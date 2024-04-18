@@ -9,13 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                ForEach(FocusAreaModel.all) { focusArea in
+                    NavigationLink {
+                        FocusAreaView(focusArea: focusArea)
+                    } label: {
+                        FocusAreaCell(focusArea: focusArea)
+                    }
+                }
+            }
+            .navigationTitle("Focus Areas")
         }
-        .padding()
     }
 }
 

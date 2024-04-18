@@ -11,6 +11,15 @@
 		FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ContentView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
 		FFACBAE42BAC778A006AAD0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */; };
+		FFD8C4BF2BD19C72001E8D42 /* SupplementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4BE2BD19C72001E8D42 /* SupplementModel.swift */; };
+		FFD8C4C22BD19D19001E8D42 /* CapsaicinSupplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4C12BD19D19001E8D42 /* CapsaicinSupplement.swift */; };
+		FFD8C4C42BD19E54001E8D42 /* FocusAreaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4C32BD19E54001E8D42 /* FocusAreaModel.swift */; };
+		FFD8C4C82BD19F41001E8D42 /* MuscleGainAndExercisePerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4C72BD19F41001E8D42 /* MuscleGainAndExercisePerformance.swift */; };
+		FFD8C4CA2BD1A031001E8D42 /* AllFocusAreas.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4C92BD1A031001E8D42 /* AllFocusAreas.swift */; };
+		FFD8C4CC2BD1A947001E8D42 /* FocusAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4CB2BD1A947001E8D42 /* FocusAreaView.swift */; };
+		FFD8C4CE2BD1A9DF001E8D42 /* FocusAreaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4CD2BD1A9DF001E8D42 /* FocusAreaCell.swift */; };
+		FFD8C4D02BD1AB45001E8D42 /* SupplementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4CF2BD1AB45001E8D42 /* SupplementView.swift */; };
+		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +28,14 @@
 		FFACBADE2BAC7788006AAD0B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FFACBAE02BAC778A006AAD0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FFD8C4BE2BD19C72001E8D42 /* SupplementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementModel.swift; sourceTree = "<group>"; };
+		FFD8C4C12BD19D19001E8D42 /* CapsaicinSupplement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsaicinSupplement.swift; sourceTree = "<group>"; };
+		FFD8C4C32BD19E54001E8D42 /* FocusAreaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaModel.swift; sourceTree = "<group>"; };
+		FFD8C4C72BD19F41001E8D42 /* MuscleGainAndExercisePerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGainAndExercisePerformance.swift; sourceTree = "<group>"; };
+		FFD8C4C92BD1A031001E8D42 /* AllFocusAreas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFocusAreas.swift; sourceTree = "<group>"; };
+		FFD8C4CB2BD1A947001E8D42 /* FocusAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaView.swift; sourceTree = "<group>"; };
+		FFD8C4CD2BD1A9DF001E8D42 /* FocusAreaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaCell.swift; sourceTree = "<group>"; };
+		FFD8C4CF2BD1AB45001E8D42 /* SupplementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +71,11 @@
 			children = (
 				FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */,
 				FFACBADE2BAC7788006AAD0B /* ContentView.swift */,
+				FFD8C4CD2BD1A9DF001E8D42 /* FocusAreaCell.swift */,
+				FFD8C4CB2BD1A947001E8D42 /* FocusAreaView.swift */,
+				FFD8C4CF2BD1AB45001E8D42 /* SupplementView.swift */,
+				FFD8C4BD2BD19C46001E8D42 /* Models */,
+				FFD8C4C02BD19CFD001E8D42 /* Mock Data */,
 				FFACBAE02BAC778A006AAD0B /* Assets.xcassets */,
 				FFACBAE22BAC778A006AAD0B /* Preview Content */,
 			);
@@ -65,6 +88,41 @@
 				FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FFD8C4BD2BD19C46001E8D42 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FFD8C4C32BD19E54001E8D42 /* FocusAreaModel.swift */,
+				FFD8C4BE2BD19C72001E8D42 /* SupplementModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FFD8C4C02BD19CFD001E8D42 /* Mock Data */ = {
+			isa = PBXGroup;
+			children = (
+				FFD8C4C52BD19F0E001E8D42 /* FocusAreas */,
+				FFD8C4C62BD19F15001E8D42 /* Supplements */,
+			);
+			path = "Mock Data";
+			sourceTree = "<group>";
+		};
+		FFD8C4C52BD19F0E001E8D42 /* FocusAreas */ = {
+			isa = PBXGroup;
+			children = (
+				FFD8C4C92BD1A031001E8D42 /* AllFocusAreas.swift */,
+				FFD8C4C72BD19F41001E8D42 /* MuscleGainAndExercisePerformance.swift */,
+			);
+			path = FocusAreas;
+			sourceTree = "<group>";
+		};
+		FFD8C4C62BD19F15001E8D42 /* Supplements */ = {
+			isa = PBXGroup;
+			children = (
+				FFD8C4C12BD19D19001E8D42 /* CapsaicinSupplement.swift */,
+			);
+			path = Supplements;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +141,9 @@
 			dependencies = (
 			);
 			name = Supplements;
+			packageProductDependencies = (
+				FFD8C4D22BD1AC5E001E8D42 /* AppUI */,
+			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +172,9 @@
 				Base,
 			);
 			mainGroup = FFACBAD02BAC7788006AAD0B;
+			packageReferences = (
+				FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */,
+			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,8 +201,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFD8C4C82BD19F41001E8D42 /* MuscleGainAndExercisePerformance.swift in Sources */,
+				FFD8C4CE2BD1A9DF001E8D42 /* FocusAreaCell.swift in Sources */,
+				FFD8C4C22BD19D19001E8D42 /* CapsaicinSupplement.swift in Sources */,
+				FFD8C4CC2BD1A947001E8D42 /* FocusAreaView.swift in Sources */,
+				FFD8C4BF2BD19C72001E8D42 /* SupplementModel.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */,
+				FFD8C4C42BD19E54001E8D42 /* FocusAreaModel.swift in Sources */,
+				FFD8C4CA2BD1A031001E8D42 /* AllFocusAreas.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
+				FFD8C4D02BD1AB45001E8D42 /* SupplementView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +416,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mpdifran/AppUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FFD8C4D22BD1AC5E001E8D42 /* AppUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */;
+			productName = AppUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FFACBAD12BAC7788006AAD0B /* Project object */;
 }

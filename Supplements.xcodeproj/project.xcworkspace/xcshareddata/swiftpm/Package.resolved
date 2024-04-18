@@ -1,0 +1,15 @@
+{
+  "originHash" : "1409b3b039eb0cb1b5178a2e7d2d04532c43e8631f0d94e678005b2836557b82",
+  "pins" : [
+    {
+      "identity" : "appui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mpdifran/AppUI",
+      "state" : {
+        "revision" : "0585437721b5399697cd0e57d7f2bf95268031bb",
+        "version" : "0.4.2"
+      }
+    }
+  ],
+  "version" : 3
+}
