@@ -12,6 +12,19 @@ struct FocusAreaView: View {
 
     var body: some View {
         List {
+            if !focusArea.primary.isEmpty {
+                Section("Primary Supplements") {
+                    ForEach(focusArea.primary) { supplement in
+                        NavigationLink {
+                            SupplementView(supplement: supplement.supplement)
+                        } label: {
+                            Label(supplement.supplement.name, systemImage: "pill.fill")
+                        }
+
+                        Label(supplement.context, systemImage: "info.circle.fill")
+                    }
+                }
+            }
             if !focusArea.unproven.isEmpty {
                 Section("Unproven Supplements") {
                     ForEach(focusArea.unproven) { supplement in

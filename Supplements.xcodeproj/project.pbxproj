@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
+		FF648BE52BDED7CD00963820 /* WheyProteinSupplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE42BDED7CD00963820 /* WheyProteinSupplement.swift */; };
+		FF648BE72BDED90C00963820 /* CarbohydratesSupplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE62BDED90C00963820 /* CarbohydratesSupplement.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ContentView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -26,6 +28,8 @@
 /* Begin PBXFileReference section */
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
+		FF648BE42BDED7CD00963820 /* WheyProteinSupplement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheyProteinSupplement.swift; sourceTree = "<group>"; };
+		FF648BE62BDED90C00963820 /* CarbohydratesSupplement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbohydratesSupplement.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -134,6 +138,8 @@
 			isa = PBXGroup;
 			children = (
 				FFD8C4C12BD19D19001E8D42 /* CapsaicinSupplement.swift */,
+				FF648BE42BDED7CD00963820 /* WheyProteinSupplement.swift */,
+				FF648BE62BDED90C00963820 /* CarbohydratesSupplement.swift */,
 			);
 			path = Supplements;
 			sourceTree = "<group>";
@@ -223,6 +229,8 @@
 				FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */,
 				FFD8C4C42BD19E54001E8D42 /* FocusAreaModel.swift in Sources */,
 				FFD8C4CA2BD1A031001E8D42 /* AllFocusAreas.swift in Sources */,
+				FF648BE52BDED7CD00963820 /* WheyProteinSupplement.swift in Sources */,
+				FF648BE72BDED90C00963820 /* CarbohydratesSupplement.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FFD8C4D02BD1AB45001E8D42 /* SupplementView.swift in Sources */,
 			);
@@ -362,6 +370,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Vitadex;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -393,6 +402,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Vitadex;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

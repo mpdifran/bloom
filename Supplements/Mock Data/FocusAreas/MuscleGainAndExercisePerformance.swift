@@ -23,7 +23,8 @@ To lose fat, exercise is a plus. To build muscle, exercise is a necessity. Any s
 Note that we said it can benefit exercise performance, but it not always does. The upper-body muscles of a wrestler would be a literal burden to a marathoner. The type of exercise that you undertake will influence the kind of muscle you grow, and the kind of muscle that you grow will make you fitter for some sports than for others.
 Even similar sports can lead to very different musculatures. Running marathons is an aerobic activity and builds more “slow twitch” muscle fibers (more endurance than strength). Running sprints is an anaerobic activity and builds more “fast twitch” muscle fibers (more strength than endurance).
 """,
-        primary: [],
+        primary: [.init(supplement: .wheyProteinSupplement, context: "Any protein found in food or supplements is called dietary protein. During the digestive process, dietary protein is broken down into its amino acid constituents and ultimately serves as building blocks that are needed to build, maintain, and repair bodily tissue, produce enzymes and hormones, construct neurotransmitters, manufacture antibodies for immune defenses. and much more.[94][95]"),
+                  .init(supplement: .carbohydratesSupplement, context: "Carbs are good for athletes")],
         secondary: [],
         promising: [],
         unproven: [.init(supplement: .capsaicinSupplement, context: "The potential of CAP as an ergogenic aid for endurance exercise may depend on the duration of exercise (e.g., 1500 meter or 10 km), the type of exercise (i.e., intermittent or continuous), and possibly the training status of the athlete. Currently, no strong conclusions can be drawn on the efficacy of CAP in improving endurance exercise performance.")],
