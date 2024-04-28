@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ContentView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +53,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF648BE12BDEA4F700963820 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		FFACBAD02BAC7788006AAD0B = {
 			isa = PBXGroup;
 			children = (
@@ -76,6 +86,7 @@
 				FFD8C4CD2BD1A9DF001E8D42 /* FocusAreaCell.swift */,
 				FFD8C4CB2BD1A947001E8D42 /* FocusAreaView.swift */,
 				FFD8C4CF2BD1AB45001E8D42 /* SupplementView.swift */,
+				FF648BE12BDEA4F700963820 /* Extensions */,
 				FFD8C4BD2BD19C46001E8D42 /* Models */,
 				FFD8C4C02BD19CFD001E8D42 /* Mock Data */,
 				FFACBAE02BAC778A006AAD0B /* Assets.xcassets */,
@@ -206,6 +217,7 @@
 				FFD8C4C82BD19F41001E8D42 /* MuscleGainAndExercisePerformance.swift in Sources */,
 				FFD8C4CE2BD1A9DF001E8D42 /* FocusAreaCell.swift in Sources */,
 				FFD8C4C22BD19D19001E8D42 /* CapsaicinSupplement.swift in Sources */,
+				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFD8C4CC2BD1A947001E8D42 /* FocusAreaView.swift in Sources */,
 				FFD8C4BF2BD19C72001E8D42 /* SupplementModel.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */,

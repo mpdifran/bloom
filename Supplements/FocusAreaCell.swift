@@ -11,21 +11,28 @@ struct FocusAreaCell: View {
     let focusArea: FocusAreaModel
 
     var body: some View {
-        HStack {
+        HStack(alignment: .center) {
             Image(systemName: focusArea.systemImage)
-                .imageScale(.large)
+                .imageScale(.medium)
                 .foregroundStyle(.white)
-                .padding(8)
+                .frame(square: 35)
                 .background {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(focusArea.color)
+                        .aspectRatio(1, contentMode: .fit)
                 }
             Text(focusArea.title)
                 .bold()
+
+            Spacer()
         }
+        .frame(minHeight: 60)
     }
 }
 
 #Preview {
-    FocusAreaCell(focusArea: .muscleGainAndExercisePerformance)
+    VStack {
+        FocusAreaCell(focusArea: .muscleGainAndExercisePerformance)
+        FocusAreaCell(focusArea: .sleepBetter)
+    }
 }

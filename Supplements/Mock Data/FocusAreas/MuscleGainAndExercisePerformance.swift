@@ -9,7 +9,7 @@ import Foundation
 
 extension FocusAreaModel {
     static let muscleGainAndExercisePerformance = FocusAreaModel(
-        title: "Muscle Gain & Exercise Performance Supplement Guide",
+        title: "Muscle Gain",
         systemImage: "figure.strengthtraining.traditional",
         color: .red,
         information: """
@@ -27,6 +27,48 @@ Even similar sports can lead to very different musculatures. Running marathons i
         secondary: [],
         promising: [],
         unproven: [.init(supplement: .capsaicinSupplement, context: "The potential of CAP as an ergogenic aid for endurance exercise may depend on the duration of exercise (e.g., 1500 meter or 10 km), the type of exercise (i.e., intermittent or continuous), and possibly the training status of the athlete. Currently, no strong conclusions can be drawn on the efficacy of CAP in improving endurance exercise performance.")],
+        inadvisable: []
+    )
+}
+
+extension FocusAreaModel {
+    static let sleepBetter = FocusAreaModel(
+        title: "Improve Sleep",
+        systemImage: "bed.double.fill",
+        color: .teal,
+        information: "",
+        primary: [],
+        secondary: [],
+        promising: [],
+        unproven: [],
+        inadvisable: []
+    )
+}
+
+extension FocusAreaModel {
+    static let brainHealth = FocusAreaModel(
+        title: "Brain Health",
+        systemImage: "brain.fill",
+        color: .blue,
+        information: "",
+        primary: [],
+        secondary: [],
+        promising: [],
+        unproven: [],
+        inadvisable: []
+    )
+}
+
+extension FocusAreaModel {
+    static let anxiety = FocusAreaModel(
+        title: "Anxiety",
+        systemImage: "hand.raised.fill",
+        color: .pink,
+        information: "",
+        primary: [],
+        secondary: [],
+        promising: [],
+        unproven: [],
         inadvisable: []
     )
 }
