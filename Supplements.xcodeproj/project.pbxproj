@@ -14,6 +14,13 @@
 		FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ContentView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
 		FFACBAE42BAC778A006AAD0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */; };
+		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
+		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
+		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
+		FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444C2BEC3B0600486AD7 /* ChatBubbleShape.swift */; };
+		FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444D2BEC3B0600486AD7 /* ChatBubble.swift */; };
+		FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444E2BEC3B0600486AD7 /* ChatEmojiCell.swift */; };
+		FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444572BEC410B00486AD7 /* HealthManager.swift */; };
 		FFD8C4BF2BD19C72001E8D42 /* SupplementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4BE2BD19C72001E8D42 /* SupplementModel.swift */; };
 		FFD8C4C22BD19D19001E8D42 /* CapsaicinSupplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4C12BD19D19001E8D42 /* CapsaicinSupplement.swift */; };
 		FFD8C4C42BD19E54001E8D42 /* FocusAreaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD8C4C32BD19E54001E8D42 /* FocusAreaModel.swift */; };
@@ -35,6 +42,14 @@
 		FFACBADE2BAC7788006AAD0B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FFACBAE02BAC778A006AAD0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
+		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
+		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
+		FFB4444C2BEC3B0600486AD7 /* ChatBubbleShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleShape.swift; sourceTree = "<group>"; };
+		FFB4444D2BEC3B0600486AD7 /* ChatBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
+		FFB4444E2BEC3B0600486AD7 /* ChatEmojiCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatEmojiCell.swift; sourceTree = "<group>"; };
+		FFB444552BEC402000486AD7 /* Supplements.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Supplements.entitlements; sourceTree = "<group>"; };
+		FFB444572BEC410B00486AD7 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		FFD8C4BE2BD19C72001E8D42 /* SupplementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementModel.swift; sourceTree = "<group>"; };
 		FFD8C4C12BD19D19001E8D42 /* CapsaicinSupplement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsaicinSupplement.swift; sourceTree = "<group>"; };
 		FFD8C4C32BD19E54001E8D42 /* FocusAreaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaModel.swift; sourceTree = "<group>"; };
@@ -84,13 +99,16 @@
 		FFACBADB2BAC7788006AAD0B /* Supplements */ = {
 			isa = PBXGroup;
 			children = (
+				FFB444552BEC402000486AD7 /* Supplements.entitlements */,
 				FF23333E2BD855ED007A5CBB /* Info.plist */,
 				FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */,
 				FFACBADE2BAC7788006AAD0B /* ContentView.swift */,
 				FFD8C4CD2BD1A9DF001E8D42 /* FocusAreaCell.swift */,
 				FFD8C4CB2BD1A947001E8D42 /* FocusAreaView.swift */,
 				FFD8C4CF2BD1AB45001E8D42 /* SupplementView.swift */,
+				FFB444562BEC40FD00486AD7 /* HealthManager */,
 				FF648BE12BDEA4F700963820 /* Extensions */,
+				FFB444482BEC3AD100486AD7 /* ChatUI */,
 				FFD8C4BD2BD19C46001E8D42 /* Models */,
 				FFD8C4C02BD19CFD001E8D42 /* Mock Data */,
 				FFACBAE02BAC778A006AAD0B /* Assets.xcassets */,
@@ -105,6 +123,27 @@
 				FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FFB444482BEC3AD100486AD7 /* ChatUI */ = {
+			isa = PBXGroup;
+			children = (
+				FFB4444D2BEC3B0600486AD7 /* ChatBubble.swift */,
+				FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */,
+				FFB4444C2BEC3B0600486AD7 /* ChatBubbleShape.swift */,
+				FFB4444E2BEC3B0600486AD7 /* ChatEmojiCell.swift */,
+				FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */,
+				FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */,
+			);
+			path = ChatUI;
+			sourceTree = "<group>";
+		};
+		FFB444562BEC40FD00486AD7 /* HealthManager */ = {
+			isa = PBXGroup;
+			children = (
+				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
+			);
+			path = HealthManager;
 			sourceTree = "<group>";
 		};
 		FFD8C4BD2BD19C46001E8D42 /* Models */ = {
@@ -221,18 +260,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFD8C4C82BD19F41001E8D42 /* MuscleGainAndExercisePerformance.swift in Sources */,
+				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFD8C4CE2BD1A9DF001E8D42 /* FocusAreaCell.swift in Sources */,
 				FFD8C4C22BD19D19001E8D42 /* CapsaicinSupplement.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFD8C4CC2BD1A947001E8D42 /* FocusAreaView.swift in Sources */,
 				FFD8C4BF2BD19C72001E8D42 /* SupplementModel.swift in Sources */,
+				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
+				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */,
+				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FFD8C4C42BD19E54001E8D42 /* FocusAreaModel.swift in Sources */,
 				FFD8C4CA2BD1A031001E8D42 /* AllFocusAreas.swift in Sources */,
 				FF648BE52BDED7CD00963820 /* WheyProteinSupplement.swift in Sources */,
+				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
+				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FF648BE72BDED90C00963820 /* CarbohydratesSupplement.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FFD8C4D02BD1AB45001E8D42 /* SupplementView.swift in Sources */,
+				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +409,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Supplements/Supplements.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Supplements/Preview Content\"";
@@ -371,6 +418,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Vitadex;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -395,6 +443,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Supplements/Supplements.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Supplements/Preview Content\"";
@@ -403,6 +452,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Vitadex;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

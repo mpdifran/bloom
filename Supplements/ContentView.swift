@@ -6,48 +6,24 @@
 //
 
 import SwiftUI
+import AppUI
 
+@MainActor
 struct ContentView: View {
 
     @State private var searchText = ""
-    @State private var hasAppeared = false
     @State private var presentedNavigationView: AnyView?
+    @State private var bodyWeight: Double?
+
+    @ObservedObject private var healthManager = HealthManager.shared
 
     var body: some View {
         NavigationStack {
-            VStack {
-                Spacer()
-
-                if hasAppeared {
-                    LazyVGrid(columns: [.init(.adaptive(minimum: 150, maximum: 250))], content: {
-                        FocusAreaCell(focusArea: .muscleGainAndExercisePerformance)
-                            .roundedBackground()
-                            .transition(.scale)
-                            .onTapGesture {
-                                presentedNavigationView = FocusAreaView(focusArea: .muscleGainAndExercisePerformance).asAny
-                            }
-                        FocusAreaCell(focusArea: .sleepBetter)
-                            .roundedBackground()
-                            .transition(.scale)
-                            .onTapGesture {
-                                presentedNavigationView = FocusAreaView(focusArea: .sleepBetter).asAny
-                            }
-                        FocusAreaCell(focusArea: .brainHealth)
-                            .roundedBackground()
-                            .transition(.scale)
-                            .onTapGesture {
-                                presentedNavigationView = FocusAreaView(focusArea: .brainHealth).asAny
-                            }
-                        FocusAreaCell(focusArea: .anxiety)
-                            .roundedBackground()
-                            .transition(.scale)
-                            .onTapGesture {
-                                presentedNavigationView = FocusAreaView(focusArea: .anxiety).asAny
-                            }
-                    })
-                    .padding(.horizontal)
-                }
-
+            ScrollView {
+                healthKitStatus
+                weightStatus
+            }
+            .shelf {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .bold()
@@ -61,15 +37,58 @@ struct ContentView: View {
                 }
                 .padding(.vertical, 8)
                 .roundedBackground()
-                .padding()
             }
             .navigationTitle("Vitadex")
             .navigationDestination($presentedNavigationView)
         }
-        .onAppear {
-            withAnimation {
-                hasAppeared = true
+        .onChange(of: healthManager.isAuthorized) { oldValue, newValue in
+            guard newValue else { return }
+
+            Task {
+                if let bodyWeight = await healthManager.fetchBodyWeight() {
+                    self.bodyWeight = bodyWeight.quantity.doubleValue(for: .pound())
+                }
+
             }
+        }
+    }
+}
+
+private extension ContentView {
+
+    @ViewBuilder
+    var healthKitStatus: some View {
+        if !healthManager.isAuthorized {
+            ChatBubbleCell(
+                message: "Tap to link HealthKit",
+                isDirect: true,
+                isCurrentUser: false,
+                showTail: false
+            )
+            .onTapGesture {
+                Task {
+                    await healthManager.requestAccess()
+                }
+            }
+        } else {
+            ChatBubbleCell(
+                message: "HealthKit linked",
+                isDirect: true,
+                isCurrentUser: false,
+                showTail: false
+            )
+        }
+    }
+
+    @ViewBuilder
+    var weightStatus: some View {
+        if let bodyWeight {
+            ChatBubbleCell(
+                message: "Body Weight: \(String(format: "%.0f", bodyWeight)) lbs",
+                isDirect: true,
+                isCurrentUser: false,
+                showTail: false
+            )
         }
     }
 }
