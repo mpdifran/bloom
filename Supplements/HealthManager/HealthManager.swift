@@ -22,6 +22,9 @@ final class HealthManager: ObservableObject {
     }
 
     let types: Set = [
+        HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!,
+        HKObjectType.characteristicType(forIdentifier: .biologicalSex)!,
+        HKObjectType.characteristicType(forIdentifier: .bloodType)!,
         HKQuantityType(.bodyMass)
     ]
 }
@@ -46,12 +49,8 @@ extension HealthManager {
     func requestAccess() async {
         guard HKHealthStore.isHealthDataAvailable() else { return }
 
-        let allTypes: Set = [
-            HKQuantityType(.bodyMass)
-        ]
-
         do {
-            try await healthStore.requestAuthorization(toShare: [], read: allTypes)
+            try await healthStore.requestAuthorization(toShare: [], read: types)
         } catch {
             fatalError("Usage description not specified")
         }
@@ -68,7 +67,9 @@ extension HealthManager {
         let bodyWeight = await fetchBodyWeight()
 
         await MainActor.run {
-            self.userInfo = UserInfoModel(bodyWeight: bodyWeight?.quantity.doubleValue(for: .pound()))
+            self.userInfo = UserInfoModel(
+                bodyWeight: bodyWeight?.quantity.doubleValue(for: .pound())
+            )
         }
     }
 
