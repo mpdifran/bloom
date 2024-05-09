@@ -8,7 +8,7 @@
 import Foundation
 
 struct ChatMessage: Identifiable, Hashable, Equatable {
-    let id = UUID()
+    let id = UUID().uuidString
     let message: String?
     let supplementReccomendation: [SupplementReccomendationModel]
     let isCurrentUser: Bool

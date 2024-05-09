@@ -17,6 +17,14 @@ final class ChatViewModel: ObservableObject {
 
 extension ChatViewModel {
 
+    func lastID() -> String? {
+        let lastMessage = chatHistory.last
+        if let lastReccomendation = lastMessage?.supplementReccomendation.last {
+            return lastReccomendation.id
+        }
+        return lastMessage?.id
+    }
+
     func send(prompt: String) async throws {
         await MainActor.run {
             chatHistory.append(

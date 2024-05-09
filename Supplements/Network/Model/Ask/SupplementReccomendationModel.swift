@@ -8,7 +8,7 @@
 import Foundation
 
 struct SupplementReccomendationModel: Codable, Identifiable, Hashable {
-    var id: Int { hashValue }
+    var id: String { supplementName + "\(efficacyRating)" + recommendedDailyDose + goal + shortText }
 
     let supplementName: String
     let efficacyRating: Int

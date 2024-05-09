@@ -27,24 +27,47 @@ struct ChatView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                ForEach(viewModel.chatHistory) { chatMessage in
-                    if let message = chatMessage.message {
-                        ChatBubbleCell(
-                            message: message,
-                            isDirect: false,
-                            isCurrentUser: chatMessage.isCurrentUser,
-                            showTail: true
-                        )
-                    } else {
-                        ForEach(chatMessage.supplementReccomendation) { reccomendation in
-                            SupplementBubble(supplementReccomendation: reccomendation)
+            ScrollViewReader { scrollViewProxy in
+                ScrollView {
+                    LazyVStack {
+                        ForEach(viewModel.chatHistory) { chatMessage in
+                            if let message = chatMessage.message {
+                                ChatBubbleCell(
+                                    message: message,
+                                    isDirect: false,
+                                    isCurrentUser: chatMessage.isCurrentUser,
+                                    showTail: true
+                                )
+                                .id(chatMessage.id)
+                            } else {
+                                ForEach(chatMessage.supplementReccomendation) { reccomendation in
+                                    SupplementBubble(supplementReccomendation: reccomendation)
+                                        .id(reccomendation.id)
+                                }
+                            }
+                        }
+
+                        if isWaitingForResponse {
+                            TypingIndicatorCell(isDirect: false)
+                                .id("TypingPrompt")
+                                .padding(.bottom, 12)
                         }
                     }
+                    .padding(.vertical, 4)
                 }
-
-                if isWaitingForResponse {
-                    TypingIndicatorCell(isDirect: false)
+                .scrollDismissesKeyboard(.interactively)
+                .onAppear {
+                    scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
+                }
+                .onChange(of: viewModel.chatHistory.count) { (_, _) in
+                    Delay(300) {
+                        scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
+                    }
+                }
+                .onChange(of: isWaitingForResponse) { (_, _) in
+                    Delay(300) {
+                        scrollViewProxy.scrollTo("TypingPrompt", anchor: .bottom)
+                    }
                 }
             }
             .shelf {
@@ -82,7 +105,7 @@ struct ChatView: View {
         .onAppear {
             feedbackGenerator.prepare()
         }
-        .animation(.bouncy, value: viewModel.chatHistory.count)
+        .animation(.default, value: viewModel.chatHistory.count)
         .tabItem {
             Label("Chat", systemImage: "bubble")
         }

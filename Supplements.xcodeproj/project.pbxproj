@@ -37,6 +37,7 @@
 		FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AF82BED71AE00926042 /* SupplementReccomendationModel.swift */; };
 		FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AFD2BED738700926042 /* SupplementBubbleCell.swift */; };
 		FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B002BED7C1300926042 /* EfficacyView.swift */; };
+		FFF61B032BED87B400926042 /* Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B022BED87B400926042 /* Delay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,7 @@
 		FFF61AF82BED71AE00926042 /* SupplementReccomendationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementReccomendationModel.swift; sourceTree = "<group>"; };
 		FFF61AFD2BED738700926042 /* SupplementBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementBubbleCell.swift; sourceTree = "<group>"; };
 		FFF61B002BED7C1300926042 /* EfficacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EfficacyView.swift; sourceTree = "<group>"; };
+		FFF61B022BED87B400926042 /* Delay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 			children = (
 				FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */,
 				FFB4445C2BEC4CAB00486AD7 /* Codable+Constants.swift */,
+				FFF61B022BED87B400926042 /* Delay.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				FFF61AF12BED548D00926042 /* GoalResponse.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
+				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FFF61AF32BED554100926042 /* GoalsView.swift in Sources */,
 				FFB4445D2BEC4CAB00486AD7 /* Codable+Constants.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
