@@ -15,13 +15,15 @@ final class NetworkRequester {
 
 extension NetworkRequester {
 
-    func sendQuery(prompt: String, userInfo: UserInfoModel?) async throws -> ChatResponseModel {
+    func sendQuery(prompt: String, userInfo: UserInfoModel?) async throws -> [SupplementReccomendationModel] {
         let request = ChatRequestModel(
-            question: prompt
-//            userInfo: userInfo
+            question: prompt,
+            userInfo: userInfo
         )
 
         let requestData = try JSONEncoder.main.encode(request)
+
+        print("Request Data: \(String(data: requestData, encoding: .utf8) ?? "")")
 
         let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/ask")!
         var urlRequest = URLRequest(url: url)
@@ -31,8 +33,17 @@ extension NetworkRequester {
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
-        let chatResponse = try JSONDecoder.main.decode(ChatResponseModel.self, from: data)
+        print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
 
-        return chatResponse
+        return try JSONDecoder.main.decode([SupplementReccomendationModel].self, from: data)
+    }
+
+    func fetchGoals() async throws -> [GoalModel] {
+        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/goals")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+
+        let goalsResponse = try JSONDecoder.main.decode(GoalResponse.self, from: data)
+
+        return goalsResponse.goals.map { GoalModel(name: $0) }
     }
 }

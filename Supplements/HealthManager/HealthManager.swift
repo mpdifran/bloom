@@ -19,7 +19,9 @@ final class HealthManager: ObservableObject {
     private let healthStore = HKHealthStore()
 
     private init() { 
-        checkAccess()
+        DispatchQueue.main.async { [weak self] in
+            self?.checkAccess()
+        }
     }
 
     let types: Set = [
@@ -27,8 +29,22 @@ final class HealthManager: ObservableObject {
         HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!,
         HKObjectType.characteristicType(forIdentifier: .biologicalSex)!,
         HKObjectType.characteristicType(forIdentifier: .bloodType)!,
-        HKObjectType.activitySummaryType()
+        HKObjectType.activitySummaryType(),
+        HKQuantityType(.appleExerciseTime)
     ]
+    // active energy
+    // steps
+    // sleep
+    // exercise min
+    // vO2 max
+    // body fat percentage
+    // BMI
+    // HRV
+    // resting heart rate
+    // respiratory rate
+    // blood oxygen
+    // double support time
+    // walking steadiness
 }
 
 extension HealthManager {
@@ -42,7 +58,7 @@ extension HealthManager {
             DispatchQueue.main.async {
                 self.authStatus = authStatus
                 Task {
-                    await self.loadUserInfo()
+                    try? await self.loadUserInfo()
                 }
             }
         }
@@ -63,14 +79,28 @@ extension HealthManager {
 
 extension HealthManager {
 
-    func loadUserInfo() async {
+    func loadUserInfo() async throws {
         guard isAuthorized else { return }
 
         let bodyWeight = await fetchBodyWeight()
+        let avgExerciseMin: Double?
+        do {
+            avgExerciseMin = try await fetchExerciseMinutes()
+        } catch {
+            print(error)
+            avgExerciseMin = nil
+        }
+
+        let avgExerciseMinQuantity = avgExerciseMin.map {
+            QuantityModel(amount: $0, kind: .average, periodDays: 1)
+        }
 
         await MainActor.run {
             self.userInfo = UserInfoModel(
-                bodyWeight: bodyWeight?.quantity.doubleValue(for: .pound())
+                age: healthStore.age(),
+                sex: healthStore.sex(),
+                bodyWeight: bodyWeight?.quantity.doubleValue(for: .pound()),
+                averageExerciseMin: avgExerciseMinQuantity
             )
         }
     }
@@ -85,7 +115,6 @@ extension HealthManager {
 
         do {
             let results = try await descriptor.result(for: healthStore)
-
             return results.first
         } catch {
             print(error)
@@ -94,40 +123,10 @@ extension HealthManager {
     }
 
     func fetchExerciseMinutes() async throws -> Double {
-        try await withCheckedThrowingContinuation { continuation in
-            // Define the predicate for the last month
-            let startDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())!
-            let endDate = Date()
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
-
-            // Define the statistics options (here we are getting the sum of exercise time)
-            let statisticsOptions: HKStatisticsOptions = .cumulativeSum
-
-            // Define the statistics query
-            let query = HKStatisticsQuery(quantityType: HKQuantityType.quantityType(forIdentifier: .appleExerciseTime)!,
-                                          quantitySamplePredicate: predicate,
-                                          options: statisticsOptions) { (query, result, error) in
-                guard let result = result, let sum = result.sumQuantity() else {
-                    if let error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(throwing: NSError(description: "Something went wrong"))
-                    }
-                    return
-                }
-
-                // Convert the sum from seconds to minutes
-                let sumInMinutes = sum.doubleValue(for: HKUnit.minute())
-
-                // Calculate the average minutes per day
-                let daysInMonth = Calendar.current.range(of: .day, in: .month, for: startDate)!.count
-                let averageMinutesPerDay = sumInMinutes / Double(daysInMonth)
-
-                continuation.resume(returning: averageMinutesPerDay)
-            }
-
-            // Execute the query
-            healthStore.execute(query)
-        }
+        try await healthStore.sumQuantity(
+            for: .appleExerciseTime,
+            pastMonths: 1,
+            unit: .minute()
+        )
     }
 }

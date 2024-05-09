@@ -14,6 +14,8 @@ extension JSONEncoder {
     static let main: JSONEncoder = {
         let encoder = JSONEncoder()
 
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+
         return encoder
     }()
 }
@@ -24,6 +26,8 @@ extension JSONDecoder {
 
     static let main: JSONDecoder = {
         let decoder = JSONDecoder()
+
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
 
         return decoder
     }()
