@@ -15,7 +15,7 @@ extension HKHealthStore {
         pastMonths: Int,
         option: HKStatisticsOptions = .cumulativeSum,
         unit: HKUnit
-    ) async throws -> Double {
+    ) async throws -> (Double, Int) {
         let start = Calendar.current.date(byAdding: .month, value: -pastMonths, to: .now)!
         let end = Date.now
 
@@ -29,8 +29,9 @@ extension HKHealthStore {
         let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 1
 
         let sumInUnits = quantity.doubleValue(for: unit)
+        let average = sumInUnits / Double(days)
 
-        return sumInUnits / Double(days)
+        return (average, days)
     }
 
     func sumQuantity(
@@ -99,6 +100,38 @@ extension HKHealthStore {
                 return "Male"
             case .other:
                 return "Other"
+            @unknown default:
+                return "Unknown"
+            }
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func typeOfBlood() -> String? {
+        do {
+            let blood = try bloodType()
+
+            switch blood.bloodType {
+            case .notSet:
+                return "Not Set"
+            case .aPositive:
+                return "A Positive"
+            case .aNegative:
+                return "A Negative"
+            case .bPositive:
+                return "B Positive"
+            case .bNegative:
+                return "B Negative"
+            case .abPositive:
+                return "AB Positive"
+            case .abNegative:
+                return "AB Negative"
+            case .oPositive:
+                return "O Positive"
+            case .oNegative:
+                return "O Negative"
             @unknown default:
                 return "Unknown"
             }

@@ -16,7 +16,9 @@ struct UserInfoModel: Codable {
     let age: Int?
     let sex: String?
     let bodyWeight: Double?
+    let bloodType: String?
     let averageExerciseMin: QuantityModel?
+    let averageSteps: QuantityModel?
 }
 
 struct QuantityModel: Codable {

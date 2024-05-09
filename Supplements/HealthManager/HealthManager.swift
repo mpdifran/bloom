@@ -30,12 +30,11 @@ final class HealthManager: ObservableObject {
         HKObjectType.characteristicType(forIdentifier: .biologicalSex)!,
         HKObjectType.characteristicType(forIdentifier: .bloodType)!,
         HKObjectType.activitySummaryType(),
-        HKQuantityType(.appleExerciseTime)
+        HKQuantityType(.appleExerciseTime),
+        HKQuantityType(.stepCount)
     ]
     // active energy
-    // steps
     // sleep
-    // exercise min
     // vO2 max
     // body fat percentage
     // BMI
@@ -83,16 +82,15 @@ extension HealthManager {
         guard isAuthorized else { return }
 
         let bodyWeight = await fetchBodyWeight()
-        let avgExerciseMin: Double?
-        do {
-            avgExerciseMin = try await fetchExerciseMinutes()
-        } catch {
-            print(error)
-            avgExerciseMin = nil
-        }
+        let avgExerciseMin = await fetchExerciseMinutes()
+        let avgSteps = await fetchAverageSteps()
 
         let avgExerciseMinQuantity = avgExerciseMin.map {
-            QuantityModel(amount: $0, kind: .average, periodDays: 1)
+            QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
+        }
+
+        let stepsQuantity = avgSteps.map {
+            QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
         }
 
         await MainActor.run {
@@ -100,7 +98,9 @@ extension HealthManager {
                 age: healthStore.age(),
                 sex: healthStore.sex(),
                 bodyWeight: bodyWeight?.quantity.doubleValue(for: .pound()),
-                averageExerciseMin: avgExerciseMinQuantity
+                bloodType: healthStore.typeOfBlood(),
+                averageExerciseMin: avgExerciseMinQuantity,
+                averageSteps: stepsQuantity
             )
         }
     }
@@ -122,11 +122,29 @@ extension HealthManager {
         return nil
     }
 
-    func fetchExerciseMinutes() async throws -> Double {
-        try await healthStore.sumQuantity(
-            for: .appleExerciseTime,
-            pastMonths: 1,
-            unit: .minute()
-        )
+    func fetchExerciseMinutes() async -> (Double, Int)? {
+        do {
+            return try await healthStore.sumQuantity(
+                for: .appleExerciseTime,
+                pastMonths: 1,
+                unit: .minute()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchAverageSteps() async -> (Double, Int)? {
+        do {
+            return try await healthStore.sumQuantity(
+                for: .stepCount,
+                pastMonths: 1,
+                unit: .count()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
     }
 }
