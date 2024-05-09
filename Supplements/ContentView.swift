@@ -14,7 +14,9 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var presentedNavigationView: AnyView?
     @State private var bodyWeight: Double?
+    @State private var error: Error?
 
+    @ObservedObject private var viewModel = ChatViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
     var body: some View {
@@ -22,6 +24,15 @@ struct ContentView: View {
             ScrollView {
                 healthKitStatus
                 weightStatus
+
+                ForEach(viewModel.chatHistory) { chatMessage in
+                    ChatBubbleCell(
+                        message: chatMessage.message,
+                        isDirect: false,
+                        isCurrentUser: chatMessage.isCurrentUser,
+                        showTail: true
+                    )
+                }
             }
             .shelf {
                 HStack {
@@ -34,6 +45,16 @@ struct ContentView: View {
                         .fontDesign(.rounded)
                         .bold()
                         .submitLabel(.go)
+                        .onSubmit {
+                            Task {
+                                do {
+                                    try await viewModel.send(prompt: searchText)
+                                    searchText = ""
+                                } catch {
+                                    self.error = error
+                                }
+                            }
+                        }
                 }
                 .padding(.vertical, 8)
                 .roundedBackground()
@@ -41,6 +62,7 @@ struct ContentView: View {
             .navigationTitle("Vitadex")
             .navigationDestination($presentedNavigationView)
         }
+        .alert(error: $error)
         .onChange(of: healthManager.isAuthorized) { oldValue, newValue in
             guard newValue else { return }
 

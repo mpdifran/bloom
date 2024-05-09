@@ -13,6 +13,8 @@ final class HealthManager: ObservableObject {
 
     @Published var authStatus: HKAuthorizationRequestStatus = .unknown
 
+    @Published var userInfo: UserInfoModel?
+
     private let healthStore = HKHealthStore()
 
     private init() { 
@@ -34,6 +36,9 @@ extension HealthManager {
         healthStore.getRequestStatusForAuthorization(toShare: [], read: types) { authStatus, error in
             DispatchQueue.main.async {
                 self.authStatus = authStatus
+                Task {
+                    await self.loadUserInfo()
+                }
             }
         }
     }
@@ -56,6 +61,16 @@ extension HealthManager {
 }
 
 extension HealthManager {
+
+    func loadUserInfo() async {
+        guard isAuthorized else { return }
+
+        let bodyWeight = await fetchBodyWeight()
+
+        await MainActor.run {
+            self.userInfo = UserInfoModel(bodyWeight: bodyWeight?.quantity.doubleValue(for: .pound()))
+        }
+    }
 
     func fetchBodyWeight() async -> HKQuantitySample? {
         let bodyMassType = HKQuantityType(.bodyMass)
