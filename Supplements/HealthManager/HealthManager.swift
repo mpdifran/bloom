@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import AppFoundations
 
 final class HealthManager: ObservableObject {
     static let shared = HealthManager()
@@ -22,10 +23,11 @@ final class HealthManager: ObservableObject {
     }
 
     let types: Set = [
+        HKQuantityType(.bodyMass),
         HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!,
         HKObjectType.characteristicType(forIdentifier: .biologicalSex)!,
         HKObjectType.characteristicType(forIdentifier: .bloodType)!,
-        HKQuantityType(.bodyMass)
+        HKObjectType.activitySummaryType()
     ]
 }
 
@@ -89,5 +91,43 @@ extension HealthManager {
             print(error)
         }
         return nil
+    }
+
+    func fetchExerciseMinutes() async throws -> Double {
+        try await withCheckedThrowingContinuation { continuation in
+            // Define the predicate for the last month
+            let startDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())!
+            let endDate = Date()
+            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
+
+            // Define the statistics options (here we are getting the sum of exercise time)
+            let statisticsOptions: HKStatisticsOptions = .cumulativeSum
+
+            // Define the statistics query
+            let query = HKStatisticsQuery(quantityType: HKQuantityType.quantityType(forIdentifier: .appleExerciseTime)!,
+                                          quantitySamplePredicate: predicate,
+                                          options: statisticsOptions) { (query, result, error) in
+                guard let result = result, let sum = result.sumQuantity() else {
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(throwing: NSError(description: "Something went wrong"))
+                    }
+                    return
+                }
+
+                // Convert the sum from seconds to minutes
+                let sumInMinutes = sum.doubleValue(for: HKUnit.minute())
+
+                // Calculate the average minutes per day
+                let daysInMonth = Calendar.current.range(of: .day, in: .month, for: startDate)!.count
+                let averageMinutesPerDay = sumInMinutes / Double(daysInMonth)
+
+                continuation.resume(returning: averageMinutesPerDay)
+            }
+
+            // Execute the query
+            healthStore.execute(query)
+        }
     }
 }

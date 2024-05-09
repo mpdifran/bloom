@@ -1,4 +1,4 @@
-//
+    //
 //  ContentView.swift
 //  Supplements
 //
@@ -11,20 +11,22 @@ import AppUI
 @MainActor
 struct ContentView: View {
 
+    @AppStorage("hasShownOnboarding") var hasShownOnboarding: Bool = false
+
     @State private var searchText = ""
     @State private var presentedNavigationView: AnyView?
     @State private var bodyWeight: Double?
+    @State private var presentedSheet: AnyView?
     @State private var error: Error?
 
     @ObservedObject private var viewModel = ChatViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
+    let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
+
     var body: some View {
         NavigationStack {
             ScrollView {
-                healthKitStatus
-                weightStatus
-
                 ForEach(viewModel.chatHistory) { chatMessage in
                     ChatBubbleCell(
                         message: chatMessage.message,
@@ -32,6 +34,13 @@ struct ContentView: View {
                         isCurrentUser: chatMessage.isCurrentUser,
                         showTail: true
                     )
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Show Onboarding", systemImage: "rectangle.portrait.and.arrow.right") {
+                        checkOnboarding(force: true)
+                    }
                 }
             }
             .shelf {
@@ -48,8 +57,10 @@ struct ContentView: View {
                         .onSubmit {
                             Task {
                                 do {
-                                    try await viewModel.send(prompt: searchText)
+                                    let prompt = searchText
                                     searchText = ""
+                                    feedbackGenerator.impactOccurred()
+                                    try await viewModel.send(prompt: prompt)
                                 } catch {
                                     self.error = error
                                 }
@@ -62,7 +73,13 @@ struct ContentView: View {
             .navigationTitle("Vitadex")
             .navigationDestination($presentedNavigationView)
         }
+        .sheet($presentedSheet)
         .alert(error: $error)
+        .onAppear {
+            checkOnboarding()
+            feedbackGenerator.prepare()
+        }
+        .animation(.bouncy, value: viewModel.chatHistory.count)
         .onChange(of: healthManager.isAuthorized) { oldValue, newValue in
             guard newValue else { return }
 
@@ -78,40 +95,16 @@ struct ContentView: View {
 
 private extension ContentView {
 
-    @ViewBuilder
-    var healthKitStatus: some View {
-        if !healthManager.isAuthorized {
-            ChatBubbleCell(
-                message: "Tap to link HealthKit",
-                isDirect: true,
-                isCurrentUser: false,
-                showTail: false
-            )
-            .onTapGesture {
-                Task {
-                    await healthManager.requestAccess()
-                }
-            }
-        } else {
-            ChatBubbleCell(
-                message: "HealthKit linked",
-                isDirect: true,
-                isCurrentUser: false,
-                showTail: false
-            )
+    func checkOnboarding(force: Bool = false) {
+        if force {
+            hasShownOnboarding = false
         }
-    }
 
-    @ViewBuilder
-    var weightStatus: some View {
-        if let bodyWeight {
-            ChatBubbleCell(
-                message: "Body Weight: \(String(format: "%.0f", bodyWeight)) lbs",
-                isDirect: true,
-                isCurrentUser: false,
-                showTail: false
-            )
-        }
+        guard !hasShownOnboarding else { return }
+
+        presentedSheet = OnboardingRootView(onComplete: {
+            hasShownOnboarding = true
+        }).asAny
     }
 }
 

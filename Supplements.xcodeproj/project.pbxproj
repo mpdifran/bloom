@@ -25,7 +25,11 @@
 		FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444612BEC4E8A00486AD7 /* ChatViewModel.swift */; };
 		FFB444642BEC526B00486AD7 /* ChatResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444632BEC526B00486AD7 /* ChatResponseModel.swift */; };
 		FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444652BEC52E600486AD7 /* ChatMessage.swift */; };
+		FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */; };
+		FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */; };
+		FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */; };
 		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
+		FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +54,9 @@
 		FFB444612BEC4E8A00486AD7 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		FFB444632BEC526B00486AD7 /* ChatResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatResponseModel.swift; sourceTree = "<group>"; };
 		FFB444652BEC52E600486AD7 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootView.swift; sourceTree = "<group>"; };
+		FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWelcomeView.swift; sourceTree = "<group>"; };
+		FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthKitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */,
+				FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,14 +103,11 @@
 				FFB444552BEC402000486AD7 /* Supplements.entitlements */,
 				FF23333E2BD855ED007A5CBB /* Info.plist */,
 				FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */,
-				FFACBADE2BAC7788006AAD0B /* ContentView.swift */,
-				FFB444612BEC4E8A00486AD7 /* ChatViewModel.swift */,
-				FFB444652BEC52E600486AD7 /* ChatMessage.swift */,
+				FFB444952BED420C00486AD7 /* UserInterface */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
 				FFB444562BEC40FD00486AD7 /* HealthManager */,
 				FFB444592BEC4C3D00486AD7 /* Model */,
 				FF648BE12BDEA4F700963820 /* Extensions */,
-				FFB444482BEC3AD100486AD7 /* ChatUI */,
 				FFACBAE02BAC778A006AAD0B /* Assets.xcassets */,
 				FFACBAE22BAC778A006AAD0B /* Preview Content */,
 			);
@@ -141,8 +146,7 @@
 		FFB444592BEC4C3D00486AD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				FFB4445A2BEC4C4C00486AD7 /* ChatRequestModel.swift */,
-				FFB444632BEC526B00486AD7 /* ChatResponseModel.swift */,
+				FFB444652BEC52E600486AD7 /* ChatMessage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -150,9 +154,40 @@
 		FFB4445E2BEC4CB400486AD7 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				FFB444982BED424000486AD7 /* Model */,
 				FFB4445F2BEC4CC500486AD7 /* NetworkRequester.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		FFB444942BED41E600486AD7 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */,
+				FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */,
+				FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		FFB444952BED420C00486AD7 /* UserInterface */ = {
+			isa = PBXGroup;
+			children = (
+				FFACBADE2BAC7788006AAD0B /* ContentView.swift */,
+				FFB444612BEC4E8A00486AD7 /* ChatViewModel.swift */,
+				FFB444942BED41E600486AD7 /* Onboarding */,
+				FFB444482BEC3AD100486AD7 /* ChatUI */,
+			);
+			path = UserInterface;
+			sourceTree = "<group>";
+		};
+		FFB444982BED424000486AD7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FFB444632BEC526B00486AD7 /* ChatResponseModel.swift */,
+				FFB4445A2BEC4C4C00486AD7 /* ChatRequestModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,6 +208,7 @@
 			name = Supplements;
 			packageProductDependencies = (
 				FFD8C4D22BD1AC5E001E8D42 /* AppUI */,
+				FFF61AEA2BED52A900926042 /* AppFoundations */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -204,6 +240,7 @@
 			mainGroup = FFACBAD02BAC7788006AAD0B;
 			packageReferences = (
 				FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */,
+				FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -239,10 +276,13 @@
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FFB444642BEC526B00486AD7 /* ChatResponseModel.swift in Sources */,
+				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ContentView.swift in Sources */,
+				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
+				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
@@ -474,6 +514,14 @@
 				minimumVersion = 0.4.2;
 			};
 		};
+		FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mpdifran/AppFoundations.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -481,6 +529,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */;
 			productName = AppUI;
+		};
+		FFF61AEA2BED52A900926042 /* AppFoundations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
+			productName = AppFoundations;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -18,12 +18,15 @@ final class ChatViewModel: ObservableObject {
 extension ChatViewModel {
 
     func send(prompt: String) async throws {
+        await MainActor.run {
+            chatHistory.append(ChatMessage(message: prompt, isCurrentUser: true))
+        }
+
         let userInfo = HealthManager.shared.userInfo
 
         let response = try await NetworkRequester.shared.sendQuery(prompt: prompt, userInfo: userInfo)
 
         await MainActor.run {
-            chatHistory.append(ChatMessage(message: prompt, isCurrentUser: true))
             chatHistory.append(ChatMessage(message: response.answer, isCurrentUser: false))
         }
     }
