@@ -46,6 +46,7 @@
 		FFF61B142BEE808700926042 /* SupplementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B132BEE808700926042 /* SupplementViewModel.swift */; };
 		FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B152BEE85D500926042 /* SupplementCell.swift */; };
 		FFF61B182BEE88A900926042 /* SupplementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B172BEE88A900926042 /* SupplementsView.swift */; };
+		FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B192BEE8C3B00926042 /* TextActionBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +90,7 @@
 		FFF61B132BEE808700926042 /* SupplementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementViewModel.swift; sourceTree = "<group>"; };
 		FFF61B152BEE85D500926042 /* SupplementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementCell.swift; sourceTree = "<group>"; };
 		FFF61B172BEE88A900926042 /* SupplementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsView.swift; sourceTree = "<group>"; };
+		FFF61B192BEE8C3B00926042 /* TextActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextActionBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				FFF61B002BED7C1300926042 /* EfficacyView.swift */,
+				FFF61B192BEE8C3B00926042 /* TextActionBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				FFF61B0D2BEE7D1900926042 /* OnboardingSupplementsView.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
+				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,

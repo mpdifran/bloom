@@ -18,8 +18,6 @@ struct ChatView: View {
     @State private var presentedSheet: AnyView?
     @State private var error: Error?
 
-    @FocusState private var isSearchFieldFocused: Bool
-
     @ObservedObject private var viewModel = ChatViewModel()
     @ObservedObject private var healthManager = HealthManager.shared
 
@@ -87,32 +85,15 @@ struct ChatView: View {
                 }
             }
             .shelf {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .bold()
-                        .fontDesign(.rounded)
-
-                    TextField(
-                        "",
-                        text: $searchText,
-                        prompt: Text("How can I help you?"),
-                        axis: .vertical
-                    )
-                    .focused($isSearchFieldFocused)
-                    .font(.title3)
-                    .fontDesign(.rounded)
-                    .bold()
-                    .submitLabel(.send)
-                    .onChange(of: searchText) { oldValue, newValue in
-                        if let newLineIndex = newValue.lastIndex(of: "\n") {
-                            searchText.remove(at: newLineIndex)
-                            isSearchFieldFocused = false
-                            submitPrompt()
-                        }
-                    }
+                TextActionBar(
+                    searchText: $searchText,
+                    prompt: "How can I help you?",
+                    systemImage: "magnifyingglass",
+                    axis: .vertical,
+                    submitLabel: .send
+                ) {
+                    submitPrompt()
                 }
-                .padding(.vertical, 8)
-                .roundedBackground()
             }
             .navigationTitle("Vitadex")
         }

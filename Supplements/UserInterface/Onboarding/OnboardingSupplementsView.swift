@@ -58,26 +58,11 @@ struct OnboardingSupplementsView: View {
             .navigationTitle("Supplements")
             .shelf {
                 VStack {
-                    HStack {
-                        Image(systemName: "cross.vial")
-                            .bold()
-                            .fontDesign(.rounded)
-
-                        TextField(
-                            "",
-                            text: $searchText,
-                            prompt: Text("What supplements do you take?")
-                        )
-                        .font(.title3)
-                        .fontDesign(.rounded)
-                        .bold()
-                        .submitLabel(.done)
-                        .onSubmit {
-
-                        }
-                    }
-                    .padding(.vertical, 8)
-                    .roundedBackground()
+                    TextActionBar(
+                        searchText: $searchText,
+                        prompt: "What supplements do you take?",
+                        systemImage: "cross.vial"
+                    )
 
                     ProminentButton("Continue") {
                         onContinue()
