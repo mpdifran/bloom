@@ -15,10 +15,10 @@ struct ChatRequestModel: Codable {
 struct UserInfoModel: Codable {
     let age: Int?
     let sex: String?
-    let bodyWeight: Double?
+    let bodyWeightPounds: Double?
     let bloodType: String?
-    let averageExerciseMin: QuantityModel?
-    let averageSteps: QuantityModel?
+    let dailyExerciseMinutes: QuantityModel?
+    let dailySteps: QuantityModel?
 }
 
 struct QuantityModel: Codable {

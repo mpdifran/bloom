@@ -74,8 +74,6 @@ extension HKHealthStore {
 extension HKHealthStore {
 
     func age() -> Int? {
-        let dateOfBirthType = HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!
-
         do {
             let dateOfBirthComponents = try dateOfBirthComponents()
             guard let dateOfBirth = Calendar.current.date(from: dateOfBirthComponents) else { return nil }

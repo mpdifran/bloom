@@ -28,34 +28,50 @@ struct ChatView: View {
     var body: some View {
         NavigationStack {
             ScrollViewReader { scrollViewProxy in
-                ScrollView {
-                    LazyVStack {
-                        ForEach(viewModel.chatHistory) { chatMessage in
-                            if let message = chatMessage.message {
-                                ChatBubbleCell(
-                                    message: message,
-                                    isDirect: false,
-                                    isCurrentUser: chatMessage.isCurrentUser,
-                                    showTail: true
-                                )
-                                .id(chatMessage.id)
-                            } else {
-                                ForEach(chatMessage.supplementReccomendation) { reccomendation in
-                                    SupplementBubble(supplementReccomendation: reccomendation)
-                                        .id(reccomendation.id)
+                Group {
+                    if viewModel.chatHistory.isEmpty {
+                        ContentUnavailableView(label: {
+                            Label(
+                                title: {
+                                    Text("Ask Vitadex anything about your health")
+                                },
+                                icon: {
+                                    Image(systemName: "bolt.heart.fill")
+                                        .foregroundStyle(.tint)
+                                }
+                            )
+                        })
+                    } else {
+                        ScrollView {
+                            LazyVStack {
+                                ForEach(viewModel.chatHistory) { chatMessage in
+                                    if let message = chatMessage.message {
+                                        ChatBubbleCell(
+                                            message: message,
+                                            isDirect: false,
+                                            isCurrentUser: chatMessage.isCurrentUser,
+                                            showTail: true
+                                        )
+                                        .id(chatMessage.id)
+                                    } else {
+                                        ForEach(chatMessage.supplementReccomendation) { reccomendation in
+                                            SupplementBubble(supplementReccomendation: reccomendation)
+                                                .id(reccomendation.id)
+                                        }
+                                    }
+                                }
+
+                                if isWaitingForResponse {
+                                    TypingIndicatorCell(isDirect: false)
+                                        .id("TypingPrompt")
+                                        .padding(.bottom, 12)
                                 }
                             }
+                            .padding(.vertical, 4)
                         }
-
-                        if isWaitingForResponse {
-                            TypingIndicatorCell(isDirect: false)
-                                .id("TypingPrompt")
-                                .padding(.bottom, 12)
-                        }
+                        .scrollDismissesKeyboard(.interactively)
                     }
-                    .padding(.vertical, 4)
                 }
-                .scrollDismissesKeyboard(.interactively)
                 .onAppear {
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
                 }

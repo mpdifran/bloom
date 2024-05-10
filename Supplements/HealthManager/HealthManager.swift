@@ -97,10 +97,10 @@ extension HealthManager {
             self.userInfo = UserInfoModel(
                 age: healthStore.age(),
                 sex: healthStore.sex(),
-                bodyWeight: bodyWeight?.quantity.doubleValue(for: .pound()),
+                bodyWeightPounds: bodyWeight?.quantity.doubleValue(for: .pound()),
                 bloodType: healthStore.typeOfBlood(),
-                averageExerciseMin: avgExerciseMinQuantity,
-                averageSteps: stepsQuantity
+                dailyExerciseMinutes: avgExerciseMinQuantity,
+                dailySteps: stepsQuantity
             )
         }
     }

@@ -53,4 +53,13 @@ extension NetworkRequester {
         }
         return goals
     }
+
+    func fetchSupplements() async throws -> [String] {
+        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/supplements")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+
+        let supplementsResponse = try JSONDecoder.main.decode([String].self, from: data)
+
+        return supplementsResponse
+    }
 }

@@ -12,6 +12,7 @@ extension OnboardingRootView {
         case welcome
         case healthKit
         case goals
+        case supplements
     }
 }
 
@@ -21,7 +22,8 @@ struct OnboardingRootView: View {
 
     @State private var step = Step.welcome
 
-    @ObservedObject private var viewModel = GoalViewModel.shared
+    @ObservedObject private var supplementsViewModel = SupplementViewModel.shared
+    @ObservedObject private var goalsViewModel = GoalViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
     @Environment(\.dismiss) private var dismiss
@@ -35,6 +37,10 @@ struct OnboardingRootView: View {
                 OnboardingHealthKitView()
             case .goals:
                 OnboardingGoalsView {
+                    determineNextStep()
+                }
+            case .supplements:
+                OnboardingSupplementsView {
                     determineNextStep()
                 }
             }
@@ -55,8 +61,10 @@ private extension OnboardingRootView {
     func determineNextStep() {
         if !healthManager.isAuthorized {
             setStep(.healthKit)
-        } else if viewModel.selectedGoals.isEmpty {
+        } else if goalsViewModel.selectedGoals.isEmpty {
             setStep(.goals)
+        } else if supplementsViewModel.selectedSupplements.isEmpty {
+            setStep(.supplements)
         } else {
             onComplete()
             dismiss()
