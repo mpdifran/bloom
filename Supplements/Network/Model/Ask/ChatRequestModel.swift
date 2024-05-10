@@ -12,7 +12,7 @@ struct ChatRequestModel: Codable {
     let userInfo: UserInfoModel?
 }
 
-struct UserInfoModel: Codable {
+struct UserInfoModel: Codable, Equatable {
     let age: Int?
     let sex: String?
     let bodyWeightPounds: Double?
@@ -22,7 +22,7 @@ struct UserInfoModel: Codable {
     let dailyHeartRateVariability: QuantityModel?
 }
 
-struct QuantityModel: Codable {
+struct QuantityModel: Codable, Equatable {
     let amount: Double
     let kind: Kind
     let periodDays: Int?

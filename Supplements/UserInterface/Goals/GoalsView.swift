@@ -30,6 +30,7 @@ struct GoalsView: View {
                                 await loadData()
                             }
                         }
+                        .buttonStyle(.borderedProminent)
                     })
                 } else {
                     ScrollView {

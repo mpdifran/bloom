@@ -8,10 +8,10 @@
 import Foundation
 
 struct InsightsResponse: Codable {
-    let goalInsights: GoalInsights
+    let goalsInsights: GoalInsights
     let scores: Scores
     let supplementInsights: SupplementInsights
-    let userInfoInsights: UserInfoInsights
+    let userInfoInsights: [UserInfoInsight]
 }
 
 struct GoalInsights: Codable {
@@ -20,8 +20,16 @@ struct GoalInsights: Codable {
 }
 
 struct Scores: Codable {
+    let nutrientsScore: NutrientsScore
     let rechargeScore: RechargeScore
     let takeChargeScore: TakeChargeScore
+}
+
+struct NutrientsScore: Codable {
+    let overallScore: Int
+    let supplementMatchToGoalScore: Int
+    let supplementScientificScore: Int
+    let shortText: String
 }
 
 struct RechargeScore: Codable {
@@ -51,6 +59,13 @@ struct RecommendedSupplement: Codable {
     let supplementName: String
 }
 
-struct UserInfoInsights: Codable {
+struct UserInfoInsight: Codable {
+    let importance: Int
+    let inRange: Int
+    let metricName: String
+    let shortText: String
 
+    var inRangeBool: Bool {
+        inRange == 1
+    }
 }

@@ -51,7 +51,27 @@
 		FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B242BEE91B500926042 /* InsightsView.swift */; };
 		FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B262BEE927F00926042 /* InsightsViewModel.swift */; };
 		FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B282BEE936100926042 /* InsightsResponse.swift */; };
+		FFF61B2B2BEEB23F00926042 /* NutrientsScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B2A2BEEB23F00926042 /* NutrientsScoreCell.swift */; };
+		FFF61B2D2BEEB46D00926042 /* OverallScoreValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B2C2BEEB46D00926042 /* OverallScoreValueView.swift */; };
+		FFF61B2F2BEEB52200926042 /* ChildScoreValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B2E2BEEB52200926042 /* ChildScoreValueView.swift */; };
+		FFF61B312BEEB5F900926042 /* RechargeScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B302BEEB5F900926042 /* RechargeScoreCell.swift */; };
+		FFF61B332BEEB67400926042 /* TakeChargeScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B322BEEB67400926042 /* TakeChargeScoreCell.swift */; };
+		FFF61B3B2BEEB7B000926042 /* SupplementsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */; };
+		FFF61B422BEEB99600926042 /* GoalInsightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B412BEEB99600926042 /* GoalInsightsCell.swift */; };
+		FFF61B442BEEBB4800926042 /* SupplementInsightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B432BEEBB4800926042 /* SupplementInsightsCell.swift */; };
+		FFF61B462BEEBBEB00926042 /* RecommendedSupplementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */; };
+		FFF61B482BEEBD8F00926042 /* UserInfoInsightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B472BEEBD8F00926042 /* UserInfoInsightsCell.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FFF61B3C2BEEB7B000926042 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFACBAD82BAC7788006AAD0B;
+			remoteInfo = Supplements;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -99,6 +119,17 @@
 		FFF61B242BEE91B500926042 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		FFF61B262BEE927F00926042 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		FFF61B282BEE936100926042 /* InsightsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsResponse.swift; sourceTree = "<group>"; };
+		FFF61B2A2BEEB23F00926042 /* NutrientsScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientsScoreCell.swift; sourceTree = "<group>"; };
+		FFF61B2C2BEEB46D00926042 /* OverallScoreValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverallScoreValueView.swift; sourceTree = "<group>"; };
+		FFF61B2E2BEEB52200926042 /* ChildScoreValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildScoreValueView.swift; sourceTree = "<group>"; };
+		FFF61B302BEEB5F900926042 /* RechargeScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RechargeScoreCell.swift; sourceTree = "<group>"; };
+		FFF61B322BEEB67400926042 /* TakeChargeScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeChargeScoreCell.swift; sourceTree = "<group>"; };
+		FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SupplementsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsTests.swift; sourceTree = "<group>"; };
+		FFF61B412BEEB99600926042 /* GoalInsightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalInsightsCell.swift; sourceTree = "<group>"; };
+		FFF61B432BEEBB4800926042 /* SupplementInsightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementInsightsCell.swift; sourceTree = "<group>"; };
+		FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSupplementView.swift; sourceTree = "<group>"; };
+		FFF61B472BEEBD8F00926042 /* UserInfoInsightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoInsightsCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +139,13 @@
 			files = (
 				FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */,
 				FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFF61B352BEEB7B000926042 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				FFACBADB2BAC7788006AAD0B /* Supplements */,
+				FFF61B392BEEB7B000926042 /* SupplementsTests */,
 				FFACBADA2BAC7788006AAD0B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -137,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				FFACBAD92BAC7788006AAD0B /* Supplements.app */,
+				FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -313,8 +353,25 @@
 			children = (
 				FFF61B242BEE91B500926042 /* InsightsView.swift */,
 				FFF61B262BEE927F00926042 /* InsightsViewModel.swift */,
+				FFF61B412BEEB99600926042 /* GoalInsightsCell.swift */,
+				FFF61B432BEEBB4800926042 /* SupplementInsightsCell.swift */,
+				FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */,
+				FFF61B2C2BEEB46D00926042 /* OverallScoreValueView.swift */,
+				FFF61B2E2BEEB52200926042 /* ChildScoreValueView.swift */,
+				FFF61B2A2BEEB23F00926042 /* NutrientsScoreCell.swift */,
+				FFF61B302BEEB5F900926042 /* RechargeScoreCell.swift */,
+				FFF61B322BEEB67400926042 /* TakeChargeScoreCell.swift */,
+				FFF61B472BEEBD8F00926042 /* UserInfoInsightsCell.swift */,
 			);
 			path = Inisghts;
+			sourceTree = "<group>";
+		};
+		FFF61B392BEEB7B000926042 /* SupplementsTests */ = {
+			isa = PBXGroup;
+			children = (
+				FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */,
+			);
+			path = SupplementsTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -341,6 +398,24 @@
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FFF61B372BEEB7B000926042 /* SupplementsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FFF61B3E2BEEB7B000926042 /* Build configuration list for PBXNativeTarget "SupplementsTests" */;
+			buildPhases = (
+				FFF61B342BEEB7B000926042 /* Sources */,
+				FFF61B352BEEB7B000926042 /* Frameworks */,
+				FFF61B362BEEB7B000926042 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FFF61B3D2BEEB7B000926042 /* PBXTargetDependency */,
+			);
+			name = SupplementsTests;
+			productName = SupplementsTests;
+			productReference = FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -353,6 +428,10 @@
 				TargetAttributes = {
 					FFACBAD82BAC7788006AAD0B = {
 						CreatedOnToolsVersion = 15.3;
+					};
+					FFF61B372BEEB7B000926042 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = FFACBAD82BAC7788006AAD0B;
 					};
 				};
 			};
@@ -374,6 +453,7 @@
 			projectRoot = "";
 			targets = (
 				FFACBAD82BAC7788006AAD0B /* Supplements */,
+				FFF61B372BEEB7B000926042 /* SupplementsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -388,6 +468,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FFF61B362BEEB7B000926042 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -396,22 +483,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
+				FFF61B2F2BEEB52200926042 /* ChildScoreValueView.swift in Sources */,
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* ChatRequestModel.swift in Sources */,
 				FFF61B142BEE808700926042 /* SupplementViewModel.swift in Sources */,
+				FFF61B462BEEBBEB00926042 /* RecommendedSupplementView.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFF61AF12BED548D00926042 /* GoalResponse.swift in Sources */,
 				FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */,
 				FFF61B0B2BEE670100926042 /* OnboardingGoalsView.swift in Sources */,
+				FFF61B332BEEB67400926042 /* TakeChargeScoreCell.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FFF61B072BED9A9C00926042 /* GoalViewModel.swift in Sources */,
+				FFF61B2B2BEEB23F00926042 /* NutrientsScoreCell.swift in Sources */,
 				FFF61AF32BED554100926042 /* GoalsView.swift in Sources */,
 				FFB4445D2BEC4CAB00486AD7 /* Codable+Constants.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
+				FFF61B2D2BEEB46D00926042 /* OverallScoreValueView.swift in Sources */,
+				FFF61B482BEEBD8F00926042 /* UserInfoInsightsCell.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
+				FFF61B442BEEBB4800926042 /* SupplementInsightsCell.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
@@ -423,6 +517,8 @@
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFF61B182BEE88A900926042 /* SupplementsView.swift in Sources */,
 				FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */,
+				FFF61B312BEEB5F900926042 /* RechargeScoreCell.swift in Sources */,
+				FFF61B422BEEB99600926042 /* GoalInsightsCell.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FFF61B0D2BEE7D1900926042 /* OnboardingSupplementsView.swift in Sources */,
@@ -438,7 +534,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FFF61B342BEEB7B000926042 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFF61B3B2BEEB7B000926042 /* SupplementsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FFF61B3D2BEEB7B000926042 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFACBAD82BAC7788006AAD0B /* Supplements */;
+			targetProxy = FFF61B3C2BEEB7B000926042 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		FFACBAE52BAC778A006AAD0B /* Debug */ = {
@@ -630,6 +742,42 @@
 			};
 			name = Release;
 		};
+		FFF61B3F2BEEB7B000926042 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 538R2KUTXD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.SupplementsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Supplements.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Supplements";
+			};
+			name = Debug;
+		};
+		FFF61B402BEEB7B000926042 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 538R2KUTXD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.SupplementsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Supplements.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Supplements";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -647,6 +795,15 @@
 			buildConfigurations = (
 				FFACBAE82BAC778A006AAD0B /* Debug */,
 				FFACBAE92BAC778A006AAD0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FFF61B3E2BEEB7B000926042 /* Build configuration list for PBXNativeTarget "SupplementsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FFF61B3F2BEEB7B000926042 /* Debug */,
+				FFF61B402BEEB7B000926042 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
