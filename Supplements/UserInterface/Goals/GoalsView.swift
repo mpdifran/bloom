@@ -63,6 +63,8 @@ struct GoalsView: View {
 private extension GoalsView {
 
     func loadData() async {
+        guard viewModel.goals.isEmpty else { return }
+
         await MainActor.run { isLoading = true }
         do {
             try await viewModel.loadGoals()

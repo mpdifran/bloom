@@ -105,6 +105,8 @@ private extension SupplementsView {
     }
 
     func loadSupplements() async throws {
+        guard viewModel.supplements.isEmpty else { return }
+
         try await viewModel.loadSupplements()
     }
 }

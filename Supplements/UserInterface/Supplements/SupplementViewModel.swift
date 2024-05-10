@@ -29,8 +29,10 @@ extension SupplementViewModel {
     func loadSupplements() async throws {
         let supplements = try await NetworkRequester.shared.fetchSupplements()
 
+        let sortedSupplements = supplements.sorted(by: { $0 < $1 })
+
         await MainActor.run {
-            self.supplements = supplements
+            self.supplements = sortedSupplements
         }
     }
 
