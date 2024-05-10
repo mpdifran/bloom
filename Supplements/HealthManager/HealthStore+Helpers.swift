@@ -72,7 +72,7 @@ extension HKHealthStore {
                     quantity = nil
                 }
 
-                guard let result = result, let quantity else {
+                guard let quantity else {
                     continuation.resume(throwing: NSError(description: "Something went wrong"))
                     return
                 }
