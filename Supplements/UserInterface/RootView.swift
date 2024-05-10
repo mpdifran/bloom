@@ -16,6 +16,7 @@ struct RootView: View {
 
     var body: some View {
         TabView {
+            GoalsView()
             ChatView()
         }
         .sheet($presentedSheet)

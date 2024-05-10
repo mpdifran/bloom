@@ -11,38 +11,65 @@ struct GoalsView: View {
 
     @ObservedObject private var viewModel = GoalViewModel.shared
 
+    @State private var isLoading = false
     @State private var error: Error?
 
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                ForEach(viewModel.goals) { goal in
-                    GoalCell(
-                        goal: goal,
-                        isSelected: viewModel.isGoalSelected(goal)
-                    )
-                    .onTapGesture {
-                        viewModel.toggleSelect(goal: goal)
-                        feedbackGenerator.impactOccurred()
+            Group {
+                if isLoading {
+                    ContentUnavailableView("Loading Goals", systemImage: "flag")
+                } else if viewModel.goals.isEmpty {
+                    ContentUnavailableView(label: {
+                        Label("Failed to Load Goals", systemImage: "flag")
+                    }, actions: {
+                        Button("Reload", systemImage: "arrow.counterclockwise") {
+                            Task {
+                                await loadData()
+                            }
+                        }
+                    })
+                } else {
+                    ScrollView {
+                        ForEach(viewModel.goals) { goal in
+                            GoalCell(
+                                goal: goal,
+                                isSelected: viewModel.isGoalSelected(goal)
+                            )
+                            .onTapGesture {
+                                viewModel.toggleSelect(goal: goal)
+                                feedbackGenerator.impactOccurred()
+                            }
+                        }
+                        .padding()
                     }
                 }
-                .padding()
             }
             .navigationTitle("Goals")
+        }
+        .tabItem {
+            Label("Goals", systemImage: "flag")
         }
         .onAppear {
             feedbackGenerator.prepare()
         }
         .alert(error: $error)
-        .task {
-            do {
-                try await viewModel.loadGoals()
-            } catch {
-                self.error = error
-            }
+        .task { await loadData() }
+    }
+}
+
+private extension GoalsView {
+
+    func loadData() async {
+        await MainActor.run { isLoading = true }
+        do {
+            try await viewModel.loadGoals()
+        } catch {
+            self.error = error
         }
+        await MainActor.run { isLoading = false }
     }
 }
 
