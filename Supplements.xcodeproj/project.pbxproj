@@ -38,6 +38,10 @@
 		FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AFD2BED738700926042 /* SupplementBubbleCell.swift */; };
 		FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B002BED7C1300926042 /* EfficacyView.swift */; };
 		FFF61B032BED87B400926042 /* Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B022BED87B400926042 /* Delay.swift */; };
+		FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B042BED9A7100926042 /* GoalCell.swift */; };
+		FFF61B072BED9A9C00926042 /* GoalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B062BED9A9C00926042 /* GoalViewModel.swift */; };
+		FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B082BED9CA900926042 /* Color+Random.swift */; };
+		FFF61B0B2BEE670100926042 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B0A2BEE670100926042 /* OnboardingGoalsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +77,10 @@
 		FFF61AFD2BED738700926042 /* SupplementBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementBubbleCell.swift; sourceTree = "<group>"; };
 		FFF61B002BED7C1300926042 /* EfficacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EfficacyView.swift; sourceTree = "<group>"; };
 		FFF61B022BED87B400926042 /* Delay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delay.swift; sourceTree = "<group>"; };
+		FFF61B042BED9A7100926042 /* GoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCell.swift; sourceTree = "<group>"; };
+		FFF61B062BED9A9C00926042 /* GoalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewModel.swift; sourceTree = "<group>"; };
+		FFF61B082BED9CA900926042 /* Color+Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Random.swift"; sourceTree = "<group>"; };
+		FFF61B0A2BEE670100926042 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +102,7 @@
 				FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */,
 				FFB4445C2BEC4CAB00486AD7 /* Codable+Constants.swift */,
 				FFF61B022BED87B400926042 /* Delay.swift */,
+				FFF61B082BED9CA900926042 /* Color+Random.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -185,6 +194,7 @@
 				FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */,
 				FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */,
 				FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */,
+				FFF61B0A2BEE670100926042 /* OnboardingGoalsView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -225,6 +235,8 @@
 			isa = PBXGroup;
 			children = (
 				FFF61AF22BED554100926042 /* GoalsView.swift */,
+				FFF61B062BED9A9C00926042 /* GoalViewModel.swift */,
+				FFF61B042BED9A7100926042 /* GoalCell.swift */,
 			);
 			path = Goals;
 			sourceTree = "<group>";
@@ -328,14 +340,18 @@
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFF61AF12BED548D00926042 /* GoalResponse.swift in Sources */,
+				FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */,
+				FFF61B0B2BEE670100926042 /* OnboardingGoalsView.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
+				FFF61B072BED9A9C00926042 /* GoalViewModel.swift in Sources */,
 				FFF61AF32BED554100926042 /* GoalsView.swift in Sources */,
 				FFB4445D2BEC4CAB00486AD7 /* Codable+Constants.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
+				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,

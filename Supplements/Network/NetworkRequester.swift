@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2024-05-08.
 //
 
-import Foundation
+import SwiftUI
 
 final class NetworkRequester {
     static let shared = NetworkRequester()
@@ -42,8 +42,15 @@ extension NetworkRequester {
         let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/goals")!
         let (data, _) = try await URLSession.shared.data(from: url)
 
-        let goalsResponse = try JSONDecoder.main.decode(GoalResponse.self, from: data)
+        let goalsResponse = try JSONDecoder.main.decode([String].self, from: data)
 
-        return goalsResponse.goals.map { GoalModel(name: $0) }
+        var goals = [GoalModel]()
+        for index in 0 ..< goalsResponse.count {
+            let goalName = goalsResponse[index]
+            let color = Color.indexedSet(index: index)
+
+            goals.append(GoalModel(name: goalName, color: color))
+        }
+        return goals
     }
 }

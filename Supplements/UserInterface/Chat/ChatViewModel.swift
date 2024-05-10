@@ -8,11 +8,9 @@
 import Foundation
 
 final class ChatViewModel: ObservableObject {
-    static let shared = ChatViewModel()
-
     @Published var chatHistory = [ChatMessage]()
 
-    private init() { }
+    init() { }
 }
 
 extension ChatViewModel {

@@ -1,13 +1,16 @@
 //
-//  GoalsView.swift
+//  OnboardingGoalsView.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-05-09.
+//  Created by Mark DiFranco on 2024-05-10.
 //
 
 import SwiftUI
+import AppUI
 
-struct GoalsView: View {
+struct OnboardingGoalsView: View {
+
+    let onContinue: () -> Void
 
     @ObservedObject private var viewModel = GoalViewModel.shared
 
@@ -31,6 +34,13 @@ struct GoalsView: View {
                 .padding()
             }
             .navigationTitle("Goals")
+            .shelf {
+                ProminentButton("Continue") {
+                    onContinue()
+                }
+                .buttonBorderShape(.roundedRectangle(radius: 17))
+                .disabled(viewModel.selectedGoals.isEmpty)
+            }
         }
         .onAppear {
             feedbackGenerator.prepare()
@@ -47,5 +57,5 @@ struct GoalsView: View {
 }
 
 #Preview {
-    GoalsView()
+    OnboardingGoalsView() { }
 }

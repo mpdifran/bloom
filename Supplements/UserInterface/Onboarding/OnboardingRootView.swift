@@ -11,6 +11,7 @@ extension OnboardingRootView {
     enum Step {
         case welcome
         case healthKit
+        case goals
     }
 }
 
@@ -20,6 +21,7 @@ struct OnboardingRootView: View {
 
     @State private var step = Step.welcome
 
+    @ObservedObject private var viewModel = GoalViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
     @Environment(\.dismiss) private var dismiss
@@ -31,6 +33,10 @@ struct OnboardingRootView: View {
                 OnboardingWelcomeView()
             case .healthKit:
                 OnboardingHealthKitView()
+            case .goals:
+                OnboardingGoalsView {
+                    determineNextStep()
+                }
             }
         }
         .animation(.easeInOut(duration: 1), value: step)
@@ -49,6 +55,8 @@ private extension OnboardingRootView {
     func determineNextStep() {
         if !healthManager.isAuthorized {
             setStep(.healthKit)
+        } else if viewModel.selectedGoals.isEmpty {
+            setStep(.goals)
         } else {
             onComplete()
             dismiss()

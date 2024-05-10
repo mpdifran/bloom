@@ -20,7 +20,7 @@ struct ChatView: View {
 
     @FocusState private var isSearchFieldFocused: Bool
 
-    @ObservedObject private var viewModel = ChatViewModel.shared
+    @ObservedObject private var viewModel = ChatViewModel()
     @ObservedObject private var healthManager = HealthManager.shared
 
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
