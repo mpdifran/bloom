@@ -19,6 +19,7 @@ struct UserInfoModel: Codable {
     let bloodType: String?
     let dailyExerciseMinutes: QuantityModel?
     let dailySteps: QuantityModel?
+    let dailyHeartRateVariability: QuantityModel?
 }
 
 struct QuantityModel: Codable {

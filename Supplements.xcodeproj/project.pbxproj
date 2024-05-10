@@ -47,6 +47,10 @@
 		FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B152BEE85D500926042 /* SupplementCell.swift */; };
 		FFF61B182BEE88A900926042 /* SupplementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B172BEE88A900926042 /* SupplementsView.swift */; };
 		FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B192BEE8C3B00926042 /* TextActionBar.swift */; };
+		FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B212BEE916300926042 /* InsightsRequest.swift */; };
+		FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B242BEE91B500926042 /* InsightsView.swift */; };
+		FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B262BEE927F00926042 /* InsightsViewModel.swift */; };
+		FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B282BEE936100926042 /* InsightsResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +95,10 @@
 		FFF61B152BEE85D500926042 /* SupplementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementCell.swift; sourceTree = "<group>"; };
 		FFF61B172BEE88A900926042 /* SupplementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsView.swift; sourceTree = "<group>"; };
 		FFF61B192BEE8C3B00926042 /* TextActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextActionBar.swift; sourceTree = "<group>"; };
+		FFF61B212BEE916300926042 /* InsightsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsRequest.swift; sourceTree = "<group>"; };
+		FFF61B242BEE91B500926042 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		FFF61B262BEE927F00926042 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
+		FFF61B282BEE936100926042 /* InsightsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				FFF61AEC2BED537B00926042 /* RootView.swift */,
+				FFF61B232BEE91A300926042 /* Inisghts */,
 				FFF61AF42BED554700926042 /* Chat */,
 				FFF61AF52BED555100926042 /* Goals */,
 				FFF61B122BEE807C00926042 /* Supplements */,
@@ -227,6 +236,7 @@
 		FFB444982BED424000486AD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FFF61B202BEE915500926042 /* Inisghts */,
 				FFF61AFA2BED71C000926042 /* Ask */,
 				FFF61B0E2BEE800300926042 /* Goals */,
 			);
@@ -287,6 +297,24 @@
 				FFF61B152BEE85D500926042 /* SupplementCell.swift */,
 			);
 			path = Supplements;
+			sourceTree = "<group>";
+		};
+		FFF61B202BEE915500926042 /* Inisghts */ = {
+			isa = PBXGroup;
+			children = (
+				FFF61B212BEE916300926042 /* InsightsRequest.swift */,
+				FFF61B282BEE936100926042 /* InsightsResponse.swift */,
+			);
+			path = Inisghts;
+			sourceTree = "<group>";
+		};
+		FFF61B232BEE91A300926042 /* Inisghts */ = {
+			isa = PBXGroup;
+			children = (
+				FFF61B242BEE91B500926042 /* InsightsView.swift */,
+				FFF61B262BEE927F00926042 /* InsightsViewModel.swift */,
+			);
+			path = Inisghts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,6 +395,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
+				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* ChatRequestModel.swift in Sources */,
 				FFF61B142BEE808700926042 /* SupplementViewModel.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
@@ -390,6 +420,7 @@
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
+				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFF61B182BEE88A900926042 /* SupplementsView.swift in Sources */,
 				FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
@@ -397,6 +428,7 @@
 				FFF61B0D2BEE7D1900926042 /* OnboardingSupplementsView.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
+				FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */,
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,

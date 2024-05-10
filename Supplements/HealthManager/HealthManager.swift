@@ -31,19 +31,20 @@ final class HealthManager: ObservableObject {
         HKObjectType.characteristicType(forIdentifier: .bloodType)!,
         HKObjectType.activitySummaryType(),
         HKQuantityType(.appleExerciseTime),
-        HKQuantityType(.stepCount)
+        HKQuantityType(.stepCount),
+        HKQuantityType(.heartRateVariabilitySDNN)
     ]
     // active energy
     // sleep
     // vO2 max
     // body fat percentage
     // BMI
-    // HRV
     // resting heart rate
     // respiratory rate
     // blood oxygen
     // double support time
     // walking steadiness
+    // time in daylight
 }
 
 extension HealthManager {
@@ -82,14 +83,16 @@ extension HealthManager {
         guard isAuthorized else { return }
 
         let bodyWeight = await fetchBodyWeight()
-        let avgExerciseMin = await fetchExerciseMinutes()
-        let avgSteps = await fetchAverageSteps()
 
-        let avgExerciseMinQuantity = avgExerciseMin.map {
+        let avgExerciseMinQuantity = await fetchExerciseMinutes().map {
             QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
         }
 
-        let stepsQuantity = avgSteps.map {
+        let stepsQuantity = await fetchAverageSteps().map {
+            QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
+        }
+
+        let hrvAverage = await fetchHRV().map {
             QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
         }
 
@@ -100,7 +103,8 @@ extension HealthManager {
                 bodyWeightPounds: bodyWeight?.quantity.doubleValue(for: .pound()),
                 bloodType: healthStore.typeOfBlood(),
                 dailyExerciseMinutes: avgExerciseMinQuantity,
-                dailySteps: stepsQuantity
+                dailySteps: stepsQuantity,
+                dailyHeartRateVariability: hrvAverage
             )
         }
     }
@@ -124,9 +128,10 @@ extension HealthManager {
 
     func fetchExerciseMinutes() async -> (Double, Int)? {
         do {
-            return try await healthStore.sumQuantity(
+            return try await healthStore.fetchQuantity(
                 for: .appleExerciseTime,
                 pastMonths: 1,
+                option: .cumulativeSum,
                 unit: .minute()
             )
         } catch {
@@ -137,10 +142,24 @@ extension HealthManager {
 
     func fetchAverageSteps() async -> (Double, Int)? {
         do {
-            return try await healthStore.sumQuantity(
+            return try await healthStore.fetchQuantity(
                 for: .stepCount,
                 pastMonths: 1,
+                option: .cumulativeSum,
                 unit: .count()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchHRV() async -> (Double, Int)? {
+        do {
+            return try await healthStore.fetchQuantity(
+                for: .heartRateVariabilitySDNN,
+                pastMonths: 1,
+                unit: .secondUnit(with: .milli)
             )
         } catch {
             print(error)

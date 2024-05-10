@@ -62,4 +62,23 @@ extension NetworkRequester {
 
         return supplementsResponse
     }
+
+    func fetchInsights(request: InsightsRequest) async throws -> InsightsResponse {
+        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/insights")!
+        
+        let requestData = try JSONEncoder.main.encode(request)
+
+        print("Request Data: \(String(data: requestData, encoding: .utf8) ?? "")")
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpBody = requestData
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
+
+        return try JSONDecoder.main.decode(InsightsResponse.self, from: data)
+    }
 }

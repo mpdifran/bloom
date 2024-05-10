@@ -10,35 +10,38 @@ import HealthKit
 
 extension HKHealthStore {
 
-    func sumQuantity(
+    func fetchQuantity(
         for quantityTypeID: HKQuantityTypeIdentifier,
         pastMonths: Int,
-        option: HKStatisticsOptions = .cumulativeSum,
+        option: HKStatisticsOptions = .discreteAverage,
         unit: HKUnit
     ) async throws -> (Double, Int) {
         let start = Calendar.current.date(byAdding: .month, value: -pastMonths, to: .now)!
         let end = Date.now
 
-        let quantity = try await sumQuantity(
+        let quantity = try await fetchQuantity(
             for: quantityTypeID,
             start: start,
             end: end,
             option: option
         )
-
         let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 1
 
-        let sumInUnits = quantity.doubleValue(for: unit)
-        let average = sumInUnits / Double(days)
+        let average: Double
+        if option == .cumulativeSum {
+            average = quantity.doubleValue(for: unit) / Double(days)
+        } else {
+            average = quantity.doubleValue(for: unit)
+        }
 
         return (average, days)
     }
 
-    func sumQuantity(
+    func fetchQuantity(
         for quantityTypeID: HKQuantityTypeIdentifier,
         start: Date,
         end: Date,
-        option: HKStatisticsOptions = .cumulativeSum
+        option: HKStatisticsOptions = .discreteAverage
     ) async throws -> HKQuantity {
         try await withCheckedThrowingContinuation { continuation in
             let predicate = HKQuery.predicateForSamples(
@@ -59,12 +62,22 @@ extension HKHealthStore {
                     return
                 }
 
-                guard let result = result, let sum = result.sumQuantity() else {
+                let quantity: HKQuantity?
+                switch option {
+                case .cumulativeSum:
+                    quantity = result?.sumQuantity()
+                case .discreteAverage:
+                    quantity = result?.averageQuantity()
+                default:
+                    quantity = nil
+                }
+
+                guard let result = result, let quantity else {
                     continuation.resume(throwing: NSError(description: "Something went wrong"))
                     return
                 }
 
-                continuation.resume(returning: sum)
+                continuation.resume(returning: quantity)
             }
             execute(query)
         }
