@@ -54,6 +54,11 @@ private extension InsightsView {
 
     func content(response: InsightsResponse) -> some View {
         List {
+            if let tip = response.tipOfTheDay {
+                Section {
+                    TipOfTheDayCell(tip: tip)
+                }
+            }
             Section {
                 GoalInsightsCell(goalInsights: response.goalsInsights)
             }

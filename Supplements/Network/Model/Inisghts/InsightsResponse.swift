@@ -8,6 +8,7 @@
 import Foundation
 
 struct InsightsResponse: Codable {
+    let tipOfTheDay: String?
     let goalsInsights: GoalInsights
     let scores: Scores
     let supplementInsights: SupplementInsights

@@ -61,6 +61,7 @@
 		FFF61B442BEEBB4800926042 /* SupplementInsightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B432BEEBB4800926042 /* SupplementInsightsCell.swift */; };
 		FFF61B462BEEBBEB00926042 /* RecommendedSupplementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */; };
 		FFF61B482BEEBD8F00926042 /* UserInfoInsightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B472BEEBD8F00926042 /* UserInfoInsightsCell.swift */; };
+		FFF61B4A2BEEC20200926042 /* TipOfTheDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +131,7 @@
 		FFF61B432BEEBB4800926042 /* SupplementInsightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementInsightsCell.swift; sourceTree = "<group>"; };
 		FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSupplementView.swift; sourceTree = "<group>"; };
 		FFF61B472BEEBD8F00926042 /* UserInfoInsightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoInsightsCell.swift; sourceTree = "<group>"; };
+		FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipOfTheDayCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -353,6 +355,7 @@
 			children = (
 				FFF61B242BEE91B500926042 /* InsightsView.swift */,
 				FFF61B262BEE927F00926042 /* InsightsViewModel.swift */,
+				FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */,
 				FFF61B412BEEB99600926042 /* GoalInsightsCell.swift */,
 				FFF61B432BEEBB4800926042 /* SupplementInsightsCell.swift */,
 				FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */,
@@ -505,6 +508,7 @@
 				FFF61B2D2BEEB46D00926042 /* OverallScoreValueView.swift in Sources */,
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsCell.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
+				FFF61B4A2BEEC20200926042 /* TipOfTheDayCell.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsCell.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
