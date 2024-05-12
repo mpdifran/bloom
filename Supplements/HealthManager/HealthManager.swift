@@ -32,19 +32,19 @@ final class HealthManager: ObservableObject {
         HKObjectType.activitySummaryType(),
         HKQuantityType(.appleExerciseTime),
         HKQuantityType(.stepCount),
-        HKQuantityType(.heartRateVariabilitySDNN)
+        HKQuantityType(.heartRateVariabilitySDNN),
+        HKObjectType.quantityType(forIdentifier: .restingHeartRate)!,
+        HKObjectType.quantityType(forIdentifier: .vo2Max)!,
+        HKObjectType.quantityType(forIdentifier: .timeInDaylight)!
     ]
     // active energy
     // sleep
-    // vO2 max
     // body fat percentage
     // BMI
-    // resting heart rate
     // respiratory rate
     // blood oxygen
     // double support time
     // walking steadiness
-    // time in daylight
 }
 
 extension HealthManager {
@@ -82,29 +82,44 @@ extension HealthManager {
     func loadUserInfo() async throws {
         guard isAuthorized else { return }
 
-        let bodyWeight = await fetchBodyWeight()
+        let bodyWeight = await fetchBodyWeight().map {
+            QuantityModel(amount: $0.quantity.doubleValue(for: .pound()), kind: .latestValue, unit: "pounds", periodDays: nil)
+        }
 
         let avgExerciseMinQuantity = await fetchExerciseMinutes().map {
-            QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
+            QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
         }
 
         let stepsQuantity = await fetchAverageSteps().map {
-            QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
+            QuantityModel(amount: $0.0, kind: .average, unit: "count", periodDays: $0.1)
         }
 
         let hrvAverage = await fetchHRV().map {
-            QuantityModel(amount: $0.0, kind: .average, periodDays: $0.1)
+            QuantityModel(amount: $0.0, kind: .average, unit: "milliseconds", periodDays: $0.1)
+        }
+
+        let restingHeartRate = await fetchRestingHeartRate()
+
+        let vO2Max = await fetchVO2Max().map {
+            QuantityModel(amount: $0, kind: .latestValue, unit: "mL/min·kg", periodDays: nil)
+        }
+
+        let timeInDaylight = await fetchTimeInDaylight().map {
+            QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
         }
 
         await MainActor.run {
             self.userInfo = UserInfoModel(
                 age: healthStore.age(),
                 sex: healthStore.sex(),
-                bodyWeightPounds: bodyWeight?.quantity.doubleValue(for: .pound()),
                 bloodType: healthStore.typeOfBlood(),
+                bodyWeightPounds: bodyWeight,
                 dailyExerciseMinutes: avgExerciseMinQuantity,
                 dailySteps: stepsQuantity,
-                dailyHeartRateVariability: hrvAverage
+                dailyHeartRateVariability: hrvAverage,
+                restingHeartRate: restingHeartRate,
+                vO2Max: vO2Max,
+                timeInDaylight: timeInDaylight
             )
         }
     }
@@ -160,6 +175,45 @@ extension HealthManager {
                 for: .heartRateVariabilitySDNN,
                 pastMonths: 1,
                 unit: .secondUnit(with: .milli)
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchRestingHeartRate() async -> [Double] {
+        do {
+            let samples = try await healthStore.fetchSamples(for: .restingHeartRate, previousDays: 7)
+
+            return samples.compactMap { sample in
+                sample as? HKQuantitySample
+            }.map { sample in
+                sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
+            }
+        } catch {
+            print(error)
+        }
+        return []
+    }
+
+    func fetchVO2Max() async -> Double? {
+        do {
+            let sample = try await healthStore.fetchLatestSample(for: .vo2Max)
+            return (sample as? HKQuantitySample)?.quantity.doubleValue(for: HKUnit(from: "mL/min·kg"))
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchTimeInDaylight() async -> (Double, Int)? {
+        do {
+            return try await healthStore.fetchQuantity(
+                for: .timeInDaylight,
+                pastMonths: 1,
+                option: .cumulativeSum,
+                unit: .minute()
             )
         } catch {
             print(error)

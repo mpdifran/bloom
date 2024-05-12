@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import AppFoundations
 
 extension HKHealthStore {
 
@@ -73,13 +74,96 @@ extension HKHealthStore {
                 }
 
                 guard let quantity else {
-                    continuation.resume(throwing: NSError(description: "Something went wrong"))
+                    continuation.resume(throwing: NSError(description: "Could not get quantity."))
                     return
                 }
 
                 continuation.resume(returning: quantity)
             }
             execute(query)
+        }
+    }
+
+    func fetchSamples(
+        for quantityTypeID: HKQuantityTypeIdentifier,
+        previousDays: Int
+    ) async throws -> [HKSample] {
+        let end = Date.now
+        let start = Calendar.current.date(byAdding: .day, value: -7, to: end)!
+
+        return try await fetchSamples(for: quantityTypeID, start: start, end: end)
+    }
+
+    func fetchSamples(
+        for quantityTypeID: HKQuantityTypeIdentifier,
+        start: Date,
+        end: Date
+    ) async throws -> [HKSample] {
+        try await withCheckedThrowingContinuation { continuation in
+            guard let sampleType = HKSampleType.quantityType(forIdentifier: quantityTypeID) else {
+                let error = NSError(description: "Sample type not available")
+                continuation.resume(throwing: error)
+                return
+            }
+
+            let predicate = HKQuery.predicateForSamples(
+                withStart: start,
+                end: end,
+                options: .strictStartDate
+            )
+            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+
+            let sampleQuery = HKSampleQuery(
+                sampleType: sampleType,
+                predicate: predicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: [sortDescriptor]
+            ) { (query, samples, error) in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let samples else {
+                    continuation.resume(throwing: NSError(description: "No samples returned"))
+                    return
+                }
+
+                continuation.resume(returning: samples)
+            }
+            execute(sampleQuery)
+        }
+    }
+
+    func fetchLatestSample(for quantityTypeID: HKQuantityTypeIdentifier) async throws -> HKSample {
+        try await withCheckedThrowingContinuation { continuation in
+            guard let sampleType = HKSampleType.quantityType(forIdentifier: quantityTypeID) else {
+                let error = NSError(description: "Sample type not available")
+                continuation.resume(throwing: error)
+                return
+            }
+
+            let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)]
+
+            let sampleQuery = HKSampleQuery(
+                sampleType: sampleType,
+                predicate: nil,
+                limit: 1,
+                sortDescriptors: sortDescriptors
+            ) { query, samples, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let sample = samples?.first else {
+                    continuation.resume(throwing: NSError(description: "No samples returned"))
+                    return
+                }
+
+                continuation.resume(returning: sample)
+            }
+            execute(sampleQuery)
         }
     }
 }

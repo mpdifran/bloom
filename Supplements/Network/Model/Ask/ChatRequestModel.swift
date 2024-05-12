@@ -15,16 +15,20 @@ struct ChatRequestModel: Codable {
 struct UserInfoModel: Codable, Equatable {
     let age: Int?
     let sex: String?
-    let bodyWeightPounds: Double?
     let bloodType: String?
+    let bodyWeightPounds: QuantityModel?
     let dailyExerciseMinutes: QuantityModel?
     let dailySteps: QuantityModel?
     let dailyHeartRateVariability: QuantityModel?
+    let restingHeartRate: [Double]
+    let vO2Max: QuantityModel?
+    let timeInDaylight: QuantityModel?
 }
 
 struct QuantityModel: Codable, Equatable {
     let amount: Double
     let kind: Kind
+    let unit: String
     let periodDays: Int?
 
     enum Kind: String, Codable {
