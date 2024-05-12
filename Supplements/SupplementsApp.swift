@@ -12,6 +12,13 @@ struct SupplementsApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .onAppear {
+                    NotificationManager.shared.requestAuthorization()
+                    BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+                }
+        }
+        .backgroundTask(.appRefresh("proactive-tip")) {
+            await ChatViewModel.shared.sendProactiveTip()
         }
     }
 }

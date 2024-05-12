@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnboardingWelcomeView: View {
     var body: some View {
-        Text("Welcome to Vitadex!")
+        Text("Welcome to Bloom!")
             .font(.largeTitle)
             .bold()
     }

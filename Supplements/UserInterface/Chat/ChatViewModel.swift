@@ -8,9 +8,11 @@
 import Foundation
 
 final class ChatViewModel: ObservableObject {
+    static let shared = ChatViewModel()
+
     @Published var chatHistory = [ChatMessage]()
 
-    init() { }
+    private init() { }
 }
 
 extension ChatViewModel {
@@ -78,6 +80,36 @@ extension ChatViewModel {
             }
         }
     }
+
+    func sendProactiveTip() async {
+        let userInfo = HealthManager.shared.userInfo
+        let currentGoals = GoalViewModel.shared.selectedGoals
+        let currentSupplements = SupplementViewModel.shared.selectedSupplements
+
+        do {
+            let response = try await NetworkRequester.shared.sendProactiveTip(
+                userInfo: userInfo,
+                currentGoals: currentGoals,
+                currentSupplements: currentSupplements,
+                chatHistory: networkChatHistory
+            )
+
+            await MainActor.run {
+                chatHistory.append(
+                    ChatMessage(
+                        message: response.message,
+                        timestamp: .now,
+                        supplementReccomendation: [],
+                        isCurrentUser: false
+                    )
+                )
+            }
+
+            await NotificationManager.shared.sendNotification(title: "Bloom", subtitle: response.message)
+        } catch {
+            print(error)
+        }
+    }
 }
 
 extension ChatViewModel {
@@ -89,7 +121,7 @@ extension ChatViewModel {
             return ChatMessageHistory(
                 timestamp: chatMessage.timestamp,
                 message: message,
-                sender: chatMessage.isCurrentUser ? "User" : "Vitadex"
+                sender: chatMessage.isCurrentUser ? "User" : "Bloom"
             )
         }
     }

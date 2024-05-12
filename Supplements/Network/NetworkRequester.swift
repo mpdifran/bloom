@@ -47,6 +47,36 @@ extension NetworkRequester {
         return try JSONDecoder.main.decode(AskResponseModel.self, from: data)
     }
 
+    func sendProactiveTip(
+        userInfo: UserInfoModel?,
+        currentGoals: [String],
+        currentSupplements: [String],
+        chatHistory: [ChatMessageHistory]
+    ) async throws -> ProactiveTipResponseModel {
+        let request = ProactiveTipRequestModel(
+            userInfo: userInfo,
+            currentSupplements: currentSupplements,
+            currentGoals: currentGoals,
+            chatHistory: chatHistory
+        )
+
+        let requestData = try JSONEncoder.main.encode(request)
+
+        print("Request Data: \(String(data: requestData, encoding: .utf8) ?? "")")
+
+        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/proactive-tip")!
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpBody = requestData
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
+
+        return try JSONDecoder.main.decode(ProactiveTipResponseModel.self, from: data)
+    }
+
     func fetchGoals() async throws -> [GoalModel] {
         let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/goals?max=100")!
         let (data, _) = try await URLSession.shared.data(from: url)

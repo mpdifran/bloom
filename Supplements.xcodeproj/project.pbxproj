@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
+		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
+		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
+		FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC952BF17B1400C34621 /* BackgroundTaskScheduler.swift */; };
+		FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ChatView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -81,6 +85,10 @@
 /* Begin PBXFileReference section */
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
+		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
+		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
+		FF6AEC952BF17B1400C34621 /* BackgroundTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskScheduler.swift; sourceTree = "<group>"; };
+		FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -173,6 +181,31 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		FF6AEC8F2BF1774C00C34621 /* ProactiveTip */ = {
+			isa = PBXGroup;
+			children = (
+				FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */,
+				FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */,
+			);
+			path = ProactiveTip;
+			sourceTree = "<group>";
+		};
+		FF6AEC942BF17AFB00C34621 /* BackgroundTasks */ = {
+			isa = PBXGroup;
+			children = (
+				FF6AEC952BF17B1400C34621 /* BackgroundTaskScheduler.swift */,
+			);
+			path = BackgroundTasks;
+			sourceTree = "<group>";
+		};
+		FF6AEC972BF17D0D00C34621 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		FFACBAD02BAC7788006AAD0B = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +231,8 @@
 				FF23333E2BD855ED007A5CBB /* Info.plist */,
 				FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */,
 				FFB444952BED420C00486AD7 /* UserInterface */,
+				FF6AEC942BF17AFB00C34621 /* BackgroundTasks */,
+				FF6AEC972BF17D0D00C34621 /* Notifications */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
 				FFB444562BEC40FD00486AD7 /* HealthManager */,
 				FFB444592BEC4C3D00486AD7 /* Model */,
@@ -290,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				FFF61B202BEE915500926042 /* Inisghts */,
+				FF6AEC8F2BF1774C00C34621 /* ProactiveTip */,
 				FFF61AFA2BED71C000926042 /* Ask */,
 				FFF61B0E2BEE800300926042 /* Goals */,
 			);
@@ -541,7 +577,9 @@
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
+				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
+				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFF61B182BEE88A900926042 /* SupplementsView.swift in Sources */,
 				FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */,
@@ -554,10 +592,12 @@
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */,
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
+				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
+				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -713,7 +753,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Vitadex;
+				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -748,7 +788,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Vitadex;
+				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

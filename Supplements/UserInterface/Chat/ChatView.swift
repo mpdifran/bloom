@@ -18,7 +18,7 @@ struct ChatView: View {
     @State private var presentedSheet: AnyView?
     @State private var error: Error?
 
-    @ObservedObject private var viewModel = ChatViewModel()
+    @ObservedObject private var viewModel = ChatViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
@@ -31,7 +31,7 @@ struct ChatView: View {
                         ContentUnavailableView(label: {
                             Label(
                                 title: {
-                                    Text("Ask Vitadex anything about your health")
+                                    Text("Ask Bloom anything about your health")
                                 },
                                 icon: {
                                     Image(systemName: "bolt.heart.fill")
@@ -70,6 +70,15 @@ struct ChatView: View {
                         .scrollDismissesKeyboard(.interactively)
                     }
                 }
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Proactive Tip", systemImage: "rectangle.portrait.and.arrow.right") {
+                            Task {
+                                await viewModel.sendProactiveTip()
+                            }
+                        }
+                    }
+                }
                 .onAppear {
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
                 }
@@ -95,7 +104,7 @@ struct ChatView: View {
                     submitPrompt()
                 }
             }
-            .navigationTitle("Vitadex")
+            .navigationTitle("Bloom")
         }
         .sheet($presentedSheet)
         .alert(error: $error)

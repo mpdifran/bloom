@@ -25,7 +25,7 @@ struct OnboardingHealthKitView: View {
                 .font(.largeTitle)
                 .bold()
 
-            Text("Link your Health data to help Vitadex give you better recommendations.")
+            Text("Link your Health data to help Bloom give you better recommendations.")
                 .font(.headline)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 300)
@@ -46,7 +46,7 @@ struct OnboardingHealthKitView: View {
                     }
                 }
                 .buttonBorderShape(.roundedRectangle(radius: 17))
-                Text("Vitadex is not a substitute for professional medical advice. Always consult your physician first.")
+                Text("Bloom is not a substitute for professional medical advice. Always consult your physician first.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
                     .font(.caption)
