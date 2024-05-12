@@ -42,9 +42,8 @@ struct SleepAggregates: Codable, Equatable {
     let remSleep: SleepStageAggregate
     let deepSleep: SleepStageAggregate
     let coreSleep: SleepStageAggregate
-    let asleep: SleepStageAggregate
+    let asleepTotal: SleepStageAggregate
     let awake: SleepStageAggregate
-    let inBed: SleepStageAggregate
 }
 
 struct SleepStageAggregate: Codable, Equatable {

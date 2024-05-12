@@ -258,7 +258,7 @@ extension HealthManager {
                     periodDays: period,
                     kind: .average
                 ),
-                asleep: .init(
+                asleepTotal: .init(
                     currentPeriodAmount: sums.totalAsleep / Double(period),
                     previousPeriodAmount: previousSums.totalAsleep / Double(period),
                     unit: "seconds",
@@ -268,13 +268,6 @@ extension HealthManager {
                 awake: .init(
                     currentPeriodAmount: sums.totalAwake / Double(period),
                     previousPeriodAmount: previousSums.totalAwake / Double(period),
-                    unit: "seconds",
-                    periodDays: period,
-                    kind: .average
-                ),
-                inBed: .init(
-                    currentPeriodAmount: sums.totalInBed / Double(period),
-                    previousPeriodAmount: previousSums.totalInBed / Double(period),
                     unit: "seconds",
                     periodDays: period,
                     kind: .average
@@ -297,7 +290,7 @@ extension HealthManager {
 
             switch state {
             case .inBed:
-                sums.totalInBed += categorySample.timeInterval
+                break
             case .asleepUnspecified:
                 sums.totalAsleep += categorySample.timeInterval
             case .asleep:
@@ -325,5 +318,4 @@ struct SleepStageSum {
     var totalCore: Double = 0
     var totalAsleep: Double = 0
     var totalAwake: Double = 0
-    var totalInBed: Double = 0
 }
