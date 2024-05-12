@@ -1,5 +1,5 @@
 //
-//  ChatRequestModel.swift
+//  AskRequestModel.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-05-08.
@@ -7,9 +7,12 @@
 
 import Foundation
 
-struct ChatRequestModel: Codable {
+struct AskRequestModel: Codable {
     let question: String
     let userInfo: UserInfoModel?
+    let currentSupplements: [String]
+    let currentGoals: [String]
+    let chatHistory: [ChatMessageHistory]
 }
 
 struct UserInfoModel: Codable, Equatable {
@@ -56,4 +59,10 @@ struct SleepStageAggregate: Codable, Equatable {
     enum Kind: String, Codable {
         case average
     }
+}
+
+struct ChatMessageHistory: Codable, Equatable {
+    let timestamp: Date
+    let message: String
+    let sender: String
 }

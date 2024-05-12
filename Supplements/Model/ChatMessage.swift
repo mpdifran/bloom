@@ -10,6 +10,7 @@ import Foundation
 struct ChatMessage: Identifiable, Hashable, Equatable {
     let id = UUID().uuidString
     let message: String?
+    let timestamp: Date
     let supplementReccomendation: [SupplementReccomendationModel]
     let isCurrentUser: Bool
 }

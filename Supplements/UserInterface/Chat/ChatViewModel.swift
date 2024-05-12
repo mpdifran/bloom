@@ -28,26 +28,68 @@ extension ChatViewModel {
             chatHistory.append(
                 ChatMessage(
                     message: prompt,
+                    timestamp: .now,
                     supplementReccomendation: [],
                     isCurrentUser: true
                 )
             )
+            SoundPlayer.playSendMessage()
         }
 
         let userInfo = HealthManager.shared.userInfo
+        let currentGoals = GoalViewModel.shared.selectedGoals
+        let currentSupplements = SupplementViewModel.shared.selectedSupplements
 
         let response = try await NetworkRequester.shared.sendQuery(
             prompt: prompt,
-            userInfo: userInfo
+            userInfo: userInfo,
+            currentGoals: currentGoals,
+            currentSupplements: currentSupplements,
+            chatHistory: networkChatHistory
         )
 
         await MainActor.run {
-            chatHistory.append(
-                ChatMessage(
-                    message: nil,
-                    supplementReccomendation: response,
-                    isCurrentUser: false
+            var hasSentMessage = false
+            if let answer = response.message {
+                chatHistory.append(
+                    ChatMessage(
+                        message: answer,
+                        timestamp: .now,
+                        supplementReccomendation: [],
+                        isCurrentUser: false
+                    )
                 )
+                hasSentMessage = true
+            }
+            if let recommendations = response.recommendedSupplements, recommendations.isNotEmpty {
+                chatHistory.append(
+                    ChatMessage(
+                        message: nil,
+                        timestamp: .now,
+                        supplementReccomendation: recommendations,
+                        isCurrentUser: false
+                    )
+                )
+                hasSentMessage = true
+            }
+
+            if hasSentMessage {
+                SoundPlayer.playReceiveMessage()
+            }
+        }
+    }
+}
+
+extension ChatViewModel {
+
+    var networkChatHistory: [ChatMessageHistory] {
+        chatHistory.map { chatMessage in
+            let message = chatMessage.message ?? chatMessage.supplementReccomendation.first?.shortText ?? ""
+
+            return ChatMessageHistory(
+                timestamp: chatMessage.timestamp,
+                message: message,
+                sender: chatMessage.isCurrentUser ? "User" : "Vitadex"
             )
         }
     }

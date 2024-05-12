@@ -15,10 +15,19 @@ final class NetworkRequester {
 
 extension NetworkRequester {
 
-    func sendQuery(prompt: String, userInfo: UserInfoModel?) async throws -> [SupplementReccomendationModel] {
-        let request = ChatRequestModel(
+    func sendQuery(
+        prompt: String,
+        userInfo: UserInfoModel?,
+        currentGoals: [String],
+        currentSupplements: [String],
+        chatHistory: [ChatMessageHistory]
+    ) async throws -> AskResponseModel {
+        let request = AskRequestModel(
             question: prompt,
-            userInfo: userInfo
+            userInfo: userInfo,
+            currentSupplements: currentSupplements,
+            currentGoals: currentGoals,
+            chatHistory: chatHistory
         )
 
         let requestData = try JSONEncoder.main.encode(request)
@@ -35,11 +44,11 @@ extension NetworkRequester {
 
         print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
 
-        return try JSONDecoder.main.decode([SupplementReccomendationModel].self, from: data)
+        return try JSONDecoder.main.decode(AskResponseModel.self, from: data)
     }
 
     func fetchGoals() async throws -> [GoalModel] {
-        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/goals")!
+        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/goals?max=100")!
         let (data, _) = try await URLSession.shared.data(from: url)
 
         let goalsResponse = try JSONDecoder.main.decode([String].self, from: data)
@@ -55,7 +64,7 @@ extension NetworkRequester {
     }
 
     func fetchSupplements() async throws -> [String] {
-        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/supplements")!
+        let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/supplements?max=100")!
         let (data, _) = try await URLSession.shared.data(from: url)
 
         let supplementsResponse = try JSONDecoder.main.decode([String].self, from: data)
