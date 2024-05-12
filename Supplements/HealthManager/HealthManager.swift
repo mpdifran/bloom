@@ -35,10 +35,10 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.heartRateVariabilitySDNN),
         HKObjectType.quantityType(forIdentifier: .restingHeartRate)!,
         HKObjectType.quantityType(forIdentifier: .vo2Max)!,
-        HKObjectType.quantityType(forIdentifier: .timeInDaylight)!
+        HKObjectType.quantityType(forIdentifier: .timeInDaylight)!,
+        HKCategoryType(.sleepAnalysis)
     ]
     // active energy
-    // sleep
     // body fat percentage
     // BMI
     // respiratory rate
@@ -108,6 +108,8 @@ extension HealthManager {
             QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
         }
 
+        let sleepData = await fetchSleepAnalysis()
+
         await MainActor.run {
             self.userInfo = UserInfoModel(
                 age: healthStore.age(),
@@ -119,7 +121,8 @@ extension HealthManager {
                 dailyHeartRateVariability: hrvAverage,
                 restingHeartRate: restingHeartRate,
                 vO2Max: vO2Max,
-                timeInDaylight: timeInDaylight
+                timeInDaylight: timeInDaylight,
+                aggregateSleep: sleepData
             )
         }
     }
@@ -220,4 +223,107 @@ extension HealthManager {
         }
         return nil
     }
+
+    func fetchSleepAnalysis() async -> SleepAggregates? {
+        do {
+            let period = 7
+            let sampleType = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            let samples = try await healthStore.fetchSamples(for: sampleType, previousDays: period)
+            let end = Calendar.current.date(byAdding: .day, value: -period, to: .now)!
+            let start = Calendar.current.date(byAdding: .day, value: -period, to: end)!
+            let previousSamples = try await healthStore.fetchSamples(for: sampleType, start: start, end: end)
+
+            let sums = sumSleepStages(in: samples)
+            let previousSums = sumSleepStages(in: previousSamples)
+
+            return SleepAggregates(
+                remSleep: .init(
+                    currentPeriodAmount: sums.totalREM / Double(period),
+                    previousPeriodAmount: previousSums.totalREM / Double(period),
+                    unit: "seconds",
+                    periodDays: period,
+                    kind: .average
+                ),
+                deepSleep: .init(
+                    currentPeriodAmount: sums.totalDeep / Double(period),
+                    previousPeriodAmount: previousSums.totalDeep / Double(period),
+                    unit: "seconds",
+                    periodDays: period,
+                    kind: .average
+                ),
+                coreSleep: .init(
+                    currentPeriodAmount: sums.totalCore / Double(period),
+                    previousPeriodAmount: previousSums.totalCore / Double(period),
+                    unit: "seconds",
+                    periodDays: period,
+                    kind: .average
+                ),
+                asleep: .init(
+                    currentPeriodAmount: sums.totalAsleep / Double(period),
+                    previousPeriodAmount: previousSums.totalAsleep / Double(period),
+                    unit: "seconds",
+                    periodDays: period,
+                    kind: .average
+                ),
+                awake: .init(
+                    currentPeriodAmount: sums.totalAwake / Double(period),
+                    previousPeriodAmount: previousSums.totalAwake / Double(period),
+                    unit: "seconds",
+                    periodDays: period,
+                    kind: .average
+                ),
+                inBed: .init(
+                    currentPeriodAmount: sums.totalInBed / Double(period),
+                    previousPeriodAmount: previousSums.totalInBed / Double(period),
+                    unit: "seconds",
+                    periodDays: period,
+                    kind: .average
+                )
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func sumSleepStages(in samples: [HKSample]) -> SleepStageSum {
+        var sums = SleepStageSum()
+
+        for sample in samples {
+            guard
+                let categorySample = sample as? HKCategorySample,
+                let state = HKCategoryValueSleepAnalysis(rawValue: categorySample.value)
+            else { continue }
+
+            switch state {
+            case .inBed:
+                sums.totalInBed += categorySample.timeInterval
+            case .asleepUnspecified:
+                sums.totalAsleep += categorySample.timeInterval
+            case .asleep:
+                sums.totalAsleep += categorySample.timeInterval
+            case .awake:
+                sums.totalAwake += categorySample.timeInterval
+            case .asleepCore:
+                sums.totalCore += categorySample.timeInterval
+            case .asleepDeep:
+                sums.totalDeep += categorySample.timeInterval
+            case .asleepREM:
+                sums.totalREM += categorySample.timeInterval
+            @unknown default:
+                break
+            }
+        }
+
+        return sums
+    }
+}
+
+struct SleepStageSum {
+    var totalREM: Double = 0
+    var totalDeep: Double = 0
+    var totalCore: Double = 0
+    var totalAsleep: Double = 0
+    var totalAwake: Double = 0
+    var totalInBed: Double = 0
 }

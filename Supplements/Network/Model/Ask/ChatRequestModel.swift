@@ -23,6 +23,7 @@ struct UserInfoModel: Codable, Equatable {
     let restingHeartRate: [Double]
     let vO2Max: QuantityModel?
     let timeInDaylight: QuantityModel?
+    let aggregateSleep: SleepAggregates?
 }
 
 struct QuantityModel: Codable, Equatable {
@@ -33,6 +34,27 @@ struct QuantityModel: Codable, Equatable {
 
     enum Kind: String, Codable {
         case latestValue
+        case average
+    }
+}
+
+struct SleepAggregates: Codable, Equatable {
+    let remSleep: SleepStageAggregate
+    let deepSleep: SleepStageAggregate
+    let coreSleep: SleepStageAggregate
+    let asleep: SleepStageAggregate
+    let awake: SleepStageAggregate
+    let inBed: SleepStageAggregate
+}
+
+struct SleepStageAggregate: Codable, Equatable {
+    let currentPeriodAmount: Double
+    let previousPeriodAmount: Double
+    let unit: String
+    let periodDays: Int
+    let kind: Kind
+
+    enum Kind: String, Codable {
         case average
     }
 }

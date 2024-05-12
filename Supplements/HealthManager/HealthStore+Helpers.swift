@@ -95,17 +95,33 @@ extension HKHealthStore {
     }
 
     func fetchSamples(
+        for sampleType: HKSampleType,
+        previousDays: Int
+    ) async throws -> [HKSample] {
+        let end = Date.now
+        let start = Calendar.current.date(byAdding: .day, value: -7, to: end)!
+
+        return try await fetchSamples(for: sampleType, start: start, end: end)
+    }
+
+    func fetchSamples(
         for quantityTypeID: HKQuantityTypeIdentifier,
         start: Date,
         end: Date
     ) async throws -> [HKSample] {
-        try await withCheckedThrowingContinuation { continuation in
-            guard let sampleType = HKSampleType.quantityType(forIdentifier: quantityTypeID) else {
-                let error = NSError(description: "Sample type not available")
-                continuation.resume(throwing: error)
-                return
-            }
+        guard let sampleType = HKSampleType.quantityType(forIdentifier: quantityTypeID) else {
+            throw NSError(description: "Sample type not available")
+        }
 
+        return try await fetchSamples(for: sampleType, start: start, end: end)
+    }
+
+    func fetchSamples(
+        for sampleType: HKSampleType,
+        start: Date,
+        end: Date
+    ) async throws -> [HKSample] {
+        try await withCheckedThrowingContinuation { continuation in
             let predicate = HKQuery.predicateForSamples(
                 withStart: start,
                 end: end,

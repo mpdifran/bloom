@@ -62,6 +62,8 @@
 		FFF61B462BEEBBEB00926042 /* RecommendedSupplementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */; };
 		FFF61B482BEEBD8F00926042 /* UserInfoInsightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B472BEEBD8F00926042 /* UserInfoInsightsCell.swift */; };
 		FFF61B4A2BEEC20200926042 /* TipOfTheDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */; };
+		FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */; };
+		FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +134,8 @@
 		FFF61B452BEEBBEB00926042 /* RecommendedSupplementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSupplementView.swift; sourceTree = "<group>"; };
 		FFF61B472BEEBD8F00926042 /* UserInfoInsightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoInsightsCell.swift; sourceTree = "<group>"; };
 		FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipOfTheDayCell.swift; sourceTree = "<group>"; };
+		FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKCategoryValueSleepAnalysis+Name.swift"; sourceTree = "<group>"; };
+		FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKCategorySample+TimeInterval.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +231,8 @@
 			children = (
 				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
 				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
+				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
+				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
 			);
 			path = HealthManager;
 			sourceTree = "<group>";
@@ -505,9 +511,11 @@
 				FFF61AF32BED554100926042 /* GoalsView.swift in Sources */,
 				FFB4445D2BEC4CAB00486AD7 /* Codable+Constants.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
+				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FFF61B2D2BEEB46D00926042 /* OverallScoreValueView.swift in Sources */,
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsCell.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
+				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FFF61B4A2BEEC20200926042 /* TipOfTheDayCell.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsCell.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
