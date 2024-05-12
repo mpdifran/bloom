@@ -19,16 +19,29 @@ struct InsightsView: View {
         NavigationStack {
             Group {
                 if isLoading {
-                    ContentUnavailableView("Loading Insights", systemImage: "heart.text.square")
+                    ContentUnavailableView {
+                        Label {
+                            Text("Loading Insights")
+                        } icon: {
+                            Image(systemName: "heart.text.square")
+                                .foregroundStyle(.tint)
+                        }
+                    }
                 } else if let insightsResponse = viewModel.insights {
                     content(response: insightsResponse)
                 } else {
                     ContentUnavailableView(label: {
-                        Label("No Insights Available", systemImage: "heart.text.square")
+                        Label {
+                            Text("No Insights Available")
+                        } icon: {
+                            Image(systemName: "heart.text.square")
+                                .foregroundStyle(.tint)
+                        }
                     }, actions: {
                         Button("Reload", systemImage: "arrow.counterclockwise") {
                             Task { await loadData() }
                         }
+                        .padding()
                         .buttonStyle(.borderedProminent)
                     })
                 }

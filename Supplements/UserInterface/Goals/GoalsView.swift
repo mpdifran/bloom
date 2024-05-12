@@ -20,16 +20,31 @@ struct GoalsView: View {
         NavigationStack {
             Group {
                 if isLoading {
-                    ContentUnavailableView("Loading Goals", systemImage: "flag")
+                    ContentUnavailableView {
+                        Label {
+                            Text("Loading Goals")
+                                .foregroundStyle(.secondary)
+                        } icon: {
+                            Image(systemName: "flag.fill")
+                                .foregroundStyle(.tint)
+                        }
+                    }
                 } else if viewModel.goals.isEmpty {
                     ContentUnavailableView(label: {
-                        Label("Failed to Load Goals", systemImage: "flag")
+                        Label {
+                            Text("Failed to Load Goals")
+                                .foregroundStyle(.secondary)
+                        } icon: {
+                            Image(systemName: "flag.fill")
+                                .foregroundStyle(.tint)
+                        }
                     }, actions: {
                         Button("Reload", systemImage: "arrow.counterclockwise") {
                             Task {
                                 await loadData()
                             }
                         }
+                        .padding()
                         .buttonStyle(.borderedProminent)
                     })
                 } else {

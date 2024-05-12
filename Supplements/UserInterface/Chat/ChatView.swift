@@ -35,7 +35,7 @@ struct ChatView: View {
                                 },
                                 icon: {
                                     Image(systemName: "bolt.heart.fill")
-                                        .foregroundStyle(.tint)
+                                        .foregroundStyle(.white, .tint)
                                 }
                             )
                         })
@@ -61,8 +61,8 @@ struct ChatView: View {
 
                                 if isWaitingForResponse {
                                     TypingIndicatorCell(isDirect: false)
-                                        .id("TypingPrompt")
                                         .padding(.bottom, 12)
+                                        .id("TypingPrompt")
                                 }
                             }
                             .padding(.vertical, 4)
