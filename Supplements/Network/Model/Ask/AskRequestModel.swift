@@ -13,6 +13,7 @@ struct AskRequestModel: Codable {
     let currentSupplements: [String]
     let currentGoals: [String]
     let chatHistory: [ChatMessageHistory]
+    let learnedUserFacts: [String]
 }
 
 struct UserInfoModel: Codable, Equatable {

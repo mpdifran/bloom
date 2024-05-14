@@ -20,14 +20,16 @@ extension NetworkRequester {
         userInfo: UserInfoModel?,
         currentGoals: [String],
         currentSupplements: [String],
-        chatHistory: [ChatMessageHistory]
+        chatHistory: [ChatMessageHistory],
+        learnedUserFacts: [String]
     ) async throws -> AskResponseModel {
         let request = AskRequestModel(
             question: prompt,
             userInfo: userInfo,
             currentSupplements: currentSupplements,
             currentGoals: currentGoals,
-            chatHistory: chatHistory
+            chatHistory: chatHistory,
+            learnedUserFacts: learnedUserFacts
         )
 
         let requestData = try JSONEncoder.main.encode(request)

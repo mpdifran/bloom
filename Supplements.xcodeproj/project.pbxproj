@@ -12,6 +12,7 @@
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
 		FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC952BF17B1400C34621 /* BackgroundTaskScheduler.swift */; };
 		FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */; };
+		FF6AECBD2BF3BE5300C34621 /* UserFactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AECBC2BF3BE5300C34621 /* UserFactsView.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ChatView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -89,6 +90,7 @@
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
 		FF6AEC952BF17B1400C34621 /* BackgroundTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskScheduler.swift; sourceTree = "<group>"; };
 		FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		FF6AECBC2BF3BE5300C34621 /* UserFactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFactsView.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -206,6 +208,14 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
+		FF6AECBB2BF3BE4200C34621 /* UserFacts */ = {
+			isa = PBXGroup;
+			children = (
+				FF6AECBC2BF3BE5300C34621 /* UserFactsView.swift */,
+			);
+			path = UserFacts;
+			sourceTree = "<group>";
+		};
 		FFACBAD02BAC7788006AAD0B = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +324,7 @@
 				FFF61AF42BED554700926042 /* Chat */,
 				FFF61AF52BED555100926042 /* Goals */,
 				FFF61B122BEE807C00926042 /* Supplements */,
+				FF6AECBB2BF3BE4200C34621 /* UserFacts */,
 				FFB444942BED41E600486AD7 /* Onboarding */,
 				FFB444482BEC3AD100486AD7 /* ChatUI */,
 				FFF61AFF2BED7C0000926042 /* Components */,
@@ -324,7 +335,7 @@
 		FFB444982BED424000486AD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				FFF61B202BEE915500926042 /* Inisghts */,
+				FFF61B202BEE915500926042 /* Insights */,
 				FF6AEC8F2BF1774C00C34621 /* ProactiveTip */,
 				FFF61AFA2BED71C000926042 /* Ask */,
 				FFF61B0E2BEE800300926042 /* Goals */,
@@ -389,13 +400,13 @@
 			path = Supplements;
 			sourceTree = "<group>";
 		};
-		FFF61B202BEE915500926042 /* Inisghts */ = {
+		FFF61B202BEE915500926042 /* Insights */ = {
 			isa = PBXGroup;
 			children = (
 				FFF61B212BEE916300926042 /* InsightsRequest.swift */,
 				FFF61B282BEE936100926042 /* InsightsResponse.swift */,
 			);
-			path = Inisghts;
+			path = Insights;
 			sourceTree = "<group>";
 		};
 		FFF61B232BEE91A300926042 /* Insights */ = {
@@ -557,6 +568,7 @@
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FFF61B072BED9A9C00926042 /* GoalViewModel.swift in Sources */,
+				FF6AECBD2BF3BE5300C34621 /* UserFactsView.swift in Sources */,
 				FFF61B2B2BEEB23F00926042 /* NutrientsScoreCell.swift in Sources */,
 				FFF61AF32BED554100926042 /* GoalsView.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,

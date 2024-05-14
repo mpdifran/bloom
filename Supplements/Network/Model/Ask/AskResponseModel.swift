@@ -10,4 +10,5 @@ import Foundation
 struct AskResponseModel: Codable, Equatable {
     let message: String?
     let recommendedSupplements: [SupplementReccomendationModel]?
+    let learnedUserFacts: [String]
 }

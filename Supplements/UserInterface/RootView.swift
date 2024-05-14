@@ -18,8 +18,9 @@ struct RootView: View {
         TabView {
             InsightsView()
             GoalsView()
-            ChatView()
             SupplementsView()
+            ChatView()
+            UserFactsView()
         }
         .sheet($presentedSheet)
         .alert(error: $error)

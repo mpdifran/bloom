@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import AppFoundations
 
 final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
 
     @Published var chatHistory = [ChatMessage]()
+    @Published var learnedUserFacts = [String]()
 
     private init() { }
 }
@@ -47,7 +49,8 @@ extension ChatViewModel {
             userInfo: userInfo,
             currentGoals: currentGoals,
             currentSupplements: currentSupplements,
-            chatHistory: networkChatHistory
+            chatHistory: networkChatHistory,
+            learnedUserFacts: learnedUserFacts
         )
 
         await MainActor.run {
@@ -74,6 +77,8 @@ extension ChatViewModel {
                 )
                 hasSentMessage = true
             }
+
+            learnedUserFacts = Array(Set(learnedUserFacts).union(response.learnedUserFacts))
 
             if hasSentMessage {
                 SoundPlayer.playReceiveMessage()
