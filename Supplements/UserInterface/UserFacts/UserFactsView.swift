@@ -17,6 +17,11 @@ struct UserFactsView: View {
                 ForEach(viewModel.learnedUserFacts, id: \.self) { userFact in
                     Text(userFact)
                         .bold()
+                        .swipeActions {
+                            Button("Delete", systemImage: "trash", role: .destructive) {
+                                viewModel.learnedUserFacts = viewModel.learnedUserFacts.filter({ $0 != userFact })
+                            }
+                        }
                 }
             }
             .navigationTitle("User Facts")

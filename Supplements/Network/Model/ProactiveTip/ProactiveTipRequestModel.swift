@@ -12,4 +12,5 @@ struct ProactiveTipRequestModel: Codable {
     let currentSupplements: [String]
     let currentGoals: [String]
     let chatHistory: [ChatMessageHistory]
+    let learnedUserFacts: [String]
 }

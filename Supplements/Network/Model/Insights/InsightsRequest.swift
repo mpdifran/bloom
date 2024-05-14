@@ -11,4 +11,5 @@ struct InsightsRequest: Codable {
     let userInfo: UserInfoModel?
     let currentSupplements: [String]
     let currentGoals: [String]
+    let learnedUserFacts: [String]
 }

@@ -72,7 +72,7 @@ struct ChatView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        Button("Proactive Tip", systemImage: "rectangle.portrait.and.arrow.right") {
+                        Button("Proactive Tip", systemImage: "sparkles") {
                             Task {
                                 await viewModel.sendProactiveTip()
                             }
@@ -121,6 +121,8 @@ struct ChatView: View {
 private extension ChatView {
 
     func submitPrompt() {
+        guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).isNotEmpty else { return }
+
         Task {
             await MainActor.run {
                 isWaitingForResponse = true

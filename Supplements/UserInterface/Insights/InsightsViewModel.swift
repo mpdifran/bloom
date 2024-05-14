@@ -18,11 +18,13 @@ extension InsightsViewModel {
         let userInfo = HealthManager.shared.userInfo
         let supplements = SupplementViewModel.shared.selectedSupplements
         let goals = GoalViewModel.shared.selectedGoals
+        let learnedUserFacts = ChatViewModel.shared.learnedUserFacts
 
         let request = InsightsRequest(
             userInfo: userInfo,
             currentSupplements: supplements,
-            currentGoals: goals
+            currentGoals: goals,
+            learnedUserFacts: learnedUserFacts
         )
 
         let response = try await NetworkRequester.shared.fetchInsights(request: request)

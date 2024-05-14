@@ -12,9 +12,17 @@ final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
 
     @Published var chatHistory = [ChatMessage]()
-    @Published var learnedUserFacts = [String]()
+    @Published var learnedUserFacts = [String]() {
+        didSet {
+            UserDefaults.standard.setValue(learnedUserFacts, forKey: "learnedUserFacts")
+        }
+    }
 
-    private init() { }
+    private init() { 
+        if let learnedUserFacts = UserDefaults.standard.value(forKey: "learnedUserFacts") as? [String] {
+            self.learnedUserFacts = learnedUserFacts
+        }
+    }
 }
 
 extension ChatViewModel {
@@ -96,7 +104,8 @@ extension ChatViewModel {
                 userInfo: userInfo,
                 currentGoals: currentGoals,
                 currentSupplements: currentSupplements,
-                chatHistory: networkChatHistory
+                chatHistory: networkChatHistory,
+                learnedUserFacts: learnedUserFacts
             )
 
             await MainActor.run {

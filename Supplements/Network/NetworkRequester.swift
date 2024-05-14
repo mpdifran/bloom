@@ -53,13 +53,15 @@ extension NetworkRequester {
         userInfo: UserInfoModel?,
         currentGoals: [String],
         currentSupplements: [String],
-        chatHistory: [ChatMessageHistory]
+        chatHistory: [ChatMessageHistory],
+        learnedUserFacts: [String]
     ) async throws -> ProactiveTipResponseModel {
         let request = ProactiveTipRequestModel(
             userInfo: userInfo,
             currentSupplements: currentSupplements,
             currentGoals: currentGoals,
-            chatHistory: chatHistory
+            chatHistory: chatHistory,
+            learnedUserFacts: learnedUserFacts
         )
 
         let requestData = try JSONEncoder.main.encode(request)
