@@ -36,9 +36,10 @@ final class HealthManager: ObservableObject {
         HKObjectType.quantityType(forIdentifier: .restingHeartRate)!,
         HKObjectType.quantityType(forIdentifier: .vo2Max)!,
         HKObjectType.quantityType(forIdentifier: .timeInDaylight)!,
-        HKCategoryType(.sleepAnalysis)
+        HKCategoryType(.sleepAnalysis),
+        HKQuantityType(.activeEnergyBurned),
+        HKQuantityType(.bodyFatPercentage)
     ]
-    // active energy
     // body fat percentage
     // BMI
     // respiratory rate
@@ -110,6 +111,14 @@ extension HealthManager {
 
         let sleepData = await fetchSleepAnalysis()
 
+        let activeEnergy = await fetchActiveEnergy().map {
+            QuantityModel(amount: $0.0, kind: .average, unit: "calories", periodDays: $0.1)
+        }
+
+        let bodyFatPercentage = await fetchBodyFatPercentage().map {
+            QuantityModel(amount: $0.0, kind: .average, unit: "percent", periodDays: $0.1)
+        }
+
         await MainActor.run {
             self.userInfo = UserInfoModel(
                 age: healthStore.age(),
@@ -122,7 +131,9 @@ extension HealthManager {
                 restingHeartRate: restingHeartRate,
                 vO2Max: vO2Max,
                 timeInDaylight: timeInDaylight,
-                aggregateSleep: sleepData
+                aggregateSleep: sleepData,
+                activeEnergy: activeEnergy,
+                bodyFatPercentage: bodyFatPercentage
             )
         }
     }
@@ -217,6 +228,34 @@ extension HealthManager {
                 pastMonths: 1,
                 option: .cumulativeSum,
                 unit: .minute()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchActiveEnergy() async -> (Double, Int)? {
+        do {
+            return try await healthStore.fetchQuantity(
+                for: .activeEnergyBurned,
+                pastMonths: 1,
+                option: .cumulativeSum,
+                unit: .smallCalorie()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchBodyFatPercentage() async -> (Double, Int)? {
+        do {
+            return try await healthStore.fetchQuantity(
+                for: .bodyFatPercentage,
+                pastMonths: 1,
+                option: .discreteAverage,
+                unit: .percent()
             )
         } catch {
             print(error)

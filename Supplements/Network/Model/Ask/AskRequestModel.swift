@@ -28,6 +28,8 @@ struct UserInfoModel: Codable, Equatable {
     let vO2Max: QuantityModel?
     let timeInDaylight: QuantityModel?
     let aggregateSleep: SleepAggregates?
+    let activeEnergy: QuantityModel?
+    let bodyFatPercentage: QuantityModel?
 }
 
 struct QuantityModel: Codable, Equatable {

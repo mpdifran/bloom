@@ -67,13 +67,8 @@ private extension InsightsView {
 
     func content(response: InsightsResponse) -> some View {
         List {
-            if let tip = response.tipOfTheDay {
-                Section {
-                    TipOfTheDayCell(tip: tip)
-                }
-            }
             Section {
-                GoalInsightsCell(goalInsights: response.goalsInsights)
+                UserInfoInsightsCell(insights: response.userInfoInsights)
             }
             Section {
                 SupplementInsightsCell(insights: response.supplementInsights)
@@ -88,7 +83,12 @@ private extension InsightsView {
                 TakeChargeScoreCell(score: response.scores.takeChargeScore)
             }
             Section {
-                UserInfoInsightsCell(insights: response.userInfoInsights)
+                GoalInsightsCell(goalInsights: response.goalsInsights)
+            }
+            if let tip = response.tipOfTheDay {
+                Section {
+                    TipOfTheDayCell(tip: tip)
+                }
             }
         }
     }
