@@ -8,7 +8,6 @@
 import Foundation
 
 struct AskRequestModel: Codable {
-    let question: String
     let userInfo: UserInfoModel?
     let currentSupplements: [String]
     let currentGoals: [String]
@@ -65,7 +64,13 @@ struct SleepStageAggregate: Codable, Equatable {
 }
 
 struct ChatMessageHistory: Codable, Equatable {
-    let timestamp: Date
-    let message: String
-    let sender: String
+    let role: Role
+    let content: String
+}
+
+extension ChatMessageHistory {
+    enum Role: String, Codable {
+        case user
+        case assistant
+    }
 }

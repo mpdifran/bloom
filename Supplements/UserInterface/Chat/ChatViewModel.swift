@@ -53,7 +53,6 @@ extension ChatViewModel {
         let currentSupplements = SupplementViewModel.shared.selectedSupplements
 
         let response = try await NetworkRequester.shared.sendQuery(
-            prompt: prompt,
             userInfo: userInfo,
             currentGoals: currentGoals,
             currentSupplements: currentSupplements,
@@ -133,9 +132,8 @@ extension ChatViewModel {
             let message = chatMessage.message ?? chatMessage.supplementReccomendation.first?.shortText ?? ""
 
             return ChatMessageHistory(
-                timestamp: chatMessage.timestamp,
-                message: message,
-                sender: chatMessage.isCurrentUser ? "User" : "Bloom"
+                role: chatMessage.isCurrentUser ? .user : .assistant,
+                content: message
             )
         }
     }

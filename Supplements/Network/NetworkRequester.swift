@@ -16,7 +16,6 @@ final class NetworkRequester {
 extension NetworkRequester {
 
     func sendQuery(
-        prompt: String,
         userInfo: UserInfoModel?,
         currentGoals: [String],
         currentSupplements: [String],
@@ -24,7 +23,6 @@ extension NetworkRequester {
         learnedUserFacts: [String]
     ) async throws -> AskResponseModel {
         let request = AskRequestModel(
-            question: prompt,
             userInfo: userInfo,
             currentSupplements: currentSupplements,
             currentGoals: currentGoals,
