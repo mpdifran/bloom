@@ -186,6 +186,73 @@ extension HKHealthStore {
 
 extension HKHealthStore {
 
+    func fetchWorkoutSummaries(recentDays: Int) async throws -> [WorkoutSummary] {
+        try await withCheckedThrowingContinuation { continuation in
+            let workoutType = HKObjectType.workoutType()
+
+            let endDate = Date.now
+            guard let startDate = Calendar.current.date(byAdding: .day, value: -recentDays, to: endDate) else {
+                continuation.resume(throwing: NSError(description: "The calendar messed up for some reason..."))
+                return
+            }
+
+            let predicate = HKQuery.predicateForSamples(
+                withStart: startDate,
+                end: endDate,
+                options: .strictEndDate
+            )
+
+            let sortDescriptors = [
+                NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+            ]
+
+            let query = HKSampleQuery(
+                sampleType: workoutType,
+                predicate: predicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: sortDescriptors
+            ) {
+                query,
+                samples,
+                error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                
+                guard let workoutSamples = samples as? [HKWorkout] else {
+                    continuation.resume(throwing: NSError(description: "HKSamples returned were the wrong type."))
+                    return
+                }
+                
+                let summaries = workoutSamples.compactMap { workout -> WorkoutSummary? in
+                    guard
+                        let activeBurned = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .smallCalorie())
+                    else { return nil }
+
+                    let energyBurned = WorkoutSummary.EnergyBurned(
+                        value: activeBurned,
+                        units: "calories"
+                    )
+
+                    return WorkoutSummary(
+                        activity: workout.workoutActivityType.name,
+                        startDate: workout.startDate,
+                        duration: workout.duration,
+                        energyBurned: energyBurned
+                    )
+                }
+
+                continuation.resume(returning: summaries)
+            }
+
+            execute(query)
+        }
+    }
+}
+
+extension HKHealthStore {
+
     func age() -> Int? {
         do {
             let dateOfBirthComponents = try dateOfBirthComponents()

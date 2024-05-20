@@ -29,6 +29,7 @@ struct UserInfoModel: Codable, Equatable {
     let aggregateSleep: SleepAggregates?
     let activeEnergy: QuantityModel?
     let bodyFatPercentage: QuantityModel?
+    let workouts: [WorkoutSummary]
 }
 
 struct QuantityModel: Codable, Equatable {
@@ -60,6 +61,20 @@ struct SleepStageAggregate: Codable, Equatable {
 
     enum Kind: String, Codable {
         case average
+    }
+}
+
+struct WorkoutSummary: Codable, Equatable {
+    let activity: String
+    let startDate: Date
+    let duration: TimeInterval
+    let energyBurned: EnergyBurned
+}
+
+extension WorkoutSummary {
+    struct EnergyBurned: Codable, Equatable {
+        let value: Double
+        let units: String
     }
 }
 

@@ -38,7 +38,8 @@ final class HealthManager: ObservableObject {
         HKObjectType.quantityType(forIdentifier: .timeInDaylight)!,
         HKCategoryType(.sleepAnalysis),
         HKQuantityType(.activeEnergyBurned),
-        HKQuantityType(.bodyFatPercentage)
+        HKQuantityType(.bodyFatPercentage),
+        HKObjectType.workoutType()
     ]
     // body fat percentage
     // BMI
@@ -119,6 +120,8 @@ extension HealthManager {
             QuantityModel(amount: $0.0, kind: .average, unit: "percent", periodDays: $0.1)
         }
 
+        let workoutSummaries = await fetchWorkoutSummaryLastTwoWeeks()
+
         await MainActor.run {
             self.userInfo = UserInfoModel(
                 age: healthStore.age(),
@@ -133,7 +136,8 @@ extension HealthManager {
                 timeInDaylight: timeInDaylight,
                 aggregateSleep: sleepData,
                 activeEnergy: activeEnergy,
-                bodyFatPercentage: bodyFatPercentage
+                bodyFatPercentage: bodyFatPercentage,
+                workouts: workoutSummaries
             )
         }
     }
@@ -247,6 +251,15 @@ extension HealthManager {
             print(error)
         }
         return nil
+    }
+
+    func fetchWorkoutSummaryLastTwoWeeks() async -> [WorkoutSummary] {
+        do {
+            return try await healthStore.fetchWorkoutSummaries(recentDays: 14)
+        } catch {
+            print(error)
+        }
+        return []
     }
 
     func fetchBodyFatPercentage() async -> (Double, Int)? {

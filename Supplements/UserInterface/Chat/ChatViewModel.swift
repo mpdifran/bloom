@@ -86,7 +86,6 @@ extension ChatViewModel {
             }
 
             learnedUserFacts = response.learnedUserFacts
-//            learnedUserFacts = Array(Set(learnedUserFacts).union(response.learnedUserFacts))
 
             if hasSentMessage {
                 SoundPlayer.playReceiveMessage()
@@ -95,6 +94,9 @@ extension ChatViewModel {
     }
 
     func sendProactiveTip() async {
+        do {
+            try await HealthManager.shared.loadUserInfo()
+        } catch { print(error) }
         let userInfo = HealthManager.shared.userInfo
         let currentGoals = GoalViewModel.shared.selectedGoals
         let currentSupplements = SupplementViewModel.shared.selectedSupplements
