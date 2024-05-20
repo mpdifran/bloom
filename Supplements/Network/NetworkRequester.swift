@@ -48,19 +48,8 @@ extension NetworkRequester {
     }
 
     func sendProactiveTip(
-        userInfo: UserInfoModel?,
-        currentGoals: [String],
-        currentSupplements: [String],
-        chatHistory: [ChatMessageHistory],
-        learnedUserFacts: [String]
+        request: ProactiveTipRequestModel
     ) async throws -> ProactiveTipResponseModel {
-        let request = ProactiveTipRequestModel(
-            userInfo: userInfo,
-            currentSupplements: currentSupplements,
-            currentGoals: currentGoals,
-            chatHistory: chatHistory,
-            learnedUserFacts: learnedUserFacts
-        )
 
         let requestData = try JSONEncoder.main.encode(request)
 

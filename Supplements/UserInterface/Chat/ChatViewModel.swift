@@ -85,7 +85,8 @@ extension ChatViewModel {
                 hasSentMessage = true
             }
 
-            learnedUserFacts = Array(Set(learnedUserFacts).union(response.learnedUserFacts))
+            learnedUserFacts = response.learnedUserFacts
+//            learnedUserFacts = Array(Set(learnedUserFacts).union(response.learnedUserFacts))
 
             if hasSentMessage {
                 SoundPlayer.playReceiveMessage()
@@ -98,14 +99,16 @@ extension ChatViewModel {
         let currentGoals = GoalViewModel.shared.selectedGoals
         let currentSupplements = SupplementViewModel.shared.selectedSupplements
 
+        let request = ProactiveTipRequestModel(
+            userInfo: userInfo,
+            currentSupplements: currentSupplements,
+            currentGoals: currentGoals,
+            chatHistory: networkChatHistory,
+            learnedUserFacts: learnedUserFacts
+        )
+
         do {
-            let response = try await NetworkRequester.shared.sendProactiveTip(
-                userInfo: userInfo,
-                currentGoals: currentGoals,
-                currentSupplements: currentSupplements,
-                chatHistory: networkChatHistory,
-                learnedUserFacts: learnedUserFacts
-            )
+            let response = try await NetworkRequester.shared.sendProactiveTip(request: request)
 
             await MainActor.run {
                 chatHistory.append(
