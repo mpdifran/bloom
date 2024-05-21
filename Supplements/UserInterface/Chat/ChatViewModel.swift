@@ -7,6 +7,7 @@
 
 import Foundation
 import AppFoundations
+import Algorithms
 
 final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
@@ -85,7 +86,13 @@ extension ChatViewModel {
                 hasSentMessage = true
             }
 
-            learnedUserFacts = response.learnedUserFacts
+            var newFacts = learnedUserFacts
+            newFacts.append(contentsOf: response.learnedUserFacts ?? [])
+            newFacts = Array(newFacts.uniqued())
+            newFacts = newFacts.filter {
+                !(response.expiredUserFacts?.contains($0) == true)
+            }
+            learnedUserFacts = newFacts
 
             if hasSentMessage {
                 SoundPlayer.playReceiveMessage()
