@@ -79,6 +79,9 @@ struct ChatView: View {
                         }
                     }
                 }
+                .onChange(of: viewModel.chatHistory.count) { _, _ in
+                    scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
+                }
                 .onAppear {
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
                 }
@@ -97,7 +100,7 @@ struct ChatView: View {
                 TextActionBar(
                     searchText: $searchText,
                     prompt: "How can I help you?",
-                    systemImage: "magnifyingglass",
+                    systemImage: "bolt.heart.fill",
                     axis: .vertical,
                     submitLabel: .send
                 ) {

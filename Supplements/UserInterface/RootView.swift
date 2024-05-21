@@ -9,40 +9,28 @@ import SwiftUI
 
 struct RootView: View {
     
-    @AppStorage("hasShownOnboarding") var hasShownOnboarding: Bool = false
-
-    @State private var presentedSheet: AnyView?
-    @State private var error: Error?
+    @AppStorage("hasShownOnboardingV2") var hasShownOnboarding: Bool = false
 
     var body: some View {
-        TabView {
-            InsightsView()
-            GoalsView()
-            SupplementsView()
-            ChatView()
-            UserFactsView()
+        Group {
+            if !hasShownOnboarding {
+                OnboardingRootView { chatMessages in
+                    ChatViewModel.shared.chatHistory = chatMessages
+                    withAnimation {
+                        hasShownOnboarding = true
+                    }
+                }
+            } else {
+                TabView {
+                    ChatView()
+                    InsightsView()
+                    GoalsView()
+                    SupplementsView()
+                    UserFactsView()
+                }
+            }
         }
-        .sheet($presentedSheet)
-        .alert(error: $error)
-        .onAppear {
-
-            checkOnboarding()
-        }
-    }
-}
-
-extension RootView {
-
-    func checkOnboarding(force: Bool = false) {
-        if force {
-            hasShownOnboarding = false
-        }
-
-        guard !hasShownOnboarding || !HealthManager.shared.isAuthorized else { return }
-
-        presentedSheet = OnboardingRootView(onComplete: {
-            hasShownOnboarding = true
-        }).asAny
+        .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
     }
 }
 

@@ -10,21 +10,15 @@ import SwiftUI
 extension OnboardingRootView {
     enum Step {
         case welcome
-        case healthKit
-        case goals
-        case supplements
+        case chat
     }
 }
 
 struct OnboardingRootView: View {
 
-    var onComplete: () -> Void
+    var onComplete: ([ChatMessage]) -> Void
 
     @State private var step = Step.welcome
-
-    @ObservedObject private var supplementsViewModel = SupplementViewModel.shared
-    @ObservedObject private var goalsViewModel = GoalViewModel.shared
-    @ObservedObject private var healthManager = HealthManager.shared
 
     @Environment(\.dismiss) private var dismiss
 
@@ -32,44 +26,21 @@ struct OnboardingRootView: View {
         Group {
             switch step {
             case .welcome:
-                OnboardingWelcomeView()
-            case .healthKit:
-                OnboardingHealthKitView()
-            case .goals:
-                OnboardingGoalsView {
-                    determineNextStep()
+                OnboardingWelcomeView {
+                    setStep(.chat)
                 }
-            case .supplements:
-                OnboardingSupplementsView {
-                    determineNextStep()
+            case .chat:
+                OnboardingChatView { chatMessages in
+                    onComplete(chatMessages)
                 }
             }
         }
         .animation(.easeInOut(duration: 1), value: step)
-        .onAppear {
-            determineNextStep()
-        }
-        .onChange(of: healthManager.isAuthorized, { oldValue, newValue in
-            determineNextStep()
-        })
         .presentationCompactAdaptation(.fullScreenCover)
     }
 }
 
 private extension OnboardingRootView {
-
-    func determineNextStep() {
-        if !healthManager.isAuthorized {
-            setStep(.healthKit)
-        } else if goalsViewModel.selectedGoals.isEmpty {
-            setStep(.goals)
-        } else if supplementsViewModel.selectedSupplements.isEmpty {
-            setStep(.supplements)
-        } else {
-            onComplete()
-            dismiss()
-        }
-    }
 
     func setStep(_ step: Step) {
         withAnimation {
@@ -79,5 +50,5 @@ private extension OnboardingRootView {
 }
 
 #Preview {
-    OnboardingRootView() { }
+    OnboardingRootView() { _ in }
 }

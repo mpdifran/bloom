@@ -6,27 +6,42 @@
 //
 
 import SwiftUI
+import AppUI
 
 struct OnboardingWelcomeView: View {
+    var onContinue: () -> Void
+
     var body: some View {
-        Image(.bloomAppIcon)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 120)
+        VStack {
+            Spacer()
 
-        Text("Bloom")
-            .font(.largeTitle)
-            .bold()
-            .fontDesign(.rounded)
+            Image(.bloomAppIcon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120)
 
-        Text("Personal Health Assistant")
-            .font(.title3)
-            .bold()
-            .fontDesign(.rounded)
-            .foregroundStyle(.secondary)
+            Text("Bloom")
+                .font(.largeTitle)
+                .bold()
+                .fontDesign(.rounded)
+
+            Text("Personal Health Assistant")
+                .font(.title3)
+                .bold()
+                .fontDesign(.rounded)
+                .foregroundStyle(.secondary)
+
+            Spacer()
+        }
+        .shelf {
+            ProminentButton("Continue") {
+                onContinue()
+            }
+            .buttonBorderShape(.roundedRectangle(radius: 17))
+        }
     }
 }
 
 #Preview {
-    OnboardingWelcomeView()
+    OnboardingWelcomeView { }
 }
