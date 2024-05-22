@@ -5,19 +5,62 @@
 //  Created by Mark DiFranco on 2024-05-10.
 //
 
-import Foundation
+import SwiftUI
 
 struct InsightsResponse: Codable {
-    let tipOfTheDay: String?
-    let goalsInsights: GoalInsights
-    let scores: Scores
-    let supplementInsights: SupplementInsights
     let userInfoInsights: [UserInfoInsight]
+    let supplementInsights: SupplementInsights?
+    let goalsInsights: GoalInsights?
+}
+
+struct UserInfoInsight: Codable {
+    let name: String
+    let range: Range
+    let currentValue: Double
+    let goalValue: Double
+    let units: String
+    let shortText: String
+    let importance: Int
+
+    enum Range: String, Codable {
+        case below
+        case above
+    }
+
+    var importanceSystemImageName: String {
+        switch importance {
+        case 5: "exclamationmark.octagon.fill"
+        case 4, 3: "exclamationmark.triangle.fill"
+        case 2, 1: "exclamationmark.circle.fill"
+        default: "exclamationmark.circle.fill"
+        }
+    }
+
+    var importanceColor: Color {
+        switch importance {
+        case 5: .red
+        case 4, 3: .orange
+        case 2, 1: .blue
+        default: .blue
+        }
+    }
 }
 
 struct GoalInsights: Codable {
-    let recommendedGoals: [String]
     let shortText: String
+    let recommendedGoals: [String]
+}
+
+struct SupplementInsights: Codable {
+    let recommendedSupplements: [RecommendedSupplement]
+    let shortText: String
+}
+
+struct RecommendedSupplement: Codable {
+    let supplementName: String
+    let goal: String
+    let efficacyRating: Int
+    let recommendedDailyDose: String
 }
 
 struct Scores: Codable {
@@ -46,27 +89,4 @@ struct TakeChargeScore: Codable {
     let overallScore: Int
     let vo2maxScore: Int
     let shortText: String
-}
-
-struct SupplementInsights: Codable {
-    let recommendedSupplements: [RecommendedSupplement]
-    let shortText: String
-}
-
-struct RecommendedSupplement: Codable {
-    let efficacyRating: Int
-    let goal: String
-    let recommendedDailyDose: String
-    let supplementName: String
-}
-
-struct UserInfoInsight: Codable {
-    let importance: Int
-    let inRange: Int
-    let metricName: String
-    let shortText: String
-
-    var inRangeBool: Bool {
-        inRange == 1
-    }
 }

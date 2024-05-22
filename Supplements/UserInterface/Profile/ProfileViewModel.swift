@@ -10,7 +10,11 @@ import Foundation
 final class ProfileViewModel: ObservableObject {
     static let shared = ProfileViewModel()
 
-    @Published var name = ""
+    @Published var name = "" {
+        didSet {
+            UserDefaults.standard.setValue(name, forKey: "name")
+        }
+    }
     @Published var userFacts = [String]() {
         didSet {
             UserDefaults.standard.setValue(userFacts, forKey: "learnedUserFacts")
@@ -31,6 +35,9 @@ final class ProfileViewModel: ObservableObject {
     @Published var allGoals = [String]()
 
     private init() {
+        if let name = UserDefaults.standard.value(forKey: "name") as? String {
+            self.name = name
+        }
         if let userFacts = UserDefaults.standard.value(forKey: "learnedUserFacts") as? [String] {
             self.userFacts = userFacts
         }

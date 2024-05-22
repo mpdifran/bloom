@@ -47,6 +47,15 @@ struct InsightsView: View {
                 }
             }
             .navigationTitle("Insights")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Reload", systemImage: "arrow.clockwise") {
+                        Task {
+                            await loadData(force: true)
+                        }
+                    }
+                }
+            }
         }
         .onChange(of: healthManager.userInfo, { oldValue, newValue in
             guard newValue != nil else {
@@ -67,28 +76,13 @@ private extension InsightsView {
 
     func content(response: InsightsResponse) -> some View {
         List {
-            Section {
-                UserInfoInsightsCell(insights: response.userInfoInsights)
+            UserInfoInsightsSection(insights: response.userInfoInsights)
+
+            if let insights = response.supplementInsights {
+                SupplementInsightsSection(insights: insights)
             }
-            Section {
-                SupplementInsightsCell(insights: response.supplementInsights)
-            }
-            Section {
-                NutrientsScoreCell(score: response.scores.nutrientsScore)
-            }
-            Section {
-                RechargeScoreCell(score: response.scores.rechargeScore)
-            }
-            Section {
-                TakeChargeScoreCell(score: response.scores.takeChargeScore)
-            }
-            Section {
-                GoalInsightsCell(goalInsights: response.goalsInsights)
-            }
-            if let tip = response.tipOfTheDay {
-                Section {
-                    TipOfTheDayCell(tip: tip)
-                }
+            if let insights = response.goalsInsights {
+                GoalInsightsSection(goalInsights: insights)
             }
         }
     }
@@ -96,8 +90,8 @@ private extension InsightsView {
 
 private extension InsightsView {
 
-    func loadData() async {
-        guard viewModel.insights == nil else { return }
+    func loadData(force: Bool = false) async {
+        guard !force && viewModel.insights == nil else { return }
 
         await MainActor.run { isLoading = true }
         do {
