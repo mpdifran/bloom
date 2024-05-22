@@ -25,11 +25,12 @@ struct RecommendedSupplementCell: View {
                         .bold()
                 }
 
-                HStack {
-                    Text(recommendedSupplement.recommendedDailyDose)
-                    Text("•")
+                VStack(alignment: .leading) {
                     Text(recommendedSupplement.goal)
+                        .font(.subheadline)
+                    Text(recommendedSupplement.recommendedDailyDose)
                 }
+                .font(.caption)
                 .foregroundStyle(.secondary)
             }
 
