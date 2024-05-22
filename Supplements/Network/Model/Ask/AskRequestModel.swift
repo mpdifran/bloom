@@ -16,6 +16,7 @@ struct AskRequestModel: Codable {
 }
 
 struct UserInfoModel: Codable, Equatable {
+    let name: String?
     let age: Int?
     let sex: String?
     let bloodType: String?

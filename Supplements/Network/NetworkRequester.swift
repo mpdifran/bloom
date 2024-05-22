@@ -68,29 +68,18 @@ extension NetworkRequester {
         return try JSONDecoder.main.decode(ProactiveTipResponseModel.self, from: data)
     }
 
-    func fetchGoals() async throws -> [GoalModel] {
+    func fetchGoals() async throws -> [String] {
         let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/goals?max=100")!
         let (data, _) = try await URLSession.shared.data(from: url)
 
-        let goalsResponse = try JSONDecoder.main.decode([String].self, from: data)
-
-        var goals = [GoalModel]()
-        for index in 0 ..< goalsResponse.count {
-            let goalName = goalsResponse[index]
-            let color = Color.indexedSet(index: index)
-
-            goals.append(GoalModel(name: goalName, color: color))
-        }
-        return goals
+        return try JSONDecoder.main.decode([String].self, from: data)
     }
 
     func fetchSupplements() async throws -> [String] {
         let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/supplements?max=100")!
         let (data, _) = try await URLSession.shared.data(from: url)
 
-        let supplementsResponse = try JSONDecoder.main.decode([String].self, from: data)
-
-        return supplementsResponse
+        return try JSONDecoder.main.decode([String].self, from: data)
     }
 
     func fetchInsights(request: InsightsRequest) async throws -> InsightsResponse {

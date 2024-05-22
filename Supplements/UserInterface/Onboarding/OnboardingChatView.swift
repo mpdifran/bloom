@@ -12,8 +12,6 @@ struct OnboardingChatView: View {
     
     var onComplete: ([ChatMessage]) -> Void
 
-    @ObservedObject private var supplementsViewModel = SupplementViewModel.shared
-    @ObservedObject private var goalsViewModel = GoalViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
     @State private var chatMessages = [ChatMessage]()

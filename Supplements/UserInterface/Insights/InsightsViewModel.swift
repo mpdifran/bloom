@@ -16,9 +16,9 @@ extension InsightsViewModel {
 
     func loadData() async throws {
         let userInfo = HealthManager.shared.userInfo
-        let supplements = SupplementViewModel.shared.selectedSupplements
-        let goals = GoalViewModel.shared.selectedGoals
-        let learnedUserFacts = ChatViewModel.shared.learnedUserFacts
+        let supplements = ProfileViewModel.shared.userSupplements
+        let goals = ProfileViewModel.shared.userGoals
+        let learnedUserFacts = ProfileViewModel.shared.userFacts
 
         let request = InsightsRequest(
             userInfo: userInfo,

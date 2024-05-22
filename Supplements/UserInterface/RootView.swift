@@ -22,11 +22,9 @@ struct RootView: View {
                 }
             } else {
                 TabView {
-                    ChatView()
                     InsightsView()
-                    GoalsView()
-                    SupplementsView()
-                    UserFactsView()
+                    ChatView()
+                    ProfileView()
                 }
             }
         }

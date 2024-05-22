@@ -13,17 +13,8 @@ final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
 
     @Published var chatHistory = [ChatMessage]()
-    @Published var learnedUserFacts = [String]() {
-        didSet {
-            UserDefaults.standard.setValue(learnedUserFacts, forKey: "learnedUserFacts")
-        }
-    }
 
-    private init() { 
-        if let learnedUserFacts = UserDefaults.standard.value(forKey: "learnedUserFacts") as? [String] {
-            self.learnedUserFacts = learnedUserFacts
-        }
-    }
+    private init() { }
 }
 
 extension ChatViewModel {
@@ -50,15 +41,15 @@ extension ChatViewModel {
         }
 
         let userInfo = HealthManager.shared.userInfo
-        let currentGoals = GoalViewModel.shared.selectedGoals
-        let currentSupplements = SupplementViewModel.shared.selectedSupplements
+        let currentGoals = ProfileViewModel.shared.userGoals
+        let currentSupplements = ProfileViewModel.shared.userSupplements
 
         let response = try await NetworkRequester.shared.sendQuery(
             userInfo: userInfo,
             currentGoals: currentGoals,
             currentSupplements: currentSupplements,
             chatHistory: networkChatHistory,
-            learnedUserFacts: learnedUserFacts
+            learnedUserFacts: ProfileViewModel.shared.userFacts
         )
 
         await MainActor.run {
@@ -86,13 +77,13 @@ extension ChatViewModel {
                 hasSentMessage = true
             }
 
-            var newFacts = learnedUserFacts
+            var newFacts = ProfileViewModel.shared.userFacts
             newFacts.append(contentsOf: response.learnedUserFacts ?? [])
             newFacts = Array(newFacts.uniqued())
             newFacts = newFacts.filter {
                 !(response.expiredUserFacts?.contains($0) == true)
             }
-            learnedUserFacts = newFacts
+            ProfileViewModel.shared.userFacts = newFacts
 
             if hasSentMessage {
                 SoundPlayer.playReceiveMessage()
@@ -105,15 +96,15 @@ extension ChatViewModel {
             try await HealthManager.shared.loadUserInfo()
         } catch { print(error) }
         let userInfo = HealthManager.shared.userInfo
-        let currentGoals = GoalViewModel.shared.selectedGoals
-        let currentSupplements = SupplementViewModel.shared.selectedSupplements
+        let currentGoals = ProfileViewModel.shared.userGoals
+        let currentSupplements = ProfileViewModel.shared.userSupplements
 
         let request = ProactiveTipRequestModel(
             userInfo: userInfo,
             currentSupplements: currentSupplements,
             currentGoals: currentGoals,
             chatHistory: networkChatHistory,
-            learnedUserFacts: learnedUserFacts
+            learnedUserFacts: ProfileViewModel.shared.userFacts
         )
 
         do {
