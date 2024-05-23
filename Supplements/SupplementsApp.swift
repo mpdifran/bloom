@@ -15,6 +15,7 @@ struct SupplementsApp: App {
                 .onAppear {
                     NotificationManager.shared.requestAuthorization()
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+                    LocationManager.shared.requestAuth()
                 }
         }
         .backgroundTask(.appRefresh("proactive-tip")) {

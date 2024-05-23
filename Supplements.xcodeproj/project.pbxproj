@@ -23,6 +23,7 @@
 		FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B2D2BFE36FF00BA2128 /* NewProfileItemView.swift */; };
 		FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B2F2BFE728300BA2128 /* RecommendedGoalCell.swift */; };
 		FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */; };
+		FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ChatView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -104,6 +105,7 @@
 		FF8B8B2D2BFE36FF00BA2128 /* NewProfileItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProfileItemView.swift; sourceTree = "<group>"; };
 		FF8B8B2F2BFE728300BA2128 /* RecommendedGoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedGoalCell.swift; sourceTree = "<group>"; };
 		FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightScoreCell.swift; sourceTree = "<group>"; };
+		FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -229,6 +231,14 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		FF8B8B332BFFE4CD00BA2128 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
 		FFACBAD02BAC7788006AAD0B = {
 			isa = PBXGroup;
 			children = (
@@ -255,6 +265,7 @@
 				FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */,
 				FFB444952BED420C00486AD7 /* UserInterface */,
 				FF6AEC942BF17AFB00C34621 /* BackgroundTasks */,
+				FF8B8B332BFFE4CD00BA2128 /* Location */,
 				FF6AEC972BF17D0D00C34621 /* Notifications */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
 				FFB444562BEC40FD00486AD7 /* HealthManager */,
@@ -582,6 +593,7 @@
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,
 				FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */,
+				FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */,
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
 				FFF61B2B2BEEB23F00926042 /* NutrientsScoreCell.swift in Sources */,
 				FF8B8B2A2BFD8EA600BA2128 /* ProfileItemCell.swift in Sources */,
@@ -784,6 +796,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help recommend supplements";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -819,6 +833,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help recommend supplements";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

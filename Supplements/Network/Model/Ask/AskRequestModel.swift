@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct AskRequestModel: Codable {
     let userInfo: UserInfoModel?
@@ -17,6 +18,7 @@ struct AskRequestModel: Codable {
 
 struct UserInfoModel: Codable, Equatable {
     let name: String?
+    let location: LocationModel?
     let age: Int?
     let sex: String?
     let bloodType: String?
@@ -31,6 +33,11 @@ struct UserInfoModel: Codable, Equatable {
     let activeEnergy: QuantityModel?
     let bodyFatPercentage: QuantityModel?
     let workouts: [WorkoutSummary]
+}
+
+struct LocationModel: Codable, Equatable {
+    let latitude: CLLocationDegrees
+    let longitude: CLLocationDegrees
 }
 
 struct QuantityModel: Codable, Equatable {

@@ -123,10 +123,20 @@ extension HealthManager {
         let workoutSummaries = await fetchWorkoutSummaryLastTwoWeeks()
 
         let name = ProfileViewModel.shared.name.isEmpty ? nil : ProfileViewModel.shared.name
+        let location: LocationModel?
+        if let currentLocation = LocationManager.shared.currentLocation {
+            location = .init(
+                latitude: currentLocation.coordinate.latitude,
+                longitude: currentLocation.coordinate.longitude
+            )
+        } else {
+            location = nil
+        }
 
         await MainActor.run {
             self.userInfo = UserInfoModel(
                 name: name,
+                location: location,
                 age: healthStore.age(),
                 sex: healthStore.sex(),
                 bloodType: healthStore.typeOfBlood(),
