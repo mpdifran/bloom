@@ -21,7 +21,7 @@ struct RechargeScoreCell: View {
 
                 Spacer()
 
-                OverallScoreValueView(score: score.overallScore)
+                OverallScoreValueView(score: score.overallScore ?? 0)
             }
             .font(.title)
             .fontDesign(.rounded)
@@ -31,23 +31,18 @@ struct RechargeScoreCell: View {
 
             ChildScoreValueView(
                 "HRV Score",
-                score: score.hrvScore
+                score: score.hrvScore ?? 0
             )
 
             ChildScoreValueView(
                 "Meditation Score",
-                score: score.meditationScore
+                score: score.meditationScore ?? 0
             )
 
             ChildScoreValueView(
                 "Sleep Score",
-                score: score.sleepScore
+                score: score.sleepScore ?? 0
             )
-
-            Divider()
-
-            Text(score.shortText)
-                .multilineTextAlignment(.leading)
         }
     }
 }
@@ -59,8 +54,7 @@ struct RechargeScoreCell: View {
                 hrvScore: 8,
                 meditationScore: 10,
                 overallScore: 9,
-                sleepScore: 10,
-                shortText: "You are kind to yourself and sleep enough"
+                sleepScore: 10
             )
         )
     }

@@ -11,6 +11,7 @@ struct InsightsResponse: Codable {
     let userInfoInsights: [UserInfoInsight]
     let supplementInsights: SupplementInsights?
     let goalsInsights: GoalInsights?
+    let scores: Scores?
 }
 
 struct UserInfoInsight: Codable {
@@ -64,29 +65,60 @@ struct RecommendedSupplement: Codable {
 }
 
 struct Scores: Codable {
-    let nutrientsScore: NutrientsScore
-    let rechargeScore: RechargeScore
-    let takeChargeScore: TakeChargeScore
+    let rechargeScore: RechargeScore?
+    let takeChargeScore: TakeChargeScore?
 }
 
 struct NutrientsScore: Codable {
-    let overallScore: Int
-    let supplementMatchToGoalScore: Int
-    let supplementScientificScore: Int
-    let shortText: String
+    let overallScore: Int?
+    let supplementMatchToGoalScore: Int?
+    let supplementScientificScore: Int?
 }
 
 struct RechargeScore: Codable {
-    let hrvScore: Int
-    let meditationScore: Int
-    let overallScore: Int
-    let sleepScore: Int
-    let shortText: String
+    let hrvScore: Int?
+    let meditationScore: Int?
+    let overallScore: Int?
+    let sleepScore: Int?
+}
+
+extension RechargeScore {
+
+    var childScores: [InsightScoreCell.ChildScore] {
+        var scores = [InsightScoreCell.ChildScore]()
+
+        if let sleepScore {
+            scores.append(.init(name: "Sleep Score", score: sleepScore))
+        }
+        if let meditationScore {
+            scores.append(.init(name: "Meditation Score", score: meditationScore))
+        }
+        if let hrvScore {
+            scores.append(.init(name: "HRV Score", score: hrvScore))
+        }
+
+        return scores
+    }
 }
 
 struct TakeChargeScore: Codable {
-    let exerciseScore: Int
-    let overallScore: Int
-    let vo2maxScore: Int
-    let shortText: String
+    let exerciseScore: Int?
+    let overallScore: Int?
+    let vo2maxScore: Int?
+}
+
+extension TakeChargeScore {
+
+    var childScores: [InsightScoreCell.ChildScore] {
+        var scores = [InsightScoreCell.ChildScore]()
+
+        if let exerciseScore {
+            scores.append(.init(name: "Exercise Score", score: exerciseScore))
+        }
+        if let vo2maxScore {
+            scores.append(.init(name: "VO2 Max Score", score: vo2maxScore))
+        }
+
+        return scores
+    }
 }

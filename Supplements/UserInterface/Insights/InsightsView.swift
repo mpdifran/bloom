@@ -84,6 +84,26 @@ private extension InsightsView {
             if let insights = response.goalsInsights {
                 GoalInsightsSection(goalInsights: insights)
             }
+            if let scores = response.scores {
+                if let rechargeScore = scores.rechargeScore, let overallScore = rechargeScore.overallScore {
+                    Section {
+                        InsightScoreCell(
+                            title: "Recharge Score",
+                            overallScore: overallScore,
+                            childScores: rechargeScore.childScores
+                        )
+                    }
+                }
+                if let takeChargeScore = scores.takeChargeScore, let overallScore = takeChargeScore.overallScore {
+                    Section {
+                        InsightScoreCell(
+                            title: "Take Charge Score",
+                            overallScore: overallScore,
+                            childScores: takeChargeScore.childScores
+                        )
+                    }
+                }
+            }
         }
     }
 }

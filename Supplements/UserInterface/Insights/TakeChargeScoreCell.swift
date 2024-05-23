@@ -21,7 +21,7 @@ struct TakeChargeScoreCell: View {
 
                 Spacer()
 
-                OverallScoreValueView(score: score.overallScore)
+                OverallScoreValueView(score: score.overallScore ?? 0)
             }
             .font(.title)
             .fontDesign(.rounded)
@@ -31,18 +31,13 @@ struct TakeChargeScoreCell: View {
 
             ChildScoreValueView(
                 "Exercise Score",
-                score: score.exerciseScore
+                score: score.exerciseScore ?? 0
             )
 
             ChildScoreValueView(
                 "vO2 Max Score",
-                score: score.vo2maxScore
+                score: score.vo2maxScore ?? 0
             )
-
-            Divider()
-
-            Text(score.shortText)
-                .multilineTextAlignment(.leading)
         }
     }
 }
@@ -53,8 +48,7 @@ struct TakeChargeScoreCell: View {
             score: .init(
                 exerciseScore: 10,
                 overallScore: 9,
-                vo2maxScore: 8,
-                shortText: "You are large and in charge and do what it takes."
+                vo2maxScore: 8
             )
         )
     }

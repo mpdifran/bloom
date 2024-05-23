@@ -21,7 +21,7 @@ struct NutrientsScoreCell: View {
 
                 Spacer()
 
-                OverallScoreValueView(score: score.overallScore)
+                OverallScoreValueView(score: score.overallScore ?? 0)
             }
             .font(.title)
             .fontDesign(.rounded)
@@ -31,18 +31,13 @@ struct NutrientsScoreCell: View {
 
             ChildScoreValueView(
                 "Supplement Goal Score",
-                score: score.supplementMatchToGoalScore
+                score: score.supplementMatchToGoalScore ?? 0
             )
 
             ChildScoreValueView(
                 "Supplement Scientific Score",
-                score: score.supplementScientificScore
+                score: score.supplementScientificScore ?? 0
             )
-
-            Divider()
-
-            Text(score.shortText)
-                .multilineTextAlignment(.leading)
         }
     }
 }
@@ -55,8 +50,7 @@ struct NutrientsScoreCell: View {
             score: .init(
                 overallScore: 8,
                 supplementMatchToGoalScore: 6,
-                supplementScientificScore: 10,
-                shortText: "You are supplementing the amazing machine that is your body with the right stuff. But your supplements do not match your current goals."
+                supplementScientificScore: 10
             )
         )
     }
