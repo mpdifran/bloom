@@ -19,6 +19,7 @@ struct SupplementsApp: App {
         }
         .backgroundTask(.appRefresh("proactive-tip")) {
             await ChatViewModel.shared.sendProactiveTip()
+            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
         }
     }
 }
