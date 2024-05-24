@@ -25,43 +25,43 @@ struct OnboardingChatView: View {
     @State private var onboardingMessageGroups: [ChatMessageGroup] = [
         ChatMessageGroup(
             chatMessages: [
-                ChatMessage(message: "Hi, welcome to Bloom! I'm your personal AI health assistant.", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
-                ChatMessage(message: "I'd love to get to know you better.", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
-                ChatMessage(message: "What's your name?", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
+                ChatMessage(message: "Hi, welcome to Bloom! I'm your personal AI health assistant.", timestamp: .now, isCurrentUser: false),
+                ChatMessage(message: "I'd love to get to know you better.", timestamp: .now, isCurrentUser: false),
+                ChatMessage(message: "What's your name?", timestamp: .now, isCurrentUser: false),
             ],
             step: .textInput
         ),
         ChatMessageGroup(
             chatMessages: [
-                ChatMessage(message: "Nice to meet you!", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
+                ChatMessage(message: "Nice to meet you!", timestamp: .now, isCurrentUser: false),
                 ChatMessage(message: "In order to get a better view of your health, I'll need to have access to your health data.", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
-                ChatMessage(message: "Let me know what you'd like to share!", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
+                ChatMessage(message: "Let me know what you'd like to share!", timestamp: .now, isCurrentUser: false),
             ],
             step: .healthKit
         ),
         ChatMessageGroup(
             chatMessages: [
-                ChatMessage(message: "Great! Let's learn more about your preferences.", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
-                ChatMessage(message: "What do you like to do to stay active?", timestamp: .now, supplementReccomendation: [], isCurrentUser: false)
+                ChatMessage(message: "Great! Let's learn more about your preferences.", timestamp: .now, isCurrentUser: false),
+                ChatMessage(message: "What do you like to do to stay active?", timestamp: .now, isCurrentUser: false)
             ],
             step: .textInput
         ),
         ChatMessageGroup(
             chatMessages: [
-                ChatMessage(message: "Cool!", timestamp: .now, supplementReccomendation: [], isCurrentUser: false),
-                ChatMessage(message: "Are you currently taking any supplements? If so, please list them.", timestamp: .now, supplementReccomendation: [], isCurrentUser: false)
+                ChatMessage(message: "Cool!", timestamp: .now, isCurrentUser: false),
+                ChatMessage(message: "Are you currently taking any supplements? If so, please list them.", timestamp: .now, isCurrentUser: false)
             ],
             step: .textInput
         ),
         ChatMessageGroup(
             chatMessages: [
-                ChatMessage(message: "Nice. What about your health goals? What would you like to achieve?", timestamp: .now, supplementReccomendation: [], isCurrentUser: false)
+                ChatMessage(message: "Nice. What about your health goals? What would you like to achieve?", timestamp: .now, isCurrentUser: false)
             ],
             step: .textInput
         ),
         ChatMessageGroup(
             chatMessages: [
-                ChatMessage(message: "Great, that should be enough to get started. Welcome to Bloom!", timestamp: .now, supplementReccomendation: [], isCurrentUser: false)
+                ChatMessage(message: "Great, that should be enough to get started. Welcome to Bloom!", timestamp: .now, isCurrentUser: false)
             ],
             step: .finish
         ),

@@ -52,9 +52,13 @@ struct ChatView: View {
                                         )
                                         .id(chatMessage.id)
                                     } else {
-                                        ForEach(chatMessage.supplementReccomendation) { reccomendation in
-                                            SupplementBubble(supplementReccomendation: reccomendation)
-                                                .id(reccomendation.id)
+                                        ForEach(chatMessage.supplementReccomendation) { recommendation in
+                                            SupplementBubble(supplementReccomendation: recommendation)
+                                                .id(recommendation.id)
+                                        }
+                                        ForEach(chatMessage.activityRecommendation) { recommendation in
+                                            ActivityBubbleCell(activityModel: recommendation)
+                                                .id(recommendation.id)
                                         }
                                     }
                                 }
@@ -128,7 +132,9 @@ private extension ChatView {
 
         Task {
             await MainActor.run {
-                isWaitingForResponse = true
+                Delay(100) {
+                    isWaitingForResponse = true
+                }
             }
 
             do {
@@ -141,7 +147,9 @@ private extension ChatView {
             }
 
             await MainActor.run {
-                isWaitingForResponse = false
+                Delay(100) {
+                    isWaitingForResponse = false
+                }
             }
         }
     }

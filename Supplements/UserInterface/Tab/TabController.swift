@@ -11,6 +11,7 @@ import UserNotifications
 enum Tab {
     case insights
     case chat
+    case pins
     case profile
 }
 

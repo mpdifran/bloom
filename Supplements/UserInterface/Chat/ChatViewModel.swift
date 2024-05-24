@@ -34,6 +34,7 @@ extension ChatViewModel {
                     message: prompt,
                     timestamp: .now,
                     supplementReccomendation: [],
+                    activityRecommendation: [],
                     isCurrentUser: true
                 )
             )
@@ -60,6 +61,7 @@ extension ChatViewModel {
                         message: answer,
                         timestamp: .now,
                         supplementReccomendation: [],
+                        activityRecommendation: [],
                         isCurrentUser: false
                     )
                 )
@@ -71,6 +73,19 @@ extension ChatViewModel {
                         message: nil,
                         timestamp: .now,
                         supplementReccomendation: recommendations,
+                        activityRecommendation: [],
+                        isCurrentUser: false
+                    )
+                )
+                hasSentMessage = true
+            }
+            if let recommendations = response.recommendedActivities, recommendations.isNotEmpty {
+                chatHistory.append(
+                    ChatMessage(
+                        message: nil,
+                        timestamp: .now,
+                        supplementReccomendation: [],
+                        activityRecommendation: recommendations,
                         isCurrentUser: false
                     )
                 )
@@ -116,6 +131,7 @@ extension ChatViewModel {
                         message: response.message,
                         timestamp: .now,
                         supplementReccomendation: [],
+                        activityRecommendation: [],
                         isCurrentUser: false
                     )
                 )
