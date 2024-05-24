@@ -10,7 +10,8 @@ import SwiftUI
 struct InsightsResponse: Codable {
     let userInfoInsights: [UserInfoInsight]
     let supplementInsights: SupplementInsights?
-    let goalsInsights: GoalInsights?
+    let goalRecommendations: GoalInsights?
+    let activityRecommendations: [ActivityModel]
     let scores: Scores?
 }
 

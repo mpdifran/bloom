@@ -12,7 +12,7 @@ struct InsightsView: View {
     @State private var isLoading = false
     @State private var error: Error?
 
-    @ObservedObject private var viewModel = InsightsViewModel()
+    @ObservedObject private var viewModel = InsightsViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
     var body: some View {
@@ -78,10 +78,23 @@ private extension InsightsView {
         List {
             UserInfoInsightsSection(insights: response.userInfoInsights)
 
+            Section {
+                ForEach(response.activityRecommendations) { activity in
+                    ActivityCell(activityModel: activity)
+                }
+            } header: {
+                Text("Activities")
+                    .multilineTextAlignment(.leading)
+                    .font(.title2)
+                    .fontDesign(.rounded)
+                    .bold()
+                    .textCase(.none)
+            }
+
             if let insights = response.supplementInsights {
                 SupplementInsightsSection(insights: insights)
             }
-            if let insights = response.goalsInsights {
+            if let insights = response.goalRecommendations {
                 GoalInsightsSection(goalInsights: insights)
             }
             if let scores = response.scores {

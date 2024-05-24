@@ -8,8 +8,11 @@
 import Foundation
 
 final class InsightsViewModel: ObservableObject {
+    static let shared = InsightsViewModel()
 
     @Published var insights: InsightsResponse?
+
+    private init() { }
 }
 
 extension InsightsViewModel {
