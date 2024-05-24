@@ -42,16 +42,12 @@ struct ActivityBubbleCell: View {
                         Text(activityModel.reasonForActivity)
                             .font(.subheadline)
 
-                        Divider()
-
                         Link(destination: activityModel.urlToBookActivity, label: {
-                            HStack {
-                                Text("Open in Safari")
-                                    .foregroundStyle(.tint)
-                                    .bold()
-                                Spacer()
-                            }
+                            Label("Open in Safari", systemImage: "arrow.up.forward.app.fill")
+                                .foregroundStyle(.white)
+                                .bold()
                         })
+                        .buttonStyle(.borderedProminent)
                     }
 
                     Button(action: {
