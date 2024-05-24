@@ -9,4 +9,5 @@ import Foundation
 
 struct ProactiveTipResponseModel: Codable {
     let message: String
+    let recommendedActivities: [ActivityModel]?
 }

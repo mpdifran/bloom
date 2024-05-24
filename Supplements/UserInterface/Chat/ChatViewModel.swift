@@ -135,6 +135,20 @@ extension ChatViewModel {
                         isCurrentUser: false
                     )
                 )
+
+                if let recommendations = response.recommendedActivities, recommendations.isNotEmpty {
+                    chatHistory.append(
+                        ChatMessage(
+                            message: nil,
+                            timestamp: .now,
+                            supplementReccomendation: [],
+                            activityRecommendation: recommendations,
+                            isCurrentUser: false
+                        )
+                    )
+                }
+
+                SoundPlayer.playReceiveMessage()
             }
 
             await NotificationManager.shared.sendNotification(title: "Bloom", subtitle: response.message)
