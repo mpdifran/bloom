@@ -213,14 +213,19 @@ extension HealthManager {
         return nil
     }
 
-    func fetchRestingHeartRate() async -> [Double] {
+    func fetchRestingHeartRate() async -> [HeartRateSample] {
         do {
             let samples = try await healthStore.fetchSamples(for: .restingHeartRate, previousDays: 7)
 
             return samples.compactMap { sample in
                 sample as? HKQuantitySample
             }.map { sample in
-                sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
+                let value = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
+                return HeartRateSample(
+                    date: sample.startDate,
+                    value: value,
+                    unit: "bpm"
+                )
             }
         } catch {
             print(error)

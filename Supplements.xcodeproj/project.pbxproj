@@ -25,6 +25,7 @@
 		FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */; };
 		FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */; };
 		FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B372C00141B00BA2128 /* TabController.swift */; };
+		FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ChatView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -108,6 +109,7 @@
 		FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightScoreCell.swift; sourceTree = "<group>"; };
 		FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		FF8B8B372C00141B00BA2128 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
+		FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateSample.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 			children = (
 				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
 				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
+				FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */,
 				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
 				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
 				FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */,
@@ -651,6 +654,7 @@
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
+				FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
