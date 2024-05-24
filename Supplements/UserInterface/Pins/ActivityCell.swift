@@ -39,13 +39,11 @@ struct ActivityCell: View {
                 Divider()
 
                 Link(destination: activityModel.urlToBookActivity, label: {
-                    HStack {
-                        Text("Open in Safari")
-                            .foregroundStyle(.tint)
-                            .bold()
-                        Spacer()
-                    }
+                    Label("Open in Safari", systemImage: "arrow.up.forward.app.fill")
+                        .foregroundStyle(.white)
+                        .bold()
                 })
+                .buttonStyle(.borderedProminent)
             }
 
             Spacer()
@@ -63,6 +61,7 @@ struct ActivityCell: View {
                     .foregroundStyle(.tint)
                     .contentTransition(.symbolEffect)
             })
+            .buttonStyle(.plain)
         }
         .animation(.bouncy, value: pinViewModel.pins.contains(activityModel))
         .onAppear {
