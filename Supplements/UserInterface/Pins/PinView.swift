@@ -18,7 +18,6 @@ struct PinView: View {
                     ActivityCell(activityModel: pin)
                 }
             }
-            .listStyle(.plain)
             .navigationTitle("Pins")
         }
         .tabItem {

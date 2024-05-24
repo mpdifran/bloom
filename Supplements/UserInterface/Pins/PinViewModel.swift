@@ -22,7 +22,7 @@ final class PinViewModel: ObservableObject {
     }
 
     private init() { 
-        if let data = UserDefaults.standard.value(forKey: "name") as? Data {
+        if let data = UserDefaults.standard.value(forKey: "pins") as? Data {
             do {
                 let pins = try JSONDecoder.main.decode([ActivityModel].self, from: data)
                 self.pins = pins
