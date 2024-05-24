@@ -18,7 +18,9 @@ struct RootView: View {
         Group {
             if !hasShownOnboarding {
                 OnboardingRootView { chatMessages in
-                    ChatViewModel.shared.chatHistory = chatMessages
+                    Task {
+                        await ChatViewModel.shared.parseOnboardingInfo(chatHistory: chatMessages)
+                    }
                     withAnimation {
                         hasShownOnboarding = true
                     }

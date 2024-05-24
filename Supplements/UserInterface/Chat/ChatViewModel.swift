@@ -126,6 +126,26 @@ extension ChatViewModel {
             print(error)
         }
     }
+
+    func parseOnboardingInfo(chatHistory: [ChatMessage]) async {
+        self.chatHistory = chatHistory
+
+        do {
+            let request = OnboardingInfoRequest(chatHistory: networkChatHistory)
+            let response = try await NetworkRequester.shared.parseOnboardingInfo(request: request)
+
+            await MainActor.run {
+                if let name = response.name {
+                    ProfileViewModel.shared.name = name
+                }
+                ProfileViewModel.shared.userFacts = response.activities
+                ProfileViewModel.shared.userSupplements = response.supplements
+                ProfileViewModel.shared.userGoals = response.healthGoals
+            }
+        } catch {
+            print(error)
+        }
+    }
 }
 
 extension ChatViewModel {

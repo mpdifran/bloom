@@ -26,6 +26,8 @@
 		FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */; };
 		FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B372C00141B00BA2128 /* TabController.swift */; };
 		FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */; };
+		FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B3C2C0021E500BA2128 /* OnboardingInfoRequest.swift */; };
+		FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B3E2C00220C00BA2128 /* OnboardingInfoResponse.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ChatView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -110,6 +112,8 @@
 		FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		FF8B8B372C00141B00BA2128 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateSample.swift; sourceTree = "<group>"; };
+		FF8B8B3C2C0021E500BA2128 /* OnboardingInfoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInfoRequest.swift; sourceTree = "<group>"; };
+		FF8B8B3E2C00220C00BA2128 /* OnboardingInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInfoResponse.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -251,6 +255,15 @@
 			path = Tab;
 			sourceTree = "<group>";
 		};
+		FF8B8B3B2C0021D700BA2128 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				FF8B8B3C2C0021E500BA2128 /* OnboardingInfoRequest.swift */,
+				FF8B8B3E2C00220C00BA2128 /* OnboardingInfoResponse.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		FFACBAD02BAC7788006AAD0B = {
 			isa = PBXGroup;
 			children = (
@@ -373,6 +386,7 @@
 		FFB444982BED424000486AD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FF8B8B3B2C0021D700BA2128 /* Onboarding */,
 				FFF61B202BEE915500926042 /* Insights */,
 				FF6AEC8F2BF1774C00C34621 /* ProactiveTip */,
 				FFF61AFA2BED71C000926042 /* Ask */,
@@ -649,7 +663,9 @@
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
 				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
+				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
+				FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
