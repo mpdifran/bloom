@@ -36,8 +36,6 @@ struct ActivityCell: View {
                 Text(activityModel.reasonForActivity)
                     .font(.subheadline)
 
-                Divider()
-
                 Link(destination: activityModel.urlToBookActivity, label: {
                     Label("Open in Safari", systemImage: "arrow.up.forward.app.fill")
                         .foregroundStyle(.white)
