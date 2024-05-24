@@ -24,6 +24,7 @@
 		FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B2F2BFE728300BA2128 /* RecommendedGoalCell.swift */; };
 		FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */; };
 		FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */; };
+		FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B372C00141B00BA2128 /* TabController.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ChatView.swift */; };
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
@@ -106,6 +107,7 @@
 		FF8B8B2F2BFE728300BA2128 /* RecommendedGoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedGoalCell.swift; sourceTree = "<group>"; };
 		FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightScoreCell.swift; sourceTree = "<group>"; };
 		FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		FF8B8B372C00141B00BA2128 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
 		FFACBADE2BAC7788006AAD0B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -239,6 +241,14 @@
 			path = Location;
 			sourceTree = "<group>";
 		};
+		FF8B8B362C00141000BA2128 /* Tab */ = {
+			isa = PBXGroup;
+			children = (
+				FF8B8B372C00141B00BA2128 /* TabController.swift */,
+			);
+			path = Tab;
+			sourceTree = "<group>";
+		};
 		FFACBAD02BAC7788006AAD0B = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +354,7 @@
 			isa = PBXGroup;
 			children = (
 				FFF61AEC2BED537B00926042 /* RootView.swift */,
+				FF8B8B362C00141000BA2128 /* Tab */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FFF61AF42BED554700926042 /* Chat */,
 				FFF61AF52BED555100926042 /* Goals */,
@@ -617,6 +628,7 @@
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
+				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,

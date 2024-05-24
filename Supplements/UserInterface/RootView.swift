@@ -7,9 +7,12 @@
 
 import SwiftUI
 
+@MainActor
 struct RootView: View {
     
     @AppStorage("hasShownOnboardingV2") var hasShownOnboarding: Bool = false
+
+    @StateObject private var tabController = TabController()
 
     var body: some View {
         Group {
@@ -21,11 +24,15 @@ struct RootView: View {
                     }
                 }
             } else {
-                TabView {
+                TabView(selection: $tabController.activeTab) {
                     InsightsView()
+                        .tag(Tab.insights)
                     ChatView()
+                        .tag(Tab.chat)
                     ProfileView()
+                        .tag(Tab.profile)
                 }
+                .environmentObject(tabController)
             }
         }
         .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
