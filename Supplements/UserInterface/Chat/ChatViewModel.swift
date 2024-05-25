@@ -158,7 +158,9 @@ extension ChatViewModel {
     }
 
     func parseOnboardingInfo(chatHistory: [ChatMessage]) async {
-        self.chatHistory = chatHistory
+        await MainActor.run {
+            self.chatHistory = chatHistory
+        }
 
         do {
             let request = OnboardingInfoRequest(chatHistory: networkChatHistory)

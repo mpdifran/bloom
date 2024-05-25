@@ -165,6 +165,7 @@ extension OnboardingChatView {
 
         if let message = onboardingMessages?.chatMessages.remove(at: 0) {
             chatMessages.append(message)
+            SoundPlayer.playReceiveMessage()
         }
 
         guard onboardingMessages?.chatMessages.isNotEmpty == true else {
@@ -212,6 +213,7 @@ extension OnboardingChatView {
             isCurrentUser: true
         )
         chatMessages.append(message)
+        SoundPlayer.playSendMessage()
 
         userMessage = ""
         userCanSendMessage = false

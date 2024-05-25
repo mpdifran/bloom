@@ -29,7 +29,7 @@ struct UserInfoModel: Codable, Equatable {
     let restingHeartRate: [HeartRateSample]
     let vO2Max: QuantityModel?
     let timeInDaylight: QuantityModel?
-    let aggregateSleep: SleepAggregates?
+    let sleepAnalysis: [SleepAnalysis]
     let activeEnergy: QuantityModel?
     let bodyFatPercentage: QuantityModel?
     let workouts: [WorkoutSummary]

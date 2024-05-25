@@ -9,6 +9,10 @@ import Foundation
 import HealthKit
 import AppFoundations
 
+extension TimeInterval {
+    static let maxSleepGroupTimeDistance: TimeInterval = 7200 // 2 hours
+}
+
 final class HealthManager: ObservableObject {
     static let shared = HealthManager()
 
@@ -110,7 +114,7 @@ extension HealthManager {
             QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
         }
 
-        let sleepData = await fetchSleepAnalysis()
+        let sleepAnalysis = await fetchDailySleepAnalysis()
 
         let activeEnergy = await fetchActiveEnergy().map {
             QuantityModel(amount: $0.0, kind: .average, unit: "calories", periodDays: $0.1)
@@ -147,7 +151,7 @@ extension HealthManager {
                 restingHeartRate: restingHeartRate,
                 vO2Max: vO2Max,
                 timeInDaylight: timeInDaylight,
-                aggregateSleep: sleepData,
+                sleepAnalysis: sleepAnalysis,
                 activeEnergy: activeEnergy,
                 bodyFatPercentage: bodyFatPercentage,
                 workouts: workoutSummaries
@@ -292,6 +296,96 @@ extension HealthManager {
             print(error)
         }
         return nil
+    }
+
+    func fetchDailySleepAnalysis() async -> [SleepAnalysis] {
+        do {
+            let sampleType = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            let period = 7
+            let end = Date.now
+            let start = Calendar.current.sleepStartDate(previousDays: period, endDate: end)
+            let samples = try await healthStore.fetchSamples(for: sampleType, start: start, end: end) as? [HKCategorySample] ?? []
+
+            var groupedSamples = [[HKCategorySample]]()
+            var currentGroup: [HKCategorySample] = []
+
+            for sample in samples.reversed() {
+                if let lastSample = currentGroup.last {
+                    let interval = sample.startDate.timeIntervalSince(lastSample.endDate)
+                    if interval <= .maxSleepGroupTimeDistance {
+                        currentGroup.append(sample)
+                    } else {
+                        groupedSamples.append(currentGroup)
+                        currentGroup = [sample]
+                    }
+                } else {
+                    currentGroup.append(sample)
+                }
+            }
+            if !currentGroup.isEmpty {
+                groupedSamples.append(currentGroup)
+            }
+
+            return groupedSamples.compactMap { sampleGroup -> SleepAnalysis? in
+                var deepSleepTime: Double = 0
+                var coreSleepTime: Double = 0
+                var remSleepTime: Double = 0
+                var awakeSleepTime: Double = 0
+
+                for sample in sampleGroup {
+                    let state = HKCategoryValueSleepAnalysis(rawValue: sample.value)
+                    switch state {
+                    case .asleepUnspecified, .asleep:
+                        break
+                    case .awake:
+                        awakeSleepTime += sample.timeInterval
+                    case .asleepCore:
+                        coreSleepTime += sample.timeInterval
+                    case .asleepDeep:
+                        deepSleepTime += sample.timeInterval
+                    case .asleepREM:
+                        remSleepTime += sample.timeInterval
+                    case .inBed, .none:
+                        break
+                    @unknown default:
+                        break
+                    }
+                }
+
+                let startDate = sampleGroup.reduce(Date.distantFuture) { partialResult, sample in
+                    if sample.startDate < partialResult {
+                        return sample.startDate
+                    }
+                    return partialResult
+                }
+
+                let endDate = sampleGroup.reduce(Date.distantPast) { partialResult, sample in
+                    if sample.endDate > partialResult {
+                        return sample.endDate
+                    }
+                    return partialResult
+                }
+
+                guard startDate < endDate else {
+                    print("We somehow have a start date after the end date...")
+                    print("Start: \(startDate)")
+                    print("End: \(endDate)")
+                    return nil
+                }
+
+                return SleepAnalysis(
+                    startDate: startDate,
+                    endDate: endDate,
+                    deepSleepMinutes: deepSleepTime / 60,
+                    coreSleepMinutes: coreSleepTime / 60,
+                    remSleepMinutes: remSleepTime / 60,
+                    awakeSleepMinutes: awakeSleepTime / 60
+                )
+            }
+        } catch {
+            print("Sleep Analysis Error: \(error)")
+        }
+        return []
     }
 
     func fetchSleepAnalysis() async -> SleepAggregates? {

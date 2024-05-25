@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C22C025174009FDC4E /* Calendar+Heath.swift */; };
+		FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */; };
+		FF0404C72C025C95009FDC4E /* DateFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -98,6 +101,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF0404C22C025174009FDC4E /* Calendar+Heath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Heath.swift"; sourceTree = "<group>"; };
+		FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepAnalysis.swift; sourceTree = "<group>"; };
+		FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
@@ -207,6 +213,7 @@
 				FFB4445C2BEC4CAB00486AD7 /* Codable+Constants.swift */,
 				FFF61B022BED87B400926042 /* Delay.swift */,
 				FFF61B082BED9CA900926042 /* Color+Random.swift */,
+				FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -351,7 +358,9 @@
 			children = (
 				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
 				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
+				FF0404C22C025174009FDC4E /* Calendar+Heath.swift */,
 				FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */,
+				FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */,
 				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
 				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
 				FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */,
@@ -654,15 +663,18 @@
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */,
+				FF0404C72C025C95009FDC4E /* DateFormatter+Constants.swift in Sources */,
 				FFF61B2D2BEEB46D00926042 /* OverallScoreValueView.swift in Sources */,
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
 				FFF61B4A2BEEC20200926042 /* TipOfTheDayCell.swift in Sources */,
+				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
+				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
