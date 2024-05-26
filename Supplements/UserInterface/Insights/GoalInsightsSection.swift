@@ -18,12 +18,7 @@ struct GoalInsightsSection: View {
                 RecommendedGoalCell(goal: goal)
             }
         } header: {
-            Text("Recommended Goals")
-                .multilineTextAlignment(.leading)
-                .font(.title2)
-                .fontDesign(.rounded)
-                .bold()
-                .textCase(.none)
+            InsightSectionHeaderView(title: "Recommended Goals")
         }
     }
 }

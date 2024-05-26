@@ -10,6 +10,7 @@ import Foundation
 struct ChatMessage: Identifiable, Hashable, Equatable {
     let id = UUID().uuidString
     let message: String?
+    let secretContext: String?
     let timestamp: Date
     let supplementReccomendation: [SupplementReccomendationModel]
     let activityRecommendation: [ActivityModel]
@@ -17,12 +18,14 @@ struct ChatMessage: Identifiable, Hashable, Equatable {
 
     init(
         message: String?,
+        secretContext: String? = nil,
         timestamp: Date,
         supplementReccomendation: [SupplementReccomendationModel] = [],
         activityRecommendation: [ActivityModel] = [],
         isCurrentUser: Bool
     ) {
         self.message = message
+        self.secretContext = secretContext
         self.timestamp = timestamp
         self.supplementReccomendation = supplementReccomendation
         self.activityRecommendation = activityRecommendation

@@ -27,11 +27,12 @@ extension ChatViewModel {
         return lastMessage?.id
     }
 
-    func send(prompt: String) async throws {
+    func send(prompt: String, secretContext: String? = nil) async throws {
         await MainActor.run {
             chatHistory.append(
                 ChatMessage(
                     message: prompt,
+                    secretContext: secretContext,
                     timestamp: .now,
                     supplementReccomendation: [],
                     activityRecommendation: [],
@@ -184,7 +185,11 @@ extension ChatViewModel {
 
     var networkChatHistory: [ChatMessageHistory] {
         chatHistory.map { chatMessage in
-            let message = chatMessage.message ?? chatMessage.supplementReccomendation.first?.shortText ?? ""
+            var message = chatMessage.message ?? chatMessage.supplementReccomendation.first?.shortText ?? ""
+
+            if let secretContext = chatMessage.secretContext {
+                message += "\n\n" + secretContext
+            }
 
             return ChatMessageHistory(
                 role: chatMessage.isCurrentUser ? .user : .assistant,

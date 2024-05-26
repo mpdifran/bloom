@@ -10,6 +10,11 @@
 		FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C22C025174009FDC4E /* Calendar+Heath.swift */; };
 		FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */; };
 		FF0404C72C025C95009FDC4E /* DateFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */; };
+		FF0404C92C0262D4009FDC4E /* SleepScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C82C0262D4009FDC4E /* SleepScoreCell.swift */; };
+		FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */; };
+		FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CC2C028223009FDC4E /* InsightSectionHeaderView.swift */; };
+		FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */; };
+		FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -73,17 +78,11 @@
 		FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B242BEE91B500926042 /* InsightsView.swift */; };
 		FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B262BEE927F00926042 /* InsightsViewModel.swift */; };
 		FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B282BEE936100926042 /* InsightsResponse.swift */; };
-		FFF61B2B2BEEB23F00926042 /* NutrientsScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B2A2BEEB23F00926042 /* NutrientsScoreCell.swift */; };
-		FFF61B2D2BEEB46D00926042 /* OverallScoreValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B2C2BEEB46D00926042 /* OverallScoreValueView.swift */; };
-		FFF61B2F2BEEB52200926042 /* ChildScoreValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B2E2BEEB52200926042 /* ChildScoreValueView.swift */; };
-		FFF61B312BEEB5F900926042 /* RechargeScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B302BEEB5F900926042 /* RechargeScoreCell.swift */; };
-		FFF61B332BEEB67400926042 /* TakeChargeScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B322BEEB67400926042 /* TakeChargeScoreCell.swift */; };
 		FFF61B3B2BEEB7B000926042 /* SupplementsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */; };
 		FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B412BEEB99600926042 /* GoalInsightsSection.swift */; };
 		FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B432BEEBB4800926042 /* SupplementInsightsSection.swift */; };
 		FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B452BEEBBEB00926042 /* RecommendedSupplementCell.swift */; };
 		FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B472BEEBD8F00926042 /* UserInfoInsightsSection.swift */; };
-		FFF61B4A2BEEC20200926042 /* TipOfTheDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */; };
 		FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */; };
 		FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */; };
 		FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B712BF1592C00926042 /* AskResponseModel.swift */; };
@@ -104,6 +103,11 @@
 		FF0404C22C025174009FDC4E /* Calendar+Heath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Heath.swift"; sourceTree = "<group>"; };
 		FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepAnalysis.swift; sourceTree = "<group>"; };
 		FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Constants.swift"; sourceTree = "<group>"; };
+		FF0404C82C0262D4009FDC4E /* SleepScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreCell.swift; sourceTree = "<group>"; };
+		FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+ScoreColor.swift"; sourceTree = "<group>"; };
+		FF0404CC2C028223009FDC4E /* InsightSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightSectionHeaderView.swift; sourceTree = "<group>"; };
+		FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TertiaryButtonStyle.swift; sourceTree = "<group>"; };
+		FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryView.swift; sourceTree = "<group>"; };
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
@@ -167,18 +171,12 @@
 		FFF61B242BEE91B500926042 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		FFF61B262BEE927F00926042 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		FFF61B282BEE936100926042 /* InsightsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsResponse.swift; sourceTree = "<group>"; };
-		FFF61B2A2BEEB23F00926042 /* NutrientsScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientsScoreCell.swift; sourceTree = "<group>"; };
-		FFF61B2C2BEEB46D00926042 /* OverallScoreValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverallScoreValueView.swift; sourceTree = "<group>"; };
-		FFF61B2E2BEEB52200926042 /* ChildScoreValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildScoreValueView.swift; sourceTree = "<group>"; };
-		FFF61B302BEEB5F900926042 /* RechargeScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RechargeScoreCell.swift; sourceTree = "<group>"; };
-		FFF61B322BEEB67400926042 /* TakeChargeScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeChargeScoreCell.swift; sourceTree = "<group>"; };
 		FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SupplementsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsTests.swift; sourceTree = "<group>"; };
 		FFF61B412BEEB99600926042 /* GoalInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalInsightsSection.swift; sourceTree = "<group>"; };
 		FFF61B432BEEBB4800926042 /* SupplementInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementInsightsSection.swift; sourceTree = "<group>"; };
 		FFF61B452BEEBBEB00926042 /* RecommendedSupplementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSupplementCell.swift; sourceTree = "<group>"; };
 		FFF61B472BEEBD8F00926042 /* UserInfoInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoInsightsSection.swift; sourceTree = "<group>"; };
-		FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipOfTheDayCell.swift; sourceTree = "<group>"; };
 		FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKCategoryValueSleepAnalysis+Name.swift"; sourceTree = "<group>"; };
 		FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKCategorySample+TimeInterval.swift"; sourceTree = "<group>"; };
 		FFF61B712BF1592C00926042 /* AskResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskResponseModel.swift; sourceTree = "<group>"; };
@@ -206,6 +204,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF0404D02C02C5DC009FDC4E /* SleepSummary */ = {
+			isa = PBXGroup;
+			children = (
+				FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */,
+			);
+			path = SleepSummary;
+			sourceTree = "<group>";
+		};
 		FF648BE12BDEA4F700963820 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +220,7 @@
 				FFF61B022BED87B400926042 /* Delay.swift */,
 				FFF61B082BED9CA900926042 /* Color+Random.swift */,
 				FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */,
+				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -459,6 +466,7 @@
 			children = (
 				FFF61B002BED7C1300926042 /* EfficacyView.swift */,
 				FFF61B192BEE8C3B00926042 /* TextActionBar.swift */,
+				FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -494,18 +502,15 @@
 			children = (
 				FFF61B242BEE91B500926042 /* InsightsView.swift */,
 				FFF61B262BEE927F00926042 /* InsightsViewModel.swift */,
+				FF0404C82C0262D4009FDC4E /* SleepScoreCell.swift */,
 				FFF61B472BEEBD8F00926042 /* UserInfoInsightsSection.swift */,
 				FFF61B432BEEBB4800926042 /* SupplementInsightsSection.swift */,
 				FFF61B452BEEBBEB00926042 /* RecommendedSupplementCell.swift */,
 				FFF61B412BEEB99600926042 /* GoalInsightsSection.swift */,
 				FF8B8B2F2BFE728300BA2128 /* RecommendedGoalCell.swift */,
 				FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */,
-				FFF61B492BEEC20100926042 /* TipOfTheDayCell.swift */,
-				FFF61B2C2BEEB46D00926042 /* OverallScoreValueView.swift */,
-				FFF61B2E2BEEB52200926042 /* ChildScoreValueView.swift */,
-				FFF61B2A2BEEB23F00926042 /* NutrientsScoreCell.swift */,
-				FFF61B302BEEB5F900926042 /* RechargeScoreCell.swift */,
-				FFF61B322BEEB67400926042 /* TakeChargeScoreCell.swift */,
+				FF0404CC2C028223009FDC4E /* InsightSectionHeaderView.swift */,
+				FF0404D02C02C5DC009FDC4E /* SleepSummary */,
 			);
 			path = Insights;
 			sourceTree = "<group>";
@@ -637,16 +642,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
-				FFF61B2F2BEEB52200926042 /* ChildScoreValueView.swift in Sources */,
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
 				FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */,
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
+				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFF61AF12BED548D00926042 /* GoalResponse.swift in Sources */,
 				FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */,
-				FFF61B332BEEB67400926042 /* TakeChargeScoreCell.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
@@ -656,7 +660,6 @@
 				FF8B8B442C002C5100BA2128 /* PinViewModel.swift in Sources */,
 				FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */,
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
-				FFF61B2B2BEEB23F00926042 /* NutrientsScoreCell.swift in Sources */,
 				FF8B8B2A2BFD8EA600BA2128 /* ProfileItemCell.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FFB4445D2BEC4CAB00486AD7 /* Codable+Constants.swift in Sources */,
@@ -664,20 +667,21 @@
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */,
 				FF0404C72C025C95009FDC4E /* DateFormatter+Constants.swift in Sources */,
-				FFF61B2D2BEEB46D00926042 /* OverallScoreValueView.swift in Sources */,
+				FF0404C92C0262D4009FDC4E /* SleepScoreCell.swift in Sources */,
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
-				FFF61B4A2BEEC20200926042 /* TipOfTheDayCell.swift in Sources */,
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
+				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
+				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
@@ -690,7 +694,6 @@
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */,
-				FFF61B312BEEB5F900926042 /* RechargeScoreCell.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
@@ -705,6 +708,7 @@
 				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
 				FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */,
+				FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,

@@ -17,4 +17,13 @@ extension DateFormatter {
 
         return dateFormatter
     }()
+
+    static var justDateMedium: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+
+        return dateFormatter
+    }()
 }

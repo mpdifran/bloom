@@ -333,8 +333,7 @@ extension HealthManager {
                 var awakeSleepTime: Double = 0
 
                 for sample in sampleGroup {
-                    let state = HKCategoryValueSleepAnalysis(rawValue: sample.value)
-                    switch state {
+                    switch sample.category {
                     case .asleepUnspecified, .asleep:
                         break
                     case .awake:
@@ -353,6 +352,13 @@ extension HealthManager {
                 }
 
                 let startDate = sampleGroup.reduce(Date.distantFuture) { partialResult, sample in
+                    switch sample.category {
+                    case .awake, .inBed, .none:
+                        return partialResult // We don't want to count these as the start and end of sleep.
+                    default:
+                        break
+                    }
+
                     if sample.startDate < partialResult {
                         return sample.startDate
                     }
@@ -360,6 +366,13 @@ extension HealthManager {
                 }
 
                 let endDate = sampleGroup.reduce(Date.distantPast) { partialResult, sample in
+                    switch sample.category {
+                    case .awake, .inBed, .none:
+                        return partialResult // We don't want to count these as the start and end of sleep.
+                    default:
+                        break
+                    }
+
                     if sample.endDate > partialResult {
                         return sample.endDate
                     }

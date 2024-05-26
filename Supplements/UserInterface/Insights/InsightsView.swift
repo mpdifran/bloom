@@ -76,6 +76,10 @@ private extension InsightsView {
 
     func content(response: InsightsResponse) -> some View {
         List {
+            if let sleepAnalysis = healthManager.userInfo?.sleepAnalysis {
+                SleepScoreCell(sleepAnalysis: sleepAnalysis)
+            }
+
             UserInfoInsightsSection(insights: response.userInfoInsights)
 
             Section {

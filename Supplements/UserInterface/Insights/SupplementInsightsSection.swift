@@ -18,12 +18,7 @@ struct SupplementInsightsSection: View {
                 RecommendedSupplementCell(recommendedSupplement: supp)
             }
         } header: {
-            Text("Supplement Recommendations")
-                .multilineTextAlignment(.leading)
-                .font(.title2)
-                .fontDesign(.rounded)
-                .bold()
-                .textCase(.none)
+            InsightSectionHeaderView(title: "Supplement Recommendations")
         }
     }
 }
