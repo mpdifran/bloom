@@ -55,6 +55,26 @@ extension SleepAnalysis {
         return "\(DateFormatter.justDateMedium.string(from: startDate)) to \(DateFormatter.justDateMedium.string(from: endDate))"
     }
 
+    var overallHours: Double {
+        timeInterval / 3600
+    }
+
+    var coreSleepHours: Double {
+        coreSleepMinutes / 60
+    }
+
+    var remSleepHours: Double {
+        remSleepMinutes / 60
+    }
+
+    var deepSleepHours: Double {
+        deepSleepMinutes / 60
+    }
+
+    var awakeSleepHours: Double {
+        awakeSleepMinutes / 60
+    }
+
     var overallScore: Int {
         Int((Double(deepSleepScore + coreSleepScore + remSleepScore + sleepLengthScore) / 4).rounded(.towardZero))
     }

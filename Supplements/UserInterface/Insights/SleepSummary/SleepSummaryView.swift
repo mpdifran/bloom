@@ -106,8 +106,8 @@ private extension SleepSummaryView {
                 RectangleMark(
                     xStart: .value("Start", earliestStartDate),
                     xEnd: .value("End", latestEndDate),
-                    yStart: .value("Start", 420),
-                    yEnd: .value("End", 540)
+                    yStart: .value("Start", 7),
+                    yEnd: .value("End", 9)
                 )
                 .foregroundStyle(.green.opacity(0.3))
 
@@ -115,7 +115,7 @@ private extension SleepSummaryView {
                     xStart: .value("Start", earliestStartDate),
                     xEnd: .value("End", latestEndDate),
                     yStart: .value("Start", 0),
-                    yEnd: .value("End", 420)
+                    yEnd: .value("End", 7)
                 )
                 .foregroundStyle(.yellow.opacity(0.3))
             }
@@ -123,25 +123,25 @@ private extension SleepSummaryView {
             ForEach(sleepAnalysises) { sleepAnalysis in
                 BarMark(
                     x: .value("Date", sleepAnalysis.endDate, unit: .day),
-                    y: .value("Value", sleepAnalysis.deepSleepMinutes)
+                    y: .value("Value", sleepAnalysis.deepSleepHours)
                 )
                 .foregroundStyle(by: .value("Category", "Deep Sleep"))
                 .cornerRadius(5)
                 BarMark(
                     x: .value("Date", sleepAnalysis.endDate, unit: .day),
-                    y: .value("Value", sleepAnalysis.coreSleepMinutes)
+                    y: .value("Value", sleepAnalysis.coreSleepHours)
                 )
                 .foregroundStyle(by: .value("Category", "Core Sleep"))
                 .cornerRadius(5)
                 BarMark(
                     x: .value("Date", sleepAnalysis.endDate, unit: .day),
-                    y: .value("Value", sleepAnalysis.remSleepMinutes)
+                    y: .value("Value", sleepAnalysis.remSleepHours)
                 )
                 .foregroundStyle(by: .value("Category", "REM Sleep"))
                 .cornerRadius(5)
                 BarMark(
                     x: .value("Date", sleepAnalysis.endDate, unit: .day),
-                    y: .value("Value", sleepAnalysis.awakeSleepMinutes)
+                    y: .value("Value", sleepAnalysis.awakeSleepHours)
                 )
                 .foregroundStyle(by: .value("Category", "Awake"))
                 .cornerRadius(5)
@@ -173,8 +173,8 @@ private extension SleepSummaryView {
     func chart(for sleepAnalysis: SleepAnalysis) -> some View {
         Chart {
             RectangleMark(
-                xStart: .value("Start", 420),
-                xEnd: .value("End", 540),
+                xStart: .value("Start", 7),
+                xEnd: .value("End", 9),
                 yStart: .value("Start", sleepAnalysis.beginningOfStartDate),
                 yEnd: .value("End", sleepAnalysis.endOfEndDate)
             )
@@ -182,32 +182,32 @@ private extension SleepSummaryView {
 
             RectangleMark(
                 xStart: .value("Start", 0),
-                xEnd: .value("End", 420),
+                xEnd: .value("End", 7),
                 yStart: .value("Start", sleepAnalysis.beginningOfStartDate),
                 yEnd: .value("End", sleepAnalysis.endOfEndDate)
             )
             .foregroundStyle(.yellow.opacity(0.3))
 
             BarMark(
-                x: .value("Value", sleepAnalysis.deepSleepMinutes),
+                x: .value("Value", sleepAnalysis.deepSleepHours),
                 y: .value("Date", sleepAnalysis.endDate, unit: .day)
             )
             .foregroundStyle(by: .value("Category", "Deep Sleep"))
             .cornerRadius(5)
             BarMark(
-                x: .value("Value", sleepAnalysis.coreSleepMinutes),
+                x: .value("Value", sleepAnalysis.coreSleepHours),
                 y: .value("Date", sleepAnalysis.endDate, unit: .day)
             )
             .foregroundStyle(by: .value("Category", "Core Sleep"))
             .cornerRadius(5)
             BarMark(
-                x: .value("Value", sleepAnalysis.remSleepMinutes),
+                x: .value("Value", sleepAnalysis.remSleepHours),
                 y: .value("Date", sleepAnalysis.endDate, unit: .day)
             )
             .foregroundStyle(by: .value("Category", "REM Sleep"))
             .cornerRadius(5)
             BarMark(
-                x: .value("Value", sleepAnalysis.awakeSleepMinutes),
+                x: .value("Value", sleepAnalysis.awakeSleepHours),
                 y: .value("Date", sleepAnalysis.endDate, unit: .day)
             )
             .foregroundStyle(by: .value("Category", "Awake"))
