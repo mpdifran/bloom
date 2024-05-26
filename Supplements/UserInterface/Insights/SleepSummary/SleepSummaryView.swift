@@ -117,7 +117,7 @@ private extension SleepSummaryView {
                     yStart: .value("Start", 0),
                     yEnd: .value("End", 420)
                 )
-                .foregroundStyle(.red.opacity(0.3))
+                .foregroundStyle(.yellow.opacity(0.3))
             }
 
             ForEach(sleepAnalysises) { sleepAnalysis in
@@ -186,7 +186,7 @@ private extension SleepSummaryView {
                 yStart: .value("Start", sleepAnalysis.beginningOfStartDate),
                 yEnd: .value("End", sleepAnalysis.endOfEndDate)
             )
-            .foregroundStyle(.orange.opacity(0.3))
+            .foregroundStyle(.yellow.opacity(0.3))
 
             BarMark(
                 x: .value("Value", sleepAnalysis.deepSleepMinutes),
