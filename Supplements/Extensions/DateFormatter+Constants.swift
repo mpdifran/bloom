@@ -26,4 +26,20 @@ extension DateFormatter {
 
         return dateFormatter
     }()
+
+    static var monthAndDay: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMM dd")
+
+        return dateFormatter
+    }()
+
+    static var justDayOfWeek: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
+
+        return dateFormatter
+    }()
 }

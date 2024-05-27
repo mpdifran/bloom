@@ -29,11 +29,17 @@ struct SleepSummaryView: View {
             ForEach(sleepAnalysises.reversed()) { sleepAnalysis in
                 Section {
                     HStack {
-                        Text(sleepAnalysis.timeSpanDescription)
-                            .font(.title3)
-                            .bold()
-                            .fontDesign(.rounded)
-                        
+                        VStack(alignment: .leading) {
+                            Text(sleepAnalysis.name)
+                                .font(.title3)
+                                .bold()
+                                .fontDesign(.rounded)
+
+                            Text(sleepAnalysis.timeSpanDescription)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
                         Spacer()
                         
                         Text("\(sleepAnalysis.overallScore)")
@@ -110,14 +116,6 @@ private extension SleepSummaryView {
                     yEnd: .value("End", 9)
                 )
                 .foregroundStyle(.green.opacity(0.3))
-
-                RectangleMark(
-                    xStart: .value("Start", earliestStartDate),
-                    xEnd: .value("End", latestEndDate),
-                    yStart: .value("Start", 0),
-                    yEnd: .value("End", 7)
-                )
-                .foregroundStyle(.yellow.opacity(0.3))
             }
 
             ForEach(sleepAnalysises) { sleepAnalysis in
@@ -146,6 +144,21 @@ private extension SleepSummaryView {
                 .foregroundStyle(by: .value("Category", "Awake"))
                 .cornerRadius(5)
             }
+
+            ForEach(sleepAnalysises) { sleepAnalysis in
+                LineMark(
+                    x: .value("Date", sleepAnalysis.endDate, unit: .day),
+                    y: .value("Score", sleepAnalysis.overallScore)
+                )
+                .interpolationMethod(.catmullRom)
+                .foregroundStyle(.green)
+                PointMark(
+                    x: .value("Date", sleepAnalysis.endDate, unit: .day),
+                    y: .value("Score", sleepAnalysis.overallScore)
+                )
+                .foregroundStyle(.green)
+                .symbolSize(50)
+            }
         }
         .chartForegroundStyleScale([
             "Deep Sleep": .deepSleep,
@@ -161,7 +174,7 @@ private extension SleepSummaryView {
             }
         }
         .chartYAxis {
-            AxisMarks(values: .automatic) { value in
+            AxisMarks(position: .trailing, values: .stride(by: 2)) { value in
                 AxisGridLine()
                 AxisTick()
                 AxisValueLabel()
@@ -175,18 +188,10 @@ private extension SleepSummaryView {
             RectangleMark(
                 xStart: .value("Start", 7),
                 xEnd: .value("End", 9),
-                yStart: .value("Start", sleepAnalysis.beginningOfStartDate),
+                yStart: .value("Start", sleepAnalysis.startDate),
                 yEnd: .value("End", sleepAnalysis.endOfEndDate)
             )
             .foregroundStyle(.green.opacity(0.3))
-
-            RectangleMark(
-                xStart: .value("Start", 0),
-                xEnd: .value("End", 7),
-                yStart: .value("Start", sleepAnalysis.beginningOfStartDate),
-                yEnd: .value("End", sleepAnalysis.endOfEndDate)
-            )
-            .foregroundStyle(.yellow.opacity(0.3))
 
             BarMark(
                 x: .value("Value", sleepAnalysis.deepSleepHours),

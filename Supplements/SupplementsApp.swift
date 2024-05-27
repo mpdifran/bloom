@@ -16,6 +16,13 @@ struct SupplementsApp: App {
                     NotificationManager.shared.requestAuthorization()
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
                     LocationManager.shared.requestAuth()
+                    Task {
+                        do {
+                            try await HealthManager.shared.loadUserInfo()
+                        } catch {
+                            print(error)
+                        }
+                    }
                 }
         }
         .backgroundTask(.appRefresh("proactive-tip")) {

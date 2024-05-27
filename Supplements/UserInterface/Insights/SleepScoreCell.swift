@@ -11,8 +11,8 @@ import AppUI
 @MainActor
 struct SleepScoreCell: View {
     let sleepAnalysis: [SleepAnalysis]
+    let showSleepSummaryView: () -> Void
 
-    @State private var showSleepDetails = false
     @State private var error: Error?
 
     @EnvironmentObject private var tabContorller: TabController
@@ -90,7 +90,7 @@ private extension SleepScoreCell {
                 Spacer()
 
                 Button(action: {
-                    showSleepDetails = true
+                    showSleepSummaryView()
                 }, label: {
                     HStack {
                         Spacer(minLength: 0)
@@ -104,9 +104,6 @@ private extension SleepScoreCell {
             }
         }
         .alert(error: $error)
-        .navigationDestination(isPresented: $showSleepDetails) {
-            SleepSummaryView(sleepAnalysises: sleepAnalysis)
-        }
     }
 }
 
@@ -197,7 +194,7 @@ struct SleepSegmentScoreView: View {
                                 awakeSleepMinutes: 32
                             )
                         ]
-                    )
+                    ) { }
                 }
                 .navigationTitle("Insights")
             }

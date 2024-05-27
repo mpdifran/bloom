@@ -10,7 +10,7 @@ import Foundation
 // https://www.mindbodygreen.com/articles/what-is-core-sleep
 // https://www.healthline.com/health/how-much-deep-sleep-do-you-need#deep-sleep
 extension Double {
-    static let coreSleepPercent: Double = 0.50
+    static let coreSleepPercent: Double = 0.40
     static let deepSleepPercent: Double = 0.25
     static let remSleepPercent: Double = 0.25
     static let minSleepLengthMinutes: Double = 7 * 60
@@ -50,9 +50,13 @@ extension SleepAnalysis {
 
     var timeSpanDescription: String {
         if Calendar.current.isDate(startDate, inSameDayAs: endDate) {
-            return DateFormatter.justDateMedium.string(from: startDate)
+            return DateFormatter.monthAndDay.string(from: startDate)
         }
-        return "\(DateFormatter.justDateMedium.string(from: startDate)) to \(DateFormatter.justDateMedium.string(from: endDate))"
+        return "\(DateFormatter.monthAndDay.string(from: startDate)) - \(DateFormatter.monthAndDay.string(from: endDate))"
+    }
+
+    var name: String {
+        DateFormatter.justDayOfWeek.string(from: endDate)
     }
 
     var overallHours: Double {

@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import AppUI
 
 struct InsightsView: View {
 
     @State private var isLoading = false
+    @State private var presentedNavigationView: AnyView?
     @State private var error: Error?
 
     @ObservedObject private var viewModel = InsightsViewModel.shared
@@ -17,36 +19,36 @@ struct InsightsView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
+            List {
+                if let sleepAnalysis = healthManager.userInfo?.sleepAnalysis {
+                    SleepScoreCell(sleepAnalysis: sleepAnalysis) {
+                        presentedNavigationView = SleepSummaryView(sleepAnalysises: sleepAnalysis).asAny
+                    }
+                }
+
                 if isLoading {
-                    ContentUnavailableView {
-                        Label {
+                    Section {
+                        VStack {
+                            ProgressView()
                             Text("Loading Insights")
-                        } icon: {
-                            Image(systemName: "heart.text.square")
-                                .foregroundStyle(.tint)
+                                .bold()
                         }
+                        .zStackAlignment(.center)
                     }
                 } else if let insightsResponse = viewModel.insights {
                     content(response: insightsResponse)
                 } else {
-                    ContentUnavailableView(label: {
-                        Label {
-                            Text("No Insights Available")
-                        } icon: {
-                            Image(systemName: "heart.text.square")
-                                .foregroundStyle(.tint)
+                    HStack {
+                        Spacer()
+                        Button("Reload Insights", systemImage: "arrow.clockwise") {
+                            Task { await loadData(force: true) }
                         }
-                    }, actions: {
-                        Button("Reload", systemImage: "arrow.counterclockwise") {
-                            Task { await loadData() }
-                        }
-                        .padding()
-                        .buttonStyle(.borderedProminent)
-                    })
+                        Spacer()
+                    }
                 }
             }
             .navigationTitle("Insights")
+            .navigationDestination($presentedNavigationView)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Reload", systemImage: "arrow.clockwise") {
@@ -74,53 +76,28 @@ struct InsightsView: View {
 
 private extension InsightsView {
 
+    @ViewBuilder
     func content(response: InsightsResponse) -> some View {
-        List {
-            if let sleepAnalysis = healthManager.userInfo?.sleepAnalysis {
-                SleepScoreCell(sleepAnalysis: sleepAnalysis)
-            }
+        UserInfoInsightsSection(insights: response.userInfoInsights)
 
-            UserInfoInsightsSection(insights: response.userInfoInsights)
+        Section {
+            ForEach(response.activityRecommendations) { activity in
+                ActivityCell(activityModel: activity)
+            }
+        } header: {
+            Text("Activities")
+                .multilineTextAlignment(.leading)
+                .font(.title2)
+                .fontDesign(.rounded)
+                .bold()
+                .textCase(.none)
+        }
 
-            Section {
-                ForEach(response.activityRecommendations) { activity in
-                    ActivityCell(activityModel: activity)
-                }
-            } header: {
-                Text("Activities")
-                    .multilineTextAlignment(.leading)
-                    .font(.title2)
-                    .fontDesign(.rounded)
-                    .bold()
-                    .textCase(.none)
-            }
-
-            if let insights = response.supplementInsights {
-                SupplementInsightsSection(insights: insights)
-            }
-            if let insights = response.goalRecommendations {
-                GoalInsightsSection(goalInsights: insights)
-            }
-            if let scores = response.scores {
-                if let rechargeScore = scores.rechargeScore, let overallScore = rechargeScore.overallScore {
-                    Section {
-                        InsightScoreCell(
-                            title: "Recharge Score",
-                            overallScore: overallScore,
-                            childScores: rechargeScore.childScores
-                        )
-                    }
-                }
-                if let takeChargeScore = scores.takeChargeScore, let overallScore = takeChargeScore.overallScore {
-                    Section {
-                        InsightScoreCell(
-                            title: "Take Charge Score",
-                            overallScore: overallScore,
-                            childScores: takeChargeScore.childScores
-                        )
-                    }
-                }
-            }
+        if let insights = response.supplementInsights {
+            SupplementInsightsSection(insights: insights)
+        }
+        if let insights = response.goalRecommendations {
+            GoalInsightsSection(goalInsights: insights)
         }
     }
 }
@@ -128,7 +105,7 @@ private extension InsightsView {
 private extension InsightsView {
 
     func loadData(force: Bool = false) async {
-        guard !force && viewModel.insights == nil else { return }
+        guard force || viewModel.insights == nil else { return }
 
         await MainActor.run { isLoading = true }
         do {
