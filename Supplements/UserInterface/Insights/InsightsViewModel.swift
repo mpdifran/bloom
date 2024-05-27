@@ -18,7 +18,9 @@ final class InsightsViewModel: ObservableObject {
 extension InsightsViewModel {
 
     func loadData() async throws {
-        insights = nil
+        await MainActor.run {
+            self.insights = nil
+        }
 
         let userInfo = HealthManager.shared.userInfo
         let supplements = ProfileViewModel.shared.userSupplements
