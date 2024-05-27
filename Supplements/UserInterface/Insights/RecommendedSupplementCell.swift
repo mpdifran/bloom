@@ -36,18 +36,13 @@ struct RecommendedSupplementCell: View {
 
             Spacer()
 
-            Button(action: {
-                guard !userAddedSupplement else { return }
-
-                profileViewModel.userSupplements.insert(recommendedSupplement.supplementName, at: 0)
-                feedbackGenerator.impactOccurred()
-            }, label: {
-                Image(systemName: userAddedSupplement ? "checkmark.circle.fill" : "plus.circle.fill")
-                    .foregroundStyle(.white, .tint)
-                    .font(.largeTitle)
-                    .fontDesign(.rounded)
-                    .contentTransition(.symbolEffect)
-            })
+            AddItemButton(hasAdded: userAddedSupplement) {
+                if userAddedSupplement {
+                    profileViewModel.userSupplements.removeAll { $0 == recommendedSupplement.supplementName }
+                } else {
+                    profileViewModel.userSupplements.insert(recommendedSupplement.supplementName, at: 0)
+                }
+            }
         }
         .animation(.bouncy, value: profileViewModel.userSupplements.count)
         .onAppear {
@@ -59,10 +54,7 @@ struct RecommendedSupplementCell: View {
 private extension RecommendedSupplementCell {
 
     var userAddedSupplement: Bool {
-        profileViewModel.userSupplements.contains { supplement in
-            supplement.localizedCaseInsensitiveContains(recommendedSupplement.supplementName) ||
-            recommendedSupplement.supplementName.localizedCaseInsensitiveContains(supplement)
-        }
+        profileViewModel.userSupplements.contains(recommendedSupplement.supplementName)
     }
 }
 

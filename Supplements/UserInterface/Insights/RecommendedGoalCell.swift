@@ -24,18 +24,13 @@ struct RecommendedGoalCell: View {
                 .bold()
             Spacer()
 
-            Button(action: {
-                guard !userAddedGoal else { return }
-
-                profileViewModel.userGoals.insert(goal, at: 0)
-                feedbackGenerator.impactOccurred()
-            }, label: {
-                Image(systemName: userAddedGoal ? "checkmark.circle.fill" : "plus.circle.fill")
-                    .foregroundStyle(.white, .tint)
-                    .font(.largeTitle)
-                    .fontDesign(.rounded)
-                    .contentTransition(.symbolEffect)
-            })
+            AddItemButton(hasAdded: userAddedGoal) {
+                if userAddedGoal {
+                    profileViewModel.userGoals.removeAll { $0 == goal }
+                } else {
+                    profileViewModel.userGoals.insert(goal, at: 0)
+                }
+            }
         }
         .animation(.bouncy, value: profileViewModel.userGoals.count)
         .onAppear {
@@ -47,10 +42,7 @@ struct RecommendedGoalCell: View {
 private extension RecommendedGoalCell {
 
     var userAddedGoal: Bool {
-        profileViewModel.userGoals.contains { userGoal in
-            userGoal.localizedCaseInsensitiveContains(goal) ||
-            goal.localizedCaseInsensitiveContains(userGoal)
-        }
+        profileViewModel.userGoals.contains(goal)
     }
 }
 

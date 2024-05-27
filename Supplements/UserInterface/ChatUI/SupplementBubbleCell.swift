@@ -12,16 +12,21 @@ struct SupplementBubble: View {
 
     @State private var showPopover = false
 
+    @ObservedObject private var profileViewModel = ProfileViewModel.shared
+
     var body: some View {
         ChatBubble(position: .leading,
                    showTail: true,
                    shouldFill: true,
                    foregroundColor: Color(uiColor: .label),
                    backgroundColor: .chatGrey) {
-            HStack(alignment: .top) {
+            HStack {
                 VStack(alignment: .leading) {
-                    Text(supplementReccomendation.supplementName)
-                        .bold()
+                    HStack(spacing: 4) {
+                        EfficacyView(efficacy: supplementReccomendation.efficacyRating)
+                        Text(supplementReccomendation.supplementName)
+                            .bold()
+                    }
 
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(supplementReccomendation.recommendedDailyDose.capitalized)
@@ -52,9 +57,22 @@ struct SupplementBubble: View {
 
                 Spacer()
 
-                EfficacyView(efficacy: supplementReccomendation.efficacyRating)
+                AddItemButton(hasAdded: userAddedSupplement) {
+                    if userAddedSupplement {
+                        profileViewModel.userSupplements.removeAll(where: { $0 ==  supplementReccomendation.supplementName})
+                    } else {
+                        profileViewModel.userSupplements.insert(supplementReccomendation.supplementName, at: 0)
+                    }
+                }
             }
         }
+    }
+}
+
+private extension SupplementBubble {
+
+    var userAddedSupplement: Bool {
+        profileViewModel.userSupplements.contains(supplementReccomendation.supplementName)
     }
 }
 
