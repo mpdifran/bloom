@@ -9,6 +9,9 @@ import SwiftUI
 
 @main
 struct SupplementsApp: App {
+
+    private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -16,6 +19,8 @@ struct SupplementsApp: App {
                     NotificationManager.shared.requestAuthorization()
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
                     LocationManager.shared.requestAuth()
+                }
+                .onReceive(foregroundPublisher) { _ in
                     Task {
                         do {
                             try await HealthManager.shared.loadUserInfo()
