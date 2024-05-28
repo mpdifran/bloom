@@ -98,6 +98,7 @@ struct SleepSummaryView: View {
             }
         }
         .navigationTitle("Sleep Analysis")
+        .navigationBarTitleDisplayMode(.inline)
         .animation(.default, value: expandedSections)
     }
 }
@@ -230,6 +231,13 @@ private extension SleepSummaryView {
             "REM Sleep": .remSleep,
             "Awake": .awakeSleep
         ])
+        .chartXAxis {
+            AxisMarks(values: .stride(by: 2)) { value in
+                AxisGridLine()
+                AxisTick()
+                AxisValueLabel()
+            }
+        }
         .chartYAxis {
             AxisMarks(values: ["Total"]) { value in
                 AxisGridLine()
