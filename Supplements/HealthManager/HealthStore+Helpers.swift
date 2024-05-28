@@ -319,3 +319,50 @@ extension HKHealthStore {
         return nil
     }
 }
+
+extension HKHealthStore {
+
+    func enableImmediateBackgrounDelivery(sampleType: HKSampleType) async throws -> Bool {
+        try await withCheckedThrowingContinuation { continuation in
+            enableBackgroundDelivery(for: sampleType, frequency: .immediate) { success, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: success)
+                }
+            }
+        }
+    }
+
+    func observeChanges(sampleType: HKSampleType, anchor: HKQueryAnchor?) -> AsyncThrowingStream<([HKSample], HKQueryAnchor?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    guard try await enableImmediateBackgrounDelivery(sampleType: sampleType) else {
+                        continuation.finish()
+                        return
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+
+                print("Starting observation of \(sampleType)")
+
+                let query = HKAnchoredObjectQuery(
+                    type: sampleType,
+                    predicate: nil,
+                    anchor: anchor,
+                    limit: HKObjectQueryNoLimit
+                ) { (query, samples, deletedObjects, anchor, error) in
+                    if let error {
+                        continuation.finish(throwing: error)
+                    }
+                    if let samples {
+                        continuation.yield((samples, anchor))
+                    }
+                }
+                execute(query)
+            }
+        }
+    }
+}

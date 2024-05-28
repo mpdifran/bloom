@@ -45,4 +45,11 @@ extension TabController: UNUserNotificationCenterDelegate {
             select(.chat)
         }
     }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        return [.banner, .sound, .list]
+    }
 }

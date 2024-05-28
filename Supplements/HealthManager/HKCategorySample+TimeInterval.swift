@@ -22,7 +22,7 @@ extension HKCategorySample {
         return "\(category.name) : \(timeInterval) seconds\nStart:\t\(DateFormatter.standardMedium.string(from: startDate))\nEnd:\t\(DateFormatter.standardMedium.string(from: endDate))\n"
     }
 
-    var category: HKCategoryValueSleepAnalysis? {
+    var sleepCategory: HKCategoryValueSleepAnalysis? {
         HKCategoryValueSleepAnalysis(rawValue: value)
     }
 }

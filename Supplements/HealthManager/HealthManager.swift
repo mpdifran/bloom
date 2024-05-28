@@ -21,8 +21,34 @@ final class HealthManager: ObservableObject {
     @Published var userInfo: UserInfoModel?
 
     private let healthStore = HKHealthStore()
+    private let throttler = Throttler(timeInterval: 600)
 
-    private init() { 
+    private var sleepDataListenerTask: Task<Void, Error>? = nil
+    private var sleepQueryAnchor: HKQueryAnchor? {
+        didSet {
+            do {
+                if let anchor = sleepQueryAnchor {
+                    let anchorData = try NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)
+                    UserDefaults.standard.set(anchorData, forKey: "sleepQueryAnchor")
+                } else {
+                    UserDefaults.standard.set(nil, forKey: "sleepQueryAnchor")
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+
+    private init() {
+        if let data = UserDefaults.standard.data(forKey: "sleepQueryAnchor") {
+            do {
+                let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: data)
+                self.sleepQueryAnchor = anchor
+            } catch {
+                print(error)
+            }
+        }
+
         DispatchQueue.main.async { [weak self] in
             self?.checkAccess()
         }
@@ -46,6 +72,7 @@ final class HealthManager: ObservableObject {
         HKObjectType.workoutType()
     ]
     // body fat percentage
+    // meditation minutes
     // BMI
     // respiratory rate
     // blood oxygen
@@ -87,6 +114,8 @@ extension HealthManager {
 
     func loadUserInfo() async throws {
         guard isAuthorized else { return }
+
+        print("Loading Health Data")
 
         let bodyWeight = await fetchBodyWeight().map {
             QuantityModel(amount: $0.quantity.doubleValue(for: .pound()), kind: .latestValue, unit: "pounds", periodDays: nil)
@@ -333,7 +362,7 @@ extension HealthManager {
                 var awakeSleepTime: Double = 0
 
                 for sample in sampleGroup {
-                    switch sample.category {
+                    switch sample.sleepCategory {
                     case .asleepUnspecified, .asleep:
                         break
                     case .awake:
@@ -352,7 +381,7 @@ extension HealthManager {
                 }
 
                 let startDate = sampleGroup.reduce(Date.distantFuture) { partialResult, sample in
-                    switch sample.category {
+                    switch sample.sleepCategory {
                     case .awake, .inBed, .none:
                         return partialResult // We don't want to count these as the start and end of sleep.
                     default:
@@ -366,7 +395,7 @@ extension HealthManager {
                 }
 
                 let endDate = sampleGroup.reduce(Date.distantPast) { partialResult, sample in
-                    switch sample.category {
+                    switch sample.sleepCategory {
                     case .awake, .inBed, .none:
                         return partialResult // We don't want to count these as the start and end of sleep.
                     default:
@@ -495,4 +524,35 @@ struct SleepStageSum {
     var totalCore: Double = 0
     var totalAsleep: Double = 0
     var totalAwake: Double = 0
+}
+
+extension HealthManager {
+
+    func observeSleepData() {
+        guard let sampleType = HKSampleType.categoryType(forIdentifier: .sleepAnalysis) else {
+            print("Cannot observe sleep data")
+            return
+        }
+        
+        sleepDataListenerTask = Task.detached { [weak self, healthStore] in
+            do {
+                for try await result in healthStore.observeChanges(sampleType: sampleType, anchor: self?.sleepQueryAnchor) {
+                    let (samples, anchor) = result
+
+                    if samples.isNotEmpty, self?.sleepQueryAnchor != nil {
+                        let categories = samples.compactMap({ $0 as? HKCategorySample }).compactMap({ $0.sleepCategory?.name })
+                        print("Anchor Query notified of sleep categories:")
+                        print(categories)
+
+                        await NotificationManager.shared.sendGoodMorningNotification()
+                    }
+
+                    print("Sleep anchor updated")
+                    self?.sleepQueryAnchor = anchor
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
 }

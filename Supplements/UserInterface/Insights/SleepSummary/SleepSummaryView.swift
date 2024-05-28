@@ -239,10 +239,8 @@ private extension SleepSummaryView {
             }
         }
         .chartYAxis {
-            AxisMarks(values: ["Total"]) { value in
-                AxisGridLine()
-                AxisTick()
-                AxisValueLabel()
+            AxisMarks(values: .automatic(desiredCount: 0)) { value in
+
             }
         }
         .frame(height: 100)

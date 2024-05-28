@@ -38,4 +38,19 @@ extension NotificationManager {
             )
         )
     }
+
+    func sendGoodMorningNotification() async {
+        let content = UNMutableNotificationContent()
+        content.title = "Good Morning!"
+        content.subtitle = "Check out how your sleep was last night."
+        content.sound = .default
+
+        try? await UNUserNotificationCenter.current().add(
+            UNNotificationRequest(
+                identifier: UUID().uuidString,//"good-morning",
+                content: content,
+                trigger: nil
+            )
+        )
+    }
 }

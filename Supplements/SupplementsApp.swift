@@ -19,6 +19,7 @@ struct SupplementsApp: App {
                     NotificationManager.shared.requestAuthorization()
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
                     LocationManager.shared.requestAuth()
+                    HealthManager.shared.observeSleepData()
                 }
                 .onReceive(foregroundPublisher) { _ in
                     Task {
