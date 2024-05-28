@@ -52,7 +52,7 @@ private extension SleepScoreCell {
             SleepSegmentScoreView(
                 title: "Sleep Length Score",
                 color: .green,
-                minutes: lastSleepAnalysis.timeIntervalMinutes,
+                minutes: lastSleepAnalysis.overallMinutes,
                 score: lastSleepAnalysis.sleepLengthScore
             )
 
@@ -60,7 +60,7 @@ private extension SleepScoreCell {
                 title: "REM Sleep Score",
                 color: .remSleep,
                 minutes: lastSleepAnalysis.remSleepMinutes,
-                overallMinutes: lastSleepAnalysis.overallHours * 60,
+                overallMinutes: lastSleepAnalysis.overallMinutes,
                 score: lastSleepAnalysis.remSleepScore
             )
 
@@ -68,7 +68,7 @@ private extension SleepScoreCell {
                 title: "Core Sleep Score",
                 color: .coreSleep,
                 minutes: lastSleepAnalysis.coreSleepMinutes,
-                overallMinutes: lastSleepAnalysis.overallHours * 60,
+                overallMinutes: lastSleepAnalysis.overallMinutes,
                 score: lastSleepAnalysis.coreSleepScore
             )
 
@@ -76,7 +76,7 @@ private extension SleepScoreCell {
                 title: "Deep Sleep Score",
                 color: .deepSleep,
                 minutes: lastSleepAnalysis.deepSleepMinutes,
-                overallMinutes: lastSleepAnalysis.overallHours * 60,
+                overallMinutes: lastSleepAnalysis.overallMinutes,
                 score: lastSleepAnalysis.deepSleepScore
             )
 

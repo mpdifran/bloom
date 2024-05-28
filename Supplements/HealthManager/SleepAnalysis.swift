@@ -44,10 +44,6 @@ extension SleepAnalysis {
         endDate.timeIntervalSince(startDate)
     }
 
-    var timeIntervalMinutes: TimeInterval {
-        timeInterval / 60
-    }
-
     var timeSpanDescription: String {
         if Calendar.current.isDate(startDate, inSameDayAs: endDate) {
             return DateFormatter.monthAndDay.string(from: startDate)
@@ -59,8 +55,20 @@ extension SleepAnalysis {
         DateFormatter.justDayOfWeek.string(from: endDate)
     }
 
+    var overallMinutesIncludingAwake: Double {
+        timeInterval / 60
+    }
+
+    var overallHoursIncludingAwake: Double {
+        overallMinutesIncludingAwake / 60
+    }
+
+    var overallMinutes: Double {
+        overallMinutesIncludingAwake - awakeSleepMinutes
+    }
+
     var overallHours: Double {
-        timeInterval / 3600
+        overallHoursIncludingAwake - awakeSleepHours
     }
 
     var coreSleepHours: Double {
@@ -84,22 +92,22 @@ extension SleepAnalysis {
     }
 
     var sleepLengthScore: Int {
-        let percent = timeIntervalMinutes / .minSleepLengthMinutes
+        let percent = overallMinutes / .minSleepLengthMinutes
         return min(Int((percent * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
     }
 
     var deepSleepScore: Int {
-        let percent = deepSleepMinutes / timeIntervalMinutes
+        let percent = deepSleepMinutes / overallMinutes
         return min(Int(((percent / .deepSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
     }
 
     var coreSleepScore: Int {
-        let percent = coreSleepMinutes / timeIntervalMinutes
+        let percent = coreSleepMinutes / overallMinutes
         return min(Int(((percent / .coreSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
     }
 
     var remSleepScore: Int {
-        let percent = remSleepMinutes / timeIntervalMinutes
+        let percent = remSleepMinutes / overallMinutes
         return min(Int(((percent / .remSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
     }
 }

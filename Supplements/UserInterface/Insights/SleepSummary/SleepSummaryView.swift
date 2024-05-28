@@ -66,7 +66,7 @@ struct SleepSummaryView: View {
                         SleepSegmentScoreView(
                             title: "Sleep Length Score",
                             color: .green,
-                            minutes: sleepAnalysis.timeIntervalMinutes,
+                            minutes: sleepAnalysis.overallMinutes,
                             score: sleepAnalysis.sleepLengthScore
                         )
 
