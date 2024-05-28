@@ -42,4 +42,13 @@ extension DateFormatter {
 
         return dateFormatter
     }()
+
+    static var timeIntervalHourMinuteShort: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+
+        formatter.unitsStyle = .short
+        formatter.allowedUnits = [.hour, .minute]
+
+        return formatter
+    }()
 }

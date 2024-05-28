@@ -50,28 +50,34 @@ private extension SleepScoreCell {
             .zStackAlignment(.center)
 
             SleepSegmentScoreView(
+                title: "Sleep Length Score",
+                color: .green,
+                minutes: lastSleepAnalysis.timeIntervalMinutes,
+                score: lastSleepAnalysis.sleepLengthScore
+            )
+
+            SleepSegmentScoreView(
+                title: "REM Sleep Score",
+                color: .remSleep,
+                minutes: lastSleepAnalysis.remSleepMinutes,
+                overallMinutes: lastSleepAnalysis.overallHours * 60,
+                score: lastSleepAnalysis.remSleepScore
+            )
+
+            SleepSegmentScoreView(
                 title: "Core Sleep Score",
+                color: .coreSleep,
                 minutes: lastSleepAnalysis.coreSleepMinutes,
+                overallMinutes: lastSleepAnalysis.overallHours * 60,
                 score: lastSleepAnalysis.coreSleepScore
             )
 
             SleepSegmentScoreView(
                 title: "Deep Sleep Score",
+                color: .deepSleep,
                 minutes: lastSleepAnalysis.deepSleepMinutes,
+                overallMinutes: lastSleepAnalysis.overallHours * 60,
                 score: lastSleepAnalysis.deepSleepScore
-            )
-
-            SleepSegmentScoreView(
-                title: "REM Sleep Score",
-                minutes: lastSleepAnalysis.remSleepMinutes,
-                score: lastSleepAnalysis.remSleepScore
-            )
-
-            SleepSegmentScoreView(
-                title: "Sleep Length Score",
-                minutes: lastSleepAnalysis.timeIntervalMinutes,
-                showHours: true,
-                score: lastSleepAnalysis.sleepLengthScore
             )
 
             HStack {
@@ -132,34 +138,45 @@ private extension SleepScoreCell {
 
 struct SleepSegmentScoreView: View {
     let title: String
+    let color: Color
     let minutes: Double
-    let showHours: Bool
+    let overallMinutes: Double?
     let score: Int
 
     init(
         title: String,
+        color: Color,
         minutes: Double,
-        showHours: Bool = false,
+        overallMinutes: Double? = nil,
         score: Int
     ) {
         self.title = title
+        self.color = color
         self.minutes = minutes
-        self.showHours = showHours
+        self.overallMinutes = overallMinutes
         self.score = score
     }
 
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(title)
-                    .fontDesign(.rounded)
-                    .bold()
-                Group {
-                    if showHours {
-                        Text("\(minutes / 60, specifier: "%.0f") hours")
-                    } else {
-                        Text("\(minutes, specifier: "%.0f") minutes")
+                HStack {
+                    Circle()
+                        .fill(color)
+                        .frame(width: 10, height: 10)
+                    Text(title)
+                        .fontDesign(.rounded)
+                        .bold()
+                }
+                HStack(spacing: 2) {
+                    Text(DateFormatter.timeIntervalHourMinuteShort.string(from: minutes * 60) ?? "")
+
+                    if let overallMinutes {
+                        Text("•")
+                        Text("\(minutes / overallMinutes * 100, specifier: "%.0f")%")
                     }
+
+                    Spacer()
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)

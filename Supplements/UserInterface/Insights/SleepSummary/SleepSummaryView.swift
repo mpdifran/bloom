@@ -64,28 +64,34 @@ struct SleepSummaryView: View {
                         chart(for: sleepAnalysis)
 
                         SleepSegmentScoreView(
-                            title: "Core Sleep Score",
-                            minutes: sleepAnalysis.coreSleepMinutes,
-                            score: sleepAnalysis.coreSleepScore
+                            title: "Sleep Length Score",
+                            color: .green,
+                            minutes: sleepAnalysis.timeIntervalMinutes,
+                            score: sleepAnalysis.sleepLengthScore
                         )
-                        
-                        SleepSegmentScoreView(
-                            title: "Deep Sleep Score",
-                            minutes: sleepAnalysis.deepSleepMinutes,
-                            score: sleepAnalysis.deepSleepScore
-                        )
-                        
+
                         SleepSegmentScoreView(
                             title: "REM Sleep Score",
+                            color: .remSleep,
                             minutes: sleepAnalysis.remSleepMinutes,
+                            overallMinutes: sleepAnalysis.overallHours * 60,
                             score: sleepAnalysis.remSleepScore
                         )
-                        
+
                         SleepSegmentScoreView(
-                            title: "Sleep Length Score",
-                            minutes: sleepAnalysis.timeIntervalMinutes,
-                            showHours: true,
-                            score: sleepAnalysis.sleepLengthScore
+                            title: "Core Sleep Score",
+                            color: .coreSleep,
+                            minutes: sleepAnalysis.coreSleepMinutes,
+                            overallMinutes: sleepAnalysis.overallHours * 60,
+                            score: sleepAnalysis.coreSleepScore
+                        )
+
+                        SleepSegmentScoreView(
+                            title: "Deep Sleep Score",
+                            color: .deepSleep,
+                            minutes: sleepAnalysis.deepSleepMinutes,
+                            overallMinutes: sleepAnalysis.overallHours * 60,
+                            score: sleepAnalysis.deepSleepScore
                         )
                     }
                 }
