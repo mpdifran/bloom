@@ -49,8 +49,8 @@ final class HealthManager: ObservableObject {
             }
         }
 
-        DispatchQueue.main.async { [weak self] in
-            self?.checkAccess()
+        Task {
+            try? await checkAccess()
         }
     }
 
@@ -69,10 +69,10 @@ final class HealthManager: ObservableObject {
         HKCategoryType(.sleepAnalysis),
         HKQuantityType(.activeEnergyBurned),
         HKQuantityType(.bodyFatPercentage),
-        HKObjectType.workoutType()
+        HKObjectType.workoutType(),
+        HKObjectType.categoryType(forIdentifier: .mindfulSession)!
     ]
     // body fat percentage
-    // meditation minutes
     // BMI
     // respiratory rate
     // blood oxygen
@@ -86,27 +86,46 @@ extension HealthManager {
         authStatus == .unnecessary
     }
 
-    func checkAccess() {
-        healthStore.getRequestStatusForAuthorization(toShare: [], read: types) { authStatus, error in
-            DispatchQueue.main.async {
-                self.authStatus = authStatus
-                Task {
-                    try? await self.loadUserInfo()
+//    func checkAccess() {
+//        healthStore.getRequestStatusForAuthorization(toShare: [], read: types) { authStatus, error in
+//            DispatchQueue.main.async {
+//                self.authStatus = authStatus
+//                Task {
+//                    try? await self.loadUserInfo()
+//                }
+//            }
+//        }
+//    }
+
+    func checkAccess() async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            healthStore.getRequestStatusForAuthorization(toShare: [], read: types) { authStatus, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
                 }
+
+                DispatchQueue.main.async {
+                    self.authStatus = authStatus
+                }
+                continuation.resume()
             }
         }
     }
 
-    func requestAccess() async {
+    func requestAccessIfNeeded() async {
         guard HKHealthStore.isHealthDataAvailable() else { return }
 
-        do {
-            try await healthStore.requestAuthorization(toShare: [], read: types)
-        } catch {
-            fatalError("Usage description not specified")
+        try? await checkAccess()
+        if authStatus == .shouldRequest {
+            do {
+                try await healthStore.requestAuthorization(toShare: [], read: types)
+            } catch {
+                fatalError("Usage description not specified")
+            }
         }
-
-        checkAccess()
+        try? await checkAccess()
+        try? await loadUserInfo()
     }
 }
 
@@ -155,6 +174,10 @@ extension HealthManager {
 
         let workoutSummaries = await fetchWorkoutSummaryLastTwoWeeks()
 
+        let meditationMinutes = await fetchMeditationMinutes().map {
+            QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
+        }
+
         let name = ProfileViewModel.shared.name.isEmpty ? nil : ProfileViewModel.shared.name
         let location: LocationModel?
         if let currentLocation = LocationManager.shared.currentLocation {
@@ -183,7 +206,8 @@ extension HealthManager {
                 sleepAnalysis: sleepAnalysis,
                 activeEnergy: activeEnergy,
                 bodyFatPercentage: bodyFatPercentage,
-                workouts: workoutSummaries
+                workouts: workoutSummaries,
+                meditationMinutes: meditationMinutes
             )
         }
     }
@@ -321,6 +345,22 @@ extension HealthManager {
                 option: .discreteAverage,
                 unit: .percent()
             )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchMeditationMinutes() async -> (Double, Int)? {
+        do {
+            let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
+            let samples = try await healthStore.fetchSamples(for: meditationType, previousDays: 7)
+
+            let meditationMinutes = samples.reduce(0) { (total, sample) -> Double in
+                total + sample.endDate.timeIntervalSince(sample.startDate) / 60
+            }
+
+            return (meditationMinutes / 7, 7)
         } catch {
             print(error)
         }

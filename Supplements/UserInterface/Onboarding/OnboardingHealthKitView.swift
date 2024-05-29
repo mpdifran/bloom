@@ -42,7 +42,7 @@ struct OnboardingHealthKitView: View {
             VStack {
                 ProminentButton("Connect to Health", systemImage: "heart.fill") {
                     Task {
-                        await healthManager.requestAccess()
+                        await healthManager.requestAccessIfNeeded()
                     }
                 }
                 .buttonBorderShape(.roundedRectangle(radius: 17))

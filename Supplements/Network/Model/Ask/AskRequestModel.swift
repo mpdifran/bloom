@@ -33,6 +33,7 @@ struct UserInfoModel: Codable, Equatable {
     let activeEnergy: QuantityModel?
     let bodyFatPercentage: QuantityModel?
     let workouts: [WorkoutSummary]
+    let meditationMinutes: QuantityModel?
 }
 
 struct LocationModel: Codable, Equatable {

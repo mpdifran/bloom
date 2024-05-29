@@ -189,7 +189,7 @@ extension OnboardingChatView {
         case .healthKit:
             hasPromptedForHealthKit = true
             Task {
-                await HealthManager.shared.requestAccess()
+                await HealthManager.shared.requestAccessIfNeeded()
             }
         case .textInput:
             userCanSendMessage = true
