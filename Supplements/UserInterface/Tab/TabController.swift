@@ -50,6 +50,11 @@ extension TabController: UNUserNotificationCenterDelegate {
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        return [.banner, .sound, .list]
+        switch notification.request.identifier {
+        case "chat-message":
+            return []
+        default :
+            return [.banner, .sound, .list]
+        }
     }
 }

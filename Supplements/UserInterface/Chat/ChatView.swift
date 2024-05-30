@@ -22,6 +22,8 @@ struct ChatView: View {
     @ObservedObject private var viewModel = ChatViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
+    @EnvironmentObject private var tabContorller: TabController
+
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
 
     var body: some View {
@@ -100,6 +102,10 @@ struct ChatView: View {
                 }
                 .onChange(of: viewModel.chatHistory.count) { _, _ in
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
+
+                    if tabContorller.activeTab == .chat {
+                        viewModel.unreadChatCount = 0
+                    }
                 }
                 .onAppear {
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
@@ -132,11 +138,13 @@ struct ChatView: View {
         .alert(error: $error)
         .onAppear {
             feedbackGenerator.prepare()
+            viewModel.unreadChatCount = 0
         }
         .animation(.default, value: viewModel.chatHistory.count)
         .tabItem {
             Label("Chat", systemImage: "bubble")
         }
+        .badge(viewModel.unreadChatCount)
     }
 }
 
@@ -171,5 +179,7 @@ private extension ChatView {
 }
 
 #Preview {
-    ChatView()
+    TabView {
+        ChatView()
+    }
 }

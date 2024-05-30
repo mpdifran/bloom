@@ -12,6 +12,8 @@ import Algorithms
 final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
 
+    @Published var unreadChatCount = 0
+
     @Published var chatHistory = [ChatMessage]() {
         didSet {
             do {
@@ -78,8 +80,10 @@ extension ChatViewModel {
 
         await MainActor.run {
             var hasSentMessage = false
+            var newChatHistory = chatHistory
+
             if let answer = response.message {
-                chatHistory.append(
+                newChatHistory.append(
                     ChatMessage(
                         message: answer,
                         timestamp: .now,
@@ -88,10 +92,11 @@ extension ChatViewModel {
                         isCurrentUser: false
                     )
                 )
+                unreadChatCount += 1
                 hasSentMessage = true
             }
             if let recommendations = response.recommendedSupplements, recommendations.isNotEmpty {
-                chatHistory.append(
+                newChatHistory.append(
                     ChatMessage(
                         message: nil,
                         timestamp: .now,
@@ -100,10 +105,11 @@ extension ChatViewModel {
                         isCurrentUser: false
                     )
                 )
+                unreadChatCount += 1
                 hasSentMessage = true
             }
             if let recommendations = response.recommendedActivities, recommendations.isNotEmpty {
-                chatHistory.append(
+                newChatHistory.append(
                     ChatMessage(
                         message: nil,
                         timestamp: .now,
@@ -112,6 +118,7 @@ extension ChatViewModel {
                         isCurrentUser: false
                     )
                 )
+                unreadChatCount += 1
                 hasSentMessage = true
             }
 
@@ -122,6 +129,8 @@ extension ChatViewModel {
                 !(response.expiredUserFacts?.contains($0) == true)
             }
             ProfileViewModel.shared.userFacts = newFacts
+
+            chatHistory = newChatHistory
 
             if hasSentMessage {
                 SoundPlayer.playReceiveMessage()
@@ -149,7 +158,9 @@ extension ChatViewModel {
             let response = try await NetworkRequester.shared.sendProactiveTip(request: request)
 
             await MainActor.run {
-                chatHistory.append(
+                var newChatHistory = chatHistory
+
+                newChatHistory.append(
                     ChatMessage(
                         message: response.message,
                         timestamp: .now,
@@ -158,9 +169,10 @@ extension ChatViewModel {
                         isCurrentUser: false
                     )
                 )
+                unreadChatCount += 1
 
                 if let recommendations = response.recommendedActivities, recommendations.isNotEmpty {
-                    chatHistory.append(
+                    newChatHistory.append(
                         ChatMessage(
                             message: nil,
                             timestamp: .now,
@@ -169,7 +181,10 @@ extension ChatViewModel {
                             isCurrentUser: false
                         )
                     )
+                    unreadChatCount += 1
                 }
+
+                chatHistory = newChatHistory
 
                 SoundPlayer.playReceiveMessage()
             }
