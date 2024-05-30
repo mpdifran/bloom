@@ -15,7 +15,7 @@ final class ChatViewModel: ObservableObject {
     @Published var chatHistory = [ChatMessage]() {
         didSet {
             do {
-                let data = try JSONEncoder.main.encode(chatHistory)
+                let data = try JSONEncoder.main.encode(Array(chatHistory.suffix(15)))
                 UserDefaults.standard.setValue(data, forKey: "chatHistory")
             } catch {
                 print(error)
