@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct ChatMessage: Identifiable, Hashable, Equatable {
-    let id = UUID().uuidString
+struct ChatMessage: Identifiable, Hashable, Equatable, Codable {
+    let id: String
     let message: String?
     let secretContext: String?
     let timestamp: Date
@@ -17,6 +17,7 @@ struct ChatMessage: Identifiable, Hashable, Equatable {
     let isCurrentUser: Bool
 
     init(
+        id: String = UUID().uuidString,
         message: String?,
         secretContext: String? = nil,
         timestamp: Date,
@@ -24,6 +25,7 @@ struct ChatMessage: Identifiable, Hashable, Equatable {
         activityRecommendation: [ActivityModel] = [],
         isCurrentUser: Bool
     ) {
+        self.id = id
         self.message = message
         self.secretContext = secretContext
         self.timestamp = timestamp

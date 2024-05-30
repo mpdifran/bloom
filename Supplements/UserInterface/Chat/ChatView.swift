@@ -16,6 +16,7 @@ struct ChatView: View {
     @State private var searchText = ""
     @State private var isWaitingForResponse = false
     @State private var presentedSheet: AnyView?
+    @State private var confirmationDialog: ConfirmationDialogDetails?
     @State private var error: Error?
 
     @ObservedObject private var viewModel = ChatViewModel.shared
@@ -75,6 +76,20 @@ struct ChatView: View {
                     }
                 }
                 .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Delete Chat History", systemImage: "trash") {
+                            confirmationDialog = .init(
+                                title: "Are You Sure?",
+                                message: "This will permanently erase your chat history with Bloom.",
+                                buttons: [
+                                    .init(title: "Delete", role: .destructive) {
+                                        viewModel.deleteChatHistory()
+                                    }
+                                ]
+                            )
+                        }
+                        .confirmationDialog($confirmationDialog)
+                    }
                     ToolbarItem(placement: .primaryAction) {
                         Button("Proactive Tip", systemImage: "sparkles") {
                             Task {

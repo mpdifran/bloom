@@ -12,9 +12,27 @@ import Algorithms
 final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
 
-    @Published var chatHistory = [ChatMessage]()
+    @Published var chatHistory = [ChatMessage]() {
+        didSet {
+            do {
+                let data = try JSONEncoder.main.encode(chatHistory)
+                UserDefaults.standard.setValue(data, forKey: "chatHistory")
+            } catch {
+                print(error)
+            }
+        }
+    }
 
-    private init() { }
+    private init() { 
+        if let data = UserDefaults.standard.value(forKey: "chatHistory") as? Data {
+            do {
+                let chatHistory = try JSONDecoder.main.decode([ChatMessage].self, from: data)
+                self.chatHistory = chatHistory
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
 extension ChatViewModel {
@@ -25,6 +43,10 @@ extension ChatViewModel {
             return lastReccomendation.id
         }
         return lastMessage?.id
+    }
+
+    func deleteChatHistory() {
+        chatHistory = []
     }
 
     func send(prompt: String, secretContext: String? = nil) async throws {

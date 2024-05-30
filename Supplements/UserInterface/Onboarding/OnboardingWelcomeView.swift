@@ -25,11 +25,13 @@ struct OnboardingWelcomeView: View {
                 .bold()
                 .fontDesign(.rounded)
 
-            Text("Personal Health Assistant")
+            Text("Welcome to Bloom, your new personal health assistant.")
                 .font(.title3)
                 .bold()
                 .fontDesign(.rounded)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 300)
 
             Spacer()
         }

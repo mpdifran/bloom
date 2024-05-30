@@ -107,6 +107,14 @@ struct OnboardingChatView: View {
                 }
             }
             .navigationTitle("Bloom")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Skip") {
+                        onComplete(chatMessages)
+                    }
+                    .bold()
+                }
+            }
             .shelf {
                 TextActionBar(
                     searchText: $userMessage,

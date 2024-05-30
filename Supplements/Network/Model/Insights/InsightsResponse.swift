@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InsightsResponse: Codable {
+struct InsightsResponse: Codable, Hashable {
     let userInfoInsights: [UserInfoInsight]
     let supplementInsights: SupplementInsights?
     let goalRecommendations: GoalInsights?
@@ -15,7 +15,7 @@ struct InsightsResponse: Codable {
     let scores: Scores?
 }
 
-struct UserInfoInsight: Codable {
+struct UserInfoInsight: Codable, Hashable {
     let name: String
     let range: Range
     let currentValue: Double
@@ -48,35 +48,35 @@ struct UserInfoInsight: Codable {
     }
 }
 
-struct GoalInsights: Codable {
+struct GoalInsights: Codable, Hashable {
     let shortText: String
     let recommendedGoals: [String]
 }
 
-struct SupplementInsights: Codable {
+struct SupplementInsights: Codable, Hashable {
     let recommendedSupplements: [RecommendedSupplement]
     let shortText: String
 }
 
-struct RecommendedSupplement: Codable {
+struct RecommendedSupplement: Codable, Hashable {
     let supplementName: String
     let goal: String
     let efficacyRating: Int
     let recommendedDailyDose: String
 }
 
-struct Scores: Codable {
+struct Scores: Codable, Hashable {
     let rechargeScore: RechargeScore?
     let takeChargeScore: TakeChargeScore?
 }
 
-struct NutrientsScore: Codable {
+struct NutrientsScore: Codable, Hashable {
     let overallScore: Int?
     let supplementMatchToGoalScore: Int?
     let supplementScientificScore: Int?
 }
 
-struct RechargeScore: Codable {
+struct RechargeScore: Codable, Hashable {
     let hrvScore: Int?
     let meditationScore: Int?
     let overallScore: Int?
@@ -102,7 +102,7 @@ extension RechargeScore {
     }
 }
 
-struct TakeChargeScore: Codable {
+struct TakeChargeScore: Codable, Hashable {
     let exerciseScore: Int?
     let overallScore: Int?
     let vo2maxScore: Int?

@@ -43,6 +43,7 @@ struct InsightsView: View {
                         Button("Reload Insights", systemImage: "arrow.clockwise") {
                             Task { await loadData(force: true) }
                         }
+                        .bold()
                         Spacer()
                     }
                 }
@@ -59,6 +60,7 @@ struct InsightsView: View {
                 }
             }
         }
+        .animation(.default, value: viewModel.insights)
         .onChange(of: healthManager.userInfo, { oldValue, newValue in
             guard newValue != nil else {
                 return
