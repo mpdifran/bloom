@@ -7,147 +7,139 @@
 
 import SwiftUI
 import Charts
+import Algorithms
+import AppUI
 
 extension SleepTrendChart {
-    enum Trend {
-        case totalAverage
-        case last7DayAverage
-    }
-
     enum YAxisLabel {
-        case nominal
+        case nominal(String)
         case percent
     }
 }
 
 struct SleepTrendChart: View {
+    let title: String
     let sleepAnalyses: [SleepAnalysis]
     let keyPath: KeyPath<SleepAnalysis, Double>
     let color: Color
-    let trends: [Trend]
     let yAxisLabel: YAxisLabel
 
     init(
+        title: String,
         sleepAnalyses: [SleepAnalysis],
         keyPath: KeyPath<SleepAnalysis, Double>,
         color: Color,
-        trends: [Trend] = [.totalAverage, .last7DayAverage],
-        yAxisLabel: YAxisLabel = .nominal
+        yAxisLabel: YAxisLabel = .percent
     ) {
+        self.title = title
         self.sleepAnalyses = sleepAnalyses
         self.keyPath = keyPath
         self.color = color
-        self.trends = trends
         self.yAxisLabel = yAxisLabel
     }
 
     var body: some View {
-        Chart {
-            ForEach(sleepAnalyses) { sleepAnalysis in
-                BarMark(
-                    x: .value("Date", sleepAnalysis.endDate, unit: .day),
-                    y: .value("Value", sleepAnalysis[keyPath: keyPath])
-                )
-                .foregroundStyle(.fill)
-                .cornerRadius(5)
-            }
-
-            if let totalAverageData {
-                RuleMark(
-                    xStart: .value("Start Date", totalAverageData.0),
-                    xEnd: .value("End Date", totalAverageData.1),
-                    y: .value("Average", totalAverageData.2)
-                )
-                .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round))
-                .foregroundStyle(Color(uiColor: .label))
-                .annotation(position: .top, alignment: .leading) {
-                    Text("Average")
-                        .font(.caption)
-                        .bold()
-                        .foregroundStyle(Color(uiColor: .label))
-                }
-            }
-
-            if let sevenDayAverageData {
-                RuleMark(
-                    xStart: .value("Start Date", sevenDayAverageData.0),
-                    xEnd: .value("End Date", sevenDayAverageData.1),
-                    y: .value("Average", sevenDayAverageData.2)
-                )
-                .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round))
+        VStack(alignment: .leading) {
+            Label(title, systemImage: "bed.double.fill")
+                .font(.headline)
+                .bold()
                 .foregroundStyle(color)
-                .annotation(position: .top, alignment: .leading) {
-                    Text("7 Day Average")
-                        .font(.caption)
-                        .bold()
-                        .foregroundStyle(color)
+
+            Chart {
+                ForEach(sleepAnalyses) { sleepAnalysis in
+                    BarMark(
+                        x: .value("Date", sleepAnalysis.endDate, unit: .day),
+                        y: .value("Value", sleepAnalysis[keyPath: keyPath])
+                    )
+                    .foregroundStyle(.fill)
+                    .cornerRadius(5)
                 }
-            }
-        }
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .weekOfYear)) { value in
-                AxisGridLine()
-                AxisTick()
-                AxisValueLabel(format: .dateTime.day())
-            }
-        }
-        .chartYAxis {
-            AxisMarks(position: .trailing, values: .automatic) { value in
-                AxisGridLine()
-                AxisTick()
-                switch yAxisLabel {
-                case .nominal:
-                    AxisValueLabel()
-                case .percent:
-                    AxisValueLabel {
-                        if let doubleValue = value.as(Double.self) {
-                            Text("\(Int(doubleValue * 100))%")
+
+                ForEach(trendLines) { trendLine in
+                    RuleMark(
+                        xStart: .value("Start Date", trendLine.startDate),
+                        xEnd: .value("End Date", trendLine.endDate),
+                        y: .value("Average", trendLine.average)
+                    )
+                    .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .foregroundStyle(trendLine.isHighlighted ? AnyShapeStyle(color) : AnyShapeStyle(FillShapeStyle.fill.secondary))
+                    .annotation(position: .top, alignment: .leading) {
+                        Group {
+                            switch yAxisLabel {
+                            case .nominal(let unit):
+                                Text("\(trendLine.average, specifier: "%.1f") \(unit)")
+                            case .percent:
+                                Text("\(trendLine.average * 100, specifier: "%.0f")%")
+                            }
                         }
+                        .font(.caption)
+                        .fontDesign(.rounded)
+                        .bold()
+                        .foregroundStyle(trendLine.isHighlighted ? AnyShapeStyle(color) : AnyShapeStyle(FillShapeStyle.fill.secondary))
                     }
                 }
             }
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .weekOfYear)) { _ in }
+            }
+            .chartYAxis {
+                AxisMarks(position: .trailing, values: .automatic) { _ in }
+        }
         }
     }
 }
 
 extension SleepTrendChart {
 
-    var sevenDayAverageData: (Date, Date, Double)? {
-        guard 
-            trends.contains(.last7DayAverage),
-            let latestDate,
-            let sevenDaysStartDate
-        else { return nil }
+    var trendLines: [TrendLine] {
+        if sleepAnalyses.count > 7 {
+            let daysCount = 7
+            let remainderCount = sleepAnalyses.count - daysCount
+            let sevenDayAverage = sleepAnalyses.average(keyPath: keyPath, subsequence: .suffix(daysCount))
+            let remainderAverage = sleepAnalyses.average(keyPath: keyPath, subsequence: .prefix(remainderCount))
 
-        let days = 7
+            if abs((sevenDayAverage / remainderAverage) - 1) > 0.05 {
+                let sevenDayStart = sleepAnalyses[sleepAnalyses.count - 7].endDate
+                let sevenDayEnd = sleepAnalyses[sleepAnalyses.count - 1].endDate
 
-        let sum = sleepAnalyses
-            .sorted(by: { $0.endDate < $1.endDate })
-            .suffix(days)
-            .reduce(0) { sum, sleepAnalysis in
-                sum + sleepAnalysis[keyPath: keyPath]
+                let remainderStart = sleepAnalyses[0].endDate
+                let remainderEnd = sleepAnalyses[sleepAnalyses.count - 8].endDate
+
+                return [
+                    TrendLine(
+                        startDate: remainderStart,
+                        endDate: remainderEnd,
+                        average: remainderAverage,
+                        isHighlighted: false,
+                        labelAlignment: .leading
+                    ),
+                    TrendLine(
+                        startDate: sevenDayStart,
+                        endDate: sevenDayEnd,
+                        average: sevenDayAverage,
+                        isHighlighted: true,
+                        labelAlignment: .trailing
+                    )
+                ]
             }
+        }
 
-        let average = sum / Double(days)
+        if sleepAnalyses.count >= 2 {
+            let average = sleepAnalyses.average(keyPath: keyPath)
 
-        return (sevenDaysStartDate, latestDate, average)
-    }
+            let startDate = sleepAnalyses.first!.endDate
+            let endDate = sleepAnalyses.last!.endDate
 
-    var totalAverageData: (Date, Date, Double)? {
-        guard
-            trends.contains(.totalAverage),
-            let latestDate,
-            let earliestDate
-        else { return nil }
+            return [TrendLine(
+                startDate: startDate,
+                endDate: endDate,
+                average: average,
+                isHighlighted: true,
+                labelAlignment: .leading
+            )]
+        }
 
-        let sum = sleepAnalyses
-            .reduce(0) { sum, sleepAnalysis in
-                sum + sleepAnalysis[keyPath: keyPath]
-            }
-
-        let average = sum / Double(sleepAnalyses.count)
-
-        return (earliestDate, latestDate, average)
+        return []
     }
 
     var earliestDate: Date? {
@@ -168,11 +160,22 @@ extension SleepTrendChart {
     }
 }
 
+struct TrendLine: Identifiable {
+    var id: String { "\(startDate) - \(endDate) - \(average) - \(isHighlighted)" }
+
+    let startDate: Date
+    let endDate: Date
+    let average: Double
+    let isHighlighted: Bool
+    let labelAlignment: HorizontalAlignment
+}
+
 #Preview {
     SleepTrendChart(
+        title: "REM Sleep",
         sleepAnalyses: SleepAnalysis.previewData,
-        keyPath: \.deepSleepPercent,
-        color: .deepSleep,
-        trends: [.last7DayAverage]
+        keyPath: \.remSleepPercent,
+        color: .remSleep,
+        yAxisLabel: .percent
     )
 }

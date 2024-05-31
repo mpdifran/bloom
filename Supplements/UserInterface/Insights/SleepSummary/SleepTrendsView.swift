@@ -15,39 +15,50 @@ struct SleepTrendsView: View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    ChartTitleView("Deep Sleep %")
                     SleepTrendChart(
+                        title: "Deep Sleep",
                         sleepAnalyses: viewModel.sleepAnalyses,
                         keyPath: \.deepSleepPercent,
-                        color: .deepSleep,
-                        yAxisLabel: .percent
+                        color: .deepSleep
                     )
-                    .frame(height: 300)
+                    .frame(height: 150)
                 }
             }
 
             Section {
                 VStack(alignment: .leading) {
-                    ChartTitleView("REM Sleep %")
                     SleepTrendChart(
+                        title: "Core Sleep",
+                        sleepAnalyses: viewModel.sleepAnalyses,
+                        keyPath: \.coreSleepPercent,
+                        color: .coreSleep
+                    )
+                    .frame(height: 150)
+                }
+            }
+
+            Section {
+                VStack(alignment: .leading) {
+                    SleepTrendChart(
+                        title: "REM Sleep",
                         sleepAnalyses: viewModel.sleepAnalyses,
                         keyPath: \.remSleepPercent,
-                        color: .remSleep,
-                        yAxisLabel: .percent
+                        color: .remSleep
                     )
-                    .frame(height: 300)
+                    .frame(height: 150)
                 }
             }
 
             Section {
                 VStack(alignment: .leading) {
-                    ChartTitleView("Sleep Length")
                     SleepTrendChart(
+                        title: "Sleep Length",
                         sleepAnalyses: viewModel.sleepAnalyses,
                         keyPath: \.overallHours,
-                        color: .green
+                        color: .green,
+                        yAxisLabel: .nominal("hours")
                     )
-                    .frame(height: 300)
+                    .frame(height: 150)
                 }
             }
         }

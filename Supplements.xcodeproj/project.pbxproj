@@ -17,6 +17,7 @@
 		FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */; };
 		FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */; };
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
+		FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -116,6 +117,7 @@
 		FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryView.swift; sourceTree = "<group>"; };
 		FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
+		FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Average.swift"; sourceTree = "<group>"; };
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				FFF61B082BED9CA900926042 /* Color+Random.swift */,
 				FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */,
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
+				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -704,6 +707,7 @@
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
+				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
