@@ -68,7 +68,8 @@ extension SleepAnalysis {
     }
 
     var overallHours: Double {
-        overallHoursIncludingAwake - awakeSleepHours
+        // Should we include awake time in the total?
+        overallHoursIncludingAwake //- awakeSleepHours
     }
 
     var coreSleepHours: Double {
@@ -85,6 +86,22 @@ extension SleepAnalysis {
 
     var awakeSleepHours: Double {
         awakeSleepMinutes / 60
+    }
+
+    var coreSleepPercent: Double {
+        coreSleepMinutes / overallMinutes
+    }
+
+    var remSleepPercent: Double {
+        remSleepMinutes / overallMinutes
+    }
+
+    var deepSleepPercent: Double {
+        deepSleepMinutes / overallMinutes
+    }
+
+    var awakeSleepPercent: Double {
+        awakeSleepMinutes / overallMinutes
     }
 
     var overallScore: Int {
@@ -109,5 +126,69 @@ extension SleepAnalysis {
     var remSleepScore: Int {
         let percent = remSleepMinutes / overallMinutes
         return min(Int(((percent / .remSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
+    }
+}
+
+extension SleepAnalysis {
+
+    static var previewData: [SleepAnalysis] {
+        [
+            .init(
+                startDate: Date().addingTimeInterval(-3600*6),
+                endDate: .now,
+                deepSleepMinutes: 51,
+                coreSleepMinutes: 290,
+                remSleepMinutes: 98,
+                awakeSleepMinutes: 25
+            ),
+            .init(
+                startDate: Date().addingTimeInterval(-(3600*6 + 86400)),
+                endDate: .now.addingTimeInterval(-86400),
+                deepSleepMinutes: 36,
+                coreSleepMinutes: 250,
+                remSleepMinutes: 67,
+                awakeSleepMinutes: 40
+            ),
+            .init(
+                startDate: Date().addingTimeInterval(-(3600*6 + 86400*2)),
+                endDate: .now.addingTimeInterval(-86400*2),
+                deepSleepMinutes: 24,
+                coreSleepMinutes: 300,
+                remSleepMinutes: 48,
+                awakeSleepMinutes: 52
+            ),
+            .init(
+                startDate: Date().addingTimeInterval(-(3600*6 + 86400*3)),
+                endDate: .now.addingTimeInterval(-86400*3),
+                deepSleepMinutes: 46,
+                coreSleepMinutes: 260,
+                remSleepMinutes: 48,
+                awakeSleepMinutes: 12
+            ),
+            .init(
+                startDate: Date().addingTimeInterval(-(3600*6 + 86400*4)),
+                endDate: .now.addingTimeInterval(-86400*4),
+                deepSleepMinutes: 52,
+                coreSleepMinutes: 274,
+                remSleepMinutes: 41,
+                awakeSleepMinutes: 23
+            ),
+            .init(
+                startDate: Date().addingTimeInterval(-(3600*6 + 86400*5)),
+                endDate: .now.addingTimeInterval(-86400*5),
+                deepSleepMinutes: 35,
+                coreSleepMinutes: 293,
+                remSleepMinutes: 53,
+                awakeSleepMinutes: 36
+            ),
+            .init(
+                startDate: Date().addingTimeInterval(-(3600*6 + 86400*6)),
+                endDate: .now.addingTimeInterval(-86400*6),
+                deepSleepMinutes: 72,
+                coreSleepMinutes: 312,
+                remSleepMinutes: 69,
+                awakeSleepMinutes: 18
+            )
+        ]
     }
 }

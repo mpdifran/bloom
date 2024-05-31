@@ -18,11 +18,16 @@ struct SleepSummaryView: View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    Text("Sleep History")
-                        .font(.title3)
-                        .bold()
-                        .fontDesign(.rounded)
+                    ChartTitleView("Sleep History")
                     chartView
+                }
+            }
+
+            Section {
+                NavigationLink {
+                    SleepTrendsView()
+                } label: {
+                    Label("Trends", systemImage: "arrow.down.left.arrow.up.right")
                 }
             }
 

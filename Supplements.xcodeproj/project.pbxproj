@@ -63,6 +63,10 @@
 		FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */; };
 		FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */; };
 		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
+		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
+		FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */; };
+		FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */; };
+		FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */; };
 		FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
 		FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEE2BED544400926042 /* GoalModel.swift */; };
@@ -159,6 +163,10 @@
 		FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootView.swift; sourceTree = "<group>"; };
 		FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWelcomeView.swift; sourceTree = "<group>"; };
 		FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthKitView.swift; sourceTree = "<group>"; };
+		FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsView.swift; sourceTree = "<group>"; };
+		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
+		FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendChart.swift; sourceTree = "<group>"; };
+		FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTitleView.swift; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FFF61AEE2BED544400926042 /* GoalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalModel.swift; sourceTree = "<group>"; };
 		FFF61AF02BED548D00926042 /* GoalResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalResponse.swift; sourceTree = "<group>"; };
@@ -212,6 +220,9 @@
 			isa = PBXGroup;
 			children = (
 				FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */,
+				FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */,
+				FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */,
+				FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */,
 			);
 			path = SleepSummary;
 			sourceTree = "<group>";
@@ -412,13 +423,14 @@
 			children = (
 				FFF61AEC2BED537B00926042 /* RootView.swift */,
 				FF8B8B362C00141000BA2128 /* Tab */,
+				FFB444942BED41E600486AD7 /* Onboarding */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FFF61AF42BED554700926042 /* Chat */,
 				FF8B8B402C002BD500BA2128 /* Pins */,
 				FFF61AF52BED555100926042 /* Goals */,
 				FFF61B122BEE807C00926042 /* Supplements */,
 				FF8B8B222BFD363C00BA2128 /* Profile */,
-				FFB444942BED41E600486AD7 /* Onboarding */,
+				FFDDE2872C0A058500BFDEF5 /* ChartUI */,
 				FFB444482BEC3AD100486AD7 /* ChatUI */,
 				FFF61AFF2BED7C0000926042 /* Components */,
 			);
@@ -435,6 +447,14 @@
 				FFF61B0E2BEE800300926042 /* Goals */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		FFDDE2872C0A058500BFDEF5 /* ChartUI */ = {
+			isa = PBXGroup;
+			children = (
+				FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */,
+			);
+			path = ChartUI;
 			sourceTree = "<group>";
 		};
 		FFF61AF42BED554700926042 /* Chat */ = {
@@ -651,6 +671,7 @@
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
 				FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */,
+				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
@@ -686,16 +707,19 @@
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
+				FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
 				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
+				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
 				FF8B8B482C00309D00BA2128 /* ActivityBubbleCell.swift in Sources */,
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
+				FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
