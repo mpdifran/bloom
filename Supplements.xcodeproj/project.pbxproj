@@ -18,6 +18,9 @@
 		FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */; };
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
 		FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */; };
+		FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */; };
+		FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */; };
+		FF1E96062C0A6F59004DAD2D /* SleepProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96052C0A6F59004DAD2D /* SleepProgressRingView.swift */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -118,6 +121,9 @@
 		FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Average.swift"; sourceTree = "<group>"; };
+		FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
+		FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brightness.swift"; sourceTree = "<group>"; };
+		FF1E96052C0A6F59004DAD2D /* SleepProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgressRingView.swift; sourceTree = "<group>"; };
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
@@ -225,6 +231,7 @@
 				FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */,
 				FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */,
 				FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */,
+				FF1E96052C0A6F59004DAD2D /* SleepProgressRingView.swift */,
 			);
 			path = SleepSummary;
 			sourceTree = "<group>";
@@ -236,6 +243,7 @@
 				FFB4445C2BEC4CAB00486AD7 /* Codable+Constants.swift */,
 				FFF61B022BED87B400926042 /* Delay.swift */,
 				FFF61B082BED9CA900926042 /* Color+Random.swift */,
+				FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */,
 				FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */,
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
 				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
@@ -495,6 +503,7 @@
 				FFF61B192BEE8C3B00926042 /* TextActionBar.swift */,
 				FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */,
 				FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */,
+				FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -712,6 +721,7 @@
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */,
+				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
 				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
@@ -744,6 +754,7 @@
 				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
 				FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */,
+				FF1E96062C0A6F59004DAD2D /* SleepProgressRingView.swift in Sources */,
 				FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
@@ -751,6 +762,7 @@
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */,
+				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

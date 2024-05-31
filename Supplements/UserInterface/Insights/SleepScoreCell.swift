@@ -31,23 +31,32 @@ private extension SleepScoreCell {
 
     func content(for lastSleepAnalysis: SleepAnalysis) -> some View {
         Section {
-            VStack {
-                Text("\(lastSleepAnalysis.overallScore)")
-                    .font(.system(size: 80))
-                    .fontDesign(.rounded)
-                    .bold()
-                    .foregroundStyle(lastSleepAnalysis.overallScore.scoreColor)
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("\(lastSleepAnalysis.overallScore)")
+                        .font(.system(size: 80))
+                        .fontDesign(.rounded)
+                        .bold()
+                        .foregroundStyle(lastSleepAnalysis.overallScore.scoreColor)
 
-                Text("Sleep Score")
-                    .font(.title)
-                    .fontDesign(.rounded)
-                    .bold()
+                    Text("Sleep Score")
+                        .font(.title)
+                        .fontDesign(.rounded)
+                        .bold()
 
-                Text(lastSleepAnalysis.timeSpanDescription)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    Text(lastSleepAnalysis.timeSpanDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                SleepProgressRingView(
+                    remSleepPercentage: .constant(lastSleepAnalysis.remSleepPercent / 0.25),
+                    coreSleepPercentage: .constant(lastSleepAnalysis.coreSleepPercent / 0.5),
+                    deepSleepPercentage: .constant(lastSleepAnalysis.deepSleepPercent / 0.25)
+                )
             }
-            .zStackAlignment(.center)
 
             SleepSegmentScoreView(
                 title: "Sleep Length Score",
