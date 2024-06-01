@@ -56,10 +56,13 @@ struct ProgressRingView: View {
                 .offset(y: -(dimension/2))
                 .rotationEffect(Angle.degrees(360 * Double(clippedProgress)))
                 .shadow(color: clippedProgress > 0.96 ? Color.black.opacity(0.1): Color.clear, radius: 3, x: 4, y: 0)
+                .transition(.opacity)
 
         }
         .frame(width: dimension, height: dimension, alignment: .center)
         .rotationEffect(Angle.degrees(360 * Double(remainderProgress)))
+        .animation(.easeInOut(duration: 1.2), value: clippedProgress)
+        .animation(.easeInOut(duration: 1.2), value: remainderProgress)
     }
 }
 
@@ -75,23 +78,41 @@ private extension ProgressRingView {
 }
 
 #Preview {
-    ZStack {
-        ProgressRingView(
-            progress: .constant(1.23),
-            dimension: 104,
-            color: .remSleep
-        )
+    struct PreviewView: View {
 
-        ProgressRingView(
-            progress: .constant(0.82),
-            dimension: 72,
-            color: .coreSleep
-        )
+        @State private var remSleepPercent: CGFloat = 0
+        @State private var coreSleepPercent: CGFloat = 0
+        @State private var deepSleepPercent: CGFloat = 0
 
-        ProgressRingView(
-            progress: .constant(1.1),
-            dimension: 40,
-            color: .deepSleep
-        )
+        var body: some View {
+            ZStack {
+                ProgressRingView(
+                    progress: $remSleepPercent,
+                    dimension: 104,
+                    color: .remSleep
+                )
+
+                ProgressRingView(
+                    progress: $coreSleepPercent,
+                    dimension: 72,
+                    color: .coreSleep
+                )
+
+                ProgressRingView(
+                    progress: $deepSleepPercent,
+                    dimension: 40,
+                    color: .deepSleep
+                )
+            }
+            .onAppear {
+                Delay(2000) {
+                    remSleepPercent = 0.96
+                    coreSleepPercent = 1.2
+                    deepSleepPercent = 0.23
+                }
+            }
+        }
     }
+
+    return PreviewView()
 }

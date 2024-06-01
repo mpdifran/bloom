@@ -13,6 +13,9 @@ struct SleepScoreCell: View {
     let sleepAnalysis: [SleepAnalysis]
     let showSleepSummaryView: () -> Void
 
+    @State private var remSleepPercent: CGFloat = 0
+    @State private var coreSleepPercent: CGFloat = 0
+    @State private var deepSleepPercent: CGFloat = 0
     @State private var error: Error?
 
     @EnvironmentObject private var tabContorller: TabController
@@ -52,9 +55,9 @@ private extension SleepScoreCell {
                 Spacer()
 
                 SleepProgressRingView(
-                    remSleepPercentage: .constant(lastSleepAnalysis.remSleepPercent / 0.25),
-                    coreSleepPercentage: .constant(lastSleepAnalysis.coreSleepPercent / 0.5),
-                    deepSleepPercentage: .constant(lastSleepAnalysis.deepSleepPercent / 0.25)
+                    remSleepPercentage: $remSleepPercent,
+                    coreSleepPercentage: $coreSleepPercent,
+                    deepSleepPercentage: $deepSleepPercent
                 )
             }
 
@@ -116,6 +119,16 @@ private extension SleepScoreCell {
                 })
                 .buttonStyle(.tertiary)
                 .tint(.teal)
+            }
+        }
+        .animation(.easeInOut(duration: 1.2), value: remSleepPercent)
+        .animation(.easeInOut(duration: 1.2), value: coreSleepPercent)
+        .animation(.easeInOut(duration: 1.2), value: deepSleepPercent)
+        .onAppear {
+            Delay(1500) {
+                remSleepPercent = lastSleepAnalysis.remSleepPercent / 0.25
+                coreSleepPercent = lastSleepAnalysis.coreSleepPercent / 0.5
+                deepSleepPercent = lastSleepAnalysis.deepSleepPercent / 0.25
             }
         }
         .alert(error: $error)

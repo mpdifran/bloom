@@ -60,6 +60,7 @@ struct InsightsView: View {
                 }
             }
         }
+        .animation(.default, value: healthManager.userInfo)
         .animation(.default, value: viewModel.insights)
         .onChange(of: healthManager.userInfo, { oldValue, newValue in
             guard newValue != nil else {

@@ -41,7 +41,6 @@ struct SleepTrendChart: View {
     var body: some View {
         VStack(alignment: .leading) {
             Label(title, systemImage: "bed.double.fill")
-                .font(.headline)
                 .bold()
                 .foregroundStyle(color)
 
@@ -63,7 +62,7 @@ struct SleepTrendChart: View {
                     )
                     .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round))
                     .foregroundStyle(trendLine.isHighlighted ? AnyShapeStyle(color) : AnyShapeStyle(FillShapeStyle.fill.secondary))
-                    .annotation(position: .top, alignment: .leading) {
+                    .annotation(position: .top, alignment: trendLine.labelAlignment) {
                         Group {
                             switch yAxisLabel {
                             case .nominal(let unit):
@@ -167,7 +166,7 @@ struct TrendLine: Identifiable {
     let endDate: Date
     let average: Double
     let isHighlighted: Bool
-    let labelAlignment: HorizontalAlignment
+    let labelAlignment: Alignment
 }
 
 #Preview {
