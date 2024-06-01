@@ -10,6 +10,7 @@ import UserNotifications
 
 enum Tab {
     case insights
+    case programs
     case chat
     case pins
     case profile
