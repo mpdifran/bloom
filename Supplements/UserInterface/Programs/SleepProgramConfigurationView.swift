@@ -7,22 +7,29 @@
 
 import SwiftUI
 import AppUI
+import FamilyControls
+import ScreenControl
 
 struct SleepProgramConfigurationView: View {
 
     @ObservedObject private var viewModel = SleepProgramConfigurationViewModel()
+    @ObservedObject private var screenUseController = ScreenUseController.shared
 
     @State private var temperature: String = "Cold"
     @State private var sound: String = "Quiet"
     @State private var light: String = "Dark"
+    @State private var error: Error?
+
+    @State private var isShowingFamilyActivityPicker = false
 
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             List {
-                environmentSection
                 sleepSection
+                environmentSection
+                screenUseSection
                 physicalActivitySection
             }
             .navigationTitle("Sleep Program")
@@ -48,6 +55,7 @@ struct SleepProgramConfigurationView: View {
             }
         }
         .tint(.coreSleep)
+        .alert(error: $error)
     }
 }
 
@@ -57,7 +65,7 @@ private extension SleepProgramConfigurationView {
         Section {
             SleepProgramSectionHeader(
                 title: "Environment",
-                subtitle: "",
+                subtitle: "During Bedtime",
                 systemImage: "thermometer.snowflake"
             )
             .tint(.remSleep)
@@ -181,6 +189,76 @@ private extension SleepProgramConfigurationView {
                 unit: "hours"
             )
         }
+    }
+
+    var screenUseSection: some View {
+        Section {
+            SleepProgramSectionHeader(
+                title: "Device Use",
+                subtitle: "During Bedtime",
+                systemImage: "apps.iphone"
+            )
+
+            Text("Screen time before bed can affect your sleep quality. Allow Bloom to remind you to put your phone away near bedtime.")
+
+            DatePicker(
+                "Bedtime",
+                selection: $screenUseController.startDate,
+                displayedComponents: .hourAndMinute
+            )
+
+            DatePicker(
+                "Wake Up",
+                selection: $screenUseController.endDate,
+                displayedComponents: .hourAndMinute
+            )
+
+            VStack {
+                Button(action: {
+                    isShowingFamilyActivityPicker = true
+                }, label: {
+                    Group {
+                        if let summary = screenUseController.activitySelection.summaryText {
+                            Text(summary)
+                        } else {
+                            Text("Select Apps")
+                        }
+                    }
+                    .expandHorizontally()
+                })
+                .buttonStyle(.tertiary)
+                .familyActivityPicker(
+                    headerText: "Bloom will restrict usage of these apps during bedtime",
+                    isPresented: $isShowingFamilyActivityPicker,
+                    selection: $screenUseController.activitySelection
+                )
+
+                if screenUseController.isMonitoring {
+                    Button(action: {
+                        screenUseController.stopMonitoring()
+                    }, label: {
+                        Text("Stop Monitoring")
+                            .expandHorizontally()
+                    })
+                    .tint(.red)
+                    .buttonStyle(.tertiary)
+                } else {
+                    Button(action: {
+                        do {
+                            try screenUseController.startMonitoring()
+                        } catch {
+                            self.error = error
+                        }
+                    }, label: {
+                        Text("Start Monitoring")
+                            .expandHorizontally()
+                    })
+                    .tint(.green)
+                    .buttonStyle(.tertiary)
+                }
+            }
+        }
+        .tint(.indigo)
     }
 }
 

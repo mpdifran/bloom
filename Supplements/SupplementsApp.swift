@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ScreenControl
 
 @main
 struct SupplementsApp: App {
@@ -24,6 +25,7 @@ struct SupplementsApp: App {
                         await MainActor.run {
                             HealthManager.shared.observeSleepData()
                         }
+                        await ScreenUseController.shared.requestAuthorization()
                     }
                 }
                 .onReceive(foregroundPublisher) { _ in

@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - JSONEncoder
 
-extension JSONEncoder {
+public extension JSONEncoder {
 
     static let main: JSONEncoder = {
         let encoder = JSONEncoder()
@@ -23,7 +23,7 @@ extension JSONEncoder {
 
 // MARK: - JSONDecoder
 
-extension JSONDecoder {
+public extension JSONDecoder {
 
     static let main: JSONDecoder = {
         let decoder = JSONDecoder()

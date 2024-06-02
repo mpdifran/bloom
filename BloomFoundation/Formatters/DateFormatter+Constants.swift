@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension DateFormatter {
+public extension DateFormatter {
 
     static var standardMedium: DateFormatter = {
         let dateFormatter = DateFormatter()
