@@ -9,12 +9,15 @@ import ManagedSettings
 
 class ShieldActionExtension: ShieldActionDelegate {
 
+    let store = ManagedSettingsStore()
+
     override func handle(action: ShieldAction, for application: ApplicationToken, completionHandler: @escaping (ShieldActionResponse) -> Void) {
         switch action {
         case .primaryButtonPressed:
             completionHandler(.close)
         case .secondaryButtonPressed:
-            completionHandler(.defer)
+            store.shield.applications?.remove(application)
+            completionHandler(.none)
         @unknown default:
             fatalError()
         }
@@ -36,7 +39,7 @@ class ShieldActionExtension: ShieldActionDelegate {
         case .primaryButtonPressed:
             completionHandler(.close)
         case .secondaryButtonPressed:
-            completionHandler(.defer)
+            completionHandler(.none)
         @unknown default:
             fatalError()
         }
