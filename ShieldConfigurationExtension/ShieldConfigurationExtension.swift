@@ -13,31 +13,7 @@ import SwiftUI
 class ShieldConfigurationExtension: ShieldConfigurationDataSource {
 
     override func configuration(shielding application: Application) -> ShieldConfiguration {
-        let deepSleep = UIColor(named: "DeepSleep")!
-        let coreSleep = UIColor(named: "CoreSleep")!
-
-        return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterialDark,
-            backgroundColor: deepSleep,
-            icon: UIImage(systemName: "moon.zzz.fill")?.withTintColor(.yellow),
-            title: .init(
-                text: "Bloom - Bedtime",
-                color: .label
-            ),
-            subtitle: .init(
-                text: "You should avoid using \(application.localizedDisplayName ?? "this app") around bedtime to have a better quality sleep.",
-                color: .label
-            ),
-            primaryButtonLabel: .init(
-                text: "Close",
-                color: .white
-            ),
-            primaryButtonBackgroundColor: coreSleep,
-            secondaryButtonLabel: .init(
-                text: "Open Anyway",
-                color: coreSleep
-            )
-        )
+        shieldConfiguration(for: application.localizedDisplayName ?? "this app")
     }
     
     override func configuration(shielding application: Application, in category: ActivityCategory) -> ShieldConfiguration {
@@ -45,11 +21,22 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     }
     
     override func configuration(shielding webDomain: WebDomain) -> ShieldConfiguration {
+        shieldConfiguration(for: webDomain.domain ?? "this website", verb: "visiting")
+    }
+    
+    override func configuration(shielding webDomain: WebDomain, in category: ActivityCategory) -> ShieldConfiguration {
+        configuration(shielding: webDomain)
+    }
+}
+
+private extension ShieldConfigurationExtension {
+
+    func shieldConfiguration(for itemName: String, verb: String = "using") -> ShieldConfiguration {
         let deepSleep = UIColor(named: "DeepSleep")!
-        let coreSleep = UIColor(named: "CoreSleep")!
-        
+        let remSleep = UIColor(named: "REMSleep")!
+
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterialDark,
+            backgroundBlurStyle: .systemThickMaterialDark,
             backgroundColor: deepSleep,
             icon: UIImage(systemName: "moon.zzz.fill")?.withTintColor(.yellow),
             title: .init(
@@ -57,22 +44,18 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
                 color: .label
             ),
             subtitle: .init(
-                text: "You should avoid visiting \(webDomain.domain ?? "this website") around bedtime to have a better quality sleep.",
+                text: "You should avoid \(verb) \(itemName) around bedtime to have a better quality sleep.",
                 color: .label
             ),
             primaryButtonLabel: .init(
                 text: "Close",
-                color: .white
+                color: deepSleep
             ),
-            primaryButtonBackgroundColor: coreSleep,
+            primaryButtonBackgroundColor: remSleep,
             secondaryButtonLabel: .init(
                 text: "Open Anyway",
-                color: coreSleep
+                color: remSleep
             )
         )
-    }
-    
-    override func configuration(shielding webDomain: WebDomain, in category: ActivityCategory) -> ShieldConfiguration {
-        configuration(shielding: webDomain)
     }
 }
