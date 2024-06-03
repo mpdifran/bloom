@@ -49,11 +49,11 @@ private extension ShieldConfigurationExtension {
             icon: UIImage(systemName: "moon.zzz.fill")?.withTintColor(.orange),
             title: .init(
                 text: "Bloom - Bedtime",
-                color: .label
+                color: .white
             ),
             subtitle: .init(
                 text: message,
-                color: .label
+                color: .white
             ),
             primaryButtonLabel: .init(
                 text: "Close App",

@@ -8,10 +8,11 @@
 import Foundation
 import DeviceActivity
 
-extension DeviceActivityName {
+public extension DeviceActivityName {
     static let sleep = Self("sleep")
+    static let timeExtension = Self("timeExtension")
 }
 
 public extension DeviceActivityEvent.Name {
-    static let tenMinExtend = Self("tenMinExtend")
+    static let timeExtension = Self("timeExtension")
 }

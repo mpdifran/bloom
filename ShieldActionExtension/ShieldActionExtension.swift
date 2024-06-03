@@ -8,6 +8,7 @@
 import ManagedSettings
 import DeviceActivity
 import ScreenControl
+import UserNotifications
 
 class ShieldActionExtension: ShieldActionDelegate {
     let store = ManagedSettingsStore()
@@ -18,9 +19,9 @@ class ShieldActionExtension: ShieldActionDelegate {
         case .primaryButtonPressed:
             completionHandler(.close)
         case .secondaryButtonPressed:
-            addTenMinuteDelayEvent(applicationToken: application)
             store.shield.applications?.remove(application)
-            completionHandler(.defer)
+            addTimeDelay(applicationToken: application)
+            completionHandler(.none)
         @unknown default:
             fatalError()
         }
@@ -31,9 +32,9 @@ class ShieldActionExtension: ShieldActionDelegate {
         case .primaryButtonPressed:
             completionHandler(.close)
         case .secondaryButtonPressed:
-            addTenMinuteDelayEvent(webDomainToken: webDomain)
             store.shield.webDomains?.remove(webDomain)
-            completionHandler(.defer)
+            addTimeDelay(webDomainToken: webDomain)
+            completionHandler(.none)
         @unknown default:
             fatalError()
         }
@@ -44,9 +45,9 @@ class ShieldActionExtension: ShieldActionDelegate {
         case .primaryButtonPressed:
             completionHandler(.close)
         case .secondaryButtonPressed:
-            addTenMinuteDelayEvent(categoryToken: category)
-            removeFromShield(categoryToken: category)
-            completionHandler(.defer)
+            store.shield.remove(categoryTokens: [category])
+            addTimeDelay(categoryToken: category)
+            completionHandler(.none)
         @unknown default:
             fatalError()
         }
@@ -55,42 +56,17 @@ class ShieldActionExtension: ShieldActionDelegate {
 
 private extension ShieldActionExtension {
 
-    func addTenMinuteDelayEvent(
+    func addTimeDelay(
         applicationToken: ApplicationToken? = nil,
         categoryToken: ActivityCategoryToken? = nil,
         webDomainToken: WebDomainToken? = nil
     ) {
-        let event = DeviceActivityEvent(
-            applications: applicationToken.map { [$0] } ?? [],
-            categories: categoryToken.map { [$0] } ?? [],
-            webDomains: webDomainToken.map { [$0] } ?? [],
-            threshold: .init(minute: 10)
-        )
-
         do {
-            try screenController.startMonitoring(events: [.tenMinExtend : event])
+            try screenController.startTimeExtensionMonitoring(
+                applicationToken: applicationToken,
+                webDomainToken: webDomainToken,
+                categoryToken: categoryToken
+            )
         } catch { }
-    }
-
-    func removeFromShield(categoryToken: ActivityCategoryToken) {
-        switch store.shield.applicationCategories {
-        case .all:
-            break // TODO: This seems problematic
-        case .specific(var categoryTokens, let exceptions):
-            categoryTokens.remove(categoryToken)
-            store.shield.applicationCategories = .specific(categoryTokens, except: exceptions)
-        default:
-            break
-        }
-
-        switch store.shield.webDomainCategories {
-        case .all(let except):
-            break // TODO: This seems problematic
-        case .specific(var categoryTokens, let exceptions):
-            categoryTokens.remove(categoryToken)
-            store.shield.webDomainCategories = .specific(categoryTokens, except: exceptions)
-        default:
-            break
-        }
     }
 }

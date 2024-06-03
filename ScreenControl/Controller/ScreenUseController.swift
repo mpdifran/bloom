@@ -10,9 +10,25 @@ import Combine
 import FamilyControls
 import DeviceActivity
 import BloomFoundation
+import ManagedSettings
+
+private extension Int {
+    // This is the time before the beginning of the sleep schedule where a warning is issued.
+    static let sleepWarningTimeMinutes = 15
+
+    // This is 10 minutes of the app being in the foreground.
+    static let timeExtensionTimeMinutes = 2
+
+    // This is 15 minutes since the extension was requested.
+    static let timeExtensionWallClockTimeMinutes = 15
+
+    // This is the time before the end of the extension when a warning is issued.
+    static let timeExtensionWarningTimeMinutes = 1
+}
 
 private extension String {
     static let activitySelection = "ScreenUseController.activitySelection"
+    static let extensionctivitySelection = "ScreenUseController.extensionActivitySelection"
     static let startDate = "ScreenUseController.startDate"
     static let endDate = "ScreenUseController.endDate"
 }
@@ -26,6 +42,14 @@ public class ScreenUseController: ObservableObject {
         didSet {
             if let data = try? JSONEncoder.main.encode(activitySelection) {
                 UserDefaults.group.set(data, forKey: .activitySelection)
+                UserDefaults.group.synchronize()
+            }
+        }
+    }
+    @Published public var extensionActivitySelection = FamilyActivitySelection() {
+        didSet {
+            if let data = try? JSONEncoder.main.encode(extensionActivitySelection) {
+                UserDefaults.group.set(data, forKey: .extensionctivitySelection)
                 UserDefaults.group.synchronize()
             }
         }
@@ -47,7 +71,7 @@ public class ScreenUseController: ObservableObject {
     private let deviceActivityCenter = DeviceActivityCenter()
 
     private init() { 
-        isMonitoring = !deviceActivityCenter.activities.isEmpty
+        isMonitoring = deviceActivityCenter.activities.contains(.sleep)
 
         loadActivitySelection()
         if let startDate = UserDefaults.group.object(forKey: .startDate) as? Date {
@@ -77,10 +101,10 @@ public extension ScreenUseController {
             intervalStart: startComponents,
             intervalEnd: endComponents,
             repeats: true,
-            warningTime: .init(minute: 15)
+            warningTime: .init(minute: .sleepWarningTimeMinutes)
         )
         try deviceActivityCenter.startMonitoring(.sleep, during: schedule, events: events)
-        isMonitoring = !deviceActivityCenter.activities.isEmpty
+        isMonitoring = deviceActivityCenter.activities.contains(.sleep)
     }
 
     func refreshActivitySelection() {
@@ -89,7 +113,45 @@ public extension ScreenUseController {
 
     func stopMonitoring() {
         deviceActivityCenter.stopMonitoring()
-        isMonitoring = !deviceActivityCenter.activities.isEmpty
+        isMonitoring = deviceActivityCenter.activities.contains(.sleep)
+    }
+
+    func startTimeExtensionMonitoring(
+        applicationToken: ApplicationToken? = nil,
+        webDomainToken: WebDomainToken? = nil,
+        categoryToken: ActivityCategoryToken? = nil
+    ) throws {
+        extensionActivitySelection.applicationTokens.insert(applicationToken)
+        extensionActivitySelection.webDomainTokens.insert(webDomainToken)
+        extensionActivitySelection.categoryTokens.insert(categoryToken)
+
+        let startComponents = Calendar.current.dateComponents([.hour, .minute], from: .now)
+        let endDate = Calendar.current.date(byAdding: .minute, value: .timeExtensionWallClockTimeMinutes, to: .now) ?? .now
+        let endComponents = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+
+        let schedule = DeviceActivitySchedule(
+            intervalStart: startComponents,
+            intervalEnd: endComponents,
+            repeats: false,
+            warningTime: .init(minute: .timeExtensionWarningTimeMinutes)
+        )
+
+        let event = DeviceActivityEvent(
+            applications: extensionActivitySelection.applicationTokens,
+            categories: extensionActivitySelection.categoryTokens,
+            webDomains: extensionActivitySelection.webDomainTokens,
+            threshold: .init(minute: .timeExtensionTimeMinutes)
+        )
+
+        try deviceActivityCenter.startMonitoring(
+            .timeExtension,
+            during: schedule,
+            events: [.timeExtension : event]
+        )
+    }
+
+    func resetTimeExtensionApps() {
+        extensionActivitySelection = FamilyActivitySelection()
     }
 
     func hasEvents(for activityName: DeviceActivityName) -> Bool {
@@ -112,6 +174,13 @@ private extension ScreenUseController {
             let activitySelection = try? JSONDecoder.main.decode(FamilyActivitySelection.self, from: data)
         {
             self.activitySelection = activitySelection
+        }
+
+        if
+            let data = UserDefaults.group.data(forKey: .extensionctivitySelection),
+            let extensionActivitySelection = try? JSONDecoder.main.decode(FamilyActivitySelection.self, from: data)
+        {
+            self.extensionActivitySelection = extensionActivitySelection
         }
     }
 }

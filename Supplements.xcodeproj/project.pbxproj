@@ -53,6 +53,9 @@
 		FF1E969E2C0D0530004DAD2D /* DateFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */; };
 		FF1E96A02C0D0555004DAD2D /* ListFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E969F2C0D0555004DAD2D /* ListFormatter+Constants.swift */; };
 		FF1E96A12C0D3ED6004DAD2D /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
+		FF1E96A82C0E09CE004DAD2D /* Set+OptionalInsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96A72C0E09CE004DAD2D /* Set+OptionalInsert.swift */; };
+		FF1E96AB2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96AA2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift */; };
+		FF1E96AE2C0E2B94004DAD2D /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96AD2C0E2B94004DAD2D /* NotificationCenter.swift */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -270,6 +273,9 @@
 		FF1E96932C0C1F64004DAD2D /* UserDefaults+Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Group.swift"; sourceTree = "<group>"; };
 		FF1E969B2C0D0486004DAD2D /* FamilyActivitySelection+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FamilyActivitySelection+Summary.swift"; sourceTree = "<group>"; };
 		FF1E969F2C0D0555004DAD2D /* ListFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListFormatter+Constants.swift"; sourceTree = "<group>"; };
+		FF1E96A72C0E09CE004DAD2D /* Set+OptionalInsert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+OptionalInsert.swift"; sourceTree = "<group>"; };
+		FF1E96AA2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ManagedSettingStore+Mutating.swift"; sourceTree = "<group>"; };
+		FF1E96AD2C0E2B94004DAD2D /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
@@ -482,6 +488,8 @@
 			isa = PBXGroup;
 			children = (
 				FF1E96782C0C1AA0004DAD2D /* Controller */,
+				FF1E96AC2C0E2B79004DAD2D /* Notifications */,
+				FF1E96A92C0E0B12004DAD2D /* Extensions */,
 				FF1E966F2C0C1A99004DAD2D /* ScreenControl.h */,
 			);
 			path = ScreenControl;
@@ -503,6 +511,7 @@
 				FF1E969D2C0D0523004DAD2D /* Formatters */,
 				FF1E969A2C0D0383004DAD2D /* Codable */,
 				FF1E96922C0C1F58004DAD2D /* UserDefaults */,
+				FF1E96A62C0E09BD004DAD2D /* Extensions */,
 				FF1E96862C0C1F38004DAD2D /* BloomFoundation.h */,
 			);
 			path = BloomFoundation;
@@ -531,6 +540,30 @@
 				FF1E969F2C0D0555004DAD2D /* ListFormatter+Constants.swift */,
 			);
 			path = Formatters;
+			sourceTree = "<group>";
+		};
+		FF1E96A62C0E09BD004DAD2D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FF1E96A72C0E09CE004DAD2D /* Set+OptionalInsert.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FF1E96A92C0E0B12004DAD2D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FF1E96AA2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FF1E96AC2C0E2B79004DAD2D /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				FF1E96AD2C0E2B94004DAD2D /* NotificationCenter.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		FF648BE12BDEA4F700963820 /* Extensions */ = {
@@ -1186,6 +1219,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF1E96792C0C1AD3004DAD2D /* ScreenUseController.swift in Sources */,
+				FF1E96AB2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift in Sources */,
+				FF1E96AE2C0E2B94004DAD2D /* NotificationCenter.swift in Sources */,
 				FF1E967A2C0C1AD5004DAD2D /* DeviceActivityName+Sleep.swift in Sources */,
 				FF1E969C2C0D0486004DAD2D /* FamilyActivitySelection+Summary.swift in Sources */,
 			);
@@ -1197,6 +1232,7 @@
 			files = (
 				FF1E96A02C0D0555004DAD2D /* ListFormatter+Constants.swift in Sources */,
 				FF1E969E2C0D0530004DAD2D /* DateFormatter+Constants.swift in Sources */,
+				FF1E96A82C0E09CE004DAD2D /* Set+OptionalInsert.swift in Sources */,
 				FF1E96992C0D0360004DAD2D /* Codable+Constants.swift in Sources */,
 				FF1E96942C0C1F64004DAD2D /* UserDefaults+Group.swift in Sources */,
 			);
