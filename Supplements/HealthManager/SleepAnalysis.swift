@@ -10,9 +10,9 @@ import Foundation
 // https://www.mindbodygreen.com/articles/what-is-core-sleep
 // https://www.healthline.com/health/how-much-deep-sleep-do-you-need#deep-sleep
 extension Double {
-    static let coreSleepPercent: Double = 0.40
-    static let deepSleepPercent: Double = 0.25
-    static let remSleepPercent: Double = 0.25
+    static let coreSleepPercent: Double = 0.45
+    static let deepSleepPercent: Double = 0.15
+    static let remSleepPercent: Double = 0.20
     static let minSleepLengthMinutes: Double = 7 * 60
     static let maxScore: Double = 10
 }

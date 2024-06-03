@@ -44,7 +44,7 @@ private extension ProgramsView {
                 Text("Analyze your sleep quality night over night and make incremental improvements to get a better night's rest.")
 
                 Button(action: {
-                    presentedSheet = SleepProgramConfigurationView().asAny
+                    presentedSheet = SleepProgramSetupView().asAny
                 }, label: {
                     HStack {
                         Spacer()

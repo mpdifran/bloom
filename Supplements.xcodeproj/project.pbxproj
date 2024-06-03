@@ -56,6 +56,10 @@
 		FF1E96A82C0E09CE004DAD2D /* Set+OptionalInsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96A72C0E09CE004DAD2D /* Set+OptionalInsert.swift */; };
 		FF1E96AB2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96AA2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift */; };
 		FF1E96AE2C0E2B94004DAD2D /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96AD2C0E2B94004DAD2D /* NotificationCenter.swift */; };
+		FF1E96B02C0E3F83004DAD2D /* SleepProgramSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96AF2C0E3F83004DAD2D /* SleepProgramSetupView.swift */; };
+		FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96B52C0E4021004DAD2D /* SleepProgramSetupViewModel.swift */; };
+		FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96B72C0E4424004DAD2D /* SleepSegmentSummaryCell.swift */; };
+		FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96B92C0E4839004DAD2D /* SleepSegmentSummary.swift */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -276,6 +280,10 @@
 		FF1E96A72C0E09CE004DAD2D /* Set+OptionalInsert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+OptionalInsert.swift"; sourceTree = "<group>"; };
 		FF1E96AA2C0E0B2A004DAD2D /* ManagedSettingStore+Mutating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ManagedSettingStore+Mutating.swift"; sourceTree = "<group>"; };
 		FF1E96AD2C0E2B94004DAD2D /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
+		FF1E96AF2C0E3F83004DAD2D /* SleepProgramSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramSetupView.swift; sourceTree = "<group>"; };
+		FF1E96B52C0E4021004DAD2D /* SleepProgramSetupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramSetupViewModel.swift; sourceTree = "<group>"; };
+		FF1E96B72C0E4424004DAD2D /* SleepSegmentSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSegmentSummaryCell.swift; sourceTree = "<group>"; };
+		FF1E96B92C0E4839004DAD2D /* SleepSegmentSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSegmentSummary.swift; sourceTree = "<group>"; };
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
@@ -436,9 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				FF1E96082C0AB58A004DAD2D /* ProgramsView.swift */,
-				FF1E960A2C0AB937004DAD2D /* SleepProgramConfigurationView.swift */,
-				FF1E960C2C0AC9E5004DAD2D /* SleepProgramConfigurationViewModel.swift */,
-				FF1E96102C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift */,
+				FF1E96B12C0E3FDE004DAD2D /* Sleep */,
 			);
 			path = Programs;
 			sourceTree = "<group>";
@@ -564,6 +570,44 @@
 				FF1E96AD2C0E2B94004DAD2D /* NotificationCenter.swift */,
 			);
 			path = Notifications;
+			sourceTree = "<group>";
+		};
+		FF1E96B12C0E3FDE004DAD2D /* Sleep */ = {
+			isa = PBXGroup;
+			children = (
+				FF1E96B22C0E3FF2004DAD2D /* Setup */,
+				FF1E96B32C0E3FFA004DAD2D /* Configure */,
+				FF1E96B42C0E4008004DAD2D /* Components */,
+			);
+			path = Sleep;
+			sourceTree = "<group>";
+		};
+		FF1E96B22C0E3FF2004DAD2D /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				FF1E96AF2C0E3F83004DAD2D /* SleepProgramSetupView.swift */,
+				FF1E96B52C0E4021004DAD2D /* SleepProgramSetupViewModel.swift */,
+				FF1E96B92C0E4839004DAD2D /* SleepSegmentSummary.swift */,
+				FF1E96B72C0E4424004DAD2D /* SleepSegmentSummaryCell.swift */,
+			);
+			path = Setup;
+			sourceTree = "<group>";
+		};
+		FF1E96B32C0E3FFA004DAD2D /* Configure */ = {
+			isa = PBXGroup;
+			children = (
+				FF1E960A2C0AB937004DAD2D /* SleepProgramConfigurationView.swift */,
+				FF1E960C2C0AC9E5004DAD2D /* SleepProgramConfigurationViewModel.swift */,
+			);
+			path = Configure;
+			sourceTree = "<group>";
+		};
+		FF1E96B42C0E4008004DAD2D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FF1E96102C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		FF648BE12BDEA4F700963820 /* Extensions */ = {
@@ -1244,6 +1288,8 @@
 			files = (
 				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
+				FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */,
+				FF1E96B02C0E3F83004DAD2D /* SleepProgramSetupView.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
 				FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */,
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
@@ -1327,7 +1373,9 @@
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
+				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
+				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
 				FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */,
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
 			);

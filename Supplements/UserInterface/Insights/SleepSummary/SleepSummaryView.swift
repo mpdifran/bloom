@@ -189,7 +189,11 @@ private extension SleepSummaryView {
             AxisMarks(position: .trailing, values: .stride(by: 2)) { value in
                 AxisGridLine()
                 AxisTick()
-                AxisValueLabel()
+                if let hours = value.as(Double.self) {
+                    AxisValueLabel {
+                        Text("\(hours, specifier: "%.0f")h")
+                    }
+                }
             }
         }
         .frame(height: 250)
