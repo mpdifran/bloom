@@ -39,6 +39,15 @@ private extension ProgramsView {
                     Text("Sleep Program")
                         .font(.title2)
                         .bold()
+
+                    Spacer()
+
+                    Button(action: {
+                        presentedSheet = SleepProgramConfigurationView().asAny
+                    }, label: {
+                        Image(systemName: "gear")
+                    })
+                    .foregroundStyle(.coreSleep)
                 }
 
                 Text("Analyze your sleep quality night over night and make incremental improvements to get a better night's rest.")

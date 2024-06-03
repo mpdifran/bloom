@@ -56,6 +56,7 @@ struct SleepProgramConfigurationView: View {
         }
         .tint(.coreSleep)
         .alert(error: $error)
+        .presentationCompactAdaptation(.fullScreenCover)
     }
 }
 
