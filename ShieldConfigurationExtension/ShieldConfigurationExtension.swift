@@ -48,12 +48,12 @@ private extension ShieldConfigurationExtension {
                 color: .label
             ),
             primaryButtonLabel: .init(
-                text: "Close",
+                text: "Close App",
                 color: deepSleep
             ),
             primaryButtonBackgroundColor: remSleep,
             secondaryButtonLabel: .init(
-                text: "Open Anyway",
+                text: "10 More Minutes",
                 color: remSleep
             )
         )

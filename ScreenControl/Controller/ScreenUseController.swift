@@ -69,7 +69,7 @@ public extension ScreenUseController {
         }
     }
 
-    func startMonitoring() throws {
+    func startMonitoring(events: [DeviceActivityEvent.Name : DeviceActivityEvent] = [:]) throws {
         let startComponents = Calendar.current.dateComponents([.hour, .minute], from: startDate)
         let endComponents = Calendar.current.dateComponents([.hour, .minute], from: endDate)
 
@@ -79,7 +79,7 @@ public extension ScreenUseController {
             repeats: true,
             warningTime: .init(minute: 15)
         )
-        try deviceActivityCenter.startMonitoring(.sleep, during: schedule)
+        try deviceActivityCenter.startMonitoring(.sleep, during: schedule, events: events)
         isMonitoring = !deviceActivityCenter.activities.isEmpty
     }
 
@@ -90,6 +90,17 @@ public extension ScreenUseController {
     func stopMonitoring() {
         deviceActivityCenter.stopMonitoring()
         isMonitoring = !deviceActivityCenter.activities.isEmpty
+    }
+
+    func hasEvents(for activityName: DeviceActivityName) -> Bool {
+        !deviceActivityCenter.events(for: activityName).isEmpty
+    }
+
+    func deviceActivityEvent(
+        activityName: DeviceActivityName,
+        eventName: DeviceActivityEvent.Name
+    ) -> DeviceActivityEvent? {
+        deviceActivityCenter.events(for: activityName)[eventName]
     }
 }
 

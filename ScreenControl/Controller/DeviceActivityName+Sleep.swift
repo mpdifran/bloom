@@ -11,3 +11,7 @@ import DeviceActivity
 extension DeviceActivityName {
     static let sleep = Self("sleep")
 }
+
+public extension DeviceActivityEvent.Name {
+    static let tenMinExtend = Self("tenMinExtend")
+}

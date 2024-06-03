@@ -52,6 +52,7 @@
 		FF1E969C2C0D0486004DAD2D /* FamilyActivitySelection+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E969B2C0D0486004DAD2D /* FamilyActivitySelection+Summary.swift */; };
 		FF1E969E2C0D0530004DAD2D /* DateFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */; };
 		FF1E96A02C0D0555004DAD2D /* ListFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E969F2C0D0555004DAD2D /* ListFormatter+Constants.swift */; };
+		FF1E96A12C0D3ED6004DAD2D /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -171,6 +172,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF1E96832C0C1F38004DAD2D;
 			remoteInfo = BloomFoundation;
+		};
+		FF1E96A22C0D3EDC004DAD2D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
+			remoteInfo = ScreenControl;
+		};
+		FF1E96A42C0D3EE3004DAD2D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
+			remoteInfo = ScreenControl;
 		};
 		FFF61B3C2BEEB7B000926042 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -357,6 +372,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF1E96A12C0D3ED6004DAD2D /* ScreenControl.framework in Frameworks */,
 				FF1E96462C0BF5E4004DAD2D /* ManagedSettings.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -895,6 +911,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF1E96A52C0D3EE3004DAD2D /* PBXTargetDependency */,
 			);
 			name = DeviceActivityMonitorExtension;
 			productName = DeviceActivityMonitorExtension;
@@ -929,6 +946,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF1E96A32C0D3EDC004DAD2D /* PBXTargetDependency */,
 			);
 			name = ShieldActionExtension;
 			productName = ShieldActionExtension;
@@ -1319,6 +1337,16 @@
 			isa = PBXTargetDependency;
 			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
 			targetProxy = FF1E968F2C0C1F44004DAD2D /* PBXContainerItemProxy */;
+		};
+		FF1E96A32C0D3EDC004DAD2D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
+			targetProxy = FF1E96A22C0D3EDC004DAD2D /* PBXContainerItemProxy */;
+		};
+		FF1E96A52C0D3EE3004DAD2D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
+			targetProxy = FF1E96A42C0D3EE3004DAD2D /* PBXContainerItemProxy */;
 		};
 		FFF61B3D2BEEB7B000926042 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
