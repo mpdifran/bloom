@@ -17,7 +17,7 @@ private extension Int {
     static let sleepWarningTimeMinutes = 15
 
     // This is 10 minutes of the app being in the foreground.
-    static let timeExtensionTimeMinutes = 2
+    static let timeExtensionTimeMinutes = 10
 
     // This is 15 minutes since the extension was requested.
     static let timeExtensionWallClockTimeMinutes = 15
