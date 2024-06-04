@@ -19,20 +19,14 @@ struct SleepProgramSetupView: View {
     private let feedbackGenerator = UINotificationFeedbackGenerator()
 
     var body: some View {
-        NavigationStack {
-            List {
-                introductionSection
-                segmentSection
-            }
-            .listStyle(.plain)
-            .navigationTitle("Sleep Program Setup")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-            }
-            .shelf {
+        List {
+            introductionSection
+            segmentSection
+            sleepDurationSection
+        }
+        .listStyle(.plain)
+        .shelf {
+            VStack(spacing: 20) {
                 Button(action: {
                     feedbackGenerator.notificationOccurred(.success)
 
@@ -42,8 +36,7 @@ struct SleepProgramSetupView: View {
                     ) {
                         dismiss()
                     }
-                },
-                       label: {
+                }, label: {
                     HStack {
                         Spacer()
                         Label("Start Program", systemImage: "moon.zzz.fill")
@@ -51,9 +44,21 @@ struct SleepProgramSetupView: View {
                     }
                 })
                 .buttonStyle(.tertiary)
+
+                Button("Cancel") {
+                    dismiss()
+                }
+                .bold()
             }
         }
         .tint(.coreSleep)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            Rectangle()
+                .fill(.bar)
+                .ignoresSafeArea()
+                .safeAreaPadding(.top, 0)
+                .frame(height: 0)
+        }
         .task {
             await viewModel.loadData()
         }
@@ -74,23 +79,31 @@ private extension SleepProgramSetupView {
                     .padding(.vertical, 50)
 
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Bloom will analyze your sleep data and make recommendations to improve your sleep. If things aren't working, Bloom will suggest changing the strategy.")
-                    Text("View your current sleep segments below.")
-                }
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 25.0)
-                        .fill(.background.secondary)
+                    Text("Sleep Program")
+                        .font(.title)
+                        .bold()
+                        .fontDesign(.rounded)
+
+                    Text("Bloom will analyze your sleep data and make recommendations to improve your sleep. If things aren't working, Bloom will suggest changing the strategy. You can stop the program at any time.")
+                    Text("View your current sleep data below. Bloom will aim to bring each segment into the necessary range.")
                 }
             }
         }
+        .removeListSeparator()
     }
 
     var segmentSection: some View {
         Section("Sleep Segments") {
             ForEach(viewModel.segmentSummary) { summary in
                 SleepSegmentSummaryCell(summary: summary)
+                    .standardListSeparatorInset()
             }
+        }
+    }
+
+    var sleepDurationSection: some View {
+        Section("Sleep Duration") {
+            SleepDurationSummaryCell(sleepAnalyses: viewModel.sleepAnalyses)
         }
     }
 }
