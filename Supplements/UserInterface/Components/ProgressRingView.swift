@@ -36,7 +36,7 @@ struct ProgressRingView: View {
                 .trim(from: 0, to: clippedProgress)
                 .stroke(
                     AngularGradient(
-                        gradient: Gradient(colors: [color.darker(), color.lighter()]),
+                        gradient: Gradient(colors: [color.darker(by: 0.2), color.lighter()]),
                         center: .center,
                         startAngle: .degrees(0),
                         endAngle: .degrees(360)
@@ -47,15 +47,15 @@ struct ProgressRingView: View {
 
             Circle()
                 .frame(width: .lineWidth, height: .lineWidth)
-                .foregroundColor(color.darker())
+                .foregroundColor(color.darker(by: 0.2))
                 .offset(y: -(dimension/2))
 
             Circle()
                 .frame(width: .lineWidth, height: .lineWidth)
-                .foregroundColor(clippedProgress > 0.95 ? color.lighter() : color.opacity(0))
+                .foregroundColor(clippedProgress >= 0.95 ? color.lighter() : color.opacity(0))
                 .offset(y: -(dimension/2))
                 .rotationEffect(Angle.degrees(360 * Double(clippedProgress)))
-                .shadow(color: clippedProgress > 0.96 ? Color.black.opacity(0.1): Color.clear, radius: 3, x: 4, y: 0)
+                .shadow(color: clippedProgress >= 0.96 ? Color.black.opacity(0.3): Color.clear, radius: 3, x: 5, y: 0)
                 .transition(.opacity)
 
         }
