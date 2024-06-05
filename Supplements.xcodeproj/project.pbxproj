@@ -18,13 +18,18 @@
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
+		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
+		FF17051F2C10A20C000D4B3D /* SleepProgramCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051E2C10A20C000D4B3D /* SleepProgramCell.swift */; };
+		FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705202C10A37C000D4B3D /* SleepProgramConfigurationView.swift */; };
+		FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705222C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift */; };
+		FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705242C10ADF1000D4B3D /* SleepEnvironmentEnums.swift */; };
 		FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */; };
 		FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */; };
 		FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */; };
 		FF1E96062C0A6F59004DAD2D /* SleepProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96052C0A6F59004DAD2D /* SleepProgressRingView.swift */; };
 		FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96082C0AB58A004DAD2D /* ProgramsView.swift */; };
-		FF1E960B2C0AB937004DAD2D /* SleepProgramConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E960A2C0AB937004DAD2D /* SleepProgramConfigurationView.swift */; };
-		FF1E960D2C0AC9E5004DAD2D /* SleepProgramConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E960C2C0AC9E5004DAD2D /* SleepProgramConfigurationViewModel.swift */; };
+		FF1E960B2C0AB937004DAD2D /* SleepProgramInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E960A2C0AB937004DAD2D /* SleepProgramInsightsView.swift */; };
+		FF1E960D2C0AC9E5004DAD2D /* SleepProgramInsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E960C2C0AC9E5004DAD2D /* SleepProgramInsightsViewModel.swift */; };
 		FF1E960F2C0ACC70004DAD2D /* LabelledMetricView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E960E2C0ACC70004DAD2D /* LabelledMetricView.swift */; };
 		FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96102C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift */; };
 		FF1E961C2C0BEC1D004DAD2D /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E961B2C0BEC1D004DAD2D /* DeviceActivity.framework */; };
@@ -246,13 +251,18 @@
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
+		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
+		FF17051E2C10A20C000D4B3D /* SleepProgramCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCell.swift; sourceTree = "<group>"; };
+		FF1705202C10A37C000D4B3D /* SleepProgramConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramConfigurationView.swift; sourceTree = "<group>"; };
+		FF1705222C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramConfigurationViewModel.swift; sourceTree = "<group>"; };
+		FF1705242C10ADF1000D4B3D /* SleepEnvironmentEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepEnvironmentEnums.swift; sourceTree = "<group>"; };
 		FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Average.swift"; sourceTree = "<group>"; };
 		FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
 		FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brightness.swift"; sourceTree = "<group>"; };
 		FF1E96052C0A6F59004DAD2D /* SleepProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgressRingView.swift; sourceTree = "<group>"; };
 		FF1E96082C0AB58A004DAD2D /* ProgramsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramsView.swift; sourceTree = "<group>"; };
-		FF1E960A2C0AB937004DAD2D /* SleepProgramConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramConfigurationView.swift; sourceTree = "<group>"; };
-		FF1E960C2C0AC9E5004DAD2D /* SleepProgramConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramConfigurationViewModel.swift; sourceTree = "<group>"; };
+		FF1E960A2C0AB937004DAD2D /* SleepProgramInsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramInsightsView.swift; sourceTree = "<group>"; };
+		FF1E960C2C0AC9E5004DAD2D /* SleepProgramInsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramInsightsViewModel.swift; sourceTree = "<group>"; };
 		FF1E960E2C0ACC70004DAD2D /* LabelledMetricView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledMetricView.swift; sourceTree = "<group>"; };
 		FF1E96102C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramSectionHeader.swift; sourceTree = "<group>"; };
 		FF1E96132C0BE3F0004DAD2D /* ScreenUseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenUseController.swift; sourceTree = "<group>"; };
@@ -444,10 +454,36 @@
 			path = SleepSummary;
 			sourceTree = "<group>";
 		};
+		FF1705182C109FF3000D4B3D /* Programs */ = {
+			isa = PBXGroup;
+			children = (
+				FF1705192C109FFD000D4B3D /* SleepProgram */,
+			);
+			path = Programs;
+			sourceTree = "<group>";
+		};
+		FF1705192C109FFD000D4B3D /* SleepProgram */ = {
+			isa = PBXGroup;
+			children = (
+				FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */,
+				FF1705242C10ADF1000D4B3D /* SleepEnvironmentEnums.swift */,
+			);
+			path = SleepProgram;
+			sourceTree = "<group>";
+		};
+		FF17051D2C10A202000D4B3D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FF17051E2C10A20C000D4B3D /* SleepProgramCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		FF1E96072C0AB577004DAD2D /* Programs */ = {
 			isa = PBXGroup;
 			children = (
 				FF1E96082C0AB58A004DAD2D /* ProgramsView.swift */,
+				FF17051D2C10A202000D4B3D /* Cells */,
 				FF1E96B12C0E3FDE004DAD2D /* Sleep */,
 			);
 			path = Programs;
@@ -601,8 +637,10 @@
 		FF1E96B32C0E3FFA004DAD2D /* Configure */ = {
 			isa = PBXGroup;
 			children = (
-				FF1E960A2C0AB937004DAD2D /* SleepProgramConfigurationView.swift */,
-				FF1E960C2C0AC9E5004DAD2D /* SleepProgramConfigurationViewModel.swift */,
+				FF1705202C10A37C000D4B3D /* SleepProgramConfigurationView.swift */,
+				FF1705222C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift */,
+				FF1E960A2C0AB937004DAD2D /* SleepProgramInsightsView.swift */,
+				FF1E960C2C0AC9E5004DAD2D /* SleepProgramInsightsViewModel.swift */,
 			);
 			path = Configure;
 			sourceTree = "<group>";
@@ -738,6 +776,7 @@
 				FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */,
 				FFB444952BED420C00486AD7 /* UserInterface */,
 				FF6AEC942BF17AFB00C34621 /* BackgroundTasks */,
+				FF1705182C109FF3000D4B3D /* Programs */,
 				FF8B8B332BFFE4CD00BA2128 /* Location */,
 				FF6AEC972BF17D0D00C34621 /* Notifications */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
@@ -1294,9 +1333,11 @@
 			files = (
 				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
+				FF17051F2C10A20C000D4B3D /* SleepProgramCell.swift in Sources */,
 				FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */,
 				FF1E96B02C0E3F83004DAD2D /* SleepProgramSetupView.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
+				FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */,
 				FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */,
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
@@ -1330,7 +1371,7 @@
 				FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */,
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
-				FF1E960B2C0AB937004DAD2D /* SleepProgramConfigurationView.swift in Sources */,
+				FF1E960B2C0AB937004DAD2D /* SleepProgramInsightsView.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,
@@ -1344,9 +1385,11 @@
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
 				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
+				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
+				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
 				FF8B8B482C00309D00BA2128 /* ActivityBubbleCell.swift in Sources */,
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
@@ -1360,6 +1403,7 @@
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
+				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
@@ -1373,7 +1417,7 @@
 				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
 				FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */,
-				FF1E960D2C0AC9E5004DAD2D /* SleepProgramConfigurationViewModel.swift in Sources */,
+				FF1E960D2C0AC9E5004DAD2D /* SleepProgramInsightsViewModel.swift in Sources */,
 				FF1E96062C0A6F59004DAD2D /* SleepProgressRingView.swift in Sources */,
 				FF1E960F2C0ACC70004DAD2D /* LabelledMetricView.swift in Sources */,
 				FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */,

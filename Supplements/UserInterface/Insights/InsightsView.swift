@@ -26,27 +26,27 @@ struct InsightsView: View {
                     }
                 }
 
-                if isLoading {
-                    Section {
-                        VStack {
-                            ProgressView()
-                            Text("Loading Insights")
-                                .bold()
-                        }
-                        .zStackAlignment(.center)
-                    }
-                } else if let insightsResponse = viewModel.insights {
-                    content(response: insightsResponse)
-                } else {
-                    HStack {
-                        Spacer()
-                        Button("Reload Insights", systemImage: "arrow.clockwise") {
-                            Task { await loadData(force: true) }
-                        }
-                        .bold()
-                        Spacer()
-                    }
-                }
+//                if isLoading {
+//                    Section {
+//                        VStack {
+//                            ProgressView()
+//                            Text("Loading Insights")
+//                                .bold()
+//                        }
+//                        .zStackAlignment(.center)
+//                    }
+//                } else if let insightsResponse = viewModel.insights {
+//                    content(response: insightsResponse)
+//                } else {
+//                    HStack {
+//                        Spacer()
+//                        Button("Reload Insights", systemImage: "arrow.clockwise") {
+//                            Task { await loadData(force: true) }
+//                        }
+//                        .bold()
+//                        Spacer()
+//                    }
+//                }
             }
             .navigationTitle("Insights")
             .navigationDestination($presentedNavigationView)

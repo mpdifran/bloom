@@ -10,9 +10,13 @@ import AppUI
 
 struct SleepProgramSetupView: View {
 
+    let onSetup: () -> Void
+
     @ObservedObject private var viewModel = SleepProgramSetupViewModel()
+    @ObservedObject private var sleepProgramCoordinator = SleepProgramCoordinator.shared
 
     @State private var alertDetails: AlertDetails?
+    @State private var hasStarted = false
 
     @Environment(\.dismiss) private var dismiss
 
@@ -28,24 +32,33 @@ struct SleepProgramSetupView: View {
         .shelf {
             VStack(spacing: 20) {
                 Button(action: {
-                    feedbackGenerator.notificationOccurred(.success)
+                    guard !hasStarted else { return }
 
-                    alertDetails = .init(
-                        title: "Not Yet Implemented",
-                        message: "Whoa there cowboy, this feature isn't implemented yet. Soon though!"
-                    ) {
+                    feedbackGenerator.notificationOccurred(.success)
+                    sleepProgramCoordinator.startProgram()
+                    hasStarted = true
+
+                    Delay(1500) {
                         dismiss()
+                        onSetup()
                     }
                 }, label: {
                     HStack {
                         Spacer()
-                        Label("Start Program", systemImage: "moon.zzz.fill")
+                        if hasStarted {
+                            Image(systemName: "checkmark")
+                                .bold()
+                        } else {
+                            Text("Start Program")
+                        }
                         Spacer()
                     }
                 })
                 .buttonStyle(.tertiary)
 
                 Button("Cancel") {
+                    guard !hasStarted else { return }
+
                     dismiss()
                 }
                 .bold()
@@ -109,5 +122,5 @@ private extension SleepProgramSetupView {
 }
 
 #Preview {
-    SleepProgramSetupView()
+    SleepProgramSetupView() { }
 }

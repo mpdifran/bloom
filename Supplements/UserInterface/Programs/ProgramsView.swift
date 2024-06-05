@@ -30,40 +30,7 @@ private extension ProgramsView {
 
     var sleepProgramSection: some View {
         Section {
-            VStack(alignment: .leading) {
-                HStack {
-                    Image(systemName: "bed.double.fill")
-                        .font(.title2)
-                        .foregroundStyle(.coreSleep)
-
-                    Text("Sleep Program")
-                        .font(.title2)
-                        .bold()
-
-                    Spacer()
-
-                    Button(action: {
-                        presentedSheet = SleepProgramConfigurationView().asAny
-                    }, label: {
-                        Image(systemName: "gear")
-                    })
-                    .foregroundStyle(.coreSleep)
-                }
-
-                Text("Analyze your sleep quality night over night and make incremental improvements to get a better night's rest.")
-
-                Button(action: {
-                    presentedSheet = SleepProgramSetupView().asAny
-                }, label: {
-                    HStack {
-                        Spacer()
-                        Text("Start Program")
-                        Spacer()
-                    }
-                })
-                .buttonStyle(.tertiary)
-                .tint(.coreSleep)
-            }
+            SleepProgramCell(presentedSheet: $presentedSheet)
         }
     }
 }

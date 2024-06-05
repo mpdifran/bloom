@@ -2,194 +2,69 @@
 //  SleepProgramConfigurationView.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-05-31.
+//  Created by Mark DiFranco on 2024-06-05.
 //
 
 import SwiftUI
 import AppUI
-import FamilyControls
 import ScreenControl
 
 struct SleepProgramConfigurationView: View {
 
     @ObservedObject private var viewModel = SleepProgramConfigurationViewModel()
+
+    @ObservedObject private var sleepProgramCoordinator = SleepProgramCoordinator.shared
     @ObservedObject private var screenUseController = ScreenUseController.shared
 
-    @State private var temperature: String = "Cold"
-    @State private var sound: String = "Quiet"
-    @State private var light: String = "Dark"
-    @State private var error: Error?
-
     @State private var isShowingFamilyActivityPicker = false
+    @State private var confirmationDetails: ConfirmationDialogDetails?
+    @State private var error: Error?
 
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             List {
-                sleepSection
-                environmentSection
+                statusSection
                 screenUseSection
-                physicalActivitySection
+                environmentSection
+                stopProgramSection
             }
-            .navigationTitle("Sleep Program")
+            .navigationTitle("Configure")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-            }
-            .shelf {
-                Button(action: {
-                    
-                }, label: {
-                    HStack {
-                        Spacer()
-                        Text("Start Program")
-                        Spacer()
+                    Button("Done") {
+                        dismiss()
                     }
-                })
-                .buttonStyle(.tertiary)
-            }
-            .task {
-                await viewModel.loadData()
+                    .bold()
+                }
             }
         }
         .tint(.coreSleep)
         .alert(error: $error)
-        .presentationCompactAdaptation(.fullScreenCover)
     }
 }
 
 private extension SleepProgramConfigurationView {
 
-    var environmentSection: some View {
+    var statusSection: some View {
         Section {
-            SleepProgramSectionHeader(
-                title: "Environment",
-                subtitle: "During Bedtime",
-                systemImage: "thermometer.snowflake"
-            )
-            .tint(.remSleep)
-
-            Picker(selection: $temperature) {
-                Text("Cold")
-                    .tag("Cold")
-                Text("Warm")
-                    .tag("Warm")
-                Text("Hot")
-                    .tag("Hot")
-            } label: {
-                Text("Temperature")
-            }
-
-            Picker(selection: $sound) {
-                Text("Quiet")
-                    .tag("Quiet")
-                Text("Intermittent Sounds")
-                    .tag("Intermittent Sounds")
-                Text("Loud")
-                    .tag("Loud")
-            } label: {
-                Text("Sound")
-            }
-
-            Picker(selection: $light) {
-                Text("Dark")
-                    .tag("Dark")
-                Text("Some Light")
-                    .tag("Some Light")
-                Text("Bright")
-                    .tag("Bright")
-            } label: {
-                Text("Darkness")
-            }
-
-            Text(sleepEnvironmentSummary)
-                .foregroundStyle(.secondary)
-        }
-    }
-
-    var physicalActivitySection: some View {
-        Section {
-            SleepProgramSectionHeader(
-                title: "Workouts",
-                subtitle: "Last Two Weeks",
-                systemImage: "figure.run"
-            )
-            .tint(.green)
-
             HStack {
-                VStack(alignment: .leading) {
-                    LabelledMetricView(
-                        label: "Amount",
-                        value: "\(viewModel.workoutSummary.count) Workouts"
-                    )
-                    .tint(.yellow)
-
-                    LabelledMetricView(
-                        label: "Duration",
-                        value: "\(String(format: "%.0f", workoutDurationSumMinutes)) Minutes"
-                    )
-                    .tint(.green)
-
-                    LabelledMetricView(
-                        label: "Energy Burned",
-                        value: "\(String(format: "%.0f", energyBurned)) CAL"
-                    )
-                    .tint(.pink)
-                }
-
-                Spacer()
-
-                ProgressRingView(
-                    progress: .constant(workoutDurationScore),
-                    dimension: 80,
-                    color: .green
-                )
+                Image(systemName: "bed.double.fill")
+                    .font(.title2)
+                    .foregroundStyle(.tint)
+                
+                Text("Sleep Program")
+                    .font(.title2)
+                    .bold()
             }
 
-            Text(workoutSummary)
-                .foregroundStyle(.secondary)
+            if let startDate = sleepProgramCoordinator.startDate {
+                Text("Started \(startDate, formatter: DateFormatter.justRelativeDateMedium)")
+            }
         }
-    }
-
-    var sleepSection: some View {
-        Section {
-            SleepProgramSectionHeader(
-                title: "Sleep",
-                subtitle: "Last Two Weeks",
-                systemImage: "bed.double.fill"
-            )
-            .tint(.coreSleep)
-
-            SleepCategoryCell(
-                title: "Avg REM Sleep",
-                color: .remSleep,
-                percent: viewModel.sleepAnalyses.average(keyPath: \.remSleepPercent) * 100,
-                unit: "%"
-            )
-
-            SleepCategoryCell(
-                title: "Avg Core Sleep",
-                color: .coreSleep,
-                percent: viewModel.sleepAnalyses.average(keyPath: \.coreSleepPercent) * 100,
-                unit: "%"
-            )
-
-            SleepCategoryCell(
-                title: "Avg Deep Sleep",
-                color: .deepSleep,
-                percent: viewModel.sleepAnalyses.average(keyPath: \.deepSleepPercent) * 100,
-                unit: "%"
-            )
-
-            SleepCategoryCell(
-                title: "Sleep Duration",
-                color: .green,
-                percent: viewModel.sleepAnalyses.average(keyPath: \.overallHours),
-                unit: "hours"
-            )
-        }
+        .tint(.coreSleep)
     }
 
     var screenUseSection: some View {
@@ -200,10 +75,10 @@ private extension SleepProgramConfigurationView {
                 systemImage: "apps.iphone"
             )
 
-            Text("Screen time before bed can affect your sleep quality. Allow Bloom to remind you to put your phone away near bedtime.")
+            Text("Screen time before bed can affect your sleep quality. Allow Bloom to restrict app usage during bedtime.")
 
             DatePicker(
-                "Bedtime",
+                "Wind Down",
                 selection: $screenUseController.startDate,
                 displayedComponents: .hourAndMinute
             )
@@ -214,117 +89,112 @@ private extension SleepProgramConfigurationView {
                 displayedComponents: .hourAndMinute
             )
 
-            VStack {
-                Button(action: {
-                    isShowingFamilyActivityPicker = true
-                }, label: {
-                    Group {
-                        if let summary = screenUseController.activitySelection.summaryText {
-                            Text(summary)
-                        } else {
-                            Text("Select Apps")
-                        }
+            HStack {
+                LabeledContent("Apps") {
+                    if let summary = screenUseController.activitySelection.summaryText {
+                        Text(summary)
+                            .multilineTextAlignment(.trailing)
+                    } else {
+                        Text("No Apps Selected")
                     }
-                    .expandHorizontally()
-                })
-                .buttonStyle(.tertiary)
-                .familyActivityPicker(
-                    headerText: "Bloom will restrict usage of these apps during bedtime",
-                    isPresented: $isShowingFamilyActivityPicker,
-                    selection: $screenUseController.activitySelection
-                )
-
-                if screenUseController.isMonitoring {
-                    Button(action: {
-                        screenUseController.stopMonitoring()
-                    }, label: {
-                        Text("Stop Monitoring")
-                            .expandHorizontally()
-                    })
-                    .tint(.red)
-                    .buttonStyle(.tertiary)
-                } else {
-                    Button(action: {
-                        do {
-                            try screenUseController.startMonitoring()
-                        } catch {
-                            self.error = error
-                        }
-                    }, label: {
-                        Text("Start Monitoring")
-                            .expandHorizontally()
-                    })
-                    .tint(.green)
-                    .buttonStyle(.tertiary)
                 }
+                Image(systemName: "chevron.forward")
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+            }
+            .frame(minHeight: 37)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isShowingFamilyActivityPicker = true
+            }
+            .familyActivityPicker(
+                headerText: "Bloom will restrict usage of these apps during bedtime",
+                isPresented: $isShowingFamilyActivityPicker,
+                selection: $screenUseController.activitySelection
+            )
+
+            if screenUseController.isMonitoring {
+                Button(action: {
+                    screenUseController.stopMonitoring()
+                }, label: {
+                    Text("Stop Monitoring")
+                        .expandHorizontally()
+                })
+                .tint(.red)
+                .buttonStyle(.tertiary)
+            } else {
+                Button(action: {
+                    do {
+                        try screenUseController.startMonitoring()
+                    } catch {
+                        self.error = error
+                    }
+                }, label: {
+                    Text("Start Monitoring")
+                        .expandHorizontally()
+                })
+                .tint(.green)
+                .buttonStyle(.tertiary)
             }
         }
         .tint(.indigo)
     }
-}
 
-private extension SleepProgramConfigurationView {
+    var environmentSection: some View {
+        Section {
+            SleepProgramSectionHeader(
+                title: "Environment",
+                subtitle: "During Bedtime",
+                systemImage: "thermometer.snowflake"
+            )
+            .tint(.remSleep)
 
-    var sleepEnvironmentSummary: String {
-        switch (temperature, sound, light) {
-        case ("Cold", "Quiet", "Dark"):
-            "These are ideal conditions for a good night sleep."
-        case ("Hot", "Loud", _),
-            ("Hot", _, "Bright"),
-            (_, "Loud", "Bright"):
-            "These are not very good conditions for sleep."
-        default:
-            "There's some room for improvement on your sleep environment."
+            Picker(selection: $sleepProgramCoordinator.environmentTemperature) {
+                ForEach(SleepEnvironmentTemperature.allCases) {
+                    Text($0.name)
+                        .tag($0)
+                }
+            } label: {
+                Text("Temperature")
+            }
+
+            Picker(selection: $sleepProgramCoordinator.environmentSound) {
+                ForEach(SleepEnvironmentSound.allCases) {
+                    Text($0.name)
+                        .tag($0)
+                }
+            } label: {
+                Text("Sound")
+            }
+
+            Picker(selection: $sleepProgramCoordinator.environmentDarkness) {
+                ForEach(SleepEnvironmentDarkness.allCases) {
+                    Text($0.name)
+                        .tag($0)
+                }
+            } label: {
+                Text("Darkness")
+            }
         }
     }
 
-    var workoutSummary: String {
-        if workoutDurationScore < 0.5 {
-            "More daily exercise can help with a good night sleep."
-        } else if workoutDurationScore < 1 {
-            "Aiming for a bit more exercise each day will help with your sleep."
-        } else {
-            "You're getting at least 30 minutes of exercise, great job!"
-        }
-    }
-
-    var workoutDurationScore: CGFloat {
-        workoutDurationSumMinutes / 14 / 30
-    }
-
-    var workoutDurationSumMinutes: TimeInterval {
-        viewModel.workoutSummary.reduce(0) { partialResult, workoutSummary in
-            partialResult + workoutSummary.duration
-        } / 60
-    }
-
-    var energyBurned: Double {
-        viewModel.workoutSummary.reduce(0) { partialResult, workoutSummary in
-            partialResult + workoutSummary.energyBurned.value
-        } / 1000
-    }
-
-    func sleepAverage(keyPath: KeyPath<SleepAnalysis, Double>) -> Double {
-        viewModel.sleepAnalyses.average(keyPath: keyPath)
-    }
-}
-
-struct SleepCategoryCell: View {
-    let title: String
-    let color: Color
-    let percent: Double
-    let unit: String
-
-    var body: some View {
-        HStack {
-            Circle()
-                .fill(color)
-                .frame(width: 10, height: 10)
-            Text(title)
-
-            Spacer()
-
-            Text("\(percent, specifier: "%.1f") \(unit)")
+    var stopProgramSection: some View {
+        Section {
+            Button("Stop Program", systemImage: "exclamationmark.octagon.fill", role: .destructive) {
+                confirmationDetails = .init(
+                    title: "Are You Sure?",
+                    message: "This will stop the program, and you'll have to start again from a new benchmark.",
+                    buttons: [
+                        .init(title: "Stop Program", role: .destructive) {
+                            sleepProgramCoordinator.stopProgram()
+                            dismiss()
+                        },
+                        .init(title: "Nevermind", role: .cancel) { }
+                    ]
+                )
+            }
+            .confirmationDialog($confirmationDetails)
+            .foregroundStyle(.red)
         }
     }
 }
