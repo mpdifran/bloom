@@ -15,4 +15,9 @@ extension Calendar {
         }
         return Date.now // We need a better fallback when this fails
     }
+
+    func endOfDay(for date: Date) -> Date {
+        let nextDay = self.date(byAdding: .day, value: 1, to: date)!
+        return startOfDay(for: nextDay)
+    }
 }

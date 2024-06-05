@@ -76,7 +76,7 @@ struct SleepStageAggregate: Codable, Equatable {
 struct WorkoutSummary: Codable, Equatable {
     let activity: String
     let startDate: Date
-    let duration: TimeInterval
+    let durationSeconds: TimeInterval
     let energyBurned: EnergyBurned
 }
 

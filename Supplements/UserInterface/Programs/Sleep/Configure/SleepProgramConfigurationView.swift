@@ -149,6 +149,8 @@ private extension SleepProgramConfigurationView {
             )
             .tint(.remSleep)
 
+            Text("Your sleep environment can play a major factor in your sleep quality. By giving Bloom an idea of how you sleep, it can provide better recommendations.")
+
             Picker(selection: $sleepProgramCoordinator.environmentTemperature) {
                 ForEach(SleepEnvironmentTemperature.allCases) {
                     Text($0.name)

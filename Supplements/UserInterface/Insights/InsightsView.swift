@@ -10,7 +10,6 @@ import AppUI
 
 struct InsightsView: View {
 
-    @State private var isLoading = false
     @State private var presentedNavigationView: AnyView?
     @State private var error: Error?
 
@@ -26,51 +25,27 @@ struct InsightsView: View {
                     }
                 }
 
-//                if isLoading {
-//                    Section {
-//                        VStack {
-//                            ProgressView()
-//                            Text("Loading Insights")
-//                                .bold()
-//                        }
-//                        .zStackAlignment(.center)
-//                    }
-//                } else if let insightsResponse = viewModel.insights {
-//                    content(response: insightsResponse)
-//                } else {
-//                    HStack {
-//                        Spacer()
-//                        Button("Reload Insights", systemImage: "arrow.clockwise") {
-//                            Task { await loadData(force: true) }
-//                        }
-//                        .bold()
-//                        Spacer()
-//                    }
-//                }
+                WorkoutSummaryCell(workoutSummaries: viewModel.workoutSummary)
+
+                TimeInDaylightCell(timeInDaylight: viewModel.timeInDaylight)
             }
             .navigationTitle("Insights")
             .navigationDestination($presentedNavigationView)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Reload", systemImage: "arrow.clockwise") {
-                        Task {
-                            await loadData(force: true)
-                        }
-                    }
-                }
-            }
         }
         .animation(.default, value: healthManager.userInfo)
-        .animation(.default, value: viewModel.insights)
+        .animation(.default, value: viewModel.workoutSummary.count)
         .onChange(of: healthManager.userInfo, { oldValue, newValue in
             guard newValue != nil else {
                 return
             }
-
-            Task {
-                await loadData()
-            }
         })
+        .task {
+            do {
+                try await viewModel.loadData()
+            } catch {
+                print(error)
+            }
+        }
         .tabItem {
             Label("Insights", systemImage: "heart.text.square")
         }
@@ -102,22 +77,6 @@ private extension InsightsView {
         if let insights = response.goalRecommendations {
             GoalInsightsSection(goalInsights: insights)
         }
-    }
-}
-
-private extension InsightsView {
-
-    func loadData(force: Bool = false) async {
-        guard force || viewModel.insights == nil else { return }
-
-        await MainActor.run { isLoading = true }
-        do {
-            try await viewModel.loadData()
-        } catch {
-            print(error)
-            self.error = error
-        }
-        await MainActor.run { isLoading = false }
     }
 }
 

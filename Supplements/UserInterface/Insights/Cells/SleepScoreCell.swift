@@ -48,7 +48,7 @@ private extension SleepScoreCell {
                         .bold()
 
                     Text(lastSleepAnalysis.timeSpanDescription)
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
 

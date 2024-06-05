@@ -294,7 +294,7 @@ private extension SleepProgramInsightsView {
 
     var workoutDurationSumMinutes: TimeInterval {
         viewModel.workoutSummary.reduce(0) { partialResult, workoutSummary in
-            partialResult + workoutSummary.duration
+            partialResult + workoutSummary.durationSeconds
         } / 60
     }
 

@@ -83,7 +83,7 @@ struct SleepTrendChart: View {
             }
             .chartYAxis {
                 AxisMarks(position: .trailing, values: .automatic) { _ in }
-        }
+            }
         }
     }
 }

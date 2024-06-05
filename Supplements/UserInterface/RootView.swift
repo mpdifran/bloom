@@ -33,8 +33,6 @@ struct RootView: View {
                         .tag(Tab.programs)
                     ChatView()
                         .tag(Tab.chat)
-                    PinView()
-                        .tag(Tab.pins)
                     ProfileView()
                         .tag(Tab.profile)
                 }

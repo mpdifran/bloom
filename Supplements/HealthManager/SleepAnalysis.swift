@@ -45,10 +45,7 @@ extension SleepAnalysis {
     }
 
     var timeSpanDescription: String {
-        if Calendar.current.isDate(startDate, inSameDayAs: endDate) {
-            return DateFormatter.monthAndDay.string(from: startDate)
-        }
-        return "\(DateFormatter.monthAndDay.string(from: startDate)) - \(DateFormatter.monthAndDay.string(from: endDate))"
+        DateFormatter.justRelativeDateMedium.string(from: endDate)
     }
 
     var name: String {

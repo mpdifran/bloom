@@ -158,7 +158,7 @@ extension HealthManager {
             QuantityModel(amount: $0, kind: .latestValue, unit: "mL/min·kg", periodDays: nil)
         }
 
-        let timeInDaylight = await fetchTimeInDaylight().map {
+        let timeInDaylight = await fetchAverageTimeInDaylight().map {
             QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
         }
 
@@ -300,7 +300,7 @@ extension HealthManager {
         return nil
     }
 
-    func fetchTimeInDaylight() async -> (Double, Int)? {
+    func fetchAverageTimeInDaylight() async -> (Double, Int)? {
         do {
             return try await healthStore.fetchQuantity(
                 for: .timeInDaylight,
@@ -312,6 +312,25 @@ extension HealthManager {
             print(error)
         }
         return nil
+    }
+
+    func fetchTimeInDaylight(periodDays: Int = 14) async -> [DateQuantitySample] {
+        do {
+            let endDate = Date.now
+            guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {
+                return []
+            }
+
+            return try await healthStore.fetchCollectionQuantity(
+                quantityTypeID: .timeInDaylight,
+                unit: HKUnit.minute(),
+                startDate: startDate,
+                endDate: endDate
+            )
+        } catch {
+            print(error)
+        }
+        return []
     }
 
     func fetchActiveEnergy() async -> (Double, Int)? {

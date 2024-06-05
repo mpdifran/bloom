@@ -186,6 +186,62 @@ extension HKHealthStore {
 
 extension HKHealthStore {
 
+    /// Queries a quantity type and groups values by time interval (specified by the interval parameter). `startDate` and `endDate` are automatically
+    /// shifted to midnight on each day.
+    func fetchCollectionQuantity(
+        quantityTypeID: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        interval: DateComponents = DateComponents(day: 1),
+        startDate: Date,
+        endDate: Date
+    ) async throws -> [DateQuantitySample] {
+        try await withCheckedThrowingContinuation { continuation in
+            guard let quantityType = HKObjectType.quantityType(forIdentifier: quantityTypeID) else {
+                let error = NSError(description: "Quantity type not available")
+                continuation.resume(throwing: error)
+                return
+            }
+
+            let adjustedStartDate = Calendar.current.startOfDay(for: startDate)
+            let adjustedEndDate = Calendar.current.endOfDay(for: endDate)
+
+            let query = HKStatisticsCollectionQuery(
+                quantityType: quantityType,
+                quantitySamplePredicate: nil,
+                options: [.cumulativeSum],
+                anchorDate: adjustedStartDate,
+                intervalComponents: interval
+            )
+
+            query.initialResultsHandler = { query, results, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let results else {
+                    continuation.resume(returning: [])
+                    return
+                }
+
+                var quantities = [DateQuantitySample]()
+                results.enumerateStatistics(from: adjustedStartDate, to: adjustedEndDate) { (statistics, stop) in
+                    if let sum = statistics.sumQuantity() {
+                        let quantity = sum.doubleValue(for: unit)
+
+                        quantities.append(.init(date: statistics.startDate, quantity: quantity))
+                    }
+                }
+                continuation.resume(returning: quantities)
+            }
+
+            execute(query)
+        }
+    }
+}
+
+extension HKHealthStore {
+
     func fetchWorkoutSummaries(recentDays: Int) async throws -> [WorkoutSummary] {
         try await withCheckedThrowingContinuation { continuation in
             let workoutType = HKObjectType.workoutType()
@@ -238,7 +294,7 @@ extension HKHealthStore {
                     return WorkoutSummary(
                         activity: workout.workoutActivityType.name,
                         startDate: workout.startDate,
-                        duration: workout.duration,
+                        durationSeconds: workout.duration,
                         energyBurned: energyBurned
                     )
                 }
@@ -356,6 +412,7 @@ extension HKHealthStore {
                 ) { (query, samples, deletedObjects, anchor, error) in
                     if let error {
                         continuation.finish(throwing: error)
+                        return
                     }
                     if let samples {
                         continuation.yield((samples, anchor))
