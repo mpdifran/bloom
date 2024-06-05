@@ -62,6 +62,7 @@ struct SleepTrendsView: View {
                 }
             }
         }
+        .listStyle(.plain)
         .navigationTitle("Sleep Trends")
         .task {
             await viewModel.loadSleepAnalysis()

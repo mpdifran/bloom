@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import AppUI
 import AppFoundations
 import Charts
 
 struct SleepSummaryView: View {
     let sleepAnalysises: [SleepAnalysis]
 
+    @State private var presentedNavigationView: AnyView?
     @State private var expandedSections = Set<String>()
 
     var body: some View {
@@ -24,11 +26,23 @@ struct SleepSummaryView: View {
             }
 
             Section {
-                NavigationLink {
-                    SleepTrendsView()
-                } label: {
+                HStack {
                     Label("Trends", systemImage: "arrow.down.left.arrow.up.right")
+                    Spacer()
+                    Image(systemName: "chevron.forward")
                 }
+                .padding(.horizontal)
+                .padding(.vertical, 12)
+                .background {
+                    RoundedRectangle(cornerRadius: 13)
+                        .fill(.background.secondary)
+                }
+                .contentShape(RoundedRectangle(cornerRadius: 13))
+                .onTapGesture {
+                    presentedNavigationView = SleepTrendsView().asAny
+                }
+                .padding(.vertical, 4)
+                .standardListSeparatorInset()
             }
 
             ForEach(sleepAnalysises.reversed()) { sleepAnalysis in
@@ -102,8 +116,10 @@ struct SleepSummaryView: View {
                 }
             }
         }
+        .listStyle(.plain)
         .navigationTitle("Sleep Analysis")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination($presentedNavigationView)
         .animation(.default, value: expandedSections)
     }
 }
