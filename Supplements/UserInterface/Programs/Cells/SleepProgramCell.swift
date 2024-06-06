@@ -39,10 +39,12 @@ struct SleepProgramCell: View {
 
             if let startDate = sleepProgramCoordinator.startDate {
                 VStack {
-                    Text("Started \(startDate, formatter: DateFormatter.justRelativeDateMedium)")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .horizontallyCentered()
+                    TimelineView(.periodic(from: .now, by: 7200)) { context in
+                        Text("Started \(startDate, formatter: DateFormatter.justRelativeDateMedium)")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .horizontallyCentered()
+                    }
                     
                     Button(action: {
                         presentedSheet = SleepProgramConfigurationView().asAny

@@ -61,7 +61,9 @@ private extension SleepProgramConfigurationView {
             }
 
             if let startDate = sleepProgramCoordinator.startDate {
-                Text("Started \(startDate, formatter: DateFormatter.justRelativeDateMedium)")
+                TimelineView(.periodic(from: .now, by: 7200)) { context in
+                    Text("Started \(startDate, formatter: DateFormatter.justRelativeDateMedium)")
+                }
             }
         }
         .tint(.coreSleep)
