@@ -11,6 +11,19 @@ struct SleepProgramSectionHeader: View {
     let title: String
     let subtitle: String
     let systemImage: String
+    let isMulticolored: Bool
+
+    init(
+        title: String,
+        subtitle: String,
+        systemImage: String,
+        isMulticolored: Bool = false
+    ) {
+        self.title = title
+        self.subtitle = subtitle
+        self.systemImage = systemImage
+        self.isMulticolored = isMulticolored
+    }
 
     var body: some View {
         HStack {
@@ -29,7 +42,13 @@ struct SleepProgramSectionHeader: View {
 
             Image(systemName: systemImage)
                 .font(.system(size: 40))
-                .foregroundStyle(.tint)
+                .if(isMulticolored) {
+                    $0.foregroundStyle(.white, .tint)
+                }
+                .if(!isMulticolored) {
+                    $0.foregroundStyle(.tint)
+                }
+
         }
         .zStackAlignment(.center)
     }
@@ -43,5 +62,13 @@ struct SleepProgramSectionHeader: View {
             systemImage: "figure.run"
         )
         .tint(.green)
+
+        SleepProgramSectionHeader(
+            title: "Resting Heart Rate",
+            subtitle: "Last Two Weeks",
+            systemImage: "arrow.down.heart.fill",
+            isMulticolored: true
+        )
+        .tint(.pink)
     }
 }

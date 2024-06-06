@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct HeartRateSample: Codable, Equatable {
+struct HeartRateSample: Codable, Equatable, Identifiable {
+    var id: String { "\(date) - \(value) - \(unit)" }
+
     let date: Date
     let value: Double
     let unit: String

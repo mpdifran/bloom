@@ -17,7 +17,6 @@ struct WorkoutSummaryCell: View {
                 subtitle: "Last Two Weeks",
                 systemImage: "figure.run"
             )
-            .tint(.green)
 
             HStack {
                 VStack(alignment: .leading) {
@@ -28,13 +27,13 @@ struct WorkoutSummaryCell: View {
                     .tint(.yellow)
 
                     LabelledMetricView(
-                        label: "Duration",
-                        value: "\(String(format: "%.0f", workoutDurationSumMinutes)) Min"
+                        label: "Total Duration",
+                        value: "\(String(format: "%.0f", workoutDurationSumMinutes)) min"
                     )
                     .tint(.green)
 
                     LabelledMetricView(
-                        label: "Energy Burned",
+                        label: "Total Energy Burned",
                         value: "\(String(format: "%.0f", energyBurned)) CAL"
                     )
                     .tint(.pink)
@@ -52,7 +51,7 @@ struct WorkoutSummaryCell: View {
             HStack {
                 LabelledMetricView(
                     label: "Average",
-                    value: "\(workoutAverageDuration) Min / Day"
+                    value: "\(workoutAverageDuration) min / day"
                 )
                 .tint(.secondary)
 
@@ -60,12 +59,11 @@ struct WorkoutSummaryCell: View {
 
                 LabelledMetricView(
                     label: "Goal",
-                    value: "30 Min / Day"
+                    value: "30 min / day"
                 )
-                .tint(.blue)
             }
-
         }
+        .tint(.green)
     }
 }
 

@@ -89,7 +89,7 @@ extension HKHealthStore {
         previousDays: Int
     ) async throws -> [HKSample] {
         let end = Date.now
-        let start = Calendar.current.date(byAdding: .day, value: -7, to: end)!
+        let start = Calendar.current.date(byAdding: .day, value: -previousDays, to: end)!
 
         return try await fetchSamples(for: quantityTypeID, start: start, end: end)
     }
@@ -99,7 +99,7 @@ extension HKHealthStore {
         previousDays: Int
     ) async throws -> [HKSample] {
         let end = Date.now
-        let start = Calendar.current.date(byAdding: .day, value: -7, to: end)!
+        let start = Calendar.current.date(byAdding: .day, value: -previousDays, to: end)!
 
         return try await fetchSamples(for: sampleType, start: start, end: end)
     }

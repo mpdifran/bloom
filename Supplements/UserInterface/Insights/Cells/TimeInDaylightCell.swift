@@ -19,8 +19,6 @@ struct TimeInDaylightCell: View {
                     subtitle: "Last Two Weeks",
                     systemImage: "sun.max.fill"
                 )
-                .tint(.yellow)
-
 
                 if timeInDaylight.isEmpty {
                     Text("No Data Available")
@@ -38,8 +36,8 @@ struct TimeInDaylightCell: View {
                 Spacer()
                 LabelledMetricView(label: "Goal", value: "30 min / day")
             }
-            .tint(.yellow)
         }
+        .tint(.yellow)
     }
 }
 
@@ -59,6 +57,8 @@ private extension TimeInDaylightCell {
         .frame(height: 120)
         .chartXAxis {
             AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+                AxisGridLine()
+                AxisTick()
                 AxisValueLabel()
             }
         }

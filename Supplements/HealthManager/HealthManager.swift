@@ -270,9 +270,9 @@ extension HealthManager {
         return nil
     }
 
-    func fetchRestingHeartRate() async -> [HeartRateSample] {
+    func fetchRestingHeartRate(period: Int = 7) async -> [HeartRateSample] {
         do {
-            let samples = try await healthStore.fetchSamples(for: .restingHeartRate, previousDays: 7)
+            let samples = try await healthStore.fetchSamples(for: .restingHeartRate, previousDays: period)
 
             return samples.compactMap { sample in
                 sample as? HKQuantitySample
@@ -576,6 +576,8 @@ extension HealthManager {
     }
 }
 
+// MARK: - Sleep
+
 struct SleepStageSum {
     var totalREM: Double = 0
     var totalDeep: Double = 0
@@ -611,6 +613,45 @@ extension HealthManager {
             } catch {
                 print(error)
             }
+        }
+    }
+}
+
+// MARK: - Heart Rate
+
+extension HealthManager {
+
+    func goalRestingHeartRateForUser() -> (Double, Double) {
+        let age = healthStore.age()
+        let sexObject = try? healthStore.biologicalSex()
+
+        if let age {
+            switch (age, sexObject?.biologicalSex) {
+
+            case (18...25, .male):
+                return (60, 70)
+            case (26...35, .male), (18...25, .female):
+                return (70, 75)
+            case (36...45, .male), (26...35, .female):
+                return (75, 80)
+            case (46...55, .male), (36...45, .female):
+                return (80, 85)
+            case (56...65, .male), (46...55, .female):
+                return (85, 90)
+            case (66..., .male), (56...65, .female):
+                return (90, 95)
+            case (66..., .female):
+                return (95, 100)
+            default:
+                break
+            }
+        }
+
+        switch sexObject?.biologicalSex {
+        case .female:
+            return (65, 105)
+        default:
+            return (60, 100)
         }
     }
 }

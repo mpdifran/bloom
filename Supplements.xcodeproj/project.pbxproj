@@ -70,6 +70,7 @@
 		FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96B52C0E4021004DAD2D /* SleepProgramSetupViewModel.swift */; };
 		FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96B72C0E4424004DAD2D /* SleepSegmentSummaryCell.swift */; };
 		FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96B92C0E4839004DAD2D /* SleepSegmentSummary.swift */; };
+		FF21AB9D2C12036A004D0D82 /* RestingHeartRateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF21AB9C2C12036A004D0D82 /* RestingHeartRateCell.swift */; };
 		FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
@@ -304,6 +305,7 @@
 		FF1E96B52C0E4021004DAD2D /* SleepProgramSetupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramSetupViewModel.swift; sourceTree = "<group>"; };
 		FF1E96B72C0E4424004DAD2D /* SleepSegmentSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSegmentSummaryCell.swift; sourceTree = "<group>"; };
 		FF1E96B92C0E4839004DAD2D /* SleepSegmentSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSegmentSummary.swift; sourceTree = "<group>"; };
+		FF21AB9C2C12036A004D0D82 /* RestingHeartRateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestingHeartRateCell.swift; sourceTree = "<group>"; };
 		FF23333E2BD855ED007A5CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkoutActivityType+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
@@ -505,6 +507,7 @@
 				FF0404C82C0262D4009FDC4E /* SleepScoreCell.swift */,
 				FF1705282C10DC67000D4B3D /* WorkoutSummaryCell.swift */,
 				FF17052A2C10E1E1000D4B3D /* TimeInDaylightCell.swift */,
+				FF21AB9C2C12036A004D0D82 /* RestingHeartRateCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1363,6 +1366,7 @@
 				FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */,
 				FF1E96B02C0E3F83004DAD2D /* SleepProgramSetupView.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
+				FF21AB9D2C12036A004D0D82 /* RestingHeartRateCell.swift in Sources */,
 				FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */,
 				FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */,
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
