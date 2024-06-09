@@ -126,9 +126,9 @@ private extension SleepScoreCell {
         .animation(.easeInOut(duration: 1.2), value: deepSleepPercent)
         .onAppear {
             Delay(1500) {
-                remSleepPercent = lastSleepAnalysis.remSleepPercent / 0.25
-                coreSleepPercent = lastSleepAnalysis.coreSleepPercent / 0.5
-                deepSleepPercent = lastSleepAnalysis.deepSleepPercent / 0.25
+                remSleepPercent = lastSleepAnalysis.remSleepPercent / .remSleepPercent
+                coreSleepPercent = lastSleepAnalysis.coreSleepPercent / .coreSleepPercent
+                deepSleepPercent = lastSleepAnalysis.deepSleepPercent / .deepSleepPercent
             }
         }
         .alert(error: $error)
