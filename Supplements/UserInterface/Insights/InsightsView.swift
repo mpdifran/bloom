@@ -30,6 +30,8 @@ struct InsightsView: View {
                 TimeInDaylightCell(timeInDaylight: viewModel.timeInDaylight)
 
                 RestingHeartRateCell(heartRateSamples: viewModel.restingHeartRate)
+
+                MeditationMinutesCell(meditationMinutes: viewModel.meditationMinutes)
             }
             .navigationTitle("Insights")
             .navigationDestination($presentedNavigationView)

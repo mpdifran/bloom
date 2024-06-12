@@ -10,10 +10,6 @@ import HealthKit
 
 extension HKCategorySample {
 
-    var timeInterval: TimeInterval {
-        endDate.timeIntervalSince(startDate)
-    }
-
     open override var debugDescription: String {
         guard let category = HKCategoryValueSleepAnalysis(rawValue: value) else {
             return "Unknown Sleep Category"

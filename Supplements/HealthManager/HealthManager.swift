@@ -174,7 +174,7 @@ extension HealthManager {
 
         let workoutSummaries = await fetchWorkoutSummaryLastTwoWeeks()
 
-        let meditationMinutes = await fetchMeditationMinutes().map {
+        let meditationMinutes = await fetchAverageMeditationMinutes().map {
             QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
         }
 
@@ -370,20 +370,54 @@ extension HealthManager {
         return nil
     }
 
-    func fetchMeditationMinutes() async -> (Double, Int)? {
+    func fetchAverageMeditationMinutes(previousDays: Int = 7) async -> (Double, Int)? {
         do {
             let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
-            let samples = try await healthStore.fetchSamples(for: meditationType, previousDays: 7)
+            let samples = try await healthStore.fetchSamples(for: meditationType, previousDays: previousDays)
 
             let meditationMinutes = samples.reduce(0) { (total, sample) -> Double in
                 total + sample.endDate.timeIntervalSince(sample.startDate) / 60
             }
 
-            return (meditationMinutes / 7, 7)
+            return (meditationMinutes / Double(previousDays), previousDays)
         } catch {
             print(error)
         }
         return nil
+    }
+
+    func fetchMeditationMinutes(periodDays: Int = 14) async -> [DateQuantitySample] {
+        do {
+            let endDate = Date.now
+            guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {
+                return []
+            }
+
+            let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
+
+            let samples = try await healthStore.fetchSamples(for: meditationType, start: startDate, end: endDate)
+
+            var quantitySamples = [DateQuantitySample]()
+
+            for sample in samples {
+                if
+                    let lastSample = quantitySamples.last, 
+                    Calendar.current.isDate(lastSample.date, equalTo: sample.endDate, toGranularity: .day) 
+                {
+                    quantitySamples[quantitySamples.count - 1].quantity += sample.timeInterval / 60
+                    continue
+                }
+
+                let startOfDay = Calendar.current.startOfDay(for: sample.endDate)
+                let newSample = DateQuantitySample(date: startOfDay, quantity: sample.timeInterval / 60)
+                quantitySamples.append(newSample)
+            }
+
+            return quantitySamples
+        } catch {
+            print(error)
+        }
+        return []
     }
 
     func fetchDailySleepAnalysis(period: Int = 7) async -> [SleepAnalysis] {

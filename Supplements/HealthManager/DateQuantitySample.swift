@@ -11,5 +11,5 @@ struct DateQuantitySample: Identifiable {
     var id: String { "\(date)-\(quantity)" }
 
     let date: Date
-    let quantity: Double
+    var quantity: Double
 }

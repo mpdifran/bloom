@@ -13,6 +13,7 @@ final class InsightsViewModel: ObservableObject {
     @Published var workoutSummary = [WorkoutSummary]()
     @Published var timeInDaylight = [DateQuantitySample]()
     @Published var restingHeartRate = [HeartRateSample]()
+    @Published var meditationMinutes = [DateQuantitySample]()
 
     private init() { }
 }
@@ -23,11 +24,13 @@ extension InsightsViewModel {
         let workoutSummary = await HealthManager.shared.fetchWorkoutSummaryLastTwoWeeks()
         let timeInDaylight = await HealthManager.shared.fetchTimeInDaylight()
         let restingHeartRate = await HealthManager.shared.fetchRestingHeartRate(period: 14)
+        let meditationMinutes = await HealthManager.shared.fetchMeditationMinutes(periodDays: 14)
 
         await MainActor.run {
             self.workoutSummary = workoutSummary
             self.timeInDaylight = timeInDaylight
             self.restingHeartRate = restingHeartRate
+            self.meditationMinutes = meditationMinutes
         }
     }
 
