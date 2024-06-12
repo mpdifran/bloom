@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppUI",
       "state" : {
-        "revision" : "499283e9cf009d64f47496d3cafc0210fe63ecfe",
-        "version" : "0.4.4"
+        "revision" : "f5eab9ed17dcac9f88afd10a3be4eee9b4e81c0a",
+        "version" : "0.4.6"
       }
     },
     {

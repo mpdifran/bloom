@@ -10,15 +10,50 @@ import AppUI
 
 struct InsightsView: View {
 
+    @State private var presentedSheet: AnyView?
     @State private var presentedNavigationView: AnyView?
     @State private var error: Error?
 
     @ObservedObject private var viewModel = InsightsViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
+    @State private var iconColor = Color.yellow
+    @State private var gradientColors: [Color] = [.orange, .red, .pink]
+
+    let timer = Timer.publish(every: 1, tolerance: 0.1, on: .main, in: .common).autoconnect()
+
     var body: some View {
         NavigationStack {
             List {
+                HStack {
+                    HStack {
+                        Image(systemName: "sunrise.fill")
+                            .font(.title2)
+                            .bold()
+                            .foregroundStyle(iconColor)
+
+                        Text("Good Morning Survey")
+                            .font(.title2)
+                            .fontDesign(.rounded)
+                            .bold()
+                    }
+                    .foregroundStyle(LinearGradient(colors: gradientColors, startPoint: .leading, endPoint: .trailing))
+                    .animation(.linear(duration: 1), value: gradientColors)
+                    .animation(.linear(duration: 1), value: iconColor)
+                    .onReceive(timer) { time in
+                        shiftGradientColors()
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.forward")
+                        .foregroundStyle(.secondary)
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    presentedSheet = GoodMorningView().asAny
+                }
+
                 if let sleepAnalysis = healthManager.userInfo?.sleepAnalysis {
                     SleepScoreCell(sleepAnalysis: sleepAnalysis) {
                         presentedNavigationView = SleepSummaryView(sleepAnalysises: sleepAnalysis).asAny
@@ -35,6 +70,7 @@ struct InsightsView: View {
             }
             .navigationTitle("Insights")
             .navigationDestination($presentedNavigationView)
+            .sheet($presentedSheet)
         }
         .animation(.default, value: healthManager.userInfo)
         .animation(.default, value: viewModel.workoutSummary.count)
@@ -81,6 +117,11 @@ private extension InsightsView {
         if let insights = response.goalRecommendations {
             GoalInsightsSection(goalInsights: insights)
         }
+    }
+
+    func shiftGradientColors() {
+        gradientColors.insert(iconColor, at: 0)
+        iconColor = gradientColors.removeLast()
     }
 }
 

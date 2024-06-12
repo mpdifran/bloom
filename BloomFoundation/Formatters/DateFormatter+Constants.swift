@@ -27,6 +27,15 @@ public extension DateFormatter {
         return dateFormatter
     }()
 
+    static var justDateLong: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+
+        return dateFormatter
+    }()
+
     static var justRelativeDateMedium: DateFormatter = {
         let dateFormatter = DateFormatter()
 

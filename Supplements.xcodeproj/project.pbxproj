@@ -117,6 +117,8 @@
 		FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */; };
 		FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */; };
 		FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB691072C19F6CF00BEC0D4 /* MeditationMinutesCell.swift */; };
+		FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */; };
+		FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */; };
 		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
 		FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */; };
@@ -357,6 +359,8 @@
 		FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthKitView.swift; sourceTree = "<group>"; };
 		FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKSample+TimeInterval.swift"; sourceTree = "<group>"; };
 		FFB691072C19F6CF00BEC0D4 /* MeditationMinutesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationMinutesCell.swift; sourceTree = "<group>"; };
+		FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoodMorningView.swift; sourceTree = "<group>"; };
+		FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomCell.swift; sourceTree = "<group>"; };
 		FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsView.swift; sourceTree = "<group>"; };
 		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
 		FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendChart.swift; sourceTree = "<group>"; };
@@ -904,6 +908,7 @@
 				FFB444942BED41E600486AD7 /* Onboarding */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
+				FFB691092C19FA6800BEC0D4 /* GoodMorning */,
 				FFF61AF42BED554700926042 /* Chat */,
 				FF8B8B402C002BD500BA2128 /* Pins */,
 				FFF61AF52BED555100926042 /* Goals */,
@@ -926,6 +931,15 @@
 				FFF61B0E2BEE800300926042 /* Goals */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		FFB691092C19FA6800BEC0D4 /* GoodMorning */ = {
+			isa = PBXGroup;
+			children = (
+				FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */,
+				FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */,
+			);
+			path = GoodMorning;
 			sourceTree = "<group>";
 		};
 		FFDDE2872C0A058500BFDEF5 /* ChartUI */ = {
@@ -1375,6 +1389,7 @@
 				FF21AB9D2C12036A004D0D82 /* RestingHeartRateCell.swift in Sources */,
 				FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */,
 				FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */,
+				FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */,
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
 				FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */,
@@ -1470,6 +1485,7 @@
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
 				FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */,
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
+				FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
