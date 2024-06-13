@@ -20,4 +20,24 @@ extension Calendar {
         let nextDay = self.date(byAdding: .day, value: 1, to: date)!
         return startOfDay(for: nextDay)
     }
+
+    func closestPastDateMatchingHourAndMinute(
+        components: DateComponents
+    ) -> Date? {
+        let referenceDate = Date.now
+        var currentDateComponents = dateComponents([.year, .month, .day], from: referenceDate)
+
+        currentDateComponents.hour = components.hour
+        currentDateComponents.minute = components.minute
+        currentDateComponents.second = 0
+
+        if let potentialDate = date(from: currentDateComponents) {
+            if potentialDate <= referenceDate {
+                return potentialDate
+            } else if let previousDay = date(byAdding: .day, value: -1, to: potentialDate) {
+                return previousDay
+            }
+        }
+        return nil
+    }
 }

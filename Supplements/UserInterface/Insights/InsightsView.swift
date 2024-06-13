@@ -67,6 +67,8 @@ struct InsightsView: View {
                 RestingHeartRateCell(heartRateSamples: viewModel.restingHeartRate)
 
                 MeditationMinutesCell(meditationMinutes: viewModel.meditationMinutes)
+
+                ScreenUsageReportCell()
             }
             .navigationTitle("Insights")
             .navigationDestination($presentedNavigationView)
