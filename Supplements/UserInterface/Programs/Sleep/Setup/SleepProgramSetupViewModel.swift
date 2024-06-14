@@ -6,23 +6,30 @@
 //
 
 import SwiftUI
+import Combine
 
 final class SleepProgramSetupViewModel: ObservableObject {
     @Published var sleepAnalyses = [SleepAnalysis]()
     @Published var segmentSummary = [SleepSegmentSummary]()
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        HealthManager.shared.$sleepAnalysis30Days
+            .map { $0 ?? [] }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$sleepAnalyses)
+
+        $sleepAnalyses
+            .map { [weak self] sleepAnalysis in
+                self?.generateSummaries(sleepAnalyses: sleepAnalysis) ?? []
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$segmentSummary)
+    }
 }
 
 extension SleepProgramSetupViewModel {
-
-    func loadData() async {
-        let sleepAnalyses = await HealthManager.shared.fetchDailySleepAnalysis(period: 28)
-        let segmentSummary = generateSummaries(sleepAnalyses: sleepAnalyses)
-
-        await MainActor.run {
-            self.sleepAnalyses = sleepAnalyses
-            self.segmentSummary = segmentSummary
-        }
-    }
 
     func generateSummaries(sleepAnalyses: [SleepAnalysis]) -> [SleepSegmentSummary] {
         [

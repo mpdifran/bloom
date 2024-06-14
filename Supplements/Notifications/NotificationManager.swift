@@ -8,6 +8,12 @@
 import Foundation
 import UserNotifications
 
+extension String {
+    enum NotificationID {
+        static let goodMorning = "good-morning"
+    }
+}
+
 final class NotificationManager {
     static let shared = NotificationManager()
 
@@ -32,24 +38,31 @@ extension NotificationManager {
 
         try? await UNUserNotificationCenter.current().add(
             UNNotificationRequest(
-                identifier: "chat-message",
+                identifier: UUID().uuidString,
                 content: content,
                 trigger: nil
             )
         )
     }
 
-    func sendGoodMorningNotification() async {
+    func sendGoodMorningNotification(delay: TimeInterval? = nil) async {
         let content = UNMutableNotificationContent()
         content.title = "Good Morning!"
         content.subtitle = "Check out how your sleep was last night."
         content.sound = .default
 
+        let trigger: UNNotificationTrigger?
+        if let delay {
+            trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
+        } else {
+            trigger = nil
+        }
+
         try? await UNUserNotificationCenter.current().add(
             UNNotificationRequest(
-                identifier: UUID().uuidString,//"good-morning",
+                identifier: .NotificationID.goodMorning,
                 content: content,
-                trigger: nil
+                trigger: trigger
             )
         )
     }

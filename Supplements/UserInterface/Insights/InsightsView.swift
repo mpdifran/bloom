@@ -54,9 +54,9 @@ struct InsightsView: View {
                     presentedSheet = GoodMorningView().asAny
                 }
 
-                if let sleepAnalysis = healthManager.userInfo?.sleepAnalysis {
-                    SleepScoreCell(sleepAnalysis: sleepAnalysis) {
-                        presentedNavigationView = SleepSummaryView(sleepAnalysises: sleepAnalysis).asAny
+                if viewModel.sleepAnalysis.isNotEmpty {
+                    SleepScoreCell(sleepAnalysis: viewModel.sleepAnalysis) {
+                        presentedNavigationView = SleepSummaryView().asAny
                     }
                 }
 
@@ -74,7 +74,7 @@ struct InsightsView: View {
             .navigationDestination($presentedNavigationView)
             .sheet($presentedSheet)
         }
-        .animation(.default, value: healthManager.userInfo)
+        .animation(.default, value: viewModel.sleepAnalysis)
         .animation(.default, value: viewModel.workoutSummary.count)
         .onChange(of: healthManager.userInfo, { oldValue, newValue in
             guard newValue != nil else {

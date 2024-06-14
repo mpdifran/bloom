@@ -376,11 +376,13 @@ extension HKHealthStore {
     }
 }
 
+extension NSPredicate: @unchecked Sendable { }
+
 extension HKHealthStore {
 
-    func enableImmediateBackgrounDelivery(sampleType: HKSampleType) async throws -> Bool {
+    func enableImmediateBackgrounDelivery(sampleType: HKSampleType, frequency: HKUpdateFrequency = .immediate) async throws -> Bool {
         try await withCheckedThrowingContinuation { continuation in
-            enableBackgroundDelivery(for: sampleType, frequency: .immediate) { success, error in
+            enableBackgroundDelivery(for: sampleType, frequency: frequency) { success, error in
                 if let error {
                     continuation.resume(throwing: error)
                 } else {
@@ -390,11 +392,16 @@ extension HKHealthStore {
         }
     }
 
-    func observeChanges(sampleType: HKSampleType, anchor: HKQueryAnchor?) -> AsyncThrowingStream<([HKSample], HKQueryAnchor?), Error> {
+    func observeChanges(
+        sampleType: HKSampleType,
+        predicate: NSPredicate? = nil,
+        frequency: HKUpdateFrequency = .immediate,
+        performQuery: @escaping () async throws -> [HKSample]
+    ) -> AsyncThrowingStream<[HKSample], Error> {
         AsyncThrowingStream { continuation in
             Task {
                 do {
-                    guard try await enableImmediateBackgrounDelivery(sampleType: sampleType) else {
+                    guard try await enableImmediateBackgrounDelivery(sampleType: sampleType, frequency: frequency) else {
                         continuation.finish()
                         return
                     }
@@ -402,23 +409,24 @@ extension HKHealthStore {
                     continuation.finish(throwing: error)
                 }
 
-                print("Starting observation of \(sampleType)")
-
-                let query = HKAnchoredObjectQuery(
-                    type: sampleType,
-                    predicate: nil,
-                    anchor: anchor,
-                    limit: HKObjectQueryNoLimit
-                ) { (query, samples, deletedObjects, anchor, error) in
+                let observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { (query, completionHandler, error) in
                     if let error {
                         continuation.finish(throwing: error)
                         return
                     }
-                    if let samples {
-                        continuation.yield((samples, anchor))
+                    
+                    Task {
+                        do {
+                            let samples = try await performQuery()
+                            continuation.yield(samples)
+                        } catch {
+                            continuation.finish(throwing: error)
+                        }
+                        completionHandler()
                     }
                 }
-                execute(query)
+
+                execute(observerQuery)
             }
         }
     }

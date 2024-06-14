@@ -11,7 +11,7 @@ import AppFoundations
 import Charts
 
 struct SleepSummaryView: View {
-    let sleepAnalysises: [SleepAnalysis]
+    @ObservedObject private var viewModel = SleepSummaryViewModel.shared
 
     @State private var presentedNavigationView: AnyView?
     @State private var expandedSections = Set<String>()
@@ -45,7 +45,7 @@ struct SleepSummaryView: View {
                 .standardListSeparatorInset()
             }
 
-            ForEach(sleepAnalysises.reversed()) { sleepAnalysis in
+            ForEach(viewModel.sleepAnalyses.reversed()) { sleepAnalysis in
                 Section {
                     HStack {
                         VStack(alignment: .leading) {
@@ -127,11 +127,11 @@ struct SleepSummaryView: View {
 private extension SleepSummaryView {
 
     var earliestStartDate: Date? {
-        sleepAnalysises.min(by: { $0.startDate < $1.startDate })?.beginningOfStartDate
+        viewModel.sleepAnalyses.min(by: { $0.startDate < $1.startDate })?.beginningOfStartDate
     }
 
     var latestEndDate: Date? {
-        sleepAnalysises.min(by: { $0.endDate > $1.endDate })?.endOfEndDate
+        viewModel.sleepAnalyses.min(by: { $0.endDate > $1.endDate })?.endOfEndDate
     }
 
     var chartView: some View {
@@ -146,7 +146,7 @@ private extension SleepSummaryView {
                 .foregroundStyle(.green.opacity(0.3))
             }
 
-            ForEach(sleepAnalysises) { sleepAnalysis in
+            ForEach(viewModel.sleepAnalyses) { sleepAnalysis in
                 BarMark(
                     x: .value("Date", sleepAnalysis.endDate, unit: .day),
                     y: .value("Value", sleepAnalysis.deepSleepHours)
@@ -173,7 +173,7 @@ private extension SleepSummaryView {
                 .cornerRadius(5)
             }
 
-            ForEach(sleepAnalysises) { sleepAnalysis in
+            ForEach(viewModel.sleepAnalyses) { sleepAnalysis in
                 LineMark(
                     x: .value("Date", sleepAnalysis.endDate, unit: .day),
                     y: .value("Score", sleepAnalysis.overallScore)
@@ -274,17 +274,6 @@ private extension SleepSummaryView {
 
 #Preview {
     NavigationStack {
-        SleepSummaryView(
-            sleepAnalysises: [
-                .init(
-                    startDate: Date().addingTimeInterval(-25200),
-                    endDate: Date(),
-                    deepSleepMinutes: 45.2,
-                    coreSleepMinutes: 180,
-                    remSleepMinutes: 93,
-                    awakeSleepMinutes: 32
-                )
-            ]
-        )
+        SleepSummaryView()
     }
 }

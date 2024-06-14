@@ -47,13 +47,18 @@ private extension RestingHeartRateCell {
     var chart: some View {
         Chart {
             if let earliestDate, let latestDate {
-                RectangleMark(
+                RuleMark(
                     xStart: .value("Start", earliestDate),
                     xEnd: .value("End", latestDate),
-                    yStart: .value("Start", minHeartRate),
-                    yEnd: .value("End", maxHeartRate)
+                    y: .value("Max", maxHeartRate)
                 )
-                .foregroundStyle(.pink.opacity(0.3))
+                .foregroundStyle(.pink.opacity(0.5))
+//                RectangleMark(
+//                    xStart: .value("Start", earliestDate),
+//                    xEnd: .value("End", latestDate),
+//                    yStart: .value("Start", minHeartRate),
+//                    yEnd: .value("End", maxHeartRate)
+//                )
             }
 
             ForEach(heartRateSamples) { dataPoint in

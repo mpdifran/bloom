@@ -10,12 +10,18 @@ import Foundation
 final class InsightsViewModel: ObservableObject {
     static let shared = InsightsViewModel()
 
+    @Published var sleepAnalysis = [SleepAnalysis]()
     @Published var workoutSummary = [WorkoutSummary]()
     @Published var timeInDaylight = [DateQuantitySample]()
     @Published var restingHeartRate = [HeartRateSample]()
     @Published var meditationMinutes = [DateQuantitySample]()
 
-    private init() { }
+    private init() { 
+        HealthManager.shared.$sleepAnalysis7Days
+            .map { $0 ?? [] }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$sleepAnalysis)
+    }
 }
 
 extension InsightsViewModel {

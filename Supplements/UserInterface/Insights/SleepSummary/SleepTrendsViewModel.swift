@@ -9,15 +9,11 @@ import Foundation
 
 final class SleepTrendsViewModel: ObservableObject {
     @Published var sleepAnalyses = [SleepAnalysis]()
-}
 
-extension SleepTrendsViewModel {
-
-    func loadSleepAnalysis() async {
-        let sleepAnalyses = await HealthManager.shared.fetchDailySleepAnalysis(period: 30)
-
-        await MainActor.run {
-            self.sleepAnalyses = sleepAnalyses
-        }
+    init() {
+        HealthManager.shared.$sleepAnalysis30Days
+            .map { $0 ?? [] }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$sleepAnalyses)
     }
 }

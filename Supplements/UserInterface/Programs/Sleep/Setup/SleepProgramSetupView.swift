@@ -72,9 +72,6 @@ struct SleepProgramSetupView: View {
                 .safeAreaPadding(.top, 0)
                 .frame(height: 0)
         }
-        .task {
-            await viewModel.loadData()
-        }
         .presentationCompactAdaptation(.fullScreenCover)
         .alert(alertDetails: $alertDetails)
     }
