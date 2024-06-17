@@ -20,14 +20,8 @@ struct MeditationMinutesCell: View {
                     systemImage: "figure.mind.and.body"
                 )
 
-                if meditationMinutes.isEmpty {
-                    Text("No Data Available")
-                        .foregroundStyle(.secondary)
-                        .frame(minHeight: 80)
-                } else {
-                    chart
-                        .padding(.bottom)
-                }
+                chart
+                    .padding(.bottom)
             }
 
             HStack {

@@ -81,13 +81,6 @@ struct InsightsView: View {
                 return
             }
         })
-        .task {
-            do {
-                try await viewModel.loadData()
-            } catch {
-                print(error)
-            }
-        }
         .tabItem {
             Label("Insights", systemImage: "heart.text.square")
         }

@@ -6,14 +6,28 @@
 //
 
 import SwiftUI
+import OpenAPIClient
 
 final class NetworkRequester {
     static let shared = NetworkRequester()
 
-    private init() { }
+    private let queue = DispatchQueue(label: "NetworkRequester")
+
+    private init() {
+        OpenAPIClientAPI.basePath = "https://shep-test-7d27e987b8ef.herokuapp.com/api"
+        OpenAPIClientAPI.apiResponseQueue = queue
+    }
 }
 
 extension NetworkRequester {
+
+    func assistant() async throws -> PostAssistantResponse {
+        let request = PostAssistantRequest(
+            testInput: "Yo",
+            marksName: "Mark"
+        )
+        return try await AssistantAPI.postAssistantRequest(postAssistantRequest: request)
+    }
 
     func sendQuery(
         userInfo: UserInfoModel?,

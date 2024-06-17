@@ -22,7 +22,7 @@ final class HealthManager: ObservableObject {
     @Published var sleepAnalysis30Days: [SleepAnalysis]?
     @Published var userInfo: UserInfoModel?
 
-    private let healthStore = HKHealthStore()
+    let healthStore = HKHealthStore()
     private let throttler = Throttler(timeInterval: 600)
 
     private var sleepDataListenerTask: Task<Void, Error>? = nil
@@ -44,7 +44,7 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.heartRateVariabilitySDNN),
         HKObjectType.quantityType(forIdentifier: .restingHeartRate)!,
         HKObjectType.quantityType(forIdentifier: .vo2Max)!,
-        HKObjectType.quantityType(forIdentifier: .timeInDaylight)!,
+        HKQuantityType(.timeInDaylight),
         HKCategoryType(.sleepAnalysis),
         HKQuantityType(.activeEnergyBurned),
         HKQuantityType(.bodyFatPercentage),
@@ -405,22 +405,19 @@ extension HealthManager {
     func observeSleepData() {
         guard sleepDataListenerTask == nil else { return }
 
-        guard let sampleType = HKSampleType.categoryType(forIdentifier: .sleepAnalysis) else {
-            print("Cannot create HKSampleType for sleep")
-            return
-        }
-        
         sleepDataListenerTask = Task.detached { [weak self, healthStore] in
             do {
-                for try await samples in healthStore.observeChanges(sampleType: sampleType, performQuery: {
+                for try await samples in healthStore.observeAsyncChanges(sampleType: HKCategoryType(.sleepAnalysis), performQuery: {
                     try await self?.fetchSleepSamples(period: 30) ?? []
                 }) {
-                    if self?.sleepAnalysis7Days != nil {
+                    let previousSleepAnalysis = self?.sleepAnalysis30Days
+
+                    await self?.publishSleepAnalysis(samples: samples)
+
+                    if self?.sleepAnalysis30Days != previousSleepAnalysis && previousSleepAnalysis != nil {
                         // We've triggered from new data, not from app launch
                         await NotificationManager.shared.sendGoodMorningNotification(delay: 60 * 5)
                     }
-
-                    await self?.publishSleepAnalysis(samples: samples)
                 }
             } catch {
                 print(error)

@@ -20,14 +20,9 @@ struct TimeInDaylightCell: View {
                     systemImage: "sun.max.fill"
                 )
 
-                if timeInDaylight.isEmpty {
-                    Text("No Data Available")
-                        .foregroundStyle(.secondary)
-                        .frame(minHeight: 80)
-                } else {
-                    chart
-                        .padding(.bottom)
-                }
+
+                chart
+                    .padding(.bottom)
             }
 
             HStack {

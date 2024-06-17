@@ -21,14 +21,8 @@ struct RestingHeartRateCell: View {
                     isMulticolored: true
                 )
 
-                if heartRateSamples.isEmpty {
-                    Text("No Data Available")
-                        .foregroundStyle(.secondary)
-                        .frame(minHeight: 80)
-                } else {
-                    chart
-                        .padding(.bottom)
-                }
+                chart
+                    .padding(.bottom)
             }
 
             HStack {

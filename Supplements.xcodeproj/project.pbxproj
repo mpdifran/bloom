@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -156,6 +156,7 @@
 		FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */; };
 		FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B712BF1592C00926042 /* AskResponseModel.swift */; };
 		FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B742BF15DD000926042 /* SoundPlayer.swift */; };
+		FFF87F8D2C1FB83A0053280E /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = FFF87F8C2C1FB83A0053280E /* OpenAPIClient */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -486,6 +487,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFF87F8D2C1FB83A0053280E /* OpenAPIClient in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
 				FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */,
 				FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */,
@@ -1265,6 +1267,7 @@
 				FFD8C4D22BD1AC5E001E8D42 /* AppUI */,
 				FFF61AEA2BED52A900926042 /* AppFoundations */,
 				FF8B8B202BFD1EF500BA2128 /* Algorithms */,
+				FFF87F8C2C1FB83A0053280E /* OpenAPIClient */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -1339,6 +1342,7 @@
 				FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */,
 				FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */,
 				FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				FFF87F8B2C1FB83A0053280E /* XCLocalSwiftPackageReference "bloom-swift-api" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -2347,6 +2351,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		FFF87F8B2C1FB83A0053280E /* XCLocalSwiftPackageReference "bloom-swift-api" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "bloom-swift-api";
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -2389,6 +2400,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
 			productName = AppFoundations;
+		};
+		FFF87F8C2C1FB83A0053280E /* OpenAPIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenAPIClient;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

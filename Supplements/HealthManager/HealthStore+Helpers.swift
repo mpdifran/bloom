@@ -392,7 +392,7 @@ extension HKHealthStore {
         }
     }
 
-    func observeChanges(
+    func observeAsyncChanges(
         sampleType: HKSampleType,
         predicate: NSPredicate? = nil,
         frequency: HKUpdateFrequency = .immediate,
@@ -428,6 +428,42 @@ extension HKHealthStore {
 
                 execute(observerQuery)
             }
+        }
+    }
+
+    func observeChanges(
+        sampleType: HKSampleType,
+        predicate: NSPredicate? = nil,
+        frequency: HKUpdateFrequency = .immediate,
+        performQuery: @escaping () async throws -> Void
+    ) throws {
+        Task {
+            do {
+                guard try await enableImmediateBackgrounDelivery(sampleType: sampleType, frequency: frequency) else {
+                    return
+                }
+            } catch {
+                throw error
+            }
+
+            let observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { (query, completionHandler, error) in
+                if let error {
+                    print(error)
+                    completionHandler()
+                    return
+                }
+
+                Task {
+                    do {
+                        try await performQuery()
+                    } catch {
+                        print(error)
+                    }
+                    completionHandler()
+                }
+            }
+
+            execute(observerQuery)
         }
     }
 }

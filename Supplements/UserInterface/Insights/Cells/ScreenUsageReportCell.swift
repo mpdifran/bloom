@@ -52,7 +52,7 @@ private extension ScreenUsageReportCell {
     var usageReport: some View {
         if let filter {
             DeviceActivityReport(.bedtimeActivity, filter: filter)
-                .frame(height: 140)
+                .frame(height: 300)
         }
     }
 }

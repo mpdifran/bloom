@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import HealthKit
 
 final class InsightsViewModel: ObservableObject {
     static let shared = InsightsViewModel()
@@ -16,15 +17,59 @@ final class InsightsViewModel: ObservableObject {
     @Published var restingHeartRate = [HeartRateSample]()
     @Published var meditationMinutes = [DateQuantitySample]()
 
-    private init() { 
+    private init() {
         HealthManager.shared.$sleepAnalysis7Days
             .map { $0 ?? [] }
             .receive(on: DispatchQueue.main)
             .assign(to: &$sleepAnalysis)
+        observeData()
     }
 }
 
 extension InsightsViewModel {
+
+    func observeData() {
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.timeInDaylight), frequency: .hourly) {
+                let timeInDaylight = await HealthManager.shared.fetchTimeInDaylight()
+                await MainActor.run {
+                    self.timeInDaylight = timeInDaylight
+                }
+            }
+        } catch {
+            print(error)
+        }
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKObjectType.workoutType(), frequency: .hourly) {
+                let workoutSummary = await HealthManager.shared.fetchWorkoutSummaryLastTwoWeeks()
+                await MainActor.run {
+                    self.workoutSummary = workoutSummary
+                }
+            }
+        } catch {
+            print(error)
+        }
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate), frequency: .hourly) {
+                let restingHeartRate = await HealthManager.shared.fetchRestingHeartRate(period: 14)
+                await MainActor.run {
+                    self.restingHeartRate = restingHeartRate
+                }
+            }
+        } catch {
+            print(error)
+        }
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKCategoryType(.mindfulSession), frequency: .hourly) {
+                let meditationMinutes = await HealthManager.shared.fetchMeditationMinutes(periodDays: 14)
+                await MainActor.run {
+                    self.meditationMinutes = meditationMinutes
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
 
     func loadData() async throws {
         let workoutSummary = await HealthManager.shared.fetchWorkoutSummaryLastTwoWeeks()
@@ -39,28 +84,4 @@ extension InsightsViewModel {
             self.meditationMinutes = meditationMinutes
         }
     }
-
-//    func loadData() async throws {
-//        await MainActor.run {
-//            self.insights = nil
-//        }
-//
-//        let userInfo = HealthManager.shared.userInfo
-//        let supplements = ProfileViewModel.shared.userSupplements
-//        let goals = ProfileViewModel.shared.userGoals
-//        let learnedUserFacts = ProfileViewModel.shared.userFacts
-//
-//        let request = InsightsRequest(
-//            userInfo: userInfo,
-//            currentSupplements: supplements,
-//            currentGoals: goals,
-//            learnedUserFacts: learnedUserFacts
-//        )
-//
-//        let response = try await NetworkRequester.shared.fetchInsights(request: request)
-//
-//        await MainActor.run {
-//            self.insights = response
-//        }
-//    }
 }
