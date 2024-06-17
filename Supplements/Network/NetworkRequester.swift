@@ -22,9 +22,8 @@ final class NetworkRequester {
 extension NetworkRequester {
 
     func assistant() async throws -> PostAssistantResponse {
-        let request = PostAssistantRequest(
-            testInput: "Yo",
-            marksName: "Mark"
+        let request = PostSleepAssistantRequest(
+            
         )
         return try await AssistantAPI.postAssistantRequest(postAssistantRequest: request)
     }

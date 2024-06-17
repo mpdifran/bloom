@@ -1,5 +1,12 @@
 #!/bin/bash
 
+pushd ../shep/openapi
+
+./generate-flask.sh
+./generate-swift.sh
+
+popd
+
 # Assign arguments to variables
 SOURCE_DIR="../shep/openapi/bloom-swift-api/"
 DEST_DIR="./bloom-swift-api"

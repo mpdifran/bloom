@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-/** A assistant POST response. */
+/** An assistant POST response. */
 public struct PostAssistantResponse: Codable, JSONEncodable, Hashable {
 
     /** A test field for an assistant response. */

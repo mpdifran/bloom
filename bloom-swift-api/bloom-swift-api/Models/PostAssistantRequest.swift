@@ -10,21 +10,18 @@ import Foundation
 import AnyCodable
 #endif
 
-/** A assistant POST request. */
+/** An assistant POST request. */
 public struct PostAssistantRequest: Codable, JSONEncodable, Hashable {
 
     /** A test field for an assistant request */
     public private(set) var testInput: String
-    public private(set) var marksName: String?
 
-    public init(testInput: String, marksName: String? = nil) {
+    public init(testInput: String) {
         self.testInput = testInput
-        self.marksName = marksName
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case testInput = "test_input"
-        case marksName = "marks_name"
     }
 
     // Encodable protocol methods
@@ -32,7 +29,6 @@ public struct PostAssistantRequest: Codable, JSONEncodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(testInput, forKey: .testInput)
-        try container.encodeIfPresent(marksName, forKey: .marksName)
     }
 }
 
