@@ -22,9 +22,9 @@ extension Calendar {
     }
 
     func closestPastDateMatchingHourAndMinute(
-        components: DateComponents
+        components: DateComponents,
+        referenceDate: Date = .now
     ) -> Date? {
-        let referenceDate = Date.now
         var currentDateComponents = dateComponents([.year, .month, .day], from: referenceDate)
 
         currentDateComponents.hour = components.hour

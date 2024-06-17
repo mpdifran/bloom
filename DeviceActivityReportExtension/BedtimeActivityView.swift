@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 extension BedtimeActivityView {
     struct Configuration {
@@ -23,7 +24,30 @@ struct BedtimeActivityView: View {
     let configuration: Configuration
 
     var body: some View {
-        Text("\(configuration.data.count)")
+        VStack {
+            ForEach(sortedDateIntervals, id: \.start) { dateInterval in
+                Text("\(dateInterval.start) - \(dateInterval.end)")
+
+                ForEach(configuration.data[dateInterval, default: []]) { usageInfo in
+                    Text("\(usageInfo.name) - \(usageInfo.duration)")
+                }
+            }
+        }
+    }
+}
+
+private extension BedtimeActivityView {
+
+    var sortedDateIntervals: [DateInterval] {
+        configuration.data.keys.sorted(by: { $0.start < $1.start })
+    }
+
+    var timeUseChart: some View {
+        Chart {
+            ForEach(sortedDateIntervals, id: \.start) { dateInterval in
+
+            }
+        }
     }
 }
 
