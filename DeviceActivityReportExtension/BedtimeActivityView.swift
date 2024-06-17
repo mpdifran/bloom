@@ -10,13 +10,13 @@ import Charts
 
 extension BedtimeActivityView {
     struct Configuration {
-        let data: [DateInterval : [UsageInfo]]
+        let usage: [UsageInfo]
     }
 
     struct UsageInfo: Identifiable {
         let id: String
         let name: String
-        let duration: TimeInterval
+        var duration: TimeInterval
     }
 }
 
@@ -25,29 +25,47 @@ struct BedtimeActivityView: View {
 
     var body: some View {
         VStack {
-            ForEach(sortedDateIntervals, id: \.start) { dateInterval in
-                Text("\(dateInterval.start) - \(dateInterval.end)")
-
-                ForEach(configuration.data[dateInterval, default: []]) { usageInfo in
-                    Text("\(usageInfo.name) - \(usageInfo.duration)")
+            if sortedUsageInfos.isEmpty {
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text("No Device Use Last Night")
+                            .bold()
+                        Text("Good job!")
+                            .font(.caption)
+                    }
+                    Spacer()
+                }
+                .foregroundStyle(.secondary)
+            }
+            ForEach(sortedUsageInfos.prefix(3)) { usageInfo in
+                HStack {
+                    Text(usageInfo.name)
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                    Text("\(DateFormatter.timeIntervalHourMinuteSecondShort.string(from: usageInfo.duration) ?? "0")")
+                        .foregroundStyle(.tint)
+                        .font(.title3)
+                        .bold()
+                        .fontDesign(.rounded)
+                }
+                .padding()
+                .background {
+                    RoundedRectangle(cornerRadius: 13)
+                        .fill(.background.tertiary)
                 }
             }
+
+            Spacer(minLength: 0)
         }
     }
 }
 
 private extension BedtimeActivityView {
 
-    var sortedDateIntervals: [DateInterval] {
-        configuration.data.keys.sorted(by: { $0.start < $1.start })
-    }
-
-    var timeUseChart: some View {
-        Chart {
-            ForEach(sortedDateIntervals, id: \.start) { dateInterval in
-
-            }
-        }
+    var sortedUsageInfos: [UsageInfo] {
+        configuration.usage.sorted(by: { $0.duration > $1.duration })
     }
 }
 
@@ -55,9 +73,20 @@ private extension BedtimeActivityView {
 // members of your app's Xcode target as well as members of your extension's target. You can use
 // Xcode's File Inspector to modify a file's Target Membership.
 #Preview {
-    BedtimeActivityView(
-        configuration: .init(
-            data: [:]
+    List {
+        BedtimeActivityView(
+            configuration: .init(
+                usage: [
+                    .init(id: "123", name: "LinkedIn", duration: 342),
+                    .init(id: "456", name: "Instagram", duration: 186),
+                    .init(id: "789", name: "Wealthsimple", duration: 93)
+                ]
+            )
         )
-    )
+        BedtimeActivityView(
+            configuration: .init(
+                usage: []
+            )
+        )
+    }
 }

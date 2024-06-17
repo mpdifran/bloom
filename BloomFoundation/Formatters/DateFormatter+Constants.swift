@@ -70,4 +70,13 @@ public extension DateFormatter {
 
         return formatter
     }()
+
+    static var timeIntervalHourMinuteSecondShort: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+
+        formatter.unitsStyle = .short
+        formatter.allowedUnits = [.hour, .minute, .second]
+
+        return formatter
+    }()
 }

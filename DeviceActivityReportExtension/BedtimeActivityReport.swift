@@ -14,41 +14,53 @@ struct BedtimeActivityReport: DeviceActivityReportScene {
     let content: (BedtimeActivityView.Configuration) -> BedtimeActivityView
 
     func makeConfiguration(representing data: DeviceActivityResults<DeviceActivityData>) async -> BedtimeActivityView.Configuration {
-        var result = [DateInterval : [BedtimeActivityView.UsageInfo]]()
+        var result = [BedtimeActivityView.UsageInfo]()
 
         for await activityData in data {
             for await activitySegment in activityData.activitySegments {
-                let dateInterval = activitySegment.dateInterval
-                var usageInfos = result[dateInterval, default: []]
 
                 for await categoryActivity in activitySegment.categories {
                     for await applicationActivity in categoryActivity.applications {
-                        guard applicationActivity.totalActivityDuration > 0.1 else { continue }
+                        guard applicationActivity.totalActivityDuration > 1 else { continue }
 
-                        let usageInfo = BedtimeActivityView.UsageInfo(
-                            id: applicationActivity.application.bundleIdentifier ?? UUID().uuidString,
-                            name: applicationActivity.application.localizedDisplayName ?? "Unknown App",
-                            duration: applicationActivity.totalActivityDuration
-                        )
-                        usageInfos.append(usageInfo)
+                        let id = applicationActivity.application.bundleIdentifier ?? UUID().uuidString
+                        let name = applicationActivity.application.localizedDisplayName ?? "Unknown App"
+                        let duration = applicationActivity.totalActivityDuration
+
+                        if let index = result.firstIndex(where: { $0.id == id }) {
+                            result[index].duration += duration
+                        } else {
+                            let usageInfo = BedtimeActivityView.UsageInfo(
+                                id: id,
+                                name: name,
+                                duration: duration
+                            )
+                            result.append(usageInfo)
+                        }
                     }
 
                     for await webDomainActivity in categoryActivity.webDomains {
-                        guard webDomainActivity.totalActivityDuration > 0.1 else { continue }
+                        guard webDomainActivity.totalActivityDuration > 1 else { continue }
 
-                        let usageInfo = BedtimeActivityView.UsageInfo(
-                            id: webDomainActivity.webDomain.domain ?? UUID().uuidString,
-                            name: webDomainActivity.webDomain.domain ?? "Unknown Website",
-                            duration: webDomainActivity.totalActivityDuration
-                        )
-                        usageInfos.append(usageInfo)
+                        let id = webDomainActivity.webDomain.domain ?? UUID().uuidString
+                        let name = webDomainActivity.webDomain.domain ?? "Unknown Website"
+                        let duration = webDomainActivity.totalActivityDuration
+
+                        if let index = result.firstIndex(where: { $0.id == id }) {
+                            result[index].duration += duration
+                        } else {
+                            let usageInfo = BedtimeActivityView.UsageInfo(
+                                id: id,
+                                name: name,
+                                duration: duration
+                            )
+                            result.append(usageInfo)
+                        }
                     }
                 }
-
-                result[dateInterval] = usageInfos
             }
         }
 
-        return BedtimeActivityView.Configuration(data: result)
+        return BedtimeActivityView.Configuration(usage: result)
     }
 }
