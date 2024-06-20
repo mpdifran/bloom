@@ -21,13 +21,6 @@ final class NetworkRequester {
 
 extension NetworkRequester {
 
-    func assistant() async throws -> PostAssistantResponse {
-        let request = PostSleepAssistantRequest(
-            
-        )
-        return try await AssistantAPI.postAssistantRequest(postAssistantRequest: request)
-    }
-
     func sendQuery(
         userInfo: UserInfoModel?,
         currentGoals: [String],
