@@ -14,15 +14,15 @@ import AnyCodable
 public struct HealthWorkout: Codable, JSONEncodable, Hashable {
 
     /** The name of the activity performed. */
-    public private(set) var activity: String?
+    public private(set) var activity: String
     /** The day and time the activity was started, formatted according to ISO-8601. */
-    public private(set) var startDate: Date?
+    public private(set) var startDate: Date
     /** The length of the workout, in minutes. */
-    public private(set) var durationMinutes: Int?
+    public private(set) var durationMinutes: Double
     /** The amount of calories the user burned. */
-    public private(set) var caloriesBurned: Double?
+    public private(set) var caloriesBurned: Double
 
-    public init(activity: String? = nil, startDate: Date? = nil, durationMinutes: Int? = nil, caloriesBurned: Double? = nil) {
+    public init(activity: String, startDate: Date, durationMinutes: Double, caloriesBurned: Double) {
         self.activity = activity
         self.startDate = startDate
         self.durationMinutes = durationMinutes
@@ -40,10 +40,10 @@ public struct HealthWorkout: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(activity, forKey: .activity)
-        try container.encodeIfPresent(startDate, forKey: .startDate)
-        try container.encodeIfPresent(durationMinutes, forKey: .durationMinutes)
-        try container.encodeIfPresent(caloriesBurned, forKey: .caloriesBurned)
+        try container.encode(activity, forKey: .activity)
+        try container.encode(startDate, forKey: .startDate)
+        try container.encode(durationMinutes, forKey: .durationMinutes)
+        try container.encode(caloriesBurned, forKey: .caloriesBurned)
     }
 }
 

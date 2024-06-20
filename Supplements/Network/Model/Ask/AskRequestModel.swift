@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import OpenAPIClient
 
 struct AskRequestModel: Codable {
     let userInfo: UserInfoModel?
@@ -26,7 +27,7 @@ struct UserInfoModel: Codable, Equatable {
     let dailyExerciseMinutes: QuantityModel?
     let dailySteps: QuantityModel?
     let dailyHeartRateVariability: QuantityModel?
-    let restingHeartRate: [HeartRateSample]
+    let restingHeartRate: [DateQuantitySample]
     let vO2Max: QuantityModel?
     let timeInDaylight: QuantityModel?
     let sleepAnalysis: [SleepAnalysis]
@@ -39,6 +40,10 @@ struct UserInfoModel: Codable, Equatable {
 struct LocationModel: Codable, Equatable {
     let latitude: CLLocationDegrees
     let longitude: CLLocationDegrees
+
+    var location: Location {
+        Location(latitude: latitude, longitude: longitude)
+    }
 }
 
 struct QuantityModel: Codable, Equatable {
@@ -70,20 +75,6 @@ struct SleepStageAggregate: Codable, Equatable {
 
     enum Kind: String, Codable {
         case average
-    }
-}
-
-struct WorkoutSummary: Codable, Equatable {
-    let activity: String
-    let startDate: Date
-    let durationSeconds: TimeInterval
-    let energyBurned: EnergyBurned
-}
-
-extension WorkoutSummary {
-    struct EnergyBurned: Codable, Equatable {
-        let value: Double
-        let units: String
     }
 }
 

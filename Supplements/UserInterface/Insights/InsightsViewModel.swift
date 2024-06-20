@@ -14,7 +14,7 @@ final class InsightsViewModel: ObservableObject {
     @Published var sleepAnalysis = [SleepAnalysis]()
     @Published var workoutSummary = [WorkoutSummary]()
     @Published var timeInDaylight = [DateQuantitySample]()
-    @Published var restingHeartRate = [HeartRateSample]()
+    @Published var restingHeartRate = [DateQuantitySample]()
     @Published var meditationMinutes = [DateQuantitySample]()
 
     private init() {

@@ -7,11 +7,17 @@
 
 import SwiftUI
 import ScreenControl
+import OpenAPIClient
 
 @main
 struct SupplementsApp: App {
 
     private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+
+    init() {
+        OpenAPIClientAPI.basePath = "https://shep-test-7d27e987b8ef.herokuapp.com/api"
+        OpenAPIClientAPI.apiResponseQueue = DispatchQueue(label: "OpenAPIQueue")
+    }
 
     var body: some Scene {
         WindowGroup {

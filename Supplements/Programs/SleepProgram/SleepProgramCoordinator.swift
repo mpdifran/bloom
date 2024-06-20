@@ -7,12 +7,14 @@
 
 import SwiftUI
 import ScreenControl
+import OpenAPIClient
 
 private extension String {
     static let sleepProgramStartDate = "SleepProgramCoordinator.startDate"
     static let sleepEnvironmentTemperature = "SleepProgramCoordinator.sleepEnvironmentTemperature"
     static let sleepEnvironmentSound = "SleepProgramCoordinator.sleepEnvironmentSound"
     static let sleepEnvironmentDarkness = "SleepProgramCoordinator.sleepEnvironmentDarkness"
+    static let automatedIds = "automatedIds"
 }
 
 final class SleepProgramCoordinator: ObservableObject {
@@ -27,6 +29,8 @@ final class SleepProgramCoordinator: ObservableObject {
     @AppStorage(.sleepEnvironmentTemperature, store: .group) var environmentTemperature = SleepEnvironmentTemperature.cold
     @AppStorage(.sleepEnvironmentSound, store: .group) var environmentSound = SleepEnvironmentSound.quiet
     @AppStorage(.sleepEnvironmentDarkness, store: .group) var environmentDarkness = SleepEnvironmentDarkness.dark
+
+    @AppStorage(.automatedIds, store: .group) private var automatedIDs = ""
 
     private init() { 
         if let date = UserDefaults.group.object(forKey: .sleepProgramStartDate) as? Date {
@@ -44,5 +48,31 @@ extension SleepProgramCoordinator {
     func stopProgram() {
         startDate = nil
         ScreenUseController.shared.stopMonitoring()
+    }
+}
+
+extension SleepProgramCoordinator {
+
+    func sleepProgramUpdate() async throws -> PostSleepAssistantResponse {
+        let userInfo = HealthManager.shared.userInfoModel
+        let viewModel = InsightsViewModel.shared
+        let request = PostSleepAssistantRequest(
+            automatedIds: automatedIDs,
+            userInfo: UserInfo(
+                name: userInfo?.name,
+                age: userInfo?.age,
+                sex: userInfo?.sex,
+                location: userInfo?.location?.location
+            ),
+            sleepHealthSnapshot: SleepHealthSnapshot(
+                timeInDaylight: viewModel.timeInDaylight.map { $0.healthMetricSample },
+                restingHeartRate: viewModel.restingHeartRate.map { $0.healthMetricSample },
+                meditation: viewModel.meditationMinutes.map { $0.healthMetricSample },
+                workouts: viewModel.workoutSummary.map { $0.healthWorkout },
+                sleepSummaries: viewModel.sleepAnalysis.map { $0.sleepSummary }
+            )
+        )
+
+        return try await AssistantAPI.postSleepAssistant(postSleepAssistantRequest: request)
     }
 }

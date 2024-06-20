@@ -15,43 +15,19 @@ public struct PostSleepAssistantRequest: Codable, JSONEncodable, Hashable {
 
     /** The IDs that the backend is using for communicating with assistants. This is a string blob that can be converted into JSON. This allows the client to not need to specifically decode the object, and just return it directly. Clients should echo these values back. */
     public private(set) var automatedIds: String
-    /** The user's name. */
-    public private(set) var name: String?
-    /** The user's age in years. */
-    public private(set) var age: Int?
-    /** The user's sex. */
-    public private(set) var sex: String?
-    public private(set) var location: Location?
-    public private(set) var timeInDaylight: [HealthMetricSample]?
-    public private(set) var restingHeartRate: [HealthMetricSample]?
-    public private(set) var meditation: [HealthMetricSample]?
-    public private(set) var workouts: [HealthWorkout]?
-    public private(set) var sleepSummaries: [SleepSummary]?
+    public private(set) var userInfo: UserInfo?
+    public private(set) var sleepHealthSnapshot: SleepHealthSnapshot?
 
-    public init(automatedIds: String, name: String? = nil, age: Int? = nil, sex: String? = nil, location: Location? = nil, timeInDaylight: [HealthMetricSample]? = nil, restingHeartRate: [HealthMetricSample]? = nil, meditation: [HealthMetricSample]? = nil, workouts: [HealthWorkout]? = nil, sleepSummaries: [SleepSummary]? = nil) {
+    public init(automatedIds: String, userInfo: UserInfo? = nil, sleepHealthSnapshot: SleepHealthSnapshot? = nil) {
         self.automatedIds = automatedIds
-        self.name = name
-        self.age = age
-        self.sex = sex
-        self.location = location
-        self.timeInDaylight = timeInDaylight
-        self.restingHeartRate = restingHeartRate
-        self.meditation = meditation
-        self.workouts = workouts
-        self.sleepSummaries = sleepSummaries
+        self.userInfo = userInfo
+        self.sleepHealthSnapshot = sleepHealthSnapshot
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case automatedIds = "automated_ids"
-        case name
-        case age
-        case sex
-        case location
-        case timeInDaylight = "time_in_daylight"
-        case restingHeartRate = "resting_heart_rate"
-        case meditation
-        case workouts
-        case sleepSummaries = "sleep_summaries"
+        case userInfo
+        case sleepHealthSnapshot
     }
 
     // Encodable protocol methods
@@ -59,15 +35,8 @@ public struct PostSleepAssistantRequest: Codable, JSONEncodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(automatedIds, forKey: .automatedIds)
-        try container.encodeIfPresent(name, forKey: .name)
-        try container.encodeIfPresent(age, forKey: .age)
-        try container.encodeIfPresent(sex, forKey: .sex)
-        try container.encodeIfPresent(location, forKey: .location)
-        try container.encodeIfPresent(timeInDaylight, forKey: .timeInDaylight)
-        try container.encodeIfPresent(restingHeartRate, forKey: .restingHeartRate)
-        try container.encodeIfPresent(meditation, forKey: .meditation)
-        try container.encodeIfPresent(workouts, forKey: .workouts)
-        try container.encodeIfPresent(sleepSummaries, forKey: .sleepSummaries)
+        try container.encodeIfPresent(userInfo, forKey: .userInfo)
+        try container.encodeIfPresent(sleepHealthSnapshot, forKey: .sleepHealthSnapshot)
     }
 }
 

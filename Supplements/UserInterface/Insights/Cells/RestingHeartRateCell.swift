@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct RestingHeartRateCell: View {
-    let heartRateSamples: [HeartRateSample]
+    let heartRateSamples: [DateQuantitySample]
 
     var body: some View {
         Section {
@@ -58,13 +58,13 @@ private extension RestingHeartRateCell {
             ForEach(heartRateSamples) { dataPoint in
                 LineMark(
                     x: .value("Date", dataPoint.date, unit: .day),
-                    y: .value("BPM", dataPoint.value)
+                    y: .value("BPM", dataPoint.quantity)
                 )
                 .foregroundStyle(.pink)
 
                 PointMark(
                     x: .value("Date", dataPoint.date, unit: .day),
-                    y: .value("BPM", dataPoint.value)
+                    y: .value("BPM", dataPoint.quantity)
                 )
                 .foregroundStyle(.pink)
                 .symbolSize(40)
@@ -107,7 +107,7 @@ private extension RestingHeartRateCell {
 
     var overallAverage: String {
         guard heartRateSamples.isNotEmpty else { return "0" }
-        let average = heartRateSamples.average(keyPath: \.value)
+        let average = heartRateSamples.average(keyPath: \.quantity)
 
         return String(format: "%.0f", average)
     }
@@ -127,14 +127,14 @@ private extension RestingHeartRateCell {
     }
 
     var minY: Double {
-        if let sample = heartRateSamples.min(by: { $0.value < $1.value })?.value {
+        if let sample = heartRateSamples.min(by: { $0.quantity < $1.quantity })?.quantity {
             return min(sample, minHeartRate)
         }
         return minHeartRate
     }
 
     var maxY: Double {
-        if let sample = heartRateSamples.max(by: { $0.value < $1.value })?.value {
+        if let sample = heartRateSamples.max(by: { $0.quantity < $1.quantity })?.quantity {
             return max(sample, maxHeartRate)
         }
         return maxHeartRate
@@ -145,15 +145,15 @@ private extension RestingHeartRateCell {
     List {
         RestingHeartRateCell(
             heartRateSamples: [
-                .init(date: .now, value: 66, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400), value: 66, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400 * 2), value: 64, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400 * 3), value: 72, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400 * 4), value: 67, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400 * 5), value: 66, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400 * 6), value: 66, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400 * 7), value: 72, unit: "bpm"),
-                .init(date: .init(timeIntervalSinceNow: -86400 * 8), value: 69, unit: "bpm")
+                .init(date: .now, quantity: 66, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400), quantity: 66, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400 * 2), quantity: 64, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400 * 3), quantity: 72, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400 * 4), quantity: 67, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400 * 5), quantity: 66, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400 * 6), quantity: 66, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400 * 7), quantity: 72, unit: "bpm"),
+                .init(date: .init(timeIntervalSinceNow: -86400 * 8), quantity: 69, unit: "bpm")
             ]
         )
     }

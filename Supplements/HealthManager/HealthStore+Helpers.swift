@@ -213,23 +213,32 @@ extension HKHealthStore {
                 intervalComponents: interval
             )
 
-            query.initialResultsHandler = { query, results, error in
+            query.initialResultsHandler = {
+                query,
+                results,
+                error in
                 if let error {
                     continuation.resume(throwing: error)
                     return
                 }
-
+                
                 guard let results else {
                     continuation.resume(returning: [])
                     return
                 }
-
+                
                 var quantities = [DateQuantitySample]()
                 results.enumerateStatistics(from: adjustedStartDate, to: adjustedEndDate) { (statistics, stop) in
                     if let sum = statistics.sumQuantity() {
                         let quantity = sum.doubleValue(for: unit)
-
-                        quantities.append(.init(date: statistics.startDate, quantity: quantity))
+                        
+                        quantities.append(
+                            DateQuantitySample(
+                                date: statistics.startDate,
+                                quantity: quantity,
+                                unit: unit.unitString
+                            )
+                        )
                     }
                 }
                 continuation.resume(returning: quantities)
@@ -286,16 +295,11 @@ extension HKHealthStore {
                         let activeBurned = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .smallCalorie())
                     else { return nil }
 
-                    let energyBurned = WorkoutSummary.EnergyBurned(
-                        value: activeBurned,
-                        units: "calories"
-                    )
-
                     return WorkoutSummary(
                         activity: workout.workoutActivityType.name,
                         startDate: workout.startDate,
                         durationSeconds: workout.duration,
-                        energyBurned: energyBurned
+                        caloriesBurned: activeBurned
                     )
                 }
 

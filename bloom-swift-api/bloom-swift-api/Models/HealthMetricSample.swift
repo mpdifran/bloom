@@ -14,13 +14,13 @@ import AnyCodable
 public struct HealthMetricSample: Codable, JSONEncodable, Hashable {
 
     /** An ISO-8601 formatted date. */
-    public private(set) var date: Date?
+    public private(set) var date: Date
     /** The quantity of the health metric */
-    public private(set) var quantity: Double?
+    public private(set) var quantity: Double
     /** The unit associated with the provided quantity. */
-    public private(set) var unit: String?
+    public private(set) var unit: String
 
-    public init(date: Date? = nil, quantity: Double? = nil, unit: String? = nil) {
+    public init(date: Date, quantity: Double, unit: String) {
         self.date = date
         self.quantity = quantity
         self.unit = unit
@@ -36,9 +36,9 @@ public struct HealthMetricSample: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(date, forKey: .date)
-        try container.encodeIfPresent(quantity, forKey: .quantity)
-        try container.encodeIfPresent(unit, forKey: .unit)
+        try container.encode(date, forKey: .date)
+        try container.encode(quantity, forKey: .quantity)
+        try container.encode(unit, forKey: .unit)
     }
 }
 

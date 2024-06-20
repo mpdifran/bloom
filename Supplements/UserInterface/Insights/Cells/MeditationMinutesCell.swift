@@ -77,10 +77,10 @@ extension MeditationMinutesCell {
     List {
         MeditationMinutesCell(
             meditationMinutes: [
-                .init(date: .now, quantity: 348),
-                .init(date: .now.addingTimeInterval(-86400), quantity: 123),
-                .init(date: .now.addingTimeInterval(-86400 * 2), quantity: 80),
-                .init(date: .now.addingTimeInterval(-86400 * 3), quantity: 213),
+                .init(date: .now, quantity: 348, unit: "minute"),
+                .init(date: .now.addingTimeInterval(-86400), quantity: 123, unit: "minute"),
+                .init(date: .now.addingTimeInterval(-86400 * 2), quantity: 80, unit: "minute"),
+                .init(date: .now.addingTimeInterval(-86400 * 3), quantity: 213, unit: "minute"),
             ]
         )
         MeditationMinutesCell(meditationMinutes: [])

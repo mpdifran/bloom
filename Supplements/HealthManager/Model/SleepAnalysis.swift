@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OpenAPIClient
 
 // https://www.mindbodygreen.com/articles/what-is-core-sleep
 // https://www.healthline.com/health/how-much-deep-sleep-do-you-need#deep-sleep
@@ -125,6 +126,22 @@ extension SleepAnalysis {
         return min(Int(((percent / .remSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
     }
 }
+
+extension SleepAnalysis {
+
+    var sleepSummary: SleepSummary {
+        SleepSummary(
+            startDate: startDate,
+            endDate: endDate,
+            deepSleepMinutes: deepSleepMinutes,
+            coreSleepMinutes: coreSleepMinutes,
+            remSleepMinutes: remSleepMinutes,
+            awakeSleepMinutes: awakeSleepMinutes
+        )
+    }
+}
+
+// MARK: - Previews
 
 extension SleepAnalysis {
 

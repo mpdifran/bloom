@@ -14,15 +14,15 @@ import AnyCodable
 public struct HealthMetricValue: Codable, JSONEncodable, Hashable {
 
     /** The value of the health metric. */
-    public private(set) var amount: Double?
+    public private(set) var amount: Double
     /** The kind of metric, either \"latestValue\" or \"average\". */
-    public private(set) var kind: String?
+    public private(set) var kind: String
     /** The unit for the metric. */
-    public private(set) var unit: String?
+    public private(set) var unit: String
     /** If the kind is \"average\", this is the period the average was conducted over, from today into the past. */
-    public private(set) var periodDays: Int?
+    public private(set) var periodDays: Int
 
-    public init(amount: Double? = nil, kind: String? = nil, unit: String? = nil, periodDays: Int? = nil) {
+    public init(amount: Double, kind: String, unit: String, periodDays: Int) {
         self.amount = amount
         self.kind = kind
         self.unit = unit
@@ -40,10 +40,10 @@ public struct HealthMetricValue: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(amount, forKey: .amount)
-        try container.encodeIfPresent(kind, forKey: .kind)
-        try container.encodeIfPresent(unit, forKey: .unit)
-        try container.encodeIfPresent(periodDays, forKey: .periodDays)
+        try container.encode(amount, forKey: .amount)
+        try container.encode(kind, forKey: .kind)
+        try container.encode(unit, forKey: .unit)
+        try container.encode(periodDays, forKey: .periodDays)
     }
 }
 

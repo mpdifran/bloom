@@ -14,19 +14,19 @@ import AnyCodable
 public struct SleepSummary: Codable, JSONEncodable, Hashable {
 
     /** The start date of the sleep session, formatted using ISO-8601. */
-    public private(set) var startDate: Date?
+    public private(set) var startDate: Date
     /** The end date of the sleep session, formatted using ISO-8601. */
-    public private(set) var endDate: Date?
+    public private(set) var endDate: Date
     /** The number of minutes the user spent in deep sleep. */
-    public private(set) var deepSleepMinutes: Double?
+    public private(set) var deepSleepMinutes: Double
     /** The number of minutes the user spent in core sleep. */
-    public private(set) var coreSleepMinutes: Double?
+    public private(set) var coreSleepMinutes: Double
     /** The number of minutes the user spent in REM sleep. */
-    public private(set) var remSleepMinutes: Double?
+    public private(set) var remSleepMinutes: Double
     /** The number of minutes the user spent awake. */
-    public private(set) var awakeSleepMinutes: Double?
+    public private(set) var awakeSleepMinutes: Double
 
-    public init(startDate: Date? = nil, endDate: Date? = nil, deepSleepMinutes: Double? = nil, coreSleepMinutes: Double? = nil, remSleepMinutes: Double? = nil, awakeSleepMinutes: Double? = nil) {
+    public init(startDate: Date, endDate: Date, deepSleepMinutes: Double, coreSleepMinutes: Double, remSleepMinutes: Double, awakeSleepMinutes: Double) {
         self.startDate = startDate
         self.endDate = endDate
         self.deepSleepMinutes = deepSleepMinutes
@@ -48,12 +48,12 @@ public struct SleepSummary: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(startDate, forKey: .startDate)
-        try container.encodeIfPresent(endDate, forKey: .endDate)
-        try container.encodeIfPresent(deepSleepMinutes, forKey: .deepSleepMinutes)
-        try container.encodeIfPresent(coreSleepMinutes, forKey: .coreSleepMinutes)
-        try container.encodeIfPresent(remSleepMinutes, forKey: .remSleepMinutes)
-        try container.encodeIfPresent(awakeSleepMinutes, forKey: .awakeSleepMinutes)
+        try container.encode(startDate, forKey: .startDate)
+        try container.encode(endDate, forKey: .endDate)
+        try container.encode(deepSleepMinutes, forKey: .deepSleepMinutes)
+        try container.encode(coreSleepMinutes, forKey: .coreSleepMinutes)
+        try container.encode(remSleepMinutes, forKey: .remSleepMinutes)
+        try container.encode(awakeSleepMinutes, forKey: .awakeSleepMinutes)
     }
 }
 

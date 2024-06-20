@@ -16,6 +16,8 @@
 		FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */; };
 		FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */; };
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
+		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
+		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
 		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
@@ -94,7 +96,6 @@
 		FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */; };
 		FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */; };
 		FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B372C00141B00BA2128 /* TabController.swift */; };
-		FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */; };
 		FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B3C2C0021E500BA2128 /* OnboardingInfoRequest.swift */; };
 		FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B3E2C00220C00BA2128 /* OnboardingInfoResponse.swift */; };
 		FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B412C002BE500BA2128 /* PinView.swift */; };
@@ -130,6 +131,7 @@
 		FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */; };
 		FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */; };
 		FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */; };
+		FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE390D62C24931400B79140 /* WorkoutSummary.swift */; };
 		FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */; };
 		FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
@@ -290,6 +292,8 @@
 		FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryView.swift; sourceTree = "<group>"; };
 		FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
+		FF049C022C24B333004ACE9C /* DirectiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListView.swift; sourceTree = "<group>"; };
+		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
 		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
@@ -367,7 +371,6 @@
 		FF8B8B312BFFDC9A00BA2128 /* InsightScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightScoreCell.swift; sourceTree = "<group>"; };
 		FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		FF8B8B372C00141B00BA2128 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
-		FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateSample.swift; sourceTree = "<group>"; };
 		FF8B8B3C2C0021E500BA2128 /* OnboardingInfoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInfoRequest.swift; sourceTree = "<group>"; };
 		FF8B8B3E2C00220C00BA2128 /* OnboardingInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInfoResponse.swift; sourceTree = "<group>"; };
 		FF8B8B412C002BE500BA2128 /* PinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinView.swift; sourceTree = "<group>"; };
@@ -404,6 +407,7 @@
 		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
 		FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendChart.swift; sourceTree = "<group>"; };
 		FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTitleView.swift; sourceTree = "<group>"; };
+		FFE390D62C24931400B79140 /* WorkoutSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummary.swift; sourceTree = "<group>"; };
 		FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryViewModel.swift; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FFF61AEE2BED544400926042 /* GoalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalModel.swift; sourceTree = "<group>"; };
@@ -518,6 +522,15 @@
 				FF1E96052C0A6F59004DAD2D /* SleepProgressRingView.swift */,
 			);
 			path = SleepSummary;
+			sourceTree = "<group>";
+		};
+		FF049C012C24B31C004ACE9C /* Directives */ = {
+			isa = PBXGroup;
+			children = (
+				FF049C022C24B333004ACE9C /* DirectiveListView.swift */,
+				FF049C042C24B33C004ACE9C /* DirectiveCell.swift */,
+			);
+			path = Directives;
 			sourceTree = "<group>";
 		};
 		FF1705182C109FF3000D4B3D /* Programs */ = {
@@ -922,12 +935,10 @@
 		FFB444562BEC40FD00486AD7 /* HealthManager */ = {
 			isa = PBXGroup;
 			children = (
+				FFE390D52C2492EC00B79140 /* Model */,
 				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
 				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
 				FF0404C22C025174009FDC4E /* Calendar+Heath.swift */,
-				FF8B8B392C001AB900BA2128 /* HeartRateSample.swift */,
-				FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */,
-				FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */,
 				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
 				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
 				FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */,
@@ -971,6 +982,7 @@
 				FF8B8B362C00141000BA2128 /* Tab */,
 				FFB444942BED41E600486AD7 /* Onboarding */,
 				FFF61B232BEE91A300926042 /* Insights */,
+				FF049C012C24B31C004ACE9C /* Directives */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
 				FFB691092C19FA6800BEC0D4 /* GoodMorning */,
 				FFF61AF42BED554700926042 /* Chat */,
@@ -1012,6 +1024,16 @@
 				FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */,
 			);
 			path = ChartUI;
+			sourceTree = "<group>";
+		};
+		FFE390D52C2492EC00B79140 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */,
+				FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */,
+				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		FFF61AF42BED554700926042 /* Chat */ = {
@@ -1536,6 +1558,7 @@
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
+				FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */,
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,
 				FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */,
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
@@ -1547,6 +1570,7 @@
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
 				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
+				FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
@@ -1589,10 +1613,10 @@
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
+				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
-				FF8B8B3A2C001AB900BA2128 /* HeartRateSample.swift in Sources */,
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
 				FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */,
 			);

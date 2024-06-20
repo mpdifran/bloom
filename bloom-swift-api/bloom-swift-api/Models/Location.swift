@@ -13,10 +13,10 @@ import AnyCodable
 /** The latitude and longitude of a location on planet Earth. */
 public struct Location: Codable, JSONEncodable, Hashable {
 
-    public private(set) var latitude: Double?
-    public private(set) var longitude: Double?
+    public private(set) var latitude: Double
+    public private(set) var longitude: Double
 
-    public init(latitude: Double? = nil, longitude: Double? = nil) {
+    public init(latitude: Double, longitude: Double) {
         self.latitude = latitude
         self.longitude = longitude
     }
@@ -30,8 +30,8 @@ public struct Location: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(latitude, forKey: .latitude)
-        try container.encodeIfPresent(longitude, forKey: .longitude)
+        try container.encode(latitude, forKey: .latitude)
+        try container.encode(longitude, forKey: .longitude)
     }
 }
 

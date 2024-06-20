@@ -97,7 +97,7 @@ private extension WorkoutSummaryCell {
 
     var energyBurned: Double {
         workoutSummaries.reduce(0) { partialResult, workoutSummary in
-            partialResult + workoutSummary.energyBurned.value
+            partialResult + workoutSummary.caloriesBurned
         } / 1000
     }
 }
@@ -110,10 +110,7 @@ private extension WorkoutSummaryCell {
                     activity: "Rock Climbing",
                     startDate: .now,
                     durationSeconds: 2894,
-                    energyBurned: .init(
-                        value: 234000,
-                        units: "calories"
-                    )
+                    caloriesBurned: 234000
                 )
             ]
         )

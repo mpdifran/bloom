@@ -20,7 +20,7 @@ final class HealthManager: ObservableObject {
 
     @Published var sleepAnalysis7Days: [SleepAnalysis]?
     @Published var sleepAnalysis30Days: [SleepAnalysis]?
-    @Published var userInfo: UserInfoModel?
+    @Published var userInfoModel: UserInfoModel?
 
     let healthStore = HKHealthStore()
     private let throttler = Throttler(timeInterval: 600)
@@ -167,7 +167,7 @@ extension HealthManager {
         }
 
         await MainActor.run {
-            self.userInfo = UserInfoModel(
+            self.userInfoModel = UserInfoModel(
                 name: name,
                 location: location,
                 age: healthStore.age(),
@@ -247,7 +247,7 @@ extension HealthManager {
         return nil
     }
 
-    func fetchRestingHeartRate(period: Int = 7) async -> [HeartRateSample] {
+    func fetchRestingHeartRate(period: Int = 7) async -> [DateQuantitySample] {
         do {
             let samples = try await healthStore.fetchSamples(for: .restingHeartRate, previousDays: period)
 
@@ -255,9 +255,9 @@ extension HealthManager {
                 sample as? HKQuantitySample
             }.map { sample in
                 let value = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
-                return HeartRateSample(
+                return DateQuantitySample(
                     date: sample.startDate,
-                    value: value,
+                    quantity: value,
                     unit: "bpm"
                 )
             }
@@ -386,7 +386,11 @@ extension HealthManager {
                 }
 
                 let startOfDay = Calendar.current.startOfDay(for: sample.endDate)
-                let newSample = DateQuantitySample(date: startOfDay, quantity: sample.timeInterval / 60)
+                let newSample = DateQuantitySample(
+                    date: startOfDay,
+                    quantity: sample.timeInterval / 60,
+                    unit: "minute"
+                )
                 quantitySamples.append(newSample)
             }
 

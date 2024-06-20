@@ -10,12 +10,12 @@ import OpenAPIClient
 
 final class NetworkRequester {
     static let shared = NetworkRequester()
+}
 
-    private let queue = DispatchQueue(label: "NetworkRequester")
+extension NetworkRequester {
 
-    private init() {
-        OpenAPIClientAPI.basePath = "https://shep-test-7d27e987b8ef.herokuapp.com/api"
-        OpenAPIClientAPI.apiResponseQueue = queue
+    func sleepProgramUpdate(request: PostSleepAssistantRequest) async throws -> PostSleepAssistantResponse {
+        return try await AssistantAPI.postSleepAssistant(postSleepAssistantRequest: request)
     }
 }
 
@@ -38,8 +38,6 @@ extension NetworkRequester {
 
         let requestData = try JSONEncoder.main.encode(request)
 
-//        print("Request Data: \(String(data: requestData, encoding: .utf8) ?? "")")
-
         let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/ask")!
         var urlRequest = URLRequest(url: url)
         urlRequest.httpBody = requestData
@@ -47,8 +45,6 @@ extension NetworkRequester {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
-//        print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
 
         return try JSONDecoder.main.decode(AskResponseModel.self, from: data)
     }
@@ -59,8 +55,6 @@ extension NetworkRequester {
 
         let requestData = try JSONEncoder.main.encode(request)
 
-//        print("Request Data: \(String(data: requestData, encoding: .utf8) ?? "")")
-
         let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/proactive-tip")!
         var urlRequest = URLRequest(url: url)
         urlRequest.httpBody = requestData
@@ -68,8 +62,6 @@ extension NetworkRequester {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
-//        print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
 
         return try JSONDecoder.main.decode(ProactiveTipResponseModel.self, from: data)
     }
@@ -93,16 +85,12 @@ extension NetworkRequester {
         
         let requestData = try JSONEncoder.main.encode(request)
 
-//        print("Request Data: \(String(data: requestData, encoding: .utf8) ?? "")")
-
         var urlRequest = URLRequest(url: url)
         urlRequest.httpBody = requestData
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
-//        print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
 
         return try JSONDecoder.main.decode(InsightsResponse.self, from: data)
     }
@@ -112,16 +100,12 @@ extension NetworkRequester {
 
         let requestData = try JSONEncoder.main.encode(request)
 
-//        print("Request Data: \(String(data: requestData, encoding: .utf8) ?? "")")
-
         var urlRequest = URLRequest(url: url)
         urlRequest.httpBody = requestData
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
-//        print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
 
         return try JSONDecoder.main.decode(OnboardingInfoResponse.self, from: data)
     }

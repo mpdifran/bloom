@@ -66,7 +66,7 @@ extension ChatViewModel {
             SoundPlayer.playSendMessage()
         }
 
-        let userInfo = HealthManager.shared.userInfo
+        let userInfo = HealthManager.shared.userInfoModel
         let currentGoals = ProfileViewModel.shared.userGoals
         let currentSupplements = ProfileViewModel.shared.userSupplements
 
@@ -142,7 +142,7 @@ extension ChatViewModel {
         do {
             try await HealthManager.shared.loadUserInfo()
         } catch { print(error) }
-        let userInfo = HealthManager.shared.userInfo
+        let userInfo = HealthManager.shared.userInfoModel
         let currentGoals = ProfileViewModel.shared.userGoals
         let currentSupplements = ProfileViewModel.shared.userSupplements
 
