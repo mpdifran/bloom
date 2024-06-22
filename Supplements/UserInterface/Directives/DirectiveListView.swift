@@ -51,6 +51,13 @@ struct DirectiveListView: View {
                 }
             }
             .navigationTitle("Actions")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Reset Assistant", systemImage: "sparkles") {
+                        SleepProgramCoordinator.shared.resetAssistant()
+                    }
+                }
+            }
         }
         .alert(error: $error)
         .tabItem {
