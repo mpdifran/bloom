@@ -41,12 +41,13 @@ private extension ShieldConfigurationExtension {
 
     func shieldConfiguration(message: String) -> ShieldConfiguration {
         let deepSleep = UIColor(named: "DeepSleep")!
+        let bloomTint = UIColor(named: "BloomTint")!
         let remSleep = UIColor(named: "REMSleep")!
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemThickMaterialDark,
             backgroundColor: deepSleep,
-            icon: UIImage(systemName: "moon.zzz.fill")?.withTintColor(.orange),
+            icon: UIImage(systemName: "moon.zzz.fill")?.withTintColor(bloomTint),
             title: .init(
                 text: "Bloom - Bedtime",
                 color: .white
@@ -57,12 +58,12 @@ private extension ShieldConfigurationExtension {
             ),
             primaryButtonLabel: .init(
                 text: "Close App",
-                color: deepSleep
+                color: .white
             ),
-            primaryButtonBackgroundColor: remSleep,
+            primaryButtonBackgroundColor: bloomTint,
             secondaryButtonLabel: .init(
                 text: "10 More Minutes",
-                color: remSleep
+                color: bloomTint
             )
         )
     }

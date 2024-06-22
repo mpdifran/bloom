@@ -29,6 +29,8 @@ struct RootView: View {
                 TabView(selection: $tabController.activeTab) {
                     InsightsView()
                         .tag(Tab.insights)
+                    DirectiveListView()
+                        .tag(Tab.actions)
                     ProgramsView()
                         .tag(Tab.programs)
                     ChatView()

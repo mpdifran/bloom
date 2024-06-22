@@ -79,6 +79,7 @@
 		FF3A8F3B2C1A8341002DA563 /* DeviceActivityReportExtension.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF3A8F402C1A8359002DA563 /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
 		FF3A8F442C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */; };
+		FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -355,6 +356,7 @@
 		FF3A8F372C1A8341002DA563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF3A8F382C1A8341002DA563 /* DeviceActivityReportExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityReportExtension.entitlements; sourceTree = "<group>"; };
 		FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceActivityReport.Context+Constants.swift"; sourceTree = "<group>"; };
+		FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListViewModel.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -528,6 +530,7 @@
 			isa = PBXGroup;
 			children = (
 				FF049C022C24B333004ACE9C /* DirectiveListView.swift */,
+				FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */,
 				FF049C042C24B33C004ACE9C /* DirectiveCell.swift */,
 			);
 			path = Directives;
@@ -1557,6 +1560,7 @@
 				FF17052B2C10E1E1000D4B3D /* TimeInDaylightCell.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
+				FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
 				FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */,
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,

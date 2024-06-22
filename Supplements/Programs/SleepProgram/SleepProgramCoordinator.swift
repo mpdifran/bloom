@@ -17,6 +17,7 @@ private extension String {
     static let automatedIds = "automatedIds"
 }
 
+@MainActor
 final class SleepProgramCoordinator: ObservableObject {
     static let shared = SleepProgramCoordinator()
 
@@ -25,6 +26,7 @@ final class SleepProgramCoordinator: ObservableObject {
             UserDefaults.group.set(startDate, forKey: .sleepProgramStartDate)
         }
     }
+    @Published private(set) var assistantResponse: PostSleepAssistantResponse?
 
     @AppStorage(.sleepEnvironmentTemperature, store: .group) var environmentTemperature = SleepEnvironmentTemperature.cold
     @AppStorage(.sleepEnvironmentSound, store: .group) var environmentSound = SleepEnvironmentSound.quiet
@@ -53,7 +55,7 @@ extension SleepProgramCoordinator {
 
 extension SleepProgramCoordinator {
 
-    func sleepProgramUpdate() async throws -> PostSleepAssistantResponse {
+    func sleepProgramUpdate() async throws {
         let userInfo = HealthManager.shared.userInfoModel
         let viewModel = InsightsViewModel.shared
         let request = PostSleepAssistantRequest(
@@ -73,6 +75,9 @@ extension SleepProgramCoordinator {
             )
         )
 
-        return try await AssistantAPI.postSleepAssistant(postSleepAssistantRequest: request)
+        let response = try await AssistantAPI.postSleepAssistant(postSleepAssistantRequest: request)
+
+        self.automatedIDs = response.automatedIds
+        self.assistantResponse = response
     }
 }
