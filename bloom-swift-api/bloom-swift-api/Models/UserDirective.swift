@@ -10,42 +10,35 @@ import Foundation
 import AnyCodable
 #endif
 
-/** A directive from the AI on what the user should do to improve thier health. */
+/** A directive from the AI on what the user should do to improve their health. */
 public struct UserDirective: Codable, JSONEncodable, Hashable {
 
     /** The title for the directive. For example, \"Take Melatonin each night\". */
     public private(set) var title: String
     /** A description of how the directive will help with the user's goals. */
     public private(set) var description: String
-    /** The kind of directive. Options are \"guideline\", and \"scheduled\". */
-    public private(set) var kind: String
-    /** The hour the scheduled directive should be performed, in 24 hour time. */
-    public private(set) var scheduleHour: Int?
-    /** The minute the scheduled directive should be performed. */
-    public private(set) var scheduleMinute: Int?
-    /** Whether Bloom should remind the user at the scheduled time with a notification. */
-    public private(set) var alertsUser: Bool?
     /** An SFSymbol that can be used by the app that represents the directive. */
-    public private(set) var sfSymbol: String?
+    public private(set) var sfSymbol: String
+    public private(set) var supplementDetails: UserDirectiveSupplementDetails?
+    public private(set) var activityDetails: UserDirectiveActivityDetails?
+    public private(set) var screenTimeAdjustment: UserDirectiveScreenTimeScheduleAdjustment?
 
-    public init(title: String, description: String, kind: String, scheduleHour: Int? = nil, scheduleMinute: Int? = nil, alertsUser: Bool? = nil, sfSymbol: String? = nil) {
+    public init(title: String, description: String, sfSymbol: String, supplementDetails: UserDirectiveSupplementDetails? = nil, activityDetails: UserDirectiveActivityDetails? = nil, screenTimeAdjustment: UserDirectiveScreenTimeScheduleAdjustment? = nil) {
         self.title = title
         self.description = description
-        self.kind = kind
-        self.scheduleHour = scheduleHour
-        self.scheduleMinute = scheduleMinute
-        self.alertsUser = alertsUser
         self.sfSymbol = sfSymbol
+        self.supplementDetails = supplementDetails
+        self.activityDetails = activityDetails
+        self.screenTimeAdjustment = screenTimeAdjustment
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case title
         case description
-        case kind
-        case scheduleHour = "schedule_hour"
-        case scheduleMinute = "schedule_minute"
-        case alertsUser = "alerts_user"
         case sfSymbol = "sf_symbol"
+        case supplementDetails = "supplement_details"
+        case activityDetails = "activity_details"
+        case screenTimeAdjustment = "screen_time_adjustment"
     }
 
     // Encodable protocol methods
@@ -54,11 +47,10 @@ public struct UserDirective: Codable, JSONEncodable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(title, forKey: .title)
         try container.encode(description, forKey: .description)
-        try container.encode(kind, forKey: .kind)
-        try container.encodeIfPresent(scheduleHour, forKey: .scheduleHour)
-        try container.encodeIfPresent(scheduleMinute, forKey: .scheduleMinute)
-        try container.encodeIfPresent(alertsUser, forKey: .alertsUser)
-        try container.encodeIfPresent(sfSymbol, forKey: .sfSymbol)
+        try container.encode(sfSymbol, forKey: .sfSymbol)
+        try container.encodeIfPresent(supplementDetails, forKey: .supplementDetails)
+        try container.encodeIfPresent(activityDetails, forKey: .activityDetails)
+        try container.encodeIfPresent(screenTimeAdjustment, forKey: .screenTimeAdjustment)
     }
 }
 

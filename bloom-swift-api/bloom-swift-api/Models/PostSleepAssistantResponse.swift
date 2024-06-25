@@ -16,16 +16,19 @@ public struct PostSleepAssistantResponse: Codable, JSONEncodable, Hashable {
     /** The IDs that the backend is using for communicating with assistants. This is a string blob that can be converted into JSON. This allows the client to not need to specifically decode the object, and just return it directly. Clients should echo these values back. */
     public private(set) var automatedIds: String
     /** A list of directives for the user. */
-    public private(set) var directives: [UserDirective]
+    public private(set) var directives: [UserDirective]?
+    public private(set) var rawResponse: String?
 
-    public init(automatedIds: String, directives: [UserDirective]) {
+    public init(automatedIds: String, directives: [UserDirective]? = nil, rawResponse: String? = nil) {
         self.automatedIds = automatedIds
         self.directives = directives
+        self.rawResponse = rawResponse
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case automatedIds = "automated_ids"
         case directives
+        case rawResponse = "raw_response"
     }
 
     // Encodable protocol methods
@@ -33,7 +36,8 @@ public struct PostSleepAssistantResponse: Codable, JSONEncodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(automatedIds, forKey: .automatedIds)
-        try container.encode(directives, forKey: .directives)
+        try container.encodeIfPresent(directives, forKey: .directives)
+        try container.encodeIfPresent(rawResponse, forKey: .rawResponse)
     }
 }
 

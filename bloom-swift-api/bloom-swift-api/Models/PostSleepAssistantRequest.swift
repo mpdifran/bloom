@@ -26,8 +26,8 @@ public struct PostSleepAssistantRequest: Codable, JSONEncodable, Hashable {
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case automatedIds = "automated_ids"
-        case userInfo
-        case sleepHealthSnapshot
+        case userInfo = "user_info"
+        case sleepHealthSnapshot = "sleep_health_snapshot"
     }
 
     // Encodable protocol methods

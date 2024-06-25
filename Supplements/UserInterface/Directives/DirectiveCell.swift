@@ -20,52 +20,79 @@ struct DirectiveCell: View {
 
                 Spacer()
 
-                if let symbol = directive.sfSymbol {
-                    Circle()
-                        .fill(.fill)
-                        .frame(square: 40)
-                        .overlay {
-                            Image(systemName: symbol)
-                                .foregroundStyle(.tint)
-                                .symbolVariant(.fill)
-                        }
-                }
+                Circle()
+                    .fill(.fill)
+                    .frame(square: 40)
+                    .overlay {
+                        Circle()
+                            .stroke(.tint, lineWidth: 2)
+                    }
+                    .overlay {
+                        Image(systemName: directive.sfSymbol)
+                            .foregroundStyle(.tint)
+                            .symbolVariant(.fill)
+                    }
             }
-
-            Divider()
+            .padding(.top)
 
             Text(directive.description)
                 .foregroundStyle(.secondary)
 
-            Divider()
+            if let supplementDetails = directive.supplementDetails {
+                Spacer()
+                Text("\(supplementDetails.dosageAmount, specifier: "%.0f") \(supplementDetails.dosageUnit)")
+                    .font(.title)
+                    .bold()
+                    .fontDesign(.rounded)
 
-            Button(action: {
-
-            }, label: {
-                HStack {
-                    if directive.kind == "scheduled" {
-                        Label("Manage Schedule", systemImage: "calendar")
-                    } else {
-                        Label("Complete", systemImage: "checkmark.circle.fill")
+                if let dateDescription = supplementDetails.scheduleTimeComponent.formattedTimeUsingNow {
+                    TimelineView(.everyMinute) { _ in
+                        Text(dateDescription)
+                            .foregroundStyle(.secondary)
+                            .font(.subheadline)
                     }
-                    Spacer()
                 }
-            })
-            .frame(height: 44)
-            .foregroundStyle(.tint)
 
-            Divider()
+                Divider()
 
-            Button(action: {
+                DirectiveCompleteButton("Mark as Taken") {
 
-            }, label: {
-                HStack {
-                    Label("Try Something Else", systemImage: "arrow.up.arrow.down")
-                    Spacer()
                 }
-            })
-            .frame(height: 44)
-            .foregroundStyle(.red)
+            } else if let activityDetails = directive.activityDetails {
+                Spacer()
+
+                Text("\(activityDetails.recommendedDurationMinutes) min")
+                    .font(.title)
+                    .bold()
+                    .fontDesign(.rounded)
+
+                if let dateDescription = activityDetails.proposedTimeComponent?.formattedTimeUsingNow {
+                    TimelineView(.everyMinute) { _ in
+                        Text(dateDescription)
+                            .foregroundStyle(.secondary)
+                            .font(.subheadline)
+                    }
+                }
+
+                Divider()
+
+                DirectiveCompleteButton("Mark as Complete") {
+
+                }
+            }
+
+//            Divider()
+//
+//            Button(action: {
+//
+//            }, label: {
+//                HStack {
+//                    Label("Try Something Else", systemImage: "arrow.up.arrow.down")
+//                    Spacer()
+//                }
+//            })
+//            .frame(height: 44)
+//            .foregroundStyle(.red)
         }
     }
 }
@@ -77,8 +104,13 @@ struct DirectiveCell: View {
                 directive: .init(
                     title: "Take melatonin nightly",
                     description: "Melatonin can help improve sleep quality. Let's try taking it every night for 2 weeks and monitor the results.",
-                    kind: "scheduled",
-                    sfSymbol: "pill"
+                    sfSymbol: "pill",
+                    supplementDetails: .init(
+                        dosageAmount: 3,
+                        dosageUnit: "mg",
+                        scheduleTimeComponent: .init(hour: 22, minute: 30),
+                        alertsUser: true
+                    )
                 )
             )
             .tint(.blue)
@@ -88,8 +120,11 @@ struct DirectiveCell: View {
                 directive: .init(
                     title: "Go for a walk today",
                     description: "Today is pretty sunny and warm. Why not take a walk on your lunch time?",
-                    kind: "one-time",
-                    sfSymbol: "figure.walk"
+                    sfSymbol: "figure.walk",
+                    activityDetails: .init(
+                        recommendedDurationMinutes: 15,
+                        proposedTimeComponent: .init(hour: 12, minute: 00)
+                    )
                 )
             )
             .tint(.green)

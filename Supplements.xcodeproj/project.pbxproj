@@ -18,6 +18,9 @@
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
 		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
 		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
+		FF13599A2C28A29A00FB49A6 /* Directive+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1359992C28A29A00FB49A6 /* Directive+Helpers.swift */; };
+		FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */; };
+		FF13599E2C28A54900FB49A6 /* TimeComponent+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13599D2C28A54900FB49A6 /* TimeComponent+Helpers.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
 		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
@@ -295,6 +298,9 @@
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		FF049C022C24B333004ACE9C /* DirectiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListView.swift; sourceTree = "<group>"; };
 		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
+		FF1359992C28A29A00FB49A6 /* Directive+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Directive+Helpers.swift"; sourceTree = "<group>"; };
+		FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCompleteButton.swift; sourceTree = "<group>"; };
+		FF13599D2C28A54900FB49A6 /* TimeComponent+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeComponent+Helpers.swift"; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
 		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
@@ -532,8 +538,18 @@
 				FF049C022C24B333004ACE9C /* DirectiveListView.swift */,
 				FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */,
 				FF049C042C24B33C004ACE9C /* DirectiveCell.swift */,
+				FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */,
 			);
 			path = Directives;
+			sourceTree = "<group>";
+		};
+		FF1359982C28A28A00FB49A6 /* OpenAPI */ = {
+			isa = PBXGroup;
+			children = (
+				FF1359992C28A29A00FB49A6 /* Directive+Helpers.swift */,
+				FF13599D2C28A54900FB49A6 /* TimeComponent+Helpers.swift */,
+			);
+			path = OpenAPI;
 			sourceTree = "<group>";
 		};
 		FF1705182C109FF3000D4B3D /* Programs */ = {
@@ -962,6 +978,7 @@
 			isa = PBXGroup;
 			children = (
 				FFB4445F2BEC4CC500486AD7 /* NetworkRequester.swift */,
+				FF1359982C28A28A00FB49A6 /* OpenAPI */,
 				FFB444982BED424000486AD7 /* Model */,
 			);
 			path = Network;
@@ -1527,6 +1544,7 @@
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
 				FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */,
+				FF13599A2C28A29A00FB49A6 /* Directive+Helpers.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
@@ -1559,6 +1577,7 @@
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FF17052B2C10E1E1000D4B3D /* TimeInDaylightCell.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
+				FF13599E2C28A54900FB49A6 /* TimeComponent+Helpers.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */,
 				FFF61B052BED9A7100926042 /* GoalCell.swift in Sources */,
@@ -1594,6 +1613,7 @@
 				FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
+				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,

@@ -46,6 +46,16 @@ public extension DateFormatter {
         return dateFormatter
     }()
 
+    static var relativeDateTimeMedium: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .medium
+        dateFormatter.doesRelativeDateFormatting = true
+
+        return dateFormatter
+    }()
+
     static var monthAndDay: DateFormatter = {
         let dateFormatter = DateFormatter()
 
