@@ -75,6 +75,10 @@ extension SleepProgramCoordinator {
             )
         )
 
+//        if let data = try? JSONEncoder.main.encode(request) {
+//            print(String(data: data, encoding: .utf8) ?? "")
+//        }
+
         let response = try await AssistantAPI.postSleepAssistant(postSleepAssistantRequest: request)
 
         self.automatedIDs = response.automatedIds

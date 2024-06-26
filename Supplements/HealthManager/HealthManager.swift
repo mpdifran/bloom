@@ -49,7 +49,9 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.activeEnergyBurned),
         HKQuantityType(.bodyFatPercentage),
         HKObjectType.workoutType(),
-        HKObjectType.categoryType(forIdentifier: .mindfulSession)!
+        HKObjectType.categoryType(forIdentifier: .mindfulSession)!,
+        HKObjectType.quantityType(forIdentifier: .heartRate)!,
+        HKObjectType.quantityType(forIdentifier: .environmentalAudioExposure)!
     ]
     // body fat percentage
     // BMI
@@ -100,7 +102,7 @@ extension HealthManager {
             do {
                 try await healthStore.requestAuthorization(toShare: [], read: types)
             } catch {
-                fatalError("Usage description not specified")
+                fatalError(error.localizedDescription)
             }
         }
         try? await checkAccess()
@@ -459,7 +461,8 @@ extension HealthManager {
             groupedSamples.append(currentGroup)
         }
 
-        let sleepAnalysis = groupedSamples.compactMap { sampleGroup -> SleepAnalysis? in
+        var sleepAnalysis = [SleepAnalysis]()
+        for sampleGroup in groupedSamples {
             var deepSleepTime: Double = 0
             var coreSleepTime: Double = 0
             var remSleepTime: Double = 0
@@ -516,22 +519,50 @@ extension HealthManager {
                 print("We somehow have a start date after the end date...")
                 print("Start: \(startDate)")
                 print("End: \(endDate)")
-                return nil
+                continue
             }
 
-            return SleepAnalysis(
+            // Sound levels
+            var soundLevelDataPoints = [SleepAnalysis.SoundLevelDataPoint]()
+            do {
+                let samples = try await healthStore.fetchMinMaxStatistics(
+                    quantityTypeID: .environmentalAudioExposure,
+                    unit: .decibelAWeightedSoundPressureLevel(),
+                    interval: DateComponents(minute: 15),
+                    startDate: startDate,
+                    endDate: endDate
+                )
+
+                for sample in samples {
+                    let dataPoint = SleepAnalysis.SoundLevelDataPoint(
+                        decibelAWeightedSoundPressureLevelMin: sample.minQuantity,
+                        decibelAWeightedSoundPressureLevelMax: sample.maxQuantity,
+                        startDate: sample.date,
+                        timeInterval: 900
+                    )
+                    soundLevelDataPoints.append(dataPoint)
+                }
+            } catch {
+                print(error)
+            }
+
+            let analysis = SleepAnalysis(
                 startDate: startDate,
                 endDate: endDate,
                 deepSleepMinutes: deepSleepTime / 60,
                 coreSleepMinutes: coreSleepTime / 60,
                 remSleepMinutes: remSleepTime / 60,
-                awakeSleepMinutes: awakeSleepTime / 60
+                awakeSleepMinutes: awakeSleepTime / 60,
+                environmentalSoundLevels: soundLevelDataPoints
             )
+            sleepAnalysis.append(analysis)
         }
 
+        let result = sleepAnalysis
+
         await MainActor.run {
-            self.sleepAnalysis30Days = sleepAnalysis
-            self.sleepAnalysis7Days = Array(sleepAnalysis.suffix(7))
+            self.sleepAnalysis30Days = result
+            self.sleepAnalysis7Days = Array(result.suffix(7))
         }
     }
 }

@@ -213,10 +213,7 @@ extension HKHealthStore {
                 intervalComponents: interval
             )
 
-            query.initialResultsHandler = {
-                query,
-                results,
-                error in
+            query.initialResultsHandler = { query, results, error in
                 if let error {
                     continuation.resume(throwing: error)
                     return
@@ -242,6 +239,67 @@ extension HKHealthStore {
                     }
                 }
                 continuation.resume(returning: quantities)
+            }
+
+            execute(query)
+        }
+    }
+
+    func fetchMinMaxStatistics(
+        quantityTypeID: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        interval: DateComponents = DateComponents(hour: 1),
+        startDate: Date,
+        endDate: Date
+    ) async throws -> [DateMinMaxQuantitySample] {
+        try await withCheckedThrowingContinuation { continuation in
+            let quantityType = HKQuantityType(quantityTypeID)
+
+            let predicate = HKQuery.predicateForSamples(
+                withStart: startDate,
+                end: endDate,
+                options: .strictStartDate
+            )
+
+            let query = HKStatisticsCollectionQuery(
+                quantityType: quantityType,
+                quantitySamplePredicate: predicate,
+                options: [.discreteMin, .discreteMax],
+                anchorDate: startDate,
+                intervalComponents: interval
+            )
+
+            query.initialResultsHandler = { query, results, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let results else {
+                    continuation.resume(returning: [])
+                    return
+                }
+
+                var samples = [DateMinMaxQuantitySample]()
+                results.enumerateStatistics(from: startDate, to: endDate) { (statistics, stop) in
+                    guard 
+                        let min = statistics.minimumQuantity(),
+                        let max = statistics.maximumQuantity()
+                    else { return }
+
+                    let minQuantity = min.doubleValue(for: unit)
+                    let maxQuantity = max.doubleValue(for: unit)
+
+                    samples.append(
+                        DateMinMaxQuantitySample(
+                            date: statistics.startDate,
+                            minQuantity: minQuantity,
+                            maxQuantity: maxQuantity,
+                            unit: unit.unitString
+                        )
+                    )
+                }
+                continuation.resume(returning: samples)
             }
 
             execute(query)

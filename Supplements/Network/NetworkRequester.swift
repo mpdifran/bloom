@@ -14,13 +14,6 @@ final class NetworkRequester {
 
 extension NetworkRequester {
 
-    func sleepProgramUpdate(request: PostSleepAssistantRequest) async throws -> PostSleepAssistantResponse {
-        return try await AssistantAPI.postSleepAssistant(postSleepAssistantRequest: request)
-    }
-}
-
-extension NetworkRequester {
-
     func sendQuery(
         userInfo: UserInfoModel?,
         currentGoals: [String],

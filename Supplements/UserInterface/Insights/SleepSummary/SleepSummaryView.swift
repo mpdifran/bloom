@@ -81,6 +81,7 @@ struct SleepSummaryView: View {
                     
                     if expandedSections.contains(sleepAnalysis.id) {
                         chart(for: sleepAnalysis)
+                        soundChart(for: sleepAnalysis)
 
                         SleepSegmentScoreView(
                             title: "Sleep Length Score",
@@ -269,6 +270,10 @@ private extension SleepSummaryView {
             }
         }
         .frame(height: 100)
+    }
+
+    func soundChart(for sleepAnalysis: SleepAnalysis) -> some View {
+        SleepSoundLevelChartView(soundLevels: sleepAnalysis.environmentalSoundLevels)
     }
 }
 

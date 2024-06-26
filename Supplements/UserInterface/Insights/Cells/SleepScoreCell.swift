@@ -186,22 +186,26 @@ struct SleepSegmentScoreView: View {
                     Circle()
                         .fill(color)
                         .frame(width: 10, height: 10)
-                    Text(title)
-                        .fontDesign(.rounded)
-                        .bold()
-                }
-                HStack(spacing: 2) {
-                    Text(DateFormatter.timeIntervalHourMinuteShort.string(from: minutes * 60) ?? "")
 
-                    if let overallMinutes {
-                        Text("•")
-                        Text("\(minutes / overallMinutes * 100, specifier: "%.0f")%")
+                    VStack(alignment: .leading) {
+                        Text(title)
+                            .fontDesign(.rounded)
+                            .bold()
+
+                        HStack(spacing: 2) {
+                            Text(DateFormatter.timeIntervalHourMinuteShort.string(from: minutes * 60) ?? "")
+
+                            if let overallMinutes {
+                                Text("•")
+                                Text("\(minutes / overallMinutes * 100, specifier: "%.0f")%")
+                            }
+
+                            Spacer()
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     }
-
-                    Spacer()
                 }
-                .font(.caption)
-                .foregroundStyle(.secondary)
             }
 
             Spacer()
@@ -230,7 +234,15 @@ struct SleepSegmentScoreView: View {
                                 deepSleepMinutes: 45.2,
                                 coreSleepMinutes: 180,
                                 remSleepMinutes: 93,
-                                awakeSleepMinutes: 32
+                                awakeSleepMinutes: 32,
+                                environmentalSoundLevels: [
+                                    SleepAnalysis.SoundLevelDataPoint(
+                                        decibelAWeightedSoundPressureLevelMin: 56,
+                                        decibelAWeightedSoundPressureLevelMax: 42,
+                                        startDate: .now,
+                                        timeInterval: 3600
+                                    )
+                                ]
                             )
                         ]
                     ) { }
