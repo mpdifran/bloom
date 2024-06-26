@@ -538,9 +538,33 @@ extension HealthManager {
                         decibelAWeightedSoundPressureLevelMin: sample.minQuantity,
                         decibelAWeightedSoundPressureLevelMax: sample.maxQuantity,
                         startDate: sample.date,
-                        timeInterval: 900
+                        timeRangeSeconds: 900 // 15 minutes
                     )
                     soundLevelDataPoints.append(dataPoint)
+                }
+            } catch {
+                print(error)
+            }
+
+            // Heart rate
+            var heartRateDataPoints = [SleepAnalysis.HeartRateDataPoint]()
+            do {
+                let samples = try await healthStore.fetchMinMaxStatistics(
+                    quantityTypeID: .heartRate,
+                    unit: .bpm(),
+                    interval: DateComponents(minute: 15),
+                    startDate: startDate,
+                    endDate: endDate
+                )
+
+                for sample in samples {
+                    let dataPoint = SleepAnalysis.HeartRateDataPoint(
+                        minHeartRate: sample.minQuantity,
+                        maxHeartRate: sample.maxQuantity,
+                        startDate: sample.date,
+                        timeRangeSeconds: 900 // 15 minutes
+                    )
+                    heartRateDataPoints.append(dataPoint)
                 }
             } catch {
                 print(error)
@@ -553,7 +577,8 @@ extension HealthManager {
                 coreSleepMinutes: coreSleepTime / 60,
                 remSleepMinutes: remSleepTime / 60,
                 awakeSleepMinutes: awakeSleepTime / 60,
-                environmentalSoundLevels: soundLevelDataPoints
+                environmentalSoundLevels: soundLevelDataPoints,
+                heartRate: heartRateDataPoints
             )
             sleepAnalysis.append(analysis)
         }

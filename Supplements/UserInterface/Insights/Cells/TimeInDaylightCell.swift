@@ -32,7 +32,7 @@ struct TimeInDaylightCell: View {
                 LabelledMetricView(label: "Goal", value: "30 min / day")
             }
         }
-        .tint(.yellow)
+        .tint(.orange)
     }
 }
 
@@ -45,7 +45,7 @@ private extension TimeInDaylightCell {
                     x: .value("Date", dataPoint.date, unit: .day),
                     y: .value("Time In Daylight", dataPoint.quantity)
                 )
-                .foregroundStyle(.yellow)
+                .foregroundStyle(.tint)
                 .cornerRadius(5)
             }
         }

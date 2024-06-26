@@ -28,18 +28,32 @@ struct SleepAnalysis: Codable, Hashable, Identifiable {
     let remSleepMinutes: Double
     let awakeSleepMinutes: Double
     let environmentalSoundLevels: [SoundLevelDataPoint]
+    let heartRate: [HeartRateDataPoint]
 }
 
 extension SleepAnalysis {
     struct SoundLevelDataPoint: Codable, Hashable, Identifiable {
         var id: String {
-            "\(decibelAWeightedSoundPressureLevelMin) - \(decibelAWeightedSoundPressureLevelMax) - \(startDate) - \(timeInterval)"
+            "\(decibelAWeightedSoundPressureLevelMin) - \(decibelAWeightedSoundPressureLevelMax) - \(startDate) - \(timeRangeSeconds)"
         }
 
         let decibelAWeightedSoundPressureLevelMin: Double
         let decibelAWeightedSoundPressureLevelMax: Double
         let startDate: Date
-        let timeInterval: TimeInterval
+        let timeRangeSeconds: TimeInterval
+    }
+}
+
+extension SleepAnalysis {
+    struct HeartRateDataPoint: Codable, Hashable, Identifiable {
+        var id: String {
+            "\(minHeartRate)-\(maxHeartRate)-\(startDate)-\(timeRangeSeconds)"
+        }
+
+        let minHeartRate: Double
+        let maxHeartRate: Double
+        let startDate: Date
+        let timeRangeSeconds: TimeInterval
     }
 }
 
@@ -168,7 +182,8 @@ extension SleepAnalysis {
                 coreSleepMinutes: 290,
                 remSleepMinutes: 98,
                 awakeSleepMinutes: 25,
-                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400)),
@@ -177,7 +192,8 @@ extension SleepAnalysis {
                 coreSleepMinutes: 250,
                 remSleepMinutes: 67,
                 awakeSleepMinutes: 40,
-                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*2)),
@@ -186,7 +202,8 @@ extension SleepAnalysis {
                 coreSleepMinutes: 300,
                 remSleepMinutes: 48,
                 awakeSleepMinutes: 52,
-                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*3)),
@@ -195,7 +212,8 @@ extension SleepAnalysis {
                 coreSleepMinutes: 260,
                 remSleepMinutes: 48,
                 awakeSleepMinutes: 12,
-                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*4)),
@@ -204,7 +222,8 @@ extension SleepAnalysis {
                 coreSleepMinutes: 274,
                 remSleepMinutes: 41,
                 awakeSleepMinutes: 23,
-                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*5)),
@@ -213,7 +232,8 @@ extension SleepAnalysis {
                 coreSleepMinutes: 293,
                 remSleepMinutes: 53,
                 awakeSleepMinutes: 36,
-                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*6)),
@@ -222,7 +242,8 @@ extension SleepAnalysis {
                 coreSleepMinutes: 312,
                 remSleepMinutes: 69,
                 awakeSleepMinutes: 18,
-                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData
+                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
             )
         ]
     }
@@ -235,73 +256,121 @@ extension SleepAnalysis.SoundLevelDataPoint {
             decibelAWeightedSoundPressureLevelMin: 44,
             decibelAWeightedSoundPressureLevelMax: 42,
             startDate: .now,
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 45,
             decibelAWeightedSoundPressureLevelMax: 41,
             startDate: Date(timeIntervalSinceNow: -3600),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 51,
             decibelAWeightedSoundPressureLevelMax: 43,
             startDate: Date(timeIntervalSinceNow: -3600 * 2),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 48,
             decibelAWeightedSoundPressureLevelMax: 43,
             startDate: Date(timeIntervalSinceNow: -3600 * 3),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 45,
             decibelAWeightedSoundPressureLevelMax: 39,
             startDate: Date(timeIntervalSinceNow: -3600 * 4),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 48,
             decibelAWeightedSoundPressureLevelMax: 43,
             startDate: Date(timeIntervalSinceNow: -3600 * 4),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 42,
             decibelAWeightedSoundPressureLevelMax: 39,
             startDate: Date(timeIntervalSinceNow: -3600 * 5),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 51,
             decibelAWeightedSoundPressureLevelMax: 45,
             startDate: Date(timeIntervalSinceNow: -3600 * 6),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 43,
             decibelAWeightedSoundPressureLevelMax: 42,
             startDate: Date(timeIntervalSinceNow: -3600 * 7),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 48,
             decibelAWeightedSoundPressureLevelMax: 43,
             startDate: Date(timeIntervalSinceNow: -3600 * 8),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 42,
             decibelAWeightedSoundPressureLevelMax: 40,
             startDate: Date(timeIntervalSinceNow: -3600 * 9),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         ),
         SleepAnalysis.SoundLevelDataPoint(
             decibelAWeightedSoundPressureLevelMin: 39,
             decibelAWeightedSoundPressureLevelMax: 32,
             startDate: Date(timeIntervalSinceNow: -3600 * 10),
-            timeInterval: 3600
+            timeRangeSeconds: 3600
         )
+    ]
+}
+
+extension SleepAnalysis.HeartRateDataPoint {
+
+    static let previewData: [SleepAnalysis.HeartRateDataPoint] = [
+        SleepAnalysis.HeartRateDataPoint(
+            minHeartRate: 56,
+            maxHeartRate: 62,
+            startDate: .now,
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.HeartRateDataPoint(
+            minHeartRate: 58,
+            maxHeartRate: 64,
+            startDate: Date(timeIntervalSinceNow: -900),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.HeartRateDataPoint(
+            minHeartRate: 48,
+            maxHeartRate: 57,
+            startDate: Date(timeIntervalSinceNow: -900 * 2),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.HeartRateDataPoint(
+            minHeartRate: 57,
+            maxHeartRate: 66,
+            startDate: Date(timeIntervalSinceNow: -900 * 3),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.HeartRateDataPoint(
+            minHeartRate: 48,
+            maxHeartRate: 55,
+            startDate: Date(timeIntervalSinceNow: -900 * 4),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.HeartRateDataPoint(
+            minHeartRate: 43,
+            maxHeartRate: 49,
+            startDate: Date(timeIntervalSinceNow: -900 * 5),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.HeartRateDataPoint(
+            minHeartRate: 48,
+            maxHeartRate: 60,
+            startDate: Date(timeIntervalSinceNow: -900 * 6),
+            timeRangeSeconds: 900
+        ),
     ]
 }

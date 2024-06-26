@@ -15,7 +15,7 @@ extension Int {
         case 4, 5, 6, 7:
             return .orange
         default:
-            return .green
+            return .coreSleep
         }
     }
 }

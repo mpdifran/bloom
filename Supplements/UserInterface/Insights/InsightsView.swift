@@ -58,6 +58,11 @@ struct InsightsView: View {
                     SleepScoreCell(sleepAnalysis: viewModel.sleepAnalysis) {
                         presentedNavigationView = SleepSummaryView().asAny
                     }
+
+                    if let firstSleepAnalysis = viewModel.sleepAnalysis.first {
+                        SleepHeartRateSummaryCell(heartRates: firstSleepAnalysis.heartRate)
+                        SleepSoundLevelSummaryCell(soundLevels: firstSleepAnalysis.environmentalSoundLevels)
+                    }
                 }
 
                 WorkoutSummaryCell(workoutSummaries: viewModel.workoutSummary)

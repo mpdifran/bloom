@@ -235,14 +235,8 @@ struct SleepSegmentScoreView: View {
                                 coreSleepMinutes: 180,
                                 remSleepMinutes: 93,
                                 awakeSleepMinutes: 32,
-                                environmentalSoundLevels: [
-                                    SleepAnalysis.SoundLevelDataPoint(
-                                        decibelAWeightedSoundPressureLevelMin: 56,
-                                        decibelAWeightedSoundPressureLevelMax: 42,
-                                        startDate: .now,
-                                        timeInterval: 3600
-                                    )
-                                ]
+                                environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
+                                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
                             )
                         ]
                     ) { }
