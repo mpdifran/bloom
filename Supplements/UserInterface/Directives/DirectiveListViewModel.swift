@@ -12,14 +12,11 @@ import OpenAPIClient
 final class DirectiveListViewModel: ObservableObject {
     static let shared = DirectiveListViewModel()
 
-    @Published var directives = [UserDirective]()
+    @Published var sleepActivities = [SleepActivityModel]()
 
     private init() { 
-        SleepProgramCoordinator.shared.$assistantResponse
-            .map { assistantResponse in
-                assistantResponse?.directives ?? []
-            }
+        SleepProgramCoordinator.shared.$sleepActivities
             .receive(on: DispatchQueue.main)
-            .assign(to: &$directives)
+            .assign(to: &$sleepActivities)
     }
 }

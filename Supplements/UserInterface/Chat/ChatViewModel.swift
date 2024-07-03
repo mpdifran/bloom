@@ -195,6 +195,29 @@ extension ChatViewModel {
         }
     }
 
+    func appendAssistantMessage(message: String) async {
+        await MainActor.run {
+            var newChatHistory = chatHistory
+
+            newChatHistory.append(
+                ChatMessage(
+                    message: message,
+                    timestamp: .now,
+                    supplementReccomendation: [],
+                    activityRecommendation: [],
+                    isCurrentUser: false
+                )
+            )
+            unreadChatCount += 1
+
+            chatHistory = newChatHistory
+
+            SoundPlayer.playReceiveMessage()
+        }
+
+        await NotificationManager.shared.sendNotification(title: "Bloom", subtitle: message)
+    }
+
     func parseOnboardingInfo(chatHistory: [ChatMessage]) async {
         await MainActor.run {
             self.chatHistory = chatHistory

@@ -9,12 +9,12 @@ import SwiftUI
 import OpenAPIClient
 
 struct DirectiveCell: View {
-    let directive: UserDirective
+    let sleepActivity: SleepActivityModel
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(directive.title)
+                Text(sleepActivity.title)
                     .font(.title3)
                     .bold()
 
@@ -28,58 +28,65 @@ struct DirectiveCell: View {
                             .stroke(.tint, lineWidth: 2)
                     }
                     .overlay {
-                        Image(systemName: directive.sfSymbol)
+                        Image(systemName: "figure.run")//sleepActivity.sfSymbol)
                             .foregroundStyle(.tint)
                             .symbolVariant(.fill)
                     }
             }
             .padding(.top)
 
-            Text(directive.description)
+            Text(sleepActivity.description)
                 .foregroundStyle(.secondary)
 
-            if let supplementDetails = directive.supplementDetails {
-                Spacer()
-                Text("\(supplementDetails.dosageAmount, specifier: "%.0f") \(supplementDetails.dosageUnit)")
-                    .font(.title)
-                    .bold()
-                    .fontDesign(.rounded)
+            Spacer()
 
-                if let dateDescription = supplementDetails.scheduleTimeComponent.formattedTimeUsingNow {
-                    TimelineView(.everyMinute) { _ in
-                        Text(dateDescription)
-                            .foregroundStyle(.secondary)
-                            .font(.subheadline)
-                    }
-                }
+            Text("Revisit on \(sleepActivity.revisitDate, formatter: DateFormatter.justDateMedium)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .horizontallyCentered()
 
-                Divider()
-
-                DirectiveCompleteButton("Mark as Taken") {
-
-                }
-            } else if let activityDetails = directive.activityDetails {
-                Spacer()
-
-                Text("\(activityDetails.recommendedDurationMinutes) min")
-                    .font(.title)
-                    .bold()
-                    .fontDesign(.rounded)
-
-                if let dateDescription = activityDetails.proposedTimeComponent?.formattedTimeUsingNow {
-                    TimelineView(.everyMinute) { _ in
-                        Text(dateDescription)
-                            .foregroundStyle(.secondary)
-                            .font(.subheadline)
-                    }
-                }
-
-                Divider()
-
-                DirectiveCompleteButton("Mark as Complete") {
-
-                }
-            }
+//            if let supplementDetails = sleepActivity.supplementDetails {
+//                Spacer()
+//                Text("\(supplementDetails.dosageAmount, specifier: "%.0f") \(supplementDetails.dosageUnit)")
+//                    .font(.title)
+//                    .bold()
+//                    .fontDesign(.rounded)
+//
+//                if let dateDescription = supplementDetails.scheduleTimeComponent.formattedTimeUsingNow {
+//                    TimelineView(.everyMinute) { _ in
+//                        Text(dateDescription)
+//                            .foregroundStyle(.secondary)
+//                            .font(.subheadline)
+//                    }
+//                }
+//
+//                Divider()
+//
+//                DirectiveCompleteButton("Mark as Taken") {
+//
+//                }
+//            } else if let activityDetails = sleepActivity.activityDetails {
+//                Spacer()
+//
+//                Text("\(activityDetails.recommendedDurationMinutes) min")
+//                    .font(.title)
+//                    .bold()
+//                    .fontDesign(.rounded)
+//
+//                if let dateDescription = activityDetails.proposedTimeComponent?.formattedTimeUsingNow {
+//                    TimelineView(.everyMinute) { _ in
+//                        Text(dateDescription)
+//                            .foregroundStyle(.secondary)
+//                            .font(.subheadline)
+//                    }
+//                }
+//
+//                Divider()
+//
+//                DirectiveCompleteButton("Mark as Complete") {
+//
+//                }
+//            }
 
 //            Divider()
 //
@@ -101,33 +108,17 @@ struct DirectiveCell: View {
     List {
         Section {
             DirectiveCell(
-                directive: .init(
+                sleepActivity: .init(
                     title: "Take melatonin nightly",
                     description: "Melatonin can help improve sleep quality. Let's try taking it every night for 2 weeks and monitor the results.",
-                    sfSymbol: "pill",
-                    supplementDetails: .init(
-                        dosageAmount: 3,
-                        dosageUnit: "mg",
-                        scheduleTimeComponent: .init(hour: 22, minute: 30),
-                        alertsUser: true
-                    )
+                    targetMetric: "deep_sleep",
+                    startDate: .now,
+                    revisitDate: Date(timeIntervalSinceNow: 12400),
+                    goalValue: 50,
+                    goalUnit: "min"
                 )
             )
             .tint(.blue)
-        }
-        Section {
-            DirectiveCell(
-                directive: .init(
-                    title: "Go for a walk today",
-                    description: "Today is pretty sunny and warm. Why not take a walk on your lunch time?",
-                    sfSymbol: "figure.walk",
-                    activityDetails: .init(
-                        recommendedDurationMinutes: 15,
-                        proposedTimeComponent: .init(hour: 12, minute: 00)
-                    )
-                )
-            )
-            .tint(.green)
         }
     }
 }

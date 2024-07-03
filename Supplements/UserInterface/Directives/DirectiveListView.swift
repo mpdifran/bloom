@@ -16,7 +16,7 @@ struct DirectiveListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.directives.isEmpty {
+                if viewModel.sleepActivities.isEmpty {
                     ContentUnavailableView {
                         Label("No Actions", systemImage: "figure.run")
                     } description: {
@@ -35,9 +35,9 @@ struct DirectiveListView: View {
                     }
                 } else {
                     List {
-                        ForEach(viewModel.directives, id: \.hashValue) { directive in
+                        ForEach(viewModel.sleepActivities) { sleepActivity in
                             Section {
-                                DirectiveCell(directive: directive)
+                                DirectiveCell(sleepActivity: sleepActivity)
                             }
                         }
                     }
