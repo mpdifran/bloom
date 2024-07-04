@@ -12,14 +12,16 @@ struct SleepHeartRateSummaryCell: View {
 
     var body: some View {
         Section {
-            SleepProgramSectionHeader(
-                title: "Heart Rate",
-                subtitle: "Last Night",
-                systemImage: "heart.fill"
-            )
+            VStack {
+                SleepProgramSectionHeader(
+                    title: "Heart Rate",
+                    subtitle: "Last Night",
+                    systemImage: "heart.fill"
+                )
 
-            SleepHeartRateChartView(heartRates: heartRates)
-                .padding(.bottom)
+                SleepHeartRateChartView(heartRates: heartRates)
+            }
+            .padding(.bottom)
         }
         .tint(.pink)
     }

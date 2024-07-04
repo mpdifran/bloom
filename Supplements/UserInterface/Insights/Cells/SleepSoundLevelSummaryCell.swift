@@ -12,14 +12,16 @@ struct SleepSoundLevelSummaryCell: View {
 
     var body: some View {
         Section {
-            SleepProgramSectionHeader(
-                title: "Sound Levels",
-                subtitle: "Last Night",
-                systemImage: "speaker.zzz.fill"
-            )
+            VStack {
+                SleepProgramSectionHeader(
+                    title: "Sound Levels",
+                    subtitle: "Last Night",
+                    systemImage: "speaker.zzz.fill"
+                )
 
-            SleepSoundLevelChartView(soundLevels: soundLevels)
-                .padding(.bottom)
+                SleepSoundLevelChartView(soundLevels: soundLevels)
+            }
+            .padding(.bottom)
         }
         .tint(.yellow)
     }
