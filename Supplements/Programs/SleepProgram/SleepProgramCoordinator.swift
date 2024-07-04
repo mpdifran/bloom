@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import ScreenControl
+//import ScreenControl
+import BloomFoundation
 import OpenAPIClient
 
 private extension String {
@@ -64,7 +65,7 @@ extension SleepProgramCoordinator {
 
     func stopProgram() {
         startDate = nil
-        ScreenUseController.shared.stopMonitoring()
+//        ScreenUseController.shared.stopMonitoring()
     }
 }
 

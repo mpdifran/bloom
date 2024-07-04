@@ -73,7 +73,7 @@ struct InsightsView: View {
 
                 MeditationMinutesCell(meditationMinutes: viewModel.meditationMinutes)
 
-                ScreenUsageReportCell()
+//                ScreenUsageReportCell()
             }
             .navigationTitle("Insights")
             .navigationDestination($presentedNavigationView)
