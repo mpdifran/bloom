@@ -131,8 +131,4 @@ extension SleepProgramCoordinator {
 //        self.automatedIDs = response.automatedIds
 //        self.assistantResponse = response
 //    }
-
-    func resetAssistant() {
-        automatedIDs = ""
-    }
 }

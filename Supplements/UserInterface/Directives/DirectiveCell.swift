@@ -11,7 +11,7 @@ import OpenAPIClient
 struct DirectiveCell: View {
     let sleepActivity: SleepActivityModel
 
-    @State private var hasTaken = true
+    @State private var hasTaken = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -60,7 +60,7 @@ struct DirectiveCell: View {
 
             Divider()
 
-            DirectiveCompleteButton("Mark as Taken", isComplete: hasTaken) {
+            DirectiveCompleteButton("Mark as Done", isComplete: hasTaken) {
                 hasTaken.toggle()
             }
         }
