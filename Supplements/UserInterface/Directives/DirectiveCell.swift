@@ -11,8 +11,10 @@ import OpenAPIClient
 struct DirectiveCell: View {
     let sleepActivity: SleepActivityModel
 
+    @State private var hasTaken = true
+
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(sleepActivity.title)
                     .font(.title3)
@@ -21,15 +23,15 @@ struct DirectiveCell: View {
                 Spacer()
 
                 Circle()
-                    .fill(.fill)
+                    .fill(sleepActivity.color)
                     .frame(square: 40)
+//                    .overlay {
+//                        Circle()
+//                            .stroke(.fill, lineWidth: 2)
+//                    }
                     .overlay {
-                        Circle()
-                            .stroke(.tint, lineWidth: 2)
-                    }
-                    .overlay {
-                        Image(systemName: "figure.run")//sleepActivity.sfSymbol)
-                            .foregroundStyle(.tint)
+                        Image(systemName: sleepActivity.sfSymbol)
+                            .foregroundStyle(.white)
                             .symbolVariant(.fill)
                     }
             }
@@ -38,68 +40,33 @@ struct DirectiveCell: View {
             Text(sleepActivity.description)
                 .foregroundStyle(.secondary)
 
-            Spacer()
-
             Text("Revisit on \(sleepActivity.revisitDate, formatter: DateFormatter.justDateMedium)")
                 .font(.caption)
-                .foregroundStyle(.secondary)
-                .horizontallyCentered()
+                .foregroundStyle(.tertiary)
+                .padding(.vertical, 4)
 
-//            if let supplementDetails = sleepActivity.supplementDetails {
-//                Spacer()
-//                Text("\(supplementDetails.dosageAmount, specifier: "%.0f") \(supplementDetails.dosageUnit)")
-//                    .font(.title)
-//                    .bold()
-//                    .fontDesign(.rounded)
-//
-//                if let dateDescription = supplementDetails.scheduleTimeComponent.formattedTimeUsingNow {
-//                    TimelineView(.everyMinute) { _ in
-//                        Text(dateDescription)
-//                            .foregroundStyle(.secondary)
-//                            .font(.subheadline)
-//                    }
-//                }
-//
-//                Divider()
-//
-//                DirectiveCompleteButton("Mark as Taken") {
-//
-//                }
-//            } else if let activityDetails = sleepActivity.activityDetails {
-//                Spacer()
-//
-//                Text("\(activityDetails.recommendedDurationMinutes) min")
-//                    .font(.title)
-//                    .bold()
-//                    .fontDesign(.rounded)
-//
-//                if let dateDescription = activityDetails.proposedTimeComponent?.formattedTimeUsingNow {
-//                    TimelineView(.everyMinute) { _ in
-//                        Text(dateDescription)
-//                            .foregroundStyle(.secondary)
-//                            .font(.subheadline)
-//                    }
-//                }
-//
-//                Divider()
-//
-//                DirectiveCompleteButton("Mark as Complete") {
-//
-//                }
-//            }
+            Divider()
 
-//            Divider()
-//
-//            Button(action: {
-//
-//            }, label: {
-//                HStack {
-//                    Label("Try Something Else", systemImage: "arrow.up.arrow.down")
-//                    Spacer()
-//                }
-//            })
-//            .frame(height: 44)
-//            .foregroundStyle(.red)
+            HStack {
+                Text("Goal")
+                    .fontDesign(.rounded)
+                    .bold()
+
+                Spacer()
+
+                Text("\(sleepActivity.goalValue, specifier: "%.0f") \(sleepActivity.goalUnit)")
+                    .fontDesign(.rounded)
+                    .bold()
+                    .foregroundStyle(sleepActivity.color)
+            }
+            .font(.headline)
+            .padding(.vertical, 6)
+
+            Divider()
+
+            DirectiveCompleteButton("Mark as Taken", isComplete: hasTaken) {
+                hasTaken.toggle()
+            }
         }
     }
 }
@@ -112,10 +79,12 @@ struct DirectiveCell: View {
                     title: "Take melatonin nightly",
                     description: "Melatonin can help improve sleep quality. Let's try taking it every night for 2 weeks and monitor the results.",
                     targetMetric: "deep_sleep",
+                    sfSymbol: "pills",
+                    tintColor: "#0088FF",
                     startDate: .now,
                     revisitDate: Date(timeIntervalSinceNow: 12400),
-                    goalValue: 50,
-                    goalUnit: "min"
+                    goalValue: 3,
+                    goalUnit: "mg"
                 )
             )
             .tint(.blue)

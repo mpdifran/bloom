@@ -13,13 +13,17 @@ struct SleepSoundLevelChartView: View {
 
     var body: some View {
         Chart(soundLevels) { soundLevel in
-            BarMark(
+            LineMark(
                 x: .value("Date", soundLevel.startDate),
-                yStart: .value("Min", soundLevel.decibelAWeightedSoundPressureLevelMin),
-                yEnd: .value("Max", soundLevel.decibelAWeightedSoundPressureLevelMax)
+                y: .value("Average", soundLevel.decibelAWeightedSoundPressureLevelAverage)
             )
             .foregroundStyle(.yellow)
-            .cornerRadius(5)
+
+            PointMark(
+                x: .value("Date", soundLevel.startDate),
+                y: .value("Average", soundLevel.decibelAWeightedSoundPressureLevelAverage)
+            )
+            .foregroundStyle(.yellow)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 10)...((maxY ?? 0) + 10),
@@ -45,11 +49,11 @@ struct SleepSoundLevelChartView: View {
 private extension SleepSoundLevelChartView {
 
     var minY: Double? {
-        soundLevels.min(by: { $0.decibelAWeightedSoundPressureLevelMin < $1.decibelAWeightedSoundPressureLevelMin })?.decibelAWeightedSoundPressureLevelMin
+        soundLevels.min(by: { $0.decibelAWeightedSoundPressureLevelAverage < $1.decibelAWeightedSoundPressureLevelAverage })?.decibelAWeightedSoundPressureLevelAverage
     }
 
     var maxY: Double? {
-        soundLevels.max(by: { $0.decibelAWeightedSoundPressureLevelMax < $1.decibelAWeightedSoundPressureLevelMax })?.decibelAWeightedSoundPressureLevelMax
+        soundLevels.max(by: { $0.decibelAWeightedSoundPressureLevelAverage < $1.decibelAWeightedSoundPressureLevelAverage })?.decibelAWeightedSoundPressureLevelAverage
     }
 }
 

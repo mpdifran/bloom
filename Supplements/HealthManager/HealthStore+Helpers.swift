@@ -305,6 +305,64 @@ extension HKHealthStore {
             execute(query)
         }
     }
+
+    func fetchAverageStatistics(
+        quantityTypeID: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        interval: DateComponents = DateComponents(hour: 1),
+        startDate: Date,
+        endDate: Date
+    ) async throws -> [DateAverageQuantitySample] {
+        try await withCheckedThrowingContinuation { continuation in
+            let quantityType = HKQuantityType(quantityTypeID)
+
+            let predicate = HKQuery.predicateForSamples(
+                withStart: startDate,
+                end: endDate,
+                options: .strictStartDate
+            )
+
+            let query = HKStatisticsCollectionQuery(
+                quantityType: quantityType,
+                quantitySamplePredicate: predicate,
+                options: [.discreteAverage],
+                anchorDate: startDate,
+                intervalComponents: interval
+            )
+
+            query.initialResultsHandler = { query, results, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let results else {
+                    continuation.resume(returning: [])
+                    return
+                }
+
+                var samples = [DateAverageQuantitySample]()
+                results.enumerateStatistics(from: startDate, to: endDate) { (statistics, stop) in
+                    guard
+                        let average = statistics.averageQuantity()
+                    else { return }
+
+                    let averageQuantity = average.doubleValue(for: unit)
+
+                    samples.append(
+                        DateAverageQuantitySample(
+                            date: statistics.startDate,
+                            averageQuantity: averageQuantity,
+                            unit: unit.unitString
+                        )
+                    )
+                }
+                continuation.resume(returning: samples)
+            }
+
+            execute(query)
+        }
+    }
 }
 
 extension HKHealthStore {

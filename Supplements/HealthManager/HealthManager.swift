@@ -522,23 +522,24 @@ extension HealthManager {
                 continue
             }
 
+            let timePeriod: Int = 10
+
             // Sound levels
             var soundLevelDataPoints = [SleepAnalysis.SoundLevelDataPoint]()
             do {
-                let samples = try await healthStore.fetchMinMaxStatistics(
+                let samples = try await healthStore.fetchAverageStatistics(
                     quantityTypeID: .environmentalAudioExposure,
                     unit: .decibelAWeightedSoundPressureLevel(),
-                    interval: DateComponents(minute: 15),
+                    interval: DateComponents(minute: timePeriod),
                     startDate: startDate,
                     endDate: endDate
                 )
 
                 for sample in samples {
                     let dataPoint = SleepAnalysis.SoundLevelDataPoint(
-                        decibelAWeightedSoundPressureLevelMin: sample.minQuantity,
-                        decibelAWeightedSoundPressureLevelMax: sample.maxQuantity,
+                        decibelAWeightedSoundPressureLevelAverage: sample.averageQuantity,
                         startDate: sample.date,
-                        timeRangeSeconds: 900 // 15 minutes
+                        timeRangeSeconds: TimeInterval(timePeriod * 60)
                     )
                     soundLevelDataPoints.append(dataPoint)
                 }
@@ -549,20 +550,19 @@ extension HealthManager {
             // Heart rate
             var heartRateDataPoints = [SleepAnalysis.HeartRateDataPoint]()
             do {
-                let samples = try await healthStore.fetchMinMaxStatistics(
+                let samples = try await healthStore.fetchAverageStatistics(
                     quantityTypeID: .heartRate,
                     unit: .bpm(),
-                    interval: DateComponents(minute: 15),
+                    interval: DateComponents(minute: timePeriod),
                     startDate: startDate,
                     endDate: endDate
                 )
 
                 for sample in samples {
                     let dataPoint = SleepAnalysis.HeartRateDataPoint(
-                        minHeartRate: sample.minQuantity,
-                        maxHeartRate: sample.maxQuantity,
+                        averageHeartRate: sample.averageQuantity,
                         startDate: sample.date,
-                        timeRangeSeconds: 900 // 15 minutes
+                        timeRangeSeconds: TimeInterval(timePeriod * 60)
                     )
                     heartRateDataPoints.append(dataPoint)
                 }

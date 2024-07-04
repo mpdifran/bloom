@@ -13,13 +13,17 @@ struct SleepHeartRateChartView: View {
 
     var body: some View {
         Chart(heartRates) { heartRate in
-            BarMark(
+            LineMark(
                 x: .value("Date", heartRate.startDate),
-                yStart: .value("Min", heartRate.minHeartRate),
-                yEnd: .value("Max", heartRate.maxHeartRate)
+                y: .value("Average", heartRate.averageHeartRate)
             )
             .foregroundStyle(.pink)
-            .cornerRadius(5)
+
+            PointMark(
+                x: .value("Date", heartRate.startDate),
+                y: .value("Average", heartRate.averageHeartRate)
+            )
+            .foregroundStyle(.pink)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 10)...((maxY ?? 0) + 10),
@@ -45,11 +49,11 @@ struct SleepHeartRateChartView: View {
 private extension SleepHeartRateChartView {
 
     var minY: Double? {
-        heartRates.min(by: { $0.minHeartRate < $1.minHeartRate })?.minHeartRate
+        heartRates.min(by: { $0.averageHeartRate < $1.averageHeartRate })?.averageHeartRate
     }
 
     var maxY: Double? {
-        heartRates.max(by: { $0.maxHeartRate < $1.maxHeartRate })?.maxHeartRate
+        heartRates.max(by: { $0.averageHeartRate < $1.averageHeartRate })?.averageHeartRate
     }
 }
 

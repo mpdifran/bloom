@@ -9,14 +9,14 @@ import SwiftUI
 import AppUI
 
 struct DirectiveListView: View {
-    @ObservedObject private var viewModel = DirectiveListViewModel.shared
+    @ObservedObject private var sleepCoordinator = SleepProgramCoordinator.shared
 
     @State private var error: Error?
 
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.sleepActivities.isEmpty {
+                if sleepCoordinator.sleepActivities.isEmpty {
                     ContentUnavailableView {
                         Label("No Actions", systemImage: "figure.run")
                     } description: {
@@ -35,9 +35,14 @@ struct DirectiveListView: View {
                     }
                 } else {
                     List {
-                        ForEach(viewModel.sleepActivities) { sleepActivity in
+                        ForEachEnumerated(sleepCoordinator.sleepActivities) { (index, sleepActivity) in
                             Section {
                                 DirectiveCell(sleepActivity: sleepActivity)
+                                    .contextMenu {
+                                        Button("Delete", systemImage: "trash", role: .destructive) {
+                                            sleepCoordinator.sleepActivities.remove(at: index)
+                                        }
+                                    }
                             }
                         }
                     }

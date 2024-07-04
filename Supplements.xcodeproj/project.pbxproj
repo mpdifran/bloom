@@ -99,6 +99,7 @@
 		FF7890582C35A8D500F9C1A5 /* SleepHealthSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7890572C35A8D500F9C1A5 /* SleepHealthSnapshot.swift */; };
 		FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7890592C35A9EA00F9C1A5 /* SleepCoachResponse.swift */; };
 		FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */; };
+		FF78905E2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */; };
 		FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B1D2BFCEB4700BA2128 /* OnboardingChatView.swift */; };
 		FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B232BFD364B00BA2128 /* ProfileView.swift */; };
@@ -392,6 +393,7 @@
 		FF7890572C35A8D500F9C1A5 /* SleepHealthSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHealthSnapshot.swift; sourceTree = "<group>"; };
 		FF7890592C35A9EA00F9C1A5 /* SleepCoachResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachResponse.swift; sourceTree = "<group>"; };
 		FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+POST.swift"; sourceTree = "<group>"; };
+		FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAverageQuantitySample.swift; sourceTree = "<group>"; };
 		FF8B8B1D2BFCEB4700BA2128 /* OnboardingChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingChatView.swift; sourceTree = "<group>"; };
 		FF8B8B232BFD364B00BA2128 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -1098,6 +1100,7 @@
 				FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */,
 				FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */,
 				FFF66FA82C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift */,
+				FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */,
 				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
 			);
 			path = Model;
@@ -1692,6 +1695,7 @@
 				FF1E960F2C0ACC70004DAD2D /* LabelledMetricView.swift in Sources */,
 				FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,
+				FF78905E2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,

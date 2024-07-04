@@ -29,7 +29,7 @@ final class SleepProgramCoordinator: ObservableObject {
     }
     @Published private(set) var assistantResponse: PostSleepAssistantResponse?
 
-    @Published private(set) var sleepActivities = [SleepActivityModel]() {
+    @Published var sleepActivities = [SleepActivityModel]() {
         didSet {
             if let data = try? JSONEncoder.main.encode(sleepActivities) {
                 UserDefaults.group.set(data, forKey: .sleepActivities)
