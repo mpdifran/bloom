@@ -13,6 +13,8 @@ struct DirectiveCell: View {
 
     @State private var hasTaken = false
 
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -62,9 +64,13 @@ struct DirectiveCell: View {
 
             DirectiveCompleteButton("Mark as Done", isComplete: hasTaken) {
                 hasTaken.toggle()
+                feedbackGenerator.impactOccurred()
             }
         }
         .tint(sleepActivity.color)
+        .onAppear {
+            feedbackGenerator.prepare()
+        }
     }
 }
 
