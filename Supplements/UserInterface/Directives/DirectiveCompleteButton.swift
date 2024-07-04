@@ -34,10 +34,16 @@ struct DirectiveCompleteButton: View {
                             Text(title)
                         },
                         icon: {
-                            Image(systemName: "checkmark.circle")
-                                .symbolVariant(isComplete ? .fill : .none)
-                                .contentTransition(.symbolEffect)
-                                .foregroundStyle(.white, .tint)
+                            Group {
+                                if isComplete {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(.white, .tint)
+                                } else {
+                                    Image(systemName: "circle")
+                                        .foregroundStyle(.tint)
+                                }
+                            }
+                            .contentTransition(.interpolate)
                         }
                     )
                     Spacer()

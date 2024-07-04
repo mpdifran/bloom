@@ -18,8 +18,6 @@ extension URLSession {
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
-        print(String(data: data, encoding: .utf8) ?? "")
-
         return try JSONDecoder.main.decode(Response.self, from: data)
     }
 }

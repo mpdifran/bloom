@@ -23,12 +23,8 @@ struct DirectiveCell: View {
                 Spacer()
 
                 Circle()
-                    .fill(sleepActivity.color)
+                    .fill(.tint)
                     .frame(square: 40)
-//                    .overlay {
-//                        Circle()
-//                            .stroke(.fill, lineWidth: 2)
-//                    }
                     .overlay {
                         Image(systemName: sleepActivity.sfSymbol)
                             .foregroundStyle(.white)
@@ -57,7 +53,7 @@ struct DirectiveCell: View {
                 Text("\(sleepActivity.goalValue, specifier: "%.0f") \(sleepActivity.goalUnit)")
                     .fontDesign(.rounded)
                     .bold()
-                    .foregroundStyle(sleepActivity.color)
+                    .foregroundStyle(.tint)
             }
             .font(.headline)
             .padding(.vertical, 6)
@@ -68,6 +64,7 @@ struct DirectiveCell: View {
                 hasTaken.toggle()
             }
         }
+        .tint(sleepActivity.color)
     }
 }
 
