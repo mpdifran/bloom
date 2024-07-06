@@ -13,4 +13,8 @@ extension HKUnit {
     static func bpm() -> HKUnit {
         HKUnit.count().unitDivided(by: HKUnit.minute())
     }
+
+    static func breathsPerMinute() -> HKUnit {
+        HKUnit.count().unitDivided(by: HKUnit.minute())
+    }
 }

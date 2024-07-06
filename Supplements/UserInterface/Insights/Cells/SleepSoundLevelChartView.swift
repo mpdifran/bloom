@@ -18,12 +18,6 @@ struct SleepSoundLevelChartView: View {
                 y: .value("Average", soundLevel.decibelAWeightedSoundPressureLevelAverage)
             )
             .foregroundStyle(.yellow)
-
-            PointMark(
-                x: .value("Date", soundLevel.startDate),
-                y: .value("Average", soundLevel.decibelAWeightedSoundPressureLevelAverage)
-            )
-            .foregroundStyle(.yellow)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 10)...((maxY ?? 0) + 10),

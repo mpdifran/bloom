@@ -86,6 +86,8 @@ struct SleepSummaryView: View {
 
                         SleepSoundLevelChartView(soundLevels: sleepAnalysis.environmentalSoundLevels)
 
+                        SleepRespiratoryRateChartView(respiratoryRates: sleepAnalysis.respiratoryRate)
+
                         SleepSegmentScoreView(
                             title: "Sleep Length Score",
                             color: .green,

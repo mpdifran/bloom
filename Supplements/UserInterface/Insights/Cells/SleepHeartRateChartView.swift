@@ -18,12 +18,6 @@ struct SleepHeartRateChartView: View {
                 y: .value("Average", heartRate.averageHeartRate)
             )
             .foregroundStyle(.pink)
-
-            PointMark(
-                x: .value("Date", heartRate.startDate),
-                y: .value("Average", heartRate.averageHeartRate)
-            )
-            .foregroundStyle(.pink)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 10)...((maxY ?? 0) + 10),

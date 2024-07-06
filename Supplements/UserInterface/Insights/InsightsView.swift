@@ -62,6 +62,7 @@ struct InsightsView: View {
                     if let firstSleepAnalysis = viewModel.sleepAnalysis.last {
                         SleepHeartRateSummaryCell(heartRates: firstSleepAnalysis.heartRate)
                         SleepSoundLevelSummaryCell(soundLevels: firstSleepAnalysis.environmentalSoundLevels)
+                        SleepRespiratoryRateSummaryCell(respiratoryRates: firstSleepAnalysis.respiratoryRate)
                     }
                 }
 

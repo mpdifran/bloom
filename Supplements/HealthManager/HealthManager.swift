@@ -51,7 +51,8 @@ final class HealthManager: ObservableObject {
         HKObjectType.workoutType(),
         HKObjectType.categoryType(forIdentifier: .mindfulSession)!,
         HKObjectType.quantityType(forIdentifier: .heartRate)!,
-        HKObjectType.quantityType(forIdentifier: .environmentalAudioExposure)!
+        HKObjectType.quantityType(forIdentifier: .environmentalAudioExposure)!,
+        HKQuantityType(.respiratoryRate)
     ]
     // body fat percentage
     // BMI
@@ -511,7 +512,7 @@ extension HealthManager {
                 continue
             }
 
-            let timePeriod: Int = 10
+            let timePeriod: Int = 10 // minutes
 
             // Sound levels
             var soundLevelDataPoints = [SleepAnalysis.SoundLevelDataPoint]()
@@ -559,6 +560,29 @@ extension HealthManager {
                 print(error)
             }
 
+            // Respiratory Rate
+            var respiratoryRateDataPoints = [SleepAnalysis.RespiratoryRateDataPoint]()
+            do {
+                let samples = try await healthStore.fetchAverageStatistics(
+                    quantityTypeID: .respiratoryRate,
+                    unit: .breathsPerMinute(),
+                    interval: .init(minute: timePeriod),
+                    startDate: startDate,
+                    endDate: endDate
+                )
+
+                for sample in samples {
+                    let dataPoint = SleepAnalysis.RespiratoryRateDataPoint(
+                        averageRespiratoryRate: sample.averageQuantity,
+                        startDate: sample.date,
+                        timeRangeSeconds: TimeInterval(timePeriod * 60)
+                    )
+                    respiratoryRateDataPoints.append(dataPoint)
+                }
+            } catch {
+                print(error)
+            }
+
             let analysis = SleepAnalysis(
                 startDate: startDate,
                 endDate: endDate,
@@ -567,7 +591,8 @@ extension HealthManager {
                 remSleepMinutes: remSleepTime / 60,
                 awakeSleepMinutes: awakeSleepTime / 60,
                 environmentalSoundLevels: soundLevelDataPoints,
-                heartRate: heartRateDataPoints
+                heartRate: heartRateDataPoints,
+                respiratoryRate: respiratoryRateDataPoints
             )
             sleepAnalysis.append(analysis)
         }

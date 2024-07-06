@@ -236,7 +236,8 @@ struct SleepSegmentScoreView: View {
                                 remSleepMinutes: 93,
                                 awakeSleepMinutes: 32,
                                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
-                                heartRate: SleepAnalysis.HeartRateDataPoint.previewData
+                                heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
+                                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
                             )
                         ]
                     ) { }
