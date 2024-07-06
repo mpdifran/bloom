@@ -43,11 +43,11 @@ struct SleepHeartRateChartView: View {
 private extension SleepHeartRateChartView {
 
     var minY: Double? {
-        heartRates.min(by: { $0.averageHeartRate < $1.averageHeartRate })?.averageHeartRate
+        heartRates.min(keyPath: \.averageHeartRate)
     }
 
     var maxY: Double? {
-        heartRates.max(by: { $0.averageHeartRate < $1.averageHeartRate })?.averageHeartRate
+        heartRates.max(keyPath: \.averageHeartRate)
     }
 }
 

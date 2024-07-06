@@ -89,14 +89,14 @@ private extension RestingHeartRateCell {
     }
 
     var earliestDate: Date? {
-        if let date = heartRateSamples.min(by: { $0.date < $1.date })?.date {
+        if let date = heartRateSamples.min(keyPath: \.date) {
             return Calendar.current.startOfDay(for: date)
         }
         return nil
     }
 
     var latestDate: Date? {
-        if let date = heartRateSamples.max(by: { $0.date < $1.date })?.date {
+        if let date = heartRateSamples.max(keyPath: \.date) {
             return Calendar.current.endOfDay(for: date)
         }
         return nil
@@ -127,14 +127,14 @@ private extension RestingHeartRateCell {
     }
 
     var minY: Double {
-        if let sample = heartRateSamples.min(by: { $0.quantity < $1.quantity })?.quantity {
+        if let sample = heartRateSamples.min(keyPath: \.quantity) {
             return min(sample, minHeartRate)
         }
         return minHeartRate
     }
 
     var maxY: Double {
-        if let sample = heartRateSamples.max(by: { $0.quantity < $1.quantity })?.quantity {
+        if let sample = heartRateSamples.max(keyPath: \.quantity) {
             return max(sample, maxHeartRate)
         }
         return maxHeartRate

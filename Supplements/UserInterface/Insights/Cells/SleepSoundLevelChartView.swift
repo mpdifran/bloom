@@ -43,11 +43,11 @@ struct SleepSoundLevelChartView: View {
 private extension SleepSoundLevelChartView {
 
     var minY: Double? {
-        soundLevels.min(by: { $0.decibelAWeightedSoundPressureLevelAverage < $1.decibelAWeightedSoundPressureLevelAverage })?.decibelAWeightedSoundPressureLevelAverage
+        soundLevels.min(keyPath: \.decibelAWeightedSoundPressureLevelAverage)
     }
 
     var maxY: Double? {
-        soundLevels.max(by: { $0.decibelAWeightedSoundPressureLevelAverage < $1.decibelAWeightedSoundPressureLevelAverage })?.decibelAWeightedSoundPressureLevelAverage
+        soundLevels.max(keyPath: \.decibelAWeightedSoundPressureLevelAverage)
     }
 }
 

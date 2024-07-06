@@ -142,11 +142,11 @@ extension SleepTrendChart {
     }
 
     var earliestDate: Date? {
-        sleepAnalyses.min(by: { $0.endDate < $1.endDate })?.endDate
+        sleepAnalyses.min(keyPath: \.endDate)
     }
 
     var latestDate: Date? {
-        sleepAnalyses.max(by: { $0.endDate < $1.endDate })?.endDate
+        sleepAnalyses.max(keyPath: \.endDate)
     }
 
     var sevenDaysStartDate: Date? {

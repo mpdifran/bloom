@@ -25,15 +25,13 @@ struct SleepRespiratoryRateChartView: View {
         )
         .chartYAxis {
             AxisMarks { value in
-                if let doubleValue = value.as(Double.self) {
-                    AxisGridLine()
-                    AxisTick()
-                    AxisValueLabel()
-                }
+                AxisGridLine()
+                AxisTick()
+                AxisValueLabel()
             }
         }
         .chartForegroundStyleScale([
-            "Heart Rate": .teal
+            "Respiratory Rate": .teal
         ])
     }
 }
@@ -41,11 +39,11 @@ struct SleepRespiratoryRateChartView: View {
 private extension SleepRespiratoryRateChartView {
 
     var minY: Double? {
-        respiratoryRates.min(by: { $0.averageRespiratoryRate < $1.averageRespiratoryRate })?.averageRespiratoryRate
+        respiratoryRates.min(keyPath: \.averageRespiratoryRate)
     }
 
     var maxY: Double? {
-        respiratoryRates.max(by: { $0.averageRespiratoryRate < $1.averageRespiratoryRate })?.averageRespiratoryRate
+        respiratoryRates.max(keyPath: \.averageRespiratoryRate)
     }
 }
 

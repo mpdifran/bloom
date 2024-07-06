@@ -20,6 +20,7 @@ struct SleepSoundLevelSummaryCell: View {
                 )
 
                 SleepSoundLevelChartView(soundLevels: soundLevels)
+                    .frame(height: 120)
             }
             .padding(.bottom)
         }

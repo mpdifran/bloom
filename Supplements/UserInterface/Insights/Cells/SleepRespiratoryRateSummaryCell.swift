@@ -20,6 +20,7 @@ struct SleepRespiratoryRateSummaryCell: View {
                 )
 
                 SleepRespiratoryRateChartView(respiratoryRates: respiratoryRates)
+                    .frame(height: 120)
             }
             .padding(.bottom)
         }

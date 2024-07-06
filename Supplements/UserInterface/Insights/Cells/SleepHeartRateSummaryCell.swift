@@ -20,6 +20,7 @@ struct SleepHeartRateSummaryCell: View {
                 )
 
                 SleepHeartRateChartView(heartRates: heartRates)
+                    .frame(height: 120)
             }
             .padding(.bottom)
         }
