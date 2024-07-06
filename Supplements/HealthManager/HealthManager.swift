@@ -67,17 +67,6 @@ extension HealthManager {
         authStatus == .unnecessary
     }
 
-//    func checkAccess() {
-//        healthStore.getRequestStatusForAuthorization(toShare: [], read: types) { authStatus, error in
-//            DispatchQueue.main.async {
-//                self.authStatus = authStatus
-//                Task {
-//                    try? await self.loadUserInfo()
-//                }
-//            }
-//        }
-//    }
-
     func checkAccess() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             healthStore.getRequestStatusForAuthorization(toShare: [], read: types) { authStatus, error in
@@ -416,11 +405,11 @@ extension HealthManager {
                 for try await samples in healthStore.observeAsyncChanges(sampleType: HKCategoryType(.sleepAnalysis), performQuery: {
                     try await self?.fetchSleepSamples(period: 30) ?? []
                 }) {
-                    let previousSleepAnalysis = self?.sleepAnalysis30Days
-
+                    let lastPreviousSleepAnalysis = self?.sleepAnalysis30Days?.last
                     await self?.publishSleepAnalysis(samples: samples)
+                    let lastSleepAnalysis = self?.sleepAnalysis30Days?.last
 
-                    if self?.sleepAnalysis30Days != previousSleepAnalysis && previousSleepAnalysis != nil {
+                    if lastSleepAnalysis?.endDate != lastPreviousSleepAnalysis?.endDate && lastPreviousSleepAnalysis != nil {
                         // We've triggered from new data, not from app launch
                         await NotificationManager.shared.sendGoodMorningNotification(delay: 60 * 5)
                     }
