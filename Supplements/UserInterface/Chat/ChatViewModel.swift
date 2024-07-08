@@ -108,6 +108,8 @@ extension ChatViewModel {
 
             chatHistory = newChatHistory
 
+            SleepProgramCoordinator.shared.sleepActivities = response.suggestions
+
             if hasSentMessage {
                 SoundPlayer.playReceiveMessage()
             }
