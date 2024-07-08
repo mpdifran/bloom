@@ -88,7 +88,7 @@
 		FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
 		FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904D2C3472D200F9C1A5 /* UserInfo.swift */; };
-		FF7890502C34733400F9C1A5 /* SleepActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904F2C34733400F9C1A5 /* SleepActivityModel.swift */; };
+		FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */; };
 		FF7890522C3473B700F9C1A5 /* SleepChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7890512C3473B700F9C1A5 /* SleepChatMessage.swift */; };
 		FF7890582C35A8D500F9C1A5 /* SleepHealthSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7890572C35A8D500F9C1A5 /* SleepHealthSnapshot.swift */; };
 		FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7890592C35A9EA00F9C1A5 /* SleepCoachResponse.swift */; };
@@ -347,7 +347,7 @@
 		FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
 		FF78904D2C3472D200F9C1A5 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
-		FF78904F2C34733400F9C1A5 /* SleepActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepActivityModel.swift; sourceTree = "<group>"; };
+		FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSuggestionModel.swift; sourceTree = "<group>"; };
 		FF7890512C3473B700F9C1A5 /* SleepChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepChatMessage.swift; sourceTree = "<group>"; };
 		FF7890572C35A8D500F9C1A5 /* SleepHealthSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHealthSnapshot.swift; sourceTree = "<group>"; };
 		FF7890592C35A9EA00F9C1A5 /* SleepCoachResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachResponse.swift; sourceTree = "<group>"; };
@@ -833,7 +833,7 @@
 			children = (
 				FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */,
 				FF7890592C35A9EA00F9C1A5 /* SleepCoachResponse.swift */,
-				FF78904F2C34733400F9C1A5 /* SleepActivityModel.swift */,
+				FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */,
 				FF7890572C35A8D500F9C1A5 /* SleepHealthSnapshot.swift */,
 				FF7890512C3473B700F9C1A5 /* SleepChatMessage.swift */,
 				FF78904D2C3472D200F9C1A5 /* UserInfo.swift */,
@@ -1566,7 +1566,7 @@
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */,
 				FFF61AF12BED548D00926042 /* GoalResponse.swift in Sources */,
-				FF7890502C34733400F9C1A5 /* SleepActivityModel.swift in Sources */,
+				FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */,
 				FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,

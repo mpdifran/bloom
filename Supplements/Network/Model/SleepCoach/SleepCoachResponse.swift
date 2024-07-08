@@ -8,6 +8,6 @@
 import Foundation
 
 struct SleepCoachResponse: Codable {
-    let activities: [SleepActivityModel]
+    let suggestions: [SleepSuggestionModel]
     let chatMessages: [SleepChatMessage]?
 }

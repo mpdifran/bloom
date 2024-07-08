@@ -35,34 +35,44 @@ struct TextActionBar: View {
 
     var body: some View {
         HStack {
-            Image(systemName: systemImage)
-                .bold()
+            HStack {
+                Image(systemName: systemImage)
+                    .bold()
+                    .fontDesign(.rounded)
+
+                TextField(
+                    "",
+                    text: $searchText,
+                    prompt: Text(prompt),
+                    axis: axis
+                )
+                .focused($isSearchFieldFocused)
+                .font(.title3)
                 .fontDesign(.rounded)
+                .bold()
+                .submitLabel(submitLabel)
+                .onSubmit(onSubmit)
+                .onChange(of: searchText) { oldValue, newValue in
+                    guard axis == .vertical else { return }
 
-            TextField(
-                "",
-                text: $searchText,
-                prompt: Text(prompt),
-                axis: axis
-            )
-            .focused($isSearchFieldFocused)
-            .font(.title3)
-            .fontDesign(.rounded)
-            .bold()
-            .submitLabel(submitLabel)
-            .onSubmit(onSubmit)
-            .onChange(of: searchText) { oldValue, newValue in
-                guard axis == .vertical else { return }
-
-                if let newLineIndex = newValue.lastIndex(of: "\n") {
-                    searchText.remove(at: newLineIndex)
-                    isSearchFieldFocused = false
-                    onSubmit()
+                    if let newLineIndex = newValue.lastIndex(of: "\n") {
+                        searchText.remove(at: newLineIndex)
+                        isSearchFieldFocused = false
+                        onSubmit()
+                    }
                 }
             }
+            .padding(.vertical, 8)
+            .roundedBackground()
+
+            Button(action: {
+                isSearchFieldFocused = false
+                onSubmit()
+            }, label: {
+                Image(systemName: "arrow.up.circle.fill")
+            })
+            .font(.largeTitle)
         }
-        .padding(.vertical, 8)
-        .roundedBackground()
     }
 }
 

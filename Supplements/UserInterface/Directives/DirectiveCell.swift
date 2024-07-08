@@ -9,7 +9,7 @@ import SwiftUI
 import OpenAPIClient
 
 struct DirectiveCell: View {
-    let sleepActivity: SleepActivityModel
+    let sleepActivity: SleepSuggestionModel
 
     @State private var hasTaken = false
 

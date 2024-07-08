@@ -12,7 +12,7 @@ import OpenAPIClient
 final class DirectiveListViewModel: ObservableObject {
     static let shared = DirectiveListViewModel()
 
-    @Published var sleepActivities = [SleepActivityModel]()
+    @Published var sleepActivities = [SleepSuggestionModel]()
 
     private init() { 
         SleepProgramCoordinator.shared.$sleepActivities

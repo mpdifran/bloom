@@ -30,7 +30,7 @@ final class SleepProgramCoordinator: ObservableObject {
     }
     @Published private(set) var assistantResponse: PostSleepAssistantResponse?
 
-    @Published var sleepActivities = [SleepActivityModel]() {
+    @Published var sleepActivities = [SleepSuggestionModel]() {
         didSet {
             if let data = try? JSONEncoder.main.encode(sleepActivities) {
                 UserDefaults.group.set(data, forKey: .sleepActivities)
@@ -52,7 +52,7 @@ final class SleepProgramCoordinator: ObservableObject {
         }
 
         if let data = UserDefaults.group.data(forKey: .sleepActivities) {
-            self.sleepActivities = (try? JSONDecoder.main.decode([SleepActivityModel].self, from: data)) ?? []
+            self.sleepActivities = (try? JSONDecoder.main.decode([SleepSuggestionModel].self, from: data)) ?? []
         }
     }
 }
@@ -89,13 +89,14 @@ extension SleepProgramCoordinator {
                 meditation: viewModel.meditationMinutes,
                 restingHeartRate: viewModel.restingHeartRate
             ),
-            currentActivities: sleepActivities
+            currentSuggestions: sleepActivities,
+            chatHistory: []
         )
 
         do {
             let response = try await NetworkRequester.shared.askSleepCoach(request: request)
 
-            self.sleepActivities = response.activities
+            self.sleepActivities = response.suggestions
 
             for chatMessage in response.chatMessages ?? [] {
                 await ChatViewModel.shared.appendAssistantMessage(message: chatMessage.message)

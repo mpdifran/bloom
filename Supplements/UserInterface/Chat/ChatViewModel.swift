@@ -67,68 +67,44 @@ extension ChatViewModel {
         }
 
         let userInfo = HealthManager.shared.userInfoModel
-        let currentGoals = ProfileViewModel.shared.userGoals
-        let currentSupplements = ProfileViewModel.shared.userSupplements
+        let viewModel = InsightsViewModel.shared
+        let suggestions = await SleepProgramCoordinator.shared.sleepActivities
 
-        let response = try await NetworkRequester.shared.sendQuery(
-            userInfo: userInfo,
-            currentGoals: currentGoals,
-            currentSupplements: currentSupplements,
-            chatHistory: networkChatHistory,
-            learnedUserFacts: ProfileViewModel.shared.userFacts
+        let request = SleepCoachRequest(
+            userInfo: .init(
+                name: userInfo?.name,
+                age: userInfo?.age,
+                sex: userInfo?.sex,
+                location: userInfo?.location
+            ),
+            sleepHealthSnapshot: SleepHealthSnapshot(
+                timeInDaylight: viewModel.timeInDaylight,
+                workouts: viewModel.workoutSummary,
+                sleepSummaries: viewModel.sleepAnalysis,
+                meditation: viewModel.meditationMinutes,
+                restingHeartRate: viewModel.restingHeartRate
+            ),
+            currentSuggestions: suggestions,
+            chatHistory: networkChatHistory
         )
+
+        let response = try await NetworkRequester.shared.chatSleepCoach(request: request)
 
         await MainActor.run {
             var hasSentMessage = false
             var newChatHistory = chatHistory
 
-            if let answer = response.message {
+            response.chatMessages?.forEach { chatMessage in
                 newChatHistory.append(
                     ChatMessage(
-                        message: answer,
+                        message: chatMessage.message,
                         timestamp: .now,
-                        supplementReccomendation: [],
-                        activityRecommendation: [],
                         isCurrentUser: false
                     )
                 )
                 unreadChatCount += 1
                 hasSentMessage = true
             }
-            if let recommendations = response.recommendedSupplements, recommendations.isNotEmpty {
-                newChatHistory.append(
-                    ChatMessage(
-                        message: nil,
-                        timestamp: .now,
-                        supplementReccomendation: recommendations,
-                        activityRecommendation: [],
-                        isCurrentUser: false
-                    )
-                )
-                unreadChatCount += 1
-                hasSentMessage = true
-            }
-            if let recommendations = response.recommendedActivities, recommendations.isNotEmpty {
-                newChatHistory.append(
-                    ChatMessage(
-                        message: nil,
-                        timestamp: .now,
-                        supplementReccomendation: [],
-                        activityRecommendation: recommendations,
-                        isCurrentUser: false
-                    )
-                )
-                unreadChatCount += 1
-                hasSentMessage = true
-            }
-
-            var newFacts = ProfileViewModel.shared.userFacts
-            newFacts.append(contentsOf: response.learnedUserFacts ?? [])
-            newFacts = Array(newFacts.uniqued())
-            newFacts = newFacts.filter {
-                !(response.expiredUserFacts?.contains($0) == true)
-            }
-            ProfileViewModel.shared.userFacts = newFacts
 
             chatHistory = newChatHistory
 

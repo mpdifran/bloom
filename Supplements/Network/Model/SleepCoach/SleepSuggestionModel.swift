@@ -1,5 +1,5 @@
 //
-//  SleepActivityModel.swift
+//  SleepSuggestionModel.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-07-02.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SleepActivityModel: Codable, Hashable, Identifiable {
+struct SleepSuggestionModel: Codable, Hashable, Identifiable {
     var id: Int { hashValue }
 
     let title: String
@@ -21,7 +21,7 @@ struct SleepActivityModel: Codable, Hashable, Identifiable {
     let goalUnit: String
 }
 
-extension SleepActivityModel {
+extension SleepSuggestionModel {
 
     var color: Color {
         Color(hex: tintColor) ?? Color.accentColor

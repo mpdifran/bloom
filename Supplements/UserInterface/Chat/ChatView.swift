@@ -92,13 +92,6 @@ struct ChatView: View {
                         }
                         .confirmationDialog($confirmationDialog)
                     }
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Proactive Tip", systemImage: "sparkles") {
-                            Task {
-                                await viewModel.sendProactiveTip()
-                            }
-                        }
-                    }
                 }
                 .onChange(of: viewModel.chatHistory.count) { _, _ in
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)

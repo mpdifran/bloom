@@ -10,5 +10,6 @@ import Foundation
 struct SleepCoachRequest: Codable {
     let userInfo: UserInfo
     let sleepHealthSnapshot: SleepHealthSnapshot
-    let currentActivities: [SleepActivityModel]
+    let currentSuggestions: [SleepSuggestionModel]
+    let chatHistory: [ChatMessageHistory]
 }
