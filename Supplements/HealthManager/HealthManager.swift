@@ -93,7 +93,7 @@ extension HealthManager {
             do {
                 try await healthStore.requestAuthorization(toShare: [], read: types)
             } catch {
-                fatalError(error.localizedDescription)
+                print(error)
             }
         }
         try? await checkAccess()
