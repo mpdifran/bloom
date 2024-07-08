@@ -30,6 +30,7 @@ struct SleepAnalysis: Codable, Hashable, Identifiable {
     let environmentalSoundLevels: [SoundLevelDataPoint]
     let heartRate: [HeartRateDataPoint]
     let respiratoryRate: [RespiratoryRateDataPoint]
+    let wristTemperature: [WristTemperatureDataPoint]
 }
 
 extension SleepAnalysis {
@@ -57,6 +58,16 @@ extension SleepAnalysis {
         var id: Int { hashValue }
 
         let averageRespiratoryRate: Double
+        let startDate: Date
+        let timeRangeSeconds: TimeInterval
+    }
+}
+
+extension SleepAnalysis {
+    struct WristTemperatureDataPoint: Codable, Hashable, Identifiable {
+        var id: Int { hashValue }
+
+        let averageWristTemperature: Double
         let startDate: Date
         let timeRangeSeconds: TimeInterval
     }
@@ -189,7 +200,8 @@ extension SleepAnalysis {
                 awakeSleepMinutes: 25,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
+                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
+                wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400)),
@@ -200,7 +212,8 @@ extension SleepAnalysis {
                 awakeSleepMinutes: 40,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
+                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
+                wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*2)),
@@ -211,7 +224,8 @@ extension SleepAnalysis {
                 awakeSleepMinutes: 52,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
+                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
+                wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*3)),
@@ -222,7 +236,8 @@ extension SleepAnalysis {
                 awakeSleepMinutes: 12,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
+                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
+                wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*4)),
@@ -233,7 +248,8 @@ extension SleepAnalysis {
                 awakeSleepMinutes: 23,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
+                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
+                wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*5)),
@@ -244,7 +260,8 @@ extension SleepAnalysis {
                 awakeSleepMinutes: 36,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
+                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
+                wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
             ),
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*6)),
@@ -255,7 +272,8 @@ extension SleepAnalysis {
                 awakeSleepMinutes: 18,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData
+                respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
+                wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
             )
         ]
     }
@@ -372,39 +390,80 @@ extension SleepAnalysis.RespiratoryRateDataPoint {
 
     static let previewData: [SleepAnalysis.RespiratoryRateDataPoint] = [
         SleepAnalysis.RespiratoryRateDataPoint(
-            averageRespiratoryRate: 56,
+            averageRespiratoryRate: 12,
             startDate: .now,
             timeRangeSeconds: 900
         ),
         SleepAnalysis.RespiratoryRateDataPoint(
-            averageRespiratoryRate: 58,
+            averageRespiratoryRate: 15,
             startDate: Date(timeIntervalSinceNow: -900),
             timeRangeSeconds: 900
         ),
         SleepAnalysis.RespiratoryRateDataPoint(
-            averageRespiratoryRate: 48,
+            averageRespiratoryRate: 14,
             startDate: Date(timeIntervalSinceNow: -900 * 2),
             timeRangeSeconds: 900
         ),
         SleepAnalysis.RespiratoryRateDataPoint(
-            averageRespiratoryRate: 57,
+            averageRespiratoryRate: 11,
             startDate: Date(timeIntervalSinceNow: -900 * 3),
             timeRangeSeconds: 900
         ),
         SleepAnalysis.RespiratoryRateDataPoint(
-            averageRespiratoryRate: 48,
+            averageRespiratoryRate: 16,
             startDate: Date(timeIntervalSinceNow: -900 * 4),
             timeRangeSeconds: 900
         ),
         SleepAnalysis.RespiratoryRateDataPoint(
-            averageRespiratoryRate: 43,
+            averageRespiratoryRate: 14,
             startDate: Date(timeIntervalSinceNow: -900 * 5),
             timeRangeSeconds: 900
         ),
         SleepAnalysis.RespiratoryRateDataPoint(
-            averageRespiratoryRate: 48,
+            averageRespiratoryRate: 12,
             startDate: Date(timeIntervalSinceNow: -900 * 6),
             timeRangeSeconds: 900
         ),
+    ]
+}
+
+extension SleepAnalysis.WristTemperatureDataPoint {
+
+    static let previewData: [SleepAnalysis.WristTemperatureDataPoint] = [
+        SleepAnalysis.WristTemperatureDataPoint(
+            averageWristTemperature: 96,
+            startDate: .now,
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.WristTemperatureDataPoint(
+            averageWristTemperature: 94,
+            startDate: Date(timeIntervalSinceNow: -900),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.WristTemperatureDataPoint(
+            averageWristTemperature: 95,
+            startDate: Date(timeIntervalSinceNow: -900 * 2),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.WristTemperatureDataPoint(
+            averageWristTemperature: 96,
+            startDate: Date(timeIntervalSinceNow: -900 * 3),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.WristTemperatureDataPoint(
+            averageWristTemperature: 98,
+            startDate: Date(timeIntervalSinceNow: -900 * 4),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.WristTemperatureDataPoint(
+            averageWristTemperature: 95,
+            startDate: Date(timeIntervalSinceNow: -900 * 5),
+            timeRangeSeconds: 900
+        ),
+        SleepAnalysis.WristTemperatureDataPoint(
+            averageWristTemperature: 94,
+            startDate: Date(timeIntervalSinceNow: -900 * 6),
+            timeRangeSeconds: 900
+        )
     ]
 }

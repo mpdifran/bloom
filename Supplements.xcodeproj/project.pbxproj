@@ -139,6 +139,8 @@
 		FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */; };
 		FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */; };
 		FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */; };
+		FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8E2C3C22DA0025FE34 /* WristTemperatureChartView.swift */; };
+		FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA902C3C23880025FE34 /* WristTemperatureSummaryCell.swift */; };
 		FFC9E4532C2C899300183FA4 /* SleepSoundLevelChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */; };
 		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
@@ -397,6 +399,8 @@
 		FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateChartView.swift; sourceTree = "<group>"; };
 		FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateSummaryCell.swift; sourceTree = "<group>"; };
 		FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+MinMax.swift"; sourceTree = "<group>"; };
+		FFC0AA8E2C3C22DA0025FE34 /* WristTemperatureChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WristTemperatureChartView.swift; sourceTree = "<group>"; };
+		FFC0AA902C3C23880025FE34 /* WristTemperatureSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WristTemperatureSummaryCell.swift; sourceTree = "<group>"; };
 		FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelChartView.swift; sourceTree = "<group>"; };
 		FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsView.swift; sourceTree = "<group>"; };
 		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
@@ -585,9 +589,11 @@
 				FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */,
 				FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */,
 				FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */,
+				FFC0AA8E2C3C22DA0025FE34 /* WristTemperatureChartView.swift */,
 				FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */,
 				FF0F79E62C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift */,
 				FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */,
+				FFC0AA902C3C23880025FE34 /* WristTemperatureSummaryCell.swift */,
 				FF1705282C10DC67000D4B3D /* WorkoutSummaryCell.swift */,
 				FF17052A2C10E1E1000D4B3D /* TimeInDaylightCell.swift */,
 				FF21AB9C2C12036A004D0D82 /* RestingHeartRateCell.swift */,
@@ -1602,6 +1608,7 @@
 				FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */,
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
+				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */,
@@ -1638,6 +1645,7 @@
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
+				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */,

@@ -52,7 +52,8 @@ final class HealthManager: ObservableObject {
         HKObjectType.categoryType(forIdentifier: .mindfulSession)!,
         HKObjectType.quantityType(forIdentifier: .heartRate)!,
         HKObjectType.quantityType(forIdentifier: .environmentalAudioExposure)!,
-        HKQuantityType(.respiratoryRate)
+        HKQuantityType(.respiratoryRate),
+        HKQuantityType(.appleSleepingWristTemperature)
     ]
     // body fat percentage
     // BMI
@@ -583,6 +584,29 @@ extension HealthManager {
                 print(error)
             }
 
+            // Wrist Temperature
+            var wristTemperatureDataPoints = [SleepAnalysis.WristTemperatureDataPoint]()
+            do {
+                let samples = try await healthStore.fetchAverageStatistics(
+                    quantityTypeID: .appleSleepingWristTemperature,
+                    unit: .degreeFahrenheit(),
+                    interval: .init(minute: timePeriod),
+                    startDate: startDate,
+                    endDate: endDate
+                )
+
+                for sample in samples {
+                    let dataPoint = SleepAnalysis.WristTemperatureDataPoint(
+                        averageWristTemperature: sample.averageQuantity,
+                        startDate: sample.date,
+                        timeRangeSeconds: TimeInterval(timePeriod * 60)
+                    )
+                    wristTemperatureDataPoints.append(dataPoint)
+                }
+            } catch {
+                print(error)
+            }
+
             let analysis = SleepAnalysis(
                 startDate: startDate,
                 endDate: endDate,
@@ -592,7 +616,8 @@ extension HealthManager {
                 awakeSleepMinutes: awakeSleepTime / 60,
                 environmentalSoundLevels: soundLevelDataPoints,
                 heartRate: heartRateDataPoints,
-                respiratoryRate: respiratoryRateDataPoints
+                respiratoryRate: respiratoryRateDataPoints,
+                wristTemperature: wristTemperatureDataPoints
             )
             sleepAnalysis.append(analysis)
         }

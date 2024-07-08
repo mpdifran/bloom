@@ -63,6 +63,7 @@ struct InsightsView: View {
                         SleepHeartRateSummaryCell(heartRates: firstSleepAnalysis.heartRate)
                         SleepSoundLevelSummaryCell(soundLevels: firstSleepAnalysis.environmentalSoundLevels)
                         SleepRespiratoryRateSummaryCell(respiratoryRates: firstSleepAnalysis.respiratoryRate)
+                        WristTemperatureSummaryCell(wristTemperature: firstSleepAnalysis.wristTemperature)
                     }
                 }
 
