@@ -88,6 +88,8 @@ struct SleepSummaryView: View {
 
                         SleepRespiratoryRateChartView(respiratoryRates: sleepAnalysis.respiratoryRate)
 
+                        WristTemperatureChartView(wristTemperatures: sleepAnalysis.wristTemperature)
+
                         SleepSegmentScoreView(
                             title: "Sleep Length Score",
                             color: .green,
