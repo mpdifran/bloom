@@ -48,20 +48,7 @@ struct OnboardingChatView: View {
         ),
         ChatMessageGroup(
             chatMessages: [
-                ChatMessage(message: "Cool!", timestamp: .now, isCurrentUser: false),
-                ChatMessage(message: "Are you currently taking any supplements? If so, please list them.", timestamp: .now, isCurrentUser: false)
-            ],
-            step: .textInput
-        ),
-        ChatMessageGroup(
-            chatMessages: [
-                ChatMessage(message: "Nice. What about your health goals? What would you like to achieve?", timestamp: .now, isCurrentUser: false)
-            ],
-            step: .textInput
-        ),
-        ChatMessageGroup(
-            chatMessages: [
-                ChatMessage(message: "Great, that should be enough to get started. Welcome to Bloom!", timestamp: .now, isCurrentUser: false)
+                ChatMessage(message: "It's been great learning more about you. Welcome to Bloom!", timestamp: .now, isCurrentUser: false)
             ],
             step: .finish
         ),
