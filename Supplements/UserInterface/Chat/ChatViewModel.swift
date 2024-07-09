@@ -12,6 +12,7 @@ import Algorithms
 final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
 
+    @Published var isWaitingForResponse = false
     @Published var unreadChatCount = 0
 
     @Published var chatHistory = [ChatMessage]() {
@@ -52,67 +53,84 @@ extension ChatViewModel {
     }
 
     func send(prompt: String, secretContext: String? = nil) async throws {
-        await MainActor.run {
-            chatHistory.append(
-                ChatMessage(
-                    message: prompt,
-                    secretContext: secretContext,
-                    timestamp: .now,
-                    supplementReccomendation: [],
-                    activityRecommendation: [],
-                    isCurrentUser: true
-                )
-            )
-            SoundPlayer.playSendMessage()
-        }
-
-        let userInfo = HealthManager.shared.userInfoModel
-        let viewModel = InsightsViewModel.shared
-        let suggestions = await SleepProgramCoordinator.shared.sleepActivities
-
-        let request = SleepCoachRequest(
-            userInfo: .init(
-                name: userInfo?.name,
-                age: userInfo?.age,
-                sex: userInfo?.sex,
-                location: userInfo?.location
-            ),
-            sleepHealthSnapshot: SleepHealthSnapshot(
-                timeInDaylight: viewModel.timeInDaylight,
-                workouts: viewModel.workoutSummary,
-                sleepSummaries: viewModel.sleepAnalysis,
-                meditation: viewModel.meditationMinutes,
-                restingHeartRate: viewModel.restingHeartRate
-            ),
-            currentSuggestions: suggestions,
-            chatHistory: networkChatHistory
-        )
-
-        let response = try await NetworkRequester.shared.chatSleepCoach(request: request)
-
-        await MainActor.run {
-            var hasSentMessage = false
-            var newChatHistory = chatHistory
-
-            response.chatMessages?.forEach { chatMessage in
-                newChatHistory.append(
+        do {
+            await MainActor.run {
+                chatHistory.append(
                     ChatMessage(
-                        message: chatMessage.message,
+                        message: prompt,
+                        secretContext: secretContext,
                         timestamp: .now,
-                        isCurrentUser: false
+                        supplementReccomendation: [],
+                        activityRecommendation: [],
+                        isCurrentUser: true
                     )
                 )
-                unreadChatCount += 1
-                hasSentMessage = true
+                SoundPlayer.playSendMessage()
+                Delay(100) {
+                    self.isWaitingForResponse = true
+                }
             }
 
-            chatHistory = newChatHistory
+            let userInfo = HealthManager.shared.userInfoModel
+            let viewModel = InsightsViewModel.shared
+            let suggestions = await SleepProgramCoordinator.shared.sleepActivities
 
-            SleepProgramCoordinator.shared.sleepActivities = response.suggestions
+            let request = SleepCoachRequest(
+                userInfo: .init(
+                    name: userInfo?.name,
+                    age: userInfo?.age,
+                    sex: userInfo?.sex,
+                    location: userInfo?.location
+                ),
+                sleepHealthSnapshot: SleepHealthSnapshot(
+                    timeInDaylight: viewModel.timeInDaylight,
+                    workouts: viewModel.workoutSummary,
+                    sleepSummaries: viewModel.sleepAnalysis,
+                    meditation: viewModel.meditationMinutes,
+                    restingHeartRate: viewModel.restingHeartRate
+                ),
+                currentSuggestions: suggestions,
+                chatHistory: networkChatHistory
+            )
 
-            if hasSentMessage {
-                SoundPlayer.playReceiveMessage()
+            let response = try await NetworkRequester.shared.chatSleepCoach(request: request)
+
+            await MainActor.run {
+                var hasSentMessage = false
+                var newChatHistory = chatHistory
+
+                response.chatMessages?.forEach { chatMessage in
+                    newChatHistory.append(
+                        ChatMessage(
+                            message: chatMessage.message,
+                            timestamp: .now,
+                            isCurrentUser: false
+                        )
+                    )
+                    unreadChatCount += 1
+                    hasSentMessage = true
+                }
+
+                chatHistory = newChatHistory
+
+                SleepProgramCoordinator.shared.sleepActivities = response.suggestions
+
+                if hasSentMessage {
+                    SoundPlayer.playReceiveMessage()
+                }
+
+                Delay(100) {
+                    self.isWaitingForResponse = false
+                }
             }
+        } catch {
+            await MainActor.run {
+                Delay(100) {
+                    self.isWaitingForResponse = false
+                }
+            }
+
+            throw error
         }
     }
 

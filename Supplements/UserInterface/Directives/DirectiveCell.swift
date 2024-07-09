@@ -46,16 +46,20 @@ struct DirectiveCell: View {
             Divider()
 
             HStack {
-                Text("Goal")
+                Text("Metric Goal")
                     .fontDesign(.rounded)
                     .bold()
 
                 Spacer()
 
-                Text("\(sleepActivity.goalValue, specifier: "%.0f") \(sleepActivity.goalUnit)")
-                    .fontDesign(.rounded)
-                    .bold()
-                    .foregroundStyle(.tint)
+                VStack(alignment: .trailing) {
+                    Text(sleepActivity.targetMetric)
+                        .font(.caption)
+                    Text("\(sleepActivity.goalValue, specifier: "%.0f") \(sleepActivity.goalUnit)")
+                        .fontDesign(.rounded)
+                        .bold()
+                        .foregroundStyle(.tint)
+                }
             }
             .font(.headline)
             .padding(.vertical, 6)
@@ -81,13 +85,13 @@ struct DirectiveCell: View {
                 sleepActivity: .init(
                     title: "Take melatonin nightly",
                     description: "Melatonin can help improve sleep quality. Let's try taking it every night for 2 weeks and monitor the results.",
-                    targetMetric: "deep_sleep",
+                    targetMetric: "Deep Sleep",
                     sfSymbol: "pills",
                     tintColor: "#0088FF",
                     startDate: .now,
                     revisitDate: Date(timeIntervalSinceNow: 12400),
-                    goalValue: 3,
-                    goalUnit: "mg"
+                    goalValue: 50,
+                    goalUnit: "min"
                 )
             )
             .tint(.blue)

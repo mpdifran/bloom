@@ -17,7 +17,7 @@ struct ProfileHeaderView: View {
                     .foregroundStyle(.tint)
                     .font(.system(size: 80))
 
-                TextField("Name", text: $name)
+                TextField("Your Name", text: $name)
                     .font(.title)
                     .fontDesign(.rounded)
                     .bold()

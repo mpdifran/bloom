@@ -24,63 +24,6 @@ struct ProfileView: View {
                 }
 
                 Section {
-                    if viewModel.userGoals.isEmpty {
-                        Text("No Goals")
-                    }
-                    ForEach(viewModel.userGoals, id: \.self) { goal in
-                        ProfileItemCell(title: goal)
-                            .swipeActions {
-                                Button("Delete", systemImage: "trash", role: .destructive) {
-                                    viewModel.userGoals = viewModel.userGoals.filter({ $0 != goal })
-                                }
-                            }
-                    }
-                    Button("Add Goal", systemImage: "plus") {
-                        presentedSheet = NewProfileItemView(
-                            itemName: "Goal",
-                            systemImageName: "flag",
-                            values: viewModel.allGoals
-                        ) { newGoal in
-                            viewModel.userGoals.insert(newGoal, at: 0)
-                        }.asAny
-                    }
-                } header: {
-                    ProfileSectionHeader(title: "Goals") {
-
-                    }
-                }
-
-                Section {
-                    if viewModel.userSupplements.isEmpty {
-                        Text("No Supplements")
-                    }
-                    ForEach(viewModel.userSupplements, id: \.self) { supplement in
-                        ProfileItemCell(title: supplement)
-                            .swipeActions {
-                                Button("Delete", systemImage: "trash", role: .destructive) {
-                                    viewModel.userSupplements = viewModel.userSupplements.filter({ $0 != supplement })
-                                }
-                            }
-                    }
-                    Button("Add Supplement", systemImage: "plus") {
-                        presentedSheet = NewProfileItemView(
-                            itemName: "Supplement",
-                            systemImageName: "cross.vial",
-                            values: viewModel.allSupplements
-                        ) { newSupplement in
-                            viewModel.userSupplements.insert(newSupplement, at: 0)
-                        }.asAny
-                    }
-                } header: {
-                    ProfileSectionHeader(title: "Supplements") {
-
-                    }
-                }
-
-                Section {
-                    if viewModel.userFacts.isEmpty {
-                        Text("No Facts")
-                    }
                     ForEach(viewModel.userFacts, id: \.self) { fact in
                         ProfileItemCell(title: fact)
                             .swipeActions {
@@ -102,6 +45,10 @@ struct ProfileView: View {
                     ProfileSectionHeader(title: "User Facts") {
 
                     }
+                } footer: {
+                    Text("Tell Bloom more details about yourself.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
             .navigationTitle("Profile")

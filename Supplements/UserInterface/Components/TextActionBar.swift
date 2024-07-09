@@ -70,6 +70,7 @@ struct TextActionBar: View {
                 onSubmit()
             }, label: {
                 Image(systemName: "arrow.up.circle.fill")
+                    .foregroundStyle(.white, .tint)
             })
             .font(.largeTitle)
         }

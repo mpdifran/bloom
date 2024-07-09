@@ -14,7 +14,6 @@ struct ChatView: View {
     @AppStorage("hasShownOnboarding") var hasShownOnboarding: Bool = false
 
     @State private var searchText = ""
-    @State private var isWaitingForResponse = false
     @State private var presentedSheet: AnyView?
     @State private var confirmationDialog: ConfirmationDialogDetails?
     @State private var error: Error?
@@ -66,7 +65,7 @@ struct ChatView: View {
                                     }
                                 }
 
-                                if isWaitingForResponse {
+                                if viewModel.isWaitingForResponse {
                                     TypingIndicatorCell(isDirect: false)
                                         .padding(.bottom, 12)
                                         .id("TypingPrompt")
@@ -108,7 +107,7 @@ struct ChatView: View {
                         scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
                     }
                 }
-                .onChange(of: isWaitingForResponse) { (_, _) in
+                .onChange(of: viewModel.isWaitingForResponse) { (_, _) in
                     Delay(300) {
                         scrollViewProxy.scrollTo("TypingPrompt", anchor: .bottom)
                     }
@@ -147,12 +146,6 @@ private extension ChatView {
         guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).isNotEmpty else { return }
 
         Task {
-            await MainActor.run {
-                Delay(100) {
-                    isWaitingForResponse = true
-                }
-            }
-
             do {
                 let prompt = searchText
                 searchText = ""
@@ -160,12 +153,6 @@ private extension ChatView {
                 try await viewModel.send(prompt: prompt)
             } catch {
                 self.error = error
-            }
-
-            await MainActor.run {
-                Delay(100) {
-                    isWaitingForResponse = false
-                }
             }
         }
     }
