@@ -411,7 +411,7 @@ extension HealthManager {
                     await self?.publishSleepAnalysis(samples: samples)
                     let lastSleepAnalysis = self?.sleepAnalysis30Days?.last
 
-                    if lastSleepAnalysis?.endDate != lastPreviousSleepAnalysis?.endDate && lastPreviousSleepAnalysis != nil {
+                    if (lastSleepAnalysis?.endDate ?? .distantPast) > (lastPreviousSleepAnalysis?.endDate ?? .distantPast) && lastPreviousSleepAnalysis != nil {
                         // We've triggered from new data, not from app launch
                         await NotificationManager.shared.sendGoodMorningNotification(delay: 60 * 5)
                     }
