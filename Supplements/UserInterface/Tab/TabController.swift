@@ -48,7 +48,7 @@ extension TabController: UNUserNotificationCenterDelegate {
             }
         case .CategoryID.goodMorning:
             await MainActor.run {
-                select(.insights)
+                select(.today)
             }
         default:
             break
