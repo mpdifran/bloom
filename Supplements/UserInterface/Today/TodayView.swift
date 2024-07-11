@@ -19,6 +19,8 @@ struct TodayView: View {
                     List {
                         SleepScoreView(sleepAnalysis: sleepAnalysis)
 
+                        SleepStageChartView(sleepAnalysis: sleepAnalysis)
+
                         SleepHeartRateSummaryCell(heartRates: sleepAnalysis.heartRate)
                         SleepSoundLevelSummaryCell(soundLevels: sleepAnalysis.environmentalSoundLevels)
                         SleepRespiratoryRateSummaryCell(respiratoryRates: sleepAnalysis.respiratoryRate)

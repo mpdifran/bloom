@@ -87,6 +87,7 @@
 		FF3A8F402C1A8359002DA563 /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
 		FF3A8F442C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */; };
 		FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */; };
+		FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F02C40797F004E8661 /* SleepStageChartView.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -391,6 +392,7 @@
 		FF3A8F382C1A8341002DA563 /* DeviceActivityReportExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityReportExtension.entitlements; sourceTree = "<group>"; };
 		FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceActivityReport.Context+Constants.swift"; sourceTree = "<group>"; };
 		FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListViewModel.swift; sourceTree = "<group>"; };
+		FF4578F02C40797F004E8661 /* SleepStageChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStageChartView.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -952,6 +954,7 @@
 				FFA134EF2C3F042300FF1829 /* TodayView.swift */,
 				FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */,
 				FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */,
+				FF4578F02C40797F004E8661 /* SleepStageChartView.swift */,
 				FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */,
 			);
 			path = Today;
@@ -1719,6 +1722,7 @@
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
+				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,

@@ -423,10 +423,17 @@ extension HealthManager {
     }
 
     func fetchSleepSamples(period: Int = 7) async throws -> [HKSample] {
-        let sampleType = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
         let end = Date.now
         let start = Calendar.current.sleepStartDate(previousDays: period, endDate: end)
-        return try await healthStore.fetchSamples(for: sampleType, start: start, end: end)
+        return try await fetchSleepSamples(startDate: start, endDate: end)
+    }
+
+    func fetchSleepSamples(startDate: Date, endDate: Date) async throws -> [HKSample] {
+        try await healthStore.fetchSamples(
+            for: HKCategoryType(.sleepAnalysis),
+            start: startDate,
+            end: endDate
+        )
     }
 
     func publishSleepAnalysis(samples: [HKSample]) async {
