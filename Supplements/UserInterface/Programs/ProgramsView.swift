@@ -11,6 +11,8 @@ import AppUI
 struct ProgramsView: View {
 
     @State private var presentedSheet: AnyView?
+    
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -19,6 +21,15 @@ struct ProgramsView: View {
             }
             .navigationTitle("Programs")
             .sheet($presentedSheet)
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Done") {
+                    dismiss()
+                }
+                .bold()
+            }
         }
         .tabItem {
             Label("Programs", systemImage: "list.bullet.clipboard")
