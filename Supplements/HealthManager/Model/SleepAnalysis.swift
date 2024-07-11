@@ -14,7 +14,13 @@ extension Double {
     static let coreSleepPercent: Double = 0.45
     static let deepSleepPercent: Double = 0.15
     static let remSleepPercent: Double = 0.20
+    static let awakeSleepMinPercent: Double = 0.05
+    static let awakeSleepMaxPercent: Double = 0.25
     static let minSleepLengthMinutes: Double = 7 * 60
+    static let minSoundLevel: Double = 35
+    static let maxSoundLevel: Double = 60
+    static let minHeartRate: Double = 60
+    static let maxHeartRate: Double = 75
     static let maxScore: Double = 10
 }
 
@@ -147,27 +153,54 @@ extension SleepAnalysis {
     }
 
     var overallScore: Int {
-        Int((Double(deepSleepScore + coreSleepScore + remSleepScore + sleepLengthScore) / 4).rounded(.towardZero))
+        let average = (deepSleepScore + coreSleepScore + remSleepScore + sleepLengthScore) / 4.0
+        return Int(average.rounded(.towardZero))
     }
 
-    var sleepLengthScore: Int {
+    var sleepLengthScore: Double {
         let percent = overallMinutes / .minSleepLengthMinutes
-        return min(Int((percent * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
+        return min((percent * .maxScore).rounded(.towardZero), .maxScore)
     }
 
-    var deepSleepScore: Int {
+    var awakeSleepScore: Double {
+        let percent = awakeSleepMinutes / overallMinutes
+        let proposedScore = 1 - ((percent - .awakeSleepMinPercent) / .awakeSleepMaxPercent)
+        return min(max((proposedScore * .maxScore).rounded(.towardZero), 0), .maxScore)
+    }
+
+    var deepSleepScore: Double {
         let percent = deepSleepMinutes / overallMinutes
-        return min(Int(((percent / .deepSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
+        return min(((percent / .deepSleepPercent) * .maxScore).rounded(.towardZero), .maxScore)
     }
 
-    var coreSleepScore: Int {
+    var coreSleepScore: Double {
         let percent = coreSleepMinutes / overallMinutes
-        return min(Int(((percent / .coreSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
+        return min(((percent / .coreSleepPercent) * .maxScore).rounded(.towardZero), .maxScore)
     }
 
-    var remSleepScore: Int {
+    var remSleepScore: Double {
         let percent = remSleepMinutes / overallMinutes
-        return min(Int(((percent / .remSleepPercent) * .maxScore).rounded(.towardZero)), Int(Double.maxScore))
+        return min(((percent / .remSleepPercent) * .maxScore).rounded(.towardZero), .maxScore)
+    }
+
+    var averageSoundLevel: Double {
+        environmentalSoundLevels.average(keyPath: \.decibelAWeightedSoundPressureLevelAverage)
+    }
+
+    var soundLevelScore: Double {
+        let percent = (averageSoundLevel - .minSoundLevel) / (.maxSoundLevel - .minSoundLevel)
+        let proposedScore = max(min(1, 1 - percent), 0)
+        return proposedScore * .maxScore
+    }
+
+    var averageHeartRate: Double {
+        heartRate.average(keyPath: \.averageHeartRate)
+    }
+
+    var heartRateScore: Double {
+        let percent = (averageHeartRate - .minHeartRate) / (.maxHeartRate - .minHeartRate)
+        let proposedScore = max(min(1, 1 - percent), 0)
+        return proposedScore * .maxScore
     }
 }
 
@@ -192,7 +225,7 @@ extension SleepAnalysis {
     static var previewData: [SleepAnalysis] {
         [
             .init(
-                startDate: Date().addingTimeInterval(-3600*6),
+                startDate: Date().addingTimeInterval(-3600*8),
                 endDate: .now,
                 deepSleepMinutes: 51,
                 coreSleepMinutes: 290,

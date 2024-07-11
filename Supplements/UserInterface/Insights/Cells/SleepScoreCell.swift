@@ -65,7 +65,7 @@ private extension SleepScoreCell {
                 title: "Sleep Length Score",
                 color: .green,
                 minutes: lastSleepAnalysis.overallMinutes,
-                score: lastSleepAnalysis.sleepLengthScore
+                score: Int(lastSleepAnalysis.sleepLengthScore)
             )
 
             SleepSegmentScoreView(
@@ -73,7 +73,7 @@ private extension SleepScoreCell {
                 color: .remSleep,
                 minutes: lastSleepAnalysis.remSleepMinutes,
                 overallMinutes: lastSleepAnalysis.overallMinutes,
-                score: lastSleepAnalysis.remSleepScore
+                score: Int(lastSleepAnalysis.remSleepScore)
             )
 
             SleepSegmentScoreView(
@@ -81,7 +81,7 @@ private extension SleepScoreCell {
                 color: .coreSleep,
                 minutes: lastSleepAnalysis.coreSleepMinutes,
                 overallMinutes: lastSleepAnalysis.overallMinutes,
-                score: lastSleepAnalysis.coreSleepScore
+                score: Int(lastSleepAnalysis.coreSleepScore)
             )
 
             SleepSegmentScoreView(
@@ -89,7 +89,7 @@ private extension SleepScoreCell {
                 color: .deepSleep,
                 minutes: lastSleepAnalysis.deepSleepMinutes,
                 overallMinutes: lastSleepAnalysis.overallMinutes,
-                score: lastSleepAnalysis.deepSleepScore
+                score: Int(lastSleepAnalysis.deepSleepScore)
             )
 
             HStack {

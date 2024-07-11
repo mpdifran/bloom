@@ -12,6 +12,10 @@ extension String {
     enum NotificationID {
         static let goodMorning = "good-morning"
     }
+    enum CategoryID {
+        static let goodMorning = "good-morning"
+        static let chatMessage = "chat-message"
+    }
 }
 
 final class NotificationManager {
@@ -30,11 +34,14 @@ extension NotificationManager {
         }
     }
 
-    func sendNotification(title: String, subtitle: String) async {
+    func sendNotification(title: String, subtitle: String, categoryID: String? = nil) async {
         let content = UNMutableNotificationContent()
         content.title = title
         content.subtitle = subtitle
         content.sound = .default
+        if let categoryID {
+            content.categoryIdentifier = categoryID
+        }
 
         try? await UNUserNotificationCenter.current().add(
             UNNotificationRequest(
@@ -50,6 +57,7 @@ extension NotificationManager {
         content.title = "Good Morning!"
         content.subtitle = "Check out how your sleep was last night."
         content.sound = .default
+        content.categoryIdentifier = .CategoryID.goodMorning
 
         let trigger: UNNotificationTrigger?
         if let delay {

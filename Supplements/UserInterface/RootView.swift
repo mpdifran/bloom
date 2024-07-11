@@ -27,12 +27,14 @@ struct RootView: View {
                 }
             } else {
                 TabView(selection: $tabController.activeTab) {
+                    TodayView()
+                        .tag(Tab.today)
                     InsightsView()
                         .tag(Tab.insights)
                     DirectiveListView()
                         .tag(Tab.actions)
-                    ProgramsView()
-                        .tag(Tab.programs)
+//                    ProgramsView()
+//                        .tag(Tab.programs)
                     ChatView()
                         .tag(Tab.chat)
                     ProfileView()

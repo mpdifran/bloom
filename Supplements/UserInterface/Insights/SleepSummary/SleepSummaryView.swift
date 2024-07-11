@@ -94,7 +94,7 @@ struct SleepSummaryView: View {
                             title: "Sleep Length Score",
                             color: .green,
                             minutes: sleepAnalysis.overallMinutes,
-                            score: sleepAnalysis.sleepLengthScore
+                            score: Int(sleepAnalysis.sleepLengthScore)
                         )
 
                         SleepSegmentScoreView(
@@ -102,7 +102,7 @@ struct SleepSummaryView: View {
                             color: .remSleep,
                             minutes: sleepAnalysis.remSleepMinutes,
                             overallMinutes: sleepAnalysis.overallHours * 60,
-                            score: sleepAnalysis.remSleepScore
+                            score: Int(sleepAnalysis.remSleepScore)
                         )
 
                         SleepSegmentScoreView(
@@ -110,7 +110,7 @@ struct SleepSummaryView: View {
                             color: .coreSleep,
                             minutes: sleepAnalysis.coreSleepMinutes,
                             overallMinutes: sleepAnalysis.overallHours * 60,
-                            score: sleepAnalysis.coreSleepScore
+                            score: Int(sleepAnalysis.coreSleepScore)
                         )
 
                         SleepSegmentScoreView(
@@ -118,7 +118,7 @@ struct SleepSummaryView: View {
                             color: .deepSleep,
                             minutes: sleepAnalysis.deepSleepMinutes,
                             overallMinutes: sleepAnalysis.overallHours * 60,
-                            score: sleepAnalysis.deepSleepScore
+                            score: Int(sleepAnalysis.deepSleepScore)
                         )
                     }
                 }

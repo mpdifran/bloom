@@ -185,7 +185,11 @@ extension ChatViewModel {
                 SoundPlayer.playReceiveMessage()
             }
 
-            await NotificationManager.shared.sendNotification(title: "Bloom", subtitle: response.message)
+            await NotificationManager.shared.sendNotification(
+                title: "Bloom",
+                subtitle: response.message,
+                categoryID: .CategoryID.chatMessage
+            )
         } catch {
             print(error)
         }
@@ -211,7 +215,11 @@ extension ChatViewModel {
             SoundPlayer.playReceiveMessage()
         }
 
-        await NotificationManager.shared.sendNotification(title: "Bloom", subtitle: message)
+        await NotificationManager.shared.sendNotification(
+            title: "Bloom",
+            subtitle: message,
+            categoryID: .CategoryID.chatMessage
+        )
     }
 
     func parseOnboardingInfo(chatHistory: [ChatMessage]) async {

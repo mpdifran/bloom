@@ -9,17 +9,17 @@ import SwiftUI
 import UserNotifications
 
 enum Tab {
+    case today
     case insights
     case actions
     case programs
     case chat
-    case pins
     case profile
 }
 
 @MainActor
 class TabController: NSObject, ObservableObject {
-    @Published var activeTab = Tab.insights
+    @Published var activeTab = Tab.today
 
     override init() {
         super.init()
@@ -41,10 +41,17 @@ extension TabController: UNUserNotificationCenterDelegate {
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
-        guard response.notification.request.identifier == "chat-message" else { return }
-
-        await MainActor.run {
-            select(.chat)
+        switch response.notification.request.content.categoryIdentifier {
+        case .CategoryID.chatMessage:
+            await MainActor.run {
+                select(.chat)
+            }
+        case .CategoryID.goodMorning:
+            await MainActor.run {
+                select(.insights)
+            }
+        default:
+            break
         }
     }
 
@@ -52,9 +59,11 @@ extension TabController: UNUserNotificationCenterDelegate {
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        switch notification.request.identifier {
-        case "chat-message":
-            return []
+        switch notification.request.content.categoryIdentifier {
+        case .CategoryID.chatMessage:
+            return [.banner]
+        case .CategoryID.goodMorning:
+            return [.banner]
         default :
             return [.banner, .sound, .list]
         }
