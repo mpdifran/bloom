@@ -9,6 +9,7 @@ import SwiftUI
 import Charts
 import HealthKit
 
+@MainActor
 struct SleepStageChartView: View {
     let sleepAnalysis: SleepAnalysis
 
