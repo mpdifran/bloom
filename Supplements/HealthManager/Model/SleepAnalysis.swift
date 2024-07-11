@@ -153,7 +153,14 @@ extension SleepAnalysis {
     }
 
     var overallScore: Int {
-        let average = (deepSleepScore + coreSleepScore + remSleepScore + sleepLengthScore) / 4.0
+        let average = [
+            deepSleepScore,
+            coreSleepScore,
+            remSleepScore,
+            sleepLengthScore,
+            soundLevelScore,
+            heartRateScore
+        ].average(keyPath: \.self)
         return Int(average.rounded(.towardZero))
     }
 
