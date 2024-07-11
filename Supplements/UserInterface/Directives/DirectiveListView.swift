@@ -11,6 +11,7 @@ import AppUI
 struct DirectiveListView: View {
     @ObservedObject private var sleepCoordinator = SleepProgramCoordinator.shared
 
+    @State private var showConfigureView = false
     @State private var error: Error?
 
     var body: some View {
@@ -56,8 +57,18 @@ struct DirectiveListView: View {
                 }
             }
             .navigationTitle("Actions")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Configure", systemImage: "list.bullet.clipboard") {
+                        showConfigureView.toggle()
+                    }
+                }
+            }
         }
         .alert(error: $error)
+        .sheet(isPresented: $showConfigureView) {
+            ProgramsView()
+        }
         .tabItem {
             Label("Actions", systemImage: "figure.run")
         }

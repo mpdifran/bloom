@@ -42,7 +42,7 @@ private extension ShieldConfigurationExtension {
     func shieldConfiguration(message: String) -> ShieldConfiguration {
         let deepSleep = UIColor(named: "DeepSleep")!
         let bloomTint = UIColor(named: "BloomTint")!
-        let remSleep = UIColor(named: "REMSleep")!
+//        let remSleep = UIColor(named: "REMSleep")!
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemThickMaterialDark,
