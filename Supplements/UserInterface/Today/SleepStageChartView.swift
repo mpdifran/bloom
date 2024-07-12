@@ -13,21 +13,40 @@ import HealthKit
 struct SleepStageChartView: View {
     let sleepAnalysis: SleepAnalysis
 
-    @State private var samples = [HKCategorySample]()
+    @State private var samples = [HKSample]()
 
     var body: some View {
-        chartView
-            .frame(height: 250)
-            .task {
-                do {
-                    self.samples = try await HealthManager.shared.fetchSleepSamples(
-                        startDate: sleepAnalysis.startDate,
-                        endDate: sleepAnalysis.endDate
-                    ) as? [HKCategorySample] ?? []
-                } catch {
-                    print(error)
-                }
+        VStack {
+            TodaySectionTitleView(
+                title: "Sleep Stages",
+                systemImage: "bed.double.fill"
+            )
+            .tint(.coreSleep)
+            chartView
+                .frame(height: 250)
+        }
+        .task {
+            await loadSamples()
+        }
+        .onChange(of: sleepAnalysis) { _, _ in
+            Task {
+                await loadSamples()
             }
+        }
+    }
+}
+
+private extension SleepStageChartView {
+
+    func loadSamples() async {
+        do {
+            self.samples = try await HealthManager.shared.fetchSleepSamples(
+                startDate: sleepAnalysis.startDate,
+                endDate: sleepAnalysis.endDate
+            )
+        } catch {
+            print(error)
+        }
     }
 }
 
@@ -36,24 +55,34 @@ private extension SleepStageChartView {
     var chartView: some View {
         Chart {
             ForEach(samples, id: \.hashValue) { sample in
-                if let category = sample.sleepCategory {
+                if 
+                    let categorySample = sample as? HKCategorySample,
+                    let category = categorySample.sleepCategory,
+                    category != .inBed && category != .asleepUnspecified
+                {
                     BarMark(
                         xStart: .value("Start Date", sample.startDate, unit: .second),
                         xEnd: .value("End Date", sample.endDate, unit: .second),
                         y: .value("Sleep Stage", category.name)
                     )
                     .foregroundStyle(by: .value("Sleep Stage", category.name))
-                    .cornerRadius(3)
+                    .cornerRadius(6)
                 }
-
             }
         }
         .chartForegroundStyleScale([
-            "Deep Sleep": .deepSleep,
-            "Core Sleep": .coreSleep,
+            "Awake": .awakeSleep,
             "REM Sleep": .remSleep,
-            "Awake": .awakeSleep
+            "Core Sleep": .coreSleep,
+            "Deep Sleep": .deepSleep
         ])
+        .chartYAxis {
+            AxisMarks(values: ["Awake", "REM Sleep", "Core Sleep", "Deep Sleep"]) {
+                AxisGridLine()
+                AxisTick()
+            }
+        }
+        .chartYScale(domain: ["Awake", "REM Sleep", "Core Sleep", "Deep Sleep"])
         .chartXAxis {
             AxisMarks(values: .stride(by: .hour)) { value in
                 AxisGridLine()

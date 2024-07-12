@@ -13,9 +13,8 @@ struct SleepHeartRateSummaryCell: View {
     var body: some View {
         Section {
             VStack {
-                SleepProgramSectionHeader(
+                TodaySectionTitleView(
                     title: "Heart Rate",
-                    subtitle: "Last Night",
                     systemImage: "heart.fill"
                 )
 

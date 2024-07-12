@@ -34,6 +34,13 @@ struct SleepSoundLevelChartView: View {
                 }
             }
         }
+        .chartXAxis {
+            AxisMarks(values: .stride(by: .hour)) { value in
+                AxisGridLine()
+                AxisTick()
+                AxisValueLabel(format: .dateTime.hour())
+            }
+        }
         .chartForegroundStyleScale([
             "Sound Levels": .yellow
         ])

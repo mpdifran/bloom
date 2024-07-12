@@ -30,6 +30,13 @@ struct SleepRespiratoryRateChartView: View {
                 AxisValueLabel()
             }
         }
+        .chartXAxis {
+            AxisMarks(values: .stride(by: .hour)) { value in
+                AxisGridLine()
+                AxisTick()
+                AxisValueLabel(format: .dateTime.hour())
+            }
+        }
         .chartForegroundStyleScale([
             "Respiratory Rate": .teal
         ])

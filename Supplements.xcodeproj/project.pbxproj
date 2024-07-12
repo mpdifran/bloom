@@ -88,6 +88,7 @@
 		FF3A8F442C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */; };
 		FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */; };
 		FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F02C40797F004E8661 /* SleepStageChartView.swift */; };
+		FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -393,6 +394,7 @@
 		FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceActivityReport.Context+Constants.swift"; sourceTree = "<group>"; };
 		FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListViewModel.swift; sourceTree = "<group>"; };
 		FF4578F02C40797F004E8661 /* SleepStageChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStageChartView.swift; sourceTree = "<group>"; };
+		FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySectionTitleView.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -956,6 +958,7 @@
 				FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */,
 				FF4578F02C40797F004E8661 /* SleepStageChartView.swift */,
 				FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */,
+				FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -1661,6 +1664,7 @@
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
+				FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */,
 				FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */,

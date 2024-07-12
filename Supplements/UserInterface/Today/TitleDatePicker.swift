@@ -18,12 +18,6 @@ struct TitleDatePicker: View {
             Image(systemName: "chevron.down")
                 .font(.caption)
         }
-        .foregroundStyle(.tint)
-        .padding(8)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(.regularMaterial)
-        }
         .contentShape(Rectangle())
         .bold()
         .onTapGesture {
