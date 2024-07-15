@@ -9,8 +9,11 @@ import SwiftUI
 
 struct TodayView: View {
     @State private var showDatePicker = false
+    @State private var lastAppearDate = Date()
 
     @ObservedObject private var viewModel = TodayViewModel.shared
+
+    private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
 
     var body: some View {
         NavigationStack {
@@ -45,6 +48,13 @@ struct TodayView: View {
                     TitleDatePicker(date: $viewModel.date)
                 }
             }
+        }
+        .onReceive(foregroundPublisher) { _ in
+            if !Calendar.current.isDateInToday(lastAppearDate) {
+                viewModel.date = Date()
+            }
+            lastAppearDate = Date()
+            print("Updated lastAppearDate")
         }
         .tabItem {
             Label("Sleep", systemImage: "moon.zzz")

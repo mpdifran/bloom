@@ -78,7 +78,6 @@ private struct LabelledText: View {
                 Image(systemName: systemImage)
                 Text(label)
             }
-            .foregroundStyle(.secondary)
             .font(.caption)
             .bold()
 
