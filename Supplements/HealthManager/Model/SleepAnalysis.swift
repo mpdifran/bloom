@@ -16,7 +16,8 @@ extension Double {
     static let remSleepPercent: Double = 0.20
     static let awakeSleepMinPercent: Double = 0.05
     static let awakeSleepMaxPercent: Double = 0.25
-    static let minSleepLengthMinutes: Double = 7 * 60
+    static let zeroSleepLengthMinutes: Double = 2 * 60
+    static let fullSleepLengthMinutes: Double = 8 * 60
     static let minSoundLevel: Double = 35
     static let maxSoundLevel: Double = 60
     static let minHeartRate: Double = 60
@@ -112,7 +113,7 @@ extension SleepAnalysis {
     }
 
     var overallMinutes: Double {
-        overallMinutesIncludingAwake - awakeSleepMinutes
+        overallMinutesIncludingAwake //- awakeSleepMinutes
     }
 
     var overallHours: Double {
@@ -165,29 +166,29 @@ extension SleepAnalysis {
     }
 
     var sleepLengthScore: Double {
-        let percent = overallMinutes / .minSleepLengthMinutes
-        return min((percent * .maxScore).rounded(.towardZero), .maxScore)
+        let percent = (overallMinutes - .zeroSleepLengthMinutes) / (.fullSleepLengthMinutes - .zeroSleepLengthMinutes)
+        return max(min((percent * .maxScore), .maxScore), 0)
     }
 
     var awakeSleepScore: Double {
         let percent = awakeSleepMinutes / overallMinutes
         let proposedScore = 1 - ((percent - .awakeSleepMinPercent) / .awakeSleepMaxPercent)
-        return min(max((proposedScore * .maxScore).rounded(.towardZero), 0), .maxScore)
+        return min(max((proposedScore * .maxScore), 0), .maxScore)
     }
 
     var deepSleepScore: Double {
         let percent = deepSleepMinutes / overallMinutes
-        return min(((percent / .deepSleepPercent) * .maxScore).rounded(.towardZero), .maxScore)
+        return min(((percent / .deepSleepPercent) * .maxScore), .maxScore)
     }
 
     var coreSleepScore: Double {
         let percent = coreSleepMinutes / overallMinutes
-        return min(((percent / .coreSleepPercent) * .maxScore).rounded(.towardZero), .maxScore)
+        return min(((percent / .coreSleepPercent) * .maxScore), .maxScore)
     }
 
     var remSleepScore: Double {
         let percent = remSleepMinutes / overallMinutes
-        return min(((percent / .remSleepPercent) * .maxScore).rounded(.towardZero), .maxScore)
+        return min(((percent / .remSleepPercent) * .maxScore), .maxScore)
     }
 
     var averageSoundLevel: Double {

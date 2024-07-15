@@ -17,7 +17,11 @@ struct TodayView: View {
             Group {
                 if let sleepAnalysis = viewModel.sleepAnalysis {
                     List {
-                        SleepScoreView(sleepAnalysis: sleepAnalysis)
+                        VStack {
+                            SleepScoreView(sleepAnalysis: sleepAnalysis)
+                            
+                            SleepScoreDetailsView(sleepAnalysis: sleepAnalysis)
+                        }
 
                         SleepStageChartView(sleepAnalysis: sleepAnalysis)
 
