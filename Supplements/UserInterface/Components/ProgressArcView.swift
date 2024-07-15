@@ -53,7 +53,7 @@ struct ProgressArcView: View {
                     ),
                     style: StrokeStyle(lineWidth: thickness, lineCap: .round)
                 )
-                .shadow(color: color, radius: 5)
+//                .shadow(color: color, radius: 5)
 
             Image(systemName: systemImage)
                 .foregroundStyle(.black)
