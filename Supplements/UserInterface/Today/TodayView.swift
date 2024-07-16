@@ -22,7 +22,8 @@ struct TodayView: View {
                     List {
                         VStack {
                             SleepScoreView(sleepAnalysis: sleepAnalysis)
-                            
+                                .frame(maxHeight: 350)
+
                             SleepScoreDetailsView(sleepAnalysis: sleepAnalysis)
                         }
 
