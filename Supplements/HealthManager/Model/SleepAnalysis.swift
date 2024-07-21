@@ -113,12 +113,12 @@ extension SleepAnalysis {
     }
 
     var overallMinutes: Double {
-        overallMinutesIncludingAwake //- awakeSleepMinutes
+        overallMinutesIncludingAwake - awakeSleepMinutes
     }
 
     var overallHours: Double {
         // Should we include awake time in the total?
-        overallHoursIncludingAwake //- awakeSleepHours
+        overallHoursIncludingAwake - awakeSleepHours
     }
 
     var coreSleepHours: Double {
