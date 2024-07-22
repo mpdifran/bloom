@@ -393,6 +393,26 @@ extension HealthManager {
         }
         return []
     }
+
+    func fetchHeartRateVariability(periodDays: Int = 14) async -> [DateQuantitySample] {
+        do {
+            let samples = try await healthStore.fetchSamples(for: .heartRateVariabilitySDNN, previousDays: periodDays)
+
+            return samples.compactMap { sample in
+                sample as? HKQuantitySample
+            }.map { sample in
+                let value = sample.quantity.doubleValue(for: .secondUnit(with: .milli))
+                return DateQuantitySample(
+                    date: sample.startDate,
+                    quantity: value,
+                    unit: "milliseconds"
+                )
+            }
+        } catch {
+            print(error)
+        }
+        return []
+    }
 }
 
 // MARK: - Sleep

@@ -25,35 +25,6 @@ struct InsightsView: View {
     var body: some View {
         NavigationStack {
             List {
-//                HStack {
-//                    HStack {
-//                        Image(systemName: "sunrise.fill")
-//                            .font(.title2)
-//                            .bold()
-//                            .foregroundStyle(iconColor)
-//
-//                        Text("Good Morning Survey")
-//                            .font(.title2)
-//                            .fontDesign(.rounded)
-//                            .bold()
-//                    }
-//                    .foregroundStyle(LinearGradient(colors: gradientColors, startPoint: .leading, endPoint: .trailing))
-//                    .animation(.linear(duration: 1), value: gradientColors)
-//                    .animation(.linear(duration: 1), value: iconColor)
-//                    .onReceive(timer) { time in
-//                        shiftGradientColors()
-//                    }
-//
-//                    Spacer()
-//
-//                    Image(systemName: "chevron.forward")
-//                        .foregroundStyle(.secondary)
-//                }
-//                .contentShape(Rectangle())
-//                .onTapGesture {
-//                    presentedSheet = GoodMorningView().asAny
-//                }
-
                 WorkoutSummaryCell(workoutSummaries: viewModel.workoutSummary)
 
                 TimeInDaylightCell(timeInDaylight: viewModel.timeInDaylight)

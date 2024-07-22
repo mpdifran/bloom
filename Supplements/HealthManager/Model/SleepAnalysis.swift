@@ -16,7 +16,7 @@ extension Double {
     static let remSleepPercent: Double = 0.20
     static let awakeSleepMinPercent: Double = 0.05
     static let awakeSleepMaxPercent: Double = 0.25
-    static let zeroSleepLengthMinutes: Double = 2 * 60
+    static let zeroSleepLengthMinutes: Double = 4 * 60
     static let fullSleepLengthMinutes: Double = 8 * 60
     static let minSoundLevel: Double = 35
     static let maxSoundLevel: Double = 60
@@ -209,6 +209,18 @@ extension SleepAnalysis {
         let percent = (averageHeartRate - .minHeartRate) / (.maxHeartRate - .minHeartRate)
         let proposedScore = max(min(1, 1 - percent), 0)
         return proposedScore * .maxScore
+    }
+}
+
+extension SleepAnalysis {
+
+    var sleepQuality: VitalStatusCell.Mode {
+        switch overallScore {
+        case 0 ..< 4: .threat
+        case 4 ..< 7: .warning
+        case 7 ..< 9: .good
+        default: .excel
+        }
     }
 }
 
