@@ -7,43 +7,10 @@
 
 import SwiftUI
 
-extension VitalStatusCell {
-    enum Mode: Hashable {
-        case insufficientData
-        case threat
-        case warning
-        case good
-        case excel
-    }
-}
-
-private extension VitalStatusCell.Mode {
-
-    var systemImage: String {
-        switch self {
-        case .insufficientData: "questionmark.diamond.fill"
-        case .threat: "exclamationmark.octagon.fill"
-        case .warning: "exclamationmark.triangle.fill"
-        case .good: "checkmark.circle.fill"
-        case .excel: "checkmark.seal.fill"
-        }
-    }
-
-    var color: Color {
-        switch self {
-        case .insufficientData: .gray
-        case .threat: .pink
-        case .warning: .yellow
-        case .good: .green
-        case .excel: .coreSleep
-        }
-    }
-}
-
 struct VitalStatusCell: View {
     let title: String
     let statusValue: String
-    let mode: Mode
+    let mode: VitalStatusData.Mode
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -73,8 +40,6 @@ struct VitalStatusCell: View {
         }
     }
 }
-
-
 
 #Preview {
     List {

@@ -122,6 +122,8 @@
 		FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B452C002F1A00BA2128 /* ActivityModel.swift */; };
 		FF8B8B482C00309D00BA2128 /* ActivityBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B472C00309D00BA2128 /* ActivityBubbleCell.swift */; };
 		FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B492C0035F100BA2128 /* ActivityCell.swift */; };
+		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
+		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FFA134F02C3F042300FF1829 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134EF2C3F042300FF1829 /* TodayView.swift */; };
 		FFA134F22C3F05E500FF1829 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */; };
 		FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */; };
@@ -432,6 +434,8 @@
 		FF8B8B452C002F1A00BA2128 /* ActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityModel.swift; sourceTree = "<group>"; };
 		FF8B8B472C00309D00BA2128 /* ActivityBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityBubbleCell.swift; sourceTree = "<group>"; };
 		FF8B8B492C0035F100BA2128 /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
+		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
+		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FFA134EF2C3F042300FF1829 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
 		FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
@@ -981,6 +985,8 @@
 				FFAA83D82C4D9E28004D12DA /* VitalsView.swift */,
 				FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */,
 				FFAA83DC2C4E9462004D12DA /* VitalStatusCell.swift */,
+				FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */,
+				FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */,
 			);
 			path = Vitals;
 			sourceTree = "<group>";
@@ -1721,6 +1727,7 @@
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
+				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */,
@@ -1755,6 +1762,7 @@
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
+				FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */,
 				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,

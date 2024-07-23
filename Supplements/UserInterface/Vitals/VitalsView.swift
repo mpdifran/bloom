@@ -13,34 +13,17 @@ struct VitalsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section("Today") {
-                    if let status = viewModel.hrvStatus {
-                        VitalStatusCell(
-                            title: status.name,
-                            statusValue: status.value,
-                            mode: status.mode
-                        )
-                    }
-                    if let status = viewModel.sleepStatus {
-                        NavigationLink {
-                            TodayView()
-                        } label: {
-                            VitalStatusCell(
-                                title: status.name,
-                                statusValue: status.value,
-                                mode: status.mode
-                            )
-                        }
-                    }
-                    if let status = viewModel.rhrStatus {
-                        VitalStatusCell(
-                            title: status.name,
-                            statusValue: status.value,
-                            mode: status.mode
-                        )
-                    }
+            ScrollView {
+                NavigationLink {
+                    TodayView()
+                } label: {
+                    VitalSummaryView(
+                        hrvStatus: viewModel.hrvStatus,
+                        sleepStatus: viewModel.sleepStatus,
+                        rhrStatus: viewModel.rhrStatus
+                    )
                 }
+                .buttonStyle(.plain)
             }
             .navigationTitle("Vitals")
             .animation(.default, value: viewModel.hrvStatus)

@@ -214,7 +214,7 @@ extension SleepAnalysis {
 
 extension SleepAnalysis {
 
-    var sleepQuality: VitalStatusCell.Mode {
+    var sleepQuality: VitalStatusData.Mode {
         switch overallScore {
         case 0 ..< 4: .threat
         case 4 ..< 7: .warning

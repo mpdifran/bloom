@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-22.
 //
 
-import Foundation
+import SwiftUI
 import HealthKit
 import Combine
 
@@ -19,7 +19,40 @@ struct VitalStatusData: Identifiable, Hashable {
 
     let name: String
     let value: String
-    let mode: VitalStatusCell.Mode
+    let mode: Mode
+}
+
+extension VitalStatusData {
+    enum Mode: Int, Hashable {
+        case insufficientData
+        case threat
+        case warning
+        case good
+        case excel
+    }
+}
+
+extension VitalStatusData.Mode {
+
+    var systemImage: String {
+        switch self {
+        case .insufficientData: "questionmark.diamond.fill"
+        case .threat: "exclamationmark.octagon.fill"
+        case .warning: "exclamationmark.triangle.fill"
+        case .good: "checkmark.circle.fill"
+        case .excel: "checkmark.seal.fill"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .insufficientData: .gray
+        case .threat: .pink
+        case .warning: .yellow
+        case .good: .green
+        case .excel: .coreSleep
+        }
+    }
 }
 
 final class VitalsViewModel: ObservableObject {
@@ -83,7 +116,7 @@ private extension VitalsViewModel {
         if let firstHRV = heartRateVariability.first {
             let average = heartRateVariability.average(keyPath: \.quantity)
 
-            let mode: VitalStatusCell.Mode
+            let mode: VitalStatusData.Mode
             if firstHRV.quantity >= average + .hrvVariance {
                 mode = .excel
             } else if firstHRV.quantity < average + .hrvVariance && firstHRV.quantity >= average - .hrvVariance {
@@ -134,7 +167,7 @@ private extension VitalsViewModel {
         if let firstRHR = restingHeartRate.first {
             let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
 
-            let mode: VitalStatusCell.Mode
+            let mode: VitalStatusData.Mode
             if firstRHR.quantity < min {
                 mode = .excel
             } else if firstRHR.quantity >= min && firstRHR.quantity <= max {
