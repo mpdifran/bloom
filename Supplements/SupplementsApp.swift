@@ -35,13 +35,7 @@ struct SupplementsApp: App {
                     }
                 }
                 .onReceive(foregroundPublisher) { _ in
-                    Task {
-                        do {
-                            try await HealthManager.shared.loadUserInfo()
-                        } catch {
-                            print(error)
-                        }
-                    }
+                    
                 }
         }
         .backgroundTask(.appRefresh("proactive-tip")) {

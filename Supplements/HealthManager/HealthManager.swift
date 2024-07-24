@@ -21,7 +21,6 @@ final class HealthManager: ObservableObject {
     @Published var sleepAnalysis7Days: [SleepAnalysis]?
     @Published var sleepAnalysis30Days: [SleepAnalysis]?
     @Published var sleepAnalysisPrevious30Days: [SleepAnalysis]?
-    @Published var userInfoModel: UserInfoModel?
 
     let healthStore = HKHealthStore()
     private let throttler = Throttler(timeInterval: 600)
@@ -57,9 +56,7 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.respiratoryRate),
         HKQuantityType(.appleSleepingWristTemperature)
     ]
-    // body fat percentage
     // BMI
-    // respiratory rate
     // blood oxygen
     // double support time
     // walking steadiness
@@ -99,89 +96,17 @@ extension HealthManager {
             }
         }
         try? await checkAccess()
-        try? await loadUserInfo()
     }
 }
 
 extension HealthManager {
 
-    func loadUserInfo() async throws {
-        guard isAuthorized else { return }
+    func age() -> Int? {
+        healthStore.age()
+    }
 
-        print("Loading Health Data")
-
-        let bodyWeight = await fetchBodyWeight().map {
-            QuantityModel(amount: $0.quantity.doubleValue(for: .pound()), kind: .latestValue, unit: "pounds", periodDays: nil)
-        }
-
-        let avgExerciseMinQuantity = await fetchExerciseMinutes().map {
-            QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
-        }
-
-        let stepsQuantity = await fetchAverageSteps().map {
-            QuantityModel(amount: $0.0, kind: .average, unit: "count", periodDays: $0.1)
-        }
-
-        let hrvAverage = await fetchHRV().map {
-            QuantityModel(amount: $0.0, kind: .average, unit: "milliseconds", periodDays: $0.1)
-        }
-
-        let restingHeartRate = await fetchRestingHeartRate()
-
-        let vO2Max = await fetchVO2Max().map {
-            QuantityModel(amount: $0, kind: .latestValue, unit: "mL/min·kg", periodDays: nil)
-        }
-
-        let timeInDaylight = await fetchAverageTimeInDaylight().map {
-            QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
-        }
-
-        let activeEnergy = await fetchActiveEnergy().map {
-            QuantityModel(amount: $0.0, kind: .average, unit: "calories", periodDays: $0.1)
-        }
-
-        let bodyFatPercentage = await fetchBodyFatPercentage().map {
-            QuantityModel(amount: $0.0, kind: .average, unit: "percent", periodDays: $0.1)
-        }
-
-        let workoutSummaries = await fetchWorkoutSummaryLastTwoWeeks()
-
-        let meditationMinutes = await fetchAverageMeditationMinutes().map {
-            QuantityModel(amount: $0.0, kind: .average, unit: "minutes", periodDays: $0.1)
-        }
-
-        let name = ProfileViewModel.shared.name.isEmpty ? nil : ProfileViewModel.shared.name
-        let location: LocationModel?
-        if let currentLocation = LocationManager.shared.currentLocation {
-            location = .init(
-                latitude: currentLocation.coordinate.latitude,
-                longitude: currentLocation.coordinate.longitude
-            )
-        } else {
-            location = nil
-        }
-
-        await MainActor.run {
-            self.userInfoModel = UserInfoModel(
-                name: name,
-                location: location,
-                age: healthStore.age(),
-                sex: healthStore.sex(),
-                bloodType: healthStore.typeOfBlood(),
-                bodyWeightPounds: bodyWeight,
-                dailyExerciseMinutes: avgExerciseMinQuantity,
-                dailySteps: stepsQuantity,
-                dailyHeartRateVariability: hrvAverage,
-                restingHeartRate: restingHeartRate,
-                vO2Max: vO2Max,
-                timeInDaylight: timeInDaylight,
-                sleepAnalysis: sleepAnalysis7Days ?? [],
-                activeEnergy: activeEnergy,
-                bodyFatPercentage: bodyFatPercentage,
-                workouts: workoutSummaries,
-                meditationMinutes: meditationMinutes
-            )
-        }
+    func sex() -> String? {
+        healthStore.sex()
     }
 
     func fetchBodyWeight() async -> HKQuantitySample? {

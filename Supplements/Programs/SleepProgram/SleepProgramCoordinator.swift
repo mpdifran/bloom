@@ -71,15 +71,24 @@ extension SleepProgramCoordinator {
 extension SleepProgramCoordinator {
 
     func sleepProgramUpdate() async throws {
-        let userInfo = HealthManager.shared.userInfoModel
         let viewModel = InsightsViewModel.shared
+
+        let location: LocationModel?
+        if let currentLocation = LocationManager.shared.currentLocation {
+            location = .init(
+                latitude: currentLocation.coordinate.latitude,
+                longitude: currentLocation.coordinate.longitude
+            )
+        } else {
+            location = nil
+        }
 
         let request = SleepCoachRequest(
             userInfo: .init(
-                name: userInfo?.name,
-                age: userInfo?.age,
-                sex: userInfo?.sex,
-                location: userInfo?.location
+                name: ProfileViewModel.shared.name,
+                age: HealthManager.shared.age(),
+                sex: HealthManager.shared.sex(),
+                location: location
             ),
             sleepHealthSnapshot: SleepHealthSnapshot(
                 timeInDaylight: viewModel.timeInDaylight,

@@ -71,16 +71,25 @@ extension ChatViewModel {
                 }
             }
 
-            let userInfo = HealthManager.shared.userInfoModel
             let viewModel = InsightsViewModel.shared
             let suggestions = await SleepProgramCoordinator.shared.sleepActivities
 
+            let location: LocationModel?
+            if let currentLocation = LocationManager.shared.currentLocation {
+                location = .init(
+                    latitude: currentLocation.coordinate.latitude,
+                    longitude: currentLocation.coordinate.longitude
+                )
+            } else {
+                location = nil
+            }
+
             let request = SleepCoachRequest(
                 userInfo: .init(
-                    name: userInfo?.name,
-                    age: userInfo?.age,
-                    sex: userInfo?.sex,
-                    location: userInfo?.location
+                    name: ProfileViewModel.shared.name,
+                    age: HealthManager.shared.age(),
+                    sex: HealthManager.shared.sex(),
+                    location: location
                 ),
                 sleepHealthSnapshot: SleepHealthSnapshot(
                     timeInDaylight: viewModel.timeInDaylight,
@@ -131,67 +140,6 @@ extension ChatViewModel {
             }
 
             throw error
-        }
-    }
-
-    func sendProactiveTip() async {
-        do {
-            try await HealthManager.shared.loadUserInfo()
-        } catch { print(error) }
-        let userInfo = HealthManager.shared.userInfoModel
-        let currentGoals = ProfileViewModel.shared.userGoals
-        let currentSupplements = ProfileViewModel.shared.userSupplements
-
-        let request = ProactiveTipRequestModel(
-            userInfo: userInfo,
-            currentSupplements: currentSupplements,
-            currentGoals: currentGoals,
-            chatHistory: networkChatHistory,
-            learnedUserFacts: ProfileViewModel.shared.userFacts
-        )
-
-        do {
-            let response = try await NetworkRequester.shared.sendProactiveTip(request: request)
-
-            await MainActor.run {
-                var newChatHistory = chatHistory
-
-                newChatHistory.append(
-                    ChatMessage(
-                        message: response.message,
-                        timestamp: .now,
-                        supplementReccomendation: [],
-                        activityRecommendation: [],
-                        isCurrentUser: false
-                    )
-                )
-                unreadChatCount += 1
-
-                if let recommendations = response.recommendedActivities, recommendations.isNotEmpty {
-                    newChatHistory.append(
-                        ChatMessage(
-                            message: nil,
-                            timestamp: .now,
-                            supplementReccomendation: [],
-                            activityRecommendation: recommendations,
-                            isCurrentUser: false
-                        )
-                    )
-                    unreadChatCount += 1
-                }
-
-                chatHistory = newChatHistory
-
-                SoundPlayer.playReceiveMessage()
-            }
-
-            await NotificationManager.shared.sendNotification(
-                title: "Bloom",
-                subtitle: response.message,
-                categoryID: .CategoryID.chatMessage
-            )
-        } catch {
-            print(error)
         }
     }
 

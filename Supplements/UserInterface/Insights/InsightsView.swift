@@ -41,11 +41,6 @@ struct InsightsView: View {
         }
         .animation(.default, value: viewModel.sleepAnalysis)
         .animation(.default, value: viewModel.workoutSummary.count)
-        .onChange(of: healthManager.userInfoModel, { oldValue, newValue in
-            guard newValue != nil else {
-                return
-            }
-        })
         .tabItem {
             Label("Insights", systemImage: "heart.text.square")
         }
