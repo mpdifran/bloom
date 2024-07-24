@@ -20,6 +20,7 @@ final class HealthManager: ObservableObject {
 
     @Published var sleepAnalysis7Days: [SleepAnalysis]?
     @Published var sleepAnalysis30Days: [SleepAnalysis]?
+    @Published var sleepAnalysisPrevious30Days: [SleepAnalysis]?
     @Published var userInfoModel: UserInfoModel?
 
     let healthStore = HKHealthStore()
@@ -449,32 +450,45 @@ extension HealthManager {
 extension HealthManager {
 
     func observeSleepData() {
-        guard sleepDataListenerTask == nil else { return }
+        do {
+            try healthStore.observeChanges(sampleType: HKCategoryType(.sleepAnalysis)) { [weak self, healthStore] in
+                let endDate = Date.now
+                let startDate = Calendar.current.sleepStartDate(previousDays: 30, endDate: endDate)
+                let lastMonthEndDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate) ?? endDate
+                let lastMonthStartDate = Calendar.current.sleepStartDate(previousDays: 30, endDate: lastMonthEndDate)
 
-        sleepDataListenerTask = Task.detached { [weak self, healthStore] in
-            do {
-                for try await samples in healthStore.observeAsyncChanges(sampleType: HKCategoryType(.sleepAnalysis), performQuery: {
-                    try await self?.fetchSleepSamples(period: 30) ?? []
-                }) {
-                    let lastPreviousSleepAnalysis = self?.sleepAnalysis30Days?.last
-                    await self?.publishSleepAnalysis(samples: samples)
-                    let lastSleepAnalysis = self?.sleepAnalysis30Days?.last
+                let thisMonthSamples = try await healthStore.fetchSamples(
+                    for: HKCategoryType(.sleepAnalysis),
+                    start: startDate,
+                    end: endDate
+                )
+                let lastMonthSamples = try await healthStore.fetchSamples(
+                    for: HKCategoryType(.sleepAnalysis),
+                    start: lastMonthStartDate,
+                    end: lastMonthEndDate
+                )
 
-                    if (lastSleepAnalysis?.endDate ?? .distantPast) > (lastPreviousSleepAnalysis?.endDate ?? .distantPast) && lastPreviousSleepAnalysis != nil {
-                        // We've triggered from new data, not from app launch
-                        await NotificationManager.shared.sendGoodMorningNotification(delay: 60 * 5)
-                    }
+                let lastPreviousSleepAnalysis = self?.sleepAnalysis30Days?.last
+
+                let thisMonthSleepAnalysis = await self?.processSleepAnalysis(samples: thisMonthSamples) ?? []
+                let lastMonthSleepAnalysis = await self?.processSleepAnalysis(samples: lastMonthSamples) ?? []
+
+                let newPreviousSleepAnalysis = thisMonthSleepAnalysis.last
+
+                if (newPreviousSleepAnalysis?.endDate ?? .distantPast) > (lastPreviousSleepAnalysis?.endDate ?? .distantPast) && lastPreviousSleepAnalysis != nil {
+                    // We've triggered from new data, not from app launch
+                    await NotificationManager.shared.sendGoodMorningNotification(delay: 60 * 5)
                 }
-            } catch {
-                print(error)
-            }
-        }
-    }
 
-    func fetchSleepSamples(period: Int = 7) async throws -> [HKSample] {
-        let end = Date.now
-        let start = Calendar.current.sleepStartDate(previousDays: period, endDate: end)
-        return try await fetchSleepSamples(startDate: start, endDate: end)
+                await MainActor.run { [weak self] in
+                    self?.sleepAnalysis7Days = thisMonthSleepAnalysis.suffix(7)
+                    self?.sleepAnalysis30Days = thisMonthSleepAnalysis
+                    self?.sleepAnalysisPrevious30Days = lastMonthSleepAnalysis
+                }
+            }
+        } catch {
+            print(error)
+        }
     }
 
     func fetchSleepSamples(startDate: Date, endDate: Date) async throws -> [HKSample] {
@@ -485,7 +499,7 @@ extension HealthManager {
         )
     }
 
-    func publishSleepAnalysis(samples: [HKSample]) async {
+    func processSleepAnalysis(samples: [HKSample]) async -> [SleepAnalysis] {
         let samples = samples as? [HKCategorySample] ?? []
 
         var groupedSamples = [[HKCategorySample]]()
@@ -680,10 +694,7 @@ extension HealthManager {
 
         let result = sleepAnalysis
 
-        await MainActor.run {
-            self.sleepAnalysis30Days = result
-            self.sleepAnalysis7Days = Array(result.suffix(7))
-        }
+        return sleepAnalysis
     }
 }
 

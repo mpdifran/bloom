@@ -1,0 +1,63 @@
+//
+//  SleepVitalsMonthlySummary.swift
+//  Supplements
+//
+//  Created by Mark DiFranco on 2024-07-24.
+//
+
+import Foundation
+
+extension SleepVitalsMonthlySummary {
+    enum SleepQuality {
+        case poor
+        case low
+        case good
+        case great
+
+        var name: String {
+            switch self {
+            case .poor: "Poor"
+            case .low: "Low"
+            case .good: "Good"
+            case .great: "Great"
+            }
+        }
+    }
+}
+
+struct SleepVitalsMonthlySummary {
+    let averageREMSleepPercent: Double
+    let averageCoreSleepPercent: Double
+    let averageDeepSleepPercent: Double
+    let averageAwakeSleepPercent: Double
+    let averageSleepLength: Double
+    let averageSleepScore: Double
+    let lastMonthAverageSleepScore: Double
+}
+
+extension SleepVitalsMonthlySummary {
+
+    var isIncreasing: Bool {
+        averageSleepScore > lastMonthAverageSleepScore
+    }
+
+    var quality: SleepQuality {
+        if averageSleepScore < 4 {
+            .poor
+        } else if averageSleepScore >= 4 && averageSleepScore < 7 {
+            .low
+        } else if averageSleepScore >= 7 && averageSleepScore < 9 {
+            .good
+        } else {
+            .great
+        }
+    }
+
+    var subtitleText: String {
+        let formattedDuration = DateFormatter.timeIntervalHourMinuteShort.string(from: .init(minute: Int(averageSleepLength)))
+        let duration = "Length: \(formattedDuration ?? "Unknown")"
+        let rem = "REM: \(String(format: "%.0f", averageREMSleepPercent * 100))%"
+        let deep = "Deep: \(String(format: "%.0f", averageDeepSleepPercent * 100))%"
+        return [duration, rem, deep].joined(separator: "\n")
+    }
+}

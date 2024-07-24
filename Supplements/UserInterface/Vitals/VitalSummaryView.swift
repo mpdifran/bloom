@@ -54,7 +54,7 @@ struct VitalDetailCardView: View {
     let statusData: VitalStatusData
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 13)
+        RoundedRectangle(cornerRadius: 20)
             .fill(.background)
             .overlay {
                 VStack {
@@ -65,13 +65,13 @@ struct VitalDetailCardView: View {
                     }
                     .foregroundStyle(statusData.mode.color)
 
+                    Spacer()
+
                     Text(statusData.name)
                         .font(.caption)
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
-
-                    Spacer()
                 }
                 .font(.title3)
                 .bold()

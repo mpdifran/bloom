@@ -15,27 +15,57 @@ struct VitalsView: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    NavigationLink {
-                        TodayView()
-                    } label: {
-                        VitalSummaryView(
-                            hrvStatus: viewModel.hrvStatus,
-                            sleepStatus: viewModel.sleepStatus,
-                            rhrStatus: viewModel.rhrStatus
-                        )
+                    VitalSummaryView(
+                        hrvStatus: viewModel.hrvStatus,
+                        sleepStatus: viewModel.sleepStatus,
+                        rhrStatus: viewModel.rhrStatus
+                    )
+
+                    HStack {
+                        Text("Monthly Vital Trends")
+                            .font(.headline)
+                            .bold()
+                        Spacer()
                     }
-                    .buttonStyle(.plain)
+                    .padding(.top)
+                    .padding(.horizontal)
+                    .padding(.horizontal)
 
                     if let energyBurnedSummary = viewModel.energyBurnedSummary {
-                        EnergyBurnedSummaryCell(energyBurnedSummary: energyBurnedSummary)
-                            .padding()
+                        MonthlyVitalCardCell(
+                            title: "Activity Level",
+                            systemImage: "figure.run",
+                            subtitleText: "Basal: \(String(format: "%.0f", energyBurnedSummary.averageBasalEnergyBurned)) Cal\nActive: \(String(format: "%.0f", energyBurnedSummary.averageActiveEnergyBurned)) Cal",
+                            metricValue: energyBurnedSummary.activityLevel.name,
+                            isIncreasing: energyBurnedSummary.isIncreasing
+                        )
+                        .tint(.green)
+                        .padding(.horizontal)
+                    }
+
+                    if let sleepVitalsSummary = viewModel.sleepVitalsSummary {
+                        NavigationLink {
+                            TodayView()
+                        } label: {
+                            MonthlyVitalCardCell(
+                                title: "Sleep Quality",
+                                systemImage: "moon.zzz.fill",
+                                subtitleText: sleepVitalsSummary.subtitleText,
+                                metricValue: sleepVitalsSummary.quality.name,
+                                isIncreasing: sleepVitalsSummary.isIncreasing
+                            )
+                            .tint(.coreSleep)
+                            .padding(.horizontal)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
             .navigationTitle("Vitals")
             .background {
-                LinearGradient(colors: [.remSleep.opacity(0.4), .remSleep.opacity(0.1)], startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea(edges: .all)
+                Rectangle()
+                    .fill(.background.secondary)
+                    .ignoresSafeArea()
             }
             .animation(.default, value: viewModel.hrvStatus)
             .animation(.default, value: viewModel.sleepStatus)

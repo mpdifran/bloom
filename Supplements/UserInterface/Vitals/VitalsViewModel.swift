@@ -63,6 +63,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var rhrStatus: VitalStatusData?
 
     @Published var energyBurnedSummary: EnergyBurnedSummary?
+    @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
 
     @Published var heartRateVariability = [DateQuantitySample]()
     @Published var restingHeartRate = [DateQuantitySample]()
@@ -156,6 +157,23 @@ private extension VitalsViewModel {
                 )
             }
             .assign(to: &$energyBurnedSummary)
+
+        HealthManager.shared.$sleepAnalysis30Days
+            .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
+            .map { (thisMonth, lastMonth) in
+                guard let thisMonth, let lastMonth else { return nil }
+
+                return SleepVitalsMonthlySummary(
+                    averageREMSleepPercent: thisMonth.average(keyPath: \.remSleepPercent),
+                    averageCoreSleepPercent: thisMonth.average(keyPath: \.coreSleepPercent),
+                    averageDeepSleepPercent: thisMonth.average(keyPath: \.deepSleepPercent),
+                    averageAwakeSleepPercent: thisMonth.average(keyPath: \.awakeSleepPercent),
+                    averageSleepLength: thisMonth.average(keyPath: \.overallMinutes),
+                    averageSleepScore: thisMonth.average(keyPath: \.overallScoreDouble),
+                    lastMonthAverageSleepScore: lastMonth.average(keyPath: \.overallScoreDouble)
+                )
+            }
+            .assign(to: &$sleepVitalsSummary)
     }
 
     func createVitalStatuses(
