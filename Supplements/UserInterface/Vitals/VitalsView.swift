@@ -31,18 +31,6 @@ struct VitalsView: View {
                     .padding(.horizontal)
                     .padding(.horizontal)
 
-                    if let energyBurnedSummary = viewModel.energyBurnedSummary {
-                        MonthlyVitalCardCell(
-                            title: "Activity Level",
-                            systemImage: "figure.run",
-                            subtitleText: "Basal: \(String(format: "%.0f", energyBurnedSummary.averageBasalEnergyBurned)) Cal\nActive: \(String(format: "%.0f", energyBurnedSummary.averageActiveEnergyBurned)) Cal",
-                            metricValue: energyBurnedSummary.activityLevel.name,
-                            isIncreasing: energyBurnedSummary.isIncreasing
-                        )
-                        .tint(.green)
-                        .padding(.horizontal)
-                    }
-
                     if let sleepVitalsSummary = viewModel.sleepVitalsSummary {
                         NavigationLink {
                             TodayView()
@@ -54,12 +42,49 @@ struct VitalsView: View {
                                 metricValue: sleepVitalsSummary.quality.name,
                                 isIncreasing: sleepVitalsSummary.isIncreasing
                             )
-                            .tint(.coreSleep)
+                            .tint(sleepVitalsSummary.quality.color)
                             .padding(.horizontal)
                         }
                         .buttonStyle(.plain)
                     }
+
+                    if let energyBurnedSummary = viewModel.energyBurnedSummary {
+                        MonthlyVitalCardCell(
+                            title: "Activity Level",
+                            systemImage: "figure.tennis",
+                            subtitleText: "Basal: \(String(format: "%.0f", energyBurnedSummary.averageBasalEnergyBurned)) Cal\nActive: \(String(format: "%.0f", energyBurnedSummary.averageActiveEnergyBurned)) Cal",
+                            metricValue: energyBurnedSummary.activityLevel.name,
+                            isIncreasing: energyBurnedSummary.isIncreasing
+                        )
+                        .tint(energyBurnedSummary.activityLevel.color)
+                        .padding(.horizontal)
+                    }
+
+                    if let cardioFitnessSummary = viewModel.cardioFitnessSummary {
+                        MonthlyVitalCardCell(
+                            title: "Cardio Fitness",
+                            systemImage: "figure.run",
+                            subtitleText: cardioFitnessSummary.subtitle,
+                            metricValue: cardioFitnessSummary.level.name,
+                            isIncreasing: cardioFitnessSummary.isIncreasing
+                        )
+                        .tint(cardioFitnessSummary.level.color)
+                        .padding(.horizontal)
+                    }
+
+                    if let bodyFatPercentageSummary = viewModel.bodyFatPercentageSummary {
+                        MonthlyVitalCardCell(
+                            title: "Body Fat Percentage",
+                            systemImage: "gauge.with.dots.needle.bottom.50percent",
+                            subtitleText: bodyFatPercentageSummary.subtitle,
+                            metricValue: bodyFatPercentageSummary.range.name,
+                            isIncreasing: bodyFatPercentageSummary.isIncreasing
+                        )
+                        .tint(bodyFatPercentageSummary.range.color)
+                        .padding(.horizontal)
+                    }
                 }
+                .padding(.bottom)
             }
             .navigationTitle("Vitals")
             .background {

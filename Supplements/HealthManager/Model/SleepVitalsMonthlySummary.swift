@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-24.
 //
 
-import Foundation
+import SwiftUI
 
 extension SleepVitalsMonthlySummary {
     enum SleepQuality {
@@ -20,6 +20,15 @@ extension SleepVitalsMonthlySummary {
             case .low: "Low"
             case .good: "Good"
             case .great: "Great"
+            }
+        }
+
+        var color: Color {
+            switch self {
+            case .poor: .pink
+            case .low: .yellow
+            case .good: .green
+            case .great: .coreSleep
             }
         }
     }
@@ -55,9 +64,9 @@ extension SleepVitalsMonthlySummary {
 
     var subtitleText: String {
         let formattedDuration = DateFormatter.timeIntervalHourMinuteShort.string(from: .init(minute: Int(averageSleepLength)))
-        let duration = "Length: \(formattedDuration ?? "Unknown")"
-        let rem = "REM: \(String(format: "%.0f", averageREMSleepPercent * 100))%"
-        let deep = "Deep: \(String(format: "%.0f", averageDeepSleepPercent * 100))%"
+        let duration = "\(formattedDuration ?? "Unknown")"
+        let rem = "REM \(String(format: "%.0f", averageREMSleepPercent * 100))%"
+        let deep = "Deep \(String(format: "%.0f", averageDeepSleepPercent * 100))%"
         return [duration, rem, deep].joined(separator: "\n")
     }
 }

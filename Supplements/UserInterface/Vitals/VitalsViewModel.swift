@@ -64,6 +64,8 @@ final class VitalsViewModel: ObservableObject {
 
     @Published var energyBurnedSummary: EnergyBurnedSummary?
     @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
+    @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
+    @Published var bodyFatPercentageSummary: BodyFatPercentageMonthlySummary?
 
     @Published var heartRateVariability = [DateQuantitySample]()
     @Published var restingHeartRate = [DateQuantitySample]()
@@ -174,6 +176,36 @@ private extension VitalsViewModel {
                 )
             }
             .assign(to: &$sleepVitalsSummary)
+
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.vo2Max)) {
+                let thisMonth = await HealthManager.shared.fetchVO2Max()
+                let lastMonth = await HealthManager.shared.fetchVO2Max(numPastMonths: 1)
+                await MainActor.run {
+                    self.cardioFitnessSummary = CardioFitnessMonthlySummary(
+                        averageVO2Max: thisMonth?.0,
+                        lastMonthAverageVO2Max: lastMonth?.0
+                    )
+                }
+            }
+        } catch {
+            print(error)
+        }
+
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.bodyFatPercentage)) {
+                let thisMonth = await HealthManager.shared.fetchBodyFatPercentage()
+                let lastMonth = await HealthManager.shared.fetchBodyFatPercentage(numPastMonths: 1)
+                await MainActor.run {
+                    self.bodyFatPercentageSummary = BodyFatPercentageMonthlySummary(
+                        bodyFatPercentage: thisMonth?.0,
+                        lastMonthBodyFatPercentage: lastMonth?.0
+                    )
+                }
+            }
+        } catch {
+            print(error)
+        }
     }
 
     func createVitalStatuses(

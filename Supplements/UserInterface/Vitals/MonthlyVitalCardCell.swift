@@ -15,28 +15,29 @@ struct MonthlyVitalCardCell: View {
     let isIncreasing: Bool
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
+        VStack {
+            HStack(alignment: .top) {
                 Label(title, systemImage: systemImage)
                     .bold()
                     .font(.title3)
 
                 Spacer()
 
+                Image(systemName: isIncreasing ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
+                    .foregroundStyle(.tint, .background.secondary)
+                    .font(.largeTitle)
+                    .bold()
+
+            }
+
+            Spacer()
+
+            HStack(alignment: .bottom) {
                 Text(subtitleText)
                     .font(.body)
                     .bold()
                     .fontDesign(.rounded)
                     .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            VStack(alignment: .trailing) {
-                Image(systemName: isIncreasing ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
-                    .foregroundStyle(.tint, .background.secondary)
-                    .font(.largeTitle)
-                    .bold()
 
                 Spacer()
 

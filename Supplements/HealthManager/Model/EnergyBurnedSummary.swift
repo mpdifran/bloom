@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-24.
 //
 
-import Foundation
+import SwiftUI
 
 extension EnergyBurnedSummary {
     enum ActivityLevel {
@@ -26,6 +26,16 @@ extension EnergyBurnedSummary.ActivityLevel {
         case .moderate: "Moderate"
         case .high: "High"
         case .intense: "Intense"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .sedentary: .pink
+        case .light: .yellow
+        case .moderate: .green
+        case .high: .coreSleep
+        case .intense: .coreSleep
         }
     }
 }
@@ -55,6 +65,10 @@ extension EnergyBurnedSummary {
 
     var isIncreasing: Bool {
         lastMonthActivityRatio > activityRatio
+    }
+
+    var subtitle: String {
+        "\(String(format: "%.0f", averageBasalEnergyBurned)) Cal basal\n\(String(format: "%.0f", averageActiveEnergyBurned)) Cal active"
     }
 
     var activityLevel: ActivityLevel {

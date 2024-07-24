@@ -164,6 +164,8 @@
 		FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA902C3C23880025FE34 /* WristTemperatureSummaryCell.swift */; };
 		FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */; };
 		FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */; };
+		FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */; };
+		FFC8B0152C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0142C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift */; };
 		FFC9E4532C2C899300183FA4 /* SleepSoundLevelChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */; };
 		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
@@ -481,6 +483,8 @@
 		FFC0AA902C3C23880025FE34 /* WristTemperatureSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WristTemperatureSummaryCell.swift; sourceTree = "<group>"; };
 		FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyVitalCardCell.swift; sourceTree = "<group>"; };
 		FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepVitalsMonthlySummary.swift; sourceTree = "<group>"; };
+		FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessMonthlySummary.swift; sourceTree = "<group>"; };
+		FFC8B0142C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyFatPercentageMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelChartView.swift; sourceTree = "<group>"; };
 		FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsView.swift; sourceTree = "<group>"; };
 		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
@@ -1183,6 +1187,8 @@
 				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
 				FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */,
 				FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */,
+				FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */,
+				FFC8B0142C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1748,6 +1754,7 @@
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
 				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
 				FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */,
+				FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
@@ -1780,6 +1787,7 @@
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
+				FFC8B0152C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift in Sources */,
 				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,

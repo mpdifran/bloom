@@ -187,10 +187,21 @@ extension HealthManager {
         return []
     }
 
-    func fetchVO2Max() async -> Double? {
+    func fetchVO2Max(numPastMonths: Int = 0) async -> (Double, Int)? {
         do {
-            let sample = try await healthStore.fetchLatestSample(for: .vo2Max)
-            return (sample as? HKQuantitySample)?.quantity.doubleValue(for: HKUnit(from: "mL/min·kg"))
+            guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
+                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+            else {
+                return nil
+            }
+
+            return try await healthStore.fetchQuantity(
+                for: .vo2Max,
+                start: startDate,
+                end: endDate,
+                option: .discreteAverage,
+                unit: HKUnit(from: "mL/min·kg")
+            )
         } catch {
             print(error)
         }
@@ -281,11 +292,18 @@ extension HealthManager {
         return []
     }
 
-    func fetchBodyFatPercentage() async -> (Double, Int)? {
+    func fetchBodyFatPercentage(numPastMonths: Int = 0) async -> (Double, Int)? {
         do {
+            guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
+                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+            else {
+                return nil
+            }
+
             return try await healthStore.fetchQuantity(
                 for: .bodyFatPercentage,
-                pastMonths: 1,
+                start: startDate,
+                end: endDate,
                 option: .discreteAverage,
                 unit: .percent()
             )
@@ -658,6 +676,47 @@ extension HealthManager {
             return (65, 105)
         default:
             return (60, 100)
+        }
+    }
+
+    func goalVO2MaxForUser() -> (Double, Double, Double)? {
+        let age = healthStore.age() ?? 0
+        let sexObject = try? healthStore.biologicalSex()
+
+        switch sexObject?.biologicalSex {
+        case .male:
+            switch age {
+            case 20...29: return (57.0, 48.0, 38.0)
+            case 30...39: return (52.0, 43.0, 34.0)
+            case 40...49: return (47.0, 38.0, 31.0)
+            case 50...59: return (41.0, 33.0, 26.0)
+            case 60...: return (36.0, 28.0, 18.0)
+            default: return nil
+            }
+        case .female:
+            switch age {
+            case 20...29: return (47.0, 38.0, 29.0)
+            case 30...39: return (38.0, 30.0, 24.0)
+            case 40...49: return (34.0, 27.0, 21.0)
+            case 50...59: return (29.0, 23.0, 19.0)
+            case 60...: return (25.0, 20.0, 15.0)
+            default: return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    func goalBodyFatPercentage() -> (Double, Double, Double, Double)? {
+        guard let sexObject = try? healthStore.biologicalSex() else { return nil }
+
+        switch sexObject.biologicalSex {
+        case .female:
+            return (14, 21, 25, 32)
+        case .male:
+            return (6, 14, 18, 25)
+        default:
+            return nil
         }
     }
 }
