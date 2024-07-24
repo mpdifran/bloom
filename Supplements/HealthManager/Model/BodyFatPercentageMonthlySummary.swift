@@ -30,8 +30,8 @@ extension BodyFatPercentageMonthlySummary {
         var color: Color {
             switch self {
             case .unknown: .gray
-            case .essentialFat, .athlete: .coreSleep
-            case .fit, .healthy: .green
+            case .essentialFat, .athlete, .fit: .coreSleep
+            case .healthy: .green
             case .high: .pink
             }
         }

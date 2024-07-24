@@ -20,6 +20,7 @@ struct VitalStatusData: Identifiable, Hashable {
     let name: String
     let value: String
     let mode: Mode
+    let score: Double?
 }
 
 extension VitalStatusData {
@@ -227,17 +228,22 @@ private extension VitalsViewModel {
                 mode = .threat
             }
 
+            let lower = average - (.hrvVariance * 2)
+            let upper = average + .hrvVariance
+
             hrvStatus = VitalStatusData(
                 name: "Heart Rate Variability",
                 value: "\(String(format: "%.0f", firstHRV.quantity)) ms",
-                mode: mode
+                mode: mode,
+                score: firstHRV.quantity.scaledPercent(lower: lower, upper: upper)
             )
 
         } else {
             hrvStatus = VitalStatusData(
                 name: "Heart Rate Variability",
                 value: "No Data",
-                mode: .insufficientData
+                mode: .insufficientData,
+                score: nil
             )
         }
 
@@ -254,13 +260,15 @@ private extension VitalsViewModel {
             sleepStatus = VitalStatusData(
                 name: "Sleep Quality",
                 value: value,
-                mode: mode
+                mode: mode,
+                score: lastSleepAnalysis.overallScoreDouble / 10
             )
         } else {
             sleepStatus = VitalStatusData(
                 name: "Sleep Quality",
                 value: "No Data",
-                mode: .insufficientData
+                mode: .insufficientData,
+                score: nil
             )
         }
 
@@ -281,13 +289,15 @@ private extension VitalsViewModel {
             rhrStatus = VitalStatusData(
                 name: "Resting Heart Rate",
                 value: "\(String(format: "%.0f", firstRHR.quantity)) bpm",
-                mode: mode
+                mode: mode,
+                score: firstRHR.quantity.scaledPercent(lower: min, upper: max)
             )
         } else {
             rhrStatus = VitalStatusData(
                 name: "Resting Heart Rate",
                 value: "No Data",
-                mode: .insufficientData
+                mode: .insufficientData,
+                score: nil
             )
         }
     }

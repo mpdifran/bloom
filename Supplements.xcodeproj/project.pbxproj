@@ -166,6 +166,7 @@
 		FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */; };
 		FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */; };
 		FFC8B0152C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0142C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift */; };
+		FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */; };
 		FFC9E4532C2C899300183FA4 /* SleepSoundLevelChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */; };
 		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
@@ -485,6 +486,7 @@
 		FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepVitalsMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0142C519DAD009C5CED /* BodyFatPercentageMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyFatPercentageMonthlySummary.swift; sourceTree = "<group>"; };
+		FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+ScaledPercentage.swift"; sourceTree = "<group>"; };
 		FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelChartView.swift; sourceTree = "<group>"; };
 		FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsView.swift; sourceTree = "<group>"; };
 		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
@@ -883,6 +885,7 @@
 				FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */,
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
 				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
+				FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
 			);
@@ -1765,6 +1768,7 @@
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySample.swift in Sources */,
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
+				FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
 				FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */,
 				FF8B8B482C00309D00BA2128 /* ActivityBubbleCell.swift in Sources */,

@@ -38,15 +38,7 @@ struct VitalSummaryView: View {
 extension VitalSummaryView {
 
     private var meterScore: CGFloat {
-        let rawModeValues = [hrvStatus, sleepStatus, rhrStatus].compactMap {
-            $0?.mode.rawValue
-        }
-
-        let sum = rawModeValues
-            .reduce(0) { partialResult, modeValue in
-                partialResult + modeValue
-            }
-        return (CGFloat(sum / rawModeValues.count) / 4) + 0.1
+        [hrvStatus, sleepStatus, rhrStatus].compactMap({ $0?.score }).average(keyPath: \.self)
     }
 }
 
@@ -87,17 +79,20 @@ struct VitalDetailCardView: View {
         hrvStatus: .init(
             name: "Heart Rate Variability",
             value: "39 ms",
-            mode: .warning
+            mode: .warning,
+            score: 0.3
         ),
         sleepStatus: .init(
             name: "Sleep Quality",
             value: "Great",
-            mode: .excel
+            mode: .excel,
+            score: 0.9
         ),
         rhrStatus: .init(
             name: "Resting Heart Rate",
             value: "59 bpm",
-            mode: .good
+            mode: .good,
+            score: 0.6
         )
     )
 }
