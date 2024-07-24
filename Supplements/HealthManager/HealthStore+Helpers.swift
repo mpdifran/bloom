@@ -20,6 +20,22 @@ extension HKHealthStore {
         let start = Calendar.current.date(byAdding: .month, value: -pastMonths, to: .now)!
         let end = Date.now
 
+        return try await fetchQuantity(
+            for: quantityTypeID,
+            start: start,
+            end: end,
+            option: option,
+            unit: unit
+        )
+    }
+
+    func fetchQuantity(
+        for quantityTypeID: HKQuantityTypeIdentifier,
+        start: Date,
+        end: Date,
+        option: HKStatisticsOptions = .discreteAverage,
+        unit: HKUnit
+    ) async throws -> (Double, Int) {
         let quantity = try await fetchQuantity(
             for: quantityTypeID,
             start: start,

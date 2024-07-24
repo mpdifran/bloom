@@ -11,19 +11,15 @@ struct EnergyBurnedSummaryCell: View {
     let energyBurnedSummary: EnergyBurnedSummary
 
     var body: some View {
-        VStack {
-            HStack {
+
+        HStack {
+            VStack(alignment: .leading) {
                 Text("Activity Level")
                     .bold()
+                    .font(.title3)
                 Spacer()
 
-                Image(systemName: "chevron.up.circle.fill")
-                    .foregroundStyle(.green, .background.secondary)
-                    .font(.largeTitle)
-            }
-
-            HStack {
-                VStack(alignment: .leading) {
+                Group {
                     Text("Basal: \(energyBurnedSummary.averageBasalEnergyBurned, specifier: "%.0f") Cal")
                     Text("Active: \(energyBurnedSummary.averageActiveEnergyBurned, specifier: "%.0f") Cal")
                 }
@@ -31,8 +27,18 @@ struct EnergyBurnedSummaryCell: View {
                 .bold()
                 .fontDesign(.rounded)
                 .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            VStack(alignment: .trailing) {
+                Image(systemName: energyBurnedSummary.isIncreasing ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
+                    .foregroundStyle(.green, .background.secondary)
+                    .font(.largeTitle)
+                    .bold()
 
                 Spacer()
+
                 Text(energyBurnedSummary.activityLevel.name)
                     .font(.title2)
                     .bold()
@@ -50,16 +56,17 @@ struct EnergyBurnedSummaryCell: View {
 
 #Preview {
     ScrollView {
-        HStack {
-            Spacer()
+        VStack {
             EnergyBurnedSummaryCell(
                 energyBurnedSummary: .init(
                     averageBasalEnergyBurned: 1700,
-                    averageActiveEnergyBurned: 661
+                    averageActiveEnergyBurned: 661,
+                    lastMonthAverageBasalEnergyBurned: 1700,
+                    lastMonthAverageActiveEnergyBurned: 750
                 )
             )
-            Spacer()
         }
+        .padding()
     }
     .background {
         Rectangle()

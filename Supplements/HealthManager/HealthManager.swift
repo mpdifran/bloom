@@ -304,25 +304,18 @@ extension HealthManager {
         return []
     }
 
-    func fetchEnergyBurnedSummary() async -> EnergyBurnedSummary? {
-        guard
-            let basalEnergy = await fetchBasalEnergy(),
-            let activeEnergy = await fetchActiveEnergy()
-        else {
-            return nil
-        }
-
-        return EnergyBurnedSummary(
-            averageBasalEnergyBurned: basalEnergy.0,
-            averageActiveEnergyBurned: activeEnergy.0
-        )
-    }
-
-    func fetchBasalEnergy() async -> (Double, Int)? {
+    func fetchBasalEnergy(numPastMonths: Int = 0) async -> (Double, Int)? {
         do {
+            guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
+                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+            else {
+                return nil
+            }
+
             return try await healthStore.fetchQuantity(
                 for: .basalEnergyBurned,
-                pastMonths: 1,
+                start: startDate,
+                end: endDate,
                 option: .cumulativeSum,
                 unit: .largeCalorie()
             )
@@ -332,11 +325,18 @@ extension HealthManager {
         return nil
     }
 
-    func fetchActiveEnergy() async -> (Double, Int)? {
+    func fetchActiveEnergy(numPastMonths: Int = 0) async -> (Double, Int)? {
         do {
+            guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
+                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+            else {
+                return nil
+            }
+
             return try await healthStore.fetchQuantity(
                 for: .activeEnergyBurned,
-                pastMonths: 1,
+                start: startDate,
+                end: endDate,
                 option: .cumulativeSum,
                 unit: .largeCalorie()
             )

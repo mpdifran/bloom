@@ -68,6 +68,8 @@ final class VitalsViewModel: ObservableObject {
     @Published var restingHeartRate = [DateQuantitySample]()
     @Published var basalEnergyBurned: (Double, Int)?
     @Published var activeEnergyBurned: (Double, Int)?
+    @Published var lastMonthBasalEnergyBurned: (Double, Int)?
+    @Published var lastMonthActiveEnergyBurned: (Double, Int)?
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -114,8 +116,10 @@ private extension VitalsViewModel {
         do {
             try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.basalEnergyBurned)) {
                 let basalEnergyBurned = await HealthManager.shared.fetchBasalEnergy()
+                let lastMonthBasalEnergyBurned = await HealthManager.shared.fetchBasalEnergy(numPastMonths: 1)
                 await MainActor.run {
                     self.basalEnergyBurned = basalEnergyBurned
+                    self.lastMonthBasalEnergyBurned = lastMonthBasalEnergyBurned
                 }
             }
         } catch {
@@ -124,8 +128,10 @@ private extension VitalsViewModel {
         do {
             try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.activeEnergyBurned)) {
                 let activeEnergyBurned = await HealthManager.shared.fetchActiveEnergy()
+                let lastMonthActiveEnergyBurned = await HealthManager.shared.fetchActiveEnergy(numPastMonths: 1)
                 await MainActor.run {
                     self.activeEnergyBurned = activeEnergyBurned
+                    self.lastMonthActiveEnergyBurned = lastMonthActiveEnergyBurned
                 }
             }
         } catch {
@@ -133,13 +139,20 @@ private extension VitalsViewModel {
         }
 
         $basalEnergyBurned
-            .combineLatest($activeEnergyBurned)
-            .map { (basalEnergy, activeEnergy) in
-                guard let basalEnergy, let activeEnergy else { return nil }
+            .combineLatest($activeEnergyBurned, $lastMonthBasalEnergyBurned, $lastMonthActiveEnergyBurned)
+            .map { (basalEnergy, activeEnergy, lastMonthBasalEnergy, lastMonthActiveEnergy) in
+                guard
+                    let basalEnergy,
+                    let activeEnergy,
+                    let lastMonthBasalEnergy,
+                    let lastMonthActiveEnergy
+                else { return nil }
 
                 return EnergyBurnedSummary(
                     averageBasalEnergyBurned: basalEnergy.0,
-                    averageActiveEnergyBurned: activeEnergy.0
+                    averageActiveEnergyBurned: activeEnergy.0,
+                    lastMonthAverageBasalEnergyBurned: lastMonthBasalEnergy.0,
+                    lastMonthAverageActiveEnergyBurned: lastMonthActiveEnergy.0
                 )
             }
             .assign(to: &$energyBurnedSummary)

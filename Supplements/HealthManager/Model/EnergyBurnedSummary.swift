@@ -33,12 +33,28 @@ extension EnergyBurnedSummary.ActivityLevel {
 struct EnergyBurnedSummary {
     let averageBasalEnergyBurned: Double
     let averageActiveEnergyBurned: Double
+    let lastMonthAverageBasalEnergyBurned: Double
+    let lastMonthAverageActiveEnergyBurned: Double
 }
 
 extension EnergyBurnedSummary {
 
     var activityRatio: Double {
-        (averageActiveEnergyBurned + averageBasalEnergyBurned) / averageBasalEnergyBurned
+        guard averageBasalEnergyBurned > 1 else {
+            return 0
+        }
+        return (averageActiveEnergyBurned + averageBasalEnergyBurned) / averageBasalEnergyBurned
+    }
+
+    var lastMonthActivityRatio: Double {
+        guard lastMonthAverageBasalEnergyBurned > 1 else {
+            return 0
+        }
+        return (lastMonthAverageActiveEnergyBurned + lastMonthAverageBasalEnergyBurned) / lastMonthAverageBasalEnergyBurned
+    }
+
+    var isIncreasing: Bool {
+        lastMonthActivityRatio > activityRatio
     }
 
     var activityLevel: ActivityLevel {

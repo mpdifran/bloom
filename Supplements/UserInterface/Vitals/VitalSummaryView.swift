@@ -60,6 +60,7 @@ struct VitalDetailCardView: View {
                 VStack {
                     Group {
                         Image(systemName: statusData.mode.systemImage)
+                            .foregroundStyle(.white, statusData.mode.color)
                         Text(statusData.value)
                     }
                     .foregroundStyle(statusData.mode.color)
