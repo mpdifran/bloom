@@ -31,9 +31,8 @@ extension EnergyBurnedSummary.ActivityLevel {
 
     var color: Color {
         switch self {
-        case .sedentary: .pink
-        case .light: .yellow
-        case .moderate: .green
+        case .sedentary: .yellow
+        case .light, .moderate: .green
         case .high: .coreSleep
         case .intense: .coreSleep
         }
