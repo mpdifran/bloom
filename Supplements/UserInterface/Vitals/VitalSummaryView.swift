@@ -54,20 +54,30 @@ struct VitalDetailCardView: View {
     let statusData: VitalStatusData
 
     var body: some View {
-        VStack {
-            Group {
-                Image(systemName: statusData.mode.systemImage)
-                Text(statusData.value)
+        RoundedRectangle(cornerRadius: 13)
+            .fill(.background)
+            .overlay {
+                VStack {
+                    Group {
+                        Image(systemName: statusData.mode.systemImage)
+                        Text(statusData.value)
+                    }
+                    .foregroundStyle(statusData.mode.color)
+
+                    Text(statusData.name)
+                        .font(.caption)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Spacer()
+                }
+                .font(.title3)
+                .bold()
+                .fontDesign(.rounded)
+                .padding()
             }
-            .foregroundStyle(statusData.mode.color)
-            Text(statusData.name)
-                .font(.caption)
-                .multilineTextAlignment(.center)
-        }
-        .font(.title2)
-        .bold()
-        .fontDesign(.rounded)
-        .frame(maxWidth: 90)
+            .aspectRatio(1, contentMode: .fit)
     }
 }
 

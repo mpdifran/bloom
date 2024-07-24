@@ -124,6 +124,8 @@
 		FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B492C0035F100BA2128 /* ActivityCell.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
+		FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */; };
+		FF9C84D62C51446400648A1E /* EnergyBurnedSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D52C51446400648A1E /* EnergyBurnedSummaryCell.swift */; };
 		FFA134F02C3F042300FF1829 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134EF2C3F042300FF1829 /* TodayView.swift */; };
 		FFA134F22C3F05E500FF1829 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */; };
 		FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */; };
@@ -436,6 +438,8 @@
 		FF8B8B492C0035F100BA2128 /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
+		FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummary.swift; sourceTree = "<group>"; };
+		FF9C84D52C51446400648A1E /* EnergyBurnedSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummaryCell.swift; sourceTree = "<group>"; };
 		FFA134EF2C3F042300FF1829 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
 		FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
@@ -987,6 +991,7 @@
 				FFAA83DC2C4E9462004D12DA /* VitalStatusCell.swift */,
 				FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */,
 				FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */,
+				FF9C84D52C51446400648A1E /* EnergyBurnedSummaryCell.swift */,
 			);
 			path = Vitals;
 			sourceTree = "<group>";
@@ -1174,6 +1179,7 @@
 				FFF66FA82C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift */,
 				FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */,
 				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
+				FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1703,6 +1709,7 @@
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */,
 				FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
+				FF9C84D62C51446400648A1E /* EnergyBurnedSummaryCell.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
@@ -1764,6 +1771,7 @@
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */,
 				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
+				FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,

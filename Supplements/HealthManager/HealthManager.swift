@@ -46,6 +46,7 @@ final class HealthManager: ObservableObject {
         HKObjectType.quantityType(forIdentifier: .vo2Max)!,
         HKQuantityType(.timeInDaylight),
         HKCategoryType(.sleepAnalysis),
+        HKQuantityType(.basalEnergyBurned),
         HKQuantityType(.activeEnergyBurned),
         HKQuantityType(.bodyFatPercentage),
         HKObjectType.workoutType(),
@@ -303,13 +304,41 @@ extension HealthManager {
         return []
     }
 
+    func fetchEnergyBurnedSummary() async -> EnergyBurnedSummary? {
+        guard
+            let basalEnergy = await fetchBasalEnergy(),
+            let activeEnergy = await fetchActiveEnergy()
+        else {
+            return nil
+        }
+
+        return EnergyBurnedSummary(
+            averageBasalEnergyBurned: basalEnergy.0,
+            averageActiveEnergyBurned: activeEnergy.0
+        )
+    }
+
+    func fetchBasalEnergy() async -> (Double, Int)? {
+        do {
+            return try await healthStore.fetchQuantity(
+                for: .basalEnergyBurned,
+                pastMonths: 1,
+                option: .cumulativeSum,
+                unit: .largeCalorie()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
     func fetchActiveEnergy() async -> (Double, Int)? {
         do {
             return try await healthStore.fetchQuantity(
                 for: .activeEnergyBurned,
                 pastMonths: 1,
                 option: .cumulativeSum,
-                unit: .smallCalorie()
+                unit: .largeCalorie()
             )
         } catch {
             print(error)

@@ -62,8 +62,12 @@ final class VitalsViewModel: ObservableObject {
     @Published var sleepStatus: VitalStatusData?
     @Published var rhrStatus: VitalStatusData?
 
+    @Published var energyBurnedSummary: EnergyBurnedSummary?
+
     @Published var heartRateVariability = [DateQuantitySample]()
     @Published var restingHeartRate = [DateQuantitySample]()
+    @Published var basalEnergyBurned: (Double, Int)?
+    @Published var activeEnergyBurned: (Double, Int)?
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -76,7 +80,7 @@ private extension VitalsViewModel {
 
     func observeData() {
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.heartRateVariabilitySDNN), frequency: .immediate) {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.heartRateVariabilitySDNN)) {
                 let heartRateVariability = await HealthManager.shared.fetchHeartRateVariability(periodDays: 28)
                 await MainActor.run {
                     self.heartRateVariability = heartRateVariability
@@ -86,7 +90,7 @@ private extension VitalsViewModel {
             print(error)
         }
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate), frequency: .immediate) {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate)) {
                 let restingHeartRate = await HealthManager.shared.fetchRestingHeartRate(period: 28)
                 await MainActor.run {
                     self.restingHeartRate = restingHeartRate
@@ -106,6 +110,39 @@ private extension VitalsViewModel {
                 )
             })
             .store(in: &cancellables)
+
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.basalEnergyBurned)) {
+                let basalEnergyBurned = await HealthManager.shared.fetchBasalEnergy()
+                await MainActor.run {
+                    self.basalEnergyBurned = basalEnergyBurned
+                }
+            }
+        } catch {
+            print(error)
+        }
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.activeEnergyBurned)) {
+                let activeEnergyBurned = await HealthManager.shared.fetchActiveEnergy()
+                await MainActor.run {
+                    self.activeEnergyBurned = activeEnergyBurned
+                }
+            }
+        } catch {
+            print(error)
+        }
+
+        $basalEnergyBurned
+            .combineLatest($activeEnergyBurned)
+            .map { (basalEnergy, activeEnergy) in
+                guard let basalEnergy, let activeEnergy else { return nil }
+
+                return EnergyBurnedSummary(
+                    averageBasalEnergyBurned: basalEnergy.0,
+                    averageActiveEnergyBurned: activeEnergy.0
+                )
+            }
+            .assign(to: &$energyBurnedSummary)
     }
 
     func createVitalStatuses(

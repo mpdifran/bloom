@@ -14,18 +14,29 @@ struct VitalsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                NavigationLink {
-                    TodayView()
-                } label: {
-                    VitalSummaryView(
-                        hrvStatus: viewModel.hrvStatus,
-                        sleepStatus: viewModel.sleepStatus,
-                        rhrStatus: viewModel.rhrStatus
-                    )
+                VStack {
+                    NavigationLink {
+                        TodayView()
+                    } label: {
+                        VitalSummaryView(
+                            hrvStatus: viewModel.hrvStatus,
+                            sleepStatus: viewModel.sleepStatus,
+                            rhrStatus: viewModel.rhrStatus
+                        )
+                    }
+                    .buttonStyle(.plain)
+
+                    if let energyBurnedSummary = viewModel.energyBurnedSummary {
+                        EnergyBurnedSummaryCell(energyBurnedSummary: energyBurnedSummary)
+                            .padding()
+                    }
                 }
-                .buttonStyle(.plain)
             }
             .navigationTitle("Vitals")
+            .background {
+                LinearGradient(colors: [.remSleep.opacity(0.4), .remSleep.opacity(0.1)], startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea(edges: .all)
+            }
             .animation(.default, value: viewModel.hrvStatus)
             .animation(.default, value: viewModel.sleepStatus)
             .animation(.default, value: viewModel.rhrStatus)
