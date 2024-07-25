@@ -46,16 +46,16 @@ struct SleepVitalsMonthlySummary: Equatable {
 
 extension SleepVitalsMonthlySummary {
 
-    var isIncreasing: Bool {
-        averageSleepScore > lastMonthAverageSleepScore
+    var trend: MonthlyVitalCardCell.Trend {
+        averageSleepScore > lastMonthAverageSleepScore ? .increasing : .decreasing
     }
 
     var quality: SleepQuality {
         if averageSleepScore < 4 {
             .poor
-        } else if averageSleepScore >= 4 && averageSleepScore < 7 {
+        } else if averageSleepScore < 7 {
             .low
-        } else if averageSleepScore >= 7 && averageSleepScore < 9 {
+        } else if averageSleepScore < 9 {
             .good
         } else {
             .great
@@ -64,9 +64,9 @@ extension SleepVitalsMonthlySummary {
 
     var subtitleText: String {
         let formattedDuration = DateFormatter.timeIntervalHourMinuteShort.string(from: .init(minute: Int(averageSleepLength)))
-        let duration = "\(formattedDuration ?? "Unknown")"
-        let rem = "REM \(String(format: "%.0f", averageREMSleepPercent * 100))%"
-        let deep = "Deep \(String(format: "%.0f", averageDeepSleepPercent * 100))%"
-        return [duration, rem, deep].joined(separator: "\n")
+        let duration = formattedDuration
+        let rem = "REM: \(String(format: "%.0f", averageREMSleepPercent * 100))%"
+        let deep = "Deep: \(String(format: "%.0f", averageDeepSleepPercent * 100))%"
+        return [duration, rem, deep].compactMap({ $0 }).joined(separator: "\n")
     }
 }

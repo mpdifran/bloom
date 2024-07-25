@@ -48,22 +48,24 @@ struct EnergyBurnedSummary: Equatable {
 
 extension EnergyBurnedSummary {
 
-    var activityRatio: Double {
+    var activityRatio: Double? {
         guard averageBasalEnergyBurned > 1 else {
-            return 0
+            return nil
         }
         return (averageActiveEnergyBurned + averageBasalEnergyBurned) / averageBasalEnergyBurned
     }
 
-    var lastMonthActivityRatio: Double {
+    var lastMonthActivityRatio: Double? {
         guard lastMonthAverageBasalEnergyBurned > 1 else {
-            return 0
+            return nil
         }
         return (lastMonthAverageActiveEnergyBurned + lastMonthAverageBasalEnergyBurned) / lastMonthAverageBasalEnergyBurned
     }
 
-    var isIncreasing: Bool {
-        lastMonthActivityRatio > activityRatio
+    var trend: MonthlyVitalCardCell.Trend {
+        guard let activityRatio, let lastMonthActivityRatio else { return .noTrend }
+
+        return activityRatio > lastMonthActivityRatio ? .increasing : .decreasing
     }
 
     var subtitle: String {
@@ -71,19 +73,17 @@ extension EnergyBurnedSummary {
     }
 
     var activityLevel: ActivityLevel {
-        switch activityRatio {
-        case ...1.2:
-            .sedentary
-        case 1.2...1.375:
-            .light
-        case 1.375...1.55:
-            .moderate
-        case 1.55...1.725:
-            .high
-        case 1.725...:
-            .intense
-        default:
-            .sedentary
+        let ratio = activityRatio ?? 0
+        if ratio < 1.2 {
+            return .sedentary
+        } else if ratio < 1.375 {
+            return .light
+        } else if ratio < 1.55 {
+            return .moderate
+        } else if ratio < 1.725 {
+            return .high
+        } else {
+            return .intense
         }
     }
 }

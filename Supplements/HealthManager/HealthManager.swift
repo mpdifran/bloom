@@ -384,6 +384,10 @@ extension HealthManager {
         return nil
     }
 
+    func fetchStressMonthlySummary() async -> StressMonthlySummary? {
+        return nil
+    }
+
     func fetchAverageMeditationMinutes(previousDays: Int = 7) async -> (Double, Int)? {
         do {
             let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
@@ -705,8 +709,6 @@ extension HealthManager {
             )
             sleepAnalysis.append(analysis)
         }
-
-        let result = sleepAnalysis
 
         return sleepAnalysis
     }

@@ -101,13 +101,13 @@ extension MobilityMonthlySummary {
         return [doubleSupportScore, walkingScore, steadinessScore].average(keyPath: \.self)
     }
 
-    var isIncreasing: Bool {
-        score > lastMonthScore
+    var trend: MonthlyVitalCardCell.Trend {
+        score > lastMonthScore ? .increasing : .decreasing
     }
 
     var subtitle: String {
-        let doubleSupport = "Double Support \(String(format: "%.0f", doubleSupportTimePercent * 100))%"
-        let sixMinuteWalk = "6 Min Walk \(String(format: "%.0f", sixMinuteWalkDistance))m"
+        let doubleSupport = "Double Support: \(String(format: "%.0f", doubleSupportTimePercent * 100))%"
+        let sixMinuteWalk = "6 Min Walk: \(String(format: "%.0f", sixMinuteWalkDistance))m"
         return [doubleSupport, sixMinuteWalk].joined(separator: "\n")
     }
 

@@ -45,8 +45,11 @@ struct BodyFatPercentageMonthlySummary: Equatable {
 
 extension BodyFatPercentageMonthlySummary {
 
-    var isIncreasing: Bool {
-        bodyFatPercentage ?? 0 > lastMonthBodyFatPercentage ?? 0
+    var trend: MonthlyVitalCardCell.Trend {
+        guard let bodyFatPercentage, let lastMonthBodyFatPercentage else {
+            return .noTrend
+        }
+        return bodyFatPercentage > lastMonthBodyFatPercentage ? .increasing : .decreasing
     }
 
     var subtitle: String {

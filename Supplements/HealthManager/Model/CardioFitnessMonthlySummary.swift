@@ -44,8 +44,11 @@ struct CardioFitnessMonthlySummary: Equatable {
 
 extension CardioFitnessMonthlySummary {
 
-    var isIncreasing: Bool {
-        averageVO2Max ?? 0 > lastMonthAverageVO2Max ?? 0
+    var trend: MonthlyVitalCardCell.Trend {
+        guard let averageVO2Max, let lastMonthAverageVO2Max else {
+            return .noTrend
+        }
+        return averageVO2Max > lastMonthAverageVO2Max ? .increasing : .decreasing
     }
 
     var subtitle: String {

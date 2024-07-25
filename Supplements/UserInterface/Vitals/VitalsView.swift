@@ -40,7 +40,7 @@ struct VitalsView: View {
                                 systemImage: "moon.zzz.fill",
                                 subtitleText: sleepVitalsSummary.subtitleText,
                                 metricValue: sleepVitalsSummary.quality.name,
-                                isIncreasing: sleepVitalsSummary.isIncreasing
+                                trend: sleepVitalsSummary.trend
                             )
                             .tint(sleepVitalsSummary.quality.color)
                             .padding(.horizontal)
@@ -54,7 +54,7 @@ struct VitalsView: View {
                             systemImage: "figure.tennis",
                             subtitleText: "Basal: \(String(format: "%.0f", energyBurnedSummary.averageBasalEnergyBurned)) Cal\nActive: \(String(format: "%.0f", energyBurnedSummary.averageActiveEnergyBurned)) Cal",
                             metricValue: energyBurnedSummary.activityLevel.name,
-                            isIncreasing: energyBurnedSummary.isIncreasing
+                            trend: energyBurnedSummary.trend
                         )
                         .tint(energyBurnedSummary.activityLevel.color)
                         .padding(.horizontal)
@@ -62,11 +62,11 @@ struct VitalsView: View {
 
                     if let cardioFitnessSummary = viewModel.cardioFitnessSummary {
                         MonthlyVitalCardCell(
-                            title: "Heart Health",
+                            title: "Cardio Fitness",
                             systemImage: "heart.fill",
                             subtitleText: cardioFitnessSummary.subtitle,
                             metricValue: cardioFitnessSummary.level.name,
-                            isIncreasing: cardioFitnessSummary.isIncreasing
+                            trend: cardioFitnessSummary.trend
                         )
                         .tint(cardioFitnessSummary.level.color)
                         .padding(.horizontal)
@@ -78,7 +78,7 @@ struct VitalsView: View {
                             systemImage: "gauge.with.dots.needle.bottom.50percent",
                             subtitleText: bodyFatPercentageSummary.subtitle,
                             metricValue: bodyFatPercentageSummary.range.name,
-                            isIncreasing: bodyFatPercentageSummary.isIncreasing
+                            trend: bodyFatPercentageSummary.trend
                         )
                         .tint(bodyFatPercentageSummary.range.color)
                         .padding(.horizontal)
@@ -90,7 +90,7 @@ struct VitalsView: View {
                             systemImage: "figure.walk",
                             subtitleText: mobilitySummary.subtitle,
                             metricValue: mobilitySummary.status.name,
-                            isIncreasing: mobilitySummary.isIncreasing
+                            trend: mobilitySummary.trend
                         )
                         .tint(mobilitySummary.status.color)
                         .padding(.horizontal)
