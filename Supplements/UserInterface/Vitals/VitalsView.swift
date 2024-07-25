@@ -95,6 +95,18 @@ struct VitalsView: View {
                         .tint(mobilitySummary.status.color)
                         .padding(.horizontal)
                     }
+
+                    if let stressSummary = viewModel.stressSummary {
+                        MonthlyVitalCardCell(
+                            title: "Stress Levels",
+                            systemImage: "bolt.fill",
+                            subtitleText: stressSummary.subtitle,
+                            metricValue: stressSummary.level.name,
+                            trend: stressSummary.trend
+                        )
+                        .tint(stressSummary.level.color)
+                        .padding(.horizontal)
+                    }
                 }
                 .padding(.bottom)
             }
@@ -112,6 +124,7 @@ struct VitalsView: View {
             .animation(.default, value: viewModel.cardioFitnessSummary)
             .animation(.default, value: viewModel.bodyFatPercentageSummary)
             .animation(.default, value: viewModel.mobilitySummary)
+            .animation(.default, value: viewModel.stressSummary)
         }
         .tabItem {
             Label("Vitals", systemImage: "bolt.heart")

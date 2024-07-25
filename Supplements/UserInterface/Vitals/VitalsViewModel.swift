@@ -68,6 +68,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
     @Published var bodyFatPercentageSummary: BodyFatPercentageMonthlySummary?
     @Published var mobilitySummary: MobilityMonthlySummary?
+    @Published var stressSummary: StressMonthlySummary?
 
     @Published var heartRateVariability = [DateQuantitySample]()
     @Published var restingHeartRate = [DateQuantitySample]()
@@ -225,6 +226,34 @@ private extension VitalsViewModel {
         } catch {
             print(error)
         }
+
+        do {
+            try HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: [
+                    HKQuantityType(.heartRateVariabilitySDNN),
+                    HKQuantityType(.restingHeartRate),
+                    HKCategoryType(.sleepAnalysis)
+                ]
+            ) {
+                let summary = await HealthManager.shared.fetchStressMonthlySummary()
+                await MainActor.run {
+                    self.stressSummary = summary
+                }
+            }
+        } catch {
+            print(error)
+        }
+
+        HealthManager.shared.$sleepAnalysis30Days
+            .sink { (_) in
+                Task {
+                    let summary = await HealthManager.shared.fetchStressMonthlySummary()
+                    await MainActor.run {
+                        self.stressSummary = summary
+                    }
+                }
+            }
+            .store(in: &cancellables)
     }
 
     func createVitalStatuses(
@@ -308,7 +337,7 @@ private extension VitalsViewModel {
                 name: "Resting Heart Rate",
                 value: "\(String(format: "%.0f", firstRHR.quantity)) bpm",
                 mode: mode,
-                score: 1 - firstRHR.quantity.scaledPercent(lower: min, upper: max)
+                score: firstRHR.quantity.scaledPercent(lower: max, upper: min)
             )
         } else {
             rhrStatus = VitalStatusData(

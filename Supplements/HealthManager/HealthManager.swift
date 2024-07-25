@@ -173,7 +173,7 @@ extension HealthManager {
             return samples.compactMap { sample in
                 sample as? HKQuantitySample
             }.map { sample in
-                let value = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
+                let value = sample.quantity.doubleValue(for: .bpm())
                 return DateQuantitySample(
                     date: sample.startDate,
                     quantity: value,
@@ -385,6 +385,64 @@ extension HealthManager {
     }
 
     func fetchStressMonthlySummary() async -> StressMonthlySummary? {
+        do {
+            let endDate = Date.now
+
+            guard let midDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate),
+                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: midDate)
+            else {
+                return nil
+            }
+
+            let hrvAverage = try await healthStore.fetchQuantity(
+                for: .heartRateVariabilitySDNN,
+                start: midDate,
+                end: endDate,
+                unit: .secondUnit(with: .milli)
+            )
+            let hrvSamples = try await healthStore.fetchSamples(
+                for: .heartRateVariabilitySDNN,
+                start: midDate,
+                end: endDate
+            ).compactMap({ $0 as? HKQuantitySample }).map({ $0.quantity.doubleValue(for: .secondUnit(with: .milli)) })
+            let rhrAverage = try await healthStore.fetchQuantity(
+                for: .restingHeartRate,
+                start: midDate,
+                end: endDate,
+                unit: .bpm()
+            )
+
+            let lastMonthHRVAverage = try await healthStore.fetchQuantity(
+                for: .heartRateVariabilitySDNN,
+                start: startDate,
+                end: midDate,
+                unit: .secondUnit(with: .milli)
+            )
+            let lastMonthHRVSamples = try await healthStore.fetchSamples(
+                for: .heartRateVariabilitySDNN,
+                start: startDate,
+                end: midDate
+            ).compactMap({ $0 as? HKQuantitySample }).map({ $0.quantity.doubleValue(for: .secondUnit(with: .milli)) })
+            let lastMonthRHRAverage = try await healthStore.fetchQuantity(
+                for: .restingHeartRate,
+                start: startDate,
+                end: midDate,
+                unit: .bpm()
+            )
+
+            return StressMonthlySummary(
+                avgHeartRateVariability: hrvAverage.0,
+                varHeartRateVariability: hrvSamples.variance(keyPath: \.self),
+                restingHeartRate: rhrAverage.0,
+                sleepScore: sleepAnalysis30Days?.average(keyPath: \.overallScoreDouble),
+                lastMonthAvgHeartRateVariability: lastMonthHRVAverage.0,
+                lastMonthVarHeartRateVariability: lastMonthHRVSamples.variance(keyPath: \.self),
+                lastMonthRestingHeartRate: lastMonthRHRAverage.0,
+                lastMonthSleepScore: sleepAnalysisPrevious30Days?.average(keyPath: \.overallScoreDouble)
+            )
+        } catch {
+            print(error)
+        }
         return nil
     }
 
