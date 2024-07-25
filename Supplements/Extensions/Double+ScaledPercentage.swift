@@ -10,11 +10,13 @@ import Foundation
 extension Double {
 
     func scaledPercent(lower: Double, upper: Double) -> Double {
-        guard lower < upper else { return 0 }
+        if lower < upper {
+            let adjustedSelf = self - lower
+            let adjustedUpper = upper - lower
 
-        let adjustedSelf = self - lower
-        let adjustedUpper = upper - lower
-
-        return min(max(adjustedSelf / adjustedUpper, 0.0), 1.0)
+            return min(max(adjustedSelf / adjustedUpper, 0.0), 1.0)
+        } else {
+            return 1 - scaledPercent(lower: upper, upper: lower)
+        }
     }
 }

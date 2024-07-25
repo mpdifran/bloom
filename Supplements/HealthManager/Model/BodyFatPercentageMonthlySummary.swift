@@ -30,15 +30,15 @@ extension BodyFatPercentageMonthlySummary {
         var color: Color {
             switch self {
             case .unknown: .gray
-            case .essentialFat, .athlete, .fit: .coreSleep
-            case .healthy: .green
+            case .athlete, .fit: .coreSleep
+            case .essentialFat, .healthy: .green
             case .high: .pink
             }
         }
     }
 }
 
-struct BodyFatPercentageMonthlySummary {
+struct BodyFatPercentageMonthlySummary: Equatable {
     let bodyFatPercentage: Double?
     let lastMonthBodyFatPercentage: Double?
 }

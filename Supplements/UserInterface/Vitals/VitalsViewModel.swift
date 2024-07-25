@@ -67,6 +67,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
     @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
     @Published var bodyFatPercentageSummary: BodyFatPercentageMonthlySummary?
+    @Published var mobilitySummary: MobilityMonthlySummary?
 
     @Published var heartRateVariability = [DateQuantitySample]()
     @Published var restingHeartRate = [DateQuantitySample]()
@@ -207,6 +208,23 @@ private extension VitalsViewModel {
         } catch {
             print(error)
         }
+
+        do {
+            try HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: [
+                    HKCategoryType(.appleWalkingSteadinessEvent),
+                    HKQuantityType(.sixMinuteWalkTestDistance),
+                    HKQuantityType(.walkingDoubleSupportPercentage)
+                ]
+            ) {
+                let summary = await HealthManager.shared.fetchMonthlyMobilitySummary()
+                await MainActor.run {
+                    self.mobilitySummary = summary
+                }
+            }
+        } catch {
+            print(error)
+        }
     }
 
     func createVitalStatuses(
@@ -290,7 +308,7 @@ private extension VitalsViewModel {
                 name: "Resting Heart Rate",
                 value: "\(String(format: "%.0f", firstRHR.quantity)) bpm",
                 mode: mode,
-                score: firstRHR.quantity.scaledPercent(lower: min, upper: max)
+                score: 1 - firstRHR.quantity.scaledPercent(lower: min, upper: max)
             )
         } else {
             rhrStatus = VitalStatusData(

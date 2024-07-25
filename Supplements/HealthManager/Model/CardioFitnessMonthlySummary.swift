@@ -37,7 +37,7 @@ extension CardioFitnessMonthlySummary {
     }
 }
 
-struct CardioFitnessMonthlySummary {
+struct CardioFitnessMonthlySummary: Equatable {
     let averageVO2Max: Double?
     let lastMonthAverageVO2Max: Double?
 }

@@ -62,8 +62,8 @@ struct VitalsView: View {
 
                     if let cardioFitnessSummary = viewModel.cardioFitnessSummary {
                         MonthlyVitalCardCell(
-                            title: "Cardio Fitness",
-                            systemImage: "figure.run",
+                            title: "Heart Health",
+                            systemImage: "heart.fill",
                             subtitleText: cardioFitnessSummary.subtitle,
                             metricValue: cardioFitnessSummary.level.name,
                             isIncreasing: cardioFitnessSummary.isIncreasing
@@ -83,6 +83,18 @@ struct VitalsView: View {
                         .tint(bodyFatPercentageSummary.range.color)
                         .padding(.horizontal)
                     }
+
+                    if let mobilitySummary = viewModel.mobilitySummary {
+                        MonthlyVitalCardCell(
+                            title: "Mobility",
+                            systemImage: "figure.walk",
+                            subtitleText: mobilitySummary.subtitle,
+                            metricValue: mobilitySummary.status.name,
+                            isIncreasing: mobilitySummary.isIncreasing
+                        )
+                        .tint(mobilitySummary.status.color)
+                        .padding(.horizontal)
+                    }
                 }
                 .padding(.bottom)
             }
@@ -95,6 +107,11 @@ struct VitalsView: View {
             .animation(.default, value: viewModel.hrvStatus)
             .animation(.default, value: viewModel.sleepStatus)
             .animation(.default, value: viewModel.rhrStatus)
+            .animation(.default, value: viewModel.sleepVitalsSummary)
+            .animation(.default, value: viewModel.energyBurnedSummary)
+            .animation(.default, value: viewModel.cardioFitnessSummary)
+            .animation(.default, value: viewModel.bodyFatPercentageSummary)
+            .animation(.default, value: viewModel.mobilitySummary)
         }
         .tabItem {
             Label("Vitals", systemImage: "bolt.heart")

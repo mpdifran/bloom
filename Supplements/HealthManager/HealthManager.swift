@@ -35,31 +35,30 @@ final class HealthManager: ObservableObject {
 
     let types: Set = [
         HKQuantityType(.bodyMass),
-        HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!,
-        HKObjectType.characteristicType(forIdentifier: .biologicalSex)!,
-        HKObjectType.characteristicType(forIdentifier: .bloodType)!,
+        HKCharacteristicType(.dateOfBirth),
+        HKCharacteristicType(.biologicalSex),
+        HKCharacteristicType(.bloodType),
         HKObjectType.activitySummaryType(),
         HKQuantityType(.appleExerciseTime),
         HKQuantityType(.stepCount),
         HKQuantityType(.heartRateVariabilitySDNN),
-        HKObjectType.quantityType(forIdentifier: .restingHeartRate)!,
-        HKObjectType.quantityType(forIdentifier: .vo2Max)!,
+        HKQuantityType(.restingHeartRate),
+        HKQuantityType(.vo2Max),
         HKQuantityType(.timeInDaylight),
         HKCategoryType(.sleepAnalysis),
         HKQuantityType(.basalEnergyBurned),
         HKQuantityType(.activeEnergyBurned),
         HKQuantityType(.bodyFatPercentage),
         HKObjectType.workoutType(),
-        HKObjectType.categoryType(forIdentifier: .mindfulSession)!,
-        HKObjectType.quantityType(forIdentifier: .heartRate)!,
-        HKObjectType.quantityType(forIdentifier: .environmentalAudioExposure)!,
+        HKCategoryType(.mindfulSession),
+        HKQuantityType(.heartRate),
+        HKQuantityType(.environmentalAudioExposure),
         HKQuantityType(.respiratoryRate),
-        HKQuantityType(.appleSleepingWristTemperature)
+        HKQuantityType(.appleSleepingWristTemperature),
+        HKCategoryType(.appleWalkingSteadinessEvent),
+        HKQuantityType(.sixMinuteWalkTestDistance),
+        HKQuantityType(.walkingDoubleSupportPercentage)
     ]
-    // BMI
-    // blood oxygen
-    // double support time
-    // walking steadiness
 }
 
 extension HealthManager {
@@ -306,6 +305,78 @@ extension HealthManager {
                 end: endDate,
                 option: .discreteAverage,
                 unit: .percent()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchMonthlyMobilitySummary() async -> MobilityMonthlySummary? {
+        do {
+            let endDate = Date.now
+
+            guard let midDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate),
+                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: midDate)
+            else {
+                return nil
+            }
+
+            let doubleSupportTime = try await healthStore.fetchQuantity(
+                for: .walkingDoubleSupportPercentage,
+                start: midDate,
+                end: endDate,
+                option: .discreteAverage,
+                unit: .percent()
+            )
+
+            let sixMinuteWalkDistance = try await healthStore.fetchQuantity(
+                for: .sixMinuteWalkTestDistance,
+                start: midDate,
+                end: endDate,
+                option: .discreteAverage,
+                unit: .meter()
+            )
+
+            let walkingSteadiness = try await healthStore.fetchSamples(
+                for: HKCategoryType(.appleWalkingSteadinessEvent),
+                start: midDate,
+                end: endDate
+            ).compactMap { sample in
+                (sample as? HKCategorySample)?.walkingSteadinessCategory
+            }
+
+            let lastMonthDoubleSupportTime = try await healthStore.fetchQuantity(
+                for: .walkingDoubleSupportPercentage,
+                start: startDate,
+                end: midDate,
+                option: .discreteAverage,
+                unit: .percent()
+            )
+
+            let lastMonthSixMinuteWalkDistance = try await healthStore.fetchQuantity(
+                for: .sixMinuteWalkTestDistance,
+                start: startDate,
+                end: midDate,
+                option: .discreteAverage,
+                unit: .meter()
+            )
+
+            let lastMonthWalkingSteadiness = try await healthStore.fetchSamples(
+                for: HKCategoryType(.appleWalkingSteadinessEvent),
+                start: startDate,
+                end: midDate
+            ).compactMap { sample in
+                (sample as? HKCategorySample)?.walkingSteadinessCategory
+            }
+
+            return MobilityMonthlySummary(
+                doubleSupportTimePercent: doubleSupportTime.0,
+                sixMinuteWalkDistance: sixMinuteWalkDistance.0,
+                walkingSteadiness: walkingSteadiness,
+                lastMonthDoubleSupportTimePercent: lastMonthDoubleSupportTime.0,
+                lastMonthSixMinuteWalkDistance: lastMonthSixMinuteWalkDistance.0,
+                lastMonthWalkingSteadiness: lastMonthWalkingSteadiness
             )
         } catch {
             print(error)

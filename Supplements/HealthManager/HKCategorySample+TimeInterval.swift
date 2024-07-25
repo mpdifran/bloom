@@ -21,4 +21,8 @@ extension HKCategorySample {
     var sleepCategory: HKCategoryValueSleepAnalysis? {
         HKCategoryValueSleepAnalysis(rawValue: value)
     }
+
+    var walkingSteadinessCategory: HKCategoryValueAppleWalkingSteadinessEvent? {
+        HKCategoryValueAppleWalkingSteadinessEvent(rawValue: value)
+    }
 }
