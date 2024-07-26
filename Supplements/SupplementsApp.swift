@@ -24,7 +24,7 @@ struct SupplementsApp: App {
             RootView()
                 .onAppear {
                     NotificationManager.shared.requestAuthorization()
-                    BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+//                    BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
                     LocationManager.shared.requestAuth()
                     Task {
                         await HealthManager.shared.requestAccessIfNeeded()
@@ -39,8 +39,8 @@ struct SupplementsApp: App {
                 }
         }
         .backgroundTask(.appRefresh("proactive-tip")) {
-            try? await SleepProgramCoordinator.shared.sleepProgramUpdate()
-            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+//            try? await SleepProgramCoordinator.shared.sleepProgramUpdate()
+//            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
         }
     }
 }
