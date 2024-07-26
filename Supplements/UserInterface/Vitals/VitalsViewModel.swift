@@ -232,7 +232,9 @@ private extension VitalsViewModel {
                 sampleTypes: [
                     HKQuantityType(.heartRateVariabilitySDNN),
                     HKQuantityType(.restingHeartRate),
-                    HKCategoryType(.sleepAnalysis)
+                    HKCategoryType(.sleepAnalysis),
+                    HKQuantityType(.bloodPressureSystolic),
+                    HKQuantityType(.bloodPressureDiastolic)
                 ]
             ) {
                 let summary = await HealthManager.shared.fetchStressMonthlySummary()

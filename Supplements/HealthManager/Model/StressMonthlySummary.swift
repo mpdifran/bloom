@@ -40,41 +40,67 @@ extension StressMonthlySummary {
 }
 
 struct StressMonthlySummary: Equatable {
-    let avgHeartRateVariability: Double
-    let varHeartRateVariability: Double
-    let restingHeartRate: Double
+    let avgHeartRateVariability: Double?
+    let varHeartRateVariability: Double?
+    let restingHeartRate: Double?
     let sleepScore: Double?
-    let lastMonthAvgHeartRateVariability: Double
-    let lastMonthVarHeartRateVariability: Double
-    let lastMonthRestingHeartRate: Double
+    let bloodPressureSystolic: Double?
+    let bloodPressureDiastolic: Double?
+    let lastMonthAvgHeartRateVariability: Double?
+    let lastMonthVarHeartRateVariability: Double?
+    let lastMonthRestingHeartRate: Double?
     let lastMonthSleepScore: Double?
+    let lastMonthBloodPressureSystolic: Double?
+    let lastMonthBloodPressureDiastolic: Double?
 }
 
 extension StressMonthlySummary {
 
     var score: Double {
-        let hrvScore = varHeartRateVariability.scaledPercent(lower: 0, upper: 500)
+        let hrvScore = varHeartRateVariability?.scaledPercent(lower: 0, upper: 500)
 
         let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
-        let rhrScore = restingHeartRate.scaledPercent(lower: max, upper: min)
+        let rhrScore = restingHeartRate?.scaledPercent(lower: max, upper: min)
+
+        let bloodPressureScore: Double?
+        if let bloodPressureSystolic, let bloodPressureDiastolic {
+            let bloodPressureCategory = HealthManager.shared.bloodPressureCategory(
+                systolic: bloodPressureSystolic,
+                diastolic: bloodPressureDiastolic
+            )
+            bloodPressureScore = bloodPressureCategory.score
+        } else {
+            bloodPressureScore = nil
+        }
 
         if let sleepScore {
-            return [hrvScore, rhrScore, sleepScore / 10].average(keyPath: \.self)
+            return [hrvScore, rhrScore, bloodPressureScore, sleepScore / 10].compactMap({ $0 }).average(keyPath: \.self)
         } else {
-            return [hrvScore, rhrScore].average(keyPath: \.self)
+            return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
         }
     }
 
     var lastMonthScore: Double {
-        let hrvScore = lastMonthVarHeartRateVariability.scaledPercent(lower: 0, upper: 100)
+        let hrvScore = lastMonthVarHeartRateVariability?.scaledPercent(lower: 0, upper: 100)
 
         let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
-        let rhrScore = lastMonthRestingHeartRate.scaledPercent(lower: max, upper: min)
+        let rhrScore = lastMonthRestingHeartRate?.scaledPercent(lower: max, upper: min)
+
+        let bloodPressureScore: Double?
+        if let bloodPressureSystolic, let bloodPressureDiastolic {
+            let bloodPressureCategory = HealthManager.shared.bloodPressureCategory(
+                systolic: bloodPressureSystolic,
+                diastolic: bloodPressureDiastolic
+            )
+            bloodPressureScore = bloodPressureCategory.score
+        } else {
+            bloodPressureScore = nil
+        }
 
         if let sleepScore = lastMonthSleepScore {
-            return [hrvScore, rhrScore, sleepScore / 10].average(keyPath: \.self)
+            return [hrvScore, rhrScore, bloodPressureScore, sleepScore / 10].compactMap({ $0 }).average(keyPath: \.self)
         } else {
-            return [hrvScore, rhrScore].average(keyPath: \.self)
+            return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
         }
     }
 
@@ -83,9 +109,16 @@ extension StressMonthlySummary {
     }
 
     var subtitle: String {
-        let hrv = "HRV: \(String(format: "%.0f", avgHeartRateVariability)) ms"
-        let rhr = "RHR: \(String(format: "%.0f", restingHeartRate)) bpm"
-        return [hrv, rhr].joined(separator: "\n")
+        let hrv = avgHeartRateVariability.map { "HRV: \($0.format()) ms" }
+        let rhr = restingHeartRate.map { "RHR: \($0.format()) bpm" }
+
+        let bloodPressure: String?
+        if let bloodPressureSystolic, let bloodPressureDiastolic {
+            bloodPressure = "\(bloodPressureSystolic.format())/\(bloodPressureDiastolic.format()) mmHg"
+        } else {
+            bloodPressure = nil
+        }
+        return [hrv, rhr, bloodPressure].compactMap({ $0 }).joined(separator: "\n")
     }
 
     var level: Level {
