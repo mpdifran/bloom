@@ -42,11 +42,16 @@ struct DailyVitalMeterView: View {
                     .trim(from: dotArcStart, to: dotArcStart + 0.000001)
                     .stroke(.white, style: StrokeStyle(lineWidth: .dotDimension, lineCap: .round))
 
-                Text(stateText)
-                    .font(.system(size: 40))
-                    .bold()
-                    .fontDesign(.rounded)
-                    .padding(.bottom, 100)
+                VStack {
+                    Text(stateText)
+                        .font(.system(size: 40))
+                        .bold()
+                        .fontDesign(.rounded)
+                    Text("Strain Meter")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.bottom, 100)
             }
             .frame(width: 280)
             .padding(.bottom, -130)

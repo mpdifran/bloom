@@ -180,6 +180,20 @@ extension HealthManager {
         return nil
     }
 
+    func fetchExerciseMinutes(startDate: Date, endDate: Date) async -> [DateQuantitySample] {
+        do {
+            return try await healthStore.fetchCollectionQuantity(
+                quantityTypeID: .appleExerciseTime,
+                unit: .minute(),
+                startDate: startDate,
+                endDate: endDate
+            )
+        } catch {
+            print(error)
+        }
+        return []
+    }
+
     func fetchAverageSteps() async -> (Double, Int)? {
         do {
             return try await healthStore.fetchQuantity(
@@ -263,15 +277,19 @@ extension HealthManager {
     }
 
     func fetchTimeInDaylight(periodDays: Int = 14) async -> [DateQuantitySample] {
-        do {
-            let endDate = Date.now
-            guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {
-                return []
-            }
+        let endDate = Date.now
+        guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {
+            return []
+        }
 
+        return await fetchTimeInDaylight(startDate: startDate, endDate: endDate)
+    }
+
+    func fetchTimeInDaylight(startDate: Date, endDate: Date) async -> [DateQuantitySample] {
+        do {
             return try await healthStore.fetchCollectionQuantity(
                 quantityTypeID: .timeInDaylight,
-                unit: HKUnit.minute(),
+                unit: .minute(),
                 startDate: startDate,
                 endDate: endDate
             )
@@ -321,6 +339,20 @@ extension HealthManager {
             print(error)
         }
         return nil
+    }
+
+    func fetchActiveEnergy(startDate: Date, endDate: Date) async -> [DateQuantitySample] {
+        do {
+            return try await healthStore.fetchCollectionQuantity(
+                quantityTypeID: .activeEnergyBurned,
+                unit: .largeCalorie(),
+                startDate: startDate,
+                endDate: endDate
+            )
+        } catch {
+            print(error)
+        }
+        return []
     }
 
     func fetchWorkoutSummaryLastTwoWeeks() async -> [WorkoutSummary] {
@@ -629,6 +661,16 @@ extension HealthManager {
         } catch {
             print(error)
         }
+    }
+
+    func fetchSleepAnalysis(startDate: Date, endDate: Date) async -> [SleepAnalysis] {
+        do {
+            let samples = try await fetchSleepSamples(startDate: startDate, endDate: endDate)
+            return await processSleepAnalysis(samples: samples)
+        } catch {
+            print(error)
+        }
+        return []
     }
 
     func fetchSleepSamples(startDate: Date, endDate: Date) async throws -> [HKSample] {

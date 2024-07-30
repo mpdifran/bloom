@@ -16,19 +16,15 @@ struct VitalSummaryView: View {
         VStack {
             DailyVitalMeterView(meterValue: meterScore)
 
-            HStack(alignment: .top) {
-                Spacer()
+            HStack(alignment: .top, spacing: 10) {
                 if let hrvStatus {
                     VitalDetailCardView(statusData: hrvStatus)
-                    Spacer()
                 }
                 if let sleepStatus {
                     VitalDetailCardView(statusData: sleepStatus)
-                    Spacer()
                 }
                 if let rhrStatus {
                     VitalDetailCardView(statusData: rhrStatus)
-                    Spacer()
                 }
             }
         }
@@ -75,24 +71,32 @@ struct VitalDetailCardView: View {
 }
 
 #Preview {
-    VitalSummaryView(
-        hrvStatus: .init(
-            name: "Heart Rate Variability",
-            value: "39 ms",
-            mode: .warning,
-            score: 0.3
-        ),
-        sleepStatus: .init(
-            name: "Sleep Quality",
-            value: "Great",
-            mode: .excel,
-            score: 0.9
-        ),
-        rhrStatus: .init(
-            name: "Resting Heart Rate",
-            value: "59 bpm",
-            mode: .good,
-            score: 0.6
+    ScrollView {
+        VitalSummaryView(
+            hrvStatus: .init(
+                name: "Heart Rate Variability",
+                value: "39 ms",
+                mode: .warning,
+                score: 0.3
+            ),
+            sleepStatus: .init(
+                name: "Sleep Quality",
+                value: "Great",
+                mode: .excel,
+                score: 0.9
+            ),
+            rhrStatus: .init(
+                name: "Resting Heart Rate",
+                value: "59 bpm",
+                mode: .good,
+                score: 0.6
+            )
         )
-    )
+        .padding()
+    }
+    .background {
+        Rectangle()
+            .fill(.background.secondary)
+            .ignoresSafeArea()
+    }
 }

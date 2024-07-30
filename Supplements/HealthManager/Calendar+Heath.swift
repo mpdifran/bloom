@@ -40,4 +40,10 @@ extension Calendar {
         }
         return nil
     }
+
+    func isDate(_ date1: Date, nextDayAfter date2: Date) -> Bool {
+        guard let nextDay = self.date(byAdding: .day, value: 1, to: date2) else { return false }
+
+        return self.isDate(date1, inSameDayAs: nextDay)
+    }
 }

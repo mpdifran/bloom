@@ -166,6 +166,13 @@
 		FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */; };
 		FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AD82C541DE9003E5F85 /* Double+Format.swift */; };
 		FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */; };
+		FFC77AE32C57FCEC003E5F85 /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FFC77AE22C57FCEC003E5F85 /* StatKit */; };
+		FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AE52C57FD1B003E5F85 /* CorrelationEngine.swift */; };
+		FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AE72C580B26003E5F85 /* DataPair.swift */; };
+		FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AEA2C580F33003E5F85 /* CorrelationsView.swift */; };
+		FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AEC2C580F3F003E5F85 /* CorrelationsViewModel.swift */; };
+		FFC77AEF2C581529003E5F85 /* CorrelationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AEE2C581529003E5F85 /* CorrelationChartCell.swift */; };
+		FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */; };
 		FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */; };
 		FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */; };
 		FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */; };
@@ -490,6 +497,12 @@
 		FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StressMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC77AD82C541DE9003E5F85 /* Double+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Format.swift"; sourceTree = "<group>"; };
 		FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureCategory.swift; sourceTree = "<group>"; };
+		FFC77AE52C57FD1B003E5F85 /* CorrelationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationEngine.swift; sourceTree = "<group>"; };
+		FFC77AE72C580B26003E5F85 /* DataPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPair.swift; sourceTree = "<group>"; };
+		FFC77AEA2C580F33003E5F85 /* CorrelationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationsView.swift; sourceTree = "<group>"; };
+		FFC77AEC2C580F3F003E5F85 /* CorrelationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationsViewModel.swift; sourceTree = "<group>"; };
+		FFC77AEE2C581529003E5F85 /* CorrelationChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationChartCell.swift; sourceTree = "<group>"; };
+		FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+DataPair.swift"; sourceTree = "<group>"; };
 		FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyVitalCardCell.swift; sourceTree = "<group>"; };
 		FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepVitalsMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessMonthlySummary.swift; sourceTree = "<group>"; };
@@ -589,6 +602,7 @@
 				FFF87F8D2C1FB83A0053280E /* OpenAPIClient in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
 				FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */,
+				FFC77AE32C57FCEC003E5F85 /* StatKit in Frameworks */,
 				FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */,
 				FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */,
 				FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */,
@@ -893,6 +907,7 @@
 				FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */,
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
 				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
+				FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */,
 				FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */,
 				FFC77AD82C541DE9003E5F85 /* Double+Format.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
@@ -1054,6 +1069,7 @@
 				FFB444952BED420C00486AD7 /* UserInterface */,
 				FF6AEC942BF17AFB00C34621 /* BackgroundTasks */,
 				FF1705182C109FF3000D4B3D /* Programs */,
+				FFC77AE42C57FD0A003E5F85 /* Correlations */,
 				FF8B8B332BFFE4CD00BA2128 /* Location */,
 				FF6AEC972BF17D0D00C34621 /* Notifications */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
@@ -1143,6 +1159,7 @@
 				FFB444942BED41E600486AD7 /* Onboarding */,
 				FFAA83D72C4D9E19004D12DA /* Vitals */,
 				FFA134EE2C3F041500FF1829 /* Today */,
+				FFC77AE92C580F20003E5F85 /* Correlations */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FF049C012C24B31C004ACE9C /* Directives */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
@@ -1179,6 +1196,25 @@
 				FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */,
 			);
 			path = GoodMorning;
+			sourceTree = "<group>";
+		};
+		FFC77AE42C57FD0A003E5F85 /* Correlations */ = {
+			isa = PBXGroup;
+			children = (
+				FFC77AE52C57FD1B003E5F85 /* CorrelationEngine.swift */,
+				FFC77AE72C580B26003E5F85 /* DataPair.swift */,
+			);
+			path = Correlations;
+			sourceTree = "<group>";
+		};
+		FFC77AE92C580F20003E5F85 /* Correlations */ = {
+			isa = PBXGroup;
+			children = (
+				FFC77AEA2C580F33003E5F85 /* CorrelationsView.swift */,
+				FFC77AEC2C580F3F003E5F85 /* CorrelationsViewModel.swift */,
+				FFC77AEE2C581529003E5F85 /* CorrelationChartCell.swift */,
+			);
+			path = Correlations;
 			sourceTree = "<group>";
 		};
 		FFDDE2872C0A058500BFDEF5 /* ChartUI */ = {
@@ -1464,6 +1500,7 @@
 				FFF61AEA2BED52A900926042 /* AppFoundations */,
 				FF8B8B202BFD1EF500BA2128 /* Algorithms */,
 				FFF87F8C2C1FB83A0053280E /* OpenAPIClient */,
+				FFC77AE22C57FCEC003E5F85 /* StatKit */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -1539,6 +1576,7 @@
 				FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */,
 				FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				FFF87F8B2C1FB83A0053280E /* XCLocalSwiftPackageReference "bloom-swift-api" */,
+				FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -1683,6 +1721,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF1705292C10DC67000D4B3D /* WorkoutSummaryCell.swift in Sources */,
+				FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */,
 				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
 				FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */,
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
@@ -1736,11 +1775,13 @@
 				FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
+				FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
 				FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */,
+				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
 				FFA134F02C3F042300FF1829 /* TodayView.swift in Sources */,
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */,
@@ -1790,6 +1831,7 @@
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */,
+				FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
@@ -1798,6 +1840,7 @@
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFF61AEF2BED544400926042 /* GoalModel.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
+				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */,
@@ -1833,6 +1876,7 @@
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
+				FFC77AEF2C581529003E5F85 /* CorrelationChartCell.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
@@ -2613,6 +2657,14 @@
 				minimumVersion = 1.2.0;
 			};
 		};
+		FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JimmyMAndersson/StatKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.1;
+			};
+		};
 		FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mpdifran/AppUI";
@@ -2636,6 +2688,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
+		};
+		FFC77AE22C57FCEC003E5F85 /* StatKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */;
+			productName = StatKit;
 		};
 		FFD8C4D22BD1AC5E001E8D42 /* AppUI */ = {
 			isa = XCSwiftPackageProductDependency;

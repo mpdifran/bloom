@@ -20,9 +20,10 @@ struct VitalsView: View {
                         sleepStatus: viewModel.sleepStatus,
                         rhrStatus: viewModel.rhrStatus
                     )
+                    .padding(.horizontal)
 
                     HStack {
-                        Text("Monthly Vital Trends")
+                        Text("Monthly Vitals")
                             .font(.headline)
                             .bold()
                         Spacer()

@@ -12,6 +12,7 @@ enum Tab {
     case today
     case vitals
     case insights
+    case correlations
     case actions
     case programs
     case chat
@@ -20,7 +21,7 @@ enum Tab {
 
 @MainActor
 class TabController: NSObject, ObservableObject {
-    @Published var activeTab = Tab.today
+    @Published var activeTab = Tab.vitals
 
     override init() {
         super.init()
