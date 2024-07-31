@@ -44,6 +44,11 @@ struct VitalsView: View {
                 }
                 .padding(.bottom)
             }
+            .background {
+                Rectangle()
+                    .fill(.background.secondary)
+                    .ignoresSafeArea()
+            }
             .navigationTitle("Vitals")
             .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
                 switch vitalKind {

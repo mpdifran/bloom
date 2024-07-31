@@ -14,31 +14,13 @@ struct GoalModel: Identifiable, Hashable {
     let summary: String
     let color: Color
     let metric: Metric
-    let vital: Vital
+    let vitalKind: VitalModel.Kind
 }
 
 extension GoalModel {
     struct Metric: Hashable {
         let value: Double
         let measurement: MeasurementMetric
-    }
-}
-
-extension GoalModel {
-    struct Vital: Hashable {
-        let name: String
-        let systemImage: String
-        let metricValue: String
-        let color: Color
-        let trend: Trend
-    }
-}
-
-extension GoalModel.Vital {
-    enum Trend {
-        case increasing
-        case decreasing
-        case noTrend
     }
 }
 

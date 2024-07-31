@@ -26,20 +26,6 @@ final class GoalsViewModel: ObservableObject {
 extension GoalsViewModel {
 
     func checkForUpdateGoals() {
-        let sleepVitals = VitalsViewModel.shared.sleepVitalsSummary
-
-        let trend: GoalModel.Vital.Trend
-        switch sleepVitals?.trend {
-        case .increasing:
-            trend = .increasing
-        case .decreasing:
-            trend = .decreasing
-        case .noTrend:
-            trend = .noTrend
-        case nil:
-            trend = .noTrend
-        }
-
         let goal = GoalModel(
             title: "Get More Sunlight",
             systemImage: "sun.max.fill",
@@ -49,13 +35,7 @@ extension GoalsViewModel {
                 value: 300,
                 measurement: .timeInDaylight
             ),
-            vital: .init(
-                name: "Sleep Quality",
-                systemImage: "moon.zzz",
-                metricValue: sleepVitals?.quality.name ?? "No Data",
-                color: sleepVitals?.quality.color ?? .gray,
-                trend: trend
-            )
+            vitalKind: .sleepQuality
         )
         goals = [goal]
     }

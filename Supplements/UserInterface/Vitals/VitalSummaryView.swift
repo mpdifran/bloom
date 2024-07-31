@@ -42,8 +42,8 @@ struct VitalDetailCardView: View {
     let statusData: VitalStatusData
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.background.secondary)
+        RoundedRectangle(cornerRadius: 30)
+            .fill(.background)
             .overlay {
                 VStack {
                     Group {

@@ -8,12 +8,13 @@
 import SwiftUI
 
 private extension CGFloat {
-    static let lineWidth: CGFloat = 25
+    static let lineWidth: CGFloat = 15
+    static let selectedLineWidth: CGFloat = 25
 
     static let arcStart: CGFloat = 0.55
     static let arcEnd: CGFloat = 0.95
     static let selectedZoneArcLength: CGFloat = 0.2
-    static let arcSpacing: CGFloat = 0.035
+    static let arcSpacing: CGFloat = 0.03
     static let dotDimension: CGFloat = 20
 }
 
@@ -27,16 +28,16 @@ struct DailyVitalMeterView: View {
             ZStack {
                 Circle()
                     .trim(from: zone1ArcStart, to: zone1ArcEnd)
-                    .stroke(.pink, style: StrokeStyle(lineWidth: .lineWidth, lineCap: .round))
+                    .stroke(.pink, style: StrokeStyle(lineWidth: isInZone1 ? .selectedLineWidth : .lineWidth, lineCap: .round))
                 Circle()
                     .trim(from: zone2ArcStart, to: zone2ArcEnd)
-                    .stroke(.yellow, style: StrokeStyle(lineWidth: .lineWidth, lineCap: .round))
+                    .stroke(.yellow, style: StrokeStyle(lineWidth: isInZone2 ? .selectedLineWidth : .lineWidth, lineCap: .round))
                 Circle()
                     .trim(from: zone3ArcStart, to: zone3ArcEnd)
-                    .stroke(.green, style: StrokeStyle(lineWidth: .lineWidth, lineCap: .round))
+                    .stroke(.green, style: StrokeStyle(lineWidth: isInZone3 ? .selectedLineWidth : .lineWidth, lineCap: .round))
                 Circle()
                     .trim(from: zone4ArcStart, to: zone4ArcEnd)
-                    .stroke(.coreSleep, style: StrokeStyle(lineWidth: .lineWidth, lineCap: .round))
+                    .stroke(.coreSleep, style: StrokeStyle(lineWidth: isInZone4 ? .selectedLineWidth : .lineWidth, lineCap: .round))
 
                 Circle()
                     .trim(from: dotArcStart, to: dotArcStart + 0.000001)
@@ -82,6 +83,22 @@ private extension DailyVitalMeterView {
 
 private extension DailyVitalMeterView {
 
+    var isInZone1: Bool {
+        cappedMeterValue <= 0.25
+    }
+
+    var isInZone2: Bool {
+        cappedMeterValue > 0.25 && cappedMeterValue <= 0.5
+    }
+
+    var isInZone3: Bool {
+        cappedMeterValue > 0.5 && cappedMeterValue <= 0.75
+    }
+
+    var isInZone4: Bool {
+        cappedMeterValue > 0.75
+    }
+
     var cappedMeterValue: CGFloat {
         min(max(meterValue, 0), 1)
     }
@@ -95,7 +112,7 @@ private extension DailyVitalMeterView {
     }
 
     var zone1ArcEnd: CGFloat {
-        if cappedMeterValue <= 0.25 {
+        if isInZone1 {
             return zone1ArcStart + .selectedZoneArcLength
         }
         return zone1ArcStart + unselectedArcLength
@@ -106,7 +123,7 @@ private extension DailyVitalMeterView {
     }
 
     var zone2ArcEnd: CGFloat {
-        if cappedMeterValue > 0.25 && cappedMeterValue <= 0.5 {
+        if isInZone2 {
             return zone2ArcStart + .selectedZoneArcLength
         }
         return zone2ArcStart + unselectedArcLength
@@ -117,7 +134,7 @@ private extension DailyVitalMeterView {
     }
 
     var zone3ArcEnd: CGFloat {
-        if cappedMeterValue > 0.5 && cappedMeterValue <= 0.75 {
+        if isInZone3 {
             return zone3ArcStart + .selectedZoneArcLength
         }
         return zone3ArcStart + unselectedArcLength
@@ -128,7 +145,7 @@ private extension DailyVitalMeterView {
     }
 
     var zone4ArcEnd: CGFloat {
-        if cappedMeterValue > 0.75 {
+        if isInZone4 {
             return zone4ArcStart + .selectedZoneArcLength
         }
         return zone4ArcStart + unselectedArcLength
@@ -137,15 +154,15 @@ private extension DailyVitalMeterView {
     var dotArcStart: CGFloat {
         var arc = CGFloat.arcStart
 
-        if cappedMeterValue <= 0.25 {
+        if isInZone1 {
             arc += (CGFloat.selectedZoneArcLength * (cappedMeterValue / 0.25))
-        } else if cappedMeterValue > 0.25 && cappedMeterValue <= 0.5 {
+        } else if isInZone2 {
             arc += unselectedArcLength + .arcSpacing
             arc += (CGFloat.selectedZoneArcLength * ((cappedMeterValue - 0.25) / 0.25))
-        } else if cappedMeterValue > 0.5 && cappedMeterValue <= 0.75 {
+        } else if isInZone3 {
             arc += (unselectedArcLength + .arcSpacing) * 2
             arc += (CGFloat.selectedZoneArcLength * ((cappedMeterValue - 0.5) / 0.25))
-        } else if cappedMeterValue > 0.75 {
+        } else if isInZone4 {
             arc += (unselectedArcLength + .arcSpacing) * 3
             arc += (CGFloat.selectedZoneArcLength * ((cappedMeterValue - 0.75) / 0.25))
         }

@@ -63,11 +63,7 @@ struct MonthlyVitalCardCell: View {
             }
         }
         .tint(vital.color)
-        .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 30)
-                .fill(.background.secondary)
-        }
+        .cardContainer()
     }
 }
 

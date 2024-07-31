@@ -15,6 +15,8 @@ struct GoalCell: View {
 
     @State private var currentGoalValue: Double = 0
 
+    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
@@ -33,44 +35,8 @@ struct GoalCell: View {
 
             barChart
 
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Target")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
-                    Text(goal.vital.name)
-                        .bold()
-                }
-
-                Spacer()
-
-                HStack {
-                    Text(goal.vital.metricValue)
-                        .font(.headline)
-                        .bold()
-                        .fontDesign(.rounded)
-                        .foregroundStyle(goal.vital.color)
-
-                    Group {
-                        switch goal.vital.trend {
-                        case .increasing:
-                            Image(systemName: "chevron.up.circle")
-                        case .decreasing:
-                            Image(systemName: "chevron.down.circle")
-                        case .noTrend:
-                            Image(systemName: "minus.circle")
-                                .foregroundStyle(.primary, .fill)
-                        }
-                    }
-                    .foregroundStyle(.primary, goal.vital.color)
-                    .font(.title)
-                }
-            }
-            .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(.ultraThinMaterial)
+            if let targetVitalModel {
+                TargetVitalComponentView(vital: targetVitalModel)
             }
         }
         .animation(.bouncy(duration: 1).delay(Double(index) * 0.3), value: currentGoalValue)
@@ -113,6 +79,10 @@ private extension GoalCell {
 }
 
 private extension GoalCell {
+
+    var targetVitalModel: VitalModel? {
+        vitalsViewModel.vitals.first(where: { $0.id == goal.vitalKind })
+    }
 
     func loadCurrentGoalValue() {
         switch goal.metric.measurement {
@@ -180,13 +150,7 @@ private extension GoalCell {
                     value: 300,
                     measurement: .timeInDaylight
                 ),
-                vital: .init(
-                    name: "Sleep Quality",
-                    systemImage: "moon.zzz",
-                    metricValue: "Low",
-                    color: .yellow,
-                    trend: .decreasing
-                )
+                vitalKind: .sleepQuality
             ),
             index: 0
         )

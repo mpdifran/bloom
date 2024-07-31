@@ -15,14 +15,22 @@ struct GoalsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEachEnumerated(viewModel.goals) { index, goal in
-                    Section {
+            ScrollView {
+                VStack {
+                    ForEachEnumerated(viewModel.goals) { index, goal in
                         GoalCell(goal: goal, index: index)
+                            .cardContainer()
+                            .transition(.blurReplace)
                     }
                 }
+                .padding()
             }
             .navigationTitle("Goals")
+            .background {
+                Rectangle()
+                    .fill(.background.secondary)
+                    .ignoresSafeArea()
+            }
         }
         .onAppear {
             viewModel.checkForUpdateGoals()

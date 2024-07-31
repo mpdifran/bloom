@@ -179,6 +179,8 @@
 		FFC77AFA2C5A75A9003E5F85 /* PreviewModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AF92C5A75A9003E5F85 /* PreviewModelContainer.swift */; };
 		FFC77AFC2C5A7D00003E5F85 /* GoalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AFB2C5A7D00003E5F85 /* GoalCell.swift */; };
 		FFC77AFE2C5AB200003E5F85 /* VitalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AFD2C5AB200003E5F85 /* VitalModel.swift */; };
+		FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AFF2C5AD843003E5F85 /* TargetVitalComponentView.swift */; };
+		FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B012C5AFF05003E5F85 /* CardContainer.swift */; };
 		FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */; };
 		FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */; };
 		FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */; };
@@ -512,6 +514,8 @@
 		FFC77AF92C5A75A9003E5F85 /* PreviewModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewModelContainer.swift; sourceTree = "<group>"; };
 		FFC77AFB2C5A7D00003E5F85 /* GoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCell.swift; sourceTree = "<group>"; };
 		FFC77AFD2C5AB200003E5F85 /* VitalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalModel.swift; sourceTree = "<group>"; };
+		FFC77AFF2C5AD843003E5F85 /* TargetVitalComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetVitalComponentView.swift; sourceTree = "<group>"; };
+		FFC77B012C5AFF05003E5F85 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
 		FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyVitalCardCell.swift; sourceTree = "<group>"; };
 		FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepVitalsMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessMonthlySummary.swift; sourceTree = "<group>"; };
@@ -1273,6 +1277,7 @@
 			children = (
 				FFC77AF22C5A6CFA003E5F85 /* GoalsView.swift */,
 				FFC77AFB2C5A7D00003E5F85 /* GoalCell.swift */,
+				FFC77AFF2C5AD843003E5F85 /* TargetVitalComponentView.swift */,
 				FFC77AF42C5A6D1C003E5F85 /* GoalsViewModel.swift */,
 				FFC77AF62C5A6D6A003E5F85 /* GoalModel.swift */,
 			);
@@ -1302,6 +1307,7 @@
 				FF1E960E2C0ACC70004DAD2D /* LabelledMetricView.swift */,
 				FF1E962B2C0BF19A004DAD2D /* View+Expand.swift */,
 				FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */,
+				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1788,6 +1794,7 @@
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
 				FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */,
+				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
@@ -1820,6 +1827,7 @@
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
+				FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */,
 				FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
