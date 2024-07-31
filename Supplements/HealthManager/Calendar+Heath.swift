@@ -46,4 +46,9 @@ extension Calendar {
 
         return self.isDate(date1, inSameDayAs: nextDay)
     }
+
+    func startOfWeek(for date: Date) -> Date? {
+        let components = Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        return Calendar.current.date(from: components)
+    }
 }

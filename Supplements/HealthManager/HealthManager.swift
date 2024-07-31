@@ -166,6 +166,24 @@ extension HealthManager {
         return nil
     }
 
+    func fetchThisWeekSumQuantity(for quantityType: HKQuantityTypeIdentifier, unit: HKUnit) async -> Double {
+        let endDate = Date.now
+        guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return 0 }
+
+        do {
+            return try await healthStore.fetchQuantity(
+                for: quantityType,
+                start: startDate,
+                end: endDate,
+                option: .cumulativeSum,
+                unit: unit
+            ).0
+        } catch {
+            print(error)
+        }
+        return 0
+    }
+
     func fetchExerciseMinutes() async -> (Double, Int)? {
         do {
             return try await healthStore.fetchQuantity(

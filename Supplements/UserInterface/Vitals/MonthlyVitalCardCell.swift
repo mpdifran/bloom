@@ -23,14 +23,26 @@ struct MonthlyVitalCardCell: View {
     let trend: Trend
 
     var body: some View {
-        VStack {
-            HStack(alignment: .top) {
-                Label(title, systemImage: systemImage)
+        HStack {
+            Image(systemName: systemImage)
+                .bold()
+                .font(.title)
+
+            VStack(alignment: .leading) {
+                Text(title)
                     .bold()
-                    .font(.title3)
+                    .font(.headline)
 
-                Spacer()
+                Text(subtitleText)
+                    .font(.subheadline)
+                    .bold()
+                    .fontDesign(.rounded)
+                    .foregroundStyle(.secondary)
+            }
 
+            Spacer()
+
+            VStack(alignment: .trailing) {
                 Group {
                     switch trend {
                     case .increasing:
@@ -43,22 +55,12 @@ struct MonthlyVitalCardCell: View {
                     }
                 }
                 .foregroundStyle(.primary, .tint)
-                .font(.largeTitle)
-            }
-
-            Spacer()
-
-            HStack(alignment: .bottom) {
-                Text(subtitleText)
-                    .font(.body)
-                    .bold()
-                    .fontDesign(.rounded)
-                    .foregroundStyle(.secondary)
+                .font(.title)
 
                 Spacer()
 
                 Text(metricValue)
-                    .font(.title2)
+                    .font(.subheadline)
                     .bold()
                     .fontDesign(.rounded)
                     .foregroundStyle(.tint)
@@ -66,7 +68,7 @@ struct MonthlyVitalCardCell: View {
         }
         .padding()
         .background {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 30)
                 .fill(.background)
         }
     }

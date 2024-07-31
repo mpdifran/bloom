@@ -34,12 +34,11 @@ struct OnboardingWelcomeView: View {
                 .frame(maxWidth: 300)
 
             Spacer()
-        }
-        .shelf {
+
             ProminentButton("Continue") {
                 onContinue()
             }
-            .buttonBorderShape(.roundedRectangle(radius: 17))
+            .padding()
         }
     }
 }

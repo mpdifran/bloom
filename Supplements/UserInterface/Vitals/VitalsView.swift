@@ -76,7 +76,7 @@ struct VitalsView: View {
                     if let bodyFatPercentageSummary = viewModel.bodyFatPercentageSummary {
                         MonthlyVitalCardCell(
                             title: "Body Fat Percentage",
-                            systemImage: "gauge.with.dots.needle.bottom.50percent",
+                            systemImage: "gauge.with.needle",
                             subtitleText: bodyFatPercentageSummary.subtitle,
                             metricValue: bodyFatPercentageSummary.range.name,
                             trend: bodyFatPercentageSummary.trend

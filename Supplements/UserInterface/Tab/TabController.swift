@@ -13,6 +13,7 @@ enum Tab {
     case vitals
     case insights
     case correlations
+    case goals
     case actions
     case programs
     case chat
