@@ -62,14 +62,14 @@ extension EnergyBurnedSummary {
         return (lastMonthAverageActiveEnergyBurned + lastMonthAverageBasalEnergyBurned) / lastMonthAverageBasalEnergyBurned
     }
 
-    var trend: MonthlyVitalCardCell.Trend {
+    var trend: VitalModel.Trend {
         guard let activityRatio, let lastMonthActivityRatio else { return .noTrend }
 
         return activityRatio > lastMonthActivityRatio ? .increasing : .decreasing
     }
 
     var subtitle: String {
-        "\(String(format: "%.0f", averageBasalEnergyBurned)) Cal basal\n\(String(format: "%.0f", averageActiveEnergyBurned)) Cal active"
+        "\(String(format: "%.0f", averageBasalEnergyBurned)) Cal Basal\n\(String(format: "%.0f", averageActiveEnergyBurned)) Cal Active"
     }
 
     var activityLevel: ActivityLevel {

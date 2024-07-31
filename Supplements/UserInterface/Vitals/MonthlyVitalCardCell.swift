@@ -16,24 +16,20 @@ extension MonthlyVitalCardCell {
 }
 
 struct MonthlyVitalCardCell: View {
-    let title: String
-    let systemImage: String
-    let subtitleText: String
-    let metricValue: String
-    let trend: Trend
+    let vital: VitalModel
 
     var body: some View {
         HStack {
-            Image(systemName: systemImage)
+            Image(systemName: vital.id.systemImage)
                 .bold()
                 .font(.title)
 
             VStack(alignment: .leading) {
-                Text(title)
+                Text(vital.id.name)
                     .bold()
                     .font(.headline)
 
-                Text(subtitleText)
+                Text(vital.subtitle)
                     .font(.subheadline)
                     .bold()
                     .fontDesign(.rounded)
@@ -44,7 +40,7 @@ struct MonthlyVitalCardCell: View {
 
             VStack(alignment: .trailing) {
                 Group {
-                    switch trend {
+                    switch vital.trend {
                     case .increasing:
                         Image(systemName: "chevron.up.circle")
                     case .decreasing:
@@ -59,17 +55,18 @@ struct MonthlyVitalCardCell: View {
 
                 Spacer()
 
-                Text(metricValue)
-                    .font(.subheadline)
+                Text(vital.status)
+                    .font(.headline)
                     .bold()
                     .fontDesign(.rounded)
                     .foregroundStyle(.tint)
             }
         }
+        .tint(vital.color)
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 30)
-                .fill(.background)
+                .fill(.background.secondary)
         }
     }
 }
@@ -78,31 +75,34 @@ struct MonthlyVitalCardCell: View {
     ScrollView {
         VStack {
             MonthlyVitalCardCell(
-                title: "Activity Level",
-                systemImage: "figure.run",
-                subtitleText: "Basal: 1756 Cal\nActive: 642 Cal",
-                metricValue: "Moderate",
-                trend: .increasing
+                vital: .init(
+                    id: .activityLevel,
+                    subtitle: "Basal: 1756 Cal\nActive: 642 Cal",
+                    status: "Moderate",
+                    color: .yellow,
+                    trend: .increasing
+                )
             )
-            .tint(.green)
 
             MonthlyVitalCardCell(
-                title: "Sleep Quality",
-                systemImage: "moon.zzz.fill",
-                subtitleText: "45% Core\n12% Deep",
-                metricValue: "Good",
-                trend: .decreasing
+                vital: .init(
+                    id: .sleepQuality,
+                    subtitle: "45% Core\n12% Deep",
+                    status: "Good",
+                    color: .coreSleep,
+                    trend: .decreasing
+                )
             )
-            .tint(.coreSleep)
 
             MonthlyVitalCardCell(
-                title: "Activity",
-                systemImage: "figure.run",
-                subtitleText: "1700 Cal Basal\n451 Cal Active",
-                metricValue: "Light",
-                trend: .noTrend
+                vital: .init(
+                    id: .activityLevel,
+                    subtitle: "1700 Cal Basal\n451 Cal Active",
+                    status: "Light",
+                    color: .green,
+                    trend: .noTrend
+                )
             )
-            .tint(.coreSleep)
         }
         .padding()
     }

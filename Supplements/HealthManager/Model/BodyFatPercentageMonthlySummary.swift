@@ -45,7 +45,7 @@ struct BodyFatPercentageMonthlySummary: Equatable {
 
 extension BodyFatPercentageMonthlySummary {
 
-    var trend: MonthlyVitalCardCell.Trend {
+    var trend: VitalModel.Trend {
         guard let bodyFatPercentage, let lastMonthBodyFatPercentage else {
             return .noTrend
         }
@@ -55,7 +55,7 @@ extension BodyFatPercentageMonthlySummary {
     var subtitle: String {
         guard let bodyFatPercentage else { return "No Data" }
 
-        return "\(String(format: "%.0f", bodyFatPercentage * 100))%"
+        return "Fat: \(String(format: "%.0f", bodyFatPercentage * 100))%"
     }
 
     var range: PercentageRange {

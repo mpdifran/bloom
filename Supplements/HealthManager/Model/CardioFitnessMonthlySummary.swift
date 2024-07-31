@@ -44,7 +44,7 @@ struct CardioFitnessMonthlySummary: Equatable {
 
 extension CardioFitnessMonthlySummary {
 
-    var trend: MonthlyVitalCardCell.Trend {
+    var trend: VitalModel.Trend {
         guard let averageVO2Max, let lastMonthAverageVO2Max else {
             return .noTrend
         }

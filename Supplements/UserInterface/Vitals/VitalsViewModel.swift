@@ -63,6 +63,8 @@ final class VitalsViewModel: ObservableObject {
     @Published var sleepStatus: VitalStatusData?
     @Published var rhrStatus: VitalStatusData?
 
+    @Published var vitals = [VitalModel]()
+
     @Published var energyBurnedSummary: EnergyBurnedSummary?
     @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
     @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
@@ -256,6 +258,109 @@ private extension VitalsViewModel {
                 }
             }
             .store(in: &cancellables)
+
+        $energyBurnedSummary
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $sleepVitalsSummary
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $cardioFitnessSummary
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $bodyFatPercentageSummary
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $mobilitySummary
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $stressSummary
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+    }
+
+    func createVitals() {
+        var vitals = [VitalModel]()
+        if let sleepVitalsSummary {
+            vitals.append(
+                VitalModel(
+                    id: .sleepQuality,
+                    subtitle: sleepVitalsSummary.subtitleText,
+                    status: sleepVitalsSummary.quality.name,
+                    color: sleepVitalsSummary.quality.color,
+                    trend: sleepVitalsSummary.trend
+                )
+            )
+        }
+        if let energyBurnedSummary {
+            vitals.append(
+                VitalModel(
+                    id: .activityLevel,
+                    subtitle: energyBurnedSummary.subtitle,
+                    status: energyBurnedSummary.activityLevel.name,
+                    color: energyBurnedSummary.activityLevel.color,
+                    trend: energyBurnedSummary.trend
+                )
+            )
+        }
+        if let cardioFitnessSummary {
+            vitals.append(
+                VitalModel(
+                    id: .cardioFitness,
+                    subtitle: cardioFitnessSummary.subtitle,
+                    status: cardioFitnessSummary.level.name,
+                    color: cardioFitnessSummary.level.color,
+                    trend: cardioFitnessSummary.trend
+                )
+            )
+        }
+        if let bodyFatPercentageSummary {
+            vitals.append(
+                VitalModel(
+                    id: .bodyComposition,
+                    subtitle: bodyFatPercentageSummary.subtitle,
+                    status: bodyFatPercentageSummary.range.name,
+                    color: bodyFatPercentageSummary.range.color,
+                    trend: bodyFatPercentageSummary.trend
+                )
+            )
+        }
+        if let mobilitySummary {
+            vitals.append(
+                VitalModel(
+                    id: .mobility,
+                    subtitle: mobilitySummary.subtitle,
+                    status: mobilitySummary.status.name,
+                    color: mobilitySummary.status.color,
+                    trend: mobilitySummary.trend
+                )
+            )
+        }
+        if let stressSummary {
+            vitals.append(
+                VitalModel(
+                    id: .stressLevels,
+                    subtitle: stressSummary.subtitle,
+                    status: stressSummary.level.name,
+                    color: stressSummary.level.color,
+                    trend: stressSummary.trend
+                )
+            )
+        }
+
+        self.vitals = vitals
     }
 
     func createVitalStatuses(

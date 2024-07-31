@@ -46,7 +46,7 @@ struct SleepVitalsMonthlySummary: Equatable {
 
 extension SleepVitalsMonthlySummary {
 
-    var trend: MonthlyVitalCardCell.Trend {
+    var trend: VitalModel.Trend {
         averageSleepScore > lastMonthAverageSleepScore ? .increasing : .decreasing
     }
 

@@ -43,7 +43,7 @@ struct VitalDetailCardView: View {
 
     var body: some View {
         RoundedRectangle(cornerRadius: 20)
-            .fill(.background)
+            .fill(.background.secondary)
             .overlay {
                 VStack {
                     Group {

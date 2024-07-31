@@ -104,7 +104,7 @@ extension StressMonthlySummary {
         }
     }
 
-    var trend: MonthlyVitalCardCell.Trend {
+    var trend: VitalModel.Trend {
         lastMonthScore > score  ? .increasing : .decreasing
     }
 

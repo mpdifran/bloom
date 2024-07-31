@@ -47,7 +47,7 @@ struct GoalCell: View {
 
                 HStack {
                     Text(goal.vital.metricValue)
-                        .font(.title2)
+                        .font(.headline)
                         .bold()
                         .fontDesign(.rounded)
                         .foregroundStyle(goal.vital.color)
