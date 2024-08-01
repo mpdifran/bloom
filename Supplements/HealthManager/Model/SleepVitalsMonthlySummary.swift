@@ -68,7 +68,7 @@ extension SleepVitalsMonthlySummary {
 
     var subtitleText: String {
         let formattedDuration = DateFormatter.timeIntervalHourMinuteShort.string(from: .init(minute: Int(averageSleepLength)))
-        let duration = formattedDuration
+        let duration = formattedDuration.map { "Avg: \($0)" }
         let rem = "REM: \(String(format: "%.0f", averageREMSleepPercent * 100))%"
         let deep = "Deep: \(String(format: "%.0f", averageDeepSleepPercent * 100))%"
         return [duration, rem, deep].compactMap({ $0 }).joined(separator: "\n")

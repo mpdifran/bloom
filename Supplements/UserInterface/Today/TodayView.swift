@@ -13,52 +13,44 @@ struct TodayView: View {
 
     @ObservedObject private var viewModel = TodayViewModel.shared
 
-    private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-
     var body: some View {
-        NavigationStack {
-            Group {
-                if let sleepAnalysis = viewModel.sleepAnalysis {
-                    List {
-                        VStack {
-                            SleepScoreView(sleepAnalysis: sleepAnalysis)
-                                .frame(maxHeight: 350)
+        Group {
+            if let sleepAnalysis = viewModel.sleepAnalysis {
+                List {
+                    VStack {
+                        SleepScoreView(sleepAnalysis: sleepAnalysis)
+                            .frame(maxHeight: 350)
 
-                            SleepScoreDetailsView(sleepAnalysis: sleepAnalysis)
-                        }
-
-                        SleepStageChartView(sleepAnalysis: sleepAnalysis)
-
-                        SleepHeartRateSummaryCell(heartRates: sleepAnalysis.heartRate)
-                        SleepSoundLevelSummaryCell(soundLevels: sleepAnalysis.environmentalSoundLevels)
-                        SleepRespiratoryRateSummaryCell(respiratoryRates: sleepAnalysis.respiratoryRate)
-                        WristTemperatureSummaryCell(wristTemperature: sleepAnalysis.wristTemperature)
+                        SleepScoreDetailsView(sleepAnalysis: sleepAnalysis)
                     }
-                    .listStyle(.plain)
-                } else {
-                    ContentUnavailableView(
-                        "No Data Available",
-                        systemImage: "moon.zzz",
-                        description: Text("There is no sleep analysis available for \(viewModel.date, formatter: DateFormatter.justRelativeDateMedium).")
-                    )
+
+                    SleepStageChartView(sleepAnalysis: sleepAnalysis)
+
+                    SleepHeartRateSummaryCell(heartRates: sleepAnalysis.heartRate)
+                    SleepSoundLevelSummaryCell(soundLevels: sleepAnalysis.environmentalSoundLevels)
+                    SleepRespiratoryRateSummaryCell(respiratoryRates: sleepAnalysis.respiratoryRate)
+                    WristTemperatureSummaryCell(wristTemperature: sleepAnalysis.wristTemperature)
                 }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    TitleDatePicker(date: $viewModel.date)
-                }
+                .listStyle(.plain)
+            } else {
+                ContentUnavailableView(
+                    "No Data Available",
+                    systemImage: "moon.zzz",
+                    description: Text("There is no sleep analysis available for \(viewModel.date, formatter: DateFormatter.justRelativeDateMedium).")
+                )
             }
         }
-        .onReceive(foregroundPublisher) { _ in
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                TitleDatePicker(date: $viewModel.date)
+            }
+        }
+        .onAppear {
             if !Calendar.current.isDateInToday(lastAppearDate) {
                 viewModel.date = Date()
             }
             lastAppearDate = Date()
-            print("Updated lastAppearDate")
-        }
-        .tabItem {
-            Label("Sleep", systemImage: "moon.zzz")
         }
     }
 }

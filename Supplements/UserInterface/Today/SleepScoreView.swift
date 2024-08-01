@@ -28,11 +28,11 @@ struct SleepScoreView: View {
                             color: .green
                         )
                         ProgressArcView(
-                            progress: CGFloat(sleepAnalysis.soundLevelScore) / 10.0,
+                            progress: CGFloat(sleepAnalysis.awakeSleepScore) / 10.0,
                             dimension: proxy.size.width - (2.0 * .lineWidth) - .ringSpacing,
                             thickness: .lineWidth,
-                            systemImage: "speaker.zzz",
-                            color: .yellow
+                            systemImage: "bolt.horizontal",
+                            color: .awakeSleep
                         )
                         ProgressArcView(
                             progress: CGFloat(sleepAnalysis.heartRateScore) / 10.0,

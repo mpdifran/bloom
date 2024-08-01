@@ -284,6 +284,24 @@ extension HealthManager {
         return []
     }
 
+    func fetchAverageRestingHeartRate(endDate: Date, period: Int = 7) async -> Double? {
+        do {
+            guard let startDate = Calendar.current.date(byAdding: .day, value: -period, to: endDate) else {
+                return 0
+            }
+
+            return try await healthStore.fetchQuantity(
+                for: .restingHeartRate,
+                start: startDate,
+                end: endDate,
+                unit: .bpm()
+            ).0
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
     func fetchVO2Max(numPastMonths: Int = 0) async -> (Double, Int)? {
         do {
             guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
@@ -989,6 +1007,8 @@ extension HealthManager {
                 print(error)
             }
 
+            let averageRestingHeartRate = await fetchAverageRestingHeartRate(endDate: startDate)
+
             let analysis = SleepAnalysis(
                 startDate: startDate,
                 endDate: endDate,
@@ -996,6 +1016,7 @@ extension HealthManager {
                 coreSleepMinutes: coreSleepTime / 60,
                 remSleepMinutes: remSleepTime / 60,
                 awakeSleepMinutes: awakeSleepTime / 60,
+                averageRestingHeartRate: averageRestingHeartRate,
                 environmentalSoundLevels: soundLevelDataPoints,
                 heartRate: heartRateDataPoints,
                 respiratoryRate: respiratoryRateDataPoints,

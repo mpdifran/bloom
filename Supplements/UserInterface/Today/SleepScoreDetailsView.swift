@@ -32,11 +32,11 @@ struct SleepScoreDetailsView: View {
 
             VStack(alignment: .leading, spacing: 20) {
                 LabelledText(
-                    label: "Sound Level",
-                    systemImage: "speaker.zzz",
-                    value: "\(String(format: "%.1f", sleepAnalysis.averageSoundLevel)) db"
+                    label: "Awake Time",
+                    systemImage: "bolt.horizontal",
+                    value: "\(String(format: "%.1f", sleepAnalysis.awakeSleepHours)) hours"
                 )
-                .tint(.yellow)
+                .tint(.awakeSleep)
 
                 LabelledText(
                     label: "Core Sleep",

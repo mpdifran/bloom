@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension VitalModel {
-    enum Kind {
+    enum Kind: String, Hashable {
         case sleepQuality
         case activityLevel
         case cardioFitness

@@ -126,9 +126,9 @@ private extension SleepScoreCell {
         .animation(.easeInOut(duration: 1.2), value: deepSleepPercent)
         .onAppear {
             Delay(1500) {
-                remSleepPercent = lastSleepAnalysis.remSleepPercent / .remSleepPercent
-                coreSleepPercent = lastSleepAnalysis.coreSleepPercent / .coreSleepPercent
-                deepSleepPercent = lastSleepAnalysis.deepSleepPercent / .deepSleepPercent
+                remSleepPercent = lastSleepAnalysis.remSleepPercent / .remSleepPercentMax
+                coreSleepPercent = lastSleepAnalysis.coreSleepPercent / .coreSleepPercentMax
+                deepSleepPercent = lastSleepAnalysis.deepSleepPercent / .deepSleepPercentMax
             }
         }
         .alert(error: $error)
@@ -235,6 +235,7 @@ struct SleepSegmentScoreView: View {
                                 coreSleepMinutes: 180,
                                 remSleepMinutes: 93,
                                 awakeSleepMinutes: 32,
+                                averageRestingHeartRate: 65,
                                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,

@@ -137,7 +137,7 @@ private extension GoalsViewModel {
             summary: summary,
             color: .blue,
             metric: .init(
-                value: max(average * .goalMultiplier, 1),
+                value: max(average * .goalMultiplier, 2),
                 measurement: .walkRunDistance
             ),
             vitalKind: vitalKind
@@ -158,7 +158,7 @@ private extension GoalsViewModel {
             summary: summary,
             color: .green,
             metric: .init(
-                value: max(average * .goalMultiplier, 1),
+                value: max(average * .goalMultiplier, 5),
                 measurement: .runDistance
             ),
             vitalKind: vitalKind
@@ -194,7 +194,7 @@ private extension GoalsViewModel {
             summary: summary,
             color: .remSleep,
             metric: .init(
-                value: max(average * .goalMultiplier, 21),
+                value: max(average * .goalMultiplier, 14),
                 measurement: .meditationMinutes
             ),
             vitalKind: vitalKind

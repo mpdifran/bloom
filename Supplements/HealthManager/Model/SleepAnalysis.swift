@@ -11,17 +11,21 @@ import OpenAPIClient
 // https://www.mindbodygreen.com/articles/what-is-core-sleep
 // https://www.healthline.com/health/how-much-deep-sleep-do-you-need#deep-sleep
 extension Double {
-    static let coreSleepPercent: Double = 0.45
-    static let deepSleepPercent: Double = 0.15
-    static let remSleepPercent: Double = 0.20
+    static let coreSleepPercentMin: Double = 0.2
+    static let coreSleepPercentMax: Double = 0.45
+    static let deepSleepPercentMin: Double = 0.05
+    static let deepSleepPercentMax: Double = 0.15
+    static let remSleepPercentMin: Double = 0.05
+    static let remSleepPercentMax: Double = 0.20
     static let awakeSleepMinPercent: Double = 0.05
-    static let awakeSleepMaxPercent: Double = 0.25
+    static let awakeSleepMaxPercent: Double = 0.15
     static let zeroSleepLengthMinutes: Double = 4 * 60
     static let fullSleepLengthMinutes: Double = 8 * 60
     static let minSoundLevel: Double = 35
     static let maxSoundLevel: Double = 60
+    static let maxRestingHeartRatePercent: Double = 0.9
     static let minHeartRate: Double = 60
-    static let maxHeartRate: Double = 75
+    static let maxHeartRate: Double = 68
     static let maxScore: Double = 10
 }
 
@@ -34,6 +38,7 @@ struct SleepAnalysis: Codable, Hashable, Identifiable {
     let coreSleepMinutes: Double
     let remSleepMinutes: Double
     let awakeSleepMinutes: Double
+    let averageRestingHeartRate: Double?
     let environmentalSoundLevels: [SoundLevelDataPoint]
     let heartRate: [HeartRateDataPoint]
     let respiratoryRate: [RespiratoryRateDataPoint]
@@ -158,40 +163,41 @@ extension SleepAnalysis {
     }
 
     var overallScoreDouble: Double {
-        [
+        let componentAverage = [
             deepSleepScore,
             coreSleepScore,
-            remSleepScore,
+            remSleepScore
+        ].average(keyPath: \.self)
+        return [
             sleepLengthScore,
-            soundLevelScore,
+            componentAverage,
+            awakeSleepScore,
             heartRateScore
         ].average(keyPath: \.self)
     }
 
     var sleepLengthScore: Double {
-        let percent = (overallMinutes - .zeroSleepLengthMinutes) / (.fullSleepLengthMinutes - .zeroSleepLengthMinutes)
-        return max(min((percent * .maxScore), .maxScore), 0)
+        overallMinutes.scaledPercent(lower: .zeroSleepLengthMinutes, upper: .fullSleepLengthMinutes) * .maxScore
     }
 
     var awakeSleepScore: Double {
         let percent = awakeSleepMinutes / overallMinutes
-        let proposedScore = 1 - ((percent - .awakeSleepMinPercent) / .awakeSleepMaxPercent)
-        return min(max((proposedScore * .maxScore), 0), .maxScore)
+        return percent.scaledPercent(lower: .awakeSleepMaxPercent, upper: .awakeSleepMinPercent) * .maxScore
     }
 
     var deepSleepScore: Double {
         let percent = deepSleepMinutes / overallMinutes
-        return min(((percent / .deepSleepPercent) * .maxScore), .maxScore)
+        return percent.scaledPercent(lower: .deepSleepPercentMin, upper: .deepSleepPercentMax) * .maxScore
     }
 
     var coreSleepScore: Double {
         let percent = coreSleepMinutes / overallMinutes
-        return min(((percent / .coreSleepPercent) * .maxScore), .maxScore)
+        return percent.scaledPercent(lower: .coreSleepPercentMin, upper: .coreSleepPercentMax) * .maxScore
     }
 
     var remSleepScore: Double {
         let percent = remSleepMinutes / overallMinutes
-        return min(((percent / .remSleepPercent) * .maxScore), .maxScore)
+        return percent.scaledPercent(lower: .remSleepPercentMin, upper: .remSleepPercentMax) * .maxScore
     }
 
     var averageSoundLevel: Double {
@@ -199,9 +205,7 @@ extension SleepAnalysis {
     }
 
     var soundLevelScore: Double {
-        let percent = (averageSoundLevel - .minSoundLevel) / (.maxSoundLevel - .minSoundLevel)
-        let proposedScore = max(min(1, 1 - percent), 0)
-        return proposedScore * .maxScore
+        averageSoundLevel.scaledPercent(lower: .maxSoundLevel, upper: .minSoundLevel) * .maxScore
     }
 
     var averageHeartRate: Double {
@@ -209,9 +213,16 @@ extension SleepAnalysis {
     }
 
     var heartRateScore: Double {
-        let percent = (averageHeartRate - .minHeartRate) / (.maxHeartRate - .minHeartRate)
-        let proposedScore = max(min(1, 1 - percent), 0)
-        return proposedScore * .maxScore
+        if let averageRestingHeartRate {
+            return averageHeartRate.scaledPercent(
+                lower: averageRestingHeartRate,
+                upper: averageRestingHeartRate * .maxRestingHeartRatePercent
+            ) * .maxScore
+        }
+        return averageHeartRate.scaledPercent(
+            lower: .maxHeartRate,
+            upper: .minHeartRate
+        ) * .maxScore
     }
 }
 
@@ -254,6 +265,7 @@ extension SleepAnalysis {
                 coreSleepMinutes: 290,
                 remSleepMinutes: 98,
                 awakeSleepMinutes: 25,
+                averageRestingHeartRate: 65,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
@@ -266,6 +278,7 @@ extension SleepAnalysis {
                 coreSleepMinutes: 250,
                 remSleepMinutes: 67,
                 awakeSleepMinutes: 40,
+                averageRestingHeartRate: 65,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
@@ -278,6 +291,7 @@ extension SleepAnalysis {
                 coreSleepMinutes: 300,
                 remSleepMinutes: 48,
                 awakeSleepMinutes: 52,
+                averageRestingHeartRate: 65,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
@@ -290,6 +304,7 @@ extension SleepAnalysis {
                 coreSleepMinutes: 260,
                 remSleepMinutes: 48,
                 awakeSleepMinutes: 12,
+                averageRestingHeartRate: 65,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
@@ -302,6 +317,7 @@ extension SleepAnalysis {
                 coreSleepMinutes: 274,
                 remSleepMinutes: 41,
                 awakeSleepMinutes: 23,
+                averageRestingHeartRate: 65,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
@@ -314,6 +330,7 @@ extension SleepAnalysis {
                 coreSleepMinutes: 293,
                 remSleepMinutes: 53,
                 awakeSleepMinutes: 36,
+                averageRestingHeartRate: 65,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
@@ -326,6 +343,7 @@ extension SleepAnalysis {
                 coreSleepMinutes: 312,
                 remSleepMinutes: 69,
                 awakeSleepMinutes: 18,
+                averageRestingHeartRate: 65,
                 environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
                 heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
                 respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
