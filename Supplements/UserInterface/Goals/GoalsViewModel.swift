@@ -153,7 +153,7 @@ private extension GoalsViewModel {
         let average = workouts.sum(keyPath: \.distance) / Double(Int.numWeeksPastAverage)
 
         return GoalModel(
-            title: "Run For More Distance",
+            title: "Run For Longer Distances",
             systemImage: "figure.run",
             summary: summary,
             color: .green,
