@@ -14,6 +14,7 @@ struct WorkoutSummary: Codable, Equatable, Identifiable {
     let startDate: Date
     let durationSeconds: TimeInterval
     let caloriesBurned: Double
+    let distance: Double
 }
 
 extension WorkoutSummary {

@@ -57,6 +57,10 @@ struct StressMonthlySummary: Equatable {
 extension StressMonthlySummary {
 
     var score: Double {
+        internalScore.scaledPercent(lower: 0.4, upper: 0.9)
+    }
+
+    var internalScore: Double {
         let hrvScore = varHeartRateVariability?.scaledPercent(lower: 0, upper: 500)
 
         let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
@@ -105,7 +109,7 @@ extension StressMonthlySummary {
     }
 
     var trend: VitalModel.Trend {
-        lastMonthScore > score  ? .increasing : .decreasing
+        lastMonthScore > internalScore  ? .increasing : .decreasing
     }
 
     var subtitle: String {
@@ -122,11 +126,11 @@ extension StressMonthlySummary {
     }
 
     var level: Level {
-        if score < 0.4 {
+        if internalScore < 0.4 {
             return .severe
-        } else if score < 0.7 {
+        } else if internalScore < 0.7 {
             return .high
-        } else if score < 0.9 {
+        } else if internalScore < 0.9 {
             return .moderate
         } else {
             return .low

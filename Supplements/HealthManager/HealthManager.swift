@@ -58,7 +58,8 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.sixMinuteWalkTestDistance),
         HKQuantityType(.walkingDoubleSupportPercentage),
         HKQuantityType(.bloodPressureSystolic),
-        HKQuantityType(.bloodPressureDiastolic)
+        HKQuantityType(.bloodPressureDiastolic),
+        HKQuantityType(.distanceWalkingRunning)
 //        HKQuantityType(.dietaryEnergyConsumed),
 //        HKQuantityType(.dietaryBiotin),
 //        HKQuantityType(.dietaryCaffeine),
@@ -178,6 +179,30 @@ extension HealthManager {
                 option: .cumulativeSum,
                 unit: unit
             ).0
+        } catch {
+            print(error)
+        }
+        return 0
+    }
+
+    func fetchWeeklyAverage(for quantityType: HKQuantityTypeIdentifier, unit: HKUnit, numWeeks: Int) async -> Double {
+        guard
+            let endDate = Calendar.current.startOfWeek(for: .now),
+            let startDate = Calendar.current.date(byAdding: .weekOfYear, value: -numWeeks, to: endDate)
+        else {
+            return 0
+        }
+
+        do {
+            let result = try await healthStore.fetchQuantity(
+                for: quantityType,
+                start: startDate,
+                end: endDate,
+                option: .cumulativeSum,
+                unit: unit
+            ).0
+
+            return result / Double(numWeeks)
         } catch {
             print(error)
         }
@@ -375,7 +400,46 @@ extension HealthManager {
 
     func fetchWorkoutSummaryLastTwoWeeks() async -> [WorkoutSummary] {
         do {
-            return try await healthStore.fetchWorkoutSummaries(recentDays: 14)
+            let endDate = Date.now
+            guard let startDate = Calendar.current.date(byAdding: .day, value: -14, to: endDate) else {
+                return []
+            }
+
+            return try await healthStore.fetchWorkoutSummaries(startDate: startDate, endDate: endDate)
+        } catch {
+            print(error)
+        }
+        return []
+    }
+
+    func fetchWorkoutSummaries(activityType: HKWorkoutActivityType? = nil, numWeeks: Int) async -> [WorkoutSummary] {
+        do {
+            guard 
+                let endDate = Calendar.current.startOfWeek(for: .now),
+                let startDate = Calendar.current.date(byAdding: .day, value: -numWeeks, to: endDate)
+            else { return [] }
+
+            return try await healthStore.fetchWorkoutSummaries(
+                startDate: startDate,
+                endDate: endDate,
+                activityType: activityType
+            )
+        } catch {
+            print(error)
+        }
+        return []
+    }
+
+    func fetchWorkoutSummariesThisWeek(activityType: HKWorkoutActivityType? = nil) async -> [WorkoutSummary] {
+        do {
+            let endDate = Date.now
+            guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return [] }
+
+            return try await healthStore.fetchWorkoutSummaries(
+                startDate: startDate,
+                endDate: endDate,
+                activityType: activityType
+            )
         } catch {
             print(error)
         }
@@ -574,6 +638,54 @@ extension HealthManager {
             print(error)
         }
         return nil
+    }
+
+    func fetchWeeklyAverageMeditationMinutes(numWeeks: Int) async -> Double {
+        do {
+            guard
+                let endDate = Calendar.current.startOfWeek(for: .now),
+                let startDate = Calendar.current.date(byAdding: .day, value: -numWeeks, to: endDate)
+            else { return 0 }
+
+            let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
+            let samples = try await healthStore.fetchSamples(
+                for: meditationType,
+                start: startDate,
+                end: endDate
+            )
+
+            let meditationMinutes = samples.reduce(0) { (total, sample) -> Double in
+                total + sample.timeInterval / 60
+            }
+
+            return meditationMinutes / Double(numWeeks)
+        } catch {
+            print(error)
+        }
+        return 0
+    }
+
+    func fetchAverageMeditationMinutesThisWeek() async -> Double {
+        do {
+            let endDate = Date.now
+            guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return 0 }
+
+            let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
+            let samples = try await healthStore.fetchSamples(
+                for: meditationType,
+                start: startDate,
+                end: endDate
+            )
+
+            let meditationMinutes = samples.reduce(0) { (total, sample) -> Double in
+                total + sample.timeInterval / 60
+            }
+
+            return meditationMinutes
+        } catch {
+            print(error)
+        }
+        return 0
     }
 
     func fetchMeditationMinutes(periodDays: Int = 14) async -> [DateQuantitySample] {
@@ -962,14 +1074,14 @@ extension HealthManager {
         }
     }
 
-    func goalBodyFatPercentage() -> (Double, Double, Double, Double)? {
+    func goalBodyFatPercentage() -> (Double, Double, Double, Double, Double)? {
         guard let sexObject = try? healthStore.biologicalSex() else { return nil }
 
         switch sexObject.biologicalSex {
         case .female:
-            return (14, 21, 25, 32)
+            return (14, 21, 25, 32, 50)
         case .male:
-            return (6, 14, 18, 25)
+            return (6, 14, 18, 25, 43)
         default:
             return nil
         }

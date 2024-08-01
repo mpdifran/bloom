@@ -62,6 +62,7 @@ struct VitalModel: Identifiable, Hashable {
     let id: Kind
     let subtitle: String
     let status: String
+    let score: Double
     let color: Color
     let trend: Trend
 }

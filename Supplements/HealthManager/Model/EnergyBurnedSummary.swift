@@ -48,6 +48,12 @@ struct EnergyBurnedSummary: Equatable {
 
 extension EnergyBurnedSummary {
 
+    var score: Double {
+        guard let activityRatio else { return 1 }
+
+        return activityRatio.scaledPercent(lower: 1, upper: 1.2)
+    }
+
     var activityRatio: Double? {
         guard averageBasalEnergyBurned > 1 else {
             return nil

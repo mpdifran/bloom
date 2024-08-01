@@ -58,6 +58,10 @@ struct MobilityMonthlySummary: Equatable {
 extension MobilityMonthlySummary {
 
     var score: Double {
+        internalScore.scaledPercent(lower: 0.5, upper: 0.9)
+    }
+
+    private var internalScore: Double {
         let doubleSupportScore = doubleSupportTimePercent.scaledPercent(
             lower: .upperDoubleSupportTime,
             upper: .lowerDoubleSupportTime
@@ -102,7 +106,7 @@ extension MobilityMonthlySummary {
     }
 
     var trend: VitalModel.Trend {
-        score > lastMonthScore ? .increasing : .decreasing
+        internalScore > lastMonthScore ? .increasing : .decreasing
     }
 
     var subtitle: String {
@@ -112,11 +116,11 @@ extension MobilityMonthlySummary {
     }
 
     var status: Status {
-        if score < 0.5 {
+        if internalScore < 0.5 {
             return .poor
-        } else if score < 0.7 {
+        } else if internalScore < 0.7 {
             return .concern
-        } else if score < 0.9 {
+        } else if internalScore < 0.9 {
             return .good
         } else {
             return .excellent

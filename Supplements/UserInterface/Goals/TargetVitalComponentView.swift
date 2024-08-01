@@ -62,6 +62,7 @@ struct TargetVitalComponentView: View {
             id: .sleepQuality,
             subtitle: "15% Deep",
             status: "Good",
+            score: 0.7,
             color: .green,
             trend: .increasing
         )

@@ -27,14 +27,14 @@ extension GoalModel {
 extension GoalModel {
     enum MeasurementMetric {
         case timeInDaylight
-        case walkWheelDistance
-        case walkWheelDuration
-        case runWheelDistance
-        case runWheelDuration
+        case walkRunDistance
+        case walkDuration
+        case runDistance
+        case runDuration
         case bikeDistance
         case bikeDuration
-        case walkRunBikeWheelDistance
-        case walkRunBikeWheelDuration
+        case walkRunBikeDistance
+        case walkRunBikeDuration
         case stepCount
         case meditationMinutes
         case bedtimeSoundLevels

@@ -299,6 +299,7 @@ private extension VitalsViewModel {
                     id: .sleepQuality,
                     subtitle: sleepVitalsSummary.subtitleText,
                     status: sleepVitalsSummary.quality.name,
+                    score: sleepVitalsSummary.score,
                     color: sleepVitalsSummary.quality.color,
                     trend: sleepVitalsSummary.trend
                 )
@@ -310,6 +311,7 @@ private extension VitalsViewModel {
                     id: .activityLevel,
                     subtitle: energyBurnedSummary.subtitle,
                     status: energyBurnedSummary.activityLevel.name,
+                    score: energyBurnedSummary.score,
                     color: energyBurnedSummary.activityLevel.color,
                     trend: energyBurnedSummary.trend
                 )
@@ -321,6 +323,7 @@ private extension VitalsViewModel {
                     id: .cardioFitness,
                     subtitle: cardioFitnessSummary.subtitle,
                     status: cardioFitnessSummary.level.name,
+                    score: cardioFitnessSummary.score,
                     color: cardioFitnessSummary.level.color,
                     trend: cardioFitnessSummary.trend
                 )
@@ -332,6 +335,7 @@ private extension VitalsViewModel {
                     id: .bodyComposition,
                     subtitle: bodyFatPercentageSummary.subtitle,
                     status: bodyFatPercentageSummary.range.name,
+                    score: bodyFatPercentageSummary.score,
                     color: bodyFatPercentageSummary.range.color,
                     trend: bodyFatPercentageSummary.trend
                 )
@@ -343,6 +347,7 @@ private extension VitalsViewModel {
                     id: .mobility,
                     subtitle: mobilitySummary.subtitle,
                     status: mobilitySummary.status.name,
+                    score: mobilitySummary.score,
                     color: mobilitySummary.status.color,
                     trend: mobilitySummary.trend
                 )
@@ -354,6 +359,7 @@ private extension VitalsViewModel {
                     id: .stressLevels,
                     subtitle: stressSummary.subtitle,
                     status: stressSummary.level.name,
+                    score: stressSummary.score,
                     color: stressSummary.level.color,
                     trend: stressSummary.trend
                 )

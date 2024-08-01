@@ -383,35 +383,35 @@ extension HKHealthStore {
 
 extension HKHealthStore {
 
-    func fetchWorkoutSummaries(recentDays: Int) async throws -> [WorkoutSummary] {
+    func fetchWorkoutSummaries(
+        startDate: Date,
+        endDate: Date,
+        activityType: HKWorkoutActivityType? = nil
+    ) async throws -> [WorkoutSummary] {
         try await withCheckedThrowingContinuation { continuation in
-            let workoutType = HKObjectType.workoutType()
-
-            let endDate = Date.now
-            guard let startDate = Calendar.current.date(byAdding: .day, value: -recentDays, to: endDate) else {
-                continuation.resume(throwing: NSError(description: "The calendar messed up for some reason..."))
-                return
-            }
-
-            let predicate = HKQuery.predicateForSamples(
+            let basePredicate = HKQuery.predicateForSamples(
                 withStart: startDate,
                 end: endDate,
                 options: .strictEndDate
             )
+            let predicate: NSPredicate
+            if let activityType {
+                let activityPredicate = HKQuery.predicateForWorkouts(with: activityType)
+                predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [basePredicate, activityPredicate])
+            } else {
+                predicate = basePredicate
+            }
 
             let sortDescriptors = [
                 NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
             ]
 
             let query = HKSampleQuery(
-                sampleType: workoutType,
+                sampleType: .workoutType(),
                 predicate: predicate,
                 limit: HKObjectQueryNoLimit,
                 sortDescriptors: sortDescriptors
-            ) {
-                query,
-                samples,
-                error in
+            ) { (query, samples, error) in
                 if let error {
                     continuation.resume(throwing: error)
                     return
@@ -427,11 +427,14 @@ extension HKHealthStore {
                         let activeBurned = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .smallCalorie())
                     else { return nil }
 
+                    let totalDistance = workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?.sumQuantity()?.doubleValue(for: .meterUnit(with: .kilo)) ?? 0
+
                     return WorkoutSummary(
                         activity: workout.workoutActivityType.name,
                         startDate: workout.startDate,
                         durationSeconds: workout.duration,
-                        caloriesBurned: activeBurned
+                        caloriesBurned: activeBurned,
+                        distance: totalDistance
                     )
                 }
 

@@ -75,6 +75,7 @@ struct MonthlyVitalCardCell: View {
                     id: .activityLevel,
                     subtitle: "Basal: 1756 Cal\nActive: 642 Cal",
                     status: "Moderate",
+                    score: 0.7,
                     color: .yellow,
                     trend: .increasing
                 )
@@ -85,6 +86,7 @@ struct MonthlyVitalCardCell: View {
                     id: .sleepQuality,
                     subtitle: "45% Core\n12% Deep",
                     status: "Good",
+                    score: 0.7,
                     color: .coreSleep,
                     trend: .decreasing
                 )
@@ -95,6 +97,7 @@ struct MonthlyVitalCardCell: View {
                     id: .activityLevel,
                     subtitle: "1700 Cal Basal\n451 Cal Active",
                     status: "Light",
+                    score: 0.7,
                     color: .green,
                     trend: .noTrend
                 )

@@ -46,6 +46,10 @@ struct SleepVitalsMonthlySummary: Equatable {
 
 extension SleepVitalsMonthlySummary {
 
+    var score: Double {
+        averageSleepScore.scaledPercent(lower: 4, upper: 8)
+    }
+
     var trend: VitalModel.Trend {
         averageSleepScore > lastMonthAverageSleepScore ? .increasing : .decreasing
     }

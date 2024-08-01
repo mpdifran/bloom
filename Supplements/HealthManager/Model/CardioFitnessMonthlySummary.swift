@@ -44,6 +44,14 @@ struct CardioFitnessMonthlySummary: Equatable {
 
 extension CardioFitnessMonthlySummary {
 
+    var score: Double {
+        guard let goal = HealthManager.shared.goalVO2MaxForUser(), let averageVO2Max else {
+            return 1
+        }
+
+        return averageVO2Max.scaledPercent(lower: goal.2, upper: goal.1)
+    }
+
     var trend: VitalModel.Trend {
         guard let averageVO2Max, let lastMonthAverageVO2Max else {
             return .noTrend

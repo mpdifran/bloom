@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import AppUI
 
+@MainActor
 struct GoalsView: View {
 
     @ObservedObject private var viewModel = GoalsViewModel.shared
@@ -33,7 +34,9 @@ struct GoalsView: View {
             }
         }
         .onAppear {
-            viewModel.checkForUpdateGoals()
+            Task {
+                await viewModel.checkForUpdateGoals()
+            }
         }
         .tabItem {
             Label("Goals", systemImage: "medal")

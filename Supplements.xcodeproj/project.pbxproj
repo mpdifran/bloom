@@ -1276,9 +1276,9 @@
 			isa = PBXGroup;
 			children = (
 				FFC77AF22C5A6CFA003E5F85 /* GoalsView.swift */,
+				FFC77AF42C5A6D1C003E5F85 /* GoalsViewModel.swift */,
 				FFC77AFB2C5A7D00003E5F85 /* GoalCell.swift */,
 				FFC77AFF2C5AD843003E5F85 /* TargetVitalComponentView.swift */,
-				FFC77AF42C5A6D1C003E5F85 /* GoalsViewModel.swift */,
 				FFC77AF62C5A6D6A003E5F85 /* GoalModel.swift */,
 			);
 			path = Goals;

@@ -110,7 +110,8 @@ private extension WorkoutSummaryCell {
                     activity: "Rock Climbing",
                     startDate: .now,
                     durationSeconds: 2894,
-                    caloriesBurned: 234000
+                    caloriesBurned: 234000,
+                    distance: 0
                 )
             ]
         )

@@ -89,31 +89,53 @@ private extension GoalCell {
         case .timeInDaylight:
             try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.timeInDaylight)) {
                 let value = await HealthManager.shared.fetchThisWeekSumQuantity(for: .timeInDaylight, unit: .minute())
-                print(value)
                 await MainActor.run {
                     self.currentGoalValue = value
                 }
             }
-        case .walkWheelDistance:
+
+        case .walkRunDistance:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.distanceWalkingRunning)) {
+                let value = await HealthManager.shared.fetchThisWeekSumQuantity(for: .distanceWalkingRunning, unit: .meterUnit(with: .kilo))
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+
+        case .walkDuration:
             break
-        case .walkWheelDuration:
-            break
-        case .runWheelDistance:
-            break
-        case .runWheelDuration:
+        case .runDistance:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKSampleType.workoutType()) {
+                let summaries = await HealthManager.shared.fetchWorkoutSummariesThisWeek(activityType: .running)
+                let totalDistance = summaries.sum(keyPath: \.distance)
+                await MainActor.run {
+                    self.currentGoalValue = totalDistance
+                }
+            }
+        case .runDuration:
             break
         case .bikeDistance:
             break
         case .bikeDuration:
             break
-        case .walkRunBikeWheelDistance:
+        case .walkRunBikeDistance:
             break
-        case .walkRunBikeWheelDuration:
+        case .walkRunBikeDuration:
             break
         case .stepCount:
-            break
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.stepCount)) {
+                let value = await HealthManager.shared.fetchThisWeekSumQuantity(for: .stepCount, unit: .count())
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
         case .meditationMinutes:
-            break
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKCategoryType(.mindfulSession)) {
+                let value = await HealthManager.shared.fetchAverageMeditationMinutesThisWeek()
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
         case .bedtimeSoundLevels:
             break
         case .yogaWorkoutDuration:

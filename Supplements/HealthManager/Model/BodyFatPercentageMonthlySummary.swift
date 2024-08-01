@@ -45,6 +45,15 @@ struct BodyFatPercentageMonthlySummary: Equatable {
 
 extension BodyFatPercentageMonthlySummary {
 
+    var score: Double {
+        guard
+            let goal = HealthManager.shared.goalBodyFatPercentage(),
+            let bodyFatPercentage
+        else { return 1 }
+
+        return bodyFatPercentage.scaledPercent(lower: goal.4, upper: goal.3)
+    }
+
     var trend: VitalModel.Trend {
         guard let bodyFatPercentage, let lastMonthBodyFatPercentage else {
             return .noTrend
