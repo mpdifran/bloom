@@ -323,6 +323,20 @@ extension HealthManager {
         return nil
     }
 
+    func fetchVO2Max(startDate: Date, endDate: Date) async -> [DateAverageQuantitySample] {
+        do {
+            return try await healthStore.fetchAverageStatistics(
+                quantityTypeID: .vo2Max,
+                unit: HKUnit(from: "mL/min·kg"),
+                startDate: startDate,
+                endDate: endDate
+            )
+        } catch {
+            print(error)
+        }
+        return []
+    }
+
     func fetchAverageTimeInDaylight() async -> (Double, Int)? {
         do {
             return try await healthStore.fetchQuantity(
@@ -431,12 +445,20 @@ extension HealthManager {
     }
 
     func fetchWorkoutSummaries(activityType: HKWorkoutActivityType? = nil, numWeeks: Int) async -> [WorkoutSummary] {
-        do {
-            guard 
-                let endDate = Calendar.current.startOfWeek(for: .now),
-                let startDate = Calendar.current.date(byAdding: .day, value: -numWeeks, to: endDate)
-            else { return [] }
+        guard
+            let endDate = Calendar.current.startOfWeek(for: .now),
+            let startDate = Calendar.current.date(byAdding: .day, value: -numWeeks, to: endDate)
+        else { return [] }
 
+        return await fetchWorkoutSummaries(startDate: startDate, endDate: endDate, activityType: activityType)
+    }
+
+    func fetchWorkoutSummaries(
+        startDate: Date,
+        endDate: Date,
+        activityType: HKWorkoutActivityType? = nil
+    ) async -> [WorkoutSummary] {
+        do {
             return try await healthStore.fetchWorkoutSummaries(
                 startDate: startDate,
                 endDate: endDate,

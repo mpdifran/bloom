@@ -14,7 +14,11 @@ final class CorrelationsViewModel: ObservableObject {
     @Published var activeEnergySleepLengthCorrelationData: ([DataPair], Double)?
     @Published var exerciseMinutesSleepScoreCorrelationData: ([DataPair], Double)?
 
-    private init() { }
+    private init() { 
+        Task {
+            await loadCorrelations()
+        }
+    }
 }
 
 extension CorrelationsViewModel {

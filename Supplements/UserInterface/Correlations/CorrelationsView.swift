@@ -64,9 +64,6 @@ struct CorrelationsView: View {
         .tabItem {
             Label("Insights", systemImage: "chart.xyaxis.line")
         }
-        .task {
-            await viewModel.loadCorrelations()
-        }
     }
 }
 

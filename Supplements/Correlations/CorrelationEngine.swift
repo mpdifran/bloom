@@ -117,6 +117,43 @@ extension CorrelationEngine {
 
         return (dataSet, coefficient)
     }
+
+    func runningDistanceAndCardioFitnessCorrelation() async -> ([DataPair], Double)? {
+        let endDate = Date.now
+        guard let startDate = Calendar.current.date(byAdding: .month, value: -6, to: endDate) else {
+            return nil
+        }
+
+        let workoutSummaries = await HealthManager.shared.fetchWorkoutSummaries(
+            startDate: startDate,
+            endDate: endDate,
+            activityType: .running
+        )
+        let heartRateVariability = await HealthManager.shared.fetchVO2Max(
+            startDate: startDate,
+            endDate: endDate
+        )
+
+        var dataSet = [DataPair]()
+
+        for heartRateVariabilitySample in heartRateVariability {
+            let date = heartRateVariabilitySample.date
+            let runDistance = workoutSummaries
+                .filter({ Calendar.current.isDate($0.startDate, inSameDayAs: date) })
+                .reduce(0, { $0 + $1.distance })
+
+            let pair = DataPair(
+                date: date,
+                a: heartRateVariabilitySample.averageQuantity,
+                b: runDistance
+            )
+            dataSet.append(pair)
+        }
+
+        let coefficient = correlationCoefficient(dataSet: dataSet)
+
+        return (dataSet, coefficient)
+    }
 }
 
 private extension CorrelationEngine {

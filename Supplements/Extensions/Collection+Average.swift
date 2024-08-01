@@ -65,4 +65,26 @@ extension Collection {
 
         return items.reduce(0) { $0 + $1[keyPath: keyPath] }
     }
+
+    func group(by matcher: (Element, Element) -> Bool) -> [[Element]] {
+        guard isNotEmpty else { return [] }
+
+        var rootResult = [[Element]]()
+
+        var iterator = makeIterator()
+        var currentGroup = [iterator.next()!]
+
+        while let element = iterator.next() {
+            if matcher(currentGroup.last!, element) {
+                currentGroup.append(element)
+            } else {
+                rootResult.append(currentGroup)
+                currentGroup = [element]
+            }
+        }
+
+        rootResult.append(currentGroup)
+
+        return rootResult
+    }
 }
