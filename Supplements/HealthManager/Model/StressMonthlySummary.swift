@@ -85,7 +85,7 @@ extension StressMonthlySummary {
     }
 
     var lastMonthScore: Double {
-        let hrvScore = lastMonthVarHeartRateVariability?.scaledPercent(lower: 0, upper: 100)
+        let hrvScore = lastMonthVarHeartRateVariability?.scaledPercent(lower: 0, upper: 500)
 
         let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
         let rhrScore = lastMonthRestingHeartRate?.scaledPercent(lower: max, upper: min)
