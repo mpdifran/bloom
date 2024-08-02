@@ -33,7 +33,7 @@ struct ChatView: View {
                         ContentUnavailableView(label: {
                             Label(
                                 title: {
-                                    Text("Ask Bloom anything about your health")
+                                    Text("Ask Bloom about your health")
                                 },
                                 icon: {
                                     Image(systemName: "bolt.heart.fill")
@@ -113,18 +113,13 @@ struct ChatView: View {
                     }
                 }
             }
-            .shelf {
-                TextActionBar(
-                    searchText: $searchText,
-                    prompt: "How can I help you?",
-                    systemImage: "bolt.heart.fill",
-                    axis: .vertical,
-                    submitLabel: .send
-                ) {
+            .safeAreaInset(edge: .bottom) {
+                ChatBar(text: $searchText) {
                     submitPrompt()
                 }
+                .padding()
             }
-            .navigationTitle("Bloom")
+            .navigationTitle("Chat")
         }
         .sheet($presentedSheet)
         .alert(error: $error)
