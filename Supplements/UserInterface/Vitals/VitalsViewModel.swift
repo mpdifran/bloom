@@ -183,13 +183,22 @@ private extension VitalsViewModel {
             .assign(to: &$sleepVitalsSummary)
 
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.vo2Max)) {
+            try HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: [
+                    HKQuantityType(.vo2Max),
+                    HKQuantityType(.heartRateRecoveryOneMinute)
+                ]
+            ) {
                 let thisMonth = await HealthManager.shared.fetchVO2Max()
+                let hrr = await HealthManager.shared.fetchHeartRateRecovery()
                 let lastMonth = await HealthManager.shared.fetchVO2Max(numPastMonths: 1)
+                let hrrLastMonth = await HealthManager.shared.fetchHeartRateRecovery(numPastMonths: 1)
                 await MainActor.run {
                     self.cardioFitnessSummary = CardioFitnessMonthlySummary(
                         averageVO2Max: thisMonth?.0,
-                        lastMonthAverageVO2Max: lastMonth?.0
+                        averageHeartRateRecovery: hrr?.0,
+                        lastMonthAverageVO2Max: lastMonth?.0,
+                        lastMonthAverageHeartRateRecovery: hrrLastMonth?.0
                     )
                 }
             }

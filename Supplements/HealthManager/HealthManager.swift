@@ -59,7 +59,8 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.walkingDoubleSupportPercentage),
         HKQuantityType(.bloodPressureSystolic),
         HKQuantityType(.bloodPressureDiastolic),
-        HKQuantityType(.distanceWalkingRunning)
+        HKQuantityType(.distanceWalkingRunning),
+        HKQuantityType(.heartRateRecoveryOneMinute)
 //        HKQuantityType(.dietaryEnergyConsumed),
 //        HKQuantityType(.dietaryBiotin),
 //        HKQuantityType(.dietaryCaffeine),
@@ -315,7 +316,28 @@ extension HealthManager {
                 start: startDate,
                 end: endDate,
                 option: .discreteAverage,
-                unit: HKUnit(from: "mL/min·kg")
+                unit: .vo2Max()
+            )
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
+    func fetchHeartRateRecovery(numPastMonths: Int = 0) async -> (Double, Int)? {
+        do {
+            guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
+                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+            else {
+                return nil
+            }
+
+            return try await healthStore.fetchQuantity(
+                for: .heartRateRecoveryOneMinute,
+                start: startDate,
+                end: endDate,
+                option: .discreteAverage,
+                unit: .bpm()
             )
         } catch {
             print(error)
@@ -327,7 +349,7 @@ extension HealthManager {
         do {
             return try await healthStore.fetchAverageStatistics(
                 quantityTypeID: .vo2Max,
-                unit: HKUnit(from: "mL/min·kg"),
+                unit: .vo2Max(),
                 startDate: startDate,
                 endDate: endDate
             )

@@ -17,4 +17,8 @@ extension HKUnit {
     static func breathsPerMinute() -> HKUnit {
         HKUnit.count().unitDivided(by: HKUnit.minute())
     }
+
+    static func vo2Max() -> HKUnit {
+        HKUnit(from: "mL/min·kg")
+    }
 }
