@@ -899,7 +899,7 @@ extension HealthManager {
 
     func observeSleepData() {
         do {
-            try healthStore.observeChanges(sampleType: HKCategoryType(.sleepAnalysis)) { [weak self, healthStore] in
+            try healthStore.observeChanges(sampleType: HKCategoryType(.sleepAnalysis), frequency: .immediate) { [weak self, healthStore] in
                 let endDate = Date.now
                 let startDate = Calendar.current.sleepStartDate(previousDays: 30, endDate: endDate)
                 let lastMonthEndDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate) ?? endDate

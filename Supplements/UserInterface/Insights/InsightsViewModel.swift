@@ -30,7 +30,7 @@ extension InsightsViewModel {
 
     func observeData() {
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.timeInDaylight), frequency: .immediate) {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.timeInDaylight)) {
                 let timeInDaylight = await HealthManager.shared.fetchTimeInDaylight()
                 await MainActor.run {
                     self.timeInDaylight = timeInDaylight
@@ -40,7 +40,7 @@ extension InsightsViewModel {
             print(error)
         }
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKObjectType.workoutType(), frequency: .immediate) {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKObjectType.workoutType()) {
                 let workoutSummary = await HealthManager.shared.fetchWorkoutSummaryLastTwoWeeks()
                 await MainActor.run {
                     self.workoutSummary = workoutSummary
@@ -50,7 +50,7 @@ extension InsightsViewModel {
             print(error)
         }
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate), frequency: .immediate) {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate)) {
                 let restingHeartRate = await HealthManager.shared.fetchRestingHeartRate(period: 14)
                 await MainActor.run {
                     self.restingHeartRate = restingHeartRate
@@ -60,7 +60,7 @@ extension InsightsViewModel {
             print(error)
         }
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKCategoryType(.mindfulSession), frequency: .immediate) {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKCategoryType(.mindfulSession)) {
                 let meditationMinutes = await HealthManager.shared.fetchMeditationMinutes(periodDays: 14)
                 await MainActor.run {
                     self.meditationMinutes = meditationMinutes

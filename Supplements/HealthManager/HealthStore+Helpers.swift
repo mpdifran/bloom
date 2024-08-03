@@ -553,7 +553,7 @@ extension HKHealthStore {
     func observeAsyncChanges(
         sampleType: HKSampleType,
         predicate: NSPredicate? = nil,
-        frequency: HKUpdateFrequency = .immediate,
+        frequency: HKUpdateFrequency = .hourly,
         performQuery: @escaping () async throws -> [HKSample]
     ) -> AsyncThrowingStream<[HKSample], Error> {
         AsyncThrowingStream { continuation in
@@ -589,7 +589,7 @@ extension HKHealthStore {
     func observeChanges(
         sampleType: HKSampleType,
         predicate: NSPredicate? = nil,
-        frequency: HKUpdateFrequency = .immediate,
+        frequency: HKUpdateFrequency = .hourly,
         performQuery: @escaping () async throws -> Void
     ) throws {
         Task {
@@ -622,7 +622,7 @@ extension HKHealthStore {
 
     func observeChanges(
         sampleTypes: [HKSampleType],
-        frequency: HKUpdateFrequency = .immediate,
+        frequency: HKUpdateFrequency = .hourly,
         performQuery: @escaping () async throws -> Void
     ) throws {
         Task {
