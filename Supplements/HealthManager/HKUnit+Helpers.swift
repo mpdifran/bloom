@@ -21,4 +21,8 @@ extension HKUnit {
     static func vo2Max() -> HKUnit {
         HKUnit(from: "mL/min·kg")
     }
+
+    static func mgPerDL() -> HKUnit {
+        .gramUnit(with: .milli).unitDivided(by: .literUnit(with: .deci))
+    }
 }

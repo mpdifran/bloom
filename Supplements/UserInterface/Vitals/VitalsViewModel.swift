@@ -71,6 +71,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var bodyFatPercentageSummary: BodyFatPercentageMonthlySummary?
     @Published var mobilitySummary: MobilityMonthlySummary?
     @Published var stressSummary: StressMonthlySummary?
+    @Published var nutritionSummary: NutritionMonthlySummary?
 
     @Published var heartRateVariability = [DateQuantitySample]()
     @Published var restingHeartRate = [DateQuantitySample]()
@@ -257,6 +258,17 @@ private extension VitalsViewModel {
             print(error)
         }
 
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleTypes: HealthManager.shared.nutritionTypes) {
+                let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
+                await MainActor.run {
+                    self.nutritionSummary = summary
+                }
+            }
+        } catch {
+            print(error)
+        }
+
         HealthManager.shared.$sleepAnalysis30Days
             .sink { (_) in
                 Task {
@@ -294,6 +306,11 @@ private extension VitalsViewModel {
             }
             .store(in: &cancellables)
         $stressSummary
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $nutritionSummary
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
@@ -374,8 +391,20 @@ private extension VitalsViewModel {
                 )
             )
         }
+        if let nutritionSummary {
+            vitals.append(
+                VitalModel(
+                    id: .nutrition,
+                    subtitle: nutritionSummary.subtitle,
+                    status: nutritionSummary.status.title,
+                    score: nutritionSummary.score,
+                    color: nutritionSummary.status.color,
+                    trend: nutritionSummary.trend
+                )
+            )
+        }
 
-        self.vitals = vitals
+        self.vitals = vitals.sorted(by: { $0.score < $1.score })
     }
 
     func createVitalStatuses(

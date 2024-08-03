@@ -19,4 +19,17 @@ extension Double {
             return 1 - scaledPercent(lower: upper, upper: lower)
         }
     }
+
+    func invertedScaledPercent(lower: Double, upper: Double) -> Double {
+        assert(lower < upper, "Incorrect arguments")
+
+        let range = abs(upper - lower)
+
+        if self < lower {
+            return scaledPercent(lower: lower - range, upper: lower)
+        } else if self > upper {
+            return scaledPercent(lower: upper, upper: upper + range)
+        }
+        return 1
+    }
 }

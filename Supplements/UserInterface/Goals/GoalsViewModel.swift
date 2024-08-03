@@ -90,6 +90,8 @@ extension GoalsViewModel {
                     vitalKind: .stressLevels
                 )
             )
+        case .nutrition:
+            break
         case nil:
             break
         }

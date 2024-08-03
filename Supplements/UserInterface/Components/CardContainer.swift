@@ -9,12 +9,12 @@ import SwiftUI
 
 extension View {
 
-    func cardContainer() -> some View {
+    func cardContainer<S>(fill: S = BackgroundStyle.background) -> some View where S: ShapeStyle {
         self
             .padding()
             .background {
                 RoundedRectangle(cornerRadius: 30)
-                    .fill(.background)
+                    .fill(fill)
             }
     }
 }

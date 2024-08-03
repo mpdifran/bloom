@@ -100,6 +100,33 @@ extension HKHealthStore {
         }
     }
 
+    func fetchNutritionalDailyAverage(
+        for quantityTypeID: HKQuantityTypeIdentifier,
+        startDate: Date,
+        endDate: Date,
+        unit: HKUnit
+    ) async throws -> HKQuantity {
+        let dailyAmounts = try await fetchCollectionQuantity(
+            quantityTypeID: quantityTypeID,
+            unit: unit,
+            startDate: startDate,
+            endDate: endDate
+        )
+
+        guard
+            let earliestDate = dailyAmounts.min(keyPath: \.date),
+            let latestDate = dailyAmounts.max(keyPath: \.date),
+            let numberOfDays = Calendar.current.dateComponents([.day], from: earliestDate, to: latestDate).day
+        else {
+            return HKQuantity(unit: unit, doubleValue: 0)
+        }
+
+        // We add a day since the diff above doesn't include the current day
+        let average = dailyAmounts.sum(keyPath: \.quantity) / Double(numberOfDays + 1)
+
+        return HKQuantity(unit: unit, doubleValue: average)
+    }
+
     func fetchSamples(
         for quantityTypeID: HKQuantityTypeIdentifier,
         previousDays: Int
@@ -424,7 +451,7 @@ extension HKHealthStore {
                 
                 let summaries = workoutSamples.compactMap { workout -> WorkoutSummary? in
                     guard
-                        let activeBurned = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .smallCalorie())
+                        let activeBurned = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .largeCalorie())
                     else { return nil }
 
                     let totalDistance = workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?.sumQuantity()?.doubleValue(for: .meterUnit(with: .kilo)) ?? 0
@@ -460,7 +487,7 @@ extension HKHealthStore {
         return nil
     }
 
-    func sex() -> String? {
+    func sexName() -> String? {
         do {
             let biologicalSexObject = try biologicalSex()
 
@@ -480,6 +507,10 @@ extension HKHealthStore {
             print(error)
         }
         return nil
+    }
+
+    func sex() -> HKBiologicalSex? {
+        try? biologicalSex().biologicalSex
     }
 
     func typeOfBlood() -> String? {

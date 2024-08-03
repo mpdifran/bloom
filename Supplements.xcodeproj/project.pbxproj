@@ -182,6 +182,9 @@
 		FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AFF2C5AD843003E5F85 /* TargetVitalComponentView.swift */; };
 		FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B012C5AFF05003E5F85 /* CardContainer.swift */; };
 		FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B032C5C6571003E5F85 /* ChatBar.swift */; };
+		FFC77B062C5E6724003E5F85 /* HKQuantity+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B052C5E6724003E5F85 /* HKQuantity+Helpers.swift */; };
+		FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */; };
+		FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */; };
 		FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */; };
 		FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */; };
 		FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */; };
@@ -518,6 +521,9 @@
 		FFC77AFF2C5AD843003E5F85 /* TargetVitalComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetVitalComponentView.swift; sourceTree = "<group>"; };
 		FFC77B012C5AFF05003E5F85 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
 		FFC77B032C5C6571003E5F85 /* ChatBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBar.swift; sourceTree = "<group>"; };
+		FFC77B052C5E6724003E5F85 /* HKQuantity+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKQuantity+Helpers.swift"; sourceTree = "<group>"; };
+		FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKQuantityRange.swift; sourceTree = "<group>"; };
+		FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyVitalCardCell.swift; sourceTree = "<group>"; };
 		FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepVitalsMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessMonthlySummary.swift; sourceTree = "<group>"; };
@@ -1130,6 +1136,8 @@
 				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
 				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
 				FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */,
+				FFC77B052C5E6724003E5F85 /* HKQuantity+Helpers.swift */,
+				FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */,
 				FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */,
 				FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */,
 			);
@@ -1261,6 +1269,7 @@
 				FFC77AD42C529CF9003E5F85 /* MobilityMonthlySummary.swift */,
 				FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */,
 				FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */,
+				FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1747,6 +1756,7 @@
 				FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */,
 				FF1E96B02C0E3F83004DAD2D /* SleepProgramSetupView.swift in Sources */,
 				FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */,
+				FFC77B062C5E6724003E5F85 /* HKQuantity+Helpers.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
 				FFC77AF72C5A6D6A003E5F85 /* GoalModel.swift in Sources */,
 				FF21AB9D2C12036A004D0D82 /* RestingHeartRateCell.swift in Sources */,
@@ -1858,6 +1868,8 @@
 				FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
+				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
+				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
 				FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */,

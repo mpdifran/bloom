@@ -33,74 +33,88 @@ final class HealthManager: ObservableObject {
         }
     }
 
-    let types: Set = [
+    let bodyMeasurementTypes = [
         HKQuantityType(.bodyMass),
         HKCharacteristicType(.dateOfBirth),
         HKCharacteristicType(.biologicalSex),
+        HKQuantityType(.bodyFatPercentage)
+    ]
+
+    let activityTypes = [
         HKObjectType.activitySummaryType(),
         HKQuantityType(.appleExerciseTime),
         HKQuantityType(.stepCount),
+        HKQuantityType(.basalEnergyBurned),
+        HKQuantityType(.activeEnergyBurned),
+        HKObjectType.workoutType(),
+        HKQuantityType(.distanceWalkingRunning)
+    ]
+
+    let heartTypes = [
         HKQuantityType(.heartRateVariabilitySDNN),
         HKQuantityType(.restingHeartRate),
         HKQuantityType(.vo2Max),
-        HKQuantityType(.timeInDaylight),
-        HKCategoryType(.sleepAnalysis),
-        HKQuantityType(.basalEnergyBurned),
-        HKQuantityType(.activeEnergyBurned),
-        HKQuantityType(.bodyFatPercentage),
-        HKObjectType.workoutType(),
-        HKCategoryType(.mindfulSession),
         HKQuantityType(.heartRate),
+        HKQuantityType(.bloodPressureSystolic),
+        HKQuantityType(.bloodPressureDiastolic),
+        HKQuantityType(.heartRateRecoveryOneMinute),
+    ]
+
+    let sleepTypes = [
+        HKCategoryType(.sleepAnalysis),
         HKQuantityType(.environmentalAudioExposure),
         HKQuantityType(.respiratoryRate),
         HKQuantityType(.appleSleepingWristTemperature),
+    ]
+
+    let nutritionTypes = [
+        HKQuantityType(.dietaryBiotin),
+        HKQuantityType(.dietaryCaffeine),
+        HKQuantityType(.dietaryCalcium),
+        HKQuantityType(.dietaryCarbohydrates),
+        HKQuantityType(.dietaryChloride),
+        HKQuantityType(.dietaryCholesterol),
+        HKQuantityType(.dietaryChromium),
+        HKQuantityType(.dietaryCopper),
+        HKQuantityType(.dietaryFatMonounsaturated),
+        HKQuantityType(.dietaryFatPolyunsaturated),
+        HKQuantityType(.dietaryFatSaturated),
+        HKQuantityType(.dietaryFatTotal),
+        HKQuantityType(.dietaryFiber),
+        HKQuantityType(.dietaryFolate),
+        HKQuantityType(.dietaryIodine),
+        HKQuantityType(.dietaryIron),
+        HKQuantityType(.dietaryMagnesium),
+        HKQuantityType(.dietaryManganese),
+        HKQuantityType(.dietaryMolybdenum),
+        HKQuantityType(.dietaryNiacin),
+        HKQuantityType(.dietaryPantothenicAcid),
+        HKQuantityType(.dietaryPhosphorus),
+        HKQuantityType(.dietaryPotassium),
+        HKQuantityType(.dietaryProtein),
+        HKQuantityType(.dietaryRiboflavin),
+        HKQuantityType(.dietarySelenium),
+        HKQuantityType(.dietarySodium),
+        HKQuantityType(.dietarySugar),
+        HKQuantityType(.dietaryThiamin),
+        HKQuantityType(.dietaryVitaminA),
+        HKQuantityType(.dietaryVitaminB12),
+        HKQuantityType(.dietaryVitaminB6),
+        HKQuantityType(.dietaryVitaminC),
+        HKQuantityType(.dietaryVitaminD),
+        HKQuantityType(.dietaryVitaminE),
+        HKQuantityType(.dietaryVitaminK),
+        HKQuantityType(.dietaryWater),
+        HKQuantityType(.dietaryZinc)
+    ]
+
+    let otherTypes = [
+        HKQuantityType(.timeInDaylight),
+        HKCategoryType(.mindfulSession),
         HKCategoryType(.appleWalkingSteadinessEvent),
         HKQuantityType(.sixMinuteWalkTestDistance),
         HKQuantityType(.walkingDoubleSupportPercentage),
-        HKQuantityType(.bloodPressureSystolic),
-        HKQuantityType(.bloodPressureDiastolic),
-        HKQuantityType(.distanceWalkingRunning),
-        HKQuantityType(.heartRateRecoveryOneMinute)
-//        HKQuantityType(.dietaryEnergyConsumed),
-//        HKQuantityType(.dietaryBiotin),
-//        HKQuantityType(.dietaryCaffeine),
-//        HKQuantityType(.dietaryCalcium),
-//        HKQuantityType(.dietaryCarbohydrates),
-//        HKQuantityType(.dietaryChloride),
-//        HKQuantityType(.dietaryCholesterol),
-//        HKQuantityType(.dietaryChromium),
-//        HKQuantityType(.dietaryCopper),
-//        HKQuantityType(.dietaryEnergyConsumed),
-//        HKQuantityType(.dietaryFatMonounsaturated),
-//        HKQuantityType(.dietaryFatPolyunsaturated),
-//        HKQuantityType(.dietaryFatSaturated),
-//        HKQuantityType(.dietaryFatTotal),
-//        HKQuantityType(.dietaryFiber),
-//        HKQuantityType(.dietaryFolate),
-//        HKQuantityType(.dietaryIodine),
-//        HKQuantityType(.dietaryIron),
-//        HKQuantityType(.dietaryMagnesium),
-//        HKQuantityType(.dietaryManganese),
-//        HKQuantityType(.dietaryMolybdenum),
-//        HKQuantityType(.dietaryNiacin),
-//        HKQuantityType(.dietaryPantothenicAcid),
-//        HKQuantityType(.dietaryPhosphorus),
-//        HKQuantityType(.dietaryPotassium),
-//        HKQuantityType(.dietaryProtein),
-//        HKQuantityType(.dietaryRiboflavin),
-//        HKQuantityType(.dietarySelenium),
-//        HKQuantityType(.dietarySodium),
-//        HKQuantityType(.dietarySugar),
-//        HKQuantityType(.dietaryThiamin),
-//        HKQuantityType(.dietaryVitaminA),
-//        HKQuantityType(.dietaryVitaminB12),
-//        HKQuantityType(.dietaryVitaminB6),
-//        HKQuantityType(.dietaryVitaminC),
-//        HKQuantityType(.dietaryVitaminD),
-//        HKQuantityType(.dietaryVitaminE),
-//        HKQuantityType(.dietaryVitaminK),
-//        HKQuantityType(.dietaryWater),
-//        HKQuantityType(.dietaryZinc)
+        HKQuantityType(.dietaryEnergyConsumed)
     ]
 }
 
@@ -110,9 +124,22 @@ extension HealthManager {
         authStatus == .unnecessary
     }
 
+    func types() -> Set<HKObjectType> {
+        var set = Set<HKObjectType>()
+
+        bodyMeasurementTypes.forEach { set.insert($0) }
+        activityTypes.forEach { set.insert($0) }
+        heartTypes.forEach { set.insert($0) }
+        sleepTypes.forEach { set.insert($0) }
+        nutritionTypes.forEach { set.insert($0) }
+        otherTypes.forEach { set.insert($0) }
+
+        return set
+    }
+
     func checkAccess() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            healthStore.getRequestStatusForAuthorization(toShare: [], read: types) { authStatus, error in
+            healthStore.getRequestStatusForAuthorization(toShare: [], read: types()) { authStatus, error in
                 if let error {
                     continuation.resume(throwing: error)
                     return
@@ -132,7 +159,7 @@ extension HealthManager {
         try? await checkAccess()
         if authStatus == .shouldRequest {
             do {
-                try await healthStore.requestAuthorization(toShare: [], read: types)
+                try await healthStore.requestAuthorization(toShare: [], read: types())
             } catch {
                 print(error)
             }
@@ -147,8 +174,8 @@ extension HealthManager {
         healthStore.age()
     }
 
-    func sex() -> String? {
-        healthStore.sex()
+    func sexName() -> String? {
+        healthStore.sexName()
     }
 
     func fetchBodyWeight() async -> HKQuantitySample? {
@@ -686,6 +713,63 @@ extension HealthManager {
         )
     }
 
+    func fetchNutritionMonthlySummary() async -> NutritionMonthlySummary? {
+        let endDate = Date.now
+
+        guard let midDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate),
+              let startDate = Calendar.current.date(byAdding: .month, value: -1, to: midDate)
+        else {
+            return nil
+        }
+
+        let bodyWeight = await fetchBodyWeight()
+        let thisMonth = await fetchNutritionMonthlySummaryDetails(startDate: midDate, endDate: endDate)
+        let lastMonth = await fetchNutritionMonthlySummaryDetails(startDate: startDate, endDate: midDate)
+
+        return NutritionMonthlySummary(
+            bodyWeight: bodyWeight,
+            details: thisMonth,
+            lastMonthDetails: lastMonth
+        )
+    }
+
+    func fetchNutritionMonthlySummaryDetails(startDate: Date, endDate: Date) async -> NutritionMonthlySummary.Details {
+        let dietaryEnergy = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryEnergyConsumed,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .largeCalorie()
+        )
+
+        let protein = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryProtein,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gram()
+        )
+
+        let carbohydrates = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryCarbohydrates,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gram()
+        )
+
+        let fat = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryFatTotal,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gram()
+        )
+
+        return .init(
+            dietaryEnergy: dietaryEnergy,
+            averageProtein: protein,
+            averageCarbohydrates: carbohydrates,
+            averageFat: fat
+        )
+    }
+
     func fetchAverageMeditationMinutes(previousDays: Int = 7) async -> (Double, Int)? {
         do {
             let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
@@ -1167,10 +1251,13 @@ extension HealthManager {
     }
 }
 
+// MARK: Nutitional Intake
+
 extension HealthManager {
 
-    // micrograms (mcg)
-    func recommendedDailyBiotin() -> HKQuantity? {
+    /// unit: micrograms (mcg)
+    /// - note: https://ods.od.nih.gov/factsheets/Biotin-HealthProfessional/
+    func adequateDailyIntakeForBiotin() -> HKQuantity? {
         guard let age = healthStore.age() else { return nil }
 
         if age < 4 {
@@ -1186,7 +1273,8 @@ extension HealthManager {
         }
     }
 
-    // milligrams (mg)
+    /// unit: milligrams (mg)
+    /// - note: https://www.opss.org/article/caffeine-performance
     func recommendedMaxDailyCaffeine() -> HKQuantity? {
         guard let age = healthStore.age() else { return nil }
 
@@ -1199,30 +1287,224 @@ extension HealthManager {
         }
     }
 
-    // milligrams (mg)
-    func recommendedDailyCalcium() -> HKQuantity? {
+    /// milligrams (mg)
+    /// - note: https://ods.od.nih.gov/factsheets/Calcium-Consumer/
+    func recommendedDailyCalcium() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
 
         if age < 4 {
-            return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 700)
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 700...2500)
         } else if age < 9 {
-            return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 1000)
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
         } else if age < 19 {
-            return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 1300)
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1300...3000)
         } else if age < 51 {
-            return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 1000)
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
         } else if age < 71 {
-            if let sexObject = try? healthStore.biologicalSex(), sexObject.biologicalSex == .female {
-                return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 1200)
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
             }
-            return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 1000)
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2000)
         } else {
-            return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 1200)
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
         }
     }
 
-    // percent (%)
+    /// unit: percent (%)
+    /// - note: https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/carbohydrates/art-20045705
     func recommendedDailyCarbohydratesPercentOfDietaryEnergy() -> ClosedRange<Double> {
         0.45...0.65
+    }
+
+    /// unit: grams
+    /// - note: https://nutritionsource.hsph.harvard.edu/chloride/
+    func adequateDailyIntakeForChloride() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        if age < 14 {
+            return nil
+        } else if age < 51 {
+            return HKQuantity(unit: .gram(), doubleValue: 2.3)
+        } else if age < 71 {
+            return HKQuantity(unit: .gram(), doubleValue: 2)
+        } else {
+            return HKQuantity(unit: .gram(), doubleValue: 1.8)
+        }
+    }
+
+    /// unit: mg/dL
+    /// - note: https://www.healthline.com/health/high-cholesterol/levels-by-age
+    func recommendedDailyMaxCholesterol() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        if age < 20 {
+            return HKQuantity(unit: .mgPerDL(), doubleValue: 170)
+        } else {
+            return HKQuantity(unit: .mgPerDL(), doubleValue: 200)
+        }
+    }
+
+    /// unit: mcg
+    /// - note: https://ods.od.nih.gov/factsheets/chromium-Consumer/
+    func adequateDailyIntakeForChromium() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isPregnant = false
+        let isBreastfeeding = false
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 29)
+            }
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 30)
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 44)
+            }
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 45)
+        }
+
+        if age < 4 {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 11)
+        } else if age < 9 {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 15)
+        } else if age < 14 {
+            if healthStore.sex() == .male {
+                return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 25)
+            }
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 21)
+        } else if age < 19 {
+            if healthStore.sex() == .male {
+                return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 35)
+            }
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 24)
+        } else if age < 51 {
+            if healthStore.sex() == .male {
+                return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 35)
+            }
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 25)
+        } else {
+            if healthStore.sex() == .male {
+                return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 30)
+            }
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 20)
+        }
+    }
+
+    /// unit: mcg
+    /// - note: https://ods.od.nih.gov/factsheets/Copper-Consumer/
+    func recommendedDailyIntakeForCopper() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isBreastfeeding = false
+        let isPregnant = false
+
+        if isBreastfeeding {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 1300...10000)
+        }
+        if isPregnant {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 1000...10000)
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 340...1000)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 440...3000)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 700...5000)
+        } else if age < 19 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 890...8000)
+        } else {
+           return HKQuantityRange(unit: .gramUnit(with: .micro), range: 900...10000)
+        }
+    }
+
+    /// unit: %
+    /// - note: https://www.healthline.com/nutrition/how-much-fat-to-eat
+    func recommendedDailyFatPercentOfDietaryEnergy() -> ClosedRange<Double> {
+        0.2...0.35
+    }
+
+    /// unit: grams
+    ///  - note: https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/fiber/art-20043983
+    func adequateDailyIntakeForFiber() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        if age < 50 {
+            if healthStore.sex() == .female {
+                return HKQuantity(unit: .gram(), doubleValue: 25)
+            }
+            return HKQuantity(unit: .gram(), doubleValue: 38)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantity(unit: .gram(), doubleValue: 21)
+            }
+            return HKQuantity(unit: .gram(), doubleValue: 30)
+        }
+    }
+
+    /// unit: mcg
+    /// - note: https://ods.od.nih.gov/factsheets/Folate-Consumer/
+    func recommendedDailyIntakeForFolate() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isBreastfeeding = false
+        let isPregnant = false
+
+        if isPregnant {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 600...1000)
+        }
+        if isBreastfeeding {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 500...1000)
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 150...300)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 200...400)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 300...600)
+        } else if age < 19 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 400...800)
+        } else {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 400...1000)
+        }
+    }
+
+    /// unit: %
+    /// - note: https://www.medicalnewstoday.com/articles/protein-intake#calculating-requirements
+    func recommendedDailyProteinPercentOfDietaryEnergy() -> ClosedRange<Double> {
+        0.1...0.35
+    }
+
+    /// unit: gram
+    /// - note: https://www.medicalnewstoday.com/articles/protein-intake#calculating-requirements
+    func adequateDailyIntakeForProtein() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        if healthStore.sex() == .female {
+            if age < 4 {
+                return HKQuantity(unit: .gram(), doubleValue: 13)
+            } else if age < 9 {
+                return HKQuantity(unit: .gram(), doubleValue: 19)
+            } else if age < 14 {
+                return HKQuantity(unit: .gram(), doubleValue: 34)
+            } else {
+                return HKQuantity(unit: .gram(), doubleValue: 46)
+            }
+        } else {
+            if age < 4 {
+                return HKQuantity(unit: .gram(), doubleValue: 13)
+            } else if age < 9 {
+                return HKQuantity(unit: .gram(), doubleValue: 19)
+            } else if age < 14 {
+                return HKQuantity(unit: .gram(), doubleValue: 34)
+            } else if age < 19 {
+                return HKQuantity(unit: .gram(), doubleValue: 52)
+            } else {
+                return HKQuantity(unit: .gram(), doubleValue: 56)
+            }
+        }
     }
 }

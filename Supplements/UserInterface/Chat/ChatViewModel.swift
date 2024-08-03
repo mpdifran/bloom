@@ -88,7 +88,7 @@ extension ChatViewModel {
                 userInfo: .init(
                     name: ProfileViewModel.shared.name,
                     age: HealthManager.shared.age(),
-                    sex: HealthManager.shared.sex(),
+                    sex: HealthManager.shared.sexName(),
                     location: location
                 ),
                 sleepHealthSnapshot: SleepHealthSnapshot(
