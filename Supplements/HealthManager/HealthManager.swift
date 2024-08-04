@@ -769,12 +769,60 @@ extension HealthManager {
             unit: .gram()
         )
 
+        let vitaminA = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryVitaminA,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .micro)
+        )
+
+        let vitaminC = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryVitaminC,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
+        let vitaminD = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryVitaminD,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .micro)
+        )
+
+        let vitaminE = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryVitaminE,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
+        let vitaminB6 = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryVitaminB6,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
+        let vitaminB12 = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryVitaminB12,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .micro)
+        )
+
         return .init(
             dietaryEnergy: dietaryEnergy,
             averageProtein: protein,
             averageCarbohydrates: carbohydrates,
             averageFat: fat,
-            averageSugar: sugar
+            averageSugar: sugar,
+            averageVitaminA: vitaminA,
+            averageVitaminB6: vitaminB6,
+            averageVitaminB12: vitaminB12,
+            averageVitaminC: vitaminC,
+            averageVitaminD: vitaminD,
+            averageVitaminE: vitaminE
         )
     }
 
@@ -1528,5 +1576,218 @@ extension HealthManager {
             return HKQuantity(unit: .gram(), doubleValue: 25)
         }
         return HKQuantity(unit: .gram(), doubleValue: 38)
+    }
+
+    /// unit: mcg
+    /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
+    func recommendedDailyIntakeForVitaminA() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isPregnant = false
+        let isBreastfeeding = false
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .micro), range: 750...2800)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .micro), range: 770...3000)
+            }
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .micro), range: 1200...2800)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .micro), range: 1300...3000)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 300...600)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 400...900)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 600...1700)
+        } else if age < 19 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .micro), range: 700...2800)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 900...2800)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .micro), range: 700...3000)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 900...3000)
+        }
+    }
+
+    /// unit: mg
+    /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html#tbl2
+    func recommendedDailyIntakeForVitaminB6() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isPregnant = false
+        let isBreastfeeding = false
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.9...80)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.9...100)
+            }
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2...80)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2...100)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 0.5...30)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 0.6...40)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1...60)
+        } else if age < 19 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.2...80)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.3...80)
+        } else if age < 51 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.3...100)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.5...100)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.7...100)
+        }
+    }
+
+    /// unit: mcg
+    /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
+    func recommendedMinDailyIntakeForVitaminB12() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isPregnant = false
+        let isBreastfeeding = false
+
+        if isPregnant {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 2.6)
+        }
+        if isBreastfeeding {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 2.8)
+        }
+
+        if age < 4 {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 0.9)
+        } else if age < 9 {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 1.2)
+        } else if age < 14 {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 1.8)
+        } else {
+            return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 2.4)
+        }
+    }
+
+    /// unit: mg
+    /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html#tbl2
+    func recommendedDailyIntakeForVitaminC() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isPregnant = false
+        let isBreastfeeding = false
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 80...1800)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 85...2000)
+            }
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 115...1800)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 120...2000)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...400)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 25...650)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 45...1200)
+        } else if age < 19 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 65...1800)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 75...1800)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 75...2000)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 90...2000)
+        }
+    }
+
+    /// unit: mcg
+    /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
+    func recommendedDailyIntakeForVitaminD() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isPregnant = false
+        let isBreastfeeding = false
+
+        if isPregnant || isBreastfeeding {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 15...100)
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 15...63)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 15...75)
+        } else if age < 70 {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 15...100)
+        } else {
+            return HKQuantityRange(unit: .gramUnit(with: .micro), range: 20...100)
+        }
+    }
+
+    /// unit: mg
+    /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
+    func recommendedDailyIntakeForVitaminE() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        let isPregnant = false
+        let isBreastfeeding = false
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...800)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...1000)
+            }
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 19...800)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 19...1000)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 6...200)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 7...300)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...600)
+        } else if age < 19 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...800)
+        } else {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...1000)
+        }
     }
 }

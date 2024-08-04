@@ -33,10 +33,12 @@ extension NutritionMonthlySummary {
     var subtitle: String {
         let macros = "Macros: \(details.macroStatus.rawValue)"
         let sugar = details.averageSugar.map { "Sugar: \($0.displayString(for: .gram()))" }
+        let vitamins = details.vitaminStatus
 
         return [
             macros,
-            sugar
+            sugar,
+            vitamins
         ].compactMap({ $0 })
             .joined(separator: "\n")
     }
@@ -75,6 +77,12 @@ extension NutritionMonthlySummary {
         let averageCarbohydrates: HKQuantity?
         let averageFat: HKQuantity?
         let averageSugar: HKQuantity?
+        let averageVitaminA: HKQuantity?
+        let averageVitaminB6: HKQuantity?
+        let averageVitaminB12: HKQuantity?
+        let averageVitaminC: HKQuantity?
+        let averageVitaminD: HKQuantity?
+        let averageVitaminE: HKQuantity?
     }
 
     enum MacroStatus: String {
@@ -99,7 +107,8 @@ extension NutritionMonthlySummary.Details {
     var score: Double? {
         let allNutrients = [
             macrosScore,
-            sugarScore
+            sugarScore,
+            vitaminScore
         ].compactMap({ $0 })
 
         if allNutrients.isEmpty {
@@ -247,5 +256,123 @@ extension NutritionMonthlySummary.Details {
         else { return nil }
 
         return average.scaledPercent(lower: goal * 2, upper: goal)
+    }
+
+    var vitaminScore: Double? {
+        let vitamins = [
+            vitaminAScore,
+            vitaminB6Score,
+            vitaminB12Score,
+            vitaminCScore,
+            vitaminDScore,
+            vitaminEScore
+        ].compactMap({ $0 })
+
+        if vitamins.isEmpty {
+            return nil
+        }
+
+        return vitamins.average(keyPath: \.self)
+    }
+
+    var vitaminStatus: String? {
+        let pairs = [
+            ("Vitamin A", vitaminAScore),
+            ("Vitamin B6", vitaminB6Score),
+            ("Vitamin B12", vitaminB12Score),
+            ("Vitamin C", vitaminCScore),
+            ("Vitamin D", vitaminDScore),
+            ("Vitamin E", vitaminEScore)
+        ].compactMap({
+            if let value = $0.1 {
+                return ($0.0, value)
+            }
+            return nil
+        })
+
+        guard let lowestPair = pairs.min(by: { $0.1 < $1.1 }) else { return nil }
+
+        if lowestPair.1 > 0.99 {
+            return "Vitamins Balanced"
+        }
+        return "\(lowestPair.0) Imbalance"
+    }
+
+    var vitaminAScore: Double? {
+        let unit = HKUnit.gramUnit(with: .micro)
+        guard
+            let average = averageVitaminA?.doubleValue(for: unit),
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminA()
+        else { return nil }
+
+        return average.invertedScaledPercent(
+            lower: goal.lowerDoubleValue(for: unit),
+            upper: goal.upperDoubleValue(for: unit)
+        )
+    }
+
+    var vitaminB6Score: Double? {
+        let unit = HKUnit.gramUnit(with: .milli)
+        guard
+            let average = averageVitaminB6?.doubleValue(for: unit),
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminB6()
+        else { return nil }
+
+        return average.invertedScaledPercent(
+            lower: goal.lowerDoubleValue(for: unit),
+            upper: goal.upperDoubleValue(for: unit)
+        )
+    }
+
+    var vitaminB12Score: Double? {
+        let unit = HKUnit.gramUnit(with: .micro)
+        guard
+            let average = averageVitaminB12?.doubleValue(for: unit),
+            let goal = HealthManager.shared.recommendedMinDailyIntakeForVitaminB12()
+        else { return nil }
+
+        return average.scaledPercent(
+            lower: 0,
+            upper: goal.doubleValue(for: unit)
+        )
+    }
+
+    var vitaminCScore: Double? {
+        let unit = HKUnit.gramUnit(with: .milli)
+        guard
+            let average = averageVitaminC?.doubleValue(for: unit),
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminC()
+        else { return nil }
+
+        return average.invertedScaledPercent(
+            lower: goal.lowerDoubleValue(for: unit),
+            upper: goal.upperDoubleValue(for: unit)
+        )
+    }
+
+    var vitaminDScore: Double? {
+        let unit = HKUnit.gramUnit(with: .micro)
+        guard
+            let average = averageVitaminD?.doubleValue(for: unit),
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminD()
+        else { return nil }
+
+        return average.invertedScaledPercent(
+            lower: goal.lowerDoubleValue(for: unit),
+            upper: goal.upperDoubleValue(for: unit)
+        )
+    }
+
+    var vitaminEScore: Double? {
+        let unit = HKUnit.gramUnit(with: .milli)
+        guard
+            let average = averageVitaminE?.doubleValue(for: unit),
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminE()
+        else { return nil }
+
+        return average.invertedScaledPercent(
+            lower: goal.lowerDoubleValue(for: unit),
+            upper: goal.upperDoubleValue(for: unit)
+        )
     }
 }
