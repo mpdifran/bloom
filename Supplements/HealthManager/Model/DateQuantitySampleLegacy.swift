@@ -1,5 +1,5 @@
 //
-//  DateQuantitySample.swift
+//  DateQuantitySampleLegacy.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-06-05.
@@ -8,7 +8,7 @@
 import Foundation
 import OpenAPIClient
 
-struct DateQuantitySample: Identifiable, Codable, Hashable {
+struct DateQuantitySampleLegacy: Identifiable, Codable, Hashable {
     var id: String { "\(date)-\(quantity)" }
 
     let date: Date
@@ -16,7 +16,7 @@ struct DateQuantitySample: Identifiable, Codable, Hashable {
     let unit: String
 }
 
-extension DateQuantitySample {
+extension DateQuantitySampleLegacy {
 
     var healthMetricSample: HealthMetricSample {
         HealthMetricSample(

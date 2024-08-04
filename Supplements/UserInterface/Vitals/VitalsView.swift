@@ -44,15 +44,12 @@ struct VitalsView: View {
                 }
                 .padding(.bottom)
             }
-            .background {
-                Rectangle()
-                    .fill(.background.secondary)
-                    .ignoresSafeArea()
-            }
+            .groupedBackground()
             .navigationTitle("Vitals")
             .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
                 switch vitalKind {
                 case .sleepQuality: TodayView()
+                case .bodyComposition: BodyCompositionDetailsView()
                 default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
                 }
             }

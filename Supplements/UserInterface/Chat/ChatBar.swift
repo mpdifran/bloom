@@ -102,11 +102,7 @@ private extension ChatBar {
                 ChatBubbleCell(message: "You know what it means.", isDirect: false, isCurrentUser: true, showTail: true)
             }
         }
-        .background {
-            Rectangle()
-                .fill(.background.secondary)
-                .ignoresSafeArea()
-        }
+        .groupedBackground()
         .navigationTitle("Preview")
         .safeAreaInset(edge: .bottom) {
             ChatBar(text: .constant("This is a message"), onSubmit: { })

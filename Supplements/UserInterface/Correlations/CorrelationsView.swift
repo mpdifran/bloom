@@ -51,11 +51,7 @@ struct CorrelationsView: View {
                 .horizontallyCentered()
                 .padding()
             }
-            .background(
-                Rectangle()
-                    .fill(.background.secondary)
-                    .ignoresSafeArea()
-            )
+            .groupedBackground()
             .navigationTitle("Insights")
             .animation(.default, value: viewModel.timeInDaylightSleepLengthCorrelationData == nil)
             .animation(.default, value: viewModel.activeEnergySleepLengthCorrelationData == nil)

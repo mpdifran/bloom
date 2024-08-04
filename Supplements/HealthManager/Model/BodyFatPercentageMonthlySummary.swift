@@ -30,9 +30,32 @@ extension BodyFatPercentageMonthlySummary {
         var color: Color {
             switch self {
             case .unknown: .gray
-            case .athlete, .fit: .coreSleep
-            case .essentialFat, .healthy: .green
+            case .athlete, .essentialFat: .coreSleep
+            case .fit, .healthy: .green
             case .high: .pink
+            }
+        }
+
+        func rangeDescription(from goals: (Double, Double, Double, Double, Double)) -> String {
+            guard let values = rangeValues(from: goals) else { return "" }
+
+            return "\(values.lowerBound.formatted(.percent)) - \(values.upperBound.formatted(.percent))"
+        }
+
+        func rangeValues(from goals: (Double, Double, Double, Double, Double)) -> ClosedRange<Double>? {
+            switch self {
+            case .unknown:
+                nil
+            case .essentialFat:
+                0...goals.0
+            case .athlete:
+                goals.0...goals.1
+            case .fit:
+                goals.1...goals.2
+            case .healthy:
+                goals.2...goals.3
+            case .high:
+                goals.3...1
             }
         }
     }
@@ -64,7 +87,7 @@ extension BodyFatPercentageMonthlySummary {
     var subtitle: String {
         guard let bodyFatPercentage else { return "No Data" }
 
-        return "Fat: \(String(format: "%.0f", bodyFatPercentage * 100))%"
+        return "Fat: \(bodyFatPercentage.formatted(.percent))"
     }
 
     var range: PercentageRange {
@@ -73,7 +96,7 @@ extension BodyFatPercentageMonthlySummary {
             let bodyFatPercentage
         else { return .unknown }
 
-        let percent = bodyFatPercentage * 100
+        let percent = bodyFatPercentage
 
         if percent < goal.0 {
             return .essentialFat

@@ -25,13 +25,10 @@ struct GoalsView: View {
                     }
                 }
                 .padding()
+                .horizontallyCentered()
             }
+            .groupedBackground()
             .navigationTitle("Goals")
-            .background {
-                Rectangle()
-                    .fill(.background.secondary)
-                    .ignoresSafeArea()
-            }
         }
         .onAppear {
             Task {

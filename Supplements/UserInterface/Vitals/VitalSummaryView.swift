@@ -94,9 +94,5 @@ struct VitalDetailCardView: View {
         )
         .padding()
     }
-    .background {
-        Rectangle()
-            .fill(.background.secondary)
-            .ignoresSafeArea()
-    }
+    .groupedBackground()
 }

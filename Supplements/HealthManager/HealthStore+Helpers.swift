@@ -237,7 +237,7 @@ extension HKHealthStore {
         interval: DateComponents = DateComponents(day: 1),
         startDate: Date,
         endDate: Date
-    ) async throws -> [DateQuantitySample] {
+    ) async throws -> [DateQuantitySampleLegacy] {
         try await withCheckedThrowingContinuation { continuation in
             guard let quantityType = HKObjectType.quantityType(forIdentifier: quantityTypeID) else {
                 let error = NSError(description: "Quantity type not available")
@@ -267,13 +267,13 @@ extension HKHealthStore {
                     return
                 }
                 
-                var quantities = [DateQuantitySample]()
+                var quantities = [DateQuantitySampleLegacy]()
                 results.enumerateStatistics(from: adjustedStartDate, to: adjustedEndDate) { (statistics, stop) in
                     if let sum = statistics.sumQuantity() {
                         let quantity = sum.doubleValue(for: unit)
                         
                         quantities.append(
-                            DateQuantitySample(
+                            DateQuantitySampleLegacy(
                                 date: statistics.startDate,
                                 quantity: quantity,
                                 unit: unit.unitString

@@ -13,7 +13,7 @@ extension View {
         self
             .padding()
             .background {
-                RoundedRectangle(cornerRadius: 30)
+                RoundedRectangle(cornerRadius: 25)
                     .fill(fill)
             }
     }
@@ -29,9 +29,5 @@ extension View {
         .cardContainer()
         .padding()
     }
-    .background {
-        Rectangle()
-            .fill(.background.secondary)
-            .ignoresSafeArea()
-    }
+    .groupedBackground()
 }

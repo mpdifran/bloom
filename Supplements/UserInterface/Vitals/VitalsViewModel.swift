@@ -73,8 +73,8 @@ final class VitalsViewModel: ObservableObject {
     @Published var stressSummary: StressMonthlySummary?
     @Published var nutritionSummary: NutritionMonthlySummary?
 
-    @Published var heartRateVariability = [DateQuantitySample]()
-    @Published var restingHeartRate = [DateQuantitySample]()
+    @Published var heartRateVariability = [DateQuantitySampleLegacy]()
+    @Published var restingHeartRate = [DateQuantitySampleLegacy]()
     @Published var basalEnergyBurned: (Double, Int)?
     @Published var activeEnergyBurned: (Double, Int)?
     @Published var lastMonthBasalEnergyBurned: (Double, Int)?
@@ -209,8 +209,8 @@ private extension VitalsViewModel {
 
         do {
             try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.bodyFatPercentage)) {
-                let thisMonth = await HealthManager.shared.fetchBodyFatPercentage()
-                let lastMonth = await HealthManager.shared.fetchBodyFatPercentage(numPastMonths: 1)
+                let thisMonth = await HealthManager.shared.fetchAverageBodyFatPercentage()
+                let lastMonth = await HealthManager.shared.fetchAverageBodyFatPercentage(numPastMonths: 1)
                 await MainActor.run {
                     self.bodyFatPercentageSummary = BodyFatPercentageMonthlySummary(
                         bodyFatPercentage: thisMonth?.0,
@@ -409,8 +409,8 @@ private extension VitalsViewModel {
 
     func createVitalStatuses(
         sleepAnalysis: [SleepAnalysis],
-        heartRateVariability: [DateQuantitySample],
-        restingHeartRate: [DateQuantitySample]
+        heartRateVariability: [DateQuantitySampleLegacy],
+        restingHeartRate: [DateQuantitySampleLegacy]
     ) {
         if let firstHRV = heartRateVariability.first {
             let average = heartRateVariability.average(keyPath: \.quantity)

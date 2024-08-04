@@ -31,7 +31,7 @@ struct NutritionMonthlySummary: Hashable {
 extension NutritionMonthlySummary {
 
     var subtitle: String {
-        let macros = "Macros: \(details.macroStatus.rawValue)"
+        let macros = details.macroStatus.map { "Macros: \($0.rawValue)" } 
         let sugar = details.averageSugar.map { "Sugar: \($0.displayString(for: .gram()))" }
         let vitamins = details.vitaminStatus
 
@@ -130,7 +130,10 @@ extension NutritionMonthlySummary.Details {
         return macros.average(keyPath: \.self)
     }
 
-    var macroStatus: NutritionMonthlySummary.MacroStatus {
+    var macroStatus: NutritionMonthlySummary.MacroStatus? {
+        if macrosScore == nil {
+            return nil
+        }
         if fatScore ?? 1 < carbohydratesScore ?? 0 && fatScore ?? 1 < proteinScore ?? 0, let fatCategory {
             switch fatCategory {
             case .deficiency:
