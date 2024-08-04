@@ -31,19 +31,7 @@ struct NutritionMonthlySummary: Hashable {
 extension NutritionMonthlySummary {
 
     var subtitle: String {
-        let protein = details.averageProtein.map { "Protein: \(String(format: "%.0f", $0.doubleValue(for: .gram()))) g" }
-        let carbs = details.averageCarbohydrates.map { "Carbs: \(String(format: "%.0f", $0.doubleValue(for: .gram()))) g" }
-        let fat = details.averageFat.map { "Fat: \(String(format: "%.0f", $0.doubleValue(for: .gram()))) g" }
-
-        let allValues = [
-            protein,
-            carbs,
-            fat
-        ].compactMap({ $0 })
-
-        guard allValues.isNotEmpty else { return "No Data" }
-
-        return allValues.joined(separator: "\n")
+        "Macros: \(details.macroStatus.rawValue)"
     }
 
     var score: Double {
@@ -58,42 +46,15 @@ extension NutritionMonthlySummary {
     }
 
     var status: Status {
-        guard let _ = details.score else {
+        guard let score = details.score else {
             return Status(title: "No Data", color: .gray)
         }
 
-        if details.proteinScore ?? 1 < details.carbohydratesScore ?? 0 && details.proteinScore ?? 1 < details.fatScore ?? 0, let proteinCategory = details.proteinCategory {
-            switch proteinCategory {
-            case .deficiency:
-                return Status(title: "Protein Deficiency", color: .pink)
-            case .surplus:
-                return Status(title: "Protein Surplus", color: .pink)
-            case .recommended:
-                break
-            }
+        if score < 0.6 {
+            return Status(title: "Unhealthy", color: .pink)
+        } else if score < 1 {
+            return Status(title: "Unbalanced", color: .yellow)
         }
-        if details.carbohydratesScore ?? 1 < details.proteinScore ?? 0 && details.carbohydratesScore ?? 1 < details.fatScore ?? 0, let carbCategory = details.carbohydratesCategory {
-            switch carbCategory {
-            case .deficiency:
-                return Status(title: "Carb Deficiency", color: .pink)
-            case .surplus:
-                return Status(title: "Carb Surplus", color: .pink)
-            case .recommended:
-                break
-            }
-
-        }
-        if details.fatScore ?? 1 < details.carbohydratesScore ?? 0 && details.fatScore ?? 1 < details.proteinScore ?? 0, let fatCategory = details.fatCategory {
-            switch fatCategory {
-            case .deficiency:
-                return Status(title: "Fat Deficiency", color: .pink)
-            case .surplus:
-                return Status(title: "Fat Surplus", color: .pink)
-            case .recommended:
-                break
-            }
-        }
-
         return Status(title: "Healthy", color: .coreSleep)
     }
 }
@@ -104,6 +65,16 @@ extension NutritionMonthlySummary {
         let averageProtein: HKQuantity?
         let averageCarbohydrates: HKQuantity?
         let averageFat: HKQuantity?
+    }
+
+    enum MacroStatus: String {
+        case proteinSurplus = "Protein Surplus"
+        case proteinDeficiency = "Protein Deficiency"
+        case carbSurplus = "Carb Surplus"
+        case carbDeficiency = "Carb Deficiency"
+        case fatSurplus = "Fat Surplus"
+        case fatDeficiency = "Fat Deficiency"
+        case balanced = "Balanced"
     }
 
     enum NutrientCategory {
@@ -126,6 +97,41 @@ extension NutritionMonthlySummary.Details {
             return nil
         }
         return inputs.average(keyPath: \.self)
+    }
+
+    var macroStatus: NutritionMonthlySummary.MacroStatus {
+        if fatScore ?? 1 < carbohydratesScore ?? 0 && fatScore ?? 1 < proteinScore ?? 0, let fatCategory {
+            switch fatCategory {
+            case .deficiency:
+                return .fatDeficiency
+            case .surplus:
+                return .fatSurplus
+            case .recommended:
+                break
+            }
+        }
+        if proteinScore ?? 1 < carbohydratesScore ?? 0 && proteinScore ?? 1 < fatScore ?? 0, let proteinCategory {
+            switch proteinCategory {
+            case .deficiency:
+                return .proteinDeficiency
+            case .surplus:
+                return .proteinSurplus
+            case .recommended:
+                break
+            }
+        }
+        if carbohydratesScore ?? 1 < proteinScore ?? 0 && carbohydratesScore ?? 1 < fatScore ?? 0, let carbohydratesCategory {
+            switch carbohydratesCategory {
+            case .deficiency:
+                return .carbDeficiency
+            case .surplus:
+                return .carbSurplus
+            case .recommended:
+                break
+            }
+
+        }
+        return .balanced
     }
 
     var proteinCategory: NutritionMonthlySummary.NutrientCategory? {
