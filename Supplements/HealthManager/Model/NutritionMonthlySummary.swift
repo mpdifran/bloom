@@ -31,7 +31,14 @@ struct NutritionMonthlySummary: Hashable {
 extension NutritionMonthlySummary {
 
     var subtitle: String {
-        "Macros: \(details.macroStatus.rawValue)"
+        let macros = "Macros: \(details.macroStatus.rawValue)"
+        let sugar = details.averageSugar.map { "Sugar: \($0.displayString(for: .gram()))" }
+
+        return [
+            macros,
+            sugar
+        ].compactMap({ $0 })
+            .joined(separator: "\n")
     }
 
     var score: Double {
@@ -50,10 +57,12 @@ extension NutritionMonthlySummary {
             return Status(title: "No Data", color: .gray)
         }
 
-        if score < 0.6 {
+        if score < 0.4 {
             return Status(title: "Unhealthy", color: .pink)
-        } else if score < 1 {
+        } else if score < 0.8 {
             return Status(title: "Unbalanced", color: .yellow)
+        } else if score < 1 {
+            return Status(title: "Good", color: .green)
         }
         return Status(title: "Healthy", color: .coreSleep)
     }
@@ -65,6 +74,7 @@ extension NutritionMonthlySummary {
         let averageProtein: HKQuantity?
         let averageCarbohydrates: HKQuantity?
         let averageFat: HKQuantity?
+        let averageSugar: HKQuantity?
     }
 
     enum MacroStatus: String {
@@ -87,16 +97,28 @@ extension NutritionMonthlySummary {
 extension NutritionMonthlySummary.Details {
 
     var score: Double? {
-        let inputs = [
+        let allNutrients = [
+            macrosScore,
+            sugarScore
+        ].compactMap({ $0 })
+
+        if allNutrients.isEmpty {
+            return nil
+        }
+        return allNutrients.average(keyPath: \.self)
+    }
+
+    var macrosScore: Double? {
+        let macros = [
             proteinScore,
             carbohydratesScore,
             fatScore
         ].compactMap({ $0 })
 
-        if inputs.isEmpty {
+        if macros.isEmpty {
             return nil
         }
-        return inputs.average(keyPath: \.self)
+        return macros.average(keyPath: \.self)
     }
 
     var macroStatus: NutritionMonthlySummary.MacroStatus {
@@ -216,5 +238,14 @@ extension NutritionMonthlySummary.Details {
         let percent = calories / dietaryEnergy.doubleValue(for: .largeCalorie())
 
         return percent.invertedScaledPercent(lower: goal.lowerBound, upper: goal.upperBound)
+    }
+
+    var sugarScore: Double? {
+        guard 
+            let average = averageSugar?.doubleValue(for: .gram()),
+            let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar()?.doubleValue(for: .gram())
+        else { return nil }
+
+        return average.scaledPercent(lower: goal * 2, upper: goal)
     }
 }

@@ -762,11 +762,19 @@ extension HealthManager {
             unit: .gram()
         )
 
+        let sugar = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietarySugar,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gram()
+        )
+
         return .init(
             dietaryEnergy: dietaryEnergy,
             averageProtein: protein,
             averageCarbohydrates: carbohydrates,
-            averageFat: fat
+            averageFat: fat,
+            averageSugar: sugar
         )
     }
 
@@ -1506,5 +1514,19 @@ extension HealthManager {
                 return HKQuantity(unit: .gram(), doubleValue: 56)
             }
         }
+    }
+
+    /// unit: g
+    /// - note: https://www.medicalnewstoday.com/articles/324673#recommended-limits
+    func recommendedMaxDailyIntakeForSugar() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        if age < 19 {
+            return HKQuantity(unit: .gram(), doubleValue: 25)
+        }
+        if healthStore.sex() == .female {
+            return HKQuantity(unit: .gram(), doubleValue: 25)
+        }
+        return HKQuantity(unit: .gram(), doubleValue: 38)
     }
 }

@@ -16,7 +16,9 @@ extension HKQuantity: Comparable {
 
 extension HKQuantity {
 
-    static func closedRange(_ range: ClosedRange<Double>, unit: HKUnit) -> ClosedRange<HKQuantity> {
-        HKQuantity(unit: unit, doubleValue: range.lowerBound)...HKQuantity(unit: unit, doubleValue: range.upperBound)
+    func displayString(for unit: HKUnit, specifier: String = "%.0f") -> String {
+        let doubleValue = doubleValue(for: unit)
+
+        return "\(String(format: specifier, doubleValue)) \(unit.unitString)"
     }
 }
