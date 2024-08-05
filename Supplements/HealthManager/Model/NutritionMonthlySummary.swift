@@ -12,6 +12,7 @@ private extension Double {
     static let caloriesPerGramOfProtein: Double = 4
     static let caloriesPerGramOfCarbs: Double = 4
     static let caloriesPerGramOfFat: Double = 9
+    static let netEnergySignificantThreshold: Double = 500
 }
 
 extension NutritionMonthlySummary {
@@ -36,9 +37,10 @@ extension NutritionMonthlySummary {
         let vitamins = details.vitaminStatus
 
         return [
+            details.netEnergyDisplayString,
             macros,
-            sugar,
-            vitamins
+            vitamins,
+            sugar
         ].compactMap({ $0 })
             .joined(separator: "\n")
     }
@@ -72,6 +74,8 @@ extension NutritionMonthlySummary {
 
 extension NutritionMonthlySummary {
     struct Details: Hashable {
+        let basalEnergyBurned: HKQuantity?
+        let activeEnergyBurned: HKQuantity?
         let dietaryEnergy: HKQuantity?
         let averageProtein: HKQuantity?
         let averageCarbohydrates: HKQuantity?
@@ -103,6 +107,21 @@ extension NutritionMonthlySummary {
 }
 
 extension NutritionMonthlySummary.Details {
+
+    var netEnergyDisplayString: String? {
+        guard let basalEnergyBurned, let activeEnergyBurned, let dietaryEnergy else { return nil }
+
+        let totalEnergy = basalEnergyBurned.doubleValue(for: .largeCalorie()) + activeEnergyBurned.doubleValue(for: .largeCalorie()) - dietaryEnergy.doubleValue(for: .largeCalorie())
+
+        if totalEnergy > .netEnergySignificantThreshold {
+            return "Significant Energy Deficiency"
+        } else if totalEnergy > 0 {
+            return "Slight Energy Deficiency"
+        } else if totalEnergy < -.netEnergySignificantThreshold {
+            return "Significant Energy Surplus"
+        }
+        return "Slight Energy Surplus"
+    }
 
     var score: Double? {
         let allNutrients = [

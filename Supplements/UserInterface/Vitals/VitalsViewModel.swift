@@ -68,7 +68,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var energyBurnedSummary: EnergyBurnedSummary?
     @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
     @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
-    @Published var bodyFatPercentageSummary: BodyFatPercentageMonthlySummary?
+    @Published var bodyFatPercentageSummary: BodyCompositionMonthlySummary?
     @Published var mobilitySummary: MobilityMonthlySummary?
     @Published var stressSummary: StressMonthlySummary?
     @Published var nutritionSummary: NutritionMonthlySummary?
@@ -212,7 +212,7 @@ private extension VitalsViewModel {
                 let thisMonth = await HealthManager.shared.fetchAverageBodyFatPercentage()
                 let lastMonth = await HealthManager.shared.fetchAverageBodyFatPercentage(numPastMonths: 1)
                 await MainActor.run {
-                    self.bodyFatPercentageSummary = BodyFatPercentageMonthlySummary(
+                    self.bodyFatPercentageSummary = BodyCompositionMonthlySummary(
                         bodyFatPercentage: thisMonth?.0,
                         lastMonthBodyFatPercentage: lastMonth?.0
                     )

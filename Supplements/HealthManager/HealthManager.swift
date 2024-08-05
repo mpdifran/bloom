@@ -751,6 +751,22 @@ extension HealthManager {
     }
 
     func fetchNutritionMonthlySummaryDetails(startDate: Date, endDate: Date) async -> NutritionMonthlySummary.Details {
+        let basalEnergyBurned = try? await healthStore.fetchQuantity(
+            for: .basalEnergyBurned,
+            start: startDate,
+            end: endDate,
+            option: .cumulativeSum,
+            unit: .largeCalorie()
+        )
+
+        let activeEnergyBurned = try? await healthStore.fetchQuantity(
+            for: .basalEnergyBurned,
+            start: startDate,
+            end: endDate,
+            option: .cumulativeSum,
+            unit: .largeCalorie()
+        )
+
         let dietaryEnergy = try? await healthStore.fetchNutritionalDailyAverage(
             for: .dietaryEnergyConsumed,
             startDate: startDate,
@@ -829,6 +845,8 @@ extension HealthManager {
         )
 
         return .init(
+            basalEnergyBurned: basalEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
+            activeEnergyBurned: activeEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
             dietaryEnergy: dietaryEnergy,
             averageProtein: protein,
             averageCarbohydrates: carbohydrates,

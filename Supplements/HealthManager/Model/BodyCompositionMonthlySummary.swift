@@ -1,5 +1,5 @@
 //
-//  BodyFatPercentageMonthlySummary.swift
+//  BodyCompositionMonthlySummary.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-07-24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension BodyFatPercentageMonthlySummary {
+extension BodyCompositionMonthlySummary {
     enum PercentageRange {
         case unknown
         case essentialFat
@@ -61,12 +61,12 @@ extension BodyFatPercentageMonthlySummary {
     }
 }
 
-struct BodyFatPercentageMonthlySummary: Equatable {
+struct BodyCompositionMonthlySummary: Equatable {
     let bodyFatPercentage: Double?
     let lastMonthBodyFatPercentage: Double?
 }
 
-extension BodyFatPercentageMonthlySummary {
+extension BodyCompositionMonthlySummary {
 
     var score: Double {
         guard

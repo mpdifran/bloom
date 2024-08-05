@@ -14,7 +14,7 @@ struct BodyCompositionDetailsView: View {
 
     @State private var bodyFatPercentageSamples = [DateAverageQuantitySample]()
 
-    @State private var range: BodyFatPercentageMonthlySummary.PercentageRange = .unknown
+    @State private var range: BodyCompositionMonthlySummary.PercentageRange = .unknown
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
@@ -182,7 +182,7 @@ private extension BodyCompositionDetailsView {
         }
     }
 
-    func bodyFatPercentageButton(percentRange: BodyFatPercentageMonthlySummary.PercentageRange) -> some View {
+    func bodyFatPercentageButton(percentRange: BodyCompositionMonthlySummary.PercentageRange) -> some View {
         Button(percentRange.name) {
             self.range = percentRange
         }
