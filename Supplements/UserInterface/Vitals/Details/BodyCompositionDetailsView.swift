@@ -156,7 +156,7 @@ private extension BodyCompositionDetailsView {
                     Text(range.rangeDescription(from: goal))
                 }
                 .bold()
-                .foregroundStyle(.black)
+                .foregroundStyle(.invertedText)
                 .padding()
                 .background {
                     RoundedRectangle(cornerRadius: 20)
