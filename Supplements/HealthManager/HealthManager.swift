@@ -1314,7 +1314,7 @@ extension HealthManager {
         }
     }
 
-    /// - note: https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage#for-women
+    /// - note: https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage
     func goalBodyFatPercentage() -> (Double, Double, Double, Double, Double)? {
         guard let sexObject = try? healthStore.biologicalSex() else { return nil }
 

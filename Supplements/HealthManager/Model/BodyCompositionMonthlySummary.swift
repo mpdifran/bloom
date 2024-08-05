@@ -30,8 +30,9 @@ extension BodyCompositionMonthlySummary {
         var color: Color {
             switch self {
             case .unknown: .gray
-            case .athlete, .essentialFat: .coreSleep
-            case .fit, .healthy: .green
+            case .athlete, .fit: .coreSleep
+            case .healthy: .green
+            case .essentialFat: .yellow
             case .high: .pink
             }
         }
@@ -87,7 +88,8 @@ extension BodyCompositionMonthlySummary {
     var subtitle: String {
         guard let bodyFatPercentage else { return "No Data" }
 
-        return "Fat: \(bodyFatPercentage.formatted(.percent))"
+        let percent = bodyFatPercentage * 100
+        return "Fat: \(percent.format(to: 0))%"
     }
 
     var range: PercentageRange {

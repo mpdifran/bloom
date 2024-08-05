@@ -20,18 +20,23 @@ struct BodyCompositionDetailsView: View {
 
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(alignment: .leading) {
                 VStack {
                     chart
 
                     bodyFatPercentageRangePicker
                 }
-                .cardContainer()
+                .padding()
+                .background {
+                    Rectangle()
+                        .fill(.background)
+                        .ignoresSafeArea()
+                }
+
+                detailsSection
+                    .padding()
             }
-            .padding()
-            .horizontallyCentered()
         }
-        .groupedBackground()
         .navigationTitle("Body Composition")
         .navigationBarTitleDisplayMode(.inline)
         .animation(.bouncy, value: range)
@@ -81,13 +86,13 @@ private extension BodyCompositionDetailsView {
                         x: .value("Date", sample.date, unit: .day),
                         y: .value("BPM", sample.averageQuantity)
                     )
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(viewModel.bodyFatPercentageSummary?.range.color ?? .blue)
 
                     PointMark(
                         x: .value("Date", sample.date, unit: .day),
                         y: .value("Body Fat Percentage", sample.averageQuantity)
                     )
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(viewModel.bodyFatPercentageSummary?.range.color ?? .blue)
                     .symbolSize(40)
 
                     if 
@@ -159,11 +164,26 @@ private extension BodyCompositionDetailsView {
                         .fill(range.color)
                 }
             }
+        }
+    }
 
-            HStack {
+    func bodyFatPercentageButton(percentRange: BodyCompositionMonthlySummary.PercentageRange) -> some View {
+        Button(percentRange.name) {
+            self.range = percentRange
+        }
+    }
+
+    @ViewBuilder
+    var detailsSection: some View {
+        if range != .unknown {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Details")
+                    .font(.headline)
+                    .bold()
+
                 switch range {
                 case .essentialFat:
-                    Text("Essential fat is the minimum amount of fat necessary for basic physiological functions. It is crucial for the protection of internal organs, insulation, and reproductive health.")
+                    Text("Essential fat is the minimum amount of fat necessary for basic physiological functions. It is crucial for the protection of internal organs, insulation, and reproductive health. It can be difficult on the body to remain in this range.")
                 case .athlete:
                     Text("This range is typical for athletes who require higher muscle mass and lower fat levels for optimal performance. It reflects a high level of fitness and conditioning.")
                 case .fit:
@@ -176,15 +196,8 @@ private extension BodyCompositionDetailsView {
                     EmptyView()
                 }
 
-                Spacer(minLength: 0)
+                Link("Learn More", destination: URL(string: "https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage")!)
             }
-            .padding(.top)
-        }
-    }
-
-    func bodyFatPercentageButton(percentRange: BodyCompositionMonthlySummary.PercentageRange) -> some View {
-        Button(percentRange.name) {
-            self.range = percentRange
         }
     }
 }
