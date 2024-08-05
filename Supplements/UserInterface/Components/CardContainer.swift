@@ -13,7 +13,7 @@ extension View {
         self
             .padding()
             .background {
-                RoundedRectangle(cornerRadius: 25)
+                RoundedRectangle(cornerRadius: 20)
                     .fill(fill)
             }
     }
