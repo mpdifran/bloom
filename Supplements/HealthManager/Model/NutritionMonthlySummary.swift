@@ -32,8 +32,8 @@ struct NutritionMonthlySummary: Hashable {
 extension NutritionMonthlySummary {
 
     var subtitle: String {
-        let macros = details.macroStatus.map { "Macros: \($0.rawValue)" } 
-        let sugar = details.averageSugar.map { "Sugar: \($0.displayString(for: .gram()))" }
+        let macros = details.macroStatus.map { "Macros \($0.rawValue)" }
+        let sugar = details.averageSugar.map { "Sugar \($0.displayString(for: .gram()))" }
         let vitamins = details.vitaminStatus
 
         return [
@@ -127,13 +127,13 @@ extension NutritionMonthlySummary.Details {
         guard let netEnergy else { return nil }
 
         if netEnergy < -.netEnergySignificantThreshold {
-            return "Significant Energy Deficiency"
+            return "Energy Deficit"
         } else if netEnergy < 0 {
-            return "Moderate Energy Deficiency"
+            return "Slight Energy Deficiency"
         } else if netEnergy > .netEnergySignificantThreshold {
-            return "Significant Energy Surplus"
+            return "Energy Surplus"
         }
-        return "Moderate Energy Surplus"
+        return "Slight Energy Surplus"
     }
 
     var netEnergyDescription: String? {
@@ -365,7 +365,10 @@ extension NutritionMonthlySummary.Details {
 
         if lowestPair.1 > 0.99 {
             return "Vitamins Balanced"
+        } else if pairs.filter({ $0.1 < 0.99 }).count > 1 {
+            return "Vitamins Imbalanced"
         }
+
         return "\(lowestPair.0) Imbalance"
     }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 private extension CGFloat {
-    static let innerBarHeight: CGFloat = 8
+    static let innerBarHeight: CGFloat = 14
     static let barBorderWidth: CGFloat = 4
     static let circleBorderWidth: CGFloat = 2
 }
@@ -39,7 +39,7 @@ struct PillRangeChart: View {
                         .frame(height: .innerBarHeight + .barBorderWidth * 2)
 
                     Capsule()
-                        .fill(.green)
+                        .stroke(isWithinRange ? .green : .pink, lineWidth: 2)
                         .frame(
                             width: (proxy.size.width) * minMaxBarWidthPercent,
                             height: .innerBarHeight + .barBorderWidth * 2
@@ -84,6 +84,10 @@ private extension PillRangeChart {
 
     var minMaxBarWidthPercent: Double {
         min((maxValue - minValue) / scaledMax, 1 - minStartPercent)
+    }
+
+    var isWithinRange: Bool {
+        value > minValue && value < maxValue
     }
 }
 

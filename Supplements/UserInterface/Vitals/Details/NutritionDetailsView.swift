@@ -8,13 +8,23 @@
 import SwiftUI
 import Charts
 
+private extension NutritionDetailsView {
+    enum EnergyChartScope {
+        case monthlyAverage
+        case last7Days
+    }
+}
+
 struct NutritionDetailsView: View {
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
+    @State private var energyChartScope = EnergyChartScope.monthlyAverage
+    @State private var last7DaysEnergy = [DateQuantitySampleLegacy]()
+
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 20) {
                 netEnergyChart
                     .cardContainer()
                 macrosChart
@@ -28,6 +38,13 @@ struct NutritionDetailsView: View {
         .navigationTitle("Nutrition")
         .navigationBarTitleDisplayMode(.inline)
         .groupedBackground()
+        .animation(.default, value: energyChartScope)
+        .task {
+            let samples = await HealthManager.shared.fetchNetEnergy()
+            await MainActor.run {
+                self.last7DaysEnergy = samples
+            }
+        }
     }
 }
 
@@ -36,34 +53,83 @@ private extension NutritionDetailsView {
     @ViewBuilder
     var netEnergyChart: some View {
         if let netEnergy = viewModel.nutritionSummary?.details.netEnergy {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 16) {
                 VitalDetailChartTitleView(
                     title: "Net Energy",
-                    value: "\(netEnergy.format()) Cals"
+                    valueLabel: "",
+                    value: ""
                 )
 
-                Chart {
-                    BarMark(xStart: .value("Origin", 0), xEnd: .value("Net Energy", netEnergy))
-                        .foregroundStyle(.green)
-                        .cornerRadius(5)
+                switch energyChartScope {
+                case .monthlyAverage:
+                    if let details = viewModel.nutritionSummary?.details,
+                       let basalEnergy = details.basalEnergyBurned?.doubleValue(for: .largeCalorie()),
+                       let activeEnergy = details.activeEnergyBurned?.doubleValue(for: .largeCalorie()),
+                       let dietaryEnergy = details.dietaryEnergy?.doubleValue(for: .largeCalorie()),
+                       let netEnergy = details.netEnergy {
+                        NetEnergyMathView(
+                            basalEnergy: basalEnergy,
+                            activeEnergy: activeEnergy,
+                            dietaryEnergy: dietaryEnergy,
+                            netEnergy: netEnergy
+                        )
+                    }
 
-                    RuleMark(
-                        x: .value("Min", -500)
-                    )
-                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.text)
+                    Chart {
+                        BarMark(xStart: .value("Origin", 0), xEnd: .value("Net Energy", netEnergy))
+                            .foregroundStyle(.green)
+                            .cornerRadius(5)
 
-                    RuleMark(
-                        x: .value("Max", 500)
+                        RuleMark(
+                            x: .value("Max", 500)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.text)
+
+                        RuleMark(
+                            x: .value("Min", -500)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.text)
+                    }
+                    .frame(height: 60)
+                    .chartXScale(
+                        domain: -(abs(netEnergy) + 300)...(abs(netEnergy) + 300),
+                        range: .plotDimension
                     )
-                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.text)
+                case .last7Days:
+                    Chart{
+                        ForEach(last7DaysEnergy) { sample in
+                            BarMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Net Energy", sample.quantity)
+                            )
+                            .foregroundStyle(.green)
+                        }
+
+                        RuleMark(
+                            y: .value("Max", 500)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.text)
+
+                        RuleMark(
+                            y: .value("Min", -500)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.text)
+                    }
+                    .frame(height: 160)
                 }
-                .frame(height: 60)
-                .chartXScale(
-                    domain: -(abs(netEnergy) + 300)...(abs(netEnergy) + 300),
-                    range: .plotDimension
-                )
+
+                Picker("", selection: $energyChartScope) {
+                    Text("Last 7 Days")
+                        .tag(EnergyChartScope.last7Days)
+
+                    Text("Monthly Average")
+                        .tag(EnergyChartScope.monthlyAverage)
+                }
+                .pickerStyle(.segmented)
 
                 if let netEnergyDescription = viewModel.nutritionSummary?.details.netEnergyDescription {
                     HStack {
@@ -100,40 +166,42 @@ private extension NutritionDetailsView {
                 .chartYAxis(.hidden)
                 .chartLegend(.hidden)
                 .chartForegroundStyleScale([
-                    "Protein" : .pink,
-                    "Carbohydrates" : .purple,
-                    "Fat" : .indigo,
+                    "Protein" : .protein,
+                    "Carbohydrates" : .carbohydrates,
+                    "Fat" : .fat,
                     "Remainder" : .gray
                 ])
                 .frame(height: 80)
 
                 Divider()
 
-                HStack {
-                    VStack {
+                VStack {
+                    HStack {
                         LabelledMetric(
                             label: "Protein",
                             value: "\(macros.protein.format()) Cals"
                         )
-                        .tint(.pink)
-                        LabelledMetric(
-                            label: "Fat",
-                            value: "\(macros.fat.format()) Cals"
-                        )
-                        .tint(.indigo)
-                    }
-                    Spacer()
-                    VStack {
+                        .tint(.protein)
+                        Spacer()
                         LabelledMetric(
                             label: "Carbohydrates",
                             value: "\(macros.carbohydrates.format()) Cals"
                         )
-                        .tint(.purple)
+                        .tint(.carbohydrates)
+                        Spacer()
+                        LabelledMetric(
+                            label: "Fat",
+                            value: "\(macros.fat.format()) Cals"
+                        )
+                        .tint(.fat)
+                    }
+                    HStack {
                         LabelledMetric(
                             label: "Remainder",
                             value: "\(macros.remainder.format()) Cals"
                         )
                         .tint(.gray)
+                        Spacer()
                     }
                 }
             }
@@ -160,6 +228,7 @@ private extension NutritionDetailsView {
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
                     )
+                    .tint(.vitaminA)
                 }
                 if let vitaminB6 = details.averageVitaminB6?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminB6() {
                     PillRangeChart(
@@ -169,6 +238,7 @@ private extension NutritionDetailsView {
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
                     )
+                    .tint(.vitaminB6)
                 }
                 if let vitaminB12 = details.averageVitaminB12?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedMinDailyIntakeForVitaminB12() {
                     PillRangeChart(
@@ -176,8 +246,9 @@ private extension NutritionDetailsView {
                         valueLabel: "\(vitaminB12.format()) mcg",
                         value: vitaminB12,
                         minValue: goal.doubleValue(for: .gramUnit(with: .micro)),
-                        maxValue: goal.doubleValue(for: .gramUnit(with: .micro)) * 100
+                        maxValue: 2000
                     )
+                    .tint(.vitaminB12)
                 }
                 if let vitaminC = details.averageVitaminC?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminC() {
                     PillRangeChart(
@@ -187,6 +258,7 @@ private extension NutritionDetailsView {
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
                     )
+                    .tint(.vitaminC)
                 }
                 if let vitaminD = details.averageVitaminD?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminD() {
                     PillRangeChart(
@@ -196,18 +268,19 @@ private extension NutritionDetailsView {
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
                     )
+                    .tint(.vitaminD)
                 }
                 if let vitaminE = details.averageVitaminE?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminE() {
                     PillRangeChart(
                         title: "Vitamin E",
-                        valueLabel: "\(vitaminE.format()) mcg",
+                        valueLabel: "\(vitaminE.format()) mg",
                         value: vitaminE,
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
                     )
+                    .tint(.vitaminE)
                 }
             }
-            .tint(.indigo)
         }
     }
 }

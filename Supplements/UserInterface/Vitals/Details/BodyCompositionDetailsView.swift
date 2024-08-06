@@ -9,7 +9,6 @@ import SwiftUI
 import Charts
 import Foundation
 
-@MainActor
 struct BodyCompositionDetailsView: View {
 
     @State private var bodyFatPercentageSamples = [DateAverageQuantitySample]()
@@ -41,7 +40,11 @@ struct BodyCompositionDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .animation(.bouncy, value: range)
         .task {
-            bodyFatPercentageSamples = await HealthManager.shared.fetchBodyFatPercentageSamples()
+            let samples = await HealthManager.shared.fetchBodyFatPercentageSamples()
+
+            await MainActor.run {
+                self.bodyFatPercentageSamples = samples
+            }
         }
         .onAppear {
             if let range = viewModel.bodyFatPercentageSummary?.range {

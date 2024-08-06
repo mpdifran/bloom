@@ -479,6 +479,46 @@ extension HealthManager {
         return []
     }
 
+    func fetchNetEnergy(numPrevDays: Int = 7) async -> [DateQuantitySampleLegacy] {
+        let endDate = Calendar.current.startOfDay(for: .now)
+
+        guard let startDate = Calendar.current.date(byAdding: .day, value: -numPrevDays, to: endDate) else { return [] }
+
+        let basal = try? await healthStore.fetchCollectionQuantity(
+            quantityTypeID: .basalEnergyBurned,
+            unit: .largeCalorie(),
+            startDate: startDate,
+            endDate: endDate
+        )
+
+        let active = try? await healthStore.fetchCollectionQuantity(
+            quantityTypeID: .activeEnergyBurned,
+            unit: .largeCalorie(),
+            startDate: startDate,
+            endDate: endDate
+        )
+
+        let dietary = try? await healthStore.fetchCollectionQuantity(
+            quantityTypeID: .dietaryEnergyConsumed,
+            unit: .largeCalorie(),
+            startDate: startDate,
+            endDate: endDate
+        )
+
+        var samples = [DateQuantitySampleLegacy]()
+
+        for basalSample in basal ?? [] {
+            let activeEnergy = active?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity ?? 0
+            let dietaryEnergy = dietary?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity ?? 0
+
+            let netEnergy = dietaryEnergy - basalSample.quantity - activeEnergy 
+
+            samples.append(.init(date: basalSample.date, quantity: netEnergy, unit: HKUnit.largeCalorie().unitString))
+        }
+
+        return samples
+    }
+
     func fetchWorkoutSummaryLastTwoWeeks() async -> [WorkoutSummary] {
         do {
             let endDate = Date.now
@@ -760,7 +800,7 @@ extension HealthManager {
         )
 
         let activeEnergyBurned = try? await healthStore.fetchQuantity(
-            for: .basalEnergyBurned,
+            for: .activeEnergyBurned,
             start: startDate,
             end: endDate,
             option: .cumulativeSum,
