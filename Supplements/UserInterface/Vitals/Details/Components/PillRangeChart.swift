@@ -8,120 +8,154 @@
 import SwiftUI
 
 private extension CGFloat {
-    static let innerBarHeight: CGFloat = 14
-    static let barBorderWidth: CGFloat = 4
-    static let circleBorderWidth: CGFloat = 2
+    static let barHeight: CGFloat = 20
 }
-
 struct PillRangeChart: View {
     let title: String
-    let valueLabel: String
+    let unitString: String
     let value: Double
     let minValue: Double
     let maxValue: Double
 
     var body: some View {
-        VStack(spacing: 2) {
-            HStack {
-                Text(title)
+        VStack(alignment: .leading) {
+            Text(title)
+                .bold()
+                .fontDesign(.rounded)
+                .padding(.horizontal)
 
-                Spacer()
-
-                Text(valueLabel)
-                    .font(.caption)
-            }
-            .bold()
-            .fontDesign(.rounded)
             GeometryReader { proxy in
                 ZStack {
-                    Capsule()
-                        .fill(.regularMaterial)
-                        .frame(height: .innerBarHeight + .barBorderWidth * 2)
+                    Rectangle()
+                        .fill(.fill)
+                        .frame(height: .barHeight)
 
-                    Capsule()
-                        .stroke(isWithinRange ? .green : .pink, lineWidth: 2)
-                        .frame(
-                            width: (proxy.size.width) * minMaxBarWidthPercent,
-                            height: .innerBarHeight + .barBorderWidth * 2
-                        )
-                        .zStackAlignment(.leading)
-                        .offset(x: (proxy.size.width) * minStartPercent)
-
-                    Capsule()
+                    Rectangle()
                         .fill(.tint)
-                        .frame(width: max((proxy.size.width - .barBorderWidth * 2) * barPercent, .innerBarHeight), height: .innerBarHeight)
-                        .padding(.horizontal, .barBorderWidth)
+                        .frame(width: currentValuePoint(proxy: proxy), height: .barHeight)
                         .zStackAlignment(.leading)
 
-//                    Circle()
-//                        .fill(.text)
-//                        .frame(height: .innerBarHeight - .circleBorderWidth * 2)
-//                        .zStackAlignment(.leading)
-//                        .offset(x: .barBorderWidth + (proxy.size.width - .barBorderWidth * 2) * barPercent - (.innerBarHeight - .circleBorderWidth))
+                    HStack {
+                        Spacer()
+
+                        if value < minValue {
+                            PillValueLabelView(title: "\(value.format()) \(unitString)")
+                            Spacer()
+                        }
+
+                        VStack {
+                            Text("Goal")
+                                .foregroundStyle(.tint)
+                                .bold()
+                                .opacity(isWithinRange ? 0 : 1)
+                            Spacer()
+                            HStack {
+                                Text("\(minValue.format()) \(unitString)")
+                                    .foregroundStyle(value > minValue ? .black : .primary)
+                                Spacer()
+                                Text("\(maxValue.format()) \(unitString)")
+                                    .foregroundStyle(value > minValue && value > maxValue ? .black : .primary)
+                            }
+                            Spacer()
+                            Text("Goal")
+                                .opacity(0)
+                                .foregroundStyle(.tint)
+                                .bold()
+                        }
+                        .font(.caption)
+                        .bold()
+                        .padding(.horizontal, 10)
+                        .background {
+                            Capsule()
+                                .stroke(value > maxValue ? AnyShapeStyle(.black) : AnyShapeStyle(.tint), lineWidth: 2)
+                                .frame(height: .barHeight - 2)
+                        }
+                        .frame(width: isWithinRange ? proxy.size.width / 1.5 : proxy.size.width / 2, height: .barHeight)
+
+                        if value > maxValue {
+                            Spacer()
+                            PillValueLabelView(title: "\(value.format()) \(unitString)")
+                        }
+
+                        Spacer()
+                    }
+
+                    if value > minValue && value < maxValue {
+                        PillValueLabelView(title: "\(value.format()) \(unitString)")
+                    }
                 }
             }
-            .frame(height: .innerBarHeight + .barBorderWidth * 2)
+            .frame(height: .barHeight)
+            .padding(.bottom)
         }
     }
 }
 
 private extension PillRangeChart {
 
-    var scaledMax: Double {
-        if value > maxValue {
-            return value
-        }
-        return max(value, min(minValue * 1.5, maxValue))
-    }
-
-    var barPercent: Double {
-        min(value / scaledMax, 1)
-    }
-
-    var minStartPercent: Double {
-        min(minValue / scaledMax, 1)
-    }
-
-    var minMaxBarWidthPercent: Double {
-        min((maxValue - minValue) / scaledMax, 1 - minStartPercent)
-    }
-
     var isWithinRange: Bool {
         value > minValue && value < maxValue
+    }
+
+    func currentValuePoint(proxy: GeometryProxy) -> CGFloat {
+        if value < minValue {
+            return offsetPoint(proxy: proxy, pointIndex: 1)
+        } else if value > maxValue {
+            return offsetPoint(proxy: proxy, pointIndex: 4)
+        }
+        return offsetPoint(proxy: proxy, pointIndex: 2.5)
+    }
+
+    func offsetPoint(proxy: GeometryProxy, pointIndex: CGFloat) -> CGFloat {
+        proxy.size.width / 5 * pointIndex
+    }
+}
+
+private struct PillValueLabelView: View {
+    let title: String
+
+    var body: some View {
+        Text(title)
+            .bold()
+            .foregroundStyle(.black)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background {
+                Capsule()
+                    .fill(.tint)
+                    .overlay {
+                        Capsule()
+                            .stroke(.background, lineWidth: 3)
+                    }
+            }
     }
 }
 
 #Preview {
-    VStack {
+    List {
         PillRangeChart(
             title: "Protein",
-            valueLabel: "182 g",
-            value: 42,
-            minValue: 81,
-            maxValue: 96
+            unitString: "%",
+            value: 13,
+            minValue: 15,
+            maxValue: 25
         )
+        .tint(.protein)
         PillRangeChart(
             title: "Carbs",
-            valueLabel: "182 g",
-            value: 86,
-            minValue: 51,
-            maxValue: 112
+            unitString: "%",
+            value: 52,
+            minValue: 45,
+            maxValue: 60
         )
+        .tint(.carbohydrates)
         PillRangeChart(
             title: "Fat",
-            valueLabel: "182 g",
-            value: 182,
-            minValue: 43,
-            maxValue: 94
+            unitString: "%",
+            value: 35,
+            minValue: 20,
+            maxValue: 30
         )
-        PillRangeChart(
-            title: "Vitamin A",
-            valueLabel: "0 g",
-            value: 0,
-            minValue: 43,
-            maxValue: 94
-        )
+        .tint(.fat)
     }
-    .padding()
-    .tint(.coreSleep)
 }

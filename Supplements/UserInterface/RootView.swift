@@ -39,7 +39,7 @@ struct RootView: View {
 //                        .tag(Tab.insights)
                     ChatView()
                         .tag(Tab.chat)
-                    ProfileView()
+                    PreferencesView()
                         .tag(Tab.profile)
                 }
                 .environmentObject(tabController)

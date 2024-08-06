@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2024-05-08.
 //
 
-import Foundation
+import SwiftUI
 import HealthKit
 import AppFoundations
 
@@ -21,6 +21,9 @@ final class HealthManager: ObservableObject {
     @Published var sleepAnalysis7Days: [SleepAnalysis]?
     @Published var sleepAnalysis30Days: [SleepAnalysis]?
     @Published var sleepAnalysisPrevious30Days: [SleepAnalysis]?
+
+    @AppStorage("HealthManager.isPregnant") var isPregnant: Bool = false
+    @AppStorage("HealthManager.isBreastfeeding") var isBreastfeeding: Bool = false
 
     let healthStore = HKHealthStore()
     private let throttler = Throttler(timeInterval: 600)
@@ -508,10 +511,14 @@ extension HealthManager {
         var samples = [DateQuantitySampleLegacy]()
 
         for basalSample in basal ?? [] {
-            let activeEnergy = active?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity ?? 0
-            let dietaryEnergy = dietary?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity ?? 0
+            guard 
+                let activeEnergy = active?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity,
+                let dietaryEnergy = dietary?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity
+            else {
+                continue
+            }
 
-            let netEnergy = dietaryEnergy - basalSample.quantity - activeEnergy 
+            let netEnergy = dietaryEnergy - basalSample.quantity - activeEnergy
 
             samples.append(.init(date: basalSample.date, quantity: netEnergy, unit: HKUnit.largeCalorie().unitString))
         }
@@ -1481,9 +1488,6 @@ extension HealthManager {
     func adequateDailyIntakeForChromium() -> HKQuantity? {
         guard let age = healthStore.age() else { return nil }
 
-        let isPregnant = false
-        let isBreastfeeding = false
-
         if isPregnant {
             if age < 19 {
                 return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 29)
@@ -1528,9 +1532,6 @@ extension HealthManager {
     /// - note: https://ods.od.nih.gov/factsheets/Copper-Consumer/
     func recommendedDailyIntakeForCopper() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
-
-        let isBreastfeeding = false
-        let isPregnant = false
 
         if isBreastfeeding {
             return HKQuantityRange(unit: .gramUnit(with: .micro), range: 1300...10000)
@@ -1580,9 +1581,6 @@ extension HealthManager {
     /// - note: https://ods.od.nih.gov/factsheets/Folate-Consumer/
     func recommendedDailyIntakeForFolate() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
-
-        let isBreastfeeding = false
-        let isPregnant = false
 
         if isPregnant {
             return HKQuantityRange(unit: .gramUnit(with: .micro), range: 600...1000)
@@ -1659,9 +1657,6 @@ extension HealthManager {
     func recommendedDailyIntakeForVitaminA() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
 
-        let isPregnant = false
-        let isBreastfeeding = false
-
         if isPregnant {
             if age < 19 {
                 return HKQuantityRange(unit: .gramUnit(with: .micro), range: 750...2800)
@@ -1700,9 +1695,6 @@ extension HealthManager {
     /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html#tbl2
     func recommendedDailyIntakeForVitaminB6() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
-
-        let isPregnant = false
-        let isBreastfeeding = false
 
         if isPregnant {
             if age < 19 {
@@ -1745,9 +1737,6 @@ extension HealthManager {
     func recommendedMinDailyIntakeForVitaminB12() -> HKQuantity? {
         guard let age = healthStore.age() else { return nil }
 
-        let isPregnant = false
-        let isBreastfeeding = false
-
         if isPregnant {
             return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 2.6)
         }
@@ -1770,9 +1759,6 @@ extension HealthManager {
     /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html#tbl2
     func recommendedDailyIntakeForVitaminC() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
-
-        let isPregnant = false
-        let isBreastfeeding = false
 
         if isPregnant {
             if age < 19 {
@@ -1813,9 +1799,6 @@ extension HealthManager {
     func recommendedDailyIntakeForVitaminD() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
 
-        let isPregnant = false
-        let isBreastfeeding = false
-
         if isPregnant || isBreastfeeding {
             return HKQuantityRange(unit: .gramUnit(with: .micro), range: 15...100)
         }
@@ -1835,9 +1818,6 @@ extension HealthManager {
     /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
     func recommendedDailyIntakeForVitaminE() -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
-
-        let isPregnant = false
-        let isBreastfeeding = false
 
         if isPregnant {
             if age < 19 {

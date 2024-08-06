@@ -28,7 +28,7 @@ struct NutritionDetailsView: View {
                 netEnergyChart
                     .cardContainer()
                 macrosChart
-                    .cardContainer()
+                    .cardContainer(includePadding: false)
                 vitaminsChart
                     .cardContainer()
             }
@@ -40,7 +40,7 @@ struct NutritionDetailsView: View {
         .groupedBackground()
         .animation(.default, value: energyChartScope)
         .task {
-            let samples = await HealthManager.shared.fetchNetEnergy()
+            let samples = await HealthManager.shared.fetchNetEnergy(numPrevDays: 30)
             await MainActor.run {
                 self.last7DaysEnergy = samples
             }
@@ -100,30 +100,43 @@ private extension NutritionDetailsView {
                 case .last7Days:
                     Chart{
                         ForEach(last7DaysEnergy) { sample in
-                            BarMark(
+                            LineMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Net Energy", sample.quantity)
+                            )
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(.green)
+
+                            PointMark(
                                 x: .value("Date", sample.date),
                                 y: .value("Net Energy", sample.quantity)
                             )
                             .foregroundStyle(.green)
                         }
 
+                        RectangleMark(
+                            yStart: .value("Max", 500),
+                            yEnd: .value("Min", -500)
+                        )
+                        .foregroundStyle(.green.opacity(0.3))
+
                         RuleMark(
                             y: .value("Max", 500)
                         )
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.text)
+                        .foregroundStyle(.green)
 
                         RuleMark(
                             y: .value("Min", -500)
                         )
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.text)
+                        .foregroundStyle(.green)
                     }
                     .frame(height: 160)
                 }
 
                 Picker("", selection: $energyChartScope) {
-                    Text("Last 7 Days")
+                    Text("Daily")
                         .tag(EnergyChartScope.last7Days)
 
                     Text("Monthly Average")
@@ -151,60 +164,42 @@ private extension NutritionDetailsView {
                     valueLabel: "",
                     value: details.macroStatus?.rawValue ?? ""
                 )
-
-                Chart {
-                    BarMark(x: .value("Protein", macros.protein))
-                        .foregroundStyle(by: .value("Name", "Protein"))
-                    BarMark(x: .value("Carbohydrates", macros.carbohydrates))
-                        .foregroundStyle(by: .value("Name", "Carbohydrates"))
-                    BarMark(x: .value("Fat", macros.fat))
-                        .foregroundStyle(by: .value("Name", "Fat"))
-                    BarMark(x: .value("Remainder", macros.remainder))
-                        .foregroundStyle(by: .value("Name", "Remainder"))
-                }
-                .chartXAxis(.hidden)
-                .chartYAxis(.hidden)
-                .chartLegend(.hidden)
-                .chartForegroundStyleScale([
-                    "Protein" : .protein,
-                    "Carbohydrates" : .carbohydrates,
-                    "Fat" : .fat,
-                    "Remainder" : .gray
-                ])
-                .frame(height: 80)
+                .padding(.horizontal)
 
                 Divider()
 
-                VStack {
-                    HStack {
-                        LabelledMetric(
-                            label: "Protein",
-                            value: "\(macros.protein.format()) Cals"
-                        )
-                        .tint(.protein)
-                        Spacer()
-                        LabelledMetric(
-                            label: "Carbohydrates",
-                            value: "\(macros.carbohydrates.format()) Cals"
-                        )
-                        .tint(.carbohydrates)
-                        Spacer()
-                        LabelledMetric(
-                            label: "Fat",
-                            value: "\(macros.fat.format()) Cals"
-                        )
-                        .tint(.fat)
-                    }
-                    HStack {
-                        LabelledMetric(
-                            label: "Remainder",
-                            value: "\(macros.remainder.format()) Cals"
-                        )
-                        .tint(.gray)
-                        Spacer()
-                    }
-                }
+                PillRangeChart(
+                    title: "Protein",
+                    unitString: "%",
+                    value: (macros.protein / macros.total * 100),
+                    minValue: HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy().lowerBound * 100,
+                    maxValue: HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy().upperBound * 100
+                )
+                .tint(.protein)
+
+                Divider()
+
+                PillRangeChart(
+                    title: "Carbohydrates",
+                    unitString: "%",
+                    value: (macros.carbohydrates / macros.total * 100),
+                    minValue: HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().lowerBound * 100,
+                    maxValue: HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().upperBound * 100
+                )
+                .tint(.carbohydrates)
+
+                Divider()
+
+                PillRangeChart(
+                    title: "Fat",
+                    unitString: "%",
+                    value: (macros.fat / macros.total * 100),
+                    minValue: HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy().lowerBound * 100,
+                    maxValue: HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy().upperBound * 100
+                )
+                .tint(.fat)
             }
+            .padding(.vertical)
         }
     }
 
@@ -221,9 +216,9 @@ private extension NutritionDetailsView {
                 Divider()
 
                 if let vitaminA = details.averageVitaminA?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminA() {
-                    PillRangeChart(
+                    CapsuleRangeChart(
                         title: "Vitamin A",
-                        valueLabel: "\(vitaminA.format()) mcg",
+                        unitString: "mcg",
                         value: vitaminA,
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
@@ -231,9 +226,9 @@ private extension NutritionDetailsView {
                     .tint(.vitaminA)
                 }
                 if let vitaminB6 = details.averageVitaminB6?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminB6() {
-                    PillRangeChart(
+                    CapsuleRangeChart(
                         title: "Vitamin B6",
-                        valueLabel: "\(vitaminB6.format()) mg",
+                        unitString: "mg",
                         value: vitaminB6,
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
@@ -241,9 +236,9 @@ private extension NutritionDetailsView {
                     .tint(.vitaminB6)
                 }
                 if let vitaminB12 = details.averageVitaminB12?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedMinDailyIntakeForVitaminB12() {
-                    PillRangeChart(
+                    CapsuleRangeChart(
                         title: "Vitamin B12",
-                        valueLabel: "\(vitaminB12.format()) mcg",
+                        unitString: "mcg",
                         value: vitaminB12,
                         minValue: goal.doubleValue(for: .gramUnit(with: .micro)),
                         maxValue: 2000
@@ -251,9 +246,9 @@ private extension NutritionDetailsView {
                     .tint(.vitaminB12)
                 }
                 if let vitaminC = details.averageVitaminC?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminC() {
-                    PillRangeChart(
+                    CapsuleRangeChart(
                         title: "Vitamin C",
-                        valueLabel: "\(vitaminC.format()) mg",
+                        unitString: "mg",
                         value: vitaminC,
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
@@ -261,9 +256,9 @@ private extension NutritionDetailsView {
                     .tint(.vitaminC)
                 }
                 if let vitaminD = details.averageVitaminD?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminD() {
-                    PillRangeChart(
+                    CapsuleRangeChart(
                         title: "Vitamin D",
-                        valueLabel: "\(vitaminD.format()) mcg",
+                        unitString: "mcg",
                         value: vitaminD,
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
@@ -271,9 +266,9 @@ private extension NutritionDetailsView {
                     .tint(.vitaminD)
                 }
                 if let vitaminE = details.averageVitaminE?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminE() {
-                    PillRangeChart(
+                    CapsuleRangeChart(
                         title: "Vitamin E",
-                        valueLabel: "\(vitaminE.format()) mg",
+                        unitString: "mg",
                         value: vitaminE,
                         minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))

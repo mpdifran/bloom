@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import AppUI
 
 extension View {
 
-    func cardContainer<S>(fill: S = BackgroundStyle.background) -> some View where S: ShapeStyle {
+    func cardContainer<S>(fill: S = BackgroundStyle.background, includePadding: Bool = true) -> some View where S: ShapeStyle {
         self
-            .padding()
+            .if(includePadding) {
+                $0.padding()
+            }
             .background {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(fill)

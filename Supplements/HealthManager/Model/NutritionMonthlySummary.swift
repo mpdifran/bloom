@@ -104,6 +104,10 @@ extension NutritionMonthlySummary {
         let carbohydrates: Double
         let fat: Double
         let remainder: Double
+
+        var total: Double {
+            protein + carbohydrates + fat + remainder
+        }
     }
 
     enum NutrientCategory {

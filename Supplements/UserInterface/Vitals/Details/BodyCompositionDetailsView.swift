@@ -184,6 +184,7 @@ private extension BodyCompositionDetailsView {
                     }
 
                     Link("Learn More", destination: URL(string: "https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage")!)
+                        .foregroundStyle(range.color)
                 }
                 Spacer(minLength: 0)
             }
