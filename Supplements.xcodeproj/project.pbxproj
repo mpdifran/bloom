@@ -124,6 +124,10 @@
 		FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B492C0035F100BA2128 /* ActivityCell.swift */; };
 		FF8F79B52C5FD5360095C36D /* BodyCompositionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79B42C5FD5360095C36D /* BodyCompositionDetailsView.swift */; };
 		FF8F79B92C601C660095C36D /* View+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79B82C601C660095C36D /* View+Background.swift */; };
+		FF8F79BB2C6189790095C36D /* NutritionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79BA2C6189790095C36D /* NutritionDetailsView.swift */; };
+		FF8F79BE2C61A3DE0095C36D /* VitalDetailChartTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79BD2C61A3DE0095C36D /* VitalDetailChartTitleView.swift */; };
+		FF8F79C02C62611D0095C36D /* PillRangeChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79BF2C62611D0095C36D /* PillRangeChart.swift */; };
+		FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79C32C627CEF0095C36D /* LabelledMetric.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */; };
@@ -464,6 +468,10 @@
 		FF8B8B492C0035F100BA2128 /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
 		FF8F79B42C5FD5360095C36D /* BodyCompositionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyCompositionDetailsView.swift; sourceTree = "<group>"; };
 		FF8F79B82C601C660095C36D /* View+Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Background.swift"; sourceTree = "<group>"; };
+		FF8F79BA2C6189790095C36D /* NutritionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionDetailsView.swift; sourceTree = "<group>"; };
+		FF8F79BD2C61A3DE0095C36D /* VitalDetailChartTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalDetailChartTitleView.swift; sourceTree = "<group>"; };
+		FF8F79BF2C62611D0095C36D /* PillRangeChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillRangeChart.swift; sourceTree = "<group>"; };
+		FF8F79C32C627CEF0095C36D /* LabelledMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledMetric.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummary.swift; sourceTree = "<group>"; };
@@ -1027,9 +1035,21 @@
 		FF8F79B32C5FD5260095C36D /* Details */ = {
 			isa = PBXGroup;
 			children = (
+				FF8F79BC2C61A3CB0095C36D /* Components */,
+				FF8F79BA2C6189790095C36D /* NutritionDetailsView.swift */,
 				FF8F79B42C5FD5360095C36D /* BodyCompositionDetailsView.swift */,
 			);
 			path = Details;
+			sourceTree = "<group>";
+		};
+		FF8F79BC2C61A3CB0095C36D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FF8F79BD2C61A3DE0095C36D /* VitalDetailChartTitleView.swift */,
+				FF8F79BF2C62611D0095C36D /* PillRangeChart.swift */,
+				FF8F79C32C627CEF0095C36D /* LabelledMetric.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		FFA134EE2C3F041500FF1829 /* Today */ = {
@@ -1790,6 +1810,7 @@
 				FFF66FA92C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */,
+				FF8F79BB2C6189790095C36D /* NutritionDetailsView.swift in Sources */,
 				FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */,
 				FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
@@ -1850,6 +1871,7 @@
 				FFC77AFE2C5AB200003E5F85 /* VitalModel.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
+				FF8F79C02C62611D0095C36D /* PillRangeChart.swift in Sources */,
 				FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
@@ -1899,6 +1921,7 @@
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
+				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
 				FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */,
 				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
@@ -1932,6 +1955,7 @@
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
+				FF8F79BE2C61A3DE0095C36D /* VitalDetailChartTitleView.swift in Sources */,
 				FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */,
 				FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */,
 				FF7890522C3473B700F9C1A5 /* SleepChatMessage.swift in Sources */,

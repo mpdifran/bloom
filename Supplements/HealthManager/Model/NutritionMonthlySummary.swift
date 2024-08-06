@@ -99,6 +99,13 @@ extension NutritionMonthlySummary {
         case balanced = "Balanced"
     }
 
+    struct Macros {
+        let protein: Double
+        let carbohydrates: Double
+        let fat: Double
+        let remainder: Double
+    }
+
     enum NutrientCategory {
         case deficiency
         case surplus
@@ -108,23 +115,43 @@ extension NutritionMonthlySummary {
 
 extension NutritionMonthlySummary.Details {
 
-    var netEnergyDisplayString: String? {
+    var netEnergy: Double? {
         guard let basalEnergyBurned, let activeEnergyBurned, let dietaryEnergy else { return nil }
 
-        let totalEnergy = basalEnergyBurned.doubleValue(for: .largeCalorie()) + activeEnergyBurned.doubleValue(for: .largeCalorie()) - dietaryEnergy.doubleValue(for: .largeCalorie())
+        return dietaryEnergy.doubleValue(for: .largeCalorie()) 
+            - basalEnergyBurned.doubleValue(for: .largeCalorie())
+            - activeEnergyBurned.doubleValue(for: .largeCalorie())
+    }
 
-        if totalEnergy > .netEnergySignificantThreshold {
+    var netEnergyDisplayString: String? {
+        guard let netEnergy else { return nil }
+
+        if netEnergy < -.netEnergySignificantThreshold {
             return "Significant Energy Deficiency"
-        } else if totalEnergy > 0 {
-            return "Slight Energy Deficiency"
-        } else if totalEnergy < -.netEnergySignificantThreshold {
+        } else if netEnergy < 0 {
+            return "Moderate Energy Deficiency"
+        } else if netEnergy > .netEnergySignificantThreshold {
             return "Significant Energy Surplus"
         }
-        return "Slight Energy Surplus"
+        return "Moderate Energy Surplus"
+    }
+
+    var netEnergyDescription: String? {
+        guard let netEnergy else { return nil }
+
+        if netEnergy < -.netEnergySignificantThreshold {
+            return "A large caloric deficit can lead to rapid weight loss, and can have negative health effects such as nutrient deficiencies, muscle loss, gallstones, or fatigue."
+        } else if netEnergy < 0 {
+            return "A caloric deficit can help with sustainable weight loss while maintaining muscle mass."
+        } else if netEnergy > .netEnergySignificantThreshold {
+            return "A large caloric surplus can lead to rapid weight gain, and can incrase the risk of various health issues such as cardiovascular diseases or type 2 diabetes."
+        }
+        return "A caloric surplus can help promote muscle growth and provide you with more energy."
     }
 
     var score: Double? {
         let allNutrients = [
+            netEnergyScore,
             macrosScore,
             sugarScore,
             vitaminScore
@@ -134,6 +161,28 @@ extension NutritionMonthlySummary.Details {
             return nil
         }
         return allNutrients.average(keyPath: \.self)
+    }
+
+    var netEnergyScore: Double? {
+        guard let netEnergy else { return nil }
+
+        return netEnergy.invertedScaledPercent(lower: -.netEnergySignificantThreshold, upper: .netEnergySignificantThreshold)
+    }
+
+    var macros: NutritionMonthlySummary.Macros? {
+        guard let averageProtein, let averageCarbohydrates, let averageFat, let dietaryEnergy else { return nil }
+
+        let protein = averageProtein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein
+        let carbs = averageCarbohydrates.doubleValue(for: .gram()) * .caloriesPerGramOfCarbs
+        let fat = averageFat.doubleValue(for: .gram()) * .caloriesPerGramOfFat
+        let remainder = dietaryEnergy.doubleValue(for: .largeCalorie()) - protein - carbs - fat
+
+        return .init(
+            protein: protein,
+            carbohydrates: carbs,
+            fat: fat,
+            remainder: remainder
+        )
     }
 
     var macrosScore: Double? {

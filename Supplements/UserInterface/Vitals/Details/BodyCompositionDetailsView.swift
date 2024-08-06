@@ -62,23 +62,7 @@ private extension BodyCompositionDetailsView {
 
     var chart: some View {
         VStack(alignment: .leading) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Body Fat Percentage")
-                    .bold()
-                    .font(.title3)
-                    .fontDesign(.rounded)
-
-                Spacer()
-
-                Text("AVG")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Text("\(average, specifier: "%.0f")%")
-                    .bold()
-                    .font(.title3)
-                    .fontDesign(.rounded)
-            }
+            VitalDetailChartTitleView(title: "Body Fat Percentage", value: "\(average.format())%")
 
             Chart {
                 ForEach(bodyFatPercentageSamples) { sample in
