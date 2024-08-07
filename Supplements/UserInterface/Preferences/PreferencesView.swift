@@ -11,11 +11,14 @@ struct PreferencesView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
 
+    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+
     var body: some View {
         List {
             appInfoSection
             femaleSection
             healthPermissionsSection
+            developerSection
         }
         .safeAreaInset(edge: .top) {
             Rectangle()
@@ -75,6 +78,12 @@ private extension PreferencesView {
                 })
                 .buttonStyle(.plain)
             }
+        }
+    }
+
+    var developerSection: some View {
+        Section("Developer") {
+            Toggle("Daniele Mode", isOn: $danieleMode)
         }
     }
 }

@@ -39,7 +39,7 @@ extension EnergyBurnedSummary.ActivityLevel {
     }
 }
 
-struct EnergyBurnedSummary: Equatable {
+struct EnergyBurnedSummary: Equatable, Codable {
     let averageBasalEnergyBurned: Double
     let averageActiveEnergyBurned: Double
     let lastMonthAverageBasalEnergyBurned: Double

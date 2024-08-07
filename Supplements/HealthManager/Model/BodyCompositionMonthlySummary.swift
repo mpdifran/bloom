@@ -62,7 +62,7 @@ extension BodyCompositionMonthlySummary {
     }
 }
 
-struct BodyCompositionMonthlySummary: Equatable {
+struct BodyCompositionMonthlySummary: Equatable, Codable {
     let bodyFatPercentage: Double?
     let lastMonthBodyFatPercentage: Double?
 }

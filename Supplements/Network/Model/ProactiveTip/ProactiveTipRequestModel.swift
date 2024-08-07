@@ -8,9 +8,39 @@
 import Foundation
 
 struct ProactiveTipRequestModel: Codable {
-    let userInfo: UserInfoModel?
-    let currentSupplements: [String]
-    let currentGoals: [String]
+    let stressMonthlySummary: StressSummary?
+    let nutritionMonthlySummary: NutritionSummary?
+    let bodyCompositionSummary: BodyCompositionMonthlySummary?
+    let cardioFitnessSummary: CardioFitnessMonthlySummary?
+    let sleepVitalsMonthlySummary: SleepVitalsMonthlySummary?
+    let energyBurnedMonthlySummary: EnergyBurnedSummary?
     let chatHistory: [ChatMessageHistory]
-    let learnedUserFacts: [String]
+}
+
+extension ProactiveTipRequestModel {
+    struct StressSummary: Codable {
+        let stressLevel: String?
+        let averageHeartRateVariability: Double?
+        let varianceHeartRateVariability: Double?
+        let averageRestingHeartRate: Double?
+        let averageSleepScore: Double?
+        let averageBloodPressureSystolic: Double?
+        let averageBloodPressureDiastolic: Double?
+    }
+
+    struct NutritionSummary: Codable {
+        let averageBasalEnergyBurnedCalories: Double?
+        let averageActiveEnergyBurnedCalories: Double?
+        let averageDietaryEnergyConsumedCalories: Double?
+        let averageProteinGrams: Double?
+        let averageCarbohydratesGrams: Double?
+        let averageFatGrams: Double?
+        let averageSugarGrams: Double?
+        let averageVitaminAMicrograms: Double?
+        let averageVitaminB6Milligrams: Double?
+        let averageVitaminB12Micrograms: Double?
+        let averageVitaminCMilligrams: Double?
+        let averageVitaminDMicrograms: Double?
+        let averageVitaminEMilligrams: Double?
+    }
 }

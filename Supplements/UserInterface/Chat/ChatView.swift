@@ -23,6 +23,8 @@ struct ChatView: View {
 
     @EnvironmentObject private var tabContorller: TabController
 
+    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
 
     var body: some View {
@@ -90,6 +92,16 @@ struct ChatView: View {
                             )
                         }
                         .confirmationDialog($confirmationDialog)
+                    }
+
+                    if danieleMode {
+                        ToolbarItem(placement: .primaryAction) {
+                            Button("Proactive Tip", systemImage: "sparkles") {
+                                Task {
+                                    await ProactiveTipper.shared.sendProactiveTip()
+                                }
+                            }
+                        }
                     }
                 }
                 .onChange(of: viewModel.chatHistory.count) { _, _ in

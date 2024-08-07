@@ -34,7 +34,7 @@ extension SleepVitalsMonthlySummary {
     }
 }
 
-struct SleepVitalsMonthlySummary: Equatable {
+struct SleepVitalsMonthlySummary: Equatable, Codable {
     let averageREMSleepPercent: Double
     let averageCoreSleepPercent: Double
     let averageDeepSleepPercent: Double

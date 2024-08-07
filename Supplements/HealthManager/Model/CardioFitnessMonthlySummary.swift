@@ -42,7 +42,7 @@ extension CardioFitnessMonthlySummary {
     }
 }
 
-struct CardioFitnessMonthlySummary: Equatable {
+struct CardioFitnessMonthlySummary: Equatable, Codable {
     let averageVO2Max: Double?
     let averageHeartRateRecovery: Double?
     let lastMonthAverageVO2Max: Double?

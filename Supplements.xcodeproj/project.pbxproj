@@ -131,6 +131,7 @@
 		FF8F79C62C628E200095C36D /* NetEnergyMathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79C52C628E200095C36D /* NetEnergyMathView.swift */; };
 		FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79C82C62C1D10095C36D /* PreferencesView.swift */; };
 		FF8F79CB2C62CE070095C36D /* PillRangeChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CA2C62CE070095C36D /* PillRangeChart.swift */; };
+		FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CC2C63BB570095C36D /* ProactiveTipper.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */; };
@@ -478,6 +479,7 @@
 		FF8F79C52C628E200095C36D /* NetEnergyMathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetEnergyMathView.swift; sourceTree = "<group>"; };
 		FF8F79C82C62C1D10095C36D /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		FF8F79CA2C62CE070095C36D /* PillRangeChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillRangeChart.swift; sourceTree = "<group>"; };
+		FF8F79CC2C63BB570095C36D /* ProactiveTipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipper.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummary.swift; sourceTree = "<group>"; };
@@ -1330,6 +1332,7 @@
 				FFACBADE2BAC7788006AAD0B /* ChatView.swift */,
 				FFC77B032C5C6571003E5F85 /* ChatBar.swift */,
 				FFB444612BEC4E8A00486AD7 /* ChatViewModel.swift */,
+				FF8F79CC2C63BB570095C36D /* ProactiveTipper.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1849,6 +1852,7 @@
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
+				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
 				FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */,
 				FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,

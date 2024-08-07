@@ -19,12 +19,14 @@ struct SupplementsApp: App {
         OpenAPIClientAPI.apiResponseQueue = DispatchQueue(label: "OpenAPIQueue")
     }
 
+    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+
     var body: some Scene {
         WindowGroup {
             RootView()
                 .onAppear {
                     NotificationManager.shared.requestAuthorization()
-//                    BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+                    BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
                     LocationManager.shared.requestAuth()
                     Task {
                         await HealthManager.shared.requestAccessIfNeeded()
@@ -39,8 +41,10 @@ struct SupplementsApp: App {
                 }
         }
         .backgroundTask(.appRefresh("proactive-tip")) {
-//            try? await SleepProgramCoordinator.shared.sleepProgramUpdate()
-//            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+            if danieleMode {
+                await ProactiveTipper.shared.sendProactiveTip()
+            }
+            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
         }
     }
 }
