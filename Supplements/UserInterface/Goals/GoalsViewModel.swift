@@ -36,7 +36,7 @@ extension GoalsViewModel {
     func checkForUpdateGoals(force: Bool = false) async {
         if let lastGoalCheckDate {
             if !force {
-                if Calendar.current.dateComponents([.day], from: lastGoalCheckDate, to: .now).day ?? 0 < 6 {
+                if Calendar.current.dateComponents([.day], from: lastGoalCheckDate, to: .now).day ?? 7 < 6 {
                     print("Returning early since goals were last updated \(lastGoalCheckDate)")
                     return
                 }
@@ -45,62 +45,62 @@ extension GoalsViewModel {
 
         var goals = [GoalModel]()
 
-        let targetVital = VitalsViewModel.shared.vitals.sorted(by: { $0.score < $1.score }).first
+        let sortedVitals = VitalsViewModel.shared.vitals.sorted(by: { $0.score < $1.score })
+        if let vital = sortedVitals.safeAccess(at: 0), let goal = await goal(for: vital) {
+            goals.append(goal)
+        }
 
-        switch targetVital?.id {
-        case .sleepQuality:
-            goals.append(
-                await timeInDaylightGoal(
-                    summary: "Your sleep scores have been a bit low lately. Try getting some more sunlight than you normally do this week!",
-                    vitalKind: .sleepQuality
-                )
-            )
-        case .activityLevel:
-            goals.append(
-                await stepGoal(
-                    summary: "Let's improve your activty level by incorporating more steps in your day. Walking has numerous other health benefits.",
-                    vitalKind: .activityLevel
-                )
-            )
-        case .cardioFitness:
-            goals.append(
-                await runDistanceGoal(
-                    summary: "Your Cardio Fitness should be your main focus. Let's focus on running more this week.",
-                    vitalKind: .cardioFitness
-                )
-            )
-        case .bodyComposition:
-            goals.append(
-                await stepGoal(
-                    summary: "Your body composition is out of the recommended range. A quick way to start making progess is to increase your steps.",
-                    vitalKind: .bodyComposition
-                )
-            )
-        case .mobility:
-            goals.append(
-                await walkRunDistanceGoal(
-                    summary: "Your mobility should be top of mind for you this week. You can improve your mobility by walking or running more!",
-                    vitalKind: .mobility
-                )
-            )
-        case .stressLevels:
-            goals.append(
-                await meditationGoal(
-                    summary: "Your stress levels are getting quite high. Try incorporating more meditation this week.",
-                    vitalKind: .stressLevels
-                )
-            )
-        case .nutrition:
-            break
-        case nil:
-            break
+        if let vital = sortedVitals.safeAccess(at: 1), let goal = await goal(for: vital) {
+            goals.append(goal)
         }
 
         let newGoals = goals
+        lastGoalCheckDate = .now
 
         await MainActor.run {
             self.goals = newGoals
         }
+    }
+}
+
+private extension GoalsViewModel {
+
+    func goal(for vital: VitalModel) async -> GoalModel? {
+        switch vital.id {
+        case .sleepQuality:
+            return await timeInDaylightGoal(
+                summary: "Your sleep scores have been a bit low lately. Try getting some more sunlight than you normally do this week!",
+                vitalKind: .sleepQuality
+            )
+        case .activityLevel:
+            return await stepGoal(
+                summary: "Let's improve your activty level by incorporating more steps in your day. Walking has numerous other health benefits.",
+                vitalKind: .activityLevel
+            )
+        case .cardioFitness:
+            return await runDistanceGoal(
+                summary: "Your Cardio Fitness should be your main focus. Let's focus on running more this week.",
+                vitalKind: .cardioFitness
+            )
+        case .bodyComposition:
+            return await stepGoal(
+                summary: "Your body composition is out of the recommended range. A quick way to start making progess is to increase your steps.",
+                vitalKind: .bodyComposition
+            )
+        case .mobility:
+            return await walkRunDistanceGoal(
+                summary: "Your mobility should be top of mind for you this week. You can improve your mobility by walking or running more!",
+                vitalKind: .mobility
+            )
+        case .stressLevels:
+            return await meditationGoal(
+                summary: "Your stress levels are getting quite high. Try incorporating more meditation this week.",
+                vitalKind: .stressLevels
+            )
+        case .nutrition:
+            break
+        }
+        return nil
     }
 }
 
