@@ -16,31 +16,35 @@ struct VitalsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack {
-                    VitalSummaryView(
-                        hrvStatus: viewModel.hrvStatus,
-                        sleepStatus: viewModel.sleepStatus,
-                        rhrStatus: viewModel.rhrStatus
-                    )
-                    .padding(.horizontal)
+                HStack {
+                    Spacer(minLength: 0)
+                    VStack {
+//                        VitalSummaryView(
+//                            hrvStatus: viewModel.hrvStatus,
+//                            sleepStatus: viewModel.sleepStatus,
+//                            rhrStatus: viewModel.rhrStatus
+//                        )
+//                        .padding(.horizontal)
+//
+//                        HStack {
+//                            Text("Monthly Vitals")
+//                                .font(.headline)
+//                                .bold()
+//                            Spacer()
+//                        }
+//                        .padding(.top)
+//                        .padding(.horizontal)
+//                        .padding(.horizontal)
 
-                    HStack {
-                        Text("Monthly Vitals")
-                            .font(.headline)
-                            .bold()
-                        Spacer()
-                    }
-                    .padding(.top)
-                    .padding(.horizontal)
-                    .padding(.horizontal)
-
-                    ForEach(viewModel.vitals) { vital in
-                        NavigationLink(value: vital.id) {
-                            MonthlyVitalCardCell(vital: vital)
-                                .padding(.horizontal)
+                        ForEach(viewModel.vitals) { vital in
+                            NavigationLink(value: vital.id) {
+                                MonthlyVitalCardCell(vital: vital)
+                                    .padding(.horizontal)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
+                    Spacer(minLength: 0)
                 }
                 .padding(.bottom)
             }

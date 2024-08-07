@@ -34,6 +34,7 @@ struct MonthlyVitalCardCell: View {
                     .bold()
                     .fontDesign(.rounded)
                     .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()

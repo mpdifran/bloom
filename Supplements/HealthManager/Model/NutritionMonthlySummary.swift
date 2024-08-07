@@ -81,6 +81,7 @@ extension NutritionMonthlySummary {
         let averageCarbohydrates: HKQuantity?
         let averageFat: HKQuantity?
         let averageSugar: HKQuantity?
+        let averageCaffeine: HKQuantity?
         let averageVitaminA: HKQuantity?
         let averageVitaminB6: HKQuantity?
         let averageVitaminB12: HKQuantity?
@@ -162,7 +163,7 @@ extension NutritionMonthlySummary.Details {
         let allNutrients = [
             netEnergyScore,
             macrosScore,
-            sugarScore,
+            otherScore,
             vitaminScore,
             mineralScore
         ].compactMap({ $0 })
@@ -330,10 +331,31 @@ extension NutritionMonthlySummary.Details {
         return percent.invertedScaledPercent(lower: goal.lowerBound, upper: goal.upperBound)
     }
 
+    var otherScore: Double? {
+        let other = [
+            sugarScore,
+            caffeineScore
+        ].compactMap({ $0 })
+
+        if other.isEmpty {
+            return nil
+        }
+        return other.average(keyPath: \.self)
+    }
+
     var sugarScore: Double? {
         guard 
             let average = averageSugar?.doubleValue(for: .gram()),
             let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar()?.doubleValue(for: .gram())
+        else { return nil }
+
+        return average.scaledPercent(lower: goal * 2, upper: goal)
+    }
+
+    var caffeineScore: Double? {
+        guard
+            let average = averageCaffeine?.doubleValue(for: .gramUnit(with: .milli)),
+            let goal = HealthManager.shared.recommendedMaxDailyCaffeine()?.doubleValue(for: .gramUnit(with: .milli))
         else { return nil }
 
         return average.scaledPercent(lower: goal * 2, upper: goal)

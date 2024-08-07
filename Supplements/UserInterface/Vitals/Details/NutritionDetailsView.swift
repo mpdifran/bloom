@@ -33,6 +33,10 @@ struct NutritionDetailsView: View {
                     .cardContainer()
                 mineralsChart
                     .cardContainer()
+                sugarChart
+                    .cardContainer()
+                caffeineChart
+                    .cardContainer()
             }
             .padding()
             .horizontallyCentered()
@@ -343,6 +347,75 @@ private extension NutritionDetailsView {
                     )
                     .tint(.zinc)
                 }
+            }
+        }
+    }
+
+    @ViewBuilder
+    var sugarChart: some View {
+        if let details = viewModel.nutritionSummary?.details, let averageSugar = details.averageSugar {
+            VStack(alignment: .leading) {
+                VitalDetailChartTitleView(
+                    title: "Sugar",
+                    value: averageSugar.displayString(for: .gram())
+                )
+
+                Chart {
+                    BarMark(
+                        x: .value("Average Sugar", averageSugar.doubleValue(for: .gram()))
+                    )
+                    .foregroundStyle(.sugar)
+                    .cornerRadius(10)
+
+                    if let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar() {
+                        RuleMark(
+                            x: .value("Max", goal.doubleValue(for: .gram()))
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.text)
+                    }
+                }
+                .chartXScale(
+                    domain: 0...(max(averageSugar.doubleValue(for: .gram()), HealthManager.shared.recommendedMaxDailyIntakeForSugar()?.doubleValue(for: .gram()) ?? 0) * 1.1),
+                    range: .plotDimension
+                )
+                .frame(height: 60)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var caffeineChart: some View {
+        if let details = viewModel.nutritionSummary?.details, let averageCaffeine = details.averageCaffeine {
+            VStack(alignment: .leading) {
+                VitalDetailChartTitleView(
+                    title: "Caffeine",
+                    value: averageCaffeine.displayString(for: .gramUnit(with: .milli))
+                )
+
+                Chart {
+//                    BarMark(
+//                        x: .value("Average Caffeine", averageCaffeine.doubleValue(for: .gramUnit(with: .milli)))
+//                    )
+                    BarMark(
+                        x: .value("Average Caffeine", 300)
+                    )
+                    .foregroundStyle(.caffeine)
+                    .cornerRadius(10)
+
+                    if let goal = HealthManager.shared.recommendedMaxDailyCaffeine() {
+                        RuleMark(
+                            x: .value("Max", goal.doubleValue(for: .gramUnit(with: .milli)))
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.text)
+                    }
+                }
+                .chartXScale(
+                    domain: 0...(max(averageCaffeine.doubleValue(for: .gramUnit(with: .milli)), HealthManager.shared.recommendedMaxDailyCaffeine()?.doubleValue(for: .gramUnit(with: .milli)) ?? 0) * 1.1),
+                    range: .plotDimension
+                )
+                .frame(height: 60)
             }
         }
     }

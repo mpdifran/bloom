@@ -849,6 +849,13 @@ extension HealthManager {
             unit: .gram()
         )
 
+        let caffeine = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryCaffeine,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
         let vitaminA = try? await healthStore.fetchNutritionalDailyAverage(
             for: .dietaryVitaminA,
             startDate: startDate,
@@ -934,6 +941,7 @@ extension HealthManager {
             averageCarbohydrates: carbohydrates,
             averageFat: fat,
             averageSugar: sugar,
+            averageCaffeine: caffeine,
             averageVitaminA: vitaminA,
             averageVitaminB6: vitaminB6,
             averageVitaminB12: vitaminB12,
