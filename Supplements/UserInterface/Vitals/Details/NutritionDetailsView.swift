@@ -31,6 +31,8 @@ struct NutritionDetailsView: View {
                     .cardContainer(includePadding: false)
                 vitaminsChart
                     .cardContainer()
+                mineralsChart
+                    .cardContainer()
             }
             .padding()
             .horizontallyCentered()
@@ -274,6 +276,72 @@ private extension NutritionDetailsView {
                         maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
                     )
                     .tint(.vitaminE)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    var mineralsChart: some View {
+        if let details = viewModel.nutritionSummary?.details, let _ = details.mineralScore {
+            VStack(alignment: .leading) {
+                VitalDetailChartTitleView(
+                    title: "Minerals",
+                    valueLabel: "",
+                    value: details.mineralStatus ?? ""
+                )
+
+                Divider()
+
+                if let calcium = details.averageCalcium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyCalcium() {
+                    CapsuleRangeChart(
+                        title: "Calcium",
+                        unitString: "mg",
+                        value: calcium,
+                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+                    )
+                    .tint(.calcium)
+                }
+                if let iron = details.averageIron?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForIron() {
+                    CapsuleRangeChart(
+                        title: "Iron",
+                        unitString: "mg",
+                        value: iron,
+                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+                    )
+                    .tint(.iron)
+                }
+                if let magnesium = details.averageMagnesium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForMagnesium() {
+                    CapsuleRangeChart(
+                        title: "Magnesium",
+                        unitString: "mg",
+                        value: magnesium,
+                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+                    )
+                    .tint(.magnesium)
+                }
+                if let potassium = details.averagePotassium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForPotassium() {
+                    CapsuleRangeChart(
+                        title: "Potassium",
+                        unitString: "mg",
+                        value: potassium,
+                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+                    )
+                    .tint(.potassium)
+                }
+                if let zinc = details.averageZinc?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForZinc() {
+                    CapsuleRangeChart(
+                        title: "Zinc",
+                        unitString: "mg",
+                        value: zinc,
+                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+                    )
+                    .tint(.zinc)
                 }
             }
         }

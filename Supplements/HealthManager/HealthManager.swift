@@ -891,6 +891,41 @@ extension HealthManager {
             unit: .gramUnit(with: .micro)
         )
 
+        let calcium = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryCalcium,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
+        let iron = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryIron,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
+        let magnesium = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryMagnesium,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
+        let potassium = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryPotassium,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
+        let zinc = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryZinc,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
         return .init(
             basalEnergyBurned: basalEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
             activeEnergyBurned: activeEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
@@ -904,7 +939,12 @@ extension HealthManager {
             averageVitaminB12: vitaminB12,
             averageVitaminC: vitaminC,
             averageVitaminD: vitaminD,
-            averageVitaminE: vitaminE
+            averageVitaminE: vitaminE,
+            averageCalcium: calcium,
+            averageIron: iron,
+            averageMagnesium: magnesium,
+            averagePotassium: potassium,
+            averageZinc: zinc
         )
     }
 
@@ -1844,6 +1884,206 @@ extension HealthManager {
             return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...800)
         } else {
             return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...1000)
+        }
+    }
+
+    /// unit: mg
+    /// - note: https://ods.od.nih.gov/factsheets/calcium-HealthProfessional/
+    func recommendedIntakeForCalcium() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        if isPregnant || isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1300...3000)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 700...2500)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1300...3000)
+        } else if age < 19 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1300...3000)
+        } else if age < 51 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
+        } else if age < 70 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2000)
+        } else {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
+        }
+    }
+
+    /// unit: mg
+    /// - note: https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/
+    func recommendedDailyIntakeForIron() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        if isPregnant {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 27...45)
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 10...45)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 9...45)
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 7...40)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 10...40)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...40)
+        } else if age < 19 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...45)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...45)
+        } else if age < 51 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 18...45)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...45)
+        } else {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...45)
+        }
+    }
+
+    /// Magnesium from supplements specifically should be limited. Magnesium found in food is ok, and there's not really a UL for it.
+    /// unit: mg
+    /// - note: https://ods.od.nih.gov/factsheets/magnesium-healthprofessional/
+    func recommendedDailyIntakeForMagnesium() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 400...750)
+            } else if age < 31 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 350...700)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 360...710)
+            }
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 360...710)
+            } else if age < 31 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 310...660)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 320...670)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 80...145)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 130...240)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 240...590)
+        } else if age < 19 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 360...710)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 410...760)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 320...670)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 420...770)
+        }
+    }
+
+    /// There is no recommended UL, so we're just picking an arbitrary number. There is no risk to this since any amount of Potassium is safe.
+    /// unit: mg
+    /// - note: https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/
+    func recommendedDailyIntakeForPotassium() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2600...10000)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2900...10000)
+            }
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2500...10000)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2800...10000)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2000...10000)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2300...10000)
+        } else if age < 14 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2300...10000)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2500...10000)
+        } else if age < 19 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2300...10000)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3000...10000)
+        } else if age < 51 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2600...10000)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3400...10000)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2600...10000)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3400...10000)
+        }
+    }
+
+    /// unit: mg
+    /// - note: https://ods.od.nih.gov/factsheets/zinc-healthprofessional/
+    func recommendedDailyIntakeForZinc() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        if isPregnant {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 12...34)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...40)
+            }
+        }
+        if isBreastfeeding {
+            if age < 19 {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 13...34)
+            } else {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 12...40)
+            }
+        }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3...7)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 5...12)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...23)
+        } else if age < 19 {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 9...34)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...34)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...40)
+            }
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...40)
         }
     }
 }
