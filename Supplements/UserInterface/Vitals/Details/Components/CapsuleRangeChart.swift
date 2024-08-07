@@ -27,6 +27,12 @@ struct CapsuleRangeChart: View {
                 Text(title)
                     .font(.subheadline)
 
+                if isWithinRange {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.white, .tint)
+                        .font(.subheadline)
+                }
+
                 Spacer()
 
                 Text("\(value.format())\(unitString)")

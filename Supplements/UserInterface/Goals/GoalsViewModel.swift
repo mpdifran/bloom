@@ -34,8 +34,9 @@ final actor GoalsViewModel: ObservableObject {
 extension GoalsViewModel {
 
     func checkForUpdateGoals(force: Bool = false) async {
+        let isNotEmpty = await goals.isNotEmpty
         if let lastGoalCheckDate {
-            if !force {
+            if !force && isNotEmpty {
                 if Calendar.current.dateComponents([.day], from: lastGoalCheckDate, to: .now).day ?? 7 < 6 {
                     print("Returning early since goals were last updated \(lastGoalCheckDate)")
                     return
