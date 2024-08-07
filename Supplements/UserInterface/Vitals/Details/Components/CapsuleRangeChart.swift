@@ -44,7 +44,7 @@ struct CapsuleRangeChart: View {
                         .stroke(.tint, lineWidth: .barBorderWidth)
                         .frame(
                             width: (proxy.size.width) * minMaxBarWidthPercent,
-                            height: .innerBarHeight + .barBorderWidth
+                            height: .innerBarHeight + .barBorderWidth + 2
                         )
                         .zStackAlignment(.leading)
                         .offset(x: (proxy.size.width) * minStartPercent)

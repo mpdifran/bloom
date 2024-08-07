@@ -96,7 +96,7 @@ private extension NutritionDetailsView {
                     }
                     .frame(height: 60)
                     .chartXScale(
-                        domain: -(abs(netEnergy) + 300)...(abs(netEnergy) + 300),
+                        domain: -(max(abs(netEnergy), 500) + 300)...(max(abs(netEnergy), 500) + 300),
                         range: .plotDimension
                     )
                 case .last7Days:
