@@ -18,7 +18,7 @@ extension BackgroundTaskScheduler {
 
     func scheduleProactiveTipTask() {
         let request = BGAppRefreshTaskRequest(identifier: "proactive-tip")
-        request.earliestBeginDate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)
+        request.earliestBeginDate = Calendar.current.date(byAdding: .day, value: 1, to: .now)
 
         do {
             try BGTaskScheduler.shared.submit(request)
