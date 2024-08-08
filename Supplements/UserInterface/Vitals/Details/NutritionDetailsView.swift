@@ -394,11 +394,8 @@ private extension NutritionDetailsView {
                 )
 
                 Chart {
-//                    BarMark(
-//                        x: .value("Average Caffeine", averageCaffeine.doubleValue(for: .gramUnit(with: .milli)))
-//                    )
                     BarMark(
-                        x: .value("Average Caffeine", 300)
+                        x: .value("Average Caffeine", averageCaffeine.doubleValue(for: .gramUnit(with: .milli)))
                     )
                     .foregroundStyle(.caffeine)
                     .cornerRadius(10)
