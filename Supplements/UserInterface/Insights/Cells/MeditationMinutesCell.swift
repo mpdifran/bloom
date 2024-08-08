@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct MeditationMinutesCell: View {
-    let meditationMinutes: [DateQuantitySampleLegacy]
+    let meditationMinutes: [DateQuantitySample]
 
     var body: some View {
         Section {

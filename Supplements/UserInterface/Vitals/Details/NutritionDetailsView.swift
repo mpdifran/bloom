@@ -11,7 +11,7 @@ import Charts
 private extension NutritionDetailsView {
     enum EnergyChartScope {
         case monthlyAverage
-        case last7Days
+        case daily
     }
 }
 
@@ -20,7 +20,11 @@ struct NutritionDetailsView: View {
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
     @State private var energyChartScope = EnergyChartScope.monthlyAverage
-    @State private var last7DaysEnergy = [DateQuantitySampleLegacy]()
+    @State private var dailyEnergy = [DateQuantitySample]()
+    @State private var sugarChartScope = EnergyChartScope.monthlyAverage
+    @State private var dailySugar = [DateQuantitySample]()
+    @State private var caffeineChartScope = EnergyChartScope.monthlyAverage
+    @State private var dailyCaffeine = [DateQuantitySample]()
 
     var body: some View {
         ScrollView {
@@ -45,10 +49,32 @@ struct NutritionDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .groupedBackground()
         .animation(.default, value: energyChartScope)
+        .animation(.default, value: sugarChartScope)
+        .animation(.default, value: caffeineChartScope)
         .task {
             let samples = await HealthManager.shared.fetchNetEnergy(numPrevDays: 30)
             await MainActor.run {
-                self.last7DaysEnergy = samples
+                self.dailyEnergy = samples
+            }
+        }
+        .task {
+            let samples = await HealthManager.shared.fetchNutritionalDailyQuantities(
+                quantityTypeID: .dietarySugar,
+                unit: .gram(),
+                numPrevDays: 30
+            )
+            await MainActor.run {
+                self.dailySugar = samples
+            }
+        }
+        .task {
+            let samples = await HealthManager.shared.fetchNutritionalDailyQuantities(
+                quantityTypeID: .dietaryCaffeine,
+                unit: .gramUnit(with: .milli),
+                numPrevDays: 30
+            )
+            await MainActor.run {
+                self.dailyCaffeine = samples
             }
         }
     }
@@ -103,9 +129,9 @@ private extension NutritionDetailsView {
                         domain: -(max(abs(netEnergy), 500) + 300)...(max(abs(netEnergy), 500) + 300),
                         range: .plotDimension
                     )
-                case .last7Days:
+                case .daily:
                     Chart{
-                        ForEach(last7DaysEnergy) { sample in
+                        ForEach(dailyEnergy) { sample in
                             LineMark(
                                 x: .value("Date", sample.date),
                                 y: .value("Net Energy", sample.quantity)
@@ -143,7 +169,7 @@ private extension NutritionDetailsView {
 
                 Picker("", selection: $energyChartScope) {
                     Text("Daily")
-                        .tag(EnergyChartScope.last7Days)
+                        .tag(EnergyChartScope.daily)
 
                     Text("Monthly Average")
                         .tag(EnergyChartScope.monthlyAverage)
@@ -360,26 +386,69 @@ private extension NutritionDetailsView {
                     value: averageSugar.displayString(for: .gram())
                 )
 
-                Chart {
-                    BarMark(
-                        x: .value("Average Sugar", averageSugar.doubleValue(for: .gram()))
-                    )
-                    .foregroundStyle(.sugar)
-                    .cornerRadius(10)
-
-                    if let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar() {
-                        RuleMark(
-                            x: .value("Max", goal.doubleValue(for: .gram()))
+                switch sugarChartScope {
+                case .monthlyAverage:
+                    Chart {
+                        BarMark(
+                            x: .value("Average Sugar", averageSugar.doubleValue(for: .gram()))
                         )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.text)
+                        .foregroundStyle(.sugar)
+                        .cornerRadius(10)
+
+                        if let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar() {
+                            RuleMark(
+                                x: .value("Max Sugar", goal.doubleValue(for: .gram()))
+                            )
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            .foregroundStyle(.text)
+                        }
                     }
+                    .chartXScale(
+                        domain: 0...(max(averageSugar.doubleValue(for: .gram()), HealthManager.shared.recommendedMaxDailyIntakeForSugar()?.doubleValue(for: .gram()) ?? 0) * 1.1),
+                        range: .plotDimension
+                    )
+                    .frame(height: 60)
+                case .daily:
+                    Chart{
+                        ForEach(dailySugar) { sample in
+                            LineMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Daily Sugar", sample.quantity)
+                            )
+                            .foregroundStyle(.sugar)
+
+                            PointMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Daily Sugar", sample.quantity)
+                            )
+                            .foregroundStyle(.sugar)
+                        }
+
+                        if let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar() {
+                            RuleMark(
+                                y: .value("Max Sugar", goal.doubleValue(for: .gram()))
+                            )
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            .foregroundStyle(.sugar)
+
+                            RectangleMark(
+                                yStart: .value("", 0),
+                                yEnd: .value("Max Sugar", goal.doubleValue(for: .gram()))
+                            )
+                            .foregroundStyle(.sugar.opacity(0.3))
+                        }
+                    }
+                    .frame(height: 160)
                 }
-                .chartXScale(
-                    domain: 0...(max(averageSugar.doubleValue(for: .gram()), HealthManager.shared.recommendedMaxDailyIntakeForSugar()?.doubleValue(for: .gram()) ?? 0) * 1.1),
-                    range: .plotDimension
-                )
-                .frame(height: 60)
+
+                Picker("", selection: $sugarChartScope) {
+                    Text("Daily")
+                        .tag(EnergyChartScope.daily)
+
+                    Text("Monthly Average")
+                        .tag(EnergyChartScope.monthlyAverage)
+                }
+                .pickerStyle(.segmented)
             }
         }
     }
@@ -393,26 +462,69 @@ private extension NutritionDetailsView {
                     value: averageCaffeine.displayString(for: .gramUnit(with: .milli))
                 )
 
-                Chart {
-                    BarMark(
-                        x: .value("Average Caffeine", averageCaffeine.doubleValue(for: .gramUnit(with: .milli)))
-                    )
-                    .foregroundStyle(.caffeine)
-                    .cornerRadius(10)
-
-                    if let goal = HealthManager.shared.recommendedMaxDailyCaffeine() {
-                        RuleMark(
-                            x: .value("Max", goal.doubleValue(for: .gramUnit(with: .milli)))
+                switch caffeineChartScope {
+                case .monthlyAverage:
+                    Chart {
+                        BarMark(
+                            x: .value("Average Caffeine", averageCaffeine.doubleValue(for: .gramUnit(with: .milli)))
                         )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.text)
+                        .foregroundStyle(.caffeine)
+                        .cornerRadius(10)
+
+                        if let goal = HealthManager.shared.recommendedMaxDailyCaffeine() {
+                            RuleMark(
+                                x: .value("Max Caffeine", goal.doubleValue(for: .gramUnit(with: .milli)))
+                            )
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            .foregroundStyle(.text)
+                        }
                     }
+                    .chartXScale(
+                        domain: 0...(max(averageCaffeine.doubleValue(for: .gramUnit(with: .milli)), HealthManager.shared.recommendedMaxDailyCaffeine()?.doubleValue(for: .gramUnit(with: .milli)) ?? 0) * 1.1),
+                        range: .plotDimension
+                    )
+                    .frame(height: 60)
+                case .daily:
+                    Chart{
+                        ForEach(dailyCaffeine) { sample in
+                            LineMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Daily Caffeine", sample.quantity)
+                            )
+                            .foregroundStyle(.caffeine)
+
+                            PointMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Daily Caffeine", sample.quantity)
+                            )
+                            .foregroundStyle(.caffeine)
+                        }
+
+                        if let goal = HealthManager.shared.recommendedMaxDailyCaffeine() {
+                            RuleMark(
+                                y: .value("Max Caffeine", goal.doubleValue(for: .gramUnit(with: .milli)))
+                            )
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            .foregroundStyle(.caffeine)
+
+                            RectangleMark(
+                                yStart: .value("", 0),
+                                yEnd: .value("Max Caffeine", goal.doubleValue(for: .gramUnit(with: .milli)))
+                            )
+                            .foregroundStyle(.caffeine.opacity(0.3))
+                        }
+                    }
+                    .frame(height: 160)
                 }
-                .chartXScale(
-                    domain: 0...(max(averageCaffeine.doubleValue(for: .gramUnit(with: .milli)), HealthManager.shared.recommendedMaxDailyCaffeine()?.doubleValue(for: .gramUnit(with: .milli)) ?? 0) * 1.1),
-                    range: .plotDimension
-                )
-                .frame(height: 60)
+
+                Picker("", selection: $caffeineChartScope) {
+                    Text("Daily")
+                        .tag(EnergyChartScope.daily)
+
+                    Text("Monthly Average")
+                        .tag(EnergyChartScope.monthlyAverage)
+                }
+                .pickerStyle(.segmented)
             }
         }
     }

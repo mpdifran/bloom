@@ -73,8 +73,8 @@ final class VitalsViewModel: ObservableObject {
     @Published var stressSummary: StressMonthlySummary?
     @Published var nutritionSummary: NutritionMonthlySummary?
 
-    @Published var heartRateVariability = [DateQuantitySampleLegacy]()
-    @Published var restingHeartRate = [DateQuantitySampleLegacy]()
+    @Published var heartRateVariability = [DateQuantitySample]()
+    @Published var restingHeartRate = [DateQuantitySample]()
     @Published var basalEnergyBurned: (Double, Int)?
     @Published var activeEnergyBurned: (Double, Int)?
     @Published var lastMonthBasalEnergyBurned: (Double, Int)?
@@ -411,8 +411,8 @@ private extension VitalsViewModel {
 
     func createVitalStatuses(
         sleepAnalysis: [SleepAnalysis],
-        heartRateVariability: [DateQuantitySampleLegacy],
-        restingHeartRate: [DateQuantitySampleLegacy]
+        heartRateVariability: [DateQuantitySample],
+        restingHeartRate: [DateQuantitySample]
     ) {
         if let firstHRV = heartRateVariability.first {
             let average = heartRateVariability.average(keyPath: \.quantity)

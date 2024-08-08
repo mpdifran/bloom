@@ -13,9 +13,9 @@ final class InsightsViewModel: ObservableObject {
 
     @Published var sleepAnalysis = [SleepAnalysis]()
     @Published var workoutSummary = [WorkoutSummary]()
-    @Published var timeInDaylight = [DateQuantitySampleLegacy]()
-    @Published var restingHeartRate = [DateQuantitySampleLegacy]()
-    @Published var meditationMinutes = [DateQuantitySampleLegacy]()
+    @Published var timeInDaylight = [DateQuantitySample]()
+    @Published var restingHeartRate = [DateQuantitySample]()
+    @Published var meditationMinutes = [DateQuantitySample]()
 
     private init() {
         HealthManager.shared.$sleepAnalysis7Days

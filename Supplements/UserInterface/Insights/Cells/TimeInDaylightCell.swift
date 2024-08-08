@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct TimeInDaylightCell: View {
-    let timeInDaylight: [DateQuantitySampleLegacy]
+    let timeInDaylight: [DateQuantitySample]
 
     var body: some View {
         Section {

@@ -27,7 +27,7 @@ struct UserInfoModel: Codable, Equatable {
     let dailyExerciseMinutes: QuantityModel?
     let dailySteps: QuantityModel?
     let dailyHeartRateVariability: QuantityModel?
-    let restingHeartRate: [DateQuantitySampleLegacy]
+    let restingHeartRate: [DateQuantitySample]
     let vO2Max: QuantityModel?
     let timeInDaylight: QuantityModel?
     let sleepAnalysis: [SleepAnalysis]

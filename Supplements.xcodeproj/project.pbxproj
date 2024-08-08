@@ -35,7 +35,7 @@
 		FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705242C10ADF1000D4B3D /* SleepEnvironmentEnums.swift */; };
 		FF1705292C10DC67000D4B3D /* WorkoutSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705282C10DC67000D4B3D /* WorkoutSummaryCell.swift */; };
 		FF17052B2C10E1E1000D4B3D /* TimeInDaylightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17052A2C10E1E1000D4B3D /* TimeInDaylightCell.swift */; };
-		FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17052C2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift */; };
+		FF17052D2C10E64C000D4B3D /* DateQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */; };
 		FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */; };
 		FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */; };
 		FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */; };
@@ -385,7 +385,7 @@
 		FF1705242C10ADF1000D4B3D /* SleepEnvironmentEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepEnvironmentEnums.swift; sourceTree = "<group>"; };
 		FF1705282C10DC67000D4B3D /* WorkoutSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummaryCell.swift; sourceTree = "<group>"; };
 		FF17052A2C10E1E1000D4B3D /* TimeInDaylightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInDaylightCell.swift; sourceTree = "<group>"; };
-		FF17052C2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateQuantitySampleLegacy.swift; sourceTree = "<group>"; };
+		FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateQuantitySample.swift; sourceTree = "<group>"; };
 		FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Average.swift"; sourceTree = "<group>"; };
 		FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
 		FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brightness.swift"; sourceTree = "<group>"; };
@@ -1313,7 +1313,7 @@
 			isa = PBXGroup;
 			children = (
 				FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */,
-				FF17052C2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift */,
+				FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */,
 				FFF66FA82C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift */,
 				FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */,
 				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
@@ -1920,7 +1920,7 @@
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
-				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
+				FF17052D2C10E64C000D4B3D /* DateQuantitySample.swift in Sources */,
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
 				FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
