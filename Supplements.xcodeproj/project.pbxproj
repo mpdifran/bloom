@@ -132,6 +132,7 @@
 		FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79C82C62C1D10095C36D /* PreferencesView.swift */; };
 		FF8F79CB2C62CE070095C36D /* PillRangeChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CA2C62CE070095C36D /* PillRangeChart.swift */; };
 		FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CC2C63BB570095C36D /* ProactiveTipper.swift */; };
+		FF8F79CF2C64546C0095C36D /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CE2C64546C0095C36D /* Color+Codable.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */; };
@@ -480,6 +481,7 @@
 		FF8F79C82C62C1D10095C36D /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		FF8F79CA2C62CE070095C36D /* PillRangeChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillRangeChart.swift; sourceTree = "<group>"; };
 		FF8F79CC2C63BB570095C36D /* ProactiveTipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipper.swift; sourceTree = "<group>"; };
+		FF8F79CE2C64546C0095C36D /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummary.swift; sourceTree = "<group>"; };
@@ -950,6 +952,7 @@
 				FFC77AD82C541DE9003E5F85 /* Double+Format.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
+				FF8F79CE2C64546C0095C36D /* Color+Codable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1943,6 +1946,7 @@
 				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
 				FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
+				FF8F79CF2C64546C0095C36D /* Color+Codable.swift in Sources */,
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,

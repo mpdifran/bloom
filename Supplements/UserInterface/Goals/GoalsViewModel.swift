@@ -18,85 +18,126 @@ private extension Double {
 final actor GoalsViewModel: ObservableObject {
     static let shared = GoalsViewModel()
 
-    @MainActor @Published var goals = [GoalModel]()
-
-    private var lastGoalCheckDate: Date? {
-        didSet { UserDefaults.group.set(lastGoalCheckDate, forKey: "lastGoalCheckDate") }
+    @MainActor @Published var goals = [GoalModel]() {
+        didSet {
+            do {
+                let data = try JSONEncoder.main.encode(goals)
+                UserDefaults.group.set(data, forKey: "GoalsViewModel.goals")
+            } catch {
+                print(error)
+            }
+        }
     }
 
-    private init() { 
-        if let date = UserDefaults.group.object(forKey: "lastGoalCheckDate") as? Date {
-            self.lastGoalCheckDate = date
+    private init() {
+        Task {
+            await loadGoals()
         }
     }
 }
 
 extension GoalsViewModel {
 
+    func loadGoals() async {
+        if
+            let data = UserDefaults.group.data(forKey: "GoalsViewModel.goals"),
+            let goals = try? JSONDecoder.main.decode([GoalModel].self, from: data)
+        {
+            await MainActor.run {
+                self.goals = goals
+            }
+        }
+    }
+
     func checkForUpdateGoals(force: Bool = false) async {
-        let isNotEmpty = await goals.isNotEmpty
-        if let lastGoalCheckDate {
-            if !force && isNotEmpty {
-                if Calendar.current.dateComponents([.day], from: lastGoalCheckDate, to: .now).day ?? 7 < 6 {
-                    print("Returning early since goals were last updated \(lastGoalCheckDate)")
-                    return
-                }
+        await loadGoals()
+
+        if let goalDueDate = await goals.first?.dueDate {
+            if goalDueDate > .now && !force {
+                print("Returning early since goals are still valid")
+                return
             }
         }
 
+        guard let dueDate = Calendar.current.startOfNextWeek(for: .now) else { return }
+
         var goals = [GoalModel]()
 
+        var vitalNames = [String]()
         let sortedVitals = VitalsViewModel.shared.vitals.sorted(by: { $0.score < $1.score })
-        if let vital = sortedVitals.safeAccess(at: 0), let goal = await goal(for: vital) {
+        if let vital = sortedVitals.safeAccess(at: 0), let goal = await goal(for: vital, dueDate: dueDate) {
             goals.append(goal)
+            vitalNames.append(vital.id.name)
         }
 
-        if let vital = sortedVitals.safeAccess(at: 1), let goal = await goal(for: vital) {
+        if let vital = sortedVitals.safeAccess(at: 1), let goal = await goal(for: vital, dueDate: dueDate) {
             goals.append(goal)
+            vitalNames.append(vital.id.name)
         }
 
         let newGoals = goals
-        lastGoalCheckDate = .now
 
         await MainActor.run {
             self.goals = newGoals
         }
+
+        let listFormatter = ListFormatter()
+        let string = listFormatter.string(from: vitalNames)
+
+        let subtitle: String
+        if let string {
+            subtitle = "Check out your new goals this week targeting \(string)!"
+        } else {
+            subtitle = "Check out your new goals this week!"
+        }
+
+        await NotificationManager.shared.sendNotification(
+            title: "New Goals Available",
+            subtitle: subtitle,
+            categoryID: .CategoryID.goalsMessage
+        )
     }
 }
 
 private extension GoalsViewModel {
 
-    func goal(for vital: VitalModel) async -> GoalModel? {
+    func goal(for vital: VitalModel, dueDate: Date) async -> GoalModel? {
         switch vital.id {
         case .sleepQuality:
             return await timeInDaylightGoal(
                 summary: "Your sleep scores have been a bit low lately. Try getting some more sunlight than you normally do this week!",
-                vitalKind: .sleepQuality
+                vitalKind: .sleepQuality,
+                dueDate: dueDate
             )
         case .activityLevel:
             return await stepGoal(
                 summary: "Let's improve your activty level by incorporating more steps in your day. Walking has numerous other health benefits.",
-                vitalKind: .activityLevel
+                vitalKind: .activityLevel,
+                dueDate: dueDate
             )
         case .cardioFitness:
             return await runDistanceGoal(
                 summary: "Your Cardio Fitness should be your main focus. Let's focus on running more this week.",
-                vitalKind: .cardioFitness
+                vitalKind: .cardioFitness,
+                dueDate: dueDate
             )
         case .bodyComposition:
             return await stepGoal(
                 summary: "Your body composition is out of the recommended range. A quick way to start making progess is to increase your steps.",
-                vitalKind: .bodyComposition
+                vitalKind: .bodyComposition,
+                dueDate: dueDate
             )
         case .mobility:
             return await walkRunDistanceGoal(
                 summary: "Your mobility should be top of mind for you this week. You can improve your mobility by walking or running more!",
-                vitalKind: .mobility
+                vitalKind: .mobility,
+                dueDate: dueDate
             )
         case .stressLevels:
             return await meditationGoal(
                 summary: "Your stress levels are getting quite high. Try incorporating more meditation this week.",
-                vitalKind: .stressLevels
+                vitalKind: .stressLevels,
+                dueDate: dueDate
             )
         case .nutrition:
             break
@@ -107,7 +148,7 @@ private extension GoalsViewModel {
 
 private extension GoalsViewModel {
 
-    func timeInDaylightGoal(summary: String, vitalKind: VitalModel.Kind) async -> GoalModel {
+    func timeInDaylightGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
         let average = await HealthManager.shared.fetchWeeklyAverage(
             for: .timeInDaylight,
             unit: .minute(),
@@ -118,7 +159,7 @@ private extension GoalsViewModel {
             title: "Get More Sunlight",
             systemImage: "sun.max.fill",
             summary: summary,
-            color: .orange,
+            dueDate: dueDate,
             metric: .init(
                 value: max(average * .goalMultiplier, 200),
                 measurement: .timeInDaylight
@@ -127,7 +168,7 @@ private extension GoalsViewModel {
         )
     }
 
-    func walkRunDistanceGoal(summary: String, vitalKind: VitalModel.Kind) async -> GoalModel {
+    func walkRunDistanceGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
         let average = await HealthManager.shared.fetchWeeklyAverage(
             for: .distanceWalkingRunning,
             unit: .meterUnit(with: .kilo),
@@ -138,7 +179,7 @@ private extension GoalsViewModel {
             title: "Increase Walking + Running Distance",
             systemImage: "figure.walk",
             summary: summary,
-            color: .blue,
+            dueDate: dueDate,
             metric: .init(
                 value: max(average * .goalMultiplier, 1),
                 measurement: .walkRunDistance
@@ -147,7 +188,7 @@ private extension GoalsViewModel {
         )
     }
 
-    func runDistanceGoal(summary: String, vitalKind: VitalModel.Kind) async -> GoalModel {
+    func runDistanceGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
         let workouts = await HealthManager.shared.fetchWorkoutSummaries(
             activityType: .running,
             numWeeks: .numWeeksPastAverage
@@ -159,7 +200,7 @@ private extension GoalsViewModel {
             title: "Run For Longer Distances",
             systemImage: "figure.run",
             summary: summary,
-            color: .green,
+            dueDate: dueDate,
             metric: .init(
                 value: max(average * .goalMultiplier, 2),
                 measurement: .runDistance
@@ -168,7 +209,7 @@ private extension GoalsViewModel {
         )
     }
 
-    func stepGoal(summary: String, vitalKind: VitalModel.Kind) async -> GoalModel {
+    func stepGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
         let average = await HealthManager.shared.fetchWeeklyAverage(
             for: .stepCount,
             unit: .count(),
@@ -179,7 +220,7 @@ private extension GoalsViewModel {
             title: "Increase Step Count",
             systemImage: "figure.walk",
             summary: summary,
-            color: .blue,
+            dueDate: dueDate,
             metric: .init(
                 value: max(average * .goalMultiplier, 1000),
                 measurement: .stepCount
@@ -188,14 +229,14 @@ private extension GoalsViewModel {
         )
     }
 
-    func meditationGoal(summary: String, vitalKind: VitalModel.Kind) async -> GoalModel {
+    func meditationGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
         let average = await HealthManager.shared.fetchWeeklyAverageMeditationMinutes(numWeeks: .numWeeksPastAverage)
 
         return GoalModel(
             title: "Meditate More Often",
             systemImage: "figure.mind.and.body",
             summary: summary,
-            color: .remSleep,
+            dueDate: dueDate,
             metric: .init(
                 value: max(average * .goalMultiplier, 10),
                 measurement: .meditationMinutes

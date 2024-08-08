@@ -15,6 +15,7 @@ extension String {
     enum CategoryID {
         static let goodMorning = "good-morning"
         static let chatMessage = "chat-message"
+        static let goalsMessage = "goals-message"
     }
 }
 

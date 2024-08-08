@@ -22,18 +22,31 @@ struct GoalCell: View {
             HStack(alignment: .top) {
                 Image(systemName: goal.systemImage)
                     .font(.largeTitle)
-                    .foregroundStyle(goal.color)
+                    .foregroundStyle(goal.metric.measurement.color)
                 VStack(alignment: .leading) {
-                    Text(goal.title)
-                        .font(.title3)
-                        .bold()
-                    Text(goal.summary)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    HStack {
+                        Text(goal.title)
+                            .font(.title3)
+                            .bold()
+                        Spacer(minLength: 0)
+
+                        VStack(alignment: .trailing) {
+                            Text("Due")
+                                .foregroundStyle(.secondary)
+                                .font(.caption2)
+                            Text("\(goal.dueDate, formatter: DateFormatter.justRelativeDateMedium)")
+                                .font(.subheadline)
+                        }
+                    }
+
                 }
             }
 
             barChart
+
+            Text(goal.summary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
 
             if let targetVitalModel {
                 TargetVitalComponentView(vital: targetVitalModel)
@@ -54,14 +67,14 @@ private extension GoalCell {
                 x: .value("Current Time", currentGoalValue),
                 y: .value("Week", "This Week")
             )
-            .foregroundStyle(goal.color)
+            .foregroundStyle(goal.metric.measurement.color)
             .cornerRadius(10)
 
             RuleMark(
                 x: .value("Goal", goal.metric.value)
             )
             .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-            .foregroundStyle(goal.color.opacity(0.5))
+            .foregroundStyle(goal.metric.measurement.color.opacity(0.5))
         }
         .chartXAxis {
             AxisMarks {
@@ -167,7 +180,7 @@ private extension GoalCell {
                 title: "Get More Sunlight",
                 systemImage: "sun.max.fill",
                 summary: "More sun is good for your body. It also gives you Vitamin D! Aim to get 50 minutes of sunlight this week.",
-                color: .orange,
+                dueDate: Date().addingTimeInterval(215453),
                 metric: .init(
                     value: 300,
                     measurement: .timeInDaylight

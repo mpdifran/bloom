@@ -32,6 +32,9 @@ struct TargetVitalComponentView: View {
                     .bold()
                     .fontDesign(.rounded)
                     .foregroundStyle(vital.color)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .multilineTextAlignment(.trailing)
 
                 Group {
                     switch vital.trend {

@@ -48,7 +48,13 @@ extension Calendar {
     }
 
     func startOfWeek(for date: Date) -> Date? {
-        let components = Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-        return Calendar.current.date(from: components)
+        let components = self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        return self.date(from: components)
+    }
+
+    func startOfNextWeek(for date: Date) -> Date? {
+        guard let nextWeek = self.date(byAdding: .day, value: 7, to: date) else { return nil }
+
+        return self.startOfWeek(for: nextWeek)
     }
 }
