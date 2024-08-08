@@ -28,6 +28,10 @@ struct GoalCell: View {
                         Text(goal.title)
                             .font(.title3)
                             .bold()
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+
                         Spacer(minLength: 0)
 
                         VStack(alignment: .trailing) {

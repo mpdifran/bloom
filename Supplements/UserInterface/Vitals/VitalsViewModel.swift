@@ -90,37 +90,37 @@ final class VitalsViewModel: ObservableObject {
 private extension VitalsViewModel {
 
     func observeData() {
-        do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.heartRateVariabilitySDNN)) {
-                let heartRateVariability = await HealthManager.shared.fetchHeartRateVariability(periodDays: 28)
-                await MainActor.run {
-                    self.heartRateVariability = heartRateVariability
-                }
-            }
-        } catch {
-            print(error)
-        }
-        do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate)) {
-                let restingHeartRate = await HealthManager.shared.fetchRestingHeartRate(period: 28)
-                await MainActor.run {
-                    self.restingHeartRate = restingHeartRate
-                }
-            }
-        } catch {
-            print(error)
-        }
-
-        HealthManager.shared.$sleepAnalysis7Days
-            .combineLatest($heartRateVariability, $restingHeartRate)
-            .sink(receiveValue: { [weak self] (sleepAnalysis, heartRateVariability, restingHeartRate) in
-                self?.createVitalStatuses(
-                    sleepAnalysis: sleepAnalysis ?? [],
-                    heartRateVariability: heartRateVariability,
-                    restingHeartRate: restingHeartRate
-                )
-            })
-            .store(in: &cancellables)
+//        do {
+//            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.heartRateVariabilitySDNN)) {
+//                let heartRateVariability = await HealthManager.shared.fetchHeartRateVariability(periodDays: 28)
+//                await MainActor.run {
+//                    self.heartRateVariability = heartRateVariability
+//                }
+//            }
+//        } catch {
+//            print(error)
+//        }
+//        do {
+//            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate)) {
+//                let restingHeartRate = await HealthManager.shared.fetchRestingHeartRate(period: 28)
+//                await MainActor.run {
+//                    self.restingHeartRate = restingHeartRate
+//                }
+//            }
+//        } catch {
+//            print(error)
+//        }
+//
+//        HealthManager.shared.$sleepAnalysis7Days
+//            .combineLatest($heartRateVariability, $restingHeartRate)
+//            .sink(receiveValue: { [weak self] (sleepAnalysis, heartRateVariability, restingHeartRate) in
+//                self?.createVitalStatuses(
+//                    sleepAnalysis: sleepAnalysis ?? [],
+//                    heartRateVariability: heartRateVariability,
+//                    restingHeartRate: restingHeartRate
+//                )
+//            })
+//            .store(in: &cancellables)
 
         do {
             try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.basalEnergyBurned)) {
@@ -164,6 +164,7 @@ private extension VitalsViewModel {
                     lastMonthAverageActiveEnergyBurned: lastMonthActiveEnergy.0
                 )
             }
+            .receive(on: DispatchQueue.main)
             .assign(to: &$energyBurnedSummary)
 
         HealthManager.shared.$sleepAnalysis30Days
@@ -181,6 +182,7 @@ private extension VitalsViewModel {
                     lastMonthAverageSleepScore: lastMonth.average(keyPath: \.overallScoreDouble)
                 )
             }
+            .receive(on: DispatchQueue.main)
             .assign(to: &$sleepVitalsSummary)
 
         do {

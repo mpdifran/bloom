@@ -550,53 +550,20 @@ extension NSPredicate: @unchecked Sendable { }
 
 extension HKHealthStore {
 
-    func observeAsyncChanges(
-        sampleType: HKSampleType,
-        predicate: NSPredicate? = nil,
-        frequency: HKUpdateFrequency = .hourly,
-        performQuery: @escaping () async throws -> [HKSample]
-    ) -> AsyncThrowingStream<[HKSample], Error> {
-        AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    try await enableBackgroundDelivery(for: sampleType, frequency: frequency)
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-
-                let observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { (query, completionHandler, error) in
-                    if let error {
-                        continuation.finish(throwing: error)
-                        return
-                    }
-                    
-                    Task {
-                        do {
-                            let samples = try await performQuery()
-                            continuation.yield(samples)
-                        } catch {
-                            continuation.finish(throwing: error)
-                        }
-                        completionHandler()
-                    }
-                }
-
-                execute(observerQuery)
-            }
-        }
-    }
-
     func observeChanges(
         sampleType: HKSampleType,
         predicate: NSPredicate? = nil,
         frequency: HKUpdateFrequency = .hourly,
+        backgroundUpdates: Bool = false,
         performQuery: @escaping () async throws -> Void
     ) throws {
         Task {
-            do {
-                try await enableBackgroundDelivery(for: sampleType, frequency: frequency)
-            } catch {
-                throw error
+            if backgroundUpdates {
+                do {
+                    try await enableBackgroundDelivery(for: sampleType, frequency: frequency)
+                } catch {
+                    throw error
+                }
             }
 
             let observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { (query, completionHandler, error) in
@@ -623,14 +590,17 @@ extension HKHealthStore {
     func observeChanges(
         sampleTypes: [HKSampleType],
         frequency: HKUpdateFrequency = .hourly,
+        backgroundUpdates: Bool = false,
         performQuery: @escaping () async throws -> Void
     ) throws {
         Task {
             for sampleType in sampleTypes {
-                do {
-                    try await enableBackgroundDelivery(for: sampleType, frequency: frequency)
-                } catch {
-                    throw error
+                if backgroundUpdates {
+                    do {
+                        try await enableBackgroundDelivery(for: sampleType, frequency: frequency)
+                    } catch {
+                        throw error
+                    }
                 }
 
                 let observerQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) { (query, completionHandler, error) in
