@@ -133,6 +133,7 @@
 		FF8F79CB2C62CE070095C36D /* PillRangeChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CA2C62CE070095C36D /* PillRangeChart.swift */; };
 		FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CC2C63BB570095C36D /* ProactiveTipper.swift */; };
 		FF8F79CF2C64546C0095C36D /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CE2C64546C0095C36D /* Color+Codable.swift */; };
+		FF8F79D12C655D7D0095C36D /* StressDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D02C655D7D0095C36D /* StressDetailsView.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */; };
@@ -482,6 +483,7 @@
 		FF8F79CA2C62CE070095C36D /* PillRangeChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillRangeChart.swift; sourceTree = "<group>"; };
 		FF8F79CC2C63BB570095C36D /* ProactiveTipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipper.swift; sourceTree = "<group>"; };
 		FF8F79CE2C64546C0095C36D /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
+		FF8F79D02C655D7D0095C36D /* StressDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StressDetailsView.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummary.swift; sourceTree = "<group>"; };
@@ -1048,6 +1050,7 @@
 			children = (
 				FF8F79BC2C61A3CB0095C36D /* Components */,
 				FF8F79BA2C6189790095C36D /* NutritionDetailsView.swift */,
+				FF8F79D02C655D7D0095C36D /* StressDetailsView.swift */,
 				FF8F79B42C5FD5360095C36D /* BodyCompositionDetailsView.swift */,
 			);
 			path = Details;
@@ -1907,6 +1910,7 @@
 				FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
+				FF8F79D12C655D7D0095C36D /* StressDetailsView.swift in Sources */,
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
 				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
 				FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */,

@@ -1,0 +1,118 @@
+//
+//  StressDetailsView.swift
+//  Supplements
+//
+//  Created by Mark DiFranco on 2024-08-08.
+//
+
+import SwiftUI
+import Charts
+
+struct StressDetailsView: View {
+    
+    @State private var restingHeartRateSamples = [DateQuantitySample]()
+
+    @ObservedObject private var viewModel = VitalsViewModel.shared
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                restingHeartRateChart
+                    .cardContainer()
+            }
+            .padding()
+            .horizontallyCentered()
+        }
+        .navigationTitle("Stress Levels")
+        .navigationBarTitleDisplayMode(.inline)
+        .groupedBackground()
+        .task {
+            let samples = await HealthManager.shared.fetchRestingHeartRate(period: 30)
+            await MainActor.run {
+                self.restingHeartRateSamples = samples
+            }
+        }
+    }
+}
+
+private extension StressDetailsView {
+
+    var restingHeartRateChart: some View {
+        VStack(alignment: .leading) {
+            if let restingHeartRate = viewModel.stressSummary?.restingHeartRate?.format() {
+                VitalDetailChartTitleView(
+                    title: "Resting Heart Rate",
+                    value: "\(restingHeartRate) bpm"
+                )
+            } else {
+                VitalDetailChartTitleView(
+                    title: "Resting Heart Rate",
+                    valueLabel: "",
+                    value: ""
+                )
+            }
+
+            Chart {
+                ForEach(restingHeartRateSamples) { sample in
+                    let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+                    RuleMark(y: .value("Min RHR", goal.0))
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.remSleep)
+
+                    RuleMark(y: .value("Max RHR", goal.1))
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.remSleep)
+
+                    LineMark(
+                        x: .value("Date", sample.date),
+                        y: .value("Resting Heart Rate", sample.quantity)
+                    )
+                    .foregroundStyle(.remSleep)
+                    .interpolationMethod(.catmullRom)
+
+                    RectangleMark(
+                        yStart: .value("Min RHR", goal.0),
+                        yEnd: .value("Max RHR", goal.1)
+                    )
+                    .foregroundStyle(.coreSleep.opacity(0.01))
+                }
+            }
+            .chartYScale(
+                domain: (minRestingHeartRate ?? 0)...(maxRestingHeartRate ?? 100),
+                range: .plotDimension
+            )
+            .frame(height: 160)
+
+            if let restingHeartRateDescription {
+                Text(restingHeartRateDescription)
+            }
+        }
+    }
+
+    var minRestingHeartRate: Double? {
+        restingHeartRateSamples.min(keyPath: \.quantity)
+    }
+
+    var maxRestingHeartRate: Double? {
+        restingHeartRateSamples.max(keyPath: \.quantity)
+    }
+
+    var restingHeartRateDescription: String? {
+        guard let restingHeartRate = viewModel.stressSummary?.restingHeartRate else {
+            return nil
+        }
+
+        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+        if restingHeartRate < goal.1 {
+            return "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer."
+        } else {
+            return "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease."
+        }
+    }
+}
+
+#Preview {
+    StressDetailsView()
+}

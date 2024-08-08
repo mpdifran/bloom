@@ -55,6 +55,7 @@ struct VitalsView: View {
                 case .sleepQuality: TodayView()
                 case .bodyComposition: BodyCompositionDetailsView()
                 case .nutrition: NutritionDetailsView()
+                case .stressLevels: StressDetailsView()
                 default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
                 }
             }
