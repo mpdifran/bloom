@@ -794,6 +794,49 @@ extension HealthManager {
         )) ?? []
     }
 
+    func fetchDietaryNutritionPercentageThisWeek(
+        quantityTypeID: HKQuantityTypeIdentifier,
+        caloriesPerGram: Double
+    ) async -> Double {
+        do {
+            let endDate = Date.now
+            guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return 0 }
+
+            let quantity = try await healthStore.fetchQuantity(
+                for: quantityTypeID,
+                start: startDate,
+                end: endDate
+            )
+            let dietaryEnergy = try await healthStore.fetchQuantity(
+                for: .dietaryEnergyConsumed,
+                start: startDate,
+                end: endDate
+            )
+
+            return (quantity.doubleValue(for: .gram()) * caloriesPerGram) / dietaryEnergy.doubleValue(for: .largeCalorie())
+        } catch {
+            print(error)
+        }
+        return 0
+    }
+
+    func fetchNutritionDailyAverageThisWeek(quantityTypeID: HKQuantityTypeIdentifier, unit: HKUnit) async -> Double {
+        do {
+            let endDate = Date.now
+            guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return 0 }
+
+            let average = try await healthStore.fetchNutritionalDailyAverage(
+                for: quantityTypeID,
+                startDate: startDate,
+                endDate: endDate,
+                unit: unit
+            )
+        } catch {
+            print(error)
+        }
+        return 0
+    }
+
     func fetchNutritionMonthlySummary() async -> NutritionMonthlySummary? {
         let endDate = Date.now
 
@@ -1488,29 +1531,6 @@ extension HealthManager {
             return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 100)
         } else {
             return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 400)
-        }
-    }
-
-    /// milligrams (mg)
-    /// - note: https://ods.od.nih.gov/factsheets/Calcium-Consumer/
-    func recommendedDailyCalcium() -> HKQuantityRange? {
-        guard let age = healthStore.age() else { return nil }
-
-        if age < 4 {
-            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 700...2500)
-        } else if age < 9 {
-            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
-        } else if age < 19 {
-            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1300...3000)
-        } else if age < 51 {
-            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
-        } else if age < 71 {
-            if healthStore.sex() == .female {
-                return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
-            }
-            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2000)
-        } else {
-            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
         }
     }
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import HealthKit
 
 private extension Int {
     static let numWeeksPastAverage: Int = 6
@@ -140,8 +141,208 @@ private extension GoalsViewModel {
                 dueDate: dueDate
             )
         case .nutrition:
-            break
+            return await nutritionGoal(dueDate: dueDate)
         }
+    }
+
+    func nutritionGoal(dueDate: Date) async -> GoalModel? {
+        guard let nutritionSummary = VitalsViewModel.shared.nutritionSummary else { return nil }
+
+        if let macros = nutritionSummary.details.macros {
+            let proteinGoal = HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy()
+            let carbsGoal = HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy()
+            let fatGoal = HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy()
+
+            if macros.proteinPercent < proteinGoal.lowerBound {
+                return GoalModel(
+                    title: "Increase Protein Intake",
+                    systemImage: "fork.knife",
+                    summary: "Try and increase your protein intake. You can find protein in things like meat, greek yogurt, chickpeas, or edamame.",
+                    dueDate: dueDate,
+                    metric: .init(
+                        value: proteinGoal.lowerBound,
+                        measurement: .increaseProtein
+                    ),
+                    vitalKind: .nutrition
+                )
+            }
+            if macros.carbsPercent < carbsGoal.lowerBound {
+                return GoalModel(
+                    title: "Increase Carbohydrate Intake",
+                    systemImage: "fork.knife",
+                    summary: "Try and increase your carbohydrate intake. You can get more carbs by eating things like whole wheat bread, potatoes, bananas, or yogurt.",
+                    dueDate: dueDate,
+                    metric: .init(
+                        value: carbsGoal.lowerBound,
+                        measurement: .increaseCarbs
+                    ),
+                    vitalKind: .nutrition
+                )
+            }
+            if macros.fatPercent < fatGoal.lowerBound {
+                return GoalModel(
+                    title: "Increase Fat",
+                    systemImage: "fork.knife",
+                    summary: "Focus on increasing your fat intake. Try eating things like avocados, nuts, salmon, eggs, or cheese to get more healthy fat.",
+                    dueDate: dueDate,
+                    metric: .init(
+                        value: carbsGoal.lowerBound,
+                        measurement: .increaseCarbs
+                    ),
+                    vitalKind: .nutrition
+                )
+            }
+        }
+
+        if 
+//            nutritionSummary.details.vitaminScore ?? 1 < nutritionSummary.details.mineralScore ?? 0,
+            let vitaminGoal = nutrientVitaminGoal(nutritionSummary: nutritionSummary, dueDate: dueDate) 
+        {
+            return vitaminGoal
+        }
+
+//        if
+//            nutritionSummary.details.mineralScore ?? 1 < nutritionSummary.details.vitaminScore ?? 0,
+//            let mineralGoal = nutrientMineralGoal(nutritionSummary: nutritionSummary, dueDate: dueDate)
+//        {
+//            return mineralGoal
+//        }
+
+        return nil
+    }
+
+    func nutrientVitaminGoal(nutritionSummary: NutritionMonthlySummary, dueDate: Date) -> GoalModel? {
+        let microgram = HKUnit.gramUnit(with: .micro)
+        let milligram = HKUnit.gramUnit(with: .milli)
+
+        if
+            let vitamin = nutritionSummary.details.averageVitaminA,
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminA(),
+            vitamin.doubleValue(for: microgram) < goal.lowerDoubleValue(for: microgram)
+        {
+            return GoalModel(
+                title: "Get More Vitamin A",
+                systemImage: "arrow.up.circle",
+                summary: "Your Vitamin A levels are low. Try eating things like liver, fish, eggs, dark leafy greens, orange + yellow vegetables, or mangoes.",
+                dueDate: dueDate,
+                metric: .init(
+                    value: goal.lowerDoubleValue(for: microgram),
+                    measurement: .increaseVitaminA
+                ),
+                vitalKind: .nutrition
+            )
+        }
+        if
+            let vitamin = nutritionSummary.details.averageVitaminB6,
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminB6(),
+            vitamin.doubleValue(for: milligram) < goal.lowerDoubleValue(for: milligram)
+        {
+            return GoalModel(
+                title: "Get More Vitamin B6",
+                systemImage: "arrow.up.circle",
+                summary: "Your Vitamin B6 levels are low. Try eating things like chicken breast, tuna, beef, chickpeas, bananas, spinach, or oatmeal.",
+                dueDate: dueDate,
+                metric: .init(
+                    value: goal.lowerDoubleValue(for: milligram),
+                    measurement: .increaseVitaminB6
+                ),
+                vitalKind: .nutrition
+            )
+        }
+        if
+            let vitamin = nutritionSummary.details.averageVitaminB12,
+            let goal = HealthManager.shared.recommendedMinDailyIntakeForVitaminB12(),
+            vitamin.doubleValue(for: microgram) < goal.doubleValue(for: microgram)
+        {
+            return GoalModel(
+                title: "Get More Vitamin B12",
+                systemImage: "arrow.up.circle",
+                summary: "Your Vitamin B12 levels are low. Try eating things like red meats, salmon, swiss or mozarella cheeses, yogurt, or egg yolks.",
+                dueDate: dueDate,
+                metric: .init(
+                    value: goal.doubleValue(for: microgram),
+                    measurement: .increaseVitaminB12
+                ),
+                vitalKind: .nutrition
+            )
+        }
+        if
+            let vitamin = nutritionSummary.details.averageVitaminC,
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminC(),
+            vitamin.doubleValue(for: milligram) < goal.lowerDoubleValue(for: milligram)
+        {
+            return GoalModel(
+                title: "Get More Vitamin C",
+                systemImage: "arrow.up.circle",
+                summary: "Your Vitamin C levels are low. Try eating things like citrus fruits, berries, kiwi, cantaloupe, bell peppers, tomatoes, potatoes, or leafy greens.",
+                dueDate: dueDate,
+                metric: .init(
+                    value: goal.lowerDoubleValue(for: milligram),
+                    measurement: .increaseVitaminC
+                ),
+                vitalKind: .nutrition
+            )
+        }
+        // TODO: Check time in sunlight for proper vitamin D level check.
+        if
+            let vitamin = nutritionSummary.details.averageVitaminD,
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminD(),
+            vitamin.doubleValue(for: microgram) < goal.lowerDoubleValue(for: microgram)
+        {
+            return GoalModel(
+                title: "Get More Vitamin D",
+                systemImage: "arrow.up.circle",
+                summary: "Your Vitamin D levels are low. Try eating things like salmon, mackerel, cod liver oil, egg yolks, or mushrooms.",
+                dueDate: dueDate,
+                metric: .init(
+                    value: goal.lowerDoubleValue(for: microgram),
+                    measurement: .increaseVitaminD
+                ),
+                vitalKind: .nutrition
+            )
+        }
+        if
+            let vitamin = nutritionSummary.details.averageVitaminE,
+            let goal = HealthManager.shared.recommendedDailyIntakeForVitaminE(),
+            vitamin.doubleValue(for: milligram) < goal.lowerDoubleValue(for: milligram)
+        {
+            return GoalModel(
+                title: "Get More Vitamin E",
+                systemImage: "arrow.up.circle",
+                summary: "Your Vitamin E levels are low. Try eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
+                dueDate: dueDate,
+                metric: .init(
+                    value: goal.lowerDoubleValue(for: milligram),
+                    measurement: .increaseVitaminE
+                ),
+                vitalKind: .nutrition
+            )
+        }
+
+        return nil
+    }
+
+    func nutrientMineralGoal(nutritionSummary: NutritionMonthlySummary, dueDate: Date) -> GoalModel? {
+//        let microgram = HKUnit.gramUnit(with: .micro)
+//        let milligram = HKUnit.gramUnit(with: .milli)
+
+//        if
+//            let mineral = nutritionSummary.details.averageCalcium,
+//            let goal = HealthManager.shared.recommendedIntakeForCalcium(),
+//            mineral.doubleValue(for: milligram) < goal.lowerDoubleValue(for: milligram)
+//        {
+//            return GoalModel(
+//                title: "Increase Calcium Intake",
+//                systemImage: "arrow.up.circle",
+//                summary: "You're not getting enough calcium. Try eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
+//                dueDate: dueDate,
+//                metric: .init(
+//                    value: goal.lowerDoubleValue(for: milligram),
+//                    measurement: .
+//                ),
+//                vitalKind: .nutrition
+//            )
+//        }
         return nil
     }
 }

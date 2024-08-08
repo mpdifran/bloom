@@ -323,7 +323,7 @@ private extension NutritionDetailsView {
 
                 Divider()
 
-                if let calcium = details.averageCalcium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyCalcium() {
+                if let calcium = details.averageCalcium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedIntakeForCalcium() {
                     CapsuleRangeChart(
                         title: "Calcium",
                         unitString: "mg",

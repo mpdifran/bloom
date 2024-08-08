@@ -65,6 +65,15 @@ extension GoalModel {
         case targetHeartRateZoneProportionsZone3
         case targetHeartRateZoneProportionsZone4
         case targetHeartRateZoneProportionsZone5
+        case increaseProtein
+        case increaseCarbs
+        case increaseFat
+        case increaseVitaminA
+        case increaseVitaminB6
+        case increaseVitaminB12
+        case increaseVitaminC
+        case increaseVitaminD
+        case increaseVitaminE
 
         var color: Color {
             switch self {
@@ -90,6 +99,24 @@ extension GoalModel {
                     .purple
             case .targetHeartRateZoneProportionsZone2, .targetHeartRateZoneProportionsZone3, .targetHeartRateZoneProportionsZone4, .targetHeartRateZoneProportionsZone5:
                     .pink
+            case .increaseProtein:
+                    .protein
+            case .increaseCarbs:
+                    .carbohydrates
+            case .increaseFat:
+                    .fat
+            case .increaseVitaminA:
+                    .vitaminA
+            case .increaseVitaminB6:
+                    .vitaminB6
+            case .increaseVitaminB12:
+                    .vitaminB12
+            case .increaseVitaminC:
+                    .vitaminC
+            case .increaseVitaminD:
+                    .vitaminD
+            case .increaseVitaminE:
+                    .vitaminE
             }
         }
     }

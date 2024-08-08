@@ -8,7 +8,7 @@
 import SwiftUI
 import HealthKit
 
-private extension Double {
+extension Double {
     static let caloriesPerGramOfProtein: Double = 4
     static let caloriesPerGramOfCarbs: Double = 4
     static let caloriesPerGramOfFat: Double = 9
@@ -113,6 +113,18 @@ extension NutritionMonthlySummary {
 
         var total: Double {
             protein + carbohydrates + fat + remainder
+        }
+
+        var proteinPercent: Double {
+            protein / total
+        }
+
+        var carbsPercent: Double {
+            carbohydrates / total
+        }
+
+        var fatPercent: Double {
+            fat / total
         }
     }
 
@@ -528,7 +540,7 @@ extension NutritionMonthlySummary.Details {
 
         guard
             let average = averageCalcium?.doubleValue(for: unit),
-            let goal = HealthManager.shared.recommendedDailyCalcium()
+            let goal = HealthManager.shared.recommendedIntakeForCalcium()
         else { return nil }
 
         return average.invertedScaledPercent(

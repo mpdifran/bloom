@@ -173,6 +173,111 @@ private extension GoalCell {
             break
         case .targetHeartRateZoneProportionsZone5:
             break
+        case .increaseProtein:
+            try? HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: [
+                    HKQuantityType(.dietaryProtein),
+                    HKQuantityType(.dietaryEnergyConsumed)
+                ]
+            ) {
+                let value = await HealthManager.shared.fetchDietaryNutritionPercentageThisWeek(
+                    quantityTypeID: .dietaryProtein,
+                    caloriesPerGram: .caloriesPerGramOfProtein
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseCarbs:
+            try? HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: [
+                    HKQuantityType(.dietaryCarbohydrates),
+                    HKQuantityType(.dietaryEnergyConsumed)
+                ]
+            ) {
+                let value = await HealthManager.shared.fetchDietaryNutritionPercentageThisWeek(
+                    quantityTypeID: .dietaryCarbohydrates,
+                    caloriesPerGram: .caloriesPerGramOfCarbs
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseFat:
+            try? HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: [
+                    HKQuantityType(.dietaryFatTotal),
+                    HKQuantityType(.dietaryEnergyConsumed)
+                ]
+            ) {
+                let value = await HealthManager.shared.fetchDietaryNutritionPercentageThisWeek(
+                    quantityTypeID: .dietaryFatTotal,
+                    caloriesPerGram: .caloriesPerGramOfFat
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseVitaminA:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminA)) {
+                let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
+                    quantityTypeID: .dietaryVitaminA,
+                    unit: .gramUnit(with: .micro)
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseVitaminB6:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminB6)) {
+                let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
+                    quantityTypeID: .dietaryVitaminB6,
+                    unit: .gramUnit(with: .milli)
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseVitaminB12:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminB12)) {
+                let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
+                    quantityTypeID: .dietaryVitaminB12,
+                    unit: .gramUnit(with: .micro)
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseVitaminC:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminC)) {
+                let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
+                    quantityTypeID: .dietaryVitaminC,
+                    unit: .gramUnit(with: .milli)
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseVitaminD:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminD)) {
+                let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
+                    quantityTypeID: .dietaryVitaminD,
+                    unit: .gramUnit(with: .micro)
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
+        case .increaseVitaminE:
+            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminE)) {
+                let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
+                    quantityTypeID: .dietaryVitaminE,
+                    unit: .gramUnit(with: .milli)
+                )
+                await MainActor.run {
+                    self.currentGoalValue = value
+                }
+            }
         }
     }
 }
