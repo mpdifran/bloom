@@ -825,12 +825,12 @@ extension HealthManager {
             let endDate = Date.now
             guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return 0 }
 
-            let average = try await healthStore.fetchNutritionalDailyAverage(
+            return try await healthStore.fetchNutritionalDailyAverage(
                 for: quantityTypeID,
                 startDate: startDate,
                 endDate: endDate,
                 unit: unit
-            )
+            ).doubleValue(for: unit)
         } catch {
             print(error)
         }
@@ -1484,16 +1484,18 @@ extension HealthManager {
     }
 
     func bloodPressureCategory(systolic: Double , diastolic: Double) -> BloodPressureCategory {
-        if systolic > 180 || diastolic > 120 {
+        if systolic > 180 || diastolic > 110 {
             return .hypertensiveCrisis
-        } else if systolic > 140 || diastolic > 90 {
+        } else if systolic > 160 || diastolic > 100 {
             return .hypertensionStage2
-        } else if systolic > 130 || diastolic > 80 {
+        } else if systolic > 140 || diastolic > 90 {
             return .hypertensionStage1
-        } else if systolic > 120 {
+        } else if systolic > 120 || diastolic > 80 {
             return .elevated
-        } else {
+        } else if systolic > 90 || diastolic > 60 {
             return .normal
+        } else {
+            return .low
         }
     }
 }

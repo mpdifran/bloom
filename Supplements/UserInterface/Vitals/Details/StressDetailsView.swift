@@ -17,15 +17,23 @@ struct StressDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                if
+                    let systolic = viewModel.stressSummary?.bloodPressureSystolic,
+                    let diastloic = viewModel.stressSummary?.bloodPressureDiastolic 
+                {
+                    BloodPressureStatusView(
+                        systolic: systolic,
+                        diastolic: diastloic
+                    )
+                }
+
                 restingHeartRateChart
-                    .cardContainer()
+                    .padding()
             }
-            .padding()
             .horizontallyCentered()
         }
         .navigationTitle("Stress Levels")
         .navigationBarTitleDisplayMode(.inline)
-        .groupedBackground()
         .task {
             let samples = await HealthManager.shared.fetchRestingHeartRate(period: 30)
             await MainActor.run {

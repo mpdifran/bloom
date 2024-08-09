@@ -5,9 +5,12 @@
 //  Created by Mark DiFranco on 2024-07-26.
 //
 
-import Foundation
+import SwiftUI
 
-enum BloodPressureCategory {
+enum BloodPressureCategory: CaseIterable, Identifiable {
+    var id: Self { self }
+
+    case low
     case normal
     case elevated
     case hypertensionStage1
@@ -16,6 +19,8 @@ enum BloodPressureCategory {
 
     var name: String {
         switch self {
+        case .low:
+            "Low"
         case .normal:
             "Normal"
         case .elevated:
@@ -31,11 +36,38 @@ enum BloodPressureCategory {
 
     var score: Double {
         switch self {
+        case .low: 0.8
         case .normal: 1
         case .elevated: 0.8
         case .hypertensionStage1: 0.5
         case .hypertensionStage2: 0.2
         case .hypertensiveCrisis: 0
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .low, .elevated: return .yellow
+        case .normal: return .green
+        case .hypertensionStage1, .hypertensionStage2: return .orange
+        case .hypertensiveCrisis: return .pink
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .low:
+            "Low blood pressure can be normal for some people, especially if they have no symptoms. However, when blood pressure drops too low, it can cause inadequate blood flow to the organs, leading to symptoms like dizziness, fainting, and in severe cases, shock."
+        case .normal:
+            "This range is considered optimal and indicates that the heart is functioning well without excessive strain on the blood vessels."
+        case .elevated:
+            "Blood pressure in this range is higher than normal but not yet in the high blood pressure range. It suggests that there may be an increased risk of developing hypertension."
+        case .hypertensionStage1:
+            "This stage indicates the beginning of high blood pressure, where there’s increased force on the arteries, potentially leading to health issues if not managed."
+        case .hypertensionStage2:
+            "Blood pressure at this stage is significantly high, posing a greater risk for heart disease, stroke, and other complications. It often requires medication and lifestyle changes to control."
+        case .hypertensiveCrisis:
+            "This is a critical condition where blood pressure is dangerously high, requiring immediate medical attention to prevent severe damage to organs."
         }
     }
 }
