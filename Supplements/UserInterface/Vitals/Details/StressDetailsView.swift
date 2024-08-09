@@ -62,29 +62,28 @@ private extension StressDetailsView {
 
             Chart {
                 ForEach(restingHeartRateSamples) { sample in
-                    let goal = HealthManager.shared.goalRestingHeartRateForUser()
-
-                    RuleMark(y: .value("Min RHR", goal.0))
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.remSleep)
-
-                    RuleMark(y: .value("Max RHR", goal.1))
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.remSleep)
-
                     LineMark(
                         x: .value("Date", sample.date),
                         y: .value("Resting Heart Rate", sample.quantity)
                     )
-                    .foregroundStyle(.remSleep)
+                    .foregroundStyle(.pink)
                     .interpolationMethod(.catmullRom)
-
-                    RectangleMark(
-                        yStart: .value("Min RHR", goal.0),
-                        yEnd: .value("Max RHR", goal.1)
-                    )
-                    .foregroundStyle(.coreSleep.opacity(0.01))
                 }
+                let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+                RuleMark(y: .value("Min RHR", goal.0))
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                    .foregroundStyle(.pink)
+
+                RuleMark(y: .value("Max RHR", goal.1))
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                    .foregroundStyle(.pink)
+
+                RectangleMark(
+                    yStart: .value("Min RHR", goal.0),
+                    yEnd: .value("Max RHR", goal.1)
+                )
+                .foregroundStyle(.pink.opacity(0.3))
             }
             .chartYScale(
                 domain: (minRestingHeartRate ?? 0)...(maxRestingHeartRate ?? 100),
@@ -93,7 +92,17 @@ private extension StressDetailsView {
             .frame(height: 160)
 
             if let restingHeartRateDescription {
-                Text(restingHeartRateDescription)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Details")
+                            .font(.headline)
+                            .bold()
+                        Text(restingHeartRateDescription)
+                    }
+                    Spacer()
+                }
+                .cardContainer(fill: .background.secondary)
+                .padding(.top)
             }
         }
     }
