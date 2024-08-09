@@ -482,6 +482,52 @@ extension HealthManager {
         return []
     }
 
+    func fetchActivityLevelRatio(numPastDays: Int) async -> [DateQuantitySample] {
+        let endDate = Date.now
+        guard let startDate = Calendar.current.date(byAdding: .day, value: -numPastDays, to: endDate) else {
+            return []
+        }
+
+        let basal = (
+            try? await healthStore.fetchCollectionQuantity(
+                quantityTypeID: .basalEnergyBurned,
+                unit: .largeCalorie(),
+                interval: .init(day: 1),
+                startDate: startDate,
+                endDate: endDate
+            )
+        ) ?? []
+        let active = (
+            try? await healthStore.fetchCollectionQuantity(
+                quantityTypeID: .activeEnergyBurned,
+                unit: .largeCalorie(),
+                interval: .init(day: 1),
+                startDate: startDate,
+                endDate: endDate
+            )
+        ) ?? []
+
+        var samples = [DateQuantitySample]()
+
+        for basalSample in basal {
+            guard let activeSample = active.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) }) else {
+                continue
+            }
+
+            let ratio = (activeSample.quantity + basalSample.quantity) / basalSample.quantity
+
+            samples.append(
+                .init(
+                    date: basalSample.date,
+                    quantity: ratio,
+                    unit: ""
+                )
+            )
+        }
+
+        return samples
+    }
+
     func fetchNetEnergy(numPrevDays: Int = 7) async -> [DateQuantitySample] {
         let endDate = Date.now
 

@@ -135,6 +135,8 @@
 		FF8F79CF2C64546C0095C36D /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79CE2C64546C0095C36D /* Color+Codable.swift */; };
 		FF8F79D12C655D7D0095C36D /* StressDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D02C655D7D0095C36D /* StressDetailsView.swift */; };
 		FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */; };
+		FF8F79D72C668AFD0095C36D /* ActivityLevelDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */; };
+		FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */; };
@@ -486,6 +488,8 @@
 		FF8F79CE2C64546C0095C36D /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
 		FF8F79D02C655D7D0095C36D /* StressDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StressDetailsView.swift; sourceTree = "<group>"; };
 		FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureStatusView.swift; sourceTree = "<group>"; };
+		FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelDetailsView.swift; sourceTree = "<group>"; };
+		FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelDistributionView.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummary.swift; sourceTree = "<group>"; };
@@ -1054,6 +1058,7 @@
 				FF8F79BA2C6189790095C36D /* NutritionDetailsView.swift */,
 				FF8F79D02C655D7D0095C36D /* StressDetailsView.swift */,
 				FF8F79B42C5FD5360095C36D /* BodyCompositionDetailsView.swift */,
+				FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -1067,6 +1072,7 @@
 				FF8F79C32C627CEF0095C36D /* LabelledMetric.swift */,
 				FF8F79C52C628E200095C36D /* NetEnergyMathView.swift */,
 				FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */,
+				FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1853,6 +1859,7 @@
 				FF1E962C2C0BF19A004DAD2D /* View+Expand.swift in Sources */,
 				FF8B8B442C002C5100BA2128 /* PinViewModel.swift in Sources */,
 				FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */,
+				FF8F79D72C668AFD0095C36D /* ActivityLevelDetailsView.swift in Sources */,
 				FFAA83DB2C4D9E89004D12DA /* HeartRateVariabilityCell.swift in Sources */,
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
 				FFC77AF52C5A6D1C003E5F85 /* GoalsViewModel.swift in Sources */,
@@ -1895,6 +1902,7 @@
 				FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */,
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,
 				FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */,
+				FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */,
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,

@@ -31,9 +31,11 @@ struct VitalDetailChartTitleView: View {
 
             Spacer()
 
-            Text(valueLabel)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            if value.isNotEmpty {
+                Text(valueLabel)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
 
             Text(value)
                 .bold()

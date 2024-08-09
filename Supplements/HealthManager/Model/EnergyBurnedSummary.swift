@@ -8,7 +8,9 @@
 import SwiftUI
 
 extension EnergyBurnedSummary {
-    enum ActivityLevel {
+    enum ActivityLevel: CaseIterable, Identifiable {
+        var id: Self { self }
+
         case sedentary
         case light
         case moderate
@@ -35,6 +37,36 @@ extension EnergyBurnedSummary.ActivityLevel {
         case .light, .moderate: .green
         case .high: .coreSleep
         case .intense: .coreSleep
+        }
+    }
+
+    var barColor: Color {
+        switch self {
+        case .sedentary:
+                .activityLevelSedentary
+        case .light:
+                .activityLevelLight
+        case .moderate:
+                .activityLevelModerate
+        case .high:
+                .activityLevelHigh
+        case .intense:
+                .activityLevelIntense
+        }
+    }
+
+    var range: ClosedRange<Double> {
+        switch self {
+        case .sedentary:
+            1...1.2
+        case .light:
+            1.2...1.375
+        case .moderate:
+            1.375...1.55
+        case .high:
+            1.55...1.725
+        case .intense:
+            1.725...2.5
         }
     }
 }

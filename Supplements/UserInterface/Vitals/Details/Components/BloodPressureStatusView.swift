@@ -22,8 +22,7 @@ struct BloodPressureStatusView: View {
         VStack(alignment: .leading) {
             VitalDetailChartTitleView(
                 title: "Blood Pressure",
-                valueLabel: "",
-                value: HealthManager.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).name
+                value: "\(systolic.format())/\(diastolic.format())"
             )
 
             Chart {
@@ -144,29 +143,6 @@ private extension BloodPressureStatusView {
             }
         }
         .buttonStyle(.plain)
-
-//        Menu {
-//            ForEach(BloodPressureCategory.allCases) { category in
-//                Button(category.name) {
-//                    selectedCategory = category
-//                }
-//            }
-//        } label: {
-//            HStack {
-//                Text("Category")
-//
-//                Spacer()
-//
-//                Text(selectedCategory.name)
-//            }
-//            .bold()
-//            .foregroundStyle(.invertedText)
-//            .padding()
-//            .background {
-//                RoundedRectangle(cornerRadius: 20)
-//                    .fill(selectedCategory.color)
-//            }
-//        }
     }
 
     var framesForSelectedCategory: [RectangleFrame] {
