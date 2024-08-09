@@ -10,6 +10,7 @@ import Charts
 
 struct StressDetailsView: View {
     
+    @State private var heartRateVariabilitySamples = [DateQuantitySample]()
     @State private var restingHeartRateSamples = [DateQuantitySample]()
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
@@ -23,7 +24,9 @@ struct StressDetailsView: View {
                 {
                     BloodPressureStatusView(
                         systolic: systolic,
-                        diastolic: diastloic
+                        diastolic: diastloic,
+                        lastMonthSystolic: viewModel.stressSummary?.lastMonthBloodPressureSystolic,
+                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthBloodPressureDiastolic
                     )
                 }
 

@@ -13,9 +13,19 @@ struct BodyCompositionDetailsView: View {
 
     @State private var bodyFatPercentageSamples = [DateAverageQuantitySample]()
 
-    @State private var range: BodyCompositionMonthlySummary.PercentageRange = .unknown
-
     @ObservedObject private var viewModel = VitalsViewModel.shared
+
+    @State private var selectedRangeIndex = 0
+
+    private let ranges: [BodyCompositionMonthlySummary.PercentageRange] = [
+        .essentialFat,
+        .athlete,
+        .fit,
+        .healthy,
+        .high
+    ]
+
+    let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     var body: some View {
         ScrollView {
@@ -47,8 +57,12 @@ struct BodyCompositionDetailsView: View {
             }
         }
         .onAppear {
-            if let range = viewModel.bodyFatPercentageSummary?.range {
-                self.range = range
+            feedbackGenerator.prepare()
+            if
+                let range = viewModel.bodyFatPercentageSummary?.range,
+                let index = ranges.firstIndex(where: { $0 == range })
+            {
+                self.selectedRangeIndex = index
             }
         }
     }
@@ -125,15 +139,16 @@ private extension BodyCompositionDetailsView {
         }
     }
 
+    var range: BodyCompositionMonthlySummary.PercentageRange {
+        ranges[selectedRangeIndex]
+    }
+
     @ViewBuilder
     var bodyFatPercentageRangePicker: some View {
         if let goal = HealthManager.shared.goalBodyFatPercentage() {
-            Menu {
-                bodyFatPercentageButton(percentRange: .essentialFat)
-                bodyFatPercentageButton(percentRange: .athlete)
-                bodyFatPercentageButton(percentRange: .fit)
-                bodyFatPercentageButton(percentRange: .healthy)
-                bodyFatPercentageButton(percentRange: .high)
+            Button {
+                selectedRangeIndex = (selectedRangeIndex + 1) % ranges.count
+                feedbackGenerator.impactOccurred()
             } label: {
                 HStack {
                     Text(range.name)
@@ -150,12 +165,7 @@ private extension BodyCompositionDetailsView {
                         .fill(range.color)
                 }
             }
-        }
-    }
-
-    func bodyFatPercentageButton(percentRange: BodyCompositionMonthlySummary.PercentageRange) -> some View {
-        Button(percentRange.name) {
-            self.range = percentRange
+            .buttonStyle(.plain)
         }
     }
 

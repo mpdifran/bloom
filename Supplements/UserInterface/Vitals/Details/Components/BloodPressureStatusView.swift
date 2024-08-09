@@ -11,8 +11,12 @@ import Charts
 struct BloodPressureStatusView: View {
     let systolic: Double
     let diastolic: Double
+    let lastMonthSystolic: Double?
+    let lastMonthDiastolic: Double?
 
-    @State private var selectedCategory = BloodPressureCategory.normal
+    @State private var selectedCategoryIndex = 0
+
+    let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -33,19 +37,32 @@ struct BloodPressureStatusView: View {
                     .foregroundStyle(selectedCategory.color.opacity(0.3))
                 }
 
+                if let lastMonthSystolic, let lastMonthDiastolic {
+                    LineMark(
+                        x: .value("Last Month Diastolic", lastMonthDiastolic),
+                        y: .value("Last Month Systolic", lastMonthSystolic)
+                    )
+                    .foregroundStyle(.gray)
+                    LineMark(
+                        x: .value("Diastolic", diastolic),
+                        y: .value("Systolic", systolic)
+                    )
+                    .foregroundStyle(.gray)
+
+                    PointMark(
+                        x: .value("Last Month Diastolic", lastMonthDiastolic),
+                        y: .value("Last Month Systolic", lastMonthSystolic)
+                    )
+                    .foregroundStyle(.gray)
+                }
+
                 PointMark(
                     x: .value("Diastolic", diastolic),
                     y: .value("Systolic", systolic)
                 )
                 .foregroundStyle(HealthManager.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).color)
             }
-            .chartYAxis {
-                AxisMarks(position: .leading, values: .stride(by: 20)) {
-                    AxisGridLine()
-                    AxisTick()
-                    AxisValueLabel()
-                }
-            }
+
             .chartXScale(domain: 40...120, range: .plotDimension)
             .chartYScale(domain: 70...200, range: .plotDimension)
             .chartXAxisLabel("Diastolic")
@@ -57,6 +74,17 @@ struct BloodPressureStatusView: View {
                     AxisValueLabel()
                 }
             }
+            .chartYAxis {
+                AxisMarks(position: .leading, values: .stride(by: 20)) {
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel()
+                }
+            }
+            .chartForegroundStyleScale([
+                "Last Month": .gray,
+                "This Month": HealthManager.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).color
+            ])
             .aspectRatio(contentMode: .fit)
 
             categoryPicker
@@ -75,23 +103,30 @@ struct BloodPressureStatusView: View {
         }
         .padding()
         .onAppear {
-            selectedCategory = HealthManager.shared.bloodPressureCategory(
+            feedbackGenerator.prepare()
+            let userCategory = HealthManager.shared.bloodPressureCategory(
                 systolic: systolic,
                 diastolic: diastolic
             )
+            if let index = BloodPressureCategory.allCases.firstIndex(where: { category in
+                userCategory == category
+            }) {
+                selectedCategoryIndex = index
+            }
         }
     }
 }
 
 private extension BloodPressureStatusView {
 
+    var selectedCategory: BloodPressureCategory {
+        BloodPressureCategory.allCases[selectedCategoryIndex]
+    }
+
     var categoryPicker: some View {
-        Menu {
-            ForEach(BloodPressureCategory.allCases) { category in
-                Button(category.name) {
-                    selectedCategory = category
-                }
-            }
+        Button {
+            selectedCategoryIndex = (selectedCategoryIndex + 1) % BloodPressureCategory.allCases.count
+            feedbackGenerator.impactOccurred()
         } label: {
             HStack {
                 Text("Category")
@@ -108,6 +143,30 @@ private extension BloodPressureStatusView {
                     .fill(selectedCategory.color)
             }
         }
+        .buttonStyle(.plain)
+
+//        Menu {
+//            ForEach(BloodPressureCategory.allCases) { category in
+//                Button(category.name) {
+//                    selectedCategory = category
+//                }
+//            }
+//        } label: {
+//            HStack {
+//                Text("Category")
+//
+//                Spacer()
+//
+//                Text(selectedCategory.name)
+//            }
+//            .bold()
+//            .foregroundStyle(.invertedText)
+//            .padding()
+//            .background {
+//                RoundedRectangle(cornerRadius: 20)
+//                    .fill(selectedCategory.color)
+//            }
+//        }
     }
 
     var framesForSelectedCategory: [RectangleFrame] {
@@ -147,7 +206,9 @@ private struct RectangleFrame: Hashable, Identifiable {
     ScrollView {
         BloodPressureStatusView(
             systolic: 120,
-            diastolic: 80
+            diastolic: 80,
+            lastMonthSystolic: 129,
+            lastMonthDiastolic: 76
         )
     }
 }
