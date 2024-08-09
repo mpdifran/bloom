@@ -16,6 +16,7 @@ final class TodayViewModel: ObservableObject {
     private init() {
         HealthManager.shared.$sleepAnalysis30Days
             .combineLatest($date)
+            .receive(on: DispatchQueue(label: "TodayViewModel.SleepAnalysis"))
             .map { (sleepAnalysis30Days, date) in
                 sleepAnalysis30Days?.first(where: { sleepAnalysis in
                     Calendar.current.isDate(sleepAnalysis.endDate, inSameDayAs: date)

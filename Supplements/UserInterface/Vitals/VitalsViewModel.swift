@@ -8,6 +8,7 @@
 import SwiftUI
 import HealthKit
 import Combine
+import AppFoundations
 
 private extension Double {
     static let hrvVariance: Double = 8
@@ -81,6 +82,8 @@ final class VitalsViewModel: ObservableObject {
     @Published var lastMonthActiveEnergyBurned: (Double, Int)?
 
     private var cancellables = Set<AnyCancellable>()
+
+    private let throttler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "Throttler"))
 
     private init() {
         observeData()
@@ -169,6 +172,7 @@ private extension VitalsViewModel {
 
         HealthManager.shared.$sleepAnalysis30Days
             .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
+            .receive(on: DispatchQueue(label: "VitalsViewModel.SleepSummary"))
             .map { (thisMonth, lastMonth) in
                 guard let thisMonth, let lastMonth else { return nil }
 
@@ -224,22 +228,22 @@ private extension VitalsViewModel {
             print(error)
         }
 
-        do {
-            try HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: [
-                    HKCategoryType(.appleWalkingSteadinessEvent),
-                    HKQuantityType(.sixMinuteWalkTestDistance),
-                    HKQuantityType(.walkingDoubleSupportPercentage)
-                ]
-            ) {
-                let summary = await HealthManager.shared.fetchMonthlyMobilitySummary()
-                await MainActor.run {
-                    self.mobilitySummary = summary
-                }
-            }
-        } catch {
-            print(error)
-        }
+//        do {
+//            try HealthManager.shared.healthStore.observeChanges(
+//                sampleTypes: [
+//                    HKCategoryType(.appleWalkingSteadinessEvent),
+//                    HKQuantityType(.sixMinuteWalkTestDistance),
+//                    HKQuantityType(.walkingDoubleSupportPercentage)
+//                ]
+//            ) {
+//                let summary = await HealthManager.shared.fetchMonthlyMobilitySummary()
+//                await MainActor.run {
+//                    self.mobilitySummary = summary
+//                }
+//            }
+//        } catch {
+//            print(error)
+//        }
 
         do {
             try HealthManager.shared.healthStore.observeChanges(
@@ -261,10 +265,14 @@ private extension VitalsViewModel {
         }
 
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleTypes: HealthManager.shared.nutritionTypes) {
-                let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
-                await MainActor.run {
-                    self.nutritionSummary = summary
+            try HealthManager.shared.healthStore.observeChanges(sampleTypes: HealthManager.shared.nutritionTypes) { [throttler] in
+                throttler.perform {
+                    Task {
+                        let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
+                        await MainActor.run {
+                            self.nutritionSummary = summary
+                        }
+                    }
                 }
             }
         } catch {

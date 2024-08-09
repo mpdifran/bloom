@@ -43,13 +43,11 @@ struct StressMonthlySummary: Equatable {
     let avgHeartRateVariability: Double?
     let varHeartRateVariability: Double?
     let restingHeartRate: Double?
-    let sleepScore: Double?
     let bloodPressureSystolic: Double?
     let bloodPressureDiastolic: Double?
     let lastMonthAvgHeartRateVariability: Double?
     let lastMonthVarHeartRateVariability: Double?
     let lastMonthRestingHeartRate: Double?
-    let lastMonthSleepScore: Double?
     let lastMonthBloodPressureSystolic: Double?
     let lastMonthBloodPressureDiastolic: Double?
 }
@@ -77,11 +75,7 @@ extension StressMonthlySummary {
             bloodPressureScore = nil
         }
 
-        if let sleepScore {
-            return [hrvScore, rhrScore, bloodPressureScore, sleepScore / 10].compactMap({ $0 }).average(keyPath: \.self)
-        } else {
-            return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
-        }
+        return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
     }
 
     var lastMonthScore: Double {
@@ -101,11 +95,7 @@ extension StressMonthlySummary {
             bloodPressureScore = nil
         }
 
-        if let sleepScore = lastMonthSleepScore {
-            return [hrvScore, rhrScore, bloodPressureScore, sleepScore / 10].compactMap({ $0 }).average(keyPath: \.self)
-        } else {
-            return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
-        }
+        return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
     }
 
     var trend: VitalModel.Trend {

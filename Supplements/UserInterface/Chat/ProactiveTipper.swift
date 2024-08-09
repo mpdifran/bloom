@@ -24,7 +24,6 @@ extension ProactiveTipper {
             averageHeartRateVariability: VitalsViewModel.shared.stressSummary?.avgHeartRateVariability,
             varianceHeartRateVariability: VitalsViewModel.shared.stressSummary?.varHeartRateVariability,
             averageRestingHeartRate: VitalsViewModel.shared.stressSummary?.restingHeartRate,
-            averageSleepScore: VitalsViewModel.shared.stressSummary?.sleepScore,
             averageBloodPressureSystolic: VitalsViewModel.shared.stressSummary?.bloodPressureSystolic,
             averageBloodPressureDiastolic: VitalsViewModel.shared.stressSummary?.bloodPressureDiastolic
         )

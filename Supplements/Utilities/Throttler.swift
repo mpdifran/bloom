@@ -11,19 +11,24 @@ final class Throttler {
     let timeInterval: TimeInterval
 
     private var timer: Timer?
+    private var workItem: DispatchWorkItem?
+    private let queue: DispatchQueue
 
-    init(timeInterval: TimeInterval) {
+    init(timeInterval: TimeInterval, queue: DispatchQueue = .main) {
         self.timeInterval = timeInterval
+        self.queue = queue
     }
 
     func perform(_ block: @escaping () -> Void) {
         cancelPerform()
-        timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { (_) in
+
+        workItem = DispatchWorkItem {
             block()
         }
+        queue.asyncAfter(deadline: .now() + timeInterval, execute: workItem!)
     }
 
     func cancelPerform() {
-        timer?.invalidate()
+        workItem?.cancel()
     }
 }

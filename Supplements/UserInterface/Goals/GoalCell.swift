@@ -42,7 +42,6 @@ struct GoalCell: View {
                                 .font(.subheadline)
                         }
                     }
-
                 }
             }
 
@@ -88,7 +87,7 @@ private extension GoalCell {
             }
         }
         .chartXScale(
-            domain: (0...goal.metric.value * 1.3),
+            domain: (0...max(goal.metric.value, currentGoalValue) * 1.3),
             range: .plotDimension
         )
         .frame(height: 100)

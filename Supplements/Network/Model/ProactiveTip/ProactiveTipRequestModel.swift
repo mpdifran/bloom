@@ -23,7 +23,6 @@ extension ProactiveTipRequestModel {
         let averageHeartRateVariability: Double?
         let varianceHeartRateVariability: Double?
         let averageRestingHeartRate: Double?
-        let averageSleepScore: Double?
         let averageBloodPressureSystolic: Double?
         let averageBloodPressureDiastolic: Double?
     }
