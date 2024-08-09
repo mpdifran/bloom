@@ -137,6 +137,8 @@
 		FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */; };
 		FF8F79D72C668AFD0095C36D /* ActivityLevelDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */; };
 		FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */; };
+		FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */; };
+		FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* EnergyBurnedSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */; };
@@ -490,6 +492,8 @@
 		FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureStatusView.swift; sourceTree = "<group>"; };
 		FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelDetailsView.swift; sourceTree = "<group>"; };
 		FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelDistributionView.swift; sourceTree = "<group>"; };
+		FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummation.swift; sourceTree = "<group>"; };
+		FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummationCell.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBurnedSummary.swift; sourceTree = "<group>"; };
@@ -1073,6 +1077,7 @@
 				FF8F79C52C628E200095C36D /* NetEnergyMathView.swift */,
 				FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */,
 				FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */,
+				FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1329,6 +1334,7 @@
 				FFF66FA82C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift */,
 				FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */,
 				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
+				FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */,
 				FF9C84D32C513E9B00648A1E /* EnergyBurnedSummary.swift */,
 				FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */,
 				FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */,
@@ -1914,6 +1920,7 @@
 				FF8F79C62C628E200095C36D /* NetEnergyMathView.swift in Sources */,
 				FF8F79C02C62611D0095C36D /* CapsuleRangeChart.swift in Sources */,
 				FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */,
+				FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
@@ -1969,6 +1976,7 @@
 				FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */,
 				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
+				FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */,
 				FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */,

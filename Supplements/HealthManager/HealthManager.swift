@@ -628,6 +628,14 @@ extension HealthManager {
         return []
     }
 
+    func fetchWorkoutSummation(pastDays: Int) async -> [WorkoutSummation] {
+        let endDate = Date()
+
+        guard let startDate = Calendar.current.date(byAdding: .day, value: -pastDays, to: endDate) else { return [] }
+
+        return (try? await healthStore.fetchWorkoutSummation(startDate: startDate, endDate: endDate)) ?? []
+    }
+
     func fetchBodyFatPercentageSamples() async -> [DateAverageQuantitySample] {
         let endDate = Date()
 

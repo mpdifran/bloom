@@ -471,6 +471,67 @@ extension HKHealthStore {
             execute(query)
         }
     }
+
+    func fetchWorkoutSummation(
+        startDate: Date,
+        endDate: Date
+    ) async throws -> [WorkoutSummation] {
+        try await withCheckedThrowingContinuation { continuation in
+            let predicate = HKQuery.predicateForSamples(
+                withStart: startDate,
+                end: endDate,
+                options: .strictEndDate
+            )
+
+            let sortDescriptors = [
+                NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+            ]
+
+            let query = HKSampleQuery(
+                sampleType: .workoutType(),
+                predicate: predicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: sortDescriptors
+            ) { (query, samples, error) in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let workoutSamples = samples as? [HKWorkout] else {
+                    continuation.resume(throwing: NSError(description: "HKSamples returned were the wrong type."))
+                    return
+                }
+
+                var calories = [HKWorkoutActivityType : Double]()
+                var workoutCount = [HKWorkoutActivityType : Int]()
+
+                for sample in workoutSamples {
+                    guard
+                        let activeBurned = sample.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .largeCalorie())
+                    else { continue }
+
+                    calories[sample.workoutActivityType, default: 0] += activeBurned
+                    workoutCount[sample.workoutActivityType, default: 0] += 1
+                }
+
+                let summations = calories.keys.map { workoutType in
+                    let calories = calories[workoutType, default: 0]
+                    let count = workoutCount[workoutType, default: 0]
+
+                    return WorkoutSummation(
+                        activityType: workoutType,
+                        totalCalories: calories,
+                        instances: count
+                    )
+                }
+
+                continuation.resume(returning: summations.sorted(by: { $0.totalCalories > $1.totalCalories }))
+            }
+
+            execute(query)
+        }
+    }
 }
 
 extension HKHealthStore {

@@ -13,6 +13,7 @@ struct ActivityLevelDetailsView: View {
     @State private var selectedActivityLevelIndex = 0
     @State private var activityLevelRatios = [DateQuantitySample]()
     @State private var ratioDistribution = [EnergyBurnedSummary.ActivityLevel : Int]()
+    @State private var workoutSummations = [WorkoutSummation]()
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
@@ -23,6 +24,7 @@ struct ActivityLevelDetailsView: View {
             VStack(spacing: 20) {
                 activityLevelRatioChart
                 ratioDistributionView
+                workoutSummationViews
             }
             .padding()
             .horizontallyCentered()
@@ -33,6 +35,12 @@ struct ActivityLevelDetailsView: View {
             let samples = await HealthManager.shared.fetchActivityLevelRatio(numPastDays: 30)
             await MainActor.run {
                 self.activityLevelRatios = samples
+            }
+        }
+        .task {
+            let samples = await HealthManager.shared.fetchWorkoutSummation(pastDays: 30)
+            await MainActor.run {
+                self.workoutSummations = samples
             }
         }
         .animation(.bouncy, value: activityLevelRatios.count)
@@ -136,6 +144,19 @@ private extension ActivityLevelDetailsView {
             }
             await MainActor.run {
                 self.ratioDistribution = ratioDistribution
+            }
+        }
+    }
+
+    @ViewBuilder
+    var workoutSummationViews: some View {
+        if workoutSummations.isNotEmpty {
+            VStack {
+                VitalDetailChartTitleView(title: "Workouts", value: "")
+
+                ForEach(workoutSummations) { workoutSummation in
+                    WorkoutSummationCell(workoutSummation: workoutSummation)
+                }
             }
         }
     }
