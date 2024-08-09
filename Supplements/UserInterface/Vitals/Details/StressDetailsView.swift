@@ -10,7 +10,7 @@ import Charts
 
 struct StressDetailsView: View {
     
-    @State private var heartRateVariabilitySamples = [DateQuantitySample]()
+    @State private var heartRateVariabilitySamples = [DateAverageQuantitySample]()
     @State private var restingHeartRateSamples = [DateQuantitySample]()
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
@@ -32,6 +32,9 @@ struct StressDetailsView: View {
 
                 restingHeartRateChart
                     .padding()
+
+                heartRateVariabilityChart
+                    .padding()
             }
             .horizontallyCentered()
         }
@@ -41,6 +44,12 @@ struct StressDetailsView: View {
             let samples = await HealthManager.shared.fetchRestingHeartRate(period: 30)
             await MainActor.run {
                 self.restingHeartRateSamples = samples
+            }
+        }
+        .task {
+            let samples = await HealthManager.shared.fetchDailyAverageHeartRateVariability(periodDays: 30)
+            await MainActor.run {
+                self.heartRateVariabilitySamples = samples
             }
         }
     }
@@ -131,8 +140,55 @@ private extension StressDetailsView {
             return "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease."
         }
     }
+
+    var heartRateVariabilityChart: some View {
+        VStack(alignment: .leading) {
+            if let hrv = viewModel.stressSummary?.avgHeartRateVariability?.format() {
+                VitalDetailChartTitleView(
+                    title: "Heart Rate Variability",
+                    value: "\(hrv) ms"
+                )
+            } else {
+                VitalDetailChartTitleView(
+                    title: "Heart Rate Variability",
+                    valueLabel: "",
+                    value: ""
+                )
+            }
+
+            Chart {
+                ForEach(heartRateVariabilitySamples) { sample in
+                    LineMark(
+                        x: .value("Date", sample.date),
+                        y: .value("Heart Rate Variability", sample.averageQuantity)
+                    )
+                    .foregroundStyle(.pink)
+                }
+
+                if let hrv = viewModel.stressSummary?.avgHeartRateVariability {
+                    RuleMark(y: .value("Average HRV", hrv))
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.pink)
+                }
+            }
+            .frame(height: 160)
+
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Details")
+                        .font(.headline)
+                        .bold()
+                    Text("Heart Rate Variability is a measure of how quickly you can change your heart rate. A higher value indicates lower stress and more relaxation, and a lower value indicates your body is in stress.")
+                }
+                Spacer()
+            }
+            .cardContainer(fill: .background.secondary)
+        }
+    }
 }
 
 #Preview {
-    StressDetailsView()
+    NavigationStack {
+        StressDetailsView()
+    }
 }

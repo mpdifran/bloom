@@ -1137,6 +1137,21 @@ extension HealthManager {
         }
         return []
     }
+
+    func fetchDailyAverageHeartRateVariability(periodDays: Int = 7) async -> [DateAverageQuantitySample] {
+        let endDate = Date.now
+        guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {
+            return []
+        }
+
+        return (try? await healthStore.fetchAverageStatistics(
+            quantityTypeID: .heartRateVariabilitySDNN,
+            unit: .secondUnit(with: .milli),
+            interval: .init(day: 1),
+            startDate: startDate,
+            endDate: endDate
+        )) ?? []
+    }
 }
 
 // MARK: - Sleep
