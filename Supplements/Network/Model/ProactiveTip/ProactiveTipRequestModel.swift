@@ -13,7 +13,7 @@ struct ProactiveTipRequestModel: Codable {
     let bodyCompositionSummary: BodyCompositionMonthlySummary?
     let cardioFitnessSummary: CardioFitnessMonthlySummary?
     let sleepVitalsMonthlySummary: SleepVitalsMonthlySummary?
-    let energyBurnedMonthlySummary: EnergyBurnedSummary?
+    let activityLevelMonthlySummary: ActivityLevelSummary?
     let chatHistory: [ChatMessageHistory]
 }
 

@@ -50,7 +50,7 @@ extension ProactiveTipper {
             bodyCompositionSummary: VitalsViewModel.shared.bodyFatPercentageSummary,
             cardioFitnessSummary: VitalsViewModel.shared.cardioFitnessSummary,
             sleepVitalsMonthlySummary: VitalsViewModel.shared.sleepVitalsSummary,
-            energyBurnedMonthlySummary: VitalsViewModel.shared.energyBurnedSummary,
+            activityLevelMonthlySummary: VitalsViewModel.shared.activityLevelSummary,
             chatHistory: chatHistory
         )
 

@@ -66,7 +66,7 @@ final class VitalsViewModel: ObservableObject {
 
     @Published var vitals = [VitalModel]()
 
-    @Published var energyBurnedSummary: EnergyBurnedSummary?
+    @Published var activityLevelSummary: ActivityLevelSummary?
     @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
     @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
     @Published var bodyFatPercentageSummary: BodyCompositionMonthlySummary?
@@ -76,14 +76,12 @@ final class VitalsViewModel: ObservableObject {
 
     @Published var heartRateVariability = [DateQuantitySample]()
     @Published var restingHeartRate = [DateQuantitySample]()
-    @Published var basalEnergyBurned: (Double, Int)?
-    @Published var activeEnergyBurned: (Double, Int)?
-    @Published var lastMonthBasalEnergyBurned: (Double, Int)?
-    @Published var lastMonthActiveEnergyBurned: (Double, Int)?
 
     private var cancellables = Set<AnyCancellable>()
 
+    private let processingQueue = DispatchQueue(label: "VitalsViewModel.Processing")
     private let throttler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "Throttler"))
+    private let activityLevelThrottler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "ActivityLevelThrottler"))
 
     private init() {
         observeData()
@@ -126,49 +124,24 @@ private extension VitalsViewModel {
 //            .store(in: &cancellables)
 
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.basalEnergyBurned)) {
-                let basalEnergyBurned = await HealthManager.shared.fetchBasalEnergy()
-                let lastMonthBasalEnergyBurned = await HealthManager.shared.fetchBasalEnergy(numPastMonths: 1)
-                await MainActor.run {
-                    self.basalEnergyBurned = basalEnergyBurned
-                    self.lastMonthBasalEnergyBurned = lastMonthBasalEnergyBurned
+            try HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: [
+                    HKQuantityType(.basalEnergyBurned),
+                    HKQuantityType(.activeEnergyBurned)
+                ]
+            ) { [activityLevelThrottler] in
+                activityLevelThrottler.perform {
+                    Task {
+                        let summary = await HealthManager.shared.fetchActivityLevelSummary()
+                        await MainActor.run {
+                            self.activityLevelSummary = summary
+                        }
+                    }
                 }
             }
         } catch {
             print(error)
         }
-        do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.activeEnergyBurned)) {
-                let activeEnergyBurned = await HealthManager.shared.fetchActiveEnergy()
-                let lastMonthActiveEnergyBurned = await HealthManager.shared.fetchActiveEnergy(numPastMonths: 1)
-                await MainActor.run {
-                    self.activeEnergyBurned = activeEnergyBurned
-                    self.lastMonthActiveEnergyBurned = lastMonthActiveEnergyBurned
-                }
-            }
-        } catch {
-            print(error)
-        }
-
-        $basalEnergyBurned
-            .combineLatest($activeEnergyBurned, $lastMonthBasalEnergyBurned, $lastMonthActiveEnergyBurned)
-            .map { (basalEnergy, activeEnergy, lastMonthBasalEnergy, lastMonthActiveEnergy) in
-                guard
-                    let basalEnergy,
-                    let activeEnergy,
-                    let lastMonthBasalEnergy,
-                    let lastMonthActiveEnergy
-                else { return nil }
-
-                return EnergyBurnedSummary(
-                    averageBasalEnergyBurned: basalEnergy.0,
-                    averageActiveEnergyBurned: activeEnergy.0,
-                    lastMonthAverageBasalEnergyBurned: lastMonthBasalEnergy.0,
-                    lastMonthAverageActiveEnergyBurned: lastMonthActiveEnergy.0
-                )
-            }
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$energyBurnedSummary)
 
         HealthManager.shared.$sleepAnalysis30Days
             .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
@@ -290,37 +263,44 @@ private extension VitalsViewModel {
             }
             .store(in: &cancellables)
 
-        $energyBurnedSummary
+        $activityLevelSummary
+            .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
             .store(in: &cancellables)
         $sleepVitalsSummary
+            .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
             .store(in: &cancellables)
         $cardioFitnessSummary
+            .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
             .store(in: &cancellables)
         $bodyFatPercentageSummary
+            .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
             .store(in: &cancellables)
         $mobilitySummary
+            .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
             .store(in: &cancellables)
         $stressSummary
+            .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
             .store(in: &cancellables)
         $nutritionSummary
+            .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
             }
@@ -341,15 +321,15 @@ private extension VitalsViewModel {
                 )
             )
         }
-        if let energyBurnedSummary {
+        if let activityLevelSummary {
             vitals.append(
                 VitalModel(
                     id: .activityLevel,
-                    subtitle: energyBurnedSummary.subtitle,
-                    status: energyBurnedSummary.activityLevel.name,
-                    score: energyBurnedSummary.score,
-                    color: energyBurnedSummary.activityLevel.color,
-                    trend: energyBurnedSummary.trend
+                    subtitle: activityLevelSummary.subtitle,
+                    status: activityLevelSummary.activityLevel.name,
+                    score: activityLevelSummary.score,
+                    color: activityLevelSummary.activityLevel.color,
+                    trend: activityLevelSummary.trend
                 )
             )
         }
@@ -414,7 +394,11 @@ private extension VitalsViewModel {
             )
         }
 
-        self.vitals = vitals.sorted(by: { $0.score < $1.score })
+        vitals.sort(by: { $0.score < $1.score })
+
+        DispatchQueue.main.async {
+            self.vitals = vitals
+        }
     }
 
     func createVitalStatuses(

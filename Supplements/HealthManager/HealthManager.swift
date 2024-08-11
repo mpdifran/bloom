@@ -426,46 +426,40 @@ extension HealthManager {
         return []
     }
 
-    func fetchBasalEnergy(numPastMonths: Int = 0) async -> (Double, Int)? {
-        do {
-            guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
-                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
-            else {
-                return nil
-            }
-
-            return try await healthStore.fetchQuantity(
-                for: .basalEnergyBurned,
-                start: startDate,
-                end: endDate,
-                option: .cumulativeSum,
-                unit: .largeCalorie()
-            )
-        } catch {
-            print(error)
+    func fetchBasalEnergy(numPastMonths: Int = 0) async -> [DateQuantitySample] {
+        guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
+              let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+        else {
+            return []
         }
-        return nil
+
+        return (
+            try? await healthStore.fetchCollectionQuantity(
+                quantityTypeID: .basalEnergyBurned,
+                unit: .largeCalorie(),
+                interval: .init(day: 1),
+                startDate: startDate,
+                endDate: endDate
+            )
+        ) ?? []
     }
 
-    func fetchActiveEnergy(numPastMonths: Int = 0) async -> (Double, Int)? {
-        do {
-            guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
-                  let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
-            else {
-                return nil
-            }
-
-            return try await healthStore.fetchQuantity(
-                for: .activeEnergyBurned,
-                start: startDate,
-                end: endDate,
-                option: .cumulativeSum,
-                unit: .largeCalorie()
-            )
-        } catch {
-            print(error)
+    func fetchActiveEnergy(numPastMonths: Int = 0) async -> [DateQuantitySample] {
+        guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
+              let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+        else {
+            return []
         }
-        return nil
+
+        return (
+            try? await healthStore.fetchCollectionQuantity(
+                quantityTypeID: .activeEnergyBurned,
+                unit: .largeCalorie(),
+                interval: .init(day: 1),
+                startDate: startDate,
+                endDate: endDate
+            )
+        ) ?? []
     }
 
     func fetchActiveEnergy(startDate: Date, endDate: Date) async -> [DateQuantitySample] {
@@ -482,35 +476,11 @@ extension HealthManager {
         return []
     }
 
-    func fetchActivityLevelRatio(numPastDays: Int) async -> [DateQuantitySample] {
-        let endDate = Date.now
-        guard let startDate = Calendar.current.date(byAdding: .day, value: -numPastDays, to: endDate) else {
-            return []
-        }
-
-        let basal = (
-            try? await healthStore.fetchCollectionQuantity(
-                quantityTypeID: .basalEnergyBurned,
-                unit: .largeCalorie(),
-                interval: .init(day: 1),
-                startDate: startDate,
-                endDate: endDate
-            )
-        ) ?? []
-        let active = (
-            try? await healthStore.fetchCollectionQuantity(
-                quantityTypeID: .activeEnergyBurned,
-                unit: .largeCalorie(),
-                interval: .init(day: 1),
-                startDate: startDate,
-                endDate: endDate
-            )
-        ) ?? []
-
+    func calculateRatios(basalEnergy: [DateQuantitySample], activeEnergy: [DateQuantitySample]) -> [DateQuantitySample] {
         var samples = [DateQuantitySample]()
 
-        for basalSample in basal {
-            guard let activeSample = active.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) }) else {
+        for basalSample in basalEnergy {
+            guard let activeSample = activeEnergy.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) }) else {
                 continue
             }
 
@@ -526,6 +496,32 @@ extension HealthManager {
         }
 
         return samples
+    }
+
+    func fetchActivityLevelSummary() async -> ActivityLevelSummary {
+        let basalEnergy = await fetchBasalEnergy()
+        let lastMonthBasalEnergy = await fetchBasalEnergy(numPastMonths: 1)
+
+        let activeEnergy = await fetchActiveEnergy()
+        let lastMonthActiveEnergy = await fetchActiveEnergy(numPastMonths: 1)
+
+        let activityLevelRatios = calculateRatios(
+            basalEnergy: basalEnergy,
+            activeEnergy: activeEnergy
+        )
+        let lastMonthActivityLevelRatios = calculateRatios(
+            basalEnergy: lastMonthBasalEnergy,
+            activeEnergy: lastMonthActiveEnergy
+        )
+
+        return ActivityLevelSummary(
+            averageBasalEnergyBurned: basalEnergy.average(keyPath: \.quantity),
+            averageActiveEnergyBurned: activeEnergy.average(keyPath: \.quantity),
+            energyRatioSamples: activityLevelRatios,
+            lastMonthAverageBasalEnergyBurned: lastMonthBasalEnergy.average(keyPath: \.quantity),
+            lastMonthAverageActiveEnergyBurned: lastMonthActiveEnergy.average(keyPath: \.quantity),
+            lastMonthEnergyRatioSamples: lastMonthActivityLevelRatios
+        )
     }
 
     func fetchNetEnergy(numPrevDays: Int = 7) async -> [DateQuantitySample] {

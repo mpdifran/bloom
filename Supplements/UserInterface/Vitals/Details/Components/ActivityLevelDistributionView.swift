@@ -15,12 +15,12 @@ private extension CGFloat {
 }
 
 struct ActivityLevelDistributionView: View {
-    let ratioDistribution: [EnergyBurnedSummary.ActivityLevel : Int]
+    let ratioDistribution: [ActivityLevelSummary.ActivityLevel : Int]
 
     var body: some View {
         GeometryReader { proxy in
             VStack(spacing: .spacing) {
-                ForEach(EnergyBurnedSummary.ActivityLevel.allCases) { level in
+                ForEach(ActivityLevelSummary.ActivityLevel.allCases) { level in
                     ZStack {
                         RoundedRectangle(cornerRadius: .barCornerRadius)
                             .fill(.fill)
@@ -59,6 +59,8 @@ struct ActivityLevelDistributionView: View {
                             .padding(.horizontal, 6)
                             .zStackAlignment(.trailing)
                     }
+                    .clipShape(RoundedRectangle(cornerRadius: .barCornerRadius))
+                    .clipped()
                 }
             }
         }
@@ -69,8 +71,8 @@ struct ActivityLevelDistributionView: View {
 private extension ActivityLevelDistributionView {
 
     var viewHeight: CGFloat {
-        CGFloat(EnergyBurnedSummary.ActivityLevel.allCases.count) * CGFloat.barHeight +
-        CGFloat(EnergyBurnedSummary.ActivityLevel.allCases.count - 1) * CGFloat.spacing
+        CGFloat(ActivityLevelSummary.ActivityLevel.allCases.count) * CGFloat.barHeight +
+        CGFloat(ActivityLevelSummary.ActivityLevel.allCases.count - 1) * CGFloat.spacing
     }
 
     var maxCount: CGFloat {
@@ -81,7 +83,7 @@ private extension ActivityLevelDistributionView {
         CGFloat(ratioDistribution.values.map({ Double($0) }).sum(keyPath: \.self))
     }
 
-    func formattedPercent(for level: EnergyBurnedSummary.ActivityLevel) -> String {
+    func formattedPercent(for level: ActivityLevelSummary.ActivityLevel) -> String {
         guard let count = ratioDistribution[level], count > 0 else { return "0%" }
 
         return String(format: "%.0f", CGFloat(count) / total * 100) + "%"
@@ -96,7 +98,7 @@ private extension ActivityLevelDistributionView {
                 .light: 13,
                 .moderate: 4,
                 .high: 1,
-                .intense: 0
+                .intense: 3
             ]
         )
         .cardContainer()

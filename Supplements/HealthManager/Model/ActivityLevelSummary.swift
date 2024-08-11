@@ -1,5 +1,5 @@
 //
-//  EnergyBurnedSummary.swift
+//  ActivityLevelSummary.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-07-24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension EnergyBurnedSummary {
+extension ActivityLevelSummary {
     enum ActivityLevel: CaseIterable, Identifiable {
         var id: Self { self }
 
@@ -19,7 +19,7 @@ extension EnergyBurnedSummary {
     }
 }
 
-extension EnergyBurnedSummary.ActivityLevel {
+extension ActivityLevelSummary.ActivityLevel {
 
     var name: String {
         switch self {
@@ -71,14 +71,16 @@ extension EnergyBurnedSummary.ActivityLevel {
     }
 }
 
-struct EnergyBurnedSummary: Equatable, Codable {
+struct ActivityLevelSummary: Equatable, Codable {
     let averageBasalEnergyBurned: Double
     let averageActiveEnergyBurned: Double
+    let energyRatioSamples: [DateQuantitySample]
     let lastMonthAverageBasalEnergyBurned: Double
     let lastMonthAverageActiveEnergyBurned: Double
+    let lastMonthEnergyRatioSamples: [DateQuantitySample]
 }
 
-extension EnergyBurnedSummary {
+extension ActivityLevelSummary {
 
     var score: Double {
         guard let activityRatio else { return 1 }
@@ -123,5 +125,18 @@ extension EnergyBurnedSummary {
         } else {
             return .intense
         }
+    }
+
+    var activityLevelRatioDistribution: [ActivityLevelSummary.ActivityLevel : Int] {
+        var ratioDistribution = [ActivityLevelSummary.ActivityLevel : Int]()
+        for sample in energyRatioSamples {
+            for level in ActivityLevelSummary.ActivityLevel.allCases {
+                if level.range.contains(sample.quantity) {
+                    ratioDistribution[level, default: 0] += 1
+                }
+            }
+        }
+
+        return ratioDistribution
     }
 }

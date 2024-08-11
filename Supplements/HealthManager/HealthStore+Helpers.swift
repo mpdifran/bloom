@@ -239,11 +239,7 @@ extension HKHealthStore {
         endDate: Date
     ) async throws -> [DateQuantitySample] {
         try await withCheckedThrowingContinuation { continuation in
-            guard let quantityType = HKObjectType.quantityType(forIdentifier: quantityTypeID) else {
-                let error = NSError(description: "Quantity type not available")
-                continuation.resume(throwing: error)
-                return
-            }
+            let quantityType = HKQuantityType(quantityTypeID)
 
             let adjustedStartDate = Calendar.current.startOfDay(for: startDate)
             let adjustedEndDate = Calendar.current.endOfDay(for: endDate)
@@ -266,7 +262,7 @@ extension HKHealthStore {
                     continuation.resume(returning: [])
                     return
                 }
-                
+
                 var quantities = [DateQuantitySample]()
                 results.enumerateStatistics(from: adjustedStartDate, to: adjustedEndDate) { (statistics, stop) in
                     if let sum = statistics.sumQuantity() {
