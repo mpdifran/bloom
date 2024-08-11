@@ -375,6 +375,13 @@ extension HealthManager {
         return nil
     }
 
+    func fetchVO2Max(numPastDays: Int) async -> [DateAverageQuantitySample] {
+        let endDate = Date.now
+        guard let startDate = Calendar.current.date(byAdding: .day, value: -numPastDays, to: endDate) else { return [] }
+
+        return await fetchVO2Max(startDate: startDate, endDate: endDate)
+    }
+
     func fetchVO2Max(startDate: Date, endDate: Date) async -> [DateAverageQuantitySample] {
         do {
             return try await healthStore.fetchAverageStatistics(

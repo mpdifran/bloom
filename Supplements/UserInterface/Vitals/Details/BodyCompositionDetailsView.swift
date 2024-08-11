@@ -157,15 +157,9 @@ private extension BodyCompositionDetailsView {
 
                     Text(range.rangeDescription(from: goal))
                 }
-                .bold()
-                .foregroundStyle(.invertedText)
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(range.color)
-                }
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.zone)
+            .tint(range.color)
         }
     }
 

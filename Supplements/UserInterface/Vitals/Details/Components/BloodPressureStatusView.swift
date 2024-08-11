@@ -134,15 +134,9 @@ private extension BloodPressureStatusView {
 
                 Text(selectedCategory.name)
             }
-            .bold()
-            .foregroundStyle(.invertedText)
-            .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(selectedCategory.color)
-            }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.zone)
+        .tint(selectedCategory.color)
     }
 
     var framesForSelectedCategory: [RectangleFrame] {

@@ -76,8 +76,7 @@ extension CardioFitnessMonthlySummary {
 
         return [
             vo2Max,
-            vo2Max, // Add it 4 times because it's more important
-            vo2Max,
+            vo2Max, // Add it 3 times because it's more important
             vo2Max,
             heartRate
         ]

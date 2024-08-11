@@ -90,6 +90,8 @@
 		FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */; };
 		FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F02C40797F004E8661 /* SleepStageChartView.swift */; };
 		FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */; };
+		FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */; };
+		FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -139,6 +141,7 @@
 		FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */; };
 		FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */; };
 		FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */; };
+		FF8F79DF2C6948B70095C36D /* CardioFitnessDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
@@ -446,6 +449,8 @@
 		FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListViewModel.swift; sourceTree = "<group>"; };
 		FF4578F02C40797F004E8661 /* SleepStageChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStageChartView.swift; sourceTree = "<group>"; };
 		FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySectionTitleView.swift; sourceTree = "<group>"; };
+		FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Zone.swift"; sourceTree = "<group>"; };
+		FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Unwrap.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -494,6 +499,7 @@
 		FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelDistributionView.swift; sourceTree = "<group>"; };
 		FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummation.swift; sourceTree = "<group>"; };
 		FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummationCell.swift; sourceTree = "<group>"; };
+		FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessDetailsView.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
@@ -960,6 +966,7 @@
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
 				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
 				FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */,
+				FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */,
 				FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */,
 				FFC77AD82C541DE9003E5F85 /* Double+Format.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
@@ -1063,6 +1070,7 @@
 				FF8F79D02C655D7D0095C36D /* StressDetailsView.swift */,
 				FF8F79B42C5FD5360095C36D /* BodyCompositionDetailsView.swift */,
 				FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */,
+				FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -1078,6 +1086,7 @@
 				FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */,
 				FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */,
 				FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */,
+				FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1924,6 +1933,7 @@
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
+				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
 				FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */,
 				FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
@@ -1948,6 +1958,7 @@
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
 				FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */,
 				FF8B8B482C00309D00BA2128 /* ActivityBubbleCell.swift in Sources */,
+				FF8F79DF2C6948B70095C36D /* CardioFitnessDetailsView.swift in Sources */,
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */,
@@ -1982,6 +1993,7 @@
 				FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */,
 				FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */,
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,
+				FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */,
 				FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */,
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,

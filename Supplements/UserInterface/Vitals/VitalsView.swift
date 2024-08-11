@@ -57,6 +57,7 @@ struct VitalsView: View {
                 case .nutrition: NutritionDetailsView()
                 case .stressLevels: StressDetailsView()
                 case .activityLevel: ActivityLevelDetailsView()
+                case .cardioFitness: CardioFitnessDetailsView()
                 default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
                 }
             }

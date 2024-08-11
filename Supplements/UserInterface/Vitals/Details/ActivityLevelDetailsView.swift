@@ -104,15 +104,9 @@ private extension ActivityLevelDetailsView {
 
                 Text(selectedLevel.name)
             }
-            .bold()
-            .foregroundStyle(.invertedText)
-            .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(selectedLevel.color)
-            }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.zone)
+        .tint(selectedLevel.color)
     }
 
     var ratioDistributionView: some View {
