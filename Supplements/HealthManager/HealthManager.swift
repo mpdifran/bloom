@@ -857,12 +857,14 @@ extension HealthManager {
             let quantity = try await healthStore.fetchQuantity(
                 for: quantityTypeID,
                 start: startDate,
-                end: endDate
+                end: endDate,
+                option: .cumulativeSum
             )
             let dietaryEnergy = try await healthStore.fetchQuantity(
                 for: .dietaryEnergyConsumed,
                 start: startDate,
-                end: endDate
+                end: endDate,
+                option: .cumulativeSum
             )
 
             return (quantity.doubleValue(for: .gram()) * caloriesPerGram) / dietaryEnergy.doubleValue(for: .largeCalorie())
