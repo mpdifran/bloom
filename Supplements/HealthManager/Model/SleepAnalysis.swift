@@ -163,11 +163,13 @@ extension SleepAnalysis {
     }
 
     var overallScoreDouble: Double {
-        let componentAverage = [
+        let components = [
             deepSleepScore,
             coreSleepScore,
             remSleepScore
-        ].average(keyPath: \.self)
+        ].filter({ $0 < .maxScore * 0.999 })
+        let componentAverage = components.isEmpty ? .maxScore : components.average(keyPath: \.self)
+
         return [
             sleepLengthScore,
             componentAverage,
