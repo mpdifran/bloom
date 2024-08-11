@@ -57,12 +57,12 @@ private extension ActivityLevelDetailsView {
 
                 Chart {
                     ForEach(activityLevelSummary.energyRatioSamples) { ratio in
-                        LineMark(
+                        BarMark(
                             x: .value("Date", ratio.date),
-                            y: .value("Ratio", ratio.quantity)
+                            yStart: .value("", 1),
+                            yEnd: .value("Ratio", ratio.quantity)
                         )
-                        .interpolationMethod(.catmullRom)
-                        .foregroundStyle(activityLevelSummary.activityLevel.color)
+                        .foregroundStyle(color(for: ratio.quantity))
                     }
 
                     RectangleMark(
@@ -86,6 +86,15 @@ private extension ActivityLevelDetailsView {
                 levelPicker
             }
         }
+    }
+
+    func color(for ratio: Double) -> Color {
+        let activityLevel = ActivityLevelSummary.ActivityLevel(ratio)
+
+        if activityLevel == selectedLevel {
+            return .green
+        }
+        return .green.opacity(0.3)
     }
 
     var selectedLevel: ActivityLevelSummary.ActivityLevel {

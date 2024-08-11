@@ -16,6 +16,20 @@ extension ActivityLevelSummary {
         case moderate
         case high
         case intense
+
+        init(_ ratio: Double) {
+            if ratio < 1.2 {
+                self = .sedentary
+            } else if ratio < 1.375 {
+                self = .light
+            } else if ratio < 1.55 {
+                self = .moderate
+            } else if ratio < 1.725 {
+                self = .high
+            } else {
+                self = .intense
+            }
+        }
     }
 }
 
