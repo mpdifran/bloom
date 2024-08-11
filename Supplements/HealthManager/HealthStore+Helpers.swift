@@ -244,9 +244,15 @@ extension HKHealthStore {
             let adjustedStartDate = Calendar.current.startOfDay(for: startDate)
             let adjustedEndDate = Calendar.current.endOfDay(for: endDate)
 
+            let predicate = HKQuery.predicateForSamples(
+                withStart: adjustedStartDate,
+                end: adjustedEndDate,
+                options: .strictStartDate
+            )
+
             let query = HKStatisticsCollectionQuery(
                 quantityType: quantityType,
-                quantitySamplePredicate: nil,
+                quantitySamplePredicate: predicate,
                 options: [.cumulativeSum],
                 anchorDate: adjustedStartDate,
                 intervalComponents: interval
