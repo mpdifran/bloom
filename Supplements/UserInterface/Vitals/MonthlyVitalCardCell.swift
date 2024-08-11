@@ -23,6 +23,7 @@ struct MonthlyVitalCardCell: View {
             Image(systemName: vital.id.systemImage)
                 .bold()
                 .font(.title)
+                .frame(width: 40)
 
             VStack(alignment: .leading) {
                 Text(vital.id.name)
