@@ -67,7 +67,7 @@ private extension ActivityLevelDetailsView {
 
                     RectangleMark(
                         yStart: .value("Min", selectedLevel.range.lowerBound),
-                        yEnd: .value("Max", selectedLevel.range.upperBound)
+                        yEnd: .value("Max", min(selectedLevel.range.upperBound, chartMax))
                     )
                     .foregroundStyle(selectedLevel.color.opacity(0.3))
 
@@ -75,17 +75,25 @@ private extension ActivityLevelDetailsView {
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                         .foregroundStyle(selectedLevel.color)
 
-                    RuleMark(y: .value("Max", selectedLevel.range.upperBound))
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(selectedLevel.color)
+                    if selectedLevel.range.upperBound < chartMax {
+                        RuleMark(y: .value("Max", min(selectedLevel.range.upperBound, chartMax)))
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            .foregroundStyle(selectedLevel.color)
+                    }
                 }
-                .chartYScale(domain: 1...2.5, range: .plotDimension(startPadding: 10, endPadding: 10))
+                .chartYScale(domain: 1...chartMax, range: .plotDimension(startPadding: 10, endPadding: 0))
                 .frame(height: 300)
                 .clipped()
 
                 levelPicker
             }
         }
+    }
+
+    var chartMax: Double {
+        guard let max = viewModel.activityLevelSummary?.energyRatioSamples.max(keyPath: \.quantity) else { return 2 }
+
+        return max * 1.1
     }
 
     func color(for ratio: Double) -> Color {
