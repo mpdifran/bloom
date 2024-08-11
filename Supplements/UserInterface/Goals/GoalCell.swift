@@ -23,24 +23,23 @@ struct GoalCell: View {
                 Image(systemName: goal.systemImage)
                     .font(.largeTitle)
                     .foregroundStyle(goal.metric.measurement.color)
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text(goal.title)
-                            .font(.title3)
+                HStack(alignment: .top) {
+                    Text(goal.title)
+                        .font(.title3)
+                        .bold()
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Spacer()
+
+                    VStack(alignment: .trailing) {
+                        Text("Due")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(goal.dueDate))")
+                            .font(.headline)
                             .bold()
-                            .lineLimit(2)
-                            .multilineTextAlignment(.leading)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        Spacer(minLength: 0)
-
-                        VStack(alignment: .trailing) {
-                            Text("Due")
-                                .foregroundStyle(.secondary)
-                                .font(.caption2)
-                            Text("\(goal.dueDate, formatter: DateFormatter.justRelativeDateMedium)")
-                                .font(.subheadline)
-                        }
                     }
                 }
             }

@@ -89,4 +89,20 @@ public extension DateFormatter {
 
         return formatter
     }()
+
+    static var timeIntervalDaysFull: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+
+        formatter.unitsStyle = .full
+        formatter.allowedUnits = [.day]
+
+        return formatter
+    }()
+
+    static func relativeTimeIntervalDaysFullFromNow(_ date: Date) -> String {
+        if Calendar.current.isDateInToday(date) {
+            return justRelativeDateMedium.string(from: date)
+        }
+        return "in " + (timeIntervalDaysFull.string(from: .now, to: date) ?? "")
+    }
 }
