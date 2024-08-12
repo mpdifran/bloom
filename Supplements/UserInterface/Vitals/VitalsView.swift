@@ -48,7 +48,6 @@ struct VitalsView: View {
                 }
                 .padding(.bottom)
             }
-            .groupedBackground()
             .navigationTitle("Vitals")
             .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
                 switch vitalKind {

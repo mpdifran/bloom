@@ -20,14 +20,13 @@ struct GoalsView: View {
                 VStack {
                     ForEachEnumerated(viewModel.goals) { index, goal in
                         GoalCell(goal: goal, index: index)
-                            .cardContainer()
+                            .cardContainer(fill: .background.secondary)
                             .transition(.blurReplace)
                     }
                 }
                 .padding()
                 .horizontallyCentered()
             }
-            .groupedBackground()
             .navigationTitle("Goals")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
