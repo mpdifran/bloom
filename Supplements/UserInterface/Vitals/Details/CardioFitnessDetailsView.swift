@@ -40,7 +40,7 @@ struct CardioFitnessDetailsView: View {
         }
         .onAppear {
             feedbackGenerator.prepare()
-            if let level = viewModel.cardioFitnessSummary?.level, let index = fitnessLevels.firstIndex(of: level) {
+            if let level = viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel, let index = fitnessLevels.firstIndex(of: level) {
                 self.selectedFitnessLevelIndex = index
             }
         }
@@ -129,12 +129,12 @@ private extension CardioFitnessDetailsView {
                                 x: .value("Date", sample.date),
                                 y: .value("VO₂ Max", sample.averageQuantity)
                             )
-                            .foregroundStyle(viewModel.cardioFitnessSummary?.level.color ?? .pink)
+                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .pink)
                             PointMark(
                                 x: .value("Date", sample.date),
                                 y: .value("VO₂ Max", sample.averageQuantity)
                             )
-                            .foregroundStyle(viewModel.cardioFitnessSummary?.level.color ?? .pink)
+                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .pink)
                         }
                     }
                     .chartYScale(domain: chartMin...chartMax, range: .plotDimension)

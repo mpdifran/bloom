@@ -132,6 +132,20 @@ extension CardioFitnessMonthlySummary {
         return descriptions.joined(separator: "\n")
     }
 
+    var vo2MaxFitnessLevel: FitnessLevel {
+        guard let goal = HealthManager.shared.goalVO2MaxForUser(), let averageVO2Max else { return .unknown }
+
+        if averageVO2Max < goal.2 {
+            return .low
+        } else if averageVO2Max < goal.1 {
+            return .belowAverage
+        } else if averageVO2Max < goal.0 {
+            return .aboveAverage
+        } else {
+            return .high
+        }
+    }
+
     var level: FitnessLevel {
         if
             averageVO2Max == nil,
