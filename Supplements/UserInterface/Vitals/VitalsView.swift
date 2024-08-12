@@ -52,7 +52,7 @@ struct VitalsView: View {
             .navigationTitle("Vitals")
             .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
                 switch vitalKind {
-                case .sleepQuality: TodayView()
+                case .sleepQuality: SleepDetailsView()
                 case .bodyComposition: BodyCompositionDetailsView()
                 case .nutrition: NutritionDetailsView()
                 case .stressLevels: StressDetailsView()

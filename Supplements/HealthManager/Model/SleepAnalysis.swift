@@ -91,6 +91,10 @@ extension SleepAnalysis {
         Calendar.current.startOfDay(for: startDate)
     }
 
+    var normalizedDate: Date {
+        Calendar.current.normalizedSleepDate(for: endDate)
+    }
+
     var endOfEndDate: Date {
         guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: endDate) else { return endDate }
 

@@ -1076,7 +1076,6 @@
 				FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */,
 				FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */,
 				FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */,
-				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -1093,6 +1092,7 @@
 				FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */,
 				FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */,
 				FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */,
+				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
