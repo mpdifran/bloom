@@ -51,7 +51,7 @@ private extension ActivityLevelDetailsView {
         if let activityLevelSummary = viewModel.activityLevelSummary {
             VStack(alignment: .leading) {
                 VitalDetailChartTitleView(
-                    title: "Activity Ratio",
+                    title: "Energy Ratio",
                     value: activityLevelSummary.activityLevel.name
                 )
 
@@ -86,6 +86,10 @@ private extension ActivityLevelDetailsView {
                 .clipped()
 
                 levelPicker
+
+                DetailInfoCardView {
+                    Text("Energy Ratio is the ratio between your Basal Energy and TDEE (Total Daily Energy Exertion) for a given day. The higher the ratio, the more active you were.")
+                }
             }
         }
     }

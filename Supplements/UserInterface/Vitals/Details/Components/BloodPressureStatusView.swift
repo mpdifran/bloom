@@ -89,16 +89,9 @@ struct BloodPressureStatusView: View {
             categoryPicker
                 .padding(.bottom)
 
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Details")
-                        .font(.headline)
-                        .bold()
-                    Text(selectedCategory.description)
-                }
-                Spacer()
+            DetailInfoCardView {
+                Text(selectedCategory.description)
             }
-            .cardContainer(fill: .background.secondary)
         }
         .padding()
         .onAppear {

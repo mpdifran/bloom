@@ -92,6 +92,8 @@
 		FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */; };
 		FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */; };
 		FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */; };
+		FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */; };
+		FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -451,6 +453,8 @@
 		FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySectionTitleView.swift; sourceTree = "<group>"; };
 		FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Zone.swift"; sourceTree = "<group>"; };
 		FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Unwrap.swift"; sourceTree = "<group>"; };
+		FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDetailsView.swift; sourceTree = "<group>"; };
+		FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoCardView.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -1071,6 +1075,8 @@
 				FF8F79B42C5FD5360095C36D /* BodyCompositionDetailsView.swift */,
 				FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */,
 				FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */,
+				FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */,
+				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -1852,6 +1858,7 @@
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
 				FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */,
 				FF13599A2C28A29A00FB49A6 /* Directive+Helpers.swift in Sources */,
+				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
 				FFA134F22C3F05E500FF1829 /* TodayViewModel.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */,
@@ -1962,6 +1969,7 @@
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */,
+				FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */,
 				FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,

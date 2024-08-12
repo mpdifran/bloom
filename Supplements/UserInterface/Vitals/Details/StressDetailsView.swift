@@ -104,16 +104,9 @@ private extension StressDetailsView {
             .frame(height: 160)
 
             if let restingHeartRateDescription {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Details")
-                            .font(.headline)
-                            .bold()
-                        Text(restingHeartRateDescription)
-                    }
-                    Spacer()
+                DetailInfoCardView {
+                    Text(restingHeartRateDescription)
                 }
-                .cardContainer(fill: .background.secondary)
                 .padding(.top)
             }
         }
@@ -173,16 +166,9 @@ private extension StressDetailsView {
             }
             .frame(height: 160)
 
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Details")
-                        .font(.headline)
-                        .bold()
-                    Text("Heart Rate Variability is a measure of how quickly you can change your heart rate. A higher value indicates lower stress and more relaxation, and a lower value indicates your body is in stress.")
-                }
-                Spacer()
+            DetailInfoCardView {
+                Text("Heart Rate Variability is a measure of how quickly you can change your heart rate. A higher value indicates lower stress and more relaxation, and a lower value indicates your body is in stress.")
             }
-            .cardContainer(fill: .background.secondary)
         }
     }
 }

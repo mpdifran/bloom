@@ -166,33 +166,25 @@ private extension BodyCompositionDetailsView {
     @ViewBuilder
     var detailsSection: some View {
         if range != .unknown {
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Details")
-                        .font(.headline)
-                        .bold()
-
-                    switch range {
-                    case .essentialFat:
-                        Text("Essential fat is the minimum amount of fat necessary for basic physiological functions. It is crucial for the protection of internal organs, insulation, and reproductive health. It can be difficult on the body to remain in this range.")
-                    case .athlete:
-                        Text("This range is typical for athletes who require higher muscle mass and lower fat levels for optimal performance. It reflects a high level of fitness and conditioning.")
-                    case .fit:
-                        Text("Individuals in this range have a healthy amount of body fat and are usually quite active. This range is often seen in non-competitive athletes or individuals who maintain a consistent exercise routine.")
-                    case .healthy:
-                        Text("This range is considered normal for the general population. People within this range have a balanced level of body fat, contributing to overall health and well-being.")
-                    case .high:
-                        Text("Higher body fat percentages can be associated with an increased risk of health issues such as cardiovascular disease, diabetes, and other metabolic conditions. It may indicate a need for lifestyle changes to improve health.")
-                    case .unknown:
-                        EmptyView()
-                    }
-
-                    Link("Learn More", destination: URL(string: "https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage")!)
-                        .foregroundStyle(range.color)
+            DetailInfoCardView {
+                switch range {
+                case .essentialFat:
+                    Text("Essential fat is the minimum amount of fat necessary for basic physiological functions. It is crucial for the protection of internal organs, insulation, and reproductive health. It can be difficult on the body to remain in this range.")
+                case .athlete:
+                    Text("This range is typical for athletes who require higher muscle mass and lower fat levels for optimal performance. It reflects a high level of fitness and conditioning.")
+                case .fit:
+                    Text("Individuals in this range have a healthy amount of body fat and are usually quite active. This range is often seen in non-competitive athletes or individuals who maintain a consistent exercise routine.")
+                case .healthy:
+                    Text("This range is considered normal for the general population. People within this range have a balanced level of body fat, contributing to overall health and well-being.")
+                case .high:
+                    Text("Higher body fat percentages can be associated with an increased risk of health issues such as cardiovascular disease, diabetes, and other metabolic conditions. It may indicate a need for lifestyle changes to improve health.")
+                case .unknown:
+                    EmptyView()
                 }
-                Spacer(minLength: 0)
+
+                Link("Learn More", destination: URL(string: "https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage")!)
+                    .foregroundStyle(range.color)
             }
-            .cardContainer(fill: .background.secondary)
         }
     }
 }
