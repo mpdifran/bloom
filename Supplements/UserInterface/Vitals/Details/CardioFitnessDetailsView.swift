@@ -28,6 +28,8 @@ struct CardioFitnessDetailsView: View {
         ScrollView {
             vo2MaxChart
                 .padding()
+            heartRateRecoveryChart
+                .padding()
         }
         .navigationTitle("Cardio Fitness")
         .navigationBarTitleDisplayMode(.inline)
@@ -158,6 +160,55 @@ private extension CardioFitnessDetailsView {
                 .buttonStyle(.zone)
                 .tint(fitnessLevel.color)
             }
+        }
+    }
+
+    var heartRateRecoveryChart: some View {
+        VStack(alignment: .leading) {
+            VitalDetailChartTitleView(
+                title: "Heart Rate Recovery",
+                value: (viewModel.cardioFitnessSummary?.averageHeartRateRecovery?.format() ?? "unknown") + " bpm"
+            )
+
+            Chart {
+                if let lastMonthHeartRateRecovery = viewModel.cardioFitnessSummary?.lastMonthAverageHeartRateRecovery {
+                    LineMark(
+                        x: .value("Time Peroid", "Last Month"),
+                        y: .value("Heart Rate Recovery", lastMonthHeartRateRecovery)
+                    )
+                    .foregroundStyle(.gray)
+                    PointMark(
+                        x: .value("Time Peroid", "Last Month"),
+                        y: .value("Heart Rate Recovery", lastMonthHeartRateRecovery)
+                    )
+                    .foregroundStyle(.gray)
+                }
+                if let heartRateRecovery = viewModel.cardioFitnessSummary?.averageHeartRateRecovery {
+                    LineMark(
+                        x: .value("Time Peroid", "This Month"),
+                        y: .value("Heart Rate Recovery", heartRateRecovery)
+                    )
+                    .foregroundStyle(.gray)
+                    PointMark(
+                        x: .value("Time Peroid", "This Month"),
+                        y: .value("Heart Rate Recovery", heartRateRecovery)
+                    )
+                    .foregroundStyle(.pink)
+                }
+
+                RuleMark(y: .value("Min", Double.minHeartRateRecovery))
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                    .foregroundStyle(.pink)
+            }
+            .chartXAxis {
+                AxisMarks(values: ["Last Month", "This Month"]) {
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel()
+                }
+            }
+            .chartXScale(domain: ["Last Month", "This Month"])
+            .frame(height: 200)
         }
     }
 }
