@@ -1043,6 +1043,13 @@ extension HealthManager {
             unit: .gramUnit(with: .milli)
         )
 
+        let sodium = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietarySodium,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gramUnit(with: .milli)
+        )
+
         let zinc = try? await healthStore.fetchNutritionalDailyAverage(
             for: .dietaryZinc,
             startDate: startDate,
@@ -1069,6 +1076,7 @@ extension HealthManager {
             averageIron: iron,
             averageMagnesium: magnesium,
             averagePotassium: potassium,
+            averageSodium: sodium,
             averageZinc: zinc
         )
     }
@@ -2164,6 +2172,26 @@ extension HealthManager {
                 return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2600...10000)
             }
             return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3400...10000)
+        }
+    }
+
+    /// unit: mg
+    /// - note: https://www.verywellhealth.com/how-much-sodium-per-day-7971716#toc-for-overall-health-how-much-sodium-to-get-per-day
+    func recommendedDailyIntakeForSodium() -> HKQuantityRange? {
+        guard let age = healthStore.age() else { return nil }
+
+        if age < 4 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...1000)
+        } else if age < 9 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...1200)
+        } else if age < 14 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...1500)
+        } else if age < 51 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...2300)
+        } else if age < 71 {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...1300)
+        } else {
+            return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...1200)
         }
     }
 

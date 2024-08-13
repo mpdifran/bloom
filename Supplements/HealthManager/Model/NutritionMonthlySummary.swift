@@ -92,6 +92,7 @@ extension NutritionMonthlySummary {
         let averageIron: HKQuantity?
         let averageMagnesium: HKQuantity?
         let averagePotassium: HKQuantity?
+        let averageSodium: HKQuantity?
         let averageZinc: HKQuantity?
     }
 
@@ -500,6 +501,7 @@ extension NutritionMonthlySummary.Details {
             ironScore,
             magnesiumScore,
             potassiumScore,
+            sodiumScore,
             zincScore
         ].compactMap({ $0 })
 
@@ -516,6 +518,7 @@ extension NutritionMonthlySummary.Details {
             ("Iron", ironScore),
             ("Magnesium", magnesiumScore),
             ("Potassium", potassiumScore),
+            ("Sodium", sodiumScore),
             ("Zinc", zincScore)
         ].compactMap({
             if let value = $0.1 {
@@ -583,6 +586,20 @@ extension NutritionMonthlySummary.Details {
         guard
             let average = averagePotassium?.doubleValue(for: unit),
             let goal = HealthManager.shared.recommendedDailyIntakeForPotassium()
+        else { return nil }
+
+        return average.invertedScaledPercent(
+            lower: goal.lowerDoubleValue(for: unit),
+            upper: goal.upperDoubleValue(for: unit)
+        )
+    }
+
+    var sodiumScore: Double? {
+        let unit = HKUnit.gramUnit(with: .milli)
+
+        guard
+            let average = averageSodium?.doubleValue(for: unit),
+            let goal = HealthManager.shared.recommendedDailyIntakeForSodium()
         else { return nil }
 
         return average.invertedScaledPercent(

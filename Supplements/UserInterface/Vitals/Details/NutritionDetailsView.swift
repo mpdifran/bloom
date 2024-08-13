@@ -363,6 +363,16 @@ private extension NutritionDetailsView {
                     )
                     .tint(.potassium)
                 }
+                if let sodium = details.averageSodium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForSodium() {
+                    CapsuleRangeChart(
+                        title: "Sodium",
+                        unitString: "mg",
+                        value: sodium,
+                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+                    )
+                    .tint(.sodium)
+                }
                 if let zinc = details.averageZinc?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForZinc() {
                     CapsuleRangeChart(
                         title: "Zinc",
