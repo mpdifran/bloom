@@ -39,6 +39,21 @@ extension CardioFitnessMonthlySummary {
             case .high: .coreSleep
             }
         }
+
+        var summary: String {
+            switch self {
+            case .unknown:
+                ""
+            case .low:
+                "This level indicates poor cardiovascular fitness and is associated with a higher risk of cardiovascular diseases and other health issues."
+            case .belowAverage:
+                "Individuals in this category have cardiovascular fitness below the median but are not in the lowest fitness category."
+            case .aboveAverage:
+                "This level represents better-than-average cardiovascular fitness and suggests a lower risk of cardiovascular diseases."
+            case .high:
+                "This top level is characterized by superior cardiovascular fitness, often indicating excellent overall health and a lower risk of heart-related conditions."
+            }
+        }
     }
 }
 

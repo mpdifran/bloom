@@ -107,7 +107,7 @@ private extension CardioFitnessDetailsView {
                     ContentUnavailableView(
                         "No Data Available",
                         systemImage: "heart.fill",
-                        description: Text("There are no VO₂ Max samples in the mpast month.")
+                        description: Text("There are no VO₂ Max samples in the past month.")
                     )
                 } else {
                     Chart {
@@ -159,6 +159,13 @@ private extension CardioFitnessDetailsView {
                 }
                 .buttonStyle(.zone)
                 .tint(fitnessLevel.color)
+
+                DetailInfoCardView {
+                    Text(fitnessLevel.summary)
+                    Text("Fitness levels derived from the Fitness Registry and Importance of Exercise National Database (FRIEND).")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
@@ -171,43 +178,49 @@ private extension CardioFitnessDetailsView {
             )
 
             Chart {
-                RuleMark(y: .value("Min", Double.minHeartRateRecovery))
+                RuleMark(x: .value("Min", Double.minHeartRateRecovery))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                     .foregroundStyle(.pink)
 
                 RectangleMark(
-                    yStart: .value("Min", Double.minHeartRateRecovery),
-                    yEnd: .value("", maxValue)
+                    xStart: .value("Min", Double.minHeartRateRecovery),
+                    xEnd: .value("", maxValue)
                 )
-                .foregroundStyle(.pink.opacity(0.3))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.pink.opacity(0.3), .pink.opacity(0.05)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
 
                 if let lastMonthHeartRateRecovery = viewModel.cardioFitnessSummary?.lastMonthAverageHeartRateRecovery {
                     BarMark(
-                        x: .value("Time Peroid", "Last Month"),
-                        y: .value("Heart Rate Recovery", lastMonthHeartRateRecovery)
+                        x: .value("Heart Rate Recovery", lastMonthHeartRateRecovery),
+                        y: .value("Time Peroid", "Last Month")
                     )
                     .foregroundStyle(.gray)
                     .cornerRadius(10)
                 }
                 if let heartRateRecovery = viewModel.cardioFitnessSummary?.averageHeartRateRecovery {
                     BarMark(
-                        x: .value("Time Peroid", "This Month"),
-                        y: .value("Heart Rate Recovery", heartRateRecovery)
+                        x: .value("Heart Rate Recovery", heartRateRecovery),
+                        y: .value("Time Peroid", "This Month")
                     )
                     .foregroundStyle(.pink)
                     .cornerRadius(10)
                 }
             }
-            .chartXAxis {
+            .chartYAxis {
                 AxisMarks(values: ["Last Month", "This Month"]) {
                     AxisGridLine()
                     AxisTick()
                     AxisValueLabel()
                 }
             }
-            .chartXScale(domain: ["Last Month", "This Month"])
-            .chartYScale(domain: 0...maxValue, range: .plotDimension)
-            .frame(height: 200)
+            .chartYScale(domain: ["Last Month", "This Month"])
+            .chartXScale(domain: 0...maxValue, range: .plotDimension)
+            .frame(height: 150)
         }
     }
 
