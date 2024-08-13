@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension SleepVitalsMonthlySummary {
-    enum SleepQuality {
+    enum SleepQuality: CaseIterable {
         case poor
         case low
         case good

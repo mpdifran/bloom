@@ -13,20 +13,23 @@ struct SleepDetailsView: View {
     @ObservedObject private var healthManager = HealthManager.shared
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
+    @State private var selectedSleepQualityIndex = 0
     @State private var showTodayView = false
+
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 sleepQualityChart
 
-                viewDailySleepDataButton
-
                 sleepDistributionChart
                     .cardContainer(
                         fill: .background.secondary,
                         includePadding: false
                     )
+
+                viewDailySleepDataButton
             }
             .padding()
         }
@@ -35,10 +38,19 @@ struct SleepDetailsView: View {
         .navigationDestination(isPresented: $showTodayView) {
             TodayView()
         }
+        .onAppear {
+            feedbackGenerator.prepare()
+        }
     }
 }
 
 private extension SleepDetailsView {
+
+    var selectedSleepQuality: SleepVitalsMonthlySummary.SleepQuality? {
+        guard selectedSleepQualityIndex > 0 else { return nil }
+
+        return SleepVitalsMonthlySummary.SleepQuality.allCases[selectedSleepQualityIndex - 1]
+    }
 
     var sleepQualityChart: some View {
         VStack(alignment: .leading) {
@@ -58,19 +70,37 @@ private extension SleepDetailsView {
                 }
             }
             .frame(height: 200)
+
+            Button  {
+                selectedSleepQualityIndex = (selectedSleepQualityIndex + 1) % (SleepVitalsMonthlySummary.SleepQuality.allCases.count + 1)
+                feedbackGenerator.impactOccurred()
+            } label: {
+                HStack {
+                    Text("Sleep Quality")
+
+                    Spacer()
+
+                    Text(selectedSleepQuality?.name ?? "All")
+                }
+            }
+            .buttonStyle(.zone)
+            .tint(selectedSleepQuality?.color ?? .coreSleep)
         }
     }
 
     func color(for sleepScore: Double) -> Color {
-        if sleepScore < 4 {
-            .pink
-        } else if sleepScore < 7 {
-            .yellow
-        } else if sleepScore < 9 {
-            .green
-        } else {
-            .blue
+        guard let quality = selectedSleepQuality else { return .coreSleep }
+
+        if 
+            sleepScore < 4 && quality == .poor ||
+            sleepScore >= 4 && sleepScore < 7 && quality == .low ||
+            sleepScore >= 7 && sleepScore < 9 && quality == .good ||
+            sleepScore >= 9 && quality == .great
+        {
+            return quality.color
         }
+
+        return .coreSleep.opacity(0.3)
     }
 
     @ViewBuilder
@@ -139,9 +169,11 @@ private extension SleepDetailsView {
                 Image(systemName: "chevron.forward")
                     .foregroundStyle(.secondary)
             }
+            .containerShape(Rectangle())
         }
-        .buttonStyle(.zone)
-        .tint(.coreSleep)
+        .buttonStyle(.plain)
+        .foregroundStyle(.coreSleep)
+        .cardContainer(fill: .background.secondary)
     }
 }
 
