@@ -171,34 +171,32 @@ private extension CardioFitnessDetailsView {
             )
 
             Chart {
-                if let lastMonthHeartRateRecovery = viewModel.cardioFitnessSummary?.lastMonthAverageHeartRateRecovery {
-                    LineMark(
-                        x: .value("Time Peroid", "Last Month"),
-                        y: .value("Heart Rate Recovery", lastMonthHeartRateRecovery)
-                    )
-                    .foregroundStyle(.gray)
-                    PointMark(
-                        x: .value("Time Peroid", "Last Month"),
-                        y: .value("Heart Rate Recovery", lastMonthHeartRateRecovery)
-                    )
-                    .foregroundStyle(.gray)
-                }
-                if let heartRateRecovery = viewModel.cardioFitnessSummary?.averageHeartRateRecovery {
-                    LineMark(
-                        x: .value("Time Peroid", "This Month"),
-                        y: .value("Heart Rate Recovery", heartRateRecovery)
-                    )
-                    .foregroundStyle(.gray)
-                    PointMark(
-                        x: .value("Time Peroid", "This Month"),
-                        y: .value("Heart Rate Recovery", heartRateRecovery)
-                    )
-                    .foregroundStyle(.pink)
-                }
-
                 RuleMark(y: .value("Min", Double.minHeartRateRecovery))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                     .foregroundStyle(.pink)
+
+                RectangleMark(
+                    yStart: .value("Min", Double.minHeartRateRecovery),
+                    yEnd: .value("", maxValue)
+                )
+                .foregroundStyle(.pink.opacity(0.3))
+
+                if let lastMonthHeartRateRecovery = viewModel.cardioFitnessSummary?.lastMonthAverageHeartRateRecovery {
+                    BarMark(
+                        x: .value("Time Peroid", "Last Month"),
+                        y: .value("Heart Rate Recovery", lastMonthHeartRateRecovery)
+                    )
+                    .foregroundStyle(.gray)
+                    .cornerRadius(10)
+                }
+                if let heartRateRecovery = viewModel.cardioFitnessSummary?.averageHeartRateRecovery {
+                    BarMark(
+                        x: .value("Time Peroid", "This Month"),
+                        y: .value("Heart Rate Recovery", heartRateRecovery)
+                    )
+                    .foregroundStyle(.pink)
+                    .cornerRadius(10)
+                }
             }
             .chartXAxis {
                 AxisMarks(values: ["Last Month", "This Month"]) {
@@ -208,8 +206,18 @@ private extension CardioFitnessDetailsView {
                 }
             }
             .chartXScale(domain: ["Last Month", "This Month"])
+            .chartYScale(domain: 0...maxValue, range: .plotDimension)
             .frame(height: 200)
         }
+    }
+
+    var maxValue: Double {
+        let maxDataPoint = max(
+            viewModel.cardioFitnessSummary?.lastMonthAverageHeartRateRecovery ?? 0,
+            viewModel.cardioFitnessSummary?.averageHeartRateRecovery ?? 0
+        )
+
+        return max(maxDataPoint * 1.1, 40)
     }
 }
 

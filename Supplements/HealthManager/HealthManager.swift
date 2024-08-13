@@ -959,6 +959,13 @@ extension HealthManager {
             unit: .gram()
         )
 
+        let fiber = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryFiber,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .gram()
+        )
+
         let sugar = try? await healthStore.fetchNutritionalDailyAverage(
             for: .dietarySugar,
             startDate: startDate,
@@ -1064,6 +1071,7 @@ extension HealthManager {
             averageProtein: protein,
             averageCarbohydrates: carbohydrates,
             averageFat: fat,
+            averageFiber: fiber,
             averageSugar: sugar,
             averageCaffeine: caffeine,
             averageVitaminA: vitaminA,
@@ -1817,6 +1825,26 @@ extension HealthManager {
             return HKQuantity(unit: .gram(), doubleValue: 25)
         }
         return HKQuantity(unit: .gram(), doubleValue: 38)
+    }
+
+    /// unit: g
+    /// - note: https://www.healthline.com/health/food-nutrition/how-much-fiber-per-day
+    func recommendedMinDailyIntakeForFiber() -> HKQuantity? {
+        guard let age = healthStore.age() else { return nil }
+
+        if age < 19 {
+            return HKQuantity(unit: .gram(), doubleValue: 14)
+        } else if age < 51 {
+            if healthStore.sex() == .female {
+                return HKQuantity(unit: .gram(), doubleValue: 25)
+            }
+            return HKQuantity(unit: .gram(), doubleValue: 31)
+        } else {
+            if healthStore.sex() == .female {
+                return HKQuantity(unit: .gram(), doubleValue: 22)
+            }
+            return HKQuantity(unit: .gram(), doubleValue: 28)
+        }
     }
 
     /// unit: mcg

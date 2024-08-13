@@ -21,6 +21,8 @@ struct NutritionDetailsView: View {
 
     @State private var energyChartScope = EnergyChartScope.monthlyAverage
     @State private var dailyEnergy = [DateQuantitySample]()
+    @State private var fiberChartScope = EnergyChartScope.monthlyAverage
+    @State private var dailyFiber = [DateQuantitySample]()
     @State private var sugarChartScope = EnergyChartScope.monthlyAverage
     @State private var dailySugar = [DateQuantitySample]()
     @State private var caffeineChartScope = EnergyChartScope.monthlyAverage
@@ -37,6 +39,8 @@ struct NutritionDetailsView: View {
                     .cardContainer()
                 mineralsChart
                     .cardContainer()
+                fiberChart
+                    .cardContainer()
                 sugarChart
                     .cardContainer()
                 caffeineChart
@@ -49,6 +53,7 @@ struct NutritionDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .groupedBackground()
         .animation(.default, value: energyChartScope)
+        .animation(.default, value: fiberChartScope)
         .animation(.default, value: sugarChartScope)
         .animation(.default, value: caffeineChartScope)
         .task {
@@ -75,6 +80,16 @@ struct NutritionDetailsView: View {
             )
             await MainActor.run {
                 self.dailyCaffeine = samples
+            }
+        }
+        .task {
+            let samples = await HealthManager.shared.fetchNutritionalDailyQuantities(
+                quantityTypeID: .dietaryFiber,
+                unit: .gram(),
+                numPrevDays: 30
+            )
+            await MainActor.run {
+                self.dailyFiber = samples
             }
         }
     }
@@ -383,6 +398,82 @@ private extension NutritionDetailsView {
                     )
                     .tint(.zinc)
                 }
+            }
+        }
+    }
+
+    @ViewBuilder
+    var fiberChart: some View {
+        if let details = viewModel.nutritionSummary?.details, let averageFiber = details.averageFiber {
+            VStack(alignment: .leading) {
+                VitalDetailChartTitleView(
+                    title: "Fiber",
+                    value: averageFiber.displayString(for: .gram())
+                )
+
+                switch fiberChartScope {
+                case .monthlyAverage:
+                    Chart {
+                        BarMark(
+                            x: .value("Average Fiber", averageFiber.doubleValue(for: .gram()))
+                        )
+                        .foregroundStyle(.fiber)
+                        .cornerRadius(10)
+
+                        if let goal = HealthManager.shared.recommendedMinDailyIntakeForFiber() {
+                            RuleMark(
+                                x: .value("Min Fiber", goal.doubleValue(for: .gram()))
+                            )
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            .foregroundStyle(.text)
+                        }
+                    }
+                    .chartXScale(
+                        domain: 0...(max(averageFiber.doubleValue(for: .gram()), HealthManager.shared.recommendedMinDailyIntakeForFiber()?.doubleValue(for: .gram()) ?? 0) * 1.1),
+                        range: .plotDimension
+                    )
+                    .frame(height: 60)
+                case .daily:
+                    Chart{
+                        ForEach(dailyFiber) { sample in
+                            LineMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Daily Fiber", sample.quantity)
+                            )
+                            .foregroundStyle(.fiber)
+
+                            PointMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Daily Fiber", sample.quantity)
+                            )
+                            .foregroundStyle(.fiber)
+                        }
+
+                        if let goal = HealthManager.shared.recommendedMinDailyIntakeForFiber() {
+                            RuleMark(
+                                y: .value("Min Fiber", goal.doubleValue(for: .gram()))
+                            )
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            .foregroundStyle(.fiber)
+
+                            RectangleMark(
+                                yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 3),
+                                yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
+                            )
+                            .foregroundStyle(.fiber.opacity(0.3))
+                        }
+                    }
+                    .frame(height: 160)
+                }
+
+                Picker("", selection: $fiberChartScope) {
+                    Text("Daily")
+                        .tag(EnergyChartScope.daily)
+
+                    Text("Monthly Average")
+                        .tag(EnergyChartScope.monthlyAverage)
+                }
+                .pickerStyle(.segmented)
             }
         }
     }

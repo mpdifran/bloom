@@ -80,6 +80,7 @@ extension NutritionMonthlySummary {
         let averageProtein: HKQuantity?
         let averageCarbohydrates: HKQuantity?
         let averageFat: HKQuantity?
+        let averageFiber: HKQuantity?
         let averageSugar: HKQuantity?
         let averageCaffeine: HKQuantity?
         let averageVitaminA: HKQuantity?
@@ -346,6 +347,7 @@ extension NutritionMonthlySummary.Details {
 
     var otherScore: Double? {
         let other = [
+            fiberScore,
             sugarScore,
             caffeineScore
         ].compactMap({ $0 })
@@ -354,6 +356,15 @@ extension NutritionMonthlySummary.Details {
             return nil
         }
         return other.average(keyPath: \.self)
+    }
+
+    var fiberScore: Double? {
+        guard
+            let average = averageFiber?.doubleValue(for: .gram()),
+            let goal = HealthManager.shared.recommendedMinDailyIntakeForFiber()?.doubleValue(for: .gram())
+        else { return nil }
+
+        return average.scaledPercent(lower: 0, upper: goal)
     }
 
     var sugarScore: Double? {
