@@ -74,6 +74,21 @@ extension GoalModel {
         case increaseVitaminC
         case increaseVitaminD
         case increaseVitaminE
+        case increaseCalcium
+        case decreaseCalcium
+        case increaseIron
+        case decreaseIron
+        case increaseMagnesium
+        case decreaseMagnesium
+        case increasePotassium
+        case decreasePotassium
+        case increaseSodium
+        case decreaseSodium
+        case increaseZinc
+        case decreaseZinc
+        case decreaseSugar
+        case decreaseCaffeine
+        case increaseFiber
 
         var color: Color {
             switch self {
@@ -117,6 +132,24 @@ extension GoalModel {
                     .vitaminD
             case .increaseVitaminE:
                     .vitaminE
+            case .increaseCalcium, .decreaseCalcium:
+                    .calcium
+            case .increaseIron, .decreaseIron:
+                    .iron
+            case .increaseMagnesium, .decreaseMagnesium:
+                    .magnesium
+            case .increasePotassium, .decreasePotassium:
+                    .potassium
+            case .increaseSodium, .decreaseSodium:
+                    .sodium
+            case .increaseZinc, .decreaseZinc:
+                    .zinc
+            case .decreaseSugar:
+                    .sugar
+            case .decreaseCaffeine:
+                    .caffeine
+            case .increaseFiber:
+                    .fiber
             }
         }
     }

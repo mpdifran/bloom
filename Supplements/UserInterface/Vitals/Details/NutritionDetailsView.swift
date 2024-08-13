@@ -460,7 +460,16 @@ private extension NutritionDetailsView {
                                 yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 3),
                                 yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
                             )
-                            .foregroundStyle(.fiber.opacity(0.3))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [
+                                        .fiber.opacity(0.3),
+                                        .clear
+                                    ],
+                                    startPoint: .bottom,
+                                    endPoint: .top
+                                )
+                            )
                         }
                     }
                     .frame(height: 160)

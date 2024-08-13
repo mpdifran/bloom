@@ -1734,24 +1734,6 @@ extension HealthManager {
         0.2...0.35
     }
 
-    /// unit: grams
-    ///  - note: https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/fiber/art-20043983
-    func adequateDailyIntakeForFiber() -> HKQuantity? {
-        guard let age = healthStore.age() else { return nil }
-
-        if age < 50 {
-            if healthStore.sex() == .female {
-                return HKQuantity(unit: .gram(), doubleValue: 25)
-            }
-            return HKQuantity(unit: .gram(), doubleValue: 38)
-        } else {
-            if healthStore.sex() == .female {
-                return HKQuantity(unit: .gram(), doubleValue: 21)
-            }
-            return HKQuantity(unit: .gram(), doubleValue: 30)
-        }
-    }
-
     /// unit: mcg
     /// - note: https://ods.od.nih.gov/factsheets/Folate-Consumer/
     func recommendedDailyIntakeForFolate() -> HKQuantityRange? {

@@ -276,6 +276,36 @@ private extension GoalCell {
                     self.currentGoalValue = value
                 }
             }
+        case .increaseCalcium, .decreaseCalcium:
+            observeNutritionGoalChanges(for: .dietaryCalcium, unit: .gramUnit(with: .milli))
+        case .increaseIron, .decreaseIron:
+            observeNutritionGoalChanges(for: .dietaryIron, unit: .gramUnit(with: .milli))
+        case .increaseMagnesium, .decreaseMagnesium:
+            observeNutritionGoalChanges(for: .dietaryMagnesium, unit: .gramUnit(with: .milli))
+        case .increasePotassium, .decreasePotassium:
+            observeNutritionGoalChanges(for: .dietaryPotassium, unit: .gramUnit(with: .milli))
+        case .increaseSodium, .decreaseSodium:
+            observeNutritionGoalChanges(for: .dietarySodium, unit: .gramUnit(with: .milli))
+        case .increaseZinc, .decreaseZinc:
+            observeNutritionGoalChanges(for: .dietaryZinc, unit: .gramUnit(with: .milli))
+        case .decreaseSugar:
+            observeNutritionGoalChanges(for: .dietarySugar, unit: .gram())
+        case .decreaseCaffeine:
+            observeNutritionGoalChanges(for: .dietaryCaffeine, unit: .gramUnit(with: .milli))
+        case .increaseFiber:
+            observeNutritionGoalChanges(for: .dietaryFiber, unit: .gram())
+        }
+    }
+
+    func observeNutritionGoalChanges(for quantityTypeID: HKQuantityTypeIdentifier, unit: HKUnit) {
+        try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(quantityTypeID)) {
+            let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
+                quantityTypeID: quantityTypeID,
+                unit: unit
+            )
+            await MainActor.run {
+                self.currentGoalValue = value
+            }
         }
     }
 }

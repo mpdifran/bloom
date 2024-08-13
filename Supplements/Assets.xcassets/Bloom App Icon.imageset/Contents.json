@@ -1,12 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "Bloom App Icon.png",
+      "filename" : "Supplements AppIcon 2.pdf",
       "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
   }
 }
