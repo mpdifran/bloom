@@ -104,7 +104,7 @@ private extension ActivityLevelDetailsView {
         let activityLevel = ActivityLevelSummary.ActivityLevel(ratio)
 
         if activityLevel == selectedLevel {
-            return .green
+            return selectedLevel.color
         }
         return .green.opacity(0.3)
     }
