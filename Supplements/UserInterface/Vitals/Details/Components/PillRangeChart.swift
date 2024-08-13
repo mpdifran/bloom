@@ -39,7 +39,7 @@ struct PillRangeChart: View {
                         Spacer()
 
                         if value < minValue {
-                            PillValueLabelView(title: "\(value.format()) \(unitString)")
+                            PillValueLabelView(title: "\(value.format())\(unitString)")
                             Spacer()
                         }
 
@@ -50,10 +50,10 @@ struct PillRangeChart: View {
                                 .opacity(isWithinRange ? 0 : 1)
                             Spacer()
                             HStack {
-                                Text("\(minValue.format()) \(unitString)")
+                                Text("\(minValue.format())\(unitString)")
                                     .foregroundStyle(value > minValue ? .black : .primary)
                                 Spacer()
-                                Text("\(maxValue.format()) \(unitString)")
+                                Text("\(maxValue.format())\(unitString)")
                                     .foregroundStyle(value > minValue && value > maxValue ? .black : .primary)
                             }
                             Spacer()
@@ -74,14 +74,14 @@ struct PillRangeChart: View {
 
                         if value > maxValue {
                             Spacer()
-                            PillValueLabelView(title: "\(value.format()) \(unitString)")
+                            PillValueLabelView(title: "\(value.format())\(unitString)")
                         }
 
                         Spacer()
                     }
 
                     if value > minValue && value < maxValue {
-                        PillValueLabelView(title: "\(value.format()) \(unitString)")
+                        PillValueLabelView(title: "\(value.format())\(unitString)")
                     }
                 }
             }
