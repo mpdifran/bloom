@@ -22,51 +22,64 @@ struct CapsuleRangeChart: View {
     @State private var showMinMaxPopup = false
 
     var body: some View {
-        VStack(spacing: 2) {
-            HStack {
-                Text(title)
-                    .font(.subheadline)
-
-                if isWithinRange {
+        HStack {
+            Group {
+                if value < minValue {
+                    Image(systemName: "chevron.down.circle.fill")
+                        .foregroundStyle(.tint, .fill)
+                } else if value > maxValue {
+                    Image(systemName: "chevron.up.circle.fill")
+                        .foregroundStyle(.tint, .fill)
+                } else {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.white, .tint)
-                        .font(.subheadline)
                 }
-
-                Spacer()
-
-                Text("\(value.format())\(unitString)")
-                    .font(.caption)
             }
+            .font(.headline)
             .bold()
-            .fontDesign(.rounded)
-            GeometryReader { proxy in
-                ZStack {
-                    Capsule()
-                        .fill(.regularMaterial)
-                        .frame(height: .innerBarHeight + .barBorderWidth * 2)
 
-                    Capsule()
-                        .stroke(.tint, lineWidth: .barBorderWidth)
-                        .frame(
-                            width: (proxy.size.width) * minMaxBarWidthPercent,
-                            height: .innerBarHeight + .barBorderWidth + 2
-                        )
-                        .zStackAlignment(.leading)
-                        .offset(x: (proxy.size.width) * minStartPercent)
-                        .popover(isPresented: $showMinMaxPopup) {
-                            MinMaxPopupView(min: minValue, max: maxValue, unitString: unitString)
-                                .presentationCompactAdaptation(.popover)
-                        }
+            VStack(spacing: 2) {
+                HStack {
+                    Text(title)
+                        .font(.subheadline)
 
-                    Capsule()
-                        .fill(.tint)
-                        .frame(width: max((proxy.size.width - .barBorderWidth * 2) * barPercent, .innerBarHeight), height: .innerBarHeight)
-                        .padding(.horizontal, .barBorderWidth)
-                        .zStackAlignment(.leading)
+
+
+                    Spacer()
+
+                    Text("\(value.format())\(unitString)")
+                        .font(.caption)
                 }
+                .bold()
+                .fontDesign(.rounded)
+                GeometryReader { proxy in
+                    ZStack {
+                        Capsule()
+                            .fill(.regularMaterial)
+                            .frame(height: .innerBarHeight + .barBorderWidth * 2)
+
+                        Capsule()
+                            .stroke(.tint, lineWidth: .barBorderWidth)
+                            .frame(
+                                width: (proxy.size.width) * minMaxBarWidthPercent,
+                                height: .innerBarHeight + .barBorderWidth + 2
+                            )
+                            .zStackAlignment(.leading)
+                            .offset(x: (proxy.size.width) * minStartPercent)
+                            .popover(isPresented: $showMinMaxPopup) {
+                                MinMaxPopupView(min: minValue, max: maxValue, unitString: unitString)
+                                    .presentationCompactAdaptation(.popover)
+                            }
+
+                        Capsule()
+                            .fill(.tint)
+                            .frame(width: max((proxy.size.width - .barBorderWidth * 2) * barPercent, .innerBarHeight), height: .innerBarHeight)
+                            .padding(.horizontal, .barBorderWidth)
+                            .zStackAlignment(.leading)
+                    }
+                }
+                .frame(height: .innerBarHeight + .barBorderWidth * 2)
             }
-            .frame(height: .innerBarHeight + .barBorderWidth * 2)
         }
         .onTapGesture {
             showMinMaxPopup.toggle()
@@ -133,6 +146,7 @@ private struct MinMaxPopupView: View {
             minValue: 81,
             maxValue: 96
         )
+        .tint(.protein)
         CapsuleRangeChart(
             title: "Carbs",
             unitString: "g",
@@ -140,6 +154,7 @@ private struct MinMaxPopupView: View {
             minValue: 51,
             maxValue: 112
         )
+        .tint(.carbohydrates)
         CapsuleRangeChart(
             title: "Fat",
             unitString: "g",
@@ -147,6 +162,7 @@ private struct MinMaxPopupView: View {
             minValue: 43,
             maxValue: 94
         )
+        .tint(.fat)
         CapsuleRangeChart(
             title: "Vitamin A",
             unitString: "g",
@@ -154,9 +170,9 @@ private struct MinMaxPopupView: View {
             minValue: 82,
             maxValue: 168
         )
+        .tint(.vitaminA)
     }
     .padding()
-    .tint(.coreSleep)
 }
 
 #Preview("Min Max Popup") {

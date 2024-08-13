@@ -211,7 +211,6 @@ private extension GoalsViewModel {
         var scoredNutrients = [(Double, GoalModel)]()
 
         if
-            let nutrient = nutritionSummary.details.averageVitaminA,
             let target = HealthManager.shared.recommendedDailyIntakeForVitaminA(),
             let score = nutritionSummary.details.vitaminAScore
         {
@@ -230,7 +229,6 @@ private extension GoalsViewModel {
         }
 
         if
-            let vitamin = nutritionSummary.details.averageVitaminB6,
             let target = HealthManager.shared.recommendedDailyIntakeForVitaminB6(),
             let score = nutritionSummary.details.vitaminB6Score
         {
@@ -249,7 +247,6 @@ private extension GoalsViewModel {
         }
 
         if
-            let vitamin = nutritionSummary.details.averageVitaminB12,
             let target = HealthManager.shared.recommendedMinDailyIntakeForVitaminB12(),
             let score = nutritionSummary.details.vitaminB12Score
         {
@@ -268,7 +265,6 @@ private extension GoalsViewModel {
         }
 
         if
-            let vitamin = nutritionSummary.details.averageVitaminC,
             let target = HealthManager.shared.recommendedDailyIntakeForVitaminC(),
             let score = nutritionSummary.details.vitaminCScore
         {
@@ -288,7 +284,6 @@ private extension GoalsViewModel {
 
         // TODO: Check time in sunlight for proper vitamin D level check.
         if
-            let vitamin = nutritionSummary.details.averageVitaminD,
             let target = HealthManager.shared.recommendedDailyIntakeForVitaminD(),
             let score = nutritionSummary.details.vitaminDScore
         {
@@ -307,7 +302,6 @@ private extension GoalsViewModel {
         }
 
         if
-            let vitamin = nutritionSummary.details.averageVitaminE,
             let target = HealthManager.shared.recommendedDailyIntakeForVitaminE(),
             let score = nutritionSummary.details.vitaminEScore
         {
@@ -524,7 +518,6 @@ private extension GoalsViewModel {
         }
 
         if
-            let mineral = nutritionSummary.details.averageSugar,
             let target = HealthManager.shared.recommendedMaxDailyIntakeForSugar(),
             let score = nutritionSummary.details.sugarScore
         {
@@ -543,7 +536,6 @@ private extension GoalsViewModel {
         }
 
         if
-            let mineral = nutritionSummary.details.averageCaffeine,
             let target = HealthManager.shared.recommendedMaxDailyCaffeine(),
             let score = nutritionSummary.details.caffeineScore
         {
@@ -562,7 +554,6 @@ private extension GoalsViewModel {
         }
 
         if
-            let mineral = nutritionSummary.details.averageFiber,
             let target = HealthManager.shared.recommendedMinDailyIntakeForFiber(),
             let score = nutritionSummary.details.fiberScore
         {
