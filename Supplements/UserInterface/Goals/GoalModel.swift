@@ -94,12 +94,10 @@ extension GoalModel {
             switch self {
             case .timeInDaylight:
                     .orange
-            case .walkRunDistance, .runDistance, .bikeDistance, .walkRunBikeDistance:
+            case .walkRunDistance, .runDistance, .bikeDistance, .walkRunBikeDistance, .stepCount:
                     .green
             case .walkDuration, .runDuration, .bikeDuration, .walkRunBikeDuration:
                     .pink
-            case .stepCount:
-                    .indigo
             case .meditationMinutes:
                     .remSleep
             case .bedtimeSoundLevels:

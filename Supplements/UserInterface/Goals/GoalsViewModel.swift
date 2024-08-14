@@ -19,7 +19,7 @@ private extension Double {
 final actor GoalsViewModel: ObservableObject {
     static let shared = GoalsViewModel()
 
-    @MainActor @Published var goals = [GoalModel]() {
+    @MainActor @Published var goals = [[GoalModel]]() {
         didSet {
             do {
                 let data = try JSONEncoder.main.encode(goals)
@@ -42,7 +42,7 @@ extension GoalsViewModel {
     func loadGoals() async {
         if
             let data = UserDefaults.group.data(forKey: "GoalsViewModel.goals"),
-            let goals = try? JSONDecoder.main.decode([GoalModel].self, from: data)
+            let goals = try? JSONDecoder.main.decode([[GoalModel]].self, from: data)
         {
             await MainActor.run {
                 self.goals = goals
@@ -53,7 +53,7 @@ extension GoalsViewModel {
     func checkForUpdateGoals(force: Bool = false) async {
         await loadGoals()
 
-        if let goalDueDate = await goals.first?.dueDate {
+        if let goalDueDate = await goals.first?.first?.dueDate {
             if goalDueDate > .now && !force {
                 print("Returning early since goals are still valid")
                 return
@@ -62,18 +62,25 @@ extension GoalsViewModel {
 
         guard let dueDate = Calendar.current.startOfNextWeek(for: .now) else { return }
 
-        var goals = [GoalModel]()
+        var goals = [[GoalModel]]()
 
         var vitalNames = [String]()
         let sortedVitals = VitalsViewModel.shared.vitals.sorted(by: { $0.score < $1.score })
-        if let vital = sortedVitals.safeAccess(at: 0), let goal = await goal(for: vital, dueDate: dueDate) {
-            goals.append(goal)
-            vitalNames.append(vital.id.name)
+
+        if let vital = sortedVitals.safeAccess(at: 0) {
+            let goal = await goal(for: vital, dueDate: dueDate)
+            if goal.isNotEmpty {
+                goals.append(goal)
+                vitalNames.append(vital.id.name)
+            }
         }
 
-        if let vital = sortedVitals.safeAccess(at: 1), let goal = await goal(for: vital, dueDate: dueDate) {
-            goals.append(goal)
-            vitalNames.append(vital.id.name)
+        if let vital = sortedVitals.safeAccess(at: 1) {
+            let goal = await goal(for: vital, dueDate: dueDate)
+            if goal.isNotEmpty {
+                goals.append(goal)
+                vitalNames.append(vital.id.name)
+            }
         }
 
         let newGoals = goals
@@ -102,46 +109,78 @@ extension GoalsViewModel {
 
 private extension GoalsViewModel {
 
-    func goal(for vital: VitalModel, dueDate: Date) async -> GoalModel? {
+    func goal(for vital: VitalModel, dueDate: Date) async -> [GoalModel] {
         switch vital.id {
         case .sleepQuality:
-            return await timeInDaylightGoal(
+            let meditation = await meditationGoal(
+                summary: "Your sleep quality is low. Meditating before bed can help you wind down.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            let timeInDaylight = await timeInDaylightGoal(
                 summary: "Your sleep scores have been a bit low lately. Try getting some more sunlight than you normally do this week!",
-                vitalKind: .sleepQuality,
+                vitalKind: vital.id,
                 dueDate: dueDate
             )
+            return [timeInDaylight, meditation]
         case .activityLevel:
-            return await stepGoal(
+            let steps = await stepGoal(
                 summary: "Let's improve your activty level by incorporating more steps in your day. Walking has numerous other health benefits.",
-                vitalKind: .activityLevel,
+                vitalKind: vital.id,
                 dueDate: dueDate
             )
+            let walkRunDistance = await walkRunDistanceGoal(
+                summary: "An easy way to improve your activity level is to incorporate more walking and running into your week. .",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            return [steps]
         case .cardioFitness:
-            return await runDistanceGoal(
+            let walkRunDistance = await walkRunDistanceGoal(
+                summary: "Your Cardio Fitness should be your main focus. Increasing your walking and running distance this week can help you improve.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            let runDistance = await runDistanceGoal(
                 summary: "Your Cardio Fitness should be your main focus. Let's focus on running more this week.",
-                vitalKind: .cardioFitness,
+                vitalKind: vital.id,
                 dueDate: dueDate
             )
+            let stepGoal = await stepGoal(
+                summary: "Your Cardio Fitness should be your main focus. Increasing your step count can have a positive impact on your cardio fitness.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            return [walkRunDistance, runDistance, stepGoal]
         case .bodyComposition:
-            return await stepGoal(
+            let steps = await stepGoal(
                 summary: "Your body composition is out of the recommended range. A quick way to start making progess is to increase your steps.",
-                vitalKind: .bodyComposition,
+                vitalKind: vital.id,
                 dueDate: dueDate
             )
+            let walkRunDistance = await walkRunDistanceGoal(
+                summary: "Your body composition is out of the recommended range. Increasing your walking and running distance this week can help you improve.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            return [steps, walkRunDistance]
         case .mobility:
-            return await walkRunDistanceGoal(
+            return [await walkRunDistanceGoal(
                 summary: "Your mobility should be top of mind for you this week. You can improve your mobility by walking or running more!",
-                vitalKind: .mobility,
+                vitalKind: vital.id,
                 dueDate: dueDate
-            )
+            )]
         case .stressLevels:
-            return await meditationGoal(
+            return [await meditationGoal(
                 summary: "Your stress levels are getting quite high. Try incorporating more meditation this week.",
-                vitalKind: .stressLevels,
+                vitalKind: vital.id,
                 dueDate: dueDate
-            )
+            )]
         case .nutrition:
-            return nutritionGoal(dueDate: dueDate)
+            if let goalModel = nutritionGoal(dueDate: dueDate) {
+                return [goalModel]
+            }
+            return []
         }
     }
 

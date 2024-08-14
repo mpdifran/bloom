@@ -207,9 +207,8 @@ extension HealthManager {
                 for: quantityType,
                 start: startDate,
                 end: endDate,
-                option: .cumulativeSum,
-                unit: unit
-            ).0
+                option: .cumulativeSum
+            ).doubleValue(for: unit)
         } catch {
             print(error)
         }
@@ -229,11 +228,10 @@ extension HealthManager {
                 for: quantityType,
                 start: startDate,
                 end: endDate,
-                option: .cumulativeSum,
-                unit: unit
-            ).0
+                option: .cumulativeSum
+            )
 
-            return result / Double(numWeeks)
+            return result.doubleValue(for: unit) / Double(numWeeks)
         } catch {
             print(error)
         }

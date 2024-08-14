@@ -18,8 +18,8 @@ struct GoalsView: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    ForEachEnumerated(viewModel.goals) { index, goal in
-                        GoalCell(goal: goal, index: index)
+                    ForEachEnumeratedNoID(viewModel.goals) { index, _ in
+                        GoalCell(goals: $viewModel.goals[index], index: index)
                             .cardContainer(fill: .background.secondary)
                             .transition(.blurReplace)
                     }

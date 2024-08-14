@@ -8,9 +8,10 @@
 import SwiftUI
 import HealthKit
 import Charts
+import AppUI
 
 struct GoalCell: View {
-    let goal: GoalModel
+    @Binding var goals: [GoalModel]
     let index: Int
 
     @State private var currentGoalValue: Double = 0
@@ -23,7 +24,7 @@ struct GoalCell: View {
                 Image(systemName: goal.systemImage)
                     .font(.largeTitle)
                     .foregroundStyle(goal.metric.measurement.color)
-                HStack(alignment: .top) {
+                VStack(alignment: .leading) {
                     Text(goal.title)
                         .font(.title3)
                         .bold()
@@ -31,16 +32,27 @@ struct GoalCell: View {
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Spacer()
+                    Text("Due \(DateFormatter.relativeTimeIntervalDaysFullFromNow(goal.dueDate))")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
 
-                    VStack(alignment: .trailing) {
-                        Text("Due")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(goal.dueDate))")
-                            .font(.headline)
-                            .bold()
+                if goals.count > 1 {
+                    Menu {
+                        Menu("Change Goal", systemImage: "medal") {
+                            ForEachEnumerated(goals) { (goalIndex, goal) in
+                                Button(goal.title) {
+                                    goals.move(fromOffsets: [goalIndex], toOffset: 0)
+                                    loadCurrentGoalValue()
+                                }
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle.fill")
                     }
+                    .font(.title)
+                    .foregroundStyle(.tint, .fill)
                 }
             }
 
@@ -62,6 +74,10 @@ struct GoalCell: View {
 }
 
 private extension GoalCell {
+
+    var goal: GoalModel {
+        goals.first!
+    }
 
     var barChart: some View {
         Chart {
@@ -102,7 +118,7 @@ private extension GoalCell {
     func loadCurrentGoalValue() {
         switch goal.metric.measurement {
         case .timeInDaylight:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.timeInDaylight)) {
+            Task {
                 let value = await HealthManager.shared.fetchThisWeekSumQuantity(for: .timeInDaylight, unit: .minute())
                 await MainActor.run {
                     self.currentGoalValue = value
@@ -110,7 +126,7 @@ private extension GoalCell {
             }
 
         case .walkRunDistance:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.distanceWalkingRunning)) {
+            Task {
                 let value = await HealthManager.shared.fetchThisWeekSumQuantity(for: .distanceWalkingRunning, unit: .meterUnit(with: .kilo))
                 await MainActor.run {
                     self.currentGoalValue = value
@@ -120,7 +136,7 @@ private extension GoalCell {
         case .walkDuration:
             break
         case .runDistance:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKSampleType.workoutType()) {
+            Task {
                 let summaries = await HealthManager.shared.fetchWorkoutSummariesThisWeek(activityType: .running)
                 let totalDistance = summaries.sum(keyPath: \.distance)
                 await MainActor.run {
@@ -138,14 +154,15 @@ private extension GoalCell {
         case .walkRunBikeDuration:
             break
         case .stepCount:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.stepCount)) {
+            Task {
                 let value = await HealthManager.shared.fetchThisWeekSumQuantity(for: .stepCount, unit: .count())
                 await MainActor.run {
+                    guard goal.metric.measurement == .stepCount else { return }
                     self.currentGoalValue = value
                 }
             }
         case .meditationMinutes:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKCategoryType(.mindfulSession)) {
+            Task {
                 let value = await HealthManager.shared.fetchAverageMeditationMinutesThisWeek()
                 await MainActor.run {
                     self.currentGoalValue = value
@@ -172,12 +189,7 @@ private extension GoalCell {
         case .targetHeartRateZoneProportionsZone5:
             break
         case .increaseProtein:
-            try? HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: [
-                    HKQuantityType(.dietaryProtein),
-                    HKQuantityType(.dietaryEnergyConsumed)
-                ]
-            ) {
+            Task {
                 let value = await HealthManager.shared.fetchDietaryNutritionPercentageThisWeek(
                     quantityTypeID: .dietaryProtein,
                     caloriesPerGram: .caloriesPerGramOfProtein
@@ -187,12 +199,7 @@ private extension GoalCell {
                 }
             }
         case .increaseCarbs:
-            try? HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: [
-                    HKQuantityType(.dietaryCarbohydrates),
-                    HKQuantityType(.dietaryEnergyConsumed)
-                ]
-            ) {
+            Task {
                 let value = await HealthManager.shared.fetchDietaryNutritionPercentageThisWeek(
                     quantityTypeID: .dietaryCarbohydrates,
                     caloriesPerGram: .caloriesPerGramOfCarbs
@@ -202,12 +209,7 @@ private extension GoalCell {
                 }
             }
         case .increaseFat:
-            try? HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: [
-                    HKQuantityType(.dietaryFatTotal),
-                    HKQuantityType(.dietaryEnergyConsumed)
-                ]
-            ) {
+            Task {
                 let value = await HealthManager.shared.fetchDietaryNutritionPercentageThisWeek(
                     quantityTypeID: .dietaryFatTotal,
                     caloriesPerGram: .caloriesPerGramOfFat
@@ -217,7 +219,7 @@ private extension GoalCell {
                 }
             }
         case .increaseVitaminA:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminA)) {
+            Task {
                 let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
                     quantityTypeID: .dietaryVitaminA,
                     unit: .gramUnit(with: .micro)
@@ -227,7 +229,7 @@ private extension GoalCell {
                 }
             }
         case .increaseVitaminB6:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminB6)) {
+            Task {
                 let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
                     quantityTypeID: .dietaryVitaminB6,
                     unit: .gramUnit(with: .milli)
@@ -237,7 +239,7 @@ private extension GoalCell {
                 }
             }
         case .increaseVitaminB12:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminB12)) {
+            Task {
                 let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
                     quantityTypeID: .dietaryVitaminB12,
                     unit: .gramUnit(with: .micro)
@@ -247,7 +249,7 @@ private extension GoalCell {
                 }
             }
         case .increaseVitaminC:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminC)) {
+            Task {
                 let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
                     quantityTypeID: .dietaryVitaminC,
                     unit: .gramUnit(with: .milli)
@@ -257,7 +259,7 @@ private extension GoalCell {
                 }
             }
         case .increaseVitaminD:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminD)) {
+            Task {
                 let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
                     quantityTypeID: .dietaryVitaminD,
                     unit: .gramUnit(with: .micro)
@@ -267,7 +269,7 @@ private extension GoalCell {
                 }
             }
         case .increaseVitaminE:
-            try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryVitaminE)) {
+            Task {
                 let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
                     quantityTypeID: .dietaryVitaminE,
                     unit: .gramUnit(with: .milli)
@@ -298,7 +300,7 @@ private extension GoalCell {
     }
 
     func observeNutritionGoalChanges(for quantityTypeID: HKQuantityTypeIdentifier, unit: HKUnit) {
-        try? HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(quantityTypeID)) {
+        Task {
             let value = await HealthManager.shared.fetchNutritionDailyAverageThisWeek(
                 quantityTypeID: quantityTypeID,
                 unit: unit
@@ -311,9 +313,9 @@ private extension GoalCell {
 }
 
 #Preview {
-    List {
-        GoalCell(
-            goal: .init(
+    struct PreviewView: View {
+        @State private var goals: [GoalModel] = [
+            GoalModel(
                 title: "Get More Sunlight",
                 systemImage: "sun.max.fill",
                 summary: "More sun is good for your body. It also gives you Vitamin D! Aim to get 50 minutes of sunlight this week.",
@@ -323,8 +325,17 @@ private extension GoalCell {
                     measurement: .timeInDaylight
                 ),
                 vitalKind: .sleepQuality
-            ),
-            index: 0
-        )
+            )
+        ]
+
+        var body: some View {
+            List {
+                GoalCell(
+                    goals: $goals,
+                    index: 0
+                )
+            }
+        }
     }
+    return PreviewView()
 }
