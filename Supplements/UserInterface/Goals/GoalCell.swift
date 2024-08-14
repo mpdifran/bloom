@@ -61,6 +61,7 @@ struct GoalCell: View {
             Text(goal.summary)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
 
             if let targetVitalModel {
                 TargetVitalComponentView(vital: targetVitalModel)
