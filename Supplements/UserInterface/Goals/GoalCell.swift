@@ -52,7 +52,7 @@ struct GoalCell: View {
                         Image(systemName: "ellipsis.circle.fill")
                     }
                     .font(.title)
-                    .foregroundStyle(.tint, .fill)
+                    .foregroundStyle(goal.metric.measurement.color, .fill)
                 }
             }
 
