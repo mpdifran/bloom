@@ -134,27 +134,11 @@ extension GoalModel.Metric {
         case .targetHeartRateZoneProportionsZone5:
             break
         case .increaseProtein:
-            // TODO: Check if the percent is correctly scaled.
-            let value = await HealthManager.shared.fetchDietaryNutritionPercentage(
-                quantityTypeID: .dietaryProtein,
-                caloriesPerGram: .caloriesPerGramOfProtein,
-                dateRange: dateRange
-            )
-            return HKQuantity(unit: .percent(), doubleValue: value)
+            return await HealthManager.shared.fetchTotalSum(for: .dietaryProtein, dateRange: dateRange) ?? defaultQuantity
         case .increaseCarbs:
-            let value = await HealthManager.shared.fetchDietaryNutritionPercentage(
-                quantityTypeID: .dietaryCarbohydrates,
-                caloriesPerGram: .caloriesPerGramOfCarbs,
-                dateRange: dateRange
-            )
-            return HKQuantity(unit: .percent(), doubleValue: value)
+            return await HealthManager.shared.fetchTotalSum(for: .dietaryCarbohydrates, dateRange: dateRange) ?? defaultQuantity
         case .increaseFat:
-            let value = await HealthManager.shared.fetchDietaryNutritionPercentage(
-                quantityTypeID: .dietaryFatTotal,
-                caloriesPerGram: .caloriesPerGramOfFat,
-                dateRange: dateRange
-            )
-            return HKQuantity(unit: .percent(), doubleValue: value)
+            return await HealthManager.shared.fetchTotalSum(for: .dietaryFatTotal, dateRange: dateRange) ?? defaultQuantity
         case .increaseVitaminA:
             return await HealthManager.shared.fetchTotalSum(for: .dietaryVitaminA, dateRange: dateRange) ?? defaultQuantity
         case .increaseVitaminB6:
@@ -297,6 +281,22 @@ extension GoalModel {
                     .caffeine
             case .increaseFiber:
                     .fiber
+            }
+        }
+
+        var isDecrease: Bool {
+            switch self {
+            case .decreaseCalcium, 
+                    .decreaseIron,
+                    .decreaseMagnesium,
+                    .decreasePotassium,
+                    .decreaseSodium,
+                    .decreaseZinc,
+                    .decreaseSugar,
+                    .decreaseCaffeine:
+                return true
+            default:
+                return false
             }
         }
     }

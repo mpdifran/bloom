@@ -177,14 +177,14 @@ private extension GoalsViewModel {
                 dueDate: dueDate
             )]
         case .nutrition:
-            if let goalModel = nutritionGoal(dueDate: dueDate) {
+            if let goalModel = await nutritionGoal(dueDate: dueDate) {
                 return [goalModel]
             }
             return []
         }
     }
 
-    func nutritionGoal(dueDate: Date) -> GoalModel? {
+    func nutritionGoal(dueDate: Date) async -> GoalModel? {
         guard let nutritionSummary = VitalsViewModel.shared.nutritionSummary else { return nil }
 
         if let macros = nutritionSummary.details.macros {
@@ -199,8 +199,8 @@ private extension GoalsViewModel {
                     summary: "Try and increase your protein intake. You can find protein in things like meat, greek yogurt, chickpeas, or edamame.",
                     dueDate: dueDate,
                     metric: .init(
-                        value: proteinGoal.lowerBound,
-                        unitString: HKUnit.percent().unitString,
+                        value: await scaledTarget(for: .dietaryProtein, unit: .gram()),
+                        unit: .gram(),
                         measurement: .increaseProtein
                     ),
                     vitalKind: .nutrition
@@ -213,8 +213,8 @@ private extension GoalsViewModel {
                     summary: "Try and increase your carbohydrate intake. You can get more carbs by eating things like whole wheat bread, potatoes, bananas, or yogurt.",
                     dueDate: dueDate,
                     metric: .init(
-                        value: carbsGoal.lowerBound,
-                        unitString: HKUnit.percent().unitString,
+                        value: await scaledTarget(for: .dietaryCarbohydrates, unit: .gram()),
+                        unit: .gram(),
                         measurement: .increaseCarbs
                     ),
                     vitalKind: .nutrition
@@ -227,16 +227,19 @@ private extension GoalsViewModel {
                     summary: "Focus on increasing your fat intake. Try eating things like avocados, nuts, salmon, eggs, or cheese to get more healthy fat.",
                     dueDate: dueDate,
                     metric: .init(
-                        value: carbsGoal.lowerBound,
-                        unitString: HKUnit.percent().unitString,
-                        measurement: .increaseCarbs
+                        value: await scaledTarget(for: .dietaryFatTotal, unit: .gram()),
+                        unit: .gram(),
+                        measurement: .increaseFat
                     ),
                     vitalKind: .nutrition
                 )
             }
         }
 
-        if let nutrientGoal = highestLeverageVitaminMineralOtherNutrientGoal(nutritionSummary: nutritionSummary, dueDate: dueDate) {
+        if let nutrientGoal = await highestLeverageVitaminMineralOtherNutrientGoal(
+            nutritionSummary: nutritionSummary,
+            dueDate: dueDate
+        ) {
             return nutrientGoal
         }
 
@@ -246,7 +249,7 @@ private extension GoalsViewModel {
     func highestLeverageVitaminMineralOtherNutrientGoal(
         nutritionSummary: NutritionMonthlySummary,
         dueDate: Date
-    ) -> GoalModel? {
+    ) async -> GoalModel? {
         let microgram = HKUnit.gramUnit(with: .micro)
         let milligram = HKUnit.gramUnit(with: .milli)
 
@@ -262,13 +265,13 @@ private extension GoalsViewModel {
                 summary: "Your Vitamin A levels are low. Try eating things like liver, fish, eggs, dark leafy greens, orange + yellow vegetables, or mangoes.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target.lower,
+                    value: await scaledTarget(for: .dietaryVitaminA, unit: microgram),
                     unit: microgram,
                     measurement: .increaseVitaminA
                 ),
                 vitalKind: .nutrition
             )
-            scoredNutrients.append((score, goal))
+//            scoredNutrients.append((score, goal))
         }
 
         if
@@ -281,13 +284,13 @@ private extension GoalsViewModel {
                 summary: "Your Vitamin B6 levels are low. Try eating things like chicken breast, tuna, beef, chickpeas, bananas, spinach, or oatmeal.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target.lower,
+                    value: await scaledTarget(for: .dietaryVitaminB6, unit: milligram),
                     unit: milligram,
                     measurement: .increaseVitaminB6
                 ),
                 vitalKind: .nutrition
             )
-            scoredNutrients.append((score, goal))
+//            scoredNutrients.append((score, goal))
         }
 
         if
@@ -300,13 +303,13 @@ private extension GoalsViewModel {
                 summary: "Your Vitamin B12 levels are low. Try eating things like red meats, salmon, swiss or mozarella cheeses, yogurt, or egg yolks.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target,
+                    value: await scaledTarget(for: .dietaryVitaminB12, unit: microgram),
                     unit: microgram,
                     measurement: .increaseVitaminB12
                 ),
                 vitalKind: .nutrition
             )
-            scoredNutrients.append((score, goal))
+//            scoredNutrients.append((score, goal))
         }
 
         if
@@ -319,7 +322,7 @@ private extension GoalsViewModel {
                 summary: "Your Vitamin C levels are low. Try eating things like citrus fruits, berries, kiwi, cantaloupe, bell peppers, tomatoes, potatoes, or leafy greens.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target.lower,
+                    value: await scaledTarget(for: .dietaryVitaminC, unit: milligram),
                     unit: milligram,
                     measurement: .increaseVitaminC
                 ),
@@ -339,13 +342,13 @@ private extension GoalsViewModel {
                 summary: "Your Vitamin D levels are low. Try eating things like salmon, mackerel, cod liver oil, egg yolks, or mushrooms.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target.lower,
+                    value: await scaledTarget(for: .dietaryVitaminD, unit: microgram),
                     unit: microgram,
                     measurement: .increaseVitaminD
                 ),
                 vitalKind: .nutrition
             )
-            scoredNutrients.append((score, goal))
+//            scoredNutrients.append((score, goal))
         }
 
         if
@@ -358,13 +361,13 @@ private extension GoalsViewModel {
                 summary: "Your Vitamin E levels are low. Try eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target.lower,
+                    value: await scaledTarget(for: .dietaryVitaminE, unit: milligram),
                     unit: milligram,
                     measurement: .increaseVitaminE
                 ),
                 vitalKind: .nutrition
             )
-            scoredNutrients.append((score, goal))
+//            scoredNutrients.append((score, goal))
         }
 
         if
@@ -380,7 +383,7 @@ private extension GoalsViewModel {
                     summary: "You're not getting enough calcium. Try eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryCalcium, unit: milligram),
                         unit: milligram,
                         measurement: .increaseCalcium
                     ),
@@ -394,7 +397,7 @@ private extension GoalsViewModel {
                     summary: "You're getting too much calcium. Try avoiding eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryCalcium, unit: milligram, isincrease: false),
                         unit: milligram,
                         measurement: .decreaseCalcium
                     ),
@@ -417,7 +420,7 @@ private extension GoalsViewModel {
                     summary: "You're not getting enough iron. Try eating things like red meat, poultry, fish, eggs, beans, spinach, cashews, almonds, or dark chocolate.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryIron, unit: milligram),
                         unit: milligram,
                         measurement: .increaseIron
                     ),
@@ -431,7 +434,7 @@ private extension GoalsViewModel {
                     summary: "You're getting too much iron. Try avoiding eating things like red meat, poultry, fish, eggs, beans, spinach, cashews, almonds, or dark chocolate.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryIron, unit: milligram, isincrease: false),
                         unit: milligram,
                         measurement: .decreaseIron
                     ),
@@ -454,13 +457,13 @@ private extension GoalsViewModel {
                     summary: "You're not getting enough magnesium. Try eating things like spinach, kale, almonds, whole wheat bread, lentils, chickpeas, salmon, avocados, milk, bananas, or tofu.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryMagnesium, unit: milligram),
                         unit: milligram,
                         measurement: .increaseMagnesium
                     ),
                     vitalKind: .nutrition
                 )
-                scoredNutrients.append((score, goal))
+//                scoredNutrients.append((score, goal))
             } else {
                 let goal = GoalModel(
                     title: "Decrease Magnesium Intake",
@@ -468,13 +471,13 @@ private extension GoalsViewModel {
                     summary: "You're getting too much iron. Try avoiding eating things like spinach, kale, almonds, whole wheat bread, lentils, chickpeas, salmon, avocados, milk, bananas, or tofu.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryMagnesium, unit: milligram, isincrease: false),
                         unit: milligram,
                         measurement: .decreaseMagnesium
                     ),
                     vitalKind: .nutrition
                 )
-                scoredNutrients.append((score, goal))
+//                scoredNutrients.append((score, goal))
             }
         }
 
@@ -491,7 +494,7 @@ private extension GoalsViewModel {
                     summary: "You're not getting enough potassium. Try eating things like bananas, avocados, potatoes, spinach, tomates, beans, oranges, yogurt, or salmon.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryPotassium, unit: milligram),
                         unit: milligram,
                         measurement: .increasePotassium
                     ),
@@ -515,7 +518,7 @@ private extension GoalsViewModel {
                     summary: "You're not getting enough sodium. Try eating things like processed meats, canned vegetables and soups, cheese, or adding table salt to meals.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietarySodium, unit: milligram),
                         unit: milligram,
                         measurement: .increaseSodium
                     ),
@@ -529,7 +532,7 @@ private extension GoalsViewModel {
                     summary: "You're getting too much sodium. Try avoiding eating things like processed meats, canned vegetables and soups, cheese, and avoid adding table salt to meals.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietarySodium, unit: milligram, isincrease: false),
                         unit: milligram,
                         measurement: .decreaseSodium
                     ),
@@ -552,13 +555,13 @@ private extension GoalsViewModel {
                     summary: "You're not getting enough zinc. Try eating things like beef, lamb, shellfish, legumes, seeds, nuts, dairy products, eggs, or whole grains.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryZinc, unit: milligram),
                         unit: milligram,
                         measurement: .increaseZinc
                     ),
                     vitalKind: .nutrition
                 )
-                scoredNutrients.append((score, goal))
+//                scoredNutrients.append((score, goal))
             } else {
                 let goal = GoalModel(
                     title: "Decrease Zinc Intake",
@@ -566,13 +569,13 @@ private extension GoalsViewModel {
                     summary: "You're getting too much zinc. Try avoiding eating things like beef, lamb, shellfish, legumes, seeds, nuts, dairy products, eggs, or whole grains.",
                     dueDate: dueDate,
                     metric: .init(
-                        quantity: target.lower,
+                        value: await scaledTarget(for: .dietaryZinc, unit: milligram, isincrease: false),
                         unit: milligram,
                         measurement: .decreaseZinc
                     ),
                     vitalKind: .nutrition
                 )
-                scoredNutrients.append((score, goal))
+//                scoredNutrients.append((score, goal))
             }
         }
 
@@ -582,11 +585,11 @@ private extension GoalsViewModel {
         {
             let goal = GoalModel(
                 title: "Decrease Sugar Intake",
-                systemImage: "arrow.up.circle",
+                systemImage: "arrow.down.circle",
                 summary: "You're eating too much sugar. Try avoiding eating things like sugary snacks or drinks, white bread, pasta, rice, fried foods, desserts, alcohol, or fruit juice. Avoid artificial sweeteners as well, since they can increase sugar cravings and impact gut health.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target,
+                    value: await scaledTarget(for: .dietarySugar, unit: .gram(), isincrease: false),
                     unit: .gram(),
                     measurement: .decreaseSugar
                 ),
@@ -601,17 +604,17 @@ private extension GoalsViewModel {
         {
             let goal = GoalModel(
                 title: "Decrease Caffeine Intake",
-                systemImage: "arrow.up.circle",
+                systemImage: "arrow.down.circle",
                 summary: "You're getting too much caffeine. Try avoiding ingesting things like caffeinated beverages (coffee, pop), or chocolate.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target,
+                    value: await scaledTarget(for: .dietaryCaffeine, unit: milligram, isincrease: false),
                     unit: milligram,
                     measurement: .decreaseCaffeine
                 ),
                 vitalKind: .nutrition
             )
-            scoredNutrients.append((score, goal))
+//            scoredNutrients.append((score, goal))
         }
 
         if
@@ -624,7 +627,7 @@ private extension GoalsViewModel {
                 summary: "You're not getting enough fiber. Try eating things like fruits, leafy greens, broccoli, carrots, oats, whole grain bread, beans, almonds, or popcorn.",
                 dueDate: dueDate,
                 metric: .init(
-                    quantity: target,
+                    value: await scaledTarget(for: .dietaryFiber, unit: milligram),
                     unit: .gram(),
                     measurement: .increaseFiber
                 ),
@@ -634,6 +637,22 @@ private extension GoalsViewModel {
         }
 
         return scoredNutrients.min(by: { $0.0 < $1.0 })?.1
+    }
+
+    func scaledTarget(for quantityTypeID: HKQuantityTypeIdentifier, unit: HKUnit, isincrease: Bool = true) async -> Double {
+        let averageQuantity = await HealthManager.shared.fetchAverage(
+            for: quantityTypeID,
+            unit: unit,
+            divisor: Double(Int.numWeeksPastAverage),
+            dateRange: .trailingWeeksFromStartOfWeek(
+                .numWeeksPastAverage
+            )
+        )
+        if isincrease {
+            return averageQuantity.doubleValue(for: unit) * .goalMultiplier
+        } else {
+            return averageQuantity.doubleValue(for: unit) / .goalMultiplier
+        }
     }
 }
 
