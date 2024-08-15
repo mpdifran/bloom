@@ -358,6 +358,14 @@ extension HKHealthStore {
         activityType: HKWorkoutActivityType? = nil,
         dateRange: DateRange
     ) async throws -> [HKWorkout] {
+        let activityTypes = activityType.map({ [$0] }) ?? []
+        return try await fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)
+    }
+
+    func fetchWorkouts(
+        activityTypes: [HKWorkoutActivityType] = [],
+        dateRange: DateRange
+    ) async throws -> [HKWorkout] {
         try await withCheckedThrowingContinuation { continuation in
             let basePredicate = HKQuery.predicateForSamples(
                 withStart: dateRange.start,
@@ -365,9 +373,10 @@ extension HKHealthStore {
                 options: .strictEndDate
             )
             let predicate: NSPredicate
-            if let activityType {
-                let activityPredicate = HKQuery.predicateForWorkouts(with: activityType)
-                predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [basePredicate, activityPredicate])
+            if activityTypes.isNotEmpty {
+                let predicates = activityTypes.map { HKQuery.predicateForWorkouts(with: $0) }
+                let activityPredicates = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+                predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [basePredicate, activityPredicates])
             } else {
                 predicate = basePredicate
             }

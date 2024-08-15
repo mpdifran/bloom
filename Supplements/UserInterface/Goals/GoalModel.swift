@@ -92,23 +92,48 @@ extension GoalModel.Metric {
         case .walkRunDistance:
             return await HealthManager.shared.fetchTotalSum(for: .distanceWalkingRunning, dateRange: dateRange) ?? defaultQuantity
         case .walkDuration:
-            break
+            let workouts = await HealthManager.shared.fetchWorkouts(activityType: .walking, dateRange: dateRange)
+            let totalDuration = workouts.sum { $0.duration }
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
         case .runDistance:
             let workouts = await HealthManager.shared.fetchWorkouts(activityType: .running, dateRange: dateRange)
             let totalDistance = workouts.sum { workout in
-                workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?.sumQuantity()?.doubleValue(for: unit) ?? 0
+                workout.totalDistanceWalkingRunning.doubleValue(for: unit)
             }
             return HKQuantity(unit: unit, doubleValue: totalDistance)
         case .runDuration:
-            break
+            let workouts = await HealthManager.shared.fetchWorkouts(activityType: .running, dateRange: dateRange)
+            let totalDuration = workouts.sum { $0.duration }
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
         case .bikeDistance:
-            break
+            let workouts = await HealthManager.shared.fetchWorkouts(activityType: .cycling, dateRange: dateRange)
+            let totalDistance = workouts.sum { $0.totalDistanceCycling.doubleValue(for: unit) }
+            return HKQuantity(unit: unit, doubleValue: totalDistance)
         case .bikeDuration:
-            break
+            let workouts = await HealthManager.shared.fetchWorkouts(activityType: .cycling, dateRange: dateRange)
+            let totalDuration = workouts.sum { $0.duration }
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
         case .walkRunBikeDistance:
-            break
+            let workouts = await HealthManager.shared.fetchWorkouts(
+                activityTypes: [.walking, .running, .cycling],
+                dateRange: dateRange
+            )
+            let totalDistance = workouts.sum { $0.totalDistanceWalkingRunningCycling.doubleValue(for: unit) }
+            return HKQuantity(unit: unit, doubleValue: totalDistance)
         case .walkRunBikeDuration:
-            break
+            let workouts = await HealthManager.shared.fetchWorkouts(
+                activityTypes: [.walking, .running, .cycling],
+                dateRange: dateRange
+            )
+            let totalDuration = workouts.sum { $0.duration }
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
+        case .hikeDuration:
+            let workouts = await HealthManager.shared.fetchWorkouts(
+                activityType: .hiking,
+                dateRange: dateRange
+            )
+            let totalDuration = workouts.sum { $0.duration }
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
         case .stepCount:
             return await HealthManager.shared.fetchTotalSum(for: .stepCount, dateRange: dateRange) ?? defaultQuantity
         case .meditationMinutes:
@@ -123,8 +148,13 @@ extension GoalModel.Metric {
             break
         case .gymTrainingWorkoutDuration:
             break
-        case .HIITTrainingWorkoutDuration:
-            break
+        case .hiitWorkoutDuration:
+            let workouts = await HealthManager.shared.fetchWorkouts(
+                activityTypes: [.highIntensityIntervalTraining],
+                dateRange: dateRange
+            )
+            let totalDuration = workouts.sum { $0.duration }
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
         case .targetHeartRateZoneProportionsZone2:
             break
         case .targetHeartRateZoneProportionsZone3:
@@ -187,13 +217,14 @@ extension GoalModel {
         case walkRunBikeDistance
         case walkRunBikeDuration
         case stepCount
+        case hikeDuration
         case meditationMinutes
         case bedtimeSoundLevels
         case yogaWorkoutDuration
         case casualSportWorkoutDuration
         case intenseSportWorkoutDuration
         case gymTrainingWorkoutDuration
-        case HIITTrainingWorkoutDuration
+        case hiitWorkoutDuration
         case targetHeartRateZoneProportionsZone2
         case targetHeartRateZoneProportionsZone3
         case targetHeartRateZoneProportionsZone4
@@ -227,7 +258,7 @@ extension GoalModel {
             switch self {
             case .timeInDaylight:
                     .orange
-            case .walkRunDistance, .runDistance, .bikeDistance, .walkRunBikeDistance, .stepCount:
+            case .walkRunDistance, .runDistance, .bikeDistance, .walkRunBikeDistance, .stepCount, .hikeDuration:
                     .green
             case .walkDuration, .runDuration, .bikeDuration, .walkRunBikeDuration:
                     .pink
@@ -241,7 +272,7 @@ extension GoalModel {
                     .blue
             case .intenseSportWorkoutDuration:
                     .orange
-            case .gymTrainingWorkoutDuration, .HIITTrainingWorkoutDuration:
+            case .gymTrainingWorkoutDuration, .hiitWorkoutDuration:
                     .purple
             case .targetHeartRateZoneProportionsZone2, .targetHeartRateZoneProportionsZone3, .targetHeartRateZoneProportionsZone4, .targetHeartRateZoneProportionsZone5:
                     .pink

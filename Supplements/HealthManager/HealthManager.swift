@@ -219,6 +219,10 @@ extension HealthManager {
         (try? await healthStore.fetchWorkouts(activityType: activityType, dateRange: dateRange)) ?? []
     }
 
+    func fetchWorkouts(activityTypes: [HKWorkoutActivityType] = [], dateRange: DateRange) async -> [HKWorkout] {
+        (try? await healthStore.fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)) ?? []
+    }
+
     func fetchTotalMeditationMinutes(dateRange: DateRange) async -> HKQuantity {
         let samples = (try? await healthStore.fetchSamples(for: HKCategoryType(.mindfulSession), dateRange: dateRange)) ?? []
 

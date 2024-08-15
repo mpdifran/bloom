@@ -23,4 +23,16 @@ extension HKWorkout {
         }
         return HKQuantity(unit: .meter(), doubleValue: 0)
     }
+
+    var totalDistanceCycling: HKQuantity {
+        if let distance = statistics(for: HKQuantityType(.distanceCycling))?.sumQuantity() {
+            return distance
+        }
+        return HKQuantity(unit: .meter(), doubleValue: 0)
+    }
+
+    var totalDistanceWalkingRunningCycling: HKQuantity {
+        let totalDistance = totalDistanceWalkingRunning.doubleValue(for: .meter()) + totalDistanceCycling.doubleValue(for: .meter())
+        return HKQuantity(unit: .meter(), doubleValue: totalDistance)
+    }
 }

@@ -134,24 +134,44 @@ private extension GoalsViewModel {
                 vitalKind: vital.id,
                 dueDate: dueDate
             )
-            return [steps, walkRunDistance]
+            let walkDuration = await walkDurationGoal(
+                summary: "An easy way to improve your activity level is to incorporate more walking into your week.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            let hikeDuration = await hikeDurationGoal(
+                summary: "Hiking is a great way to be more active!",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            return [walkDuration, steps, walkRunDistance, hikeDuration]
         case .cardioFitness:
             let walkRunDistance = await walkRunDistanceGoal(
-                summary: "Your Cardio Fitness should be your main focus. Increasing your walking and running distance this week can help you improve.",
+                summary: "Increasing your walking and running distance this week can help you improve your cardio fitness.",
                 vitalKind: vital.id,
                 dueDate: dueDate
             )
             let runDistance = await runDistanceGoal(
-                summary: "Your Cardio Fitness should be your main focus. Let's focus on running more this week.",
+                summary: "Running is a great way to improve your cardio fitness.",
                 vitalKind: vital.id,
                 dueDate: dueDate
             )
             let stepGoal = await stepGoal(
-                summary: "Your Cardio Fitness should be your main focus. Increasing your step count can have a positive impact on your cardio fitness.",
+                summary: "Increasing your step count can have a positive impact on your cardio fitness.",
                 vitalKind: vital.id,
                 dueDate: dueDate
             )
-            return [walkRunDistance, runDistance, stepGoal]
+            let walkDuration = await walkDurationGoal(
+                summary: "Walking for longer can help improve your cardio fitness.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            let hiitDuration = await hiitDurationGoal(
+                summary: "Doing more high intensity interval training can help improve your cardio fitness.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            return [walkRunDistance, runDistance, stepGoal, walkDuration, hiitDuration]
         case .bodyComposition:
             let steps = await stepGoal(
                 summary: "Your body composition is out of the recommended range. A quick way to start making progess is to increase your steps.",
@@ -163,6 +183,11 @@ private extension GoalsViewModel {
                 vitalKind: vital.id,
                 dueDate: dueDate
             )
+            let walkDuration = await walkDurationGoal(
+                summary: "Your body composition is out of the recommended range. A quick way to start making progess is to walk for longer.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
             return [steps, walkRunDistance]
         case .mobility:
             return [await walkRunDistanceGoal(
@@ -171,11 +196,17 @@ private extension GoalsViewModel {
                 dueDate: dueDate
             )]
         case .stressLevels:
-            return [await meditationGoal(
+            let meditation = await meditationGoal(
                 summary: "Your stress levels are getting quite high. Try incorporating more meditation this week.",
                 vitalKind: vital.id,
                 dueDate: dueDate
-            )]
+            )
+            let walkDuration = await walkDurationGoal(
+                summary: "Walking is a great way to relive stress. Try spending more time walking this week.",
+                vitalKind: vital.id,
+                dueDate: dueDate
+            )
+            return [meditation, walkDuration]
         case .nutrition:
             if let goalModel = await nutritionGoal(dueDate: dueDate) {
                 return [goalModel]
@@ -656,6 +687,10 @@ private extension GoalsViewModel {
 
 private extension GoalsViewModel {
 
+    var defaultDateRange: DateRange {
+        .trailingWeeksFromStartOfWeek(.numWeeksPastAverage)
+    }
+
     func timeInDaylightGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
         let unit = HKUnit.minute()
         let average = await HealthManager.shared.fetchAverage(
@@ -674,6 +709,28 @@ private extension GoalsViewModel {
                 value: max(average * .goalMultiplier, 200),
                 unit: unit,
                 measurement: .timeInDaylight
+            ),
+            vitalKind: vitalKind
+        )
+    }
+
+    func walkDurationGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
+        let unit = HKUnit.minute()
+        let workouts = await HealthManager.shared.fetchWorkouts(
+            activityType: .walking,
+            dateRange: defaultDateRange
+        )
+        let averageDuration = workouts.sum(keyPath: \.duration) / Double(Int.numWeeksPastAverage)
+
+        return GoalModel(
+            title: "Increase Walking Duration",
+            systemImage: "figure.walk",
+            summary: summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: max((averageDuration / 60) * .goalMultiplier, 15),
+                unit: unit,
+                measurement: .walkDuration
             ),
             vitalKind: vitalKind
         )
@@ -728,6 +785,28 @@ private extension GoalsViewModel {
         )
     }
 
+    func hikeDurationGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
+        let unit = HKUnit.minute()
+        let workouts = await HealthManager.shared.fetchWorkouts(
+            activityType: .hiking,
+            dateRange: defaultDateRange
+        )
+        let averageDuration = workouts.sum(keyPath: \.duration) / Double(Int.numWeeksPastAverage)
+
+        return GoalModel(
+            title: "Hike More",
+            systemImage: "figure.hiking",
+            summary: summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: max((averageDuration / 60) * .goalMultiplier, 15),
+                unit: unit,
+                measurement: .hikeDuration
+            ),
+            vitalKind: vitalKind
+        )
+    }
+
     func stepGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
         let averageQuantity = await HealthManager.shared.fetchAverage(
             for: .stepCount,
@@ -747,6 +826,28 @@ private extension GoalsViewModel {
                 value: max(amount * .goalMultiplier, 1000),
                 unit: unit,
                 measurement: .stepCount
+            ),
+            vitalKind: vitalKind
+        )
+    }
+
+    func hiitDurationGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
+        let unit = HKUnit.minute()
+        let workouts = await HealthManager.shared.fetchWorkouts(
+            activityType: .highIntensityIntervalTraining,
+            dateRange: defaultDateRange
+        )
+        let averageDuration = workouts.sum(keyPath: \.duration) / Double(Int.numWeeksPastAverage)
+
+        return GoalModel(
+            title: "Increase HIIT Duration",
+            systemImage: "figure.highintensity.intervaltraining",
+            summary: summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: max((averageDuration / 60) * .goalMultiplier, 30),
+                unit: unit,
+                measurement: .hiitWorkoutDuration
             ),
             vitalKind: vitalKind
         )
