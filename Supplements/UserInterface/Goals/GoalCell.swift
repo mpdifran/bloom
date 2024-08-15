@@ -40,12 +40,14 @@ struct GoalCell: View {
 
                 if goals.count > 1 {
                     Menu {
-                        Menu("Change Goal", systemImage: "medal") {
+                        Menu("Change Goal", systemImage: "trophy") {
                             ForEachEnumerated(goals) { (goalIndex, goal) in
-                                Button(goal.title) {
-                                    goals.move(fromOffsets: [goalIndex], toOffset: 0)
-                                    Task {
-                                        await loadCurrentGoalValue()
+                                if goalIndex > 0 {
+                                    Button(goal.title) {
+                                        goals.move(fromOffsets: [goalIndex], toOffset: 0)
+                                        Task {
+                                            await loadCurrentGoalValue()
+                                        }
                                     }
                                 }
                             }

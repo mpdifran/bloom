@@ -16,7 +16,7 @@ struct TargetVitalComponentView: View {
                 .font(.title2)
 
             VStack(alignment: .leading) {
-                Text("Target")
+                Text("Focus")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 

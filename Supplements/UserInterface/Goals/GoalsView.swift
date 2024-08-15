@@ -45,7 +45,7 @@ struct GoalsView: View {
             }
         }
         .tabItem {
-            Label("Goals", systemImage: "medal")
+            Label("Goals", systemImage: "trophy")
         }
     }
 }
