@@ -141,24 +141,24 @@ private extension GoalDailyUpdateCell {
                             let tomorrowRate = currentRemainingAmount / Double(tomorrowRemainingHours)
                             let tomorrowDailyRate = tomorrowRate * 24
 
-                            return "At this rate, you're going to exceed your goal by the end of the week! Since you've exceeded your goal today, you need to reduce to \(tomorrowDailyRate.format(to: 1)) \(goal.metric.unit.unitString) tomorrow to meet your goal."
+                            return "At this rate, you're going to exceed your weekly goal by the end of the week! Since you've exceeded your goal today, you need to reduce to \(tomorrowDailyRate.format(to: 1)) \(goal.metric.unit.unitString) tomorrow to meet your weekly goal."
                         }
                     }
 
                     guard let projectedDate = Calendar.current.date(byAdding: .hour, value: Int(projectedHours), to: startOfDay) else {
-                        return "At this rate, you're going to exceed your goal by the end of the week! Reduce to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to meet your goal."
+                        return "At this rate, you're going to exceed your weekly goal by the end of the week! Reduce to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to meet your weekly goal."
                     }
 
-                    return "At this rate, you're going to exceed your goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))! Reduce to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to meet your goal."
+                    return "At this rate, you're going to exceed your weekly goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))! Reduce to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to meet your weekly goal."
                 } else {
-                    return "If you keep it below \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today, you'll meet your goal!"
+                    return "If you keep it below \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today, you'll meet your weekly goal!"
                 }
             }
         } else {
             if currentValue < 0.0001 {
                 return "You haven't made any progress today."
             } else if thisWeekValue > goal.metric.value {
-                return "You've reached your goal!"
+                return "You've reached your weekly goal!"
             }
 
             if 
@@ -172,12 +172,12 @@ private extension GoalDailyUpdateCell {
 
                 if projectedHours < Double(remainingHours) {
                     guard let projectedDate = Calendar.current.date(byAdding: .hour, value: Int(projectedHours), to: startOfDay) else {
-                        return "At this rate, you'll hit your goal by the end of the week!"
+                        return "At this rate, you'll hit your weekly goal by the end of the week!"
                     }
 
-                    return "At this rate, you'll hit your goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))!"
+                    return "At this rate, you'll hit your weekly goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))!"
                 } else {
-                    return "At this pace, you won't hit your goal in time! Try and get to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) to hit your goal."
+                    return "At this pace, you won't hit your weekly goal in time! Try and get to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) to hit your weekly goal."
                 }
             }
         }

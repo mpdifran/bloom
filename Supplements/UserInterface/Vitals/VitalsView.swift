@@ -19,7 +19,7 @@ struct VitalsView: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    Text("Goals")
+                    Text("Weekly Goals")
                         .bold()
                         .padding(.horizontal)
                         .zStackAlignment(.leading)
