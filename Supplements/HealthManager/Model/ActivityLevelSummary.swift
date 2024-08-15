@@ -88,10 +88,10 @@ extension ActivityLevelSummary.ActivityLevel {
 struct ActivityLevelSummary: Equatable, Codable {
     let averageBasalEnergyBurned: Double
     let averageActiveEnergyBurned: Double
-    let energyRatioSamples: [DateQuantitySample]
+    let energyRatioSamples: [DateQuantitySampleLegacy]
     let lastMonthAverageBasalEnergyBurned: Double
     let lastMonthAverageActiveEnergyBurned: Double
-    let lastMonthEnergyRatioSamples: [DateQuantitySample]
+    let lastMonthEnergyRatioSamples: [DateQuantitySampleLegacy]
 }
 
 extension ActivityLevelSummary {

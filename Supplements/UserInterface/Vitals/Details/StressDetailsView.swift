@@ -11,7 +11,7 @@ import Charts
 struct StressDetailsView: View {
     
     @State private var heartRateVariabilitySamples = [DateAverageQuantitySample]()
-    @State private var restingHeartRateSamples = [DateQuantitySample]()
+    @State private var restingHeartRateSamples = [DateQuantitySampleLegacy]()
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 

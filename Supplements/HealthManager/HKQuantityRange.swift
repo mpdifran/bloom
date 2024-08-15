@@ -15,6 +15,14 @@ struct HKQuantityRange {
 
 extension HKQuantityRange {
 
+    var lower: HKQuantity {
+        HKQuantity(unit: self.unit, doubleValue: range.lowerBound)
+    }
+
+    var upper: HKQuantity {
+        HKQuantity(unit: self.unit, doubleValue: range.upperBound)
+    }
+
     func lowerDoubleValue(for unit: HKUnit) -> Double {
         let quantity = HKQuantity(unit: self.unit, doubleValue: range.lowerBound)
         return quantity.doubleValue(for: unit)

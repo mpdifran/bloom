@@ -37,7 +37,6 @@ final class HealthManager: ObservableObject {
     }
 
     let bodyMeasurementTypes = [
-        HKQuantityType(.bodyMass),
         HKCharacteristicType(.dateOfBirth),
         HKCharacteristicType(.biologicalSex),
         HKQuantityType(.bodyFatPercentage)
@@ -180,24 +179,71 @@ extension HealthManager {
     func sexName() -> String? {
         healthStore.sexName()
     }
+}
 
-    func fetchBodyWeight() async -> HKQuantitySample? {
-        let bodyMassType = HKQuantityType(.bodyMass)
-        let descriptor = HKSampleQueryDescriptor(
-            predicates:[.quantitySample(type: bodyMassType)],
-            sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)],
-            limit: 1
-        )
+extension HealthManager {
 
+    func fetchTotalSum(for quantityType: HKQuantityTypeIdentifier, dateRange: DateRange) async -> HKQuantity? {
+        try? await healthStore.fetchQuantity(for: quantityType, dateRange: dateRange, option: .cumulativeSum)
+    }
+
+    func fetchAverage(
+        for quantityType: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        divisor: Double? = nil,
+        dateRange: DateRange
+    ) async -> HKQuantity {
+        let totalSum = await fetchTotalSum(for: quantityType, dateRange: dateRange)
+        let resolvedDivisor = divisor ?? Double(dateRange.numberOfDaysInclusive)
+        let average = (totalSum?.doubleValue(for: unit) ?? 0) / resolvedDivisor
+
+        return HKQuantity(unit: unit, doubleValue: average)
+    }
+
+    func fetchWorkouts(activityType: HKWorkoutActivityType? = nil, dateRange: DateRange) async -> [HKWorkout] {
+        (try? await healthStore.fetchWorkouts(activityType: activityType, dateRange: dateRange)) ?? []
+    }
+
+    func fetchTotalMeditationMinutes(dateRange: DateRange) async -> HKQuantity {
+        let samples = (try? await healthStore.fetchSamples(for: HKCategoryType(.mindfulSession), dateRange: dateRange)) ?? []
+
+        let meditationMinutes = samples.reduce(0) { (total, sample) -> Double in
+            total + sample.timeInterval / 60
+        }
+        return HKQuantity(unit: .minute(), doubleValue: meditationMinutes)
+    }
+
+    func fetchDietaryNutritionPercentage(
+        quantityTypeID: HKQuantityTypeIdentifier,
+        caloriesPerGram: Double,
+        dateRange: DateRange
+    ) async -> Double {
         do {
-            let results = try await descriptor.result(for: healthStore)
-            return results.first
+            let quantity = try await healthStore.fetchQuantity(
+                for: quantityTypeID,
+                dateRange: dateRange,
+                option: .cumulativeSum
+            )
+
+            let dietaryEnergy = try await healthStore.fetchQuantity(
+                for: .dietaryEnergyConsumed,
+                dateRange: dateRange,
+                option: .cumulativeSum
+            )
+
+            return (quantity.doubleValue(for: .gram()) * caloriesPerGram) / dietaryEnergy.doubleValue(for: .largeCalorie())
         } catch {
             print(error)
         }
-        return nil
+        return 0
     }
+}
 
+// MARK: Deprecated
+
+extension HealthManager {
+
+    @available(*, deprecated, message: "Use fetchTotalSum instead")
     func fetchThisWeekSumQuantity(for quantityType: HKQuantityTypeIdentifier, unit: HKUnit) async -> Double {
         let endDate = Date.now
         guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return 0 }
@@ -215,6 +261,7 @@ extension HealthManager {
         return 0
     }
 
+    @available(*, deprecated, message: "Use fetchTotalSum instead")
     func fetchWeeklyAverage(for quantityType: HKQuantityTypeIdentifier, unit: HKUnit, numWeeks: Int) async -> Double {
         guard
             let endDate = Calendar.current.startOfWeek(for: .now),
@@ -252,7 +299,7 @@ extension HealthManager {
         return nil
     }
 
-    func fetchExerciseMinutes(startDate: Date, endDate: Date) async -> [DateQuantitySample] {
+    func fetchExerciseMinutes(startDate: Date, endDate: Date) async -> [DateQuantitySampleLegacy] {
         do {
             return try await healthStore.fetchCollectionQuantity(
                 quantityTypeID: .appleExerciseTime,
@@ -293,7 +340,7 @@ extension HealthManager {
         return nil
     }
 
-    func fetchRestingHeartRate(period: Int = 7) async -> [DateQuantitySample] {
+    func fetchRestingHeartRate(period: Int = 7) async -> [DateQuantitySampleLegacy] {
         do {
             let samples = try await healthStore.fetchSamples(for: .restingHeartRate, previousDays: period)
 
@@ -301,7 +348,7 @@ extension HealthManager {
                 sample as? HKQuantitySample
             }.map { sample in
                 let value = sample.quantity.doubleValue(for: .bpm())
-                return DateQuantitySample(
+                return DateQuantitySampleLegacy(
                     date: sample.startDate,
                     quantity: value,
                     unit: "bpm"
@@ -408,7 +455,7 @@ extension HealthManager {
         return nil
     }
 
-    func fetchTimeInDaylight(periodDays: Int = 14) async -> [DateQuantitySample] {
+    func fetchTimeInDaylight(periodDays: Int = 14) async -> [DateQuantitySampleLegacy] {
         let endDate = Date.now
         guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {
             return []
@@ -417,7 +464,7 @@ extension HealthManager {
         return await fetchTimeInDaylight(startDate: startDate, endDate: endDate)
     }
 
-    func fetchTimeInDaylight(startDate: Date, endDate: Date) async -> [DateQuantitySample] {
+    func fetchTimeInDaylight(startDate: Date, endDate: Date) async -> [DateQuantitySampleLegacy] {
         do {
             return try await healthStore.fetchCollectionQuantity(
                 quantityTypeID: .timeInDaylight,
@@ -431,7 +478,7 @@ extension HealthManager {
         return []
     }
 
-    func fetchBasalEnergy(numPastMonths: Int = 0) async -> [DateQuantitySample] {
+    func fetchBasalEnergy(numPastMonths: Int = 0) async -> [DateQuantitySampleLegacy] {
         guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
               let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
         else {
@@ -449,7 +496,7 @@ extension HealthManager {
         ) ?? []
     }
 
-    func fetchActiveEnergy(numPastMonths: Int = 0) async -> [DateQuantitySample] {
+    func fetchActiveEnergy(numPastMonths: Int = 0) async -> [DateQuantitySampleLegacy] {
         guard let endDate = Calendar.current.date(byAdding: .month, value: -numPastMonths, to: .now),
               let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
         else {
@@ -467,7 +514,7 @@ extension HealthManager {
         ) ?? []
     }
 
-    func fetchActiveEnergy(startDate: Date, endDate: Date) async -> [DateQuantitySample] {
+    func fetchActiveEnergy(startDate: Date, endDate: Date) async -> [DateQuantitySampleLegacy] {
         do {
             return try await healthStore.fetchCollectionQuantity(
                 quantityTypeID: .activeEnergyBurned,
@@ -481,8 +528,8 @@ extension HealthManager {
         return []
     }
 
-    func calculateRatios(basalEnergy: [DateQuantitySample], activeEnergy: [DateQuantitySample]) -> [DateQuantitySample] {
-        var samples = [DateQuantitySample]()
+    func calculateRatios(basalEnergy: [DateQuantitySampleLegacy], activeEnergy: [DateQuantitySampleLegacy]) -> [DateQuantitySampleLegacy] {
+        var samples = [DateQuantitySampleLegacy]()
 
         for basalSample in basalEnergy {
             guard let activeSample = activeEnergy.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) }) else {
@@ -529,7 +576,7 @@ extension HealthManager {
         )
     }
 
-    func fetchNetEnergy(numPrevDays: Int = 7) async -> [DateQuantitySample] {
+    func fetchNetEnergy(numPrevDays: Int = 7) async -> [DateQuantitySampleLegacy] {
         let endDate = Date.now
 
         guard let startDate = Calendar.current.date(byAdding: .day, value: -numPrevDays, to: endDate) else { return [] }
@@ -555,7 +602,7 @@ extension HealthManager {
             endDate: endDate
         )
 
-        var samples = [DateQuantitySample]()
+        var samples = [DateQuantitySampleLegacy]()
 
         for basalSample in basal ?? [] {
             guard 
@@ -587,6 +634,7 @@ extension HealthManager {
         return []
     }
 
+    @available(*, deprecated, message: "User DateRange method instead")
     func fetchWorkoutSummaries(activityType: HKWorkoutActivityType? = nil, numWeeks: Int) async -> [WorkoutSummary] {
         guard
             let endDate = Calendar.current.startOfWeek(for: .now),
@@ -596,6 +644,7 @@ extension HealthManager {
         return await fetchWorkoutSummaries(startDate: startDate, endDate: endDate, activityType: activityType)
     }
 
+    @available(*, deprecated, message: "User DateRange method instead")
     func fetchWorkoutSummaries(
         startDate: Date,
         endDate: Date,
@@ -613,6 +662,7 @@ extension HealthManager {
         return []
     }
 
+    @available(*, deprecated, message: "User DateRange method instead")
     func fetchWorkoutSummariesThisWeek(activityType: HKWorkoutActivityType? = nil) async -> [WorkoutSummary] {
         do {
             let endDate = Date.now
@@ -834,7 +884,7 @@ extension HealthManager {
         quantityTypeID: HKQuantityTypeIdentifier,
         unit: HKUnit,
         numPrevDays: Int
-    ) async -> [DateQuantitySample] {
+    ) async -> [DateQuantitySampleLegacy] {
         let endDate = Date.now
 
         guard let startDate = Calendar.current.date(byAdding: .day, value: -numPrevDays, to: endDate) else { return [] }
@@ -847,34 +897,7 @@ extension HealthManager {
         )) ?? []
     }
 
-    func fetchDietaryNutritionPercentageThisWeek(
-        quantityTypeID: HKQuantityTypeIdentifier,
-        caloriesPerGram: Double
-    ) async -> Double {
-        do {
-            let endDate = Date.now
-            guard let startDate = Calendar.current.startOfWeek(for: endDate) else { return 0 }
-
-            let quantity = try await healthStore.fetchQuantity(
-                for: quantityTypeID,
-                start: startDate,
-                end: endDate,
-                option: .cumulativeSum
-            )
-            let dietaryEnergy = try await healthStore.fetchQuantity(
-                for: .dietaryEnergyConsumed,
-                start: startDate,
-                end: endDate,
-                option: .cumulativeSum
-            )
-
-            return (quantity.doubleValue(for: .gram()) * caloriesPerGram) / dietaryEnergy.doubleValue(for: .largeCalorie())
-        } catch {
-            print(error)
-        }
-        return 0
-    }
-
+    @available(*, deprecated, message: "Update to use a DateRange method instead.")
     func fetchNutritionDailyAverageThisWeek(quantityTypeID: HKQuantityTypeIdentifier, unit: HKUnit) async -> Double {
         do {
             let endDate = Date.now
@@ -901,12 +924,10 @@ extension HealthManager {
             return nil
         }
 
-        let bodyWeight = await fetchBodyWeight()
         let thisMonth = await fetchNutritionMonthlySummaryDetails(startDate: midDate, endDate: endDate)
         let lastMonth = await fetchNutritionMonthlySummaryDetails(startDate: startDate, endDate: midDate)
 
         return NutritionMonthlySummary(
-            bodyWeight: bodyWeight,
             details: thisMonth,
             lastMonthDetails: lastMonth
         )
@@ -1103,6 +1124,7 @@ extension HealthManager {
         return nil
     }
 
+    @available(*, deprecated, message: "Use DateRange method instead")
     func fetchWeeklyAverageMeditationMinutes(numWeeks: Int) async -> Double {
         do {
             guard
@@ -1128,6 +1150,7 @@ extension HealthManager {
         return 0
     }
 
+    @available(*, deprecated, message: "Use DateRange method instead")
     func fetchAverageMeditationMinutesThisWeek() async -> Double {
         do {
             let endDate = Date.now
@@ -1151,7 +1174,7 @@ extension HealthManager {
         return 0
     }
 
-    func fetchMeditationMinutes(periodDays: Int = 14) async -> [DateQuantitySample] {
+    func fetchMeditationMinutes(periodDays: Int = 14) async -> [DateQuantitySampleLegacy] {
         do {
             let endDate = Date.now
             guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {
@@ -1162,7 +1185,7 @@ extension HealthManager {
 
             let samples = try await healthStore.fetchSamples(for: meditationType, start: startDate, end: endDate)
 
-            var quantitySamples = [DateQuantitySample]()
+            var quantitySamples = [DateQuantitySampleLegacy]()
 
             for sample in samples {
                 if
@@ -1174,7 +1197,7 @@ extension HealthManager {
                 }
 
                 let startOfDay = Calendar.current.startOfDay(for: sample.endDate)
-                let newSample = DateQuantitySample(
+                let newSample = DateQuantitySampleLegacy(
                     date: startOfDay,
                     quantity: sample.timeInterval / 60,
                     unit: "minute"
@@ -1189,7 +1212,7 @@ extension HealthManager {
         return []
     }
 
-    func fetchHeartRateVariability(periodDays: Int = 14) async -> [DateQuantitySample] {
+    func fetchHeartRateVariability(periodDays: Int = 14) async -> [DateQuantitySampleLegacy] {
         do {
             let samples = try await healthStore.fetchSamples(for: .heartRateVariabilitySDNN, previousDays: periodDays)
 
@@ -1197,7 +1220,7 @@ extension HealthManager {
                 sample as? HKQuantitySample
             }.map { sample in
                 let value = sample.quantity.doubleValue(for: .secondUnit(with: .milli))
-                return DateQuantitySample(
+                return DateQuantitySampleLegacy(
                     date: sample.startDate,
                     quantity: value,
                     unit: "milliseconds"

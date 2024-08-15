@@ -6,47 +6,45 @@
 //
 
 import SwiftUI
+import AppUI
 
 struct VitalsView: View {
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
+    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
 
     @State private var path = NavigationPath()
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                HStack {
-                    Spacer(minLength: 0)
-                    VStack {
-//                        VitalSummaryView(
-//                            hrvStatus: viewModel.hrvStatus,
-//                            sleepStatus: viewModel.sleepStatus,
-//                            rhrStatus: viewModel.rhrStatus
-//                        )
-//                        .padding(.horizontal)
-//
-//                        HStack {
-//                            Text("Monthly Vitals")
-//                                .font(.headline)
-//                                .bold()
-//                            Spacer()
-//                        }
-//                        .padding(.top)
-//                        .padding(.horizontal)
-//                        .padding(.horizontal)
+                VStack {
+                    Text("Goals")
+                        .bold()
+                        .padding(.horizontal)
+                        .zStackAlignment(.leading)
 
-                        ForEach(viewModel.vitals) { vital in
-                            NavigationLink(value: vital.id) {
-                                MonthlyVitalCardCell(vital: vital)
-                                    .padding(.horizontal)
-                            }
-                            .buttonStyle(.plain)
+                    ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
+                        if let goal = goals.first {
+                            GoalDailyUpdateCell(goal: goal)
                         }
                     }
-                    Spacer(minLength: 0)
+
+                    Text("Vitals")
+                        .bold()
+                        .padding(.horizontal)
+                        .zStackAlignment(.leading)
+                        .padding(.top)
+
+                    ForEach(viewModel.vitals) { vital in
+                        NavigationLink(value: vital.id) {
+                            MonthlyVitalCardCell(vital: vital)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
-                .padding(.bottom)
+                .horizontallyCentered()
+                .padding()
             }
             .navigationTitle("Vitals")
             .navigationDestination(for: VitalModel.Kind.self) { vitalKind in

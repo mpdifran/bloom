@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct RestingHeartRateCell: View {
-    let heartRateSamples: [DateQuantitySample]
+    let heartRateSamples: [DateQuantitySampleLegacy]
 
     var body: some View {
         Section {

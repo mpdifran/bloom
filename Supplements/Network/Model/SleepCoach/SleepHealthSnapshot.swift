@@ -8,9 +8,9 @@
 import Foundation
 
 struct SleepHealthSnapshot: Codable {
-    let timeInDaylight: [DateQuantitySample]
+    let timeInDaylight: [DateQuantitySampleLegacy]
     let workouts: [WorkoutSummary]
     let sleepSummaries: [SleepAnalysis]
-    let meditation: [DateQuantitySample]
-    let restingHeartRate: [DateQuantitySample]
+    let meditation: [DateQuantitySampleLegacy]
+    let restingHeartRate: [DateQuantitySampleLegacy]
 }

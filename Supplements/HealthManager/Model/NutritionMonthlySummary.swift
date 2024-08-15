@@ -24,7 +24,6 @@ extension NutritionMonthlySummary {
 }
 
 struct NutritionMonthlySummary: Hashable {
-    let bodyWeight: HKQuantitySample?
     let details: Details
     let lastMonthDetails: Details
 }

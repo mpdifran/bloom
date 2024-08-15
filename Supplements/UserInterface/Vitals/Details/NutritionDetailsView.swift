@@ -20,13 +20,13 @@ struct NutritionDetailsView: View {
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
     @State private var energyChartScope = EnergyChartScope.monthlyAverage
-    @State private var dailyEnergy = [DateQuantitySample]()
+    @State private var dailyEnergy = [DateQuantitySampleLegacy]()
     @State private var fiberChartScope = EnergyChartScope.monthlyAverage
-    @State private var dailyFiber = [DateQuantitySample]()
+    @State private var dailyFiber = [DateQuantitySampleLegacy]()
     @State private var sugarChartScope = EnergyChartScope.monthlyAverage
-    @State private var dailySugar = [DateQuantitySample]()
+    @State private var dailySugar = [DateQuantitySampleLegacy]()
     @State private var caffeineChartScope = EnergyChartScope.monthlyAverage
-    @State private var dailyCaffeine = [DateQuantitySample]()
+    @State private var dailyCaffeine = [DateQuantitySampleLegacy]()
 
     var body: some View {
         ScrollView {

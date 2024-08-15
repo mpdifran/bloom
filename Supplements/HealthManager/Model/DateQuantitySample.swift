@@ -2,27 +2,15 @@
 //  DateQuantitySample.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-06-05.
+//  Created by Mark DiFranco on 2024-08-14.
 //
 
 import Foundation
-import OpenAPIClient
+import HealthKit
 
-struct DateQuantitySample: Identifiable, Codable, Hashable {
-    var id: String { "\(date)-\(quantity)" }
+struct DateQuantitySample: Identifiable, Hashable {
+    var id: Int { hashValue }
 
     let date: Date
-    var quantity: Double
-    let unit: String
-}
-
-extension DateQuantitySample {
-
-    var healthMetricSample: HealthMetricSample {
-        HealthMetricSample(
-            date: date,
-            quantity: quantity,
-            unit: unit
-        )
-    }
+    let quantity: HKQuantity
 }

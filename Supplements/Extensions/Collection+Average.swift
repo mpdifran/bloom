@@ -66,6 +66,12 @@ extension Collection {
         return items.reduce(0) { $0 + $1[keyPath: keyPath] }
     }
 
+    func sum(where addend: (Element) -> Double) -> Double {
+        reduce(0) { (partialResult, element) in
+            partialResult + addend(element)
+        }
+    }
+
     func group(by matcher: (Element, Element) -> Bool) -> [[Element]] {
         guard isNotEmpty else { return [] }
 

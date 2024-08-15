@@ -35,7 +35,7 @@
 		FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705242C10ADF1000D4B3D /* SleepEnvironmentEnums.swift */; };
 		FF1705292C10DC67000D4B3D /* WorkoutSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705282C10DC67000D4B3D /* WorkoutSummaryCell.swift */; };
 		FF17052B2C10E1E1000D4B3D /* TimeInDaylightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17052A2C10E1E1000D4B3D /* TimeInDaylightCell.swift */; };
-		FF17052D2C10E64C000D4B3D /* DateQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */; };
+		FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17052C2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift */; };
 		FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */; };
 		FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */; };
 		FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */; };
@@ -87,6 +87,11 @@
 		FF3A8F3B2C1A8341002DA563 /* DeviceActivityReportExtension.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF3A8F402C1A8359002DA563 /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
 		FF3A8F442C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */; };
+		FF426AC92C6D39B4006E0F17 /* DateRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426AC82C6D39B4006E0F17 /* DateRange.swift */; };
+		FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426ACA2C6D424E006E0F17 /* DateQuantitySample.swift */; };
+		FF426ACD2C6D4768006E0F17 /* NSPredicate+Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */; };
+		FF426ACF2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */; };
+		FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */; };
 		FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */; };
 		FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F02C40797F004E8661 /* SleepStageChartView.swift */; };
 		FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */; };
@@ -396,7 +401,7 @@
 		FF1705242C10ADF1000D4B3D /* SleepEnvironmentEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepEnvironmentEnums.swift; sourceTree = "<group>"; };
 		FF1705282C10DC67000D4B3D /* WorkoutSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummaryCell.swift; sourceTree = "<group>"; };
 		FF17052A2C10E1E1000D4B3D /* TimeInDaylightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInDaylightCell.swift; sourceTree = "<group>"; };
-		FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateQuantitySample.swift; sourceTree = "<group>"; };
+		FF17052C2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateQuantitySampleLegacy.swift; sourceTree = "<group>"; };
 		FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Average.swift"; sourceTree = "<group>"; };
 		FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
 		FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brightness.swift"; sourceTree = "<group>"; };
@@ -448,6 +453,11 @@
 		FF3A8F372C1A8341002DA563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF3A8F382C1A8341002DA563 /* DeviceActivityReportExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityReportExtension.entitlements; sourceTree = "<group>"; };
 		FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceActivityReport.Context+Constants.swift"; sourceTree = "<group>"; };
+		FF426AC82C6D39B4006E0F17 /* DateRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRange.swift; sourceTree = "<group>"; };
+		FF426ACA2C6D424E006E0F17 /* DateQuantitySample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateQuantitySample.swift; sourceTree = "<group>"; };
+		FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPredicate+Sendable.swift"; sourceTree = "<group>"; };
+		FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDailyUpdateCell.swift; sourceTree = "<group>"; };
+		FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkout+Helpers.swift"; sourceTree = "<group>"; };
 		FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListViewModel.swift; sourceTree = "<group>"; };
 		FF4578F02C40797F004E8661 /* SleepStageChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStageChartView.swift; sourceTree = "<group>"; };
 		FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySectionTitleView.swift; sourceTree = "<group>"; };
@@ -1093,6 +1103,7 @@
 				FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */,
 				FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */,
 				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
+				FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1226,6 +1237,8 @@
 				FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */,
 				FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */,
 				FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */,
+				FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */,
+				FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */,
 			);
 			path = HealthManager;
 			sourceTree = "<group>";
@@ -1345,7 +1358,9 @@
 			isa = PBXGroup;
 			children = (
 				FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */,
-				FF17052C2C10E64C000D4B3D /* DateQuantitySample.swift */,
+				FF426AC82C6D39B4006E0F17 /* DateRange.swift */,
+				FF426ACA2C6D424E006E0F17 /* DateQuantitySample.swift */,
+				FF17052C2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift */,
 				FFF66FA82C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift */,
 				FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */,
 				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
@@ -1891,6 +1906,7 @@
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
+				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
 				FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */,
 				FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
@@ -1907,6 +1923,7 @@
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
+				FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */,
 				FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */,
 				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
 				FFA134F02C3F042300FF1829 /* TodayView.swift in Sources */,
@@ -1959,7 +1976,7 @@
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
-				FF17052D2C10E64C000D4B3D /* DateQuantitySample.swift in Sources */,
+				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
 				FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
@@ -1969,6 +1986,7 @@
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */,
+				FF426ACF2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift in Sources */,
 				FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */,
 				FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
@@ -1995,12 +2013,14 @@
 				FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */,
 				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
+				FF426ACD2C6D4768006E0F17 /* NSPredicate+Sendable.swift in Sources */,
 				FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */,
 				FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */,
 				FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */,
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,
+				FF426AC92C6D39B4006E0F17 /* DateRange.swift in Sources */,
 				FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */,
 				FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */,
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
