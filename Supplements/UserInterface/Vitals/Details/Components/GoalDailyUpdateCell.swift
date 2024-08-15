@@ -9,10 +9,6 @@ import SwiftUI
 import Charts
 import HealthKit
 
-private extension Int {
-    static let numTrailingHours: Int = 24
-}
-
 struct GoalDailyUpdateCell: View {
     let goal: GoalModel
 
@@ -20,53 +16,58 @@ struct GoalDailyUpdateCell: View {
     @State private var thisWeekValue: Double = 0
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(alignment: .top) {
-                Image(systemName: goal.systemImage)
-                    .font(.title2)
-                    .foregroundStyle(.tint)
+        TimelineView(.everyMinute) { _ in
+            VStack(alignment: .leading) {
+                HStack(alignment: .top) {
+                    Image(systemName: goal.systemImage)
+                        .font(.title2)
+                        .foregroundStyle(.tint)
 
-                VStack(alignment: .leading) {
-                    Text(goal.title)
-                        .bold()
-                    Text("Past \(Int.numTrailingHours) hours")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .fixedSize(horizontal: false, vertical: true)
-
-                Spacer(minLength: 0)
-
-                Text("\(currentValue.format(to: 1)) \(goal.metric.unit.unitString)")
-                    .font(.headline)
-                    .bold()
-            }
-
-            Group {
-                if currentValue < 0.0001 {
-                    Text("No Data")
-                        .foregroundStyle(.secondary)
-                        .bold()
-                        .horizontallyCentered()
-                } else {
-                    Chart {
-                        BarMark(x: .value("Amount", currentValue))
-                            .foregroundStyle(.tint)
-                            .cornerRadius(5)
-
-                        RuleMark(
-                            x: .value("Daily Goal", remainingGoalValue)
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [2]))
-                        .foregroundStyle(currentValue < remainingGoalValue ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
+                    VStack(alignment: .leading) {
+                        Text(goal.title)
+                            .bold()
+                        Text("Today")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                    .chartXScale(domain: 0...maxChartValue * 1.1, range: .plotDimension)
-                }
-            }
-            .frame(height: 40)
+                    .fixedSize(horizontal: false, vertical: true)
 
-            if let predictiveText {
-                TimelineView(.periodic(from: .now, by: 60 * 60)) { _ in
+                    Spacer(minLength: 0)
+
+                    VStack(alignment: .trailing) {
+                        Text("\(currentValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                            .font(.headline)
+                            .bold()
+                        Text("/ \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Group {
+                    if currentValue < 0.0001 {
+                        Text("No Data")
+                            .foregroundStyle(.secondary)
+                            .bold()
+                            .horizontallyCentered()
+                    } else {
+                        Chart {
+                            BarMark(x: .value("Amount", currentValue))
+                                .foregroundStyle(.tint)
+                                .cornerRadius(5)
+
+                            RuleMark(
+                                x: .value("Daily Goal", remainingGoalValue)
+                            )
+                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [2]))
+                            .foregroundStyle(currentValue < remainingGoalValue ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
+                        }
+                        .chartXScale(domain: 0...maxChartValue * 1.1, range: .plotDimension)
+                    }
+                }
+                .frame(height: 40)
+
+                if let predictiveText {
                     Text(predictiveText)
                         .foregroundStyle(.secondary)
                         .font(.subheadline)
@@ -86,7 +87,9 @@ struct GoalDailyUpdateCell: View {
 private extension GoalDailyUpdateCell {
 
     var remainingGoalValue: Double {
-        guard let remainingHours = Calendar.current.dateComponents([.hour], from: .now, to: goal.dueDate).hour else {
+        let startOfDay = Calendar.current.startOfDay(for: .now)
+
+        guard let remainingHours = Calendar.current.dateComponents([.hour], from: startOfDay, to: goal.dueDate).hour else {
             return goal.metric.value / 7
         }
 
@@ -95,7 +98,7 @@ private extension GoalDailyUpdateCell {
             return goal.metric.value / 7
         }
         let rate = remainingGoalAmount / Double(remainingHours)
-        return rate * Double(Int.numTrailingHours)
+        return rate * 24
     }
 
     var maxChartValue: Double {
@@ -103,8 +106,8 @@ private extension GoalDailyUpdateCell {
     }
 
     func loadQuantity() async {
-        let quantity = await goal.metric.quantity(for: .trailingHoursFromNow(.numTrailingHours))
-        let thisWeekQuantity = await goal.metric.quantity(for: .startOfWeekToNow())
+        let quantity = await goal.metric.quantity(for: .startOfDayToNow())
+        let thisWeekQuantity = await goal.metric.quantity(for: .startOfWeekToStartOfToday())
         await MainActor.run {
             self.currentValue = quantity.doubleValue(for: goal.metric.unit)
             self.thisWeekValue = thisWeekQuantity.doubleValue(for: goal.metric.unit)
@@ -112,47 +115,69 @@ private extension GoalDailyUpdateCell {
     }
 
     var predictiveText: String? {
+        let startOfDay = Calendar.current.startOfDay(for: .now)
+
         if goal.metric.measurement.isDecrease {
-            if thisWeekValue > goal.metric.value {
+            if thisWeekValue + currentValue > goal.metric.value {
                 return "You've exceeded your goal for the week."
-            } else if let remainingHours = Calendar.current.dateComponents([.hour], from: .now, to: goal.dueDate).hour {
-                let rate = currentValue / Double(Int.numTrailingHours)
+            }
+
+            if
+                let startOfWeek = Calendar.current.startOfWeek(for: .now),
+                let hoursThisWeek = Calendar.current.dateComponents([.hour], from: startOfWeek, to: startOfDay).hour,
+                let remainingHours = Calendar.current.dateComponents([.hour], from: startOfDay, to: goal.dueDate).hour
+            {
+                let rate = thisWeekValue / Double(hoursThisWeek)
                 let remainingGoalAmount = goal.metric.value - thisWeekValue
                 let projectedHours = remainingGoalAmount / rate
 
                 if projectedHours < Double(remainingHours) {
-                    guard let projectedDate = Calendar.current.date(byAdding: .hour, value: Int(projectedHours), to: .now) else {
-                        return nil
-                    }
-                    let requiredPace = remainingGoalAmount / Double(remainingHours)
-                    let requiredTimeWindowPace = requiredPace * Double(Int.numTrailingHours)
+                    if currentValue > remainingGoalValue {
+                        let tomorrow = Calendar.current.startOfTomorrow(for: .now)
 
-                    return "At this rate, you're going to exceed your goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))! Reduce to \(requiredTimeWindowPace.format(to: 1)) \(goal.metric.unit.unitString) per \(Int.numTrailingHours) hours to meet your goal."
+                        let currentRemainingAmount = remainingGoalAmount - currentValue
+
+                        if let tomorrowRemainingHours = Calendar.current.dateComponents([.hour], from: tomorrow, to: goal.dueDate).hour {
+                            let tomorrowRate = currentRemainingAmount / Double(tomorrowRemainingHours)
+                            let tomorrowDailyRate = tomorrowRate * 24
+
+                            return "At this rate, you're going to exceed your goal by the end of the week! Since you've exceeded your goal today, you need to reduce to \(tomorrowDailyRate.format(to: 1)) \(goal.metric.unit.unitString) tomorrow to meet your goal."
+                        }
+                    }
+
+                    guard let projectedDate = Calendar.current.date(byAdding: .hour, value: Int(projectedHours), to: startOfDay) else {
+                        return "At this rate, you're going to exceed your goal by the end of the week! Reduce to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to meet your goal."
+                    }
+
+                    return "At this rate, you're going to exceed your goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))! Reduce to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to meet your goal."
                 } else {
-                    return "At this pace, you'll meet your goal!"
+                    return "If you keep it below \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today, you'll meet your goal!"
                 }
             }
         } else {
             if currentValue < 0.0001 {
-                return "You haven't made any progress in the last 24 hours."
+                return "You haven't made any progress today."
             } else if thisWeekValue > goal.metric.value {
                 return "You've reached your goal!"
-            } else if let remainingHours = Calendar.current.dateComponents([.hour], from: .now, to: goal.dueDate).hour {
-                let rate = currentValue / Double(Int.numTrailingHours)
+            }
+
+            if 
+                let startOfWeek = Calendar.current.startOfWeek(for: .now),
+                let hoursThisWeek = Calendar.current.dateComponents([.hour], from: startOfWeek, to: startOfDay).hour,
+                let remainingHours = Calendar.current.dateComponents([.hour], from: startOfDay, to: goal.dueDate).hour
+            {
+                let rate = thisWeekValue / Double(hoursThisWeek)
                 let remainingGoalAmount = goal.metric.value - thisWeekValue
                 let projectedHours = remainingGoalAmount / rate
 
                 if projectedHours < Double(remainingHours) {
-                    guard let projectedDate = Calendar.current.date(byAdding: .hour, value: Int(projectedHours), to: .now) else {
-                        return nil
+                    guard let projectedDate = Calendar.current.date(byAdding: .hour, value: Int(projectedHours), to: startOfDay) else {
+                        return "At this rate, you'll hit your goal by the end of the week!"
                     }
 
                     return "At this rate, you'll hit your goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))!"
                 } else {
-                    let requiredPace = remainingGoalAmount / Double(remainingHours)
-                    let requiredTimeWindowPace = requiredPace * Double(Int.numTrailingHours)
-
-                    return "At this pace, you won't hit your goal in time! Try and get to \(requiredTimeWindowPace.format(to: 1)) \(goal.metric.unit.unitString) per \(Int.numTrailingHours) hours to hit your goal."
+                    return "At this pace, you won't hit your goal in time! Try and get to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) to hit your goal."
                 }
             }
         }

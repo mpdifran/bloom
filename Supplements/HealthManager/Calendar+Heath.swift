@@ -22,6 +22,11 @@ extension Calendar {
         return Calendar.current.date(from: components) ?? date
     }
 
+    func startOfTomorrow(for date: Date) -> Date {
+        let nextDay = self.date(byAdding: .day, value: 1, to: date)!
+        return startOfDay(for: nextDay)
+    }
+
     func endOfDay(for date: Date) -> Date {
         let nextDay = self.date(byAdding: .day, value: 1, to: date)!
         return startOfDay(for: nextDay)

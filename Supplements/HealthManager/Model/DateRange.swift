@@ -42,6 +42,14 @@ extension DateRange {
 
         return DateRange(startDate, endDate)
     }
+
+    static func startOfWeekToStartOfToday() -> DateRange {
+        let endDate = Calendar.current.startOfDay(for: .now)
+        guard let startDate = Calendar.current.startOfWeek(for: endDate) else {
+            return DateRange(endDate, endDate)
+        }
+        return DateRange(startDate, endDate)
+    }
 }
 
 // MARK: Trailing Ranges

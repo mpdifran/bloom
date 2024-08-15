@@ -640,18 +640,16 @@ private extension GoalsViewModel {
     }
 
     func scaledTarget(for quantityTypeID: HKQuantityTypeIdentifier, unit: HKUnit, isincrease: Bool = true) async -> Double {
-        let averageQuantity = await HealthManager.shared.fetchAverage(
+        let averageValue = await HealthManager.shared.fetchNutritionalDailyAverage(
             for: quantityTypeID,
             unit: unit,
-            divisor: Double(Int.numWeeksPastAverage),
-            dateRange: .trailingWeeksFromStartOfWeek(
-                .numWeeksPastAverage
-            )
-        )
+            dateRange: .trailingWeeksFromStartOfWeek(.numWeeksPastAverage)
+        ).doubleValue(for: unit) * 7 // Gets us a weekly amount
+
         if isincrease {
-            return averageQuantity.doubleValue(for: unit) * .goalMultiplier
+            return averageValue * .goalMultiplier
         } else {
-            return averageQuantity.doubleValue(for: unit) / .goalMultiplier
+            return averageValue / .goalMultiplier
         }
     }
 }

@@ -200,6 +200,21 @@ extension HealthManager {
         return HKQuantity(unit: unit, doubleValue: average)
     }
 
+    func fetchNutritionalDailyAverage(
+        for quantityType: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        dateRange: DateRange
+    ) async -> HKQuantity {
+        let quantities = (try? await healthStore.fetchCollatedQuantity(
+            quantityTypeID: quantityType,
+            unit: unit,
+            dateRange: dateRange
+        )) ?? []
+        let average = quantities.map({ $0.quantity.doubleValue(for: unit) }).average(keyPath: \.self)
+
+        return HKQuantity(unit: unit, doubleValue: average)
+    }
+
     func fetchWorkouts(activityType: HKWorkoutActivityType? = nil, dateRange: DateRange) async -> [HKWorkout] {
         (try? await healthStore.fetchWorkouts(activityType: activityType, dateRange: dateRange)) ?? []
     }
