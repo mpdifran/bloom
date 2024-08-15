@@ -100,7 +100,7 @@ public extension DateFormatter {
     }()
 
     static func relativeTimeIntervalDaysFullFromNow(_ date: Date) -> String {
-        if Calendar.current.isDateInToday(date) {
+        if Calendar.current.isDateInToday(date) || Calendar.current.isDateInTomorrow(date) {
             return justRelativeDateMedium.string(from: date)
         }
         return "in " + (timeIntervalDaysFull.string(from: .now, to: date) ?? "")

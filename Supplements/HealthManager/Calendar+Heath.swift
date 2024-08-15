@@ -64,7 +64,7 @@ extension Calendar {
     }
 
     func startOfNextWeek(for date: Date) -> Date? {
-        guard let nextWeek = self.date(byAdding: .day, value: 7, to: date) else { return nil }
+        guard let nextWeek = self.date(byAdding: .weekOfYear, value: 1, to: date) else { return nil }
 
         return self.startOfWeek(for: nextWeek)
     }
