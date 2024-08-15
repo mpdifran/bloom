@@ -129,12 +129,14 @@ private extension VitalsViewModel {
                     HKQuantityType(.basalEnergyBurned),
                     HKQuantityType(.activeEnergyBurned)
                 ]
-            ) { [activityLevelThrottler] in
-                activityLevelThrottler.perform {
-                    Task {
-                        let summary = await HealthManager.shared.fetchActivityLevelSummary()
-                        await MainActor.run {
-                            self.activityLevelSummary = summary
+            ) { [activityLevelThrottler, processingQueue] in
+                processingQueue.async {
+                    activityLevelThrottler.perform {
+                        Task {
+                            let summary = await HealthManager.shared.fetchActivityLevelSummary()
+                            await MainActor.run {
+                                self.activityLevelSummary = summary
+                            }
                         }
                     }
                 }
@@ -238,12 +240,14 @@ private extension VitalsViewModel {
         }
 
         do {
-            try HealthManager.shared.healthStore.observeChanges(sampleTypes: HealthManager.shared.nutritionTypes) { [throttler] in
-                throttler.perform {
-                    Task {
-                        let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
-                        await MainActor.run {
-                            self.nutritionSummary = summary
+            try HealthManager.shared.healthStore.observeChanges(sampleTypes: HealthManager.shared.nutritionTypes) { [throttler, processingQueue] in
+                processingQueue.async {
+                    throttler.perform {
+                        Task {
+                            let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
+                            await MainActor.run {
+                                self.nutritionSummary = summary
+                            }
                         }
                     }
                 }

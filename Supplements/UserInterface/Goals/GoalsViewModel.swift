@@ -13,7 +13,7 @@ private extension Int {
 }
 
 private extension Double {
-    static let goalMultiplier: Double = 1.3
+    static let goalMultiplier: Double = 1.2
 }
 
 final actor GoalsViewModel: ObservableObject {
