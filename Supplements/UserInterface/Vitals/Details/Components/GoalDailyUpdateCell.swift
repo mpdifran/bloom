@@ -177,7 +177,7 @@ private extension GoalDailyUpdateCell {
 
                     return "At this rate, you'll hit your weekly goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))!"
                 } else {
-                    return "At this pace, you won't hit your weekly goal in time! Try and get to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) to hit your weekly goal."
+                    return "At this pace, you won't hit your weekly goal in time! Try and get to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to hit your weekly goal."
                 }
             }
         }
