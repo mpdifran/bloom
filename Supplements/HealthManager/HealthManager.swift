@@ -22,8 +22,13 @@ final class HealthManager: ObservableObject {
     @Published var sleepAnalysis30Days: [SleepAnalysis]?
     @Published var sleepAnalysisPrevious30Days: [SleepAnalysis]?
 
-    @AppStorage("HealthManager.isPregnant") var isPregnant: Bool = false
-    @AppStorage("HealthManager.isBreastfeeding") var isBreastfeeding: Bool = false
+    @AppStorage("HealthManager.isFemale") var isFemale = false
+    @Published var birthday = Date.now {
+        didSet { UserDefaults.group.set(birthday, forKey: "HealthManager.birthday") }
+    }
+
+    @AppStorage("HealthManager.isPregnant") var isPregnant = false
+    @AppStorage("HealthManager.isBreastfeeding") var isBreastfeeding = false
 
     let healthStore = HKHealthStore()
     private let throttler = Throttler(timeInterval: 600)
@@ -31,6 +36,9 @@ final class HealthManager: ObservableObject {
     private var sleepDataListenerTask: Task<Void, Error>? = nil
 
     private init() {
+        if let birthday = UserDefaults.group.object(forKey: "HealthManager.birthday") as? Date {
+            self.birthday = birthday
+        }
         Task {
             try? await checkAccess()
         }
@@ -38,8 +46,7 @@ final class HealthManager: ObservableObject {
 
     let bodyMeasurementTypes = [
         HKCharacteristicType(.dateOfBirth),
-        HKCharacteristicType(.biologicalSex),
-        HKQuantityType(.bodyFatPercentage)
+        HKCharacteristicType(.biologicalSex)
     ]
 
     let activityTypes = [
@@ -70,6 +77,7 @@ final class HealthManager: ObservableObject {
     ]
 
     let nutritionTypes = [
+        HKQuantityType(.dietaryEnergyConsumed),
 //        HKQuantityType(.dietaryBiotin),
         HKQuantityType(.dietaryCaffeine),
         HKQuantityType(.dietaryCalcium),
@@ -116,7 +124,7 @@ final class HealthManager: ObservableObject {
         HKCategoryType(.appleWalkingSteadinessEvent),
         HKQuantityType(.sixMinuteWalkTestDistance),
         HKQuantityType(.walkingDoubleSupportPercentage),
-        HKQuantityType(.dietaryEnergyConsumed)
+        HKQuantityType(.bodyFatPercentage)
     ]
 }
 
@@ -155,6 +163,18 @@ extension HealthManager {
         }
     }
 
+    func checkAccess(readTypes: [HKObjectType] = [], writeTypes: [HKSampleType] = []) async throws -> HKAuthorizationRequestStatus {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<HKAuthorizationRequestStatus, Error>) in
+            healthStore.getRequestStatusForAuthorization(toShare: Set(writeTypes), read: Set(readTypes)) { authStatus, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: authStatus)
+                }
+            }
+        }
+    }
+
     func requestAccessIfNeeded() async {
         guard HKHealthStore.isHealthDataAvailable() else { return }
 
@@ -172,12 +192,51 @@ extension HealthManager {
 
 extension HealthManager {
 
-    func age() -> Int? {
-        healthStore.age()
+    func attemptToReadAgeAndSex() {
+        do {
+            let birthdayComponents = try healthStore.dateOfBirthComponents()
+
+            if let date = Calendar.current.date(from: birthdayComponents) {
+                self.birthday = date
+            }
+        } catch { }
+
+        do {
+            let sex = try healthStore.biologicalSex().biologicalSex
+
+            if sex == .female {
+                isFemale = true
+            }
+        } catch {}
     }
 
-    func sexName() -> String? {
-        healthStore.sexName()
+    func age() -> Int {
+        if let age = healthStore.age() {
+            return age
+        }
+        return Calendar.current.dateComponents([.year], from: birthday, to: .now).year ?? 0
+    }
+
+    func sex() -> HKBiologicalSex {
+        if let sex = healthStore.sex() {
+            return sex
+        }
+        return isFemale ? .female : .male
+    }
+
+    func sexName() -> String {
+        switch sex() {
+        case .notSet:
+            "Not Set"
+        case .female:
+            "Female"
+        case .male:
+            "Male"
+        case .other:
+            "Other"
+        @unknown default:
+            "Unknown"
+        }
     }
 }
 

@@ -10,13 +10,19 @@ import SwiftUI
 extension OnboardingRootView {
     enum Step {
         case welcome
-        case chat
+        case healthKit
+        case vitalLevels
+        case ageAndSex
+        case activity
+        case sleep
+        case heart
+        case nutrition
+        case otherTypes
     }
 }
 
 struct OnboardingRootView: View {
-
-    var onComplete: ([ChatMessage]) -> Void
+    let onComplete: () -> Void
 
     @State private var step = Step.welcome
 
@@ -27,11 +33,39 @@ struct OnboardingRootView: View {
             switch step {
             case .welcome:
                 OnboardingWelcomeView {
-                    setStep(.chat)
+                    setStep(.healthKit)
                 }
-            case .chat:
-                OnboardingChatView { chatMessages in
-                    onComplete(chatMessages)
+            case .healthKit:
+                OnboardingHealthKitView {
+                    setStep(.vitalLevels)
+                }
+            case .vitalLevels:
+                OnboardingHealthVitalLevelsView {
+                    setStep(.ageAndSex)
+                }
+            case .ageAndSex:
+                OnboardingHealthAgeView {
+                    setStep(.activity)
+                }
+            case .activity:
+                OnboardingHealthActivityView {
+                    setStep(.sleep)
+                }
+            case .sleep:
+                OnboardingHealthSleepView {
+                    setStep(.heart)
+                }
+            case .heart:
+                OnboardingHealthHeartView {
+                    setStep(.nutrition)
+                }
+            case .nutrition:
+                OnboardingHealthNutritionView {
+                    setStep(.otherTypes)
+                }
+            case .otherTypes:
+                OnboardingHealthOtherTypesView {
+                    onComplete()
                 }
             }
         }
@@ -50,5 +84,5 @@ private extension OnboardingRootView {
 }
 
 #Preview {
-    OnboardingRootView() { _ in }
+    OnboardingRootView() { }
 }

@@ -10,17 +10,14 @@ import SwiftUI
 @MainActor
 struct RootView: View {
     
-    @AppStorage("hasShownOnboardingV2") var hasShownOnboarding: Bool = false
+    @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
     @StateObject private var tabController = TabController()
 
     var body: some View {
         Group {
             if !hasShownOnboarding {
-                OnboardingRootView { chatMessages in
-                    Task {
-                        await ChatViewModel.shared.parseOnboardingInfo(chatHistory: chatMessages)
-                    }
+                OnboardingRootView {
                     withAnimation {
                         hasShownOnboarding = true
                     }
@@ -39,6 +36,7 @@ struct RootView: View {
                         .tag(Tab.profile)
                 }
                 .environmentObject(tabController)
+                .transition(.blurReplace)
             }
         }
         .animation(.easeInOut(duration: 1), value: hasShownOnboarding)

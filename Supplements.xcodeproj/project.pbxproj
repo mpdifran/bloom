@@ -184,6 +184,15 @@
 		FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB691072C19F6CF00BEC0D4 /* MeditationMinutesCell.swift */; };
 		FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */; };
 		FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */; };
+		FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */; };
+		FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */; };
+		FFBE52272C6EF69B00F510DE /* HealthPrivacyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52262C6EF69B00F510DE /* HealthPrivacyCardView.swift */; };
+		FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52282C6EF9D600F510DE /* OnboardingHealthActivityView.swift */; };
+		FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */; };
+		FFBE522D2C6F044B00F510DE /* OnboardingHealthSleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE522C2C6F044B00F510DE /* OnboardingHealthSleepView.swift */; };
+		FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE522E2C6F06CF00F510DE /* OnboardingHealthHeartView.swift */; };
+		FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */; };
+		FFBE52332C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */; };
 		FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */; };
 		FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */; };
 		FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */; };
@@ -551,6 +560,15 @@
 		FFB691072C19F6CF00BEC0D4 /* MeditationMinutesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationMinutesCell.swift; sourceTree = "<group>"; };
 		FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoodMorningView.swift; sourceTree = "<group>"; };
 		FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomCell.swift; sourceTree = "<group>"; };
+		FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthAgeView.swift; sourceTree = "<group>"; };
+		FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardTemplateView.swift; sourceTree = "<group>"; };
+		FFBE52262C6EF69B00F510DE /* HealthPrivacyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthPrivacyCardView.swift; sourceTree = "<group>"; };
+		FFBE52282C6EF9D600F510DE /* OnboardingHealthActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthActivityView.swift; sourceTree = "<group>"; };
+		FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthVitalLevelsView.swift; sourceTree = "<group>"; };
+		FFBE522C2C6F044B00F510DE /* OnboardingHealthSleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthSleepView.swift; sourceTree = "<group>"; };
+		FFBE522E2C6F06CF00F510DE /* OnboardingHealthHeartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthHeartView.swift; sourceTree = "<group>"; };
+		FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthNutritionView.swift; sourceTree = "<group>"; };
+		FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthOtherTypesView.swift; sourceTree = "<group>"; };
 		FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateChartView.swift; sourceTree = "<group>"; };
 		FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateSummaryCell.swift; sourceTree = "<group>"; };
 		FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+MinMax.swift"; sourceTree = "<group>"; };
@@ -1264,10 +1282,18 @@
 		FFB444942BED41E600486AD7 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				FFBE52232C6EF5A900F510DE /* Components */,
 				FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */,
 				FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */,
 				FF8B8B1D2BFCEB4700BA2128 /* OnboardingChatView.swift */,
 				FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */,
+				FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */,
+				FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */,
+				FFBE52282C6EF9D600F510DE /* OnboardingHealthActivityView.swift */,
+				FFBE522C2C6F044B00F510DE /* OnboardingHealthSleepView.swift */,
+				FFBE522E2C6F06CF00F510DE /* OnboardingHealthHeartView.swift */,
+				FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */,
+				FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1317,6 +1343,15 @@
 				FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */,
 			);
 			path = GoodMorning;
+			sourceTree = "<group>";
+		};
+		FFBE52232C6EF5A900F510DE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */,
+				FFBE52262C6EF69B00F510DE /* HealthPrivacyCardView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		FFC77AE42C57FD0A003E5F85 /* Correlations */ = {
@@ -1877,6 +1912,7 @@
 				FFA134F22C3F05E500FF1829 /* TodayViewModel.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */,
+				FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */,
 				FFAA83DD2C4E9462004D12DA /* VitalStatusCell.swift in Sources */,
 				FFC77AFC2C5A7D00003E5F85 /* GoalCell.swift in Sources */,
 				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
@@ -1892,6 +1928,8 @@
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,
+				FFBE52272C6EF69B00F510DE /* HealthPrivacyCardView.swift in Sources */,
+				FFBE52332C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift in Sources */,
 				FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */,
 				FF1E962C2C0BF19A004DAD2D /* View+Expand.swift in Sources */,
 				FF8B8B442C002C5100BA2128 /* PinViewModel.swift in Sources */,
@@ -1904,6 +1942,7 @@
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
+				FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
 				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
@@ -1925,6 +1964,7 @@
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
 				FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */,
 				FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */,
+				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
 				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
 				FFA134F02C3F042300FF1829 /* TodayView.swift in Sources */,
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
@@ -1944,6 +1984,7 @@
 				FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */,
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
+				FFBE522D2C6F044B00F510DE /* OnboardingHealthSleepView.swift in Sources */,
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
 				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
@@ -1969,6 +2010,7 @@
 				FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FF8F79B52C5FD5360095C36D /* BodyCompositionDetailsView.swift in Sources */,
+				FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
@@ -1997,6 +2039,7 @@
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
 				FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */,
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
+				FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
 				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
@@ -2043,6 +2086,7 @@
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
+				FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */,
 				FFC77AEF2C581529003E5F85 /* CorrelationChartCell.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,

@@ -7,15 +7,17 @@
 
 import SwiftUI
 import AppUI
+import HealthKitUI
 
 struct OnboardingHealthKitView: View {
+    let onContinue: () -> Void
 
     @ObservedObject private var healthManager = HealthManager.shared
 
-    var body: some View {
-        VStack {
-            Spacer()
+    @State private var healthPermissionTrigger = false
 
+    var body: some View {
+        OnboardingCardTemplateView {
             Image(.healthAppIcon)
                 .resizable()
                 .scaledToFit()
@@ -25,36 +27,97 @@ struct OnboardingHealthKitView: View {
                 .font(.largeTitle)
                 .bold()
 
-            Text("Link your Health data to help Bloom give you better recommendations.")
+            Text("Bloom uses your data in the Health App to help give you recommendations. Data is organized into vitals which represent different areas of your overall health.")
                 .font(.headline)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 300)
                 .multilineTextAlignment(.center)
+        } bottom: {
+            ScrollView {
+                VStack {
+                    MonthlyVitalCardCell(
+                        vital: .init(
+                            id: .sleepQuality,
+                            subtitle: "Avg 7h45min",
+                            status: "Good",
+                            score: 0.8,
+                            color: .green,
+                            trend: .decreasing
+                        )
+                    )
 
-            Spacer()
+                    MonthlyVitalCardCell(
+                        vital: .init(
+                            id: .stressLevels,
+                            subtitle: "BP: 121/78",
+                            status: "Moderate",
+                            score: 0.8,
+                            color: .yellow,
+                            trend: .decreasing
+                        )
+                    )
 
-            Spacer()
+                    MonthlyVitalCardCell(
+                        vital: .init(
+                            id: .cardioFitness,
+                            subtitle: "VO₂ Max: 43 mL/min·kg",
+                            status: "Above Average",
+                            score: 0.8,
+                            color: .green,
+                            trend: .increasing
+                        )
+                    )
 
-            Spacer()
+                    MonthlyVitalCardCell(
+                        vital: .init(
+                            id: .nutrition,
+                            subtitle: "Slight Energy Deficiency",
+                            status: "Very Healthy",
+                            score: 0.8,
+                            color: .blue,
+                            trend: .increasing
+                        )
+                    )
+
+                    MonthlyVitalCardCell(
+                        vital: .init(
+                            id: .activityLevel,
+                            subtitle: "1796 Cal Basal\n241 Cal Active",
+                            status: "Light",
+                            score: 0.8,
+                            color: .green,
+                            trend: .increasing
+                        )
+                    )
+
+                    MonthlyVitalCardCell(
+                        vital: .init(
+                            id: .bodyComposition,
+                            subtitle: "19% Body Fat",
+                            status: "Healthy",
+                            score: 0.8,
+                            color: .green,
+                            trend: .decreasing
+                        )
+                    )
+                }
+                .padding()
+            }
         }
-        .fontDesign(.rounded)
         .shelf {
             VStack {
-                ProminentButton("Connect to Health", systemImage: "heart.fill") {
-                    Task {
-                        await healthManager.requestAccessIfNeeded()
-                    }
+                ProminentButton("Continue") {
+                    onContinue()
                 }
-                .buttonBorderShape(.roundedRectangle(radius: 17))
-                Text("Bloom is not a substitute for professional medical advice. Always consult your physician first.")
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-                    .font(.caption)
+//                Text("Bloom is not a substitute for professional medical advice. Always consult your physician first.")
+//                    .multilineTextAlignment(.center)
+//                    .foregroundStyle(.secondary)
+//                    .font(.caption)
             }
         }
     }
 }
 
 #Preview {
-    OnboardingHealthKitView()
+    OnboardingHealthKitView { }
 }
