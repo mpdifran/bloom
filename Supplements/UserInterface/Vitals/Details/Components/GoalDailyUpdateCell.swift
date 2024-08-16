@@ -45,25 +45,18 @@ struct GoalDailyUpdateCell: View {
                 }
 
                 Group {
-                    if currentValue < 0.0001 {
-                        Text("No Data")
-                            .foregroundStyle(.secondary)
-                            .bold()
-                            .horizontallyCentered()
-                    } else {
-                        Chart {
-                            BarMark(x: .value("Amount", currentValue))
-                                .foregroundStyle(.tint)
-                                .cornerRadius(5)
+                    Chart {
+                        BarMark(x: .value("Amount", currentValue))
+                            .foregroundStyle(.tint)
+                            .cornerRadius(5)
 
-                            RuleMark(
-                                x: .value("Daily Goal", remainingGoalValue)
-                            )
-                            .lineStyle(StrokeStyle(lineWidth: 2, dash: [2]))
-                            .foregroundStyle(currentValue < remainingGoalValue ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
-                        }
-                        .chartXScale(domain: 0...maxChartValue * 1.1, range: .plotDimension)
+                        RuleMark(
+                            x: .value("Daily Goal", remainingGoalValue)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [2]))
+                        .foregroundStyle(currentValue < remainingGoalValue ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
                     }
+                    .chartXScale(domain: 0...maxChartValue * 1.1, range: .plotDimension)
                 }
                 .frame(height: 40)
 
