@@ -16,58 +16,57 @@ struct GoalDailyUpdateCell: View {
     @State private var thisWeekValue: Double = 0
 
     var body: some View {
-        TimelineView(.everyMinute) { _ in
-            VStack(alignment: .leading) {
-                HStack(alignment: .top) {
-                    Image(systemName: goal.systemImage)
-                        .font(.title2)
-                        .foregroundStyle(.tint)
+        VStack(alignment: .leading) {
+            HStack(alignment: .top) {
+                Image(systemName: goal.systemImage)
+                    .font(.title2)
+                    .foregroundStyle(.tint)
 
-                    VStack(alignment: .leading) {
-                        Text(goal.title)
-                            .bold()
-                        Text("Today")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
-
-                    Spacer(minLength: 0)
-
-                    VStack(alignment: .trailing) {
-                        Text("\(currentValue.format(to: 1)) \(goal.metric.unit.unitString)")
-                            .font(.headline)
-                            .bold()
-                        Text("/ \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Group {
-                    Chart {
-                        BarMark(x: .value("Amount", currentValue))
-                            .foregroundStyle(.tint)
-                            .cornerRadius(5)
-
-                        RuleMark(
-                            x: .value("Daily Goal", remainingGoalValue)
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [2]))
-                        .foregroundStyle(currentValue < remainingGoalValue ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
-                    }
-                    .chartXScale(domain: 0...maxChartValue * 1.1, range: .plotDimension)
-                }
-                .frame(height: 40)
-
-                if let predictiveText {
-                    Text(predictiveText)
+                VStack(alignment: .leading) {
+                    Text(goal.title)
+                        .bold()
+                    Text("Today")
+                        .font(.caption)
                         .foregroundStyle(.secondary)
-                        .font(.subheadline)
-                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+
+                Spacer(minLength: 0)
+
+                VStack(alignment: .trailing) {
+                    Text("\(currentValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                        .font(.headline)
+                        .bold()
+                    Text("/ \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
+
+            Group {
+                Chart {
+                    BarMark(x: .value("Amount", currentValue))
+                        .foregroundStyle(.tint)
+                        .cornerRadius(5)
+
+                    RuleMark(
+                        x: .value("Daily Goal", remainingGoalValue)
+                    )
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [2]))
+                    .foregroundStyle(currentValue < remainingGoalValue ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
+                }
+                .chartXScale(domain: 0...maxChartValue * 1.1, range: .plotDimension)
+            }
+            .frame(height: 40)
+
+            if let predictiveText {
+                Text(predictiveText)
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
+        .reload(after: 60)
         .animation(.bouncy(duration: 1), value: currentValue)
         .tint(goal.metric.measurement.color)
         .cardContainer(fill: .background.secondary)

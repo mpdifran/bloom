@@ -193,6 +193,7 @@
 		FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE522E2C6F06CF00F510DE /* OnboardingHealthHeartView.swift */; };
 		FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */; };
 		FFBE52332C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */; };
+		FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */; };
 		FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */; };
 		FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */; };
 		FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */; };
@@ -569,6 +570,7 @@
 		FFBE522E2C6F06CF00F510DE /* OnboardingHealthHeartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthHeartView.swift; sourceTree = "<group>"; };
 		FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthNutritionView.swift; sourceTree = "<group>"; };
 		FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthOtherTypesView.swift; sourceTree = "<group>"; };
+		FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ReloadAfterTimeInterval.swift"; sourceTree = "<group>"; };
 		FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateChartView.swift; sourceTree = "<group>"; };
 		FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateSummaryCell.swift; sourceTree = "<group>"; };
 		FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+MinMax.swift"; sourceTree = "<group>"; };
@@ -1459,6 +1461,7 @@
 				FF1E962B2C0BF19A004DAD2D /* View+Expand.swift */,
 				FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */,
 				FF8F79B82C601C660095C36D /* View+Background.swift */,
+				FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */,
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
 			);
 			path = Components;
@@ -2009,6 +2012,7 @@
 				FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */,
 				FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
+				FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */,
 				FF8F79B52C5FD5360095C36D /* BodyCompositionDetailsView.swift in Sources */,
 				FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
