@@ -143,6 +143,9 @@ private extension GoalDailyUpdateCell {
 
                     return "At this rate, you're going to exceed your weekly goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))! Reduce to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to meet your weekly goal."
                 } else {
+                    if currentValue > remainingGoalValue {
+                        return "Looks like you've exceeded your goal today. Let's try again tomorrow!"
+                    }
                     return "If you keep it below \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today, you'll meet your weekly goal!"
                 }
             }
@@ -169,6 +172,10 @@ private extension GoalDailyUpdateCell {
 
                     return "At this rate, you'll hit your weekly goal by \(DateFormatter.justDayOfWeek.string(from: projectedDate))!"
                 } else {
+                    if currentValue > remainingGoalValue {
+                        return "Keep up the pace to hit your weekly goal by the end of the week!"
+                    }
+
                     return "At this pace, you won't hit your weekly goal in time! Try and get to \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString) today to hit your weekly goal."
                 }
             }
