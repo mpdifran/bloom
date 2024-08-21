@@ -117,8 +117,7 @@ private extension ExerciseEffectivenessView {
 
     @ViewBuilder
     var workoutTypeSummary: some View {
-        if let workoutTypeReports = viewModel.exerciseEffectivenessSummary?.details.workoutTypeHeartRateReports() {
-
+        if let workoutTypeReports = viewModel.exerciseEffectivenessSummary?.details.workoutTypeHeartRateReports {
             VStack {
                 VitalDetailChartTitleView(title: "Workouts", value: "")
                     .padding(.horizontal)

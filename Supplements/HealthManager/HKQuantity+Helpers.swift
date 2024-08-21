@@ -21,4 +21,10 @@ extension HKQuantity {
 
         return "\(String(format: specifier, doubleValue)) \(unit.unitString)"
     }
+
+    func sum(_ other: HKQuantity, unit: HKUnit) -> HKQuantity {
+        let total = doubleValue(for: unit) + other.doubleValue(for: unit)
+
+        return HKQuantity(unit: unit, doubleValue: total)
+    }
 }

@@ -155,13 +155,13 @@ extension GoalModel.Metric {
             )
             let totalDuration = workouts.sum { $0.duration }
             return HKQuantity(unit: .second(), doubleValue: totalDuration)
-        case .targetHeartRateZoneProportionsZone2:
+        case .targetHeartRateZoneTimeZone2:
             break
-        case .targetHeartRateZoneProportionsZone3:
+        case .targetHeartRateZoneTimeZone3:
             break
-        case .targetHeartRateZoneProportionsZone4:
+        case .targetHeartRateZoneTimeZone4:
             break
-        case .targetHeartRateZoneProportionsZone5:
+        case .targetHeartRateZoneTimeZone5:
             break
         case .increaseProtein:
             return await HealthManager.shared.fetchTotalSum(for: .dietaryProtein, dateRange: dateRange) ?? defaultQuantity
@@ -225,10 +225,10 @@ extension GoalModel {
         case intenseSportWorkoutDuration
         case gymTrainingWorkoutDuration
         case hiitWorkoutDuration
-        case targetHeartRateZoneProportionsZone2
-        case targetHeartRateZoneProportionsZone3
-        case targetHeartRateZoneProportionsZone4
-        case targetHeartRateZoneProportionsZone5
+        case targetHeartRateZoneTimeZone2
+        case targetHeartRateZoneTimeZone3
+        case targetHeartRateZoneTimeZone4
+        case targetHeartRateZoneTimeZone5
         case increaseProtein
         case increaseCarbs
         case increaseFat
@@ -274,8 +274,14 @@ extension GoalModel {
                     .orange
             case .gymTrainingWorkoutDuration, .hiitWorkoutDuration:
                     .purple
-            case .targetHeartRateZoneProportionsZone2, .targetHeartRateZoneProportionsZone3, .targetHeartRateZoneProportionsZone4, .targetHeartRateZoneProportionsZone5:
-                    .pink
+            case .targetHeartRateZoneTimeZone2:
+                    .heartRateZone2
+            case .targetHeartRateZoneTimeZone3:
+                    .heartRateZone3
+            case .targetHeartRateZoneTimeZone4:
+                    .heartRateZone4
+            case .targetHeartRateZoneTimeZone5:
+                    .heartRateZone5
             case .increaseProtein:
                     .protein
             case .increaseCarbs:

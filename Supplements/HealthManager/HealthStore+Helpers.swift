@@ -126,7 +126,7 @@ extension HKHealthStore {
                 end: dateRange.end,
                 options: .strictStartDate
             )
-            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
 
             let sampleQuery = HKSampleQuery(
                 sampleType: sampleType,

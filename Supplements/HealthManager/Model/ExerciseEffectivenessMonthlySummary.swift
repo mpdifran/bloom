@@ -63,6 +63,39 @@ extension ExerciseEffectivenessMonthlySummary {
     struct Details {
         let heartRateZones: HeartRateZones
         let workoutReports: [WorkoutHeartRateReport]
+        let overallHeartZoneDistribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution
+        let workoutTypeHeartRateReports: [WorkoutTypeHeartRateReport]
+
+        init(
+            heartRateZones: HeartRateZones,
+            workoutReports: [WorkoutHeartRateReport]
+        ) {
+            self.heartRateZones = heartRateZones
+            self.workoutReports = workoutReports
+
+            self.overallHeartZoneDistribution = workoutReports.reduce(WorkoutHeartRateReport.WorkoutHeartZoneDistribution()) { partialResult, report in
+                partialResult.sum(with: report.heartZoneDistribution)
+            }
+
+            var workoutTypeReports = [WorkoutTypeHeartRateReport]()
+            for workoutReport in workoutReports {
+                if let existingReportIndex = workoutTypeReports.firstIndex(where: {
+                    $0.activityType == workoutReport.workout.workoutActivityType
+                }) {
+                    let report = workoutTypeReports.remove(at: existingReportIndex)
+                    let newReport = report.appending(workoutReport: workoutReport)
+                    workoutTypeReports.insert(newReport, at: existingReportIndex)
+                } else {
+                    let report = WorkoutTypeHeartRateReport(
+                        activityType: workoutReport.workout.workoutActivityType,
+                        workoutCount: 1,
+                        heartZoneDistribution: workoutReport.heartZoneDistribution
+                    )
+                    workoutTypeReports.append(report)
+                }
+            }
+            self.workoutTypeHeartRateReports = workoutTypeReports
+        }
     }
 }
 
@@ -108,55 +141,5 @@ extension ExerciseEffectivenessMonthlySummary.Details {
             return .imbalanced
         }
         return .effective
-    }
-
-    func workoutTypeHeartRateReports() -> [WorkoutTypeHeartRateReport] {
-        var workoutTypeReports = [WorkoutTypeHeartRateReport]()
-        for workoutReport in workoutReports {
-            if let existingReportIndex = workoutTypeReports.firstIndex(where: {
-                $0.workouts.first?.workoutActivityType == workoutReport.workout.workoutActivityType
-            }) {
-                let report = workoutTypeReports.remove(at: existingReportIndex)
-                let newReport = report.appending(workoutReport: workoutReport)
-                workoutTypeReports.insert(newReport, at: existingReportIndex)
-            } else {
-                let report = WorkoutTypeHeartRateReport(
-                    workouts: [workoutReport.workout],
-                    heartRateSamples: workoutReport.heartRateSamples,
-                    heartRateZones: workoutReport.heartRateZones
-                )
-                workoutTypeReports.append(report)
-            }
-        }
-        return workoutTypeReports
-    }
-
-    var overallHeartZoneDistribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution {
-        var totalTime: Double = 0
-        var zone1: Double = 0
-        var zone2: Double = 0
-        var zone3: Double = 0
-        var zone4: Double = 0
-        var zone5: Double = 0
-
-        for workoutReport in workoutReports {
-            let distribution = workoutReport.heartRateDistribution()
-
-            totalTime += distribution.totalDuration.doubleValue(for: .minute())
-            zone1 += distribution.zone1.doubleValue(for: .minute())
-            zone2 += distribution.zone2.doubleValue(for: .minute())
-            zone3 += distribution.zone3.doubleValue(for: .minute())
-            zone4 += distribution.zone4.doubleValue(for: .minute())
-            zone5 += distribution.zone5.doubleValue(for: .minute())
-        }
-
-        return .init(
-            totalDuration: HKQuantity(unit: .minute(), doubleValue: totalTime),
-            zone1: HKQuantity(unit: .minute(), doubleValue: zone1),
-            zone2: HKQuantity(unit: .minute(), doubleValue: zone2),
-            zone3: HKQuantity(unit: .minute(), doubleValue: zone3),
-            zone4: HKQuantity(unit: .minute(), doubleValue: zone4),
-            zone5: HKQuantity(unit: .minute(), doubleValue: zone5)
-        )
     }
 }

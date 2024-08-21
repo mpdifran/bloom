@@ -689,6 +689,27 @@ private extension GoalsViewModel {
 
 private extension GoalsViewModel {
 
+    func exerciseEffectivenessGoal(dueDate: Date) async -> GoalModel? {
+        guard let exerciseSummary = VitalsViewModel.shared.exerciseEffectivenessSummary else { return nil }
+
+        let distribution = exerciseSummary.details.overallHeartZoneDistribution
+        if distribution.zone2.doubleValue(for: .minute()) < .minZone2Minutes {
+//            return GoalModel(
+//                title: <#T##String#>,
+//                systemImage: <#T##String#>,
+//                summary: <#T##String#>,
+//                dueDate: <#T##Date#>,
+//                metric: .init(value: 20, unit: .minute(), measurement: .targetHeartRateZoneTimeZone2),
+//                vitalKind: <#T##VitalModel.Kind#>
+//            )
+        }
+
+        return nil
+    }
+}
+
+private extension GoalsViewModel {
+
     var defaultDateRange: DateRange {
         .trailingWeeksFromStartOfWeek(.numWeeksPastAverage)
     }
