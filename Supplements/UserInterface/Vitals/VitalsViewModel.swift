@@ -73,6 +73,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var mobilitySummary: MobilityMonthlySummary?
     @Published var stressSummary: StressMonthlySummary?
     @Published var nutritionSummary: NutritionMonthlySummary?
+    @Published var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
 
     @Published var heartRateVariability = [DateQuantitySampleLegacy]()
     @Published var restingHeartRate = [DateQuantitySampleLegacy]()
@@ -256,16 +257,18 @@ private extension VitalsViewModel {
             print(error)
         }
 
-        HealthManager.shared.$sleepAnalysis30Days
-            .sink { (_) in
+        do {
+            try HealthManager.shared.healthStore.observeChanges(sampleType: HKWorkoutType.workoutType()) {
                 Task {
-                    let summary = await HealthManager.shared.fetchStressMonthlySummary()
+                    let summary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
                     await MainActor.run {
-                        self.stressSummary = summary
+                        self.exerciseEffectivenessSummary = summary
                     }
                 }
             }
-            .store(in: &cancellables)
+        } catch {
+            print(error)
+        }
 
         $activityLevelSummary
             .receive(on: processingQueue)
@@ -304,6 +307,12 @@ private extension VitalsViewModel {
             }
             .store(in: &cancellables)
         $nutritionSummary
+            .receive(on: processingQueue)
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $exerciseEffectivenessSummary
             .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
@@ -394,6 +403,18 @@ private extension VitalsViewModel {
                     score: nutritionSummary.score,
                     color: nutritionSummary.status.color,
                     trend: nutritionSummary.trend
+                )
+            )
+        }
+        if let exerciseEffectivenessSummary {
+            vitals.append(
+                VitalModel(
+                    id: .exerciseEffectiveness,
+                    subtitle: exerciseEffectivenessSummary.details.subtitle,
+                    status: exerciseEffectivenessSummary.details.level.name,
+                    score: exerciseEffectivenessSummary.details.score,
+                    color: exerciseEffectivenessSummary.details.level.color,
+                    trend: exerciseEffectivenessSummary.trend
                 )
             )
         }

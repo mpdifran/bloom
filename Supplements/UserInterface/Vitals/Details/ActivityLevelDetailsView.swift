@@ -27,6 +27,14 @@ struct ActivityLevelDetailsView: View {
             .padding()
             .horizontallyCentered()
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VitalSummaryDetailTitleView(
+                    title: "Activity Level",
+                    subtitle: "Last 30 Days"
+                )
+            }
+        }
         .navigationTitle("Activity Level")
         .navigationBarTitleDisplayMode(.inline)
         .task {

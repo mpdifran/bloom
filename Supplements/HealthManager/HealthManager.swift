@@ -317,6 +317,59 @@ extension HealthManager {
     }
 }
 
+// MARK: Vitals
+
+extension HealthManager {
+
+    func fetchExerciseEffectivenessSummary() async -> ExerciseEffectivenessMonthlySummary? {
+        guard let targetHeartRateZones = await heartRateZones() else { return nil }
+
+        let thisMonth = await fetchExerciseEffectivenessDetails(
+            heartRateZones: targetHeartRateZones,
+            dateRange: .trailingMonthsFromNow(1)
+        )
+        let lastMonth = await fetchExerciseEffectivenessDetails(
+            heartRateZones: targetHeartRateZones,
+            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)
+        )
+
+        return ExerciseEffectivenessMonthlySummary(
+            details: thisMonth,
+            lastMonthDetails: lastMonth
+        )
+    }
+
+    func fetchExerciseEffectivenessDetails(
+        heartRateZones: HeartRateZones,
+        dateRange: DateRange
+    ) async -> ExerciseEffectivenessMonthlySummary.Details {
+        let workouts = (try? await healthStore.fetchWorkouts(dateRange: dateRange)) ?? []
+
+        var workoutReports = [WorkoutHeartRateReport]()
+        for workout in workouts {
+            guard let heartRateSamples = try? await healthStore.fetchSamples(
+                for: HKQuantityType(.heartRate),
+                dateRange: workout.dateRange
+            ) as? [HKQuantitySample] else {
+                continue
+            }
+
+            workoutReports.append(
+                WorkoutHeartRateReport(
+                    workout: workout,
+                    heartRateSamples: heartRateSamples,
+                    heartRateZones: heartRateZones
+                )
+            )
+        }
+
+        return .init(
+            heartRateZones: heartRateZones,
+            workoutReports: workoutReports
+        )
+    }
+}
+
 // MARK: Deprecated
 
 extension HealthManager {
@@ -1629,10 +1682,12 @@ extension HealthManager {
     }
 
     func goalVO2MaxForUser() -> (Double, Double, Double)? {
-        let age = healthStore.age() ?? 0
-        let sexObject = try? healthStore.biologicalSex()
+        guard
+            let age = healthStore.age(),
+            let sexObject = try? healthStore.biologicalSex()
+        else { return nil }
 
-        switch sexObject?.biologicalSex {
+        switch sexObject.biologicalSex {
         case .male:
             switch age {
             case 20...29: return (57.0, 48.0, 38.0)
@@ -1654,6 +1709,35 @@ extension HealthManager {
         default:
             return nil
         }
+    }
+
+    /// - note: https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887
+    func heartRateZones() async -> HeartRateZones? {
+        guard let age = healthStore.age() else { return nil }
+
+        let projectedMax = 208 - (Double(age) * 0.7)
+
+        guard let restingHeartRate = try? await healthStore.fetchDailyAverageQuantity(
+            for: .restingHeartRate,
+            unit: .bpm(),
+            dateRange: .trailingMonthsFromNow(6),
+            option: .discreteAverage
+        ).doubleValue(for: .bpm()).rounded() else {
+            return nil
+        }
+
+        let heartRateReserve = projectedMax - restingHeartRate
+
+        return HeartRateZones(
+            heartRateReserve: heartRateReserve,
+            restingHeartRate: restingHeartRate,
+            maxHeartRate: projectedMax,
+            zone1: (0.5 * heartRateReserve) + restingHeartRate,
+            zone2: (0.6 * heartRateReserve) + restingHeartRate,
+            zone3: (0.7 * heartRateReserve) + restingHeartRate,
+            zone4: (0.8 * heartRateReserve) + restingHeartRate,
+            zone5: (0.9 * heartRateReserve) + restingHeartRate
+        )
     }
 
     /// - note: https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage

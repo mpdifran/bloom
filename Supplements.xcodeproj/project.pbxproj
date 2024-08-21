@@ -194,6 +194,15 @@
 		FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */; };
 		FFBE52332C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */; };
 		FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */; };
+		FFBE52372C74D57300F510DE /* HeartRateZones.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52362C74D57300F510DE /* HeartRateZones.swift */; };
+		FFBE52392C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52382C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift */; };
+		FFBE523B2C74E2EB00F510DE /* ExerciseEffectivenessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE523A2C74E2EB00F510DE /* ExerciseEffectivenessView.swift */; };
+		FFBE523D2C74EE7D00F510DE /* WorkoutHeartRateReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE523C2C74EE7D00F510DE /* WorkoutHeartRateReport.swift */; };
+		FFBE523F2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE523E2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift */; };
+		FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52402C7569AB00F510DE /* VitalSummaryDetailTitleView.swift */; };
+		FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52422C756DED00F510DE /* WorkoutTypeHeartRateReport.swift */; };
+		FFBE52452C76129C00F510DE /* WorkoutHeartRateZoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52442C76129C00F510DE /* WorkoutHeartRateZoneCell.swift */; };
+		FFBE52472C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52462C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift */; };
 		FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */; };
 		FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */; };
 		FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */; };
@@ -571,6 +580,15 @@
 		FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthNutritionView.swift; sourceTree = "<group>"; };
 		FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthOtherTypesView.swift; sourceTree = "<group>"; };
 		FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ReloadAfterTimeInterval.swift"; sourceTree = "<group>"; };
+		FFBE52362C74D57300F510DE /* HeartRateZones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateZones.swift; sourceTree = "<group>"; };
+		FFBE52382C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseEffectivenessMonthlySummary.swift; sourceTree = "<group>"; };
+		FFBE523A2C74E2EB00F510DE /* ExerciseEffectivenessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseEffectivenessView.swift; sourceTree = "<group>"; };
+		FFBE523C2C74EE7D00F510DE /* WorkoutHeartRateReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHeartRateReport.swift; sourceTree = "<group>"; };
+		FFBE523E2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetHeartRateZonesDistributionView.swift; sourceTree = "<group>"; };
+		FFBE52402C7569AB00F510DE /* VitalSummaryDetailTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryDetailTitleView.swift; sourceTree = "<group>"; };
+		FFBE52422C756DED00F510DE /* WorkoutTypeHeartRateReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTypeHeartRateReport.swift; sourceTree = "<group>"; };
+		FFBE52442C76129C00F510DE /* WorkoutHeartRateZoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHeartRateZoneCell.swift; sourceTree = "<group>"; };
+		FFBE52462C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniTargetHeartRateZoneDistributionView.swift; sourceTree = "<group>"; };
 		FFC0AA882C3990880025FE34 /* SleepRespiratoryRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateChartView.swift; sourceTree = "<group>"; };
 		FFC0AA8A2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRespiratoryRateSummaryCell.swift; sourceTree = "<group>"; };
 		FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+MinMax.swift"; sourceTree = "<group>"; };
@@ -1106,6 +1124,7 @@
 				FF8F79D62C668AFD0095C36D /* ActivityLevelDetailsView.swift */,
 				FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */,
 				FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */,
+				FFBE523A2C74E2EB00F510DE /* ExerciseEffectivenessView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -1120,10 +1139,14 @@
 				FF8F79C52C628E200095C36D /* NetEnergyMathView.swift */,
 				FF8F79D42C65A9140095C36D /* BloodPressureStatusView.swift */,
 				FF8F79D82C6699FA0095C36D /* ActivityLevelDistributionView.swift */,
+				FFBE523E2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift */,
+				FFBE52462C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift */,
 				FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */,
+				FFBE52442C76129C00F510DE /* WorkoutHeartRateZoneCell.swift */,
 				FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */,
 				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
 				FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */,
+				FFBE52402C7569AB00F510DE /* VitalSummaryDetailTitleView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1402,6 +1425,9 @@
 				FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */,
 				FFE390D62C24931400B79140 /* WorkoutSummary.swift */,
 				FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */,
+				FFBE52362C74D57300F510DE /* HeartRateZones.swift */,
+				FFBE523C2C74EE7D00F510DE /* WorkoutHeartRateReport.swift */,
+				FFBE52422C756DED00F510DE /* WorkoutTypeHeartRateReport.swift */,
 				FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */,
 				FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */,
 				FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */,
@@ -1410,6 +1436,7 @@
 				FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */,
 				FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */,
 				FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */,
+				FFBE52382C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1921,6 +1948,7 @@
 				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
 				FFF66FA92C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
+				FFBE52472C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift in Sources */,
 				FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */,
 				FF8F79BB2C6189790095C36D /* NutritionDetailsView.swift in Sources */,
 				FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */,
@@ -1946,6 +1974,7 @@
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */,
+				FFBE52452C76129C00F510DE /* WorkoutHeartRateZoneCell.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
 				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
@@ -1956,6 +1985,7 @@
 				FFC77AD52C529CF9003E5F85 /* MobilityMonthlySummary.swift in Sources */,
 				FF0404C92C0262D4009FDC4E /* SleepScoreCell.swift in Sources */,
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */,
+				FFBE523F2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift in Sources */,
 				FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
@@ -1992,6 +2022,7 @@
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
 				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
 				FFC77AFE2C5AB200003E5F85 /* VitalModel.swift in Sources */,
+				FFBE523D2C74EE7D00F510DE /* WorkoutHeartRateReport.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FF8F79C62C628E200095C36D /* NetEnergyMathView.swift in Sources */,
@@ -2000,6 +2031,7 @@
 				FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
+				FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */,
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
 				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
 				FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */,
@@ -2019,6 +2051,7 @@
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */,
+				FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */,
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
@@ -2033,6 +2066,7 @@
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
 				FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */,
 				FF426ACF2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift in Sources */,
+				FFBE523B2C74E2EB00F510DE /* ExerciseEffectivenessView.swift in Sources */,
 				FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */,
 				FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
@@ -2055,6 +2089,7 @@
 				FF8F79CF2C64546C0095C36D /* Color+Codable.swift in Sources */,
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
+				FFBE52392C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift in Sources */,
 				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
 				FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */,
@@ -2088,6 +2123,7 @@
 				FF8F79B92C601C660095C36D /* View+Background.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
+				FFBE52372C74D57300F510DE /* HeartRateZones.swift in Sources */,
 				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
 				FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */,

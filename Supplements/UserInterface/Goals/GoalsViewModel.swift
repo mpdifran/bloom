@@ -188,7 +188,7 @@ private extension GoalsViewModel {
                 vitalKind: vital.id,
                 dueDate: dueDate
             )
-            return [steps, walkRunDistance]
+            return [steps, walkRunDistance, walkDuration]
         case .mobility:
             return [await walkRunDistanceGoal(
                 summary: "Your mobility should be top of mind for you this week. You can improve your mobility by walking or running more!",
@@ -211,6 +211,8 @@ private extension GoalsViewModel {
             if let goalModel = await nutritionGoal(dueDate: dueDate) {
                 return [goalModel]
             }
+            return []
+        case .exerciseEffectiveness:
             return []
         }
     }

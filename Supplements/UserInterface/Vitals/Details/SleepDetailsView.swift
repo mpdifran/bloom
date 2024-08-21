@@ -33,6 +33,14 @@ struct SleepDetailsView: View {
             }
             .padding()
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VitalSummaryDetailTitleView(
+                    title: "Sleep Quality",
+                    subtitle: "Last 30 Days"
+                )
+            }
+        }
         .navigationTitle("Sleep Quality")
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $showTodayView) {

@@ -222,6 +222,7 @@ extension HKHealthStore {
         quantityTypeID: HKQuantityTypeIdentifier,
         unit: HKUnit,
         interval: DateComponents = DateComponents(day: 1),
+        options: HKStatisticsOptions = [.cumulativeSum],
         dateRange: DateRange
     ) async throws -> [DateQuantitySample] {
         try await withCheckedThrowingContinuation { continuation in
@@ -239,7 +240,7 @@ extension HKHealthStore {
             let query = HKStatisticsCollectionQuery(
                 quantityType: quantityType,
                 quantitySamplePredicate: predicate,
-                options: [.cumulativeSum],
+                options: options,
                 anchorDate: adjustedStartDate,
                 intervalComponents: interval
             )
@@ -363,7 +364,7 @@ extension HKHealthStore {
     }
 
     func fetchWorkouts(
-        activityTypes: [HKWorkoutActivityType] = [],
+        activityTypes: [HKWorkoutActivityType],
         dateRange: DateRange
     ) async throws -> [HKWorkout] {
         try await withCheckedThrowingContinuation { continuation in

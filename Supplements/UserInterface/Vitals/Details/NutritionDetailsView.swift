@@ -49,6 +49,14 @@ struct NutritionDetailsView: View {
             .padding()
             .horizontallyCentered()
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VitalSummaryDetailTitleView(
+                    title: "Nutrition",
+                    subtitle: "Last 30 Days"
+                )
+            }
+        }
         .navigationTitle("Nutrition")
         .navigationBarTitleDisplayMode(.inline)
         .groupedBackground()

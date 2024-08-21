@@ -46,6 +46,14 @@ struct BodyCompositionDetailsView: View {
                     .padding(.horizontal)
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VitalSummaryDetailTitleView(
+                    title: "Body Composition",
+                    subtitle: "Last 30 Days"
+                )
+            }
+        }
         .navigationTitle("Body Composition")
         .navigationBarTitleDisplayMode(.inline)
         .animation(.bouncy, value: range)

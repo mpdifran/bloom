@@ -35,4 +35,8 @@ extension HKWorkout {
         let totalDistance = totalDistanceWalkingRunning.doubleValue(for: .meter()) + totalDistanceCycling.doubleValue(for: .meter())
         return HKQuantity(unit: .meter(), doubleValue: totalDistance)
     }
+
+    var dateRange: DateRange {
+        DateRange(startDate, endDate)
+    }
 }

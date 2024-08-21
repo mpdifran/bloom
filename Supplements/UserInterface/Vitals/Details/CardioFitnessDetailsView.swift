@@ -31,6 +31,14 @@ struct CardioFitnessDetailsView: View {
             heartRateRecoveryChart
                 .padding()
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VitalSummaryDetailTitleView(
+                    title: "Cardio Fitness",
+                    subtitle: "Last 30 Days"
+                )
+            }
+        }
         .navigationTitle("Cardio Fitness")
         .navigationBarTitleDisplayMode(.inline)
         .animation(.default, value: selectedFitnessLevelIndex)

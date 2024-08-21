@@ -16,6 +16,7 @@ extension VitalModel {
         case mobility
         case stressLevels
         case nutrition
+        case exerciseEffectiveness
 
         var name: String {
             switch self {
@@ -33,6 +34,8 @@ extension VitalModel {
                 "Stress Levels"
             case .nutrition:
                 "Nutrition"
+            case .exerciseEffectiveness:
+                "Exercise Effectiveness"
             }
         }
 
@@ -52,6 +55,8 @@ extension VitalModel {
                 "bolt.fill"
             case .nutrition:
                 "fork.knife"
+            case .exerciseEffectiveness:
+                "figure.highintensity.intervaltraining"
             }
         }
     }

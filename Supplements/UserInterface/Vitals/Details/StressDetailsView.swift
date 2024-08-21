@@ -38,6 +38,14 @@ struct StressDetailsView: View {
             }
             .horizontallyCentered()
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VitalSummaryDetailTitleView(
+                    title: "Stress Levels",
+                    subtitle: "Last 30 Days"
+                )
+            }
+        }
         .navigationTitle("Stress Levels")
         .navigationBarTitleDisplayMode(.inline)
         .task {
