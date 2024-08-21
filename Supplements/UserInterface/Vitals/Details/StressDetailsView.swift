@@ -91,23 +91,28 @@ private extension StressDetailsView {
                 }
                 let goal = HealthManager.shared.goalRestingHeartRateForUser()
 
-                RuleMark(y: .value("Min RHR", goal.0))
-                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.pink)
-
                 RuleMark(y: .value("Max RHR", goal.1))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                     .foregroundStyle(.pink)
 
                 RectangleMark(
-                    yStart: .value("Min RHR", goal.0),
+                    yStart: .value("", goal.1 - 20),
                     yEnd: .value("Max RHR", goal.1)
                 )
-                .foregroundStyle(.pink.opacity(0.3))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            .pink.opacity(0.3),
+                            .clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
             }
             .chartYScale(
-                domain: (minRestingHeartRate ?? 0)...(maxRestingHeartRate ?? 100),
-                range: .plotDimension
+                domain: chartMin...chartMax,
+                range: .plotDimension(padding: 10)
             )
             .frame(height: 160)
 
@@ -118,6 +123,18 @@ private extension StressDetailsView {
                 .padding(.top)
             }
         }
+    }
+
+    var chartMin: Double {
+        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+        return min(minRestingHeartRate ?? 0, goal.1 - 20)
+    }
+
+    var chartMax: Double {
+        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+        return min(maxRestingHeartRate ?? 100, goal.1)
     }
 
     var minRestingHeartRate: Double? {
@@ -136,9 +153,9 @@ private extension StressDetailsView {
         let goal = HealthManager.shared.goalRestingHeartRateForUser()
 
         if restingHeartRate < goal.1 {
-            return "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer."
+            return "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
         } else {
-            return "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease."
+            return "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
         }
     }
 

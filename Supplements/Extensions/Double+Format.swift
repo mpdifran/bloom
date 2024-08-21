@@ -6,10 +6,15 @@
 //
 
 import Foundation
+import BloomFoundation
 
 extension Double {
 
     func format(to decimalPlaces: Int = 0) -> String {
-        String(format: "%.\(decimalPlaces)f", self)
+        if decimalPlaces > 0 {
+            return NumberFormatter.oneDecimalPlace.string(from: self as NSNumber) ?? ""
+        }
+
+        return NumberFormatter.noDecimalPlaces.string(from: self as NSNumber) ?? ""
     }
 }
