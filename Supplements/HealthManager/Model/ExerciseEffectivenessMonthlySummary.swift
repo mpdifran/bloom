@@ -17,34 +17,39 @@ extension Double {
 
 extension ExerciseEffectivenessMonthlySummary {
     enum Level {
-        case ineffective
+        case sedentary
         case beginner
-        case imbalanced
-        case effective
+        case intermediate
+        case advanced
+        case athelete
 
         var name: String {
             switch self {
-            case .ineffective:
-                "Ineffective"
+            case .sedentary:
+                "Sedentary"
             case .beginner:
                 "Beginner"
-            case .imbalanced:
-                "Imbalanced"
-            case .effective:
-                "Effective"
+            case .intermediate:
+                "Intermediate"
+            case .advanced:
+                "Advanced"
+            case .athelete:
+                "Athlete"
             }
         }
 
         var color: Color {
             switch self {
-            case .ineffective:
+            case .sedentary:
                     .pink
             case .beginner:
                     .yellow
-            case .imbalanced:
-                    .yellow
-            case .effective:
+            case .intermediate:
                     .green
+            case .advanced:
+                    .green
+            case .athelete:
+                    .coreSleep
             }
         }
     }
@@ -133,13 +138,23 @@ extension ExerciseEffectivenessMonthlySummary.Details {
     }
 
     var level: ExerciseEffectivenessMonthlySummary.Level {
-        if score < 0.01 {
-            return .ineffective
-        } else if score < 0.5 {
-            return .beginner
-        } else if score < 1 {
-            return .imbalanced
+        if workoutReports.isEmpty {
+            return .sedentary
         }
-        return .effective
+
+        if overallHeartZoneDistribution.zone2.doubleValue(for: .minute()) < .minZone2Minutes {
+            return .beginner
+        }
+        if 
+            overallHeartZoneDistribution.zone3.doubleValue(for: .minute()) < .minZone3Minutes ||
+            overallHeartZoneDistribution.zone4.doubleValue(for: .minute()) < .minZone4Minutes
+        {
+            return .intermediate
+        }
+        if overallHeartZoneDistribution.zone5.doubleValue(for: .minute()) < .minZone5Minutes {
+            return .advanced
+        }
+
+        return .athelete
     }
 }
