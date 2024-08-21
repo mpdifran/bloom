@@ -67,6 +67,11 @@ struct VitalsView: View {
         .tabItem {
             Label("Vitals", systemImage: "bolt.heart")
         }
+        .onAppear {
+            Task {
+                await goalsViewModel.checkForUpdateGoals()
+            }
+        }
     }
 }
 
