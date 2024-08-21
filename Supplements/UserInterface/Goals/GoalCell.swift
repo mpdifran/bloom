@@ -93,7 +93,7 @@ private extension GoalCell {
     var barChart: some View {
         Chart {
             BarMark(
-                x: .value("Current Time", currentGoal),
+                x: .value("Current Value", currentGoal),
                 y: .value("Week", "This Week")
             )
             .foregroundStyle(goal.metric.measurement.color)
@@ -104,12 +104,56 @@ private extension GoalCell {
             )
             .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
             .foregroundStyle(goal.metric.measurement.color.opacity(0.5))
+
+            if goal.metric.measurement.isDecrease {
+                RectangleMark(
+                    xStart: .value("Goal", goal.metric.value),
+                    xEnd: .value("", goal.metric.value / 1.5)
+                )
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            goal.metric.measurement.color.opacity(0.3),
+                            .clear
+                        ],
+                        startPoint: .trailing,
+                        endPoint: .leading
+                    )
+                )
+            } else {
+                RectangleMark(
+                    xStart: .value("Goal", goal.metric.value),
+                    xEnd: .value("", goal.metric.value * 1.3)
+                )
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            goal.metric.measurement.color.opacity(0.3),
+                            .clear
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+            }
         }
         .chartXAxis {
-            AxisMarks {
+            AxisMarks { value in
                 AxisGridLine()
                 AxisTick()
-                AxisValueLabel()
+                if let doubleValue = value.as(Double.self) {
+                    AxisValueLabel(doubleValue.format() + " \(goal.metric.unit.unitString)")
+                } else {
+                    AxisValueLabel()
+                }
+            }
+            AxisMarks(position: .top, values: [goal.metric.value]) { value in
+                if let doubleValue = value.as(Double.self) {
+                    AxisValueLabel(
+                        doubleValue.format() + " \(goal.metric.unit.unitString)"
+                    )
+                    .foregroundStyle(goal.metric.measurement.color)
+                }
             }
         }
         .chartXScale(

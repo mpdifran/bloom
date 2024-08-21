@@ -25,9 +25,6 @@ struct GoalDailyUpdateCell: View {
                 VStack(alignment: .leading) {
                     Text(goal.title)
                         .bold()
-                    Text("Today")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                 }
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -45,19 +42,54 @@ struct GoalDailyUpdateCell: View {
 
             Group {
                 Chart {
-                    BarMark(x: .value("Amount", currentValue))
-                        .foregroundStyle(.tint)
-                        .cornerRadius(5)
+                    BarMark(
+                        x: .value("Amount", currentValue),
+                        y: .value("Day", "Today")
+                    )
+                    .foregroundStyle(.tint)
+                    .cornerRadius(5)
 
                     RuleMark(
                         x: .value("Daily Goal", remainingGoalValue)
                     )
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [2]))
                     .foregroundStyle(currentValue < remainingGoalValue ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
+
+                    if goal.metric.measurement.isDecrease {
+                        RectangleMark(
+                            xStart: .value("Goal", remainingGoalValue),
+                            xEnd: .value("", remainingGoalValue / 1.5)
+                        )
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [
+                                    goal.metric.measurement.color.opacity(0.3),
+                                    .clear
+                                ],
+                                startPoint: .trailing,
+                                endPoint: .leading
+                            )
+                        )
+                    } else {
+                        RectangleMark(
+                            xStart: .value("Goal", remainingGoalValue),
+                            xEnd: .value("", remainingGoalValue * 1.3)
+                        )
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [
+                                    goal.metric.measurement.color.opacity(0.3),
+                                    .clear
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                    }
                 }
-                .chartXScale(domain: 0...maxChartValue * 1.1, range: .plotDimension)
+                .chartXScale(domain: 0...maxChartValue * 1.3, range: .plotDimension)
             }
-            .frame(height: 40)
+            .frame(height: 60)
 
             if let predictiveText {
                 Text(predictiveText)
