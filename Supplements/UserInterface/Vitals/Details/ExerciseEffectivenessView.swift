@@ -18,7 +18,6 @@ struct ExerciseEffectivenessView: View {
         ScrollView {
             VStack(spacing: 20) {
                 targetHeartRateZonesChart
-                zoneSummary
                 workoutTypeSummary
             }
             .padding()

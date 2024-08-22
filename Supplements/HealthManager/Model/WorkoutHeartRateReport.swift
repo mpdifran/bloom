@@ -153,6 +153,16 @@ extension WorkoutHeartRateReport.WorkoutHeartZoneDistribution {
         ]
         return values.max() ?? 1
     }
+
+    var scaledDurationSum: HKQuantity {
+        let total = zone1.doubleValue(for: .minute()) +
+            zone2.doubleValue(for: .minute()) +
+            zone3.doubleValue(for: .minute()) * .zone34Multiplier +
+            zone4.doubleValue(for: .minute()) * .zone34Multiplier +
+            zone5.doubleValue(for: .minute()) * .zone5Multiplier
+
+        return HKQuantity(unit: .minute(), doubleValue: total)
+    }
 }
 
 extension WorkoutHeartRateReport.WorkoutHeartZoneDistribution {

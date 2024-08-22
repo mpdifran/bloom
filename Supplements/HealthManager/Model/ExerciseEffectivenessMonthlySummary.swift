@@ -8,33 +8,33 @@
 import SwiftUI
 import HealthKit
 
+/// https://www.heart.org/en/healthy-living/fitness/fitness-basics/aha-recs-for-physical-activity-in-adults
+/// https://www.sciencealert.com/heart-rate-zones-explained-heres-how-to-optimize-your-exercise-routine
 extension Double {
-    static let minZone2Minutes: Double = 480
-    static let minZone3Minutes: Double = 240
-    static let minZone4Minutes: Double = 120
-    static let minZone5Minutes: Double = 40
+    static let maxMinimalZoneMinutes: Double = 300
+    static let minZoneMinutes: Double = 600
+    static let zone12Multiplier: Double = 1
+    static let zone34Multiplier: Double = 2
+    static let zone5Multiplier: Double = 3
 }
 
 extension ExerciseEffectivenessMonthlySummary {
     enum Level {
         case sedentary
-        case beginner
-        case intermediate
-        case advanced
-        case athelete
+        case minimal
+        case moderate
+        case high
 
         var name: String {
             switch self {
             case .sedentary:
                 "Sedentary"
-            case .beginner:
-                "Beginner"
-            case .intermediate:
-                "Intermediate"
-            case .advanced:
-                "Advanced"
-            case .athelete:
-                "Athlete"
+            case .minimal:
+                "Minimal"
+            case .moderate:
+                "Moderate"
+            case .high:
+                "High"
             }
         }
 
@@ -42,13 +42,11 @@ extension ExerciseEffectivenessMonthlySummary {
             switch self {
             case .sedentary:
                     .pink
-            case .beginner:
+            case .minimal:
                     .yellow
-            case .intermediate:
+            case .moderate:
                     .green
-            case .advanced:
-                    .green
-            case .athelete:
+            case .high:
                     .coreSleep
             }
         }
@@ -107,34 +105,18 @@ extension ExerciseEffectivenessMonthlySummary {
 extension ExerciseEffectivenessMonthlySummary.Details {
 
     var score: Double {
-        zoneScores.average(keyPath: \.0)
-    }
-
-    var zoneScores: [(Double, String)] {
-        let distribution = overallHeartZoneDistribution
-
-        let zone2Score = distribution.zone2.doubleValue(for: .minute()).scaledPercent(lower: 0, upper: .minZone2Minutes)
-        let zone3Score = distribution.zone3.doubleValue(for: .minute()).scaledPercent(lower: 0, upper: .minZone3Minutes)
-        let zone4Score = distribution.zone4.doubleValue(for: .minute()).scaledPercent(lower: 0, upper: .minZone4Minutes)
-        let zone5Score = distribution.zone5.doubleValue(for: .minute()).scaledPercent(lower: 0, upper: .minZone5Minutes)
-
-        return [
-            (zone2Score, "Heart Rate Zone 2"),
-            (zone3Score, "Heart Rate Zone 3"),
-            (zone4Score, "Heart Rate Zone 4"),
-            (zone5Score, "Heart Rate Zone 5")
-        ]
+        let scaledDuration = overallHeartZoneDistribution.scaledDurationSum.doubleValue(for: .minute())
+        return scaledDuration.scaledPercent(lower: 0, upper: .minZoneMinutes)
     }
 
     var subtitle: String {
         if score < 1 {
-            if let minZoneScore = zoneScores.min(by: { $0.0 < $1.0 }) {
-                return "Insufficient \(minZoneScore.1) Coverage"
-            }
-            return "Imbalanced Target Heart Rate Zones"
-        }
+            let scaledDuration = overallHeartZoneDistribution.scaledDurationSum.doubleValue(for: .minute())
+            let remainderDuration = Double.minZoneMinutes - scaledDuration
 
-        return "Effective Target Heart Rate Zone Coverage"
+            return "\(remainderDuration.format()) zone minutes short"
+        }
+        return "Exercise Effective"
     }
 
     var level: ExerciseEffectivenessMonthlySummary.Level {
@@ -142,19 +124,14 @@ extension ExerciseEffectivenessMonthlySummary.Details {
             return .sedentary
         }
 
-        if overallHeartZoneDistribution.zone2.doubleValue(for: .minute()) < .minZone2Minutes {
-            return .beginner
-        }
-        if 
-            overallHeartZoneDistribution.zone3.doubleValue(for: .minute()) < .minZone3Minutes ||
-            overallHeartZoneDistribution.zone4.doubleValue(for: .minute()) < .minZone4Minutes
-        {
-            return .intermediate
-        }
-        if overallHeartZoneDistribution.zone5.doubleValue(for: .minute()) < .minZone5Minutes {
-            return .advanced
-        }
+        let scaledSum = overallHeartZoneDistribution.scaledDurationSum
 
-        return .athelete
+        if scaledSum.doubleValue(for: .minute()) < .maxMinimalZoneMinutes {
+            return .minimal
+        }
+        if scaledSum.doubleValue(for: .minute()) < .minZoneMinutes {
+            return .moderate
+        }
+        return .high
     }
 }

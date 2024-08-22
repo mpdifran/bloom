@@ -56,7 +56,7 @@ extension VitalModel {
             case .nutrition:
                 "fork.knife"
             case .exerciseEffectiveness:
-                "figure.highintensity.intervaltraining"
+                "figure.mixed.cardio"
             }
         }
     }

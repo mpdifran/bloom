@@ -17,57 +17,77 @@ struct TargetHeartRateZonesDistributionView: View {
     let distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution
 
     var body: some View {
-        VStack(spacing: .spacing) {
+        VStack(spacing: 16) {
+            VStack(spacing: .spacing) {
+                HeartRateZoneBar(
+                    title: "Zone 1",
+                    duration: distribution.zone1,
+                    totalDuration: distribution.totalDuration,
+                    maxProportion: distribution.maxPercent,
+                    multiplierString: "x \(Double.zone12Multiplier.format())"
+                )
+                .frame(height: .barHeight)
+                .tint(.heartRateZone1)
 
-            HeartRateZoneBar(
-                title: "Zone 1",
-                duration: distribution.zone1,
-                totalDuration: distribution.totalDuration,
-                maxProportion: distribution.maxPercent,
-                targetDurationMinutes: nil
-            )
-            .frame(height: .barHeight)
-            .tint(.heartRateZone1)
+                HeartRateZoneBar(
+                    title: "Zone 2",
+                    duration: distribution.zone2,
+                    totalDuration: distribution.totalDuration,
+                    maxProportion: distribution.maxPercent,
+                    multiplierString: "x \(Double.zone12Multiplier.format())"
+                )
+                .frame(height: .barHeight)
+                .tint(.heartRateZone2)
 
-            HeartRateZoneBar(
-                title: "Zone 2",
-                duration: distribution.zone2,
-                totalDuration: distribution.totalDuration,
-                maxProportion: distribution.maxPercent,
-                targetDurationMinutes: .minZone2Minutes
-            )
-            .frame(height: .barHeight)
-            .tint(.heartRateZone2)
+                HeartRateZoneBar(
+                    title: "Zone 3",
+                    duration: distribution.zone3,
+                    totalDuration: distribution.totalDuration,
+                    maxProportion: distribution.maxPercent,
+                    multiplierString: "x \(Double.zone34Multiplier.format())"
+                )
+                .frame(height: .barHeight)
+                .tint(.heartRateZone3)
 
-            HeartRateZoneBar(
-                title: "Zone 3",
-                duration: distribution.zone3,
-                totalDuration: distribution.totalDuration,
-                maxProportion: distribution.maxPercent,
-                targetDurationMinutes: .minZone3Minutes
-            )
-            .frame(height: .barHeight)
-            .tint(.heartRateZone3)
+                HeartRateZoneBar(
+                    title: "Zone 4",
+                    duration: distribution.zone4,
+                    totalDuration: distribution.totalDuration,
+                    maxProportion: distribution.maxPercent,
+                    multiplierString: "x \(Double.zone34Multiplier.format())"
+                )
+                .frame(height: .barHeight)
+                .tint(.heartRateZone4)
 
-            HeartRateZoneBar(
-                title: "Zone 4",
-                duration: distribution.zone4,
-                totalDuration: distribution.totalDuration,
-                maxProportion: distribution.maxPercent,
-                targetDurationMinutes: .minZone4Minutes
-            )
-            .frame(height: .barHeight)
-            .tint(.heartRateZone4)
+                HeartRateZoneBar(
+                    title: "Zone 5",
+                    duration: distribution.zone5,
+                    totalDuration: distribution.totalDuration,
+                    maxProportion: distribution.maxPercent,
+                    multiplierString: "x \(Double.zone5Multiplier.format())"
+                )
+                .frame(height: .barHeight)
+                .tint(.heartRateZone5)
+            }
 
-            HeartRateZoneBar(
-                title: "Zone 5",
-                duration: distribution.zone5,
-                totalDuration: distribution.totalDuration,
-                maxProportion: distribution.maxPercent,
-                targetDurationMinutes: .minZone5Minutes
-            )
-            .frame(height: .barHeight)
-            .tint(.heartRateZone5)
+            Divider()
+
+            HStack {
+                Text("Total")
+                    .bold()
+
+                Spacer()
+
+                VStack(alignment: .trailing) {
+                    Text("\(distribution.scaledDurationSum.doubleValue(for: .minute()).format()) min")
+                        .font(.subheadline)
+                        .bold()
+                    Text("/ \(Double.minZoneMinutes.format()) min")
+                        .foregroundStyle(.secondary)
+                        .font(.caption)
+                        .bold()
+                }
+            }
         }
     }
 }
@@ -77,7 +97,7 @@ struct HeartRateZoneBar: View {
     let duration: HKQuantity
     let totalDuration: HKQuantity
     let maxProportion: Double
-    let targetDurationMinutes: Double?
+    let multiplierString: String
 
     var body: some View {
         HStack {
@@ -91,12 +111,10 @@ struct HeartRateZoneBar: View {
                     .frame(width: ((duration.doubleValue(for: .second()) / totalDuration.doubleValue(for: .second())) / maxProportion) * proxy.size.width)
             }
 
-            VStack(alignment: .trailing) {
-                Text(formattedDuration)
-                if let targetDurationMinutes {
-                    Text("/ \(formattedTarget(target: targetDurationMinutes))")
-                        .foregroundStyle(.secondary)
-                }
+            Group {
+                Text(formattedDuration) +
+                Text(" \(multiplierString)")
+                    .foregroundStyle(.tint)
             }
             .bold()
             .font(.caption)
@@ -104,8 +122,7 @@ struct HeartRateZoneBar: View {
     }
 
     var formattedDuration: String {
-        let dateComponents = DateComponents(second: Int(duration.doubleValue(for: .second())))
-        return DateFormatter.timeIntervalHourMinuteShort.string(from: dateComponents) ?? ""
+        return duration.doubleValue(for: .minute()).format() + " min"
     }
 
     func formattedTarget(target: Double) -> String {

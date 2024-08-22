@@ -693,7 +693,7 @@ private extension GoalsViewModel {
         guard let exerciseSummary = VitalsViewModel.shared.exerciseEffectivenessSummary else { return nil }
 
         let distribution = exerciseSummary.details.overallHeartZoneDistribution
-        if distribution.zone2.doubleValue(for: .minute()) < .minZone2Minutes {
+//        if distribution.zone2.doubleValue(for: .minute()) < .minZone2Minutes {
 //            return GoalModel(
 //                title: <#T##String#>,
 //                systemImage: <#T##String#>,
@@ -702,7 +702,7 @@ private extension GoalsViewModel {
 //                metric: .init(value: 20, unit: .minute(), measurement: .targetHeartRateZoneTimeZone2),
 //                vitalKind: <#T##VitalModel.Kind#>
 //            )
-        }
+//        }
 
         return nil
     }
