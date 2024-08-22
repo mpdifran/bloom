@@ -141,7 +141,12 @@ extension GoalModel.Metric {
         case .bedtimeSoundLevels:
             break
         case .yogaWorkoutDuration:
-            break
+            let workouts = await HealthManager.shared.fetchWorkouts(
+                activityType: .yoga,
+                dateRange: dateRange
+            )
+            let totalDuration = workouts.sum { $0.duration }
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
         case .casualSportWorkoutDuration:
             break
         case .intenseSportWorkoutDuration:
@@ -155,14 +160,18 @@ extension GoalModel.Metric {
             )
             let totalDuration = workouts.sum { $0.duration }
             return HKQuantity(unit: .second(), doubleValue: totalDuration)
-        case .targetHeartRateZoneTimeZone2:
-            break
-        case .targetHeartRateZoneTimeZone3:
-            break
-        case .targetHeartRateZoneTimeZone4:
-            break
+        case .targetHeartRateZoneTimeZone12:
+            let reports = await HealthManager.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
+            let distribution = reports.generateOverallDistribution()
+            return distribution.zone1.sum(distribution.zone2, unit: .minute())
+        case .targetHeartRateZoneTimeZone34:
+            let reports = await HealthManager.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
+            let distribution = reports.generateOverallDistribution()
+            return distribution.zone3.sum(distribution.zone4, unit: .minute())
         case .targetHeartRateZoneTimeZone5:
-            break
+            let reports = await HealthManager.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
+            let distribution = reports.generateOverallDistribution()
+            return distribution.zone5
         case .increaseProtein:
             return await HealthManager.shared.fetchTotalSum(for: .dietaryProtein, dateRange: dateRange) ?? defaultQuantity
         case .increaseCarbs:
@@ -225,9 +234,8 @@ extension GoalModel {
         case intenseSportWorkoutDuration
         case gymTrainingWorkoutDuration
         case hiitWorkoutDuration
-        case targetHeartRateZoneTimeZone2
-        case targetHeartRateZoneTimeZone3
-        case targetHeartRateZoneTimeZone4
+        case targetHeartRateZoneTimeZone12
+        case targetHeartRateZoneTimeZone34
         case targetHeartRateZoneTimeZone5
         case increaseProtein
         case increaseCarbs
@@ -273,15 +281,13 @@ extension GoalModel {
             case .intenseSportWorkoutDuration:
                     .orange
             case .gymTrainingWorkoutDuration, .hiitWorkoutDuration:
-                    .purple
-            case .targetHeartRateZoneTimeZone2:
-                    .heartRateZone2
-            case .targetHeartRateZoneTimeZone3:
-                    .heartRateZone3
-            case .targetHeartRateZoneTimeZone4:
-                    .heartRateZone4
+                Color.purple
+            case .targetHeartRateZoneTimeZone12:
+                .heartRateZone2
+            case .targetHeartRateZoneTimeZone34:
+                .heartRateZone4
             case .targetHeartRateZoneTimeZone5:
-                    .heartRateZone5
+                .heartRateZone5
             case .increaseProtein:
                     .protein
             case .increaseCarbs:
@@ -323,7 +329,7 @@ extension GoalModel {
 
         var isDecrease: Bool {
             switch self {
-            case .decreaseCalcium, 
+            case .decreaseCalcium,
                     .decreaseIron,
                     .decreaseMagnesium,
                     .decreasePotassium,

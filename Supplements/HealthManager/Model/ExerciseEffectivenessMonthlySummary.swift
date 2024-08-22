@@ -75,29 +75,8 @@ extension ExerciseEffectivenessMonthlySummary {
         ) {
             self.heartRateZones = heartRateZones
             self.workoutReports = workoutReports
-
-            self.overallHeartZoneDistribution = workoutReports.reduce(WorkoutHeartRateReport.WorkoutHeartZoneDistribution()) { partialResult, report in
-                partialResult.sum(with: report.heartZoneDistribution)
-            }
-
-            var workoutTypeReports = [WorkoutTypeHeartRateReport]()
-            for workoutReport in workoutReports {
-                if let existingReportIndex = workoutTypeReports.firstIndex(where: {
-                    $0.activityType == workoutReport.workout.workoutActivityType
-                }) {
-                    let report = workoutTypeReports.remove(at: existingReportIndex)
-                    let newReport = report.appending(workoutReport: workoutReport)
-                    workoutTypeReports.insert(newReport, at: existingReportIndex)
-                } else {
-                    let report = WorkoutTypeHeartRateReport(
-                        activityType: workoutReport.workout.workoutActivityType,
-                        workoutCount: 1,
-                        heartZoneDistribution: workoutReport.heartZoneDistribution
-                    )
-                    workoutTypeReports.append(report)
-                }
-            }
-            self.workoutTypeHeartRateReports = workoutTypeReports
+            self.overallHeartZoneDistribution = workoutReports.generateOverallDistribution()
+            self.workoutTypeHeartRateReports = workoutReports.generateWorkoutTypeHeartRateReports()
         }
     }
 }

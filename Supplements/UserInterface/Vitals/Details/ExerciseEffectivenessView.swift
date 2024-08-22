@@ -102,7 +102,7 @@ private extension ExerciseEffectivenessView {
         if let exerciseEffectivenessSummary = viewModel.exerciseEffectivenessSummary {
             VStack(alignment: .leading) {
                 VitalDetailChartTitleView(
-                    title: "Heart Rate Zones",
+                    title: "Zone Minutes",
                     value: ""
                 )
 

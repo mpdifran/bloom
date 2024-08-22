@@ -133,4 +133,14 @@ extension DateRange {
 
         return DateRange(startDate, endDate)
     }
+
+    static func trailingYearsFromNow(_ numberOfYears: Int) -> DateRange {
+        let endDate = Date.now
+
+        guard let startDate = Calendar.current.date(byAdding: .year, value: -numberOfYears, to: endDate) else {
+            return DateRange(endDate, endDate)
+        }
+
+        return DateRange(startDate, endDate)
+    }
 }

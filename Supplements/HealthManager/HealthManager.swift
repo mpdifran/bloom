@@ -315,6 +315,32 @@ extension HealthManager {
         }
         return 0
     }
+
+    func fetchWorkoutHeartRateReports(dateRange: DateRange) async -> [WorkoutHeartRateReport] {
+        guard let targetHeartRateZones = await heartRateZones() else { return [] }
+
+        let workouts = (try? await healthStore.fetchWorkouts(dateRange: dateRange)) ?? []
+        var reports = [WorkoutHeartRateReport]()
+
+        for workout in workouts {
+            guard let heartRateSamples = try? await healthStore.fetchSamples(
+                for: HKQuantityType(.heartRate),
+                dateRange: workout.dateRange
+            ) as? [HKQuantitySample] else {
+                continue
+            }
+
+            reports.append(
+                WorkoutHeartRateReport(
+                    workout: workout,
+                    heartRateSamples: heartRateSamples,
+                    heartRateZones: targetHeartRateZones
+                )
+            )
+        }
+
+        return reports
+    }
 }
 
 // MARK: Vitals
@@ -343,27 +369,8 @@ extension HealthManager {
         heartRateZones: HeartRateZones,
         dateRange: DateRange
     ) async -> ExerciseEffectivenessMonthlySummary.Details {
-        let workouts = (try? await healthStore.fetchWorkouts(dateRange: dateRange)) ?? []
-
-        var workoutReports = [WorkoutHeartRateReport]()
-        for workout in workouts {
-            guard let heartRateSamples = try? await healthStore.fetchSamples(
-                for: HKQuantityType(.heartRate),
-                dateRange: workout.dateRange
-            ) as? [HKQuantitySample] else {
-                continue
-            }
-
-            workoutReports.append(
-                WorkoutHeartRateReport(
-                    workout: workout,
-                    heartRateSamples: heartRateSamples,
-                    heartRateZones: heartRateZones
-                )
-            )
-        }
-
-        return .init(
+        let workoutReports = await fetchWorkoutHeartRateReports(dateRange: dateRange)
+        return ExerciseEffectivenessMonthlySummary.Details(
             heartRateZones: heartRateZones,
             workoutReports: workoutReports
         )

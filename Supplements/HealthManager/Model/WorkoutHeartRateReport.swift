@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import AppFoundations
 
 struct WorkoutHeartRateReport: Identifiable, Hashable {
     var id: Int { hashValue }
@@ -143,6 +144,28 @@ extension WorkoutHeartRateReport.WorkoutHeartZoneDistribution {
         zone5.doubleValue(for: .minute()) / totalDuration.doubleValue(for: .minute())
     }
 
+    var zone12Duration: HKQuantity {
+        zone1.sum(zone2, unit: .minute())
+    }
+
+    var zone34Duration: HKQuantity {
+        zone3.sum(zone4, unit: .minute())
+    }
+
+    var dominantZones: Set<Int> {
+        [
+            (zone1Percent, 1),
+            (zone2Percent, 2),
+            (zone3Percent, 3),
+            (zone4Percent, 4),
+            (zone5Percent, 5),
+        ]
+            .sorted(by: { $0.0 < $1.0 })
+            .suffix(2)
+            .map({ $0.1 })
+            .asSet()
+    }
+
     var maxPercent: Double {
         let values = [
             zone1Percent,
@@ -176,5 +199,35 @@ extension WorkoutHeartRateReport.WorkoutHeartZoneDistribution {
             zone4: zone4.sum(other.zone4, unit: .minute()),
             zone5: zone5.sum(other.zone5, unit: .minute())
         )
+    }
+}
+
+extension Collection where Element == WorkoutHeartRateReport {
+
+    func generateOverallDistribution() -> WorkoutHeartRateReport.WorkoutHeartZoneDistribution {
+        reduce(WorkoutHeartRateReport.WorkoutHeartZoneDistribution()) { (partialResult, report) in
+            partialResult.sum(with: report.heartZoneDistribution)
+        }
+    }
+
+    func generateWorkoutTypeHeartRateReports() -> [WorkoutTypeHeartRateReport] {
+        var workoutTypeReports = [WorkoutTypeHeartRateReport]()
+        for workoutReport in self {
+            if let existingReportIndex = workoutTypeReports.firstIndex(where: {
+                $0.activityType == workoutReport.workout.workoutActivityType
+            }) {
+                let report = workoutTypeReports.remove(at: existingReportIndex)
+                let newReport = report.appending(workoutReport: workoutReport)
+                workoutTypeReports.insert(newReport, at: existingReportIndex)
+            } else {
+                let report = WorkoutTypeHeartRateReport(
+                    activityType: workoutReport.workout.workoutActivityType,
+                    workoutCount: 1,
+                    heartZoneDistribution: workoutReport.heartZoneDistribution
+                )
+                workoutTypeReports.append(report)
+            }
+        }
+        return workoutTypeReports
     }
 }

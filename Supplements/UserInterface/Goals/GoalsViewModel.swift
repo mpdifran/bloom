@@ -213,7 +213,7 @@ private extension GoalsViewModel {
             }
             return []
         case .exerciseEffectiveness:
-            return []
+            return await exerciseEffectivenessGoals(dueDate: dueDate)
         }
     }
 
@@ -689,22 +689,97 @@ private extension GoalsViewModel {
 
 private extension GoalsViewModel {
 
-    func exerciseEffectivenessGoal(dueDate: Date) async -> GoalModel? {
-        guard let exerciseSummary = VitalsViewModel.shared.exerciseEffectivenessSummary else { return nil }
+    func exerciseEffectivenessGoals(dueDate: Date) async -> [GoalModel] {
+        guard let exerciseSummary = VitalsViewModel.shared.exerciseEffectivenessSummary else { return [] }
 
-        let distribution = exerciseSummary.details.overallHeartZoneDistribution
-//        if distribution.zone2.doubleValue(for: .minute()) < .minZone2Minutes {
-//            return GoalModel(
-//                title: <#T##String#>,
-//                systemImage: <#T##String#>,
-//                summary: <#T##String#>,
-//                dueDate: <#T##Date#>,
-//                metric: .init(value: 20, unit: .minute(), measurement: .targetHeartRateZoneTimeZone2),
-//                vitalKind: <#T##VitalModel.Kind#>
-//            )
-//        }
+        let reports = await HealthManager.shared.fetchWorkoutHeartRateReports(dateRange: defaultDateRange)
+        let distribution = reports.generateOverallDistribution()
 
-        return nil
+        let lastYearReport = await HealthManager.shared.fetchWorkoutHeartRateReports(dateRange: .trailingYearsFromNow(1))
+        let lastYearWorkoutTypeReports = lastYearReport.generateWorkoutTypeHeartRateReports()
+
+        let zone12DominantActivities = lastYearWorkoutTypeReports.filter({ typeReport in
+            typeReport.heartZoneDistribution.dominantZones.contains(1) ||
+            typeReport.heartZoneDistribution.dominantZones.contains(2)
+        }).map({ $0.activityType.name })
+
+        let zone12Summary: String
+        if let activityList = ListFormatter.main.string(from: zone12DominantActivities) {
+            zone12Summary = "Do more workouts where your heart rate falls in zone 1 or 2. Some activities you like to do include \(activityList)."
+        } else {
+            zone12Summary = "Do more workouts where your heart rate falls in zone 1 or 2."
+        }
+
+        let zone12Goal = GoalModel(
+            title: "Increase Time in Zones 1 and 2",
+            systemImage: "12.square.fill",
+            summary: zone12Summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: distribution.zone12Duration.doubleValue(for: .minute()) * .goalMultiplier,
+                unit: .minute(),
+                measurement: .targetHeartRateZoneTimeZone12
+            ),
+            vitalKind: .exerciseEffectiveness
+        )
+
+        let zone34DominantActivities = lastYearWorkoutTypeReports.filter({ typeReport in
+            typeReport.heartZoneDistribution.dominantZones.contains(3) ||
+            typeReport.heartZoneDistribution.dominantZones.contains(4)
+        }).map({ $0.activityType.name })
+
+        let zone34Summary: String
+        if let activityList = ListFormatter.main.string(from: zone34DominantActivities) {
+            zone34Summary = "Do more workouts where your heart rate falls in zone 3 or 4. Some activities you like to do include \(activityList)."
+        } else {
+            zone34Summary = "Do more workouts where your heart rate falls in zone 3 or 4."
+        }
+
+        let zone34Goal = GoalModel(
+            title: "Increase Time in Zones 3 and 4",
+            systemImage: "34.square.fill",
+            summary: zone34Summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: distribution.zone34Duration.doubleValue(for: .minute()) * .goalMultiplier,
+                unit: .minute(),
+                measurement: .targetHeartRateZoneTimeZone34
+            ),
+            vitalKind: .exerciseEffectiveness
+        )
+
+        let zone5DominantActivities = lastYearWorkoutTypeReports.filter({ typeReport in
+            typeReport.heartZoneDistribution.dominantZones.contains(5)
+        }).map({ $0.activityType.name })
+
+        let zone5Summary: String
+        if let activityList = ListFormatter.main.string(from: zone5DominantActivities) {
+            zone5Summary = "Do more intense workouts where your heart rate falls in zone 5. Some activities you like to do include \(activityList)."
+        } else {
+            zone5Summary = "Do more intense workouts where your heart rate falls in zone 5."
+        }
+
+        let zone5Goal = GoalModel(
+            title: "Increase Time in Zone 5",
+            systemImage: "5.square.fill",
+            summary: zone5Summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: distribution.zone5.doubleValue(for: .minute()) * .goalMultiplier,
+                unit: .minute(),
+                measurement: .targetHeartRateZoneTimeZone5
+            ),
+            vitalKind: .exerciseEffectiveness
+        )
+
+        switch exerciseSummary.details.level {
+        case .sedentary, .minimal:
+            return [zone12Goal]
+        case .moderate:
+            return [zone34Goal, zone12Goal]
+        case .high:
+            return [zone5Goal, zone34Goal]
+        }
     }
 }
 
