@@ -33,7 +33,7 @@ final class HealthManager: ObservableObject {
     let healthStore = HKHealthStore()
     private let throttler = Throttler(timeInterval: 600)
 
-    private var sleepDataListenerTask: Task<Void, Error>? = nil
+    private var sleepObserverQueryHandle: HKObserverQueryHandle?
 
     private init() {
         if let birthday = UserDefaults.group.object(forKey: "HealthManager.birthday") as? Date {
@@ -346,6 +346,30 @@ extension HealthManager {
 // MARK: Vitals
 
 extension HealthManager {
+
+    func fetchCardioFitnessSummary() async -> CardioFitnessMonthlySummary {
+        let thisMonth = await HealthManager.shared.fetchVO2Max()
+        let hrr = await HealthManager.shared.fetchHeartRateRecovery()
+        let lastMonth = await HealthManager.shared.fetchVO2Max(numPastMonths: 1)
+        let hrrLastMonth = await HealthManager.shared.fetchHeartRateRecovery(numPastMonths: 1)
+
+        return CardioFitnessMonthlySummary(
+            averageVO2Max: thisMonth?.0,
+            averageHeartRateRecovery: hrr?.0,
+            lastMonthAverageVO2Max: lastMonth?.0,
+            lastMonthAverageHeartRateRecovery: hrrLastMonth?.0
+        )
+    }
+
+    func fetchBodyCompositionSummary() async -> BodyCompositionMonthlySummary {
+        let thisMonth = await HealthManager.shared.fetchAverageBodyFatPercentage()
+        let lastMonth = await HealthManager.shared.fetchAverageBodyFatPercentage(numPastMonths: 1)
+
+        return BodyCompositionMonthlySummary(
+            bodyFatPercentage: thisMonth?.0,
+            lastMonthBodyFatPercentage: lastMonth?.0
+        )
+    }
 
     func fetchExerciseEffectivenessSummary() async -> ExerciseEffectivenessMonthlySummary? {
         guard let targetHeartRateZones = await heartRateZones() else { return nil }
@@ -1391,44 +1415,42 @@ extension HealthManager {
 extension HealthManager {
 
     func observeSleepData() {
-        do {
-            try healthStore.observeChanges(sampleType: HKCategoryType(.sleepAnalysis), frequency: .immediate, backgroundUpdates: true) { [weak self, healthStore] in
-                let endDate = Date.now
-                let startDate = Calendar.current.sleepStartDate(previousDays: 30, endDate: endDate)
-                let lastMonthEndDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate) ?? endDate
-                let lastMonthStartDate = Calendar.current.sleepStartDate(previousDays: 30, endDate: lastMonthEndDate)
-
-                let thisMonthSamples = try await healthStore.fetchSamples(
-                    for: HKCategoryType(.sleepAnalysis),
-                    start: startDate,
-                    end: endDate
-                )
-                let lastMonthSamples = try await healthStore.fetchSamples(
-                    for: HKCategoryType(.sleepAnalysis),
-                    start: lastMonthStartDate,
-                    end: lastMonthEndDate
-                )
-
-                let lastPreviousSleepAnalysis = self?.sleepAnalysis30Days?.last
-
-                let thisMonthSleepAnalysis = await self?.processSleepAnalysis(samples: thisMonthSamples) ?? []
-                let lastMonthSleepAnalysis = await self?.processSleepAnalysis(samples: lastMonthSamples) ?? []
-
-                let newPreviousSleepAnalysis = thisMonthSleepAnalysis.last
-
-                if (newPreviousSleepAnalysis?.endDate ?? .distantPast) > (lastPreviousSleepAnalysis?.endDate ?? .distantPast) && lastPreviousSleepAnalysis != nil {
-                    // We've triggered from new data, not from app launch
-                    await NotificationManager.shared.sendGoodMorningNotification(delay: 60 * 5)
-                }
-
-                await MainActor.run { [weak self] in
-                    self?.sleepAnalysis7Days = thisMonthSleepAnalysis.suffix(7)
-                    self?.sleepAnalysis30Days = thisMonthSleepAnalysis
-                    self?.sleepAnalysisPrevious30Days = lastMonthSleepAnalysis
-                }
+        healthStore.enableBackgroundDelivery(for: HKCategoryType(.sleepAnalysis), frequency: .immediate) { (success, error) in
+            if let error {
+                print(error)
             }
-        } catch {
-            print(error)
+        }
+        sleepObserverQueryHandle = healthStore.observeChanges(
+            sampleType: HKCategoryType(.sleepAnalysis),
+            dateRange: .trailingMonthsFromNowSleepStartDate(2),
+            frequency: .immediate
+        ) { [weak self, healthStore] in
+            let thisMonthSamples = try await healthStore.fetchSamples(
+                for: HKCategoryType(.sleepAnalysis),
+                dateRange: .trailingMonthsFromNowSleepStartDate(1)
+            )
+            let lastMonthSamples = try await healthStore.fetchSamples(
+                for: HKCategoryType(.sleepAnalysis),
+                dateRange: .trailingMonthsFromMonthsFromNowSleepStartDate(monthsFromNow: 1, numberOfMonths: 1)
+            )
+
+            let lastPreviousSleepAnalysis = self?.sleepAnalysis30Days?.last
+
+            let thisMonthSleepAnalysis = await self?.processSleepAnalysis(samples: thisMonthSamples) ?? []
+            let lastMonthSleepAnalysis = await self?.processSleepAnalysis(samples: lastMonthSamples) ?? []
+
+            let newPreviousSleepAnalysis = thisMonthSleepAnalysis.last
+
+            if (newPreviousSleepAnalysis?.endDate ?? .distantPast) > (lastPreviousSleepAnalysis?.endDate ?? .distantPast) && lastPreviousSleepAnalysis != nil {
+                // We've triggered from new data, not from app launch
+                await NotificationManager.shared.sendGoodMorningNotification(delay: 60 * 5)
+            }
+
+            await MainActor.run { [weak self] in
+                self?.sleepAnalysis7Days = thisMonthSleepAnalysis.suffix(7)
+                self?.sleepAnalysis30Days = thisMonthSleepAnalysis
+                self?.sleepAnalysisPrevious30Days = lastMonthSleepAnalysis
+            }
         }
     }
 
@@ -1456,7 +1478,7 @@ extension HealthManager {
         var groupedSamples = [[HKCategorySample]]()
         var currentGroup: [HKCategorySample] = []
 
-        for sample in samples.reversed() {
+        for sample in samples {
             if let lastSample = currentGroup.last {
                 let interval = sample.startDate.timeIntervalSince(lastSample.endDate)
                 if interval <= .maxSleepGroupTimeDistance {

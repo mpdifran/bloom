@@ -71,7 +71,7 @@ struct GoalCell: View {
                 TargetVitalComponentView(vital: targetVitalModel)
             }
         }
-        .animation(.bouncy(duration: 1).delay(Double(index) * 0.3), value: currentGoal)
+        .animation(.easeInOut.delay(Double(index) * 0.3), value: currentGoal)
         .onAppear {
             Task {
                 await loadCurrentGoalValue()

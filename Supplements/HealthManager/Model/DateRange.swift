@@ -134,6 +134,21 @@ extension DateRange {
         return DateRange(startDate, endDate)
     }
 
+    static func trailingMonthsFromNowSleepStartDate(_ numberOfMonths: Int) -> DateRange {
+        let endDate = Date.now
+        let startDate = Calendar.current.sleepStartDate(previousMonths: numberOfMonths, endDate: endDate)
+        return DateRange(startDate, endDate)
+    }
+
+    static func trailingMonthsFromMonthsFromNowSleepStartDate(monthsFromNow: Int, numberOfMonths: Int) -> DateRange {
+        guard let endDate = Calendar.current.date(byAdding: .month, value: -monthsFromNow, to: .now) else {
+            return DateRange(.now, .now)
+        }
+
+        let startDate = Calendar.current.sleepStartDate(previousMonths: numberOfMonths, endDate: endDate)
+        return DateRange(startDate, endDate)
+    }
+
     static func trailingYearsFromNow(_ numberOfYears: Int) -> DateRange {
         let endDate = Date.now
 

@@ -13,7 +13,14 @@ extension Calendar {
         if let startDate = date(byAdding: .day, value: -previousDays, to: endDate) {
             return date(bySettingHour: 15, minute: 0, second: 0, of: startDate) ?? startDate
         }
-        return Date.now // We need a better fallback when this fails
+        return endDate
+    }
+
+    func sleepStartDate(previousMonths: Int, endDate: Date) -> Date {
+        if let startDate = date(byAdding: .month, value: -previousMonths, to: endDate) {
+            return date(bySettingHour: 15, minute: 0, second: 0, of: startDate) ?? startDate
+        }
+        return endDate
     }
 
     func normalizedSleepDate(for date: Date) -> Date {

@@ -39,7 +39,7 @@ struct OnboardingHealthOtherTypesView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut(duration: 1), value: vitalModel)
+        .animation(.easeInOut, value: vitalModel)
         .onAppear {
             showCards = true
         }
@@ -84,7 +84,7 @@ private extension OnboardingHealthOtherTypesView {
     }
 
     var vitalModel: VitalModel {
-        if let bodyCompositionSummary = vitalsViewModel.bodyFatPercentageSummary {
+        if let bodyCompositionSummary = vitalsViewModel.bodyCompositionSummary {
             VitalModel(
                 id: .bodyComposition,
                 subtitle: bodyCompositionSummary.subtitle,

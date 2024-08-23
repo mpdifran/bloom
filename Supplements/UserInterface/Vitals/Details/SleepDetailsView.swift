@@ -168,20 +168,17 @@ private extension SleepDetailsView {
     }
 
     var viewDailySleepDataButton: some View {
-        Button {
-            showTodayView = true
-        } label: {
-            HStack {
-                Label("View All Data", systemImage: "bed.double.fill")
-                Spacer()
-                Image(systemName: "chevron.forward")
-                    .foregroundStyle(.secondary)
-            }
-            .containerShape(Rectangle())
+        HStack {
+            Label("View All Data", systemImage: "bed.double.fill")
+            Spacer()
+            Image(systemName: "chevron.forward")
+                .foregroundStyle(.secondary)
         }
-        .buttonStyle(.plain)
         .foregroundStyle(.coreSleep)
         .cardContainer(fill: .background.secondary)
+        .onTapGesture {
+            showTodayView = true
+        }
     }
 }
 

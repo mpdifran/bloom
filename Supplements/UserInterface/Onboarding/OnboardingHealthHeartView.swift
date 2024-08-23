@@ -45,7 +45,7 @@ struct OnboardingHealthHeartView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut(duration: 1), value: cardioVitalModel)
+        .animation(.easeInOut, value: cardioVitalModel)
         .onAppear {
             showCards = true
         }

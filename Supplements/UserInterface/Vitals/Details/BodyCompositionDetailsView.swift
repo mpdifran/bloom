@@ -67,7 +67,7 @@ struct BodyCompositionDetailsView: View {
         .onAppear {
             feedbackGenerator.prepare()
             if
-                let range = viewModel.bodyFatPercentageSummary?.range,
+                let range = viewModel.bodyCompositionSummary?.range,
                 let index = ranges.firstIndex(where: { $0 == range })
             {
                 self.selectedRangeIndex = index
@@ -95,13 +95,13 @@ private extension BodyCompositionDetailsView {
                         x: .value("Date", sample.date, unit: .day),
                         y: .value("BPM", sample.averageQuantity)
                     )
-                    .foregroundStyle(viewModel.bodyFatPercentageSummary?.range.color ?? .blue)
+                    .foregroundStyle(viewModel.bodyCompositionSummary?.range.color ?? .blue)
 
                     PointMark(
                         x: .value("Date", sample.date, unit: .day),
                         y: .value("Body Fat Percentage", sample.averageQuantity)
                     )
-                    .foregroundStyle(viewModel.bodyFatPercentageSummary?.range.color ?? .blue)
+                    .foregroundStyle(viewModel.bodyCompositionSummary?.range.color ?? .blue)
                     .symbolSize(40)
 
                     if 

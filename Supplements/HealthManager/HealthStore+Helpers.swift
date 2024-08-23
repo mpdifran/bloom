@@ -472,6 +472,7 @@ extension HKHealthStore {
 
 extension HKHealthStore {
 
+    @available(*, deprecated, message: "Use the other method instead")
     func observeChanges(
         sampleType: HKSampleType,
         dateRange: DateRange? = nil,
@@ -488,6 +489,7 @@ extension HKHealthStore {
         )
     }
 
+    @available(*, deprecated, message: "Use the other method instead")
     func observeChanges(
         sampleTypes: [HKSampleType],
         dateRange: DateRange? = nil,
@@ -539,6 +541,62 @@ extension HKHealthStore {
                 execute(observerQuery)
             }
         }
+    }
+
+    func observeChanges(
+        sampleType: HKSampleType,
+        dateRange: DateRange,
+        frequency: HKUpdateFrequency = .hourly,
+        performQuery: @escaping () async throws -> Void
+    ) -> HKObserverQueryHandle {
+        observeChanges(
+            sampleTypes: [sampleType],
+            dateRange: dateRange,
+            frequency: frequency,
+            performQuery: performQuery
+        )
+    }
+
+    func observeChanges(
+        sampleTypes: [HKSampleType],
+        dateRange: DateRange,
+        frequency: HKUpdateFrequency = .hourly,
+        performQuery: @escaping () async throws -> Void
+    ) -> HKObserverQueryHandle {
+        var queries = [HKObserverQuery]()
+
+        let predicate = HKQuery.predicateForSamples(
+            withStart: dateRange.start,
+            end: dateRange.end,
+            options: .strictStartDate
+        )
+
+        for sampleType in sampleTypes {
+            let observerQuery = HKObserverQuery(
+                sampleType: sampleType,
+                predicate: predicate
+            ) { (query, completionHandler, error) in
+                if let error {
+                    print(error)
+                    completionHandler()
+                    return
+                }
+
+                Task {
+                    do {
+                        try await performQuery()
+                    } catch {
+                        print(error)
+                    }
+                    completionHandler()
+                }
+            }
+
+            execute(observerQuery)
+            queries.append(observerQuery)
+        }
+
+        return HKObserverQueryHandle(queries: queries, healthStore: self)
     }
 }
 
@@ -692,11 +750,7 @@ extension HKHealthStore {
         start: Date,
         end: Date
     ) async throws -> [HKSample] {
-        guard let sampleType = HKSampleType.quantityType(forIdentifier: quantityTypeID) else {
-            throw NSError(description: "Sample type not available")
-        }
-
-        return try await fetchSamples(for: sampleType, start: start, end: end)
+        try await fetchSamples(for: HKQuantityType(quantityTypeID), start: start, end: end)
     }
 
     @available(*, deprecated, message: "Create DateRange based method instead.")

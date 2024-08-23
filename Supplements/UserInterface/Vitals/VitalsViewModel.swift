@@ -69,8 +69,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var activityLevelSummary: ActivityLevelSummary?
     @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
     @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
-    @Published var bodyFatPercentageSummary: BodyCompositionMonthlySummary?
-    @Published var mobilitySummary: MobilityMonthlySummary?
+    @Published var bodyCompositionSummary: BodyCompositionMonthlySummary?
     @Published var stressSummary: StressMonthlySummary?
     @Published var nutritionSummary: NutritionMonthlySummary?
     @Published var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
@@ -78,6 +77,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var heartRateVariability = [DateQuantitySampleLegacy]()
     @Published var restingHeartRate = [DateQuantitySampleLegacy]()
 
+    private var observerQueryHandles = [HKObserverQueryHandle]()
     private var cancellables = Set<AnyCancellable>()
 
     private let processingQueue = DispatchQueue(label: "VitalsViewModel.Processing")
@@ -92,126 +92,117 @@ final class VitalsViewModel: ObservableObject {
 extension VitalsViewModel {
 
     func refreshVitals() async {
-        let summary = await HealthManager.shared.fetchActivityLevelSummary()
-        await MainActor.run {
-            self.activityLevelSummary = summary
-        }
-
-        if
-            let thisMonth = HealthManager.shared.sleepAnalysis30Days,
-            let lastMonth = HealthManager.shared.sleepAnalysisPrevious30Days
-        {
-            let sleepSummary = SleepVitalsMonthlySummary(
-                averageREMSleepPercent: thisMonth.average(keyPath: \.remSleepPercent),
-                averageCoreSleepPercent: thisMonth.average(keyPath: \.coreSleepPercent),
-                averageDeepSleepPercent: thisMonth.average(keyPath: \.deepSleepPercent),
-                averageAwakeSleepPercent: thisMonth.average(keyPath: \.awakeSleepPercent),
-                averageSleepLength: thisMonth.average(keyPath: \.overallMinutes),
-                averageSleepScore: thisMonth.average(keyPath: \.overallScoreDouble),
-                lastMonthAverageSleepScore: lastMonth.average(keyPath: \.overallScoreDouble)
-            )
-            await MainActor.run {
-                self.sleepVitalsSummary = sleepSummary
-            }
-        }
-
-        let thisMonth = await HealthManager.shared.fetchVO2Max()
-        let hrr = await HealthManager.shared.fetchHeartRateRecovery()
-        let lastMonth = await HealthManager.shared.fetchVO2Max(numPastMonths: 1)
-        let hrrLastMonth = await HealthManager.shared.fetchHeartRateRecovery(numPastMonths: 1)
-        await MainActor.run {
-            self.cardioFitnessSummary = CardioFitnessMonthlySummary(
-                averageVO2Max: thisMonth?.0,
-                averageHeartRateRecovery: hrr?.0,
-                lastMonthAverageVO2Max: lastMonth?.0,
-                lastMonthAverageHeartRateRecovery: hrrLastMonth?.0
-            )
-        }
-
-        let bodyFatThisMonth = await HealthManager.shared.fetchAverageBodyFatPercentage()
-        let bodyFatLastMonth = await HealthManager.shared.fetchAverageBodyFatPercentage(numPastMonths: 1)
-        await MainActor.run {
-            self.bodyFatPercentageSummary = BodyCompositionMonthlySummary(
-                bodyFatPercentage: bodyFatThisMonth?.0,
-                lastMonthBodyFatPercentage: bodyFatLastMonth?.0
-            )
-        }
-
-        let stressSummary = await HealthManager.shared.fetchStressMonthlySummary()
-        await MainActor.run {
-            self.stressSummary = stressSummary
-        }
-
-        let nutritionSummary = await HealthManager.shared.fetchNutritionMonthlySummary()
-        await MainActor.run {
-            self.nutritionSummary = nutritionSummary
-        }
-
-        let exerciseSummary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
-        await MainActor.run {
-            self.exerciseEffectivenessSummary = exerciseSummary
-        }
-
-        createVitals()
+        setupChangeObservers()
     }
 }
 
 private extension VitalsViewModel {
 
-    func observeData() {
-//        do {
-//            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.heartRateVariabilitySDNN)) {
-//                let heartRateVariability = await HealthManager.shared.fetchHeartRateVariability(periodDays: 28)
-//                await MainActor.run {
-//                    self.heartRateVariability = heartRateVariability
-//                }
-//            }
-//        } catch {
-//            print(error)
-//        }
-//        do {
-//            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.restingHeartRate)) {
-//                let restingHeartRate = await HealthManager.shared.fetchRestingHeartRate(period: 28)
-//                await MainActor.run {
-//                    self.restingHeartRate = restingHeartRate
-//                }
-//            }
-//        } catch {
-//            print(error)
-//        }
-//
-//        HealthManager.shared.$sleepAnalysis7Days
-//            .combineLatest($heartRateVariability, $restingHeartRate)
-//            .sink(receiveValue: { [weak self] (sleepAnalysis, heartRateVariability, restingHeartRate) in
-//                self?.createVitalStatuses(
-//                    sleepAnalysis: sleepAnalysis ?? [],
-//                    heartRateVariability: heartRateVariability,
-//                    restingHeartRate: restingHeartRate
-//                )
-//            })
-//            .store(in: &cancellables)
+    func setupChangeObservers() {
+        observerQueryHandles.removeAll(keepingCapacity: true)
 
-        do {
-            try HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: [
-                    HKQuantityType(.basalEnergyBurned),
-                    HKQuantityType(.activeEnergyBurned)
-                ]
-            ) { [activityLevelThrottler, processingQueue] in
-                processingQueue.async {
-                    activityLevelThrottler.perform {
-                        Task {
-                            let summary = await HealthManager.shared.fetchActivityLevelSummary()
-                            await MainActor.run {
-                                self.activityLevelSummary = summary
-                            }
+        HealthManager.shared.healthStore.observeChanges(
+            sampleTypes: [
+                HKQuantityType(.vo2Max),
+                HKQuantityType(.heartRateRecoveryOneMinute)
+            ],
+            dateRange: .trailingMonthsFromNow(2),
+            frequency: .immediate
+        ) {
+            let summary = await HealthManager.shared.fetchCardioFitnessSummary()
+            await MainActor.run {
+                self.cardioFitnessSummary = summary
+            }
+        }
+        .store(in: &observerQueryHandles)
+
+        HealthManager.shared.healthStore.observeChanges(
+            sampleTypes: [
+                HKQuantityType(.basalEnergyBurned),
+                HKQuantityType(.activeEnergyBurned)
+            ],
+            dateRange: .trailingMonthsFromNow(2),
+            frequency: .immediate
+        ) { [activityLevelThrottler, processingQueue] in
+            processingQueue.async {
+                activityLevelThrottler.perform {
+                    Task {
+                        let summary = await HealthManager.shared.fetchActivityLevelSummary()
+                        await MainActor.run {
+                            self.activityLevelSummary = summary
                         }
                     }
                 }
             }
-        } catch {
-            print(error)
         }
+        .store(in: &observerQueryHandles)
+
+        HealthManager.shared.healthStore.observeChanges(
+            sampleType: HKQuantityType(.bodyFatPercentage),
+            dateRange: .trailingMonthsFromNow(2),
+            frequency: .immediate
+        ) {
+            let summary = await HealthManager.shared.fetchBodyCompositionSummary()
+            await MainActor.run {
+                self.bodyCompositionSummary = summary
+            }
+        }
+        .store(in: &observerQueryHandles)
+
+        HealthManager.shared.healthStore.observeChanges(
+            sampleTypes: [
+                HKQuantityType(.heartRateVariabilitySDNN),
+                HKQuantityType(.restingHeartRate),
+                HKQuantityType(.bloodPressureSystolic),
+                HKQuantityType(.bloodPressureDiastolic)
+            ],
+            dateRange: .trailingMonthsFromNow(2),
+            frequency: .immediate
+        ) {
+            let summary = await HealthManager.shared.fetchStressMonthlySummary()
+            await MainActor.run {
+                self.stressSummary = summary
+            }
+        }
+        .store(in: &observerQueryHandles)
+
+        HealthManager.shared.healthStore.observeChanges(
+            sampleTypes: HealthManager.shared.nutritionTypes,
+            dateRange: .trailingMonthsFromNow(2),
+            frequency: .immediate
+        ) { [throttler, processingQueue] in
+            processingQueue.async {
+                throttler.perform {
+                    Task {
+                        let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
+                        await MainActor.run {
+                            self.nutritionSummary = summary
+                        }
+                    }
+                }
+            }
+        }
+        .store(in: &observerQueryHandles)
+
+        HealthManager.shared.healthStore.observeChanges(
+            sampleType: HKWorkoutType.workoutType(),
+            dateRange: .trailingMonthsFromNow(2),
+            frequency: .immediate
+        ) {
+            Task {
+                let summary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
+                await MainActor.run {
+                    self.exerciseEffectivenessSummary = summary
+                }
+            }
+        }
+        .store(in: &observerQueryHandles)
+
+        HealthManager.shared.observeSleepData()
+    }
+
+    func observeData() {
+        setupChangeObservers()
 
         HealthManager.shared.$sleepAnalysis30Days
             .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
@@ -232,111 +223,6 @@ private extension VitalsViewModel {
             .receive(on: DispatchQueue.main)
             .assign(to: &$sleepVitalsSummary)
 
-        do {
-            try HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: [
-                    HKQuantityType(.vo2Max),
-                    HKQuantityType(.heartRateRecoveryOneMinute)
-                ]
-            ) {
-                let thisMonth = await HealthManager.shared.fetchVO2Max()
-                let hrr = await HealthManager.shared.fetchHeartRateRecovery()
-                let lastMonth = await HealthManager.shared.fetchVO2Max(numPastMonths: 1)
-                let hrrLastMonth = await HealthManager.shared.fetchHeartRateRecovery(numPastMonths: 1)
-                await MainActor.run {
-                    self.cardioFitnessSummary = CardioFitnessMonthlySummary(
-                        averageVO2Max: thisMonth?.0,
-                        averageHeartRateRecovery: hrr?.0,
-                        lastMonthAverageVO2Max: lastMonth?.0,
-                        lastMonthAverageHeartRateRecovery: hrrLastMonth?.0
-                    )
-                }
-            }
-        } catch {
-            print(error)
-        }
-
-        do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.bodyFatPercentage)) {
-                let thisMonth = await HealthManager.shared.fetchAverageBodyFatPercentage()
-                let lastMonth = await HealthManager.shared.fetchAverageBodyFatPercentage(numPastMonths: 1)
-                await MainActor.run {
-                    self.bodyFatPercentageSummary = BodyCompositionMonthlySummary(
-                        bodyFatPercentage: thisMonth?.0,
-                        lastMonthBodyFatPercentage: lastMonth?.0
-                    )
-                }
-            }
-        } catch {
-            print(error)
-        }
-
-//        do {
-//            try HealthManager.shared.healthStore.observeChanges(
-//                sampleTypes: [
-//                    HKCategoryType(.appleWalkingSteadinessEvent),
-//                    HKQuantityType(.sixMinuteWalkTestDistance),
-//                    HKQuantityType(.walkingDoubleSupportPercentage)
-//                ]
-//            ) {
-//                let summary = await HealthManager.shared.fetchMonthlyMobilitySummary()
-//                await MainActor.run {
-//                    self.mobilitySummary = summary
-//                }
-//            }
-//        } catch {
-//            print(error)
-//        }
-
-        do {
-            try HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: [
-                    HKQuantityType(.heartRateVariabilitySDNN),
-                    HKQuantityType(.restingHeartRate),
-                    HKCategoryType(.sleepAnalysis),
-                    HKQuantityType(.bloodPressureSystolic),
-                    HKQuantityType(.bloodPressureDiastolic)
-                ]
-            ) {
-                let summary = await HealthManager.shared.fetchStressMonthlySummary()
-                await MainActor.run {
-                    self.stressSummary = summary
-                }
-            }
-        } catch {
-            print(error)
-        }
-
-        do {
-            try HealthManager.shared.healthStore.observeChanges(sampleTypes: HealthManager.shared.nutritionTypes) { [throttler, processingQueue] in
-                processingQueue.async {
-                    throttler.perform {
-                        Task {
-                            let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
-                            await MainActor.run {
-                                self.nutritionSummary = summary
-                            }
-                        }
-                    }
-                }
-            }
-        } catch {
-            print(error)
-        }
-
-        do {
-            try HealthManager.shared.healthStore.observeChanges(sampleType: HKWorkoutType.workoutType()) {
-                Task {
-                    let summary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
-                    await MainActor.run {
-                        self.exerciseEffectivenessSummary = summary
-                    }
-                }
-            }
-        } catch {
-            print(error)
-        }
-
         $activityLevelSummary
             .receive(on: processingQueue)
             .sink { [weak self] (_) in
@@ -355,13 +241,7 @@ private extension VitalsViewModel {
                 self?.createVitals()
             }
             .store(in: &cancellables)
-        $bodyFatPercentageSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $mobilitySummary
+        $bodyCompositionSummary
             .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
@@ -400,6 +280,8 @@ private extension VitalsViewModel {
                     trend: sleepVitalsSummary.trend
                 )
             )
+        } else {
+            vitals.append(.init(id: .sleepQuality))
         }
         if let activityLevelSummary {
             vitals.append(
@@ -412,6 +294,8 @@ private extension VitalsViewModel {
                     trend: activityLevelSummary.trend
                 )
             )
+        } else {
+            vitals.append(.init(id: .activityLevel))
         }
         if let cardioFitnessSummary {
             vitals.append(
@@ -424,31 +308,23 @@ private extension VitalsViewModel {
                     trend: cardioFitnessSummary.trend
                 )
             )
+        } else {
+            vitals.append(.init(id: .cardioFitness))
         }
-        if let bodyFatPercentageSummary {
+        if let bodyCompositionSummary {
             vitals.append(
                 VitalModel(
                     id: .bodyComposition,
-                    subtitle: bodyFatPercentageSummary.subtitle,
-                    status: bodyFatPercentageSummary.range.name,
-                    score: bodyFatPercentageSummary.score,
-                    color: bodyFatPercentageSummary.range.color,
-                    trend: bodyFatPercentageSummary.trend
+                    subtitle: bodyCompositionSummary.subtitle,
+                    status: bodyCompositionSummary.range.name,
+                    score: bodyCompositionSummary.score,
+                    color: bodyCompositionSummary.range.color,
+                    trend: bodyCompositionSummary.trend
                 )
             )
+        } else {
+            vitals.append(.init(id: .bodyComposition))
         }
-//        if let mobilitySummary {
-//            vitals.append(
-//                VitalModel(
-//                    id: .mobility,
-//                    subtitle: mobilitySummary.subtitle,
-//                    status: mobilitySummary.status.name,
-//                    score: mobilitySummary.score,
-//                    color: mobilitySummary.status.color,
-//                    trend: mobilitySummary.trend
-//                )
-//            )
-//        }
         if let stressSummary {
             vitals.append(
                 VitalModel(
@@ -460,6 +336,8 @@ private extension VitalsViewModel {
                     trend: stressSummary.trend
                 )
             )
+        } else {
+            vitals.append(.init(id: .stressLevels))
         }
         if let nutritionSummary {
             vitals.append(
@@ -472,6 +350,8 @@ private extension VitalsViewModel {
                     trend: nutritionSummary.trend
                 )
             )
+        } else {
+            vitals.append(.init(id: .nutrition))
         }
         if let exerciseEffectivenessSummary {
             vitals.append(
@@ -484,105 +364,14 @@ private extension VitalsViewModel {
                     trend: exerciseEffectivenessSummary.trend
                 )
             )
+        } else {
+            vitals.append(.init(id: .exerciseEffectiveness))
         }
 
         vitals.sort(by: { $0.score < $1.score })
 
         DispatchQueue.main.async {
             self.vitals = vitals
-        }
-    }
-
-    func createVitalStatuses(
-        sleepAnalysis: [SleepAnalysis],
-        heartRateVariability: [DateQuantitySampleLegacy],
-        restingHeartRate: [DateQuantitySampleLegacy]
-    ) {
-        if let firstHRV = heartRateVariability.first {
-            let average = heartRateVariability.average(keyPath: \.quantity)
-
-            let mode: VitalStatusData.Mode
-            if firstHRV.quantity >= average + .hrvVariance {
-                mode = .excel
-            } else if firstHRV.quantity < average + .hrvVariance && firstHRV.quantity >= average - .hrvVariance {
-                mode = .good
-            } else if firstHRV.quantity < average - .hrvVariance && firstHRV.quantity >= average - (.hrvVariance * 2) {
-                mode = .warning
-            } else {
-                mode = .threat
-            }
-
-            let lower = average - (.hrvVariance * 2)
-            let upper = average + .hrvVariance
-
-            hrvStatus = VitalStatusData(
-                name: "Heart Rate Variability",
-                value: "\(String(format: "%.0f", firstHRV.quantity)) ms",
-                mode: mode,
-                score: firstHRV.quantity.scaledPercent(lower: lower, upper: upper)
-            )
-
-        } else {
-            hrvStatus = VitalStatusData(
-                name: "Heart Rate Variability",
-                value: "No Data",
-                mode: .insufficientData,
-                score: nil
-            )
-        }
-
-        if let lastSleepAnalysis = sleepAnalysis.last {
-            let mode = lastSleepAnalysis.sleepQuality
-            let value: String
-            switch mode {
-            case .insufficientData: value = "No Data"
-            case .threat: value = "Poor"
-            case .warning: value = "Low"
-            case .good: value = "Good"
-            case .excel: value = "Great"
-            }
-            sleepStatus = VitalStatusData(
-                name: "Sleep Quality",
-                value: value,
-                mode: mode,
-                score: lastSleepAnalysis.overallScoreDouble / 10
-            )
-        } else {
-            sleepStatus = VitalStatusData(
-                name: "Sleep Quality",
-                value: "No Data",
-                mode: .insufficientData,
-                score: nil
-            )
-        }
-
-        if let firstRHR = restingHeartRate.first {
-            let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
-
-            let mode: VitalStatusData.Mode
-            if firstRHR.quantity < min {
-                mode = .excel
-            } else if firstRHR.quantity >= min && firstRHR.quantity <= max {
-                mode = .good
-            } else if firstRHR.quantity > max && firstRHR.quantity <= max + .rhrUpperThreadDiff {
-                mode = .warning
-            } else {
-                mode = .threat
-            }
-
-            rhrStatus = VitalStatusData(
-                name: "Resting Heart Rate",
-                value: "\(String(format: "%.0f", firstRHR.quantity)) bpm",
-                mode: mode,
-                score: firstRHR.quantity.scaledPercent(lower: max, upper: min)
-            )
-        } else {
-            rhrStatus = VitalStatusData(
-                name: "Resting Heart Rate",
-                value: "No Data",
-                mode: .insufficientData,
-                score: nil
-            )
         }
     }
 }

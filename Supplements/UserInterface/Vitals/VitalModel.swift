@@ -13,7 +13,6 @@ extension VitalModel {
         case activityLevel
         case cardioFitness
         case bodyComposition
-//        case mobility
         case stressLevels
         case nutrition
         case exerciseEffectiveness
@@ -28,8 +27,6 @@ extension VitalModel {
                 "Cardio Fitness"
             case .bodyComposition:
                 "Body Composition"
-//            case .mobility:
-//                "Mobility"
             case .stressLevels:
                 "Stress Levels"
             case .nutrition:
@@ -49,8 +46,6 @@ extension VitalModel {
                 "heart.fill"
             case .bodyComposition:
                 "gauge.with.needle"
-//            case .mobility:
-//                "figure.walk"
             case .stressLevels:
                 "bolt.fill"
             case .nutrition:
@@ -75,4 +70,31 @@ struct VitalModel: Identifiable, Hashable {
     let score: Double
     let color: Color
     let trend: Trend
+
+    init(
+        id: Kind,
+        subtitle: String,
+        status: String,
+        score: Double,
+        color: Color,
+        trend: Trend
+    ) {
+        self.id = id
+        self.subtitle = subtitle
+        self.status = status
+        self.score = score
+        self.color = color
+        self.trend = trend
+    }
+
+    init(id: Kind) {
+        self.init(
+            id: id,
+            subtitle: "No data available",
+            status: "No Data",
+            score: 1,
+            color: .gray,
+            trend: .noTrend
+        )
+    }
 }

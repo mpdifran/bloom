@@ -39,7 +39,7 @@ struct OnboardingHealthNutritionView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut(duration: 1), value: vitalModel)
+        .animation(.easeInOut, value: vitalModel)
         .onAppear {
             showCards = true
         }
