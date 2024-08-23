@@ -89,6 +89,73 @@ final class VitalsViewModel: ObservableObject {
     }
 }
 
+extension VitalsViewModel {
+
+    func refreshVitals() async {
+        let summary = await HealthManager.shared.fetchActivityLevelSummary()
+        await MainActor.run {
+            self.activityLevelSummary = summary
+        }
+
+        if
+            let thisMonth = HealthManager.shared.sleepAnalysis30Days,
+            let lastMonth = HealthManager.shared.sleepAnalysisPrevious30Days
+        {
+            let sleepSummary = SleepVitalsMonthlySummary(
+                averageREMSleepPercent: thisMonth.average(keyPath: \.remSleepPercent),
+                averageCoreSleepPercent: thisMonth.average(keyPath: \.coreSleepPercent),
+                averageDeepSleepPercent: thisMonth.average(keyPath: \.deepSleepPercent),
+                averageAwakeSleepPercent: thisMonth.average(keyPath: \.awakeSleepPercent),
+                averageSleepLength: thisMonth.average(keyPath: \.overallMinutes),
+                averageSleepScore: thisMonth.average(keyPath: \.overallScoreDouble),
+                lastMonthAverageSleepScore: lastMonth.average(keyPath: \.overallScoreDouble)
+            )
+            await MainActor.run {
+                self.sleepVitalsSummary = sleepSummary
+            }
+        }
+
+        let thisMonth = await HealthManager.shared.fetchVO2Max()
+        let hrr = await HealthManager.shared.fetchHeartRateRecovery()
+        let lastMonth = await HealthManager.shared.fetchVO2Max(numPastMonths: 1)
+        let hrrLastMonth = await HealthManager.shared.fetchHeartRateRecovery(numPastMonths: 1)
+        await MainActor.run {
+            self.cardioFitnessSummary = CardioFitnessMonthlySummary(
+                averageVO2Max: thisMonth?.0,
+                averageHeartRateRecovery: hrr?.0,
+                lastMonthAverageVO2Max: lastMonth?.0,
+                lastMonthAverageHeartRateRecovery: hrrLastMonth?.0
+            )
+        }
+
+        let bodyFatThisMonth = await HealthManager.shared.fetchAverageBodyFatPercentage()
+        let bodyFatLastMonth = await HealthManager.shared.fetchAverageBodyFatPercentage(numPastMonths: 1)
+        await MainActor.run {
+            self.bodyFatPercentageSummary = BodyCompositionMonthlySummary(
+                bodyFatPercentage: bodyFatThisMonth?.0,
+                lastMonthBodyFatPercentage: bodyFatLastMonth?.0
+            )
+        }
+
+        let stressSummary = await HealthManager.shared.fetchStressMonthlySummary()
+        await MainActor.run {
+            self.stressSummary = stressSummary
+        }
+
+        let nutritionSummary = await HealthManager.shared.fetchNutritionMonthlySummary()
+        await MainActor.run {
+            self.nutritionSummary = nutritionSummary
+        }
+
+        let exerciseSummary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
+        await MainActor.run {
+            self.exerciseEffectivenessSummary = exerciseSummary
+        }
+
+        createVitals()
+    }
+}
+
 private extension VitalsViewModel {
 
     func observeData() {
@@ -370,18 +437,18 @@ private extension VitalsViewModel {
                 )
             )
         }
-        if let mobilitySummary {
-            vitals.append(
-                VitalModel(
-                    id: .mobility,
-                    subtitle: mobilitySummary.subtitle,
-                    status: mobilitySummary.status.name,
-                    score: mobilitySummary.score,
-                    color: mobilitySummary.status.color,
-                    trend: mobilitySummary.trend
-                )
-            )
-        }
+//        if let mobilitySummary {
+//            vitals.append(
+//                VitalModel(
+//                    id: .mobility,
+//                    subtitle: mobilitySummary.subtitle,
+//                    status: mobilitySummary.status.name,
+//                    score: mobilitySummary.score,
+//                    color: mobilitySummary.status.color,
+//                    trend: mobilitySummary.trend
+//                )
+//            )
+//        }
         if let stressSummary {
             vitals.append(
                 VitalModel(

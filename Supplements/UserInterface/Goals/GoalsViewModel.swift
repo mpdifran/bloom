@@ -189,12 +189,6 @@ private extension GoalsViewModel {
                 dueDate: dueDate
             )
             return [steps, walkRunDistance, walkDuration]
-        case .mobility:
-            return [await walkRunDistanceGoal(
-                summary: "Your mobility should be top of mind for you this week. You can improve your mobility by walking or running more!",
-                vitalKind: vital.id,
-                dueDate: dueDate
-            )]
         case .stressLevels:
             let meditation = await meditationGoal(
                 summary: "Your stress levels are getting quite high. Try incorporating more meditation this week.",

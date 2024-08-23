@@ -13,12 +13,11 @@ struct OnboardingHealthSleepView: View {
     let onContinue: () -> Void
 
     @ObservedObject private var healthManager = HealthManager.shared
+    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
 
     @State private var isAuthorized = false
     @State private var triggerHealthPermissionSheet = false
     @State private var showCards = false
-    @State private var sleepHours: Double = 0
-    @State private var sleepMinutes: Double = 0
     @State private var error: Error?
 
     var body: some View {
@@ -31,17 +30,8 @@ struct OnboardingHealthSleepView: View {
             ScrollView {
                 VStack {
                     MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .sleepQuality,
-                            subtitle: "Avg \(sleepHours.format())h\(sleepMinutes.format())m",
-                            status: sleepHours > 0 ? "Great" : "No Data",
-                            score: 0.9,
-                            color: sleepHours > 0 ? .blue : .gray,
-                            trend: sleepHours > 0 ? .increasing : .noTrend
-                        )
+                        vital: vitalModel
                     )
-                    .contentTransition(.numericText(value: sleepHours))
-                    .contentTransition(.numericText(value: sleepMinutes))
                     .opacity(showCards ? 1 : 0)
                     .transition(.blurReplace)
                 }
@@ -49,21 +39,12 @@ struct OnboardingHealthSleepView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut, value: sleepHours)
-        .animation(.easeInOut, value: sleepMinutes)
+        .animation(.easeInOut(duration: 1), value: vitalModel)
         .onAppear {
             showCards = true
-            Delay(1500) {
-                sleepHours = 7
-                sleepMinutes = 43
-            }
         }
         .task {
-            do {
-                let authStatus = try await healthManager.checkAccess(readTypes: healthManager.sleepTypes)
-
-                isAuthorized = authStatus == .unnecessary
-            } catch { }
+            await checkAuth()
         }
         .shelf {
             if isAuthorized {
@@ -83,10 +64,44 @@ struct OnboardingHealthSleepView: View {
         ) { result in
             switch result {
             case .success:
-                onContinue()
+                Task { await checkAuth() }
             case .failure(let error):
                 self.error = error
             }
+        }
+    }
+}
+
+private extension OnboardingHealthSleepView {
+
+    func checkAuth() async {
+        do {
+            let authStatus = try await healthManager.checkAccess(readTypes: healthManager.sleepTypes)
+
+            isAuthorized = authStatus == .unnecessary
+            await vitalsViewModel.refreshVitals()
+        } catch { }
+    }
+
+    var vitalModel: VitalModel {
+        if let sleepSummary = vitalsViewModel.sleepVitalsSummary {
+            VitalModel(
+                id: .sleepQuality,
+                subtitle: sleepSummary.subtitleText,
+                status: sleepSummary.quality.name,
+                score: sleepSummary.score,
+                color: sleepSummary.quality.color,
+                trend: sleepSummary.trend
+            )
+        } else {
+            VitalModel(
+                id: .sleepQuality,
+                subtitle: "",
+                status: "No Data",
+                score: 0,
+                color: .gray,
+                trend: .noTrend
+            )
         }
     }
 }

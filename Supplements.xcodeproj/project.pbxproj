@@ -113,7 +113,7 @@
 		FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */; };
 		FF78905E2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
-		FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B1D2BFCEB4700BA2128 /* OnboardingChatView.swift */; };
+		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B232BFD364B00BA2128 /* ProfileView.swift */; };
 		FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */; };
@@ -499,7 +499,7 @@
 		FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+POST.swift"; sourceTree = "<group>"; };
 		FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAverageQuantitySample.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
-		FF8B8B1D2BFCEB4700BA2128 /* OnboardingChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingChatView.swift; sourceTree = "<group>"; };
+		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF8B8B232BFD364B00BA2128 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		FF8B8B272BFD36BF00BA2128 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
@@ -1024,6 +1024,7 @@
 				FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */,
 				FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */,
 				FFC77AD82C541DE9003E5F85 /* Double+Format.swift */,
+				FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
 				FF8F79CE2C64546C0095C36D /* Color+Codable.swift */,
@@ -1313,7 +1314,6 @@
 				FFBE52232C6EF5A900F510DE /* Components */,
 				FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */,
 				FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */,
-				FF8B8B1D2BFCEB4700BA2128 /* OnboardingChatView.swift */,
 				FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */,
 				FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */,
 				FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */,
@@ -1936,7 +1936,6 @@
 				FFC77AF72C5A6D6A003E5F85 /* GoalModel.swift in Sources */,
 				FF21AB9D2C12036A004D0D82 /* RestingHeartRateCell.swift in Sources */,
 				FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */,
-				FF8B8B1E2BFCEB4700BA2128 /* OnboardingChatView.swift in Sources */,
 				FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */,
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
@@ -2059,6 +2058,7 @@
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
+				FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
 				FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */,
@@ -2712,7 +2712,7 @@
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help recommend supplements";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -2752,7 +2752,7 @@
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help recommend supplements";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

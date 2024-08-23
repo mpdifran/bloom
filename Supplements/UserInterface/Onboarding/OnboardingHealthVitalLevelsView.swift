@@ -13,11 +13,24 @@ struct OnboardingHealthVitalLevelsView: View {
 
     var body: some View {
         ScrollView {
-            VStack {
-                Text("Vital Levels")
+            VStack(alignment: .leading) {
+                Text("Vitals")
                     .font(.largeTitle)
                     .bold()
                     .fontDesign(.rounded)
+
+                Text("Bloom organizes your health data into several categories, called **Vitals**.")
+
+                ForEach(VitalModel.Kind.allCases, id: \.rawValue) { kind in
+                    MiniVitalView(kind: kind)
+                }
+
+                Text("Levels")
+                    .font(.largeTitle)
+                    .bold()
+                    .fontDesign(.rounded)
+
+                Text("Each **Vital** is categorized into different color-coded levels based on where your health data falls in recommended ranges.")
 
                 VitalLevelView(
                     systemImage: "checkmark.seal.fill",
@@ -40,7 +53,7 @@ struct OnboardingHealthVitalLevelsView: View {
                 VitalLevelView(
                     systemImage: "exclamationmark.octagon.fill",
                     title: "Poor",
-                    description: "You're at a dangerous health level, and should take action immediately."
+                    description: "You're outside recommended health levels, and should take action ASAP."
                 )
                 .tint(.pink)
             }
@@ -51,6 +64,30 @@ struct OnboardingHealthVitalLevelsView: View {
                 onContinue()
             }
         }
+        .safeAreaInset(edge: .top) {
+            Rectangle()
+                .fill(.bar)
+                .ignoresSafeArea()
+                .frame(height: 0)
+        }
+    }
+}
+
+private struct MiniVitalView: View {
+    let kind: VitalModel.Kind
+
+    var body: some View {
+        HStack {
+            Image(systemName: kind.systemImage)
+                .font(.subheadline)
+                .bold()
+
+            Text(kind.name)
+                .font(.headline)
+
+            Spacer()
+        }
+        .cardContainer(fill: .background.secondary)
     }
 }
 

@@ -8,12 +8,12 @@
 import SwiftUI
 
 extension VitalModel {
-    enum Kind: String, Hashable, Codable {
+    enum Kind: String, Hashable, Codable, CaseIterable {
         case sleepQuality
         case activityLevel
         case cardioFitness
         case bodyComposition
-        case mobility
+//        case mobility
         case stressLevels
         case nutrition
         case exerciseEffectiveness
@@ -28,8 +28,8 @@ extension VitalModel {
                 "Cardio Fitness"
             case .bodyComposition:
                 "Body Composition"
-            case .mobility:
-                "Mobility"
+//            case .mobility:
+//                "Mobility"
             case .stressLevels:
                 "Stress Levels"
             case .nutrition:
@@ -49,8 +49,8 @@ extension VitalModel {
                 "heart.fill"
             case .bodyComposition:
                 "gauge.with.needle"
-            case .mobility:
-                "figure.walk"
+//            case .mobility:
+//                "figure.walk"
             case .stressLevels:
                 "bolt.fill"
             case .nutrition:

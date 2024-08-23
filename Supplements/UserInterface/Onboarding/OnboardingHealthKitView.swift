@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import HealthKitUI
+import Charts
 
 struct OnboardingHealthKitView: View {
     let onContinue: () -> Void
@@ -15,6 +16,18 @@ struct OnboardingHealthKitView: View {
     @ObservedObject private var healthManager = HealthManager.shared
 
     @State private var healthPermissionTrigger = false
+
+    @State private var showArea = false
+    @State private var dataPoints = [DataPoint]()
+    @State private var unplottedDataPoints: [DataPoint] = [
+        DataPoint(date: Date(prevDays: 6), value: 80),
+        DataPoint(date: Date(prevDays: 5), value: 61),
+        DataPoint(date: Date(prevDays: 4), value: 67),
+        DataPoint(date: Date(prevDays: 3), value: 60),
+        DataPoint(date: Date(prevDays: 2), value: 63),
+        DataPoint(date: Date(prevDays: 1), value: 76),
+        DataPoint(date: Date(prevDays: 0), value: 77)
+    ]
 
     var body: some View {
         OnboardingCardTemplateView {
@@ -27,83 +40,51 @@ struct OnboardingHealthKitView: View {
                 .font(.largeTitle)
                 .bold()
 
-            Text("Bloom uses your data in the Health App to help give you recommendations. Data is organized into vitals which represent different areas of your overall health.")
+            Group {
+                Text("Bloom uses data in the Health App to give you recommendations on how to improve your health.")
+                Text("Your data is always private and never leaves your device.")
+            }
                 .font(.headline)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 300)
                 .multilineTextAlignment(.center)
+                .padding(.top)
         } bottom: {
-            ScrollView {
-                VStack {
-                    MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .sleepQuality,
-                            subtitle: "Avg 7h45min",
-                            status: "Good",
-                            score: 0.8,
-                            color: .green,
-                            trend: .decreasing
-                        )
+            Chart {
+                ForEach(dataPoints) { dataPoint in
+                    PointMark(
+                        x: .value("", dataPoint.date),
+                        y: .value("", dataPoint.value)
                     )
+                    .foregroundStyle(.pink)
 
-                    MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .stressLevels,
-                            subtitle: "BP: 121/78",
-                            status: "Moderate",
-                            score: 0.8,
-                            color: .yellow,
-                            trend: .decreasing
-                        )
+                    LineMark(
+                        x: .value("", dataPoint.date),
+                        y: .value("", dataPoint.value)
                     )
+                    .foregroundStyle(.pink)
 
-                    MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .cardioFitness,
-                            subtitle: "VO₂ Max: 43 mL/min·kg",
-                            status: "Above Average",
-                            score: 0.8,
-                            color: .green,
-                            trend: .increasing
+                    if showArea {
+                        AreaMark(
+                            x: .value("", dataPoint.date),
+                            y: .value("", dataPoint.value)
                         )
-                    )
-
-                    MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .nutrition,
-                            subtitle: "Slight Energy Deficiency",
-                            status: "Very Healthy",
-                            score: 0.8,
-                            color: .blue,
-                            trend: .increasing
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.pink.opacity(0.3), .clear],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
                         )
-                    )
-
-                    MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .activityLevel,
-                            subtitle: "1796 Cal Basal\n241 Cal Active",
-                            status: "Light",
-                            score: 0.8,
-                            color: .green,
-                            trend: .increasing
-                        )
-                    )
-
-                    MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .bodyComposition,
-                            subtitle: "19% Body Fat",
-                            status: "Healthy",
-                            score: 0.8,
-                            color: .green,
-                            trend: .decreasing
-                        )
-                    )
+                    }
                 }
-                .padding()
             }
+            .chartXScale(domain: Date(prevDays: 6)...Date(prevDays: 0), range: .plotDimension)
+            .chartYScale(domain: 0...100, range: .plotDimension)
+            .padding()
         }
+        .animation(.easeInOut, value: dataPoints)
+        .animation(.easeInOut, value: showArea)
         .shelf {
             VStack {
                 ProminentButton("Continue") {
@@ -115,7 +96,34 @@ struct OnboardingHealthKitView: View {
 //                    .font(.caption)
             }
         }
+        .onAppear {
+            addDataPoint()
+        }
     }
+}
+
+private extension OnboardingHealthKitView {
+
+    func addDataPoint() {
+        guard unplottedDataPoints.isNotEmpty else {
+            showArea = true
+            return
+        }
+
+        let dataPoint = unplottedDataPoints.removeFirst()
+        dataPoints.append(dataPoint)
+
+        Delay(300) {
+            addDataPoint()
+        }
+    }
+}
+
+private struct DataPoint: Hashable, Identifiable {
+    var id: Int { hashValue }
+
+    let date: Date
+    let value: Double
 }
 
 #Preview {

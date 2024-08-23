@@ -13,11 +13,11 @@ struct OnboardingHealthNutritionView: View {
     let onContinue: () -> Void
 
     @ObservedObject private var healthManager = HealthManager.shared
+    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
 
     @State private var isAuthorized = false
     @State private var triggerHealthPermissionSheet = false
     @State private var showCards = false
-    @State private var status: String = ""
     @State private var error: Error?
 
     var body: some View {
@@ -30,16 +30,8 @@ struct OnboardingHealthNutritionView: View {
             ScrollView {
                 VStack {
                     MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .nutrition,
-                            subtitle: status.isNotEmpty ? status : "Unknown",
-                            status: status.isNotEmpty ? "Healthy" : "No Data",
-                            score: 0.9,
-                            color: status.isNotEmpty ? .green : .gray,
-                            trend: status.isNotEmpty ? .increasing : .noTrend
-                        )
+                        vital: vitalModel
                     )
-                    .contentTransition(.symbolEffect)
                     .opacity(showCards ? 1 : 0)
                     .transition(.blurReplace)
                 }
@@ -47,19 +39,12 @@ struct OnboardingHealthNutritionView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut, value: status)
+        .animation(.easeInOut(duration: 1), value: vitalModel)
         .onAppear {
             showCards = true
-            Delay(1500) {
-                status = "Slight Caloric Deficiency"
-            }
         }
         .task {
-            do {
-                let authStatus = try await healthManager.checkAccess(readTypes: healthManager.nutritionTypes)
-
-                isAuthorized = authStatus == .unnecessary
-            } catch { }
+            await checkAuth()
         }
         .shelf {
             if isAuthorized {
@@ -79,10 +64,44 @@ struct OnboardingHealthNutritionView: View {
         ) { result in
             switch result {
             case .success:
-                onContinue()
+                Task { await checkAuth() }
             case .failure(let error):
                 self.error = error
             }
+        }
+    }
+}
+
+private extension OnboardingHealthNutritionView {
+
+    func checkAuth() async {
+        do {
+            let authStatus = try await healthManager.checkAccess(readTypes: healthManager.nutritionTypes)
+
+            isAuthorized = authStatus == .unnecessary
+            await vitalsViewModel.refreshVitals()
+        } catch { }
+    }
+
+    var vitalModel: VitalModel {
+        if let nutritionSummary = vitalsViewModel.nutritionSummary {
+            VitalModel(
+                id: .nutrition,
+                subtitle: nutritionSummary.subtitle,
+                status: nutritionSummary.status.title,
+                score: nutritionSummary.score,
+                color: nutritionSummary.status.color,
+                trend: nutritionSummary.trend
+            )
+        } else {
+            VitalModel(
+                id: .nutrition,
+                subtitle: "",
+                status: "No Data",
+                score: 0,
+                color: .gray,
+                trend: .noTrend
+            )
         }
     }
 }

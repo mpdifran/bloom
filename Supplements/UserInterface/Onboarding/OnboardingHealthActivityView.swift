@@ -14,33 +14,25 @@ struct OnboardingHealthActivityView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
 
+    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
+
     @State private var isAuthorized = false
     @State private var triggerHealthPermissionSheet = false
     @State private var showCards = false
-    @State private var basalEnergy: Double = 0
-    @State private var activeEnergy: Double = 0
     @State private var error: Error?
 
     var body: some View {
         OnboardingCardTemplateView {
             HealthPrivacyCardView(
                 title: "Activity Data",
-                message: "Bloom can use your activity data to help you live a healthier life."
+                message: "Bloom can use your activity data to help ensure you get the recommended level of activity."
             )
         } bottom: {
             ScrollView {
                 VStack {
                     MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .activityLevel,
-                            subtitle: "\(basalEnergy.format()) Cal Basal\n\(activeEnergy.format()) Cal Active",
-                            status: basalEnergy > 0 ? "Light" : "No Data",
-                            score: 0.9,
-                            color: basalEnergy > 0 ? .green : .gray,
-                            trend: basalEnergy > 0 ? .increasing : .noTrend
-                        )
+                        vital: vitalModel
                     )
-                    .contentTransition(.numericText(value: basalEnergy))
                     .opacity(showCards ? 1 : 0)
                     .transition(.blurReplace)
                 }
@@ -48,21 +40,12 @@ struct OnboardingHealthActivityView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut, value: basalEnergy)
-        .animation(.easeInOut, value: activeEnergy)
+        .animation(.easeInOut(duration: 1), value: vitalModel)
         .onAppear {
             showCards = true
-            Delay(1500) {
-                basalEnergy = 1826
-                activeEnergy = 326
-            }
         }
         .task {
-            do {
-                let authStatus = try await healthManager.checkAccess(readTypes: healthManager.activityTypes)
-
-                isAuthorized = authStatus == .unnecessary
-            } catch { }
+            await checkAuth()
         }
         .shelf {
             if isAuthorized {
@@ -82,10 +65,44 @@ struct OnboardingHealthActivityView: View {
         ) { result in
             switch result {
             case .success:
-                onContinue()
+                Task { await checkAuth() }
             case .failure(let error):
                 self.error = error
             }
+        }
+    }
+}
+
+private extension OnboardingHealthActivityView {
+
+    func checkAuth() async {
+        do {
+            let authStatus = try await healthManager.checkAccess(readTypes: healthManager.activityTypes)
+
+            isAuthorized = authStatus == .unnecessary
+            await vitalsViewModel.refreshVitals()
+        } catch { }
+    }
+
+    var vitalModel: VitalModel {
+        if let activitySummary = vitalsViewModel.activityLevelSummary {
+            VitalModel(
+                id: .activityLevel,
+                subtitle: activitySummary.subtitle,
+                status: activitySummary.activityLevel.name,
+                score: activitySummary.score,
+                color: activitySummary.activityLevel.color,
+                trend: activitySummary.trend
+            )
+        } else {
+            VitalModel(
+                id: .activityLevel,
+                subtitle: "",
+                status: "No Data",
+                score: 0,
+                color: .gray,
+                trend: .noTrend
+            )
         }
     }
 }

@@ -36,6 +36,7 @@ struct MonthlyVitalCardCell: View {
                     .fontDesign(.rounded)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                    .contentTransition(.interpolate)
             }
 
             Spacer()
@@ -54,6 +55,7 @@ struct MonthlyVitalCardCell: View {
                 }
                 .foregroundStyle(.primary, .tint)
                 .font(.title)
+                .contentTransition(.symbolEffect)
 
                 Spacer()
 
@@ -62,6 +64,7 @@ struct MonthlyVitalCardCell: View {
                     .bold()
                     .fontDesign(.rounded)
                     .foregroundStyle(.tint)
+                    .contentTransition(.interpolate)
             }
         }
         .tint(vital.color)

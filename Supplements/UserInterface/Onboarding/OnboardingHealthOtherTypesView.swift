@@ -13,33 +13,25 @@ struct OnboardingHealthOtherTypesView: View {
     let onContinue: () -> Void
 
     @ObservedObject private var healthManager = HealthManager.shared
+    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
 
     @State private var isAuthorized = false
     @State private var triggerHealthPermissionSheet = false
     @State private var showCards = false
-    @State private var bodyFat: Double = 0
     @State private var error: Error?
 
     var body: some View {
         OnboardingCardTemplateView {
             HealthPrivacyCardView(
-                title: "Other  Data",
+                title: "Other Data",
                 message: "Bloom can access other health data to keep you healthy."
             )
         } bottom: {
             ScrollView {
                 VStack {
                     MonthlyVitalCardCell(
-                        vital: .init(
-                            id: .bodyComposition,
-                            subtitle: "\(bodyFat.format())% Body Fat",
-                            status: bodyFat > 0 ? "Healthy" : "No Data",
-                            score: 0.9,
-                            color: bodyFat > 0 ? .green : .gray,
-                            trend: bodyFat > 0 ? .decreasing : .noTrend
-                        )
+                        vital: vitalModel
                     )
-                    .contentTransition(.numericText(value: bodyFat))
                     .opacity(showCards ? 1 : 0)
                     .transition(.blurReplace)
                 }
@@ -47,19 +39,12 @@ struct OnboardingHealthOtherTypesView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut, value: bodyFat)
+        .animation(.easeInOut(duration: 1), value: vitalModel)
         .onAppear {
             showCards = true
-            Delay(1500) {
-                bodyFat = 22
-            }
         }
         .task {
-            do {
-                let authStatus = try await healthManager.checkAccess(readTypes: healthManager.otherTypes)
-
-                isAuthorized = authStatus == .unnecessary
-            } catch { }
+            await checkAuth()
         }
         .shelf {
             if isAuthorized {
@@ -79,10 +64,44 @@ struct OnboardingHealthOtherTypesView: View {
         ) { result in
             switch result {
             case .success:
-                onContinue()
+                Task { await checkAuth() }
             case .failure(let error):
                 self.error = error
             }
+        }
+    }
+}
+
+private extension OnboardingHealthOtherTypesView {
+
+    func checkAuth() async {
+        do {
+            let authStatus = try await healthManager.checkAccess(readTypes: healthManager.otherTypes)
+
+            isAuthorized = authStatus == .unnecessary
+            await vitalsViewModel.refreshVitals()
+        } catch { }
+    }
+
+    var vitalModel: VitalModel {
+        if let bodyCompositionSummary = vitalsViewModel.bodyFatPercentageSummary {
+            VitalModel(
+                id: .bodyComposition,
+                subtitle: bodyCompositionSummary.subtitle,
+                status: bodyCompositionSummary.range.name,
+                score: bodyCompositionSummary.score,
+                color: bodyCompositionSummary.range.color,
+                trend: bodyCompositionSummary.trend
+            )
+        } else {
+            VitalModel(
+                id: .bodyComposition,
+                subtitle: "",
+                status: "No Data",
+                score: 0,
+                color: .gray,
+                trend: .noTrend
+            )
         }
     }
 }

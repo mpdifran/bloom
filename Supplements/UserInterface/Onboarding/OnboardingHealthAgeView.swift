@@ -28,7 +28,7 @@ struct OnboardingHealthAgeView: View {
         } bottom: {
             ScrollView {
                 VStack {
-                    LabeledContent("Age") {
+                    LabeledContent("Birthday") {
                         if checkForAgeAndSex {
                             if let age = healthManager.healthStore.age() {
                                 Text("\(age) years old")
