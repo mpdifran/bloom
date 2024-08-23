@@ -34,6 +34,7 @@ final class HealthManager: ObservableObject {
     private let throttler = Throttler(timeInterval: 600)
 
     private var sleepObserverQueryHandle: HKObserverQueryHandle?
+    private var sleepBackgroundDeliveryHandle: HKBackgroundDeliveryHandle?
 
     private init() {
         if let birthday = UserDefaults.group.object(forKey: "HealthManager.birthday") as? Date {
@@ -1415,11 +1416,11 @@ extension HealthManager {
 extension HealthManager {
 
     func observeSleepData() {
-        healthStore.enableBackgroundDelivery(for: HKCategoryType(.sleepAnalysis), frequency: .immediate) { (success, error) in
-            if let error {
-                print(error)
-            }
-        }
+        sleepBackgroundDeliveryHandle = healthStore.enableBackgroundDelivery(
+            objectType: HKCategoryType(.sleepAnalysis),
+            frequency: .immediate
+        )
+
         sleepObserverQueryHandle = healthStore.observeChanges(
             sampleType: HKCategoryType(.sleepAnalysis),
             dateRange: .trailingMonthsFromNowSleepStartDate(2),

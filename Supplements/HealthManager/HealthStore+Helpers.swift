@@ -472,77 +472,6 @@ extension HKHealthStore {
 
 extension HKHealthStore {
 
-    @available(*, deprecated, message: "Use the other method instead")
-    func observeChanges(
-        sampleType: HKSampleType,
-        dateRange: DateRange? = nil,
-        frequency: HKUpdateFrequency = .hourly,
-        backgroundUpdates: Bool = false,
-        performQuery: @escaping () async throws -> Void
-    ) throws {
-        try observeChanges(
-            sampleTypes: [sampleType],
-            dateRange: dateRange,
-            frequency: frequency,
-            backgroundUpdates: backgroundUpdates,
-            performQuery: performQuery
-        )
-    }
-
-    @available(*, deprecated, message: "Use the other method instead")
-    func observeChanges(
-        sampleTypes: [HKSampleType],
-        dateRange: DateRange? = nil,
-        frequency: HKUpdateFrequency = .hourly,
-        backgroundUpdates: Bool = false,
-        performQuery: @escaping () async throws -> Void
-    ) throws {
-        Task {
-            for sampleType in sampleTypes {
-                if backgroundUpdates {
-                    do {
-                        try await enableBackgroundDelivery(for: sampleType, frequency: frequency)
-                    } catch {
-                        throw error
-                    }
-                }
-
-                let predicate: NSPredicate?
-                if let dateRange {
-                    predicate = HKQuery.predicateForSamples(
-                        withStart: dateRange.start,
-                        end: dateRange.end,
-                        options: .strictStartDate
-                    )
-                } else {
-                    predicate = nil
-                }
-
-                let observerQuery = HKObserverQuery(
-                    sampleType: sampleType,
-                    predicate: predicate
-                ) { (query, completionHandler, error) in
-                    if let error {
-                        print(error)
-                        completionHandler()
-                        return
-                    }
-
-                    Task {
-                        do {
-                            try await performQuery()
-                        } catch {
-                            print(error)
-                        }
-                        completionHandler()
-                    }
-                }
-
-                execute(observerQuery)
-            }
-        }
-    }
-
     func observeChanges(
         sampleType: HKSampleType,
         dateRange: DateRange,
@@ -597,6 +526,21 @@ extension HKHealthStore {
         }
 
         return HKObserverQueryHandle(queries: queries, healthStore: self)
+    }
+}
+
+extension HKHealthStore {
+
+    func enableBackgroundDelivery(
+        objectType: HKObjectType,
+        frequency: HKUpdateFrequency = .immediate
+    ) -> HKBackgroundDeliveryHandle {
+        enableBackgroundDelivery(for: objectType, frequency: frequency) { success, error in
+            if let error {
+                print(error)
+            }
+        }
+        return HKBackgroundDeliveryHandle(objectType: objectType, healthStore: self)
     }
 }
 
@@ -1100,6 +1044,80 @@ extension HKHealthStore {
             }
 
             execute(query)
+        }
+    }
+}
+
+extension HKHealthStore {
+
+    @available(*, deprecated, message: "Use the other method instead")
+    func observeChanges(
+        sampleType: HKSampleType,
+        dateRange: DateRange? = nil,
+        frequency: HKUpdateFrequency = .hourly,
+        backgroundUpdates: Bool = false,
+        performQuery: @escaping () async throws -> Void
+    ) throws {
+        try observeChanges(
+            sampleTypes: [sampleType],
+            dateRange: dateRange,
+            frequency: frequency,
+            backgroundUpdates: backgroundUpdates,
+            performQuery: performQuery
+        )
+    }
+
+    @available(*, deprecated, message: "Use the other method instead")
+    func observeChanges(
+        sampleTypes: [HKSampleType],
+        dateRange: DateRange? = nil,
+        frequency: HKUpdateFrequency = .hourly,
+        backgroundUpdates: Bool = false,
+        performQuery: @escaping () async throws -> Void
+    ) throws {
+        Task {
+            for sampleType in sampleTypes {
+                if backgroundUpdates {
+                    do {
+                        try await enableBackgroundDelivery(for: sampleType, frequency: frequency)
+                    } catch {
+                        throw error
+                    }
+                }
+
+                let predicate: NSPredicate?
+                if let dateRange {
+                    predicate = HKQuery.predicateForSamples(
+                        withStart: dateRange.start,
+                        end: dateRange.end,
+                        options: .strictStartDate
+                    )
+                } else {
+                    predicate = nil
+                }
+
+                let observerQuery = HKObserverQuery(
+                    sampleType: sampleType,
+                    predicate: predicate
+                ) { (query, completionHandler, error) in
+                    if let error {
+                        print(error)
+                        completionHandler()
+                        return
+                    }
+
+                    Task {
+                        do {
+                            try await performQuery()
+                        } catch {
+                            print(error)
+                        }
+                        completionHandler()
+                    }
+                }
+
+                execute(observerQuery)
+            }
         }
     }
 }

@@ -99,7 +99,7 @@ struct GoalDailyUpdateCell: View {
             }
         }
         .reload(after: 60)
-        .animation(.easeInOut, value: currentValue)
+        .animation(.bouncy, value: currentValue)
         .tint(goal.metric.measurement.color)
         .cardContainer(fill: .background.secondary)
         .task {
