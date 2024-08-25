@@ -101,12 +101,7 @@ private extension OnboardingHealthHeartView {
             )
         } else {
             VitalModel(
-                id: .cardioFitness,
-                subtitle: "",
-                status: "No Data",
-                score: 0,
-                color: .gray,
-                trend: .noTrend
+                id: .cardioFitness
             )
         }
     }
@@ -123,12 +118,7 @@ private extension OnboardingHealthHeartView {
             )
         } else {
             VitalModel(
-                id: .stressLevels,
-                subtitle: "",
-                status: "No Data",
-                score: 0,
-                color: .gray,
-                trend: .noTrend
+                id: .stressLevels
             )
         }
     }

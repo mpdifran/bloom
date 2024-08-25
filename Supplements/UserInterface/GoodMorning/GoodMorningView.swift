@@ -8,150 +8,62 @@
 import SwiftUI
 import AppUI
 import AppFoundations
+import EventKit
+import EventKitUI
 
+@MainActor
 struct GoodMorningView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @State private var selectedSymptoms = Set<String>()
-    @State private var selectedUnusualActivities = Set<String>()
-    @State private var selectedBedtimeActivities = Set<String>()
-
-    private let symptoms = [
-        "Well Rested",
-        "Energized",
-        "Groggy",
-        "Tired",
-        "Headache",
-        "Confused"
-    ]
-
-    private let unusualActivities = [
-        "Drank Alcohol",
-        "Ate after 10pm",
-        "Smoked Weed"
-    ]
-
-    private let bedtimeActivities = [
-        "Stretched",
-        "Took Melatonin",
-        "Meditated"
-    ]
+    @State private var events = [EKEvent]()
+    @State private var selectedEvent: EKEvent?
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
 
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("Good Morning \(ProfileViewModel.shared.name)!")
-                        .font(.title)
-                        .fontDesign(.rounded)
-                        .bold()
-                        .padding(.top)
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "cloud.sun.fill")
-                            .font(.largeTitle)
-                            .foregroundStyle(.gray.lighter(by: 0.5), .yellow)
-
-                        VStack(alignment: .leading) {
-                            Text("\(DateFormatter.justDateLong.string(from: .now))")
-                                .font(.title3)
-                                .bold()
-                                .fontDesign(.rounded)
-
-                            Text("Some clouds in the morning")
-
-                            Text("H: 25º L: 16º")
-                                .font(.subheadline)
-                                .bold()
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
+        NavigationStack {
+            List {
+                calendarSection
             }
-
-            Section {
-                VStack(alignment: .leading) {
-                    Text("How are you feeling?")
-                        .font(.title2)
-                        .fontDesign(.rounded)
-                        .bold()
-
-                    LazyVGrid(columns: [.init(.adaptive(minimum: 100))], alignment: .center) {
-                        ForEach(symptoms, id: \.self) { symptom in
-                            SymptomCell(symptom: symptom, isSelected: selectedSymptoms.contains(symptom))
-                                .onTapGesture {
-                                    if !selectedSymptoms.contains(symptom) {
-                                        feedbackGenerator.impactOccurred()
-                                    }
-                                    selectedSymptoms.toggleMembership(symptom)
-                                }
-                        }
-                    }
-                }
+            .navigationTitle("Good Morning")
+            .listStyle(.plain)
+            .shelf {
+                Button(action: {
+                    dismiss()
+                }, label: {
+                    Text("Done")
+                        .horizontallyCentered()
+                })
+                .buttonStyle(.tertiary)
             }
-            .tint(.blue)
-
-            Section {
-                VStack(alignment: .leading) {
-                    Text("Did you do anything unusual last night?")
-                        .font(.title2)
-                        .fontDesign(.rounded)
-                        .bold()
-
-                    LazyVGrid(columns: [.init(.adaptive(minimum: 100))], alignment: .center) {
-                        ForEach(unusualActivities, id: \.self) { activity in
-                            SymptomCell(symptom: activity, isSelected: selectedUnusualActivities.contains(activity))
-                                .onTapGesture {
-                                    if !selectedUnusualActivities.contains(activity) {
-                                        feedbackGenerator.impactOccurred()
-                                    }
-                                    selectedUnusualActivities.toggleMembership(activity)
-                                }
-                        }
-                    }
-                }
-            }
-            .tint(.indigo)
-
-            Section {
-                VStack(alignment: .leading) {
-                    Text("Did you do these before bed?")
-                        .font(.title2)
-                        .fontDesign(.rounded)
-                        .bold()
-
-                    LazyVGrid(columns: [.init(.adaptive(minimum: 100))], alignment: .center) {
-                        ForEach(bedtimeActivities, id: \.self) { activity in
-                            SymptomCell(symptom: activity, isSelected: selectedBedtimeActivities.contains(activity))
-                                .onTapGesture {
-                                    if !selectedBedtimeActivities.contains(activity) {
-                                        feedbackGenerator.impactOccurred()
-                                    }
-                                    selectedBedtimeActivities.toggleMembership(activity)
-                                }
-                        }
-                    }
-                }
-            }
-            .tint(.pink)
         }
-        .listStyle(.plain)
-        .shelf {
-            Button(action: {
-                dismiss()
-            }, label: {
-                Label("Save", systemImage: "sun.max.fill")
-                    .horizontallyCentered()
-            })
-            .buttonStyle(.tertiary)
+        .sheet(item: $selectedEvent) { event in
+            EKEventView(event: event)
         }
         .presentationCompactAdaptation(.fullScreenCover)
         .tint(.blue)
         .onAppear {
             feedbackGenerator.prepare()
+        }
+        .task {
+            await CalendarManager.shared.promptForPermission()
+            self.events = await CalendarManager.shared.eventsToday()
+        }
+    }
+}
+
+private extension GoodMorningView {
+
+    var calendarSection: some View {
+        Section("Today") {
+            ForEach(events) { event in
+                EventCell(event: event)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedEvent = event
+                    }
+            }
         }
     }
 }

@@ -116,6 +116,11 @@
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
 		FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1172C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift */; };
+		FF88F11B2C7B75C20093D1B4 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F11A2C7B75C20093D1B4 /* CalendarManager.swift */; };
+		FF88F11D2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F11C2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift */; };
+		FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F11E2C7B817D0093D1B4 /* EKEvent+Helpers.swift */; };
+		FF88F1212C7B81AF0093D1B4 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1202C7B81AF0093D1B4 /* EventCell.swift */; };
+		FF88F1242C7BBDF90093D1B4 /* EKEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1232C7BBDF90093D1B4 /* EKEventView.swift */; };
 		FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B232BFD364B00BA2128 /* ProfileView.swift */; };
 		FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */; };
@@ -504,6 +509,11 @@
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryHandle.swift; sourceTree = "<group>"; };
 		FF88F1172C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKBackgroundDeliveryHandle.swift; sourceTree = "<group>"; };
+		FF88F11A2C7B75C20093D1B4 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		FF88F11C2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Helpers.swift"; sourceTree = "<group>"; };
+		FF88F11E2C7B817D0093D1B4 /* EKEvent+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EKEvent+Helpers.swift"; sourceTree = "<group>"; };
+		FF88F1202C7B81AF0093D1B4 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		FF88F1232C7BBDF90093D1B4 /* EKEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EKEventView.swift; sourceTree = "<group>"; };
 		FF8B8B232BFD364B00BA2128 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		FF8B8B272BFD36BF00BA2128 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
@@ -1074,6 +1084,24 @@
 			path = SleepCoach;
 			sourceTree = "<group>";
 		};
+		FF88F1192C7B75AE0093D1B4 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				FF88F11A2C7B75C20093D1B4 /* CalendarManager.swift */,
+				FF88F11C2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift */,
+				FF88F11E2C7B817D0093D1B4 /* EKEvent+Helpers.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		FF88F1222C7BBDE80093D1B4 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				FF88F1232C7BBDF90093D1B4 /* EKEventView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
 		FF8B8B222BFD363C00BA2128 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -1238,6 +1266,7 @@
 				FF1705182C109FF3000D4B3D /* Programs */,
 				FFC77AE42C57FD0A003E5F85 /* Correlations */,
 				FF8B8B332BFFE4CD00BA2128 /* Location */,
+				FF88F1192C7B75AE0093D1B4 /* Calendar */,
 				FF6AEC972BF17D0D00C34621 /* Notifications */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
 				FFC77AF82C5A7599003E5F85 /* SwiftData */,
@@ -1344,6 +1373,7 @@
 				FF049C012C24B31C004ACE9C /* Directives */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
 				FFB691092C19FA6800BEC0D4 /* GoodMorning */,
+				FF88F1222C7BBDE80093D1B4 /* Calendar */,
 				FFF61AF42BED554700926042 /* Chat */,
 				FF8B8B402C002BD500BA2128 /* Pins */,
 				FFF61B122BEE807C00926042 /* Supplements */,
@@ -1372,6 +1402,7 @@
 			isa = PBXGroup;
 			children = (
 				FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */,
+				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
 				FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */,
 			);
 			path = GoodMorning;
@@ -1987,6 +2018,7 @@
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
 				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
+				FF88F11D2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift in Sources */,
 				FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */,
 				FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
@@ -2002,6 +2034,7 @@
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
 				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
+				FF88F1212C7B81AF0093D1B4 /* EventCell.swift in Sources */,
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
@@ -2016,6 +2049,7 @@
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */,
 				FF13599E2C28A54900FB49A6 /* TimeComponent+Helpers.swift in Sources */,
+				FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */,
 				FFC77AFA2C5A75A9003E5F85 /* PreviewModelContainer.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */,
@@ -2139,6 +2173,7 @@
 				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
 				FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */,
+				FF88F1242C7BBDF90093D1B4 /* EKEventView.swift in Sources */,
 				FFC77AEF2C581529003E5F85 /* CorrelationChartCell.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
@@ -2147,6 +2182,7 @@
 				FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */,
 				FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */,
 				FF7890522C3473B700F9C1A5 /* SleepChatMessage.swift in Sources */,
+				FF88F11B2C7B75C20093D1B4 /* CalendarManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,6 +24,23 @@ extension DateRange {
     }
 }
 
+// MARK: Today
+
+extension DateRange {
+    static func today() -> DateRange {
+        let startDate = Calendar.current.startOfDay(for: .now)
+
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+        guard let endOfDay = Calendar.current.date(byAdding: components, to: startDate) else {
+            return DateRange(startDate, .now)
+        }
+
+        return DateRange(startDate, endOfDay)
+    }
+}
+
 // MARK: Start Of Week / Day
 
 extension DateRange {

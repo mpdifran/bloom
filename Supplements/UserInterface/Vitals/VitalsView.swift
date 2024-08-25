@@ -13,13 +13,22 @@ struct VitalsView: View {
     @ObservedObject private var viewModel = VitalsViewModel.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
 
+    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+
     @State private var path = NavigationPath()
+    @State private var presentedFullScreen: AnyView?
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    Text("Weekly Goals")
+                    TimelineView(.everyMinute) { context in
+                        if Calendar.current.isMorning(date: .now) || danieleMode {
+                            goodMorningCell
+                        }
+                    }
+
+                    Text("Today's Goals")
                         .bold()
                         .padding(.horizontal)
                         .zStackAlignment(.leading)
@@ -46,7 +55,7 @@ struct VitalsView: View {
                 .horizontallyCentered()
                 .padding()
             }
-            .navigationTitle("Vitals")
+            .navigationTitle("For You")
             .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
                 switch vitalKind {
                 case .sleepQuality: SleepDetailsView()
@@ -59,19 +68,52 @@ struct VitalsView: View {
                 default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
                 }
             }
+            .fullScreenCover($presentedFullScreen)
             .animation(.default, value: viewModel.hrvStatus)
             .animation(.default, value: viewModel.sleepStatus)
             .animation(.default, value: viewModel.rhrStatus)
             .animation(.default, value: viewModel.vitals)
         }
         .tabItem {
-            Label("Vitals", systemImage: "bolt.heart")
+            Label("For You", systemImage: "bolt.heart")
         }
         .onAppear {
             Task {
                 await goalsViewModel.checkForUpdateGoals()
             }
         }
+    }
+}
+
+private extension VitalsView {
+
+    @ViewBuilder
+    var goodMorningCell: some View {
+        HStack {
+            Image(systemName: "sunrise")
+                .foregroundStyle(.orange)
+                .font(.title2)
+
+            VStack(alignment: .leading) {
+                Text("Good Morning Summary")
+                    .font(.title3)
+                    .bold()
+                Text("Everything you need to start your day.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.forward")
+                .foregroundStyle(.secondary)
+        }
+        .cardContainer(fill: .background.secondary)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            presentedFullScreen = GoodMorningView().asAny
+        }
+        .padding(.bottom)
     }
 }
 

@@ -18,6 +18,15 @@ public extension DateFormatter {
         return dateFormatter
     }()
 
+    static var justTimeShort: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
+
+        return dateFormatter
+    }()
+
     static var justDateMedium: DateFormatter = {
         let dateFormatter = DateFormatter()
 
@@ -76,6 +85,15 @@ public extension DateFormatter {
         let formatter = DateComponentsFormatter()
 
         formatter.unitsStyle = .short
+        formatter.allowedUnits = [.hour, .minute]
+
+        return formatter
+    }()
+
+    static var timeIntervalHourMinuteFull: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+
+        formatter.unitsStyle = .full
         formatter.allowedUnits = [.hour, .minute]
 
         return formatter

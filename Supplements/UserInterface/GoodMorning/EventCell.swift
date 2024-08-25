@@ -1,0 +1,75 @@
+//
+//  EventCell.swift
+//  Supplements
+//
+//  Created by Mark DiFranco on 2024-08-25.
+//
+
+import SwiftUI
+import EventKit
+
+struct EventCell: View {
+    let event: EKEvent
+
+    var body: some View {
+        TimelineView(.everyMinute) { context in
+            HStack {
+                Capsule()
+                    .fill(event.hasCompleted ? .gray : Color(event.calendar.cgColor))
+                    .frame(width: 4)
+                    .padding(.vertical, 6)
+
+                VStack(alignment: .leading) {
+                    Text(event.title)
+                        .font(.headline)
+                        .bold()
+
+                    if let location = event.structuredLocation?.title {
+                        HStack(spacing: 2) {
+                            Image(systemName: "location")
+                                .font(.caption)
+
+                            Text(location)
+                        }
+                        .foregroundStyle(.secondary)
+                    }
+
+                    if event.isStartingSoon, let durationText = DateFormatter.timeIntervalHourMinuteFull.string(from: event.startDate.timeIntervalSinceNow) {
+
+                        Text("Starting in \(durationText)")
+                            .foregroundStyle(.secondary)
+                    }
+                    if event.hasStarted, let durationText = DateFormatter.timeIntervalHourMinuteFull.string(from: event.endDate.timeIntervalSinceNow) {
+                        Text("Ending in \(durationText)")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .font(.subheadline)
+
+                Spacer()
+
+                VStack(alignment: .trailing) {
+                    Text("\(event.startDate, formatter: DateFormatter.justTimeShort)")
+
+                    Text("\(DateFormatter.timeIntervalHourMinuteShort.string(from: event.duration) ?? "")")
+                        .foregroundStyle(.secondary)
+                }
+                .font(.subheadline)
+            }
+            .opacity(event.hasCompleted ? 0.4 : 1)
+            .animation(.default, value: event.hasCompleted)
+            .animation(.default, value: event.hasStarted)
+            .animation(.default, value: event.isStartingSoon)
+        }
+    }
+}
+
+#Preview {
+    List {
+        Section("Today") {
+            EventCell(event: .preview)
+            EventCell(event: .futurePreview)
+        }
+    }
+    .listStyle(.plain)
+}

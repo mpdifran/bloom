@@ -13,6 +13,8 @@ struct PreferencesView: View {
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
+    @State private var presentedFullScreenView: AnyView?
+
     var body: some View {
         List {
             appInfoSection
@@ -20,6 +22,7 @@ struct PreferencesView: View {
             healthPermissionsSection
             developerSection
         }
+        .fullScreenCover($presentedFullScreenView)
         .safeAreaInset(edge: .top) {
             Rectangle()
                 .fill(.thickMaterial)
