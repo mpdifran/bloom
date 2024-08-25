@@ -24,6 +24,8 @@ enum Tab {
 class TabController: NSObject, ObservableObject {
     @Published var activeTab = Tab.vitals
 
+    @Published var showMorningReport = false
+
     override init() {
         super.init()
 
@@ -51,7 +53,8 @@ extension TabController: UNUserNotificationCenterDelegate {
             }
         case .CategoryID.goodMorning:
             await MainActor.run {
-                select(.today)
+                select(.vitals)
+                showMorningReport = true
             }
         default:
             break

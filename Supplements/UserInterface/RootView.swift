@@ -26,8 +26,6 @@ struct RootView: View {
                 TabView(selection: $tabController.activeTab) {
                     VitalsView()
                         .tag(Tab.vitals)
-//                    CorrelationsView()
-//                        .tag(Tab.correlations)
                     GoalsView()
                         .tag(Tab.goals)
                     ChatView()

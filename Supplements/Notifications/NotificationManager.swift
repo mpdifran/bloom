@@ -55,8 +55,8 @@ extension NotificationManager {
 
     func sendGoodMorningNotification(delay: TimeInterval? = nil) async {
         let content = UNMutableNotificationContent()
-        content.title = "Good Morning!"
-        content.subtitle = "Check out how your sleep was last night."
+        content.title = "Your Morning Report is Ready!"
+        content.subtitle = "Check out your personalized report designed just for you."
         content.sound = .default
         content.categoryIdentifier = .CategoryID.goodMorning
 

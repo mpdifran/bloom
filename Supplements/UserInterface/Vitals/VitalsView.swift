@@ -13,6 +13,8 @@ struct VitalsView: View {
     @ObservedObject private var viewModel = VitalsViewModel.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
 
+    @EnvironmentObject private var tabContorller: TabController
+
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
     @State private var path = NavigationPath()
@@ -69,6 +71,9 @@ struct VitalsView: View {
                 }
             }
             .fullScreenCover($presentedFullScreen)
+            .fullScreenCover(isPresented: $tabContorller.showMorningReport) {
+                GoodMorningView()
+            }
             .animation(.default, value: viewModel.hrvStatus)
             .animation(.default, value: viewModel.sleepStatus)
             .animation(.default, value: viewModel.rhrStatus)
