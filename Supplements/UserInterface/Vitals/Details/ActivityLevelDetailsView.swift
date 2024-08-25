@@ -103,9 +103,9 @@ private extension ActivityLevelDetailsView {
     }
 
     var chartMax: Double {
-        guard let max = viewModel.activityLevelSummary?.energyRatioSamples.max(keyPath: \.quantity) else { return 2 }
+        guard let maxValue = viewModel.activityLevelSummary?.energyRatioSamples.max(keyPath: \.quantity) else { return 2 }
 
-        return max * 1.1
+        return max(maxValue * 1.1, 2)
     }
 
     func color(for ratio: Double) -> Color {

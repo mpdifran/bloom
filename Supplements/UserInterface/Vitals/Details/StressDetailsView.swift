@@ -134,7 +134,7 @@ private extension StressDetailsView {
     var chartMax: Double {
         let goal = HealthManager.shared.goalRestingHeartRateForUser()
 
-        return min(maxRestingHeartRate ?? 100, goal.1)
+        return max(maxRestingHeartRate ?? 100, goal.1)
     }
 
     var minRestingHeartRate: Double? {
