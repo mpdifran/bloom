@@ -242,6 +242,41 @@ extension SleepAnalysis {
         default: .excel
         }
     }
+
+    var sleepSummaryDescription: String {
+        var results = [String]()
+
+        if let durationString = DateFormatter.timeIntervalHourMinuteFull.string(from: DateComponents(minute: Int(overallMinutes))) {
+            results.append("You slept for \(durationString).")
+        }
+
+        if deepSleepScore < coreSleepScore && deepSleepScore < remSleepScore && deepSleepScore < awakeSleepScore {
+            results.append("You didn't get enough Deep sleep compared to REM and Core sleep.")
+        } else if coreSleepScore < deepSleepScore && coreSleepScore < remSleepScore && coreSleepScore < awakeSleepScore {
+            results.append("You didn't get enough Core sleep compared to REM and Deep sleep.")
+        } else if remSleepScore < deepSleepScore && remSleepScore < coreSleepScore && remSleepScore < awakeSleepScore {
+            results.append("You didn't get enough REM sleep compared to Core and Deep sleep.")
+        } else if awakeSleepScore < deepSleepScore && awakeSleepScore < coreSleepScore && awakeSleepScore < remSleepScore, let durationString = DateFormatter.timeIntervalHourMinuteFull.string(from: DateComponents(minute: Int(awakeSleepMinutes))) {
+            results.append("You were awake for \(durationString).")
+        }
+        if heartRateScore < 7 {
+            if let averageRestingHeartRate {
+                results.append("Your heart rate was elevated to \(averageHeartRate.format()) bpm, when it should be \((averageRestingHeartRate * .maxRestingHeartRatePercent).format()) bpm or below.")
+            } else {
+                results.append("Your heart rate was elevated to \(averageHeartRate.format()) bpm.")
+            }
+        }
+
+        if overallScoreDouble < 4 {
+            results.append("Your sleep score indicates you should take it slow and make time for recovery.")
+        } else if overallScoreDouble < 8 {
+            results.append("Your sleep score indicates you should take it easy today.")
+        } else {
+            results.append("Your sleep score indicates you're ready to tackle the day!")
+        }
+
+        return results.joined(separator: " ")
+    }
 }
 
 extension SleepAnalysis {

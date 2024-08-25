@@ -38,10 +38,12 @@ struct EventCell: View {
 
                         Text("Starting in \(durationText)")
                             .foregroundStyle(.secondary)
+                            .contentTransition(.numericText(countsDown: true))
                     }
                     if event.hasStarted, let durationText = DateFormatter.timeIntervalHourMinuteFull.string(from: event.endDate.timeIntervalSinceNow) {
                         Text("Ending in \(durationText)")
                             .foregroundStyle(.secondary)
+                            .contentTransition(.numericText(countsDown: true))
                     }
                 }
                 .font(.subheadline)

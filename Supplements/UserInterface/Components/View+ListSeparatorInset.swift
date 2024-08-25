@@ -14,6 +14,6 @@ extension View {
     }
 
     func removeListSeparator() -> some View {
-        alignmentGuide(.listRowSeparatorLeading) { viewDimensions in viewDimensions.width }
+        alignmentGuide(.listRowSeparatorLeading) { viewDimensions in viewDimensions.width * 2 }
     }
 }

@@ -95,7 +95,7 @@ private extension VitalsView {
                 .font(.title2)
 
             VStack(alignment: .leading) {
-                Text("Good Morning Summary")
+                Text("Morning Report")
                     .font(.title3)
                     .bold()
                 Text("Everything you need to start your day.")
