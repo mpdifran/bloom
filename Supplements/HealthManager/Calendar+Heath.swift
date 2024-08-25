@@ -71,6 +71,10 @@ extension Calendar {
         return self.isDate(date1, inSameDayAs: nextDay)
     }
 
+    func isDateInYesterdayOrToday(_ date: Date) -> Bool {
+        isDateInYesterday(date) || isDateInToday(date)
+    }
+
     func startOfWeek(for date: Date) -> Date? {
         let components = self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
         return self.date(from: components)

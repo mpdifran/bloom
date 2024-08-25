@@ -140,7 +140,7 @@ private extension ActivityLevelDetailsView {
 
     var ratioDistributionView: some View {
         VStack {
-            VitalDetailChartTitleView(title: "Daily Activity Level Distribution", value: "")
+            VitalDetailChartTitleView(title: "Daily Energy Ratio Distribution", value: "")
             ActivityLevelDistributionView(ratioDistribution: viewModel.activityLevelSummary?.activityLevelRatioDistribution ?? [:])
         }
         .cardContainer(fill: .background.secondary)
