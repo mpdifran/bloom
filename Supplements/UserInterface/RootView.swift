@@ -28,6 +28,8 @@ struct RootView: View {
                         .tag(Tab.vitals)
                     GoalsView()
                         .tag(Tab.goals)
+                    ActionsView()
+                        .tag(Tab.actions)
                     ChatView()
                         .tag(Tab.chat)
                     PreferencesView()

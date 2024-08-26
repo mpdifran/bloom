@@ -1,0 +1,55 @@
+//
+//  ActionsView.swift
+//  Supplements
+//
+//  Created by Mark DiFranco on 2024-08-26.
+//
+
+import SwiftUI
+
+struct ActionsView: View {
+
+    @State private var showAllDataView = false
+    @State private var presentedCardSheet: AnyView?
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    Button(action: {
+                        presentedCardSheet = BowelMovementActionCardView().asAny
+                    }, label: {
+                        Label("Log Bowel Movement", systemImage: "toilet.fill")
+                            .horizontallyCentered()
+                    })
+                    .buttonStyle(.tertiary)
+                    .tint(.brown)
+                }
+                .padding()
+            }
+            .navigationTitle("Actions")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        showAllDataView = true
+                    }, label: {
+                        Text("All Data")
+                    })
+                }
+            }
+            .navigationDestination(isPresented: $showAllDataView) {
+                AllActionDataListView()
+            }
+        }
+        .sheet($presentedCardSheet)
+        .tabItem {
+            Label("Actions", systemImage: "arrow.up.forward.app")
+        }
+    }
+}
+
+#Preview {
+    TabView {
+        ActionsView()
+    }
+}

@@ -39,6 +39,7 @@ struct SupplementsApp: App {
                     
                 }
         }
+        .modelContainer(for: BowelMovement.self)
         .backgroundTask(.appRefresh("proactive-tip")) {
             if danieleMode {
                 await ProactiveTipper.shared.sendProactiveTip()

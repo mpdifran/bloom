@@ -15,7 +15,7 @@ extension HKCategorySample {
             return "Unknown Sleep Category"
         }
 
-        return "\(category.name) : \(timeInterval) seconds\nStart:\t\(DateFormatter.standardMedium.string(from: startDate))\nEnd:\t\(DateFormatter.standardMedium.string(from: endDate))\n"
+        return "\(category.name) : \(timeInterval) seconds\nStart:\t\(DateFormatter.dateTimeMedium.string(from: startDate))\nEnd:\t\(DateFormatter.dateTimeMedium.string(from: endDate))\n"
     }
 
     var sleepCategory: HKCategoryValueSleepAnalysis? {

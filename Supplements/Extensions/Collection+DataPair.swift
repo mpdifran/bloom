@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension Collection where Element == DataPair {
+extension Collection where Element: IdentifiableByDate {
 
-    func collated(by component: Calendar.Component) -> [Int : [DataPair]] {
-        var collated = [Int : [DataPair]]()
+    func collated(by component: Calendar.Component) -> [Int : [Element]] {
+        var collated = [Int : [Element]]()
         for pair in self {
             let value = Calendar.current.component(component, from: pair.date)
             collated[value, default: []].append(pair)

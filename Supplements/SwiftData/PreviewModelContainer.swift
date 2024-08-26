@@ -14,7 +14,7 @@ extension View {
     func previewModelContainer(for forTypes: [any PersistentModel.Type]) -> some View {
         Group {
             if let container = container(for: forTypes) {
-                modelContainer(container)
+                self.modelContainer(container)
             } else {
                 self
             }

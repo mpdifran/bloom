@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DataPair: Hashable, Identifiable {
+struct DataPair: Hashable, Identifiable, IdentifiableByDate {
     var id: Int { hashValue }
 
     let date: Date

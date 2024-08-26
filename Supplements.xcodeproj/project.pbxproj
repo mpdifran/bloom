@@ -121,6 +121,14 @@
 		FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F11E2C7B817D0093D1B4 /* EKEvent+Helpers.swift */; };
 		FF88F1212C7B81AF0093D1B4 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1202C7B81AF0093D1B4 /* EventCell.swift */; };
 		FF88F1242C7BBDF90093D1B4 /* EKEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1232C7BBDF90093D1B4 /* EKEventView.swift */; };
+		FF88F1272C7CFEA60093D1B4 /* BowelMovement.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1262C7CFEA60093D1B4 /* BowelMovement.swift */; };
+		FF88F12B2C7D02D80093D1B4 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F12A2C7D02D80093D1B4 /* ActionsView.swift */; };
+		FF88F12E2C7D03E10093D1B4 /* BowelMovementActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F12D2C7D03E10093D1B4 /* BowelMovementActionCardView.swift */; };
+		FF88F1302C7D0C420093D1B4 /* AllActionDataListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F12F2C7D0C420093D1B4 /* AllActionDataListView.swift */; };
+		FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1322C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift */; };
+		FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1342C7D0D980093D1B4 /* BowelMovementAllDataView.swift */; };
+		FF88F1382C7D0FE30093D1B4 /* IdentifiableByDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1372C7D0FE30093D1B4 /* IdentifiableByDate.swift */; };
+		FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */; };
 		FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B232BFD364B00BA2128 /* ProfileView.swift */; };
 		FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */; };
@@ -514,6 +522,14 @@
 		FF88F11E2C7B817D0093D1B4 /* EKEvent+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EKEvent+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1202C7B81AF0093D1B4 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		FF88F1232C7BBDF90093D1B4 /* EKEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EKEventView.swift; sourceTree = "<group>"; };
+		FF88F1262C7CFEA60093D1B4 /* BowelMovement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovement.swift; sourceTree = "<group>"; };
+		FF88F12A2C7D02D80093D1B4 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
+		FF88F12D2C7D03E10093D1B4 /* BowelMovementActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovementActionCardView.swift; sourceTree = "<group>"; };
+		FF88F12F2C7D0C420093D1B4 /* AllActionDataListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllActionDataListView.swift; sourceTree = "<group>"; };
+		FF88F1322C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovementAllDataCell.swift; sourceTree = "<group>"; };
+		FF88F1342C7D0D980093D1B4 /* BowelMovementAllDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovementAllDataView.swift; sourceTree = "<group>"; };
+		FF88F1372C7D0FE30093D1B4 /* IdentifiableByDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableByDate.swift; sourceTree = "<group>"; };
+		FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Chart+DateScale.swift"; sourceTree = "<group>"; };
 		FF8B8B232BFD364B00BA2128 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		FF8B8B272BFD36BF00BA2128 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
@@ -1032,6 +1048,7 @@
 				FFF61B022BED87B400926042 /* Delay.swift */,
 				FFF61B082BED9CA900926042 /* Color+Random.swift */,
 				FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */,
+				FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */,
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
 				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
 				FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */,
@@ -1100,6 +1117,50 @@
 				FF88F1232C7BBDF90093D1B4 /* EKEventView.swift */,
 			);
 			path = Calendar;
+			sourceTree = "<group>";
+		};
+		FF88F1252C7CFE9C0093D1B4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF88F1262C7CFEA60093D1B4 /* BowelMovement.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FF88F1282C7D027E0093D1B4 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				FF88F12A2C7D02D80093D1B4 /* ActionsView.swift */,
+				FF88F12C2C7D03C10093D1B4 /* ActionCards */,
+				FF88F12F2C7D0C420093D1B4 /* AllActionDataListView.swift */,
+				FF88F1312C7D0CCE0093D1B4 /* AllDataViews */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		FF88F12C2C7D03C10093D1B4 /* ActionCards */ = {
+			isa = PBXGroup;
+			children = (
+				FF88F12D2C7D03E10093D1B4 /* BowelMovementActionCardView.swift */,
+			);
+			path = ActionCards;
+			sourceTree = "<group>";
+		};
+		FF88F1312C7D0CCE0093D1B4 /* AllDataViews */ = {
+			isa = PBXGroup;
+			children = (
+				FF88F1322C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift */,
+				FF88F1342C7D0D980093D1B4 /* BowelMovementAllDataView.swift */,
+			);
+			path = AllDataViews;
+			sourceTree = "<group>";
+		};
+		FF88F1362C7D0FCB0093D1B4 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				FF88F1372C7D0FE30093D1B4 /* IdentifiableByDate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		FF8B8B222BFD363C00BA2128 /* Profile */ = {
@@ -1273,6 +1334,7 @@
 				FFB444562BEC40FD00486AD7 /* HealthManager */,
 				FFB444592BEC4C3D00486AD7 /* Model */,
 				FFF61B732BF15DBE00926042 /* Utilities */,
+				FF88F1362C7D0FCB0093D1B4 /* Protocols */,
 				FF648BE12BDEA4F700963820 /* Extensions */,
 				FFACBAE02BAC778A006AAD0B /* Assets.xcassets */,
 				FFACBAE22BAC778A006AAD0B /* Preview Content */,
@@ -1370,6 +1432,7 @@
 				FFA134EE2C3F041500FF1829 /* Today */,
 				FFC77AE92C580F20003E5F85 /* Correlations */,
 				FFF61B232BEE91A300926042 /* Insights */,
+				FF88F1282C7D027E0093D1B4 /* Actions */,
 				FF049C012C24B31C004ACE9C /* Directives */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
 				FFB691092C19FA6800BEC0D4 /* GoodMorning */,
@@ -1440,6 +1503,7 @@
 			isa = PBXGroup;
 			children = (
 				FFC77AF92C5A75A9003E5F85 /* PreviewModelContainer.swift */,
+				FF88F1252C7CFE9C0093D1B4 /* Models */,
 			);
 			path = SwiftData;
 			sourceTree = "<group>";
@@ -1972,6 +2036,7 @@
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
 				FFC77AF72C5A6D6A003E5F85 /* GoalModel.swift in Sources */,
 				FF21AB9D2C12036A004D0D82 /* RestingHeartRateCell.swift in Sources */,
+				FF88F1272C7CFEA60093D1B4 /* BowelMovement.swift in Sources */,
 				FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */,
 				FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */,
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
@@ -2013,6 +2078,7 @@
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
+				FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */,
 				FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */,
 				FFBE52452C76129C00F510DE /* WorkoutHeartRateZoneCell.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
@@ -2024,6 +2090,7 @@
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */,
 				FFC77AD52C529CF9003E5F85 /* MobilityMonthlySummary.swift in Sources */,
+				FF88F1382C7D0FE30093D1B4 /* IdentifiableByDate.swift in Sources */,
 				FF0404C92C0262D4009FDC4E /* SleepScoreCell.swift in Sources */,
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */,
 				FFBE523F2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift in Sources */,
@@ -2038,6 +2105,7 @@
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
+				FF88F1302C7D0C420093D1B4 /* AllActionDataListView.swift in Sources */,
 				FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */,
 				FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */,
 				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
@@ -2046,6 +2114,7 @@
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */,
 				FF17052B2C10E1E1000D4B3D /* TimeInDaylightCell.swift in Sources */,
+				FF88F12E2C7D03E10093D1B4 /* BowelMovementActionCardView.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */,
 				FF13599E2C28A54900FB49A6 /* TimeComponent+Helpers.swift in Sources */,
@@ -2091,6 +2160,7 @@
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */,
 				FF8F79B52C5FD5360095C36D /* BodyCompositionDetailsView.swift in Sources */,
+				FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */,
 				FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
@@ -2126,6 +2196,7 @@
 				FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
 				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
+				FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */,
@@ -2171,6 +2242,7 @@
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 				FFBE52372C74D57300F510DE /* HeartRateZones.swift in Sources */,
 				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
+				FF88F12B2C7D02D80093D1B4 /* ActionsView.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
 				FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */,
 				FF88F1242C7BBDF90093D1B4 /* EKEventView.swift in Sources */,

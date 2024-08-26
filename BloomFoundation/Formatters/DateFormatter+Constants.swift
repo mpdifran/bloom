@@ -9,7 +9,16 @@ import Foundation
 
 public extension DateFormatter {
 
-    static var standardMedium: DateFormatter = {
+    static var dateTimeShort: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+
+        return dateFormatter
+    }()
+
+    static var dateTimeMedium: DateFormatter = {
         let dateFormatter = DateFormatter()
 
         dateFormatter.dateStyle = .medium
