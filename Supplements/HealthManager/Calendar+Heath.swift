@@ -85,4 +85,18 @@ extension Calendar {
 
         return self.startOfWeek(for: nextWeek)
     }
+
+    func mondayMorning(for date: Date) -> Date? {
+        var components = self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        components.weekday = 2
+        components.hour = 9
+
+        return self.date(from: components)
+    }
+
+    func nextMondayMorning(for date: Date) -> Date? {
+        guard let nextWeek = self.date(byAdding: .weekOfYear, value: 1, to: date) else { return nil }
+
+        return self.mondayMorning(for: nextWeek)
+    }
 }

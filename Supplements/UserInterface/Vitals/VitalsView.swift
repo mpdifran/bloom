@@ -67,7 +67,7 @@ struct VitalsView: View {
                 case .activityLevel: ActivityLevelDetailsView()
                 case .cardioFitness: CardioFitnessDetailsView()
                 case .exerciseEffectiveness: ExerciseEffectivenessView()
-                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
+//                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
                 }
             }
             .fullScreenCover($presentedFullScreen)

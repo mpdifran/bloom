@@ -60,7 +60,7 @@ extension GoalsViewModel {
             }
         }
 
-        guard let dueDate = Calendar.current.startOfNextWeek(for: .now) else { return }
+        guard let dueDate = Calendar.current.nextMondayMorning(for: .now) else { return }
 
         var goals = [[GoalModel]]()
 
