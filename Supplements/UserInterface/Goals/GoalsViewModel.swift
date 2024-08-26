@@ -710,7 +710,7 @@ private extension GoalsViewModel {
             summary: zone12Summary,
             dueDate: dueDate,
             metric: .init(
-                value: distribution.zone12Duration.doubleValue(for: .minute()) * .goalMultiplier,
+                value: (distribution.zone12Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage)) * .goalMultiplier,
                 unit: .minute(),
                 measurement: .targetHeartRateZoneTimeZone12
             ),
@@ -735,7 +735,7 @@ private extension GoalsViewModel {
             summary: zone34Summary,
             dueDate: dueDate,
             metric: .init(
-                value: distribution.zone34Duration.doubleValue(for: .minute()) * .goalMultiplier,
+                value: (distribution.zone34Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage)) * .goalMultiplier,
                 unit: .minute(),
                 measurement: .targetHeartRateZoneTimeZone34
             ),
@@ -759,7 +759,7 @@ private extension GoalsViewModel {
             summary: zone5Summary,
             dueDate: dueDate,
             metric: .init(
-                value: distribution.zone5.doubleValue(for: .minute()) * .goalMultiplier,
+                value: (distribution.zone5.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage)) * .goalMultiplier,
                 unit: .minute(),
                 measurement: .targetHeartRateZoneTimeZone5
             ),
