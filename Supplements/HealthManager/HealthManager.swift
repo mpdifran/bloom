@@ -70,6 +70,11 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.heartRateRecoveryOneMinute),
     ]
 
+    let writeHeartTypes = [
+        HKQuantityType(.bloodPressureSystolic),
+        HKQuantityType(.bloodPressureDiastolic)
+    ]
+
     let sleepTypes = [
         HKCategoryType(.sleepAnalysis),
         HKQuantityType(.environmentalAudioExposure),
@@ -143,6 +148,7 @@ extension HealthManager {
         var set = Set<HKSampleType>()
 
         writeNutritionTypes.forEach { set.insert($0) }
+        writeHeartTypes.forEach { set.insert($0) }
 
         return set
     }
@@ -364,6 +370,10 @@ extension HealthManager {
 
     func write(sample: HKObject) async throws {
         try await healthStore.save(sample)
+    }
+
+    func write(samples: [HKObject]) async throws {
+        try await healthStore.save(samples)
     }
 }
 

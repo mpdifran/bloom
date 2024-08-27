@@ -21,6 +21,7 @@ struct BowelMovementActionCardView: View {
                 duration: duration
             )
             modelContext.insert(model)
+            return true
         } content: { (_, _) in
             List {
                 Section {

@@ -65,6 +65,7 @@ struct OnboardingHealthHeartView: View {
         }
         .healthDataAccessRequest(
             store: healthManager.healthStore,
+            shareTypes: Set(healthManager.writeHeartTypes),
             readTypes: Set(healthManager.heartTypes),
             trigger: triggerHealthPermissionSheet
         ) { result in

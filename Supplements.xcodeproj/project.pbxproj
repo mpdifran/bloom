@@ -131,6 +131,7 @@
 		FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */; };
 		FF88F13C2C7D1CDD0093D1B4 /* ActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */; };
 		FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */; };
+		FF88F1402C7E475F0093D1B4 /* BloodPressureActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */; };
 		FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B232BFD364B00BA2128 /* ProfileView.swift */; };
 		FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */; };
@@ -534,6 +535,7 @@
 		FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Chart+DateScale.swift"; sourceTree = "<group>"; };
 		FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionCardView.swift; sourceTree = "<group>"; };
 		FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterActionCardView.swift; sourceTree = "<group>"; };
+		FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureActionCardView.swift; sourceTree = "<group>"; };
 		FF8B8B232BFD364B00BA2128 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		FF8B8B272BFD36BF00BA2128 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
@@ -1148,6 +1150,7 @@
 				FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */,
 				FF88F12D2C7D03E10093D1B4 /* BowelMovementActionCardView.swift */,
 				FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */,
+				FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */,
 			);
 			path = ActionCards;
 			sourceTree = "<group>";
@@ -2200,6 +2203,7 @@
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
 				FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */,
+				FF88F1402C7E475F0093D1B4 /* BloodPressureActionCardView.swift in Sources */,
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,

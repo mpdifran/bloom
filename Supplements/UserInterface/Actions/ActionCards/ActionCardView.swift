@@ -11,13 +11,13 @@ import SwiftData
 struct ActionCardView<Content>: View where Content: View {
     let title: String
     let showSaveBar: Bool
-    let saveHandler: (ModelContext) -> Void
+    let saveHandler: (ModelContext) async -> Bool
     let content: (Bool, @escaping () -> Void) -> Content
 
     init(
         title: String,
         showSaveBar: Bool = true,
-        saveHandler: @escaping (ModelContext) -> Void,
+        saveHandler: @escaping (ModelContext) async -> Bool = { (_) in return true },
         @ViewBuilder content: @escaping (Bool, @escaping () -> Void) -> Content
     ) {
         self.title = title
@@ -73,20 +73,22 @@ struct ActionCardView<Content>: View where Content: View {
 private extension ActionCardView {
 
     func handleSave() {
-        saveHandler(modelContext)
+        Task {
+            guard await saveHandler(modelContext) else { return }
 
-        SoundPlayer.playLogHealthData()
-        hasInserted = true
-        Delay(1000) {
-            dismiss()
+            await MainActor.run {
+                SoundPlayer.playLogHealthData()
+                hasInserted = true
+                Delay(1000) {
+                    dismiss()
+                }
+            }
         }
     }
 }
 
 #Preview {
-    ActionCardView(title: "Log Water") { _ in
-
-    } content: { (hasInserted, handleSave) in
+    ActionCardView(title: "Log Water") { (hasInserted, handleSave) in
         List {
             Text("Log Water")
         }

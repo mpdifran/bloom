@@ -24,9 +24,7 @@ struct WaterActionCardView: View {
         ActionCardView(
             title: "Water",
             showSaveBar: false
-        ) { _ in
-
-        } content: { (hasInserted, handleSave) in
+        ) { (hasInserted, handleSave) in
             VStack {
                 Spacer()
 
@@ -162,9 +160,8 @@ private extension WaterActionCardView {
                 quantity: quantity,
                 start: .now,
                 end: .now,
-                device: .local(),
                 metadata: [
-                    HKMetadataKeyWasUserEntered : true,
+                    HKMetadataKeyWasUserEntered : true
                 ]
             )
 
