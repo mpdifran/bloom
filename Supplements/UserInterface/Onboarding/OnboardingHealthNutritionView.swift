@@ -59,6 +59,7 @@ struct OnboardingHealthNutritionView: View {
         }
         .healthDataAccessRequest(
             store: healthManager.healthStore,
+            shareTypes: Set(healthManager.writeNutritionTypes),
             readTypes: Set(healthManager.nutritionTypes),
             trigger: triggerHealthPermissionSheet
         ) { result in

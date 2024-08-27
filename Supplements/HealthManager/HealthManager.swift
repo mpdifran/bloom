@@ -119,6 +119,10 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.dietaryZinc)
     ]
 
+    let writeNutritionTypes = [
+        HKQuantityType(.dietaryWater)
+    ]
+
     let otherTypes = [
         HKQuantityType(.timeInDaylight),
         HKCategoryType(.mindfulSession),
@@ -135,7 +139,15 @@ extension HealthManager {
         authStatus == .unnecessary
     }
 
-    func types() -> Set<HKObjectType> {
+    func writeTypes() -> Set<HKSampleType> {
+        var set = Set<HKSampleType>()
+
+        writeNutritionTypes.forEach { set.insert($0) }
+
+        return set
+    }
+
+    func readTypes() -> Set<HKObjectType> {
         var set = Set<HKObjectType>()
 
         bodyMeasurementTypes.forEach { set.insert($0) }
@@ -150,7 +162,7 @@ extension HealthManager {
 
     func checkAccess() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            healthStore.getRequestStatusForAuthorization(toShare: [], read: types()) { authStatus, error in
+            healthStore.getRequestStatusForAuthorization(toShare: writeTypes(), read: readTypes()) { authStatus, error in
                 if let error {
                     continuation.resume(throwing: error)
                     return
@@ -182,7 +194,7 @@ extension HealthManager {
         try? await checkAccess()
         if authStatus == .shouldRequest {
             do {
-                try await healthStore.requestAuthorization(toShare: [], read: types())
+                try await healthStore.requestAuthorization(toShare: [], read: readTypes())
             } catch {
                 print(error)
             }
@@ -240,6 +252,8 @@ extension HealthManager {
         }
     }
 }
+
+// MARK: Fetching Data
 
 extension HealthManager {
 
@@ -341,6 +355,15 @@ extension HealthManager {
         }
 
         return reports
+    }
+}
+
+// MARK: Writing Data
+
+extension HealthManager {
+
+    func write(sample: HKObject) async throws {
+        try await healthStore.save(sample)
     }
 }
 

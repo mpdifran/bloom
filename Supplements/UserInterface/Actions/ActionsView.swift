@@ -17,6 +17,15 @@ struct ActionsView: View {
             ScrollView {
                 VStack {
                     Button(action: {
+                        presentedCardSheet = WaterActionCardView().asAny
+                    }, label: {
+                        Label("Log Water", systemImage: "waterbottle.fill")
+                            .horizontallyCentered()
+                    })
+                    .buttonStyle(.tertiary)
+                    .tint(.blue)
+
+                    Button(action: {
                         presentedCardSheet = BowelMovementActionCardView().asAny
                     }, label: {
                         Label("Log Bowel Movement", systemImage: "toilet.fill")

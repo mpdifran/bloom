@@ -129,6 +129,8 @@
 		FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1342C7D0D980093D1B4 /* BowelMovementAllDataView.swift */; };
 		FF88F1382C7D0FE30093D1B4 /* IdentifiableByDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1372C7D0FE30093D1B4 /* IdentifiableByDate.swift */; };
 		FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */; };
+		FF88F13C2C7D1CDD0093D1B4 /* ActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */; };
+		FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */; };
 		FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B232BFD364B00BA2128 /* ProfileView.swift */; };
 		FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */; };
@@ -530,6 +532,8 @@
 		FF88F1342C7D0D980093D1B4 /* BowelMovementAllDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovementAllDataView.swift; sourceTree = "<group>"; };
 		FF88F1372C7D0FE30093D1B4 /* IdentifiableByDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableByDate.swift; sourceTree = "<group>"; };
 		FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Chart+DateScale.swift"; sourceTree = "<group>"; };
+		FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionCardView.swift; sourceTree = "<group>"; };
+		FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterActionCardView.swift; sourceTree = "<group>"; };
 		FF8B8B232BFD364B00BA2128 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		FF8B8B272BFD36BF00BA2128 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
@@ -1141,7 +1145,9 @@
 		FF88F12C2C7D03C10093D1B4 /* ActionCards */ = {
 			isa = PBXGroup;
 			children = (
+				FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */,
 				FF88F12D2C7D03E10093D1B4 /* BowelMovementActionCardView.swift */,
+				FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */,
 			);
 			path = ActionCards;
 			sourceTree = "<group>";
@@ -2135,6 +2141,7 @@
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
 				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
+				FF88F13C2C7D1CDD0093D1B4 /* ActionCardView.swift in Sources */,
 				FFC77AFE2C5AB200003E5F85 /* VitalModel.swift in Sources */,
 				FFBE523D2C74EE7D00F510DE /* WorkoutHeartRateReport.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
@@ -2169,6 +2176,7 @@
 				FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */,
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
+				FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
@@ -2827,7 +2835,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";
@@ -2867,7 +2875,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help recommend supplements";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";

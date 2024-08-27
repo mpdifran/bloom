@@ -13,13 +13,15 @@ struct BowelMovementActionCardView: View {
     @State private var stoolType: Int = 1
     @State private var duration: BowelMovement.Duration = .between5And10Min
 
-    @State private var hasInserted = false
-
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.dismiss) private var dismiss
-
     var body: some View {
-        NavigationStack {
+        ActionCardView(title: "New Bowel Movement") { modelContext in
+            let model = BowelMovement(
+                date: date,
+                bristolStoolType: stoolType,
+                duration: duration
+            )
+            modelContext.insert(model)
+        } content: { (_, _) in
             List {
                 Section {
                     Picker("Stool Type", selection: $stoolType) {
@@ -40,55 +42,8 @@ struct BowelMovementActionCardView: View {
                     DatePicker("Time", selection: $date)
                 }
             }
-            .navigationTitle("New Bowel Movement")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(action: {
-                        dismiss()
-                    }, label: {
-                        Text("Cancel")
-                    })
-                }
-            }
-            .shelf {
-                Button {
-                    logEntry()
-                } label: {
-                    Group {
-                        if hasInserted {
-                            Image(systemName: "checkmark")
-                        } else {
-                            Text("Save")
-                        }
-                    }
-                    .horizontallyCentered()
-                }
-                .buttonStyle(.tertiary)
-                .sensoryFeedback(.success, trigger: hasInserted)
-            }
         }
-        .presentationDetents([.medium, .large])
-        .presentationCornerRadius(25)
         .tint(.brown)
-    }
-}
-
-private extension BowelMovementActionCardView {
-
-    func logEntry() {
-        let model = BowelMovement(
-            date: date,
-            bristolStoolType: stoolType,
-            duration: duration
-        )
-
-        modelContext.insert(model)
-
-        hasInserted = true
-        Delay(1000) {
-            dismiss()
-        }
     }
 }
 

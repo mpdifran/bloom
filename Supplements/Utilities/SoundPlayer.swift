@@ -9,7 +9,26 @@ import UIKit
 import AVFoundation
 
 /// Sounds can be found here: https://github.com/TUNER88/iOSSystemSoundsLibrary
-struct SoundPlayer {
+enum SoundPlayer {
+
+    static func playWorkoutCountdown() {
+        playSoundFile(name: "nano/WorkoutCountdown_Haptic.caf")
+    }
+
+    static func playLogHealthData() {
+        playSoundFile(name: "nano/ReceiverConfirmation.caf")
+    }
+
+    private static func playSoundFile(name: String) {
+        guard let url = URL(string: "/System/Library/Audio/UISounds/\(name)") else { return }
+
+        var soundID: SystemSoundID = 0
+        AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+
+        guard soundID > 0 else { return }
+
+        AudioServicesPlaySystemSound(soundID)
+    }
 
     static func playSendMessage() {
         guard UIApplication.shared.applicationState == .active else { return }
