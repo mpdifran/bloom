@@ -61,7 +61,7 @@ struct ActionsView: View {
         }
         .sheet($presentedCardSheet)
         .tabItem {
-            Label("Actions", systemImage: "arrow.up.forward.app")
+            Label("Actions", systemImage: "plus.app")
         }
     }
 }
