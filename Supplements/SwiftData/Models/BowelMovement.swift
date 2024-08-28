@@ -10,14 +10,14 @@ import SwiftData
 
 @Model
 final class BowelMovement: IdentifiableByDate {
-    let date: Date
-    let bristolStoolType: Int
-    let rawDuration: Int
+    let date: Date = Date.now
+    let bristolStoolType: Int = 0
+    let rawDuration: Int = 1
 
     init(
-        date: Date,
-        bristolStoolType: Int,
-        duration: Duration
+        date: Date = .now,
+        bristolStoolType: Int = 0,
+        duration: Duration = .between5And10Min
     ) {
         self.date = date
         self.bristolStoolType = bristolStoolType

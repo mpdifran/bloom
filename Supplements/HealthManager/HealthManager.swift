@@ -1583,12 +1583,7 @@ extension HealthManager {
                 return partialResult
             }
 
-            guard startDate < endDate else {
-                print("We somehow have a start date after the end date...")
-                print("Start: \(startDate)")
-                print("End: \(endDate)")
-                continue
-            }
+            guard startDate < endDate else { continue }
 
             let timePeriod: Int = 10 // minutes
 
