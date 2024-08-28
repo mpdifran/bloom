@@ -9,13 +9,16 @@ import SwiftUI
 
 struct OnboardingCardTemplateView<TopContent, BottomContent>: View where TopContent: View, BottomContent: View {
 
+    let aspectRatio: CGFloat
     let topContent: TopContent
     let bottomContent: BottomContent
 
     init(
+        aspectRatio: CGFloat = 1,
         @ViewBuilder card: () -> TopContent,
         @ViewBuilder bottom: () -> BottomContent
     ) {
+        self.aspectRatio = aspectRatio
         self.topContent = card()
         self.bottomContent = bottom()
     }
@@ -24,7 +27,7 @@ struct OnboardingCardTemplateView<TopContent, BottomContent>: View where TopCont
         VStack(spacing: 0) {
             Rectangle()
                 .fill(.background.secondary)
-                .aspectRatio(contentMode: .fit)
+                .aspectRatio(aspectRatio, contentMode: .fit)
                 .overlay {
                     VStack {
                         topContent

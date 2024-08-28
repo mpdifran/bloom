@@ -99,11 +99,13 @@ extension GoalsViewModel {
             subtitle = "Check out your new goals this week!"
         }
 
-        await NotificationManager.shared.sendNotification(
-            title: "New Goals Available",
-            subtitle: subtitle,
-            categoryID: .CategoryID.goalsMessage
-        )
+        if !force {
+            await NotificationManager.shared.sendNotification(
+                title: "New Goals Available",
+                subtitle: subtitle,
+                categoryID: .CategoryID.goalsMessage
+            )
+        }
     }
 }
 

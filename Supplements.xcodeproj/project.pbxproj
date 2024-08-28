@@ -99,6 +99,10 @@
 		FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */; };
 		FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */; };
 		FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */; };
+		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
+		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
+		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
+		FF4CAAF72C7F6ACA001A59F3 /* OnboardingGoalDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF62C7F6ACA001A59F3 /* OnboardingGoalDetails.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -205,7 +209,7 @@
 		FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */; };
 		FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */; };
 		FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */; };
-		FFBE52272C6EF69B00F510DE /* HealthPrivacyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52262C6EF69B00F510DE /* HealthPrivacyCardView.swift */; };
+		FFBE52272C6EF69B00F510DE /* OnboardingTitleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52262C6EF69B00F510DE /* OnboardingTitleCardView.swift */; };
 		FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52282C6EF9D600F510DE /* OnboardingHealthActivityView.swift */; };
 		FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */; };
 		FFBE522D2C6F044B00F510DE /* OnboardingHealthSleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE522C2C6F044B00F510DE /* OnboardingHealthSleepView.swift */; };
@@ -503,6 +507,10 @@
 		FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Unwrap.swift"; sourceTree = "<group>"; };
 		FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDetailsView.swift; sourceTree = "<group>"; };
 		FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoCardView.swift; sourceTree = "<group>"; };
+		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
+		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
+		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
+		FF4CAAF62C7F6ACA001A59F3 /* OnboardingGoalDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalDetails.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -610,7 +618,7 @@
 		FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomCell.swift; sourceTree = "<group>"; };
 		FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthAgeView.swift; sourceTree = "<group>"; };
 		FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardTemplateView.swift; sourceTree = "<group>"; };
-		FFBE52262C6EF69B00F510DE /* HealthPrivacyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthPrivacyCardView.swift; sourceTree = "<group>"; };
+		FFBE52262C6EF69B00F510DE /* OnboardingTitleCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTitleCardView.swift; sourceTree = "<group>"; };
 		FFBE52282C6EF9D600F510DE /* OnboardingHealthActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthActivityView.swift; sourceTree = "<group>"; };
 		FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthVitalLevelsView.swift; sourceTree = "<group>"; };
 		FFBE522C2C6F044B00F510DE /* OnboardingHealthSleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthSleepView.swift; sourceTree = "<group>"; };
@@ -1426,6 +1434,8 @@
 				FFBE522E2C6F06CF00F510DE /* OnboardingHealthHeartView.swift */,
 				FFBE52302C6F086F00F510DE /* OnboardingHealthNutritionView.swift */,
 				FFBE52322C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift */,
+				FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */,
+				FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1484,7 +1494,9 @@
 			isa = PBXGroup;
 			children = (
 				FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */,
-				FFBE52262C6EF69B00F510DE /* HealthPrivacyCardView.swift */,
+				FFBE52262C6EF69B00F510DE /* OnboardingTitleCardView.swift */,
+				FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */,
+				FF4CAAF62C7F6ACA001A59F3 /* OnboardingGoalDetails.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2033,6 +2045,7 @@
 			files = (
 				FF1705292C10DC67000D4B3D /* WorkoutSummaryCell.swift in Sources */,
 				FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */,
+				FF4CAAF72C7F6ACA001A59F3 /* OnboardingGoalDetails.swift in Sources */,
 				FF8F79CB2C62CE070095C36D /* PillRangeChart.swift in Sources */,
 				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
 				FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */,
@@ -2054,6 +2067,7 @@
 				FF13599A2C28A29A00FB49A6 /* Directive+Helpers.swift in Sources */,
 				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
 				FFA134F22C3F05E500FF1829 /* TodayViewModel.swift in Sources */,
+				FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */,
 				FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */,
@@ -2073,7 +2087,7 @@
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,
-				FFBE52272C6EF69B00F510DE /* HealthPrivacyCardView.swift in Sources */,
+				FFBE52272C6EF69B00F510DE /* OnboardingTitleCardView.swift in Sources */,
 				FFBE52332C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift in Sources */,
 				FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */,
 				FF1E962C2C0BF19A004DAD2D /* View+Expand.swift in Sources */,
@@ -2213,6 +2227,8 @@
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */,
 				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
+				FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */,
+				FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */,
 				FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
 				FF8F79CF2C64546C0095C36D /* Color+Codable.swift in Sources */,

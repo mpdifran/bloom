@@ -18,6 +18,8 @@ extension OnboardingRootView {
         case heart
         case nutrition
         case otherTypes
+        case goals
+        case notifications
     }
 }
 
@@ -65,6 +67,14 @@ struct OnboardingRootView: View {
                 }
             case .otherTypes:
                 OnboardingHealthOtherTypesView {
+                    setStep(.goals)
+                }
+            case .goals:
+                OnboardingGoalsView {
+                    setStep(.notifications)
+                }
+            case .notifications:
+                OnboardingNotificationPermissionView {
                     onComplete()
                 }
             }

@@ -21,10 +21,11 @@ struct OnboardingHealthAgeView: View {
 
     var body: some View {
         OnboardingCardTemplateView {
-            HealthPrivacyCardView(
+            OnboardingTitleCardView(
                 title: "Age & Sex",
                 message: "Bloom requires your age and sex in order accurately quantify your health data."
             )
+            .tint(.blue)
         } bottom: {
             ScrollView {
                 VStack {
@@ -45,6 +46,11 @@ struct OnboardingHealthAgeView: View {
                         }
                     }
                     .cardContainer(fill: .background.secondary)
+                    .if(!checkForAgeAndSex) {
+                        $0.onTapGesture {
+                            triggerHealthPermissionSheet.toggle()
+                        }
+                    }
 
                     LabeledContent("Sex") {
                         if checkForAgeAndSex {
@@ -65,6 +71,11 @@ struct OnboardingHealthAgeView: View {
                         }
                     }
                     .cardContainer(fill: .background.secondary)
+                    .if(!checkForAgeAndSex) {
+                        $0.onTapGesture {
+                            triggerHealthPermissionSheet.toggle()
+                        }
+                    }
                 }
                 .padding()
             }

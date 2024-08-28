@@ -22,10 +22,11 @@ struct OnboardingHealthNutritionView: View {
 
     var body: some View {
         OnboardingCardTemplateView {
-            HealthPrivacyCardView(
+            OnboardingTitleCardView(
                 title: "Nutrition Data",
                 message: "Bloom can use your nutrition data to help you eat better."
             )
+            .tint(.blue)
         } bottom: {
             ScrollView {
                 VStack {

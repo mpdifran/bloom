@@ -35,6 +35,11 @@ extension NotificationManager {
         }
     }
 
+    func shouldRequestAuthorization() async -> Bool {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        return settings.authorizationStatus == .notDetermined
+    }
+
     func sendNotification(title: String, subtitle: String, categoryID: String? = nil) async {
         let content = UNMutableNotificationContent()
         content.title = title

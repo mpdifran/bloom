@@ -7,12 +7,15 @@
 
 import SwiftUI
 
+@MainActor
 struct PreferencesView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+    @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
+    @State private var shouldPromptForNotificationPermissions = false
     @State private var presentedFullScreenView: AnyView?
 
     var body: some View {
@@ -29,8 +32,20 @@ struct PreferencesView: View {
                 .ignoresSafeArea()
                 .frame(height: 0)
         }
+        .onAppear {
+            checkNotificationPermissions()
+        }
         .tabItem {
             Label("Preferences", systemImage: "slider.horizontal.below.square.and.square.filled")
+        }
+    }
+}
+
+private extension PreferencesView {
+
+    func checkNotificationPermissions() {
+        Task {
+            shouldPromptForNotificationPermissions = await NotificationManager.shared.shouldRequestAuthorization()
         }
     }
 }
@@ -68,18 +83,30 @@ private extension PreferencesView {
 
     @ViewBuilder
     var healthPermissionsSection: some View {
-        if healthManager.authStatus == .shouldRequest {
-            Section("HealthKit") {
-                Button(action: {
-                    Task {
-                        await healthManager.requestAccessIfNeeded()
-                    }
-                }, label: {
-                    LabeledContent("HealthKit Permissions") {
-                        Image(systemName: "arrow.up.forward.app.fill")
-                    }
-                })
-                .buttonStyle(.plain)
+        if healthManager.authStatus == .shouldRequest || shouldPromptForNotificationPermissions {
+            Section("Permissions") {
+                if healthManager.authStatus == .shouldRequest {
+                    Button(action: {
+                        Task {
+                            await healthManager.requestAccessIfNeeded()
+                        }
+                    }, label: {
+                        LabeledContent("HealthKit Permissions") {
+                            Image(systemName: "arrow.up.forward.app.fill")
+                        }
+                    })
+                    .buttonStyle(.plain)
+                }
+                if shouldPromptForNotificationPermissions {
+                    Button(action: {
+                        NotificationManager.shared.requestAuthorization()
+                    }, label: {
+                        LabeledContent("Notification Permissions") {
+                            Image(systemName: "arrow.up.forward.app.fill")
+                        }
+                    })
+                    .buttonStyle(.plain)
+                }
             }
         }
     }
@@ -87,6 +114,9 @@ private extension PreferencesView {
     var developerSection: some View {
         Section("Developer") {
             Toggle("Daniele Mode", isOn: $danieleMode)
+            Button("Re-Take Onboarding") {
+                hasShownOnboarding = false
+            }
         }
     }
 }

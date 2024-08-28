@@ -22,10 +22,11 @@ struct OnboardingHealthHeartView: View {
 
     var body: some View {
         OnboardingCardTemplateView {
-            HealthPrivacyCardView(
+            OnboardingTitleCardView(
                 title: "Heart Data",
                 message: "Bloom can use your cardio data to help keep your heart healthy."
             )
+            .tint(.blue)
         } bottom: {
             ScrollView {
                 VStack {

@@ -25,14 +25,11 @@ struct SupplementsApp: App {
         WindowGroup {
             RootView()
                 .onAppear {
-                    NotificationManager.shared.requestAuthorization()
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
-//                    LocationManager.shared.requestAuth()
                     Task {
                         await MainActor.run {
                             HealthManager.shared.observeSleepData()
                         }
-//                        await ScreenUseController.shared.requestAuthorization()
                     }
                 }
                 .onReceive(foregroundPublisher) { _ in
