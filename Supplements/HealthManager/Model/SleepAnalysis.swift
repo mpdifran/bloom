@@ -243,6 +243,24 @@ extension SleepAnalysis {
         }
     }
 
+    var sleepOneLiner: String {
+        var results = [String]()
+
+        results.append("Your sleep score last night was \(overallScore).")
+
+        if deepSleepScore < coreSleepScore && deepSleepScore < remSleepScore && deepSleepScore < awakeSleepScore {
+            results.append("You didn't get enough Deep sleep.")
+        } else if coreSleepScore < deepSleepScore && coreSleepScore < remSleepScore && coreSleepScore < awakeSleepScore {
+            results.append("You didn't get enough Core sleep.")
+        } else if remSleepScore < deepSleepScore && remSleepScore < coreSleepScore && remSleepScore < awakeSleepScore {
+            results.append("You didn't get enough REM sleep.")
+        } else if awakeSleepScore < deepSleepScore && awakeSleepScore < coreSleepScore && awakeSleepScore < remSleepScore, let durationString = DateFormatter.timeIntervalHourMinuteFull.string(from: DateComponents(minute: Int(awakeSleepMinutes))) {
+            results.append("You were awake for \(durationString).")
+        }
+
+        return results.joined(separator: " ")
+    }
+
     var sleepSummaryDescription: String {
         var results = [String]()
 
