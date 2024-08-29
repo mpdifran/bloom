@@ -116,4 +116,25 @@ extension BowelMovementMonthlySummary.Details {
     var stoolTypeDistribution: [Int : [BowelMovement]] {
         bowelMovements.grouped(by: { $0.bristolStoolType })
     }
+
+    func prioritizedBristolStoolType() -> Int {
+        var scores = Array(repeating: 0.0, count: 7)
+
+        for (index, bowelMovement) in self.bowelMovements.enumerated() {
+            guard bowelMovement.bristolStoolType != 3 && bowelMovement.bristolStoolType != 4 else { continue }
+
+            scores[bowelMovement.bristolStoolType - 1] += Double(index)
+        }
+
+        var maxIndex = 0
+        var maxScore: Double = 0
+
+        for (index, score) in scores.enumerated() {
+            if score > maxScore {
+                maxIndex = index
+            }
+        }
+
+        return maxIndex + 1
+    }
 }

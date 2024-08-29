@@ -208,6 +208,8 @@ extension GoalModel.Metric {
             return await HealthManager.shared.fetchTotalSum(for: .dietaryCaffeine, dateRange: dateRange) ?? defaultQuantity
         case .increaseFiber:
             return await HealthManager.shared.fetchTotalSum(for: .dietaryFiber, dateRange: dateRange) ?? defaultQuantity
+        case .increaseWater:
+            return await HealthManager.shared.fetchTotalSum(for: .dietaryWater, dateRange: dateRange) ?? defaultQuantity
         }
 
         return defaultQuantity
@@ -261,6 +263,7 @@ extension GoalModel {
         case decreaseSugar
         case decreaseCaffeine
         case increaseFiber
+        case increaseWater
 
         var color: Color {
             switch self {
@@ -324,6 +327,8 @@ extension GoalModel {
                     .caffeine
             case .increaseFiber:
                     .fiber
+            case .increaseWater:
+                    .blue
             }
         }
 

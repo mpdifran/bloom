@@ -190,7 +190,7 @@ private extension BowelMovementsDetailView {
         if hour == 0 {
             return "12 AM"
         }
-        if hour < 13 {
+        if hour < 12 {
             return "\(hour) AM"
         }
         return "\(hour - 12) PM"
