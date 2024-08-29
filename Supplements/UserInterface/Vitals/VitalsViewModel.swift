@@ -73,6 +73,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var stressSummary: StressMonthlySummary?
     @Published var nutritionSummary: NutritionMonthlySummary?
     @Published var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
+    @Published var bowelMovementSummary: BowelMovementMonthlySummary?
 
     @Published var heartRateVariability = [DateQuantitySampleLegacy]()
     @Published var restingHeartRate = [DateQuantitySampleLegacy]()
@@ -199,6 +200,17 @@ private extension VitalsViewModel {
         .store(in: &observerQueryHandles)
 
         HealthManager.shared.observeSleepData()
+
+        fetchSwiftDataTypes()
+    }
+
+    func fetchSwiftDataTypes() {
+        Task {
+            let summary = await DataFetcher.shared.fetchBowelMovementMonthlySummary()
+            await MainActor.run {
+                self.bowelMovementSummary = summary
+            }
+        }
     }
 
     func observeData() {
@@ -260,6 +272,12 @@ private extension VitalsViewModel {
             }
             .store(in: &cancellables)
         $exerciseEffectivenessSummary
+            .receive(on: processingQueue)
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $bowelMovementSummary
             .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
@@ -366,6 +384,20 @@ private extension VitalsViewModel {
             )
         } else {
             vitals.append(.init(id: .exerciseEffectiveness))
+        }
+        if let bowelMovementSummary {
+            vitals.append(
+                VitalModel(
+                    id: .bowelMovements,
+                    subtitle: bowelMovementSummary.details?.subtitle ?? "No Data Available",
+                    status: bowelMovementSummary.details?.rating.name ?? "No Data",
+                    score: bowelMovementSummary.details?.score ?? 1,
+                    color: bowelMovementSummary.details?.rating.color ?? .gray,
+                    trend: bowelMovementSummary.trend
+                )
+            )
+        } else {
+            vitals.append(.init(id: .bowelMovements))
         }
 
         vitals.sort(by: { $0.score < $1.score })

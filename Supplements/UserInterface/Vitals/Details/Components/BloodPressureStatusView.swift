@@ -61,7 +61,6 @@ struct BloodPressureStatusView: View {
                 )
                 .foregroundStyle(HealthManager.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).color)
             }
-
             .chartXScale(domain: 40...120, range: .plotDimension)
             .chartYScale(domain: 70...200, range: .plotDimension)
             .chartXAxisLabel("Diastolic")

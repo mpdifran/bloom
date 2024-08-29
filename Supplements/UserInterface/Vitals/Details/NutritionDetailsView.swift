@@ -132,7 +132,7 @@ private extension NutritionDetailsView {
 
                     Chart {
                         BarMark(xStart: .value("Origin", 0), xEnd: .value("Net Energy", netEnergy))
-                            .foregroundStyle(.green)
+                            .foregroundStyle((netEnergy < 500 && netEnergy > -500) ? .green : .yellow)
                             .cornerRadius(5)
 
                         RuleMark(
@@ -155,18 +155,12 @@ private extension NutritionDetailsView {
                 case .daily:
                     Chart{
                         ForEach(dailyEnergy) { sample in
-                            LineMark(
+                            BarMark(
                                 x: .value("Date", sample.date),
                                 y: .value("Net Energy", sample.quantity)
                             )
-                            .interpolationMethod(.catmullRom)
-                            .foregroundStyle(.green)
-
-                            PointMark(
-                                x: .value("Date", sample.date),
-                                y: .value("Net Energy", sample.quantity)
-                            )
-                            .foregroundStyle(.green)
+                            .foregroundStyle((sample.quantity < 500 && sample.quantity > -500) ? .green : .yellow)
+                            .cornerRadius(3)
                         }
 
                         RectangleMark(
@@ -187,7 +181,7 @@ private extension NutritionDetailsView {
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                         .foregroundStyle(.green)
                     }
-                    .frame(height: 160)
+                    .frame(height: 300)
                 }
 
                 Picker("", selection: $energyChartScope) {

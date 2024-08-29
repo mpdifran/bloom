@@ -210,6 +210,8 @@ private extension GoalsViewModel {
             return []
         case .exerciseEffectiveness:
             return await exerciseEffectivenessGoals(dueDate: dueDate)
+        case .bowelMovements:
+            return []
         }
     }
 
