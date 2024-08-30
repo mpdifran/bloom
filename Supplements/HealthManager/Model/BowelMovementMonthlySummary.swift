@@ -97,9 +97,9 @@ extension BowelMovementMonthlySummary.Details {
     }
 
     var rating: BowelMovementMonthlySummary.Rating {
-        if score < 0.5 {
+        if score < 0.3 {
             return .unhealthy
-        } else if score < 0.7 {
+        } else if score < 0.5 {
             return .concerning
         } else if score < 0.9 {
             return .acceptable
