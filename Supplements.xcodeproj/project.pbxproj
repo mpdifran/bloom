@@ -107,6 +107,9 @@
 		FF4CAAFB2C80B23E001A59F3 /* ContainerHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAFA2C80B23E001A59F3 /* ContainerHolder.swift */; };
 		FF4CAAFD2C80B67D001A59F3 /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAFC2C80B67D001A59F3 /* DataFetcher.swift */; };
 		FF4CAAFF2C80EF34001A59F3 /* BowelMovementsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAFE2C80EF34001A59F3 /* BowelMovementsDetailView.swift */; };
+		FF4CAB022C813D91001A59F3 /* WeatherForecaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAB012C813D91001A59F3 /* WeatherForecaster.swift */; };
+		FF4CAB042C81441F001A59F3 /* WeatherAlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */; };
+		FF4CAB062C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -519,6 +522,9 @@
 		FF4CAAFA2C80B23E001A59F3 /* ContainerHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerHolder.swift; sourceTree = "<group>"; };
 		FF4CAAFC2C80B67D001A59F3 /* DataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetcher.swift; sourceTree = "<group>"; };
 		FF4CAAFE2C80EF34001A59F3 /* BowelMovementsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovementsDetailView.swift; sourceTree = "<group>"; };
+		FF4CAB012C813D91001A59F3 /* WeatherForecaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecaster.swift; sourceTree = "<group>"; };
+		FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAlertCell.swift; sourceTree = "<group>"; };
+		FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCurrentConditionsCell.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -1063,6 +1069,14 @@
 			path = DeviceActivityReportExtension;
 			sourceTree = "<group>";
 		};
+		FF4CAB002C813D7B001A59F3 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				FF4CAB012C813D91001A59F3 /* WeatherForecaster.swift */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
 		FF648BE12BDEA4F700963820 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1353,6 +1367,7 @@
 				FF1705182C109FF3000D4B3D /* Programs */,
 				FFC77AE42C57FD0A003E5F85 /* Correlations */,
 				FF8B8B332BFFE4CD00BA2128 /* Location */,
+				FF4CAB002C813D7B001A59F3 /* Weather */,
 				FF88F1192C7B75AE0093D1B4 /* Calendar */,
 				FF6AEC972BF17D0D00C34621 /* Notifications */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
@@ -1495,6 +1510,8 @@
 				FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */,
 				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
 				FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */,
+				FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */,
+				FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */,
 			);
 			path = GoodMorning;
 			sourceTree = "<group>";
@@ -2245,6 +2262,7 @@
 				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
 				FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */,
 				FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */,
+				FF4CAB062C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift in Sources */,
 				FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */,
 				FFF61B012BED7C1300926042 /* EfficacyView.swift in Sources */,
 				FF8F79CF2C64546C0095C36D /* Color+Codable.swift in Sources */,
@@ -2258,6 +2276,7 @@
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
 				FF426ACD2C6D4768006E0F17 /* NSPredicate+Sendable.swift in Sources */,
 				FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */,
+				FF4CAB022C813D91001A59F3 /* WeatherForecaster.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */,
 				FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */,
@@ -2271,6 +2290,7 @@
 				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
 				FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
+				FF4CAB042C81441F001A59F3 /* WeatherAlertCell.swift in Sources */,
 				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
 				FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */,
@@ -2875,8 +2895,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -2915,8 +2934,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Help recommend activities in your area";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Help recommend activities in your area";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

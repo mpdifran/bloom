@@ -10,6 +10,8 @@ import AppUI
 import AppFoundations
 import EventKit
 import EventKitUI
+import WeatherKit
+import Charts
 
 @MainActor
 struct GoodMorningView: View {
@@ -21,15 +23,15 @@ struct GoodMorningView: View {
 
     @State private var events = [EKEvent]()
     @State private var selectedEvent: EKEvent?
-
+    @State private var locationLocality: String?
+    @State private var weather: Weather?
     @State private var showSleepTodayView = false
-
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
 
     var body: some View {
         NavigationStack {
             List {
                 sleepSection
+                weatherSection
                 calendarSection
                 activityLevelSection
             }
@@ -56,7 +58,20 @@ struct GoodMorningView: View {
         .animation(.default, value: healthManager.sleepAnalysis7Days)
         .animation(.default, value: events.count)
         .onAppear {
-            feedbackGenerator.prepare()
+            LocationManager.shared.requestAuth()
+        }
+        .onChange(of: LocationManager.shared.currentLocation) { oldValue, newValue in
+            if oldValue == nil, weather == nil, let newValue {
+                Task {
+                    let weather = await WeatherForecaster.shared.forecastedWeather(location: newValue)
+                    let locality = await LocationManager.shared.locality(for: newValue)
+
+                    await MainActor.run {
+                        self.weather = weather
+                        self.locationLocality = locality
+                    }
+                }
+            }
         }
         .task {
             await CalendarManager.shared.promptForPermission()
@@ -70,10 +85,10 @@ private extension GoodMorningView {
     @ViewBuilder
     var sleepSection: some View {
         if let sleepAnalysis = healthManager.sleepAnalysis7Days?.last, Calendar.current.isDateInToday(sleepAnalysis.endDate) {
-            Section {
+            Section("Sleep Score") {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        Text("Sleep Score")
+                        Text("Summary")
                             .font(.title3)
                             .bold()
 
@@ -88,12 +103,10 @@ private extension GoodMorningView {
 
                     SleepScoreView(sleepAnalysis: sleepAnalysis, isMini: true)
                 }
-                .cardContainer(fill: .background.secondary)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     showSleepTodayView = true
                 }
-                .removeListSeparator()
             }
         }
     }
@@ -153,7 +166,7 @@ private extension GoodMorningView {
     @ViewBuilder
     var calendarSection: some View {
         if events.isNotEmpty {
-            Section("Today's Events") {
+            Section("Events") {
                 ForEach(events) { event in
                     EventCell(event: event)
                         .contentShape(Rectangle())
@@ -161,6 +174,52 @@ private extension GoodMorningView {
                             selectedEvent = event
                         }
                 }
+            }
+        }
+    }
+
+    @ViewBuilder
+    var weatherSection: some View {
+        if let weather {
+            Section("Weather") {
+                ForEach(weather.weatherAlerts ?? [], id: \.summary) { weatherAlert in
+                    WeatherAlertCell(weatherAlert: weatherAlert)
+                }
+
+                VStack {
+                    WeatherCurrentConditionsCell(
+                        currentWeather: weather.currentWeather,
+                        locality: locationLocality ?? ""
+                    )
+
+                    Chart {
+                        ForEach(weather.hourlyForecast, id: \.date) { hourWeather in
+                            if Calendar.current.isDateInToday(hourWeather.date) {
+                                LineMark(
+                                    x: .value("Date", hourWeather.date),
+                                    y: .value("Temperature", hourWeather.temperature.value)
+                                )
+                                .lineStyle(StrokeStyle(lineWidth: 6))
+                                .interpolationMethod(.catmullRom)
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.blue, .green, .orange, .red],
+                                        startPoint: .bottom,
+                                        endPoint: .top
+                                    )
+                                )
+
+//                                BarMark(
+//                                    x: .value("Date", hourWeather.date),
+//                                    y: .value("Precipitation %", hourWeather.precipitationChance * 30)
+//                                )
+//                                .foregroundStyle(.blue)
+                            }
+                        }
+                    }
+                    .frame(height: 180)
+                }
+                .standardListSeparatorInset()
             }
         }
     }

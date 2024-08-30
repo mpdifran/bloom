@@ -14,6 +14,7 @@ final class LocationManager: NSObject, ObservableObject {
     @Published private(set) var currentLocation: CLLocation?
 
     private let locationManager = CLLocationManager()
+    private let geocoder = CLGeocoder()
 
     private override init() {
         super.init()
@@ -30,7 +31,7 @@ extension LocationManager {
         case .authorizedAlways, .authorizedWhenInUse:
             startMonitoring()
         default:
-            locationManager.requestAlwaysAuthorization()
+            locationManager.requestWhenInUseAuthorization()
         }
     }
 
@@ -51,6 +52,17 @@ extension LocationManager {
     func stopMonitoring() {
         print("Stopping location monitoring")
         locationManager.stopMonitoringSignificantLocationChanges()
+    }
+
+    func locality(for location: CLLocation) async -> String? {
+        do {
+            let placemarks = try await geocoder.reverseGeocodeLocation(location)
+
+            return placemarks.first?.locality
+        } catch {
+            print(error)
+        }
+        return nil
     }
 }
 
