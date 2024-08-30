@@ -57,6 +57,7 @@ struct GoodMorningView: View {
         .tint(.blue)
         .animation(.default, value: healthManager.sleepAnalysis7Days)
         .animation(.default, value: events.count)
+        .animation(.default, value: weather)
         .onAppear {
             LocationManager.shared.requestAuth()
         }
