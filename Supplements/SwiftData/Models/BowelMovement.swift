@@ -72,7 +72,7 @@ extension BowelMovement {
             case .between5And10Min:
                 1
             case .moreThan10Min:
-                0.9
+                0.75
             }
         }
     }

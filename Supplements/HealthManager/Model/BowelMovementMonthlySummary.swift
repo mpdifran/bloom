@@ -91,9 +91,16 @@ extension BowelMovementMonthlySummary.Details {
         let daySpan = (Calendar.current.dateComponents([.day], from: start, to: .now).day ?? 0) + 1
 
         let pace = Double(daySpan) / Double(bowelMovements.count)
-        let paceFormat = pace.format(to: 1)
+        let paceFormat = pace.format()
 
-        return "Every \(paceFormat) \(paceFormat == "1" ? "Day" : "Days")"
+        if paceFormat == "1" {
+            return "Once a Day"
+        }
+        if pace > 1 {
+            return "Every \(paceFormat) Days"
+        }
+
+        return "\(1/pace)x a Day"
     }
 
     var rating: BowelMovementMonthlySummary.Rating {
