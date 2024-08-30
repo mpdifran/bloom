@@ -178,7 +178,14 @@ private extension GoodMorningView {
     var calendarSection: some View {
         if events.isNotEmpty {
             Section("Events") {
-                ForEach(events) { event in
+                ForEach(allDayEvents) { event in
+                    AllDayEventCell(event: event)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedEvent = event
+                        }
+                }
+                ForEach(nonAllDayEvents) { event in
                     EventCell(event: event)
                         .contentShape(Rectangle())
                         .onTapGesture {
@@ -187,6 +194,14 @@ private extension GoodMorningView {
                 }
             }
         }
+    }
+
+    var allDayEvents: [EKEvent] {
+        events.filter({ $0.isAllDay })
+    }
+
+    var nonAllDayEvents: [EKEvent] {
+        events.filter({ !$0.isAllDay })
     }
 
     @ViewBuilder

@@ -66,4 +66,20 @@ extension EKEvent {
 
         return event
     }()
+
+    static var allDayPreview = {
+        let event = EKEvent.init(eventStore: CalendarManager.shared.eventStore)
+
+        event.title = "All Day Event"
+        event.availability = .busy
+        event.startDate = Date.now
+        event.endDate = Date.now.addingTimeInterval(3600 * 24)
+        event.isAllDay = true
+        event.calendar = CalendarManager.shared.eventStore.defaultCalendarForNewEvents
+
+        try? CalendarManager.shared.eventStore.save(event, span: .thisEvent)
+        try? CalendarManager.shared.eventStore.commit()
+
+        return event
+    }()
 }

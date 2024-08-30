@@ -19,6 +19,7 @@
 		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
 		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
+		FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */; };
 		FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */; };
 		FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */; };
 		FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */; };
@@ -434,6 +435,7 @@
 		FF049C022C24B333004ACE9C /* DirectiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListView.swift; sourceTree = "<group>"; };
 		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
 		FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreDetailsView.swift; sourceTree = "<group>"; };
+		FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDayEventCell.swift; sourceTree = "<group>"; };
 		FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKUnit+Helpers.swift"; sourceTree = "<group>"; };
 		FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHeartRateChartView.swift; sourceTree = "<group>"; };
 		FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelSummaryCell.swift; sourceTree = "<group>"; };
@@ -1508,6 +1510,7 @@
 			isa = PBXGroup;
 			children = (
 				FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */,
+				FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */,
 				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
 				FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */,
 				FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */,
@@ -2217,6 +2220,7 @@
 				FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */,
 				FF8F79B52C5FD5360095C36D /* BodyCompositionDetailsView.swift in Sources */,
 				FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */,
+				FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */,
 				FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,

@@ -25,13 +25,23 @@ struct EventCell: View {
                         .bold()
 
                     if let location = event.structuredLocation?.title {
-                        HStack(spacing: 2) {
-                            Image(systemName: "location")
-                                .font(.caption)
+                        if let url = URL(string: location), let host = url.host() {
+                            HStack(spacing: 2) {
+                                Image(systemName: "video")
+                                    .font(.caption)
 
-                            Text(location)
+                                Text(host)
+                            }
+                            .foregroundStyle(.secondary)
+                        } else {
+                            HStack(spacing: 2) {
+                                Image(systemName: "location")
+                                    .font(.caption)
+
+                                Text(location)
+                            }
+                            .foregroundStyle(.secondary)
                         }
-                        .foregroundStyle(.secondary)
                     }
 
                     if event.isStartingSoon, let durationText = DateFormatter.timeIntervalHourMinuteFull.string(from: event.startDate.timeIntervalSinceNow) {
