@@ -191,7 +191,14 @@ private extension GoodMorningView {
 
     @ViewBuilder
     var weatherSection: some View {
-        if let weather, let minTemp = minTemp(from: weather), let maxTemp = maxTemp(from: weather) {
+        if 
+            let weather,
+            let minTemp = minTemp(from: weather),
+            let maxTemp = maxTemp(from: weather),
+            let closestHour = weather.hourlyForecast.filter({ Calendar.current.isDateInToday($0.date) && $0.date > .now }).min(by: {
+                abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
+            })
+        {
             Section("Weather") {
                 ForEach(weather.weatherAlerts ?? [], id: \.summary) { weatherAlert in
                     WeatherAlertCell(weatherAlert: weatherAlert)
@@ -206,38 +213,62 @@ private extension GoodMorningView {
                     Chart {
                         ForEach(weather.hourlyForecast, id: \.date) { hourWeather in
                             if Calendar.current.isDateInToday(hourWeather.date) {
-                                LineMark(
-                                    x: .value("Date", hourWeather.date),
-                                    y: .value("Temperature", hourWeather.temperature.value)
-                                )
-                                .lineStyle(StrokeStyle(lineWidth: 4))
-                                .interpolationMethod(.catmullRom)
-                                .foregroundStyle(
-                                    gradientFor(minTemp: minTemp, maxTemp: maxTemp)
-                                )
+                                if hourWeather.date < .now || hourWeather == closestHour {
+                                    LineMark(
+                                        x: .value("Date", hourWeather.date),
+                                        y: .value("Temperature", hourWeather.temperature.value)
+                                    )
+                                    .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round, dash: [10, 10]))
+                                    .interpolationMethod(.catmullRom)
+                                    .foregroundStyle(by: .value("DataSet", "Past Line"))
 
-                                AreaMark(
-                                    x: .value("Date", hourWeather.date),
-                                    yStart: .value("", minTemp - 5),
-                                    yEnd: .value("Temperature", hourWeather.temperature.value)
-                                )
-                                .interpolationMethod(.catmullRom)
-                                .foregroundStyle(
-                                    gradientFor(minTemp: minTemp, maxTemp: maxTemp, opacity: 0.5)
-                                )
+                                    AreaMark(
+                                        x: .value("Date", hourWeather.date),
+                                        yStart: .value("", minTemp - 5),
+                                        yEnd: .value("Temperature", hourWeather.temperature.value)
+                                    )
+                                    .interpolationMethod(.catmullRom)
+                                    .foregroundStyle(by: .value("DataSet", "Past Area"))
+                                }
+                                if hourWeather.date >= .now {
+                                    LineMark(
+                                        x: .value("Date", hourWeather.date),
+                                        y: .value("Temperature", hourWeather.temperature.value)
+                                    )
+                                    .lineStyle(StrokeStyle(lineWidth: 4))
+                                    .interpolationMethod(.catmullRom)
+                                    .foregroundStyle(by: .value("DataSet", "Future Line"))
+
+                                    AreaMark(
+                                        x: .value("Date", hourWeather.date),
+                                        yStart: .value("", minTemp - 5),
+                                        yEnd: .value("Temperature", hourWeather.temperature.value)
+                                    )
+                                    .interpolationMethod(.catmullRom)
+                                    .foregroundStyle(by: .value("DataSet", "Future Area"))
+                                }
                             }
                         }
 
-                        if let closestHour = weather.hourlyForecast.filter({ Calendar.current.isDateInToday($0.date) }).min(by: {
-                            abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
-                        }) {
-                            PointMark(
-                                x: .value("Date", closestHour.date),
-                                y: .value("Temperature", closestHour.temperature.value)
-                            )
-                            .foregroundStyle(.text)
-                        }
+                        PointMark(
+                            x: .value("Date", closestHour.date),
+                            y: .value("Temperature", closestHour.temperature.value)
+                        )
+                        .foregroundStyle(.text)
+
+                        RuleMark(
+                            x: .value("Date", closestHour.date)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 0.5))
+                        .foregroundStyle(.text)
                     }
+                    .chartForegroundStyleScale([
+                        "Past Line" : gradientFor(minTemp: minTemp, maxTemp: maxTemp, opacity: 0.5),
+                        "Future Line" : gradientFor(minTemp: minTemp, maxTemp: maxTemp),
+                        "Past Area" : gradientFor(minTemp: minTemp - 5, maxTemp: maxTemp, opacity: 0.2),
+                        "Future Area" : gradientFor(minTemp: minTemp - 5, maxTemp: maxTemp, opacity: 0.5)
+                    ])
+                    .chartLegend(.hidden)
                     .chartYScale(domain: (minTemp - 5)...(maxTemp + 5), range: .plotDimension)
                     .frame(height: 180)
                 }
