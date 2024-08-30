@@ -17,7 +17,7 @@ struct WeatherCurrentConditionsCell: View {
     init(currentWeather: CurrentWeather, locality: String) {
         self.init(
             symbolName: currentWeather.symbolName,
-            temperature: currentWeather.temperature.formatted(.measurement(width: .abbreviated, numberFormatStyle: .number)),
+            temperature: currentWeather.temperature.formatted(.measurement(width: .narrow, numberFormatStyle: .number.precision(.fractionLength(0)))),
             conditions: currentWeather.condition.description,
             locality: locality
         )
@@ -36,19 +36,21 @@ struct WeatherCurrentConditionsCell: View {
     }
 
     var body: some View {
-        HStack(alignment: .bottom) {
-            Image(systemName: symbolName)
-                .font(.largeTitle)
-
+        HStack(alignment: .top) {
             VStack(alignment: .leading) {
+                HStack {
+                    Text(temperature)
+                    Image(systemName: symbolName)
+                }
+                .font(.title)
+                .fontDesign(.rounded)
+                .bold()
+
                 Text(conditions)
                     .foregroundStyle(.secondary)
-                    .font(.caption)
-                Text(temperature)
-                    .font(.title)
-                    .fontDesign(.rounded)
-                    .bold()
+                    .font(.subheadline)
             }
+
             Spacer()
 
             HStack(spacing: 2) {
@@ -65,7 +67,7 @@ struct WeatherCurrentConditionsCell: View {
     List {
         WeatherCurrentConditionsCell(
             symbolName: "moon.stars",
-            temperature: "26.62 ºC",
+            temperature: "26º",
             conditions: "Clear",
             locality: "Waterloo"
         )

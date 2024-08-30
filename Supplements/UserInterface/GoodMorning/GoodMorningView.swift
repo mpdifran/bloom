@@ -60,23 +60,33 @@ struct GoodMorningView: View {
         .animation(.default, value: weather)
         .onAppear {
             LocationManager.shared.requestAuth()
+            loadWeather()
         }
         .onChange(of: LocationManager.shared.currentLocation) { oldValue, newValue in
-            if oldValue == nil, weather == nil, let newValue {
-                Task {
-                    let weather = await WeatherForecaster.shared.forecastedWeather(location: newValue)
-                    let locality = await LocationManager.shared.locality(for: newValue)
-
-                    await MainActor.run {
-                        self.weather = weather
-                        self.locationLocality = locality
-                    }
-                }
+            if oldValue == nil, newValue != nil {
+                loadWeather()
             }
         }
         .task {
             await CalendarManager.shared.promptForPermission()
             self.events = await CalendarManager.shared.eventsToday()
+        }
+    }
+}
+
+private extension GoodMorningView {
+
+    func loadWeather() {
+        guard let location = LocationManager.shared.currentLocation, weather == nil else { return }
+
+        Task {
+            let weather = await WeatherForecaster.shared.forecastedWeather(location: location)
+            let locality = await LocationManager.shared.locality(for: location)
+
+            await MainActor.run {
+                self.weather = weather
+                self.locationLocality = locality
+            }
         }
     }
 }
@@ -181,7 +191,7 @@ private extension GoodMorningView {
 
     @ViewBuilder
     var weatherSection: some View {
-        if let weather {
+        if let weather, let minTemp = minTemp(from: weather), let maxTemp = maxTemp(from: weather) {
             Section("Weather") {
                 ForEach(weather.weatherAlerts ?? [], id: \.summary) { weatherAlert in
                     WeatherAlertCell(weatherAlert: weatherAlert)
@@ -200,29 +210,86 @@ private extension GoodMorningView {
                                     x: .value("Date", hourWeather.date),
                                     y: .value("Temperature", hourWeather.temperature.value)
                                 )
-                                .lineStyle(StrokeStyle(lineWidth: 6))
+                                .lineStyle(StrokeStyle(lineWidth: 4))
                                 .interpolationMethod(.catmullRom)
                                 .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [.blue, .green, .orange, .red],
-                                        startPoint: .bottom,
-                                        endPoint: .top
-                                    )
+                                    gradientFor(minTemp: minTemp, maxTemp: maxTemp)
                                 )
 
-//                                BarMark(
-//                                    x: .value("Date", hourWeather.date),
-//                                    y: .value("Precipitation %", hourWeather.precipitationChance * 30)
-//                                )
-//                                .foregroundStyle(.blue)
+                                AreaMark(
+                                    x: .value("Date", hourWeather.date),
+                                    yStart: .value("", minTemp - 5),
+                                    yEnd: .value("Temperature", hourWeather.temperature.value)
+                                )
+                                .interpolationMethod(.catmullRom)
+                                .foregroundStyle(
+                                    gradientFor(minTemp: minTemp, maxTemp: maxTemp, opacity: 0.5)
+                                )
                             }
                         }
+
+                        if let closestHour = weather.hourlyForecast.filter({ Calendar.current.isDateInToday($0.date) }).min(by: {
+                            abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
+                        }) {
+                            PointMark(
+                                x: .value("Date", closestHour.date),
+                                y: .value("Temperature", closestHour.temperature.value)
+                            )
+                            .foregroundStyle(.text)
+                        }
                     }
+                    .chartYScale(domain: (minTemp - 5)...(maxTemp + 5), range: .plotDimension)
                     .frame(height: 180)
                 }
                 .standardListSeparatorInset()
             }
         }
+    }
+
+    func minTemp(from weather: Weather) -> Double? {
+        weather.hourlyForecast
+            .filter({ Calendar.current.isDateInToday($0.date) })
+            .min(keyPath: \.temperature.value)
+    }
+
+    func maxTemp(from weather: Weather) -> Double? {
+        weather.hourlyForecast
+            .filter({ Calendar.current.isDateInToday($0.date) })
+            .max(keyPath: \.temperature.value)
+    }
+
+    func gradientFor(minTemp: Double, maxTemp: Double, opacity: Double = 1) -> LinearGradient {
+        var colors = [Color]()
+
+        if minTemp < -10 {
+            colors.append(.belowMinus10.opacity(opacity))
+        }
+        if minTemp < 0 && maxTemp > 0 {
+            colors.append(.below0.opacity(opacity))
+        }
+        if minTemp < 10 && maxTemp > 10 {
+            colors.append(.above10.opacity(opacity))
+        }
+        if minTemp < 15 && maxTemp > 15 {
+            colors.append(.above15.opacity(opacity))
+        }
+        if minTemp < 20 && maxTemp > 20 {
+            colors.append(.above20.opacity(opacity))
+        }
+        if minTemp < 25 && maxTemp > 25 {
+            colors.append(.above25.opacity(opacity))
+        }
+        if minTemp < 30 && maxTemp > 30 {
+            colors.append(.above30.opacity(opacity))
+        }
+        if minTemp < 35 && maxTemp > 35 {
+            colors.append(.above35.opacity(opacity))
+        }
+        if maxTemp > 40 {
+            colors.append(.above40.opacity(opacity))
+        }
+
+        return LinearGradient(colors: colors, startPoint: .bottom, endPoint: .top)
     }
 }
 
