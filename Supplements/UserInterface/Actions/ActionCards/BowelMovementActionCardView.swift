@@ -21,6 +21,7 @@ struct BowelMovementActionCardView: View {
                 duration: duration
             )
             modelContext.insert(model)
+            VitalsViewModel.shared.fetchSwiftDataTypes()
             return true
         } content: { (_, _) in
             ScrollView {

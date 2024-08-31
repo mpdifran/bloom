@@ -95,6 +95,15 @@ extension VitalsViewModel {
     func refreshVitals() async {
         setupChangeObservers()
     }
+
+    func fetchSwiftDataTypes() {
+        Task {
+            let summary = await DataFetcher.shared.fetchBowelMovementMonthlySummary()
+            await MainActor.run {
+                self.bowelMovementSummary = summary
+            }
+        }
+    }
 }
 
 private extension VitalsViewModel {
@@ -202,15 +211,6 @@ private extension VitalsViewModel {
         HealthManager.shared.observeSleepData()
 
         fetchSwiftDataTypes()
-    }
-
-    func fetchSwiftDataTypes() {
-        Task {
-            let summary = await DataFetcher.shared.fetchBowelMovementMonthlySummary()
-            await MainActor.run {
-                self.bowelMovementSummary = summary
-            }
-        }
     }
 
     func observeData() {
