@@ -1,5 +1,5 @@
 //
-//  TodaySectionTitleView.swift
+//  SleepSectionTitleView.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-07-11.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TodaySectionTitleView: View {
+struct SleepSectionTitleView: View {
     let title: String
     let systemImage: String
     let isMulticolor: Bool
@@ -44,7 +44,7 @@ struct TodaySectionTitleView: View {
 
 #Preview {
     List {
-        TodaySectionTitleView(
+        SleepSectionTitleView(
             title: "Heart Rate",
             systemImage: "heart.fill"
         )

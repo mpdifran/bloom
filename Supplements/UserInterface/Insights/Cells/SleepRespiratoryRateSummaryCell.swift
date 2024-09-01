@@ -13,7 +13,7 @@ struct SleepRespiratoryRateSummaryCell: View {
     var body: some View {
         Section {
             VStack {
-                TodaySectionTitleView(
+                SleepSectionTitleView(
                     title: "Respiratory Rate",
                     systemImage: "lungs.fill"
                 )

@@ -13,7 +13,7 @@ struct WristTemperatureSummaryCell: View {
     var body: some View {
         Section {
             VStack {
-                TodaySectionTitleView(
+                SleepSectionTitleView(
                     title: "Wrist Temperature",
                     systemImage: "thermometer.medium"
                 )

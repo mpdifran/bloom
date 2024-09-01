@@ -17,7 +17,7 @@ struct SleepStageChartView: View {
 
     var body: some View {
         VStack {
-            TodaySectionTitleView(
+            SleepSectionTitleView(
                 title: "Sleep Stages",
                 systemImage: "bed.double.fill"
             )

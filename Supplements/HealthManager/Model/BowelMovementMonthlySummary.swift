@@ -9,13 +9,13 @@ import SwiftUI
 
 private enum Constants {
     static let stoolTypeScoreMap = [
-        1 : 0.5,
-        2 : 0.75,
-        3 : 1,
-        4 : 1,
-        5 : 0.75,
-        6 : 0.5,
-        7 : 0,
+        1 : 0.7,
+        2 : 0.95,
+        3 : 1.1,
+        4 : 1.1,
+        5 : 0.95,
+        6 : 0.7,
+        7 : 0.3,
     ]
 }
 
@@ -104,9 +104,9 @@ extension BowelMovementMonthlySummary.Details {
     }
 
     var rating: BowelMovementMonthlySummary.Rating {
-        if score < 0.3 {
+        if score < 0.4 {
             return .unhealthy
-        } else if score < 0.5 {
+        } else if score < 0.6 {
             return .concerning
         } else if score < 0.9 {
             return .acceptable

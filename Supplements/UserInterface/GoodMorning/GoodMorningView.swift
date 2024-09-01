@@ -47,7 +47,7 @@ struct GoodMorningView: View {
                 .buttonStyle(.tertiary)
             }
             .navigationDestination(isPresented: $showSleepTodayView) {
-                TodayView()
+                SleepDayView()
             }
         }
         .sheet(item: $selectedEvent) { event in

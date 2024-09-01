@@ -24,10 +24,10 @@ struct RootView: View {
                 }
             } else {
                 TabView(selection: $tabController.activeTab) {
+                    TodayView()
+                        .tag(Tab.today)
                     VitalsView()
                         .tag(Tab.vitals)
-                    GoalsView()
-                        .tag(Tab.goals)
                     ActionsView()
                         .tag(Tab.actions)
                     ChatView()

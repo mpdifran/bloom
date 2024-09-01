@@ -44,7 +44,7 @@ struct SleepDetailsView: View {
         .navigationTitle("Sleep Quality")
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $showTodayView) {
-            TodayView()
+            SleepDayView()
         }
         .onAppear {
             feedbackGenerator.prepare()

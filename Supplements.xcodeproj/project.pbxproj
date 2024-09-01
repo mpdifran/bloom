@@ -20,6 +20,8 @@
 		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
 		FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */; };
+		FF0DA0ED2C84D661007D1A6B /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EC2C84D661007D1A6B /* TodayView.swift */; };
+		FF0DA0F02C84D69C007D1A6B /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EF2C84D69C007D1A6B /* TodayViewModel.swift */; };
 		FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */; };
 		FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */; };
 		FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */; };
@@ -95,7 +97,7 @@
 		FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */; };
 		FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */; };
 		FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F02C40797F004E8661 /* SleepStageChartView.swift */; };
-		FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */; };
+		FF4578F32C40A9D6004E8661 /* SleepSectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F22C40A9D6004E8661 /* SleepSectionTitleView.swift */; };
 		FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */; };
 		FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */; };
 		FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */; };
@@ -183,8 +185,8 @@
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
-		FFA134F02C3F042300FF1829 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134EF2C3F042300FF1829 /* TodayView.swift */; };
-		FFA134F22C3F05E500FF1829 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */; };
+		FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134EF2C3F042300FF1829 /* SleepDayView.swift */; };
+		FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */; };
 		FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */; };
 		FFA134F62C3F16F900FF1829 /* ProgressArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */; };
 		FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */; };
@@ -436,6 +438,8 @@
 		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
 		FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreDetailsView.swift; sourceTree = "<group>"; };
 		FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDayEventCell.swift; sourceTree = "<group>"; };
+		FF0DA0EC2C84D661007D1A6B /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		FF0DA0EF2C84D69C007D1A6B /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
 		FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKUnit+Helpers.swift"; sourceTree = "<group>"; };
 		FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHeartRateChartView.swift; sourceTree = "<group>"; };
 		FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelSummaryCell.swift; sourceTree = "<group>"; };
@@ -511,7 +515,7 @@
 		FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkout+Helpers.swift"; sourceTree = "<group>"; };
 		FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListViewModel.swift; sourceTree = "<group>"; };
 		FF4578F02C40797F004E8661 /* SleepStageChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStageChartView.swift; sourceTree = "<group>"; };
-		FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySectionTitleView.swift; sourceTree = "<group>"; };
+		FF4578F22C40A9D6004E8661 /* SleepSectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSectionTitleView.swift; sourceTree = "<group>"; };
 		FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Zone.swift"; sourceTree = "<group>"; };
 		FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Unwrap.swift"; sourceTree = "<group>"; };
 		FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDetailsView.swift; sourceTree = "<group>"; };
@@ -598,8 +602,8 @@
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
-		FFA134EF2C3F042300FF1829 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
-		FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
+		FFA134EF2C3F042300FF1829 /* SleepDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayView.swift; sourceTree = "<group>"; };
+		FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayViewModel.swift; sourceTree = "<group>"; };
 		FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
 		FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressArcView.swift; sourceTree = "<group>"; };
 		FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDatePicker.swift; sourceTree = "<group>"; };
@@ -813,6 +817,24 @@
 				FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */,
 			);
 			path = Directives;
+			sourceTree = "<group>";
+		};
+		FF0DA0EE2C84D664007D1A6B /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				FF0DA0F12C84D967007D1A6B /* Components */,
+				FF0DA0EC2C84D661007D1A6B /* TodayView.swift */,
+				FF0DA0EF2C84D69C007D1A6B /* TodayViewModel.swift */,
+			);
+			path = Today;
+			sourceTree = "<group>";
+		};
+		FF0DA0F12C84D967007D1A6B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		FF1359982C28A28A00FB49A6 /* OpenAPI */ = {
@@ -1284,7 +1306,6 @@
 				FFBE52442C76129C00F510DE /* WorkoutHeartRateZoneCell.swift */,
 				FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */,
 				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
-				FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */,
 				FFBE52402C7569AB00F510DE /* VitalSummaryDetailTitleView.swift */,
 			);
 			path = Components;
@@ -1298,18 +1319,18 @@
 			path = Preferences;
 			sourceTree = "<group>";
 		};
-		FFA134EE2C3F041500FF1829 /* Today */ = {
+		FFA134EE2C3F041500FF1829 /* SleepDay */ = {
 			isa = PBXGroup;
 			children = (
-				FFA134EF2C3F042300FF1829 /* TodayView.swift */,
-				FFA134F12C3F05E500FF1829 /* TodayViewModel.swift */,
+				FFA134EF2C3F042300FF1829 /* SleepDayView.swift */,
+				FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */,
 				FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */,
 				FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */,
 				FF4578F02C40797F004E8661 /* SleepStageChartView.swift */,
 				FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */,
-				FF4578F22C40A9D6004E8661 /* TodaySectionTitleView.swift */,
+				FF4578F22C40A9D6004E8661 /* SleepSectionTitleView.swift */,
 			);
-			path = Today;
+			path = SleepDay;
 			sourceTree = "<group>";
 		};
 		FFAA83D72C4D9E19004D12DA /* Vitals */ = {
@@ -1472,9 +1493,10 @@
 				FFF61AEC2BED537B00926042 /* RootView.swift */,
 				FF8B8B362C00141000BA2128 /* Tab */,
 				FFB444942BED41E600486AD7 /* Onboarding */,
+				FF0DA0EE2C84D664007D1A6B /* Today */,
 				FFAA83D72C4D9E19004D12DA /* Vitals */,
 				FFF61AF52BED555100926042 /* Goals */,
-				FFA134EE2C3F041500FF1829 /* Today */,
+				FFA134EE2C3F041500FF1829 /* SleepDay */,
 				FFC77AE92C580F20003E5F85 /* Correlations */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FF88F1282C7D027E0093D1B4 /* Actions */,
@@ -2098,7 +2120,7 @@
 				FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */,
 				FF13599A2C28A29A00FB49A6 /* Directive+Helpers.swift in Sources */,
 				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
-				FFA134F22C3F05E500FF1829 /* TodayViewModel.swift in Sources */,
+				FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */,
 				FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */,
@@ -2137,11 +2159,12 @@
 				FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */,
 				FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */,
 				FFBE52452C76129C00F510DE /* WorkoutHeartRateZoneCell.swift in Sources */,
+				FF0DA0F02C84D69C007D1A6B /* TodayViewModel.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
 				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
 				FF88F11D2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift in Sources */,
-				FF4578F32C40A9D6004E8661 /* TodaySectionTitleView.swift in Sources */,
+				FF4578F32C40A9D6004E8661 /* SleepSectionTitleView.swift in Sources */,
 				FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */,
@@ -2166,7 +2189,7 @@
 				FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */,
 				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
 				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
-				FFA134F02C3F042300FF1829 /* TodayView.swift in Sources */,
+				FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */,
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */,
 				FF17052B2C10E1E1000D4B3D /* TimeInDaylightCell.swift in Sources */,
@@ -2307,6 +2330,7 @@
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
 				FF8F79B92C601C660095C36D /* View+Background.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
+				FF0DA0ED2C84D661007D1A6B /* TodayView.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 				FFBE52372C74D57300F510DE /* HeartRateZones.swift in Sources */,
 				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,

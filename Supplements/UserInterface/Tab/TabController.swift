@@ -22,7 +22,7 @@ enum Tab {
 
 @MainActor
 class TabController: NSObject, ObservableObject {
-    @Published var activeTab = Tab.vitals
+    @Published var activeTab = Tab.today
 
     @Published var showMorningReport = false
 

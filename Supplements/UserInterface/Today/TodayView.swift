@@ -2,56 +2,92 @@
 //  TodayView.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-07-10.
+//  Created by Mark DiFranco on 2024-09-01.
 //
 
 import SwiftUI
+import AppUI
 
 struct TodayView: View {
-    @State private var showDatePicker = false
-    @State private var lastAppearDate = Date()
 
     @ObservedObject private var viewModel = TodayViewModel.shared
+    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
+
+    @EnvironmentObject private var tabContorller: TabController
+
+    @State private var presentedFullScreen: AnyView?
+
+    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
     var body: some View {
-        Group {
-            if let sleepAnalysis = viewModel.sleepAnalysis {
-                List {
-                    VStack {
-                        SleepScoreView(sleepAnalysis: sleepAnalysis)
-                            .frame(maxHeight: 350)
-
-                        SleepScoreDetailsView(sleepAnalysis: sleepAnalysis)
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    TimelineView(.everyMinute) { context in
+                        if Calendar.current.isMorning(date: .now) || danieleMode {
+                            goodMorningCell
+                        }
                     }
 
-                    SleepStageChartView(sleepAnalysis: sleepAnalysis)
+                    Text("Goals")
+                        .bold()
+                        .padding(.horizontal)
+                        .zStackAlignment(.leading)
 
-                    SleepHeartRateSummaryCell(heartRates: sleepAnalysis.heartRate)
-                    SleepSoundLevelSummaryCell(soundLevels: sleepAnalysis.environmentalSoundLevels)
-                    SleepRespiratoryRateSummaryCell(respiratoryRates: sleepAnalysis.respiratoryRate)
-                    WristTemperatureSummaryCell(wristTemperature: sleepAnalysis.wristTemperature)
+                    ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
+                        if let goal = goals.first {
+                            GoalDailyUpdateCell(goal: goal)
+                        }
+                    }
                 }
-                .listStyle(.plain)
-            } else {
-                ContentUnavailableView(
-                    "No Data Available",
-                    systemImage: "moon.zzz",
-                    description: Text("There is no sleep analysis available for \(viewModel.date, formatter: DateFormatter.justRelativeDateMedium).")
-                )
+                .horizontallyCentered()
+                .padding()
+            }
+            .navigationTitle("Today")
+            .fullScreenCover($presentedFullScreen)
+            .fullScreenCover(isPresented: $tabContorller.showMorningReport) {
+                GoodMorningView()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                TitleDatePicker(date: $viewModel.date)
-            }
+        .tabItem {
+            Label("Today", systemImage: "calendar.badge.checkmark")
         }
         .onAppear {
-            if !Calendar.current.isDateInToday(lastAppearDate) {
-                viewModel.date = Date()
+            Task {
+                await goalsViewModel.checkForUpdateGoals()
             }
-            lastAppearDate = Date()
         }
+    }
+}
+
+private extension TodayView {
+
+    var goodMorningCell: some View {
+        HStack {
+            Image(systemName: "sunrise")
+                .foregroundStyle(.orange)
+                .font(.title2)
+
+            VStack(alignment: .leading) {
+                Text("Morning Report")
+                    .font(.title3)
+                    .bold()
+                Text("Everything you need to start your day.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.forward")
+                .foregroundStyle(.secondary)
+        }
+        .cardContainer(fill: .background.secondary)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            presentedFullScreen = GoodMorningView().asAny
+        }
+        .padding(.bottom)
     }
 }
 

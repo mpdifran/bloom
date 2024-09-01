@@ -12,7 +12,7 @@ extension Calendar {
     func isMorning(date: Date) -> Bool {
         guard let hour = dateComponents([.hour], from: date).hour else { return false }
 
-        return hour > 6 && hour < 12
+        return hour >= 6 && hour < 12
     }
 
     func sleepStartDate(previousDays: Int, endDate: Date) -> Date {
