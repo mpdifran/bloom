@@ -91,7 +91,16 @@ extension Calendar {
         components.weekday = 2
         components.hour = 9
 
-        return self.date(from: components)
+        // Is there a more clever way of doing this?
+
+        guard let result = self.date(from: components) else {
+            return nil
+        }
+
+        if result > date {
+            return self.date(byAdding: .weekOfYear, value: -1, to: result)
+        }
+        return result
     }
 
     func nextMondayMorning(for date: Date) -> Date? {

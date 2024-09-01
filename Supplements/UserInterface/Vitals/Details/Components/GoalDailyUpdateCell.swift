@@ -165,7 +165,7 @@ private extension GoalDailyUpdateCell {
 
     func loadQuantity() async {
         let quantity = await goal.metric.quantity(for: .startOfDayToNow())
-        let thisWeekQuantity = await goal.metric.quantity(for: .startOfWeekToStartOfToday())
+        let thisWeekQuantity = await goal.metric.quantity(for: .mondayMorningToStartOfToday())
         await MainActor.run {
             self.currentValue = quantity.doubleValue(for: goal.metric.unit)
             self.thisWeekValue = thisWeekQuantity.doubleValue(for: goal.metric.unit)
@@ -179,7 +179,7 @@ private extension GoalDailyUpdateCell {
             }
 
             if
-                let startOfWeek = Calendar.current.startOfWeek(for: .now),
+                let startOfWeek = Calendar.current.mondayMorning(for: .now),
                 let hoursThisWeek = Calendar.current.dateComponents([.hour], from: startOfWeek, to: .now).hour,
                 let remainingHours = Calendar.current.dateComponents([.hour], from: .now, to: goal.dueDate).hour
             {
@@ -217,7 +217,7 @@ private extension GoalDailyUpdateCell {
             }
 
             if 
-                let startOfWeek = Calendar.current.startOfWeek(for: .now),
+                let startOfWeek = Calendar.current.mondayMorning(for: .now),
                 let hoursThisWeek = Calendar.current.dateComponents([.hour], from: startOfWeek, to: .now).hour,
                 let remainingHours = Calendar.current.dateComponents([.hour], from: .now, to: goal.dueDate).hour
             {

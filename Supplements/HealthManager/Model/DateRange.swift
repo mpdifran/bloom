@@ -67,6 +67,22 @@ extension DateRange {
         }
         return DateRange(startDate, endDate)
     }
+
+    static func mondayMorningToNow() -> DateRange {
+        let endDate = Date.now
+        guard let startDate = Calendar.current.mondayMorning(for: endDate) else {
+            return DateRange(endDate, endDate)
+        }
+        return DateRange(startDate, endDate)
+    }
+
+    static func mondayMorningToStartOfToday() -> DateRange {
+        let endDate = Calendar.current.startOfDay(for: .now)
+        guard let startDate = Calendar.current.mondayMorning(for: endDate) else {
+            return DateRange(endDate, endDate)
+        }
+        return DateRange(startDate, endDate)
+    }
 }
 
 // MARK: Trailing Ranges

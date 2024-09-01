@@ -83,7 +83,7 @@ struct GoalCell: View {
 private extension GoalCell {
 
     var dateRange: DateRange {
-        .startOfWeekToNow()
+        .mondayMorningToNow()
     }
 
     var goal: GoalModel {
