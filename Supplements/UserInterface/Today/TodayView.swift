@@ -16,6 +16,7 @@ struct TodayView: View {
     @EnvironmentObject private var tabContorller: TabController
 
     @State private var presentedFullScreen: AnyView?
+    @State private var presentedCardSheet: AnyView?
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
@@ -39,11 +40,35 @@ struct TodayView: View {
                             GoalDailyUpdateCell(goal: goal)
                         }
                     }
+
+                    Text("Actions")
+                        .bold()
+                        .padding(.horizontal)
+                        .zStackAlignment(.leading)
+
+                    Button(action: {
+                        presentedCardSheet = WaterActionCardView().asAny
+                    }, label: {
+                        Label("Log Water", systemImage: "waterbottle.fill")
+                            .horizontallyCentered()
+                    })
+                    .buttonStyle(.tertiary)
+                    .tint(.blue)
+
+                    Button(action: {
+                        presentedCardSheet = BowelMovementActionCardView().asAny
+                    }, label: {
+                        Label("Log Bowel Movement", systemImage: "toilet.fill")
+                            .horizontallyCentered()
+                    })
+                    .buttonStyle(.tertiary)
+                    .tint(.brown)
                 }
                 .horizontallyCentered()
                 .padding()
             }
             .navigationTitle("Today")
+            .sheet($presentedCardSheet)
             .fullScreenCover($presentedFullScreen)
             .fullScreenCover(isPresented: $tabContorller.showMorningReport) {
                 GoodMorningView()
