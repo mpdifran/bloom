@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import HealthKit
 
 private extension CGFloat {
     static let barHeight: CGFloat = 20
 }
 struct PillRangeChart: View {
     let title: String
+    let quantityString: String
     let unitString: String
     let value: Double
     let minValue: Double
@@ -19,10 +21,19 @@ struct PillRangeChart: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(title)
-                .bold()
-                .fontDesign(.rounded)
-                .padding(.horizontal)
+            HStack {
+                Text(title)
+                    .bold()
+
+                Spacer()
+
+                Text(quantityString)
+                    .font(.headline)
+                    .bold()
+                    .fontDesign(.rounded)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal)
 
             GeometryReader { proxy in
                 ZStack {
@@ -135,6 +146,7 @@ private struct PillValueLabelView: View {
     List {
         PillRangeChart(
             title: "Protein",
+            quantityString: "34 g",
             unitString: "%",
             value: 13,
             minValue: 15,
@@ -143,6 +155,7 @@ private struct PillValueLabelView: View {
         .tint(.protein)
         PillRangeChart(
             title: "Carbs",
+            quantityString: "56 g",
             unitString: "%",
             value: 52,
             minValue: 45,
@@ -151,6 +164,7 @@ private struct PillValueLabelView: View {
         .tint(.carbohydrates)
         PillRangeChart(
             title: "Fat",
+            quantityString: "12 g",
             unitString: "%",
             value: 35,
             minValue: 20,

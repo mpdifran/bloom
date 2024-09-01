@@ -125,6 +125,7 @@ private extension SleepDetailsView {
 
                 PillRangeChart(
                     title: "REM Sleep",
+                    quantityString: "",
                     unitString: "%",
                     value: (summary.averageREMSleepPercent * 100),
                     minValue: 20,
@@ -136,6 +137,7 @@ private extension SleepDetailsView {
 
                 PillRangeChart(
                     title: "Core Sleep",
+                    quantityString: "",
                     unitString: "%",
                     value: (summary.averageCoreSleepPercent * 100),
                     minValue: 45,
@@ -147,6 +149,7 @@ private extension SleepDetailsView {
 
                 PillRangeChart(
                     title: "Deep Sleep",
+                    quantityString: "",
                     unitString: "%",
                     value: (summary.averageDeepSleepPercent * 100),
                     minValue: 15,
@@ -156,6 +159,7 @@ private extension SleepDetailsView {
 
                 PillRangeChart(
                     title: "Awake",
+                    quantityString: "",
                     unitString: "%",
                     value: (summary.averageAwakeSleepPercent * 100),
                     minValue: 0,

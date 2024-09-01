@@ -219,8 +219,9 @@ private extension NutritionDetailsView {
 
                 PillRangeChart(
                     title: "Protein",
+                    quantityString: macros.protein.displayString(for: .gram()),
                     unitString: "%",
-                    value: (macros.protein / macros.total * 100),
+                    value: (macros.proteinPercent * 100),
                     minValue: HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy().lowerBound * 100,
                     maxValue: HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy().upperBound * 100
                 )
@@ -230,8 +231,9 @@ private extension NutritionDetailsView {
 
                 PillRangeChart(
                     title: "Carbohydrates",
+                    quantityString: macros.carbohydrates.displayString(for: .gram()),
                     unitString: "%",
-                    value: (macros.carbohydrates / macros.total * 100),
+                    value: (macros.carbsPercent * 100),
                     minValue: HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().lowerBound * 100,
                     maxValue: HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().upperBound * 100
                 )
@@ -241,8 +243,9 @@ private extension NutritionDetailsView {
 
                 PillRangeChart(
                     title: "Fat",
+                    quantityString: macros.fat.displayString(for: .gram()),
                     unitString: "%",
-                    value: (macros.fat / macros.total * 100),
+                    value: (macros.fatPercent * 100),
                     minValue: HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy().lowerBound * 100,
                     maxValue: HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy().upperBound * 100
                 )

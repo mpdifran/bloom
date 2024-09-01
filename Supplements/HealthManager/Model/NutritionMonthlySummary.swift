@@ -107,25 +107,37 @@ extension NutritionMonthlySummary {
     }
 
     struct Macros {
-        let protein: Double
-        let carbohydrates: Double
-        let fat: Double
-        let remainder: Double
+        let protein: HKQuantity
+        let carbohydrates: HKQuantity
+        let fat: HKQuantity
+        let remainderCalories: Double
 
         var total: Double {
-            protein + carbohydrates + fat + remainder
+            proteinCalories + carbsCalories + fatCalories + remainderCalories
+        }
+
+        var proteinCalories: Double {
+            protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein
         }
 
         var proteinPercent: Double {
-            protein / total
+            protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein / total
+        }
+
+        var carbsCalories: Double {
+            carbohydrates.doubleValue(for: .gram()) * .caloriesPerGramOfCarbs
         }
 
         var carbsPercent: Double {
-            carbohydrates / total
+            carbsCalories / total
+        }
+
+        var fatCalories: Double {
+            fat.doubleValue(for: .gram()) * .caloriesPerGramOfFat
         }
 
         var fatPercent: Double {
-            fat / total
+            fatCalories / total
         }
     }
 
@@ -202,10 +214,10 @@ extension NutritionMonthlySummary.Details {
         let remainder = dietaryEnergy.doubleValue(for: .largeCalorie()) - protein - carbs - fat
 
         return .init(
-            protein: protein,
-            carbohydrates: carbs,
-            fat: fat,
-            remainder: remainder
+            protein: averageProtein,
+            carbohydrates: averageCarbohydrates,
+            fat: averageFat,
+            remainderCalories: remainder
         )
     }
 
