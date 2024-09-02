@@ -45,6 +45,7 @@ struct TodayView: View {
                         .bold()
                         .padding(.horizontal)
                         .zStackAlignment(.leading)
+                        .padding(.top)
 
                     Button(action: {
                         presentedCardSheet = WaterActionCardView().asAny

@@ -15,6 +15,14 @@ struct GoalDailyUpdateCell: View {
     @State private var currentValue: Double = 0
     @State private var thisWeekValue: Double = 0
 
+    @State private var observationHandler: HKObserverQueryHandle?
+
+    init(goal: GoalModel) {
+        self.goal = goal
+
+        observeGoalMetric()
+    }
+
     var body: some View {
         HStack {
             Group {
@@ -88,6 +96,16 @@ private extension GoalDailyUpdateCell {
 
     var shouldShowChart: Bool {
         thisWeekValue + currentValue < goal.metric.value
+    }
+
+    func observeGoalMetric() {
+        observationHandler = HealthManager.shared.healthStore.observeChanges(
+            sampleTypes: goal.metric.measurement.sampleTypes,
+            dateRange: .mondayMorningToNow(),
+            frequency: .immediate
+        ) {
+            await loadQuantity()
+        }
     }
 
     func loadQuantity() async {

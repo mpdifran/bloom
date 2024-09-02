@@ -347,5 +347,60 @@ extension GoalModel {
                 return false
             }
         }
+
+        var sampleTypes: [HKSampleType] {
+            switch self {
+            case .timeInDaylight:
+                [HKQuantityType(.timeInDaylight)]
+            case .walkRunDistance:
+                [HKQuantityType(.distanceWalkingRunning)]
+            case .walkDuration, .runDistance, .runDuration, .bikeDistance, .bikeDuration, .walkRunBikeDistance, .walkRunBikeDuration, .hikeDuration, .yogaWorkoutDuration, .casualSportWorkoutDuration, .intenseSportWorkoutDuration, .gymTrainingWorkoutDuration, .hiitWorkoutDuration, .targetHeartRateZoneTimeZone12, .targetHeartRateZoneTimeZone34, .targetHeartRateZoneTimeZone5:
+                [HKWorkoutType.workoutType()]
+            case .stepCount:
+                [HKQuantityType(.stepCount)]
+            case .meditationMinutes:
+                [HKCategoryType(.mindfulSession)]
+            case .bedtimeSoundLevels:
+                [HKQuantityType(.environmentalAudioExposure)]
+            case .increaseProtein:
+                [HKQuantityType(.dietaryProtein)]
+            case .increaseCarbs:
+                [HKQuantityType(.dietaryCarbohydrates)]
+            case .increaseFat:
+                [HKQuantityType(.dietaryFatTotal)]
+            case .increaseVitaminA:
+                [HKQuantityType(.dietaryVitaminA)]
+            case .increaseVitaminB6:
+                [HKQuantityType(.dietaryVitaminB6)]
+            case .increaseVitaminB12:
+                [HKQuantityType(.dietaryVitaminB12)]
+            case .increaseVitaminC:
+                [HKQuantityType(.dietaryVitaminC)]
+            case .increaseVitaminD:
+                [HKQuantityType(.dietaryVitaminD)]
+            case .increaseVitaminE:
+                [HKQuantityType(.dietaryVitaminE)]
+            case .increaseCalcium, .decreaseCalcium:
+                [HKQuantityType(.dietaryCalcium)]
+            case .increaseIron, .decreaseIron:
+                [HKQuantityType(.dietaryIron)]
+            case .increaseMagnesium, .decreaseMagnesium:
+                [HKQuantityType(.dietaryMagnesium)]
+            case .increasePotassium, .decreasePotassium:
+                [HKQuantityType(.dietaryPotassium)]
+            case .increaseSodium, .decreaseSodium:
+                [HKQuantityType(.dietarySodium)]
+            case .increaseZinc, .decreaseZinc:
+                [HKQuantityType(.dietaryZinc)]
+            case .decreaseSugar:
+                [HKQuantityType(.dietarySugar)]
+            case .decreaseCaffeine:
+                [HKQuantityType(.dietaryCaffeine)]
+            case .increaseFiber:
+                [HKQuantityType(.dietaryFiber)]
+            case .increaseWater:
+                [HKQuantityType(.dietaryWater)]
+            }
+        }
     }
 }
