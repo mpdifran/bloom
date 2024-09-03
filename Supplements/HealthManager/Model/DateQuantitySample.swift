@@ -8,7 +8,7 @@
 import Foundation
 import HealthKit
 
-struct DateQuantitySample: Identifiable, Hashable {
+struct DateQuantitySample: Identifiable, Hashable, Sendable {
     var id: Int { hashValue }
 
     let date: Date

@@ -9,40 +9,35 @@ import SwiftUI
 import Charts
 import HealthKit
 
+@MainActor
 struct GoalDailyUpdateCell: View {
     let goal: GoalModel
 
-    @State private var currentValue: Double = 0
-    @State private var thisWeekValue: Double = 0
-
-    @State private var observationHandler: HKObserverQueryHandle?
+    @StateObject private var viewModel: GoalDailyUpdateCellViewModel
 
     init(goal: GoalModel) {
         self.goal = goal
-
-        observeGoalMetric()
+        self._viewModel = StateObject(wrappedValue: GoalDailyUpdateCellViewModel(goal: goal))
     }
 
     var body: some View {
-        HStack {
-            Group {
-                if hasCompletedTodayGoal {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.white, goal.metric.measurement.color)
-                } else {
-                    Image(systemName: "circle")
-                        .foregroundStyle(goal.metric.measurement.color)
-                }
-            }
-            .font(.title2)
+        HStack(spacing: 16) {
+            CompletionCheckmarkView(hasCompleted: viewModel.hasCompletedTodayGoal)
 
             HStack {
                 VStack(alignment: .leading) {
-                    Text(goal.title)
-                        .bold()
+                    HStack(alignment: .firstTextBaseline) {
+                        Image(systemName: goal.systemImage)
+                            .foregroundStyle(.tint)
+                        Text(goal.title)
+                    }
+                    .bold()
+
+                    ProgressView(value: min(viewModel.dailyValue / remainingGoalValue, 1))
+                        .foregroundStyle(.tint)
 
                     HStack {
-                        Text("\(currentValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                        Text("\(viewModel.dailyValue.format(to: 1)) \(goal.metric.unit.unitString)")
                             .foregroundStyle(.tint)
 
                         Text("/ \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString)")
@@ -50,33 +45,18 @@ struct GoalDailyUpdateCell: View {
                     }
                     .font(.subheadline)
                     .bold()
-
-                    ProgressView(value: currentValue / remainingGoalValue)
-                        .foregroundStyle(.tint)
                 }
                 .fixedSize(horizontal: false, vertical: true)
 
                 Spacer(minLength: 0)
-
-                Image(systemName: goal.systemImage)
-                    .font(.largeTitle)
-                    .foregroundStyle(.tint)
             }
+
+            Image(systemName: "chevron.forward")
+                .foregroundStyle(.secondary)
         }
         .tint(goal.metric.measurement.color)
         .cardContainer(fill: .background.secondary)
-        .task {
-            await loadQuantity()
-        }
-    }
-}
-
-private extension GoalDailyUpdateCell {
-
-    var hasCompletedTodayGoal: Bool {
-        guard !goal.metric.measurement.isDecrease else { return false }
-
-        return currentValue > (goal.metric.value / 7)
+        .animation(.easeOut, value: viewModel.dailyValue)
     }
 }
 
@@ -84,37 +64,6 @@ private extension GoalDailyUpdateCell {
 
     var remainingGoalValue: Double {
         (goal.metric.value / 7)
-    }
-
-    var maxChartValue: Double {
-        max(currentValue, remainingGoalValue)
-    }
-
-    var hasMetGoal: Bool {
-        !goal.metric.measurement.isDecrease && thisWeekValue + currentValue > goal.metric.value
-    }
-
-    var shouldShowChart: Bool {
-        thisWeekValue + currentValue < goal.metric.value
-    }
-
-    func observeGoalMetric() {
-        observationHandler = HealthManager.shared.healthStore.observeChanges(
-            sampleTypes: goal.metric.measurement.sampleTypes,
-            dateRange: .mondayMorningToNow(),
-            frequency: .immediate
-        ) {
-            await loadQuantity()
-        }
-    }
-
-    func loadQuantity() async {
-        let quantity = await goal.metric.quantity(for: .startOfDayToNow())
-        let thisWeekQuantity = await goal.metric.quantity(for: .mondayMorningToStartOfToday())
-        await MainActor.run {
-            self.currentValue = quantity.doubleValue(for: goal.metric.unit)
-            self.thisWeekValue = thisWeekQuantity.doubleValue(for: goal.metric.unit)
-        }
     }
 }
 

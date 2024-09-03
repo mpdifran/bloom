@@ -409,6 +409,37 @@ extension HKHealthStore {
         }
     }
 
+    func fetchCollatedWorkouts(
+        activityTypes: [HKWorkoutActivityType],
+        interval: DateComponents = DateComponents(day: 1),
+        dateRange: DateRange
+    ) async throws -> [DateCollatedWorkouts] {
+        let workouts = try await fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)
+
+        var collatedWorkouts = [Date : [HKWorkout]]()
+
+        for workout in workouts {
+            if let existingDate = collatedWorkouts.keys.first(where: {
+                let dateComponents = Calendar.current.dateComponents(
+                    interval.calendarComponents,
+                    from: $0,
+                    to: workout.startDate
+                )
+                return dateComponents < interval
+            }) {
+                collatedWorkouts[existingDate, default: []].append(workout)
+            } else {
+                let referenceDate = Calendar.current.startOfDay(for: workout.startDate)
+                collatedWorkouts[referenceDate, default: []].append(workout)
+            }
+        }
+
+        let result = collatedWorkouts.map { (key: Date, value: [HKWorkout]) in
+            DateCollatedWorkouts(date: key, workouts: value)
+        }
+        return result.sorted(keyPath: \.date)
+    }
+
     func fetchWorkoutSummation(
         dateRange: DateRange
     ) async throws -> [WorkoutSummation] {

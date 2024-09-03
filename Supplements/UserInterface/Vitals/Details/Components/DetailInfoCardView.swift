@@ -15,7 +15,7 @@ struct DetailInfoCardView<Content>: View where Content: View {
     }
 
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 15) {
                 Text("Details")
                     .font(.headline)
@@ -23,7 +23,7 @@ struct DetailInfoCardView<Content>: View where Content: View {
 
                 content
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
         .cardContainer(fill: .background.secondary)
     }

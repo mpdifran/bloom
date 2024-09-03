@@ -36,9 +36,9 @@ struct WeatherCurrentConditionsCell: View {
     }
 
     var body: some View {
-        HStack(alignment: .top) {
+        HStack {
             VStack(alignment: .leading) {
-                HStack {
+                HStack(alignment: .firstTextBaseline) {
                     Text(temperature)
                     Image(systemName: symbolName)
                 }
@@ -46,19 +46,20 @@ struct WeatherCurrentConditionsCell: View {
                 .fontDesign(.rounded)
                 .bold()
 
-                Text(conditions)
-                    .foregroundStyle(.secondary)
-                    .font(.subheadline)
+                HStack(spacing: 2) {
+                    Image(systemName: "location")
+                    Text(locality)
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+
             }
 
             Spacer()
 
-            HStack(spacing: 2) {
-                Image(systemName: "location")
-                Text(locality)
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            Text(conditions)
+                .bold()
         }
     }
 }

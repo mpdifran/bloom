@@ -37,7 +37,12 @@ struct TodayView: View {
 
                     ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
                         if let goal = goals.first {
-                            GoalDailyUpdateCell(goal: goal)
+                            NavigationLink {
+                                GoalDetailsView(goals: $goalsViewModel.goals[index])
+                            } label: {
+                                GoalDailyUpdateCell(goal: goal)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 

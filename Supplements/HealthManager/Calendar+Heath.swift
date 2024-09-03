@@ -108,4 +108,20 @@ extension Calendar {
 
         return self.mondayMorning(for: nextWeek)
     }
+
+    func mondayMorningMidnight(for date: Date) -> Date? {
+        guard let monday = mondayMorning(for: date) else { return nil }
+
+        let components = self.dateComponents([.year, .month, .day], from: monday)
+
+        return self.date(from: components)
+    }
+
+    func nextMondayMorningMidnight(for date: Date) -> Date? {
+        guard let monday = nextMondayMorning(for: date) else { return nil }
+
+        let components = self.dateComponents([.year, .month, .day], from: monday)
+
+        return self.date(from: components)
+    }
 }

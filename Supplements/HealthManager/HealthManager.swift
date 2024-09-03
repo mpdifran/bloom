@@ -268,6 +268,22 @@ extension HealthManager {
         try? await healthStore.fetchQuantity(for: quantityType, dateRange: dateRange, option: .cumulativeSum)
     }
 
+    func fetchCollatedQuantity(
+        for quantityType: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        interval: DateComponents = DateComponents(day: 1),
+        options: HKStatisticsOptions = [.cumulativeSum],
+        dateRange: DateRange
+    ) async -> [DateQuantitySample] {
+        (try? await healthStore.fetchCollatedQuantity(
+            quantityTypeID: quantityType,
+            unit: unit,
+            interval: interval,
+            options: options,
+            dateRange: dateRange
+        )) ?? []
+    }
+
     func fetchAverage(
         for quantityType: HKQuantityTypeIdentifier,
         unit: HKUnit,
@@ -304,6 +320,26 @@ extension HealthManager {
         (try? await healthStore.fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)) ?? []
     }
 
+    func fetchCollatedWorkouts(
+        activityType: HKWorkoutActivityType,
+        interval: DateComponents = DateComponents(day: 1),
+        dateRange: DateRange
+    ) async -> [DateCollatedWorkouts] {
+        await fetchCollatedWorkouts(activityTypes: [activityType], interval: interval, dateRange: dateRange)
+    }
+
+    func fetchCollatedWorkouts(
+        activityTypes: [HKWorkoutActivityType] = [],
+        interval: DateComponents = DateComponents(day: 1),
+        dateRange: DateRange
+    ) async -> [DateCollatedWorkouts] {
+        (try? await healthStore.fetchCollatedWorkouts(
+            activityTypes: activityTypes,
+            interval: interval,
+            dateRange: dateRange
+        )) ?? []
+    }
+
     func fetchTotalMeditationMinutes(dateRange: DateRange) async -> HKQuantity {
         let samples = (try? await healthStore.fetchSamples(for: HKCategoryType(.mindfulSession), dateRange: dateRange)) ?? []
 
@@ -311,6 +347,35 @@ extension HealthManager {
             total + sample.timeInterval / 60
         }
         return HKQuantity(unit: .minute(), doubleValue: meditationMinutes)
+    }
+
+    func fetchCollatedMeditationMinutes(
+        interval: DateComponents = DateComponents(day: 1),
+        dateRange: DateRange
+    ) async -> [DateQuantitySample] {
+        let samples = (try? await healthStore.fetchSamples(for: HKCategoryType(.mindfulSession), dateRange: dateRange)) ?? []
+
+        var collatedDates = [Date : Double]()
+
+        for sample in samples {
+            if let existingDate = collatedDates.keys.first(where: { date in
+                let dateComponents = Calendar.current.dateComponents(
+                    interval.calendarComponents,
+                    from: date,
+                    to: sample.startDate
+                )
+                return dateComponents < interval
+            }) {
+                collatedDates[existingDate, default: 0] += (sample.timeInterval / 60)
+            } else {
+                let referenceDate = Calendar.current.startOfDay(for: sample.startDate)
+                collatedDates[referenceDate, default: 0] += (sample.timeInterval / 60)
+            }
+        }
+
+        return collatedDates.map { (key: Date, value: Double) in
+            DateQuantitySample(date: key, quantity: .init(unit: .minute(), doubleValue: value))
+        }.sorted(keyPath: \.date)
     }
 
     func fetchDietaryNutritionPercentage(
@@ -362,6 +427,43 @@ extension HealthManager {
         }
 
         return reports
+    }
+
+    func fetchCollatedWorkoutHeartRateReports(
+        interval: DateComponents = DateComponents(day: 1),
+        dateRange: DateRange
+    ) async -> [DateCollatedWorkoutHeartRateReport] {
+        guard let targetHeartRateZones = await heartRateZones() else { return [] }
+
+        let collatedWorkouts = await fetchCollatedWorkouts(interval: interval, dateRange: dateRange)
+
+        var collatedReports = [DateCollatedWorkoutHeartRateReport]()
+
+        for collatedWorkout in collatedWorkouts {
+            var reports = [WorkoutHeartRateReport]()
+
+            for workout in collatedWorkout.workouts {
+                guard let heartRateSamples = try? await healthStore.fetchSamples(
+                    for: HKQuantityType(.heartRate),
+                    dateRange: workout.dateRange
+                ) as? [HKQuantitySample] else {
+                    continue
+                }
+
+                reports.append(
+                    WorkoutHeartRateReport(
+                        workout: workout,
+                        heartRateSamples: heartRateSamples,
+                        heartRateZones: targetHeartRateZones
+                    )
+                )
+            }
+
+            let collatedReport = DateCollatedWorkoutHeartRateReport(date: collatedWorkout.date, reports: reports)
+            collatedReports.append(collatedReport)
+        }
+
+        return collatedReports
     }
 }
 

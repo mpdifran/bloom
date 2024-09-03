@@ -90,6 +90,14 @@ public extension DateFormatter {
         return dateFormatter
     }()
 
+    static var justDayOfWeekShort: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.setLocalizedDateFormatFromTemplate("E")
+
+        return dateFormatter
+    }()
+
     static var timeIntervalHourMinuteShort: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
 

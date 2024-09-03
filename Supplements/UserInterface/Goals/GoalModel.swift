@@ -84,6 +84,10 @@ extension GoalModel.Metric {
         HKUnit(from: unitString)
     }
 
+    var dailyValue: Double {
+        value / 7
+    }
+
     func quantity(for dateRange: DateRange) async -> HKQuantity {
         let defaultQuantity = HKQuantity(unit: unit, doubleValue: 0)
         switch measurement {
@@ -213,6 +217,159 @@ extension GoalModel.Metric {
         }
 
         return defaultQuantity
+    }
+
+    func fetchCollatedDailyQuantity(for dateRange: DateRange) async -> [DateQuantitySample] {
+        switch measurement {
+        case .timeInDaylight:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: unit, dateRange: dateRange)
+        case .walkRunDistance:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .distanceWalkingRunning, unit: unit, dateRange: dateRange)
+        case .walkDuration:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(activityType: .walking, dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+            }
+        case .runDistance:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(activityType: .running, dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(where: { $0.totalDistanceWalkingRunning.doubleValue(for: unit) })
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: unit, doubleValue: total))
+            }
+        case .runDuration:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(activityType: .running, dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+            }
+        case .bikeDistance:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(activityType: .cycling, dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(where: { $0.totalDistanceCycling.doubleValue(for: unit) })
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: unit, doubleValue: total))
+            }
+        case .bikeDuration:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(activityType: .cycling, dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+            }
+        case .walkRunBikeDistance:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(
+                activityTypes: [.walking, .running, .cycling],
+                dateRange: dateRange
+            )
+            return workouts.map {
+                let total = $0.workouts.sum(where: { $0.totalDistanceWalkingRunningCycling.doubleValue(for: unit) })
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: unit, doubleValue: total))
+            }
+        case .walkRunBikeDuration:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(
+                activityTypes: [.walking, .running, .cycling],
+                dateRange: dateRange
+            )
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+            }
+        case .hikeDuration:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(activityType: .hiking, dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+            }
+        case .stepCount:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .stepCount, unit: unit, dateRange: dateRange)
+        case .meditationMinutes:
+            return await HealthManager.shared.fetchCollatedMeditationMinutes(dateRange: dateRange)
+        case .bedtimeSoundLevels:
+            break
+        case .yogaWorkoutDuration:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(activityType: .yoga, dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+            }
+        case .casualSportWorkoutDuration:
+            break
+        case .intenseSportWorkoutDuration:
+            break
+        case .gymTrainingWorkoutDuration:
+            break
+        case .hiitWorkoutDuration:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(
+                activityType: .highIntensityIntervalTraining,
+                dateRange: dateRange
+            )
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+            }
+        case .targetHeartRateZoneTimeZone12:
+            let collatedReports = await HealthManager.shared.fetchCollatedWorkoutHeartRateReports(dateRange: dateRange)
+            return collatedReports.map { collatedReport in
+                let overallDistribution = collatedReport.reports.generateOverallDistribution()
+                let totalDuration = overallDistribution.zone1.sum(overallDistribution.zone2, unit: unit)
+
+                return DateQuantitySample(date: collatedReport.date, quantity: totalDuration)
+            }
+        case .targetHeartRateZoneTimeZone34:
+            let collatedReports = await HealthManager.shared.fetchCollatedWorkoutHeartRateReports(dateRange: dateRange)
+            return collatedReports.map { collatedReport in
+                let overallDistribution = collatedReport.reports.generateOverallDistribution()
+                let totalDuration = overallDistribution.zone3.sum(overallDistribution.zone4, unit: unit)
+
+                return DateQuantitySample(date: collatedReport.date, quantity: totalDuration)
+            }
+        case .targetHeartRateZoneTimeZone5:
+            let collatedReports = await HealthManager.shared.fetchCollatedWorkoutHeartRateReports(dateRange: dateRange)
+            return collatedReports.map { collatedReport in
+                let overallDistribution = collatedReport.reports.generateOverallDistribution()
+                let totalDuration = overallDistribution.zone5
+
+                return DateQuantitySample(date: collatedReport.date, quantity: totalDuration)
+            }
+        case .increaseProtein:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryProtein, unit: unit, dateRange: dateRange)
+        case .increaseCarbs:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryCarbohydrates, unit: unit, dateRange: dateRange)
+        case .increaseFat:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryFatTotal, unit: unit, dateRange: dateRange)
+        case .increaseVitaminA:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryVitaminA, unit: unit, dateRange: dateRange)
+        case .increaseVitaminB6:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryVitaminB6, unit: unit, dateRange: dateRange)
+        case .increaseVitaminB12:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryVitaminB12, unit: unit, dateRange: dateRange)
+        case .increaseVitaminC:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryVitaminC, unit: unit, dateRange: dateRange)
+        case .increaseVitaminD:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryVitaminD, unit: unit, dateRange: dateRange)
+        case .increaseVitaminE:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryVitaminE, unit: unit, dateRange: dateRange)
+        case .increaseCalcium, .decreaseCalcium:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryCalcium, unit: unit, dateRange: dateRange)
+        case .increaseIron, .decreaseIron:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryIron, unit: unit, dateRange: dateRange)
+        case .increaseMagnesium, .decreaseMagnesium:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryMagnesium, unit: unit, dateRange: dateRange)
+        case .increasePotassium, .decreasePotassium:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryPotassium, unit: unit, dateRange: dateRange)
+        case .increaseSodium, .decreaseSodium:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietarySodium, unit: unit, dateRange: dateRange)
+        case .increaseZinc, .decreaseZinc:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryZinc, unit: unit, dateRange: dateRange)
+        case .decreaseSugar:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietarySugar, unit: unit, dateRange: dateRange)
+        case .decreaseCaffeine:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryCaffeine, unit: unit, dateRange: dateRange)
+        case .increaseFiber:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryFiber, unit: unit, dateRange: dateRange)
+        case .increaseWater:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryWater, unit: unit, dateRange: dateRange)
+        }
+        return []
     }
 }
 
@@ -345,6 +502,15 @@ extension GoalModel {
                 return true
             default:
                 return false
+            }
+        }
+
+        var isCumulative: Bool {
+            switch self {
+            case .timeInDaylight, .walkRunDistance, .walkDuration, .runDistance, .runDuration, .bikeDistance, .bikeDuration, .walkRunBikeDistance, .walkRunBikeDuration, .hikeDuration, .meditationMinutes, .yogaWorkoutDuration, .casualSportWorkoutDuration, .intenseSportWorkoutDuration, .gymTrainingWorkoutDuration, .hiitWorkoutDuration, .targetHeartRateZoneTimeZone12, .targetHeartRateZoneTimeZone34, .targetHeartRateZoneTimeZone5:
+                true
+            case .stepCount, .bedtimeSoundLevels, .increaseProtein, .increaseCarbs, .increaseFat, .increaseVitaminA, .increaseVitaminB6, .increaseVitaminB12, .increaseVitaminC, .increaseVitaminD, .increaseVitaminE, .increaseCalcium, .decreaseCalcium, .increaseIron, .decreaseIron, .increaseMagnesium, .decreaseMagnesium, .increasePotassium, .decreasePotassium, .increaseSodium, .decreaseSodium, .increaseZinc, .decreaseZinc, .decreaseSugar, .decreaseCaffeine, .increaseFiber, .increaseWater:
+                false
             }
         }
 

@@ -26,7 +26,7 @@ struct EventCell: View {
 
                     if let location = event.structuredLocation?.title {
                         if let url = URL(string: location), let host = url.host() {
-                            HStack(spacing: 2) {
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
                                 Image(systemName: "video")
                                     .font(.caption)
 
@@ -34,7 +34,7 @@ struct EventCell: View {
                             }
                             .foregroundStyle(.secondary)
                         } else {
-                            HStack(spacing: 2) {
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
                                 Image(systemName: "location")
                                     .font(.caption)
 
