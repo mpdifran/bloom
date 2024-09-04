@@ -860,7 +860,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: average), 200),
+                value: max(multipliedGoal(for: average), 105),
                 unit: unit,
                 measurement: .timeInDaylight
             ),
@@ -882,7 +882,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: (averageDuration / 60)), 15),
+                value: max(multipliedGoal(for: (averageDuration / 60)), 14),
                 unit: unit,
                 measurement: .walkDuration
             ),
@@ -907,7 +907,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: amount), 1),
+                value: max(multipliedGoal(for: amount), 3.5),
                 unitString: unit.unitString,
                 measurement: .walkRunDistance
             ),
@@ -931,7 +931,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: average), 2),
+                value: max(multipliedGoal(for: average), 2.1),
                 unitString: unit.unitString,
                 measurement: .runDistance
             ),
@@ -953,7 +953,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: (averageDuration / 60)), 15),
+                value: max(multipliedGoal(for: (averageDuration / 60)), 14),
                 unit: unit,
                 measurement: .hikeDuration
             ),
@@ -977,7 +977,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: amount), 1000),
+                value: max(multipliedGoal(for: amount), 3500),
                 unit: unit,
                 measurement: .stepCount
             ),
@@ -999,7 +999,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: (averageDuration / 60)), 30),
+                value: max(multipliedGoal(for: (averageDuration / 60)), 35),
                 unit: unit,
                 measurement: .hiitWorkoutDuration
             ),
@@ -1016,7 +1016,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(multipliedGoal(for: average), 10),
+                value: max(multipliedGoal(for: average), 7),
                 unit: .minute(),
                 measurement: .meditationMinutes
             ),

@@ -13,7 +13,7 @@ struct TodayView: View {
     @ObservedObject private var viewModel = TodayViewModel.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
 
-    @EnvironmentObject private var tabContorller: TabController
+    @EnvironmentObject private var tabController: TabController
 
     @State private var presentedFullScreen: AnyView?
     @State private var presentedCardSheet: AnyView?
@@ -85,7 +85,7 @@ struct TodayView: View {
             .navigationTitle("Today")
             .sheet($presentedCardSheet)
             .fullScreenCover($presentedFullScreen)
-            .fullScreenCover(isPresented: $tabContorller.showMorningReport) {
+            .fullScreenCover(isPresented: $tabController.showMorningReport) {
                 GoodMorningView()
             }
         }

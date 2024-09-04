@@ -26,7 +26,7 @@ struct GoalDetailsView: View {
                 HStack {
                     Image(systemName: goal.systemImage)
                         .font(.largeTitle)
-                        .foregroundStyle(goal.metric.measurement.color)
+                        .foregroundStyle(.tint)
 
                     Text(goal.title)
                         .font(.title3)
@@ -34,23 +34,10 @@ struct GoalDetailsView: View {
 
                     Spacer()
 
-                    VStack {
-                        Text(goal.metric.targetDailyQuantity.displayString(for: goal.metric.unit))
-                            .font(.subheadline)
-                            .fontDesign(.rounded)
-                            .bold()
-                            .foregroundStyle(goal.metric.measurement.color)
-                        Text("per day")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(.fill)
-                    }
+
+                    GoalDailyTargetTagView(formattedTarget: goal.metric.targetDailyQuantity.displayString(for: goal.metric.unit))
                 }
+                .tint(goal.metric.measurement.color)
 
                 chart
 

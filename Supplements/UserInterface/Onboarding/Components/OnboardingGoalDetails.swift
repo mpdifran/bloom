@@ -16,27 +16,21 @@ struct OnboardingGoalDetails: View {
         VStack {
             HStack {
                 Image(systemName: goal.systemImage)
-                    .foregroundStyle(goal.metric.measurement.color)
+                    .foregroundStyle(.tint)
                     .font(.largeTitle)
 
                 VStack(alignment: .leading) {
                     Text(goal.title)
                         .font(.title3)
                         .bold()
-                    Text("Due \(DateFormatter.relativeTimeIntervalDaysFullFromNow(goal.dueDate))")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                 }
                 .multilineTextAlignment(.leading)
 
                 Spacer()
 
-                Text("\(goal.metric.value.format()) \(goal.metric.unitString)")
-                    .font(.title2)
-                    .bold()
-                    .fontDesign(.rounded)
-                    .foregroundStyle(goal.metric.measurement.color)
+                GoalDailyTargetTagView(formattedTarget: goal.metric.targetDailyQuantity.displayString(for: goal.metric.unit))
             }
+            .tint(goal.metric.measurement.color)
 
 
             if let targetVitalModel {

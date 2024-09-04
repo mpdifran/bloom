@@ -53,7 +53,7 @@ extension TabController: UNUserNotificationCenterDelegate {
             }
         case .CategoryID.goodMorning:
             await MainActor.run {
-                select(.vitals)
+                select(.today)
                 showMorningReport = true
             }
         default:

@@ -9,12 +9,10 @@ import Foundation
 
 extension Double {
 
-    var numberOfDigits: Int {
-        Int(Double.log10(self))
-    }
-
     func roundedToNiceNumber() -> Self {
-        let roundingPoint = Double.pow(10, numberOfDigits)
+        guard abs(self) > 0 else { return 0 }
+
+        let roundingPoint = Double.pow(10, Double.log10(self))
         return (self / roundingPoint).rounded() * roundingPoint
     }
 }

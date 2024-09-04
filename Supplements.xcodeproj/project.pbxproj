@@ -112,6 +112,7 @@
 		FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */; };
 		FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B22C88957C00278019 /* Double+Rounding.swift */; };
 		FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */; };
+		FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
 		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
@@ -540,6 +541,7 @@
 		FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoCardView.swift; sourceTree = "<group>"; };
 		FF4A21B22C88957C00278019 /* Double+Rounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Rounding.swift"; sourceTree = "<group>"; };
 		FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightActionCardView.swift; sourceTree = "<group>"; };
+		FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDailyTargetTagView.swift; sourceTree = "<group>"; };
 		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
 		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
 		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
@@ -857,6 +859,7 @@
 				FF0DA0FE2C8787DB007D1A6B /* GoalDailyUpdateCellViewModel.swift */,
 				FF0DA0F22C86364B007D1A6B /* GoalDetailsView.swift */,
 				FF0DA1002C878B35007D1A6B /* GoalDetailsViewModel.swift */,
+				FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2334,6 +2337,7 @@
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FFBE52392C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift in Sources */,
 				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,
+				FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
 				FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */,
 				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
