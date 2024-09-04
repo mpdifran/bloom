@@ -15,5 +15,10 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<key>bugsnag</key>
+	<dict>
+		<key>apiKey</key>
+		<string>bdabfb744461469374c2cc273b493168</string>
+	</dict>
 </dict>
 </plist>

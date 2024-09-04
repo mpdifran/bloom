@@ -8,6 +8,8 @@
 import SwiftUI
 import ScreenControl
 import OpenAPIClient
+import Bugsnag
+import BugsnagPerformance
 
 @main
 struct SupplementsApp: App {
@@ -15,6 +17,9 @@ struct SupplementsApp: App {
     private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
 
     init() {
+        Bugsnag.start()
+        BugsnagPerformance.start()
+
         OpenAPIClientAPI.basePath = "https://shep-test-7d27e987b8ef.herokuapp.com/api"
         OpenAPIClientAPI.apiResponseQueue = DispatchQueue(label: "OpenAPIQueue")
     }
@@ -33,7 +38,7 @@ struct SupplementsApp: App {
                     }
                 }
                 .onReceive(foregroundPublisher) { _ in
-                    
+
                 }
         }
         .modelContainer(ContainerHolder.shared.container)

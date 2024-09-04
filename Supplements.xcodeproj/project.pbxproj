@@ -114,6 +114,11 @@
 		FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */; };
 		FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */; };
 		FF4A21B92C88E11E00278019 /* DateValueSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B82C88E11E00278019 /* DateValueSample.swift */; };
+		FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BB2C88FA5600278019 /* Bugsnag */; };
+		FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */; };
+		FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C02C88FA9D00278019 /* BugsnagPerformance */; };
+		FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */; };
+		FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
 		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
@@ -800,11 +805,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFF87F8D2C1FB83A0053280E /* OpenAPIClient in Frameworks */,
+				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
+				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
 				FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */,
 				FFC77AE32C57FCEC003E5F85 /* StatKit in Frameworks */,
+				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
 				FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */,
 				FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */,
+				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
+				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
 				FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1913,6 +1923,11 @@
 				FF8B8B202BFD1EF500BA2128 /* Algorithms */,
 				FFF87F8C2C1FB83A0053280E /* OpenAPIClient */,
 				FFC77AE22C57FCEC003E5F85 /* StatKit */,
+				FF4A21BB2C88FA5600278019 /* Bugsnag */,
+				FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */,
+				FF4A21C02C88FA9D00278019 /* BugsnagPerformance */,
+				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
+				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -1989,6 +2004,8 @@
 				FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				FFF87F8B2C1FB83A0053280E /* XCLocalSwiftPackageReference "bloom-swift-api" */,
 				FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */,
+				FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
+				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -3161,6 +3178,22 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bugsnag/bugsnag-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.30.1;
+			};
+		};
+		FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bugsnag/bugsnag-cocoa-performance";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.1;
+			};
+		};
 		FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
@@ -3196,6 +3229,31 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FF4A21BB2C88FA5600278019 /* Bugsnag */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */;
+			productName = Bugsnag;
+		};
+		FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */;
+			productName = BugsnagNetworkRequestPlugin;
+		};
+		FF4A21C02C88FA9D00278019 /* BugsnagPerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
+			productName = BugsnagPerformance;
+		};
+		FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
+			productName = BugsnagPerformanceSwift;
+		};
+		FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
+			productName = BugsnagPerformanceSwiftUI;
+		};
 		FF8B8B202BFD1EF500BA2128 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
