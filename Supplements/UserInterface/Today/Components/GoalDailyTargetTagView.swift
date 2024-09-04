@@ -11,15 +11,20 @@ struct GoalDailyTargetTagView: View {
     let formattedTarget: String
 
     var body: some View {
-        VStack {
-            Text(formattedTarget)
-                .font(.subheadline)
-                .fontDesign(.rounded)
-                .bold()
+        HStack {
+            Image(systemName: "trophy")
                 .foregroundStyle(.tint)
-            Text("per day")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+
+            VStack(alignment: .leading) {
+                Text(formattedTarget)
+                    .font(.subheadline)
+                    .fontDesign(.rounded)
+                    .bold()
+                    .foregroundStyle(.tint)
+                Text("per day")
+                    .font(.caption2)
+//                    .foregroundStyle(.secondary)
+            }
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)

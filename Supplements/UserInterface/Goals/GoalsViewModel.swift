@@ -225,7 +225,7 @@ private extension GoalsViewModel {
 
             if macros.proteinPercent < proteinGoal.lowerBound {
                 return GoalModel(
-                    title: "Increase Protein Intake",
+                    title: "Protein Intake",
                     systemImage: "fork.knife",
                     summary: "Try and increase your protein intake. You can find protein in things like meat, greek yogurt, chickpeas, or edamame.",
                     dueDate: dueDate,
@@ -239,7 +239,7 @@ private extension GoalsViewModel {
             }
             if macros.carbsPercent < carbsGoal.lowerBound {
                 return GoalModel(
-                    title: "Increase Carbohydrate Intake",
+                    title: "Carbohydrate Intake",
                     systemImage: "fork.knife",
                     summary: "Try and increase your carbohydrate intake. You can get more carbs by eating things like whole wheat bread, potatoes, bananas, or yogurt.",
                     dueDate: dueDate,
@@ -253,7 +253,7 @@ private extension GoalsViewModel {
             }
             if macros.fatPercent < fatGoal.lowerBound {
                 return GoalModel(
-                    title: "Increase Fat Intake",
+                    title: "Fat Intake",
                     systemImage: "fork.knife",
                     summary: "Focus on increasing your fat intake. Try eating things like avocados, nuts, salmon, eggs, or cheese to get more healthy fat.",
                     dueDate: dueDate,
@@ -291,7 +291,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.vitaminAScore
         {
             let goal = GoalModel(
-                title: "Get More Vitamin A",
+                title: "Vitamin A",
                 systemImage: "arrow.up.circle",
                 summary: "Your Vitamin A levels are low. Try eating things like liver, fish, eggs, dark leafy greens, orange + yellow vegetables, or mangoes.",
                 dueDate: dueDate,
@@ -310,7 +310,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.vitaminB6Score
         {
             let goal = GoalModel(
-                title: "Get More Vitamin B6",
+                title: "Vitamin B6",
                 systemImage: "arrow.up.circle",
                 summary: "Your Vitamin B6 levels are low. Try eating things like chicken breast, tuna, beef, chickpeas, bananas, spinach, or oatmeal.",
                 dueDate: dueDate,
@@ -329,7 +329,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.vitaminB12Score
         {
             let goal = GoalModel(
-                title: "Get More Vitamin B12",
+                title: "Vitamin B12",
                 systemImage: "arrow.up.circle",
                 summary: "Your Vitamin B12 levels are low. Try eating things like red meats, salmon, swiss or mozarella cheeses, yogurt, or egg yolks.",
                 dueDate: dueDate,
@@ -348,7 +348,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.vitaminCScore
         {
             let goal = GoalModel(
-                title: "Get More Vitamin C",
+                title: "Vitamin C",
                 systemImage: "arrow.up.circle",
                 summary: "Your Vitamin C levels are low. Try eating things like citrus fruits, berries, kiwi, cantaloupe, bell peppers, tomatoes, potatoes, or leafy greens.",
                 dueDate: dueDate,
@@ -368,7 +368,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.vitaminDScore
         {
             let goal = GoalModel(
-                title: "Get More Vitamin D",
+                title: "Vitamin D",
                 systemImage: "arrow.up.circle",
                 summary: "Your Vitamin D levels are low. Try eating things like salmon, mackerel, cod liver oil, egg yolks, or mushrooms.",
                 dueDate: dueDate,
@@ -387,7 +387,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.vitaminEScore
         {
             let goal = GoalModel(
-                title: "Get More Vitamin E",
+                title: "Vitamin E",
                 systemImage: "arrow.up.circle",
                 summary: "Your Vitamin E levels are low. Try eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
                 dueDate: dueDate,
@@ -409,7 +409,7 @@ private extension GoalsViewModel {
             let isBelow = mineral.doubleValue(for: milligram) < target.lowerDoubleValue(for: milligram)
             if isBelow {
                 let goal = GoalModel(
-                    title: "Increase Calcium Intake",
+                    title: "Calcium Intake",
                     systemImage: "arrow.up.circle",
                     summary: "You're not getting enough calcium. Try eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
                     dueDate: dueDate,
@@ -423,7 +423,7 @@ private extension GoalsViewModel {
                 scoredNutrients.append((score, goal))
             } else {
                 let goal = GoalModel(
-                    title: "Decrease Calcium Intake",
+                    title: "Calcium Intake",
                     systemImage: "arrow.down.circle",
                     summary: "You're getting too much calcium. Try avoiding eating things like nuts, seeds, avocado, mango, spinach, broccoli, or asparagus.",
                     dueDate: dueDate,
@@ -446,7 +446,7 @@ private extension GoalsViewModel {
             let isBelow = mineral.doubleValue(for: milligram) < target.lowerDoubleValue(for: milligram)
             if isBelow {
                 let goal = GoalModel(
-                    title: "Increase Iron Intake",
+                    title: "Iron Intake",
                     systemImage: "arrow.up.circle",
                     summary: "You're not getting enough iron. Try eating things like red meat, poultry, fish, eggs, beans, spinach, cashews, almonds, or dark chocolate.",
                     dueDate: dueDate,
@@ -460,7 +460,7 @@ private extension GoalsViewModel {
                 scoredNutrients.append((score, goal))
             } else {
                 let goal = GoalModel(
-                    title: "Decrease Iron Intake",
+                    title: "Iron Intake",
                     systemImage: "arrow.down.circle",
                     summary: "You're getting too much iron. Try avoiding eating things like red meat, poultry, fish, eggs, beans, spinach, cashews, almonds, or dark chocolate.",
                     dueDate: dueDate,
@@ -483,7 +483,7 @@ private extension GoalsViewModel {
             let isBelow = mineral.doubleValue(for: milligram) < target.lowerDoubleValue(for: milligram)
             if isBelow {
                 let goal = GoalModel(
-                    title: "Increase Magnesium Intake",
+                    title: "Magnesium Intake",
                     systemImage: "arrow.up.circle",
                     summary: "You're not getting enough magnesium. Try eating things like spinach, kale, almonds, whole wheat bread, lentils, chickpeas, salmon, avocados, milk, bananas, or tofu.",
                     dueDate: dueDate,
@@ -497,7 +497,7 @@ private extension GoalsViewModel {
 //                scoredNutrients.append((score, goal))
             } else {
                 let goal = GoalModel(
-                    title: "Decrease Magnesium Intake",
+                    title: "Magnesium Intake",
                     systemImage: "arrow.down.circle",
                     summary: "You're getting too much iron. Try avoiding eating things like spinach, kale, almonds, whole wheat bread, lentils, chickpeas, salmon, avocados, milk, bananas, or tofu.",
                     dueDate: dueDate,
@@ -520,7 +520,7 @@ private extension GoalsViewModel {
             let isBelow = mineral.doubleValue(for: milligram) < target.lowerDoubleValue(for: milligram)
             if isBelow {
                 let goal = GoalModel(
-                    title: "Increase Potassium Intake",
+                    title: "Potassium Intake",
                     systemImage: "arrow.up.circle",
                     summary: "You're not getting enough potassium. Try eating things like bananas, avocados, potatoes, spinach, tomates, beans, oranges, yogurt, or salmon.",
                     dueDate: dueDate,
@@ -544,7 +544,7 @@ private extension GoalsViewModel {
             let isBelow = mineral.doubleValue(for: milligram) < target.lowerDoubleValue(for: milligram)
             if isBelow {
                 let goal = GoalModel(
-                    title: "Increase Sodium Intake",
+                    title: "Sodium Intake",
                     systemImage: "arrow.up.circle",
                     summary: "You're not getting enough sodium. Try eating things like processed meats, canned vegetables and soups, cheese, or adding table salt to meals.",
                     dueDate: dueDate,
@@ -558,7 +558,7 @@ private extension GoalsViewModel {
                 scoredNutrients.append((score, goal))
             } else {
                 let goal = GoalModel(
-                    title: "Decrease Sodium Intake",
+                    title: "Sodium Intake",
                     systemImage: "arrow.down.circle",
                     summary: "You're getting too much sodium. Try avoiding eating things like processed meats, canned vegetables and soups, cheese, and avoid adding table salt to meals.",
                     dueDate: dueDate,
@@ -581,7 +581,7 @@ private extension GoalsViewModel {
             let isBelow = mineral.doubleValue(for: milligram) < target.lowerDoubleValue(for: milligram)
             if isBelow {
                 let goal = GoalModel(
-                    title: "Increase Zinc Intake",
+                    title: "Zinc Intake",
                     systemImage: "arrow.up.circle",
                     summary: "You're not getting enough zinc. Try eating things like beef, lamb, shellfish, legumes, seeds, nuts, dairy products, eggs, or whole grains.",
                     dueDate: dueDate,
@@ -595,7 +595,7 @@ private extension GoalsViewModel {
 //                scoredNutrients.append((score, goal))
             } else {
                 let goal = GoalModel(
-                    title: "Decrease Zinc Intake",
+                    title: "Zinc Intake",
                     systemImage: "arrow.down.circle",
                     summary: "You're getting too much zinc. Try avoiding eating things like beef, lamb, shellfish, legumes, seeds, nuts, dairy products, eggs, or whole grains.",
                     dueDate: dueDate,
@@ -615,7 +615,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.sugarScore
         {
             let goal = GoalModel(
-                title: "Decrease Sugar Intake",
+                title: "Sugar Intake",
                 systemImage: "arrow.down.circle",
                 summary: "You're eating too much sugar. Try avoiding eating things like sugary snacks or drinks, white bread, pasta, rice, fried foods, desserts, alcohol, or fruit juice. Avoid artificial sweeteners as well, since they can increase sugar cravings and impact gut health.",
                 dueDate: dueDate,
@@ -634,7 +634,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.caffeineScore
         {
             let goal = GoalModel(
-                title: "Decrease Caffeine Intake",
+                title: "Caffeine Intake",
                 systemImage: "arrow.down.circle",
                 summary: "You're getting too much caffeine. Try avoiding ingesting things like caffeinated beverages (coffee, pop), or chocolate.",
                 dueDate: dueDate,
@@ -653,7 +653,7 @@ private extension GoalsViewModel {
             let score = nutritionSummary.details.fiberScore
         {
             let goal = GoalModel(
-                title: "Increase Fiber Intake",
+                title: "Fiber Intake",
                 systemImage: "arrow.up.circle",
                 summary: "You're not getting enough fiber. Try eating things like fruits, leafy greens, broccoli, carrots, oats, whole grain bread, beans, almonds, or popcorn.",
                 dueDate: dueDate,
@@ -721,7 +721,7 @@ private extension GoalsViewModel {
         let zone12Value = (distribution.zone12Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage))
 
         let zone12Goal = GoalModel(
-            title: "Increase Time in Zones 1 and 2",
+            title: "Time in Zones 1 and 2",
             systemImage: "12.square.fill",
             summary: zone12Summary,
             dueDate: dueDate,
@@ -748,7 +748,7 @@ private extension GoalsViewModel {
         let zone34Value = (distribution.zone34Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage))
 
         let zone34Goal = GoalModel(
-            title: "Increase Time in Zones 3 and 4",
+            title: "Time in Zones 3 and 4",
             systemImage: "34.square.fill",
             summary: zone34Summary,
             dueDate: dueDate,
@@ -774,7 +774,7 @@ private extension GoalsViewModel {
         let zone5Value = (distribution.zone5.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage))
 
         let zone5Goal = GoalModel(
-            title: "Increase Time in Zone 5",
+            title: "Time in Zone 5",
             systemImage: "5.square.fill",
             summary: zone5Summary,
             dueDate: dueDate,
@@ -807,7 +807,7 @@ private extension GoalsViewModel {
         switch focusStoolType {
         case 1, 2, 5, 6, 7:
             let fiberGoal = GoalModel(
-                title: "Increase Fiber Intake",
+                title: "Fiber Intake",
                 systemImage: "arrow.up.circle",
                 summary: "More fiber could help improve bowel movements. Try eating things like fruits, leafy greens, broccoli, carrots, oats, whole grain bread, beans, almonds, or popcorn.",
                 dueDate: dueDate,
@@ -820,7 +820,7 @@ private extension GoalsViewModel {
             )
             
             let waterGoal = GoalModel(
-                title: "Drink More Water",
+                title: "Water",
                 systemImage: "waterbottle",
                 summary: "Drinking more water can help improve your bowel movements.",
                 dueDate: dueDate,
@@ -855,7 +855,7 @@ private extension GoalsViewModel {
         ).doubleValue(for: unit)
 
         return GoalModel(
-            title: "Get More Sunlight",
+            title: "Sunlight",
             systemImage: "sun.max.fill",
             summary: summary,
             dueDate: dueDate,
@@ -877,7 +877,7 @@ private extension GoalsViewModel {
         let averageDuration = workouts.sum(keyPath: \.duration) / Double(Int.numWeeksPastAverage)
 
         return GoalModel(
-            title: "Increase Walking Duration",
+            title: "Walking Duration",
             systemImage: "figure.walk",
             summary: summary,
             dueDate: dueDate,
@@ -902,7 +902,7 @@ private extension GoalsViewModel {
         let amount = averageQuantity.doubleValue(for: unit)
 
         return GoalModel(
-            title: "Increase Walking + Running Distance",
+            title: "Walking + Running Distance",
             systemImage: "figure.walk",
             summary: summary,
             dueDate: dueDate,
@@ -926,7 +926,7 @@ private extension GoalsViewModel {
         } / Double(Int.numWeeksPastAverage)
 
         return GoalModel(
-            title: "Run For Longer Distances",
+            title: "Running",
             systemImage: "figure.run",
             summary: summary,
             dueDate: dueDate,
@@ -948,7 +948,7 @@ private extension GoalsViewModel {
         let averageDuration = workouts.sum(keyPath: \.duration) / Double(Int.numWeeksPastAverage)
 
         return GoalModel(
-            title: "Hike More",
+            title: "Hiking",
             systemImage: "figure.hiking",
             summary: summary,
             dueDate: dueDate,
@@ -972,7 +972,7 @@ private extension GoalsViewModel {
         let amount = averageQuantity.doubleValue(for: unit)
 
         return GoalModel(
-            title: "Increase Step Count",
+            title: "Steps",
             systemImage: "figure.walk",
             summary: summary,
             dueDate: dueDate,
@@ -994,7 +994,7 @@ private extension GoalsViewModel {
         let averageDuration = workouts.sum(keyPath: \.duration) / Double(Int.numWeeksPastAverage)
 
         return GoalModel(
-            title: "Increase HIIT Duration",
+            title: "HIIT Duration",
             systemImage: "figure.highintensity.intervaltraining",
             summary: summary,
             dueDate: dueDate,
@@ -1011,7 +1011,7 @@ private extension GoalsViewModel {
         let average = await HealthManager.shared.fetchWeeklyAverageMeditationMinutes(numWeeks: .numWeeksPastAverage)
 
         return GoalModel(
-            title: "Meditate More Often",
+            title: "Meditation",
             systemImage: "figure.mind.and.body",
             summary: summary,
             dueDate: dueDate,
