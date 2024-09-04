@@ -9,11 +9,11 @@ import SwiftUI
 import HealthKit
 
 private extension Int {
-    static let numWeeksPastAverage: Int = 6
+    static let numWeeksPastAverage: Int = 3
 }
 
 private extension Double {
-    static let goalMultiplier: Double = 1.2
+    static let goalMultiplier: Double = 1.1
 }
 
 final actor GoalsViewModel: ObservableObject {
@@ -677,11 +677,21 @@ private extension GoalsViewModel {
             dateRange: .trailingWeeksFromStartOfWeek(.numWeeksPastAverage)
         ).doubleValue(for: unit) * 7 // Gets us a weekly amount
 
-        if isincrease {
-            return averageValue * .goalMultiplier
+        return multipliedGoal(for: averageValue, isIncrease: isincrease)
+    }
+
+    func multipliedGoal(for value: Double, isIncrease: Bool = true) -> Double {
+        let dailyValue = value / 7
+        let newValue: Double
+        if isIncrease {
+            newValue = (dailyValue * .goalMultiplier).roundedToNiceNumber() * 7
         } else {
-            return averageValue / .goalMultiplier
+            newValue = (dailyValue / .goalMultiplier).roundedToNiceNumber() * 7
         }
+
+        print("Weekly Avg: \(value), isIncrease: \(isIncrease ? "true" : "false"), goal: \(newValue)")
+
+        return newValue
     }
 }
 
@@ -708,13 +718,15 @@ private extension GoalsViewModel {
             zone12Summary = "Do more workouts where your heart rate falls in zone 1 or 2."
         }
 
+        let zone12Value = (distribution.zone12Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage))
+
         let zone12Goal = GoalModel(
             title: "Increase Time in Zones 1 and 2",
             systemImage: "12.square.fill",
             summary: zone12Summary,
             dueDate: dueDate,
             metric: .init(
-                value: (distribution.zone12Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage)) * .goalMultiplier,
+                value: multipliedGoal(for: zone12Value),
                 unit: .minute(),
                 measurement: .targetHeartRateZoneTimeZone12
             ),
@@ -733,13 +745,15 @@ private extension GoalsViewModel {
             zone34Summary = "Do more workouts where your heart rate falls in zone 3 or 4."
         }
 
+        let zone34Value = (distribution.zone34Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage))
+
         let zone34Goal = GoalModel(
             title: "Increase Time in Zones 3 and 4",
             systemImage: "34.square.fill",
             summary: zone34Summary,
             dueDate: dueDate,
             metric: .init(
-                value: (distribution.zone34Duration.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage)) * .goalMultiplier,
+                value: multipliedGoal(for: zone34Value),
                 unit: .minute(),
                 measurement: .targetHeartRateZoneTimeZone34
             ),
@@ -757,13 +771,15 @@ private extension GoalsViewModel {
             zone5Summary = "Do more intense workouts where your heart rate falls in zone 5."
         }
 
+        let zone5Value = (distribution.zone5.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage))
+
         let zone5Goal = GoalModel(
             title: "Increase Time in Zone 5",
             systemImage: "5.square.fill",
             summary: zone5Summary,
             dueDate: dueDate,
             metric: .init(
-                value: (distribution.zone5.doubleValue(for: .minute()) / Double(Int.numWeeksPastAverage)) * .goalMultiplier,
+                value: multipliedGoal(for: zone5Value),
                 unit: .minute(),
                 measurement: .targetHeartRateZoneTimeZone5
             ),
@@ -844,7 +860,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(average * .goalMultiplier, 200),
+                value: max(multipliedGoal(for: average), 200),
                 unit: unit,
                 measurement: .timeInDaylight
             ),
@@ -866,7 +882,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max((averageDuration / 60) * .goalMultiplier, 15),
+                value: max(multipliedGoal(for: (averageDuration / 60)), 15),
                 unit: unit,
                 measurement: .walkDuration
             ),
@@ -891,7 +907,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(amount * .goalMultiplier, 1),
+                value: max(multipliedGoal(for: amount), 1),
                 unitString: unit.unitString,
                 measurement: .walkRunDistance
             ),
@@ -915,7 +931,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(average * .goalMultiplier, 2),
+                value: max(multipliedGoal(for: average), 2),
                 unitString: unit.unitString,
                 measurement: .runDistance
             ),
@@ -937,7 +953,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max((averageDuration / 60) * .goalMultiplier, 15),
+                value: max(multipliedGoal(for: (averageDuration / 60)), 15),
                 unit: unit,
                 measurement: .hikeDuration
             ),
@@ -961,7 +977,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(amount * .goalMultiplier, 1000),
+                value: max(multipliedGoal(for: amount), 1000),
                 unit: unit,
                 measurement: .stepCount
             ),
@@ -983,7 +999,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max((averageDuration / 60) * .goalMultiplier, 30),
+                value: max(multipliedGoal(for: (averageDuration / 60)), 30),
                 unit: unit,
                 measurement: .hiitWorkoutDuration
             ),
@@ -1000,7 +1016,7 @@ private extension GoalsViewModel {
             summary: summary,
             dueDate: dueDate,
             metric: .init(
-                value: max(average * .goalMultiplier, 10),
+                value: max(multipliedGoal(for: average), 10),
                 unit: .minute(),
                 measurement: .meditationMinutes
             ),

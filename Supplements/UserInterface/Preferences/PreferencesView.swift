@@ -6,17 +6,20 @@
 //
 
 import SwiftUI
+import AppUI
 
 @MainActor
 struct PreferencesView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
+    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
     @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
     @State private var shouldPromptForNotificationPermissions = false
     @State private var presentedFullScreenView: AnyView?
+    @State private var alertDetails: AlertDetails?
 
     var body: some View {
         List {
@@ -35,6 +38,7 @@ struct PreferencesView: View {
         .onAppear {
             checkNotificationPermissions()
         }
+        .alert(alertDetails: $alertDetails)
         .tabItem {
             Label("Preferences", systemImage: "slider.horizontal.below.square.and.square.filled")
         }
@@ -114,9 +118,30 @@ private extension PreferencesView {
     var developerSection: some View {
         Section("Developer") {
             Toggle("Daniele Mode", isOn: $danieleMode)
-            Button("Re-Take Onboarding") {
-                hasShownOnboarding = false
+            Button {
+                Task {
+                    await goalsViewModel.checkForUpdateGoals(force: true)
+                    await MainActor.run {
+                        self.alertDetails = AlertDetails(
+                            title: "Goals Recalculated",
+                            message: "Your goals have been recalculated."
+                        )
+                    }
+                }
+            } label: {
+                LabeledContent("Recalculate Goals") {
+                    Image(systemName: "arrow.counterclockwise.square.fill")
+                }
             }
+            .buttonStyle(.plain)
+            Button {
+                hasShownOnboarding = false
+            } label: {
+                LabeledContent("Reset Onboarding") {
+                    Image(systemName: "arrow.uturn.backward.square.fill")
+                }
+            }
+            .buttonStyle(.plain)
         }
     }
 }

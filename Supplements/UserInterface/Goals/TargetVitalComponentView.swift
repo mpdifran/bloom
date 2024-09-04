@@ -22,6 +22,7 @@ struct TargetVitalComponentView: View {
 
                 Text(vital.id.name)
                     .bold()
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()

@@ -110,6 +110,7 @@
 		FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */; };
 		FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */; };
 		FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */; };
+		FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B22C88957C00278019 /* Double+Rounding.swift */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
 		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
@@ -536,6 +537,7 @@
 		FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Unwrap.swift"; sourceTree = "<group>"; };
 		FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDetailsView.swift; sourceTree = "<group>"; };
 		FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoCardView.swift; sourceTree = "<group>"; };
+		FF4A21B22C88957C00278019 /* Double+Rounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Rounding.swift"; sourceTree = "<group>"; };
 		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
 		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
 		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
@@ -1135,6 +1137,7 @@
 				FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */,
 				FF0DA0F82C876390007D1A6B /* Collection+Sort.swift */,
 				FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */,
+				FF4A21B22C88957C00278019 /* Double+Rounding.swift */,
 				FFC77AD82C541DE9003E5F85 /* Double+Format.swift */,
 				FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */,
 				FF0DA0F62C875106007D1A6B /* DateComponents+Helpers.swift */,
@@ -2341,6 +2344,7 @@
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,
 				FF426AC92C6D39B4006E0F17 /* DateRange.swift in Sources */,
 				FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */,
+				FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */,
 				FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */,
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,

@@ -32,18 +32,24 @@ struct GoalDetailsView: View {
                         .font(.title3)
                         .bold()
 
-                    Spacer(minLength: 0)
+                    Spacer()
 
-                    Text(goal.metric.targetQuantity.displayString(for: goal.metric.unit))
-                        .bold()
-                        .fontDesign(.rounded)
-                        .foregroundStyle(goal.metric.measurement.color)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 4)
-                        .background {
-                            Capsule()
-                                .fill(.fill)
-                        }
+                    VStack {
+                        Text(goal.metric.targetDailyQuantity.displayString(for: goal.metric.unit))
+                            .font(.subheadline)
+                            .fontDesign(.rounded)
+                            .bold()
+                            .foregroundStyle(goal.metric.measurement.color)
+                        Text("per day")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.fill)
+                    }
                 }
 
                 chart

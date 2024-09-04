@@ -77,7 +77,11 @@ extension GoalModel {
 extension GoalModel.Metric {
 
     var targetQuantity: HKQuantity {
-        HKQuantity(unit: HKUnit(from: unitString), doubleValue: value)
+        HKQuantity(unit: unit, doubleValue: value)
+    }
+
+    var targetDailyQuantity: HKQuantity {
+        HKQuantity(unit: unit, doubleValue: dailyValue)
     }
 
     var unit: HKUnit {
