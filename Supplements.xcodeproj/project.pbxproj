@@ -113,6 +113,7 @@
 		FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B22C88957C00278019 /* Double+Rounding.swift */; };
 		FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */; };
 		FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */; };
+		FF4A21B92C88E11E00278019 /* DateValueSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B82C88E11E00278019 /* DateValueSample.swift */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
 		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
@@ -542,6 +543,7 @@
 		FF4A21B22C88957C00278019 /* Double+Rounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Rounding.swift"; sourceTree = "<group>"; };
 		FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightActionCardView.swift; sourceTree = "<group>"; };
 		FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDailyTargetTagView.swift; sourceTree = "<group>"; };
+		FF4A21B82C88E11E00278019 /* DateValueSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValueSample.swift; sourceTree = "<group>"; };
 		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
 		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
 		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
@@ -1628,6 +1630,7 @@
 				FF426AC82C6D39B4006E0F17 /* DateRange.swift */,
 				FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */,
 				FF88F1172C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift */,
+				FF4A21B82C88E11E00278019 /* DateValueSample.swift */,
 				FF426ACA2C6D424E006E0F17 /* DateQuantitySample.swift */,
 				FF17052C2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift */,
 				FFF66FA82C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift */,
@@ -2347,6 +2350,7 @@
 				FF4CAB022C813D91001A59F3 /* WeatherForecaster.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */,
+				FF4A21B92C88E11E00278019 /* DateValueSample.swift in Sources */,
 				FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */,
 				FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */,
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,

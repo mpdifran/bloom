@@ -306,9 +306,9 @@ private extension VitalsViewModel {
                 VitalModel(
                     id: .activityLevel,
                     subtitle: activityLevelSummary.subtitle,
-                    status: activityLevelSummary.activityLevel.name,
-                    score: activityLevelSummary.score,
-                    color: activityLevelSummary.activityLevel.color,
+                    status: activityLevelSummary.details.activityLevel?.name ?? "Unknown",
+                    score: activityLevelSummary.details.score,
+                    color: activityLevelSummary.details.activityLevel?.color ?? .gray,
                     trend: activityLevelSummary.trend
                 )
             )

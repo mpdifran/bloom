@@ -90,9 +90,9 @@ private extension OnboardingHealthActivityView {
             VitalModel(
                 id: .activityLevel,
                 subtitle: activitySummary.subtitle,
-                status: activitySummary.activityLevel.name,
-                score: activitySummary.score,
-                color: activitySummary.activityLevel.color,
+                status: activitySummary.details.activityLevel?.name ?? "Unknown",
+                score: activitySummary.details.score,
+                color: activitySummary.details.activityLevel?.color ?? .gray,
                 trend: activitySummary.trend
             )
         } else {

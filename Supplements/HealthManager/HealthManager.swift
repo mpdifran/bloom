@@ -490,6 +490,52 @@ extension HealthManager {
 
 extension HealthManager {
 
+    func fetchActivityLevelSummary() async -> ActivityLevelSummary {
+        let thisMonth = await fetchActivityLevelSummaryDetails(dateRange: .trailingMonthsFromNow(1))
+        let lastMonth = await fetchActivityLevelSummaryDetails(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1))
+
+        return ActivityLevelSummary(details: thisMonth, lastMonthDetails: lastMonth)
+    }
+
+    func fetchActivityLevelSummaryDetails(dateRange: DateRange) async -> ActivityLevelSummary.Details {
+        let unit = HKUnit.largeCalorie()
+        let basal = (try? await healthStore.fetchCollatedQuantity(
+            quantityTypeID: .basalEnergyBurned,
+            unit: unit,
+            dateRange: dateRange
+        )) ?? []
+
+        let active = (try? await healthStore.fetchCollatedQuantity(
+            quantityTypeID: .activeEnergyBurned,
+            unit: unit,
+            dateRange: dateRange
+        )) ?? []
+
+        let ratios = calculateRatios(basalEnergy: basal, activeEnergy: active)
+
+        return ActivityLevelSummary.Details(
+            averageBasalEnergyBurned: basal.map({ $0.quantity.doubleValue(for: unit) }).average(keyPath: \.self),
+            averageActiveEnergyBurned: active.map({ $0.quantity.doubleValue(for: unit) }).average(keyPath: \.self),
+            energyRatioSamples: ratios
+        )
+    }
+
+    func calculateRatios(basalEnergy: [DateQuantitySample], activeEnergy: [DateQuantitySample]) -> [DateValueSample] {
+        var samples = [DateValueSample]()
+        for basalSample in basalEnergy {
+            guard let activeSample = activeEnergy.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) }) else {
+                continue
+            }
+
+            let unit = HKUnit.largeCalorie()
+            let sum = activeSample.quantity.doubleValue(for: unit) + basalSample.quantity.doubleValue(for: unit)
+            let ratio = sum / basalSample.quantity.doubleValue(for: unit)
+
+            samples.append(.init(date: basalSample.date, value: ratio))
+        }
+        return samples
+    }
+
     func fetchCardioFitnessSummary() async -> CardioFitnessMonthlySummary {
         let thisMonth = await HealthManager.shared.fetchVO2Max()
         let hrr = await HealthManager.shared.fetchHeartRateRecovery()
@@ -853,32 +899,6 @@ extension HealthManager {
         }
 
         return samples
-    }
-
-    func fetchActivityLevelSummary() async -> ActivityLevelSummary {
-        let basalEnergy = await fetchBasalEnergy()
-        let lastMonthBasalEnergy = await fetchBasalEnergy(numPastMonths: 1)
-
-        let activeEnergy = await fetchActiveEnergy()
-        let lastMonthActiveEnergy = await fetchActiveEnergy(numPastMonths: 1)
-
-        let activityLevelRatios = calculateRatios(
-            basalEnergy: basalEnergy,
-            activeEnergy: activeEnergy
-        )
-        let lastMonthActivityLevelRatios = calculateRatios(
-            basalEnergy: lastMonthBasalEnergy,
-            activeEnergy: lastMonthActiveEnergy
-        )
-
-        return ActivityLevelSummary(
-            averageBasalEnergyBurned: basalEnergy.average(keyPath: \.quantity),
-            averageActiveEnergyBurned: activeEnergy.average(keyPath: \.quantity),
-            energyRatioSamples: activityLevelRatios,
-            lastMonthAverageBasalEnergyBurned: lastMonthBasalEnergy.average(keyPath: \.quantity),
-            lastMonthAverageActiveEnergyBurned: lastMonthActiveEnergy.average(keyPath: \.quantity),
-            lastMonthEnergyRatioSamples: lastMonthActivityLevelRatios
-        )
     }
 
     func fetchNetEnergy(numPrevDays: Int = 7) async -> [DateQuantitySampleLegacy] {

@@ -85,22 +85,38 @@ extension ActivityLevelSummary.ActivityLevel {
     }
 }
 
-struct ActivityLevelSummary: Equatable, Codable {
-    let averageBasalEnergyBurned: Double
-    let averageActiveEnergyBurned: Double
-    let energyRatioSamples: [DateQuantitySampleLegacy]
-    let lastMonthAverageBasalEnergyBurned: Double
-    let lastMonthAverageActiveEnergyBurned: Double
-    let lastMonthEnergyRatioSamples: [DateQuantitySampleLegacy]
+struct ActivityLevelSummary: Hashable, Codable {
+    let details: Details
+    let lastMonthDetails: Details
 }
 
 extension ActivityLevelSummary {
 
-    var score: Double {
-        guard let activityRatio else { return 1 }
+    var trend: VitalModel.Trend {
+        guard let thisMonth = details.activityRatio, let lastMonth = details.activityRatio else { return .noTrend }
 
-        return activityRatio.scaledPercent(lower: 1, upper: 1.2)
+        return thisMonth > lastMonth ? .increasing : .decreasing
     }
+
+    var subtitle: String {
+        let basal = details.averageBasalEnergyBurned
+        let active = details.averageActiveEnergyBurned
+
+        guard basal > 1 else { return "No Data" }
+
+        return "\(String(format: "%.0f", basal)) Cal Basal\n\(String(format: "%.0f", active)) Cal Active"
+    }
+}
+
+extension ActivityLevelSummary {
+    struct Details: Hashable, Codable {
+        let averageBasalEnergyBurned: Double
+        let averageActiveEnergyBurned: Double
+        let energyRatioSamples: [DateValueSample]
+    }
+}
+
+extension ActivityLevelSummary.Details {
 
     var activityRatio: Double? {
         guard averageBasalEnergyBurned > 1 else {
@@ -109,25 +125,15 @@ extension ActivityLevelSummary {
         return (averageActiveEnergyBurned + averageBasalEnergyBurned) / averageBasalEnergyBurned
     }
 
-    var lastMonthActivityRatio: Double? {
-        guard lastMonthAverageBasalEnergyBurned > 1 else {
-            return nil
-        }
-        return (lastMonthAverageActiveEnergyBurned + lastMonthAverageBasalEnergyBurned) / lastMonthAverageBasalEnergyBurned
+    var score: Double {
+        guard let activityRatio else { return 1 }
+
+        return activityRatio.scaledPercent(lower: 1, upper: 1.2)
     }
 
-    var trend: VitalModel.Trend {
-        guard let activityRatio, let lastMonthActivityRatio else { return .noTrend }
+    var activityLevel: ActivityLevelSummary.ActivityLevel? {
+        guard let ratio = activityRatio else { return nil }
 
-        return activityRatio > lastMonthActivityRatio ? .increasing : .decreasing
-    }
-
-    var subtitle: String {
-        "\(String(format: "%.0f", averageBasalEnergyBurned)) Cal Basal\n\(String(format: "%.0f", averageActiveEnergyBurned)) Cal Active"
-    }
-
-    var activityLevel: ActivityLevel {
-        let ratio = activityRatio ?? 0
         if ratio < 1.2 {
             return .sedentary
         } else if ratio < 1.375 {
@@ -145,7 +151,7 @@ extension ActivityLevelSummary {
         var ratioDistribution = [ActivityLevelSummary.ActivityLevel : Int]()
         for sample in energyRatioSamples {
             for level in ActivityLevelSummary.ActivityLevel.allCases {
-                if level.range.contains(sample.quantity) {
+                if level.range.contains(sample.value) {
                     ratioDistribution[level, default: 0] += 1
                 }
             }

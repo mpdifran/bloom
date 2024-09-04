@@ -45,7 +45,7 @@ struct ActivityLevelDetailsView: View {
         }
         .onAppear {
             feedbackGenerator.prepare()
-            if let index = ActivityLevelSummary.ActivityLevel.allCases.firstIndex(where: { $0 == viewModel.activityLevelSummary?.activityLevel }) {
+            if let index = ActivityLevelSummary.ActivityLevel.allCases.firstIndex(where: { $0 == viewModel.activityLevelSummary?.details.activityLevel }) {
                 selectedActivityLevelIndex = index
             }
         }
@@ -60,17 +60,17 @@ private extension ActivityLevelDetailsView {
             VStack(alignment: .leading) {
                 VitalDetailChartTitleView(
                     title: "Energy Ratio",
-                    value: activityLevelSummary.activityLevel.name
+                    value: activityLevelSummary.details.activityLevel?.name ?? "Unknown"
                 )
 
                 Chart {
-                    ForEach(activityLevelSummary.energyRatioSamples) { ratio in
+                    ForEach(activityLevelSummary.details.energyRatioSamples) { ratio in
                         BarMark(
                             x: .value("Date", ratio.date),
                             yStart: .value("", 1),
-                            yEnd: .value("Ratio", ratio.quantity)
+                            yEnd: .value("Ratio", ratio.value)
                         )
-                        .foregroundStyle(color(for: ratio.quantity))
+                        .foregroundStyle(color(for: ratio.value))
                     }
 
                     RectangleMark(
@@ -103,7 +103,7 @@ private extension ActivityLevelDetailsView {
     }
 
     var chartMax: Double {
-        guard let maxValue = viewModel.activityLevelSummary?.energyRatioSamples.max(keyPath: \.quantity) else { return 2 }
+        guard let maxValue = viewModel.activityLevelSummary?.details.energyRatioSamples.max(keyPath: \.value) else { return 2 }
 
         return max(maxValue * 1.1, 2)
     }
@@ -141,7 +141,7 @@ private extension ActivityLevelDetailsView {
     var ratioDistributionView: some View {
         VStack {
             VitalDetailChartTitleView(title: "Daily Energy Ratio Distribution", value: "")
-            ActivityLevelDistributionView(ratioDistribution: viewModel.activityLevelSummary?.activityLevelRatioDistribution ?? [:])
+            ActivityLevelDistributionView(ratioDistribution: viewModel.activityLevelSummary?.details.activityLevelRatioDistribution ?? [:])
         }
         .cardContainer(fill: .background.secondary)
     }
