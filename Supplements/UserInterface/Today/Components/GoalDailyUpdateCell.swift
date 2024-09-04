@@ -21,17 +21,23 @@ struct GoalDailyUpdateCell: View {
     }
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack {
             CompletionCheckmarkView(hasCompleted: viewModel.hasCompletedTodayGoal)
 
             HStack {
+                Image(systemName: goal.systemImage)
+                    .foregroundStyle(.tint)
+                    .font(.largeTitle)
+                    .minimumScaleFactor(0.1)
+                    .frame(width: 40)
+
                 VStack(alignment: .leading) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Image(systemName: goal.systemImage)
-                            .foregroundStyle(.tint)
-                        Text(goal.title)
-                    }
-                    .bold()
+                    Label(goal.vitalKind.name, systemImage: goal.vitalKind.systemImage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Text(goal.title)
+                        .bold()
 
                     ProgressView(value: min(viewModel.dailyValue / remainingGoalValue, 1))
                         .foregroundStyle(.tint)
@@ -53,6 +59,7 @@ struct GoalDailyUpdateCell: View {
 
             Image(systemName: "chevron.forward")
                 .foregroundStyle(.secondary)
+                .padding(.leading)
         }
         .tint(goal.metric.measurement.color)
         .cardContainer(fill: .background.secondary)
