@@ -78,7 +78,10 @@ private extension OnboardingHealthOtherTypesView {
 
     func checkAuth() async {
         do {
-            let authStatus = try await healthManager.checkAccess(readTypes: healthManager.otherTypes)
+            let authStatus = try await healthManager.checkAccess(
+                readTypes: healthManager.otherTypes,
+                writeTypes: healthManager.writeOtherTypes
+            )
 
             isAuthorized = authStatus == .unnecessary
             await vitalsViewModel.refreshVitals()
