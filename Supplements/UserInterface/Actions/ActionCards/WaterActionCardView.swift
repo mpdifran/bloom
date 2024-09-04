@@ -15,7 +15,6 @@ struct WaterActionCardView: View {
     @State private var didIncrease = false
     @State private var didError = false
     @State private var selectedQuantity: HKQuantity?
-    @State private var triggerHealthPermissionSheet = false
     @State private var error: Error?
 
     @ObservedObject private var healthManager = HealthManager.shared
@@ -23,8 +22,11 @@ struct WaterActionCardView: View {
     var body: some View {
         ActionCardView(
             title: "Water",
+            sampleTypes: [HKQuantityType(.dietaryWater)],
             showSaveBar: false
-        ) { (hasInserted, handleSave) in
+        ) { (_) in
+            await logSelectedWater()
+        } content: { (hasInserted, handleSave) in
             VStack {
                 Spacer()
 
@@ -32,16 +34,8 @@ struct WaterActionCardView: View {
                     Spacer()
 
                     Button {
-                        Task {
-                            guard await logWater(quantity: HKQuantity(unit: .literUnit(with: .milli), doubleValue: 125)) else {
-                                return
-                            }
-
-                            await MainActor.run {
-                                didIncrease.toggle()
-                                handleSave()
-                            }
-                        }
+                        selectedQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: 125)
+                        handleSave()
                     } label: {
                         VStack {
                             Text("1/2 Cup")
@@ -55,16 +49,8 @@ struct WaterActionCardView: View {
                     .sensoryFeedback(.error, trigger: didError)
 
                     Button {
-                        Task {
-                            guard await logWater(quantity: HKQuantity(unit: .literUnit(with: .milli), doubleValue: 250)) else {
-                                return
-                            }
-
-                            await MainActor.run {
-                                didIncrease.toggle()
-                                handleSave()
-                            }
-                        }
+                        selectedQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: 250)
+                        handleSave()
                     } label: {
                         VStack {
                             Text("1 Cup")
@@ -78,16 +64,8 @@ struct WaterActionCardView: View {
                     .sensoryFeedback(.error, trigger: didError)
 
                     Button {
-                        Task {
-                            guard await logWater(quantity: HKQuantity(unit: .literUnit(with: .milli), doubleValue: 500)) else {
-                                return
-                            }
-
-                            await MainActor.run {
-                                didIncrease.toggle()
-                                handleSave()
-                            }
-                        }
+                        selectedQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: 500)
+                        handleSave()
                     } label: {
                         VStack {
                             Text("2 Cup")
@@ -117,26 +95,6 @@ struct WaterActionCardView: View {
                     .opacity(hasInserted ? 1 : 0)
                     .transition(.move(edge: .bottom))
             }
-            .healthDataAccessRequest(
-                store: healthManager.healthStore,
-                shareTypes: [HKQuantityType(.dietaryWater)],
-                readTypes: [HKQuantityType(.dietaryWater)],
-                trigger: triggerHealthPermissionSheet
-            ) { result in
-                switch result {
-                case .success:
-                    Task {
-                        if let selectedQuantity, await logWater(quantity: selectedQuantity) {
-                            await MainActor.run {
-                                didIncrease.toggle()
-                                handleSave()
-                            }
-                        }
-                    }
-                case .failure(let error):
-                    self.error = error
-                }
-            }
         }
         .tint(.blue)
         .alert(error: $error)
@@ -145,16 +103,10 @@ struct WaterActionCardView: View {
 
 private extension WaterActionCardView {
 
-    func logWater(quantity: HKQuantity) async -> Bool {
+    func logSelectedWater() async -> Bool {
+        guard let quantity = selectedQuantity else { return false }
+
         do {
-            let authStatus = try await healthManager.checkAccess(writeTypes: [HKQuantityType(.dietaryWater)])
-
-            if authStatus == .shouldRequest {
-                selectedQuantity = quantity
-                triggerHealthPermissionSheet.toggle()
-                return false
-            }
-
             let sample = HKQuantitySample(
                 type: .init(.dietaryWater),
                 quantity: quantity,
@@ -166,6 +118,7 @@ private extension WaterActionCardView {
             )
 
             try await HealthManager.shared.write(sample: sample)
+            didIncrease.toggle()
             return true
         } catch {
             self.error = error

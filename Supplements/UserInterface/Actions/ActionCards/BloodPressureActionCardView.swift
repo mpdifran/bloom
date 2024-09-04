@@ -14,13 +14,18 @@ struct BloodPressureActionCardView: View {
     @State private var systolic: Double = 120
     @State private var diastolic: Double = 80
     @State private var didError = false
-    @State private var triggerHealthPermissionSheet = false
     @State private var error: Error?
 
     @ObservedObject private var healthManager = HealthManager.shared
 
     var body: some View {
-        ActionCardView(title: "Blood Pressure") { (_) in
+        ActionCardView(
+            title: "Blood Pressure",
+            sampleTypes: [
+                HKQuantityType(.bloodPressureSystolic),
+                HKQuantityType(.bloodPressureDiastolic)
+            ]
+        ) { (_) in
             await logBloodPressure()
         } content: { (_, handleSave) in
             VStack(spacing: 20) {
@@ -52,25 +57,6 @@ struct BloodPressureActionCardView: View {
             .bold()
             .multilineTextAlignment(.trailing)
             .padding()
-            .healthDataAccessRequest(
-                store: healthManager.healthStore,
-                shareTypes: [
-                    HKQuantityType(.bloodPressureSystolic),
-                    HKQuantityType(.bloodPressureDiastolic)
-                ],
-                readTypes: [
-                    HKQuantityType(.bloodPressureSystolic),
-                    HKQuantityType(.bloodPressureDiastolic)
-                ],
-                trigger: triggerHealthPermissionSheet
-            ) { result in
-                switch result {
-                case .success:
-                    handleSave()
-                case .failure(let error):
-                    self.error = error
-                }
-            }
         }
         .tint(.pink)
         .alert(error: $error)
@@ -81,16 +67,6 @@ private extension BloodPressureActionCardView {
 
     func logBloodPressure() async -> Bool {
         do {
-            let authStatus = try await healthManager.checkAccess(writeTypes: [
-                HKQuantityType(.bloodPressureSystolic),
-                HKQuantityType(.bloodPressureDiastolic)
-            ])
-
-            if authStatus == .shouldRequest {
-                triggerHealthPermissionSheet.toggle()
-                return false
-            }
-
             let systolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: systolic)
             let diastolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: diastolic)
 

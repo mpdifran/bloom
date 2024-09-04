@@ -60,6 +60,7 @@ struct OnboardingHealthOtherTypesView: View {
         }
         .healthDataAccessRequest(
             store: healthManager.healthStore,
+            shareTypes: Set(healthManager.writeOtherTypes),
             readTypes: Set(healthManager.otherTypes),
             trigger: triggerHealthPermissionSheet
         ) { result in

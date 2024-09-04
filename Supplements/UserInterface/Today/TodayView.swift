@@ -53,6 +53,15 @@ struct TodayView: View {
                         .padding(.top)
 
                     Button(action: {
+                        presentedCardSheet = BodyWeightActionCardView().asAny
+                    }, label: {
+                        Label("Log Weight", systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus")
+                            .horizontallyCentered()
+                    })
+                    .buttonStyle(.tertiary)
+                    .tint(.indigo)
+
+                    Button(action: {
                         presentedCardSheet = WaterActionCardView().asAny
                     }, label: {
                         Label("Log Water", systemImage: "waterbottle.fill")

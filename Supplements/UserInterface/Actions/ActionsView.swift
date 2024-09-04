@@ -17,9 +17,18 @@ struct ActionsView: View {
             ScrollView {
                 VStack {
                     Button(action: {
+                        presentedCardSheet = BodyWeightActionCardView().asAny
+                    }, label: {
+                        Label("Log Weight", systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus")
+                            .horizontallyCentered()
+                    })
+                    .buttonStyle(.tertiary)
+                    .tint(.indigo)
+
+                    Button(action: {
                         presentedCardSheet = BloodPressureActionCardView().asAny
                     }, label: {
-                        Label("Log Blood Pressure", systemImage: "gauge.with.needle.fill")
+                        Label("Log Blood Pressure", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle")
                             .horizontallyCentered()
                     })
                     .buttonStyle(.tertiary)

@@ -135,7 +135,12 @@ final class HealthManager: ObservableObject {
         HKCategoryType(.appleWalkingSteadinessEvent),
         HKQuantityType(.sixMinuteWalkTestDistance),
         HKQuantityType(.walkingDoubleSupportPercentage),
-        HKQuantityType(.bodyFatPercentage)
+        HKQuantityType(.bodyFatPercentage),
+        HKQuantityType(.bodyMass)
+    ]
+
+    let writeOtherTypes = [
+        HKQuantityType(.bodyMass)
     ]
 }
 
@@ -150,6 +155,7 @@ extension HealthManager {
 
         writeNutritionTypes.forEach { set.insert($0) }
         writeHeartTypes.forEach { set.insert($0) }
+        writeOtherTypes.forEach { set.insert($0) }
 
         return set
     }
