@@ -97,12 +97,7 @@ private extension OnboardingHealthNutritionView {
             )
         } else {
             VitalModel(
-                id: .nutrition,
-                subtitle: "",
-                status: "No Data",
-                score: 0,
-                color: .gray,
-                trend: .noTrend
+                id: .nutrition
             )
         }
     }

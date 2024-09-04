@@ -96,12 +96,7 @@ private extension OnboardingHealthSleepView {
             )
         } else {
             VitalModel(
-                id: .sleepQuality,
-                subtitle: "",
-                status: "No Data",
-                score: 0,
-                color: .gray,
-                trend: .noTrend
+                id: .sleepQuality
             )
         }
     }

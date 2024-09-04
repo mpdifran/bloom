@@ -78,27 +78,27 @@ struct VitalModel: Identifiable, Hashable {
 
     init(
         id: Kind,
-        subtitle: String,
-        status: String,
+        subtitle: String?,
+        status: String?,
         score: Double,
-        color: Color,
+        color: Color?,
         trend: Trend
     ) {
         self.id = id
-        self.subtitle = subtitle
-        self.status = status
+        self.subtitle = subtitle ?? "No Data"
+        self.status = status ?? "Unknown"
         self.score = score
-        self.color = color
+        self.color = color ?? .gray
         self.trend = trend
     }
 
     init(id: Kind) {
         self.init(
             id: id,
-            subtitle: "No data available",
-            status: "No Data",
+            subtitle: nil,
+            status: nil,
             score: 1,
-            color: .gray,
+            color: nil,
             trend: .noTrend
         )
     }

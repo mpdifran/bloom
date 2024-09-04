@@ -33,7 +33,7 @@ extension Collection {
         return sum / Double(items.count)
     }
 
-    func variance(keyPath: KeyPath<Element, Double>, subsequence: CollectionAverageSubsequence? = nil) -> Double {
+    func variance(keyPath: KeyPath<Element, Double>, subsequence: CollectionAverageSubsequence? = nil) -> Double? {
         let items: Array<Element>
         switch subsequence {
         case .prefix(let prefix):
@@ -44,7 +44,7 @@ extension Collection {
             items = Array(self)
         }
 
-        guard items.isNotEmpty else { return 0 }
+        guard items.isNotEmpty else { return nil }
 
         let mean = average(keyPath: keyPath, subsequence: subsequence)
         let sumOfSquaredDifferences = items.map { pow($0[keyPath: keyPath] - mean, 2) }.reduce(0, +)

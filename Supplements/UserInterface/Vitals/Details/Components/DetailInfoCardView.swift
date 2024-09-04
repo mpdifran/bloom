@@ -22,6 +22,7 @@ struct DetailInfoCardView<Content>: View where Content: View {
                     .bold()
 
                 content
+                    .fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: 0)
         }

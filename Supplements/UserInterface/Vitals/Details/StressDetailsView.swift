@@ -19,14 +19,14 @@ struct StressDetailsView: View {
         ScrollView {
             VStack(spacing: 20) {
                 if
-                    let systolic = viewModel.stressSummary?.bloodPressureSystolic,
-                    let diastloic = viewModel.stressSummary?.bloodPressureDiastolic 
+                    let systolic = viewModel.stressSummary?.details.bloodPressureSystolic,
+                    let diastloic = viewModel.stressSummary?.details.bloodPressureDiastolic
                 {
                     BloodPressureStatusView(
                         systolic: systolic,
                         diastolic: diastloic,
-                        lastMonthSystolic: viewModel.stressSummary?.lastMonthBloodPressureSystolic,
-                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthBloodPressureDiastolic
+                        lastMonthSystolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureSystolic,
+                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureDiastolic
                     )
                 }
 
@@ -67,7 +67,7 @@ private extension StressDetailsView {
 
     var restingHeartRateChart: some View {
         VStack(alignment: .leading) {
-            if let restingHeartRate = viewModel.stressSummary?.restingHeartRate?.format() {
+            if let restingHeartRate = viewModel.stressSummary?.details.restingHeartRate?.format() {
                 VitalDetailChartTitleView(
                     title: "Resting Heart Rate",
                     value: "\(restingHeartRate) bpm"
@@ -146,7 +146,7 @@ private extension StressDetailsView {
     }
 
     var restingHeartRateDescription: String? {
-        guard let restingHeartRate = viewModel.stressSummary?.restingHeartRate else {
+        guard let restingHeartRate = viewModel.stressSummary?.details.restingHeartRate else {
             return nil
         }
 
@@ -161,7 +161,7 @@ private extension StressDetailsView {
 
     var heartRateVariabilityChart: some View {
         VStack(alignment: .leading) {
-            if let hrv = viewModel.stressSummary?.avgHeartRateVariability?.format() {
+            if let hrv = viewModel.stressSummary?.details.avgHeartRateVariability?.format() {
                 VitalDetailChartTitleView(
                     title: "Heart Rate Variability",
                     value: "\(hrv) ms"
@@ -183,7 +183,7 @@ private extension StressDetailsView {
                     .foregroundStyle(.pink)
                 }
 
-                if let hrv = viewModel.stressSummary?.avgHeartRateVariability {
+                if let hrv = viewModel.stressSummary?.details.avgHeartRateVariability {
                     RuleMark(y: .value("Average HRV", hrv))
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                         .foregroundStyle(.pink)

@@ -39,26 +39,34 @@ extension StressMonthlySummary {
     }
 }
 
-struct StressMonthlySummary: Equatable {
-    let avgHeartRateVariability: Double?
-    let varHeartRateVariability: Double?
-    let restingHeartRate: Double?
-    let bloodPressureSystolic: Double?
-    let bloodPressureDiastolic: Double?
-    let lastMonthAvgHeartRateVariability: Double?
-    let lastMonthVarHeartRateVariability: Double?
-    let lastMonthRestingHeartRate: Double?
-    let lastMonthBloodPressureSystolic: Double?
-    let lastMonthBloodPressureDiastolic: Double?
+struct StressMonthlySummary: Hashable {
+    let details: Details
+    let lastMonthDetails: Details
+
+    var score: Double {
+        details.internalScore?.scaledPercent(lower: 0.4, upper: 0.9) ?? 1
+    }
+
+    var trend: VitalModel.Trend {
+        guard let lastMonth = lastMonthDetails.internalScore, let thisMonth = details.internalScore else { return .noTrend }
+
+        return lastMonth > thisMonth  ? .increasing : .decreasing
+    }
 }
 
 extension StressMonthlySummary {
-
-    var score: Double {
-        internalScore.scaledPercent(lower: 0.4, upper: 0.9)
+    struct Details: Hashable {
+        let avgHeartRateVariability: Double?
+        let varHeartRateVariability: Double?
+        let restingHeartRate: Double?
+        let bloodPressureSystolic: Double?
+        let bloodPressureDiastolic: Double?
     }
+}
 
-    var internalScore: Double {
+extension StressMonthlySummary.Details {
+
+    var internalScore: Double? {
         let hrvScore = varHeartRateVariability?.scaledPercent(lower: 0, upper: 500)
 
         let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
@@ -75,31 +83,11 @@ extension StressMonthlySummary {
             bloodPressureScore = nil
         }
 
-        return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
-    }
+        let components = [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 })
 
-    var lastMonthScore: Double {
-        let hrvScore = lastMonthVarHeartRateVariability?.scaledPercent(lower: 0, upper: 500)
+        guard components.isNotEmpty else { return nil }
 
-        let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
-        let rhrScore = lastMonthRestingHeartRate?.scaledPercent(lower: max, upper: min)
-
-        let bloodPressureScore: Double?
-        if let bloodPressureSystolic, let bloodPressureDiastolic {
-            let bloodPressureCategory = HealthManager.shared.bloodPressureCategory(
-                systolic: bloodPressureSystolic,
-                diastolic: bloodPressureDiastolic
-            )
-            bloodPressureScore = bloodPressureCategory.score
-        } else {
-            bloodPressureScore = nil
-        }
-
-        return [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 }).average(keyPath: \.self)
-    }
-
-    var trend: VitalModel.Trend {
-        lastMonthScore > internalScore  ? .increasing : .decreasing
+        return components.average(keyPath: \.self)
     }
 
     var subtitle: String {
@@ -115,7 +103,9 @@ extension StressMonthlySummary {
         return [hrv, rhr, bloodPressure].compactMap({ $0 }).joined(separator: "\n")
     }
 
-    var level: Level {
+    var level: StressMonthlySummary.Level? {
+        guard let internalScore else { return nil }
+
         if internalScore < 0.4 {
             return .severe
         } else if internalScore < 0.7 {
@@ -127,4 +117,3 @@ extension StressMonthlySummary {
         }
     }
 }
-

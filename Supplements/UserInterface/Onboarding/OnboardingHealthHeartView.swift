@@ -112,10 +112,10 @@ private extension OnboardingHealthHeartView {
         if let stressSummary = vitalsViewModel.stressSummary {
             VitalModel(
                 id: .stressLevels,
-                subtitle: stressSummary.subtitle,
-                status: stressSummary.level.name,
+                subtitle: stressSummary.details.subtitle,
+                status: stressSummary.details.level?.name,
                 score: stressSummary.score,
-                color: stressSummary.level.color,
+                color: stressSummary.details.level?.color,
                 trend: stressSummary.trend
             )
         } else {

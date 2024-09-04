@@ -536,6 +536,48 @@ extension HealthManager {
         return samples
     }
 
+    func fetchStressMonthlySummary() async -> StressMonthlySummary? {
+        let thisMonth = await fetchStressMonthlySummaryDetails(dateRange: .trailingMonthsFromNow(1))
+        let lastMonth = await fetchStressMonthlySummaryDetails(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1))
+
+        return StressMonthlySummary(details: thisMonth, lastMonthDetails: lastMonth)
+    }
+
+    func fetchStressMonthlySummaryDetails(dateRange: DateRange) async -> StressMonthlySummary.Details {
+        let hrvAverage = (try? await healthStore.fetchQuantity(
+            for: .heartRateVariabilitySDNN,
+            dateRange: dateRange
+        ))
+        let hrvVariance = (try? await healthStore.fetchSamples(
+            for: HKQuantityType(.heartRateVariabilitySDNN),
+            dateRange: dateRange
+        ))?.compactMap({ $0 as? HKQuantitySample })
+            .map({ $0.quantity.doubleValue(for: .secondUnit(with: .milli)) })
+            .variance(keyPath: \.self)
+
+        let rhrAverage = (try? await healthStore.fetchQuantity(
+            for: .restingHeartRate,
+            dateRange: dateRange
+        ))
+
+        let systolicAverage = (try? await healthStore.fetchQuantity(
+            for: .bloodPressureSystolic,
+            dateRange: dateRange
+        ))
+        let diastolicAverage = (try? await healthStore.fetchQuantity(
+            for: .bloodPressureDiastolic,
+            dateRange: dateRange
+        ))
+
+        return StressMonthlySummary.Details(
+            avgHeartRateVariability: hrvAverage?.doubleValue(for: .secondUnit(with: .milli)),
+            varHeartRateVariability: hrvVariance,
+            restingHeartRate: rhrAverage?.doubleValue(for: .bpm()),
+            bloodPressureSystolic: systolicAverage?.doubleValue(for: .millimeterOfMercury()),
+            bloodPressureDiastolic: diastolicAverage?.doubleValue(for: .millimeterOfMercury())
+        )
+    }
+
     func fetchCardioFitnessSummary() async -> CardioFitnessMonthlySummary {
         let thisMonth = await HealthManager.shared.fetchVO2Max()
         let hrr = await HealthManager.shared.fetchHeartRateRecovery()
@@ -1120,89 +1162,6 @@ extension HealthManager {
             print(error)
         }
         return nil
-    }
-
-    func fetchStressMonthlySummary() async -> StressMonthlySummary? {
-        let endDate = Date.now
-
-        guard let midDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate),
-              let startDate = Calendar.current.date(byAdding: .month, value: -1, to: midDate)
-        else {
-            return nil
-        }
-
-        let hrvAverage = try? await healthStore.fetchQuantity(
-            for: .heartRateVariabilitySDNN,
-            start: midDate,
-            end: endDate,
-            unit: .secondUnit(with: .milli)
-        )
-        let hrvSamples = try? await healthStore.fetchSamples(
-            for: .heartRateVariabilitySDNN,
-            start: midDate,
-            end: endDate
-        ).compactMap({ $0 as? HKQuantitySample }).map({ $0.quantity.doubleValue(for: .secondUnit(with: .milli)) })
-        let rhrAverage = try? await healthStore.fetchQuantity(
-            for: .restingHeartRate,
-            start: midDate,
-            end: endDate,
-            unit: .bpm()
-        )
-        let systolicAverage = try? await healthStore.fetchQuantity(
-            for: .bloodPressureSystolic,
-            start: midDate,
-            end: endDate,
-            unit: .millimeterOfMercury()
-        )
-        let diastolicAverage = try? await healthStore.fetchQuantity(
-            for: .bloodPressureDiastolic,
-            start: midDate,
-            end: endDate,
-            unit: .millimeterOfMercury()
-        )
-
-        let lastMonthHRVAverage = try? await healthStore.fetchQuantity(
-            for: .heartRateVariabilitySDNN,
-            start: startDate,
-            end: midDate,
-            unit: .secondUnit(with: .milli)
-        )
-        let lastMonthHRVSamples = try? await healthStore.fetchSamples(
-            for: .heartRateVariabilitySDNN,
-            start: startDate,
-            end: midDate
-        ).compactMap({ $0 as? HKQuantitySample }).map({ $0.quantity.doubleValue(for: .secondUnit(with: .milli)) })
-        let lastMonthRHRAverage = try? await healthStore.fetchQuantity(
-            for: .restingHeartRate,
-            start: startDate,
-            end: midDate,
-            unit: .bpm()
-        )
-        let lastMonthSystolicAverage = try? await healthStore.fetchQuantity(
-            for: .bloodPressureSystolic,
-            start: startDate,
-            end: midDate,
-            unit: .millimeterOfMercury()
-        )
-        let lastMonthDiastolicAverage = try? await healthStore.fetchQuantity(
-            for: .bloodPressureDiastolic,
-            start: startDate,
-            end: midDate,
-            unit: .millimeterOfMercury()
-        )
-
-        return StressMonthlySummary(
-            avgHeartRateVariability: hrvAverage?.0,
-            varHeartRateVariability: hrvSamples?.variance(keyPath: \.self),
-            restingHeartRate: rhrAverage?.0,
-            bloodPressureSystolic: systolicAverage?.0,
-            bloodPressureDiastolic: diastolicAverage?.0,
-            lastMonthAvgHeartRateVariability: lastMonthHRVAverage?.0,
-            lastMonthVarHeartRateVariability: lastMonthHRVSamples?.variance(keyPath: \.self),
-            lastMonthRestingHeartRate: lastMonthRHRAverage?.0,
-            lastMonthBloodPressureSystolic: lastMonthSystolicAverage?.0,
-            lastMonthBloodPressureDiastolic: lastMonthDiastolicAverage?.0
-        )
     }
 
     func fetchNutritionalDailyQuantities(

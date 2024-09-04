@@ -306,9 +306,9 @@ private extension VitalsViewModel {
                 VitalModel(
                     id: .activityLevel,
                     subtitle: activityLevelSummary.subtitle,
-                    status: activityLevelSummary.details.activityLevel?.name ?? "Unknown",
+                    status: activityLevelSummary.details.activityLevel?.name,
                     score: activityLevelSummary.details.score,
-                    color: activityLevelSummary.details.activityLevel?.color ?? .gray,
+                    color: activityLevelSummary.details.activityLevel?.color,
                     trend: activityLevelSummary.trend
                 )
             )
@@ -347,10 +347,10 @@ private extension VitalsViewModel {
             vitals.append(
                 VitalModel(
                     id: .stressLevels,
-                    subtitle: stressSummary.subtitle,
-                    status: stressSummary.level.name,
+                    subtitle: stressSummary.details.subtitle,
+                    status: stressSummary.details.level?.name,
                     score: stressSummary.score,
-                    color: stressSummary.level.color,
+                    color: stressSummary.details.level?.color,
                     trend: stressSummary.trend
                 )
             )
@@ -389,10 +389,10 @@ private extension VitalsViewModel {
             vitals.append(
                 VitalModel(
                     id: .bowelMovements,
-                    subtitle: bowelMovementSummary.details?.subtitle ?? "No Data Available",
-                    status: bowelMovementSummary.details?.rating.name ?? "No Data",
+                    subtitle: bowelMovementSummary.details?.subtitle,
+                    status: bowelMovementSummary.details?.rating.name,
                     score: bowelMovementSummary.details?.score ?? 1,
-                    color: bowelMovementSummary.details?.rating.color ?? .gray,
+                    color: bowelMovementSummary.details?.rating.color,
                     trend: bowelMovementSummary.trend
                 )
             )

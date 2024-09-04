@@ -19,13 +19,14 @@ extension ProactiveTipper {
     func sendProactiveTip() async {
         let chatHistory = ChatViewModel.shared.networkChatHistory
 
+        let stressDetails = VitalsViewModel.shared.stressSummary?.details
         let stressSummary = ProactiveTipRequestModel.StressSummary(
-            stressLevel: VitalsViewModel.shared.stressSummary?.level.name,
-            averageHeartRateVariability: VitalsViewModel.shared.stressSummary?.avgHeartRateVariability,
-            varianceHeartRateVariability: VitalsViewModel.shared.stressSummary?.varHeartRateVariability,
-            averageRestingHeartRate: VitalsViewModel.shared.stressSummary?.restingHeartRate,
-            averageBloodPressureSystolic: VitalsViewModel.shared.stressSummary?.bloodPressureSystolic,
-            averageBloodPressureDiastolic: VitalsViewModel.shared.stressSummary?.bloodPressureDiastolic
+            stressLevel: stressDetails?.level?.name,
+            averageHeartRateVariability: stressDetails?.avgHeartRateVariability,
+            varianceHeartRateVariability: stressDetails?.varHeartRateVariability,
+            averageRestingHeartRate: stressDetails?.restingHeartRate,
+            averageBloodPressureSystolic: stressDetails?.bloodPressureSystolic,
+            averageBloodPressureDiastolic: stressDetails?.bloodPressureDiastolic
         )
 
         let nutritionSummary = ProactiveTipRequestModel.NutritionSummary(
