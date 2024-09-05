@@ -15,7 +15,7 @@ struct VitalsView: View {
     @State private var path = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ScrollView {
                 VStack {
                     ForEach(viewModel.vitals) { vital in

@@ -34,7 +34,6 @@ struct GoalDetailsView: View {
 
                     Spacer()
 
-
                     GoalDailyTargetTagView(formattedTarget: goal.metric.targetDailyQuantity.displayString(for: goal.metric.unit))
                 }
                 .tint(goal.metric.measurement.color)
@@ -306,7 +305,22 @@ private extension GoalDetailsView {
             Text(goal.summary)
 
             if let targetVitalModel {
-                TargetVitalComponentView(vital: targetVitalModel)
+                NavigationLink {
+                    switch targetVitalModel.id {
+                    case .sleepQuality: SleepDetailsView()
+                    case .bodyComposition: BodyCompositionDetailsView()
+                    case .nutrition: NutritionDetailsView()
+                    case .stressLevels: StressDetailsView()
+                    case .activityLevel: ActivityLevelDetailsView()
+                    case .cardioFitness: CardioFitnessDetailsView()
+                    case .exerciseEffectiveness: ExerciseEffectivenessView()
+                    case .bowelMovements: BowelMovementsDetailView()
+    //                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
+                    }
+                } label: {
+                    TargetVitalComponentView(vital: targetVitalModel)
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -370,7 +384,7 @@ private extension GoalDetailsView {
         ]
 
         var body: some View {
-            NavigationView {
+            NavigationStack {
                 GoalDetailsView(goals: $goals)
             }
         }
