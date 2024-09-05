@@ -119,6 +119,7 @@
 		FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C02C88FA9D00278019 /* BugsnagPerformance */; };
 		FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */; };
 		FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */; };
+		FF4A21C72C89F62000278019 /* EditGoalTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
 		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
@@ -549,6 +550,7 @@
 		FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightActionCardView.swift; sourceTree = "<group>"; };
 		FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDailyTargetTagView.swift; sourceTree = "<group>"; };
 		FF4A21B82C88E11E00278019 /* DateValueSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValueSample.swift; sourceTree = "<group>"; };
+		FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGoalTargetView.swift; sourceTree = "<group>"; };
 		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
 		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
 		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
@@ -871,6 +873,7 @@
 				FF0DA0FE2C8787DB007D1A6B /* GoalDailyUpdateCellViewModel.swift */,
 				FF0DA0F22C86364B007D1A6B /* GoalDetailsView.swift */,
 				FF0DA1002C878B35007D1A6B /* GoalDetailsViewModel.swift */,
+				FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */,
 				FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */,
 			);
 			path = Components;
@@ -2177,6 +2180,7 @@
 				FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */,
 				FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */,
 				FF0DA0F72C875106007D1A6B /* DateComponents+Helpers.swift in Sources */,
+				FF4A21C72C89F62000278019 /* EditGoalTargetView.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */,
 				FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */,

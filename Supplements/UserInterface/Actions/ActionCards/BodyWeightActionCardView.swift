@@ -31,7 +31,7 @@ struct BodyWeightActionCardView: View {
                     TextField("", value: $weight, formatter: NumberFormatter.noDecimalPlaces)
                     Text("lbs")
                 }
-                .frame(width: 130)
+                .frame(width: 150)
                 .fontDesign(.rounded)
                 .keyboardType(.numberPad)
                 .sensoryFeedback(.error, trigger: didError)

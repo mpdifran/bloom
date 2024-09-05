@@ -14,7 +14,7 @@ struct GoalModel: Identifiable, Hashable, Codable {
     let systemImage: String
     let summary: String
     let dueDate: Date
-    let metric: Metric
+    var metric: Metric
     let vitalKind: VitalModel.Kind
 
     init(
@@ -34,11 +34,27 @@ struct GoalModel: Identifiable, Hashable, Codable {
         self.metric = metric
         self.vitalKind = vitalKind
     }
+
+    func duplicate(with dailyTargetValue: Double) -> GoalModel {
+        GoalModel(
+            id: id,
+            title: title,
+            systemImage: systemImage,
+            summary: summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: dailyTargetValue * 7,
+                unitString: metric.unitString,
+                measurement: metric.measurement
+            ),
+            vitalKind: vitalKind
+        )
+    }
 }
 
 extension GoalModel {
     struct Metric: Hashable, Codable {
-        let value: Double
+        var value: Double
         let unitString: String
         let measurement: MeasurementMetric
 

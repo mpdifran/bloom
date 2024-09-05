@@ -16,6 +16,8 @@ struct GoalDetailsView: View {
 
     @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
 
+    @State private var presentedSheet: AnyView?
+
     init(goals: Binding<[GoalModel]>) {
         self._viewModel = StateObject(wrappedValue: GoalDetailsViewModel(goals: goals))
     }
@@ -42,13 +44,19 @@ struct GoalDetailsView: View {
 
                 goalDescriptionCardView
 
-                goalPickerMenu
+                VStack(spacing: 16) {
+                    goalPickerMenu
+                    Divider()
+                    goalTargetEditButton
+                }
+                .cardContainer(fill: .background.secondary)
             }
             .padding()
         }
         .navigationTitle("Goal")
         .navigationBarTitleDisplayMode(.inline)
         .animation(.default, value: viewModel.goal)
+        .sheet($presentedSheet)
     }
 }
 
@@ -344,8 +352,21 @@ private extension GoalDetailsView {
                 }
             }
             .buttonStyle(.plain)
-            .cardContainer(fill: .background.secondary)
         }
+    }
+
+    var goalTargetEditButton: some View {
+        Button {
+            presentedSheet = EditGoalTargetView(goal: $viewModel.goals[0])
+                .tint(goal.metric.measurement.color)
+                .asAny
+        } label: {
+            LabeledContent("Change Target") {
+                Image(systemName: "chart.line.uptrend.xyaxis")
+                    .foregroundStyle(goal.metric.measurement.color)
+            }
+        }
+        .buttonStyle(.plain)
     }
 }
 

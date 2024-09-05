@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import Combine
 
 @MainActor
 final class GoalDetailsViewModel: ObservableObject {
@@ -20,7 +21,12 @@ final class GoalDetailsViewModel: ObservableObject {
     @Published var goal: GoalModel
     @Published var allGoals: [GoalModel]
 
-    @Binding var goals: [GoalModel]
+    @Binding var goals: [GoalModel] {
+        didSet {
+            goal = goals[0]
+            allGoals = goals
+        }
+    }
 
     init(goals: Binding<[GoalModel]>) {
         self._goals = goals
@@ -41,8 +47,6 @@ extension GoalDetailsViewModel {
         observationHandler = nil
 
         goals.move(fromOffsets: [index], toOffset: 0)
-        goal = goals[0]
-        allGoals = goals
 
         observeValues()
     }
