@@ -14,21 +14,26 @@ struct PreferencesView: View {
     @ObservedObject private var healthManager = HealthManager.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
 
+    @AppStorage("PreferencesView.user.name") private(set) var userName: String = ""
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
     @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
     @State private var shouldPromptForNotificationPermissions = false
     @State private var presentedFullScreenView: AnyView?
+    @State private var presentedSheet: AnyView?
     @State private var alertDetails: AlertDetails?
 
     var body: some View {
         List {
             appInfoSection
+            nameSection
             femaleSection
             healthPermissionsSection
+            feedbackSection
             developerSection
         }
         .fullScreenCover($presentedFullScreenView)
+        .sheet($presentedSheet)
         .safeAreaInset(edge: .top) {
             Rectangle()
                 .fill(.thickMaterial)
@@ -56,6 +61,22 @@ private extension PreferencesView {
 
 private extension PreferencesView {
 
+    var nameSection: some View {
+        Section("User Details") {
+            LabeledContent("Name") {
+                TextField("", text: $userName, prompt: Text("Name"))
+                    .multilineTextAlignment(.trailing)
+                    .textContentType(.name)
+                    .submitLabel(.done)
+            }
+            LabeledContent("ID") {
+                Text(UserID.value)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.3)
+            }
+        }
+    }
+
     var appInfoSection: some View {
         Section {
             LabeledContent("App Version", value: appVersion ?? "Unknown")
@@ -73,6 +94,32 @@ private extension PreferencesView {
             .horizontallyCentered()
             .textCase(.none)
         }
+    }
+
+    var feedbackSection: some View {
+        Section("Feedback") {
+            Button {
+                if userName.isEmpty {
+                    presentedSheet = UserNamePrompt {
+                        showFeedbackView()
+                    }
+                    .asAny
+                } else {
+                    showFeedbackView()
+                }
+            } label: {
+                LabeledContent("Submit Feedback") {
+                    Image(systemName: "heart")
+                        .foregroundStyle(.red)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    func showFeedbackView() {
+        presentedFullScreenView = FeatureRequestScreen().asAny
     }
 
     @ViewBuilder

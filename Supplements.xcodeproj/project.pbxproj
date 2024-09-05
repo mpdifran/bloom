@@ -120,6 +120,11 @@
 		FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */; };
 		FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */; };
 		FF4A21C72C89F62000278019 /* EditGoalTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */; };
+		FF4A21C92C89FF5500278019 /* UserNamePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21C82C89FF5500278019 /* UserNamePrompt.swift */; };
+		FF4A21CC2C8A01CF00278019 /* FeatureRequestWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21CB2C8A01CF00278019 /* FeatureRequestWebView.swift */; };
+		FF4A21CE2C8A01FE00278019 /* URL+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */; };
+		FF4A21D02C8A02BD00278019 /* FeatureRequestsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21CF2C8A02BD00278019 /* FeatureRequestsScreen.swift */; };
+		FF4A21D22C8A05D700278019 /* UserID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21D12C8A05D700278019 /* UserID.swift */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
 		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
@@ -551,6 +556,11 @@
 		FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDailyTargetTagView.swift; sourceTree = "<group>"; };
 		FF4A21B82C88E11E00278019 /* DateValueSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValueSample.swift; sourceTree = "<group>"; };
 		FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGoalTargetView.swift; sourceTree = "<group>"; };
+		FF4A21C82C89FF5500278019 /* UserNamePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNamePrompt.swift; sourceTree = "<group>"; };
+		FF4A21CB2C8A01CF00278019 /* FeatureRequestWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureRequestWebView.swift; sourceTree = "<group>"; };
+		FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Constants.swift"; sourceTree = "<group>"; };
+		FF4A21CF2C8A02BD00278019 /* FeatureRequestsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureRequestsScreen.swift; sourceTree = "<group>"; };
+		FF4A21D12C8A05D700278019 /* UserID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserID.swift; sourceTree = "<group>"; };
 		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
 		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
 		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
@@ -1135,6 +1145,15 @@
 			path = DeviceActivityReportExtension;
 			sourceTree = "<group>";
 		};
+		FF4A21CA2C8A01B900278019 /* FeatureRequests */ = {
+			isa = PBXGroup;
+			children = (
+				FF4A21CF2C8A02BD00278019 /* FeatureRequestsScreen.swift */,
+				FF4A21CB2C8A01CF00278019 /* FeatureRequestWebView.swift */,
+			);
+			path = FeatureRequests;
+			sourceTree = "<group>";
+		};
 		FF4CAB002C813D7B001A59F3 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
@@ -1163,6 +1182,7 @@
 				FF0DA0F62C875106007D1A6B /* DateComponents+Helpers.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
+				FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */,
 				FF8F79CE2C64546C0095C36D /* Color+Codable.swift */,
 			);
 			path = Extensions;
@@ -1361,6 +1381,9 @@
 			isa = PBXGroup;
 			children = (
 				FF8F79C82C62C1D10095C36D /* PreferencesView.swift */,
+				FF4A21C82C89FF5500278019 /* UserNamePrompt.swift */,
+				FF4A21D12C8A05D700278019 /* UserID.swift */,
+				FF4A21CA2C8A01B900278019 /* FeatureRequests */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -2162,6 +2185,7 @@
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
 				FF17051F2C10A20C000D4B3D /* SleepProgramCell.swift in Sources */,
 				FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */,
+				FF4A21C92C89FF5500278019 /* UserNamePrompt.swift in Sources */,
 				FF1E96B02C0E3F83004DAD2D /* SleepProgramSetupView.swift in Sources */,
 				FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */,
 				FFC77B062C5E6724003E5F85 /* HKQuantity+Helpers.swift in Sources */,
@@ -2233,6 +2257,7 @@
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */,
 				FFBE523F2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift in Sources */,
 				FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */,
+				FF4A21CE2C8A01FE00278019 /* URL+Constants.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
 				FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */,
@@ -2273,6 +2298,7 @@
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FFBE522D2C6F044B00F510DE /* OnboardingHealthSleepView.swift in Sources */,
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,
+				FF4A21CC2C8A01CF00278019 /* FeatureRequestWebView.swift in Sources */,
 				FF4CAAF92C8005B6001A59F3 /* BowelMovementMonthlySummary.swift in Sources */,
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
 				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
@@ -2345,6 +2371,7 @@
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
+				FF4A21D22C8A05D700278019 /* UserID.swift in Sources */,
 				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
 				FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
@@ -2412,6 +2439,7 @@
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
 				FF8F79BE2C61A3DE0095C36D /* VitalDetailChartTitleView.swift in Sources */,
 				FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */,
+				FF4A21D02C8A02BD00278019 /* FeatureRequestsScreen.swift in Sources */,
 				FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */,
 				FF0DA0F32C86364B007D1A6B /* GoalDetailsView.swift in Sources */,
 				FF7890522C3473B700F9C1A5 /* SleepChatMessage.swift in Sources */,
