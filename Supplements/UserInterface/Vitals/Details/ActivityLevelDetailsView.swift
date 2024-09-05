@@ -22,6 +22,7 @@ struct ActivityLevelDetailsView: View {
             VStack(spacing: 20) {
                 activityLevelRatioChart
                 ratioDistributionView
+                dayOfWeekDistributionView
                 workoutSummationViews
             }
             .padding()
@@ -140,10 +141,47 @@ private extension ActivityLevelDetailsView {
 
     var ratioDistributionView: some View {
         VStack {
-            VitalDetailChartTitleView(title: "Daily Energy Ratio Distribution", value: "")
+            VitalDetailChartTitleView(title: "By Level", value: "")
             ActivityLevelDistributionView(ratioDistribution: viewModel.activityLevelSummary?.details.activityLevelRatioDistribution ?? [:])
         }
         .cardContainer(fill: .background.secondary)
+    }
+
+    @ViewBuilder
+    var dayOfWeekDistributionView: some View {
+        if let distribution = viewModel.activityLevelSummary?.details.dayOfWeekActivityLevelRatioDistribution() {
+            VStack {
+                VitalDetailChartTitleView(title: "By Day of Week", value: "")
+
+                Chart {
+                    ForEach(distribution.keys.sorted(keyPath: \.self), id: \.self) { dayOfWeek in
+                        BarMark(
+                            x: .value("Day", dayOfWeek.dayOfWeekLabel),
+                            y: .value("Average Activity Level", distribution[dayOfWeek, default: 1])
+                        )
+                        .cornerRadius(5)
+                        .foregroundStyle(.green)
+                    }
+                }
+                .chartXScale(domain: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], range: .plotDimension)
+                .chartXAxis {
+                    AxisMarks(values: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]) { value in
+                        AxisGridLine()
+                        AxisTick()
+
+                        if let intValue = value.as(Int.self) {
+                            AxisValueLabel {
+                                Text(intValue.dayOfWeekLabel)
+                            }
+                        } else {
+                            AxisValueLabel()
+                        }
+                    }
+                }
+                .frame(height: 200)
+            }
+            .cardContainer(fill: .background.secondary)
+        }
     }
 
     @ViewBuilder
@@ -157,6 +195,22 @@ private extension ActivityLevelDetailsView {
                     WorkoutSummationCell(workoutSummation: workoutSummation)
                 }
             }
+        }
+    }
+}
+
+private extension Int {
+
+    var dayOfWeekLabel: String {
+        switch self {
+        case 1: "Sun"
+        case 2: "Mon"
+        case 3: "Tue"
+        case 4: "Wed"
+        case 5: "Thu"
+        case 6: "Fri"
+        case 7: "Sat"
+        default: ""
         }
     }
 }

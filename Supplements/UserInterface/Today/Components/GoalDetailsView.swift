@@ -220,6 +220,7 @@ private extension GoalDetailsView {
                     x: .value("Date", sample.date, unit: .day),
                     y: .value("Value", sample.quantity.doubleValue(for: goal.metric.unit))
                 )
+                .cornerRadius(5)
                 .foregroundStyle(.tint)
             }
 

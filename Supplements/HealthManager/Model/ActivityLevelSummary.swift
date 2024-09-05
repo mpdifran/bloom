@@ -159,4 +159,19 @@ extension ActivityLevelSummary.Details {
 
         return ratioDistribution
     }
+
+    func dayOfWeekActivityLevelRatioDistribution() -> [Int : Double] {
+        var collection = [Int : [Double]]()
+        for sample in energyRatioSamples {
+            let dayOfWeek = Calendar.current.component(.weekday, from: sample.date)
+            collection[dayOfWeek, default: []].append(sample.value)
+        }
+
+        var result = [Int : Double]()
+        for key in collection.keys {
+            result[key] = collection[key, default: []].average(keyPath: \.self)
+        }
+
+        return result
+    }
 }

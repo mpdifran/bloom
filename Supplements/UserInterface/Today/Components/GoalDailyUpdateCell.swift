@@ -46,7 +46,7 @@ struct GoalDailyUpdateCell: View {
                         Text("\(viewModel.dailyValue.format(to: 1)) \(goal.metric.unit.unitString)")
                             .foregroundStyle(.tint)
 
-                        Text("/ \(remainingGoalValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                        Text("/ \(remainingGoalValue.format()) \(goal.metric.unit.unitString)")
                             .foregroundStyle(.secondary)
                     }
                     .font(.subheadline)
