@@ -28,12 +28,12 @@ struct BodyWeightActionCardView: View {
                 Spacer()
 
                 HStack {
-                    TextField("", value: $weight, formatter: NumberFormatter.noDecimalPlaces)
+                    TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
                     Text("lbs")
                 }
                 .frame(width: 150)
                 .fontDesign(.rounded)
-                .keyboardType(.numberPad)
+                .keyboardType(.decimalPad)
                 .sensoryFeedback(.error, trigger: didError)
                 .textFieldStyle(.roundedBorder)
                 .font(.largeTitle)
