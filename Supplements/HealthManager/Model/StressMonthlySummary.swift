@@ -90,7 +90,7 @@ extension StressMonthlySummary.Details {
         return components.average(keyPath: \.self)
     }
 
-    var subtitle: String {
+    var subtitle: String? {
         let hrv = avgHeartRateVariability.map { "HRV: \($0.format()) ms" }
         let rhr = restingHeartRate.map { "RHR: \($0.format()) bpm" }
 
@@ -100,7 +100,12 @@ extension StressMonthlySummary.Details {
         } else {
             bloodPressure = nil
         }
-        return [hrv, rhr, bloodPressure].compactMap({ $0 }).joined(separator: "\n")
+
+        let compactEntries = [hrv, rhr, bloodPressure].compactMap({ $0 })
+
+        guard compactEntries.isNotEmpty else { return nil }
+
+        return compactEntries.joined(separator: "\n")
     }
 
     var level: StressMonthlySummary.Level? {
