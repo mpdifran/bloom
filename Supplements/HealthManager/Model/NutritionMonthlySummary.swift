@@ -30,18 +30,21 @@ struct NutritionMonthlySummary: Hashable {
 
 extension NutritionMonthlySummary {
 
-    var subtitle: String {
+    var subtitle: String? {
         let macros = details.macroStatus.map { "Macros \($0.rawValue)" }
         let vitamins = details.vitaminStatus
         let minerals = details.mineralStatus
 
-        return [
+        let entries = [
             details.netEnergyDisplayString,
             macros,
             vitamins,
             minerals
         ].compactMap({ $0 })
-            .joined(separator: "\n")
+
+        guard entries.isNotEmpty else { return nil }
+
+        return entries.joined(separator: "\n")
     }
 
     var score: Double {
@@ -55,9 +58,9 @@ extension NutritionMonthlySummary {
         return .noTrend
     }
 
-    var status: Status {
+    var status: Status? {
         guard let score = details.score else {
-            return Status(title: "No Data", color: .gray)
+            return nil
         }
 
         if score < 0.4 {
@@ -290,7 +293,7 @@ extension NutritionMonthlySummary.Details {
     }
 
     var proteinScore: Double? {
-        guard let average = averageProtein, let dietaryEnergy else { return nil }
+        guard let average = averageProtein, let dietaryEnergy, average.doubleValue(for: .gram()) >= 1 else { return nil }
 
         let goal = HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy()
 
@@ -318,7 +321,7 @@ extension NutritionMonthlySummary.Details {
     }
 
     var carbohydratesScore: Double? {
-        guard let average = averageCarbohydrates, let dietaryEnergy else { return nil }
+        guard let average = averageCarbohydrates, let dietaryEnergy, average.doubleValue(for: .gram()) >= 1 else { return nil }
 
         let goal = HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy()
 
@@ -346,7 +349,7 @@ extension NutritionMonthlySummary.Details {
     }
 
     var fatScore: Double? {
-        guard let average = averageFat, let dietaryEnergy else { return nil }
+        guard let average = averageFat, let dietaryEnergy, average.doubleValue(for: .gram()) >= 1 else { return nil }
 
         let goal = HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy()
 

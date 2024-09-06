@@ -302,9 +302,9 @@ private extension VitalsViewModel {
                 VitalModel(
                     id: .nutrition,
                     subtitle: nutritionSummary.subtitle,
-                    status: nutritionSummary.status.title,
+                    status: nutritionSummary.status?.title,
                     score: nutritionSummary.score,
-                    color: nutritionSummary.status.color,
+                    color: nutritionSummary.status?.color,
                     trend: nutritionSummary.trend
                 )
             )

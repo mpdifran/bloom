@@ -87,7 +87,7 @@ struct VitalModel: Identifiable, Hashable {
         self.id = id
         self.subtitle = subtitle ?? "No Data"
         self.status = status ?? "Unknown"
-        self.score = score
+        self.score = status == nil ? 2 : score
         self.color = color ?? .gray
         self.trend = trend
     }
