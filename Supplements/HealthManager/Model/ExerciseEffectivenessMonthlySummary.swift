@@ -41,13 +41,13 @@ extension ExerciseEffectivenessMonthlySummary {
         var color: Color {
             switch self {
             case .sedentary:
-                    .pink
+                    .vitalSevere
             case .minimal:
-                    .yellow
+                    .vitalWarning
             case .moderate:
-                    .green
+                    .vitalGood
             case .high:
-                    .coreSleep
+                    .vitalGreat
             }
         }
     }

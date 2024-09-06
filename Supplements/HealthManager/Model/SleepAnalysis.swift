@@ -234,15 +234,6 @@ extension SleepAnalysis {
 
 extension SleepAnalysis {
 
-    var sleepQuality: VitalStatusData.Mode {
-        switch overallScore {
-        case 0 ..< 4: .threat
-        case 4 ..< 7: .warning
-        case 7 ..< 9: .good
-        default: .excel
-        }
-    }
-
     var sleepOneLiner: String {
         var results = [String]()
 

@@ -25,10 +25,10 @@ extension SleepVitalsMonthlySummary {
 
         var color: Color {
             switch self {
-            case .poor: .pink
-            case .low: .yellow
-            case .good: .green
-            case .great: .coreSleep
+            case .poor: .vitalSevere
+            case .low: .vitalWarning
+            case .good: .vitalGood
+            case .great: .vitalGreat
             }
         }
     }

@@ -33,10 +33,10 @@ extension CardioFitnessMonthlySummary {
         var color: Color {
             switch self {
             case .unknown: .gray
-            case .low: .pink
-            case .belowAverage: .yellow
-            case .aboveAverage: .green
-            case .high: .coreSleep
+            case .low: .vitalSevere
+            case .belowAverage: .vitalWarning
+            case .aboveAverage: .vitalGood
+            case .high: .vitalGreat
             }
         }
 

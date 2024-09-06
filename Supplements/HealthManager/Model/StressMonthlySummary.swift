@@ -30,10 +30,10 @@ extension StressMonthlySummary {
 
         var color: Color {
             switch self {
-            case .low: .coreSleep
-            case .moderate: .green
-            case .high: .yellow
-            case .severe: .pink
+            case .low: .vitalGreat
+            case .moderate: .vitalGood
+            case .high: .vitalWarning
+            case .severe: .vitalSevere
             }
         }
     }

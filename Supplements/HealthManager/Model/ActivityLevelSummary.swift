@@ -47,10 +47,9 @@ extension ActivityLevelSummary.ActivityLevel {
 
     var color: Color {
         switch self {
-        case .sedentary: .yellow
-        case .light, .moderate: .green
-        case .high: .coreSleep
-        case .intense: .coreSleep
+        case .sedentary: .vitalWarning
+        case .light, .moderate: .vitalGood
+        case .high, .intense: .vitalGreat
         }
     }
 

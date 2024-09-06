@@ -10,59 +10,8 @@ import HealthKit
 import Combine
 import AppFoundations
 
-private extension Double {
-    static let hrvVariance: Double = 8
-    static let rhrUpperThreadDiff: Double = 10
-}
-
-struct VitalStatusData: Identifiable, Hashable {
-    var id: Int { hashValue }
-
-    let name: String
-    let value: String
-    let mode: Mode
-    let score: Double?
-}
-
-extension VitalStatusData {
-    enum Mode: Int, Hashable {
-        case insufficientData
-        case threat
-        case warning
-        case good
-        case excel
-    }
-}
-
-extension VitalStatusData.Mode {
-
-    var systemImage: String {
-        switch self {
-        case .insufficientData: "questionmark.diamond.fill"
-        case .threat: "exclamationmark.octagon.fill"
-        case .warning: "exclamationmark.triangle.fill"
-        case .good: "checkmark.circle.fill"
-        case .excel: "checkmark.seal.fill"
-        }
-    }
-
-    var color: Color {
-        switch self {
-        case .insufficientData: .gray
-        case .threat: .pink
-        case .warning: .yellow
-        case .good: .green
-        case .excel: .coreSleep
-        }
-    }
-}
-
 final class VitalsViewModel: ObservableObject {
     static let shared = VitalsViewModel()
-
-    @Published var hrvStatus: VitalStatusData?
-    @Published var sleepStatus: VitalStatusData?
-    @Published var rhrStatus: VitalStatusData?
 
     @Published var vitals = [VitalModel]()
 

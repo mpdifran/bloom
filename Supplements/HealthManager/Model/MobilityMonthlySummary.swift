@@ -37,10 +37,10 @@ extension MobilityMonthlySummary {
         var color: Color {
             switch self {
             case .unknown: .gray
-            case .poor: .pink
-            case .concern: .yellow
-            case .good: .green
-            case .excellent: .coreSleep
+            case .poor: .vitalSevere
+            case .concern: .vitalWarning
+            case .good: .vitalGood
+            case .excellent: .vitalGreat
             }
         }
     }

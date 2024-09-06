@@ -30,7 +30,7 @@ struct GoalDailyTargetTagView: View {
         .padding(.vertical, 4)
         .background {
             RoundedRectangle(cornerRadius: 10)
-                .fill(.fill)
+                .fill(.background.secondary)
         }
     }
 }

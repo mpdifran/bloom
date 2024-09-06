@@ -193,7 +193,7 @@ private extension GoalCell {
                 dueDate: Date().addingTimeInterval(215453),
                 metric: .init(
                     value: 300,
-                    unitString: "minute",
+                    unit: .minute(),
                     measurement: .timeInDaylight
                 ),
                 vitalKind: .sleepQuality

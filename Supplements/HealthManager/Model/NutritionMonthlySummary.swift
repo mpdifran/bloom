@@ -61,13 +61,13 @@ extension NutritionMonthlySummary {
         }
 
         if score < 0.4 {
-            return Status(title: "Unhealthy", color: .pink)
+            return Status(title: "Unhealthy", color: .vitalSevere)
         } else if score < 0.8 {
-            return Status(title: "Unbalanced", color: .yellow)
+            return Status(title: "Unbalanced", color: .vitalWarning)
         } else if score < 1 {
-            return Status(title: "Good", color: .green)
+            return Status(title: "Good", color: .vitalGood)
         }
-        return Status(title: "Healthy", color: .coreSleep)
+        return Status(title: "Healthy", color: .vitalGreat)
     }
 }
 

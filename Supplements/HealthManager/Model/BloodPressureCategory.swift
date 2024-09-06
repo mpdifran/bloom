@@ -47,9 +47,9 @@ enum BloodPressureCategory: CaseIterable, Identifiable {
 
     var color: Color {
         switch self {
-        case .low, .elevated: return .yellow
-        case .normal: return .green
-        case .hypertensionStage1, .hypertensionStage2: return .orange
+        case .low, .elevated: return .vitalWarning
+        case .normal: return .vitalGood
+        case .hypertensionStage1, .hypertensionStage2: return .vitalSevere
         case .hypertensiveCrisis: return .pink
         }
     }

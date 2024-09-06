@@ -62,7 +62,7 @@ struct GoalDailyUpdateCell: View {
                 .padding(.leading)
         }
         .tint(goal.metric.measurement.color)
-        .cardContainer(fill: .background.secondary)
+        .cardContainer()
         .animation(.easeOut, value: viewModel.dailyValue)
     }
 }
@@ -76,20 +76,23 @@ private extension GoalDailyUpdateCell {
 
 #Preview {
     ScrollView {
-        GoalDailyUpdateCell(
-            goal: .init(
-                title: "Increase Walking + Running Distance",
-                systemImage: "figure.walk",
-                summary: "Walking and running are good for you.",
-                dueDate: .now.addingTimeInterval(60 * 60 * 24 * 3),
-                metric: .init(
-                    value: 2,
-                    unit: HKUnit.meterUnit(with: .kilo),
-                    measurement: .walkRunDistance
-                ),
-                vitalKind: .cardioFitness
+        VStack {
+            GoalDailyUpdateCell(
+                goal: .init(
+                    title: "Increase Walking + Running Distance",
+                    systemImage: "figure.walk",
+                    summary: "Walking and running are good for you.",
+                    dueDate: .now.addingTimeInterval(60 * 60 * 24 * 3),
+                    metric: .init(
+                        value: 2,
+                        unit: HKUnit.meterUnit(with: .kilo),
+                        measurement: .walkRunDistance
+                    ),
+                    vitalKind: .cardioFitness
+                )
             )
-        )
+        }
         .padding()
     }
+    .gradientRootBackground()
 }

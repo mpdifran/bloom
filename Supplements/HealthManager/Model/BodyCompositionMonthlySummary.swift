@@ -30,10 +30,10 @@ extension BodyCompositionMonthlySummary {
         var color: Color {
             switch self {
             case .unknown: .gray
-            case .athlete, .fit: .coreSleep
-            case .healthy: .green
-            case .essentialFat: .yellow
-            case .high: .pink
+            case .athlete, .fit: .vitalGreat
+            case .healthy: .vitalGood
+            case .essentialFat: .vitalWarning
+            case .high: .vitalSevere
             }
         }
 

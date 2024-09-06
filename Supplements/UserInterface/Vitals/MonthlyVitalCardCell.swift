@@ -45,15 +45,15 @@ struct MonthlyVitalCardCell: View {
                 Group {
                     switch vital.trend {
                     case .increasing:
-                        Image(systemName: "chevron.up.circle")
+                        Image(systemName: "chevron.up.circle.fill")
                     case .decreasing:
-                        Image(systemName: "chevron.down.circle")
+                        Image(systemName: "chevron.down.circle.fill")
                     case .noTrend:
-                        Image(systemName: "minus.circle")
-                            .foregroundStyle(.primary, .fill)
+                        Image(systemName: "minus.circle.fill")
+                            .foregroundStyle(.fill, .fill.secondary)
                     }
                 }
-                .foregroundStyle(.primary, .tint)
+                .foregroundStyle(.tint, .tint.tertiary)
                 .font(.title)
                 .contentTransition(.symbolEffect)
 
@@ -68,7 +68,7 @@ struct MonthlyVitalCardCell: View {
             }
         }
         .tint(vital.color)
-        .cardContainer(fill: .background.secondary)
+        .cardContainer()
     }
 }
 
@@ -81,7 +81,7 @@ struct MonthlyVitalCardCell: View {
                     subtitle: "Basal: 1756 Cal\nActive: 642 Cal",
                     status: "Moderate",
                     score: 0.7,
-                    color: .yellow,
+                    color: .vitalWarning,
                     trend: .increasing
                 )
             )
@@ -92,7 +92,7 @@ struct MonthlyVitalCardCell: View {
                     subtitle: "45% Core\n12% Deep",
                     status: "Good",
                     score: 0.7,
-                    color: .coreSleep,
+                    color: .vitalGreat,
                     trend: .decreasing
                 )
             )
@@ -103,12 +103,23 @@ struct MonthlyVitalCardCell: View {
                     subtitle: "1700 Cal Basal\n451 Cal Active",
                     status: "Light",
                     score: 0.7,
-                    color: .green,
+                    color: .vitalGood,
                     trend: .noTrend
+                )
+            )
+
+            MonthlyVitalCardCell(
+                vital: .init(
+                    id: .bowelMovements,
+                    subtitle: "Once a Day",
+                    status: "Irregular",
+                    score: 0.1,
+                    color: .vitalSevere,
+                    trend: .increasing
                 )
             )
         }
         .padding()
     }
-    .groupedBackground()
+    .gradientRootBackground()
 }

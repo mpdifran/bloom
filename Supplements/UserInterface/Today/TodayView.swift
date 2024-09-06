@@ -88,6 +88,7 @@ struct TodayView: View {
             .fullScreenCover(isPresented: $tabController.showMorningReport) {
                 GoodMorningView()
             }
+            .gradientRootBackground()
         }
         .tabItem {
             Label("Today", systemImage: "calendar.badge.checkmark")
@@ -122,7 +123,7 @@ private extension TodayView {
             Image(systemName: "chevron.forward")
                 .foregroundStyle(.secondary)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer()
         .contentShape(Rectangle())
         .onTapGesture {
             presentedFullScreen = GoodMorningView().asAny
@@ -135,4 +136,5 @@ private extension TodayView {
     TabView {
         TodayView()
     }
+    .environmentObject(TabController())
 }

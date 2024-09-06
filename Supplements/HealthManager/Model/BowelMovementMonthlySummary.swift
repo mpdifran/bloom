@@ -42,13 +42,13 @@ extension BowelMovementMonthlySummary {
         var color: Color {
             switch self {
             case .unhealthy:
-                    .pink
+                    .vitalSevere
             case .concerning:
-                    .yellow
+                    .vitalWarning
             case .acceptable:
-                    .green
+                    .vitalGood
             case .optimal:
-                    .coreSleep
+                    .vitalGreat
             }
         }
     }

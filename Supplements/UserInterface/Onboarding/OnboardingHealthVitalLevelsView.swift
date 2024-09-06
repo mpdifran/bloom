@@ -37,25 +37,25 @@ struct OnboardingHealthVitalLevelsView: View {
                     title: "Great",
                     description: "You're exceeding recommended health levels."
                 )
-                .tint(.blue)
+                .tint(.vitalGreat)
                 VitalLevelView(
                     systemImage: "checkmark.circle.fill",
                     title: "Good",
                     description: "You're at the recommended healthy level."
                 )
-                .tint(.green)
+                .tint(.vitalGood)
                 VitalLevelView(
                     systemImage: "exclamationmark.triangle.fill",
                     title: "Low",
                     description: "You're below recommended health levels, and should take notice."
                 )
-                .tint(.yellow)
+                .tint(.vitalWarning)
                 VitalLevelView(
                     systemImage: "exclamationmark.octagon.fill",
                     title: "Poor",
                     description: "You're outside recommended health levels, and should take action ASAP."
                 )
-                .tint(.pink)
+                .tint(.vitalSevere)
             }
             .padding()
         }

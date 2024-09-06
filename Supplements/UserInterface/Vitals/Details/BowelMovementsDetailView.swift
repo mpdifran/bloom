@@ -143,10 +143,10 @@ private extension BowelMovementsDetailView {
 
     func color(for bristolStoolType: Int) -> Color {
         switch bristolStoolType {
-        case 7: .pink
-        case 1, 6: .yellow
-        case 2, 5: .green
-        case 3, 4: .coreSleep
+        case 7: .vitalSevere
+        case 1, 6: .vitalWarning
+        case 2, 5: .vitalGood
+        case 3, 4: .vitalGreat
         default: .brown
         }
     }

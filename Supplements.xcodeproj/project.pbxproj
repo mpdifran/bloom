@@ -206,7 +206,6 @@
 		FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */; };
 		FF8F79DF2C6948B70095C36D /* CardioFitnessDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
-		FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
 		FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134EF2C3F042300FF1829 /* SleepDayView.swift */; };
 		FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */; };
@@ -215,7 +214,6 @@
 		FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */; };
 		FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83D82C4D9E28004D12DA /* VitalsView.swift */; };
 		FFAA83DB2C4D9E89004D12DA /* HeartRateVariabilityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83DA2C4D9E89004D12DA /* HeartRateVariabilityCell.swift */; };
-		FFAA83DD2C4E9462004D12DA /* VitalStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83DC2C4E9462004D12DA /* VitalStatusCell.swift */; };
 		FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */; };
 		FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */; };
 		FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFACBADE2BAC7788006AAD0B /* ChatView.swift */; };
@@ -641,7 +639,6 @@
 		FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummationCell.swift; sourceTree = "<group>"; };
 		FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessDetailsView.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
-		FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalSummaryView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
 		FFA134EF2C3F042300FF1829 /* SleepDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayView.swift; sourceTree = "<group>"; };
 		FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayViewModel.swift; sourceTree = "<group>"; };
@@ -650,7 +647,6 @@
 		FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDatePicker.swift; sourceTree = "<group>"; };
 		FFAA83D82C4D9E28004D12DA /* VitalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsView.swift; sourceTree = "<group>"; };
 		FFAA83DA2C4D9E89004D12DA /* HeartRateVariabilityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateVariabilityCell.swift; sourceTree = "<group>"; };
-		FFAA83DC2C4E9462004D12DA /* VitalStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusCell.swift; sourceTree = "<group>"; };
 		FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsViewModel.swift; sourceTree = "<group>"; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBADC2BAC7788006AAD0B /* SupplementsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsApp.swift; sourceTree = "<group>"; };
@@ -1408,9 +1404,7 @@
 				FF8F79B32C5FD5260095C36D /* Details */,
 				FFAA83D82C4D9E28004D12DA /* VitalsView.swift */,
 				FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */,
-				FFAA83DC2C4E9462004D12DA /* VitalStatusCell.swift */,
 				FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */,
-				FF9C84D12C5032D900648A1E /* VitalSummaryView.swift */,
 				FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */,
 				FFC77AFD2C5AB200003E5F85 /* VitalModel.swift */,
 			);
@@ -2208,7 +2202,6 @@
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */,
 				FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */,
-				FFAA83DD2C4E9462004D12DA /* VitalStatusCell.swift in Sources */,
 				FFC77AFC2C5A7D00003E5F85 /* GoalCell.swift in Sources */,
 				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
 				FFF66FA92C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift in Sources */,
@@ -2376,7 +2369,6 @@
 				FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
-				FF9C84D22C5032D900648A1E /* VitalSummaryView.swift in Sources */,
 				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
 				FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */,
 				FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */,
