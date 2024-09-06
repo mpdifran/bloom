@@ -630,6 +630,39 @@ extension HealthManager {
             workoutReports: workoutReports
         )
     }
+
+    func fetchSleepVitalSummary() -> SleepVitalsMonthlySummary {
+        let thisMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: sleepAnalysis30Days ?? [])
+        let lastMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: sleepAnalysisPrevious30Days ?? [])
+
+        return SleepVitalsMonthlySummary(
+            details: thisMonth,
+            lastMonthDetails: lastMonth
+        )
+    }
+
+    func fetchSleepVitalSummaryDetails(sleepAnalyses: [SleepAnalysis]) -> SleepVitalsMonthlySummary.Details {
+
+        if sleepAnalyses.isEmpty {
+            return SleepVitalsMonthlySummary.Details(
+                averageREMSleepPercent: nil,
+                averageCoreSleepPercent: nil,
+                averageDeepSleepPercent: nil,
+                averageAwakeSleepPercent: nil,
+                averageSleepLength: nil,
+                averageSleepScore: nil
+            )
+        }
+
+        return SleepVitalsMonthlySummary.Details(
+            averageREMSleepPercent: sleepAnalyses.average(keyPath: \.remSleepPercent),
+            averageCoreSleepPercent: sleepAnalyses.average(keyPath: \.coreSleepPercent),
+            averageDeepSleepPercent: sleepAnalyses.average(keyPath: \.deepSleepPercent),
+            averageAwakeSleepPercent: sleepAnalyses.average(keyPath: \.awakeSleepPercent),
+            averageSleepLength: sleepAnalyses.average(keyPath: \.overallMinutes),
+            averageSleepScore: sleepAnalyses.average(keyPath: \.overallScoreDouble)
+        )
+    }
 }
 
 // MARK: Deprecated

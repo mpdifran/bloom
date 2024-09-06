@@ -89,9 +89,9 @@ private extension OnboardingHealthSleepView {
             VitalModel(
                 id: .sleepQuality,
                 subtitle: sleepSummary.subtitleText,
-                status: sleepSummary.quality.name,
+                status: sleepSummary.details.quality?.name,
                 score: sleepSummary.score,
-                color: sleepSummary.quality.color,
+                color: sleepSummary.details.quality?.color,
                 trend: sleepSummary.trend
             )
         } else {

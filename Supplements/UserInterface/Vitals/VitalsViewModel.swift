@@ -168,18 +168,9 @@ private extension VitalsViewModel {
         HealthManager.shared.$sleepAnalysis30Days
             .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
             .receive(on: DispatchQueue(label: "VitalsViewModel.SleepSummary"))
-            .map { (thisMonth, lastMonth) in
-                guard let thisMonth, let lastMonth else { return nil }
+            .map { (_, _) in
 
-                return SleepVitalsMonthlySummary(
-                    averageREMSleepPercent: thisMonth.average(keyPath: \.remSleepPercent),
-                    averageCoreSleepPercent: thisMonth.average(keyPath: \.coreSleepPercent),
-                    averageDeepSleepPercent: thisMonth.average(keyPath: \.deepSleepPercent),
-                    averageAwakeSleepPercent: thisMonth.average(keyPath: \.awakeSleepPercent),
-                    averageSleepLength: thisMonth.average(keyPath: \.overallMinutes),
-                    averageSleepScore: thisMonth.average(keyPath: \.overallScoreDouble),
-                    lastMonthAverageSleepScore: lastMonth.average(keyPath: \.overallScoreDouble)
-                )
+                return HealthManager.shared.fetchSleepVitalSummary()
             }
             .receive(on: DispatchQueue.main)
             .assign(to: &$sleepVitalsSummary)
@@ -241,9 +232,9 @@ private extension VitalsViewModel {
                 VitalModel(
                     id: .sleepQuality,
                     subtitle: sleepVitalsSummary.subtitleText,
-                    status: sleepVitalsSummary.quality.name,
+                    status: sleepVitalsSummary.details.quality?.name,
                     score: sleepVitalsSummary.score,
-                    color: sleepVitalsSummary.quality.color,
+                    color: sleepVitalsSummary.details.quality?.color,
                     trend: sleepVitalsSummary.trend
                 )
             )

@@ -64,7 +64,7 @@ private extension SleepDetailsView {
         VStack(alignment: .leading) {
             VitalDetailChartTitleView(
                 title: "Sleep Quality",
-                value: viewModel.sleepVitalsSummary?.averageSleepScore.format() ?? ""
+                value: viewModel.sleepVitalsSummary?.details.averageSleepScore?.format() ?? ""
             )
 
             Chart {
@@ -113,7 +113,13 @@ private extension SleepDetailsView {
 
     @ViewBuilder
     var sleepDistributionChart: some View {
-        if let summary = viewModel.sleepVitalsSummary {
+        if 
+            let summary = viewModel.sleepVitalsSummary,
+            let averageREMSleepPercent = summary.details.averageREMSleepPercent,
+            let averageCoreSleepPercent = summary.details.averageCoreSleepPercent,
+            let averageDeepSleepPercent = summary.details.averageDeepSleepPercent,
+            let averageAwakeSleepPercent = summary.details.averageAwakeSleepPercent
+        {
             VStack(alignment: .leading) {
                 VitalDetailChartTitleView(
                     title: "Sleep Stages",
@@ -127,7 +133,7 @@ private extension SleepDetailsView {
                     title: "REM Sleep",
                     quantityString: "",
                     unitString: "%",
-                    value: (summary.averageREMSleepPercent * 100),
+                    value: (averageREMSleepPercent * 100),
                     minValue: 20,
                     maxValue: 25
                 )
@@ -139,7 +145,7 @@ private extension SleepDetailsView {
                     title: "Core Sleep",
                     quantityString: "",
                     unitString: "%",
-                    value: (summary.averageCoreSleepPercent * 100),
+                    value: (averageCoreSleepPercent * 100),
                     minValue: 45,
                     maxValue: 50
                 )
@@ -151,7 +157,7 @@ private extension SleepDetailsView {
                     title: "Deep Sleep",
                     quantityString: "",
                     unitString: "%",
-                    value: (summary.averageDeepSleepPercent * 100),
+                    value: (averageDeepSleepPercent * 100),
                     minValue: 15,
                     maxValue: 25
                 )
@@ -161,7 +167,7 @@ private extension SleepDetailsView {
                     title: "Awake",
                     quantityString: "",
                     unitString: "%",
-                    value: (summary.averageAwakeSleepPercent * 100),
+                    value: (averageAwakeSleepPercent * 100),
                     minValue: 0,
                     maxValue: 5
                 )
