@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import HealthKit
 
 extension BodyCompositionMonthlySummary {
     enum PercentageRange {
@@ -62,43 +63,81 @@ extension BodyCompositionMonthlySummary {
     }
 }
 
-struct BodyCompositionMonthlySummary: Equatable, Codable {
-    let bodyFatPercentage: Double?
-    let lastMonthBodyFatPercentage: Double?
+struct BodyCompositionMonthlySummary: Hashable {
+    let details: Details
+    let lastMonthDetails: Details
 }
 
 extension BodyCompositionMonthlySummary {
 
     var score: Double {
-        guard
-            let goal = HealthManager.shared.goalBodyFatPercentage(),
-            let bodyFatPercentage
-        else { return 1 }
-
-        return bodyFatPercentage.scaledPercent(lower: goal.4, upper: goal.3)
+        details.score ?? 1
     }
 
     var trend: VitalModel.Trend {
-        guard let bodyFatPercentage, let lastMonthBodyFatPercentage else {
+        guard let thisMonth = details.score, let lastMonth = lastMonthDetails.score else {
             return .noTrend
         }
-        return bodyFatPercentage > lastMonthBodyFatPercentage ? .increasing : .decreasing
+        return thisMonth > lastMonth ? .increasing : .decreasing
     }
 
-    var subtitle: String {
-        guard let bodyFatPercentage else { return "No Data" }
+    var subtitle: String? {
+        guard let bodyFatPercentage = details.bodyFatPercentage?.doubleValue(for: .percent()) else { return nil }
 
         let percent = bodyFatPercentage * 100
         return "Fat: \(percent.format(to: 0))%"
     }
 
-    var range: PercentageRange {
+    var bodyMassTrendDescription: String? {
+        guard
+            let thisMonth = details.averageBodyMass?.doubleValue(for: .pound()),
+            let lastMonth = lastMonthDetails.averageBodyMass?.doubleValue(for: .pound())
+        else { return nil }
+
+        let difference = abs(thisMonth - lastMonth)
+
+        if difference < 1 {
+            return "Your average body weight has held steady over this month compared to last month."
+        }
+
+        if thisMonth > lastMonth {
+            return "Your average body weight has increased \((thisMonth - lastMonth) / lastMonth * 100)% this month."
+        } else {
+            return "Your average body weight has decreased \((lastMonth - thisMonth) / lastMonth * 100)% this month."
+        }
+    }
+}
+
+extension BodyCompositionMonthlySummary {
+    struct Details: Hashable {
+        let bodyFatPercentage: HKQuantity?
+        let averageBodyMass: HKQuantity?
+    }
+}
+
+extension BodyCompositionMonthlySummary.Details {
+
+    var score: Double? {
         guard
             let goal = HealthManager.shared.goalBodyFatPercentage(),
             let bodyFatPercentage
-        else { return .unknown }
+        else { return nil }
 
-        let percent = bodyFatPercentage
+        return bodyFatPercentage.doubleValue(for: .percent()).scaledPercent(lower: goal.4, upper: goal.3)
+    }
+
+    var range: BodyCompositionMonthlySummary.PercentageRange? {
+        guard
+            let goal = HealthManager.shared.goalBodyFatPercentage(),
+            let bodyFatPercentage
+        else {
+            if averageBodyMass == nil {
+                return nil
+            }
+            return .unknown
+        }
+
+        let percent = bodyFatPercentage.doubleValue(for: .percent())
 
         if percent < goal.0 {
             return .essentialFat

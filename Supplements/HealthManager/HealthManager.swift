@@ -593,12 +593,23 @@ extension HealthManager {
     }
 
     func fetchBodyCompositionSummary() async -> BodyCompositionMonthlySummary {
-        let thisMonth = await HealthManager.shared.fetchAverageBodyFatPercentage()
-        let lastMonth = await HealthManager.shared.fetchAverageBodyFatPercentage(numPastMonths: 1)
+        let thisMonth = await fetchBodyCompositionSummaryDetails(dateRange: .trailingMonthsFromNow(1))
+        let lastMonth = await fetchBodyCompositionSummaryDetails(
+            dateRange: .trailingMonthsFromMonthsFromNow(
+                monthsFromNow: 1,
+                numberOfMonths: 1
+            )
+        )
+        return BodyCompositionMonthlySummary(details: thisMonth, lastMonthDetails: lastMonth)
+    }
 
-        return BodyCompositionMonthlySummary(
-            bodyFatPercentage: thisMonth?.0,
-            lastMonthBodyFatPercentage: lastMonth?.0
+    func fetchBodyCompositionSummaryDetails(dateRange: DateRange) async -> BodyCompositionMonthlySummary.Details {
+        let bodyFatPercentage = try? await healthStore.fetchQuantity(for: .bodyFatPercentage, dateRange: dateRange)
+        let bodyMass = try? await healthStore.fetchQuantity(for: .bodyMass, dateRange: dateRange)
+
+        return BodyCompositionMonthlySummary.Details(
+            bodyFatPercentage: bodyFatPercentage,
+            averageBodyMass: bodyMass
         )
     }
 

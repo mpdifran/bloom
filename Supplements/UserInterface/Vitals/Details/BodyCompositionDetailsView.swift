@@ -7,10 +7,11 @@
 
 import SwiftUI
 import Charts
-import Foundation
+import HealthKit
 
 struct BodyCompositionDetailsView: View {
 
+    @State private var bodyMassSamples = [DateQuantitySample]()
     @State private var bodyFatPercentageSamples = [DateAverageQuantitySample]()
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
@@ -31,7 +32,9 @@ struct BodyCompositionDetailsView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 VStack {
-                    chart
+                    bodyMassChart
+
+                    bodyFatPercentageChart
 
                     bodyFatPercentageRangePicker
                 }
@@ -64,10 +67,21 @@ struct BodyCompositionDetailsView: View {
                 self.bodyFatPercentageSamples = samples
             }
         }
+        .task {
+            let samples = (try? await HealthManager.shared.healthStore.fetchAverageStatistics(
+                quantityTypeID: .bodyMass,
+                unit: .pound(),
+                dateRange: .trailingMonthsFromNow(1)
+            )) ?? []
+
+            await MainActor.run {
+                self.bodyMassSamples = samples
+            }
+        }
         .onAppear {
             feedbackGenerator.prepare()
             if
-                let range = viewModel.bodyCompositionSummary?.range,
+                let range = viewModel.bodyCompositionSummary?.details.range,
                 let index = ranges.firstIndex(where: { $0 == range })
             {
                 self.selectedRangeIndex = index
@@ -81,11 +95,67 @@ private extension BodyCompositionDetailsView {
     var average: Double {
         bodyFatPercentageSamples.average(keyPath: \.averageQuantity) * 100
     }
+
+    var averageWeight: Double {
+        bodyMassSamples.map({ $0.quantity.doubleValue(for: .pound()) }).average(keyPath: \.self)
+    }
 }
 
 private extension BodyCompositionDetailsView {
 
-    var chart: some View {
+    @ViewBuilder
+    var bodyMassChart: some View {
+        if bodyMassSamples.isNotEmpty {
+            VStack {
+                VitalDetailChartTitleView(title: "Body Weight", value: "\(averageWeight.format()) \(HKUnit.pound().unitString)")
+
+                Chart {
+                    ForEach(bodyMassSamples) { sample in
+                        LineMark(
+                            x: .value("Date", sample.date, unit: .day),
+                            y: .value("Body Weight", sample.quantity.doubleValue(for: .pound()))
+                        )
+                        .foregroundStyle(.vitalGood)
+
+                        PointMark(
+                            x: .value("Date", sample.date, unit: .day),
+                            y: .value("Body Weight", sample.quantity.doubleValue(for: .pound()))
+                        )
+                        .foregroundStyle(.vitalGood)
+                        .symbolSize(40)
+                    }
+                }
+                .frame(height: 200)
+                .chartXAxis {
+                    AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+                        AxisGridLine()
+                        AxisTick()
+                        AxisValueLabel()
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks(position: .trailing, values: .automatic) { value in
+                        AxisGridLine()
+                        AxisTick()
+                        if let doubleValue = value.as(Double.self) {
+                            AxisValueLabel("\(doubleValue.format()) \(HKUnit.pound().unitString)")
+                        } else {
+                            AxisValueLabel()
+                        }
+                    }
+                }
+
+                if let bodyMassTrendDescription = viewModel.bodyCompositionSummary?.bodyMassTrendDescription {
+                    DetailInfoCardView {
+                        Text(bodyMassTrendDescription)
+                    }
+                }
+            }
+            .padding(.bottom)
+        }
+    }
+
+    var bodyFatPercentageChart: some View {
         VStack(alignment: .leading) {
             VitalDetailChartTitleView(title: "Body Fat Percentage", value: "\(average.format())%")
 
@@ -93,15 +163,15 @@ private extension BodyCompositionDetailsView {
                 ForEach(bodyFatPercentageSamples) { sample in
                     LineMark(
                         x: .value("Date", sample.date, unit: .day),
-                        y: .value("BPM", sample.averageQuantity)
+                        y: .value("Body Fat Percentage", sample.averageQuantity)
                     )
-                    .foregroundStyle(viewModel.bodyCompositionSummary?.range.color ?? .blue)
+                    .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
 
                     PointMark(
                         x: .value("Date", sample.date, unit: .day),
                         y: .value("Body Fat Percentage", sample.averageQuantity)
                     )
-                    .foregroundStyle(viewModel.bodyCompositionSummary?.range.color ?? .blue)
+                    .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
                     .symbolSize(40)
 
                     if 
