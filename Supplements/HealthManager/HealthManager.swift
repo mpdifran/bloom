@@ -1609,11 +1609,7 @@ extension HealthManager {
 
             if (newPreviousSleepAnalysis?.endDate ?? .distantPast) > (lastPreviousSleepAnalysis?.endDate ?? .distantPast) && lastPreviousSleepAnalysis != nil {
                 // We've triggered from new data, not from app launch
-                let message = newPreviousSleepAnalysis?.sleepOneLiner ?? ""
-                await NotificationManager.shared.sendGoodMorningNotification(
-                    message: message,
-                    delay: 60 * 1
-                )
+                await ReportCoordinator.shared.didDetectWakeUp()
             }
 
             await MainActor.run { [weak self] in

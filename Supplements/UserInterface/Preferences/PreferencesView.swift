@@ -13,6 +13,7 @@ struct PreferencesView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
+    @ObservedObject private var reportCoordinator = ReportCoordinator.shared
 
     @AppStorage("PreferencesView.user.name") private(set) var userName: String = ""
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
@@ -28,6 +29,7 @@ struct PreferencesView: View {
             appInfoSection
             nameSection
             femaleSection
+            reportsSection
             healthPermissionsSection
             feedbackSection
             developerSection
@@ -93,6 +95,16 @@ private extension PreferencesView {
             .padding(.bottom)
             .horizontallyCentered()
             .textCase(.none)
+        }
+    }
+
+    var reportsSection: some View {
+        Section("Reports") {
+            Toggle(isOn: $reportCoordinator.showMorningReportOnWakeUp) {
+                Text("Morning Report on Wake Up")
+            }
+
+            DatePicker("Evening Report", selection: $reportCoordinator.eveningReportDate, displayedComponents: .hourAndMinute)
         }
     }
 

@@ -298,6 +298,7 @@
 		FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */; };
 		FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE390D62C24931400B79140 /* WorkoutSummary.swift */; };
 		FFE41D152C8B83F600E3E559 /* ToDoActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */; };
+		FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */; };
 		FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */; };
 		FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
@@ -732,6 +733,7 @@
 		FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTitleView.swift; sourceTree = "<group>"; };
 		FFE390D62C24931400B79140 /* WorkoutSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummary.swift; sourceTree = "<group>"; };
 		FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoActionCell.swift; sourceTree = "<group>"; };
+		FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCoordinator.swift; sourceTree = "<group>"; };
 		FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryViewModel.swift; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthStore+Helpers.swift"; sourceTree = "<group>"; };
@@ -1458,6 +1460,7 @@
 				FF8B8B332BFFE4CD00BA2128 /* Location */,
 				FF4CAB002C813D7B001A59F3 /* Weather */,
 				FF88F1192C7B75AE0093D1B4 /* Calendar */,
+				FFE41D162C8B8A8600E3E559 /* Reports */,
 				FF6AEC972BF17D0D00C34621 /* Notifications */,
 				FFB4445E2BEC4CB400486AD7 /* Network */,
 				FFC77AF82C5A7599003E5F85 /* SwiftData */,
@@ -1687,6 +1690,14 @@
 				FF4CAAF82C8005B6001A59F3 /* BowelMovementMonthlySummary.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		FFE41D162C8B8A8600E3E559 /* Reports */ = {
+			isa = PBXGroup;
+			children = (
+				FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */,
+			);
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		FFF61AF42BED554700926042 /* Chat */ = {
@@ -2271,6 +2282,7 @@
 				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
 				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
 				FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */,
+				FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */,
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,
 				FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */,
 				FF17052B2C10E1E1000D4B3D /* TimeInDaylightCell.swift in Sources */,

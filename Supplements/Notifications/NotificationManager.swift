@@ -64,7 +64,7 @@ extension NotificationManager {
     ) async {
         let content = UNMutableNotificationContent()
         content.title = "Your Morning Report is Ready!"
-        content.subtitle = message ?? "Check out your personalized report designed just for you."
+        content.subtitle = message ?? "Check out your personalized report for today."
         content.sound = .default
         content.categoryIdentifier = .CategoryID.goodMorning
 
