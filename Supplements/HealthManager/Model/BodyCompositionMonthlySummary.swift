@@ -101,9 +101,11 @@ extension BodyCompositionMonthlySummary {
         }
 
         if thisMonth > lastMonth {
-            return "Your average body weight has increased \((thisMonth - lastMonth) / lastMonth * 100)% this month."
+            let formattedPercent = ((thisMonth - lastMonth) / lastMonth * 100).format(to: 1)
+            return "Your average body weight has increased \(formattedPercent)% this month."
         } else {
-            return "Your average body weight has decreased \((lastMonth - thisMonth) / lastMonth * 100)% this month."
+            let formattedPercent = ((lastMonth - thisMonth) / lastMonth * 100).format(to: 1)
+            return "Your average body weight has decreased \(formattedPercent)% this month."
         }
     }
 }
