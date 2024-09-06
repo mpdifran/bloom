@@ -20,7 +20,7 @@ struct CompletionCheckmarkView: View {
                     .foregroundStyle(.fill)
             }
         }
-        .font(.title2)
+        .font(.title)
         .contentTransition(.symbolEffect)
         .animation(.bouncy, value: hasCompleted)
     }

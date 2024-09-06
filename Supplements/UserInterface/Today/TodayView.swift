@@ -46,38 +46,33 @@ struct TodayView: View {
                         }
                     }
 
-                    Text("Actions")
+                    Text("To Do")
                         .bold()
                         .padding(.horizontal)
                         .zStackAlignment(.leading)
                         .padding(.top)
 
-                    Button(action: {
-                        presentedCardSheet = BodyWeightActionCardView().asAny
-                    }, label: {
-                        Label("Log Weight", systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus")
-                            .horizontallyCentered()
-                    })
-                    .buttonStyle(.tertiary)
+                    ToDoActionCell(
+                        title: "Weigh Yourself",
+                        subtitle: "Daily",
+                        systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
+                        isComplete: viewModel.hasLoggedBodyWeight
+                    )
                     .tint(.indigo)
+                    .onTapGesture {
+                        presentedCardSheet = BodyWeightActionCardView().asAny
+                    }
 
-                    Button(action: {
-                        presentedCardSheet = WaterActionCardView().asAny
-                    }, label: {
-                        Label("Log Water", systemImage: "waterbottle.fill")
-                            .horizontallyCentered()
-                    })
-                    .buttonStyle(.tertiary)
+                    ToDoActionCell(
+                        title: "Drink Water",
+                        subtitle: "500 mL / Day",
+                        systemImage: "waterbottle.fill",
+                        isComplete: viewModel.hasLoggedWater
+                    )
                     .tint(.blue)
-
-                    Button(action: {
-                        presentedCardSheet = BowelMovementActionCardView().asAny
-                    }, label: {
-                        Label("Log Bowel Movement", systemImage: "toilet.fill")
-                            .horizontallyCentered()
-                    })
-                    .buttonStyle(.tertiary)
-                    .tint(.brown)
+                    .onTapGesture {
+                        presentedCardSheet = WaterActionCardView().asAny
+                    }
                 }
                 .horizontallyCentered()
                 .padding()
@@ -94,6 +89,7 @@ struct TodayView: View {
             Label("Today", systemImage: "calendar.badge.checkmark")
         }
         .onAppear {
+            viewModel.observeData()
             Task {
                 await goalsViewModel.checkForUpdateGoals()
             }
