@@ -10,7 +10,7 @@ import HealthKit
 
 struct ActionLatestValueDetails {
     let displayString: String
-    let timestamp: Date
+    let timestampString: String
 }
 
 @MainActor
@@ -41,9 +41,12 @@ extension ActionsViewModel {
             let latestSample = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bodyMass)
             if let quantitySample = latestSample as? HKQuantitySample {
                 let displayString = quantitySample.quantity.displayString(for: .pound())
-                let timestamp = quantitySample.startDate
+                let timestamp = DateFormatter.relativeDateTimeShort.string(from: quantitySample.startDate)
                 await MainActor.run {
-                    self.weightDetails = ActionLatestValueDetails(displayString: displayString, timestamp: timestamp)
+                    self.weightDetails = ActionLatestValueDetails(
+                        displayString: displayString,
+                        timestampString: timestamp
+                    )
                 }
             } else {
                 await MainActor.run {
@@ -59,16 +62,21 @@ extension ActionsViewModel {
             frequency: .immediate
         ) {
             let latestSystolic = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bloodPressureSystolic)
-            let latestDiastolic = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bloodPressureSystolic)
+            let latestDiastolic = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bloodPressureDiastolic)
 
             if
                 let systolicQuantitySample = latestSystolic as? HKQuantitySample,
                 let diastolicQuantitySample = latestDiastolic as? HKQuantitySample
             {
-                let displayString = "\(systolicQuantitySample.quantity.doubleValue(for: .millimeterOfMercury()))/\(diastolicQuantitySample.quantity.doubleValue(for: .millimeterOfMercury()))"
+                let displayString = "\(systolicQuantitySample.quantity.doubleValue(for: .millimeterOfMercury()).format())/\(diastolicQuantitySample.quantity.doubleValue(for: .millimeterOfMercury()).format())"
                 let timestamp = max(systolicQuantitySample.startDate, diastolicQuantitySample.startDate)
 
-                self.bloodPressureDetails = .init(displayString: displayString, timestamp: timestamp)
+                let timestampString = DateFormatter.relativeDateTimeShort.string(from: timestamp)
+
+                self.bloodPressureDetails = .init(
+                    displayString: displayString,
+                    timestampString: timestampString
+                )
             } else {
                 self.bloodPressureDetails = nil
             }
@@ -80,12 +88,19 @@ extension ActionsViewModel {
             dateRange: .trailingMonthsFromNow(1),
             frequency: .immediate
         ) {
-            let latestSample = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .dietaryWater)
-            if let quantitySample = latestSample as? HKQuantitySample {
-                let displayString = quantitySample.quantity.displayString(for: .literUnit(with: .milli))
-                let timestamp = quantitySample.startDate
+            let quantity = try? await HealthManager.shared.healthStore.fetchQuantity(
+                for: .dietaryWater,
+                dateRange: .today(),
+                option: .cumulativeSum
+            )
+            if let quantity {
+                let displayString = quantity.displayString(for: .literUnit(with: .milli))
+
                 await MainActor.run {
-                    self.waterDetails = ActionLatestValueDetails(displayString: displayString, timestamp: timestamp)
+                    self.waterDetails = ActionLatestValueDetails(
+                        displayString: displayString,
+                        timestampString: "Today"
+                    )
                 }
             } else {
                 await MainActor.run {
@@ -100,10 +115,10 @@ extension ActionsViewModel {
 
             if let lastSample = bowelMovements?.last {
                 let displayString = "Type \(lastSample.bristolStoolType)"
-                let timestamp = lastSample.date
+                let timestamp = DateFormatter.relativeDateTimeShort.string(from: lastSample.date)
 
                 await MainActor.run {
-                    self.bowelMovementDetails = .init(displayString: displayString, timestamp: timestamp)
+                    self.bowelMovementDetails = .init(displayString: displayString, timestampString: timestamp)
                 }
             } else {
                 await MainActor.run {

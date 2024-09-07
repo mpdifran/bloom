@@ -12,7 +12,7 @@ struct ActionStatusCell: View {
     let title: String
     let systemImage: String
     let latestValue: String?
-    let latestTimestamp: Date?
+    let latestTimestamp: String?
 
     var body: some View {
         HStack {
@@ -33,7 +33,7 @@ struct ActionStatusCell: View {
 
                 Group {
                     if let latestTimestamp {
-                        Text("\(latestTimestamp, formatter: DateFormatter.relativeDateTimeShort)")
+                        Text(latestTimestamp)
                     } else {
                         Text("Never")
                     }
@@ -78,21 +78,21 @@ struct ActionStatusCell: View {
                 title: "Log Weight",
                 systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
                 latestValue: "159.2 lbs",
-                latestTimestamp: .now
+                latestTimestamp: "Today"
             )
             .tint(.indigo)
             ActionStatusCell(
                 title: "Log Blood Pressure",
                 systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
                 latestValue: "120/80",
-                latestTimestamp: .now
+                latestTimestamp: "Today"
             )
             .tint(.pink)
             ActionStatusCell(
                 title: "Log Water",
                 systemImage: "waterbottle.fill",
                 latestValue: "500 mL",
-                latestTimestamp: .now
+                latestTimestamp: "Today"
             )
             .tint(.blue)
         }

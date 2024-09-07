@@ -22,7 +22,7 @@ struct ActionsView: View {
                         title: "Log Weight",
                         systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
                         latestValue: viewModel.weightDetails?.displayString,
-                        latestTimestamp: viewModel.weightDetails?.timestamp
+                        latestTimestamp: viewModel.weightDetails?.timestampString
                     )
                     .tint(.indigo)
                     .onTapGesture {
@@ -33,7 +33,7 @@ struct ActionsView: View {
                         title: "Log Blood Pressure",
                         systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
                         latestValue: viewModel.bloodPressureDetails?.displayString,
-                        latestTimestamp: viewModel.bloodPressureDetails?.timestamp
+                        latestTimestamp: viewModel.bloodPressureDetails?.timestampString
                     )
                     .tint(.pink)
                     .onTapGesture {
@@ -44,7 +44,7 @@ struct ActionsView: View {
                         title: "Log Water",
                         systemImage: "waterbottle.fill",
                         latestValue: viewModel.waterDetails?.displayString,
-                        latestTimestamp: viewModel.waterDetails?.timestamp
+                        latestTimestamp: viewModel.waterDetails?.timestampString
                     )
                     .tint(.blue)
                     .onTapGesture {
@@ -55,7 +55,7 @@ struct ActionsView: View {
                         title: "Log Bowel Movement",
                         systemImage: "toilet.fill",
                         latestValue: viewModel.bowelMovementDetails?.displayString,
-                        latestTimestamp: viewModel.bowelMovementDetails?.timestamp
+                        latestTimestamp: viewModel.bowelMovementDetails?.timestampString
                     )
                     .tint(.brown)
                     .onTapGesture {
