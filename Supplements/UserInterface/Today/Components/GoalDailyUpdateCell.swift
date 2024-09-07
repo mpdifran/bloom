@@ -65,6 +65,18 @@ struct GoalDailyUpdateCell: View {
         .tint(goal.metric.measurement.color)
         .cardContainer()
         .animation(.easeOut, value: viewModel.dailyValue)
+        .standardConfetti(
+            $viewModel.didHitGoal,
+            colors: [
+                goal.metric.measurement.color,
+                .white,
+                goal.metric.measurement.color.lighter(),
+                goal.metric.measurement.color.darker()
+            ]
+        )
+        .onAppear {
+            viewModel.checkHitGoal()
+        }
     }
 }
 

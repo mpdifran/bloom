@@ -5,13 +5,18 @@
 //  Created by Mark DiFranco on 2024-09-03.
 //
 
-import Foundation
+import UIKit
 
 @MainActor
 final class GoalDailyUpdateCellViewModel: ObservableObject {
     let goal: GoalModel
 
-    @Published var dailyValue: Double = 0
+    @Published var didHitGoal = 0
+    var didSendConfetti = false
+    var didSendNotification = false
+    @Published var dailyValue: Double = 0 {
+        didSet { checkHitGoal() }
+    }
     @Published var yesterdayValue: Double = 0
     @Published var hasCompletedTodayGoal = false
 
@@ -21,11 +26,31 @@ final class GoalDailyUpdateCellViewModel: ObservableObject {
     }
 
     private var observationHandler: HKObserverQueryHandle?
+    private var backgroundHandler: HKBackgroundDeliveryHandle?
+}
+
+extension GoalDailyUpdateCellViewModel {
+
+    func checkHitGoal() {
+        if UIApplication.shared.applicationState == .active {
+            if hasCompletedTodayGoal && !didSendConfetti {
+                didHitGoal += 1
+                didSendConfetti = true
+            }
+        }
+        if !hasCompletedTodayGoal {
+            didSendConfetti = false
+        }
+    }
 }
 
 private extension GoalDailyUpdateCellViewModel {
 
     func observeValues() {
+        backgroundHandler = HealthManager.shared.healthStore.enableBackgroundDelivery(
+            objectTypes: goal.metric.measurement.sampleTypes,
+            frequency: .immediate
+        )
         observationHandler = HealthManager.shared.healthStore.observeChanges(
             sampleTypes: goal.metric.measurement.sampleTypes,
             dateRange: .mondayMorningToNow(),
@@ -42,11 +67,35 @@ private extension GoalDailyUpdateCellViewModel {
         await MainActor.run {
             dailyValue = currentValue
             yesterdayValue = prevValue
+            let prevHasCompletedGoal = hasCompletedTodayGoal
             if !goal.metric.measurement.isDecrease {
                 hasCompletedTodayGoal = dailyValue > (goal.metric.value / 7)
             } else {
                 hasCompletedTodayGoal = false
             }
+            
+            checkHitGoal()
+
+            if !prevHasCompletedGoal && hasCompletedTodayGoal {
+                Task {
+                    await sendGoalHitNotification()
+                }
+            } else if !hasCompletedTodayGoal {
+                didSendNotification = false
+            }
+        }
+    }
+
+    func sendGoalHitNotification() async {
+        if UIApplication.shared.applicationState != .active && !didSendNotification {
+            await NotificationManager.shared.sendNotification(
+                title: "You Did It!",
+                subtitle: "You've hit your \(goal.title) goal, great job!"
+            )
+        }
+
+        await MainActor.run {
+            didSendNotification = true
         }
     }
 }

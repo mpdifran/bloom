@@ -301,6 +301,8 @@
 		FFE41D1D2C8BCDAA00E3E559 /* EveningReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */; };
 		FFE41D1F2C8BCE1500E3E559 /* EveningGoalProgressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */; };
 		FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D202C8BD8C900E3E559 /* ReportCell.swift */; };
+		FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */; };
+		FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */; };
 		FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */; };
 		FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
@@ -738,6 +740,7 @@
 		FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningReportView.swift; sourceTree = "<group>"; };
 		FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningGoalProgressCell.swift; sourceTree = "<group>"; };
 		FFE41D202C8BD8C900E3E559 /* ReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCell.swift; sourceTree = "<group>"; };
+		FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Confetti.swift"; sourceTree = "<group>"; };
 		FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryViewModel.swift; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthStore+Helpers.swift"; sourceTree = "<group>"; };
@@ -832,6 +835,7 @@
 				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
 				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
 				FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */,
+				FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1776,6 +1780,7 @@
 				FF1E960E2C0ACC70004DAD2D /* LabelledMetricView.swift */,
 				FF1E962B2C0BF19A004DAD2D /* View+Expand.swift */,
 				FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */,
+				FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */,
 				FF8F79B82C601C660095C36D /* View+Background.swift */,
 				FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */,
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
@@ -1992,6 +1997,7 @@
 				FF4A21C02C88FA9D00278019 /* BugsnagPerformance */,
 				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
 				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
+				FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -2070,6 +2076,7 @@
 				FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */,
 				FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
 				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
+				FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -2338,6 +2345,7 @@
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FFBE522D2C6F044B00F510DE /* OnboardingHealthSleepView.swift in Sources */,
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,
+				FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */,
 				FF4A21CC2C8A01CF00278019 /* FeatureRequestWebView.swift in Sources */,
 				FF4CAAF92C8005B6001A59F3 /* BowelMovementMonthlySummary.swift in Sources */,
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
@@ -3290,6 +3298,14 @@
 				minimumVersion = 0.4.2;
 			};
 		};
+		FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 		FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mpdifran/AppFoundations.git";
@@ -3340,6 +3356,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */;
 			productName = AppUI;
+		};
+		FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
 		};
 		FFF61AEA2BED52A900926042 /* AppFoundations */ = {
 			isa = XCSwiftPackageProductDependency;

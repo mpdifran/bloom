@@ -9,21 +9,23 @@ import Foundation
 import HealthKit
 
 class HKBackgroundDeliveryHandle {
-    let objectType: HKObjectType
+    let objectTypes: [HKObjectType]
     weak var healthStore: HKHealthStore?
 
     init(
-        objectType: HKObjectType,
+        objectTypes: [HKObjectType],
         healthStore: HKHealthStore?
     ) {
-        self.objectType = objectType
+        self.objectTypes = objectTypes
         self.healthStore = healthStore
     }
 
     deinit {
-        healthStore?.disableBackgroundDelivery(for: objectType) { success, error in
-            if let error {
-                print(error)
+        for objectType in objectTypes {
+            healthStore?.disableBackgroundDelivery(for: objectType) { success, error in
+                if let error {
+                    print(error)
+                }
             }
         }
     }
