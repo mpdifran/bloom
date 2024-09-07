@@ -12,6 +12,7 @@ struct TodayView: View {
 
     @ObservedObject private var viewModel = TodayViewModel.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
+    @ObservedObject private var reportCoordinator = ReportCoordinator.shared
 
     @EnvironmentObject private var tabController: TabController
 
@@ -26,7 +27,18 @@ struct TodayView: View {
                 VStack {
                     TimelineView(.everyMinute) { context in
                         if Calendar.current.isMorning(date: .now) || danieleMode {
-                            goodMorningCell
+                            ReportCell(kind: .morning)
+                                .onTapGesture {
+                                    presentedFullScreen = GoodMorningView().asAny
+                                }
+                                .padding(.bottom)
+                        }
+                        if reportCoordinator.shouldShowEveningReport() || danieleMode {
+                            ReportCell(kind: .evening)
+                                .onTapGesture {
+                                    presentedFullScreen = EveningReportView().asAny
+                                }
+                                .padding(.bottom)
                         }
                     }
 
@@ -94,37 +106,6 @@ struct TodayView: View {
                 await goalsViewModel.checkForUpdateGoals()
             }
         }
-    }
-}
-
-private extension TodayView {
-
-    var goodMorningCell: some View {
-        HStack {
-            Image(systemName: "sunrise")
-                .foregroundStyle(.orange)
-                .font(.title2)
-
-            VStack(alignment: .leading) {
-                Text("Morning Report")
-                    .font(.title3)
-                    .bold()
-                Text("Everything you need to start your day.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            Image(systemName: "chevron.forward")
-                .foregroundStyle(.secondary)
-        }
-        .cardContainer()
-        .contentShape(Rectangle())
-        .onTapGesture {
-            presentedFullScreen = GoodMorningView().asAny
-        }
-        .padding(.bottom)
     }
 }
 

@@ -237,7 +237,6 @@
 		FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */; };
 		FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB691072C19F6CF00BEC0D4 /* MeditationMinutesCell.swift */; };
 		FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */; };
-		FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */; };
 		FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */; };
 		FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */; };
 		FFBE52272C6EF69B00F510DE /* OnboardingTitleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBE52262C6EF69B00F510DE /* OnboardingTitleCardView.swift */; };
@@ -299,6 +298,9 @@
 		FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE390D62C24931400B79140 /* WorkoutSummary.swift */; };
 		FFE41D152C8B83F600E3E559 /* ToDoActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */; };
 		FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */; };
+		FFE41D1D2C8BCDAA00E3E559 /* EveningReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */; };
+		FFE41D1F2C8BCE1500E3E559 /* EveningGoalProgressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */; };
+		FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D202C8BD8C900E3E559 /* ReportCell.swift */; };
 		FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */; };
 		FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
@@ -674,7 +676,6 @@
 		FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKSample+TimeInterval.swift"; sourceTree = "<group>"; };
 		FFB691072C19F6CF00BEC0D4 /* MeditationMinutesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationMinutesCell.swift; sourceTree = "<group>"; };
 		FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoodMorningView.swift; sourceTree = "<group>"; };
-		FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomCell.swift; sourceTree = "<group>"; };
 		FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthAgeView.swift; sourceTree = "<group>"; };
 		FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardTemplateView.swift; sourceTree = "<group>"; };
 		FFBE52262C6EF69B00F510DE /* OnboardingTitleCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTitleCardView.swift; sourceTree = "<group>"; };
@@ -734,6 +735,9 @@
 		FFE390D62C24931400B79140 /* WorkoutSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummary.swift; sourceTree = "<group>"; };
 		FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoActionCell.swift; sourceTree = "<group>"; };
 		FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCoordinator.swift; sourceTree = "<group>"; };
+		FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningReportView.swift; sourceTree = "<group>"; };
+		FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningGoalProgressCell.swift; sourceTree = "<group>"; };
+		FFE41D202C8BD8C900E3E559 /* ReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCell.swift; sourceTree = "<group>"; };
 		FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryViewModel.swift; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthStore+Helpers.swift"; sourceTree = "<group>"; };
@@ -886,6 +890,7 @@
 				FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */,
 				FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */,
 				FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */,
+				FFE41D202C8BD8C900E3E559 /* ReportCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1571,7 +1576,7 @@
 				FF88F1282C7D027E0093D1B4 /* Actions */,
 				FF049C012C24B31C004ACE9C /* Directives */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
-				FFB691092C19FA6800BEC0D4 /* GoodMorning */,
+				FFB691092C19FA6800BEC0D4 /* Reports */,
 				FF88F1222C7BBDE80093D1B4 /* Calendar */,
 				FFF61AF42BED554700926042 /* Chat */,
 				FF8B8B402C002BD500BA2128 /* Pins */,
@@ -1597,17 +1602,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		FFB691092C19FA6800BEC0D4 /* GoodMorning */ = {
+		FFB691092C19FA6800BEC0D4 /* Reports */ = {
 			isa = PBXGroup;
 			children = (
-				FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */,
-				FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */,
-				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
-				FFB6910C2C19FF8D00BEC0D4 /* SymptomCell.swift */,
-				FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */,
-				FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */,
+				FFE41D1A2C8BCC6F00E3E559 /* Components */,
+				FFE41D192C8BCC6600E3E559 /* MorningReport */,
+				FFE41D1B2C8BCD9700E3E559 /* EveningReport */,
 			);
-			path = GoodMorning;
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		FFBE52232C6EF5A900F510DE /* Components */ = {
@@ -1698,6 +1700,34 @@
 				FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */,
 			);
 			path = Reports;
+			sourceTree = "<group>";
+		};
+		FFE41D192C8BCC6600E3E559 /* MorningReport */ = {
+			isa = PBXGroup;
+			children = (
+				FFB6910A2C19FA7F00BEC0D4 /* GoodMorningView.swift */,
+			);
+			path = MorningReport;
+			sourceTree = "<group>";
+		};
+		FFE41D1A2C8BCC6F00E3E559 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */,
+				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
+				FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */,
+				FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */,
+				FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		FFE41D1B2C8BCD9700E3E559 /* EveningReport */ = {
+			isa = PBXGroup;
+			children = (
+				FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */,
+			);
+			path = EveningReport;
 			sourceTree = "<group>";
 		};
 		FFF61AF42BED554700926042 /* Chat */ = {
@@ -2228,6 +2258,7 @@
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFC77AF32C5A6CFA003E5F85 /* GoalsView.swift in Sources */,
+				FFE41D1F2C8BCE1500E3E559 /* EveningGoalProgressCell.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,
@@ -2273,6 +2304,7 @@
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FF88F1212C7B81AF0093D1B4 /* EventCell.swift in Sources */,
 				FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */,
+				FFE41D1D2C8BCDAA00E3E559 /* EveningReportView.swift in Sources */,
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
 				FF8B8B322BFFDC9A00BA2128 /* InsightScoreCell.swift in Sources */,
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
@@ -2361,6 +2393,7 @@
 				FF8F79DF2C6948B70095C36D /* CardioFitnessDetailsView.swift in Sources */,
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,
 				FFB444622BEC4E8A00486AD7 /* ChatViewModel.swift in Sources */,
+				FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */,
 				FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */,
 				FF426ACF2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift in Sources */,
 				FFBE523B2C74E2EB00F510DE /* ExerciseEffectivenessView.swift in Sources */,
@@ -2446,7 +2479,6 @@
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
 				FF8F79BE2C61A3DE0095C36D /* VitalDetailChartTitleView.swift in Sources */,
-				FFB6910D2C19FF8D00BEC0D4 /* SymptomCell.swift in Sources */,
 				FF4A21D02C8A02BD00278019 /* FeatureRequestsScreen.swift in Sources */,
 				FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */,
 				FF0DA0F32C86364B007D1A6B /* GoalDetailsView.swift in Sources */,

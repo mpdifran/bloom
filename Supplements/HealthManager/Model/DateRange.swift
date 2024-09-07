@@ -39,6 +39,28 @@ extension DateRange {
 
         return DateRange(startDate, endOfDay)
     }
+
+    static func yesterday() -> DateRange {
+        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now) else {
+            return DateRange(.now, .now)
+        }
+
+        let startDate = Calendar.current.startOfDay(for: yesterday)
+        let endDate = Calendar.current.endOfDay(for: yesterday)
+
+        return DateRange(startDate, endDate)
+    }
+
+    static func tomorrow() -> DateRange {
+        guard let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: .now) else {
+            return DateRange(.now, .now)
+        }
+
+        let startDate = Calendar.current.startOfDay(for: tomorrow)
+        let endDate = Calendar.current.endOfDay(for: tomorrow)
+
+        return DateRange(startDate, endDate)
+    }
 }
 
 // MARK: Start Of Week / Day

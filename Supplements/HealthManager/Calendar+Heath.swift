@@ -42,7 +42,8 @@ extension Calendar {
 
     func endOfDay(for date: Date) -> Date {
         let nextDay = self.date(byAdding: .day, value: 1, to: date)!
-        return startOfDay(for: nextDay)
+        let startOfNextDay = startOfDay(for: nextDay)
+        return self.date(byAdding: .second, value: -1, to: startOfNextDay) ?? startOfNextDay
     }
 
     func closestPastDateMatchingHourAndMinute(
@@ -123,5 +124,17 @@ extension Calendar {
         let components = self.dateComponents([.year, .month, .day], from: monday)
 
         return self.date(from: components)
+    }
+
+    func applyHourMinuteSecond(to toDate: Date, from fromDate: Date) -> Date? {
+        let components = self.dateComponents([.hour, .minute, .second], from: fromDate)
+
+        var currentComponents = self.dateComponents([.year, .month, .day], from: toDate)
+
+        currentComponents.hour = components.hour
+        currentComponents.minute = components.minute
+        currentComponents.second = components.second
+
+        return self.date(from: currentComponents)
     }
 }

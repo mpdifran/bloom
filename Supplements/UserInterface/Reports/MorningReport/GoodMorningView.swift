@@ -54,7 +54,7 @@ struct GoodMorningView: View {
             EKEventView(event: event)
         }
         .presentationCompactAdaptation(.fullScreenCover)
-        .tint(.blue)
+        .tint(.orange)
         .animation(.default, value: healthManager.sleepAnalysis7Days)
         .animation(.default, value: events.count)
         .animation(.default, value: weather)

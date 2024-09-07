@@ -12,6 +12,7 @@ final class GoalDailyUpdateCellViewModel: ObservableObject {
     let goal: GoalModel
 
     @Published var dailyValue: Double = 0
+    @Published var yesterdayValue: Double = 0
     @Published var hasCompletedTodayGoal = false
 
     init(goal: GoalModel) {
@@ -36,11 +37,15 @@ private extension GoalDailyUpdateCellViewModel {
 
     func loadValues() async {
         let currentValue = await goal.metric.quantity(for: .startOfDayToNow()).doubleValue(for: goal.metric.unit)
+        let prevValue = await goal.metric.quantity(for: .yesterday()).doubleValue(for: goal.metric.unit)
 
         await MainActor.run {
             dailyValue = currentValue
+            yesterdayValue = prevValue
             if !goal.metric.measurement.isDecrease {
                 hasCompletedTodayGoal = dailyValue > (goal.metric.value / 7)
+            } else {
+                hasCompletedTodayGoal = false
             }
         }
     }

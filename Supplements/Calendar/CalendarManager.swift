@@ -41,4 +41,17 @@ extension CalendarManager {
 
         return await eventStore.fetchEvents(matching: predicate)
     }
+
+    func eventsTomorrow() async -> [EKEvent] {
+        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
+
+        let dateRange = DateRange.tomorrow()
+        let predicate = eventStore.predicateForEvents(
+            withStart: dateRange.start,
+            end: dateRange.end,
+            calendars: nil
+        )
+
+        return await eventStore.fetchEvents(matching: predicate)
+    }
 }

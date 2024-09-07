@@ -45,6 +45,7 @@ struct GoalDailyUpdateCell: View {
                     HStack {
                         Text("\(viewModel.dailyValue.format(to: 1)) \(goal.metric.unit.unitString)")
                             .foregroundStyle(.tint)
+                            .contentTransition(.numericText(value: viewModel.dailyValue))
 
                         Text("/ \(remainingGoalValue.format()) \(goal.metric.unit.unitString)")
                             .foregroundStyle(.secondary)
@@ -79,7 +80,7 @@ private extension GoalDailyUpdateCell {
         VStack {
             GoalDailyUpdateCell(
                 goal: .init(
-                    title: "Increase Walking + Running Distance",
+                    title: "Walking + Running Distance",
                     systemImage: "figure.walk",
                     summary: "Walking and running are good for you.",
                     dueDate: .now.addingTimeInterval(60 * 60 * 24 * 3),

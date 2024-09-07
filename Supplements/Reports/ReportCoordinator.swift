@@ -72,4 +72,13 @@ extension ReportCoordinator {
 
         lastMorningReportNotificationDate = .now
     }
+
+    func shouldShowEveningReport() -> Bool {
+        let now = Date.now
+        guard let eveningStartDate = Calendar.current.applyHourMinuteSecond(to: now, from: eveningReportDate) else {
+            return false
+        }
+
+        return eveningStartDate < now
+    }
 }
