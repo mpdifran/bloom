@@ -45,6 +45,16 @@ struct BodyWeightActionCardView: View {
         }
         .alert(error: $error)
         .tint(.indigo)
+        .task {
+            let sample = try? await healthManager.healthStore.fetchLatestSample(for: .bodyMass)
+            guard let quantitySample = sample as? HKQuantitySample else { return }
+
+            let weight = quantitySample.quantity.doubleValue(for: .pound())
+
+            await MainActor.run {
+                self.weight = weight
+            }
+        }
     }
 }
 
