@@ -82,10 +82,21 @@ extension BodyCompositionMonthlySummary {
     }
 
     var subtitle: String? {
-        guard let bodyFatPercentage = details.bodyFatPercentage?.doubleValue(for: .percent()) else { return nil }
+        var entries = [String]()
 
-        let percent = bodyFatPercentage * 100
-        return "Fat: \(percent.format(to: 0))%"
+        if let bodyWeight = details.averageBodyMass {
+            entries.append("Weight: \(bodyWeight.displayString(for: .pound()))")
+        }
+        if let bodyFatPercentage = details.bodyFatPercentage?.doubleValue(for: .percent()) {
+            let percent = bodyFatPercentage * 100
+            entries.append("Fat: \(percent.format(to: 0))%")
+        }
+
+        let compactEntries = entries.compactMap({ $0 })
+
+        guard compactEntries.isNotEmpty else { return nil }
+
+        return compactEntries.joined(separator: "\n")
     }
 
     var bodyMassTrendDescription: String? {
