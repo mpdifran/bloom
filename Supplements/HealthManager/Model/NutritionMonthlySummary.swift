@@ -32,14 +32,14 @@ extension NutritionMonthlySummary {
 
     var subtitle: String? {
         let macros = details.macroStatus.map { "Macros \($0.rawValue)" }
-        let vitamins = details.vitaminStatus
-        let minerals = details.mineralStatus
+        let water = details.waterStatus
+//        let vitamins = details.vitaminStatus
+//        let minerals = details.mineralStatus
 
         let entries = [
             details.netEnergyDisplayString,
             macros,
-            vitamins,
-            minerals
+            water
         ].compactMap({ $0 })
 
         guard entries.isNotEmpty else { return nil }
@@ -97,6 +97,7 @@ extension NutritionMonthlySummary {
         let averagePotassium: HKQuantity?
         let averageSodium: HKQuantity?
         let averageZinc: HKQuantity?
+        let averageWater: HKQuantity?
     }
 
     enum MacroStatus: String {
@@ -363,7 +364,8 @@ extension NutritionMonthlySummary.Details {
         let other = [
             fiberScore,
             sugarScore,
-            caffeineScore
+            caffeineScore,
+            waterScore
         ].compactMap({ $0 })
 
         if other.isEmpty {
@@ -397,6 +399,27 @@ extension NutritionMonthlySummary.Details {
         else { return nil }
 
         return average.scaledPercent(lower: goal * 2, upper: goal)
+    }
+
+    var waterStatus: String? {
+        guard
+            let average = averageWater?.doubleValue(for: .literUnit(with: .milli))
+        else { return nil }
+
+        if average < 1000 {
+            return "Dehydrated"
+        } else if average < 2000 {
+            return "Slightly Dehydrated"
+        }
+        return "Hydrated"
+    }
+
+    var waterScore: Double? {
+        guard
+            let average = averageWater?.doubleValue(for: .literUnit(with: .milli))
+        else { return nil }
+
+        return average.scaledPercent(lower: 0, upper: 2000) // TODO: Make this more official
     }
 
     var vitaminScore: Double? {

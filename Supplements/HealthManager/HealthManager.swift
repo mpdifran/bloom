@@ -1411,6 +1411,13 @@ extension HealthManager {
             unit: .gramUnit(with: .milli)
         )
 
+        let water = try? await healthStore.fetchNutritionalDailyAverage(
+            for: .dietaryWater,
+            startDate: startDate,
+            endDate: endDate,
+            unit: .literUnit(with: .milli)
+        )
+
         return .init(
             basalEnergyBurned: basalEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
             activeEnergyBurned: activeEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
@@ -1432,7 +1439,8 @@ extension HealthManager {
             averageMagnesium: magnesium,
             averagePotassium: potassium,
             averageSodium: sodium,
-            averageZinc: zinc
+            averageZinc: zinc,
+            averageWater: water
         )
     }
 

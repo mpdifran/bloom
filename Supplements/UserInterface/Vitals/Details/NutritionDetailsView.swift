@@ -27,6 +27,8 @@ struct NutritionDetailsView: View {
     @State private var dailySugar = [DateQuantitySampleLegacy]()
     @State private var caffeineChartScope = EnergyChartScope.monthlyAverage
     @State private var dailyCaffeine = [DateQuantitySampleLegacy]()
+    @State private var waterChartScope = EnergyChartScope.monthlyAverage
+    @State private var dailyWater = [DateQuantitySample]()
 
     var body: some View {
         ScrollView {
@@ -38,6 +40,8 @@ struct NutritionDetailsView: View {
                 vitaminsChart
                     .cardContainer()
                 mineralsChart
+                    .cardContainer()
+                waterChart
                     .cardContainer()
                 fiberChart
                     .cardContainer()
@@ -98,6 +102,16 @@ struct NutritionDetailsView: View {
             )
             await MainActor.run {
                 self.dailyFiber = samples
+            }
+        }
+        .task {
+            let samples = (try? await HealthManager.shared.healthStore.fetchCollatedQuantity(
+                quantityTypeID: .dietaryWater,
+                unit: .literUnit(with: .milli),
+                dateRange: .trailingMonthsFromNow(1)
+            )) ?? []
+            await MainActor.run {
+                self.dailyWater = samples
             }
         }
     }
@@ -441,13 +455,7 @@ private extension NutritionDetailsView {
                 case .daily:
                     Chart{
                         ForEach(dailyFiber) { sample in
-                            LineMark(
-                                x: .value("Date", sample.date),
-                                y: .value("Daily Fiber", sample.quantity)
-                            )
-                            .foregroundStyle(.fiber)
-
-                            PointMark(
+                            BarMark(
                                 x: .value("Date", sample.date),
                                 y: .value("Daily Fiber", sample.quantity)
                             )
@@ -462,7 +470,7 @@ private extension NutritionDetailsView {
                             .foregroundStyle(.fiber)
 
                             RectangleMark(
-                                yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 3),
+                                yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
                                 yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
                             )
                             .foregroundStyle(
@@ -526,13 +534,7 @@ private extension NutritionDetailsView {
                 case .daily:
                     Chart{
                         ForEach(dailySugar) { sample in
-                            LineMark(
-                                x: .value("Date", sample.date),
-                                y: .value("Daily Sugar", sample.quantity)
-                            )
-                            .foregroundStyle(.sugar)
-
-                            PointMark(
+                            BarMark(
                                 x: .value("Date", sample.date),
                                 y: .value("Daily Sugar", sample.quantity)
                             )
@@ -557,6 +559,74 @@ private extension NutritionDetailsView {
                 }
 
                 Picker("", selection: $sugarChartScope) {
+                    Text("Daily")
+                        .tag(EnergyChartScope.daily)
+
+                    Text("Monthly Average")
+                        .tag(EnergyChartScope.monthlyAverage)
+                }
+                .pickerStyle(.segmented)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var waterChart: some View {
+        if let details = viewModel.nutritionSummary?.details, let averageWater = details.averageWater {
+            VStack(alignment: .leading) {
+                VitalDetailChartTitleView(
+                    title: "Water",
+                    value: averageWater.displayString(for: .literUnit(with: .milli))
+                )
+
+                switch waterChartScope {
+                case .monthlyAverage:
+                    Chart {
+                        BarMark(
+                            x: .value("Average Water", averageWater.doubleValue(for: .literUnit(with: .milli)))
+                        )
+                        .foregroundStyle(.blue)
+                        .cornerRadius(10)
+
+                        RuleMark(
+                            x: .value("Min Water Intake", 2000)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.text)
+                    }
+                    .chartXScale(
+                        domain: 0...(max(averageWater.doubleValue(for: .literUnit(with: .milli)), 2000) * 1.1),
+                        range: .plotDimension
+                    )
+                    .frame(height: 60)
+                case .daily:
+                    Chart{
+                        ForEach(dailyWater) { sample in
+                            BarMark(
+                                x: .value("Date", sample.date),
+                                y: .value("Water", sample.quantity.doubleValue(for: .literUnit(with: .milli)))
+                            )
+                            .foregroundStyle(.blue)
+                        }
+
+                        RuleMark(
+                            y: .value("Min Water", 2000)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundStyle(.blue)
+
+                        RectangleMark(
+                            yStart: .value("Min Water", 2000),
+                            yEnd: .value("Min Water", 4000)
+                        )
+                        .foregroundStyle(
+                            LinearGradient(colors: [.blue.opacity(0.3), .clear], startPoint: .bottom, endPoint: .top)
+                        )
+                    }
+                    .frame(height: 160)
+                }
+
+                Picker("", selection: $waterChartScope) {
                     Text("Daily")
                         .tag(EnergyChartScope.daily)
 
@@ -602,13 +672,7 @@ private extension NutritionDetailsView {
                 case .daily:
                     Chart{
                         ForEach(dailyCaffeine) { sample in
-                            LineMark(
-                                x: .value("Date", sample.date),
-                                y: .value("Daily Caffeine", sample.quantity)
-                            )
-                            .foregroundStyle(.caffeine)
-
-                            PointMark(
+                            BarMark(
                                 x: .value("Date", sample.date),
                                 y: .value("Daily Caffeine", sample.quantity)
                             )
