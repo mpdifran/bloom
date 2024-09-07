@@ -13,7 +13,6 @@ final class TodayViewModel: ObservableObject {
     static let shared = TodayViewModel()
 
     @Published var hasLoggedBodyWeight = false
-    @Published var hasLoggedWater = false
 
     private var observers = [HKObserverQueryHandle]()
 
@@ -37,20 +36,5 @@ extension TodayViewModel {
             }
         }
         observers.append(weightObserver)
-
-        let waterObserver = HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.dietaryWater), dateRange: .today(), frequency: .immediate) {
-            let quantity = try? await HealthManager.shared.healthStore.fetchQuantity(
-                for: .dietaryWater,
-                dateRange: .today(),
-                option: .cumulativeSum
-            )
-
-            await MainActor.run { [weak self] in
-                guard let quantity else { self?.hasLoggedWater = false; return }
-
-                self?.hasLoggedWater = quantity.doubleValue(for: .literUnit(with: .milli)) > 500
-            }
-        }
-        observers.append(waterObserver)
     }
 }

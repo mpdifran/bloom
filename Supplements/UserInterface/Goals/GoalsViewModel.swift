@@ -649,6 +649,17 @@ private extension GoalsViewModel {
         }
 
         if
+            let score = nutritionSummary.details.waterScore
+        {
+            let goal = await waterGoal(
+                summary: "Increase the amount of water you drink to stay hydrated.",
+                vitalKind: .nutrition,
+                dueDate: dueDate
+            )
+            scoredNutrients.append((score, goal))
+        }
+
+        if
             let target = HealthManager.shared.recommendedMinDailyIntakeForFiber(),
             let score = nutritionSummary.details.fiberScore
         {
@@ -804,35 +815,54 @@ private extension GoalsViewModel {
 
         guard let focusStoolType = bowelMovementSummary.details?.prioritizedBristolStoolType() else { return [] }
 
-        switch focusStoolType {
-        case 1, 2, 5, 6, 7:
-            let fiberGoal = GoalModel(
-                title: "Fiber Intake",
-                systemImage: "arrow.up.circle",
-                summary: "More fiber could help improve bowel movements. Try eating things like fruits, leafy greens, broccoli, carrots, oats, whole grain bread, beans, almonds, or popcorn.",
-                dueDate: dueDate,
-                metric: .init(
-                    value: await scaledTarget(for: .dietaryFiber, unit: .gram()),
-                    unit: .gram(),
-                    measurement: .increaseFiber
-                ),
-                vitalKind: .bowelMovements
-            )
-            
-            let waterGoal = GoalModel(
-                title: "Water",
-                systemImage: "waterbottle",
-                summary: "Drinking more water can help improve your bowel movements.",
-                dueDate: dueDate,
-                metric: .init(
-                    value: max(await scaledTarget(for: .dietaryWater, unit: .literUnit(with: .milli)), 1750),
-                    unit: .literUnit(with: .milli),
-                    measurement: .increaseWater
-                ),
-                vitalKind: .bowelMovements
-            )
+        let fiberGoal = GoalModel(
+            title: "Fiber Intake",
+            systemImage: "arrow.up.circle",
+            summary: "More fiber could help improve bowel movements. Try eating things like fruits, leafy greens, broccoli, carrots, oats, whole grain bread, beans, almonds, or popcorn.",
+            dueDate: dueDate,
+            metric: .init(
+                value: await scaledTarget(for: .dietaryFiber, unit: .gram()),
+                unit: .gram(),
+                measurement: .increaseFiber
+            ),
+            vitalKind: .bowelMovements
+        )
 
+        let waterGoal = await waterGoal(
+            summary: "Drinking more water can help improve your bowel movements.",
+            vitalKind: .bowelMovements,
+            dueDate: dueDate
+        )
+
+        let walkRunDistance = await walkRunDistanceGoal(
+            summary: "Increasing your walking and running distance this week can help you regularize your bowel movements.",
+            vitalKind: .bowelMovements,
+            dueDate: dueDate
+        )
+
+        let steps = await stepGoal(
+            summary: "Moving more can help make you more regular. Tracking steps is an easy way to get yourself moving more.",
+            vitalKind: .bowelMovements,
+            dueDate: dueDate
+        )
+
+        let meditationGoal = await meditationGoal(
+            summary: "Lowering your stress can help improve your bowel movements. Try and meditate more throughout the week.",
+            vitalKind: .bowelMovements,
+            dueDate: dueDate
+        )
+
+        switch focusStoolType {
+        case 1:
+            return [waterGoal, fiberGoal]
+        case 2:
+            return [waterGoal, steps, walkRunDistance, fiberGoal]
+        case 5:
             return [fiberGoal, waterGoal]
+        case 6:
+            return [meditationGoal, waterGoal, fiberGoal]
+        case 7:
+            return [waterGoal]
         default:
             return []
         }
@@ -1019,6 +1049,21 @@ private extension GoalsViewModel {
                 value: max(multipliedGoal(for: average), 7),
                 unit: .minute(),
                 measurement: .meditationMinutes
+            ),
+            vitalKind: vitalKind
+        )
+    }
+
+    func waterGoal(summary: String, vitalKind: VitalModel.Kind, dueDate: Date) async -> GoalModel {
+        GoalModel(
+            title: "Water",
+            systemImage: "waterbottle",
+            summary: summary,
+            dueDate: dueDate,
+            metric: .init(
+                value: max(await scaledTarget(for: .dietaryWater, unit: .literUnit(with: .milli)), 2000),
+                unit: .literUnit(with: .milli),
+                measurement: .increaseWater
             ),
             vitalKind: vitalKind
         )

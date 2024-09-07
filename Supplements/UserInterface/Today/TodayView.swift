@@ -74,17 +74,6 @@ struct TodayView: View {
                     .onTapGesture {
                         presentedCardSheet = BodyWeightActionCardView().asAny
                     }
-
-                    ToDoActionCell(
-                        title: "Drink Water",
-                        subtitle: "500 mL / Day",
-                        systemImage: "waterbottle.fill",
-                        isComplete: viewModel.hasLoggedWater
-                    )
-                    .tint(.blue)
-                    .onTapGesture {
-                        presentedCardSheet = WaterActionCardView().asAny
-                    }
                 }
                 .horizontallyCentered()
                 .padding()

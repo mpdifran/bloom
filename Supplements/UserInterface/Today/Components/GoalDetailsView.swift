@@ -45,8 +45,10 @@ struct GoalDetailsView: View {
                 goalDescriptionCardView
 
                 VStack(spacing: 16) {
-                    goalPickerMenu
-                    Divider()
+                    if viewModel.allGoals.count > 1 {
+                        goalPickerMenu
+                        Divider()
+                    }
                     goalTargetEditButton
                 }
                 .cardContainer(fill: .background.secondary)
@@ -334,25 +336,22 @@ private extension GoalDetailsView {
         }
     }
 
-    @ViewBuilder
     var goalPickerMenu: some View {
-        if viewModel.allGoals.count > 1 {
-            Menu {
-                ForEachEnumerated(viewModel.allGoals) { (goalIndex, goal) in
-                    if goalIndex > 0 {
-                        Button(goal.title, systemImage: goal.systemImage) {
-                            viewModel.selectGoal(at: goalIndex)
-                        }
+        Menu {
+            ForEachEnumerated(viewModel.allGoals) { (goalIndex, goal) in
+                if goalIndex > 0 {
+                    Button(goal.title, systemImage: goal.systemImage) {
+                        viewModel.selectGoal(at: goalIndex)
                     }
                 }
-            } label: {
-                LabeledContent("Change Goal") {
-                    Image(systemName: "trophy")
-                        .foregroundStyle(goal.metric.measurement.color)
-                }
             }
-            .buttonStyle(.plain)
+        } label: {
+            LabeledContent("Change Goal") {
+                Image(systemName: "trophy")
+                    .foregroundStyle(goal.metric.measurement.color)
+            }
         }
+        .buttonStyle(.plain)
     }
 
     var goalTargetEditButton: some View {
