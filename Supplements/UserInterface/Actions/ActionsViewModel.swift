@@ -40,7 +40,7 @@ extension ActionsViewModel {
         ) {
             let latestSample = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bodyMass)
             if let quantitySample = latestSample as? HKQuantitySample {
-                let displayString = quantitySample.quantity.displayString(for: .pound())
+                let displayString = quantitySample.quantity.displayString(for: .pound(), specifier: "%.1f")
                 let timestamp = DateFormatter.relativeDateTimeShort.string(from: quantitySample.startDate)
                 await MainActor.run {
                     self.weightDetails = ActionLatestValueDetails(
