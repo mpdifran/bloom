@@ -18,7 +18,7 @@ final actor DataFetcher {
     }
 }
 
-private extension DataFetcher {
+extension DataFetcher {
 
     func fetch<Model>(
         _ modelType: Model.Type,

@@ -74,6 +74,16 @@ public extension DateFormatter {
         return dateFormatter
     }()
 
+    static var relativeDateTimeShort: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        dateFormatter.doesRelativeDateFormatting = true
+
+        return dateFormatter
+    }()
+
     static var monthAndDay: DateFormatter = {
         let dateFormatter = DateFormatter()
 

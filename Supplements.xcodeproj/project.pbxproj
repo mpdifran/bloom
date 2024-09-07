@@ -284,6 +284,8 @@
 		FFC77B062C5E6724003E5F85 /* HKQuantity+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B052C5E6724003E5F85 /* HKQuantity+Helpers.swift */; };
 		FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */; };
 		FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */; };
+		FFC832182C8CDCB100108F47 /* ActionStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC832172C8CDCB100108F47 /* ActionStatusCell.swift */; };
+		FFC8321A2C8CE0B300108F47 /* ActionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC832192C8CE0B300108F47 /* ActionsViewModel.swift */; };
 		FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */; };
 		FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */; };
 		FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */; };
@@ -724,6 +726,8 @@
 		FFC77B052C5E6724003E5F85 /* HKQuantity+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKQuantity+Helpers.swift"; sourceTree = "<group>"; };
 		FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKQuantityRange.swift; sourceTree = "<group>"; };
 		FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionMonthlySummary.swift; sourceTree = "<group>"; };
+		FFC832172C8CDCB100108F47 /* ActionStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusCell.swift; sourceTree = "<group>"; };
+		FFC832192C8CE0B300108F47 /* ActionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsViewModel.swift; sourceTree = "<group>"; };
 		FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyVitalCardCell.swift; sourceTree = "<group>"; };
 		FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepVitalsMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0122C518FF5009C5CED /* CardioFitnessMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessMonthlySummary.swift; sourceTree = "<group>"; };
@@ -1266,6 +1270,8 @@
 			isa = PBXGroup;
 			children = (
 				FF88F12A2C7D02D80093D1B4 /* ActionsView.swift */,
+				FFC832192C8CE0B300108F47 /* ActionsViewModel.swift */,
+				FFC832162C8CDC9600108F47 /* Components */,
 				FF88F12C2C7D03C10093D1B4 /* ActionCards */,
 				FF88F12F2C7D0C420093D1B4 /* AllActionDataListView.swift */,
 				FF88F1312C7D0CCE0093D1B4 /* AllDataViews */,
@@ -1655,6 +1661,14 @@
 				FF88F1252C7CFE9C0093D1B4 /* Models */,
 			);
 			path = SwiftData;
+			sourceTree = "<group>";
+		};
+		FFC832162C8CDC9600108F47 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FFC832172C8CDCB100108F47 /* ActionStatusCell.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		FFDDE2872C0A058500BFDEF5 /* ChartUI */ = {
@@ -2285,6 +2299,7 @@
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */,
+				FFC8321A2C8CE0B300108F47 /* ActionsViewModel.swift in Sources */,
 				FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */,
 				FFBE52452C76129C00F510DE /* WorkoutHeartRateZoneCell.swift in Sources */,
 				FF0DA0F02C84D69C007D1A6B /* TodayViewModel.swift in Sources */,
@@ -2320,6 +2335,7 @@
 				FF1E96092C0AB58A004DAD2D /* ProgramsView.swift in Sources */,
 				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
 				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
+				FFC832182C8CDCB100108F47 /* ActionStatusCell.swift in Sources */,
 				FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */,
 				FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */,
 				FF0404C32C025174009FDC4E /* Calendar+Heath.swift in Sources */,

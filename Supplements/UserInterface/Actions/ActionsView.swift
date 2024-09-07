@@ -12,47 +12,60 @@ struct ActionsView: View {
     @State private var showAllDataView = false
     @State private var presentedCardSheet: AnyView?
 
+    @StateObject private var viewModel = ActionsViewModel()
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    Button(action: {
-                        presentedCardSheet = BodyWeightActionCardView().asAny
-                    }, label: {
-                        Label("Log Weight", systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus")
-                            .horizontallyCentered()
-                    })
-                    .buttonStyle(.tertiary)
+                    ActionStatusCell(
+                        title: "Log Weight",
+                        systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
+                        latestValue: viewModel.weightDetails?.displayString,
+                        latestTimestamp: viewModel.weightDetails?.timestamp
+                    )
                     .tint(.indigo)
+                    .onTapGesture {
+                        presentedCardSheet = BodyWeightActionCardView().asAny
+                    }
 
-                    Button(action: {
-                        presentedCardSheet = BloodPressureActionCardView().asAny
-                    }, label: {
-                        Label("Log Blood Pressure", systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle")
-                            .horizontallyCentered()
-                    })
-                    .buttonStyle(.tertiary)
+                    ActionStatusCell(
+                        title: "Log Blood Pressure",
+                        systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
+                        latestValue: viewModel.bloodPressureDetails?.displayString,
+                        latestTimestamp: viewModel.bloodPressureDetails?.timestamp
+                    )
                     .tint(.pink)
+                    .onTapGesture {
+                        presentedCardSheet = BloodPressureActionCardView().asAny
+                    }
 
-                    Button(action: {
-                        presentedCardSheet = WaterActionCardView().asAny
-                    }, label: {
-                        Label("Log Water", systemImage: "waterbottle.fill")
-                            .horizontallyCentered()
-                    })
-                    .buttonStyle(.tertiary)
+                    ActionStatusCell(
+                        title: "Log Water",
+                        systemImage: "waterbottle.fill",
+                        latestValue: viewModel.waterDetails?.displayString,
+                        latestTimestamp: viewModel.waterDetails?.timestamp
+                    )
                     .tint(.blue)
+                    .onTapGesture {
+                        presentedCardSheet = WaterActionCardView().asAny
+                    }
 
-                    Button(action: {
-                        presentedCardSheet = BowelMovementActionCardView().asAny
-                    }, label: {
-                        Label("Log Bowel Movement", systemImage: "toilet.fill")
-                            .horizontallyCentered()
-                    })
-                    .buttonStyle(.tertiary)
+                    ActionStatusCell(
+                        title: "Log Bowel Movement",
+                        systemImage: "toilet.fill",
+                        latestValue: viewModel.bowelMovementDetails?.displayString,
+                        latestTimestamp: viewModel.bowelMovementDetails?.timestamp
+                    )
                     .tint(.brown)
+                    .onTapGesture {
+                        presentedCardSheet = BowelMovementActionCardView().asAny
+                    }
                 }
                 .padding()
+                .onAppear {
+                    viewModel.observeData()
+                }
             }
             .navigationTitle("Actions")
             .toolbar {
