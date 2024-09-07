@@ -11,6 +11,7 @@ import SwiftUI
 struct RootView: View {
     
     @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
+    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
     @StateObject private var tabController = TabController()
 
@@ -30,8 +31,10 @@ struct RootView: View {
                         .tag(Tab.vitals)
                     ActionsView()
                         .tag(Tab.actions)
-                    ChatView()
-                        .tag(Tab.chat)
+                    if danieleMode {
+                        ChatView()
+                            .tag(Tab.chat)
+                    }
                     PreferencesView()
                         .tag(Tab.profile)
                 }
@@ -40,6 +43,7 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
+        .animation(.default, value: danieleMode)
     }
 }
 
