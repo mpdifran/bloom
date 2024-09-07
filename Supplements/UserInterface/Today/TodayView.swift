@@ -95,6 +95,9 @@ struct TodayView: View {
             .fullScreenCover(isPresented: $tabController.showMorningReport) {
                 GoodMorningView()
             }
+            .fullScreenCover(isPresented: $tabController.showEveningReport) {
+                EveningReportView()
+            }
             .gradientRootBackground()
         }
         .tabItem {

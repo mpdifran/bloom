@@ -25,6 +25,7 @@ class TabController: NSObject, ObservableObject {
     @Published var activeTab = Tab.today
 
     @Published var showMorningReport = false
+    @Published var showEveningReport = false
 
     override init() {
         super.init()
@@ -56,6 +57,11 @@ extension TabController: UNUserNotificationCenterDelegate {
                 select(.today)
                 showMorningReport = true
             }
+        case .CategoryID.goodEvening:
+            await MainActor.run {
+                select(.today)
+                showEveningReport = true
+            }
         default:
             break
         }
@@ -68,7 +74,7 @@ extension TabController: UNUserNotificationCenterDelegate {
         switch notification.request.content.categoryIdentifier {
         case .CategoryID.chatMessage:
             return [.banner]
-        case .CategoryID.goodMorning:
+        case .CategoryID.goodMorning, .CategoryID.goodEvening:
             return [.banner]
         default :
             return [.banner, .sound, .list]
