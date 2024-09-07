@@ -204,10 +204,7 @@ private extension GoalsViewModel {
             )
             return [meditation, walkDuration]
         case .nutrition:
-            if let goalModel = await nutritionGoal(dueDate: dueDate) {
-                return [goalModel]
-            }
-            return []
+            return await nutritionGoal(dueDate: dueDate)
         case .exerciseEffectiveness:
             return await exerciseEffectivenessGoals(dueDate: dueDate)
         case .bowelMovements:
@@ -215,8 +212,10 @@ private extension GoalsViewModel {
         }
     }
 
-    func nutritionGoal(dueDate: Date) async -> GoalModel? {
-        guard let nutritionSummary = VitalsViewModel.shared.nutritionSummary else { return nil }
+    func nutritionGoal(dueDate: Date) async -> [GoalModel] {
+        guard let nutritionSummary = VitalsViewModel.shared.nutritionSummary else { return [] }
+
+        var goals = [GoalModel]()
 
         if let macros = nutritionSummary.details.macros {
             let proteinGoal = HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy()
@@ -224,7 +223,7 @@ private extension GoalsViewModel {
             let fatGoal = HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy()
 
             if macros.proteinPercent < proteinGoal.lowerBound {
-                return GoalModel(
+                goals.append(GoalModel(
                     title: "Protein Intake",
                     systemImage: "fork.knife",
                     summary: "Try and increase your protein intake. You can find protein in things like meat, greek yogurt, chickpeas, or edamame.",
@@ -235,10 +234,10 @@ private extension GoalsViewModel {
                         measurement: .increaseProtein
                     ),
                     vitalKind: .nutrition
-                )
+                ))
             }
             if macros.carbsPercent < carbsGoal.lowerBound {
-                return GoalModel(
+                goals.append(GoalModel(
                     title: "Carbohydrate Intake",
                     systemImage: "fork.knife",
                     summary: "Try and increase your carbohydrate intake. You can get more carbs by eating things like whole wheat bread, potatoes, bananas, or yogurt.",
@@ -249,10 +248,10 @@ private extension GoalsViewModel {
                         measurement: .increaseCarbs
                     ),
                     vitalKind: .nutrition
-                )
+                ))
             }
             if macros.fatPercent < fatGoal.lowerBound {
-                return GoalModel(
+                goals.append(GoalModel(
                     title: "Fat Intake",
                     systemImage: "fork.knife",
                     summary: "Focus on increasing your fat intake. Try eating things like avocados, nuts, salmon, eggs, or cheese to get more healthy fat.",
@@ -263,24 +262,24 @@ private extension GoalsViewModel {
                         measurement: .increaseFat
                     ),
                     vitalKind: .nutrition
-                )
+                ))
             }
         }
 
-        if let nutrientGoal = await highestLeverageVitaminMineralOtherNutrientGoal(
+        let otherGoals = await highestLeverageVitaminMineralOtherNutrientGoal(
             nutritionSummary: nutritionSummary,
             dueDate: dueDate
-        ) {
-            return nutrientGoal
-        }
+        )
 
-        return nil
+        goals.append(contentsOf: otherGoals)
+
+        return goals
     }
 
     func highestLeverageVitaminMineralOtherNutrientGoal(
         nutritionSummary: NutritionMonthlySummary,
         dueDate: Date
-    ) async -> GoalModel? {
+    ) async -> [GoalModel] {
         let microgram = HKUnit.gramUnit(with: .micro)
         let milligram = HKUnit.gramUnit(with: .milli)
 
@@ -678,7 +677,11 @@ private extension GoalsViewModel {
             scoredNutrients.append((score, goal))
         }
 
-        return scoredNutrients.min(by: { $0.0 < $1.0 })?.1
+        return scoredNutrients
+            .filter({ $0.0 < 1 })
+            .sorted(keyPath: \.0)
+            .prefix(2)
+            .map({ $0.1 })
     }
 
     func scaledTarget(for quantityTypeID: HKQuantityTypeIdentifier, unit: HKUnit, isincrease: Bool = true) async -> Double {
