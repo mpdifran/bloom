@@ -26,6 +26,9 @@ final class ReportCoordinator: ObservableObject {
     @Published var eveningReportDate: Date = Calendar.current.date(bySettingHour: 22, minute: 0, second: 0, of: .now) ?? .now {
         didSet {
             UserDefaults.group.set(eveningReportDate, forKey: .eveningReportDate)
+            Task {
+                await scheduleEveningReport()
+            }
         }
     }
 
@@ -46,6 +49,10 @@ final class ReportCoordinator: ObservableObject {
         }
         if let date = UserDefaults.group.object(forKey: .lastMorningReportNotificationDate) as? Date {
             self.lastMorningReportNotificationDate = date
+        }
+
+        Task {
+            await scheduleEveningReport()
         }
     }
 }
@@ -71,6 +78,12 @@ extension ReportCoordinator {
         await NotificationManager.shared.sendGoodMorningNotification(message: message, delay: 60 * 1)
 
         lastMorningReportNotificationDate = .now
+    }
+
+    func scheduleEveningReport() async {
+        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: eveningReportDate)
+
+        await NotificationManager.shared.scheduleEveningReportNotification(dateComponents: dateComponents)
     }
 
     func shouldShowEveningReport() -> Bool {

@@ -11,9 +11,11 @@ import UserNotifications
 extension String {
     enum NotificationID {
         static let goodMorning = "good-morning"
+        static let goodEvening = "good-evening"
     }
     enum CategoryID {
         static let goodMorning = "good-morning"
+        static let goodEvening = "good-evening"
         static let chatMessage = "chat-message"
         static let goalsMessage = "goals-message"
     }
@@ -78,6 +80,24 @@ extension NotificationManager {
         try? await UNUserNotificationCenter.current().add(
             UNNotificationRequest(
                 identifier: .NotificationID.goodMorning,
+                content: content,
+                trigger: trigger
+            )
+        )
+    }
+
+    func scheduleEveningReportNotification(dateComponents: DateComponents) async {
+        let content = UNMutableNotificationContent()
+        content.title = "Your Evening Report is Ready!"
+        content.subtitle = "Check out your personalized summary of the day."
+        content.sound = .default
+        content.categoryIdentifier = .CategoryID.goodEvening
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+
+        try? await UNUserNotificationCenter.current().add(
+            UNNotificationRequest(
+                identifier: .NotificationID.goodEvening,
                 content: content,
                 trigger: trigger
             )
