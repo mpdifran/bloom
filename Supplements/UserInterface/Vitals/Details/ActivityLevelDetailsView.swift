@@ -159,12 +159,14 @@ private extension ActivityLevelDetailsView {
                     ForEach(distribution.keys.sorted(keyPath: \.self), id: \.self) { dayOfWeek in
                         BarMark(
                             x: .value("Day", dayOfWeek.dayOfWeekLabel),
-                            y: .value("Average Activity Level", distribution[dayOfWeek, default: 1])
+                            yStart: .value("", 1),
+                            yEnd: .value("Average Activity Level", distribution[dayOfWeek, default: 1])
                         )
                         .cornerRadius(5)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(ActivityLevelSummary.ActivityLevel(distribution[dayOfWeek, default: 1]).color)
                     }
                 }
+                .chartYScale(domain: 1...((distribution.max(keyPath: \.value) ?? 1.8) * 1.1), range: .plotDimension)
                 .chartXScale(domain: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], range: .plotDimension)
                 .chartXAxis {
                     AxisMarks(values: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]) { value in
