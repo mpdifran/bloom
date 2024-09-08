@@ -127,7 +127,7 @@ private extension GoalsViewModel {
             return [timeInDaylight, meditation]
         case .activityLevel:
             let steps = await stepGoal(
-                summary: "Let's improve your activty level by incorporating more steps in your day. Walking has numerous other health benefits.",
+                summary: "Let's improve your activity level by incorporating more steps in your day. Walking has numerous other health benefits.",
                 vitalKind: vital.id,
                 dueDate: dueDate
             )
