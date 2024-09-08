@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import TelemetryDeck
 
 struct CardioFitnessDetailsView: View {
     
@@ -53,6 +54,7 @@ struct CardioFitnessDetailsView: View {
             if let level = viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel, let index = fitnessLevels.firstIndex(of: level) {
                 self.selectedFitnessLevelIndex = index
             }
+            TelemetryDeck.viewScreen("Cardio Fitness Vital Details")
         }
     }
 }

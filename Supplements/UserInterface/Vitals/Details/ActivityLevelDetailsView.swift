@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import TelemetryDeck
 
 struct ActivityLevelDetailsView: View {
 
@@ -49,6 +50,7 @@ struct ActivityLevelDetailsView: View {
             if let index = ActivityLevelSummary.ActivityLevel.allCases.firstIndex(where: { $0 == viewModel.activityLevelSummary?.details.activityLevel }) {
                 selectedActivityLevelIndex = index
             }
+            TelemetryDeck.viewScreen("Activity Level Vital Details")
         }
     }
 }

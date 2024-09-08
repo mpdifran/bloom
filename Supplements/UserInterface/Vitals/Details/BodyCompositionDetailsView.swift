@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 import HealthKit
+import TelemetryDeck
 
 struct BodyCompositionDetailsView: View {
 
@@ -86,6 +87,7 @@ struct BodyCompositionDetailsView: View {
             {
                 self.selectedRangeIndex = index
             }
+            TelemetryDeck.viewScreen("Body Composition Vital Details")
         }
     }
 }

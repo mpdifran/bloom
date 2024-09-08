@@ -17,6 +17,7 @@
 		FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */; };
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
 		FF0405232C8D2DB800FF1E2F /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF0405222C8D2DB800FF1E2F /* TelemetryDeck */; };
+		FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */; };
 		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
 		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
@@ -464,6 +465,7 @@
 		FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryView.swift; sourceTree = "<group>"; };
 		FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
+		FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TelemetryDeck+Helpers.swift"; sourceTree = "<group>"; };
 		FF049C022C24B333004ACE9C /* DirectiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListView.swift; sourceTree = "<group>"; };
 		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
 		FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreDetailsView.swift; sourceTree = "<group>"; };
@@ -866,6 +868,14 @@
 				FF1E96052C0A6F59004DAD2D /* SleepProgressRingView.swift */,
 			);
 			path = SleepSummary;
+			sourceTree = "<group>";
+		};
+		FF0405242C8D354000FF1E2F /* TelemetryDeck */ = {
+			isa = PBXGroup;
+			children = (
+				FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */,
+			);
+			path = TelemetryDeck;
 			sourceTree = "<group>";
 		};
 		FF049C012C24B31C004ACE9C /* Directives */ = {
@@ -1483,6 +1493,7 @@
 				FFC77AF82C5A7599003E5F85 /* SwiftData */,
 				FFB444562BEC40FD00486AD7 /* HealthManager */,
 				FFB444592BEC4C3D00486AD7 /* Model */,
+				FF0405242C8D354000FF1E2F /* TelemetryDeck */,
 				FFF61B732BF15DBE00926042 /* Utilities */,
 				FF88F1362C7D0FCB0093D1B4 /* Protocols */,
 				FF648BE12BDEA4F700963820 /* Extensions */,
@@ -2327,6 +2338,7 @@
 				FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */,
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
 				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
+				FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FF88F1212C7B81AF0093D1B4 /* EventCell.swift in Sources */,
 				FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */,

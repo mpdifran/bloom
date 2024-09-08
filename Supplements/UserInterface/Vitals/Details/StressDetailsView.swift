@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import TelemetryDeck
 
 struct StressDetailsView: View {
     
@@ -59,6 +60,9 @@ struct StressDetailsView: View {
             await MainActor.run {
                 self.heartRateVariabilitySamples = samples
             }
+        }
+        .onAppear {
+            TelemetryDeck.viewScreen("Stress Vital Details")
         }
     }
 }

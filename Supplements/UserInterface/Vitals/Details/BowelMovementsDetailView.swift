@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import TelemetryDeck
 
 struct BowelMovementsDetailView: View {
 
@@ -26,6 +27,9 @@ struct BowelMovementsDetailView: View {
         .animation(.default, value: selectedBristolType)
         .navigationTitle("Bowel Movements")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            TelemetryDeck.viewScreen("Bowel Movements Vital Details")
+        }
     }
 }
 

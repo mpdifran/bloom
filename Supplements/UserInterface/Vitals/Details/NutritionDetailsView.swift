@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import TelemetryDeck
 
 private extension NutritionDetailsView {
     enum EnergyChartScope {
@@ -113,6 +114,9 @@ struct NutritionDetailsView: View {
             await MainActor.run {
                 self.dailyWater = samples
             }
+        }
+        .onAppear {
+            TelemetryDeck.viewScreen("Nutrition Vital Details")
         }
     }
 }

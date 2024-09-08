@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import TelemetryDeck
 
 struct SleepDetailsView: View {
 
@@ -48,6 +49,7 @@ struct SleepDetailsView: View {
         }
         .onAppear {
             feedbackGenerator.prepare()
+            TelemetryDeck.viewScreen("Sleep Vital Details")
         }
     }
 }

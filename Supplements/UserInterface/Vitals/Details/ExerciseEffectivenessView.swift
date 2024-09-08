@@ -7,12 +7,11 @@
 
 import SwiftUI
 import Charts
+import TelemetryDeck
 
 struct ExerciseEffectivenessView: View {
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
-
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     var body: some View {
         ScrollView {
@@ -34,7 +33,7 @@ struct ExerciseEffectivenessView: View {
         .navigationTitle("Exercise Effectiveness")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            feedbackGenerator.prepare()
+            TelemetryDeck.viewScreen("Exercise Effectiveness Vital Details")
         }
     }
 }
