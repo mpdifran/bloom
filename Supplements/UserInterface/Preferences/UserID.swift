@@ -6,14 +6,17 @@
 //
 
 import Foundation
+import TelemetryDeck
 
 enum UserID {
     static var value: String {
         if let value = UserDefaults.group.string(forKey: "UserID") {
+            TelemetryDeck.updateDefaultUserID(to: value)
             return value
         }
         let newValue = UUID().uuidString
         UserDefaults.group.set(newValue, forKey: "UserID")
+        TelemetryDeck.updateDefaultUserID(to: newValue)
         return newValue
     }
 }

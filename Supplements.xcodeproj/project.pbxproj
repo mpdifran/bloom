@@ -16,6 +16,7 @@
 		FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */; };
 		FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */; };
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
+		FF0405232C8D2DB800FF1E2F /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF0405222C8D2DB800FF1E2F /* TelemetryDeck */; };
 		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
 		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
@@ -832,6 +833,7 @@
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
 				FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */,
+				FF0405232C8D2DB800FF1E2F /* TelemetryDeck in Frameworks */,
 				FFC77AE32C57FCEC003E5F85 /* StatKit in Frameworks */,
 				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
 				FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */,
@@ -2012,6 +2014,7 @@
 				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
 				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
 				FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */,
+				FF0405222C8D2DB800FF1E2F /* TelemetryDeck */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -2091,6 +2094,7 @@
 				FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
 				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 				FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -3274,6 +3278,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
 		FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bugsnag/bugsnag-cocoa";
@@ -3333,6 +3345,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FF0405222C8D2DB800FF1E2F /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
 		FF4A21BB2C88FA5600278019 /* Bugsnag */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */;
