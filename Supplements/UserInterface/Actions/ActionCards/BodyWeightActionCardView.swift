@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import TelemetryDeck
 
 struct BodyWeightActionCardView: View {
 
@@ -74,6 +75,7 @@ private extension BodyWeightActionCardView {
             )
 
             try await HealthManager.shared.write(sample: sample)
+            TelemetryDeck.signal("Log Weight")
         } catch {
             self.error = error
             self.didError.toggle()

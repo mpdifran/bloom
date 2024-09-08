@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import HealthKit
+import TelemetryDeck
 
 struct BloodPressureActionCardView: View {
     
@@ -90,6 +91,7 @@ private extension BloodPressureActionCardView {
             )
 
             try await healthManager.write(samples: [systolicSample, diastolicSample])
+            TelemetryDeck.signal("Log Blood Pressure")
             return true
         } catch {
             self.error = error

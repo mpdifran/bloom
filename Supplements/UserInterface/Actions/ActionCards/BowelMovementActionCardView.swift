@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import TelemetryDeck
 
 struct BowelMovementActionCardView: View {
     @State private var date = Date.now
@@ -22,6 +23,7 @@ struct BowelMovementActionCardView: View {
             )
             modelContext.insert(model)
             VitalsViewModel.shared.fetchSwiftDataTypes()
+            TelemetryDeck.signal("Log Bowel Movement")
             return true
         } content: { (_, _) in
             ScrollView {

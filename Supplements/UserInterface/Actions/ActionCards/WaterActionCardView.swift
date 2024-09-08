@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import HealthKit
 import HealthKitUI
+import TelemetryDeck
 
 struct WaterActionCardView: View {
 
@@ -119,6 +120,7 @@ private extension WaterActionCardView {
 
             try await HealthManager.shared.write(sample: sample)
             didIncrease.toggle()
+            TelemetryDeck.signal("Log Water")
             return true
         } catch {
             self.error = error
