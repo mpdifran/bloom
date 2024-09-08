@@ -505,29 +505,26 @@ extension HKHealthStore {
 
     func observeChanges(
         sampleType: HKSampleType,
-        dateRange: DateRange,
-        frequency: HKUpdateFrequency = .hourly,
+        startDate: Date,
         performQuery: @escaping () async throws -> Void
     ) -> HKObserverQueryHandle {
         observeChanges(
             sampleTypes: [sampleType],
-            dateRange: dateRange,
-            frequency: frequency,
+            startDate: startDate,
             performQuery: performQuery
         )
     }
 
     func observeChanges(
         sampleTypes: [HKSampleType],
-        dateRange: DateRange,
-        frequency: HKUpdateFrequency = .hourly,
+        startDate: Date,
         performQuery: @escaping () async throws -> Void
     ) -> HKObserverQueryHandle {
         var queries = [HKObserverQuery]()
 
         let predicate = HKQuery.predicateForSamples(
-            withStart: dateRange.start,
-            end: dateRange.end,
+            withStart: startDate,
+            end: nil,
             options: .strictStartDate
         )
 

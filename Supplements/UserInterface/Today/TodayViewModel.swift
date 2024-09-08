@@ -26,7 +26,10 @@ extension TodayViewModel {
     func observeData() {
         observers.removeAll(keepingCapacity: true)
 
-        let weightObserver = HealthManager.shared.healthStore.observeChanges(sampleType: HKQuantityType(.bodyMass), dateRange: .today(), frequency: .immediate) {
+        let weightObserver = HealthManager.shared.healthStore.observeChanges(
+            sampleType: HKQuantityType(.bodyMass),
+            startDate: Calendar.current.startOfDay(for: .now)
+        ) {
             let sample = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bodyMass)
 
             await MainActor.run { [weak self] in

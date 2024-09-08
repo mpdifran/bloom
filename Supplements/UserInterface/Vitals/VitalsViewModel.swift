@@ -65,8 +65,7 @@ private extension VitalsViewModel {
                 HKQuantityType(.vo2Max),
                 HKQuantityType(.heartRateRecoveryOneMinute)
             ],
-            dateRange: .trailingMonthsFromNow(2),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) {
             let summary = await HealthManager.shared.fetchCardioFitnessSummary()
             await MainActor.run {
@@ -80,8 +79,7 @@ private extension VitalsViewModel {
                 HKQuantityType(.basalEnergyBurned),
                 HKQuantityType(.activeEnergyBurned)
             ],
-            dateRange: .trailingMonthsFromNow(2),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) { [activityLevelThrottler, processingQueue] in
             processingQueue.async {
                 activityLevelThrottler.perform {
@@ -98,8 +96,7 @@ private extension VitalsViewModel {
 
         HealthManager.shared.healthStore.observeChanges(
             sampleType: HKQuantityType(.bodyFatPercentage),
-            dateRange: .trailingMonthsFromNow(2),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) {
             let summary = await HealthManager.shared.fetchBodyCompositionSummary()
             await MainActor.run {
@@ -115,8 +112,7 @@ private extension VitalsViewModel {
                 HKQuantityType(.bloodPressureSystolic),
                 HKQuantityType(.bloodPressureDiastolic)
             ],
-            dateRange: .trailingMonthsFromNow(2),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) {
             let summary = await HealthManager.shared.fetchStressMonthlySummary()
             await MainActor.run {
@@ -127,8 +123,7 @@ private extension VitalsViewModel {
 
         HealthManager.shared.healthStore.observeChanges(
             sampleTypes: HealthManager.shared.nutritionTypes,
-            dateRange: .trailingMonthsFromNow(2),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) { [throttler, processingQueue] in
             processingQueue.async {
                 throttler.perform {
@@ -145,8 +140,7 @@ private extension VitalsViewModel {
 
         HealthManager.shared.healthStore.observeChanges(
             sampleType: HKWorkoutType.workoutType(),
-            dateRange: .trailingMonthsFromNow(2),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) {
             Task {
                 let summary = await HealthManager.shared.fetchExerciseEffectivenessSummary()

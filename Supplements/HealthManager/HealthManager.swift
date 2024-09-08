@@ -1596,8 +1596,7 @@ extension HealthManager {
 
         sleepObserverQueryHandle = healthStore.observeChanges(
             sampleType: HKCategoryType(.sleepAnalysis),
-            dateRange: .trailingMonthsFromNowSleepStartDate(2),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) { [weak self, healthStore] in
             let thisMonthSamples = try await healthStore.fetchSamples(
                 for: HKCategoryType(.sleepAnalysis),

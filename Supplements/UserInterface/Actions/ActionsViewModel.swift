@@ -15,6 +15,8 @@ struct ActionLatestValueDetails {
 
 @MainActor
 final class ActionsViewModel: ObservableObject {
+    static let shared = ActionsViewModel()
+
 
     @Published var weightDetails: ActionLatestValueDetails?
     @Published var bloodPressureDetails: ActionLatestValueDetails?
@@ -23,7 +25,7 @@ final class ActionsViewModel: ObservableObject {
 
     private var observers = [HKObserverQueryHandle]()
 
-    init() {
+    private init() {
         observeData()
     }
 }
@@ -35,8 +37,7 @@ extension ActionsViewModel {
 
         let weightHandle = HealthManager.shared.healthStore.observeChanges(
             sampleType: HKQuantityType(.bodyMass),
-            dateRange: .trailingMonthsFromNow(1),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
         ) {
             let latestSample = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bodyMass)
             if let quantitySample = latestSample as? HKQuantitySample {
@@ -58,8 +59,7 @@ extension ActionsViewModel {
 
         let bloodPressureHandle = HealthManager.shared.healthStore.observeChanges(
             sampleTypes: [HKQuantityType(.bloodPressureSystolic), HKQuantityType(.bloodPressureDiastolic)],
-            dateRange: .trailingMonthsFromNow(1),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
         ) {
             let latestSystolic = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bloodPressureSystolic)
             let latestDiastolic = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bloodPressureDiastolic)
@@ -85,8 +85,7 @@ extension ActionsViewModel {
 
         let waterHandle = HealthManager.shared.healthStore.observeChanges(
             sampleType: HKQuantityType(.dietaryWater),
-            dateRange: .trailingMonthsFromNow(1),
-            frequency: .immediate
+            startDate: Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
         ) {
             let quantity = try? await HealthManager.shared.healthStore.fetchQuantity(
                 for: .dietaryWater,

@@ -61,8 +61,7 @@ private extension GoalDetailsViewModel {
     func observeValues() {
         observationHandler = HealthManager.shared.healthStore.observeChanges(
             sampleTypes: goal.metric.measurement.sampleTypes,
-            dateRange: .mondayMorningToNow(),
-            frequency: .immediate
+            startDate: Calendar.current.mondayMorning(for: .now) ?? .now
         ) { [weak self] in
             await self?.loadValues()
         }
