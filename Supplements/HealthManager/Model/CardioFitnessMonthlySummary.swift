@@ -79,7 +79,7 @@ extension CardioFitnessMonthlySummary {
     private var internalScore: Double {
         let vo2Max: Double?
         if let goal = HealthManager.shared.goalVO2MaxForUser() {
-            vo2Max = averageVO2Max?.scaledPercent(lower: goal.2, upper: goal.0)
+            vo2Max = averageVO2Max?.scaledPercent(lower: goal.2, upper: goal.1)
         } else {
             vo2Max = nil
         }
@@ -102,7 +102,7 @@ extension CardioFitnessMonthlySummary {
     private var lastMonthInternalScore: Double {
         let vo2Max: Double?
         if let goal = HealthManager.shared.goalVO2MaxForUser() {
-            vo2Max = averageVO2Max?.scaledPercent(lower: goal.2, upper: goal.0)
+            vo2Max = averageVO2Max?.scaledPercent(lower: goal.2, upper: goal.1)
         } else {
             vo2Max = nil
         }
