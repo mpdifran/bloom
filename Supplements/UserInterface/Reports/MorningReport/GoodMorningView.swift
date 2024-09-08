@@ -25,6 +25,7 @@ struct GoodMorningView: View {
     @State private var selectedEvent: EKEvent?
     @State private var locationLocality: String?
     @State private var weather: Weather?
+    @State private var isLoadingWeather = false
     @State private var showSleepTodayView = false
 
     var body: some View {
@@ -79,6 +80,7 @@ private extension GoodMorningView {
     func loadWeather() {
         guard let location = LocationManager.shared.currentLocation, weather == nil else { return }
 
+        isLoadingWeather = true
         Task {
             let weather = await WeatherForecaster.shared.forecastedWeather(location: location)
             let locality = await LocationManager.shared.locality(for: location)
@@ -86,6 +88,8 @@ private extension GoodMorningView {
             await MainActor.run {
                 self.weather = weather
                 self.locationLocality = locality
+
+                self.isLoadingWeather = false
             }
         }
     }
@@ -93,10 +97,12 @@ private extension GoodMorningView {
 
 private extension GoodMorningView {
 
-    @ViewBuilder
     var sleepSection: some View {
-        if let sleepAnalysis = healthManager.sleepAnalysis7Days?.last, Calendar.current.isDateInToday(sleepAnalysis.endDate) {
-            Section("Sleep Score") {
+        Section("Sleep Score") {
+            if 
+                let sleepAnalysis = healthManager.sleepAnalysis7Days?.last, 
+                Calendar.current.isDateInToday(sleepAnalysis.endDate)
+            {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         Text("Summary")
@@ -118,6 +124,14 @@ private extension GoodMorningView {
                 .onTapGesture {
                     showSleepTodayView = true
                 }
+            } else {
+                Text("No Sleep Data")
+                    .font(.title3)
+                    .bold()
+                    .foregroundStyle(.secondary)
+                    .horizontallyCentered()
+                    .frame(height: 140)
+                    .standardListSeparatorInset()
             }
         }
     }
@@ -174,24 +188,30 @@ private extension GoodMorningView {
         }
     }
 
-    @ViewBuilder
     var calendarSection: some View {
-        if events.isNotEmpty {
-            Section("Events") {
-                ForEach(allDayEvents) { event in
-                    AllDayEventCell(event: event)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedEvent = event
-                        }
-                }
-                ForEach(nonAllDayEvents) { event in
-                    EventCell(event: event)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedEvent = event
-                        }
-                }
+        Section("Events") {
+            if events.isEmpty {
+                Text("No Events")
+                    .font(.title3)
+                    .bold()
+                    .foregroundStyle(.secondary)
+                    .horizontallyCentered()
+                    .frame(height: 100)
+                    .standardListSeparatorInset()
+            }
+            ForEach(allDayEvents) { event in
+                AllDayEventCell(event: event)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedEvent = event
+                    }
+            }
+            ForEach(nonAllDayEvents) { event in
+                EventCell(event: event)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedEvent = event
+                    }
             }
         }
     }
@@ -204,17 +224,21 @@ private extension GoodMorningView {
         events.filter({ !$0.isAllDay })
     }
 
-    @ViewBuilder
     var weatherSection: some View {
-        if 
-            let weather,
-            let minTemp = minTemp(from: weather),
-            let maxTemp = maxTemp(from: weather),
-            let closestHour = weather.hourlyForecast.filter({ Calendar.current.isDateInToday($0.date) && $0.date > .now }).min(by: {
-                abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
-            })
-        {
-            Section("Weather") {
+        Section("Weather") {
+            if isLoadingWeather {
+                ProgressView("Loading Weather")
+                    .horizontallyCentered()
+                    .frame(height: 180)
+            } else if
+                let weather,
+                let minTemp = minTemp(from: weather),
+                let maxTemp = maxTemp(from: weather),
+                let closestHour = weather.hourlyForecast.filter({ Calendar.current.isDateInToday($0.date) && $0.date > .now }).min(by: {
+                    abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
+                }),
+                !isLoadingWeather
+            {
                 ForEach(weather.weatherAlerts ?? [], id: \.summary) { weatherAlert in
                     WeatherAlertCell(weatherAlert: weatherAlert)
                 }

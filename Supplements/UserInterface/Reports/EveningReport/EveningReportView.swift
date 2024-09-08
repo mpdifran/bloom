@@ -74,24 +74,30 @@ private extension EveningReportView {
         events.filter({ !$0.isAllDay })
     }
 
-    @ViewBuilder
     var calendarSection: some View {
-        if events.isNotEmpty {
-            Section("Tomorrow's Events") {
-                ForEach(allDayEvents) { event in
-                    AllDayEventCell(event: event)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedEvent = event
-                        }
-                }
-                ForEach(nonAllDayEvents) { event in
-                    EventCell(event: event)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedEvent = event
-                        }
-                }
+        Section("Tomorrow's Events") {
+            if events.isEmpty {
+                Text("No Events")
+                    .font(.title3)
+                    .bold()
+                    .foregroundStyle(.secondary)
+                    .horizontallyCentered()
+                    .frame(height: 100)
+                    .standardListSeparatorInset()
+            }
+            ForEach(allDayEvents) { event in
+                AllDayEventCell(event: event)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedEvent = event
+                    }
+            }
+            ForEach(nonAllDayEvents) { event in
+                EventCell(event: event)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedEvent = event
+                    }
             }
         }
     }
