@@ -42,22 +42,22 @@ struct MonthlyVitalCardCell: View {
             Spacer()
 
             VStack(alignment: .trailing) {
-                Group {
-                    switch vital.trend {
-                    case .increasing:
-                        Image(systemName: "chevron.up.circle.fill")
-                    case .decreasing:
-                        Image(systemName: "chevron.down.circle.fill")
-                    case .noTrend:
-                        Image(systemName: "minus.circle.fill")
-                            .foregroundStyle(.fill, .fill.secondary)
-                    }
-                }
-                .foregroundStyle(.tint, .tint.tertiary)
-                .font(.title)
-                .contentTransition(.symbolEffect)
-
-                Spacer()
+//                Group {
+//                    switch vital.trend {
+//                    case .increasing:
+//                        Image(systemName: "chevron.up.circle.fill")
+//                    case .decreasing:
+//                        Image(systemName: "chevron.down.circle.fill")
+//                    case .noTrend:
+//                        Image(systemName: "minus.circle.fill")
+//                            .foregroundStyle(.fill, .fill.secondary)
+//                    }
+//                }
+//                .foregroundStyle(.tint, .tint.tertiary)
+//                .font(.title)
+//                .contentTransition(.symbolEffect)
+//
+//                Spacer()
 
                 Text(vital.status)
                     .font(.headline)
