@@ -75,7 +75,7 @@ private extension EveningGoalProgressCell {
     var dailyComparisonDescription: String {
         let absDifference = abs(viewModel.dailyValue - viewModel.yesterdayValue)
         if absDifference < 0.1 {
-            return "This is the same distance as yesterday."
+            return "This is the same as yesterday."
         }
 
         if viewModel.dailyValue > viewModel.yesterdayValue {
