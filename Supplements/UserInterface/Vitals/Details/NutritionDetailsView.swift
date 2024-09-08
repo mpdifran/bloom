@@ -20,7 +20,6 @@ struct NutritionDetailsView: View {
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
-    @State private var energyChartScope = EnergyChartScope.monthlyAverage
     @State private var dailyEnergy = [DateQuantitySampleLegacy]()
     @State private var fiberChartScope = EnergyChartScope.monthlyAverage
     @State private var dailyFiber = [DateQuantitySampleLegacy]()
@@ -65,7 +64,6 @@ struct NutritionDetailsView: View {
         .navigationTitle("Nutrition")
         .navigationBarTitleDisplayMode(.inline)
         .groupedBackground()
-        .animation(.default, value: energyChartScope)
         .animation(.default, value: fiberChartScope)
         .animation(.default, value: sugarChartScope)
         .animation(.default, value: caffeineChartScope)
@@ -133,83 +131,35 @@ private extension NutritionDetailsView {
                     value: ""
                 )
 
-                switch energyChartScope {
-                case .monthlyAverage:
-                    if let details = viewModel.nutritionSummary?.details,
-                       let basalEnergy = details.basalEnergyBurned?.doubleValue(for: .largeCalorie()),
-                       let activeEnergy = details.activeEnergyBurned?.doubleValue(for: .largeCalorie()),
-                       let dietaryEnergy = details.dietaryEnergy?.doubleValue(for: .largeCalorie()),
-                       let netEnergy = details.netEnergy {
-                        NetEnergyMathView(
-                            basalEnergy: basalEnergy,
-                            activeEnergy: activeEnergy,
-                            dietaryEnergy: dietaryEnergy,
-                            netEnergy: netEnergy
+                Chart{
+                    ForEach(dailyEnergy) { sample in
+                        BarMark(
+                            x: .value("Date", sample.date),
+                            y: .value("Net Energy", sample.quantity)
                         )
+                        .foregroundStyle((sample.quantity < 500 && sample.quantity > -500) ? .green : .yellow)
+                        .cornerRadius(3)
                     }
 
-                    Chart {
-                        BarMark(xStart: .value("Origin", 0), xEnd: .value("Net Energy", netEnergy))
-                            .foregroundStyle((netEnergy < 500 && netEnergy > -500) ? .green : .yellow)
-                            .cornerRadius(5)
-
-                        RuleMark(
-                            x: .value("Max", 500)
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.text)
-
-                        RuleMark(
-                            x: .value("Min", -500)
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.text)
-                    }
-                    .frame(height: 60)
-                    .chartXScale(
-                        domain: -(max(abs(netEnergy), 500) + 300)...(max(abs(netEnergy), 500) + 300),
-                        range: .plotDimension
+                    RectangleMark(
+                        yStart: .value("Max", 500),
+                        yEnd: .value("Min", -500)
                     )
-                case .daily:
-                    Chart{
-                        ForEach(dailyEnergy) { sample in
-                            BarMark(
-                                x: .value("Date", sample.date),
-                                y: .value("Net Energy", sample.quantity)
-                            )
-                            .foregroundStyle((sample.quantity < 500 && sample.quantity > -500) ? .green : .yellow)
-                            .cornerRadius(3)
-                        }
+                    .foregroundStyle(.green.opacity(0.3))
 
-                        RectangleMark(
-                            yStart: .value("Max", 500),
-                            yEnd: .value("Min", -500)
-                        )
-                        .foregroundStyle(.green.opacity(0.3))
+                    RuleMark(
+                        y: .value("Max", 500)
+                    )
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                    .foregroundStyle(.green)
 
-                        RuleMark(
-                            y: .value("Max", 500)
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.green)
-
-                        RuleMark(
-                            y: .value("Min", -500)
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.green)
-                    }
-                    .frame(height: 300)
+                    RuleMark(
+                        y: .value("Min", -500)
+                    )
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                    .foregroundStyle(.green)
                 }
-
-                Picker("", selection: $energyChartScope) {
-                    Text("Daily")
-                        .tag(EnergyChartScope.daily)
-
-                    Text("Monthly Average")
-                        .tag(EnergyChartScope.monthlyAverage)
-                }
-                .pickerStyle(.segmented)
+                .frame(height: 300)
 
                 if let netEnergyDescription = viewModel.nutritionSummary?.details.netEnergyDescription {
                     HStack {
