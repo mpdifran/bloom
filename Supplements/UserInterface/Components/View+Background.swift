@@ -26,11 +26,12 @@ extension View {
                     VStack {
                         LinearGradient(
                             colors: [
-                                .vitalGreat.opacity(0.4),
+                                .indigo.opacity(0.3),
+                                .vitalGreat.opacity(0.3),
                                 .vitalGood.opacity(0.3)
                             ],
                             startPoint: .leading,
-                            endPoint: .trailing
+                            endPoint: .topTrailing
                         )
                         .frame(height: 500)
                         .mask {

@@ -29,7 +29,7 @@ struct EditGoalTargetView: View {
                     TextField("", value: $targetDailyValue, formatter: NumberFormatter.noDecimalPlaces)
                     Text(goal.metric.unitString)
                 }
-                .frame(width: 150)
+                .frame(width: 240)
                 .fontDesign(.rounded)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
