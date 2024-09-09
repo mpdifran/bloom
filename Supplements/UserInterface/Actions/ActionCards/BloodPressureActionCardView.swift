@@ -10,6 +10,13 @@ import AppUI
 import HealthKit
 import TelemetryDeck
 
+extension BloodPressureActionCardView {
+    enum FocusedTextField {
+        case systolic
+        case diastolic
+    }
+}
+
 struct BloodPressureActionCardView: View {
     
     @State private var systolic: Double = 120
@@ -17,6 +24,7 @@ struct BloodPressureActionCardView: View {
     @State private var didError = false
     @State private var error: Error?
 
+    @FocusState private var focusedTextField: FocusedTextField?
     @ObservedObject private var healthManager = HealthManager.shared
 
     var body: some View {
@@ -39,6 +47,8 @@ struct BloodPressureActionCardView: View {
                         .frame(width: 130)
                         .fontDesign(.rounded)
                         .keyboardType(.numberPad)
+                        .focused($focusedTextField, equals: .systolic)
+                        .selectAllTextOnBeginEditing()
                 }
 
                 HStack {
@@ -48,6 +58,8 @@ struct BloodPressureActionCardView: View {
                         .frame(width: 130)
                         .fontDesign(.rounded)
                         .keyboardType(.numberPad)
+                        .focused($focusedTextField, equals: .diastolic)
+                        .selectAllTextOnBeginEditing()
                 }
 
                 Spacer()
@@ -61,6 +73,9 @@ struct BloodPressureActionCardView: View {
         }
         .tint(.pink)
         .alert(error: $error)
+        .onAppear {
+            focusedTextField = .systolic
+        }
     }
 }
 

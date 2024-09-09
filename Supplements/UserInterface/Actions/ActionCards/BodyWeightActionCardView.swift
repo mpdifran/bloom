@@ -16,6 +16,7 @@ struct BodyWeightActionCardView: View {
     @State private var didError = false
     @State private var error: Error?
 
+    @FocusState private var isFocused: Bool
     @ObservedObject private var healthManager = HealthManager.shared
 
     var body: some View {
@@ -30,6 +31,8 @@ struct BodyWeightActionCardView: View {
 
                 HStack {
                     TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
+                        .selectAllTextOnBeginEditing()
+                        .focused($isFocused)
                     Text("lbs")
                 }
                 .frame(width: 200)
@@ -46,15 +49,8 @@ struct BodyWeightActionCardView: View {
         }
         .alert(error: $error)
         .tint(.indigo)
-        .task {
-            let sample = try? await healthManager.healthStore.fetchLatestSample(for: .bodyMass)
-            guard let quantitySample = sample as? HKQuantitySample else { return }
-
-            let weight = quantitySample.quantity.doubleValue(for: .pound())
-
-            await MainActor.run {
-                self.weight = weight
-            }
+        .onAppear {
+            isFocused = true
         }
     }
 }

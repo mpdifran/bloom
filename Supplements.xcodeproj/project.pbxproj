@@ -18,6 +18,7 @@
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
 		FF0405232C8D2DB800FF1E2F /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF0405222C8D2DB800FF1E2F /* TelemetryDeck */; };
 		FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */; };
+		FF0405282C8F70D400FF1E2F /* TextField+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */; };
 		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
 		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
@@ -466,6 +467,7 @@
 		FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TelemetryDeck+Helpers.swift"; sourceTree = "<group>"; };
+		FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+Selection.swift"; sourceTree = "<group>"; };
 		FF049C022C24B333004ACE9C /* DirectiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListView.swift; sourceTree = "<group>"; };
 		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
 		FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreDetailsView.swift; sourceTree = "<group>"; };
@@ -1810,6 +1812,7 @@
 				FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */,
 				FF8F79B82C601C660095C36D /* View+Background.swift */,
 				FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */,
+				FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */,
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
 			);
 			path = Components;
@@ -2315,6 +2318,7 @@
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */,
 				FFC8321A2C8CE0B300108F47 /* ActionsViewModel.swift in Sources */,
+				FF0405282C8F70D400FF1E2F /* TextField+Selection.swift in Sources */,
 				FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */,
 				FFBE52452C76129C00F510DE /* WorkoutHeartRateZoneCell.swift in Sources */,
 				FF0DA0F02C84D69C007D1A6B /* TodayViewModel.swift in Sources */,
