@@ -40,7 +40,7 @@ struct TodayConfigureView: View {
                     }
                 }
             }
-            .navigationTitle("Configure Today")
+            .navigationTitle("Configure")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
