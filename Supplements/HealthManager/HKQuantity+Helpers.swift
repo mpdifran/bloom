@@ -16,10 +16,17 @@ extension HKQuantity: Comparable {
 
 extension HKQuantity {
 
-    func displayString(for unit: HKUnit, specifier: String = "%.0f") -> String {
+    func displayString(for unit: HKUnit, hasNoDecimalPlaces: Bool = true) -> String {
         let doubleValue = doubleValue(for: unit)
 
-        return "\(String(format: specifier, doubleValue)) \(unit.unitString)"
+        let formattedNumber: String
+        if hasNoDecimalPlaces {
+            formattedNumber = NumberFormatter.noDecimalPlaces.string(for: doubleValue) ?? ""
+        } else {
+            formattedNumber = NumberFormatter.oneDecimalPlace.string(for: doubleValue) ?? ""
+        }
+
+        return "\(formattedNumber) \(unit.unitString)"
     }
 
     func sum(_ other: HKQuantity, unit: HKUnit) -> HKQuantity {

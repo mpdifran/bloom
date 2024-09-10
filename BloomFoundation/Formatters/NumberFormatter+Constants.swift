@@ -13,6 +13,7 @@ public extension NumberFormatter {
         let numberFormatter = NumberFormatter()
 
         numberFormatter.maximumFractionDigits = 0
+        numberFormatter.numberStyle = .decimal
 
         return numberFormatter
     }()
@@ -21,6 +22,7 @@ public extension NumberFormatter {
         let numberFormatter = NumberFormatter()
 
         numberFormatter.maximumFractionDigits = 1
+        numberFormatter.numberStyle = .decimal
 
         return numberFormatter
     }()

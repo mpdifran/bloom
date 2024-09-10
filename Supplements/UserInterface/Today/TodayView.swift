@@ -17,7 +17,7 @@ struct TodayView: View {
     @EnvironmentObject private var tabController: TabController
 
     @State private var presentedFullScreen: AnyView?
-    @State private var presentedCardSheet: AnyView?
+    @State private var presentedSheet: AnyView?
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
@@ -58,6 +58,23 @@ struct TodayView: View {
                         }
                     }
 
+                    if goalsViewModel.habits.isNotEmpty {
+                        Text("Habits")
+                            .bold()
+                            .padding(.horizontal)
+                            .zStackAlignment(.leading)
+                            .padding(.top)
+
+                        ForEachEnumerated(goalsViewModel.habits) { (index, habit) in
+//                            NavigationLink {
+//                                Text("TODO")
+//                            } label: {
+                                HabitDailyUpdateCell(habit: habit)
+//                            }
+//                            .buttonStyle(.plain)
+                        }
+                    }
+
                     Text("To Do")
                         .bold()
                         .padding(.horizontal)
@@ -72,14 +89,21 @@ struct TodayView: View {
                     )
                     .tint(.indigo)
                     .onTapGesture {
-                        presentedCardSheet = BodyWeightActionCardView().asAny
+                        presentedSheet = BodyWeightActionCardView().asAny
                     }
                 }
                 .horizontallyCentered()
                 .padding()
             }
             .navigationTitle("Today")
-            .sheet($presentedCardSheet)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Configure", systemImage: "gear") {
+                        presentedSheet = TodayConfigureView().asAny
+                    }
+                }
+            }
+            .sheet($presentedSheet)
             .fullScreenCover($presentedFullScreen)
             .fullScreenCover(isPresented: $tabController.showMorningReport) {
                 GoodMorningView()

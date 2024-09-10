@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import OpenAPIClient
 
 struct DateQuantitySampleLegacy: Identifiable, Codable, Hashable {
     var id: String { "\(date)-\(quantity)" }
@@ -14,15 +13,4 @@ struct DateQuantitySampleLegacy: Identifiable, Codable, Hashable {
     let date: Date
     var quantity: Double
     let unit: String
-}
-
-extension DateQuantitySampleLegacy {
-
-    var healthMetricSample: HealthMetricSample {
-        HealthMetricSample(
-            date: date,
-            quantity: quantity,
-            unit: unit
-        )
-    }
 }

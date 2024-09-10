@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import OpenAPIClient
 
 final class NetworkRequester {
     static let shared = NetworkRequester()

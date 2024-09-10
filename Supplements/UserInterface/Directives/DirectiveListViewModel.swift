@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import OpenAPIClient
 
 @MainActor
 final class DirectiveListViewModel: ObservableObject {

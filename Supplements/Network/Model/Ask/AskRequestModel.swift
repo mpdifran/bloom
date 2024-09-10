@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreLocation
-import OpenAPIClient
 
 struct AskRequestModel: Codable {
     let userInfo: UserInfoModel?
@@ -41,9 +40,9 @@ struct LocationModel: Codable, Equatable {
     let latitude: CLLocationDegrees
     let longitude: CLLocationDegrees
 
-    var location: Location {
-        Location(latitude: latitude, longitude: longitude)
-    }
+//    var location: Location {
+//        Location(latitude: latitude, longitude: longitude)
+//    }
 }
 
 struct QuantityModel: Codable, Equatable {

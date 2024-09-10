@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ScreenControl
-import OpenAPIClient
 import Bugsnag
 import BugsnagPerformance
 import TelemetryDeck
@@ -22,9 +21,6 @@ struct SupplementsApp: App {
         BugsnagPerformance.start()
 
         TelemetryDeck.initialize(config: .init(appID: "764D40B8-F2CE-4372-87D3-0D68F34E08CA"))
-
-        OpenAPIClientAPI.basePath = "https://shep-test-7d27e987b8ef.herokuapp.com/api"
-        OpenAPIClientAPI.apiResponseQueue = DispatchQueue(label: "OpenAPIQueue")
     }
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false

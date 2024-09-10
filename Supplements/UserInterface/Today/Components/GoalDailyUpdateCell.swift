@@ -27,9 +27,9 @@ struct GoalDailyUpdateCell: View {
             HStack {
                 Image(systemName: goal.systemImage)
                     .foregroundStyle(.tint)
-                    .font(.largeTitle)
+                    .font(.title)
                     .minimumScaleFactor(0.1)
-                    .frame(width: 40)
+                    .frame(width: 30)
 
                 VStack(alignment: .leading) {
                     Label(goal.vitalKind.name, systemImage: goal.vitalKind.systemImage)

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,6 +19,12 @@
 		FF0405232C8D2DB800FF1E2F /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF0405222C8D2DB800FF1E2F /* TelemetryDeck */; };
 		FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */; };
 		FF0405282C8F70D400FF1E2F /* TextField+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */; };
+		FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */; };
+		FF04052E2C8F816A00FF1E2F /* HabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052D2C8F816A00FF1E2F /* HabitCell.swift */; };
+		FF0405302C8F868C00FF1E2F /* HabitGoalPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */; };
+		FF0405342C8F876500FF1E2F /* HabitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405332C8F876500FF1E2F /* HabitModel.swift */; };
+		FF0405362C8F8C3400FF1E2F /* HabitMetricCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */; };
+		FF0405382C8F94A400FF1E2F /* HabitDailyUpdateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */; };
 		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
 		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
@@ -37,9 +43,7 @@
 		FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */; };
 		FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */; };
 		FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E62C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift */; };
-		FF13599A2C28A29A00FB49A6 /* Directive+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1359992C28A29A00FB49A6 /* Directive+Helpers.swift */; };
 		FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */; };
-		FF13599E2C28A54900FB49A6 /* TimeComponent+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13599D2C28A54900FB49A6 /* TimeComponent+Helpers.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
 		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
@@ -295,6 +299,7 @@
 		FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0142C519DAD009C5CED /* BodyCompositionMonthlySummary.swift */; };
 		FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */; };
 		FFC9E4532C2C899300183FA4 /* SleepSoundLevelChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */; };
+		FFD5EC7F2C90888800B5E217 /* HabitDailyUpdateCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */; };
 		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
 		FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */; };
@@ -333,7 +338,6 @@
 		FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B712BF1592C00926042 /* AskResponseModel.swift */; };
 		FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B742BF15DD000926042 /* SoundPlayer.swift */; };
 		FFF66FA92C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF66FA82C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift */; };
-		FFF87F8D2C1FB83A0053280E /* OpenAPIClient in Frameworks */ = {isa = PBXBuildFile; productRef = FFF87F8C2C1FB83A0053280E /* OpenAPIClient */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -468,6 +472,12 @@
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TelemetryDeck+Helpers.swift"; sourceTree = "<group>"; };
 		FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+Selection.swift"; sourceTree = "<group>"; };
+		FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayConfigureView.swift; sourceTree = "<group>"; };
+		FF04052D2C8F816A00FF1E2F /* HabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCell.swift; sourceTree = "<group>"; };
+		FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalPicker.swift; sourceTree = "<group>"; };
+		FF0405332C8F876500FF1E2F /* HabitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitModel.swift; sourceTree = "<group>"; };
+		FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitMetricCell.swift; sourceTree = "<group>"; };
+		FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDailyUpdateCell.swift; sourceTree = "<group>"; };
 		FF049C022C24B333004ACE9C /* DirectiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListView.swift; sourceTree = "<group>"; };
 		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
 		FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreDetailsView.swift; sourceTree = "<group>"; };
@@ -486,9 +496,7 @@
 		FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHeartRateChartView.swift; sourceTree = "<group>"; };
 		FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelSummaryCell.swift; sourceTree = "<group>"; };
 		FF0F79E62C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHeartRateSummaryCell.swift; sourceTree = "<group>"; };
-		FF1359992C28A29A00FB49A6 /* Directive+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Directive+Helpers.swift"; sourceTree = "<group>"; };
 		FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCompleteButton.swift; sourceTree = "<group>"; };
-		FF13599D2C28A54900FB49A6 /* TimeComponent+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeComponent+Helpers.swift"; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
 		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
@@ -739,6 +747,7 @@
 		FFC8B0142C519DAD009C5CED /* BodyCompositionMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyCompositionMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+ScaledPercentage.swift"; sourceTree = "<group>"; };
 		FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelChartView.swift; sourceTree = "<group>"; };
+		FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDailyUpdateCellViewModel.swift; sourceTree = "<group>"; };
 		FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsView.swift; sourceTree = "<group>"; };
 		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
 		FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendChart.swift; sourceTree = "<group>"; };
@@ -832,7 +841,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFF87F8D2C1FB83A0053280E /* OpenAPIClient in Frameworks */,
 				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
@@ -913,17 +921,14 @@
 				FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */,
 				FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */,
 				FFE41D202C8BD8C900E3E559 /* ReportCell.swift */,
+				FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */,
+				FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */,
+				FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */,
+				FF04052D2C8F816A00FF1E2F /* HabitCell.swift */,
+				FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */,
+				FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		FF1359982C28A28A00FB49A6 /* OpenAPI */ = {
-			isa = PBXGroup;
-			children = (
-				FF1359992C28A29A00FB49A6 /* Directive+Helpers.swift */,
-				FF13599D2C28A54900FB49A6 /* TimeComponent+Helpers.swift */,
-			);
-			path = OpenAPI;
 			sourceTree = "<group>";
 		};
 		FF1705182C109FF3000D4B3D /* Programs */ = {
@@ -1560,7 +1565,6 @@
 			isa = PBXGroup;
 			children = (
 				FFB4445F2BEC4CC500486AD7 /* NetworkRequester.swift */,
-				FF1359982C28A28A00FB49A6 /* OpenAPI */,
 				FFB444982BED424000486AD7 /* Model */,
 			);
 			path = Network;
@@ -1782,6 +1786,7 @@
 				FFC77AFB2C5A7D00003E5F85 /* GoalCell.swift */,
 				FFC77AFF2C5AD843003E5F85 /* TargetVitalComponentView.swift */,
 				FFC77AF62C5A6D6A003E5F85 /* GoalModel.swift */,
+				FF0405332C8F876500FF1E2F /* HabitModel.swift */,
 			);
 			path = Goals;
 			sourceTree = "<group>";
@@ -2020,7 +2025,6 @@
 				FFD8C4D22BD1AC5E001E8D42 /* AppUI */,
 				FFF61AEA2BED52A900926042 /* AppFoundations */,
 				FF8B8B202BFD1EF500BA2128 /* Algorithms */,
-				FFF87F8C2C1FB83A0053280E /* OpenAPIClient */,
 				FFC77AE22C57FCEC003E5F85 /* StatKit */,
 				FF4A21BB2C88FA5600278019 /* Bugsnag */,
 				FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */,
@@ -2060,7 +2064,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					FF1E96182C0BEC1D004DAD2D = {
 						CreatedOnToolsVersion = 15.4;
@@ -2103,7 +2107,6 @@
 				FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */,
 				FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */,
 				FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
-				FFF87F8B2C1FB83A0053280E /* XCLocalSwiftPackageReference "bloom-swift-api" */,
 				FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */,
 				FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
 				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
@@ -2273,10 +2276,10 @@
 				FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */,
 				FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */,
 				FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */,
+				FF0405342C8F876500FF1E2F /* HabitModel.swift in Sources */,
 				FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */,
 				FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */,
 				FF0DA0FF2C8787DB007D1A6B /* GoalDailyUpdateCellViewModel.swift in Sources */,
-				FF13599A2C28A29A00FB49A6 /* Directive+Helpers.swift in Sources */,
 				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
 				FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */,
 				FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */,
@@ -2314,6 +2317,7 @@
 				FFC77AF52C5A6D1C003E5F85 /* GoalsViewModel.swift in Sources */,
 				FF8B8B2A2BFD8EA600BA2128 /* ProfileItemCell.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
+				FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */,
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */,
@@ -2364,7 +2368,6 @@
 				FF88F12E2C7D03E10093D1B4 /* BowelMovementActionCardView.swift in Sources */,
 				FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */,
 				FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */,
-				FF13599E2C28A54900FB49A6 /* TimeComponent+Helpers.swift in Sources */,
 				FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */,
 				FFC77AFA2C5A75A9003E5F85 /* PreviewModelContainer.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
@@ -2383,6 +2386,7 @@
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,
 				FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */,
 				FF4A21CC2C8A01CF00278019 /* FeatureRequestWebView.swift in Sources */,
+				FF04052E2C8F816A00FF1E2F /* HabitCell.swift in Sources */,
 				FF4CAAF92C8005B6001A59F3 /* BowelMovementMonthlySummary.swift in Sources */,
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
 				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
@@ -2422,6 +2426,7 @@
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */,
+				FF0405362C8F8C3400FF1E2F /* HabitMetricCell.swift in Sources */,
 				FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */,
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
@@ -2446,6 +2451,7 @@
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
+				FF0405302C8F868C00FF1E2F /* HabitGoalPicker.swift in Sources */,
 				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
@@ -2455,6 +2461,7 @@
 				FF88F1402C7E475F0093D1B4 /* BloodPressureActionCardView.swift in Sources */,
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */,
+				FF0405382C8F94A400FF1E2F /* HabitDailyUpdateCell.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,
 				FF4A21D22C8A05D700278019 /* UserID.swift in Sources */,
 				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
@@ -2515,6 +2522,7 @@
 				FFBE52372C74D57300F510DE /* HeartRateZones.swift in Sources */,
 				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
 				FF88F12B2C7D02D80093D1B4 /* ActionsView.swift in Sources */,
+				FFD5EC7F2C90888800B5E217 /* HabitDailyUpdateCellViewModel.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,
 				FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */,
 				FF88F1242C7BBDF90093D1B4 /* EKEventView.swift in Sources */,
@@ -2766,6 +2774,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -2802,6 +2811,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -2839,6 +2849,7 @@
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -2877,6 +2888,7 @@
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3089,7 +3101,6 @@
 		FFACBAE82BAC778A006AAD0B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Supplements/Supplements.entitlements;
@@ -3128,7 +3139,6 @@
 		FFACBAE92BAC778A006AAD0B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Supplements/Supplements.entitlements;
@@ -3286,13 +3296,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		FFF87F8B2C1FB83A0053280E /* XCLocalSwiftPackageReference "bloom-swift-api" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "bloom-swift-api";
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -3415,10 +3418,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
 			productName = AppFoundations;
-		};
-		FFF87F8C2C1FB83A0053280E /* OpenAPIClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = OpenAPIClient;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

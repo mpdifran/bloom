@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import OpenAPIClient
 
 struct DirectiveCell: View {
     let sleepActivity: SleepSuggestionModel

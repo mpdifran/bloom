@@ -29,6 +29,16 @@ final actor GoalsViewModel: ObservableObject {
             }
         }
     }
+    @MainActor @Published var habits = [HabitModel]() {
+        didSet {
+            do {
+                let data = try JSONEncoder.main.encode(habits)
+                UserDefaults.group.set(data, forKey: "GoalsViewModel.habits")
+            } catch {
+                print(error)
+            }
+        }
+    }
 
     private init() {
         Task {
@@ -46,6 +56,14 @@ extension GoalsViewModel {
         {
             await MainActor.run {
                 self.goals = goals
+            }
+        }
+        if
+            let data = UserDefaults.group.data(forKey: "GoalsViewModel.habits"),
+            let habits = try? JSONDecoder.main.decode([HabitModel].self, from: data)
+        {
+            await MainActor.run {
+                self.habits = habits
             }
         }
     }
@@ -106,6 +124,16 @@ extension GoalsViewModel {
                 categoryID: .CategoryID.goalsMessage
             )
         }
+    }
+}
+
+extension GoalsViewModel {
+
+    @MainActor
+    func notYetAddedHabits() -> [HabitModel.MeasurementMetric] {
+        HabitModel.MeasurementMetric.allCases.filter({ metric in
+            !habits.contains(where: { $0.measurement == metric })
+        })
     }
 }
 

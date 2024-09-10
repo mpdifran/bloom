@@ -1,35 +1,37 @@
 //
-//  GoalDailyUpdateCellViewModel.swift
+//  HabitDailyUpdateCellViewModel.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-09-03.
+//  Created by Mark DiFranco on 2024-09-10.
 //
 
-import UIKit
+import SwiftUI
 
 @MainActor
-final class GoalDailyUpdateCellViewModel: ObservableObject {
-    let goal: GoalModel
+final class HabitDailyUpdateCellViewModel: ObservableObject {
 
     @Published var didHitGoal = 0
-    private var didSendConfetti = false
-    private var didSendNotification = false
     @Published var dailyValue: Double = 0 {
         didSet { checkHitGoal() }
     }
     @Published var yesterdayValue: Double = 0
     @Published var hasCompletedTodayGoal = false
 
-    init(goal: GoalModel) {
-        self.goal = goal
+    private let habitModel: HabitModel
+
+    init(habitModel: HabitModel) {
+        self.habitModel = habitModel
         observeValues()
     }
+
+    private var didSendConfetti = false
+    private var didSendNotification = false
 
     private var observationHandler: HKObserverQueryHandle?
     private var backgroundHandler: HKBackgroundDeliveryHandle?
 }
 
-extension GoalDailyUpdateCellViewModel {
+extension HabitDailyUpdateCellViewModel {
 
     func checkHitGoal() {
         if UIApplication.shared.applicationState == .active {
@@ -44,40 +46,35 @@ extension GoalDailyUpdateCellViewModel {
     }
 }
 
-private extension GoalDailyUpdateCellViewModel {
+private extension HabitDailyUpdateCellViewModel {
 
     func observeValues() {
         backgroundHandler = HealthManager.shared.healthStore.enableBackgroundDelivery(
-            objectTypes: goal.metric.measurement.sampleTypes,
+            objectTypes: habitModel.measurement.sampleTypes,
             frequency: .immediate
         )
         observationHandler = HealthManager.shared.healthStore.observeChanges(
-            sampleTypes: goal.metric.measurement.sampleTypes,
-            startDate: Calendar.current.mondayMorning(for: .now) ?? .now
+            sampleTypes: habitModel.measurement.sampleTypes,
+            startDate: Calendar.current.date(byAdding: .day, value: -2, to: .now) ?? .now
         ) { [weak self] in
             await self?.loadValues()
         }
     }
 
     func loadValues() async {
-        let currentValue = await goal.metric.quantity(for: .startOfDayToNow()).doubleValue(for: goal.metric.unit)
-        let prevValue = await goal.metric.quantity(for: .yesterday()).doubleValue(for: goal.metric.unit)
+        let currentValue = await habitModel.measurement.quantity(for: .startOfDayToNow()).doubleValue(for: habitModel.measurement.unit)
+        let prevValue = await habitModel.measurement.quantity(for: .yesterday()).doubleValue(for: habitModel.measurement.unit)
 
         await MainActor.run {
             dailyValue = currentValue
             yesterdayValue = prevValue
             let prevHasCompletedGoal = hasCompletedTodayGoal
-            if !goal.metric.measurement.isDecrease {
-                hasCompletedTodayGoal = dailyValue > (goal.metric.value / 7)
-            } else {
-                hasCompletedTodayGoal = false
-            }
-
+            hasCompletedTodayGoal = dailyValue > (habitModel.value)
             checkHitGoal()
 
             if !prevHasCompletedGoal && hasCompletedTodayGoal {
                 Task {
-                    await sendGoalHitNotification()
+                    await sendHabitHitNotification()
                 }
             } else if !hasCompletedTodayGoal {
                 didSendNotification = false
@@ -85,11 +82,11 @@ private extension GoalDailyUpdateCellViewModel {
         }
     }
 
-    func sendGoalHitNotification() async {
+    func sendHabitHitNotification() async {
         if UIApplication.shared.applicationState != .active && !didSendNotification {
             await NotificationManager.shared.sendNotification(
-                title: "You Did It!",
-                subtitle: "You've hit your \(goal.title) goal, great job!"
+                title: "Great Job, You Did It!",
+                subtitle: "You've hit your \(habitModel.name) habit, great job!"
             )
         }
 

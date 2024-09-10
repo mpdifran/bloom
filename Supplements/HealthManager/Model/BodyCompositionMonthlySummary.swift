@@ -85,7 +85,7 @@ extension BodyCompositionMonthlySummary {
         var entries = [String]()
 
         if let bodyWeight = details.averageBodyMass {
-            entries.append("Avg Weight: \(bodyWeight.displayString(for: .pound(), specifier: "%.1f"))")
+            entries.append("Avg Weight: \(bodyWeight.displayString(for: .pound(), hasNoDecimalPlaces: false))")
         }
         if let bodyFatPercentage = details.bodyFatPercentage?.doubleValue(for: .percent()) {
             let percent = bodyFatPercentage * 100

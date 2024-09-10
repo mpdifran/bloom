@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import OpenAPIClient
 
 struct WorkoutSummary: Codable, Equatable, Identifiable {
     var id: String { "\(activity)-\(startDate)-\(durationSeconds)-\(caloriesBurned)" }
@@ -15,16 +14,4 @@ struct WorkoutSummary: Codable, Equatable, Identifiable {
     let durationSeconds: TimeInterval
     let caloriesBurned: Double
     let distance: Double
-}
-
-extension WorkoutSummary {
-
-    var healthWorkout: HealthWorkout {
-        HealthWorkout(
-            activity: activity,
-            startDate: startDate,
-            durationMinutes: durationSeconds / 60,
-            caloriesBurned: caloriesBurned
-        )
-    }
 }

@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ScreenControl
-import OpenAPIClient
 
 private extension String {
     static let sleepActivities = "SleepProgramCoordinator.sleepActivities"
@@ -27,7 +26,6 @@ final class SleepProgramCoordinator: ObservableObject {
             UserDefaults.group.set(startDate, forKey: .sleepProgramStartDate)
         }
     }
-    @Published private(set) var assistantResponse: PostSleepAssistantResponse?
 
     @Published var sleepActivities = [SleepSuggestionModel]() {
         didSet {
