@@ -69,7 +69,7 @@ private extension HabitDailyUpdateCellViewModel {
             dailyValue = currentValue
             yesterdayValue = prevValue
             let prevHasCompletedGoal = hasCompletedTodayGoal
-            hasCompletedTodayGoal = dailyValue > (habitModel.value)
+            hasCompletedTodayGoal = dailyValue >= (habitModel.value)
             checkHitGoal()
 
             if !prevHasCompletedGoal && hasCompletedTodayGoal {

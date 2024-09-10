@@ -39,16 +39,44 @@ struct GoalDailyUpdateCell: View {
                     Text(goal.title)
                         .bold()
 
-                    ProgressView(value: min(viewModel.dailyValue / remainingGoalValue, 1))
-                        .foregroundStyle(.tint)
-
-                    HStack {
-                        Text("\(viewModel.dailyValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                    if goal.metric.measurement.isDecrease {
+                        ProgressView(value: min(remainingValue / goalValue, 1))
+                            .scaleEffect(x: -1)
                             .foregroundStyle(.tint)
-                            .contentTransition(.numericText(value: viewModel.dailyValue))
+                    } else {
+                        ProgressView(value: min(viewModel.dailyValue / goalValue, 1))
+                            .foregroundStyle(.tint)
+                    }
 
-                        Text("/ \(remainingGoalValue.format()) \(goal.metric.unit.unitString)")
-                            .foregroundStyle(.secondary)
+                    Group {
+                        if goal.metric.measurement.isDecrease {
+                            if remainingValue < 0 {
+                                Text("\(remainingValue * -1) \(goal.metric.unitString)")
+                                    .foregroundStyle(.tint)
+                                    .contentTransition(.numericText(value: remainingValue))
+
+                                Text("over goal")
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                HStack {
+                                    Text("\(remainingValue.format(to: 1)) \(goal.metric.unitString)")
+                                        .foregroundStyle(.tint)
+                                        .contentTransition(.numericText(value: remainingValue))
+
+                                    Text("remaining")
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        } else {
+                            HStack {
+                                Text("\(viewModel.dailyValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                                    .foregroundStyle(.tint)
+                                    .contentTransition(.numericText(value: viewModel.dailyValue))
+
+                                Text("/ \(goalValue.format()) \(goal.metric.unit.unitString)")
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                     .font(.subheadline)
                     .bold()
@@ -80,9 +108,14 @@ struct GoalDailyUpdateCell: View {
     }
 }
 
+@MainActor
 private extension GoalDailyUpdateCell {
 
-    var remainingGoalValue: Double {
+    var remainingValue: Double {
+        goalValue - viewModel.dailyValue
+    }
+
+    var goalValue: Double {
         (goal.metric.value / 7)
     }
 }
@@ -97,11 +130,26 @@ private extension GoalDailyUpdateCell {
                     summary: "Walking and running are good for you.",
                     dueDate: .now.addingTimeInterval(60 * 60 * 24 * 3),
                     metric: .init(
-                        value: 2,
+                        value: 21,
                         unit: HKUnit.meterUnit(with: .kilo),
                         measurement: .walkRunDistance
                     ),
                     vitalKind: .cardioFitness
+                )
+            )
+
+            GoalDailyUpdateCell(
+                goal: .init(
+                    title: "Sodium Intake",
+                    systemImage: "arrow.down.circle",
+                    summary: "Eat less sodium.",
+                    dueDate: .now.addingTimeInterval(60 * 60 * 24 * 3),
+                    metric: .init(
+                        value: 15,
+                        unit: .gram(),
+                        measurement: .decreaseSodium
+                    ),
+                    vitalKind: .nutrition
                 )
             )
         }

@@ -33,7 +33,7 @@ extension GoalDailyUpdateCellViewModel {
 
     func checkHitGoal() {
         if UIApplication.shared.applicationState == .active {
-            if hasCompletedTodayGoal && !didSendConfetti {
+            if hasCompletedTodayGoal && !didSendConfetti && !goal.metric.measurement.isDecrease {
                 didHitGoal += 1
                 didSendConfetti = true
             }
@@ -67,10 +67,10 @@ private extension GoalDailyUpdateCellViewModel {
             dailyValue = currentValue
             yesterdayValue = prevValue
             let prevHasCompletedGoal = hasCompletedTodayGoal
-            if !goal.metric.measurement.isDecrease {
-                hasCompletedTodayGoal = dailyValue > (goal.metric.value / 7)
+            if goal.metric.measurement.isDecrease {
+                hasCompletedTodayGoal = dailyValue <= (goal.metric.value / 7)
             } else {
-                hasCompletedTodayGoal = false
+                hasCompletedTodayGoal = dailyValue >= (goal.metric.value / 7)
             }
 
             checkHitGoal()

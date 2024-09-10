@@ -20,7 +20,7 @@ struct HabitDailyUpdateCell: View {
 
     var body: some View {
         HStack {
-            CompletionCheckmarkView(hasCompleted: false)
+            CompletionCheckmarkView(hasCompleted: viewModel.hasCompletedTodayGoal)
 
             Image(systemName: habit.systemImage)
                 .font(.title)
