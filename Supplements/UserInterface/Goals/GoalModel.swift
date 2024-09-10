@@ -445,23 +445,23 @@ extension GoalModel {
         var color: Color {
             switch self {
             case .timeInDaylight:
-                    .orange
+                    .mutedOrange
             case .walkRunDistance, .runDistance, .bikeDistance, .walkRunBikeDistance, .stepCount, .hikeDuration:
-                    .green
+                    .mutedGreen
             case .walkDuration, .runDuration, .bikeDuration, .walkRunBikeDuration:
-                    .pink
+                    .mutedPink
             case .meditationMinutes:
-                    .remSleep
+                    .mutedTeal
             case .bedtimeSoundLevels:
-                    .yellow
+                    .mutedYellow
             case .yogaWorkoutDuration:
-                    .awakeSleep
+                    .mutedPink
             case .casualSportWorkoutDuration:
-                    .blue
+                    .mutedPink
             case .intenseSportWorkoutDuration:
-                    .orange
+                    .mutedPink
             case .gymTrainingWorkoutDuration, .hiitWorkoutDuration:
-                Color.purple
+                    .mutedPink
             case .targetHeartRateZoneTimeZone12:
                 .heartRateZone2
             case .targetHeartRateZoneTimeZone34:
@@ -505,7 +505,7 @@ extension GoalModel {
             case .increaseFiber:
                     .fiber
             case .increaseWater:
-                    .blue
+                    .mutedBlue
             }
         }
 

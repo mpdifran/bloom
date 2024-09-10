@@ -65,7 +65,7 @@ extension NotificationManager {
         delay: TimeInterval? = nil
     ) async {
         let content = UNMutableNotificationContent()
-        content.title = "Your Morning Report is Ready!"
+        content.title = "Morning Report"
         content.subtitle = message ?? "Check out your personalized report for today."
         content.sound = .default
         content.categoryIdentifier = .CategoryID.goodMorning
@@ -88,7 +88,7 @@ extension NotificationManager {
 
     func scheduleEveningReportNotification(dateComponents: DateComponents) async {
         let content = UNMutableNotificationContent()
-        content.title = "Your Evening Report is Ready!"
+        content.title = "Evening Report"
         content.subtitle = "Check out your personalized summary of the day."
         content.sound = .default
         content.categoryIdentifier = .CategoryID.goodEvening

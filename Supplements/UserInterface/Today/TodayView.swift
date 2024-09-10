@@ -87,7 +87,7 @@ struct TodayView: View {
                         systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
                         isComplete: viewModel.hasLoggedBodyWeight
                     )
-                    .tint(.indigo)
+                    .tint(.mutedIndigo)
                     .onTapGesture {
                         presentedSheet = BodyWeightActionCardView().asAny
                     }

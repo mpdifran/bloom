@@ -71,7 +71,7 @@ struct BloodPressureActionCardView: View {
             .multilineTextAlignment(.trailing)
             .padding()
         }
-        .tint(.pink)
+        .tint(.mutedPink)
         .alert(error: $error)
         .onAppear {
             focusedTextField = .systolic

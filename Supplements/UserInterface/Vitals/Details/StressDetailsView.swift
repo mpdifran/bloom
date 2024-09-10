@@ -90,14 +90,14 @@ private extension StressDetailsView {
                         x: .value("Date", sample.date),
                         y: .value("Resting Heart Rate", sample.quantity)
                     )
-                    .foregroundStyle(.pink)
+                    .foregroundStyle(.mutedPink)
                     .interpolationMethod(.catmullRom)
                 }
                 let goal = HealthManager.shared.goalRestingHeartRateForUser()
 
                 RuleMark(y: .value("Max RHR", goal.1))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.pink)
+                    .foregroundStyle(.mutedPink)
 
                 RectangleMark(
                     yStart: .value("", goal.1 - 20),
@@ -106,7 +106,7 @@ private extension StressDetailsView {
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            .pink.opacity(0.3),
+                            .mutedPink.opacity(0.3),
                             .clear
                         ],
                         startPoint: .top,
@@ -184,13 +184,13 @@ private extension StressDetailsView {
                         x: .value("Date", sample.date),
                         y: .value("Heart Rate Variability", sample.averageQuantity)
                     )
-                    .foregroundStyle(.pink)
+                    .foregroundStyle(.mutedPink)
                 }
 
                 if let hrv = viewModel.stressSummary?.details.avgHeartRateVariability {
                     RuleMark(y: .value("Average HRV", hrv))
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.pink)
+                        .foregroundStyle(.mutedPink)
                 }
             }
             .frame(height: 160)

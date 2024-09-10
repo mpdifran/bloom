@@ -24,7 +24,7 @@ struct ActionsView: View {
                         latestValue: viewModel.weightDetails?.displayString,
                         latestTimestamp: viewModel.weightDetails?.timestampString
                     )
-                    .tint(.indigo)
+                    .tint(.mutedIndigo)
                     .onTapGesture {
                         presentedCardSheet = BodyWeightActionCardView().asAny
                     }
@@ -35,7 +35,7 @@ struct ActionsView: View {
                         latestValue: viewModel.bloodPressureDetails?.displayString,
                         latestTimestamp: viewModel.bloodPressureDetails?.timestampString
                     )
-                    .tint(.pink)
+                    .tint(.mutedPink)
                     .onTapGesture {
                         presentedCardSheet = BloodPressureActionCardView().asAny
                     }
@@ -46,7 +46,7 @@ struct ActionsView: View {
                         latestValue: viewModel.waterDetails?.displayString,
                         latestTimestamp: viewModel.waterDetails?.timestampString
                     )
-                    .tint(.blue)
+                    .tint(.mutedBlue)
                     .onTapGesture {
                         presentedCardSheet = WaterActionCardView().asAny
                     }

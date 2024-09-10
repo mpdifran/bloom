@@ -97,7 +97,7 @@ struct WaterActionCardView: View {
                     .transition(.move(edge: .bottom))
             }
         }
-        .tint(.blue)
+        .tint(.mutedBlue)
         .alert(error: $error)
     }
 }

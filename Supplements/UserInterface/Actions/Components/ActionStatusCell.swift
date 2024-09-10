@@ -80,21 +80,21 @@ struct ActionStatusCell: View {
                 latestValue: "159.2 lbs",
                 latestTimestamp: "Today"
             )
-            .tint(.indigo)
+            .tint(.mutedIndigo)
             ActionStatusCell(
                 title: "Log Blood Pressure",
                 systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
                 latestValue: "120/80",
                 latestTimestamp: "Today"
             )
-            .tint(.pink)
+            .tint(.mutedPink)
             ActionStatusCell(
                 title: "Log Water",
                 systemImage: "waterbottle.fill",
                 latestValue: "500 mL",
                 latestTimestamp: "Today"
             )
-            .tint(.blue)
+            .tint(.mutedBlue)
         }
         .horizontallyCentered()
         .padding()

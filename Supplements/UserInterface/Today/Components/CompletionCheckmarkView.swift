@@ -31,5 +31,5 @@ struct CompletionCheckmarkView: View {
         CompletionCheckmarkView(hasCompleted: true)
         CompletionCheckmarkView(hasCompleted: false)
     }
-    .tint(.pink)
+    .tint(.mutedPink)
 }

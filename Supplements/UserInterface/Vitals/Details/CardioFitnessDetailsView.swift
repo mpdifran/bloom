@@ -141,12 +141,12 @@ private extension CardioFitnessDetailsView {
                                 x: .value("Date", sample.date),
                                 y: .value("VO₂ Max", sample.averageQuantity)
                             )
-                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .pink)
+                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .mutedPink)
                             PointMark(
                                 x: .value("Date", sample.date),
                                 y: .value("VO₂ Max", sample.averageQuantity)
                             )
-                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .pink)
+                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .mutedPink)
                         }
                     }
                     .chartYScale(domain: chartMin...chartMax, range: .plotDimension)

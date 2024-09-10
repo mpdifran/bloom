@@ -81,10 +81,10 @@ extension HabitModel.MeasurementMetric {
 
     var color: Color {
         switch self {
-        case .stepCount: .green
-        case .waterIntake: .blue
-        case .walkingRunningDistance: .green
-        case .timeInDaylight: .orange
+        case .stepCount: .mutedGreen
+        case .waterIntake: .mutedBlue
+        case .walkingRunningDistance: .mutedGreen
+        case .timeInDaylight: .mutedOrange
         }
     }
 
