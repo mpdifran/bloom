@@ -59,7 +59,7 @@ final class ReportCoordinator: ObservableObject {
 
 extension ReportCoordinator {
 
-    func didDetectWakeUp() async {
+    func didDetectWakeUp(sleepAnalysis: SleepAnalysis? = nil) async {
         guard showMorningReportOnWakeUp else { return }
 
         if let lastMorningReportNotificationDate {
@@ -69,7 +69,7 @@ extension ReportCoordinator {
         }
 
         let message: String?
-        if let sleepAnalysis = HealthManager.shared.sleepAnalysis7Days?.last, Calendar.current.isDateInToday(sleepAnalysis.endDate) {
+        if let sleepAnalysis, Calendar.current.isDateInToday(sleepAnalysis.endDate) {
             message = sleepAnalysis.sleepOneLiner
         } else {
             message = nil

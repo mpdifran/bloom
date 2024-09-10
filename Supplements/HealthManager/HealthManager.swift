@@ -1616,7 +1616,7 @@ extension HealthManager {
 
             if (newPreviousSleepAnalysis?.endDate ?? .distantPast) > (lastPreviousSleepAnalysis?.endDate ?? .distantPast) && lastPreviousSleepAnalysis != nil {
                 // We've triggered from new data, not from app launch
-                await ReportCoordinator.shared.didDetectWakeUp()
+                await ReportCoordinator.shared.didDetectWakeUp(sleepAnalysis: newPreviousSleepAnalysis)
             }
 
             await MainActor.run { [weak self] in
