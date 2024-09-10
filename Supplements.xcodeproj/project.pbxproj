@@ -132,6 +132,8 @@
 		FF4A21CE2C8A01FE00278019 /* URL+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */; };
 		FF4A21D02C8A02BD00278019 /* FeatureRequestsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21CF2C8A02BD00278019 /* FeatureRequestsScreen.swift */; };
 		FF4A21D22C8A05D700278019 /* UserID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21D12C8A05D700278019 /* UserID.swift */; };
+		FF4B2F482C90C7960003879C /* ToDoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4B2F472C90C7910003879C /* ToDoManager.swift */; };
+		FF4B2F4A2C90C7DE0003879C /* ToDoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4B2F492C90C7D90003879C /* ToDoModel.swift */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
 		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
@@ -580,6 +582,8 @@
 		FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Constants.swift"; sourceTree = "<group>"; };
 		FF4A21CF2C8A02BD00278019 /* FeatureRequestsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureRequestsScreen.swift; sourceTree = "<group>"; };
 		FF4A21D12C8A05D700278019 /* UserID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserID.swift; sourceTree = "<group>"; };
+		FF4B2F472C90C7910003879C /* ToDoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoManager.swift; sourceTree = "<group>"; };
+		FF4B2F492C90C7D90003879C /* ToDoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoModel.swift; sourceTree = "<group>"; };
 		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
 		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
 		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
@@ -903,6 +907,7 @@
 			isa = PBXGroup;
 			children = (
 				FF0DA0F12C84D967007D1A6B /* Components */,
+				FF4B2F462C90C7880003879C /* ToDos */,
 				FF0DA0EC2C84D661007D1A6B /* TodayView.swift */,
 				FF0DA0EF2C84D69C007D1A6B /* TodayViewModel.swift */,
 			);
@@ -1185,6 +1190,15 @@
 				FF4A21CB2C8A01CF00278019 /* FeatureRequestWebView.swift */,
 			);
 			path = FeatureRequests;
+			sourceTree = "<group>";
+		};
+		FF4B2F462C90C7880003879C /* ToDos */ = {
+			isa = PBXGroup;
+			children = (
+				FF4B2F472C90C7910003879C /* ToDoManager.swift */,
+				FF4B2F492C90C7D90003879C /* ToDoModel.swift */,
+			);
+			path = ToDos;
 			sourceTree = "<group>";
 		};
 		FF4CAB002C813D7B001A59F3 /* Weather */ = {
@@ -2424,6 +2438,7 @@
 				FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
+				FF4B2F482C90C7960003879C /* ToDoManager.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */,
 				FF0405362C8F8C3400FF1E2F /* HabitMetricCell.swift in Sources */,
@@ -2536,6 +2551,7 @@
 				FF0DA0F32C86364B007D1A6B /* GoalDetailsView.swift in Sources */,
 				FF7890522C3473B700F9C1A5 /* SleepChatMessage.swift in Sources */,
 				FF88F11B2C7B75C20093D1B4 /* CalendarManager.swift in Sources */,
+				FF4B2F4A2C90C7DE0003879C /* ToDoModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

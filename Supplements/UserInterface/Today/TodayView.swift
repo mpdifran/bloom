@@ -13,6 +13,7 @@ struct TodayView: View {
     @ObservedObject private var viewModel = TodayViewModel.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
     @ObservedObject private var reportCoordinator = ReportCoordinator.shared
+    @ObservedObject private var toDoManager = ToDoManager.shared
 
     @EnvironmentObject private var tabController: TabController
 
@@ -42,19 +43,21 @@ struct TodayView: View {
                         }
                     }
 
-                    Text("Goals")
-                        .bold()
-                        .padding(.horizontal)
-                        .zStackAlignment(.leading)
-
-                    ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
-                        if let goal = goals.first {
-                            NavigationLink {
-                                GoalDetailsView(goals: $goalsViewModel.goals[index])
-                            } label: {
-                                GoalDailyUpdateCell(goal: goal)
+                    if goalsViewModel.goals.isNotEmpty {
+                        Text("Goals")
+                            .bold()
+                            .padding(.horizontal)
+                            .zStackAlignment(.leading)
+                        
+                        ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
+                            if let goal = goals.first {
+                                NavigationLink {
+                                    GoalDetailsView(goals: $goalsViewModel.goals[index])
+                                } label: {
+                                    GoalDailyUpdateCell(goal: goal)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
 
@@ -75,21 +78,25 @@ struct TodayView: View {
                         }
                     }
 
-                    Text("To Do")
-                        .bold()
-                        .padding(.horizontal)
-                        .zStackAlignment(.leading)
-                        .padding(.top)
+                    if toDoManager.relevantToDos.isNotEmpty {
+                        Text("To Do")
+                            .bold()
+                            .padding(.horizontal)
+                            .zStackAlignment(.leading)
+                            .padding(.top)
 
-                    ToDoActionCell(
-                        title: "Weigh Yourself",
-                        subtitle: "Daily",
-                        systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
-                        isComplete: viewModel.hasLoggedBodyWeight
-                    )
-                    .tint(.mutedIndigo)
-                    .onTapGesture {
-                        presentedSheet = BodyWeightActionCardView().asAny
+                        ForEach(toDoManager.relevantToDos) { todo in
+                            ToDoActionCell(
+                                title: todo.kind.name,
+                                subtitle: todo.cadence.name,
+                                systemImage: todo.kind.systemImage,
+                                isComplete: toDoManager.completedToDoKinds.contains(todo.kind)
+                            )
+                            .tint(todo.kind.color)
+                            .onTapGesture {
+                                presentedSheet = todo.kind.sheetToPresent
+                            }
+                        }
                     }
                 }
                 .horizontallyCentered()
@@ -120,6 +127,9 @@ struct TodayView: View {
             viewModel.observeData()
             Task {
                 await goalsViewModel.checkForUpdateGoals()
+            }
+            Task {
+                await toDoManager.recalculateToDos()
             }
         }
     }
