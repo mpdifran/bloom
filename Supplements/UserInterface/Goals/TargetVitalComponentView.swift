@@ -27,30 +27,14 @@ struct TargetVitalComponentView: View {
 
             Spacer()
 
-            HStack {
-                Text(vital.status)
-                    .font(.headline)
-                    .bold()
-                    .fontDesign(.rounded)
-                    .foregroundStyle(vital.color)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .multilineTextAlignment(.trailing)
-
-                Group {
-                    switch vital.trend {
-                    case .increasing:
-                        Image(systemName: "chevron.up.circle")
-                    case .decreasing:
-                        Image(systemName: "chevron.down.circle")
-                    case .noTrend:
-                        Image(systemName: "minus.circle")
-                            .foregroundStyle(.primary, .fill)
-                    }
-                }
-                .foregroundStyle(.primary, vital.color)
-                .font(.title)
-            }
+            Text(vital.status)
+                .font(.headline)
+                .bold()
+                .fontDesign(.rounded)
+                .foregroundStyle(vital.color)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.trailing)
         }
         .padding()
         .background {
