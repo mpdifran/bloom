@@ -106,7 +106,8 @@ private extension ExerciseEffectivenessView {
                 )
 
                 TargetHeartRateZonesDistributionView(
-                    distribution: exerciseEffectivenessSummary.details.overallHeartZoneDistribution
+                    distribution: exerciseEffectivenessSummary.details.overallHeartZoneDistribution,
+                    heartRateZones: exerciseEffectivenessSummary.details.heartRateZones
                 )
             }
             .cardContainer(fill: .background.secondary)

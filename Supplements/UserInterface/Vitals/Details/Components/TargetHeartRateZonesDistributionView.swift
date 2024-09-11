@@ -15,12 +15,14 @@ private extension CGFloat {
 
 struct TargetHeartRateZonesDistributionView: View {
     let distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution
+    let heartRateZones: HeartRateZones
 
     var body: some View {
         VStack(spacing: 16) {
             VStack(spacing: .spacing) {
                 HeartRateZoneBar(
                     title: "Zone 1",
+                    subtitle: heartRateZones.zone1RangeString,
                     duration: distribution.zone1,
                     totalDuration: distribution.totalDuration,
                     maxProportion: distribution.maxPercent,
@@ -31,6 +33,7 @@ struct TargetHeartRateZonesDistributionView: View {
 
                 HeartRateZoneBar(
                     title: "Zone 2",
+                    subtitle: heartRateZones.zone2RangeString,
                     duration: distribution.zone2,
                     totalDuration: distribution.totalDuration,
                     maxProportion: distribution.maxPercent,
@@ -41,6 +44,7 @@ struct TargetHeartRateZonesDistributionView: View {
 
                 HeartRateZoneBar(
                     title: "Zone 3",
+                    subtitle: heartRateZones.zone3RangeString,
                     duration: distribution.zone3,
                     totalDuration: distribution.totalDuration,
                     maxProportion: distribution.maxPercent,
@@ -51,6 +55,7 @@ struct TargetHeartRateZonesDistributionView: View {
 
                 HeartRateZoneBar(
                     title: "Zone 4",
+                    subtitle: heartRateZones.zone4RangeString,
                     duration: distribution.zone4,
                     totalDuration: distribution.totalDuration,
                     maxProportion: distribution.maxPercent,
@@ -61,6 +66,7 @@ struct TargetHeartRateZonesDistributionView: View {
 
                 HeartRateZoneBar(
                     title: "Zone 5",
+                    subtitle: heartRateZones.zone5RangeString,
                     duration: distribution.zone5,
                     totalDuration: distribution.totalDuration,
                     maxProportion: distribution.maxPercent,
@@ -94,6 +100,7 @@ struct TargetHeartRateZonesDistributionView: View {
 
 struct HeartRateZoneBar: View {
     let title: String
+    let subtitle: String
     let duration: HKQuantity
     let totalDuration: HKQuantity
     let maxProportion: Double
@@ -101,9 +108,13 @@ struct HeartRateZoneBar: View {
 
     var body: some View {
         HStack {
-            Text(title)
-                .bold()
-                .foregroundStyle(.tint)
+            VStack(alignment: .leading) {
+                Text(title)
+                    .bold()
+                Text(subtitle)
+                    .font(.caption)
+            }
+            .foregroundStyle(.tint)
 
             GeometryReader { proxy in
                 Capsule()
@@ -141,6 +152,16 @@ struct HeartRateZoneBar: View {
                 zone3: .init(unit: .minute(), doubleValue: 9),
                 zone4: .init(unit: .minute(), doubleValue: 6),
                 zone5: .init(unit: .minute(), doubleValue: 4)
+            ),
+            heartRateZones: .init(
+                heartRateReserve: 120,
+                restingHeartRate: 60,
+                maxHeartRate: 180,
+                zone1: 130,
+                zone2: 140,
+                zone3: 150,
+                zone4: 160,
+                zone5: 170
             )
         )
         .cardContainer(fill: .background.secondary)
