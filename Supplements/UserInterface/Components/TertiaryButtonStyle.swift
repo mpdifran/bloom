@@ -16,7 +16,7 @@ struct TertiaryButtonStyle: ButtonStyle {
         .bold()
         .padding(.vertical, 16)
         .padding(.horizontal)
-        .background(.tint.opacity(0.3))
+        .background(.tint.opacity(0.5))
         .foregroundStyle(.tint)
         .clipShape(RoundedRectangle(cornerRadius: 17))
     }

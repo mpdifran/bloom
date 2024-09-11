@@ -103,7 +103,10 @@ extension ActionsViewModel {
                 }
             } else {
                 await MainActor.run {
-                    self.waterDetails = nil
+                    self.waterDetails = ActionLatestValueDetails(
+                        displayString: "0 mL",
+                        timestampString: "Today"
+                    )
                 }
             }
         }

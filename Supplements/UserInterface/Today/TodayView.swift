@@ -124,7 +124,6 @@ struct TodayView: View {
             Label("Today", systemImage: "calendar.badge.checkmark")
         }
         .onAppear {
-            viewModel.observeData()
             Task {
                 await goalsViewModel.checkForUpdateGoals()
             }
