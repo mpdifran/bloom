@@ -84,18 +84,16 @@ extension ToDoManager {
         var newRelevantToDos = [ToDoModel]()
 
         for todo in allToDos {
-            let dateRange: DateRange
             switch todo.cadence {
             case .daily:
-                dateRange = .trailingDaysFromStartOfToday(1)
+                newRelevantToDos.append(todo)
+                continue
             case .weekly:
-                dateRange = .trailingDaysFromStartOfToday(7)
+                if await !isToDoComplete(todo: todo, dateRange: .trailingDaysFromStartOfToday(6)) {
+                    newRelevantToDos.append(todo)
+                }
             case .never:
                 continue
-            }
-
-            if await !isToDoComplete(todo: todo, dateRange: dateRange) {
-                newRelevantToDos.append(todo)
             }
         }
 
