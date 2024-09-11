@@ -20,11 +20,37 @@ extension ToDoModel {
         var id: Self { self }
 
         case daily
-        case weekly
+        case everySunday
+        case everyMonday
+        case everyTuesday
+        case everyWednesday
+        case everyThursday
+        case everyFriday
+        case everySaturday
+        case everySevenDays
         case never
 
         var name: String {
-            rawValue.capitalized
+            switch self {
+            case .everySunday:
+                "Every Sunday"
+            case .everyMonday:
+                "Every Monday"
+            case .everyTuesday:
+                "Every Tuesday"
+            case .everyWednesday:
+                "Every Wednesday"
+            case .everyThursday:
+                "Every Thursday"
+            case .everyFriday:
+                "Every Friday"
+            case .everySaturday:
+                "Every Saturday"
+            case .everySevenDays:
+                "Every 7 Days"
+            default:
+                rawValue.capitalized
+            }
         }
     }
 

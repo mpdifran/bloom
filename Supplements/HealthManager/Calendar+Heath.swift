@@ -8,6 +8,24 @@
 import Foundation
 
 extension Calendar {
+    enum Weekday: Int {
+        case sunday = 1
+        case monday
+        case tuesday
+        case wednesday
+        case thursday
+        case friday
+        case saturday
+    }
+}
+
+extension Calendar {
+
+    func weekday(for date: Date) -> Weekday? {
+        guard let weekday = dateComponents([.weekday], from: date).weekday else { return nil }
+
+        return Weekday(rawValue: weekday)
+    }
 
     func isMorning(date: Date) -> Bool {
         guard let hour = dateComponents([.hour], from: date).hour else { return false }

@@ -87,13 +87,75 @@ extension ToDoManager {
             switch todo.cadence {
             case .daily:
                 newRelevantToDos.append(todo)
-                continue
-            case .weekly:
+            case .everySunday:
+                if Calendar.current.weekday(for: .now) == .sunday {
+                    newRelevantToDos.append(todo)
+                } else {
+                    let dateRange = DateRange.startOfWeekdayToStartOfToday(weekday: .sunday)
+                    if await !isToDoComplete(todo: todo, dateRange: dateRange) {
+                        newRelevantToDos.append(todo)
+                    }
+                }
+            case .everyMonday:
+                if Calendar.current.weekday(for: .now) == .monday {
+                    newRelevantToDos.append(todo)
+                } else {
+                    let dateRange = DateRange.startOfWeekdayToStartOfToday(weekday: .monday)
+                    if await !isToDoComplete(todo: todo, dateRange: dateRange) {
+                        newRelevantToDos.append(todo)
+                    }
+                }
+            case .everyTuesday:
+                if Calendar.current.weekday(for: .now) == .tuesday {
+                    newRelevantToDos.append(todo)
+                } else {
+                    let dateRange = DateRange.startOfWeekdayToStartOfToday(weekday: .tuesday)
+                    if await !isToDoComplete(todo: todo, dateRange: dateRange) {
+                        newRelevantToDos.append(todo)
+                    }
+                }
+            case .everyWednesday:
+                if Calendar.current.weekday(for: .now) == .wednesday {
+                    newRelevantToDos.append(todo)
+                } else {
+                    let dateRange = DateRange.startOfWeekdayToStartOfToday(weekday: .wednesday)
+                    if await !isToDoComplete(todo: todo, dateRange: dateRange) {
+                        newRelevantToDos.append(todo)
+                    }
+                }
+            case .everyThursday:
+                if Calendar.current.weekday(for: .now) == .thursday {
+                    newRelevantToDos.append(todo)
+                } else {
+                    let dateRange = DateRange.startOfWeekdayToStartOfToday(weekday: .thursday)
+                    if await !isToDoComplete(todo: todo, dateRange: dateRange) {
+                        newRelevantToDos.append(todo)
+                    }
+                }
+            case .everyFriday:
+                if Calendar.current.weekday(for: .now) == .friday {
+                    newRelevantToDos.append(todo)
+                } else {
+                    let dateRange = DateRange.startOfWeekdayToStartOfToday(weekday: .friday)
+                    if await !isToDoComplete(todo: todo, dateRange: dateRange) {
+                        newRelevantToDos.append(todo)
+                    }
+                }
+            case .everySaturday:
+                if Calendar.current.weekday(for: .now) == .saturday {
+                    newRelevantToDos.append(todo)
+                } else {
+                    let dateRange = DateRange.startOfWeekdayToStartOfToday(weekday: .saturday)
+                    if await !isToDoComplete(todo: todo, dateRange: dateRange) {
+                        newRelevantToDos.append(todo)
+                    }
+                }
+            case .everySevenDays:
                 if await !isToDoComplete(todo: todo, dateRange: .trailingDaysFromStartOfToday(6)) {
                     newRelevantToDos.append(todo)
                 }
             case .never:
-                continue
+                break
             }
         }
 

@@ -105,6 +105,20 @@ extension DateRange {
         }
         return DateRange(startDate, endDate)
     }
+
+    static func startOfWeekdayToStartOfToday(weekday: Calendar.Weekday) -> DateRange {
+        let now = Date.now
+        let endDate = Calendar.current.startOfDay(for: now)
+
+        let currentWeekday = Calendar.current.component(.weekday, from: now)
+        let daysDifference = (currentWeekday - weekday.rawValue + 7) % 7
+
+        guard let startDate = Calendar.current.date(byAdding: .day, value: -daysDifference, to: endDate) else {
+            return DateRange(endDate, endDate)
+        }
+
+        return DateRange(startDate, endDate)
+    }
 }
 
 // MARK: Trailing Ranges
