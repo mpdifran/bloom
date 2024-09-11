@@ -26,4 +26,13 @@ public extension NumberFormatter {
 
         return numberFormatter
     }()
+
+    static var twoDecimalPlaces: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+
+        numberFormatter.maximumFractionDigits = 2
+        numberFormatter.numberStyle = .decimal
+
+        return numberFormatter
+    }()
 }

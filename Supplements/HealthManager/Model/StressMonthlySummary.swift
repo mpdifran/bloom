@@ -44,7 +44,7 @@ struct StressMonthlySummary: Hashable {
     let lastMonthDetails: Details
 
     var score: Double {
-        details.internalScore?.scaledPercent(lower: 0.4, upper: 0.9) ?? 1
+        details.internalScore?.scaledPercent(lower: 0.4, upper: 1) ?? 1
     }
 
     var trend: VitalModel.Trend {
@@ -70,7 +70,7 @@ extension StressMonthlySummary.Details {
         let hrvScore = varHeartRateVariability?.scaledPercent(lower: 0, upper: 500)
 
         let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
-        let rhrScore = restingHeartRate?.scaledPercent(lower: max, upper: min)
+        let rhrScore = restingHeartRate?.scaledPercent(lower: max + 10, upper: max)
 
         let bloodPressureScore: Double?
         if let bloodPressureSystolic, let bloodPressureDiastolic {
@@ -83,7 +83,7 @@ extension StressMonthlySummary.Details {
             bloodPressureScore = nil
         }
 
-        let components = [hrvScore, rhrScore, bloodPressureScore].compactMap({ $0 })
+        let components = [hrvScore, rhrScore, bloodPressureScore, bloodPressureScore].compactMap({ $0 })
 
         guard components.isNotEmpty else { return nil }
 

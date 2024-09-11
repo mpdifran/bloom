@@ -10,11 +10,7 @@ import BloomFoundation
 
 extension Double {
 
-    func format(to decimalPlaces: Int = 0) -> String {
-        if decimalPlaces > 0 {
-            return NumberFormatter.oneDecimalPlace.string(from: self as NSNumber) ?? ""
-        }
-
-        return NumberFormatter.noDecimalPlaces.string(from: self as NSNumber) ?? ""
+    func format(using numberFormatter: NumberFormatter = .noDecimalPlaces) -> String {
+        numberFormatter.string(from: self as NSNumber) ?? ""
     }
 }

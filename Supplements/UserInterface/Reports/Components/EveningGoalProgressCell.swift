@@ -58,7 +58,7 @@ struct EveningGoalProgressCell: View {
                                 .foregroundStyle(.secondary)
                         } else {
                             HStack {
-                                Text("\(remainingValue.format(to: 1)) \(goal.metric.unitString)")
+                                Text("\(remainingValue.format(using: .oneDecimalPlace)) \(goal.metric.unitString)")
                                     .foregroundStyle(.tint)
                                     .contentTransition(.numericText(value: remainingValue))
 
@@ -67,7 +67,7 @@ struct EveningGoalProgressCell: View {
                             }
                         }
                     } else {
-                        Text("\(viewModel.dailyValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                        Text("\(viewModel.dailyValue.format(using: .oneDecimalPlace)) \(goal.metric.unit.unitString)")
                             .foregroundStyle(.tint)
                             .contentTransition(.numericText(value: viewModel.dailyValue))
 
@@ -109,10 +109,10 @@ private extension EveningGoalProgressCell {
         }
 
         if viewModel.dailyValue > viewModel.yesterdayValue {
-            let difference = (viewModel.dailyValue - viewModel.yesterdayValue).format(to: 1)
+            let difference = (viewModel.dailyValue - viewModel.yesterdayValue).format(using: .oneDecimalPlace)
             return "This is \(difference) \(goal.metric.unitString) more than yesterday."
         } else {
-            let difference = (viewModel.yesterdayValue - viewModel.dailyValue).format(to: 1)
+            let difference = (viewModel.yesterdayValue - viewModel.dailyValue).format(using: .oneDecimalPlace)
             return "This is \(difference) \(goal.metric.unitString) less than yesterday."
         }
     }

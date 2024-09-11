@@ -35,7 +35,7 @@ struct HabitDailyUpdateCell: View {
                     .foregroundStyle(.tint)
 
                 HStack {
-                    Text("\(viewModel.dailyValue.format(to: 1)) \(habit.unit.unitString)")
+                    Text("\(viewModel.dailyValue.format(using: .oneDecimalPlace)) \(habit.unit.unitString)")
                         .foregroundStyle(.tint)
 
                     Text("/ \(NumberFormatter.noDecimalPlaces.string(for: habit.value) ?? "") \(habit.unit.unitString)")

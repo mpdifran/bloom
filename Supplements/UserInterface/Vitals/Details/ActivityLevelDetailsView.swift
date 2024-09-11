@@ -153,7 +153,7 @@ private extension ActivityLevelDetailsView {
     var dayOfWeekDistributionView: some View {
         if let distribution = viewModel.activityLevelSummary?.details.dayOfWeekActivityLevelRatioDistribution() {
             VStack {
-                VitalDetailChartTitleView(title: "By Day of Week", value: "")
+                VitalDetailChartTitleView(title: "Avg By Day of Week", value: "")
 
                 Chart {
                     ForEach(distribution.keys.sorted(keyPath: \.self), id: \.self) { dayOfWeek in

@@ -18,6 +18,8 @@ extension MonthlyVitalCardCell {
 struct MonthlyVitalCardCell: View {
     let vital: VitalModel
 
+    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+
     var body: some View {
         HStack {
             Image(systemName: vital.id.systemImage)
@@ -65,6 +67,14 @@ struct MonthlyVitalCardCell: View {
                     .fontDesign(.rounded)
                     .foregroundStyle(.tint)
                     .contentTransition(.interpolate)
+
+                if danieleMode {
+                    Text(vital.score.format(using: .twoDecimalPlaces))
+                        .font(.subheadline)
+                        .fontDesign(.rounded)
+                        .foregroundStyle(.tint)
+                        .contentTransition(.interpolate)
+                }
             }
         }
         .tint(vital.color)

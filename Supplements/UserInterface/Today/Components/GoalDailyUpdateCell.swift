@@ -59,7 +59,7 @@ struct GoalDailyUpdateCell: View {
                                     .foregroundStyle(.secondary)
                             } else {
                                 HStack {
-                                    Text("\(remainingValue.format(to: 1)) \(goal.metric.unitString)")
+                                    Text("\(remainingValue.format(using: .oneDecimalPlace)) \(goal.metric.unitString)")
                                         .foregroundStyle(.tint)
                                         .contentTransition(.numericText(value: remainingValue))
 
@@ -69,7 +69,7 @@ struct GoalDailyUpdateCell: View {
                             }
                         } else {
                             HStack {
-                                Text("\(viewModel.dailyValue.format(to: 1)) \(goal.metric.unit.unitString)")
+                                Text("\(viewModel.dailyValue.format(using: .oneDecimalPlace)) \(goal.metric.unit.unitString)")
                                     .foregroundStyle(.tint)
                                     .contentTransition(.numericText(value: viewModel.dailyValue))
 

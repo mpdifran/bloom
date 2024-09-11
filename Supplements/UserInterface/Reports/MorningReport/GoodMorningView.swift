@@ -155,7 +155,7 @@ private extension GoodMorningView {
                                 .font(.title3)
                                 .bold()
 
-                            Text("Your Energy Ratio yesterday was in the Intense level (\(energyRatioSample.value.format(to: 1))). Make sure to take a break from activity today to give your body time to recover.")
+                            Text("Your Energy Ratio yesterday was in the Intense level (\(energyRatioSample.value.format(using: .oneDecimalPlace))). Make sure to take a break from activity today to give your body time to recover.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
@@ -175,7 +175,7 @@ private extension GoodMorningView {
                                 .font(.title3)
                                 .bold()
 
-                            Text("Your Energy Ratio yesterday was in the Sedentary level (\(energyRatioSample.value.format(to: 1))). Today might be a good day to get active!")
+                            Text("Your Energy Ratio yesterday was in the Sedentary level (\(energyRatioSample.value.format(using: .oneDecimalPlace))). Today might be a good day to get active!")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }

@@ -89,7 +89,7 @@ extension BodyCompositionMonthlySummary {
         }
         if let bodyFatPercentage = details.bodyFatPercentage?.doubleValue(for: .percent()) {
             let percent = bodyFatPercentage * 100
-            entries.append("Fat: \(percent.format(to: 0))%")
+            entries.append("Fat: \(percent.format())%")
         }
 
         let compactEntries = entries.compactMap({ $0 })
@@ -112,10 +112,10 @@ extension BodyCompositionMonthlySummary {
         }
 
         if thisMonth > lastMonth {
-            let formattedPercent = ((thisMonth - lastMonth) / lastMonth * 100).format(to: 1)
+            let formattedPercent = ((thisMonth - lastMonth) / lastMonth * 100).format(using: .oneDecimalPlace)
             return "Your average body weight has increased \(formattedPercent)% this month."
         } else {
-            let formattedPercent = ((lastMonth - thisMonth) / lastMonth * 100).format(to: 1)
+            let formattedPercent = ((lastMonth - thisMonth) / lastMonth * 100).format(using: .oneDecimalPlace)
             return "Your average body weight has decreased \(formattedPercent)% this month."
         }
     }
