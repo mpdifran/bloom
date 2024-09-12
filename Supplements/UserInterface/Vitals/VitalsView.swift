@@ -39,7 +39,7 @@ struct VitalsView: View {
                 case .cardioFitness: CardioFitnessDetailsView()
                 case .exerciseEffectiveness: ExerciseEffectivenessView()
                 case .bowelMovements: BowelMovementsDetailView()
-//                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
+                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
                 }
             }
             .animation(.default, value: viewModel.vitals)

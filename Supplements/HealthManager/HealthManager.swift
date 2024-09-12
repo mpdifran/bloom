@@ -12,6 +12,7 @@ import SwiftData
 
 extension TimeInterval {
     static let maxSleepGroupTimeDistance: TimeInterval = 7200 // 2 hours
+    static let maxMenstruationTimeGap: TimeInterval = TimeInterval(60 * 60 * 24 * 2) // 2 days
 }
 
 final class HealthManager: ObservableObject {
@@ -394,6 +395,13 @@ extension HealthManager {
         }.sorted(keyPath: \.date)
     }
 
+    func fetchMenstrualFlowSamples(dateRange: DateRange) async -> [MenstrualCycle] {
+        let samples = (try? await healthStore.fetchSamples(for: HKCategoryType(.menstrualFlow), dateRange: dateRange)) ?? []
+        let categorySamples = samples as? [HKCategorySample] ?? []
+
+        return groupMenstrualCycles(from: categorySamples)
+    }
+
     func fetchDietaryNutritionPercentage(
         quantityTypeID: HKQuantityTypeIdentifier,
         caloriesPerGram: Double,
@@ -685,6 +693,60 @@ extension HealthManager {
             averageSleepLength: sleepAnalyses.average(keyPath: \.overallMinutes),
             averageSleepScore: sleepAnalyses.average(keyPath: \.overallScoreDouble)
         )
+    }
+
+    func fetchMenstrualSummary() async -> MenstrualSummary {
+        let cycles = await fetchMenstrualFlowSamples(dateRange: .trailingMonthsFromNow(7))
+        return MenstrualSummary(menstrualCycles: cycles)
+    }
+}
+
+// MARK: Grouping Algorithms
+
+extension HealthManager {
+
+    func groupMenstrualCycles(from samples: [HKCategorySample]) -> [MenstrualCycle] {
+        var cycles = [MenstrualCycle]()
+        var currentCycleSamples = [HKCategorySample]()
+
+        for sample in samples {
+            if let lastSample = currentCycleSamples.last {
+                let timeGap = sample.startDate.timeIntervalSince(lastSample.endDate)
+
+                // If the gap is larger than the threshold
+                if timeGap > .maxMenstruationTimeGap {
+                    // Close out the current cycle and start a new one
+                    let beginningOfCycleStartDate = currentCycleSamples.first(where: { $0.menstrualFlowCategory.marksBeginningOfCycle })?.startDate
+                    let cycleStartDate = beginningOfCycleStartDate ?? currentCycleSamples.first?.startDate
+
+                    if let cycleStartDate = cycleStartDate {
+                        let cycle = MenstrualCycle(
+                            startDate: cycleStartDate,
+                            samples: currentCycleSamples
+                        )
+                        cycles.append(cycle)
+                    }
+
+                    currentCycleSamples = [sample]
+                } else {
+                    currentCycleSamples.append(sample)
+                }
+            } else {
+                // First sample in a new cycle
+                currentCycleSamples.append(sample)
+            }
+        }
+
+        // Append the last cycle
+        let beginningOfCycleStartDate = currentCycleSamples.first(where: { $0.menstrualFlowCategory.marksBeginningOfCycle })?.startDate
+        let cycleStartDate = beginningOfCycleStartDate ?? currentCycleSamples.first?.startDate
+
+        if let cycleStartDate = cycleStartDate, !currentCycleSamples.isEmpty {
+            let cycle = MenstrualCycle(startDate: cycleStartDate, samples: currentCycleSamples)
+            cycles.append(cycle)
+        }
+
+        return cycles
     }
 }
 

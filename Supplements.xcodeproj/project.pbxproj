@@ -145,6 +145,10 @@
 		FF4CAB022C813D91001A59F3 /* WeatherForecaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAB012C813D91001A59F3 /* WeatherForecaster.swift */; };
 		FF4CAB042C81441F001A59F3 /* WeatherAlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */; };
 		FF4CAB062C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */; };
+		FF4EFF882C937CD3005E4A1F /* MenstrualCycle.MenstrualFlow+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF872C937CC4005E4A1F /* MenstrualCycle.MenstrualFlow+Helpers.swift */; };
+		FF4EFF8A2C937D25005E4A1F /* MenstrualCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF892C937D1B005E4A1F /* MenstrualCycle.swift */; };
+		FF4EFF8C2C9381A4005E4A1F /* MenstrualSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF8B2C938196005E4A1F /* MenstrualSummary.swift */; };
+		FF4EFF8E2C938497005E4A1F /* MenstrualCyclePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -599,6 +603,10 @@
 		FF4CAB012C813D91001A59F3 /* WeatherForecaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecaster.swift; sourceTree = "<group>"; };
 		FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAlertCell.swift; sourceTree = "<group>"; };
 		FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCurrentConditionsCell.swift; sourceTree = "<group>"; };
+		FF4EFF872C937CC4005E4A1F /* MenstrualCycle.MenstrualFlow+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenstrualCycle.MenstrualFlow+Helpers.swift"; sourceTree = "<group>"; };
+		FF4EFF892C937D1B005E4A1F /* MenstrualCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstrualCycle.swift; sourceTree = "<group>"; };
+		FF4EFF8B2C938196005E4A1F /* MenstrualSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstrualSummary.swift; sourceTree = "<group>"; };
+		FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstrualCyclePhase.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -1581,6 +1589,7 @@
 				FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */,
 				FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */,
 				FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */,
+				FF4EFF872C937CC4005E4A1F /* MenstrualCycle.MenstrualFlow+Helpers.swift */,
 				FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */,
 			);
 			path = HealthManager;
@@ -1757,6 +1766,9 @@
 				FFC77AD42C529CF9003E5F85 /* MobilityMonthlySummary.swift */,
 				FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */,
 				FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */,
+				FF4EFF8B2C938196005E4A1F /* MenstrualSummary.swift */,
+				FF4EFF892C937D1B005E4A1F /* MenstrualCycle.swift */,
+				FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */,
 				FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */,
 				FFBE52382C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift */,
 				FF4CAAF82C8005B6001A59F3 /* BowelMovementMonthlySummary.swift */,
@@ -2294,6 +2306,8 @@
 				FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */,
 				FF4CAAF72C7F6ACA001A59F3 /* OnboardingGoalDetails.swift in Sources */,
 				FF8F79CB2C62CE070095C36D /* PillRangeChart.swift in Sources */,
+				FF4EFF8C2C9381A4005E4A1F /* MenstrualSummary.swift in Sources */,
+				FF4EFF882C937CD3005E4A1F /* MenstrualCycle.MenstrualFlow+Helpers.swift in Sources */,
 				FFF61B222BEE916300926042 /* InsightsRequest.swift in Sources */,
 				FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */,
 				FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */,
@@ -2443,6 +2457,7 @@
 				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
 				FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */,
 				FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */,
+				FF4EFF8A2C937D25005E4A1F /* MenstrualCycle.swift in Sources */,
 				FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,
@@ -2492,6 +2507,7 @@
 				FF0405302C8F868C00FF1E2F /* HabitGoalPicker.swift in Sources */,
 				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
+				FF4EFF8E2C938497005E4A1F /* MenstrualCyclePhase.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
 				FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */,
 				FF0DA0FD2C878473007D1A6B /* CompletionCheckmarkView.swift in Sources */,

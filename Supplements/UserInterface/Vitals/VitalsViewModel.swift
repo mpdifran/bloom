@@ -23,6 +23,7 @@ final class VitalsViewModel: ObservableObject {
     @Published var nutritionSummary: NutritionMonthlySummary?
     @Published var exerciseEffectivenessSummary: ExerciseEffectivenessMonthlySummary?
     @Published var bowelMovementSummary: BowelMovementMonthlySummary?
+    @Published var menstrualSummary: MenstrualSummary?
 
     @Published var heartRateVariability = [DateQuantitySampleLegacy]()
     @Published var restingHeartRate = [DateQuantitySampleLegacy]()
@@ -142,11 +143,20 @@ private extension VitalsViewModel {
             sampleType: HKWorkoutType.workoutType(),
             startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) {
-            Task {
-                let summary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
-                await MainActor.run {
-                    self.exerciseEffectivenessSummary = summary
-                }
+            let summary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
+            await MainActor.run {
+                self.exerciseEffectivenessSummary = summary
+            }
+        }
+        .store(in: &observerQueryHandles)
+
+        HealthManager.shared.healthStore.observeChanges(
+            sampleType: HKCategoryType(.menstrualFlow),
+            startDate: Calendar.current.date(byAdding: .month, value: -7, to: .now) ?? .now
+        ) {
+            let summary = await HealthManager.shared.fetchMenstrualSummary()
+            await MainActor.run {
+                self.menstrualSummary = summary
             }
         }
         .store(in: &observerQueryHandles)
@@ -206,6 +216,12 @@ private extension VitalsViewModel {
             }
             .store(in: &cancellables)
         $exerciseEffectivenessSummary
+            .receive(on: processingQueue)
+            .sink { [weak self] (_) in
+                self?.createVitals()
+            }
+            .store(in: &cancellables)
+        $menstrualSummary
             .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
@@ -318,6 +334,22 @@ private extension VitalsViewModel {
             )
         } else {
             vitals.append(.init(id: .exerciseEffectiveness))
+        }
+        if HealthManager.shared.sex() == .female {
+            if let menstrualSummary {
+                vitals.append(
+                    VitalModel(
+                        id: .cycleTracking,
+                        subtitle: menstrualSummary.subtitle,
+                        status: menstrualSummary.phaseDescription,
+                        score: 1,
+                        color: .green,
+                        trend: .noTrend
+                    )
+                )
+            } else {
+                vitals.append(.init(id: .cycleTracking))
+            }
         }
         if let bowelMovementSummary {
             vitals.append(

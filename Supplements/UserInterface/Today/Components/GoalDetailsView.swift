@@ -326,7 +326,7 @@ private extension GoalDetailsView {
                     case .cardioFitness: CardioFitnessDetailsView()
                     case .exerciseEffectiveness: ExerciseEffectivenessView()
                     case .bowelMovements: BowelMovementsDetailView()
-    //                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
+                    default: Text("Not Yet Implemented").navigationTitle(targetVitalModel.id.name)
                     }
                 } label: {
                     TargetVitalComponentView(vital: targetVitalModel)

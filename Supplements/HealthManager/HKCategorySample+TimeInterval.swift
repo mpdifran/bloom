@@ -25,4 +25,8 @@ extension HKCategorySample {
     var walkingSteadinessCategory: HKCategoryValueAppleWalkingSteadinessEvent? {
         HKCategoryValueAppleWalkingSteadinessEvent(rawValue: value)
     }
+
+    var menstrualFlowCategory: MenstrualCycle.MenstrualFlow {
+        MenstrualCycle.MenstrualFlow(rawValue: value) ?? .unspecified
+    }
 }
