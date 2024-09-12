@@ -45,6 +45,15 @@ public extension DateFormatter {
         return dateFormatter
     }()
 
+    static var justDateShort: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+
+        return dateFormatter
+    }()
+
     static var justDateLong: DateFormatter = {
         let dateFormatter = DateFormatter()
 
@@ -87,7 +96,7 @@ public extension DateFormatter {
     static var monthAndDay: DateFormatter = {
         let dateFormatter = DateFormatter()
 
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMM dd")
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMM d")
 
         return dateFormatter
     }()

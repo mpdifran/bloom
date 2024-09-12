@@ -30,7 +30,12 @@ extension MenstrualSummary {
         }
 
         if isMenstruating {
-            entries.append("Currently menstruating")
+            entries.append("Menstruating")
+        } else {
+            if let date = nextPredictedPeriodDate() {
+                let dateString = DateFormatter.monthAndDay.string(from: date)
+                entries.append("Next Period: \(dateString)")
+            }
         }
 
         guard entries.isNotEmpty else { return nil }
@@ -45,6 +50,17 @@ extension MenstrualSummary {
             return "Calculating Cycle"
         }
         return nil
+    }
+
+    var color: Color? {
+        let phase = currentPhase()
+
+        switch phase {
+        case .follicular, .luteal, .ovulation:
+            return .green
+        default:
+            return nil
+        }
     }
 }
 
@@ -72,6 +88,9 @@ private extension MenstrualSummary {
                 previousCycle = current
             }
         }
+
+        guard days.isNotEmpty else { return nil }
+
         return Int(days.average(keyPath: \.self))
     }
 
@@ -119,5 +138,18 @@ private extension MenstrualSummary {
         }
 
         return .unknown
+    }
+
+    func nextPredictedPeriodDate() -> Date? {
+        guard
+            let averageCycleDuration,
+            let mostRecentCycle = menstrualCycles.max(by: \.startDate)
+        else { return nil }
+
+        return Calendar.current.date(
+            byAdding: .day,
+            value: averageCycleDuration,
+            to: mostRecentCycle.startDate
+        )
     }
 }

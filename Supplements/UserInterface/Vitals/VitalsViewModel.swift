@@ -343,7 +343,7 @@ private extension VitalsViewModel {
                         subtitle: menstrualSummary.subtitle,
                         status: menstrualSummary.phaseDescription,
                         score: 1,
-                        color: .green,
+                        color: menstrualSummary.color,
                         trend: .noTrend
                     )
                 )
