@@ -28,6 +28,7 @@ struct SupplementsApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .tint(.accent)
                 .onAppear {
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
                     Task {
