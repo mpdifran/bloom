@@ -69,12 +69,12 @@ struct TodayView: View {
                             .padding(.top)
 
                         ForEachEnumerated(goalsViewModel.habits) { (index, habit) in
-//                            NavigationLink {
-//                                Text("TODO")
-//                            } label: {
+                            NavigationLink {
+                                HabitDetailsView(habit: habit)
+                            } label: {
                                 HabitDailyUpdateCell(habit: habit)
-//                            }
-//                            .buttonStyle(.plain)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 

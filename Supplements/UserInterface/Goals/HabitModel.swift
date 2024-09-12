@@ -46,6 +46,10 @@ extension HabitModel {
         let quantity = HKQuantity(unit: unit, doubleValue: value)
         return quantity.displayString(for: unit)
     }
+
+    func quantityExceedsGoal(_ quantity: HKQuantity) -> Bool {
+        quantity.doubleValue(for: unit) >= value
+    }
 }
 
 extension HabitModel {
@@ -124,6 +128,19 @@ extension HabitModel.MeasurementMetric {
             return await HealthManager.shared.fetchTotalSum(for: .distanceWalkingRunning, dateRange: dateRange) ?? defaultQuantity
         case .timeInDaylight:
             return await HealthManager.shared.fetchTotalSum(for: .timeInDaylight, dateRange: dateRange) ?? defaultQuantity
+        }
+    }
+
+    func fetchCollatedDailyQuantity(for dateRange: DateRange) async -> [DateQuantitySample] {
+        switch self {
+        case .stepCount:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .stepCount, unit: unit, dateRange: dateRange)
+        case .waterIntake:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryWater, unit: unit, dateRange: dateRange)
+        case .walkingRunningDistance:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .distanceWalkingRunning, unit: unit, dateRange: dateRange)
+        case .timeInDaylight:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: unit, dateRange: dateRange)
         }
     }
 }

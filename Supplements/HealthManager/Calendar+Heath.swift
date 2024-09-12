@@ -16,6 +16,25 @@ extension Calendar {
         case thursday
         case friday
         case saturday
+
+        var name: String {
+            switch self {
+            case .sunday:
+                "Sunday"
+            case .monday:
+                "Monday"
+            case .tuesday:
+                "Tuesday"
+            case .wednesday:
+                "Wednesday"
+            case .thursday:
+                "Thursday"
+            case .friday:
+                "Friday"
+            case .saturday:
+                "Saturday"
+            }
+        }
     }
 }
 
@@ -25,6 +44,10 @@ extension Calendar {
         guard let weekday = dateComponents([.weekday], from: date).weekday else { return nil }
 
         return Weekday(rawValue: weekday)
+    }
+
+    func weekOfYear(for date: Date) -> Int? {
+        dateComponents([.weekOfYear], from: date).weekOfYear
     }
 
     func isMorning(date: Date) -> Bool {

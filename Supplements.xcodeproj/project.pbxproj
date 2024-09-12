@@ -216,6 +216,10 @@
 		FF8F79DF2C6948B70095C36D /* CardioFitnessDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
+		FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */; };
+		FFA062B02C921AFE00ADCB09 /* HabitGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062AF2C921AF400ADCB09 /* HabitGridCell.swift */; };
+		FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062B12C9222AF00ADCB09 /* HabitGridModel.swift */; };
+		FFA062B42C9236B600ADCB09 /* HabitDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062B32C9236B100ADCB09 /* HabitDetailsView.swift */; };
 		FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134EF2C3F042300FF1829 /* SleepDayView.swift */; };
 		FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */; };
 		FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */; };
@@ -665,6 +669,10 @@
 		FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessDetailsView.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
+		FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGrid.swift; sourceTree = "<group>"; };
+		FFA062AF2C921AF400ADCB09 /* HabitGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGridCell.swift; sourceTree = "<group>"; };
+		FFA062B12C9222AF00ADCB09 /* HabitGridModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGridModel.swift; sourceTree = "<group>"; };
+		FFA062B32C9236B100ADCB09 /* HabitDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailsView.swift; sourceTree = "<group>"; };
 		FFA134EF2C3F042300FF1829 /* SleepDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayView.swift; sourceTree = "<group>"; };
 		FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayViewModel.swift; sourceTree = "<group>"; };
 		FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
@@ -928,6 +936,7 @@
 				FFE41D202C8BD8C900E3E559 /* ReportCell.swift */,
 				FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */,
 				FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */,
+				FFA062B32C9236B100ADCB09 /* HabitDetailsView.swift */,
 				FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */,
 				FF04052D2C8F816A00FF1E2F /* HabitCell.swift */,
 				FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */,
@@ -1437,6 +1446,16 @@
 			path = Preferences;
 			sourceTree = "<group>";
 		};
+		FFA062AE2C921AE900ADCB09 /* HabitGrid */ = {
+			isa = PBXGroup;
+			children = (
+				FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */,
+				FFA062AF2C921AF400ADCB09 /* HabitGridCell.swift */,
+				FFA062B12C9222AF00ADCB09 /* HabitGridModel.swift */,
+			);
+			path = HabitGrid;
+			sourceTree = "<group>";
+		};
 		FFA134EE2C3F041500FF1829 /* SleepDay */ = {
 			isa = PBXGroup;
 			children = (
@@ -1819,6 +1838,7 @@
 		FFF61AFF2BED7C0000926042 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				FFA062AE2C921AE900ADCB09 /* HabitGrid */,
 				FFF61B002BED7C1300926042 /* EfficacyView.swift */,
 				FFF61B192BEE8C3B00926042 /* TextActionBar.swift */,
 				FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */,
@@ -2306,6 +2326,7 @@
 				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
 				FFF66FA92C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
+				FFA062B42C9236B600ADCB09 /* HabitDetailsView.swift in Sources */,
 				FFBE52472C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift in Sources */,
 				FFC0AA892C3990880025FE34 /* SleepRespiratoryRateChartView.swift in Sources */,
 				FF8F79BB2C6189790095C36D /* NutritionDetailsView.swift in Sources */,
@@ -2420,6 +2441,7 @@
 				FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */,
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
 				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
+				FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */,
 				FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */,
 				FFC0AA8B2C3992730025FE34 /* SleepRespiratoryRateSummaryCell.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
@@ -2450,6 +2472,7 @@
 				FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
+				FFA062B02C921AFE00ADCB09 /* HabitGridCell.swift in Sources */,
 				FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
 				FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */,
@@ -2524,6 +2547,7 @@
 				FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */,
 				FF7890582C35A8D500F9C1A5 /* SleepHealthSnapshot.swift in Sources */,
 				FF1E96062C0A6F59004DAD2D /* SleepProgressRingView.swift in Sources */,
+				FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */,
 				FF1E960F2C0ACC70004DAD2D /* LabelledMetricView.swift in Sources */,
 				FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,
