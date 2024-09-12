@@ -44,6 +44,10 @@ struct HabitDailyUpdateCell: View {
                 .font(.subheadline)
                 .bold()
             }
+
+            Image(systemName: "chevron.forward")
+                .foregroundStyle(.secondary)
+                .padding(.leading)
         }
         .tint(habit.color)
         .cardContainer()
