@@ -32,7 +32,7 @@ extension MenstrualSummary {
         if isMenstruating {
             entries.append("Menstruating")
         } else {
-            if let date = nextPredictedPeriodDate() {
+            if let date = nextPredictedPeriodDate {
                 let dateString = DateFormatter.monthAndDay.string(from: date)
                 entries.append("Next Period: \(dateString)")
             }
@@ -64,7 +64,7 @@ extension MenstrualSummary {
     }
 }
 
-private extension MenstrualSummary {
+extension MenstrualSummary {
 
     var averageMenstruationDays: Int? {
         let doubleValue = menstrualCycles
@@ -140,7 +140,7 @@ private extension MenstrualSummary {
         return .unknown
     }
 
-    func nextPredictedPeriodDate() -> Date? {
+    var nextPredictedPeriodDate: Date? {
         guard
             let averageCycleDuration,
             let mostRecentCycle = menstrualCycles.max(by: \.startDate)
