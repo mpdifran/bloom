@@ -423,6 +423,8 @@ extension HealthManager {
                 continue
             }
 
+            guard heartRateSamples.isNotEmpty else { continue }
+
             reports.append(
                 WorkoutHeartRateReport(
                     workout: workout,

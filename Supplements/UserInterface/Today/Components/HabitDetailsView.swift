@@ -46,10 +46,7 @@ struct HabitDetailsView: View {
                 }
                 .padding(.bottom)
 
-                averageSection
-                    .padding(.horizontal)
-
-                dayStatsSection
+                statsSection
                     .padding(.horizontal)
             }
         }
@@ -68,38 +65,42 @@ private extension HabitDetailsView {
         allSamplesEightWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
     }
 
-    var averageSection: some View {
-        HStack {
+    var statsSection: some View {
+        VStack(alignment: .leading) {
+            Text("Over Last 8 Weeks")
+                .font(.headline)
+                .bold()
+
             LabeledContent("Daily Average") {
                 Text("\(average.format(using: .oneDecimalPlace)) \(habit.unit.unitString)")
                     .fontDesign(.rounded)
                     .bold()
                     .foregroundStyle(habit.color)
             }
-        }
-        .cardContainer(fill: .background.secondary)
-    }
+            .frame(height: 44)
 
-    var dayStatsSection: some View {
-        VStack(spacing: 16) {
             if let bestDay = dayStats.max(by: { $0.value < $1.value })?.key.name {
+                Divider()
+
                 LabeledContent("Best Day") {
                     Text(bestDay)
                         .fontDesign(.rounded)
                         .bold()
                         .foregroundStyle(habit.color)
                 }
+                .frame(height: 44)
             }
 
-            Divider()
-
             if let worstDay = dayStats.min(by: { $0.value < $1.value })?.key.name {
+                Divider()
+
                 LabeledContent("Worst Day") {
                     Text(worstDay)
                         .fontDesign(.rounded)
                         .bold()
                         .foregroundStyle(habit.color)
                 }
+                .frame(height: 44)
             }
         }
         .cardContainer(fill: .background.secondary)
