@@ -129,6 +129,14 @@ final class HealthManager: ObservableObject {
         HKQuantityType(.dietaryWater)
     ]
 
+    let menstrualTypes = [
+        HKCategoryType(.menstrualFlow)
+    ]
+
+    let writeMenstrualTypes = [
+        HKCategoryType(.menstrualFlow)
+    ]
+
     let otherTypes = [
         HKQuantityType(.timeInDaylight),
         HKCategoryType(.mindfulSession),
@@ -155,6 +163,7 @@ extension HealthManager {
 
         writeNutritionTypes.forEach { set.insert($0) }
         writeHeartTypes.forEach { set.insert($0) }
+        writeMenstrualTypes.forEach { set.insert($0) }
         writeOtherTypes.forEach { set.insert($0) }
 
         return set
@@ -168,6 +177,7 @@ extension HealthManager {
         heartTypes.forEach { set.insert($0) }
         sleepTypes.forEach { set.insert($0) }
         nutritionTypes.forEach { set.insert($0) }
+        menstrualTypes.forEach { set.insert($0) }
         otherTypes.forEach { set.insert($0) }
 
         return set

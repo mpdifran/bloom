@@ -76,8 +76,10 @@ private extension GoalDailyUpdateCellViewModel {
             checkHitGoal()
 
             if !prevHasCompletedGoal && hasCompletedTodayGoal {
-                Task {
-                    await sendGoalHitNotification()
+                if !goal.metric.measurement.isDecrease {
+                    Task {
+                        await sendGoalHitNotification()
+                    }
                 }
             } else if !hasCompletedTodayGoal {
                 didSendNotification = false
