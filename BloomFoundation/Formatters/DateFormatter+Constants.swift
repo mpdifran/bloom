@@ -93,6 +93,22 @@ public extension DateFormatter {
         return dateFormatter
     }()
 
+    static var justFullMonth: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMMM")
+
+        return dateFormatter
+    }()
+
+    static var fullMonthAndYear: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMMM yyyy")
+
+        return dateFormatter
+    }()
+
     static var monthAndDay: DateFormatter = {
         let dateFormatter = DateFormatter()
 

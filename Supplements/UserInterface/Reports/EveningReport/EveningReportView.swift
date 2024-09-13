@@ -35,7 +35,7 @@ struct EveningReportView: View {
                     Text("Done")
                         .horizontallyCentered()
                 })
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
             }
         }
         .tint(.indigo)

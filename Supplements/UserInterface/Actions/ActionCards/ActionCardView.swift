@@ -69,7 +69,7 @@ struct ActionCardView<Content>: View where Content: View {
                             }
                             .horizontallyCentered()
                         }
-                        .buttonStyle(.tertiary)
+                        .buttonStyle(.primary)
                         .sensoryFeedback(.success, trigger: hasInserted)
                     }
                 }

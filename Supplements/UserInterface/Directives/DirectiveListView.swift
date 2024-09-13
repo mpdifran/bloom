@@ -32,7 +32,7 @@ struct DirectiveListView: View {
                                 }
                             }
                         }
-                        .buttonStyle(.tertiary)
+                        .buttonStyle(.primary)
                     }
                 } else {
                     List {

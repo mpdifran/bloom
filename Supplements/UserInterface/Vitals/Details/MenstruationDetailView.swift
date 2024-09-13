@@ -16,6 +16,8 @@ struct MenstruationDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                MenstruationCalendarView(cycles: menstruationSummary?.menstrualCycles ?? [])
+
                 predictedPeriodCell
             }
             .padding()
@@ -42,7 +44,6 @@ private extension MenstruationDetailView {
                     VStack(alignment: .trailing) {
                         Text("\(predictionDate, formatter: DateFormatter.monthAndDay)")
                         Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(predictionDate))")
-                            .foregroundStyle(.secondary)
                             .font(.caption)
                     }
                 } else {

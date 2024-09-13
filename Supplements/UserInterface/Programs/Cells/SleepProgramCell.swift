@@ -52,7 +52,7 @@ struct SleepProgramCell: View {
                         Text("Configure Program")
                             .expandHorizontally()
                     })
-                    .buttonStyle(.tertiary)
+                    .buttonStyle(.primary)
                 }
             } else {
                 Button(action: {
@@ -65,7 +65,7 @@ struct SleepProgramCell: View {
                     Text("Start Program")
                         .expandHorizontally()
                 })
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
             }
         }
         .tint(.coreSleep)

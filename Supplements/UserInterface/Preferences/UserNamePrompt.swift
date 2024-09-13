@@ -63,7 +63,7 @@ struct UserNamePrompt: View {
                     Text("Continue")
                         .horizontallyCentered()
                 }
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
                 .disabled(userName.isEmpty)
                 .sensoryFeedback(.success, trigger: didContinue)
             }

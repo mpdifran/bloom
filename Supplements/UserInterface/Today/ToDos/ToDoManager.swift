@@ -158,9 +158,11 @@ extension ToDoManager {
                 break
             }
         }
+        
+        let newRelevantToDosConstant = newRelevantToDos
 
         await MainActor.run {
-            self.relevantToDos = newRelevantToDos
+            self.relevantToDos = newRelevantToDosConstant
         }
     }
 

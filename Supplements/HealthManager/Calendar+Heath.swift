@@ -128,6 +128,16 @@ extension Calendar {
         return self.startOfWeek(for: nextWeek)
     }
 
+    func startOfMonth(for date: Date) -> Date? {
+        startOfDayInMonth(for: date, day: 1)
+    }
+
+    func startOfDayInMonth(for date: Date, day: Int) -> Date? {
+        var components = self.dateComponents([.year, .month], from: date)
+        components.day = day
+        return self.date(from: components)
+    }
+
     func mondayMorning(for date: Date) -> Date? {
         var components = self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
         components.weekday = 2

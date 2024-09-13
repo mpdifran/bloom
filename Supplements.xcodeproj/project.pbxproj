@@ -150,6 +150,7 @@
 		FF4EFF8C2C9381A4005E4A1F /* MenstrualSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF8B2C938196005E4A1F /* MenstrualSummary.swift */; };
 		FF4EFF8E2C938497005E4A1F /* MenstrualCyclePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */; };
 		FF4EFF902C93A0B7005E4A1F /* MenstruationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF8F2C93A0AF005E4A1F /* MenstruationDetailView.swift */; };
+		FF4EFF922C93BDDE005E4A1F /* MenstruationCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -609,6 +610,7 @@
 		FF4EFF8B2C938196005E4A1F /* MenstrualSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstrualSummary.swift; sourceTree = "<group>"; };
 		FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstrualCyclePhase.swift; sourceTree = "<group>"; };
 		FF4EFF8F2C93A0AF005E4A1F /* MenstruationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstruationDetailView.swift; sourceTree = "<group>"; };
+		FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstruationCalendarView.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -1442,6 +1444,7 @@
 				FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */,
 				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
 				FFBE52402C7569AB00F510DE /* VitalSummaryDetailTitleView.swift */,
+				FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2472,6 +2475,7 @@
 				FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */,
+				FF4EFF922C93BDDE005E4A1F /* MenstruationCalendarView.swift in Sources */,
 				FF8F79B52C5FD5360095C36D /* BodyCompositionDetailsView.swift in Sources */,
 				FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */,
 				FF0DA0F92C876390007D1A6B /* Collection+Sort.swift in Sources */,

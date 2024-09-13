@@ -45,7 +45,7 @@ struct GoodMorningView: View {
                     Text("Done")
                         .horizontallyCentered()
                 })
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
             }
             .navigationDestination(isPresented: $showSleepTodayView) {
                 SleepDayView()

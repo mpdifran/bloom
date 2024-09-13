@@ -54,7 +54,7 @@ struct SleepProgramSetupView: View {
                         Spacer()
                     }
                 })
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
 
                 Button("Cancel") {
                     guard !hasStarted else { return }

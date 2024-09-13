@@ -57,7 +57,7 @@ struct EditGoalTargetView: View {
                     Text("Save")
                         .horizontallyCentered()
                 }
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
             }
         }
         .presentationDetents([.height(300)])

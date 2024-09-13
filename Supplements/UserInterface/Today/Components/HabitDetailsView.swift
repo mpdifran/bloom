@@ -167,10 +167,12 @@ private extension HabitDetailsView {
             }
         }
 
+        let statsConstant = stats
+
         await MainActor.run {
             self.allSamplesEightWeeks = eightWeeksSamples
             self.weekQuantitySamples = weekSamples
-            self.dayStats = stats
+            self.dayStats = statsConstant
         }
     }
 }

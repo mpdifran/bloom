@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TertiaryButtonStyle: ButtonStyle {
+struct PrimaryButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         HStack {
@@ -22,15 +22,15 @@ struct TertiaryButtonStyle: ButtonStyle {
     }
 }
 
-extension ButtonStyle where Self == TertiaryButtonStyle {
-    static var tertiary: some ButtonStyle { TertiaryButtonStyle() }
+extension ButtonStyle where Self == PrimaryButtonStyle {
+    static var primary: some ButtonStyle { PrimaryButtonStyle() }
 }
 
 #Preview {
     Button("Tap Me", systemImage: "sparkles") {
 
     }
-    .buttonStyle(.tertiary)
+    .buttonStyle(.primary)
     .padding()
     .tint(.blue)
 }

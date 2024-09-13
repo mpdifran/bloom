@@ -123,7 +123,7 @@ private extension SleepProgramConfigurationView {
                         .expandHorizontally()
                 })
                 .tint(.red)
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
             } else {
                 Button(action: {
                     do {
@@ -136,7 +136,7 @@ private extension SleepProgramConfigurationView {
                         .expandHorizontally()
                 })
                 .tint(.green)
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
             }
         }
         .tint(.indigo)

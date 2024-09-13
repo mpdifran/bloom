@@ -103,7 +103,7 @@ private extension SleepScoreCell {
                         Spacer(minLength: 0)
                     }
                 })
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
 
                 Spacer()
 
@@ -117,7 +117,7 @@ private extension SleepScoreCell {
                         Spacer(minLength: 0)
                     }
                 })
-                .buttonStyle(.tertiary)
+                .buttonStyle(.primary)
                 .tint(.teal)
             }
         }

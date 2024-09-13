@@ -45,7 +45,7 @@ struct WaterActionCardView: View {
                             Text("125 mL")
                         }
                     }
-                    .buttonStyle(.tertiary)
+                    .buttonStyle(.primary)
                     .sensoryFeedback(.success, trigger: didIncrease)
                     .sensoryFeedback(.error, trigger: didError)
 
@@ -60,7 +60,7 @@ struct WaterActionCardView: View {
                             Text("250 mL")
                         }
                     }
-                    .buttonStyle(.tertiary)
+                    .buttonStyle(.primary)
                     .sensoryFeedback(.increase, trigger: didIncrease)
                     .sensoryFeedback(.error, trigger: didError)
 
@@ -75,7 +75,7 @@ struct WaterActionCardView: View {
                             Text("500 mL")
                         }
                     }
-                    .buttonStyle(.tertiary)
+                    .buttonStyle(.primary)
                     .sensoryFeedback(.increase, trigger: didIncrease)
                     .sensoryFeedback(.error, trigger: didError)
 
