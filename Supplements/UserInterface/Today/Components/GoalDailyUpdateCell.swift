@@ -73,7 +73,7 @@ struct GoalDailyUpdateCell: View {
                                     .foregroundStyle(.tint)
                                     .contentTransition(.numericText(value: viewModel.dailyValue))
 
-                                Text("/ \(goalValue.format()) \(goal.metric.unit.unitString)")
+                                Text("/ \(goalValue.format(using: .oneDecimalPlace)) \(goal.metric.unit.unitString)")
                                     .foregroundStyle(.secondary)
                             }
                         }
