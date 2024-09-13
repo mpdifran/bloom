@@ -31,57 +31,64 @@ struct OnboardingHealthKitView: View {
 
     var body: some View {
         OnboardingCardTemplateView {
-            Image(.healthAppIcon)
-                .resizable()
-                .scaledToFit()
-                .frame(square: 100)
+//            Image(.healthAppIcon)
+//                .resizable()
+//                .scaledToFit()
+//                .frame(square: 100)
 
-            Text("Health App")
+            Image(systemName: "hand.raised.circle.fill")
+                .foregroundStyle(.white, .tint)
+                .font(.system(size: 80))
+
+            Text("Privacy")
                 .font(.largeTitle)
                 .bold()
 
-            Group {
-                Text("Bloom uses data in the Health App to give you recommendations on how to improve your health.")
-                Text("Your data is always private and never leaves your device.")
-            }
-                .font(.headline)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: 300)
-                .multilineTextAlignment(.center)
+            Text("We value and respect your privacy.")
                 .padding(.top)
         } bottom: {
-            Chart {
-                ForEach(dataPoints) { dataPoint in
-                    PointMark(
-                        x: .value("", dataPoint.date),
-                        y: .value("", dataPoint.value)
-                    )
-                    .foregroundStyle(.pink)
-
-                    LineMark(
-                        x: .value("", dataPoint.date),
-                        y: .value("", dataPoint.value)
-                    )
-                    .foregroundStyle(.pink)
-
-                    if showArea {
-                        AreaMark(
-                            x: .value("", dataPoint.date),
-                            y: .value("", dataPoint.value)
-                        )
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [.pink.opacity(0.3), .clear],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                    }
-                }
+            VStack(spacing: 20) {
+                Spacer()
+                Text("Bloom uses data in the Health App to give you recommendations on how to improve your health.")
+                Text("Your data is always private and only you will have access to it.")
+                    .bold()
+                Spacer()
             }
-            .chartXScale(domain: Date(prevDays: 6)...Date(prevDays: 0), range: .plotDimension)
-            .chartYScale(domain: 0...100, range: .plotDimension)
-            .padding()
+            .frame(maxWidth: 300)
+            .multilineTextAlignment(.center)
+
+//            Chart {
+//                ForEach(dataPoints) { dataPoint in
+//                    PointMark(
+//                        x: .value("", dataPoint.date),
+//                        y: .value("", dataPoint.value)
+//                    )
+//                    .foregroundStyle(.pink)
+//
+//                    LineMark(
+//                        x: .value("", dataPoint.date),
+//                        y: .value("", dataPoint.value)
+//                    )
+//                    .foregroundStyle(.pink)
+//
+//                    if showArea {
+//                        AreaMark(
+//                            x: .value("", dataPoint.date),
+//                            y: .value("", dataPoint.value)
+//                        )
+//                        .foregroundStyle(
+//                            LinearGradient(
+//                                colors: [.pink.opacity(0.3), .clear],
+//                                startPoint: .top,
+//                                endPoint: .bottom
+//                            )
+//                        )
+//                    }
+//                }
+//            }
+//            .chartXScale(domain: Date(prevDays: 6)...Date(prevDays: 0), range: .plotDimension)
+//            .chartYScale(domain: 0...100, range: .plotDimension)
+//            .padding()
         }
         .animation(.easeInOut, value: dataPoints)
         .animation(.easeInOut, value: showArea)
