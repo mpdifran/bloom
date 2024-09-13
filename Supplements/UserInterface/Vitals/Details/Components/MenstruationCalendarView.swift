@@ -85,32 +85,37 @@ private extension MenstruationCalendarView {
     }
 
     func highlightKind(for date: Date) -> DayCapsule.HighlightKind {
-        let isPeriodDate = cycles.contains { cycle in
+        if cycles.contains(where: { cycle in
             cycle.samples.contains { sample in
                 Calendar.current.isDate(date, inSameDayAs: sample.startDate)
             }
-        }
-        if isPeriodDate {
+        }) {
             return .full
         }
 
-        guard let predictedPeriodDate = menstruationSummary?.nextPredictedPeriodDate else { return .none }
-
-        if let difference = Calendar.current.dateComponents([.day], from: date, to: predictedPeriodDate).day {
-            if date < predictedPeriodDate, difference <= 3, difference > 0 {
-                return .fadedPartial
-            }
-
-            let averageMenstruation = menstruationSummary?.averageMenstruationDays ?? 5
-
-            if difference <= 0, difference > -(averageMenstruation - 1) {
-                return .partial
-            } else if difference <= -(averageMenstruation - 1), difference > -(averageMenstruation + 1) {
-                return .fadedPartial
+        if let predictedOvulationDate = menstruationSummary?.nextPredictedOvulationDate {
+            if Calendar.current.isDate(date, inSameDayAs: predictedOvulationDate) {
+                return .ring
             }
         }
 
-        return isPeriodDate ? .full : .none
+        if let predictedPeriodDate = menstruationSummary?.nextPredictedPeriodDate {
+            if let difference = Calendar.current.dateComponents([.day], from: date, to: predictedPeriodDate).day {
+                if date < predictedPeriodDate, difference <= 3, difference > 0 {
+                    return .fadedPartial
+                }
+
+                let averageMenstruation = menstruationSummary?.averageMenstruationDays ?? 5
+
+                if difference <= 0, difference > -(averageMenstruation - 1) {
+                    return .partial
+                } else if difference <= -(averageMenstruation - 1), difference > -(averageMenstruation + 1) {
+                    return .fadedPartial
+                }
+            }
+        }
+
+        return .none
     }
 
     func generateDays() -> [Date] {
@@ -137,8 +142,16 @@ extension DayCapsule {
     enum HighlightKind {
         case none
         case full
+        case ring
         case partial
         case fadedPartial
+
+        var useWhiteText: Bool {
+            switch self {
+            case .full, .partial, .fadedPartial, .ring: true
+            default: false
+            }
+        }
     }
 }
 
@@ -168,6 +181,13 @@ struct DayCapsule: View {
                         case .full:
                             Circle()
                                 .fill(.mutedPink)
+                        case .ring:
+                            Circle()
+                                .fill(.mutedBlue.secondary)
+                                .overlay {
+                                    Circle()
+                                        .stroke(.mutedBlue, lineWidth: 2)
+                                }
                         case .partial:
                             Circle()
                                 .fill(ShaderLibrary.Stripes(
@@ -193,7 +213,7 @@ struct DayCapsule: View {
                     .overlay {
                         Text(dayNumber)
                             .font(.subheadline)
-                            .foregroundStyle(highlightKind == .none ? .text : .white)
+                            .foregroundStyle(highlightKind.useWhiteText ? .white : .text)
                             .bold()
                     }
                     Spacer()
@@ -212,7 +232,7 @@ struct DayCapsule: View {
             DayCapsule(dayNumber: "4", highlightKind: .partial, isToday: false)
             DayCapsule(dayNumber: "5", highlightKind: .partial, isToday: false)
             DayCapsule(dayNumber: "6", highlightKind: .fadedPartial, isToday: true)
-            DayCapsule(dayNumber: "7", highlightKind: .none, isToday: false)
+            DayCapsule(dayNumber: "7", highlightKind: .ring, isToday: false)
         }
         .padding()
         Spacer()

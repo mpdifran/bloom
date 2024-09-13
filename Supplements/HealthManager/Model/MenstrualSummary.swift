@@ -156,4 +156,17 @@ extension MenstrualSummary {
             to: mostRecentCycle.startDate
         )
     }
+
+    var nextPredictedOvulationDate: Date? {
+        guard
+            let averageCycleDuration,
+            let mostRecentCycle = menstrualCycles.max(by: \.startDate)
+        else { return nil }
+
+        return Calendar.current.date(
+            byAdding: .day,
+            value: averageCycleDuration / 2,
+            to: mostRecentCycle.startDate
+        )
+    }
 }
