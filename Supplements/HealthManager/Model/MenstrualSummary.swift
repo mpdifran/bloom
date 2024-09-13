@@ -56,8 +56,12 @@ extension MenstrualSummary {
         let phase = currentPhase()
 
         switch phase {
-        case .follicular, .luteal, .ovulation:
-            return .green
+        case .follicular:
+            return .mutedPurple
+        case .luteal:
+            return .mutedBlue
+        case .ovulation:
+            return .mutedIndigo
         default:
             return nil
         }

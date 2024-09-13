@@ -19,6 +19,8 @@ struct MenstruationDetailView: View {
                 MenstruationCalendarView(cycles: menstruationSummary?.menstrualCycles ?? [])
 
                 predictedPeriodCell
+
+                phaseCell
             }
             .padding()
             .horizontallyCentered()
@@ -51,6 +53,23 @@ private extension MenstruationDetailView {
                 }
             }
             .foregroundStyle(.mutedPink)
+            .font(.title2)
+            .bold()
+            .fontDesign(.rounded)
+        }
+        .cardContainer(fill: .background.secondary)
+    }
+
+    var phaseCell: some View {
+        LabeledContent("Current Phase") {
+            Group {
+                if let phaseDescription = menstruationSummary?.phaseDescription {
+                    Text(phaseDescription)
+                        .foregroundStyle(menstruationSummary?.color ?? .mutedPink)
+                } else {
+                    Text("Unknown")
+                }
+            }
             .font(.title2)
             .bold()
             .fontDesign(.rounded)
