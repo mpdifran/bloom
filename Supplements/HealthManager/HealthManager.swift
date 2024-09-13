@@ -15,6 +15,37 @@ extension TimeInterval {
     static let maxMenstruationTimeGap: TimeInterval = TimeInterval(60 * 60 * 24 * 2) // 2 days
 }
 
+extension HealthManager {
+    enum HealthGoal: String {
+        case none
+        case gainWeight
+        case maintainWeight
+        case loseWeight
+    }
+    enum WeightLossSpeed: String, CaseIterable, Identifiable {
+        var id: Self { self }
+
+        case slow
+        case moderate
+        case fast
+
+        var name: String {
+            rawValue.capitalized
+        }
+
+        var weightLossDescription: String {
+            switch self {
+            case .slow:
+                "About 0.5 lbs a week."
+            case .moderate:
+                "About 1 lb a week."
+            case .fast:
+                "About 2 lbs a week."
+            }
+        }
+    }
+}
+
 final class HealthManager: ObservableObject {
     static let shared = HealthManager()
 
@@ -28,7 +59,14 @@ final class HealthManager: ObservableObject {
     @Published var birthday = Date.now {
         didSet { UserDefaults.group.set(birthday, forKey: "HealthManager.birthday") }
     }
+    @Published var healthGoal: HealthGoal = .none {
+        didSet { UserDefaults.group.set(healthGoal.rawValue, forKey: "HealthManager.healthGoal") }
+    }
+    @Published var weightLossSpeed: WeightLossSpeed = .moderate {
+        didSet { UserDefaults.group.set(weightLossSpeed.rawValue, forKey: "HealthManager.weightLossSpeed") }
+    }
 
+    @AppStorage("HealthManager.targetWeightDifference", store: .group) var targetWeightDifference: Double = 0
     @AppStorage("HealthManager.isPregnant") var isPregnant = false
     @AppStorage("HealthManager.isBreastfeeding") var isBreastfeeding = false
 
@@ -41,6 +79,12 @@ final class HealthManager: ObservableObject {
     private init() {
         if let birthday = UserDefaults.group.object(forKey: "HealthManager.birthday") as? Date {
             self.birthday = birthday
+        }
+        if let healthGoalRaw = UserDefaults.group.string(forKey: "HealthManager.healthGoal") {
+            self.healthGoal = HealthGoal(rawValue: healthGoalRaw) ?? .none
+        }
+        if let weightLossSpeedRaw = UserDefaults.group.string(forKey: "HealthManager.weightLossSpeed") {
+            self.weightLossSpeed = WeightLossSpeed(rawValue: weightLossSpeedRaw) ?? .moderate
         }
         Task {
             try? await checkAccess()

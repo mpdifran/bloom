@@ -232,6 +232,8 @@
 		FFA134F62C3F16F900FF1829 /* ProgressArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */; };
 		FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */; };
 		FFA402C62C9473AE00D8DD40 /* Stripes.metal in Sources */ = {isa = PBXBuildFile; fileRef = FFA402C52C9473AE00D8DD40 /* Stripes.metal */; };
+		FFA402C82C94C5E000D8DD40 /* OnboardingHealthGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA402C72C94C5E000D8DD40 /* OnboardingHealthGoalView.swift */; };
+		FFA402CA2C94C88700D8DD40 /* View+Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA402C92C94C88700D8DD40 /* View+Selectable.swift */; };
 		FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83D82C4D9E28004D12DA /* VitalsView.swift */; };
 		FFAA83DB2C4D9E89004D12DA /* HeartRateVariabilityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83DA2C4D9E89004D12DA /* HeartRateVariabilityCell.swift */; };
 		FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */; };
@@ -692,6 +694,8 @@
 		FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressArcView.swift; sourceTree = "<group>"; };
 		FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDatePicker.swift; sourceTree = "<group>"; };
 		FFA402C52C9473AE00D8DD40 /* Stripes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Stripes.metal; sourceTree = "<group>"; };
+		FFA402C72C94C5E000D8DD40 /* OnboardingHealthGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthGoalView.swift; sourceTree = "<group>"; };
+		FFA402C92C94C88700D8DD40 /* View+Selectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Selectable.swift"; sourceTree = "<group>"; };
 		FFAA83D82C4D9E28004D12DA /* VitalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsView.swift; sourceTree = "<group>"; };
 		FFAA83DA2C4D9E89004D12DA /* HeartRateVariabilityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateVariabilityCell.swift; sourceTree = "<group>"; };
 		FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsViewModel.swift; sourceTree = "<group>"; };
@@ -1634,6 +1638,7 @@
 				FFBE52232C6EF5A900F510DE /* Components */,
 				FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */,
 				FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */,
+				FFA402C72C94C5E000D8DD40 /* OnboardingHealthGoalView.swift */,
 				FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */,
 				FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */,
 				FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */,
@@ -1879,6 +1884,7 @@
 				FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */,
 				FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */,
 				FF8F79B82C601C660095C36D /* View+Background.swift */,
+				FFA402C92C94C88700D8DD40 /* View+Selectable.swift */,
 				FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */,
 				FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */,
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
@@ -2379,6 +2385,7 @@
 				FF8B8B442C002C5100BA2128 /* PinViewModel.swift in Sources */,
 				FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */,
 				FF8F79D72C668AFD0095C36D /* ActivityLevelDetailsView.swift in Sources */,
+				FFA402C82C94C5E000D8DD40 /* OnboardingHealthGoalView.swift in Sources */,
 				FFAA83DB2C4D9E89004D12DA /* HeartRateVariabilityCell.swift in Sources */,
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
 				FFC77AF52C5A6D1C003E5F85 /* GoalsViewModel.swift in Sources */,
@@ -2526,6 +2533,7 @@
 				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
 				FF0405302C8F868C00FF1E2F /* HabitGoalPicker.swift in Sources */,
 				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
+				FFA402CA2C94C88700D8DD40 /* View+Selectable.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
 				FF4EFF8E2C938497005E4A1F /* MenstrualCyclePhase.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,

@@ -25,7 +25,6 @@ struct OnboardingHealthAgeView: View {
                 title: "Age & Sex",
                 message: "Bloom requires your age and sex in order accurately quantify your health data."
             )
-            .tint(.blue)
         } bottom: {
             ScrollView {
                 VStack {
@@ -111,6 +110,7 @@ struct OnboardingHealthAgeView: View {
                 }
             } catch { }
         }
+        .tint(.mutedBlue)
         .healthDataAccessRequest(
             store: healthManager.healthStore,
             readTypes: Set(healthManager.bodyMeasurementTypes),
