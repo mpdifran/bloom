@@ -26,7 +26,6 @@ struct OnboardingHealthHeartView: View {
                 title: "Heart Data",
                 message: "Bloom can use your cardio data to help keep your heart healthy."
             )
-            .tint(.blue)
         } bottom: {
             ScrollView {
                 VStack {

@@ -57,7 +57,7 @@ struct OnboardingGoalsView: View {
             }
         }
         .animation(.easeIn(duration: 1), value: isCalculatingGoals)
-        .tint(.orange)
+        .tint(.mutedOrange)
         .task {
             await goalsViewModel.checkForUpdateGoals(force: true)
             await MainActor.run {

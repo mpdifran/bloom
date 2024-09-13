@@ -26,7 +26,6 @@ struct OnboardingHealthSleepView: View {
                 title: "Sleep Data",
                 message: "Bloom can use your sleep data to help you improve your sleep."
             )
-            .tint(.blue)
         } bottom: {
             ScrollView {
                 VStack {

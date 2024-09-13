@@ -26,7 +26,6 @@ struct OnboardingHealthOtherTypesView: View {
                 title: "Other Data",
                 message: "Bloom can access other health data to keep you healthy."
             )
-            .tint(.blue)
         } bottom: {
             ScrollView {
                 VStack {

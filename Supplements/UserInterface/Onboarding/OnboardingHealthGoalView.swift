@@ -100,8 +100,6 @@ struct OnboardingHealthGoalView: View {
             }
         }
         .animation(.default, value: healthManager.healthGoal)
-        .tint(.mutedBlue)
-
     }
 }
 

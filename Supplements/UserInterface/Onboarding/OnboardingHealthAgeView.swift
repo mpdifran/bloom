@@ -110,7 +110,6 @@ struct OnboardingHealthAgeView: View {
                 }
             } catch { }
         }
-        .tint(.mutedBlue)
         .healthDataAccessRequest(
             store: healthManager.healthStore,
             readTypes: Set(healthManager.bodyMeasurementTypes),
