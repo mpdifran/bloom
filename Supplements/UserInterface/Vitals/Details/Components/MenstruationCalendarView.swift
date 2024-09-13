@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import Metal
 
 struct MenstruationCalendarView: View {
-    let cycles: [MenstrualCycle]
+    let menstruationSummary: MenstrualSummary?
 
     @State private var referenceDate = Date.now
 
@@ -26,6 +27,7 @@ struct MenstruationCalendarView: View {
                     Image(systemName: "chevron.backward")
                         .foregroundStyle(.mutedPink)
                 }
+                .frame(square: 44)
                 Spacer()
                 Text("\(referenceDate, formatter: DateFormatter.fullMonthAndYear)")
                 Spacer()
@@ -35,9 +37,9 @@ struct MenstruationCalendarView: View {
                     Image(systemName: "chevron.forward")
                         .foregroundStyle(.mutedPink)
                 }
+                .frame(square: 44)
             }
             .bold()
-            .padding(.horizontal)
 
             // Days of the week headers
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
@@ -52,15 +54,20 @@ struct MenstruationCalendarView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
                 // Empty slots for the days before the first day of the month
                 ForEach(0..<firstWeekday, id: \.self) { _ in
-                    DayCapsule(dayNumber: "", isHighlighted: false)
-                        .opacity(0)
+                    DayCapsule(
+                        dayNumber: "",
+                        highlightKind: .none,
+                        isToday: false
+                    )
+                    .opacity(0)
                 }
 
                 // Actual days of the month
                 ForEach(daysInMonth, id: \.self) { date in
                     DayCapsule(
                         dayNumber: "\(Calendar.current.component(.day, from: date))",
-                        isHighlighted: isDayHighlighted(date: date)
+                        highlightKind: highlightKind(for: date),
+                        isToday: Calendar.current.isDateInToday(date)
                     )
                     .transition(.scale)
                 }
@@ -73,12 +80,37 @@ struct MenstruationCalendarView: View {
 
 private extension MenstruationCalendarView {
 
-    func isDayHighlighted(date: Date) -> Bool {
-        cycles.contains { cycle in
+    var cycles: [MenstrualCycle] {
+        menstruationSummary?.menstrualCycles ?? []
+    }
+
+    func highlightKind(for date: Date) -> DayCapsule.HighlightKind {
+        let isPeriodDate = cycles.contains { cycle in
             cycle.samples.contains { sample in
                 Calendar.current.isDate(date, inSameDayAs: sample.startDate)
             }
         }
+        if isPeriodDate {
+            return .full
+        }
+
+        guard let predictedPeriodDate = menstruationSummary?.nextPredictedPeriodDate else { return .none }
+
+        if let difference = Calendar.current.dateComponents([.day], from: date, to: predictedPeriodDate).day {
+            if date < predictedPeriodDate, difference <= 3, difference > 0 {
+                return .fadedPartial
+            }
+
+            let averageMenstruation = menstruationSummary?.averageMenstruationDays ?? 5
+
+            if difference <= 0, difference > -(averageMenstruation - 1) {
+                return .partial
+            } else if difference <= -(averageMenstruation - 1), difference > -(averageMenstruation + 1) {
+                return .fadedPartial
+            }
+        }
+
+        return isPeriodDate ? .full : .none
     }
 
     func generateDays() -> [Date] {
@@ -101,27 +133,72 @@ private extension MenstruationCalendarView {
     }
 }
 
+extension DayCapsule {
+    enum HighlightKind {
+        case none
+        case full
+        case partial
+        case fadedPartial
+    }
+}
+
 struct DayCapsule: View {
     let dayNumber: String
-    let isHighlighted: Bool
+    let highlightKind: HighlightKind
+    let isToday: Bool
 
     var body: some View {
         Capsule()
             .fill(.background.secondary)
             .aspectRatio(0.7, contentMode: .fit)
             .overlay {
+                if isToday {
+                    Capsule()
+                        .stroke(.mutedPink, lineWidth: 2)
+                        .aspectRatio(0.7, contentMode: .fit)
+                }
+            }
+            .overlay {
                 VStack {
-                    Circle()
-                        .fill(isHighlighted ? AnyShapeStyle(.mutedPink) : AnyShapeStyle(.background.tertiary))
-                        .overlay {
-                            Text(dayNumber)
-                                .font(.subheadline)
-                                .foregroundStyle(isHighlighted ? .white : .text)
-                                .bold()
+                    Group {
+                        switch highlightKind {
+                        case .none:
+                            Circle()
+                                .fill(.background.tertiary)
+                        case .full:
+                            Circle()
+                                .fill(.mutedPink)
+                        case .partial:
+                            Circle()
+                                .fill(ShaderLibrary.Stripes(
+                                    .float(2),
+                                    .colorArray([
+                                        .mutedPink,
+                                        .mutedPink.opacity(0.6)
+                                    ])
+                                ))
+                                .rotationEffect(.degrees(-45))
+                        case .fadedPartial:
+                            Circle()
+                                .fill(ShaderLibrary.Stripes(
+                                    .float(2),
+                                    .colorArray([
+                                        .mutedPink.opacity(0.5),
+                                        .mutedPink.opacity(0.2)
+                                    ])
+                                ))
+                                .rotationEffect(.degrees(-45))
                         }
+                    }
+                    .overlay {
+                        Text(dayNumber)
+                            .font(.subheadline)
+                            .foregroundStyle(highlightKind == .none ? .text : .white)
+                            .bold()
+                    }
                     Spacer()
                 }
-                .padding(4)
+                .padding(6)
             }
     }
 }
@@ -129,32 +206,26 @@ struct DayCapsule: View {
 #Preview("DayCapsule") {
     VStack {
         HStack {
-            DayCapsule(dayNumber: "1", isHighlighted: true)
-            DayCapsule(dayNumber: "2", isHighlighted: false)
-            DayCapsule(dayNumber: "3", isHighlighted: true)
-            DayCapsule(dayNumber: "4", isHighlighted: false)
-            DayCapsule(dayNumber: "5", isHighlighted: true)
-            DayCapsule(dayNumber: "6", isHighlighted: false)
-            DayCapsule(dayNumber: "7", isHighlighted: true)
+            DayCapsule(dayNumber: "1", highlightKind: .none, isToday: false)
+            DayCapsule(dayNumber: "2", highlightKind: .full, isToday: false)
+            DayCapsule(dayNumber: "3", highlightKind: .fadedPartial, isToday: false)
+            DayCapsule(dayNumber: "4", highlightKind: .partial, isToday: false)
+            DayCapsule(dayNumber: "5", highlightKind: .partial, isToday: false)
+            DayCapsule(dayNumber: "6", highlightKind: .fadedPartial, isToday: true)
+            DayCapsule(dayNumber: "7", highlightKind: .none, isToday: false)
         }
         .padding()
         Spacer()
-    }
-    .background {
-        Rectangle()
-            .fill(.background.secondary)
-            .ignoresSafeArea()
     }
 }
 
 #Preview {
     VStack {
-        MenstruationCalendarView(cycles: [])
+        MenstruationCalendarView(
+            menstruationSummary: .init(
+                menstrualCycles: []
+            )
+        )
         Spacer()
-    }
-    .background {
-        Rectangle()
-            .fill(.background.secondary)
-            .ignoresSafeArea()
     }
 }

@@ -231,6 +231,7 @@
 		FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */; };
 		FFA134F62C3F16F900FF1829 /* ProgressArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */; };
 		FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */; };
+		FFA402C62C9473AE00D8DD40 /* Stripes.metal in Sources */ = {isa = PBXBuildFile; fileRef = FFA402C52C9473AE00D8DD40 /* Stripes.metal */; };
 		FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83D82C4D9E28004D12DA /* VitalsView.swift */; };
 		FFAA83DB2C4D9E89004D12DA /* HeartRateVariabilityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83DA2C4D9E89004D12DA /* HeartRateVariabilityCell.swift */; };
 		FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */; };
@@ -690,6 +691,7 @@
 		FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
 		FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressArcView.swift; sourceTree = "<group>"; };
 		FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDatePicker.swift; sourceTree = "<group>"; };
+		FFA402C52C9473AE00D8DD40 /* Stripes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Stripes.metal; sourceTree = "<group>"; };
 		FFAA83D82C4D9E28004D12DA /* VitalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsView.swift; sourceTree = "<group>"; };
 		FFAA83DA2C4D9E89004D12DA /* HeartRateVariabilityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateVariabilityCell.swift; sourceTree = "<group>"; };
 		FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsViewModel.swift; sourceTree = "<group>"; };
@@ -1484,6 +1486,14 @@
 			path = SleepDay;
 			sourceTree = "<group>";
 		};
+		FFA402C42C94739E00D8DD40 /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				FFA402C52C9473AE00D8DD40 /* Stripes.metal */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
 		FFAA83D72C4D9E19004D12DA /* Vitals */ = {
 			isa = PBXGroup;
 			children = (
@@ -1856,6 +1866,7 @@
 		FFF61AFF2BED7C0000926042 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				FFA402C42C94739E00D8DD40 /* Metal */,
 				FFA062AE2C921AE900ADCB09 /* HabitGrid */,
 				FFF61B002BED7C1300926042 /* EfficacyView.swift */,
 				FFF61B192BEE8C3B00926042 /* TextActionBar.swift */,
@@ -2360,6 +2371,7 @@
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,
 				FFBE52272C6EF69B00F510DE /* OnboardingTitleCardView.swift in Sources */,
+				FFA402C62C9473AE00D8DD40 /* Stripes.metal in Sources */,
 				FF4CAAFB2C80B23E001A59F3 /* ContainerHolder.swift in Sources */,
 				FFBE52332C6F0A1E00F510DE /* OnboardingHealthOtherTypesView.swift in Sources */,
 				FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */,

@@ -16,7 +16,7 @@ struct MenstruationDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                MenstruationCalendarView(cycles: menstruationSummary?.menstrualCycles ?? [])
+                MenstruationCalendarView(menstruationSummary: menstruationSummary)
 
                 predictedPeriodCell
 
