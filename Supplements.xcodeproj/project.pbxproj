@@ -932,6 +932,8 @@
 		FF0DA0EE2C84D664007D1A6B /* Today */ = {
 			isa = PBXGroup;
 			children = (
+				FF7112872C9874CC0020A0F0 /* Goals */,
+				FF7112862C9874AF0020A0F0 /* Habits */,
 				FF0DA0F12C84D967007D1A6B /* Components */,
 				FF4B2F462C90C7880003879C /* ToDos */,
 				FF0DA0EC2C84D661007D1A6B /* TodayView.swift */,
@@ -944,21 +946,9 @@
 			isa = PBXGroup;
 			children = (
 				FF0DA0FC2C878473007D1A6B /* CompletionCheckmarkView.swift */,
-				FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */,
-				FF0DA0FE2C8787DB007D1A6B /* GoalDailyUpdateCellViewModel.swift */,
-				FF0DA0F22C86364B007D1A6B /* GoalDetailsView.swift */,
-				FF0DA1002C878B35007D1A6B /* GoalDetailsViewModel.swift */,
-				FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */,
-				FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */,
 				FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */,
 				FFE41D202C8BD8C900E3E559 /* ReportCell.swift */,
-				FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */,
-				FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */,
-				FFA062B32C9236B100ADCB09 /* HabitDetailsView.swift */,
 				FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */,
-				FF04052D2C8F816A00FF1E2F /* HabitCell.swift */,
-				FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */,
-				FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1285,6 +1275,32 @@
 				FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */,
 			);
 			path = Notifications;
+			sourceTree = "<group>";
+		};
+		FF7112862C9874AF0020A0F0 /* Habits */ = {
+			isa = PBXGroup;
+			children = (
+				FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */,
+				FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */,
+				FFA062B32C9236B100ADCB09 /* HabitDetailsView.swift */,
+				FF04052D2C8F816A00FF1E2F /* HabitCell.swift */,
+				FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */,
+				FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */,
+			);
+			path = Habits;
+			sourceTree = "<group>";
+		};
+		FF7112872C9874CC0020A0F0 /* Goals */ = {
+			isa = PBXGroup;
+			children = (
+				FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */,
+				FF0DA0FE2C8787DB007D1A6B /* GoalDailyUpdateCellViewModel.swift */,
+				FF0DA0F22C86364B007D1A6B /* GoalDetailsView.swift */,
+				FF0DA1002C878B35007D1A6B /* GoalDetailsViewModel.swift */,
+				FF4A21C62C89F62000278019 /* EditGoalTargetView.swift */,
+				FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */,
+			);
+			path = Goals;
 			sourceTree = "<group>";
 		};
 		FF78904A2C34726B00F9C1A5 /* SleepCoach */ = {

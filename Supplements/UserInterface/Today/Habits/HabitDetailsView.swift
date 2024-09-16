@@ -148,12 +148,14 @@ private extension HabitDetailsView {
 
         let weekSamples = groupedByWeekSamples.compactMap { (key, samples) -> WeekQuantitySamples? in
             guard
-                let sample = samples.first, key >= 0
+                let sample = samples.first,
+                key >= 0,
+                let referenceDate = Calendar.current.startOfWeek(for: sample.date)
             else { return nil }
 
             return WeekQuantitySamples(
                 id: key,
-                referenceDate: sample.date,
+                referenceDate: referenceDate,
                 samples: samples
             )
         }.sorted(keyPath: \.referenceDate)
