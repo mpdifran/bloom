@@ -25,8 +25,6 @@
 		FF0405342C8F876500FF1E2F /* HabitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405332C8F876500FF1E2F /* HabitModel.swift */; };
 		FF0405362C8F8C3400FF1E2F /* HabitMetricCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */; };
 		FF0405382C8F94A400FF1E2F /* HabitDailyUpdateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */; };
-		FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C022C24B333004ACE9C /* DirectiveListView.swift */; };
-		FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF049C042C24B33C004ACE9C /* DirectiveCell.swift */; };
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
 		FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */; };
 		FF0DA0ED2C84D661007D1A6B /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EC2C84D661007D1A6B /* TodayView.swift */; };
@@ -43,7 +41,6 @@
 		FF0F79E32C2C9B9E0013F048 /* SleepHeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */; };
 		FF0F79E52C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */; };
 		FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E62C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift */; };
-		FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
 		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
@@ -110,7 +107,6 @@
 		FF426ACD2C6D4768006E0F17 /* NSPredicate+Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */; };
 		FF426ACF2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */; };
 		FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */; };
-		FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */; };
 		FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F02C40797F004E8661 /* SleepStageChartView.swift */; };
 		FF4578F32C40A9D6004E8661 /* SleepSectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4578F22C40A9D6004E8661 /* SleepSectionTitleView.swift */; };
 		FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */; };
@@ -493,8 +489,6 @@
 		FF0405332C8F876500FF1E2F /* HabitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitModel.swift; sourceTree = "<group>"; };
 		FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitMetricCell.swift; sourceTree = "<group>"; };
 		FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDailyUpdateCell.swift; sourceTree = "<group>"; };
-		FF049C022C24B333004ACE9C /* DirectiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListView.swift; sourceTree = "<group>"; };
-		FF049C042C24B33C004ACE9C /* DirectiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCell.swift; sourceTree = "<group>"; };
 		FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreDetailsView.swift; sourceTree = "<group>"; };
 		FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDayEventCell.swift; sourceTree = "<group>"; };
 		FF0DA0EC2C84D661007D1A6B /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
@@ -511,7 +505,6 @@
 		FF0F79E22C2C9B9E0013F048 /* SleepHeartRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHeartRateChartView.swift; sourceTree = "<group>"; };
 		FF0F79E42C2C9F110013F048 /* SleepSoundLevelSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelSummaryCell.swift; sourceTree = "<group>"; };
 		FF0F79E62C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHeartRateSummaryCell.swift; sourceTree = "<group>"; };
-		FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveCompleteButton.swift; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
 		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
@@ -578,7 +571,6 @@
 		FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPredicate+Sendable.swift"; sourceTree = "<group>"; };
 		FF426ACE2C6D87C7006E0F17 /* GoalDailyUpdateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDailyUpdateCell.swift; sourceTree = "<group>"; };
 		FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKWorkout+Helpers.swift"; sourceTree = "<group>"; };
-		FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectiveListViewModel.swift; sourceTree = "<group>"; };
 		FF4578F02C40797F004E8661 /* SleepStageChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStageChartView.swift; sourceTree = "<group>"; };
 		FF4578F22C40A9D6004E8661 /* SleepSectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSectionTitleView.swift; sourceTree = "<group>"; };
 		FF48C2892C694B2B00DC8D1D /* Button+Zone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Zone.swift"; sourceTree = "<group>"; };
@@ -916,17 +908,6 @@
 				FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */,
 			);
 			path = TelemetryDeck;
-			sourceTree = "<group>";
-		};
-		FF049C012C24B31C004ACE9C /* Directives */ = {
-			isa = PBXGroup;
-			children = (
-				FF049C022C24B333004ACE9C /* DirectiveListView.swift */,
-				FF44DAD72C266D7100EF246E /* DirectiveListViewModel.swift */,
-				FF049C042C24B33C004ACE9C /* DirectiveCell.swift */,
-				FF13599B2C28A48800FB49A6 /* DirectiveCompleteButton.swift */,
-			);
-			path = Directives;
 			sourceTree = "<group>";
 		};
 		FF0DA0EE2C84D664007D1A6B /* Today */ = {
@@ -1682,7 +1663,6 @@
 				FFC77AE92C580F20003E5F85 /* Correlations */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FF88F1282C7D027E0093D1B4 /* Actions */,
-				FF049C012C24B31C004ACE9C /* Directives */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
 				FFB691092C19FA6800BEC0D4 /* Reports */,
 				FF88F1222C7BBDE80093D1B4 /* Calendar */,
@@ -2461,11 +2441,9 @@
 				FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */,
 				FFC77AFA2C5A75A9003E5F85 /* PreviewModelContainer.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
-				FF44DAD82C266D7100EF246E /* DirectiveListViewModel.swift in Sources */,
 				FF4EFF902C93A0B7005E4A1F /* MenstruationDetailView.swift in Sources */,
 				FFA134F62C3F16F900FF1829 /* ProgressArcView.swift in Sources */,
 				FFC9E4532C2C899300183FA4 /* SleepSoundLevelChartView.swift in Sources */,
-				FF049C052C24B33C004ACE9C /* DirectiveCell.swift in Sources */,
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,
 				FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */,
 				FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */,
@@ -2566,7 +2544,6 @@
 				FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
-				FF13599C2C28A48800FB49A6 /* DirectiveCompleteButton.swift in Sources */,
 				FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */,
 				FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */,
 				FF4CAB062C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift in Sources */,
@@ -2619,7 +2596,6 @@
 				FF0DA0ED2C84D661007D1A6B /* TodayView.swift in Sources */,
 				FFB444582BEC410B00486AD7 /* HealthManager.swift in Sources */,
 				FFBE52372C74D57300F510DE /* HeartRateZones.swift in Sources */,
-				FF049C032C24B333004ACE9C /* DirectiveListView.swift in Sources */,
 				FF88F12B2C7D02D80093D1B4 /* ActionsView.swift in Sources */,
 				FFD5EC7F2C90888800B5E217 /* HabitDailyUpdateCellViewModel.swift in Sources */,
 				FF1E96B62C0E4021004DAD2D /* SleepProgramSetupViewModel.swift in Sources */,

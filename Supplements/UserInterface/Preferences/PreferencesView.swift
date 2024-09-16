@@ -28,6 +28,7 @@ struct PreferencesView: View {
         List {
             appInfoSection
             nameSection
+            healthGoalsSection
             femaleSection
             reportsSection
             healthPermissionsSection
@@ -46,6 +47,7 @@ struct PreferencesView: View {
             checkNotificationPermissions()
         }
         .alert(alertDetails: $alertDetails)
+        .animation(.default, value: healthManager.healthGoal)
         .tabItem {
             Label("Preferences", systemImage: "slider.horizontal.below.square.and.square.filled")
         }
@@ -75,6 +77,55 @@ private extension PreferencesView {
                 Text(UserID.value)
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
+            }
+        }
+    }
+
+    var healthGoalsSection: some View {
+        Section {
+            Picker("Goal", selection: $healthManager.healthGoal) {
+                Text("None")
+                    .tag(HealthManager.HealthGoal.none)
+                Text("Lose Weight")
+                    .tag(HealthManager.HealthGoal.loseWeight)
+                Text("Maintain Weight")
+                    .tag(HealthManager.HealthGoal.maintainWeight)
+                Text("Gain Weight")
+                    .tag(HealthManager.HealthGoal.gainWeight)
+            }
+
+            if healthManager.healthGoal == .loseWeight {
+                LabeledContent("Weight Difference") {
+                    HStack {
+                        TextField(
+                            "",
+                            value: $healthManager.targetWeightDifference,
+                            formatter: NumberFormatter.oneDecimalPlace
+                        )
+                        .selectAllTextOnBeginEditing()
+                        .multilineTextAlignment(.trailing)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(.roundedBorder)
+                        .scrollDismissesKeyboard(.immediately)
+                        .fontDesign(.rounded)
+                        .bold()
+
+                        Text("lbs")
+                    }
+                }
+                Picker("", selection: $healthManager.weightLossSpeed) {
+                    ForEach(HealthManager.WeightLossSpeed.allCases) { speed in
+                        Text(speed.name)
+                            .tag(speed)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+        } header: {
+            Text("Health Goals")
+        } footer: {
+            if healthManager.healthGoal == .loseWeight {
+                Text(healthManager.weightLossSpeed.weightLossDescription)
             }
         }
     }
