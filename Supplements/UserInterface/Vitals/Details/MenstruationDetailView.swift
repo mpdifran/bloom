@@ -18,9 +18,8 @@ struct MenstruationDetailView: View {
             VStack(spacing: 20) {
                 MenstruationCalendarView(menstruationSummary: menstruationSummary)
 
-                predictedPeriodCell
-
-                phaseCell
+                currentStatusSection
+                detailsSection
             }
             .padding()
             .horizontallyCentered()
@@ -39,41 +38,62 @@ private extension MenstruationDetailView {
         viewModel.menstrualSummary
     }
 
-    var predictedPeriodCell: some View {
-        LabeledContent("Next Period") {
-            Group {
-                if let predictionDate = menstruationSummary?.nextPredictedPeriodDate {
-                    VStack(alignment: .trailing) {
-                        Text("\(predictionDate, formatter: DateFormatter.monthAndDay)")
-                        Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(predictionDate))")
-                            .font(.caption)
+    var currentStatusSection: some View {
+        VStack {
+            LabeledContent("Next Period") {
+                Group {
+                    if let predictionDate = menstruationSummary?.nextPredictedPeriodDate {
+                        VStack(alignment: .trailing) {
+                            Text("\(predictionDate, formatter: DateFormatter.monthAndDay)")
+                            Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(predictionDate))")
+                                .font(.caption)
+                        }
+                    } else {
+                        Text("Unsure")
                     }
-                } else {
-                    Text("Unsure")
                 }
+                .foregroundStyle(.mutedPink)
+                .font(.title2)
+                .bold()
+                .fontDesign(.rounded)
             }
-            .foregroundStyle(.mutedPink)
-            .font(.title2)
-            .bold()
-            .fontDesign(.rounded)
+
+            Divider()
+
+            LabeledContent("Current Phase") {
+                Group {
+                    if let phaseDescription = menstruationSummary?.phaseName {
+                        Text(phaseDescription)
+                            .foregroundStyle(menstruationSummary?.color ?? .mutedPink)
+                    } else {
+                        Text("Unknown")
+                    }
+                }
+                .font(.title2)
+                .bold()
+                .fontDesign(.rounded)
+            }
         }
         .cardContainer(fill: .background.secondary)
     }
 
-    var phaseCell: some View {
-        LabeledContent("Current Phase") {
-            Group {
-                if let phaseDescription = menstruationSummary?.phaseDescription {
-                    Text(phaseDescription)
-                        .foregroundStyle(menstruationSummary?.color ?? .mutedPink)
-                } else {
-                    Text("Unknown")
+    @ViewBuilder
+    var detailsSection: some View {
+        if
+            let phase = menstruationSummary?.currentPhase(),
+            let details = phase.details
+        {
+            DetailInfoCardView {
+                Text(details)
+
+                if phase.coolFacts.isNotEmpty {
+                    Button("Learn More") {
+                        
+                    }
+                    .frame(height: 44)
                 }
             }
-            .font(.title2)
-            .bold()
-            .fontDesign(.rounded)
+            .tint(.mutedPink)
         }
-        .cardContainer(fill: .background.secondary)
     }
 }

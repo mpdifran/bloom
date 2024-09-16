@@ -341,7 +341,7 @@ private extension VitalsViewModel {
                     VitalModel(
                         id: .cycleTracking,
                         subtitle: menstrualSummary.subtitle,
-                        status: menstrualSummary.phaseDescription,
+                        status: menstrualSummary.phaseName,
                         score: 1,
                         color: menstrualSummary.color,
                         trend: .noTrend

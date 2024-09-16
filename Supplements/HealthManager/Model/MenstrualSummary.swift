@@ -43,7 +43,7 @@ extension MenstrualSummary {
         return entries.joined(separator: "\n")
     }
 
-    var phaseDescription: String? {
+    var phaseName: String? {
         if let phase = currentPhase() {
             return phase.name
         } else if menstrualCycles.isNotEmpty {
