@@ -11,7 +11,7 @@ import DataContainer
 
 struct BowelMovementAllDataView: View {
 
-    @Query var bowelMovements: [BowelMovement]
+    @Query(sort: \BowelMovement.date, order: .reverse) var bowelMovements: [BowelMovement]
 
     @Environment(\.modelContext) var modelContext
 

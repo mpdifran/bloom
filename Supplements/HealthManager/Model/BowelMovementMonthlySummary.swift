@@ -140,6 +140,7 @@ extension BowelMovementMonthlySummary.Details {
         for (index, score) in scores.enumerated() {
             if score > maxScore {
                 maxIndex = index
+                maxScore = score
             }
         }
 

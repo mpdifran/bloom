@@ -677,6 +677,7 @@
 		FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummation.swift; sourceTree = "<group>"; };
 		FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummationCell.swift; sourceTree = "<group>"; };
 		FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessDetailsView.swift; sourceTree = "<group>"; };
+		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
 		FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGrid.swift; sourceTree = "<group>"; };
@@ -1476,6 +1477,14 @@
 			path = Preferences;
 			sourceTree = "<group>";
 		};
+		FF9782D12C9A1CC700A8ED7E /* ci_scripts */ = {
+			isa = PBXGroup;
+			children = (
+				FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */,
+			);
+			path = ci_scripts;
+			sourceTree = "<group>";
+		};
 		FFA062AE2C921AE900ADCB09 /* HabitGrid */ = {
 			isa = PBXGroup;
 			children = (
@@ -1532,6 +1541,7 @@
 				FF1E966E2C0C1A99004DAD2D /* ScreenControl */,
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
 				FF1E96852C0C1F38004DAD2D /* BloomFoundation */,
+				FF9782D12C9A1CC700A8ED7E /* ci_scripts */,
 				FF1E961A2C0BEC1D004DAD2D /* Frameworks */,
 				FFACBADA2BAC7788006AAD0B /* Products */,
 			);

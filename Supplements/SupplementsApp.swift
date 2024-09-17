@@ -32,11 +32,7 @@ struct SupplementsApp: App {
                 .tint(.accent)
                 .onAppear {
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
-                    Task {
-                        await MainActor.run {
-                            HealthManager.shared.observeSleepData()
-                        }
-                    }
+                    HealthManager.shared.observeSleepData()
                 }
                 .onReceive(foregroundPublisher) { _ in
 
@@ -44,7 +40,7 @@ struct SupplementsApp: App {
         }
         .modelContainer(ContainerHolder.shared.container)
         .backgroundTask(.appRefresh("proactive-tip")) {
-            if danieleMode {
+            if await danieleMode {
                 await ProactiveTipper.shared.sendProactiveTip()
             }
             await GoalsViewModel.shared.checkForUpdateGoals()
