@@ -9,6 +9,7 @@ import SwiftUI
 import HealthKit
 import Combine
 import AppFoundations
+import DataContainer
 
 final class VitalsViewModel: ObservableObject {
     static let shared = VitalsViewModel()

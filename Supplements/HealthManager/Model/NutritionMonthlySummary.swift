@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
 
 extension Double {
     static let caloriesPerGramOfProtein: Double = 4

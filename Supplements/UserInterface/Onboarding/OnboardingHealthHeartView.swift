@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import HealthKitUI
+import DataContainer
 
 struct OnboardingHealthHeartView: View {
     let onContinue: () -> Void

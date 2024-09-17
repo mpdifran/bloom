@@ -7,6 +7,8 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
+import BloomFoundation
 
 struct GoalModel: Identifiable, Hashable, Codable {
     let id: UUID

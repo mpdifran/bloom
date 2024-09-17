@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import DataContainer
 
 struct BowelMovementAllDataView: View {
 

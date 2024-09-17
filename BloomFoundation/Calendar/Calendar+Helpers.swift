@@ -1,5 +1,5 @@
 //
-//  Calendar+Heath.swift
+//  Calendar+Helpers.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-05-25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Calendar {
+public extension Calendar {
     enum Weekday: Int {
         case sunday = 1
         case monday
@@ -17,7 +17,7 @@ extension Calendar {
         case friday
         case saturday
 
-        var name: String {
+        public var name: String {
             switch self {
             case .sunday:
                 "Sunday"
@@ -38,7 +38,7 @@ extension Calendar {
     }
 }
 
-extension Calendar {
+public extension Calendar {
 
     func weekday(for date: Date) -> Weekday? {
         guard let weekday = dateComponents([.weekday], from: date).weekday else { return nil }

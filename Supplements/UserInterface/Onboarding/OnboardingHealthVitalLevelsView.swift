@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import DataContainer
 
 struct OnboardingHealthVitalLevelsView: View {
     let onContinue: () -> Void

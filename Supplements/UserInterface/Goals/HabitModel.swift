@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import BloomFoundation
 
 struct HabitModel: Identifiable, Hashable, Codable {
     let id: UUID

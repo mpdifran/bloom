@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 
 extension Double {
     static let maxHeartRateRecovery: Double = 18

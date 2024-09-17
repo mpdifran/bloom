@@ -12,6 +12,7 @@ import EventKit
 import EventKitUI
 import WeatherKit
 import Charts
+import DataContainer
 
 @MainActor
 struct GoodMorningView: View {

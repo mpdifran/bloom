@@ -9,6 +9,8 @@ import SwiftUI
 import HealthKit
 import Charts
 import AppUI
+import DataContainer
+import BloomFoundation
 
 struct GoalCell: View {
     @Binding var goals: [GoalModel]

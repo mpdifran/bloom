@@ -8,6 +8,7 @@
 import SwiftUI
 import HealthKit
 import Combine
+import BloomFoundation
 
 @MainActor
 final class GoalDetailsViewModel: ObservableObject {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
 
 struct EveningGoalProgressCell: View {
     let goal: GoalModel

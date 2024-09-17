@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
 
 /// https://www.heart.org/en/healthy-living/fitness/fitness-basics/aha-recs-for-physical-activity-in-adults
 /// https://www.sciencealert.com/heart-rate-zones-explained-heres-how-to-optimize-your-exercise-routine

@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import TelemetryDeck
+import DataContainer
 
 struct BowelMovementActionCardView: View {
     @State private var date = Date.now

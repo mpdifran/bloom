@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 import SwiftData
+import DataContainer
 
 struct BowelMovementAllDataCell: View {
 

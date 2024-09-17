@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 import HealthKit
+import DataContainer
 
 @MainActor
 struct GoalDailyUpdateCell: View {

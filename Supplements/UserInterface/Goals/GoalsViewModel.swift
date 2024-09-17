@@ -7,6 +7,8 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
+import BloomFoundation
 
 private extension Int {
     static let numWeeksPastAverage: Int = 3

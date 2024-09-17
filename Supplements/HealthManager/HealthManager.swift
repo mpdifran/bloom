@@ -9,6 +9,7 @@ import SwiftUI
 import HealthKit
 import AppFoundations
 import SwiftData
+import BloomFoundation
 
 extension TimeInterval {
     static let maxSleepGroupTimeDistance: TimeInterval = 7200 // 2 hours

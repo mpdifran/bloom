@@ -9,6 +9,7 @@ import SwiftUI
 import HealthKit
 import Charts
 import AppUI
+import DataContainer
 
 struct GoalDetailsView: View {
 

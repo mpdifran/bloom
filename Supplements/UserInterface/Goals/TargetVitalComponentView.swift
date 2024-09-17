@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 
 struct TargetVitalComponentView: View {
     let vital: VitalModel

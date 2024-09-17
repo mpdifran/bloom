@@ -7,18 +7,21 @@
 
 import Foundation
 import SwiftData
+import BloomFoundation
 
-final actor DataFetcher {
-    static let shared = DataFetcher()
+public final actor DataFetcher {
+    public static let shared = DataFetcher()
 
     private let context: ModelContext
 
-    init() {
-        context = ModelContext(ContainerHolder.shared.container)
+    private init() {
+        let context = ModelContext(ContainerHolder.shared.container)
+        context.autosaveEnabled = true
+        self.context = context
     }
 }
 
-extension DataFetcher {
+public extension DataFetcher {
 
     func fetch<Model>(
         _ modelType: Model.Type,
@@ -47,18 +50,5 @@ extension DataFetcher {
             sortBy: [SortDescriptor(\.date)]
         )
         return try context.fetch(descriptor)
-    }
-}
-
-extension DataFetcher {
-
-    func fetchBowelMovementMonthlySummary() async -> BowelMovementMonthlySummary {
-        let thisMonth = (try? fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
-        let lastMonth = (try? fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
-
-        return BowelMovementMonthlySummary(
-            details: thisMonth.isNotEmpty ? .init(bowelMovements: thisMonth) : nil,
-            lastMonth: lastMonth.isNotEmpty ? .init(bowelMovements: lastMonth) : nil
-        )
     }
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
 
 private extension Double {
     static let lowerDoubleSupportTime: Double = 0.4

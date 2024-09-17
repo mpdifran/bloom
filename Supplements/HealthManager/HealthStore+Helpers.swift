@@ -8,6 +8,7 @@
 import Foundation
 import HealthKit
 import AppFoundations
+import BloomFoundation
 
 extension HKHealthStore {
 

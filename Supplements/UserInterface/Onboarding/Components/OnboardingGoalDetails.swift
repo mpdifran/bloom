@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 
 struct OnboardingGoalDetails: View {
     let goal: GoalModel

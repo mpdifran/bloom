@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DataContainer
 
 struct DataPair: Hashable, Identifiable, IdentifiableByDate {
     var id: Int { hashValue }

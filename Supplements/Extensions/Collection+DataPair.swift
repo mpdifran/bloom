@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DataContainer
 
 extension Collection where Element: IdentifiableByDate {
 

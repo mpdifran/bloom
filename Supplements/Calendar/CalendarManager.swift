@@ -7,6 +7,7 @@
 
 import Foundation
 import EventKit
+import BloomFoundation
 
 final actor CalendarManager {
     static let shared = CalendarManager()

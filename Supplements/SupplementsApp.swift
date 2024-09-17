@@ -10,6 +10,7 @@ import ScreenControl
 import Bugsnag
 import BugsnagPerformance
 import TelemetryDeck
+import DataContainer
 
 @main
 struct SupplementsApp: App {

@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct DateRange {
-    let start: Date
-    let end: Date
+public struct DateRange {
+    public let start: Date
+    public let end: Date
 
-    init(_ start: Date, _ end: Date) {
+    public init(_ start: Date, _ end: Date) {
         self.start = start
         self.end = end
     }
 }
 
-extension DateRange {
+public extension DateRange {
 
     var numberOfDaysInclusive: Int {
         (Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0) + 1
@@ -26,7 +26,7 @@ extension DateRange {
 
 // MARK: Today
 
-extension DateRange {
+public extension DateRange {
     static func today() -> DateRange {
         let startDate = Calendar.current.startOfDay(for: .now)
 
@@ -65,7 +65,7 @@ extension DateRange {
 
 // MARK: Start Of Week / Day
 
-extension DateRange {
+public extension DateRange {
     static func startOfDayToNow() -> DateRange {
         let endDate = Date.now
         let startDate = Calendar.current.startOfDay(for: endDate)
@@ -123,7 +123,7 @@ extension DateRange {
 
 // MARK: Trailing Ranges
 
-extension DateRange {
+public extension DateRange {
     static func trailingHoursFromNow(_ numberOfHours: Int) -> DateRange {
         let endDate = Date.now
 

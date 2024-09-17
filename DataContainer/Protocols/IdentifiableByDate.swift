@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol IdentifiableByDate {
+public protocol IdentifiableByDate {
     var date: Date { get }
 }

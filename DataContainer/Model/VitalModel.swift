@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension VitalModel {
+public extension VitalModel {
     enum Kind: String, Hashable, Codable, CaseIterable {
         case sleepQuality
         case activityLevel
@@ -19,7 +19,7 @@ extension VitalModel {
         case cycleTracking
         case bowelMovements
 
-        var name: String {
+        public var name: String {
             switch self {
             case .sleepQuality:
                 "Sleep Quality"
@@ -42,7 +42,7 @@ extension VitalModel {
             }
         }
 
-        var systemImage: String {
+        public var systemImage: String {
             switch self {
             case .sleepQuality:
                 "moon.zzz.fill"
@@ -73,15 +73,15 @@ extension VitalModel {
     }
 }
 
-struct VitalModel: Identifiable, Hashable {
-    let id: Kind
-    let subtitle: String
-    let status: String
-    let score: Double
-    let color: Color
-    let trend: Trend
+public struct VitalModel: Identifiable, Hashable {
+    public let id: Kind
+    public let subtitle: String
+    public let status: String
+    public let score: Double
+    public let color: Color
+    public let trend: Trend
 
-    init(
+    public init(
         id: Kind,
         subtitle: String?,
         status: String?,
@@ -97,7 +97,7 @@ struct VitalModel: Identifiable, Hashable {
         self.trend = trend
     }
 
-    init(id: Kind) {
+    public init(id: Kind) {
         self.init(
             id: id,
             subtitle: nil,

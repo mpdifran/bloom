@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-extension View {
+public extension View {
 
     @ViewBuilder
     func previewModelContainer(for forTypes: [any PersistentModel.Type]) -> some View {

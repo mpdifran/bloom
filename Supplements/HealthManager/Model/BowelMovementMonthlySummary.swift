@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 
 private enum Constants {
     static let stoolTypeScoreMap = [

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 
 extension SleepVitalsMonthlySummary {
     enum SleepQuality: CaseIterable {

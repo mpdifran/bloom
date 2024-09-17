@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import BloomFoundation
 
 final class ToDoManager: ObservableObject {
     static let shared = ToDoManager()

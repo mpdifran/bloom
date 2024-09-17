@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 
 extension ActivityLevelSummary {
     enum ActivityLevel: CaseIterable, Identifiable {

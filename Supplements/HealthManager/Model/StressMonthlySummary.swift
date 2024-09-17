@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 
 private extension Double {
     static let hrvVariance: Double = 8
