@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import TelemetryDeck
 
 public final class ContainerHolder {
     public static let shared = ContainerHolder()
@@ -27,6 +28,11 @@ public final class ContainerHolder {
                 configurations: modelConfiguration
             )
         } catch {
+            TelemetryDeck.errorOccurred(
+                id: "ContainerHolder.containerSetup",
+                category: .appState,
+                message: error.localizedDescription
+            )
             fatalError("Could not set up model container: \(error)")
         }
     }
