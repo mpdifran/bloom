@@ -15,7 +15,6 @@
 		FF0404D22C02C618009FDC4E /* SleepSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D12C02C618009FDC4E /* SleepSummaryView.swift */; };
 		FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */; };
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
-		FF0405232C8D2DB800FF1E2F /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF0405222C8D2DB800FF1E2F /* TelemetryDeck */; };
 		FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */; };
 		FF0405282C8F70D400FF1E2F /* TextField+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */; };
 		FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */; };
@@ -174,7 +173,6 @@
 		FF88F13C2C7D1CDD0093D1B4 /* ActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */; };
 		FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */; };
 		FF88F1402C7E475F0093D1B4 /* BloodPressureActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */; };
-		FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF8B8B242BFD364B00BA2128 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B232BFD364B00BA2128 /* ProfileView.swift */; };
 		FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B252BFD365400BA2128 /* ProfileViewModel.swift */; };
 		FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B272BFD36BF00BA2128 /* ProfileHeaderView.swift */; };
@@ -210,6 +208,14 @@
 		FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */; };
 		FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */; };
 		FF8F79DF2C6948B70095C36D /* CardioFitnessDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */; };
+		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF9782E42C9A22D300A8ED7E /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E32C9A22D300A8ED7E /* TelemetryDeck */; };
+		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
+		FF9782E82C9A22F200A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E72C9A22F200A8ED7E /* AppFoundations */; };
+		FF9782EA2C9A231900A8ED7E /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E92C9A231900A8ED7E /* StatKit */; };
+		FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782EB2C9A233300A8ED7E /* Algorithms */; };
+		FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
 		FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */; };
@@ -277,7 +283,6 @@
 		FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */; };
 		FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AD82C541DE9003E5F85 /* Double+Format.swift */; };
 		FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */; };
-		FFC77AE32C57FCEC003E5F85 /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FFC77AE22C57FCEC003E5F85 /* StatKit */; };
 		FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AE52C57FD1B003E5F85 /* CorrelationEngine.swift */; };
 		FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AE72C580B26003E5F85 /* DataPair.swift */; };
 		FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AEA2C580F33003E5F85 /* CorrelationsView.swift */; };
@@ -310,7 +315,6 @@
 		FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */; };
 		FFCE856B2C99EBC3002C46B1 /* DataFetcher+MonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE856A2C99EBB8002C46B1 /* DataFetcher+MonthlySummary.swift */; };
 		FFD5EC7F2C90888800B5E217 /* HabitDailyUpdateCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */; };
-		FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
 		FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */; };
 		FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */; };
@@ -324,7 +328,6 @@
 		FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */; };
 		FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */; };
 		FFE918E72C1CBBB100B3FA8E /* SleepSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */; };
-		FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
 		FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */; };
 		FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AF82BED71AE00926042 /* SupplementReccomendationModel.swift */; };
@@ -421,6 +424,13 @@
 			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
 			remoteInfo = ScreenControl;
 		};
+		FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
+			remoteInfo = Umbrella;
+		};
 		FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -459,6 +469,7 @@
 			files = (
 				FF1E96742C0C1A99004DAD2D /* ScreenControl.framework in Embed Frameworks */,
 				FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */,
+				FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */,
 				FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -678,6 +689,7 @@
 		FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummationCell.swift; sourceTree = "<group>"; };
 		FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessDetailsView.swift; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
+		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
 		FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGrid.swift; sourceTree = "<group>"; };
@@ -814,6 +826,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			publicHeaders = (
+				Umbrella.h,
+			);
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+		};
 		FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
@@ -824,6 +843,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -878,6 +898,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF9782D42C9A22C900A8ED7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */,
+				FF9782E42C9A22D300A8ED7E /* TelemetryDeck in Frameworks */,
+				FF9782E82C9A22F200A8ED7E /* AppFoundations in Frameworks */,
+				FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */,
+				FF9782EA2C9A231900A8ED7E /* StatKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FFACBAD62BAC7788006AAD0B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -886,15 +918,11 @@
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
 				FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */,
-				FF0405232C8D2DB800FF1E2F /* TelemetryDeck in Frameworks */,
-				FFC77AE32C57FCEC003E5F85 /* StatKit in Frameworks */,
 				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
-				FF8B8B212BFD1EF500BA2128 /* Algorithms in Frameworks */,
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
-				FFD8C4D32BD1AC5E001E8D42 /* AppUI in Frameworks */,
 				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
 				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
-				FFF61AEB2BED52A900926042 /* AppFoundations in Frameworks */,
+				FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */,
 				FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -903,6 +931,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */,
 				FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1542,6 +1571,7 @@
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
 				FF1E96852C0C1F38004DAD2D /* BloomFoundation */,
 				FF9782D12C9A1CC700A8ED7E /* ci_scripts */,
+				FF9782D82C9A22C900A8ED7E /* Umbrella */,
 				FF1E961A2C0BEC1D004DAD2D /* Frameworks */,
 				FFACBADA2BAC7788006AAD0B /* Products */,
 			);
@@ -1559,6 +1589,7 @@
 				FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */,
 				FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */,
 				FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */,
+				FF9782D72C9A22C900A8ED7E /* Umbrella.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1988,6 +2019,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF9782D22C9A22C900A8ED7E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FFCE85292C99DBD6002C46B1 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2106,6 +2144,34 @@
 			productReference = FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */;
 			productType = "com.apple.product-type.extensionkit-extension";
 		};
+		FF9782D62C9A22C900A8ED7E /* Umbrella */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF9782E02C9A22C900A8ED7E /* Build configuration list for PBXNativeTarget "Umbrella" */;
+			buildPhases = (
+				FF9782D22C9A22C900A8ED7E /* Headers */,
+				FF9782D32C9A22C900A8ED7E /* Sources */,
+				FF9782D42C9A22C900A8ED7E /* Frameworks */,
+				FF9782D52C9A22C900A8ED7E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				FF9782D82C9A22C900A8ED7E /* Umbrella */,
+			);
+			name = Umbrella;
+			packageProductDependencies = (
+				FF9782E32C9A22D300A8ED7E /* TelemetryDeck */,
+				FF9782E52C9A22EE00A8ED7E /* AppUI */,
+				FF9782E72C9A22F200A8ED7E /* AppFoundations */,
+				FF9782E92C9A231900A8ED7E /* StatKit */,
+				FF9782EB2C9A233300A8ED7E /* Algorithms */,
+			);
+			productName = Umbrella;
+			productReference = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		FFACBAD82BAC7788006AAD0B /* Supplements */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Supplements" */;
@@ -2127,6 +2193,7 @@
 				FF1E964D2C0BF5E4004DAD2D /* PBXTargetDependency */,
 				FF3A8F3A2C1A8341002DA563 /* PBXTargetDependency */,
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
+				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
 			);
 			name = Supplements;
 			packageProductDependencies = (
@@ -2216,6 +2283,9 @@
 					FF3A8F2E2C1A8341002DA563 = {
 						CreatedOnToolsVersion = 15.4;
 					};
+					FF9782D62C9A22C900A8ED7E = {
+						CreatedOnToolsVersion = 16.0;
+					};
 					FFACBAD82BAC7788006AAD0B = {
 						CreatedOnToolsVersion = 15.3;
 					};
@@ -2260,6 +2330,7 @@
 				FF1E966C2C0C1A99004DAD2D /* ScreenControl */,
 				FFCE852D2C99DBD6002C46B1 /* DataContainer */,
 				FF1E96832C0C1F38004DAD2D /* BloomFoundation */,
+				FF9782D62C9A22C900A8ED7E /* Umbrella */,
 			);
 		};
 /* End PBXProject section */
@@ -2302,6 +2373,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FF3A8F2D2C1A8341002DA563 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF9782D52C9A22C900A8ED7E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2393,6 +2471,13 @@
 				FF3A8F362C1A8341002DA563 /* BedtimeActivityView.swift in Sources */,
 				FF3A8F322C1A8341002DA563 /* DefaultReportExtension.swift in Sources */,
 				FF3A8F342C1A8341002DA563 /* BedtimeActivityReport.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF9782D32C9A22C900A8ED7E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2755,6 +2840,11 @@
 			isa = PBXTargetDependency;
 			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
 			targetProxy = FF3A8F412C1A835F002DA563 /* PBXContainerItemProxy */;
+		};
+		FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+			targetProxy = FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */;
 		};
 		FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3138,6 +3228,80 @@
 			};
 			name = Release;
 		};
+		FF9782E12C9A22C900A8ED7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 538R2KUTXD;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.Umbrella;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FF9782E22C9A22C900A8ED7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 538R2KUTXD;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.Umbrella;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		FFACBAE52BAC778A006AAD0B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3502,6 +3666,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FF9782E02C9A22C900A8ED7E /* Build configuration list for PBXNativeTarget "Umbrella" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF9782E12C9A22C900A8ED7E /* Debug */,
+				FF9782E22C9A22C900A8ED7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FFACBAD42BAC7788006AAD0B /* Build configuration list for PBXProject "Supplements" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -3639,6 +3812,31 @@
 			productName = BugsnagPerformanceSwiftUI;
 		};
 		FF8B8B202BFD1EF500BA2128 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		FF9782E32C9A22D300A8ED7E /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
+		FF9782E52C9A22EE00A8ED7E /* AppUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */;
+			productName = AppUI;
+		};
+		FF9782E72C9A22F200A8ED7E /* AppFoundations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
+			productName = AppFoundations;
+		};
+		FF9782E92C9A231900A8ED7E /* StatKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */;
+			productName = StatKit;
+		};
+		FF9782EB2C9A233300A8ED7E /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
