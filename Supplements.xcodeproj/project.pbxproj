@@ -210,12 +210,12 @@
 		FF8F79DF2C6948B70095C36D /* CardioFitnessDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FF9782E42C9A22D300A8ED7E /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E32C9A22D300A8ED7E /* TelemetryDeck */; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
 		FF9782E82C9A22F200A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E72C9A22F200A8ED7E /* AppFoundations */; };
 		FF9782EA2C9A231900A8ED7E /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E92C9A231900A8ED7E /* StatKit */; };
 		FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782EB2C9A233300A8ED7E /* Algorithms */; };
-		FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; platformFilter = ios; };
+		FF9782F52C9B1ECD00A8ED7E /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
 		FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */; };
@@ -311,7 +311,7 @@
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FFCE85602C99DCA7002C46B1 /* DateRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426AC82C6D39B4006E0F17 /* DateRange.swift */; };
 		FFCE85622C99DCD9002C46B1 /* Calendar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C22C025174009FDC4E /* Calendar+Helpers.swift */; };
-		FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
+		FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; platformFilter = ios; };
 		FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */; };
 		FFCE856B2C99EBC3002C46B1 /* DataFetcher+MonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE856A2C99EBB8002C46B1 /* DataFetcher+MonthlySummary.swift */; };
 		FFD5EC7F2C90888800B5E217 /* HabitDailyUpdateCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD5EC7E2C90888200B5E217 /* HabitDailyUpdateCellViewModel.swift */; };
@@ -903,9 +903,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */,
-				FF9782E42C9A22D300A8ED7E /* TelemetryDeck in Frameworks */,
 				FF9782E82C9A22F200A8ED7E /* AppFoundations in Frameworks */,
 				FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */,
+				FF9782F52C9B1ECD00A8ED7E /* TelemetryDeck in Frameworks */,
 				FF9782EA2C9A231900A8ED7E /* StatKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2162,11 +2162,11 @@
 			);
 			name = Umbrella;
 			packageProductDependencies = (
-				FF9782E32C9A22D300A8ED7E /* TelemetryDeck */,
 				FF9782E52C9A22EE00A8ED7E /* AppUI */,
 				FF9782E72C9A22F200A8ED7E /* AppFoundations */,
 				FF9782E92C9A231900A8ED7E /* StatKit */,
 				FF9782EB2C9A233300A8ED7E /* Algorithms */,
+				FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */,
 			);
 			productName = Umbrella;
 			productReference = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */;
@@ -2207,7 +2207,6 @@
 				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
 				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
 				FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */,
-				FF0405222C8D2DB800FF1E2F /* TelemetryDeck */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -2315,7 +2314,7 @@
 				FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
 				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 				FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
-				FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */,
+				FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -3438,6 +3437,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";
@@ -3455,9 +3455,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.Supplements;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -3476,6 +3480,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";
@@ -3493,9 +3498,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.Supplements;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -3527,6 +3536,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.DataContainer;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -3564,6 +3577,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.DataContainer;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -3714,14 +3731,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.3.0;
-			};
-		};
 		FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bugsnag/bugsnag-cocoa";
@@ -3744,6 +3753,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.2.0;
+			};
+		};
+		FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
 			};
 		};
 		FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */ = {
@@ -3781,11 +3798,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FF0405222C8D2DB800FF1E2F /* TelemetryDeck */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */;
-			productName = TelemetryDeck;
-		};
 		FF4A21BB2C88FA5600278019 /* Bugsnag */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */;
@@ -3816,11 +3828,6 @@
 			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
 		};
-		FF9782E32C9A22D300A8ED7E /* TelemetryDeck */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF0405212C8D2DB800FF1E2F /* XCRemoteSwiftPackageReference "SwiftSDK" */;
-			productName = TelemetryDeck;
-		};
 		FF9782E52C9A22EE00A8ED7E /* AppUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */;
@@ -3840,6 +3847,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
+		};
+		FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
 		};
 		FFC77AE22C57FCEC003E5F85 /* StatKit */ = {
 			isa = XCSwiftPackageProductDependency;
