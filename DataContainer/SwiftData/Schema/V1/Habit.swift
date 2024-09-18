@@ -15,10 +15,7 @@ extension SchemaV1 {
         public var targetMetric: TargetMetric?
         public var value: Double = 0
         public var unitString: String = ""
-
-        @Attribute(.unique)
         public var date: Date = Date.now
-
         public var vitalKind: VitalModel.Kind?
         public var context: String?
 
