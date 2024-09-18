@@ -216,6 +216,7 @@
 		FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782EB2C9A233300A8ED7E /* Algorithms */; };
 		FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; platformFilter = ios; };
 		FF9782F52C9B1ECD00A8ED7E /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */; };
+		FF9782F82C9B3B0500A8ED7E /* HabitsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
 		FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */; };
@@ -690,6 +691,7 @@
 		FF8F79DE2C6948B70095C36D /* CardioFitnessDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioFitnessDetailsView.swift; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
 		FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGrid.swift; sourceTree = "<group>"; };
@@ -1514,6 +1516,14 @@
 			path = ci_scripts;
 			sourceTree = "<group>";
 		};
+		FF9782F62C9B3AF700A8ED7E /* Habits */ = {
+			isa = PBXGroup;
+			children = (
+				FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */,
+			);
+			path = Habits;
+			sourceTree = "<group>";
+		};
 		FFA062AE2C921AE900ADCB09 /* HabitGrid */ = {
 			isa = PBXGroup;
 			children = (
@@ -1711,6 +1721,7 @@
 				FFB444942BED41E600486AD7 /* Onboarding */,
 				FF0DA0EE2C84D664007D1A6B /* Today */,
 				FFAA83D72C4D9E19004D12DA /* Vitals */,
+				FF9782F62C9B3AF700A8ED7E /* Habits */,
 				FFF61AF52BED555100926042 /* Goals */,
 				FFA134EE2C3F041500FF1829 /* SleepDay */,
 				FFC77AE92C580F20003E5F85 /* Correlations */,
@@ -2621,6 +2632,7 @@
 				FF88F13C2C7D1CDD0093D1B4 /* ActionCardView.swift in Sources */,
 				FF0DA1012C878B36007D1A6B /* GoalDetailsViewModel.swift in Sources */,
 				FFBE523D2C74EE7D00F510DE /* WorkoutHeartRateReport.swift in Sources */,
+				FF9782F82C9B3B0500A8ED7E /* HabitsViewModel.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FF8F79C62C628E200095C36D /* NetEnergyMathView.swift in Sources */,
@@ -2869,7 +2881,6 @@
 				INFOPLIST_FILE = DeviceActivityMonitorExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceActivityMonitorExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2896,7 +2907,6 @@
 				INFOPLIST_FILE = DeviceActivityMonitorExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceActivityMonitorExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2923,7 +2933,6 @@
 				INFOPLIST_FILE = ShieldConfigurationExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShieldConfigurationExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2950,7 +2959,6 @@
 				INFOPLIST_FILE = ShieldConfigurationExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShieldConfigurationExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2977,7 +2985,6 @@
 				INFOPLIST_FILE = ShieldActionExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShieldActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3004,7 +3011,6 @@
 				INFOPLIST_FILE = ShieldActionExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShieldActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3036,7 +3042,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3073,7 +3078,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3111,7 +3115,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3150,7 +3153,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3183,7 +3185,6 @@
 				INFOPLIST_FILE = DeviceActivityReportExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceActivityReportExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3211,7 +3212,6 @@
 				INFOPLIST_FILE = DeviceActivityReportExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceActivityReportExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3243,7 +3243,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3280,7 +3279,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3353,7 +3351,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -3411,7 +3409,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -3524,7 +3522,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3565,7 +3562,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

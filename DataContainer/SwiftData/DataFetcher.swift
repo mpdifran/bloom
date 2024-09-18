@@ -38,13 +38,23 @@ public extension DataFetcher {
         return try context.fetch(descriptor)
     }
 
-    func fetchBowelMovements(
-        dateRange: DateRange
-    ) throws -> [BowelMovement] {
+    func fetchBowelMovements(dateRange: DateRange) throws -> [BowelMovement] {
         let start = dateRange.start
         let end = dateRange.end
         let descriptor = FetchDescriptor<BowelMovement>(
             predicate: #Predicate<BowelMovement> { model in
+                model.date >= start && model.date <= end
+            },
+            sortBy: [SortDescriptor(\.date)]
+        )
+        return try context.fetch(descriptor)
+    }
+
+    func fetchHabits(dateRange: DateRange) throws -> [Habit] {
+        let start = dateRange.start
+        let end = dateRange.end
+        let descriptor = FetchDescriptor<Habit>(
+            predicate: #Predicate<Habit> { model in
                 model.date >= start && model.date <= end
             },
             sortBy: [SortDescriptor(\.date)]
