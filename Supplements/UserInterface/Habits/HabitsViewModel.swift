@@ -18,10 +18,17 @@ final class HabitsViewModel: ObservableObject {
 
 extension HabitsViewModel {
 
+    func shouldUpdateSuggestedHabits() -> Bool {
+        let mondayMorning = Calendar.current.mondayMorning(for: .now) ?? .distantPast
+        let habits = (try? DataFetcher.shared.fetchActiveHabits(isSuggested: true)) ?? []
+
+        return habits.isEmpty || habits.contains(where: { mondayMorning > $0.startDate })
+    }
+
     func generateProposedHabits() async -> [Habit] {
         let existingHabits: [Habit]
         do {
-            existingHabits = try DataFetcher.shared.fetchActiveHabits(source: .suggested)
+            existingHabits = try DataFetcher.shared.fetchActiveHabits(isSuggested: true)
         } catch {
             print(error)
             TelemetryDeck.errorOccurred(
@@ -57,7 +64,7 @@ private extension HabitsViewModel {
 
         let habitHistory: [Habit]
         do {
-            habitHistory = try DataFetcher.shared.fetchHabits(for: targetMetric, source: .suggested)
+            habitHistory = try DataFetcher.shared.fetchHabits(for: targetMetric, isSuggested: true)
         } catch {
             print(error)
             TelemetryDeck.errorOccurred(
@@ -83,11 +90,11 @@ private extension HabitsViewModel {
         let newValue = [dailyAverage, currentValue].average(keyPath: \.self)
 
         return Habit(
-            source: .suggested,
             targetMetric: targetMetric,
             value: newValue,
             unitString: unit.unitString,
             startDate: .now,
+            isSuggested: true,
             vitalKind: habit.vitalKind, // Does this always stay the same?
             context: habit.context
         )

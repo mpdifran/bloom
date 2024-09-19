@@ -49,22 +49,20 @@ public extension DataFetcher {
         return try context.fetch(descriptor)
     }
 
-    func fetchActiveHabits(source: Habit.Source) throws -> [Habit] {
-        let rawSource = source.rawValue
+    func fetchActiveHabits(isSuggested: Bool) throws -> [Habit] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
-                model.endDate == nil && model.source.rawValue == rawSource
+                model.endDate == nil && model.isSuggested == isSuggested
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
         return try context.fetch(descriptor)
     }
 
-    func fetchHabits(for targetMetric: TargetMetric, source: Habit.Source) throws -> [Habit] {
-        let rawSource = source.rawValue
+    func fetchHabits(for targetMetric: TargetMetric, isSuggested: Bool) throws -> [Habit] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
-                model.targetMetric == targetMetric && model.source.rawValue == rawSource
+                model.targetMetric == targetMetric && model.isSuggested == isSuggested
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )

@@ -16,7 +16,7 @@ public final class ContainerHolder {
 
     private init() {
         do {
-            let schema = Schema(versionedSchema: SchemaV1.self)
+            let schema = Schema(versionedSchema: SchemaV0.self)
             let modelConfiguration = ModelConfiguration(
                 schema: schema,
                 groupContainer: .identifier("group.supplements")

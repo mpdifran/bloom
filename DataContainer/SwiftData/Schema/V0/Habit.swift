@@ -11,42 +11,33 @@ import SwiftData
 extension SchemaV0 {
     @Model
     public final class Habit: Identifiable {
-        public var source: Source = Source.suggested
         public var targetMetric: TargetMetric = TargetMetric.none
         public var value: Double = 0
         public var unitString: String = ""
         public var startDate: Date = Date.now
         public var endDate: Date? = nil
+        public var isSuggested: Bool = false
         public var vitalKind: VitalModel.Kind?
         public var context: String?
 
         public init(
-            source: Source,
             targetMetric: TargetMetric,
             value: Double,
             unitString: String,
             startDate: Date,
             endDate: Date? = nil,
+            isSuggested: Bool,
             vitalKind: VitalModel.Kind? = nil,
             context: String? = nil
         ) {
-            self.source = source
             self.targetMetric = targetMetric
             self.value = value
             self.unitString = unitString
             self.startDate = startDate
             self.endDate = endDate
+            self.isSuggested = isSuggested
             self.vitalKind = vitalKind
             self.context = context
         }
-    }
-}
-
-extension SchemaV0.Habit {
-    public enum Source: String, Identifiable, Codable {
-        case suggested
-        case user
-
-        public var id: Self { self }
     }
 }

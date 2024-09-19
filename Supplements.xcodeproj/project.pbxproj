@@ -314,6 +314,7 @@
 		FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0142C519DAD009C5CED /* BodyCompositionMonthlySummary.swift */; };
 		FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */; };
 		FFC9E4532C2C899300183FA4 /* SleepSoundLevelChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */; };
+		FFCC6B8A2C9C8B8C00676CAA /* GoalReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCC6B892C9C8B7D00676CAA /* GoalReviewCell.swift */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FFCE85602C99DCA7002C46B1 /* DateRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426AC82C6D39B4006E0F17 /* DateRange.swift */; };
@@ -792,6 +793,7 @@
 		FFC8B0142C519DAD009C5CED /* BodyCompositionMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyCompositionMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC8B0162C51A500009C5CED /* Double+ScaledPercentage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+ScaledPercentage.swift"; sourceTree = "<group>"; };
 		FFC9E4522C2C899300183FA4 /* SleepSoundLevelChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundLevelChartView.swift; sourceTree = "<group>"; };
+		FFCC6B892C9C8B7D00676CAA /* GoalReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalReviewCell.swift; sourceTree = "<group>"; };
 		FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BowelMovement+Helpers.swift"; sourceTree = "<group>"; };
 		FFCE856A2C99EBB8002C46B1 /* DataFetcher+MonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataFetcher+MonthlySummary.swift"; sourceTree = "<group>"; };
@@ -983,6 +985,7 @@
 		FF0DA0EE2C84D664007D1A6B /* Today */ = {
 			isa = PBXGroup;
 			children = (
+				FF2FB8942C9C906F00F57523 /* Habits */,
 				FF7112872C9874CC0020A0F0 /* Goals */,
 				FF7112862C9874AF0020A0F0 /* HabitsLegacy */,
 				FF0DA0F12C84D967007D1A6B /* Components */,
@@ -999,6 +1002,7 @@
 				FF0DA0FC2C878473007D1A6B /* CompletionCheckmarkView.swift */,
 				FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */,
 				FFE41D202C8BD8C900E3E559 /* ReportCell.swift */,
+				FFCC6B892C9C8B7D00676CAA /* GoalReviewCell.swift */,
 				FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */,
 			);
 			path = Components;
@@ -1239,6 +1243,13 @@
 				FF1E96102C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		FF2FB8942C9C906F00F57523 /* Habits */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Habits;
 			sourceTree = "<group>";
 		};
 		FF3A8F302C1A8341002DA563 /* DeviceActivityReportExtension */ = {
@@ -2728,6 +2739,7 @@
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */,
+				FFCC6B8A2C9C8B8C00676CAA /* GoalReviewCell.swift in Sources */,
 				FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */,
 				FF4CAB062C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift in Sources */,
 				FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */,
@@ -3052,7 +3064,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3088,7 +3099,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3125,7 +3135,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3163,7 +3172,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3253,7 +3261,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3289,7 +3296,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3532,7 +3538,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3572,7 +3577,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

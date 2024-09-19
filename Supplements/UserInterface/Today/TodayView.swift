@@ -12,23 +12,12 @@ import DataContainer
 
 struct TodayView: View {
 
-    @Query var staleHabits: [Habit]
     @Query var habits: [Habit]
 
     init() {
-        let rawSource = Habit.Source.suggested.rawValue
-        let mondayMorning = Calendar.current.mondayMorning(for: .now) ?? .distantPast
-
-        _staleHabits = Query(
-            filter: #Predicate<Habit> { habit in
-                habit.endDate == nil && habit.source.rawValue == rawSource && mondayMorning > habit.startDate
-            },
-            sort: \Habit.startDate,
-            order: .reverse
-        )
         _habits = Query(
             filter: #Predicate<Habit> { habit in
-                habit.endDate == nil && habit.source.rawSource == rawSource
+                habit.endDate == nil && habit.isSuggested
             },
             sort: \Habit.startDate,
             order: .reverse
@@ -37,6 +26,7 @@ struct TodayView: View {
 
     @ObservedObject private var viewModel = TodayViewModel.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
+    @ObservedObject private var habitsViewModel = HabitsViewModel.shared
     @ObservedObject private var reportCoordinator = ReportCoordinator.shared
     @ObservedObject private var toDoManager = ToDoManager.shared
 
@@ -66,18 +56,21 @@ struct TodayView: View {
                                 }
                                 .padding(.bottom)
                         }
+//                        if habitsViewModel.shouldUpdateSuggestedHabits() || danieleMode {
+//                            GoalReviewCell()
+//                        }
                     }
 
-                    if habits.isNotEmpty {
-                        Text("Focus Areas")
-                            .bold()
-                            .padding(.horizontal)
-                            .zStackAlignment(.leading)
-
-                        ForEach(habits) { habit in
-                            Label(habit.targetMetric.name, systemImage: habit.targetMetric.systemImage)
-                        }
-                    }
+//                    if habits.isNotEmpty {
+//                        Text("Focus Areas")
+//                            .bold()
+//                            .padding(.horizontal)
+//                            .zStackAlignment(.leading)
+//
+//                        ForEach(habits) { habit in
+//                            Label(habit.targetMetric.name, systemImage: habit.targetMetric.systemImage)
+//                        }
+//                    }
 
                     if goalsViewModel.goals.isNotEmpty {
                         Text("Goals")
