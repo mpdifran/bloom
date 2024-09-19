@@ -8,7 +8,7 @@
 import SwiftUI
 import HealthKit
 
-struct HabitCell: View {
+struct HabitCellLegacy: View {
     let habit: HabitModel
 
     var body: some View {
@@ -34,13 +34,13 @@ struct HabitCell: View {
 
 #Preview {
     List {
-        HabitCell(
+        HabitCellLegacy(
             habit: .init(
                 measurement: .stepCount,
                 value: 10000
             )
         )
-        HabitCell(
+        HabitCellLegacy(
             habit: .init(
                 measurement: .waterIntake,
                 value: 500

@@ -9,34 +9,33 @@ import Foundation
 import SwiftData
 import BloomFoundation
 
-public final actor DataFetcher {
+public final class DataFetcher {
     public static let shared = DataFetcher()
 
     private let context: ModelContext
 
     private init() {
         let context = ModelContext(ContainerHolder.shared.container)
-        context.autosaveEnabled = true
         self.context = context
     }
 }
 
 public extension DataFetcher {
 
-    func fetch<Model>(
-        _ modelType: Model.Type,
-        dateRange: DateRange
-    ) throws -> [Model] where Model: PersistentModel, Model: IdentifiableByDate {
-        let start = dateRange.start
-        let end = dateRange.end
-        let descriptor = FetchDescriptor<Model>(
-            predicate: #Predicate<Model> { model in
-                model.date >= start && model.date <= end
-            },
-            sortBy: [SortDescriptor(\.date)]
-        )
-        return try context.fetch(descriptor)
-    }
+//    func fetch<Model>(
+//        _ modelType: Model.Type,
+//        dateRange: DateRange
+//    ) throws -> [Model] where Model: PersistentModel, Model: IdentifiableByDate {
+//        let start = dateRange.start
+//        let end = dateRange.end
+//        let descriptor = FetchDescriptor<Model>(
+//            predicate: #Predicate<Model> { model in
+//                model.date >= start && model.date <= end
+//            },
+//            sortBy: [SortDescriptor(\.date)]
+//        )
+//        return try context.fetch(descriptor)
+//    }
 
     func fetchBowelMovements(dateRange: DateRange) throws -> [BowelMovement] {
         let start = dateRange.start
@@ -45,19 +44,29 @@ public extension DataFetcher {
             predicate: #Predicate<BowelMovement> { model in
                 model.date >= start && model.date <= end
             },
-            sortBy: [SortDescriptor(\.date)]
+            sortBy: [SortDescriptor(\BowelMovement.date)]
         )
         return try context.fetch(descriptor)
     }
 
-    func fetchHabits(dateRange: DateRange) throws -> [Habit] {
-        let start = dateRange.start
-        let end = dateRange.end
+    func fetchActiveHabits(source: Habit.Source) throws -> [Habit] {
+        let rawSource = source.rawValue
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
-                model.date >= start && model.date <= end
+                model.endDate == nil && model.source.rawValue == rawSource
             },
-            sortBy: [SortDescriptor(\.date)]
+            sortBy: [SortDescriptor(\Habit.startDate)]
+        )
+        return try context.fetch(descriptor)
+    }
+
+    func fetchHabits(for targetMetric: TargetMetric, source: Habit.Source) throws -> [Habit] {
+        let rawSource = source.rawValue
+        let descriptor = FetchDescriptor<Habit>(
+            predicate: #Predicate<Habit> { model in
+                model.targetMetric == targetMetric && model.source.rawValue == rawSource
+            },
+            sortBy: [SortDescriptor(\Habit.startDate)]
         )
         return try context.fetch(descriptor)
     }

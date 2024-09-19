@@ -43,7 +43,7 @@ private extension TodayConfigureView {
     var habitsSection: some View {
         Section("Habits") {
             ForEach(goalsViewModel.habits) { (habit) in
-                HabitCell(habit: habit)
+                HabitCellLegacy(habit: habit)
             }
             .onDelete { indexSet in
                 for index in indexSet {

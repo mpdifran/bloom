@@ -10,14 +10,14 @@ import SwiftData
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
     public static var schemas: [any VersionedSchema.Type] {
         [
-            SchemaV0.self,
-            SchemaV1.self
+            SchemaV0.self
+//            SchemaV1.self
         ]
     }
 
     public static var stages: [MigrationStage] {
         [
-            migrateV0ToV1
+//            migrateV0ToV1
         ]
     }
 

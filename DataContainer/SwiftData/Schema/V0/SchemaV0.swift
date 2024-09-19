@@ -12,6 +12,7 @@ public enum SchemaV0: VersionedSchema {
     public static var versionIdentifier = Schema.Version(0, 0, 0)
 
     public static var models: [any PersistentModel.Type] = [
-        SchemaV0.BowelMovement.self
+        SchemaV0.BowelMovement.self,
+        SchemaV0.Habit.self
     ]
 }

@@ -49,7 +49,7 @@ extension VitalsViewModel {
 
     func fetchSwiftDataTypes() {
         Task {
-            let summary = await DataFetcher.shared.fetchBowelMovementMonthlySummary()
+            let summary = DataFetcher.shared.fetchBowelMovementMonthlySummary()
             await MainActor.run {
                 self.bowelMovementSummary = summary
             }

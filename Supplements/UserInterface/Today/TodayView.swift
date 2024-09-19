@@ -7,8 +7,33 @@
 
 import SwiftUI
 import AppUI
+import SwiftData
+import DataContainer
 
 struct TodayView: View {
+
+    @Query var staleHabits: [Habit]
+    @Query var habits: [Habit]
+
+    init() {
+        let rawSource = Habit.Source.suggested.rawValue
+        let mondayMorning = Calendar.current.mondayMorning(for: .now) ?? .distantPast
+
+        _staleHabits = Query(
+            filter: #Predicate<Habit> { habit in
+                habit.endDate == nil && habit.source.rawValue == rawSource && mondayMorning > habit.startDate
+            },
+            sort: \Habit.startDate,
+            order: .reverse
+        )
+        _habits = Query(
+            filter: #Predicate<Habit> { habit in
+                habit.endDate == nil && habit.source.rawSource == rawSource
+            },
+            sort: \Habit.startDate,
+            order: .reverse
+        )
+    }
 
     @ObservedObject private var viewModel = TodayViewModel.shared
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
@@ -40,6 +65,17 @@ struct TodayView: View {
                                     presentedFullScreen = EveningReportView().asAny
                                 }
                                 .padding(.bottom)
+                        }
+                    }
+
+                    if habits.isNotEmpty {
+                        Text("Focus Areas")
+                            .bold()
+                            .padding(.horizontal)
+                            .zStackAlignment(.leading)
+
+                        ForEach(habits) { habit in
+                            Label(habit.targetMetric.name, systemImage: habit.targetMetric.systemImage)
                         }
                     }
 

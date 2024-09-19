@@ -10,7 +10,7 @@ import DataContainer
 
 extension DataFetcher {
 
-    func fetchBowelMovementMonthlySummary() async -> BowelMovementMonthlySummary {
+    func fetchBowelMovementMonthlySummary() -> BowelMovementMonthlySummary {
         let thisMonth = (try? fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
         let lastMonth = (try? fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
 

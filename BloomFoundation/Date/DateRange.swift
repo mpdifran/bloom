@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DateRange {
+public struct DateRange: Sendable {
     public let start: Date
     public let end: Date
 

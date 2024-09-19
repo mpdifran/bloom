@@ -8,14 +8,15 @@
 import SwiftUI
 import SwiftData
 
-extension SchemaV1 {
+extension SchemaV0 {
     @Model
-    public final class Habit: Identifiable, Sendable {
+    public final class Habit: Identifiable {
         public var source: Source = Source.suggested
-        public var targetMetric: TargetMetric?
+        public var targetMetric: TargetMetric = TargetMetric.none
         public var value: Double = 0
         public var unitString: String = ""
-        public var date: Date = Date.now
+        public var startDate: Date = Date.now
+        public var endDate: Date? = nil
         public var vitalKind: VitalModel.Kind?
         public var context: String?
 
@@ -24,7 +25,8 @@ extension SchemaV1 {
             targetMetric: TargetMetric,
             value: Double,
             unitString: String,
-            date: Date,
+            startDate: Date,
+            endDate: Date? = nil,
             vitalKind: VitalModel.Kind? = nil,
             context: String? = nil
         ) {
@@ -32,14 +34,15 @@ extension SchemaV1 {
             self.targetMetric = targetMetric
             self.value = value
             self.unitString = unitString
-            self.date = date
+            self.startDate = startDate
+            self.endDate = endDate
             self.vitalKind = vitalKind
             self.context = context
         }
     }
 }
 
-extension SchemaV1.Habit {
+extension SchemaV0.Habit {
     public enum Source: String, Identifiable, Codable {
         case suggested
         case user

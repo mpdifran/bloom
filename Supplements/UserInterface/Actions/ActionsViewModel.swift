@@ -114,7 +114,7 @@ extension ActionsViewModel {
         observers.append(waterHandle)
 
         Task {
-            let bowelMovements = try? await DataFetcher.shared.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))
+            let bowelMovements = try? DataFetcher.shared.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))
 
             if let lastSample = bowelMovements?.last {
                 let displayString = "Type \(lastSample.bristolStoolType)"

@@ -217,6 +217,12 @@
 		FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; platformFilter = ios; };
 		FF9782F52C9B1ECD00A8ED7E /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */; };
 		FF9782F82C9B3B0500A8ED7E /* HabitsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */; };
+		FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
+		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
+		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
+		FF97832D2C9B546700A8ED7E /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FFC77AE22C57FCEC003E5F85 /* StatKit */; };
+		FF9783562C9B615A00A8ED7E /* TargetMetric+HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9783552C9B614B00A8ED7E /* TargetMetric+HealthData.swift */; };
+		FF9783572C9B61A300A8ED7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
 		FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */; };
 		FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */; };
 		FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */; };
@@ -692,6 +698,7 @@
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
+		FF9783552C9B614B00A8ED7E /* TargetMetric+HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TargetMetric+HealthData.swift"; sourceTree = "<group>"; };
 		FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVitalMeterView.swift; sourceTree = "<group>"; };
 		FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSummary.swift; sourceTree = "<group>"; };
 		FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGrid.swift; sourceTree = "<group>"; };
@@ -916,6 +923,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF97832D2C9B546700A8ED7E /* StatKit in Frameworks */,
+				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
+				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
+				FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */,
 				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
@@ -973,7 +984,7 @@
 			isa = PBXGroup;
 			children = (
 				FF7112872C9874CC0020A0F0 /* Goals */,
-				FF7112862C9874AF0020A0F0 /* Habits */,
+				FF7112862C9874AF0020A0F0 /* HabitsLegacy */,
 				FF0DA0F12C84D967007D1A6B /* Components */,
 				FF4B2F462C90C7880003879C /* ToDos */,
 				FF0DA0EC2C84D661007D1A6B /* TodayView.swift */,
@@ -1319,7 +1330,7 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
-		FF7112862C9874AF0020A0F0 /* Habits */ = {
+		FF7112862C9874AF0020A0F0 /* HabitsLegacy */ = {
 			isa = PBXGroup;
 			children = (
 				FF0405372C8F94A400FF1E2F /* HabitDailyUpdateCell.swift */,
@@ -1329,7 +1340,7 @@
 				FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */,
 				FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */,
 			);
-			path = Habits;
+			path = HabitsLegacy;
 			sourceTree = "<group>";
 		};
 		FF7112872C9874CC0020A0F0 /* Goals */ = {
@@ -1823,6 +1834,7 @@
 			children = (
 				FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */,
 				FFCE856A2C99EBB8002C46B1 /* DataFetcher+MonthlySummary.swift */,
+				FF9783552C9B614B00A8ED7E /* TargetMetric+HealthData.swift */,
 			);
 			path = DataContainer;
 			sourceTree = "<group>";
@@ -2409,6 +2421,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF9783572C9B61A300A8ED7E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2742,6 +2755,7 @@
 				FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */,
 				FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */,
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
+				FF9783562C9B615A00A8ED7E /* TargetMetric+HealthData.swift in Sources */,
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
 				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
 				FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */,
