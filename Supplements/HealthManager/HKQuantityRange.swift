@@ -32,4 +32,12 @@ extension HKQuantityRange {
         let quantity = HKQuantity(unit: self.unit, doubleValue: range.upperBound)
         return quantity.doubleValue(for: unit)
     }
+
+    func contains(quantity: HKQuantity) -> Bool {
+        guard quantity.is(compatibleWith: unit) else { return false }
+
+        let quantityValue = quantity.doubleValue(for: unit)
+
+        return range.contains(quantityValue)
+    }
 }

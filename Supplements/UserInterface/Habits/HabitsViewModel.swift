@@ -8,9 +8,9 @@
 import SwiftUI
 import DataContainer
 import TelemetryDeck
+import HealthKit
 
-@MainActor
-final class HabitsViewModel: ObservableObject {
+final actor HabitsViewModel: ObservableObject {
     static let shared = HabitsViewModel()
 
     private init() { }
@@ -25,7 +25,7 @@ extension HabitsViewModel {
         return habits.isEmpty || habits.contains(where: { mondayMorning > $0.startDate })
     }
 
-    func generateProposedHabits() async -> [Habit] {
+    func generateProposedHabits() async -> [ProposedHabit] {
         let existingHabits: [Habit]
         do {
             existingHabits = try DataFetcher.shared.fetchActiveHabits(isSuggested: true)
@@ -39,7 +39,7 @@ extension HabitsViewModel {
             existingHabits = []
         }
 
-        var newHabits = [Habit]()
+        var newHabits = [ProposedHabit]()
         for habit in existingHabits {
             guard let newHabit = await updatedHabit(for: habit) else { continue }
 
@@ -47,7 +47,13 @@ extension HabitsViewModel {
         }
 
         if newHabits.isEmpty {
-            if let newHabit = await suggestNewHabit() {
+            await VitalsViewModel.shared.forceFetchVitals()
+            let sortedVitals = VitalsViewModel.shared.vitals.sorted(by: { $0.score < $1.score })
+
+            if
+                let targetVital = sortedVitals.safeAccess(at: 0),
+                let newHabit = await suggestNewHabit(for: targetVital)
+            {
                 newHabits.append(newHabit)
             }
         }
@@ -58,7 +64,7 @@ extension HabitsViewModel {
 
 private extension HabitsViewModel {
 
-    func updatedHabit(for habit: Habit) async -> Habit? {
+    func updatedHabit(for habit: Habit) async -> ProposedHabit? {
         let targetMetric = habit.targetMetric
         let unit = habit.unit
 
@@ -75,27 +81,48 @@ private extension HabitsViewModel {
             habitHistory = []
         }
 
-        let lastThreeWeeksSamples = await targetMetric.fetchCollatedDailyQuantity(
+        // Calcualte changes to new habit target.
+        let habitTargetValue = habit.quantity.doubleValue(for: unit)
+
+        let lastTwoWeeksSamples = await targetMetric.fetchCollatedDailyQuantity(
             unit: unit,
-            dateRange: .trailingWeeksFromNow(3)
+            dateRange: .trailingWeeksFromNow(2)
         )
-        let dailyAverage = lastThreeWeeksSamples
+        let dailyAverage = lastTwoWeeksSamples
             .map({ $0.quantity.doubleValue(for: unit) })
             .average(keyPath: \.self)
 
-        let passFailPercentage = goalMetPercentage(habitHistory: habitHistory, samples: lastThreeWeeksSamples)
+        let passFailPercentage = goalMetPercentage(habitHistory: habitHistory, samples: lastTwoWeeksSamples)
+        let percentageRelativeToHabitValue = (dailyAverage - habitTargetValue) / habitTargetValue
 
-        let currentValue = habit.value
+        var newHabitTargetValue: Double
+        if passFailPercentage > 0.9 {
+            // We can increase the goal by a bit.
+            let percentageIncrease = percentageRelativeToHabitValue > 0.15 ? 0.1 : 0.05
+            newHabitTargetValue = habitTargetValue * (1 + percentageIncrease)
+        } else if passFailPercentage < 0.5 {
+            // We need to lower the goal.
+            let percentageDecrease = percentageRelativeToHabitValue < -0.15 ? -0.1 : -0.05
+            newHabitTargetValue = habitTargetValue * (1 + percentageDecrease)
+        } else {
+            // Maintain the goal for some more time.
+            newHabitTargetValue = habitTargetValue
+        }
 
-        let newValue = [dailyAverage, currentValue].average(keyPath: \.self)
+        // Check the ideal range
+        if let idealRange = targetMetric.idealRange {
+            let targetQuantity = HKQuantity(unit: unit, doubleValue: newHabitTargetValue)
 
-        return Habit(
+            if idealRange.upper.compare(targetQuantity) == .orderedAscending {
+                newHabitTargetValue = idealRange.upperDoubleValue(for: unit)
+            }
+        }
+
+        return ProposedHabit(
             targetMetric: targetMetric,
-            value: newValue,
+            value: newHabitTargetValue,
             unitString: unit.unitString,
-            startDate: .now,
-            isSuggested: true,
-            vitalKind: habit.vitalKind, // Does this always stay the same?
+            vitalKind: habit.vitalKind,
             context: habit.context
         )
     }
@@ -120,7 +147,86 @@ private extension HabitsViewModel {
         return Double(passCount) / Double(totalCount)
     }
 
-    func suggestNewHabit() async -> Habit? {
-        return nil
+    func suggestNewHabit(for vital: VitalModel) async -> ProposedHabit? {
+        switch vital.id {
+        case .cardioFitness:
+            return await createHabit(
+                targetMetric: .walkingRunningDistance,
+                unit: .meterUnit(with: .kilo),
+                vitalKind: vital.id,
+                context: ""
+            )
+        case .sleepQuality:
+            return await createHabit(
+                targetMetric: .timeInDaylight,
+                unit: .minute(),
+                vitalKind: vital.id,
+                context: ""
+            )
+        case .activityLevel:
+            return await createHabit(
+                targetMetric: .stepCount,
+                unit: .count(),
+                vitalKind: vital.id,
+                context: ""
+            )
+        case .stressLevels:
+            return await createHabit(
+                targetMetric: .timeInDaylight,
+                unit: .minute(),
+                vitalKind: vital.id,
+                context: ""
+            )
+        case .nutrition:
+            return await createHabit(
+                targetMetric: .waterIntake,
+                unit: .literUnit(with: .milli),
+                vitalKind: vital.id,
+                context: ""
+            )
+        case .exerciseEffectiveness:
+            return await createHabit(
+                targetMetric: .walkingRunningDistance,
+                unit: .meterUnit(with: .kilo),
+                vitalKind: vital.id,
+                context: ""
+            )
+        case .bowelMovements:
+            return await createHabit(
+                targetMetric: .waterIntake,
+                unit: .literUnit(with: .milli),
+                vitalKind: vital.id,
+                context: ""
+            )
+        case .bodyComposition, .cycleTracking:
+            return nil
+        @unknown default:
+            fatalError("Unknown VitalModel.Kind case")
+        }
+    }
+}
+
+private extension HabitsViewModel {
+
+    func createHabit(
+        targetMetric: TargetMetric,
+        unit: HKUnit,
+        vitalKind: VitalModel.Kind,
+        context: String
+    ) async -> ProposedHabit {
+        let average = await targetMetric.fetchDailyAverage(unit: unit, dateRange: .trailingWeeksFromNow(3)).doubleValue(for: unit)
+        let value: Double
+        if let min = TargetMetric.stepCount.minHabitTarget?.doubleValue(for: unit) {
+            value = max(min, average)
+        } else {
+            value = average
+        }
+        return ProposedHabit(
+            targetMetric: targetMetric,
+            value: value,
+            unitString: unit.unitString,
+            vitalKind: vitalKind,
+            context: context
+        )
     }
 }

@@ -85,7 +85,7 @@ extension ActivityLevelSummary.ActivityLevel {
     }
 }
 
-struct ActivityLevelSummary: Hashable, Codable {
+struct ActivityLevelSummary: Hashable, Codable, Sendable {
     let details: Details
     let lastMonthDetails: Details
 }
@@ -109,7 +109,7 @@ extension ActivityLevelSummary {
 }
 
 extension ActivityLevelSummary {
-    struct Details: Hashable, Codable {
+    struct Details: Hashable, Codable, Sendable {
         let averageBasalEnergyBurned: Double
         let averageActiveEnergyBurned: Double
         let energyRatioSamples: [DateValueSample]

@@ -40,7 +40,7 @@ extension StressMonthlySummary {
     }
 }
 
-struct StressMonthlySummary: Hashable {
+struct StressMonthlySummary: Hashable, Sendable {
     let details: Details
     let lastMonthDetails: Details
 
@@ -56,7 +56,7 @@ struct StressMonthlySummary: Hashable {
 }
 
 extension StressMonthlySummary {
-    struct Details: Hashable {
+    struct Details: Hashable, Sendable {
         let avgHeartRateVariability: Double?
         let varHeartRateVariability: Double?
         let restingHeartRate: Double?

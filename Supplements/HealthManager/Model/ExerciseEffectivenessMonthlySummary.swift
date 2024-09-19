@@ -54,7 +54,7 @@ extension ExerciseEffectivenessMonthlySummary {
     }
 }
 
-struct ExerciseEffectivenessMonthlySummary {
+struct ExerciseEffectivenessMonthlySummary: Hashable, Sendable {
     let details: Details
     let lastMonthDetails: Details
 
@@ -64,7 +64,7 @@ struct ExerciseEffectivenessMonthlySummary {
 }
 
 extension ExerciseEffectivenessMonthlySummary {
-    struct Details {
+    struct Details: Hashable, Sendable {
         let heartRateZones: HeartRateZones
         let workoutReports: [WorkoutHeartRateReport]
         let overallHeartZoneDistribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution

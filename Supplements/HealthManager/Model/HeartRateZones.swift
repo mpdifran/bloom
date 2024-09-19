@@ -8,7 +8,7 @@
 import Foundation
 import HealthKit
 
-struct HeartRateZones: Hashable {
+struct HeartRateZones: Hashable, Sendable {
     let heartRateReserve: Double
     let restingHeartRate: Double
     let maxHeartRate: Double

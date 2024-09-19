@@ -6,9 +6,7 @@
 //
 
 import Foundation
-import HealthKit
-
-
+@preconcurrency import HealthKit
 
 extension MenstrualCycle {
     enum MenstrualFlow: Int {
@@ -20,7 +18,7 @@ extension MenstrualCycle {
     }
 }
 
-struct MenstrualCycle: Hashable, Identifiable {
+struct MenstrualCycle: Hashable, Identifiable, Sendable {
     var id: Int { hashValue }
 
     let startDate: Date

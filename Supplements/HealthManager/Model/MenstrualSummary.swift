@@ -16,7 +16,7 @@ private extension Int {
     static let typicalCycleDuration = 28
 }
 
-struct MenstrualSummary: Hashable {
+struct MenstrualSummary: Hashable, Sendable {
     let menstrualCycles: [MenstrualCycle]
 }
 

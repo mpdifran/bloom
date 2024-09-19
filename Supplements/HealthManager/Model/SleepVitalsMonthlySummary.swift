@@ -35,7 +35,7 @@ extension SleepVitalsMonthlySummary {
     }
 }
 
-struct SleepVitalsMonthlySummary: Hashable, Codable {
+struct SleepVitalsMonthlySummary: Hashable, Codable, Sendable {
     let details: Details
     let lastMonthDetails: Details
 }
@@ -78,7 +78,7 @@ extension SleepVitalsMonthlySummary {
 }
 
 extension SleepVitalsMonthlySummary {
-    struct Details: Hashable, Codable {
+    struct Details: Hashable, Codable, Sendable {
         let averageREMSleepPercent: Double?
         let averageCoreSleepPercent: Double?
         let averageDeepSleepPercent: Double?

@@ -41,12 +41,10 @@ struct GoalDailyUpdateCell: View {
                         .bold()
 
                     if goal.metric.measurement.isDecrease {
-                        ProgressView(value: min(remainingValue / goalValue, 1))
+                        ProgressBar(progress: remainingValue / goalValue)
                             .scaleEffect(x: -1)
-                            .foregroundStyle(.tint)
                     } else {
-                        ProgressView(value: min(viewModel.dailyValue / goalValue, 1))
-                            .foregroundStyle(.tint)
+                        ProgressBar(progress: min(viewModel.dailyValue / goalValue, 1))
                     }
 
                     Group {

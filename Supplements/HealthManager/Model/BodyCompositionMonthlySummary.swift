@@ -64,7 +64,7 @@ extension BodyCompositionMonthlySummary {
     }
 }
 
-struct BodyCompositionMonthlySummary: Hashable {
+struct BodyCompositionMonthlySummary: Hashable, Sendable {
     let details: Details
     let lastMonthDetails: Details
 }
@@ -123,7 +123,7 @@ extension BodyCompositionMonthlySummary {
 }
 
 extension BodyCompositionMonthlySummary {
-    struct Details: Hashable {
+    struct Details: Hashable, Sendable {
         let bodyFatPercentage: HKQuantity?
         let averageBodyMass: HKQuantity?
     }

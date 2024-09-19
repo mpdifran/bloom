@@ -1,5 +1,5 @@
 //
-//  HabitDailyUpdateCellViewModel.swift
+//  LegacyHabitDailyUpdateCellViewModel.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-10.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @MainActor
-final class HabitDailyUpdateCellViewModel: ObservableObject {
+final class LegacyHabitDailyUpdateCellViewModel: ObservableObject {
 
     @Published var didHitGoal = 0
     @Published var dailyValue: Double = 0 {
@@ -31,7 +31,7 @@ final class HabitDailyUpdateCellViewModel: ObservableObject {
     private var backgroundHandler: HKBackgroundDeliveryHandle?
 }
 
-extension HabitDailyUpdateCellViewModel {
+extension LegacyHabitDailyUpdateCellViewModel {
 
     func checkHitGoal() {
         if UIApplication.shared.applicationState == .active {
@@ -46,7 +46,7 @@ extension HabitDailyUpdateCellViewModel {
     }
 }
 
-private extension HabitDailyUpdateCellViewModel {
+private extension LegacyHabitDailyUpdateCellViewModel {
 
     func observeValues() {
         backgroundHandler = HealthManager.shared.healthStore.enableBackgroundDelivery(

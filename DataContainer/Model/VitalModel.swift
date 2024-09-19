@@ -8,7 +8,7 @@
 import SwiftUI
 
 public extension VitalModel {
-    enum Kind: String, Hashable, Codable, CaseIterable {
+    enum Kind: String, Hashable, Codable, CaseIterable, Sendable {
         case sleepQuality
         case activityLevel
         case cardioFitness
@@ -66,14 +66,14 @@ public extension VitalModel {
         }
     }
 
-    enum Trend {
+    enum Trend: Sendable {
         case increasing
         case decreasing
         case noTrend
     }
 }
 
-public struct VitalModel: Identifiable, Hashable {
+public struct VitalModel: Identifiable, Hashable, Sendable {
     public let id: Kind
     public let subtitle: String
     public let status: String

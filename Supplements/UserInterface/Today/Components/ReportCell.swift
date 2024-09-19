@@ -71,14 +71,29 @@ struct ReportCell: View {
             Image(systemName: "chevron.forward")
                 .foregroundStyle(.secondary)
         }
-        .cardContainer()
+        .cardContainer(
+            fill: LinearGradient(
+                colors: kind.colors,
+                startPoint: .bottom,
+                endPoint: .top
+            ).opacity(0.3),
+            stroke: LinearGradient(
+                colors: kind.colors,
+                startPoint: .bottom,
+                endPoint: .top
+            )
+        )
         .contentShape(Rectangle())
     }
 }
 
 #Preview {
     ScrollView {
-        ReportCell(kind: .morning)
-        ReportCell(kind: .evening)
+        VStack {
+            ReportCell(kind: .morning)
+            ReportCell(kind: .evening)
+        }
+        .padding()
     }
+    .gradientRootBackground()
 }

@@ -1,5 +1,5 @@
 //
-//  HabitDailyUpdateCell.swift
+//  LegacyHabitDailyUpdateCell.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-09.
@@ -8,14 +8,14 @@
 import SwiftUI
 
 @MainActor
-struct HabitDailyUpdateCell: View {
+struct LegacyHabitDailyUpdateCell: View {
     let habit: HabitModel
 
-    @StateObject private var viewModel: HabitDailyUpdateCellViewModel
+    @StateObject private var viewModel: LegacyHabitDailyUpdateCellViewModel
 
     init(habit: HabitModel) {
         self.habit = habit
-        self._viewModel = StateObject(wrappedValue: HabitDailyUpdateCellViewModel(habitModel: habit))
+        self._viewModel = StateObject(wrappedValue: LegacyHabitDailyUpdateCellViewModel(habitModel: habit))
     }
 
     var body: some View {
@@ -31,8 +31,7 @@ struct HabitDailyUpdateCell: View {
                 Text(habit.name)
                     .bold()
 
-                ProgressView(value: min(viewModel.dailyValue / habit.value, 1))
-                    .foregroundStyle(.tint)
+                ProgressBar(progress: viewModel.dailyValue / habit.value)
 
                 HStack {
                     Text("\(viewModel.dailyValue.format(using: .oneDecimalPlace)) \(habit.unit.unitString)")
@@ -70,7 +69,7 @@ struct HabitDailyUpdateCell: View {
 #Preview {
     ScrollView {
         VStack {
-            HabitDailyUpdateCell(habit: .init(measurement: .stepCount, value: 10000))
+            LegacyHabitDailyUpdateCell(habit: .init(measurement: .stepCount, value: 10000))
         }
         .padding()
     }

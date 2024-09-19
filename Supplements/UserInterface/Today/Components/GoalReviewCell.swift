@@ -22,7 +22,10 @@ struct GoalReviewCell: View {
 
             Spacer()
         }
-        .cardContainer()
+        .cardContainer(
+            fill: .mutedOrange.opacity(0.3),
+            stroke: .mutedOrange
+        )
     }
 }
 
@@ -34,5 +37,5 @@ struct GoalReviewCell: View {
         .zStackAlignment(.center)
         .padding()
     }
-    .groupedBackground()
+    .gradientRootBackground()
 }

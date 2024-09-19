@@ -55,6 +55,28 @@ extension VitalsViewModel {
             }
         }
     }
+
+    func forceFetchVitals() async {
+        let cardio = await HealthManager.shared.fetchCardioFitnessSummary()
+        let activityLevel = await HealthManager.shared.fetchActivityLevelSummary()
+        let bodyComposition = await HealthManager.shared.fetchBodyCompositionSummary()
+        let stress = await HealthManager.shared.fetchStressMonthlySummary()
+        let nutrition = await HealthManager.shared.fetchNutritionMonthlySummary()
+        let exerciseEffectiveness = await HealthManager.shared.fetchExerciseEffectivenessSummary()
+        let menstrual = await HealthManager.shared.fetchMenstrualSummary()
+        let bowelMovements = DataFetcher.shared.fetchBowelMovementMonthlySummary()
+
+        await MainActor.run {
+            self.cardioFitnessSummary = cardio
+            self.activityLevelSummary = activityLevel
+            self.bodyCompositionSummary = bodyComposition
+            self.stressSummary = stress
+            self.nutritionSummary = nutrition
+            self.exerciseEffectivenessSummary = exerciseEffectiveness
+            self.menstrualSummary = menstrual
+            self.bowelMovementSummary = bowelMovements
+        }
+    }
 }
 
 private extension VitalsViewModel {

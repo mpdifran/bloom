@@ -8,7 +8,7 @@
 import Foundation
 import HealthKit
 
-struct WorkoutTypeHeartRateReport: Identifiable, Hashable {
+struct WorkoutTypeHeartRateReport: Identifiable, Hashable, Sendable {
     var id: Int { hashValue }
 
     let activityType: HKWorkoutActivityType

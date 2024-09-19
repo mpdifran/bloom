@@ -10,7 +10,11 @@ import AppUI
 
 extension View {
 
-    func cardContainer<S>(fill: S = BackgroundStyle.background, includePadding: Bool = true) -> some View where S: ShapeStyle {
+    func cardContainer<S, S2>(
+        fill: S = BackgroundStyle.background,
+        stroke: S2 = .clear,
+        includePadding: Bool = true
+    ) -> some View where S: ShapeStyle, S2: ShapeStyle {
         self
             .if(includePadding) {
                 $0.padding()
@@ -18,18 +22,32 @@ extension View {
             .background {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(fill)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(stroke, lineWidth: 1)
+                    }
             }
     }
 }
 
 #Preview {
     ScrollView {
-        HStack {
-            Spacer()
-            Text("Hello\nWorld")
-            Spacer()
+        VStack {
+            HStack {
+                Spacer()
+                Text("Hello\nWorld")
+                Spacer()
+            }
+            .cardContainer()
+
+            HStack {
+                Label("Good Morning", systemImage: "sunrise.fill")
+                    .foregroundStyle(.mutedGreen)
+
+                Spacer()
+            }
+            .cardContainer(fill: .mutedGreen.opacity(0.3), stroke: .mutedGreen)
         }
-        .cardContainer()
         .padding()
     }
     .groupedBackground()

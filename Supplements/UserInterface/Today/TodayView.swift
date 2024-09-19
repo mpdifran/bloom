@@ -61,23 +61,25 @@ struct TodayView: View {
 //                        }
                     }
 
-//                    if habits.isNotEmpty {
-//                        Text("Focus Areas")
-//                            .bold()
-//                            .padding(.horizontal)
-//                            .zStackAlignment(.leading)
-//
-//                        ForEach(habits) { habit in
-//                            Label(habit.targetMetric.name, systemImage: habit.targetMetric.systemImage)
-//                        }
-//                    }
+                    if habits.isNotEmpty {
+                        Text("Focus Areas")
+                            .bold()
+                            .padding(.horizontal)
+                            .zStackAlignment(.leading)
+                            .padding(.top)
+
+                        ForEach(habits) { habit in
+                            Label(habit.targetMetric.name, systemImage: habit.targetMetric.systemImage)
+                        }
+                    }
 
                     if goalsViewModel.goals.isNotEmpty {
                         Text("Goals")
                             .bold()
                             .padding(.horizontal)
                             .zStackAlignment(.leading)
-                        
+                            .padding(.top)
+
                         ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
                             if let goal = goals.first {
                                 NavigationLink {
@@ -101,7 +103,7 @@ struct TodayView: View {
                             NavigationLink {
                                 HabitDetailsView(habit: habit)
                             } label: {
-                                HabitDailyUpdateCell(habit: habit)
+                                LegacyHabitDailyUpdateCell(habit: habit)
                             }
                             .buttonStyle(.plain)
                         }

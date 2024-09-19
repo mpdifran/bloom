@@ -6,10 +6,10 @@
 //
 
 import Foundation
-import HealthKit
+@preconcurrency import HealthKit
 import AppFoundations
 
-struct WorkoutHeartRateReport: Identifiable, Hashable {
+struct WorkoutHeartRateReport: Identifiable, Hashable, Sendable {
     var id: Int { hashValue }
 
     let workout: HKWorkout
@@ -87,7 +87,7 @@ extension WorkoutHeartRateReport {
 }
 
 extension WorkoutHeartRateReport {
-    struct WorkoutHeartZoneDistribution: Hashable {
+    struct WorkoutHeartZoneDistribution: Hashable, Sendable {
         let totalDuration: HKQuantity
         let zone1: HKQuantity
         let zone2: HKQuantity

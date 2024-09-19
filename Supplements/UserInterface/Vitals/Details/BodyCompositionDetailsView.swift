@@ -60,7 +60,7 @@ struct BodyCompositionDetailsView: View {
         }
         .navigationTitle("Body Composition")
         .navigationBarTitleDisplayMode(.inline)
-        .animation(.bouncy, value: range)
+        .animation(.default, value: range)
         .task {
             let samples = await HealthManager.shared.fetchBodyFatPercentageSamples()
 

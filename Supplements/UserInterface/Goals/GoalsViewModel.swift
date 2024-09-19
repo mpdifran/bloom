@@ -85,6 +85,8 @@ extension GoalsViewModel {
         var goals = [[GoalModel]]()
 
         var vitalNames = [String]()
+        await VitalsViewModel.shared.forceFetchVitals()
+
         let sortedVitals = VitalsViewModel.shared.vitals.sorted(by: { $0.score < $1.score })
 
         if let vital = sortedVitals.safeAccess(at: 0) {

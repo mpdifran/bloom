@@ -24,7 +24,7 @@ extension NutritionMonthlySummary {
     }
 }
 
-struct NutritionMonthlySummary: Hashable {
+struct NutritionMonthlySummary: Hashable, Sendable {
     let details: Details
     let lastMonthDetails: Details
 }
@@ -76,7 +76,7 @@ extension NutritionMonthlySummary {
 }
 
 extension NutritionMonthlySummary {
-    struct Details: Hashable {
+    struct Details: Hashable, Sendable {
         let basalEnergyBurned: HKQuantity?
         let activeEnergyBurned: HKQuantity?
         let dietaryEnergy: HKQuantity?
