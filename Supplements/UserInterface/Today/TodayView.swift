@@ -56,9 +56,12 @@ struct TodayView: View {
                                 }
                                 .padding(.bottom)
                         }
-//                        if habitsViewModel.shouldUpdateSuggestedHabits() || danieleMode {
-//                            GoalReviewCell()
-//                        }
+                        if habitsViewModel.shouldUpdateSuggestedHabits() || danieleMode {
+                            GoalReviewCell()
+                                .onTapGesture {
+                                    presentedFullScreen = NewUpdateHabitView().asAny
+                                }
+                        }
                     }
 
                     if habits.isNotEmpty {
@@ -69,26 +72,7 @@ struct TodayView: View {
                             .padding(.top)
 
                         ForEach(habits) { habit in
-                            Label(habit.targetMetric.name, systemImage: habit.targetMetric.systemImage)
-                        }
-                    }
-
-                    if goalsViewModel.goals.isNotEmpty {
-                        Text("Goals")
-                            .bold()
-                            .padding(.horizontal)
-                            .zStackAlignment(.leading)
-                            .padding(.top)
-
-                        ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
-                            if let goal = goals.first {
-                                NavigationLink {
-                                    GoalDetailsView(goals: $goalsViewModel.goals[index])
-                                } label: {
-                                    GoalDailyUpdateCell(goal: goal)
-                                }
-                                .buttonStyle(.plain)
-                            }
+                            HabitDailyUpdateCell(habit: habit)
                         }
                     }
 

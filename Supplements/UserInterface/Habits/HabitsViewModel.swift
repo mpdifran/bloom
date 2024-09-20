@@ -10,7 +10,7 @@ import DataContainer
 import TelemetryDeck
 import HealthKit
 
-final actor HabitsViewModel: ObservableObject {
+final class HabitsViewModel: ObservableObject {
     static let shared = HabitsViewModel()
 
     private init() { }
@@ -118,9 +118,12 @@ private extension HabitsViewModel {
             }
         }
 
+        let previousValue = habitHistory.last?.quantity.doubleValue(for: unit)
+
         return ProposedHabit(
             targetMetric: targetMetric,
             value: newHabitTargetValue,
+            previousValue: previousValue,
             unitString: unit.unitString,
             vitalKind: habit.vitalKind,
             context: habit.context
@@ -216,7 +219,7 @@ private extension HabitsViewModel {
     ) async -> ProposedHabit {
         let average = await targetMetric.fetchDailyAverage(unit: unit, dateRange: .trailingWeeksFromNow(3)).doubleValue(for: unit)
         let value: Double
-        if let min = TargetMetric.stepCount.minHabitTarget?.doubleValue(for: unit) {
+        if let min = targetMetric.minHabitTarget?.doubleValue(for: unit) {
             value = max(min, average)
         } else {
             value = average
@@ -224,6 +227,7 @@ private extension HabitsViewModel {
         return ProposedHabit(
             targetMetric: targetMetric,
             value: value,
+            previousValue: nil,
             unitString: unit.unitString,
             vitalKind: vitalKind,
             context: context

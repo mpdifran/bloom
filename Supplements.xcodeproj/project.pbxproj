@@ -97,6 +97,9 @@
 		FF2FB8982C9CD03400F57523 /* HabitDailyUpdateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB8972C9CD03400F57523 /* HabitDailyUpdateCell.swift */; };
 		FF2FB89A2C9CD12000F57523 /* HabitDailyUpdateCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB8992C9CD11E00F57523 /* HabitDailyUpdateCellViewModel.swift */; };
 		FF2FB89C2C9CD80000F57523 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB89B2C9CD80000F57523 /* ProgressBar.swift */; };
+		FF2FB89E2C9DA98A00F57523 /* NewUpdateHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB89D2C9DA98A00F57523 /* NewUpdateHabitView.swift */; };
+		FF2FB8A02C9DA9F100F57523 /* ProposedHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB89F2C9DA9F100F57523 /* ProposedHabitCell.swift */; };
+		FF2FB8A22C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB8A12C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift */; };
 		FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F252C1A7041002DA563 /* ScreenUsageReportCell.swift */; };
 		FF3A8F322C1A8341002DA563 /* DefaultReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F312C1A8341002DA563 /* DefaultReportExtension.swift */; };
 		FF3A8F342C1A8341002DA563 /* BedtimeActivityReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F332C1A8341002DA563 /* BedtimeActivityReport.swift */; };
@@ -592,6 +595,9 @@
 		FF2FB8972C9CD03400F57523 /* HabitDailyUpdateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDailyUpdateCell.swift; sourceTree = "<group>"; };
 		FF2FB8992C9CD11E00F57523 /* HabitDailyUpdateCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDailyUpdateCellViewModel.swift; sourceTree = "<group>"; };
 		FF2FB89B2C9CD80000F57523 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		FF2FB89D2C9DA98A00F57523 /* NewUpdateHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUpdateHabitView.swift; sourceTree = "<group>"; };
+		FF2FB89F2C9DA9F100F57523 /* ProposedHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedHabitCell.swift; sourceTree = "<group>"; };
+		FF2FB8A12C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedHabitTargetValueEditCardView.swift; sourceTree = "<group>"; };
 		FF3A8F252C1A7041002DA563 /* ScreenUsageReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenUsageReportCell.swift; sourceTree = "<group>"; };
 		FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3A8F312C1A8341002DA563 /* DefaultReportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultReportExtension.swift; sourceTree = "<group>"; };
@@ -1259,6 +1265,9 @@
 			children = (
 				FF2FB8972C9CD03400F57523 /* HabitDailyUpdateCell.swift */,
 				FF2FB8992C9CD11E00F57523 /* HabitDailyUpdateCellViewModel.swift */,
+				FF2FB89D2C9DA98A00F57523 /* NewUpdateHabitView.swift */,
+				FF2FB89F2C9DA9F100F57523 /* ProposedHabitCell.swift */,
+				FF2FB8A12C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift */,
 			);
 			path = Habits;
 			sourceTree = "<group>";
@@ -2531,6 +2540,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF2FB8A22C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift in Sources */,
 				FF1705292C10DC67000D4B3D /* WorkoutSummaryCell.swift in Sources */,
 				FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */,
 				FF4CAAF72C7F6ACA001A59F3 /* OnboardingGoalDetails.swift in Sources */,
@@ -2681,6 +2691,7 @@
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
 				FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */,
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
+				FF2FB8A02C9DA9F100F57523 /* ProposedHabitCell.swift in Sources */,
 				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
 				FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */,
 				FFC77B002C5AD843003E5F85 /* TargetVitalComponentView.swift in Sources */,
@@ -2776,6 +2787,7 @@
 				FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */,
 				FF4A21B92C88E11E00278019 /* DateValueSample.swift in Sources */,
 				FF8B8B4A2C0035F100BA2128 /* ActivityCell.swift in Sources */,
+				FF2FB89E2C9DA98A00F57523 /* NewUpdateHabitView.swift in Sources */,
 				FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */,
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,
 				FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */,

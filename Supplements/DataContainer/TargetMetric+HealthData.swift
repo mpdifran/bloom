@@ -76,6 +76,23 @@ extension TargetMetric {
             fatalError("Unhandled TargetMetric case.")
         }
     }
+
+    var preferredFormatter: NumberFormatter {
+        switch self {
+        case .none:
+            NumberFormatter.noDecimalPlaces
+        case .stepCount:
+            NumberFormatter.noDecimalPlaces
+        case .waterIntake:
+            NumberFormatter.noDecimalPlaces
+        case .walkingRunningDistance:
+            NumberFormatter.oneDecimalPlace
+        case .timeInDaylight:
+            NumberFormatter.noDecimalPlaces
+        @unknown default:
+            fatalError("Unhandled TargetMetric case.")
+        }
+    }
 }
 
 extension TargetMetric {

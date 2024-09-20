@@ -8,7 +8,7 @@
 import Foundation
 import HealthKit
 
-extension HKQuantity: Comparable {
+extension HKQuantity: @retroactive Comparable {
     public static func < (lhs: HKQuantity, rhs: HKQuantity) -> Bool {
         lhs.compare(rhs) == .orderedAscending
     }
@@ -16,17 +16,10 @@ extension HKQuantity: Comparable {
 
 extension HKQuantity {
 
-    func displayString(for unit: HKUnit, hasNoDecimalPlaces: Bool = true) -> String {
+    func displayString(for unit: HKUnit, formatter: NumberFormatter = NumberFormatter.noDecimalPlaces) -> String {
         let doubleValue = doubleValue(for: unit)
 
-        let formattedNumber: String
-        if hasNoDecimalPlaces {
-            formattedNumber = NumberFormatter.noDecimalPlaces.string(for: doubleValue) ?? ""
-        } else {
-            formattedNumber = NumberFormatter.oneDecimalPlace.string(for: doubleValue) ?? ""
-        }
-
-        return "\(formattedNumber) \(unit.unitString)"
+        return "\(formatter.string(for: doubleValue) ?? "") \(unit.unitString)"
     }
 
     func sum(_ other: HKQuantity, unit: HKUnit) -> HKQuantity {

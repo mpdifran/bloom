@@ -6,13 +6,40 @@
 //
 
 import DataContainer
+import HealthKit
 
 struct ProposedHabit: Sendable, Identifiable {
     let id = UUID()
     let targetMetric: TargetMetric
-    let value: Double
+    var value: Double
+    let previousValue: Double?
     let unitString: String
     let startDate: Date = Date.now
     let vitalKind: VitalModel.Kind?
     let context: String?
+}
+
+extension ProposedHabit {
+
+    var unit: HKUnit {
+        HKUnit(from: unitString)
+    }
+
+    var quantity: HKQuantity {
+        HKQuantity(unit: unit, doubleValue: value)
+    }
+
+    var displayQuantity: String {
+        quantity.displayString(for: unit, formatter: targetMetric.preferredFormatter)
+    }
+
+    var previousQuantity: HKQuantity? {
+        guard let previousValue else { return nil }
+
+        return HKQuantity(unit: unit, doubleValue: previousValue)
+    }
+
+    var displayPreviousQuantity: String? {
+        previousQuantity?.displayString(for: unit, formatter: targetMetric.preferredFormatter)
+    }
 }

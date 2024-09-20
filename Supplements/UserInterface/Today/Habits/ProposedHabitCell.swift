@@ -1,0 +1,139 @@
+//
+//  ProposedHabitCell.swift
+//  Supplements
+//
+//  Created by Mark DiFranco on 2024-09-20.
+//
+
+import SwiftUI
+import HealthKit
+
+struct ProposedHabitCell: View {
+    @Binding var proposedHabit: ProposedHabit
+
+    @State private var presentedSheet: AnyView?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Image(systemName: proposedHabit.targetMetric.systemImage)
+                    .font(.title)
+                    .foregroundStyle(.tint)
+
+                VStack(alignment: .leading) {
+                    if let vitalKind = proposedHabit.vitalKind {
+                        Label(vitalKind.name, systemImage: vitalKind.systemImage)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(proposedHabit.targetMetric.name)
+                        .bold()
+                }
+
+                Spacer(minLength: 0)
+
+                VStack {
+                    if let previousQuantity = proposedHabit.displayPreviousQuantity {
+                        Text("\(previousQuantity)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .bold()
+                        Image(systemName: "arrow.down")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("NEW")
+                            .foregroundStyle(.mutedRed)
+                            .bold()
+                            .font(.caption)
+                    }
+
+                    Text(proposedHabit.displayQuantity)
+                        .font(.title3)
+                        .fontDesign(.rounded)
+                        .bold()
+                        .foregroundStyle(.tint)
+                        .contentTransition(.numericText(value: proposedHabit.value))
+                        .animation(.default, value: proposedHabit.value)
+                }
+            }
+            .cardContainer(stroke: .tint)
+
+            Button {
+                presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
+            } label: {
+                LabeledContent("Change Value") {
+                    Image(systemName: "chart.xyaxis.line")
+                        .foregroundStyle(.tint)
+                }
+            }
+            .padding()
+
+//            Divider()
+//
+//            Menu {
+//                Text("Test")
+//            } label: {
+//                LabeledContent("Change Vital") {
+//                    Image(systemName: "bolt.heart")
+//                        .foregroundStyle(.tint)
+//                }
+//            }
+//            .padding()
+//
+//            Divider()
+//
+//            Menu {
+//                Text("Test")
+//            } label: {
+//                LabeledContent("Change Habit") {
+//                    Image(systemName: "trophy")
+//                        .foregroundStyle(.tint)
+//                }
+//            }
+//            .padding()
+        }
+        .cardContainer(fill: .tint.tertiary, includePadding: false)
+        .tint(proposedHabit.targetMetric.color)
+        .sheet($presentedSheet)
+    }
+}
+
+#Preview {
+    ScrollView {
+        VStack(spacing: 20) {
+            ProposedHabitCell(
+                proposedHabit: .constant(.init(
+                    targetMetric: .waterIntake,
+                    value: 500,
+                    previousValue: 250,
+                    unitString: HKUnit.literUnit(with: .milli).unitString,
+                    vitalKind: .nutrition,
+                    context: "Water can keep you hydrated."
+                ))
+            )
+            ProposedHabitCell(
+                proposedHabit: .constant(.init(
+                    targetMetric: .walkingRunningDistance,
+                    value: 5,
+                    previousValue: 3,
+                    unitString: HKUnit.meterUnit(with: .kilo).unitString,
+                    vitalKind: .cardioFitness,
+                    context: "You should run more."
+                ))
+            )
+            ProposedHabitCell(
+                proposedHabit: .constant(.init(
+                    targetMetric: .timeInDaylight,
+                    value: 30,
+                    previousValue: nil,
+                    unitString: HKUnit.minute().unitString,
+                    vitalKind: .sleepQuality,
+                    context: "Get out in the sun!"
+                ))
+            )
+        }
+        .padding()
+    }
+    .groupedBackground()
+}

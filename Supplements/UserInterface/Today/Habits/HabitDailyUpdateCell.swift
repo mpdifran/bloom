@@ -28,7 +28,7 @@ struct HabitDailyUpdateCell: View {
                     Image(systemName: habit.targetMetric.systemImage)
                         .font(.title2)
                         .foregroundStyle(.tint)
-                        .frame(width: 30)
+                        .frame(width: 25)
 
                     VStack(alignment: .leading) {
                         if let vitalKind = habit.vitalKind {
@@ -47,8 +47,12 @@ struct HabitDailyUpdateCell: View {
                 HStack {
                     Text("\(viewModel.dailyValue.format(using: .oneDecimalPlace)) \(habit.unit.unitString)")
                         .foregroundStyle(.tint)
+                        .contentTransition(.numericText(value: viewModel.dailyValue))
+                        .animation(.default, value: viewModel.dailyValue)
 
-                    Text("/ \(NumberFormatter.noDecimalPlaces.string(for: habit.value) ?? "") \(habit.unit.unitString)")
+                    Spacer()
+
+                    Text("\(NumberFormatter.noDecimalPlaces.string(for: habit.value) ?? "") \(habit.unit.unitString)")
                         .foregroundStyle(.secondary)
                 }
                 .font(.subheadline)
