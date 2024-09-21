@@ -42,9 +42,14 @@ struct ProposedHabitTargetValueEditCardView: View {
                 .padding()
                 .padding(.horizontal, 30)
 
+                if proposedHabit.shouldShowSuggestedValue {
+                    Text("Recommended \(proposedHabit.displaySuggestedValue)")
+                        .bold()
+                }
                 if let previousQuantity = proposedHabit.displayPreviousQuantity {
                     Text("Previously \(previousQuantity)")
                         .foregroundStyle(.secondary)
+                        .font(.caption)
                 }
 
                 Spacer()
@@ -83,12 +88,12 @@ struct ProposedHabitTargetValueEditCardView: View {
         @State private var proposedHabit = ProposedHabit(
             targetMetric: .stepCount,
             value: 3000,
-            suggestedValue: 3000,
+            suggestedValue: 5000,
             previousValue: 2000,
             unitString: HKUnit.count().unitString,
             vitalKind: .cardioFitness,
             context: "",
-            hasUserEdited: false
+            hasUserEdited: true
         )
 
         var body: some View {
