@@ -15,46 +15,66 @@ struct ProposedHabitCell: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Image(systemName: proposedHabit.targetMetric.systemImage)
-                    .font(.title)
-                    .foregroundStyle(.tint)
+            VStack {
+                HStack {
+                    Image(systemName: proposedHabit.targetMetric.systemImage)
+                        .font(.title)
+                        .foregroundStyle(.tint)
 
-                VStack(alignment: .leading) {
-                    if let vitalKind = proposedHabit.vitalKind {
-                        Label(vitalKind.name, systemImage: vitalKind.systemImage)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                    VStack(alignment: .leading) {
+                        if let vitalKind = proposedHabit.vitalKind {
+                            Label(vitalKind.name, systemImage: vitalKind.systemImage)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Text(proposedHabit.targetMetric.name)
+                            .bold()
                     }
-                    Text(proposedHabit.targetMetric.name)
-                        .bold()
+
+                    Spacer(minLength: 0)
+
+                    VStack {
+                        if let previousQuantity = proposedHabit.displayPreviousQuantity, proposedHabit.shouldShowPreviousQuantity {
+                            Text("\(previousQuantity)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .bold()
+                            Image(systemName: "arrow.down")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else if proposedHabit.isNewHabit {
+                            Text("NEW")
+                                .foregroundStyle(.mutedRed)
+                                .bold()
+                                .font(.caption)
+                        }
+
+                        Text(proposedHabit.displayQuantity)
+                            .font(.title3)
+                            .fontDesign(.rounded)
+                            .bold()
+                            .foregroundStyle(.tint)
+                            .contentTransition(.numericText(value: proposedHabit.value))
+                            .animation(.default, value: proposedHabit.value)
+                    }
                 }
 
-                Spacer(minLength: 0)
-
-                VStack {
-                    if let previousQuantity = proposedHabit.displayPreviousQuantity {
-                        Text("\(previousQuantity)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                if proposedHabit.shouldShowSuggestedValue {
+                    Divider()
+                    
+                    HStack {
+                        Text("Recommended")
+                        
+                        Spacer()
+                        
+                        Text(proposedHabit.displaySuggestedValue)
+                            .foregroundStyle(.tint)
+                            .fontDesign(.rounded)
                             .bold()
-                        Image(systemName: "arrow.down")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Text("NEW")
-                            .foregroundStyle(.mutedRed)
-                            .bold()
-                            .font(.caption)
                     }
-
-                    Text(proposedHabit.displayQuantity)
-                        .font(.title3)
-                        .fontDesign(.rounded)
-                        .bold()
-                        .foregroundStyle(.tint)
-                        .contentTransition(.numericText(value: proposedHabit.value))
-                        .animation(.default, value: proposedHabit.value)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
                 }
             }
             .cardContainer(stroke: .tint)
@@ -119,11 +139,11 @@ struct ProposedHabitCell: View {
                     targetMetric: .walkingRunningDistance,
                     value: 5,
                     suggestedValue: 5,
-                    previousValue: 3,
+                    previousValue: 5,
                     unitString: HKUnit.meterUnit(with: .kilo).unitString,
                     vitalKind: .cardioFitness,
                     context: "You should run more.",
-                    hasUserEdited: false
+                    hasUserEdited: true
                 ))
             )
             ProposedHabitCell(

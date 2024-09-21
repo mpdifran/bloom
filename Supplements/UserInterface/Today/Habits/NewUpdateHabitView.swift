@@ -23,12 +23,16 @@ struct NewUpdateHabitView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    VStack(alignment: .leading, spacing: 20) {
-                        Text("Let's Start the Week Right!")
-                            .font(.title2)
-                            .bold()
+                    HStack {
+                        VStack(alignment: .leading, spacing: 20) {
+                            Text("Let's Start the Week Right!")
+                                .font(.title2)
+                                .bold()
 
-                        Text("Review your goals for the week. These recommendations are based off the data from the past two weeks.")
+                            Text("Review your goals for the week. These recommendations are based off the data from the past two weeks.")
+                        }
+
+                        Spacer(minLength: 0)
                     }
                     .cardContainer()
 

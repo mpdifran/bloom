@@ -44,4 +44,24 @@ extension ProposedHabit {
     var displayPreviousQuantity: String? {
         previousQuantity?.displayString(for: unit, formatter: targetMetric.preferredFormatter)
     }
+
+    var shouldShowPreviousQuantity: Bool {
+        guard let previousValue else { return false }
+
+        return abs(value - previousValue) > 1
+    }
+
+    var isNewHabit: Bool {
+        previousValue == nil
+    }
+
+    var shouldShowSuggestedValue: Bool {
+        hasUserEdited && abs(value - suggestedValue) > 1
+    }
+
+    var displaySuggestedValue: String {
+        let suggestedQuantity = HKQuantity(unit: unit, doubleValue: suggestedValue)
+
+        return suggestedQuantity.displayString(for: unit, formatter: targetMetric.preferredFormatter)
+    }
 }
