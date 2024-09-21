@@ -36,6 +36,8 @@ final class VitalsViewModel: ObservableObject {
     private let throttler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "Throttler"))
     private let activityLevelThrottler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "ActivityLevelThrottler"))
 
+    private let dataFetcher = DataFetcher()
+
     private init() {
         observeData()
     }
@@ -49,7 +51,7 @@ extension VitalsViewModel {
 
     func fetchSwiftDataTypes() {
         Task {
-            let summary = DataFetcher.shared.fetchBowelMovementMonthlySummary()
+            let summary = dataFetcher.fetchBowelMovementMonthlySummary()
             await MainActor.run {
                 self.bowelMovementSummary = summary
             }
@@ -64,7 +66,7 @@ extension VitalsViewModel {
         let nutrition = await HealthManager.shared.fetchNutritionMonthlySummary()
         let exerciseEffectiveness = await HealthManager.shared.fetchExerciseEffectivenessSummary()
         let menstrual = await HealthManager.shared.fetchMenstrualSummary()
-        let bowelMovements = DataFetcher.shared.fetchBowelMovementMonthlySummary()
+        let bowelMovements = dataFetcher.fetchBowelMovementMonthlySummary()
 
         await MainActor.run {
             self.cardioFitnessSummary = cardio

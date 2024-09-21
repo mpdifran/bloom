@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HabitGridModel {
+struct HabitGridModel: Sendable {
     let weeks: [Week]
 
     init(weeks: [Week]) {
@@ -24,7 +24,7 @@ struct HabitGridModel {
 }
 
 extension HabitGridModel {
-    struct Week: Identifiable {
+    struct Week: Identifiable, Sendable {
         let id: Int
         let isComplete: [Bool]
         let todayIndex: Int?

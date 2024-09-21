@@ -13,7 +13,7 @@ public enum TargetMetric: String, Identifiable, Codable, CaseIterable, Sendable 
     case none
     case stepCount
     case waterIntake
-    case walkingRunningDistance
+    case walkingRunningDistance // Some of these should be related
     case timeInDaylight
 }
 

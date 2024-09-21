@@ -9,14 +9,14 @@ import Foundation
 import SwiftData
 import TelemetryDeck
 
-public final class ContainerHolder {
+public actor ContainerHolder {
     public static let shared = ContainerHolder()
 
     public let container: ModelContainer
 
     private init() {
         do {
-            let schema = Schema(versionedSchema: SchemaV0.self)
+            let schema = Schema(versionedSchema: SchemaV1.self)
             let modelConfiguration = ModelConfiguration(
                 schema: schema,
                 groupContainer: .identifier("group.supplements")

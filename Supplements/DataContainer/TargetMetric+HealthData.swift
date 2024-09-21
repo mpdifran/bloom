@@ -48,7 +48,7 @@ extension TargetMetric {
         case .none:
             return nil
         case .stepCount:
-            return HKQuantity(unit: defaultUnit, doubleValue: 1000)
+            return HKQuantity(unit: defaultUnit, doubleValue: 5000) // Maybe 4000
         case .waterIntake:
             return HKQuantity(unit: defaultUnit, doubleValue: 250)
         case .walkingRunningDistance:

@@ -14,7 +14,7 @@ private extension CGFloat {
 }
 
 private extension Double {
-    static let cellDelay: Double = 0.05
+    static let cellDelay: Double = 0.01
 }
 
 struct HabitGrid: View {
@@ -73,7 +73,7 @@ extension HabitGrid {
 
         guard shiftedColumn > 0 else { return 0 }
 
-        return (Double(shiftedColumn) * Double.cellDelay * 7) + Double(row) * Double.cellDelay
+        return (Double(shiftedColumn) * Double.cellDelay * 4) + Double(row) * Double.cellDelay
     }
 
     func recommendedMaxColumnCount(for width: CGFloat) -> Int {

@@ -13,14 +13,35 @@ import HealthKit
 final class HabitsViewModel: ObservableObject {
     static let shared = HabitsViewModel()
 
-    private init() { }
+    private let dataFetcher = DataFetcher()
 }
 
 extension HabitsViewModel {
 
+    func deleteNoneHabits() {
+        Task.detached {
+            let dataFetcher = DataFetcher()
+            do {
+                let suggestedHabits = try dataFetcher.fetchHabits(for: .none, isSuggested: true)
+                let userHabits = try dataFetcher.fetchHabits(for: .none, isSuggested: false)
+                let combined = suggestedHabits + userHabits
+
+                guard combined.isNotEmpty else { return }
+
+                for habit in combined {
+                    dataFetcher.context.delete(habit)
+                }
+
+                try dataFetcher.context.save()
+            } catch {
+                print(error)
+            }
+        }
+    }
+
     func shouldUpdateSuggestedHabits() -> Bool {
         let mondayMorning = Calendar.current.mondayMorning(for: .now) ?? .distantPast
-        let habits = (try? DataFetcher.shared.fetchActiveHabits(isSuggested: true)) ?? []
+        let habits = (try? dataFetcher.fetchActiveHabits(isSuggested: true)) ?? []
 
         return habits.isEmpty || habits.contains(where: { mondayMorning > $0.startDate })
     }
@@ -28,7 +49,7 @@ extension HabitsViewModel {
     func generateProposedHabits() async -> [ProposedHabit] {
         let existingHabits: [Habit]
         do {
-            existingHabits = try DataFetcher.shared.fetchActiveHabits(isSuggested: true)
+            existingHabits = try dataFetcher.fetchActiveHabits(isSuggested: true)
         } catch {
             print(error)
             TelemetryDeck.errorOccurred(
@@ -70,7 +91,7 @@ private extension HabitsViewModel {
 
         let habitHistory: [Habit]
         do {
-            habitHistory = try DataFetcher.shared.fetchHabits(for: targetMetric, isSuggested: true)
+            habitHistory = try dataFetcher.fetchHabits(for: targetMetric, isSuggested: true)
         } catch {
             print(error)
             TelemetryDeck.errorOccurred(
@@ -93,10 +114,21 @@ private extension HabitsViewModel {
             .average(keyPath: \.self)
 
         let passFailPercentage = goalMetPercentage(habitHistory: habitHistory, samples: lastTwoWeeksSamples)
+
+        // Separate out values by whether they hit or missed goals.
+
+        // If 3 days out of week they didn't even get 50% of goal, keep goal as it is.
+
+        // How bad do they miss? Can put in emotions here.
+
+        // Max 3 days missed in last two weeks + percent over goal for met goals days. Divide percent over by 2 for setting next goal.
+
+        // More than 6 days missed in last 2 weeks, decrease goal. Percentage difference.
+
         let percentageRelativeToHabitValue = (dailyAverage - habitTargetValue) / habitTargetValue
 
         var newHabitTargetValue: Double
-        if passFailPercentage > 0.9 {
+        if passFailPercentage > 0.75 {
             // We can increase the goal by a bit.
             let percentageIncrease = percentageRelativeToHabitValue > 0.15 ? 0.1 : 0.05
             newHabitTargetValue = habitTargetValue * (1 + percentageIncrease)
@@ -108,6 +140,8 @@ private extension HabitsViewModel {
             // Maintain the goal for some more time.
             newHabitTargetValue = habitTargetValue
         }
+
+        // Hint when app is recommending a different value, keep user set goal.
 
         // Check the ideal range
         if let idealRange = targetMetric.idealRange {
@@ -123,6 +157,7 @@ private extension HabitsViewModel {
         return ProposedHabit(
             targetMetric: targetMetric,
             value: newHabitTargetValue,
+            suggestedValue: newHabitTargetValue,
             previousValue: previousValue,
             unitString: unit.unitString,
             vitalKind: habit.vitalKind,
@@ -141,7 +176,7 @@ private extension HabitsViewModel {
             let habitTarget = habit.quantity.doubleValue(for: unit)
             let sampleValue = sample.quantity.doubleValue(for: unit)
 
-            if sampleValue >= habitTarget {
+            if sampleValue >= (habitTarget * 0.95) { // 5% for grace around meeting goals
                 passCount += 1
             }
             totalCount += 1
@@ -227,6 +262,7 @@ private extension HabitsViewModel {
         return ProposedHabit(
             targetMetric: targetMetric,
             value: value,
+            suggestedValue: value,
             previousValue: nil,
             unitString: unit.unitString,
             vitalKind: vitalKind,

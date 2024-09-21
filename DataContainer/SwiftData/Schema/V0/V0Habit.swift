@@ -11,12 +11,13 @@ import SwiftData
 extension SchemaV0 {
     @Model
     public final class Habit: Identifiable {
-        public var targetMetric: TargetMetric = TargetMetric.none
+        public var targetMetric: TargetMetric? = TargetMetric.none
         public var value: Double = 0
         public var unitString: String = ""
         public var startDate: Date = Date.now
         public var endDate: Date? = nil
         public var isSuggested: Bool = false
+        public var isUserEdited: Bool = false
         public var vitalKind: VitalModel.Kind?
         public var context: String?
 
@@ -27,6 +28,7 @@ extension SchemaV0 {
             startDate: Date,
             endDate: Date? = nil,
             isSuggested: Bool,
+            isUserEdited: Bool,
             vitalKind: VitalModel.Kind? = nil,
             context: String? = nil
         ) {
@@ -36,6 +38,7 @@ extension SchemaV0 {
             self.startDate = startDate
             self.endDate = endDate
             self.isSuggested = isSuggested
+            self.isUserEdited = isUserEdited
             self.vitalKind = vitalKind
             self.context = context
         }

@@ -12,11 +12,13 @@ struct ProposedHabit: Sendable, Identifiable {
     let id = UUID()
     let targetMetric: TargetMetric
     var value: Double
+    var suggestedValue: Double
     let previousValue: Double?
     let unitString: String
     let startDate: Date = Date.now
     let vitalKind: VitalModel.Kind?
     let context: String?
+    var hasUserEdited: Bool = false
 }
 
 extension ProposedHabit {

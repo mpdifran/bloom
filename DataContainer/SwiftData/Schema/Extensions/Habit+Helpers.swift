@@ -10,12 +10,18 @@ import HealthKit
 
 public extension Habit {
 
-    var quantity: HKQuantity {
-        HKQuantity(unit: self.unit, doubleValue: self.value)
+    var unit: HKUnit {
+        HKUnit(from: unitString)
     }
 
-    var unit: HKUnit {
-        HKUnit(from: self.unitString)
+    var quantity: HKQuantity {
+        HKQuantity(unit: unit, doubleValue: value)
+    }
+
+    func quantityExceedsGoal(_ quantity: HKQuantity) -> Bool {
+        guard quantity.is(compatibleWith: unit) else { return false }
+
+        return quantity.compare(self.quantity) == .orderedDescending
     }
 }
 

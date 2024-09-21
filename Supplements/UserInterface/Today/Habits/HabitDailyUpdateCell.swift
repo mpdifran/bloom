@@ -78,6 +78,7 @@ struct HabitDailyUpdateCell: View {
                 unitString: HKUnit.minute().unitString,
                 startDate: .now,
                 isSuggested: true,
+                isUserEdited: false,
                 vitalKind: .sleepQuality
             )
         )

@@ -252,6 +252,12 @@ private extension PreferencesView {
                 }
             }
             .buttonStyle(.plain)
+
+            Button {
+                presentedSheet = DebugHabitsListView().asAny
+            } label: {
+                Text("Debug Habits")
+            }
         }
     }
 }

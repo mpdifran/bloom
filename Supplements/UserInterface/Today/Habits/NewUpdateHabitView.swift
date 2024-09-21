@@ -23,6 +23,15 @@ struct NewUpdateHabitView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text("Let's Start the Week Right!")
+                            .font(.title2)
+                            .bold()
+
+                        Text("Review your goals for the week. These recommendations are based off the data from the past two weeks.")
+                    }
+                    .cardContainer()
+
                     ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
                         ProposedHabitCell(proposedHabit: $proposedHabits[index])
                     }
@@ -66,6 +75,7 @@ private extension NewUpdateHabitView {
                 unitString: proposedHabit.unitString,
                 startDate: .now,
                 isSuggested: true,
+                isUserEdited: false,
                 vitalKind: proposedHabit.vitalKind,
                 context: proposedHabit.context
             )

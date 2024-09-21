@@ -10,11 +10,10 @@ import SwiftData
 import BloomFoundation
 
 public final class DataFetcher {
-    public static let shared = DataFetcher()
 
-    private let context: ModelContext
+    public let context: ModelContext
 
-    private init() {
+    public init() {
         let context = ModelContext(ContainerHolder.shared.container)
         self.context = context
     }
@@ -62,7 +61,7 @@ public extension DataFetcher {
     func fetchHabits(for targetMetric: TargetMetric, isSuggested: Bool) throws -> [Habit] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
-                model.targetMetric == targetMetric && model.isSuggested == isSuggested
+                model.rawTargetMetric == targetMetric.rawValue && model.isSuggested == isSuggested
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )

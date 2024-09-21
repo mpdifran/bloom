@@ -35,7 +35,7 @@ struct SupplementsApp: App {
                     HealthManager.shared.observeSleepData()
                 }
                 .onReceive(foregroundPublisher) { _ in
-
+                    HabitsViewModel.shared.deleteNoneHabits()
                 }
         }
         .modelContainer(ContainerHolder.shared.container)

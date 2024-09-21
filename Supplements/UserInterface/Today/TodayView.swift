@@ -72,7 +72,12 @@ struct TodayView: View {
                             .padding(.top)
 
                         ForEach(habits) { habit in
-                            HabitDailyUpdateCell(habit: habit)
+                            NavigationLink {
+                                HabitDetailsView(habit: habit)
+                            } label: {
+                                HabitDailyUpdateCell(habit: habit)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
@@ -85,7 +90,7 @@ struct TodayView: View {
 
                         ForEachEnumerated(goalsViewModel.habits) { (index, habit) in
                             NavigationLink {
-                                HabitDetailsView(habit: habit)
+                                LegacyHabitDetailsView(habit: habit)
                             } label: {
                                 LegacyHabitDailyUpdateCell(habit: habit)
                             }

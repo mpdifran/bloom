@@ -1,5 +1,5 @@
 //
-//  HabitDetailsView.swift
+//  LegacyHabitDetailsView.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-11.
@@ -8,7 +8,7 @@
 import SwiftUI
 import HealthKit
 
-struct HabitDetailsView: View {
+struct LegacyHabitDetailsView: View {
     let habit: HabitModel
 
     @State private var allSamplesEightWeeks = [DateQuantitySample]()
@@ -59,7 +59,7 @@ struct HabitDetailsView: View {
     }
 }
 
-private extension HabitDetailsView {
+private extension LegacyHabitDetailsView {
 
     var average: Double {
         allSamplesEightWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
@@ -107,7 +107,7 @@ private extension HabitDetailsView {
     }
 }
 
-private extension HabitDetailsView {
+private extension LegacyHabitDetailsView {
 
     var habitGridModel: HabitGridModel {
         var weeks = weekQuantitySamples.map { weekSamples in
@@ -136,7 +136,7 @@ private extension HabitDetailsView {
     }
 }
 
-private extension HabitDetailsView {
+private extension LegacyHabitDetailsView {
 
     func loadGoalHistory() async {
         let eightWeeksSamples = await habit.measurement.fetchCollatedDailyQuantity(for: .trailingWeeksFromNow(8))
@@ -179,15 +179,9 @@ private extension HabitDetailsView {
     }
 }
 
-struct WeekQuantitySamples: Identifiable {
-    let id: Int
-    let referenceDate: Date
-    let samples: [DateQuantitySample]
-}
-
 #Preview {
     NavigationStack {
-        HabitDetailsView(
+        LegacyHabitDetailsView(
             habit: .init(
                 measurement: .stepCount,
                 value: 2000

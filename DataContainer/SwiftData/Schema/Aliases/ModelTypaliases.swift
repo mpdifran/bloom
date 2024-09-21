@@ -6,4 +6,4 @@
 //
 
 public typealias BowelMovement = SchemaV0.BowelMovement
-public typealias Habit = SchemaV0.Habit
+public typealias Habit = SchemaV1.Habit

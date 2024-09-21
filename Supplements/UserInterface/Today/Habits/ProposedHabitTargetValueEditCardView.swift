@@ -66,6 +66,7 @@ struct ProposedHabitTargetValueEditCardView: View {
             .shelf {
                 ProminentButton("Save") {
                     proposedHabit.value = value
+                    proposedHabit.hasUserEdited = true
                     dismiss()
                 }
             }
@@ -82,6 +83,7 @@ struct ProposedHabitTargetValueEditCardView: View {
         @State private var proposedHabit = ProposedHabit(
             targetMetric: .stepCount,
             value: 3000,
+            suggestedValue: 3000,
             previousValue: 2000,
             unitString: HKUnit.count().unitString,
             vitalKind: .cardioFitness,
