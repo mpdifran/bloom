@@ -33,7 +33,7 @@ public actor ContainerHolder {
                 category: .appState,
                 message: error.localizedDescription
             )
-            fatalError("Could not set up model container: \(error)")
+            fatalError("Could not set up model container: \(error.localizedDescription)")
         }
     }
 }

@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct HabitGridCell: View {
-    let isComplete: Bool
+    let isComplete: Bool?
     let isToday: Bool
 
     var body: some View {
         Group {
             RoundedRectangle(cornerRadius: 6)
-                .fill(.tint.opacity(isComplete ? 1 : 0.3))
+                .fill(.tint.opacity(cellOpacity))
                 .overlay {
-                    if isToday {
+                    if isToday, let isComplete {
                         if isComplete {
                             RoundedRectangle(cornerRadius: 4)
                                 .stroke(.background, lineWidth: 2)
@@ -29,6 +29,17 @@ struct HabitGridCell: View {
                 }
         }
         .aspectRatio(contentMode: .fit)
+    }
+}
+
+private extension HabitGridCell {
+
+    var cellOpacity: Double {
+        switch isComplete {
+        case true: 1
+        case false: 0.3
+        default: 0.1
+        }
     }
 }
 

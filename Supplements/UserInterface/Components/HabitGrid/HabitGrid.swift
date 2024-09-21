@@ -29,13 +29,16 @@ struct HabitGrid: View {
                     if recommendedMaxColumnCount(for: proxy.size.width) > (model.weeks.count - columnIndex - 1) {
                         VStack(spacing: .spacing) {
                             ForEach(0 ..< 7) { rowIndex in
-                                HabitGridCell(isComplete: week.isComplete.safeAccess(at: UInt(rowIndex)) ?? false, isToday: week.todayIndex == rowIndex)
-                                    .transition(.scale)
-                                    .animation(
-                                        .bouncy
-                                        .delay(delay(column: columnIndex, row: rowIndex, width: proxy.size.width)),
-                                        value: week.isComplete.safeAccess(at: UInt(rowIndex))
-                                    )
+                                HabitGridCell(
+                                    isComplete: week.isComplete.safeAccess(at: UInt(rowIndex)),
+                                    isToday: week.todayIndex == rowIndex
+                                )
+                                .transition(.scale)
+                                .animation(
+                                    .bouncy
+                                    .delay(delay(column: columnIndex, row: rowIndex, width: proxy.size.width)),
+                                    value: week.isComplete.safeAccess(at: UInt(rowIndex))
+                                )
                             }
                         }
                     }
