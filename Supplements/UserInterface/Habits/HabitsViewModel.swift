@@ -109,39 +109,22 @@ private extension HabitsViewModel {
             unit: unit,
             dateRange: .trailingWeeksFromNow(2)
         )
-        let dailyAverage = lastTwoWeeksSamples
-            .map({ $0.quantity.doubleValue(for: unit) })
-            .average(keyPath: \.self)
 
-        let passFailPercentage = goalMetPercentage(habitHistory: habitHistory, samples: lastTwoWeeksSamples)
-
-        // Separate out values by whether they hit or missed goals.
-
-        // If 3 days out of week they didn't even get 50% of goal, keep goal as it is.
-
-        // How bad do they miss? Can put in emotions here.
-
-        // Max 3 days missed in last two weeks + percent over goal for met goals days. Divide percent over by 2 for setting next goal.
-
-        // More than 6 days missed in last 2 weeks, decrease goal. Percentage difference.
-
-        let percentageRelativeToHabitValue = (dailyAverage - habitTargetValue) / habitTargetValue
+        let habitGoalStatistics = calculateHabitGoalStatistics(habitHistory: habitHistory, samples: lastTwoWeeksSamples)
 
         var newHabitTargetValue: Double
-        if passFailPercentage > 0.75 {
-            // We can increase the goal by a bit.
-            let percentageIncrease = percentageRelativeToHabitValue > 0.15 ? 0.1 : 0.05
-            newHabitTargetValue = habitTargetValue * (1 + percentageIncrease)
-        } else if passFailPercentage < 0.5 {
-            // We need to lower the goal.
-            let percentageDecrease = percentageRelativeToHabitValue < -0.15 ? -0.1 : -0.05
-            newHabitTargetValue = habitTargetValue * (1 + percentageDecrease)
+        if habitGoalStatistics.missedGoalCountPercentage > 0.4 {
+            // decrease target
+            let averagePercentMissedGoalBy = habitGoalStatistics.averagePercentMissedGoalBy
+            newHabitTargetValue = habitTargetValue * (1 - (averagePercentMissedGoalBy / 2))
+        } else if habitGoalStatistics.missedGoalSamples.count < 3 {
+            // increase target
+            let averagePercentExceededGoalBy = habitGoalStatistics.averagePercentExceededGoalBy
+            newHabitTargetValue = habitTargetValue * (1 + (averagePercentExceededGoalBy / 2))
         } else {
-            // Maintain the goal for some more time.
+            // keep target the same
             newHabitTargetValue = habitTargetValue
         }
-
-        // Hint when app is recommending a different value, keep user set goal.
 
         // Check the ideal range
         if let idealRange = targetMetric.idealRange {
@@ -154,20 +137,38 @@ private extension HabitsViewModel {
 
         let previousValue = habitHistory.last?.quantity.doubleValue(for: unit)
 
-        return ProposedHabit(
-            targetMetric: targetMetric,
-            value: newHabitTargetValue,
-            suggestedValue: newHabitTargetValue,
-            previousValue: previousValue,
-            unitString: unit.unitString,
-            vitalKind: habit.vitalKind,
-            context: habit.context
-        )
+        if habit.isUserEdited {
+            return ProposedHabit(
+                targetMetric: targetMetric,
+                value: habitTargetValue,
+                suggestedValue: newHabitTargetValue,
+                previousValue: nil,
+                unitString: unit.unitString,
+                vitalKind: habit.vitalKind,
+                context: habit.context,
+                hasUserEdited: true
+            )
+        } else {
+            return ProposedHabit(
+                targetMetric: targetMetric,
+                value: newHabitTargetValue,
+                suggestedValue: newHabitTargetValue,
+                previousValue: previousValue,
+                unitString: unit.unitString,
+                vitalKind: habit.vitalKind,
+                context: habit.context,
+                hasUserEdited: false
+            )
+        }
     }
 
-    func goalMetPercentage(habitHistory: [Habit], samples: [DateQuantitySample]) -> Double {
-        var passCount = 0
-        var totalCount = 0
+    func calculateHabitGoalStatistics(
+        habitHistory: [Habit],
+        samples: [DateQuantitySample]
+    ) -> HabitGoalStatistics {
+
+        var metGoalSamples = [HabitGoalStatistics.HabitSamplePair]()
+        var missedGoalSamples = [HabitGoalStatistics.HabitSamplePair]()
 
         for sample in samples {
             guard let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: sample.date) }) else { continue }
@@ -177,12 +178,20 @@ private extension HabitsViewModel {
             let sampleValue = sample.quantity.doubleValue(for: unit)
 
             if sampleValue >= (habitTarget * 0.95) { // 5% for grace around meeting goals
-                passCount += 1
+                metGoalSamples.append(
+                    .init(habit: habit, sample: sample)
+                )
+            } else {
+                missedGoalSamples.append(
+                    .init(habit: habit, sample: sample)
+                )
             }
-            totalCount += 1
         }
 
-        return Double(passCount) / Double(totalCount)
+        return HabitGoalStatistics(
+            metGoalSamples: metGoalSamples,
+            missedGoalSamples: missedGoalSamples
+        )
     }
 
     func suggestNewHabit(for vital: VitalModel) async -> ProposedHabit? {
@@ -266,7 +275,8 @@ private extension HabitsViewModel {
             previousValue: nil,
             unitString: unit.unitString,
             vitalKind: vitalKind,
-            context: context
+            context: context,
+            hasUserEdited: false
         )
     }
 }

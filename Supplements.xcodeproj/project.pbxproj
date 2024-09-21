@@ -103,6 +103,7 @@
 		FF2FB8A42C9DD74A00F57523 /* HabitDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB8A32C9DD74A00F57523 /* HabitDetailsView.swift */; };
 		FF2FB8A62C9DD81A00F57523 /* Habit+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB8A52C9DD81400F57523 /* Habit+Helpers.swift */; };
 		FF2FB8AD2C9E117C00F57523 /* DebugHabitsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB8AC2C9E117C00F57523 /* DebugHabitsListView.swift */; };
+		FF2FB8B42C9F748F00F57523 /* HabitGoalStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */; };
 		FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F252C1A7041002DA563 /* ScreenUsageReportCell.swift */; };
 		FF3A8F322C1A8341002DA563 /* DefaultReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F312C1A8341002DA563 /* DefaultReportExtension.swift */; };
 		FF3A8F342C1A8341002DA563 /* BedtimeActivityReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F332C1A8341002DA563 /* BedtimeActivityReport.swift */; };
@@ -604,6 +605,7 @@
 		FF2FB8A32C9DD74A00F57523 /* HabitDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailsView.swift; sourceTree = "<group>"; };
 		FF2FB8A52C9DD81400F57523 /* Habit+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+Helpers.swift"; sourceTree = "<group>"; };
 		FF2FB8AC2C9E117C00F57523 /* DebugHabitsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugHabitsListView.swift; sourceTree = "<group>"; };
+		FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalStatistics.swift; sourceTree = "<group>"; };
 		FF3A8F252C1A7041002DA563 /* ScreenUsageReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenUsageReportCell.swift; sourceTree = "<group>"; };
 		FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3A8F312C1A8341002DA563 /* DefaultReportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultReportExtension.swift; sourceTree = "<group>"; };
@@ -1570,6 +1572,7 @@
 			isa = PBXGroup;
 			children = (
 				FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */,
+				FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */,
 				FF2FB8952C9CCB7700F57523 /* ProposedHabit.swift */,
 			);
 			path = Habits;
@@ -2792,6 +2795,7 @@
 				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
 				FFB4449F2BED458A00486AD7 /* OnboardingWelcomeView.swift in Sources */,
 				FF426ACD2C6D4768006E0F17 /* NSPredicate+Sendable.swift in Sources */,
+				FF2FB8B42C9F748F00F57523 /* HabitGoalStatistics.swift in Sources */,
 				FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */,
 				FF4CAB022C813D91001A59F3 /* WeatherForecaster.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,

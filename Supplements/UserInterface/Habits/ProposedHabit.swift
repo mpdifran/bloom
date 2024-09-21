@@ -18,7 +18,7 @@ struct ProposedHabit: Sendable, Identifiable {
     let startDate: Date = Date.now
     let vitalKind: VitalModel.Kind?
     let context: String?
-    var hasUserEdited: Bool = false
+    var hasUserEdited: Bool
 }
 
 extension ProposedHabit {

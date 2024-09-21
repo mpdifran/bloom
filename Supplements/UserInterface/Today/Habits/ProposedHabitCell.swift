@@ -106,11 +106,12 @@ struct ProposedHabitCell: View {
                 proposedHabit: .constant(.init(
                     targetMetric: .waterIntake,
                     value: 500,
-                    suggestedValue: 500,
+                    suggestedValue: 800,
                     previousValue: 250,
                     unitString: HKUnit.literUnit(with: .milli).unitString,
                     vitalKind: .nutrition,
-                    context: "Water can keep you hydrated."
+                    context: "Water can keep you hydrated.",
+                    hasUserEdited: true
                 ))
             )
             ProposedHabitCell(
@@ -121,7 +122,8 @@ struct ProposedHabitCell: View {
                     previousValue: 3,
                     unitString: HKUnit.meterUnit(with: .kilo).unitString,
                     vitalKind: .cardioFitness,
-                    context: "You should run more."
+                    context: "You should run more.",
+                    hasUserEdited: false
                 ))
             )
             ProposedHabitCell(
@@ -132,7 +134,8 @@ struct ProposedHabitCell: View {
                     previousValue: nil,
                     unitString: HKUnit.minute().unitString,
                     vitalKind: .sleepQuality,
-                    context: "Get out in the sun!"
+                    context: "Get out in the sun!",
+                    hasUserEdited: false
                 ))
             )
         }

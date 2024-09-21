@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 import TelemetryDeck
 
-public actor ContainerHolder {
+public class ContainerHolder {
     public static let shared = ContainerHolder()
 
     public let container: ModelContainer
