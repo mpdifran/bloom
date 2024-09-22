@@ -12,12 +12,20 @@ import DataContainer
 
 struct TodayView: View {
 
-    @Query var habits: [Habit]
+    @Query var suggestedHabits: [Habit]
+    @Query var userHabits: [Habit]
 
     init() {
-        _habits = Query(
+        _suggestedHabits = Query(
             filter: #Predicate<Habit> { habit in
                 habit.endDate == nil && habit.isSuggested
+            },
+            sort: \Habit.startDate,
+            order: .reverse
+        )
+        _userHabits = Query(
+            filter: #Predicate<Habit> { habit in
+                habit.endDate == nil && !habit.isSuggested
             },
             sort: \Habit.startDate,
             order: .reverse
@@ -64,14 +72,14 @@ struct TodayView: View {
                         }
                     }
 
-                    if habits.isNotEmpty {
+                    if suggestedHabits.isNotEmpty {
                         Text("Focus Areas")
                             .bold()
                             .padding(.horizontal)
                             .zStackAlignment(.leading)
                             .padding(.top)
 
-                        ForEach(habits) { habit in
+                        ForEach(suggestedHabits) { habit in
                             NavigationLink {
                                 HabitDetailsView(habit: habit)
                             } label: {
@@ -81,18 +89,18 @@ struct TodayView: View {
                         }
                     }
 
-                    if goalsViewModel.habits.isNotEmpty {
+                    if userHabits.isNotEmpty {
                         Text("Habits")
                             .bold()
                             .padding(.horizontal)
                             .zStackAlignment(.leading)
                             .padding(.top)
 
-                        ForEachEnumerated(goalsViewModel.habits) { (index, habit) in
+                        ForEach(userHabits) { habit in
                             NavigationLink {
-                                LegacyHabitDetailsView(habit: habit)
+                                HabitDetailsView(habit: habit)
                             } label: {
-                                LegacyHabitDailyUpdateCell(habit: habit)
+                                HabitDailyUpdateCell(habit: habit)
                             }
                             .buttonStyle(.plain)
                         }

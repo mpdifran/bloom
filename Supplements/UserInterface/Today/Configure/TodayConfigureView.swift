@@ -7,6 +7,8 @@
 
 import SwiftUI
 import AppUI
+import SwiftData
+import DataContainer
 
 struct TodayConfigureView: View {
 
@@ -14,8 +16,23 @@ struct TodayConfigureView: View {
     @ObservedObject private var toDoManager = ToDoManager.shared
 
     @State private var presentedSheet: AnyView?
+    @State private var error: Error?
 
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+
+    @Query private var userAddedHabits: [Habit]
+    @Query private var allHabits: [Habit]
+
+    init() {
+        _userAddedHabits = Query(
+            filter: #Predicate<Habit> { habit in
+                habit.endDate == nil && !habit.isSuggested
+            },
+            sort: \Habit.startDate,
+            order: .forward
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -35,6 +52,7 @@ struct TodayConfigureView: View {
             }
         }
         .sheet($presentedSheet)
+        .alert(error: $error)
     }
 }
 
@@ -42,25 +60,37 @@ private extension TodayConfigureView {
 
     var habitsSection: some View {
         Section("Habits") {
-            ForEach(goalsViewModel.habits) { (habit) in
-                HabitCellLegacy(habit: habit)
+            ForEach(userAddedHabits) { (habit) in
+                UserAddedHabitCell(habit: habit)
             }
             .onDelete { indexSet in
                 for index in indexSet {
-                    goalsViewModel.habits.remove(at: index)
+                    let habit = userAddedHabits[index]
+                    modelContext.delete(habit)
+                }
+                do {
+                    try modelContext.save()
+                } catch {
+                    self.error = error
                 }
             }
 
-            if goalsViewModel.notYetAddedHabits().isNotEmpty {
+            if remainingMetrics.isNotEmpty {
                 Button {
-                    presentedSheet = HabitGoalPicker { habit in
-                        goalsViewModel.habits.append(habit)
-                    }.asAny
+                    presentedSheet = UserAddedGoalPicker().asAny
                 } label: {
                     Label("Add a Habit", systemImage: "plus")
                 }
             }
         }
+    }
+
+    var remainingMetrics: [TargetMetric] {
+        TargetMetric.allCases.filter({ targetMetric in
+            !allHabits.contains(where: { habit in
+                habit.targetMetric == targetMetric
+            })
+        })
     }
 
     var toDoSection: some View {

@@ -1,5 +1,5 @@
 //
-//  HabitCell.swift
+//  HabitCellLegacy.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-09.

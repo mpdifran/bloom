@@ -18,8 +18,8 @@
 		FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */; };
 		FF0405282C8F70D400FF1E2F /* TextField+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */; };
 		FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */; };
-		FF04052E2C8F816A00FF1E2F /* HabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052D2C8F816A00FF1E2F /* HabitCell.swift */; };
-		FF0405302C8F868C00FF1E2F /* HabitGoalPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */; };
+		FF04052E2C8F816A00FF1E2F /* HabitCellLegacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052D2C8F816A00FF1E2F /* HabitCellLegacy.swift */; };
+		FF0405302C8F868C00FF1E2F /* HabitGoalPickerLegacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04052F2C8F868C00FF1E2F /* HabitGoalPickerLegacy.swift */; };
 		FF0405342C8F876500FF1E2F /* HabitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405332C8F876500FF1E2F /* HabitModel.swift */; };
 		FF0405362C8F8C3400FF1E2F /* HabitMetricCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */; };
 		FF0405382C8F94A400FF1E2F /* LegacyHabitDailyUpdateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405372C8F94A400FF1E2F /* LegacyHabitDailyUpdateCell.swift */; };
@@ -158,6 +158,9 @@
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
 		FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC952BF17B1400C34621 /* BackgroundTaskScheduler.swift */; };
 		FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */; };
+		FF6E060C2C9F8E7C00C4219B /* UserAddedHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E060B2C9F8E7C00C4219B /* UserAddedHabitCell.swift */; };
+		FF6E060E2C9F90A900C4219B /* UserAddedGoalPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E060D2C9F90A900C4219B /* UserAddedGoalPicker.swift */; };
+		FF6E06102C9F930800C4219B /* SelectableHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E060F2C9F930800C4219B /* SelectableHabitCell.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
 		FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904D2C3472D200F9C1A5 /* UserInfo.swift */; };
 		FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */; };
@@ -521,8 +524,8 @@
 		FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TelemetryDeck+Helpers.swift"; sourceTree = "<group>"; };
 		FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+Selection.swift"; sourceTree = "<group>"; };
 		FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayConfigureView.swift; sourceTree = "<group>"; };
-		FF04052D2C8F816A00FF1E2F /* HabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCell.swift; sourceTree = "<group>"; };
-		FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalPicker.swift; sourceTree = "<group>"; };
+		FF04052D2C8F816A00FF1E2F /* HabitCellLegacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCellLegacy.swift; sourceTree = "<group>"; };
+		FF04052F2C8F868C00FF1E2F /* HabitGoalPickerLegacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalPickerLegacy.swift; sourceTree = "<group>"; };
 		FF0405332C8F876500FF1E2F /* HabitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitModel.swift; sourceTree = "<group>"; };
 		FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitMetricCell.swift; sourceTree = "<group>"; };
 		FF0405372C8F94A400FF1E2F /* LegacyHabitDailyUpdateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyHabitDailyUpdateCell.swift; sourceTree = "<group>"; };
@@ -657,6 +660,9 @@
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
 		FF6AEC952BF17B1400C34621 /* BackgroundTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskScheduler.swift; sourceTree = "<group>"; };
 		FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		FF6E060B2C9F8E7C00C4219B /* UserAddedHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAddedHabitCell.swift; sourceTree = "<group>"; };
+		FF6E060D2C9F90A900C4219B /* UserAddedGoalPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAddedGoalPicker.swift; sourceTree = "<group>"; };
+		FF6E060F2C9F930800C4219B /* SelectableHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableHabitCell.swift; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
 		FF78904D2C3472D200F9C1A5 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSuggestionModel.swift; sourceTree = "<group>"; };
@@ -1010,6 +1016,7 @@
 				FF2FB8942C9C906F00F57523 /* Habits */,
 				FF7112872C9874CC0020A0F0 /* Goals */,
 				FF7112862C9874AF0020A0F0 /* HabitsLegacy */,
+				FF6E060A2C9F8DFA00C4219B /* Configure */,
 				FF0DA0F12C84D967007D1A6B /* Components */,
 				FF4B2F462C90C7880003879C /* ToDos */,
 				FF0DA0EC2C84D661007D1A6B /* TodayView.swift */,
@@ -1025,7 +1032,6 @@
 				FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */,
 				FFE41D202C8BD8C900E3E559 /* ReportCell.swift */,
 				FFCC6B892C9C8B7D00676CAA /* GoalReviewCell.swift */,
-				FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */,
 				FF2FB89B2C9CD80000F57523 /* ProgressBar.swift */,
 			);
 			path = Components;
@@ -1370,15 +1376,26 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
+		FF6E060A2C9F8DFA00C4219B /* Configure */ = {
+			isa = PBXGroup;
+			children = (
+				FF04052B2C8F7E0900FF1E2F /* TodayConfigureView.swift */,
+				FF6E060B2C9F8E7C00C4219B /* UserAddedHabitCell.swift */,
+				FF6E060D2C9F90A900C4219B /* UserAddedGoalPicker.swift */,
+				FF6E060F2C9F930800C4219B /* SelectableHabitCell.swift */,
+			);
+			path = Configure;
+			sourceTree = "<group>";
+		};
 		FF7112862C9874AF0020A0F0 /* HabitsLegacy */ = {
 			isa = PBXGroup;
 			children = (
 				FF0405372C8F94A400FF1E2F /* LegacyHabitDailyUpdateCell.swift */,
 				FFD5EC7E2C90888200B5E217 /* LegacyHabitDailyUpdateCellViewModel.swift */,
 				FFA062B32C9236B100ADCB09 /* LegacyHabitDetailsView.swift */,
-				FF04052D2C8F816A00FF1E2F /* HabitCell.swift */,
+				FF04052D2C8F816A00FF1E2F /* HabitCellLegacy.swift */,
 				FF0405352C8F8C3400FF1E2F /* HabitMetricCell.swift */,
-				FF04052F2C8F868C00FF1E2F /* HabitGoalPicker.swift */,
+				FF04052F2C8F868C00FF1E2F /* HabitGoalPickerLegacy.swift */,
 			);
 			path = HabitsLegacy;
 			sourceTree = "<group>";
@@ -2686,7 +2703,7 @@
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,
 				FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */,
 				FF4A21CC2C8A01CF00278019 /* FeatureRequestWebView.swift in Sources */,
-				FF04052E2C8F816A00FF1E2F /* HabitCell.swift in Sources */,
+				FF04052E2C8F816A00FF1E2F /* HabitCellLegacy.swift in Sources */,
 				FF4CAAF92C8005B6001A59F3 /* BowelMovementMonthlySummary.swift in Sources */,
 				FFC0AA8F2C3C22DA0025FE34 /* WristTemperatureChartView.swift in Sources */,
 				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
@@ -2702,6 +2719,7 @@
 				FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
+				FF6E06102C9F930800C4219B /* SelectableHabitCell.swift in Sources */,
 				FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */,
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
 				FF2FB8A02C9DA9F100F57523 /* ProposedHabitCell.swift in Sources */,
@@ -2716,6 +2734,7 @@
 				FF8B8B302BFE728300BA2128 /* RecommendedGoalCell.swift in Sources */,
 				FF0404CD2C028223009FDC4E /* InsightSectionHeaderView.swift in Sources */,
 				FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */,
+				FF6E060C2C9F8E7C00C4219B /* UserAddedHabitCell.swift in Sources */,
 				FFC8B0132C518FF5009C5CED /* CardioFitnessMonthlySummary.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */,
@@ -2757,7 +2776,7 @@
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
-				FF0405302C8F868C00FF1E2F /* HabitGoalPicker.swift in Sources */,
+				FF0405302C8F868C00FF1E2F /* HabitGoalPickerLegacy.swift in Sources */,
 				FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */,
 				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
 				FFA402CA2C94C88700D8DD40 /* View+Selectable.swift in Sources */,
@@ -2813,6 +2832,7 @@
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
 				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
 				FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */,
+				FF6E060E2C9F90A900C4219B /* UserAddedGoalPicker.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FF4CAB042C81441F001A59F3 /* WeatherAlertCell.swift in Sources */,
 				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,

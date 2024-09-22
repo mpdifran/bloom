@@ -18,7 +18,7 @@ struct DebugHabitsListView: View {
 
     var body: some View {
         NavigationStack {
-            List(habits) { habit in
+            List {
                 ForEach(habits) { habit in
                     HStack {
                         Text(habit.targetMetric.name)

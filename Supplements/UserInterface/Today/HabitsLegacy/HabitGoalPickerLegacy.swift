@@ -1,5 +1,5 @@
 //
-//  HabitGoalPicker.swift
+//  HabitGoalPickerLegacy.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-09.
@@ -8,7 +8,7 @@
 import SwiftUI
 import AppUI
 
-struct HabitGoalPicker: View {
+struct HabitGoalPickerLegacy: View {
 
     let onHabit: (HabitModel) -> Void
 
@@ -71,7 +71,7 @@ struct HabitGoalPicker: View {
 }
 
 #Preview {
-    HabitGoalPicker { _ in
+    HabitGoalPickerLegacy { _ in
 
     }
 }
