@@ -7,8 +7,9 @@
 
 import Foundation
 import DataContainer
+import SwiftData
 
-extension DataFetcher {
+extension ModelContext {
 
     func fetchBowelMovementMonthlySummary() -> BowelMovementMonthlySummary {
         let thisMonth = (try? fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []

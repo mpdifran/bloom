@@ -6,8 +6,9 @@
 //
 
 import Foundation
-import HealthKit
+@preconcurrency import HealthKit
 import DataContainer
+import SwiftData
 
 struct ActionLatestValueDetails {
     let displayString: String
@@ -26,7 +27,7 @@ final class ActionsViewModel: ObservableObject {
 
     private var observers = [HKObserverQueryHandle]()
 
-    private let dataFetcher = DataFetcher()
+    let modelContext = ModelContext(ContainerHolder.shared.container)
 
     private init() {
         observeData()
@@ -116,7 +117,7 @@ extension ActionsViewModel {
         observers.append(waterHandle)
 
         Task {
-            let bowelMovements = try? dataFetcher.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))
+            let bowelMovements = try? modelContext.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))
 
             if let lastSample = bowelMovements?.last {
                 let displayString = "Type \(lastSample.bristolStoolType)"

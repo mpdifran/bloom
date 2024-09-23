@@ -35,7 +35,7 @@ struct SupplementsApp: App {
                     HealthManager.shared.observeSleepData()
                 }
                 .onReceive(foregroundPublisher) { _ in
-                    HabitsViewModel.shared.deleteNoneHabits()
+                    onForeground()
                 }
         }
         .modelContainer(ContainerHolder.shared.container)
@@ -46,5 +46,12 @@ struct SupplementsApp: App {
             await GoalsViewModel.shared.checkForUpdateGoals()
             BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
         }
+    }
+}
+
+private extension SupplementsApp {
+
+    func onForeground() {
+
     }
 }

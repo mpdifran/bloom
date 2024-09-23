@@ -1,40 +1,31 @@
 //
-//  DataFetcher.swift
-//  Supplements
+//  ModelContext+Helpers.swift
+//  DataContainer
 //
-//  Created by Mark DiFranco on 2024-08-29.
+//  Created by Mark DiFranco on 2024-09-23.
 //
 
 import Foundation
 import SwiftData
 import BloomFoundation
 
-public final class DataFetcher {
+public extension ModelContext {
 
-    public let context: ModelContext
+    func existingModel<T>(for objectID: PersistentIdentifier) throws -> T? where T: PersistentModel {
+        if let registered: T = registeredModel(for: objectID) {
+            return registered
+        }
 
-    public init() {
-        let context = ModelContext(ContainerHolder.shared.container)
-        self.context = context
+        let fetchDescriptor = FetchDescriptor<T>(
+            predicate: #Predicate {
+                $0.persistentModelID == objectID
+            })
+
+        return try fetch(fetchDescriptor).first
     }
 }
 
-public extension DataFetcher {
-
-//    func fetch<Model>(
-//        _ modelType: Model.Type,
-//        dateRange: DateRange
-//    ) throws -> [Model] where Model: PersistentModel, Model: IdentifiableByDate {
-//        let start = dateRange.start
-//        let end = dateRange.end
-//        let descriptor = FetchDescriptor<Model>(
-//            predicate: #Predicate<Model> { model in
-//                model.date >= start && model.date <= end
-//            },
-//            sortBy: [SortDescriptor(\.date)]
-//        )
-//        return try context.fetch(descriptor)
-//    }
+public extension ModelContext {
 
     func fetchBowelMovements(dateRange: DateRange) throws -> [BowelMovement] {
         let start = dateRange.start
@@ -45,7 +36,7 @@ public extension DataFetcher {
             },
             sortBy: [SortDescriptor(\BowelMovement.date)]
         )
-        return try context.fetch(descriptor)
+        return try fetch(descriptor)
     }
 
     func fetchActiveHabits(isSuggested: Bool) throws -> [Habit] {
@@ -55,7 +46,7 @@ public extension DataFetcher {
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
-        return try context.fetch(descriptor)
+        return try fetch(descriptor)
     }
 
     func fetchHabits(for targetMetric: TargetMetric, isSuggested: Bool) throws -> [Habit] {
@@ -65,6 +56,10 @@ public extension DataFetcher {
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
-        return try context.fetch(descriptor)
+        return try fetch(descriptor)
+    }
+
+    func fetchHabit(id: PersistentIdentifier) throws -> Habit? {
+        try existingModel(for: id)
     }
 }

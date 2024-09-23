@@ -7,9 +7,11 @@
 
 import DataContainer
 import HealthKit
+import SwiftData
 
 struct ProposedHabit: Sendable, Identifiable {
     let id = UUID()
+    let habitID: PersistentIdentifier?
     let targetMetric: TargetMetric
     var value: Double
     var suggestedValue: Double

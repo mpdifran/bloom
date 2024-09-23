@@ -95,7 +95,8 @@ private extension PreferencesView {
             }
 
             if healthManager.healthGoal == .loseWeight {
-                LabeledContent("Weight Difference") {
+                VStack(alignment: .leading) {
+                    Text("Weight Difference")
                     HStack {
                         TextField(
                             "",

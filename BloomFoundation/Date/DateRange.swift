@@ -22,11 +22,16 @@ public extension DateRange {
     var numberOfDaysInclusive: Int {
         (Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0) + 1
     }
+
+    func containsTodayDate() -> Bool {
+        return Calendar.current.isDateInToday(end) || end > .now
+    }
 }
 
 // MARK: Today
 
 public extension DateRange {
+
     static func today() -> DateRange {
         let startDate = Calendar.current.startOfDay(for: .now)
 

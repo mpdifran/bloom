@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import HealthKit
+import SwiftData
 
 struct ProposedHabitTargetValueEditCardView: View {
     @Binding var proposedHabit: ProposedHabit
@@ -86,6 +87,7 @@ struct ProposedHabitTargetValueEditCardView: View {
 
         @State private var showSheet = true
         @State private var proposedHabit = ProposedHabit(
+            habitID: nil,
             targetMetric: .stepCount,
             value: 3000,
             suggestedValue: 5000,

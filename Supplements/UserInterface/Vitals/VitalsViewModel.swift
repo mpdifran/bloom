@@ -10,6 +10,7 @@ import HealthKit
 import Combine
 import AppFoundations
 import DataContainer
+import SwiftData
 
 final class VitalsViewModel: ObservableObject {
     static let shared = VitalsViewModel()
@@ -36,7 +37,7 @@ final class VitalsViewModel: ObservableObject {
     private let throttler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "Throttler"))
     private let activityLevelThrottler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "ActivityLevelThrottler"))
 
-    private let dataFetcher = DataFetcher()
+    private let modelContext = ModelContext(ContainerHolder.shared.container)
 
     private init() {
         observeData()
@@ -51,7 +52,7 @@ extension VitalsViewModel {
 
     func fetchSwiftDataTypes() {
         Task {
-            let summary = dataFetcher.fetchBowelMovementMonthlySummary()
+            let summary = modelContext.fetchBowelMovementMonthlySummary()
             await MainActor.run {
                 self.bowelMovementSummary = summary
             }
@@ -66,7 +67,7 @@ extension VitalsViewModel {
         let nutrition = await HealthManager.shared.fetchNutritionMonthlySummary()
         let exerciseEffectiveness = await HealthManager.shared.fetchExerciseEffectivenessSummary()
         let menstrual = await HealthManager.shared.fetchMenstrualSummary()
-        let bowelMovements = dataFetcher.fetchBowelMovementMonthlySummary()
+        let bowelMovements = modelContext.fetchBowelMovementMonthlySummary()
 
         await MainActor.run {
             self.cardioFitnessSummary = cardio

@@ -161,6 +161,8 @@
 		FF6E060C2C9F8E7C00C4219B /* UserAddedHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E060B2C9F8E7C00C4219B /* UserAddedHabitCell.swift */; };
 		FF6E060E2C9F90A900C4219B /* UserAddedGoalPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E060D2C9F90A900C4219B /* UserAddedGoalPicker.swift */; };
 		FF6E06102C9F930800C4219B /* SelectableHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E060F2C9F930800C4219B /* SelectableHabitCell.swift */; };
+		FF6E06172CA1DE0A00C4219B /* HabitsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */; };
+		FF6E06192CA2080800C4219B /* DebugHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06182CA2080800C4219B /* DebugHabitCell.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
 		FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904D2C3472D200F9C1A5 /* UserInfo.swift */; };
 		FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */; };
@@ -663,6 +665,8 @@
 		FF6E060B2C9F8E7C00C4219B /* UserAddedHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAddedHabitCell.swift; sourceTree = "<group>"; };
 		FF6E060D2C9F90A900C4219B /* UserAddedGoalPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAddedGoalPicker.swift; sourceTree = "<group>"; };
 		FF6E060F2C9F930800C4219B /* SelectableHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableHabitCell.swift; sourceTree = "<group>"; };
+		FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsFactory.swift; sourceTree = "<group>"; };
+		FF6E06182CA2080800C4219B /* DebugHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugHabitCell.swift; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
 		FF78904D2C3472D200F9C1A5 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSuggestionModel.swift; sourceTree = "<group>"; };
@@ -1572,6 +1576,7 @@
 				FF4A21C82C89FF5500278019 /* UserNamePrompt.swift */,
 				FF4A21D12C8A05D700278019 /* UserID.swift */,
 				FF2FB8AC2C9E117C00F57523 /* DebugHabitsListView.swift */,
+				FF6E06182CA2080800C4219B /* DebugHabitCell.swift */,
 				FF4A21CA2C8A01B900278019 /* FeatureRequests */,
 			);
 			path = Preferences;
@@ -1589,6 +1594,7 @@
 			isa = PBXGroup;
 			children = (
 				FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */,
+				FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */,
 				FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */,
 				FF2FB8952C9CCB7700F57523 /* ProposedHabit.swift */,
 			);
@@ -2599,6 +2605,7 @@
 				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
 				FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */,
 				FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */,
+				FF6E06172CA1DE0A00C4219B /* HabitsFactory.swift in Sources */,
 				FF0DA0F72C875106007D1A6B /* DateComponents+Helpers.swift in Sources */,
 				FF4A21C72C89F62000278019 /* EditGoalTargetView.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
@@ -2838,6 +2845,7 @@
 				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,
 				FFE41D152C8B83F600E3E559 /* ToDoActionCell.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
+				FF6E06192CA2080800C4219B /* DebugHabitCell.swift in Sources */,
 				FF2FB8982C9CD03400F57523 /* HabitDailyUpdateCell.swift in Sources */,
 				FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */,
 				FF7890582C35A8D500F9C1A5 /* SleepHealthSnapshot.swift in Sources */,

@@ -20,15 +20,7 @@ struct DebugHabitsListView: View {
         NavigationStack {
             List {
                 ForEach(habits) { habit in
-                    HStack {
-                        Text(habit.targetMetric.name)
-
-                        Spacer()
-
-                        Text(habit.displayQuantity)
-                            .foregroundStyle(habit.targetMetric.color)
-                            .bold()
-                    }
+                    DebugHabitCell(habit: habit)
                 }
                 .onDelete(perform: deleteHabits)
             }

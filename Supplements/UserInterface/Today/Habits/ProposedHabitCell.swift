@@ -124,6 +124,7 @@ struct ProposedHabitCell: View {
         VStack(spacing: 20) {
             ProposedHabitCell(
                 proposedHabit: .constant(.init(
+                    habitID: nil,
                     targetMetric: .waterIntake,
                     value: 500,
                     suggestedValue: 800,
@@ -136,6 +137,7 @@ struct ProposedHabitCell: View {
             )
             ProposedHabitCell(
                 proposedHabit: .constant(.init(
+                    habitID: nil,
                     targetMetric: .walkingRunningDistance,
                     value: 5,
                     suggestedValue: 5,
@@ -148,6 +150,7 @@ struct ProposedHabitCell: View {
             )
             ProposedHabitCell(
                 proposedHabit: .constant(.init(
+                    habitID: nil,
                     targetMetric: .timeInDaylight,
                     value: 30,
                     suggestedValue: 30,

@@ -275,14 +275,14 @@ extension HKHealthStore {
                         )
                     }
                 }
-                if !quantities.contains(where: { Calendar.current.isDateInToday($0.date) }) {
-                    quantities.append(
-                        DateQuantitySample(
-                            date: Calendar.current.startOfDay(for: .now),
-                            quantity: HKQuantity(unit: unit, doubleValue: 0)
-                        )
-                    )
-                }
+//                if !quantities.contains(where: { Calendar.current.isDateInToday($0.date) }) && dateRange.containsTodayDate() {
+//                    quantities.append(
+//                        DateQuantitySample(
+//                            date: Calendar.current.startOfDay(for: .now),
+//                            quantity: HKQuantity(unit: unit, doubleValue: 0)
+//                        )
+//                    )
+//                }
                 continuation.resume(returning: quantities)
             }
 

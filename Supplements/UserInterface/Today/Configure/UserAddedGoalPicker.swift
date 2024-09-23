@@ -73,6 +73,7 @@ struct UserAddedGoalPicker: View {
                 }
 
                 proposedHabit = ProposedHabit(
+                    habitID: nil,
                     targetMetric: newValue,
                     value: 0,
                     suggestedValue: 0,

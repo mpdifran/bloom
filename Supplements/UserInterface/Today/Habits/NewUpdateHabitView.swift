@@ -56,8 +56,12 @@ struct NewUpdateHabitView: View {
             }
             .shelf {
                 ProminentButton("Save") {
-                    performSave()
-                    dismiss()
+                    do {
+                        try performSave()
+                        dismiss()
+                    } catch {
+                        self.error = error
+                    }
                 }
             }
         }
@@ -71,8 +75,15 @@ struct NewUpdateHabitView: View {
 
 private extension NewUpdateHabitView {
 
-    func performSave() {
+    func performSave() throws {
         for proposedHabit in proposedHabits {
+            if
+                let habitID = proposedHabit.habitID,
+                let existingHabit = try modelContext.fetchHabit(id: habitID)
+            {
+                existingHabit.endDate = .now
+            }
+
             let habit = Habit(
                 targetMetric: proposedHabit.targetMetric,
                 value: proposedHabit.value,
