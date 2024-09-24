@@ -427,7 +427,6 @@ extension HKHealthStore {
 
     func fetchCollatedWorkouts(
         activityTypes: [HKWorkoutActivityType],
-        interval: DateComponents = DateComponents(day: 1),
         dateRange: DateRange
     ) async throws -> [DateCollatedWorkouts] {
         let workouts = try await fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)
@@ -436,12 +435,7 @@ extension HKHealthStore {
 
         for workout in workouts {
             if let existingDate = collatedWorkouts.keys.first(where: {
-                let dateComponents = Calendar.current.dateComponents(
-                    interval.calendarComponents,
-                    from: $0,
-                    to: workout.startDate
-                )
-                return dateComponents < interval
+                return Calendar.current.isDate($0, inSameDayAs: workout.startDate)
             }) {
                 collatedWorkouts[existingDate, default: []].append(workout)
             } else {
@@ -450,9 +444,18 @@ extension HKHealthStore {
             }
         }
 
-        let result = collatedWorkouts.map { (key: Date, value: [HKWorkout]) in
-            DateCollatedWorkouts(date: key, workouts: value)
+        var result = [DateCollatedWorkouts]()
+        Calendar.current.iterate(dateRange: dateRange, by: .init(day: 1)) { date in
+            if
+                let key = collatedWorkouts.keys.first(where: { Calendar.current.isDate($0, inSameDayAs: date) }),
+                let workouts = collatedWorkouts[key]
+            {
+                result.append(DateCollatedWorkouts(date: date, workouts: workouts))
+            } else {
+                result.append(DateCollatedWorkouts(date: date, workouts: []))
+            }
         }
+
         return result.sorted(keyPath: \.date)
     }
 

@@ -23,6 +23,8 @@ extension TargetMetric {
             [HKQuantityType(.distanceWalkingRunning)]
         case .timeInDaylight:
             [HKQuantityType(.timeInDaylight)]
+        case .exerciseMinutes:
+            [HKWorkoutType.workoutType()]
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -40,6 +42,10 @@ extension TargetMetric {
                 .meterUnit(with: .kilo)
         case .timeInDaylight:
                 .minute()
+        case .exerciseMinutes:
+                .minute()
+        @unknown default:
+            fatalError("Unhandled TargetMetric case.")
         }
     }
 
@@ -54,6 +60,8 @@ extension TargetMetric {
         case .walkingRunningDistance:
             return HKQuantity(unit: defaultUnit, doubleValue: 0.5)
         case .timeInDaylight:
+            return HKQuantity(unit: defaultUnit, doubleValue: 5)
+        case .exerciseMinutes:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
@@ -72,6 +80,8 @@ extension TargetMetric {
             return HKQuantityRange(unit: defaultUnit, range: 5...8)
         case .timeInDaylight:
             return HKQuantityRange(unit: defaultUnit, range: 20...30)
+        case .exerciseMinutes:
+            return HKQuantityRange(unit: defaultUnit, range: 20...30)
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -88,6 +98,8 @@ extension TargetMetric {
         case .walkingRunningDistance:
             NumberFormatter.oneDecimalPlace
         case .timeInDaylight:
+            NumberFormatter.noDecimalPlaces
+        case .exerciseMinutes:
             NumberFormatter.noDecimalPlaces
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
@@ -120,6 +132,9 @@ extension TargetMetric {
             return await HealthManager.shared.fetchTotalSum(for: .distanceWalkingRunning, dateRange: dateRange) ?? defaultQuantity
         case .timeInDaylight:
             return await HealthManager.shared.fetchTotalSum(for: .timeInDaylight, dateRange: dateRange) ?? defaultQuantity
+        case .exerciseMinutes:
+            let totalDuration = await HealthManager.shared.fetchWorkouts(dateRange: dateRange).sum(keyPath: \.duration)
+            return HKQuantity(unit: .second(), doubleValue: totalDuration)
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -137,6 +152,13 @@ extension TargetMetric {
             return await HealthManager.shared.fetchCollatedQuantity(for: .distanceWalkingRunning, unit: unit, dateRange: dateRange)
         case .timeInDaylight:
             return await HealthManager.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: unit, dateRange: dateRange)
+        case .exerciseMinutes:
+            let workouts = await HealthManager.shared.fetchCollatedWorkouts(dateRange: dateRange)
+            return workouts.map {
+                let total = $0.workouts.sum(keyPath: \.duration)
+                let quantity = HKQuantity(unit: .second(), doubleValue: total)
+                return DateQuantitySample(date: $0.date, quantity: quantity)
+            }
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }

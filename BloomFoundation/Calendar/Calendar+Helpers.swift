@@ -189,3 +189,22 @@ public extension Calendar {
         return self.date(from: currentComponents)
     }
 }
+
+public extension Calendar {
+
+    func iterate(dateRange: DateRange, by dateComponents: DateComponents, iterator: (Date) -> Void) {
+        guard dateRange.end > dateRange.start else { return }
+
+        var currentDate = dateRange.start
+
+        while currentDate < dateRange.end {
+            iterator(currentDate)
+
+            if let nextDate = date(byAdding: dateComponents, to: currentDate) {
+                currentDate = nextDate
+            } else {
+                break
+            }
+        }
+    }
+}

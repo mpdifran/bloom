@@ -378,26 +378,23 @@ extension HealthManager {
         (try? await healthStore.fetchWorkouts(activityType: activityType, dateRange: dateRange)) ?? []
     }
 
-    func fetchWorkouts(activityTypes: [HKWorkoutActivityType] = [], dateRange: DateRange) async -> [HKWorkout] {
+    func fetchWorkouts(activityTypes: [HKWorkoutActivityType], dateRange: DateRange) async -> [HKWorkout] {
         (try? await healthStore.fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)) ?? []
     }
 
     func fetchCollatedWorkouts(
         activityType: HKWorkoutActivityType,
-        interval: DateComponents = DateComponents(day: 1),
         dateRange: DateRange
     ) async -> [DateCollatedWorkouts] {
-        await fetchCollatedWorkouts(activityTypes: [activityType], interval: interval, dateRange: dateRange)
+        await fetchCollatedWorkouts(activityTypes: [activityType], dateRange: dateRange)
     }
 
     func fetchCollatedWorkouts(
         activityTypes: [HKWorkoutActivityType] = [],
-        interval: DateComponents = DateComponents(day: 1),
         dateRange: DateRange
     ) async -> [DateCollatedWorkouts] {
         (try? await healthStore.fetchCollatedWorkouts(
             activityTypes: activityTypes,
-            interval: interval,
             dateRange: dateRange
         )) ?? []
     }
@@ -501,12 +498,11 @@ extension HealthManager {
     }
 
     func fetchCollatedWorkoutHeartRateReports(
-        interval: DateComponents = DateComponents(day: 1),
         dateRange: DateRange
     ) async -> [DateCollatedWorkoutHeartRateReport] {
         guard let targetHeartRateZones = await heartRateZones() else { return [] }
 
-        let collatedWorkouts = await fetchCollatedWorkouts(interval: interval, dateRange: dateRange)
+        let collatedWorkouts = await fetchCollatedWorkouts(dateRange: dateRange)
 
         var collatedReports = [DateCollatedWorkoutHeartRateReport]()
 
