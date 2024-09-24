@@ -347,7 +347,7 @@
 		FFE41D152C8B83F600E3E559 /* ToDoActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */; };
 		FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */; };
 		FFE41D1D2C8BCDAA00E3E559 /* EveningReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */; };
-		FFE41D1F2C8BCE1500E3E559 /* EveningGoalProgressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */; };
+		FFE41D1F2C8BCE1500E3E559 /* EveningHabitProgressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1E2C8BCE1500E3E559 /* EveningHabitProgressCell.swift */; };
 		FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D202C8BD8C900E3E559 /* ReportCell.swift */; };
 		FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */; };
 		FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */; };
@@ -838,7 +838,7 @@
 		FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoActionCell.swift; sourceTree = "<group>"; };
 		FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCoordinator.swift; sourceTree = "<group>"; };
 		FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningReportView.swift; sourceTree = "<group>"; };
-		FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningGoalProgressCell.swift; sourceTree = "<group>"; };
+		FFE41D1E2C8BCE1500E3E559 /* EveningHabitProgressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningHabitProgressCell.swift; sourceTree = "<group>"; };
 		FFE41D202C8BD8C900E3E559 /* ReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCell.swift; sourceTree = "<group>"; };
 		FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Confetti.swift"; sourceTree = "<group>"; };
 		FFE918E62C1CBBB100B3FA8E /* SleepSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSummaryViewModel.swift; sourceTree = "<group>"; };
@@ -1972,7 +1972,7 @@
 				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
 				FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */,
 				FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */,
-				FFE41D1E2C8BCE1500E3E559 /* EveningGoalProgressCell.swift */,
+				FFE41D1E2C8BCE1500E3E559 /* EveningHabitProgressCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2624,7 +2624,7 @@
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFC77AF32C5A6CFA003E5F85 /* GoalsView.swift in Sources */,
-				FFE41D1F2C8BCE1500E3E559 /* EveningGoalProgressCell.swift in Sources */,
+				FFE41D1F2C8BCE1500E3E559 /* EveningHabitProgressCell.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,

@@ -9,6 +9,8 @@ import SwiftUI
 import AppUI
 import EventKit
 import EventKitUI
+import SwiftData
+import DataContainer
 
 @MainActor
 struct EveningReportView: View {
@@ -17,13 +19,26 @@ struct EveningReportView: View {
 
     @ObservedObject private var goalsViewModel = GoalsViewModel.shared
 
+    @Query var suggestedHabits: [Habit]
+
+    @State private var selectedHabit: Habit?
     @State private var events = [EKEvent]()
     @State private var selectedEvent: EKEvent?
+
+    init() {
+        _suggestedHabits = Query(
+            filter: #Predicate<Habit> { habit in
+                habit.endDate == nil && habit.isSuggested
+            },
+            sort: \Habit.startDate,
+            order: .reverse
+        )
+    }
 
     var body: some View {
         NavigationStack {
             List {
-                goalsSection
+                habitsSection
                 calendarSection
             }
             .navigationTitle("Evening Report")
@@ -37,11 +52,14 @@ struct EveningReportView: View {
                 })
                 .buttonStyle(.primary)
             }
+            .navigationDestination(item: $selectedHabit) { habit in
+                HabitDetailsView(habit: habit)
+            }
+            .sheet(item: $selectedEvent) { event in
+                EKEventView(event: event)
+            }
         }
         .tint(.indigo)
-        .sheet(item: $selectedEvent) { event in
-            EKEventView(event: event)
-        }
         .task {
             await CalendarManager.shared.promptForPermission()
             self.events = await CalendarManager.shared.eventsTomorrow()
@@ -51,17 +69,21 @@ struct EveningReportView: View {
 
 private extension EveningReportView {
 
-    var goalsSection: some View {
-        Section("Goals") {
-            ForEachEnumeratedNoID(goalsViewModel.goals) { (index, goals) in
-                if let goal = goals.first {
-                    NavigationLink {
-                        GoalDetailsView(goals: $goalsViewModel.goals[index])
-                    } label: {
-                        EveningGoalProgressCell(goal: goal)
+    @ViewBuilder
+    var habitsSection: some View {
+        if suggestedHabits.isNotEmpty {
+            Section("Focus Areas") {
+                VStack {
+                    ForEach(suggestedHabits) { habit in
+                        Button {
+                            selectedHabit = habit
+                        } label: {
+                            EveningHabitProgressCell(habit: habit)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .removeListSeparator()
             }
         }
     }

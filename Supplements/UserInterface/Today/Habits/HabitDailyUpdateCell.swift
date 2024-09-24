@@ -45,14 +45,14 @@ struct HabitDailyUpdateCell: View {
                 ProgressBar(progress: viewModel.dailyValue / habit.value)
 
                 HStack {
-                    Text("\(viewModel.dailyValue.format(using: .oneDecimalPlace)) \(habit.unit.unitString)")
+                    Text(viewModel.formattedDailyValue)
                         .foregroundStyle(.tint)
                         .contentTransition(.numericText(value: viewModel.dailyValue))
                         .animation(.default, value: viewModel.dailyValue)
 
                     Spacer()
 
-                    Text("\(NumberFormatter.noDecimalPlaces.string(for: habit.value) ?? "") \(habit.unit.unitString)")
+                    Text(habit.displayQuantity)
                         .foregroundStyle(.secondary)
                 }
                 .font(.subheadline)

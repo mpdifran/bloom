@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DataContainer
+import HealthKit
 
 @MainActor
 final class HabitDailyUpdateCellViewModel: ObservableObject {
@@ -22,6 +23,14 @@ final class HabitDailyUpdateCellViewModel: ObservableObject {
     }
 
     private var observationHandler: HKObserverQueryHandle?
+}
+
+extension HabitDailyUpdateCellViewModel {
+
+    var formattedDailyValue: String {
+        let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
+        return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter)
+    }
 }
 
 private extension HabitDailyUpdateCellViewModel {

@@ -10,7 +10,7 @@ import SwiftData
 
 extension SchemaV1 {
     @Model
-    public final class Habit: Identifiable {
+    public final class Habit: Identifiable, Hashable {
         public var rawTargetMetric: String = ""
         public var value: Double = 0
         public var unitString: String = ""
