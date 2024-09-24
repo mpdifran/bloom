@@ -29,18 +29,8 @@ extension HabitsFactory {
     }
 
     func generateProposedHabits() async -> [ProposedHabit] {
-        let existingHabits: [Habit]
-        do {
-            existingHabits = try modelContext.fetchActiveHabits(isSuggested: true)
-        } catch {
-            print(error)
-            TelemetryDeck.errorOccurred(
-                id: "HabitsViewModel.fetchActiveSuggestedHabits",
-                category: .thrownException,
-                message: error.localizedDescription
-            )
-            existingHabits = []
-        }
+        let existingHabits = (try? modelContext.fetchActiveHabits(isSuggested: true)) ?? []
+        let userAddedHabits = (try? modelContext.fetchActiveHabits(isSuggested: false)) ?? []
 
         var newHabits = [ProposedHabit]()
         for habit in existingHabits {
@@ -60,6 +50,14 @@ extension HabitsFactory {
                 newHabits.append(newHabit)
             }
         }
+
+        // Make sure there's no duplicates
+        var targetMetrics: Set<TargetMetric> = userAddedHabits.map(\.targetMetric).asSet()
+        newHabits = newHabits.filter({ newHabit in
+            let shouldInclude = !targetMetrics.contains(newHabit.targetMetric)
+            targetMetrics.insert(newHabit.targetMetric)
+            return shouldInclude
+        })
 
         return newHabits
     }
