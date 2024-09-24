@@ -30,6 +30,7 @@ struct HabitGrid: View {
                         VStack(spacing: .spacing) {
                             ForEach(0 ..< 7) { rowIndex in
                                 HabitGridCell(
+                                    id: "\(week.id)-\(rowIndex)",
                                     isComplete: week.isComplete.safeAccess(at: UInt(rowIndex)),
                                     isToday: week.todayIndex == rowIndex
                                 )
@@ -76,7 +77,7 @@ extension HabitGrid {
 
         guard shiftedColumn > 0 else { return 0 }
 
-        return (Double(shiftedColumn) * Double.cellDelay * 4) + Double(row) * Double.cellDelay
+        return (Double(shiftedColumn) * Double.cellDelay * 3) + Double(row) * Double.cellDelay
     }
 
     func recommendedMaxColumnCount(for width: CGFloat) -> Int {
@@ -106,7 +107,7 @@ extension HabitGrid {
                     .init(id: 14, isComplete: [true, true, false, true, false, false, false]),
                     .init(id: 15, isComplete: [true, false, false, true, false, true, true]),
                     .init(id: 16, isComplete: [false, true, true, false, false, true, false]),
-                    .init(id: 17, isComplete: [true, true, false, true, false, false, false], todayIndex: 3),
+                    .init(id: 17, isComplete: [true, true, false, true], todayIndex: 3),
                 ]
             )
         )

@@ -17,7 +17,7 @@ struct HabitGridModel: Sendable {
     init() {
         var weeks = [Week]()
         for index in 0 ..< 40 {
-            weeks.append(Week(id: index, isComplete: Array(repeating: false, count: 7)))
+            weeks.append(Week(id: index, isComplete: []))
         }
         self.weeks = weeks
     }

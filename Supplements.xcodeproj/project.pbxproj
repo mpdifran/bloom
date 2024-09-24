@@ -1244,6 +1244,7 @@
 		FF2FB8942C9C906F00F57523 /* Habits */ = {
 			isa = PBXGroup;
 			children = (
+				FFA062AE2C921AE900ADCB09 /* HabitGrid */,
 				FF2FB8972C9CD03400F57523 /* HabitDailyUpdateCell.swift */,
 				FF2FB8992C9CD11E00F57523 /* HabitDailyUpdateCellViewModel.swift */,
 				FF2FB8A32C9DD74A00F57523 /* HabitDetailsView.swift */,
@@ -1954,7 +1955,6 @@
 			isa = PBXGroup;
 			children = (
 				FFA402C42C94739E00D8DD40 /* Metal */,
-				FFA062AE2C921AE900ADCB09 /* HabitGrid */,
 				FFF61B002BED7C1300926042 /* EfficacyView.swift */,
 				FFF61B192BEE8C3B00926042 /* TextActionBar.swift */,
 				FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */,
