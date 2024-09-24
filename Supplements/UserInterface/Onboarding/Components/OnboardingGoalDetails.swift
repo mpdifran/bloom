@@ -33,12 +33,11 @@ struct OnboardingGoalDetails: View {
             }
             .tint(goal.metric.measurement.color)
 
-
             if let targetVitalModel {
                 TargetVitalComponentView(vital: targetVitalModel)
             }
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
     }
 }
 

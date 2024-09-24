@@ -14,7 +14,7 @@ struct OnboardingHealthGoalView: View {
     @ObservedObject private var healthManager = HealthManager.shared
 
     var body: some View {
-        OnboardingCardTemplateView(aspectRatio: 1.5) {
+        OnboardingCardTemplateView(aspectRatio: 2) {
             OnboardingTitleCardView(
                 systemImage: "trophy.circle.fill",
                 title: "Health Goal",
@@ -53,22 +53,20 @@ struct OnboardingHealthGoalView: View {
 
                 if healthManager.healthGoal == .loseWeight {
                     Section {
-                        LabeledContent("Weight Difference") {
-                            HStack {
-                                TextField(
-                                    "",
-                                    value: $healthManager.targetWeightDifference,
-                                    formatter: NumberFormatter.oneDecimalPlace
-                                )
-                                .selectAllTextOnBeginEditing()
-                                .multilineTextAlignment(.trailing)
-                                .keyboardType(.decimalPad)
-                                .textFieldStyle(.roundedBorder)
-                                .font(.title3)
-                                .fontDesign(.rounded)
-                                .bold()
-                                Text("lbs")
-                            }
+                        HStack {
+                            TextField(
+                                "",
+                                value: $healthManager.targetWeightDifference,
+                                formatter: NumberFormatter.oneDecimalPlace
+                            )
+                            .selectAllTextOnBeginEditing()
+                            .multilineTextAlignment(.trailing)
+                            .keyboardType(.decimalPad)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.title3)
+                            .fontDesign(.rounded)
+                            .bold()
+                            Text("lbs")
                         }
 
                         Picker("", selection: $healthManager.weightLossSpeed) {

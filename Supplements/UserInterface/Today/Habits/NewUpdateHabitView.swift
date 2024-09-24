@@ -79,7 +79,7 @@ struct NewUpdateHabitView: View {
             .shelf {
                 ProminentButton("Save") {
                     do {
-                        try performSave()
+                        try habitsViewModel.performSave(proposedHabits: proposedHabits)
                         dismiss()
                     } catch {
                         self.error = error
@@ -93,39 +93,6 @@ struct NewUpdateHabitView: View {
         .task {
             proposedHabits = await habitsViewModel.generateProposedHabits()
             isLoading = false
-        }
-    }
-}
-
-private extension NewUpdateHabitView {
-
-    func performSave() throws {
-        for proposedHabit in proposedHabits {
-            if
-                let habitID = proposedHabit.habitID,
-                let existingHabit = try modelContext.fetchHabit(id: habitID)
-            {
-                existingHabit.endDate = .now
-            }
-
-            let habit = Habit(
-                targetMetric: proposedHabit.targetMetric,
-                value: proposedHabit.value,
-                unitString: proposedHabit.unitString,
-                startDate: .now,
-                isSuggested: true,
-                isUserEdited: false,
-                vitalKind: proposedHabit.vitalKind,
-                context: proposedHabit.context
-            )
-
-            modelContext.insert(habit)
-        }
-
-        do {
-            try modelContext.save()
-        } catch {
-            self.error = error
         }
     }
 }

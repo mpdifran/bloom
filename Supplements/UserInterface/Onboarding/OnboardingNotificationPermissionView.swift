@@ -17,7 +17,7 @@ struct OnboardingNotificationPermissionView: View {
     @State private var showNotification2 = false
 
     var body: some View {
-        OnboardingCardTemplateView {
+        OnboardingCardTemplateView(aspectRatio: 1.1) {
             OnboardingTitleCardView(
                 systemImage: "bell.badge.circle.fill",
                 title: "Notifications",
@@ -25,30 +25,33 @@ struct OnboardingNotificationPermissionView: View {
             )
             .tint(.red)
         } bottom: {
-            VStack {
-                if showNotification {
-                    MockNotificationView(
-                        title: "Your Morning Report is Ready!",
-                        message: "Check out your personalized report designed just for you.",
-                        timestamp: "5m ago"
-                    )
-                    .transition(.blurReplace)
-                    .sensoryFeedback(.success, trigger: showNotification)
+            ScrollView {
+                VStack {
+                    if showNotification {
+                        MockNotificationView(
+                            title: "Your Morning Report is Ready!",
+                            message: "Check out your personalized report designed just for you.",
+                            timestamp: "5m ago"
+                        )
+                        .transition(.blurReplace)
+                        .sensoryFeedback(.success, trigger: showNotification)
+                    }
+                    
+                    if showNotification2 {
+                        MockNotificationView(
+                            title: "Your RHR is higher than normal",
+                            message: "You may be stressed or getting sick.",
+                            timestamp: "11m ago"
+                        )
+                        .transition(.blurReplace)
+                        .sensoryFeedback(.success, trigger: showNotification2)
+                    }
+                    
+                    Spacer()
                 }
-
-                if showNotification2 {
-                    MockNotificationView(
-                        title: "Your RHR is higher than normal",
-                        message: "You may be stressed or getting sick.",
-                        timestamp: "11m ago"
-                    )
-                    .transition(.blurReplace)
-                    .sensoryFeedback(.success, trigger: showNotification2)
-                }
-
-                Spacer()
+                .horizontallyCentered()
+                .padding()
             }
-            .padding()
         }
         .animation(.easeIn(duration: 0.5), value: showNotification)
         .animation(.easeIn(duration: 0.5), value: showNotification2)

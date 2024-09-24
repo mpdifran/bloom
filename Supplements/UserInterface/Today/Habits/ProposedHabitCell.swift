@@ -10,6 +10,15 @@ import HealthKit
 
 struct ProposedHabitCell: View {
     @Binding var proposedHabit: ProposedHabit
+    let includeActions: Bool
+
+    init(
+        proposedHabit: Binding<ProposedHabit>,
+        includeActions: Bool = true
+    ) {
+        self._proposedHabit = proposedHabit
+        self.includeActions = includeActions
+    }
 
     @State private var presentedSheet: AnyView?
 
@@ -79,39 +88,41 @@ struct ProposedHabitCell: View {
             }
             .cardContainer(stroke: .tint)
 
-            Button {
-                presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
-            } label: {
-                LabeledContent("Change Value") {
-                    Image(systemName: "chart.xyaxis.line")
-                        .foregroundStyle(.tint)
+            if includeActions {
+                Button {
+                    presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
+                } label: {
+                    LabeledContent("Change Value") {
+                        Image(systemName: "chart.xyaxis.line")
+                            .foregroundStyle(.tint)
+                    }
                 }
-            }
-            .padding()
+                .padding()
 
-//            Divider()
+//                Divider()
 //
-//            Menu {
-//                Text("Test")
-//            } label: {
-//                LabeledContent("Change Vital") {
-//                    Image(systemName: "bolt.heart")
-//                        .foregroundStyle(.tint)
+//                Menu {
+//                    Text("Test")
+//                } label: {
+//                    LabeledContent("Change Vital") {
+//                        Image(systemName: "bolt.heart")
+//                            .foregroundStyle(.tint)
+//                    }
 //                }
-//            }
-//            .padding()
+//                .padding()
+//                
+//                Divider()
 //
-//            Divider()
-//
-//            Menu {
-//                Text("Test")
-//            } label: {
-//                LabeledContent("Change Habit") {
-//                    Image(systemName: "trophy")
-//                        .foregroundStyle(.tint)
+//                Menu {
+//                    Text("Test")
+//                } label: {
+//                    LabeledContent("Change Habit") {
+//                        Image(systemName: "trophy")
+//                            .foregroundStyle(.tint)
+//                    }
 //                }
-//            }
-//            .padding()
+//                .padding()
+            }
         }
         .cardContainer(fill: .tint.tertiary, includePadding: false)
         .tint(proposedHabit.targetMetric.color)

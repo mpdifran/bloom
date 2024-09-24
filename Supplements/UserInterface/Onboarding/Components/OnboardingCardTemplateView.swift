@@ -29,7 +29,7 @@ struct OnboardingCardTemplateView<TopContent, BottomContent>: View where TopCont
     var body: some View {
         VStack(spacing: 0) {
             Rectangle()
-                .fill(isSecondaryBackground ? AnyShapeStyle(.background.secondary) : AnyShapeStyle(.background))
+                .fill(.background)
                 .aspectRatio(aspectRatio, contentMode: .fit)
                 .overlay {
                     VStack {
@@ -37,15 +37,15 @@ struct OnboardingCardTemplateView<TopContent, BottomContent>: View where TopCont
                     }
                     .padding()
                 }
-                .background {
-                    Rectangle()
-                        .fill(isSecondaryBackground ? AnyShapeStyle(.background.secondary) : AnyShapeStyle(.background))
-                        .ignoresSafeArea()
-                }
                 .layoutPriority(100)
 
             VStack {
                 bottomContent
+            }
+            .background {
+                Rectangle()
+                    .fill(isSecondaryBackground ? AnyShapeStyle(.background.secondary) : AnyShapeStyle(.background))
+                    .ignoresSafeArea()
             }
 
             Spacer(minLength: 0)
@@ -60,7 +60,7 @@ struct OnboardingCardTemplateView<TopContent, BottomContent>: View where TopCont
         ScrollView {
             VStack {
                 Text("Hello Friend")
-                    .cardContainer(fill: .background.secondary)
+                    .cardContainer(fill: .background)
             }
             .padding()
             .horizontallyCentered()

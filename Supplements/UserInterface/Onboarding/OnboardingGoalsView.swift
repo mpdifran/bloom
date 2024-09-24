@@ -13,15 +13,16 @@ struct OnboardingGoalsView: View {
 
     @State private var isCalculatingGoals = true
     @State private var showContinue = false
+    @State private var proposedHabits = [ProposedHabit]()
 
-    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
+    @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
     var body: some View {
         OnboardingCardTemplateView(aspectRatio: 1.3) {
             OnboardingTitleCardView(
                 systemImage: "trophy.circle.fill",
-                title: "Goals",
-                message: "Bloom will now calculate your personalized goals."
+                title: "Focus Areas",
+                message: "Bloom will identify the best way to improve your health."
             )
 
         } bottom: {
@@ -34,13 +35,16 @@ struct OnboardingGoalsView: View {
                         .bold()
                     Spacer()
                 }
+                .horizontallyCentered()
             } else {
                 ScrollView {
                     VStack {
-                        ForEach(goalsViewModel.goals, id: \.self) { goalModels in
-                            if let first = goalModels.first {
-                                OnboardingGoalDetails(goal: first)
-                            }
+                        ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
+                            ProposedHabitCell(
+                                proposedHabit: $proposedHabits[index],
+                                includeActions: false
+                            )
+                                .transition(.scale)
                         }
                         Spacer()
                     }
@@ -59,7 +63,7 @@ struct OnboardingGoalsView: View {
         .animation(.easeIn(duration: 1), value: isCalculatingGoals)
         .tint(.mutedOrange)
         .task {
-            await goalsViewModel.checkForUpdateGoals(force: true)
+            proposedHabits = await habitsViewModel.generateProposedHabits()
             await MainActor.run {
                 Delay(3000) {
                     isCalculatingGoals = false

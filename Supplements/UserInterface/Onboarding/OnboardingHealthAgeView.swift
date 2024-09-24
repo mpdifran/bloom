@@ -44,7 +44,7 @@ struct OnboardingHealthAgeView: View {
                             Text("Unknown")
                         }
                     }
-                    .cardContainer(fill: .background.secondary)
+                    .cardContainer(fill: .background)
                     .if(!checkForAgeAndSex) {
                         $0.onTapGesture {
                             triggerHealthPermissionSheet.toggle()
@@ -69,7 +69,7 @@ struct OnboardingHealthAgeView: View {
                             Text("Unknown")
                         }
                     }
-                    .cardContainer(fill: .background.secondary)
+                    .cardContainer(fill: .background)
                     .if(!checkForAgeAndSex) {
                         $0.onTapGesture {
                             triggerHealthPermissionSheet.toggle()
