@@ -13,7 +13,7 @@ import SwiftData
 struct HabitDetailsView: View {
     let habit: Habit
 
-    @State private var allSamplesFourWeeks = [DateQuantitySample]()
+    @State private var allSamplesTwelveWeeks = [DateQuantitySample]()
     @State private var weekQuantitySamples = [WeekQuantitySamples]() {
         didSet {
             Task { await loadHabitGridModel() }
@@ -69,12 +69,12 @@ struct HabitDetailsView: View {
 private extension HabitDetailsView {
 
     var average: Double {
-        allSamplesFourWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
+        allSamplesTwelveWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
     }
 
     var statsSection: some View {
         VStack(alignment: .leading) {
-            Text("Over Last 4 Weeks")
+            Text("Over Last 12 Weeks")
                 .font(.headline)
                 .bold()
 
@@ -184,9 +184,9 @@ private extension HabitDetailsView {
     }
 
     func loadGoalHistory() async {
-        let fourWeeksSamples = await habit.targetMetric.fetchCollatedDailyQuantity(
+        let twelveWeeksSamples = await habit.targetMetric.fetchCollatedDailyQuantity(
             unit: habit.unit,
-            dateRange: .trailingWeeksFromNow(4)
+            dateRange: .trailingWeeksFromNow(12)
         )
         let samples = await habit.targetMetric.fetchCollatedDailyQuantity(
             unit: habit.unit,
@@ -212,7 +212,7 @@ private extension HabitDetailsView {
         }.sorted(keyPath: \.referenceDate)
 
         var stats = [Calendar.Weekday : Int]()
-        for sample in fourWeeksSamples {
+        for sample in twelveWeeksSamples {
             guard let weekday = Calendar.current.weekday(for: sample.date) else { continue }
 
             if habit.quantityExceedsGoal(sample.quantity) {
@@ -223,7 +223,7 @@ private extension HabitDetailsView {
         let statsConstant = stats
 
         await MainActor.run {
-            self.allSamplesFourWeeks = fourWeeksSamples
+            self.allSamplesTwelveWeeks = twelveWeeksSamples
             self.weekQuantitySamples = weekSamples
             self.dayStats = statsConstant
         }
