@@ -13,6 +13,7 @@ struct NewUpdateHabitView: View {
 
     @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
+    @State private var isLoading = true
     @State private var proposedHabits = [ProposedHabit]()
     @State private var error: Error?
 
@@ -36,8 +37,29 @@ struct NewUpdateHabitView: View {
                     }
                     .cardContainer()
 
-                    ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
-                        ProposedHabitCell(proposedHabit: $proposedHabits[index])
+                    if isLoading {
+                        VStack(spacing: 20) {
+                            CircularSpinnerView()
+                                .foregroundStyle(.tint)
+                            Text("Loading Focus Areas")
+                                .font(.title2)
+                                .bold()
+                        }
+                        .horizontallyCentered()
+                        .padding(.top, 40)
+                    } else {
+                        if proposedHabits.isEmpty {
+                            ContentUnavailableView(
+                                "Oops",
+                                systemImage: "exclamationmark.triangle.fill",
+                                description: Text("There was a problem loading your focus areas. Please try again later.")
+                            )
+                        } else {
+                            ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
+                                ProposedHabitCell(proposedHabit: $proposedHabits[index])
+                                    .transition(.scale)
+                            }
+                        }
                     }
                 }
                 .horizontallyCentered()
@@ -67,8 +89,10 @@ struct NewUpdateHabitView: View {
         }
         .tint(.mutedBlue)
         .alert(error: $error)
+        .animation(.default, value: proposedHabits)
         .task {
             proposedHabits = await habitsViewModel.generateProposedHabits()
+            isLoading = false
         }
     }
 }

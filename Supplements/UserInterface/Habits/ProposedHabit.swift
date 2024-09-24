@@ -9,7 +9,7 @@ import DataContainer
 import HealthKit
 import SwiftData
 
-struct ProposedHabit: Sendable, Identifiable {
+struct ProposedHabit: Sendable, Identifiable, Hashable {
     let id = UUID()
     let habitID: PersistentIdentifier?
     let targetMetric: TargetMetric
