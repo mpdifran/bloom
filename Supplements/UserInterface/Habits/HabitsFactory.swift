@@ -61,6 +61,18 @@ extension HabitsFactory {
 
         return newHabits
     }
+
+    func generateProposedHabit(
+        for targetMetric: TargetMetric,
+        vitalKind: VitalModel.Kind?
+    ) async -> ProposedHabit {
+        await createHabit(
+            targetMetric: targetMetric,
+            unit: targetMetric.defaultUnit,
+            vitalKind: vitalKind,
+            context: ""
+        )
+    }
 }
 
 private extension HabitsFactory {
@@ -248,7 +260,7 @@ private extension HabitsFactory {
     func createHabit(
         targetMetric: TargetMetric,
         unit: HKUnit,
-        vitalKind: VitalModel.Kind,
+        vitalKind: VitalModel.Kind?,
         context: String
     ) async -> ProposedHabit {
         let average = await targetMetric.fetchDailyAverage(unit: unit, dateRange: .trailingWeeksFromNow(3)).doubleValue(for: unit)

@@ -89,7 +89,7 @@ struct NewUpdateHabitView: View {
         }
         .tint(.mutedBlue)
         .alert(error: $error)
-        .animation(.default, value: proposedHabits)
+        .animation(.bouncy, value: proposedHabits)
         .task {
             proposedHabits = await habitsViewModel.generateProposedHabits()
             isLoading = false

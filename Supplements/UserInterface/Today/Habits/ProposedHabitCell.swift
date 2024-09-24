@@ -20,6 +20,8 @@ struct ProposedHabitCell: View {
         self.includeActions = includeActions
     }
 
+    @ObservedObject private var habitsViewModel = HabitsViewModel.shared
+
     @State private var presentedSheet: AnyView?
 
     var body: some View {
@@ -89,6 +91,31 @@ struct ProposedHabitCell: View {
             .cardContainer(stroke: .tint)
 
             if includeActions {
+                if habitsViewModel.alternateTargetMetrics(for: proposedHabit).isNotEmpty {
+                    Menu {
+                        ForEach(habitsViewModel.alternateTargetMetrics(for: proposedHabit)) { alternativeTargetMetric in
+                            Button {
+                                Task {
+                                    proposedHabit = await habitsViewModel.generateProposedHabit(
+                                        for: alternativeTargetMetric,
+                                        vitalKind: proposedHabit.vitalKind
+                                    )
+                                }
+                            } label: {
+                                Label(alternativeTargetMetric.name, systemImage: alternativeTargetMetric.systemImage)
+                            }
+                        }
+                    } label: {
+                        LabeledContent("Change Habit") {
+                            Image(systemName: "trophy")
+                                .foregroundStyle(.tint)
+                        }
+                    }
+                    .padding()
+                    
+                    Divider()
+                }
+
                 Button {
                     presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
                 } label: {

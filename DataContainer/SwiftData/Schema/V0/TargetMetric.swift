@@ -48,4 +48,13 @@ public extension TargetMetric {
         case .timeInDaylight: .mutedOrange
         }
     }
+
+    var related: [TargetMetric] {
+        switch self {
+        case .stepCount, .walkingRunningDistance:
+            [.stepCount, .walkingRunningDistance].filter({ $0 != self })
+        default:
+            []
+        }
+    }
 }

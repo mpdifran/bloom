@@ -25,7 +25,32 @@ extension HabitsViewModel {
     }
 
     func generateProposedHabits() async -> [ProposedHabit] {
-        return await HabitsFactory.shared.generateProposedHabits()
+        await HabitsFactory.shared.generateProposedHabits()
+    }
+
+    func alternateTargetMetrics(for proposedHabit: ProposedHabit) -> [TargetMetric] {
+        let alternativeTargetMetrics = proposedHabit.targetMetric.related
+
+        guard alternativeTargetMetrics.isNotEmpty else { return [] }
+
+        do {
+            let existingTargetMetrics = try modelContext.fetchActiveHabits(isSuggested: false).map(\.targetMetric).asSet()
+
+            return alternativeTargetMetrics.filter({ !existingTargetMetrics.contains($0) })
+        } catch {
+            print(error)
+        }
+        return []
+    }
+
+    func generateProposedHabit(
+        for targetMetric: TargetMetric,
+        vitalKind: VitalModel.Kind?
+    ) async -> ProposedHabit {
+        await HabitsFactory.shared.generateProposedHabit(
+            for: targetMetric,
+            vitalKind: vitalKind
+        )
     }
 
     func performSave(proposedHabits: [ProposedHabit]) throws {

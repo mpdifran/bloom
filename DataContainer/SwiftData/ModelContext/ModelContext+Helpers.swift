@@ -39,6 +39,16 @@ public extension ModelContext {
         return try fetch(descriptor)
     }
 
+    func fetchActiveHabits() throws -> [Habit] {
+        let descriptor = FetchDescriptor<Habit>(
+            predicate: #Predicate<Habit> { model in
+                model.endDate == nil
+            },
+            sortBy: [SortDescriptor(\Habit.startDate)]
+        )
+        return try fetch(descriptor)
+    }
+
     func fetchActiveHabits(isSuggested: Bool) throws -> [Habit] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
