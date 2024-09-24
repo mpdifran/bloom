@@ -133,8 +133,7 @@ extension TargetMetric {
         case .timeInDaylight:
             return await HealthManager.shared.fetchTotalSum(for: .timeInDaylight, dateRange: dateRange) ?? defaultQuantity
         case .exerciseMinutes:
-            let totalDuration = await HealthManager.shared.fetchWorkouts(dateRange: dateRange).sum(keyPath: \.duration)
-            return HKQuantity(unit: .second(), doubleValue: totalDuration)
+            return await HealthManager.shared.fetchTotalSum(for: .appleExerciseTime, dateRange: dateRange) ?? defaultQuantity
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -153,12 +152,7 @@ extension TargetMetric {
         case .timeInDaylight:
             return await HealthManager.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: unit, dateRange: dateRange)
         case .exerciseMinutes:
-            let workouts = await HealthManager.shared.fetchCollatedWorkouts(dateRange: dateRange)
-            return workouts.map {
-                let total = $0.workouts.sum(keyPath: \.duration)
-                let quantity = HKQuantity(unit: .second(), doubleValue: total)
-                return DateQuantitySample(date: $0.date, quantity: quantity)
-            }
+            return await HealthManager.shared.fetchCollatedQuantity(for: .appleExerciseTime, unit: unit, dateRange: dateRange)
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }

@@ -197,7 +197,7 @@ public extension Calendar {
 
         var currentDate = dateRange.start
 
-        while currentDate < dateRange.end {
+        while currentDate <= dateRange.end {
             iterator(currentDate)
 
             if let nextDate = date(byAdding: dateComponents, to: currentDate) {
