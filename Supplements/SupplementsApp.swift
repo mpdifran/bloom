@@ -43,7 +43,6 @@ struct SupplementsApp: App {
             if await danieleMode {
                 await ProactiveTipper.shared.sendProactiveTip()
             }
-            await GoalsViewModel.shared.checkForUpdateGoals()
             BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
         }
     }

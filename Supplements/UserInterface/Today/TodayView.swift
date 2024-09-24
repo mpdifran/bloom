@@ -34,7 +34,6 @@ struct TodayView: View {
     }
 
     @ObservedObject private var viewModel = TodayViewModel.shared
-    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
     @ObservedObject private var habitsViewModel = HabitsViewModel.shared
     @ObservedObject private var reportCoordinator = ReportCoordinator.shared
     @ObservedObject private var toDoManager = ToDoManager.shared
@@ -157,9 +156,6 @@ struct TodayView: View {
             self.shouldUpdateSuggestedHabits = await habitsViewModel.shouldUpdateSuggestedHabits()
         }
         .onAppear {
-            Task {
-                await goalsViewModel.checkForUpdateGoals()
-            }
             Task {
                 await toDoManager.recalculateToDos()
             }

@@ -12,7 +12,6 @@ import AppUI
 struct PreferencesView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
-    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
     @ObservedObject private var reportCoordinator = ReportCoordinator.shared
 
     @AppStorage("PreferencesView.user.name") private(set) var userName: String = ""
@@ -230,22 +229,6 @@ private extension PreferencesView {
         Section("Developer") {
             Toggle("Daniele Mode", isOn: $danieleMode)
             Button {
-                Task {
-                    await goalsViewModel.checkForUpdateGoals(force: true)
-                    await MainActor.run {
-                        self.alertDetails = AlertDetails(
-                            title: "Goals Recalculated",
-                            message: "Your goals have been recalculated."
-                        )
-                    }
-                }
-            } label: {
-                LabeledContent("Recalculate Goals") {
-                    Image(systemName: "arrow.counterclockwise.square.fill")
-                }
-            }
-            .buttonStyle(.plain)
-            Button {
                 hasShownOnboarding = false
             } label: {
                 LabeledContent("Reset Onboarding") {
@@ -259,6 +242,7 @@ private extension PreferencesView {
             } label: {
                 Text("Debug Habits")
             }
+            .buttonStyle(.plain)
         }
     }
 }

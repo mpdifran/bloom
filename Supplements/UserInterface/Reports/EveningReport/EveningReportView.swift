@@ -17,8 +17,6 @@ struct EveningReportView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
-
     @Query var suggestedHabits: [Habit]
 
     @State private var selectedHabit: Habit?

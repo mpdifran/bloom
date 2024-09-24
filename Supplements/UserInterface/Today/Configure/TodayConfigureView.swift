@@ -12,7 +12,6 @@ import DataContainer
 
 struct TodayConfigureView: View {
 
-    @ObservedObject private var goalsViewModel = GoalsViewModel.shared
     @ObservedObject private var toDoManager = ToDoManager.shared
 
     @State private var presentedSheet: AnyView?
