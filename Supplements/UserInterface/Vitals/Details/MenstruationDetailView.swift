@@ -13,6 +13,8 @@ struct MenstruationDetailView: View {
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
+    @State private var selectedPhase: MenstrualCyclePhase?
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -26,6 +28,9 @@ struct MenstruationDetailView: View {
         }
         .navigationTitle("Cycle Tracking")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $selectedPhase) { phase in
+            CyclePhaseLearnMoreView(phase: phase)
+        }
         .onAppear {
             TelemetryDeck.viewScreen("Cycle Tracking Vital Details")
         }
@@ -88,12 +93,18 @@ private extension MenstruationDetailView {
 
                 if phase.coolFacts.isNotEmpty {
                     Button("Learn More") {
-                        
+                        selectedPhase = phase
                     }
                     .frame(height: 44)
                 }
             }
             .tint(.mutedPink)
         }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        MenstruationDetailView()
     }
 }

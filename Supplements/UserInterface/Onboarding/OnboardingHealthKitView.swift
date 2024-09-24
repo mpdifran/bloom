@@ -56,6 +56,7 @@ struct OnboardingHealthKitView: View {
             }
             .frame(maxWidth: 300)
             .multilineTextAlignment(.center)
+            .horizontallyCentered()
 
 //            Chart {
 //                ForEach(dataPoints) { dataPoint in

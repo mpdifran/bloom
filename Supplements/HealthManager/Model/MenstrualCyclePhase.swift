@@ -5,9 +5,10 @@
 //  Created by Mark DiFranco on 2024-09-12.
 //
 
+import SwiftUI
 import HealthKit
 
-enum MenstrualCyclePhase {
+enum MenstrualCyclePhase: Hashable {
     case follicular
     case ovulation
     case luteal
@@ -26,6 +27,19 @@ extension MenstrualCyclePhase {
             "Luteal Phase"
         case .unknown:
             "Unknown"
+        }
+    }
+
+    var color: Color? {
+        switch self {
+        case .follicular:
+            return .mutedPurple
+        case .luteal:
+            return .mutedIndigo
+        case .ovulation:
+            return .mutedBlue
+        default:
+            return nil
         }
     }
 
@@ -102,7 +116,9 @@ extension MenstrualCyclePhase {
 }
 
 extension MenstrualCyclePhase {
-    struct CoolFact {
+    struct CoolFact: Identifiable, Hashable {
+        var id: Int { hashValue }
+
         let title: String
         let fact: String
     }

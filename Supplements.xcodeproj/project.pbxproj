@@ -152,6 +152,8 @@
 		FF6E06102C9F930800C4219B /* SelectableHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E060F2C9F930800C4219B /* SelectableHabitCell.swift */; };
 		FF6E06172CA1DE0A00C4219B /* HabitsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */; };
 		FF6E06192CA2080800C4219B /* DebugHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06182CA2080800C4219B /* DebugHabitCell.swift */; };
+		FF6E061F2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E061E2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift */; };
+		FF6E06212CA34ADA00C4219B /* CyclePhaseCoolFactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06202CA34AD200C4219B /* CyclePhaseCoolFactCell.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
 		FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904D2C3472D200F9C1A5 /* UserInfo.swift */; };
 		FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */; };
@@ -638,6 +640,8 @@
 		FF6E060F2C9F930800C4219B /* SelectableHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableHabitCell.swift; sourceTree = "<group>"; };
 		FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsFactory.swift; sourceTree = "<group>"; };
 		FF6E06182CA2080800C4219B /* DebugHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugHabitCell.swift; sourceTree = "<group>"; };
+		FF6E061E2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclePhaseLearnMoreView.swift; sourceTree = "<group>"; };
+		FF6E06202CA34AD200C4219B /* CyclePhaseCoolFactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclePhaseCoolFactCell.swift; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
 		FF78904D2C3472D200F9C1A5 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSuggestionModel.swift; sourceTree = "<group>"; };
@@ -1488,6 +1492,7 @@
 				FF48C28D2C69A89500DC8D1D /* SleepDetailsView.swift */,
 				FFBE523A2C74E2EB00F510DE /* ExerciseEffectivenessView.swift */,
 				FF4EFF8F2C93A0AF005E4A1F /* MenstruationDetailView.swift */,
+				FF6E061E2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift */,
 				FF4CAAFE2C80EF34001A59F3 /* BowelMovementsDetailView.swift */,
 			);
 			path = Details;
@@ -1511,6 +1516,7 @@
 				FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */,
 				FFBE52402C7569AB00F510DE /* VitalSummaryDetailTitleView.swift */,
 				FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */,
+				FF6E06202CA34AD200C4219B /* CyclePhaseCoolFactCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2668,11 +2674,13 @@
 				FF2FB89C2C9CD80000F57523 /* ProgressBar.swift in Sources */,
 				FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */,
 				FF0DA0F92C876390007D1A6B /* Collection+Sort.swift in Sources */,
+				FF6E06212CA34ADA00C4219B /* CyclePhaseCoolFactCell.swift in Sources */,
 				FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */,
 				FFBE52292C6EF9D600F510DE /* OnboardingHealthActivityView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
 				FF4B2F482C90C7960003879C /* ToDoManager.swift in Sources */,
+				FF6E061F2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */,
 				FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */,

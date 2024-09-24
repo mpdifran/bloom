@@ -53,18 +53,7 @@ extension MenstrualSummary {
     }
 
     var color: Color? {
-        let phase = currentPhase()
-
-        switch phase {
-        case .follicular:
-            return .mutedPurple
-        case .luteal:
-            return .mutedBlue
-        case .ovulation:
-            return .mutedIndigo
-        default:
-            return nil
-        }
+        currentPhase()?.color
     }
 }
 
