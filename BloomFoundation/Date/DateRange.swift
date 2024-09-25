@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DateRange: Sendable {
+public struct DateRange: Sendable, Hashable {
     public let start: Date
     public let end: Date
 
@@ -21,6 +21,10 @@ public extension DateRange {
 
     var numberOfDaysInclusive: Int {
         (Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0) + 1
+    }
+
+    func contains(date: Date) -> Bool {
+        start <= date && date <= end
     }
 
     func containsTodayDate() -> Bool {
@@ -215,6 +219,14 @@ public extension DateRange {
         }
 
         return DateRange(startDate, endDate)
+    }
+
+    static func trailingMonthsFromDate(date: Date, numberOfMonths: Int) -> DateRange {
+        guard let startDate = Calendar.current.date(byAdding: .month, value: -numberOfMonths, to: date) else {
+            return DateRange(date, date)
+        }
+
+        return DateRange(startDate, date)
     }
 
     static func trailingMonthsFromNowSleepStartDate(_ numberOfMonths: Int) -> DateRange {

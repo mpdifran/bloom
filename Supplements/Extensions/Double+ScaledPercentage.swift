@@ -32,4 +32,10 @@ extension Double {
         }
         return 1
     }
+
+    /// Scales the receiver between a score of -1 to 1 based on `lower` and `upper`.
+    func scaledSymmetricalScore(lower: Double, upper: Double) -> Double {
+        let percent = scaledPercent(lower: lower, upper: upper)
+        return (percent * 2) - 1
+    }
 }

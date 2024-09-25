@@ -10,24 +10,24 @@ import Charts
 import TelemetryDeck
 
 struct StressDetailsView: View {
-    
-    @State private var heartRateVariabilitySamples = [DateAverageQuantitySample]()
-    @State private var restingHeartRateSamples = [DateQuantitySampleLegacy]()
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                stressLevelChart
+                    .padding()
+
                 if
                     let systolic = viewModel.stressSummary?.details.bloodPressureSystolic,
                     let diastloic = viewModel.stressSummary?.details.bloodPressureDiastolic
                 {
                     BloodPressureStatusView(
-                        systolic: systolic,
-                        diastolic: diastloic,
-                        lastMonthSystolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureSystolic,
-                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureDiastolic
+                        systolic: systolic.doubleValue(for: .millimeterOfMercury()),
+                        diastolic: diastloic.doubleValue(for: .millimeterOfMercury()),
+                        lastMonthSystolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureSystolic?.doubleValue(for: .millimeterOfMercury()),
+                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureDiastolic?.doubleValue(for: .millimeterOfMercury())
                     )
                 }
 
@@ -49,18 +49,6 @@ struct StressDetailsView: View {
         }
         .navigationTitle("Stress Levels")
         .navigationBarTitleDisplayMode(.inline)
-        .task {
-            let samples = await HealthManager.shared.fetchRestingHeartRate(period: 30)
-            await MainActor.run {
-                self.restingHeartRateSamples = samples
-            }
-        }
-        .task {
-            let samples = await HealthManager.shared.fetchDailyAverageHeartRateVariability(periodDays: 30)
-            await MainActor.run {
-                self.heartRateVariabilitySamples = samples
-            }
-        }
         .onAppear {
             TelemetryDeck.viewScreen("Stress Vital Details")
         }
@@ -69,12 +57,58 @@ struct StressDetailsView: View {
 
 private extension StressDetailsView {
 
+    var stressLevelChart: some View {
+        VStack(alignment: .leading) {
+            if let averageStressLevel = viewModel.stressSummary?.details.averageStressLevel {
+                VitalDetailChartTitleView(
+                    title: "Daily Stress Levels",
+                    value: "\(StressMonthlySummary.Level(score: averageStressLevel).name)"
+                )
+            } else {
+                VitalDetailChartTitleView(
+                    title: "Daily Stress Levels",
+                    valueLabel: "",
+                    value: ""
+                )
+            }
+
+            Chart {
+                ForEach(viewModel.stressSummary?.details.stressLevels ?? []) { stressLevel in
+                    BarMark(
+                        x: .value("Date", stressLevel.date),
+                        y: .value("Stress Level", stressLevel.stressScore)
+                    )
+                    .foregroundStyle(stressLevel.level.color)
+                }
+            }
+            .chartYScale(
+                domain: -1...1,
+                range: .plotDimension(padding: 10)
+            )
+            .chartForegroundStyleScale([
+                StressMonthlySummary.Level.relaxed.name: StressMonthlySummary.Level.relaxed.color,
+                StressMonthlySummary.Level.normal.name: StressMonthlySummary.Level.normal.color,
+                StressMonthlySummary.Level.high.name: StressMonthlySummary.Level.high.color,
+                StressMonthlySummary.Level.severe.name: StressMonthlySummary.Level.severe.color
+            ])
+            .frame(height: 200)
+
+            DetailInfoCardView {
+                Text("Your stress level can fluctuate day to day. It's normal to have some days of high stress, but prolonged stress can be harmful to your overall health. Bloom factors in your blood pressure, resting heart rate, and heart rate variability when calculating your stress level.")
+            }
+            .padding(.top)
+        }
+    }
+}
+
+private extension StressDetailsView {
+
     var restingHeartRateChart: some View {
         VStack(alignment: .leading) {
-            if let restingHeartRate = viewModel.stressSummary?.details.restingHeartRate?.format() {
+            if let restingHeartRate = viewModel.stressSummary?.details.averageRestingHeartRate {
                 VitalDetailChartTitleView(
                     title: "Resting Heart Rate",
-                    value: "\(restingHeartRate) bpm"
+                    value: "\(restingHeartRate.format()) bpm"
                 )
             } else {
                 VitalDetailChartTitleView(
@@ -85,19 +119,19 @@ private extension StressDetailsView {
             }
 
             Chart {
-                ForEach(restingHeartRateSamples) { sample in
+                ForEach(viewModel.stressSummary?.details.restingHeartRate ?? []) { sample in
                     LineMark(
                         x: .value("Date", sample.date),
-                        y: .value("Resting Heart Rate", sample.quantity)
+                        y: .value("Resting Heart Rate", sample.quantity.doubleValue(for: .bpm()))
                     )
-                    .foregroundStyle(.mutedPink)
+                    .foregroundStyle(.mutedRed)
                     .interpolationMethod(.catmullRom)
                 }
                 let goal = HealthManager.shared.goalRestingHeartRateForUser()
 
                 RuleMark(y: .value("Max RHR", goal.1))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.mutedPink)
+                    .foregroundStyle(.mutedRed)
 
                 RectangleMark(
                     yStart: .value("", goal.1 - 20),
@@ -106,7 +140,7 @@ private extension StressDetailsView {
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            .mutedPink.opacity(0.3),
+                            .mutedRed.opacity(0.3),
                             .clear
                         ],
                         startPoint: .top,
@@ -142,15 +176,15 @@ private extension StressDetailsView {
     }
 
     var minRestingHeartRate: Double? {
-        restingHeartRateSamples.min(keyPath: \.quantity)
+        viewModel.stressSummary?.details.restingHeartRate.map({ $0.quantity.doubleValue(for: .bpm()) }).min()
     }
 
     var maxRestingHeartRate: Double? {
-        restingHeartRateSamples.max(keyPath: \.quantity)
+        viewModel.stressSummary?.details.restingHeartRate.map({ $0.quantity.doubleValue(for: .bpm()) }).max()
     }
 
     var restingHeartRateDescription: String? {
-        guard let restingHeartRate = viewModel.stressSummary?.details.restingHeartRate else {
+        guard let restingHeartRate = viewModel.stressSummary?.details.averageRestingHeartRate else {
             return nil
         }
 
@@ -165,7 +199,7 @@ private extension StressDetailsView {
 
     var heartRateVariabilityChart: some View {
         VStack(alignment: .leading) {
-            if let hrv = viewModel.stressSummary?.details.avgHeartRateVariability?.format() {
+            if let hrv = viewModel.stressSummary?.details.averageHeartRateVariability?.format() {
                 VitalDetailChartTitleView(
                     title: "Heart Rate Variability",
                     value: "\(hrv) ms"
@@ -179,18 +213,18 @@ private extension StressDetailsView {
             }
 
             Chart {
-                ForEach(heartRateVariabilitySamples) { sample in
+                ForEach(viewModel.stressSummary?.details.heartRateVariability ?? []) { sample in
                     LineMark(
                         x: .value("Date", sample.date),
-                        y: .value("Heart Rate Variability", sample.averageQuantity)
+                        y: .value("Heart Rate Variability", sample.quantity.doubleValue(for: .millisecond()))
                     )
-                    .foregroundStyle(.mutedPink)
+                    .foregroundStyle(.mutedRed)
                 }
 
-                if let hrv = viewModel.stressSummary?.details.avgHeartRateVariability {
+                if let hrv = viewModel.stressSummary?.details.averageHeartRateVariability {
                     RuleMark(y: .value("Average HRV", hrv))
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.mutedPink)
+                        .foregroundStyle(.mutedRed)
                 }
             }
             .frame(height: 160)

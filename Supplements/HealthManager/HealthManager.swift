@@ -326,7 +326,7 @@ extension HealthManager {
 
 extension HealthManager {
 
-    func fetchTotalSum(for quantityType: HKQuantityTypeIdentifier, dateRange: DateRange) async -> HKQuantity? {
+    func fetchTotalQuantity(for quantityType: HKQuantityTypeIdentifier, dateRange: DateRange) async -> HKQuantity? {
         try? await healthStore.fetchQuantity(for: quantityType, dateRange: dateRange, option: .cumulativeSum)
     }
 
@@ -352,11 +352,25 @@ extension HealthManager {
         divisor: Double? = nil,
         dateRange: DateRange
     ) async -> HKQuantity {
-        let totalSum = await fetchTotalSum(for: quantityType, dateRange: dateRange)
+        let totalSum = await fetchTotalQuantity(for: quantityType, dateRange: dateRange)
         let resolvedDivisor = divisor ?? Double(dateRange.numberOfDaysInclusive)
         let average = (totalSum?.doubleValue(for: unit) ?? 0) / resolvedDivisor
 
         return HKQuantity(unit: unit, doubleValue: average)
+    }
+
+    func fetchCollatedAverage(
+        quantityType: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        interval: DateComponents = DateComponents(day: 1),
+        dateRange: DateRange
+    ) async -> [DateQuantitySample] {
+        return (try? await healthStore.fetchAverageStatistics(
+            quantityTypeID: quantityType,
+            unit: unit,
+            interval: interval,
+            dateRange: dateRange
+        )) ?? []
     }
 
     func fetchNutritionalDailyAverage(
@@ -605,37 +619,34 @@ extension HealthManager {
     }
 
     func fetchStressMonthlySummaryDetails(dateRange: DateRange) async -> StressMonthlySummary.Details {
-        let hrvAverage = (try? await healthStore.fetchQuantity(
-            for: .heartRateVariabilitySDNN,
-            dateRange: dateRange
-        ))
-        let hrvVariance = (try? await healthStore.fetchSamples(
-            for: HKQuantityType(.heartRateVariabilitySDNN),
-            dateRange: dateRange
-        ))?.compactMap({ $0 as? HKQuantitySample })
-            .map({ $0.quantity.doubleValue(for: .secondUnit(with: .milli)) })
-            .variance(keyPath: \.self)
+        let hrv = await fetchCollatedAverage(
+            quantityType: .heartRateVariabilitySDNN,
+            unit: .secondUnit(with: .milli),
+            dateRange: .trailingMonthsFromDate(date: dateRange.end, numberOfMonths: 2) // We need an extra month of data for a rolling average.
+        )
 
-        let rhrAverage = (try? await healthStore.fetchQuantity(
-            for: .restingHeartRate,
+        let rhr = await fetchCollatedAverage(
+            quantityType: .restingHeartRate,
+            unit: .bpm(),
             dateRange: dateRange
-        ))
+        )
 
         let systolicAverage = (try? await healthStore.fetchQuantity(
             for: .bloodPressureSystolic,
             dateRange: dateRange
         ))
+
         let diastolicAverage = (try? await healthStore.fetchQuantity(
             for: .bloodPressureDiastolic,
             dateRange: dateRange
         ))
 
         return StressMonthlySummary.Details(
-            avgHeartRateVariability: hrvAverage?.doubleValue(for: .secondUnit(with: .milli)),
-            varHeartRateVariability: hrvVariance,
-            restingHeartRate: rhrAverage?.doubleValue(for: .bpm()),
-            bloodPressureSystolic: systolicAverage?.doubleValue(for: .millimeterOfMercury()),
-            bloodPressureDiastolic: diastolicAverage?.doubleValue(for: .millimeterOfMercury())
+            dateRange: dateRange,
+            heartRateVariability: hrv,
+            restingHeartRate: rhr,
+            bloodPressureSystolic: systolicAverage,
+            bloodPressureDiastolic: diastolicAverage
         )
     }
 
@@ -1683,6 +1694,7 @@ extension HealthManager {
         return []
     }
 
+    @available(*, deprecated, message: "Use fetchCollatedAverage method instead")
     func fetchDailyAverageHeartRateVariability(periodDays: Int = 7) async -> [DateAverageQuantitySample] {
         let endDate = Date.now
         guard let startDate = Calendar.current.date(byAdding: .day, value: -periodDays, to: endDate) else {

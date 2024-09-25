@@ -20,14 +20,6 @@ extension ProactiveTipper {
         let chatHistory = ChatViewModel.shared.networkChatHistory
 
         let stressDetails = VitalsViewModel.shared.stressSummary?.details
-        let stressSummary = ProactiveTipRequestModel.StressSummary(
-            stressLevel: stressDetails?.level?.name,
-            averageHeartRateVariability: stressDetails?.avgHeartRateVariability,
-            varianceHeartRateVariability: stressDetails?.varHeartRateVariability,
-            averageRestingHeartRate: stressDetails?.restingHeartRate,
-            averageBloodPressureSystolic: stressDetails?.bloodPressureSystolic,
-            averageBloodPressureDiastolic: stressDetails?.bloodPressureDiastolic
-        )
 
         let nutritionSummary = ProactiveTipRequestModel.NutritionSummary(
             averageBasalEnergyBurnedCalories: VitalsViewModel.shared.nutritionSummary?.details.basalEnergyBurned?.doubleValue(for: .largeCalorie()),
@@ -46,7 +38,7 @@ extension ProactiveTipper {
         )
 
         let request = ProactiveTipRequestModel(
-            stressMonthlySummary: stressSummary,
+            stressMonthlySummary: nil,
             nutritionMonthlySummary: nutritionSummary,
             cardioFitnessSummary: VitalsViewModel.shared.cardioFitnessSummary,
             sleepVitalsMonthlySummary: VitalsViewModel.shared.sleepVitalsSummary,

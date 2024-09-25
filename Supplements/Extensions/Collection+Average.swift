@@ -52,6 +52,12 @@ extension Collection {
         return sumOfSquaredDifferences / Double(items.count)
     }
 
+    func standardDeviation(keyPath: KeyPath<Element, Double>, subsequence: CollectionAverageSubsequence? = nil) -> Double? {
+        guard let variance = variance(keyPath: keyPath, subsequence: subsequence) else { return nil }
+        
+        return sqrt(variance)
+    }
+
     func sum(keyPath: KeyPath<Element, Double>, subsequence: CollectionAverageSubsequence? = nil) -> Double {
         let items: Array<Element>
         switch subsequence {

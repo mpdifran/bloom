@@ -125,15 +125,15 @@ extension TargetMetric {
         case .none:
             return defaultQuantity
         case .stepCount:
-            return await HealthManager.shared.fetchTotalSum(for: .stepCount, dateRange: dateRange) ?? defaultQuantity
+            return await HealthManager.shared.fetchTotalQuantity(for: .stepCount, dateRange: dateRange) ?? defaultQuantity
         case .waterIntake:
-            return await HealthManager.shared.fetchTotalSum(for: .dietaryWater, dateRange: dateRange) ?? defaultQuantity
+            return await HealthManager.shared.fetchTotalQuantity(for: .dietaryWater, dateRange: dateRange) ?? defaultQuantity
         case .walkingRunningDistance:
-            return await HealthManager.shared.fetchTotalSum(for: .distanceWalkingRunning, dateRange: dateRange) ?? defaultQuantity
+            return await HealthManager.shared.fetchTotalQuantity(for: .distanceWalkingRunning, dateRange: dateRange) ?? defaultQuantity
         case .timeInDaylight:
-            return await HealthManager.shared.fetchTotalSum(for: .timeInDaylight, dateRange: dateRange) ?? defaultQuantity
+            return await HealthManager.shared.fetchTotalQuantity(for: .timeInDaylight, dateRange: dateRange) ?? defaultQuantity
         case .exerciseMinutes:
-            return await HealthManager.shared.fetchTotalSum(for: .appleExerciseTime, dateRange: dateRange) ?? defaultQuantity
+            return await HealthManager.shared.fetchTotalQuantity(for: .appleExerciseTime, dateRange: dateRange) ?? defaultQuantity
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }

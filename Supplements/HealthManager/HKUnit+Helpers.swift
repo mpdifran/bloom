@@ -25,4 +25,8 @@ extension HKUnit {
     static func mgPerDL() -> HKUnit {
         .gramUnit(with: .milli).unitDivided(by: .literUnit(with: .deci))
     }
+
+    static func millisecond() -> HKUnit {
+        .secondUnit(with: .milli)
+    }
 }
