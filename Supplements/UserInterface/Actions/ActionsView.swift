@@ -80,7 +80,6 @@ struct ActionsView: View {
             .navigationDestination(isPresented: $showAllDataView) {
                 AllActionDataListView()
             }
-            .gradientRootBackground()
         }
         .sheet($presentedCardSheet)
         .tabItem {

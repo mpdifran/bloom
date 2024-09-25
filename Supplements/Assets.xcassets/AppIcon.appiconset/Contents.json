@@ -1,7 +1,31 @@
 {
   "images" : [
     {
-      "filename" : "Supplements AppIcon.png",
+      "filename" : "Bloom AppIcon.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Bloom App Icon Dark.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "Bloom App Icon Dark 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

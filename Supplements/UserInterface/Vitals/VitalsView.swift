@@ -45,7 +45,7 @@ struct VitalsView: View {
                 }
             }
             .animation(.default, value: viewModel.vitals)
-            .gradientRootBackground()
+            .groupedBackground()
         }
         .tabItem {
             Label("Vitals", systemImage: "bolt.heart")

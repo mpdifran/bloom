@@ -26,9 +26,9 @@ extension View {
                     VStack {
                         LinearGradient(
                             colors: [
-                                .indigo.opacity(0.3),
-                                .vitalGreat.opacity(0.3),
-                                .vitalGood.opacity(0.3)
+                                .mutedIndigo.opacity(0.3),
+                                .mutedBlue.opacity(0.3),
+                                .mutedGreen.opacity(0.3)
                             ],
                             startPoint: .leading,
                             endPoint: .topTrailing

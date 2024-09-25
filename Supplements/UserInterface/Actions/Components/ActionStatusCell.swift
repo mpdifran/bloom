@@ -46,6 +46,7 @@ struct ActionStatusCell: View {
 
             VStack(alignment: .trailing) {
                 Image(systemName: "plus")
+                    .foregroundStyle(.tint)
                     .bold()
                     .padding()
                     .background {
