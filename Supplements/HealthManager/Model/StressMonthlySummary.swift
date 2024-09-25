@@ -18,7 +18,7 @@ private extension Double {
 extension StressMonthlySummary {
     enum Level {
         case relaxed
-        case normal
+        case mild
         case high
         case severe
 
@@ -28,7 +28,7 @@ extension StressMonthlySummary {
             } else if score < 0 {
                 self = .high
             } else if score < 0.5 {
-                self = .normal
+                self = .mild
             } else {
                 self = .relaxed
             }
@@ -37,7 +37,7 @@ extension StressMonthlySummary {
         var name: String {
             switch self {
             case .relaxed: "Relaxed"
-            case .normal: "Normal"
+            case .mild: "Mild"
             case .high: "High"
             case .severe: "Severe"
             }
@@ -46,7 +46,7 @@ extension StressMonthlySummary {
         var color: Color {
             switch self {
             case .relaxed: .vitalGreat
-            case .normal: .vitalGood
+            case .mild: .vitalGood
             case .high: .vitalWarning
             case .severe: .vitalSevere
             }
