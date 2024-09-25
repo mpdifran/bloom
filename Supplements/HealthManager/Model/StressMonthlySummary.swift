@@ -149,8 +149,6 @@ extension StressMonthlySummary.Details {
                 bloodPressureScore
             ].unwrap()
 
-            print("Stress Debug: \(date) HRV: \(hrvStressScore) RHR: \(rhrStressScore) BP: \(bloodPressureScore)")
-
             stressScores.append(
                 StressMonthlySummary.DateStressScore(
                     date: referenceDate,

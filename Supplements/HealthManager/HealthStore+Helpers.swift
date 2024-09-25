@@ -581,22 +581,12 @@ extension HKHealthStore {
     func enableBackgroundDelivery(
         objectType: HKObjectType,
         frequency: HKUpdateFrequency = .immediate
-    ) -> HKBackgroundDeliveryHandle {
-        enableBackgroundDelivery(objectTypes: [objectType], frequency: frequency)
-    }
-
-    func enableBackgroundDelivery(
-        objectTypes: [HKObjectType],
-        frequency: HKUpdateFrequency = .immediate
-    ) -> HKBackgroundDeliveryHandle {
-        for objectType in objectTypes {
-            enableBackgroundDelivery(for: objectType, frequency: frequency) { success, error in
-                if let error {
-                    print(error)
-                }
+    ) {
+        enableBackgroundDelivery(for: objectType, frequency: frequency) { success, error in
+            if let error {
+                print(error)
             }
         }
-        return HKBackgroundDeliveryHandle(objectTypes: objectTypes, healthStore: self)
     }
 }
 

@@ -74,6 +74,12 @@ final class HealthManager: ObservableObject {
     let healthStore = HKHealthStore()
     private let throttler = Throttler(timeInterval: 600)
 
+    private var backgroundDeliveryReferenceCounts = [HKObjectType : Int]() {
+        didSet {
+            print("Health Background Delivery Ref Counts: \(backgroundDeliveryReferenceCounts)")
+        }
+    }
+
     private var sleepObserverQueryHandle: HKObserverQueryHandle?
     private var sleepBackgroundDeliveryHandle: HKBackgroundDeliveryHandle?
 
@@ -558,6 +564,52 @@ extension HealthManager {
 
     func write(samples: [HKObject]) async throws {
         try await healthStore.save(samples)
+    }
+}
+
+// MARK: Observing Data
+
+extension HealthManager {
+
+    func enableBackgroundDelivery(
+        objectType: HKObjectType,
+        frequency: HKUpdateFrequency = .immediate
+    ) -> HKBackgroundDeliveryHandle {
+        enableBackgroundDelivery(objectTypes: [objectType], frequency: frequency)
+    }
+
+    func enableBackgroundDelivery(
+        objectTypes: [HKObjectType],
+        frequency: HKUpdateFrequency = .immediate
+    ) -> HKBackgroundDeliveryHandle {
+
+        for objectType in objectTypes {
+            print("Health Background Delivery Ref Counts: Enabling delivery for \(objectType).")
+            // TODO: We should check the existing frequency and make sure we update it only if it's more often.
+            healthStore.enableBackgroundDelivery(objectType: objectType, frequency: frequency)
+            backgroundDeliveryReferenceCounts[objectType, default: 0] += 1
+        }
+
+        return HKBackgroundDeliveryHandle(objectTypes: objectTypes) { [weak self] in
+            guard let self else { return }
+
+            for objectType in objectTypes {
+                var refCount = self.backgroundDeliveryReferenceCounts[objectType, default: 0]
+
+                refCount -= 1
+
+                if refCount <= 0 {
+                    print("Health Background Delivery Ref Counts: Disabling delivery for \(objectType).")
+                    healthStore.disableBackgroundDelivery(for: objectType) { success, error in
+                        if let error {
+                            print(error)
+                        }
+                    }
+                }
+
+                self.backgroundDeliveryReferenceCounts[objectType] = max(refCount, 0)
+            }
+        }
     }
 }
 
@@ -1741,7 +1793,7 @@ extension HealthManager {
 extension HealthManager {
 
     func observeSleepData() {
-        sleepBackgroundDeliveryHandle = healthStore.enableBackgroundDelivery(
+        sleepBackgroundDeliveryHandle = enableBackgroundDelivery(
             objectType: HKCategoryType(.sleepAnalysis),
             frequency: .immediate
         )
