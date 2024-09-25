@@ -155,6 +155,8 @@
 		FF6E061F2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E061E2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift */; };
 		FF6E06212CA34ADA00C4219B /* CyclePhaseCoolFactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06202CA34AD200C4219B /* CyclePhaseCoolFactCell.swift */; };
 		FF6E06232CA3514700C4219B /* OnboardingHealthMenstruationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06222CA3514700C4219B /* OnboardingHealthMenstruationView.swift */; };
+		FF6E06252CA3A3B600C4219B /* WaterGlassSizeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06242CA3A3B600C4219B /* WaterGlassSizeModel.swift */; };
+		FF6E06272CA3A94A00C4219B /* AddWaterGlassSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
 		FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904D2C3472D200F9C1A5 /* UserInfo.swift */; };
 		FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */; };
@@ -644,6 +646,8 @@
 		FF6E061E2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclePhaseLearnMoreView.swift; sourceTree = "<group>"; };
 		FF6E06202CA34AD200C4219B /* CyclePhaseCoolFactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclePhaseCoolFactCell.swift; sourceTree = "<group>"; };
 		FF6E06222CA3514700C4219B /* OnboardingHealthMenstruationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthMenstruationView.swift; sourceTree = "<group>"; };
+		FF6E06242CA3A3B600C4219B /* WaterGlassSizeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterGlassSizeModel.swift; sourceTree = "<group>"; };
+		FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWaterGlassSizeView.swift; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
 		FF78904D2C3472D200F9C1A5 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSuggestionModel.swift; sourceTree = "<group>"; };
@@ -1419,6 +1423,8 @@
 				FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */,
 				FF88F12D2C7D03E10093D1B4 /* BowelMovementActionCardView.swift */,
 				FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */,
+				FF6E06242CA3A3B600C4219B /* WaterGlassSizeModel.swift */,
+				FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */,
 				FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */,
 				FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */,
 			);
@@ -2539,6 +2545,7 @@
 				FFB691082C19F6CF00BEC0D4 /* MeditationMinutesCell.swift in Sources */,
 				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
 				FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */,
+				FF6E06272CA3A94A00C4219B /* AddWaterGlassSizeView.swift in Sources */,
 				FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */,
 				FF6E06172CA1DE0A00C4219B /* HabitsFactory.swift in Sources */,
 				FF0DA0F72C875106007D1A6B /* DateComponents+Helpers.swift in Sources */,
@@ -2631,6 +2638,7 @@
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,
 				FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */,
 				FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */,
+				FF6E06252CA3A3B600C4219B /* WaterGlassSizeModel.swift in Sources */,
 				FF0DA0FB2C876629007D1A6B /* DateCollatedWorkoutHeartRateReport.swift in Sources */,
 				FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */,
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
