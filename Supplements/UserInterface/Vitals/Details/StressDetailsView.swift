@@ -20,14 +20,14 @@ struct StressDetailsView: View {
                     .padding()
 
                 if
-                    let systolic = viewModel.stressSummary?.details.bloodPressureSystolic,
-                    let diastloic = viewModel.stressSummary?.details.bloodPressureDiastolic
+                    let systolic = viewModel.stressSummary?.details.averageSystolic,
+                    let diastloic = viewModel.stressSummary?.details.averageDiastolic
                 {
                     BloodPressureStatusView(
-                        systolic: systolic.doubleValue(for: .millimeterOfMercury()),
-                        diastolic: diastloic.doubleValue(for: .millimeterOfMercury()),
-                        lastMonthSystolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureSystolic?.doubleValue(for: .millimeterOfMercury()),
-                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthDetails.bloodPressureDiastolic?.doubleValue(for: .millimeterOfMercury())
+                        systolic: systolic,
+                        diastolic: diastloic,
+                        lastMonthSystolic: viewModel.stressSummary?.lastMonthDetails.averageSystolic,
+                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthDetails.averageDiastolic
                     )
                 }
 

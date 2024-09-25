@@ -76,30 +76,41 @@ extension StressMonthlySummary {
     struct Details: Hashable, Sendable {
         let dateRange: DateRange
         let heartRateVariability: [DateQuantitySample]
+        let twoMonthsHeartRateVariability: [DateQuantitySample]
         let restingHeartRate: [DateQuantitySample]
-        let bloodPressureSystolic: HKQuantity?
-        let bloodPressureDiastolic: HKQuantity?
+        let bloodPressureSystolic: [DateQuantitySample]
+        let twoMonthsBloodPressureSystolic: [DateQuantitySample]
+        let bloodPressureDiastolic: [DateQuantitySample]
+        let twoMonthsBloodPressureDiastolic: [DateQuantitySample]
 
         // TODO: Add sleep here as well
 
         init(
             dateRange: DateRange,
             heartRateVariability: [DateQuantitySample],
+            twoMonthsHeartRateVariability: [DateQuantitySample],
             restingHeartRate: [DateQuantitySample],
-            bloodPressureSystolic: HKQuantity?,
-            bloodPressureDiastolic: HKQuantity?
+            bloodPressureSystolic: [DateQuantitySample],
+            twoMonthsBloodPressureSystolic: [DateQuantitySample],
+            bloodPressureDiastolic: [DateQuantitySample],
+            twoMonthsBloodPressureDiastolic: [DateQuantitySample]
         ) {
             self.dateRange = dateRange
             self.heartRateVariability = heartRateVariability
+            self.twoMonthsHeartRateVariability = twoMonthsHeartRateVariability
             self.restingHeartRate = restingHeartRate
             self.bloodPressureSystolic = bloodPressureSystolic
+            self.twoMonthsBloodPressureSystolic = twoMonthsBloodPressureSystolic
             self.bloodPressureDiastolic = bloodPressureDiastolic
+            self.twoMonthsBloodPressureDiastolic = twoMonthsBloodPressureDiastolic
 
             self.calculateStressLevels()
         }
 
         private(set) var averageHeartRateVariability: Double? = nil
         private(set) var averageRestingHeartRate: Double? = nil
+        private(set) var averageSystolic: Double? = nil
+        private(set) var averageDiastolic: Double? = nil
         private(set) var stressLevels = [DateStressScore]()
         private(set) var averageStressLevel: Double? = nil
     }
@@ -118,17 +129,27 @@ extension StressMonthlySummary {
 extension StressMonthlySummary.Details {
 
     mutating func calculateStressLevels() {
-        let targetDateRange = DateRange.trailingMonthsFromDate(date: dateRange.end, numberOfMonths: 1)
-
-        let bloodPressure = averageBloodPressureStressLevel()
+        let targetDateRange = DateRange.trailingMonths(from: dateRange.end, numberOfMonths: 1)
 
         var stressScores = [StressMonthlySummary.DateStressScore]()
 
         Calendar.current.iterate(dateRange: targetDateRange, by: .init(day: 1)) { date in
             let referenceDate = Calendar.current.startOfDay(for: date)
+
             let hrvStressScore = hrvStressLevel(for: referenceDate)
             let rhrStressScore = rhrStressLevel(for: referenceDate)
-            let allStressScores = [hrvStressScore, hrvStressScore, hrvStressScore, rhrStressScore, bloodPressure, bloodPressure].unwrap()
+            let bloodPressureScore = bloodPressureStressLevel(for: referenceDate)
+
+            let allStressScores = [
+                hrvStressScore,
+                hrvStressScore,
+                hrvStressScore,
+                rhrStressScore,
+                bloodPressureScore,
+                bloodPressureScore
+            ].unwrap()
+
+            print("Stress Debug: \(date) HRV: \(hrvStressScore) RHR: \(rhrStressScore) BP: \(bloodPressureScore)")
 
             stressScores.append(
                 StressMonthlySummary.DateStressScore(
@@ -144,6 +165,13 @@ extension StressMonthlySummary.Details {
         if restingHeartRate.isNotEmpty {
             self.averageRestingHeartRate = restingHeartRate.map({ $0.quantity.doubleValue(for: .bpm()) }).average(keyPath: \.self)
         }
+        if bloodPressureSystolic.isNotEmpty {
+            self.averageSystolic = bloodPressureSystolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
+        }
+        if bloodPressureDiastolic.isNotEmpty {
+            self.averageDiastolic = bloodPressureDiastolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
+        }
+
         self.stressLevels = stressScores
         if stressScores.isEmpty {
             self.averageStressLevel = nil
@@ -153,8 +181,8 @@ extension StressMonthlySummary.Details {
     }
 
     func hrvStressLevel(for date: Date) -> Double? {
-        let trailingMonthDateRange = DateRange.trailingMonthsFromDate(date: date, numberOfMonths: 1)
-        let trailingMonthValues = heartRateVariability.compactMap({ (sample) -> Double? in
+        let trailingMonthDateRange = DateRange.trailingMonths(from: date, numberOfMonths: 1)
+        let trailingMonthValues = twoMonthsHeartRateVariability.compactMap({ (sample) -> Double? in
             guard trailingMonthDateRange.contains(date: sample.date) else { return nil }
 
             return sample.quantity.doubleValue(for: .millisecond())
@@ -162,7 +190,7 @@ extension StressMonthlySummary.Details {
 
         guard
             let trailingMonthStdDev = trailingMonthValues.standardDeviation(keyPath: \.self),
-            let currentSample = heartRateVariability.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) })
+            let currentSample = twoMonthsHeartRateVariability.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) })
         else {
             return nil
         }
@@ -194,14 +222,29 @@ extension StressMonthlySummary.Details {
         }
     }
 
-    func averageBloodPressureStressLevel() -> Double? {
-        guard let bloodPressureSystolic, let bloodPressureDiastolic else { return nil }
+    func bloodPressureStressLevel(for date: Date) -> Double? {
+        let trailingDateRange = DateRange.trailingMonths(from: date, numberOfMonths: 1)
 
-        let bloodPressureCategory = HealthManager.shared.bloodPressureCategory(
-            systolic: bloodPressureSystolic.doubleValue(for: .millimeterOfMercury()),
-            diastolic: bloodPressureDiastolic.doubleValue(for: .millimeterOfMercury())
+        let trailingSystolicValues = twoMonthsBloodPressureSystolic.compactMap { (sample) -> Double? in
+            guard trailingDateRange.contains(date: sample.date) else { return nil }
+
+            return sample.quantity.doubleValue(for: .millimeterOfMercury())
+        }
+
+        let trailingDiastolicValues = twoMonthsBloodPressureDiastolic.compactMap { (sample) -> Double? in
+            guard trailingDateRange.contains(date: sample.date) else { return nil }
+
+            return sample.quantity.doubleValue(for: .millimeterOfMercury())
+        }
+
+        guard trailingSystolicValues.isNotEmpty, trailingDiastolicValues.isNotEmpty else { return nil }
+
+        let bloodPressureStressScore = HealthManager.shared.bloodPressureStressScore(
+            systolic: trailingSystolicValues.average(keyPath: \.self),
+            diastolic: trailingDiastolicValues.average(keyPath: \.self)
         )
-        return bloodPressureCategory.stressScore
+
+        return bloodPressureStressScore
     }
 
     var subtitle: String? {
@@ -221,12 +264,11 @@ extension StressMonthlySummary.Details {
             rhr = nil
         }
 
-
         let bloodPressure: String?
-        if let bloodPressureSystolic, let bloodPressureDiastolic {
-            let systolic = bloodPressureSystolic.doubleValue(for: .millimeterOfMercury())
-            let diastolic = bloodPressureDiastolic.doubleValue(for: .millimeterOfMercury())
-            bloodPressure = "\(systolic.format())/\(diastolic.format()) mmHg"
+        if bloodPressureSystolic.isNotEmpty, bloodPressureDiastolic.isNotEmpty {
+            let systolicAverage = bloodPressureSystolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
+            let diastolicAverage = bloodPressureDiastolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
+            bloodPressure = "BP: \(systolicAverage.format())/\(diastolicAverage.format()) mmHg"
         } else {
             bloodPressure = nil
         }

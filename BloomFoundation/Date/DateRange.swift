@@ -221,7 +221,7 @@ public extension DateRange {
         return DateRange(startDate, endDate)
     }
 
-    static func trailingMonthsFromDate(date: Date, numberOfMonths: Int) -> DateRange {
+    static func trailingMonths(from date: Date, numberOfMonths: Int) -> DateRange {
         guard let startDate = Calendar.current.date(byAdding: .month, value: -numberOfMonths, to: date) else {
             return DateRange(date, date)
         }

@@ -34,28 +34,6 @@ enum BloodPressureCategory: CaseIterable, Identifiable {
         }
     }
 
-    var stressScore: Double {
-        switch self {
-        case .low: 1
-        case .normal: 0.5
-        case .elevated: -0.25
-        case .hypertensionStage1: -0.5
-        case .hypertensionStage2: -0.75
-        case .hypertensiveCrisis: -1
-        }
-    }
-
-    var score: Double {
-        switch self {
-        case .low: 0.8
-        case .normal: 1
-        case .elevated: 0.8
-        case .hypertensionStage1: 0.5
-        case .hypertensionStage2: 0.2
-        case .hypertensiveCrisis: 0
-        }
-    }
-
     var color: Color {
         switch self {
         case .low, .elevated: return .vitalWarning

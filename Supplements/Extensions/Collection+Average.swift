@@ -54,7 +54,7 @@ extension Collection {
 
     func standardDeviation(keyPath: KeyPath<Element, Double>, subsequence: CollectionAverageSubsequence? = nil) -> Double? {
         guard let variance = variance(keyPath: keyPath, subsequence: subsequence) else { return nil }
-        
+
         return sqrt(variance)
     }
 

@@ -619,10 +619,18 @@ extension HealthManager {
     }
 
     func fetchStressMonthlySummaryDetails(dateRange: DateRange) async -> StressMonthlySummary.Details {
+        let twoMonthDateRange = DateRange.trailingMonths(from: dateRange.end, numberOfMonths: 2)
+
         let hrv = await fetchCollatedAverage(
             quantityType: .heartRateVariabilitySDNN,
             unit: .secondUnit(with: .milli),
-            dateRange: .trailingMonthsFromDate(date: dateRange.end, numberOfMonths: 2) // We need an extra month of data for a rolling average.
+            dateRange: dateRange
+        )
+
+        let hrv2Months = await fetchCollatedAverage(
+            quantityType: .heartRateVariabilitySDNN,
+            unit: .secondUnit(with: .milli),
+            dateRange: twoMonthDateRange
         )
 
         let rhr = await fetchCollatedAverage(
@@ -631,22 +639,39 @@ extension HealthManager {
             dateRange: dateRange
         )
 
-        let systolicAverage = (try? await healthStore.fetchQuantity(
-            for: .bloodPressureSystolic,
+        let systolic = await fetchCollatedAverage(
+            quantityType: .bloodPressureSystolic,
+            unit: .millimeterOfMercury(),
             dateRange: dateRange
-        ))
+        )
 
-        let diastolicAverage = (try? await healthStore.fetchQuantity(
-            for: .bloodPressureDiastolic,
+        let systolic2Months = await fetchCollatedAverage(
+            quantityType: .bloodPressureSystolic,
+            unit: .millimeterOfMercury(),
+            dateRange: twoMonthDateRange
+        )
+
+        let diastolic = await fetchCollatedAverage(
+            quantityType: .bloodPressureDiastolic,
+            unit: .millimeterOfMercury(),
             dateRange: dateRange
-        ))
+        )
+
+        let diastolic2Months = await fetchCollatedAverage(
+            quantityType: .bloodPressureDiastolic,
+            unit: .millimeterOfMercury(),
+            dateRange: twoMonthDateRange
+        )
 
         return StressMonthlySummary.Details(
             dateRange: dateRange,
             heartRateVariability: hrv,
+            twoMonthsHeartRateVariability: hrv2Months,
             restingHeartRate: rhr,
-            bloodPressureSystolic: systolicAverage,
-            bloodPressureDiastolic: diastolicAverage
+            bloodPressureSystolic: systolic,
+            twoMonthsBloodPressureSystolic: systolic2Months,
+            bloodPressureDiastolic: diastolic,
+            twoMonthsBloodPressureDiastolic: diastolic2Months
         )
     }
 
@@ -2092,6 +2117,28 @@ extension HealthManager {
         } else {
             return .low
         }
+    }
+
+    func bloodPressureStressScore(systolic: Double , diastolic: Double) -> Double {
+        let systolicScore: Double
+        if systolic <= 90 {
+            systolicScore = systolic.scaledPercent(lower: 90, upper: 70)
+        } else if systolic <= 120 {
+            systolicScore = 0
+        } else {
+            systolicScore = (1 - systolic.scaledPercent(lower: 180, upper: 120)) * -1
+        }
+
+        let diastolicScore: Double
+        if diastolic <= 60 {
+            diastolicScore = diastolic.scaledPercent(lower: 60, upper: 40)
+        } else if diastolic <= 80 {
+            diastolicScore = 0
+        } else {
+            diastolicScore = (1 - diastolic.scaledPercent(lower: 110, upper: 80)) * -1
+        }
+
+        return [systolicScore, diastolicScore].average(keyPath: \.self)
     }
 }
 
