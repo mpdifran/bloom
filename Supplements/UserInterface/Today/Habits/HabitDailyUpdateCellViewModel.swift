@@ -16,21 +16,10 @@ final class HabitDailyUpdateCellViewModel: ObservableObject {
     @Published var hasCompletedTodayGoal = false
     @Published var shouldShowConfetti = false
 
-    private var lastGoalCompletionDate: Date? {
-        didSet {
-            UserDefaults.group.set(lastGoalCompletionDate, forKey: "HabitDailyUpdateCellViewModel.lastGoalCompletionDate")
-        }
-    }
-
     private let habit: Habit
 
     init(habit: Habit) {
         self.habit = habit
-
-        if let date = UserDefaults.group.object(forKey: "HabitDailyUpdateCellViewModel.lastGoalCompletionDate") as? Date {
-            self.lastGoalCompletionDate = date
-        }
-
         observeValues()
     }
 
@@ -73,18 +62,11 @@ private extension HabitDailyUpdateCellViewModel {
 
         if !prevHasCompletedGoal && hasCompletedTodayGoal {
             await sendHabitHitNotification()
-            lastGoalCompletionDate = .now
             shouldShowConfetti = true
         }
     }
 
     func sendHabitHitNotification() async {
-        if let lastGoalCompletionDate {
-            if Calendar.current.isDateInToday(lastGoalCompletionDate) {
-                return
-            }
-        }
-
         if UIApplication.shared.applicationState != .active {
             await NotificationManager.shared.sendNotification(
                 title: "You Did It!",
