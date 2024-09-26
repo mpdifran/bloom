@@ -664,13 +664,19 @@ extension HealthManager {
     }
 
     func fetchStressMonthlySummary() async -> StressMonthlySummary? {
-        let thisMonth = await fetchStressMonthlySummaryDetails(dateRange: .trailingMonthsFromNow(1))
-        let lastMonth = await fetchStressMonthlySummaryDetails(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1))
+        let thisMonth = await fetchStressMonthlySummaryDetails(
+            dateRange: .trailingMonthsFromNow(1),
+            sleepAnalyses: sleepAnalysis30Days ?? []
+        )
+        let lastMonth = await fetchStressMonthlySummaryDetails(
+            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1),
+            sleepAnalyses: sleepAnalysisPrevious30Days ?? []
+        )
 
         return StressMonthlySummary(details: thisMonth, lastMonthDetails: lastMonth)
     }
 
-    func fetchStressMonthlySummaryDetails(dateRange: DateRange) async -> StressMonthlySummary.Details {
+    func fetchStressMonthlySummaryDetails(dateRange: DateRange, sleepAnalyses: [SleepAnalysis]) async -> StressMonthlySummary.Details {
         let twoMonthDateRange = DateRange.trailingMonths(from: dateRange.end, numberOfMonths: 2)
 
         let hrv = await fetchCollatedAverage(
@@ -723,7 +729,8 @@ extension HealthManager {
             bloodPressureSystolic: systolic,
             twoMonthsBloodPressureSystolic: systolic2Months,
             bloodPressureDiastolic: diastolic,
-            twoMonthsBloodPressureDiastolic: diastolic2Months
+            twoMonthsBloodPressureDiastolic: diastolic2Months,
+            sleepAnalyses: sleepAnalyses
         )
     }
 

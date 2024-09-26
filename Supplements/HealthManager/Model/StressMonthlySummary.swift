@@ -82,6 +82,7 @@ extension StressMonthlySummary {
         let twoMonthsBloodPressureSystolic: [DateQuantitySample]
         let bloodPressureDiastolic: [DateQuantitySample]
         let twoMonthsBloodPressureDiastolic: [DateQuantitySample]
+        let sleepAnalyses: [SleepAnalysis]
 
         // TODO: Add sleep here as well
 
@@ -93,7 +94,8 @@ extension StressMonthlySummary {
             bloodPressureSystolic: [DateQuantitySample],
             twoMonthsBloodPressureSystolic: [DateQuantitySample],
             bloodPressureDiastolic: [DateQuantitySample],
-            twoMonthsBloodPressureDiastolic: [DateQuantitySample]
+            twoMonthsBloodPressureDiastolic: [DateQuantitySample],
+            sleepAnalyses: [SleepAnalysis]
         ) {
             self.dateRange = dateRange
             self.heartRateVariability = heartRateVariability
@@ -103,6 +105,7 @@ extension StressMonthlySummary {
             self.twoMonthsBloodPressureSystolic = twoMonthsBloodPressureSystolic
             self.bloodPressureDiastolic = bloodPressureDiastolic
             self.twoMonthsBloodPressureDiastolic = twoMonthsBloodPressureDiastolic
+            self.sleepAnalyses = sleepAnalyses
 
             self.calculateStressLevels()
         }
@@ -111,6 +114,7 @@ extension StressMonthlySummary {
         private(set) var averageRestingHeartRate: Double? = nil
         private(set) var averageSystolic: Double? = nil
         private(set) var averageDiastolic: Double? = nil
+        private(set) var averageSleepScore: Double? = nil
         private(set) var stressLevels = [DateStressScore]()
         private(set) var averageStressLevel: Double? = nil
     }
@@ -137,17 +141,18 @@ extension StressMonthlySummary.Details {
             let referenceDate = Calendar.current.startOfDay(for: date)
 
             let hrvStressScore = hrvStressLevel(for: referenceDate)
-            let rhrStressScore = rhrStressLevel(for: referenceDate)
+//            let rhrStressScore = rhrStressLevel(for: referenceDate)
             let bloodPressureScore = bloodPressureStressLevel(for: referenceDate)
+            let sleepStressScore = sleepStressLevel(for: referenceDate)
 
             let allStressScores = [
                 hrvStressScore,
-                hrvStressScore,
-                hrvStressScore,
-                rhrStressScore,
+//                rhrStressScore,
                 bloodPressureScore,
-                bloodPressureScore
+                sleepStressScore
             ].unwrap()
+
+//            print("STRESS DEBUG \(referenceDate) HRV: \(hrvStressScore), RHR: \(rhrStressScore), BP: \(bloodPressureScore), SLEEP: \(sleepStressScore)")
 
             stressScores.append(
                 StressMonthlySummary.DateStressScore(
@@ -168,6 +173,9 @@ extension StressMonthlySummary.Details {
         }
         if bloodPressureDiastolic.isNotEmpty {
             self.averageDiastolic = bloodPressureDiastolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
+        }
+        if sleepAnalyses.isNotEmpty {
+            self.averageSleepScore = sleepAnalyses.average(keyPath: \.overallScoreDouble)
         }
 
         self.stressLevels = stressScores
@@ -243,6 +251,18 @@ extension StressMonthlySummary.Details {
         )
 
         return bloodPressureStressScore
+    }
+
+    func sleepStressLevel(for date: Date) -> Double? {
+        guard
+            let sleepAnalysis = sleepAnalyses.first(where: { Calendar.current.isDate($0.endDate, inSameDayAs: date) })
+        else { return nil }
+
+        let score = sleepAnalysis.overallScoreDouble.scaledSymmetricalScore(lower: 5, upper: 10)
+
+//        print("SLEEP STRESS DEBUG \(sleepAnalysis.endDate) Sleep score: \(sleepAnalysis.overallScoreDouble.format(using: .oneDecimalPlace)) Score: \(score.format(using: .twoDecimalPlaces))")
+
+        return score
     }
 
     var subtitle: String? {

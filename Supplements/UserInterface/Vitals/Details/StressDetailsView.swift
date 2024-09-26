@@ -31,10 +31,13 @@ struct StressDetailsView: View {
                     )
                 }
 
-                restingHeartRateChart
-                    .padding()
+//                restingHeartRateChart
+//                    .padding()
 
                 heartRateVariabilityChart
+                    .padding()
+
+                sleepChart
                     .padding()
             }
             .horizontallyCentered()
@@ -94,7 +97,7 @@ private extension StressDetailsView {
             .frame(height: 200)
 
             DetailInfoCardView {
-                Text("Your stress level can fluctuate day to day. It's normal to have some days of high stress, but prolonged stress can be harmful to your overall health. Bloom factors in your blood pressure, resting heart rate, and heart rate variability when calculating your stress level.")
+                Text("Your stress level can fluctuate day to day. It's normal to have some days of high stress, but prolonged stress can be harmful to your overall health. Bloom factors in your blood pressure, sleep, and heart rate variability when calculating your stress level.")
             }
             .padding(.top)
         }
@@ -194,6 +197,56 @@ private extension StressDetailsView {
             return "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
         } else {
             return "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
+        }
+    }
+
+    var sleepChart: some View {
+        VStack(alignment: .leading) {
+            if let averageScore = viewModel.stressSummary?.details.averageSleepScore?.format(using: .oneDecimalPlace) {
+                VitalDetailChartTitleView(
+                    title: "Sleep",
+                    value: "\(averageScore)"
+                )
+            } else {
+                VitalDetailChartTitleView(
+                    title: "Sleep",
+                    valueLabel: "",
+                    value: ""
+                )
+            }
+
+            Chart {
+                ForEach(viewModel.stressSummary?.details.sleepAnalyses ?? []) { sleepAnalysis in
+                    AreaMark(
+                        x: .value("Date", sleepAnalysis.endDate),
+                        y: .value("Sleep Score", sleepAnalysis.overallScoreDouble)
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.remSleep, .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+
+                    LineMark(
+                        x: .value("Date", sleepAnalysis.endDate),
+                        y: .value("Sleep Score", sleepAnalysis.overallScoreDouble)
+                    )
+                    .foregroundStyle(.remSleep)
+
+                    PointMark(
+                        x: .value("Date", sleepAnalysis.endDate),
+                        y: .value("Sleep Score", sleepAnalysis.overallScoreDouble)
+                    )
+                    .foregroundStyle(.remSleep)
+                }
+            }
+            .frame(height: 160)
+
+            DetailInfoCardView {
+                Text("A poor sleep can have a negative effect on your stress level for the following day. Try to get enough sleep each night to help keep your stress levels low.")
+            }
         }
     }
 

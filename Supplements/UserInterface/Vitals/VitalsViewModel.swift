@@ -36,6 +36,7 @@ final class VitalsViewModel: ObservableObject {
     private let processingQueue = DispatchQueue(label: "VitalsViewModel.Processing")
     private let throttler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "Throttler"))
     private let activityLevelThrottler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "ActivityLevelThrottler"))
+    private let stressThrottler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "StressThrottler"))
 
     private let modelContext = ModelContext(ContainerHolder.shared.container)
 
@@ -140,10 +141,16 @@ private extension VitalsViewModel {
                 HKQuantityType(.bloodPressureDiastolic)
             ],
             startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) {
-            let summary = await HealthManager.shared.fetchStressMonthlySummary()
-            await MainActor.run {
-                self.stressSummary = summary
+        ) { [stressThrottler, processingQueue] in
+            processingQueue.async {
+                stressThrottler.perform {
+                    Task {
+                        let summary = await HealthManager.shared.fetchStressMonthlySummary()
+                        await MainActor.run {
+                            self.stressSummary = summary
+                        }
+                    }
+                }
             }
         }
         .store(in: &observerQueryHandles)
@@ -199,11 +206,23 @@ private extension VitalsViewModel {
             .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
             .receive(on: DispatchQueue(label: "VitalsViewModel.SleepSummary"))
             .map { (_, _) in
-
                 return HealthManager.shared.fetchSleepVitalSummary()
             }
             .receive(on: DispatchQueue.main)
             .assign(to: &$sleepVitalsSummary)
+
+        HealthManager.shared.$sleepAnalysis30Days
+            .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
+            .receive(on: DispatchQueue(label: "VitalsViewModel.SleepSummary"))
+            .sink { _ in
+                Task {
+                    let summary = await HealthManager.shared.fetchStressMonthlySummary()
+                    await MainActor.run {
+                        self.stressSummary = summary
+                    }
+                }
+            }
+            .store(in: &cancellables)
 
         $activityLevelSummary
             .receive(on: processingQueue)
