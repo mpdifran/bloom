@@ -51,7 +51,7 @@ private extension HabitDailyUpdateCellViewModel {
     func observeValues() {
         backgroundHandler = HealthManager.shared.enableBackgroundDelivery(
             objectTypes: habit.targetMetric.sampleTypes,
-            frequency: .immediate
+            frequency: .hourly
         )
         observationHandler = HealthManager.shared.healthStore.observeChanges(
             sampleTypes: habit.targetMetric.sampleTypes,
