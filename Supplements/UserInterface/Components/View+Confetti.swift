@@ -13,12 +13,14 @@ extension View {
     func standardConfetti(_ counter: Binding<Int>, colors: [Color]) -> some View {
         confettiCannon(
             counter: counter,
-            num: 150,
+            num: 70,
             colors: colors,
-            confettiSize: 15,
-            openingAngle: .init(degrees: 0),
-            closingAngle: .init(degrees: 360),
-            radius: 250
+            confettiSize: 10,
+            rainHeight: 600,
+            openingAngle: .init(degrees: 20),
+            closingAngle: .init(degrees: 160),
+            radius: 320,
+            repetitions: 0
         )
     }
 }
