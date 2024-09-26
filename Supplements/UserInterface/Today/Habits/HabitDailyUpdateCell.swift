@@ -14,6 +14,8 @@ struct HabitDailyUpdateCell: View {
 
     @ObservedObject private var viewModel: HabitDailyUpdateCellViewModel
 
+    @State private var showConfetti = 0
+
     init(habit: Habit) {
         self.habit = habit
         self._viewModel = ObservedObject(wrappedValue: HabitDailyUpdateCellViewModel(habit: habit))
@@ -65,7 +67,21 @@ struct HabitDailyUpdateCell: View {
         }
         .tint(habit.targetMetric.color)
         .cardContainer()
+        .standardConfetti(
+            $showConfetti,
+            colors: [
+                habit.targetMetric.color,
+                habit.targetMetric.color.darker(),
+                habit.targetMetric.color.lighter()
+            ]
+        )
         .animation(.default, value: viewModel.dailyValue)
+        .onShow {
+            guard viewModel.shouldShowConfetti else { return }
+
+            showConfetti += 1
+            viewModel.shouldShowConfetti = false
+        }
     }
 }
 

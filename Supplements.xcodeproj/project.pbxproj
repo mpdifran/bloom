@@ -157,6 +157,7 @@
 		FF6E06232CA3514700C4219B /* OnboardingHealthMenstruationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06222CA3514700C4219B /* OnboardingHealthMenstruationView.swift */; };
 		FF6E06252CA3A3B600C4219B /* WaterGlassSizeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06242CA3A3B600C4219B /* WaterGlassSizeModel.swift */; };
 		FF6E06272CA3A94A00C4219B /* AddWaterGlassSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */; };
+		FF6E062E2CA4E4BA00C4219B /* View+Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E062D2CA4E4BA00C4219B /* View+Show.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
 		FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904D2C3472D200F9C1A5 /* UserInfo.swift */; };
 		FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */; };
@@ -648,6 +649,7 @@
 		FF6E06222CA3514700C4219B /* OnboardingHealthMenstruationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthMenstruationView.swift; sourceTree = "<group>"; };
 		FF6E06242CA3A3B600C4219B /* WaterGlassSizeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterGlassSizeModel.swift; sourceTree = "<group>"; };
 		FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWaterGlassSizeView.swift; sourceTree = "<group>"; };
+		FF6E062D2CA4E4BA00C4219B /* View+Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Show.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
 		FF78904D2C3472D200F9C1A5 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		FF78904F2C34733400F9C1A5 /* SleepSuggestionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSuggestionModel.swift; sourceTree = "<group>"; };
@@ -1983,6 +1985,7 @@
 				FF8F79B82C601C660095C36D /* View+Background.swift */,
 				FFA402C92C94C88700D8DD40 /* View+Selectable.swift */,
 				FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */,
+				FF6E062D2CA4E4BA00C4219B /* View+Show.swift */,
 				FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */,
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
 			);
@@ -2609,6 +2612,7 @@
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
 				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
 				FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */,
+				FF6E062E2CA4E4BA00C4219B /* View+Show.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
 				FF88F1212C7B81AF0093D1B4 /* EventCell.swift in Sources */,
 				FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */,
