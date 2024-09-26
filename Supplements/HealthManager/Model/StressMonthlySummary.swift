@@ -117,15 +117,33 @@ extension StressMonthlySummary {
         private(set) var averageSleepScore: Double? = nil
         private(set) var stressLevels = [DateStressScore]()
         private(set) var averageStressLevel: Double? = nil
+        private(set) var averageBloodPressureStressLevel: Double? = nil
+        private(set) var averageHeartRateVariabilityStressLevel: Double? = nil
+        private(set) var averageSleepStressLevel: Double? = nil
     }
 
     struct DateStressScore: Hashable, Sendable, Identifiable {
         var id: Date { date }
         let date: Date
         let stressScore: Double
+        let bloodPressureStressScore: Double
+        let hrvStressScore: Double
+        let sleepStressScore: Double
 
         var level: StressMonthlySummary.Level {
             StressMonthlySummary.Level(score: stressScore)
+        }
+
+        var bloodPressureLevel: StressMonthlySummary.Level {
+            StressMonthlySummary.Level(score: bloodPressureStressScore)
+        }
+
+        var hrvLevel: StressMonthlySummary.Level {
+            StressMonthlySummary.Level(score: hrvStressScore)
+        }
+
+        var sleepLevel: StressMonthlySummary.Level {
+            StressMonthlySummary.Level(score: sleepStressScore)
         }
     }
 }
@@ -157,7 +175,10 @@ extension StressMonthlySummary.Details {
             stressScores.append(
                 StressMonthlySummary.DateStressScore(
                     date: referenceDate,
-                    stressScore: allStressScores.average(keyPath: \.self)
+                    stressScore: allStressScores.average(keyPath: \.self),
+                    bloodPressureStressScore: bloodPressureScore ?? 0,
+                    hrvStressScore: hrvStressScore ?? 0,
+                    sleepStressScore: sleepStressScore ?? 0
                 )
             )
         }
@@ -179,10 +200,11 @@ extension StressMonthlySummary.Details {
         }
 
         self.stressLevels = stressScores
-        if stressScores.isEmpty {
-            self.averageStressLevel = nil
-        } else {
+        if stressScores.isNotEmpty {
             self.averageStressLevel = stressScores.average(keyPath: \.stressScore)
+            self.averageBloodPressureStressLevel = stressScores.average(keyPath: \.bloodPressureStressScore)
+            self.averageHeartRateVariabilityStressLevel = stressScores.average(keyPath: \.hrvStressScore)
+            self.averageSleepStressLevel = stressScores.average(keyPath: \.sleepStressScore)
         }
     }
 

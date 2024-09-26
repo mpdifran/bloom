@@ -9,9 +9,29 @@ import SwiftUI
 import Charts
 import TelemetryDeck
 
+extension StressDetailsView {
+    enum StressContributor: CaseIterable, Hashable {
+        case all
+        case bloodPressure
+        case heartRateVariability
+        case sleep
+
+        var name: String {
+            switch self {
+            case .all: "All"
+            case .bloodPressure: "Blood Pressure"
+            case .heartRateVariability: "Heart Rate Variability"
+            case .sleep: "Sleep"
+            }
+        }
+    }
+}
+
 struct StressDetailsView: View {
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
+
+    @State private var selectedContributor: StressContributor = .all
 
     var body: some View {
         ScrollView {
@@ -50,6 +70,7 @@ struct StressDetailsView: View {
                 )
             }
         }
+        .animation(.easeInOut, value: selectedContributor)
         .navigationTitle("Stress Levels")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -62,10 +83,10 @@ private extension StressDetailsView {
 
     var stressLevelChart: some View {
         VStack(alignment: .leading) {
-            if let averageStressLevel = viewModel.stressSummary?.details.averageStressLevel {
+            if let averageStressLevelName {
                 VitalDetailChartTitleView(
                     title: "Daily Stress Levels",
-                    value: "\(StressMonthlySummary.Level(score: averageStressLevel).name)"
+                    value: averageStressLevelName
                 )
             } else {
                 VitalDetailChartTitleView(
@@ -77,11 +98,32 @@ private extension StressDetailsView {
 
             Chart {
                 ForEach(viewModel.stressSummary?.details.stressLevels ?? []) { stressLevel in
-                    BarMark(
-                        x: .value("Date", stressLevel.date),
-                        y: .value("Stress Level", stressLevel.stressScore)
-                    )
-                    .foregroundStyle(stressLevel.level.color)
+                    switch selectedContributor {
+                    case .all:
+                        BarMark(
+                            x: .value("Date", stressLevel.date, unit: .day),
+                            y: .value("Stress Level", stressLevel.stressScore)
+                        )
+                        .foregroundStyle(stressLevel.level.color)
+                    case .bloodPressure:
+                        BarMark(
+                            x: .value("Date", stressLevel.date, unit: .day),
+                            y: .value("Stress Level", stressLevel.bloodPressureStressScore)
+                        )
+                        .foregroundStyle(stressLevel.bloodPressureLevel.color)
+                    case .heartRateVariability:
+                        BarMark(
+                            x: .value("Date", stressLevel.date, unit: .day),
+                            y: .value("Stress Level", stressLevel.hrvStressScore)
+                        )
+                        .foregroundStyle(stressLevel.hrvLevel.color)
+                    case .sleep:
+                        BarMark(
+                            x: .value("Date", stressLevel.date, unit: .day),
+                            y: .value("Stress Level", stressLevel.sleepStressScore)
+                        )
+                        .foregroundStyle(stressLevel.sleepLevel.color)
+                    }
                 }
             }
             .chartYScale(
@@ -94,13 +136,66 @@ private extension StressDetailsView {
                 StressMonthlySummary.Level.high.name: StressMonthlySummary.Level.high.color,
                 StressMonthlySummary.Level.severe.name: StressMonthlySummary.Level.severe.color
             ])
-            .frame(height: 200)
+            .frame(height: 260)
+
+            stressContributorPicker
 
             DetailInfoCardView {
                 Text("Your stress level can fluctuate day to day. It's normal to have some days of high stress, but prolonged stress can be harmful to your overall health. Bloom factors in your blood pressure, sleep, and heart rate variability when calculating your stress level.")
             }
             .padding(.top)
         }
+    }
+
+    var averageStressLevelName: String? {
+        guard let selectedStressLevelScore else { return nil }
+
+        return StressMonthlySummary.Level(score: selectedStressLevelScore).name
+    }
+
+    var details: StressMonthlySummary.Details? {
+        viewModel.stressSummary?.details
+    }
+
+    var stressLevels: [StressMonthlySummary.DateStressScore] {
+        details?.stressLevels ?? []
+    }
+
+    var selectedStressLevelScore: Double? {
+        switch selectedContributor {
+        case .all: details?.averageStressLevel
+        case .bloodPressure: details?.averageBloodPressureStressLevel
+        case .heartRateVariability: details?.averageHeartRateVariabilityStressLevel
+        case .sleep: details?.averageSleepStressLevel
+        }
+    }
+
+    var stressContributorPicker: some View {
+        Button {
+            guard let index = StressContributor.allCases.firstIndex(of: selectedContributor) else {
+                selectedContributor = .all
+                return
+            }
+            let newIndex = (index + 1) % StressContributor.allCases.count
+            selectedContributor = StressContributor.allCases[newIndex]
+        } label: {
+            HStack {
+                Text("Contributor")
+
+                Spacer()
+
+                Text(selectedContributor.name)
+            }
+        }
+        .buttonStyle(.zone)
+        .tint(pickerTintColor)
+        .sensoryFeedback(.selection, trigger: selectedContributor)
+    }
+
+    var pickerTintColor: Color {
+        guard let selectedStressLevelScore else { return .gray }
+
+        return StressMonthlySummary.Level(score: selectedStressLevelScore).color
     }
 }
 
