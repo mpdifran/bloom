@@ -130,8 +130,8 @@ private extension StressDetailsView {
             .chartForegroundStyleScale([
                 StressMonthlySummary.Level.relaxed.name: StressMonthlySummary.Level.relaxed.color,
                 StressMonthlySummary.Level.mild.name: StressMonthlySummary.Level.mild.color,
-                StressMonthlySummary.Level.high.name: StressMonthlySummary.Level.high.color,
-                StressMonthlySummary.Level.severe.name: StressMonthlySummary.Level.severe.color
+                StressMonthlySummary.Level.moderate.name: StressMonthlySummary.Level.moderate.color,
+                StressMonthlySummary.Level.high.name: StressMonthlySummary.Level.high.color
             ])
             .frame(height: 260)
 

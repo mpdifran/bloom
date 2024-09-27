@@ -19,14 +19,14 @@ extension StressMonthlySummary {
     enum Level {
         case relaxed
         case mild
+        case moderate
         case high
-        case severe
 
         init(score: Double) {
             if score < -0.5 {
-                self = .severe
-            } else if score < 0 {
                 self = .high
+            } else if score < 0 {
+                self = .moderate
             } else if score < 0.5 {
                 self = .mild
             } else {
@@ -38,8 +38,8 @@ extension StressMonthlySummary {
             switch self {
             case .relaxed: "Relaxed"
             case .mild: "Mild"
+            case .moderate: "Moderate"
             case .high: "High"
-            case .severe: "Severe"
             }
         }
 
@@ -47,8 +47,8 @@ extension StressMonthlySummary {
             switch self {
             case .relaxed: .vitalGreat
             case .mild: .vitalGood
-            case .high: .vitalWarning
-            case .severe: .vitalSevere
+            case .moderate: .vitalWarning
+            case .high: .vitalSevere
             }
         }
     }
