@@ -290,7 +290,7 @@ private extension VitalsViewModel {
                     status: sleepVitalsSummary.details.quality?.name,
                     score: sleepVitalsSummary.score,
                     color: sleepVitalsSummary.details.quality?.color,
-                    trend: sleepVitalsSummary.trend
+                    barLevel: sleepVitalsSummary.barLevel
                 )
             )
         } else {
@@ -304,7 +304,7 @@ private extension VitalsViewModel {
                     status: activityLevelSummary.details.activityLevel?.name,
                     score: activityLevelSummary.details.score,
                     color: activityLevelSummary.details.activityLevel?.color,
-                    trend: activityLevelSummary.trend
+                    barLevel: activityLevelSummary.barLevel
                 )
             )
         } else {
@@ -318,7 +318,7 @@ private extension VitalsViewModel {
                     status: heartHealthSummary.details.level?.name,
                     score: heartHealthSummary.details.score ?? 1,
                     color: heartHealthSummary.details.level?.color,
-                    trend: .noTrend
+                    barLevel: heartHealthSummary.details.barLevel
                 )
             )
         } else {
@@ -332,7 +332,7 @@ private extension VitalsViewModel {
                     status: bodyCompositionSummary.details.range?.name,
                     score: bodyCompositionSummary.score,
                     color: bodyCompositionSummary.details.range?.color,
-                    trend: bodyCompositionSummary.trend
+                    barLevel: bodyCompositionSummary.barLevel
                 )
             )
         } else {
@@ -346,7 +346,7 @@ private extension VitalsViewModel {
                     status: stressSummary.details.level?.name,
                     score: stressSummary.score,
                     color: stressSummary.details.level?.color,
-                    trend: stressSummary.trend
+                    barLevel: stressSummary.barLevel
                 )
             )
         } else {
@@ -360,7 +360,7 @@ private extension VitalsViewModel {
                     status: nutritionSummary.status?.title,
                     score: nutritionSummary.score,
                     color: nutritionSummary.status?.color,
-                    trend: nutritionSummary.trend
+                    barLevel: nutritionSummary.barLevel
                 )
             )
         } else {
@@ -374,7 +374,7 @@ private extension VitalsViewModel {
                     status: exerciseEffectivenessSummary.details.level.name,
                     score: exerciseEffectivenessSummary.details.score,
                     color: exerciseEffectivenessSummary.details.level.color,
-                    trend: exerciseEffectivenessSummary.trend
+                    barLevel: exerciseEffectivenessSummary.barLevel
                 )
             )
         } else {
@@ -389,7 +389,7 @@ private extension VitalsViewModel {
                         status: menstrualSummary.phaseName,
                         score: 1,
                         color: menstrualSummary.color,
-                        trend: .noTrend
+                        barLevel: nil
                     )
                 )
             } else {
@@ -404,14 +404,19 @@ private extension VitalsViewModel {
                     status: bowelMovementSummary.details?.rating.name,
                     score: bowelMovementSummary.details?.score ?? 1,
                     color: bowelMovementSummary.details?.rating.color,
-                    trend: bowelMovementSummary.trend
+                    barLevel: bowelMovementSummary.barLevel
                 )
             )
         } else {
             vitals.append(.init(id: .bowelMovements))
         }
 
-        vitals.sort(by: { $0.score < $1.score })
+        vitals.sort(by: { lhs, rhs in
+            guard let lhsLevel = lhs.barLevel else { return false }
+            guard let rhsLevel = rhs.barLevel else { return true }
+
+            return lhsLevel < rhsLevel
+        })
 
         DispatchQueue.main.async {
             self.vitals = vitals

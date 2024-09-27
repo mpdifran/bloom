@@ -92,10 +92,34 @@ struct ActivityLevelSummary: Hashable, Codable, Sendable {
 
 extension ActivityLevelSummary {
 
-    var trend: VitalModel.Trend {
-        guard let thisMonth = details.activityRatio, let lastMonth = details.activityRatio else { return .noTrend }
+    var barLevel: VitalModel.BarLevel? {
+        guard
+            let ratio = details.activityRatio,
+            let level = details.activityLevel
+        else { return nil }
 
-        return thisMonth > lastMonth ? .increasing : .decreasing
+        switch level {
+        case .sedentary:
+            let range = level.range
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: ratio.scaledPercent(lower: range.lowerBound, upper: range.upperBound)
+            )
+        case .light, .moderate:
+            let lower = ActivityLevelSummary.ActivityLevel.light.range.lowerBound
+            let upper = ActivityLevelSummary.ActivityLevel.moderate.range.upperBound
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: ratio.scaledPercent(lower: lower, upper: upper)
+            )
+        case .high, .intense:
+            let lower = ActivityLevelSummary.ActivityLevel.high.range.lowerBound
+            let upper = ActivityLevelSummary.ActivityLevel.intense.range.upperBound
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: ratio.scaledPercent(lower: lower, upper: upper)
+            )
+        }
     }
 
     var subtitle: String {

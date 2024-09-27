@@ -99,7 +99,7 @@ private extension OnboardingHealthHeartView {
                 status: heartHealth.details.level?.name,
                 score: heartHealth.details.score ?? 1,
                 color: heartHealth.details.level?.color,
-                trend: .noTrend
+                barLevel: heartHealth.details.barLevel
             )
         } else {
             VitalModel(
@@ -116,7 +116,7 @@ private extension OnboardingHealthHeartView {
                 status: stressSummary.details.level?.name,
                 score: stressSummary.score,
                 color: stressSummary.details.level?.color,
-                trend: stressSummary.trend
+                barLevel: stressSummary.barLevel
             )
         } else {
             VitalModel(

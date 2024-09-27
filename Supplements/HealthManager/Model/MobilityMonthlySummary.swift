@@ -106,8 +106,8 @@ extension MobilityMonthlySummary {
         return [doubleSupportScore, walkingScore, steadinessScore].average(keyPath: \.self)
     }
 
-    var trend: VitalModel.Trend {
-        internalScore > lastMonthScore ? .increasing : .decreasing
+    var barLevel: VitalModel.BarLevel? {
+        return nil // TODO: implement
     }
 
     var subtitle: String {

@@ -93,7 +93,7 @@ private extension OnboardingHealthNutritionView {
                 status: nutritionSummary.status?.title,
                 score: nutritionSummary.score,
                 color: nutritionSummary.status?.color,
-                trend: nutritionSummary.trend
+                barLevel: nutritionSummary.barLevel
             )
         } else {
             VitalModel(

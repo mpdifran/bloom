@@ -52,11 +52,30 @@ extension NutritionMonthlySummary {
         details.score ?? 1
     }
 
-    var trend: VitalModel.Trend {
-        if let thisMonth = details.score, let lastMonth = details.score {
-            return thisMonth < lastMonth ? .decreasing : .increasing
+    var barLevel: VitalModel.BarLevel? {
+        guard let score = details.score else { return nil }
+
+        if score < 0.4 {
+            return VitalModel.BarLevel(
+                level: .low,
+                proportion: score.scaledPercent(lower: 0, upper: 0.4)
+            )
+        } else if score < 0.7 {
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: score.scaledPercent(lower: 0.4, upper: 0.7)
+            )
+        } else if score < 0.9 {
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: score.scaledPercent(lower: 0.7, upper: 0.9)
+            )
+        } else {
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: score.scaledPercent(lower: 0.9, upper: 1)
+            )
         }
-        return .noTrend
     }
 
     var status: Status? {
@@ -66,9 +85,9 @@ extension NutritionMonthlySummary {
 
         if score < 0.4 {
             return Status(title: "Unhealthy", color: .vitalSevere)
-        } else if score < 0.8 {
+        } else if score < 0.7 {
             return Status(title: "Unbalanced", color: .vitalWarning)
-        } else if score < 1 {
+        } else if score < 0.9 {
             return Status(title: "Good", color: .vitalGood)
         }
         return Status(title: "Healthy", color: .vitalGreat)

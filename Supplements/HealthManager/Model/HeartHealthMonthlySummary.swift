@@ -107,6 +107,33 @@ extension HeartHealthMonthlySummary.Details {
         return scores.average(keyPath: \.self)
     }
 
+    var barLevel: VitalModel.BarLevel? {
+        guard let level, let score else { return nil }
+
+        switch level {
+        case .atRisk:
+            return VitalModel.BarLevel(
+                level: .low,
+                proportion: score.scaledPercent(lower: 0, upper: 0.4)
+            )
+        case .moderate:
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: score.scaledPercent(lower: 0.4, upper: 0.7)
+            )
+        case .healthy:
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: score.scaledPercent(lower: 0.7, upper: 0.95)
+            )
+        case .optimal:
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: score.scaledPercent(lower: 0.95, upper: 1)
+            )
+        }
+    }
+
     var level: HeartHealthMonthlySummary.HeartHealthLevel? {
         guard let score else { return nil }
 

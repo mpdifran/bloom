@@ -66,10 +66,33 @@ public extension VitalModel {
         }
     }
 
-    enum Trend: Sendable {
-        case increasing
-        case decreasing
-        case noTrend
+    enum Level: Int, Hashable, Sendable {
+        case low
+        case medium
+        case high
+        case optimal
+    }
+
+    struct BarLevel: Hashable, Sendable {
+        public let level: Level
+        public let proportion: Double
+
+        public init(
+            level: Level,
+            proportion: Double
+        ) {
+            self.level = level
+            self.proportion = proportion
+        }
+    }
+}
+
+extension VitalModel.BarLevel: Comparable {
+    public static func < (lhs: VitalModel.BarLevel, rhs: VitalModel.BarLevel) -> Bool {
+        if lhs.level == rhs.level {
+            return lhs.proportion < rhs.proportion
+        }
+        return lhs.level.rawValue < rhs.level.rawValue
     }
 }
 
@@ -79,7 +102,7 @@ public struct VitalModel: Identifiable, Hashable, Sendable {
     public let status: String
     public let score: Double
     public let color: Color
-    public let trend: Trend
+    public let barLevel: BarLevel?
 
     public init(
         id: Kind,
@@ -87,14 +110,14 @@ public struct VitalModel: Identifiable, Hashable, Sendable {
         status: String?,
         score: Double,
         color: Color?,
-        trend: Trend
+        barLevel: BarLevel?
     ) {
         self.id = id
         self.subtitle = subtitle ?? "No Data"
         self.status = status ?? "Unknown"
         self.score = status == nil ? 2 : score
         self.color = color ?? .gray
-        self.trend = trend
+        self.barLevel = barLevel
     }
 
     public init(id: Kind) {
@@ -104,7 +127,7 @@ public struct VitalModel: Identifiable, Hashable, Sendable {
             status: nil,
             score: 1,
             color: nil,
-            trend: .noTrend
+            barLevel: nil
         )
     }
 }

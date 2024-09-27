@@ -93,7 +93,7 @@ private extension OnboardingHealthMenstruationView {
                 status: menstrualSummary.phaseName,
                 score: 1,
                 color: menstrualSummary.color,
-                trend: .noTrend
+                barLevel: nil
             )
         } else {
             VitalModel(

@@ -59,10 +59,34 @@ struct BowelMovementMonthlySummary: Sendable {
     let details: Details?
     let lastMonth: Details?
 
-    var trend: VitalModel.Trend {
-        guard let details, let lastMonth else { return .noTrend }
+    var barLevel: VitalModel.BarLevel? {
+        guard
+            let rating = details?.rating,
+            let score = details?.score
+        else { return nil }
 
-        return details.score < lastMonth.score ? .decreasing : .increasing
+        switch rating {
+        case .unhealthy:
+            return VitalModel.BarLevel(
+                level: .low,
+                proportion: score.scaledPercent(lower: 0, upper: 0.4)
+            )
+        case .concerning:
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: score.scaledPercent(lower: 0.4, upper: 0.6)
+            )
+        case .acceptable:
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: score.scaledPercent(lower: 0.6, upper: 0.9)
+            )
+        case .optimal:
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: score.scaledPercent(lower: 0.9, upper: 1)
+            )
+        }
     }
 }
 

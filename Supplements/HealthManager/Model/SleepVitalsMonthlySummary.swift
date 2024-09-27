@@ -46,10 +46,34 @@ extension SleepVitalsMonthlySummary {
         details.score ?? 1
     }
 
-    var trend: VitalModel.Trend {
-        guard let thisMonth = details.score, let lastMonth = lastMonthDetails.score else { return .noTrend }
+    var barLevel: VitalModel.BarLevel? {
+        guard
+            let averageSleepScore = details.averageSleepScore,
+            let level = details.quality
+        else { return nil }
 
-        return thisMonth > lastMonth ? .increasing : .decreasing
+        switch level {
+        case .poor:
+            return VitalModel.BarLevel(
+                level: .low,
+                proportion: averageSleepScore.scaledPercent(lower: 0, upper: 4)
+            )
+        case .low:
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: averageSleepScore.scaledPercent(lower: 4, upper: 7)
+            )
+        case .good:
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: averageSleepScore.scaledPercent(lower: 7, upper: 9)
+            )
+        case .great:
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: averageSleepScore.scaledPercent(lower: 9, upper: 10)
+            )
+        }
     }
 
     var subtitleText: String? {

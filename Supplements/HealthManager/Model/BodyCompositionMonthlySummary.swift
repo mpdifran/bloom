@@ -75,11 +75,38 @@ extension BodyCompositionMonthlySummary {
         details.score ?? 1
     }
 
-    var trend: VitalModel.Trend {
-        guard let thisMonth = details.score, let lastMonth = lastMonthDetails.score else {
-            return .noTrend
+    var barLevel: VitalModel.BarLevel? {
+        guard let range = details.range,
+              let goal = HealthManager.shared.goalBodyFatPercentage(),
+              let bodyFatPercentage = details.bodyFatPercentage
+        else { return nil }
+
+        let bodyFat = bodyFatPercentage.doubleValue(for: .percent())
+
+        switch range {
+        case .unknown:
+            return nil
+        case .essentialFat:
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: bodyFat.scaledPercent(lower: 0, upper: goal.0)
+            )
+        case .athlete, .fit:
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: bodyFat.scaledPercent(lower: goal.2, upper: goal.0)
+            )
+        case .healthy:
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: bodyFat.scaledPercent(lower: goal.3, upper: goal.2)
+            )
+        case .high:
+            return VitalModel.BarLevel(
+                level: .low,
+                proportion: bodyFat.scaledPercent(lower: goal.4, upper: goal.3)
+            )
         }
-        return thisMonth > lastMonth ? .increasing : .decreasing
     }
 
     var subtitle: String? {

@@ -93,7 +93,7 @@ private extension OnboardingHealthActivityView {
                 status: activitySummary.details.activityLevel?.name,
                 score: activitySummary.details.score,
                 color: activitySummary.details.activityLevel?.color,
-                trend: activitySummary.trend
+                barLevel: activitySummary.barLevel
             )
         } else {
             VitalModel(

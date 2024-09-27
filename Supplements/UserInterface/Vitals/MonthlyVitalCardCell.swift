@@ -62,6 +62,13 @@ struct MonthlyVitalCardCell: View {
 //
 //                Spacer()
 
+                if let barLevel = vital.barLevel {
+                    VitalStatusBarView(
+                        level: .init(barLevel: barLevel.level),
+                        levelPercent: barLevel.proportion
+                    )
+                }
+
                 Text(vital.status)
                     .font(.headline)
                     .bold()
@@ -93,7 +100,7 @@ struct MonthlyVitalCardCell: View {
                     status: "Moderate",
                     score: 0.7,
                     color: .vitalWarning,
-                    trend: .increasing
+                    barLevel: .init(level: .medium, proportion: 1)
                 )
             )
 
@@ -104,7 +111,7 @@ struct MonthlyVitalCardCell: View {
                     status: "Good",
                     score: 0.7,
                     color: .vitalGreat,
-                    trend: .decreasing
+                    barLevel: .init(level: .optimal, proportion: 0.9)
                 )
             )
 
@@ -115,7 +122,7 @@ struct MonthlyVitalCardCell: View {
                     status: "Light",
                     score: 0.7,
                     color: .vitalGood,
-                    trend: .noTrend
+                    barLevel: .init(level: .high, proportion: 0.6)
                 )
             )
 
@@ -126,7 +133,7 @@ struct MonthlyVitalCardCell: View {
                     status: "Irregular",
                     score: 0.1,
                     color: .vitalSevere,
-                    trend: .increasing
+                    barLevel: .init(level: .low, proportion: 0.4)
                 )
             )
         }

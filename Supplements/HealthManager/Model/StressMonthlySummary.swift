@@ -63,8 +63,34 @@ struct StressMonthlySummary: Hashable, Sendable {
         details.averageStressLevel?.scaledPercent(lower: -1, upper: 0.5) ?? 1
     }
 
-    var trend: VitalModel.Trend {
-        return .noTrend
+    var barLevel: VitalModel.BarLevel? {
+        guard
+            let averageStressLevel = details.averageStressLevel,
+            let level = details.level
+        else { return nil }
+
+        switch level {
+        case .high:
+            return VitalModel.BarLevel(
+                level: .low,
+                proportion: averageStressLevel.scaledPercent(lower: -1, upper: -0.5)
+            )
+        case .moderate:
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: averageStressLevel.scaledPercent(lower: -0.5, upper: 0)
+            )
+        case .mild:
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: averageStressLevel.scaledPercent(lower: 0, upper: 0.5)
+            )
+        case .relaxed:
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: averageStressLevel.scaledPercent(lower: 0.5, upper: 1)
+            )
+        }
     }
 }
 

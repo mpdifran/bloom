@@ -96,7 +96,7 @@ private extension OnboardingHealthOtherTypesView {
                 status: bodyCompositionSummary.details.range?.name,
                 score: bodyCompositionSummary.score,
                 color: bodyCompositionSummary.details.range?.color,
-                trend: bodyCompositionSummary.trend
+                barLevel: bodyCompositionSummary.barLevel
             )
         } else {
             VitalModel(

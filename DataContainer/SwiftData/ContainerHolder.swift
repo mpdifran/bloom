@@ -15,13 +15,13 @@ public class ContainerHolder {
     public let container: ModelContainer
 
     private init() {
-        do {
-            let schema = Schema(versionedSchema: SchemaV1.self)
-            let modelConfiguration = ModelConfiguration(
-                schema: schema,
-                groupContainer: .identifier("group.supplements")
-            )
+        let schema = Schema(versionedSchema: SchemaV1.self)
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            groupContainer: .identifier("group.supplements")
+        )
 
+        do {
             self.container = try ModelContainer(
                 for: schema,
                 migrationPlan: DefaultMigrationPlan.self,
@@ -33,7 +33,7 @@ public class ContainerHolder {
                 category: .appState,
                 message: error.localizedDescription
             )
-            fatalError("Could not set up model container: \(error.localizedDescription)")
+            fatalError("Could not set up model container: \(modelConfiguration.url.absoluteString)\n\nError: \(error.localizedDescription)")
         }
     }
 }

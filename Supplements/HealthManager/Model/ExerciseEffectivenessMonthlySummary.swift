@@ -58,8 +58,34 @@ struct ExerciseEffectivenessMonthlySummary: Hashable, Sendable {
     let details: Details
     let lastMonthDetails: Details
 
-    var trend: VitalModel.Trend {
-        details.score < lastMonthDetails.score ? .decreasing : .increasing
+    var barLevel: VitalModel.BarLevel? {
+        let level = details.level
+        let scaledSum = details.overallHeartZoneDistribution.scaledDurationSum
+
+        let minutes = scaledSum.doubleValue(for: .minute())
+
+        switch level {
+        case .sedentary:
+            return VitalModel.BarLevel(
+                level: .low,
+                proportion: 0.5
+            )
+        case .minimal:
+            return VitalModel.BarLevel(
+                level: .medium,
+                proportion: minutes.scaledPercent(lower: 0, upper: .maxMinimalZoneMinutes)
+            )
+        case .moderate:
+            return VitalModel.BarLevel(
+                level: .high,
+                proportion: minutes.scaledPercent(lower: .maxMinimalZoneMinutes, upper: .minZoneMinutes)
+            )
+        case .high:
+            return VitalModel.BarLevel(
+                level: .optimal,
+                proportion: minutes.scaledPercent(lower: .minZoneMinutes, upper: .minZoneMinutes * 2)
+            )
+        }
     }
 }
 
