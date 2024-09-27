@@ -93,7 +93,7 @@ struct ProposedHabitTargetValueEditCardView: View {
             suggestedValue: 5000,
             previousValue: 2000,
             unitString: HKUnit.count().unitString,
-            vitalKind: .cardioFitness,
+            vitalKind: .heartHealth,
             context: "",
             hasUserEdited: true
         )

@@ -198,7 +198,7 @@ private extension HabitsFactory {
 
     func suggestNewHabit(for vital: VitalModel) async -> ProposedHabit? {
         switch vital.id {
-        case .cardioFitness:
+        case .heartHealth:
             return await createHabit(
                 targetMetric: .walkingRunningDistance,
                 unit: .meterUnit(with: .kilo),

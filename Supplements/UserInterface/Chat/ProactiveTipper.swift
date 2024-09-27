@@ -40,7 +40,6 @@ extension ProactiveTipper {
         let request = ProactiveTipRequestModel(
             stressMonthlySummary: nil,
             nutritionMonthlySummary: nutritionSummary,
-            cardioFitnessSummary: VitalsViewModel.shared.cardioFitnessSummary,
             sleepVitalsMonthlySummary: VitalsViewModel.shared.sleepVitalsSummary,
             activityLevelMonthlySummary: VitalsViewModel.shared.activityLevelSummary,
             chatHistory: chatHistory

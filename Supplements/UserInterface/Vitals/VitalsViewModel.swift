@@ -19,7 +19,7 @@ final class VitalsViewModel: ObservableObject {
 
     @Published var activityLevelSummary: ActivityLevelSummary?
     @Published var sleepVitalsSummary: SleepVitalsMonthlySummary?
-    @Published var cardioFitnessSummary: CardioFitnessMonthlySummary?
+    @Published var heartHealthSummary: HeartHealthMonthlySummary?
     @Published var bodyCompositionSummary: BodyCompositionMonthlySummary?
     @Published var stressSummary: StressMonthlySummary?
     @Published var nutritionSummary: NutritionMonthlySummary?
@@ -61,7 +61,7 @@ extension VitalsViewModel {
     }
 
     func forceFetchVitals() async {
-        let cardio = await HealthManager.shared.fetchCardioFitnessSummary()
+        let cardio = await HealthManager.shared.fetchHeartHealthSummary()
         let activityLevel = await HealthManager.shared.fetchActivityLevelSummary()
         let bodyComposition = await HealthManager.shared.fetchBodyCompositionSummary()
         let stress = await HealthManager.shared.fetchStressMonthlySummary()
@@ -71,7 +71,7 @@ extension VitalsViewModel {
         let bowelMovements = modelContext.fetchBowelMovementMonthlySummary()
 
         await MainActor.run {
-            self.cardioFitnessSummary = cardio
+            self.heartHealthSummary = cardio
             self.activityLevelSummary = activityLevel
             self.bodyCompositionSummary = bodyComposition
             self.stressSummary = stress
@@ -95,9 +95,9 @@ private extension VitalsViewModel {
             ],
             startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
         ) {
-            let summary = await HealthManager.shared.fetchCardioFitnessSummary()
+            let summary = await HealthManager.shared.fetchHeartHealthSummary()
             await MainActor.run {
-                self.cardioFitnessSummary = summary
+                self.heartHealthSummary = summary
             }
         }
         .store(in: &observerQueryHandles)
@@ -236,7 +236,7 @@ private extension VitalsViewModel {
                 self?.createVitals()
             }
             .store(in: &cancellables)
-        $cardioFitnessSummary
+        $heartHealthSummary
             .receive(on: processingQueue)
             .sink { [weak self] (_) in
                 self?.createVitals()
@@ -310,19 +310,19 @@ private extension VitalsViewModel {
         } else {
             vitals.append(.init(id: .activityLevel))
         }
-        if let cardioFitnessSummary {
+        if let heartHealthSummary {
             vitals.append(
                 VitalModel(
-                    id: .cardioFitness,
-                    subtitle: cardioFitnessSummary.subtitle,
-                    status: cardioFitnessSummary.level.name,
-                    score: cardioFitnessSummary.score,
-                    color: cardioFitnessSummary.level.color,
-                    trend: cardioFitnessSummary.trend
+                    id: .heartHealth,
+                    subtitle: heartHealthSummary.details.subtitle,
+                    status: heartHealthSummary.details.level?.name,
+                    score: heartHealthSummary.details.score ?? 1,
+                    color: heartHealthSummary.details.level?.color,
+                    trend: .noTrend
                 )
             )
         } else {
-            vitals.append(.init(id: .cardioFitness))
+            vitals.append(.init(id: .heartHealth))
         }
         if let bodyCompositionSummary {
             vitals.append(

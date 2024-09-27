@@ -11,7 +11,7 @@ public extension VitalModel {
     enum Kind: String, Hashable, Codable, CaseIterable, Sendable {
         case sleepQuality
         case activityLevel
-        case cardioFitness
+        case heartHealth
         case bodyComposition
         case stressLevels
         case nutrition
@@ -25,8 +25,8 @@ public extension VitalModel {
                 "Sleep Quality"
             case .activityLevel:
                 "Activity Level"
-            case .cardioFitness:
-                "Cardio Fitness"
+            case .heartHealth:
+                "Heart Health"
             case .bodyComposition:
                 "Body Composition"
             case .stressLevels:
@@ -48,7 +48,7 @@ public extension VitalModel {
                 "moon.zzz.fill"
             case .activityLevel:
                 "figure.tennis"
-            case .cardioFitness:
+            case .heartHealth:
                 "heart.fill"
             case .bodyComposition:
                 "gauge.with.needle"

@@ -10,7 +10,6 @@ import Foundation
 struct ProactiveTipRequestModel: Codable {
     let stressMonthlySummary: StressSummary?
     let nutritionMonthlySummary: NutritionSummary?
-    let cardioFitnessSummary: CardioFitnessMonthlySummary?
     let sleepVitalsMonthlySummary: SleepVitalsMonthlySummary?
     let activityLevelMonthlySummary: ActivityLevelSummary?
     let chatHistory: [ChatMessageHistory]

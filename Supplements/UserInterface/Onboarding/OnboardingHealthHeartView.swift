@@ -31,7 +31,7 @@ struct OnboardingHealthHeartView: View {
             ScrollView {
                 VStack {
                     MonthlyVitalCardCell(
-                        vital: cardioVitalModel
+                        vital: heartHealthVitalModel
                     )
                     .opacity(showCards ? 1 : 0)
                     .transition(.blurReplace)
@@ -46,7 +46,7 @@ struct OnboardingHealthHeartView: View {
             }
         }
         .animation(.easeOut(duration: 1), value: showCards)
-        .animation(.easeInOut, value: cardioVitalModel)
+        .animation(.easeInOut, value: heartHealthVitalModel)
         .onAppear {
             showCards = true
         }
@@ -91,19 +91,19 @@ private extension OnboardingHealthHeartView {
         } catch { }
     }
 
-    var cardioVitalModel: VitalModel {
-        if let cardioSummary = vitalsViewModel.cardioFitnessSummary {
+    var heartHealthVitalModel: VitalModel {
+        if let heartHealth = vitalsViewModel.heartHealthSummary {
             VitalModel(
-                id: .cardioFitness,
-                subtitle: cardioSummary.subtitle,
-                status: cardioSummary.level.name,
-                score: cardioSummary.score,
-                color: cardioSummary.level.color,
-                trend: cardioSummary.trend
+                id: .heartHealth,
+                subtitle: heartHealth.details.subtitle,
+                status: heartHealth.details.level?.name,
+                score: heartHealth.details.score ?? 1,
+                color: heartHealth.details.level?.color,
+                trend: .noTrend
             )
         } else {
             VitalModel(
-                id: .cardioFitness
+                id: .heartHealth
             )
         }
     }

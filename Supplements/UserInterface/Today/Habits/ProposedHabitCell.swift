@@ -181,7 +181,7 @@ struct ProposedHabitCell: View {
                     suggestedValue: 5,
                     previousValue: 5,
                     unitString: HKUnit.meterUnit(with: .kilo).unitString,
-                    vitalKind: .cardioFitness,
+                    vitalKind: .heartHealth,
                     context: "You should run more.",
                     hasUserEdited: true
                 ))

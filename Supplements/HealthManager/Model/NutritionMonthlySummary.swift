@@ -196,7 +196,7 @@ extension NutritionMonthlySummary.Details {
             otherScore,
             vitaminScore,
             mineralScore
-        ].compactMap({ $0 })
+        ].unwrap()
 
         if allNutrients.isEmpty {
             return nil

@@ -1,5 +1,5 @@
 //
-//  CardioFitnessDetailsView.swift
+//  HeartHealthDetailsView.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-08-11.
@@ -9,16 +9,17 @@ import SwiftUI
 import Charts
 import TelemetryDeck
 
-struct CardioFitnessDetailsView: View {
+struct HeartHealthDetailsView: View {
     
     @State private var selectedFitnessLevelIndex: Int = 0
     @State private var vo2MaxSamples = [DateAverageQuantitySample]()
+    @State private var restingHeartRateSamples = [DateQuantitySample]()
 
     @ObservedObject private var viewModel = VitalsViewModel.shared
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
-    private let fitnessLevels: [CardioFitnessMonthlySummary.FitnessLevel] = [
+    private let fitnessLevels: [HeartHealthMonthlySummary.CardioFitnessLevel] = [
         .low,
         .belowAverage,
         .aboveAverage,
@@ -29,18 +30,22 @@ struct CardioFitnessDetailsView: View {
         ScrollView {
             vo2MaxChart
                 .padding()
+
+            restingHeartRateChart
+                .padding()
+
             heartRateRecoveryChart
                 .padding()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
                 VitalSummaryDetailTitleView(
-                    title: "Cardio Fitness",
+                    title: "Heart Health",
                     subtitle: "Last 30 Days"
                 )
             }
         }
-        .navigationTitle("Cardio Fitness")
+        .navigationTitle("Heart Health")
         .navigationBarTitleDisplayMode(.inline)
         .animation(.default, value: selectedFitnessLevelIndex)
         .task {
@@ -49,19 +54,29 @@ struct CardioFitnessDetailsView: View {
                 self.vo2MaxSamples = samples
             }
         }
+        .task {
+            let samples = await HealthManager.shared.fetchCollatedAverage(
+                quantityType: .restingHeartRate,
+                unit: .bpm(),
+                dateRange: .trailingMonthsFromNow(1)
+            )
+            await MainActor.run {
+                self.restingHeartRateSamples = samples
+            }
+        }
         .onAppear {
             feedbackGenerator.prepare()
-            if let level = viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel, let index = fitnessLevels.firstIndex(of: level) {
+            if let level = viewModel.heartHealthSummary?.details.cardioFitnessLevel, let index = fitnessLevels.firstIndex(of: level) {
                 self.selectedFitnessLevelIndex = index
             }
-            TelemetryDeck.viewScreen("Cardio Fitness Vital Details")
+            TelemetryDeck.viewScreen("Heart Health Vital Details")
         }
     }
 }
 
-private extension CardioFitnessDetailsView {
+private extension HeartHealthDetailsView {
 
-    var fitnessLevel: CardioFitnessMonthlySummary.FitnessLevel {
+    var fitnessLevel: HeartHealthMonthlySummary.CardioFitnessLevel {
         fitnessLevels[selectedFitnessLevelIndex]
     }
 
@@ -110,7 +125,7 @@ private extension CardioFitnessDetailsView {
 
     var vo2MaxChart: some View {
         VStack(alignment: .leading) {
-            VitalDetailChartTitleView(title: "VO₂ Max", value: viewModel.cardioFitnessSummary?.averageVO2Max?.format() ?? "")
+            VitalDetailChartTitleView(title: "VO₂ Max", value: viewModel.heartHealthSummary?.details.averageVO2Max?.displayString(for: .vo2Max()) ?? "")
 
             Group {
                 if vo2MaxSamples.isEmpty {
@@ -141,12 +156,12 @@ private extension CardioFitnessDetailsView {
                                 x: .value("Date", sample.date),
                                 y: .value("VO₂ Max", sample.averageQuantity)
                             )
-                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .mutedPink)
+                            .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
                             PointMark(
                                 x: .value("Date", sample.date),
                                 y: .value("VO₂ Max", sample.averageQuantity)
                             )
-                            .foregroundStyle(viewModel.cardioFitnessSummary?.vo2MaxFitnessLevel.color ?? .mutedPink)
+                            .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
                         }
                     }
                     .chartYScale(domain: chartMin...chartMax, range: .plotDimension)
@@ -184,7 +199,7 @@ private extension CardioFitnessDetailsView {
         VStack(alignment: .leading) {
             VitalDetailChartTitleView(
                 title: "Heart Rate Recovery",
-                value: (viewModel.cardioFitnessSummary?.averageHeartRateRecovery?.format() ?? "unknown") + " bpm"
+                value: viewModel.heartHealthSummary?.details.displayHeartRateRecovery ?? ""
             )
 
             Chart {
@@ -204,17 +219,17 @@ private extension CardioFitnessDetailsView {
                     )
                 )
 
-                if let lastMonthHeartRateRecovery = viewModel.cardioFitnessSummary?.lastMonthAverageHeartRateRecovery {
+                if let lastMonthHeartRateRecovery = viewModel.heartHealthSummary?.lastMonthDetails.averageHeartRateRecovery {
                     BarMark(
-                        x: .value("Heart Rate Recovery", lastMonthHeartRateRecovery),
+                        x: .value("Heart Rate Recovery", lastMonthHeartRateRecovery.doubleValue(for: .bpm())),
                         y: .value("Time Peroid", "Last Month")
                     )
                     .foregroundStyle(.gray)
                     .cornerRadius(10)
                 }
-                if let heartRateRecovery = viewModel.cardioFitnessSummary?.averageHeartRateRecovery {
+                if let heartRateRecovery = viewModel.heartHealthSummary?.details.averageHeartRateRecovery {
                     BarMark(
-                        x: .value("Heart Rate Recovery", heartRateRecovery),
+                        x: .value("Heart Rate Recovery", heartRateRecovery.doubleValue(for: .bpm())),
                         y: .value("Time Peroid", "This Month")
                     )
                     .foregroundStyle(.pink)
@@ -236,16 +251,105 @@ private extension CardioFitnessDetailsView {
 
     var maxValue: Double {
         let maxDataPoint = max(
-            viewModel.cardioFitnessSummary?.lastMonthAverageHeartRateRecovery ?? 0,
-            viewModel.cardioFitnessSummary?.averageHeartRateRecovery ?? 0
+            viewModel.heartHealthSummary?.lastMonthDetails.averageHeartRateRecovery?.doubleValue(for: .bpm()) ?? 0,
+            viewModel.heartHealthSummary?.details.averageHeartRateRecovery?.doubleValue(for: .bpm()) ?? 0
         )
 
         return max(maxDataPoint * 1.1, 40)
     }
 }
 
+private extension HeartHealthDetailsView {
+
+    var restingHeartRateChart: some View {
+        VStack(alignment: .leading) {
+            VitalDetailChartTitleView(
+                title: "Resting Heart Rate",
+                value: viewModel.heartHealthSummary?.details.displayRestingHeartRate ?? ""
+            )
+
+            Chart {
+                ForEach(restingHeartRateSamples) { sample in
+                    LineMark(
+                        x: .value("Date", sample.date),
+                        y: .value("Resting Heart Rate", sample.quantity.doubleValue(for: .bpm()))
+                    )
+                    .foregroundStyle(.mutedRed)
+                    .interpolationMethod(.catmullRom)
+                }
+                let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+                RuleMark(y: .value("Max RHR", goal.1))
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                    .foregroundStyle(.mutedRed)
+
+                RectangleMark(
+                    yStart: .value("", goal.1 - 20),
+                    yEnd: .value("Max RHR", goal.1)
+                )
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            .mutedRed.opacity(0.3),
+                            .clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            }
+            .chartYScale(
+                domain: rhrChartMin...rhrChartMax,
+                range: .plotDimension(padding: 10)
+            )
+            .frame(height: 160)
+
+            if let restingHeartRateDescription {
+                DetailInfoCardView {
+                    Text(restingHeartRateDescription)
+                }
+                .padding(.top)
+            }
+        }
+    }
+
+    var rhrChartMin: Double {
+        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+        return min(minRestingHeartRate ?? 0, goal.1 - 20)
+    }
+
+    var rhrChartMax: Double {
+        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+        return max(maxRestingHeartRate ?? 100, goal.1)
+    }
+
+    var minRestingHeartRate: Double? {
+        restingHeartRateSamples.map({ $0.quantity.doubleValue(for: .bpm()) }).min()
+    }
+
+    var maxRestingHeartRate: Double? {
+        restingHeartRateSamples.map({ $0.quantity.doubleValue(for: .bpm()) }).max()
+    }
+
+    var restingHeartRateDescription: String? {
+        guard let restingHeartRate = viewModel.heartHealthSummary?.details.averageRestingHeartRate?.doubleValue(for: .bpm()) else {
+            return nil
+        }
+
+        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+
+        if restingHeartRate < goal.1 {
+            return "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
+        } else {
+            return "A high resting heart rate can increase your risk of diabetes, stroke, and heart disease. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."
+        }
+    }
+}
+
 #Preview {
     NavigationView {
-        CardioFitnessDetailsView()
+        HeartHealthDetailsView()
     }
 }

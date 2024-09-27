@@ -77,7 +77,6 @@ extension StressMonthlySummary {
         let dateRange: DateRange
         let heartRateVariability: [DateQuantitySample]
         let twoMonthsHeartRateVariability: [DateQuantitySample]
-        let restingHeartRate: [DateQuantitySample]
         let bloodPressureSystolic: [DateQuantitySample]
         let twoMonthsBloodPressureSystolic: [DateQuantitySample]
         let bloodPressureDiastolic: [DateQuantitySample]
@@ -90,7 +89,6 @@ extension StressMonthlySummary {
             dateRange: DateRange,
             heartRateVariability: [DateQuantitySample],
             twoMonthsHeartRateVariability: [DateQuantitySample],
-            restingHeartRate: [DateQuantitySample],
             bloodPressureSystolic: [DateQuantitySample],
             twoMonthsBloodPressureSystolic: [DateQuantitySample],
             bloodPressureDiastolic: [DateQuantitySample],
@@ -100,7 +98,6 @@ extension StressMonthlySummary {
             self.dateRange = dateRange
             self.heartRateVariability = heartRateVariability
             self.twoMonthsHeartRateVariability = twoMonthsHeartRateVariability
-            self.restingHeartRate = restingHeartRate
             self.bloodPressureSystolic = bloodPressureSystolic
             self.twoMonthsBloodPressureSystolic = twoMonthsBloodPressureSystolic
             self.bloodPressureDiastolic = bloodPressureDiastolic
@@ -111,7 +108,6 @@ extension StressMonthlySummary {
         }
 
         private(set) var averageHeartRateVariability: Double? = nil
-        private(set) var averageRestingHeartRate: Double? = nil
         private(set) var averageSystolic: Double? = nil
         private(set) var averageDiastolic: Double? = nil
         private(set) var averageSleepScore: Double? = nil
@@ -186,9 +182,6 @@ extension StressMonthlySummary.Details {
         if heartRateVariability.isNotEmpty {
             self.averageHeartRateVariability = heartRateVariability.map({ $0.quantity.doubleValue(for: .millisecond()) }).average(keyPath: \.self)
         }
-        if restingHeartRate.isNotEmpty {
-            self.averageRestingHeartRate = restingHeartRate.map({ $0.quantity.doubleValue(for: .bpm()) }).average(keyPath: \.self)
-        }
         if bloodPressureSystolic.isNotEmpty {
             self.averageSystolic = bloodPressureSystolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
         }
@@ -229,25 +222,6 @@ extension StressMonthlySummary.Details {
         let upper = trailingMonthAverage + 2 * trailingMonthStdDev
 
         return value.scaledSymmetricalScore(lower: lower, upper: upper)
-    }
-
-    func rhrStressLevel(for date: Date) -> Double? {
-        guard
-            let currentSample = restingHeartRate.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) })
-        else { return nil }
-
-        let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
-
-        let value = currentSample.quantity.doubleValue(for: .bpm())
-
-        if value > max {
-            return value.scaledPercent(lower: max, upper: max + 10) * -1
-        } else {
-            let range = max - min
-            let lower = max - (range * 2)
-
-            return value.scaledPercent(lower: max, upper: lower)
-        }
     }
 
     func bloodPressureStressLevel(for date: Date) -> Double? {
@@ -296,14 +270,6 @@ extension StressMonthlySummary.Details {
             hrv = nil
         }
 
-        let rhr: String?
-        if restingHeartRate.isNotEmpty {
-            let average = restingHeartRate.map({ $0.quantity.doubleValue(for: .bpm()) }).average(keyPath: \.self)
-            rhr = "RHR: \(average.format()) bpm"
-        } else {
-            rhr = nil
-        }
-
         let bloodPressure: String?
         if bloodPressureSystolic.isNotEmpty, bloodPressureDiastolic.isNotEmpty {
             let systolicAverage = bloodPressureSystolic.map({ $0.quantity.doubleValue(for: .millimeterOfMercury()) }).average(keyPath: \.self)
@@ -313,7 +279,7 @@ extension StressMonthlySummary.Details {
             bloodPressure = nil
         }
 
-        let compactEntries = [hrv, rhr, bloodPressure].compactMap({ $0 })
+        let compactEntries = [hrv, bloodPressure].compactMap({ $0 })
 
         guard compactEntries.isNotEmpty else { return nil }
 

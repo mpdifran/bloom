@@ -691,12 +691,6 @@ extension HealthManager {
             dateRange: twoMonthDateRange
         )
 
-        let rhr = await fetchCollatedAverage(
-            quantityType: .restingHeartRate,
-            unit: .bpm(),
-            dateRange: dateRange
-        )
-
         let systolic = await fetchCollatedAverage(
             quantityType: .bloodPressureSystolic,
             unit: .millimeterOfMercury(),
@@ -725,7 +719,6 @@ extension HealthManager {
             dateRange: dateRange,
             heartRateVariability: hrv,
             twoMonthsHeartRateVariability: hrv2Months,
-            restingHeartRate: rhr,
             bloodPressureSystolic: systolic,
             twoMonthsBloodPressureSystolic: systolic2Months,
             bloodPressureDiastolic: diastolic,
@@ -734,17 +727,43 @@ extension HealthManager {
         )
     }
 
-    func fetchCardioFitnessSummary() async -> CardioFitnessMonthlySummary {
-        let thisMonth = await HealthManager.shared.fetchVO2Max()
-        let hrr = await HealthManager.shared.fetchHeartRateRecovery()
-        let lastMonth = await HealthManager.shared.fetchVO2Max(numPastMonths: 1)
-        let hrrLastMonth = await HealthManager.shared.fetchHeartRateRecovery(numPastMonths: 1)
+    func fetchHeartHealthSummary() async -> HeartHealthMonthlySummary {
+        let details = await fetchHeartHealthDetails(
+            dateRange: .trailingMonthsFromNow(1)
+        )
+        let lastMonthDetails = await fetchHeartHealthDetails(
+            dateRange: .trailingMonthsFromMonthsFromNow(
+                monthsFromNow: 1,
+                numberOfMonths: 1
+            )
+        )
 
-        return CardioFitnessMonthlySummary(
-            averageVO2Max: thisMonth?.0,
-            averageHeartRateRecovery: hrr?.0,
-            lastMonthAverageVO2Max: lastMonth?.0,
-            lastMonthAverageHeartRateRecovery: hrrLastMonth?.0
+        return HeartHealthMonthlySummary(details: details, lastMonthDetails: lastMonthDetails)
+    }
+
+    func fetchHeartHealthDetails(dateRange: DateRange) async -> HeartHealthMonthlySummary.Details {
+        let vo2Max = try? await healthStore.fetchDailyAverageQuantity(
+            for: .vo2Max,
+            unit: .vo2Max(),
+            dateRange: dateRange
+        )
+
+        let rhr = try? await healthStore.fetchDailyAverageQuantity(
+            for: .restingHeartRate,
+            unit: .bpm(),
+            dateRange: dateRange
+        )
+
+        let heartRateRecovery = try? await healthStore.fetchDailyAverageQuantity(
+            for: .heartRateRecoveryOneMinute,
+            unit: .bpm(),
+            dateRange: dateRange
+        )
+
+        return HeartHealthMonthlySummary.Details(
+            averageVO2Max: vo2Max,
+            averageHeartRateRecovery: heartRateRecovery,
+            averageRestingHeartRate: rhr
         )
     }
 
