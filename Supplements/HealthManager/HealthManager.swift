@@ -672,8 +672,20 @@ extension HealthManager {
             dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1),
             sleepAnalyses: sleepAnalysisPrevious30Days ?? []
         )
+        let lastMonthAverageSystolic = (try? await healthStore.fetchQuantity(
+            for: .bloodPressureSystolic,
+            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)
+        ))
+        let lastMonthAverageDiastolic = (try? await healthStore.fetchQuantity(
+            for: .bloodPressureDiastolic,
+            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)
+        ))
 
-        return StressMonthlySummary(details: thisMonth, lastMonthDetails: lastMonth)
+        return StressMonthlySummary(
+            details: thisMonth,
+            lastMonthAverageSystolic: lastMonthAverageSystolic?.doubleValue(for: .millimeterOfMercury()),
+            lastMonthAverageDiastolic: lastMonthAverageDiastolic?.doubleValue(for: .millimeterOfMercury())
+        )
     }
 
     func fetchStressMonthlySummaryDetails(dateRange: DateRange, sleepAnalyses: [SleepAnalysis]) async -> StressMonthlySummary.Details {

@@ -22,6 +22,8 @@ struct SupplementsApp: App {
         BugsnagPerformance.start()
 
         TelemetryDeck.initialize(config: .init(appID: "764D40B8-F2CE-4372-87D3-0D68F34E08CA"))
+
+        HealthManager.shared.observeSleepData()
     }
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
@@ -32,7 +34,6 @@ struct SupplementsApp: App {
                 .tint(.accent)
                 .onAppear {
                     BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
-                    HealthManager.shared.observeSleepData()
                 }
                 .onReceive(foregroundPublisher) { _ in
                     onForeground()

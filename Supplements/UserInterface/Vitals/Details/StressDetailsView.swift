@@ -46,8 +46,8 @@ struct StressDetailsView: View {
                     BloodPressureStatusView(
                         systolic: systolic,
                         diastolic: diastloic,
-                        lastMonthSystolic: viewModel.stressSummary?.lastMonthDetails.averageSystolic,
-                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthDetails.averageDiastolic
+                        lastMonthSystolic: viewModel.stressSummary?.lastMonthAverageSystolic,
+                        lastMonthDiastolic: viewModel.stressSummary?.lastMonthAverageDiastolic
                     )
                 }
 

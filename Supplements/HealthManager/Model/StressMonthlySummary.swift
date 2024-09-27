@@ -56,19 +56,15 @@ extension StressMonthlySummary {
 
 struct StressMonthlySummary: Hashable, Sendable {
     let details: Details
-    let lastMonthDetails: Details
+    let lastMonthAverageSystolic: Double?
+    let lastMonthAverageDiastolic: Double?
 
     var score: Double {
         details.averageStressLevel?.scaledPercent(lower: -1, upper: 0.5) ?? 1
     }
 
     var trend: VitalModel.Trend {
-        guard
-            let lastMonth = lastMonthDetails.averageStressLevel,
-            let thisMonth = details.averageStressLevel
-        else { return .noTrend }
-
-        return lastMonth > thisMonth  ? .increasing : .decreasing
+        return .noTrend
     }
 }
 

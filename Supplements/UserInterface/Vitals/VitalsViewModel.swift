@@ -36,7 +36,7 @@ final class VitalsViewModel: ObservableObject {
     private let processingQueue = DispatchQueue(label: "VitalsViewModel.Processing")
     private let throttler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "Throttler"))
     private let activityLevelThrottler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "ActivityLevelThrottler"))
-    private let stressThrottler = Throttler(timeInterval: 0.1, queue: DispatchQueue(label: "StressThrottler"))
+    private let stressThrottler = Throttler(timeInterval: 2, queue: DispatchQueue(label: "StressThrottler"))
 
     private let modelContext = ModelContext(ContainerHolder.shared.container)
 
@@ -48,7 +48,7 @@ final class VitalsViewModel: ObservableObject {
 extension VitalsViewModel {
 
     func refreshVitals() async {
-        setupChangeObservers()
+        await forceFetchVitals()
     }
 
     func fetchSwiftDataTypes() {

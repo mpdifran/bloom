@@ -111,7 +111,7 @@ extension HeartHealthMonthlySummary.Details {
         guard let score else { return nil }
 
         // TODO: Vet these scores
-        if score > 0.9 {
+        if score > 0.95 {
             return .optimal
         } else if score > 0.7 {
             return .healthy
