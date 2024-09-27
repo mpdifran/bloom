@@ -832,6 +832,8 @@ extension HealthManager {
     }
 
     func fetchMenstrualSummary() async -> MenstrualSummary {
+        // TODO: Ask Kim what the best way to do this is
+        // Placebo week with birth control, what if you skip placebo week?
         let cycles = await fetchMenstrualFlowSamples(dateRange: .trailingMonthsFromNow(7))
         return MenstrualSummary(menstrualCycles: cycles)
     }

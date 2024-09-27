@@ -58,6 +58,8 @@ extension CardioFitnessMonthlySummary {
     }
 }
 
+// TODO: Rename to heart health
+// Incorporate resting heart rate
 struct CardioFitnessMonthlySummary: Equatable, Codable, Sendable {
     let averageVO2Max: Double?
     let averageHeartRateRecovery: Double?

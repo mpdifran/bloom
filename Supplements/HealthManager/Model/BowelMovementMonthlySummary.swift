@@ -75,6 +75,7 @@ extension BowelMovementMonthlySummary {
 extension BowelMovementMonthlySummary.Details {
 
     var score: Double {
+        // TODO: Incorporate frequency
         bowelMovements
             .compactMap({ bowelMovement in
                 guard let score = Constants.stoolTypeScoreMap[bowelMovement.bristolStoolType] else { return nil }

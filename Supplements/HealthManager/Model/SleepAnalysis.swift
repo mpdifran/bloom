@@ -19,7 +19,7 @@ extension Double {
     static let awakeSleepMinPercent: Double = 0.05
     static let awakeSleepMaxPercent: Double = 0.15
     static let zeroSleepLengthMinutes: Double = 4 * 60
-    static let fullSleepLengthMinutes: Double = 8 * 60
+    static let fullSleepLengthMinutes: Double = 7 * 60
     static let minSoundLevel: Double = 35
     static let maxSoundLevel: Double = 60
     static let maxRestingHeartRatePercent: Double = 0.9
@@ -224,6 +224,8 @@ extension SleepAnalysis {
                 upper: averageRestingHeartRate * .maxRestingHeartRatePercent
             ) * .maxScore
         }
+        // TODO: Bad to use hard coded numbers for heart rate.
+        // Update this to have an unknown value
         return averageHeartRate.scaledPercent(
             lower: .maxHeartRate,
             upper: .minHeartRate

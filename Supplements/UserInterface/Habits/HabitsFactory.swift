@@ -206,6 +206,7 @@ private extension HabitsFactory {
                 context: ""
             )
         case .sleepQuality:
+            // Maintain weight
             return await createHabit(
                 targetMetric: .timeInDaylight,
                 unit: .minute(),
@@ -220,6 +221,7 @@ private extension HabitsFactory {
                 context: ""
             )
         case .stressLevels:
+            // Maintain weight
             return await createHabit(
                 targetMetric: .timeInDaylight,
                 unit: .minute(),
@@ -227,6 +229,12 @@ private extension HabitsFactory {
                 context: ""
             )
         case .nutrition:
+            // Lose weight + gain weight
+            // Calorie intake / net energy
+            // Options: Calories, cal + protein, macros
+            // 1200 calories is not recommended
+            // Suggest a weight loss plan
+            // TODO: should be protein and calorie goal. Calorie goal should have 10% variance to count as complete.
             return await createHabit(
                 targetMetric: .waterIntake,
                 unit: .literUnit(with: .milli),

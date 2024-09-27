@@ -51,8 +51,8 @@ struct StressDetailsView: View {
                     )
                 }
 
-//                restingHeartRateChart
-//                    .padding()
+                restingHeartRateChart
+                    .padding()
 
                 heartRateVariabilityChart
                     .padding()
