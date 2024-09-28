@@ -33,6 +33,7 @@ struct SleepAnalysis: Codable, Hashable, Identifiable {
 
     let startDate: Date
     let endDate: Date
+    let hasDetailedSleepCategories: Bool
     let deepSleepMinutes: Double
     let coreSleepMinutes: Double
     let remSleepMinutes: Double
@@ -170,37 +171,48 @@ extension SleepAnalysis {
             deepSleepScore,
             coreSleepScore,
             remSleepScore
-        ].filter({ $0 < .maxScore * 0.999 })
-        let componentAverage = components.isEmpty ? .maxScore : components.average(keyPath: \.self)
+        ].unwrap()
+            .filter({ $0 < .maxScore * 0.999 })
+
+        let componentAverage: Double? = components.isEmpty ? nil : components.average(keyPath: \.self)
 
         return [
             sleepLengthScore,
             componentAverage,
             awakeSleepScore,
             heartRateScore
-        ].average(keyPath: \.self)
+        ].unwrap()
+            .average(keyPath: \.self)
     }
 
     var sleepLengthScore: Double {
         overallMinutes.scaledPercent(lower: .zeroSleepLengthMinutes, upper: .fullSleepLengthMinutes) * .maxScore
     }
 
-    var awakeSleepScore: Double {
+    var awakeSleepScore: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
         let percent = awakeSleepMinutes / overallMinutes
         return percent.scaledPercent(lower: .awakeSleepMaxPercent, upper: .awakeSleepMinPercent) * .maxScore
     }
 
-    var deepSleepScore: Double {
+    var deepSleepScore: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
         let percent = deepSleepMinutes / overallMinutes
         return percent.scaledPercent(lower: .deepSleepPercentMin, upper: .deepSleepPercentMax) * .maxScore
     }
 
-    var coreSleepScore: Double {
+    var coreSleepScore: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
         let percent = coreSleepMinutes / overallMinutes
         return percent.scaledPercent(lower: .coreSleepPercentMin, upper: .coreSleepPercentMax) * .maxScore
     }
 
-    var remSleepScore: Double {
+    var remSleepScore: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
         let percent = remSleepMinutes / overallMinutes
         return percent.scaledPercent(lower: .remSleepPercentMin, upper: .remSleepPercentMax) * .maxScore
     }
@@ -217,19 +229,14 @@ extension SleepAnalysis {
         heartRate.average(keyPath: \.averageHeartRate)
     }
 
-    var heartRateScore: Double {
+    var heartRateScore: Double? {
         if let averageRestingHeartRate {
             return averageHeartRate.scaledPercent(
                 lower: averageRestingHeartRate,
                 upper: averageRestingHeartRate * .maxRestingHeartRatePercent
             ) * .maxScore
         }
-        // TODO: Bad to use hard coded numbers for heart rate.
-        // Update this to have an unknown value
-        return averageHeartRate.scaledPercent(
-            lower: .maxHeartRate,
-            upper: .minHeartRate
-        ) * .maxScore
+        return nil
     }
 }
 
@@ -240,14 +247,24 @@ extension SleepAnalysis {
 
         results.append("Your sleep score last night was \(overallScore).")
 
-        if deepSleepScore < coreSleepScore && deepSleepScore < remSleepScore && deepSleepScore < awakeSleepScore {
-            results.append("You didn't get enough Deep sleep.")
-        } else if coreSleepScore < deepSleepScore && coreSleepScore < remSleepScore && coreSleepScore < awakeSleepScore {
-            results.append("You didn't get enough Core sleep.")
-        } else if remSleepScore < deepSleepScore && remSleepScore < coreSleepScore && remSleepScore < awakeSleepScore {
-            results.append("You didn't get enough REM sleep.")
-        } else if awakeSleepScore < deepSleepScore && awakeSleepScore < coreSleepScore && awakeSleepScore < remSleepScore, let durationString = DateFormatter.timeIntervalHourMinuteFull.string(from: DateComponents(minute: Int(awakeSleepMinutes))) {
-            results.append("You were awake for \(durationString).")
+        let awakeSleepDescription: String
+        if let durationString = DateFormatter.timeIntervalHourMinuteFull.string(from: DateComponents(minute: Int(awakeSleepMinutes))) {
+            awakeSleepDescription = "You were awake for \(durationString)."
+        } else {
+            awakeSleepDescription = "You were awake often throughout the night."
+        }
+
+        let pairings = [
+            (deepSleepScore, "You didn't get enough Deep sleep."),
+            (coreSleepScore, "You didn't get enough Core sleep."),
+            (remSleepScore, "You didn't get enough REM sleep."),
+            (awakeSleepScore, awakeSleepDescription)
+        ]
+
+        if let minPairingText = pairings.min(by: { (lhs, rhs) in
+            (lhs.0 ?? .infinity) < (rhs.0 ?? .infinity)
+        })?.1 {
+            results.append(minPairingText)
         }
 
         return results.joined(separator: " ")
@@ -260,16 +277,27 @@ extension SleepAnalysis {
             results.append("You slept for \(durationString).")
         }
 
-        if deepSleepScore < coreSleepScore && deepSleepScore < remSleepScore && deepSleepScore < awakeSleepScore {
-            results.append("You didn't get enough Deep sleep compared to REM and Core sleep.")
-        } else if coreSleepScore < deepSleepScore && coreSleepScore < remSleepScore && coreSleepScore < awakeSleepScore {
-            results.append("You didn't get enough Core sleep compared to REM and Deep sleep.")
-        } else if remSleepScore < deepSleepScore && remSleepScore < coreSleepScore && remSleepScore < awakeSleepScore {
-            results.append("You didn't get enough REM sleep compared to Core and Deep sleep.")
-        } else if awakeSleepScore < deepSleepScore && awakeSleepScore < coreSleepScore && awakeSleepScore < remSleepScore, let durationString = DateFormatter.timeIntervalHourMinuteFull.string(from: DateComponents(minute: Int(awakeSleepMinutes))) {
-            results.append("You were awake for \(durationString).")
+        let awakeSleepDescription: String
+        if let durationString = DateFormatter.timeIntervalHourMinuteFull.string(from: DateComponents(minute: Int(awakeSleepMinutes))) {
+            awakeSleepDescription = "You were awake for \(durationString)."
+        } else {
+            awakeSleepDescription = "You were awake often throughout the night."
         }
-        if heartRateScore < 7 {
+
+        let pairings = [
+            (deepSleepScore, "You didn't get enough Deep sleep."),
+            (coreSleepScore, "You didn't get enough Core sleep."),
+            (remSleepScore, "You didn't get enough REM sleep."),
+            (awakeSleepScore, awakeSleepDescription)
+        ]
+
+        if let minPairingText = pairings.min(by: { (lhs, rhs) in
+            (lhs.0 ?? .infinity) < (rhs.0 ?? .infinity)
+        })?.1 {
+            results.append(minPairingText)
+        }
+
+        if let heartRateScore, heartRateScore < 7 {
             if let averageRestingHeartRate {
                 results.append("Your heart rate was elevated to \(averageHeartRate.format()) bpm, when it should be \((averageRestingHeartRate * .maxRestingHeartRatePercent).format()) bpm or below.")
             } else {
@@ -298,6 +326,7 @@ extension SleepAnalysis {
             .init(
                 startDate: Date().addingTimeInterval(-3600*8),
                 endDate: .now,
+                hasDetailedSleepCategories: true,
                 deepSleepMinutes: 51,
                 coreSleepMinutes: 290,
                 remSleepMinutes: 98,
@@ -311,6 +340,7 @@ extension SleepAnalysis {
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400)),
                 endDate: .now.addingTimeInterval(-86400),
+                hasDetailedSleepCategories: true,
                 deepSleepMinutes: 36,
                 coreSleepMinutes: 250,
                 remSleepMinutes: 67,
@@ -324,6 +354,7 @@ extension SleepAnalysis {
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*2)),
                 endDate: .now.addingTimeInterval(-86400*2),
+                hasDetailedSleepCategories: true,
                 deepSleepMinutes: 24,
                 coreSleepMinutes: 300,
                 remSleepMinutes: 48,
@@ -337,6 +368,7 @@ extension SleepAnalysis {
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*3)),
                 endDate: .now.addingTimeInterval(-86400*3),
+                hasDetailedSleepCategories: true,
                 deepSleepMinutes: 46,
                 coreSleepMinutes: 260,
                 remSleepMinutes: 48,
@@ -350,6 +382,7 @@ extension SleepAnalysis {
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*4)),
                 endDate: .now.addingTimeInterval(-86400*4),
+                hasDetailedSleepCategories: true,
                 deepSleepMinutes: 52,
                 coreSleepMinutes: 274,
                 remSleepMinutes: 41,
@@ -363,6 +396,7 @@ extension SleepAnalysis {
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*5)),
                 endDate: .now.addingTimeInterval(-86400*5),
+                hasDetailedSleepCategories: true,
                 deepSleepMinutes: 35,
                 coreSleepMinutes: 293,
                 remSleepMinutes: 53,
@@ -376,6 +410,7 @@ extension SleepAnalysis {
             .init(
                 startDate: Date().addingTimeInterval(-(3600*6 + 86400*6)),
                 endDate: .now.addingTimeInterval(-86400*6),
+                hasDetailedSleepCategories: true,
                 deepSleepMinutes: 72,
                 coreSleepMinutes: 312,
                 remSleepMinutes: 69,

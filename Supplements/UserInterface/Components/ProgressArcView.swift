@@ -13,7 +13,7 @@ private extension CGFloat {
 }
 
 struct ProgressArcView: View {
-    let progress: CGFloat
+    let progress: CGFloat?
     let dimension: CGFloat
     let thickness: CGFloat
     let systemImage: String
@@ -21,7 +21,7 @@ struct ProgressArcView: View {
     let color: Color
 
     init(
-        progress: CGFloat,
+        progress: CGFloat?,
         dimension: CGFloat,
         thickness: CGFloat? = nil,
         systemImage: String,
@@ -45,15 +45,9 @@ struct ProgressArcView: View {
             Circle()
                 .trim(from: 0, to: clippedProgress * .arcPercentage)
                 .stroke(
-                    AngularGradient(
-                        gradient: Gradient(colors: [color, color.lighter()]),
-                        center: .center,
-                        startAngle: .degrees(0),
-                        endAngle: .degrees(360.0 * .arcPercentage)
-                    ),
+                    barFill,
                     style: StrokeStyle(lineWidth: thickness, lineCap: .round)
                 )
-//                .shadow(color: color, radius: 5)
 
             Image(systemName: systemImage)
                 .foregroundStyle(.black)
@@ -78,7 +72,24 @@ struct ProgressArcView: View {
 private extension ProgressArcView {
 
     var clippedProgress: CGFloat {
-        max(0.001, min(progress, 1))
+        guard let progress else { return 0.001 }
+
+        return max(0.001, min(progress, 1))
+    }
+
+    var barFill: AnyShapeStyle {
+        if progress == nil {
+            AnyShapeStyle(FillShapeStyle.fill)
+        } else {
+            AnyShapeStyle(
+                AngularGradient(
+                    gradient: Gradient(colors: [color, color.lighter()]),
+                    center: .center,
+                    startAngle: .degrees(0),
+                    endAngle: .degrees(360.0 * .arcPercentage)
+                )
+            )
+        }
     }
 }
 
@@ -99,7 +110,7 @@ private extension ProgressArcView {
                 )
 
                 ProgressArcView(
-                    progress: coreSleepPercent,
+                    progress: nil,
                     dimension: 94,
                     systemImage: "heart",
                     color: .coreSleep

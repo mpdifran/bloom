@@ -35,14 +35,14 @@ struct SleepScoreView: View {
                             color: .green
                         )
                         ProgressArcView(
-                            progress: CGFloat(sleepAnalysis.awakeSleepScore) / 10.0,
+                            progress: sleepAnalysis.awakeSleepScore.map { $0.asCGFloat / 10 },
                             dimension: proxy.size.width - (2.0 * scaledLineWidth) - scaledRingSpacing,
                             thickness: .lineWidth / divisor,
                             systemImage: "bolt.horizontal",
                             color: .awakeSleep
                         )
                         ProgressArcView(
-                            progress: CGFloat(sleepAnalysis.heartRateScore) / 10.0,
+                            progress: sleepAnalysis.heartRateScore.map { $0.asCGFloat / 10 },
                             dimension: proxy.size.width - (4.0 * scaledLineWidth) - (2.0 * scaledRingSpacing),
                             thickness: .lineWidth / divisor,
                             systemImage: "heart",
@@ -51,7 +51,7 @@ struct SleepScoreView: View {
                     }
                     ZStack(alignment: .top) {
                         ProgressArcView(
-                            progress: CGFloat(sleepAnalysis.deepSleepScore) / 10.0,
+                            progress: sleepAnalysis.deepSleepScore.map { $0.asCGFloat / 10 },
                             dimension: proxy.size.width - (4.0 * scaledLineWidth) - (2.0 * scaledRingSpacing),
                             thickness: .lineWidth / divisor,
                             systemImage: "arrow.down.to.line",
@@ -59,7 +59,7 @@ struct SleepScoreView: View {
                             color: .deepSleep
                         )
                         ProgressArcView(
-                            progress: CGFloat(sleepAnalysis.coreSleepScore) / 10.0,
+                            progress: sleepAnalysis.coreSleepScore.map { $0.asCGFloat / 10 },
                             dimension: proxy.size.width - (2.0 * scaledLineWidth) - scaledRingSpacing,
                             thickness: .lineWidth / divisor,
                             systemImage: "circle.dotted.circle",
@@ -67,7 +67,7 @@ struct SleepScoreView: View {
                             color: .coreSleep
                         )
                         ProgressArcView(
-                            progress: CGFloat(sleepAnalysis.remSleepScore) / 10.0,
+                            progress: sleepAnalysis.remSleepScore.map { $0.asCGFloat / 10 },
                             dimension: proxy.size.width,
                             thickness: .lineWidth / divisor,
                             systemImage: "eyes.inverse",
@@ -112,6 +112,22 @@ struct SleepScoreView: View {
 #Preview {
     List {
         SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[0])
+        SleepScoreView(
+            sleepAnalysis: SleepAnalysis(
+                startDate: .now.addingTimeInterval(-20000),
+                endDate: .now,
+                hasDetailedSleepCategories: false,
+                deepSleepMinutes: 0,
+                coreSleepMinutes: 0,
+                remSleepMinutes: 0,
+                awakeSleepMinutes: 0,
+                averageRestingHeartRate: nil,
+                environmentalSoundLevels: [],
+                heartRate: [],
+                respiratoryRate: [],
+                wristTemperature: []
+            )
+        )
         SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[0], isMini: true)
     }
     .listStyle(.plain)

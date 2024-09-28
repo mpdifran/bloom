@@ -1914,6 +1914,7 @@ extension HealthManager {
 
         var sleepAnalysis = [SleepAnalysis]()
         for sampleGroup in groupedSamples {
+            var hasDetailedSleepCategories = false
             var deepSleepTime: Double = 0
             var coreSleepTime: Double = 0
             var remSleepTime: Double = 0
@@ -1925,12 +1926,16 @@ extension HealthManager {
                     break
                 case .awake:
                     awakeSleepTime += sample.timeInterval
+                    hasDetailedSleepCategories = true
                 case .asleepCore:
                     coreSleepTime += sample.timeInterval
+                    hasDetailedSleepCategories = true
                 case .asleepDeep:
                     deepSleepTime += sample.timeInterval
+                    hasDetailedSleepCategories = true
                 case .asleepREM:
                     remSleepTime += sample.timeInterval
+                    hasDetailedSleepCategories = true
                 case .inBed, .none:
                     break
                 @unknown default:
@@ -2067,6 +2072,7 @@ extension HealthManager {
             let analysis = SleepAnalysis(
                 startDate: startDate,
                 endDate: endDate,
+                hasDetailedSleepCategories: hasDetailedSleepCategories,
                 deepSleepMinutes: deepSleepTime / 60,
                 coreSleepMinutes: coreSleepTime / 60,
                 remSleepMinutes: remSleepTime / 60,
