@@ -42,7 +42,7 @@ struct SleepAnalysis: Codable, Hashable, Identifiable {
     let environmentalSoundLevels: [SoundLevelDataPoint]
     let heartRate: [HeartRateDataPoint]
     let respiratoryRate: [RespiratoryRateDataPoint]
-    let wristTemperature: [WristTemperatureDataPoint]
+    let wristTemperature: WristTemperatureDataPoint?
 }
 
 extension SleepAnalysis {
@@ -127,23 +127,31 @@ extension SleepAnalysis {
 
     var overallHours: Double {
         // Should we include awake time in the total?
-        overallHoursIncludingAwake - awakeSleepHours
+        overallHoursIncludingAwake - (awakeSleepHours ?? 0)
     }
 
-    var coreSleepHours: Double {
-        coreSleepMinutes / 60
+    var coreSleepHours: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
+        return coreSleepMinutes / 60
     }
 
-    var remSleepHours: Double {
-        remSleepMinutes / 60
+    var remSleepHours: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
+        return remSleepMinutes / 60
     }
 
-    var deepSleepHours: Double {
-        deepSleepMinutes / 60
+    var deepSleepHours: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
+        return deepSleepMinutes / 60
     }
 
-    var awakeSleepHours: Double {
-        awakeSleepMinutes / 60
+    var awakeSleepHours: Double? {
+        guard hasDetailedSleepCategories else { return nil }
+
+        return awakeSleepMinutes / 60
     }
 
     var coreSleepPercent: Double {
@@ -225,12 +233,14 @@ extension SleepAnalysis {
         averageSoundLevel.scaledPercent(lower: .maxSoundLevel, upper: .minSoundLevel) * .maxScore
     }
 
-    var averageHeartRate: Double {
-        heartRate.average(keyPath: \.averageHeartRate)
+    var averageHeartRate: Double? {
+        guard heartRate.isNotEmpty else { return nil }
+
+        return heartRate.average(keyPath: \.averageHeartRate)
     }
 
     var heartRateScore: Double? {
-        if let averageRestingHeartRate {
+        if let averageRestingHeartRate, let averageHeartRate {
             return averageHeartRate.scaledPercent(
                 lower: averageRestingHeartRate,
                 upper: averageRestingHeartRate * .maxRestingHeartRatePercent
@@ -298,10 +308,12 @@ extension SleepAnalysis {
         }
 
         if let heartRateScore, heartRateScore < 7 {
-            if let averageRestingHeartRate {
+            if let averageRestingHeartRate, let averageHeartRate {
                 results.append("Your heart rate was elevated to \(averageHeartRate.format()) bpm, when it should be \((averageRestingHeartRate * .maxRestingHeartRatePercent).format()) bpm or below.")
-            } else {
+            } else if let averageHeartRate {
                 results.append("Your heart rate was elevated to \(averageHeartRate.format()) bpm.")
+            } else {
+                results.append("Your heart rate was elevated.")
             }
         }
 
@@ -575,41 +587,9 @@ extension SleepAnalysis.RespiratoryRateDataPoint {
 
 extension SleepAnalysis.WristTemperatureDataPoint {
 
-    static let previewData: [SleepAnalysis.WristTemperatureDataPoint] = [
-        SleepAnalysis.WristTemperatureDataPoint(
-            averageWristTemperature: 96,
-            startDate: .now,
-            timeRangeSeconds: 900
-        ),
-        SleepAnalysis.WristTemperatureDataPoint(
-            averageWristTemperature: 94,
-            startDate: Date(timeIntervalSinceNow: -900),
-            timeRangeSeconds: 900
-        ),
-        SleepAnalysis.WristTemperatureDataPoint(
-            averageWristTemperature: 95,
-            startDate: Date(timeIntervalSinceNow: -900 * 2),
-            timeRangeSeconds: 900
-        ),
-        SleepAnalysis.WristTemperatureDataPoint(
-            averageWristTemperature: 96,
-            startDate: Date(timeIntervalSinceNow: -900 * 3),
-            timeRangeSeconds: 900
-        ),
-        SleepAnalysis.WristTemperatureDataPoint(
-            averageWristTemperature: 98,
-            startDate: Date(timeIntervalSinceNow: -900 * 4),
-            timeRangeSeconds: 900
-        ),
-        SleepAnalysis.WristTemperatureDataPoint(
-            averageWristTemperature: 95,
-            startDate: Date(timeIntervalSinceNow: -900 * 5),
-            timeRangeSeconds: 900
-        ),
-        SleepAnalysis.WristTemperatureDataPoint(
-            averageWristTemperature: 94,
-            startDate: Date(timeIntervalSinceNow: -900 * 6),
-            timeRangeSeconds: 900
-        )
-    ]
+    static let previewData = SleepAnalysis.WristTemperatureDataPoint(
+        averageWristTemperature: 96,
+        startDate: .now,
+        timeRangeSeconds: 900
+    )
 }

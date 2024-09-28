@@ -29,7 +29,9 @@ struct SleepDayView: View {
                     SleepHeartRateSummaryCell(heartRates: sleepAnalysis.heartRate)
                     SleepSoundLevelSummaryCell(soundLevels: sleepAnalysis.environmentalSoundLevels)
                     SleepRespiratoryRateSummaryCell(respiratoryRates: sleepAnalysis.respiratoryRate)
-                    WristTemperatureSummaryCell(wristTemperature: sleepAnalysis.wristTemperature)
+                    if let wristTemperature = sleepAnalysis.wristTemperature {
+                        WristTemperatureSummaryCell(wristTemperature: wristTemperature)
+                    }
                 }
                 .listStyle(.plain)
             } else {

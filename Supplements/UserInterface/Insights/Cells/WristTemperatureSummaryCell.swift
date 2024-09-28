@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WristTemperatureSummaryCell: View {
-    let wristTemperature: [SleepAnalysis.WristTemperatureDataPoint]
+    let wristTemperature: SleepAnalysis.WristTemperatureDataPoint
 
     var body: some View {
         Section {
@@ -18,8 +18,15 @@ struct WristTemperatureSummaryCell: View {
                     systemImage: "thermometer.medium"
                 )
 
-                WristTemperatureChartView(wristTemperatures: wristTemperature)
-                    .frame(height: 120)
+                HStack {
+                    Spacer()
+
+                    Text("\(wristTemperature.averageWristTemperature.format())°F")
+                        .font(.system(size: 60))
+                        .fontDesign(.rounded)
+                        .bold()
+                        .foregroundStyle(.tint)
+                }
             }
             .padding(.bottom)
         }

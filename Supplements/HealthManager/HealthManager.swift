@@ -2045,23 +2045,26 @@ extension HealthManager {
             }
 
             // Wrist Temperature
-            var wristTemperatureDataPoints = [SleepAnalysis.WristTemperatureDataPoint]()
+            var wristTemperatureDataPoint: SleepAnalysis.WristTemperatureDataPoint?
             do {
-                let samples = try await healthStore.fetchAverageStatistics(
-                    quantityTypeID: .appleSleepingWristTemperature,
-                    unit: .degreeFahrenheit(),
-                    interval: .init(minute: timePeriod),
-                    startDate: startDate,
-                    endDate: endDate
-                )
+                if let shiftedStart = Calendar.current.date(byAdding: .minute, value: -30, to: startDate),
+                   let shiftedEnd = Calendar.current.date(byAdding: .minute, value: 30, to: endDate)
+                {
 
-                for sample in samples {
-                    let dataPoint = SleepAnalysis.WristTemperatureDataPoint(
-                        averageWristTemperature: sample.averageQuantity,
-                        startDate: sample.date,
-                        timeRangeSeconds: TimeInterval(timePeriod * 60)
-                    )
-                    wristTemperatureDataPoints.append(dataPoint)
+                    let dateRange = DateRange(shiftedStart, shiftedEnd)
+                    let samples = try await healthStore.fetchSamples(
+                        for: HKQuantityType(.appleSleepingWristTemperature),
+                        dateRange: dateRange
+                    ) as? [HKQuantitySample] ?? []
+
+                    for sample in samples {
+                        let dataPoint = SleepAnalysis.WristTemperatureDataPoint(
+                            averageWristTemperature: sample.quantity.doubleValue(for: .degreeFahrenheit()),
+                            startDate: sample.startDate,
+                            timeRangeSeconds: sample.timeInterval
+                        )
+                        wristTemperatureDataPoint = dataPoint
+                    }
                 }
             } catch {
                 print(error)
@@ -2081,7 +2084,7 @@ extension HealthManager {
                 environmentalSoundLevels: soundLevelDataPoints,
                 heartRate: heartRateDataPoints,
                 respiratoryRate: respiratoryRateDataPoints,
-                wristTemperature: wristTemperatureDataPoints
+                wristTemperature: wristTemperatureDataPoint
             )
             sleepAnalysis.append(analysis)
         }

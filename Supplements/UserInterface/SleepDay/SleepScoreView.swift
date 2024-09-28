@@ -125,7 +125,7 @@ struct SleepScoreView: View {
                 environmentalSoundLevels: [],
                 heartRate: [],
                 respiratoryRate: [],
-                wristTemperature: []
+                wristTemperature: nil
             )
         )
         SleepScoreView(sleepAnalysis: SleepAnalysis.previewData[0], isMini: true)

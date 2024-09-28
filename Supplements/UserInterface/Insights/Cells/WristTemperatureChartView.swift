@@ -9,32 +9,34 @@ import SwiftUI
 import Charts
 
 struct WristTemperatureChartView: View {
-    let wristTemperatures: [SleepAnalysis.WristTemperatureDataPoint]
+    let wristTemperature: SleepAnalysis.WristTemperatureDataPoint
 
     var body: some View {
-        Chart(wristTemperatures) { wristTemperature in
-            LineMark(
-                x: .value("Date", wristTemperature.startDate),
-                y: .value("Average", wristTemperature.averageWristTemperature)
+        Chart {
+            BarMark(
+                xStart: .value("", wristTemperature.averageWristTemperature - 2),
+                xEnd: .value("Average", wristTemperature.averageWristTemperature),
+                y: .value("Date", wristTemperature.startDate, unit: .day)
             )
             .foregroundStyle(.indigo)
+            .cornerRadius(10)
         }
-        .chartYScale(
-            domain: ((minY ?? 0) - 5)...((maxY ?? 0) + 5),
+        .chartXScale(
+            domain: minX...maxX,
             range: .plotDimension
         )
-        .chartYAxis {
+        .chartXAxis {
             AxisMarks { value in
                 AxisGridLine()
                 AxisTick()
                 AxisValueLabel()
             }
         }
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .hour)) { value in
+        .chartYAxis {
+            AxisMarks { value in
                 AxisGridLine()
                 AxisTick()
-                AxisValueLabel(format: .dateTime.hour())
+                AxisValueLabel(format: .dateTime.day())
             }
         }
         .chartForegroundStyleScale([
@@ -45,17 +47,17 @@ struct WristTemperatureChartView: View {
 
 private extension WristTemperatureChartView {
 
-    var minY: Double? {
-        wristTemperatures.min(keyPath: \.averageWristTemperature)
+    var minX: Double {
+        wristTemperature.averageWristTemperature - 2
     }
 
-    var maxY: Double? {
-        wristTemperatures.max(keyPath: \.averageWristTemperature)
+    var maxX: Double {
+        wristTemperature.averageWristTemperature + 2
     }
 }
 
 #Preview {
     WristTemperatureChartView(
-        wristTemperatures: SleepAnalysis.WristTemperatureDataPoint.previewData
+        wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
     )
 }
