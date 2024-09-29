@@ -37,7 +37,7 @@ struct VitalsView: View {
                 case .nutrition: NutritionDetailsView()
                 case .stressLevels: StressDetailsView()
                 case .activityLevel: ActivityLevelDetailsView()
-                case .heartHealth: HeartHealthDetailsView()
+                case .heartHealth, .cardioFitness: HeartHealthDetailsView()
                 case .exerciseEffectiveness: ExerciseEffectivenessView()
                 case .cycleTracking: MenstruationDetailView()
                 case .bowelMovements: BowelMovementsDetailView()

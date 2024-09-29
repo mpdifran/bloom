@@ -138,43 +138,43 @@ final class HealthManager: ObservableObject {
     let nutritionTypes = [
         HKQuantityType(.dietaryEnergyConsumed),
 //        HKQuantityType(.dietaryBiotin),
-        HKQuantityType(.dietaryCaffeine),
-        HKQuantityType(.dietaryCalcium),
+//        HKQuantityType(.dietaryCaffeine),
+//        HKQuantityType(.dietaryCalcium),
         HKQuantityType(.dietaryCarbohydrates),
 //        HKQuantityType(.dietaryChloride),
-        HKQuantityType(.dietaryCholesterol),
+//        HKQuantityType(.dietaryCholesterol),
 //        HKQuantityType(.dietaryChromium),
 //        HKQuantityType(.dietaryCopper),
-        HKQuantityType(.dietaryFatMonounsaturated),
-        HKQuantityType(.dietaryFatPolyunsaturated),
-        HKQuantityType(.dietaryFatSaturated),
+//        HKQuantityType(.dietaryFatMonounsaturated),
+//        HKQuantityType(.dietaryFatPolyunsaturated),
+//        HKQuantityType(.dietaryFatSaturated),
         HKQuantityType(.dietaryFatTotal),
         HKQuantityType(.dietaryFiber),
 //        HKQuantityType(.dietaryFolate),
 //        HKQuantityType(.dietaryIodine),
-        HKQuantityType(.dietaryIron),
-        HKQuantityType(.dietaryMagnesium),
+//        HKQuantityType(.dietaryIron),
+//        HKQuantityType(.dietaryMagnesium),
 //        HKQuantityType(.dietaryManganese),
 //        HKQuantityType(.dietaryMolybdenum),
 //        HKQuantityType(.dietaryNiacin),
 //        HKQuantityType(.dietaryPantothenicAcid),
 //        HKQuantityType(.dietaryPhosphorus),
-        HKQuantityType(.dietaryPotassium),
+//        HKQuantityType(.dietaryPotassium),
         HKQuantityType(.dietaryProtein),
 //        HKQuantityType(.dietaryRiboflavin),
 //        HKQuantityType(.dietarySelenium),
-        HKQuantityType(.dietarySodium),
+//        HKQuantityType(.dietarySodium),
         HKQuantityType(.dietarySugar),
 //        HKQuantityType(.dietaryThiamin),
-        HKQuantityType(.dietaryVitaminA),
-        HKQuantityType(.dietaryVitaminB12),
-        HKQuantityType(.dietaryVitaminB6),
-        HKQuantityType(.dietaryVitaminC),
-        HKQuantityType(.dietaryVitaminD),
-        HKQuantityType(.dietaryVitaminE),
+//        HKQuantityType(.dietaryVitaminA),
+//        HKQuantityType(.dietaryVitaminB12),
+//        HKQuantityType(.dietaryVitaminB6),
+//        HKQuantityType(.dietaryVitaminC),
+//        HKQuantityType(.dietaryVitaminD),
+//        HKQuantityType(.dietaryVitaminE),
 //        HKQuantityType(.dietaryVitaminK),
         HKQuantityType(.dietaryWater),
-        HKQuantityType(.dietaryZinc)
+//        HKQuantityType(.dietaryZinc)
     ]
 
     let writeNutritionTypes = [
@@ -736,6 +736,59 @@ extension HealthManager {
             bloodPressureDiastolic: diastolic,
             twoMonthsBloodPressureDiastolic: diastolic2Months,
             sleepAnalyses: sleepAnalyses
+        )
+    }
+
+    func fetchNutritionMonthlySummary() async -> NutritionMonthlySummary? {
+        let thisMonth = await fetchNutritionMonthlySummaryDetails(
+            dateRange: .trailingMonthsFromNow(1)
+        )
+        let lastMonth = await fetchNutritionMonthlySummaryDetails(
+            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)
+        )
+
+        return NutritionMonthlySummary(
+            details: thisMonth,
+            lastMonthDetails: lastMonth
+        )
+    }
+
+    func fetchNutritionMonthlySummaryDetails(dateRange: DateRange) async -> NutritionMonthlySummary.Details {
+        let basalEnergyBurned = try? await healthStore.fetchQuantity(
+            for: .basalEnergyBurned,
+            dateRange: dateRange,
+            option: .cumulativeSum
+        )
+
+        let activeEnergyBurned = try? await healthStore.fetchQuantity(
+            for: .activeEnergyBurned,
+            dateRange: dateRange,
+            option: .cumulativeSum
+        )
+
+        let dietaryEnergy = try? await healthStore.fetchQuantity(
+            for: .dietaryEnergyConsumed,
+            dateRange: dateRange,
+            option: .cumulativeSum
+        )
+
+        let protein = await fetchNutritionalDailyAverage(for: .dietaryProtein, unit: .gram(), dateRange: dateRange)
+        let carbohydrates = await fetchNutritionalDailyAverage(for: .dietaryCarbohydrates, unit: .gram(), dateRange: dateRange)
+        let fat = await fetchNutritionalDailyAverage(for: .dietaryFatTotal, unit: .gram(), dateRange: dateRange)
+        let fiber = await fetchNutritionalDailyAverage(for: .dietaryFiber, unit: .gram(), dateRange: dateRange)
+        let sugar = await fetchNutritionalDailyAverage(for: .dietarySugar, unit: .gram(), dateRange: dateRange)
+        let water = await fetchNutritionalDailyAverage(for: .dietaryWater, unit: .literUnit(with: .milli), dateRange: dateRange)
+
+        return .init(
+            basalEnergyBurned: basalEnergyBurned,
+            activeEnergyBurned: activeEnergyBurned,
+            dietaryEnergy: dietaryEnergy,
+            averageProtein: protein,
+            averageCarbohydrates: carbohydrates,
+            averageFat: fat,
+            averageFiber: fiber,
+            averageSugar: sugar,
+            averageWater: water
         )
     }
 
@@ -1486,207 +1539,6 @@ extension HealthManager {
         return 0
     }
 
-    func fetchNutritionMonthlySummary() async -> NutritionMonthlySummary? {
-        let endDate = Date.now
-
-        guard let midDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate),
-              let startDate = Calendar.current.date(byAdding: .month, value: -1, to: midDate)
-        else {
-            return nil
-        }
-
-        let thisMonth = await fetchNutritionMonthlySummaryDetails(startDate: midDate, endDate: endDate)
-        let lastMonth = await fetchNutritionMonthlySummaryDetails(startDate: startDate, endDate: midDate)
-
-        return NutritionMonthlySummary(
-            details: thisMonth,
-            lastMonthDetails: lastMonth
-        )
-    }
-
-    func fetchNutritionMonthlySummaryDetails(startDate: Date, endDate: Date) async -> NutritionMonthlySummary.Details {
-        let basalEnergyBurned = try? await healthStore.fetchQuantity(
-            for: .basalEnergyBurned,
-            start: startDate,
-            end: endDate,
-            option: .cumulativeSum,
-            unit: .largeCalorie()
-        )
-
-        let activeEnergyBurned = try? await healthStore.fetchQuantity(
-            for: .activeEnergyBurned,
-            start: startDate,
-            end: endDate,
-            option: .cumulativeSum,
-            unit: .largeCalorie()
-        )
-
-        let dietaryEnergy = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryEnergyConsumed,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .largeCalorie()
-        )
-
-        let protein = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryProtein,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gram()
-        )
-
-        let carbohydrates = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryCarbohydrates,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gram()
-        )
-
-        let fat = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryFatTotal,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gram()
-        )
-
-        let fiber = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryFiber,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gram()
-        )
-
-        let sugar = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietarySugar,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gram()
-        )
-
-        let caffeine = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryCaffeine,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let vitaminA = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryVitaminA,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .micro)
-        )
-
-        let vitaminC = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryVitaminC,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let vitaminD = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryVitaminD,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .micro)
-        )
-
-        let vitaminE = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryVitaminE,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let vitaminB6 = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryVitaminB6,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let vitaminB12 = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryVitaminB12,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .micro)
-        )
-
-        let calcium = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryCalcium,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let iron = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryIron,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let magnesium = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryMagnesium,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let potassium = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryPotassium,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let sodium = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietarySodium,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let zinc = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryZinc,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .gramUnit(with: .milli)
-        )
-
-        let water = try? await healthStore.fetchNutritionalDailyAverage(
-            for: .dietaryWater,
-            startDate: startDate,
-            endDate: endDate,
-            unit: .literUnit(with: .milli)
-        )
-
-        return .init(
-            basalEnergyBurned: basalEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
-            activeEnergyBurned: activeEnergyBurned.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0.0) },
-            dietaryEnergy: dietaryEnergy,
-            averageProtein: protein,
-            averageCarbohydrates: carbohydrates,
-            averageFat: fat,
-            averageFiber: fiber,
-            averageSugar: sugar,
-            averageCaffeine: caffeine,
-            averageVitaminA: vitaminA,
-            averageVitaminB6: vitaminB6,
-            averageVitaminB12: vitaminB12,
-            averageVitaminC: vitaminC,
-            averageVitaminD: vitaminD,
-            averageVitaminE: vitaminE,
-            averageCalcium: calcium,
-            averageIron: iron,
-            averageMagnesium: magnesium,
-            averagePotassium: potassium,
-            averageSodium: sodium,
-            averageZinc: zinc,
-            averageWater: water
-        )
-    }
-
     func fetchAverageMeditationMinutes(previousDays: Int = 7) async -> (Double, Int)? {
         do {
             let meditationType = HKObjectType.categoryType(forIdentifier: .mindfulSession)!
@@ -2243,7 +2095,7 @@ extension HealthManager {
     }
 }
 
-// MARK: Nutitional Intake
+// MARK: - Nutitional Intake
 
 extension HealthManager {
 

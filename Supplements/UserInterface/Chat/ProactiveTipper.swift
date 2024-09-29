@@ -21,25 +21,9 @@ extension ProactiveTipper {
 
         let stressDetails = VitalsViewModel.shared.stressSummary?.details
 
-        let nutritionSummary = ProactiveTipRequestModel.NutritionSummary(
-            averageBasalEnergyBurnedCalories: VitalsViewModel.shared.nutritionSummary?.details.basalEnergyBurned?.doubleValue(for: .largeCalorie()),
-            averageActiveEnergyBurnedCalories: VitalsViewModel.shared.nutritionSummary?.details.activeEnergyBurned?.doubleValue(for: .largeCalorie()),
-            averageDietaryEnergyConsumedCalories: VitalsViewModel.shared.nutritionSummary?.details.dietaryEnergy?.doubleValue(for: .largeCalorie()),
-            averageProteinGrams: VitalsViewModel.shared.nutritionSummary?.details.averageProtein?.doubleValue(for: .gram()),
-            averageCarbohydratesGrams: VitalsViewModel.shared.nutritionSummary?.details.averageCarbohydrates?.doubleValue(for: .gram()),
-            averageFatGrams: VitalsViewModel.shared.nutritionSummary?.details.averageFat?.doubleValue(for: .gram()),
-            averageSugarGrams: VitalsViewModel.shared.nutritionSummary?.details.averageSugar?.doubleValue(for: .gram()),
-            averageVitaminAMicrograms: VitalsViewModel.shared.nutritionSummary?.details.averageVitaminA?.doubleValue(for: .gramUnit(with: .micro)),
-            averageVitaminB6Milligrams: VitalsViewModel.shared.nutritionSummary?.details.averageVitaminB6?.doubleValue(for: .gramUnit(with: .milli)),
-            averageVitaminB12Micrograms: VitalsViewModel.shared.nutritionSummary?.details.averageVitaminB12?.doubleValue(for: .gramUnit(with: .micro)),
-            averageVitaminCMilligrams: VitalsViewModel.shared.nutritionSummary?.details.averageVitaminC?.doubleValue(for: .gramUnit(with: .milli)),
-            averageVitaminDMicrograms: VitalsViewModel.shared.nutritionSummary?.details.averageVitaminD?.doubleValue(for: .gramUnit(with: .micro)),
-            averageVitaminEMilligrams: VitalsViewModel.shared.nutritionSummary?.details.averageVitaminE?.doubleValue(for: .gramUnit(with: .milli))
-        )
-
         let request = ProactiveTipRequestModel(
             stressMonthlySummary: nil,
-            nutritionMonthlySummary: nutritionSummary,
+            nutritionMonthlySummary: nil,
             sleepVitalsMonthlySummary: VitalsViewModel.shared.sleepVitalsSummary,
             activityLevelMonthlySummary: VitalsViewModel.shared.activityLevelSummary,
             chatHistory: chatHistory

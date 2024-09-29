@@ -41,10 +41,10 @@ extension HabitsFactory {
 
         if newHabits.isEmpty {
             await VitalsViewModel.shared.forceFetchVitals()
-            let sortedVitals = VitalsViewModel.shared.vitals.sorted(by: { $0.score < $1.score })
+            let vitals = VitalsViewModel.shared.vitals
 
             if
-                let targetVital = sortedVitals.safeAccess(at: 0),
+                let targetVital = vitals.safeAccess(at: 0),
                 let newHabit = await suggestNewHabit(for: targetVital)
             {
                 newHabits.append(newHabit)

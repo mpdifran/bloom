@@ -190,15 +190,17 @@ extension StressMonthlySummary.Details {
 
 //            print("STRESS DEBUG \(referenceDate) HRV: \(hrvStressScore), RHR: \(rhrStressScore), BP: \(bloodPressureScore), SLEEP: \(sleepStressScore)")
 
-            stressScores.append(
-                StressMonthlySummary.DateStressScore(
-                    date: referenceDate,
-                    stressScore: allStressScores.average(keyPath: \.self),
-                    bloodPressureStressScore: bloodPressureScore ?? 0,
-                    hrvStressScore: hrvStressScore ?? 0,
-                    sleepStressScore: sleepStressScore ?? 0
+            if allStressScores.isNotEmpty {
+                stressScores.append(
+                    StressMonthlySummary.DateStressScore(
+                        date: referenceDate,
+                        stressScore: allStressScores.average(keyPath: \.self),
+                        bloodPressureStressScore: bloodPressureScore ?? 0,
+                        hrvStressScore: hrvStressScore ?? 0,
+                        sleepStressScore: sleepStressScore ?? 0
+                    )
                 )
-            )
+            }
         }
 
         if heartRateVariability.isNotEmpty {

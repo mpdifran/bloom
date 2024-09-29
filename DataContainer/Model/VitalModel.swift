@@ -9,6 +9,7 @@ import SwiftUI
 
 public extension VitalModel {
     enum Kind: String, Hashable, Codable, CaseIterable, Sendable {
+        case cardioFitness
         case sleepQuality
         case activityLevel
         case heartHealth
@@ -21,6 +22,9 @@ public extension VitalModel {
 
         public var name: String {
             switch self {
+                // TODO: Get rid of this
+            case .cardioFitness:
+                "Cardio Fitness"
             case .sleepQuality:
                 "Sleep Quality"
             case .activityLevel:
@@ -48,7 +52,7 @@ public extension VitalModel {
                 "moon.zzz.fill"
             case .activityLevel:
                 "figure.tennis"
-            case .heartHealth:
+            case .heartHealth, .cardioFitness:
                 "heart.fill"
             case .bodyComposition:
                 "gauge.with.needle"
