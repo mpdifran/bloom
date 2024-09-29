@@ -25,13 +25,13 @@ struct PreferencesView: View {
 
     var body: some View {
         List {
+            feedbackSection
+            healthPermissionsSection
             appInfoSection
-            nameSection
             healthGoalsSection
             femaleSection
             reportsSection
-            healthPermissionsSection
-            feedbackSection
+            nameSection
             developerSection
         }
         .fullScreenCover($presentedFullScreenView)
