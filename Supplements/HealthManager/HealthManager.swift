@@ -754,24 +754,21 @@ extension HealthManager {
     }
 
     func fetchNutritionMonthlySummaryDetails(dateRange: DateRange) async -> NutritionMonthlySummary.Details {
-        let basalEnergyBurned = try? await healthStore.fetchQuantity(
+        let basalEnergyBurned = try? await healthStore.fetchDailyAverageQuantity(
             for: .basalEnergyBurned,
+            unit: .largeCalorie(),
             dateRange: dateRange,
             option: .cumulativeSum
         )
 
-        let activeEnergyBurned = try? await healthStore.fetchQuantity(
+        let activeEnergyBurned = try? await healthStore.fetchDailyAverageQuantity(
             for: .activeEnergyBurned,
+            unit: .largeCalorie(),
             dateRange: dateRange,
             option: .cumulativeSum
         )
 
-        let dietaryEnergy = try? await healthStore.fetchQuantity(
-            for: .dietaryEnergyConsumed,
-            dateRange: dateRange,
-            option: .cumulativeSum
-        )
-
+        let dietaryEnergy = await fetchNutritionalDailyAverage(for: .dietaryEnergyConsumed, unit: .largeCalorie(), dateRange: dateRange)
         let protein = await fetchNutritionalDailyAverage(for: .dietaryProtein, unit: .gram(), dateRange: dateRange)
         let carbohydrates = await fetchNutritionalDailyAverage(for: .dietaryCarbohydrates, unit: .gram(), dateRange: dateRange)
         let fat = await fetchNutritionalDailyAverage(for: .dietaryFatTotal, unit: .gram(), dateRange: dateRange)
