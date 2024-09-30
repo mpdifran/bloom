@@ -84,7 +84,7 @@ private extension OnboardingHealthOtherTypesView {
             )
 
             isAuthorized = authStatus == .unnecessary
-            await vitalsViewModel.refreshVitals()
+            await vitalsViewModel.forceFetchVitals()
         } catch { }
     }
 

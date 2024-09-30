@@ -80,7 +80,7 @@ private extension OnboardingHealthSleepView {
             let authStatus = try await healthManager.checkAccess(readTypes: healthManager.sleepTypes)
 
             isAuthorized = authStatus == .unnecessary
-            await vitalsViewModel.refreshVitals()
+            await vitalsViewModel.forceFetchVitals()
         } catch { }
     }
 

@@ -38,6 +38,9 @@ struct SupplementsApp: App {
                 .onReceive(foregroundPublisher) { _ in
                     onForeground()
                 }
+                .task {
+                    await VitalsViewModel.shared.refreshVitals()
+                }
         }
         .modelContainer(ContainerHolder.shared.container)
         .backgroundTask(.appRefresh("proactive-tip")) {
@@ -52,6 +55,8 @@ struct SupplementsApp: App {
 private extension SupplementsApp {
 
     func onForeground() {
-
+        Task {
+            await VitalsViewModel.shared.refreshVitals()
+        }
     }
 }

@@ -664,13 +664,16 @@ extension HealthManager {
     }
 
     func fetchStressMonthlySummary() async -> StressMonthlySummary? {
+        let thisMonthAnalyses: [SleepAnalysis]
+        if let sleepAnalysis30Days {
+            thisMonthAnalyses = sleepAnalysis30Days
+        } else {
+            thisMonthAnalyses = await fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+        }
+
         let thisMonth = await fetchStressMonthlySummaryDetails(
             dateRange: .trailingMonthsFromNow(1),
-            sleepAnalyses: sleepAnalysis30Days ?? []
-        )
-        let lastMonth = await fetchStressMonthlySummaryDetails(
-            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1),
-            sleepAnalyses: sleepAnalysisPrevious30Days ?? []
+            sleepAnalyses: thisMonthAnalyses
         )
         let lastMonthAverageSystolic = (try? await healthStore.fetchQuantity(
             for: .bloodPressureSystolic,
@@ -879,9 +882,23 @@ extension HealthManager {
         )
     }
 
-    func fetchSleepVitalSummary() -> SleepVitalsMonthlySummary {
-        let thisMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: sleepAnalysis30Days ?? [])
-        let lastMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: sleepAnalysisPrevious30Days ?? [])
+    func fetchSleepVitalSummary() async -> SleepVitalsMonthlySummary {
+        let thisMonthAnalyses: [SleepAnalysis]
+        if let sleepAnalysis30Days {
+            thisMonthAnalyses = sleepAnalysis30Days
+        } else {
+            thisMonthAnalyses = await fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+        }
+
+        let lastMonthAnalyses: [SleepAnalysis]
+        if let sleepAnalysisPrevious30Days {
+            lastMonthAnalyses = sleepAnalysisPrevious30Days
+        } else {
+            lastMonthAnalyses = await fetchSleepAnalysis(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1))
+        }
+
+        let thisMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: thisMonthAnalyses)
+        let lastMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: lastMonthAnalyses)
 
         return SleepVitalsMonthlySummary(
             details: thisMonth,
@@ -890,7 +907,6 @@ extension HealthManager {
     }
 
     func fetchSleepVitalSummaryDetails(sleepAnalyses: [SleepAnalysis]) -> SleepVitalsMonthlySummary.Details {
-
         if sleepAnalyses.isEmpty {
             return SleepVitalsMonthlySummary.Details(
                 averageREMSleepPercent: nil,
@@ -1690,20 +1706,11 @@ extension HealthManager {
         sleepObserverQueryHandle = healthStore.observeChanges(
             sampleType: HKCategoryType(.sleepAnalysis),
             startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) { [weak self, healthStore] in
-            let thisMonthSamples = try await healthStore.fetchSamples(
-                for: HKCategoryType(.sleepAnalysis),
-                dateRange: .trailingMonthsFromNowSleepStartDate(1)
-            )
-            let lastMonthSamples = try await healthStore.fetchSamples(
-                for: HKCategoryType(.sleepAnalysis),
-                dateRange: .trailingMonthsFromMonthsFromNowSleepStartDate(monthsFromNow: 1, numberOfMonths: 1)
-            )
-
+        ) { [weak self] in
             let lastPreviousSleepAnalysis = self?.sleepAnalysis30Days?.last
 
-            let thisMonthSleepAnalysis = await self?.processSleepAnalysis(samples: thisMonthSamples) ?? []
-            let lastMonthSleepAnalysis = await self?.processSleepAnalysis(samples: lastMonthSamples) ?? []
+            let thisMonthSleepAnalysis = await self?.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1)) ?? []
+            let lastMonthSleepAnalysis = await self?.fetchSleepAnalysis(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)) ?? []
 
             let newPreviousSleepAnalysis = thisMonthSleepAnalysis.last
 
@@ -1720,6 +1727,15 @@ extension HealthManager {
         }
     }
 
+    func fetchSleepAnalysis(dateRange: DateRange) async -> [SleepAnalysis] {
+        let samples = (try? await healthStore.fetchSamples(
+            for: HKCategoryType(.sleepAnalysis),
+            dateRange: dateRange
+        )) ?? []
+        return await processSleepAnalysis(samples: samples)
+    }
+
+    @available(*, deprecated, message: "Use a DateRange based method instead.")
     func fetchSleepAnalysis(startDate: Date, endDate: Date) async -> [SleepAnalysis] {
         do {
             let samples = try await fetchSleepSamples(startDate: startDate, endDate: endDate)
@@ -1730,6 +1746,7 @@ extension HealthManager {
         return []
     }
 
+    @available(*, deprecated, message: "Use a DateRange based method instead.")
     func fetchSleepSamples(startDate: Date, endDate: Date) async throws -> [HKSample] {
         try await healthStore.fetchSamples(
             for: HKCategoryType(.sleepAnalysis),

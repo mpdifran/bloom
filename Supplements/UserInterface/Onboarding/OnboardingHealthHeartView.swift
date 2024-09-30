@@ -87,7 +87,7 @@ private extension OnboardingHealthHeartView {
             let authStatus = try await healthManager.checkAccess(readTypes: healthManager.heartTypes)
 
             isAuthorized = authStatus == .unnecessary
-            await vitalsViewModel.refreshVitals()
+            await vitalsViewModel.forceFetchVitals()
         } catch { }
     }
 

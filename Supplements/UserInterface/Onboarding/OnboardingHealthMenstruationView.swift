@@ -80,7 +80,7 @@ private extension OnboardingHealthMenstruationView {
             let authStatus = try await healthManager.checkAccess(readTypes: healthManager.menstrualTypes)
 
             isAuthorized = authStatus == .unnecessary
-            await vitalsViewModel.refreshVitals()
+            await vitalsViewModel.forceFetchVitals()
         } catch { }
     }
 

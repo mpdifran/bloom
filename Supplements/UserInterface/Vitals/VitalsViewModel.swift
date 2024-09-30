@@ -30,6 +30,12 @@ final class VitalsViewModel: ObservableObject {
     @Published var heartRateVariability = [DateQuantitySampleLegacy]()
     @Published var restingHeartRate = [DateQuantitySampleLegacy]()
 
+    private var lastVitalFetchDate: Date? {
+        didSet {
+            UserDefaults.group.set(lastVitalFetchDate, forKey: "VitalsViewModel.lastVitalFetchDate")
+        }
+    }
+
     private var observerQueryHandles = [HKObserverQueryHandle]()
     private var cancellables = Set<AnyCancellable>()
 
@@ -40,14 +46,25 @@ final class VitalsViewModel: ObservableObject {
 
     private let modelContext = ModelContext(ContainerHolder.shared.container)
 
-    private init() {
-        observeData()
+    init() {
+        if let date = UserDefaults.group.object(forKey: "VitalsViewModel.lastVitalFetchDate") as? Date {
+            lastVitalFetchDate = date
+        }
     }
 }
 
 extension VitalsViewModel {
 
     func refreshVitals() async {
+        if let lastVitalFetchDate {
+            let minutes = Calendar.current.dateComponents([.minute], from: lastVitalFetchDate, to: .now).minute ?? 0
+
+            if minutes < 3 {
+                print("Returning early since we like just fetched vitals.")
+                return
+            }
+        }
+
         await forceFetchVitals()
     }
 
@@ -64,6 +81,7 @@ extension VitalsViewModel {
         let cardio = await HealthManager.shared.fetchHeartHealthSummary()
         let activityLevel = await HealthManager.shared.fetchActivityLevelSummary()
         let bodyComposition = await HealthManager.shared.fetchBodyCompositionSummary()
+        let sleep = await HealthManager.shared.fetchSleepVitalSummary()
         let stress = await HealthManager.shared.fetchStressMonthlySummary()
         let nutrition = await HealthManager.shared.fetchNutritionMonthlySummary()
         let exerciseEffectiveness = await HealthManager.shared.fetchExerciseEffectivenessSummary()
@@ -77,208 +95,18 @@ extension VitalsViewModel {
             self.stressSummary = stress
             self.nutritionSummary = nutrition
             self.exerciseEffectivenessSummary = exerciseEffectiveness
+            self.sleepVitalsSummary = sleep
             self.menstrualSummary = menstrual
             self.bowelMovementSummary = bowelMovements
+
+            self.createVitals()
+
+            self.lastVitalFetchDate = .now
         }
     }
 }
 
 private extension VitalsViewModel {
-
-    func setupChangeObservers() {
-        observerQueryHandles.removeAll(keepingCapacity: true)
-
-        HealthManager.shared.healthStore.observeChanges(
-            sampleTypes: [
-                HKQuantityType(.vo2Max),
-                HKQuantityType(.heartRateRecoveryOneMinute)
-            ],
-            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) {
-            let summary = await HealthManager.shared.fetchHeartHealthSummary()
-            await MainActor.run {
-                self.heartHealthSummary = summary
-            }
-        }
-        .store(in: &observerQueryHandles)
-
-        HealthManager.shared.healthStore.observeChanges(
-            sampleTypes: [
-                HKQuantityType(.basalEnergyBurned),
-                HKQuantityType(.activeEnergyBurned)
-            ],
-            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) { [activityLevelThrottler, processingQueue] in
-            processingQueue.async {
-                activityLevelThrottler.perform {
-                    Task {
-                        let summary = await HealthManager.shared.fetchActivityLevelSummary()
-                        await MainActor.run {
-                            self.activityLevelSummary = summary
-                        }
-                    }
-                }
-            }
-        }
-        .store(in: &observerQueryHandles)
-
-        HealthManager.shared.healthStore.observeChanges(
-            sampleType: HKQuantityType(.bodyFatPercentage),
-            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) {
-            let summary = await HealthManager.shared.fetchBodyCompositionSummary()
-            await MainActor.run {
-                self.bodyCompositionSummary = summary
-            }
-        }
-        .store(in: &observerQueryHandles)
-
-        HealthManager.shared.healthStore.observeChanges(
-            sampleTypes: [
-                HKQuantityType(.heartRateVariabilitySDNN),
-                HKQuantityType(.restingHeartRate),
-                HKQuantityType(.bloodPressureSystolic),
-                HKQuantityType(.bloodPressureDiastolic)
-            ],
-            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) { [stressThrottler, processingQueue] in
-            processingQueue.async {
-                stressThrottler.perform {
-                    Task {
-                        let summary = await HealthManager.shared.fetchStressMonthlySummary()
-                        await MainActor.run {
-                            self.stressSummary = summary
-                        }
-                    }
-                }
-            }
-        }
-        .store(in: &observerQueryHandles)
-
-        HealthManager.shared.healthStore.observeChanges(
-            sampleTypes: HealthManager.shared.nutritionTypes,
-            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) { [throttler, processingQueue] in
-            processingQueue.async {
-                throttler.perform {
-                    Task {
-                        let summary = await HealthManager.shared.fetchNutritionMonthlySummary()
-                        await MainActor.run {
-                            self.nutritionSummary = summary
-                        }
-                    }
-                }
-            }
-        }
-        .store(in: &observerQueryHandles)
-
-        HealthManager.shared.healthStore.observeChanges(
-            sampleType: HKWorkoutType.workoutType(),
-            startDate: Calendar.current.date(byAdding: .month, value: -2, to: .now) ?? .now
-        ) {
-            let summary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
-            await MainActor.run {
-                self.exerciseEffectivenessSummary = summary
-            }
-        }
-        .store(in: &observerQueryHandles)
-
-        HealthManager.shared.healthStore.observeChanges(
-            sampleType: HKCategoryType(.menstrualFlow),
-            startDate: Calendar.current.date(byAdding: .month, value: -7, to: .now) ?? .now
-        ) {
-            let summary = await HealthManager.shared.fetchMenstrualSummary()
-            await MainActor.run {
-                self.menstrualSummary = summary
-            }
-        }
-        .store(in: &observerQueryHandles)
-
-        HealthManager.shared.observeSleepData()
-
-        fetchSwiftDataTypes()
-    }
-
-    func observeData() {
-        setupChangeObservers()
-
-        HealthManager.shared.$sleepAnalysis30Days
-            .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
-            .receive(on: DispatchQueue(label: "VitalsViewModel.SleepSummary"))
-            .map { (_, _) in
-                return HealthManager.shared.fetchSleepVitalSummary()
-            }
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$sleepVitalsSummary)
-
-        HealthManager.shared.$sleepAnalysis30Days
-            .combineLatest(HealthManager.shared.$sleepAnalysisPrevious30Days)
-            .receive(on: DispatchQueue(label: "VitalsViewModel.SleepSummary"))
-            .sink { _ in
-                Task {
-                    let summary = await HealthManager.shared.fetchStressMonthlySummary()
-                    await MainActor.run {
-                        self.stressSummary = summary
-                    }
-                }
-            }
-            .store(in: &cancellables)
-
-        $activityLevelSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $sleepVitalsSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $heartHealthSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $bodyCompositionSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $stressSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $nutritionSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $exerciseEffectivenessSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $menstrualSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-        $bowelMovementSummary
-            .receive(on: processingQueue)
-            .sink { [weak self] (_) in
-                self?.createVitals()
-            }
-            .store(in: &cancellables)
-    }
 
     func createVitals() {
         var vitals = [VitalModel]()
