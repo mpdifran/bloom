@@ -58,12 +58,14 @@ extension ToDoModel {
         case logWeight
         case logBloodPressure
         case logFood
+        case logProtein
 
         var name: String {
             switch self {
             case .logWeight: "Log Weight"
             case .logBloodPressure: "Record Blood Pressure"
             case .logFood: "Log Food"
+            case .logProtein: "Log Protein"
             }
         }
 
@@ -72,6 +74,7 @@ extension ToDoModel {
             case .logWeight: "gauge.with.dots.needle.bottom.50percent.badge.plus"
             case .logBloodPressure: "gauge.open.with.lines.needle.67percent.and.arrowtriangle"
             case .logFood: "fork.knife"
+            case .logProtein: "fork.knife"
             }
         }
 
@@ -80,6 +83,7 @@ extension ToDoModel {
             case .logWeight: .mutedIndigo
             case .logBloodPressure: .mutedPink
             case .logFood: .mutedGreen
+            case .logProtein: .protein
             }
         }
 
@@ -88,6 +92,7 @@ extension ToDoModel {
             case .logWeight: [HKQuantityType(.bodyMass)]
             case .logBloodPressure: [HKQuantityType(.bloodPressureSystolic), HKQuantityType(.bloodPressureDiastolic)]
             case .logFood: [HKQuantityType(.dietaryEnergyConsumed)]
+            case .logProtein: [HKQuantityType(.dietaryProtein)]
             }
         }
 
@@ -95,7 +100,8 @@ extension ToDoModel {
             switch self {
             case .logWeight: BodyWeightActionCardView().asAny
             case .logBloodPressure: BloodPressureActionCardView().asAny
-            case .logFood: Text("TODO").asAny
+            case .logFood: Text("TODO").asAny // TODO: Implement
+            case .logProtein: Text("TODO").asAny
             }
         }
     }

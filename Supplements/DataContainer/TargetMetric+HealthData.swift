@@ -25,6 +25,8 @@ extension TargetMetric {
             [HKQuantityType(.timeInDaylight)]
         case .exerciseMinutes:
             [HKWorkoutType.workoutType()]
+        case .proteinIntake:
+            [HKQuantityType(.dietaryProtein)]
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -44,6 +46,8 @@ extension TargetMetric {
                 .minute()
         case .exerciseMinutes:
                 .minute()
+        case .proteinIntake:
+                .gram()
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -63,6 +67,8 @@ extension TargetMetric {
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
         case .exerciseMinutes:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
+        case .proteinIntake:
+            return HKQuantity(unit: defaultUnit, doubleValue: 30) // TODO: Double check with Kaitlyn
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -82,6 +88,8 @@ extension TargetMetric {
             return HKQuantityRange(unit: defaultUnit, range: 20...30)
         case .exerciseMinutes:
             return HKQuantityRange(unit: defaultUnit, range: 20...30)
+        case .proteinIntake:
+            return nil
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -100,6 +108,8 @@ extension TargetMetric {
         case .timeInDaylight:
             NumberFormatter.noDecimalPlaces
         case .exerciseMinutes:
+            NumberFormatter.noDecimalPlaces
+        case .proteinIntake:
             NumberFormatter.noDecimalPlaces
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
@@ -134,6 +144,8 @@ extension TargetMetric {
             return await HealthManager.shared.fetchTotalQuantity(for: .timeInDaylight, dateRange: dateRange) ?? defaultQuantity
         case .exerciseMinutes:
             return await HealthManager.shared.fetchTotalQuantity(for: .appleExerciseTime, dateRange: dateRange) ?? defaultQuantity
+        case .proteinIntake:
+            return await HealthManager.shared.fetchTotalQuantity(for: .dietaryProtein, dateRange: dateRange) ?? defaultQuantity
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }
@@ -153,6 +165,8 @@ extension TargetMetric {
             return await HealthManager.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: unit, dateRange: dateRange)
         case .exerciseMinutes:
             return await HealthManager.shared.fetchCollatedQuantity(for: .appleExerciseTime, unit: unit, dateRange: dateRange)
+        case .proteinIntake:
+            return await HealthManager.shared.fetchCollatedQuantity(for: .dietaryProtein, unit: unit, dateRange: dateRange)
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }

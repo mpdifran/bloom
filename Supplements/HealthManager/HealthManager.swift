@@ -67,7 +67,7 @@ final class HealthManager: ObservableObject {
         didSet { UserDefaults.group.set(weightLossSpeed.rawValue, forKey: "HealthManager.weightLossSpeed") }
     }
 
-    @AppStorage("HealthManager.targetWeightDifference", store: .group) var targetWeightDifference: Double = 0
+    @AppStorage("HealthManager.targetWeight", store: .group) var targetWeight: Double = 0
     @AppStorage("HealthManager.isPregnant") var isPregnant = false
     @AppStorage("HealthManager.isBreastfeeding") var isBreastfeeding = false
 
@@ -778,11 +778,18 @@ extension HealthManager {
             unit: .largeCalorie(),
             dateRange: dateRange
         )
+        let dietaryEnergyCountAboveZero = collatedDietaryEnergy.count(where: { $0.quantity.doubleValue(for: .largeCalorie()) > 0 })
 
-        let countAboveZero = collatedDietaryEnergy.count(where: { $0.quantity.doubleValue(for: .largeCalorie()) > 0 })
+        let collatedProtein = await fetchCollatedQuantity(
+            for: .dietaryProtein,
+            unit: .gram(),
+            dateRange: dateRange
+        )
+        let proteinCountAboveZero = collatedProtein.count(where: { $0.quantity.doubleValue(for: .gram()) > 0 })
 
         return .init(
-            numberOfNutritionLogDays: countAboveZero,
+            numberOfNutritionLogDays: dietaryEnergyCountAboveZero,
+            numberOfProteinLogDays: proteinCountAboveZero,
             basalEnergyBurned: basalEnergyBurned,
             activeEnergyBurned: activeEnergyBurned,
             dietaryEnergy: dietaryEnergy,

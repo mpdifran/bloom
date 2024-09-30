@@ -65,7 +65,7 @@ private extension TodayConfigureView {
             .onDelete { indexSet in
                 for index in indexSet {
                     let habit = userAddedHabits[index]
-                    modelContext.delete(habit)
+                    habit.endDate = .now
                 }
                 do {
                     try modelContext.save()

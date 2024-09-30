@@ -56,7 +56,7 @@ struct OnboardingHealthGoalView: View {
                         HStack {
                             TextField(
                                 "",
-                                value: $healthManager.targetWeightDifference,
+                                value: $healthManager.targetWeight,
                                 formatter: NumberFormatter.oneDecimalPlace
                             )
                             .selectAllTextOnBeginEditing()
@@ -77,7 +77,7 @@ struct OnboardingHealthGoalView: View {
                         }
                         .pickerStyle(.segmented)
                     } header: {
-                        Text("How Much?")
+                        Text("What's your target weight?")
                     } footer: {
                         Text(healthManager.weightLossSpeed.weightLossDescription)
                     }
@@ -86,8 +86,8 @@ struct OnboardingHealthGoalView: View {
         }
         .shelf(spacing: 0) {
             VStack {
-                if healthManager.healthGoal == .loseWeight && healthManager.targetWeightDifference < 1 {
-                    Text("Please enter how much weight you want to lose.")
+                if healthManager.healthGoal == .loseWeight && healthManager.targetWeight < 1 {
+                    Text("Please enter what your ideal weight is.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -109,7 +109,7 @@ private extension OnboardingHealthGoalView {
         }
 
         if healthManager.healthGoal == .loseWeight {
-            if healthManager.targetWeightDifference < 1 {
+            if healthManager.targetWeight < 1 {
                 return false
             }
         }

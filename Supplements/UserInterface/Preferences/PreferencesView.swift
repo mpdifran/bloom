@@ -25,9 +25,9 @@ struct PreferencesView: View {
 
     var body: some View {
         List {
+            appInfoSection
             feedbackSection
             healthPermissionsSection
-            appInfoSection
             healthGoalsSection
             femaleSection
             reportsSection
@@ -95,11 +95,11 @@ private extension PreferencesView {
 
             if healthManager.healthGoal == .loseWeight {
                 VStack(alignment: .leading) {
-                    Text("Weight Difference")
+                    Text("Target Weight")
                     HStack {
                         TextField(
                             "",
-                            value: $healthManager.targetWeightDifference,
+                            value: $healthManager.targetWeight,
                             formatter: NumberFormatter.oneDecimalPlace
                         )
                         .selectAllTextOnBeginEditing()
@@ -228,6 +228,7 @@ private extension PreferencesView {
     var developerSection: some View {
         Section("Developer") {
             Toggle("Daniele Mode", isOn: $danieleMode)
+
             Button {
                 hasShownOnboarding = false
             } label: {
@@ -241,6 +242,12 @@ private extension PreferencesView {
                 presentedSheet = DebugHabitsListView().asAny
             } label: {
                 Text("Debug Habits")
+            }
+            .buttonStyle(.plain)
+
+            Button("Prompt Focus Area Review") {
+                HabitsViewModel.shared.resetHabitCheckDate()
+                alertDetails = AlertDetails(title: "Focus Area Review", message: "You will now be prompted to review your focus areas.")
             }
             .buttonStyle(.plain)
         }

@@ -81,6 +81,13 @@ extension HabitsViewModel {
         }
 
         for proposedHabit in proposedHabits {
+            if
+                let habitID = proposedHabit.habitID,
+                let existingHabit = try modelContext.fetchHabit(id: habitID)
+            {
+                existingHabit.endDate = .now
+            }
+
             let habit = Habit(
                 targetMetric: proposedHabit.targetMetric,
                 value: proposedHabit.value,
@@ -102,5 +109,9 @@ extension HabitsViewModel {
         }
 
         lastHabitRefreshDate = .now
+    }
+
+    func resetHabitCheckDate() {
+        lastHabitRefreshDate = nil
     }
 }

@@ -21,32 +21,22 @@ actor HabitsFactory {
 
 extension HabitsFactory {
 
-    func shouldUpdateSuggestedHabits() -> Bool {
-        let mondayMorning = Calendar.current.mondayMorning(for: .now) ?? .distantPast
-        let habits = (try? modelContext.fetchActiveHabits(isSuggested: true)) ?? []
-
-        return habits.isEmpty || habits.contains(where: { mondayMorning > $0.startDate })
-    }
-
     func generateProposedHabits() async -> NewHabitResult {
         let existingHabits = (try? modelContext.fetchActiveHabits(isSuggested: true)) ?? []
         let userAddedHabits = (try? modelContext.fetchActiveHabits(isSuggested: false)) ?? []
 
         await VitalsViewModel.shared.forceFetchVitals()
 
-        if VitalsViewModel.shared.nutritionSummary?.details.hasSufficientNutritionLogs == false {
-//            ToDoManager.shared.set(.daily, for: .logFood) // Do this on the other side
-
-            let todo = ProposedToDo(
-                todoKind: .logFood,
-                todoCadence: .daily,
-                context: "Bloom needs more data before it can suggest a habit. Please log your food for at least 7 days."
-            )
-            return NewHabitResult(
-                proposedHabits: [],
-                proposedToDos: [todo]
-            )
+        if let nutritionHabits = await generateNutritionHabits(
+            existingHabits: existingHabits,
+            userAddedHabits: userAddedHabits
+        ) {
+            return nutritionHabits
         }
+
+
+
+
 
         var newHabits = [ProposedHabit]()
         for habit in existingHabits {
@@ -88,6 +78,93 @@ extension HabitsFactory {
             vitalKind: vitalKind,
             context: ""
         )
+    }
+}
+
+// MARK: - Nutrition Habits
+
+private extension HabitsFactory {
+
+    func generateNutritionHabits(existingHabits: [Habit], userAddedHabits: [Habit]) async -> NewHabitResult? {
+        var todos = [ProposedToDo]()
+        // Ensure the user has logged their weight
+        if VitalsViewModel.shared.bodyCompositionSummary?.details.averageBodyMass == nil {
+            let todo = ProposedToDo(
+                todoKind: .logWeight,
+                todoCadence: .daily,
+                context: "Bloom needs more data before it can suggest a focus area. Please log your weight."
+            )
+            todos.append(todo)
+        }
+
+        // Ensure we have enough food logged
+        if VitalsViewModel.shared.nutritionSummary?.details.hasSufficientNutritionLogs == false {
+            let todo = ProposedToDo(
+                todoKind: .logFood,
+                todoCadence: .daily,
+                context: "Bloom needs more data before it can suggest a focus area. Please log your food for at least 7 days."
+            )
+            todos.append(todo)
+            return NewHabitResult(
+                proposedHabits: [],
+                proposedToDos: [todo]
+            )
+        } else if VitalsViewModel.shared.nutritionSummary?.details.hasSufficientProteinLogs == false {
+            let todo = ProposedToDo(
+                todoKind: .logProtein,
+                todoCadence: .daily,
+                context: "Bloom needs more data before it can suggest a focus area. Please ensure you're logging protein for at least 7 days."
+            )
+            todos.append(todo)
+        }
+
+        if todos.isNotEmpty {
+            return NewHabitResult(proposedHabits: [], proposedToDos: todos)
+        }
+
+        guard
+            let bodyMass = VitalsViewModel.shared.bodyCompositionSummary?.details.averageBodyMass,
+            let averageDietaryEnergy = VitalsViewModel.shared.nutritionSummary?.details.dietaryEnergy?.doubleValue(for: .largeCalorie()),
+            let averageProtein = VitalsViewModel.shared.nutritionSummary?.details.averageProtein?.doubleValue(for: .gram())
+        else {
+            print("We should never get here.")
+            return NewHabitResult(proposedHabits: [], proposedToDos: [])
+        }
+
+        // Check the user's goal
+        if HealthManager.shared.healthGoal == .loseWeight {
+            let targetWeight = HealthManager.shared.targetWeight // lbs
+            let currentWeight = bodyMass.doubleValue(for: .pound()) // lbs
+
+            let proteinTarget: HKQuantity
+            switch HealthManager.shared.weightLossSpeed {
+            case .slow:
+                proteinTarget = HKQuantity(unit: .gram(), doubleValue: averageProtein * 1.05)
+            case .moderate:
+                proteinTarget = HKQuantity(unit: .gram(), doubleValue: averageProtein * 1.1)
+            case .fast:
+                proteinTarget = HKQuantity(unit: .gram(), doubleValue: averageProtein * 1.2)
+            }
+
+            let proteinHabit = ProposedHabit(
+                habitID: nil,
+                targetMetric: .proteinIntake,
+                value: proteinTarget.doubleValue(for: .gram()),
+                suggestedValue: proteinTarget.doubleValue(for: .gram()),
+                previousValue: nil,
+                unitString: HKUnit.gram().unitString,
+                vitalKind: .nutrition,
+                context: "Eating more protein can help you stay satiated and lose weight.",
+                hasUserEdited: false
+            )
+
+            return NewHabitResult(
+                proposedHabits: [proteinHabit],
+                proposedToDos: []
+            )
+        }
+
+        return nil
     }
 }
 

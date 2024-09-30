@@ -17,6 +17,7 @@ public extension TargetMetric {
         case .walkingRunningDistance: "Walking + Running Distance"
         case .timeInDaylight: "Time in Daylight"
         case .exerciseMinutes: "Exercise Minutes"
+        case .proteinIntake: "Protein Intake"
         }
     }
 
@@ -28,6 +29,7 @@ public extension TargetMetric {
         case .walkingRunningDistance: "figure.walk"
         case .timeInDaylight: "sun.max.fill"
         case .exerciseMinutes: "figure.step.training"
+        case .proteinIntake: "Protein Intake"
         }
     }
 
@@ -39,6 +41,7 @@ public extension TargetMetric {
         case .walkingRunningDistance: .mutedGreen
         case .timeInDaylight: .mutedOrange
         case .exerciseMinutes: .mutedGreen
+        case .proteinIntake: .protein
         }
     }
 
