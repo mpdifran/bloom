@@ -63,7 +63,7 @@ struct OnboardingGoalsView: View {
         .animation(.easeIn(duration: 1), value: isCalculatingGoals)
         .tint(.mutedOrange)
         .task {
-            proposedHabits = await habitsViewModel.generateProposedHabits()
+            proposedHabits = await habitsViewModel.generateProposedHabits().proposedHabits
             await MainActor.run {
                 Delay(3000) {
                     isCalculatingGoals = false

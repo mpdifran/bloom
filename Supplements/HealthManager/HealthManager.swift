@@ -746,14 +746,8 @@ extension HealthManager {
         let thisMonth = await fetchNutritionMonthlySummaryDetails(
             dateRange: .trailingMonthsFromNow(1)
         )
-        let lastMonth = await fetchNutritionMonthlySummaryDetails(
-            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)
-        )
 
-        return NutritionMonthlySummary(
-            details: thisMonth,
-            lastMonthDetails: lastMonth
-        )
+        return NutritionMonthlySummary(details: thisMonth)
     }
 
     func fetchNutritionMonthlySummaryDetails(dateRange: DateRange) async -> NutritionMonthlySummary.Details {
@@ -779,7 +773,16 @@ extension HealthManager {
         let sugar = await fetchNutritionalDailyAverage(for: .dietarySugar, unit: .gram(), dateRange: dateRange)
         let water = await fetchNutritionalDailyAverage(for: .dietaryWater, unit: .literUnit(with: .milli), dateRange: dateRange)
 
+        let collatedDietaryEnergy = await fetchCollatedQuantity(
+            for: .dietaryEnergyConsumed,
+            unit: .largeCalorie(),
+            dateRange: dateRange
+        )
+
+        let countAboveZero = collatedDietaryEnergy.count(where: { $0.quantity.doubleValue(for: .largeCalorie()) > 0 })
+
         return .init(
+            numberOfNutritionLogDays: countAboveZero,
             basalEnergyBurned: basalEnergyBurned,
             activeEnergyBurned: activeEnergyBurned,
             dietaryEnergy: dietaryEnergy,

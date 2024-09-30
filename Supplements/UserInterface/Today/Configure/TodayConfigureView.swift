@@ -101,9 +101,7 @@ private extension TodayConfigureView {
                             .tag(cadence)
                     }
                 } label: {
-                    Label(todo.kind.name, systemImage: todo.kind.systemImage)
-                        .foregroundStyle(todo.kind.color)
-                        .bold()
+                    Text(todo.kind.name)
                 }
             }
         }

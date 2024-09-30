@@ -40,7 +40,6 @@ struct TodayView: View {
 
     @EnvironmentObject private var tabController: TabController
 
-    @State private var shouldUpdateSuggestedHabits = false
     @State private var presentedFullScreen: AnyView?
     @State private var presentedSheet: AnyView?
 
@@ -65,7 +64,7 @@ struct TodayView: View {
                                 }
                                 .padding(.bottom)
                         }
-                        if shouldUpdateSuggestedHabits || danieleMode {
+                        if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
                             GoalReviewCell()
                                 .onTapGesture {
                                     presentedFullScreen = NewUpdateHabitView().asAny
@@ -152,10 +151,8 @@ struct TodayView: View {
         .tabItem {
             Label("Today", systemImage: "calendar.badge.checkmark")
         }
-        .task {
-            self.shouldUpdateSuggestedHabits = await habitsViewModel.shouldUpdateSuggestedHabits()
-        }
         .onAppear {
+            habitsViewModel.checkUpdateSuggestedHabits()
             Task {
                 await toDoManager.recalculateToDos()
             }

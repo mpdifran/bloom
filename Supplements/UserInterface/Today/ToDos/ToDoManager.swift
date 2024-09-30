@@ -9,6 +9,7 @@ import SwiftUI
 import HealthKit
 import BloomFoundation
 
+@MainActor
 final class ToDoManager: ObservableObject {
     static let shared = ToDoManager()
 
@@ -47,33 +48,6 @@ final class ToDoManager: ObservableObject {
 }
 
 extension ToDoManager {
-
-    func observeToDos() {
-        var newHandlers = [HKObserverQueryHandle]()
-
-        for todo in allToDos {
-            let observationHandler = HealthManager.shared.healthStore.observeChanges(
-                sampleTypes: todo.kind.sampleTypes,
-                startDate: Calendar.current.startOfDay(for: .now)
-            ) { [weak self] in
-
-                guard let self else { return }
-
-                if await self.isToDoComplete(todo: todo, dateRange: .today()) == true {
-                    await MainActor.run {
-                        self.completedToDoKinds.insert(todo.kind)
-                    }
-                } else {
-                    await MainActor.run {
-                        self.completedToDoKinds.remove(todo.kind)
-                    }
-                }
-            }
-            newHandlers.append(observationHandler)
-        }
-
-        self.observationHandlers = newHandlers
-    }
 
     func recalculateToDos() async {
         if let todoCalculationDate {
@@ -159,12 +133,48 @@ extension ToDoManager {
                 break
             }
         }
-        
+
         let newRelevantToDosConstant = newRelevantToDos
 
         await MainActor.run {
             self.relevantToDos = newRelevantToDosConstant
         }
+    }
+
+    func set(_ cadence: ToDoModel.Cadence, for kind: ToDoModel.Kind) {
+        guard let index = allToDos.firstIndex(where: { $0.kind == kind }) else { return }
+
+        allToDos[index].cadence = cadence
+    }
+}
+
+private extension ToDoManager {
+
+    func observeToDos() {
+        var newHandlers = [HKObserverQueryHandle]()
+
+        for todo in allToDos {
+            let observationHandler = HealthManager.shared.healthStore.observeChanges(
+                sampleTypes: todo.kind.sampleTypes,
+                startDate: Calendar.current.startOfDay(for: .now)
+            ) { [weak self] in
+
+                guard let self else { return }
+
+                if await self.isToDoComplete(todo: todo, dateRange: .today()) == true {
+                    await MainActor.run {
+                        self.completedToDoKinds.insert(todo.kind)
+                    }
+                } else {
+                    await MainActor.run {
+                        self.completedToDoKinds.remove(todo.kind)
+                    }
+                }
+            }
+            newHandlers.append(observationHandler)
+        }
+
+        self.observationHandlers = newHandlers
     }
 
     func isToDoComplete(todo: ToDoModel, dateRange: DateRange) async -> Bool {
@@ -187,6 +197,9 @@ extension ToDoManager {
         }
         if !allToDos.contains(where: { $0.kind == .logBloodPressure }) {
             allToDos.append(.init(kind: .logBloodPressure, cadence: .never))
+        }
+        if !allToDos.contains(where: { $0.kind == .logFood }) {
+            allToDos.append(.init(kind: .logFood, cadence: .never))
         }
     }
 }

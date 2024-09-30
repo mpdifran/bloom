@@ -15,6 +15,7 @@ struct NewUpdateHabitView: View {
 
     @State private var isLoading = true
     @State private var proposedHabits = [ProposedHabit]()
+    @State private var proposedToDos = [ProposedToDo]()
     @State private var error: Error?
 
     @Environment(\.modelContext) var modelContext
@@ -31,36 +32,14 @@ struct NewUpdateHabitView: View {
                                 .bold()
 
                             Text("Review your goals for the week. These recommendations are based off the data from the past two weeks.")
+                                .fixedSize(horizontal: false, vertical: true)
                         }
 
                         Spacer(minLength: 0)
                     }
                     .cardContainer()
 
-                    if isLoading {
-                        VStack(spacing: 20) {
-                            CircularSpinnerView()
-                                .foregroundStyle(.tint)
-                            Text("Loading Focus Areas")
-                                .font(.title2)
-                                .bold()
-                        }
-                        .horizontallyCentered()
-                        .padding(.top, 40)
-                    } else {
-                        if proposedHabits.isEmpty {
-                            ContentUnavailableView(
-                                "Oops",
-                                systemImage: "exclamationmark.triangle.fill",
-                                description: Text("There was a problem loading your focus areas. Please try again later.")
-                            )
-                        } else {
-                            ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
-                                ProposedHabitCell(proposedHabit: $proposedHabits[index])
-                                    .transition(.scale)
-                            }
-                        }
-                    }
+                    newHabitsSection
                 }
                 .horizontallyCentered()
                 .padding()
@@ -79,7 +58,10 @@ struct NewUpdateHabitView: View {
             .shelf {
                 ProminentButton("Save") {
                     do {
-                        try habitsViewModel.performSave(proposedHabits: proposedHabits)
+                        try habitsViewModel.performSave(
+                            proposedHabits: proposedHabits,
+                            proposedToDos: proposedToDos
+                        )
                         dismiss()
                     } catch {
                         self.error = error
@@ -91,8 +73,57 @@ struct NewUpdateHabitView: View {
         .alert(error: $error)
         .animation(.bouncy, value: proposedHabits)
         .task {
-            proposedHabits = await habitsViewModel.generateProposedHabits()
+            let result = await habitsViewModel.generateProposedHabits()
+            proposedHabits = result.proposedHabits
+            proposedToDos = result.proposedToDos
+
             isLoading = false
+        }
+    }
+}
+
+private extension NewUpdateHabitView {
+
+    @ViewBuilder
+    var newHabitsSection: some View {
+        if isLoading {
+            loadingView
+        } else if proposedHabits.isEmpty && proposedToDos.isEmpty {
+            contentUnavailableView
+        } else {
+            contentView
+        }
+    }
+
+    var loadingView: some View {
+        VStack(spacing: 20) {
+            CircularSpinnerView()
+                .foregroundStyle(.tint)
+            Text("Loading Focus Areas")
+                .font(.title2)
+                .bold()
+        }
+        .horizontallyCentered()
+        .padding(.top, 40)
+    }
+
+    var contentUnavailableView: some View {
+        ContentUnavailableView(
+            "Oops",
+            systemImage: "exclamationmark.triangle.fill",
+            description: Text("There was a problem loading your focus areas. Please try again later.")
+        )
+    }
+
+    @ViewBuilder
+    var contentView: some View {
+        ForEach(proposedToDos) { proposedToDo in
+            ProposedToDoCell(proposedToDo: proposedToDo)
+        }
+
+        ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
+            ProposedHabitCell(proposedHabit: $proposedHabits[index])
+                .transition(.scale)
         }
     }
 }

@@ -57,11 +57,13 @@ extension ToDoModel {
     enum Kind: String, Codable {
         case logWeight
         case logBloodPressure
+        case logFood
 
         var name: String {
             switch self {
             case .logWeight: "Log Weight"
             case .logBloodPressure: "Record Blood Pressure"
+            case .logFood: "Log Food"
             }
         }
 
@@ -69,6 +71,7 @@ extension ToDoModel {
             switch self {
             case .logWeight: "gauge.with.dots.needle.bottom.50percent.badge.plus"
             case .logBloodPressure: "gauge.open.with.lines.needle.67percent.and.arrowtriangle"
+            case .logFood: "fork.knife"
             }
         }
 
@@ -76,6 +79,7 @@ extension ToDoModel {
             switch self {
             case .logWeight: .mutedIndigo
             case .logBloodPressure: .mutedPink
+            case .logFood: .mutedGreen
             }
         }
 
@@ -83,6 +87,7 @@ extension ToDoModel {
             switch self {
             case .logWeight: [HKQuantityType(.bodyMass)]
             case .logBloodPressure: [HKQuantityType(.bloodPressureSystolic), HKQuantityType(.bloodPressureDiastolic)]
+            case .logFood: [HKQuantityType(.dietaryEnergyConsumed)]
             }
         }
 
@@ -90,6 +95,7 @@ extension ToDoModel {
             switch self {
             case .logWeight: BodyWeightActionCardView().asAny
             case .logBloodPressure: BloodPressureActionCardView().asAny
+            case .logFood: Text("TODO").asAny
             }
         }
     }

@@ -15,16 +15,38 @@ import SwiftData
 final class HabitsViewModel: ObservableObject {
     static let shared = HabitsViewModel()
 
+    @Published var shouldUpdateSuggestedHabits = false
+
+    private var lastHabitRefreshDate: Date? {
+        didSet {
+            UserDefaults.group.set(lastHabitRefreshDate, forKey: "HabitsViewModel.lastHabitRefreshDate")
+            checkUpdateSuggestedHabits()
+        }
+    }
+
     let modelContext = ModelContext(ContainerHolder.shared.container)
+
+    init() {
+        if let date = UserDefaults.group.object(forKey: "HabitsViewModel.lastHabitRefreshDate") as? Date {
+            lastHabitRefreshDate = date
+        }
+    }
 }
 
 extension HabitsViewModel {
 
-    func shouldUpdateSuggestedHabits() async -> Bool {
-        await HabitsFactory.shared.shouldUpdateSuggestedHabits()
+    func checkUpdateSuggestedHabits() {
+        guard let lastHabitRefreshDate else {
+            shouldUpdateSuggestedHabits = true
+            return
+        }
+
+        let mondayMorning = Calendar.current.mondayMorning(for: .now) ?? .distantPast
+
+        shouldUpdateSuggestedHabits = mondayMorning > lastHabitRefreshDate
     }
 
-    func generateProposedHabits() async -> [ProposedHabit] {
+    func generateProposedHabits() async -> NewHabitResult {
         await HabitsFactory.shared.generateProposedHabits()
     }
 
@@ -53,15 +75,12 @@ extension HabitsViewModel {
         )
     }
 
-    func performSave(proposedHabits: [ProposedHabit]) throws {
-        for proposedHabit in proposedHabits {
-            if
-                let habitID = proposedHabit.habitID,
-                let existingHabit = try modelContext.fetchHabit(id: habitID)
-            {
-                existingHabit.endDate = .now
-            }
+    func performSave(proposedHabits: [ProposedHabit], proposedToDos: [ProposedToDo]) throws {
+        for existingHabit in try modelContext.fetchActiveHabits(isSuggested: true) {
+            existingHabit.endDate = .now
+        }
 
+        for proposedHabit in proposedHabits {
             let habit = Habit(
                 targetMetric: proposedHabit.targetMetric,
                 value: proposedHabit.value,
@@ -77,5 +96,11 @@ extension HabitsViewModel {
         }
 
         try modelContext.save()
+
+        for proposedToDo in proposedToDos {
+            ToDoManager.shared.set(proposedToDo.todoCadence, for: proposedToDo.todoKind)
+        }
+
+        lastHabitRefreshDate = .now
     }
 }

@@ -26,7 +26,6 @@ extension NutritionMonthlySummary {
 
 struct NutritionMonthlySummary: Hashable, Sendable {
     let details: Details
-    let lastMonthDetails: Details
 }
 
 extension NutritionMonthlySummary {
@@ -96,6 +95,7 @@ extension NutritionMonthlySummary {
 
 extension NutritionMonthlySummary {
     struct Details: Hashable, Sendable {
+        let numberOfNutritionLogDays: Int
         let basalEnergyBurned: HKQuantity?
         let activeEnergyBurned: HKQuantity?
         let dietaryEnergy: HKQuantity?
@@ -160,6 +160,10 @@ extension NutritionMonthlySummary {
 }
 
 extension NutritionMonthlySummary.Details {
+
+    var hasSufficientNutritionLogs: Bool {
+        numberOfNutritionLogDays >= 7
+    }
 
     var netEnergy: Double? {
         guard let basalEnergyBurned, let activeEnergyBurned, let dietaryEnergy else { return nil }

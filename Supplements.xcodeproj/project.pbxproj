@@ -251,6 +251,9 @@
 		FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE02BAC778A006AAD0B /* Assets.xcassets */; };
 		FFACBAE42BAC778A006AAD0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */; };
 		FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F352C1A8341002DA563 /* BedtimeActivityView.swift */; };
+		FFAFF4162CAB07D000FAD3C9 /* NewHabitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */; };
+		FFAFF41B2CAB176B00FAD3C9 /* ProposedToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */; };
+		FFAFF41D2CAB18E300FAD3C9 /* ProposedToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -727,6 +730,9 @@
 		FFACBADE2BAC7788006AAD0B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		FFACBAE02BAC778A006AAD0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitResult.swift; sourceTree = "<group>"; };
+		FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedToDo.swift; sourceTree = "<group>"; };
+		FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedToDoCell.swift; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1231,13 +1237,11 @@
 		FF2FB8942C9C906F00F57523 /* Habits */ = {
 			isa = PBXGroup;
 			children = (
+				FFAFF4172CAB0A9B00FAD3C9 /* UpdateHabits */,
 				FFA062AE2C921AE900ADCB09 /* HabitGrid */,
 				FF2FB8972C9CD03400F57523 /* HabitDailyUpdateCell.swift */,
 				FF2FB8992C9CD11E00F57523 /* HabitDailyUpdateCellViewModel.swift */,
 				FF2FB8A32C9DD74A00F57523 /* HabitDetailsView.swift */,
-				FF2FB89D2C9DA98A00F57523 /* NewUpdateHabitView.swift */,
-				FF2FB89F2C9DA9F100F57523 /* ProposedHabitCell.swift */,
-				FF2FB8A12C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift */,
 			);
 			path = Habits;
 			sourceTree = "<group>";
@@ -1536,6 +1540,8 @@
 				FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */,
 				FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */,
 				FF2FB8952C9CCB7700F57523 /* ProposedHabit.swift */,
+				FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */,
+				FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */,
 			);
 			path = Habits;
 			sourceTree = "<group>";
@@ -1654,6 +1660,17 @@
 				FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FFAFF4172CAB0A9B00FAD3C9 /* UpdateHabits */ = {
+			isa = PBXGroup;
+			children = (
+				FF2FB89D2C9DA98A00F57523 /* NewUpdateHabitView.swift */,
+				FF2FB89F2C9DA9F100F57523 /* ProposedHabitCell.swift */,
+				FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */,
+				FF2FB8A12C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift */,
+			);
+			path = UpdateHabits;
 			sourceTree = "<group>";
 		};
 		FFB444482BEC3AD100486AD7 /* ChatUI */ = {
@@ -2615,6 +2632,7 @@
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,
 				FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */,
 				FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */,
+				FFAFF41D2CAB18E300FAD3C9 /* ProposedToDoCell.swift in Sources */,
 				FF6E06252CA3A3B600C4219B /* WaterGlassSizeModel.swift in Sources */,
 				FF0DA0FB2C876629007D1A6B /* DateCollatedWorkoutHeartRateReport.swift in Sources */,
 				FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */,
@@ -2672,6 +2690,7 @@
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */,
 				FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */,
+				FFAFF41B2CAB176B00FAD3C9 /* ProposedToDo.swift in Sources */,
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */,
@@ -2683,6 +2702,7 @@
 				FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */,
 				FF8B8B282BFD36BF00BA2128 /* ProfileHeaderView.swift in Sources */,
 				FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */,
+				FFAFF4162CAB07D000FAD3C9 /* NewHabitResult.swift in Sources */,
 				FF8B8B482C00309D00BA2128 /* ActivityBubbleCell.swift in Sources */,
 				FF8F79DF2C6948B70095C36D /* HeartHealthDetailsView.swift in Sources */,
 				FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */,

@@ -28,9 +28,25 @@ extension HabitsFactory {
         return habits.isEmpty || habits.contains(where: { mondayMorning > $0.startDate })
     }
 
-    func generateProposedHabits() async -> [ProposedHabit] {
+    func generateProposedHabits() async -> NewHabitResult {
         let existingHabits = (try? modelContext.fetchActiveHabits(isSuggested: true)) ?? []
         let userAddedHabits = (try? modelContext.fetchActiveHabits(isSuggested: false)) ?? []
+
+        await VitalsViewModel.shared.forceFetchVitals()
+
+        if VitalsViewModel.shared.nutritionSummary?.details.hasSufficientNutritionLogs == false {
+//            ToDoManager.shared.set(.daily, for: .logFood) // Do this on the other side
+
+            let todo = ProposedToDo(
+                todoKind: .logFood,
+                todoCadence: .daily,
+                context: "Bloom needs more data before it can suggest a habit. Please log your food for at least 7 days."
+            )
+            return NewHabitResult(
+                proposedHabits: [],
+                proposedToDos: [todo]
+            )
+        }
 
         var newHabits = [ProposedHabit]()
         for habit in existingHabits {
@@ -40,7 +56,7 @@ extension HabitsFactory {
         }
 
         if newHabits.isEmpty {
-            await VitalsViewModel.shared.forceFetchVitals()
+
             let vitals = VitalsViewModel.shared.vitals
 
             if
@@ -59,7 +75,7 @@ extension HabitsFactory {
             return shouldInclude
         })
 
-        return newHabits
+        return NewHabitResult(proposedHabits: newHabits, proposedToDos: [])
     }
 
     func generateProposedHabit(
