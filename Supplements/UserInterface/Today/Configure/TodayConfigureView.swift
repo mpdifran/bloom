@@ -94,8 +94,8 @@ private extension TodayConfigureView {
 
     var toDoSection: some View {
         Section("To Dos") {
-            ForEachEnumerated(toDoManager.allToDos) { (index, todo) in
-                Picker(selection: $toDoManager.allToDos[index].cadence) {
+            ForEachEnumerated(toDoManager.userAddableToDos) { (index, todo) in
+                Picker(selection: $toDoManager.userAddableToDos[index].cadence) {
                     ForEach(ToDoModel.Cadence.allCases) { cadence in
                         Text(cadence.name)
                             .tag(cadence)

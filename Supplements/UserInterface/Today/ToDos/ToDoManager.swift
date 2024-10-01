@@ -15,10 +15,20 @@ final class ToDoManager: ObservableObject {
 
     @Published var relevantToDos = [ToDoModel]()
     @Published var completedToDoKinds = Set<ToDoModel.Kind>()
-    @Published var allToDos = [ToDoModel]() {
+    @Published var userAddableToDos = [ToDoModel]() {
         didSet {
-            if let data = try? JSONEncoder.main.encode(allToDos) {
+            if let data = try? JSONEncoder.main.encode(userAddableToDos) {
                 UserDefaults.group.set(data, forKey: "ToDoManager.allToDos")
+            }
+            Task {
+                await recalculateToDos()
+            }
+        }
+    }
+    @Published var systemSuggestedToDos = [ToDoModel]() {
+        didSet {
+            if let data = try? JSONEncoder.main.encode(systemSuggestedToDos) {
+                UserDefaults.group.set(data, forKey: "ToDoManager.systemSuggestedToDos")
             }
             Task {
                 await recalculateToDos()
@@ -37,10 +47,13 @@ final class ToDoManager: ObservableObject {
             self.todoCalculationDate = date
         }
         if let data = UserDefaults.group.data(forKey: "ToDoManager.allToDos") {
-            allToDos = (try? JSONDecoder.main.decode([ToDoModel].self, from: data)) ?? []
+            userAddableToDos = (try? JSONDecoder.main.decode([ToDoModel].self, from: data)) ?? []
+        }
+        if let data = UserDefaults.group.data(forKey: "ToDoManager.systemSuggestedToDos") {
+            systemSuggestedToDos = (try? JSONDecoder.main.decode([ToDoModel].self, from: data)) ?? []
         }
 
-        populateAllToDos()
+        populateUserAddableToDos()
         observeToDos()
     }
 
@@ -58,7 +71,9 @@ extension ToDoManager {
 
         var newRelevantToDos = [ToDoModel]()
 
-        for todo in allToDos {
+        let allPossibleToDos = systemSuggestedToDos + userAddableToDos
+
+        for todo in allPossibleToDos {
             switch todo.cadence {
             case .daily:
                 newRelevantToDos.append(todo)
@@ -142,9 +157,13 @@ extension ToDoManager {
     }
 
     func set(_ cadence: ToDoModel.Cadence, for kind: ToDoModel.Kind) {
-        guard let index = allToDos.firstIndex(where: { $0.kind == kind }) else { return }
-
-        allToDos[index].cadence = cadence
+        if let index = userAddableToDos.firstIndex(where: { $0.kind == kind }) {
+            userAddableToDos[index].cadence = cadence
+        } else {
+            // We're just going to assume this is the system adding this because I'm tired.
+            let todo = ToDoModel(kind: kind, cadence: cadence)
+            systemSuggestedToDos.append(todo)
+        }
     }
 }
 
@@ -153,7 +172,7 @@ private extension ToDoManager {
     func observeToDos() {
         var newHandlers = [HKObserverQueryHandle]()
 
-        for todo in allToDos {
+        for todo in userAddableToDos {
             let observationHandler = HealthManager.shared.healthStore.observeChanges(
                 sampleTypes: todo.kind.sampleTypes,
                 startDate: Calendar.current.startOfDay(for: .now)
@@ -191,15 +210,19 @@ private extension ToDoManager {
         return true
     }
 
-    func populateAllToDos() {
-        if !allToDos.contains(where: { $0.kind == .logWeight }) {
-            allToDos.append(.init(kind: .logWeight, cadence: .never))
+    func populateUserAddableToDos() {
+        var todos = [ToDoModel]()
+        if let todo = userAddableToDos.first(where: { $0.kind == .logWeight }) {
+            todos.append(todo)
+        } else {
+            todos.append(.init(kind: .logWeight, cadence: .never))
         }
-        if !allToDos.contains(where: { $0.kind == .logBloodPressure }) {
-            allToDos.append(.init(kind: .logBloodPressure, cadence: .never))
+        if let todo = userAddableToDos.first(where: { $0.kind == .logBloodPressure }) {
+            todos.append(todo)
+        } else {
+            todos.append(.init(kind: .logBloodPressure, cadence: .never))
         }
-        if !allToDos.contains(where: { $0.kind == .logFood }) {
-            allToDos.append(.init(kind: .logFood, cadence: .never))
-        }
+
+        userAddableToDos = todos
     }
 }
