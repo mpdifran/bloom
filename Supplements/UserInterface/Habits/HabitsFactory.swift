@@ -11,6 +11,12 @@ import DataContainer
 import HealthKit
 import TelemetryDeck
 
+private extension Double {
+    static let initialProteinOverallCaloriePercent: Double = 0.30
+    static let intermediateProteinOverallCaloriePercent: Double = 0.35
+    static let advancedProteinOverallCaloriePercent: Double = 0.40
+}
+
 actor HabitsFactory {
     static let shared = HabitsFactory()
 
@@ -120,8 +126,7 @@ private extension HabitsFactory {
 
         guard
             let bodyMass = VitalsViewModel.shared.bodyCompositionSummary?.details.averageBodyMass,
-            let averageDietaryEnergy = VitalsViewModel.shared.nutritionSummary?.details.dietaryEnergy?.doubleValue(for: .largeCalorie()),
-            let averageProtein = VitalsViewModel.shared.nutritionSummary?.details.averageProtein?.doubleValue(for: .gram())
+            let averageDietaryEnergy = VitalsViewModel.shared.nutritionSummary?.details.dietaryEnergy?.doubleValue(for: .largeCalorie())
         else {
             print("We should never get here.")
             return NewHabitResult(proposedHabits: [], proposedToDos: [])
@@ -132,25 +137,17 @@ private extension HabitsFactory {
             let targetWeight = HealthManager.shared.targetWeight // lbs
             let currentWeight = bodyMass.doubleValue(for: .pound()) // lbs
 
-            let proteinTarget: HKQuantity
-            switch HealthManager.shared.weightLossSpeed {
-            case .slow:
-                proteinTarget = HKQuantity(unit: .gram(), doubleValue: averageProtein * 1.05)
-            case .moderate:
-                proteinTarget = HKQuantity(unit: .gram(), doubleValue: averageProtein * 1.1)
-            case .fast:
-                proteinTarget = HKQuantity(unit: .gram(), doubleValue: averageProtein * 1.2)
-            }
+            let proteinTarget = averageDietaryEnergy * .initialProteinOverallCaloriePercent / .caloriesPerGramOfProtein
 
             let proteinHabit = ProposedHabit(
                 habitID: nil,
                 targetMetric: .proteinIntake,
-                value: proteinTarget.doubleValue(for: .gram()),
-                suggestedValue: proteinTarget.doubleValue(for: .gram()),
+                value: proteinTarget,
+                suggestedValue: proteinTarget,
                 previousValue: nil,
                 unitString: HKUnit.gram().unitString,
                 vitalKind: .nutrition,
-                context: "Eating more protein can help you stay satiated and lose weight.",
+                context: "Eating more protein can help you stay satiated and lose weight sustainably.",
                 hasUserEdited: false
             )
 
