@@ -79,7 +79,6 @@ struct ProposedHabitCell: View {
                         Spacer()
                         
                         Text(proposedHabit.displaySuggestedValue)
-                            .foregroundStyle(.tint)
                             .fontDesign(.rounded)
                             .bold()
                     }

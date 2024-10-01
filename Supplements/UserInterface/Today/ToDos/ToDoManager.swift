@@ -50,7 +50,8 @@ final class ToDoManager: ObservableObject {
             userAddableToDos = (try? JSONDecoder.main.decode([ToDoModel].self, from: data)) ?? []
         }
         if let data = UserDefaults.group.data(forKey: "ToDoManager.systemSuggestedToDos") {
-            systemSuggestedToDos = (try? JSONDecoder.main.decode([ToDoModel].self, from: data)) ?? []
+            let todos = (try? JSONDecoder.main.decode([ToDoModel].self, from: data)) ?? []
+            systemSuggestedToDos = todos.uniqued(on: { $0.kind })
         }
 
         populateUserAddableToDos()
@@ -153,12 +154,15 @@ extension ToDoManager {
 
         await MainActor.run {
             self.relevantToDos = newRelevantToDosConstant
+            self.observeToDos()
         }
     }
 
     func set(_ cadence: ToDoModel.Cadence, for kind: ToDoModel.Kind) {
         if let index = userAddableToDos.firstIndex(where: { $0.kind == kind }) {
             userAddableToDos[index].cadence = cadence
+        } else if let index = systemSuggestedToDos.firstIndex(where: { $0.kind == kind }) {
+            systemSuggestedToDos[index].cadence = cadence
         } else {
             // We're just going to assume this is the system adding this because I'm tired.
             let todo = ToDoModel(kind: kind, cadence: cadence)
@@ -184,7 +188,9 @@ private extension ToDoManager {
     func observeToDos() {
         var newHandlers = [HKObserverQueryHandle]()
 
-        for todo in userAddableToDos {
+        let allPossibleToDos = systemSuggestedToDos + userAddableToDos
+
+        for todo in allPossibleToDos {
             let observationHandler = HealthManager.shared.healthStore.observeChanges(
                 sampleTypes: todo.kind.sampleTypes,
                 startDate: Calendar.current.startOfDay(for: .now)

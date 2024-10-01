@@ -255,6 +255,7 @@
 		FFAFF41B2CAB176B00FAD3C9 /* ProposedToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */; };
 		FFAFF41D2CAB18E300FAD3C9 /* ProposedToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */; };
 		FFAFF41F2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41E2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift */; };
+		FFAFF4212CAC37DF00FAD3C9 /* Collection+Trim.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4202CAC37D900FAD3C9 /* Collection+Trim.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -735,6 +736,7 @@
 		FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedToDo.swift; sourceTree = "<group>"; };
 		FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedToDoCell.swift; sourceTree = "<group>"; };
 		FFAFF41E2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFPRecommendationActionCard.swift; sourceTree = "<group>"; };
+		FFAFF4202CAC37D900FAD3C9 /* Collection+Trim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Trim.swift"; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1296,6 +1298,7 @@
 				FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */,
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
 				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
+				FFAFF4202CAC37D900FAD3C9 /* Collection+Trim.swift */,
 				FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */,
 				FF48C28B2C6951CD00DC8D1D /* Collection+Unwrap.swift */,
 				FF0DA0F82C876390007D1A6B /* Collection+Sort.swift */,
@@ -2559,6 +2562,7 @@
 				FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
+				FFAFF4212CAC37DF00FAD3C9 /* Collection+Trim.swift in Sources */,
 				FFE41D1F2C8BCE1500E3E559 /* EveningHabitProgressCell.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,

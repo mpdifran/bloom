@@ -51,24 +51,11 @@ struct ActionStatusCell: View {
                     .padding()
                     .background {
                         Circle()
-                            .fill(.thickMaterial)
-                            .background {
-                                Circle()
-                                    .fill(.tint.opacity(0.5))
-                            }
+                            .fill(.tint.tertiary)
                     }
             }
         }
-        .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.regularMaterial)
-                .background {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.tint.opacity(0.5))
-                }
-
-        }
+        .cardContainer()
     }
 }
 

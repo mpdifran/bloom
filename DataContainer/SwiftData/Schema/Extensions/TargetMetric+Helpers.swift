@@ -29,7 +29,7 @@ public extension TargetMetric {
         case .walkingRunningDistance: "figure.walk"
         case .timeInDaylight: "sun.max.fill"
         case .exerciseMinutes: "figure.step.training"
-        case .proteinIntake: "Protein Intake"
+        case .proteinIntake: "fork.knife"
         }
     }
 

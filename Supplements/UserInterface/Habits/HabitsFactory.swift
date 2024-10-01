@@ -34,10 +34,6 @@ extension HabitsFactory {
             return nutritionHabits
         }
 
-
-
-
-
         var newHabits = [ProposedHabit]()
         for habit in existingHabits {
             guard let newHabit = await updatedHabit(for: habit) else { continue }

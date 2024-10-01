@@ -389,7 +389,9 @@ extension HealthManager {
             unit: unit,
             dateRange: dateRange
         )) ?? []
-        let average = quantities.map({ $0.quantity.doubleValue(for: unit) }).average(keyPath: \.self)
+
+        let trimmedQuantities = quantities.trim(where: { $0.quantity.doubleValue(for: unit) == 0 })
+        let average = trimmedQuantities.map({ $0.quantity.doubleValue(for: unit) }).average(keyPath: \.self)
 
         return HKQuantity(unit: unit, doubleValue: average)
     }
