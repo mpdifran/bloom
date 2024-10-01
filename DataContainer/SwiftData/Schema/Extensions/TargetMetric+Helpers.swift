@@ -18,6 +18,7 @@ public extension TargetMetric {
         case .timeInDaylight: "Time in Daylight"
         case .exerciseMinutes: "Exercise Minutes"
         case .proteinIntake: "Protein Intake"
+        case .calories: "Calories"
         }
     }
 
@@ -30,6 +31,7 @@ public extension TargetMetric {
         case .timeInDaylight: "sun.max.fill"
         case .exerciseMinutes: "figure.step.training"
         case .proteinIntake: "fork.knife"
+        case .calories: "flame"
         }
     }
 
@@ -42,6 +44,14 @@ public extension TargetMetric {
         case .timeInDaylight: .mutedOrange
         case .exerciseMinutes: .mutedGreen
         case .proteinIntake: .protein
+        case .calories: .mutedOrange
+        }
+    }
+
+    var measurementStyle: TargetMetric.MeasurementStyle {
+        switch self {
+        case .calories: .range
+        default: .minimum
         }
     }
 

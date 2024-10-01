@@ -65,8 +65,8 @@ struct HabitDailyUpdateCell: View {
                 .foregroundStyle(.secondary)
                 .padding(.leading)
         }
-        .tint(habit.targetMetric.color)
         .cardContainer()
+        .tint(habit.targetMetric.color)
         .standardConfetti(
             $showConfetti,
             colors: [

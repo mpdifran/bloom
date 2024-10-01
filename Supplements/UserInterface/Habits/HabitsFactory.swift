@@ -11,12 +11,6 @@ import DataContainer
 import HealthKit
 import TelemetryDeck
 
-private extension Double {
-    static let initialProteinOverallCaloriePercent: Double = 0.30
-    static let intermediateProteinOverallCaloriePercent: Double = 0.35
-    static let advancedProteinOverallCaloriePercent: Double = 0.40
-}
-
 actor HabitsFactory {
     static let shared = HabitsFactory()
 
@@ -126,38 +120,63 @@ private extension HabitsFactory {
 
         guard
             let bodyMass = VitalsViewModel.shared.bodyCompositionSummary?.details.averageBodyMass,
-            let averageDietaryEnergy = VitalsViewModel.shared.nutritionSummary?.details.dietaryEnergy?.doubleValue(for: .largeCalorie())
+            let averageDietaryEnergy = VitalsViewModel.shared.nutritionSummary?.details.dietaryEnergy
         else {
             print("We should never get here.")
             return NewHabitResult(proposedHabits: [], proposedToDos: [])
         }
 
-        // Check the user's goal
-        if HealthManager.shared.healthGoal == .loseWeight {
-            let targetWeight = HealthManager.shared.targetWeight // lbs
-            let currentWeight = bodyMass.doubleValue(for: .pound()) // lbs
+        var habits = [ProposedHabit]()
 
-            let proteinTarget = averageDietaryEnergy * .initialProteinOverallCaloriePercent / .caloriesPerGramOfProtein
+        // Calories
+        let basalEnergy = VitalsViewModel.shared.nutritionSummary?.details.basalEnergyBurned
+        let activeEnergy = VitalsViewModel.shared.nutritionSummary?.details.activeEnergyBurned
 
+        if let recommendation = CalorieTargetCalculator.targetCalories(
+            basalEnergy: basalEnergy,
+            activeEnergy: activeEnergy,
+            dietaryEnergy: averageDietaryEnergy
+        ) {
+            let calorieHabit = ProposedHabit(
+                habitID: nil,
+                targetMetric: .calories,
+                value: recommendation.target.doubleValue(for: .largeCalorie()),
+                suggestedValue: recommendation.target.doubleValue(for: .largeCalorie()),
+                previousValue: nil,
+                unitString: HKUnit.largeCalorie().unitString,
+                vitalKind: .nutrition,
+                context: recommendation.context,
+                hasUserEdited: false
+            )
+            habits.append(calorieHabit)
+        }
+
+        // Protein
+        if
+            let averageProtein = VitalsViewModel.shared.nutritionSummary?.details.averageProtein,
+            let recommendation = ProteinTargetCalculator.targetProtein(
+                protein: averageProtein,
+                dietaryEnergy: averageDietaryEnergy
+            )
+        {
             let proteinHabit = ProposedHabit(
                 habitID: nil,
                 targetMetric: .proteinIntake,
-                value: proteinTarget,
-                suggestedValue: proteinTarget,
+                value: recommendation.target.doubleValue(for: .gram()),
+                suggestedValue: recommendation.target.doubleValue(for: .gram()),
                 previousValue: nil,
                 unitString: HKUnit.gram().unitString,
                 vitalKind: .nutrition,
-                context: "Eating more protein can help you stay satiated and lose weight sustainably.",
+                context: recommendation.context,
                 hasUserEdited: false
             )
-
-            return NewHabitResult(
-                proposedHabits: [proteinHabit],
-                proposedToDos: []
-            )
+            habits.append(proteinHabit)
         }
 
-        return nil
+        return NewHabitResult(
+            proposedHabits: habits,
+            proposedToDos: []
+        )
     }
 }
 

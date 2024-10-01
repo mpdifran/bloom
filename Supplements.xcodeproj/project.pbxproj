@@ -256,6 +256,9 @@
 		FFAFF41D2CAB18E300FAD3C9 /* ProposedToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */; };
 		FFAFF41F2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41E2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift */; };
 		FFAFF4212CAC37DF00FAD3C9 /* Collection+Trim.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4202CAC37D900FAD3C9 /* Collection+Trim.swift */; };
+		FFAFF4252CAC824200FAD3C9 /* ProteinTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4242CAC823F00FAD3C9 /* ProteinTargetCalculator.swift */; };
+		FFAFF4272CAC831500FAD3C9 /* CalorieTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */; };
+		FFAFF4292CAC89FE00FAD3C9 /* TargetMetricRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -737,6 +740,9 @@
 		FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedToDoCell.swift; sourceTree = "<group>"; };
 		FFAFF41E2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFPRecommendationActionCard.swift; sourceTree = "<group>"; };
 		FFAFF4202CAC37D900FAD3C9 /* Collection+Trim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Trim.swift"; sourceTree = "<group>"; };
+		FFAFF4242CAC823F00FAD3C9 /* ProteinTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinTargetCalculator.swift; sourceTree = "<group>"; };
+		FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieTargetCalculator.swift; sourceTree = "<group>"; };
+		FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetMetricRecommendation.swift; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1542,6 +1548,7 @@
 		FF9782F62C9B3AF700A8ED7E /* Habits */ = {
 			isa = PBXGroup;
 			children = (
+				FFAFF4232CAC823500FAD3C9 /* Calculators */,
 				FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */,
 				FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */,
 				FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */,
@@ -1677,6 +1684,16 @@
 				FF2FB8A12C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift */,
 			);
 			path = UpdateHabits;
+			sourceTree = "<group>";
+		};
+		FFAFF4232CAC823500FAD3C9 /* Calculators */ = {
+			isa = PBXGroup;
+			children = (
+				FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */,
+				FFAFF4242CAC823F00FAD3C9 /* ProteinTargetCalculator.swift */,
+				FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */,
+			);
+			path = Calculators;
 			sourceTree = "<group>";
 		};
 		FFB444482BEC3AD100486AD7 /* ChatUI */ = {
@@ -2599,6 +2616,7 @@
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FF2FB8962C9CCB7B00F57523 /* ProposedHabit.swift in Sources */,
 				FFF61B752BF15DD000926042 /* SoundPlayer.swift in Sources */,
+				FFAFF4292CAC89FE00FAD3C9 /* TargetMetricRecommendation.swift in Sources */,
 				FFC77AD52C529CF9003E5F85 /* MobilityMonthlySummary.swift in Sources */,
 				FFF61B482BEEBD8F00926042 /* UserInfoInsightsSection.swift in Sources */,
 				FFBE523F2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift in Sources */,
@@ -2755,6 +2773,7 @@
 				FFBE52392C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift in Sources */,
 				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,
 				FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */,
+				FFAFF4272CAC831500FAD3C9 /* CalorieTargetCalculator.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
 				FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */,
 				FFC0AA912C3C23880025FE34 /* WristTemperatureSummaryCell.swift in Sources */,
@@ -2805,6 +2824,7 @@
 				FF88F12B2C7D02D80093D1B4 /* ActionsView.swift in Sources */,
 				FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */,
 				FF88F1242C7BBDF90093D1B4 /* EKEventView.swift in Sources */,
+				FFAFF4252CAC824200FAD3C9 /* ProteinTargetCalculator.swift in Sources */,
 				FFC77AEF2C581529003E5F85 /* CorrelationChartCell.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,

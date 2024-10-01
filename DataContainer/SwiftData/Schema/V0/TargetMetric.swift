@@ -17,4 +17,14 @@ public enum TargetMetric: String, Identifiable, Codable, CaseIterable, Sendable 
     case timeInDaylight
     case exerciseMinutes
     case proteinIntake
+    case calories
+}
+
+public extension TargetMetric {
+    enum MeasurementStyle: String, Identifiable, Codable, CaseIterable, Sendable {
+        public var id: Self { self }
+
+        case minimum
+        case range
+    }
 }
