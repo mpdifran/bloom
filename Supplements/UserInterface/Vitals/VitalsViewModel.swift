@@ -56,12 +56,14 @@ final class VitalsViewModel: ObservableObject {
 extension VitalsViewModel {
 
     func refreshVitals() async {
-        if let lastVitalFetchDate {
-            let minutes = Calendar.current.dateComponents([.minute], from: lastVitalFetchDate, to: .now).minute ?? 0
-
-            if minutes < 3 {
-                print("Returning early since we like just fetched vitals.")
-                return
+        if vitals.isNotEmpty {
+            if let lastVitalFetchDate {
+                let minutes = Calendar.current.dateComponents([.minute], from: lastVitalFetchDate, to: .now).minute ?? 0
+                
+                if minutes < 3 {
+                    print("Returning early since we like just fetched vitals.")
+                    return
+                }
             }
         }
 
