@@ -104,9 +104,7 @@ extension HabitsViewModel {
 
         try modelContext.save()
 
-        for proposedToDo in proposedToDos {
-            ToDoManager.shared.set(proposedToDo.todoCadence, for: proposedToDo.todoKind)
-        }
+        ToDoManager.shared.apply(proposedToDos: proposedToDos)
 
         lastHabitRefreshDate = .now
     }

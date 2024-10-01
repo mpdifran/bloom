@@ -165,6 +165,18 @@ extension ToDoManager {
             systemSuggestedToDos.append(todo)
         }
     }
+
+    func apply(proposedToDos: [ProposedToDo]) {
+        // Turn off any existing ones first
+        for systemToDo in systemSuggestedToDos {
+            set(.never, for: systemToDo.kind)
+        }
+
+        // Set the new system ones.
+        for proposedToDo in proposedToDos {
+            set(proposedToDo.todoCadence, for: proposedToDo.todoKind)
+        }
+    }
 }
 
 private extension ToDoManager {
