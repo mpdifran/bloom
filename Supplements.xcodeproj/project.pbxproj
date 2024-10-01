@@ -254,6 +254,7 @@
 		FFAFF4162CAB07D000FAD3C9 /* NewHabitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */; };
 		FFAFF41B2CAB176B00FAD3C9 /* ProposedToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */; };
 		FFAFF41D2CAB18E300FAD3C9 /* ProposedToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */; };
+		FFAFF41F2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF41E2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -733,6 +734,7 @@
 		FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitResult.swift; sourceTree = "<group>"; };
 		FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedToDo.swift; sourceTree = "<group>"; };
 		FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedToDoCell.swift; sourceTree = "<group>"; };
+		FFAFF41E2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFPRecommendationActionCard.swift; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1409,6 +1411,7 @@
 				FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */,
 				FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */,
 				FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */,
+				FFAFF41E2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift */,
 			);
 			path = ActionCards;
 			sourceTree = "<group>";
@@ -2695,6 +2698,7 @@
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
+				FFAFF41F2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift in Sources */,
 				FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "MyFitnessPal_iOS-App-Icon.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
