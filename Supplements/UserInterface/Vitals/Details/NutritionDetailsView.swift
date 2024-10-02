@@ -128,7 +128,27 @@ private extension NutritionDetailsView {
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                     .foregroundStyle(.green)
                 }
-                .frame(height: 300)
+                .frame(height: 260)
+
+                if let netEnergyStatus = viewModel.nutritionSummary?.details.netEnergyStatus {
+                    HStack(alignment: .firstTextBaseline) {
+                        switch netEnergyStatus {
+                        case .deficit(let percent):
+                            Text("\(percent.doubleValue(for: .percent()).format())%")
+                                .font(.largeTitle)
+                                .fontDesign(.rounded)
+                            Text("Caloric Deficit")
+                        case .surplus(let percent):
+                            Text("\(percent.doubleValue(for: .percent()).format())%")
+                                .font(.largeTitle)
+                                .fontDesign(.rounded)
+                            Text("Caloric Surplus")
+                        }
+
+                        Spacer(minLength: 0)
+                    }
+                    .bold()
+                }
 
                 if let netEnergyDescription = viewModel.nutritionSummary?.details.netEnergyDescription {
                     HStack {

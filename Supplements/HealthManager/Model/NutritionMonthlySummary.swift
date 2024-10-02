@@ -108,6 +108,11 @@ extension NutritionMonthlySummary {
         let averageWater: HKQuantity?
     }
 
+    enum NetEnergyStatus {
+        case deficit(HKQuantity)
+        case surplus(HKQuantity)
+    }
+
     enum MacroStatus: String {
         case proteinSurplus = "Protein Surplus"
         case proteinDeficiency = "Protein Deficiency"
@@ -202,6 +207,23 @@ extension NutritionMonthlySummary.Details {
             return "A large caloric surplus can lead to rapid weight gain, and can incrase the risk of various health issues such as cardiovascular diseases or type 2 diabetes."
         }
         return "A caloric surplus can help promote muscle growth and provide you with more energy."
+    }
+
+    var netEnergyStatus: NutritionMonthlySummary.NetEnergyStatus? {
+        guard let basalEnergyBurned, let activeEnergyBurned, let dietaryEnergy else { return nil }
+
+        let tdee = basalEnergyBurned.doubleValue(for: .largeCalorie()) + activeEnergyBurned.doubleValue(for: .largeCalorie())
+        let dietary = dietaryEnergy.doubleValue(for: .largeCalorie())
+
+        if dietary > tdee {
+            let percent = (dietary / tdee) - 1
+
+            return .surplus(HKQuantity(unit: .percent(), doubleValue: percent * 100))
+        }
+
+        let percent = 1 - (dietary / tdee)
+
+        return .deficit(HKQuantity(unit: .percent(), doubleValue: percent * 100))
     }
 
     var score: Double? {

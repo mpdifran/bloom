@@ -12,7 +12,8 @@ internal import TelemetryDeck
 public final class ContainerHolder: Sendable {
     public static let shared = ContainerHolder()
 
-    public let container: ModelContainer
+    // It's only modified by the tests.
+    private(set) public var container: ModelContainer
 
     private init() {
         let schema = Schema(versionedSchema: SchemaV1.self)
@@ -39,5 +40,22 @@ public final class ContainerHolder: Sendable {
 
     public func createContext() -> ModelContext {
         ModelContext(container)
+    }
+}
+
+public extension ContainerHolder {
+
+    func setupForTests() {
+        let schema = Schema(versionedSchema: SchemaV1.self)
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: true
+        )
+
+        self.container = try! ModelContainer(
+            for: schema,
+            migrationPlan: DefaultMigrationPlan.self,
+            configurations: modelConfiguration
+        )
     }
 }
