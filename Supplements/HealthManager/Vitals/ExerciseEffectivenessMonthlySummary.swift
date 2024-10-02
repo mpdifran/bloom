@@ -56,7 +56,6 @@ extension ExerciseEffectivenessMonthlySummary {
 
 struct ExerciseEffectivenessMonthlySummary: Hashable, Sendable {
     let details: Details
-    let lastMonthDetails: Details
 
     var barLevel: VitalModel.BarLevel? {
         let level = details.level

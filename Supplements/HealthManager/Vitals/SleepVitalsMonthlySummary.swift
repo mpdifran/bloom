@@ -49,7 +49,6 @@ extension SleepVitalsMonthlySummary {
 
 struct SleepVitalsMonthlySummary: Hashable, Codable, Sendable {
     let details: Details
-    let lastMonthDetails: Details
 }
 
 extension SleepVitalsMonthlySummary {

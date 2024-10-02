@@ -87,7 +87,6 @@ extension ActivityLevelSummary.ActivityLevel {
 
 struct ActivityLevelSummary: Hashable, Codable, Sendable {
     let details: Details
-    let lastMonthDetails: Details
 }
 
 extension ActivityLevelSummary {

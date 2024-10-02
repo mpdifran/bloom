@@ -58,7 +58,6 @@ final class HealthManager: ObservableObject {
 
     @Published var sleepAnalysis7Days: [SleepAnalysis]?
     @Published var sleepAnalysis30Days: [SleepAnalysis]?
-    @Published var sleepAnalysisPrevious30Days: [SleepAnalysis]?
 
     @AppStorage("HealthManager.isFemale") var isFemale = false
     @Published var birthday = Date.now {
@@ -654,9 +653,8 @@ extension HealthManager {
 
     func fetchActivityLevelSummary() async -> ActivityLevelSummary {
         let thisMonth = await fetchActivityLevelSummaryDetails(dateRange: .trailingMonthsFromNow(1))
-        let lastMonth = await fetchActivityLevelSummaryDetails(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1))
 
-        return ActivityLevelSummary(details: thisMonth, lastMonthDetails: lastMonth)
+        return ActivityLevelSummary(details: thisMonth)
     }
 
     func fetchActivityLevelSummaryDetails(dateRange: DateRange) async -> ActivityLevelSummary.Details {
@@ -905,15 +903,8 @@ extension HealthManager {
             heartRateZones: targetHeartRateZones,
             dateRange: .trailingMonthsFromNow(1)
         )
-        let lastMonth = await fetchExerciseEffectivenessDetails(
-            heartRateZones: targetHeartRateZones,
-            dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)
-        )
 
-        return ExerciseEffectivenessMonthlySummary(
-            details: thisMonth,
-            lastMonthDetails: lastMonth
-        )
+        return ExerciseEffectivenessMonthlySummary(details: thisMonth)
     }
 
     func fetchExerciseEffectivenessDetails(
@@ -935,19 +926,10 @@ extension HealthManager {
             thisMonthAnalyses = await fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
         }
 
-        let lastMonthAnalyses: [SleepAnalysis]
-        if let sleepAnalysisPrevious30Days {
-            lastMonthAnalyses = sleepAnalysisPrevious30Days
-        } else {
-            lastMonthAnalyses = await fetchSleepAnalysis(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1))
-        }
-
         let thisMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: thisMonthAnalyses)
-        let lastMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: lastMonthAnalyses)
 
         return SleepVitalsMonthlySummary(
-            details: thisMonth,
-            lastMonthDetails: lastMonth
+            details: thisMonth
         )
     }
 
@@ -1755,7 +1737,6 @@ extension HealthManager {
             let lastPreviousSleepAnalysis = self?.sleepAnalysis30Days?.last
 
             let thisMonthSleepAnalysis = await self?.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1)) ?? []
-            let lastMonthSleepAnalysis = await self?.fetchSleepAnalysis(dateRange: .trailingMonthsFromMonthsFromNow(monthsFromNow: 1, numberOfMonths: 1)) ?? []
 
             let newPreviousSleepAnalysis = thisMonthSleepAnalysis.last
 
@@ -1767,7 +1748,6 @@ extension HealthManager {
             await MainActor.run { [weak self] in
                 self?.sleepAnalysis7Days = thisMonthSleepAnalysis.suffix(7)
                 self?.sleepAnalysis30Days = thisMonthSleepAnalysis
-                self?.sleepAnalysisPrevious30Days = lastMonthSleepAnalysis
             }
         }
     }

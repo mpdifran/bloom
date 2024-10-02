@@ -57,7 +57,6 @@ extension BowelMovementMonthlySummary {
 
 struct BowelMovementMonthlySummary: Sendable {
     let details: Details?
-    let lastMonth: Details?
 
     var barLevel: VitalModel.BarLevel? {
         guard

@@ -1737,6 +1737,23 @@
 			path = Tags;
 			sourceTree = "<group>";
 		};
+		FFAFF44A2CAE065700FAD3C9 /* Vitals */ = {
+			isa = PBXGroup;
+			children = (
+				FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */,
+				FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */,
+				FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */,
+				FFC8B0122C518FF5009C5CED /* HeartHealthMonthlySummary.swift */,
+				FFC8B0142C519DAD009C5CED /* BodyCompositionMonthlySummary.swift */,
+				FF4EFF8B2C938196005E4A1F /* MenstrualSummary.swift */,
+				FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */,
+				FFBE52382C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift */,
+				FF4CAAF82C8005B6001A59F3 /* BowelMovementMonthlySummary.swift */,
+				FFC77AD42C529CF9003E5F85 /* MobilityMonthlySummary.swift */,
+			);
+			path = Vitals;
+			sourceTree = "<group>";
+		};
 		FFB444482BEC3AD100486AD7 /* ChatUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1755,6 +1772,7 @@
 		FFB444562BEC40FD00486AD7 /* HealthManager */ = {
 			isa = PBXGroup;
 			children = (
+				FFAFF44A2CAE065700FAD3C9 /* Vitals */,
 				FFE390D52C2492EC00B79140 /* Model */,
 				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
 				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
@@ -1951,19 +1969,9 @@
 				FF0DA0FA2C876629007D1A6B /* DateCollatedWorkoutHeartRateReport.swift */,
 				FFBE523C2C74EE7D00F510DE /* WorkoutHeartRateReport.swift */,
 				FFBE52422C756DED00F510DE /* WorkoutTypeHeartRateReport.swift */,
-				FF9C84D32C513E9B00648A1E /* ActivityLevelSummary.swift */,
-				FFC8B0102C5164BB009C5CED /* SleepVitalsMonthlySummary.swift */,
-				FFC8B0122C518FF5009C5CED /* HeartHealthMonthlySummary.swift */,
-				FFC8B0142C519DAD009C5CED /* BodyCompositionMonthlySummary.swift */,
-				FFC77AD42C529CF9003E5F85 /* MobilityMonthlySummary.swift */,
-				FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */,
 				FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */,
-				FF4EFF8B2C938196005E4A1F /* MenstrualSummary.swift */,
 				FF4EFF892C937D1B005E4A1F /* MenstrualCycle.swift */,
 				FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */,
-				FFC77B092C5EA2EA003E5F85 /* NutritionMonthlySummary.swift */,
-				FFBE52382C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift */,
-				FF4CAAF82C8005B6001A59F3 /* BowelMovementMonthlySummary.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
