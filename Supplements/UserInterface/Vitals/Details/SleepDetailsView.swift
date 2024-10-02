@@ -66,7 +66,7 @@ private extension SleepDetailsView {
         VStack(alignment: .leading) {
             VitalDetailChartTitleView(
                 title: "Sleep Quality",
-                value: viewModel.sleepVitalsSummary?.details.averageSleepScore?.format() ?? ""
+                value: viewModel.sleepVitalsSummary?.details.averageSleepScore?.format(using: .oneDecimalPlace) ?? ""
             )
 
             Chart {
@@ -99,18 +99,13 @@ private extension SleepDetailsView {
     }
 
     func color(for sleepScore: Double) -> Color {
-        guard let quality = selectedSleepQuality else { return .coreSleep }
+        let sleepQuality = SleepVitalsMonthlySummary.SleepQuality(sleepScore: sleepScore)
 
-        if 
-            sleepScore < 4 && quality == .poor ||
-            sleepScore >= 4 && sleepScore < 7 && quality == .low ||
-            sleepScore >= 7 && sleepScore < 9 && quality == .good ||
-            sleepScore >= 9 && quality == .great
-        {
-            return quality.color
+        if selectedSleepQuality == nil {
+            return sleepQuality.color
+        } else {
+            return sleepQuality.color.opacity(selectedSleepQuality == sleepQuality ? 1 : 0.3)
         }
-
-        return .coreSleep.opacity(0.3)
     }
 
     @ViewBuilder

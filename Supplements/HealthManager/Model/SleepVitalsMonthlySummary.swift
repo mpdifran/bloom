@@ -15,6 +15,18 @@ extension SleepVitalsMonthlySummary {
         case good
         case great
 
+        init(sleepScore: Double) {
+            if sleepScore < 4 {
+                self = .poor
+            } else if sleepScore < 7 {
+                self = .low
+            } else if sleepScore < 9 {
+                self = .good
+            } else {
+                self = .great
+            }
+        }
+
         var name: String {
             switch self {
             case .poor: "Poor"
@@ -121,14 +133,6 @@ extension SleepVitalsMonthlySummary.Details {
     var quality: SleepVitalsMonthlySummary.SleepQuality? {
         guard let averageSleepScore else { return nil }
 
-        if averageSleepScore < 4 {
-            return .poor
-        } else if averageSleepScore < 7 {
-            return .low
-        } else if averageSleepScore < 9 {
-            return .good
-        } else {
-            return .great
-        }
+        return SleepVitalsMonthlySummary.SleepQuality(sleepScore: averageSleepScore)
     }
 }
