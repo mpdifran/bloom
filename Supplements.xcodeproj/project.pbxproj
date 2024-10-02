@@ -259,6 +259,7 @@
 		FFAFF4252CAC824200FAD3C9 /* ProteinTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4242CAC823F00FAD3C9 /* ProteinTargetCalculator.swift */; };
 		FFAFF4272CAC831500FAD3C9 /* CalorieTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */; };
 		FFAFF4292CAC89FE00FAD3C9 /* TargetMetricRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */; };
+		FFAFF42E2CAD792E00FAD3C9 /* Double+WithinRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF42C2CAD778E00FAD3C9 /* Double+WithinRange.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -743,6 +744,7 @@
 		FFAFF4242CAC823F00FAD3C9 /* ProteinTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinTargetCalculator.swift; sourceTree = "<group>"; };
 		FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieTargetCalculator.swift; sourceTree = "<group>"; };
 		FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetMetricRecommendation.swift; sourceTree = "<group>"; };
+		FFAFF42C2CAD778E00FAD3C9 /* Double+WithinRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+WithinRange.swift"; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1185,6 +1187,7 @@
 		FF1E96A62C0E09BD004DAD2D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				FFAFF42C2CAD778E00FAD3C9 /* Double+WithinRange.swift */,
 				FF1E96A72C0E09CE004DAD2D /* Set+OptionalInsert.swift */,
 			);
 			path = Extensions;
@@ -2511,6 +2514,7 @@
 				FF1E96A02C0D0555004DAD2D /* ListFormatter+Constants.swift in Sources */,
 				FFCE85622C99DCD9002C46B1 /* Calendar+Helpers.swift in Sources */,
 				FFCE85602C99DCA7002C46B1 /* DateRange.swift in Sources */,
+				FFAFF42E2CAD792E00FAD3C9 /* Double+WithinRange.swift in Sources */,
 				FF1E969E2C0D0530004DAD2D /* DateFormatter+Constants.swift in Sources */,
 				FF1E96A82C0E09CE004DAD2D /* Set+OptionalInsert.swift in Sources */,
 				FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */,

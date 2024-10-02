@@ -153,7 +153,7 @@ private extension HabitDetailsView {
                     } else {
                         return false
                     }
-                    return referenceHabit.quantityExceedsGoal(sample.quantity)
+                    return referenceHabit.quantityMeetsGoal(sample.quantity)
                 }
 
                 return HabitGridModel.Week(
@@ -215,7 +215,7 @@ private extension HabitDetailsView {
         for sample in twelveWeeksSamples {
             guard let weekday = Calendar.current.weekday(for: sample.date) else { continue }
 
-            if habit.quantityExceedsGoal(sample.quantity) {
+            if habit.quantityMeetsGoal(sample.quantity) {
                 stats[weekday, default: 0] += 1
             }
         }

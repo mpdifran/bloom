@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import BloomFoundation
 
 public extension Habit {
 
@@ -18,10 +19,18 @@ public extension Habit {
         HKQuantity(unit: unit, doubleValue: value)
     }
 
-    func quantityExceedsGoal(_ quantity: HKQuantity) -> Bool {
+    func quantityMeetsGoal(_ otherQuantity: HKQuantity) -> Bool {
         guard quantity.is(compatibleWith: unit) else { return false }
 
-        return quantity.compare(self.quantity) == .orderedDescending
+        switch targetMetric.measurementStyle {
+        case .minimum:
+            return otherQuantity.compare(self.quantity) == .orderedDescending
+        case .range:
+            let value = otherQuantity.doubleValue(for: unit)
+            let goal = quantity.doubleValue(for: unit)
+
+            return value.isWithinRange(of: goal, precision: 0.1)
+        }
     }
 }
 

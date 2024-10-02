@@ -55,10 +55,11 @@ private extension HabitDailyUpdateCellViewModel {
         let currentValue = Task.detached(priority: .userInitiated) {
             await targetMetric.fetchTotalQuantity(for: .startOfDayToNow())
         }
-        dailyValue = await currentValue.value.doubleValue(for: habit.unit)
+        let dailyQuantity = await currentValue.value
+        dailyValue = dailyQuantity.doubleValue(for: habit.unit)
 
         let prevHasCompletedGoal = hasCompletedTodayGoal
-        hasCompletedTodayGoal = dailyValue >= habit.value
+        hasCompletedTodayGoal = habit.quantityMeetsGoal(dailyQuantity)
 
         if !prevHasCompletedGoal && hasCompletedTodayGoal {
             await sendHabitHitNotification()

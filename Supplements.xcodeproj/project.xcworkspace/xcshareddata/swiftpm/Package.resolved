@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppUI",
       "state" : {
-        "revision" : "b8fc8a45485cbae0e695a8ced3f88485d51f98a4",
-        "version" : "0.5.4"
+        "revision" : "514e3ee48b4ffc1a4bb314dc563f8d9406761ba3",
+        "version" : "0.5.5"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/bugsnag/bugsnag-cocoa-performance",
       "state" : {
-        "revision" : "c62a0d1f29280106b0330aa621793be050aa8887",
-        "version" : "1.8.1"
+        "revision" : "d077f7665e282a52c6446e836c87d57e254a54f8",
+        "version" : "1.10.0"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TelemetryDeck/SwiftSDK.git",
       "state" : {
-        "revision" : "13a26cf125b70d695913eb9bea9f9b9c29da5790",
-        "version" : "2.3.0"
+        "revision" : "11072df81e1f00caa8ac24180d8796264c1e15d2",
+        "version" : "2.4.0"
       }
     }
   ],

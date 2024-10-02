@@ -44,7 +44,11 @@ struct HabitDailyUpdateCell: View {
                     }
                 }
 
-                ProgressBar(progress: viewModel.dailyValue / habit.value)
+                ProgressBar(
+                    value: viewModel.dailyValue,
+                    target: habit.value,
+                    measurementStyle: habit.targetMetric.measurementStyle == .range ? .range : .minimum
+                )
 
                 HStack {
                     Text(viewModel.formattedDailyValue)
@@ -87,17 +91,30 @@ struct HabitDailyUpdateCell: View {
 
 #Preview {
     ScrollView {
-        HabitDailyUpdateCell(
-            habit: .init(
-                targetMetric: .timeInDaylight,
-                value: 30,
-                unitString: HKUnit.minute().unitString,
-                startDate: .now,
-                isSuggested: true,
-                isUserEdited: false,
-                vitalKind: .sleepQuality
+        VStack {
+            HabitDailyUpdateCell(
+                habit: .init(
+                    targetMetric: .timeInDaylight,
+                    value: 30,
+                    unitString: HKUnit.minute().unitString,
+                    startDate: .now,
+                    isSuggested: true,
+                    isUserEdited: false,
+                    vitalKind: .sleepQuality
+                )
             )
-        )
+            HabitDailyUpdateCell(
+                habit: .init(
+                    targetMetric: .calories,
+                    value: 1800,
+                    unitString: HKUnit.largeCalorie().unitString,
+                    startDate: .now,
+                    isSuggested: true,
+                    isUserEdited: false,
+                    vitalKind: .nutrition
+                )
+            )
+        }
         .padding()
     }
     .groupedBackground()
