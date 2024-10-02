@@ -11,13 +11,15 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
     public static var schemas: [any VersionedSchema.Type] {
         [
             SchemaV0.self,
-            SchemaV1.self
+            SchemaV1.self,
+            SchemaV2.self
         ]
     }
 
     public static var stages: [MigrationStage] {
         [
-            migrateV0ToV1
+            migrateV0ToV1,
+            migrateV1ToV2
         ]
     }
 
@@ -48,6 +50,13 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
                 try context.save()
             },
             didMigrate: nil
+        )
+    }
+
+    private static var migrateV1ToV2: MigrationStage {
+        .lightweight(
+            fromVersion: SchemaV1.self,
+            toVersion: SchemaV2.self
         )
     }
 }

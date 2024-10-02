@@ -8,6 +8,7 @@
 import SwiftUI
 import DataContainer
 import HealthKit
+import TelemetryDeck
 
 @MainActor
 final class HabitDailyUpdateCellViewModel: ObservableObject {
@@ -61,9 +62,28 @@ private extension HabitDailyUpdateCellViewModel {
         let prevHasCompletedGoal = hasCompletedTodayGoal
         hasCompletedTodayGoal = habit.quantityMeetsGoal(dailyQuantity)
 
-        if !prevHasCompletedGoal && hasCompletedTodayGoal {
-            await sendHabitHitNotification()
-            shouldShowConfetti = true
+        if
+            !prevHasCompletedGoal &&
+            hasCompletedTodayGoal &&
+            !Calendar.current.isDateInToday(habit.lastNotificationDate ?? .distantPast)
+        {
+            let id = habit.persistentModelID
+            do {
+                try ContainerHolder.shared.editAndSave { context in
+                    let editableHabit = try context.fetchHabit(id: id)
+                    editableHabit?.lastNotificationDate = .now
+                }
+
+                await sendHabitHitNotification()
+                shouldShowConfetti = true
+            } catch {
+                TelemetryDeck.errorOccurred(
+                    id: "HabitDailyUpdateCellViewModel.habitGoalNotification",
+                    category: .thrownException,
+                    message: error.localizedDescription
+                )
+                print(error)
+            }
         }
     }
 
