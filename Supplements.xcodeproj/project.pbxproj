@@ -263,6 +263,7 @@
 		FFAFF4302CAD8A6200FAD3C9 /* HabitGoalStatisticsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF42F2CAD8A5A00FAD3C9 /* HabitGoalStatisticsCalculator.swift */; };
 		FFAFF4322CAD8D5F00FAD3C9 /* Double+Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4312CAD8D5A00FAD3C9 /* Double+Interpolation.swift */; };
 		FFAFF4392CAD9B1000FAD3C9 /* GenericHabitTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4382CAD9B0600FAD3C9 /* GenericHabitTargetCalculator.swift */; };
+		FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculator.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -751,6 +752,7 @@
 		FFAFF42F2CAD8A5A00FAD3C9 /* HabitGoalStatisticsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalStatisticsCalculator.swift; sourceTree = "<group>"; };
 		FFAFF4312CAD8D5A00FAD3C9 /* Double+Interpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Interpolation.swift"; sourceTree = "<group>"; };
 		FFAFF4382CAD9B0600FAD3C9 /* GenericHabitTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericHabitTargetCalculator.swift; sourceTree = "<group>"; };
+		FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinTargetCalculator.swift; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1708,6 +1710,22 @@
 			path = Calculators;
 			sourceTree = "<group>";
 		};
+		FFAFF43A2CADA20800FAD3C9 /* Habits */ = {
+			isa = PBXGroup;
+			children = (
+				FFAFF43B2CADA21B00FAD3C9 /* Calculators */,
+			);
+			path = Habits;
+			sourceTree = "<group>";
+		};
+		FFAFF43B2CADA21B00FAD3C9 /* Calculators */ = {
+			isa = PBXGroup;
+			children = (
+				FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculator.swift */,
+			);
+			path = Calculators;
+			sourceTree = "<group>";
+		};
 		FFB444482BEC3AD100486AD7 /* ChatUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -2053,6 +2071,7 @@
 		FFF61B392BEEB7B000926042 /* SupplementsTests */ = {
 			isa = PBXGroup;
 			children = (
+				FFAFF43A2CADA20800FAD3C9 /* Habits */,
 				FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */,
 			);
 			path = SupplementsTests;
@@ -2865,6 +2884,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculator.swift in Sources */,
 				FFF61B3B2BEEB7B000926042 /* SupplementsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -93,26 +93,27 @@ private extension PreferencesView {
                     .tag(HealthManager.HealthGoal.gainWeight)
             }
 
-            if healthManager.healthGoal == .loseWeight {
-                VStack(alignment: .leading) {
-                    Text("Target Weight")
-                    HStack {
-                        TextField(
-                            "",
-                            value: $healthManager.targetWeight,
-                            formatter: NumberFormatter.oneDecimalPlace
-                        )
-                        .selectAllTextOnBeginEditing()
-                        .multilineTextAlignment(.trailing)
-                        .keyboardType(.decimalPad)
-                        .textFieldStyle(.roundedBorder)
-                        .scrollDismissesKeyboard(.immediately)
-                        .fontDesign(.rounded)
-                        .bold()
+            VStack(alignment: .leading) {
+                Text("Target Weight")
+                HStack {
+                    TextField(
+                        "",
+                        value: $healthManager.targetWeight,
+                        formatter: NumberFormatter.oneDecimalPlace
+                    )
+                    .selectAllTextOnBeginEditing()
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(.decimalPad)
+                    .textFieldStyle(.roundedBorder)
+                    .scrollDismissesKeyboard(.interactively)
+                    .fontDesign(.rounded)
+                    .bold()
 
-                        Text("lbs")
-                    }
+                    Text("lbs")
                 }
+            }
+
+            if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
                 Picker("", selection: $healthManager.weightLossSpeed) {
                     ForEach(HealthManager.WeightLossSpeed.allCases) { speed in
                         Text(speed.name)
