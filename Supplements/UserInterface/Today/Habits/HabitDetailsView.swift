@@ -120,20 +120,11 @@ private extension HabitDetailsView {
         let targetMetric = habit.targetMetric
 
         Task.detached {
-            let container = await ContainerHolder.shared.container
-            let context = ModelContext(container)
+            let context = ContainerHolder.shared.createContext()
 
             let habitHistory: [Habit]
-            let rawTargetMetric = targetMetric.rawValue
             do {
-                habitHistory = try context.fetch(
-                    FetchDescriptor<Habit>(
-                        predicate: #Predicate<Habit> { model in
-                            model.rawTargetMetric == rawTargetMetric
-                        },
-                        sortBy: [SortDescriptor(\Habit.startDate)]
-                    )
-                )
+                habitHistory = try context.fetchHabits(for: targetMetric)
             } catch {
                 print(error)
                 return
@@ -193,8 +184,11 @@ private extension HabitDetailsView {
             dateRange: .trailingWeeksFromNow(30)
         )
 
+        let currentWeekOfYear = Calendar.current.weekOfYear(for: .now) ?? 52
         let groupedByWeekSamples = samples.grouped { sample in
-            Calendar.current.weekOfYear(for: sample.date) ?? -1
+            guard let weekOfYear = Calendar.current.weekOfYear(for: sample.date) else { return -1 }
+
+            return currentWeekOfYear - weekOfYear
         }
 
         let weekSamples = groupedByWeekSamples.compactMap { (key, samples) -> WeekQuantitySamples? in

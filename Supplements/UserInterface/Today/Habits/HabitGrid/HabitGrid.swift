@@ -14,7 +14,7 @@ private extension CGFloat {
 }
 
 private extension Double {
-    static let cellDelay: Double = 0.01
+    static let cellDelay: Double = 0.02
 }
 
 struct HabitGrid: View {
@@ -77,7 +77,7 @@ extension HabitGrid {
 
         guard shiftedColumn > 0 else { return 0 }
 
-        return (Double(shiftedColumn) * Double.cellDelay * 3) + Double(row) * Double.cellDelay
+        return (Double(shiftedColumn) * Double.cellDelay * 2) + Double(row) * Double.cellDelay
     }
 
     func recommendedMaxColumnCount(for width: CGFloat) -> Int {
@@ -87,9 +87,20 @@ extension HabitGrid {
 }
 
 #Preview {
+    @Previewable @State var habitGridModel = HabitGridModel()
+
     VStack {
-        HabitGrid(
-            model: .init(
+        HabitGrid(model: habitGridModel)
+            .padding(.spacing)
+
+        HabitGrid(model: .init())
+            .padding(.spacing)
+
+        Spacer()
+    }
+    .onAppear {
+        withAnimation {
+            habitGridModel = HabitGridModel(
                 weeks: [
                     .init(id: 1, isComplete: [false, true, true, false, false, true, false]),
                     .init(id: 2, isComplete: [true, false, true, false, true, true, true]),
@@ -110,12 +121,6 @@ extension HabitGrid {
                     .init(id: 17, isComplete: [true, true, false, true], todayIndex: 3),
                 ]
             )
-        )
-        .padding(.spacing)
-
-        HabitGrid(model: .init())
-            .padding(.spacing)
-
-        Spacer()
+        }
     }
 }
