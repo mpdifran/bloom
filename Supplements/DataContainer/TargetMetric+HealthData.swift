@@ -57,12 +57,12 @@ extension TargetMetric {
         }
     }
 
-    var minHabitTarget: HKQuantity? {
+    var minHabitTarget: HKQuantity {
         switch self {
         case .none:
-            return nil
+            return HKQuantity(unit: defaultUnit, doubleValue: 0)
         case .stepCount:
-            return HKQuantity(unit: defaultUnit, doubleValue: 5000) // Maybe 4000
+            return HKQuantity(unit: defaultUnit, doubleValue: 4000)
         case .waterIntake:
             return HKQuantity(unit: defaultUnit, doubleValue: 250)
         case .walkingRunningDistance:
@@ -72,7 +72,7 @@ extension TargetMetric {
         case .exerciseMinutes:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
         case .proteinIntake:
-            return HKQuantity(unit: defaultUnit, doubleValue: 30) // TODO: Double check with Kaitlyn
+            return HKQuantity(unit: defaultUnit, doubleValue: 50) // TODO: Double check with Kaitlyn
         case .calories:
             return HKQuantity(unit: defaultUnit, doubleValue: 1500)
         @unknown default:

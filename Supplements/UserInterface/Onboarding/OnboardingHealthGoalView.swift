@@ -51,24 +51,24 @@ struct OnboardingHealthGoalView: View {
                     }
                 }
 
-                if healthManager.healthGoal == .loseWeight {
-                    Section {
-                        HStack {
-                            TextField(
-                                "",
-                                value: $healthManager.targetWeight,
-                                formatter: NumberFormatter.oneDecimalPlace
-                            )
-                            .selectAllTextOnBeginEditing()
-                            .multilineTextAlignment(.trailing)
-                            .keyboardType(.decimalPad)
-                            .textFieldStyle(.roundedBorder)
-                            .font(.title3)
-                            .fontDesign(.rounded)
-                            .bold()
-                            Text("lbs")
-                        }
+                Section {
+                    HStack {
+                        TextField(
+                            "",
+                            value: $healthManager.targetWeight,
+                            formatter: NumberFormatter.oneDecimalPlace
+                        )
+                        .selectAllTextOnBeginEditing()
+                        .multilineTextAlignment(.trailing)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(.roundedBorder)
+                        .font(.title3)
+                        .fontDesign(.rounded)
+                        .bold()
+                        Text("lbs")
+                    }
 
+                    if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
                         Picker("", selection: $healthManager.weightLossSpeed) {
                             ForEach(HealthManager.WeightLossSpeed.allCases) { speed in
                                 Text(speed.name)
@@ -76,11 +76,11 @@ struct OnboardingHealthGoalView: View {
                             }
                         }
                         .pickerStyle(.segmented)
-                    } header: {
-                        Text("What's your target weight?")
-                    } footer: {
-                        Text(healthManager.weightLossSpeed.weightLossDescription)
                     }
+                } header: {
+                    Text("What's your target weight?")
+                } footer: {
+                    Text(healthManager.weightLossSpeed.weightLossDescription)
                 }
             }
         }

@@ -17,19 +17,105 @@ private extension Double {
 
 enum ProteinTargetCalculator {
 
-    static func targetProtein(protein: HKQuantity, dietaryEnergy: HKQuantity) -> TargetMetricRecommendation? {
+    static func targetProtein(
+        existingHabit: HabitDTO?,
+        protein: HKQuantity,
+        dietaryEnergy: HKQuantity
+    ) async -> TargetMetricRecommendation? {
 
-        let currentProteinPercent = (protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein) / dietaryEnergy.doubleValue(for: .largeCalorie())
+        if let existingHabit {
+            return await updateExistingHabit(
+                existingHabit: existingHabit,
+                protein: protein,
+                dietaryEnergy: dietaryEnergy
+            )
+        }
 
-        // TODO: Work in some logic to make this more dynamic
-        guard currentProteinPercent < .initialProteinOverallCaloriePercent else {
+        return createNewProteinGoal(
+            protein: protein,
+            dietaryEnergy: dietaryEnergy
+        )
+    }
+}
+
+private extension ProteinTargetCalculator {
+
+    static func createNewProteinGoal(
+        protein: HKQuantity,
+        dietaryEnergy: HKQuantity
+    ) -> TargetMetricRecommendation? {
+        guard let proteinTarget = calculateTargetProtein(protein: protein, dietaryEnergy: dietaryEnergy) else {
             return nil
         }
 
-        let percentDifference = Double.initialProteinOverallCaloriePercent - currentProteinPercent
+        let context: String
+        switch HealthManager.shared.healthGoal {
+        case .loseWeight:
+            context = "Eating more protein can help you stay satiated and lose weight sustainably."
+        case .gainWeight:
+            context = "Eating more protein can help you gain weight sustainably."
+        case .maintainWeight, .none:
+            return nil
+        }
+
+        return TargetMetricRecommendation(
+            target: proteinTarget,
+            context: context
+        )
+    }
+
+    static func updateExistingHabit(
+        existingHabit: HabitDTO,
+        protein: HKQuantity,
+        dietaryEnergy: HKQuantity
+    ) async -> TargetMetricRecommendation? {
+
+        let habitGoalStatistics = await HabitGoalStatisticsCalculator.calculateStatistics(for: existingHabit)
+
+        let existingHabitTargetValue = existingHabit.value
+
+        if habitGoalStatistics.missedGoalCountPercentage > 0.4 {
+            // Decrease protein goal
+            let newValue = existingHabitTargetValue * (1 - (habitGoalStatistics.averagePercentMissedGoalBy / 2))
+
+            return TargetMetricRecommendation(
+                target: HKQuantity(unit: existingHabit.unit, doubleValue: newValue),
+                context: "Looks like you haven't been hitting your protein goal recently. Let's set a more achievable goal."
+            )
+        } else if habitGoalStatistics.missedGoalSamples.count < 3 {
+            // Increase protein percentage
+            if let proteinTarget = calculateTargetProtein(protein: protein, dietaryEnergy: dietaryEnergy) {
+                return TargetMetricRecommendation(
+                    target: proteinTarget,
+                    context: "Great job getting your protein! Let's set a new goal to challenge you."
+                )
+            } else {
+                return nil // I guess the goals changed?
+            }
+        } else {
+            // Keep the same
+            return TargetMetricRecommendation(
+                target: existingHabit.quantity,
+                context: "Keep up the good work! We'll keep your goal the same this week."
+            )
+        }
+    }
+
+    static func calculateTargetProtein(protein: HKQuantity, dietaryEnergy: HKQuantity) -> HKQuantity? {
+        let currentProteinPercent = (protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein) / dietaryEnergy.doubleValue(for: .largeCalorie())
+
+        let percentDifference: Double
+        if currentProteinPercent > .advancedProteinOverallCaloriePercent {
+            return nil
+        } else if currentProteinPercent > .intermediateProteinOverallCaloriePercent {
+            percentDifference = Double.advancedProteinOverallCaloriePercent - currentProteinPercent
+        } else if currentProteinPercent > .initialProteinOverallCaloriePercent {
+            percentDifference = Double.intermediateProteinOverallCaloriePercent - currentProteinPercent
+        } else {
+            percentDifference = Double.initialProteinOverallCaloriePercent - currentProteinPercent
+        }
 
         let targetProteinPercent: Double
-        let context: String
         switch HealthManager.shared.healthGoal {
         case .loseWeight:
             switch HealthManager.shared.weightLossSpeed {
@@ -38,23 +124,18 @@ enum ProteinTargetCalculator {
             case .moderate:
                 targetProteinPercent = currentProteinPercent + percentDifference * 0.6
             case .fast:
-                targetProteinPercent = Double.initialProteinOverallCaloriePercent
+                targetProteinPercent = currentProteinPercent + percentDifference
             }
-            context = "Eating more protein can help you stay satiated and lose weight sustainably."
         case .gainWeight:
-            targetProteinPercent = Double.initialProteinOverallCaloriePercent // TODO: Ask Kaitlyn what to do here.
-            context = "Eating more protein can help you gain weight sustainably."
+            targetProteinPercent = currentProteinPercent + percentDifference // TODO: Ask Kaitlyn what to do here.
         case .maintainWeight, .none:
             return nil
         }
 
         let targetProteinCalories = targetProteinPercent * dietaryEnergy.doubleValue(for: .largeCalorie())
-        let minProteinTarget = TargetMetric.proteinIntake.minHabitTarget?.doubleValue(for: .gram()) ?? Double.infinity
+        let minProteinTarget = TargetMetric.proteinIntake.minHabitTarget.doubleValue(for: .gram())
         let proteinGrams = max(targetProteinCalories / .caloriesPerGramOfProtein, minProteinTarget)
 
-        return TargetMetricRecommendation(
-            target: HKQuantity(unit: .gram(), doubleValue: proteinGrams.roundedToNiceNumber()),
-            context: context
-        )
+        return HKQuantity(unit: .gram(), doubleValue: proteinGrams.roundedToNiceNumber())
     }
 }

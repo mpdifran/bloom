@@ -81,11 +81,18 @@ extension HabitsViewModel {
         }
 
         for proposedHabit in proposedHabits {
+            // If this is replacing an existing focus area, let's end the existing one.
             if
                 let habitID = proposedHabit.habitID,
                 let existingHabit = try modelContext.fetchHabit(id: habitID)
             {
                 existingHabit.endDate = .now
+            }
+
+            // If the user added this habit, let's end it.
+            let activeMatchingHabits = try modelContext.fetchActiveHabits(for: proposedHabit.targetMetric)
+            for habit in activeMatchingHabits {
+                habit.endDate = .now
             }
 
             let habit = Habit(

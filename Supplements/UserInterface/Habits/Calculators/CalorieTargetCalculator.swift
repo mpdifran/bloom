@@ -14,24 +14,46 @@ private extension Double {
     static let calorieDeficitSlowPercentage: Double = 0.95
     static let calorieDeficitModeratePercentage: Double = 0.9
     static let calorieDeficitFastPercentage: Double = 0.85
-    static let minCalorieTarget: Double = 1500
 }
 
 enum CalorieTargetCalculator {
 
     static func targetCalories(
+        existingHabit: HabitDTO?,
+        basalEnergy: HKQuantity?,
+        activeEnergy: HKQuantity?,
+        dietaryEnergy: HKQuantity
+    ) async -> TargetMetricRecommendation? {
+
+        if let existingHabit {
+            return await updateExistingHabit(
+                existingHabit: existingHabit,
+                basalEnergy: basalEnergy,
+                activeEnergy: activeEnergy,
+                dietaryEnergy: dietaryEnergy
+            )
+        } else {
+            return createNewCalorieGoal(
+                basalEnergy: basalEnergy,
+                activeEnergy: activeEnergy,
+                dietaryEnergy: dietaryEnergy
+            )
+        }
+    }
+}
+
+private extension CalorieTargetCalculator {
+
+    static func createNewCalorieGoal(
         basalEnergy: HKQuantity?,
         activeEnergy: HKQuantity?,
         dietaryEnergy: HKQuantity
     ) -> TargetMetricRecommendation? {
-
-        let currentEnergy: Double
-        if let basalEnergy, let activeEnergy {
-            let tdee = basalEnergy.doubleValue(for: .largeCalorie()) + activeEnergy.doubleValue(for: .largeCalorie())
-            currentEnergy = min(tdee, dietaryEnergy.doubleValue(for: .largeCalorie()))
-        } else {
-            currentEnergy = dietaryEnergy.doubleValue(for: .largeCalorie())
-        }
+        let currentEnergy = calculateCurrentEnergy(
+            basalEnergy: basalEnergy,
+            activeEnergy: activeEnergy,
+            dietaryEnergy: dietaryEnergy
+        )
 
         let targetCalories: Double
         let context: String
@@ -56,12 +78,49 @@ enum CalorieTargetCalculator {
             return nil
         }
 
-        let minCalorieTarget = TargetMetric.calories.minHabitTarget?.doubleValue(for: .largeCalorie()) ?? .minCalorieTarget
+        let minCalorieTarget = TargetMetric.calories.minHabitTarget.doubleValue(for: .largeCalorie())
         let cappedTargetCalories = max(targetCalories, minCalorieTarget) // Ensure we never go too low
 
         return TargetMetricRecommendation(
             target: HKQuantity(unit: .largeCalorie(), doubleValue: cappedTargetCalories.roundedToNiceNumber()),
             context: context
         )
+    }
+
+    static func updateExistingHabit(
+        existingHabit: HabitDTO,
+        basalEnergy: HKQuantity?,
+        activeEnergy: HKQuantity?,
+        dietaryEnergy: HKQuantity
+    ) async -> TargetMetricRecommendation? {
+
+        let habitGoalStatistics = await HabitGoalStatisticsCalculator.calculateStatistics(for: existingHabit)
+
+        let context: String
+        if habitGoalStatistics.missedGoalCountPercentage > 0.4 {
+            context = "Looks like you had some trouble hitting this goal last week. Let's turn over a new leaf this week!"
+        } else if habitGoalStatistics.missedGoalSamples.count < 3 {
+            context = "Great job hitting this goal over the last couple weeks, keep up the good work!"
+        } else {
+            context = "You're on the right track, keep it up!"
+        }
+
+        return TargetMetricRecommendation(
+            target: existingHabit.quantity,
+            context: context
+        )
+    }
+
+    static func calculateCurrentEnergy(
+        basalEnergy: HKQuantity?,
+        activeEnergy: HKQuantity?,
+        dietaryEnergy: HKQuantity
+    ) -> Double {
+        if let basalEnergy, let activeEnergy {
+            let tdee = basalEnergy.doubleValue(for: .largeCalorie()) + activeEnergy.doubleValue(for: .largeCalorie())
+            return min(tdee, dietaryEnergy.doubleValue(for: .largeCalorie()))
+        } else {
+            return dietaryEnergy.doubleValue(for: .largeCalorie())
+        }
     }
 }

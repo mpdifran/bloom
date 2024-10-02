@@ -7,9 +7,9 @@
 
 import Foundation
 import SwiftData
-import TelemetryDeck
+internal import TelemetryDeck
 
-public class ContainerHolder {
+public final class ContainerHolder: Sendable {
     public static let shared = ContainerHolder()
 
     public let container: ModelContainer
@@ -35,5 +35,9 @@ public class ContainerHolder {
             )
             fatalError("Could not set up model container: \(modelConfiguration.url.absoluteString)\n\nError: \(error.localizedDescription)")
         }
+    }
+
+    public func createContext() -> ModelContext {
+        ModelContext(container)
     }
 }

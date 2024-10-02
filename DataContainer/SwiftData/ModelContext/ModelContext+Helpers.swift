@@ -49,10 +49,30 @@ public extension ModelContext {
         return try fetch(descriptor)
     }
 
+    func fetchActiveHabits(for targetMetric: TargetMetric) throws -> [Habit] {
+        let descriptor = FetchDescriptor<Habit>(
+            predicate: #Predicate<Habit> { model in
+                model.endDate == nil && model.rawTargetMetric == targetMetric.rawValue
+            },
+            sortBy: [SortDescriptor(\Habit.startDate)]
+        )
+        return try fetch(descriptor)
+    }
+
     func fetchActiveHabits(isSuggested: Bool) throws -> [Habit] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
                 model.endDate == nil && model.isSuggested == isSuggested
+            },
+            sortBy: [SortDescriptor(\Habit.startDate)]
+        )
+        return try fetch(descriptor)
+    }
+
+    func fetchHabits(for targetMetric: TargetMetric) throws -> [Habit] {
+        let descriptor = FetchDescriptor<Habit>(
+            predicate: #Predicate<Habit> { model in
+                model.rawTargetMetric == targetMetric.rawValue
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )

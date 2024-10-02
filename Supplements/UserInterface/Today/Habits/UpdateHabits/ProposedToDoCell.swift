@@ -22,6 +22,7 @@ struct ProposedToDoCell: View {
             Text(proposedToDo.context)
                 .foregroundStyle(.tint)
                 .bold()
+                .fixedSize(horizontal: false, vertical: true)
                 .padding()
         }
         .cardContainer(fill: .tint.tertiary, includePadding: false)

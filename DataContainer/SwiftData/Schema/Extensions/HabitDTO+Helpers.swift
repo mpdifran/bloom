@@ -1,15 +1,14 @@
 //
-//  Habit+Helpers.swift
+//  HabitDTO+Helpers.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-09-18.
+//  Created by Mark DiFranco on 2024-10-02.
 //
 
 import Foundation
 import HealthKit
-import BloomFoundation
 
-public extension Habit {
+public extension HabitDTO {
 
     var unit: HKUnit {
         HKUnit(from: unitString)
@@ -38,7 +37,7 @@ public extension Habit {
     }
 }
 
-public extension Habit {
+public extension HabitDTO {
 
     func isDateWithinHabit(date: Date) -> Bool {
         if Calendar.current.isDate(date, inSameDayAs: startDate) {

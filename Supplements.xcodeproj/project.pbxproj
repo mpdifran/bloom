@@ -260,6 +260,9 @@
 		FFAFF4272CAC831500FAD3C9 /* CalorieTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */; };
 		FFAFF4292CAC89FE00FAD3C9 /* TargetMetricRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */; };
 		FFAFF42E2CAD792E00FAD3C9 /* Double+WithinRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF42C2CAD778E00FAD3C9 /* Double+WithinRange.swift */; };
+		FFAFF4302CAD8A6200FAD3C9 /* HabitGoalStatisticsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF42F2CAD8A5A00FAD3C9 /* HabitGoalStatisticsCalculator.swift */; };
+		FFAFF4322CAD8D5F00FAD3C9 /* Double+Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4312CAD8D5A00FAD3C9 /* Double+Interpolation.swift */; };
+		FFAFF4392CAD9B1000FAD3C9 /* GenericHabitTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4382CAD9B0600FAD3C9 /* GenericHabitTargetCalculator.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -745,6 +748,9 @@
 		FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieTargetCalculator.swift; sourceTree = "<group>"; };
 		FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetMetricRecommendation.swift; sourceTree = "<group>"; };
 		FFAFF42C2CAD778E00FAD3C9 /* Double+WithinRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+WithinRange.swift"; sourceTree = "<group>"; };
+		FFAFF42F2CAD8A5A00FAD3C9 /* HabitGoalStatisticsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalStatisticsCalculator.swift; sourceTree = "<group>"; };
+		FFAFF4312CAD8D5A00FAD3C9 /* Double+Interpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Interpolation.swift"; sourceTree = "<group>"; };
+		FFAFF4382CAD9B0600FAD3C9 /* GenericHabitTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericHabitTargetCalculator.swift; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1188,6 +1194,7 @@
 			isa = PBXGroup;
 			children = (
 				FFAFF42C2CAD778E00FAD3C9 /* Double+WithinRange.swift */,
+				FFAFF4312CAD8D5A00FAD3C9 /* Double+Interpolation.swift */,
 				FF1E96A72C0E09CE004DAD2D /* Set+OptionalInsert.swift */,
 			);
 			path = Extensions;
@@ -1554,7 +1561,6 @@
 				FFAFF4232CAC823500FAD3C9 /* Calculators */,
 				FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */,
 				FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */,
-				FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */,
 				FF2FB8952C9CCB7700F57523 /* ProposedHabit.swift */,
 				FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */,
 				FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */,
@@ -1695,6 +1701,9 @@
 				FFAFF4282CAC89F600FAD3C9 /* TargetMetricRecommendation.swift */,
 				FFAFF4242CAC823F00FAD3C9 /* ProteinTargetCalculator.swift */,
 				FFAFF4262CAC830A00FAD3C9 /* CalorieTargetCalculator.swift */,
+				FFAFF4382CAD9B0600FAD3C9 /* GenericHabitTargetCalculator.swift */,
+				FFAFF42F2CAD8A5A00FAD3C9 /* HabitGoalStatisticsCalculator.swift */,
+				FF2FB8B32C9F748900F57523 /* HabitGoalStatistics.swift */,
 			);
 			path = Calculators;
 			sourceTree = "<group>";
@@ -2512,6 +2521,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF1E96A02C0D0555004DAD2D /* ListFormatter+Constants.swift in Sources */,
+				FFAFF4322CAD8D5F00FAD3C9 /* Double+Interpolation.swift in Sources */,
 				FFCE85622C99DCD9002C46B1 /* Calendar+Helpers.swift in Sources */,
 				FFCE85602C99DCA7002C46B1 /* DateRange.swift in Sources */,
 				FFAFF42E2CAD792E00FAD3C9 /* Double+WithinRange.swift in Sources */,
@@ -2631,6 +2641,7 @@
 				FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */,
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
 				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
+				FFAFF4392CAD9B1000FAD3C9 /* GenericHabitTargetCalculator.swift in Sources */,
 				FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */,
 				FF6E062E2CA4E4BA00C4219B /* View+Show.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
@@ -2766,6 +2777,7 @@
 				FF8B8B262BFD365400BA2128 /* ProfileViewModel.swift in Sources */,
 				FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */,
 				FFCC6B8A2C9C8B8C00676CAA /* GoalReviewCell.swift in Sources */,
+				FFAFF4302CAD8A6200FAD3C9 /* HabitGoalStatisticsCalculator.swift in Sources */,
 				FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */,
 				FF4CAB062C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift in Sources */,
 				FF9C84D42C513E9B00648A1E /* ActivityLevelSummary.swift in Sources */,

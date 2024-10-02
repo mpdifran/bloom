@@ -87,9 +87,19 @@ struct ProposedHabitCell: View {
                     .padding(.top, 4)
                 }
             }
-            .cardContainer(stroke: .tint)
+            .cardContainer()
 
             if includeActions {
+                if let context = proposedHabit.context {
+                    Text(context)
+                        .foregroundStyle(.tint)
+                        .bold()
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding()
+
+                    Divider()
+                }
+
                 if habitsViewModel.alternateTargetMetrics(for: proposedHabit).isNotEmpty {
                     Menu {
                         ForEach(habitsViewModel.alternateTargetMetrics(for: proposedHabit)) { alternativeTargetMetric in

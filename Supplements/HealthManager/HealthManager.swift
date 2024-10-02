@@ -278,6 +278,8 @@ extension HealthManager {
     }
 }
 
+// MARK: Age and Sex
+
 extension HealthManager {
 
     func attemptToReadAgeAndSex() {
@@ -324,6 +326,26 @@ extension HealthManager {
             "Other"
         @unknown default:
             "Unknown"
+        }
+    }
+}
+
+// MARK: Health Goals
+
+extension HealthManager {
+
+    func hasMetWeightGoal(for bodyMass: HKQuantity) -> Bool {
+        let weight = bodyMass.doubleValue(for: .pound())
+
+        switch healthGoal {
+        case .loseWeight:
+            return weight < targetWeight
+        case .gainWeight:
+            return weight > targetWeight
+        case .maintainWeight:
+            return weight.isWithinRange(of: targetWeight, precision: 0.05)
+        case .none:
+            return false
         }
     }
 }
