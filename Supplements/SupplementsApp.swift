@@ -24,6 +24,8 @@ struct SupplementsApp: App {
         TelemetryDeck.initialize(config: .init(appID: "764D40B8-F2CE-4372-87D3-0D68F34E08CA"))
 
         HealthManager.shared.observeSleepData()
+
+//        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
     }
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
@@ -32,9 +34,6 @@ struct SupplementsApp: App {
         WindowGroup {
             RootView()
                 .tint(.accent)
-                .onAppear {
-                    BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
-                }
                 .onReceive(foregroundPublisher) { _ in
                     onForeground()
                 }
@@ -43,12 +42,12 @@ struct SupplementsApp: App {
                 }
         }
         .modelContainer(ContainerHolder.shared.container)
-        .backgroundTask(.appRefresh("proactive-tip")) {
-            if await danieleMode {
-                await ProactiveTipper.shared.sendProactiveTip()
-            }
-            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
-        }
+//        .backgroundTask(.appRefresh("proactive-tip")) {
+//            if await danieleMode {
+//                await ProactiveTipper.shared.sendProactiveTip()
+//            }
+//            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+//        }
     }
 }
 
