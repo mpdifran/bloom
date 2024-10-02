@@ -7,7 +7,7 @@
 
 import HealthKit
 
-struct TargetMetricRecommendation: Sendable {
+struct TargetMetricRecommendation: Sendable, Hashable {
     let target: HKQuantity
     let context: String
 }

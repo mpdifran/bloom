@@ -16,36 +16,40 @@ extension TimeInterval {
     static let maxMenstruationTimeGap: TimeInterval = TimeInterval(60 * 60 * 24 * 2) // 2 days
 }
 
-extension HealthManager {
-    enum HealthGoal: String {
-        case none
-        case gainWeight
-        case maintainWeight
-        case loseWeight
+struct HealthTargetDetails {
+    let goal: HealthGoal
+    let weightLossSpeed: WeightLossSpeed
+}
+
+enum HealthGoal: String {
+    case none
+    case gainWeight
+    case maintainWeight
+    case loseWeight
+}
+enum WeightLossSpeed: String, CaseIterable, Identifiable {
+    var id: Self { self }
+
+    case slow
+    case moderate
+    case fast
+    
+    var name: String {
+        rawValue.capitalized
     }
-    enum WeightLossSpeed: String, CaseIterable, Identifiable {
-        var id: Self { self }
 
-        case slow
-        case moderate
-        case fast
-
-        var name: String {
-            rawValue.capitalized
-        }
-
-        var weightLossDescription: String {
-            switch self {
-            case .slow:
-                "About 0.5 lbs a week."
-            case .moderate:
-                "About 1 lb a week."
-            case .fast:
-                "About 2 lbs a week."
-            }
+    var weightLossDescription: String {
+        switch self {
+        case .slow:
+            "About 0.5 lbs a week."
+        case .moderate:
+            "About 1 lb a week."
+        case .fast:
+            "About 2 lbs a week."
         }
     }
 }
+
 
 final class HealthManager: ObservableObject {
     static let shared = HealthManager()
@@ -65,6 +69,13 @@ final class HealthManager: ObservableObject {
     }
     @Published var weightLossSpeed: WeightLossSpeed = .moderate {
         didSet { UserDefaults.group.set(weightLossSpeed.rawValue, forKey: "HealthManager.weightLossSpeed") }
+    }
+
+    var healthTargetDetails: HealthTargetDetails {
+        HealthTargetDetails(
+            goal: healthGoal,
+            weightLossSpeed: weightLossSpeed
+        )
     }
 
     @AppStorage("HealthManager.targetWeight", store: .group) var targetWeight: Double = 0

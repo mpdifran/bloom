@@ -141,7 +141,8 @@ private extension HabitsFactory {
             existingHabit: existingCalorieHabit?.asDTO(),
             basalEnergy: basalEnergy,
             activeEnergy: activeEnergy,
-            dietaryEnergy: averageDietaryEnergy
+            dietaryEnergy: averageDietaryEnergy,
+            targetDetails: HealthManager.shared.healthTargetDetails
         ) {
             let suggestedValue = recommendation.target.doubleValue(for: .largeCalorie())
             let value: Double
@@ -172,7 +173,8 @@ private extension HabitsFactory {
             let recommendation = await ProteinTargetCalculator.targetProtein(
                 existingHabit: existingProteinHabit?.asDTO(),
                 protein: averageProtein,
-                dietaryEnergy: averageDietaryEnergy
+                dietaryEnergy: averageDietaryEnergy,
+                targetDetails: HealthManager.shared.healthTargetDetails
             )
         {
             let suggestedValue = recommendation.target.doubleValue(for: .gram())

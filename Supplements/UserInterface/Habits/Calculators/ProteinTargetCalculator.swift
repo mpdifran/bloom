@@ -20,20 +20,23 @@ enum ProteinTargetCalculator {
     static func targetProtein(
         existingHabit: HabitDTO?,
         protein: HKQuantity,
-        dietaryEnergy: HKQuantity
+        dietaryEnergy: HKQuantity,
+        targetDetails: HealthTargetDetails
     ) async -> TargetMetricRecommendation? {
 
         if let existingHabit {
             return await updateExistingHabit(
                 existingHabit: existingHabit,
                 protein: protein,
-                dietaryEnergy: dietaryEnergy
+                dietaryEnergy: dietaryEnergy,
+                targetDetails: targetDetails
             )
         }
 
         return createNewProteinGoal(
             protein: protein,
-            dietaryEnergy: dietaryEnergy
+            dietaryEnergy: dietaryEnergy,
+            targetDetails: targetDetails
         )
     }
 }
@@ -42,14 +45,19 @@ private extension ProteinTargetCalculator {
 
     static func createNewProteinGoal(
         protein: HKQuantity,
-        dietaryEnergy: HKQuantity
+        dietaryEnergy: HKQuantity,
+        targetDetails: HealthTargetDetails
     ) -> TargetMetricRecommendation? {
-        guard let proteinTarget = calculateTargetProtein(protein: protein, dietaryEnergy: dietaryEnergy) else {
+        guard let proteinTarget = calculateTargetProtein(
+            protein: protein,
+            dietaryEnergy: dietaryEnergy,
+            targetDetails: targetDetails
+        ) else {
             return nil
         }
 
         let context: String
-        switch HealthManager.shared.healthGoal {
+        switch targetDetails.goal {
         case .loseWeight:
             context = "Eating more protein can help you stay satiated and lose weight sustainably."
         case .gainWeight:
@@ -67,7 +75,8 @@ private extension ProteinTargetCalculator {
     static func updateExistingHabit(
         existingHabit: HabitDTO,
         protein: HKQuantity,
-        dietaryEnergy: HKQuantity
+        dietaryEnergy: HKQuantity,
+        targetDetails: HealthTargetDetails
     ) async -> TargetMetricRecommendation? {
 
         let habitGoalStatistics = await HabitGoalStatisticsCalculator.calculateStatistics(for: existingHabit)
@@ -84,7 +93,11 @@ private extension ProteinTargetCalculator {
             )
         } else if habitGoalStatistics.missedGoalSamples.count < 3 {
             // Increase protein percentage
-            if let proteinTarget = calculateTargetProtein(protein: protein, dietaryEnergy: dietaryEnergy) {
+            if let proteinTarget = calculateTargetProtein(
+                protein: protein,
+                dietaryEnergy: dietaryEnergy,
+                targetDetails: targetDetails
+            ) {
                 return TargetMetricRecommendation(
                     target: proteinTarget,
                     context: "Great job getting your protein! Let's set a new goal to challenge you."
@@ -101,7 +114,11 @@ private extension ProteinTargetCalculator {
         }
     }
 
-    static func calculateTargetProtein(protein: HKQuantity, dietaryEnergy: HKQuantity) -> HKQuantity? {
+    static func calculateTargetProtein(
+        protein: HKQuantity,
+        dietaryEnergy: HKQuantity,
+        targetDetails: HealthTargetDetails
+    ) -> HKQuantity? {
         let currentProteinPercent = (protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein) / dietaryEnergy.doubleValue(for: .largeCalorie())
 
         let percentDifference: Double
@@ -116,9 +133,9 @@ private extension ProteinTargetCalculator {
         }
 
         let targetProteinPercent: Double
-        switch HealthManager.shared.healthGoal {
+        switch targetDetails.goal {
         case .loseWeight:
-            switch HealthManager.shared.weightLossSpeed {
+            switch targetDetails.weightLossSpeed {
             case .slow:
                 targetProteinPercent = currentProteinPercent + percentDifference * 0.3
             case .moderate:

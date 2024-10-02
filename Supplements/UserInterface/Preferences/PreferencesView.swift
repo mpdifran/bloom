@@ -84,13 +84,13 @@ private extension PreferencesView {
         Section {
             Picker("Goal", selection: $healthManager.healthGoal) {
                 Text("None")
-                    .tag(HealthManager.HealthGoal.none)
+                    .tag(HealthGoal.none)
                 Text("Lose Weight")
-                    .tag(HealthManager.HealthGoal.loseWeight)
+                    .tag(HealthGoal.loseWeight)
                 Text("Maintain Weight")
-                    .tag(HealthManager.HealthGoal.maintainWeight)
+                    .tag(HealthGoal.maintainWeight)
                 Text("Gain Weight")
-                    .tag(HealthManager.HealthGoal.gainWeight)
+                    .tag(HealthGoal.gainWeight)
             }
 
             VStack(alignment: .leading) {
@@ -115,7 +115,7 @@ private extension PreferencesView {
 
             if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
                 Picker("", selection: $healthManager.weightLossSpeed) {
-                    ForEach(HealthManager.WeightLossSpeed.allCases) { speed in
+                    ForEach(WeightLossSpeed.allCases) { speed in
                         Text(speed.name)
                             .tag(speed)
                     }

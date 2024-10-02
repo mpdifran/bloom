@@ -263,7 +263,9 @@
 		FFAFF4302CAD8A6200FAD3C9 /* HabitGoalStatisticsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF42F2CAD8A5A00FAD3C9 /* HabitGoalStatisticsCalculator.swift */; };
 		FFAFF4322CAD8D5F00FAD3C9 /* Double+Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4312CAD8D5A00FAD3C9 /* Double+Interpolation.swift */; };
 		FFAFF4392CAD9B1000FAD3C9 /* GenericHabitTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4382CAD9B0600FAD3C9 /* GenericHabitTargetCalculator.swift */; };
-		FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculator.swift */; };
+		FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift */; };
+		FFAFF4422CADDD4000FAD3C9 /* Tags.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4412CADDD3B00FAD3C9 /* Tags.swift */; };
+		FFAFF4442CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4432CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -361,7 +363,6 @@
 		FFF61B252BEE91B500926042 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B242BEE91B500926042 /* InsightsView.swift */; };
 		FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B262BEE927F00926042 /* InsightsViewModel.swift */; };
 		FFF61B292BEE936100926042 /* InsightsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B282BEE936100926042 /* InsightsResponse.swift */; };
-		FFF61B3B2BEEB7B000926042 /* SupplementsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */; };
 		FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B412BEEB99600926042 /* GoalInsightsSection.swift */; };
 		FFF61B442BEEBB4800926042 /* SupplementInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B432BEEBB4800926042 /* SupplementInsightsSection.swift */; };
 		FFF61B462BEEBBEB00926042 /* RecommendedSupplementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61B452BEEBBEB00926042 /* RecommendedSupplementCell.swift */; };
@@ -752,7 +753,9 @@
 		FFAFF42F2CAD8A5A00FAD3C9 /* HabitGoalStatisticsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalStatisticsCalculator.swift; sourceTree = "<group>"; };
 		FFAFF4312CAD8D5A00FAD3C9 /* Double+Interpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Interpolation.swift"; sourceTree = "<group>"; };
 		FFAFF4382CAD9B0600FAD3C9 /* GenericHabitTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericHabitTargetCalculator.swift; sourceTree = "<group>"; };
-		FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinTargetCalculator.swift; sourceTree = "<group>"; };
+		FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinTargetCalculatorSuite.swift; sourceTree = "<group>"; };
+		FFAFF4412CADDD3B00FAD3C9 /* Tags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tags.swift; sourceTree = "<group>"; };
+		FFAFF4432CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieTargetCalculatorSuite.swift; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -848,7 +851,6 @@
 		FFF61B262BEE927F00926042 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		FFF61B282BEE936100926042 /* InsightsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsResponse.swift; sourceTree = "<group>"; };
 		FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SupplementsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsTests.swift; sourceTree = "<group>"; };
 		FFF61B412BEEB99600926042 /* GoalInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalInsightsSection.swift; sourceTree = "<group>"; };
 		FFF61B432BEEBB4800926042 /* SupplementInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementInsightsSection.swift; sourceTree = "<group>"; };
 		FFF61B452BEEBBEB00926042 /* RecommendedSupplementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSupplementCell.swift; sourceTree = "<group>"; };
@@ -1721,9 +1723,18 @@
 		FFAFF43B2CADA21B00FAD3C9 /* Calculators */ = {
 			isa = PBXGroup;
 			children = (
-				FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculator.swift */,
+				FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift */,
+				FFAFF4432CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift */,
 			);
 			path = Calculators;
+			sourceTree = "<group>";
+		};
+		FFAFF4402CADDD3500FAD3C9 /* Tags */ = {
+			isa = PBXGroup;
+			children = (
+				FFAFF4412CADDD3B00FAD3C9 /* Tags.swift */,
+			);
+			path = Tags;
 			sourceTree = "<group>";
 		};
 		FFB444482BEC3AD100486AD7 /* ChatUI */ = {
@@ -2071,8 +2082,8 @@
 		FFF61B392BEEB7B000926042 /* SupplementsTests */ = {
 			isa = PBXGroup;
 			children = (
+				FFAFF4402CADDD3500FAD3C9 /* Tags */,
 				FFAFF43A2CADA20800FAD3C9 /* Habits */,
-				FFF61B3A2BEEB7B000926042 /* SupplementsTests.swift */,
 			);
 			path = SupplementsTests;
 			sourceTree = "<group>";
@@ -2884,8 +2895,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculator.swift in Sources */,
-				FFF61B3B2BEEB7B000926042 /* SupplementsTests.swift in Sources */,
+				FFAFF4422CADDD4000FAD3C9 /* Tags.swift in Sources */,
+				FFAFF4442CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift in Sources */,
+				FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

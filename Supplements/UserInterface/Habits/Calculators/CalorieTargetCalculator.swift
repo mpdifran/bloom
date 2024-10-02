@@ -22,7 +22,8 @@ enum CalorieTargetCalculator {
         existingHabit: HabitDTO?,
         basalEnergy: HKQuantity?,
         activeEnergy: HKQuantity?,
-        dietaryEnergy: HKQuantity
+        dietaryEnergy: HKQuantity,
+        targetDetails: HealthTargetDetails
     ) async -> TargetMetricRecommendation? {
 
         if let existingHabit {
@@ -36,7 +37,8 @@ enum CalorieTargetCalculator {
             return createNewCalorieGoal(
                 basalEnergy: basalEnergy,
                 activeEnergy: activeEnergy,
-                dietaryEnergy: dietaryEnergy
+                dietaryEnergy: dietaryEnergy,
+                targetDetails: targetDetails
             )
         }
     }
@@ -47,7 +49,8 @@ private extension CalorieTargetCalculator {
     static func createNewCalorieGoal(
         basalEnergy: HKQuantity?,
         activeEnergy: HKQuantity?,
-        dietaryEnergy: HKQuantity
+        dietaryEnergy: HKQuantity,
+        targetDetails: HealthTargetDetails
     ) -> TargetMetricRecommendation? {
         let currentEnergy = calculateCurrentEnergy(
             basalEnergy: basalEnergy,
@@ -57,9 +60,9 @@ private extension CalorieTargetCalculator {
 
         let targetCalories: Double
         let context: String
-        switch HealthManager.shared.healthGoal {
+        switch targetDetails.goal {
         case .loseWeight:
-            switch HealthManager.shared.weightLossSpeed {
+            switch targetDetails.weightLossSpeed {
             case .slow:
                 targetCalories = currentEnergy * .calorieDeficitSlowPercentage
             case .moderate:

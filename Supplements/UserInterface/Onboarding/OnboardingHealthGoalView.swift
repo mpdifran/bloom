@@ -70,7 +70,7 @@ struct OnboardingHealthGoalView: View {
 
                     if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
                         Picker("", selection: $healthManager.weightLossSpeed) {
-                            ForEach(HealthManager.WeightLossSpeed.allCases) { speed in
+                            ForEach(WeightLossSpeed.allCases) { speed in
                                 Text(speed.name)
                                     .tag(speed)
                             }
