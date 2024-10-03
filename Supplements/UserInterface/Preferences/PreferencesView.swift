@@ -242,13 +242,39 @@ private extension PreferencesView {
             Button {
                 presentedSheet = DebugHabitsListView().asAny
             } label: {
-                Text("Debug Habits")
+                HStack {
+                    Text("Debug Habits")
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                }
             }
             .buttonStyle(.plain)
 
-            Button("Prompt Focus Area Review") {
+            Button {
                 HabitsViewModel.shared.resetHabitCheckDate()
                 alertDetails = AlertDetails(title: "Focus Area Review", message: "You will now be prompted to review your focus areas.")
+            } label: {
+                HStack {
+                    Text("Prompt Focus Area Review")
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                }
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                Task {
+                    await VitalsViewModel.shared.forceFetchVitals()
+                    await MainActor.run {
+                        alertDetails = AlertDetails(title: "Vitals Recalculated", message: "Your Vitals have been recalculated.")
+                    }
+                }
+            } label: {
+                HStack {
+                    Text("Recalculate Vitals")
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                }
             }
             .buttonStyle(.plain)
         }
