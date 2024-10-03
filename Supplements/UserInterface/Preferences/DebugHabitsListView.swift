@@ -43,6 +43,7 @@ private extension DebugHabitsListView {
         for index in indexSet {
             let habit = habits[index]
             modelContext.delete(habit)
+            try? modelContext.save()
         }
     }
 }

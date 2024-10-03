@@ -23,6 +23,8 @@ enum CalorieTargetCalculator {
         basalEnergy: HKQuantity?,
         activeEnergy: HKQuantity?,
         dietaryEnergy: HKQuantity,
+        bodyMass: HKQuantity,
+        activityLevel: ActivityLevelSummary.ActivityLevel?,
         targetDetails: HealthTargetDetails
     ) async -> TargetMetricRecommendation? {
 
@@ -38,6 +40,8 @@ enum CalorieTargetCalculator {
                 basalEnergy: basalEnergy,
                 activeEnergy: activeEnergy,
                 dietaryEnergy: dietaryEnergy,
+                bodyMass: bodyMass,
+                activityLevel: activityLevel,
                 targetDetails: targetDetails
             )
         }
@@ -50,14 +54,31 @@ private extension CalorieTargetCalculator {
         basalEnergy: HKQuantity?,
         activeEnergy: HKQuantity?,
         dietaryEnergy: HKQuantity,
+        bodyMass: HKQuantity,
+        activityLevel: ActivityLevelSummary.ActivityLevel?,
         targetDetails: HealthTargetDetails
     ) -> TargetMetricRecommendation? {
-        let currentEnergy = calculateCurrentEnergy(
-            basalEnergy: basalEnergy,
-            activeEnergy: activeEnergy,
-            dietaryEnergy: dietaryEnergy
-        )
 
+        if
+            let tdee = calculateTDEE(basalEnergy: basalEnergy, activeEnergy: activeEnergy)
+        {
+            return calculateEnergyBasedCalorieGoal(currentEnergy: tdee, targetDetails: targetDetails)
+        } else if
+            let activityLevel,
+            let calorieMultiplier = activityLevel.calorieMultiplier(for: targetDetails)
+        {
+            let targetCalories = calorieMultiplier * bodyMass.doubleValue(for: .pound())
+            return calculateActivityLevelBasedCalorieGoal(targetCalories: targetCalories, targetDetails: targetDetails)
+        } else {
+            let dietaryEnergy = dietaryEnergy.doubleValue(for: .largeCalorie())
+            return calculateEnergyBasedCalorieGoal(currentEnergy: dietaryEnergy, targetDetails: targetDetails)
+        }
+    }
+
+    static func calculateEnergyBasedCalorieGoal(
+        currentEnergy: Double,
+        targetDetails: HealthTargetDetails
+    ) -> TargetMetricRecommendation? {
         let targetCalories: Double
         let context: String
         switch targetDetails.goal {
@@ -90,6 +111,35 @@ private extension CalorieTargetCalculator {
         )
     }
 
+    static func calculateActivityLevelBasedCalorieGoal(
+        targetCalories: Double,
+        targetDetails: HealthTargetDetails
+    ) -> TargetMetricRecommendation? {
+
+        let context: String
+        switch targetDetails.goal {
+        case .loseWeight:
+            context = "Maintaining a calorie deficit is an important part of losing weight."
+        case .maintainWeight:
+            context = "Try and maintain the same calorie intake to maintain your current weight."
+        case .gainWeight:
+            context = "Maintaining a calorie surplus is an important part of gaining weight."
+        case .none:
+            return nil
+        }
+
+        let minCalorieTarget = TargetMetric.calories.minHabitTarget.doubleValue(for: .largeCalorie())
+        let cappedTargetCalories = max(targetCalories, minCalorieTarget) // Ensure we never go too low
+
+        return TargetMetricRecommendation(
+            target: HKQuantity(unit: .largeCalorie(), doubleValue: cappedTargetCalories.roundedToNiceNumber()),
+            context: context
+        )
+    }
+}
+
+private extension CalorieTargetCalculator {
+
     static func updateExistingHabit(
         existingHabit: HabitDTO,
         basalEnergy: HKQuantity?,
@@ -113,17 +163,23 @@ private extension CalorieTargetCalculator {
             context: context
         )
     }
+}
 
-    static func calculateCurrentEnergy(
+private extension CalorieTargetCalculator {
+
+    static func calculateTDEE(
         basalEnergy: HKQuantity?,
-        activeEnergy: HKQuantity?,
-        dietaryEnergy: HKQuantity
-    ) -> Double {
-        if let basalEnergy, let activeEnergy {
-            let tdee = basalEnergy.doubleValue(for: .largeCalorie()) + activeEnergy.doubleValue(for: .largeCalorie())
-            return min(tdee, dietaryEnergy.doubleValue(for: .largeCalorie()))
-        } else {
-            return dietaryEnergy.doubleValue(for: .largeCalorie())
+        activeEnergy: HKQuantity?
+    ) -> Double? {
+        if
+            let basalEnergy,
+            let activeEnergy,
+            basalEnergy.doubleValue(for: .largeCalorie()) > 0,
+            activeEnergy.doubleValue(for: .largeCalorie()) > 0
+        {
+            return basalEnergy.doubleValue(for: .largeCalorie()) + activeEnergy.doubleValue(for: .largeCalorie())
         }
+
+        return nil
     }
 }

@@ -8,5 +8,5 @@
 import Testing
 
 extension Tag {
-//    static let targetCalculator: Tag = "targetCalculator"
+    @Tag static var targetCalculator: Self
 }

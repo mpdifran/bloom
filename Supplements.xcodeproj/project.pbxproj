@@ -266,6 +266,8 @@
 		FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift */; };
 		FFAFF4422CADDD4000FAD3C9 /* Tags.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4412CADDD3B00FAD3C9 /* Tags.swift */; };
 		FFAFF4442CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF4432CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift */; };
+		FFAFF44E2CAEDCEA00FAD3C9 /* Double+RoundingSuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF44D2CAEDCEA00FAD3C9 /* Double+RoundingSuite.swift */; };
+		FFAFF4502CAF2D0000FAD3C9 /* CalorieTargetCalculatorSuiteArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFF44F2CAF2CF900FAD3C9 /* CalorieTargetCalculatorSuiteArguments.swift */; };
 		FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */; };
 		FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */; };
 		FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */; };
@@ -756,6 +758,8 @@
 		FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinTargetCalculatorSuite.swift; sourceTree = "<group>"; };
 		FFAFF4412CADDD3B00FAD3C9 /* Tags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tags.swift; sourceTree = "<group>"; };
 		FFAFF4432CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieTargetCalculatorSuite.swift; sourceTree = "<group>"; };
+		FFAFF44D2CAEDCEA00FAD3C9 /* Double+RoundingSuite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+RoundingSuite.swift"; sourceTree = "<group>"; };
+		FFAFF44F2CAF2CF900FAD3C9 /* CalorieTargetCalculatorSuiteArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieTargetCalculatorSuiteArguments.swift; sourceTree = "<group>"; };
 		FFB444492BEC3B0600486AD7 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
 		FFB4444A2BEC3B0600486AD7 /* ChatGameInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGameInviteCell.swift; sourceTree = "<group>"; };
 		FFB4444B2BEC3B0600486AD7 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
@@ -1725,6 +1729,7 @@
 			children = (
 				FFAFF43C2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift */,
 				FFAFF4432CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift */,
+				FFAFF44F2CAF2CF900FAD3C9 /* CalorieTargetCalculatorSuiteArguments.swift */,
 			);
 			path = Calculators;
 			sourceTree = "<group>";
@@ -1752,6 +1757,22 @@
 				FFC77AD42C529CF9003E5F85 /* MobilityMonthlySummary.swift */,
 			);
 			path = Vitals;
+			sourceTree = "<group>";
+		};
+		FFAFF44B2CAEDCC300FAD3C9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FFAFF44C2CAEDCD300FAD3C9 /* Double */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FFAFF44C2CAEDCD300FAD3C9 /* Double */ = {
+			isa = PBXGroup;
+			children = (
+				FFAFF44D2CAEDCEA00FAD3C9 /* Double+RoundingSuite.swift */,
+			);
+			path = Double;
 			sourceTree = "<group>";
 		};
 		FFB444482BEC3AD100486AD7 /* ChatUI */ = {
@@ -2092,6 +2113,7 @@
 			children = (
 				FFAFF4402CADDD3500FAD3C9 /* Tags */,
 				FFAFF43A2CADA20800FAD3C9 /* Habits */,
+				FFAFF44B2CAEDCC300FAD3C9 /* Extensions */,
 			);
 			path = SupplementsTests;
 			sourceTree = "<group>";
@@ -2906,6 +2928,8 @@
 				FFAFF4422CADDD4000FAD3C9 /* Tags.swift in Sources */,
 				FFAFF4442CADE1FE00FAD3C9 /* CalorieTargetCalculatorSuite.swift in Sources */,
 				FFAFF43D2CADA23800FAD3C9 /* ProteinTargetCalculatorSuite.swift in Sources */,
+				FFAFF4502CAF2D0000FAD3C9 /* CalorieTargetCalculatorSuiteArguments.swift in Sources */,
+				FFAFF44E2CAEDCEA00FAD3C9 /* Double+RoundingSuite.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

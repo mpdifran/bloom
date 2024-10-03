@@ -74,7 +74,7 @@ extension TargetMetric {
         case .proteinIntake:
             return HKQuantity(unit: defaultUnit, doubleValue: 50) // TODO: Double check with Kaitlyn
         case .calories:
-            return HKQuantity(unit: defaultUnit, doubleValue: 1500)
+            return HKQuantity(unit: defaultUnit, doubleValue: 1200)
         @unknown default:
             fatalError("Unhandled TargetMetric case.")
         }

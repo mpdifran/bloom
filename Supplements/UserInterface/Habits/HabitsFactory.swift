@@ -134,6 +134,7 @@ private extension HabitsFactory {
         // Calories
         let basalEnergy = VitalsViewModel.shared.nutritionSummary?.details.basalEnergyBurned
         let activeEnergy = VitalsViewModel.shared.nutritionSummary?.details.activeEnergyBurned
+        let activityLevel = VitalsViewModel.shared.activityLevelSummary?.details.activityLevel
 
         let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
 
@@ -142,6 +143,8 @@ private extension HabitsFactory {
             basalEnergy: basalEnergy,
             activeEnergy: activeEnergy,
             dietaryEnergy: averageDietaryEnergy,
+            bodyMass: bodyMass,
+            activityLevel: activityLevel,
             targetDetails: HealthManager.shared.healthTargetDetails
         ) {
             let suggestedValue = recommendation.target.doubleValue(for: .largeCalorie())
