@@ -155,19 +155,19 @@ extension SleepAnalysis {
     }
 
     var coreSleepPercent: Double {
-        coreSleepMinutes / overallMinutes
+        coreSleepMinutes / overallMinutesIncludingAwake
     }
 
     var remSleepPercent: Double {
-        remSleepMinutes / overallMinutes
+        remSleepMinutes / overallMinutesIncludingAwake
     }
 
     var deepSleepPercent: Double {
-        deepSleepMinutes / overallMinutes
+        deepSleepMinutes / overallMinutesIncludingAwake
     }
 
     var awakeSleepPercent: Double {
-        awakeSleepMinutes / overallMinutes
+        awakeSleepMinutes / overallMinutesIncludingAwake
     }
 
     var overallScore: Int {
