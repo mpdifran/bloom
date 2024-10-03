@@ -16,7 +16,7 @@ private enum Constants {
         4 : 1.1,
         5 : 0.95,
         6 : 0.7,
-        7 : 0.3,
+        7 : 0.2,
     ]
 }
 
@@ -56,13 +56,10 @@ extension BowelMovementMonthlySummary {
 }
 
 struct BowelMovementMonthlySummary: Sendable {
-    let details: Details?
+    let bowelMovements: [BowelMovementDTO]
 
     var barLevel: VitalModel.BarLevel? {
-        guard
-            let rating = details?.rating,
-            let score = details?.score
-        else { return nil }
+        guard bowelMovements.count >= 2 else { return nil }
 
         switch rating {
         case .unhealthy:
@@ -90,12 +87,6 @@ struct BowelMovementMonthlySummary: Sendable {
 }
 
 extension BowelMovementMonthlySummary {
-    struct Details: Sendable {
-        let bowelMovements: [BowelMovement]
-    }
-}
-
-extension BowelMovementMonthlySummary.Details {
 
     var score: Double {
         // TODO: Incorporate frequency
@@ -140,12 +131,12 @@ extension BowelMovementMonthlySummary.Details {
         }
     }
 
-    var timeOfDayDistribution: [Int : [BowelMovement]] {
+    var timeOfDayDistribution: [Calendar.TimeOfDay : [BowelMovementDTO]] {
         bowelMovements
-            .grouped(by: { Calendar.current.component(.hour, from: $0.date) })
+            .grouped(by: { Calendar.current.timeOfDay(for: $0.date) })
     }
 
-    var stoolTypeDistribution: [Int : [BowelMovement]] {
+    var stoolTypeDistribution: [Int : [BowelMovementDTO]] {
         bowelMovements.grouped(by: { $0.bristolStoolType })
     }
 

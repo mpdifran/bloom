@@ -35,13 +35,13 @@ struct BowelMovementsDetailView: View {
 
 private extension BowelMovementsDetailView {
 
-    var details: BowelMovementMonthlySummary.Details? {
-        viewModel.bowelMovementSummary?.details
+    var summary: BowelMovementMonthlySummary? {
+        viewModel.bowelMovementSummary
     }
 
     @ViewBuilder
     var stoolTypeChart: some View {
-        if let details {
+        if let summary {
             VStack(alignment: .leading, spacing: 20) {
                 VitalDetailChartTitleView(
                     title: "Bristol Stool Types",
@@ -49,9 +49,9 @@ private extension BowelMovementsDetailView {
                 )
 
                 Chart {
-                    ForEach(details.bowelMovements) { bowelMovement in
+                    ForEach(summary.bowelMovements) { bowelMovement in
                         if bowelMovement.isValidBristolStoolType {
-                            BarMark(
+                            PointMark(
                                 x: .value("Date", bowelMovement.date),
                                 y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
                             )
@@ -89,7 +89,7 @@ private extension BowelMovementsDetailView {
     }
 
     var chartMinDate: Date {
-        details?.bowelMovements.min(keyPath: \.date) ?? .now
+        summary?.bowelMovements.min(keyPath: \.date) ?? .now
     }
 
     func chartForegroundColor(for stoolType: Int) -> Color {
@@ -157,7 +157,7 @@ private extension BowelMovementsDetailView {
 
     @ViewBuilder
     var timeOfDayChart: some View {
-        if let details {
+        if let summary {
             VStack(alignment: .leading) {
                 VitalDetailChartTitleView(
                     title: "Time Of Day",
@@ -165,24 +165,13 @@ private extension BowelMovementsDetailView {
                 )
 
                 Chart {
-                    ForEach(0...23, id: \.self) { hour in
+                    ForEach(Calendar.TimeOfDay.allCases) { timeOfDay in
                         BarMark(
-                            x: .value("Hour", hour),
-                            y: .value("Count", details.timeOfDayDistribution[hour, default: []].count)
+                            x: .value("Time Of Day", timeOfDay.name),
+                            y: .value("Count", summary.timeOfDayDistribution[timeOfDay, default: []].count)
                         )
-                        .foregroundStyle(.brown)
-                    }
-                }
-                .chartXScale(domain: 0...23, range: .plotDimension)
-                .chartXAxis {
-                    AxisMarks(values: .stride(by: 4)) { value in
-                        AxisGridLine()
-                        AxisTick()
-                        if let intValue = value.as(Int.self) {
-                            AxisValueLabel(hourFormat(for: intValue))
-                        } else {
-                            AxisValueLabel()
-                        }
+                        .foregroundStyle(color(for: timeOfDay))
+                        .cornerRadius(8)
                     }
                 }
                 .frame(height: 250)
@@ -190,17 +179,15 @@ private extension BowelMovementsDetailView {
         }
     }
 
-    func hourFormat(for hour: Int) -> String {
-        if hour == 0 {
-            return "12 AM"
+    func color(for timeOfDay: Calendar.TimeOfDay) -> Color {
+        switch timeOfDay {
+        case .morning: .mutedYellow
+        case .afternoon: .mutedOrange
+        case .evening: .mutedPurple
+        case .overnight: .mutedIndigo
+        @unknown default:
+            fatalError("Unhandled case")
         }
-        if hour < 12 {
-            return "\(hour) AM"
-        }
-        if hour == 12 {
-            return "12 PM"
-        }
-        return "\(hour - 12) PM"
     }
 }
 

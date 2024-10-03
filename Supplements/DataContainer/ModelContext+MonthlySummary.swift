@@ -12,10 +12,8 @@ import SwiftData
 extension ModelContext {
 
     func fetchBowelMovementMonthlySummary() -> BowelMovementMonthlySummary {
-        let thisMonth = (try? fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
+        let samples = (try? fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
 
-        return BowelMovementMonthlySummary(
-            details: thisMonth.isNotEmpty ? .init(bowelMovements: thisMonth) : nil
-        )
+        return BowelMovementMonthlySummary(bowelMovements: samples.map({ $0.asDTO() }))
     }
 }

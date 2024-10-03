@@ -339,7 +339,7 @@
 		FFCE85622C99DCD9002C46B1 /* Calendar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C22C025174009FDC4E /* Calendar+Helpers.swift */; };
 		FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; platformFilter = ios; };
 		FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */; };
-		FFCE856B2C99EBC3002C46B1 /* DataFetcher+MonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE856A2C99EBB8002C46B1 /* DataFetcher+MonthlySummary.swift */; };
+		FFCE856B2C99EBC3002C46B1 /* ModelContext+MonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE856A2C99EBB8002C46B1 /* ModelContext+MonthlySummary.swift */; };
 		FFDDE2822C09155800BFDEF5 /* SleepTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */; };
 		FFDDE2842C09156200BFDEF5 /* SleepTrendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */; };
 		FFDDE2862C09164C00BFDEF5 /* SleepTrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */; };
@@ -829,7 +829,7 @@
 		FFCC6B892C9C8B7D00676CAA /* GoalReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalReviewCell.swift; sourceTree = "<group>"; };
 		FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BowelMovement+Helpers.swift"; sourceTree = "<group>"; };
-		FFCE856A2C99EBB8002C46B1 /* DataFetcher+MonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataFetcher+MonthlySummary.swift"; sourceTree = "<group>"; };
+		FFCE856A2C99EBB8002C46B1 /* ModelContext+MonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContext+MonthlySummary.swift"; sourceTree = "<group>"; };
 		FFDDE2812C09155800BFDEF5 /* SleepTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsView.swift; sourceTree = "<group>"; };
 		FFDDE2832C09156200BFDEF5 /* SleepTrendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendsViewModel.swift; sourceTree = "<group>"; };
 		FFDDE2852C09164C00BFDEF5 /* SleepTrendChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTrendChart.swift; sourceTree = "<group>"; };
@@ -1957,7 +1957,7 @@
 			isa = PBXGroup;
 			children = (
 				FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */,
-				FFCE856A2C99EBB8002C46B1 /* DataFetcher+MonthlySummary.swift */,
+				FFCE856A2C99EBB8002C46B1 /* ModelContext+MonthlySummary.swift */,
 				FF9783552C9B614B00A8ED7E /* TargetMetric+HealthData.swift */,
 				FF2FB8A52C9DD81400F57523 /* Habit+Helpers.swift */,
 			);
@@ -2739,7 +2739,7 @@
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
 				FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */,
 				FFBE522D2C6F044B00F510DE /* OnboardingHealthSleepView.swift in Sources */,
-				FFCE856B2C99EBC3002C46B1 /* DataFetcher+MonthlySummary.swift in Sources */,
+				FFCE856B2C99EBC3002C46B1 /* ModelContext+MonthlySummary.swift in Sources */,
 				FF8F79C92C62C1D10095C36D /* PreferencesView.swift in Sources */,
 				FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */,
 				FF4A21CC2C8A01CF00278019 /* FeatureRequestWebView.swift in Sources */,

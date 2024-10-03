@@ -230,10 +230,10 @@ private extension VitalsViewModel {
             vitals.append(
                 VitalModel(
                     id: .bowelMovements,
-                    subtitle: bowelMovementSummary.details?.subtitle,
-                    status: bowelMovementSummary.details?.rating.name,
-                    score: bowelMovementSummary.details?.score ?? 1,
-                    color: bowelMovementSummary.details?.rating.color,
+                    subtitle: bowelMovementSummary.subtitle,
+                    status: bowelMovementSummary.rating.name,
+                    score: bowelMovementSummary.score,
+                    color: bowelMovementSummary.rating.color,
                     barLevel: bowelMovementSummary.barLevel
                 )
             )

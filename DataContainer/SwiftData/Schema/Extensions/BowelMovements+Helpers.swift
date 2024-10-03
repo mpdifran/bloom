@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension SchemaV0.BowelMovement {
+public extension BowelMovement {
 
     var duration: Duration {
         Duration(rawValue: rawDuration) ?? .between5And10Min
@@ -18,8 +18,8 @@ public extension SchemaV0.BowelMovement {
     }
 }
 
-public extension SchemaV0.BowelMovement {
-    enum Duration: Int, CaseIterable, Identifiable {
+public extension BowelMovement {
+    enum Duration: Int, CaseIterable, Identifiable, Sendable {
         public var id: Self { self }
 
         case lessThan5Min = 0

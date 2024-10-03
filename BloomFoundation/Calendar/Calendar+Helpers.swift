@@ -36,6 +36,41 @@ public extension Calendar {
             }
         }
     }
+
+    enum TimeOfDay: CaseIterable, Identifiable {
+        public var id: Self { self }
+
+        case morning
+        case afternoon
+        case evening
+        case overnight
+
+        public var name: String {
+            switch self {
+            case .morning:
+                "Morning"
+            case .afternoon:
+                "Afternoon"
+            case .evening:
+                "Evening"
+            case .overnight:
+                "Overnight"
+            }
+        }
+
+        public var summary: String {
+            switch self {
+            case .morning:
+                "6am - 12pm"
+            case .afternoon:
+                "12pm - 6pm"
+            case .evening:
+                "6pm - 12am"
+            case .overnight:
+                "12am - 6am"
+            }
+        }
+    }
 }
 
 public extension Calendar {
@@ -187,6 +222,20 @@ public extension Calendar {
         currentComponents.second = components.second
 
         return self.date(from: currentComponents)
+    }
+
+    func timeOfDay(for date: Date) -> TimeOfDay {
+        let hour = Calendar.current.component(.hour, from: date)
+
+        if hour < 6 {
+            return .overnight
+        } else if hour < 12 {
+            return .morning
+        } else if hour < 18 {
+            return .afternoon
+        } else {
+            return .evening
+        }
     }
 }
 
