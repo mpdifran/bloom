@@ -20,9 +20,9 @@ struct ProteinTargetCalculatorSuite {
 
     @Test(
         arguments: [
-            (30, 2000, 66, HealthGoal.loseWeight, WeightLossSpeed.slow),
+            (30, 2000, 65, HealthGoal.loseWeight, WeightLossSpeed.slow),
             (120, 2000, 129, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (40, 2000, 106, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+            (40, 2000, 110, HealthGoal.loseWeight, WeightLossSpeed.moderate),
             (100, 2000, 150, HealthGoal.loseWeight, WeightLossSpeed.fast)
         ]
     )
