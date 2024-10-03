@@ -33,7 +33,10 @@ enum CalorieTargetCalculator {
                 existingHabit: existingHabit,
                 basalEnergy: basalEnergy,
                 activeEnergy: activeEnergy,
-                dietaryEnergy: dietaryEnergy
+                dietaryEnergy: dietaryEnergy,
+                bodyMass: bodyMass,
+                activityLevel: activityLevel,
+                targetDetails: targetDetails
             )
         } else {
             return createNewCalorieGoal(
@@ -144,8 +147,41 @@ private extension CalorieTargetCalculator {
         existingHabit: HabitDTO,
         basalEnergy: HKQuantity?,
         activeEnergy: HKQuantity?,
-        dietaryEnergy: HKQuantity
+        dietaryEnergy: HKQuantity,
+        bodyMass: HKQuantity,
+        activityLevel: ActivityLevelSummary.ActivityLevel?,
+        targetDetails: HealthTargetDetails
     ) async -> TargetMetricRecommendation? {
+
+        if
+            let tdee = calculateTDEE(basalEnergy: basalEnergy, activeEnergy: activeEnergy),
+            let recommendation = calculateEnergyBasedCalorieGoal(currentEnergy: tdee, targetDetails: targetDetails)
+        {
+
+            if !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1) {
+                return TargetMetricRecommendation(
+                    target: recommendation.target,
+                    context: "Your activity level has changed, so we're changing your calorie goal to match!"
+                )
+            }
+        } else if
+            let activityLevel,
+            let calorieMultiplier = activityLevel.calorieMultiplier(for: targetDetails)
+        {
+
+            let targetCalories = calorieMultiplier * bodyMass.doubleValue(for: .pound())
+            if
+                let recommendation = calculateActivityLevelBasedCalorieGoal(targetCalories: targetCalories, targetDetails: targetDetails),
+                !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1)
+            {
+                return TargetMetricRecommendation(
+                    target: recommendation.target,
+                    context: "Your activity level has changed, so we're changing your calorie goal to match!"
+                )
+            }
+        }
+
+        // If we're not changing it because of the above, then keep the goal the same.
 
         let habitGoalStatistics = await HabitGoalStatisticsCalculator.calculateStatistics(for: existingHabit)
 

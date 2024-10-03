@@ -134,7 +134,7 @@ private extension HabitsFactory {
         // Calories
         let basalEnergy = VitalsViewModel.shared.nutritionSummary?.details.basalEnergyBurned
         let activeEnergy = VitalsViewModel.shared.nutritionSummary?.details.activeEnergyBurned
-        let activityLevel = VitalsViewModel.shared.activityLevelSummary?.details.activityLevel
+        let activityLevel = VitalsViewModel.shared.activityLevelSummary?.details.activityLevel // TODO: Use user specified activity level.
 
         let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
 
