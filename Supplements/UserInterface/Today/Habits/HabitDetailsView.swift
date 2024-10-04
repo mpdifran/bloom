@@ -177,11 +177,11 @@ private extension HabitDetailsView {
     func loadGoalHistory() async {
         let twelveWeeksSamples = await habit.targetMetric.fetchCollatedDailyQuantity(
             unit: habit.unit,
-            dateRange: .trailingWeeksFromNow(12)
+            dateRange: .trailingWeeksFromEndOfToday(12)
         )
         let samples = await habit.targetMetric.fetchCollatedDailyQuantity(
             unit: habit.unit,
-            dateRange: .trailingWeeksFromNow(30)
+            dateRange: .trailingWeeksFromEndOfToday(30)
         )
 
         let currentWeekOfYear = Calendar.current.weekOfYear(for: .now) ?? 52

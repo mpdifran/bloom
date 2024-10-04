@@ -90,13 +90,25 @@ extension BowelMovementMonthlySummary {
 
     var score: Double {
         // TODO: Incorporate frequency
-        bowelMovements
-            .compactMap({ bowelMovement in
-                guard let score = Constants.stoolTypeScoreMap[bowelMovement.bristolStoolType] else { return nil }
 
-                return score * bowelMovement.duration.scoreModifier
-            })
-            .average(keyPath: \.self)
+        var scores = [Double]()
+        var previousBowelMovement: BowelMovementDTO?
+
+        for bowelMovement in bowelMovements.sorted(keyPath: \.date) {
+            guard let score = Constants.stoolTypeScoreMap[bowelMovement.bristolStoolType] else { continue }
+
+            let typeScore = score * bowelMovement.duration.scoreModifier
+
+            if let previousBowelMovement {
+                
+            } else {
+                scores.append(typeScore)
+            }
+
+            previousBowelMovement = bowelMovement
+        }
+
+        return scores.average(keyPath: \.self)
     }
 
     var subtitle: String {
@@ -160,5 +172,40 @@ extension BowelMovementMonthlySummary {
         }
 
         return maxIndex + 1
+    }
+}
+
+private extension BowelMovementMonthlySummary {
+
+    struct BowelMovementIntervalStatistics {
+        let averageIntervalHours: Double
+        let standardDeviationIntervalHours: Double
+    }
+
+    func bowelMovementStatistics() -> BowelMovementIntervalStatistics? {
+        var intervals = [Double]()
+        var previousBowelMovement: BowelMovementDTO?
+
+        for bowelMovement in bowelMovements.sorted(keyPath: \.date) {
+            defer {
+                previousBowelMovement = bowelMovement
+            }
+
+            guard
+                let previousBowelMovement,
+                let hours = Calendar.current.dateComponents([.hour], from: previousBowelMovement.date, to: bowelMovement.date).hour
+            else { continue }
+
+            intervals.append(Double(hours))
+        }
+
+        let averageInterval = intervals.average(keyPath: \.self)
+
+        guard let standardDeviation = intervals.standardDeviation(keyPath: \.self) else { return nil }
+
+        return BowelMovementIntervalStatistics(
+            averageIntervalHours: averageInterval,
+            standardDeviationIntervalHours: standardDeviation
+        )
     }
 }
