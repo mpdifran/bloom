@@ -42,15 +42,22 @@ extension HabitsFactory {
                 let newHabit = await updatedHabit(for: habit)
             else { continue }
 
+            // TODO: We may promote this to a habit eventually.
             newHabitResult.proposedFocusAreas.append(newHabit)
         }
 
         // Add new habits
-        if newHabitResult.proposedFocusAreas.isEmpty {
+        if newHabitResult.proposedFocusAreas.count < 2 {
             let vitals = VitalsViewModel.shared.vitals
 
+            let genericGoalVitals = vitals.filter {
+                $0.id != .nutrition &&
+                $0.id != .cycleTracking &&
+                $0.id != .bodyComposition
+            }
+
             if
-                let targetVital = vitals.safeAccess(at: 0),
+                let targetVital = genericGoalVitals.safeAccess(at: 0),
                 let newHabit = await suggestNewHabit(for: targetVital)
             {
                 newHabitResult.proposedFocusAreas.append(newHabit)
@@ -249,8 +256,9 @@ private extension HabitsFactory {
 
     func updatedHabit(for habit: Habit) async -> ProposedHabit? {
 
+        // TODO: Determine when to promote to Habit from Focus Area
         guard let recommendation = await GenericHabitTargetCalculator.calculateNewTarget(
-            habit:habit.asDTO()
+            habit: habit.asDTO()
         ) else {
             return nil
         }
@@ -308,19 +316,6 @@ private extension HabitsFactory {
                 vitalKind: vital.id,
                 context: ""
             )
-        case .nutrition:
-            // Lose weight + gain weight
-            // Calorie intake / net energy
-            // Options: Calories, cal + protein, macros
-            // 1200 calories is not recommended
-            // Suggest a weight loss plan
-            // TODO: should be protein and calorie goal. Calorie goal should have 10% variance to count as complete.
-            return await createHabit(
-                targetMetric: .waterIntake,
-                unit: .literUnit(with: .milli),
-                vitalKind: vital.id,
-                context: ""
-            )
         case .exerciseEffectiveness:
             return await createHabit(
                 targetMetric: .walkingRunningDistance,
@@ -335,7 +330,7 @@ private extension HabitsFactory {
                 vitalKind: vital.id,
                 context: ""
             )
-        case .bodyComposition, .cycleTracking:
+        case .bodyComposition, .cycleTracking, .nutrition, .cardioFitness:
             return nil
         @unknown default:
             fatalError("Unknown VitalModel.Kind case")

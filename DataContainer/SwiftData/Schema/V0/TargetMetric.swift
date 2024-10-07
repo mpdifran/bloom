@@ -11,13 +11,22 @@ public enum TargetMetric: String, Identifiable, Codable, CaseIterable, Sendable 
     public var id: Self { self }
 
     case none
-    case stepCount
+    case calories
+    case proteinIntake
     case waterIntake
-    case walkingRunningDistance
     case timeInDaylight
     case exerciseMinutes
-    case proteinIntake
-    case calories
+    case stepCount
+    case walkingRunningDistance
+    case runDistance
+    case runDuration
+    case bikeDistance
+    case bikeDuration
+    case targetHeartRateZone1
+    case targetHeartRateZone2
+    case targetHeartRateZone3
+    case targetHeartRateZone4
+    case targetHeartRateZone5
 }
 
 public extension TargetMetric {

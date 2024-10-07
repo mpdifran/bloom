@@ -12,26 +12,42 @@ public extension TargetMetric {
     var name: String {
         switch self {
         case .none: "None"
-        case .stepCount: "Steps"
+        case .calories: "Calories"
+        case .proteinIntake: "Protein Intake"
         case .waterIntake: "Water Intake"
-        case .walkingRunningDistance: "Walking + Running Distance"
         case .timeInDaylight: "Time in Daylight"
         case .exerciseMinutes: "Exercise Minutes"
-        case .proteinIntake: "Protein Intake"
-        case .calories: "Calories"
+        case .stepCount: "Steps"
+        case .walkingRunningDistance: "Walking + Running Distance"
+        case .runDistance: "Running Distance"
+        case .runDuration: "Running Duration"
+        case .bikeDistance: "Bike Distance"
+        case .bikeDuration: "Bike Duration"
+        case .targetHeartRateZone1: "Target Heart Rate Zone 1"
+        case .targetHeartRateZone2: "Target Heart Rate Zone 2"
+        case .targetHeartRateZone3: "Target Heart Rate Zone 3"
+        case .targetHeartRateZone4: "Target Heart Rate Zone 4"
+        case .targetHeartRateZone5: "Target Heart Rate Zone 5"
         }
     }
 
     var systemImage: String {
         switch self {
         case .none: "xmark.app"
-        case .stepCount: "figure.walk"
+        case .calories: "flame"
+        case .proteinIntake: "fork.knife"
         case .waterIntake: "waterbottle"
-        case .walkingRunningDistance: "figure.walk"
         case .timeInDaylight: "sun.max.fill"
         case .exerciseMinutes: "figure.step.training"
-        case .proteinIntake: "fork.knife"
-        case .calories: "flame"
+        case .stepCount: "figure.walk"
+        case .walkingRunningDistance: "figure.walk"
+        case .runDistance, .runDuration: "figure.run"
+        case .bikeDistance, .bikeDuration: "figure.outdoor.cycle"
+        case .targetHeartRateZone1: "1.circle.fill"
+        case .targetHeartRateZone2: "2.circle.fill"
+        case .targetHeartRateZone3: "3.circle.fill"
+        case .targetHeartRateZone4: "4.circle.fill"
+        case .targetHeartRateZone5: "5.circle.fill"
         }
     }
 
@@ -45,6 +61,12 @@ public extension TargetMetric {
         case .exerciseMinutes: .mutedGreen
         case .proteinIntake: .protein
         case .calories: .mutedOrange
+        case .runDistance, .runDuration, .bikeDistance, .bikeDuration: .mutedGreen
+        case .targetHeartRateZone1: .heartRateZone1
+        case .targetHeartRateZone2: .heartRateZone2
+        case .targetHeartRateZone3: .heartRateZone3
+        case .targetHeartRateZone4: .heartRateZone4
+        case .targetHeartRateZone5: .heartRateZone5
         }
     }
 
@@ -59,6 +81,12 @@ public extension TargetMetric {
         switch self {
         case .stepCount, .walkingRunningDistance:
             [.stepCount, .walkingRunningDistance].filter({ $0 != self })
+        case .runDistance, .runDuration:
+            [.runDistance, .runDuration].filter({ $0 != self })
+        case .bikeDistance, .bikeDuration:
+            [.bikeDistance, .bikeDuration].filter({ $0 != self })
+        case .targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5:
+            [.targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5].filter({ $0 != self })
         default:
             []
         }
