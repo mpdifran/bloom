@@ -696,17 +696,11 @@ extension HealthManager {
         return samples
     }
 
-    func fetchStressMonthlySummary() async -> StressMonthlySummary? {
-        let thisMonthAnalyses: [SleepAnalysis]
-        if let sleepAnalysis30Days {
-            thisMonthAnalyses = sleepAnalysis30Days
-        } else {
-            thisMonthAnalyses = await fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
-        }
+    func fetchStressMonthlySummary(trailingMonthAnalyses: [SleepAnalysis]) async -> StressMonthlySummary? {
 
         let thisMonth = await fetchStressMonthlySummaryDetails(
             dateRange: .trailingMonthsFromNow(1),
-            sleepAnalyses: thisMonthAnalyses
+            sleepAnalyses: trailingMonthAnalyses
         )
         let lastMonthAverageSystolic = (try? await healthStore.fetchQuantity(
             for: .bloodPressureSystolic,
@@ -918,15 +912,8 @@ extension HealthManager {
         )
     }
 
-    func fetchSleepVitalSummary() async -> SleepVitalsMonthlySummary {
-        let thisMonthAnalyses: [SleepAnalysis]
-        if let sleepAnalysis30Days {
-            thisMonthAnalyses = sleepAnalysis30Days
-        } else {
-            thisMonthAnalyses = await fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
-        }
-
-        let thisMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: thisMonthAnalyses)
+    func fetchSleepVitalSummary(trailingMonthAnalyses: [SleepAnalysis]) async -> SleepVitalsMonthlySummary {
+        let thisMonth = fetchSleepVitalSummaryDetails(sleepAnalyses: trailingMonthAnalyses)
 
         return SleepVitalsMonthlySummary(
             details: thisMonth

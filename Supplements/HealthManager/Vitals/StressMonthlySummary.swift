@@ -105,8 +105,6 @@ extension StressMonthlySummary {
         let twoMonthsBloodPressureDiastolic: [DateQuantitySample]
         let sleepAnalyses: [SleepAnalysis]
 
-        // TODO: Add sleep here as well
-
         init(
             dateRange: DateRange,
             heartRateVariability: [DateQuantitySample],
@@ -177,13 +175,11 @@ extension StressMonthlySummary.Details {
             let referenceDate = Calendar.current.startOfDay(for: date)
 
             let hrvStressScore = hrvStressLevel(for: referenceDate)
-//            let rhrStressScore = rhrStressLevel(for: referenceDate)
             let bloodPressureScore = bloodPressureStressLevel(for: referenceDate)
             let sleepStressScore = sleepStressLevel(for: referenceDate)
 
             let allStressScores = [
                 hrvStressScore,
-//                rhrStressScore,
                 bloodPressureScore,
                 sleepStressScore
             ].unwrap()

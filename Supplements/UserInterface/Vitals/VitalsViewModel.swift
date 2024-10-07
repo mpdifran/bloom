@@ -80,11 +80,13 @@ extension VitalsViewModel {
     }
 
     func forceFetchVitals() async {
+        let sleepAnalyses = await HealthManager.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+
         let cardio = await HealthManager.shared.fetchHeartHealthSummary()
         let activityLevel = await HealthManager.shared.fetchActivityLevelSummary()
         let bodyComposition = await HealthManager.shared.fetchBodyCompositionSummary()
-        let sleep = await HealthManager.shared.fetchSleepVitalSummary()
-        let stress = await HealthManager.shared.fetchStressMonthlySummary()
+        let sleep = await HealthManager.shared.fetchSleepVitalSummary(trailingMonthAnalyses: sleepAnalyses)
+        let stress = await HealthManager.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)
         let nutrition = await HealthManager.shared.fetchNutritionMonthlySummary()
         let exerciseEffectiveness = await HealthManager.shared.fetchExerciseEffectivenessSummary()
         let menstrual = await HealthManager.shared.fetchMenstrualSummary()
