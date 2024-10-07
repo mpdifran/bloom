@@ -89,8 +89,6 @@ struct BowelMovementMonthlySummary: Sendable {
 extension BowelMovementMonthlySummary {
 
     var score: Double {
-        // TODO: Incorporate frequency
-
         var scores = [Double]()
         var previousBowelMovement: BowelMovementDTO?
 
@@ -100,7 +98,19 @@ extension BowelMovementMonthlySummary {
             let typeScore = score * bowelMovement.duration.scoreModifier
 
             if let previousBowelMovement {
-                
+                let hours = bowelMovement.date.timeIntervalSince(previousBowelMovement.date) / 3600
+
+                let intervalScore: Double
+                if hours < 8 {
+                    intervalScore = Double(hours).scaledPercent(lower: 4, upper: 8)
+                } else if hours > 72 {
+                    intervalScore = Double(hours).scaledPercent(lower: 120, upper: 72)
+                } else {
+                    intervalScore = 1
+                }
+
+                let average = [typeScore, intervalScore].average(keyPath: \.self)
+                scores.append(average)
             } else {
                 scores.append(typeScore)
             }
