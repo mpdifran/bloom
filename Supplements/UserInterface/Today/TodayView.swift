@@ -73,11 +73,8 @@ struct TodayView: View {
                     }
 
                     if suggestedHabits.isNotEmpty {
-                        Text("Focus Areas")
-                            .bold()
+                        SectionTitleView("Focus Areas")
                             .padding(.horizontal)
-                            .zStackAlignment(.leading)
-                            .padding(.top)
 
                         ForEach(suggestedHabits) { habit in
                             NavigationLink {
@@ -90,11 +87,8 @@ struct TodayView: View {
                     }
 
                     if userHabits.isNotEmpty {
-                        Text("Habits")
-                            .bold()
+                        SectionTitleView("Habits")
                             .padding(.horizontal)
-                            .zStackAlignment(.leading)
-                            .padding(.top)
 
                         ForEach(userHabits) { habit in
                             NavigationLink {
@@ -107,11 +101,8 @@ struct TodayView: View {
                     }
 
                     if toDoManager.relevantToDos.isNotEmpty {
-                        Text("To Do")
-                            .bold()
+                        SectionTitleView("To Do")
                             .padding(.horizontal)
-                            .zStackAlignment(.leading)
-                            .padding(.top)
 
                         ForEach(toDoManager.relevantToDos) { todo in
                             ToDoActionCell(

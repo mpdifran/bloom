@@ -26,40 +26,38 @@ extension HabitsFactory {
 
         await VitalsViewModel.shared.forceFetchVitals()
 
+        var newHabitResult = NewHabitResult()
+
+        // Nutrition
         if let nutritionHabits = await generateNutritionHabits(
             activeHabits: activeHabits
         ) {
-            return nutritionHabits
+            newHabitResult.appendNewTargets(result: nutritionHabits)
         }
 
-        var newHabits = [ProposedHabit]()
+        // Update existing habits
         for habit in activeHabits.filter(\.isSuggested) {
-            guard let newHabit = await updatedHabit(for: habit) else { continue }
+            guard
+                !newHabitResult.contains(habit.targetMetric),
+                let newHabit = await updatedHabit(for: habit)
+            else { continue }
 
-            newHabits.append(newHabit)
+            newHabitResult.proposedFocusAreas.append(newHabit)
         }
 
-        if newHabits.isEmpty {
+        // Add new habits
+        if newHabitResult.proposedFocusAreas.isEmpty {
             let vitals = VitalsViewModel.shared.vitals
 
             if
                 let targetVital = vitals.safeAccess(at: 0),
                 let newHabit = await suggestNewHabit(for: targetVital)
             {
-                newHabits.append(newHabit)
+                newHabitResult.proposedFocusAreas.append(newHabit)
             }
         }
 
-        // Make sure there's no duplicates
-        let userAddedHabits = activeHabits.filter({ $0.isSuggested == false })
-        var targetMetrics: Set<TargetMetric> = userAddedHabits.map(\.targetMetric).asSet()
-        newHabits = newHabits.filter({ newHabit in
-            let shouldInclude = !targetMetrics.contains(newHabit.targetMetric)
-            targetMetrics.insert(newHabit.targetMetric)
-            return shouldInclude
-        })
-
-        return NewHabitResult(proposedHabits: newHabits, proposedToDos: [])
+        return newHabitResult
     }
 
     func generateProposedHabit(
@@ -100,6 +98,7 @@ private extension HabitsFactory {
             )
             todos.append(todo)
             return NewHabitResult(
+                proposedFocusAreas: [],
                 proposedHabits: [],
                 proposedToDos: [todo]
             )
@@ -113,7 +112,9 @@ private extension HabitsFactory {
         }
 
         if todos.isNotEmpty {
-            return NewHabitResult(proposedHabits: [], proposedToDos: todos)
+            return NewHabitResult(
+                proposedToDos: todos
+            )
         }
 
         guard
@@ -125,11 +126,40 @@ private extension HabitsFactory {
         }
 
         if HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
-            // Suggest them as habits over focus areas?
-            return nil
+            var proposedHabits = [ProposedHabit]()
+            if let habit = activeHabits.first(where: { $0.targetMetric == .calories }) {
+                let calorieHabit = ProposedHabit(
+                    habitID: habit.persistentModelID,
+                    targetMetric: .calories,
+                    value: habit.value,
+                    suggestedValue: habit.value,
+                    previousValue: nil,
+                    unitString: HKUnit.largeCalorie().unitString,
+                    vitalKind: .nutrition,
+                    context: "You've met your target weight! Let's make this a permanent habit.",
+                    hasUserEdited: habit.isUserEdited
+                )
+            }
+            if let habit = activeHabits.first(where: { $0.targetMetric == .proteinIntake }) {
+                let calorieHabit = ProposedHabit(
+                    habitID: habit.persistentModelID,
+                    targetMetric: .proteinIntake,
+                    value: habit.value,
+                    suggestedValue: habit.value,
+                    previousValue: nil,
+                    unitString: HKUnit.gram().unitString,
+                    vitalKind: .nutrition,
+                    context: "You've met your target weight! Let's make this a permanent habit.",
+                    hasUserEdited: habit.isUserEdited
+                )
+            }
+
+            return NewHabitResult(
+                proposedHabits: proposedHabits
+            )
         }
 
-        var habits = [ProposedHabit]()
+        var newFocusAreas = [ProposedHabit]()
 
         // Calories
         let basalEnergy = VitalsViewModel.shared.nutritionSummary?.details.basalEnergyBurned
@@ -166,7 +196,7 @@ private extension HabitsFactory {
                 context: recommendation.context,
                 hasUserEdited: existingCalorieHabit?.isUserEdited == true
             )
-            habits.append(calorieHabit)
+            newFocusAreas.append(calorieHabit)
         }
 
         // Protein
@@ -199,12 +229,13 @@ private extension HabitsFactory {
                 context: recommendation.context,
                 hasUserEdited: existingProteinHabit?.isUserEdited == true
             )
-            habits.append(proteinHabit)
+            newFocusAreas.append(proteinHabit)
         }
 
-        if habits.isNotEmpty {
+        if newFocusAreas.isNotEmpty {
             return NewHabitResult(
-                proposedHabits: habits,
+                proposedFocusAreas: newFocusAreas,
+                proposedHabits: [],
                 proposedToDos: []
             )
         }

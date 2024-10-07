@@ -14,6 +14,7 @@ struct NewUpdateHabitView: View {
     @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
     @State private var isLoading = true
+    @State private var proposedFocusAreas = [ProposedHabit]()
     @State private var proposedHabits = [ProposedHabit]()
     @State private var proposedToDos = [ProposedToDo]()
     @State private var error: Error?
@@ -59,6 +60,7 @@ struct NewUpdateHabitView: View {
                 ProminentButton("Save") {
                     do {
                         try habitsViewModel.performSave(
+                            proposedFocusAreas: proposedFocusAreas,
                             proposedHabits: proposedHabits,
                             proposedToDos: proposedToDos
                         )
@@ -74,6 +76,7 @@ struct NewUpdateHabitView: View {
         .animation(.bouncy, value: proposedHabits)
         .task {
             let result = await habitsViewModel.generateProposedHabits()
+            proposedFocusAreas = result.proposedFocusAreas 
             proposedHabits = result.proposedHabits
             proposedToDos = result.proposedToDos
 
@@ -88,7 +91,7 @@ private extension NewUpdateHabitView {
     var newHabitsSection: some View {
         if isLoading {
             loadingView
-        } else if proposedHabits.isEmpty && proposedToDos.isEmpty {
+        } else if proposedFocusAreas.isEmpty && proposedHabits.isEmpty && proposedToDos.isEmpty {
             contentUnavailableView
         } else {
             contentView
@@ -117,13 +120,31 @@ private extension NewUpdateHabitView {
 
     @ViewBuilder
     var contentView: some View {
-        ForEach(proposedToDos) { proposedToDo in
-            ProposedToDoCell(proposedToDo: proposedToDo)
+        if proposedFocusAreas.isNotEmpty {
+            SectionTitleView("Focus Areas")
+
+            ForEachEnumerated(proposedFocusAreas) { (index, _) in
+                ProposedHabitCell(proposedHabit: $proposedFocusAreas[index])
+                    .transition(.scale)
+            }
         }
 
-        ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
-            ProposedHabitCell(proposedHabit: $proposedHabits[index])
-                .transition(.scale)
+        if proposedHabits.isNotEmpty {
+            SectionTitleView("New Habits")
+
+            ForEachEnumerated(proposedHabits) { (index, _) in
+                ProposedHabitCell(proposedHabit: $proposedHabits[index])
+                    .transition(.scale)
+            }
+        }
+
+        if proposedToDos.isNotEmpty {
+            SectionTitleView("To Do")
+
+            ForEach(proposedToDos) { proposedToDo in
+                ProposedToDoCell(proposedToDo: proposedToDo)
+                    .transition(.scale)
+            }
         }
     }
 }

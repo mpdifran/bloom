@@ -13,12 +13,12 @@ import TelemetryDeck
 enum GenericHabitTargetCalculator {
 
     static func calculateNewTarget(habit: HabitDTO) async -> TargetMetricRecommendation? {
-        let targetMetric = habit.targetMetric
-        let unit = habit.unit
-        let habitTargetValue = habit.quantity.doubleValue(for: unit)
+        guard
+            habit.targetMetric != .calories &&
+            habit.targetMetric != .proteinIntake
+        else { return nil }
 
         let habitGoalStatistics = await HabitGoalStatisticsCalculator.calculateStatistics(for: habit)
-
         return habitGoalStatistics.newHabitGoal(for: habit)
     }
 }

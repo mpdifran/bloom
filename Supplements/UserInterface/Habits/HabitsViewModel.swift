@@ -75,7 +75,11 @@ extension HabitsViewModel {
         )
     }
 
-    func performSave(proposedHabits: [ProposedHabit], proposedToDos: [ProposedToDo]) throws {
+    func performSave(
+        proposedFocusAreas: [ProposedHabit],
+        proposedHabits: [ProposedHabit],
+        proposedToDos: [ProposedToDo]
+    ) throws {
         for existingHabit in try modelContext.fetchActiveHabits(isSuggested: true) {
             existingHabit.endDate = .now
         }
