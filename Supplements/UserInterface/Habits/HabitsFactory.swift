@@ -139,9 +139,10 @@ private extension HabitsFactory {
                     context: "You've met your target weight! Let's make this a permanent habit.",
                     hasUserEdited: habit.isUserEdited
                 )
+                proposedHabits.append(calorieHabit)
             }
             if let habit = activeHabits.first(where: { $0.targetMetric == .proteinIntake }) {
-                let calorieHabit = ProposedHabit(
+                let proteinHabit = ProposedHabit(
                     habitID: habit.persistentModelID,
                     targetMetric: .proteinIntake,
                     value: habit.value,
@@ -152,6 +153,7 @@ private extension HabitsFactory {
                     context: "You've met your target weight! Let's make this a permanent habit.",
                     hasUserEdited: habit.isUserEdited
                 )
+                proposedHabits.append(proteinHabit)
             }
 
             return NewHabitResult(
