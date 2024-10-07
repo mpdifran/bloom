@@ -51,6 +51,12 @@ private extension BowelMovementsDetailView {
                 Chart {
                     ForEach(summary.bowelMovements) { bowelMovement in
                         if bowelMovement.isValidBristolStoolType {
+                            LineMark(
+                                x: .value("Date", bowelMovement.date),
+                                y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
+                            )
+                            .foregroundStyle(.fill)
+
                             PointMark(
                                 x: .value("Date", bowelMovement.date),
                                 y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
