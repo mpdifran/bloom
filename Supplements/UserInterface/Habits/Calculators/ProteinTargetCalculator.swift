@@ -9,12 +9,6 @@ import Foundation
 import HealthKit
 import DataContainer
 
-private extension Double {
-    static let initialProteinOverallCaloriePercent: Double = 0.30
-    static let intermediateProteinOverallCaloriePercent: Double = 0.35
-    static let advancedProteinOverallCaloriePercent: Double = 0.40
-}
-
 enum ProteinTargetCalculator {
 
     static func targetProtein(
@@ -121,20 +115,12 @@ private extension ProteinTargetCalculator {
     ) -> HKQuantity? {
         let currentProteinPercent = (protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein) / dietaryEnergy.doubleValue(for: .largeCalorie())
 
-        let percentDifference: Double
-        if currentProteinPercent > .advancedProteinOverallCaloriePercent {
-            return nil
-        } else if currentProteinPercent > .intermediateProteinOverallCaloriePercent {
-            percentDifference = Double.advancedProteinOverallCaloriePercent - currentProteinPercent
-        } else if currentProteinPercent > .initialProteinOverallCaloriePercent {
-            percentDifference = Double.intermediateProteinOverallCaloriePercent - currentProteinPercent
-        } else {
-            percentDifference = Double.initialProteinOverallCaloriePercent - currentProteinPercent
-        }
-
         let targetProteinPercent: Double
         switch targetDetails.goal {
         case .loseWeight:
+            let targetPercent = 0.35
+            let percentDifference = targetPercent - currentProteinPercent
+
             switch targetDetails.weightLossSpeed {
             case .slow:
                 targetProteinPercent = currentProteinPercent + percentDifference * 0.3
@@ -143,9 +129,9 @@ private extension ProteinTargetCalculator {
             case .fast:
                 targetProteinPercent = currentProteinPercent + percentDifference
             }
-        case .gainWeight:
-            targetProteinPercent = currentProteinPercent + percentDifference // TODO: Ask Kaitlyn what to do here.
-        case .maintainWeight, .none:
+        case .gainWeight, .maintainWeight:
+            targetProteinPercent = 0.3
+        case .none:
             return nil
         }
 
