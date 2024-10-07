@@ -24,7 +24,7 @@ extension BowelMovementMonthlySummary {
     enum Rating {
         case unhealthy
         case concerning
-        case acceptable
+        case regular
         case optimal
 
         var name: String {
@@ -33,8 +33,8 @@ extension BowelMovementMonthlySummary {
                 "Unhealthy"
             case .concerning:
                 "Concerning"
-            case .acceptable:
-                "Acceptable"
+            case .regular:
+                "Regular"
             case .optimal:
                 "Optimal"
             }
@@ -46,7 +46,7 @@ extension BowelMovementMonthlySummary {
                     .vitalSevere
             case .concerning:
                     .vitalWarning
-            case .acceptable:
+            case .regular:
                     .vitalGood
             case .optimal:
                     .vitalGreat
@@ -57,6 +57,12 @@ extension BowelMovementMonthlySummary {
 
 struct BowelMovementMonthlySummary: Sendable {
     let bowelMovements: [BowelMovementDTO]
+
+    init(bowelMovements: [BowelMovementDTO]) {
+        self.bowelMovements = bowelMovements
+
+        self.calculateScore()
+    }
 
     var barLevel: VitalModel.BarLevel? {
         guard bowelMovements.count >= 2 else { return nil }
@@ -72,7 +78,7 @@ struct BowelMovementMonthlySummary: Sendable {
                 level: .medium,
                 proportion: score.scaledPercent(lower: 0.4, upper: 0.6)
             )
-        case .acceptable:
+        case .regular:
             return VitalModel.BarLevel(
                 level: .high,
                 proportion: score.scaledPercent(lower: 0.6, upper: 0.9)
@@ -84,11 +90,14 @@ struct BowelMovementMonthlySummary: Sendable {
             )
         }
     }
+
+    private(set) var score: Double = 1
+    private(set) var subtitle: String = ""
 }
 
 extension BowelMovementMonthlySummary {
 
-    var score: Double {
+    mutating func calculateScore() {
         var scores = [Double]()
         var previousBowelMovement: BowelMovementDTO?
 
@@ -110,18 +119,21 @@ extension BowelMovementMonthlySummary {
                 }
 
                 let average = [typeScore, intervalScore].average(keyPath: \.self)
+                print("\(bowelMovement.date) Type Score: \(typeScore), intervalScore: \(intervalScore)")
                 scores.append(average)
             } else {
+                print("\(bowelMovement.date) Type Score: \(typeScore)")
                 scores.append(typeScore)
             }
 
             previousBowelMovement = bowelMovement
         }
 
-        return scores.average(keyPath: \.self)
+        self.score = scores.average(keyPath: \.self)
+        self.subtitle = calculateSubtitle()
     }
 
-    var subtitle: String {
+    func calculateSubtitle() -> String {
         guard let start = bowelMovements.min(keyPath: \.date) else {
             return "No Data"
         }
@@ -147,7 +159,7 @@ extension BowelMovementMonthlySummary {
         } else if score < 0.6 {
             return .concerning
         } else if score < 0.9 {
-            return .acceptable
+            return .regular
         } else {
             return .optimal
         }
