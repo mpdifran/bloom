@@ -93,24 +93,15 @@ private extension PreferencesView {
                     .tag(HealthGoal.gainWeight)
             }
 
-            VStack(alignment: .leading) {
-                Text("Target Weight")
+            LabeledContent("Target Weight") {
                 HStack {
-                    TextField(
-                        "",
-                        value: $healthManager.targetWeight,
-                        formatter: NumberFormatter.oneDecimalPlace
-                    )
-                    .selectAllTextOnBeginEditing()
-                    .multilineTextAlignment(.trailing)
-                    .keyboardType(.decimalPad)
-                    .textFieldStyle(.roundedBorder)
-                    .scrollDismissesKeyboard(.interactively)
-                    .fontDesign(.rounded)
-                    .bold()
-
-                    Text("lbs")
+                    Text("\(healthManager.targetWeight.format(using: .oneDecimalPlace)) lbs")
+                    Image(systemName: "chevron.forward")
+                        .foregroundStyle(.secondary)
                 }
+            }
+            .onTapGesture {
+                presentedSheet = TargetWeightEditCard().asAny
             }
 
             if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
