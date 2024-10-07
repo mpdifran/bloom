@@ -12,14 +12,8 @@ extension OnboardingRootView {
         case welcome
         case healthGoals
         case healthKit
-        case vitalLevels
         case ageAndSex
-        case activity
-        case sleep
-        case heart
-        case nutrition
-        case cycleTracking
-        case otherTypes
+        case vitals
         case goals
         case notifications
     }
@@ -45,38 +39,14 @@ struct OnboardingRootView: View {
                 }
             case .healthKit:
                 OnboardingHealthKitView {
-                    setStep(.vitalLevels)
-                }
-            case .vitalLevels:
-                OnboardingHealthVitalLevelsView {
                     setStep(.ageAndSex)
                 }
             case .ageAndSex:
                 OnboardingHealthAgeView {
-                    setStep(.activity)
+                    setStep(.vitals)
                 }
-            case .activity:
-                OnboardingHealthActivityView {
-                    setStep(.sleep)
-                }
-            case .sleep:
-                OnboardingHealthSleepView {
-                    setStep(.heart)
-                }
-            case .heart:
-                OnboardingHealthHeartView {
-                    setStep(.nutrition)
-                }
-            case .nutrition:
-                OnboardingHealthNutritionView {
-                    setStep(.cycleTracking)
-                }
-            case .cycleTracking:
-                OnboardingHealthMenstruationView {
-                    setStep(.otherTypes)
-                }
-            case .otherTypes:
-                OnboardingHealthOtherTypesView {
+            case .vitals:
+                OnboardingHealthVitalLevelsView {
                     setStep(.goals)
                 }
             case .goals:

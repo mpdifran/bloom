@@ -65,7 +65,7 @@ struct BowelMovementMonthlySummary: Sendable {
     }
 
     var barLevel: VitalModel.BarLevel? {
-        guard bowelMovements.count >= 2 else { return nil }
+        guard let rating else { return nil }
 
         switch rating {
         case .unhealthy:
@@ -92,12 +92,16 @@ struct BowelMovementMonthlySummary: Sendable {
     }
 
     private(set) var score: Double = 1
-    private(set) var subtitle: String = ""
+    private(set) var subtitle: String?
 }
 
 extension BowelMovementMonthlySummary {
 
     mutating func calculateScore() {
+        guard bowelMovements.isNotEmpty else {
+            return
+        }
+
         var scores = [Double]()
         var previousBowelMovement: BowelMovementDTO?
 
@@ -153,7 +157,11 @@ extension BowelMovementMonthlySummary {
         return "\(1/pace)x a Day"
     }
 
-    var rating: BowelMovementMonthlySummary.Rating {
+    var rating: BowelMovementMonthlySummary.Rating? {
+        guard bowelMovements.isNotEmpty else {
+            return nil
+        }
+
         if score < 0.4 {
             return .unhealthy
         } else if score < 0.6 {

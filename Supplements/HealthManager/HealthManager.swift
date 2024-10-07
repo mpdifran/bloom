@@ -27,6 +27,7 @@ enum HealthGoal: String {
     case maintainWeight
     case loseWeight
 }
+
 enum WeightLossSpeed: String, CaseIterable, Identifiable {
     var id: Self { self }
 
@@ -69,6 +70,9 @@ final class HealthManager: ObservableObject {
     @Published var weightLossSpeed: WeightLossSpeed = .moderate {
         didSet { UserDefaults.group.set(weightLossSpeed.rawValue, forKey: "HealthManager.weightLossSpeed") }
     }
+    @Published var userReportedActivityLevel: ActivityLevelSummary.ActivityLevel? {
+        didSet { UserDefaults.group.set(userReportedActivityLevel?.rawValue, forKey: "HealthManager.userReportedActivityLevel") }
+    }
 
     var healthTargetDetails: HealthTargetDetails {
         HealthTargetDetails(
@@ -102,6 +106,9 @@ final class HealthManager: ObservableObject {
         }
         if let weightLossSpeedRaw = UserDefaults.group.string(forKey: "HealthManager.weightLossSpeed") {
             self.weightLossSpeed = WeightLossSpeed(rawValue: weightLossSpeedRaw) ?? .moderate
+        }
+        if let activityLevelRaw = UserDefaults.group.string(forKey: "HealthManager.activityLevel") {
+            self.userReportedActivityLevel = ActivityLevelSummary.ActivityLevel(rawValue: activityLevelRaw)
         }
         Task {
             try? await checkAccess()

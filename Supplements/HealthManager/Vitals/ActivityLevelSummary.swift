@@ -9,7 +9,7 @@ import SwiftUI
 import DataContainer
 
 extension ActivityLevelSummary {
-    enum ActivityLevel: CaseIterable, Identifiable {
+    enum ActivityLevel: String, CaseIterable, Identifiable {
         var id: Self { self }
 
         case sedentary

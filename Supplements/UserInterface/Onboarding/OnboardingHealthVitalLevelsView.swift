@@ -12,6 +12,8 @@ import DataContainer
 struct OnboardingHealthVitalLevelsView: View {
     let onContinue: () -> Void
 
+    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -22,8 +24,8 @@ struct OnboardingHealthVitalLevelsView: View {
 
                 Text("Bloom organizes your health data into several categories, called **Vitals**.")
 
-                ForEach(VitalModel.Kind.allCases, id: \.rawValue) { kind in
-                    MiniVitalView(kind: kind)
+                ForEach(vitalsViewModel.vitals) { vital in
+                    MonthlyVitalCardCell(vital: vital)
                 }
 
                 Text("Levels")
@@ -65,11 +67,15 @@ struct OnboardingHealthVitalLevelsView: View {
                 onContinue()
             }
         }
+        .groupedBackground()
         .safeAreaInset(edge: .top) {
             Rectangle()
                 .fill(.bar)
                 .ignoresSafeArea()
                 .frame(height: 0)
+        }
+        .task {
+            await vitalsViewModel.forceFetchVitals()
         }
     }
 }

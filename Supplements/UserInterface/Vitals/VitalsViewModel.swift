@@ -233,9 +233,9 @@ private extension VitalsViewModel {
                 VitalModel(
                     id: .bowelMovements,
                     subtitle: bowelMovementSummary.subtitle,
-                    status: bowelMovementSummary.rating.name,
+                    status: bowelMovementSummary.rating?.name,
                     score: bowelMovementSummary.score,
-                    color: bowelMovementSummary.rating.color,
+                    color: bowelMovementSummary.rating?.color,
                     barLevel: bowelMovementSummary.barLevel
                 )
             )
