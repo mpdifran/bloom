@@ -161,7 +161,7 @@ private extension CalorieTargetCalculator {
             if !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1) {
                 return TargetMetricRecommendation(
                     target: recommendation.target,
-                    context: "Your activity level has changed, so we're changing your calorie goal to match!"
+                    context: "Your activity level has changed, so we're changing your calorie goal to match."
                 )
             }
         } else if
@@ -176,7 +176,7 @@ private extension CalorieTargetCalculator {
             {
                 return TargetMetricRecommendation(
                     target: recommendation.target,
-                    context: "Your activity level has changed, so we're changing your calorie goal to match!"
+                    context: "Your activity level has changed, so we're changing your calorie goal to match."
                 )
             }
         }

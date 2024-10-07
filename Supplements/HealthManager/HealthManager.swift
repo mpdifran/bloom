@@ -353,7 +353,8 @@ extension HealthManager {
         case .gainWeight:
             return weight > targetWeight
         case .maintainWeight:
-            return weight.isWithinRange(of: targetWeight, precision: 0.05)
+            return false
+//            return weight.isWithinRange(of: targetWeight, precision: 0.05)
         case .none:
             return false
         }
