@@ -84,29 +84,43 @@ extension HabitsViewModel {
             existingHabit.endDate = .now
         }
 
-        for proposedHabit in proposedHabits {
+        for proposedFocusArea in proposedFocusAreas {
             // If this is replacing an existing focus area, let's end the existing one.
             if
-                let habitID = proposedHabit.habitID,
+                let habitID = proposedFocusArea.habitID,
                 let existingHabit = try modelContext.fetchHabit(id: habitID)
             {
                 existingHabit.endDate = .now
             }
 
             // If the user added this habit, let's end it.
-            let activeMatchingHabits = try modelContext.fetchActiveHabits(for: proposedHabit.targetMetric)
+            let activeMatchingHabits = try modelContext.fetchActiveHabits(for: proposedFocusArea.targetMetric)
             for habit in activeMatchingHabits {
                 habit.endDate = .now
             }
 
             let habit = Habit(
+                targetMetric: proposedFocusArea.targetMetric,
+                value: proposedFocusArea.value,
+                unitString: proposedFocusArea.unitString,
+                startDate: .now,
+                isSuggested: true,
+                isUserEdited: proposedFocusArea.hasUserEdited,
+                vitalKind: proposedFocusArea.vitalKind,
+                context: proposedFocusArea.context
+            )
+
+            modelContext.insert(habit)
+        }
+
+        for proposedHabit in proposedHabits {
+            let habit = Habit(
                 targetMetric: proposedHabit.targetMetric,
                 value: proposedHabit.value,
                 unitString: proposedHabit.unitString,
                 startDate: .now,
-                isSuggested: true,
-                isUserEdited: false,
-                vitalKind: proposedHabit.vitalKind,
+                isSuggested: false,
+                isUserEdited: proposedHabit.hasUserEdited,
                 context: proposedHabit.context
             )
 
