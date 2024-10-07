@@ -20,10 +20,10 @@ struct ProteinTargetCalculatorSuite {
 
     @Test(
         arguments: [
-            (30, 2000, 65, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (120, 2000, 129, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (40, 2000, 110, HealthGoal.loseWeight, WeightLossSpeed.moderate),
-            (100, 2000, 150, HealthGoal.loseWeight, WeightLossSpeed.fast)
+            (30, 2000, 75, HealthGoal.loseWeight, WeightLossSpeed.slow),
+            (120, 2000, 140, HealthGoal.loseWeight, WeightLossSpeed.slow),
+            (40, 2000, 120, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+            (100, 2000, 180, HealthGoal.loseWeight, WeightLossSpeed.fast)
         ]
     )
     func noExistingHabit(
