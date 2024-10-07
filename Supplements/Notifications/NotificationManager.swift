@@ -12,10 +12,12 @@ extension String {
     enum NotificationID {
         static let goodMorning = "good-morning"
         static let goodEvening = "good-evening"
+        static let reviewFocusAreas = "review-focus-areas"
     }
     enum CategoryID {
         static let goodMorning = "good-morning"
         static let goodEvening = "good-evening"
+        static let reviewFocusAreas = "review-focus-areas"
         static let chatMessage = "chat-message"
         static let goalsMessage = "goals-message"
     }
@@ -98,6 +100,25 @@ extension NotificationManager {
         try? await UNUserNotificationCenter.current().add(
             UNNotificationRequest(
                 identifier: .NotificationID.goodEvening,
+                content: content,
+                trigger: trigger
+            )
+        )
+    }
+
+    func scheduleFocusAreaNotification() async {
+        let content = UNMutableNotificationContent()
+        content.title = "Review Focus Areas"
+        content.subtitle = "It's time to review your focus areas!"
+        content.sound = .default
+        content.categoryIdentifier = .CategoryID.reviewFocusAreas
+
+        let dateComponents = DateComponents(hour: 9, minute: 0, second: 0, weekday: 2)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+
+        try? await UNUserNotificationCenter.current().add(
+            UNNotificationRequest(
+                identifier: .NotificationID.reviewFocusAreas,
                 content: content,
                 trigger: trigger
             )

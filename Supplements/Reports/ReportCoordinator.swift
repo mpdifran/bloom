@@ -53,6 +53,7 @@ final class ReportCoordinator: ObservableObject {
 
         Task {
             await scheduleEveningReport()
+            await NotificationManager.shared.scheduleFocusAreaNotification()
         }
     }
 }
