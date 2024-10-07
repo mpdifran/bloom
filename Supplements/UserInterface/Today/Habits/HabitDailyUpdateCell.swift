@@ -23,7 +23,7 @@ struct HabitDailyUpdateCell: View {
 
     var body: some View {
         HStack {
-            CompletionCheckmarkView(hasCompleted: viewModel.hasCompletedTodayGoal)
+            CompletionCheckmarkView(state: viewModel.goalCompletionState)
 
             VStack(alignment: .leading) {
                 HStack {

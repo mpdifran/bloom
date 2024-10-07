@@ -7,29 +7,46 @@
 
 import SwiftUI
 
+extension CompletionCheckmarkView {
+    enum State {
+        case unmetGoal
+        case metGoal
+        case exceededGoal
+    }
+}
+
 struct CompletionCheckmarkView: View {
-    let hasCompleted: Bool
+    let state: State
 
     var body: some View {
         Group {
-            if hasCompleted {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.white, .tint)
-            } else {
+            switch state {
+            case .unmetGoal:
                 Image(systemName: "circle")
                     .foregroundStyle(.fill)
+            case .metGoal:
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.white, .tint)
+            case .exceededGoal:
+                Image(systemName: "exclamationmark.circle")
+                    .foregroundStyle(.tint)
+                    .background {
+                        Circle()
+                            .fill(.tint.tertiary)
+                    }
             }
         }
         .font(.title)
         .contentTransition(.symbolEffect)
-        .animation(.bouncy, value: hasCompleted)
+        .animation(.bouncy, value: state)
     }
 }
 
 #Preview {
     VStack {
-        CompletionCheckmarkView(hasCompleted: true)
-        CompletionCheckmarkView(hasCompleted: false)
+        CompletionCheckmarkView(state: .unmetGoal)
+        CompletionCheckmarkView(state: .metGoal)
+        CompletionCheckmarkView(state: .exceededGoal)
     }
-    .tint(.mutedPink)
+    .tint(.mutedGreen)
 }

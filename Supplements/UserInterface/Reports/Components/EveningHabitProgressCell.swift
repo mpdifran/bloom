@@ -69,7 +69,7 @@ struct EveningHabitProgressCell: View {
 
             Spacer()
 
-            CompletionCheckmarkView(hasCompleted: viewModel.hasCompletedTodayGoal)
+            CompletionCheckmarkView(state: viewModel.goalCompletionState)
 
             Image(systemName: "chevron.forward")
                 .foregroundStyle(.secondary)

@@ -15,7 +15,7 @@ struct ToDoActionCell: View {
 
     var body: some View {
         HStack {
-            CompletionCheckmarkView(hasCompleted: isComplete)
+            CompletionCheckmarkView(state: isComplete ? .metGoal : .unmetGoal)
 
             LabeledContent {
                 Image(systemName: systemImage)

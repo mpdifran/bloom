@@ -14,7 +14,7 @@ import TelemetryDeck
 final class HabitDailyUpdateCellViewModel: ObservableObject {
 
     @Published var dailyValue: Double = 0
-    @Published var hasCompletedTodayGoal = false
+    @Published var goalCompletionState: CompletionCheckmarkView.State = .unmetGoal
     @Published var shouldShowConfetti = false
 
     private let habit: Habit
@@ -59,12 +59,28 @@ private extension HabitDailyUpdateCellViewModel {
         let dailyQuantity = await currentValue.value
         dailyValue = dailyQuantity.doubleValue(for: habit.unit)
 
-        let prevHasCompletedGoal = hasCompletedTodayGoal
-        hasCompletedTodayGoal = habit.quantityMeetsGoal(dailyQuantity)
+        let prevHasCompletedGoal = goalCompletionState
+
+        if habit.quantityMeetsGoal(dailyQuantity) {
+            goalCompletionState = .metGoal
+        } else {
+            switch habit.targetMetric.measurementStyle {
+            case .minimum:
+                goalCompletionState = .unmetGoal
+            case .range:
+                if habit.quantity.compare(dailyQuantity) == .orderedDescending {
+                    goalCompletionState = .unmetGoal
+                } else {
+                    goalCompletionState = .exceededGoal
+                }
+            @unknown default:
+                fatalError("Unknown Case")
+            }
+        }
 
         if
-            !prevHasCompletedGoal &&
-            hasCompletedTodayGoal &&
+            prevHasCompletedGoal != .metGoal &&
+            goalCompletionState == .metGoal &&
             !Calendar.current.isDateInToday(habit.lastNotificationDate ?? .distantPast)
         {
             let id = habit.persistentModelID
