@@ -77,6 +77,10 @@ struct MiniHeartRateZoneBar: View {
     }
 
     private func width(proxy: GeometryProxy) -> CGFloat {
+        if duration.doubleValue(for: .second()) < 1 {
+            return .barHeight
+        }
+
         let proportionWidth = ((duration.doubleValue(for: .second()) / totalDuration.doubleValue(for: .second())) / maxProportion) * proxy.size.width
 
         return max(proportionWidth, 1)
@@ -85,17 +89,31 @@ struct MiniHeartRateZoneBar: View {
 
 #Preview {
     ScrollView {
-        MiniTargetHeartRateZoneDistributionView(
-            distribution: .init(
-                totalDuration: .init(unit: .minute(), doubleValue: 30),
-                zone1: .init(unit: .minute(), doubleValue: 3),
-                zone2: .init(unit: .minute(), doubleValue: 8),
-                zone3: .init(unit: .minute(), doubleValue: 9),
-                zone4: .init(unit: .minute(), doubleValue: 6),
-                zone5: .init(unit: .minute(), doubleValue: 4)
+        VStack {
+            MiniTargetHeartRateZoneDistributionView(
+                distribution: .init(
+                    totalDuration: .init(unit: .minute(), doubleValue: 30),
+                    zone1: .init(unit: .minute(), doubleValue: 3),
+                    zone2: .init(unit: .minute(), doubleValue: 8),
+                    zone3: .init(unit: .minute(), doubleValue: 9),
+                    zone4: .init(unit: .minute(), doubleValue: 6),
+                    zone5: .init(unit: .minute(), doubleValue: 4)
+                )
             )
-        )
-        .cardContainer(fill: .background.secondary)
+            .cardContainer(fill: .background.secondary)
+
+            MiniTargetHeartRateZoneDistributionView(
+                distribution: .init(
+                    totalDuration: .init(unit: .minute(), doubleValue: 0),
+                    zone1: .init(unit: .minute(), doubleValue: 0),
+                    zone2: .init(unit: .minute(), doubleValue: 0),
+                    zone3: .init(unit: .minute(), doubleValue: 0),
+                    zone4: .init(unit: .minute(), doubleValue: 0),
+                    zone5: .init(unit: .minute(), doubleValue: 0)
+                )
+            )
+            .cardContainer(fill: .background.secondary)
+        }
         .padding()
     }
 }

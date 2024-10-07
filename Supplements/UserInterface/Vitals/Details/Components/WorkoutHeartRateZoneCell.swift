@@ -39,21 +39,39 @@ struct WorkoutHeartRateZoneCell: View {
 
 #Preview {
     ScrollView {
-        WorkoutHeartRateZoneCell(
-            report: .init(
-                activityType: .bowling,
-                workoutCount: 3,
-                heartZoneDistribution: .init(
-                    totalDuration: .init(unit: .minute(), doubleValue: 30),
-                    zone1: .init(unit: .minute(), doubleValue: 9),
-                    zone2: .init(unit: .minute(), doubleValue: 7),
-                    zone3: .init(unit: .minute(), doubleValue: 5),
-                    zone4: .init(unit: .minute(), doubleValue: 5),
-                    zone5: .init(unit: .minute(), doubleValue: 4)
+        VStack {
+            WorkoutHeartRateZoneCell(
+                report: .init(
+                    activityType: .bowling,
+                    workoutCount: 3,
+                    heartZoneDistribution: .init(
+                        totalDuration: .init(unit: .minute(), doubleValue: 30),
+                        zone1: .init(unit: .minute(), doubleValue: 9),
+                        zone2: .init(unit: .minute(), doubleValue: 7),
+                        zone3: .init(unit: .minute(), doubleValue: 5),
+                        zone4: .init(unit: .minute(), doubleValue: 5),
+                        zone5: .init(unit: .minute(), doubleValue: 4)
+                    )
                 )
             )
-        )
-        .cardContainer(fill: .background.secondary)
+            .cardContainer(fill: .background.secondary)
+
+            WorkoutHeartRateZoneCell(
+                report: .init(
+                    activityType: .walking,
+                    workoutCount: 4,
+                    heartZoneDistribution: .init(
+                        totalDuration: .init(unit: .minute(), doubleValue: 30),
+                        zone1: .init(unit: .minute(), doubleValue: 0),
+                        zone2: .init(unit: .minute(), doubleValue: 0),
+                        zone3: .init(unit: .minute(), doubleValue: 0),
+                        zone4: .init(unit: .minute(), doubleValue: 0),
+                        zone5: .init(unit: .minute(), doubleValue: 0)
+                    )
+                )
+            )
+            .cardContainer(fill: .background.secondary)
+        }
         .padding()
     }
 }

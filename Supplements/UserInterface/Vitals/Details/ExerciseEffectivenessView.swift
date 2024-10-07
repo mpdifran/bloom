@@ -117,13 +117,15 @@ private extension ExerciseEffectivenessView {
     @ViewBuilder
     var workoutTypeSummary: some View {
         if let workoutTypeReports = viewModel.exerciseEffectivenessSummary?.details.workoutTypeHeartRateReports {
-            VStack {
-                VitalDetailChartTitleView(title: "Workouts", value: "")
-                    .padding(.horizontal)
+            if workoutTypeReports.isNotEmpty {
+                VStack {
+                    VitalDetailChartTitleView(title: "Workouts", value: "")
+                        .padding(.horizontal)
 
-                ForEach(workoutTypeReports) { report in
-                    WorkoutHeartRateZoneCell(report: report)
-                        .cardContainer(fill: .background.secondary)
+                    ForEach(workoutTypeReports) { report in
+                        WorkoutHeartRateZoneCell(report: report)
+                            .cardContainer(fill: .background.secondary)
+                    }
                 }
             }
         }

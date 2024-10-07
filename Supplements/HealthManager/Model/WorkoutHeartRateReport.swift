@@ -29,7 +29,7 @@ struct WorkoutHeartRateReport: Identifiable, Hashable, Sendable {
         var zoneDurations: [TimeInterval] = [0, 0, 0, 0, 0, 0]
 
         var currentZone = 0
-        var zoneStartDate: Date?
+        var zoneStartDate: Date? = heartRateSamples.first?.startDate
         var zoneEndDate: Date?
 
         for heartRateSample in heartRateSamples {
