@@ -83,7 +83,7 @@ struct MiniHeartRateZoneBar: View {
 
         let proportionWidth = ((duration.doubleValue(for: .second()) / totalDuration.doubleValue(for: .second())) / maxProportion) * proxy.size.width
 
-        return max(proportionWidth, 1)
+        return min(max(CGFloat.barHeight, proportionWidth), proxy.size.width)
     }
 }
 
