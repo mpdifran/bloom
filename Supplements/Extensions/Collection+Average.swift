@@ -33,7 +33,11 @@ extension Collection {
         return sum / Double(items.count)
     }
 
-    func variance(keyPath: KeyPath<Element, Double>, subsequence: CollectionAverageSubsequence? = nil) -> Double? {
+    func variance(
+        keyPath: KeyPath<Element, Double>,
+        subsequence: CollectionAverageSubsequence? = nil,
+        mean: Double? = nil
+    ) -> Double? {
         let items: Array<Element>
         switch subsequence {
         case .prefix(let prefix):
@@ -46,14 +50,22 @@ extension Collection {
 
         guard items.isNotEmpty else { return nil }
 
-        let mean = average(keyPath: keyPath, subsequence: subsequence)
+        let mean = mean ?? average(keyPath: keyPath, subsequence: subsequence)
         let sumOfSquaredDifferences = items.map { pow($0[keyPath: keyPath] - mean, 2) }.reduce(0, +)
 
         return sumOfSquaredDifferences / Double(items.count)
     }
 
-    func standardDeviation(keyPath: KeyPath<Element, Double>, subsequence: CollectionAverageSubsequence? = nil) -> Double? {
-        guard let variance = variance(keyPath: keyPath, subsequence: subsequence) else { return nil }
+    func standardDeviation(
+        keyPath: KeyPath<Element, Double>,
+        subsequence: CollectionAverageSubsequence? = nil,
+        mean: Double? = nil
+    ) -> Double? {
+        guard let variance = variance(
+            keyPath: keyPath,
+            subsequence: subsequence,
+            mean: mean
+        ) else { return nil }
 
         return sqrt(variance)
     }

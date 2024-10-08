@@ -171,10 +171,18 @@ extension StressMonthlySummary.Details {
 
         var stressScores = [StressMonthlySummary.DateStressScore]()
 
+        let hrvValues = twoMonthsHeartRateVariability.map({ $0.quantity.doubleValue(for: .millisecond()) })
+        let hrvAverage = hrvValues.average(keyPath: \.self)
+        let hrvStdDev = hrvValues.standardDeviation(keyPath: \.self, mean: hrvAverage)
+
         Calendar.current.iterate(dateRange: targetDateRange, by: .init(day: 1)) { date in
             let referenceDate = Calendar.current.startOfDay(for: date)
 
-            let hrvStressScore = hrvStressLevel(for: referenceDate)
+            let hrvStressScore = simplifiedHVRStressLevel(
+                for: referenceDate,
+                average: hrvAverage,
+                standardDeviation: hrvStdDev
+            )
             let bloodPressureScore = bloodPressureStressLevel(for: referenceDate)
             let sleepStressScore = sleepStressLevel(for: referenceDate)
 
@@ -221,25 +229,19 @@ extension StressMonthlySummary.Details {
         }
     }
 
-    func hrvStressLevel(for date: Date) -> Double? {
-        let trailingMonthDateRange = DateRange.trailingMonths(from: date, numberOfMonths: 1)
-        let trailingMonthValues = twoMonthsHeartRateVariability.compactMap({ (sample) -> Double? in
-            guard trailingMonthDateRange.contains(date: sample.date) else { return nil }
-
-            return sample.quantity.doubleValue(for: .millisecond())
-        })
-
+    func simplifiedHVRStressLevel(
+        for date: Date,
+        average: Double,
+        standardDeviation: Double?
+    ) -> Double? {
         guard
-            let trailingMonthStdDev = trailingMonthValues.standardDeviation(keyPath: \.self),
+            let standardDeviation,
             let currentSample = twoMonthsHeartRateVariability.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) })
-        else {
-            return nil
-        }
+        else { return nil }
 
-        let trailingMonthAverage = trailingMonthValues.average(keyPath: \.self)
         let value = currentSample.quantity.doubleValue(for: .millisecond())
-        let lower = trailingMonthAverage - 2 * trailingMonthStdDev
-        let upper = trailingMonthAverage + 2 * trailingMonthStdDev
+        let lower = average - 2 * standardDeviation
+        let upper = average + 2 * standardDeviation
 
         return value.scaledSymmetricalScore(lower: lower, upper: upper)
     }
