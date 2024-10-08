@@ -31,6 +31,14 @@
 		FF0F79E72C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0F79E62C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift */; };
 		FF1327F52CB41FE700ACF981 /* SectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1327F42CB41FE700ACF981 /* SectionTitleView.swift */; };
 		FF1327F82CB4338000ACF981 /* TargetWeightEditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1327F72CB4338000ACF981 /* TargetWeightEditCard.swift */; };
+		FF1327FB2CB5AEB800ACF981 /* BloomPlusPaywall.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1327FA2CB5AEB800ACF981 /* BloomPlusPaywall.swift */; };
+		FF1327FD2CB5AF9300ACF981 /* PaywallButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1327FC2CB5AF9300ACF981 /* PaywallButtonStyle.swift */; };
+		FF1327FF2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1327FE2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift */; };
+		FF1328022CB5B43400ACF981 /* BloomPlusPaywallHeroImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328012CB5B43400ACF981 /* BloomPlusPaywallHeroImageView.swift */; };
+		FF1328042CB5B6FE00ACF981 /* BloomPlusFeaturesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328032CB5B6FE00ACF981 /* BloomPlusFeaturesListView.swift */; };
+		FF1328082CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328072CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift */; };
+		FF13280A2CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */; };
+		FF13280E2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
 		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
@@ -540,6 +548,14 @@
 		FF0F79E62C2CA01D0013F048 /* SleepHeartRateSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepHeartRateSummaryCell.swift; sourceTree = "<group>"; };
 		FF1327F42CB41FE700ACF981 /* SectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTitleView.swift; sourceTree = "<group>"; };
 		FF1327F72CB4338000ACF981 /* TargetWeightEditCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetWeightEditCard.swift; sourceTree = "<group>"; };
+		FF1327FA2CB5AEB800ACF981 /* BloomPlusPaywall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusPaywall.swift; sourceTree = "<group>"; };
+		FF1327FC2CB5AF9300ACF981 /* PaywallButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallButtonStyle.swift; sourceTree = "<group>"; };
+		FF1327FE2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusHeaderView.swift; sourceTree = "<group>"; };
+		FF1328012CB5B43400ACF981 /* BloomPlusPaywallHeroImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusPaywallHeroImageView.swift; sourceTree = "<group>"; };
+		FF1328032CB5B6FE00ACF981 /* BloomPlusFeaturesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusFeaturesListView.swift; sourceTree = "<group>"; };
+		FF1328072CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusUserReviewListView.swift; sourceTree = "<group>"; };
+		FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusUserTestimonialChatView.swift; sourceTree = "<group>"; };
+		FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusLegalSectionView.swift; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
 		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
@@ -1047,6 +1063,29 @@
 				FF1327F72CB4338000ACF981 /* TargetWeightEditCard.swift */,
 			);
 			path = HealthGoals;
+			sourceTree = "<group>";
+		};
+		FF1327F92CB5AE9100ACF981 /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				FF1327FA2CB5AEB800ACF981 /* BloomPlusPaywall.swift */,
+				FF1328002CB5B33F00ACF981 /* Components */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		FF1328002CB5B33F00ACF981 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FF1327FE2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift */,
+				FF1328012CB5B43400ACF981 /* BloomPlusPaywallHeroImageView.swift */,
+				FF1328032CB5B6FE00ACF981 /* BloomPlusFeaturesListView.swift */,
+				FF1328072CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift */,
+				FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */,
+				FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */,
+				FF1327FC2CB5AF9300ACF981 /* PaywallButtonStyle.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		FF1705182C109FF3000D4B3D /* Programs */ = {
@@ -1885,6 +1924,7 @@
 				FFF61B122BEE807C00926042 /* Supplements */,
 				FF8B8B222BFD363C00BA2128 /* Profile */,
 				FF8F79C72C62C1540095C36D /* Preferences */,
+				FF1327F92CB5AE9100ACF981 /* Paywall */,
 				FFDDE2872C0A058500BFDEF5 /* ChartUI */,
 				FFB444482BEC3AD100486AD7 /* ChatUI */,
 				FFF61AFF2BED7C0000926042 /* Components */,
@@ -2639,6 +2679,7 @@
 				FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */,
 				FF4A21C92C89FF5500278019 /* UserNamePrompt.swift in Sources */,
 				FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */,
+				FF13280A2CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift in Sources */,
 				FFC77B062C5E6724003E5F85 /* HKQuantity+Helpers.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
 				FF21AB9D2C12036A004D0D82 /* RestingHeartRateCell.swift in Sources */,
@@ -2666,9 +2707,11 @@
 				FF7890502C34733400F9C1A5 /* SleepSuggestionModel.swift in Sources */,
 				FFF61B092BED9CA900926042 /* Color+Random.swift in Sources */,
 				FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */,
+				FF13280E2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFAFF4212CAC37DF00FAD3C9 /* Collection+Trim.swift in Sources */,
 				FFE41D1F2C8BCE1500E3E559 /* EveningHabitProgressCell.swift in Sources */,
+				FF1328082CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,
@@ -2728,6 +2771,7 @@
 				FF2FB8A62C9DD81A00F57523 /* Habit+Helpers.swift in Sources */,
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
 				FF88F1302C7D0C420093D1B4 /* AllActionDataListView.swift in Sources */,
+				FF1327FB2CB5AEB800ACF981 /* BloomPlusPaywall.swift in Sources */,
 				FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */,
 				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
 				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
@@ -2766,6 +2810,7 @@
 				FFBE523D2C74EE7D00F510DE /* WorkoutHeartRateReport.swift in Sources */,
 				FF9782F82C9B3B0500A8ED7E /* HabitsViewModel.swift in Sources */,
 				FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */,
+				FF1327FD2CB5AF9300ACF981 /* PaywallButtonStyle.swift in Sources */,
 				FFB444532BEC3B0600486AD7 /* ChatBubble.swift in Sources */,
 				FF8F79C62C628E200095C36D /* NetEnergyMathView.swift in Sources */,
 				FF8F79C02C62611D0095C36D /* CapsuleRangeChart.swift in Sources */,
@@ -2811,6 +2856,7 @@
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
+				FF1327FF2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift in Sources */,
 				FFAFF41F2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift in Sources */,
 				FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
@@ -2863,6 +2909,7 @@
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FF6E06232CA3514700C4219B /* OnboardingHealthMenstruationView.swift in Sources */,
 				FFBE52392C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift in Sources */,
+				FF1328022CB5B43400ACF981 /* BloomPlusPaywallHeroImageView.swift in Sources */,
 				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,
 				FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */,
 				FFAFF4272CAC831500FAD3C9 /* CalorieTargetCalculator.swift in Sources */,
@@ -2893,6 +2940,7 @@
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FF4CAB042C81441F001A59F3 /* WeatherAlertCell.swift in Sources */,
 				FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */,
+				FF1328042CB5B6FE00ACF981 /* BloomPlusFeaturesListView.swift in Sources */,
 				FFE41D152C8B83F600E3E559 /* ToDoActionCell.swift in Sources */,
 				FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */,
 				FF6E06192CA2080800C4219B /* DebugHabitCell.swift in Sources */,

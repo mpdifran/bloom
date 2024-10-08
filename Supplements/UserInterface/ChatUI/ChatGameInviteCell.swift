@@ -39,8 +39,8 @@ public struct ChatGameInviteCell<Content: View>: View {
             position: isCurrentUser ? .trailing : .leading,
             showTail: showTail,
             shouldFill: !isDirect,
-            foregroundColor: foregroundColor,
-            backgroundColor: backgroundColor
+            foregroundStyle: foregroundColor,
+            backgroundStyle: backgroundColor
         ) {
             VStack(alignment: .leading) {
                 contentBuilder()

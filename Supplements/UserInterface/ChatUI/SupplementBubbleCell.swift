@@ -15,11 +15,13 @@ struct SupplementBubble: View {
     @ObservedObject private var profileViewModel = ProfileViewModel.shared
 
     var body: some View {
-        ChatBubble(position: .leading,
-                   showTail: true,
-                   shouldFill: true,
-                   foregroundColor: Color(uiColor: .label),
-                   backgroundColor: .chatGrey) {
+        ChatBubble(
+            position: .leading,
+            showTail: true,
+            shouldFill: true,
+            foregroundStyle: Color(uiColor: .label),
+            backgroundStyle: .chatGrey
+        ) {
             HStack {
                 VStack(alignment: .leading) {
                     HStack(spacing: 4) {

@@ -7,37 +7,40 @@
 
 import SwiftUI
 
-public struct ChatBubble<Content>: View where Content: View {
-    public enum Position {
-        case leading, trailing
-    }
+public enum ChatBubblePosition {
+    case leading, trailing
+}
 
-    let position: Position
+public struct ChatBubble<Content, ForegroundStyle, BackgroundStyle>: View where Content: View, ForegroundStyle: ShapeStyle, BackgroundStyle: ShapeStyle {
+    let position: ChatBubblePosition
     let showTail: Bool
     let shouldFill: Bool
-    let foregroundColor: Color
-    let backgroundColor : Color
+    let includePadding: Bool
+    let foregroundStyle: ForegroundStyle
+    let backgroundStyle: BackgroundStyle
     let content: () -> Content
 
     public init(
-        position: Position,
+        position: ChatBubblePosition,
         showTail: Bool = false,
         shouldFill: Bool = true,
-        foregroundColor: Color = Color(uiColor: .label),
-        backgroundColor: Color,
+        includePadding: Bool = true,
+        foregroundStyle: ForegroundStyle = Color(uiColor: .label),
+        backgroundStyle: BackgroundStyle,
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.position = position
         self.showTail = showTail
         self.shouldFill = shouldFill
-        self.foregroundColor = foregroundColor
-        self.backgroundColor = backgroundColor
+        self.includePadding = includePadding
+        self.foregroundStyle = foregroundStyle
+        self.backgroundStyle = backgroundStyle
         self.content = content
     }
 
     public var body: some View {
         HStack {
-            if position == .trailing {
+            if position == .trailing && includePadding {
                 Spacer(minLength: 60)
             }
 
@@ -46,12 +49,12 @@ public struct ChatBubble<Content>: View where Content: View {
                     .padding(.vertical, 10)
                     .padding(.horizontal, 15)
                     .frame(minWidth: 40)
-                    .foregroundColor(foregroundColor)
+                    .foregroundStyle(foregroundStyle)
                     .background(backgroundView)
             }
             .padding(position == .leading ? .leading : .trailing)
 
-            if position == .leading {
+            if position == .leading && includePadding{
                 Spacer(minLength: 60)
             }
         }
@@ -72,15 +75,15 @@ extension ChatBubble {
     var backgroundView: some View {
         if shouldFill {
             return ChatBubbleShape(tailPosition: tailPosition)
-                .fill(backgroundColor)
+                .fill(backgroundStyle)
                 .asAny
         } else {
             return ChatBubbleShape(tailPosition: tailPosition)
                 .stroke(style: StrokeStyle(lineWidth: 3, dash: [4]))
-                .fill(backgroundColor)
+                .fill(backgroundStyle)
                 .background(
                     ChatBubbleShape(tailPosition: tailPosition)
-                        .fill(backgroundColor.opacity(0.3))
+                        .fill(backgroundStyle.opacity(0.3))
                 )
                 .asAny
         }
@@ -91,31 +94,31 @@ struct ChatBubble_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView {
             VStack(spacing: 8) {
-                ChatBubble(position: .leading, showTail: true, backgroundColor: .chatGrey) {
+                ChatBubble(position: .leading, showTail: true, backgroundStyle: .chatGrey) {
                     Text("Hello World")
                 }
-                ChatBubble(position: .trailing, foregroundColor: .white, backgroundColor: .blue) {
+                ChatBubble(position: .trailing, foregroundStyle: .white, backgroundStyle: .blue) {
                     Text("Why hello")
                 }
-                ChatBubble(position: .trailing, showTail: true, foregroundColor: .white, backgroundColor: .blue) {
+                ChatBubble(position: .trailing, showTail: true, foregroundStyle: .white, backgroundStyle: .blue) {
                     Text("How are you doing?")
                 }
-                ChatBubble(position: .leading, showTail: true, backgroundColor: .chatGrey) {
+                ChatBubble(position: .leading, showTail: true, backgroundStyle: .chatGrey) {
                     Text("I'm doing great, this is a really great chat app don't you say?")
                 }
-                ChatBubble(position: .trailing, showTail: true, foregroundColor: .white, backgroundColor: .blue) {
+                ChatBubble(position: .trailing, showTail: true, foregroundStyle: .white, backgroundStyle: .blue) {
                     Text("Yes, it is certainly splendid. And it's built with no server!")
                 }
-                ChatBubble(position: .trailing, showTail: true, foregroundColor: .white, backgroundColor: .blue) {
+                ChatBubble(position: .trailing, showTail: true, foregroundStyle: .white, backgroundStyle: .blue) {
                     Text("I")
                 }
-                ChatBubble(position: .trailing, showTail: true, foregroundColor: .white, backgroundColor: .blue) {
+                ChatBubble(position: .trailing, showTail: true, foregroundStyle: .white, backgroundStyle: .blue) {
                     Text("🥳")
                 }
-                ChatBubble(position: .leading, showTail: true, shouldFill: false, backgroundColor: .chatGrey) {
+                ChatBubble(position: .leading, showTail: true, shouldFill: false, backgroundStyle: .chatGrey) {
                     Text("This is a secret direct message, don't tell anyone!")
                 }
-                ChatBubble(position: .trailing, showTail: true, shouldFill: false, backgroundColor: .blue) {
+                ChatBubble(position: .trailing, showTail: true, shouldFill: false, backgroundStyle: .blue) {
                     Text("OK I won't!")
                 }
             }

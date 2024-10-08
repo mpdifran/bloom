@@ -24,11 +24,13 @@ public struct TypingIndicatorCell: View {
     @State private var dot3Opacity: CGFloat = 0.3
 
     public var body: some View {
-        ChatBubble(position: .leading,
-                   showTail: true,
-                   shouldFill: !isDirect,
-                   foregroundColor: Color(uiColor: .label),
-                   backgroundColor: .chatGrey) {
+        ChatBubble(
+            position: .leading,
+            showTail: true,
+            shouldFill: !isDirect,
+            foregroundStyle: Color(uiColor: .label),
+            backgroundStyle: .chatGrey
+        ) {
             tripleDotAnimation
         }
     }

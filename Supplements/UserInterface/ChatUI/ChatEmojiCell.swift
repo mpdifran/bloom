@@ -37,13 +37,13 @@ struct ChatEmojiCell_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView {
             VStack(spacing: 4) {
-                ChatBubble(position: .trailing, showTail: false, shouldFill: true, backgroundColor: .accentColor) {
+                ChatBubble(position: .trailing, showTail: false, shouldFill: true, backgroundStyle: .tint) {
                     Text("Hey")
                         .foregroundColor(.white)
                 }
                 ChatEmojiCell(emojiMessage: "🥳🤟🏻", isCurrentUser: true)
 
-                ChatBubble(position: .leading, showTail: false, shouldFill: true, backgroundColor: .chatGrey) {
+                ChatBubble(position: .leading, showTail: false, shouldFill: true, backgroundStyle: .chatGrey) {
                     Text("What's up?")
                 }
                 ChatEmojiCell(emojiMessage: "🥳🤟🏻", isCurrentUser: false)

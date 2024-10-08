@@ -29,8 +29,8 @@ public struct ChatBubbleCell: View {
         ChatBubble(position: isCurrentUser ? .trailing : .leading,
                    showTail: showTail,
                    shouldFill: !isDirect,
-                   foregroundColor: foregroundColor,
-                   backgroundColor: isCurrentUser ? .accentColor : .chatGrey) {
+                   foregroundStyle: foregroundColor,
+                   backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(Color.chatGrey)) {
             Text(message)
         }
     }

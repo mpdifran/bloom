@@ -19,8 +19,8 @@ struct ActivityBubbleCell: View {
             position: .leading,
             showTail: true,
             shouldFill: true,
-            foregroundColor: Color(uiColor: .label),
-            backgroundColor: .chatGrey) {
+            foregroundStyle: Color(uiColor: .label),
+            backgroundStyle: .chatGrey) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         HStack {
