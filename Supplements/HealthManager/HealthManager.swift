@@ -696,6 +696,12 @@ extension HealthManager {
             }
 
             let unit = HKUnit.largeCalorie()
+
+            guard basalSample.quantity.doubleValue(for: unit) > 0 else {
+                samples.append(.init(date: basalSample.date, value: 1))
+                continue
+            }
+
             let sum = activeSample.quantity.doubleValue(for: unit) + basalSample.quantity.doubleValue(for: unit)
             let ratio = sum / basalSample.quantity.doubleValue(for: unit)
 

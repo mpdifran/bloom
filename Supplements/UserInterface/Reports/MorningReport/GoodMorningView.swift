@@ -29,10 +29,13 @@ struct GoodMorningView: View {
     @State private var isLoadingWeather = false
     @State private var showSleepTodayView = false
 
+    private let randomMenstrualCyclePhaseFactIndex = Int.random(in: 0..<6)
+
     var body: some View {
         NavigationStack {
             List {
                 sleepSection
+                menstrualCycleSection
                 activityLevelSection
                 weatherSection
                 calendarSection
@@ -182,6 +185,35 @@ private extension GoodMorningView {
                                     .foregroundStyle(.secondary)
                             }
                             Spacer(minLength: 0)
+                        }
+                    }
+                }
+            default:
+                EmptyView()
+            }
+        }
+    }
+
+    @ViewBuilder
+    var menstrualCycleSection: some View {
+        if let phase = vitalsViewModel.menstrualSummary?.currentPhase() {
+            switch phase {
+            case .follicular, .luteal:
+                Section("Cycle Phase") {
+                    HStack {
+                        Image(systemName: "circle.dotted.and.circle")
+                            .font(.largeTitle)
+                            .foregroundStyle(phase.color!)
+                            .frame(width: 50)
+
+                        VStack(alignment: .leading) {
+                            Text(phase.name)
+                                .font(.title3)
+                                .bold()
+
+                            Text(phase.coolFacts[randomMenstrualCyclePhaseFactIndex % phase.coolFacts.count].fact)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }

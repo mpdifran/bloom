@@ -11,7 +11,7 @@ extension MenstrualCycle.MenstrualFlow {
 
     var marksBeginningOfCycle: Bool {
         switch self {
-        case .medium, .heavy:
+        case .medium, .heavy, .unspecified:
             return true
         default:
             return false
