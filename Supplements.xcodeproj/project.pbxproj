@@ -40,6 +40,7 @@
 		FF13280A2CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */; };
 		FF13280E2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */; };
 		FF1328122CB6D42F00ACF981 /* EveningHabitStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328112CB6D42F00ACF981 /* EveningHabitStatusCell.swift */; };
+		FF1328142CB7082800ACF981 /* MorningHabitStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328132CB7082800ACF981 /* MorningHabitStatusCell.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
 		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
@@ -557,6 +558,7 @@
 		FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusUserTestimonialChatView.swift; sourceTree = "<group>"; };
 		FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusLegalSectionView.swift; sourceTree = "<group>"; };
 		FF1328112CB6D42F00ACF981 /* EveningHabitStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningHabitStatusCell.swift; sourceTree = "<group>"; };
+		FF1328132CB7082800ACF981 /* MorningHabitStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorningHabitStatusCell.swift; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
 		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
@@ -2074,6 +2076,7 @@
 				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
 				FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */,
 				FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */,
+				FF1328132CB7082800ACF981 /* MorningHabitStatusCell.swift */,
 				FF1328112CB6D42F00ACF981 /* EveningHabitStatusCell.swift */,
 			);
 			path = Components;
@@ -2713,6 +2716,7 @@
 				FF1328082CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
+				FF1328142CB7082800ACF981 /* MorningHabitStatusCell.swift in Sources */,
 				FF8B8B2E2BFE36FF00BA2128 /* NewProfileItemView.swift in Sources */,
 				FFBE52272C6EF69B00F510DE /* OnboardingTitleCardView.swift in Sources */,
 				FFA402C62C9473AE00D8DD40 /* Stripes.metal in Sources */,

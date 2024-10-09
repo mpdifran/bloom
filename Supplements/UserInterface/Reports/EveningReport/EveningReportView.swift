@@ -7,7 +7,7 @@
 
 import SwiftUI
 import AppUI
-import EventKit
+@preconcurrency import EventKit
 import EventKitUI
 import SwiftData
 import DataContainer
@@ -22,6 +22,8 @@ struct EveningReportView: View {
     @State private var selectedHabit: Habit?
     @State private var events = [EKEvent]()
     @State private var selectedEvent: EKEvent?
+
+    @State private var completedTargetMetrics = Set<TargetMetric>()
 
     init() {
         _activeHabits = Query(
@@ -62,6 +64,9 @@ struct EveningReportView: View {
             await CalendarManager.shared.promptForPermission()
             self.events = await CalendarManager.shared.eventsTomorrow()
         }
+        .task {
+            await calculateHabitCompletion()
+        }
     }
 }
 
@@ -70,14 +75,33 @@ private extension EveningReportView {
     @ViewBuilder
     var habitsSection: some View {
         if activeHabits.isNotEmpty {
-            Section("Habits") {
-                ForEach(activeHabits) { habit in
-                    Button {
-                        selectedHabit = habit
-                    } label: {
-                        EveningHabitStatusCell(habit: habit)
+            if completedTargetMetrics.isNotEmpty {
+                Section("Completed Habits") {
+                    ForEach(activeHabits) { habit in
+                        if completedTargetMetrics.contains(habit.targetMetric) {
+                            Button {
+                                selectedHabit = habit
+                            } label: {
+                                EveningHabitStatusCell(habit: habit)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
-                    .buttonStyle(.plain)
+                }
+            }
+
+            if completedTargetMetrics.count < activeHabits.count {
+                Section("To Focus On Tomorrow") {
+                    ForEach(activeHabits) { habit in
+                        if !completedTargetMetrics.contains(habit.targetMetric) {
+                            Button {
+                                selectedHabit = habit
+                            } label: {
+                                EveningHabitStatusCell(habit: habit)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
                 }
             }
         }
@@ -115,6 +139,21 @@ private extension EveningReportView {
                     .onTapGesture {
                         selectedEvent = event
                     }
+            }
+        }
+    }
+}
+
+private extension EveningReportView {
+
+    func calculateHabitCompletion() async {
+        for habit in activeHabits {
+            let targetMetric = habit.targetMetric
+
+            let dailyQuantity = await targetMetric.fetchTotalQuantity(for: .today())
+
+            if habit.quantityMeetsGoal(dailyQuantity) {
+                completedTargetMetrics.insert(targetMetric)
             }
         }
     }

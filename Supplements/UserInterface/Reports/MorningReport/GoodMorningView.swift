@@ -8,11 +8,12 @@
 import SwiftUI
 import AppUI
 import AppFoundations
-import EventKit
+@preconcurrency import EventKit
 import EventKitUI
-import WeatherKit
+@preconcurrency import WeatherKit
 import Charts
 import DataContainer
+import SwiftData
 
 @MainActor
 struct GoodMorningView: View {
@@ -29,14 +30,29 @@ struct GoodMorningView: View {
     @State private var isLoadingWeather = false
     @State private var showSleepTodayView = false
 
+    @State private var incompleteTargetMetrics = Set<TargetMetric>()
+
+    @Query var activeHabits: [Habit]
+
     private let randomMenstrualCyclePhaseFactIndex = Int.random(in: 0..<6)
+
+    init() {
+        _activeHabits = Query(
+            filter: #Predicate<Habit> { habit in
+                habit.endDate == nil
+            },
+            sort: \Habit.startDate,
+            order: .reverse
+        )
+    }
 
     var body: some View {
         NavigationStack {
             List {
                 sleepSection
-                menstrualCycleSection
+                focusAreasSection
                 activityLevelSection
+                menstrualCycleSection
                 weatherSection
                 calendarSection
             }
@@ -75,6 +91,9 @@ struct GoodMorningView: View {
         .task {
             await CalendarManager.shared.promptForPermission()
             self.events = await CalendarManager.shared.eventsToday()
+        }
+        .task {
+            await calculateHabitCompletion()
         }
     }
 }
@@ -219,6 +238,31 @@ private extension GoodMorningView {
                 }
             default:
                 EmptyView()
+            }
+        }
+    }
+
+    @ViewBuilder
+    var focusAreasSection: some View {
+        if incompleteTargetMetrics.isNotEmpty {
+            Section("Focus On Today") {
+                ForEach(activeHabits) { habit in
+                    if incompleteTargetMetrics.contains(habit.targetMetric) {
+                        MorningHabitStatusCell(habit: habit)
+                    }
+                }
+            }
+        }
+    }
+
+    func calculateHabitCompletion() async {
+        for habit in activeHabits {
+            let targetMetric = habit.targetMetric
+
+            let dailyQuantity = await targetMetric.fetchTotalQuantity(for: .yesterday())
+
+            if !habit.quantityMeetsGoal(dailyQuantity) {
+                incompleteTargetMetrics.insert(targetMetric)
             }
         }
     }
