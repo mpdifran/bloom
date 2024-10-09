@@ -20,7 +20,17 @@ struct UserAddedGoalPicker: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @Query private var allHabits: [Habit]
+    @Query private var activeHabits: [Habit]
+
+    init() {
+        _activeHabits = Query(
+            filter: #Predicate<Habit> { habit in
+                habit.endDate == nil
+            },
+            sort: \Habit.startDate,
+            order: .forward
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -103,7 +113,7 @@ private extension UserAddedGoalPicker {
         TargetMetric.allCases.filter({ targetMetric in
             if targetMetric == .none { return false }
 
-            return !allHabits.contains { habit in
+            return !activeHabits.contains { habit in
                 habit.targetMetric == targetMetric
             }
         })
