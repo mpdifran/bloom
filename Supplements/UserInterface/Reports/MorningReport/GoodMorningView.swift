@@ -33,9 +33,9 @@ struct GoodMorningView: View {
         NavigationStack {
             List {
                 sleepSection
+                activityLevelSection
                 weatherSection
                 calendarSection
-                activityLevelSection
             }
             .navigationTitle("Morning Report")
             .listStyle(.plain)
@@ -164,23 +164,25 @@ private extension GoodMorningView {
                     }
                 }
             case .sedentary:
-                Section("Activity Level") {
-                    HStack {
-                        Image(systemName: VitalModel.Kind.activityLevel.systemImage)
-                            .font(.largeTitle)
-                            .foregroundStyle(.green)
-                            .frame(width: 50)
+                if vitalsViewModel.activityLevelSummary?.details.hasSedentaryStreakLast3Days == true {
+                    Section("Activity Level") {
+                        HStack {
+                            Image(systemName: VitalModel.Kind.activityLevel.systemImage)
+                                .font(.largeTitle)
+                                .foregroundStyle(.green)
+                                .frame(width: 50)
 
-                        VStack(alignment: .leading) {
-                            Text("Energy Ratio")
-                                .font(.title3)
-                                .bold()
+                            VStack(alignment: .leading) {
+                                Text("Energy Ratio")
+                                    .font(.title3)
+                                    .bold()
 
-                            Text("Your Energy Ratio yesterday was in the Sedentary level (\(energyRatioSample.value.format(using: .oneDecimalPlace))). Today might be a good day to get active!")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                Text("Your Energy Ratio has been sedentary over the last 3 days. Today might be a good day to get active!")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer(minLength: 0)
                         }
-                        Spacer(minLength: 0)
                     }
                 }
             default:

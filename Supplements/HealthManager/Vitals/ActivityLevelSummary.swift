@@ -208,6 +208,26 @@ extension ActivityLevelSummary.Details {
         }
     }
 
+    var hasSedentaryStreakLast3Days: Bool {
+        guard let index = energyRatioSamples.lastIndex(where: { Calendar.current.isDateInYesterday($0.date) }) else {
+            return false
+        }
+
+        guard
+            let firstDay = energyRatioSamples.safeAccess(at: UInt(index - 2)),
+            let secondDay = energyRatioSamples.safeAccess(at: UInt(index - 1)),
+            let thirdDay = energyRatioSamples.safeAccess(at: UInt(index))
+        else {
+            return false
+        }
+
+        let firstLevel = ActivityLevelSummary.ActivityLevel(firstDay.value)
+        let secondLevel = ActivityLevelSummary.ActivityLevel(secondDay.value)
+        let thirdLevel = ActivityLevelSummary.ActivityLevel(thirdDay.value)
+
+        return firstLevel == .sedentary && secondLevel == .sedentary && thirdLevel == .sedentary
+    }
+
     var activityLevelRatioDistribution: [ActivityLevelSummary.ActivityLevel : Int] {
         var ratioDistribution = [ActivityLevelSummary.ActivityLevel : Int]()
         for sample in energyRatioSamples {
