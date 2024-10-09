@@ -17,16 +17,16 @@ struct EveningReportView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @Query var suggestedHabits: [Habit]
+    @Query var activeHabits: [Habit]
 
     @State private var selectedHabit: Habit?
     @State private var events = [EKEvent]()
     @State private var selectedEvent: EKEvent?
 
     init() {
-        _suggestedHabits = Query(
+        _activeHabits = Query(
             filter: #Predicate<Habit> { habit in
-                habit.endDate == nil && habit.isSuggested
+                habit.endDate == nil
             },
             sort: \Habit.startDate,
             order: .reverse
@@ -69,19 +69,16 @@ private extension EveningReportView {
 
     @ViewBuilder
     var habitsSection: some View {
-        if suggestedHabits.isNotEmpty {
-            Section("Focus Areas") {
-                VStack {
-                    ForEach(suggestedHabits) { habit in
-                        Button {
-                            selectedHabit = habit
-                        } label: {
-                            EveningHabitProgressCell(habit: habit)
-                        }
-                        .buttonStyle(.plain)
+        if activeHabits.isNotEmpty {
+            Section("Habits") {
+                ForEach(activeHabits) { habit in
+                    Button {
+                        selectedHabit = habit
+                    } label: {
+                        EveningHabitStatusCell(habit: habit)
                     }
+                    .buttonStyle(.plain)
                 }
-                .removeListSeparator()
             }
         }
     }

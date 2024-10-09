@@ -34,6 +34,44 @@ extension HabitDailyUpdateCellViewModel {
         let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
         return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter)
     }
+
+    var goalDifferenceSummary: String {
+        let difference = habit.value - dailyValue
+        let unit = habit.unit
+        let formatter = habit.targetMetric.preferredFormatter
+
+        let defaultLogic = {
+            if difference > 0 {
+                let formatted = HKQuantity(
+                    unit: unit,
+                    doubleValue: difference
+                ).displayString(for: unit, formatter: formatter)
+                return "\(formatted) below your goal."
+            } else if difference == 0 {
+                return "You met your goal!"
+            } else {
+                let formatted = HKQuantity(
+                    unit: unit,
+                    doubleValue: difference
+                ).displayString(for: unit, formatter: formatter)
+                return "\(formatted) above your goal."
+            }
+        }
+
+        switch habit.targetMetric.measurementStyle {
+        case .minimum:
+            return defaultLogic()
+        case .range:
+            let dailyQuantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
+            if habit.quantityMeetsGoal(dailyQuantity) {
+                return "You met your goal!"
+            } else {
+                return defaultLogic()
+            }
+        @unknown default:
+            fatalError("Unhandled case")
+        }
+    }
 }
 
 private extension HabitDailyUpdateCellViewModel {

@@ -39,6 +39,7 @@
 		FF1328082CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328072CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift */; };
 		FF13280A2CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */; };
 		FF13280E2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */; };
+		FF1328122CB6D42F00ACF981 /* EveningHabitStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1328112CB6D42F00ACF981 /* EveningHabitStatusCell.swift */; };
 		FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */; };
 		FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */; };
 		FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */; };
@@ -358,7 +359,6 @@
 		FFE41D152C8B83F600E3E559 /* ToDoActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */; };
 		FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */; };
 		FFE41D1D2C8BCDAA00E3E559 /* EveningReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */; };
-		FFE41D1F2C8BCE1500E3E559 /* EveningHabitProgressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D1E2C8BCE1500E3E559 /* EveningHabitProgressCell.swift */; };
 		FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D202C8BD8C900E3E559 /* ReportCell.swift */; };
 		FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */; };
 		FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */; };
@@ -556,6 +556,7 @@
 		FF1328072CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusUserReviewListView.swift; sourceTree = "<group>"; };
 		FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusUserTestimonialChatView.swift; sourceTree = "<group>"; };
 		FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusLegalSectionView.swift; sourceTree = "<group>"; };
+		FF1328112CB6D42F00ACF981 /* EveningHabitStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningHabitStatusCell.swift; sourceTree = "<group>"; };
 		FF1705122C0E7CB5000D4B3D /* View+ListSeparatorInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ListSeparatorInset.swift"; sourceTree = "<group>"; };
 		FF1705142C0E7D89000D4B3D /* SleepDurationSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDurationSummaryCell.swift; sourceTree = "<group>"; };
 		FF17051A2C10A00C000D4B3D /* SleepProgramCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepProgramCoordinator.swift; sourceTree = "<group>"; };
@@ -858,7 +859,6 @@
 		FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoActionCell.swift; sourceTree = "<group>"; };
 		FFE41D172C8B8A9400E3E559 /* ReportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCoordinator.swift; sourceTree = "<group>"; };
 		FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningReportView.swift; sourceTree = "<group>"; };
-		FFE41D1E2C8BCE1500E3E559 /* EveningHabitProgressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningHabitProgressCell.swift; sourceTree = "<group>"; };
 		FFE41D202C8BD8C900E3E559 /* ReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCell.swift; sourceTree = "<group>"; };
 		FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Confetti.swift"; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -2074,7 +2074,7 @@
 				FF88F1202C7B81AF0093D1B4 /* EventCell.swift */,
 				FF4CAB032C81441F001A59F3 /* WeatherAlertCell.swift */,
 				FF4CAB052C814DA8001A59F3 /* WeatherCurrentConditionsCell.swift */,
-				FFE41D1E2C8BCE1500E3E559 /* EveningHabitProgressCell.swift */,
+				FF1328112CB6D42F00ACF981 /* EveningHabitStatusCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2710,7 +2710,6 @@
 				FF13280E2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift in Sources */,
 				FFF61AED2BED537B00926042 /* RootView.swift in Sources */,
 				FFAFF4212CAC37DF00FAD3C9 /* Collection+Trim.swift in Sources */,
-				FFE41D1F2C8BCE1500E3E559 /* EveningHabitProgressCell.swift in Sources */,
 				FF1328082CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift in Sources */,
 				FFF61B032BED87B400926042 /* Delay.swift in Sources */,
 				FF8B8B2C2BFE334400BA2128 /* ProfileSectionHeader.swift in Sources */,
@@ -2756,6 +2755,7 @@
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
 				FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */,
+				FF1328122CB6D42F00ACF981 /* EveningHabitStatusCell.swift in Sources */,
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
 				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
 				FFAFF4392CAD9B1000FAD3C9 /* GenericHabitTargetCalculator.swift in Sources */,
