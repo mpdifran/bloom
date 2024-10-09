@@ -256,6 +256,9 @@ private extension HabitsFactory {
 
     func updatedHabit(for habit: Habit) async -> ProposedHabit? {
 
+        // Cardio Fitness is now Heart Health
+        guard habit.vitalKind != .cardioFitness else { return nil }
+
         // TODO: Determine when to promote to Habit from Focus Area
         guard let recommendation = await GenericHabitTargetCalculator.calculateNewTarget(
             habit: habit.asDTO()
@@ -291,10 +294,9 @@ private extension HabitsFactory {
                 targetMetric: .walkingRunningDistance,
                 unit: .meterUnit(with: .kilo),
                 vitalKind: vital.id,
-                context: ""
+                context: "Walking or running more can help improve your heart health."
             )
         case .sleepQuality:
-            // Maintain weight
             return await createHabit(
                 targetMetric: .timeInDaylight,
                 unit: .minute(),
@@ -306,10 +308,9 @@ private extension HabitsFactory {
                 targetMetric: .stepCount,
                 unit: .count(),
                 vitalKind: vital.id,
-                context: ""
+                context: "Getting your steps in is an easy way to increase your activity level."
             )
         case .stressLevels:
-            // Maintain weight
             return await createHabit(
                 targetMetric: .timeInDaylight,
                 unit: .minute(),
@@ -318,17 +319,17 @@ private extension HabitsFactory {
             )
         case .exerciseEffectiveness:
             return await createHabit(
-                targetMetric: .walkingRunningDistance,
+                targetMetric: .runDistance,
                 unit: .meterUnit(with: .kilo),
                 vitalKind: vital.id,
-                context: ""
+                context: "Running is a great way to spend time in different target heart rate zones."
             )
         case .bowelMovements:
             return await createHabit(
                 targetMetric: .waterIntake,
                 unit: .literUnit(with: .milli),
                 vitalKind: vital.id,
-                context: ""
+                context: "Staying hydrated can help make your bowel movements more regular."
             )
         case .bodyComposition, .cycleTracking, .nutrition, .cardioFitness:
             return nil
