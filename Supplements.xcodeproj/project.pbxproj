@@ -314,11 +314,6 @@
 		FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */; };
 		FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AD82C541DE9003E5F85 /* Double+Format.swift */; };
 		FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */; };
-		FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AE52C57FD1B003E5F85 /* CorrelationEngine.swift */; };
-		FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AE72C580B26003E5F85 /* DataPair.swift */; };
-		FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AEA2C580F33003E5F85 /* CorrelationsView.swift */; };
-		FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AEC2C580F3F003E5F85 /* CorrelationsViewModel.swift */; };
-		FFC77AEF2C581529003E5F85 /* CorrelationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AEE2C581529003E5F85 /* CorrelationChartCell.swift */; };
 		FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */; };
 		FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B012C5AFF05003E5F85 /* CardContainer.swift */; };
 		FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC77B032C5C6571003E5F85 /* ChatBar.swift */; };
@@ -795,11 +790,6 @@
 		FFC77AD62C52CD17003E5F85 /* StressMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StressMonthlySummary.swift; sourceTree = "<group>"; };
 		FFC77AD82C541DE9003E5F85 /* Double+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Format.swift"; sourceTree = "<group>"; };
 		FFC77ADA2C541F84003E5F85 /* BloodPressureCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureCategory.swift; sourceTree = "<group>"; };
-		FFC77AE52C57FD1B003E5F85 /* CorrelationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationEngine.swift; sourceTree = "<group>"; };
-		FFC77AE72C580B26003E5F85 /* DataPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPair.swift; sourceTree = "<group>"; };
-		FFC77AEA2C580F33003E5F85 /* CorrelationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationsView.swift; sourceTree = "<group>"; };
-		FFC77AEC2C580F3F003E5F85 /* CorrelationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationsViewModel.swift; sourceTree = "<group>"; };
-		FFC77AEE2C581529003E5F85 /* CorrelationChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrelationChartCell.swift; sourceTree = "<group>"; };
 		FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+DataPair.swift"; sourceTree = "<group>"; };
 		FFC77B012C5AFF05003E5F85 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
 		FFC77B032C5C6571003E5F85 /* ChatBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBar.swift; sourceTree = "<group>"; };
@@ -1642,7 +1632,6 @@
 				FFB444952BED420C00486AD7 /* UserInterface */,
 				FF6AEC942BF17AFB00C34621 /* BackgroundTasks */,
 				FF1705182C109FF3000D4B3D /* Programs */,
-				FFC77AE42C57FD0A003E5F85 /* Correlations */,
 				FF8B8B332BFFE4CD00BA2128 /* Location */,
 				FF4CAB002C813D7B001A59F3 /* Weather */,
 				FF88F1192C7B75AE0093D1B4 /* Calendar */,
@@ -1833,7 +1822,6 @@
 				FFAA83D72C4D9E19004D12DA /* Vitals */,
 				FF9782F62C9B3AF700A8ED7E /* Habits */,
 				FFA134EE2C3F041500FF1829 /* SleepDay */,
-				FFC77AE92C580F20003E5F85 /* Correlations */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FF88F1282C7D027E0093D1B4 /* Actions */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
@@ -1881,25 +1869,6 @@
 				FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		FFC77AE42C57FD0A003E5F85 /* Correlations */ = {
-			isa = PBXGroup;
-			children = (
-				FFC77AE52C57FD1B003E5F85 /* CorrelationEngine.swift */,
-				FFC77AE72C580B26003E5F85 /* DataPair.swift */,
-			);
-			path = Correlations;
-			sourceTree = "<group>";
-		};
-		FFC77AE92C580F20003E5F85 /* Correlations */ = {
-			isa = PBXGroup;
-			children = (
-				FFC77AEA2C580F33003E5F85 /* CorrelationsView.swift */,
-				FFC77AEC2C580F3F003E5F85 /* CorrelationsViewModel.swift */,
-				FFC77AEE2C581529003E5F85 /* CorrelationChartCell.swift */,
-			);
-			path = Correlations;
 			sourceTree = "<group>";
 		};
 		FFC832162C8CDC9600108F47 /* Components */ = {
@@ -2576,7 +2545,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF2FB8A22C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift in Sources */,
-				FFC77AEB2C580F33003E5F85 /* CorrelationsView.swift in Sources */,
 				FF70E9252CB86FD90055E932 /* WristTemperatureChartView.swift in Sources */,
 				FF8F79CB2C62CE070095C36D /* PillRangeChart.swift in Sources */,
 				FF4EFF8C2C9381A4005E4A1F /* MenstrualSummary.swift in Sources */,
@@ -2650,7 +2618,6 @@
 				FF4A21CE2C8A01FE00278019 /* URL+Constants.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
-				FFC77AED2C580F3F003E5F85 /* CorrelationsViewModel.swift in Sources */,
 				FF1328122CB6D42F00ACF981 /* EveningHabitStatusCell.swift in Sources */,
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
 				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
@@ -2669,7 +2636,6 @@
 				FF1327FB2CB5AEB800ACF981 /* BloomPlusPaywall.swift in Sources */,
 				FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */,
 				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
-				FFC77AE82C580B26003E5F85 /* DataPair.swift in Sources */,
 				FFC832182C8CDCB100108F47 /* ActionStatusCell.swift in Sources */,
 				FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */,
 				FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */,
@@ -2760,7 +2726,6 @@
 				FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */,
 				FFBE523B2C74E2EB00F510DE /* ExerciseEffectivenessView.swift in Sources */,
 				FF48C28E2C69A89500DC8D1D /* SleepDetailsView.swift in Sources */,
-				FFC77AE62C57FD1B003E5F85 /* CorrelationEngine.swift in Sources */,
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
@@ -2850,7 +2815,6 @@
 				FFBE522B2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift in Sources */,
 				FF88F1242C7BBDF90093D1B4 /* EKEventView.swift in Sources */,
 				FFAFF4252CAC824200FAD3C9 /* ProteinTargetCalculator.swift in Sources */,
-				FFC77AEF2C581529003E5F85 /* CorrelationChartCell.swift in Sources */,
 				FF8B8B422C002BE500BA2128 /* PinView.swift in Sources */,
 				FF1E96B82C0E4424004DAD2D /* SleepSegmentSummaryCell.swift in Sources */,
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,

@@ -8,11 +8,12 @@
 import SwiftUI
 import Charts
 import TelemetryDeck
+import HealthKit
 
 struct HeartHealthDetailsView: View {
     
     @State private var selectedFitnessLevelIndex: Int = 0
-    @State private var vo2MaxSamples = [DateAverageQuantitySample]()
+    @State private var vo2MaxSamples = [DateQuantitySample]()
     @State private var restingHeartRateSamples = [DateQuantitySample]()
 
     private let viewModel = VitalsViewModel.shared
@@ -49,7 +50,11 @@ struct HeartHealthDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .animation(.default, value: selectedFitnessLevelIndex)
         .task {
-            let samples = await HealthManager.shared.fetchVO2Max(numPastDays: 30)
+            let samples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+                quantityType: .vo2Max,
+                unit: .vo2Max(),
+                dateRange: .trailingMonthsFromNow(1)
+            )
             await MainActor.run {
                 self.vo2MaxSamples = samples
             }
@@ -98,11 +103,11 @@ private extension HeartHealthDetailsView {
     }
 
     var maxVO2Max: Double? {
-        vo2MaxSamples.max(keyPath: \.averageQuantity)
+        vo2MaxSamples.map({ $0.quantity.doubleValue(for: .vo2Max()) }).max(keyPath: \.self)
     }
 
     var minVO2Max: Double? {
-        vo2MaxSamples.min(keyPath: \.averageQuantity)
+        vo2MaxSamples.map({ $0.quantity.doubleValue(for: .vo2Max()) }).min(keyPath: \.self)
     }
 
     var chartMin: Double {
@@ -154,12 +159,12 @@ private extension HeartHealthDetailsView {
                         ForEach(vo2MaxSamples) { sample in
                             LineMark(
                                 x: .value("Date", sample.date),
-                                y: .value("VO₂ Max", sample.averageQuantity)
+                                y: .value("VO₂ Max", sample.quantity.doubleValue(for: .vo2Max()))
                             )
                             .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
                             PointMark(
                                 x: .value("Date", sample.date),
-                                y: .value("VO₂ Max", sample.averageQuantity)
+                                y: .value("VO₂ Max", sample.quantity.doubleValue(for: .vo2Max()))
                             )
                             .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
                         }

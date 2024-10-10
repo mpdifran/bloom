@@ -21,7 +21,7 @@ extension DateComponents {
     }
 }
 
-extension DateComponents: Comparable {
+extension DateComponents: @retroactive Comparable {
 
     public static func < (lhs: DateComponents, rhs: DateComponents) -> Bool {
         if let lhsYear = lhs.year, let rhsYear = rhs.year, lhsYear != rhsYear {

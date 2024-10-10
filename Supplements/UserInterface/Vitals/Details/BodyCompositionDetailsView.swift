@@ -13,7 +13,7 @@ import TelemetryDeck
 struct BodyCompositionDetailsView: View {
 
     @State private var bodyMassSamples = [DateQuantitySample]()
-    @State private var bodyFatPercentageSamples = [DateAverageQuantitySample]()
+    @State private var bodyFatPercentageSamples = [DateQuantitySample]()
 
     private let viewModel = VitalsViewModel.shared
 
@@ -62,7 +62,11 @@ struct BodyCompositionDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .animation(.default, value: range)
         .task {
-            let samples = await HealthManager.shared.fetchBodyFatPercentageSamples()
+            let samples = await HealthStoreFetcher.shared.fetchCollatedAverage(
+                quantityType: .bodyFatPercentage,
+                unit: .percent(),
+                dateRange: .trailingMonthsFromNow(1)
+            )
 
             await MainActor.run {
                 self.bodyFatPercentageSamples = samples
@@ -95,7 +99,7 @@ struct BodyCompositionDetailsView: View {
 private extension BodyCompositionDetailsView {
 
     var average: Double {
-        bodyFatPercentageSamples.average(keyPath: \.averageQuantity) * 100
+        bodyFatPercentageSamples.map({ $0.quantity.doubleValue(for: .percent()) }).average(keyPath: \.self) * 100
     }
 
     var averageWeight: Double {
@@ -165,13 +169,13 @@ private extension BodyCompositionDetailsView {
                 ForEach(bodyFatPercentageSamples) { sample in
                     LineMark(
                         x: .value("Date", sample.date, unit: .day),
-                        y: .value("Body Fat Percentage", sample.averageQuantity)
+                        y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
                     )
                     .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
 
                     PointMark(
                         x: .value("Date", sample.date, unit: .day),
-                        y: .value("Body Fat Percentage", sample.averageQuantity)
+                        y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
                     )
                     .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
                     .symbolSize(40)
