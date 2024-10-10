@@ -54,16 +54,16 @@ extension VitalsCalculator {
     }
 
     func forceFetchVitals() async {
-        let sleepAnalyses = await HealthManager.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+        let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
 
-        heartHealthSummary = await HealthManager.shared.fetchHeartHealthSummary()
-        activityLevelSummary = await HealthManager.shared.fetchActivityLevelSummary()
-        bodyCompositionSummary = await HealthManager.shared.fetchBodyCompositionSummary()
-        sleepVitalsSummary = await HealthManager.shared.fetchSleepVitalSummary(trailingMonthAnalyses: sleepAnalyses)
-        stressSummary = await HealthManager.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)
-        nutritionSummary = await HealthManager.shared.fetchNutritionMonthlySummary()
-        exerciseEffectivenessSummary = await HealthManager.shared.fetchExerciseEffectivenessSummary()
-        menstrualSummary = await HealthManager.shared.fetchMenstrualSummary()
+        heartHealthSummary = await HealthStoreFetcher.shared.fetchHeartHealthSummary()
+        activityLevelSummary = await HealthStoreFetcher.shared.fetchActivityLevelSummary()
+        bodyCompositionSummary = await HealthStoreFetcher.shared.fetchBodyCompositionSummary()
+        sleepVitalsSummary = await HealthStoreFetcher.shared.fetchSleepVitalSummary(trailingMonthAnalyses: sleepAnalyses)
+        stressSummary = await HealthStoreFetcher.shared.fetchStressMonthlySummary(trailingMonthAnalyses: sleepAnalyses)
+        nutritionSummary = await HealthStoreFetcher.shared.fetchNutritionMonthlySummary()
+        exerciseEffectivenessSummary = await HealthStoreFetcher.shared.fetchExerciseEffectivenessSummary()
+        menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
         bowelMovementSummary = await fetchBowelMovementMonthlySummary()
 
         createVitals()

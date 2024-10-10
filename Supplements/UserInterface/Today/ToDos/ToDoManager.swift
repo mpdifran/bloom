@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import HealthKit
+@preconcurrency import HealthKit
 import BloomFoundation
 
 @MainActor

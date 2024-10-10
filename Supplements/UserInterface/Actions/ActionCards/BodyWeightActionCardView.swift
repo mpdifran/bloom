@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import HealthKit
+@preconcurrency import HealthKit
 import TelemetryDeck
 
 struct BodyWeightActionCardView: View {
@@ -70,7 +70,7 @@ private extension BodyWeightActionCardView {
                 ]
             )
 
-            try await HealthManager.shared.write(sample: sample)
+            try await HealthStoreFetcher.shared.write(sample: sample)
             TelemetryDeck.signal("Log Weight")
         } catch {
             self.error = error

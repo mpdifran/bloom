@@ -143,7 +143,7 @@ private extension WaterActionCardView {
                 ]
             )
 
-            try await HealthManager.shared.write(sample: sample)
+            try await HealthStoreFetcher.shared.write(sample: sample)
             didIncrease.toggle()
             TelemetryDeck.signal("Log Water")
             return true

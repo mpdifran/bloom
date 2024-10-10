@@ -165,6 +165,7 @@
 		FF6E062E2CA4E4BA00C4219B /* View+Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E062D2CA4E4BA00C4219B /* View+Show.swift */; };
 		FF70E90D2CB834D60055E932 /* AsyncStreamWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */; };
 		FF70E90F2CB848590055E932 /* VitalsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E90E2CB848530055E932 /* VitalsCalculator.swift */; };
+		FF70E9132CB85C9D0055E932 /* HealthStoreFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9122CB85C980055E932 /* HealthStoreFetcher.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -679,6 +680,7 @@
 		FF6E062D2CA4E4BA00C4219B /* View+Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Show.swift"; sourceTree = "<group>"; };
 		FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncStreamWrapper.swift; sourceTree = "<group>"; };
 		FF70E90E2CB848530055E932 /* VitalsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsCalculator.swift; sourceTree = "<group>"; };
+		FF70E9122CB85C980055E932 /* HealthStoreFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStoreFetcher.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1851,6 +1853,7 @@
 				FFAFF44A2CAE065700FAD3C9 /* Vitals */,
 				FFE390D52C2492EC00B79140 /* Model */,
 				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
+				FF70E9122CB85C980055E932 /* HealthStoreFetcher.swift */,
 				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
 				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
 				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
@@ -2893,6 +2896,7 @@
 				FF0DA0FD2C878473007D1A6B /* CompletionCheckmarkView.swift in Sources */,
 				FF4CAAFF2C80EF34001A59F3 /* BowelMovementsDetailView.swift in Sources */,
 				FF88F1402C7E475F0093D1B4 /* BloodPressureActionCardView.swift in Sources */,
+				FF70E9132CB85C9D0055E932 /* HealthStoreFetcher.swift in Sources */,
 				FFF61B272BEE927F00926042 /* InsightsViewModel.swift in Sources */,
 				FFBE522F2C6F06CF00F510DE /* OnboardingHealthHeartView.swift in Sources */,
 				FFF61B422BEEB99600926042 /* GoalInsightsSection.swift in Sources */,

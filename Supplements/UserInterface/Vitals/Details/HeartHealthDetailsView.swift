@@ -55,7 +55,7 @@ struct HeartHealthDetailsView: View {
             }
         }
         .task {
-            let samples = await HealthManager.shared.fetchCollatedAverage(
+            let samples = await HealthStoreFetcher.shared.fetchCollatedAverage(
                 quantityType: .restingHeartRate,
                 unit: .bpm(),
                 dateRange: .trailingMonthsFromNow(1)

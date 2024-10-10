@@ -27,4 +27,10 @@ extension HKQuantity {
 
         return HKQuantity(unit: unit, doubleValue: total)
     }
+
+    func subtract(_ other: HKQuantity, unit: HKUnit) -> HKQuantity {
+        let total = doubleValue(for: unit) - other.doubleValue(for: unit)
+
+        return HKQuantity(unit: unit, doubleValue: total)
+    }
 }

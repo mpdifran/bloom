@@ -7,7 +7,7 @@
 
 import SwiftUI
 import AppUI
-import HealthKit
+@preconcurrency import HealthKit
 import TelemetryDeck
 
 extension BloodPressureActionCardView {
@@ -105,7 +105,7 @@ private extension BloodPressureActionCardView {
                 ]
             )
 
-            try await healthManager.write(samples: [systolicSample, diastolicSample])
+            try await HealthStoreFetcher.shared.write(samples: [systolicSample, diastolicSample])
             TelemetryDeck.signal("Log Blood Pressure")
             return true
         } catch {

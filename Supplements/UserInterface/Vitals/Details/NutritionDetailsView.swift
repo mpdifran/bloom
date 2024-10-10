@@ -13,7 +13,7 @@ struct NutritionDetailsView: View {
 
     private let viewModel = VitalsViewModel.shared
 
-    @State private var dailyEnergy = [DateQuantitySampleLegacy]()
+    @State private var dailyEnergy = [DateQuantitySample]()
     @State private var dailyFiber = [DateQuantitySample]()
     @State private var dailySugar = [DateQuantitySample]()
     @State private var dailyWater = [DateQuantitySample]()
@@ -47,13 +47,13 @@ struct NutritionDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .groupedBackground()
         .task {
-            let samples = await HealthManager.shared.fetchNetEnergy(numPrevDays: 30)
+            let samples = await HealthStoreFetcher.shared.fetchNetEnergy(dateRange: .trailingDaysFromNow(30))
             await MainActor.run {
                 self.dailyEnergy = samples
             }
         }
         .task {
-            let samples = await HealthManager.shared.fetchCollatedQuantity(
+            let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
                 for: .dietarySugar,
                 unit: .gram(),
                 dateRange: .trailingMonthsFromNow(1)
@@ -63,7 +63,7 @@ struct NutritionDetailsView: View {
             }
         }
         .task {
-            let samples = await HealthManager.shared.fetchCollatedQuantity(
+            let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
                 for: .dietaryFiber,
                 unit: .gram(),
                 dateRange: .trailingMonthsFromNow(1)
@@ -73,7 +73,7 @@ struct NutritionDetailsView: View {
             }
         }
         .task {
-            let samples = await HealthManager.shared.fetchCollatedQuantity(
+            let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
                 for: .dietaryWater,
                 unit: .literUnit(with: .milli),
                 dateRange: .trailingMonthsFromNow(1)
@@ -104,9 +104,9 @@ private extension NutritionDetailsView {
                     ForEach(dailyEnergy) { sample in
                         BarMark(
                             x: .value("Date", sample.date),
-                            y: .value("Net Energy", sample.quantity)
+                            y: .value("Net Energy", sample.quantity.doubleValue(for: .largeCalorie()))
                         )
-                        .foregroundStyle((sample.quantity < 500 && sample.quantity > -500) ? .green : .yellow)
+                        .foregroundStyle((sample.quantity.doubleValue(for: .largeCalorie()) < 500 && sample.quantity.doubleValue(for: .largeCalorie()) > -500) ? .green : .yellow)
                         .cornerRadius(3)
                     }
 
