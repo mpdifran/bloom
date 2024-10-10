@@ -10,7 +10,7 @@ import SwiftUI
 struct BloomPlusUserReviewListView: View {
     var body: some View {
         VStack {
-            Text("What are Bloomers saying?")
+            Text("What Are People Saying?")
                 .font(.title)
                 .fontDesign(.rounded)
                 .bold()

@@ -14,11 +14,19 @@ struct BloomPlusPaywall: View {
 
     var body: some View {
         ZStack {
+            BloomPlusPaywallHeroImageView()
+                .zStackAlignment(.top)
+                .ignoresSafeArea(edges: .top)
+
             ScrollView {
                 contentView
+                    .background {
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(.background)
+                    }
+                    .padding(.top, 170)
             }
             .scrollIndicators(.hidden)
-            .ignoresSafeArea(edges: .top)
 
             BloomPlusHeaderView()
                 .padding(.horizontal)
@@ -40,8 +48,6 @@ private extension BloomPlusPaywall {
 
     var contentView: some View {
         VStack {
-            BloomPlusPaywallHeroImageView()
-
             VStack(spacing: 30) {
                 BloomPlusFeaturesListView()
 
@@ -54,6 +60,7 @@ private extension BloomPlusPaywall {
                 BloomPlusLegalSectionView()
             }
             .padding()
+            .padding(.top)
         }
     }
 
