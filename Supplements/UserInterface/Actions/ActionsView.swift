@@ -12,7 +12,7 @@ struct ActionsView: View {
     @State private var showAllDataView = false
     @State private var presentedCardSheet: AnyView?
 
-    @ObservedObject private var viewModel = ActionsViewModel.shared
+    @State private var viewModel = ViewModel()
 
     var body: some View {
         NavigationStack {

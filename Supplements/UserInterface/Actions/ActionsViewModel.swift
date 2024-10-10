@@ -10,31 +10,30 @@ import Foundation
 import DataContainer
 import SwiftData
 
-struct ActionLatestValueDetails {
+struct ActionLatestValueDetails: Sendable {
     let displayString: String
     let timestampString: String
 }
 
-@MainActor
-final class ActionsViewModel: ObservableObject {
-    static let shared = ActionsViewModel()
+extension ActionsView {
+    @Observable
+    final class ViewModel: Sendable {
+        var weightDetails: ActionLatestValueDetails?
+        var bloodPressureDetails: ActionLatestValueDetails?
+        var waterDetails: ActionLatestValueDetails?
+        var bowelMovementDetails: ActionLatestValueDetails?
 
+        private var observers = [HKObserverQueryHandle]()
 
-    @Published var weightDetails: ActionLatestValueDetails?
-    @Published var bloodPressureDetails: ActionLatestValueDetails?
-    @Published var waterDetails: ActionLatestValueDetails?
-    @Published var bowelMovementDetails: ActionLatestValueDetails?
+        let modelContext = ModelContext(ContainerHolder.shared.container)
 
-    private var observers = [HKObserverQueryHandle]()
-
-    let modelContext = ModelContext(ContainerHolder.shared.container)
-
-    private init() {
-        observeData()
+        init() {
+            observeData()
+        }
     }
 }
 
-extension ActionsViewModel {
+extension ActionsView.ViewModel {
 
     func observeData() {
         observers.removeAll()
@@ -47,6 +46,7 @@ extension ActionsViewModel {
             if let quantitySample = latestSample as? HKQuantitySample {
                 let displayString = quantitySample.quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)
                 let timestamp = DateFormatter.relativeDateTimeShort.string(from: quantitySample.startDate)
+
                 await MainActor.run {
                     self.weightDetails = ActionLatestValueDetails(
                         displayString: displayString,
@@ -77,12 +77,16 @@ extension ActionsViewModel {
 
                 let timestampString = DateFormatter.relativeDateTimeShort.string(from: timestamp)
 
-                self.bloodPressureDetails = .init(
-                    displayString: displayString,
-                    timestampString: timestampString
-                )
+                await MainActor.run {
+                    self.bloodPressureDetails = .init(
+                        displayString: displayString,
+                        timestampString: timestampString
+                    )
+                }
             } else {
-                self.bloodPressureDetails = nil
+                await MainActor.run {
+                    self.bloodPressureDetails = nil
+                }
             }
         }
         observers.append(bloodPressureHandle)
@@ -123,9 +127,10 @@ extension ActionsViewModel {
             if let lastSample = bowelMovements?.last {
                 let displayString = "Type \(lastSample.bristolStoolType)"
                 let timestamp = DateFormatter.relativeDateTimeShort.string(from: lastSample.date)
+                let details = ActionLatestValueDetails(displayString: displayString, timestampString: timestamp)
 
                 await MainActor.run {
-                    self.bowelMovementDetails = .init(displayString: displayString, timestampString: timestamp)
+                    self.bowelMovementDetails = details
                 }
             } else {
                 await MainActor.run {

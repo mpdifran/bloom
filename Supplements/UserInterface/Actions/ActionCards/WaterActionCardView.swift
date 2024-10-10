@@ -25,7 +25,6 @@ struct WaterActionCardView: View {
         didSet {
             if let data = try? JSONEncoder.main.encode(glassSizes) {
                 UserDefaults.group.set(data, forKey: "WaterActionCardView.glassSizes")
-                print("Storing in User Defaults")
             }
         }
     }
@@ -37,7 +36,6 @@ struct WaterActionCardView: View {
             let sizes = try? JSONDecoder.main.decode([WaterGlassSizeModel].self, from: data)
         {
             glassSizes = sizes
-            print("Loaded")
         } else {
             glassSizes = []
         }
@@ -48,7 +46,6 @@ struct WaterActionCardView: View {
                 WaterGlassSizeModel(name: "1 Cup", quantityValue: 250, unit: .literUnit(with: .milli)),
                 WaterGlassSizeModel(name: "2 Cups", quantityValue: 500, unit: .literUnit(with: .milli))
             ]
-            print("It was empty \(glassSizes.count)")
         } else {
             self.glassSizes = glassSizes
         }
