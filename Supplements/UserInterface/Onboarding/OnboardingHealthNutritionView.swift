@@ -14,7 +14,7 @@ struct OnboardingHealthNutritionView: View {
     let onContinue: () -> Void
 
     @ObservedObject private var healthManager = HealthManager.shared
-    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
+    @State private var vitalsViewModel = VitalsViewModel.shared
 
     @State private var isAuthorized = false
     @State private var triggerHealthPermissionSheet = false
@@ -81,7 +81,7 @@ private extension OnboardingHealthNutritionView {
             let authStatus = try await healthManager.checkAccess(readTypes: healthManager.nutritionTypes)
 
             isAuthorized = authStatus == .unnecessary
-            await vitalsViewModel.forceFetchVitals()
+            await VitalsCalculator.shared.forceFetchVitals()
         } catch { }
     }
 

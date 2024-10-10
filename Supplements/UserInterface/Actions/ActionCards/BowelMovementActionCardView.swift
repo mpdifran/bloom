@@ -23,7 +23,8 @@ struct BowelMovementActionCardView: View {
                 duration: duration
             )
             modelContext.insert(model)
-            VitalsViewModel.shared.fetchSwiftDataTypes()
+            await VitalsCalculator.shared.fetchSwiftDataTypes()
+
             TelemetryDeck.signal("Log Bowel Movement")
             return true
         } content: { (_, _) in

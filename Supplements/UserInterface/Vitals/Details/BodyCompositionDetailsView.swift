@@ -15,7 +15,7 @@ struct BodyCompositionDetailsView: View {
     @State private var bodyMassSamples = [DateQuantitySample]()
     @State private var bodyFatPercentageSamples = [DateAverageQuantitySample]()
 
-    @ObservedObject private var viewModel = VitalsViewModel.shared
+    @State private var viewModel = VitalsViewModel.shared
 
     @State private var selectedRangeIndex = 0
 

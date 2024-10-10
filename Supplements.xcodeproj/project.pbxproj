@@ -163,6 +163,8 @@
 		FF6E06252CA3A3B600C4219B /* WaterGlassSizeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06242CA3A3B600C4219B /* WaterGlassSizeModel.swift */; };
 		FF6E06272CA3A94A00C4219B /* AddWaterGlassSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */; };
 		FF6E062E2CA4E4BA00C4219B /* View+Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6E062D2CA4E4BA00C4219B /* View+Show.swift */; };
+		FF70E90D2CB834D60055E932 /* AsyncStreamWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */; };
+		FF70E90F2CB848590055E932 /* VitalsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E90E2CB848530055E932 /* VitalsCalculator.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -675,6 +677,8 @@
 		FF6E06242CA3A3B600C4219B /* WaterGlassSizeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterGlassSizeModel.swift; sourceTree = "<group>"; };
 		FF6E06262CA3A94A00C4219B /* AddWaterGlassSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWaterGlassSizeView.swift; sourceTree = "<group>"; };
 		FF6E062D2CA4E4BA00C4219B /* View+Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Show.swift"; sourceTree = "<group>"; };
+		FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncStreamWrapper.swift; sourceTree = "<group>"; };
+		FF70E90E2CB848530055E932 /* VitalsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsCalculator.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1664,6 +1668,7 @@
 				FF8F79B32C5FD5260095C36D /* Details */,
 				FFAA83D82C4D9E28004D12DA /* VitalsView.swift */,
 				FFAA83DE2C4E9863004D12DA /* VitalsViewModel.swift */,
+				FF70E90E2CB848530055E932 /* VitalsCalculator.swift */,
 				FF9C84CF2C5004F100648A1E /* DailyVitalMeterView.swift */,
 				FFC8B00E2C516146009C5CED /* MonthlyVitalCardCell.swift */,
 			);
@@ -2174,6 +2179,7 @@
 			children = (
 				FFF61B742BF15DD000926042 /* SoundPlayer.swift */,
 				FF0404D52C065F3B009FDC4E /* Throttler.swift */,
+				FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -2726,6 +2732,7 @@
 				FF8B8B2A2BFD8EA600BA2128 /* ProfileItemCell.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */,
+				FF70E90D2CB834D60055E932 /* AsyncStreamWrapper.swift in Sources */,
 				FF3A8F262C1A7041002DA563 /* ScreenUsageReportCell.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */,
@@ -2874,6 +2881,7 @@
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
+				FF70E90F2CB848590055E932 /* VitalsCalculator.swift in Sources */,
 				FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */,
 				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
 				FFA402CA2C94C88700D8DD40 /* View+Selectable.swift in Sources */,

@@ -28,7 +28,7 @@ extension Double {
     static let maxScore: Double = 10
 }
 
-struct SleepAnalysis: Codable, Hashable, Identifiable {
+struct SleepAnalysis: Codable, Hashable, Identifiable, Sendable {
     var id: String { "\(startDate)-\(endDate)" }
 
     let startDate: Date
@@ -46,7 +46,7 @@ struct SleepAnalysis: Codable, Hashable, Identifiable {
 }
 
 extension SleepAnalysis {
-    struct SoundLevelDataPoint: Codable, Hashable, Identifiable {
+    struct SoundLevelDataPoint: Codable, Hashable, Identifiable, Sendable {
         var id: Int { hashValue }
 
         let decibelAWeightedSoundPressureLevelAverage: Double
@@ -56,7 +56,7 @@ extension SleepAnalysis {
 }
 
 extension SleepAnalysis {
-    struct HeartRateDataPoint: Codable, Hashable, Identifiable {
+    struct HeartRateDataPoint: Codable, Hashable, Identifiable, Sendable {
         var id: Int { hashValue }
 
         let averageHeartRate: Double
@@ -66,7 +66,7 @@ extension SleepAnalysis {
 }
 
 extension SleepAnalysis {
-    struct RespiratoryRateDataPoint: Codable, Hashable, Identifiable {
+    struct RespiratoryRateDataPoint: Codable, Hashable, Identifiable, Sendable {
         var id: Int { hashValue }
 
         let averageRespiratoryRate: Double
@@ -76,7 +76,7 @@ extension SleepAnalysis {
 }
 
 extension SleepAnalysis {
-    struct WristTemperatureDataPoint: Codable, Hashable, Identifiable {
+    struct WristTemperatureDataPoint: Codable, Hashable, Identifiable, Sendable {
         var id: Int { hashValue }
 
         let averageWristTemperature: Double

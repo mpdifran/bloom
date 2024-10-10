@@ -38,7 +38,7 @@ struct SupplementsApp: App {
                     onForeground()
                 }
                 .task {
-                    await VitalsViewModel.shared.refreshVitals()
+                    await VitalsCalculator.shared.refreshVitals()
                 }
         }
         .modelContainer(ContainerHolder.shared.container)
@@ -55,7 +55,7 @@ private extension SupplementsApp {
 
     func onForeground() {
         Task {
-            await VitalsViewModel.shared.refreshVitals()
+            await VitalsCalculator.shared.refreshVitals()
         }
     }
 }

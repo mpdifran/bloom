@@ -12,7 +12,7 @@ import DataContainer
 struct OnboardingHealthVitalLevelsView: View {
     let onContinue: () -> Void
 
-    @ObservedObject private var vitalsViewModel = VitalsViewModel.shared
+    @State private var vitalsViewModel = VitalsViewModel.shared
 
     var body: some View {
         ScrollView {
@@ -75,7 +75,7 @@ struct OnboardingHealthVitalLevelsView: View {
                 .frame(height: 0)
         }
         .task {
-            await vitalsViewModel.forceFetchVitals()
+            await VitalsCalculator.shared.forceFetchVitals()
         }
     }
 }

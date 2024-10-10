@@ -255,7 +255,7 @@ private extension PreferencesView {
 
             Button {
                 Task {
-                    await VitalsViewModel.shared.forceFetchVitals()
+                    await VitalsCalculator.shared.forceFetchVitals()
                     await MainActor.run {
                         alertDetails = AlertDetails(title: "Vitals Recalculated", message: "Your Vitals have been recalculated.")
                     }

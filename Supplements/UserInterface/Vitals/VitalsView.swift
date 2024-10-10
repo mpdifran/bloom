@@ -11,7 +11,7 @@ import DataContainer
 
 struct VitalsView: View {
 
-    @ObservedObject private var viewModel = VitalsViewModel.shared
+    @State private var viewModel = VitalsViewModel.shared
 
     @State private var path = NavigationPath()
 

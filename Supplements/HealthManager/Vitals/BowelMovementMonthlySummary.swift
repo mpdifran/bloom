@@ -123,10 +123,8 @@ extension BowelMovementMonthlySummary {
                 }
 
                 let average = [typeScore, intervalScore].average(keyPath: \.self)
-                print("\(bowelMovement.date) Type Score: \(typeScore), intervalScore: \(intervalScore)")
                 scores.append(average)
             } else {
-                print("\(bowelMovement.date) Type Score: \(typeScore)")
                 scores.append(typeScore)
             }
 

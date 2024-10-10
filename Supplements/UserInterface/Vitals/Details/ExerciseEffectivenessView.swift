@@ -11,7 +11,7 @@ import TelemetryDeck
 
 struct ExerciseEffectivenessView: View {
 
-    @ObservedObject private var viewModel = VitalsViewModel.shared
+    @State private var viewModel = VitalsViewModel.shared
 
     var body: some View {
         ScrollView {

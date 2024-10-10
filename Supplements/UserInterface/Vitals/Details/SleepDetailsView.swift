@@ -12,7 +12,7 @@ import TelemetryDeck
 struct SleepDetailsView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
-    @ObservedObject private var viewModel = VitalsViewModel.shared
+    @State private var viewModel = VitalsViewModel.shared
 
     @State private var selectedSleepQualityIndex = 0
     @State private var showTodayView = false

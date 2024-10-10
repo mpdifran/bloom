@@ -24,7 +24,7 @@ extension HabitsFactory {
 
         let activeHabits = (try? modelContext.fetchActiveHabits()) ?? []
 
-        await VitalsViewModel.shared.forceFetchVitals()
+        await VitalsCalculator.shared.forceFetchVitals()
 
         var newHabitResult = NewHabitResult()
 
@@ -48,7 +48,7 @@ extension HabitsFactory {
 
         // Add new habits
         if newHabitResult.proposedFocusAreas.count < 2 {
-            let vitals = VitalsViewModel.shared.vitals
+            let vitals = await VitalsCalculator.shared.vitals
 
             let genericGoalVitals = vitals.filter {
                 $0.id != .nutrition &&
@@ -87,7 +87,7 @@ private extension HabitsFactory {
     func generateNutritionHabits(activeHabits: [Habit]) async -> NewHabitResult? {
         var todos = [ProposedToDo]()
         // Ensure the user has logged their weight
-        if VitalsViewModel.shared.bodyCompositionSummary?.details.averageBodyMass == nil {
+        if await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass == nil {
             let todo = ProposedToDo(
                 todoKind: .logWeight,
                 todoCadence: .daily,
@@ -97,7 +97,7 @@ private extension HabitsFactory {
         }
 
         // Ensure we have enough food logged
-        if VitalsViewModel.shared.nutritionSummary?.details.hasSufficientNutritionLogs == false {
+        if await VitalsCalculator.shared.nutritionSummary?.details.hasSufficientNutritionLogs == false {
             let todo = ProposedToDo(
                 todoKind: .logFood,
                 todoCadence: .daily,
@@ -109,7 +109,7 @@ private extension HabitsFactory {
                 proposedHabits: [],
                 proposedToDos: [todo]
             )
-        } else if VitalsViewModel.shared.nutritionSummary?.details.hasSufficientProteinLogs == false {
+        } else if await VitalsCalculator.shared.nutritionSummary?.details.hasSufficientProteinLogs == false {
             let todo = ProposedToDo(
                 todoKind: .logProtein,
                 todoCadence: .daily,
@@ -125,8 +125,8 @@ private extension HabitsFactory {
         }
 
         guard
-            let bodyMass = VitalsViewModel.shared.bodyCompositionSummary?.details.averageBodyMass,
-            let averageDietaryEnergy = VitalsViewModel.shared.nutritionSummary?.details.dietaryEnergy
+            let bodyMass = await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass,
+            let averageDietaryEnergy = await VitalsCalculator.shared.nutritionSummary?.details.dietaryEnergy
         else {
             print("We should never get here.")
             return nil
@@ -171,9 +171,9 @@ private extension HabitsFactory {
         var newFocusAreas = [ProposedHabit]()
 
         // Calories
-        let basalEnergy = VitalsViewModel.shared.nutritionSummary?.details.basalEnergyBurned
-        let activeEnergy = VitalsViewModel.shared.nutritionSummary?.details.activeEnergyBurned
-        let activityLevel = VitalsViewModel.shared.activityLevelSummary?.details.activityLevel // TODO: Use user specified activity level.
+        let basalEnergy = await VitalsCalculator.shared.nutritionSummary?.details.basalEnergyBurned
+        let activeEnergy = await VitalsCalculator.shared.nutritionSummary?.details.activeEnergyBurned
+        let activityLevel = await VitalsCalculator.shared.activityLevelSummary?.details.activityLevel // TODO: Use user specified activity level.
 
         let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
 
@@ -211,7 +211,7 @@ private extension HabitsFactory {
         // Protein
         let existingProteinHabit = activeHabits.first(where: { $0.targetMetric == .proteinIntake })
         if
-            let averageProtein = VitalsViewModel.shared.nutritionSummary?.details.averageProtein,
+            let averageProtein = await VitalsCalculator.shared.nutritionSummary?.details.averageProtein,
             let recommendation = await ProteinTargetCalculator.targetProtein(
                 existingHabit: existingProteinHabit?.asDTO(),
                 protein: averageProtein,
