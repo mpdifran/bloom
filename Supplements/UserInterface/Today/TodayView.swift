@@ -33,7 +33,6 @@ struct TodayView: View {
         )
     }
 
-    @ObservedObject private var viewModel = TodayViewModel.shared
     @ObservedObject private var habitsViewModel = HabitsViewModel.shared
     @ObservedObject private var reportCoordinator = ReportCoordinator.shared
     @ObservedObject private var toDoManager = ToDoManager.shared

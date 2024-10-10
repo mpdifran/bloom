@@ -19,7 +19,6 @@
 		FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */; };
 		FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */; };
 		FF0DA0ED2C84D661007D1A6B /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EC2C84D661007D1A6B /* TodayView.swift */; };
-		FF0DA0F02C84D69C007D1A6B /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0EF2C84D69C007D1A6B /* TodayViewModel.swift */; };
 		FF0DA0F52C874DB7007D1A6B /* DateCollatedWorkouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0F42C874DB7007D1A6B /* DateCollatedWorkouts.swift */; };
 		FF0DA0F72C875106007D1A6B /* DateComponents+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0F62C875106007D1A6B /* DateComponents+Helpers.swift */; };
 		FF0DA0F92C876390007D1A6B /* Collection+Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DA0F82C876390007D1A6B /* Collection+Sort.swift */; };
@@ -536,7 +535,6 @@
 		FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreDetailsView.swift; sourceTree = "<group>"; };
 		FF0DA0EA2C825876007D1A6B /* AllDayEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDayEventCell.swift; sourceTree = "<group>"; };
 		FF0DA0EC2C84D661007D1A6B /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
-		FF0DA0EF2C84D69C007D1A6B /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
 		FF0DA0F42C874DB7007D1A6B /* DateCollatedWorkouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCollatedWorkouts.swift; sourceTree = "<group>"; };
 		FF0DA0F62C875106007D1A6B /* DateComponents+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+Helpers.swift"; sourceTree = "<group>"; };
 		FF0DA0F82C876390007D1A6B /* Collection+Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Sort.swift"; sourceTree = "<group>"; };
@@ -1039,7 +1037,6 @@
 				FF0DA0F12C84D967007D1A6B /* Components */,
 				FF4B2F462C90C7880003879C /* ToDos */,
 				FF0DA0EC2C84D661007D1A6B /* TodayView.swift */,
-				FF0DA0EF2C84D69C007D1A6B /* TodayViewModel.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -2737,7 +2734,6 @@
 				FFBE52312C6F086F00F510DE /* OnboardingHealthNutritionView.swift in Sources */,
 				FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */,
 				FFBE52452C76129C00F510DE /* WorkoutHeartRateZoneCell.swift in Sources */,
-				FF0DA0F02C84D69C007D1A6B /* TodayViewModel.swift in Sources */,
 				FFB444602BEC4CC500486AD7 /* NetworkRequester.swift in Sources */,
 				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
 				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
