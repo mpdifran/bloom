@@ -13,11 +13,7 @@ final class HealthPermissionChecker: Sendable {
 
     let healthStore = HKHealthStore()
 
-    private init() {
-        Task {
-            try? await checkAccess()
-        }
-    }
+    private init() { }
 
     let bodyMeasurementTypes: Set<HKObjectType> = [
         HKCharacteristicType(.dateOfBirth),
@@ -160,7 +156,9 @@ extension HealthPermissionChecker {
     }
 
     func checkAccess(readTypes: Set<HKObjectType> = [], writeTypes: Set<HKSampleType> = []) async throws -> HKAuthorizationRequestStatus {
-        try await healthStore.getRequestStatusForAuthorization(
+        guard readTypes.isNotEmpty else { return .unknown }
+
+        return try await healthStore.getRequestStatusForAuthorization(
             toShare: writeTypes.asSet(),
             read: readTypes.asSet()
         )
