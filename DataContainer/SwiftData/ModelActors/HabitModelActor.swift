@@ -1,83 +1,75 @@
 //
-//  ModelContext+Helpers.swift
-//  DataContainer
+//  HabitModelActor.swift
+//  Supplements
 //
-//  Created by Mark DiFranco on 2024-09-23.
+//  Created by Mark DiFranco on 2024-10-10.
 //
 
 import Foundation
 import SwiftData
-import BloomFoundation
 
-public extension ModelContext {
+public extension HabitModelActor {
 
-    func existingModel<T>(for objectID: PersistentIdentifier) throws -> T? where T: PersistentModel {
-        if let registered: T = registeredModel(for: objectID) {
-            return registered
-        }
-
-        let fetchDescriptor = FetchDescriptor<T>(
-            predicate: #Predicate {
-                $0.persistentModelID == objectID
-            })
-
-        return try fetch(fetchDescriptor).first
+    static func standard() -> Self {
+        .init(modelContainer: ContainerHolder.shared.container)
     }
 }
 
-public extension ModelContext {
+@ModelActor
+public final actor HabitModelActor {
 
-    func fetchActiveHabits() throws -> [Habit] {
+    private var context: ModelContext { modelExecutor.modelContext }
+}
+
+public extension HabitModelActor {
+
+    func fetchActiveHabits() throws -> [HabitDTO] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
                 model.endDate == nil
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
-        return try fetch(descriptor)
+        return try context.fetch(descriptor).map { $0 .asDTO() }
     }
 
-    func fetchActiveHabits(for targetMetric: TargetMetric) throws -> [Habit] {
+    func fetchActiveHabits(for targetMetric: TargetMetric) throws -> [HabitDTO] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
                 model.endDate == nil && model.rawTargetMetric == targetMetric.rawValue
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
-        return try fetch(descriptor)
+        return try context.fetch(descriptor).map { $0.asDTO() }
     }
 
-    func fetchActiveHabits(isSuggested: Bool) throws -> [Habit] {
+    func fetchActiveHabits(isSuggested: Bool) throws -> [HabitDTO] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
                 model.endDate == nil && model.isSuggested == isSuggested
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
-        return try fetch(descriptor)
+        return try context.fetch(descriptor).map { $0.asDTO() }
     }
 
-    func fetchHabits(for targetMetric: TargetMetric) throws -> [Habit] {
+    func fetchHabits(for targetMetric: TargetMetric) throws -> [HabitDTO] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
                 model.rawTargetMetric == targetMetric.rawValue
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
-        return try fetch(descriptor)
+        return try context.fetch(descriptor).map { $0.asDTO() }
     }
 
-    func fetchHabits(for targetMetric: TargetMetric, isSuggested: Bool) throws -> [Habit] {
+    func fetchHabits(for targetMetric: TargetMetric, isSuggested: Bool) throws -> [HabitDTO] {
         let descriptor = FetchDescriptor<Habit>(
             predicate: #Predicate<Habit> { model in
                 model.rawTargetMetric == targetMetric.rawValue && model.isSuggested == isSuggested
             },
             sortBy: [SortDescriptor(\Habit.startDate)]
         )
-        return try fetch(descriptor)
-    }
-
-    func fetchHabit(id: PersistentIdentifier) throws -> Habit? {
-        try existingModel(for: id)
+        return try context.fetch(descriptor).map { $0.asDTO() }
     }
 }

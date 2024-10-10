@@ -117,7 +117,8 @@ extension ActionsViewModel {
         observers.append(waterHandle)
 
         Task {
-            let bowelMovements = try? modelContext.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))
+            let modelActor = BowelMovementModelActor.standard()
+            let bowelMovements = try? await modelActor.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))
 
             if let lastSample = bowelMovements?.last {
                 let displayString = "Type \(lastSample.bristolStoolType)"

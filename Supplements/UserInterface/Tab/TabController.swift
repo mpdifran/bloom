@@ -43,7 +43,7 @@ extension TabController {
 
 extension TabController: UNUserNotificationCenterDelegate {
 
-    func userNotificationCenter(
+    nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
@@ -67,7 +67,7 @@ extension TabController: UNUserNotificationCenterDelegate {
         }
     }
 
-    func userNotificationCenter(
+    nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {

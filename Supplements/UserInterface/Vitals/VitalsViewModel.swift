@@ -72,7 +72,7 @@ extension VitalsViewModel {
 
     func fetchSwiftDataTypes() {
         Task {
-            let summary = modelContext.fetchBowelMovementMonthlySummary()
+            let summary = await fetchBowelMovementMonthlySummary()
             await MainActor.run {
                 self.bowelMovementSummary = summary
             }
@@ -90,7 +90,7 @@ extension VitalsViewModel {
         let nutrition = await HealthManager.shared.fetchNutritionMonthlySummary()
         let exerciseEffectiveness = await HealthManager.shared.fetchExerciseEffectivenessSummary()
         let menstrual = await HealthManager.shared.fetchMenstrualSummary()
-        let bowelMovements = modelContext.fetchBowelMovementMonthlySummary()
+        let bowelMovements = await fetchBowelMovementMonthlySummary()
 
         await MainActor.run {
             self.heartHealthSummary = cardio
@@ -107,6 +107,12 @@ extension VitalsViewModel {
 
             self.lastVitalFetchDate = .now
         }
+    }
+
+    func fetchBowelMovementMonthlySummary() async -> BowelMovementMonthlySummary? {
+        let modelActor = BowelMovementModelActor.standard()
+        let samples = (try? await modelActor.fetchBowelMovements(dateRange: .trailingMonthsFromNow(1))) ?? []
+        return BowelMovementMonthlySummary(bowelMovements: samples)
     }
 }
 

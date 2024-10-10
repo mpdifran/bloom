@@ -50,13 +50,14 @@ extension HabitsViewModel {
         await HabitsFactory.shared.generateProposedHabits()
     }
 
-    func alternateTargetMetrics(for proposedHabit: ProposedHabit) -> [TargetMetric] {
+    func alternateTargetMetrics(for proposedHabit: ProposedHabit) async -> [TargetMetric] {
         let alternativeTargetMetrics = proposedHabit.targetMetric.related
 
         guard alternativeTargetMetrics.isNotEmpty else { return [] }
 
         do {
-            let existingTargetMetrics = try modelContext.fetchActiveHabits(isSuggested: false).map(\.targetMetric).asSet()
+            let modelActor = HabitModelActor.standard()
+            let existingTargetMetrics = try await modelActor.fetchActiveHabits(isSuggested: false).map(\.targetMetric).asSet()
 
             return alternativeTargetMetrics.filter({ !existingTargetMetrics.contains($0) })
         } catch {

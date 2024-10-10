@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
 
 struct ProposedHabitCell: View {
     @Binding var proposedHabit: ProposedHabit
@@ -22,6 +23,7 @@ struct ProposedHabitCell: View {
 
     @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
+    @State private var alternateTargetMetrics = [TargetMetric]()
     @State private var presentedSheet: AnyView?
 
     var body: some View {
@@ -100,9 +102,9 @@ struct ProposedHabitCell: View {
                     Divider()
                 }
 
-                if habitsViewModel.alternateTargetMetrics(for: proposedHabit).isNotEmpty {
+                if alternateTargetMetrics.isNotEmpty {
                     Menu {
-                        ForEach(habitsViewModel.alternateTargetMetrics(for: proposedHabit)) { alternativeTargetMetric in
+                        ForEach(alternateTargetMetrics) { alternativeTargetMetric in
                             Button {
                                 Task {
                                     proposedHabit = await habitsViewModel.generateProposedHabit(
@@ -163,6 +165,9 @@ struct ProposedHabitCell: View {
         .cardContainer(fill: .tint.tertiary, includePadding: false)
         .tint(proposedHabit.targetMetric.color)
         .sheet($presentedSheet)
+        .task {
+            self.alternateTargetMetrics = await habitsViewModel.alternateTargetMetrics(for: proposedHabit)
+        }
     }
 }
 
