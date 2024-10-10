@@ -199,11 +199,11 @@ private extension ToDoManager {
                 guard let self else { return }
 
                 if await self.isToDoComplete(todo: todo, dateRange: .today()) == true {
-                    await MainActor.run {
+                    _ = await MainActor.run {
                         self.completedToDoKinds.insert(todo.kind)
                     }
                 } else {
-                    await MainActor.run {
+                    _ = await MainActor.run {
                         self.completedToDoKinds.remove(todo.kind)
                     }
                 }

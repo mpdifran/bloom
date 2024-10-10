@@ -115,11 +115,15 @@ struct OnboardingHealthAgeView: View {
             readTypes: HealthPermissionChecker.shared.bodyMeasurementTypes,
             trigger: triggerHealthPermissionSheet
         ) { result in
-            switch result {
-            case .success:
-                checkForAgeAndSex = true
-            case .failure(let error):
-                self.error = error
+            Task {
+                await MainActor.run {
+                    switch result {
+                    case .success:
+                        checkForAgeAndSex = true
+                    case .failure(let error):
+                        self.error = error
+                    }
+                }
             }
         }
     }

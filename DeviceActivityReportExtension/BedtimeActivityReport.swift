@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2024-06-12.
 //
 
-import DeviceActivity
+@preconcurrency import DeviceActivity
 import SwiftUI
 import ScreenControl
 
