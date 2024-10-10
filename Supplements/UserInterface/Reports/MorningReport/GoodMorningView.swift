@@ -21,7 +21,7 @@ struct GoodMorningView: View {
     @Environment(\.dismiss) private var dismiss
 
     @ObservedObject private var healthManager = HealthManager.shared
-    @State private var vitalsViewModel = VitalsViewModel.shared
+    private let vitalsViewModel = VitalsViewModel.shared
 
     @State private var events = [EKEvent]()
     @State private var selectedEvent: EKEvent?

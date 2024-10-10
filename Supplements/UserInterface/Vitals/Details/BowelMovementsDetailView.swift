@@ -11,7 +11,7 @@ import TelemetryDeck
 
 struct BowelMovementsDetailView: View {
 
-    @State private var viewModel = VitalsViewModel.shared
+    private let viewModel = VitalsViewModel.shared
 
     @State private var selectedBristolType = 0
 

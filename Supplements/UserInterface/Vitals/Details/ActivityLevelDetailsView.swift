@@ -14,7 +14,7 @@ struct ActivityLevelDetailsView: View {
     @State private var selectedActivityLevelIndex = 0
     @State private var workoutSummations = [WorkoutSummation]()
 
-    @State private var viewModel = VitalsViewModel.shared
+    private let viewModel = VitalsViewModel.shared
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 

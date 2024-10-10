@@ -29,7 +29,7 @@ extension StressDetailsView {
 
 struct StressDetailsView: View {
 
-    @State private var viewModel = VitalsViewModel.shared
+    private let viewModel = VitalsViewModel.shared
 
     @State private var selectedContributor: StressContributor = .all
 

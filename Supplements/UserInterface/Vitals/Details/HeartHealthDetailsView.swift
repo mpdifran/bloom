@@ -15,7 +15,7 @@ struct HeartHealthDetailsView: View {
     @State private var vo2MaxSamples = [DateAverageQuantitySample]()
     @State private var restingHeartRateSamples = [DateQuantitySample]()
 
-    @State private var viewModel = VitalsViewModel.shared
+    private let viewModel = VitalsViewModel.shared
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 

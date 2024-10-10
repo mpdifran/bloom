@@ -15,7 +15,7 @@ struct OnboardingHealthActivityView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
 
-    @State private var vitalsViewModel = VitalsViewModel.shared
+    private let vitalsViewModel = VitalsViewModel.shared
 
     @State private var isAuthorized = false
     @State private var triggerHealthPermissionSheet = false

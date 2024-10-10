@@ -12,7 +12,7 @@ import DataContainer
 struct OnboardingHealthVitalLevelsView: View {
     let onContinue: () -> Void
 
-    @State private var vitalsViewModel = VitalsViewModel.shared
+    private let vitalsViewModel = VitalsViewModel.shared
 
     var body: some View {
         ScrollView {

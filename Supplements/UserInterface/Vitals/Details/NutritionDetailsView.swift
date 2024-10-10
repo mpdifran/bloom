@@ -11,7 +11,7 @@ import TelemetryDeck
 
 struct NutritionDetailsView: View {
 
-    @State private var viewModel = VitalsViewModel.shared
+    private let viewModel = VitalsViewModel.shared
 
     @State private var dailyEnergy = [DateQuantitySampleLegacy]()
     @State private var dailyFiber = [DateQuantitySample]()

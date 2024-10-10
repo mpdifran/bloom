@@ -11,7 +11,7 @@ import TelemetryDeck
 
 struct MenstruationDetailView: View {
 
-    @State private var viewModel = VitalsViewModel.shared
+    private let viewModel = VitalsViewModel.shared
 
     @State private var selectedPhase: MenstrualCyclePhase?
 
