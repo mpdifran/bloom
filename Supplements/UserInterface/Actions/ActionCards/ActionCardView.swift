@@ -8,19 +8,20 @@
 import SwiftUI
 import HealthKit
 import SwiftData
+import DataContainer
 
 struct ActionCardView<Content>: View where Content: View {
     let title: String
     let sampleTypes: Set<HKSampleType>
     let showSaveBar: Bool
-    let saveHandler: (ModelContext) async -> Bool
+    let saveHandler: () async throws -> Bool
     let content: (Bool, @escaping () -> Void) -> Content
 
     init(
         title: String,
         sampleTypes: Set<HKSampleType> = [],
         showSaveBar: Bool = true,
-        saveHandler: @escaping (ModelContext) async -> Bool,
+        saveHandler: @escaping () async throws -> Bool,
         @ViewBuilder content: @escaping (Bool, @escaping () -> Void) -> Content
     ) {
         self.title = title
@@ -37,7 +38,6 @@ struct ActionCardView<Content>: View where Content: View {
     @State private var didError = false
     @State private var error: Error?
 
-    @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -100,9 +100,9 @@ private extension ActionCardView {
     func handleSave() {
         Task {
             if sampleTypes.isNotEmpty {
-                let authStatus = try await healthManager.checkAccess(
-                    readTypes: Array(sampleTypes),
-                    writeTypes: Array(sampleTypes)
+                let authStatus = try await HealthPermissionChecker.shared.checkAccess(
+                    readTypes: Set(sampleTypes),
+                    writeTypes: Set(sampleTypes)
                 )
 
                 if authStatus == .shouldRequest {
@@ -111,7 +111,11 @@ private extension ActionCardView {
                 }
             }
 
-            guard await saveHandler(modelContext) else { return }
+            do {
+                guard try await saveHandler() else { return }
+            } catch {
+                self.error = error
+            }
 
             await MainActor.run {
                 SoundPlayer.playLogHealthData()
@@ -125,7 +129,7 @@ private extension ActionCardView {
 }
 
 #Preview {
-    ActionCardView(title: "Log Water") { (_) in
+    ActionCardView(title: "Log Water") {
         return true
     } content: { (hasInserted, handleSave) in
         List {

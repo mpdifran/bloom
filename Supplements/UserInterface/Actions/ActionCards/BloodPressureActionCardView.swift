@@ -34,7 +34,7 @@ struct BloodPressureActionCardView: View {
                 HKQuantityType(.bloodPressureSystolic),
                 HKQuantityType(.bloodPressureDiastolic)
             ]
-        ) { (_) in
+        ) {
             await logBloodPressure()
         } content: { (_, handleSave) in
             VStack(spacing: 20) {

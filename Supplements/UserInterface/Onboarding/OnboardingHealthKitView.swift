@@ -13,8 +13,6 @@ import Charts
 struct OnboardingHealthKitView: View {
     let onContinue: () -> Void
 
-    @ObservedObject private var healthManager = HealthManager.shared
-
     @State private var healthPermissionTrigger = false
     @State private var isAuthorized = false
     @State private var error: Error?
@@ -62,9 +60,9 @@ struct OnboardingHealthKitView: View {
         }
         .alert(error: $error)
         .healthDataAccessRequest(
-            store: healthManager.healthStore,
-            shareTypes: healthManager.writeTypes(),
-            readTypes: healthManager.readTypes(),
+            store: HealthPermissionChecker.shared.healthStore,
+            shareTypes: HealthPermissionChecker.shared.writeTypes(),
+            readTypes: HealthPermissionChecker.shared.readTypes(),
             trigger: healthPermissionTrigger
         ) { result in
             switch result {
@@ -81,10 +79,7 @@ private extension OnboardingHealthKitView {
 
     func checkAuth() async {
         do {
-            let authStatus = try await healthManager.checkAccess(
-                readTypes: Array(healthManager.readTypes()),
-                writeTypes: Array(healthManager.writeTypes())
-            )
+            let authStatus = try await HealthPermissionChecker.shared.checkAccessForAllTypes()
 
             isAuthorized = authStatus == .unnecessary
 

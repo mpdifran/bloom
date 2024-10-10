@@ -23,7 +23,7 @@ struct BodyWeightActionCardView: View {
         ActionCardView(
             title: "Body Weight",
             sampleTypes: [HKQuantityType(.bodyMass)]
-        ) { (_) in
+        ) {
             await logWeight()
         } content: { (_, handleSave) in
             VStack {

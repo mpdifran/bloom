@@ -56,7 +56,7 @@ struct WaterActionCardView: View {
             title: "Water",
             sampleTypes: [HKQuantityType(.dietaryWater)],
             showSaveBar: false
-        ) { (_) in
+        ) {
             await logSelectedWater()
         } content: { (hasInserted, handleSave) in
             List {

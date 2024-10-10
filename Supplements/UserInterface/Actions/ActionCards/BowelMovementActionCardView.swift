@@ -16,13 +16,16 @@ struct BowelMovementActionCardView: View {
     @State private var duration: BowelMovement.Duration = .between5And10Min
 
     var body: some View {
-        ActionCardView(title: "New Bowel Movement") { modelContext in
+        ActionCardView(title: "New Bowel Movement") {
+            let context = ContainerHolder.shared.createContext()
             let model = BowelMovement(
                 date: date,
                 bristolStoolType: selectedStoolType,
                 duration: duration
             )
-            modelContext.insert(model)
+            context.insert(model)
+            try context.save()
+
             await VitalsCalculator.shared.fetchSwiftDataTypes()
 
             TelemetryDeck.signal("Log Bowel Movement")

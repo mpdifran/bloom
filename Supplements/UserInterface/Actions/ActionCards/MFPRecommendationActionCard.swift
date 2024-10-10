@@ -16,7 +16,7 @@ struct MFPRecommendationActionCard: View {
         ActionCardView(
             title: "Log Food",
             showSaveBar: false
-        ) { _ in
+        ) {
             false
         } content: { _, handleSave in
             VStack(spacing: 20) {

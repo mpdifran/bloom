@@ -21,7 +21,7 @@ struct TargetWeightEditCard: View {
     var body: some View {
         ActionCardView(
             title: "Target Weight"
-        ) { (_) in
+        ) {
             saveTargetWeight()
         } content: { (_, handleSave) in
             VStack {

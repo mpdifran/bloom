@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import HealthKit
 
 @MainActor
 struct PreferencesView: View {
@@ -18,6 +19,7 @@ struct PreferencesView: View {
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
     @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
+    @State private var authStatus: HKAuthorizationRequestStatus = .unknown
     @State private var shouldPromptForNotificationPermissions = false
     @State private var presentedFullScreenView: AnyView?
     @State private var presentedSheet: AnyView?
@@ -43,21 +45,21 @@ struct PreferencesView: View {
                 .frame(height: 0)
         }
         .onAppear {
-            checkNotificationPermissions()
+            Task {
+                shouldPromptForNotificationPermissions = await NotificationManager.shared.shouldRequestAuthorization()
+                await checkHealthAuthStatus()
+            }
+        }
+        .task {
+            shouldPromptForNotificationPermissions = await NotificationManager.shared.shouldRequestAuthorization()
+        }
+        .task {
+            await checkHealthAuthStatus()
         }
         .alert(alertDetails: $alertDetails)
         .animation(.default, value: healthManager.healthGoal)
         .tabItem {
             Label("Preferences", systemImage: "slider.horizontal.below.square.and.square.filled")
-        }
-    }
-}
-
-private extension PreferencesView {
-
-    func checkNotificationPermissions() {
-        Task {
-            shouldPromptForNotificationPermissions = await NotificationManager.shared.shouldRequestAuthorization()
         }
     }
 }
@@ -189,12 +191,12 @@ private extension PreferencesView {
 
     @ViewBuilder
     var healthPermissionsSection: some View {
-        if healthManager.authStatus == .shouldRequest || shouldPromptForNotificationPermissions {
+        if authStatus == .shouldRequest || shouldPromptForNotificationPermissions {
             Section("Permissions") {
-                if healthManager.authStatus == .shouldRequest {
+                if authStatus == .shouldRequest {
                     Button(action: {
                         Task {
-                            await healthManager.requestAccessIfNeeded()
+                            await HealthPermissionChecker.shared.requestAccessIfNeeded()
                         }
                     }, label: {
                         LabeledContent("HealthKit Permissions") {
@@ -215,6 +217,10 @@ private extension PreferencesView {
                 }
             }
         }
+    }
+
+    func checkHealthAuthStatus() async {
+        self.authStatus = (try? await HealthPermissionChecker.shared.checkAccessForAllTypes()) ?? .unknown
     }
 
     var developerSection: some View {

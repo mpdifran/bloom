@@ -12,6 +12,24 @@ import BloomFoundation
 
 extension HKHealthStore {
 
+    func getRequestStatusForAuthorization(
+        toShare typesToShare: Set<HKSampleType>,
+        read typesToRead: Set<HKObjectType>
+    ) async throws -> HKAuthorizationRequestStatus {
+        try await withCheckedThrowingContinuation { continuation in
+            getRequestStatusForAuthorization(toShare: typesToShare, read: typesToRead) { authStatus, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: authStatus)
+                }
+            }
+        }
+    }
+}
+
+extension HKHealthStore {
+
     func age() -> Int? {
         do {
             let dateOfBirthComponents = try dateOfBirthComponents()

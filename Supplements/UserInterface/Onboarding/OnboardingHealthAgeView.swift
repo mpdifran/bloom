@@ -101,7 +101,7 @@ struct OnboardingHealthAgeView: View {
         }
         .task {
             do {
-                let authStatus = try await healthManager.checkAccess(readTypes: healthManager.bodyMeasurementTypes)
+                let authStatus = try await HealthPermissionChecker.shared.checkAccess(readTypes: HealthPermissionChecker.shared.bodyMeasurementTypes)
 
                 if authStatus == .unnecessary {
                     await MainActor.run {
@@ -111,8 +111,8 @@ struct OnboardingHealthAgeView: View {
             } catch { }
         }
         .healthDataAccessRequest(
-            store: healthManager.healthStore,
-            readTypes: Set(healthManager.bodyMeasurementTypes),
+            store: HealthPermissionChecker.shared.healthStore,
+            readTypes: HealthPermissionChecker.shared.bodyMeasurementTypes,
             trigger: triggerHealthPermissionSheet
         ) { result in
             switch result {
