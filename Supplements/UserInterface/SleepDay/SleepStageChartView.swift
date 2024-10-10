@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Charts
-import HealthKit
+@preconcurrency import HealthKit
 
 @MainActor
 struct SleepStageChartView: View {

@@ -8,7 +8,7 @@
 import SwiftUI
 import EventKit
 
-extension EKEvent: Identifiable {
+extension EKEvent: @retroactive Identifiable {
     public var id: String { eventIdentifier }
 }
 
@@ -33,7 +33,7 @@ extension EKEvent {
 
 extension EKEvent {
     static var preview = {
-        let event = EKEvent.init(eventStore: CalendarManager.shared.eventStore)
+        let event = CalendarManager.shared.createEvent()
 
         event.title = "Preview Event"
         event.availability = .busy
@@ -48,7 +48,7 @@ extension EKEvent {
     }()
 
     static var futurePreview = {
-        let event = EKEvent.init(eventStore: CalendarManager.shared.eventStore)
+        let event = CalendarManager.shared.createEvent()
 
         let calendar = EKCalendar(for: .event, eventStore: CalendarManager.shared.eventStore)
         calendar.cgColor = UIColor(red: 1, green: 0, blue: 0.5, alpha: 1).cgColor
@@ -68,7 +68,7 @@ extension EKEvent {
     }()
 
     static var allDayPreview = {
-        let event = EKEvent.init(eventStore: CalendarManager.shared.eventStore)
+        let event = CalendarManager.shared.createEvent()
 
         event.title = "All Day Event"
         event.availability = .busy

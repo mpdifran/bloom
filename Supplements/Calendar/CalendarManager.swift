@@ -9,7 +9,7 @@ import Foundation
 @preconcurrency import EventKit
 import BloomFoundation
 
-final actor CalendarManager {
+final class CalendarManager {
     static let shared = CalendarManager()
 
     let eventStore = EKEventStore()
@@ -25,6 +25,13 @@ extension CalendarManager {
         } catch {
             print(error)
         }
+    }
+}
+
+extension CalendarManager {
+
+    func createEvent() -> EKEvent {
+        EKEvent(eventStore: eventStore)
     }
 }
 

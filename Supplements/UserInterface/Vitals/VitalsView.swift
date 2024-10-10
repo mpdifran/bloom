@@ -42,6 +42,8 @@ struct VitalsView: View {
                 case .cycleTracking: MenstruationDetailView()
                 case .bowelMovements: BowelMovementsDetailView()
 //                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
+                @unknown default:
+                    fatalError("Unknown case")
                 }
             }
             .animation(.default, value: viewModel.vitals)
