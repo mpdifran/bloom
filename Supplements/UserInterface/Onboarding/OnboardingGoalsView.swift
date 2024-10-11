@@ -13,7 +13,10 @@ struct OnboardingGoalsView: View {
 
     @State private var isCalculatingGoals = true
     @State private var showContinue = false
+    @State private var proposedFocusAreas = [ProposedHabit]()
     @State private var proposedHabits = [ProposedHabit]()
+    @State private var proposedToDos = [ProposedToDo]()
+    @State private var error: Error?
 
     @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
@@ -39,14 +42,38 @@ struct OnboardingGoalsView: View {
             } else {
                 ScrollView {
                     VStack {
-                        ForEachEnumerated(proposedHabits) { (index, proposedHabit) in
-                            ProposedHabitCell(
-                                proposedHabit: $proposedHabits[index],
-                                includeActions: false
-                            )
+                        if proposedFocusAreas.isNotEmpty {
+                            SectionTitleView("Focus Areas")
+
+                            ForEachEnumerated(proposedFocusAreas) { (index, _) in
+                                ProposedHabitCell(
+                                    proposedHabit: $proposedFocusAreas[index],
+                                    includeActions: false
+                                )
                                 .transition(.scale)
+                            }
                         }
-                        Spacer()
+
+                        if proposedHabits.isNotEmpty {
+                            SectionTitleView("New Habits")
+
+                            ForEachEnumerated(proposedHabits) { (index, _) in
+                                ProposedHabitCell(
+                                    proposedHabit: $proposedHabits[index],
+                                    includeActions: false
+                                )
+                                .transition(.scale)
+                            }
+                        }
+
+                        if proposedToDos.isNotEmpty {
+                            SectionTitleView("To Do")
+
+                            ForEach(proposedToDos) { proposedToDo in
+                                ProposedToDoCell(proposedToDo: proposedToDo)
+                                    .transition(.scale)
+                            }
+                        }
                     }
                     .padding()
                 }
@@ -56,19 +83,33 @@ struct OnboardingGoalsView: View {
         .if(showContinue) {
             $0.shelf {
                 ProminentButton("Continue") {
-                    onContinue()
+                    do {
+                        try habitsViewModel.performSave(
+                            proposedFocusAreas: proposedFocusAreas,
+                            proposedHabits: proposedHabits,
+                            proposedToDos: proposedToDos
+                        )
+                        onContinue()
+                    } catch {
+                        self.error = error
+                    }
                 }
             }
         }
         .animation(.easeIn(duration: 1), value: isCalculatingGoals)
+        .alert(error: $error)
         .tint(.mutedOrange)
         .task {
-            proposedHabits = await habitsViewModel.generateProposedHabits().proposedFocusAreas
+            let result = await habitsViewModel.generateProposedHabits()
             await MainActor.run {
-                Delay(3000) {
+                proposedFocusAreas = result.proposedFocusAreas
+                proposedHabits = result.proposedHabits
+                proposedToDos = result.proposedToDos
+
+                Delay(1000) {
                     isCalculatingGoals = false
                 }
-                Delay(5000) {
+                Delay(3000) {
                     showContinue = true
                 }
             }
