@@ -50,6 +50,8 @@ struct GoodMorningView: View {
     var body: some View {
         NavigationStack {
             List {
+                currentDateSection
+                    .removeListSeparator()
                 sleepSection
                 focusAreasSection
                 activityLevelSection
@@ -126,6 +128,18 @@ private extension GoodMorningView {
 }
 
 private extension GoodMorningView {
+
+    @ViewBuilder
+    var currentDateSection: some View {
+        VStack(alignment: .leading) {
+            Text("\(DateFormatter.justDayOfWeek.string(from: .now))")
+                .bold()
+                .foregroundStyle(.secondary)
+            Text("\(DateFormatter.justDateLong.string(from: .now))")
+                .font(.title2)
+                .bold()
+        }
+    }
 
     var sleepSection: some View {
         Section("Sleep Score") {

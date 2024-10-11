@@ -186,8 +186,7 @@ private extension SleepDetailsView {
         HStack {
             Label("View All Data", systemImage: "bed.double.fill")
             Spacer()
-            Image(systemName: "chevron.forward")
-                .foregroundStyle(.secondary)
+            DisclosureIndicator()
         }
         .foregroundStyle(.coreSleep)
         .cardContainer(fill: .background.secondary)

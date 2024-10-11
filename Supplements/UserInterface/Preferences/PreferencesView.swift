@@ -98,8 +98,7 @@ private extension PreferencesView {
             LabeledContent("Target Weight") {
                 HStack {
                     Text("\(healthManager.targetWeight.format(using: .oneDecimalPlace)) lbs")
-                    Image(systemName: "chevron.forward")
-                        .foregroundStyle(.secondary)
+                    DisclosureIndicator()
                 }
             }
             .onTapGesture {
@@ -242,7 +241,7 @@ private extension PreferencesView {
                 HStack {
                     Text("Debug Habits")
                     Spacer()
-                    Image(systemName: "chevron.forward")
+                    DisclosureIndicator()
                 }
             }
             .buttonStyle(.plain)
@@ -254,7 +253,7 @@ private extension PreferencesView {
                 HStack {
                     Text("Prompt Focus Area Review")
                     Spacer()
-                    Image(systemName: "chevron.forward")
+                    DisclosureIndicator()
                 }
             }
             .buttonStyle(.plain)
@@ -270,7 +269,7 @@ private extension PreferencesView {
                 HStack {
                     Text("Recalculate Vitals")
                     Spacer()
-                    Image(systemName: "chevron.forward")
+                    DisclosureIndicator()
                 }
             }
             .buttonStyle(.plain)

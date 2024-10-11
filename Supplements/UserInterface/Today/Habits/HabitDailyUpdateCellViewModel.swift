@@ -46,15 +46,15 @@ extension HabitDailyUpdateCellViewModel {
                     unit: unit,
                     doubleValue: difference
                 ).displayString(for: unit, formatter: formatter)
-                return "\(formatted) below your goal."
+                return "\(formatted) below your goal today."
             } else if difference == 0 {
-                return "You met your goal!"
+                return "You met your goal today!"
             } else {
                 let formatted = HKQuantity(
                     unit: unit,
                     doubleValue: -difference
                 ).displayString(for: unit, formatter: formatter)
-                return "\(formatted) above your goal."
+                return "\(formatted) above your goal today."
             }
         }
 
@@ -64,7 +64,7 @@ extension HabitDailyUpdateCellViewModel {
         case .range:
             let dailyQuantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
             if habit.quantityMeetsGoal(dailyQuantity) {
-                return "You met your goal!"
+                return "You met your goal today!"
             } else {
                 return defaultLogic()
             }

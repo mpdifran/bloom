@@ -37,8 +37,7 @@ struct EveningHabitStatusCell: View {
                 .font(.title2)
                 .foregroundStyle(.tint)
 
-            Image(systemName: "chevron.forward")
-                .foregroundStyle(.secondary)
+            DisclosureIndicator()
         }
         .padding(.vertical, 2)
         .tint(habit.targetMetric.color)

@@ -100,9 +100,7 @@ private extension SleepProgramConfigurationView {
                         Text("No Apps Selected")
                     }
                 }
-                Image(systemName: "chevron.forward")
-                    .foregroundStyle(.secondary)
-                    .font(.subheadline)
+                DisclosureIndicator()
             }
             .frame(minHeight: 37)
             .contentShape(Rectangle())

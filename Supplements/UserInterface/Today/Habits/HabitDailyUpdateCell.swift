@@ -65,8 +65,7 @@ struct HabitDailyUpdateCell: View {
                 .bold()
             }
 
-            Image(systemName: "chevron.forward")
-                .foregroundStyle(.secondary)
+            DisclosureIndicator()
                 .padding(.leading)
         }
         .cardContainer()

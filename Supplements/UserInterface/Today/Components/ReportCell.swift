@@ -68,8 +68,7 @@ struct ReportCell: View {
 
             Spacer()
 
-            Image(systemName: "chevron.forward")
-                .foregroundStyle(.secondary)
+            DisclosureIndicator()
         }
         .cardContainer(
             fill: LinearGradient(

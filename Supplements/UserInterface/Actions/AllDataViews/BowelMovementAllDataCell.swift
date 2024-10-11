@@ -24,9 +24,7 @@ struct BowelMovementAllDataCell: View {
 
                     Spacer()
 
-                    Image(systemName: "chevron.forward")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    DisclosureIndicator()
                 }
 
                 chart
