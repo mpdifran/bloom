@@ -50,17 +50,11 @@ extension HabitsFactory {
         if newHabitResult.proposedFocusAreas.count < 2 {
             let vitals = await VitalsCalculator.shared.vitals
 
-            let genericGoalVitals = vitals.filter {
-                $0.id != .nutrition &&
-                $0.id != .cycleTracking &&
-                $0.id != .bodyComposition
-            }
-
-            if
-                let targetVital = genericGoalVitals.safeAccess(at: 0),
-                let newHabit = await suggestNewHabit(for: targetVital)
-            {
-                newHabitResult.proposedFocusAreas.append(newHabit)
+            for vital in vitals {
+                if let newHabit = await suggestNewHabit(for: vital) {
+                    newHabitResult.proposedFocusAreas.append(newHabit)
+                    break
+                }
             }
         }
 
@@ -297,12 +291,7 @@ private extension HabitsFactory {
                 context: "Walking or running more can help improve your heart health."
             )
         case .sleepQuality:
-            return await createHabit(
-                targetMetric: .timeInDaylight,
-                unit: .minute(),
-                vitalKind: vital.id,
-                context: ""
-            )
+            return nil
         case .activityLevel:
             return await createHabit(
                 targetMetric: .stepCount,
