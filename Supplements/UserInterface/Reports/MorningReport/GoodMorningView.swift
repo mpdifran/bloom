@@ -29,6 +29,7 @@ struct GoodMorningView: View {
     @State private var weather: Weather?
     @State private var isLoadingWeather = false
     @State private var showSleepTodayView = false
+    @State private var sleepAnalysis: SleepAnalysis?
 
     @State private var incompleteTargetMetrics = Set<TargetMetric>()
 
@@ -76,7 +77,7 @@ struct GoodMorningView: View {
         }
         .presentationCompactAdaptation(.fullScreenCover)
         .tint(.orange)
-        .animation(.default, value: healthManager.sleepAnalysis7Days)
+        .animation(.default, value: sleepAnalysis)
         .animation(.default, value: events.count)
         .animation(.default, value: weather)
         .onAppear {
@@ -94,6 +95,12 @@ struct GoodMorningView: View {
         }
         .task {
             await calculateHabitCompletion()
+        }
+        .task {
+            let sleepAnalysis = await HealthStoreFetcher.shared.fetchSleepAnalysis(for: .now)
+            await MainActor.run {
+                self.sleepAnalysis = sleepAnalysis
+            }
         }
     }
 }
@@ -122,10 +129,7 @@ private extension GoodMorningView {
 
     var sleepSection: some View {
         Section("Sleep Score") {
-            if 
-                let sleepAnalysis = healthManager.sleepAnalysis7Days?.last, 
-                Calendar.current.isDateInToday(sleepAnalysis.endDate)
-            {
+            if let sleepAnalysis {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         Text("Summary")

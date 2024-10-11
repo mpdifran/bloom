@@ -297,6 +297,12 @@ extension HealthStoreFetcher {
         )) ?? []
         return await processSleepAnalysis(samples: samples)
     }
+
+    func fetchSleepAnalysis(for date: Date) async -> SleepAnalysis? {
+        let endDate = Calendar.current.endOfDay(for: date)
+        let sleepAnalyses = await fetchSleepAnalysis(dateRange: .trailingDays(from: endDate, numberOfDays: 3))
+        return sleepAnalyses.first(where: { Calendar.current.isDate($0.endDate, inSameDayAs: date) })
+    }
 }
 
 // MARK: Writing Data

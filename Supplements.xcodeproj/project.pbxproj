@@ -243,7 +243,6 @@
 		FFA062B02C921AFE00ADCB09 /* HabitGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062AF2C921AF400ADCB09 /* HabitGridCell.swift */; };
 		FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA062B12C9222AF00ADCB09 /* HabitGridModel.swift */; };
 		FFA134F02C3F042300FF1829 /* SleepDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134EF2C3F042300FF1829 /* SleepDayView.swift */; };
-		FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */; };
 		FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */; };
 		FFA134F62C3F16F900FF1829 /* ProgressArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */; };
 		FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */; };
@@ -712,7 +711,6 @@
 		FFA062AF2C921AF400ADCB09 /* HabitGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGridCell.swift; sourceTree = "<group>"; };
 		FFA062B12C9222AF00ADCB09 /* HabitGridModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGridModel.swift; sourceTree = "<group>"; };
 		FFA134EF2C3F042300FF1829 /* SleepDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayView.swift; sourceTree = "<group>"; };
-		FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDayViewModel.swift; sourceTree = "<group>"; };
 		FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
 		FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressArcView.swift; sourceTree = "<group>"; };
 		FFA134F72C402DCC00FF1829 /* TitleDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDatePicker.swift; sourceTree = "<group>"; };
@@ -1525,7 +1523,6 @@
 			isa = PBXGroup;
 			children = (
 				FFA134EF2C3F042300FF1829 /* SleepDayView.swift */,
-				FFA134F12C3F05E500FF1829 /* SleepDayViewModel.swift */,
 				FFA134F32C3F167E00FF1829 /* SleepScoreView.swift */,
 				FF08828E2C459C57000C1244 /* SleepScoreDetailsView.swift */,
 				FF4578F02C40797F004E8661 /* SleepStageChartView.swift */,
@@ -2536,7 +2533,6 @@
 				FF2FB89A2C9CD12000F57523 /* HabitDailyUpdateCellViewModel.swift in Sources */,
 				FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */,
 				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
-				FFA134F22C3F05E500FF1829 /* SleepDayViewModel.swift in Sources */,
 				FF6E06272CA3A94A00C4219B /* AddWaterGlassSizeView.swift in Sources */,
 				FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */,
 				FF6E06172CA1DE0A00C4219B /* HabitsFactory.swift in Sources */,

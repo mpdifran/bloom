@@ -55,9 +55,6 @@ enum WeightLossSpeed: String, CaseIterable, Identifiable {
 final class HealthManager: ObservableObject {
     static let shared = HealthManager()
 
-    @Published var sleepAnalysis7Days: [SleepAnalysis]?
-    @Published var sleepAnalysis30Days: [SleepAnalysis]?
-
     @AppStorage("HealthManager.isFemale") var isFemale = false
     @Published var birthday = Date.now {
         didSet { UserDefaults.group.set(birthday, forKey: "HealthManager.birthday") }
@@ -91,9 +88,6 @@ final class HealthManager: ObservableObject {
             print("Health Background Delivery Ref Counts: \(backgroundDeliveryReferenceCounts)")
         }
     }
-
-    private var sleepObserverQueryHandle: HKObserverQueryHandle?
-    private var sleepBackgroundDeliveryHandle: HKBackgroundDeliveryHandle?
 
     private init() {
         if let birthday = UserDefaults.group.object(forKey: "HealthManager.birthday") as? Date {

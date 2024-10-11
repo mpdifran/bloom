@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct SleepDayView: View {
+
+    @State private var date = Date.now
+    @State private var sleepAnalysis: SleepAnalysis?
+
     @State private var showDatePicker = false
     @State private var lastAppearDate = Date()
 
-    @ObservedObject private var viewModel = SleepDayViewModel.shared
-
     var body: some View {
         Group {
-            if let sleepAnalysis = viewModel.sleepAnalysis {
+            if let sleepAnalysis {
                 List {
                     VStack {
                         SleepScoreView(sleepAnalysis: sleepAnalysis)
@@ -38,21 +40,40 @@ struct SleepDayView: View {
                 ContentUnavailableView(
                     "No Data Available",
                     systemImage: "moon.zzz",
-                    description: Text("There is no sleep analysis available for \(viewModel.date, formatter: DateFormatter.justRelativeDateMedium).")
+                    description: Text("There is no sleep analysis available for \(date, formatter: DateFormatter.justRelativeDateMedium).")
                 )
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: date) { oldValue, newValue in
+            Task {
+                await fetchNewSleepAnalysis()
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                TitleDatePicker(date: $viewModel.date)
+                TitleDatePicker(date: $date)
             }
+        }
+        .task {
+            await fetchNewSleepAnalysis()
         }
         .onAppear {
             if !Calendar.current.isDateInToday(lastAppearDate) {
-                viewModel.date = Date()
+                date = Date()
             }
             lastAppearDate = Date()
+        }
+    }
+}
+
+private extension SleepDayView {
+
+    func fetchNewSleepAnalysis() async {
+        let sleepAnalysis = await HealthStoreFetcher.shared.fetchSleepAnalysis(for: date)
+
+        await MainActor.run {
+            self.sleepAnalysis = sleepAnalysis
         }
     }
 }

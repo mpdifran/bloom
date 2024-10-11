@@ -16,6 +16,7 @@ struct SleepDetailsView: View {
 
     @State private var selectedSleepQualityIndex = 0
     @State private var showTodayView = false
+    @State private var sleepAnalyses = [SleepAnalysis]()
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
@@ -51,6 +52,13 @@ struct SleepDetailsView: View {
             feedbackGenerator.prepare()
             TelemetryDeck.viewScreen("Sleep Vital Details")
         }
+        .task {
+            let analyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: .trailingMonthsFromNow(1))
+
+            await MainActor.run {
+                self.sleepAnalyses = analyses
+            }
+        }
     }
 }
 
@@ -70,7 +78,7 @@ private extension SleepDetailsView {
             )
 
             Chart {
-                ForEach(healthManager.sleepAnalysis30Days ?? []) { sleepAnalysis in
+                ForEach(sleepAnalyses) { sleepAnalysis in
                     BarMark(
                         x: .value("Date", sleepAnalysis.normalizedDate),
                         y: .value("Sleep Quality", sleepAnalysis.overallScoreDouble)
