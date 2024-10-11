@@ -85,6 +85,10 @@ extension HealthStoreFetcher {
         return HKQuantity(unit: unit, doubleValue: average)
     }
 
+    func fetchSamples(for sampleType: HKSampleType, dateRange: DateRange) async -> [HKSample] {
+        (try? await healthStore.fetchSamples(for: sampleType, dateRange: dateRange)) ?? []
+    }
+
     func fetchNetEnergy(dateRange: DateRange) async -> [DateQuantitySample] {
 
         let basal = try? await healthStore.fetchCollatedQuantity(
@@ -146,6 +150,10 @@ extension HealthStoreFetcher {
             activityTypes: activityTypes,
             dateRange: dateRange
         )) ?? []
+    }
+
+    func fetchWorkoutSummations(dateRange: DateRange) async -> [WorkoutSummation] {
+        (try? await healthStore.fetchWorkoutSummation(dateRange: dateRange)) ?? []
     }
 
     func fetchTotalMeditationMinutes(dateRange: DateRange) async -> HKQuantity {

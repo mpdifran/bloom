@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import BloomFoundation
 @preconcurrency import HealthKit
 
 @MainActor
@@ -39,14 +40,12 @@ struct SleepStageChartView: View {
 private extension SleepStageChartView {
 
     func loadSamples() async {
-        do {
-            self.samples = try await HealthManager.shared.fetchSleepSamples(
-                startDate: sleepAnalysis.startDate,
-                endDate: sleepAnalysis.endDate
+        self.samples = await Task {
+            await HealthStoreFetcher.shared.fetchSamples(
+                for: HKCategoryType(.sleepAnalysis),
+                dateRange: DateRange(sleepAnalysis.startDate, sleepAnalysis.endDate)
             )
-        } catch {
-            print(error)
-        }
+        }.value
     }
 }
 

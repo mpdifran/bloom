@@ -41,7 +41,7 @@ struct ActivityLevelDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .animation(.default, value: selectedActivityLevelIndex)
         .task {
-            let samples = await HealthManager.shared.fetchWorkoutSummation(pastDays: 30)
+            let samples = await HealthStoreFetcher.shared.fetchWorkoutSummations(dateRange: .trailingMonthsFromNow(1))
             await MainActor.run {
                 self.workoutSummations = samples
             }

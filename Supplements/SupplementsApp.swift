@@ -23,7 +23,9 @@ struct SupplementsApp: App {
 
         TelemetryDeck.initialize(config: .init(appID: "764D40B8-F2CE-4372-87D3-0D68F34E08CA"))
 
-        HealthManager.shared.observeSleepData()
+        Task {
+            await HealthSleepObserver.shared.observeSleep()
+        }
 
 //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
     }

@@ -9,7 +9,7 @@ import Foundation
 @preconcurrency import EventKit
 import BloomFoundation
 
-final class CalendarManager {
+final class CalendarManager: Sendable {
     static let shared = CalendarManager()
 
     let eventStore = EKEventStore()

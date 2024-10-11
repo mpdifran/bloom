@@ -12,8 +12,6 @@ struct SupplementBubble: View {
 
     @State private var showPopover = false
 
-    @ObservedObject private var profileViewModel = ProfileViewModel.shared
-
     var body: some View {
         ChatBubble(
             position: .leading,
@@ -58,14 +56,6 @@ struct SupplementBubble: View {
                 }
 
                 Spacer()
-
-                AddItemButton(hasAdded: userAddedSupplement) {
-                    if userAddedSupplement {
-                        profileViewModel.userSupplements.removeAll(where: { $0 ==  supplementReccomendation.supplementName})
-                    } else {
-                        profileViewModel.userSupplements.insert(supplementReccomendation.supplementName, at: 0)
-                    }
-                }
             }
         }
     }
@@ -74,7 +64,7 @@ struct SupplementBubble: View {
 private extension SupplementBubble {
 
     var userAddedSupplement: Bool {
-        profileViewModel.userSupplements.contains(supplementReccomendation.supplementName)
+        false
     }
 }
 

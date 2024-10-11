@@ -17,20 +17,6 @@ final actor ProactiveTipper {
 extension ProactiveTipper {
 
     func sendProactiveTip() async {
-        let chatHistory = ChatViewModel.shared.networkChatHistory
-
-        let stressDetails = await VitalsCalculator.shared.stressSummary?.details
-
-        let request = ProactiveTipRequestModel(
-            stressMonthlySummary: nil,
-            nutritionMonthlySummary: nil,
-            sleepVitalsMonthlySummary: await VitalsCalculator.shared.sleepVitalsSummary,
-            activityLevelMonthlySummary: await VitalsCalculator.shared.activityLevelSummary,
-            chatHistory: chatHistory
-        )
-
-        guard let response = try? await NetworkRequester.shared.sendProactiveTip(request: request) else { return }
-
-        await ChatViewModel.shared.appendAssistantMessage(message: response.message)
+        
     }
 }
