@@ -95,9 +95,9 @@ private extension VitalsCalculator {
                     id: .sleepQuality,
                     subtitle: sleepVitalsSummary.subtitleText,
                     status: sleepVitalsSummary.details.quality?.name,
-                    score: sleepVitalsSummary.score,
                     color: sleepVitalsSummary.details.quality?.color,
-                    barLevel: sleepVitalsSummary.barLevel
+                    barLevel: sleepVitalsSummary.barLevel,
+                    hasNoData: sleepVitalsSummary.details.hasNoData
                 )
             )
         } else {
@@ -109,9 +109,9 @@ private extension VitalsCalculator {
                     id: .activityLevel,
                     subtitle: activityLevelSummary.subtitle,
                     status: activityLevelSummary.details.activityLevel?.name,
-                    score: activityLevelSummary.details.score,
                     color: activityLevelSummary.details.activityLevel?.color,
-                    barLevel: activityLevelSummary.barLevel
+                    barLevel: activityLevelSummary.barLevel,
+                    hasNoData: activityLevelSummary.details.hasNoData
                 )
             )
         } else {
@@ -123,9 +123,9 @@ private extension VitalsCalculator {
                     id: .heartHealth,
                     subtitle: heartHealthSummary.details.subtitle,
                     status: heartHealthSummary.details.level?.name,
-                    score: heartHealthSummary.details.score ?? 1,
                     color: heartHealthSummary.details.level?.color,
-                    barLevel: heartHealthSummary.details.barLevel
+                    barLevel: heartHealthSummary.details.barLevel,
+                    hasNoData: heartHealthSummary.details.hasNoData
                 )
             )
         } else {
@@ -137,9 +137,9 @@ private extension VitalsCalculator {
                     id: .bodyComposition,
                     subtitle: bodyCompositionSummary.subtitle,
                     status: bodyCompositionSummary.details.range?.name,
-                    score: bodyCompositionSummary.score,
                     color: bodyCompositionSummary.details.range?.color,
-                    barLevel: bodyCompositionSummary.barLevel
+                    barLevel: bodyCompositionSummary.barLevel,
+                    hasNoData: bodyCompositionSummary.details.hasNoData
                 )
             )
         } else {
@@ -151,9 +151,9 @@ private extension VitalsCalculator {
                     id: .stressLevels,
                     subtitle: stressSummary.details.subtitle,
                     status: stressSummary.details.level?.name,
-                    score: stressSummary.score,
                     color: stressSummary.details.level?.color,
-                    barLevel: stressSummary.barLevel
+                    barLevel: stressSummary.barLevel,
+                    hasNoData: stressSummary.hasNoData
                 )
             )
         } else {
@@ -165,9 +165,9 @@ private extension VitalsCalculator {
                     id: .nutrition,
                     subtitle: nutritionSummary.subtitle,
                     status: nutritionSummary.status?.title,
-                    score: nutritionSummary.score,
                     color: nutritionSummary.status?.color,
-                    barLevel: nutritionSummary.barLevel
+                    barLevel: nutritionSummary.barLevel,
+                    hasNoData: nutritionSummary.hasNoData
                 )
             )
         } else {
@@ -179,9 +179,9 @@ private extension VitalsCalculator {
                     id: .exerciseEffectiveness,
                     subtitle: exerciseEffectivenessSummary.details.subtitle,
                     status: exerciseEffectivenessSummary.details.level.name,
-                    score: exerciseEffectivenessSummary.details.score,
                     color: exerciseEffectivenessSummary.details.level.color,
-                    barLevel: exerciseEffectivenessSummary.barLevel
+                    barLevel: exerciseEffectivenessSummary.barLevel,
+                    hasNoData: exerciseEffectivenessSummary.details.hasNoData
                 )
             )
         } else {
@@ -194,9 +194,9 @@ private extension VitalsCalculator {
                         id: .cycleTracking,
                         subtitle: menstrualSummary.subtitle,
                         status: menstrualSummary.phaseName,
-                        score: 1,
                         color: menstrualSummary.color,
-                        barLevel: nil
+                        barLevel: nil,
+                        hasNoData: menstrualSummary.hasNoData
                     )
                 )
             } else {
@@ -209,9 +209,9 @@ private extension VitalsCalculator {
                     id: .bowelMovements,
                     subtitle: bowelMovementSummary.subtitle,
                     status: bowelMovementSummary.rating?.name,
-                    score: bowelMovementSummary.score,
                     color: bowelMovementSummary.rating?.color,
-                    barLevel: bowelMovementSummary.barLevel
+                    barLevel: bowelMovementSummary.barLevel,
+                    hasNoData: bowelMovementSummary.hasNoData
                 )
             )
         } else {

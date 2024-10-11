@@ -114,6 +114,10 @@ extension ExerciseEffectivenessMonthlySummary.Details {
         return scaledDuration.scaledPercent(lower: 0, upper: .minZoneMinutes)
     }
 
+    var hasNoData: Bool {
+        workoutReports.isEmpty
+    }
+
     var subtitle: String {
         if score < 1 {
             let scaledDuration = overallHeartZoneDistribution.scaledDurationSum.doubleValue(for: .minute())

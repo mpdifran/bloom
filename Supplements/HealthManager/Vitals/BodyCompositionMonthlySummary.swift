@@ -167,6 +167,10 @@ extension BodyCompositionMonthlySummary.Details {
         return bodyFatPercentage.doubleValue(for: .percent()).scaledPercent(lower: goal.4, upper: goal.3)
     }
 
+    var hasNoData: Bool {
+        bodyFatPercentage == nil && averageBodyMass == nil
+    }
+
     var range: BodyCompositionMonthlySummary.PercentageRange? {
         guard
             let goal = HealthManager.shared.goalBodyFatPercentage(),

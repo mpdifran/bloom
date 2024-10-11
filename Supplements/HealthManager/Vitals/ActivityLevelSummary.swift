@@ -186,10 +186,8 @@ extension ActivityLevelSummary.Details {
         return (averageActiveEnergyBurned + averageBasalEnergyBurned) / averageBasalEnergyBurned
     }
 
-    var score: Double {
-        guard let activityRatio else { return 1 }
-
-        return activityRatio.scaledPercent(lower: 1, upper: 1.2)
+    var hasNoData: Bool {
+        activityRatio == nil
     }
 
     var activityLevel: ActivityLevelSummary.ActivityLevel? {

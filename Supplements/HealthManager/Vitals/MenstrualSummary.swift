@@ -22,6 +22,10 @@ struct MenstrualSummary: Hashable, Sendable {
 
 extension MenstrualSummary {
 
+    var hasNoData: Bool {
+        menstrualCycles.isEmpty
+    }
+
     var subtitle: String? {
         var entries = [String]()
 

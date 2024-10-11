@@ -75,14 +75,6 @@ struct MonthlyVitalCardCell: View {
                     .fontDesign(.rounded)
                     .foregroundStyle(.tint)
                     .contentTransition(.interpolate)
-
-                if danieleMode {
-                    Text(vital.score.format(using: .twoDecimalPlaces))
-                        .font(.subheadline)
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.tint)
-                        .contentTransition(.interpolate)
-                }
             }
         }
         .tint(vital.color)
@@ -98,9 +90,9 @@ struct MonthlyVitalCardCell: View {
                     id: .activityLevel,
                     subtitle: "Basal: 1756 Cal\nActive: 642 Cal",
                     status: "Moderate",
-                    score: 0.7,
                     color: .vitalWarning,
-                    barLevel: .init(level: .medium, proportion: 1)
+                    barLevel: .init(level: .medium, proportion: 1),
+                    hasNoData: false
                 )
             )
 
@@ -109,9 +101,9 @@ struct MonthlyVitalCardCell: View {
                     id: .sleepQuality,
                     subtitle: "45% Core\n12% Deep",
                     status: "Good",
-                    score: 0.7,
                     color: .vitalGreat,
-                    barLevel: .init(level: .optimal, proportion: 0.9)
+                    barLevel: .init(level: .optimal, proportion: 0.9),
+                    hasNoData: false
                 )
             )
 
@@ -120,9 +112,9 @@ struct MonthlyVitalCardCell: View {
                     id: .activityLevel,
                     subtitle: "1700 Cal Basal\n451 Cal Active",
                     status: "Light",
-                    score: 0.7,
                     color: .vitalGood,
-                    barLevel: .init(level: .high, proportion: 0.6)
+                    barLevel: .init(level: .high, proportion: 0.6),
+                    hasNoData: false
                 )
             )
 
@@ -131,9 +123,9 @@ struct MonthlyVitalCardCell: View {
                     id: .bowelMovements,
                     subtitle: "Once a Day",
                     status: "Irregular",
-                    score: 0.1,
                     color: .vitalSevere,
-                    barLevel: .init(level: .low, proportion: 0.4)
+                    barLevel: .init(level: .low, proportion: 0.4),
+                    hasNoData: false
                 )
             )
         }

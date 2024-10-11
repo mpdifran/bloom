@@ -129,6 +129,10 @@ extension SleepVitalsMonthlySummary.Details {
         averageSleepScore?.scaledPercent(lower: 4, upper: 8)
     }
 
+    var hasNoData: Bool {
+        averageSleepScore == nil
+    }
+
     var quality: SleepVitalsMonthlySummary.SleepQuality? {
         guard let averageSleepScore else { return nil }
 

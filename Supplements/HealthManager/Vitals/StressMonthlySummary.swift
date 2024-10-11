@@ -63,6 +63,10 @@ struct StressMonthlySummary: Hashable, Sendable {
         details.averageStressLevel?.scaledPercent(lower: -1, upper: 0.5) ?? 1
     }
 
+    var hasNoData: Bool {
+        details.averageStressLevel == nil
+    }
+
     var barLevel: VitalModel.BarLevel? {
         guard
             let averageStressLevel = details.averageStressLevel,

@@ -64,6 +64,10 @@ struct BowelMovementMonthlySummary: Sendable {
         self.calculateScore()
     }
 
+    var hasNoData: Bool {
+        bowelMovements.isEmpty
+    }
+
     var barLevel: VitalModel.BarLevel? {
         guard let rating else { return nil }
 

@@ -17,6 +17,7 @@ final class VitalsViewModel: Sendable {
     static let shared = VitalsViewModel()
 
     var vitals = [VitalModel]()
+    var noDataVitals = [VitalModel]()
     var activityLevelSummary: ActivityLevelSummary?
     var sleepVitalsSummary: SleepVitalsMonthlySummary?
     var heartHealthSummary: HeartHealthMonthlySummary?
@@ -42,8 +43,12 @@ extension VitalsViewModel {
 
         tasks.append(Task.detached {
             for await vitals in await VitalsCalculator.shared.$vitals {
+                let dataVitals = vitals.filter({ !$0.hasNoData })
+                let noDataVitals = vitals.filter(\.hasNoData)
+
                 await MainActor.run {
-                    self.vitals = vitals
+                    self.vitals = dataVitals
+                    self.noDataVitals = noDataVitals
                 }
             }
         })

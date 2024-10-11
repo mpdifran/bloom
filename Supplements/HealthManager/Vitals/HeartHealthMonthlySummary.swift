@@ -107,6 +107,10 @@ extension HeartHealthMonthlySummary.Details {
         return scores.average(keyPath: \.self)
     }
 
+    var hasNoData: Bool {
+        vo2MaxScore == nil && heartRateRecoveryScore == nil && restingHeartRateScore == nil
+    }
+
     var barLevel: VitalModel.BarLevel? {
         guard let level, let score else { return nil }
 

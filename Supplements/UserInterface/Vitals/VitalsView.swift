@@ -25,6 +25,17 @@ struct VitalsView: View {
                         }
                         .buttonStyle(.plain)
                     }
+
+                    if viewModel.noDataVitals.isNotEmpty {
+                        SectionTitleView("No Data")
+                            .padding(.horizontal)
+                        ForEach(viewModel.noDataVitals) { vital in
+                            NavigationLink(value: vital.id) {
+                                MonthlyVitalCardCell(vital: vital)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
                 }
                 .horizontallyCentered()
                 .padding()

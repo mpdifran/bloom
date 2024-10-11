@@ -51,6 +51,10 @@ extension NutritionMonthlySummary {
         details.score ?? 1
     }
 
+    var hasNoData: Bool {
+        details.score == nil
+    }
+
     var barLevel: VitalModel.BarLevel? {
         guard let score = details.score else { return nil }
 

@@ -104,24 +104,24 @@ public struct VitalModel: Identifiable, Hashable, Sendable {
     public let id: Kind
     public let subtitle: String
     public let status: String
-    public let score: Double
     public let color: Color
     public let barLevel: BarLevel?
+    public let hasNoData: Bool
 
     public init(
         id: Kind,
         subtitle: String?,
         status: String?,
-        score: Double,
         color: Color?,
-        barLevel: BarLevel?
+        barLevel: BarLevel?,
+        hasNoData: Bool
     ) {
         self.id = id
         self.subtitle = subtitle ?? "No Data"
         self.status = status ?? "Unknown"
-        self.score = status == nil ? 2 : score
         self.color = color ?? .gray
         self.barLevel = barLevel
+        self.hasNoData = hasNoData
     }
 
     public init(id: Kind) {
@@ -129,9 +129,9 @@ public struct VitalModel: Identifiable, Hashable, Sendable {
             id: id,
             subtitle: nil,
             status: nil,
-            score: 1,
             color: nil,
-            barLevel: nil
+            barLevel: nil,
+            hasNoData: true
         )
     }
 }
