@@ -52,7 +52,7 @@ extension HabitDailyUpdateCellViewModel {
             } else {
                 let formatted = HKQuantity(
                     unit: unit,
-                    doubleValue: difference
+                    doubleValue: -difference
                 ).displayString(for: unit, formatter: formatter)
                 return "\(formatted) above your goal."
             }
