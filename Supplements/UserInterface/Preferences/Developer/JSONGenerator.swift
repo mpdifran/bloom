@@ -1,0 +1,139 @@
+//
+//  JSONGenerator.swift
+//  Supplements
+//
+//  Created by Mark DiFranco on 2024-10-12.
+//
+
+import SwiftUI
+import HealthKit
+
+final actor JSONGenerator {
+    static let shared = JSONGenerator()
+
+    private init() { }
+}
+
+extension JSONGenerator {
+
+    func generateJSONString() async throws -> String {
+        await VitalsCalculator.shared.forceFetchVitals()
+
+        let calc = VitalsCalculator.shared
+
+        let heartDetails = await SummaryJSON.HeartDetails(
+            averageVo2Max: calc.heartHealthSummary?.details.averageVO2Max.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .vo2Max()), unit: .vo2Max()) }),
+            averageHeartRateRecovery: calc.heartHealthSummary?.details.averageHeartRateRecovery.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .bpm()), unit: .bpm()) }),
+            averageRestingHeartRate: calc.heartHealthSummary?.details.averageRestingHeartRate.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .bpm()), unit: .bpm()) })
+        )
+
+        let bodyComp = await SummaryJSON.BodyCompDetails(
+            bodyFatPercentage: calc.bodyCompositionSummary?.details.bodyFatPercentage.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .percent()), unit: .percent()) }),
+            bodyMass: calc.bodyCompositionSummary?.details.averageBodyMass.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .pound()), unit: .pound()) })
+        )
+
+        let stress = await SummaryJSON.StressDetails(
+            heartRateVariability: calc.stressSummary?.details.heartRateVariability.map({
+                SummaryJSON.DateQuantity(date: $0.date, quantity: .init(value: $0.quantity.doubleValue(for: .millisecond()), unit: .millisecond()))
+            }) ?? [],
+            bloodPressureSystolic: calc.stressSummary?.details.bloodPressureSystolic.map({
+                SummaryJSON.DateQuantity(date: $0.date, quantity: .init(value: $0.quantity.doubleValue(for: .millimeterOfMercury()), unit: .millimeterOfMercury()))
+            }) ?? [],
+            bloodPressureDiastolic: calc.stressSummary?.details.bloodPressureDiastolic.map({
+                SummaryJSON.DateQuantity(date: $0.date, quantity: .init(value: $0.quantity.doubleValue(for: .millimeterOfMercury()), unit: .millimeterOfMercury()))
+            }) ?? []
+        )
+
+        let nutrition = await SummaryJSON.NutritionDetails(
+            averageBasalEnergy: calc.nutritionSummary?.details.basalEnergyBurned.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
+            averageActiveEnergy: calc.nutritionSummary?.details.activeEnergyBurned.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
+            averageDietaryEnergy: calc.nutritionSummary?.details.dietaryEnergy.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .largeCalorie()), unit: .largeCalorie()) }),
+            averageProtein: calc.nutritionSummary?.details.averageProtein.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+            averageCarbohydrates: calc.nutritionSummary?.details.averageCarbohydrates.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+            averagFat: calc.nutritionSummary?.details.averageFat.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+            averageFiber: calc.nutritionSummary?.details.averageFiber.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+            averageSugar: calc.nutritionSummary?.details.averageSugar.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
+            averageWater: calc.nutritionSummary?.details.averageWater.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .literUnit(with: .milli)), unit: .literUnit(with: .milli)) })
+        )
+
+        let bms = await calc.bowelMovementSummary?.bowelMovements.map({ SummaryJSON.BM(date: $0.date, bristolStoolType: $0.bristolStoolType, duration: $0.duration.name) }) ?? []
+
+        let summary = await SummaryJSON(
+            activityLevel: VitalsCalculator.shared.activityLevelSummary?.details,
+            sleep: VitalsCalculator.shared.sleepVitalsSummary?.details,
+            heartHealth: heartDetails,
+            bodyComposition: bodyComp,
+            stress: stress,
+            nutrition: nutrition,
+            bowelMovements: bms
+        )
+
+        let data = try JSONEncoder.main.encode(summary)
+
+        return String(data: data, encoding: .utf8) ?? ""
+    }
+}
+
+struct SummaryJSON: Codable {
+    let activityLevel: ActivityLevelSummary.Details?
+    let sleep: SleepVitalsMonthlySummary.Details?
+    let heartHealth: HeartDetails
+    let bodyComposition: BodyCompDetails
+    let stress: StressDetails
+    let nutrition: NutritionDetails
+    let bowelMovements: [BM]
+}
+
+extension SummaryJSON {
+    struct HeartDetails: Codable {
+        let averageVo2Max: Quantity?
+        let averageHeartRateRecovery: Quantity?
+        let averageRestingHeartRate: Quantity?
+    }
+
+    struct BodyCompDetails: Codable {
+        let bodyFatPercentage: Quantity?
+        let bodyMass: Quantity?
+    }
+
+    struct StressDetails: Codable {
+        let heartRateVariability: [DateQuantity]
+        let bloodPressureSystolic: [DateQuantity]
+        let bloodPressureDiastolic: [DateQuantity]
+    }
+
+    struct NutritionDetails: Codable {
+        let averageBasalEnergy: Quantity?
+        let averageActiveEnergy: Quantity?
+        let averageDietaryEnergy: Quantity?
+        let averageProtein: Quantity?
+        let averageCarbohydrates: Quantity?
+        let averagFat: Quantity?
+        let averageFiber: Quantity?
+        let averageSugar: Quantity?
+        let averageWater: Quantity?
+    }
+}
+
+extension SummaryJSON {
+    struct Quantity: Codable {
+        let value: Double
+        let unit: String
+
+        init(value: Double, unit: HKUnit) {
+            self.value = value
+            self.unit = unit.unitString
+        }
+    }
+
+    struct DateQuantity: Codable {
+        let date: Date
+        let quantity: Quantity
+    }
+
+    struct BM: Codable {
+        let date: Date
+        let bristolStoolType: Int
+        let duration: String
+    }
+}

@@ -24,6 +24,7 @@ struct PreferencesView: View {
     @State private var presentedFullScreenView: AnyView?
     @State private var presentedSheet: AnyView?
     @State private var alertDetails: AlertDetails?
+    @State private var error: Error?
 
     var body: some View {
         List {
@@ -57,6 +58,7 @@ struct PreferencesView: View {
             await checkHealthAuthStatus()
         }
         .alert(alertDetails: $alertDetails)
+        .alert(error: $error)
         .animation(.default, value: healthManager.healthGoal)
         .tabItem {
             Label("Preferences", systemImage: "slider.horizontal.below.square.and.square.filled")
@@ -281,6 +283,33 @@ private extension PreferencesView {
             } label: {
                 HStack {
                     Text("Send Good Morning Notification")
+                    Spacer()
+                    DisclosureIndicator()
+                }
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                Task {
+                    do {
+                        let jsonString = try await JSONGenerator.shared.generateJSONString()
+                        UIPasteboard.general.string = jsonString
+
+                        await MainActor.run {
+                            alertDetails = AlertDetails(
+                                title: "Copied to Clipboard",
+                                message: "The data for your Vitals have been copied to your clipboard."
+                            )
+                        }
+                    } catch {
+                        await MainActor.run {
+                            self.error = error
+                        }
+                    }
+                }
+            } label: {
+                HStack {
+                    Text("Copy Vitals JSON to Clipboard")
                     Spacer()
                     DisclosureIndicator()
                 }

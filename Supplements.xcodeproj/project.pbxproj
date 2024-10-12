@@ -170,6 +170,7 @@
 		FF70E9292CB99C720055E932 /* UpcomingPeriodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9282CB99C720055E932 /* UpcomingPeriodCell.swift */; };
 		FF70E92B2CB99EA30055E932 /* DisclosureIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92A2CB99EA30055E932 /* DisclosureIndicator.swift */; };
 		FF70E92D2CBADD740055E932 /* NotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */; };
+		FF70E9302CBAF4F80055E932 /* JSONGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -652,6 +653,7 @@
 		FF70E9282CB99C720055E932 /* UpcomingPeriodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingPeriodCell.swift; sourceTree = "<group>"; };
 		FF70E92A2CB99EA30055E932 /* DisclosureIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureIndicator.swift; sourceTree = "<group>"; };
 		FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterDelegate.swift; sourceTree = "<group>"; };
+		FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONGenerator.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1328,6 +1330,14 @@
 			path = Configure;
 			sourceTree = "<group>";
 		};
+		FF70E92E2CBAF4E80055E932 /* Developer */ = {
+			isa = PBXGroup;
+			children = (
+				FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */,
+			);
+			path = Developer;
+			sourceTree = "<group>";
+		};
 		FF7112872C9874CC0020A0F0 /* Goals */ = {
 			isa = PBXGroup;
 			children = (
@@ -1486,6 +1496,7 @@
 			children = (
 				FF1327F62CB4336600ACF981 /* HealthGoals */,
 				FF4A21CA2C8A01B900278019 /* FeatureRequests */,
+				FF70E92E2CBAF4E80055E932 /* Developer */,
 				FF8F79C82C62C1D10095C36D /* PreferencesView.swift */,
 				FF4A21C82C89FF5500278019 /* UserNamePrompt.swift */,
 				FF4A21D12C8A05D700278019 /* UserID.swift */,
@@ -2723,6 +2734,7 @@
 				FF88F1402C7E475F0093D1B4 /* BloodPressureActionCardView.swift in Sources */,
 				FF70E9132CB85C9D0055E932 /* HealthStoreFetcher.swift in Sources */,
 				FF4A21D22C8A05D700278019 /* UserID.swift in Sources */,
+				FF70E9302CBAF4F80055E932 /* JSONGenerator.swift in Sources */,
 				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
 				FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
