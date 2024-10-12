@@ -21,7 +21,7 @@ struct ChatView: View {
     @ObservedObject private var viewModel = ChatViewModel.shared
     @ObservedObject private var healthManager = HealthManager.shared
 
-    @EnvironmentObject private var tabContorller: TabController
+    @Environment(TabController.self) private var tabController: TabController
 
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
@@ -107,7 +107,7 @@ struct ChatView: View {
                 .onChange(of: viewModel.chatHistory.count) { _, _ in
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
 
-                    if tabContorller.activeTab == .chat {
+                    if tabController.activeTab == .chat {
                         viewModel.unreadChatCount = 0
                     }
                 }

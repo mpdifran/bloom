@@ -37,7 +37,7 @@ struct TodayView: View {
     @ObservedObject private var reportCoordinator = ReportCoordinator.shared
     @ObservedObject private var toDoManager = ToDoManager.shared
 
-    @EnvironmentObject private var tabController: TabController
+    @Environment(TabController.self) private var tabController: TabController
 
     @State private var presentedFullScreen: AnyView?
     @State private var presentedSheet: AnyView?
@@ -45,6 +45,8 @@ struct TodayView: View {
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
     var body: some View {
+        @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
+
         NavigationStack {
             ScrollView {
                 VStack {
@@ -154,5 +156,5 @@ struct TodayView: View {
     TabView {
         TodayView()
     }
-    .environmentObject(TabController())
+    .environment(TabController())
 }

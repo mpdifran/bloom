@@ -273,6 +273,19 @@ private extension PreferencesView {
                 }
             }
             .buttonStyle(.plain)
+
+            Button {
+                Task {
+                    await NotificationManager.shared.sendGoodMorningNotification(message: "Test")
+                }
+            } label: {
+                HStack {
+                    Text("Send Good Morning Notification")
+                    Spacer()
+                    DisclosureIndicator()
+                }
+            }
+            .buttonStyle(.plain)
         }
     }
 }

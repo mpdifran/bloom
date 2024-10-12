@@ -169,6 +169,7 @@
 		FF70E9272CB96D320055E932 /* HealthSleepObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9262CB96D2A0055E932 /* HealthSleepObserver.swift */; };
 		FF70E9292CB99C720055E932 /* UpcomingPeriodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9282CB99C720055E932 /* UpcomingPeriodCell.swift */; };
 		FF70E92B2CB99EA30055E932 /* DisclosureIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92A2CB99EA30055E932 /* DisclosureIndicator.swift */; };
+		FF70E92D2CBADD740055E932 /* NotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -650,6 +651,7 @@
 		FF70E9262CB96D2A0055E932 /* HealthSleepObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSleepObserver.swift; sourceTree = "<group>"; };
 		FF70E9282CB99C720055E932 /* UpcomingPeriodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingPeriodCell.swift; sourceTree = "<group>"; };
 		FF70E92A2CB99EA30055E932 /* DisclosureIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureIndicator.swift; sourceTree = "<group>"; };
+		FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterDelegate.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1310,6 +1312,7 @@
 			isa = PBXGroup;
 			children = (
 				FF6AEC982BF17D1B00C34621 /* NotificationManager.swift */,
+				FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -2744,6 +2747,7 @@
 				FF426ACD2C6D4768006E0F17 /* NSPredicate+Sendable.swift in Sources */,
 				FF2FB8B42C9F748F00F57523 /* HabitGoalStatistics.swift in Sources */,
 				FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */,
+				FF70E92D2CBADD740055E932 /* NotificationCenterDelegate.swift in Sources */,
 				FF4CAB022C813D91001A59F3 /* WeatherForecaster.swift in Sources */,
 				FFB444522BEC3B0600486AD7 /* ChatBubbleShape.swift in Sources */,
 				FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */,

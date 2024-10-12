@@ -11,26 +11,29 @@ import UserNotifications
 enum Tab {
     case today
     case vitals
-    case insights
-    case correlations
-    case goals
     case actions
-    case programs
     case chat
     case profile
 }
 
-@MainActor
-class TabController: NSObject, ObservableObject {
-    @Published var activeTab = Tab.today
+@Observable @MainActor
+final class TabController {
+    var activeTab = Tab.today
 
-    @Published var showMorningReport = false
-    @Published var showEveningReport = false
+    var showMorningReport = false
+    var showEveningReport = false
+    var toggleToDismiss = false
 
-    override init() {
-        super.init()
+    private var notificationCenterDelegate: NotificationCenterDelegate!
 
-        UNUserNotificationCenter.current().delegate = self
+    init() {
+        self.notificationCenterDelegate = NotificationCenterDelegate { [weak self] response in
+            Task {
+                await MainActor.run {
+                    self?.handle(response: response)
+                }
+            }
+        }
     }
 }
 
@@ -39,45 +42,29 @@ extension TabController {
     func select(_ tab: Tab) {
         activeTab = tab
     }
+
+    func dismiss() {
+        toggleToDismiss.toggle()
+    }
 }
 
-extension TabController: UNUserNotificationCenterDelegate {
+private extension TabController {
 
-    nonisolated func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse
-    ) async {
+    func handle(response: UNNotificationResponse) {
         switch response.notification.request.content.categoryIdentifier {
         case .CategoryID.chatMessage:
-            await MainActor.run {
-                select(.chat)
-            }
+            dismiss()
+            select(.chat)
         case .CategoryID.goodMorning:
-            await MainActor.run {
-                select(.today)
-                showMorningReport = true
-            }
+            dismiss()
+            select(.today)
+            showMorningReport = true
         case .CategoryID.goodEvening:
-            await MainActor.run {
-                select(.today)
-                showEveningReport = true
-            }
+            dismiss()
+            select(.today)
+            showEveningReport = true
         default:
             break
-        }
-    }
-
-    nonisolated func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        willPresent notification: UNNotification
-    ) async -> UNNotificationPresentationOptions {
-        switch notification.request.content.categoryIdentifier {
-        case .CategoryID.chatMessage:
-            return [.banner]
-        case .CategoryID.goodMorning, .CategoryID.goodEvening:
-            return [.banner]
-        default :
-            return [.banner, .sound, .list]
         }
     }
 }

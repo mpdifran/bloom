@@ -13,7 +13,9 @@ struct RootView: View {
     @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
-    @StateObject private var tabController = TabController()
+    @Bindable private var tabController = TabController()
+
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         Group {
@@ -38,12 +40,15 @@ struct RootView: View {
                     PreferencesView()
                         .tag(Tab.profile)
                 }
-                .environmentObject(tabController)
+                .environment(tabController)
                 .transition(.blurReplace)
             }
         }
         .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
         .animation(.default, value: danieleMode)
+        .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
+            dismiss()
+        }
     }
 }
 
