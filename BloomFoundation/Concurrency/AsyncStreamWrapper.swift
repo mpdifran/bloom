@@ -8,9 +8,9 @@
 import Foundation
 
 @propertyWrapper
-class AsyncStreamable<Value> {
+public class AsyncStreamable<Value> {
 
-    var wrappedValue: Value {
+    public var wrappedValue: Value {
         didSet {
             subscriptions.values.forEach {
                 $0.yield(wrappedValue)
@@ -18,13 +18,13 @@ class AsyncStreamable<Value> {
         }
     }
 
-    init(wrappedValue: Value) {
+    public init(wrappedValue: Value) {
         self.wrappedValue = wrappedValue
     }
 
     private var subscriptions: [UUID: AsyncStream<Value>.Continuation] = [:]
 
-    var projectedValue: AsyncStream<Value> {
+    public var projectedValue: AsyncStream<Value> {
         AsyncStream { continuation in
             let id = UUID()
             subscriptions[id] = continuation

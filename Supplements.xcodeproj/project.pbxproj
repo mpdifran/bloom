@@ -1114,6 +1114,7 @@
 		FF1E96852C0C1F38004DAD2D /* BloomFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				FF70E9BF2CBDD91F0055E932 /* Concurrency */,
 				FFCE85612C99DCC5002C46B1 /* Calendar */,
 				FFCE855F2C99DC99002C46B1 /* Date */,
 				FF1E969D2C0D0523004DAD2D /* Formatters */,
@@ -1336,6 +1337,14 @@
 				FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */,
 			);
 			path = Developer;
+			sourceTree = "<group>";
+		};
+		FF70E9BF2CBDD91F0055E932 /* Concurrency */ = {
+			isa = PBXGroup;
+			children = (
+				FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */,
+			);
+			path = Concurrency;
 			sourceTree = "<group>";
 		};
 		FF7112872C9874CC0020A0F0 /* Goals */ = {
@@ -2046,7 +2055,6 @@
 			children = (
 				FFF61B742BF15DD000926042 /* SoundPlayer.swift */,
 				FF0404D52C065F3B009FDC4E /* Throttler.swift */,
-				FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
