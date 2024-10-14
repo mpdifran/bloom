@@ -1,5 +1,5 @@
 //
-//  ProteinTargetCalculatorSuite.swift
+//  ProteinTargetCalculatorTestSuite.swift
 //  SupplementsTests
 //
 //  Created by Mark DiFranco on 2024-10-02.
@@ -12,7 +12,7 @@ import BloomFoundation
 @testable import Supplements
 
 @Suite(.tags(.targetCalculator))
-struct ProteinTargetCalculatorSuite {
+struct ProteinTargetCalculatorTestSuite {
 
     init() {
         ContainerHolder.shared.setupForTests()
@@ -86,7 +86,7 @@ struct ProteinTargetCalculatorSuite {
     }
 }
 
-private extension ProteinTargetCalculatorSuite {
+private extension ProteinTargetCalculatorTestSuite {
 
     func addHabit() throws -> HabitDTO {
         let startDate = try #require(Calendar.current.date(byAdding: .day, value: -7, to: .now))

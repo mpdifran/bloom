@@ -11,7 +11,7 @@ import DataContainer
 import BloomFoundation
 @testable import Supplements
 
-extension CalorieTargetCalculatorSuite {
+extension CalorieTargetCalculatorTestSuite {
 
     static var noExistinHabitsArguments: [(Input, Double)] {
         [
@@ -195,6 +195,54 @@ extension CalorieTargetCalculatorSuite {
                 goal: .loseWeight,
                 speed: .fast
             ), 1700),
+            (Input(
+                "AL lose weight high activity existing habit",
+                basal: 1700,
+                active: 600,
+                dietary: 2000,
+                bodyMass: 180,
+                activityLevel: nil,
+                goal: .loseWeight,
+                speed: .moderate,
+                existingHabit: HabitDTO(
+                    id: nil,
+                    targetMetric: .calories,
+                    value: 1650,
+                    unitString: HKUnit.largeCalorie().unitString,
+                    startDate: .now,
+                    endDate: nil,
+                    lastNotificationDate: nil,
+                    isSuggested: true,
+                    isUserEdited: false,
+                    vitalKind: .nutrition,
+                    context: ""
+                )
+            ),
+            1650),
+            (Input(
+                "AL lose weight high activity existing habit",
+                basal: 1700,
+                active: 600,
+                dietary: 2000,
+                bodyMass: 180,
+                activityLevel: nil,
+                goal: .maintainWeight,
+                speed: .moderate,
+                existingHabit: HabitDTO(
+                    id: nil,
+                    targetMetric: .calories,
+                    value: 1650,
+                    unitString: HKUnit.largeCalorie().unitString,
+                    startDate: .now,
+                    endDate: nil,
+                    lastNotificationDate: nil,
+                    isSuggested: true,
+                    isUserEdited: false,
+                    vitalKind: .nutrition,
+                    context: ""
+                )
+            ),
+            2300),
         ]
     }
 }

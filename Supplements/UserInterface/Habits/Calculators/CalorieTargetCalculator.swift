@@ -157,8 +157,10 @@ private extension CalorieTargetCalculator {
             let tdee = calculateTDEE(basalEnergy: basalEnergy, activeEnergy: activeEnergy),
             let recommendation = calculateEnergyBasedCalorieGoal(currentEnergy: tdee, targetDetails: targetDetails)
         {
-
-            if !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1) {
+            if
+                targetDetails.goal != .loseWeight,
+                !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1)
+            {
                 return TargetMetricRecommendation(
                     target: recommendation.target,
                     context: "Your activity level has changed, so we're changing your calorie goal to match."
@@ -170,8 +172,10 @@ private extension CalorieTargetCalculator {
         {
 
             let targetCalories = calorieMultiplier * bodyMass.doubleValue(for: .pound())
+
             if
                 let recommendation = calculateActivityLevelBasedCalorieGoal(targetCalories: targetCalories, targetDetails: targetDetails),
+                targetDetails.goal != .loseWeight,
                 !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1)
             {
                 return TargetMetricRecommendation(

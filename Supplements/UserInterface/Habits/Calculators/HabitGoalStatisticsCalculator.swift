@@ -20,9 +20,9 @@ enum HabitGoalStatisticsCalculator {
         unit: HKUnit
     ) async -> HabitGoalStatistics {
 
-        let modelContext = ContainerHolder.shared.createContext()
+        let modelActor = HabitModelActor.standard()
 
-        let habitHistory = (try? modelContext.fetchHabits(for: targetMetric)) ?? []
+        let habitHistory = (try? await modelActor.fetchHabits(for: targetMetric)) ?? []
 
         let samples = await targetMetric.fetchCollatedDailyQuantity(
             unit: unit,
@@ -33,7 +33,7 @@ enum HabitGoalStatisticsCalculator {
         var missedGoalSamples = [HabitGoalStatistics.HabitSamplePair]()
 
         for sample in samples {
-            let habit: Habit
+            let habit: HabitDTO
 
             if let timelineHabit = habitHistory.first(where: { $0.isDateWithinHabit(date: sample.date) }) {
                 habit = timelineHabit
@@ -47,11 +47,11 @@ enum HabitGoalStatisticsCalculator {
 
             if habit.quantityMeetsGoal(sampleValue, gracePercent: 0.05) {
                 metGoalSamples.append(
-                    .init(habit: habit, sample: sample)
+                    HabitGoalStatistics.HabitSamplePair(habit: habit, sample: sample)
                 )
             } else {
                 missedGoalSamples.append(
-                    .init(habit: habit, sample: sample)
+                    HabitGoalStatistics.HabitSamplePair(habit: habit, sample: sample)
                 )
             }
         }

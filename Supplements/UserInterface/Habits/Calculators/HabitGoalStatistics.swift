@@ -76,7 +76,7 @@ extension HabitGoalStatistics {
 
 extension HabitGoalStatistics {
     struct HabitSamplePair {
-        let habit: Habit
+        let habit: HabitDTO
         let sample: DateQuantitySample
     }
 }

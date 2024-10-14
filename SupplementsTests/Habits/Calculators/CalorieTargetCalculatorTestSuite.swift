@@ -1,5 +1,5 @@
 //
-//  CalorieTargetCalculatorSuite.swift
+//  CalorieTargetCalculatorTestSuite.swift
 //  SupplementsTests
 //
 //  Created by Mark DiFranco on 2024-10-02.
@@ -12,7 +12,7 @@ import BloomFoundation
 @testable import Supplements
 
 @Suite(.tags(.targetCalculator))
-struct CalorieTargetCalculatorSuite {
+struct CalorieTargetCalculatorTestSuite {
 
     init() {
         ContainerHolder.shared.setupForTests()
@@ -25,7 +25,7 @@ struct CalorieTargetCalculatorSuite {
     ) async throws {
         let result = try #require(
             await CalorieTargetCalculator.targetCalories(
-                existingHabit: nil,
+                existingHabit: input.existingHabit,
                 basalEnergy: input.basalEnergy.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0) },
                 activeEnergy: input.activeEnergy.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0) },
                 dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: input.dietaryEnergy),
@@ -44,7 +44,7 @@ struct CalorieTargetCalculatorSuite {
     }
 }
 
-extension CalorieTargetCalculatorSuite {
+extension CalorieTargetCalculatorTestSuite {
     struct Input: CustomTestStringConvertible {
         let testDescription: String
         let basalEnergy: Double?
@@ -54,6 +54,7 @@ extension CalorieTargetCalculatorSuite {
         let activityLevel: ActivityLevelSummary.ActivityLevel?
         let healthGoal: HealthGoal
         let speed: WeightLossSpeed
+        let existingHabit: HabitDTO?
 
         init(
             _ testDescription: String,
@@ -63,7 +64,8 @@ extension CalorieTargetCalculatorSuite {
             bodyMass: Double,
             activityLevel: ActivityLevelSummary.ActivityLevel?,
             goal: HealthGoal,
-            speed: WeightLossSpeed
+            speed: WeightLossSpeed,
+            existingHabit: HabitDTO? = nil
         ) {
             self.testDescription = testDescription
             self.basalEnergy = basal
@@ -73,6 +75,7 @@ extension CalorieTargetCalculatorSuite {
             self.activityLevel = activityLevel
             self.healthGoal = goal
             self.speed = speed
+            self.existingHabit = existingHabit
         }
     }
 }

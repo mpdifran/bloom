@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 public struct HabitDTO: Sendable {
-    public let id: PersistentIdentifier
+    public let id: PersistentIdentifier!
     public let targetMetric: TargetMetric
     public let value: Double
     public let unitString: String
@@ -20,6 +20,32 @@ public struct HabitDTO: Sendable {
     public let isUserEdited: Bool
     public let vitalKind: VitalModel.Kind?
     public let context: String?
+
+    public init(
+        id: PersistentIdentifier!,
+        targetMetric: TargetMetric,
+        value: Double,
+        unitString: String,
+        startDate: Date,
+        endDate: Date?,
+        lastNotificationDate: Date?,
+        isSuggested: Bool,
+        isUserEdited: Bool,
+        vitalKind: VitalModel.Kind?,
+        context: String?
+    ) {
+        self.id = id
+        self.targetMetric = targetMetric
+        self.value = value
+        self.unitString = unitString
+        self.startDate = startDate
+        self.endDate = endDate
+        self.lastNotificationDate = lastNotificationDate
+        self.isSuggested = isSuggested
+        self.isUserEdited = isUserEdited
+        self.vitalKind = vitalKind
+        self.context = context
+    }
 }
 
 public extension Habit {

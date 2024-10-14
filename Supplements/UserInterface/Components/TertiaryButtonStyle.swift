@@ -16,7 +16,7 @@ struct PrimaryButtonStyle: ButtonStyle {
         .bold()
         .padding(.vertical, 16)
         .padding(.horizontal)
-        .background(.tint.opacity(0.5))
+        .background(.tint.secondary)
         .foregroundStyle(.tint)
         .clipShape(RoundedRectangle(cornerRadius: 17))
     }

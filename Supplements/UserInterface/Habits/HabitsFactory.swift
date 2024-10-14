@@ -47,7 +47,7 @@ extension HabitsFactory {
         }
 
         // Add new habits
-        if newHabitResult.proposedFocusAreas.count < 2 {
+        if newHabitResult.proposedFocusAreas.count < 2 && newHabitResult.proposedToDos.count == 0 {
             let vitals = await VitalsCalculator.shared.vitals
 
             for vital in vitals {

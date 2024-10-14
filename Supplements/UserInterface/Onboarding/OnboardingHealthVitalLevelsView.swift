@@ -28,6 +28,10 @@ struct OnboardingHealthVitalLevelsView: View {
                     MonthlyVitalCardCell(vital: vital)
                 }
 
+                ForEach(vitalsViewModel.noDataVitals) { vital in
+                    MonthlyVitalCardCell(vital: vital)
+                }
+
                 Text("Levels")
                     .font(.largeTitle)
                     .bold()
