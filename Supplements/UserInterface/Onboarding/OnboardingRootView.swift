@@ -31,10 +31,6 @@ struct OnboardingRootView: View {
             switch step {
             case .welcome:
                 OnboardingWelcomeView {
-                    setStep(.healthGoals)
-                }
-            case .healthGoals:
-                OnboardingHealthGoalView {
                     setStep(.healthKit)
                 }
             case .healthKit:
@@ -43,6 +39,10 @@ struct OnboardingRootView: View {
                 }
             case .ageAndSex:
                 OnboardingHealthAgeView {
+                    setStep(.healthGoals)
+                }
+            case .healthGoals:
+                OnboardingHealthGoalView {
                     setStep(.vitals)
                 }
             case .vitals:

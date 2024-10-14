@@ -44,6 +44,7 @@ struct OnboardingGoalsView: View {
                     VStack {
                         if proposedFocusAreas.isNotEmpty {
                             SectionTitleView("Focus Areas")
+                                .padding(.horizontal)
 
                             ForEachEnumerated(proposedFocusAreas) { (index, _) in
                                 ProposedHabitCell(
@@ -56,6 +57,7 @@ struct OnboardingGoalsView: View {
 
                         if proposedHabits.isNotEmpty {
                             SectionTitleView("New Habits")
+                                .padding(.horizontal)
 
                             ForEachEnumerated(proposedHabits) { (index, _) in
                                 ProposedHabitCell(
@@ -68,6 +70,7 @@ struct OnboardingGoalsView: View {
 
                         if proposedToDos.isNotEmpty {
                             SectionTitleView("To Do")
+                                .padding(.horizontal)
 
                             ForEach(proposedToDos) { proposedToDo in
                                 ProposedToDoCell(proposedToDo: proposedToDo)
