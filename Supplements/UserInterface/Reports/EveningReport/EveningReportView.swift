@@ -22,7 +22,6 @@ struct EveningReportView: View {
     @State private var selectedHabit: Habit?
     @State private var events = [EKEvent]()
     @State private var selectedEvent: EKEvent?
-    @State private var showMenstruationDetails = false
 
     @State private var completedTargetMetrics = Set<TargetMetric>()
 
@@ -43,7 +42,6 @@ struct EveningReportView: View {
             List {
                 currentDateSection
                     .removeListSeparator()
-                projectedPeriodSection
                 habitsSection
                 calendarSection
             }
@@ -60,9 +58,6 @@ struct EveningReportView: View {
             }
             .navigationDestination(item: $selectedHabit) { habit in
                 HabitDetailsView(habit: habit)
-            }
-            .navigationDestination(isPresented: $showMenstruationDetails) {
-                MenstruationDetailView()
             }
             .sheet(item: $selectedEvent) { event in
                 EKEventView(event: event)
@@ -124,23 +119,6 @@ private extension EveningReportView {
                         }
                     }
                 }
-            }
-        }
-    }
-
-    @ViewBuilder
-    var projectedPeriodSection: some View {
-        if
-            let periodDate = vitalsViewModel.menstrualSummary?.nextPredictedPeriodDate,
-            let remainingDays = Calendar.current.dateComponents([.day], from: .now, to: periodDate).day,
-            remainingDays < 5
-        {
-            Section("Cycle Tracking") {
-                UpcomingPeriodCell(predictedPeriodDate: periodDate)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        showMenstruationDetails = true
-                    }
             }
         }
     }

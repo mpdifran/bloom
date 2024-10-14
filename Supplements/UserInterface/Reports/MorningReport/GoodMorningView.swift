@@ -29,6 +29,7 @@ struct GoodMorningView: View {
     @State private var weather: Weather?
     @State private var isLoadingWeather = false
     @State private var showSleepTodayView = false
+    @State private var showMenstruationDetails = false
     @State private var sleepAnalysis: SleepAnalysis?
 
     @State private var incompleteTargetMetrics = Set<TargetMetric>()
@@ -53,6 +54,7 @@ struct GoodMorningView: View {
                 currentDateSection
                     .removeListSeparator()
                 sleepSection
+                projectedPeriodSection
                 focusAreasSection
                 activityLevelSection
                 menstrualCycleSection
@@ -72,6 +74,9 @@ struct GoodMorningView: View {
             }
             .navigationDestination(isPresented: $showSleepTodayView) {
                 SleepDayView()
+            }
+            .navigationDestination(isPresented: $showMenstruationDetails) {
+                MenstruationDetailView()
             }
         }
         .sheet(item: $selectedEvent) { event in
@@ -232,6 +237,23 @@ private extension GoodMorningView {
     }
 
     @ViewBuilder
+    var projectedPeriodSection: some View {
+        if
+            let periodDate = vitalsViewModel.menstrualSummary?.nextPredictedPeriodDate,
+            let remainingDays = Calendar.current.dateComponents([.day], from: .now, to: periodDate).day,
+            remainingDays < 5
+        {
+            Section("Cycle Tracking") {
+                UpcomingPeriodCell(predictedPeriodDate: periodDate)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showMenstruationDetails = true
+                    }
+            }
+        }
+    }
+
+    @ViewBuilder
     var menstrualCycleSection: some View {
         if let phase = vitalsViewModel.menstrualSummary?.currentPhase() {
             switch phase {
@@ -252,6 +274,10 @@ private extension GoodMorningView {
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showMenstruationDetails = true
                     }
                 }
             default:
