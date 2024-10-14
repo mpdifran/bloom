@@ -99,7 +99,7 @@ final class HealthManager: ObservableObject {
         if let weightLossSpeedRaw = UserDefaults.group.string(forKey: "HealthManager.weightLossSpeed") {
             self.weightLossSpeed = WeightLossSpeed(rawValue: weightLossSpeedRaw) ?? .moderate
         }
-        if let activityLevelRaw = UserDefaults.group.string(forKey: "HealthManager.activityLevel") {
+        if let activityLevelRaw = UserDefaults.group.string(forKey: "HealthManager.userReportedActivityLevel") {
             self.userReportedActivityLevel = ActivityLevelSummary.ActivityLevel(rawValue: activityLevelRaw)
         }
     }

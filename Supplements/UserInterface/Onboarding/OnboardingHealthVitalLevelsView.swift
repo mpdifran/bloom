@@ -125,7 +125,7 @@ private struct VitalLevelView: View {
 
             Spacer(minLength: 0)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer()
     }
 }
 

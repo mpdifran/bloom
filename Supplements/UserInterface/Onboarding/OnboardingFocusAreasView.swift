@@ -1,5 +1,5 @@
 //
-//  OnboardingGoalsView.swift
+//  OnboardingFocusAreasView.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-08-28.
@@ -8,7 +8,7 @@
 import SwiftUI
 import AppUI
 
-struct OnboardingGoalsView: View {
+struct OnboardingFocusAreasView: View {
     let onContinue: () -> Void
 
     @State private var isCalculatingGoals = true
@@ -121,5 +121,5 @@ struct OnboardingGoalsView: View {
 }
 
 #Preview {
-    OnboardingGoalsView { }
+    OnboardingFocusAreasView { }
 }

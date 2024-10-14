@@ -10,11 +10,12 @@ import SwiftUI
 extension OnboardingRootView {
     enum Step {
         case welcome
-        case healthGoals
         case healthKit
         case ageAndSex
+        case healthGoals
+        case activityLevel
+        case focusAreas
         case vitals
-        case goals
         case notifications
     }
 }
@@ -23,6 +24,8 @@ struct OnboardingRootView: View {
     let onComplete: () -> Void
 
     @State private var step = Step.welcome
+
+    private let vitalsViewModel = VitalsViewModel.shared
 
     @Environment(\.dismiss) private var dismiss
 
@@ -43,14 +46,22 @@ struct OnboardingRootView: View {
                 }
             case .healthGoals:
                 OnboardingHealthGoalView {
+                    if let activityLevel = vitalsViewModel.activityLevelSummary?.details.activityLevel {
+                        setStep(.vitals)
+                    } else {
+                        setStep(.activityLevel)
+                    }
+                }
+            case .activityLevel:
+                OnboardingHealthActivityLevelView {
                     setStep(.vitals)
                 }
             case .vitals:
                 OnboardingHealthVitalLevelsView {
-                    setStep(.goals)
+                    setStep(.focusAreas)
                 }
-            case .goals:
-                OnboardingGoalsView {
+            case .focusAreas:
+                OnboardingFocusAreasView {
                     setStep(.notifications)
                 }
             case .notifications:

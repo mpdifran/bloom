@@ -127,7 +127,7 @@
 		FF4B2F4A2C90C7DE0003879C /* ToDoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4B2F492C90C7D90003879C /* ToDoModel.swift */; };
 		FF4CAAF12C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */; };
 		FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */; };
-		FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */; };
+		FF4CAAF52C7F66CF001A59F3 /* OnboardingFocusAreasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF42C7F66CF001A59F3 /* OnboardingFocusAreasView.swift */; };
 		FF4CAAF92C8005B6001A59F3 /* BowelMovementMonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAF82C8005B6001A59F3 /* BowelMovementMonthlySummary.swift */; };
 		FF4CAAFF2C80EF34001A59F3 /* BowelMovementsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAAFE2C80EF34001A59F3 /* BowelMovementsDetailView.swift */; };
 		FF4CAB022C813D91001A59F3 /* WeatherForecaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CAB012C813D91001A59F3 /* WeatherForecaster.swift */; };
@@ -171,6 +171,7 @@
 		FF70E92B2CB99EA30055E932 /* DisclosureIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92A2CB99EA30055E932 /* DisclosureIndicator.swift */; };
 		FF70E92D2CBADD740055E932 /* NotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */; };
 		FF70E9302CBAF4F80055E932 /* JSONGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */; };
+		FF70E9C42CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -610,7 +611,7 @@
 		FF4B2F492C90C7D90003879C /* ToDoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoModel.swift; sourceTree = "<group>"; };
 		FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationPermissionView.swift; sourceTree = "<group>"; };
 		FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationView.swift; sourceTree = "<group>"; };
-		FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGoalsView.swift; sourceTree = "<group>"; };
+		FF4CAAF42C7F66CF001A59F3 /* OnboardingFocusAreasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFocusAreasView.swift; sourceTree = "<group>"; };
 		FF4CAAF82C8005B6001A59F3 /* BowelMovementMonthlySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovementMonthlySummary.swift; sourceTree = "<group>"; };
 		FF4CAAFE2C80EF34001A59F3 /* BowelMovementsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BowelMovementsDetailView.swift; sourceTree = "<group>"; };
 		FF4CAB012C813D91001A59F3 /* WeatherForecaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecaster.swift; sourceTree = "<group>"; };
@@ -654,6 +655,7 @@
 		FF70E92A2CB99EA30055E932 /* DisclosureIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureIndicator.swift; sourceTree = "<group>"; };
 		FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterDelegate.swift; sourceTree = "<group>"; };
 		FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONGenerator.swift; sourceTree = "<group>"; };
+		FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthActivityLevelView.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1804,11 +1806,12 @@
 				FFBE52232C6EF5A900F510DE /* Components */,
 				FFB4449C2BED441E00486AD7 /* OnboardingRootView.swift */,
 				FFB4449E2BED458A00486AD7 /* OnboardingWelcomeView.swift */,
-				FFA402C72C94C5E000D8DD40 /* OnboardingHealthGoalView.swift */,
 				FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */,
-				FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */,
 				FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */,
-				FF4CAAF42C7F66CF001A59F3 /* OnboardingGoalsView.swift */,
+				FFA402C72C94C5E000D8DD40 /* OnboardingHealthGoalView.swift */,
+				FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */,
+				FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */,
+				FF4CAAF42C7F66CF001A59F3 /* OnboardingFocusAreasView.swift */,
 				FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */,
 			);
 			path = Onboarding;
@@ -2679,6 +2682,7 @@
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
 				FF2FB8A02C9DA9F100F57523 /* ProposedHabitCell.swift in Sources */,
 				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
+				FF70E9C42CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift in Sources */,
 				FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */,
 				FF4EFF8A2C937D25005E4A1F /* MenstrualCycle.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
@@ -2746,7 +2750,7 @@
 				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
 				FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
-				FF4CAAF52C7F66CF001A59F3 /* OnboardingGoalsView.swift in Sources */,
+				FF4CAAF52C7F66CF001A59F3 /* OnboardingFocusAreasView.swift in Sources */,
 				FFCC6B8A2C9C8B8C00676CAA /* GoalReviewCell.swift in Sources */,
 				FFAFF4302CAD8A6200FAD3C9 /* HabitGoalStatisticsCalculator.swift in Sources */,
 				FF4CAAF32C7F5E8F001A59F3 /* MockNotificationView.swift in Sources */,
