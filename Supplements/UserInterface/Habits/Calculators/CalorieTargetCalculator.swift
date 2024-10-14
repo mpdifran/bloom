@@ -158,13 +158,17 @@ private extension CalorieTargetCalculator {
             let recommendation = calculateEnergyBasedCalorieGoal(currentEnergy: tdee, targetDetails: targetDetails)
         {
             if
-                targetDetails.goal != .loseWeight,
                 !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1)
             {
-                return TargetMetricRecommendation(
-                    target: recommendation.target,
-                    context: "Your activity level has changed, so we're changing your calorie goal to match."
-                )
+                if
+                    targetDetails.goal != .loseWeight ||
+                    recommendation.target.doubleValue(for: .largeCalorie()) < existingHabit.value
+                {
+                    return TargetMetricRecommendation(
+                        target: recommendation.target,
+                        context: "Your activity level has changed, so we recommend changing your calorie goal to match."
+                    )
+                }
             }
         } else if
             let activityLevel,
@@ -175,13 +179,17 @@ private extension CalorieTargetCalculator {
 
             if
                 let recommendation = calculateActivityLevelBasedCalorieGoal(targetCalories: targetCalories, targetDetails: targetDetails),
-                targetDetails.goal != .loseWeight,
                 !recommendation.target.doubleValue(for: .largeCalorie()).isWithinRange(of: existingHabit.value, precision: 0.1)
             {
-                return TargetMetricRecommendation(
-                    target: recommendation.target,
-                    context: "Your activity level has changed, so we're changing your calorie goal to match."
-                )
+                if
+                    targetDetails.goal != .loseWeight ||
+                    recommendation.target.doubleValue(for: .largeCalorie()) < existingHabit.value
+                {
+                    return TargetMetricRecommendation(
+                        target: recommendation.target,
+                        context: "Your activity level has changed, so we recommend changing your calorie goal to match."
+                    )
+                }
             }
         }
 

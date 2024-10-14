@@ -122,6 +122,7 @@ private extension NewUpdateHabitView {
     var contentView: some View {
         if proposedFocusAreas.isNotEmpty {
             SectionTitleView("Focus Areas")
+                .padding(.horizontal)
 
             ForEachEnumerated(proposedFocusAreas) { (index, _) in
                 ProposedHabitCell(proposedHabit: $proposedFocusAreas[index])
@@ -131,6 +132,7 @@ private extension NewUpdateHabitView {
 
         if proposedHabits.isNotEmpty {
             SectionTitleView("New Habits")
+                .padding(.horizontal)
 
             ForEachEnumerated(proposedHabits) { (index, _) in
                 ProposedHabitCell(proposedHabit: $proposedHabits[index])
@@ -140,6 +142,7 @@ private extension NewUpdateHabitView {
 
         if proposedToDos.isNotEmpty {
             SectionTitleView("To Do")
+                .padding(.horizontal)
 
             ForEach(proposedToDos) { proposedToDo in
                 ProposedToDoCell(proposedToDo: proposedToDo)

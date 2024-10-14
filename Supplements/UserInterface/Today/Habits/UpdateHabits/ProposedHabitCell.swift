@@ -29,70 +29,17 @@ struct ProposedHabitCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack {
-                HStack {
-                    Image(systemName: proposedHabit.targetMetric.systemImage)
-                        .font(.title)
-                        .foregroundStyle(.tint)
-
-                    VStack(alignment: .leading) {
-                        if let vitalKind = proposedHabit.vitalKind {
-                            Label(vitalKind.name, systemImage: vitalKind.systemImage)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Text(proposedHabit.targetMetric.name)
-                            .bold()
-                    }
-
-                    Spacer(minLength: 0)
-
-                    VStack {
-                        if let previousQuantity = proposedHabit.displayPreviousQuantity, proposedHabit.shouldShowPreviousQuantity {
-                            Text("\(previousQuantity)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .bold()
-                            Image(systemName: "arrow.down")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        } else if proposedHabit.isNewHabit {
-                            Text("NEW")
-                                .foregroundStyle(.mutedRed)
-                                .bold()
-                                .font(.caption)
-                        }
-
-                        Text(proposedHabit.displayQuantity)
-                            .font(.title3)
-                            .fontDesign(.rounded)
-                            .bold()
-                            .foregroundStyle(.tint)
-                            .contentTransition(.numericText(value: proposedHabit.value))
-                            .animation(.default, value: proposedHabit.value)
-                    }
-                }
+                habitContentView
 
                 if proposedHabit.shouldShowSuggestedValue {
                     Divider()
-                    
-                    HStack {
-                        Text("Recommended")
-                        
-                        Spacer()
-                        
-                        Text(proposedHabit.displaySuggestedValue)
-                            .fontDesign(.rounded)
-                            .bold()
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.top, 4)
+                    recommendedValueDisplayView
                 }
             }
             .cardContainer()
 
             if includeActions {
-                if let context = proposedHabit.context {
+                if let context = proposedHabit.context, context.isNotEmpty {
                     Text(context)
                         .foregroundStyle(.tint)
                         .bold()
@@ -103,39 +50,16 @@ struct ProposedHabitCell: View {
                 }
 
                 if alternateTargetMetrics.isNotEmpty {
-                    Menu {
-                        ForEach(alternateTargetMetrics) { alternativeTargetMetric in
-                            Button {
-                                Task {
-                                    proposedHabit = await habitsViewModel.generateProposedHabit(
-                                        for: alternativeTargetMetric,
-                                        vitalKind: proposedHabit.vitalKind
-                                    )
-                                }
-                            } label: {
-                                Label(alternativeTargetMetric.name, systemImage: alternativeTargetMetric.systemImage)
-                            }
-                        }
-                    } label: {
-                        LabeledContent("Change Habit") {
-                            Image(systemName: "trophy")
-                                .foregroundStyle(.tint)
-                        }
-                    }
-                    .padding()
-                    
+                    alternateTargetMetricMenu
                     Divider()
                 }
 
-                Button {
-                    presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
-                } label: {
-                    LabeledContent("Change Value") {
-                        Image(systemName: "chart.xyaxis.line")
-                            .foregroundStyle(.tint)
-                    }
+                if proposedHabit.shouldShowSuggestedValue {
+                    setRecommendedValueButton
+                    Divider()
                 }
-                .padding()
+
+                changeValueButton
 
 //                Divider()
 //
@@ -163,10 +87,122 @@ struct ProposedHabitCell: View {
             }
         }
         .cardContainer(fill: .tint.tertiary, includePadding: false)
+        .animation(.default, value: proposedHabit.value)
         .tint(proposedHabit.targetMetric.color)
         .sheet($presentedSheet)
         .task {
             self.alternateTargetMetrics = await habitsViewModel.alternateTargetMetrics(for: proposedHabit)
+        }
+    }
+}
+
+private extension ProposedHabitCell {
+
+    var habitContentView: some View {
+        HStack {
+            Image(systemName: proposedHabit.targetMetric.systemImage)
+                .font(.title)
+                .foregroundStyle(.tint)
+
+            VStack(alignment: .leading) {
+                if let vitalKind = proposedHabit.vitalKind {
+                    Label(vitalKind.name, systemImage: vitalKind.systemImage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Text(proposedHabit.targetMetric.name)
+                    .bold()
+            }
+
+            Spacer(minLength: 0)
+
+            VStack {
+                if let previousQuantity = proposedHabit.displayPreviousQuantity, proposedHabit.shouldShowPreviousQuantity {
+                    Text("\(previousQuantity)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .bold()
+                        .contentTransition(.numericText(value: proposedHabit.previousValue ?? 0))
+                    Image(systemName: "arrow.down")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else if proposedHabit.isNewHabit {
+                    Text("NEW")
+                        .foregroundStyle(.mutedRed)
+                        .bold()
+                        .font(.caption)
+                }
+
+                Text(proposedHabit.displayQuantity)
+                    .font(.title3)
+                    .fontDesign(.rounded)
+                    .bold()
+                    .foregroundStyle(.tint)
+                    .contentTransition(.numericText(value: proposedHabit.value))
+                    .animation(.default, value: proposedHabit.value)
+            }
+        }
+    }
+
+    var recommendedValueDisplayView: some View {
+        HStack {
+            Text("Recommended")
+
+            Spacer()
+
+            Text(proposedHabit.displaySuggestedValue)
+                .fontDesign(.rounded)
+                .bold()
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .padding(.top, 4)
+    }
+
+    var setRecommendedValueButton: some View {
+        Button {
+            proposedHabit.value = proposedHabit.suggestedValue
+        } label: {
+            LabeledContent("Set Recommended Value") {
+                Image(systemName: "star.circle")
+                    .foregroundStyle(.tint)
+            }
+            .padding()
+        }
+    }
+
+    var alternateTargetMetricMenu: some View {
+        Menu {
+            ForEach(alternateTargetMetrics) { alternativeTargetMetric in
+                Button {
+                    Task {
+                        proposedHabit = await habitsViewModel.generateProposedHabit(
+                            for: alternativeTargetMetric,
+                            vitalKind: proposedHabit.vitalKind
+                        )
+                    }
+                } label: {
+                    Label(alternativeTargetMetric.name, systemImage: alternativeTargetMetric.systemImage)
+                }
+            }
+        } label: {
+            LabeledContent("Change Habit") {
+                Image(systemName: "trophy")
+                    .foregroundStyle(.tint)
+            }
+            .padding()
+        }
+    }
+
+    var changeValueButton: some View {
+        Button {
+            presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
+        } label: {
+            LabeledContent("Change Value") {
+                Image(systemName: "chart.xyaxis.line")
+                    .foregroundStyle(.tint)
+            }
+            .padding()
         }
     }
 }

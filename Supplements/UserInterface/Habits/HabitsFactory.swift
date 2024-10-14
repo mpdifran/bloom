@@ -20,9 +20,8 @@ actor HabitsFactory {
 extension HabitsFactory {
 
     func generateProposedHabits() async -> NewHabitResult {
-        let modelContext = ContainerHolder.shared.createContext()
-
-        let activeHabits = (try? modelContext.fetchActiveHabits()) ?? []
+        let modelActor = HabitModelActor.standard()
+        let activeHabits = (try? await modelActor.fetchActiveHabits()) ?? []
 
         await VitalsCalculator.shared.forceFetchVitals()
 
@@ -78,7 +77,7 @@ extension HabitsFactory {
 
 private extension HabitsFactory {
 
-    func generateNutritionHabits(activeHabits: [Habit]) async -> NewHabitResult? {
+    func generateNutritionHabits(activeHabits: [HabitDTO]) async -> NewHabitResult? {
         var todos = [ProposedToDo]()
         // Ensure the user has logged their weight
         if await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass == nil {
@@ -130,7 +129,7 @@ private extension HabitsFactory {
             var proposedHabits = [ProposedHabit]()
             if let habit = activeHabits.first(where: { $0.targetMetric == .calories }) {
                 let calorieHabit = ProposedHabit(
-                    habitID: habit.persistentModelID,
+                    habitID: habit.id,
                     targetMetric: .calories,
                     value: habit.value,
                     suggestedValue: habit.value,
@@ -144,7 +143,7 @@ private extension HabitsFactory {
             }
             if let habit = activeHabits.first(where: { $0.targetMetric == .proteinIntake }) {
                 let proteinHabit = ProposedHabit(
-                    habitID: habit.persistentModelID,
+                    habitID: habit.id,
                     targetMetric: .proteinIntake,
                     value: habit.value,
                     suggestedValue: habit.value,
@@ -172,7 +171,7 @@ private extension HabitsFactory {
         let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
 
         if let recommendation = await CalorieTargetCalculator.targetCalories(
-            existingHabit: existingCalorieHabit?.asDTO(),
+            existingHabit: existingCalorieHabit,
             basalEnergy: basalEnergy,
             activeEnergy: activeEnergy,
             dietaryEnergy: averageDietaryEnergy,
@@ -189,7 +188,7 @@ private extension HabitsFactory {
             }
 
             let calorieHabit = ProposedHabit(
-                habitID: existingCalorieHabit?.persistentModelID,
+                habitID: existingCalorieHabit?.id,
                 targetMetric: .calories,
                 value: value,
                 suggestedValue: suggestedValue,
@@ -207,7 +206,7 @@ private extension HabitsFactory {
         if
             let averageProtein = await VitalsCalculator.shared.nutritionSummary?.details.averageProtein,
             let recommendation = await ProteinTargetCalculator.targetProtein(
-                existingHabit: existingProteinHabit?.asDTO(),
+                existingHabit: existingProteinHabit,
                 protein: averageProtein,
                 dietaryEnergy: averageDietaryEnergy,
                 targetDetails: HealthManager.shared.healthTargetDetails
@@ -222,7 +221,7 @@ private extension HabitsFactory {
             }
 
             let proteinHabit = ProposedHabit(
-                habitID: existingProteinHabit?.persistentModelID,
+                habitID: existingProteinHabit?.id,
                 targetMetric: .proteinIntake,
                 value: value,
                 suggestedValue: suggestedValue,
@@ -248,14 +247,14 @@ private extension HabitsFactory {
 
 private extension HabitsFactory {
 
-    func updatedHabit(for habit: Habit) async -> ProposedHabit? {
+    func updatedHabit(for habit: HabitDTO) async -> ProposedHabit? {
 
         // Cardio Fitness is now Heart Health
         guard habit.vitalKind != .cardioFitness else { return nil }
 
         // TODO: Determine when to promote to Habit from Focus Area
         guard let recommendation = await GenericHabitTargetCalculator.calculateNewTarget(
-            habit: habit.asDTO()
+            habit: habit
         ) else {
             return nil
         }
