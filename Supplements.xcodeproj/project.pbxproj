@@ -173,6 +173,7 @@
 		FF70E9302CBAF4F80055E932 /* JSONGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */; };
 		FF70E9C42CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */; };
 		FF70E9C62CBDEEF20055E932 /* ActivityLevelEditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9C52CBDEEF20055E932 /* ActivityLevelEditCard.swift */; };
+		FF70E9C92CBED0030055E932 /* Measurement+Locale.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9C82CBECFFF0055E932 /* Measurement+Locale.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -658,6 +659,7 @@
 		FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONGenerator.swift; sourceTree = "<group>"; };
 		FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthActivityLevelView.swift; sourceTree = "<group>"; };
 		FF70E9C52CBDEEF20055E932 /* ActivityLevelEditCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelEditCard.swift; sourceTree = "<group>"; };
+		FF70E9C82CBECFFF0055E932 /* Measurement+Locale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Measurement+Locale.swift"; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1350,6 +1352,14 @@
 				FF70E90C2CB834D10055E932 /* AsyncStreamWrapper.swift */,
 			);
 			path = Concurrency;
+			sourceTree = "<group>";
+		};
+		FF70E9C72CBECFF80055E932 /* Measurement */ = {
+			isa = PBXGroup;
+			children = (
+				FF70E9C82CBECFFF0055E932 /* Measurement+Locale.swift */,
+			);
+			path = Measurement;
 			sourceTree = "<group>";
 		};
 		FF7112872C9874CC0020A0F0 /* Goals */ = {
@@ -2059,6 +2069,7 @@
 		FFF61B732BF15DBE00926042 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				FF70E9C72CBECFF80055E932 /* Measurement */,
 				FFF61B742BF15DD000926042 /* SoundPlayer.swift */,
 				FF0404D52C065F3B009FDC4E /* Throttler.swift */,
 			);
@@ -2708,6 +2719,7 @@
 				FF4B2F482C90C7960003879C /* ToDoManager.swift in Sources */,
 				FF6E061F2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
+				FF70E9C92CBED0030055E932 /* Measurement+Locale.swift in Sources */,
 				FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */,
 				FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */,
 				FFAFF41B2CAB176B00FAD3C9 /* ProposedToDo.swift in Sources */,

@@ -21,7 +21,6 @@ extension WeatherForecaster {
 
     func forecastedWeather(location: CLLocation) async -> Weather? {
         do {
-            print("Fetching Weather")
             return try await weatherService.weather(for: location)
         } catch {
             print(error)

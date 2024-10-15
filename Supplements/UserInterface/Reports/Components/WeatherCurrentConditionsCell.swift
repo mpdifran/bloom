@@ -17,7 +17,12 @@ struct WeatherCurrentConditionsCell: View {
     init(currentWeather: CurrentWeather, locality: String) {
         self.init(
             symbolName: currentWeather.symbolName,
-            temperature: currentWeather.temperature.formatted(.measurement(width: .narrow, numberFormatStyle: .number.precision(.fractionLength(0)))),
+            temperature: currentWeather.temperature.formatted(
+                .measurement(
+                    width: .narrow,
+                    numberFormatStyle: .number.precision(.fractionLength(0))
+                )
+            ),
             conditions: currentWeather.condition.description,
             locality: locality
         )

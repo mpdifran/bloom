@@ -378,7 +378,7 @@ private extension GoodMorningView {
                                 if hourWeather.date < .now || hourWeather == closestHour {
                                     LineMark(
                                         x: .value("Date", hourWeather.date),
-                                        y: .value("Temperature", hourWeather.temperature.value)
+                                        y: .value("Temperature", hourWeather.temperature.localizedValue)
                                     )
                                     .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round, dash: [10, 10]))
                                     .interpolationMethod(.catmullRom)
@@ -386,8 +386,8 @@ private extension GoodMorningView {
 
                                     AreaMark(
                                         x: .value("Date", hourWeather.date),
-                                        yStart: .value("", minTemp - 5),
-                                        yEnd: .value("Temperature", hourWeather.temperature.value)
+                                        yStart: .value("", minTemp.localizedValue - 5),
+                                        yEnd: .value("Temperature", hourWeather.temperature.localizedValue)
                                     )
                                     .interpolationMethod(.catmullRom)
                                     .foregroundStyle(by: .value("DataSet", "Past Area"))
@@ -395,7 +395,7 @@ private extension GoodMorningView {
                                 if hourWeather.date >= .now {
                                     LineMark(
                                         x: .value("Date", hourWeather.date),
-                                        y: .value("Temperature", hourWeather.temperature.value)
+                                        y: .value("Temperature", hourWeather.temperature.localizedValue)
                                     )
                                     .lineStyle(StrokeStyle(lineWidth: 4))
                                     .interpolationMethod(.catmullRom)
@@ -403,8 +403,8 @@ private extension GoodMorningView {
 
                                     AreaMark(
                                         x: .value("Date", hourWeather.date),
-                                        yStart: .value("", minTemp - 5),
-                                        yEnd: .value("Temperature", hourWeather.temperature.value)
+                                        yStart: .value("", minTemp.localizedValue - 5),
+                                        yEnd: .value("Temperature", hourWeather.temperature.localizedValue)
                                     )
                                     .interpolationMethod(.catmullRom)
                                     .foregroundStyle(by: .value("DataSet", "Future Area"))
@@ -414,7 +414,7 @@ private extension GoodMorningView {
 
                         PointMark(
                             x: .value("Date", closestHour.date),
-                            y: .value("Temperature", closestHour.temperature.value)
+                            y: .value("Temperature", closestHour.temperature.localizedValue)
                         )
                         .foregroundStyle(.text)
 
@@ -427,11 +427,11 @@ private extension GoodMorningView {
                     .chartForegroundStyleScale([
                         "Past Line" : gradientFor(minTemp: minTemp, maxTemp: maxTemp, opacity: 0.5),
                         "Future Line" : gradientFor(minTemp: minTemp, maxTemp: maxTemp),
-                        "Past Area" : gradientFor(minTemp: minTemp - 5, maxTemp: maxTemp, opacity: 0.2),
-                        "Future Area" : gradientFor(minTemp: minTemp - 5, maxTemp: maxTemp, opacity: 0.5)
+                        "Past Area" : gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.2),
+                        "Future Area" : gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.5)
                     ])
                     .chartLegend(.hidden)
-                    .chartYScale(domain: (minTemp - 5)...(maxTemp + 5), range: .plotDimension)
+                    .chartYScale(domain: (minTemp.localizedValue - 5)...(maxTemp.localizedValue + 5), range: .plotDimension)
                     .frame(height: 180)
                 }
                 .standardListSeparatorInset()
@@ -439,46 +439,56 @@ private extension GoodMorningView {
         }
     }
 
-    func minTemp(from weather: Weather) -> Double? {
+    func minTemp(from weather: Weather) -> Measurement<UnitTemperature>? {
         weather.hourlyForecast
             .filter({ Calendar.current.isDateInToday($0.date) })
-            .min(keyPath: \.temperature.value)
+            .min(by: \.temperature.value)
+            .map { $0.temperature }
     }
 
-    func maxTemp(from weather: Weather) -> Double? {
+    func maxTemp(from weather: Weather) -> Measurement<UnitTemperature>? {
         weather.hourlyForecast
             .filter({ Calendar.current.isDateInToday($0.date) })
-            .max(keyPath: \.temperature.value)
+            .max(by: \.temperature.value)
+            .map { $0.temperature }
     }
 
-    func gradientFor(minTemp: Double, maxTemp: Double, opacity: Double = 1) -> LinearGradient {
+    func gradientFor(
+        minTemp: Measurement<UnitTemperature>,
+        minTempShift: Double = 0,
+        maxTemp: Measurement<UnitTemperature>,
+        opacity: Double = 1
+    ) -> LinearGradient {
         var colors = [Color]()
 
-        if minTemp < -10 {
+        let min = minTemp.converted(to: .celsius).value - minTempShift
+        let max = minTemp.converted(to: .celsius).value
+
+        if min < -10 {
             colors.append(.belowMinus10.opacity(opacity))
         }
-        if minTemp < 0 && maxTemp > 0 {
+        if (min < 0 && max > 0) || (min > -10 && max < 10) {
             colors.append(.below0.opacity(opacity))
         }
-        if minTemp < 10 && maxTemp > 10 {
+        if (min < 10 && max > 10) || (min > 10 && max < 15) {
             colors.append(.above10.opacity(opacity))
         }
-        if minTemp < 15 && maxTemp > 15 {
+        if (min < 15 && max > 15) || (min > 15 && max < 20) {
             colors.append(.above15.opacity(opacity))
         }
-        if minTemp < 20 && maxTemp > 20 {
+        if (min < 20 && max > 20) || (min > 20 && max < 25) {
             colors.append(.above20.opacity(opacity))
         }
-        if minTemp < 25 && maxTemp > 25 {
+        if (min < 25 && max > 25) || (min > 25 && max < 30) {
             colors.append(.above25.opacity(opacity))
         }
-        if minTemp < 30 && maxTemp > 30 {
+        if (min < 30 && max > 30) || (min > 30 && max < 35) {
             colors.append(.above30.opacity(opacity))
         }
-        if minTemp < 35 && maxTemp > 35 {
+        if (min < 35 && max > 35) || (min > 35 && max < 40) {
             colors.append(.above35.opacity(opacity))
         }
-        if maxTemp > 40 {
+        if max > 40 {
             colors.append(.above40.opacity(opacity))
         }
 
