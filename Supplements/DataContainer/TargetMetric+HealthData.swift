@@ -23,6 +23,8 @@ extension TargetMetric {
             [HKQuantityType(.dietaryWater)]
         case .timeInDaylight:
             [HKQuantityType(.timeInDaylight)]
+        case .meditationMinutes:
+            [HKCategoryType(.mindfulSession)]
         case .exerciseMinutes:
             [HKWorkoutType.workoutType()]
         case .stepCount:
@@ -48,8 +50,9 @@ extension TargetMetric {
                 .gram()
         case .waterIntake:
                 .literUnit(with: .milli)
-
         case .timeInDaylight:
+                .minute()
+        case .meditationMinutes:
                 .minute()
         case .exerciseMinutes:
                 .minute()
@@ -84,6 +87,8 @@ extension TargetMetric {
             return HKQuantity(unit: defaultUnit, doubleValue: 0.5)
         case .timeInDaylight:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
+        case .meditationMinutes:
+            return HKQuantity(unit: defaultUnit, doubleValue: 1)
         case .exerciseMinutes:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
         case .proteinIntake:
@@ -121,6 +126,8 @@ extension TargetMetric {
             return HKQuantityRange(unit: defaultUnit, range: 5...8)
         case .timeInDaylight:
             return HKQuantityRange(unit: defaultUnit, range: 20...30)
+        case .meditationMinutes:
+            return HKQuantityRange(unit: defaultUnit, range: 10...30)
         case .exerciseMinutes:
             return HKQuantityRange(unit: defaultUnit, range: 20...30)
         case .proteinIntake:
@@ -157,6 +164,8 @@ extension TargetMetric {
         case .walkingRunningDistance:
             NumberFormatter.oneDecimalPlace
         case .timeInDaylight:
+            NumberFormatter.noDecimalPlaces
+        case .meditationMinutes:
             NumberFormatter.noDecimalPlaces
         case .exerciseMinutes:
             NumberFormatter.noDecimalPlaces
@@ -201,6 +210,8 @@ extension TargetMetric {
             return await HealthStoreFetcher.shared.fetchTotalQuantity(for: .dietaryWater, dateRange: dateRange) ?? defaultQuantity
         case .timeInDaylight:
             return await HealthStoreFetcher.shared.fetchTotalQuantity(for: .timeInDaylight, dateRange: dateRange) ?? defaultQuantity
+        case .meditationMinutes:
+            return await HealthStoreFetcher.shared.fetchTotalMeditationMinutes(dateRange: dateRange)
         case .exerciseMinutes:
             return await HealthStoreFetcher.shared.fetchTotalQuantity(for: .appleExerciseTime, dateRange: dateRange) ?? defaultQuantity
         case .stepCount:
@@ -264,6 +275,8 @@ extension TargetMetric {
             return await HealthStoreFetcher.shared.fetchCollatedQuantity(for: .dietaryWater, unit: unit, dateRange: dateRange)
         case .timeInDaylight:
             return await HealthStoreFetcher.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: unit, dateRange: dateRange)
+        case .meditationMinutes:
+            return await HealthStoreFetcher.shared.fetchCollatedMeditationMinutes(dateRange: dateRange)
         case .exerciseMinutes:
             return await HealthStoreFetcher.shared.fetchCollatedQuantity(for: .appleExerciseTime, unit: unit, dateRange: dateRange)
         case .stepCount:

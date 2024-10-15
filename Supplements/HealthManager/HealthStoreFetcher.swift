@@ -166,32 +166,24 @@ extension HealthStoreFetcher {
     }
 
     func fetchCollatedMeditationMinutes(
-        interval: DateComponents = DateComponents(day: 1),
         dateRange: DateRange
     ) async -> [DateQuantitySample] {
         let samples = (try? await healthStore.fetchSamples(for: HKCategoryType(.mindfulSession), dateRange: dateRange)) ?? []
 
-        var collatedDates = [Date : Double]()
+        var result = [DateQuantitySample]()
 
-        for sample in samples {
-            if let existingDate = collatedDates.keys.first(where: { date in
-                let dateComponents = Calendar.current.dateComponents(
-                    interval.calendarComponents,
-                    from: date,
-                    to: sample.startDate
-                )
-                return dateComponents < interval
-            }) {
-                collatedDates[existingDate, default: 0] += (sample.timeInterval / 60)
-            } else {
-                let referenceDate = Calendar.current.startOfDay(for: sample.startDate)
-                collatedDates[referenceDate, default: 0] += (sample.timeInterval / 60)
+        Calendar.current.iterate(dateRange: dateRange, by: .init(day: 1)) { date in
+            let currentDateSamples = samples.filter({ Calendar.current.isDate($0.startDate, inSameDayAs: date) })
+
+            let sum = currentDateSamples.reduce(0) { (total, sample) -> Double in
+                total + (sample.timeInterval / 60)
             }
+
+            let sample = DateQuantitySample(date: date, quantity: HKQuantity(unit: .minute(), doubleValue: sum))
+            result.append(sample)
         }
 
-        return collatedDates.map { (key: Date, value: Double) in
-            DateQuantitySample(date: key, quantity: .init(unit: .minute(), doubleValue: value))
-        }.sorted(keyPath: \.date)
+        return result
     }
 
     func fetchMenstrualFlowSamples(dateRange: DateRange) async -> [MenstrualCycle] {

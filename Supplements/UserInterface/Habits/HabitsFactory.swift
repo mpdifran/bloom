@@ -68,7 +68,7 @@ extension HabitsFactory {
             targetMetric: targetMetric,
             unit: targetMetric.defaultUnit,
             vitalKind: vitalKind,
-            context: ""
+            context: nil
         )
     }
 }
@@ -301,10 +301,10 @@ private extension HabitsFactory {
             )
         case .stressLevels:
             return await createHabit(
-                targetMetric: .timeInDaylight,
+                targetMetric: .meditationMinutes,
                 unit: .minute(),
                 vitalKind: vital.id,
-                context: ""
+                context: "Meditation is a great way to lower stress levels."
             )
         case .exerciseEffectiveness:
             return await createHabit(
@@ -334,7 +334,7 @@ private extension HabitsFactory {
         targetMetric: TargetMetric,
         unit: HKUnit,
         vitalKind: VitalModel.Kind?,
-        context: String
+        context: String?
     ) async -> ProposedHabit {
         let average = await targetMetric.fetchDailyAverage(unit: unit, dateRange: .trailingWeeksFromNow(3)).doubleValue(for: unit)
 

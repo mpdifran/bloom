@@ -46,7 +46,7 @@ struct OnboardingRootView: View {
                 }
             case .healthGoals:
                 OnboardingHealthGoalView {
-                    if let activityLevel = vitalsViewModel.activityLevelSummary?.details.activityLevel {
+                    if let _ = vitalsViewModel.activityLevelSummary?.details.activityLevel {
                         setStep(.vitals)
                     } else {
                         setStep(.activityLevel)

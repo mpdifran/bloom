@@ -15,6 +15,7 @@ public enum TargetMetric: String, Identifiable, Codable, CaseIterable, Sendable 
     case proteinIntake
     case waterIntake
     case timeInDaylight
+    case meditationMinutes
     case exerciseMinutes
     case stepCount
     case walkingRunningDistance

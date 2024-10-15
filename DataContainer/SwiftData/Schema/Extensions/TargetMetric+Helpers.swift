@@ -16,6 +16,7 @@ public extension TargetMetric {
         case .proteinIntake: "Protein Intake"
         case .waterIntake: "Water Intake"
         case .timeInDaylight: "Time in Daylight"
+        case .meditationMinutes: "Meditation Minutes"
         case .exerciseMinutes: "Exercise Minutes"
         case .stepCount: "Steps"
         case .walkingRunningDistance: "Walking + Running Distance"
@@ -38,6 +39,7 @@ public extension TargetMetric {
         case .proteinIntake: "fork.knife"
         case .waterIntake: "waterbottle"
         case .timeInDaylight: "sun.max.fill"
+        case .meditationMinutes: "figure.mind.and.body"
         case .exerciseMinutes: "figure.step.training"
         case .stepCount: "figure.walk"
         case .walkingRunningDistance: "figure.walk"
@@ -58,6 +60,7 @@ public extension TargetMetric {
         case .waterIntake: .mutedBlue
         case .walkingRunningDistance: .mutedGreen
         case .timeInDaylight: .mutedOrange
+        case .meditationMinutes: .mutedLightBlue
         case .exerciseMinutes: .mutedGreen
         case .proteinIntake: .protein
         case .calories: .mutedOrange

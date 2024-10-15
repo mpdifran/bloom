@@ -210,7 +210,7 @@ private extension HeartHealthMonthlySummary.Details {
     }
 
     var restingHeartRateScore: Double? {
-        let (min, max) = HealthManager.shared.goalRestingHeartRateForUser()
+        let (_, max) = HealthManager.shared.goalRestingHeartRateForUser()
 
         return averageRestingHeartRate?.doubleValue(for: .bpm()).scaledPercent(lower: max + 10, upper: max)
     }
