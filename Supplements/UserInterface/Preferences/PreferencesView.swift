@@ -26,6 +26,8 @@ struct PreferencesView: View {
     @State private var alertDetails: AlertDetails?
     @State private var error: Error?
 
+    private let vitalsViewModel = VitalsViewModel.shared
+
     var body: some View {
         List {
             appInfoSection
@@ -115,6 +117,21 @@ private extension PreferencesView {
                     }
                 }
                 .pickerStyle(.segmented)
+            }
+
+            if
+                vitalsViewModel.activityLevelSummary?.details.activityLevel == nil
+            {
+                LabeledContent("Activity Level") {
+                    HStack {
+                        Text(healthManager.userReportedActivityLevel?.name ?? "Unknown")
+                        DisclosureIndicator()
+                    }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    presentedSheet = ActivityLevelEditCard().asAny
+                }
             }
         } header: {
             Text("Health Goals")

@@ -1,5 +1,5 @@
 //
-//  TertiaryButtonStyle.swift
+//  PrimaryButtonStyle.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-05-25.
@@ -16,8 +16,8 @@ struct PrimaryButtonStyle: ButtonStyle {
         .bold()
         .padding(.vertical, 16)
         .padding(.horizontal)
-        .background(.tint.secondary)
-        .foregroundStyle(.tint)
+        .background(.tint)
+        .foregroundStyle(.white)
         .clipShape(RoundedRectangle(cornerRadius: 17))
     }
 }

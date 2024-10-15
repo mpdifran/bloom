@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */; };
 		FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */; };
-		FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */; };
+		FF0404CF2C028456009FDC4E /* PrimaryButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CE2C028456009FDC4E /* PrimaryButtonStyle.swift */; };
 		FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */; };
 		FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404D52C065F3B009FDC4E /* Throttler.swift */; };
 		FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */; };
@@ -172,6 +172,7 @@
 		FF70E92D2CBADD740055E932 /* NotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */; };
 		FF70E9302CBAF4F80055E932 /* JSONGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */; };
 		FF70E9C42CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */; };
+		FF70E9C62CBDEEF20055E932 /* ActivityLevelEditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9C52CBDEEF20055E932 /* ActivityLevelEditCard.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -497,7 +498,7 @@
 		FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepAnalysis.swift; sourceTree = "<group>"; };
 		FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+ScoreColor.swift"; sourceTree = "<group>"; };
-		FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TertiaryButtonStyle.swift; sourceTree = "<group>"; };
+		FF0404CE2C028456009FDC4E /* PrimaryButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonStyle.swift; sourceTree = "<group>"; };
 		FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		FF0404D52C065F3B009FDC4E /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		FF0405252C8D355500FF1E2F /* TelemetryDeck+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TelemetryDeck+Helpers.swift"; sourceTree = "<group>"; };
@@ -656,6 +657,7 @@
 		FF70E92C2CBADD740055E932 /* NotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterDelegate.swift; sourceTree = "<group>"; };
 		FF70E92F2CBAF4F80055E932 /* JSONGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONGenerator.swift; sourceTree = "<group>"; };
 		FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthActivityLevelView.swift; sourceTree = "<group>"; };
+		FF70E9C52CBDEEF20055E932 /* ActivityLevelEditCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelEditCard.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -999,6 +1001,7 @@
 			isa = PBXGroup;
 			children = (
 				FF1327F72CB4338000ACF981 /* TargetWeightEditCard.swift */,
+				FF70E9C52CBDEEF20055E932 /* ActivityLevelEditCard.swift */,
 			);
 			path = HealthGoals;
 			sourceTree = "<group>";
@@ -2008,7 +2011,7 @@
 				FFA402C42C94739E00D8DD40 /* Metal */,
 				FFF61B002BED7C1300926042 /* EfficacyView.swift */,
 				FFF61B192BEE8C3B00926042 /* TextActionBar.swift */,
-				FF0404CE2C028456009FDC4E /* TertiaryButtonStyle.swift */,
+				FF0404CE2C028456009FDC4E /* PrimaryButtonStyle.swift */,
 				FF0404D32C04D4F4009FDC4E /* AddItemButton.swift */,
 				FF1E96012C0A6263004DAD2D /* ProgressRingView.swift */,
 				FFA134F52C3F16F900FF1829 /* ProgressArcView.swift */,
@@ -2570,7 +2573,7 @@
 				FF0DA0F72C875106007D1A6B /* DateComponents+Helpers.swift in Sources */,
 				FFB444662BEC52E600486AD7 /* ChatMessage.swift in Sources */,
 				FFBE52252C6EF5BB00F510DE /* OnboardingCardTemplateView.swift in Sources */,
-				FF0404CF2C028456009FDC4E /* TertiaryButtonStyle.swift in Sources */,
+				FF0404CF2C028456009FDC4E /* PrimaryButtonStyle.swift in Sources */,
 				FFF66FA92C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFBE52472C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift in Sources */,
@@ -2785,6 +2788,7 @@
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
 				FF70E9152CB867740055E932 /* HealthPermissionChecker.swift in Sources */,
 				FF9783562C9B615A00A8ED7E /* TargetMetric+HealthData.swift in Sources */,
+				FF70E9C62CBDEEF20055E932 /* ActivityLevelEditCard.swift in Sources */,
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
 				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
 				FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */,

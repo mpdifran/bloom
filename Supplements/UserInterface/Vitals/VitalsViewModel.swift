@@ -28,7 +28,7 @@ final class VitalsViewModel: Sendable {
     var bowelMovementSummary: BowelMovementMonthlySummary?
     var menstrualSummary: MenstrualSummary?
 
-    init() {
+    private init() {
         observeData()
     }
 
