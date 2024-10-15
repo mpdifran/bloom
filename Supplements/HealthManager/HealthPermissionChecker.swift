@@ -159,18 +159,18 @@ extension HealthPermissionChecker {
         guard readTypes.isNotEmpty else { return .unknown }
 
         return try await healthStore.getRequestStatusForAuthorization(
-            toShare: writeTypes.asSet(),
-            read: readTypes.asSet()
+            toShare: writeTypes,
+            read: readTypes
         )
     }
 
     func requestAccessIfNeeded() async {
         guard HKHealthStore.isHealthDataAvailable() else { return }
 
-        let authStatus = try? await checkAccess()
+        let authStatus = try? await checkAccessForAllTypes()
         if authStatus == .shouldRequest {
             do {
-                try await healthStore.requestAuthorization(toShare: [], read: readTypes())
+                try await healthStore.requestAuthorization(toShare: writeTypes(), read: readTypes())
             } catch {
                 print(error)
             }
