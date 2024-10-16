@@ -33,6 +33,7 @@ extension ProposedHabit {
         HKQuantity(unit: unit, doubleValue: value)
     }
 
+    @MainActor
     var displayQuantity: String {
         quantity.displayString(for: unit, formatter: targetMetric.preferredFormatter)
     }
@@ -43,6 +44,7 @@ extension ProposedHabit {
         return HKQuantity(unit: unit, doubleValue: previousValue)
     }
 
+    @MainActor
     var displayPreviousQuantity: String? {
         previousQuantity?.displayString(for: unit, formatter: targetMetric.preferredFormatter)
     }
@@ -61,6 +63,7 @@ extension ProposedHabit {
         hasUserEdited && abs(value - suggestedValue) > 1
     }
 
+    @MainActor
     var displaySuggestedValue: String {
         let suggestedQuantity = HKQuantity(unit: unit, doubleValue: suggestedValue)
 

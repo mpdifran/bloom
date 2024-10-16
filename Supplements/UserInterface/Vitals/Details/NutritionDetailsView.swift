@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 import TelemetryDeck
+import HealthKit
 
 struct NutritionDetailsView: View {
 
@@ -460,20 +461,20 @@ private extension NutritionDetailsView {
                     ForEach(dailyWater) { sample in
                         BarMark(
                             x: .value("Date", sample.date),
-                            y: .value("Water", sample.quantity.doubleValue(for: .literUnit(with: .milli)))
+                            y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
                         )
                         .foregroundStyle(.blue)
                     }
 
                     RuleMark(
-                        y: .value("Min Water", 2000)
+                        y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
                     )
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                     .foregroundStyle(.blue)
 
                     RectangleMark(
-                        yStart: .value("Min Water", 2000),
-                        yEnd: .value("Min Water", 4000)
+                        yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
+                        yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
                     )
                     .foregroundStyle(
                         LinearGradient(colors: [.blue.opacity(0.3), .clear], startPoint: .bottom, endPoint: .top)

@@ -34,7 +34,7 @@ struct TodayView: View {
     }
 
     @ObservedObject private var habitsViewModel = HabitsViewModel.shared
-    @ObservedObject private var reportCoordinator = ReportCoordinator.shared
+    private var reportViewModel = ReportCoordinatorViewModel.shared
     @ObservedObject private var toDoManager = ToDoManager.shared
 
     @Environment(TabController.self) private var tabController: TabController
@@ -58,7 +58,7 @@ struct TodayView: View {
                                 }
                                 .padding(.bottom)
                         }
-                        if reportCoordinator.shouldShowEveningReport() || danieleMode {
+                        if reportViewModel.shouldShowEveningReport() || danieleMode {
                             ReportCell(kind: .evening)
                                 .onTapGesture {
                                     presentedFullScreen = EveningReportView().asAny

@@ -9,6 +9,7 @@ import Foundation
 import AppFoundations
 import Algorithms
 
+@MainActor
 final class ChatViewModel: ObservableObject {
     static let shared = ChatViewModel()
 

@@ -16,10 +16,16 @@ extension HKQuantity: @retroactive Comparable {
 
 extension HKQuantity {
 
+    @MainActor
     func displayString(for unit: HKUnit, formatter: NumberFormatter = NumberFormatter.noDecimalPlaces) -> String {
-        let doubleValue = doubleValue(for: unit)
+        let localizedUnit = unit.localizedUnit()
+        let localizedValue = localizedValue(for: unit)
+        return "\(formatter.string(for: localizedValue) ?? "") \(localizedUnit.sensibleUnitString)"
+    }
 
-        return "\(formatter.string(for: doubleValue) ?? "") \(unit.unitString)"
+    @MainActor
+    func localizedValue(for unit: HKUnit) -> Double {
+        doubleValue(for: unit.localizedUnit())
     }
 
     func sum(_ other: HKQuantity, unit: HKUnit) -> HKQuantity {

@@ -6,27 +6,34 @@
 //
 
 import Foundation
-import CoreLocation
+@preconcurrency import CoreLocation
 
-final class LocationManager: NSObject, ObservableObject {
+final actor LocationManager: NSObject {
     static let shared = LocationManager()
 
-    @Published private(set) var currentLocation: CLLocation?
+    @AsyncStreamable private(set) var currentLocation: CLLocation?
 
     private let locationManager = CLLocationManager()
     private let geocoder = CLGeocoder()
+    private let locationManagerDelegate = LocationManagerDelegate()
 
     private override init() {
         super.init()
 
-        locationManager.delegate = self
+        locationManagerDelegate.onAuthentication = { [weak self] in
+            await self?.startMonitoring()
+        }
+        locationManagerDelegate.onNewLocation = { [weak self] location in
+            await self?.set(currentLocation: location)
+        }
+
+        locationManager.delegate = locationManagerDelegate
     }
 }
 
 extension LocationManager {
 
     func requestAuth() {
-        print("Requesting Auth")
         switch locationManager.authorizationStatus {
         case .authorizedAlways, .authorizedWhenInUse:
             startMonitoring()
@@ -36,7 +43,6 @@ extension LocationManager {
     }
 
     func startMonitoring() {
-        print("Attempting to start location monitoring")
         guard
             CLLocationManager.significantLocationChangeMonitoringAvailable(),
             locationManager.authorizationStatus == .authorizedAlways || locationManager.authorizationStatus == .authorizedWhenInUse
@@ -45,13 +51,15 @@ extension LocationManager {
             return
         }
 
-        print("Starting location monitoring")
         locationManager.startMonitoringSignificantLocationChanges()
     }
 
     func stopMonitoring() {
-        print("Stopping location monitoring")
         locationManager.stopMonitoringSignificantLocationChanges()
+    }
+
+    func set(currentLocation: CLLocation) {
+        self.currentLocation = currentLocation
     }
 
     func locality(for location: CLLocation) async -> String? {
@@ -66,16 +74,25 @@ extension LocationManager {
     }
 }
 
-extension LocationManager: CLLocationManagerDelegate {
+private final class LocationManagerDelegate: NSObject, CLLocationManagerDelegate {
+
+    var onAuthentication: @Sendable () async -> Void = { }
+    var onNewLocation: @Sendable (CLLocation) async -> Void = { _ in }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        startMonitoring()
+        let onAuthenticationCopy = onAuthentication
+        Task {
+            await onAuthenticationCopy()
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let newLocation = locations.last else { return }
 
-        currentLocation = newLocation
+        let onNewLocationCopy = onNewLocation
+        Task {
+            await onNewLocationCopy(newLocation)
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

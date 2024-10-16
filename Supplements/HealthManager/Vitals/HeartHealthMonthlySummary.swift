@@ -169,6 +169,7 @@ extension HeartHealthMonthlySummary.Details {
         }
     }
 
+    @MainActor
     var subtitle: String? {
         let vo2Max = averageVO2Max.map { "VO₂ Max: \($0.displayString(for: .vo2Max()))" }
         let rhr = averageRestingHeartRate.map { _ in "RHR: \(displayRestingHeartRate)" }

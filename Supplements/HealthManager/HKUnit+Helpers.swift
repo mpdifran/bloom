@@ -30,3 +30,46 @@ extension HKUnit {
         .secondUnit(with: .milli)
     }
 }
+
+extension HKUnit {
+
+    var descriptiveUnitName: String {
+        switch self {
+        case .count():
+            "Steps"
+        case.fluidOunceUS():
+            "oz (US)"
+        case .fluidOunceImperial():
+            "oz (UK)"
+        default:
+            unitString
+        }
+    }
+
+    var sensibleUnitString: String {
+        switch self {
+        case .count():
+            "Steps"
+        case.fluidOunceUS():
+            "oz"
+        case .fluidOunceImperial():
+            "oz"
+        default:
+            unitString
+        }
+    }
+
+    @MainActor
+    func localizedUnit() -> HKUnit {
+        switch self {
+        case .meterUnit(with: .kilo), .mile():
+            return HealthUnitPreferences.shared.distanceUnit
+        case .literUnit(with: .milli), .fluidOunceUS(), .fluidOunceImperial():
+            return HealthUnitPreferences.shared.liquidVolumeUnit
+        case .gramUnit(with: .kilo), .pound():
+            return HealthUnitPreferences.shared.weightUnit
+        default:
+            return self
+        }
+    }
+}

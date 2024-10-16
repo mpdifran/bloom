@@ -9,30 +9,18 @@ import Foundation
 
 public extension NumberFormatter {
 
-    static var noDecimalPlaces: NumberFormatter = {
-        let numberFormatter = NumberFormatter()
+    static let noDecimalPlaces = NumberFormatter().with {
+        $0.maximumFractionDigits = 0
+        $0.numberStyle = .decimal
+    }
 
-        numberFormatter.maximumFractionDigits = 0
-        numberFormatter.numberStyle = .decimal
+    static let oneDecimalPlace = NumberFormatter().with {
+        $0.maximumFractionDigits = 1
+        $0.numberStyle = .decimal
+    }
 
-        return numberFormatter
-    }()
-
-    static var oneDecimalPlace: NumberFormatter = {
-        let numberFormatter = NumberFormatter()
-
-        numberFormatter.maximumFractionDigits = 1
-        numberFormatter.numberStyle = .decimal
-
-        return numberFormatter
-    }()
-
-    static var twoDecimalPlaces: NumberFormatter = {
-        let numberFormatter = NumberFormatter()
-
-        numberFormatter.maximumFractionDigits = 2
-        numberFormatter.numberStyle = .decimal
-
-        return numberFormatter
-    }()
+    static let twoDecimalPlaces = NumberFormatter().with {
+        $0.maximumFractionDigits = 2
+        $0.numberStyle = .decimal
+    }
 }

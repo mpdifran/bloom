@@ -10,6 +10,7 @@ import DataContainer
 
 extension Habit {
 
+    @MainActor
     var displayQuantity: String {
         quantity.displayString(for: unit, formatter: targetMetric.preferredFormatter)
     }

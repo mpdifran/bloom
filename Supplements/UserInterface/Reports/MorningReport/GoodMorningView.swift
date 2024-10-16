@@ -34,6 +34,8 @@ struct GoodMorningView: View {
 
     @State private var incompleteTargetMetrics = Set<TargetMetric>()
 
+    private var locationViewModel = LocationManagerViewModel.shared
+
     @Query var activeHabits: [Habit]
 
     private let randomMenstrualCyclePhaseFactIndex = Int.random(in: 0..<6)
@@ -87,13 +89,15 @@ struct GoodMorningView: View {
         .animation(.default, value: sleepAnalysis)
         .animation(.default, value: events.count)
         .animation(.default, value: weather)
-        .onAppear {
-            LocationManager.shared.requestAuth()
-            loadWeather()
+        .task {
+            await LocationManager.shared.requestAuth()
+            await loadWeather()
         }
-        .onChange(of: LocationManager.shared.currentLocation) { oldValue, newValue in
+        .onChange(of: locationViewModel.currentLocation) { oldValue, newValue in
             if oldValue == nil, newValue != nil {
-                loadWeather()
+                Task {
+                    await loadWeather()
+                }
             }
         }
         .task {
@@ -114,20 +118,20 @@ struct GoodMorningView: View {
 
 private extension GoodMorningView {
 
-    func loadWeather() {
-        guard let location = LocationManager.shared.currentLocation, weather == nil else { return }
+    func loadWeather() async {
+        guard let location = await LocationManager.shared.currentLocation, weather == nil else { return }
 
-        isLoadingWeather = true
-        Task {
-            let weather = await WeatherForecaster.shared.forecastedWeather(location: location)
-            let locality = await LocationManager.shared.locality(for: location)
+        await MainActor.run {
+            isLoadingWeather = true
+        }
 
-            await MainActor.run {
-                self.weather = weather
-                self.locationLocality = locality
+        let weather = await WeatherForecaster.shared.forecastedWeather(location: location)
+        let locality = await LocationManager.shared.locality(for: location)
 
-                self.isLoadingWeather = false
-            }
+        await MainActor.run {
+            self.weather = weather
+            self.locationLocality = locality
+            self.isLoadingWeather = false
         }
     }
 }

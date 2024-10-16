@@ -102,8 +102,9 @@ private extension BodyCompositionDetailsView {
         bodyFatPercentageSamples.map({ $0.quantity.doubleValue(for: .percent()) }).average(keyPath: \.self) * 100
     }
 
-    var averageWeight: Double {
-        bodyMassSamples.map({ $0.quantity.doubleValue(for: .pound()) }).average(keyPath: \.self)
+    var averageWeight: HKQuantity {
+        let averageValue = bodyMassSamples.map({ $0.quantity.doubleValue(for: .pound()) }).average(keyPath: \.self)
+        return HKQuantity(unit: .pound(), doubleValue: averageValue)
     }
 }
 
@@ -113,19 +114,19 @@ private extension BodyCompositionDetailsView {
     var bodyMassChart: some View {
         if bodyMassSamples.isNotEmpty {
             VStack {
-                VitalDetailChartTitleView(title: "Body Weight", value: "\(averageWeight.format()) \(HKUnit.pound().unitString)")
+                VitalDetailChartTitleView(title: "Body Weight", value: "\(averageWeight.displayString(for: .pound(), formatter: .oneDecimalPlace))")
 
                 Chart {
                     ForEach(bodyMassSamples) { sample in
                         LineMark(
                             x: .value("Date", sample.date, unit: .day),
-                            y: .value("Body Weight", sample.quantity.doubleValue(for: .pound()))
+                            y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
                         )
                         .foregroundStyle(.vitalGood)
 
                         PointMark(
                             x: .value("Date", sample.date, unit: .day),
-                            y: .value("Body Weight", sample.quantity.doubleValue(for: .pound()))
+                            y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
                         )
                         .foregroundStyle(.vitalGood)
                         .symbolSize(40)
@@ -144,7 +145,7 @@ private extension BodyCompositionDetailsView {
                         AxisGridLine()
                         AxisTick()
                         if let doubleValue = value.as(Double.self) {
-                            AxisValueLabel("\(doubleValue.format()) \(HKUnit.pound().unitString)")
+                            AxisValueLabel("\(doubleValue.format()) \(HKUnit.pound().localizedUnit())")
                         } else {
                             AxisValueLabel()
                         }

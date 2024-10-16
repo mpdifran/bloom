@@ -8,31 +8,11 @@
 import SwiftUI
 
 private extension String {
-    static let morningReportDate = "ReportCoordinator.morningReportDate"
-    static let eveningReportDate = "ReportCoordinator.eveningReportDate"
-    static let showMorningReportOnWakeUp = "ReportCoordinator.showMorningReportOnWakeUp"
     static let lastMorningReportNotificationDate = "ReportCoordinator.lastMorningReportNotificationDate"
 }
 
-final class ReportCoordinator: ObservableObject {
+final actor ReportCoordinator {
     static let shared = ReportCoordinator()
-
-    @Published var morningReportDate: Date = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now {
-        didSet {
-            UserDefaults.group.set(morningReportDate, forKey: .morningReportDate)
-        }
-    }
-
-    @Published var eveningReportDate: Date = Calendar.current.date(bySettingHour: 22, minute: 0, second: 0, of: .now) ?? .now {
-        didSet {
-            UserDefaults.group.set(eveningReportDate, forKey: .eveningReportDate)
-            Task {
-                await scheduleEveningReport()
-            }
-        }
-    }
-
-    @AppStorage(.showMorningReportOnWakeUp, store: .group) var showMorningReportOnWakeUp: Bool = true
 
     private var lastMorningReportNotificationDate: Date? {
         didSet {
@@ -41,27 +21,21 @@ final class ReportCoordinator: ObservableObject {
     }
 
     private init() {
-        if let date = UserDefaults.group.object(forKey: .morningReportDate) as? Date {
-            self.morningReportDate = date
-        }
-        if let date = UserDefaults.group.object(forKey: .eveningReportDate) as? Date {
-            self.eveningReportDate = date
-        }
         if let date = UserDefaults.group.object(forKey: .lastMorningReportNotificationDate) as? Date {
             self.lastMorningReportNotificationDate = date
-        }
-
-        Task {
-            await scheduleEveningReport()
-            await NotificationManager.shared.scheduleFocusAreaNotification()
         }
     }
 }
 
 extension ReportCoordinator {
 
+    func scheduleNotifications() async {
+        await scheduleEveningReport()
+        await NotificationManager.shared.scheduleFocusAreaNotification()
+    }
+
     func didDetectWakeUp(sleepAnalysis: SleepAnalysis? = nil) async {
-        guard showMorningReportOnWakeUp else { return }
+        guard await ReportCoordinatorViewModel.shared.showMorningReportOnWakeUp else { return }
 
         if let lastMorningReportNotificationDate {
             if Calendar.current.isDateInToday(lastMorningReportNotificationDate) {
@@ -80,19 +54,14 @@ extension ReportCoordinator {
 
         lastMorningReportNotificationDate = .now
     }
+}
+
+private extension ReportCoordinator {
 
     func scheduleEveningReport() async {
+        let eveningReportDate = await ReportCoordinatorViewModel.shared.eveningReportDate
         let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: eveningReportDate)
 
         await NotificationManager.shared.scheduleEveningReportNotification(dateComponents: dateComponents)
-    }
-
-    func shouldShowEveningReport() -> Bool {
-        let now = Date.now
-        guard let eveningStartDate = Calendar.current.applyHourMinuteSecond(to: now, from: eveningReportDate) else {
-            return false
-        }
-
-        return eveningStartDate < now
     }
 }

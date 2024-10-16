@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-final class NetworkRequester {
+final class NetworkRequester: Sendable {
     static let shared = NetworkRequester()
 }
 

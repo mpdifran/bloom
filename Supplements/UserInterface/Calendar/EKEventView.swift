@@ -26,20 +26,24 @@ struct EKEventView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UINavigationController, context: Context) { }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(dismiss: dismiss)
+        Coordinator(onDismiss: {
+            dismiss()
+        })
     }
 }
 
 extension EKEventView {
-    class Coordinator: NSObject, EKEventViewDelegate {
-        var dismiss: DismissAction
+    final class Coordinator: NSObject, EKEventViewDelegate, Sendable {
+        let onDismiss: @MainActor @Sendable () -> Void
 
-        init(dismiss: DismissAction) {
-            self.dismiss = dismiss
+        init(onDismiss: @escaping @MainActor @Sendable () -> Void) {
+            self.onDismiss = onDismiss
         }
 
         func eventViewController(_ controller: EKEventViewController, didCompleteWith action: EKEventViewAction) {
-            dismiss()
+            MainTask { [weak self] in
+                self?.onDismiss()
+            }
         }
     }
 }

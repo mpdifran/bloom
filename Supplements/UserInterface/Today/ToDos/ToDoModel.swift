@@ -96,6 +96,7 @@ extension ToDoModel {
             }
         }
 
+        @MainActor
         var sheetToPresent: AnyView {
             switch self {
             case .logWeight: BodyWeightActionCardView().asAny

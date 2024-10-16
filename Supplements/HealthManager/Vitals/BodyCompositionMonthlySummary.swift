@@ -109,6 +109,7 @@ extension BodyCompositionMonthlySummary {
         }
     }
 
+    @MainActor
     var subtitle: String? {
         var entries = [String]()
 

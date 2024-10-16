@@ -68,8 +68,9 @@ struct HabitDetailsView: View {
 
 private extension HabitDetailsView {
 
-    var average: Double {
-        allSamplesTwelveWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
+    var average: HKQuantity {
+        let averageValue = allSamplesTwelveWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
+        return HKQuantity(unit: habit.unit, doubleValue: averageValue)
     }
 
     var statsSection: some View {
@@ -79,7 +80,7 @@ private extension HabitDetailsView {
                 .bold()
 
             LabeledContent("Daily Average") {
-                Text("\(average.format(using: habit.targetMetric.preferredFormatter)) \(habit.unit.unitString)")
+                Text("\(average.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter))")
                     .fontDesign(.rounded)
                     .bold()
                     .foregroundStyle(habit.targetMetric.color)

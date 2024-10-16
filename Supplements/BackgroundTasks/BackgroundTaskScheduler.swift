@@ -8,7 +8,7 @@
 import Foundation
 import BackgroundTasks
 
-final class BackgroundTaskScheduler {
+final class BackgroundTaskScheduler: Sendable {
     static let shared = BackgroundTaskScheduler()
 
     private init() { }

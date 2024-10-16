@@ -543,7 +543,7 @@ extension HKHealthStore {
     func observeChanges(
         sampleType: HKSampleType,
         startDate: Date,
-        performQuery: @escaping () async throws -> Void
+        performQuery: @escaping @Sendable () async throws -> Void
     ) -> HKObserverQueryHandle {
         observeChanges(
             sampleTypes: [sampleType],
@@ -555,7 +555,7 @@ extension HKHealthStore {
     func observeChanges(
         sampleTypes: [HKSampleType],
         startDate: Date,
-        performQuery: @escaping () async throws -> Void
+        performQuery: @escaping @Sendable () async throws -> Void
     ) -> HKObserverQueryHandle {
         var queries = [HKObserverQuery]()
 
@@ -576,14 +576,14 @@ extension HKHealthStore {
                     return
                 }
 
-                Task {
+                Task { @Sendable in
                     do {
                         try await performQuery()
                     } catch {
                         print(error)
                     }
-                    completionHandler()
                 }
+                completionHandler()
             }
 
             execute(observerQuery)

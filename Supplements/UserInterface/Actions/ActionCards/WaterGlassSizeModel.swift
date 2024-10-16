@@ -49,6 +49,7 @@ extension WaterGlassSizeModel {
         HKQuantity(unit: unit, doubleValue: quantityValue)
     }
 
+    @MainActor
     var displayValue: String {
         quantity.displayString(for: unit, formatter: NumberFormatter.noDecimalPlaces)
     }

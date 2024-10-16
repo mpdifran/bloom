@@ -16,8 +16,8 @@ struct ActionLatestValueDetails: Sendable {
 }
 
 extension ActionsView {
-    @Observable
-    final class ViewModel: Sendable {
+    @Observable @MainActor
+    final class ViewModel {
         var weightDetails: ActionLatestValueDetails?
         var bloodPressureDetails: ActionLatestValueDetails?
         var waterDetails: ActionLatestValueDetails?
@@ -44,7 +44,7 @@ extension ActionsView.ViewModel {
         ) {
             let latestSample = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bodyMass)
             if let quantitySample = latestSample as? HKQuantitySample {
-                let displayString = quantitySample.quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)
+                let displayString = await quantitySample.quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)
                 let timestamp = DateFormatter.relativeDateTimeShort.string(from: quantitySample.startDate)
 
                 await MainActor.run {
@@ -101,7 +101,7 @@ extension ActionsView.ViewModel {
                 option: .cumulativeSum
             )
             if let quantity {
-                let displayString = quantity.displayString(for: .literUnit(with: .milli))
+                let displayString = await quantity.displayString(for: .literUnit(with: .milli))
 
                 await MainActor.run {
                     self.waterDetails = ActionLatestValueDetails(

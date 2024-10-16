@@ -60,10 +60,6 @@ struct ChatView: View {
                                             SupplementBubble(supplementReccomendation: recommendation)
                                                 .id(recommendation.id)
                                         }
-                                        ForEach(chatMessage.activityRecommendation) { recommendation in
-                                            ActivityBubbleCell(activityModel: recommendation)
-                                                .id(recommendation.id)
-                                        }
                                     }
                                 }
 

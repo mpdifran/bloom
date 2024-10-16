@@ -66,13 +66,17 @@ extension VitalsCalculator {
         menstrualSummary = await HealthStoreFetcher.shared.fetchMenstrualSummary()
         bowelMovementSummary = await fetchBowelMovementMonthlySummary()
 
-        createVitals()
+        await createVitals()
     }
 
     func fetchSwiftDataTypes() async {
         self.bowelMovementSummary = await fetchBowelMovementMonthlySummary()
 
-        createVitals()
+        await createVitals()
+    }
+
+    func recalculateVitals() async {
+        await createVitals()
     }
 }
 
@@ -87,7 +91,7 @@ private extension VitalsCalculator {
 
 private extension VitalsCalculator {
 
-    func createVitals() {
+    func createVitals() async {
         var vitals = [VitalModel]()
         if let sleepVitalsSummary {
             vitals.append(
@@ -118,7 +122,7 @@ private extension VitalsCalculator {
             vitals.append(.init(id: .activityLevel))
         }
         if let heartHealthSummary {
-            vitals.append(
+            await vitals.append(
                 VitalModel(
                     id: .heartHealth,
                     subtitle: heartHealthSummary.details.subtitle,
@@ -132,7 +136,7 @@ private extension VitalsCalculator {
             vitals.append(.init(id: .heartHealth))
         }
         if let bodyCompositionSummary {
-            vitals.append(
+            await vitals.append(
                 VitalModel(
                     id: .bodyComposition,
                     subtitle: bodyCompositionSummary.subtitle,

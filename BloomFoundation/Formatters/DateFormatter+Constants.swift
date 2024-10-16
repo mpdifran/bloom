@@ -9,165 +9,93 @@ import Foundation
 
 public extension DateFormatter {
 
-    static var dateTimeShort: DateFormatter = {
-        let dateFormatter = DateFormatter()
+    static let dateTimeShort = DateFormatter().with {
+        $0.dateStyle = .short
+        $0.timeStyle = .short
+    }
 
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
+    static let dateTimeMedium = DateFormatter().with {
+        $0.dateStyle = .medium
+        $0.timeStyle = .medium
+    }
 
-        return dateFormatter
-    }()
+    static let justTimeShort = DateFormatter().with {
+        $0.dateStyle = .none
+        $0.timeStyle = .short
+    }
 
-    static var dateTimeMedium: DateFormatter = {
-        let dateFormatter = DateFormatter()
+    static let justDateMedium = DateFormatter().with {
+        $0.dateStyle = .medium
+        $0.timeStyle = .none
+    }
 
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
+    static let justDateShort = DateFormatter().with {
+        $0.dateStyle = .short
+        $0.timeStyle = .none
+    }
 
-        return dateFormatter
-    }()
+    static let justDateLong = DateFormatter().with {
+        $0.dateStyle = .long
+        $0.timeStyle = .none
+    }
 
-    static var justTimeShort: DateFormatter = {
-        let dateFormatter = DateFormatter()
+    static let justRelativeDateMedium = DateFormatter().with {
+        $0.dateStyle = .medium
+        $0.timeStyle = .none
+        $0.doesRelativeDateFormatting = true
+    }
 
-        dateFormatter.dateStyle = .none
-        dateFormatter.timeStyle = .short
+    static let relativeDateTimeMedium = DateFormatter().with {
+        $0.dateStyle = .medium
+        $0.timeStyle = .medium
+        $0.doesRelativeDateFormatting = true
+    }
 
-        return dateFormatter
-    }()
+    static let relativeDateTimeShort = DateFormatter().with {
+        $0.dateStyle = .short
+        $0.timeStyle = .short
+        $0.doesRelativeDateFormatting = true
+    }
 
-    static var justDateMedium: DateFormatter = {
-        let dateFormatter = DateFormatter()
+    static let justFullMonth = DateFormatter().with {
+        $0.setLocalizedDateFormatFromTemplate("MMMM")
+    }
 
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
+    static let fullMonthAndYear = DateFormatter().with {
+        $0.setLocalizedDateFormatFromTemplate("MMMM yyyy")
+    }
 
-        return dateFormatter
-    }()
+    static let monthAndDay = DateFormatter().with {
+        $0.setLocalizedDateFormatFromTemplate("MMM d")
+    }
 
-    static var justDateShort: DateFormatter = {
-        let dateFormatter = DateFormatter()
+    static let justDayOfWeek = DateFormatter().with {
+        $0.setLocalizedDateFormatFromTemplate("EEEE")
+    }
 
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
+    static let justDayOfWeekShort = DateFormatter().with {
+        $0.setLocalizedDateFormatFromTemplate("E")
+    }
 
-        return dateFormatter
-    }()
+    static let timeIntervalHourMinuteShort = DateComponentsFormatter().with {
+        $0.unitsStyle = .short
+        $0.allowedUnits = [.hour, .minute]
+    }
 
-    static var justDateLong: DateFormatter = {
-        let dateFormatter = DateFormatter()
+    static let timeIntervalHourMinuteFull = DateComponentsFormatter().with {
+        $0.unitsStyle = .full
+        $0.allowedUnits = [.hour, .minute]
+    }
 
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
+    static let timeIntervalHourMinuteSecondShort = DateComponentsFormatter().with {
+        $0.unitsStyle = .short
+        $0.allowedUnits = [.hour, .minute, .second]
+    }
 
-        return dateFormatter
-    }()
-
-    static var justRelativeDateMedium: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
-        dateFormatter.doesRelativeDateFormatting = true
-
-        return dateFormatter
-    }()
-
-    static var relativeDateTimeMedium: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-        dateFormatter.doesRelativeDateFormatting = true
-
-        return dateFormatter
-    }()
-
-    static var relativeDateTimeShort: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        dateFormatter.doesRelativeDateFormatting = true
-
-        return dateFormatter
-    }()
-
-    static var justFullMonth: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMMM")
-
-        return dateFormatter
-    }()
-
-    static var fullMonthAndYear: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMMM yyyy")
-
-        return dateFormatter
-    }()
-
-    static var monthAndDay: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMM d")
-
-        return dateFormatter
-    }()
-
-    static var justDayOfWeek: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
-
-        return dateFormatter
-    }()
-
-    static var justDayOfWeekShort: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.setLocalizedDateFormatFromTemplate("E")
-
-        return dateFormatter
-    }()
-
-    static var timeIntervalHourMinuteShort: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-
-        formatter.unitsStyle = .short
-        formatter.allowedUnits = [.hour, .minute]
-
-        return formatter
-    }()
-
-    static var timeIntervalHourMinuteFull: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-
-        formatter.unitsStyle = .full
-        formatter.allowedUnits = [.hour, .minute]
-
-        return formatter
-    }()
-
-    static var timeIntervalHourMinuteSecondShort: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-
-        formatter.unitsStyle = .short
-        formatter.allowedUnits = [.hour, .minute, .second]
-
-        return formatter
-    }()
-
-    static var timeIntervalDaysFull: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-
-        formatter.unitsStyle = .full
-        formatter.allowedUnits = [.day]
-
-        return formatter
-    }()
+    static let timeIntervalDaysFull = DateComponentsFormatter().with {
+        $0.unitsStyle = .full
+        $0.allowedUnits = [.day]
+    }
 
     static func relativeTimeIntervalDaysFullFromNow(_ date: Date) -> String {
         if

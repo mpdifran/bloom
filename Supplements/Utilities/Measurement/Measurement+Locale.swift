@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import HealthKit
 
 extension Measurement where UnitType == UnitTemperature {
 

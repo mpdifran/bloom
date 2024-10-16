@@ -69,7 +69,9 @@ struct OnboardingHealthKitView: View {
             case .success:
                 Task { await checkAuth() }
             case .failure(let error):
-                self.error = error
+                MainTask {
+                    self.error = error
+                }
             }
         }
     }

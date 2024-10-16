@@ -13,7 +13,9 @@ import HealthKit
 struct PreferencesView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
-    @ObservedObject private var reportCoordinator = ReportCoordinator.shared
+    @Bindable private var reportViewModel = ReportCoordinatorViewModel.shared
+
+    @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
     @AppStorage("PreferencesView.user.name") private(set) var userName: String = ""
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
@@ -34,6 +36,7 @@ struct PreferencesView: View {
             feedbackSection
             healthPermissionsSection
             healthGoalsSection
+            unitsSection
             femaleSection
             reportsSection
             nameSection
@@ -163,11 +166,34 @@ private extension PreferencesView {
 
     var reportsSection: some View {
         Section("Reports") {
-            Toggle(isOn: $reportCoordinator.showMorningReportOnWakeUp) {
+            Toggle(isOn: $reportViewModel.showMorningReportOnWakeUp) {
                 Text("Morning Report on Wake Up")
             }
 
-            DatePicker("Evening Report", selection: $reportCoordinator.eveningReportDate, displayedComponents: .hourAndMinute)
+            DatePicker("Evening Report", selection: $reportViewModel.eveningReportDate, displayedComponents: .hourAndMinute)
+        }
+    }
+
+    var unitsSection: some View {
+        Section("Units") {
+            Picker("Distance", selection: $unitPreferences.distanceUnit) {
+                ForEach(HKUnit.distanceUnits, id: \.unitString) { unit in
+                    Text(unit.descriptiveUnitName)
+                        .tag(unit)
+                }
+            }
+            Picker("Liquid Volume", selection: $unitPreferences.liquidVolumeUnit) {
+                ForEach(HKUnit.liquidVolumeUnits, id: \.unitString) { unit in
+                    Text(unit.descriptiveUnitName)
+                        .tag(unit)
+                }
+            }
+            Picker("Weight", selection: $unitPreferences.weightUnit) {
+                ForEach(HKUnit.weightUnits, id: \.unitString) { unit in
+                    Text(unit.descriptiveUnitName)
+                        .tag(unit)
+                }
+            }
         }
     }
 

@@ -86,10 +86,14 @@ struct ActionCardView<Content>: View where Content: View {
         ) { result in
             switch result {
             case .success:
-                handleSave()
+                MainTask {
+                    handleSave()
+                }
             case .failure(let error):
-                self.error = error
-                self.didError.toggle()
+                MainTask {
+                    self.error = error
+                    self.didError.toggle()
+                }
             }
         }
     }
