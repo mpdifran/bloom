@@ -91,10 +91,7 @@ private extension HabitDailyUpdateCellViewModel {
 
     func loadValues() async {
         let targetMetric = habit.targetMetric
-        let currentValue = Task.detached(priority: .userInitiated) {
-            await targetMetric.fetchTotalQuantity(for: .today())
-        }
-        let dailyQuantity = await currentValue.value
+        let dailyQuantity = await targetMetric.fetchTotalQuantity(for: .today())
         dailyValue = dailyQuantity.doubleValue(for: habit.unit)
 
         let prevHasCompletedGoal = goalCompletionState

@@ -179,6 +179,9 @@
 		FF70E9ED2CBFF7FC0055E932 /* LocationManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9EC2CBFF7F10055E932 /* LocationManagerViewModel.swift */; };
 		FF70E9F02CBFFE1F0055E932 /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9EE2CBFFC030055E932 /* With.swift */; };
 		FF70E9F22CC000350055E932 /* MainTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9F12CC000330055E932 /* MainTask.swift */; };
+		FF70E9F62CC0236F0055E932 /* NutritionHabitTodayWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9F52CC0236F0055E932 /* NutritionHabitTodayWidgetView.swift */; };
+		FF70E9F92CC0277D0055E932 /* NutritionHabitTodayWidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9F82CC0277A0055E932 /* NutritionHabitTodayWidgetViewModel.swift */; };
+		FF70E9FB2CC02B010055E932 /* NutritionRemainingValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70E9FA2CC02B010055E932 /* NutritionRemainingValueView.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -666,6 +669,9 @@
 		FF70E9EC2CBFF7F10055E932 /* LocationManagerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerViewModel.swift; sourceTree = "<group>"; };
 		FF70E9EE2CBFFC030055E932 /* With.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = With.swift; sourceTree = "<group>"; };
 		FF70E9F12CC000330055E932 /* MainTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTask.swift; sourceTree = "<group>"; };
+		FF70E9F52CC0236F0055E932 /* NutritionHabitTodayWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionHabitTodayWidgetView.swift; sourceTree = "<group>"; };
+		FF70E9F82CC0277A0055E932 /* NutritionHabitTodayWidgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionHabitTodayWidgetViewModel.swift; sourceTree = "<group>"; };
+		FF70E9FA2CC02B010055E932 /* NutritionRemainingValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionRemainingValueView.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -978,6 +984,7 @@
 		FF0DA0EE2C84D664007D1A6B /* Today */ = {
 			isa = PBXGroup;
 			children = (
+				FF70E9F42CC023440055E932 /* TodayWidgets */,
 				FF2FB8942C9C906F00F57523 /* Habits */,
 				FF7112872C9874CC0020A0F0 /* Goals */,
 				FF6E060A2C9F8DFA00C4219B /* Configure */,
@@ -1364,6 +1371,24 @@
 				FF70E9C82CBECFFF0055E932 /* Measurement+Locale.swift */,
 			);
 			path = Measurement;
+			sourceTree = "<group>";
+		};
+		FF70E9F42CC023440055E932 /* TodayWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				FF70E9F72CC023D10055E932 /* Nutrition */,
+			);
+			path = TodayWidgets;
+			sourceTree = "<group>";
+		};
+		FF70E9F72CC023D10055E932 /* Nutrition */ = {
+			isa = PBXGroup;
+			children = (
+				FF70E9F52CC0236F0055E932 /* NutritionHabitTodayWidgetView.swift */,
+				FF70E9F82CC0277A0055E932 /* NutritionHabitTodayWidgetViewModel.swift */,
+				FF70E9FA2CC02B010055E932 /* NutritionRemainingValueView.swift */,
+			);
+			path = Nutrition;
 			sourceTree = "<group>";
 		};
 		FF7112872C9874CC0020A0F0 /* Goals */ = {
@@ -2599,6 +2624,7 @@
 				FF1E962C2C0BF19A004DAD2D /* View+Expand.swift in Sources */,
 				FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */,
 				FF70E9172CB86F8A0055E932 /* WristTemperatureSummaryCell.swift in Sources */,
+				FF70E9F62CC0236F0055E932 /* NutritionHabitTodayWidgetView.swift in Sources */,
 				FF8F79D72C668AFD0095C36D /* ActivityLevelDetailsView.swift in Sources */,
 				FFA402C82C94C5E000D8DD40 /* OnboardingHealthGoalView.swift in Sources */,
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
@@ -2796,6 +2822,7 @@
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
 				FF70E9152CB867740055E932 /* HealthPermissionChecker.swift in Sources */,
 				FF9783562C9B615A00A8ED7E /* TargetMetric+HealthData.swift in Sources */,
+				FF70E9F92CC0277D0055E932 /* NutritionHabitTodayWidgetViewModel.swift in Sources */,
 				FF70E9C62CBDEEF20055E932 /* ActivityLevelEditCard.swift in Sources */,
 				FFF61B1A2BEE8C3B00926042 /* TextActionBar.swift in Sources */,
 				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
@@ -2836,6 +2863,7 @@
 				FF4A21D02C8A02BD00278019 /* FeatureRequestsScreen.swift in Sources */,
 				FF7890522C3473B700F9C1A5 /* SleepChatMessage.swift in Sources */,
 				FF70E9272CB96D320055E932 /* HealthSleepObserver.swift in Sources */,
+				FF70E9FB2CC02B010055E932 /* NutritionRemainingValueView.swift in Sources */,
 				FF88F11B2C7B75C20093D1B4 /* CalendarManager.swift in Sources */,
 				FF70E9ED2CBFF7FC0055E932 /* LocationManagerViewModel.swift in Sources */,
 				FF4B2F4A2C90C7DE0003879C /* ToDoModel.swift in Sources */,

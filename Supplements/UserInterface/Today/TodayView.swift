@@ -42,6 +42,7 @@ struct TodayView: View {
     @State private var presentedFullScreen: AnyView?
     @State private var presentedSheet: AnyView?
 
+    @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
     var body: some View {
@@ -71,6 +72,10 @@ struct TodayView: View {
                                     presentedFullScreen = NewUpdateHabitView().asAny
                                 }
                         }
+                    }
+
+                    if showNutritionWidget {
+                        NutritionHabitTodayWidgetView()
                     }
 
                     if suggestedHabits.isNotEmpty {
@@ -149,6 +154,18 @@ struct TodayView: View {
                 await toDoManager.recalculateToDos()
             }
         }
+    }
+}
+
+private extension TodayView {
+
+    var showNutritionWidget: Bool {
+        guard showNutritionTodayWidget else { return false }
+
+        let allHabits = userHabits + suggestedHabits
+        return allHabits.contains(where: {
+            $0.targetMetric == .calories || $0.targetMetric == .proteinIntake
+        })
     }
 }
 
