@@ -12,7 +12,7 @@ public extension TargetMetric {
     var name: String {
         switch self {
         case .none: "None"
-        case .calories: "Calories"
+        case .calories: "Dietary Calories"
         case .proteinIntake: "Protein Intake"
         case .waterIntake: "Water Intake"
         case .timeInDaylight: "Time in Daylight"
@@ -35,7 +35,7 @@ public extension TargetMetric {
     var systemImage: String {
         switch self {
         case .none: "xmark.app"
-        case .calories: "flame"
+        case .calories: "carrot.fill"
         case .proteinIntake: "fork.knife"
         case .waterIntake: "waterbottle"
         case .timeInDaylight: "sun.max.fill"
