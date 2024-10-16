@@ -86,7 +86,7 @@ private extension HeartHealthDetailsView {
     }
 
     var selectedFitnessLevelRanges: (Double, Double)? {
-        guard let goal = HealthManager.shared.goalVO2MaxForUser() else { return nil }
+        guard let goal = HealthGoalProvider.shared.goalVO2MaxForUser() else { return nil }
 
         switch selectedFitnessLevelIndex {
         case 0:
@@ -282,7 +282,7 @@ private extension HeartHealthDetailsView {
                     .foregroundStyle(.mutedRed)
                     .interpolationMethod(.catmullRom)
                 }
-                let goal = HealthManager.shared.goalRestingHeartRateForUser()
+                let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
 
                 RuleMark(y: .value("Max RHR", goal.1))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
@@ -319,13 +319,13 @@ private extension HeartHealthDetailsView {
     }
 
     var rhrChartMin: Double {
-        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+        let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
 
         return min(minRestingHeartRate ?? 0, goal.1 - 20)
     }
 
     var rhrChartMax: Double {
-        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+        let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
 
         return max(maxRestingHeartRate ?? 100, goal.1)
     }
@@ -343,7 +343,7 @@ private extension HeartHealthDetailsView {
             return nil
         }
 
-        let goal = HealthManager.shared.goalRestingHeartRateForUser()
+        let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
 
         if restingHeartRate < goal.1 {
             return "A low resting heart rate can be a good indicator of an efficient metabolism, can reduce your risk of heart disease, and help you live longer. For your age and sex, it is recommended your resting heart rate is below \(goal.1.format()) bpm."

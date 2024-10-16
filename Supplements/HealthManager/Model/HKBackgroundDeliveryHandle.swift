@@ -8,7 +8,7 @@
 import Foundation
 import HealthKit
 
-class HKBackgroundDeliveryHandle {
+class HKBackgroundDeliveryHandle: @unchecked Sendable {
     let objectTypes: [HKObjectType]
     let onDeinit: () -> Void
 

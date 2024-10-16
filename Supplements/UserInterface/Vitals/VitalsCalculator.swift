@@ -191,7 +191,7 @@ private extension VitalsCalculator {
         } else {
             vitals.append(.init(id: .exerciseEffectiveness))
         }
-        if HealthManager.shared.sex() == .female {
+        if await HealthManager.shared.sex() == .female {
             if let menstrualSummary {
                 vitals.append(
                     VitalModel(

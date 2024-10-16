@@ -39,26 +39,26 @@ extension BodyCompositionMonthlySummary {
             }
         }
 
-        func rangeDescription(from goals: (Double, Double, Double, Double, Double)) -> String {
+        func rangeDescription(from goals: BodyFatPercentageGoalThresholds) -> String {
             guard let values = rangeValues(from: goals) else { return "" }
 
             return "\(values.lowerBound.formatted(.percent)) - \(values.upperBound.formatted(.percent))"
         }
 
-        func rangeValues(from goals: (Double, Double, Double, Double, Double)) -> ClosedRange<Double>? {
+        func rangeValues(from goals: BodyFatPercentageGoalThresholds) -> ClosedRange<Double>? {
             switch self {
             case .unknown:
                 nil
             case .essentialFat:
-                0...goals.0
+                0...goals.maxEssentialFat
             case .athlete:
-                goals.0...goals.1
+                goals.maxEssentialFat...goals.maxAthleteFat
             case .fit:
-                goals.1...goals.2
+                goals.maxAthleteFat...goals.maxFitFat
             case .healthy:
-                goals.2...goals.3
+                goals.maxFitFat...goals.maxHealthyFat
             case .high:
-                goals.3...1
+                goals.maxHealthyFat...1
             }
         }
     }
@@ -77,7 +77,7 @@ extension BodyCompositionMonthlySummary {
 
     var barLevel: VitalModel.BarLevel? {
         guard let range = details.range,
-              let goal = HealthManager.shared.goalBodyFatPercentage(),
+              let goal = details.goalBodyFatPercentage,
               let bodyFatPercentage = details.bodyFatPercentage
         else { return nil }
 
@@ -89,22 +89,22 @@ extension BodyCompositionMonthlySummary {
         case .essentialFat:
             return VitalModel.BarLevel(
                 level: .medium,
-                proportion: bodyFat.scaledPercent(lower: 0, upper: goal.0)
+                proportion: bodyFat.scaledPercent(lower: 0, upper: goal.maxEssentialFat)
             )
         case .athlete, .fit:
             return VitalModel.BarLevel(
                 level: .optimal,
-                proportion: bodyFat.scaledPercent(lower: goal.2, upper: goal.0)
+                proportion: bodyFat.scaledPercent(lower: goal.maxFitFat, upper: goal.maxEssentialFat)
             )
         case .healthy:
             return VitalModel.BarLevel(
                 level: .high,
-                proportion: bodyFat.scaledPercent(lower: goal.3, upper: goal.2)
+                proportion: bodyFat.scaledPercent(lower: goal.maxHealthyFat, upper: goal.maxFitFat)
             )
         case .high:
             return VitalModel.BarLevel(
                 level: .low,
-                proportion: bodyFat.scaledPercent(lower: goal.4, upper: goal.3)
+                proportion: bodyFat.scaledPercent(lower: goal.maxHighFat, upper: goal.maxHealthyFat)
             )
         }
     }
@@ -153,6 +153,7 @@ extension BodyCompositionMonthlySummary {
 extension BodyCompositionMonthlySummary {
     struct Details: Hashable, Sendable {
         let bodyFatPercentage: HKQuantity?
+        let goalBodyFatPercentage: BodyFatPercentageGoalThresholds?
         let averageBodyMass: HKQuantity?
     }
 }
@@ -161,11 +162,11 @@ extension BodyCompositionMonthlySummary.Details {
 
     var score: Double? {
         guard
-            let goal = HealthManager.shared.goalBodyFatPercentage(),
+            let goal = goalBodyFatPercentage,
             let bodyFatPercentage
         else { return nil }
 
-        return bodyFatPercentage.doubleValue(for: .percent()).scaledPercent(lower: goal.4, upper: goal.3)
+        return bodyFatPercentage.doubleValue(for: .percent()).scaledPercent(lower: goal.maxHighFat, upper: goal.maxHealthyFat)
     }
 
     var hasNoData: Bool {
@@ -174,7 +175,7 @@ extension BodyCompositionMonthlySummary.Details {
 
     var range: BodyCompositionMonthlySummary.PercentageRange? {
         guard
-            let goal = HealthManager.shared.goalBodyFatPercentage(),
+            let goal = goalBodyFatPercentage,
             let bodyFatPercentage
         else {
             if averageBodyMass == nil {
@@ -185,13 +186,13 @@ extension BodyCompositionMonthlySummary.Details {
 
         let percent = bodyFatPercentage.doubleValue(for: .percent())
 
-        if percent < goal.0 {
+        if percent < goal.maxEssentialFat {
             return .essentialFat
-        } else if percent < goal.1 {
+        } else if percent < goal.maxAthleteFat {
             return .athlete
-        } else if percent < goal.2 {
+        } else if percent < goal.maxFitFat {
             return .fit
-        } else if percent < goal.3 {
+        } else if percent < goal.maxHealthyFat {
             return .healthy
         } else {
             return .high

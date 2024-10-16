@@ -31,24 +31,16 @@ struct BodyCompositionDetailsView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                VStack {
-                    bodyMassChart
+            VStack {
+                bodyMassChart
 
-                    bodyFatPercentageChart
+                bodyFatPercentageChart
 
-                    bodyFatPercentageRangePicker
-                }
-                .padding()
-                .background {
-                    Rectangle()
-                        .fill(.background)
-                        .ignoresSafeArea()
-                }
+                bodyFatPercentageRangePicker
 
                 detailsSection
-                    .padding(.horizontal)
             }
+            .padding()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -182,7 +174,7 @@ private extension BodyCompositionDetailsView {
                     .symbolSize(40)
 
                     if 
-                        let goals = HealthManager.shared.goalBodyFatPercentage(),
+                        let goals = viewModel.bodyCompositionSummary?.details.goalBodyFatPercentage,
                         let goal = range.rangeValues(from: goals)
                     {
 
@@ -230,7 +222,7 @@ private extension BodyCompositionDetailsView {
 
     @ViewBuilder
     var bodyFatPercentageRangePicker: some View {
-        if let goal = HealthManager.shared.goalBodyFatPercentage() {
+        if let goal = HealthGoalProvider.shared.goalBodyFatPercentage() {
             Button {
                 selectedRangeIndex = (selectedRangeIndex + 1) % ranges.count
                 feedbackGenerator.impactOccurred()

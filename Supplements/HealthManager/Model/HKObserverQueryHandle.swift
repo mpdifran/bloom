@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import HealthKit
+@preconcurrency import HealthKit
 
-class HKObserverQueryHandle {
+class HKObserverQueryHandle: @unchecked Sendable {
     let queries: [HKObserverQuery]
     weak var healthStore: HKHealthStore?
 

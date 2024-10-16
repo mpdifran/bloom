@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import EventKit
+@preconcurrency import EventKit
 
 extension EKEventStore {
 

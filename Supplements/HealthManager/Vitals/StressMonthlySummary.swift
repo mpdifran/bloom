@@ -267,12 +267,34 @@ extension StressMonthlySummary.Details {
 
         guard trailingSystolicValues.isNotEmpty, trailingDiastolicValues.isNotEmpty else { return nil }
 
-        let bloodPressureStressScore = HealthManager.shared.bloodPressureStressScore(
+        let bloodPressureStressScore = bloodPressureStressScore(
             systolic: trailingSystolicValues.average(keyPath: \.self),
             diastolic: trailingDiastolicValues.average(keyPath: \.self)
         )
 
         return bloodPressureStressScore
+    }
+
+    func bloodPressureStressScore(systolic: Double , diastolic: Double) -> Double {
+        let systolicScore: Double
+        if systolic <= 90 {
+            systolicScore = systolic.scaledPercent(lower: 90, upper: 70)
+        } else if systolic <= 120 {
+            systolicScore = 0
+        } else {
+            systolicScore = (1 - systolic.scaledPercent(lower: 180, upper: 120)) * -1
+        }
+
+        let diastolicScore: Double
+        if diastolic <= 60 {
+            diastolicScore = diastolic.scaledPercent(lower: 60, upper: 40)
+        } else if diastolic <= 80 {
+            diastolicScore = 0
+        } else {
+            diastolicScore = (1 - diastolic.scaledPercent(lower: 110, upper: 80)) * -1
+        }
+
+        return [systolicScore, diastolicScore].average(keyPath: \.self)
     }
 
     func sleepStressLevel(for date: Date) -> Double? {

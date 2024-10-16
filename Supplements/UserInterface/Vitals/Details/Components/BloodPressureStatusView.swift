@@ -59,7 +59,7 @@ struct BloodPressureStatusView: View {
                     x: .value("Diastolic", diastolic),
                     y: .value("Systolic", systolic)
                 )
-                .foregroundStyle(HealthManager.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).color)
+                .foregroundStyle(HealthGoalProvider.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).color)
             }
             .chartXScale(domain: 40...120, range: .plotDimension)
             .chartYScale(domain: 70...200, range: .plotDimension)
@@ -81,7 +81,7 @@ struct BloodPressureStatusView: View {
             }
             .chartForegroundStyleScale([
                 "Last Month": .gray,
-                "This Month": HealthManager.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).color
+                "This Month": HealthGoalProvider.shared.bloodPressureCategory(systolic: systolic, diastolic: diastolic).color
             ])
             .aspectRatio(contentMode: .fit)
 
@@ -95,7 +95,7 @@ struct BloodPressureStatusView: View {
         .padding()
         .onAppear {
             feedbackGenerator.prepare()
-            let userCategory = HealthManager.shared.bloodPressureCategory(
+            let userCategory = HealthGoalProvider.shared.bloodPressureCategory(
                 systolic: systolic,
                 diastolic: diastolic
             )

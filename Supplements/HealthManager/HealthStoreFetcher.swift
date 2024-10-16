@@ -6,15 +6,71 @@
 //
 
 import Foundation
-import HealthKit
+@preconcurrency import HealthKit
 import BloomFoundation
 
-final class HealthStoreFetcher: Sendable {
+private extension TimeInterval {
+    static let maxSleepGroupTimeDistance: TimeInterval = 7200 // 2 hours
+    static let maxMenstruationTimeGap: TimeInterval = TimeInterval(60 * 60 * 24 * 2) // 2 days
+}
+
+final actor HealthStoreFetcher {
     static let shared = HealthStoreFetcher()
 
     private let healthStore = HKHealthStore()
+    private var backgroundDeliveryReferenceCounts = [HKObjectType : Int]()
 
     private init() { }
+}
+
+// MARK: Background Delivery
+
+extension HealthStoreFetcher {
+
+    func enableBackgroundDelivery(
+        objectType: HKObjectType,
+        frequency: HKUpdateFrequency = .immediate
+    ) -> HKBackgroundDeliveryHandle {
+        enableBackgroundDelivery(objectTypes: [objectType], frequency: frequency)
+    }
+
+    func enableBackgroundDelivery(
+        objectTypes: [HKObjectType],
+        frequency: HKUpdateFrequency = .immediate
+    ) -> HKBackgroundDeliveryHandle {
+
+        for objectType in objectTypes {
+            print("Health Background Delivery Ref Counts: Enabling delivery for \(objectType).")
+            // TODO: We should check the existing frequency and make sure we update it only if it's more often.
+            healthStore.enableBackgroundDelivery(objectType: objectType, frequency: frequency)
+            backgroundDeliveryReferenceCounts[objectType, default: 0] += 1
+        }
+
+        return HKBackgroundDeliveryHandle(objectTypes: objectTypes) { [weak self] in
+            Task { @Sendable [weak self] in
+                await self?.decreaseCount(for: objectTypes)
+            }
+        }
+    }
+
+    private func decreaseCount(for objectTypes: [HKObjectType]) {
+        for objectType in objectTypes {
+            var refCount = backgroundDeliveryReferenceCounts[objectType, default: 0]
+
+            refCount -= 1
+
+            if refCount <= 0 {
+                print("Health Background Delivery Ref Counts: Disabling delivery for \(objectType).")
+                healthStore.disableBackgroundDelivery(for: objectType) { success, error in
+                    if let error {
+                        print(error)
+                    }
+                }
+            }
+
+            backgroundDeliveryReferenceCounts[objectType] = max(refCount, 0)
+        }
+    }
 }
 
 // MARK: Fetching Data
@@ -805,10 +861,12 @@ extension HealthStoreFetcher {
 
     func fetchBodyCompositionSummaryDetails(dateRange: DateRange) async -> BodyCompositionMonthlySummary.Details {
         let bodyFatPercentage = try? await healthStore.fetchQuantity(for: .bodyFatPercentage, dateRange: dateRange)
+        let goalBodyFatPercentage = await HealthGoalProvider.shared.goalBodyFatPercentage()
         let bodyMass = try? await healthStore.fetchQuantity(for: .bodyMass, dateRange: dateRange)
 
         return BodyCompositionMonthlySummary.Details(
             bodyFatPercentage: bodyFatPercentage,
+            goalBodyFatPercentage: goalBodyFatPercentage,
             averageBodyMass: bodyMass
         )
     }

@@ -11,7 +11,7 @@ import DataContainer
 import HealthKit
 import TelemetryDeck
 
-actor HabitsFactory {
+final actor HabitsFactory {
     static let shared = HabitsFactory()
 
     private init() { }
@@ -125,7 +125,7 @@ private extension HabitsFactory {
             return nil
         }
 
-        if HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
+        if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
             var proposedHabits = [ProposedHabit]()
             if let habit = activeHabits.first(where: { $0.targetMetric == .calories }) {
                 let calorieHabit = ProposedHabit(
@@ -166,8 +166,8 @@ private extension HabitsFactory {
         // Calories
         let basalEnergy = await VitalsCalculator.shared.nutritionSummary?.details.basalEnergyBurned
         let activeEnergy = await VitalsCalculator.shared.nutritionSummary?.details.activeEnergyBurned
-        let activityLevel = await VitalsCalculator.shared.activityLevelSummary?.details.activityLevel ??
-            HealthManager.shared.userReportedActivityLevel
+        let userReportedActivityLevel = await HealthManager.shared.userReportedActivityLevel
+        let activityLevel = await VitalsCalculator.shared.activityLevelSummary?.details.activityLevel ?? userReportedActivityLevel
 
         let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
 

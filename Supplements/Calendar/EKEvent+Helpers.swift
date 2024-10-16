@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import EventKit
+@preconcurrency import EventKit
 
 extension EKEvent: @retroactive Identifiable {
     public var id: String { eventIdentifier }
@@ -32,54 +32,42 @@ extension EKEvent {
 }
 
 extension EKEvent {
-    static var preview = {
-        let event = CalendarManager.shared.createEvent()
+    static let preview = CalendarManager.shared.createEvent().with {
+        $0.title = "Preview Event"
+        $0.availability = .busy
+        $0.startDate = Date.now.addingTimeInterval(-3600)
+        $0.endDate = Date.now
+        $0.calendar = CalendarManager.shared.eventStore.defaultCalendarForNewEvents
 
-        event.title = "Preview Event"
-        event.availability = .busy
-        event.startDate = Date.now.addingTimeInterval(-3600)
-        event.endDate = Date.now
-        event.calendar = CalendarManager.shared.eventStore.defaultCalendarForNewEvents
-
-        try? CalendarManager.shared.eventStore.save(event, span: .thisEvent)
+        try? CalendarManager.shared.eventStore.save($0, span: .thisEvent)
         try? CalendarManager.shared.eventStore.commit()
+    }
 
-        return event
-    }()
-
-    static var futurePreview = {
-        let event = CalendarManager.shared.createEvent()
-
+    static let futurePreview = CalendarManager.shared.createEvent().with {
         let calendar = EKCalendar(for: .event, eventStore: CalendarManager.shared.eventStore)
         calendar.cgColor = UIColor(red: 1, green: 0, blue: 0.5, alpha: 1).cgColor
 
-        event.title = "Future Preview Event"
-        event.availability = .busy
-        event.startDate = Date.now.addingTimeInterval(1600)
-        event.endDate = Date.now.addingTimeInterval(5200)
-        event.calendar = calendar
-        event.structuredLocation = .init(title: "Home")
+        $0.title = "Future Preview Event"
+        $0.availability = .busy
+        $0.startDate = Date.now.addingTimeInterval(1600)
+        $0.endDate = Date.now.addingTimeInterval(5200)
+        $0.calendar = calendar
+        $0.structuredLocation = .init(title: "Home")
 
         try? CalendarManager.shared.eventStore.saveCalendar(calendar, commit: false)
-        try? CalendarManager.shared.eventStore.save(event, span: .thisEvent)
+        try? CalendarManager.shared.eventStore.save($0, span: .thisEvent)
         try? CalendarManager.shared.eventStore.commit()
+    }
 
-        return event
-    }()
+    static let allDayPreview = CalendarManager.shared.createEvent().with {
+        $0.title = "All Day Event"
+        $0.availability = .busy
+        $0.startDate = Date.now
+        $0.endDate = Date.now.addingTimeInterval(3600 * 24)
+        $0.isAllDay = true
+        $0.calendar = CalendarManager.shared.eventStore.defaultCalendarForNewEvents
 
-    static var allDayPreview = {
-        let event = CalendarManager.shared.createEvent()
-
-        event.title = "All Day Event"
-        event.availability = .busy
-        event.startDate = Date.now
-        event.endDate = Date.now.addingTimeInterval(3600 * 24)
-        event.isAllDay = true
-        event.calendar = CalendarManager.shared.eventStore.defaultCalendarForNewEvents
-
-        try? CalendarManager.shared.eventStore.save(event, span: .thisEvent)
+        try? CalendarManager.shared.eventStore.save($0, span: .thisEvent)
         try? CalendarManager.shared.eventStore.commit()
-
-        return event
-    }()
+    }
 }

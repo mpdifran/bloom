@@ -319,7 +319,7 @@ extension NutritionMonthlySummary.Details {
     var proteinCategory: NutritionMonthlySummary.NutrientCategory? {
         guard let average = averageProtein, let dietaryEnergy else { return nil }
 
-        let goal = HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy()
+        let goal = HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy()
 
         let calories = average.doubleValue(for: .gram()) * .caloriesPerGramOfProtein
         let percent = calories / dietaryEnergy.doubleValue(for: .largeCalorie())
@@ -336,7 +336,7 @@ extension NutritionMonthlySummary.Details {
     var proteinScore: Double? {
         guard let average = averageProtein, let dietaryEnergy, average.doubleValue(for: .gram()) >= 1 else { return nil }
 
-        let goal = HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy()
+        let goal = HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy()
 
         let calories = average.doubleValue(for: .gram()) * .caloriesPerGramOfProtein
         let percent = calories / dietaryEnergy.doubleValue(for: .largeCalorie())
@@ -347,7 +347,7 @@ extension NutritionMonthlySummary.Details {
     var carbohydratesCategory: NutritionMonthlySummary.NutrientCategory? {
         guard let average = averageCarbohydrates, let dietaryEnergy else { return nil }
 
-        let goal = HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy()
+        let goal = HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy()
 
         let calories = average.doubleValue(for: .gram()) * .caloriesPerGramOfCarbs
         let percent = calories / dietaryEnergy.doubleValue(for: .largeCalorie())
@@ -364,7 +364,7 @@ extension NutritionMonthlySummary.Details {
     var carbohydratesScore: Double? {
         guard let average = averageCarbohydrates, let dietaryEnergy, average.doubleValue(for: .gram()) >= 1 else { return nil }
 
-        let goal = HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy()
+        let goal = HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy()
 
         let calories = average.doubleValue(for: .gram()) * .caloriesPerGramOfCarbs
         let percent = calories / dietaryEnergy.doubleValue(for: .largeCalorie())
@@ -375,7 +375,7 @@ extension NutritionMonthlySummary.Details {
     var fatCategory: NutritionMonthlySummary.NutrientCategory? {
         guard let average = averageFat, let dietaryEnergy else { return nil }
 
-        let goal = HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy()
+        let goal = HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy()
 
         let calories = average.doubleValue(for: .gram()) * .caloriesPerGramOfFat
         let percent = calories / dietaryEnergy.doubleValue(for: .largeCalorie())
@@ -392,7 +392,7 @@ extension NutritionMonthlySummary.Details {
     var fatScore: Double? {
         guard let average = averageFat, let dietaryEnergy, average.doubleValue(for: .gram()) >= 1 else { return nil }
 
-        let goal = HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy()
+        let goal = HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy()
 
         let calories = average.doubleValue(for: .gram()) * .caloriesPerGramOfFat
         let percent = calories / dietaryEnergy.doubleValue(for: .largeCalorie())
@@ -417,7 +417,7 @@ extension NutritionMonthlySummary.Details {
         guard
             let average = averageFiber?.doubleValue(for: .gram()),
             average > 0,
-            let goal = HealthManager.shared.recommendedMinDailyIntakeForFiber()?.doubleValue(for: .gram())
+            let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber()?.doubleValue(for: .gram())
         else { return nil }
 
         return average.scaledPercent(lower: 0, upper: goal)
@@ -427,7 +427,7 @@ extension NutritionMonthlySummary.Details {
         guard 
             let average = averageSugar?.doubleValue(for: .gram()),
             average > 0,
-            let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar()?.doubleValue(for: .gram())
+            let goal = HealthGoalProvider.shared.recommendedMaxDailyIntakeForSugar()?.doubleValue(for: .gram())
         else { return nil }
 
         return average.scaledPercent(lower: goal * 2, upper: goal)

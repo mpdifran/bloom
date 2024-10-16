@@ -21,7 +21,9 @@ final class HabitDailyUpdateCellViewModel: ObservableObject {
 
     init(habit: Habit) {
         self.habit = habit
-        observeValues()
+        Task {
+            await observeValues()
+        }
     }
 
     private var observationHandler: HKObserverQueryHandle?
@@ -76,8 +78,8 @@ extension HabitDailyUpdateCellViewModel {
 
 private extension HabitDailyUpdateCellViewModel {
 
-    func observeValues() {
-        backgroundHandler = HealthManager.shared.enableBackgroundDelivery(
+    func observeValues() async {
+        backgroundHandler = await HealthStoreFetcher.shared.enableBackgroundDelivery(
             objectTypes: habit.targetMetric.sampleTypes,
             frequency: .hourly
         )

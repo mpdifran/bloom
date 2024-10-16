@@ -154,7 +154,7 @@ extension HeartHealthMonthlySummary.Details {
     }
 
     var cardioFitnessLevel: HeartHealthMonthlySummary.CardioFitnessLevel? {
-        guard let goal = HealthManager.shared.goalVO2MaxForUser(), let averageVO2Max else { return nil }
+        guard let goal = HealthGoalProvider.shared.goalVO2MaxForUser(), let averageVO2Max else { return nil }
 
         let vo2Max = averageVO2Max.doubleValue(for: .vo2Max())
 
@@ -197,7 +197,7 @@ extension HeartHealthMonthlySummary.Details {
 private extension HeartHealthMonthlySummary.Details {
 
     var vo2MaxScore: Double? {
-        if let goal = HealthManager.shared.goalVO2MaxForUser() {
+        if let goal = HealthGoalProvider.shared.goalVO2MaxForUser() {
             return averageVO2Max?.doubleValue(for: .vo2Max()).scaledPercent(lower: goal.2, upper: goal.1)
         }
         return nil
@@ -211,7 +211,7 @@ private extension HeartHealthMonthlySummary.Details {
     }
 
     var restingHeartRateScore: Double? {
-        let (_, max) = HealthManager.shared.goalRestingHeartRateForUser()
+        let (_, max) = HealthGoalProvider.shared.goalRestingHeartRateForUser()
 
         return averageRestingHeartRate?.doubleValue(for: .bpm()).scaledPercent(lower: max + 10, upper: max)
     }

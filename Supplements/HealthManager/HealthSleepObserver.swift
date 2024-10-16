@@ -23,8 +23,8 @@ final actor HealthSleepObserver {
 
 extension HealthSleepObserver {
 
-    func observeSleep() {
-        sleepBackgroundDeliveryHandle = HealthManager.shared.enableBackgroundDelivery(
+    func observeSleep() async {
+        sleepBackgroundDeliveryHandle = await HealthStoreFetcher.shared.enableBackgroundDelivery(
             objectType: HKCategoryType(.sleepAnalysis),
             frequency: .immediate
         )

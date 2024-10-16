@@ -180,8 +180,8 @@ private extension NutritionDetailsView {
                     quantityString: macros.protein.displayString(for: .gram()),
                     unitString: "%",
                     value: (macros.proteinPercent * 100),
-                    minValue: HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy().lowerBound * 100,
-                    maxValue: HealthManager.shared.recommendedDailyProteinPercentOfDietaryEnergy().upperBound * 100
+                    minValue: HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy().lowerBound * 100,
+                    maxValue: HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy().upperBound * 100
                 )
                 .tint(.protein)
 
@@ -192,8 +192,8 @@ private extension NutritionDetailsView {
                     quantityString: macros.carbohydrates.displayString(for: .gram()),
                     unitString: "%",
                     value: (macros.carbsPercent * 100),
-                    minValue: HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().lowerBound * 100,
-                    maxValue: HealthManager.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().upperBound * 100
+                    minValue: HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().lowerBound * 100,
+                    maxValue: HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().upperBound * 100
                 )
                 .tint(.carbohydrates)
 
@@ -204,8 +204,8 @@ private extension NutritionDetailsView {
                     quantityString: macros.fat.displayString(for: .gram()),
                     unitString: "%",
                     value: (macros.fatPercent * 100),
-                    minValue: HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy().lowerBound * 100,
-                    maxValue: HealthManager.shared.recommendedDailyFatPercentOfDietaryEnergy().upperBound * 100
+                    minValue: HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy().lowerBound * 100,
+                    maxValue: HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy().upperBound * 100
                 )
                 .tint(.fat)
             }
@@ -383,7 +383,7 @@ private extension NutritionDetailsView {
                         .foregroundStyle(.fiber)
                     }
 
-                    if let goal = HealthManager.shared.recommendedMinDailyIntakeForFiber() {
+                    if let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber() {
                         RuleMark(
                             y: .value("Min Fiber", goal.doubleValue(for: .gram()))
                         )
@@ -429,7 +429,7 @@ private extension NutritionDetailsView {
                         .foregroundStyle(.sugar)
                     }
 
-                    if let goal = HealthManager.shared.recommendedMaxDailyIntakeForSugar() {
+                    if let goal = HealthGoalProvider.shared.recommendedMaxDailyIntakeForSugar() {
                         RuleMark(
                             y: .value("Max Sugar", goal.doubleValue(for: .gram()))
                         )
