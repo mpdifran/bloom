@@ -19,6 +19,8 @@ struct BodyWeightActionCardView: View {
     @FocusState private var isFocused: Bool
     @ObservedObject private var healthManager = HealthManager.shared
 
+    private var unitPreferences = HealthUnitPreferences.shared
+
     var body: some View {
         ActionCardView(
             title: "Body Weight",
@@ -33,7 +35,7 @@ struct BodyWeightActionCardView: View {
                     TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
                         .selectAllTextOnBeginEditing()
                         .focused($isFocused)
-                    Text("lbs")
+                    Text(unitPreferences.weightUnit.sensibleUnitString)
                 }
                 .frame(width: 200)
                 .fontDesign(.rounded)
@@ -60,9 +62,10 @@ private extension BodyWeightActionCardView {
     func logWeight() async -> Bool {
         do {
             let date = Date.now
+            let quantity = HKQuantity(unit: unitPreferences.weightUnit, doubleValue: weight)
             let sample = HKQuantitySample(
                 type: .init(.bodyMass),
-                quantity: .init(unit: .pound(), doubleValue: weight),
+                quantity: quantity,
                 start: date,
                 end: date,
                 metadata: [

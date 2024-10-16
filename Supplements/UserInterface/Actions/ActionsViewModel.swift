@@ -111,8 +111,9 @@ extension ActionsView.ViewModel {
                 }
             } else {
                 await MainActor.run {
+                    let emptyQuantity = HKQuantity(unit: .literUnit(with: .milli), doubleValue: 0)
                     self.waterDetails = ActionLatestValueDetails(
-                        displayString: "0 mL",
+                        displayString: emptyQuantity.displayString(for: .literUnit(with: .milli)),
                         timestampString: "Today"
                     )
                 }

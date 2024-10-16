@@ -12,12 +12,18 @@ struct AddWaterGlassSizeView: View {
 
     let onAdd: (WaterGlassSizeModel) -> Void
 
+    init(onAdd: @escaping (WaterGlassSizeModel) -> Void) {
+        self.onAdd = onAdd
+    }
+
     @State private var name: String = ""
     @State private var quantityValue: Double = 0
 
     @FocusState private var isFocused: Bool
 
     @Environment(\.dismiss) var dismiss
+
+    private var unitPreferences = HealthUnitPreferences.shared
 
     var body: some View {
         NavigationStack {
@@ -41,7 +47,7 @@ struct AddWaterGlassSizeView: View {
                             TextField("", value: $quantityValue, formatter: NumberFormatter.noDecimalPlaces)
                                 .selectAllTextOnBeginEditing()
                                 .focused($isFocused)
-                            Text("mL")
+                            Text(unitPreferences.liquidVolumeUnit.sensibleUnitString)
                                 .foregroundStyle(.secondary)
                         }
                         .frame(width: 200)
@@ -70,7 +76,7 @@ struct AddWaterGlassSizeView: View {
                     let size = WaterGlassSizeModel(
                         name: name,
                         quantityValue: quantityValue,
-                        unit: .literUnit(with: .milli)
+                        unit: unitPreferences.liquidVolumeUnit
                     )
                     onAdd(size)
                     dismiss()
