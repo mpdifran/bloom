@@ -112,7 +112,9 @@ struct ChatView: View {
                 }
                 .onChange(of: viewModel.chatHistory.count) { (_, _) in
                     Delay(300) {
-                        scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
+                        MainTask {
+                            scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
+                        }
                     }
                 }
                 .onChange(of: viewModel.isWaitingForResponse) { (_, _) in

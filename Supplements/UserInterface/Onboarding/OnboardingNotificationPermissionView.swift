@@ -55,11 +55,13 @@ struct OnboardingNotificationPermissionView: View {
         }
         .animation(.easeIn(duration: 0.5), value: showNotification)
         .animation(.easeIn(duration: 0.5), value: showNotification2)
-        .onAppear {
-            Delay(1000) {
+        .task {
+            await Delay(1000)
+            await MainActor.run {
                 showNotification = true
             }
-            Delay(1800) {
+            await Delay(1800)
+            await MainActor.run {
                 showNotification2 = true
             }
         }

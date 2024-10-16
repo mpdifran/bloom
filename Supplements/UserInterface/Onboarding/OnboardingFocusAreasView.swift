@@ -108,13 +108,18 @@ struct OnboardingFocusAreasView: View {
                 proposedFocusAreas = result.proposedFocusAreas
                 proposedHabits = result.proposedHabits
                 proposedToDos = result.proposedToDos
+            }
 
-                Delay(1000) {
-                    isCalculatingGoals = false
-                }
-                Delay(3000) {
-                    showContinue = true
-                }
+            await Delay(1000)
+
+            await MainActor.run {
+                isCalculatingGoals = false
+            }
+
+            await Delay(2000)
+
+            await MainActor.run {
+                showContinue = true
             }
         }
     }

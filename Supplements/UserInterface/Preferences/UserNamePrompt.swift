@@ -56,8 +56,12 @@ struct UserNamePrompt: View {
                 Button {
                     didContinue.toggle()
                     dismiss()
-                    Delay(300) {
-                        onContinue()
+                    Task {
+                        await Delay(300)
+
+                        await MainActor.run {
+                            onContinue()
+                        }
                     }
                 } label: {
                     Text("Continue")

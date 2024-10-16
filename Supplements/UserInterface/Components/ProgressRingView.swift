@@ -104,8 +104,9 @@ private extension ProgressRingView {
                     color: .deepSleep
                 )
             }
-            .onAppear {
-                Delay(2000) {
+            .task {
+                await Delay(2000)
+                await MainActor.run {
                     remSleepPercent = 0.96
                     coreSleepPercent = 1.2
                     deepSleepPercent = 0.23

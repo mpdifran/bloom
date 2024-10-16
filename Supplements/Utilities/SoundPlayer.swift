@@ -30,12 +30,14 @@ enum SoundPlayer {
         AudioServicesPlaySystemSound(soundID)
     }
 
+    @MainActor
     static func playSendMessage() {
         guard UIApplication.shared.applicationState == .active else { return }
 
         AudioServicesPlaySystemSound(1004)
     }
 
+    @MainActor
     static func playReceiveMessage() {
         guard UIApplication.shared.applicationState == .active else { return }
 

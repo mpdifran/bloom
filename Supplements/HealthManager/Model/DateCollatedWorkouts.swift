@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import HealthKit
+@preconcurrency import HealthKit
 
-struct DateCollatedWorkouts: Identifiable, Hashable {
+struct DateCollatedWorkouts: Identifiable, Hashable, Sendable {
     var id: Int { hashValue }
 
     let date: Date

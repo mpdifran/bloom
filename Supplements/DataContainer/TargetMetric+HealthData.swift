@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-18.
 //
 
-import HealthKit
+@preconcurrency import HealthKit
 import DataContainer
 import BloomFoundation
 

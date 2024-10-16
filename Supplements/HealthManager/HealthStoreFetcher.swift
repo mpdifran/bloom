@@ -861,7 +861,7 @@ extension HealthStoreFetcher {
 
     func fetchBodyCompositionSummaryDetails(dateRange: DateRange) async -> BodyCompositionMonthlySummary.Details {
         let bodyFatPercentage = try? await healthStore.fetchQuantity(for: .bodyFatPercentage, dateRange: dateRange)
-        let goalBodyFatPercentage = await HealthGoalProvider.shared.goalBodyFatPercentage()
+        let goalBodyFatPercentage = HealthGoalProvider.shared.goalBodyFatPercentage()
         let bodyMass = try? await healthStore.fetchQuantity(for: .bodyMass, dateRange: dateRange)
 
         return BodyCompositionMonthlySummary.Details(

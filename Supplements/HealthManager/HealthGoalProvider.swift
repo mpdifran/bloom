@@ -796,9 +796,6 @@ extension HealthGoalProvider {
     func recommendedDailyIntakeForSodium() async -> HKQuantityRange? {
         guard let age = healthStore.age() else { return nil }
 
-        let isPregnant = await HealthManager.shared.isPregnant
-        let isBreastfeeding = await HealthManager.shared.isBreastfeeding
-
         if age < 4 {
             return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...1000)
         } else if age < 9 {

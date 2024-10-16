@@ -124,10 +124,13 @@ private extension ProgressArcView {
                 )
             }
             .onAppear {
-                Delay(2000) {
-                    remSleepPercent = 0.7
-                    coreSleepPercent = 0.3
-                    deepSleepPercent = 0
+                Task {
+                    await Delay(2000)
+                    await MainActor.run {
+                        remSleepPercent = 0.7
+                        coreSleepPercent = 0.3
+                        deepSleepPercent = 0
+                    }
                 }
             }
         }

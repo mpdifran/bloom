@@ -7,6 +7,16 @@
 
 import Foundation
 
-public func Delay(_ milliseconds: Int, _ closure: @escaping () -> Void) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(milliseconds), execute: closure)
+public func Delay(_ milliseconds: Int, _ closure: @escaping @Sendable @MainActor () -> Void) {
+    Task {
+        await Delay(milliseconds)
+        await MainActor.run {
+            closure()
+        }
+    }
+}
+
+public func Delay(_ milliseconds: Int) async {
+    let nanoseconds = UInt64(milliseconds) * 1_000_000  // Convert milliseconds to nanoseconds
+    try? await Task.sleep(nanoseconds: nanoseconds)
 }
