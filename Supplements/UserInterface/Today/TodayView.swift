@@ -76,11 +76,21 @@ struct TodayView: View {
                     }
 
                     if computedShowWeightWidget {
-                        BodyWeightTodayWidgetView()
+                        NavigationLink {
+                            BodyCompositionDetailsView()
+                        } label: {
+                            BodyWeightTodayWidgetView()
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     if showNutritionWidget {
-                        NutritionHabitTodayWidgetView()
+                        NavigationLink {
+                            NutritionDetailsView()
+                        } label: {
+                            NutritionHabitTodayWidgetView()
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     if suggestedHabits.isNotEmpty {

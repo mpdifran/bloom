@@ -114,16 +114,17 @@ private extension BodyCompositionDetailsView {
                             x: .value("Date", sample.date, unit: .day),
                             y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
                         )
-                        .foregroundStyle(.vitalGood)
+                        .foregroundStyle(.tint)
 
                         PointMark(
                             x: .value("Date", sample.date, unit: .day),
                             y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
                         )
-                        .foregroundStyle(.vitalGood)
+                        .foregroundStyle(.tint)
                         .symbolSize(40)
                     }
                 }
+                .tint(.mutedIndigo)
                 .chartYScale(domain: bodyMassChartMin...bodyMassChartMax, range: .plotDimension)
                 .frame(height: 200)
                 .chartXAxis {
