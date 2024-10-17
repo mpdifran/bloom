@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BloomPlusFeaturesListView: View {
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 30) {
                 VStack(alignment: .leading) {
                     Text("Bloom Plus")
@@ -19,24 +19,26 @@ struct BloomPlusFeaturesListView: View {
                     Text("Your personal health coach in your pocket.")
                         .foregroundStyle(.secondary)
                 }
+                .padding(.horizontal)
 
-                VStack(alignment: .leading) {
-                    Text("$17 / Month")
-                        .bold()
-                        .font(.title)
-                    Text("$199.99 a year")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                TabView {
+                    BloomPlusOfferView(
+                        mainPrice: "$119.99",
+                        mainPricePeriod: "/ Year",
+                        subtitlePrice: "Try FREE for 3 Weeks"
+                    )
+                    .padding()
+
+                    BloomPlusOfferView(
+                        mainPrice: "$15.99",
+                        mainPricePeriod: "/ Month",
+                        subtitlePrice: ""
+                    )
+                    .padding()
                 }
-
-                Label("Personalized goals tailored for you", systemImage: "star")
-                    .foregroundStyle(.secondary)
-
-                Label("Lose weight in a sustainable way", systemImage: "gauge.open.with.lines.needle.33percent.and.arrowtriangle")
-                    .foregroundStyle(.secondary)
-
-                Label("Quantify your health", systemImage: "bolt.heart")
-                    .foregroundStyle(.secondary)
+                .aspectRatio(1.2, contentMode: .fit)
+                .tabViewStyle(.page)
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             }
             Spacer(minLength: 0)
         }

@@ -44,12 +44,7 @@ struct PreferencesView: View {
         }
         .fullScreenCover($presentedFullScreenView)
         .sheet($presentedSheet)
-        .safeAreaInset(edge: .top) {
-            Rectangle()
-                .fill(.thickMaterial)
-                .ignoresSafeArea()
-                .frame(height: 0)
-        }
+        .topSafeAreaBlur()
         .onAppear {
             Task {
                 shouldPromptForNotificationPermissions = await NotificationManager.shared.shouldRequestAuthorization()

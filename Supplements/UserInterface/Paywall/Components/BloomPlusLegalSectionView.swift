@@ -9,26 +9,39 @@ import SwiftUI
 
 struct BloomPlusLegalSectionView: View {
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 20) {
-                Button("Restore Purchase", systemImage: "arrow.clockwise") {
+            VStack {
+                Button {
 
+                } label: {
+                    LabeledContent("Restore Purchase") {
+                        Image(systemName: "arrow.clockwise")
+                            .foregroundStyle(.mutedIndigo)
+                    }
+                    .cardContainer(fill: .background.secondary)
                 }
 
-                Button("Privacy Policy", systemImage: "hand.raised") {
+                Button {
 
+                } label: {
+                    LabeledContent("Privacy Policy") {
+                        Image(systemName: "hand.raised.fill")
+                            .foregroundStyle(.mutedBlue)
+                    }
+                    .cardContainer(fill: .background.secondary)
                 }
 
-                Button("Terms of Service", systemImage: "list.clipboard") {
+                Button {
 
+                } label: {
+                    LabeledContent("Terms of Service") {
+                        Image(systemName: "list.clipboard.fill")
+                            .foregroundStyle(.mutedPink)
+                    }
+                    .cardContainer(fill: .background.secondary)
                 }
             }
-            .foregroundStyle(.secondary)
             .buttonStyle(.plain)
             .bold()
-
-            Spacer()
-        }
     }
 }
 

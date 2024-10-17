@@ -48,9 +48,11 @@ private extension BloomPlusPaywall {
 
     var contentView: some View {
         VStack {
-            VStack(spacing: 30) {
-                BloomPlusFeaturesListView()
+            BloomPlusFeaturesListView()
+                .padding(.top)
+                .padding(.top)
 
+            VStack(spacing: 30) {
                 Divider()
 
                 BloomPlusUserReviewListView()
@@ -60,12 +62,15 @@ private extension BloomPlusPaywall {
                 BloomPlusLegalSectionView()
             }
             .padding()
-            .padding(.top)
         }
     }
 
     var purchaseShelf: some View {
         VStack {
+            Label("Try FREE for 3 Weeks", systemImage: "heart")
+                .font(.subheadline)
+                .bold()
+
             Button {
 
             } label: {
@@ -76,8 +81,7 @@ private extension BloomPlusPaywall {
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 30)
-                .fill(.thinMaterial)
-                .shadow(color: .mutedBlue.opacity(0.4), radius: 30)
+                .fill(.thickMaterial)
         }
         .padding()
         .transition(.move(edge: .bottom))
