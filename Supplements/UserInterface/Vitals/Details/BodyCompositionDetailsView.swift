@@ -124,6 +124,7 @@ private extension BodyCompositionDetailsView {
                         .symbolSize(40)
                     }
                 }
+                .chartYScale(domain: bodyMassChartMin...bodyMassChartMax, range: .plotDimension)
                 .frame(height: 200)
                 .chartXAxis {
                     AxisMarks(values: .stride(by: .weekOfYear)) { _ in
@@ -152,6 +153,28 @@ private extension BodyCompositionDetailsView {
             }
             .padding(.bottom)
         }
+    }
+
+    var bodyMassChartMin: Double {
+        if
+            let min = bodyMassSamples.min(by: {
+                $0.quantity.doubleValue(for: .pound()) < $1.quantity.doubleValue(for: .pound())
+            })?.quantity.localizedValue(for: .pound())
+        {
+            return min * 0.9
+        }
+        return HKQuantity(unit: .pound(), doubleValue: 100).localizedValue(for: .pound())
+    }
+
+    var bodyMassChartMax: Double {
+        if
+            let max = bodyMassSamples.max(by: {
+                $0.quantity.doubleValue(for: .pound()) < $1.quantity.doubleValue(for: .pound())
+            })?.quantity.localizedValue(for: .pound())
+        {
+            return max * 1.1
+        }
+        return HKQuantity(unit: .pound(), doubleValue: 250).localizedValue(for: .pound())
     }
 
     var bodyFatPercentageChart: some View {

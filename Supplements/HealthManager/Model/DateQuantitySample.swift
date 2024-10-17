@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import HealthKit
+@preconcurrency import HealthKit
 
 struct DateQuantitySample: Identifiable, Hashable, Sendable {
     var id: Int { hashValue }

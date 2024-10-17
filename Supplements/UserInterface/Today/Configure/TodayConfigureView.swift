@@ -20,6 +20,7 @@ struct TodayConfigureView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
+    @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
     @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
 
     @Query private var userAddedHabits: [Habit]
@@ -62,11 +63,12 @@ private extension TodayConfigureView {
 
     var widgetsSection: some View {
         Section {
+            Toggle("Weight Widget", isOn: $showWeightWidget)
             Toggle("Nutrition Widget", isOn: $showNutritionTodayWidget)
         } header: {
             Text("Widgets")
         } footer: {
-            Text("Widgets will only show if they're enabled, and there's a corresponding Focus Area or Habit.")
+            Text("Widgets will only show if they're enabled above, and there's a corresponding Focus Area, Habit, or Health Goal.")
         }
     }
 

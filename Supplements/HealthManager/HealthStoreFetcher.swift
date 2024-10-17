@@ -77,6 +77,10 @@ extension HealthStoreFetcher {
 
 extension HealthStoreFetcher {
 
+    func fetchLatestSample(for quantityType: HKQuantityTypeIdentifier) async -> HKQuantitySample? {
+        (try? await healthStore.fetchLatestSample(for: quantityType)) as? HKQuantitySample
+    }
+
     func fetchTotalQuantity(for quantityType: HKQuantityTypeIdentifier, dateRange: DateRange) async -> HKQuantity? {
         try? await healthStore.fetchQuantity(for: quantityType, dateRange: dateRange, option: .cumulativeSum)
     }

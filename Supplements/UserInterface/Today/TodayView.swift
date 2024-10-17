@@ -42,6 +42,7 @@ struct TodayView: View {
     @State private var presentedFullScreen: AnyView?
     @State private var presentedSheet: AnyView?
 
+    @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
     @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
@@ -72,6 +73,10 @@ struct TodayView: View {
                                     presentedFullScreen = NewUpdateHabitView().asAny
                                 }
                         }
+                    }
+
+                    if computedShowWeightWidget {
+                        BodyWeightTodayWidgetView()
                     }
 
                     if showNutritionWidget {
@@ -158,6 +163,15 @@ struct TodayView: View {
 }
 
 private extension TodayView {
+
+    var computedShowWeightWidget: Bool {
+        guard showWeightWidget else { return false }
+
+        switch HealthManager.shared.healthGoal {
+        case .loseWeight, .gainWeight, .maintainWeight: return true
+        default: return false
+        }
+    }
 
     var showNutritionWidget: Bool {
         guard showNutritionTodayWidget else { return false }

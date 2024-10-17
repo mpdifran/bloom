@@ -42,10 +42,10 @@ extension ActionsView.ViewModel {
             sampleType: HKQuantityType(.bodyMass),
             startDate: Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
         ) {
-            let latestSample = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bodyMass)
-            if let quantitySample = latestSample as? HKQuantitySample {
-                let displayString = await quantitySample.quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)
-                let timestamp = DateFormatter.relativeDateTimeShort.string(from: quantitySample.startDate)
+            let latestSample = await HealthStoreFetcher.shared.fetchLatestSample(for: .bodyMass)
+            if let latestSample {
+                let displayString = await latestSample.quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)
+                let timestamp = DateFormatter.relativeDateTimeShort.string(from: latestSample.startDate)
 
                 await MainActor.run {
                     self.weightDetails = ActionLatestValueDetails(
@@ -65,12 +65,12 @@ extension ActionsView.ViewModel {
             sampleTypes: [HKQuantityType(.bloodPressureSystolic), HKQuantityType(.bloodPressureDiastolic)],
             startDate: Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
         ) {
-            let latestSystolic = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bloodPressureSystolic)
-            let latestDiastolic = try? await HealthManager.shared.healthStore.fetchLatestSample(for: .bloodPressureDiastolic)
+            let latestSystolic = await HealthStoreFetcher.shared.fetchLatestSample(for: .bloodPressureSystolic)
+            let latestDiastolic = await HealthStoreFetcher.shared.fetchLatestSample(for: .bloodPressureDiastolic)
 
             if
-                let systolicQuantitySample = latestSystolic as? HKQuantitySample,
-                let diastolicQuantitySample = latestDiastolic as? HKQuantitySample
+                let systolicQuantitySample = latestSystolic,
+                let diastolicQuantitySample = latestDiastolic
             {
                 let displayString = "\(systolicQuantitySample.quantity.doubleValue(for: .millimeterOfMercury()).format())/\(diastolicQuantitySample.quantity.doubleValue(for: .millimeterOfMercury()).format())"
                 let timestamp = max(systolicQuantitySample.startDate, diastolicQuantitySample.startDate)
