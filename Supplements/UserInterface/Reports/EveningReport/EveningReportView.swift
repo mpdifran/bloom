@@ -25,7 +25,7 @@ struct EveningReportView: View {
 
     @State private var completedTargetMetrics = Set<TargetMetric>()
 
-    private let vitalsViewModel = VitalsViewModel.shared
+    @State private var vitalsViewModel = VitalsViewModel.shared
 
     init() {
         _activeHabits = Query(
