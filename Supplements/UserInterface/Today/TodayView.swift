@@ -52,6 +52,9 @@ struct TodayView: View {
         NavigationStack {
             ScrollView {
                 VStack {
+                    TodaysDateView()
+                        .padding(.bottom)
+
                     TimelineView(.everyMinute) { context in
                         if Calendar.current.isMorning(date: .now) || danieleMode {
                             ReportCell(kind: .morning)
@@ -108,11 +111,6 @@ struct TodayView: View {
                             }
                             .buttonStyle(.plain)
                         }
-                    }
-
-                    if userHabits.isNotEmpty {
-                        SectionTitleView("Habits")
-                            .padding(.horizontal)
 
                         ForEach(userHabits) { habit in
                             NavigationLink {

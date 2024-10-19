@@ -78,14 +78,7 @@ private extension EveningReportView {
 
     @ViewBuilder
     var currentDateSection: some View {
-        VStack(alignment: .leading) {
-            Text("\(DateFormatter.justDayOfWeek.string(from: .now))")
-                .bold()
-                .foregroundStyle(.secondary)
-            Text("\(DateFormatter.justDateLong.string(from: .now))")
-                .font(.title2)
-                .bold()
-        }
+        TodaysDateView()
     }
 
     @ViewBuilder
