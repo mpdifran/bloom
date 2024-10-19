@@ -17,6 +17,14 @@ struct RootView: View {
 
     @Environment(\.dismiss) private var dismiss
 
+    init() {
+        let largeTitleFont = UIFont.systemFont(ofSize: 35, weight: .bold)
+        let regularTitleFont = UIFont.systemFont(ofSize: 17, weight: .bold)
+
+        UINavigationBar.appearance().largeTitleTextAttributes = [.font : largeTitleFont.rounded]
+        UINavigationBar.appearance().titleTextAttributes = [.font : regularTitleFont.rounded]
+    }
+
     var body: some View {
         Group {
             if !hasShownOnboarding {

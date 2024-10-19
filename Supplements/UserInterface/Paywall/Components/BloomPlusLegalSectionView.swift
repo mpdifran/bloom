@@ -15,7 +15,7 @@ struct BloomPlusLegalSectionView: View {
                 } label: {
                     LabeledContent("Restore Purchase") {
                         Image(systemName: "arrow.clockwise")
-                            .foregroundStyle(.mutedIndigo)
+                            .foregroundStyle(.gray)
                     }
                     .cardContainer(fill: .background.secondary)
                 }
@@ -25,7 +25,7 @@ struct BloomPlusLegalSectionView: View {
                 } label: {
                     LabeledContent("Privacy Policy") {
                         Image(systemName: "hand.raised.fill")
-                            .foregroundStyle(.mutedBlue)
+                            .foregroundStyle(.gray)
                     }
                     .cardContainer(fill: .background.secondary)
                 }
@@ -35,7 +35,7 @@ struct BloomPlusLegalSectionView: View {
                 } label: {
                     LabeledContent("Terms of Service") {
                         Image(systemName: "list.clipboard.fill")
-                            .foregroundStyle(.mutedPink)
+                            .foregroundStyle(.gray)
                     }
                     .cardContainer(fill: .background.secondary)
                 }

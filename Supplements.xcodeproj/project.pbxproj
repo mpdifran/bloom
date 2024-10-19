@@ -188,6 +188,8 @@
 		FF70EA042CC183770055E932 /* BodyWeightTodayWidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA032CC183730055E932 /* BodyWeightTodayWidgetViewModel.swift */; };
 		FF70EA062CC1A1620055E932 /* BloomPlusOfferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA052CC1A1620055E932 /* BloomPlusOfferView.swift */; };
 		FF70EA082CC1A4F60055E932 /* View+SafeAreaBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA072CC1A4EB0055E932 /* View+SafeAreaBlur.swift */; };
+		FF70EA0A2CC2D6140055E932 /* BloomPlusLaurelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA092CC2D6140055E932 /* BloomPlusLaurelView.swift */; };
+		FF70EA0C2CC3302E0055E932 /* Font+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA0B2CC330280055E932 /* Font+Rounded.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -684,6 +686,8 @@
 		FF70EA032CC183730055E932 /* BodyWeightTodayWidgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightTodayWidgetViewModel.swift; sourceTree = "<group>"; };
 		FF70EA052CC1A1620055E932 /* BloomPlusOfferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusOfferView.swift; sourceTree = "<group>"; };
 		FF70EA072CC1A4EB0055E932 /* View+SafeAreaBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+SafeAreaBlur.swift"; sourceTree = "<group>"; };
+		FF70EA092CC2D6140055E932 /* BloomPlusLaurelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusLaurelView.swift; sourceTree = "<group>"; };
+		FF70EA0B2CC330280055E932 /* Font+Rounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Rounded.swift"; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1047,6 +1051,7 @@
 				FF70EA052CC1A1620055E932 /* BloomPlusOfferView.swift */,
 				FF1328072CB5BD0900ACF981 /* BloomPlusUserReviewListView.swift */,
 				FF1328092CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift */,
+				FF70EA092CC2D6140055E932 /* BloomPlusLaurelView.swift */,
 				FF13280D2CB5C46D00ACF981 /* BloomPlusLegalSectionView.swift */,
 				FF1327FC2CB5AF9300ACF981 /* PaywallButtonStyle.swift */,
 			);
@@ -1305,6 +1310,7 @@
 				FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */,
 				FF88F1392C7D113A0093D1B4 /* Chart+DateScale.swift */,
 				FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */,
+				FF70EA0B2CC330280055E932 /* Font+Rounded.swift */,
 				FF1E95FD2C0A2FFC004DAD2D /* Collection+Average.swift */,
 				FFAFF4202CAC37D900FAD3C9 /* Collection+Trim.swift */,
 				FFC77AF02C5839FE003E5F85 /* Collection+DataPair.swift */,
@@ -2845,6 +2851,7 @@
 				FFC77B042C5C6571003E5F85 /* ChatBar.swift in Sources */,
 				FF4A21B92C88E11E00278019 /* DateValueSample.swift in Sources */,
 				FF2FB89E2C9DA98A00F57523 /* NewUpdateHabitView.swift in Sources */,
+				FF70EA0A2CC2D6140055E932 /* BloomPlusLaurelView.swift in Sources */,
 				FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */,
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,
 				FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */,
@@ -2858,6 +2865,7 @@
 				FF6AEC962BF17B1400C34621 /* BackgroundTaskScheduler.swift in Sources */,
 				FF70E9FF2CC063C30055E932 /* BodyFatPercentageGoalThresholds.swift in Sources */,
 				FF08828F2C459C57000C1244 /* SleepScoreDetailsView.swift in Sources */,
+				FF70EA0C2CC3302E0055E932 /* Font+Rounded.swift in Sources */,
 				FF6E060E2C9F90A900C4219B /* UserAddedGoalPicker.swift in Sources */,
 				FFB444512BEC3B0600486AD7 /* TypingIndicatorCell.swift in Sources */,
 				FF4CAB042C81441F001A59F3 /* WeatherAlertCell.swift in Sources */,

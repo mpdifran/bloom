@@ -158,7 +158,6 @@ struct TodayView: View {
             .fullScreenCover(isPresented: $tabController.showEveningReport) {
                 EveningReportView()
             }
-            .gradientRootBackground()
         }
         .tabItem {
             Label("Today", systemImage: "calendar.badge.checkmark")

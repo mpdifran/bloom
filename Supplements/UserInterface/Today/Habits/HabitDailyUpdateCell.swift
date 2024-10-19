@@ -41,6 +41,7 @@ struct HabitDailyUpdateCell: View {
 
                         Text(habit.targetMetric.name)
                             .bold()
+                            .fontDesign(.rounded)
                     }
                 }
 

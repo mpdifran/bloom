@@ -20,6 +20,7 @@ struct NutritionHabitTodayWidgetView: View {
             Text("Remaining Today")
                 .font(.subheadline)
                 .bold()
+                .fontDesign(.rounded)
 
             Divider()
 

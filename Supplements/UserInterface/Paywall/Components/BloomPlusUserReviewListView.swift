@@ -18,27 +18,31 @@ struct BloomPlusUserReviewListView: View {
 
             BloomPlusUserTestimonialChatView(
                 testimonial: "I love using Bloom to keep track of my health. It's my new favourite app!",
+                name: "Tori M",
                 position: .leading
+            )
+            .tint(.mutedBlue.lighter(by: 0.2))
+
+            BloomPlusUserTestimonialChatView(
+                testimonial: "I lost 20 pounds in 2 months using Bloom, it's unbelievable!",
+                name: "Katie M",
+                position: .trailing
             )
             .tint(.mutedBlue)
 
             BloomPlusUserTestimonialChatView(
-                testimonial: "I lost 20 pounds in 2 months using Bloom, it's unbelievable!",
-                position: .trailing
-            )
-            .tint(.mutedIndigo)
-
-            BloomPlusUserTestimonialChatView(
-                testimonial: "I love using Bloom to keep track of my health. It's my new favourite app!",
+                testimonial: "This app has changed my life! I love it!",
+                name: "Kaitlyn M",
                 position: .leading
             )
-            .tint(.mutedPurple)
+            .tint(.mutedBlue.darker(by: 0.2))
 
             BloomPlusUserTestimonialChatView(
-                testimonial: "I lost 20 pounds in 2 months using Bloom, it's unbelievable!",
+                testimonial: "Bloom has made me so much more healthy, thank you Team Bloom! ❤️",
+                name: "Clara A",
                 position: .trailing
             )
-            .tint(.mutedPink)
+            .tint(.mutedBlue.darker(by: 0.4))
         }
     }
 }

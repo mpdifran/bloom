@@ -19,6 +19,7 @@ struct BodyWeightTodayWidgetView: View {
                 Text("Weight")
                     .font(.subheadline)
                     .bold()
+                    .fontDesign(.rounded)
 
                 Spacer()
 

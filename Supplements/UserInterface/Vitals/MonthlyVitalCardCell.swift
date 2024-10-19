@@ -26,12 +26,14 @@ struct MonthlyVitalCardCell: View {
             Image(systemName: vital.id.systemImage)
                 .bold()
                 .font(.title)
+                .fontDesign(.rounded)
                 .frame(width: 40)
 
             VStack(alignment: .leading) {
                 Text(vital.id.name)
                     .bold()
                     .font(.headline)
+                    .fontDesign(.rounded)
 
                 Text(vital.subtitle)
                     .font(.subheadline)
@@ -45,23 +47,6 @@ struct MonthlyVitalCardCell: View {
             Spacer()
 
             VStack(alignment: .trailing) {
-//                Group {
-//                    switch vital.trend {
-//                    case .increasing:
-//                        Image(systemName: "chevron.up.circle.fill")
-//                    case .decreasing:
-//                        Image(systemName: "chevron.down.circle.fill")
-//                    case .noTrend:
-//                        Image(systemName: "minus.circle.fill")
-//                            .foregroundStyle(.fill, .fill.secondary)
-//                    }
-//                }
-//                .foregroundStyle(.tint, .tint.tertiary)
-//                .font(.title)
-//                .contentTransition(.symbolEffect)
-//
-//                Spacer()
-
                 if let barLevel = vital.barLevel {
                     VitalStatusBarView(
                         level: .init(barLevel: barLevel.level),

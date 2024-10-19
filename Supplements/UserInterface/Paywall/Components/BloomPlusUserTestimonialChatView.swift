@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BloomPlusUserTestimonialChatView: View {
     let testimonial: String
+    let name: String
     let position: ChatBubblePosition
 
     var body: some View {
@@ -39,19 +40,26 @@ struct BloomPlusUserTestimonialChatView: View {
 private extension BloomPlusUserTestimonialChatView {
 
     var profilePic: some View {
-        Circle()
-            .fill(.green)
-            .frame(square: 60)
+        VStack {
+            Circle()
+                .fill(.green)
+                .frame(square: 60)
+            Text(name)
+                .font(.caption)
+                .bold()
+        }
     }
 }
 
 #Preview {
     BloomPlusUserTestimonialChatView(
         testimonial: "I love using Bloom to keep track of my health. It's my new favourite app!",
+        name: "Tori",
         position: .leading
     )
     BloomPlusUserTestimonialChatView(
         testimonial: "I love using Bloom to keep track of my health. It's my new favourite app!",
+        name: "Katie",
         position: .trailing
     )
 }

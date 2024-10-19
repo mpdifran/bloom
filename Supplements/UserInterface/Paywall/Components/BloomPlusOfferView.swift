@@ -20,6 +20,7 @@ struct BloomPlusOfferView: View {
                         Text(mainPrice)
                             .bold()
                             .font(.largeTitle)
+                            .fontDesign(.rounded)
 
                         Text(mainPricePeriod)
                             .font(.headline)
@@ -41,8 +42,6 @@ struct BloomPlusOfferView: View {
             Spacer(minLength: 0)
         }
         .cardContainer(fill: .background.secondary, stroke: .mutedBlue)
-        .compositingGroup()
-        .shadow(color: .mutedBlue.opacity(0.5), radius: 15)
     }
 }
 

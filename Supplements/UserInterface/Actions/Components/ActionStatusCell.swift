@@ -23,6 +23,7 @@ struct ActionStatusCell: View {
                     Text(title)
                 }
                 .bold()
+                .fontDesign(.rounded)
                 .padding(.bottom, 6)
 
                 Text(latestValue ?? "No Data")

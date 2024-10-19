@@ -10,11 +10,12 @@ import SwiftUI
 struct BloomPlusFeaturesListView: View {
     var body: some View {
         HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 30) {
+            VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading) {
                     Text("Bloom Plus")
                         .font(.largeTitle)
                         .bold()
+                        .fontDesign(.rounded)
 
                     Text("Your personal health coach in your pocket.")
                         .foregroundStyle(.secondary)
@@ -27,16 +28,18 @@ struct BloomPlusFeaturesListView: View {
                         mainPricePeriod: "/ Year",
                         subtitlePrice: "Try FREE for 3 Weeks"
                     )
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
 
                     BloomPlusOfferView(
                         mainPrice: "$15.99",
                         mainPricePeriod: "/ Month",
                         subtitlePrice: ""
                     )
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
                 }
-                .aspectRatio(1.2, contentMode: .fit)
+                .aspectRatio(1.3, contentMode: .fit)
                 .tabViewStyle(.page)
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             }

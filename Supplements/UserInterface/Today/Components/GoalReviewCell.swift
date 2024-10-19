@@ -14,19 +14,12 @@ struct GoalReviewCell: View {
             Image(systemName: "trophy.fill")
                 .foregroundStyle(.mutedOrange)
                 .font(.title2)
-                .overlay {
-                    ZStack {
-                        Circle()
-                            .fill(.mutedRed)
-                            .frame(square: 10)
-                            .zStackAlignment(.topTrailing)
-                    }
-                }
 
             VStack(alignment: .leading) {
                 Text("Review Focus Areas")
                     .bold()
                     .foregroundStyle(.tint)
+                    .fontDesign(.rounded)
             }
 
             Spacer()

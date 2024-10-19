@@ -61,6 +61,7 @@ struct ReportCell: View {
                 Text(kind.title)
                     .font(.title3)
                     .bold()
+                    .fontDesign(.rounded)
                 Text(kind.subtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)

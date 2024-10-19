@@ -53,12 +53,7 @@ private extension BloomPlusPaywall {
                 .padding(.top)
 
             VStack(spacing: 30) {
-                Divider()
-
                 BloomPlusUserReviewListView()
-
-                Divider()
-
                 BloomPlusLegalSectionView()
             }
             .padding()

@@ -20,10 +20,10 @@ extension View {
                 $0.padding()
             }
             .background {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 26)
                     .fill(fill)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: 26)
                             .stroke(stroke, lineWidth: 1)
                     }
             }
