@@ -25,17 +25,18 @@ extension View {
                         RoundedRectangle(cornerRadius: 26)
                             .fill(.tint)
                             .frame(width: proxy.size.width * progress.clipped(0, 1))
-
                         Spacer(minLength: 0)
                     }
                 }
-
+                .compositingGroup()
+                .clipShape(RoundedRectangle(cornerRadius: 26))
             }
             .cardContainer(
                 fill: backgroundFill,
                 stroke: backgroundStroke,
                 includePadding: false
             )
+            .animation(.bouncy, value: progress)
     }
 }
 
@@ -58,6 +59,15 @@ extension View {
             }
             .progressCardContainer(
                 progress: 0.7
+            )
+
+            HStack {
+                Label("Good Morning", systemImage: "sunrise.fill")
+
+                Spacer()
+            }
+            .progressCardContainer(
+                progress: 0.01
             )
         }
         .padding()

@@ -66,6 +66,8 @@ struct WaterActionCardView: View {
                             .foregroundStyle(.tint)
 
                         Text(glassSize.name)
+                            .fontDesign(.rounded)
+                            .bold()
 
                         Spacer()
 

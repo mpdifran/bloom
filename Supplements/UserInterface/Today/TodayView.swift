@@ -55,6 +55,7 @@ struct TodayView: View {
                     TimelineView(.everyMinute) { context in
                         if Calendar.current.isMorning(date: .now) || danieleMode {
                             ReportCell(kind: .morning)
+                                .transition(.scale)
                                 .onTapGesture {
                                     presentedFullScreen = GoodMorningView().asAny
                                 }
@@ -62,6 +63,7 @@ struct TodayView: View {
                         }
                         if reportViewModel.shouldShowEveningReport() || danieleMode {
                             ReportCell(kind: .evening)
+                                .transition(.scale)
                                 .onTapGesture {
                                     presentedFullScreen = EveningReportView().asAny
                                 }
@@ -69,6 +71,7 @@ struct TodayView: View {
                         }
                         if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
                             GoalReviewCell()
+                                .transition(.scale)
                                 .onTapGesture {
                                     presentedFullScreen = NewUpdateHabitView().asAny
                                 }

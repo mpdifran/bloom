@@ -45,32 +45,19 @@ struct HabitDailyUpdateCell: View {
 
                     Spacer(minLength: 0)
 
-                    Text(viewModel.formattedDailyValue)
-                        .font(.subheadline)
-                        .bold()
-                        .contentTransition(.numericText(value: viewModel.dailyValue))
-                        .animation(.default, value: viewModel.dailyValue)
-                }
+                    VStack(alignment: .trailing) {
+                        Text(viewModel.formattedDailyValue)
+                            .font(.subheadline)
+                            .fontDesign(.rounded)
+                            .bold()
+                            .contentTransition(.numericText(value: viewModel.dailyValue))
+                            .animation(.default, value: viewModel.dailyValue)
 
-//                ProgressBar(
-//                    value: viewModel.dailyValue,
-//                    target: habit.value,
-//                    measurementStyle: habit.targetMetric.measurementStyle == .range ? .range : .minimum
-//                )
-//
-//                HStack {
-//                    Text(viewModel.formattedDailyValue)
-//                        .foregroundStyle(.tint)
-//                        .contentTransition(.numericText(value: viewModel.dailyValue))
-//                        .animation(.default, value: viewModel.dailyValue)
-//
-//                    Spacer()
-//
-//                    Text(habit.displayQuantity)
-//                        .foregroundStyle(.secondary)
-//                }
-//                .font(.subheadline)
-//                .bold()
+                        Text(habit.displayQuantity)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
 
             Spacer(minLength: 0)
@@ -128,5 +115,4 @@ struct HabitDailyUpdateCell: View {
         }
         .padding()
     }
-    .groupedBackground()
 }

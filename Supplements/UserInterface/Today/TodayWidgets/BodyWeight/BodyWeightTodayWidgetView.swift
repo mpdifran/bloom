@@ -45,7 +45,7 @@ struct BodyWeightTodayWidgetView: View {
                     )
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [.mutedIndigo.opacity(0.7), .clear],
+                            colors: [.pastelIndigo.opacity(0.7), .clear],
                             startPoint: .top,
                             endPoint: .bottom
                         )
@@ -69,7 +69,7 @@ struct BodyWeightTodayWidgetView: View {
             .frame(height: 60)
         }
         .cardContainer(fill: .background.secondary)
-        .tint(.mutedIndigo)
+        .tint(.pastelIndigo)
     }
 }
 

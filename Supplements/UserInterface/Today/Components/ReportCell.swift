@@ -35,8 +35,8 @@ extension ReportCell {
 
         var colors: [Color] {
             switch self {
-            case .morning: [.mutedRed, .mutedOrange, .mutedYellow]
-            case .evening: [.mutedPurple, .mutedPink]
+            case .morning: [.pastelRed, .pastelOrange, .pastelYellow]
+            case .evening: [.pastelPurple, .pastelPink]
             }
         }
     }
