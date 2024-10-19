@@ -23,16 +23,16 @@ struct CompletionCheckmarkView: View {
             switch state {
             case .unmetGoal:
                 Image(systemName: "circle")
-                    .foregroundStyle(.fill)
+                    .foregroundStyle(.white)
             case .metGoal:
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.white, .tint)
+                    .foregroundStyle(.white)
             case .exceededGoal:
                 Image(systemName: "exclamationmark.circle")
-                    .foregroundStyle(.tint)
+                    .foregroundStyle(.white)
                     .background {
                         Circle()
-                            .fill(.tint.tertiary)
+                            .fill(.white.tertiary)
                     }
             }
         }

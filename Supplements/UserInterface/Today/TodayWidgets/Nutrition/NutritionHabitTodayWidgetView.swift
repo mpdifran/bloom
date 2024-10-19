@@ -32,7 +32,7 @@ struct NutritionHabitTodayWidgetView: View {
             .padding(.vertical)
         }
         .horizontallyCentered()
-        .cardContainer()
+        .cardContainer(fill: .background.secondary)
     }
 }
 

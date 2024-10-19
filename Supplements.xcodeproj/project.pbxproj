@@ -190,6 +190,8 @@
 		FF70EA082CC1A4F60055E932 /* View+SafeAreaBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA072CC1A4EB0055E932 /* View+SafeAreaBlur.swift */; };
 		FF70EA0A2CC2D6140055E932 /* BloomPlusLaurelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA092CC2D6140055E932 /* BloomPlusLaurelView.swift */; };
 		FF70EA0C2CC3302E0055E932 /* Font+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA0B2CC330280055E932 /* Font+Rounded.swift */; };
+		FF70EA0E2CC333D10055E932 /* ProgressCardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA0D2CC333D10055E932 /* ProgressCardContainer.swift */; };
+		FF70EA102CC334D90055E932 /* Comparable+Clipped.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA0F2CC334D30055E932 /* Comparable+Clipped.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -688,6 +690,8 @@
 		FF70EA072CC1A4EB0055E932 /* View+SafeAreaBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+SafeAreaBlur.swift"; sourceTree = "<group>"; };
 		FF70EA092CC2D6140055E932 /* BloomPlusLaurelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomPlusLaurelView.swift; sourceTree = "<group>"; };
 		FF70EA0B2CC330280055E932 /* Font+Rounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Rounded.swift"; sourceTree = "<group>"; };
+		FF70EA0D2CC333D10055E932 /* ProgressCardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCardContainer.swift; sourceTree = "<group>"; };
+		FF70EA0F2CC334D30055E932 /* Comparable+Clipped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clipped.swift"; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1320,6 +1324,7 @@
 				FF4A21B22C88957C00278019 /* Double+Rounding.swift */,
 				FFC77AD82C541DE9003E5F85 /* Double+Format.swift */,
 				FF78681D2CA782620001F49E /* Double+Helpers.swift */,
+				FF70EA0F2CC334D30055E932 /* Comparable+Clipped.swift */,
 				FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */,
 				FF0DA0F62C875106007D1A6B /* DateComponents+Helpers.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
@@ -2088,6 +2093,7 @@
 				FF70EA072CC1A4EB0055E932 /* View+SafeAreaBlur.swift */,
 				FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */,
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
+				FF70EA0D2CC333D10055E932 /* ProgressCardContainer.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2786,6 +2792,7 @@
 				FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FF1327FF2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift in Sources */,
+				FF70EA102CC334D90055E932 /* Comparable+Clipped.swift in Sources */,
 				FFAFF41F2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift in Sources */,
 				FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
@@ -2812,6 +2819,7 @@
 				FF4EFF8E2C938497005E4A1F /* MenstrualCyclePhase.swift in Sources */,
 				FF2FB8A42C9DD74A00F57523 /* HabitDetailsView.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,
+				FF70EA0E2CC333D10055E932 /* ProgressCardContainer.swift in Sources */,
 				FFC77ADB2C541F84003E5F85 /* BloodPressureCategory.swift in Sources */,
 				FF0DA0FD2C878473007D1A6B /* CompletionCheckmarkView.swift in Sources */,
 				FF70E91F2CB86FBC0055E932 /* SleepHeartRateChartView.swift in Sources */,

@@ -29,7 +29,6 @@ struct HabitDailyUpdateCell: View {
                 HStack {
                     Image(systemName: habit.targetMetric.systemImage)
                         .font(.title2)
-                        .foregroundStyle(.tint)
                         .frame(width: 25)
 
                     VStack(alignment: .leading) {
@@ -43,33 +42,45 @@ struct HabitDailyUpdateCell: View {
                             .bold()
                             .fontDesign(.rounded)
                     }
-                }
 
-                ProgressBar(
-                    value: viewModel.dailyValue,
-                    target: habit.value,
-                    measurementStyle: habit.targetMetric.measurementStyle == .range ? .range : .minimum
-                )
+                    Spacer(minLength: 0)
 
-                HStack {
                     Text(viewModel.formattedDailyValue)
-                        .foregroundStyle(.tint)
+                        .font(.subheadline)
+                        .bold()
                         .contentTransition(.numericText(value: viewModel.dailyValue))
                         .animation(.default, value: viewModel.dailyValue)
-
-                    Spacer()
-
-                    Text(habit.displayQuantity)
-                        .foregroundStyle(.secondary)
                 }
-                .font(.subheadline)
-                .bold()
+
+//                ProgressBar(
+//                    value: viewModel.dailyValue,
+//                    target: habit.value,
+//                    measurementStyle: habit.targetMetric.measurementStyle == .range ? .range : .minimum
+//                )
+//
+//                HStack {
+//                    Text(viewModel.formattedDailyValue)
+//                        .foregroundStyle(.tint)
+//                        .contentTransition(.numericText(value: viewModel.dailyValue))
+//                        .animation(.default, value: viewModel.dailyValue)
+//
+//                    Spacer()
+//
+//                    Text(habit.displayQuantity)
+//                        .foregroundStyle(.secondary)
+//                }
+//                .font(.subheadline)
+//                .bold()
             }
+
+            Spacer(minLength: 0)
 
             DisclosureIndicator()
                 .padding(.leading)
         }
-        .cardContainer()
+        .progressCardContainer(
+            progress: viewModel.dailyValue / habit.value
+        )
         .tint(habit.targetMetric.color)
         .standardConfetti(
             $showConfetti,

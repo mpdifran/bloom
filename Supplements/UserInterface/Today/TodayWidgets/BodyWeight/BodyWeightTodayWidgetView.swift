@@ -68,7 +68,7 @@ struct BodyWeightTodayWidgetView: View {
             .chartYAxis(.hidden)
             .frame(height: 60)
         }
-        .cardContainer()
+        .cardContainer(fill: .background.secondary)
         .tint(.mutedIndigo)
     }
 }
