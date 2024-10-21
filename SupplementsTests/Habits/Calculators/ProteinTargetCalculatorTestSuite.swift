@@ -20,16 +20,17 @@ struct ProteinTargetCalculatorTestSuite {
 
     @Test(
         arguments: [
-            (30, 2000, 75, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (120, 2000, 140, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (40, 2000, 120, HealthGoal.loseWeight, WeightLossSpeed.moderate),
-            (100, 2000, 180, HealthGoal.loseWeight, WeightLossSpeed.fast)
+            (30, 2000, 65, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+            (120, 2000, 120, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+            (40, 2000, 100, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+            (100, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
         ]
     )
     func noExistingHabit(
         inputProtein: Double,
         inputDietaryEnergy: Double,
         expectedProtein: Double,
+        calorieGoal: Double,
         healthGoal: HealthGoal,
         speed: WeightLossSpeed
     ) async throws {
@@ -38,6 +39,7 @@ struct ProteinTargetCalculatorTestSuite {
                 existingHabit: nil,
                 protein: HKQuantity(unit: .gram(), doubleValue: inputProtein),
                 dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: inputDietaryEnergy),
+                calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
                 targetDetails: .init(
                     goal: healthGoal,
                     weightLossSpeed: speed
@@ -53,16 +55,17 @@ struct ProteinTargetCalculatorTestSuite {
     @Test(
         .disabled("Need to remove shared singleton."),
         arguments: [
-            (30, 2000, 40.6, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (120, 2000, 40.6, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (40, 2000, 40.6, HealthGoal.loseWeight, WeightLossSpeed.moderate),
-            (100, 2000, 40.6, HealthGoal.loseWeight, WeightLossSpeed.fast)
+            (30, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+            (120, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+            (40, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+            (100, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
         ]
     )
     func lowTargetExistingHabit(
         inputProtein: Double,
         inputDietaryEnergy: Double,
         expectedProtein: Double,
+        calorieGoal: Double,
         healthGoal: HealthGoal,
         speed: WeightLossSpeed
     ) async throws {
@@ -73,6 +76,7 @@ struct ProteinTargetCalculatorTestSuite {
                 existingHabit: existingHabit,
                 protein: HKQuantity(unit: .gram(), doubleValue: inputProtein),
                 dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: inputDietaryEnergy),
+                calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
                 targetDetails: .init(
                     goal: healthGoal,
                     weightLossSpeed: speed

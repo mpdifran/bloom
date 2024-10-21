@@ -15,6 +15,7 @@ enum ProteinTargetCalculator {
         existingHabit: HabitDTO?,
         protein: HKQuantity,
         dietaryEnergy: HKQuantity,
+        calorieGoal: HKQuantity,
         targetDetails: HealthTargetDetails
     ) async -> TargetMetricRecommendation? {
 
@@ -23,6 +24,7 @@ enum ProteinTargetCalculator {
                 existingHabit: existingHabit,
                 protein: protein,
                 dietaryEnergy: dietaryEnergy,
+                calorieGoal: calorieGoal,
                 targetDetails: targetDetails
             )
         }
@@ -30,6 +32,7 @@ enum ProteinTargetCalculator {
         return createNewProteinGoal(
             protein: protein,
             dietaryEnergy: dietaryEnergy,
+            calorieGoal: calorieGoal,
             targetDetails: targetDetails
         )
     }
@@ -40,11 +43,13 @@ private extension ProteinTargetCalculator {
     static func createNewProteinGoal(
         protein: HKQuantity,
         dietaryEnergy: HKQuantity,
+        calorieGoal: HKQuantity,
         targetDetails: HealthTargetDetails
     ) -> TargetMetricRecommendation? {
         guard let proteinTarget = calculateTargetProtein(
             protein: protein,
             dietaryEnergy: dietaryEnergy,
+            calorieGoal: calorieGoal,
             targetDetails: targetDetails
         ) else {
             return nil
@@ -70,6 +75,7 @@ private extension ProteinTargetCalculator {
         existingHabit: HabitDTO,
         protein: HKQuantity,
         dietaryEnergy: HKQuantity,
+        calorieGoal: HKQuantity,
         targetDetails: HealthTargetDetails
     ) async -> TargetMetricRecommendation? {
 
@@ -90,6 +96,7 @@ private extension ProteinTargetCalculator {
             if let proteinTarget = calculateTargetProtein(
                 protein: protein,
                 dietaryEnergy: dietaryEnergy,
+                calorieGoal: calorieGoal,
                 targetDetails: targetDetails
             ) {
                 return TargetMetricRecommendation(
@@ -111,6 +118,7 @@ private extension ProteinTargetCalculator {
     static func calculateTargetProtein(
         protein: HKQuantity,
         dietaryEnergy: HKQuantity,
+        calorieGoal: HKQuantity,
         targetDetails: HealthTargetDetails
     ) -> HKQuantity? {
         let currentProteinPercent = (protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein) / dietaryEnergy.doubleValue(for: .largeCalorie())
@@ -118,7 +126,7 @@ private extension ProteinTargetCalculator {
         let targetProteinPercent: Double
         switch targetDetails.goal {
         case .loseWeight:
-            let targetPercent = 0.35
+            let targetPercent = 0.3
             let percentDifference = targetPercent - currentProteinPercent
 
             switch targetDetails.weightLossSpeed {
@@ -130,12 +138,12 @@ private extension ProteinTargetCalculator {
                 targetProteinPercent = currentProteinPercent + percentDifference
             }
         case .gainWeight, .maintainWeight:
-            targetProteinPercent = 0.3
+            targetProteinPercent = 0.33
         case .none:
             return nil
         }
 
-        let targetProteinCalories = targetProteinPercent * dietaryEnergy.doubleValue(for: .largeCalorie())
+        let targetProteinCalories = targetProteinPercent * calorieGoal.doubleValue(for: .largeCalorie())
         let minProteinTarget = TargetMetric.proteinIntake.minHabitTarget.doubleValue(for: .gram())
         let proteinGrams = max(targetProteinCalories / .caloriesPerGramOfProtein, minProteinTarget)
 

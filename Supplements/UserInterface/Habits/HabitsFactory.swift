@@ -170,6 +170,7 @@ private extension HabitsFactory {
         let activityLevel = await VitalsCalculator.shared.activityLevelSummary?.details.activityLevel ?? userReportedActivityLevel
 
         let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
+        let newCalorieGoal: HKQuantity?
 
         if let recommendation = await CalorieTargetCalculator.targetCalories(
             existingHabit: existingCalorieHabit,
@@ -200,16 +201,21 @@ private extension HabitsFactory {
                 hasUserEdited: existingCalorieHabit?.isUserEdited == true
             )
             newFocusAreas.append(calorieHabit)
+            newCalorieGoal = recommendation.target
+        } else {
+            newCalorieGoal = nil
         }
 
         // Protein
         let existingProteinHabit = activeHabits.first(where: { $0.targetMetric == .proteinIntake })
         if
+            let newCalorieGoal,
             let averageProtein = await VitalsCalculator.shared.nutritionSummary?.details.averageProtein,
             let recommendation = await ProteinTargetCalculator.targetProtein(
                 existingHabit: existingProteinHabit,
                 protein: averageProtein,
                 dietaryEnergy: averageDietaryEnergy,
+                calorieGoal: newCalorieGoal,
                 targetDetails: HealthManager.shared.healthTargetDetails
             )
         {

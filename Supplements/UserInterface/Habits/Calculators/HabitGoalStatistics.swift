@@ -63,7 +63,8 @@ extension HabitGoalStatistics {
             context = "Keep up the good work! We'll keep your goal the same this week."
         }
 
-        let clampedValue = max(existingHabit.targetMetric.minHabitTarget.doubleValue(for: existingHabit.unit), newValue)
+        let minValue = existingHabit.targetMetric.minHabitTarget.doubleValue(for: existingHabit.unit)
+        let clampedValue = max(minValue, newValue.roundedToNiceNumber())
 
         return TargetMetricRecommendation(
             target: HKQuantity(unit: existingHabit.unit, doubleValue: clampedValue),
