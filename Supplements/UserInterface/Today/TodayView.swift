@@ -97,8 +97,8 @@ struct TodayView: View {
                         .buttonStyle(.plain)
                     }
 
-                    if suggestedHabits.isNotEmpty {
-                        SectionTitleView("Focus Areas")
+                    if suggestedHabits.isNotEmpty || userHabits.isNotEmpty {
+                        SectionTitleView("Habits")
                             .padding(.horizontal)
 
                         ForEach(suggestedHabits) { habit in
