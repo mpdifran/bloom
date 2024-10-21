@@ -23,7 +23,7 @@ struct SleepRespiratoryRateSummaryCell: View {
             }
             .padding(.bottom)
         }
-        .tint(.teal)
+        .tint(.mutedTeal)
     }
 }
 

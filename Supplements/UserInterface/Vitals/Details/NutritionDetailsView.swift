@@ -463,21 +463,25 @@ private extension NutritionDetailsView {
                             x: .value("Date", sample.date),
                             y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
                         )
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(.mutedBlue)
                     }
 
                     RuleMark(
                         y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
                     )
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(.mutedBlue)
 
                     RectangleMark(
                         yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
                         yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
                     )
                     .foregroundStyle(
-                        LinearGradient(colors: [.blue.opacity(0.3), .clear], startPoint: .bottom, endPoint: .top)
+                        LinearGradient(
+                            colors: [.mutedBlue.opacity(0.3), .clear],
+                            startPoint: .bottom,
+                            endPoint: .top
+                        )
                     )
                 }
                 .frame(height: 160)

@@ -18,7 +18,7 @@ struct WristTemperatureChartView: View {
                 xEnd: .value("Average", wristTemperature.averageWristTemperature),
                 y: .value("Date", wristTemperature.startDate, unit: .day)
             )
-            .foregroundStyle(.indigo)
+            .foregroundStyle(.mutedIndigo)
             .cornerRadius(10)
         }
         .chartXScale(
@@ -40,7 +40,7 @@ struct WristTemperatureChartView: View {
             }
         }
         .chartForegroundStyleScale([
-            "Wrist Temperature": .indigo
+            "Wrist Temperature": .mutedIndigo
         ])
     }
 }

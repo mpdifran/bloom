@@ -23,7 +23,7 @@ struct SleepSoundLevelSummaryCell: View {
             }
             .padding(.bottom)
         }
-        .tint(.yellow)
+        .tint(.mutedYellow)
     }
 }
 

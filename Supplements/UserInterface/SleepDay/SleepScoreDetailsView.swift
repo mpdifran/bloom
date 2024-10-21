@@ -18,7 +18,7 @@ struct SleepScoreDetailsView: View {
                     systemImage: "clock",
                     value: "\(String(format: "%.1f", sleepAnalysis.overallHours)) hours"
                 )
-                .tint(.green)
+                .tint(.mutedGreen)
 
                 LabelledText(
                     label: "REM Sleep",
@@ -54,7 +54,7 @@ struct SleepScoreDetailsView: View {
                     systemImage: "heart",
                     value: heartRateDescription
                 )
-                .tint(sleepAnalysis.averageHeartRate == nil ? .gray : .pink)
+                .tint(sleepAnalysis.averageHeartRate == nil ? .gray : .mutedPink)
 
                 LabelledText(
                     label: "Deep Sleep",
@@ -128,6 +128,7 @@ private struct LabelledText: View {
                 .foregroundStyle(.tint)
                 .bold()
                 .font(.title3)
+                .fontDesign(.rounded)
         }
     }
 }

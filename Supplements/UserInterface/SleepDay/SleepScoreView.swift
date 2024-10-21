@@ -32,7 +32,7 @@ struct SleepScoreView: View {
                             dimension: proxy.size.width,
                             thickness: .lineWidth / divisor,
                             systemImage: "clock",
-                            color: .green
+                            color: .mutedGreen
                         )
                         ProgressArcView(
                             progress: sleepAnalysis.awakeSleepScore.map { $0.asCGFloat / 10 },
@@ -46,7 +46,7 @@ struct SleepScoreView: View {
                             dimension: proxy.size.width - (4.0 * scaledLineWidth) - (2.0 * scaledRingSpacing),
                             thickness: .lineWidth / divisor,
                             systemImage: "heart",
-                            color: .pink
+                            color: .mutedPink
                         )
                     }
                     ZStack(alignment: .top) {

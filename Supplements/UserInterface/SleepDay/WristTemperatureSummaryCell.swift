@@ -30,7 +30,7 @@ struct WristTemperatureSummaryCell: View {
             }
             .padding(.bottom)
         }
-        .tint(.indigo)
+        .tint(.mutedIndigo)
     }
 }
 

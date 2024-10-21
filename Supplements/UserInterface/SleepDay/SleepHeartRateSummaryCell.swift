@@ -23,7 +23,7 @@ struct SleepHeartRateSummaryCell: View {
             }
             .padding(.bottom)
         }
-        .tint(.pink)
+        .tint(.mutedPink)
     }
 }
 

@@ -17,7 +17,7 @@ struct SleepHeartRateChartView: View {
                 x: .value("Date", heartRate.startDate),
                 y: .value("Average", heartRate.averageHeartRate)
             )
-            .foregroundStyle(.pink)
+            .foregroundStyle(.mutedPink)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 10)...((maxY ?? 0) + 10),
@@ -42,7 +42,7 @@ struct SleepHeartRateChartView: View {
             }
         }
         .chartForegroundStyleScale([
-            "Heart Rate": .pink
+            "Heart Rate": .mutedPink
         ])
     }
 }

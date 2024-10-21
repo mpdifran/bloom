@@ -17,7 +17,7 @@ struct SleepRespiratoryRateChartView: View {
                 x: .value("Date", respiratoryRate.startDate),
                 y: .value("Average", respiratoryRate.averageRespiratoryRate)
             )
-            .foregroundStyle(.teal)
+            .foregroundStyle(.mutedTeal)
         }
         .chartYScale(
             domain: ((minY ?? 0) - 5)...((maxY ?? 0) + 5),
@@ -38,7 +38,7 @@ struct SleepRespiratoryRateChartView: View {
             }
         }
         .chartForegroundStyleScale([
-            "Respiratory Rate": .teal
+            "Respiratory Rate": .mutedTeal
         ])
     }
 }
