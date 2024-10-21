@@ -56,6 +56,13 @@ struct HabitDetailsView: View {
                 statsSection
                     .padding(.horizontal)
             }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Image(systemName: habit.targetMetric.systemImage)
+                        .symbolVariant(.fill)
+                        .bold()
+                }
+            }
         }
         .tint(habit.targetMetric.color)
         .navigationTitle("Habit Details")

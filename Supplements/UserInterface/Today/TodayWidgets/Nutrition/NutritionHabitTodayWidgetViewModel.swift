@@ -12,7 +12,9 @@ import DataContainer
 extension NutritionHabitTodayWidgetView {
     @Observable @MainActor
     final class ViewModel {
+        var remainingCaloriesPercent: Double?
         var remainingCalories: HKQuantity?
+        var remainingProteinPercent: Double?
         var remainingProtein: HKQuantity?
 
         init() {
@@ -56,9 +58,11 @@ extension NutritionHabitTodayWidgetView.ViewModel {
 
             let quantity = await HealthStoreFetcher.shared.fetchTotalQuantity(for: .dietaryEnergyConsumed, dateRange: .today()) ?? HKQuantity(unit: .largeCalorie(), doubleValue: 0)
             let remainingCalories = habit.quantity.subtract(quantity, unit: .largeCalorie())
+            let remainingCaloriesPercent = remainingCalories.doubleValue(for: .largeCalorie()) / habit.value
 
             await MainActor.run {
                 self.remainingCalories = remainingCalories
+                self.remainingCaloriesPercent = remainingCaloriesPercent
             }
         } catch {
             print(error)
@@ -80,9 +84,11 @@ extension NutritionHabitTodayWidgetView.ViewModel {
 
             let quantity = await HealthStoreFetcher.shared.fetchTotalQuantity(for: .dietaryProtein, dateRange: .today()) ?? HKQuantity(unit: .gram(), doubleValue: 0)
             let remainingProtein = habit.quantity.subtract(quantity, unit: .gram())
+            let remainingProteinPercent = quantity.doubleValue(for: .gram()) / habit.value
 
             await MainActor.run {
                 self.remainingProtein = remainingProtein
+                self.remainingProteinPercent = remainingProteinPercent
             }
         } catch {
             print(error)

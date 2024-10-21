@@ -21,11 +21,11 @@ struct MorningHabitStatusCell: View {
 
             Text(habit.targetMetric.name)
                 .bold()
+                .fontDesign(.rounded)
 
             Spacer()
 
             Text(habit.displayQuantity)
-                .font(.title2)
                 .bold()
                 .fontDesign(.rounded)
                 .foregroundStyle(.tint)

@@ -8,18 +8,25 @@
 import SwiftUI
 
 struct NutritionRemainingValueView: View {
-    let value: String
-    let subtitle: String
+    let systemImage: String
+    let value: Double
+    let valueText: String
+    let title: String
 
     var body: some View {
         VStack {
-            Text(value)
-                .font(.title)
-                .bold()
-                .fontDesign(.rounded)
-                .foregroundStyle(.tint)
+            Gauge(value: value) {
 
-            Text(subtitle)
+            } currentValueLabel: {
+                Image(systemName: systemImage)
+                    .font(.body)
+            }
+            .gaugeStyle(.accessoryCircularCapacity)
+
+            Text(valueText)
+                .bold()
+
+            Text(title)
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -29,14 +36,20 @@ struct NutritionRemainingValueView: View {
 #Preview {
     HStack(spacing: 10) {
         NutritionRemainingValueView(
-            value: "1500 Cal",
-            subtitle: "Dietary Calories"
+            systemImage: "carrot",
+            value: 0.4,
+            valueText: "1500 Cal",
+            title: "Dietary Calories"
         )
-        
+        .tint(.mutedOrange)
+
         NutritionRemainingValueView(
-            value: "34 g",
-            subtitle: "Protein"
+            systemImage: "fork.knife",
+            value: 0.6,
+            valueText: "34 g",
+            title: "Protein"
         )
+        .tint(.protein)
     }
     .horizontallyCentered()
     .cardContainer()

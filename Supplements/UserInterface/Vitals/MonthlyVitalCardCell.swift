@@ -37,7 +37,6 @@ struct MonthlyVitalCardCell: View {
 
                 Text(vital.subtitle)
                     .font(.subheadline)
-                    .bold()
                     .fontDesign(.rounded)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -63,7 +62,7 @@ struct MonthlyVitalCardCell: View {
             }
         }
         .tint(vital.color)
-        .cardContainer()
+        .cardContainer(fill: .background.secondary)
     }
 }
 
@@ -116,5 +115,4 @@ struct MonthlyVitalCardCell: View {
         }
         .padding()
     }
-    .gradientRootBackground()
 }

@@ -15,7 +15,10 @@ struct ToDoActionCell: View {
 
     var body: some View {
         HStack {
-            CompletionCheckmarkView(state: isComplete ? .metGoal : .unmetGoal)
+            CompletionCheckmarkView(
+                state: isComplete ? .metGoal : .unmetGoal,
+                colorize: true
+            )
 
             LabeledContent {
                 Image(systemName: systemImage)
@@ -33,7 +36,7 @@ struct ToDoActionCell: View {
 
             Spacer()
         }
-        .cardContainer()
+        .cardContainer(fill: .background.secondary)
     }
 }
 
@@ -46,17 +49,16 @@ struct ToDoActionCell: View {
                 systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
                 isComplete: false
             )
-            .tint(.indigo)
+            .tint(.mutedIndigo)
             ToDoActionCell(
                 title: "Log Weight",
                 subtitle: "Daily",
                 systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
                 isComplete: true
             )
-            .tint(.blue)
+            .tint(.mutedBlue)
         }
         .horizontallyCentered()
         .padding()
     }
-    .gradientRootBackground()
 }

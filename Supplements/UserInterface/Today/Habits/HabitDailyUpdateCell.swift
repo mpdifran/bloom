@@ -23,7 +23,7 @@ struct HabitDailyUpdateCell: View {
 
     var body: some View {
         HStack {
-            CompletionCheckmarkView(state: viewModel.goalCompletionState)
+            CompletionCheckmarkView(state: viewModel.goalCompletionState, colorize: true)
 
             VStack(alignment: .leading) {
                 HStack {
@@ -41,21 +41,22 @@ struct HabitDailyUpdateCell: View {
                         Text(habit.targetMetric.name)
                             .bold()
                             .fontDesign(.rounded)
+
+                        Text(habit.displayQuantity)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
 
                     Spacer(minLength: 0)
 
                     VStack(alignment: .trailing) {
                         Text(viewModel.formattedDailyValue)
-                            .font(.subheadline)
+                            .font(.title3)
                             .fontDesign(.rounded)
+                            .foregroundStyle(.tint)
                             .bold()
                             .contentTransition(.numericText(value: viewModel.dailyValue))
                             .animation(.default, value: viewModel.dailyValue)
-
-                        Text(habit.displayQuantity)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
                     }
                 }
             }

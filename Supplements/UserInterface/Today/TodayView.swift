@@ -62,7 +62,6 @@ struct TodayView: View {
                                 .onTapGesture {
                                     presentedFullScreen = GoodMorningView().asAny
                                 }
-                                .padding(.bottom)
                         }
                         if reportViewModel.shouldShowEveningReport() || danieleMode {
                             ReportCell(kind: .evening)
@@ -70,7 +69,6 @@ struct TodayView: View {
                                 .onTapGesture {
                                     presentedFullScreen = EveningReportView().asAny
                                 }
-                                .padding(.bottom)
                         }
                         if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
                             GoalReviewCell()

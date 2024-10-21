@@ -56,15 +56,15 @@ public extension TargetMetric {
     var color: Color {
         switch self {
         case .none: .gray
-        case .stepCount: .pastelGreen
-        case .waterIntake: .pastelBlue
-        case .walkingRunningDistance: .pastelGreen
-        case .timeInDaylight: .pastelOrange
-        case .meditationMinutes: .pastelLightBlue
-        case .exerciseMinutes: .pastelGreen
+        case .stepCount: .mutedGreen
+        case .waterIntake: .mutedBlue
+        case .walkingRunningDistance: .mutedGreen
+        case .timeInDaylight: .mutedOrange
+        case .meditationMinutes: .mutedLightBlue
+        case .exerciseMinutes: .mutedGreen
         case .proteinIntake: .protein
-        case .calories: .pastelOrange
-        case .runDistance, .runDuration, .bikeDistance, .bikeDuration: .pastelGreen
+        case .calories: .mutedOrange
+        case .runDistance, .runDuration, .bikeDistance, .bikeDuration: .mutedGreen
         case .targetHeartRateZone1: .heartRateZone1
         case .targetHeartRateZone2: .heartRateZone2
         case .targetHeartRateZone3: .heartRateZone3

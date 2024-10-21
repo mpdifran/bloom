@@ -45,7 +45,7 @@ struct BodyWeightTodayWidgetView: View {
                     )
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [.pastelIndigo.opacity(0.7), .clear],
+                            colors: [.mutedIndigo.opacity(0.7), .clear],
                             startPoint: .top,
                             endPoint: .bottom
                         )
@@ -69,7 +69,7 @@ struct BodyWeightTodayWidgetView: View {
             .frame(height: 60)
         }
         .cardContainer(fill: .background.secondary)
-        .tint(.pastelIndigo)
+        .tint(.mutedIndigo)
     }
 }
 
@@ -79,7 +79,7 @@ private extension BodyWeightTodayWidgetView {
         if let latestWeight = viewModel.latestWeight {
             return DateFormatter.relativeDateTimeShort.string(from: latestWeight.startDate)
         }
-        return "Never"
+        return ""
     }
 
     var chartMin: Double {
@@ -104,5 +104,4 @@ private extension BodyWeightTodayWidgetView {
         }
         .padding()
     }
-    .groupedBackground()
 }

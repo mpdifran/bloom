@@ -23,7 +23,7 @@ extension View {
                 GeometryReader { proxy in
                     HStack(spacing: 0) {
                         RoundedRectangle(cornerRadius: 26)
-                            .fill(.tint)
+                            .fill(.tint.tertiary)
                             .frame(width: proxy.size.width * progress.clipped(0, 1))
                         Spacer(minLength: 0)
                     }

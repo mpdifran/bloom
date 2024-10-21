@@ -56,7 +56,7 @@ struct ActionStatusCell: View {
                     }
             }
         }
-        .cardContainer()
+        .cardContainer(fill: .background.secondary)
     }
 }
 
@@ -88,5 +88,4 @@ struct ActionStatusCell: View {
         .horizontallyCentered()
         .padding()
     }
-    .gradientRootBackground()
 }

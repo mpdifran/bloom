@@ -193,6 +193,7 @@
 		FF70EA0E2CC333D10055E932 /* ProgressCardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA0D2CC333D10055E932 /* ProgressCardContainer.swift */; };
 		FF70EA102CC334D90055E932 /* Comparable+Clipped.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA0F2CC334D30055E932 /* Comparable+Clipped.swift */; };
 		FF70EA122CC405EF0055E932 /* TodaysDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA112CC405EF0055E932 /* TodaysDateView.swift */; };
+		FF70EA142CC696110055E932 /* ColorPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA132CC696110055E932 /* ColorPaletteView.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -694,6 +695,7 @@
 		FF70EA0D2CC333D10055E932 /* ProgressCardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCardContainer.swift; sourceTree = "<group>"; };
 		FF70EA0F2CC334D30055E932 /* Comparable+Clipped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clipped.swift"; sourceTree = "<group>"; };
 		FF70EA112CC405EF0055E932 /* TodaysDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysDateView.swift; sourceTree = "<group>"; };
+		FF70EA132CC696110055E932 /* ColorPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteView.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -2097,6 +2099,7 @@
 				FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */,
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
 				FF70EA0D2CC333D10055E932 /* ProgressCardContainer.swift */,
+				FF70EA132CC696110055E932 /* ColorPaletteView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2720,6 +2723,7 @@
 				FFE41D182C8B8A9400E3E559 /* ReportCoordinator.swift in Sources */,
 				FFAA83DF2C4E9863004D12DA /* VitalsViewModel.swift in Sources */,
 				FF70E91D2CB86FB30055E932 /* SleepHeartRateSummaryCell.swift in Sources */,
+				FF70EA142CC696110055E932 /* ColorPaletteView.swift in Sources */,
 				FF88F12E2C7D03E10093D1B4 /* BowelMovementActionCardView.swift in Sources */,
 				FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */,
 				FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */,

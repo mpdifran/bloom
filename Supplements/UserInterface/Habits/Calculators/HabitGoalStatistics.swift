@@ -40,37 +40,35 @@ extension HabitGoalStatistics {
 
     func newHabitGoal(for existingHabit: HabitDTO) -> TargetMetricRecommendation {
 
+        let newValue: Double
+        let context: String
+
         if missedGoalCountPercentage > 0.4 {
             // decrease target
-            let newValue = existingHabit.value * (1 - (averagePercentMissedGoalBy / 2))
-
-            return TargetMetricRecommendation(
-                target: HKQuantity(unit: existingHabit.unit, doubleValue: newValue),
-                context: "Looks like you haven't been hitting your goal recently. Let's set a more achievable goal."
-            )
+            newValue = existingHabit.value * (1 - (averagePercentMissedGoalBy / 2))
+            context = "Looks like you haven't been hitting your goal recently. Let's set a more achievable goal."
         } else if missedGoalSamples.count < 3 {
             if existingHabit.targetMetric.idealRange?.contains(quantity: existingHabit.quantity) == true {
                 // TODO: Promote to habit here?
-                return TargetMetricRecommendation(
-                    target: existingHabit.quantity,
-                    context: "Way to continue hitting your goal! We'll keep your goal the same this week."
-                )
+                newValue = existingHabit.quantity.doubleValue(for: existingHabit.unit)
+                context = "Way to continue hitting your goal! We'll keep your goal the same this week."
+            } else {
+                // increase target
+                newValue = existingHabit.value * (1 + (averagePercentExceededGoalBy / 2))
+                context = "Great job hitting your goal! Let's set a new goal to challenge you."
             }
-
-            // increase target
-            let newValue = existingHabit.value * (1 + (averagePercentExceededGoalBy / 2))
-
-            return TargetMetricRecommendation(
-                target: HKQuantity(unit: existingHabit.unit, doubleValue: newValue),
-                context: "Great job hitting your goal! Let's set a new goal to challenge you."
-            )
         } else {
             // keep target the same
-            return TargetMetricRecommendation(
-                target: existingHabit.quantity,
-                context: "Keep up the good work! We'll keep your goal the same this week."
-            )
+            newValue = existingHabit.quantity.doubleValue(for: existingHabit.unit)
+            context = "Keep up the good work! We'll keep your goal the same this week."
         }
+
+        let clampedValue = max(existingHabit.targetMetric.minHabitTarget.doubleValue(for: existingHabit.unit), newValue)
+
+        return TargetMetricRecommendation(
+            target: HKQuantity(unit: existingHabit.unit, doubleValue: clampedValue),
+            context: context
+        )
     }
 }
 

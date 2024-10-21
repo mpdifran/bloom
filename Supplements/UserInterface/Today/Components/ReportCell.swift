@@ -35,8 +35,8 @@ extension ReportCell {
 
         var colors: [Color] {
             switch self {
-            case .morning: [.pastelRed, .pastelOrange, .pastelYellow]
-            case .evening: [.pastelPurple, .pastelPink]
+            case .morning: [.mutedRed, .mutedOrange, .mutedYellow]
+            case .evening: [.mutedPurple, .mutedPink]
             }
         }
     }
@@ -56,6 +56,7 @@ struct ReportCell: View {
                         endPoint: .top
                     )
                 )
+                .frame(width: 40)
 
             VStack(alignment: .leading) {
                 Text(kind.title)

@@ -21,7 +21,10 @@ struct EveningHabitStatusCell: View {
 
     var body: some View {
         HStack {
-            CompletionCheckmarkView(state: viewModel.goalCompletionState)
+            CompletionCheckmarkView(
+                state: viewModel.goalCompletionState,
+                colorize: true
+            )
 
             VStack(alignment: .leading) {
                 Text(habit.targetMetric.name)

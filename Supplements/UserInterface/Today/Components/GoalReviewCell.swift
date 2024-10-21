@@ -13,16 +13,22 @@ struct GoalReviewCell: View {
         HStack {
             Image(systemName: "trophy.fill")
                 .foregroundStyle(.mutedOrange)
-                .font(.title2)
+                .font(.title)
+                .frame(width: 40)
 
             VStack(alignment: .leading) {
                 Text("Review Focus Areas")
+                    .font(.title3)
                     .bold()
-                    .foregroundStyle(.tint)
                     .fontDesign(.rounded)
+                Text("See how you did this week.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
+
+            DisclosureIndicator()
         }
         .cardContainer(
             fill: .tint.opacity(0.3),

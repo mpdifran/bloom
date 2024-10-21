@@ -14,9 +14,11 @@ struct TodaysDateView: View {
                 VStack(alignment: .leading) {
                     Text("\(DateFormatter.justDayOfWeek.string(from: .now))")
                         .bold()
+                        .fontDesign(.rounded)
                         .foregroundStyle(.secondary)
                     Text("\(DateFormatter.justDateLong.string(from: .now))")
                         .font(.title2)
+                        .fontDesign(.rounded)
                         .bold()
                 }
                 Spacer(minLength: 0)

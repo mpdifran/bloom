@@ -29,7 +29,6 @@ struct NutritionHabitTodayWidgetView: View {
                 calorieCountdownView
                 proteinCountdownView
             }
-            .padding(.vertical)
         }
         .horizontallyCentered()
         .cardContainer(fill: .background.secondary)
@@ -40,10 +39,12 @@ private extension NutritionHabitTodayWidgetView {
 
     @ViewBuilder
     var calorieCountdownView: some View {
-        if let remainingCalories = viewModel.remainingCalories {
+        if let remainingCalories = viewModel.remainingCalories, let percent = viewModel.remainingCaloriesPercent {
             NutritionRemainingValueView(
-                value: remainingCalories.displayString(for: .largeCalorie()),
-                subtitle: "Dietary Calories"
+                systemImage: TargetMetric.calories.systemImage,
+                value: percent,
+                valueText: remainingCalories.displayString(for: .largeCalorie()),
+                title: "Dietary Calories"
             )
             .tint(TargetMetric.calories.color)
             Spacer(minLength: 0)
@@ -52,10 +53,12 @@ private extension NutritionHabitTodayWidgetView {
 
     @ViewBuilder
     var proteinCountdownView: some View {
-        if let remainingProtein = viewModel.remainingProtein {
+        if let remainingProtein = viewModel.remainingProtein, let percent = viewModel.remainingProteinPercent {
             NutritionRemainingValueView(
-                value: remainingProtein.displayString(for: .gram()),
-                subtitle: "Protein"
+                systemImage: TargetMetric.proteinIntake.systemImage,
+                value: percent,
+                valueText: remainingProtein.displayString(for: .gram()),
+                title: "Protein"
             )
             .tint(TargetMetric.proteinIntake.color)
             Spacer(minLength: 0)

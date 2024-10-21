@@ -184,20 +184,7 @@ private extension BodyCompositionDetailsView {
 
             Chart {
                 ForEach(bodyFatPercentageSamples) { sample in
-                    LineMark(
-                        x: .value("Date", sample.date, unit: .day),
-                        y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
-                    )
-                    .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
-
-                    PointMark(
-                        x: .value("Date", sample.date, unit: .day),
-                        y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
-                    )
-                    .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
-                    .symbolSize(40)
-
-                    if 
+                    if
                         let goals = viewModel.bodyCompositionSummary?.details.goalBodyFatPercentage,
                         let goal = range.rangeValues(from: goals)
                     {
@@ -220,6 +207,19 @@ private extension BodyCompositionDetailsView {
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
                         .foregroundStyle(range.color)
                     }
+
+                    LineMark(
+                        x: .value("Date", sample.date, unit: .day),
+                        y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
+                    )
+                    .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
+
+                    PointMark(
+                        x: .value("Date", sample.date, unit: .day),
+                        y: .value("Body Fat Percentage", sample.quantity.doubleValue(for: .percent()))
+                    )
+                    .foregroundStyle(viewModel.bodyCompositionSummary?.details.range?.color ?? .vitalGood)
+                    .symbolSize(40)
                 }
             }
             .frame(height: 200)
