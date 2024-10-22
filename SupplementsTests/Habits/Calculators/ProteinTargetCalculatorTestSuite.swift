@@ -41,6 +41,7 @@ struct ProteinTargetCalculatorTestSuite {
                 dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: inputDietaryEnergy),
                 calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
                 targetDetails: .init(
+                    targetWeight: 160,
                     goal: healthGoal,
                     weightLossSpeed: speed
                 )
@@ -78,6 +79,7 @@ struct ProteinTargetCalculatorTestSuite {
                 dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: inputDietaryEnergy),
                 calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
                 targetDetails: .init(
+                    targetWeight: 160,
                     goal: healthGoal,
                     weightLossSpeed: speed
                 )

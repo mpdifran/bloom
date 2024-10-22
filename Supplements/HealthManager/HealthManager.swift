@@ -12,6 +12,7 @@ import SwiftData
 import BloomFoundation
 
 struct HealthTargetDetails {
+    let targetWeight: Double
     let goal: HealthGoal
     let weightLossSpeed: WeightLossSpeed
 }
@@ -66,6 +67,7 @@ final class HealthManager: ObservableObject {
 
     var healthTargetDetails: HealthTargetDetails {
         HealthTargetDetails(
+            targetWeight: targetWeight,
             goal: healthGoal,
             weightLossSpeed: weightLossSpeed
         )

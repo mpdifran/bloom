@@ -21,6 +21,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: 200,
                 dietary: 2100,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .slow
@@ -31,6 +32,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: 200,
                 dietary: 2100,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .moderate
@@ -41,6 +43,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: 200,
                 dietary: 2100,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .fast
@@ -51,6 +54,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: 200,
                 dietary: 2100,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .maintainWeight,
                 speed: .fast
@@ -61,6 +65,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: 200,
                 dietary: 2100,
                 bodyMass: 160,
+                targetWeight: 180,
                 activityLevel: nil,
                 goal: .gainWeight,
                 speed: .fast
@@ -71,6 +76,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: 400,
                 dietary: 2400,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .slow
@@ -81,6 +87,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2080,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: .sedentary,
                 goal: .loseWeight,
                 speed: .slow
@@ -91,6 +98,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2400,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: .light,
                 goal: .loseWeight,
                 speed: .slow
@@ -101,6 +109,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2720,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: .high,
                 goal: .loseWeight,
                 speed: .slow
@@ -111,6 +120,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2080,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: .sedentary,
                 goal: .loseWeight,
                 speed: .moderate
@@ -121,6 +131,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2400,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: .light,
                 goal: .loseWeight,
                 speed: .moderate
@@ -131,6 +142,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2600,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: .high,
                 goal: .loseWeight,
                 speed: .moderate
@@ -141,6 +153,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2860,
                 bodyMass: 220,
+                targetWeight: 140,
                 activityLevel: .sedentary,
                 goal: .loseWeight,
                 speed: .slow
@@ -151,6 +164,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2860,
                 bodyMass: 220,
+                targetWeight: 220,
                 activityLevel: .sedentary,
                 goal: .maintainWeight,
                 speed: .slow
@@ -161,6 +175,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2860,
                 bodyMass: 220,
+                targetWeight: 240,
                 activityLevel: .sedentary,
                 goal: .gainWeight,
                 speed: .slow
@@ -171,6 +186,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2000,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .slow
@@ -181,6 +197,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2000,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .moderate
@@ -191,6 +208,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: nil,
                 dietary: 2000,
                 bodyMass: 160,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .fast
@@ -201,6 +219,7 @@ extension CalorieTargetCalculatorTestSuite {
                 active: 600,
                 dietary: 2000,
                 bodyMass: 180,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .loseWeight,
                 speed: .moderate,
@@ -220,11 +239,12 @@ extension CalorieTargetCalculatorTestSuite {
             ),
             1650),
             (Input(
-                "AL lose weight high activity existing habit",
+                "AL maintain weight high activity existing habit",
                 basal: 1700,
                 active: 600,
                 dietary: 2000,
                 bodyMass: 180,
+                targetWeight: 140,
                 activityLevel: nil,
                 goal: .maintainWeight,
                 speed: .moderate,

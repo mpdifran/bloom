@@ -32,6 +32,7 @@ struct CalorieTargetCalculatorTestSuite {
                 bodyMass: HKQuantity(unit: .pound(), doubleValue: input.bodyMass),
                 activityLevel: input.activityLevel,
                 targetDetails: .init(
+                    targetWeight: input.targetWeight,
                     goal: input.healthGoal,
                     weightLossSpeed: input.speed
                 )
@@ -51,6 +52,7 @@ extension CalorieTargetCalculatorTestSuite {
         let activeEnergy: Double?
         let dietaryEnergy: Double
         let bodyMass: Double
+        let targetWeight: Double
         let activityLevel: ActivityLevelSummary.ActivityLevel?
         let healthGoal: HealthGoal
         let speed: WeightLossSpeed
@@ -62,6 +64,7 @@ extension CalorieTargetCalculatorTestSuite {
             active: Double?,
             dietary: Double,
             bodyMass: Double,
+            targetWeight: Double,
             activityLevel: ActivityLevelSummary.ActivityLevel?,
             goal: HealthGoal,
             speed: WeightLossSpeed,
@@ -72,6 +75,7 @@ extension CalorieTargetCalculatorTestSuite {
             self.activeEnergy = active
             self.dietaryEnergy = dietary
             self.bodyMass = bodyMass
+            self.targetWeight = targetWeight
             self.activityLevel = activityLevel
             self.healthGoal = goal
             self.speed = speed
