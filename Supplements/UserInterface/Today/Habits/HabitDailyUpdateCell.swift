@@ -41,10 +41,6 @@ struct HabitDailyUpdateCell: View {
                         Text(habit.targetMetric.name)
                             .bold()
                             .fontDesign(.rounded)
-
-                        Text(habit.displayQuantity)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
                     }
 
                     Spacer(minLength: 0)
@@ -57,6 +53,12 @@ struct HabitDailyUpdateCell: View {
                             .bold()
                             .contentTransition(.numericText(value: viewModel.dailyValue))
                             .animation(.default, value: viewModel.dailyValue)
+
+                        Text("/ \(habit.displayQuantity)")
+                            .font(.caption)
+                            .bold()
+                            .foregroundStyle(.secondary)
+                            .fontDesign(.rounded)
                     }
                 }
             }

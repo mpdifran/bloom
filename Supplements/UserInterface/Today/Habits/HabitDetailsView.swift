@@ -38,13 +38,13 @@ struct HabitDetailsView: View {
                         Spacer()
 
                         VStack(alignment: .trailing) {
+                            Text("Goal")
+                                .foregroundStyle(.secondary)
+                                .font(.caption)
                             Text(habit.displayQuantity)
                                 .font(.title3)
                                 .bold()
                                 .fontDesign(.rounded)
-                            Text("Goal")
-                                .foregroundStyle(.secondary)
-                                .font(.caption)
                         }
                     }
                     .padding()
@@ -90,7 +90,6 @@ private extension HabitDetailsView {
                 Text("\(average.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter))")
                     .fontDesign(.rounded)
                     .bold()
-                    .foregroundStyle(habit.targetMetric.color)
             }
             .frame(height: 44)
 
@@ -101,7 +100,6 @@ private extension HabitDetailsView {
                     Text(bestDay)
                         .fontDesign(.rounded)
                         .bold()
-                        .foregroundStyle(habit.targetMetric.color)
                 }
                 .frame(height: 44)
             }
@@ -113,7 +111,6 @@ private extension HabitDetailsView {
                     Text(worstDay)
                         .fontDesign(.rounded)
                         .bold()
-                        .foregroundStyle(habit.targetMetric.color)
                 }
                 .frame(height: 44)
             }
