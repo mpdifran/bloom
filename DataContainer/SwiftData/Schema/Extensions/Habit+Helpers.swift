@@ -9,6 +9,10 @@ import Foundation
 import HealthKit
 import BloomFoundation
 
+private extension Double {
+    static let defaultPrecision: Double = 0.05
+}
+
 public extension Habit {
 
     var unit: HKUnit {
@@ -31,7 +35,7 @@ public extension Habit {
             let value = otherQuantity.doubleValue(for: unit)
             let goal = quantity.doubleValue(for: unit)
 
-            let resultPrecision = 0.1 + clampedGracePercent
+            let resultPrecision = .defaultPrecision + clampedGracePercent
 
             return value.isWithinRange(of: goal, precision: resultPrecision)
         }
