@@ -238,7 +238,8 @@ private extension GoodMorningView {
         if
             let periodDate = vitalsViewModel.menstrualSummary?.nextPredictedPeriodDate,
             let remainingDays = Calendar.current.dateComponents([.day], from: .now, to: periodDate).day,
-            remainingDays < 5
+            remainingDays <= 4,
+            remainingDays >= -3
         {
             Section("Cycle Tracking") {
                 UpcomingPeriodCell(predictedPeriodDate: periodDate)

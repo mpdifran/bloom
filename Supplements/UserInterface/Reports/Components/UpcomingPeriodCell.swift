@@ -20,10 +20,10 @@ struct UpcomingPeriodCell: View {
             .frame(width: 50)
 
             VStack(alignment: .leading) {
-                Text("Upcoming Period")
+                Text(title)
                     .bold()
 
-                Text("Your period is expected to start by \(DateFormatter.justDateMedium.string(from: predictedPeriodDate)).")
+                Text(summary)
             }
 
             Spacer(minLength: 0)
@@ -33,6 +33,37 @@ struct UpcomingPeriodCell: View {
     }
 }
 
+private extension UpcomingPeriodCell {
+
+    var isLate: Bool {
+        let startOfDay = Calendar.current.startOfDay(for: .now)
+
+        return predictedPeriodDate < startOfDay
+    }
+
+    var title: String {
+        if isLate {
+            "Late Period"
+        } else {
+            "Upcoming Period"
+        }
+    }
+
+    var summary: String {
+        if isLate {
+            "Your period is late. It was predicted to start \(DateFormatter.justRelativeDateMedium.string(from: predictedPeriodDate))."
+        } else {
+            "Your period is expected to start \(DateFormatter.justRelativeDateMedium.string(from: predictedPeriodDate))."
+        }
+    }
+}
+
 #Preview {
-    UpcomingPeriodCell(predictedPeriodDate: .now)
+    List {
+        UpcomingPeriodCell(predictedPeriodDate: .now.addingTimeInterval(3600 * 24 * -3))
+        UpcomingPeriodCell(predictedPeriodDate: .now.addingTimeInterval(3600 * 24 * -1))
+        UpcomingPeriodCell(predictedPeriodDate: .now)
+        UpcomingPeriodCell(predictedPeriodDate: .now.addingTimeInterval(3600 * 24 * 2))
+    }
+    .listStyle(.plain)
 }
