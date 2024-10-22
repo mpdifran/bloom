@@ -90,6 +90,7 @@ private extension HabitDetailsView {
                 Text("\(average.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter))")
                     .fontDesign(.rounded)
                     .bold()
+                    .foregroundStyle(.text)
             }
             .frame(height: 44)
 
@@ -100,6 +101,7 @@ private extension HabitDetailsView {
                     Text(bestDay)
                         .fontDesign(.rounded)
                         .bold()
+                        .foregroundStyle(.text)
                 }
                 .frame(height: 44)
             }
@@ -111,6 +113,7 @@ private extension HabitDetailsView {
                     Text(worstDay)
                         .fontDesign(.rounded)
                         .bold()
+                        .foregroundStyle(.text)
                 }
                 .frame(height: 44)
             }

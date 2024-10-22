@@ -26,11 +26,13 @@ struct NutritionRemainingValueView: View {
             Text(valueText)
                 .bold()
 
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .layoutPriority(0)
+            Group {
+                Text(title)
+                Text("Remaining")
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
         }
     }
 }
