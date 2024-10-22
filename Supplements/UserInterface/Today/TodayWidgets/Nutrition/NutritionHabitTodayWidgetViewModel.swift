@@ -28,6 +28,13 @@ extension NutritionHabitTodayWidgetView {
 
 extension NutritionHabitTodayWidgetView.ViewModel {
 
+    var hasNoContent: Bool {
+        remainingCalories == nil &&
+        remainingProtein == nil &&
+        remainingCaloriesPercent == nil &&
+        remainingProteinPercent == nil
+    }
+
     func observeValues() {
         calorieObservationHandler = HealthManager.shared.healthStore.observeChanges(
             sampleTypes: [HKQuantityType(.dietaryEnergyConsumed)],

@@ -13,20 +13,27 @@ import DataContainer
 @MainActor
 struct TodayView: View {
 
-    @Query var suggestedHabits: [Habit]
-    @Query var userHabits: [Habit]
+    @Query var habits: [Habit]
+    @Query var nutritionHabits: [Habit]
 
     init() {
-        _suggestedHabits = Query(
+        let rawCaloriesMetric = TargetMetric.calories.rawValue
+        let rawProteinMetric = TargetMetric.proteinIntake.rawValue
+
+        _habits = Query(
             filter: #Predicate<Habit> { habit in
-                habit.endDate == nil && habit.isSuggested
+                habit.endDate == nil &&
+                habit.rawTargetMetric != rawProteinMetric &&
+                habit.rawTargetMetric != rawCaloriesMetric
             },
             sort: \Habit.startDate,
             order: .reverse
         )
-        _userHabits = Query(
+        _nutritionHabits = Query(
             filter: #Predicate<Habit> { habit in
-                habit.endDate == nil && !habit.isSuggested
+                habit.endDate == nil &&
+                habit.rawTargetMetric == rawProteinMetric ||
+                habit.rawTargetMetric == rawCaloriesMetric
             },
             sort: \Habit.startDate,
             order: .reverse
@@ -89,28 +96,17 @@ struct TodayView: View {
                     }
 
                     if showNutritionWidget {
-                        NavigationLink {
-                            NutritionDetailsView()
-                        } label: {
-                            NutritionHabitTodayWidgetView()
-                        }
-                        .buttonStyle(.plain)
+                        SectionTitleView("Nutrition")
+                            .padding(.horizontal)
+
+                        NutritionHabitTodayWidgetView()
                     }
 
-                    if suggestedHabits.isNotEmpty || userHabits.isNotEmpty {
+                    if habits.isNotEmpty {
                         SectionTitleView("Habits")
                             .padding(.horizontal)
 
-                        ForEach(suggestedHabits) { habit in
-                            NavigationLink {
-                                HabitDetailsView(habit: habit)
-                            } label: {
-                                HabitDailyUpdateCell(habit: habit)
-                            }
-                            .buttonStyle(.plain)
-                        }
-
-                        ForEach(userHabits) { habit in
+                        ForEach(habits) { habit in
                             NavigationLink {
                                 HabitDetailsView(habit: habit)
                             } label: {
@@ -184,10 +180,7 @@ private extension TodayView {
     var showNutritionWidget: Bool {
         guard showNutritionTodayWidget else { return false }
 
-        let allHabits = userHabits + suggestedHabits
-        return allHabits.contains(where: {
-            $0.targetMetric == .calories || $0.targetMetric == .proteinIntake
-        })
+        return nutritionHabits.isNotEmpty
     }
 }
 

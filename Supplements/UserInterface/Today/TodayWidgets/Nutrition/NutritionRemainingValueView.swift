@@ -29,6 +29,8 @@ struct NutritionRemainingValueView: View {
             Text(title)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .layoutPriority(0)
         }
     }
 }
