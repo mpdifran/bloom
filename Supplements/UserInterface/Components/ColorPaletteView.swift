@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ColorPaletteView: View {
+
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         NavigationStack {
             List {
@@ -25,6 +28,14 @@ struct ColorPaletteView: View {
                 }
             }
             .navigationTitle("Color Palette")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .bold()
+                }
+            }
         }
     }
 }
@@ -60,6 +71,10 @@ private struct ColorCell: View {
             }
 
             Spacer()
+
+            Circle()
+                .fill(color.tertiary)
+                .frame(square: 40)
 
             Circle()
                 .fill(color)

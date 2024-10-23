@@ -267,6 +267,15 @@ private extension PreferencesView {
             Toggle("Daniele Mode", isOn: $danieleMode)
 
             Button {
+                presentedSheet = ColorPaletteView().asAny
+            } label: {
+                LabeledContent("Color Palette") {
+                    Image(systemName: "palette")
+                }
+            }
+            .buttonStyle(.plain)
+
+            Button {
                 hasShownOnboarding = false
             } label: {
                 LabeledContent("Reset Onboarding") {
