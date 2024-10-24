@@ -10,6 +10,7 @@ import SwiftUI
 extension OnboardingRootView {
     enum Step {
         case welcome
+        case appExplanation
         case healthKit
         case ageAndSex
         case healthGoals
@@ -34,6 +35,10 @@ struct OnboardingRootView: View {
             switch step {
             case .welcome:
                 OnboardingWelcomeView {
+                    setStep(.appExplanation)
+                }
+            case .appExplanation:
+                OnboardingAppExplanationView {
                     setStep(.healthKit)
                 }
             case .healthKit:

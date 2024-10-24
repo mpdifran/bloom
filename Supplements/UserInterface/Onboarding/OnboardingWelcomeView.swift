@@ -27,7 +27,6 @@ struct OnboardingWelcomeView: View {
 
                 if index >= 1 {
                     Text("Hey there!")
-                        .contentTransition(.interpolate)
                         .if(index != 1) {
                             $0.foregroundStyle(.secondary)
                         }
@@ -36,7 +35,6 @@ struct OnboardingWelcomeView: View {
 
                 if index >= 2 {
                     Text("Welcome to Bloom, your new personal Health Assistant")
-                        .contentTransition(.interpolate)
                         .if(index != 2) {
                             $0.foregroundStyle(.secondary)
                         }
@@ -73,22 +71,23 @@ struct OnboardingWelcomeView: View {
                 if index >= 4 {
                     Text("Nice to meet you, \(healthManager.name)! Let's get to know each other a bit...")
                         .fixedSize(horizontal: false, vertical: true)
-                        .transition(.blurReplace)
+                        .transition(.opacity)
                 }
 
                 Spacer()
             }
+            .padding()
             .horizontalAlignment(.leading)
         }
         .font(.title)
         .bold()
         .fontDesign(.rounded)
-        .padding()
+        .topSafeAreaBlur()
         .sensoryFeedback(.selection, trigger: index)
         .animation(.default, value: index)
         .shelf {
             if index >= 5 {
-                Button("Continue") {
+                Button("Sounds Great!") {
                     onContinue()
                 }
                 .buttonStyle(.onboarding)
