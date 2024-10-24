@@ -99,7 +99,7 @@ private extension OnboardingAppExplanationView {
 private extension OnboardingAppExplanationView {
 
     func advanceIndex() async {
-        await Delay(100)
+        await Delay(200)
 
         index += 1
     }

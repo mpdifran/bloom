@@ -42,6 +42,7 @@ struct OnboardingHealthKitView: View {
                     .transition(.move(edge: .bottom))
             }
         }
+        .animation(.bouncy, value: showMockHealthApp)
         .horizontalAlignment(.leading)
         .padding()
         .shelf {
@@ -69,8 +70,8 @@ struct OnboardingHealthKitView: View {
 //                    .font(.caption)
             }
         }
-        .onAppear {
-            showMockHealthApp = true
+        .task {
+            await toggleMockHealthApp()
         }
         .alert(error: $error)
         .healthDataAccessRequest(
@@ -92,6 +93,12 @@ struct OnboardingHealthKitView: View {
 }
 
 private extension OnboardingHealthKitView {
+
+    func toggleMockHealthApp() async {
+        await Delay(600)
+
+        showMockHealthApp = true
+    }
 
     func checkAuth() async {
         do {

@@ -85,13 +85,12 @@ struct OnboardingWelcomeView: View {
         .topSafeAreaBlur()
         .sensoryFeedback(.selection, trigger: index)
         .animation(.default, value: index)
-        .shelf {
-            if index >= 5 {
+        .if(index >= 5) {
+            $0.shelf {
                 Button("Sounds Great!") {
                     onContinue()
                 }
                 .buttonStyle(.onboarding)
-                .transition(.move(edge: .bottom))
             }
         }
         .task {
