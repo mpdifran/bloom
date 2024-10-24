@@ -13,50 +13,64 @@ import Charts
 struct OnboardingHealthKitView: View {
     let onContinue: () -> Void
 
+    @State private var showMockHealthApp = false
     @State private var healthPermissionTrigger = false
     @State private var isAuthorized = false
     @State private var error: Error?
 
     var body: some View {
-        OnboardingCardTemplateView {
-            Image(systemName: "hand.raised.circle.fill")
-                .foregroundStyle(.white, .tint)
-                .font(.system(size: 80))
-
-            Text("Privacy")
-                .font(.largeTitle)
-                .bold()
-
-            Text("We value and respect your privacy.")
-                .padding(.top)
-        } bottom: {
-            VStack(spacing: 20) {
-                Spacer()
-                Text("Bloom uses data in the Health App to give you recommendations on how to improve your health.")
-                Text("Your data is always private and only you will have access to it.")
-                    .bold()
-                Spacer()
+        VStack(alignment: .leading) {
+            Group {
+                Text("Let's calculate your Vitals!")
+                    .padding(.top, 30)
+                Text("Bloom needs access to your Health data in order to set personalized goals.")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
             }
-            .frame(maxWidth: 300)
-            .multilineTextAlignment(.center)
-            .horizontallyCentered()
+            .font(.title)
+            .bold()
+            .fontDesign(.rounded)
+
+            Spacer()
         }
+        .overlay {
+            if showMockHealthApp {
+                MockHealthAppPermissionView()
+                    .zStackAlignment(.bottom)
+                    .offset(y: 160)
+                    .horizontallyCentered()
+                    .transition(.move(edge: .bottom))
+            }
+        }
+        .horizontalAlignment(.leading)
+        .padding()
         .shelf {
             VStack {
+                Text("Your Health data never leaves your device")
+                    .font(.subheadline)
+                    .fontDesign(.rounded)
+                    .bold()
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
                 if isAuthorized {
-                    ProminentButton("Continue") {
+                    Button("Let's Go!") {
                         onContinue()
                     }
+                    .buttonStyle(.onboarding)
                 } else {
-                    ProminentButton("Connect to Health", systemImage: "heart.fill") {
+                    Button("Connect to Health", systemImage: "heart.fill") {
                         healthPermissionTrigger.toggle()
                     }
+                    .buttonStyle(.onboarding)
                 }
 //                Text("Bloom is not a substitute for professional medical advice. Always consult your physician first.")
 //                    .multilineTextAlignment(.center)
 //                    .foregroundStyle(.secondary)
 //                    .font(.caption)
             }
+        }
+        .onAppear {
+            showMockHealthApp = true
         }
         .alert(error: $error)
         .healthDataAccessRequest(

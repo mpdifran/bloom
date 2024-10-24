@@ -198,6 +198,7 @@
 		FF70EA1C2CCA77AE0055E932 /* OnboardingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */; };
 		FF70EA1E2CCA792F0055E932 /* View+HorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA1D2CCA79240055E932 /* View+HorizontalAlignment.swift */; };
 		FF70EA202CCAC13B0055E932 /* OnboardingAppExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA1F2CCAC13B0055E932 /* OnboardingAppExplanationView.swift */; };
+		FF70EA222CCADEAC0055E932 /* MockHealthAppPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA212CCADEAC0055E932 /* MockHealthAppPermissionView.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -704,6 +705,7 @@
 		FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButtonStyle.swift; sourceTree = "<group>"; };
 		FF70EA1D2CCA79240055E932 /* View+HorizontalAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+HorizontalAlignment.swift"; sourceTree = "<group>"; };
 		FF70EA1F2CCAC13B0055E932 /* OnboardingAppExplanationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingAppExplanationView.swift; sourceTree = "<group>"; };
+		FF70EA212CCADEAC0055E932 /* MockHealthAppPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHealthAppPermissionView.swift; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1954,6 +1956,7 @@
 				FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */,
 				FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */,
 				FF70EA192CC990140055E932 /* MiniVitalCell.swift */,
+				FF70EA212CCADEAC0055E932 /* MockHealthAppPermissionView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2743,6 +2746,7 @@
 				FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
 				FF4EFF902C93A0B7005E4A1F /* MenstruationDetailView.swift in Sources */,
+				FF70EA222CCADEAC0055E932 /* MockHealthAppPermissionView.swift in Sources */,
 				FFA134F62C3F16F900FF1829 /* ProgressArcView.swift in Sources */,
 				FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */,
 				FFADB6EC2C209F1B0028BFE7 /* BedtimeActivityView.swift in Sources */,

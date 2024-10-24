@@ -14,6 +14,7 @@ struct OnboardingAppExplanationView: View {
 
     @State private var vitalPairs = [VitalOffsetPair]()
 
+    @State private var animationCount = 0
     @State private var index = 0
 
     var body: some View {
@@ -108,7 +109,12 @@ private extension OnboardingAppExplanationView {
         while !hasFinished {
             hasFinished = await advanceVitals()
         }
+
+        animationCount += 1
+
         await Delay(3000)
+
+        guard animationCount < 4 else { return }
 
         vitalPairs.removeAll(keepingCapacity: true)
 
