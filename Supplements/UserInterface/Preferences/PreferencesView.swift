@@ -17,7 +17,6 @@ struct PreferencesView: View {
 
     @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
-    @AppStorage("PreferencesView.user.name") private(set) var userName: String = ""
     @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
     @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
@@ -71,7 +70,7 @@ private extension PreferencesView {
     var nameSection: some View {
         Section("User Details") {
             LabeledContent("Name") {
-                TextField("", text: $userName, prompt: Text("Name"))
+                TextField("", text: $healthManager.name, prompt: Text("Name"))
                     .multilineTextAlignment(.trailing)
                     .textContentType(.name)
                     .submitLabel(.done)
@@ -195,7 +194,7 @@ private extension PreferencesView {
     var feedbackSection: some View {
         Section("Feedback") {
             Button {
-                if userName.isEmpty {
+                if healthManager.name.isEmpty {
                     presentedSheet = UserNamePrompt {
                         showFeedbackView()
                     }

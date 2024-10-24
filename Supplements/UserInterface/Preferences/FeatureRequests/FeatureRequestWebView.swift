@@ -12,7 +12,7 @@ struct FeatureRequestWebView: UIViewRepresentable {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    @AppStorage("PreferencesView.user.name") private(set) var userName: String = ""
+    @ObservedObject private var healthManager = HealthManager.shared
 
     func makeUIView(context: Context) -> WKWebView {
         WKWebView()
@@ -22,7 +22,7 @@ struct FeatureRequestWebView: UIViewRepresentable {
         let request = URLRequest(
             url: .featureRequests(
                 userID: UserID.value,
-                name: userName,
+                name: healthManager.name,
                 isDark: colorScheme == .dark
             )
         )

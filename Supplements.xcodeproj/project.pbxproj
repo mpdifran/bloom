@@ -194,6 +194,9 @@
 		FF70EA102CC334D90055E932 /* Comparable+Clipped.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA0F2CC334D30055E932 /* Comparable+Clipped.swift */; };
 		FF70EA122CC405EF0055E932 /* TodaysDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA112CC405EF0055E932 /* TodaysDateView.swift */; };
 		FF70EA142CC696110055E932 /* ColorPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA132CC696110055E932 /* ColorPaletteView.swift */; };
+		FF70EA1A2CC990140055E932 /* MiniVitalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA192CC990140055E932 /* MiniVitalCell.swift */; };
+		FF70EA1C2CCA77AE0055E932 /* OnboardingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */; };
+		FF70EA1E2CCA792F0055E932 /* View+HorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF70EA1D2CCA79240055E932 /* View+HorizontalAlignment.swift */; };
 		FF78681C2CA60E490001F49E /* VitalStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */; };
 		FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78681D2CA782620001F49E /* Double+Helpers.swift */; };
 		FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */; };
@@ -696,6 +699,9 @@
 		FF70EA0F2CC334D30055E932 /* Comparable+Clipped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clipped.swift"; sourceTree = "<group>"; };
 		FF70EA112CC405EF0055E932 /* TodaysDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysDateView.swift; sourceTree = "<group>"; };
 		FF70EA132CC696110055E932 /* ColorPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteView.swift; sourceTree = "<group>"; };
+		FF70EA192CC990140055E932 /* MiniVitalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniVitalCell.swift; sourceTree = "<group>"; };
+		FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButtonStyle.swift; sourceTree = "<group>"; };
+		FF70EA1D2CCA79240055E932 /* View+HorizontalAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+HorizontalAlignment.swift"; sourceTree = "<group>"; };
 		FF78681B2CA60E490001F49E /* VitalStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalStatusBarView.swift; sourceTree = "<group>"; };
 		FF78681D2CA782620001F49E /* Double+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Helpers.swift"; sourceTree = "<group>"; };
 		FF78904B2C34727A00F9C1A5 /* SleepCoachRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachRequest.swift; sourceTree = "<group>"; };
@@ -1313,6 +1319,7 @@
 			isa = PBXGroup;
 			children = (
 				FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */,
+				FF70EA1D2CCA79240055E932 /* View+HorizontalAlignment.swift */,
 				FFF61B022BED87B400926042 /* Delay.swift */,
 				FFF61B082BED9CA900926042 /* Color+Random.swift */,
 				FF1E96032C0A6462004DAD2D /* Color+Brightness.swift */,
@@ -1942,6 +1949,8 @@
 				FFBE52242C6EF5BB00F510DE /* OnboardingCardTemplateView.swift */,
 				FFBE52262C6EF69B00F510DE /* OnboardingTitleCardView.swift */,
 				FF4CAAF22C7F5E8F001A59F3 /* MockNotificationView.swift */,
+				FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */,
+				FF70EA192CC990140055E932 /* MiniVitalCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2675,6 +2684,7 @@
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */,
+				FF70EA1C2CCA77AE0055E932 /* OnboardingButtonStyle.swift in Sources */,
 				FF70E90D2CB834D60055E932 /* AsyncStreamWrapper.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
 				FF88F1332C7D0CE10093D1B4 /* BowelMovementAllDataCell.swift in Sources */,
@@ -2711,6 +2721,7 @@
 				FFE41D1D2C8BCDAA00E3E559 /* EveningReportView.swift in Sources */,
 				FF1327F82CB4338000ACF981 /* TargetWeightEditCard.swift in Sources */,
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
+				FF70EA1E2CCA792F0055E932 /* View+HorizontalAlignment.swift in Sources */,
 				FF2FB8A62C9DD81A00F57523 /* Habit+Helpers.swift in Sources */,
 				FF1705152C0E7D89000D4B3D /* SleepDurationSummaryCell.swift in Sources */,
 				FF88F1302C7D0C420093D1B4 /* AllActionDataListView.swift in Sources */,
@@ -2807,6 +2818,7 @@
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
 				FFA062B02C921AFE00ADCB09 /* HabitGridCell.swift in Sources */,
 				FFC8B0172C51A500009C5CED /* Double+ScaledPercentage.swift in Sources */,
+				FF70EA1A2CC990140055E932 /* MiniVitalCell.swift in Sources */,
 				FFC0AA8D2C39973D0025FE34 /* Sequence+MinMax.swift in Sources */,
 				FFAFF4162CAB07D000FAD3C9 /* NewHabitResult.swift in Sources */,
 				FF8F79DF2C6948B70095C36D /* HeartHealthDetailsView.swift in Sources */,

@@ -51,7 +51,9 @@ enum WeightLossSpeed: String, CaseIterable, Identifiable {
 final class HealthManager: ObservableObject {
     static let shared = HealthManager()
 
-    @AppStorage("HealthManager.isFemale") var isFemale = false
+    @AppStorage("HealthManager.name", store: .group) var name: String = ""
+    @AppStorage("HealthManager.isFemale", store: .group) var isFemale = false
+
     @Published var birthday = Date.now {
         didSet { UserDefaults.group.set(birthday, forKey: "HealthManager.birthday") }
     }
@@ -74,8 +76,8 @@ final class HealthManager: ObservableObject {
     }
 
     @AppStorage("HealthManager.targetWeight", store: .group) var targetWeight: Double = 0
-    @AppStorage("HealthManager.isPregnant") var isPregnant = false
-    @AppStorage("HealthManager.isBreastfeeding") var isBreastfeeding = false
+    @AppStorage("HealthManager.isPregnant", store: .group) var isPregnant = false
+    @AppStorage("HealthManager.isBreastfeeding", store: .group) var isBreastfeeding = false
 
     let healthStore = HKHealthStore()
 

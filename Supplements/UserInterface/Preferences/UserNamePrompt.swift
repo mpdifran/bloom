@@ -11,7 +11,7 @@ struct UserNamePrompt: View {
 
     let onContinue: () -> Void
 
-    @AppStorage("PreferencesView.user.name") private(set) var userName: String = ""
+    @ObservedObject private var healthManager = HealthManager.shared
 
     @State private var didContinue = false
 
@@ -28,7 +28,7 @@ struct UserNamePrompt: View {
 
                 HStack {
                     LabeledContent("Name") {
-                        TextField("", text: $userName, prompt: Text("Name"))
+                        TextField("", text: $healthManager.name, prompt: Text("Name"))
                             .multilineTextAlignment(.trailing)
                             .textContentType(.name)
                             .submitLabel(.done)
@@ -68,7 +68,7 @@ struct UserNamePrompt: View {
                         .horizontallyCentered()
                 }
                 .buttonStyle(.primary)
-                .disabled(userName.isEmpty)
+                .disabled(healthManager.name.isEmpty)
                 .sensoryFeedback(.success, trigger: didContinue)
             }
         }
