@@ -14,91 +14,89 @@ struct OnboardingHealthVitalLevelsView: View {
 
     private let vitalsViewModel = VitalsViewModel.shared
 
+    @State private var vitals = [VitalModel]()
+    @State private var noDataVitals = [VitalModel]()
+
+    @State private var didContinue = false
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                Text("Vitals")
-                    .font(.largeTitle)
-                    .bold()
-                    .fontDesign(.rounded)
-
-                Text("Bloom organizes your health data into several categories, called **Vitals**.")
-
-                ForEach(vitalsViewModel.vitals) { vital in
-                    MonthlyVitalCardCell(vital: vital)
+            VStack(alignment: .leading, spacing: 20) {
+                Group {
+                    Text("Let's calculate your Vitals to see where you are on your health journey.")
                 }
+                .font(.title)
+                .bold()
+                .fontDesign(.rounded)
+                .fixedSize(horizontal: false, vertical: true)
 
-                ForEach(vitalsViewModel.noDataVitals) { vital in
-                    MonthlyVitalCardCell(vital: vital)
+                if vitals.isEmpty && noDataVitals.isEmpty {
+                    CircularSpinnerView()
+                        .foregroundStyle(.tint)
+                        .horizontallyCentered()
+                } else {
+                    VStack(alignment: .leading) {
+                        ForEach(vitals) { vital in
+                            MiniVitalCell(vital: vital)
+                                .transition(.scale)
+                        }
+                        if noDataVitals.isNotEmpty {
+                            Text("Looks like we're missing some data. That's ok!")
+                                .font(.title)
+                                .bold()
+                                .fontDesign(.rounded)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .transition(.blurReplace)
+
+                            ForEach(noDataVitals) { vital in
+                                MiniVitalCell(vital: vital)
+                                    .transition(.scale)
+                            }
+                        }
+                    }
+                    .horizontalAlignment(.leading)
                 }
-
-                Text("Levels")
-                    .font(.largeTitle)
-                    .bold()
-                    .fontDesign(.rounded)
-
-                Text("Each **Vital** is categorized into different color-coded levels based on where your health data falls in recommended ranges.")
-
-                VitalLevelView(
-                    systemImage: "checkmark.seal.fill",
-                    title: "Great",
-                    description: "You're exceeding recommended health levels."
-                )
-                .tint(.vitalGreat)
-                VitalLevelView(
-                    systemImage: "checkmark.circle.fill",
-                    title: "Good",
-                    description: "You're at the recommended healthy level."
-                )
-                .tint(.vitalGood)
-                VitalLevelView(
-                    systemImage: "exclamationmark.triangle.fill",
-                    title: "Low",
-                    description: "You're below recommended health levels, and should take notice."
-                )
-                .tint(.vitalWarning)
-                VitalLevelView(
-                    systemImage: "exclamationmark.octagon.fill",
-                    title: "Poor",
-                    description: "You're outside recommended health levels, and should take action ASAP."
-                )
-                .tint(.vitalSevere)
             }
+            .horizontalAlignment(.leading)
             .padding()
         }
+        .topSafeAreaBlur()
+        .animation(.bouncy, value: vitals.count)
+        .animation(.bouncy, value: noDataVitals.count)
+        .sensoryFeedback(.impact, trigger: vitals.count)
+        .sensoryFeedback(.impact, trigger: noDataVitals.count)
+        .sensoryFeedback(.selection, trigger: didContinue)
         .shelf {
-            ProminentButton("Continue") {
+            Button("So Cool!") {
+                didContinue.toggle()
                 onContinue()
             }
-        }
-        .groupedBackground()
-        .safeAreaInset(edge: .top) {
-            Rectangle()
-                .fill(.bar)
-                .ignoresSafeArea()
-                .frame(height: 0)
+            .buttonStyle(.onboarding)
         }
         .task {
             await VitalsCalculator.shared.forceFetchVitals()
+            await Delay(1000)
+            await advanceVitals()
         }
     }
 }
 
-private struct MiniVitalView: View {
-    let kind: VitalModel.Kind
+private extension OnboardingHealthVitalLevelsView {
 
-    var body: some View {
-        HStack {
-            Image(systemName: kind.systemImage)
-                .font(.subheadline)
-                .bold()
+    func advanceVitals() async {
+        await Delay(100)
 
-            Text(kind.name)
-                .font(.headline)
-
-            Spacer()
+        if vitals.count < vitalsViewModel.vitals.count {
+            let index = vitals.count
+            vitals.append(vitalsViewModel.vitals[index])
+        } else if noDataVitals.count < vitalsViewModel.noDataVitals.count {
+            let index = noDataVitals.count
+            noDataVitals.append(vitalsViewModel.noDataVitals[index])
+        } else {
+            return
         }
-        .cardContainer(fill: .background.secondary)
+
+        await advanceVitals()
     }
 }
 

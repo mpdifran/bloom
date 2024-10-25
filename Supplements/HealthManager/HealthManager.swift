@@ -24,6 +24,17 @@ enum HealthGoal: String {
     case loseWeight
 }
 
+extension HealthGoal {
+    var isWeightRelated: Bool {
+        switch self {
+        case .gainWeight, .maintainWeight, .loseWeight:
+            true
+        default:
+            false
+        }
+    }
+}
+
 enum WeightLossSpeed: String, CaseIterable, Identifiable {
     var id: Self { self }
 

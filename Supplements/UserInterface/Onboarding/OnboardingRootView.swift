@@ -28,6 +28,8 @@ struct OnboardingRootView: View {
 
     private let vitalsViewModel = VitalsViewModel.shared
 
+    @ObservedObject private var healthManager = HealthManager.shared
+
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -47,22 +49,18 @@ struct OnboardingRootView: View {
                 }
             case .ageAndSex:
                 OnboardingHealthAgeView {
-                    setStep(.healthGoals)
-                }
-            case .healthGoals:
-                OnboardingHealthGoalView {
-                    if let _ = vitalsViewModel.activityLevelSummary?.details.activityLevel {
-                        setStep(.vitals)
-                    } else {
-                        setStep(.activityLevel)
-                    }
-                }
-            case .activityLevel:
-                OnboardingHealthActivityLevelView {
                     setStep(.vitals)
                 }
             case .vitals:
                 OnboardingHealthVitalLevelsView {
+                    setStep(.healthGoals)
+                }
+            case .healthGoals:
+                OnboardingHealthGoalView {
+                    setStep(.activityLevel)
+                }
+            case .activityLevel:
+                OnboardingHealthActivityLevelView {
                     setStep(.focusAreas)
                 }
             case .focusAreas:

@@ -1886,9 +1886,9 @@
 				FF70EA1F2CCAC13B0055E932 /* OnboardingAppExplanationView.swift */,
 				FFB444A02BED46ED00486AD7 /* OnboardingHealthKitView.swift */,
 				FFBE52212C6EEA4300F510DE /* OnboardingHealthAgeView.swift */,
+				FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */,
 				FFA402C72C94C5E000D8DD40 /* OnboardingHealthGoalView.swift */,
 				FF70E9C32CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift */,
-				FFBE522A2C6F00F200F510DE /* OnboardingHealthVitalLevelsView.swift */,
 				FF4CAAF42C7F66CF001A59F3 /* OnboardingFocusAreasView.swift */,
 				FF4CAAF02C7F5DC3001A59F3 /* OnboardingNotificationPermissionView.swift */,
 			);

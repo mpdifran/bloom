@@ -15,7 +15,7 @@ struct OnboardingHealthAgeView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
 
-    @State private var index = 0
+    @State private var index = 1
     @State private var isHealthDataCorrect: Bool?
     @State private var didContinue = false
 
@@ -113,7 +113,7 @@ private extension OnboardingHealthAgeView {
                 index = 4
             }
             .buttonStyle(.onboarding)
-            .tint(.mutedGreen.opacity(isHealthDataCorrect == false ? 0.3 : 1))
+            .tint(.mutedBlue.opacity(isHealthDataCorrect == false ? 0.3 : 1))
 
             Spacer(minLength: 20)
 
