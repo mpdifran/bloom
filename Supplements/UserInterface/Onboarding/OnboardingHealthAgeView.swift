@@ -17,6 +17,7 @@ struct OnboardingHealthAgeView: View {
 
     @State private var index = 0
     @State private var isHealthDataCorrect: Bool?
+    @State private var didContinue = false
 
     var body: some View {
         ScrollView {
@@ -49,7 +50,9 @@ struct OnboardingHealthAgeView: View {
         }
         .topSafeAreaBlur()
         .animation(.default, value: index)
+        .sensoryFeedback(.selection, trigger: index)
         .sensoryFeedback(.selection, trigger: isHealthDataCorrect)
+        .sensoryFeedback(.selection, trigger: didContinue)
         .task {
             while index < 3 {
                 await advanceIndex()
@@ -67,6 +70,7 @@ struct OnboardingHealthAgeView: View {
                             .multilineTextAlignment(.center)
                     }
                     Button("Looks Good!") {
+                        didContinue.toggle()
                         onContinue()
                     }
                     .buttonStyle(.onboarding)

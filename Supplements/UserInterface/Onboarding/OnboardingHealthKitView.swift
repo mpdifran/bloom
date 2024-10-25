@@ -16,6 +16,7 @@ struct OnboardingHealthKitView: View {
     @State private var showMockHealthApp = false
     @State private var healthPermissionTrigger = false
     @State private var isAuthorized = false
+    @State private var didContinue = false
     @State private var error: Error?
 
     var body: some View {
@@ -43,6 +44,7 @@ struct OnboardingHealthKitView: View {
             }
         }
         .animation(.bouncy, value: showMockHealthApp)
+        .sensoryFeedback(.selection, trigger: didContinue)
         .horizontalAlignment(.leading)
         .padding()
         .shelf {
@@ -55,6 +57,7 @@ struct OnboardingHealthKitView: View {
                     .multilineTextAlignment(.center)
                 if isAuthorized {
                     Button("Let's Go!") {
+                        didContinue.toggle()
                         onContinue()
                     }
                     .buttonStyle(.onboarding)
@@ -68,6 +71,7 @@ struct OnboardingHealthKitView: View {
 //                    .multilineTextAlignment(.center)
 //                    .foregroundStyle(.secondary)
 //                    .font(.caption)
+//                    .fontDesign(.rounded)
             }
         }
         .task {

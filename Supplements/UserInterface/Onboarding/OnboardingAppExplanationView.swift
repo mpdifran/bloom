@@ -16,6 +16,7 @@ struct OnboardingAppExplanationView: View {
 
     @State private var animationCount = 0
     @State private var index = 0
+    @State private var didContinue = false
 
     var body: some View {
         ScrollView {
@@ -54,9 +55,12 @@ struct OnboardingAppExplanationView: View {
         .topSafeAreaBlur()
         .animation(.default, value: vitalPairs.count)
         .animation(.default, value: index)
+        .sensoryFeedback(.selection, trigger: vitalPairs.count)
         .sensoryFeedback(.selection, trigger: index)
+        .sensoryFeedback(.selection, trigger: didContinue)
         .shelf {
             Button("Neat!") {
+                didContinue.toggle()
                 onContinue()
             }
             .buttonStyle(.onboarding)

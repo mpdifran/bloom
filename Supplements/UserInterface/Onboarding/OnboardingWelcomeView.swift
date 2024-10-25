@@ -12,6 +12,7 @@ struct OnboardingWelcomeView: View {
     var onContinue: () -> Void
 
     @State private var index = 1
+    @State private var didContinue = false
 
     @FocusState private var isFocused: Bool
 
@@ -66,10 +67,12 @@ struct OnboardingWelcomeView: View {
         .fontDesign(.rounded)
         .topSafeAreaBlur()
         .sensoryFeedback(.selection, trigger: index)
+        .sensoryFeedback(.selection, trigger: didContinue)
         .animation(.default, value: index)
         .if(index >= 4) {
             $0.shelf {
                 Button("Sounds Great!") {
+                    didContinue.toggle()
                     onContinue()
                 }
                 .buttonStyle(.onboarding)
