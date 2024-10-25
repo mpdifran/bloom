@@ -46,15 +46,19 @@ enum WeightLossSpeed: String, CaseIterable, Identifiable {
         rawValue.capitalized
     }
 
+    @MainActor
     var weightLossDescription: String {
+        let quantity: HKQuantity
         switch self {
         case .slow:
-            "About 0.5 lbs a week."
+            quantity = HKQuantity(unit: .pound(), doubleValue: 0.5)
         case .moderate:
-            "About 1 lb a week."
+            quantity = HKQuantity(unit: .pound(), doubleValue: 1)
         case .fast:
-            "About 2 lbs a week."
+            quantity = HKQuantity(unit: .pound(), doubleValue: 2)
         }
+
+        return "About \(quantity.displayString(for: .pound(), formatter: .oneDecimalPlace)) a week."
     }
 }
 

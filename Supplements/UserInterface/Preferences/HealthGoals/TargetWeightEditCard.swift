@@ -6,17 +6,21 @@
 //
 
 import SwiftUI
+import HealthKit
 
 struct TargetWeightEditCard: View {
 
     @State private var weight: Double
 
     init() {
-        self._weight = State(initialValue: HealthManager.shared.targetWeight)
+        let weightQuantity = HKQuantity(unit: .pound(), doubleValue: HealthManager.shared.targetWeight)
+        self._weight = State(initialValue: weightQuantity.localizedValue(for: .pound()))
     }
 
     @FocusState private var isFocused: Bool
     @ObservedObject private var healthManager = HealthManager.shared
+
+    private var unitPreferences = HealthUnitPreferences.shared
 
     var body: some View {
         ActionCardView(
@@ -31,7 +35,8 @@ struct TargetWeightEditCard: View {
                     TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
                         .selectAllTextOnBeginEditing()
                         .focused($isFocused)
-                    Text("lbs")
+
+                    Text(unitPreferences.weightUnit.sensibleUnitString)
                 }
                 .frame(width: 200)
                 .fontDesign(.rounded)
@@ -54,7 +59,8 @@ struct TargetWeightEditCard: View {
 private extension TargetWeightEditCard {
 
     func saveTargetWeight() -> Bool {
-        HealthManager.shared.targetWeight = weight
+        let quantity = HKQuantity(unit: unitPreferences.weightUnit, doubleValue: weight)
+        HealthManager.shared.targetWeight = quantity.doubleValue(for: .pound())
         return true
     }
 }
