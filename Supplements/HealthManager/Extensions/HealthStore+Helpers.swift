@@ -30,6 +30,16 @@ extension HKHealthStore {
 
 extension HKHealthStore {
 
+    func birthday() -> Date? {
+        do {
+            let dateOfBirthComponents = try dateOfBirthComponents()
+            return Calendar.current.date(from: dateOfBirthComponents)
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+
     func age() -> Int? {
         do {
             let dateOfBirthComponents = try dateOfBirthComponents()

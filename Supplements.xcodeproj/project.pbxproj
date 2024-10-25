@@ -364,6 +364,8 @@
 		FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D202C8BD8C900E3E559 /* ReportCell.swift */; };
 		FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */; };
 		FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */; };
+		FFF03D072CCBE3DF00476B44 /* View+AppearWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */; };
+		FFF03D0A2CCBE6F300476B44 /* HKBiologicalSex+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
 		FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */; };
 		FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AF82BED71AE00926042 /* SupplementReccomendationModel.swift */; };
@@ -857,6 +859,8 @@
 		FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningReportView.swift; sourceTree = "<group>"; };
 		FFE41D202C8BD8C900E3E559 /* ReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCell.swift; sourceTree = "<group>"; };
 		FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Confetti.swift"; sourceTree = "<group>"; };
+		FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+AppearWithIndex.swift"; sourceTree = "<group>"; };
+		FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKBiologicalSex+Helpers.swift"; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthStore+Helpers.swift"; sourceTree = "<group>"; };
 		FFF61AF82BED71AE00926042 /* SupplementReccomendationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementReccomendationModel.swift; sourceTree = "<group>"; };
@@ -1845,23 +1849,13 @@
 			children = (
 				FFAFF44A2CAE065700FAD3C9 /* Vitals */,
 				FFE390D52C2492EC00B79140 /* Model */,
+				FFF03D082CCBE6C900476B44 /* Extensions */,
 				FFB444572BEC410B00486AD7 /* HealthManager.swift */,
 				FF70E9142CB867650055E932 /* HealthPermissionChecker.swift */,
 				FF70E9262CB96D2A0055E932 /* HealthSleepObserver.swift */,
 				FF70E9122CB85C980055E932 /* HealthStoreFetcher.swift */,
 				FF70E9FC2CC060260055E932 /* HealthGoalProvider.swift */,
 				FF70E9CA2CBF076C0055E932 /* HealthUnitPreferences.swift */,
-				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
-				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
-				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
-				FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */,
-				FFC77B052C5E6724003E5F85 /* HKQuantity+Helpers.swift */,
-				FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */,
-				FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */,
-				FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */,
-				FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */,
-				FF4EFF872C937CC4005E4A1F /* MenstrualCycle.MenstrualFlow+Helpers.swift */,
-				FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */,
 			);
 			path = HealthManager;
 			sourceTree = "<group>";
@@ -1957,6 +1951,7 @@
 				FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */,
 				FF70EA192CC990140055E932 /* MiniVitalCell.swift */,
 				FF70EA212CCADEAC0055E932 /* MockHealthAppPermissionView.swift */,
+				FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2066,6 +2061,25 @@
 				FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */,
 			);
 			path = EveningReport;
+			sourceTree = "<group>";
+		};
+		FFF03D082CCBE6C900476B44 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
+				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
+				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
+				FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */,
+				FFC77B052C5E6724003E5F85 /* HKQuantity+Helpers.swift */,
+				FFC77B072C5E6C0E003E5F85 /* HKQuantityRange.swift */,
+				FF0F79E02C2C99AE0013F048 /* HKUnit+Helpers.swift */,
+				FF2C99E22BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift */,
+				FF426AD02C6D9A52006E0F17 /* HKWorkout+Helpers.swift */,
+				FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */,
+				FF4EFF872C937CC4005E4A1F /* MenstrualCycle.MenstrualFlow+Helpers.swift */,
+				FF426ACC2C6D4768006E0F17 /* NSPredicate+Sendable.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		FFF61AF42BED554700926042 /* Chat */ = {
@@ -2786,6 +2800,7 @@
 				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
 				FF70E9C42CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift in Sources */,
 				FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */,
+				FFF03D072CCBE3DF00476B44 /* View+AppearWithIndex.swift in Sources */,
 				FF4EFF8A2C937D25005E4A1F /* MenstrualCycle.swift in Sources */,
 				FF70E9EB2CBFF4720055E932 /* ReportCoordinatorViewModel.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
@@ -2806,6 +2821,7 @@
 				FF70EA122CC405EF0055E932 /* TodaysDateView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
+				FFF03D0A2CCBE6F300476B44 /* HKBiologicalSex+Helpers.swift in Sources */,
 				FF4B2F482C90C7960003879C /* ToDoManager.swift in Sources */,
 				FF6E061F2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,

@@ -25,30 +25,15 @@ struct OnboardingWelcomeView: View {
                     .scaledToFit()
                     .frame(width: 100)
 
-                if index >= 1 {
-                    Text("Hey there!")
-                        .if(index != 1) {
-                            $0.foregroundStyle(.secondary)
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+                Text("Hey there!")
+                    .appear(with: 1, currentIndex: index)
 
-                if index >= 2 {
-                    Text("Welcome to Bloom, your new personal Health Assistant")
-                        .if(index != 2) {
-                            $0.foregroundStyle(.secondary)
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
-                        .transition(.opacity)
-                }
+                Text("Welcome to Bloom, your new personal Health Assistant")
+                    .transition(.opacity)
+                    .appear(with: 2, currentIndex: index)
 
-                if index >= 3 {
+                Group {
                     Text("What should we call you?")
-                        .if(index != 3) {
-                            $0.foregroundStyle(.secondary)
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
-                        .transition(.blurReplace)
 
                     TextField("", text: $healthManager.name, prompt: Text("Your Name"))
                         .textContentType(.name)
@@ -58,21 +43,18 @@ struct OnboardingWelcomeView: View {
                         .disabled(index != 3)
                         .onSubmit {
                             index += 1
-                            Task {
-                                await advanceIndex()
-                            }
                         }
                         .onAppear {
                             isFocused = true
                         }
-                        .transition(.blurReplace)
                 }
+                .transition(.blurReplace)
+                .appear(with: 3, currentIndex: index)
 
-                if index >= 4 {
-                    Text("Nice to meet you, \(healthManager.name)! Let's get to know each other a bit...")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .transition(.opacity)
-                }
+
+                Text("Nice to meet you, \(healthManager.name)! Let's get to know each other a bit...")
+                    .transition(.opacity)
+                    .appear(with: 4, currentIndex: index)
 
                 Spacer()
             }
@@ -85,7 +67,7 @@ struct OnboardingWelcomeView: View {
         .topSafeAreaBlur()
         .sensoryFeedback(.selection, trigger: index)
         .animation(.default, value: index)
-        .if(index >= 5) {
+        .if(index >= 4) {
             $0.shelf {
                 Button("Sounds Great!") {
                     onContinue()

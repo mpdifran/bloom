@@ -19,10 +19,10 @@ struct OnboardingAppExplanationView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 20) {
                 vitalsCardPileView
 
-                Spacer(minLength: 80)
+                Spacer(minLength: 40)
 
                 if index >= 1 {
                     Text("The Power of Vitals")

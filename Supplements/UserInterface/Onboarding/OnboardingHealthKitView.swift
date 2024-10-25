@@ -19,7 +19,7 @@ struct OnboardingHealthKitView: View {
     @State private var error: Error?
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 20) {
             Group {
                 Text("Let's calculate your Vitals!")
                     .padding(.top, 30)
@@ -37,7 +37,7 @@ struct OnboardingHealthKitView: View {
             if showMockHealthApp {
                 MockHealthAppPermissionView()
                     .zStackAlignment(.bottom)
-                    .offset(y: 160)
+                    .offset(y: 180)
                     .horizontallyCentered()
                     .transition(.move(edge: .bottom))
             }
