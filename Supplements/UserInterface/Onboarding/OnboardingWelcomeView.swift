@@ -71,7 +71,7 @@ struct OnboardingWelcomeView: View {
         .animation(.default, value: index)
         .if(index >= 4) {
             $0.shelf {
-                Button("Sounds Great!") {
+                Button("Sounds great!") {
                     didContinue.toggle()
                     onContinue()
                 }

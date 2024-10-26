@@ -24,7 +24,7 @@ extension View {
                     .fill(fill)
                     .overlay {
                         RoundedRectangle(cornerRadius: 26)
-                            .stroke(stroke, lineWidth: 1)
+                            .stroke(stroke, lineWidth: 2)
                     }
             }
     }

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ActivityLevelEditCard: View {
 
-    @State private var activityLevel: ActivityLevelSummary.ActivityLevel?
+    @State private var selectedActivityLevel: ActivityLevelSummary.ActivityLevel?
+
+    @State private var vitalsViewModel = VitalsViewModel.shared
 
     @ObservedObject private var healthManager = HealthManager.shared
 
@@ -17,45 +19,20 @@ struct ActivityLevelEditCard: View {
         ActionCardView(
             title: "Activity Level"
         ) {
-            healthManager.userReportedActivityLevel = activityLevel
+            healthManager.userReportedActivityLevel = selectedActivityLevel
             return true
         } content: { (_, handleSave) in
             ScrollView {
                 VStack {
-                    ActivityLevelSelectionCell(
-                        isSelected: activityLevel == .sedentary,
-                        title: "Sedentary",
-                        subtitle: "Little to no exercise",
-                        systemImage: "figure.stand"
-                    )
-                    .tint(.vitalWarning)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        activityLevel = .sedentary
-                    }
-
-                    ActivityLevelSelectionCell(
-                        isSelected: activityLevel == .light,
-                        title: "Light",
-                        subtitle: "Exercise 1 to 3 times a week",
-                        systemImage: "figure.run"
-                    )
-                    .tint(.vitalGood)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        activityLevel = .light
-                    }
-
-                    ActivityLevelSelectionCell(
-                        isSelected: activityLevel == .high,
-                        title: "High",
-                        subtitle: "Exercise 4 to 7 times a week",
-                        systemImage: "figure.tennis"
-                    )
-                    .tint(.vitalGreat)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        activityLevel = .high
+                    ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
+                        ActivityLevelSelectionCell(
+                            activityLevel: .sedentary,
+                            isRecommended: vitalsViewModel.activityLevelSummary?.details.activityLevel == activityLevel,
+                            isSelected: selectedActivityLevel == activityLevel
+                        )
+                        .onTapGesture {
+                            selectedActivityLevel = activityLevel
+                        }
                     }
                 }
                 .padding()
@@ -64,7 +41,7 @@ struct ActivityLevelEditCard: View {
         }
         .tint(.mutedGreen)
         .onAppear {
-            activityLevel = healthManager.userReportedActivityLevel
+            selectedActivityLevel = healthManager.userReportedActivityLevel
         }
     }
 }

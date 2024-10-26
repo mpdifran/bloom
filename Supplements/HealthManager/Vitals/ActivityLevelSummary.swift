@@ -46,6 +46,26 @@ extension ActivityLevelSummary.ActivityLevel {
         }
     }
 
+    var summary: String {
+        switch self {
+        case .sedentary: "Little to no exercise"
+        case .light: "Exercise 1 to 3 times a week"
+        case .moderate: "Exercise 3 to 5 times a week"
+        case .high: "Exercise 5 to 7 times a week"
+        case .intense: "Intense exercise 5 to 7 times a week"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .sedentary: "figure.stand"
+        case .light: "figure.mixed.cardio"
+        case .moderate: "figure.run"
+        case .high: "figure.highintensity.intervaltraining"
+        case .intense: "figure.climbing"
+        }
+    }
+
     var color: Color {
         switch self {
         case .sedentary: .vitalWarning

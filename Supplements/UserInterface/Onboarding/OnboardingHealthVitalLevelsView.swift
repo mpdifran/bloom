@@ -67,7 +67,7 @@ struct OnboardingHealthVitalLevelsView: View {
         .sensoryFeedback(.impact, trigger: noDataVitals.count)
         .sensoryFeedback(.selection, trigger: didContinue)
         .shelf {
-            Button("So Cool!") {
+            Button("So cool!") {
                 didContinue.toggle()
                 onContinue()
             }

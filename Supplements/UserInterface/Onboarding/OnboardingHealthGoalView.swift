@@ -62,7 +62,7 @@ struct OnboardingHealthGoalView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    Button("Looks Good") {
+                    Button("Looks good") {
                         didContinue.toggle()
                         onContinue()
                     }

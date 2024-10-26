@@ -13,100 +13,100 @@ struct OnboardingHealthActivityLevelView: View {
 
     @ObservedObject private var healthManager = HealthManager.shared
 
-    var userSelectableActivityLevels: [ActivityLevelSummary.ActivityLevel] = [
-        .sedentary,
-        .light,
-        .high
-    ]
+    @State private var vitalsViewModel = VitalsViewModel.shared
+
+    @State private var index = 0
+    @State private var activityLevels = [ActivityLevelSummary.ActivityLevel]()
 
     var body: some View {
-        OnboardingCardTemplateView(aspectRatio: 1.3) {
-            OnboardingTitleCardView(
-                title: "Activity Level",
-                message: "Bloom uses your activity level to help set your goals."
-            )
-        } bottom: {
-            ScrollView {
-                VStack {
-                    ActivityLevelSelectionCell(
-                        isSelected: healthManager.userReportedActivityLevel == .sedentary,
-                        title: "Sedentary",
-                        subtitle: "Little to no exercise",
-                        systemImage: "figure.stand"
-                    )
-                    .tint(.vitalWarning)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        healthManager.userReportedActivityLevel = .sedentary
-                    }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Group {
+                    Text("Your activity level is an important factor in your health.")
+                        .transition(.opacity)
+                        .appear(with: 1, currentIndex: index)
 
-                    ActivityLevelSelectionCell(
-                        isSelected: healthManager.userReportedActivityLevel == .light,
-                        title: "Light",
-                        subtitle: "Exercise 1 to 3 times a week",
-                        systemImage: "figure.run"
-                    )
-                    .tint(.vitalGood)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        healthManager.userReportedActivityLevel = .light
-                    }
-
-                    ActivityLevelSelectionCell(
-                        isSelected: healthManager.userReportedActivityLevel == .high,
-                        title: "High",
-                        subtitle: "Exercise 4 to 7 times a week",
-                        systemImage: "figure.tennis"
-                    )
-                    .tint(.vitalGreat)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        healthManager.userReportedActivityLevel = .high
+                    if vitalsViewModel.activityLevelSummary?.details.activityLevel != nil {
+                        Text("We've selected where we think your activity level is based on your Health data, but feel free to change it!")
+                            .font(.title3)
+                            .transition(.opacity)
+                            .appear(with: 2, currentIndex: index)
+                    } else {
+                        Text("Select the level you identify with the most.")
+                            .font(.title3)
+                            .transition(.opacity)
+                            .appear(with: 2, currentIndex: index)
                     }
                 }
-                .padding()
+                .font(.title)
+                .bold()
+                .fontDesign(.rounded)
+
+                VStack {
+                    ForEach(activityLevels) { activityLevel in
+                        ActivityLevelSelectionCell(
+                            activityLevel: activityLevel,
+                            isRecommended: vitalsViewModel.activityLevelSummary?.details.activityLevel == activityLevel,
+                            isSelected: healthManager.userReportedActivityLevel == activityLevel
+                        )
+                        .transition(.scale)
+                        .onTapGesture {
+                            healthManager.userReportedActivityLevel = activityLevel
+                        }
+                    }
+                }
             }
+            .horizontalAlignment(.leading)
+            .padding()
+        }
+        .animation(.default, value: index)
+        .animation(.bouncy, value: activityLevels.count)
+        .animation(.default, value: healthManager.userReportedActivityLevel)
+        .sensoryFeedback(.selection, trigger: index)
+        .sensoryFeedback(.selection, trigger: activityLevels.count)
+        .sensoryFeedback(.impact, trigger: healthManager.userReportedActivityLevel)
+        .onAppear {
+            healthManager.userReportedActivityLevel = vitalsViewModel.activityLevelSummary?.details.activityLevel
+        }
+        .task {
+            while index < 2 {
+                await advanceIndex()
+            }
+
+            await Delay(500)
+
+            await addActivityLevels()
         }
         .shelf {
-            ProminentButton("Continue") {
+            Button("That looks right") {
                 onContinue()
             }
+            .buttonStyle(.onboarding)
             .disabled(healthManager.userReportedActivityLevel == nil)
         }
     }
 }
 
-struct ActivityLevelSelectionCell: View {
-    let isSelected: Bool
+private extension OnboardingHealthActivityLevelView {
 
-    let title: String
-    let subtitle: String
-    let systemImage: String
+    func advanceIndex() async {
+        await Delay(1700)
 
-    var body: some View {
-        HStack {
-            Image(systemName: systemImage)
-                .foregroundStyle(.tint)
-                .font(.largeTitle)
-                .frame(width: 40)
+        index += 1
+    }
 
-            VStack(alignment: .leading) {
-                Text(title)
+    func addActivityLevels() async {
+        await Delay(100)
 
-                Text(subtitle)
-                    .foregroundStyle(.secondary)
-            }
+        if activityLevels.count < ActivityLevelSummary.ActivityLevel.allCases.count {
+            let index = activityLevels.count
 
-            Spacer(minLength: 0)
-
-            if isSelected {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.white, .tint)
-                    .font(.title2)
-                    .bold()
-            }
+            activityLevels.append(ActivityLevelSummary.ActivityLevel.allCases[index])
+        } else {
+            return
         }
-        .cardContainer()
+
+        await addActivityLevels()
     }
 }
 

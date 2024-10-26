@@ -69,7 +69,7 @@ struct OnboardingHealthAgeView: View {
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                     }
-                    Button("Looks Good!") {
+                    Button("Continue") {
                         didContinue.toggle()
                         onContinue()
                     }

@@ -366,6 +366,7 @@
 		FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */; };
 		FFF03D072CCBE3DF00476B44 /* View+AppearWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */; };
 		FFF03D0A2CCBE6F300476B44 /* HKBiologicalSex+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */; };
+		FFF03D0C2CCC653800476B44 /* ActivityLevelSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */; };
 		FFF61AED2BED537B00926042 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AEC2BED537B00926042 /* RootView.swift */; };
 		FFF61AF72BED5A4D00926042 /* HealthStore+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */; };
 		FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF61AF82BED71AE00926042 /* SupplementReccomendationModel.swift */; };
@@ -861,6 +862,7 @@
 		FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Confetti.swift"; sourceTree = "<group>"; };
 		FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+AppearWithIndex.swift"; sourceTree = "<group>"; };
 		FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKBiologicalSex+Helpers.swift"; sourceTree = "<group>"; };
+		FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSelectionCell.swift; sourceTree = "<group>"; };
 		FFF61AEC2BED537B00926042 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthStore+Helpers.swift"; sourceTree = "<group>"; };
 		FFF61AF82BED71AE00926042 /* SupplementReccomendationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementReccomendationModel.swift; sourceTree = "<group>"; };
@@ -1951,6 +1953,7 @@
 				FF70EA1B2CCA77AE0055E932 /* OnboardingButtonStyle.swift */,
 				FF70EA192CC990140055E932 /* MiniVitalCell.swift */,
 				FF70EA212CCADEAC0055E932 /* MockHealthAppPermissionView.swift */,
+				FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */,
 				FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */,
 			);
 			path = Components;
@@ -2816,6 +2819,7 @@
 				FF2FB89C2C9CD80000F57523 /* ProgressBar.swift in Sources */,
 				FF88F13A2C7D113A0093D1B4 /* Chart+DateScale.swift in Sources */,
 				FF0DA0F92C876390007D1A6B /* Collection+Sort.swift in Sources */,
+				FFF03D0C2CCC653800476B44 /* ActivityLevelSelectionCell.swift in Sources */,
 				FF6E06212CA34ADA00C4219B /* CyclePhaseCoolFactCell.swift in Sources */,
 				FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */,
 				FF70EA122CC405EF0055E932 /* TodaysDateView.swift in Sources */,

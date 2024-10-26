@@ -56,7 +56,7 @@ struct OnboardingHealthKitView: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                 if isAuthorized {
-                    Button("Let's Go!") {
+                    Button("Let's go!") {
                         didContinue.toggle()
                         onContinue()
                     }
