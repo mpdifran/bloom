@@ -17,7 +17,8 @@ struct ActivityLevelEditCard: View {
 
     var body: some View {
         ActionCardView(
-            title: "Activity Level"
+            title: "Activity Level",
+            detents: [.large]
         ) {
             healthManager.userReportedActivityLevel = selectedActivityLevel
             return true
@@ -26,7 +27,7 @@ struct ActivityLevelEditCard: View {
                 VStack {
                     ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
                         ActivityLevelSelectionCell(
-                            activityLevel: .sedentary,
+                            activityLevel: activityLevel,
                             isRecommended: vitalsViewModel.activityLevelSummary?.details.activityLevel == activityLevel,
                             isSelected: selectedActivityLevel == activityLevel
                         )
@@ -37,9 +38,10 @@ struct ActivityLevelEditCard: View {
                 }
                 .padding()
             }
-            .groupedBackground()
         }
-        .tint(.mutedGreen)
+        .sensoryFeedback(.impact, trigger: selectedActivityLevel)
+        .animation(.default, value: selectedActivityLevel)
+        .tint(selectedActivityLevel?.barColor ?? .mutedBlue)
         .onAppear {
             selectedActivityLevel = healthManager.userReportedActivityLevel
         }

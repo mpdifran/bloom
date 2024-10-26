@@ -116,19 +116,15 @@ private extension PreferencesView {
                 .pickerStyle(.segmented)
             }
 
-            if
-                vitalsViewModel.activityLevelSummary?.details.activityLevel == nil
-            {
-                LabeledContent("Activity Level") {
-                    HStack {
-                        Text(healthManager.userReportedActivityLevel?.name ?? "Unknown")
-                        DisclosureIndicator()
-                    }
+            LabeledContent("Activity Level") {
+                HStack {
+                    Text(healthManager.userReportedActivityLevel?.name ?? "Unknown")
+                    DisclosureIndicator()
                 }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    presentedSheet = ActivityLevelEditCard().asAny
-                }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                presentedSheet = ActivityLevelEditCard().asAny
             }
         } header: {
             Text("Health Goals")

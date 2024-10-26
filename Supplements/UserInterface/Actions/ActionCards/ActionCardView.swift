@@ -12,6 +12,7 @@ import DataContainer
 
 struct ActionCardView<Content>: View where Content: View {
     let title: String
+    let detents: Set<PresentationDetent>
     let sampleTypes: Set<HKSampleType>
     let showSaveBar: Bool
     let saveHandler: () async throws -> Bool
@@ -19,12 +20,14 @@ struct ActionCardView<Content>: View where Content: View {
 
     init(
         title: String,
+        detents: Set<PresentationDetent> = [.medium, .large],
         sampleTypes: Set<HKSampleType> = [],
         showSaveBar: Bool = true,
         saveHandler: @escaping () async throws -> Bool,
         @ViewBuilder content: @escaping (Bool, @escaping () -> Void) -> Content
     ) {
         self.title = title
+        self.detents = detents
         self.sampleTypes = sampleTypes
         self.showSaveBar = showSaveBar
         self.saveHandler = saveHandler
@@ -74,7 +77,7 @@ struct ActionCardView<Content>: View where Content: View {
                     }
                 }
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents(detents)
         .presentationCornerRadius(25)
         .animation(.easeInOut, value: hasInserted)
         .alert(error: $error)
