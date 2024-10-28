@@ -10,10 +10,10 @@ import SwiftUI
 extension View {
 
     @ViewBuilder
-    func appear(with index: Int, currentIndex: Int) -> some View {
+    func appear(with index: Int, currentIndex: Int, secondaryIfNotCurrentIndex: Bool = true) -> some View {
         if index <= currentIndex {
             self
-                .if(currentIndex != index) {
+                .if(currentIndex != index && secondaryIfNotCurrentIndex) {
                     $0.foregroundStyle(.secondary)
                 }
                 .fixedSize(horizontal: false, vertical: true)

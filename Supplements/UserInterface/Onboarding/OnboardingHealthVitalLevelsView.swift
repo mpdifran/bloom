@@ -17,6 +17,7 @@ struct OnboardingHealthVitalLevelsView: View {
     @State private var vitals = [VitalModel]()
     @State private var noDataVitals = [VitalModel]()
 
+    @State private var showContinue = false
     @State private var didContinue = false
 
     var body: some View {
@@ -65,16 +66,20 @@ struct OnboardingHealthVitalLevelsView: View {
         .sensoryFeedback(.impact, trigger: noDataVitals.count)
         .sensoryFeedback(.selection, trigger: didContinue)
         .shelf {
-            Button("So cool!") {
-                didContinue.toggle()
-                onContinue()
+            if showContinue {
+                Button("So cool!") {
+                    didContinue.toggle()
+                    onContinue()
+                }
+                .buttonStyle(.onboarding)
             }
-            .buttonStyle(.onboarding)
         }
         .task {
             await VitalsCalculator.shared.forceFetchVitals()
             await Delay(1000)
             await advanceVitals()
+            await Delay(500)
+            showContinue = true
         }
     }
 }

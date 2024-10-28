@@ -58,6 +58,7 @@ struct OnboardingHealthActivityLevelView: View {
             .horizontalAlignment(.leading)
             .padding()
         }
+        .topSafeAreaBlur()
         .animation(.default, value: index)
         .animation(.bouncy, value: activityLevels.count)
         .animation(.default, value: healthManager.userReportedActivityLevel)

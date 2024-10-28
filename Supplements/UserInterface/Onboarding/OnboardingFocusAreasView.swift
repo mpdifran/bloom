@@ -32,7 +32,7 @@ struct OnboardingFocusAreasView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 20) {
                 Text("Great! Let's determine which parts of your health we should focus on.")
                     .onboardingTextStyle()
                     .appear(with: 1, currentIndex: index)

@@ -29,8 +29,10 @@ struct MockNotificationView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Text(message)
-                    .lineLimit(2)
+                if message.isNotEmpty {
+                    Text(message)
+                        .lineLimit(2)
+                }
             }
         }
         .font(.footnote)
