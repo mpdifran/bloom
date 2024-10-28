@@ -6,12 +6,31 @@
 //
 
 import SwiftUI
+import DataContainer
 
 struct ToDoActionCell: View {
     let title: String
     let subtitle: String
     let systemImage: String
     let isComplete: Bool
+    let vitalKind: VitalModel.Kind?
+    let useSecondaryBackground: Bool
+
+    init(
+        title: String,
+        subtitle: String,
+        systemImage: String,
+        isComplete: Bool,
+        vitalKind: VitalModel.Kind?,
+        useSecondaryBackground: Bool = true
+    ) {
+        self.title = title
+        self.subtitle = subtitle
+        self.systemImage = systemImage
+        self.isComplete = isComplete
+        self.vitalKind = vitalKind
+        self.useSecondaryBackground = useSecondaryBackground
+    }
 
     var body: some View {
         HStack {
@@ -26,17 +45,25 @@ struct ToDoActionCell: View {
             } label: {
                 VStack(alignment: .leading) {
                     Text(title)
-                        .foregroundStyle(.tint)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+
+                    HStack(spacing: 2) {
+                        if let vitalKind {
+                            Image(systemName: vitalKind.systemImage)
+                            Text(vitalKind.name)
+                            Text("•")
+                        }
+                        Text(subtitle)
+                        Spacer(minLength: 0)
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 }
             }
             .bold()
 
             Spacer()
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: useSecondaryBackground ? AnyShapeStyle(.background.secondary) : AnyShapeStyle(.background))
     }
 }
 
@@ -47,14 +74,16 @@ struct ToDoActionCell: View {
                 title: "Log Weight",
                 subtitle: "Daily",
                 systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
-                isComplete: false
+                isComplete: false,
+                vitalKind: nil
             )
             .tint(.mutedIndigo)
             ToDoActionCell(
                 title: "Log Weight",
                 subtitle: "Daily",
                 systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
-                isComplete: true
+                isComplete: true,
+                vitalKind: .nutrition
             )
             .tint(.mutedBlue)
         }

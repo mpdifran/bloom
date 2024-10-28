@@ -84,6 +84,7 @@ private extension HabitsFactory {
             let todo = ProposedToDo(
                 todoKind: .logWeight,
                 todoCadence: .daily,
+                vitalKind: .nutrition,
                 context: "Bloom needs more data before it can suggest a focus area. Please log your weight."
             )
             todos.append(todo)
@@ -94,6 +95,7 @@ private extension HabitsFactory {
             let todo = ProposedToDo(
                 todoKind: .logFood,
                 todoCadence: .daily,
+                vitalKind: .nutrition,
                 context: "Bloom needs more data before it can suggest a focus area. Please log your food for at least 7 days."
             )
             todos.append(todo)
@@ -106,6 +108,7 @@ private extension HabitsFactory {
             let todo = ProposedToDo(
                 todoKind: .logProtein,
                 todoCadence: .daily,
+                vitalKind: .nutrition,
                 context: "Bloom needs more data before it can suggest a focus area. Please ensure you're logging protein for at least 7 days."
             )
             todos.append(todo)

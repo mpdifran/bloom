@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import DataContainer
 
 struct ProposedToDo: Sendable, Identifiable, Hashable {
     let id = UUID()
     let todoKind: ToDoModel.Kind
     let todoCadence: ToDoModel.Cadence
+    let vitalKind: VitalModel.Kind?
     let context: String
 }

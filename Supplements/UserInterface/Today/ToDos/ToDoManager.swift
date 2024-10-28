@@ -8,6 +8,7 @@
 import SwiftUI
 @preconcurrency import HealthKit
 import BloomFoundation
+import DataContainer
 
 @MainActor
 final class ToDoManager: ObservableObject {
@@ -141,8 +142,12 @@ extension ToDoManager {
                         newRelevantToDos.append(todo)
                     }
                 }
+            case .everyThreeDays:
+                if await !isToDoComplete(todo: todo, dateRange: .trailingDaysFromStartOfToday(3)) {
+                    newRelevantToDos.append(todo)
+                }
             case .everySevenDays:
-                if await !isToDoComplete(todo: todo, dateRange: .trailingDaysFromStartOfToday(6)) {
+                if await !isToDoComplete(todo: todo, dateRange: .trailingDaysFromStartOfToday(7)) {
                     newRelevantToDos.append(todo)
                 }
             case .never:
@@ -158,14 +163,14 @@ extension ToDoManager {
         }
     }
 
-    func set(_ cadence: ToDoModel.Cadence, for kind: ToDoModel.Kind) {
+    func set(cadence: ToDoModel.Cadence, for kind: ToDoModel.Kind, vitalKind: VitalModel.Kind?) {
         if let index = userAddableToDos.firstIndex(where: { $0.kind == kind }) {
             userAddableToDos[index].cadence = cadence
         } else if let index = systemSuggestedToDos.firstIndex(where: { $0.kind == kind }) {
             systemSuggestedToDos[index].cadence = cadence
         } else {
             // We're just going to assume this is the system adding this because I'm tired.
-            let todo = ToDoModel(kind: kind, cadence: cadence)
+            let todo = ToDoModel(kind: kind, cadence: cadence, vitalKind: vitalKind)
             systemSuggestedToDos.append(todo)
         }
     }
@@ -173,12 +178,16 @@ extension ToDoManager {
     func apply(proposedToDos: [ProposedToDo]) {
         // Turn off any existing ones first
         for systemToDo in systemSuggestedToDos {
-            set(.never, for: systemToDo.kind)
+            set(cadence: .never, for: systemToDo.kind, vitalKind: nil)
         }
 
         // Set the new system ones.
         for proposedToDo in proposedToDos {
-            set(proposedToDo.todoCadence, for: proposedToDo.todoKind)
+            set(
+                cadence: proposedToDo.todoCadence,
+                for: proposedToDo.todoKind,
+                vitalKind: proposedToDo.vitalKind
+            )
         }
     }
 }
@@ -233,12 +242,12 @@ private extension ToDoManager {
         if let todo = userAddableToDos.first(where: { $0.kind == .logWeight }) {
             todos.append(todo)
         } else {
-            todos.append(.init(kind: .logWeight, cadence: .never))
+            todos.append(.init(kind: .logWeight, cadence: .never, vitalKind: nil))
         }
         if let todo = userAddableToDos.first(where: { $0.kind == .logBloodPressure }) {
             todos.append(todo)
         } else {
-            todos.append(.init(kind: .logBloodPressure, cadence: .never))
+            todos.append(.init(kind: .logBloodPressure, cadence: .never, vitalKind: nil))
         }
 
         userAddableToDos = todos

@@ -37,11 +37,12 @@ struct ProposedHabitCell: View {
                 }
             }
             .cardContainer()
+            .padding(4)
 
             if includeActions {
                 if let context = proposedHabit.context, context.isNotEmpty {
                     Text(context)
-                        .foregroundStyle(.tint)
+                        .foregroundStyle(.white)
                         .bold()
                         .fixedSize(horizontal: false, vertical: true)
                         .padding()
@@ -86,7 +87,7 @@ struct ProposedHabitCell: View {
 //                .padding()
             }
         }
-        .cardContainer(fill: .tint.tertiary, includePadding: false)
+        .cardContainer(fill: .tint, includePadding: false, cornerRadius: 30)
         .animation(.default, value: proposedHabit.value)
         .tint(proposedHabit.targetMetric.color)
         .sheet($presentedSheet)
@@ -145,7 +146,8 @@ private extension ProposedHabitCell {
     }
 
     var recommendedValueDisplayView: some View {
-        HStack {
+        HStack(spacing: 4) {
+            Image(systemName: "star.circle.fill")
             Text("Recommended")
 
             Spacer()
@@ -164,11 +166,16 @@ private extension ProposedHabitCell {
             proposedHabit.value = proposedHabit.suggestedValue
         } label: {
             LabeledContent("Set Recommended Value") {
-                Image(systemName: "star.circle")
-                    .foregroundStyle(.tint)
+                Image(systemName: "star.circle.fill")
+                    .foregroundStyle(.primary)
+                    .bold()
             }
+            .bold()
+            .selectable()
             .padding()
         }
+        .foregroundStyle(.white)
+        .buttonStyle(.plain)
     }
 
     var alternateTargetMetricMenu: some View {
@@ -187,23 +194,33 @@ private extension ProposedHabitCell {
             }
         } label: {
             LabeledContent("Change Habit") {
-                Image(systemName: "trophy")
-                    .foregroundStyle(.tint)
+                Image(systemName: "trophy.fill")
+                    .foregroundStyle(.primary)
+                    .bold()
             }
+            .bold()
+            .selectable()
             .padding()
         }
+        .foregroundStyle(.white)
+        .buttonStyle(.plain)
     }
 
     var changeValueButton: some View {
         Button {
             presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
         } label: {
-            LabeledContent("Change Value") {
+            LabeledContent("Set Custom Value") {
                 Image(systemName: "chart.xyaxis.line")
-                    .foregroundStyle(.tint)
+                    .foregroundStyle(.primary)
+                    .bold()
             }
+            .bold()
+            .selectable()
             .padding()
         }
+        .foregroundStyle(.white)
+        .buttonStyle(.plain)
     }
 }
 
@@ -252,5 +269,4 @@ private extension ProposedHabitCell {
         }
         .padding()
     }
-    .groupedBackground()
 }

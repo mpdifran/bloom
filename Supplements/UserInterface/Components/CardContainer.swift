@@ -13,17 +13,18 @@ extension View {
     func cardContainer<S, S2>(
         fill: S = BackgroundStyle.background,
         stroke: S2 = .clear,
-        includePadding: Bool = true
+        includePadding: Bool = true,
+        cornerRadius: CGFloat = 26
     ) -> some View where S: ShapeStyle, S2: ShapeStyle {
         self
             .if(includePadding) {
                 $0.padding()
             }
             .background {
-                RoundedRectangle(cornerRadius: 26)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(fill)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 26)
+                        RoundedRectangle(cornerRadius: cornerRadius)
                             .stroke(stroke, lineWidth: 2)
                     }
             }

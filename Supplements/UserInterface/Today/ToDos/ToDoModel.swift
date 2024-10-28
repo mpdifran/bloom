@@ -7,12 +7,14 @@
 
 import SwiftUI
 import HealthKit
+import DataContainer
 
 struct ToDoModel: Codable, Identifiable, Hashable {
     var id: Int { hashValue }
 
     let kind: Kind
     var cadence: Cadence
+    let vitalKind: VitalModel.Kind?
 }
 
 extension ToDoModel {
@@ -27,6 +29,7 @@ extension ToDoModel {
         case everyThursday
         case everyFriday
         case everySaturday
+        case everyThreeDays
         case everySevenDays
         case never
 
@@ -46,6 +49,8 @@ extension ToDoModel {
                 "Every Friday"
             case .everySaturday:
                 "Every Saturday"
+            case .everyThreeDays:
+                "Every 3 Days"
             case .everySevenDays:
                 "Every 7 Days"
             default:

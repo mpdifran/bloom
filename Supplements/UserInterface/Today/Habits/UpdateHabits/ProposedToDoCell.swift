@@ -16,16 +16,19 @@ struct ProposedToDoCell: View {
                 title: proposedToDo.todoKind.name,
                 subtitle: proposedToDo.todoCadence.name,
                 systemImage: proposedToDo.todoKind.systemImage,
-                isComplete: false
+                isComplete: false,
+                vitalKind: proposedToDo.vitalKind,
+                useSecondaryBackground: false
             )
+            .padding(4)
 
             Text(proposedToDo.context)
-                .foregroundStyle(.tint)
+                .foregroundStyle(.white)
                 .bold()
                 .fixedSize(horizontal: false, vertical: true)
                 .padding()
         }
-        .cardContainer(fill: .tint.tertiary, includePadding: false)
+        .cardContainer(fill: .tint, includePadding: false, cornerRadius: 30)
         .tint(proposedToDo.todoKind.color)
     }
 }
@@ -37,11 +40,11 @@ struct ProposedToDoCell: View {
                 proposedToDo: .init(
                     todoKind: .logFood,
                     todoCadence: .daily,
+                    vitalKind: .nutrition,
                     context: "Bloom needs more data before it can suggest a habit. Please log your food for at least 7 days."
                 )
             )
         }
         .padding()
     }
-    .groupedBackground()
 }

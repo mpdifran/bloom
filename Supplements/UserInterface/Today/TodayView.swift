@@ -125,7 +125,8 @@ struct TodayView: View {
                                 title: todo.kind.name,
                                 subtitle: todo.cadence.name,
                                 systemImage: todo.kind.systemImage,
-                                isComplete: toDoManager.completedToDoKinds.contains(todo.kind)
+                                isComplete: toDoManager.completedToDoKinds.contains(todo.kind),
+                                vitalKind: todo.vitalKind
                             )
                             .tint(todo.kind.color)
                             .onTapGesture {
