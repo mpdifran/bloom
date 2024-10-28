@@ -28,9 +28,7 @@ struct OnboardingHealthKitView: View {
                     .font(.title3)
                     .foregroundStyle(.secondary)
             }
-            .font(.title)
-            .bold()
-            .fontDesign(.rounded)
+            .onboardingTextStyle()
 
             Spacer()
         }

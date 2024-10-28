@@ -44,9 +44,7 @@ struct OnboardingHealthAgeView: View {
             }
             .horizontalAlignment(.leading)
             .padding()
-            .font(.title)
-            .bold()
-            .fontDesign(.rounded)
+            .onboardingTextStyle()
         }
         .topSafeAreaBlur()
         .animation(.default, value: index)

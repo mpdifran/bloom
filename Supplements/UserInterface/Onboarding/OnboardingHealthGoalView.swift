@@ -31,9 +31,7 @@ struct OnboardingHealthGoalView: View {
                         .transition(.opacity)
                         .appear(with: 2, currentIndex: index)
                 }
-                .font(.title)
-                .bold()
-                .fontDesign(.rounded)
+                .onboardingTextStyle()
 
                 goalPickerView
                     .transition(.blurReplace)

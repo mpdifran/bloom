@@ -49,4 +49,10 @@ extension NewHabitResult {
         proposedFocusAreas.map { $0.targetMetric } +
         proposedHabits.map { $0.targetMetric }
     }
+
+    var allVitalKinds: [VitalModel.Kind] {
+        proposedFocusAreas.compactMap(\.vitalKind) +
+        proposedHabits.compactMap(\.vitalKind) +
+        proposedToDos.compactMap(\.vitalKind)
+    }
 }

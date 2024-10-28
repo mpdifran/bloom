@@ -62,9 +62,7 @@ struct OnboardingWelcomeView: View {
             .padding()
             .horizontalAlignment(.leading)
         }
-        .font(.title)
-        .bold()
-        .fontDesign(.rounded)
+        .onboardingTextStyle()
         .topSafeAreaBlur()
         .sensoryFeedback(.selection, trigger: index)
         .sensoryFeedback(.selection, trigger: didContinue)

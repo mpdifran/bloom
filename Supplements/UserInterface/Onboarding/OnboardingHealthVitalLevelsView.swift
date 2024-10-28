@@ -25,9 +25,7 @@ struct OnboardingHealthVitalLevelsView: View {
                 Group {
                     Text("Let's calculate your Vitals to see where you are on your health journey.")
                 }
-                .font(.title)
-                .bold()
-                .fontDesign(.rounded)
+                .onboardingTextStyle()
                 .fixedSize(horizontal: false, vertical: true)
 
                 if vitals.isEmpty && noDataVitals.isEmpty {

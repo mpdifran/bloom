@@ -48,9 +48,7 @@ struct OnboardingAppExplanationView: View {
                 }
             }
             .padding()
-            .font(.title)
-            .bold()
-            .fontDesign(.rounded)
+            .onboardingTextStyle()
         }
         .topSafeAreaBlur()
         .animation(.default, value: vitalPairs.count)

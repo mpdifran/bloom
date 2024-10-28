@@ -38,6 +38,10 @@ final class VitalsViewModel: Sendable {
 
 extension VitalsViewModel {
 
+    var allVitals: [VitalModel] {
+        vitals + noDataVitals
+    }
+
     func observeData() {
         tasks.removeAll(keepingCapacity: true)
 

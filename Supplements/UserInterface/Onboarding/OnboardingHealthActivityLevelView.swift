@@ -17,6 +17,7 @@ struct OnboardingHealthActivityLevelView: View {
 
     @State private var index = 0
     @State private var activityLevels = [ActivityLevelSummary.ActivityLevel]()
+    @State private var didContinue = false
 
     var body: some View {
         ScrollView {
@@ -38,9 +39,7 @@ struct OnboardingHealthActivityLevelView: View {
                             .appear(with: 2, currentIndex: index)
                     }
                 }
-                .font(.title)
-                .bold()
-                .fontDesign(.rounded)
+                .onboardingTextStyle()
 
                 VStack {
                     ForEach(activityLevels) { activityLevel in
@@ -65,6 +64,7 @@ struct OnboardingHealthActivityLevelView: View {
         .sensoryFeedback(.selection, trigger: index)
         .sensoryFeedback(.selection, trigger: activityLevels.count)
         .sensoryFeedback(.impact, trigger: healthManager.userReportedActivityLevel)
+        .sensoryFeedback(.selection, trigger: didContinue)
         .onAppear {
             healthManager.userReportedActivityLevel = vitalsViewModel.activityLevelSummary?.details.activityLevel
         }
@@ -79,6 +79,7 @@ struct OnboardingHealthActivityLevelView: View {
         }
         .shelf {
             Button("That looks right") {
+                didContinue.toggle()
                 onContinue()
             }
             .buttonStyle(.onboarding)
