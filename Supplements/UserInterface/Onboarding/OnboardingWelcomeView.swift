@@ -38,7 +38,7 @@ struct OnboardingWelcomeView: View {
                     Text("What should we call you?")
 
                     TextField("", text: $healthManager.name, prompt: Text("Your Name"))
-                        .textContentType(.name)
+                        .textContentType(.givenName)
                         .cardContainer(fill: .background.secondary)
                         .focused($isFocused)
                         .submitLabel(.continue)
