@@ -21,31 +21,30 @@ struct OnboardingHealthKitView: View {
     @State private var error: Error?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Group {
-                Text("Let's calculate your Vitals!")
-                    .padding(.top, 30)
-                Text("Bloom needs access to your Health data in order to set personalized goals.")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-            }
-            .onboardingTextStyle()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Group {
+                    Text("Let's calculate your Vitals!")
+                        .padding(.top, 30)
+                    Text("Bloom needs access to your Health data in order to set personalized goals.")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                }
+                .onboardingTextStyle()
 
-            Spacer()
-        }
-        .overlay {
-            if showMockHealthApp {
-                MockHealthAppPermissionView()
-                    .zStackAlignment(.bottom)
-                    .offset(y: 180)
-                    .horizontallyCentered()
-                    .transition(.move(edge: .bottom))
+                if showMockHealthApp {
+                    MockHealthAppPermissionView()
+                        .padding(.top, 40)
+                        .horizontallyCentered()
+                        .transition(.move(edge: .bottom))
+                }
             }
+            .padding()
         }
         .animation(.bouncy, value: showMockHealthApp)
         .sensoryFeedback(.selection, trigger: didContinue)
         .horizontalAlignment(.leading)
-        .padding()
+
         .shelf {
             VStack {
                 Text("Your Health data never leaves your device")

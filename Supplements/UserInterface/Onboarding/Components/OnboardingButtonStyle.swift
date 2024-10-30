@@ -16,7 +16,7 @@ struct OnboardingButtonStyle: ButtonStyle {
             Spacer(minLength: 0)
         }
         .foregroundStyle(.white)
-        .font(.headline)
+        .font(.title3)
         .fontDesign(.rounded)
         .bold()
         .padding(.vertical, 20)
