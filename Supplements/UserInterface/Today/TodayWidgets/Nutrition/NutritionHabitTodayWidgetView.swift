@@ -78,9 +78,9 @@ private extension NutritionHabitTodayWidgetView {
                     systemImage: TargetMetric.calories.systemImage,
                     value: percent,
                     valueText: remainingCalories.displayString(for: .largeCalorie()),
-                    title: "Dietary Calories"
+                    title: "Dietary Calories",
+                    color: TargetMetric.calories.color
                 )
-                .tint(TargetMetric.calories.color)
             }
             .buttonStyle(.plain)
 
@@ -100,9 +100,9 @@ private extension NutritionHabitTodayWidgetView {
                     systemImage: TargetMetric.proteinIntake.systemImage,
                     value: percent,
                     valueText: remainingProtein.displayString(for: .gram()),
-                    title: "Protein"
+                    title: "Protein",
+                    color: TargetMetric.proteinIntake.color
                 )
-                .tint(TargetMetric.proteinIntake.color)
             }
             .buttonStyle(.plain)
 
