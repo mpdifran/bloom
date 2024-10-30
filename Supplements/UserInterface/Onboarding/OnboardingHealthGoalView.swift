@@ -151,7 +151,7 @@ private extension OnboardingHealthGoalView {
 
                 if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
                     Divider()
-                    LabeledContent("Weight Loss Speed") {
+                    LabeledContent(healthManager.healthGoal == .loseWeight ? "Weight Loss Speed" : "Weight Gain Speed") {
                         Menu {
                             ForEach(WeightLossSpeed.allCases) { speed in
                                 Button(speed.name, systemImage: speed == healthManager.weightLossSpeed ? "checkmark" : "") {
