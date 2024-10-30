@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import TelemetryDeck
 
 struct OnboardingWelcomeView: View {
     var onContinue: () -> Void
@@ -80,6 +81,9 @@ struct OnboardingWelcomeView: View {
             while index < 3 {
                 await advanceIndex()
             }
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB Welcome")
         }
     }
 }

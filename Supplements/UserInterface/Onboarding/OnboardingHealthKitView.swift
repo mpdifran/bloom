@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import HealthKitUI
 import Charts
+import TelemetryDeck
 
 struct OnboardingHealthKitView: View {
     let onContinue: () -> Void
@@ -90,6 +91,9 @@ struct OnboardingHealthKitView: View {
                     self.error = error
                 }
             }
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB HealthKit")
         }
     }
 }

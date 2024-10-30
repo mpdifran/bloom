@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import DataContainer
+import TelemetryDeck
 
 struct OnboardingHealthVitalLevelsView: View {
     let onContinue: () -> Void
@@ -80,6 +81,9 @@ struct OnboardingHealthVitalLevelsView: View {
             await advanceVitals()
             await Delay(500)
             showContinue = true
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB Vitals")
         }
     }
 }

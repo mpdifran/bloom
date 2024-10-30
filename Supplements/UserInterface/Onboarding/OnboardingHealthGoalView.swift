@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import HealthKit
+import TelemetryDeck
 
 struct OnboardingHealthGoalView: View {
     let onContinue: () -> Void
@@ -73,6 +74,9 @@ struct OnboardingHealthGoalView: View {
             while index < 3 {
                 await advanceIndex()
             }
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB Health Goals")
         }
     }
 }

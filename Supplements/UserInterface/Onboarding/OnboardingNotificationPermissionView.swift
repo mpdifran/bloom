@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import TelemetryDeck
 
 struct OnboardingNotificationPermissionView: View {
     let onContinue: () -> Void
@@ -20,8 +21,6 @@ struct OnboardingNotificationPermissionView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-
-
                 Group {
                     Text("We're almost done!")
                         .transition(.opacity)
@@ -108,6 +107,9 @@ struct OnboardingNotificationPermissionView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB Notifications")
         }
     }
 }

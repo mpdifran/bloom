@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import DataContainer
+import TelemetryDeck
 
 struct OnboardingFocusAreasView: View {
     let onContinue: () -> Void
@@ -144,6 +145,9 @@ struct OnboardingFocusAreasView: View {
             proposedFocusAreas = result.proposedFocusAreas
             proposedHabits = result.proposedHabits
             proposedToDos = result.proposedToDos
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB Focus Areas")
         }
     }
 }

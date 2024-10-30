@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import HealthKitUI
+import TelemetryDeck
 
 @MainActor
 struct OnboardingHealthAgeView: View {
@@ -75,6 +76,9 @@ struct OnboardingHealthAgeView: View {
                     .disabled(healthManager.age() < 1)
                 }
             }
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB Age+Sex")
         }
     }
 }

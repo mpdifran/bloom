@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import TelemetryDeck
 
 struct OnboardingHealthActivityLevelView: View {
     let onContinue: () -> Void
@@ -85,6 +86,9 @@ struct OnboardingHealthActivityLevelView: View {
             }
             .buttonStyle(.onboarding)
             .disabled(healthManager.userReportedActivityLevel == nil)
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB Activity Level")
         }
     }
 }

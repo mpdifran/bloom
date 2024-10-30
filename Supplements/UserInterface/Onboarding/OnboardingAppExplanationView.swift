@@ -8,6 +8,7 @@
 import SwiftUI
 import DataContainer
 import AppUI
+import TelemetryDeck
 
 struct OnboardingAppExplanationView: View {
     var onContinue: () -> Void
@@ -72,6 +73,9 @@ struct OnboardingAppExplanationView: View {
             while index < 3 {
                 await advanceIndex()
             }
+        }
+        .onAppear {
+            TelemetryDeck.signal("OB App Explanation")
         }
     }
 }
