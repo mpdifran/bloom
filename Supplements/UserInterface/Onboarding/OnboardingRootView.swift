@@ -73,7 +73,6 @@ struct OnboardingRootView: View {
                 }
             }
         }
-        .tint(.mutedBlue)
         .animation(.easeInOut(duration: 1), value: step)
         .presentationCompactAdaptation(.fullScreenCover)
     }
