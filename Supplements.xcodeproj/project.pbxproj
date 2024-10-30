@@ -364,6 +364,7 @@
 		FFE41D212C8BD8C900E3E559 /* ReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D202C8BD8C900E3E559 /* ReportCell.swift */; };
 		FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */; };
 		FFE41D262C8BE1BD00E3E559 /* View+Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */; };
+		FFEBEA5D2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEBEA5C2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift */; };
 		FFF03D072CCBE3DF00476B44 /* View+AppearWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */; };
 		FFF03D0A2CCBE6F300476B44 /* HKBiologicalSex+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */; };
 		FFF03D0C2CCC653800476B44 /* ActivityLevelSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */; };
@@ -862,6 +863,7 @@
 		FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningReportView.swift; sourceTree = "<group>"; };
 		FFE41D202C8BD8C900E3E559 /* ReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCell.swift; sourceTree = "<group>"; };
 		FFE41D252C8BE1BD00E3E559 /* View+Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Confetti.swift"; sourceTree = "<group>"; };
+		FFEBEA5C2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthKitPrivacyCard.swift; sourceTree = "<group>"; };
 		FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+AppearWithIndex.swift"; sourceTree = "<group>"; };
 		FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKBiologicalSex+Helpers.swift"; sourceTree = "<group>"; };
 		FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSelectionCell.swift; sourceTree = "<group>"; };
@@ -1961,6 +1963,7 @@
 				FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */,
 				FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */,
 				FFF03D0D2CCFDAB800476B44 /* View+OnboardingTextStyle.swift */,
+				FFEBEA5C2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2726,6 +2729,7 @@
 				FF8F79CD2C63BB570095C36D /* ProactiveTipper.swift in Sources */,
 				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
 				FF88F11D2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift in Sources */,
+				FFEBEA5D2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift in Sources */,
 				FF4578F32C40A9D6004E8661 /* SleepSectionTitleView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FF2FB8962C9CCB7B00F57523 /* ProposedHabit.swift in Sources */,

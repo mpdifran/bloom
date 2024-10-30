@@ -18,6 +18,7 @@ struct OnboardingHealthKitView: View {
     @State private var healthPermissionTrigger = false
     @State private var isAuthorized = false
     @State private var didContinue = false
+    @State private var presentedSheet: AnyView?
     @State private var error: Error?
 
     var body: some View {
@@ -44,7 +45,7 @@ struct OnboardingHealthKitView: View {
         .animation(.bouncy, value: showMockHealthApp)
         .sensoryFeedback(.selection, trigger: didContinue)
         .horizontalAlignment(.leading)
-
+        .sheet($presentedSheet)
         .shelf {
             VStack {
                 Text("Your Health data never leaves your device")
@@ -61,7 +62,9 @@ struct OnboardingHealthKitView: View {
                     .buttonStyle(.onboarding)
                 } else {
                     Button("Connect to Health", systemImage: "heart.fill") {
-                        healthPermissionTrigger.toggle()
+                        presentedSheet = OnboardingHealthKitPrivacyCard {
+                            healthPermissionTrigger.toggle()
+                        }.asAny
                     }
                     .buttonStyle(.onboarding)
                 }

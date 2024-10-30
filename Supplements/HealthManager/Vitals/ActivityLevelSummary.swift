@@ -49,10 +49,10 @@ extension ActivityLevelSummary.ActivityLevel {
     var summary: String {
         switch self {
         case .sedentary: "Little to no exercise"
-        case .light: "Exercise 1 to 3 times a week"
-        case .moderate: "Exercise 3 to 5 times a week"
-        case .high: "Exercise 5 to 7 times a week"
-        case .intense: "Intense exercise 5 to 7 times a week"
+        case .light: "Exercise a couple times a week"
+        case .moderate: "Exercise half the week"
+        case .high: "Exercise almost every day"
+        case .intense: "Intense exercise most days"
         }
     }
 

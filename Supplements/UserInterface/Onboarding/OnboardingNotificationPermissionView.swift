@@ -22,7 +22,7 @@ struct OnboardingNotificationPermissionView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 Group {
-                    Text("We're almost done!")
+                    Text("Almost done!")
                         .transition(.opacity)
                         .appear(with: 1, currentIndex: index)
 
@@ -39,7 +39,7 @@ struct OnboardingNotificationPermissionView: View {
                     .overlay {
                         VStack {
                             MockNotificationView(
-                                title: "Your Morning Report is Ready!",
+                                title: "Your Morning Report is ready",
                                 message: "",
                                 timestamp: "Now"
                             )
@@ -47,7 +47,7 @@ struct OnboardingNotificationPermissionView: View {
                             .appear(with: 2, currentIndex: notificationIndex, secondaryIfNotCurrentIndex: false)
 
                             MockNotificationView(
-                                title: "Your RHR is higher than normal",
+                                title: "You met your steps goal! 🎉",
                                 message: "",
                                 timestamp: "5m ago"
                             )
