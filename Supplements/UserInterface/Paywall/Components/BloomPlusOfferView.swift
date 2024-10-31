@@ -29,8 +29,9 @@ struct BloomPlusOfferView: View {
                             .foregroundStyle(.secondary)
                     }
                     Text(subtitlePrice)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .font(.headline)
+                        .fontDesign(.rounded)
+                        .bold()
                 }
 
                 Label("Personalized goals tailored for you", systemImage: "star")
@@ -41,7 +42,7 @@ struct BloomPlusOfferView: View {
             }
             Spacer(minLength: 0)
         }
-        .cardContainer(fill: .background.secondary, stroke: .mutedBlue)
+        .cardContainer(fill: .background.secondary, stroke: .tint)
     }
 }
 

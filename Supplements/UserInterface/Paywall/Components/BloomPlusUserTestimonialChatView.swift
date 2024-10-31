@@ -58,7 +58,7 @@ private extension BloomPlusUserTestimonialChatView {
         position: .leading
     )
     BloomPlusUserTestimonialChatView(
-        testimonial: "I love using Bloom to keep track of my health. It's my new favourite app!",
+        testimonial: "I love using Bloom to keep track of my health.",
         name: "Katie",
         position: .trailing
     )

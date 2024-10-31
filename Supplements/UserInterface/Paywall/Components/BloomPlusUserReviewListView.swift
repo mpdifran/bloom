@@ -21,28 +21,28 @@ struct BloomPlusUserReviewListView: View {
                 name: "Tori M",
                 position: .leading
             )
-            .tint(.mutedBlue.lighter(by: 0.2))
+            .tint(.mutedPink.lighter(by: 0.2))
 
             BloomPlusUserTestimonialChatView(
                 testimonial: "I lost 20 pounds in 2 months using Bloom, it's unbelievable!",
                 name: "Katie M",
                 position: .trailing
             )
-            .tint(.mutedBlue)
+            .tint(.mutedPink)
 
             BloomPlusUserTestimonialChatView(
                 testimonial: "This app has changed my life! I love it!",
                 name: "Kaitlyn M",
                 position: .leading
             )
-            .tint(.mutedBlue.darker(by: 0.2))
+            .tint(.mutedPink.darker(by: 0.2))
 
             BloomPlusUserTestimonialChatView(
                 testimonial: "Bloom has made me so much more healthy, thank you Team Bloom! ❤️",
                 name: "Clara A",
                 position: .trailing
             )
-            .tint(.mutedBlue.darker(by: 0.4))
+            .tint(.mutedPink.darker(by: 0.4))
         }
     }
 }

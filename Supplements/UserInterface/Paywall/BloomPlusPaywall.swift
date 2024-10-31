@@ -62,16 +62,20 @@ private extension BloomPlusPaywall {
 
     var purchaseShelf: some View {
         VStack {
-            Label("Try FREE for 3 Weeks", systemImage: "heart")
-                .font(.subheadline)
-                .bold()
-
             Button {
 
             } label: {
-                Text("Continue")
+                Text("Start Free Trial")
             }
             .buttonStyle(.paywall)
+
+            HStack(spacing: 4) {
+                Image(systemName: "checkmark.shield.fill")
+                    .foregroundStyle(.white, .mutedGreen)
+                Text("No Payment Now")
+            }
+            .font(.subheadline)
+            .bold()
         }
         .padding()
         .background {
