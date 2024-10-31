@@ -36,7 +36,7 @@ struct OnboardingHealthKitPrivacyCard: View {
         .sensoryFeedback(.selection, trigger: didContinue)
         .padding()
         .shelf {
-            Button("Awesome!") {
+            Button("Connect to Health", systemImage: "heart.fill") {
                 dismiss()
                 didContinue.toggle()
                 onContinue()

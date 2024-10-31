@@ -24,18 +24,18 @@ extension HKBiologicalSex {
         }
     }
 
-    var personName: String {
+    var personName: String? {
         switch self {
         case .notSet:
-            "person"
+            nil
         case .female:
-            "woman"
+            "female"
         case .male:
-            "man"
+            "male"
         case .other:
-            "person"
+            nil
         @unknown default:
-            "person"
+            nil
         }
     }
 }

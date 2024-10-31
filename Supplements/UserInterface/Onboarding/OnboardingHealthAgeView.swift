@@ -25,9 +25,10 @@ struct OnboardingHealthAgeView: View {
             VStack(alignment: .leading, spacing: 20) {
                 if
                     let sex = healthManager.healthStore.sex(),
-                    let age = healthManager.healthStore.age()
+                    let age = healthManager.healthStore.age(),
+                    let sexName = sex.personName
                 {
-                    hasHealthDataContent(age: age, sex: sex)
+                    hasHealthDataContent(age: age, sex: sexName)
 
                     if isHealthDataCorrect == false {
                         ageAndSexPicker
@@ -78,6 +79,9 @@ struct OnboardingHealthAgeView: View {
             }
         }
         .onAppear {
+            healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
+            healthManager.isFemale = healthManager.healthStore.sex() == .female
+
             TelemetryDeck.signal("OB Age+Sex")
         }
     }
@@ -102,11 +106,11 @@ private extension OnboardingHealthAgeView {
     }
 
     @ViewBuilder
-    func hasHealthDataContent(age: Int, sex: HKBiologicalSex) -> some View {
+    func hasHealthDataContent(age: Int, sex: String) -> some View {
         Text("Looks Great!")
             .appear(with: 1, currentIndex: index)
 
-        Text("According to your Health data, you're a \(age) year old \(sex.personName). Is that correct?")
+        Text("According to your Health data, you're a \(age) year old \(sex). Is that correct?")
             .appear(with: 2, currentIndex: index)
 
         HStack {
@@ -120,9 +124,6 @@ private extension OnboardingHealthAgeView {
             Spacer(minLength: 20)
 
             Button("No") {
-                healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
-                healthManager.isFemale = healthManager.healthStore.sex() == .female
-
                 isHealthDataCorrect = false
                 index = 4
             }

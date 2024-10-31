@@ -17,6 +17,7 @@ struct OnboardingHealthGoalView: View {
 
     @State private var index = 1
     @State private var didContinue = false
+    @State private var currentWeight: HKQuantity?
 
     @State private var presentedSheet: AnyView?
 

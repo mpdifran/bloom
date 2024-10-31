@@ -87,7 +87,7 @@ struct OnboardingNotificationPermissionView: View {
         .shelf {
             if showContinueButton {
                 if isAuthorized {
-                    Button("Continue") {
+                    Button("Let's go!") {
                         didContinue.toggle()
                         onContinue()
                     }
@@ -101,8 +101,10 @@ struct OnboardingNotificationPermissionView: View {
                         .buttonStyle(.onboarding)
 
                         Button("Skip") {
+                            // TODO: Add welcome to Bloom screen
                             onContinue()
                         }
+                        .bold()
                         .frame(height: 44)
                     }
                 }

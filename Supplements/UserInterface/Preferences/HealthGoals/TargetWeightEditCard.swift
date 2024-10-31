@@ -19,8 +19,7 @@ struct TargetWeightEditCard: View {
 
     @FocusState private var isFocused: Bool
     @ObservedObject private var healthManager = HealthManager.shared
-
-    private var unitPreferences = HealthUnitPreferences.shared
+    @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
     var body: some View {
         ActionCardView(
@@ -36,7 +35,17 @@ struct TargetWeightEditCard: View {
                         .selectAllTextOnBeginEditing()
                         .focused($isFocused)
 
-                    Text(unitPreferences.weightUnit.sensibleUnitString)
+                    Menu {
+                        ForEach(HKUnit.weightUnits, id: \.unitString) { unit in
+                            Button(unit.descriptiveUnitName) {
+                                unitPreferences.weightUnit = unit
+                            }
+                        }
+                    } label: {
+                        Text(unitPreferences.weightUnit.sensibleUnitString)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.title2)
+                    }
                 }
                 .frame(width: 200)
                 .fontDesign(.rounded)

@@ -38,6 +38,12 @@ struct OnboardingHealthKitView: View {
                         .padding(.top, 40)
                         .horizontallyCentered()
                         .transition(.move(edge: .bottom))
+                        .onTapGesture {
+                            didContinue.toggle()
+                            presentedSheet = OnboardingHealthKitPrivacyCard {
+                                healthPermissionTrigger.toggle()
+                            }.asAny
+                        }
                 }
             }
             .padding()
@@ -61,7 +67,8 @@ struct OnboardingHealthKitView: View {
                     }
                     .buttonStyle(.onboarding)
                 } else {
-                    Button("Connect to Health", systemImage: "heart.fill") {
+                    Button("Continue") {
+                        didContinue.toggle()
                         presentedSheet = OnboardingHealthKitPrivacyCard {
                             healthPermissionTrigger.toggle()
                         }.asAny

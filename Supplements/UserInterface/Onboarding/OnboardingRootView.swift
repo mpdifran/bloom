@@ -18,6 +18,7 @@ extension OnboardingRootView {
         case focusAreas
         case vitals
         case notifications
+        case finish
     }
 }
 
@@ -69,6 +70,10 @@ struct OnboardingRootView: View {
                 }
             case .notifications:
                 OnboardingNotificationPermissionView {
+                    setStep(.finish)
+                }
+            case .finish:
+                OnboardingFinishView {
                     onComplete()
                 }
             }

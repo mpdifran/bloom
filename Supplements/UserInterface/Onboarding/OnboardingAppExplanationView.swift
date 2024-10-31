@@ -83,7 +83,7 @@ struct OnboardingAppExplanationView: View {
 private extension OnboardingAppExplanationView {
 
     var vitalsCardPileView: some View {
-        ZStack {
+        VStack {
             HStack {
                 Spacer()
             }
@@ -92,10 +92,6 @@ private extension OnboardingAppExplanationView {
                     vital: vitalPair.vital
                 )
                 .transition(.blurReplace)
-                .rotationEffect(vitalPair.rotation)
-                .offset(y: vitalPair.offset)
-                .blur(radius: 2 * CGFloat((vitalPairs.count - 1 - index)))
-                .shadow(color: .black.opacity(0.1), radius: 10)
             }
         }
         .frame(height: 270)

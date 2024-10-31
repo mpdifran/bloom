@@ -30,12 +30,12 @@ struct OnboardingWelcomeView: View {
                 Text("Hey there!")
                     .appear(with: 1, currentIndex: index)
 
-                Text("Welcome to Bloom, your new personal Health Assistant")
+                Text("I'm Bloom, your new personal Health Assistant.")
                     .transition(.opacity)
                     .appear(with: 2, currentIndex: index)
 
                 Group {
-                    Text("What should we call you?")
+                    Text("What's your first name?")
 
                     TextField("", text: $healthManager.name, prompt: Text("Your Name"))
                         .textContentType(.givenName)
@@ -44,7 +44,9 @@ struct OnboardingWelcomeView: View {
                         .submitLabel(.continue)
                         .disabled(index != 3)
                         .onSubmit {
-                            index += 1
+                            withAnimation {
+                                index += 1
+                            }
                         }
                         .onAppear {
                             isFocused = true
@@ -52,7 +54,6 @@ struct OnboardingWelcomeView: View {
                 }
                 .transition(.blurReplace)
                 .appear(with: 3, currentIndex: index)
-
 
                 Text("Nice to meet you, \(healthManager.name)! Let's get to know each other a bit...")
                     .transition(.opacity)

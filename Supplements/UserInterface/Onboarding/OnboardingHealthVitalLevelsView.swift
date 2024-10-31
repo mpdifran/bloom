@@ -17,7 +17,7 @@ struct OnboardingHealthVitalLevelsView: View {
 
     @State private var vitals = [VitalModel]()
     @State private var noDataVitals = [VitalModel]()
-
+    @State private var index = 0
     @State private var showContinue = false
     @State private var didContinue = false
 
@@ -25,23 +25,35 @@ struct OnboardingHealthVitalLevelsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 Group {
-                    Text("Let's calculate your Vitals to see where you are on your health journey.")
+                    Text("Calculating your Vitals...")
                 }
                 .onboardingTextStyle()
                 .fixedSize(horizontal: false, vertical: true)
+                .appear(with: 0, currentIndex: index)
 
                 if vitals.isEmpty && noDataVitals.isEmpty {
                     CircularSpinnerView()
                         .foregroundStyle(.tint)
                         .horizontallyCentered()
+                        .padding(.top, 100)
                 } else {
                     VStack(alignment: .leading) {
-                        ForEach(vitals) { vital in
-                            MiniVitalCell(vital: vital)
-                                .transition(.scale)
+                        if vitals.isNotEmpty {
+                            Text("Here's a preview, you can dig in more later!")
+                                .font(.title)
+                                .bold()
+                                .fontDesign(.rounded)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .transition(.blurReplace)
+
+                            ForEach(vitals) { vital in
+                                MiniVitalCell(vital: vital)
+                                    .transition(.scale)
+                            }
                         }
+
                         if noDataVitals.isNotEmpty {
-                            Text("Looks like we're missing some data. That's ok!")
+                            Text("Looks like we're missing some data. That's ok, we can fill it in later!")
                                 .font(.title)
                                 .bold()
                                 .fontDesign(.rounded)
@@ -68,7 +80,7 @@ struct OnboardingHealthVitalLevelsView: View {
         .sensoryFeedback(.selection, trigger: didContinue)
         .shelf {
             if showContinue {
-                Button("So cool!") {
+                Button(vitals.isEmpty ? "Sounds good" : "So cool!") {
                     didContinue.toggle()
                     onContinue()
                 }
@@ -78,6 +90,7 @@ struct OnboardingHealthVitalLevelsView: View {
         .task {
             await VitalsCalculator.shared.forceFetchVitals()
             await Delay(1000)
+            index += 1
             await advanceVitals()
             await Delay(500)
             showContinue = true
