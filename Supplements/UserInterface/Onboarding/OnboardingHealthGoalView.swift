@@ -53,6 +53,7 @@ struct OnboardingHealthGoalView: View {
         .animation(.default, value: index)
         .animation(.default, value: healthManager.healthGoal)
         .sensoryFeedback(.selection, trigger: index)
+        .sensoryFeedback(.selection, trigger: healthManager.healthGoal)
         .sensoryFeedback(.selection, trigger: didContinue)
         .shelf(spacing: 0) {
             if index >= 3 {

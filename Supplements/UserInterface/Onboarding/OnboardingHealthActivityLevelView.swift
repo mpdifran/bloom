@@ -80,12 +80,14 @@ struct OnboardingHealthActivityLevelView: View {
             await addActivityLevels()
         }
         .shelf {
-            Button("That looks right") {
-                didContinue.toggle()
-                onContinue()
+            if activityLevels.isNotEmpty {
+                Button("That looks right") {
+                    didContinue.toggle()
+                    onContinue()
+                }
+                .buttonStyle(.onboarding)
+                .disabled(healthManager.userReportedActivityLevel == nil)
             }
-            .buttonStyle(.onboarding)
-            .disabled(healthManager.userReportedActivityLevel == nil)
         }
         .onAppear {
             TelemetryDeck.signal("OB Activity Level")

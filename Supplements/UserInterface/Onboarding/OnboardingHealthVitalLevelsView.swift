@@ -39,7 +39,7 @@ struct OnboardingHealthVitalLevelsView: View {
                 } else {
                     VStack(alignment: .leading) {
                         if vitals.isNotEmpty {
-                            Text("Here's a preview, you can dig in more later!")
+                            Text("Here's a preview! You can dig in more later.")
                                 .font(.title)
                                 .bold()
                                 .fontDesign(.rounded)
