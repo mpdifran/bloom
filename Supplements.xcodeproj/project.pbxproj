@@ -111,7 +111,6 @@
 		FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */; };
 		FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B22C88957C00278019 /* Double+Rounding.swift */; };
 		FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */; };
-		FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */; };
 		FF4A21B92C88E11E00278019 /* DateValueSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4A21B82C88E11E00278019 /* DateValueSample.swift */; };
 		FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BB2C88FA5600278019 /* Bugsnag */; };
 		FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */; };
@@ -367,6 +366,7 @@
 		FFEBEA5D2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEBEA5C2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift */; };
 		FFEBEA5F2CD29BDE00142AA1 /* IconGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEBEA5E2CD29BDE00142AA1 /* IconGauge.swift */; };
 		FFEBEA612CD4016300142AA1 /* OnboardingFinishView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEBEA602CD4016300142AA1 /* OnboardingFinishView.swift */; };
+		FFEBEA682CD561BE00142AA1 /* HabitTargetValueEditCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEBEA672CD561B900142AA1 /* HabitTargetValueEditCardView.swift */; };
 		FFF03D072CCBE3DF00476B44 /* View+AppearWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */; };
 		FFF03D0A2CCBE6F300476B44 /* HKBiologicalSex+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */; };
 		FFF03D0C2CCC653800476B44 /* ActivityLevelSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */; };
@@ -631,7 +631,6 @@
 		FF48C28F2C69A9BD00DC8D1D /* DetailInfoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoCardView.swift; sourceTree = "<group>"; };
 		FF4A21B22C88957C00278019 /* Double+Rounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Rounding.swift"; sourceTree = "<group>"; };
 		FF4A21B42C88B8EF00278019 /* BodyWeightActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightActionCardView.swift; sourceTree = "<group>"; };
-		FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDailyTargetTagView.swift; sourceTree = "<group>"; };
 		FF4A21B82C88E11E00278019 /* DateValueSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValueSample.swift; sourceTree = "<group>"; };
 		FF4A21C82C89FF5500278019 /* UserNamePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNamePrompt.swift; sourceTree = "<group>"; };
 		FF4A21CB2C8A01CF00278019 /* FeatureRequestWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureRequestWebView.swift; sourceTree = "<group>"; };
@@ -868,6 +867,7 @@
 		FFEBEA5C2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHealthKitPrivacyCard.swift; sourceTree = "<group>"; };
 		FFEBEA5E2CD29BDE00142AA1 /* IconGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGauge.swift; sourceTree = "<group>"; };
 		FFEBEA602CD4016300142AA1 /* OnboardingFinishView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFinishView.swift; sourceTree = "<group>"; };
+		FFEBEA672CD561B900142AA1 /* HabitTargetValueEditCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTargetValueEditCardView.swift; sourceTree = "<group>"; };
 		FFF03D062CCBE3D400476B44 /* View+AppearWithIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+AppearWithIndex.swift"; sourceTree = "<group>"; };
 		FFF03D092CCBE6EC00476B44 /* HKBiologicalSex+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKBiologicalSex+Helpers.swift"; sourceTree = "<group>"; };
 		FFF03D0B2CCC653600476B44 /* ActivityLevelSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLevelSelectionCell.swift; sourceTree = "<group>"; };
@@ -1035,8 +1035,6 @@
 			isa = PBXGroup;
 			children = (
 				FF70E9F42CC023440055E932 /* TodayWidgets */,
-				FF2FB8942C9C906F00F57523 /* Habits */,
-				FF7112872C9874CC0020A0F0 /* Goals */,
 				FF6E060A2C9F8DFA00C4219B /* Configure */,
 				FF0DA0F12C84D967007D1A6B /* Components */,
 				FF4B2F462C90C7880003879C /* ToDos */,
@@ -1286,18 +1284,6 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		FF2FB8942C9C906F00F57523 /* Habits */ = {
-			isa = PBXGroup;
-			children = (
-				FFAFF4172CAB0A9B00FAD3C9 /* UpdateHabits */,
-				FFA062AE2C921AE900ADCB09 /* HabitGrid */,
-				FF2FB8972C9CD03400F57523 /* HabitDailyUpdateCell.swift */,
-				FF2FB8992C9CD11E00F57523 /* HabitDailyUpdateCellViewModel.swift */,
-				FF2FB8A32C9DD74A00F57523 /* HabitDetailsView.swift */,
-			);
-			path = Habits;
-			sourceTree = "<group>";
-		};
 		FF3A8F302C1A8341002DA563 /* DeviceActivityReportExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -1455,14 +1441,6 @@
 				FF70EA032CC183730055E932 /* BodyWeightTodayWidgetViewModel.swift */,
 			);
 			path = BodyWeight;
-			sourceTree = "<group>";
-		};
-		FF7112872C9874CC0020A0F0 /* Goals */ = {
-			isa = PBXGroup;
-			children = (
-				FF4A21B62C88D5D200278019 /* GoalDailyTargetTagView.swift */,
-			);
-			path = Goals;
 			sourceTree = "<group>";
 		};
 		FF78904A2C34726B00F9C1A5 /* SleepCoach */ = {
@@ -1627,24 +1605,16 @@
 		FF9782F62C9B3AF700A8ED7E /* Habits */ = {
 			isa = PBXGroup;
 			children = (
+				FFEBEA642CD5614C00142AA1 /* Details */,
+				FFAFF4172CAB0A9B00FAD3C9 /* UpdateHabits */,
+				FFEBEA652CD5615500142AA1 /* Cells */,
+				FFEBEA662CD5616000142AA1 /* Grid */,
+				FFEBEA632CD5613B00142AA1 /* Models */,
 				FFAFF4232CAC823500FAD3C9 /* Calculators */,
 				FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */,
 				FF6E06162CA1DE0A00C4219B /* HabitsFactory.swift */,
-				FF2FB8952C9CCB7700F57523 /* ProposedHabit.swift */,
-				FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */,
-				FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */,
 			);
 			path = Habits;
-			sourceTree = "<group>";
-		};
-		FFA062AE2C921AE900ADCB09 /* HabitGrid */ = {
-			isa = PBXGroup;
-			children = (
-				FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */,
-				FFA062AF2C921AF400ADCB09 /* HabitGridCell.swift */,
-				FFA062B12C9222AF00ADCB09 /* HabitGridModel.swift */,
-			);
-			path = HabitGrid;
 			sourceTree = "<group>";
 		};
 		FFA134EE2C3F041500FF1829 /* SleepDay */ = {
@@ -2079,6 +2049,44 @@
 				FFE41D1C2C8BCDAA00E3E559 /* EveningReportView.swift */,
 			);
 			path = EveningReport;
+			sourceTree = "<group>";
+		};
+		FFEBEA632CD5613B00142AA1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF2FB8952C9CCB7700F57523 /* ProposedHabit.swift */,
+				FFAFF41A2CAB176B00FAD3C9 /* ProposedToDo.swift */,
+				FFAFF4152CAB07C900FAD3C9 /* NewHabitResult.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FFEBEA642CD5614C00142AA1 /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				FF2FB8A32C9DD74A00F57523 /* HabitDetailsView.swift */,
+				FFEBEA672CD561B900142AA1 /* HabitTargetValueEditCardView.swift */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		FFEBEA652CD5615500142AA1 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FF2FB8972C9CD03400F57523 /* HabitDailyUpdateCell.swift */,
+				FF2FB8992C9CD11E00F57523 /* HabitDailyUpdateCellViewModel.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		FFEBEA662CD5616000142AA1 /* Grid */ = {
+			isa = PBXGroup;
+			children = (
+				FFA062AC2C9219BA00ADCB09 /* HabitGrid.swift */,
+				FFA062AF2C921AF400ADCB09 /* HabitGridCell.swift */,
+				FFA062B12C9222AF00ADCB09 /* HabitGridModel.swift */,
+			);
+			path = Grid;
 			sourceTree = "<group>";
 		};
 		FFF03D082CCBE6C900476B44 /* Extensions */ = {
@@ -2911,7 +2919,6 @@
 				FFBE52392C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift in Sources */,
 				FF1328022CB5B43400ACF981 /* BloomPlusPaywallHeroImageView.swift in Sources */,
 				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,
-				FF4A21B72C88D5D200278019 /* GoalDailyTargetTagView.swift in Sources */,
 				FFAFF4272CAC831500FAD3C9 /* CalorieTargetCalculator.swift in Sources */,
 				FF1705132C0E7CB5000D4B3D /* View+ListSeparatorInset.swift in Sources */,
 				FFC8B0152C519DAD009C5CED /* BodyCompositionMonthlySummary.swift in Sources */,
@@ -2976,6 +2983,7 @@
 				FF1E96042C0A6462004DAD2D /* Color+Brightness.swift in Sources */,
 				FF8F79BE2C61A3DE0095C36D /* VitalDetailChartTitleView.swift in Sources */,
 				FFF03D0E2CCFDAC000476B44 /* View+OnboardingTextStyle.swift in Sources */,
+				FFEBEA682CD561BE00142AA1 /* HabitTargetValueEditCardView.swift in Sources */,
 				FF4A21D02C8A02BD00278019 /* FeatureRequestsScreen.swift in Sources */,
 				FF7890522C3473B700F9C1A5 /* SleepChatMessage.swift in Sources */,
 				FF70E9272CB96D320055E932 /* HealthSleepObserver.swift in Sources */,

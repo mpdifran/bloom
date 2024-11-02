@@ -15,6 +15,24 @@ private extension Double {
 
 public extension Habit {
 
+    func duplicate() -> Habit {
+        Habit(
+            targetMetric: targetMetric,
+            value: value,
+            unitString: unitString,
+            startDate: startDate,
+            endDate: endDate,
+            lastNotificationDate: lastNotificationDate,
+            isSuggested: isSuggested,
+            isUserEdited: isUserEdited,
+            vitalKind: vitalKind,
+            context: context
+        )
+    }
+}
+
+public extension Habit {
+
     var unit: HKUnit {
         HKUnit(from: unitString)
     }

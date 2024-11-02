@@ -11,7 +11,11 @@ import HealthKit
 import SwiftData
 
 struct HabitDetailsView: View {
-    let habit: Habit
+    @State private var habit: Habit
+
+    init(habit: Habit) {
+        self._habit = State(initialValue: habit)
+    }
 
     @State private var allSamplesTwelveWeeks = [DateQuantitySample]()
     @State private var weekQuantitySamples = [WeekQuantitySamples]() {
@@ -21,37 +25,15 @@ struct HabitDetailsView: View {
     }
     @State private var dayStats = [Calendar.Weekday : Int]()
     @State private var habitGridModel = HabitGridModel()
+    @State private var presentedSheet: AnyView?
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                VStack {
-                    HStack {
-                        Image(systemName: habit.targetMetric.systemImage)
-                            .font(.largeTitle)
-                            .foregroundStyle(.tint)
+                titleSection
 
-                        Text(habit.targetMetric.name)
-                            .font(.title3)
-                            .bold()
-
-                        Spacer()
-
-                        VStack(alignment: .trailing) {
-                            Text("Goal")
-                                .foregroundStyle(.secondary)
-                                .font(.caption)
-                            Text(habit.displayQuantity)
-                                .font(.title3)
-                                .bold()
-                                .fontDesign(.rounded)
-                        }
-                    }
-                    .padding()
-
-                    HabitGrid(model: habitGridModel)
-                }
-                .padding(.bottom)
+                HabitGrid(model: habitGridModel)
+                    .padding(.bottom)
 
                 statsSection
                     .padding(.horizontal)
@@ -62,6 +44,14 @@ struct HabitDetailsView: View {
                         .symbolVariant(.fill)
                         .bold()
                 }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Edit") {
+                        presentedSheet = HabitTargetValueEditCardView(habit: habit) { (habit) in
+                            self.habit = habit
+                        }.asAny
+                    }
+                    .bold()
+                }
             }
         }
         .tint(habit.targetMetric.color)
@@ -70,6 +60,7 @@ struct HabitDetailsView: View {
         .task {
             await loadGoalHistory()
         }
+        .sheet($presentedSheet)
     }
 }
 
@@ -78,6 +69,31 @@ private extension HabitDetailsView {
     var average: HKQuantity {
         let averageValue = allSamplesTwelveWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
         return HKQuantity(unit: habit.unit, doubleValue: averageValue)
+    }
+
+    var titleSection: some View {
+        HStack {
+            Image(systemName: habit.targetMetric.systemImage)
+                .font(.largeTitle)
+                .foregroundStyle(.tint)
+
+            Text(habit.targetMetric.name)
+                .font(.title3)
+                .bold()
+
+            Spacer()
+
+            VStack(alignment: .trailing) {
+                Text("Goal")
+                    .foregroundStyle(.secondary)
+                    .font(.caption)
+                Text(habit.displayQuantity)
+                    .font(.title3)
+                    .bold()
+                    .fontDesign(.rounded)
+            }
+        }
+        .padding()
     }
 
     var statsSection: some View {

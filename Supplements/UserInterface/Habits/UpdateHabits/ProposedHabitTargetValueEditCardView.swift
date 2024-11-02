@@ -28,11 +28,6 @@ struct ProposedHabitTargetValueEditCardView: View {
             VStack {
                 Spacer()
 
-                if proposedHabit.shouldShowSuggestedValue {
-                    Text("Recommended \(proposedHabit.displaySuggestedValue)")
-                        .bold()
-                }
-
                 HStack {
                     TextField("", value: $value, formatter: proposedHabit.targetMetric.preferredFormatter)
                         .selectAllTextOnBeginEditing()
@@ -47,6 +42,11 @@ struct ProposedHabitTargetValueEditCardView: View {
                 .multilineTextAlignment(.trailing)
                 .padding()
                 .padding(.horizontal, 30)
+
+                if proposedHabit.shouldShowSuggestedValue {
+                    Text("Recommended \(proposedHabit.displaySuggestedValue)")
+                        .bold()
+                }
 
                 if let previousQuantity = proposedHabit.displayPreviousQuantity {
                     Text("Previously \(previousQuantity)")
