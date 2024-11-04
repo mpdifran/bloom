@@ -26,8 +26,6 @@ struct CalorieTargetCalculatorTestSuite {
         let result = try #require(
             await CalorieTargetCalculator.targetCalories(
                 existingHabit: input.existingHabit,
-                basalEnergy: input.basalEnergy.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0) },
-                activeEnergy: input.activeEnergy.map { HKQuantity(unit: .largeCalorie(), doubleValue: $0) },
                 dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: input.dietaryEnergy),
                 bodyMass: HKQuantity(unit: .pound(), doubleValue: input.bodyMass),
                 activityLevel: input.activityLevel,
@@ -48,31 +46,25 @@ struct CalorieTargetCalculatorTestSuite {
 extension CalorieTargetCalculatorTestSuite {
     struct Input: CustomTestStringConvertible {
         let testDescription: String
-        let basalEnergy: Double?
-        let activeEnergy: Double?
         let dietaryEnergy: Double
         let bodyMass: Double
         let targetWeight: Double
-        let activityLevel: ActivityLevelSummary.ActivityLevel?
+        let activityLevel: ActivityLevelSummary.ActivityLevel
         let healthGoal: HealthGoal
         let speed: WeightLossSpeed
         let existingHabit: HabitDTO?
 
         init(
             _ testDescription: String,
-            basal: Double?,
-            active: Double?,
             dietary: Double,
             bodyMass: Double,
             targetWeight: Double,
-            activityLevel: ActivityLevelSummary.ActivityLevel?,
+            activityLevel: ActivityLevelSummary.ActivityLevel,
             goal: HealthGoal,
             speed: WeightLossSpeed,
             existingHabit: HabitDTO? = nil
         ) {
             self.testDescription = testDescription
-            self.basalEnergy = basal
-            self.activeEnergy = active
             self.dietaryEnergy = dietary
             self.bodyMass = bodyMass
             self.targetWeight = targetWeight

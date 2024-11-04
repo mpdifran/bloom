@@ -167,21 +167,16 @@ private extension HabitsFactory {
         var newFocusAreas = [ProposedHabit]()
 
         // Calories
-        let basalEnergy = await VitalsCalculator.shared.nutritionSummary?.details.basalEnergyBurned
-        let activeEnergy = await VitalsCalculator.shared.nutritionSummary?.details.activeEnergyBurned
-        let userReportedActivityLevel = await HealthManager.shared.userReportedActivityLevel
-        let activityLevel = await VitalsCalculator.shared.activityLevelSummary?.details.activityLevel ?? userReportedActivityLevel
+        let userReportedActivityLevel = await HealthManager.shared.userReportedActivityLevel ?? .sedentary
 
         let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
         let newCalorieGoal: HKQuantity?
 
         if let recommendation = await CalorieTargetCalculator.targetCalories(
             existingHabit: existingCalorieHabit,
-            basalEnergy: basalEnergy,
-            activeEnergy: activeEnergy,
             dietaryEnergy: averageDietaryEnergy,
             bodyMass: bodyMass,
-            activityLevel: activityLevel,
+            activityLevel: userReportedActivityLevel,
             targetDetails: HealthManager.shared.healthTargetDetails
         ) {
             let suggestedValue = recommendation.target.doubleValue(for: .largeCalorie())
