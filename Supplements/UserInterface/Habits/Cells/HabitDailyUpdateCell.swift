@@ -23,14 +23,17 @@ struct HabitDailyUpdateCell: View {
 
     var body: some View {
         HStack {
-            CompletionCheckmarkView(state: viewModel.goalCompletionState, colorize: true)
+            IconGauge(
+                progress: viewModel.dailyValue / habit.value,
+                dimension: 50,
+                lineThickness: 8,
+                systemImage: habit.targetMetric.systemImage,
+                color: habit.targetMetric.color
+            )
+            .foregroundStyle(viewModel.goalCompletionState == .metGoal ? habit.targetMetric.color : .text)
 
             VStack(alignment: .leading) {
                 HStack {
-                    Image(systemName: habit.targetMetric.systemImage)
-                        .font(.title2)
-                        .frame(width: 25)
-
                     VStack(alignment: .leading) {
                         if let vitalKind = habit.vitalKind {
                             Label(vitalKind.name, systemImage: vitalKind.systemImage)
@@ -68,9 +71,7 @@ struct HabitDailyUpdateCell: View {
             DisclosureIndicator()
                 .padding(.leading)
         }
-        .progressCardContainer(
-            progress: viewModel.dailyValue / habit.value
-        )
+        .cardContainer(fill: .background.secondary)
         .tint(habit.targetMetric.color)
         .standardConfetti(
             $showConfetti,
