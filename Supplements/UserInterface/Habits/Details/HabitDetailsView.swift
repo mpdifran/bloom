@@ -37,20 +37,15 @@ struct HabitDetailsView: View {
 
                 statsSection
                     .padding(.horizontal)
+
+                editSection
+                    .padding(.horizontal)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Image(systemName: habit.targetMetric.systemImage)
                         .symbolVariant(.fill)
                         .bold()
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Edit") {
-                        presentedSheet = HabitTargetValueEditCardView(habit: habit) { (habit) in
-                            self.habit = habit
-                        }.asAny
-                    }
-                    .bold()
                 }
             }
         }
@@ -135,6 +130,18 @@ private extension HabitDetailsView {
             }
         }
         .cardContainer(fill: .background.secondary)
+    }
+
+    var editSection: some View {
+        Button {
+            presentedSheet = HabitTargetValueEditCardView(habit: habit) { (habit) in
+                self.habit = habit
+            }.asAny
+        } label: {
+            Text("Manage Value")
+                .horizontallyCentered()
+        }
+        .buttonStyle(.primary)
     }
 }
 
