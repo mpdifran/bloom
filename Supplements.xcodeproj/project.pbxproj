@@ -355,6 +355,11 @@
 		FFCE85622C99DCD9002C46B1 /* Calendar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C22C025174009FDC4E /* Calendar+Helpers.swift */; };
 		FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; platformFilter = ios; };
 		FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */; };
+		FFD582C12CD9696C00833FEE /* FocusAreaVitalReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD582C02CD9696C00833FEE /* FocusAreaVitalReviewView.swift */; };
+		FFD582C32CD969A100833FEE /* ProposedVitalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD582C22CD969A100833FEE /* ProposedVitalCell.swift */; };
+		FFD582C52CD996A400833FEE /* VitalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD582C42CD996A400833FEE /* VitalPickerView.swift */; };
+		FFD582C72CD99DD100833FEE /* FocusAreaReviewRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD582C62CD99DD100833FEE /* FocusAreaReviewRootView.swift */; };
+		FFD582C92CD9A09D00833FEE /* View+Foreground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD582C82CD9A09500833FEE /* View+Foreground.swift */; };
 		FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */; };
 		FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE390D62C24931400B79140 /* WorkoutSummary.swift */; };
 		FFE41D152C8B83F600E3E559 /* ToDoActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */; };
@@ -857,6 +862,11 @@
 		FFCC6B892C9C8B7D00676CAA /* GoalReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalReviewCell.swift; sourceTree = "<group>"; };
 		FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BowelMovement+Helpers.swift"; sourceTree = "<group>"; };
+		FFD582C02CD9696C00833FEE /* FocusAreaVitalReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaVitalReviewView.swift; sourceTree = "<group>"; };
+		FFD582C22CD969A100833FEE /* ProposedVitalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedVitalCell.swift; sourceTree = "<group>"; };
+		FFD582C42CD996A400833FEE /* VitalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalPickerView.swift; sourceTree = "<group>"; };
+		FFD582C62CD99DD100833FEE /* FocusAreaReviewRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaReviewRootView.swift; sourceTree = "<group>"; };
+		FFD582C82CD9A09500833FEE /* View+Foreground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Foreground.swift"; sourceTree = "<group>"; };
 		FFDDE2882C0A059F00BFDEF5 /* ChartTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTitleView.swift; sourceTree = "<group>"; };
 		FFE390D62C24931400B79140 /* WorkoutSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummary.swift; sourceTree = "<group>"; };
 		FFE41D142C8B83F600E3E559 /* ToDoActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoActionCell.swift; sourceTree = "<group>"; };
@@ -1733,7 +1743,11 @@
 		FFAFF4172CAB0A9B00FAD3C9 /* UpdateHabits */ = {
 			isa = PBXGroup;
 			children = (
+				FFD582C62CD99DD100833FEE /* FocusAreaReviewRootView.swift */,
+				FFD582C02CD9696C00833FEE /* FocusAreaVitalReviewView.swift */,
+				FFD582C42CD996A400833FEE /* VitalPickerView.swift */,
 				FF2FB89D2C9DA98A00F57523 /* NewUpdateHabitView.swift */,
+				FFD582C22CD969A100833FEE /* ProposedVitalCell.swift */,
 				FF2FB89F2C9DA9F100F57523 /* ProposedHabitCell.swift */,
 				FFAFF41C2CAB18E300FAD3C9 /* ProposedToDoCell.swift */,
 				FF2FB8A12C9DC47700F57523 /* ProposedHabitTargetValueEditCardView.swift */,
@@ -2149,6 +2163,7 @@
 				FF8F79B82C601C660095C36D /* View+Background.swift */,
 				FFA402C92C94C88700D8DD40 /* View+Selectable.swift */,
 				FFBE52342C73102B00F510DE /* View+ReloadAfterTimeInterval.swift */,
+				FFD582C82CD9A09500833FEE /* View+Foreground.swift */,
 				FF6E062D2CA4E4BA00C4219B /* View+Show.swift */,
 				FF70EA072CC1A4EB0055E932 /* View+SafeAreaBlur.swift */,
 				FF0405272C8F70D400FF1E2F /* TextField+Selection.swift */,
@@ -2744,6 +2759,7 @@
 				FF426AD12C6D9A52006E0F17 /* HKWorkout+Helpers.swift in Sources */,
 				FF88F11D2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift in Sources */,
 				FFEBEA5D2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift in Sources */,
+				FFD582C12CD9696C00833FEE /* FocusAreaVitalReviewView.swift in Sources */,
 				FF4578F32C40A9D6004E8661 /* SleepSectionTitleView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FF2FB8962C9CCB7B00F57523 /* ProposedHabit.swift in Sources */,
@@ -2820,6 +2836,7 @@
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
 				FF6E06102C9F930800C4219B /* SelectableHabitCell.swift in Sources */,
+				FFD582C72CD99DD100833FEE /* FocusAreaReviewRootView.swift in Sources */,
 				FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */,
 				FF70E9F22CC000350055E932 /* MainTask.swift in Sources */,
 				FF70E9292CB99C720055E932 /* UpcomingPeriodCell.swift in Sources */,
@@ -2847,16 +2864,19 @@
 				FFF03D0C2CCC653800476B44 /* ActivityLevelSelectionCell.swift in Sources */,
 				FF6E06212CA34ADA00C4219B /* CyclePhaseCoolFactCell.swift in Sources */,
 				FF0DA0EB2C825876007D1A6B /* AllDayEventCell.swift in Sources */,
+				FFD582C92CD9A09D00833FEE /* View+Foreground.swift in Sources */,
 				FF70EA122CC405EF0055E932 /* TodaysDateView.swift in Sources */,
 				FF17051B2C10A00C000D4B3D /* SleepProgramCoordinator.swift in Sources */,
 				FF0F79E12C2C99AE0013F048 /* HKUnit+Helpers.swift in Sources */,
 				FFF03D0A2CCBE6F300476B44 /* HKBiologicalSex+Helpers.swift in Sources */,
 				FF4B2F482C90C7960003879C /* ToDoManager.swift in Sources */,
+				FFD582C32CD969A100833FEE /* ProposedVitalCell.swift in Sources */,
 				FF6E061F2CA34A1400C4219B /* CyclePhaseLearnMoreView.swift in Sources */,
 				FF8B8B462C002F1A00BA2128 /* ActivityModel.swift in Sources */,
 				FF70E9C92CBED0030055E932 /* Measurement+Locale.swift in Sources */,
 				FFC8B0112C5164BB009C5CED /* SleepVitalsMonthlySummary.swift in Sources */,
 				FFBE52412C7569AB00F510DE /* VitalSummaryDetailTitleView.swift in Sources */,
+				FFD582C52CD996A400833FEE /* VitalPickerView.swift in Sources */,
 				FFAFF41B2CAB176B00FAD3C9 /* ProposedToDo.swift in Sources */,
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,

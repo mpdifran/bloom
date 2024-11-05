@@ -19,6 +19,70 @@ final actor HabitsFactory {
 
 extension HabitsFactory {
 
+    func recommendedFocusVitals() async -> [VitalModel] {
+        var focusVitals: [VitalModel] = []
+
+        await VitalsCalculator.shared.forceFetchVitals()
+
+        if
+            await shouldFocusOnNotrition(),
+            let vital = await VitalsCalculator.shared.vitals.first(where: { $0.id == .nutrition })
+        {
+            focusVitals.append(vital)
+        }
+
+        let modelActor = HabitModelActor.standard()
+        let suggestedHabits = (try? await modelActor.fetchActiveHabits(isSuggested: true)) ?? []
+
+        for habit in suggestedHabits {
+            guard
+                let vitalKind = habit.vitalKind,
+                let vital = await VitalsCalculator.shared.vitals.first(where: { $0.id == vitalKind }),
+                !focusVitals.contains(where: { $0.id == vital.id })
+            else { continue }
+
+            focusVitals.append(vital)
+        }
+
+        for vital in await VitalsCalculator.shared.vitals {
+            guard focusVitals.count < 2 else { break }
+
+            if let _ = await suggestNewHabit(for: vital) {
+                guard !focusVitals.contains(where: { $0.id == vital.id }) else { continue }
+
+                focusVitals.append(vital)
+            }
+        }
+
+        focusVitals.sort(by: { lhs, rhs in
+            guard let lhsLevel = lhs.barLevel else { return false }
+            guard let rhsLevel = rhs.barLevel else { return true }
+
+            return lhsLevel < rhsLevel
+        })
+
+        return focusVitals
+    }
+
+    private func shouldFocusOnNotrition() async -> Bool {
+        if let bodyMass = await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass {
+            if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
+                return false
+            }
+            return true
+        }
+
+        switch await HealthManager.shared.healthGoal {
+        case .gainWeight, .maintainWeight, .loseWeight:
+            return true
+        case .none:
+            return false
+        }
+    }
+}
+
+extension HabitsFactory {
+
     func generateProposedHabits() async -> NewHabitResult {
         let modelActor = HabitModelActor.standard()
         let activeHabits = (try? await modelActor.fetchActiveHabits()) ?? []

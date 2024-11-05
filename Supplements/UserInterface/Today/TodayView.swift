@@ -81,7 +81,7 @@ struct TodayView: View {
                             GoalReviewCell()
                                 .transition(.scale)
                                 .onTapGesture {
-                                    presentedFullScreen = NewUpdateHabitView().asAny
+                                    presentedFullScreen = FocusAreaReviewRootView().asAny
                                 }
                         }
                     }
@@ -159,6 +159,12 @@ struct TodayView: View {
             Label("Today", systemImage: "calendar.badge.checkmark")
         }
         .onAppear {
+            habitsViewModel.checkUpdateSuggestedHabits()
+            Task {
+                await toDoManager.recalculateToDos()
+            }
+        }
+        .onForeground {
             habitsViewModel.checkUpdateSuggestedHabits()
             Task {
                 await toDoManager.recalculateToDos()

@@ -10,6 +10,15 @@ import DataContainer
 
 struct MiniVitalCell: View {
     let vital: VitalModel
+    let useSecondaryBackground: Bool
+
+    init(
+        vital: VitalModel,
+        useSecondaryBackground: Bool = true
+    ) {
+        self.vital = vital
+        self.useSecondaryBackground = useSecondaryBackground
+    }
 
     var body: some View {
         HStack {
@@ -41,7 +50,7 @@ struct MiniVitalCell: View {
             }
         }
         .tint(vital.color)
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: useSecondaryBackground ? AnyShapeStyle(.background.secondary) : AnyShapeStyle(.background))
     }
 }
 
