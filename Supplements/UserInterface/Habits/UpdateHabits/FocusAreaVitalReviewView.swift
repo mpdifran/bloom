@@ -24,7 +24,7 @@ struct FocusAreaVitalReviewView: View {
                         .transition(.opacity)
                         .appear(with: 1, currentIndex: index)
 
-                    Text("Here's what I think we should focus on this week.")
+                    Text("Here are the focus areas I’ve identified.")
                         .transition(.opacity)
                         .appear(with: 2, currentIndex: index)
                 }
@@ -42,11 +42,6 @@ struct FocusAreaVitalReviewView: View {
                         .transition(.scale)
                     }
                 }
-
-                Text("Feel free to change them if you want!")
-                    .transition(.opacity)
-                    .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
-                    .onboardingTextStyle()
             }
             .horizontalAlignment(.leading)
             .padding()
@@ -56,7 +51,7 @@ struct FocusAreaVitalReviewView: View {
                 onContinue(vitals)
             }
             .transition(.move(edge: .bottom))
-            .appear(with: 4, currentIndex: index)
+            .appear(with: 3, currentIndex: index)
         }
         .sheet($presentedSheet)
         .sensoryFeedback(.selection, trigger: index)
@@ -68,7 +63,7 @@ struct FocusAreaVitalReviewView: View {
                 await advanceIndex()
             }
             await loadVitals()
-            while index < 4 {
+            while index < 3 {
                 await advanceIndex()
             }
         }
