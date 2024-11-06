@@ -208,6 +208,7 @@
 		FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7890592C35A9EA00F9C1A5 /* SleepCoachResponse.swift */; };
 		FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */; };
 		FF78905E2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */; };
+		FF7D6C1F2CDB125F005B86C0 /* FocusAreaHabitReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C1E2CDB1258005B86C0 /* FocusAreaHabitReviewView.swift */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
@@ -728,6 +729,7 @@
 		FF7890592C35A9EA00F9C1A5 /* SleepCoachResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepCoachResponse.swift; sourceTree = "<group>"; };
 		FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+POST.swift"; sourceTree = "<group>"; };
 		FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAverageQuantitySample.swift; sourceTree = "<group>"; };
+		FF7D6C1E2CDB1258005B86C0 /* FocusAreaHabitReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaHabitReviewView.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryHandle.swift; sourceTree = "<group>"; };
@@ -1745,6 +1747,7 @@
 			children = (
 				FFD582C62CD99DD100833FEE /* FocusAreaReviewRootView.swift */,
 				FFD582C02CD9696C00833FEE /* FocusAreaVitalReviewView.swift */,
+				FF7D6C1E2CDB1258005B86C0 /* FocusAreaHabitReviewView.swift */,
 				FFD582C42CD996A400833FEE /* VitalPickerView.swift */,
 				FF2FB89D2C9DA98A00F57523 /* NewUpdateHabitView.swift */,
 				FFD582C22CD969A100833FEE /* ProposedVitalCell.swift */,
@@ -2911,6 +2914,7 @@
 				FFA402CA2C94C88700D8DD40 /* View+Selectable.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
 				FF4EFF8E2C938497005E4A1F /* MenstrualCyclePhase.swift in Sources */,
+				FF7D6C1F2CDB125F005B86C0 /* FocusAreaHabitReviewView.swift in Sources */,
 				FFEBEA612CD4016300142AA1 /* OnboardingFinishView.swift in Sources */,
 				FF2FB8A42C9DD74A00F57523 /* HabitDetailsView.swift in Sources */,
 				FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */,

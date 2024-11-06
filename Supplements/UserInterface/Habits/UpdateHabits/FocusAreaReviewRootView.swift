@@ -10,12 +10,14 @@ import DataContainer
 
 enum Step {
     case vitalReview
+    case habitReview
 }
 
 struct FocusAreaReviewRootView: View {
     @State private var step: Step = .vitalReview
-
     @State private var vitalModels = [VitalModel]()
+
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         Group {
@@ -23,6 +25,11 @@ struct FocusAreaReviewRootView: View {
             case .vitalReview:
                 FocusAreaVitalReviewView { vitalModels in
                     self.vitalModels = vitalModels
+                    self.step = .habitReview
+                }
+            case .habitReview:
+                FocusAreaHabitReviewView(vitals: vitalModels) {
+                    dismiss()
                 }
             }
         }

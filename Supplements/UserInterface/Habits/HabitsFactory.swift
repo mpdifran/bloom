@@ -83,6 +83,49 @@ extension HabitsFactory {
 
 extension HabitsFactory {
 
+    func generateProposedHabits(vitals: [VitalModel]) async -> NewHabitResult {
+        var vitals = vitals
+        let modelActor = HabitModelActor.standard()
+        let activeHabits = (try? await modelActor.fetchActiveHabits()) ?? []
+
+        await VitalsCalculator.shared.forceFetchVitals()
+
+        var newHabitResult = NewHabitResult()
+
+        if
+            vitals.contains(where: { $0.id == .nutrition }),
+            let nutritionHabits = await generateNutritionHabits(activeHabits: activeHabits)
+        {
+            newHabitResult.appendNewTargets(result: nutritionHabits)
+            vitals.removeAll(where: { $0.id == .nutrition })
+        }
+
+        // Update existing habits
+        for habit in activeHabits.filter(\.isSuggested) {
+            guard
+                !newHabitResult.contains(habit.targetMetric),
+                let newHabit = await updatedHabit(for: habit)
+            else { continue }
+
+            // TODO: We may promote this to a habit eventually.
+            newHabitResult.proposedFocusAreas.append(newHabit)
+            vitals.removeAll(where: { $0.id == newHabit.vitalKind })
+        }
+
+        // Add habits for remaining vitals
+        for vital in vitals {
+            if let newHabit = await suggestNewHabit(for: vital) {
+                newHabitResult.proposedFocusAreas.append(newHabit)
+                vitals.removeAll(where: { $0.id == vital.id })
+            }
+        }
+
+        return newHabitResult
+    }
+}
+
+extension HabitsFactory {
+
     func generateProposedHabits() async -> NewHabitResult {
         let modelActor = HabitModelActor.standard()
         let activeHabits = (try? await modelActor.fetchActiveHabits()) ?? []
