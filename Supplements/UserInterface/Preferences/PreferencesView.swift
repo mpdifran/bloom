@@ -265,7 +265,7 @@ private extension PreferencesView {
                 presentedSheet = ColorPaletteView().asAny
             } label: {
                 LabeledContent("Color Palette") {
-                    Image(systemName: "palette")
+                    Image(systemName: "paintpalette")
                 }
             }
             .buttonStyle(.plain)

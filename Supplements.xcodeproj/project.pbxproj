@@ -227,7 +227,6 @@
 		FF88F13C2C7D1CDD0093D1B4 /* ActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */; };
 		FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */; };
 		FF88F1402C7E475F0093D1B4 /* BloodPressureActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */; };
-		FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */; };
 		FF8B8B382C00141B00BA2128 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B372C00141B00BA2128 /* TabController.swift */; };
 		FF8B8B3D2C0021E500BA2128 /* OnboardingInfoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B3C2C0021E500BA2128 /* OnboardingInfoRequest.swift */; };
 		FF8B8B3F2C00220C00BA2128 /* OnboardingInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8B8B3E2C00220C00BA2128 /* OnboardingInfoResponse.swift */; };
@@ -748,7 +747,6 @@
 		FF88F13B2C7D1CDD0093D1B4 /* ActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionCardView.swift; sourceTree = "<group>"; };
 		FF88F13D2C7D1E750093D1B4 /* WaterActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterActionCardView.swift; sourceTree = "<group>"; };
 		FF88F13F2C7E475F0093D1B4 /* BloodPressureActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureActionCardView.swift; sourceTree = "<group>"; };
-		FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		FF8B8B372C00141B00BA2128 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		FF8B8B3C2C0021E500BA2128 /* OnboardingInfoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInfoRequest.swift; sourceTree = "<group>"; };
 		FF8B8B3E2C00220C00BA2128 /* OnboardingInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInfoResponse.swift; sourceTree = "<group>"; };
@@ -1527,7 +1525,6 @@
 			isa = PBXGroup;
 			children = (
 				FF70E9EC2CBFF7F10055E932 /* LocationManagerViewModel.swift */,
-				FF8B8B342BFFE4DC00BA2128 /* LocationManager.swift */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -2740,7 +2737,6 @@
 				FFBE52272C6EF69B00F510DE /* OnboardingTitleCardView.swift in Sources */,
 				FFA402C62C9473AE00D8DD40 /* Stripes.metal in Sources */,
 				FF1E962C2C0BF19A004DAD2D /* View+Expand.swift in Sources */,
-				FF8B8B352BFFE4DC00BA2128 /* LocationManager.swift in Sources */,
 				FF70E9172CB86F8A0055E932 /* WristTemperatureSummaryCell.swift in Sources */,
 				FF70E9F62CC0236F0055E932 /* NutritionHabitTodayWidgetView.swift in Sources */,
 				FF8F79D72C668AFD0095C36D /* ActivityLevelDetailsView.swift in Sources */,

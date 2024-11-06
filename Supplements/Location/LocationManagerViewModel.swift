@@ -13,23 +13,86 @@ final class LocationManagerViewModel {
     static let shared = LocationManagerViewModel()
 
     private(set) var currentLocation: CLLocation?
+    private(set) var auth: CLAuthorizationStatus = .notDetermined
 
     private init() {
-        observeChanges()
+        locationManagerDelegate = LocationManagerDelegate(actor: self)
+        locationManager.delegate = locationManagerDelegate
     }
 
+    private let locationManager = CLLocationManager()
+
+    private var locationManagerDelegate: LocationManagerDelegate? = nil
     private var tasks = [Task<Void, Never>]()
 }
 
-private extension LocationManagerViewModel {
+extension LocationManagerViewModel {
 
-    func observeChanges() {
-        tasks.append(Task.detached {
-            for await location in await LocationManager.shared.$currentLocation {
-                await MainActor.run {
-                    self.currentLocation = location
-                }
-            }
-        })
+    func requestAuth() {
+        switch locationManager.authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+//            startMonitoring()
+            break
+        default:
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+
+    func requestLocation() {
+        locationManager.requestLocation()
+    }
+
+    func set(auth: CLAuthorizationStatus) {
+        self.auth = auth
+    }
+
+    func set(currentLocation: CLLocation) {
+        self.currentLocation = currentLocation
+    }
+
+    func locality(for location: CLLocation) async -> String? {
+        do {
+            let geocoder = CLGeocoder()
+            let placemarks = try await geocoder.reverseGeocodeLocation(location)
+
+            return placemarks.first?.locality
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+}
+
+private final class LocationManagerDelegate: NSObject, CLLocationManagerDelegate {
+
+    weak var actor: LocationManagerViewModel?
+
+    init(actor: LocationManagerViewModel) {
+        self.actor = actor
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        guard let actor else { return }
+
+        let auth = manager.authorizationStatus
+
+        Task.detached {
+            await actor.set(auth: auth)
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard
+            let newLocation = locations.last,
+            let actor
+        else { return }
+
+        Task.detached {
+            await actor.set(currentLocation: newLocation)
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location manager failed with error: \(error)")
     }
 }

@@ -14,6 +14,7 @@ import EventKitUI
 import Charts
 import DataContainer
 import SwiftData
+import CoreLocation
 
 @MainActor
 struct GoodMorningView: View {
@@ -90,7 +91,8 @@ struct GoodMorningView: View {
         .animation(.default, value: events.count)
         .animation(.default, value: weather)
         .task {
-            await LocationManager.shared.requestAuth()
+            locationViewModel.requestAuth()
+            locationViewModel.requestLocation()
             await loadWeather()
         }
         .onChange(of: locationViewModel.currentLocation) { oldValue, newValue in
@@ -98,6 +100,14 @@ struct GoodMorningView: View {
                 Task {
                     await loadWeather()
                 }
+            }
+        }
+        .onChange(of: locationViewModel.auth) { (_, newValue) in
+            switch newValue {
+            case .authorizedAlways, .authorizedWhenInUse:
+                locationViewModel.requestLocation()
+            default:
+                break
             }
         }
         .task {
@@ -119,14 +129,17 @@ struct GoodMorningView: View {
 private extension GoodMorningView {
 
     func loadWeather() async {
-        guard let location = await LocationManager.shared.currentLocation, weather == nil else { return }
+        guard
+            let location = locationViewModel.currentLocation,
+            weather == nil
+        else { return }
 
         await MainActor.run {
             isLoadingWeather = true
         }
 
         let weather = await WeatherForecaster.shared.forecastedWeather(location: location)
-        let locality = await LocationManager.shared.locality(for: location)
+        let locality = await locationViewModel.locality(for: location)
 
         await MainActor.run {
             self.weather = weather
