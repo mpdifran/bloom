@@ -82,7 +82,7 @@ struct ReportCell: View {
                 colors: kind.colors,
                 startPoint: .bottom,
                 endPoint: .top
-            )
+            ).opacity(0.3)
         )
         .contentShape(Rectangle())
     }

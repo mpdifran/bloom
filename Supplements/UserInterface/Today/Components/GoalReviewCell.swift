@@ -32,7 +32,7 @@ struct GoalReviewCell: View {
         }
         .cardContainer(
             fill: .tint.opacity(0.3),
-            stroke: .tint
+            stroke: .tint.opacity(0.3)
         )
         .tint(.mutedBlue)
     }
