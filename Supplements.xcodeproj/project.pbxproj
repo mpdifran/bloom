@@ -209,6 +209,13 @@
 		FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */; };
 		FF78905E2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */; };
 		FF7D6C1F2CDB125F005B86C0 /* FocusAreaHabitReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C1E2CDB1258005B86C0 /* FocusAreaHabitReviewView.swift */; };
+		FF7D6C262CDC01D6005B86C0 /* USDAFoodSearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C252CDC01D6005B86C0 /* USDAFoodSearchRequest.swift */; };
+		FF7D6C282CDC0217005B86C0 /* USDAFoodSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C272CDC0217005B86C0 /* USDAFoodSearchResponse.swift */; };
+		FF7D6C2B2CDC057D005B86C0 /* FoodLoggingActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */; };
+		FF7D6C2D2CDC0A11005B86C0 /* FoodLoggingActionCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */; };
+		FF7D6C312CDD198E005B86C0 /* USDAFoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */; };
+		FF7D6C332CDD24E1005B86C0 /* URL+QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */; };
+		FF7D6C352CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
@@ -729,6 +736,13 @@
 		FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+POST.swift"; sourceTree = "<group>"; };
 		FF78905D2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAverageQuantitySample.swift; sourceTree = "<group>"; };
 		FF7D6C1E2CDB1258005B86C0 /* FocusAreaHabitReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreaHabitReviewView.swift; sourceTree = "<group>"; };
+		FF7D6C252CDC01D6005B86C0 /* USDAFoodSearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAFoodSearchRequest.swift; sourceTree = "<group>"; };
+		FF7D6C272CDC0217005B86C0 /* USDAFoodSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAFoodSearchResponse.swift; sourceTree = "<group>"; };
+		FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLoggingActionCardView.swift; sourceTree = "<group>"; };
+		FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLoggingActionCardViewModel.swift; sourceTree = "<group>"; };
+		FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAFoodCell.swift; sourceTree = "<group>"; };
+		FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+QueryItems.swift"; sourceTree = "<group>"; };
+		FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchAutocompleteCell.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryHandle.swift; sourceTree = "<group>"; };
@@ -1358,6 +1372,7 @@
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
 				FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */,
+				FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */,
 				FF8F79CE2C64546C0095C36D /* Color+Codable.swift */,
 			);
 			path = Extensions;
@@ -1466,6 +1481,33 @@
 			path = SleepCoach;
 			sourceTree = "<group>";
 		};
+		FF7D6C242CDC01C0005B86C0 /* USDA */ = {
+			isa = PBXGroup;
+			children = (
+				FF7D6C252CDC01D6005B86C0 /* USDAFoodSearchRequest.swift */,
+				FF7D6C272CDC0217005B86C0 /* USDAFoodSearchResponse.swift */,
+			);
+			path = USDA;
+			sourceTree = "<group>";
+		};
+		FF7D6C292CDC039A005B86C0 /* FoodTracking */ = {
+			isa = PBXGroup;
+			children = (
+				FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */,
+				FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */,
+				FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */,
+				FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */,
+			);
+			path = FoodTracking;
+			sourceTree = "<group>";
+		};
+		FF7D6C362CDD47F7005B86C0 /* Edamam */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Edamam;
+			sourceTree = "<group>";
+		};
 		FF88F1192C7B75AE0093D1B4 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -1491,6 +1533,7 @@
 				FFC832192C8CE0B300108F47 /* ActionsViewModel.swift */,
 				FFC832162C8CDC9600108F47 /* Components */,
 				FF88F12C2C7D03C10093D1B4 /* ActionCards */,
+				FF7D6C292CDC039A005B86C0 /* FoodTracking */,
 				FF88F12F2C7D0C420093D1B4 /* AllActionDataListView.swift */,
 				FF88F1312C7D0CCE0093D1B4 /* AllDataViews */,
 			);
@@ -1922,6 +1965,8 @@
 		FFB444982BED424000486AD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FF7D6C362CDD47F7005B86C0 /* Edamam */,
+				FF7D6C242CDC01C0005B86C0 /* USDA */,
 				FF78904A2C34726B00F9C1A5 /* SleepCoach */,
 				FF8B8B3B2C0021D700BA2128 /* Onboarding */,
 				FF6AEC8F2BF1774C00C34621 /* ProactiveTip */,
@@ -2774,6 +2819,7 @@
 				FF1328122CB6D42F00ACF981 /* EveningHabitStatusCell.swift in Sources */,
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
 				FFC77B022C5AFF05003E5F85 /* CardContainer.swift in Sources */,
+				FF7D6C282CDC0217005B86C0 /* USDAFoodSearchResponse.swift in Sources */,
 				FFAFF4392CAD9B1000FAD3C9 /* GenericHabitTargetCalculator.swift in Sources */,
 				FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */,
 				FF70E92B2CB99EA30055E932 /* DisclosureIndicator.swift in Sources */,
@@ -2783,6 +2829,7 @@
 				FF4A21B52C88B8EF00278019 /* BodyWeightActionCardView.swift in Sources */,
 				FFE41D1D2C8BCDAA00E3E559 /* EveningReportView.swift in Sources */,
 				FF1327F82CB4338000ACF981 /* TargetWeightEditCard.swift in Sources */,
+				FF7D6C352CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift in Sources */,
 				FFA134F82C402DCC00FF1829 /* TitleDatePicker.swift in Sources */,
 				FF70EA1E2CCA792F0055E932 /* View+HorizontalAlignment.swift in Sources */,
 				FF2FB8A62C9DD81A00F57523 /* Habit+Helpers.swift in Sources */,
@@ -2834,8 +2881,10 @@
 				FF70EA082CC1A4F60055E932 /* View+SafeAreaBlur.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
+				FF7D6C2B2CDC057D005B86C0 /* FoodLoggingActionCardView.swift in Sources */,
 				FF6E06102C9F930800C4219B /* SelectableHabitCell.swift in Sources */,
 				FFD582C72CD99DD100833FEE /* FocusAreaReviewRootView.swift in Sources */,
+				FF7D6C312CDD198E005B86C0 /* USDAFoodCell.swift in Sources */,
 				FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */,
 				FF70E9F22CC000350055E932 /* MainTask.swift in Sources */,
 				FF70E9292CB99C720055E932 /* UpcomingPeriodCell.swift in Sources */,
@@ -2880,6 +2929,7 @@
 				FFDDE2892C0A059F00BFDEF5 /* ChartTitleView.swift in Sources */,
 				FFAA83D92C4D9E28004D12DA /* VitalsView.swift in Sources */,
 				FF88F13E2C7D1E750093D1B4 /* WaterActionCardView.swift in Sources */,
+				FF7D6C332CDD24E1005B86C0 /* URL+QueryItems.swift in Sources */,
 				FFB4449D2BED441E00486AD7 /* OnboardingRootView.swift in Sources */,
 				FF1327FF2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift in Sources */,
 				FF70EA102CC334D90055E932 /* Comparable+Clipped.swift in Sources */,
@@ -2960,6 +3010,7 @@
 				FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */,
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
 				FF70E9152CB867740055E932 /* HealthPermissionChecker.swift in Sources */,
+				FF7D6C262CDC01D6005B86C0 /* USDAFoodSearchRequest.swift in Sources */,
 				FF9783562C9B615A00A8ED7E /* TargetMetric+HealthData.swift in Sources */,
 				FF70E9F92CC0277D0055E932 /* NutritionHabitTodayWidgetViewModel.swift in Sources */,
 				FF70E9C62CBDEEF20055E932 /* ActivityLevelEditCard.swift in Sources */,
@@ -3009,6 +3060,7 @@
 				FF70E9272CB96D320055E932 /* HealthSleepObserver.swift in Sources */,
 				FF70E9FB2CC02B010055E932 /* NutritionRemainingValueView.swift in Sources */,
 				FF88F11B2C7B75C20093D1B4 /* CalendarManager.swift in Sources */,
+				FF7D6C2D2CDC0A11005B86C0 /* FoodLoggingActionCardViewModel.swift in Sources */,
 				FF70E9ED2CBFF7FC0055E932 /* LocationManagerViewModel.swift in Sources */,
 				FF4B2F4A2C90C7DE0003879C /* ToDoModel.swift in Sources */,
 			);

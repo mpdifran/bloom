@@ -53,7 +53,7 @@ struct WaterActionCardView: View {
 
     var body: some View {
         ActionCardView(
-            title: "Water",
+            title: "Log Water",
             sampleTypes: [HKQuantityType(.dietaryWater)],
             showSaveBar: false
         ) {

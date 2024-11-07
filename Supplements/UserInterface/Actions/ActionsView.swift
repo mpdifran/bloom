@@ -19,6 +19,17 @@ struct ActionsView: View {
             ScrollView {
                 VStack {
                     ActionStatusCell(
+                        title: "Log Food",
+                        systemImage: "fork.knife",
+                        latestValue: "No Food Logged",
+                        latestTimestamp: "Today"
+                    )
+                    .tint(.mutedGreen)
+                    .onTapGesture {
+                        presentedCardSheet = FoodLoggingActionCardView().asAny
+                    }
+
+                    ActionStatusCell(
                         title: "Log Weight",
                         systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
                         latestValue: viewModel.weightDetails?.displayString,

@@ -7,8 +7,60 @@
 
 import SwiftUI
 
+private extension String {
+    static let usdaAPIKey = "d8qTh8MkWmXtiqUjVvO2dv7w64W9wDOTnAYY6pJa"
+    static let edamamAPIKey = "2e8d3fa598795c7616bd159abb9ff7ab"
+    static let edamamAppID = "b6fefe5f"
+}
+
 final class NetworkRequester: Sendable {
     static let shared = NetworkRequester()
+}
+
+extension NetworkRequester {
+
+    func edamamFoodAutocomplete(query: String) async throws -> [String] {
+        let url = URL(string: "https://api.edamam.com/auto-complete")!.setting(
+            queryItems: [
+                URLQueryItem(name: "app_id", value: .edamamAppID),
+                URLQueryItem(name: "app_key", value: .edamamAPIKey),
+                URLQueryItem(name: "q", value: query),
+                URLQueryItem(name: "limit", value: "10")
+            ]
+        )!
+
+        let urlRequest = URLRequest(url: url)
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        return try JSONDecoder.main.decode([String].self, from: data)
+    }
+}
+
+extension NetworkRequester {
+
+    func usdaFoodSearch(query: String) async throws -> USDAFoodSearchResponse {
+        let request = USDAFoodSearchRequest(
+            query: query,
+            dataType: ["Foundation", "Branded", "SR Legacy"],
+            pageSize: 10,
+            pageNumber: 0,
+            sortBy: "dataType.keyword",
+            sortOrder: "asc"
+        )
+
+        let url = URL(string: "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=\(String.usdaAPIKey)")!
+        let requestData = try JSONEncoder.main.encode(request)
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = requestData
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        return try JSONDecoder.main.decode(USDAFoodSearchResponse.self, from: data)
+    }
 }
 
 extension NetworkRequester {
