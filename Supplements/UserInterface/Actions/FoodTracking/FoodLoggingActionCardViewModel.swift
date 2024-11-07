@@ -16,7 +16,7 @@ extension FoodLoggingActionCardView {
     @Observable @MainActor
     final class ViewModel {
         var autocomplete = [String]()
-        var results = [USDAFood]()
+        var results = [Supplements.Components.Schemas.Food]()
         var error: Error?
 
         private var debouncedSearchQuery = ""
@@ -37,9 +37,14 @@ extension FoodLoggingActionCardView.ViewModel {
         }
     }
 
-    func performSearch(for query: String) {
+    func performSearch(for query: String) async {
         autocomplete.removeAll()
-        print("Searching...")
+
+        do {
+            self.results = try await NetworkRequester.shared.edamamFoodSearch(query: query)
+        } catch {
+            self.error = error
+        }
     }
 }
 

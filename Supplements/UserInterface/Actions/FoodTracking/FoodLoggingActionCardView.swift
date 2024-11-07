@@ -22,9 +22,15 @@ struct FoodLoggingActionCardView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                List(viewModel.results) { result in
-                    USDAFoodCell(food: result)
+                if viewModel.results.isNotEmpty {
+                    List(viewModel.results, id: \.foodId) { result in
+                        EdamamFoodCell(food: result)
+                    }
+                    .animation(.bouncy, value: viewModel.results.count)
+                } else {
+                    Spacer()
                 }
+
 
                 ScrollView(.horizontal) {
                     HStack {
@@ -102,7 +108,9 @@ struct FoodLoggingActionCardView: View {
 private extension FoodLoggingActionCardView {
 
     func performSearch() {
-        viewModel.performSearch(for: searchQuery)
+        Task {
+            await viewModel.performSearch(for: searchQuery)
+        }
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAPIURLSession
 
 private extension String {
     static let usdaAPIKey = "d8qTh8MkWmXtiqUjVvO2dv7w64W9wDOTnAYY6pJa"
@@ -34,6 +35,29 @@ extension NetworkRequester {
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
         return try JSONDecoder.main.decode([String].self, from: data)
+    }
+
+    func edamamFoodSearch(query: String) async throws -> [Supplements.Components.Schemas.Food] {
+        let client = Client(
+            serverURL: try Servers.Server1.url(),
+            transport: URLSessionTransport()
+        )
+
+        let input = Operations.get_sol_api_sol_food_hyphen_database_sol_v2_sol_parser.Input(
+            query: .init(
+                app_id: .edamamAppID,
+                app_key: .edamamAPIKey,
+                ingr: query,
+                brand: query
+            ),
+            headers: .init()
+        )
+
+        let response = try await client.get_sol_api_sol_food_hyphen_database_sol_v2_sol_parser(input)
+
+        let data = try response.ok.body.json.hints?.compactMap(\.food) ?? []
+        print(data)
+        return data
     }
 }
 

@@ -216,6 +216,11 @@
 		FF7D6C312CDD198E005B86C0 /* USDAFoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */; };
 		FF7D6C332CDD24E1005B86C0 /* URL+QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */; };
 		FF7D6C352CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */; };
+		FF8740612CDD4B15002581FA /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = FF8740602CDD4B15002581FA /* OpenAPIRuntime */; };
+		FF8740642CDD4B32002581FA /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = FF8740632CDD4B32002581FA /* OpenAPIURLSession */; };
+		FF87406A2CDD4F4D002581FA /* openapi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = FF8740672CDD4C30002581FA /* openapi.yaml */; };
+		FF87406B2CDD4F53002581FA /* openapi-generator-config.yaml in Resources */ = {isa = PBXBuildFile; fileRef = FF8740682CDD4C30002581FA /* openapi-generator-config.yaml */; };
+		FF87406E2CDD5474002581FA /* EdamamFoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
@@ -743,6 +748,9 @@
 		FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAFoodCell.swift; sourceTree = "<group>"; };
 		FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+QueryItems.swift"; sourceTree = "<group>"; };
 		FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchAutocompleteCell.swift; sourceTree = "<group>"; };
+		FF8740672CDD4C30002581FA /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = openapi.yaml; path = Supplements/openapi.yaml; sourceTree = "<group>"; };
+		FF8740682CDD4C30002581FA /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "openapi-generator-config.yaml"; path = "Supplements/openapi-generator-config.yaml"; sourceTree = "<group>"; };
+		FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdamamFoodCell.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryHandle.swift; sourceTree = "<group>"; };
@@ -1007,9 +1015,11 @@
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
 				FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */,
+				FF8740642CDD4B32002581FA /* OpenAPIURLSession in Frameworks */,
 				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
+				FF8740612CDD4B15002581FA /* OpenAPIRuntime in Frameworks */,
 				FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */,
 				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
@@ -1496,6 +1506,7 @@
 				FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */,
 				FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */,
 				FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */,
+				FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */,
 				FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */,
 			);
 			path = FoodTracking;
@@ -1506,6 +1517,15 @@
 			children = (
 			);
 			path = Edamam;
+			sourceTree = "<group>";
+		};
+		FF8740692CDD4C30002581FA /* OpenAPI */ = {
+			isa = PBXGroup;
+			children = (
+				FF8740672CDD4C30002581FA /* openapi.yaml */,
+				FF8740682CDD4C30002581FA /* openapi-generator-config.yaml */,
+			);
+			name = OpenAPI;
 			sourceTree = "<group>";
 		};
 		FF88F1192C7B75AE0093D1B4 /* Calendar */ = {
@@ -1723,6 +1743,7 @@
 				FF1E966E2C0C1A99004DAD2D /* ScreenControl */,
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
 				FF1E96852C0C1F38004DAD2D /* BloomFoundation */,
+				FF8740692CDD4C30002581FA /* OpenAPI */,
 				FF9782D12C9A1CC700A8ED7E /* ci_scripts */,
 				FF9782D82C9A22C900A8ED7E /* Umbrella */,
 				FF1E961A2C0BEC1D004DAD2D /* Frameworks */,
@@ -2441,6 +2462,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF8740662CDD4B63002581FA /* PBXTargetDependency */,
 				FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */,
 				FF1E96722C0C1A99004DAD2D /* PBXTargetDependency */,
 				FF1E96232C0BEC1D004DAD2D /* PBXTargetDependency */,
@@ -2462,6 +2484,8 @@
 				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
 				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
 				FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */,
+				FF8740602CDD4B15002581FA /* OpenAPIRuntime */,
+				FF8740632CDD4B32002581FA /* OpenAPIURLSession */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -2570,6 +2594,9 @@
 				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 				FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 				FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */,
+				FF87405D2CDD4AE3002581FA /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
+				FF87405F2CDD4B15002581FA /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
+				FF8740622CDD4B32002581FA /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -2645,7 +2672,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFACBAE42BAC778A006AAD0B /* Preview Assets.xcassets in Resources */,
+				FF87406B2CDD4F53002581FA /* openapi-generator-config.yaml in Resources */,
 				FFACBAE12BAC778A006AAD0B /* Assets.xcassets in Resources */,
+				FF87406A2CDD4F4D002581FA /* openapi.yaml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2788,6 +2817,7 @@
 				FFA402C82C94C5E000D8DD40 /* OnboardingHealthGoalView.swift in Sources */,
 				FFF03D102CD011E700476B44 /* MockHomeScreenView.swift in Sources */,
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
+				FF87406E2CDD5474002581FA /* EdamamFoodCell.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */,
 				FF70EA1C2CCA77AE0055E932 /* OnboardingButtonStyle.swift in Sources */,
@@ -3137,6 +3167,10 @@
 			isa = PBXTargetDependency;
 			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
 			targetProxy = FF3A8F412C1A835F002DA563 /* PBXContainerItemProxy */;
+		};
+		FF8740662CDD4B63002581FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = FF8740652CDD4B63002581FA /* OpenAPIGenerator */;
 		};
 		FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4021,6 +4055,30 @@
 				minimumVersion = 1.8.1;
 			};
 		};
+		FF87405D2CDD4AE3002581FA /* XCRemoteSwiftPackageReference "swift-openapi-generator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-generator";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
+		FF87405F2CDD4B15002581FA /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-runtime";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.0;
+			};
+		};
+		FF8740622CDD4B32002581FA /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-urlsession";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 		FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
@@ -4096,6 +4154,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
 			productName = BugsnagPerformanceSwiftUI;
+		};
+		FF8740602CDD4B15002581FA /* OpenAPIRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF87405F2CDD4B15002581FA /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */;
+			productName = OpenAPIRuntime;
+		};
+		FF8740632CDD4B32002581FA /* OpenAPIURLSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF8740622CDD4B32002581FA /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */;
+			productName = OpenAPIURLSession;
+		};
+		FF8740652CDD4B63002581FA /* OpenAPIGenerator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF87405D2CDD4AE3002581FA /* XCRemoteSwiftPackageReference "swift-openapi-generator" */;
+			productName = "plugin:OpenAPIGenerator";
 		};
 		FF8B8B202BFD1EF500BA2128 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
