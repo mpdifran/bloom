@@ -221,6 +221,7 @@
 		FF87406A2CDD4F4D002581FA /* openapi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = FF8740672CDD4C30002581FA /* openapi.yaml */; };
 		FF87406B2CDD4F53002581FA /* openapi-generator-config.yaml in Resources */ = {isa = PBXBuildFile; fileRef = FF8740682CDD4C30002581FA /* openapi-generator-config.yaml */; };
 		FF87406E2CDD5474002581FA /* EdamamFoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */; };
+		FF8740F32CDE6891002581FA /* FoodSearchToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
@@ -751,6 +752,7 @@
 		FF8740672CDD4C30002581FA /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = openapi.yaml; path = Supplements/openapi.yaml; sourceTree = "<group>"; };
 		FF8740682CDD4C30002581FA /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "openapi-generator-config.yaml"; path = "Supplements/openapi-generator-config.yaml"; sourceTree = "<group>"; };
 		FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdamamFoodCell.swift; sourceTree = "<group>"; };
+		FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchToolCell.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryHandle.swift; sourceTree = "<group>"; };
@@ -1506,6 +1508,7 @@
 				FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */,
 				FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */,
 				FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */,
+				FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */,
 				FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */,
 				FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */,
 			);
@@ -3071,6 +3074,7 @@
 				FF78905E2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift in Sources */,
 				FF2FB8AD2C9E117C00F57523 /* DebugHabitsListView.swift in Sources */,
 				FFACBADD2BAC7788006AAD0B /* SupplementsApp.swift in Sources */,
+				FF8740F32CDE6891002581FA /* FoodSearchToolCell.swift in Sources */,
 				FF8F79B92C601C660095C36D /* View+Background.swift in Sources */,
 				FF6AEC992BF17D1B00C34621 /* NotificationManager.swift in Sources */,
 				FF0DA0ED2C84D661007D1A6B /* TodayView.swift in Sources */,

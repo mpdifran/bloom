@@ -27,10 +27,17 @@ struct HabitDailyUpdateCell: View {
                 progress: viewModel.dailyValue / habit.value,
                 dimension: 50,
                 lineThickness: 8,
-                systemImage: habit.targetMetric.systemImage,
+                systemImage: viewModel.goalCompletionState == .metGoal ? "checkmark" : habit.targetMetric.systemImage,
                 color: habit.targetMetric.color
             )
+            .bold()
             .foregroundStyle(viewModel.goalCompletionState == .metGoal ? habit.targetMetric.color : .text)
+            .background {
+                if viewModel.goalCompletionState == .metGoal {
+                    Circle()
+                        .fill(habit.targetMetric.color.tertiary)
+                }
+            }
 
             VStack(alignment: .leading) {
                 HStack {

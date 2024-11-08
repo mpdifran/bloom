@@ -11,12 +11,27 @@ private extension Int {
     static let debounceTime: Int = 300
 }
 
+extension FoodLoggingActionCardView.ViewModel {
+    enum Meal: String, CaseIterable {
+        case breakfast
+        case lunch
+        case dinner
+        case snack
+
+        var name: String {
+            self.rawValue.capitalized
+        }
+    }
+}
+
 extension FoodLoggingActionCardView {
 
     @Observable @MainActor
     final class ViewModel {
+        var meal = Meal.breakfast
         var autocomplete = [String]()
-        var results = [Supplements.Components.Schemas.Food]()
+        var isSearching = false
+        var results: [Supplements.Components.Schemas.Food]?
         var error: Error?
 
         private var debouncedSearchQuery = ""
@@ -38,6 +53,9 @@ extension FoodLoggingActionCardView.ViewModel {
     }
 
     func performSearch(for query: String) async {
+        defer { isSearching = false }
+        isSearching = true
+
         autocomplete.removeAll()
 
         do {

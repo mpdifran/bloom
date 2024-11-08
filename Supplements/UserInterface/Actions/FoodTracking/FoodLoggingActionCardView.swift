@@ -14,6 +14,7 @@ struct FoodLoggingActionCardView: View {
 
     @State private var searchQuery = ""
     @State private var shouldAutocomplete = true
+    @State private var didSearchToggle = false
 
     @Environment(\.dismiss) private var dismiss
 
@@ -22,68 +23,10 @@ struct FoodLoggingActionCardView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                if viewModel.results.isNotEmpty {
-                    List(viewModel.results, id: \.foodId) { result in
-                        EdamamFoodCell(food: result)
-                    }
-                    .animation(.bouncy, value: viewModel.results.count)
-                } else {
-                    Spacer()
-                }
-
-
-                ScrollView(.horizontal) {
-                    HStack {
-                        ForEachEnumerated(viewModel.autocomplete) { (index, autocomplete) in
-                            FoodSearchAutocompleteCell(query: autocomplete)
-                                .transition(.blurReplace)
-                                .onTapGesture {
-                                    shouldAutocomplete = false
-                                    searchQuery = autocomplete
-                                    performSearch()
-                                    Delay(100) {
-                                        shouldAutocomplete = true
-                                    }
-                                }
-                        }
-                    }
-                    .padding(.horizontal)
-                }
-                .scrollIndicators(.hidden)
-                .animation(.bouncy, value: viewModel.autocomplete)
-
-                HStack {
-                    TextField(
-                        "",
-                        text: $searchQuery,
-                        prompt: Text("What did you eat?")
-                    )
-                    .padding()
-                    .onChange(of: searchQuery) { oldValue, newValue in
-                        guard shouldAutocomplete else { return }
-
-                        viewModel.debounceAutocomplete(for: searchQuery)
-                    }
-
-                    Button {
-                        performSearch()
-                    } label: {
-                        Image(systemName: "magnifyingglass.circle.fill")
-                            .font(.largeTitle)
-                            .foregroundStyle(.white, .tint)
-                    }
-                }
-                .focused($isFocused)
-                .padding(.horizontal, 8)
-                .background {
-                    Capsule()
-                        .fill(.background.secondary)
-                        .onTapGesture {
-                            isFocused = true
-                        }
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
+                mealPicker
+                resultsView
+                suggestionsBarView
+                foodSearchTextBar
             }
             .navigationTitle("Log Food")
             .navigationBarTitleDisplayMode(.inline)
@@ -100,6 +43,7 @@ struct FoodLoggingActionCardView: View {
         }
         .presentationDetents([.large])
         .presentationCornerRadius(25)
+        .presentationCompactAdaptation(.fullScreenCover)
         .alert(error: $viewModel.error)
         .tint(.mutedGreen)
     }
@@ -107,7 +51,121 @@ struct FoodLoggingActionCardView: View {
 
 private extension FoodLoggingActionCardView {
 
+    var mealPicker: some View {
+        LabeledContent("Meal") {
+            Picker("Meal", selection: $viewModel.meal) {
+                ForEach(FoodLoggingActionCardView.ViewModel.Meal.allCases, id: \.self) { meal in
+                    Text(meal.name)
+                }
+            }
+        }
+        .cardContainer(fill: .background.secondary)
+        .padding()
+    }
+
+    @ViewBuilder
+    var resultsView: some View {
+        if viewModel.isSearching {
+            VStack {
+                Spacer()
+                ProgressView()
+                    .tint(.secondary)
+                Text("Looking up foods...")
+                    .font(.title2)
+                    .bold()
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+        } else if let results = viewModel.results {
+            if results.isNotEmpty {
+                ScrollView {
+                    VStack {
+                        ForEach(results, id: \.foodId) { result in
+                            EdamamFoodCell(food: result)
+                                .transition(.scale)
+                        }
+                    }
+                    .padding()
+                }
+                .animation(.bouncy, value: viewModel.results)
+            } else {
+                ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
+                    .foregroundStyle(.secondary)
+            }
+        } else {
+            Spacer()
+        }
+    }
+
+    var suggestionsBarView: some View {
+        ScrollView(.horizontal) {
+            HStack {
+                if viewModel.autocomplete.isNotEmpty {
+                    ForEachEnumerated(viewModel.autocomplete) { (index, autocomplete) in
+                        FoodSearchAutocompleteCell(query: autocomplete)
+                            .transition(.scale)
+                            .onTapGesture {
+                                shouldAutocomplete = false
+                                searchQuery = autocomplete
+                                performSearch()
+                                Delay(100) {
+                                    shouldAutocomplete = true
+                                }
+                            }
+                    }
+                } else if searchQuery.isEmpty {
+                    FoodSearchToolCell(title: "AI Photo", systemImage: "sparkles")
+                    FoodSearchToolCell(title: "Scan Barcode", systemImage: "barcode.viewfinder")
+                }
+            }
+            .padding(.horizontal)
+        }
+        .scrollIndicators(.hidden)
+        .animation(.bouncy, value: viewModel.autocomplete)
+    }
+
+    var foodSearchTextBar: some View {
+        HStack {
+            TextField(
+                "",
+                text: $searchQuery,
+                prompt: Text("What did you eat?")
+            )
+            .padding()
+            .onChange(of: searchQuery) { oldValue, newValue in
+                guard shouldAutocomplete else { return }
+
+                viewModel.debounceAutocomplete(for: searchQuery)
+            }
+
+            Button {
+                performSearch()
+            } label: {
+                Image(systemName: "magnifyingglass.circle.fill")
+                    .font(.largeTitle)
+                    .foregroundStyle(.white, .tint)
+            }
+            .sensoryFeedback(.impact, trigger: didSearchToggle)
+        }
+        .focused($isFocused)
+        .padding(.horizontal, 8)
+        .background {
+            Capsule()
+                .fill(.background.secondary)
+                .onTapGesture {
+                    isFocused = true
+                }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+    }
+}
+
+private extension FoodLoggingActionCardView {
+
     func performSearch() {
+        didSearchToggle.toggle()
+        isFocused = false
         Task {
             await viewModel.performSearch(for: searchQuery)
         }
