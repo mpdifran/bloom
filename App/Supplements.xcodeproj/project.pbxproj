@@ -1674,7 +1674,8 @@
 			children = (
 				FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */,
 			);
-			path = ci_scripts;
+			name = ci_scripts;
+			path = ../ci_scripts;
 			sourceTree = "<group>";
 		};
 		FF9782F62C9B3AF700A8ED7E /* Habits */ = {
