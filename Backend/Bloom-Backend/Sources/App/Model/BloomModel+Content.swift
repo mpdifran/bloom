@@ -8,4 +8,5 @@
 import BloomModel
 import Vapor
 
+extension FoodAutocompleteRequest: @retroactive Content { }
 extension FoodAutocompleteResponse: @retroactive Content { }

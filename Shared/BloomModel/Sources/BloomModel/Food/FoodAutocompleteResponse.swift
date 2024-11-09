@@ -8,5 +8,9 @@
 import Foundation
 
 public struct FoodAutocompleteResponse: Codable {
-    let tokens: [String]
+    public let tokens: [String]
+
+    public init(tokens: [String]) {
+        self.tokens = tokens
+    }
 }

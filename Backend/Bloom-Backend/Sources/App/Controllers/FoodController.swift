@@ -11,10 +11,13 @@ import BloomModel
 
 struct FoodController {
 
-    let app: Application
+    private let app: Application
+    private let edamamController: EdamamFoodController
+
 
     init(app: Application) {
         self.app = app
+        self.edamamController = EdamamFoodController(app: app)
     }
 }
 
@@ -23,7 +26,7 @@ extension FoodController: RouteCollection {
     func boot(routes: any Vapor.RoutesBuilder) throws {
         routes.group("v1") { v1 in
             v1.group("food") { food in
-                food.get("autocomplete", use: autocomplete)
+                food.post("autocomplete", use: autocomplete)
             }
         }
     }
@@ -33,6 +36,13 @@ extension FoodController {
 
     @Sendable
     func autocomplete(_ request: Request) async throws -> FoodAutocompleteResponse {
-        throw NSError(domain: "Not implemented", code: 501)
+        let requestBody = try request.content.decode(FoodAutocompleteRequest.self)
+
+        let tokens = try await edamamController.autocomplete(
+            client: request.client,
+            query: requestBody.query
+        )
+
+        return FoodAutocompleteResponse(tokens: tokens)
     }
 }
