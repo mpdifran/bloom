@@ -76,23 +76,25 @@ private extension FoodLoggingActionCardView {
                     .foregroundStyle(.secondary)
                 Spacer()
             }
-        } else if let results = viewModel.results {
-            if results.isNotEmpty {
-                ScrollView {
-                    VStack {
-                        ForEach(results, id: \.foodId) { result in
-                            EdamamFoodCell(food: result)
-                                .transition(.scale)
-                        }
-                    }
-                    .padding()
-                }
-                .animation(.bouncy, value: viewModel.results)
-            } else {
-                ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
-                    .foregroundStyle(.secondary)
-            }
-        } else {
+        }
+//        else if let results = viewModel.results {
+//            if results.isNotEmpty {
+//                ScrollView {
+//                    VStack {
+//                        ForEach(results, id: \.foodId) { result in
+//                            EdamamFoodCell(food: result)
+//                                .transition(.scale)
+//                        }
+//                    }
+//                    .padding()
+//                }
+//                .animation(.bouncy, value: viewModel.results)
+//            } else {
+//                ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
+//                    .foregroundStyle(.secondary)
+//            }
+//        }
+        else {
             Spacer()
         }
     }
