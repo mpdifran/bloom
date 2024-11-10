@@ -30,10 +30,25 @@ struct FoodItemCell: View {
                 if let serving = food.servingSizes.first {
                     Text("\(serving.value.format()) \(serving.unit)")
                         .font(.subheadline)
+                        .bold()
+                        .foregroundStyle(.secondary)
                 }
             }
 
             Spacer()
+
+            if let calories = food.calories {
+                VStack(spacing: 0) {
+                    Text("\(calories.format())")
+                        .bold()
+                        .font(.title2)
+                        .foregroundStyle(.tint)
+                    Text("cals")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .fontDesign(.rounded)
+            }
 
             Button {
 
