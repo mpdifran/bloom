@@ -8,16 +8,22 @@
 import Foundation
 
 public struct FoodSearchRequest: Codable {
-    public let query: String?
+    public let name: String?
+    public let brand: String?
     public let upcCode: String?
 
-    public init(query: String?) {
-        self.query = query
+    public init(
+        name: String?,
+        brand: String?
+    ) {
+        self.name = name
+        self.brand = brand
         self.upcCode = nil
     }
 
     public init(upcCode: String?) {
-        self.query = nil
+        self.name = nil
+        self.brand = nil
         self.upcCode = upcCode
     }
 }

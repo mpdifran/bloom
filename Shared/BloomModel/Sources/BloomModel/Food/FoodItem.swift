@@ -14,20 +14,23 @@ public struct FoodItem: Codable {
     public let id: FoodItemIdentifier
     public let name: String
     public let brandName: String?
-    public let serving: Quantity?
+    public let nutrients: [Nutrient]
+    public let servingSizes: [Quantity]
     public let ingredients: String?
 
     public init(
         id: FoodItemIdentifier,
         name: String,
         brandName: String?,
-        serving: Quantity?,
+        nutrients: [Nutrient],
+        servingSizes: [Quantity],
         ingredients: String?
     ) {
         self.id = id
         self.name = name
         self.brandName = brandName
-        self.serving = serving
+        self.nutrients = nutrients
+        self.servingSizes = servingSizes
         self.ingredients = ingredients
     }
 }
@@ -47,22 +50,19 @@ public extension FoodItem {
     }
 }
 
-public final class NutrientIdentifier: Identifier, Codable { }
-
 public extension FoodItem {
-    struct Nutrient: Codable {
-        public let id: NutrientIdentifier
+    struct Nutrient: Codable, Identifiable {
+        public var id: Kind { kind }
+
         public let name: String
         public let kind: Kind
         public let quantity: Quantity
 
-        init(
-            id: NutrientIdentifier,
+        public init(
             name: String,
             kind: Kind,
             quantity: Quantity
         ) {
-            self.id = id
             self.name = name
             self.kind = kind
             self.quantity = quantity
@@ -75,6 +75,6 @@ public extension FoodItem.Nutrient {
         case protein
         case carbohydrates
         case fat
-        case energy
+        case calories
     }
 }
