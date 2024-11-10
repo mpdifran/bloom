@@ -1,5 +1,5 @@
 {
-  "originHash" : "1bc2157745cd8a9d36c8ef14504a8d778e2973c9e36fc5fe6efb11e0e271e9c6",
+  "originHash" : "96a13d4cf08613db574c9626fcbb9a18f67c88461898667e007388431b4253b2",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -44,6 +44,15 @@
       "state" : {
         "revision" : "a31236f24bfd2ea2f520a74575881f6731d7ae68",
         "version" : "4.7.0"
+      }
+    },
+    {
+      "identity" : "openai-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dylanshine/openai-kit.git",
+      "state" : {
+        "revision" : "bf4e81668fe3c561afa29078121f3ff7d99da210",
+        "version" : "1.8.2"
       }
     },
     {

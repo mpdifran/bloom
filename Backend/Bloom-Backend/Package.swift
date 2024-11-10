@@ -13,6 +13,8 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         // Shared model between backend and client
         .package(name: "bloom-model", path: "../../Shared/BloomModel"),
+        // OpenAI wrapper.
+        .package(url: "https://github.com/dylanshine/openai-kit.git", from: "1.0.0"),
     ],
     targets: [
         .executableTarget(
@@ -22,6 +24,7 @@ let package = Package(
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
                 .product(name: "BloomModel", package: "bloom-model"),
+                .product(name: "OpenAIKit", package: "openai-kit"),
             ],
             swiftSettings: swiftSettings
         ),
