@@ -52,16 +52,16 @@ extension FoodController {
         let requestBody = try request.content.decode(FoodSearchRequest.self)
 
         let foodItems: [FoodItem]
-        if let name = requestBody.name, let brand = requestBody.brand {
-            foodItems = try await edamamController.searchFoods(
-                client: request.client,
-                name: name,
-                brand: brand
-            )
-        } else if let upcCode = requestBody.upcCode {
+        if let upcCode = requestBody.upcCode {
             foodItems = try await edamamController.searchFoods(
                 client: request.client,
                 upc: upcCode
+            )
+        } else if let name = requestBody.name {
+            foodItems = try await edamamController.searchFoods(
+                client: request.client,
+                name: name,
+                brand: requestBody.brand
             )
         } else {
             throw Abort(.badRequest)

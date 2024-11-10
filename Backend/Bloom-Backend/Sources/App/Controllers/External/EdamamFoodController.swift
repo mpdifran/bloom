@@ -19,7 +19,10 @@ struct EdamamFoodController {
 
 extension EdamamFoodController {
 
-    func autocomplete(client: Client, query: String) async throws -> [String] {
+    func autocomplete(
+        client: Client,
+        query: String
+    ) async throws -> [String] {
 
         var urlComponents = URLComponents(string: app.edamamDomain + "/auto-complete")
         urlComponents?.queryItems = [
@@ -38,15 +41,19 @@ extension EdamamFoodController {
     func searchFoods(
         client: Client,
         name: String,
-        brand: String
+        brand: String?
     ) async throws -> [FoodItem] {
+
         var urlComponents = URLComponents(string: app.edamamDomain + "/api/food-database/v2/parser")
-        urlComponents?.queryItems = [
+        var queryItems: [URLQueryItem] = [
             URLQueryItem(name: "app_id", value: app.edamamAppID),
             URLQueryItem(name: "app_key", value: app.edamamAPIKey),
             URLQueryItem(name: "ingr", value: name),
-            URLQueryItem(name: "brand", value: brand)
         ]
+        if let brand {
+            queryItems.append(URLQueryItem(name: "brand", value: brand))
+        }
+        urlComponents?.queryItems = queryItems
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
@@ -57,7 +64,25 @@ extension EdamamFoodController {
         return foods
     }
 
-    func searchFoods(client: Client, upc: String) async throws -> [FoodItem] {
-        []
+    func searchFoods(
+        client: Client,
+        upc: String
+    ) async throws -> [FoodItem] {
+
+        var urlComponents = URLComponents(string: app.edamamDomain + "/api/food-database/v2/parser")
+        var queryItems: [URLQueryItem] = [
+            URLQueryItem(name: "app_id", value: app.edamamAppID),
+            URLQueryItem(name: "app_key", value: app.edamamAPIKey),
+            URLQueryItem(name: "upc", value: upc),
+        ]
+        urlComponents?.queryItems = queryItems
+
+        guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
+
+        let response = try await client.get(URI(string: uri.absoluteString))
+        let responseBody = try response.content.decode(Components.Schemas.ParseResponse.self)
+        let foods = responseBody.hints?.compactMap({ $0.asFoodItem() }) ?? []
+
+        return foods
     }
 }
