@@ -8,9 +8,9 @@
 import Foundation
 import AppFoundations
 
-public final class FoodItemIdentifier: Identifier, Codable { }
+public final class FoodItemIdentifier: Identifier, Codable, @unchecked Sendable { }
 
-public struct FoodItem: Codable {
+public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
     public let id: FoodItemIdentifier
     public let name: String
     public let brandName: String?
@@ -36,7 +36,7 @@ public struct FoodItem: Codable {
 }
 
 public extension FoodItem {
-    struct Quantity: Codable {
+    struct Quantity: Codable, Sendable, Hashable {
         public let value: Double
         public let unit: String
 
@@ -51,19 +51,16 @@ public extension FoodItem {
 }
 
 public extension FoodItem {
-    struct Nutrient: Codable, Identifiable {
+    struct Nutrient: Codable, Identifiable, Sendable, Hashable {
         public var id: Kind { kind }
 
-        public let name: String
         public let kind: Kind
         public let quantity: Quantity
 
         public init(
-            name: String,
             kind: Kind,
             quantity: Quantity
         ) {
-            self.name = name
             self.kind = kind
             self.quantity = quantity
         }
@@ -71,10 +68,22 @@ public extension FoodItem {
 }
 
 public extension FoodItem.Nutrient {
-    enum Kind: String, Codable {
+    enum Kind: String, Codable, Sendable, Hashable {
         case protein
         case carbohydrates
         case fat
         case calories
+    }
+}
+
+public extension FoodItem.Nutrient.Kind {
+
+    var name: String {
+        switch self {
+        case .protein: return "Protein"
+        case .carbohydrates: return "Carbohydrates"
+        case .fat: return "Fat"
+        case .calories: return "Calories"
+        }
     }
 }

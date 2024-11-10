@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomModel
 
 private extension Int {
     static let debounceTime: Int = 300
@@ -31,7 +32,7 @@ extension FoodLoggingActionCardView {
         var meal = Meal.breakfast
         var autocomplete = [String]()
         var isSearching = false
-//        var results: [Supplements.Components.Schemas.Food]?
+        var results: [FoodItem]?
         var error: Error?
 
         private var debouncedSearchQuery = ""
@@ -58,11 +59,11 @@ extension FoodLoggingActionCardView.ViewModel {
 
         autocomplete.removeAll()
 
-//        do {
-//            self.results = try await NetworkRequester.shared.edamamFoodSearch(query: query)
-//        } catch {
-//            self.error = error
-//        }
+        do {
+            self.results = try await NetworkRequester.shared.foodSearch(name: query, brand: nil)
+        } catch {
+            self.error = error
+        }
     }
 }
 
@@ -71,9 +72,8 @@ private extension FoodLoggingActionCardView.ViewModel {
     func performAutocomplete(query: String) async {
         guard query.isNotEmpty else { return }
 
-//        do {
-//            let response = try await NetworkRequester.shared.edamamFoodAutocomplete(query: query)
-//            autocomplete = response
-//        } catch { }
+        do {
+            self.autocomplete = try await NetworkRequester.shared.foodAutocomplete(query: query)
+        } catch { }
     }
 }

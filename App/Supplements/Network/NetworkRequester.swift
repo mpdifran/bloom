@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import BloomModel
 
 private extension String {
     static let usdaAPIKey = "d8qTh8MkWmXtiqUjVvO2dv7w64W9wDOTnAYY6pJa"
-    static let edamamAPIKey = "2e8d3fa598795c7616bd159abb9ff7ab"
-    static let edamamAppID = "b6fefe5f"
+
+    static let bloomAPIBase = "https://bloom-api-5903aeb2ee43.herokuapp.com/"
 }
 
 final class NetworkRequester: Sendable {
@@ -19,45 +20,62 @@ final class NetworkRequester: Sendable {
 
 extension NetworkRequester {
 
-//    func edamamFoodAutocomplete(query: String) async throws -> [String] {
-//        let url = URL(string: "https://api.edamam.com/auto-complete")!.setting(
-//            queryItems: [
-//                URLQueryItem(name: "app_id", value: .edamamAppID),
-//                URLQueryItem(name: "app_key", value: .edamamAPIKey),
-//                URLQueryItem(name: "q", value: query),
-//                URLQueryItem(name: "limit", value: "10")
-//            ]
-//        )!
-//
-//        let urlRequest = URLRequest(url: url)
-//
-//        let (data, _) = try await URLSession.shared.data(for: urlRequest)
-//
-//        return try JSONDecoder.main.decode([String].self, from: data)
-//    }
-//
-//    func edamamFoodSearch(query: String) async throws -> [Supplements.Components.Schemas.Food] {
-//        let client = Client(
-//            serverURL: try Servers.Server1.url(),
-//            transport: URLSessionTransport()
-//        )
-//
-//        let input = Operations.get_sol_api_sol_food_hyphen_database_sol_v2_sol_parser.Input(
-//            query: .init(
-//                app_id: .edamamAppID,
-//                app_key: .edamamAPIKey,
-//                ingr: query,
-//                brand: query
-//            ),
-//            headers: .init()
-//        )
-//
-//        let response = try await client.get_sol_api_sol_food_hyphen_database_sol_v2_sol_parser(input)
-//
-//        let data = try response.ok.body.json.hints?.compactMap(\.food) ?? []
-//        print(data)
-//        return data
-//    }
+    func foodAutocomplete(query: String) async throws -> [String] {
+        let url = URL(string: .bloomAPIBase + "v1/food/autocomplete")!
+
+        let request = FoodAutocompleteRequest(query: query)
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        let response = try JSONDecoder.main.decode(FoodAutocompleteResponse.self, from: data)
+
+        return response.tokens
+    }
+
+
+    func foodSearch(name: String, brand: String?) async throws -> [FoodItem] {
+        let url = URL(string: .bloomAPIBase + "v1/food/search")!
+
+        let request = FoodSearchRequest(
+            name: name,
+            brand: brand
+        )
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        let response = try JSONDecoder.main.decode(FoodSearchResponse.self, from: data)
+
+        return response.foods
+    }
+
+    func foodSearch(upcCode: String) async throws -> [FoodItem] {
+        let url = URL(string: .bloomAPIBase + "v1/food/search")!
+
+        let request = FoodSearchRequest(
+            upcCode: upcCode
+        )
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        let response = try JSONDecoder.main.decode(FoodSearchResponse.self, from: data)
+
+        return response.foods
+    }
 }
 
 extension NetworkRequester {

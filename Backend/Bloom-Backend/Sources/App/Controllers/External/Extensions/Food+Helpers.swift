@@ -16,7 +16,6 @@ extension Components.Schemas.Food {
         if let value = nutrients?.additionalProperties["ENERC_KCAL"] {
             result.append(
                 FoodItem.Nutrient(
-                    name: "Calories",
                     kind: .calories,
                     quantity: .init(
                         value: value,
@@ -28,7 +27,6 @@ extension Components.Schemas.Food {
         if let value = nutrients?.additionalProperties["PROCNT"] {
             result.append(
                 FoodItem.Nutrient(
-                    name: "Protein",
                     kind: .protein,
                     quantity: .init(
                         value: value,
@@ -40,7 +38,6 @@ extension Components.Schemas.Food {
         if let value = nutrients?.additionalProperties["CHOCDF"] {
             result.append(
                 FoodItem.Nutrient(
-                    name: "Carbohydrates",
                     kind: .carbohydrates,
                     quantity: .init(
                         value: value,
@@ -52,7 +49,6 @@ extension Components.Schemas.Food {
         if let value = nutrients?.additionalProperties["FAT"] {
             result.append(
                 FoodItem.Nutrient(
-                    name: "Fat",
                     kind: .fat,
                     quantity: .init(
                         value: value,

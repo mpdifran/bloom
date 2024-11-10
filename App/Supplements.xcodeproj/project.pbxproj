@@ -216,8 +216,9 @@
 		FF7D6C312CDD198E005B86C0 /* USDAFoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */; };
 		FF7D6C332CDD24E1005B86C0 /* URL+QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */; };
 		FF7D6C352CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */; };
-		FF87406E2CDD5474002581FA /* EdamamFoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */; };
+		FF87406E2CDD5474002581FA /* FoodItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87406D2CDD5474002581FA /* FoodItemCell.swift */; };
 		FF8740F32CDE6891002581FA /* FoodSearchToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */; };
+		FF8741792CE14F8E002581FA /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
@@ -745,7 +746,7 @@
 		FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAFoodCell.swift; sourceTree = "<group>"; };
 		FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+QueryItems.swift"; sourceTree = "<group>"; };
 		FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchAutocompleteCell.swift; sourceTree = "<group>"; };
-		FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdamamFoodCell.swift; sourceTree = "<group>"; };
+		FF87406D2CDD5474002581FA /* FoodItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemCell.swift; sourceTree = "<group>"; };
 		FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchToolCell.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
@@ -1019,6 +1020,7 @@
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
 				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
 				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
+				FF8741792CE14F8E002581FA /* BloomModel in Frameworks */,
 				FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */,
 				FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */,
 			);
@@ -1501,7 +1503,7 @@
 				FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */,
 				FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */,
 				FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */,
-				FF87406D2CDD5474002581FA /* EdamamFoodCell.swift */,
+				FF87406D2CDD5474002581FA /* FoodItemCell.swift */,
 				FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */,
 			);
 			path = FoodTracking;
@@ -2461,6 +2463,7 @@
 				FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */,
 				FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */,
 				FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */,
+				FF8741782CE14F8E002581FA /* BloomModel */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -2569,6 +2572,7 @@
 				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 				FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 				FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */,
+				FF8741772CE14F8E002581FA /* XCLocalSwiftPackageReference "../Shared/BloomModel" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -2787,7 +2791,7 @@
 				FFA402C82C94C5E000D8DD40 /* OnboardingHealthGoalView.swift in Sources */,
 				FFF03D102CD011E700476B44 /* MockHomeScreenView.swift in Sources */,
 				FF2C99E32BFBE1AC006F753B /* HKWorkoutActivityType+Helpers.swift in Sources */,
-				FF87406E2CDD5474002581FA /* EdamamFoodCell.swift in Sources */,
+				FF87406E2CDD5474002581FA /* FoodItemCell.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */,
 				FF70EA1C2CCA77AE0055E932 /* OnboardingButtonStyle.swift in Sources */,
@@ -4005,6 +4009,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		FF8741772CE14F8E002581FA /* XCLocalSwiftPackageReference "../Shared/BloomModel" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Shared/BloomModel;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -4097,6 +4108,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
 			productName = BugsnagPerformanceSwiftUI;
+		};
+		FF8741782CE14F8E002581FA /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BloomModel;
 		};
 		FF8B8B202BFD1EF500BA2128 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
