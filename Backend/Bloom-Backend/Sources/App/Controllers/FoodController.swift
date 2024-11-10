@@ -27,6 +27,7 @@ extension FoodController: RouteCollection {
         routes.group("v1") { v1 in
             v1.group("food") { food in
                 food.post("autocomplete", use: autocomplete)
+                food.post("search", use: searchFoods)
             }
         }
     }
@@ -44,5 +45,27 @@ extension FoodController {
         )
 
         return FoodAutocompleteResponse(tokens: tokens)
+    }
+
+    @Sendable
+    func searchFoods(_ request: Request) async throws -> FoodSearchResponse {
+        let requestBody = try request.content.decode(FoodSearchRequest.self)
+
+        let foodItems: [FoodItem]
+        if let query = requestBody.query {
+            foodItems = try await edamamController.searchFoods(
+                client: request.client,
+                query: query
+            )
+        } else if let upcCode = requestBody.upcCode {
+            foodItems = try await edamamController.searchFoods(
+                client: request.client,
+                upc: upcCode
+            )
+        } else {
+            throw Abort(.badRequest)
+        }
+
+        return FoodSearchResponse(foods: foodItems)
     }
 }

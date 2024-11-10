@@ -7,6 +7,7 @@
 
 import Foundation
 import Vapor
+import BloomModel
 
 struct EdamamFoodController {
     let app: Application
@@ -25,12 +26,20 @@ extension EdamamFoodController {
             URLQueryItem(name: "q", value: query),
             URLQueryItem(name: "app_id", value: app.edamamAppID),
             URLQueryItem(name: "app_key", value: app.edamamAPIKey),
-            URLQueryItem(name: "limit", value: "10")
+            URLQueryItem(name: "limit", value: "6")
         ]
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
         let response = try await client.get(URI(string: uri.absoluteString))
         return try response.content.decode([String].self)
+    }
+
+    func searchFoods(client: Client, query: String) async throws -> [FoodItem] {
+        []
+    }
+
+    func searchFoods(client: Client, upc: String) async throws -> [FoodItem] {
+        []
     }
 }

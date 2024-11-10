@@ -10,3 +10,5 @@ import Vapor
 
 extension FoodAutocompleteRequest: @retroactive Content { }
 extension FoodAutocompleteResponse: @retroactive Content { }
+extension FoodSearchRequest: @retroactive Content { }
+extension FoodSearchResponse: @retroactive Content { }
