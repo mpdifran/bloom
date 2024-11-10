@@ -57,7 +57,13 @@ extension EdamamFoodController {
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
-        let response = try await client.get(URI(string: uri.absoluteString))
+        let response = try await client.get(
+            URI(string: uri.absoluteString),
+            headers: .init(
+                [("Accept-Encoding", "gzip")]
+            )
+        )
+
         let responseBody = try response.content.decode(Components.Schemas.ParseResponse.self)
         let foods = responseBody.hints?.compactMap({ $0.asFoodItem() }) ?? []
 
@@ -70,12 +76,11 @@ extension EdamamFoodController {
     ) async throws -> [FoodItem] {
 
         var urlComponents = URLComponents(string: app.edamamDomain + "/api/food-database/v2/parser")
-        var queryItems: [URLQueryItem] = [
+        urlComponents?.queryItems = [
             URLQueryItem(name: "app_id", value: app.edamamAppID),
             URLQueryItem(name: "app_key", value: app.edamamAPIKey),
             URLQueryItem(name: "upc", value: upc),
         ]
-        urlComponents?.queryItems = queryItems
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
