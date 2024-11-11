@@ -12,6 +12,13 @@ private extension Int {
     static let debounceTime: Int = 300
 }
 
+struct FoodItemSection: Equatable, Identifiable {
+    var id: String { title }
+
+    let title: String
+    let foodItems: [FoodItem]
+}
+
 extension FoodLoggingActionCardView.ViewModel {
     enum Meal: String, CaseIterable {
         case breakfast
@@ -32,7 +39,7 @@ extension FoodLoggingActionCardView {
         var meal = Meal.breakfast
         var autocomplete = [String]()
         var isSearching = false
-        var results: [FoodItem]?
+        var results: [FoodItemSection]?
         var error: Error?
 
         private var debouncedSearchQuery = ""
@@ -65,7 +72,8 @@ extension FoodLoggingActionCardView.ViewModel {
         autocomplete.removeAll()
 
         do {
-            self.results = try await NetworkRequester.shared.foodSearch(name: query, brand: nil)
+            let sections = try await NetworkRequester.shared.foodSearch(name: query, brand: nil)
+            self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
         } catch {
             self.error = error
         }
@@ -80,7 +88,8 @@ extension FoodLoggingActionCardView.ViewModel {
         autocomplete.removeAll()
 
         do {
-            self.results = try await NetworkRequester.shared.foodSearch(upcCode: barcode)
+            let sections = try await NetworkRequester.shared.foodSearch(upcCode: barcode)
+            self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
         } catch {
             self.error = error
         }

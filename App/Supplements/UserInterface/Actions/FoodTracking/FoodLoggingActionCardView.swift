@@ -82,9 +82,13 @@ private extension FoodLoggingActionCardView {
             if results.isNotEmpty {
                 ScrollView {
                     VStack {
-                        ForEach(results) { food in
-                            FoodItemCell(food: food)
-                                .transition(.scale)
+                        ForEach(results) { section in
+                            Section(section.title) {
+                                ForEach(section.foodItems) { food in
+                                    FoodItemCell(food: food)
+                                        .transition(.scale)
+                                }
+                            }
                         }
                     }
                     .padding()

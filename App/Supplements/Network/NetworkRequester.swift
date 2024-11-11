@@ -38,7 +38,7 @@ extension NetworkRequester {
     }
 
 
-    func foodSearch(name: String, brand: String?) async throws -> [FoodItem] {
+    func foodSearch(name: String, brand: String?) async throws -> [FoodSearchResponse.Section] {
         let url = URL(string: .bloomAPIBase + "v1/food/search")!
 
         let request = FoodSearchRequest(
@@ -55,10 +55,10 @@ extension NetworkRequester {
 
         let response = try JSONDecoder.main.decode(FoodSearchResponse.self, from: data)
 
-        return response.foods
+        return response.sections
     }
 
-    func foodSearch(upcCode: String) async throws -> [FoodItem] {
+    func foodSearch(upcCode: String) async throws -> [FoodSearchResponse.Section] {
         let url = URL(string: .bloomAPIBase + "v1/food/search")!
 
         let request = FoodSearchRequest(
@@ -74,33 +74,7 @@ extension NetworkRequester {
 
         let response = try JSONDecoder.main.decode(FoodSearchResponse.self, from: data)
 
-        return response.foods
-    }
-}
-
-extension NetworkRequester {
-
-    func usdaFoodSearch(query: String) async throws -> USDAFoodSearchResponse {
-        let request = USDAFoodSearchRequest(
-            query: query,
-            dataType: ["Foundation", "Branded", "SR Legacy"],
-            pageSize: 10,
-            pageNumber: 0,
-            sortBy: "dataType.keyword",
-            sortOrder: "asc"
-        )
-
-        let url = URL(string: "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=\(String.usdaAPIKey)")!
-        let requestData = try JSONEncoder.main.encode(request)
-
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = requestData
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
-        return try JSONDecoder.main.decode(USDAFoodSearchResponse.self, from: data)
+        return response.sections
     }
 }
 

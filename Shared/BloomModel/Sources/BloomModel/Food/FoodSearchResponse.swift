@@ -7,10 +7,28 @@
 
 import Foundation
 
-public struct FoodSearchResponse: Codable {
-    public let foods: [FoodItem]
+public struct FoodSearchResponse: Codable, Sendable {
+    public let sections: [Section]
 
-    public init(foods: [FoodItem]) {
-        self.foods = foods
+    public init(sections: [Section]) {
+        self.sections = sections
+    }
+}
+
+public extension FoodSearchResponse {
+    public struct Section: Codable, Sendable {
+        public let title: String
+        public let index: Int
+        public let foods: [FoodItem]
+
+        public init(
+            title: String,
+            index: Int,
+            foods: [FoodItem]
+        ) {
+            self.title = title
+            self.index = index
+            self.foods = foods
+        }
     }
 }

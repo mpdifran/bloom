@@ -30,3 +30,16 @@ extension Application {
         "https://api.edamam.com"
     }
 }
+
+// MARK: - USDA
+
+extension Application {
+
+    var usdaAPIKey: String? {
+        Environment.get("USDA_API_KEY")
+    }
+
+    var usdaDomain: String {
+        "https://api.nal.usda.gov/fdc"
+    }
+}

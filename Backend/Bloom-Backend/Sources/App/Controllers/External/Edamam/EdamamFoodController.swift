@@ -34,7 +34,12 @@ extension EdamamFoodController {
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
-        let response = try await client.get(URI(string: uri.absoluteString))
+        let response = try await client.get(
+            URI(string: uri.absoluteString),
+            headers: .init(
+                [("Accept-Encoding", "gzip")]
+            )
+        )
         return try response.content.decode([String].self)
     }
 
@@ -84,7 +89,13 @@ extension EdamamFoodController {
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
-        let response = try await client.get(URI(string: uri.absoluteString))
+        let response = try await client.get(
+            URI(string: uri.absoluteString),
+            headers: .init(
+                [("Accept-Encoding", "gzip")]
+            )
+        )
+
         let responseBody = try response.content.decode(Components.Schemas.ParseResponse.self)
         let foods = responseBody.hints?.compactMap({ $0.asFoodItem() }) ?? []
 

@@ -13,11 +13,13 @@ struct FoodController {
 
     private let app: Application
     private let edamamController: EdamamFoodController
+    private let usdaFoodController: USDAFoodController
 
 
     init(app: Application) {
         self.app = app
         self.edamamController = EdamamFoodController(app: app)
+        self.usdaFoodController = USDAFoodController(app: app)
     }
 }
 
@@ -49,16 +51,61 @@ extension FoodController {
 
     @Sendable
     func searchFoods(_ request: Request) async throws -> FoodSearchResponse {
+        var sections = [FoodSearchResponse.Section]()
+
+        // parallelize
+        try await withThrowingTaskGroup(of: FoodSearchResponse.Section?.self) { group in
+            group.addTask {
+                return try await searchFoodUSDA(request)
+            }
+            group.addTask {
+                return try await searchFoodsEdamam(request)
+            }
+
+            for try await section in group {
+                guard let section else { continue }
+
+                sections.append(section)
+            }
+        }
+
+        let sortedSections = sections.sorted(by: { $0.index < $1.index })
+        return FoodSearchResponse(sections: sortedSections)
+    }
+}
+
+private extension FoodController {
+
+    func searchFoodUSDA(_ request: Request) async throws -> FoodSearchResponse.Section? {
         let requestBody = try request.content.decode(FoodSearchRequest.self)
 
-        let foodItems: [FoodItem]
+        guard let name = requestBody.name else { return nil }
+
+        let foodItems = try await usdaFoodController.foundationFoodSearch(
+            client: request.client,
+            query: name
+        )
+
+        guard foodItems.isNotEmpty else { return nil }
+
+        return FoodSearchResponse.Section(
+            title: "Foundation",
+            index: 1,
+            foods: foodItems
+        )
+    }
+
+    func searchFoodsEdamam(_ request: Request) async throws -> FoodSearchResponse.Section? {
+        let requestBody = try request.content.decode(FoodSearchRequest.self)
+
+        let otherFoodItems: [FoodItem]
         if let upcCode = requestBody.upcCode {
-            foodItems = try await edamamController.searchFoods(
+            otherFoodItems = try await edamamController.searchFoods(
                 client: request.client,
                 upc: upcCode
             )
         } else if let name = requestBody.name {
-            foodItems = try await edamamController.searchFoods(
+            otherFoodItems = try await edamamController.searchFoods(
                 client: request.client,
                 name: name,
                 brand: requestBody.brand
@@ -67,6 +114,12 @@ extension FoodController {
             throw Abort(.badRequest)
         }
 
-        return FoodSearchResponse(foods: foodItems)
+        guard otherFoodItems.isNotEmpty else { return nil }
+
+        return FoodSearchResponse.Section(
+            title: "Other",
+            index: 2,
+            foods: otherFoodItems
+        )
     }
 }
