@@ -45,7 +45,10 @@ extension FoodLoggingActionCardView.ViewModel {
     func debounceAutocomplete(for query: String) {
         debounceTask?.cancel()
 
-        guard query.isNotEmpty else { return }
+        guard query.isNotEmpty else {
+            autocomplete.removeAll()
+            return
+        }
 
         debounceTask = Task {
             await Delay(.debounceTime)
@@ -54,6 +57,8 @@ extension FoodLoggingActionCardView.ViewModel {
     }
 
     func performSearch(for query: String) async {
+        results = []
+
         defer { isSearching = false }
         isSearching = true
 
@@ -61,6 +66,21 @@ extension FoodLoggingActionCardView.ViewModel {
 
         do {
             self.results = try await NetworkRequester.shared.foodSearch(name: query, brand: nil)
+        } catch {
+            self.error = error
+        }
+    }
+
+    func performBarcodeSearch(for barcode: String) async {
+        results = []
+
+        defer { isSearching = false }
+        isSearching = true
+
+        autocomplete.removeAll()
+
+        do {
+            self.results = try await NetworkRequester.shared.foodSearch(upcCode: barcode)
         } catch {
             self.error = error
         }

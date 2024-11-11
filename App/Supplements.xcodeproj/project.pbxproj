@@ -213,13 +213,14 @@
 		FF7D6C282CDC0217005B86C0 /* USDAFoodSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C272CDC0217005B86C0 /* USDAFoodSearchResponse.swift */; };
 		FF7D6C2B2CDC057D005B86C0 /* FoodLoggingActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */; };
 		FF7D6C2D2CDC0A11005B86C0 /* FoodLoggingActionCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */; };
-		FF7D6C312CDD198E005B86C0 /* USDAFoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */; };
 		FF7D6C332CDD24E1005B86C0 /* URL+QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */; };
 		FF7D6C352CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */; };
 		FF87406E2CDD5474002581FA /* FoodItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87406D2CDD5474002581FA /* FoodItemCell.swift */; };
 		FF8740F32CDE6891002581FA /* FoodSearchToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */; };
 		FF8741792CE14F8E002581FA /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF8741FE2CE15834002581FA /* FoodItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8741FD2CE1582F002581FA /* FoodItem+Helpers.swift */; };
+		FF8742422CE17B08002581FA /* DataScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8742412CE17B08002581FA /* DataScannerView.swift */; };
+		FF8742442CE17D41002581FA /* FoodBarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
@@ -744,12 +745,13 @@
 		FF7D6C272CDC0217005B86C0 /* USDAFoodSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAFoodSearchResponse.swift; sourceTree = "<group>"; };
 		FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLoggingActionCardView.swift; sourceTree = "<group>"; };
 		FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLoggingActionCardViewModel.swift; sourceTree = "<group>"; };
-		FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAFoodCell.swift; sourceTree = "<group>"; };
 		FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+QueryItems.swift"; sourceTree = "<group>"; };
 		FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchAutocompleteCell.swift; sourceTree = "<group>"; };
 		FF87406D2CDD5474002581FA /* FoodItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemCell.swift; sourceTree = "<group>"; };
 		FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchToolCell.swift; sourceTree = "<group>"; };
 		FF8741FD2CE1582F002581FA /* FoodItem+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItem+Helpers.swift"; sourceTree = "<group>"; };
+		FF8742412CE17B08002581FA /* DataScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataScannerView.swift; sourceTree = "<group>"; };
+		FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBarcodeScannerView.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryHandle.swift; sourceTree = "<group>"; };
@@ -1506,7 +1508,7 @@
 				FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */,
 				FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */,
 				FF87406D2CDD5474002581FA /* FoodItemCell.swift */,
-				FF7D6C302CDD198E005B86C0 /* USDAFoodCell.swift */,
+				FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */,
 			);
 			path = FoodTracking;
 			sourceTree = "<group>";
@@ -1517,6 +1519,14 @@
 				FF8741FD2CE1582F002581FA /* FoodItem+Helpers.swift */,
 			);
 			path = BloomModel;
+			sourceTree = "<group>";
+		};
+		FF8742402CE17AA3002581FA /* Scanners */ = {
+			isa = PBXGroup;
+			children = (
+				FF8742412CE17B08002581FA /* DataScannerView.swift */,
+			);
+			path = Scanners;
 			sourceTree = "<group>";
 		};
 		FF88F1192C7B75AE0093D1B4 /* Calendar */ = {
@@ -1960,6 +1970,7 @@
 				FFA134EE2C3F041500FF1829 /* SleepDay */,
 				FFF61B232BEE91A300926042 /* Insights */,
 				FF88F1282C7D027E0093D1B4 /* Actions */,
+				FF8742402CE17AA3002581FA /* Scanners */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
 				FFB691092C19FA6800BEC0D4 /* Reports */,
 				FF88F1222C7BBDE80093D1B4 /* Calendar */,
@@ -2900,7 +2911,6 @@
 				FF7D6C2B2CDC057D005B86C0 /* FoodLoggingActionCardView.swift in Sources */,
 				FF6E06102C9F930800C4219B /* SelectableHabitCell.swift in Sources */,
 				FFD582C72CD99DD100833FEE /* FocusAreaReviewRootView.swift in Sources */,
-				FF7D6C312CDD198E005B86C0 /* USDAFoodCell.swift in Sources */,
 				FFBE52432C756DED00F510DE /* WorkoutTypeHeartRateReport.swift in Sources */,
 				FF70E9F22CC000350055E932 /* MainTask.swift in Sources */,
 				FF70E9292CB99C720055E932 /* UpcomingPeriodCell.swift in Sources */,
@@ -2918,6 +2928,7 @@
 				FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */,
 				FF6E060C2C9F8E7C00C4219B /* UserAddedHabitCell.swift in Sources */,
 				FFC8B0132C518FF5009C5CED /* HeartHealthMonthlySummary.swift in Sources */,
+				FF8742442CE17D41002581FA /* FoodBarcodeScannerView.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,
 				FFBE52352C73102B00F510DE /* View+ReloadAfterTimeInterval.swift in Sources */,
 				FF4EFF922C93BDDE005E4A1F /* MenstruationCalendarView.swift in Sources */,
@@ -2968,6 +2979,7 @@
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
 				FF70E90F2CB848590055E932 /* VitalsCalculator.swift in Sources */,
+				FF8742422CE17B08002581FA /* DataScannerView.swift in Sources */,
 				FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */,
 				FF70EA202CCAC13B0055E932 /* OnboardingAppExplanationView.swift in Sources */,
 				FFEBEA5F2CD29BDE00142AA1 /* IconGauge.swift in Sources */,
@@ -3733,6 +3745,7 @@
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";
@@ -3776,6 +3789,7 @@
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";

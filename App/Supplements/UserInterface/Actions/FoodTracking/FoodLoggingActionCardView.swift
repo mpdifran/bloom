@@ -15,6 +15,7 @@ struct FoodLoggingActionCardView: View {
     @State private var searchQuery = ""
     @State private var shouldAutocomplete = true
     @State private var didSearchToggle = false
+    @State private var presentedSheet: AnyView?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -41,6 +42,7 @@ struct FoodLoggingActionCardView: View {
                 isFocused = true
             }
         }
+        .sheet($presentedSheet)
         .presentationDetents([.large])
         .presentationCornerRadius(25)
         .presentationCompactAdaptation(.fullScreenCover)
@@ -116,6 +118,14 @@ private extension FoodLoggingActionCardView {
                 } else if searchQuery.isEmpty {
                     FoodSearchToolCell(title: "AI Photo", systemImage: "sparkles")
                     FoodSearchToolCell(title: "Scan Barcode", systemImage: "barcode.viewfinder")
+                        .onTapGesture {
+                            presentedSheet = FoodBarcodeScannerView { barcode in
+                                isFocused = false
+                                Task {
+                                    await viewModel.performBarcodeSearch(for: barcode)
+                                }
+                            }.asAny
+                        }
                 }
             }
             .padding(.horizontal)
