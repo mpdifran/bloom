@@ -11,6 +11,12 @@ extension Application {
 
     func printEnvironmentInfo() {
         logger.info("Environment: \(environment.name)")
+
+        if let _ = postgresURL {
+            logger.info("Postgres URL set")
+        } else {
+            logger.info("Using local Postgres")
+        }
     }
 }
 
@@ -41,5 +47,17 @@ extension Application {
 
     var usdaDomain: String {
         "https://api.nal.usda.gov/fdc"
+    }
+}
+
+// MARK: - Postgres
+
+extension Application {
+
+    var postgresURL: URL? {
+        guard let urlString = Environment.get("DATABASE_URL") else {
+            return nil
+        }
+        return URL(string: urlString)
     }
 }

@@ -1,1 +1,1 @@
-web: App serve --env production --hostname 0.0.0.0 --port $PORT
+web: App serve --env production --hostname 0.0.0.0 --port $PORT --auto-migrate

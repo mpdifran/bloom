@@ -8,4 +8,10 @@ public func configure(_ app: Application) async throws {
 
     // Routes
     try routes(app)
+
+    // Database
+    try app.setupPostgres()
+
+    // Migrations
+    allMigrations.forEach { app.migrations.add($0) }
 }

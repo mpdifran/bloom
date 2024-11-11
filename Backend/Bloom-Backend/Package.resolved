@@ -1,5 +1,5 @@
 {
-  "originHash" : "a36db6119576332f8f7a918aa5b64eb7cc00aea1ec6ec6edd0068a325db58c78",
+  "originHash" : "7dbe21488e6867d3c03050857d20bceda2c3bea05ed832b8d37d34ecaf12c7ff",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -38,6 +38,33 @@
       }
     },
     {
+      "identity" : "fluent",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/fluent.git",
+      "state" : {
+        "revision" : "223b27d04ab2b51c25503c9922eecbcdf6c12f89",
+        "version" : "4.12.0"
+      }
+    },
+    {
+      "identity" : "fluent-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/fluent-kit.git",
+      "state" : {
+        "revision" : "614d3ec27cdef50cfb9fc3cfd382b6a4d9578cff",
+        "version" : "1.49.0"
+      }
+    },
+    {
+      "identity" : "fluent-postgres-driver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/fluent-postgres-driver.git",
+      "state" : {
+        "revision" : "fd57101e426d3edf66a32ba63a7d0b8ced4d7499",
+        "version" : "2.10.0"
+      }
+    },
+    {
       "identity" : "multipart-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/multipart-kit.git",
@@ -65,12 +92,39 @@
       }
     },
     {
+      "identity" : "postgres-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/postgres-kit.git",
+      "state" : {
+        "revision" : "0b72fa83b1023c4b82072e4049a3db6c29781fff",
+        "version" : "2.13.5"
+      }
+    },
+    {
+      "identity" : "postgres-nio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/postgres-nio.git",
+      "state" : {
+        "revision" : "cd5318a01a1efcb1e0b3c82a0ce5c9fefaf1cb2d",
+        "version" : "1.22.1"
+      }
+    },
+    {
       "identity" : "routing-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/routing-kit.git",
       "state" : {
         "revision" : "8c9a227476555c55837e569be71944e02a056b72",
         "version" : "4.9.1"
+      }
+    },
+    {
+      "identity" : "sql-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/sql-kit.git",
+      "state" : {
+        "revision" : "e0b35ff07601465dd9f3af19a1c23083acaae3bd",
+        "version" : "3.32.0"
       }
     },
     {
@@ -98,6 +152,15 @@
       "state" : {
         "revision" : "7faebca1ea4f9aaf0cda1cef7c43aecd2311ddf6",
         "version" : "1.3.0"
+      }
+    },
+    {
+      "identity" : "swift-async-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-async-algorithms.git",
+      "state" : {
+        "revision" : "5c8bd186f48c16af0775972700626f0b74588278",
+        "version" : "1.0.2"
       }
     },
     {
@@ -227,12 +290,12 @@
       }
     },
     {
-      "identity" : "swift-openapi-urlsession",
+      "identity" : "swift-service-lifecycle",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-openapi-urlsession",
+      "location" : "https://github.com/swift-server/swift-service-lifecycle.git",
       "state" : {
-        "revision" : "9bf4c712ad7989d6a91dbe68748b8829a50837e4",
-        "version" : "1.0.2"
+        "revision" : "f70b838872863396a25694d8b19fe58bcd0b7903",
+        "version" : "2.6.2"
       }
     },
     {
