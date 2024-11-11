@@ -44,6 +44,7 @@ extension USDAFoodController {
             URI(string: uri.absoluteString),
             content: requestBody
         )
+
         let responseBody = try response.content.decode(USDAFoodSearchResponse.self)
         let foodItems = responseBody.foods.compactMap({ $0.asFoodItem() })
 
