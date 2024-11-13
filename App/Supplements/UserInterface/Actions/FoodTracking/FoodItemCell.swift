@@ -27,8 +27,11 @@ struct FoodItemCell: View {
                 Text(food.name)
                     .bold()
 
-                if let serving = food.servingSizes.first {
-                    Text("\(serving.value.format()) \(serving.unit)")
+                if
+                    let serving = food.servingName,
+                    let servingQuantity = food.servingQuantity
+                {
+                    Text("\(serving) - \(servingQuantity.value.format()) \(servingQuantity.unit)")
                         .font(.subheadline)
                         .bold()
                         .foregroundStyle(.secondary)
@@ -76,9 +79,8 @@ struct FoodItemCell: View {
                         .init(kind: .carbohydrates, quantity: .init(value: 12, unit: "g")),
                         .init(kind: .fat, quantity: .init(value: 2.8, unit: "g")),
                     ],
-                    servingSizes: [
-                        .init(value: 100, unit: "g")
-                    ],
+                    servingName: "1 package",
+                    servingQuantity: .init(value: 43, unit: "g"),
                     ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))"
                 )
             )

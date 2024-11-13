@@ -26,7 +26,8 @@ extension Components.Schemas.Hint {
             name: name,
             brandName: food?.brand,
             nutrients: nutrients,
-            servingSizes: servingSizes,
+            servingName: nil, // TODO: Implement?
+            servingQuantity: servingSizes.first,
             ingredients: food?.foodContentsLabel
         )
     }

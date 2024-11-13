@@ -25,7 +25,8 @@ extension USDAFoodItem {
             name: name,
             brandName: foodCategory,
             nutrients: toNutrients(),
-            servingSizes: [], // ??
+            servingName: nil,
+            servingQuantity: nil,
             ingredients: nil
         )
     }
