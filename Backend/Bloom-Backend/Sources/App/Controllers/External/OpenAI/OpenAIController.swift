@@ -1,0 +1,154 @@
+//
+//  OpenAIController.swift
+//  Bloom-Backend
+//
+//  Created by Mark DiFranco on 2024-11-11.
+//
+
+import Foundation
+import Vapor
+import OpenAIKit
+import BloomModel
+
+struct OpenAIController {
+    let app: Application
+
+    init(app: Application) {
+        self.app = app
+    }
+}
+
+extension OpenAIController {
+
+    func parseNewFoodItem(
+        request: Request,
+        barCode: String,
+        nutritionLabelMetadata: ImageFileMetadata,
+        packagingMetadata: ImageFileMetadata
+    ) async throws -> (FoodItemRecord?, UploadNewFoodResponse.Result) {
+
+        let openAI = request.application.openAI
+
+//        let nutritionLabelFile = try await openAI.files.upload(
+//            file: nutritionLabelMetadata.data,
+//            fileName: nutritionLabelMetadata.filename,
+//            purpose: .search
+//        )
+//
+//        let packagingFile = try await openAI.files.upload(
+//            file: packagingMetadata.data,
+//            fileName: packagingMetadata.filename,
+//            purpose: .search
+//        )
+
+        guard let nutritionData = try await parseNutritionLabel(request: request, nutritionLabelMetadata: nutritionLabelMetadata) else {
+            return (nil, .unclearNutritionLabel)
+        }
+
+        guard let packagingData = try await parsePackaging(request: request, packagingMetadata: packagingMetadata) else {
+            return (nil, .unclearPackaging)
+        }
+
+        var foodItemRecord = FoodItemRecord(name: packagingData.productName)
+
+        foodItemRecord.barcode = barCode
+        foodItemRecord.brandName = packagingData.brandName
+        foodItemRecord.flavour = packagingData.flavour
+        foodItemRecord.nutritionLabelImage = nutritionLabelMetadata.filename
+        foodItemRecord.packagingImage = packagingMetadata.filename
+        foodItemRecord.calories = nutritionData.calories.value
+        foodItemRecord.protien = nutritionData.protein.value
+        foodItemRecord.carbohydrates = nutritionData.carbohydrate.value
+        foodItemRecord.fat = nutritionData.fat.value
+        foodItemRecord.servingName = nutritionData.servingName
+        foodItemRecord.servingValue = nutritionData.servingValue.value
+        foodItemRecord.servingUnit = nutritionData.servingValue.unit
+
+        return (foodItemRecord, .foodLogged)
+    }
+}
+
+private extension OpenAIController {
+
+    func parseNutritionLabel(
+        request: Request,
+        nutritionLabelMetadata: ImageFileMetadata
+    ) async throws -> OpenAINutritionLabelParseResponse? {
+        let openAI = request.application.openAI
+
+        let messages: [Chat.Message] = [
+            Chat.Message(
+                role: .system,
+                content: [
+                    .text("You must respond in JSON. There should be a single object with properties for each nutrient. The value should be an object that contains a double for the value and a string for the unit. Only include the mass, not the daily percentage. For the serving, use a property called 'serving_name' that is the name of one serving, and 'serving_value' that is the numerical value of a serving (this should be an object with value: double and unit: string as well). Make sure all JSON keys are snake case.")
+                ]
+            ),
+            Chat.Message(
+                role: .user,
+                content: [
+                    .imageData(nutritionLabelMetadata.data, "image/png"),
+                    .text("Return the nutrition information from this image.")
+                ]
+            )
+        ]
+
+        let response = try await openAI.chats.create(
+            model: Model.GPT4.gpt_4o_mini,
+            messages: messages
+        )
+
+        guard var message = response.choices.first?.message.content.first?.text else { return nil }
+
+        message.removeFirst("```json".count)
+        message.removeLast("```".count)
+        message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let data = message.data(using: .utf8) else { return nil }
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        return try decoder.decode(OpenAINutritionLabelParseResponse.self, from: data)
+    }
+
+    func parsePackaging(
+        request: Request,
+        packagingMetadata: ImageFileMetadata
+    ) async throws -> OpenAIPackagingParseResponse? {
+        let openAI = request.application.openAI
+
+        let messages: [Chat.Message] = [
+            Chat.Message(
+                role: .system,
+                content: [
+                    .text("You must respond in JSON. There should be a single object three properties: brand_name, product_name, and flavour (optional). Each property is a string populated with data from the image. Ensure the JSON keys are formatted in snake case. The detected strings should have the first letter of each word capitalized.")
+                ]
+            ),
+            Chat.Message(
+                role: .user,
+                content: [
+                    .imageData(packagingMetadata.data, "image/png"),
+                    .text("Return the brand name, product name, and any flavour (it there is one) you see in the packaging.")
+                ]
+            )
+        ]
+
+        let response = try await openAI.chats.create(
+            model: Model.GPT4.gpt_4o_mini,
+            messages: messages
+        )
+
+        guard var message = response.choices.first?.message.content.first?.text else { return nil }
+
+        message.removeFirst("```json".count)
+        message.removeLast("```".count)
+        message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let data = message.data(using: .utf8) else { return nil }
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        return try decoder.decode(OpenAIPackagingParseResponse.self, from: data)
+    }
+}

@@ -14,12 +14,13 @@ struct FoodController {
     private let app: Application
     private let edamamController: EdamamFoodController
     private let usdaFoodController: USDAFoodController
-
+    private let openAIController: OpenAIController
 
     init(app: Application) {
         self.app = app
         self.edamamController = EdamamFoodController(app: app)
         self.usdaFoodController = USDAFoodController(app: app)
+        self.openAIController = OpenAIController(app: app)
     }
 }
 
@@ -30,6 +31,7 @@ extension FoodController: RouteCollection {
             v1.group("food") { food in
                 food.post("autocomplete", use: autocomplete)
                 food.post("search", use: searchFoods)
+                food.post("upload", use: uploadNewFood)
             }
         }
     }
@@ -71,6 +73,25 @@ extension FoodController {
 
         let sortedSections = sections.sorted(by: { $0.index < $1.index })
         return FoodSearchResponse(sections: sortedSections)
+    }
+
+    @Sendable
+    func uploadNewFood(_ request: Request) async throws -> UploadNewFoodResponse {
+        let requestBody = try request.content.decode(UploadNewFoodRequest.self)
+
+        let nutritionLabelMetadata = try await save(image: requestBody.nutritionLabelImage, request: request)
+        let packagingMetadata = try await save(image: requestBody.packagingImage, request: request)
+
+        let (foodItemRecord, result) = try await openAIController.parseNewFoodItem(
+            request: request,
+            barCode: requestBody.barcode,
+            nutritionLabelMetadata: nutritionLabelMetadata,
+            packagingMetadata: packagingMetadata
+        )
+
+        try await foodItemRecord?.save(on: request.db)
+
+        return UploadNewFoodResponse(result: result)
     }
 }
 
@@ -121,5 +142,18 @@ private extension FoodController {
             index: 2,
             foods: otherFoodItems
         )
+    }
+}
+
+private extension FoodController {
+
+    func save(image: ImageFile, request: Request) async throws -> ImageFileMetadata {
+        let filename = "\(UUID().uuidString).\(image.fileExtension)"
+        let filePath = request.application.directory.workingDirectory + "Private/Food/" + filename
+        let buffer = request.application.allocator.buffer(data: image.data)
+
+        try await request.fileio.writeFile(buffer, at: filePath)
+
+        return ImageFileMetadata(filename: filename, data: image.data)
     }
 }

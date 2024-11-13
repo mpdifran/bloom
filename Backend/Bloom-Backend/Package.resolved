@@ -1,5 +1,5 @@
 {
-  "originHash" : "7dbe21488e6867d3c03050857d20bceda2c3bea05ed832b8d37d34ecaf12c7ff",
+  "originHash" : "88b034c5ac1265e392931c1855edd57b031259603bef44875e14b0a10e6b1dab",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -76,10 +76,10 @@
     {
       "identity" : "openai-kit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dylanshine/openai-kit.git",
+      "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "bf4e81668fe3c561afa29078121f3ff7d99da210",
-        "version" : "1.8.2"
+        "branch" : "chat-images",
+        "revision" : "76f93ae8fe8432380df97b69f7c6e5d74df8e0ac"
       }
     },
     {

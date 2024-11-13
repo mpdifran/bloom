@@ -13,7 +13,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.0.0"),
         .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.0.0"),
-        .package(url: "https://github.com/dylanshine/openai-kit.git", from: "1.0.0"),
+        .package(url: "https://github.com/mpdifran/openai-kit.git", branch: "chat-images"),
         .package(name: "bloom-model", path: "../../Shared/BloomModel"),
     ],
     targets: [
