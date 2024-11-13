@@ -91,7 +91,12 @@ extension FoodController {
 
         try await foodItemRecord?.save(on: request.db)
 
-        return UploadNewFoodResponse(result: result)
+        let foodItem = foodItemRecord?.asFoodItem()
+
+        return UploadNewFoodResponse(
+            result: result,
+            foodItem: foodItem
+        )
     }
 }
 

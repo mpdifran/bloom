@@ -9,9 +9,14 @@ import Foundation
 
 public struct UploadNewFoodResponse: Codable {
     public let result: Result
+    public let foodItem: FoodItem?
 
-    public init(result: Result) {
+    public init(
+        result: Result,
+        foodItem: FoodItem?
+    ) {
         self.result = result
+        self.foodItem = foodItem
     }
 }
 

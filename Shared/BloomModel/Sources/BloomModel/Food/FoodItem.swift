@@ -15,7 +15,8 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
     public let name: String
     public let brandName: String?
     public let nutrients: [Nutrient]
-    public let servingSizes: [Quantity]
+    public let servingName: String?
+    public let servingQuantity: Quantity?
     public let ingredients: String?
 
     public init(
@@ -23,14 +24,16 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
         name: String,
         brandName: String?,
         nutrients: [Nutrient],
-        servingSizes: [Quantity],
+        servingName: String?,
+        servingQuantity: Quantity?,
         ingredients: String?
     ) {
         self.id = id
         self.name = name
         self.brandName = brandName
         self.nutrients = nutrients
-        self.servingSizes = servingSizes
+        self.servingName = servingName
+        self.servingQuantity = servingQuantity
         self.ingredients = ingredients
     }
 }

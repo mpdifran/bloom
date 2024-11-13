@@ -27,8 +27,6 @@ extension OpenAIController {
         packagingMetadata: ImageFileMetadata
     ) async throws -> (FoodItemRecord?, UploadNewFoodResponse.Result) {
 
-        let openAI = request.application.openAI
-
 //        let nutritionLabelFile = try await openAI.files.upload(
 //            file: nutritionLabelMetadata.data,
 //            fileName: nutritionLabelMetadata.filename,
@@ -49,7 +47,7 @@ extension OpenAIController {
             return (nil, .unclearPackaging)
         }
 
-        var foodItemRecord = FoodItemRecord(name: packagingData.productName)
+        let foodItemRecord = FoodItemRecord(name: packagingData.productName)
 
         foodItemRecord.barcode = barCode
         foodItemRecord.brandName = packagingData.brandName
