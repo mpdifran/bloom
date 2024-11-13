@@ -78,7 +78,7 @@ private extension OpenAIController {
             Chat.Message(
                 role: .system,
                 content: [
-                    .text("You must respond in JSON. There should be a single object with properties for each nutrient. The value should be an object that contains a double for the value and a string for the unit. Only include the mass, not the daily percentage. For the serving, use a property called 'serving_name' that is the name of one serving, and 'serving_value' that is the numerical value of a serving (this should be an object with value: double and unit: string as well). Make sure all JSON keys are snake case.")
+                    .text("You must respond in JSON. There should be a single object with properties for each nutrient. The value should be an object that contains a double for the value and a string for the unit. Only include the mass, not the daily percentage. Make sure to include calories as well. For the serving, use a property called 'serving_name' that is the name of one serving, and 'serving_value' that is the numerical value of a serving (this should be an object with value: double and unit: string as well). Make sure all JSON keys are snake case.")
                 ]
             ),
             Chat.Message(
