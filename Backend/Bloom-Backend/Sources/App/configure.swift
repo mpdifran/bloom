@@ -1,5 +1,5 @@
 import Vapor
-import TelemetryDeck
+//import TelemetryDeck
 
 // configures your application
 public func configure(_ app: Application) async throws {
