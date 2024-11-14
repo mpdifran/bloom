@@ -97,10 +97,11 @@ private extension OpenAIService {
 
             return try decoder.decode(OpenAINutritionLabelParseResponse.self, from: data)
         } catch {
-            request.telemetryDeck.errorOccurred(
-                id: "OpenAIService.parseNutritionLabel",
-                message: error.localizedDescription
-            )
+            request.logger.error(.init(stringLiteral: error.localizedDescription))
+//            request.telemetryDeck.errorOccurred(
+//                id: "OpenAIService.parseNutritionLabel",
+//                message: error.localizedDescription
+//            )
             return nil
         }
     }
@@ -146,10 +147,11 @@ private extension OpenAIService {
 
             return try decoder.decode(OpenAIPackagingParseResponse.self, from: data)
         } catch {
-            request.telemetryDeck.errorOccurred(
-                id: "OpenAIService.parsePackaging",
-                message: error.localizedDescription
-            )
+            request.logger.error(.init(stringLiteral: error.localizedDescription))
+//            request.telemetryDeck.errorOccurred(
+//                id: "OpenAIService.parsePackaging",
+//                message: error.localizedDescription
+//            )
             return nil
         }
     }
