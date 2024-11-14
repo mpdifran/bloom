@@ -1,5 +1,5 @@
 {
-  "originHash" : "5d3ec8f543e21493eaa9274128b88c417a5b7e85e63f51d4cc091c84ce304c2e",
+  "originHash" : "63ea301c736882a6ffdfd0e4198394cbadc89d8d134411574910362a1111d5a9",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -132,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/S3.git",
       "state" : {
-        "branch" : "vapor4",
-        "revision" : "1eee10ae91a859c3117c63971c185f919546e05e"
+        "revision" : "47704645024e97e94b428c4ad9b92d7f0a7108a8",
+        "version" : "1.0.0"
       }
     },
     {

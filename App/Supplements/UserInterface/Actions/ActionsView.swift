@@ -78,7 +78,7 @@ struct ActionsView: View {
                     viewModel.observeData()
                 }
             }
-            .navigationTitle("Actions")
+            .navigationTitle("Log")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: {
@@ -94,7 +94,7 @@ struct ActionsView: View {
         }
         .sheet($presentedCardSheet)
         .tabItem {
-            Label("Actions", systemImage: "plus.app")
+            Label("Log", systemImage: "plus.app")
         }
     }
 }
