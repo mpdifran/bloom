@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import BloomModel
+import S3Kit
 
 struct FoodController {
     private let edamamService = EdamamFoodService()
@@ -148,6 +149,7 @@ private extension FoodController {
         let filePath = request.application.directory.workingDirectory + "Private/Food/" + filename
         let buffer = request.application.allocator.buffer(data: image.data)
 
+        // TODO: Write this to S3 instead.
         try await request.fileio.writeFile(buffer, at: filePath)
 
         return ImageFileMetadata(filename: filename, data: image.data)

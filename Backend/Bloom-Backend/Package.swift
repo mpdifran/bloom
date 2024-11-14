@@ -15,6 +15,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.0.0"),
         .package(url: "https://github.com/mpdifran/openai-kit.git", branch: "chat-images"),
 //        .package(url: "https://github.com/TelemetryDeck/SwiftSDK.git", from: "2.5.0"),
+        .package(url: "https://github.com/mpdifran/S3.git", branch: "vapor4"),
         .package(name: "bloom-model", path: "../../Shared/BloomModel"),
     ],
     targets: [
@@ -29,6 +30,7 @@ let package = Package(
                 .product(name: "OpenAIKit", package: "openai-kit"),
                 .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime"),
 //                .product(name: "TelemetryDeck", package: "SwiftSDK"),
+                .product(name: "S3Kit", package: "S3"),
                 .product(name: "BloomModel", package: "bloom-model"),
             ],
             swiftSettings: swiftSettings,

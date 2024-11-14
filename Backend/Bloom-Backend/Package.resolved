@@ -1,5 +1,5 @@
 {
-  "originHash" : "eeb182cfacef87965963bb5dd7e52ccf8522a3caf4ae2a9029a85e4a04cd2a97",
+  "originHash" : "5d3ec8f543e21493eaa9274128b88c417a5b7e85e63f51d4cc091c84ce304c2e",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -65,6 +65,15 @@
       }
     },
     {
+      "identity" : "httpmediatypes",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Einstore/HTTPMediaTypes.git",
+      "state" : {
+        "revision" : "cbbb333bce74fbe5ef34648de1d3c2bfef2327fa",
+        "version" : "0.0.1"
+      }
+    },
+    {
       "identity" : "multipart-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/multipart-kit.git",
@@ -116,6 +125,15 @@
       "state" : {
         "revision" : "8c9a227476555c55837e569be71944e02a056b72",
         "version" : "4.9.1"
+      }
+    },
+    {
+      "identity" : "s3",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mpdifran/S3.git",
+      "state" : {
+        "branch" : "vapor4",
+        "revision" : "1eee10ae91a859c3117c63971c185f919546e05e"
       }
     },
     {
@@ -308,12 +326,30 @@
       }
     },
     {
+      "identity" : "weberrorkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Einstore/WebErrorKit.git",
+      "state" : {
+        "revision" : "183170b95c46ca5a900d0ea870980c9c280a573a",
+        "version" : "0.0.1"
+      }
+    },
+    {
       "identity" : "websocket-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/websocket-kit.git",
       "state" : {
         "revision" : "4232d34efa49f633ba61afde365d3896fc7f8740",
         "version" : "2.15.0"
+      }
+    },
+    {
+      "identity" : "xmlcoding",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LiveUI/XMLCoding.git",
+      "state" : {
+        "revision" : "f0fbfe17e73f329e13a6133ff5437f7b174049fd",
+        "version" : "0.4.1"
       }
     },
     {

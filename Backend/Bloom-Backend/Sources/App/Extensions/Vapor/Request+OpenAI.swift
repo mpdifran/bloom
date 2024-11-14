@@ -19,9 +19,7 @@ extension Request {
             return client
         } else {
             let client = application.openAI
-
-            self.application.storage[OpenAIKey.self] = client
-
+            application.storage[OpenAIKey.self] = client
             return client
         }
     }
