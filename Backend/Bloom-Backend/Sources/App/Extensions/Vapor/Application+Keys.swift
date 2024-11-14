@@ -10,12 +10,12 @@ import Vapor
 extension Application {
 
     func printEnvironmentInfo() {
-        logger.info("Environment: \(environment.name)")
+        logger.notice("Environment: \(environment.name)")
 
         if let _ = postgresURL {
-            logger.info("Postgres URL set")
+            logger.notice("Postgres URL set")
         } else {
-            logger.info("Using local Postgres")
+            logger.notice("Using local Postgres")
         }
     }
 }

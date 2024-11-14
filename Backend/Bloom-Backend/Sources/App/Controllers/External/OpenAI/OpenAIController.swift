@@ -27,23 +27,17 @@ extension OpenAIController {
         packagingMetadata: ImageFileMetadata
     ) async throws -> (FoodItemRecord?, UploadNewFoodResponse.Result) {
 
-//        let nutritionLabelFile = try await openAI.files.upload(
-//            file: nutritionLabelMetadata.data,
-//            fileName: nutritionLabelMetadata.filename,
-//            purpose: .search
-//        )
-//
-//        let packagingFile = try await openAI.files.upload(
-//            file: packagingMetadata.data,
-//            fileName: packagingMetadata.filename,
-//            purpose: .search
-//        )
-
-        guard let nutritionData = try await parseNutritionLabel(request: request, nutritionLabelMetadata: nutritionLabelMetadata) else {
+        guard let nutritionData = await parseNutritionLabel(
+            request: request,
+            nutritionLabelMetadata: nutritionLabelMetadata
+        ) else {
             return (nil, .unclearNutritionLabel)
         }
 
-        guard let packagingData = try await parsePackaging(request: request, packagingMetadata: packagingMetadata) else {
+        guard let packagingData = await parsePackaging(
+            request: request,
+            packagingMetadata: packagingMetadata
+        ) else {
             return (nil, .unclearPackaging)
         }
 
@@ -71,82 +65,98 @@ private extension OpenAIController {
     func parseNutritionLabel(
         request: Request,
         nutritionLabelMetadata: ImageFileMetadata
-    ) async throws -> OpenAINutritionLabelParseResponse? {
-        let openAI = request.application.openAI
+    ) async -> OpenAINutritionLabelParseResponse? {
+        do {
+            let openAI = request.application.openAI
 
-        let messages: [Chat.Message] = [
-            Chat.Message(
-                role: .system,
-                content: [
-                    .text("You must respond in JSON. There should be a single object with properties for each nutrient. The value should be an object that contains a double for the value and a string for the unit. Only include the mass, not the daily percentage. Make sure to include calories as well. For the serving, use a property called 'serving_name' that is the name of one serving, and 'serving_value' that is the numerical value of a serving (this should be an object with value: double and unit: string as well). Make sure all JSON keys are snake case.")
-                ]
-            ),
-            Chat.Message(
-                role: .user,
-                content: [
-                    .imageData(nutritionLabelMetadata.data, "image/png"),
-                    .text("Return the nutrition information from this image.")
-                ]
+            let messages: [Chat.Message] = [
+                Chat.Message(
+                    role: .system,
+                    content: [
+                        .text("You must respond in JSON. There should be a single object with properties for each nutrient. The value should be an object that contains a double for the value and a string for the unit. Only include the mass, not the daily percentage. Make sure to include calories as well. For the serving, use a property called 'serving_name' that is the name of one serving, and 'serving_value' that is the numerical value of a serving (this should be an object with value: double and unit: string as well). Make sure all JSON keys are snake case.")
+                    ]
+                ),
+                Chat.Message(
+                    role: .user,
+                    content: [
+                        .imageData(nutritionLabelMetadata.data, "image/png"),
+                        .text("Return the nutrition information from this image.")
+                    ]
+                )
+            ]
+
+            let response = try await openAI.chats.create(
+                model: Model.GPT4.gpt_4o_mini,
+                messages: messages
             )
-        ]
 
-        let response = try await openAI.chats.create(
-            model: Model.GPT4.gpt_4o_mini,
-            messages: messages
-        )
+            guard var message = response.choices.first?.message.content.first?.text else { return nil }
 
-        guard var message = response.choices.first?.message.content.first?.text else { return nil }
+            message.removeFirst("```json".count)
+            message.removeLast("```".count)
+            message = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        message.removeFirst("```json".count)
-        message.removeLast("```".count)
-        message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let data = message.data(using: .utf8) else { return nil }
 
-        guard let data = message.data(using: .utf8) else { return nil }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        return try decoder.decode(OpenAINutritionLabelParseResponse.self, from: data)
+            return try decoder.decode(OpenAINutritionLabelParseResponse.self, from: data)
+        } catch {
+            request.telemetryDeck.errorOccurred(
+                id: "OpenAIController.parseNutritionLabel",
+                message: error.localizedDescription
+            )
+            return nil
+        }
     }
 
     func parsePackaging(
         request: Request,
         packagingMetadata: ImageFileMetadata
-    ) async throws -> OpenAIPackagingParseResponse? {
-        let openAI = request.application.openAI
+    ) async -> OpenAIPackagingParseResponse? {
+        do {
+            let openAI = request.application.openAI
 
-        let messages: [Chat.Message] = [
-            Chat.Message(
-                role: .system,
-                content: [
-                    .text("You must respond in JSON. There should be a single object three properties: brand_name, product_name, and flavour (optional). Each property is a string populated with data from the image. Ensure the JSON keys are formatted in snake case. The detected strings should have the first letter of each word capitalized.")
-                ]
-            ),
-            Chat.Message(
-                role: .user,
-                content: [
-                    .imageData(packagingMetadata.data, "image/png"),
-                    .text("Return the brand name, product name, and any flavour (it there is one) you see in the packaging.")
-                ]
+            let messages: [Chat.Message] = [
+                Chat.Message(
+                    role: .system,
+                    content: [
+                        .text("You must respond in JSON. There should be a single object three properties: brand_name, product_name, and flavour (optional). Each property is a string populated with data from the image. Ensure the JSON keys are formatted in snake case. The detected strings should have the first letter of each word capitalized.")
+                    ]
+                ),
+                Chat.Message(
+                    role: .user,
+                    content: [
+                        .imageData(packagingMetadata.data, "image/png"),
+                        .text("Return the brand name, product name, and any flavour (it there is one) you see in the packaging.")
+                    ]
+                )
+            ]
+
+            let response = try await openAI.chats.create(
+                model: Model.GPT4.gpt_4o_mini,
+                messages: messages
             )
-        ]
 
-        let response = try await openAI.chats.create(
-            model: Model.GPT4.gpt_4o_mini,
-            messages: messages
-        )
+            guard var message = response.choices.first?.message.content.first?.text else { return nil }
 
-        guard var message = response.choices.first?.message.content.first?.text else { return nil }
+            message.removeFirst("```json".count)
+            message.removeLast("```".count)
+            message = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        message.removeFirst("```json".count)
-        message.removeLast("```".count)
-        message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let data = message.data(using: .utf8) else { return nil }
 
-        guard let data = message.data(using: .utf8) else { return nil }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        return try decoder.decode(OpenAIPackagingParseResponse.self, from: data)
+            return try decoder.decode(OpenAIPackagingParseResponse.self, from: data)
+        } catch {
+            request.telemetryDeck.errorOccurred(
+                id: "OpenAIController.parsePackaging",
+                message: error.localizedDescription
+            )
+            return nil
+        }
     }
 }

@@ -1,7 +1,13 @@
 import Vapor
+import TelemetryDeck
 
 // configures your application
 public func configure(_ app: Application) async throws {
+
+    // TelemetryDeck
+    app.telemetryDeck.initialize(appID: "F1AC4445-7F73-4026-A19A-FF2250C34853")
+
+    // Debug
     app.printEnvironmentInfo()
 
 //    app.http.client.configuration.decompression = .enabled(limit: .ratio(10))
