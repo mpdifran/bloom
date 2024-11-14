@@ -1,5 +1,5 @@
 //
-//  EdamamFoodController.swift
+//  EdamamFoodService.swift
 //  Bloom-Backend
 //
 //  Created by Mark DiFranco on 2024-11-09.
@@ -9,32 +9,26 @@ import Foundation
 import Vapor
 import BloomModel
 
-struct EdamamFoodController {
-    let app: Application
+struct EdamamFoodService { }
 
-    init(app: Application) {
-        self.app = app
-    }
-}
-
-extension EdamamFoodController {
+extension EdamamFoodService {
 
     func autocomplete(
-        client: Client,
+        request: Request,
         query: String
     ) async throws -> [String] {
 
-        var urlComponents = URLComponents(string: app.edamamDomain + "/auto-complete")
+        var urlComponents = URLComponents(string: request.application.edamamDomain + "/auto-complete")
         urlComponents?.queryItems = [
-            URLQueryItem(name: "app_id", value: app.edamamAppID),
-            URLQueryItem(name: "app_key", value: app.edamamAPIKey),
+            URLQueryItem(name: "app_id", value: request.application.edamamAppID),
+            URLQueryItem(name: "app_key", value: request.application.edamamAPIKey),
             URLQueryItem(name: "q", value: query),
             URLQueryItem(name: "limit", value: "6")
         ]
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
-        let response = try await client.get(
+        let response = try await request.client.get(
             URI(string: uri.absoluteString)
 //            headers: .init(
 //                [("Accept-Encoding", "gzip")]
@@ -44,15 +38,15 @@ extension EdamamFoodController {
     }
 
     func searchFoods(
-        client: Client,
+        request: Request,
         name: String,
         brand: String?
     ) async throws -> [FoodItem] {
 
-        var urlComponents = URLComponents(string: app.edamamDomain + "/api/food-database/v2/parser")
+        var urlComponents = URLComponents(string: request.application.edamamDomain + "/api/food-database/v2/parser")
         var queryItems: [URLQueryItem] = [
-            URLQueryItem(name: "app_id", value: app.edamamAppID),
-            URLQueryItem(name: "app_key", value: app.edamamAPIKey),
+            URLQueryItem(name: "app_id", value: request.application.edamamAppID),
+            URLQueryItem(name: "app_key", value: request.application.edamamAPIKey),
             URLQueryItem(name: "ingr", value: name),
         ]
         if let brand {
@@ -62,7 +56,7 @@ extension EdamamFoodController {
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
-        let response = try await client.get(
+        let response = try await request.client.get(
             URI(string: uri.absoluteString)
 //            headers: .init(
 //                [("Accept-Encoding", "gzip")]
@@ -76,20 +70,20 @@ extension EdamamFoodController {
     }
 
     func searchFoods(
-        client: Client,
+        request: Request,
         upc: String
     ) async throws -> [FoodItem] {
 
-        var urlComponents = URLComponents(string: app.edamamDomain + "/api/food-database/v2/parser")
+        var urlComponents = URLComponents(string: request.application.edamamDomain + "/api/food-database/v2/parser")
         urlComponents?.queryItems = [
-            URLQueryItem(name: "app_id", value: app.edamamAppID),
-            URLQueryItem(name: "app_key", value: app.edamamAPIKey),
+            URLQueryItem(name: "app_id", value: request.application.edamamAppID),
+            URLQueryItem(name: "app_key", value: request.application.edamamAPIKey),
             URLQueryItem(name: "upc", value: upc),
         ]
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
-        let response = try await client.get(
+        let response = try await request.client.get(
             URI(string: uri.absoluteString)
 //            headers: .init(
 //                [("Accept-Encoding", "gzip")]

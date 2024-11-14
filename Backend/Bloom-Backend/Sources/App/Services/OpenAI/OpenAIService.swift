@@ -1,5 +1,5 @@
 //
-//  OpenAIController.swift
+//  OpenAIService.swift
 //  Bloom-Backend
 //
 //  Created by Mark DiFranco on 2024-11-11.
@@ -10,15 +10,9 @@ import Vapor
 import OpenAIKit
 import BloomModel
 
-struct OpenAIController {
-    let app: Application
+struct OpenAIService { }
 
-    init(app: Application) {
-        self.app = app
-    }
-}
-
-extension OpenAIController {
+extension OpenAIService {
 
     func parseNewFoodItem(
         request: Request,
@@ -60,14 +54,14 @@ extension OpenAIController {
     }
 }
 
-private extension OpenAIController {
+private extension OpenAIService {
 
     func parseNutritionLabel(
         request: Request,
         nutritionLabelMetadata: ImageFileMetadata
     ) async -> OpenAINutritionLabelParseResponse? {
         do {
-            let openAI = request.application.openAI
+            let openAI = request.openAI
 
             let messages: [Chat.Message] = [
                 Chat.Message(
@@ -104,7 +98,7 @@ private extension OpenAIController {
             return try decoder.decode(OpenAINutritionLabelParseResponse.self, from: data)
         } catch {
             request.telemetryDeck.errorOccurred(
-                id: "OpenAIController.parseNutritionLabel",
+                id: "OpenAIService.parseNutritionLabel",
                 message: error.localizedDescription
             )
             return nil
@@ -116,7 +110,7 @@ private extension OpenAIController {
         packagingMetadata: ImageFileMetadata
     ) async -> OpenAIPackagingParseResponse? {
         do {
-            let openAI = request.application.openAI
+            let openAI = request.openAI
 
             let messages: [Chat.Message] = [
                 Chat.Message(
@@ -153,7 +147,7 @@ private extension OpenAIController {
             return try decoder.decode(OpenAIPackagingParseResponse.self, from: data)
         } catch {
             request.telemetryDeck.errorOccurred(
-                id: "OpenAIController.parsePackaging",
+                id: "OpenAIService.parsePackaging",
                 message: error.localizedDescription
             )
             return nil

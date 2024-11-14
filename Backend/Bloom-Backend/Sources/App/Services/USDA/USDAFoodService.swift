@@ -1,5 +1,5 @@
 //
-//  USDAFoodController.swift
+//  USDAFoodService.swift
 //  Bloom-Backend
 //
 //  Created by Mark DiFranco on 2024-11-11.
@@ -9,24 +9,18 @@ import Foundation
 import Vapor
 import BloomModel
 
-struct USDAFoodController {
-    let app: Application
+struct USDAFoodService { }
 
-    init(app: Application) {
-        self.app = app
-    }
-}
-
-extension USDAFoodController {
+extension USDAFoodService {
 
     func foundationFoodSearch(
-        client: Client,
+        request: Request,
         query: String
     ) async throws -> [FoodItem] {
 
-        var urlComponents = URLComponents(string: app.usdaDomain + "/v1/foods/search")
+        var urlComponents = URLComponents(string: request.application.usdaDomain + "/v1/foods/search")
         urlComponents?.queryItems = [
-            URLQueryItem(name: "api_key", value: app.usdaAPIKey)
+            URLQueryItem(name: "api_key", value: request.application.usdaAPIKey)
         ]
 
         let requestBody = USDAFoodSearchRequest(
@@ -40,7 +34,7 @@ extension USDAFoodController {
 
         guard let uri = urlComponents?.url else { throw Abort(.internalServerError) }
 
-        let response = try await client.post(
+        let response = try await request.client.post(
             URI(string: uri.absoluteString),
             content: requestBody
         )

@@ -10,18 +10,9 @@ import Vapor
 import BloomModel
 
 struct FoodController {
-
-    private let app: Application
-    private let edamamController: EdamamFoodController
-    private let usdaFoodController: USDAFoodController
-    private let openAIController: OpenAIController
-
-    init(app: Application) {
-        self.app = app
-        self.edamamController = EdamamFoodController(app: app)
-        self.usdaFoodController = USDAFoodController(app: app)
-        self.openAIController = OpenAIController(app: app)
-    }
+    private let edamamService = EdamamFoodService()
+    private let usdaFoodService = USDAFoodService()
+    private let openAIService = OpenAIService()
 }
 
 extension FoodController: RouteCollection {
@@ -43,8 +34,8 @@ extension FoodController {
     func autocomplete(_ request: Request) async throws -> FoodAutocompleteResponse {
         let requestBody = try request.content.decode(FoodAutocompleteRequest.self)
 
-        let tokens = try await edamamController.autocomplete(
-            client: request.client,
+        let tokens = try await edamamService.autocomplete(
+            request: request,
             query: requestBody.query
         )
 
@@ -82,7 +73,7 @@ extension FoodController {
         let nutritionLabelMetadata = try await save(image: requestBody.nutritionLabelImage, request: request)
         let packagingMetadata = try await save(image: requestBody.packagingImage, request: request)
 
-        let (foodItemRecord, result) = try await openAIController.parseNewFoodItem(
+        let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
             request: request,
             barCode: requestBody.barcode,
             nutritionLabelMetadata: nutritionLabelMetadata,
@@ -107,8 +98,8 @@ private extension FoodController {
 
         guard let name = requestBody.name else { return nil }
 
-        let foodItems = try await usdaFoodController.foundationFoodSearch(
-            client: request.client,
+        let foodItems = try await usdaFoodService.foundationFoodSearch(
+            request: request,
             query: name
         )
 
@@ -126,13 +117,13 @@ private extension FoodController {
 
         let otherFoodItems: [FoodItem]
         if let upcCode = requestBody.upcCode {
-            otherFoodItems = try await edamamController.searchFoods(
-                client: request.client,
+            otherFoodItems = try await edamamService.searchFoods(
+                request: request,
                 upc: upcCode
             )
         } else if let name = requestBody.name {
-            otherFoodItems = try await edamamController.searchFoods(
-                client: request.client,
+            otherFoodItems = try await edamamService.searchFoods(
+                request: request,
                 name: name,
                 brand: requestBody.brand
             )
