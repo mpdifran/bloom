@@ -76,6 +76,44 @@ extension NetworkRequester {
 
         return response.sections
     }
+
+    func uploadFood(
+        barcode: String,
+        nutritionImage: UIImage,
+        packagingImage: UIImage
+    ) async throws -> UploadNewFoodResponse {
+        let url = URL(string: .bloomAPIBase + "v1/food/upload")!
+
+        guard
+            let nutritionData = nutritionImage.pngData(),
+            let packagingData = packagingImage.pngData()
+        else {
+            throw NSError(description: "There was an issue uploading the images.")
+        }
+
+        let request = UploadNewFoodRequest(
+            barcode: barcode,
+            nutritionLabelImage: .init(
+                data: nutritionData,
+                fileExtension: "png"
+            ),
+            packagingImage: .init(
+                data: packagingData,
+                fileExtension: "png"
+            )
+        )
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        let response = try JSONDecoder.init().decode(UploadNewFoodResponse.self, from: data)
+
+        return response
+    }
 }
 
 extension NetworkRequester {

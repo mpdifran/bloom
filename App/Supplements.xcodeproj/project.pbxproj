@@ -221,6 +221,13 @@
 		FF8741FE2CE15834002581FA /* FoodItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8741FD2CE1582F002581FA /* FoodItem+Helpers.swift */; };
 		FF8742422CE17B08002581FA /* DataScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8742412CE17B08002581FA /* DataScannerView.swift */; };
 		FF8742442CE17D41002581FA /* FoodBarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */; };
+		FF87434A2CE5115C002581FA /* FoodUploadScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8743492CE5115C002581FA /* FoodUploadScannerView.swift */; };
+		FF87434C2CE5117C002581FA /* BarcodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87434B2CE5117C002581FA /* BarcodeView.swift */; };
+		FF87434E2CE5128E002581FA /* BarcodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87434D2CE5128E002581FA /* BarcodeGenerator.swift */; };
+		FF8743532CE517E8002581FA /* UploadFoodActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8743522CE517E8002581FA /* UploadFoodActionView.swift */; };
+		FF87435D2CE5393F002581FA /* AVFoundation+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87435C2CE53934002581FA /* AVFoundation+Configuration.swift */; };
+		FF8743622CE5420C002581FA /* UIApplication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8743612CE54208002581FA /* UIApplication+Helpers.swift */; };
+		FF87436A2CE56D9B002581FA /* CameraPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8743692CE56D92002581FA /* CameraPhotoPicker.swift */; };
 		FF88F1122C76293E0093D1B4 /* NumberFormatter+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */; };
 		FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */; };
 		FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */; };
@@ -752,6 +759,13 @@
 		FF8741FD2CE1582F002581FA /* FoodItem+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItem+Helpers.swift"; sourceTree = "<group>"; };
 		FF8742412CE17B08002581FA /* DataScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataScannerView.swift; sourceTree = "<group>"; };
 		FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBarcodeScannerView.swift; sourceTree = "<group>"; };
+		FF8743492CE5115C002581FA /* FoodUploadScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodUploadScannerView.swift; sourceTree = "<group>"; };
+		FF87434B2CE5117C002581FA /* BarcodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeView.swift; sourceTree = "<group>"; };
+		FF87434D2CE5128E002581FA /* BarcodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeGenerator.swift; sourceTree = "<group>"; };
+		FF8743522CE517E8002581FA /* UploadFoodActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFoodActionView.swift; sourceTree = "<group>"; };
+		FF87435C2CE53934002581FA /* AVFoundation+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFoundation+Configuration.swift"; sourceTree = "<group>"; };
+		FF8743612CE54208002581FA /* UIApplication+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Helpers.swift"; sourceTree = "<group>"; };
+		FF8743692CE56D92002581FA /* CameraPhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotoPicker.swift; sourceTree = "<group>"; };
 		FF88F1112C76293E0093D1B4 /* NumberFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Constants.swift"; sourceTree = "<group>"; };
 		FF88F1132C782F6B0093D1B4 /* Date+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Helpers.swift"; sourceTree = "<group>"; };
 		FF88F1152C792B5D0093D1B4 /* HKObserverQueryHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryHandle.swift; sourceTree = "<group>"; };
@@ -1381,6 +1395,8 @@
 				FF0DA0F62C875106007D1A6B /* DateComponents+Helpers.swift */,
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
+				FF87435C2CE53934002581FA /* AVFoundation+Configuration.swift */,
+				FF8743612CE54208002581FA /* UIApplication+Helpers.swift */,
 				FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */,
 				FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */,
 				FF8F79CE2C64546C0095C36D /* Color+Codable.swift */,
@@ -1503,12 +1519,9 @@
 		FF7D6C292CDC039A005B86C0 /* FoodTracking */ = {
 			isa = PBXGroup;
 			children = (
-				FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */,
-				FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */,
-				FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */,
-				FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */,
-				FF87406D2CDD5474002581FA /* FoodItemCell.swift */,
-				FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */,
+				FF87434F2CE5179A002581FA /* Action */,
+				FF8743512CE517CA002581FA /* Tools */,
+				FF8743502CE517B1002581FA /* FoodUpload */,
 			);
 			path = FoodTracking;
 			sourceTree = "<group>";
@@ -1527,6 +1540,44 @@
 				FF8742412CE17B08002581FA /* DataScannerView.swift */,
 			);
 			path = Scanners;
+			sourceTree = "<group>";
+		};
+		FF87434F2CE5179A002581FA /* Action */ = {
+			isa = PBXGroup;
+			children = (
+				FF7D6C2A2CDC057D005B86C0 /* FoodLoggingActionCardView.swift */,
+				FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */,
+				FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */,
+				FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */,
+				FF87406D2CDD5474002581FA /* FoodItemCell.swift */,
+			);
+			path = Action;
+			sourceTree = "<group>";
+		};
+		FF8743502CE517B1002581FA /* FoodUpload */ = {
+			isa = PBXGroup;
+			children = (
+				FF8743492CE5115C002581FA /* FoodUploadScannerView.swift */,
+				FF87434B2CE5117C002581FA /* BarcodeView.swift */,
+				FF8743522CE517E8002581FA /* UploadFoodActionView.swift */,
+			);
+			path = FoodUpload;
+			sourceTree = "<group>";
+		};
+		FF8743512CE517CA002581FA /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		FF8743682CE56D87002581FA /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				FF8743692CE56D92002581FA /* CameraPhotoPicker.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		FF88F1192C7B75AE0093D1B4 /* Calendar */ = {
@@ -1971,6 +2022,7 @@
 				FFF61B232BEE91A300926042 /* Insights */,
 				FF88F1282C7D027E0093D1B4 /* Actions */,
 				FF8742402CE17AA3002581FA /* Scanners */,
+				FF8743682CE56D87002581FA /* Camera */,
 				FF1E96072C0AB577004DAD2D /* Programs */,
 				FFB691092C19FA6800BEC0D4 /* Reports */,
 				FF88F1222C7BBDE80093D1B4 /* Calendar */,
@@ -2238,6 +2290,7 @@
 				FFC77B012C5AFF05003E5F85 /* CardContainer.swift */,
 				FF70EA0D2CC333D10055E932 /* ProgressCardContainer.swift */,
 				FF70EA132CC696110055E932 /* ColorPaletteView.swift */,
+				FF87434D2CE5128E002581FA /* BarcodeGenerator.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2776,6 +2829,7 @@
 				FF1E96BA2C0E4839004DAD2D /* SleepSegmentSummary.swift in Sources */,
 				FF4A21C92C89FF5500278019 /* UserNamePrompt.swift in Sources */,
 				FF78904C2C34727A00F9C1A5 /* SleepCoachRequest.swift in Sources */,
+				FF87435D2CE5393F002581FA /* AVFoundation+Configuration.swift in Sources */,
 				FF13280A2CB5BD9500ACF981 /* BloomPlusUserTestimonialChatView.swift in Sources */,
 				FFC77B062C5E6724003E5F85 /* HKQuantity+Helpers.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
@@ -2816,6 +2870,7 @@
 				FF87406E2CDD5474002581FA /* FoodItemCell.swift in Sources */,
 				FFF61B722BF1592C00926042 /* AskResponseModel.swift in Sources */,
 				FF04052C2C8F7E0900FF1E2F /* TodayConfigureView.swift in Sources */,
+				FF87436A2CE56D9B002581FA /* CameraPhotoPicker.swift in Sources */,
 				FF70EA1C2CCA77AE0055E932 /* OnboardingButtonStyle.swift in Sources */,
 				FF70E90D2CB834D60055E932 /* AsyncStreamWrapper.swift in Sources */,
 				FFC77AD72C52CD17003E5F85 /* StressMonthlySummary.swift in Sources */,
@@ -2830,6 +2885,7 @@
 				FF88F11D2C7B7EF80093D1B4 /* EKEventStore+Helpers.swift in Sources */,
 				FFEBEA5D2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift in Sources */,
 				FFD582C12CD9696C00833FEE /* FocusAreaVitalReviewView.swift in Sources */,
+				FF87434A2CE5115C002581FA /* FoodUploadScannerView.swift in Sources */,
 				FF4578F32C40A9D6004E8661 /* SleepSectionTitleView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FF2FB8962C9CCB7B00F57523 /* ProposedHabit.swift in Sources */,
@@ -2905,6 +2961,7 @@
 				FF8F79C02C62611D0095C36D /* CapsuleRangeChart.swift in Sources */,
 				FF70E91B2CB86FA40055E932 /* SleepSoundLevelSummaryCell.swift in Sources */,
 				FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */,
+				FF8743622CE5420C002581FA /* UIApplication+Helpers.swift in Sources */,
 				FF70EA082CC1A4F60055E932 /* View+SafeAreaBlur.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
@@ -2984,6 +3041,7 @@
 				FF70EA202CCAC13B0055E932 /* OnboardingAppExplanationView.swift in Sources */,
 				FFEBEA5F2CD29BDE00142AA1 /* IconGauge.swift in Sources */,
 				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
+				FF87434E2CE5128E002581FA /* BarcodeGenerator.swift in Sources */,
 				FF70EA062CC1A1620055E932 /* BloomPlusOfferView.swift in Sources */,
 				FFA402CA2C94C88700D8DD40 /* View+Selectable.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
@@ -3034,6 +3092,7 @@
 				FF70EA0A2CC2D6140055E932 /* BloomPlusLaurelView.swift in Sources */,
 				FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */,
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,
+				FF8743532CE517E8002581FA /* UploadFoodActionView.swift in Sources */,
 				FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */,
 				FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */,
 				FF0404D62C065F3B009FDC4E /* Throttler.swift in Sources */,
@@ -3064,6 +3123,7 @@
 				FF1E960F2C0ACC70004DAD2D /* LabelledMetricView.swift in Sources */,
 				FF70EA042CC183770055E932 /* BodyWeightTodayWidgetViewModel.swift in Sources */,
 				FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */,
+				FF87434C2CE5117C002581FA /* BarcodeView.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,
 				FF0DA0F52C874DB7007D1A6B /* DateCollatedWorkouts.swift in Sources */,
 				FF78905E2C35D8EB00F9C1A5 /* DateAverageQuantitySample.swift in Sources */,
@@ -3745,7 +3805,7 @@
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes for food tracking";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";
@@ -3789,7 +3849,7 @@
 				INFOPLIST_FILE = Supplements/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scanning barcodes for food tracking";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show you weather for your location";

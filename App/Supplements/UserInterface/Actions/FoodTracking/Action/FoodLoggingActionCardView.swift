@@ -130,6 +130,10 @@ private extension FoodLoggingActionCardView {
                                 }
                             }.asAny
                         }
+                    FoodSearchToolCell(title: "Add New Food", systemImage: "plus.viewfinder")
+                        .onTapGesture {
+                            presentedSheet = FoodUploadScannerView().asAny
+                        }
                 }
             }
             .padding(.horizontal)
