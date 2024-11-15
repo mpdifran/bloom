@@ -19,7 +19,7 @@ extension FoodDatabaseService {
         guard !query.isEmpty else { return [] }
 
         guard let sqlDatabase = request.db as? SQLDatabase else {
-            throw Abort(.internalServerError)
+            throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
         }
 
         let results = try await sqlDatabase.raw("""
@@ -35,6 +35,23 @@ extension FoodDatabaseService {
                OR similarity(flavour, \(bind: query)) > 0.1
             ORDER BY rank DESC
             LIMIT \(bind: limit)
+        """).all(decodingFluent: FoodItemRecord.self)
+
+        // Map database records to your FoodItem model
+        return results.compactMap { $0.asFoodItem() }
+    }
+
+    func searchFoods(request: Request, barcode: String) async throws -> [FoodItem] {
+        guard !barcode.isEmpty else { return [] }
+
+        guard let sqlDatabase = request.db as? SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
+        }
+
+        let results = try await sqlDatabase.raw("""
+            SELECT *
+            FROM food_item_records
+            WHERE barcode = \(bind: barcode)
         """).all(decodingFluent: FoodItemRecord.self)
 
         // Map database records to your FoodItem model

@@ -98,11 +98,21 @@ private extension FoodController {
 
         guard let name = requestBody.name else { return nil }
 
-        let foodItems = try await foodDatabaseService.searchFoods(
-            request: request,
-            query: name,
-            limit: 20
-        )
+        let foodItems: [FoodItem]
+        if let barcode = requestBody.upcCode {
+            foodItems = try await foodDatabaseService.searchFoods(
+                request: request,
+                barcode: barcode
+            )
+        } else if let name = requestBody.name {
+            foodItems = try await foodDatabaseService.searchFoods(
+                request: request,
+                query: name,
+                limit: 20
+            )
+        } else {
+            throw Abort(.badRequest)
+        }
 
         guard foodItems.isNotEmpty else { return nil }
 
