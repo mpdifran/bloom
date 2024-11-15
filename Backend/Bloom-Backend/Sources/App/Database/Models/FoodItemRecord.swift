@@ -12,8 +12,8 @@ import Fluent
 final class FoodItemRecord: Model, @unchecked Sendable {
     static let schema = "food_item_records"
 
-    @ID(key: .id)
-    var id: UUID?
+    @ID(custom: "id", generatedBy: .user)
+    var id: String?
 
     @Field(key: "name")
     var name: String
@@ -49,7 +49,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     var calories: Double?
 
     @Field(key: "protein")
-    var protien: Double?
+    var protein: Double?
 
     @Field(key: "carbohydrates")
     var carbohydrates: Double?
@@ -66,6 +66,9 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     @Field(key: "serving_unit")
     var servingUnit: String?
 
+    @Field(key: "downvote_count")
+    var downvoteCount: Int?
+
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
@@ -75,10 +78,10 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     init() { }
 
     init(
-        id: UUID = UUID(),
+        id: String,
         name: String,
         country: Country,
-        category: Category = .generic
+        category: Category
     ) {
         self.id = id
         self.name = name

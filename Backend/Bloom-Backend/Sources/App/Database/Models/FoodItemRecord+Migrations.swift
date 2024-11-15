@@ -30,7 +30,7 @@ extension FoodItemRecord {
                 .create()
 
             try await database.schema(FoodItemRecord.schema)
-                .id()
+                .field("id", .string, .identifier(auto: false))
                 .field("name", .string, .required)
                 .field("state", stateEnumType, .required)
                 .field("brand_name", .string)
@@ -48,6 +48,7 @@ extension FoodItemRecord {
                 .field("serving_name", .string)
                 .field("serving_value", .double)
                 .field("serving_unit", .string)
+                .field("downvote_count", .int)
                 .field("created_at", .datetime)
                 .field("updated_at", .datetime)
                 .create()

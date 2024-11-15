@@ -45,18 +45,19 @@ extension OpenAIService {
         }
 
         let foodItemRecord = FoodItemRecord(
+            id: UUID().uuidString,
             name: packagingData.productName,
-            country: countryEnum
+            country: countryEnum,
+            category: .branded
         )
 
-        foodItemRecord.barcode = barCode
         foodItemRecord.brandName = packagingData.brandName
         foodItemRecord.flavour = packagingData.flavour
-        foodItemRecord.category = .branded
+        foodItemRecord.barcode = barCode
         foodItemRecord.nutritionLabelImage = nutritionLabelMetadata.filename
         foodItemRecord.packagingImage = packagingMetadata.filename
         foodItemRecord.calories = nutritionData.calories.value
-        foodItemRecord.protien = nutritionData.protein.value
+        foodItemRecord.protein = nutritionData.protein.value
         foodItemRecord.carbohydrates = nutritionData.carbohydrate.value
         foodItemRecord.fat = nutritionData.fat.value
         foodItemRecord.servingName = nutritionData.servingName

@@ -21,7 +21,7 @@ extension FoodItemRecord {
         }
 
         return FoodItem(
-            id: FoodItemIdentifier(id.uuidString),
+            id: FoodItemIdentifier(id),
             name: name,
             brandName: brandName,
             nutrients: toNutrients(),
@@ -39,9 +39,9 @@ extension FoodItemRecord {
                 .init(kind: .calories, quantity: .init(value: calories, unit: "kcal"))
             )
         }
-        if let protien {
+        if let protein {
             nutrients.append(
-                .init(kind: .protein, quantity: .init(value: protien, unit: "g"))
+                .init(kind: .protein, quantity: .init(value: protein, unit: "g"))
             )
         }
         if let carbohydrates {

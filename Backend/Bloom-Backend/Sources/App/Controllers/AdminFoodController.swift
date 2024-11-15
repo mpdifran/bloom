@@ -1,0 +1,53 @@
+//
+//  AdminFoodController.swift
+//  Bloom-Backend
+//
+//  Created by Mark DiFranco on 2024-11-15.
+//
+
+import Foundation
+import Vapor
+import Fluent
+
+struct AdminFoodController { }
+
+extension AdminFoodController: RouteCollection {
+
+    func boot(routes: any RoutesBuilder) throws {
+        routes.group("v1", "admin", "food") { food in
+            food.post("usda-ingest", use: ingestUSDA)
+        }
+    }
+}
+
+private extension AdminFoodController {
+
+    @Sendable
+    func ingestUSDA(_ request: Request) async throws -> USDAImportFoodResponse {
+        let requestBody = try request.content.decode(USDAImportFoodRequest.self)
+
+        let category: FoodItemRecord.Category
+        switch requestBody.kind {
+        case .foundation:
+            category = .generic
+        }
+
+        var count = 0
+        for foodItem in requestBody.foods {
+            guard
+                let foodItemRecord = foodItem.asFoodItemRecord(
+                    request: request,
+                    category: category
+                )
+            else { continue }
+
+            try await FoodItemRecord.upsert(
+                on: request.db,
+                model: foodItemRecord
+            )
+            count += 1
+        }
+
+        return USDAImportFoodResponse(addedFoodItemsCount: count)
+    }
+}

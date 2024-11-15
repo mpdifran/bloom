@@ -31,7 +31,6 @@ struct DataScannerView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: DataScannerViewController, context: Context) {
-        print(uiViewController.delegate)
         if scannerAvailable {
             do {
                 if !uiViewController.isScanning {

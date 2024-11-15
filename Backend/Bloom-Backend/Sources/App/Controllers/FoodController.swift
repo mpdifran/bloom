@@ -19,12 +19,10 @@ struct FoodController {
 extension FoodController: RouteCollection {
 
     func boot(routes: any Vapor.RoutesBuilder) throws {
-        routes.group("v1") { v1 in
-            v1.group("food") { food in
-                food.post("autocomplete", use: autocomplete)
-                food.post("search", use: searchFoods)
-                food.post("upload", use: uploadNewFood)
-            }
+        routes.group("v1", "food") { food in
+            food.post("autocomplete", use: autocomplete)
+            food.post("search", use: searchFoods)
+            food.post("upload", use: uploadNewFood)
         }
     }
 }
