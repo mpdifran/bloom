@@ -77,6 +77,7 @@ extension FoodController {
         let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
             request: request,
             barCode: requestBody.barcode,
+            country: requestBody.country,
             nutritionLabelMetadata: nutritionLabelMetadata,
             packagingMetadata: packagingMetadata
         )

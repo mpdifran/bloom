@@ -100,7 +100,8 @@ extension NetworkRequester {
             packagingImage: .init(
                 data: packagingData,
                 fileExtension: "png"
-            )
+            ),
+            country: "canada" // TODO: Need to do better here
         )
 
         var urlRequest = URLRequest(url: url)
