@@ -12,8 +12,8 @@ import S3Kit
 
 struct FoodController {
     private let edamamService = EdamamFoodService()
-    private let usdaFoodService = USDAFoodService()
     private let openAIService = OpenAIService()
+    private let foodDatabaseService = FoodDatabaseService()
 }
 
 extension FoodController: RouteCollection {
@@ -48,7 +48,7 @@ extension FoodController {
         // parallelize
         try await withThrowingTaskGroup(of: FoodSearchResponse.Section?.self) { group in
             group.addTask {
-                return try await searchFoodUSDA(request)
+                return try await searchFoodsLocalDatabase(request)
             }
             group.addTask {
                 return try await searchFoodsEdamam(request)
@@ -93,20 +93,21 @@ extension FoodController {
 
 private extension FoodController {
 
-    func searchFoodUSDA(_ request: Request) async throws -> FoodSearchResponse.Section? {
+    func searchFoodsLocalDatabase(_ request: Request) async throws -> FoodSearchResponse.Section? {
         let requestBody = try request.content.decode(FoodSearchRequest.self)
 
         guard let name = requestBody.name else { return nil }
 
-        let foodItems = try await usdaFoodService.foundationFoodSearch(
+        let foodItems = try await foodDatabaseService.searchFoods(
             request: request,
-            query: name
+            query: name,
+            limit: 20
         )
 
         guard foodItems.isNotEmpty else { return nil }
 
         return FoodSearchResponse.Section(
-            title: "Foundation",
+            title: "Generic",
             index: 1,
             foods: foodItems
         )

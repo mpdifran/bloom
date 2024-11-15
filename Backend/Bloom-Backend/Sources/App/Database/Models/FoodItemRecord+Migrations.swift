@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import Fluent
+import SQLKit
 
 extension FoodItemRecord {
     struct Create: AsyncMigration {
@@ -52,6 +53,49 @@ extension FoodItemRecord {
                 .field("created_at", .datetime)
                 .field("updated_at", .datetime)
                 .create()
+
+            // Create a trigram index for faster searches
+            guard let sqlDatabase = database as? SQLDatabase else {
+                fatalError("This migration requires an SQL database.")
+            }
+            // Trigram index for fuzzy matching on 'name'
+            try await sqlDatabase.raw("""
+                CREATE INDEX CONCURRENTLY IF NOT EXISTS trgm_name_index
+                ON food_item_records
+                USING gin (name gin_trgm_ops);
+            """).run()
+
+            // Trigram index for fuzzy matching on 'brand_name'
+            try await sqlDatabase.raw("""
+                CREATE INDEX CONCURRENTLY IF NOT EXISTS trgm_brand_name_index
+                ON food_item_records
+                USING gin (brand_name gin_trgm_ops);
+            """).run()
+
+            // Trigram index for fuzzy matching on 'flavour'
+            try await sqlDatabase.raw("""
+                CREATE INDEX CONCURRENTLY IF NOT EXISTS trgm_flavour_index
+                ON food_item_records
+                USING gin (flavour gin_trgm_ops);
+            """).run()
+
+            // B-tree index for 'barcode' (exact lookup)
+            try await sqlDatabase.raw("""
+                CREATE INDEX CONCURRENTLY IF NOT EXISTS barcode_index
+                ON food_item_records (barcode);
+            """).run()
+
+            // B-tree index for 'category' (equality filtering)
+            try await sqlDatabase.raw("""
+                CREATE INDEX CONCURRENTLY IF NOT EXISTS category_index
+                ON food_item_records (category);
+            """).run()
+
+            // B-tree index for 'country' (equality filtering)
+            try await sqlDatabase.raw("""
+                CREATE INDEX CONCURRENTLY IF NOT EXISTS country_index
+                ON food_item_records (country);
+            """).run()
         }
 
         func revert(on database: any Database) async throws {
