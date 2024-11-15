@@ -1,0 +1,6 @@
+app_identifier("com.mdfprojects.Supplements")
+apple_id("mpdifranco@icloud.com")
+
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

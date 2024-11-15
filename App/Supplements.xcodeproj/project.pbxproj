@@ -806,6 +806,9 @@
 		FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummation.swift; sourceTree = "<group>"; };
 		FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSummationCell.swift; sourceTree = "<group>"; };
 		FF8F79DE2C6948B70095C36D /* HeartHealthDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartHealthDetailsView.swift; sourceTree = "<group>"; };
+		FF95D5612CE6DC7A0047F8C2 /* Appfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Appfile; sourceTree = "<group>"; };
+		FF95D5622CE6DC7A0047F8C2 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
+		FF95D5642CE6DD840047F8C2 /* Matchfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Matchfile; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
@@ -1718,6 +1721,16 @@
 			path = Preferences;
 			sourceTree = "<group>";
 		};
+		FF95D5632CE6DC7A0047F8C2 /* fastlane */ = {
+			isa = PBXGroup;
+			children = (
+				FF95D5612CE6DC7A0047F8C2 /* Appfile */,
+				FF95D5622CE6DC7A0047F8C2 /* Fastfile */,
+				FF95D5642CE6DD840047F8C2 /* Matchfile */,
+			);
+			path = fastlane;
+			sourceTree = "<group>";
+		};
 		FF9782D12C9A1CC700A8ED7E /* ci_scripts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1797,6 +1810,7 @@
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
 				FF1E96852C0C1F38004DAD2D /* BloomFoundation */,
 				FF9782D12C9A1CC700A8ED7E /* ci_scripts */,
+				FF95D5632CE6DC7A0047F8C2 /* fastlane */,
 				FF9782D82C9A22C900A8ED7E /* Umbrella */,
 				FF1E961A2C0BEC1D004DAD2D /* Frameworks */,
 				FFACBADA2BAC7788006AAD0B /* Products */,
@@ -3796,10 +3810,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Supplements/Supplements.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Supplements/Preview Content\"";
-				DEVELOPMENT_TEAM = 538R2KUTXD;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 538R2KUTXD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
@@ -3823,6 +3839,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.Supplements;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.mdfprojects.Supplements";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -3840,10 +3857,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Supplements/Supplements.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Supplements/Preview Content\"";
-				DEVELOPMENT_TEAM = 538R2KUTXD;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 538R2KUTXD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Supplements/Info.plist;
@@ -3867,6 +3886,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mdfprojects.Supplements;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.mdfprojects.Supplements";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

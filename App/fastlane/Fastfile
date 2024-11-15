@@ -1,0 +1,28 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Sets up Match locally for development ensuring no new certificates are created."
+  lane :setupMatch do
+    match(readonly: true)
+  end
+
+  desc "Registers new devices with the Match profiles. Devices must be added in the Developer Portal first."
+  lane :registerDevices do
+    match(force: true)
+  end
+end
