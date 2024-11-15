@@ -27,6 +27,9 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     @Field(key: "flavour")
     var flavour: String?
 
+    @Enum(key: "category")
+    var category: Category
+
     @Field(key: "barcode")
     var barcode: String?
 
@@ -38,6 +41,9 @@ final class FoodItemRecord: Model, @unchecked Sendable {
 
     @Field(key: "ingredients")
     var ingredients: String?
+
+    @Enum(key: "country")
+    var country: Country
 
     @Field(key: "calories")
     var calories: Double?
@@ -68,10 +74,17 @@ final class FoodItemRecord: Model, @unchecked Sendable {
 
     init() { }
 
-    init(id: UUID = UUID(), name: String) {
+    init(
+        id: UUID = UUID(),
+        name: String,
+        country: Country,
+        category: Category = .generic
+    ) {
         self.id = id
         self.name = name
         self.state = .unverified
+        self.category = category
+        self.country = country
     }
 }
 
@@ -79,5 +92,17 @@ extension FoodItemRecord {
     enum State: String, Codable {
         case unverified
         case verified
+    }
+
+    enum Category: String, Codable {
+        case generic
+        case fastfood
+        case restaurant
+        case branded
+    }
+
+    enum Country: String, Codable {
+        case canada
+        case usa
     }
 }

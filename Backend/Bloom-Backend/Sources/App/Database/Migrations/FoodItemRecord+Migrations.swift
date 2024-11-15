@@ -17,16 +17,30 @@ extension FoodItemRecord {
                 .case("verified")
                 .create()
 
+            let categoryEnumType = try await database.enum("category")
+                .case("generic")
+                .case("fastfood")
+                .case("restaurant")
+                .case("branded")
+                .create()
+
+            let countryEnumType = try await database.enum("country")
+                .case("canada")
+                .case("usa")
+                .create()
+
             try await database.schema(FoodItemRecord.schema)
                 .id()
                 .field("name", .string, .required)
                 .field("state", stateEnumType, .required)
                 .field("brand_name", .string)
                 .field("flavour", .string)
+                .field("category", categoryEnumType, .required)
                 .field("barcode", .string)
                 .field("nutrition_label_image", .string)
                 .field("packaging_image", .string)
                 .field("ingredients", .string)
+                .field("country", countryEnumType, .required)
                 .field("calories", .double)
                 .field("protein", .double)
                 .field("carbohydrates", .double)
@@ -42,6 +56,8 @@ extension FoodItemRecord {
         func revert(on database: any Database) async throws {
             try await database.schema(FoodItemRecord.schema).delete()
             try await database.enum("state").delete()
+            try await database.enum("country").delete()
+            try await database.enum("category").delete()
         }
     }
 }

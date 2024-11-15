@@ -35,11 +35,15 @@ extension OpenAIService {
             return (nil, .unclearPackaging)
         }
 
-        let foodItemRecord = FoodItemRecord(name: packagingData.productName)
+        let foodItemRecord = FoodItemRecord(
+            name: packagingData.productName,
+            country: .canada // TODO: Add country of origin to request.
+        )
 
         foodItemRecord.barcode = barCode
         foodItemRecord.brandName = packagingData.brandName
         foodItemRecord.flavour = packagingData.flavour
+        foodItemRecord.category = .branded
         foodItemRecord.nutritionLabelImage = nutritionLabelMetadata.filename
         foodItemRecord.packagingImage = packagingMetadata.filename
         foodItemRecord.calories = nutritionData.calories.value
