@@ -24,14 +24,16 @@ struct FoodLoggingActionCardView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                mealPicker
                 resultsView
                 suggestionsBarView
                 foodSearchTextBar
             }
-            .navigationTitle("Log Food")
+//            .navigationTitle("Log Food")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    mealPicker
+                }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
@@ -54,15 +56,20 @@ struct FoodLoggingActionCardView: View {
 private extension FoodLoggingActionCardView {
 
     var mealPicker: some View {
-        LabeledContent("Meal") {
-            Picker("Meal", selection: $viewModel.meal) {
-                ForEach(FoodLoggingActionCardView.ViewModel.Meal.allCases, id: \.self) { meal in
-                    Text(meal.name)
+        Menu {
+            ForEach(FoodLoggingActionCardView.ViewModel.Meal.allCases, id: \.self) { meal in
+                Button(meal.name) {
+                    viewModel.meal = meal
                 }
             }
+        } label: {
+            HStack {
+                Text(viewModel.meal.name)
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.caption)
+            }
+            .bold()
         }
-        .cardContainer(fill: .background.secondary)
-        .padding()
     }
 
     @ViewBuilder
