@@ -21,6 +21,7 @@ extension FoodController: RouteCollection {
     func boot(routes: any Vapor.RoutesBuilder) throws {
         routes.group("v1", "food") { food in
             food.post("autocomplete", use: autocomplete)
+            food.post("estimate", use: estimateFoodCalories)
             food.post("search", use: searchFoods)
             food.post("upload", use: uploadNewFood)
         }
@@ -88,6 +89,24 @@ extension FoodController {
             result: result,
             foodItem: foodItem
         )
+    }
+
+    @Sendable
+    func estimateFoodCalories(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
+      let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
+
+      let foodPictureMetadata = try await save(image: requestBody.foodImage, request: request)
+
+      let foodEstimate = await openAIService.estimateCalories(request: request, foodImageFile: foodPictureMetadata)
+
+      guard let foodEstimate else {
+        return EstimateFoodCaloriesResponse(servings: [])
+      }
+
+      let servings = foodEstimate.items.map { item in
+        item.asFoodItem()
+      }
+      return EstimateFoodCaloriesResponse(servings: servings)
     }
 }
 

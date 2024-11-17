@@ -14,6 +14,8 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
     public let id: FoodItemIdentifier
     public let name: String
     public let brandName: String?
+    // This is the nutrients, total, in the food item.
+    // This is _not_ per serving.
     public let nutrients: [Nutrient]
     public let servingName: String?
     public let servingQuantity: Quantity?

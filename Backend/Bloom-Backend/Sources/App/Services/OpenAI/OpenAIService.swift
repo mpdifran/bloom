@@ -5,10 +5,12 @@
 //  Created by Mark DiFranco on 2024-11-11.
 //
 
-import Foundation
-import Vapor
-import OpenAIKit
 import BloomModel
+import Foundation
+import Logging
+import OpenAIKit
+import Vapor
+
 
 struct OpenAIService { }
 
@@ -65,6 +67,75 @@ extension OpenAIService {
         foodItemRecord.servingUnit = nutritionData.servingValue.unit
 
         return (foodItemRecord, .foodLogged)
+    }
+
+    func estimateCalories(
+        request: Request,
+        foodImageFile: ImageFileMetadata
+    ) async -> OpenAIEstimateCaloriesResponse? {
+        do {
+            let openAI = request.openAI
+            guard let fileExtension = foodImageFile.fileExtension else {
+              request.logger.error("No file extension found for \(foodImageFile.filename)")
+              return nil
+            }
+
+            let messages: [Chat.Message] = [
+                Chat.Message(
+                    role: .system,
+                    content: [
+                        .text("""
+  You must respond in JSON. There should be a list of objects, one for each food item. Each object should have the following properties:
+  - Property called 'name' that is the name of the food item,
+  - Property called 'serving_name' which indicates the kind of serving such as 1 oz or 1 chicken breast.
+  - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be an integer in relation to the serving_name. If the serving_name is 2 chicken breasts, and there are 6 chicken breats - then this should be 3 since it is 3 servings of 2 chicken breasts.
+  - Property called 'calories' which is a numerical int of the calories of the item per serving.
+  - Property called 'fat', an integer of how many grams of fat per serving.
+  - Property called 'carbs', an integer of how many grams of carbs per serving.
+  - Property called 'protein', an integer of how many grams of protein per serving.
+  - Property called 'total_calories', an integer of how many calories there are in the food item. This should be the calories per servings multiplied by the number of services.
+  - Property called 'total_fat', an integer of how many grams of fat there are in the food item. This should be the fat per servings multiplied by the number of servings.
+  - Property called 'tobal_carbs', an integer of how many grams of carbs there are in the food item. This should be the carbs per servings multiplied by the number of servings.
+  - Property called 'total_protein', an integer of how many grams of protein there are in the food item. This should be the protein per servings multiplied by the number of servings. 
+
+  Make sure all JSON keys are snake case.
+"""
+)
+                    ]
+                ),
+                Chat.Message(
+                    role: .user,
+                    content: [
+                      .imageData(foodImageFile.data, "image/\(fileExtension)"),
+                        .text("Estimate the nutrient information for each food item in the image.")
+                    ]
+                )
+            ]
+
+            let response = try await openAI.chats.create(
+                model: Model.GPT4.gpt_4o_mini,
+                messages: messages
+            )
+
+
+            guard var message = response.choices.first?.message.content.first?.text else { return nil }
+
+            message.removeFirst("```json".count)
+            message.removeLast("```".count)
+            message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+
+
+            guard let data = message.data(using: .utf8) else { return nil }
+
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+            let returnValue = try decoder.decode([OpenAIEstimateCaloriesResponse.Item].self, from: data)
+            return OpenAIEstimateCaloriesResponse(items: returnValue)
+        } catch {
+            request.logger.error(.init(stringLiteral: error.localizedDescription))
+            return nil
+        }
     }
 }
 
