@@ -37,20 +37,20 @@ extension OpenAIEstimateCaloriesResponse {
 extension OpenAIEstimateCaloriesResponse.Item {
 
     func asFoodItem() -> FoodItem {
-      let nutrients: [FoodItem.Nutrient] = [
-        .init(kind: .calories, quantity: .init(value: Double(totalCalories), unit: "calories")),
-        .init(kind: .fat, quantity: .init(value: Double(totalFat), unit: "grams")),
-        .init(kind: .carbohydrates, quantity: .init(value: Double(totalCarbs), unit: "grams")),
-        .init(kind: .protein, quantity: .init(value: Double(totalProtein), unit: "grams"))
-      ]
-      return FoodItem(id: FoodItemIdentifier(UUID().uuidString),
-                      name: name,
-                      brandName: nil,
-                      nutrients: nutrients,
-                      servingName: servingName,
-                      servingQuantity: FoodItem.Quantity(
-                        value: Double(servingAmount),
-                        unit: servingName),
-                      ingredients: nil)
+        let nutrients: [FoodItem.Nutrient] = [
+            .init(kind: .calories, quantity: .init(value: Double(totalCalories), unit: "calories")),
+            .init(kind: .fat, quantity: .init(value: Double(totalFat), unit: "grams")),
+            .init(kind: .carbohydrates, quantity: .init(value: Double(totalCarbs), unit: "grams")),
+            .init(kind: .protein, quantity: .init(value: Double(totalProtein), unit: "grams"))
+        ]
+        return FoodItem(id: FoodItemIdentifier(UUID().uuidString),
+                        name: name,
+                        brandName: nil,
+                        nutrients: nutrients,
+                        servingName: servingName,
+                        servingQuantity: FoodItem.Quantity(
+                          value: Double(servingAmount),
+                          unit: servingName),
+                        ingredients: nil)
   }
 }

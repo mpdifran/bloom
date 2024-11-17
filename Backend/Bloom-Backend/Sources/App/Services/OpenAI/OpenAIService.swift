@@ -76,8 +76,8 @@ extension OpenAIService {
         do {
             let openAI = request.openAI
             guard let fileExtension = foodImageFile.fileExtension else {
-              request.logger.error("No file extension found for \(foodImageFile.filename)")
-              return nil
+                request.logger.error("No file extension found for \(foodImageFile.filename)")
+                return nil
             }
 
             let messages: [Chat.Message] = [
