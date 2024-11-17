@@ -9,17 +9,17 @@
 import CoreImage
 import UIKit
 
-actor CameraManager: NSObject, ObservableObject {
+actor CameraManager: NSObject {
 
-  enum Status {
+  private enum Status {
     case configured
     case unConfigured
     case unAuthorized
     case failed
   }
 
-  @Published var status: Status = .unConfigured
-  @Published var capturedImage: UIImage? = nil
+  private var status: Status = .unConfigured
+  private var capturedImageContinuation: CheckedContinuation<UIImage?, Never>?
 
   private let photoOutput = AVCapturePhotoOutput()
   private var deviceInput: AVCaptureDeviceInput?
@@ -39,6 +39,7 @@ extension CameraManager {
   func start() async {
     guard await checkAuthorization() else {
       print("Camera access not authorized")
+      status = .unAuthorized
       return
     }
     await configureCaptureSession()
@@ -52,17 +53,22 @@ extension CameraManager {
     captureSession.stopRunning()
   }
 
-  func capture() async {
-    var photoSettings = AVCapturePhotoSettings()
+  func capture() async -> UIImage? {
+    return await withCheckedContinuation { continuation in
+      var photoSettings = AVCapturePhotoSettings()
 
-    if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
-      photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+      capturedImageContinuation?.resume(returning: nil)
+      capturedImageContinuation = continuation
+
+      if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+        photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+      }
+
+      photoSettings.maxPhotoDimensions = .init(width: 4032, height: 3024)
+      photoSettings.photoQualityPrioritization = .balanced
+
+      photoOutput.capturePhoto(with: photoSettings, delegate: self)
     }
-
-    photoSettings.maxPhotoDimensions = .init(width: 4032, height: 3024)
-    photoSettings.photoQualityPrioritization = .quality
-
-    photoOutput.capturePhoto(with: photoSettings, delegate: self)
   }
 }
 
@@ -136,27 +142,41 @@ private extension CameraManager {
     photoOutput.maxPhotoDimensions = .init(width: 4032, height: 3024)
     photoOutput.maxPhotoQualityPrioritization = .quality
   }
-
-  func updateCapturedImage(_ image: UIImage) {
-    self.capturedImage = image
-  }
 }
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
-  nonisolated func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-    if let error {
-      print("CameraManager: \(error.localizedDescription)")
+  nonisolated func photoOutput(
+    _ output: AVCapturePhotoOutput,
+    didFinishProcessingPhoto photo: AVCapturePhoto,
+    error: Error?
+  ) {
+    let sendableImage = SendableImage(data: photo.fileDataRepresentation(), error: error)
+    Task {
+      await handlePhotoOutput(sendableImage: sendableImage)
+    }
+  }
+
+  private func handlePhotoOutput(sendableImage: SendableImage) {
+    defer { capturedImageContinuation = nil }
+
+    if let error = sendableImage.error {
+      print("CameraManager: Error capturing photo: \(error)")
+      capturedImageContinuation?.resume(returning: nil)
+      capturedImageContinuation = nil
       return
     }
 
-    if
-      let imageData = photo.fileDataRepresentation(),
-        let capturedImage = UIImage(data: imageData) {
-      Task {
-        await updateCapturedImage(capturedImage)
-      }
+    if let imageData = sendableImage.data,
+       let image = UIImage(data: imageData)
+    {
+      capturedImageContinuation?.resume(returning: image)
     } else {
-      print("CameraManager: Image could not be fetched.")
+      capturedImageContinuation?.resume(returning: nil)
     }
   }
+}
+
+struct SendableImage: Sendable {
+  let data: Data?
+  let error: Error?
 }
