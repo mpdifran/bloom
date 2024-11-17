@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4BABF3C82CE93ECC005D71F2 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */; };
+		4BABF3D32CE96D03005D71F2 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */; };
+		4BABF3D52CE97201005D71F2 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3D42CE971FE005D71F2 /* CameraView.swift */; };
+		4BABF3D72CE97251005D71F2 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3D62CE9724A005D71F2 /* CameraViewModel.swift */; };
 		FF0404C52C02540B009FDC4E /* SleepAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */; };
 		FF0404CB2C027FAD009FDC4E /* Int+ScoreColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CA2C027FAD009FDC4E /* Int+ScoreColor.swift */; };
 		FF0404CF2C028456009FDC4E /* PrimaryButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0404CE2C028456009FDC4E /* PrimaryButtonStyle.swift */; };
@@ -493,6 +497,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		4BABF3D42CE971FE005D71F2 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		4BABF3D62CE9724A005D71F2 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		FF0404C22C025174009FDC4E /* Calendar+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Helpers.swift"; sourceTree = "<group>"; };
 		FF0404C42C02540B009FDC4E /* SleepAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepAnalysis.swift; sourceTree = "<group>"; };
 		FF0404C62C025C95009FDC4E /* DateFormatter+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Constants.swift"; sourceTree = "<group>"; };
@@ -1525,6 +1533,10 @@
 		FF8743682CE56D87002581FA /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				4BABF3D62CE9724A005D71F2 /* CameraViewModel.swift */,
+				4BABF3D42CE971FE005D71F2 /* CameraView.swift */,
+				4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */,
+				4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */,
 				FF8743692CE56D92002581FA /* CameraPhotoPicker.swift */,
 			);
 			path = Camera;
@@ -2853,6 +2865,7 @@
 				FF70E9212CB86FC40055E932 /* SleepRespiratoryRateChartView.swift in Sources */,
 				FF4A21CE2C8A01FE00278019 /* URL+Constants.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
+				4BABF3D72CE97251005D71F2 /* CameraViewModel.swift in Sources */,
 				FF0404D42C04D4F4009FDC4E /* AddItemButton.swift in Sources */,
 				FF1328122CB6D42F00ACF981 /* EveningHabitStatusCell.swift in Sources */,
 				FF88F1182C7939AA0093D1B4 /* HKBackgroundDeliveryHandle.swift in Sources */,
@@ -2896,6 +2909,7 @@
 				FF88F1162C792B5D0093D1B4 /* HKObserverQueryHandle.swift in Sources */,
 				FFAFF41D2CAB18E300FAD3C9 /* ProposedToDoCell.swift in Sources */,
 				FF6E06252CA3A3B600C4219B /* WaterGlassSizeModel.swift in Sources */,
+				4BABF3D32CE96D03005D71F2 /* CameraPreview.swift in Sources */,
 				FF0DA0FB2C876629007D1A6B /* DateCollatedWorkoutHeartRateReport.swift in Sources */,
 				FF8F79D92C6699FA0095C36D /* ActivityLevelDistributionView.swift in Sources */,
 				FF1E95FE2C0A2FFC004DAD2D /* Collection+Average.swift in Sources */,
@@ -3049,6 +3063,7 @@
 				FF70EA0A2CC2D6140055E932 /* BloomPlusLaurelView.swift in Sources */,
 				FF8F79D52C65A9140095C36D /* BloodPressureStatusView.swift in Sources */,
 				FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */,
+				4BABF3C82CE93ECC005D71F2 /* CameraManager.swift in Sources */,
 				FF8743532CE517E8002581FA /* UploadFoodActionView.swift in Sources */,
 				FF48C28A2C694B2B00DC8D1D /* Button+Zone.swift in Sources */,
 				FF4A21B32C88957C00278019 /* Double+Rounding.swift in Sources */,
@@ -3107,6 +3122,7 @@
 				FF70E9FB2CC02B010055E932 /* NutritionRemainingValueView.swift in Sources */,
 				FF88F11B2C7B75C20093D1B4 /* CalendarManager.swift in Sources */,
 				FF7D6C2D2CDC0A11005B86C0 /* FoodLoggingActionCardViewModel.swift in Sources */,
+				4BABF3D52CE97201005D71F2 /* CameraView.swift in Sources */,
 				FF70E9ED2CBFF7FC0055E932 /* LocationManagerViewModel.swift in Sources */,
 				FF4B2F4A2C90C7DE0003879C /* ToDoModel.swift in Sources */,
 			);
