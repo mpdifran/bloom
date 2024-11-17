@@ -5,34 +5,41 @@
 //  Created by Zach Radford on 2024-11-16.
 //
 
+import AVFoundation
 import SwiftUI
 
 struct CameraView: View {
-  @ObservedObject var viewModel = CameraViewModel()
+  let onImageCaptured: @MainActor (UIImage?) -> Void
+
+  private let manager: CameraManager
+  private let captureSession = AVCaptureSession()
+
+  @Environment(\.dismiss) private var dismiss
+
+  init(
+    onImageCaptured: @escaping @MainActor (UIImage?) -> Void
+  ) {
+    manager = CameraManager.create(with: captureSession)
+    self.onImageCaptured = onImageCaptured
+  }
 
   var body: some View {
     ZStack(alignment: .bottom) {
       Color.black.edgesIgnoringSafeArea(.all)
 
-      if let image = viewModel.image {
-        Image(uiImage: image)
-          .resizable()
-          .aspectRatio(contentMode: .fill)
-      } else {
-        CameraPreview(
-          session: viewModel.session
-        )
-      }
+      CameraPreview(
+        session: captureSession
+      )
 
       captureButton
         .padding(.bottom, 24)
     }
     .task {
-      await viewModel.manager.start()
+      await manager.start()
     }
     .onDisappear {
       Task {
-        await viewModel.manager.stop()
+        await manager.stop()
       }
     }
   }
@@ -41,7 +48,13 @@ struct CameraView: View {
 private extension CameraView {
   var captureButton: some View {
     Button {
-      viewModel.capturePressed()
+      Task {
+        let image = await manager.capture()
+        await MainActor.run {
+          onImageCaptured(image)
+          dismiss()
+        }
+      }
     } label: {
       Circle()
         .foregroundColor(.white)
