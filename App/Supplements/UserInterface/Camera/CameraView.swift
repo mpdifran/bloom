@@ -14,9 +14,15 @@ struct CameraView: View {
     ZStack(alignment: .bottom) {
       Color.black.edgesIgnoringSafeArea(.all)
 
-      CameraPreview(
-        session: viewModel.session
-      )
+      if let image = viewModel.image {
+        Image(uiImage: image)
+          .resizable()
+          .aspectRatio(contentMode: .fill)
+      } else {
+        CameraPreview(
+          session: viewModel.session
+        )
+      }
 
       captureButton
         .padding(.bottom, 24)
