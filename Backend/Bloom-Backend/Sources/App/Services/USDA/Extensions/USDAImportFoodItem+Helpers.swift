@@ -10,15 +10,15 @@ import Vapor
 
 extension USDAImportFoodItem {
 
-    func asFoodItemRecord(request: Request, category: FoodItemRecord.Category) -> FoodItemRecord? {
+    func asFoodItemRecord(request: Request, category: FoodItemRecord.Category) async throws -> FoodItemRecord? {
         guard description.isNotEmpty else { return nil }
 
-        let foodItemRecord = FoodItemRecord(
-            id: "\(fdcId)",
-            name: description,
-            country: .usa, // Assuming all USDA items are from the USA.
-            category: category
-        )
+        let id = "\(fdcId)"
+        let foodItemRecord = try await FoodItemRecord.findOrCreate(id: id, on: request.db)
+
+        foodItemRecord.name = description
+        foodItemRecord.country = .usa // Assuming all USDA items are from the USA.
+        foodItemRecord.category = category
 
         foodItemRecord.brandName = foodCategory.description
 
@@ -44,7 +44,7 @@ extension USDAImportFoodItem {
             foodItemRecord.servingValue = portion.gramWeight
             foodItemRecord.servingUnit = "g"
         } else {
-            foodItemRecord.servingName = "100 g"
+            foodItemRecord.servingName = "1 serving"
             foodItemRecord.servingValue = 100
             foodItemRecord.servingUnit = "g"
         }

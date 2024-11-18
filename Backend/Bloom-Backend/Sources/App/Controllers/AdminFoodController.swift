@@ -35,16 +35,13 @@ private extension AdminFoodController {
         var count = 0
         for foodItem in requestBody.foods {
             guard
-                let foodItemRecord = foodItem.asFoodItemRecord(
+                let foodItemRecord = try await foodItem.asFoodItemRecord(
                     request: request,
                     category: category
                 )
             else { continue }
 
-            try await FoodItemRecord.upsert(
-                on: request.db,
-                model: foodItemRecord
-            )
+            try await foodItemRecord.createOrUpdate(on: request.db)
             count += 1
         }
 
