@@ -9,7 +9,7 @@ import SwiftUI
 import VisionKit
 
 struct FoodBarcodeScannerView: View {
-    let onBarcodeScan: @MainActor (String) -> Void
+    @Binding var barcode: String?
 
     @State private var shouldCapturePhoto = false
     @State private var capturedPhoto: IdentifiableImage?
@@ -41,7 +41,7 @@ struct FoodBarcodeScannerView: View {
             Task {
                 await Delay(500)
                 await MainActor.run {
-                    onBarcodeScan(newValue)
+                    self.barcode = newValue
                     dismiss()
                 }
             }
@@ -90,5 +90,5 @@ private extension FoodBarcodeScannerView {
 }
 
 #Preview {
-    FoodBarcodeScannerView { (_) in }
+    FoodBarcodeScannerView(barcode: .constant(nil))
 }

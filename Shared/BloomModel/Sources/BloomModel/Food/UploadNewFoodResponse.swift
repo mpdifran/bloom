@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct UploadNewFoodResponse: Codable {
+public struct UploadNewFoodResponse: Codable, Sendable {
     public let result: Result
     public let foodItem: FoodItem?
 
@@ -21,7 +21,7 @@ public struct UploadNewFoodResponse: Codable {
 }
 
 public extension UploadNewFoodResponse {
-    public enum Result: String, Codable {
+    public enum Result: String, Codable, Sendable {
         case foodLogged
         case unclearNutritionLabel
         case unclearPackaging

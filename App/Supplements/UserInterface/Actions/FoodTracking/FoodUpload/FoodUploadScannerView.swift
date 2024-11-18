@@ -10,11 +10,10 @@ import AppUI
 
 struct FoodUploadScannerView: View {
 
-    @State private var barcode: String?
-    @State private var nutritionLabelImage: UIImage?
-    @State private var packagingImage: UIImage?
+    @Bindable private var viewModel = ViewModel()
 
     @State private var presentedSheet: AnyView?
+    @State private var error: Error?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -40,20 +39,26 @@ struct FoodUploadScannerView: View {
             .sheet($presentedSheet)
             .shelf {
                 ProminentButton("Upload", systemImage: "arrow.up.square.fill") {
-
+                    Task { await upload() }
                 }
-                .disabled(!canUpload)
+                .disabled(!viewModel.canUpload)
             }
         }
-        .animation(.default, value: barcode)
+        .animation(.default, value: viewModel.barcode)
+        .animation(.default, value: viewModel.nutritionLabelImage)
+        .animation(.default, value: viewModel.packagingImage)
         .presentationCompactAdaptation(.fullScreenCover)
+        .alert(error: $error)
+        .alert(alertDetails: $viewModel.alertDetails)
     }
 }
 
 private extension FoodUploadScannerView {
 
-    var canUpload: Bool {
-        barcode != nil && nutritionLabelImage != nil && packagingImage != nil
+    func upload() async {
+        do {
+            try await viewModel.upload()
+        } catch { self.error = error }
     }
 }
 
@@ -64,7 +69,7 @@ private extension FoodUploadScannerView {
         SectionTitleView("Barcode")
             .padding(.horizontal)
         VStack {
-            if let barcode {
+            if let barcode = viewModel.barcode {
                 BarcodeView(barcode: barcode)
                     .horizontallyCentered()
 
@@ -82,9 +87,7 @@ private extension FoodUploadScannerView {
         }
         .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
         .onTapGesture {
-            presentedSheet = FoodBarcodeScannerView() { barcode in
-                self.barcode = barcode
-            }.asAny
+            presentedSheet = FoodBarcodeScannerView(barcode: $viewModel.barcode).asAny
         }
     }
 
@@ -93,7 +96,7 @@ private extension FoodUploadScannerView {
         SectionTitleView("Nutrition Label")
             .padding(.horizontal)
         VStack {
-            if let nutritionLabelImage {
+            if let nutritionLabelImage = viewModel.nutritionLabelImage {
                 Image(uiImage: nutritionLabelImage)
                     .resizable()
                     .scaledToFit()
@@ -113,7 +116,7 @@ private extension FoodUploadScannerView {
         }
         .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
         .onTapGesture {
-            presentedSheet = CameraPhotoPicker(image: $nutritionLabelImage).asAny
+            presentedSheet = CameraPhotoPicker(image: $viewModel.nutritionLabelImage).asAny
         }
         Text("For best results, try and get a clear picture of the entire nutrition label.")
             .font(.caption)
@@ -126,7 +129,7 @@ private extension FoodUploadScannerView {
         SectionTitleView("Packaging")
             .padding(.horizontal)
         VStack {
-            if let packagingImage {
+            if let packagingImage = viewModel.packagingImage {
                 Image(uiImage: packagingImage)
                     .resizable()
                     .scaledToFit()
@@ -146,7 +149,7 @@ private extension FoodUploadScannerView {
         }
         .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
         .onTapGesture {
-            presentedSheet = CameraPhotoPicker(image: $packagingImage).asAny
+            presentedSheet = CameraPhotoPicker(image: $viewModel.packagingImage).asAny
         }
         Text("Make sure to get the front of the packaging, including the brand and product name.")
             .font(.caption)

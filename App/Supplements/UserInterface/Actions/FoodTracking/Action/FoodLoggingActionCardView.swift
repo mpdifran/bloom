@@ -35,9 +35,10 @@ struct FoodLoggingActionCardView: View {
                     mealPicker
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button("Done") {
                         dismiss()
                     }
+                    .bold()
                 }
             }
             .onAppear {

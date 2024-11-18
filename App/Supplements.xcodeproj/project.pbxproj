@@ -264,6 +264,7 @@
 		FF8F79DB2C66A3D00095C36D /* WorkoutSummation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DA2C66A3D00095C36D /* WorkoutSummation.swift */; };
 		FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */; };
 		FF8F79DF2C6948B70095C36D /* HeartHealthDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* HeartHealthDetailsView.swift */; };
+		FF95D7492CEBBF0B0047F8C2 /* FoodUploadScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7482CEBBF050047F8C2 /* FoodUploadScannerViewModel.swift */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -753,6 +754,7 @@
 		FF95D5612CE6DC7A0047F8C2 /* Appfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Appfile; sourceTree = "<group>"; };
 		FF95D5622CE6DC7A0047F8C2 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
 		FF95D5642CE6DD840047F8C2 /* Matchfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Matchfile; sourceTree = "<group>"; };
+		FF95D7482CEBBF050047F8C2 /* FoodUploadScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodUploadScannerViewModel.swift; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
@@ -1505,6 +1507,7 @@
 			isa = PBXGroup;
 			children = (
 				FF8743492CE5115C002581FA /* FoodUploadScannerView.swift */,
+				FF95D7482CEBBF050047F8C2 /* FoodUploadScannerViewModel.swift */,
 				FF87434B2CE5117C002581FA /* BarcodeView.swift */,
 				FF8743522CE517E8002581FA /* UploadFoodActionView.swift */,
 			);
@@ -2913,6 +2916,7 @@
 				FF8F79C02C62611D0095C36D /* CapsuleRangeChart.swift in Sources */,
 				FF70E91B2CB86FA40055E932 /* SleepSoundLevelSummaryCell.swift in Sources */,
 				FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */,
+				FF95D7492CEBBF0B0047F8C2 /* FoodUploadScannerViewModel.swift in Sources */,
 				FF8743622CE5420C002581FA /* UIApplication+Helpers.swift in Sources */,
 				FF70EA082CC1A4F60055E932 /* View+SafeAreaBlur.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
