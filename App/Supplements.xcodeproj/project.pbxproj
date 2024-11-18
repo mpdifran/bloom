@@ -51,15 +51,12 @@
 		FF1E96112C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96102C0ACFF1004DAD2D /* SleepProgramSectionHeader.swift */; };
 		FF1E961C2C0BEC1D004DAD2D /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E961B2C0BEC1D004DAD2D /* DeviceActivity.framework */; };
 		FF1E961F2C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E961E2C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.swift */; };
-		FF1E96242C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96192C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF1E962C2C0BF19A004DAD2D /* View+Expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E962B2C0BF19A004DAD2D /* View+Expand.swift */; };
 		FF1E96332C0BF57F004DAD2D /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96322C0BF57F004DAD2D /* ManagedSettings.framework */; };
 		FF1E96352C0BF57F004DAD2D /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96342C0BF57F004DAD2D /* ManagedSettingsUI.framework */; };
 		FF1E96382C0BF57F004DAD2D /* ShieldConfigurationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96372C0BF57F004DAD2D /* ShieldConfigurationExtension.swift */; };
-		FF1E963D2C0BF57F004DAD2D /* ShieldConfigurationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96312C0BF57F004DAD2D /* ShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF1E96462C0BF5E4004DAD2D /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96322C0BF57F004DAD2D /* ManagedSettings.framework */; };
 		FF1E96492C0BF5E4004DAD2D /* ShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1E96482C0BF5E4004DAD2D /* ShieldActionExtension.swift */; };
-		FF1E964E2C0BF5E4004DAD2D /* ShieldActionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96452C0BF5E4004DAD2D /* ShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF1E96672C0C199F004DAD2D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF1E96662C0C199F004DAD2D /* Assets.xcassets */; };
 		FF1E96702C0C1A99004DAD2D /* ScreenControl.h in Headers */ = {isa = PBXBuildFile; fileRef = FF1E966F2C0C1A99004DAD2D /* ScreenControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
@@ -97,7 +94,6 @@
 		FF3A8F322C1A8341002DA563 /* DefaultReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F312C1A8341002DA563 /* DefaultReportExtension.swift */; };
 		FF3A8F342C1A8341002DA563 /* BedtimeActivityReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F332C1A8341002DA563 /* BedtimeActivityReport.swift */; };
 		FF3A8F362C1A8341002DA563 /* BedtimeActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F352C1A8341002DA563 /* BedtimeActivityView.swift */; };
-		FF3A8F3B2C1A8341002DA563 /* DeviceActivityReportExtension.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF3A8F402C1A8359002DA563 /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
 		FF3A8F442C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3A8F432C1B387D002DA563 /* DeviceActivityReport.Context+Constants.swift */; };
 		FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF426ACA2C6D424E006E0F17 /* DateQuantitySample.swift */; };
@@ -413,27 +409,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FF1E96222C0BEC1D004DAD2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF1E96182C0BEC1D004DAD2D;
-			remoteInfo = DeviceActivityMonitorExtension;
-		};
-		FF1E963B2C0BF57F004DAD2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF1E96302C0BF57F004DAD2D;
-			remoteInfo = ShieldConfigurationExtension;
-		};
-		FF1E964C2C0BF5E4004DAD2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF1E96442C0BF5E4004DAD2D;
-			remoteInfo = ShieldActionExtension;
-		};
 		FF1E96712C0C1A99004DAD2D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -469,13 +444,6 @@
 			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
 			remoteInfo = ScreenControl;
 		};
-		FF3A8F392C1A8341002DA563 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF3A8F2E2C1A8341002DA563;
-			remoteInfo = DeviceActivityReportExtension;
-		};
 		FF3A8F412C1A835F002DA563 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -507,19 +475,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FF1E96282C0BEC1D004DAD2D /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				FF1E963D2C0BF57F004DAD2D /* ShieldConfigurationExtension.appex in Embed Foundation Extensions */,
-				FF1E96242C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.appex in Embed Foundation Extensions */,
-				FF1E964E2C0BF5E4004DAD2D /* ShieldActionExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FF1E96622C0BF96D004DAD2D /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -532,17 +487,6 @@
 				FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FF3A8F3F2C1A8341002DA563 /* Embed ExtensionKit Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
-			dstSubfolderSpec = 16;
-			files = (
-				FF3A8F3B2C1A8341002DA563 /* DeviceActivityReportExtension.appex in Embed ExtensionKit Extensions */,
-			);
-			name = "Embed ExtensionKit Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -2524,19 +2468,13 @@
 				FFACBAD52BAC7788006AAD0B /* Sources */,
 				FFACBAD62BAC7788006AAD0B /* Frameworks */,
 				FFACBAD72BAC7788006AAD0B /* Resources */,
-				FF1E96282C0BEC1D004DAD2D /* Embed Foundation Extensions */,
 				FF1E96622C0BF96D004DAD2D /* Embed Frameworks */,
-				FF3A8F3F2C1A8341002DA563 /* Embed ExtensionKit Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */,
 				FF1E96722C0C1A99004DAD2D /* PBXTargetDependency */,
-				FF1E96232C0BEC1D004DAD2D /* PBXTargetDependency */,
-				FF1E963C2C0BF57F004DAD2D /* PBXTargetDependency */,
-				FF1E964D2C0BF5E4004DAD2D /* PBXTargetDependency */,
-				FF3A8F3A2C1A8341002DA563 /* PBXTargetDependency */,
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
 				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
 			);
@@ -3191,21 +3129,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FF1E96232C0BEC1D004DAD2D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF1E96182C0BEC1D004DAD2D /* DeviceActivityMonitorExtension */;
-			targetProxy = FF1E96222C0BEC1D004DAD2D /* PBXContainerItemProxy */;
-		};
-		FF1E963C2C0BF57F004DAD2D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF1E96302C0BF57F004DAD2D /* ShieldConfigurationExtension */;
-			targetProxy = FF1E963B2C0BF57F004DAD2D /* PBXContainerItemProxy */;
-		};
-		FF1E964D2C0BF5E4004DAD2D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF1E96442C0BF5E4004DAD2D /* ShieldActionExtension */;
-			targetProxy = FF1E964C2C0BF5E4004DAD2D /* PBXContainerItemProxy */;
-		};
 		FF1E96722C0C1A99004DAD2D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
@@ -3230,11 +3153,6 @@
 			isa = PBXTargetDependency;
 			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
 			targetProxy = FF1E96A42C0D3EE3004DAD2D /* PBXContainerItemProxy */;
-		};
-		FF3A8F3A2C1A8341002DA563 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF3A8F2E2C1A8341002DA563 /* DeviceActivityReportExtension */;
-			targetProxy = FF3A8F392C1A8341002DA563 /* PBXContainerItemProxy */;
 		};
 		FF3A8F422C1A835F002DA563 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
