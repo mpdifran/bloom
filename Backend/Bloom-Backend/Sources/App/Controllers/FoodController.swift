@@ -95,17 +95,10 @@ extension FoodController {
     func estimateFoodCalories(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
       let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
 
-      let foodPictureMetadata = try await save(image: requestBody.foodImage, request: request)
-
-      let foodEstimate = await openAIService.estimateCalories(request: request, foodImageFile: foodPictureMetadata)
-
-      guard let foodEstimate else {
-        return EstimateFoodCaloriesResponse(servings: [])
-      }
-
-      let servings = foodEstimate.items.map { item in
-        item.asFoodItem()
-      }
+      let foodEstimate = await openAIService.estimateCalories(request: request, foodImageFile: requestBody.foodImage)
+      
+      let servings = foodEstimate?.items.map({ item in item.asFoodItem() }) ?? []
+      
       return EstimateFoodCaloriesResponse(servings: servings)
     }
 }

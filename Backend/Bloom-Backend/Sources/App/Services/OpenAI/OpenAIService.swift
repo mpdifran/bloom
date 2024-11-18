@@ -71,14 +71,10 @@ extension OpenAIService {
 
     func estimateCalories(
         request: Request,
-        foodImageFile: ImageFileMetadata
+        foodImageFile: ImageFile
     ) async -> OpenAIEstimateCaloriesResponse? {
         do {
             let openAI = request.openAI
-            guard let fileExtension = foodImageFile.fileExtension else {
-                request.logger.error("No file extension found for \(foodImageFile.filename)")
-                return nil
-            }
 
             let messages: [Chat.Message] = [
                 Chat.Message(
@@ -93,11 +89,6 @@ extension OpenAIService {
   - Property called 'fat', an integer of how many grams of fat per serving.
   - Property called 'carbs', an integer of how many grams of carbs per serving.
   - Property called 'protein', an integer of how many grams of protein per serving.
-  - Property called 'total_calories', an integer of how many calories there are in the food item. This should be the calories per servings multiplied by the number of services.
-  - Property called 'total_fat', an integer of how many grams of fat there are in the food item. This should be the fat per servings multiplied by the number of servings.
-  - Property called 'tobal_carbs', an integer of how many grams of carbs there are in the food item. This should be the carbs per servings multiplied by the number of servings.
-  - Property called 'total_protein', an integer of how many grams of protein there are in the food item. This should be the protein per servings multiplied by the number of servings. 
-
   Make sure all JSON keys are snake case.
 """
 )
@@ -106,7 +97,7 @@ extension OpenAIService {
                 Chat.Message(
                     role: .user,
                     content: [
-                      .imageData(foodImageFile.data, "image/\(fileExtension)"),
+                      .imageData(foodImageFile.data, "image/\(foodImageFile.fileExtension)"),
                         .text("Estimate the nutrient information for each food item in the image.")
                     ]
                 )

@@ -22,10 +22,6 @@ extension OpenAIEstimateCaloriesResponse {
         let fat: Int
         let carbs: Int
         let protein: Int
-        let totalCalories: Int
-        let totalFat: Int
-        let totalCarbs: Int
-        let totalProtein: Int
     }
 
     struct Quantity: Codable {
@@ -38,10 +34,10 @@ extension OpenAIEstimateCaloriesResponse.Item {
 
     func asFoodItem() -> FoodItem {
         let nutrients: [FoodItem.Nutrient] = [
-            .init(kind: .calories, quantity: .init(value: Double(totalCalories), unit: "calories")),
-            .init(kind: .fat, quantity: .init(value: Double(totalFat), unit: "grams")),
-            .init(kind: .carbohydrates, quantity: .init(value: Double(totalCarbs), unit: "grams")),
-            .init(kind: .protein, quantity: .init(value: Double(totalProtein), unit: "grams"))
+            .init(kind: .calories, quantity: .init(value: Double(calories), unit: "calories")),
+            .init(kind: .fat, quantity: .init(value: Double(fat), unit: "grams")),
+            .init(kind: .carbohydrates, quantity: .init(value: Double(carbs), unit: "grams")),
+            .init(kind: .protein, quantity: .init(value: Double(protein), unit: "grams"))
         ]
         return FoodItem(id: FoodItemIdentifier(UUID().uuidString),
                         name: name,
