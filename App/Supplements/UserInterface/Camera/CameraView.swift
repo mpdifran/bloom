@@ -24,15 +24,22 @@ struct CameraView: View {
   }
 
   var body: some View {
-    ZStack(alignment: .bottom) {
+    ZStack {
       Color.black.edgesIgnoringSafeArea(.all)
 
       CameraPreview(
         session: captureSession
       )
 
+      CutoutOverlayView()
+
+      instructionLabel
+        .padding(.top, 24)
+        .zStackAlignment(.top)
+
       captureButton
         .padding(.bottom, 24)
+        .zStackAlignment(.bottom)
     }
     .task {
       await manager.start()
@@ -46,6 +53,17 @@ struct CameraView: View {
 }
 
 private extension CameraView {
+  var instructionLabel: some View {
+    Text("Please position your package within the frame")
+      .foregroundStyle(.white)
+      .font(.caption)
+      .fontDesign(.rounded)
+      .padding()
+      .background(Color.black.opacity(0.6))
+      .cornerRadius(10)
+      .multilineTextAlignment(.center)
+  }
+
   var captureButton: some View {
     Button {
       Task {
@@ -64,6 +82,29 @@ private extension CameraView {
             .stroke(Color.black.opacity(0.8), lineWidth: 2)
             .frame(width: 59, height: 59, alignment: .center)
         )
+    }
+  }
+}
+
+struct CutoutOverlayView: View {
+  private let widthPercentage: CGFloat = 0.6
+  private let heightPercentage: CGFloat = 0.3
+
+  var body: some View {
+    GeometryReader { geometry in
+      ZStack {
+        Color.black.opacity(0.6)
+
+        Rectangle()
+          .frame(
+            width: geometry.size.width * widthPercentage,
+            height: geometry.size.height * heightPercentage
+          )
+          .cornerRadius(20)
+          .blendMode(.destinationOut)
+      }
+      .compositingGroup()
+      .edgesIgnoringSafeArea(.all)
     }
   }
 }
