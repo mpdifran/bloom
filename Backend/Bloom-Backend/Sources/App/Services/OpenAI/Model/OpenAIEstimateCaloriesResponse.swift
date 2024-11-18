@@ -17,7 +17,9 @@ extension OpenAIEstimateCaloriesResponse {
     struct Item: Codable {
         let name: String
         let servingName: String
+        let servingAmountUnit: String
         let servingAmount: Int
+        let servingCount: Int
         let calories: Int
         let fat: Int
         let carbs: Int
@@ -31,6 +33,11 @@ extension OpenAIEstimateCaloriesResponse {
 }
 
 extension OpenAIEstimateCaloriesResponse.Item {
+
+    func asServing() -> EstimateFoodCaloriesResponse.Serving {
+        .init(servingCount: servingCount,
+              item: asFoodItem())
+    }
 
     func asFoodItem() -> FoodItem {
         let nutrients: [FoodItem.Nutrient] = [
@@ -46,7 +53,7 @@ extension OpenAIEstimateCaloriesResponse.Item {
                         servingName: servingName,
                         servingQuantity: FoodItem.Quantity(
                           value: Double(servingAmount),
-                          unit: servingName),
+                          unit: servingAmountUnit),
                         ingredients: nil)
   }
 }

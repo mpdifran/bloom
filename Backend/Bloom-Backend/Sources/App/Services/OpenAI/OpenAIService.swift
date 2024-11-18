@@ -83,8 +83,10 @@ extension OpenAIService {
                         .text("""
   You must respond in JSON. There should be a list of objects, one for each food item. Each object should have the following properties:
   - Property called 'name' that is the name of the food item,
-  - Property called 'serving_name' which indicates the kind of serving such as 1 oz or 1 chicken breast.
-  - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be an integer in relation to the serving_name. If the serving_name is 2 chicken breasts, and there are 6 chicken breats - then this should be 3 since it is 3 servings of 2 chicken breasts.
+  - Property called 'serving_name' which indicates the kind of serving such as 1 chicken breast or 3 pieces of toast. This should be a common measurable amount, and the lowest value possible.
+  - Property called 'serving_amount_unit' which indicates a measurable unit for the serving, such as grams, cups, ml, or oz. 
+  - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be an integer in relation to the serving_quantity. If the serving_name is grams and there are 100 grams in a chicken breats, and there are 2 chicken breats in the serving - then this should be 200 since it is 100 grams per breast in a servings of 2 chicken breasts.
+  - Property called 'serving_count' which indicates how many servings of the food item are in the image.
   - Property called 'calories' which is a numerical int of the calories of the item per serving.
   - Property called 'fat', an integer of how many grams of fat per serving.
   - Property called 'carbs', an integer of how many grams of carbs per serving.
