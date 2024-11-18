@@ -87,7 +87,9 @@ private extension FoodUploadScannerView {
         }
         .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
         .onTapGesture {
-            presentedSheet = FoodBarcodeScannerView(barcode: $viewModel.barcode).asAny
+            presentedSheet = FoodBarcodeScannerView { (barcode) in
+                viewModel.barcode = barcode
+            }.asAny
         }
     }
 

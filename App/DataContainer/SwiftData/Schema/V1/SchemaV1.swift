@@ -6,12 +6,12 @@
 //
 
 import Foundation
-import SwiftData
+@preconcurrency import SwiftData
 
 public enum SchemaV1: VersionedSchema {
-    public static var versionIdentifier = Schema.Version(1, 0, 0)
+    public static let versionIdentifier = Schema.Version(1, 0, 0)
 
-    public static var models: [any PersistentModel.Type] = [
+    public static let models: [any PersistentModel.Type] = [
         SchemaV0.BowelMovement.self,
         SchemaV1.Habit.self
     ]

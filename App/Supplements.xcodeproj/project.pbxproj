@@ -213,7 +213,6 @@
 		FF7D6C352CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */; };
 		FF87406E2CDD5474002581FA /* FoodItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87406D2CDD5474002581FA /* FoodItemCell.swift */; };
 		FF8740F32CDE6891002581FA /* FoodSearchToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */; };
-		FF8741792CE14F8E002581FA /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF8741FE2CE15834002581FA /* FoodItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8741FD2CE1582F002581FA /* FoodItem+Helpers.swift */; };
 		FF8742422CE17B08002581FA /* DataScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8742412CE17B08002581FA /* DataScannerView.swift */; };
 		FF8742442CE17D41002581FA /* FoodBarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8742432CE17D41002581FA /* FoodBarcodeScannerView.swift */; };
@@ -265,6 +264,7 @@
 		FF8F79DD2C66A6510095C36D /* WorkoutSummationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DC2C66A6510095C36D /* WorkoutSummationCell.swift */; };
 		FF8F79DF2C6948B70095C36D /* HeartHealthDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* HeartHealthDetailsView.swift */; };
 		FF95D7492CEBBF0B0047F8C2 /* FoodUploadScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7482CEBBF050047F8C2 /* FoodUploadScannerViewModel.swift */; };
+		FF95D74D2CEBD3060047F8C2 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF95D74C2CEBD3060047F8C2 /* BloomModel */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -963,6 +963,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF95D74D2CEBD3060047F8C2 /* BloomModel in Frameworks */,
 				FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */,
 				FF9782E82C9A22F200A8ED7E /* AppFoundations in Frameworks */,
 				FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */,
@@ -987,7 +988,6 @@
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
 				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
 				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
-				FF8741792CE14F8E002581FA /* BloomModel in Frameworks */,
 				FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */,
 				FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */,
 			);
@@ -2459,6 +2459,7 @@
 				FF9782E92C9A231900A8ED7E /* StatKit */,
 				FF9782EB2C9A233300A8ED7E /* Algorithms */,
 				FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */,
+				FF95D74C2CEBD3060047F8C2 /* BloomModel */,
 			);
 			productName = Umbrella;
 			productReference = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */;
@@ -4145,6 +4146,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
+		};
+		FF95D74C2CEBD3060047F8C2 /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF8741772CE14F8E002581FA /* XCLocalSwiftPackageReference "../Shared/BloomModel" */;
+			productName = BloomModel;
 		};
 		FF9782E52C9A22EE00A8ED7E /* AppUI */ = {
 			isa = XCSwiftPackageProductDependency;
