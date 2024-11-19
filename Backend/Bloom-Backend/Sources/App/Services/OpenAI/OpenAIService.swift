@@ -5,10 +5,12 @@
 //  Created by Mark DiFranco on 2024-11-11.
 //
 
-import Foundation
-import Vapor
-import OpenAIKit
 import BloomModel
+import Foundation
+import Logging
+import OpenAIKit
+import Vapor
+
 
 struct OpenAIService { }
 
@@ -65,6 +67,68 @@ extension OpenAIService {
         foodItemRecord.servingUnit = nutritionData.servingValue.unit
 
         return (foodItemRecord, .foodLogged)
+    }
+
+    func estimateCalories(
+        request: Request,
+        foodImageFile: ImageFile
+    ) async -> OpenAIEstimateCaloriesResponse? {
+        do {
+            let openAI = request.openAI
+
+            let messages: [Chat.Message] = [
+                Chat.Message(
+                    role: .system,
+                    content: [
+                        .text("""
+  You must respond in JSON. There should be a list of objects, one for each food item. Each object should have the following properties:
+  - Property called 'name' that is the name of the food item,
+  - Property called 'serving_name' which indicates the kind of serving such as 1 chicken breast or 3 pieces of toast. This should be a common measurable amount, and the lowest value possible.
+  - Property called 'serving_amount_unit' which indicates a measurable unit for the serving, such as grams, cups, ml, or oz. 
+  - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be an integer in relation to the serving_quantity. If the serving_name is grams and there are 100 grams in a chicken breats, and there are 2 chicken breats in the serving - then this should be 200 since it is 100 grams per breast in a servings of 2 chicken breasts.
+  - Property called 'serving_count' which indicates how many servings of the food item are in the image.
+  - Property called 'calories' which is a numerical int of the calories of the item per serving.
+  - Property called 'fat', an integer of how many grams of fat per serving.
+  - Property called 'carbs', an integer of how many grams of carbs per serving.
+  - Property called 'protein', an integer of how many grams of protein per serving.
+  Make sure all JSON keys are snake case.
+"""
+)
+                    ]
+                ),
+                Chat.Message(
+                    role: .user,
+                    content: [
+                      .imageData(foodImageFile.data, "image/\(foodImageFile.fileExtension)"),
+                        .text("Estimate the nutrient information for each food item in the image.")
+                    ]
+                )
+            ]
+
+            let response = try await openAI.chats.create(
+                model: Model.GPT4.gpt_4o_mini,
+                messages: messages
+            )
+
+
+            guard var message = response.choices.first?.message.content.first?.text else { return nil }
+
+            message.removeFirst("```json".count)
+            message.removeLast("```".count)
+            message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+
+
+            guard let data = message.data(using: .utf8) else { return nil }
+
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+            let returnValue = try decoder.decode([OpenAIEstimateCaloriesResponse.Item].self, from: data)
+            return OpenAIEstimateCaloriesResponse(items: returnValue)
+        } catch {
+            request.logger.error(.init(stringLiteral: error.localizedDescription))
+            return nil
+        }
     }
 }
 
