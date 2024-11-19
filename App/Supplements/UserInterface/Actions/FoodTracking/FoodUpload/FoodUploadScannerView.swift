@@ -151,7 +151,7 @@ private extension FoodUploadScannerView {
         }
         .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
         .onTapGesture {
-            presentedSheet = CameraPhotoPicker(image: $viewModel.packagingImage).asAny
+            presentedSheet = CameraView(capturedImage: $viewModel.packagingImage).asAny
         }
         Text("Make sure to get the front of the packaging, including the brand and product name.")
             .font(.caption)
