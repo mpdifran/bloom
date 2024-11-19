@@ -95,7 +95,11 @@ final class HealthPermissionChecker: Sendable {
     ]
 
     let writeNutritionTypes: Set<HKSampleType> = [
-        HKQuantityType(.dietaryWater)
+        HKQuantityType(.dietaryWater),
+        HKQuantityType(.dietaryEnergyConsumed),
+        HKQuantityType(.dietaryCarbohydrates),
+        HKQuantityType(.dietaryFatTotal),
+        HKQuantityType(.dietaryProtein)
     ]
 
     let menstrualTypes: Set<HKObjectType> = [

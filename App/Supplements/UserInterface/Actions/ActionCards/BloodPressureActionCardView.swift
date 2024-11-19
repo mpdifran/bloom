@@ -105,7 +105,7 @@ private extension BloodPressureActionCardView {
                 ]
             )
 
-            try await HealthStoreFetcher.shared.write(samples: [systolicSample, diastolicSample])
+            try await HealthStoreModifier.shared.write(samples: [systolicSample, diastolicSample])
             TelemetryDeck.signal("Log Blood Pressure")
             return true
         } catch {

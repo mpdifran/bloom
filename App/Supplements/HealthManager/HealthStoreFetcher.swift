@@ -357,19 +357,6 @@ extension HealthStoreFetcher {
     }
 }
 
-// MARK: Writing Data
-
-extension HealthStoreFetcher {
-
-    func write(sample: HKObject) async throws {
-        try await healthStore.save(sample)
-    }
-
-    func write(samples: [HKObject]) async throws {
-        try await healthStore.save(samples)
-    }
-}
-
 // MARK: Grouping Algorithms
 
 extension HealthStoreFetcher {

@@ -272,6 +272,7 @@
 		FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF95D7972CECE7280047F8C2 /* CutoutOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7962CECE7230047F8C2 /* CutoutOverlayView.swift */; };
 		FF95D7992CECEEF10047F8C2 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */; };
+		FF95D7A02CED35CD0047F8C2 /* HealthStoreModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D79F2CED35C00047F8C2 /* HealthStoreModifier.swift */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -768,6 +769,7 @@
 		FF95D7482CEBBF050047F8C2 /* FoodUploadScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodUploadScannerViewModel.swift; sourceTree = "<group>"; };
 		FF95D7962CECE7230047F8C2 /* CutoutOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoutOverlayView.swift; sourceTree = "<group>"; };
 		FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
+		FF95D79F2CED35C00047F8C2 /* HealthStoreModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStoreModifier.swift; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
@@ -1948,6 +1950,7 @@
 				FF70E9142CB867650055E932 /* HealthPermissionChecker.swift */,
 				FF70E9262CB96D2A0055E932 /* HealthSleepObserver.swift */,
 				FF70E9122CB85C980055E932 /* HealthStoreFetcher.swift */,
+				FF95D79F2CED35C00047F8C2 /* HealthStoreModifier.swift */,
 				FF70E9FC2CC060260055E932 /* HealthGoalProvider.swift */,
 				FF70E9CA2CBF076C0055E932 /* HealthUnitPreferences.swift */,
 			);
@@ -3016,6 +3019,7 @@
 				FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */,
 				FFF61B162BEE85D500926042 /* SupplementCell.swift in Sources */,
 				FFC77B0A2C5EA2EA003E5F85 /* NutritionMonthlySummary.swift in Sources */,
+				FF95D7A02CED35CD0047F8C2 /* HealthStoreModifier.swift in Sources */,
 				FF70E90F2CB848590055E932 /* VitalsCalculator.swift in Sources */,
 				FF8742422CE17B08002581FA /* DataScannerView.swift in Sources */,
 				FFCE85692C99DE6C002C46B1 /* BowelMovement+Helpers.swift in Sources */,
@@ -3376,6 +3380,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3411,6 +3416,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3447,6 +3453,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3484,6 +3491,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3565,7 +3573,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3573,6 +3581,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3600,7 +3609,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3608,6 +3617,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3850,7 +3860,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3858,6 +3868,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3889,7 +3900,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3897,6 +3908,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
