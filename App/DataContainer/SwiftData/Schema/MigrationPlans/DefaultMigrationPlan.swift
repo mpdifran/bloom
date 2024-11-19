@@ -12,14 +12,16 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
         [
             SchemaV0.self,
             SchemaV1.self,
-            SchemaV2.self
+            SchemaV2.self,
+            SchemaV3.self
         ]
     }
 
     public static var stages: [MigrationStage] {
         [
             migrateV0ToV1,
-            migrateV1ToV2
+            migrateV1ToV2,
+            migrateV2toV3
         ]
     }
 
@@ -57,6 +59,13 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
         .lightweight(
             fromVersion: SchemaV1.self,
             toVersion: SchemaV2.self
+        )
+    }
+
+    private static var migrateV2toV3: MigrationStage {
+        .lightweight(
+            fromVersion: SchemaV2.self,
+            toVersion: SchemaV3.self
         )
     }
 }

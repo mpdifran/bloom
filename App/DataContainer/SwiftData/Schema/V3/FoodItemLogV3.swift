@@ -10,7 +10,7 @@ import SwiftData
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit
 // For CloudKit sync to work, all properties must be optional or have default values, and all relationship must be optional.
 
-extension SchemaV2 {
+extension SchemaV3 {
     @Model
     public final class FoodItemLog: Identifiable, Hashable {
         public var id: String = ""

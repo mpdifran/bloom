@@ -7,7 +7,7 @@
 
 import SwiftData
 
-extension SchemaV2 {
+extension SchemaV3 {
     @Model
     public final class FoodItem: Identifiable, Hashable {
         public var id: String = ""
