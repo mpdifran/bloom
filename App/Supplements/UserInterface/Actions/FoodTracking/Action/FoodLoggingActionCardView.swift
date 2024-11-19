@@ -17,6 +17,8 @@ struct FoodLoggingActionCardView: View {
     @State private var didSearchToggle = false
     @State private var presentedSheet: AnyView?
 
+    @State private var showAllInSection = [Int : Bool]()
+
     @Environment(\.dismiss) private var dismiss
 
     @FocusState private var isFocused: Bool
@@ -28,7 +30,6 @@ struct FoodLoggingActionCardView: View {
                 suggestionsBarView
                 foodSearchTextBar
             }
-//            .navigationTitle("Log Food")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -89,19 +90,34 @@ private extension FoodLoggingActionCardView {
         } else if let results = viewModel.results {
             if results.isNotEmpty {
                 ScrollView {
-                    VStack {
-                        ForEach(results) { section in
-                            Section(section.title) {
+                    LazyVStack {
+                        ForEachEnumerated(results) { (sectionIndex, section) in
+                            SectionTitleView(section.title)
+                                .padding(.horizontal)
+
+                            if showAllInSection[sectionIndex] == true || section.foodItems.count <= 3 {
                                 ForEach(section.foodItems) { food in
                                     FoodItemCell(food: food)
-                                        .transition(.scale)
+                                        .id(food.id)
+                                        .transition(.blurReplace)
+                                }
+                            } else {
+                                ForEach(section.foodItems.prefix(3)) { food in
+                                    FoodItemCell(food: food)
+                                        .id(food.id)
+                                        .transition(.blurReplace)
+                                }
+                                ProminentButton("Show All") {
+                                    showAllInSection[sectionIndex] = true
                                 }
                             }
                         }
                     }
                     .padding()
                 }
+                .listStyle(.plain)
                 .animation(.bouncy, value: viewModel.results)
+                .animation(.bouncy, value: showAllInSection)
             } else {
                 ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
                     .foregroundStyle(.secondary)
@@ -191,6 +207,7 @@ private extension FoodLoggingActionCardView {
 
     func performSearch() {
         didSearchToggle.toggle()
+        showAllInSection.removeAll()
         isFocused = false
         Task {
             await viewModel.performSearch(for: searchQuery)
