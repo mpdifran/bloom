@@ -66,7 +66,7 @@ private extension FoodUploadScannerView {
 
     @ViewBuilder
     var barcodeSection: some View {
-        SectionTitleView("Barcode")
+        SectionTitleView("1. Barcode")
             .padding(.horizontal)
         VStack {
             if let barcode = viewModel.barcode {
@@ -94,41 +94,8 @@ private extension FoodUploadScannerView {
     }
 
     @ViewBuilder
-    var nutritionLabelSection: some View {
-        SectionTitleView("Nutrition Label")
-            .padding(.horizontal)
-        VStack {
-            if let nutritionLabelImage = viewModel.nutritionLabelImage {
-                Image(uiImage: nutritionLabelImage)
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-
-                UploadFoodActionView(
-                    title: "Scan Again",
-                    systemImage: "text.viewfinder"
-                )
-            } else {
-                UploadFoodActionView(
-                    title: "Scan Nutrition Label",
-                    systemImage: "text.viewfinder"
-                )
-                .frame(minHeight: 100)
-            }
-        }
-        .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
-        .onTapGesture {
-            presentedSheet = CameraPhotoPicker(image: $viewModel.nutritionLabelImage).asAny
-        }
-        Text("For best results, try and get a clear picture of the entire nutrition label.")
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .padding(.horizontal)
-    }
-
-    @ViewBuilder
     var packagingSection: some View {
-        SectionTitleView("Packaging")
+        SectionTitleView("2. Packaging")
             .padding(.horizontal)
         VStack {
             if let packagingImage = viewModel.packagingImage {
@@ -151,9 +118,50 @@ private extension FoodUploadScannerView {
         }
         .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
         .onTapGesture {
-            presentedSheet = CameraView(capturedImage: $viewModel.packagingImage).asAny
+            presentedSheet = CameraView(
+                capturedImage: $viewModel.packagingImage,
+                instructions: "Position your package within the frame",
+                aspectRatio: 0.8
+            ).asAny
         }
         Text("Make sure to get the front of the packaging, including the brand and product name.")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    var nutritionLabelSection: some View {
+        SectionTitleView("3. Nutrition Label")
+            .padding(.horizontal)
+        VStack {
+            if let nutritionLabelImage = viewModel.nutritionLabelImage {
+                Image(uiImage: nutritionLabelImage)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                UploadFoodActionView(
+                    title: "Scan Again",
+                    systemImage: "text.viewfinder"
+                )
+            } else {
+                UploadFoodActionView(
+                    title: "Scan Nutrition Label",
+                    systemImage: "text.viewfinder"
+                )
+                .frame(minHeight: 100)
+            }
+        }
+        .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
+        .onTapGesture {
+            presentedSheet = CameraView(
+                capturedImage: $viewModel.nutritionLabelImage,
+                instructions: "Position the nutrition label within the frame",
+                aspectRatio: 0.6
+            ).asAny
+        }
+        Text("For best results, try and get a clear picture of the entire nutrition label.")
             .font(.caption)
             .foregroundStyle(.secondary)
             .padding(.horizontal)

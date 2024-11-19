@@ -11,158 +11,171 @@ import SwiftUI
 // MARK: - CameraView
 
 struct CameraView: View {
-  private let cameraManager: CameraManager
-  private let captureSession = AVCaptureSession()
 
-  @StateObject var permissionManager = CameraPermissionManager.shared
+    @Binding var capturedImage: UIImage?
+    private let instructions: String
+    private let aspectRatio: CGFloat
 
-  @Binding var capturedImage: UIImage?
-
-  @Environment(\.dismiss) private var dismiss
-
-  init(capturedImage: Binding<UIImage?>) {
-    cameraManager = CameraManager.create(with: captureSession)
-    _capturedImage = capturedImage
-  }
-
-  var body: some View {
-    Group {
-      if permissionManager.isPermissionGranted {
-        cameraView
-      } else {
-        permissionDeniedView
-      }
+    init(
+        capturedImage: Binding<UIImage?>,
+        instructions: String,
+        aspectRatio: CGFloat
+    ) {
+        self.cameraManager = CameraManager.create(with: captureSession)
+        self._capturedImage = capturedImage
+        self.instructions = instructions
+        self.aspectRatio = aspectRatio
     }
-    .onAppear {
-      Task {
-        await permissionManager.checkPermission()
-        if permissionManager.isPermissionGranted {
-          await cameraManager.start()
+
+    private let cameraManager: CameraManager
+    private let captureSession = AVCaptureSession()
+
+    @StateObject var permissionManager = CameraPermissionManager.shared
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        Group {
+            if permissionManager.isPermissionGranted {
+                cameraView
+            } else {
+                permissionDeniedView
+            }
         }
-      }
+        .overlay {
+            dismissButton
+                .zStackAlignment(.topLeading)
+        }
+        .presentationCompactAdaptation(.fullScreenCover)
+        .onAppear {
+            Task {
+                await permissionManager.checkPermission()
+                if permissionManager.isPermissionGranted {
+                    await cameraManager.start()
+                }
+            }
+        }
+        .onDisappear {
+            Task {
+                await cameraManager.stop()
+            }
+        }
+        .alert(isPresented: $permissionManager.shouldShowAlert) {
+            Alert(
+                title: Text("Camera Permission Required"),
+                message: Text("Please allow camera access in Settings."),
+                primaryButton: .default(Text("Open Settings")) {
+                    permissionManager.openSettings()
+                },
+                secondaryButton: .cancel(Text("Cancel"))
+            )
+        }
     }
-    .onDisappear {
-      Task {
-        await cameraManager.stop()
-      }
-    }
-    .alert(isPresented: $permissionManager.shouldShowAlert) {
-      Alert(
-        title: Text("Camera Permission Required"),
-        message: Text("Please allow camera access in Settings."),
-        primaryButton: .default(Text("Open Settings")) {
-          permissionManager.openSettings()
-        },
-        secondaryButton: .cancel(Text("Cancel"))
-      )
-    }
-  }
 }
 
 // MARK: Private Methods
 
 private extension CameraView {
-  var cameraView: some View {
-    ZStack {
-      Color.black.edgesIgnoringSafeArea(.all)
 
-      CameraPreview(
-        session: captureSession
-      )
+    var cameraView: some View {
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
 
-      CutoutOverlayView()
+            CameraPreview(
+                session: captureSession
+            )
 
-      instructionLabel
-        .padding(.top, 24)
-        .zStackAlignment(.top)
+            CutoutOverlayView(aspectRatio: aspectRatio)
 
-      captureButton
-        .padding(.bottom, 24)
-        .zStackAlignment(.bottom)
-    }
-  }
+            instructionLabel
+                .padding(.top, 24)
+                .zStackAlignment(.top)
 
-  var instructionLabel: some View {
-    Text("Please position your package within the frame")
-      .foregroundStyle(.white)
-      .font(.caption)
-      .fontDesign(.rounded)
-      .padding()
-      .background(Color.black.opacity(0.6))
-      .cornerRadius(10)
-      .multilineTextAlignment(.center)
-  }
 
-  var captureButton: some View {
-    Button {
-      Task {
-        let image = await cameraManager.capture()
-        await MainActor.run {
-          capturedImage = image
-          dismiss()
+            captureButton
+                .padding(.bottom, 24)
+                .zStackAlignment(.bottom)
         }
-      }
-    } label: {
-      Circle()
-        .foregroundColor(.white)
-        .frame(width: 70, height: 70, alignment: .center)
-        .overlay(
-          Circle()
-            .stroke(Color.black.opacity(0.8), lineWidth: 2)
-            .frame(width: 59, height: 59, alignment: .center)
-        )
     }
-  }
 
-  var permissionDeniedView: some View {
-    ZStack {
-      Color.black.edgesIgnoringSafeArea(.all)
+    var instructionLabel: some View {
+        Text(instructions)
+            .foregroundStyle(.white)
+            .font(.caption)
+            .bold()
+            .fontDesign(.rounded)
+            .padding()
+            .background(Color.black.opacity(0.6))
+            .cornerRadius(10)
+            .multilineTextAlignment(.center)
+    }
 
-      VStack(spacing: 16) {
-        Image(systemName: "camera.fill")
-          .font(.system(size: 80))
-          .foregroundColor(.gray)
-
-        Text("Bloom requires permission to take photos.")
-          .font(.title3)
-          .fontWeight(.semibold)
-          .multilineTextAlignment(.center)
-          .foregroundColor(.gray)
-          .padding(.horizontal)
-
+    var captureButton: some View {
         Button {
-          permissionManager.openSettings()
+            Task {
+                let image = await cameraManager.capture()
+                await MainActor.run {
+                    capturedImage = image
+                    dismiss()
+                }
+            }
         } label: {
-          Text("Open Settings")
-            .fontWeight(.bold)
-            .foregroundColor(.white)
+            Circle()
+                .foregroundColor(.white)
+                .frame(width: 70, height: 70, alignment: .center)
+                .overlay(
+                    Circle()
+                        .stroke(Color.black.opacity(0.8), lineWidth: 2)
+                        .frame(width: 59, height: 59, alignment: .center)
+                )
         }
-      }
     }
-  }
+
+    var dismissButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundStyle(.white, .gray)
+                .font(.title)
+        }
+        .frame(square: 44)
+        .padding()
+    }
+
+    var permissionDeniedView: some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+
+            VStack(spacing: 16) {
+                Image(systemName: "camera.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.gray)
+
+                Text("Bloom requires permission to take photos.")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.gray)
+                    .padding(.horizontal)
+
+                Button {
+                    permissionManager.openSettings()
+                } label: {
+                    Text("Open Settings")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                }
+            }
+        }
+    }
 }
 
-// MARK: - CutoutOverlayView
-
-struct CutoutOverlayView: View {
-  private let widthPercentage: CGFloat = 0.6
-  private let heightPercentage: CGFloat = 0.3
-
-  var body: some View {
-    GeometryReader { geometry in
-      ZStack {
-        Color.black.opacity(0.6)
-
-        Rectangle()
-          .frame(
-            width: geometry.size.width * widthPercentage,
-            height: geometry.size.height * heightPercentage
-          )
-          .cornerRadius(20)
-          .blendMode(.destinationOut)
-      }
-      .compositingGroup()
-      .edgesIgnoringSafeArea(.all)
-    }
-  }
+#Preview {
+    CameraView(
+        capturedImage: .constant(nil),
+        instructions: "Position your package within the frame",
+        aspectRatio: 0.8
+    )
 }

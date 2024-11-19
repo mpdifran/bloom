@@ -269,6 +269,9 @@
 		FF8F79DF2C6948B70095C36D /* HeartHealthDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8F79DE2C6948B70095C36D /* HeartHealthDetailsView.swift */; };
 		FF95D7492CEBBF0B0047F8C2 /* FoodUploadScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7482CEBBF050047F8C2 /* FoodUploadScannerViewModel.swift */; };
 		FF95D74D2CEBD3060047F8C2 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF95D74C2CEBD3060047F8C2 /* BloomModel */; };
+		FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
+		FF95D7972CECE7280047F8C2 /* CutoutOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7962CECE7230047F8C2 /* CutoutOverlayView.swift */; };
+		FF95D7992CECEEF10047F8C2 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -763,6 +766,8 @@
 		FF95D5622CE6DC7A0047F8C2 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
 		FF95D5642CE6DD840047F8C2 /* Matchfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Matchfile; sourceTree = "<group>"; };
 		FF95D7482CEBBF050047F8C2 /* FoodUploadScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodUploadScannerViewModel.swift; sourceTree = "<group>"; };
+		FF95D7962CECE7230047F8C2 /* CutoutOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoutOverlayView.swift; sourceTree = "<group>"; };
+		FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
@@ -984,6 +989,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */,
 				FF97832D2C9B546700A8ED7E /* StatKit in Frameworks */,
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
@@ -1354,6 +1360,7 @@
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
 				FF87435C2CE53934002581FA /* AVFoundation+Configuration.swift */,
 				FF8743612CE54208002581FA /* UIApplication+Helpers.swift */,
+				FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */,
 				FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */,
 				FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */,
 				FF8F79CE2C64546C0095C36D /* Color+Codable.swift */,
@@ -1537,6 +1544,7 @@
 				4BABF3D42CE971FE005D71F2 /* CameraView.swift */,
 				4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */,
 				4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */,
+				FF95D7962CECE7230047F8C2 /* CutoutOverlayView.swift */,
 				FF8743692CE56D92002581FA /* CameraPhotoPicker.swift */,
 			);
 			path = Camera;
@@ -2862,6 +2870,7 @@
 				FFC77AD52C529CF9003E5F85 /* MobilityMonthlySummary.swift in Sources */,
 				FFBE523F2C7515EE00F510DE /* TargetHeartRateZonesDistributionView.swift in Sources */,
 				FF78905C2C35AA9700F9C1A5 /* URLSession+POST.swift in Sources */,
+				FF95D7972CECE7280047F8C2 /* CutoutOverlayView.swift in Sources */,
 				FF70E9212CB86FC40055E932 /* SleepRespiratoryRateChartView.swift in Sources */,
 				FF4A21CE2C8A01FE00278019 /* URL+Constants.swift in Sources */,
 				FFB444502BEC3B0600486AD7 /* ChatGameInviteCell.swift in Sources */,
@@ -2949,6 +2958,7 @@
 				FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */,
 				FFF03D072CCBE3DF00476B44 /* View+AppearWithIndex.swift in Sources */,
 				FF4EFF8A2C937D25005E4A1F /* MenstrualCycle.swift in Sources */,
+				FF95D7992CECEEF10047F8C2 /* UIImage+Resize.swift in Sources */,
 				FF70E9EB2CBFF4720055E932 /* ReportCoordinatorViewModel.swift in Sources */,
 				FFC77AD92C541DE9003E5F85 /* Double+Format.swift in Sources */,
 				FFACBADF2BAC7788006AAD0B /* ChatView.swift in Sources */,

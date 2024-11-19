@@ -9,9 +9,18 @@ import AVFoundation
 
 extension AVCaptureSession {
 
-    func configure(_ editor: () -> Void) {
+    func configure(_ editor: () async -> Void) async {
         beginConfiguration()
-        editor()
+        await editor()
         commitConfiguration()
+    }
+}
+
+extension AVCaptureDevice {
+
+    func configure(_ editor: () -> Void) throws {
+        try lockForConfiguration()
+        editor()
+        unlockForConfiguration()
     }
 }
