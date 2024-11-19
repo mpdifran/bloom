@@ -1,5 +1,5 @@
 //
-//  Untitled.swift
+//  CameraPreview.swift
 //  Supplements
 //
 //  Created by Zach Radford on 2024-11-16.
@@ -7,6 +7,8 @@
 
 import AVFoundation
 import SwiftUI
+
+// MARK: - CameraPreview
 
 struct CameraPreview: UIViewRepresentable {
 
@@ -16,7 +18,7 @@ struct CameraPreview: UIViewRepresentable {
     let view = VideoPreviewView()
     view.backgroundColor = .black
     view.videoPreviewLayer.session = session
-    view.videoPreviewLayer.videoGravity = .resizeAspect
+    view.videoPreviewLayer.videoGravity = .resizeAspectFill
     view.videoPreviewLayer.connection?.videoRotationAngle = 90
 
     return view

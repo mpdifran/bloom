@@ -8,22 +8,61 @@
 import AVFoundation
 import SwiftUI
 
-struct CameraView: View {
-  let onImageCaptured: @MainActor (UIImage?) -> Void
+// MARK: - CameraView
 
-  private let manager: CameraManager
+struct CameraView: View {
+  private let cameraManager: CameraManager
   private let captureSession = AVCaptureSession()
+
+  @StateObject var permissionManager = CameraPermissionManager.shared
+
+  @Binding var capturedImage: UIImage?
 
   @Environment(\.dismiss) private var dismiss
 
-  init(
-    onImageCaptured: @escaping @MainActor (UIImage?) -> Void
-  ) {
-    manager = CameraManager.create(with: captureSession)
-    self.onImageCaptured = onImageCaptured
+  init(capturedImage: Binding<UIImage?>) {
+    cameraManager = CameraManager.create(with: captureSession)
+    _capturedImage = capturedImage
   }
 
   var body: some View {
+    Group {
+      if permissionManager.isPermissionGranted {
+        cameraView
+      } else {
+        permissionDeniedView
+      }
+    }
+    .onAppear {
+      Task {
+        await permissionManager.checkPermission()
+        if permissionManager.isPermissionGranted {
+          await cameraManager.start()
+        }
+      }
+    }
+    .onDisappear {
+      Task {
+        await cameraManager.stop()
+      }
+    }
+    .alert(isPresented: $permissionManager.shouldShowAlert) {
+      Alert(
+        title: Text("Camera Permission Required"),
+        message: Text("Please allow camera access in Settings."),
+        primaryButton: .default(Text("Open Settings")) {
+          permissionManager.openSettings()
+        },
+        secondaryButton: .cancel(Text("Cancel"))
+      )
+    }
+  }
+}
+
+// MARK: Private Methods
+
+private extension CameraView {
+  var cameraView: some View {
     ZStack {
       Color.black.edgesIgnoringSafeArea(.all)
 
@@ -41,18 +80,8 @@ struct CameraView: View {
         .padding(.bottom, 24)
         .zStackAlignment(.bottom)
     }
-    .task {
-      await manager.start()
-    }
-    .onDisappear {
-      Task {
-        await manager.stop()
-      }
-    }
   }
-}
 
-private extension CameraView {
   var instructionLabel: some View {
     Text("Please position your package within the frame")
       .foregroundStyle(.white)
@@ -67,9 +96,9 @@ private extension CameraView {
   var captureButton: some View {
     Button {
       Task {
-        let image = await manager.capture()
+        let image = await cameraManager.capture()
         await MainActor.run {
-          onImageCaptured(image)
+          capturedImage = image
           dismiss()
         }
       }
@@ -84,7 +113,36 @@ private extension CameraView {
         )
     }
   }
+
+  var permissionDeniedView: some View {
+    ZStack {
+      Color.black.edgesIgnoringSafeArea(.all)
+
+      VStack(spacing: 16) {
+        Image(systemName: "camera.fill")
+          .font(.system(size: 80))
+          .foregroundColor(.gray)
+
+        Text("Bloom requires permission to take photos.")
+          .font(.title3)
+          .fontWeight(.semibold)
+          .multilineTextAlignment(.center)
+          .foregroundColor(.gray)
+          .padding(.horizontal)
+
+        Button {
+          permissionManager.openSettings()
+        } label: {
+          Text("Open Settings")
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+        }
+      }
+    }
+  }
 }
+
+// MARK: - CutoutOverlayView
 
 struct CutoutOverlayView: View {
   private let widthPercentage: CGFloat = 0.6

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B8F74742CEC1FE400493AE3 /* CameraPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F74732CEC1FDF00493AE3 /* CameraPermissionManager.swift */; };
 		4BABF3C82CE93ECC005D71F2 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */; };
 		4BABF3D32CE96D03005D71F2 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */; };
 		4BABF3D52CE97201005D71F2 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3D42CE971FE005D71F2 /* CameraView.swift */; };
@@ -496,6 +497,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B8F74732CEC1FDF00493AE3 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
 		4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		4BABF3D42CE971FE005D71F2 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
@@ -1531,6 +1533,7 @@
 		FF8743682CE56D87002581FA /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				4B8F74732CEC1FDF00493AE3 /* CameraPermissionManager.swift */,
 				4BABF3D42CE971FE005D71F2 /* CameraView.swift */,
 				4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */,
 				4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */,
@@ -2885,6 +2888,7 @@
 				FF1327FB2CB5AEB800ACF981 /* BloomPlusPaywall.swift in Sources */,
 				FF426ACB2C6D424E006E0F17 /* DateQuantitySample.swift in Sources */,
 				FF8741FE2CE15834002581FA /* FoodItem+Helpers.swift in Sources */,
+				4B8F74742CEC1FE400493AE3 /* CameraPermissionManager.swift in Sources */,
 				FF70EA022CC17DC50055E932 /* BodyWeightTodayWidgetView.swift in Sources */,
 				FFBE52222C6EEA4300F510DE /* OnboardingHealthAgeView.swift in Sources */,
 				FFC832182C8CDCB100108F47 /* ActionStatusCell.swift in Sources */,

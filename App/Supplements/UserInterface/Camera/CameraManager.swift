@@ -9,21 +9,15 @@
 import CoreImage
 import UIKit
 
-actor CameraManager: NSObject {
+// MARK: - CameraManager
 
-  private enum Status {
-    case configured
-    case unConfigured
-    case unAuthorized
-    case failed
-  }
+final actor CameraManager: NSObject {
 
-  private var status: Status = .unConfigured
+  private var isInitialized = false
   private var capturedImageContinuation: CheckedContinuation<UIImage?, Never>?
-
-  private let photoOutput = AVCapturePhotoOutput()
   private var deviceInput: AVCaptureDeviceInput?
 
+  private let photoOutput = AVCapturePhotoOutput()
   private let captureSession: AVCaptureSession
 
   private init(_ session: AVCaptureSession) {
@@ -35,13 +29,10 @@ actor CameraManager: NSObject {
   }
 }
 
+// MARK: Public Methods
+
 extension CameraManager {
   func start() async {
-    guard await checkAuthorization() else {
-      print("Camera access not authorized")
-      status = .unAuthorized
-      return
-    }
     await configureCaptureSession()
 
     captureSession.startRunning()
@@ -72,28 +63,11 @@ extension CameraManager {
   }
 }
 
-private extension CameraManager {
-  func checkAuthorization() async -> Bool {
-    switch AVCaptureDevice.authorizationStatus(for: .video) {
-    case .authorized:
-      print("Camera access authorized.")
-      return true
-    case .notDetermined:
-      print("Camera access not determined.")
-      return await AVCaptureDevice.requestAccess(for: .video)
-    case .denied:
-      print("Camera access denied.")
-      return false
-    case .restricted:
-      print("Camera library access restricted.")
-      return false
-    @unknown default:
-      return false
-    }
-  }
+// MARK: Private Methods
 
+private extension CameraManager {
   func configureCaptureSession() async {
-    guard status == .unConfigured else { return }
+    guard !isInitialized else { return }
 
     captureSession.beginConfiguration()
 
@@ -104,13 +78,12 @@ private extension CameraManager {
     await setupVideoInput()
     await setupPhotoOutput()
 
-    status = .configured
+    isInitialized = true
   }
 
   func setupVideoInput() async {
     do {
       guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
-        status = .unConfigured
         return
       }
 
@@ -118,7 +91,6 @@ private extension CameraManager {
 
       guard captureSession.canAddInput(videoInput) else {
         print("CameraManager: Could not add video input to session")
-        status = .failed
         return
       }
 
@@ -126,14 +98,12 @@ private extension CameraManager {
       deviceInput = videoInput
     } catch {
       print("CameraManager: Could not create video input: \(error)")
-      status = .failed
     }
   }
 
   func setupPhotoOutput() async {
     guard captureSession.canAddOutput(photoOutput) else {
       print("CameraManager: Could not add photo output to session")
-      status = .failed
       return
     }
 
@@ -143,6 +113,8 @@ private extension CameraManager {
     photoOutput.maxPhotoQualityPrioritization = .quality
   }
 }
+
+// MARK: - AVCapturePhotoCaptureDelegate
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
   nonisolated func photoOutput(
@@ -176,7 +148,9 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
   }
 }
 
-struct SendableImage: Sendable {
+// MARK: - SendableImage
+
+private struct SendableImage: Sendable {
   let data: Data?
   let error: Error?
 }
