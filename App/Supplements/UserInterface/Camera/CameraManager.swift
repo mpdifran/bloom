@@ -89,6 +89,10 @@ private extension CameraManager {
 
             do {
                 try camera.configure {
+                    if camera.isFocusPointOfInterestSupported {
+                        camera.focusPointOfInterest = CGPoint(x: 0.5, y: 0.5)
+                    }
+
                     if camera.isFocusModeSupported(.continuousAutoFocus) {
                         camera.focusMode = .continuousAutoFocus
                     } else if camera.isFocusModeSupported(.autoFocus) {

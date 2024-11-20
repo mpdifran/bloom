@@ -203,7 +203,7 @@ private extension FoodUploadScannerView {
             presentedSheet = CameraView(
                 capturedImage: $viewModel.nutritionLabelImage,
                 instructions: "Position the nutrition label within the frame",
-                aspectRatio: 0.6
+                aspectRatio: 0.8
             ).asAny
         }
         Text("For best results, try and get a clear picture of the entire nutrition label.")
