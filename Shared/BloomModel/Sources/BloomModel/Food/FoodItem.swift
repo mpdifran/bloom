@@ -14,35 +14,44 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
     public let id: FoodItemIdentifier
     public let name: String
     public let brandName: String?
+    public let flavour: String?
+
     /// This is the nutrients per serving in the food item.
     /// To get the total nutrients, multiple by the quantity of servings.
     public let nutrients: [Nutrient]
+
     /// The serving name is what you might see on a nutrition label (e.g. 1 breast, 1 package, 24 chips)
+    public let servingName: String?
+
     /// The serving quantity is some numerical breakdown of the serving name, such as
     /// {
     ///    unit: "g" (like grams)
     ///    value: 100
     /// }
-    public let servingName: String?
     public let servingQuantity: Quantity?
     public let ingredients: String?
+    public let isVerified: Bool
 
     public init(
         id: FoodItemIdentifier,
         name: String,
         brandName: String?,
+        flavour: String?,
         nutrients: [Nutrient],
         servingName: String?,
         servingQuantity: Quantity?,
-        ingredients: String?
+        ingredients: String?,
+        isVerified: Bool
     ) {
         self.id = id
         self.name = name
         self.brandName = brandName
+        self.flavour = flavour
         self.nutrients = nutrients
         self.servingName = servingName
         self.servingQuantity = servingQuantity
         self.ingredients = ingredients
+        self.isVerified = isVerified
     }
 }
 

@@ -15,26 +15,36 @@ struct FoodItemCell: View {
         HStack {
             VStack(alignment: .leading) {
                 HStack(spacing: 4) {
-                    if food.brandName != nil {
+                    if food.isVerified {
                         Image(systemName: "checkmark.shield.fill")
                             .foregroundStyle(.white, .mutedGreen)
+                        Text("Verified")
+                            .foregroundStyle(.mutedGreen)
+                            .bold()
                     }
+
                     Text(food.brandName ?? "Unknown")
                         .foregroundStyle(.secondary)
+                        .bold()
                 }
                 .font(.caption)
 
-                Text(food.name)
-                    .bold()
+                HStack(alignment: .firstTextBaseline) {
+                    Text(food.name)
+                    if let flavour = food.flavour {
+                        Text(flavour)
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                    }
+                }
+                .bold()
 
                 if
                     let serving = food.servingName,
                     let servingQuantity = food.servingQuantity
                 {
-                    Text("\(serving) - \(servingQuantity.value.format()) \(servingQuantity.unit)")
-                        .font(.subheadline)
-                        .bold()
-                        .foregroundStyle(.secondary)
+                    Text("\(serving) (\(servingQuantity.value.format()) \(servingQuantity.unit))")
+                        .font(.caption)
                 }
             }
 
@@ -71,8 +81,9 @@ struct FoodItemCell: View {
             FoodItemCell(
                 food: .init(
                     id: .init(),
-                    name: "Activia Rhubarb Yogurt",
+                    name: "Yogurt",
                     brandName: "Activia",
+                    flavour: "Rhubarb",
                     nutrients: [
                         .init(kind: .protein, quantity: .init(value: 3.9, unit: "g")),
                         .init(kind: .calories, quantity: .init(value: 91, unit: "kcal")),
@@ -81,7 +92,26 @@ struct FoodItemCell: View {
                     ],
                     servingName: "1 package",
                     servingQuantity: .init(value: 43, unit: "g"),
-                    ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))"
+                    ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
+                    isVerified: false
+                )
+            )
+            FoodItemCell(
+                food: .init(
+                    id: .init(),
+                    name: "Crackers",
+                    brandName: "Ritz",
+                    flavour: "Low Sodium",
+                    nutrients: [
+                        .init(kind: .protein, quantity: .init(value: 3.9, unit: "g")),
+                        .init(kind: .calories, quantity: .init(value: 91, unit: "kcal")),
+                        .init(kind: .carbohydrates, quantity: .init(value: 12, unit: "g")),
+                        .init(kind: .fat, quantity: .init(value: 2.8, unit: "g")),
+                    ],
+                    servingName: "1 package",
+                    servingQuantity: .init(value: 43, unit: "g"),
+                    ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
+                    isVerified: true
                 )
             )
         }

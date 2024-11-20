@@ -46,14 +46,18 @@ extension OpenAIEstimateCaloriesResponse.Item {
             .init(kind: .carbohydrates, quantity: .init(value: Double(carbs), unit: "grams")),
             .init(kind: .protein, quantity: .init(value: Double(protein), unit: "grams"))
         ]
-        return FoodItem(id: FoodItemIdentifier(UUID().uuidString),
-                        name: name,
-                        brandName: nil,
-                        nutrients: nutrients,
-                        servingName: servingName,
-                        servingQuantity: FoodItem.Quantity(
-                          value: Double(servingAmount),
-                          unit: servingAmountUnit),
-                        ingredients: nil)
+        return FoodItem(
+            id: FoodItemIdentifier(UUID().uuidString),
+            name: name,
+            brandName: nil,
+            flavour: nil,
+            nutrients: nutrients,
+            servingName: servingName,
+            servingQuantity: FoodItem.Quantity(
+                value: Double(servingAmount),
+                unit: servingAmountUnit),
+            ingredients: nil,
+            isVerified: false
+        )
   }
 }

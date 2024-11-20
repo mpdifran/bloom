@@ -25,10 +25,12 @@ extension Components.Schemas.Hint {
             id: FoodItemIdentifier(foodId),
             name: name,
             brandName: food?.brand,
+            flavour: nil,
             nutrients: nutrients,
             servingName: nil, // TODO: Implement?
             servingQuantity: servingSizes.first,
-            ingredients: food?.foodContentsLabel
+            ingredients: food?.foodContentsLabel,
+            isVerified: false
         )
     }
 }

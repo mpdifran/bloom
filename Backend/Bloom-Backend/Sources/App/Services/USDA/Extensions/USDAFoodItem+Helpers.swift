@@ -24,10 +24,12 @@ extension USDAFoodItem {
             id: FoodItemIdentifier("\(fdcId)"),
             name: name,
             brandName: foodCategory,
+            flavour: nil,
             nutrients: toNutrients(),
             servingName: nil,
             servingQuantity: nil,
-            ingredients: nil
+            ingredients: nil,
+            isVerified: false
         )
     }
 

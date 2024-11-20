@@ -24,10 +24,12 @@ extension FoodItemRecord {
             id: FoodItemIdentifier(id),
             name: name,
             brandName: brandName,
+            flavour: flavour,
             nutrients: toNutrients(),
             servingName: servingName,
             servingQuantity: servingQuantity,
-            ingredients: nil
+            ingredients: nil,
+            isVerified: state == .verified
         )
     }
 
