@@ -16,6 +16,7 @@ struct FoodLoggingActionCardView: View {
     @State private var shouldAutocomplete = true
     @State private var didSearchToggle = false
     @State private var presentedSheet: AnyView?
+    @State private var aiImage: UIImage?
 
     @State private var showAllInSection = [Int : Bool]()
 
@@ -42,9 +43,6 @@ struct FoodLoggingActionCardView: View {
                     .bold()
                 }
             }
-            .onAppear {
-                isFocused = true
-            }
         }
         .sheet($presentedSheet)
         .presentationDetents([.large])
@@ -52,6 +50,13 @@ struct FoodLoggingActionCardView: View {
         .presentationCompactAdaptation(.fullScreenCover)
         .alert(error: $viewModel.error)
         .tint(.mutedGreen)
+        .onChange(of: aiImage) { _, newValue in
+            guard let image = newValue else { return }
+
+            Task {
+                await viewModel.performAIFoodLog(for: image)
+            }
+        }
     }
 }
 
@@ -145,6 +150,13 @@ private extension FoodLoggingActionCardView {
                     }
                 } else if searchQuery.isEmpty {
                     FoodSearchToolCell(title: "AI Photo", systemImage: "sparkles")
+                        .onTapGesture {
+                            presentedSheet = CameraView(
+                                capturedImage: $aiImage,
+                                instructions: "Take a photo of your meal.",
+                                aspectRatio: 0.8
+                            ).asAny
+                        }
                     FoodSearchToolCell(title: "Scan Barcode", systemImage: "barcode.viewfinder")
                         .onTapGesture {
                             presentedSheet = FoodBarcodeScannerView { barcode in

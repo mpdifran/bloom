@@ -116,6 +116,32 @@ extension NetworkRequester {
 
         return response
     }
+
+    func foodAIEstimate(image: UIImage) async throws -> EstimateFoodCaloriesResponse {
+        let url = URL(string: .bloomAPIBase + "v1/food/estimate")!
+
+        guard let imageData = image.pngData() else {
+            throw NSError(description: "There was an issue uploading the image.")
+        }
+
+        let request = EstimateFoodCaloriesRequest(
+            foodImage: .init(
+                data: imageData,
+                fileExtension: "png"
+            )
+        )
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try JSONEncoder.bloomModel.encode(request)
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+        let response = try JSONDecoder.bloomModel.decode(EstimateFoodCaloriesResponse.self, from: data)
+
+        return response
+    }
 }
 
 extension NetworkRequester {

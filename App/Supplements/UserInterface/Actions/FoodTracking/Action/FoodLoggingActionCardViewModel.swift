@@ -94,6 +94,17 @@ extension FoodLoggingActionCardView.ViewModel {
             self.error = error
         }
     }
+
+    func performAIFoodLog(for image: UIImage) async -> EstimateFoodCaloriesResponse? {
+        guard let smallerImage = image.resized(toWidth: 400) else { return nil }
+
+        do {
+            return try await NetworkRequester.shared.foodAIEstimate(image: smallerImage)
+        } catch {
+            self.error = error
+        }
+        return nil
+    }
 }
 
 private extension FoodLoggingActionCardView.ViewModel {
