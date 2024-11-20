@@ -7,10 +7,14 @@
 
 import SwiftUI
 import AppUI
+import BloomModel
+import CoreLocation
 
 struct FoodUploadScannerView: View {
 
     @Bindable private var viewModel = ViewModel()
+
+    private var locationViewModel = LocationManagerViewModel.shared
 
     @State private var presentedSheet: AnyView?
     @State private var error: Error?
@@ -21,6 +25,7 @@ struct FoodUploadScannerView: View {
         NavigationStack {
             ScrollView {
                 VStack {
+                    countrySection
                     barcodeSection
                     packagingSection
                     nutritionLabelSection
@@ -50,6 +55,14 @@ struct FoodUploadScannerView: View {
         .presentationCompactAdaptation(.fullScreenCover)
         .alert(error: $error)
         .alert(alertDetails: $viewModel.alertDetails)
+        .onChange(of: locationViewModel.currentLocation) { oldValue, newValue in
+            guard let location = newValue else { return }
+
+            Task { await determineCountry(location: location) }
+        }
+        .onAppear {
+            viewModel.onAppear()
+        }
     }
 }
 
@@ -60,9 +73,41 @@ private extension FoodUploadScannerView {
             try await viewModel.upload()
         } catch { self.error = error }
     }
+
+    func determineCountry(location: CLLocation) async {
+        let geocoder = CLGeocoder()
+        do {
+            guard let country = try await geocoder.getCountry(from: location) else {
+                return
+            }
+            if country.lowercased() == "canada" || country.lowercased() == "ca" {
+                viewModel.country = .canada
+            }
+        } catch {
+            print(error)
+        }
+    }
 }
 
 private extension FoodUploadScannerView {
+
+    @ViewBuilder
+    var countrySection: some View {
+        SectionTitleView("Country")
+            .padding(.horizontal)
+
+        VStack {
+            LabeledContent("Country") {
+                Picker("Country", selection: $viewModel.country) {
+                    ForEach(FoodCountry.allCases) { country in
+                        Text(country.name)
+                            .tag(country)
+                    }
+                }
+            }
+        }
+        .cardContainer(fill: .background.secondary)
+    }
 
     @ViewBuilder
     var barcodeSection: some View {
@@ -85,7 +130,7 @@ private extension FoodUploadScannerView {
                 .frame(minHeight: 100)
             }
         }
-        .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
+        .cardContainer(fill: .background.secondary)
         .onTapGesture {
             presentedSheet = FoodBarcodeScannerView { (barcode) in
                 viewModel.barcode = barcode
@@ -116,7 +161,7 @@ private extension FoodUploadScannerView {
                 .frame(minHeight: 100)
             }
         }
-        .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
+        .cardContainer(fill: .background.secondary)
         .onTapGesture {
             presentedSheet = CameraView(
                 capturedImage: $viewModel.packagingImage,
@@ -153,7 +198,7 @@ private extension FoodUploadScannerView {
                 .frame(minHeight: 100)
             }
         }
-        .cardContainer(fill: .background.secondary, stroke: .tint.secondary)
+        .cardContainer(fill: .background.secondary)
         .onTapGesture {
             presentedSheet = CameraView(
                 capturedImage: $viewModel.nutritionLabelImage,

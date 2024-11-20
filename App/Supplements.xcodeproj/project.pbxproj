@@ -273,6 +273,7 @@
 		FF95D7972CECE7280047F8C2 /* CutoutOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7962CECE7230047F8C2 /* CutoutOverlayView.swift */; };
 		FF95D7992CECEEF10047F8C2 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */; };
 		FF95D7A02CED35CD0047F8C2 /* HealthStoreModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D79F2CED35C00047F8C2 /* HealthStoreModifier.swift */; };
+		FF95D7AA2CED6D3E0047F8C2 /* CLGeocoder+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF95D7A92CED6D390047F8C2 /* CLGeocoder+Helpers.swift */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -770,6 +771,7 @@
 		FF95D7962CECE7230047F8C2 /* CutoutOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoutOverlayView.swift; sourceTree = "<group>"; };
 		FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		FF95D79F2CED35C00047F8C2 /* HealthStoreModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStoreModifier.swift; sourceTree = "<group>"; };
+		FF95D7A92CED6D390047F8C2 /* CLGeocoder+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLGeocoder+Helpers.swift"; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF9782F72C9B3AFF00A8ED7E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
@@ -1361,6 +1363,7 @@
 				FFC0AA8C2C39973D0025FE34 /* Sequence+MinMax.swift */,
 				FF78905B2C35AA9700F9C1A5 /* URLSession+POST.swift */,
 				FF87435C2CE53934002581FA /* AVFoundation+Configuration.swift */,
+				FF95D7A92CED6D390047F8C2 /* CLGeocoder+Helpers.swift */,
 				FF8743612CE54208002581FA /* UIApplication+Helpers.swift */,
 				FF95D7982CECEEEB0047F8C2 /* UIImage+Resize.swift */,
 				FF4A21CD2C8A01FE00278019 /* URL+Constants.swift */,
@@ -2968,6 +2971,7 @@
 				FF8F79D12C655D7D0095C36D /* StressDetailsView.swift in Sources */,
 				FFE390D72C24931400B79140 /* WorkoutSummary.swift in Sources */,
 				FF6E060C2C9F8E7C00C4219B /* UserAddedHabitCell.swift in Sources */,
+				FF95D7AA2CED6D3E0047F8C2 /* CLGeocoder+Helpers.swift in Sources */,
 				FFC8B0132C518FF5009C5CED /* HeartHealthMonthlySummary.swift in Sources */,
 				FF8742442CE17D41002581FA /* FoodBarcodeScannerView.swift in Sources */,
 				FFF61AFE2BED738700926042 /* SupplementBubbleCell.swift in Sources */,

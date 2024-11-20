@@ -19,7 +19,7 @@ extension OpenAIService {
     func parseNewFoodItem(
         request: Request,
         barCode: String,
-        country: String,
+        country: FoodCountry,
         nutritionLabelMetadata: ImageFileMetadata,
         packagingMetadata: ImageFileMetadata
     ) async throws -> (FoodItemRecord?, UploadNewFoodResponse.Result) {
@@ -39,10 +39,10 @@ extension OpenAIService {
         }
 
         let countryEnum: FoodItemRecord.Country
-        switch country.lowercased() {
-        case "usa", "united states of america", "america", "us":
+        switch country {
+        case .usa:
             countryEnum = .usa
-        default:
+        case .canada:
             countryEnum = .canada
         }
 

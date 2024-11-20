@@ -11,13 +11,13 @@ public struct UploadNewFoodRequest: Codable {
     public let barcode: String
     public let nutritionLabelImage: ImageFile
     public let packagingImage: ImageFile
-    public let country: String
+    public let country: FoodCountry
 
     public init(
         barcode: String,
         nutritionLabelImage: ImageFile,
         packagingImage: ImageFile,
-        country: String
+        country: FoodCountry
     ) {
         self.barcode = barcode
         self.nutritionLabelImage = nutritionLabelImage

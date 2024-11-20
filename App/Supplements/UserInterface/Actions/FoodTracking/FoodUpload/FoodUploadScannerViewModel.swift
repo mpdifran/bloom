@@ -15,12 +15,17 @@ extension FoodUploadScannerView {
         var barcode: String?
         var nutritionLabelImage: UIImage?
         var packagingImage: UIImage?
+        var country: FoodCountry = .usa
 
         var alertDetails: AlertDetails?
     }
 }
 
 extension FoodUploadScannerView.ViewModel {
+
+    func onAppear() {
+        LocationManagerViewModel.shared.requestLocation()
+    }
 
     var canUpload: Bool {
         barcode != nil && nutritionLabelImage != nil && packagingImage != nil
@@ -38,7 +43,8 @@ extension FoodUploadScannerView.ViewModel {
         let response = try await NetworkRequester.shared.uploadFood(
             barcode: barcode,
             nutritionImage: nutritionLabelImage,
-            packagingImage: packagingImage
+            packagingImage: packagingImage,
+            country: country
         )
 
         switch response.result {

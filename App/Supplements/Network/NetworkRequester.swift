@@ -80,7 +80,8 @@ extension NetworkRequester {
     func uploadFood(
         barcode: String,
         nutritionImage: UIImage,
-        packagingImage: UIImage
+        packagingImage: UIImage,
+        country: FoodCountry
     ) async throws -> UploadNewFoodResponse {
         let url = URL(string: .bloomAPIBase + "v1/food/upload")!
 
@@ -101,7 +102,7 @@ extension NetworkRequester {
                 data: packagingData,
                 fileExtension: "png"
             ),
-            country: "canada" // TODO: Need to do better here
+            country: country
         )
 
         var urlRequest = URLRequest(url: url)

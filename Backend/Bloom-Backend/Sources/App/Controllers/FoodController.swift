@@ -108,8 +108,6 @@ private extension FoodController {
     func searchFoodsLocalDatabase(_ request: Request) async throws -> FoodSearchResponse.Section? {
         let requestBody = try request.content.decode(FoodSearchRequest.self)
 
-        guard let name = requestBody.name else { return nil }
-
         let foodItems: [FoodItem]
         if let barcode = requestBody.upcCode {
             foodItems = try await foodDatabaseService.searchFoods(
