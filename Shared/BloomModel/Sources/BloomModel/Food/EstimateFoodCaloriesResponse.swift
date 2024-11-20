@@ -18,11 +18,11 @@ public struct EstimateFoodCaloriesResponse: Codable, Sendable {
 
 extension EstimateFoodCaloriesResponse {
     public struct Serving: Codable, Sendable {
-        let servingCount: Int
+        let servings: Double
         let item: FoodItem
 
-        public init(servingCount: Int, item: FoodItem) {
-            self.servingCount = servingCount
+        public init(servings: Double, item: FoodItem) {
+            self.servings = servings
             self.item = item
         }
     }
