@@ -9,15 +9,8 @@ import Foundation
 import SwiftData
 import BloomFoundation
 
-public extension BowelMovementModelActor {
-
-    static func standard() -> Self {
-        .init(modelContainer: ContainerHolder.shared.container)
-    }
-}
-
 @ModelActor
-public final actor BowelMovementModelActor: Sendable {
+public final actor BowelMovementModelActor: Sendable, SharedModelActor {
 
     private var context: ModelContext { modelExecutor.modelContext }
 }

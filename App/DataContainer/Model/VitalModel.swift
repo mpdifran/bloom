@@ -22,7 +22,7 @@ public extension VitalModel {
 
         public var name: String {
             switch self {
-                // TODO: Get rid of this
+                // TODO: Get rid of the cardioFitness case
             case .cardioFitness:
                 "Cardio Fitness"
             case .sleepQuality:

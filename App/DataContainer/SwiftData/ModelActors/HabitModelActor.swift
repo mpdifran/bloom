@@ -8,15 +8,8 @@
 import Foundation
 import SwiftData
 
-public extension HabitModelActor {
-
-    static func standard() -> Self {
-        .init(modelContainer: ContainerHolder.shared.container)
-    }
-}
-
 @ModelActor
-public final actor HabitModelActor {
+public final actor HabitModelActor: SharedModelActor {
 
     private var context: ModelContext { modelExecutor.modelContext }
 }

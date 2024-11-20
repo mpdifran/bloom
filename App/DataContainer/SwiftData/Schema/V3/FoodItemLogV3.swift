@@ -15,19 +15,31 @@ extension SchemaV3 {
     public final class FoodItemLog: Identifiable, Hashable {
         public var id: String = ""
         public var date: Date = Date.distantPast
+        public var meal: Meal = Meal.breakfast
         public var numberOfServings: Double = 0
         public var foodItem: FoodItem?
 
         public init(
             id: String,
             date: Date,
+            meal: Meal,
             numberOfServings: Double,
             foodItem: FoodItem
         ) {
             self.id = id
             self.date = date
+            self.meal = meal
             self.numberOfServings = numberOfServings
             self.foodItem = foodItem
         }
+    }
+}
+
+public extension SchemaV3.FoodItemLog {
+    enum Meal: String, Hashable, Sendable, Codable, CaseIterable {
+        case breakfast
+        case lunch
+        case dinner
+        case snack
     }
 }
