@@ -27,12 +27,12 @@ extension NetworkRequester {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.httpBody = try JSONEncoder.bloomModel.encode(request)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
-        let response = try JSONDecoder.main.decode(FoodAutocompleteResponse.self, from: data)
+        let response = try JSONDecoder.bloomModel.decode(FoodAutocompleteResponse.self, from: data)
 
         return response.tokens
     }
@@ -48,12 +48,12 @@ extension NetworkRequester {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.httpBody = try JSONEncoder.bloomModel.encode(request)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
-        let response = try JSONDecoder.main.decode(FoodSearchResponse.self, from: data)
+        let response = try JSONDecoder.bloomModel.decode(FoodSearchResponse.self, from: data)
 
         return response.sections
     }
@@ -67,12 +67,12 @@ extension NetworkRequester {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.httpBody = try JSONEncoder.bloomModel.encode(request)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
-        let response = try JSONDecoder.main.decode(FoodSearchResponse.self, from: data)
+        let response = try JSONDecoder.bloomModel.decode(FoodSearchResponse.self, from: data)
 
         return response.sections
     }
@@ -107,12 +107,12 @@ extension NetworkRequester {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = try JSONEncoder.main.encode(request)
+        urlRequest.httpBody = try JSONEncoder.bloomModel.encode(request)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
-        let response = try JSONDecoder.init().decode(UploadNewFoodResponse.self, from: data)
+        let response = try JSONDecoder.bloomModel.decode(UploadNewFoodResponse.self, from: data)
 
         return response
     }
