@@ -82,11 +82,16 @@ private extension CameraView {
             Color.black
                 .ignoresSafeArea()
 
-            CameraPreview(
-                session: captureSession
-            )
+          CameraPreview(
+              session: captureSession
+          ) { focusPoint in
+            Task {
+              await cameraManager.setFocus(for: focusPoint)
+            }
+          }
 
-            CutoutOverlayView(aspectRatio: aspectRatio)
+          CutoutOverlayView(aspectRatio: aspectRatio)
+            .allowsHitTesting(false) // allow tapping through the overlay.
 
             instructionLabel
                 .padding(.top, 24)

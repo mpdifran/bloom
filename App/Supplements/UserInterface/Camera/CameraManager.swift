@@ -61,6 +61,29 @@ extension CameraManager {
             photoOutput.capturePhoto(with: photoSettings, delegate: self)
         }
     }
+
+  func setFocus(for point: CGPoint) async {
+    guard let camera = deviceInput?.device else { return }
+
+    do {
+      try camera.configure {
+        if camera.isFocusPointOfInterestSupported {
+          camera.focusPointOfInterest = point
+        }
+        if camera.isFocusModeSupported(.autoFocus) {
+          camera.focusMode = .autoFocus
+        }
+        if camera.isExposurePointOfInterestSupported {
+          camera.exposurePointOfInterest = point
+        }
+        if camera.isExposureModeSupported(.autoExpose) {
+          camera.exposureMode = .autoExpose
+        }
+      }
+    } catch {
+      print("Error setting camera focus: \(error.localizedDescription)")
+    }
+  }
 }
 
 // MARK: Private Methods
@@ -83,7 +106,18 @@ private extension CameraManager {
 
     func setupVideoInput() async {
         do {
-            guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
+          // Choose the best available camera for close up focus (wider the better).
+          let discoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [
+              .builtInUltraWideCamera,
+              .builtInTelephotoCamera,
+              .builtInTripleCamera,
+              .builtInDualCamera,
+            ],
+            mediaType: .video,
+            position: .back
+          )
+          guard let camera = discoverySession.devices.first else {
                 return
             }
 
