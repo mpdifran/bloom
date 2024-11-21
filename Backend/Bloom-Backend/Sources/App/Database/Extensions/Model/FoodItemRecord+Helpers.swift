@@ -25,38 +25,14 @@ extension FoodItemRecord {
             name: name,
             brandName: brandName,
             flavour: flavour,
-            nutrients: toNutrients(),
+            calories: calories.map({ .init(value: $0, unit: "kcal")}),
+            protein: protein.map({ .init(value: $0, unit: "g")}),
+            carbohydrates: carbohydrates.map({ .init(value: $0, unit: "g")}),
+            fat: fat.map({ .init(value: $0, unit: "g")}),
             servingName: servingName,
             servingQuantity: servingQuantity,
             ingredients: nil,
             isVerified: state == .verified
         )
-    }
-
-    func toNutrients() -> [FoodItem.Nutrient] {
-        var nutrients = [FoodItem.Nutrient]()
-
-        if let calories {
-            nutrients.append(
-                .init(kind: .calories, quantity: .init(value: calories, unit: "kcal"))
-            )
-        }
-        if let protein {
-            nutrients.append(
-                .init(kind: .protein, quantity: .init(value: protein, unit: "g"))
-            )
-        }
-        if let carbohydrates {
-            nutrients.append(
-                .init(kind: .carbohydrates, quantity: .init(value: carbohydrates, unit: "g"))
-            )
-        }
-        if let fat {
-            nutrients.append(
-                .init(kind: .fat, quantity: .init(value: fat, unit: "g"))
-            )
-        }
-
-        return nutrients
     }
 }

@@ -20,7 +20,9 @@ struct FoodItemSection: Equatable, Identifiable {
 }
 
 extension FoodLoggingActionCardView.ViewModel {
-    enum Meal: String, CaseIterable {
+    enum Meal: String, CaseIterable, Identifiable {
+        var id: Self { self }
+
         case breakfast
         case lunch
         case dinner

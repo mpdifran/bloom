@@ -18,7 +18,6 @@ extension Components.Schemas.Hint {
             let name = optionalName
         else { return nil }
 
-        let nutrients = food?.toNutrients() ?? []
         let servingSizes = food?.servingSizes?.compactMap({ $0.asFoodItemQuantity() }) ?? []
 
         return FoodItem(
@@ -26,7 +25,10 @@ extension Components.Schemas.Hint {
             name: name,
             brandName: food?.brand,
             flavour: nil,
-            nutrients: nutrients,
+            calories: food?.calories.map({ .init(value: $0, unit: "kcal") }),
+            protein: food?.calories.map({ .init(value: $0, unit: "g") }),
+            carbohydrates: food?.calories.map({ .init(value: $0, unit: "g") }),
+            fat: food?.calories.map({ .init(value: $0, unit: "g") }),
             servingName: nil, // TODO: Implement?
             servingQuantity: servingSizes.first,
             ingredients: food?.foodContentsLabel,

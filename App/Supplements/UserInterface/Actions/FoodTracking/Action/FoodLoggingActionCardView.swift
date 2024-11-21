@@ -100,18 +100,20 @@ private extension FoodLoggingActionCardView {
                             SectionTitleView(section.title)
                                 .padding(.horizontal)
 
-                            if showAllInSection[sectionIndex] == true || section.foodItems.count <= 3 {
-                                ForEach(section.foodItems) { food in
+                            ForEachEnumerated(section.foodItems) { index, food in
+                                if index < 3 || showAllInSection[sectionIndex] == true {
                                     FoodItemCell(food: food)
                                         .id(food.id)
                                         .transition(.blurReplace)
+                                        .onTapGesture {
+                                            presentedSheet = FoodItemDetailsView(
+                                                foodItem: food
+                                            ).asAny
+                                        }
                                 }
-                            } else {
-                                ForEach(section.foodItems.prefix(3)) { food in
-                                    FoodItemCell(food: food)
-                                        .id(food.id)
-                                        .transition(.blurReplace)
-                                }
+                            }
+
+                            if showAllInSection[sectionIndex] != true {
                                 ProminentButton("Show All") {
                                     showAllInSection[sectionIndex] = true
                                 }

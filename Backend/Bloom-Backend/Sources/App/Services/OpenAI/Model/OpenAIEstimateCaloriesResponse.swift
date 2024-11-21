@@ -40,18 +40,15 @@ extension OpenAIEstimateCaloriesResponse.Item {
     }
 
     func asFoodItem() -> FoodItem {
-        let nutrients: [FoodItem.Nutrient] = [
-            .init(kind: .calories, quantity: .init(value: Double(calories), unit: "kcal")),
-            .init(kind: .fat, quantity: .init(value: Double(fat), unit: "g")),
-            .init(kind: .carbohydrates, quantity: .init(value: Double(carbs), unit: "g")),
-            .init(kind: .protein, quantity: .init(value: Double(protein), unit: "g"))
-        ]
-        return FoodItem(
+        FoodItem(
             id: FoodItemIdentifier(UUID().uuidString),
             name: name,
             brandName: nil,
             flavour: nil,
-            nutrients: nutrients,
+            calories: .init(value: Double(calories), unit: "kcal"),
+            protein: .init(value: Double(protein), unit: "g"),
+            carbohydrates: .init(value: Double(carbs), unit: "g"),
+            fat: .init(value: Double(fat), unit: "g"),
             servingName: servingName,
             servingQuantity: FoodItem.Quantity(
                 value: Double(servingAmount),

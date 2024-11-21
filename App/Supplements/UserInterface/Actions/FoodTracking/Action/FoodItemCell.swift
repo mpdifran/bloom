@@ -50,7 +50,7 @@ struct FoodItemCell: View {
 
             Spacer()
 
-            if let calories = food.calories {
+            if let calories = food.calories?.value {
                 VStack(spacing: 0) {
                     Text("\(calories.format())")
                         .bold()
@@ -84,12 +84,10 @@ struct FoodItemCell: View {
                     name: "Yogurt",
                     brandName: "Activia",
                     flavour: "Rhubarb",
-                    nutrients: [
-                        .init(kind: .protein, quantity: .init(value: 3.9, unit: "g")),
-                        .init(kind: .calories, quantity: .init(value: 91, unit: "kcal")),
-                        .init(kind: .carbohydrates, quantity: .init(value: 12, unit: "g")),
-                        .init(kind: .fat, quantity: .init(value: 2.8, unit: "g")),
-                    ],
+                    calories: .init(value: 91, unit: "kcal"),
+                    protein: .init(value: 3.9, unit: "g"),
+                    carbohydrates: .init(value: 12, unit: "g"),
+                    fat: .init(value: 2.8, unit: "g"),
                     servingName: "1 package",
                     servingQuantity: .init(value: 43, unit: "g"),
                     ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
@@ -102,12 +100,10 @@ struct FoodItemCell: View {
                     name: "Crackers",
                     brandName: "Ritz",
                     flavour: "Low Sodium",
-                    nutrients: [
-                        .init(kind: .protein, quantity: .init(value: 3.9, unit: "g")),
-                        .init(kind: .calories, quantity: .init(value: 91, unit: "kcal")),
-                        .init(kind: .carbohydrates, quantity: .init(value: 12, unit: "g")),
-                        .init(kind: .fat, quantity: .init(value: 2.8, unit: "g")),
-                    ],
+                    calories: .init(value: 91, unit: "kcal"),
+                    protein: .init(value: 3.9, unit: "g"),
+                    carbohydrates: .init(value: 12, unit: "g"),
+                    fat: .init(value: 2.8, unit: "g"),
                     servingName: "1 package",
                     servingQuantity: .init(value: 43, unit: "g"),
                     ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",

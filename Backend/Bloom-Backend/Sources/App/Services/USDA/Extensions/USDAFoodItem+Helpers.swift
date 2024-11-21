@@ -25,7 +25,10 @@ extension USDAFoodItem {
             name: name,
             brandName: foodCategory,
             flavour: nil,
-            nutrients: toNutrients(),
+            calories: calories.map({ .init(value: $0, unit: "kcal") }),
+            protein: protein.map({ .init(value: $0, unit: "g") }),
+            carbohydrates: carbohydrates.map({ .init(value: $0, unit: "g") }),
+            fat: fat.map({ .init(value: $0, unit: "g") }),
             servingName: nil,
             servingQuantity: nil,
             ingredients: nil,
@@ -33,42 +36,19 @@ extension USDAFoodItem {
         )
     }
 
-    func toNutrients() -> [FoodItem.Nutrient] {
-        var newNutrients = [FoodItem.Nutrient]()
+    var calories: Double? {
+        foodNutrients.first(where: { $0.nutrientId == .calories })?.value
+    }
 
-        if let nutrient = foodNutrients.first(where: { $0.nutrientId == .protein }), let value = nutrient.value {
-            newNutrients.append(
-                FoodItem.Nutrient(
-                    kind: .protein,
-                    quantity: .init(value: value, unit: "g")
-                )
-            )
-        }
-        if let nutrient = foodNutrients.first(where: { $0.nutrientId == .carbohydrates }), let value = nutrient.value {
-            newNutrients.append(
-                FoodItem.Nutrient(
-                    kind: .carbohydrates,
-                    quantity: .init(value: value, unit: "g")
-                )
-            )
-        }
-        if let nutrient = foodNutrients.first(where: { $0.nutrientId == .fat }), let value = nutrient.value {
-            newNutrients.append(
-                FoodItem.Nutrient(
-                    kind: .fat,
-                    quantity: .init(value: value, unit: "g")
-                )
-            )
-        }
-        if let nutrient = foodNutrients.first(where: { $0.nutrientId == .calories }), let value = nutrient.value {
-            newNutrients.append(
-                FoodItem.Nutrient(
-                    kind: .calories,
-                    quantity: .init(value: value, unit: "kcal")
-                )
-            )
-        }
+    var protein: Double? {
+        foodNutrients.first(where: { $0.nutrientId == .protein })?.value
+    }
 
-        return newNutrients
+    var carbohydrates: Double? {
+        foodNutrients.first(where: { $0.nutrientId == .carbohydrates })?.value
+    }
+
+    var fat: Double? {
+        foodNutrients.first(where: { $0.nutrientId == .fat })?.value
     }
 }

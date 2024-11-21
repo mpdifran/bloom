@@ -10,54 +10,19 @@ import BloomModel
 
 extension Components.Schemas.Food {
 
-    func toNutrients() -> [FoodItem.Nutrient] {
-        var result = [FoodItem.Nutrient]()
+    var calories: Double? {
+        nutrients?.additionalProperties["ENERC_KCAL"]
+    }
 
-        if let value = nutrients?.additionalProperties["ENERC_KCAL"] {
-            result.append(
-                FoodItem.Nutrient(
-                    kind: .calories,
-                    quantity: .init(
-                        value: value,
-                        unit: "kcal"
-                    )
-                )
-            )
-        }
-        if let value = nutrients?.additionalProperties["PROCNT"] {
-            result.append(
-                FoodItem.Nutrient(
-                    kind: .protein,
-                    quantity: .init(
-                        value: value,
-                        unit: "g"
-                    )
-                )
-            )
-        }
-        if let value = nutrients?.additionalProperties["CHOCDF"] {
-            result.append(
-                FoodItem.Nutrient(
-                    kind: .carbohydrates,
-                    quantity: .init(
-                        value: value,
-                        unit: "g"
-                    )
-                )
-            )
-        }
-        if let value = nutrients?.additionalProperties["FAT"] {
-            result.append(
-                FoodItem.Nutrient(
-                    kind: .fat,
-                    quantity: .init(
-                        value: value,
-                        unit: "g"
-                    )
-                )
-            )
-        }
+    var protein: Double? {
+        nutrients?.additionalProperties["PROCNT"]
+    }
 
-        return result
+    var carbohydrates: Double? {
+        nutrients?.additionalProperties["CHOCDF"]
+    }
+
+    var fat: Double? {
+        nutrients?.additionalProperties["FAT"]
     }
 }

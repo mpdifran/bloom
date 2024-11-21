@@ -16,16 +16,17 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
     public let brandName: String?
     public let flavour: String?
 
-    /// This is the nutrients per serving in the food item.
-    /// To get the total nutrients, multiple by the quantity of servings.
-    public let nutrients: [Nutrient]
+    public let calories: Quantity?
+    public let protein: Quantity?
+    public let carbohydrates: Quantity?
+    public let fat: Quantity?
 
     /// The serving name is what you might see on a nutrition label (e.g. 1 breast, 1 package, 24 chips)
     public let servingName: String?
 
     /// The serving quantity is some numerical breakdown of the serving name, such as
     /// {
-    ///    unit: "g" (like grams)
+    ///    unit: "g" (like grams),
     ///    value: 100
     /// }
     public let servingQuantity: Quantity?
@@ -37,7 +38,10 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
         name: String,
         brandName: String?,
         flavour: String?,
-        nutrients: [Nutrient],
+        calories: Quantity?,
+        protein: Quantity?,
+        carbohydrates: Quantity?,
+        fat: Quantity?,
         servingName: String?,
         servingQuantity: Quantity?,
         ingredients: String?,
@@ -47,7 +51,10 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
         self.name = name
         self.brandName = brandName
         self.flavour = flavour
-        self.nutrients = nutrients
+        self.calories = calories
+        self.protein = protein
+        self.carbohydrates = carbohydrates
+        self.fat = fat
         self.servingName = servingName
         self.servingQuantity = servingQuantity
         self.ingredients = ingredients
@@ -71,39 +78,18 @@ public extension FoodItem {
 }
 
 public extension FoodItem {
-    struct Nutrient: Codable, Identifiable, Sendable, Hashable {
-        public var id: Kind { kind }
 
-        public let kind: Kind
-        public let quantity: Quantity
+    var displayServing: String {
+        var result = ""
 
-        public init(
-            kind: Kind,
-            quantity: Quantity
-        ) {
-            self.kind = kind
-            self.quantity = quantity
+        if let name = servingName {
+            result = name
         }
-    }
-}
 
-public extension FoodItem.Nutrient {
-    enum Kind: String, Codable, Sendable, Hashable {
-        case protein
-        case carbohydrates
-        case fat
-        case calories
-    }
-}
-
-public extension FoodItem.Nutrient.Kind {
-
-    var name: String {
-        switch self {
-        case .protein: return "Protein"
-        case .carbohydrates: return "Carbohydrates"
-        case .fat: return "Fat"
-        case .calories: return "Calories"
+        if let quantity = servingQuantity {
+            result += " (\(quantity.value.formatted()) \(quantity.unit))"
         }
+
+        return result
     }
 }
