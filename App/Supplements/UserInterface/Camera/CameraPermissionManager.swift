@@ -14,20 +14,26 @@ import SwiftUI
 final class CameraPermissionManager: ObservableObject {
   static let shared = CameraPermissionManager()
 
-  @Published var isPermissionGranted: Bool = false
+  enum State {
+    case pending
+    case granted
+    case denied
+  }
+
+  @Published var permissionState: State = .pending
   @Published var shouldShowAlert: Bool = false
 
   func checkPermission() async {
     switch AVCaptureDevice.authorizationStatus(for: .video) {
     case .authorized:
-      isPermissionGranted = true
+      permissionState = .granted
     case .notDetermined:
       await requestPermission()
     case .denied, .restricted:
       shouldShowAlert = true
-      isPermissionGranted = false
+      permissionState = .denied
     @unknown default:
-      isPermissionGranted = false
+      permissionState = .denied
     }
   }
 
@@ -41,9 +47,12 @@ final class CameraPermissionManager: ObservableObject {
 
 private extension CameraPermissionManager {
   func requestPermission() async {
-    isPermissionGranted = await AVCaptureDevice.requestAccess(for: .video)
-    if !isPermissionGranted {
+    let isGranted = await AVCaptureDevice.requestAccess(for: .video)
+    if isGranted {
+      permissionState = .granted
+    } else {
       shouldShowAlert = true
+      permissionState = .denied
     }
   }
 }
