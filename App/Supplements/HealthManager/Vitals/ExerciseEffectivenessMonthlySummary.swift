@@ -14,6 +14,8 @@ import DataContainer
 extension Double {
     static let maxMinimalZoneMinutes: Double = 300
     static let minZoneMinutes: Double = 600
+    static let minExtraZoneMinutes: Double = 800
+    static let maxExtraZoneMinutes: Double = 1200
     static let zone12Multiplier: Double = 1
     static let zone34Multiplier: Double = 2
     static let zone5Multiplier: Double = 3
@@ -67,22 +69,22 @@ struct ExerciseEffectivenessMonthlySummary: Hashable, Sendable {
         case .sedentary:
             return VitalModel.BarLevel(
                 level: .low,
-                proportion: 0.5
+                proportion: minutes.scaledPercent(lower: 0, upper: .maxMinimalZoneMinutes)
             )
         case .minimal:
             return VitalModel.BarLevel(
                 level: .medium,
-                proportion: minutes.scaledPercent(lower: 0, upper: .maxMinimalZoneMinutes)
+                proportion: minutes.scaledPercent(lower: .maxMinimalZoneMinutes, upper: .minZoneMinutes)
             )
         case .moderate:
             return VitalModel.BarLevel(
                 level: .high,
-                proportion: minutes.scaledPercent(lower: .maxMinimalZoneMinutes, upper: .minZoneMinutes)
+                proportion: minutes.scaledPercent(lower: .minZoneMinutes, upper: .minExtraZoneMinutes)
             )
         case .high:
             return VitalModel.BarLevel(
                 level: .optimal,
-                proportion: minutes.scaledPercent(lower: .minZoneMinutes, upper: .minZoneMinutes * 2)
+                proportion: minutes.scaledPercent(lower: .minExtraZoneMinutes, upper: .maxExtraZoneMinutes)
             )
         }
     }
@@ -136,9 +138,12 @@ extension ExerciseEffectivenessMonthlySummary.Details {
         let scaledSum = overallHeartZoneDistribution.scaledDurationSum
 
         if scaledSum.doubleValue(for: .minute()) < .maxMinimalZoneMinutes {
-            return .minimal
+            return .sedentary
         }
         if scaledSum.doubleValue(for: .minute()) < .minZoneMinutes {
+            return .minimal
+        }
+        if scaledSum.doubleValue(for: .minute()) < .minExtraZoneMinutes {
             return .moderate
         }
         return .high
