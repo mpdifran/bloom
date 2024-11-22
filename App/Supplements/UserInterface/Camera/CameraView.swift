@@ -36,11 +36,15 @@ struct CameraView: View {
 
     var body: some View {
         Group {
-            if permissionManager.isPermissionGranted {
-                cameraView
-            } else {
-                permissionDeniedView
-            }
+          switch permissionManager.permissionState {
+          case .granted:
+            cameraView
+          case .denied:
+            permissionDeniedView
+          case .pending:
+            // Just a black screen.
+            Color.black.edgesIgnoringSafeArea(.all)
+          }
         }
         .overlay {
             dismissButton
@@ -50,7 +54,7 @@ struct CameraView: View {
         .onAppear {
             Task {
                 await permissionManager.checkPermission()
-                if permissionManager.isPermissionGranted {
+                if permissionManager.permissionState == .granted {
                     await cameraManager.start()
                 }
             }
@@ -82,11 +86,16 @@ private extension CameraView {
             Color.black
                 .ignoresSafeArea()
 
-            CameraPreview(
-                session: captureSession
-            )
+          CameraPreview(
+              session: captureSession
+          ) { focusPoint in
+            Task {
+              await cameraManager.setFocus(for: focusPoint)
+            }
+          }
 
-            CutoutOverlayView(aspectRatio: aspectRatio)
+          CutoutOverlayView(aspectRatio: aspectRatio)
+            .allowsHitTesting(false) // allow tapping through the overlay.
 
             instructionLabel
                 .padding(.top, 24)
