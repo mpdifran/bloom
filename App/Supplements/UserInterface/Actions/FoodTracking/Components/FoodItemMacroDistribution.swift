@@ -16,18 +16,26 @@ struct FoodItemMacroDistribution: View {
     let protein: Double
     let carbohydrates: Double
     let fat: Double
+    let numberOfServings: Double
 
-    init(protein: Double?, carbohydrates: Double?, fat: Double?) {
+    init(
+        protein: Double?,
+        carbohydrates: Double?,
+        fat: Double?,
+        numberOfServings: Double
+    ) {
         self.protein = protein ?? 0
         self.carbohydrates = carbohydrates ?? 0
         self.fat = fat ?? 0
+        self.numberOfServings = numberOfServings
     }
 
     var body: some View {
         VStack {
             HStack {
                 VStack {
-                    Text("\(protein.format()) g")
+                    Text("\(proteinValue.format()) g")
+                        .contentTransition(.numericText(value: proteinValue))
                     Text("Protein")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -36,7 +44,8 @@ struct FoodItemMacroDistribution: View {
                 Spacer()
 
                 VStack {
-                    Text("\(carbohydrates.format()) g")
+                    Text("\(carbsValue.format()) g")
+                        .contentTransition(.numericText(value: carbsValue))
                     Text("Carbs")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -45,7 +54,8 @@ struct FoodItemMacroDistribution: View {
                 Spacer()
 
                 VStack {
-                    Text("\(fat.format()) g")
+                    Text("\(fatValue.format()) g")
+                        .contentTransition(.numericText(value: fatValue))
                     Text("Fat")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -77,6 +87,18 @@ struct FoodItemMacroDistribution: View {
 
 private extension FoodItemMacroDistribution {
 
+    var proteinValue: Double {
+        protein * numberOfServings
+    }
+
+    var carbsValue: Double {
+        carbohydrates * numberOfServings
+    }
+
+    var fatValue: Double {
+        fat * numberOfServings
+    }
+
     var proteinPercent: CGFloat {
         CGFloat((protein * .caloriesPerGramOfProtein) / total)
     }
@@ -100,6 +122,13 @@ private extension FoodItemMacroDistribution {
     FoodItemMacroDistribution(
         protein: 12,
         carbohydrates: 40,
-        fat: 2
+        fat: 2,
+        numberOfServings: 1
+    )
+    FoodItemMacroDistribution(
+        protein: 1,
+        carbohydrates: 2,
+        fat: 3,
+        numberOfServings: 2
     )
 }

@@ -13,6 +13,13 @@ struct FoodItemNutritionLabel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            Text("Nutrition Label")
+                .font(.title2)
+                .fontDesign(.rounded)
+                .bold()
+                .horizontallyCentered()
+                .padding(.vertical)
+
             NutritionLine(name: "Calories", quantity: foodItem.calories, indentationLevel: 0)
 
             Divider()

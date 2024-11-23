@@ -88,6 +88,7 @@ struct FoodItemDetailsView: View {
             }
             .navigationTitle("Details")
             .navigationBarTitleDisplayMode(.inline)
+            .animation(.easeInOut, value: numberOfServings)
             .alert(error: $error)
         }
     }
@@ -131,12 +132,25 @@ private extension FoodItemDetailsView {
         }
     }
 
+    var caloriesValue: Double {
+        (foodItem.calories?.value ?? 0) * numberOfServings
+    }
+
     var macrosSection: some View {
         VStack {
+            Text("\(caloriesValue.format()) cal")
+                .font(.title)
+                .bold()
+                .fontDesign(.rounded)
+                .contentTransition(.numericText(value: caloriesValue))
+
+            Divider()
+
             FoodItemMacroDistribution(
                 protein: foodItem.protein?.value,
                 carbohydrates: foodItem.carbohydrates?.value,
-                fat: foodItem.fat?.value
+                fat: foodItem.fat?.value,
+                numberOfServings: numberOfServings
             )
         }
         .cardContainer(fill: .background.secondary)
