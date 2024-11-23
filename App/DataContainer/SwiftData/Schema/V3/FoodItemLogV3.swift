@@ -1,5 +1,5 @@
 //
-//  FoodItemLogV2.swift
+//  FoodItemLogV3.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-11-18.
@@ -17,14 +17,14 @@ extension SchemaV3 {
         public var date: Date = Date.distantPast
         public var meal: Meal = Meal.breakfast
         public var numberOfServings: Double = 0
-        public var foodItem: FoodItem?
+        @Relationship public var foodItem: FoodItemRecord? = nil
 
         public init(
             id: String,
             date: Date,
             meal: Meal,
             numberOfServings: Double,
-            foodItem: FoodItem
+            foodItem: FoodItemRecord
         ) {
             self.id = id
             self.date = date
@@ -36,10 +36,18 @@ extension SchemaV3 {
 }
 
 public extension SchemaV3.FoodItemLog {
-    enum Meal: String, Hashable, Sendable, Codable, CaseIterable {
+    enum Meal: String, Hashable, Sendable, Codable, CaseIterable, Identifiable {
+        public var id: Self { self }
+        
         case breakfast
         case lunch
         case dinner
         case snack
+    }
+}
+
+public extension SchemaV3.FoodItemLog.Meal {
+    var name: String {
+        rawValue.capitalized
     }
 }

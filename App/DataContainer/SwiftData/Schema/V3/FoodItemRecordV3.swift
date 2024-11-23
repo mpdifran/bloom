@@ -1,5 +1,5 @@
 //
-//  FoodItemV2.swift
+//  FoodItemRecordV3.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-11-18.
@@ -12,10 +12,11 @@ import SwiftData
 
 extension SchemaV3 {
     @Model
-    public final class FoodItem: Identifiable, Hashable {
+    public final class FoodItemRecord: Identifiable, Hashable {
         public var id: String = ""
         public var name: String = ""
         public var brandName: String = ""
+        public var flavour: String = ""
         public var calories: Double = 0.0
         public var protein: Double = 0.0
         public var carbohydrates: Double = 0.0
@@ -24,14 +25,16 @@ extension SchemaV3 {
         public var servingUnitString: String?
         public var servingValue: Double?
         public var ingredients: String?
+        public var isVerified: Bool = false
 
         @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.foodItem)
-        public var logs: [FoodItemLog]
+        public var logs: [FoodItemLog]?
 
         public init(
             id: String,
             name: String,
             brandName: String,
+            flavour: String,
             calories: Double,
             protein: Double,
             carbohydrates: Double,
@@ -40,11 +43,13 @@ extension SchemaV3 {
             servingUnitString: String?,
             servingValue: Double?,
             ingredients: String?,
+            isVerified: Bool,
             logs: [FoodItemLog]
         ) {
             self.id = id
             self.name = name
             self.brandName = brandName
+            self.flavour = flavour
             self.calories = calories
             self.protein = protein
             self.carbohydrates = carbohydrates
@@ -53,6 +58,7 @@ extension SchemaV3 {
             self.servingUnitString = servingUnitString
             self.servingValue = servingValue
             self.ingredients = ingredients
+            self.isVerified = isVerified
             self.logs = logs
         }
     }

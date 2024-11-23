@@ -54,7 +54,7 @@ public struct FoodItemDTO: Sendable {
     }
 }
 
-public extension FoodItem {
+public extension FoodItemRecord {
 
     func asDTO() -> FoodItemDTO {
         FoodItemDTO(
@@ -70,7 +70,7 @@ public extension FoodItem {
             servingUnitString: servingUnitString,
             servingValue: servingValue,
             ingredients: ingredients,
-            foodItemLogIDs: logs.map({ $0.id })
+            foodItemLogIDs: logs?.map({ $0.id }) ?? []
         )
     }
 }

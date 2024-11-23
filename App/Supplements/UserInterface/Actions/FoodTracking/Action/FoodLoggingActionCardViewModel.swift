@@ -7,6 +7,7 @@
 
 import SwiftUI
 import BloomModel
+import DataContainer
 
 private extension Int {
     static let debounceTime: Int = 300
@@ -16,29 +17,14 @@ struct FoodItemSection: Equatable, Identifiable {
     var id: String { title }
 
     let title: String
-    let foodItems: [FoodItem]
-}
-
-extension FoodLoggingActionCardView.ViewModel {
-    enum Meal: String, CaseIterable, Identifiable {
-        var id: Self { self }
-
-        case breakfast
-        case lunch
-        case dinner
-        case snack
-
-        var name: String {
-            self.rawValue.capitalized
-        }
-    }
+    let foodItems: [BloomModel.FoodItem]
 }
 
 extension FoodLoggingActionCardView {
 
     @Observable @MainActor
     final class ViewModel {
-        var meal = Meal.breakfast
+        var meal = FoodItemLog.Meal.breakfast
         var autocomplete = [String]()
         var isSearching = false
         var results: [FoodItemSection]?
