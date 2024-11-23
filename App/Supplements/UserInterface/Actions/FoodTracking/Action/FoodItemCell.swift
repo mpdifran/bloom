@@ -17,7 +17,7 @@ struct FoodItemCell: View {
     private let foodItemLogModelActor = FoodItemLogModelActor(modelContainer: ContainerHolder.shared.container)
 
     @State private var saveComplete = false
-    @State private var existingFoodLog: FoodItemLogDTO?
+    @State private var hasLoggedThisFoodItem = false
     @State private var error: Error?
 
     var body: some View {
@@ -73,11 +73,11 @@ struct FoodItemCell: View {
             }
 
             Button {
-                guard existingFoodLog == nil else { return }
+                guard !hasLoggedThisFoodItem else { return }
 
                 Task { await quickLogFood() }
             } label: {
-                if existingFoodLog == nil {
+                if !hasLoggedThisFoodItem {
                     Image(systemName: "plus.circle.fill")
                         .foregroundStyle(.tint, .tint.tertiary)
                         .font(.largeTitle)
@@ -88,7 +88,6 @@ struct FoodItemCell: View {
                 }
             }
             .sensoryFeedback(.success, trigger: saveComplete)
-            .disabled(existingFoodLog != nil)
         }
         .cardContainer(fill: .background.secondary)
         .alert(error: $error)
@@ -107,7 +106,7 @@ private extension FoodItemCell {
                 meal: nutritionViewModel.suggestedMeal,
                 numberOfServings: 1
             )
-            await checkForExistingFoodLog()
+            hasLoggedThisFoodItem = true
             saveComplete.toggle()
             SoundPlayer.playLogHealthData()
         } catch {
@@ -117,11 +116,13 @@ private extension FoodItemCell {
 
     func checkForExistingFoodLog() async {
         do {
-            existingFoodLog = try await foodItemLogModelActor.fetchLog(
+            let existingFoodLog = try await foodItemLogModelActor.fetchLog(
                 for: .now,
                 meal: nutritionViewModel.suggestedMeal,
                 foodItemID: food.id.value
             )
+
+            hasLoggedThisFoodItem = existingFoodLog != nil
         } catch {
             print(error)
         }
