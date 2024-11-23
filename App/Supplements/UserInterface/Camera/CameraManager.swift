@@ -33,7 +33,7 @@ final actor CameraManager: NSObject {
 
 extension CameraManager {
     func start() async {
-        await configureCaptureSession()
+        configureCaptureSession()
 
         captureSession.startRunning()
     }
@@ -89,7 +89,7 @@ extension CameraManager {
 // MARK: Private Methods
 
 private extension CameraManager {
-    func configureCaptureSession() async {
+    func configureCaptureSession() {
         guard !isInitialized else { return }
 
         captureSession.beginConfiguration()
@@ -98,13 +98,13 @@ private extension CameraManager {
 
         captureSession.sessionPreset = .photo
 
-        await setupVideoInput()
-        await setupPhotoOutput()
+        setupVideoInput()
+        setupPhotoOutput()
 
         isInitialized = true
     }
 
-    func setupVideoInput() async {
+    func setupVideoInput() {
         do {
           // Choose the best available camera for close up focus (wider the better).
           let discoverySession = AVCaptureDevice.DiscoverySession(
@@ -159,7 +159,7 @@ private extension CameraManager {
         }
     }
 
-    func setupPhotoOutput() async {
+    func setupPhotoOutput() {
         guard captureSession.canAddOutput(photoOutput) else {
             print("CameraManager: Could not add photo output to session")
             return
