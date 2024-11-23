@@ -81,3 +81,15 @@ public extension ModelContext {
         try existingModel(for: id)
     }
 }
+
+public extension ModelContext {
+
+    func fetchFoodItem(for id: String) throws -> FoodItemRecord? {
+        let descriptor = FetchDescriptor<FoodItemRecord>(
+            predicate: #Predicate<FoodItemRecord> { model in
+                model.id == id
+            }
+        )
+        return try fetch(descriptor).first
+    }
+}

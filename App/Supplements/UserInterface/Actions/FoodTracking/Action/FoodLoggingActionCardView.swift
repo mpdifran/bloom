@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import DataContainer
 
 struct FoodLoggingActionCardView: View {
 
@@ -27,7 +28,7 @@ struct FoodLoggingActionCardView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                resultsView
+                mainView
                 suggestionsBarView
                 foodSearchTextBar
             }
@@ -64,7 +65,7 @@ private extension FoodLoggingActionCardView {
 
     var mealPicker: some View {
         Menu {
-            ForEach(FoodLoggingActionCardView.ViewModel.Meal.allCases, id: \.self) { meal in
+            ForEach(FoodItemLog.Meal.allCases, id: \.self) { meal in
                 Button(meal.name) {
                     viewModel.meal = meal
                 }
@@ -80,58 +81,71 @@ private extension FoodLoggingActionCardView {
     }
 
     @ViewBuilder
-    var resultsView: some View {
+    var mainView: some View {
         if viewModel.isSearching {
-            VStack {
-                Spacer()
-                ProgressView()
-                    .tint(.secondary)
-                Text("Looking up foods...")
-                    .font(.title2)
-                    .bold()
-                    .foregroundStyle(.secondary)
-                Spacer()
-            }
+            searchingView
         } else if let results = viewModel.results {
             if results.isNotEmpty {
-                ScrollView {
-                    LazyVStack {
-                        ForEachEnumerated(results) { (sectionIndex, section) in
-                            SectionTitleView(section.title)
-                                .padding(.horizontal)
-
-                            ForEachEnumerated(section.foodItems) { index, food in
-                                if index < 3 || showAllInSection[sectionIndex] == true {
-                                    FoodItemCell(food: food)
-                                        .id(food.id)
-                                        .transition(.blurReplace)
-                                        .onTapGesture {
-                                            presentedSheet = FoodItemDetailsView(
-                                                foodItem: food
-                                            ).asAny
-                                        }
-                                }
-                            }
-
-                            if showAllInSection[sectionIndex] != true {
-                                ProminentButton("Show All") {
-                                    showAllInSection[sectionIndex] = true
-                                }
-                            }
-                        }
-                    }
-                    .padding()
-                }
-                .listStyle(.plain)
-                .animation(.bouncy, value: viewModel.results)
-                .animation(.bouncy, value: showAllInSection)
+                resultsView(results: results)
             } else {
-                ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
-                    .foregroundStyle(.secondary)
+                noContentView
             }
         } else {
             Spacer()
         }
+    }
+
+    var searchingView: some View {
+        VStack {
+            Spacer()
+            ProgressView()
+                .tint(.secondary)
+            Text("Looking up foods...")
+                .font(.title2)
+                .bold()
+                .foregroundStyle(.secondary)
+            Spacer()
+        }
+    }
+
+    func resultsView(results: [FoodItemSection]) -> some View {
+        ScrollView {
+            LazyVStack {
+                ForEachEnumerated(results) { (sectionIndex, section) in
+                    SectionTitleView(section.title)
+                        .padding(.horizontal)
+
+                    ForEachEnumerated(section.foodItems) { index, food in
+                        if index < 3 || showAllInSection[sectionIndex] == true {
+                            FoodItemCell(food: food)
+                                .id(food.id)
+                                .transition(.blurReplace)
+                                .onTapGesture {
+                                    presentedSheet = FoodItemDetailsView(
+                                        foodItem: food,
+                                        existingFoodItemLog: nil
+                                    ).asAny
+                                }
+                        }
+                    }
+
+                    if showAllInSection[sectionIndex] != true {
+                        ProminentButton("Show All") {
+                            showAllInSection[sectionIndex] = true
+                        }
+                    }
+                }
+            }
+            .padding()
+        }
+        .listStyle(.plain)
+        .animation(.bouncy, value: viewModel.results)
+        .animation(.bouncy, value: showAllInSection)
+    }
+
+    var noContentView: some View {
+        ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
+            .foregroundStyle(.secondary)
     }
 
     var suggestionsBarView: some View {

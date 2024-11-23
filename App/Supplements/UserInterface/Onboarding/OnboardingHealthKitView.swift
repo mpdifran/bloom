@@ -70,7 +70,7 @@ struct OnboardingHealthKitView: View {
                     Button("Continue") {
                         didContinue.toggle()
                         presentedSheet = OnboardingHealthKitPrivacyCard {
-                            healthPermissionTrigger.toggle()
+                            Task { await delayShowHealthKitPermissionView() }
                         }.asAny
                     }
                     .buttonStyle(.onboarding)
@@ -108,6 +108,11 @@ struct OnboardingHealthKitView: View {
 }
 
 private extension OnboardingHealthKitView {
+
+    func delayShowHealthKitPermissionView() async {
+        await Delay(500)
+        healthPermissionTrigger.toggle()
+    }
 
     func toggleMockHealthApp() async {
         await Delay(600)

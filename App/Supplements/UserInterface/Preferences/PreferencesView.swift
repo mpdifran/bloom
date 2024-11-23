@@ -291,6 +291,17 @@ private extension PreferencesView {
             .buttonStyle(.plain)
 
             Button {
+                presentedSheet = DebugFoodItemLogListView().asAny
+            } label: {
+                HStack {
+                    Text("Debug Food Item Logs")
+                    Spacer()
+                    DisclosureIndicator()
+                }
+            }
+            .buttonStyle(.plain)
+
+            Button {
                 HabitsViewModel.shared.resetHabitCheckDate()
                 alertDetails = AlertDetails(title: "Focus Area Review", message: "You will now be prompted to review your focus areas.")
             } label: {

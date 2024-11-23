@@ -12,10 +12,32 @@ import DataContainer
 
 struct FoodItemDetailsView: View {
     let foodItem: BloomModel.FoodItem
+    let existingFoodItemLog: FoodItemLog?
 
-    @State private var numberOfServings: Double = 1.5
-    @State private var meal: FoodLoggingActionCardView.ViewModel.Meal = .breakfast
+    init(
+        foodItem: BloomModel.FoodItem,
+        existingFoodItemLog: FoodItemLog?
+    ) {
+        self.foodItem = foodItem
+        self.existingFoodItemLog = existingFoodItemLog
 
+        if let existingFoodItemLog {
+            self._numberOfServings = State(initialValue: existingFoodItemLog.numberOfServings)
+            self._meal = State(initialValue: existingFoodItemLog.meal)
+        } else {
+            self._numberOfServings = State(initialValue: 1)
+            self._meal = State(initialValue: .breakfast)
+        }
+    }
+
+    @State private var numberOfServings: Double
+    @State private var meal: FoodItemLog.Meal = .breakfast
+    @State private var saveComplete = false
+    @State private var error: Error?
+
+    @FocusState private var isFocused: Bool
+
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -41,12 +63,30 @@ struct FoodItemDetailsView: View {
                 }
             }
             .shelf {
-                ProminentButton("Log") {
+                if isFocused {
+                    ProminentButton("Done") {
+                        isFocused = false
+                    }
+                } else {
+                    ProminentButton("Log") {
+                        Task {
+                            do {
+                                try await save()
 
+                                saveComplete.toggle()
+                                SoundPlayer.playLogHealthData()
+                                dismiss()
+                            } catch {
+                                self.error = error
+                            }
+                        }
+                    }
+                    .sensoryFeedback(.success, trigger: saveComplete)
                 }
             }
             .navigationTitle("Details")
             .navigationBarTitleDisplayMode(.inline)
+            .alert(error: $error)
         }
     }
 }
@@ -114,6 +154,7 @@ private extension FoodItemDetailsView {
                     .frame(width: 70)
                     .fontDesign(.rounded)
                     .keyboardType(.decimalPad)
+                    .focused($isFocused)
                     .selectAllTextOnBeginEditing()
             }
             .frame(minHeight: 60)
@@ -122,7 +163,7 @@ private extension FoodItemDetailsView {
 
             LabeledContent("Meal") {
                 Picker(meal.name, selection: $meal) {
-                    ForEach(FoodLoggingActionCardView.ViewModel.Meal.allCases) { meal in
+                    ForEach(FoodItemLog.Meal.allCases) { meal in
                         Text(meal.name)
                             .tag(meal)
                     }
@@ -143,6 +184,37 @@ private extension FoodItemDetailsView {
     }
 }
 
+private extension FoodItemDetailsView {
+
+    func save() async throws {
+        try modelContext.transaction {
+            if let existingFoodItemLog {
+                existingFoodItemLog.numberOfServings = numberOfServings
+                existingFoodItemLog.meal = meal
+
+            } else {
+                let dbFoodItem: FoodItemRecord
+                if let existingFoodItem = try modelContext.fetchFoodItem(for: foodItem.id.value) {
+                    dbFoodItem = existingFoodItem
+                } else {
+                    dbFoodItem = FoodItemRecord(foodItem: foodItem)
+                    modelContext.insert(dbFoodItem)
+                }
+
+                let foodItemLog = FoodItemLog(
+                    id: UUID().uuidString,
+                    date: .now, // TODO: this date needs to be computed based on the selected date + meal.
+                    meal: meal,
+                    numberOfServings: numberOfServings,
+                    foodItem: dbFoodItem
+                )
+
+                modelContext.insert(foodItemLog)
+            }
+        }
+    }
+}
+
 #Preview {
     FoodItemDetailsView(
         foodItem: .init(
@@ -158,6 +230,7 @@ private extension FoodItemDetailsView {
             servingQuantity: .init(value: 20, unit: "g"),
             ingredients: nil,
             isVerified: true
-        )
+        ),
+        existingFoodItemLog: nil
     )
 }
