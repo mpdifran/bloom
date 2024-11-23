@@ -24,7 +24,6 @@ extension FoodLoggingActionCardView {
 
     @Observable @MainActor
     final class ViewModel {
-        var meal = FoodItemLog.Meal.breakfast
         var autocomplete = [String]()
         var isSearching = false
         var results: [FoodItemSection]?

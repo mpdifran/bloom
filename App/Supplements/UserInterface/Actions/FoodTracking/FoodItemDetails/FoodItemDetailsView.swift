@@ -30,6 +30,8 @@ struct FoodItemDetailsView: View {
         }
     }
 
+    private let nutritionViewModel = NutritionTrackingViewModel.shared
+
     @State private var numberOfServings: Double
     @State private var meal: FoodItemLog.Meal = .breakfast
     @State private var saveComplete = false
@@ -187,30 +189,17 @@ private extension FoodItemDetailsView {
 private extension FoodItemDetailsView {
 
     func save() async throws {
-        try modelContext.transaction {
-            if let existingFoodItemLog {
-                existingFoodItemLog.numberOfServings = numberOfServings
-                existingFoodItemLog.meal = meal
+        if let existingFoodItemLog {
+            existingFoodItemLog.numberOfServings = numberOfServings
+            existingFoodItemLog.meal = meal
 
-            } else {
-                let dbFoodItem: FoodItemRecord
-                if let existingFoodItem = try modelContext.fetchFoodItem(for: foodItem.id.value) {
-                    dbFoodItem = existingFoodItem
-                } else {
-                    dbFoodItem = FoodItemRecord(foodItem: foodItem)
-                    modelContext.insert(dbFoodItem)
-                }
-
-                let foodItemLog = FoodItemLog(
-                    id: UUID().uuidString,
-                    date: .now, // TODO: this date needs to be computed based on the selected date + meal.
-                    meal: meal,
-                    numberOfServings: numberOfServings,
-                    foodItem: dbFoodItem
-                )
-
-                modelContext.insert(foodItemLog)
-            }
+            try modelContext.save()
+        } else {
+            try nutritionViewModel.log(
+                foodItem: foodItem,
+                meal: meal,
+                numberOfServings: numberOfServings
+            )
         }
     }
 }

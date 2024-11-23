@@ -43,4 +43,20 @@ public extension FoodItemLogModelActor {
         )
         return try context.fetch(descriptor).map { $0.asDTO() }
     }
+
+    func fetchLog(for date: Date, meal: FoodItemLog.Meal, foodItemID: String) throws -> FoodItemLogDTO? {
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        let endOfDay = Calendar.current.endOfDay(for: date)
+
+        let descriptor = FetchDescriptor<FoodItemLog>(
+            predicate: #Predicate<FoodItemLog> { model in
+                model.date >= startOfDay &&
+                model.date <= endOfDay &&
+                model.meal == meal &&
+                model.foodItem?.id == foodItemID
+            },
+            sortBy: [SortDescriptor(\FoodItemLog.date)]
+        )
+        return try context.fetch(descriptor).first?.asDTO()
+    }
 }

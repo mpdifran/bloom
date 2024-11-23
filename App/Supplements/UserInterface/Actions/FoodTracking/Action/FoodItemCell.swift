@@ -6,10 +6,19 @@
 //
 
 import SwiftUI
+import AppUI
 import BloomModel
+import DataContainer
 
 struct FoodItemCell: View {
     let food: FoodItem
+
+    private let nutritionViewModel = NutritionTrackingViewModel.shared
+    private let foodItemLogModelActor = FoodItemLogModelActor(modelContainer: ContainerHolder.shared.container)
+
+    @State private var saveComplete = false
+    @State private var existingFoodLog: FoodItemLogDTO?
+    @State private var error: Error?
 
     var body: some View {
         HStack {
@@ -64,14 +73,58 @@ struct FoodItemCell: View {
             }
 
             Button {
+                guard existingFoodLog == nil else { return }
 
+                Task { await quickLogFood() }
             } label: {
-                Image(systemName: "plus.circle.fill")
-                    .foregroundStyle(.white, .tint)
-                    .font(.largeTitle)
+                if existingFoodLog == nil {
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundStyle(.tint, .tint.tertiary)
+                        .font(.largeTitle)
+                } else {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.white, .tint)
+                        .font(.largeTitle)
+                }
             }
+            .sensoryFeedback(.success, trigger: saveComplete)
+            .disabled(existingFoodLog != nil)
         }
         .cardContainer(fill: .background.secondary)
+        .alert(error: $error)
+        .onChange(of: nutritionViewModel.suggestedMeal) { _, _ in
+            Task { await checkForExistingFoodLog() }
+        }
+    }
+}
+
+private extension FoodItemCell {
+
+    func quickLogFood() async {
+        do {
+            try nutritionViewModel.log(
+                foodItem: food,
+                meal: nutritionViewModel.suggestedMeal,
+                numberOfServings: 1
+            )
+            await checkForExistingFoodLog()
+            saveComplete.toggle()
+            SoundPlayer.playLogHealthData()
+        } catch {
+            self.error = error
+        }
+    }
+
+    func checkForExistingFoodLog() async {
+        do {
+            existingFoodLog = try await foodItemLogModelActor.fetchLog(
+                for: .now,
+                meal: nutritionViewModel.suggestedMeal,
+                foodItemID: food.id.value
+            )
+        } catch {
+            print(error)
+        }
     }
 }
 

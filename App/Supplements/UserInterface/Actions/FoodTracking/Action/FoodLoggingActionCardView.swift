@@ -25,6 +25,8 @@ struct FoodLoggingActionCardView: View {
 
     @FocusState private var isFocused: Bool
 
+    private let nutritionViewModel = NutritionTrackingViewModel.shared
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -67,12 +69,12 @@ private extension FoodLoggingActionCardView {
         Menu {
             ForEach(FoodItemLog.Meal.allCases, id: \.self) { meal in
                 Button(meal.name) {
-                    viewModel.meal = meal
+                    nutritionViewModel.suggestedMeal = meal
                 }
             }
         } label: {
             HStack {
-                Text(viewModel.meal.name)
+                Text(nutritionViewModel.suggestedMeal.name)
                 Image(systemName: "chevron.up.chevron.down")
                     .font(.caption)
             }
@@ -130,9 +132,16 @@ private extension FoodLoggingActionCardView {
                     }
 
                     if showAllInSection[sectionIndex] != true {
-                        ProminentButton("Show All") {
+                        Button {
                             showAllInSection[sectionIndex] = true
+                        } label: {
+                            Text("Show All")
+                                .padding(.vertical, 6)
+                                .horizontallyCentered()
                         }
+                        .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.capsule)
+                        .foregroundStyle(.white)
                     }
                 }
             }
