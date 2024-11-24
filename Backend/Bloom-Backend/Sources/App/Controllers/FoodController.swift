@@ -70,6 +70,18 @@ extension FoodController {
     func uploadNewFood(_ request: Request) async throws -> UploadNewFoodResponse {
         let requestBody = try request.content.decode(UploadNewFoodRequest.self)
 
+        let existingFoodItems = try await foodDatabaseService.searchFoods(
+            request: request,
+            barcode: requestBody.barcode
+        )
+
+        if let foodItem = existingFoodItems.first {
+            return UploadNewFoodResponse(
+                result: .foodLogged,
+                foodItem: foodItem
+            )
+        }
+
         let nutritionLabelMetadata = try await save(image: requestBody.nutritionLabelImage, request: request)
         let packagingMetadata = try await save(image: requestBody.packagingImage, request: request)
 
