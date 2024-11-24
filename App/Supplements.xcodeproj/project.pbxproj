@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4B8F74742CEC1FE400493AE3 /* CameraPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F74732CEC1FDF00493AE3 /* CameraPermissionManager.swift */; };
+		4B900C382CF3CA2D00B4EAB0 /* Metadata+AppIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B900C372CF3CA1100B4EAB0 /* Metadata+AppIdentifier.swift */; };
 		4BABF3C82CE93ECC005D71F2 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */; };
 		4BABF3D32CE96D03005D71F2 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */; };
 		4BABF3D52CE97201005D71F2 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BABF3D42CE971FE005D71F2 /* CameraView.swift */; };
@@ -514,6 +515,7 @@
 
 /* Begin PBXFileReference section */
 		4B8F74732CEC1FDF00493AE3 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
+		4B900C372CF3CA1100B4EAB0 /* Metadata+AppIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Metadata+AppIdentifier.swift"; sourceTree = "<group>"; };
 		4BABF3C72CE93EC8005D71F2 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		4BABF3D22CE96CFD005D71F2 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		4BABF3D42CE971FE005D71F2 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
@@ -2270,6 +2272,7 @@
 		FFF03D082CCBE6C900476B44 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				4B900C372CF3CA1100B4EAB0 /* Metadata+AppIdentifier.swift */,
 				FFF61AF62BED5A4D00926042 /* HealthStore+Helpers.swift */,
 				FFF61B6D2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift */,
 				FFF61B6F2BF136F500926042 /* HKCategorySample+TimeInterval.swift */,
@@ -2997,6 +3000,7 @@
 				FF70E9192CB86F970055E932 /* SleepRespiratoryRateSummaryCell.swift in Sources */,
 				FF1327F52CB41FE700ACF981 /* SectionTitleView.swift in Sources */,
 				FF4CAAF92C8005B6001A59F3 /* BowelMovementMonthlySummary.swift in Sources */,
+				4B900C382CF3CA2D00B4EAB0 /* Metadata+AppIdentifier.swift in Sources */,
 				FF9C84D02C5004F100648A1E /* DailyVitalMeterView.swift in Sources */,
 				FF88F13C2C7D1CDD0093D1B4 /* ActionCardView.swift in Sources */,
 				FFBE523D2C74EE7D00F510DE /* WorkoutHeartRateReport.swift in Sources */,

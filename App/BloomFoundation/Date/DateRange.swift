@@ -128,6 +128,15 @@ public extension DateRange {
 
         return DateRange(startDate, endDate)
     }
+
+  static func duringDay(_ date: Date) -> DateRange {
+    let startOfDay = Calendar.current.startOfDay(for: date)
+    guard let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) else {
+      return DateRange(startOfDay, startOfDay)
+    }
+
+    return DateRange(startOfDay, endOfDay)
+  }
 }
 
 // MARK: Trailing Ranges

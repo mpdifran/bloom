@@ -30,7 +30,7 @@ enum HealthType: CaseIterable {
 
   var unit: HKUnit {
     switch self {
-    case .calories: .kilocalorie()
+    case .calories: .largeCalorie()
     case .protein: .gram()
     case .carbohydrates: .gram()
     case .fat: .gram()
@@ -95,29 +95,15 @@ extension HealthStoreModifier {
 
 private extension HealthStoreModifier {
   func clearExistingEntries(for date: Date) async throws {
-    let calendar = Calendar.current
-    let startOfDay = calendar.startOfDay(for: date)
-    let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-
-    let dayPredicate = HKQuery.predicateForSamples(
-      withStart: startOfDay,
-      end: endOfDay,
-      options: .strictEndDate
-    )
-
-    guard let appBundleIdentifier = Bundle.main.bundleIdentifier else {
-      throw NSError(description: "Unable to fetch bundle ID")
-    }
-
-    let metadataPredicate = HKQuery.predicateForObjects(withMetadataKey: "AppIdentifier", allowedValues: [appBundleIdentifier])
-    // Find all entries for the day that were logged by Bloom.
-    let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [dayPredicate, metadataPredicate])
-
     // We need to find and delete for each quantity type. ex calories, protein, carbs, fat.
     for sampleType in HealthType.allCases {
       do {
         let type = HKQuantityType.quantityType(forIdentifier: sampleType.identifier)!
-        let samples = try await fetchSamples(for: type, predicate: combinedPredicate)
+        let samples = await HealthStoreFetcher.shared.fetchSamples(
+          for: type,
+          dateRange: .duringDay(date),
+          writtenByApp: true
+        )
         guard samples.isNotEmpty else { return }
         // Cast to the correct type for delete. HKSamples are also HKObjects.
         let objects = samples as [HKObject]
@@ -125,28 +111,6 @@ private extension HealthStoreModifier {
       } catch {
         print("Error fetching or deleting samples for \(sampleType.identifier): \(error.localizedDescription)")
       }
-    }
-  }
-
-  func fetchSamples(for sampleType: HKQuantityType, predicate: NSPredicate) async throws -> [HKSample] {
-    try await withCheckedThrowingContinuation { continuation in
-      let query = HKSampleQuery(
-        sampleType: sampleType,
-        predicate: predicate,
-        limit: HKObjectQueryNoLimit,
-        sortDescriptors: nil
-      ) { _, samples, error in
-        if let error = error {
-          continuation.resume(throwing: error)
-        } else if let samples = samples {
-          // Passing HKSample risks a data race because it isn't sendable but there isn't a good way to reconstruct it...
-          continuation.resume(returning: samples)
-        } else {
-          continuation.resume(returning: [])
-        }
-      }
-
-      healthStore.execute(query)
     }
   }
 
@@ -182,13 +146,13 @@ private extension HealthStoreModifier {
       unit: type.unit,
       doubleValue: servingValue * foodItemLog.numberOfServings
     )
-
-    let metaData: [String: Any] = [
-      HKMetadataKeyFoodType: foodItem.name,
-      "brandName": foodItem.brandName,
-      "servingName": foodItem.servingName ?? "",
-      // TODO: any other metadata here. Remember an app identifier.
-    ]
+    let metaData = HealthMetadata.create(
+      [
+        .appIdentifier,
+        .food(foodItem.name),
+        .meal(foodItemLog.meal.rawValue)
+      ]
+    )
 
     return HKQuantitySample(
       type: .quantityType(forIdentifier: type.identifier)!,
@@ -197,5 +161,32 @@ private extension HealthStoreModifier {
       end: foodItemLog.date,
       metadata: metaData
     )
+  }
+}
+
+// TODO: ZACH - Move this somewhere else
+enum HealthMetadata {
+  case appIdentifier
+  case meal(String)
+  case food(String)
+
+  var key: String {
+    switch self {
+    case .appIdentifier: "AppIdentifier"
+    case .meal: "Meal"
+    case .food: HKMetadataKeyFoodType
+    }
+  }
+
+  var value: String {
+    switch self {
+    case .appIdentifier: Bundle.main.bundleIdentifier ?? ""
+    case .meal(let mealName): mealName
+    case .food(let foodName): foodName
+    }
+  }
+
+  static func create(_ cases: [HealthMetadata]) -> [String: String] {
+    Dictionary(uniqueKeysWithValues: cases.map { ($0.key, $0.value) })
   }
 }
