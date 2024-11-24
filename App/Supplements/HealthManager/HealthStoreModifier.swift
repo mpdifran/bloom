@@ -9,6 +9,49 @@ import Foundation
 import DataContainer
 @preconcurrency import HealthKit
 
+// MARK: - HealthType
+
+/// Making the logged health types opt-in.
+/// We can leverage allCases to make logging more generic.
+enum HealthType: CaseIterable {
+  case calories
+  case protein
+  case carbohydrates
+  case fat
+
+  var identifier: HKQuantityTypeIdentifier {
+    switch self {
+    case .calories: .dietaryEnergyConsumed
+    case .protein: .dietaryProtein
+    case .carbohydrates: .dietaryCarbohydrates
+    case .fat: .dietaryFatTotal
+    }
+  }
+
+  var unit: HKUnit {
+    switch self {
+    case .calories: .kilocalorie()
+    case .protein: .gram()
+    case .carbohydrates: .gram()
+    case .fat: .gram()
+    }
+  }
+
+  func getServingSize(_ foodItem: FoodItemDTO) -> Double {
+    let servingValue = foodItem.servingValue ?? 0
+    let value = switch self {
+    case .calories: foodItem.calories
+    case .protein: foodItem.protein
+    case .carbohydrates: foodItem.carbohydrates
+    case .fat: foodItem.fat
+    }
+
+    return servingValue * value
+  }
+}
+
+// MARK: - HealthStoreModifier
+
 final actor HealthStoreModifier {
     static let shared = HealthStoreModifier()
 
@@ -43,7 +86,10 @@ extension HealthStoreModifier {
 
       let foodLogs = try await foodItemLogModel.fetchLogs(for: date)
 
+      // Fetch and delete all entries for the day.
       try await clearExistingEntries(for: date)
+      // Write food logs to HealthKit.
+      try await recordFoodLogs(foodLogs)
     }
 }
 
@@ -59,25 +105,19 @@ private extension HealthStoreModifier {
       options: .strictEndDate
     )
 
-    // Get the bundle identifier of your app
     guard let appBundleIdentifier = Bundle.main.bundleIdentifier else {
-      throw NSError(domain: "YourApp", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unable to retrieve bundle identifier."])
+      throw NSError(description: "Unable to fetch bundle ID")
     }
 
     let metadataPredicate = HKQuery.predicateForObjects(withMetadataKey: "AppIdentifier", allowedValues: [appBundleIdentifier])
     let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [dayPredicate, metadataPredicate])
 
-    let sampleTypes: [HKQuantityType] = [
-      HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
-      HKQuantityType.quantityType(forIdentifier: .dietaryProtein)!,
-      HKQuantityType.quantityType(forIdentifier: .dietaryCarbohydrates)!,
-      HKQuantityType.quantityType(forIdentifier: .dietaryFatTotal)!
-    ]
-
-    for sampleType in sampleTypes {
+    for sampleType in HealthType.allCases {
       do {
-        let samples = try await fetchSamples(for: sampleType, predicate: combinedPredicate)
+        let type = HKQuantityType.quantityType(forIdentifier: sampleType.identifier)!
+        let samples = try await fetchSamples(for: type, predicate: combinedPredicate)
         guard samples.isNotEmpty else { return }
+        // Cast to the correct type for delete. HKSamples are also HKObjects.
         let objects = samples as [HKObject]
         try await healthStore.delete(objects)
       } catch {
@@ -97,6 +137,7 @@ private extension HealthStoreModifier {
         if let error = error {
           continuation.resume(throwing: error)
         } else if let samples = samples {
+          // Passing HKSample risks a data race because it isn't sendable but there isn't a good way to reconstruct it...
           continuation.resume(returning: samples)
         } else {
           continuation.resume(returning: [])
@@ -105,5 +146,52 @@ private extension HealthStoreModifier {
 
       healthStore.execute(query)
     }
+  }
+
+  func recordFoodLogs(_ foodItemLogs: [FoodItemLogDTO]) async throws {
+    // Each log will make entries for the samples: calories, protein, carbs, and fat.
+    let samples = foodItemLogs.flatMap { log in
+      createFoodSamples(log)
+    }
+
+    guard samples.isNotEmpty else { return }
+    try await write(samples: samples)
+  }
+
+  func createFoodSamples(_ foodItemLog: FoodItemLogDTO) -> [HKQuantitySample] {
+    HealthType.allCases.compactMap { type in
+      createFoodSample(
+        foodItemLog,
+        type: type
+      )
+    }
+  }
+
+  func createFoodSample(
+    _ foodItemLog: FoodItemLogDTO,
+    type: HealthType
+  ) -> HKQuantitySample? {
+    guard let foodItem = foodItemLog.foodItem else { return nil }
+
+    let servingValue = type.getServingSize(foodItem)
+    let quantity = HKQuantity(
+      unit: type.unit,
+      doubleValue: servingValue * foodItemLog.numberOfServings
+    )
+
+    let metaData: [String: Any] = [
+      HKMetadataKeyFoodType: foodItem.name,
+      "brandName": foodItem.brandName,
+      "servingName": foodItem.servingName ?? "",
+      // TODO: any other metadata here. Remember an app identifier.
+    ]
+
+    return HKQuantitySample(
+      type: .quantityType(forIdentifier: type.identifier)!,
+      quantity: quantity,
+      start: foodItemLog.date,
+      end: foodItemLog.date,
+      metadata: metaData
+    )
   }
 }
