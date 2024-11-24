@@ -110,8 +110,10 @@ private extension HealthStoreModifier {
     }
 
     let metadataPredicate = HKQuery.predicateForObjects(withMetadataKey: "AppIdentifier", allowedValues: [appBundleIdentifier])
+    // Find all entries for the day that were logged by Bloom.
     let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [dayPredicate, metadataPredicate])
 
+    // We need to find and delete for each quantity type. ex calories, protein, carbs, fat.
     for sampleType in HealthType.allCases {
       do {
         let type = HKQuantityType.quantityType(forIdentifier: sampleType.identifier)!
@@ -149,12 +151,14 @@ private extension HealthStoreModifier {
   }
 
   func recordFoodLogs(_ foodItemLogs: [FoodItemLogDTO]) async throws {
-    // Each log will make entries for the samples: calories, protein, carbs, and fat.
+    // Each log will make entries for each log, for the samples: calories, protein, carbs, and fat.
+    // These will be batched, and logged once.
     let samples = foodItemLogs.flatMap { log in
       createFoodSamples(log)
     }
 
     guard samples.isNotEmpty else { return }
+    // Write to HealthKit
     try await write(samples: samples)
   }
 
