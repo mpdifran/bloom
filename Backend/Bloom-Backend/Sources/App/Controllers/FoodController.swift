@@ -176,14 +176,13 @@ private extension FoodController {
 
 private extension FoodController {
 
+    /// Saves images using the `request.imageStorage`
+    /// - Parameters:
+    ///   - image: The image to save
+    ///   - request: The request context for the current request.
+    /// - Returns: ImageFileMetadata
+    ///   The metadata for the resulting image.
     func save(image: ImageFile, request: Request) async throws -> ImageFileMetadata {
-        let filename = "\(UUID().uuidString).\(image.fileExtension)"
-        let filePath = request.application.directory.workingDirectory + "Private/Food/" + filename
-        let buffer = request.application.allocator.buffer(data: image.data)
-
-        // TODO: Write this to S3 instead.
-        try await request.fileio.writeFile(buffer, at: filePath)
-
-        return ImageFileMetadata(filename: filename, data: image.data)
+        return try await request.imageStorage.store(image: image)
     }
 }
