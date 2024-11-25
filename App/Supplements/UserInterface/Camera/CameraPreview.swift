@@ -13,13 +13,24 @@ import SwiftUI
 struct CameraPreview: UIViewRepresentable {
 
     let session: AVCaptureSession
+    let gravity: AVLayerVideoGravity
     let onTap: (CGPoint) -> Void
+
+    init(
+        session: AVCaptureSession,
+        gravity: AVLayerVideoGravity = .resizeAspect,
+        onTap: @escaping (CGPoint) -> Void
+    ) {
+        self.session = session
+        self.gravity = gravity
+        self.onTap = onTap
+    }
 
     func makeUIView(context: Context) -> VideoPreviewView {
         let view = VideoPreviewView()
         view.backgroundColor = .black
         view.videoPreviewLayer.session = session
-        view.videoPreviewLayer.videoGravity = .resizeAspect
+        view.videoPreviewLayer.videoGravity = gravity
         view.videoPreviewLayer.connection?.videoRotationAngle = 90
 
         let tapGesture = UITapGestureRecognizer(

@@ -138,6 +138,7 @@
 		FF4EFF8E2C938497005E4A1F /* MenstrualCyclePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */; };
 		FF4EFF902C93A0B7005E4A1F /* MenstruationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF8F2C93A0AF005E4A1F /* MenstruationDetailView.swift */; };
 		FF4EFF922C93BDDE005E4A1F /* MenstruationCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */; };
+		FF5D06DB2CF3F1A400374F66 /* AIFoodScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D06DA2CF3F19F00374F66 /* AIFoodScannerViewModel.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -215,6 +216,9 @@
 		FF7D6C2D2CDC0A11005B86C0 /* FoodLoggingActionCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */; };
 		FF7D6C332CDD24E1005B86C0 /* URL+QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */; };
 		FF7D6C352CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */; };
+		FF8243772CF3A26B0087955A /* AIFoodScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8243762CF3A26B0087955A /* AIFoodScannerView.swift */; };
+		FF8243792CF3A3210087955A /* FoodItemServing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8243782CF3A3210087955A /* FoodItemServing.swift */; };
+		FF82437B2CF3B4D10087955A /* AIScanFoodItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF82437A2CF3B4D10087955A /* AIScanFoodItemCell.swift */; };
 		FF87406E2CDD5474002581FA /* FoodItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87406D2CDD5474002581FA /* FoodItemCell.swift */; };
 		FF8740F32CDE6891002581FA /* FoodSearchToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */; };
 		FF8742422CE17B08002581FA /* DataScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8742412CE17B08002581FA /* DataScannerView.swift */; };
@@ -642,6 +646,7 @@
 		FF4EFF8D2C938492005E4A1F /* MenstrualCyclePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstrualCyclePhase.swift; sourceTree = "<group>"; };
 		FF4EFF8F2C93A0AF005E4A1F /* MenstruationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstruationDetailView.swift; sourceTree = "<group>"; };
 		FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstruationCalendarView.swift; sourceTree = "<group>"; };
+		FF5D06DA2CF3F19F00374F66 /* AIFoodScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIFoodScannerViewModel.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -719,6 +724,9 @@
 		FF7D6C2C2CDC0A09005B86C0 /* FoodLoggingActionCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLoggingActionCardViewModel.swift; sourceTree = "<group>"; };
 		FF7D6C322CDD24DD005B86C0 /* URL+QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+QueryItems.swift"; sourceTree = "<group>"; };
 		FF7D6C342CDD272A005B86C0 /* FoodSearchAutocompleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchAutocompleteCell.swift; sourceTree = "<group>"; };
+		FF8243762CF3A26B0087955A /* AIFoodScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIFoodScannerView.swift; sourceTree = "<group>"; };
+		FF8243782CF3A3210087955A /* FoodItemServing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemServing.swift; sourceTree = "<group>"; };
+		FF82437A2CF3B4D10087955A /* AIScanFoodItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIScanFoodItemCell.swift; sourceTree = "<group>"; };
 		FF87406D2CDD5474002581FA /* FoodItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemCell.swift; sourceTree = "<group>"; };
 		FF8740F22CDE6891002581FA /* FoodSearchToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchToolCell.swift; sourceTree = "<group>"; };
 		FF8742412CE17B08002581FA /* DataScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataScannerView.swift; sourceTree = "<group>"; };
@@ -1507,9 +1515,21 @@
 				FFB6407E2CEFBF270013502E /* FoodItemDetails */,
 				FFB640832CEFDDAC0013502E /* Components */,
 				FF8743512CE517CA002581FA /* Tools */,
+				FF8243752CF3A1D60087955A /* AIFoodScanner */,
 				FF8743502CE517B1002581FA /* FoodUpload */,
 			);
 			path = FoodTracking;
+			sourceTree = "<group>";
+		};
+		FF8243752CF3A1D60087955A /* AIFoodScanner */ = {
+			isa = PBXGroup;
+			children = (
+				FF8243762CF3A26B0087955A /* AIFoodScannerView.swift */,
+				FF5D06DA2CF3F19F00374F66 /* AIFoodScannerViewModel.swift */,
+				FF82437A2CF3B4D10087955A /* AIScanFoodItemCell.swift */,
+				FF8243782CF3A3210087955A /* FoodItemServing.swift */,
+			);
+			path = AIFoodScanner;
 			sourceTree = "<group>";
 		};
 		FF8742402CE17AA3002581FA /* Scanners */ = {
@@ -2853,6 +2873,7 @@
 				FFC77B062C5E6724003E5F85 /* HKQuantity+Helpers.swift in Sources */,
 				FFB4445B2BEC4C4C00486AD7 /* AskRequestModel.swift in Sources */,
 				FF1705232C10A38A000D4B3D /* SleepProgramConfigurationViewModel.swift in Sources */,
+				FF82437B2CF3B4D10087955A /* AIScanFoodItemCell.swift in Sources */,
 				FF2FB89A2C9CD12000F57523 /* HabitDailyUpdateCellViewModel.swift in Sources */,
 				FFB6910B2C19FA7F00BEC0D4 /* GoodMorningView.swift in Sources */,
 				FF48C2902C69A9BD00DC8D1D /* DetailInfoCardView.swift in Sources */,
@@ -2865,6 +2886,7 @@
 				FF0404CF2C028456009FDC4E /* PrimaryButtonStyle.swift in Sources */,
 				FFF66FA92C2B53CF00BBF348 /* DateMinMaxQuantitySample.swift in Sources */,
 				FF70E9FD2CC0602D0055E932 /* HealthGoalProvider.swift in Sources */,
+				FF8243772CF3A26B0087955A /* AIFoodScannerView.swift in Sources */,
 				FFB444542BEC3B0600486AD7 /* ChatEmojiCell.swift in Sources */,
 				FFBE52472C76135700F510DE /* MiniTargetHeartRateZoneDistributionView.swift in Sources */,
 				FF8F79BB2C6189790095C36D /* NutritionDetailsView.swift in Sources */,
@@ -3071,6 +3093,7 @@
 				FFEBEA5F2CD29BDE00142AA1 /* IconGauge.swift in Sources */,
 				FFC77B082C5E6C0E003E5F85 /* HKQuantityRange.swift in Sources */,
 				FF87434E2CE5128E002581FA /* BarcodeGenerator.swift in Sources */,
+				FF8243792CF3A3210087955A /* FoodItemServing.swift in Sources */,
 				FF70EA062CC1A1620055E932 /* BloomPlusOfferView.swift in Sources */,
 				FFA402CA2C94C88700D8DD40 /* View+Selectable.swift in Sources */,
 				FFA134F42C3F167E00FF1829 /* SleepScoreView.swift in Sources */,
@@ -3154,6 +3177,7 @@
 				FF70E9232CB86FCE0055E932 /* SleepSoundLevelChartView.swift in Sources */,
 				FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */,
 				FF1E960F2C0ACC70004DAD2D /* LabelledMetricView.swift in Sources */,
+				FF5D06DB2CF3F1A400374F66 /* AIFoodScannerViewModel.swift in Sources */,
 				FF70EA042CC183770055E932 /* BodyWeightTodayWidgetViewModel.swift in Sources */,
 				FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */,
 				FF87434C2CE5117C002581FA /* BarcodeView.swift in Sources */,
