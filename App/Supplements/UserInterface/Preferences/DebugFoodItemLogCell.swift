@@ -48,6 +48,7 @@ struct DebugFoodItemLogCell: View {
                 servingUnitString: "g",
                 servingValue: 20,
                 ingredients: nil,
+                category: .branded,
                 isVerified: true,
                 logs: []
             )

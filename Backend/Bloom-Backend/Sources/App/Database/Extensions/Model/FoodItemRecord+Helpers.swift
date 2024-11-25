@@ -32,7 +32,24 @@ extension FoodItemRecord {
             servingName: servingName,
             servingQuantity: servingQuantity,
             ingredients: nil,
+            category: category.asCategory(),
             isVerified: state == .verified
         )
+    }
+}
+
+extension FoodItemRecord.Category {
+
+    func asCategory() -> FoodItem.Category {
+        switch self {
+        case .generic:
+                .generic
+        case .fastfood:
+                .fastfood
+        case .restaurant:
+                .restaurant
+        case .branded:
+                .branded
+        }
     }
 }

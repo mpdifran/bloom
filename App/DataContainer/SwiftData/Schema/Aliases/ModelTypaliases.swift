@@ -7,5 +7,5 @@
 
 public typealias BowelMovement = SchemaV0.BowelMovement
 public typealias Habit = SchemaV2.Habit
-public typealias FoodItemRecord = SchemaV3.FoodItemRecord
-public typealias FoodItemLog = SchemaV3.FoodItemLog
+public typealias FoodItemRecord = SchemaV4.FoodItemRecord
+public typealias FoodItemLog = SchemaV4.FoodItemLog

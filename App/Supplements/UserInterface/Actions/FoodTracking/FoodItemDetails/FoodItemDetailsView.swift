@@ -230,6 +230,7 @@ private extension FoodItemDetailsView {
             servingName: "6 crackers",
             servingQuantity: .init(value: 20, unit: "g"),
             ingredients: nil,
+            category: .branded,
             isVerified: true
         ),
         existingFoodItemLog: nil

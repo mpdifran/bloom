@@ -32,6 +32,7 @@ extension Components.Schemas.Hint {
             servingName: nil, // TODO: Implement?
             servingQuantity: servingSizes.first,
             ingredients: food?.foodContentsLabel,
+            category: .branded, // TODO: Don't assume this, look at the model data.
             isVerified: false
         )
     }

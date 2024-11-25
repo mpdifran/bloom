@@ -31,6 +31,7 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
     /// }
     public let servingQuantity: Quantity?
     public let ingredients: String?
+    public let category: Category
     public let isVerified: Bool
 
     public init(
@@ -45,6 +46,7 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
         servingName: String?,
         servingQuantity: Quantity?,
         ingredients: String?,
+        category: Category,
         isVerified: Bool
     ) {
         self.id = id
@@ -58,6 +60,7 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
         self.servingName = servingName
         self.servingQuantity = servingQuantity
         self.ingredients = ingredients
+        self.category = category
         self.isVerified = isVerified
     }
 }
@@ -74,6 +77,16 @@ public extension FoodItem {
             self.value = value
             self.unit = unit
         }
+    }
+}
+
+public extension FoodItem {
+    enum Category: String, Codable, Sendable {
+        case generic
+        case fastfood
+        case restaurant
+        case branded
+        case aiGenerated
     }
 }
 

@@ -10,5 +10,5 @@ import Fluent
 
 let allMigrations: [Migration] = [
     EnablePgTrgmMigration(),
-    FoodItemRecord.Create(),
+    FoodItemRecord.Create()
 ]

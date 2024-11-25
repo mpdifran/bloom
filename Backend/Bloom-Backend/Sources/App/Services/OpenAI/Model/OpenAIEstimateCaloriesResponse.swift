@@ -54,6 +54,7 @@ extension OpenAIEstimateCaloriesResponse.Item {
                 value: Double(servingAmount),
                 unit: servingAmountUnit),
             ingredients: nil,
+            category: .aiGenerated,
             isVerified: false
         )
   }

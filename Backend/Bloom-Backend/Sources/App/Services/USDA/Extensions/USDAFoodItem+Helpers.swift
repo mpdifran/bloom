@@ -32,6 +32,7 @@ extension USDAFoodItem {
             servingName: nil,
             servingQuantity: nil,
             ingredients: nil,
+            category: .generic,
             isVerified: false
         )
     }

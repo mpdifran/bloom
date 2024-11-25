@@ -43,26 +43,8 @@ extension FoodController {
 
     @Sendable
     func searchFoods(_ request: Request) async throws -> FoodSearchResponse {
-        var sections = [FoodSearchResponse.Section]()
-
-        // parallelize
-        try await withThrowingTaskGroup(of: FoodSearchResponse.Section?.self) { group in
-            group.addTask {
-                return try await searchFoodsLocalDatabase(request)
-            }
-            group.addTask {
-                return try await searchFoodsEdamam(request)
-            }
-
-            for try await section in group {
-                guard let section else { continue }
-
-                sections.append(section)
-            }
-        }
-
-        let sortedSections = sections.sorted(by: { $0.index < $1.index })
-        return FoodSearchResponse(sections: sortedSections)
+        let sections = try await searchFoodsLocalDatabase(request)
+        return FoodSearchResponse(sections: sections)
     }
 
     @Sendable
@@ -116,32 +98,106 @@ extension FoodController {
 
 private extension FoodController {
 
-    func searchFoodsLocalDatabase(_ request: Request) async throws -> FoodSearchResponse.Section? {
+    func searchFoodsLocalDatabase(_ request: Request) async throws -> [FoodSearchResponse.Section] {
         let requestBody = try request.content.decode(FoodSearchRequest.self)
 
-        let foodItems: [FoodItem]
         if let barcode = requestBody.upcCode {
-            foodItems = try await foodDatabaseService.searchFoods(
-                request: request,
-                barcode: barcode
-            )
+            return try await searchFoodsBarcodeLocalDatabase(request, barcode: barcode)
         } else if let name = requestBody.name {
-            foodItems = try await foodDatabaseService.searchFoods(
-                request: request,
-                query: name,
-                limit: 20
-            )
+            return try await searchFoodsByNameLocalDatabase(request, name: name)
         } else {
             throw Abort(.badRequest)
         }
+    }
 
-        guard foodItems.isNotEmpty else { return nil }
+    func searchFoodsBarcodeLocalDatabase(_ request: Request, barcode: String) async throws -> [FoodSearchResponse.Section] {
+        let foodItems = try await foodDatabaseService.searchFoods(
+            request: request,
+            barcode: barcode
+        )
 
-        return FoodSearchResponse.Section(
-            title: "Generic",
-            index: 1,
+        let section = FoodSearchResponse.Section(
+            title: "Matched Barcode",
+            index: 0,
             foods: foodItems
         )
+
+        return [section]
+    }
+
+    func searchFoodsByNameLocalDatabase(_ request: Request, name: String) async throws -> [FoodSearchResponse.Section] {
+        var sections = [FoodSearchResponse.Section]()
+
+        try await withThrowingTaskGroup(of: FoodSearchResponse.Section?.self) { group in
+            group.addTask {
+                let foodItems = try await foodDatabaseService.searchFoods(
+                    request: request,
+                    query: name,
+                    category: .branded,
+                    limit: 20
+                )
+                guard foodItems.isNotEmpty else { return nil }
+
+                return FoodSearchResponse.Section(
+                    title: "Branded",
+                    index: 0,
+                    foods: foodItems
+                )
+            }
+            group.addTask {
+                let foodItems = try await foodDatabaseService.searchFoods(
+                    request: request,
+                    query: name,
+                    category: .restaurant,
+                    limit: 20
+                )
+                guard foodItems.isNotEmpty else { return nil }
+
+                return FoodSearchResponse.Section(
+                    title: "Restaurant",
+                    index: 1,
+                    foods: foodItems
+                )
+            }
+            group.addTask {
+                let foodItems = try await foodDatabaseService.searchFoods(
+                    request: request,
+                    query: name,
+                    category: .fastfood,
+                    limit: 20
+                )
+                guard foodItems.isNotEmpty else { return nil }
+
+                return FoodSearchResponse.Section(
+                    title: "Fast Food",
+                    index: 2,
+                    foods: foodItems
+                )
+            }
+            group.addTask {
+                let foodItems = try await foodDatabaseService.searchFoods(
+                    request: request,
+                    query: name,
+                    category: .generic,
+                    limit: 20
+                )
+                guard foodItems.isNotEmpty else { return nil }
+
+                return FoodSearchResponse.Section(
+                    title: "Generic",
+                    index: 3,
+                    foods: foodItems
+                )
+            }
+
+            for try await section in group {
+                guard let section else { continue }
+
+                sections.append(section)
+            }
+        }
+
+        return sections.sorted(by: { $0.index < $1.index })
     }
 
     func searchFoodsEdamam(_ request: Request) async throws -> FoodSearchResponse.Section? {

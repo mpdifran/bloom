@@ -16,7 +16,7 @@ public final class ContainerHolder: Sendable {
     private(set) public var container: ModelContainer
 
     private init() {
-        let schema = Schema(versionedSchema: SchemaV3.self)
+        let schema = Schema(versionedSchema: SchemaV4.self)
         let modelConfiguration = ModelConfiguration(
             schema: schema,
             groupContainer: .identifier("group.supplements")
@@ -52,7 +52,7 @@ public final class ContainerHolder: Sendable {
 public extension ContainerHolder {
 
     func setupForTests() {
-        let schema = Schema(versionedSchema: SchemaV2.self)
+        let schema = Schema(versionedSchema: SchemaV4.self)
         let modelConfiguration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: true

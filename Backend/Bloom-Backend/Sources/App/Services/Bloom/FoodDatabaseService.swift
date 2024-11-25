@@ -15,7 +15,12 @@ struct FoodDatabaseService { }
 
 extension FoodDatabaseService {
 
-    func searchFoods(request: Request, query: String, limit: Int) async throws -> [FoodItem] {
+    func searchFoods(
+        request: Request,
+        query: String,
+        category: FoodItemRecord.Category,
+        limit: Int
+    ) async throws -> [FoodItem] {
         guard !query.isEmpty else { return [] }
 
         guard let sqlDatabase = request.db as? SQLDatabase else {
@@ -30,9 +35,10 @@ extension FoodDatabaseService {
                        similarity(flavour, \(bind: query)) * 0.8
                    ) AS rank
             FROM food_item_records
-            WHERE similarity(name, \(bind: query)) > 0.1
+            WHERE (similarity(name, \(bind: query)) > 0.1
                OR similarity(brand_name, \(bind: query)) > 0.1
-               OR similarity(flavour, \(bind: query)) > 0.1
+               OR similarity(flavour, \(bind: query)) > 0.1)
+              AND category = \(bind: category.rawValue)::category
             ORDER BY rank DESC
             LIMIT \(bind: limit)
         """).all(decodingFluent: FoodItemRecord.self)

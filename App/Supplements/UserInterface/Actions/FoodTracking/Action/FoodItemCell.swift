@@ -145,6 +145,7 @@ private extension FoodItemCell {
                     servingName: "1 package",
                     servingQuantity: .init(value: 43, unit: "g"),
                     ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
+                    category: .branded,
                     isVerified: false
                 )
             )
@@ -161,6 +162,7 @@ private extension FoodItemCell {
                     servingName: "1 package",
                     servingQuantity: .init(value: 43, unit: "g"),
                     ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
+                    category: .branded,
                     isVerified: true
                 )
             )

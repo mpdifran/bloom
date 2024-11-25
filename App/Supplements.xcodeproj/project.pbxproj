@@ -346,9 +346,8 @@
 		FFB640802CEFBF370013502E /* FoodItemDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB6407F2CEFBF370013502E /* FoodItemDetailsView.swift */; };
 		FFB640822CEFC2BE0013502E /* FoodItemNutritionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640812CEFC2BE0013502E /* FoodItemNutritionLabel.swift */; };
 		FFB640852CEFDDBE0013502E /* FoodItemMacroDistribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640842CEFDDBE0013502E /* FoodItemMacroDistribution.swift */; };
-		FFB640D72CF125A80013502E /* FoodItemLog+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640D62CF125A30013502E /* FoodItemLog+Helpers.swift */; };
 		FFB640DA2CF12CEA0013502E /* NutritionTrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640D92CF12CDF0013502E /* NutritionTrackingViewModel.swift */; };
-		FFB640DC2CF12E9F0013502E /* FoodItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640DB2CF12E9C0013502E /* FoodItem+Helpers.swift */; };
+		FFB640DC2CF12E9F0013502E /* FoodItemRecord+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640DB2CF12E9C0013502E /* FoodItemRecord+Helpers.swift */; };
 		FFB640DE2CF130450013502E /* DebugFoodItemLogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640DD2CF130450013502E /* DebugFoodItemLogListView.swift */; };
 		FFB640E02CF131280013502E /* DebugFoodItemLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB640DF2CF131280013502E /* DebugFoodItemLogCell.swift */; };
 		FFB691062C19F58500BEC0D4 /* HKSample+TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */; };
@@ -847,9 +846,8 @@
 		FFB6407F2CEFBF370013502E /* FoodItemDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemDetailsView.swift; sourceTree = "<group>"; };
 		FFB640812CEFC2BE0013502E /* FoodItemNutritionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemNutritionLabel.swift; sourceTree = "<group>"; };
 		FFB640842CEFDDBE0013502E /* FoodItemMacroDistribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemMacroDistribution.swift; sourceTree = "<group>"; };
-		FFB640D62CF125A30013502E /* FoodItemLog+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItemLog+Helpers.swift"; sourceTree = "<group>"; };
 		FFB640D92CF12CDF0013502E /* NutritionTrackingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionTrackingViewModel.swift; sourceTree = "<group>"; };
-		FFB640DB2CF12E9C0013502E /* FoodItem+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItem+Helpers.swift"; sourceTree = "<group>"; };
+		FFB640DB2CF12E9C0013502E /* FoodItemRecord+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItemRecord+Helpers.swift"; sourceTree = "<group>"; };
 		FFB640DD2CF130450013502E /* DebugFoodItemLogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugFoodItemLogListView.swift; sourceTree = "<group>"; };
 		FFB640DF2CF131280013502E /* DebugFoodItemLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugFoodItemLogCell.swift; sourceTree = "<group>"; };
 		FFB691052C19F58500BEC0D4 /* HKSample+TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKSample+TimeInterval.swift"; sourceTree = "<group>"; };
@@ -2153,8 +2151,7 @@
 				FFCE85682C99DE67002C46B1 /* BowelMovement+Helpers.swift */,
 				FF9783552C9B614B00A8ED7E /* TargetMetric+HealthData.swift */,
 				FF2FB8A52C9DD81400F57523 /* Habit+Helpers.swift */,
-				FFB640D62CF125A30013502E /* FoodItemLog+Helpers.swift */,
-				FFB640DB2CF12E9C0013502E /* FoodItem+Helpers.swift */,
+				FFB640DB2CF12E9C0013502E /* FoodItemRecord+Helpers.swift */,
 			);
 			path = DataContainer;
 			sourceTree = "<group>";
@@ -3071,7 +3068,6 @@
 				FF1327FF2CB5B1EB00ACF981 /* BloomPlusHeaderView.swift in Sources */,
 				FF70EA102CC334D90055E932 /* Comparable+Clipped.swift in Sources */,
 				FFAFF41F2CAC301E00FAD3C9 /* MFPRecommendationActionCard.swift in Sources */,
-				FFB640D72CF125A80013502E /* FoodItemLog+Helpers.swift in Sources */,
 				FF88F1142C782F6B0093D1B4 /* Date+Helpers.swift in Sources */,
 				FF17052D2C10E64C000D4B3D /* DateQuantitySampleLegacy.swift in Sources */,
 				FF1705212C10A37C000D4B3D /* SleepProgramConfigurationView.swift in Sources */,
@@ -3129,7 +3125,7 @@
 				FF1705252C10ADF1000D4B3D /* SleepEnvironmentEnums.swift in Sources */,
 				FFB4444F2BEC3B0600486AD7 /* ChatBubbleCell.swift in Sources */,
 				FFBE52392C74DB5200F510DE /* ExerciseEffectivenessMonthlySummary.swift in Sources */,
-				FFB640DC2CF12E9F0013502E /* FoodItem+Helpers.swift in Sources */,
+				FFB640DC2CF12E9F0013502E /* FoodItemRecord+Helpers.swift in Sources */,
 				FF1328022CB5B43400ACF981 /* BloomPlusPaywallHeroImageView.swift in Sources */,
 				FF8F79C42C627CEF0095C36D /* LabelledMetric.swift in Sources */,
 				FFAFF4272CAC831500FAD3C9 /* CalorieTargetCalculator.swift in Sources */,
