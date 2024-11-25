@@ -165,23 +165,28 @@ private extension AIFoodScannerView {
                 }
                 .horizontallyCentered()
             } else {
-                ScrollView {
-                    VStack {
-                        if viewModel.servings.isEmpty {
-                            Spacer()
-                            ContentUnavailableView("No Food Identified", systemImage: "fork.knife")
-                            Spacer()
-                        } else {
-                            SectionTitleView("Identified Food")
-                                .padding(.horizontal)
-                            ForEachEnumerated(viewModel.servings) { (index, serving) in
-                                AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
+                VStack(spacing: 0) {
+                    if viewModel.servings.isEmpty {
+                        Spacer()
+                        ContentUnavailableView("No Food Identified", systemImage: "fork.knife")
+                        Spacer()
+                    } else {
+                        MealPicker()
+                            .padding(.vertical, 8)
+                        Divider()
+
+                        ScrollView {
+                            VStack {
+                                SectionTitleView("Identified Food")
+                                    .padding(.horizontal)
+                                ForEachEnumerated(viewModel.servings) { (index, serving) in
+                                    AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
+                                }
                             }
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.top)
                 }
+                .padding(.horizontal)
             }
 
             HStack(spacing: 6) {

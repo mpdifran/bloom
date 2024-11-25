@@ -36,7 +36,7 @@ struct FoodLoggingActionCardView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    mealPicker
+                    MealPicker()
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") {
@@ -56,23 +56,6 @@ struct FoodLoggingActionCardView: View {
 }
 
 private extension FoodLoggingActionCardView {
-
-    var mealPicker: some View {
-        Menu {
-            ForEach(FoodItemLog.Meal.allCases, id: \.self) { meal in
-                Button(meal.name) {
-                    nutritionViewModel.suggestedMeal = meal
-                }
-            }
-        } label: {
-            HStack {
-                Text(nutritionViewModel.suggestedMeal.name)
-                Image(systemName: "chevron.up.chevron.down")
-                    .font(.caption)
-            }
-            .bold()
-        }
-    }
 
     @ViewBuilder
     var mainView: some View {
