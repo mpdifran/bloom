@@ -1,5 +1,5 @@
 {
-  "originHash" : "63ea301c736882a6ffdfd0e4198394cbadc89d8d134411574910362a1111d5a9",
+  "originHash" : "4948227e4ee31981218ed3c92e00494d09093e74586e657f2e928ea1984ecbc4",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -65,12 +65,12 @@
       }
     },
     {
-      "identity" : "httpmediatypes",
+      "identity" : "jmespath.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Einstore/HTTPMediaTypes.git",
+      "location" : "https://github.com/adam-fowler/jmespath.swift.git",
       "state" : {
-        "revision" : "cbbb333bce74fbe5ef34648de1d3c2bfef2327fa",
-        "version" : "0.0.1"
+        "revision" : "3877a5060e85ae33e3b9fe51ab581784f65ec80e",
+        "version" : "1.0.3"
       }
     },
     {
@@ -128,12 +128,21 @@
       }
     },
     {
-      "identity" : "s3",
+      "identity" : "soto",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mpdifran/S3.git",
+      "location" : "https://github.com/soto-project/soto.git",
       "state" : {
-        "revision" : "47704645024e97e94b428c4ad9b92d7f0a7108a8",
-        "version" : "1.0.0"
+        "revision" : "c28c3efa72e6beceae6f38f8c8fe18e7c57e3418",
+        "version" : "6.8.0"
+      }
+    },
+    {
+      "identity" : "soto-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/soto-project/soto-core.git",
+      "state" : {
+        "revision" : "3ed66ec536bc372360d7e3ec39a5e8b1870747ea",
+        "version" : "6.5.2"
       }
     },
     {
@@ -326,30 +335,12 @@
       }
     },
     {
-      "identity" : "weberrorkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Einstore/WebErrorKit.git",
-      "state" : {
-        "revision" : "183170b95c46ca5a900d0ea870980c9c280a573a",
-        "version" : "0.0.1"
-      }
-    },
-    {
       "identity" : "websocket-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/websocket-kit.git",
       "state" : {
         "revision" : "4232d34efa49f633ba61afde365d3896fc7f8740",
         "version" : "2.15.0"
-      }
-    },
-    {
-      "identity" : "xmlcoding",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/LiveUI/XMLCoding.git",
-      "state" : {
-        "revision" : "f0fbfe17e73f329e13a6133ff5437f7b174049fd",
-        "version" : "0.4.1"
       }
     },
     {

@@ -141,6 +141,11 @@ private extension OpenAIService {
         do {
             let openAI = request.openAI
 
+            guard let imageFileExtension = nutritionLabelMetadata.fileExtension else {
+                request.logger.warning("Image file extension could not be determined \(nutritionLabelMetadata.filename)")
+                return nil
+            }
+
             let messages: [Chat.Message] = [
                 Chat.Message(
                     role: .system,
@@ -151,7 +156,7 @@ private extension OpenAIService {
                 Chat.Message(
                     role: .user,
                     content: [
-                        .imageData(nutritionLabelMetadata.data, "image/png"),
+                        .imageData(nutritionLabelMetadata.data, "image/\(imageFileExtension)"),
                         .text("Return the nutrition information from this image.")
                     ]
                 )
@@ -191,6 +196,11 @@ private extension OpenAIService {
         do {
             let openAI = request.openAI
 
+            guard let fileExtension = packagingMetadata.fileExtension else {
+                request.logger.warning("Image file extension could not be determined \(packagingMetadata.filename)")
+                return nil
+            }
+
             let messages: [Chat.Message] = [
                 Chat.Message(
                     role: .system,
@@ -201,7 +211,7 @@ private extension OpenAIService {
                 Chat.Message(
                     role: .user,
                     content: [
-                        .imageData(packagingMetadata.data, "image/png"),
+                        .imageData(packagingMetadata.data, "image/\(fileExtension)"),
                         .text("Return the brand name, product name, and any flavour (it there is one) you see in the packaging.")
                     ]
                 )
