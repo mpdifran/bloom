@@ -9,17 +9,18 @@ import SwiftUI
 import BloomModel
 import DataContainer
 
-@Observable @MainActor
-final class AIFoodScannerViewModel {
-
-    var image: UIImage?
-    var hasScannedAtLeastOnce = false
-    var isLoading = false
-    var servings = [FoodItemServing]()
-    var error: Error?
+extension AIFoodScannerView {
+    @Observable @MainActor
+    final class ViewModel {
+        var image: UIImage?
+        var hasScannedAtLeastOnce = false
+        var isLoading = false
+        var servings = [FoodItemServing]()
+        var error: Error?
+    }
 }
 
-extension AIFoodScannerViewModel {
+extension AIFoodScannerView.ViewModel {
 
     func performAIFoodLog(for image: UIImage) async {
         guard let smallerImage = image.resized(toWidth: 800) else { return }
@@ -38,5 +39,13 @@ extension AIFoodScannerViewModel {
         } catch {
             self.error = error
         }
+    }
+
+    func reset() {
+        hasScannedAtLeastOnce = false
+        image = nil
+        isLoading = false
+        error = nil
+        servings.removeAll()
     }
 }

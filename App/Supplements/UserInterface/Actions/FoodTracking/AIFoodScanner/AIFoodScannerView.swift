@@ -16,7 +16,7 @@ struct AIFoodScannerView: View {
         self.cameraManager = CameraManager.create(with: captureSession)
     }
 
-    @Bindable private var viewModel = AIFoodScannerViewModel()
+    @State private var viewModel = ViewModel()
 
     @State private var startScanToggle = false
     @State private var scanResultsToggle = false
@@ -82,7 +82,7 @@ struct AIFoodScannerView: View {
             )
         }
         .onChange(of: error as? NSError) { oldValue, newValue in
-            guard let newValue else { return }
+            guard newValue != nil else { return }
 
             errorToggle.toggle()
         }
@@ -107,7 +107,7 @@ private extension AIFoodScannerView {
             permissionDeniedView
         case .pending:
             Rectangle()
-                .fill(.green)
+                .fill(.black)
                 .ignoresSafeArea()
                 .aspectRatio(contentMode: .fit)
         }
@@ -173,30 +173,28 @@ private extension AIFoodScannerView {
                     Spacer()
                 }
                 .horizontallyCentered()
+            } else if !viewModel.hasScannedAtLeastOnce {
+                Spacer()
+                ContentUnavailableView("Scan Food", systemImage: "fork.knife")
+                Spacer()
             } else {
                 VStack(spacing: 0) {
                     if viewModel.servings.isEmpty {
-                        if viewModel.hasScannedAtLeastOnce {
-                            Spacer()
-                            ContentUnavailableView("No Food Identified", systemImage: "fork.knife")
-                            Spacer()
-                        } else {
-                            Spacer()
-                            ContentUnavailableView("Scan Food", systemImage: "fork.knife")
-                            Spacer()
-                        }
+                        Spacer()
+                        ContentUnavailableView("No Food Identified", systemImage: "fork.knife")
+                        Spacer()
                     } else {
-                        MealPicker()
-                            .padding(.vertical, 4)
-                        Divider()
+                        foodResultsHeader
 
                         ScrollView {
                             VStack {
                                 SectionTitleView("Identified Food")
                                     .padding(.horizontal)
                                 ForEachEnumerated(viewModel.servings) { (index, serving) in
-                                    AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
-                                        .focused($focusedIndex, equals: index)
+                                    if viewModel.servings.count > index { // Fixes dumb bug where viewModel.servings is empty but we try and load a cell.
+                                        AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
+                                            .focused($focusedIndex, equals: index)
+                                    }
                                 }
                             }
                         }
@@ -219,6 +217,23 @@ private extension AIFoodScannerView {
 }
 
 private extension AIFoodScannerView {
+
+    @ViewBuilder
+    var foodResultsHeader: some View {
+        MealPicker()
+            .horizontallyCentered()
+            .padding(.vertical, 4)
+            .background {
+                Button {
+                    viewModel.reset()
+                } label: {
+                    Image(systemName: "arrow.counterclockwise")
+                        .bold()
+                }
+                .horizontalAlignment(.trailing)
+            }
+        Divider()
+    }
 
     @ViewBuilder
     var logFoodBottomBar: some View {
