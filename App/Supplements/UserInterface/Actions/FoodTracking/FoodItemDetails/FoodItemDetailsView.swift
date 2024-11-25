@@ -71,16 +71,14 @@ struct FoodItemDetailsView: View {
                     }
                 } else {
                     ProminentButton("Log") {
-                        Task {
-                            do {
-                                try await save()
+                        do {
+                            try save()
 
-                                saveComplete.toggle()
-                                SoundPlayer.playLogHealthData()
-                                dismiss()
-                            } catch {
-                                self.error = error
-                            }
+                            saveComplete.toggle()
+                            SoundPlayer.playLogHealthData()
+                            dismiss()
+                        } catch {
+                            self.error = error
                         }
                     }
                     .sensoryFeedback(.success, trigger: saveComplete)
@@ -202,7 +200,7 @@ private extension FoodItemDetailsView {
 
 private extension FoodItemDetailsView {
 
-    func save() async throws {
+    func save() throws {
         if let existingFoodItemLog {
             existingFoodItemLog.numberOfServings = numberOfServings
             existingFoodItemLog.meal = meal

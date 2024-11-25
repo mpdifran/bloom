@@ -19,11 +19,14 @@ struct AIFoodScannerView: View {
     @Bindable private var viewModel = AIFoodScannerViewModel()
 
     @State private var image: UIImage?
+    @State private var error: Error?
+    @FocusState private var focusedIndex: Int?
 
     @StateObject var permissionManager = CameraPermissionManager.shared
 
     @Environment(\.dismiss) private var dismiss
 
+    private let nutritionViewModel = NutritionTrackingViewModel.shared
     private let cameraManager: CameraManager
     private let captureSession = AVCaptureSession()
 
@@ -60,6 +63,7 @@ struct AIFoodScannerView: View {
                 await cameraManager.stop()
             }
         }
+        .alert(error: $error)
         .alert(isPresented: $permissionManager.shouldShowAlert) {
             Alert(
                 title: Text("Camera Permission Required"),
@@ -181,6 +185,7 @@ private extension AIFoodScannerView {
                                     .padding(.horizontal)
                                 ForEachEnumerated(viewModel.servings) { (index, serving) in
                                     AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
+                                        .focused($focusedIndex, equals: index)
                                 }
                             }
                         }
@@ -190,57 +195,100 @@ private extension AIFoodScannerView {
             }
 
             HStack(spacing: 6) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .bold()
-                        .frame(square: 55)
-                        .background {
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.tint)
-                        }
-                        .foregroundStyle(.white)
-                }
-
-                if viewModel.servings.isNotEmpty {
-                    Button {
-                        // Log food
-                    } label: {
-                        Text("Log All")
-                            .bold()
-                            .horizontallyCentered()
-                            .frame(height: 55)
-                            .background {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(.tint)
-                            }
-                            .foregroundStyle(.white)
-                    }
+                if focusedIndex != nil {
+                    textEditorBottomBar
                 } else {
-                    Button {
-                        Task {
-                            guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
-
-                            self.image = image
-                            await viewModel.performAIFoodLog(for: image)
-                        }
-                    } label: {
-                        Text("Scan")
-                            .bold()
-                            .horizontallyCentered()
-                            .frame(height: 55)
-                            .background {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(.tint)
-                            }
-                            .foregroundStyle(.white)
-                    }
+                    logFoodBottomBar
                 }
             }
             .padding()
         }
 
+    }
+}
+
+private extension AIFoodScannerView {
+
+    @ViewBuilder
+    var logFoodBottomBar: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "xmark")
+                .bold()
+                .frame(square: 55)
+                .background {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.tint)
+                }
+                .foregroundStyle(.white)
+        }
+
+        if viewModel.servings.isNotEmpty {
+            Button {
+                do {
+                    try save()
+                } catch {
+                    self.error = error
+                }
+            } label: {
+                Text("Log All")
+                    .bold()
+                    .horizontallyCentered()
+                    .frame(height: 55)
+                    .background {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.tint)
+                    }
+                    .foregroundStyle(.white)
+            }
+        } else {
+            Button {
+                Task {
+                    guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
+
+                    self.image = image
+                    await viewModel.performAIFoodLog(for: image)
+                }
+            } label: {
+                Text("Scan")
+                    .bold()
+                    .horizontallyCentered()
+                    .frame(height: 55)
+                    .background {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.tint)
+                    }
+                    .foregroundStyle(.white)
+            }
+        }
+    }
+
+    var textEditorBottomBar: some View {
+        Button {
+            focusedIndex = nil
+        } label: {
+            Text("Done")
+                .bold()
+                .horizontallyCentered()
+                .frame(height: 55)
+                .background {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.tint)
+                }
+                .foregroundStyle(.white)
+        }
+    }
+}
+
+private extension AIFoodScannerView {
+
+    func save() throws {
+        let meal = nutritionViewModel.suggestedMeal
+        try nutritionViewModel.log(
+            foodItemServings: viewModel.servings,
+            meal: meal
+        )
     }
 }
 

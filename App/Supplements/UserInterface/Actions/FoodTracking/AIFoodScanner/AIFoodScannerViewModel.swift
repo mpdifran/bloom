@@ -22,7 +22,6 @@ extension AIFoodScannerViewModel {
     func performAIFoodLog(for image: UIImage) async {
         guard let smallerImage = image.resized(toWidth: 800) else { return }
 
-
         do {
             isLoading = true
             let response = try await NetworkRequester.shared.foodAIEstimate(image: smallerImage)

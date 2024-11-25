@@ -1529,7 +1529,6 @@
 				FF8243762CF3A26B0087955A /* AIFoodScannerView.swift */,
 				FF5D06DA2CF3F19F00374F66 /* AIFoodScannerViewModel.swift */,
 				FF82437A2CF3B4D10087955A /* AIScanFoodItemCell.swift */,
-				FF8243782CF3A3210087955A /* FoodItemServing.swift */,
 			);
 			path = AIFoodScanner;
 			sourceTree = "<group>";
@@ -2091,6 +2090,7 @@
 			isa = PBXGroup;
 			children = (
 				FFB640D92CF12CDF0013502E /* NutritionTrackingViewModel.swift */,
+				FF8243782CF3A3210087955A /* FoodItemServing.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
