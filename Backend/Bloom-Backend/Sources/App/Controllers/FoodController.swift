@@ -8,7 +8,6 @@
 import Foundation
 import Vapor
 import BloomModel
-import S3Kit
 
 struct FoodController {
     private let edamamService = EdamamFoodService()
