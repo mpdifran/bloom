@@ -18,6 +18,7 @@ struct AIScanFoodItemCell: View {
 
             Spacer()
 
+            caloriesView
             editContentView
         }
         .cardContainer(fill: .background, stroke: .background.secondary)
@@ -64,6 +65,22 @@ private extension AIScanFoodItemCell {
                 Text("\(serving) (\(servingQuantity.value.format()) \(servingQuantity.unit))")
                     .font(.caption)
             }
+        }
+    }
+
+    @ViewBuilder
+    var caloriesView: some View {
+        if let calories = food.calories?.value {
+            VStack(spacing: 0) {
+                Text("\(calories.format())")
+                    .bold()
+                    .font(.title2)
+                    .foregroundStyle(.tint)
+                Text("cals")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .fontDesign(.rounded)
         }
     }
 

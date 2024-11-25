@@ -89,7 +89,7 @@ struct FoodItemCell: View {
             }
             .sensoryFeedback(.success, trigger: saveComplete)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background, stroke: .background.secondary)
         .alert(error: $error)
         .onChange(of: nutritionViewModel.suggestedMeal) { _, _ in
             Task { await checkForExistingFoodLog() }

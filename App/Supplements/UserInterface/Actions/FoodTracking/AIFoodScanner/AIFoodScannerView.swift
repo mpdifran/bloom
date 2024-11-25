@@ -176,7 +176,7 @@ private extension AIFoodScannerView {
                         Spacer()
                     } else {
                         MealPicker()
-                            .padding(.vertical, 8)
+                            .padding(.vertical, 4)
                         Divider()
 
                         ScrollView {
