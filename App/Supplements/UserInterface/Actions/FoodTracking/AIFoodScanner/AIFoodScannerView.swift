@@ -18,7 +18,10 @@ struct AIFoodScannerView: View {
 
     @Bindable private var viewModel = AIFoodScannerViewModel()
 
-    @State private var image: UIImage?
+    @State private var startScanToggle = false
+    @State private var scanResultsToggle = false
+    @State private var saveComplete = false
+    @State private var errorToggle = false
     @State private var error: Error?
     @FocusState private var focusedIndex: Int?
 
@@ -46,9 +49,13 @@ struct AIFoodScannerView: View {
                     .padding(.top, -30)
             }
         }
+        .sensoryFeedback(.error, trigger: errorToggle)
+        .sensoryFeedback(.impact, trigger: startScanToggle)
+        .sensoryFeedback(.success, trigger: scanResultsToggle)
+        .sensoryFeedback(.success, trigger: saveComplete)
         .ignoresSafeArea(edges: .top)
         .presentationCompactAdaptation(.fullScreenCover)
-        .animation(.bouncy, value: image)
+        .animation(.bouncy, value: viewModel.image)
         .animation(.default, value: viewModel.isLoading)
         .onAppear {
             Task {
@@ -74,13 +81,18 @@ struct AIFoodScannerView: View {
                 secondaryButton: .cancel(Text("Cancel"))
             )
         }
+        .onChange(of: error as? NSError) { oldValue, newValue in
+            guard let newValue else { return }
+
+            errorToggle.toggle()
+        }
     }
 }
 
 private extension AIFoodScannerView {
 
     var imageScanAspect: CGFloat {
-        if image == nil {
+        if viewModel.image == nil {
             return 0.6
         }
         return 0.4
@@ -112,7 +124,7 @@ private extension AIFoodScannerView {
                 }
             }
 
-            if let image {
+            if let image = viewModel.image {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -149,14 +161,7 @@ private extension AIFoodScannerView {
 
     var scannedItemsView: some View {
         VStack {
-            if image == nil {
-                VStack {
-                    Spacer()
-                    ContentUnavailableView("Scan Food", systemImage: "fork.knife")
-                    Spacer()
-                }
-                .horizontallyCentered()
-            } else if viewModel.isLoading {
+            if viewModel.isLoading {
                 VStack {
                     Spacer()
                     CircularSpinnerView()
@@ -171,9 +176,15 @@ private extension AIFoodScannerView {
             } else {
                 VStack(spacing: 0) {
                     if viewModel.servings.isEmpty {
-                        Spacer()
-                        ContentUnavailableView("No Food Identified", systemImage: "fork.knife")
-                        Spacer()
+                        if viewModel.hasScannedAtLeastOnce {
+                            Spacer()
+                            ContentUnavailableView("No Food Identified", systemImage: "fork.knife")
+                            Spacer()
+                        } else {
+                            Spacer()
+                            ContentUnavailableView("Scan Food", systemImage: "fork.knife")
+                            Spacer()
+                        }
                     } else {
                         MealPicker()
                             .padding(.vertical, 4)
@@ -244,11 +255,16 @@ private extension AIFoodScannerView {
             }
         } else {
             Button {
+                startScanToggle.toggle()
                 Task {
                     guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
 
-                    self.image = image
+                    viewModel.image = image
                     await viewModel.performAIFoodLog(for: image)
+
+                    if viewModel.servings.isNotEmpty {
+                        scanResultsToggle.toggle()
+                    }
                 }
             } label: {
                 Text("Scan")
@@ -261,6 +277,7 @@ private extension AIFoodScannerView {
                     }
                     .foregroundStyle(.white)
             }
+            .disabled(viewModel.isLoading)
         }
     }
 
@@ -289,6 +306,10 @@ private extension AIFoodScannerView {
             foodItemServings: viewModel.servings,
             meal: meal
         )
+
+        saveComplete.toggle()
+        SoundPlayer.playLogHealthData()
+        dismiss()
     }
 }
 
