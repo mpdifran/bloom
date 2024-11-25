@@ -9,47 +9,6 @@ import Foundation
 import DataContainer
 @preconcurrency import HealthKit
 
-// MARK: - HealthType
-
-/// Making the logged health types opt-in.
-/// We can leverage allCases to make logging more generic.
-enum HealthType: CaseIterable {
-  case calories
-  case protein
-  case carbohydrates
-  case fat
-
-  var identifier: HKQuantityTypeIdentifier {
-    switch self {
-    case .calories: .dietaryEnergyConsumed
-    case .protein: .dietaryProtein
-    case .carbohydrates: .dietaryCarbohydrates
-    case .fat: .dietaryFatTotal
-    }
-  }
-
-  var unit: HKUnit {
-    switch self {
-    case .calories: .largeCalorie()
-    case .protein: .gram()
-    case .carbohydrates: .gram()
-    case .fat: .gram()
-    }
-  }
-
-  func getServingSize(_ foodItem: FoodItemDTO) -> Double {
-    let servingValue = foodItem.servingValue ?? 0
-    let value = switch self {
-    case .calories: foodItem.calories
-    case .protein: foodItem.protein
-    case .carbohydrates: foodItem.carbohydrates
-    case .fat: foodItem.fat
-    }
-
-    return servingValue * value
-  }
-}
-
 // MARK: - HealthStoreModifier
 
 final actor HealthStoreModifier {
@@ -79,13 +38,8 @@ extension HealthStoreModifier {
 extension HealthStoreModifier {
 
     func updateNutrition(for date: Date) async throws {
-        // TODO: Fetch FoodItemLogs from SwiftData
-        // Fetch data logged to HealthKit by Bloom (not sure if we can filter by who logged the data)
-        // Recalculate the nutrition amounts for each time block (breakfast, lunch, dinner, snack)
-        // Write the new data to HealthKit, if necessary
-
+      // Fetch logs from local database.
       let foodLogs = try await foodItemLogModel.fetchLogs(for: date)
-
       // Fetch and delete all entries for the day.
       try await clearExistingEntries(for: date)
       // Write food logs to HealthKit.
@@ -109,7 +63,7 @@ private extension HealthStoreModifier {
         let objects = samples as [HKObject]
         try await healthStore.delete(objects)
       } catch {
-        print("Error fetching or deleting samples for \(sampleType.identifier): \(error.localizedDescription)")
+        print("Error deleting samples for \(sampleType.identifier): \(error.localizedDescription)")
       }
     }
   }
@@ -161,32 +115,5 @@ private extension HealthStoreModifier {
       end: foodItemLog.date,
       metadata: metaData
     )
-  }
-}
-
-// TODO: ZACH - Move this somewhere else
-enum HealthMetadata {
-  case appIdentifier
-  case meal(String)
-  case food(String)
-
-  var key: String {
-    switch self {
-    case .appIdentifier: "AppIdentifier"
-    case .meal: "Meal"
-    case .food: HKMetadataKeyFoodType
-    }
-  }
-
-  var value: String {
-    switch self {
-    case .appIdentifier: Bundle.main.bundleIdentifier ?? ""
-    case .meal(let mealName): mealName
-    case .food(let foodName): foodName
-    }
-  }
-
-  static func create(_ cases: [HealthMetadata]) -> [String: String] {
-    Dictionary(uniqueKeysWithValues: cases.map { ($0.key, $0.value) })
   }
 }

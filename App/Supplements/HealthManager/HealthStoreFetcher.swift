@@ -150,13 +150,11 @@ extension HealthStoreFetcher {
     dateRange: DateRange,
     writtenByApp: Bool = false
   ) async -> [HKSample] {
-    // if requesting data from the app, include the fromApp predicate.
-    let fromAppPredicate: [NSPredicate] = [.fromApp].compactMap { $0 }
-    return (
+    (
       try? await healthStore.fetchSamples(
         for: sampleType,
         dateRange: dateRange,
-        additionalPredicates: writtenByApp ? fromAppPredicate : []
+        additionalPredicates: writtenByApp ? [HealthMetadata.predicate(for: .appIdentifier)] : []
       )
     ) ?? []
   }
