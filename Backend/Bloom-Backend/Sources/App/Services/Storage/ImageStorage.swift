@@ -17,22 +17,25 @@ protocol ImageStorage {
 
 struct S3Storage: ImageStorage {
 
-  init(request: Request) {
+  init(request: Request, bucketName: String) {
     self.request = request
+    self.bucketName = bucketName
   }
 
   let request: Request
+  let bucketName: String
 
   func store(image: BloomModel.ImageFile) async throws -> ImageFileMetadata {
     let filename = "\(UUID().uuidString).\(image.fileExtension)"
 
     let putObjectRequest = S3.PutObjectRequest(
-      body: .data(image.data, byteBufferAllocator: request.application.allocator),
-      bucket: "lotus-labs-bloom-sandbox",  // TODO: Get from env variable
-      key: "testing/\(filename)"
+        body: .data(image.data, byteBufferAllocator: request.application.allocator),
+        bucket: bucketName,
+        key: "testing/\(filename)"
     )
     do {
-      _ = try await request.sotoS3.putObject(putObjectRequest)
+        _ = try await request.sotoS3.putObject(putObjectRequest)
+        request.logger.info("Saved image to S3: \(bucketName) - \(putObjectRequest.key)")
     } catch {
         request.logger.error("Failed to save content to S3: \(error)")
     }

@@ -8,7 +8,11 @@
 import Vapor
 
 extension Request {
+
     var imageStorage: ImageStorage {
-        return S3Storage(request: self)
+        guard let bucket = Environment.get("S3_BUCKET_NAME") else {
+            fatalError("S3_BUCKET_NAME env var required")
+        }
+        return S3Storage(request: self, bucketName: bucket)
     }
 }
