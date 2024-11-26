@@ -25,7 +25,7 @@ struct MealPicker: View {
                     .font(.caption)
             }
             .bold()
-            .padding()
+            .padding(.vertical)
         }
     }
 }

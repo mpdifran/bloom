@@ -51,9 +51,6 @@ struct BodyWeightActionCardView: View {
         }
         .alert(error: $error)
         .tint(.mutedIndigo)
-        .onAppear {
-            isFocused = true
-        }
     }
 }
 

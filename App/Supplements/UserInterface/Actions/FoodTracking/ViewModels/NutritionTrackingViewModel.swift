@@ -14,11 +14,66 @@ import DataContainer
 final class NutritionTrackingViewModel {
     static let shared = NutritionTrackingViewModel()
 
-    var suggestedMeal = FoodItemLog.Meal.breakfast // TODO: Make this change based on time of day
+    var date = Date.now
+    var suggestedMeal = FoodItemLog.Meal.breakfast
 
     private let modelContext = ModelContext(ContainerHolder.shared.container)
 
-    private init() { }
+    private init() {
+        updateMealForCurrentTime()
+    }
+}
+
+extension NutritionTrackingViewModel {
+
+    func updateMealForCurrentTime() {
+        let hour = Calendar.current.component(.hour, from: date)
+
+        switch hour {
+        case 6 ..< 10:
+            suggestedMeal = .breakfast
+        case 11 ..< 13:
+            suggestedMeal = .lunch
+        case 17 ..< 20:
+            suggestedMeal = .dinner
+        default:
+            suggestedMeal = .snack
+        }
+    }
+
+    /// Advances the suggested meal by one meal. If needed, the day will advance as well.
+    func advanceTimeWindow() {
+        switch suggestedMeal {
+        case .breakfast:
+            suggestedMeal = .lunch
+        case .lunch:
+            suggestedMeal = .dinner
+        case .dinner:
+            suggestedMeal = .breakfast
+            date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
+        case .snack:
+            suggestedMeal = .breakfast
+        @unknown default:
+            break
+        }
+    }
+
+    /// Reverses the suggested meal by one meal. If needed, the day will reverse as well.
+    func reverseTimeWindow() {
+        switch suggestedMeal {
+        case .breakfast:
+            suggestedMeal = .dinner
+            date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
+        case .lunch:
+            suggestedMeal = .breakfast
+        case .dinner:
+            suggestedMeal = .lunch
+        case .snack:
+            suggestedMeal = .dinner
+        @unknown default:
+            break
+        }
+    }
 }
 
 extension NutritionTrackingViewModel {
@@ -36,7 +91,7 @@ extension NutritionTrackingViewModel {
 
                 let foodItemLog = FoodItemLog(
                     id: UUID().uuidString,
-                    date: .now, // TODO: this date needs to be computed based on the selected date + meal.
+                    date: date(for: meal),
                     meal: meal,
                     numberOfServings: serving.serving,
                     foodItem: dbFoodItem
@@ -54,5 +109,23 @@ extension NutritionTrackingViewModel {
     ) throws {
         let serving = FoodItemServing(serving: numberOfServings, foodItem: foodItem)
         try log(foodItemServings: [serving], meal: meal)
+    }
+}
+
+private extension NutritionTrackingViewModel {
+
+    func date(for meal: FoodItemLog.Meal) -> Date {
+        switch meal {
+        case .breakfast:
+            Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: date) ?? date
+        case .lunch:
+            Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date
+        case .dinner:
+            Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: date) ?? date
+        case .snack:
+            Calendar.current.date(bySettingHour: 21, minute: 0, second: 0, of: date) ?? date
+        @unknown default:
+            date
+        }
     }
 }

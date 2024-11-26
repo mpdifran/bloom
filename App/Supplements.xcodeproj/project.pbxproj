@@ -142,6 +142,12 @@
 		FF4EFF922C93BDDE005E4A1F /* MenstruationCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */; };
 		FF5D06DB2CF3F1A400374F66 /* AIFoodScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D06DA2CF3F19F00374F66 /* AIFoodScannerViewModel.swift */; };
 		FF5D06DD2CF4BCB900374F66 /* MealPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D06DC2CF4BCB900374F66 /* MealPicker.swift */; };
+		FF5D08862CF61C3600374F66 /* NutritionStatusCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D08852CF61C3600374F66 /* NutritionStatusCard.swift */; };
+		FF5D098F2CF61E0D00374F66 /* FoodItem+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D098E2CF61E0800374F66 /* FoodItem+Preview.swift */; };
+		FF5D09922CF61E9500374F66 /* FoodItemRecord+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09912CF61E9000374F66 /* FoodItemRecord+Preview.swift */; };
+		FF5D09942CF61F4900374F66 /* FoodItemLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09932CF61F4900374F66 /* FoodItemLogCell.swift */; };
+		FF5D09962CF6236B00374F66 /* FoodItemLog+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09952CF6236600374F66 /* FoodItemLog+Helpers.swift */; };
+		FF5D09982CF65CE700374F66 /* FoodItemLogDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -652,6 +658,12 @@
 		FF4EFF912C93BDD8005E4A1F /* MenstruationCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenstruationCalendarView.swift; sourceTree = "<group>"; };
 		FF5D06DA2CF3F19F00374F66 /* AIFoodScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIFoodScannerViewModel.swift; sourceTree = "<group>"; };
 		FF5D06DC2CF4BCB900374F66 /* MealPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPicker.swift; sourceTree = "<group>"; };
+		FF5D08852CF61C3600374F66 /* NutritionStatusCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionStatusCard.swift; sourceTree = "<group>"; };
+		FF5D098E2CF61E0800374F66 /* FoodItem+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItem+Preview.swift"; sourceTree = "<group>"; };
+		FF5D09912CF61E9000374F66 /* FoodItemRecord+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItemRecord+Preview.swift"; sourceTree = "<group>"; };
+		FF5D09932CF61F4900374F66 /* FoodItemLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemLogCell.swift; sourceTree = "<group>"; };
+		FF5D09952CF6236600374F66 /* FoodItemLog+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItemLog+Helpers.swift"; sourceTree = "<group>"; };
+		FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemLogDatePicker.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -1363,6 +1375,31 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
+		FF5D08872CF61C6200374F66 /* StatusCard */ = {
+			isa = PBXGroup;
+			children = (
+				FF5D08852CF61C3600374F66 /* NutritionStatusCard.swift */,
+				FF5D09932CF61F4900374F66 /* FoodItemLogCell.swift */,
+			);
+			path = StatusCard;
+			sourceTree = "<group>";
+		};
+		FF5D098D2CF61DF500374F66 /* BloomModel */ = {
+			isa = PBXGroup;
+			children = (
+				FF5D098E2CF61E0800374F66 /* FoodItem+Preview.swift */,
+			);
+			path = BloomModel;
+			sourceTree = "<group>";
+		};
+		FF5D09902CF61E8300374F66 /* DataContainer */ = {
+			isa = PBXGroup;
+			children = (
+				FF5D09912CF61E9000374F66 /* FoodItemRecord+Preview.swift */,
+			);
+			path = DataContainer;
+			sourceTree = "<group>";
+		};
 		FF648BE12BDEA4F700963820 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1514,6 +1551,7 @@
 		FF7D6C292CDC039A005B86C0 /* FoodTracking */ = {
 			isa = PBXGroup;
 			children = (
+				FF5D08872CF61C6200374F66 /* StatusCard */,
 				FF87434F2CE5179A002581FA /* Action */,
 				FFB640D82CF12CD10013502E /* ViewModels */,
 				FFB6407E2CEFBF270013502E /* FoodItemDetails */,
@@ -1870,6 +1908,8 @@
 		FFACBAE22BAC778A006AAD0B /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				FF5D09902CF61E8300374F66 /* DataContainer */,
+				FF5D098D2CF61DF500374F66 /* BloomModel */,
 				FFACBAE32BAC778A006AAD0B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -2086,6 +2126,7 @@
 			children = (
 				FFB640842CEFDDBE0013502E /* FoodItemMacroDistribution.swift */,
 				FF5D06DC2CF4BCB900374F66 /* MealPicker.swift */,
+				FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2158,6 +2199,7 @@
 				FF9783552C9B614B00A8ED7E /* TargetMetric+HealthData.swift */,
 				FF2FB8A52C9DD81400F57523 /* Habit+Helpers.swift */,
 				FFB640DB2CF12E9C0013502E /* FoodItemRecord+Helpers.swift */,
+				FF5D09952CF6236600374F66 /* FoodItemLog+Helpers.swift */,
 			);
 			path = DataContainer;
 			sourceTree = "<group>";
@@ -2937,6 +2979,7 @@
 				FFEBEA5D2CD2849000142AA1 /* OnboardingHealthKitPrivacyCard.swift in Sources */,
 				FFD582C12CD9696C00833FEE /* FocusAreaVitalReviewView.swift in Sources */,
 				FF87434A2CE5115C002581FA /* FoodUploadScannerView.swift in Sources */,
+				FF5D09962CF6236B00374F66 /* FoodItemLog+Helpers.swift in Sources */,
 				FF4578F32C40A9D6004E8661 /* SleepSectionTitleView.swift in Sources */,
 				FFF61B6E2BF1317500926042 /* HKCategoryValueSleepAnalysis+Name.swift in Sources */,
 				FF2FB8962C9CCB7B00F57523 /* ProposedHabit.swift in Sources */,
@@ -2956,6 +2999,7 @@
 				FF7D6C282CDC0217005B86C0 /* USDAFoodSearchResponse.swift in Sources */,
 				FFAFF4392CAD9B1000FAD3C9 /* GenericHabitTargetCalculator.swift in Sources */,
 				FF0405262C8D355500FF1E2F /* TelemetryDeck+Helpers.swift in Sources */,
+				FF5D09922CF61E9500374F66 /* FoodItemRecord+Preview.swift in Sources */,
 				FF70E92B2CB99EA30055E932 /* DisclosureIndicator.swift in Sources */,
 				FF6E062E2CA4E4BA00C4219B /* View+Show.swift in Sources */,
 				FFF61B702BF136F500926042 /* HKCategorySample+TimeInterval.swift in Sources */,
@@ -3019,6 +3063,7 @@
 				4B900C3A2CF406D200B4EAB0 /* HealthMetadata.swift in Sources */,
 				FF8743622CE5420C002581FA /* UIApplication+Helpers.swift in Sources */,
 				FF70EA082CC1A4F60055E932 /* View+SafeAreaBlur.swift in Sources */,
+				FF5D08862CF61C3600374F66 /* NutritionStatusCard.swift in Sources */,
 				FFC8B00F2C516146009C5CED /* MonthlyVitalCardCell.swift in Sources */,
 				FF1E96022C0A6263004DAD2D /* ProgressRingView.swift in Sources */,
 				FF7D6C2B2CDC057D005B86C0 /* FoodLoggingActionCardView.swift in Sources */,
@@ -3030,6 +3075,7 @@
 				FF78904E2C3472D200F9C1A5 /* UserInfo.swift in Sources */,
 				FF2FB8A02C9DA9F100F57523 /* ProposedHabitCell.swift in Sources */,
 				FF48C28C2C6951CD00DC8D1D /* Collection+Unwrap.swift in Sources */,
+				FF5D09942CF61F4900374F66 /* FoodItemLogCell.swift in Sources */,
 				FF70E9C42CBDDD3E0055E932 /* OnboardingHealthActivityLevelView.swift in Sources */,
 				FFA062B22C9222B400ADCB09 /* HabitGridModel.swift in Sources */,
 				FFF03D072CCBE3DF00476B44 /* View+AppearWithIndex.swift in Sources */,
@@ -3185,8 +3231,10 @@
 				FF70E9232CB86FCE0055E932 /* SleepSoundLevelChartView.swift in Sources */,
 				FFA062AD2C921ACF00ADCB09 /* HabitGrid.swift in Sources */,
 				FF1E960F2C0ACC70004DAD2D /* LabelledMetricView.swift in Sources */,
+				FF5D098F2CF61E0D00374F66 /* FoodItem+Preview.swift in Sources */,
 				FF5D06DB2CF3F1A400374F66 /* AIFoodScannerViewModel.swift in Sources */,
 				FF70EA042CC183770055E932 /* BodyWeightTodayWidgetViewModel.swift in Sources */,
+				FF5D09982CF65CE700374F66 /* FoodItemLogDatePicker.swift in Sources */,
 				FF78681E2CA782660001F49E /* Double+Helpers.swift in Sources */,
 				FF87434C2CE5117C002581FA /* BarcodeView.swift in Sources */,
 				FFF61AF92BED71AE00926042 /* SupplementReccomendationModel.swift in Sources */,

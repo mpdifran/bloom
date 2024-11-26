@@ -133,38 +133,10 @@ private extension FoodItemCell {
     ScrollView {
         VStack {
             FoodItemCell(
-                food: .init(
-                    id: .init(),
-                    name: "Yogurt",
-                    brandName: "Activia",
-                    flavour: "Rhubarb",
-                    calories: .init(value: 91, unit: "kcal"),
-                    protein: .init(value: 3.9, unit: "g"),
-                    carbohydrates: .init(value: 12, unit: "g"),
-                    fat: .init(value: 2.8, unit: "g"),
-                    servingName: "1 package",
-                    servingQuantity: .init(value: 43, unit: "g"),
-                    ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
-                    category: .branded,
-                    isVerified: false
-                )
+                food: .Preview.unverifiedRitzCrackers
             )
             FoodItemCell(
-                food: .init(
-                    id: .init(),
-                    name: "Crackers",
-                    brandName: "Ritz",
-                    flavour: "Low Sodium",
-                    calories: .init(value: 91, unit: "kcal"),
-                    protein: .init(value: 3.9, unit: "g"),
-                    carbohydrates: .init(value: 12, unit: "g"),
-                    fat: .init(value: 2.8, unit: "g"),
-                    servingName: "1 package",
-                    servingQuantity: .init(value: 43, unit: "g"),
-                    ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
-                    category: .branded,
-                    isVerified: true
-                )
+                food: .Preview.ritzCrackers
             )
         }
         .padding()

@@ -100,20 +100,6 @@ private extension FoodItemNutritionLabel {
 
 #Preview {
     FoodItemNutritionLabel(
-        foodItem: .init(
-            id: .init("1234"),
-            name: "Crackers",
-            brandName: "Ritz",
-            flavour: "Low Sodium",
-            calories: .init(value: 100, unit: "kcal"),
-            protein: .init(value: 1, unit: "g"),
-            carbohydrates: .init(value: 13, unit: "g"),
-            fat: .init(value: 4.5, unit: "g"),
-            servingName: "6 crackers",
-            servingQuantity: .init(value: 20, unit: "g"),
-            ingredients: nil,
-            category: .branded,
-            isVerified: true
-        )
+        foodItem: .Preview.ritzCrackers
     )
 }

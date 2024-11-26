@@ -58,6 +58,7 @@ private extension SupplementsApp {
     func onForeground() {
         Task {
             await VitalsCalculator.shared.refreshVitals()
+            NutritionTrackingViewModel.shared.updateMealForCurrentTime()
         }
     }
 }

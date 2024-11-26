@@ -73,9 +73,6 @@ struct BloodPressureActionCardView: View {
         }
         .tint(.mutedPink)
         .alert(error: $error)
-        .onAppear {
-            focusedTextField = .systolic
-        }
     }
 }
 

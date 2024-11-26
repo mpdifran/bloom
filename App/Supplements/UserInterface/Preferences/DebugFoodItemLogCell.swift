@@ -35,23 +35,7 @@ struct DebugFoodItemLogCell: View {
             date: .now,
             meal: .lunch,
             numberOfServings: 2,
-            foodItem: .init(
-                id: "456",
-                name: "Crackers",
-                brandName: "Ritz",
-                flavour: "Low Sodium",
-                calories: 120,
-                protein: 1,
-                carbohydrates: 13,
-                fat: 4,
-                servingName: "6 crackers",
-                servingUnitString: "g",
-                servingValue: 20,
-                ingredients: nil,
-                category: .branded,
-                isVerified: true,
-                logs: []
-            )
+            foodItem: .Preview.ritzCrackers
         )
     )
 }
