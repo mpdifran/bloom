@@ -103,7 +103,9 @@ private extension CameraManager {
 
         isInitialized = true
 
-      resetZoomScale()
+        // After the camera is initialized, we need to reset the zoom scale for 1x camera (0.5x is default).
+        // We cannot set the zoom factor when setting up the video input initially, it must be done after.
+        resetZoomScale()
     }
 
     func setupVideoInput() {
@@ -178,7 +180,9 @@ private extension CameraManager {
 
     do {
       try camera.configure {
-        camera.videoZoomFactor = 2
+        // Find the zoomFactor to switch over to the next lens.
+        guard let zoomFactor = camera.virtualDeviceSwitchOverVideoZoomFactors.first as? CGFloat else { return }
+        camera.videoZoomFactor = zoomFactor
       }
     } catch {
       print("Error setting camera zoom: \(error.localizedDescription)")
