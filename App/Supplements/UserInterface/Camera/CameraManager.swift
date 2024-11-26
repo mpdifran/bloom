@@ -102,6 +102,8 @@ private extension CameraManager {
         setupPhotoOutput()
 
         isInitialized = true
+
+      resetZoomScale()
     }
 
     func setupVideoInput() {
@@ -170,6 +172,18 @@ private extension CameraManager {
         photoOutput.maxPhotoDimensions = .init(width: 4032, height: 3024)
         photoOutput.maxPhotoQualityPrioritization = .quality
     }
+
+  func resetZoomScale() {
+    guard let camera = deviceInput?.device else { return }
+
+    do {
+      try camera.configure {
+        camera.videoZoomFactor = 2
+      }
+    } catch {
+      print("Error setting camera zoom: \(error.localizedDescription)")
+    }
+  }
 }
 
 // MARK: - AVCapturePhotoCaptureDelegate
