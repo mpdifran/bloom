@@ -33,7 +33,7 @@ final actor CameraManager: NSObject {
 
 extension CameraManager {
     func start() async {
-        await configureCaptureSession()
+        configureCaptureSession()
 
         captureSession.startRunning()
     }
@@ -89,7 +89,7 @@ extension CameraManager {
 // MARK: Private Methods
 
 private extension CameraManager {
-    func configureCaptureSession() async {
+    func configureCaptureSession() {
         guard !isInitialized else { return }
 
         captureSession.beginConfiguration()
@@ -98,13 +98,17 @@ private extension CameraManager {
 
         captureSession.sessionPreset = .photo
 
-        await setupVideoInput()
-        await setupPhotoOutput()
+        setupVideoInput()
+        setupPhotoOutput()
 
         isInitialized = true
+
+        // After the camera is initialized, we need to reset the zoom scale for 1x camera (0.5x is default).
+        // We cannot set the zoom factor when setting up the video input initially, it must be done after.
+        resetZoomScale()
     }
 
-    func setupVideoInput() async {
+    func setupVideoInput() {
         do {
           // Choose the best available camera for close up focus (wider the better).
           let discoverySession = AVCaptureDevice.DiscoverySession(
@@ -159,7 +163,7 @@ private extension CameraManager {
         }
     }
 
-    func setupPhotoOutput() async {
+    func setupPhotoOutput() {
         guard captureSession.canAddOutput(photoOutput) else {
             print("CameraManager: Could not add photo output to session")
             return
@@ -170,6 +174,20 @@ private extension CameraManager {
         photoOutput.maxPhotoDimensions = .init(width: 4032, height: 3024)
         photoOutput.maxPhotoQualityPrioritization = .quality
     }
+
+  func resetZoomScale() {
+    guard let camera = deviceInput?.device else { return }
+
+    do {
+      try camera.configure {
+        // Find the zoomFactor to switch over to the next lens.
+        guard let zoomFactor = camera.virtualDeviceSwitchOverVideoZoomFactors.first as? CGFloat else { return }
+        camera.videoZoomFactor = zoomFactor
+      }
+    } catch {
+      print("Error setting camera zoom: \(error.localizedDescription)")
+    }
+  }
 }
 
 // MARK: - AVCapturePhotoCaptureDelegate
