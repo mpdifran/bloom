@@ -150,11 +150,13 @@ extension HealthStoreFetcher {
     dateRange: DateRange,
     writtenByApp: Bool = false
   ) async -> [HKSample] {
-    (
+    // Source is the current app.
+    let predicateFromApp = HKQuery.predicateForObjects(from: HKSource.default())
+    return (
       try? await healthStore.fetchSamples(
         for: sampleType,
         dateRange: dateRange,
-        additionalPredicates: writtenByApp ? [HealthMetadata.predicate(for: .appIdentifier)] : []
+        additionalPredicates: writtenByApp ? [predicateFromApp] : []
       )
     ) ?? []
   }

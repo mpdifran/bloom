@@ -11,13 +11,11 @@ import HealthKit
 // MARK: - HealthMetadata
 
 enum HealthMetadata {
-  case appIdentifier
   case meal(String)
   case food(String)
 
   var key: String {
     switch self {
-    case .appIdentifier: "AppIdentifier"
     case .meal: "Meal"
     case .food: HKMetadataKeyFoodType
     }
@@ -25,7 +23,6 @@ enum HealthMetadata {
 
   var value: String {
     switch self {
-    case .appIdentifier: Bundle.main.bundleIdentifier ?? "UnknownApp"
     case .meal(let mealName): mealName
     case .food(let foodName): foodName
     }
@@ -35,6 +32,7 @@ enum HealthMetadata {
     Dictionary(uniqueKeysWithValues: cases.map { ($0.key, $0.value) })
   }
 
+  // Query data from sample metadata.
   static func predicate(for data: HealthMetadata) -> NSPredicate {
     HKQuery.predicateForObjects(
       withMetadataKey: data.key,

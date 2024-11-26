@@ -50,7 +50,7 @@ extension HealthStoreModifier {
 private extension HealthStoreModifier {
   func clearExistingEntries(for date: Date) async throws {
     // We need to find and delete for each quantity type. ex calories, protein, carbs, fat.
-    for sampleType in HealthType.allCases {
+    for sampleType in FoodItemNutrient.allCases {
       do {
         let type = HKQuantityType.quantityType(forIdentifier: sampleType.identifier)!
         let samples = await HealthStoreFetcher.shared.fetchSamples(
@@ -81,7 +81,7 @@ private extension HealthStoreModifier {
   }
 
   func createFoodSamples(_ foodItemLog: FoodItemLogDTO) -> [HKQuantitySample] {
-    HealthType.allCases.compactMap { type in
+    FoodItemNutrient.allCases.compactMap { type in
       createFoodSample(
         foodItemLog,
         type: type
@@ -91,7 +91,7 @@ private extension HealthStoreModifier {
 
   func createFoodSample(
     _ foodItemLog: FoodItemLogDTO,
-    type: HealthType
+    type: FoodItemNutrient
   ) -> HKQuantitySample? {
     guard let foodItem = foodItemLog.foodItem else { return nil }
 
@@ -102,9 +102,8 @@ private extension HealthStoreModifier {
     )
     let metaData = HealthMetadata.create(
       [
-        .appIdentifier,
         .food(foodItem.name),
-        .meal(foodItemLog.meal.rawValue)
+        .meal(foodItemLog.meal.name)
       ]
     )
 

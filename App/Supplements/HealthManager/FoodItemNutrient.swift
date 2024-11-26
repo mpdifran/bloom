@@ -1,5 +1,5 @@
 //
-//  HealthType.swift
+//  FoodItemNutrient.swift
 //  Supplements
 //
 //  Created by Zach Radford on 2024-11-24.
@@ -9,11 +9,11 @@ import DataContainer
 import Foundation
 import HealthKit
 
-// MARK: - HealthType
+// MARK: - FoodItemNutrient
 
 /// Making the logged health types opt-in.
 /// We can leverage allCases to make logging more generic.
-enum HealthType: CaseIterable {
+enum FoodItemNutrient: CaseIterable {
   case calories
   case protein
   case carbohydrates
