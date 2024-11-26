@@ -145,9 +145,21 @@ extension HealthStoreFetcher {
         return HKQuantity(unit: unit, doubleValue: average)
     }
 
-    func fetchSamples(for sampleType: HKSampleType, dateRange: DateRange) async -> [HKSample] {
-        (try? await healthStore.fetchSamples(for: sampleType, dateRange: dateRange)) ?? []
-    }
+  func fetchSamples(
+    for sampleType: HKSampleType,
+    dateRange: DateRange,
+    writtenByApp: Bool = false
+  ) async -> [HKSample] {
+    // Source is the current app.
+    let predicateFromApp = HKQuery.predicateForObjects(from: HKSource.default())
+    return (
+      try? await healthStore.fetchSamples(
+        for: sampleType,
+        dateRange: dateRange,
+        additionalPredicates: writtenByApp ? [predicateFromApp] : []
+      )
+    ) ?? []
+  }
 
     func fetchNetEnergy(dateRange: DateRange) async -> [DateQuantitySample] {
 

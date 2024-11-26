@@ -147,19 +147,22 @@ extension HKHealthStore {
 
     func fetchSamples(
         for sampleType: HKSampleType,
-        dateRange: DateRange
+        dateRange: DateRange,
+        additionalPredicates: [NSPredicate] = []
     ) async throws -> [HKSample] {
         try await withCheckedThrowingContinuation { continuation in
-            let predicate = HKQuery.predicateForSamples(
+            let datePredicate = HKQuery.predicateForSamples(
                 withStart: dateRange.start,
                 end: dateRange.end,
                 options: .strictStartDate
             )
+            let predicates = [datePredicate] + additionalPredicates
+            let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
             let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
 
             let sampleQuery = HKSampleQuery(
                 sampleType: sampleType,
-                predicate: predicate,
+                predicate: combinedPredicate,
                 limit: HKObjectQueryNoLimit,
                 sortDescriptors: [sortDescriptor]
             ) { (query, samples, error) in
