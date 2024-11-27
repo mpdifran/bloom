@@ -83,15 +83,18 @@ private extension NutritionStatusCard {
 private extension NutritionStatusCard {
     private struct FilteredFoodItemLogsListView: View {
 
+        private let meal: FoodItemLog.Meal
+
         init(date: Date, meal: FoodItemLog.Meal) {
+            self.meal = meal
+
             let startOfDay = Calendar.current.startOfDay(for: date)
             let endOfDay = Calendar.current.endOfDay(for: date)
 
             self._foodItemLogs = Query(
                 filter: #Predicate<FoodItemLog> { log in
                     log.date >= startOfDay &&
-                    log.date <= endOfDay &&
-                    log.meal == meal // TODO: This never matches
+                    log.date <= endOfDay
                 },
                 sort: \FoodItemLog.date,
                 order: .forward
@@ -102,7 +105,7 @@ private extension NutritionStatusCard {
 
         var body: some View {
             Group {
-                if foodItemLogs.isEmpty {
+                if filteredFoodItemLogs.isEmpty {
                     VStack {
                         Text("No Food Logged")
                             .font(.title2)
@@ -111,13 +114,21 @@ private extension NutritionStatusCard {
                     }
                     .frame(height: 100)
                 } else {
-                    ForEach(foodItemLogs) { foodItemLog in
+                    ForEach(filteredFoodItemLogs) { foodItemLog in
                         FoodItemLogCell(foodItemLog: foodItemLog)
+                            .id(foodItemLog.id)
                             .transition(.blurReplace)
                             .padding(.vertical)
                         Divider()
                     }
                 }
+            }
+        }
+
+        /// We need to filter in memory because of a bug in SwiftData that improperly filters enums in #Predicates.
+        private var filteredFoodItemLogs: [FoodItemLog] {
+            foodItemLogs.filter {
+                $0.meal == meal
             }
         }
     }
