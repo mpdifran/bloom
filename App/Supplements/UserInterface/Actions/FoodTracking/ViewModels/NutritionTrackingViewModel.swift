@@ -113,6 +113,22 @@ extension NutritionTrackingViewModel {
         let serving = FoodItemServing(serving: numberOfServings, foodItem: foodItem)
         try await log(foodItemServings: [serving], meal: meal)
     }
+
+    func delete(foodItemLogs: [FoodItemLog]) async throws {
+        var dates = Set<Date>()
+
+        try? modelContext.transaction {
+            for foodItemLog in foodItemLogs {
+                dates.insert(foodItemLog.date)
+                
+                try modelContext.deleteByID(foodItemLog)
+            }
+        }
+
+        for date in dates {
+            try await HealthStoreModifier.shared.updateNutrition(for: date)
+        }
+    }
 }
 
 private extension NutritionTrackingViewModel {

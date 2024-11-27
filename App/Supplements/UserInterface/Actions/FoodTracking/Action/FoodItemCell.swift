@@ -101,7 +101,7 @@ private extension FoodItemCell {
 
     func quickLogFood() async {
         do {
-            try nutritionViewModel.log(
+            try await nutritionViewModel.log(
                 foodItem: food,
                 meal: nutritionViewModel.suggestedMeal,
                 numberOfServings: 1

@@ -14,38 +14,35 @@ import HealthKit
 /// Making the logged health types opt-in.
 /// We can leverage allCases to make logging more generic.
 enum FoodItemNutrient: CaseIterable {
-  case calories
-  case protein
-  case carbohydrates
-  case fat
+    case calories
+    case protein
+    case carbohydrates
+    case fat
 
-  var identifier: HKQuantityTypeIdentifier {
-    switch self {
-    case .calories: .dietaryEnergyConsumed
-    case .protein: .dietaryProtein
-    case .carbohydrates: .dietaryCarbohydrates
-    case .fat: .dietaryFatTotal
-    }
-  }
-
-  var unit: HKUnit {
-    switch self {
-    case .calories: .largeCalorie()
-    case .protein: .gram()
-    case .carbohydrates: .gram()
-    case .fat: .gram()
-    }
-  }
-
-  func getServingSize(_ foodItem: FoodItemDTO) -> Double {
-    let servingValue = foodItem.servingValue ?? 0
-    let value = switch self {
-    case .calories: foodItem.calories
-    case .protein: foodItem.protein
-    case .carbohydrates: foodItem.carbohydrates
-    case .fat: foodItem.fat
+    var identifier: HKQuantityTypeIdentifier {
+        switch self {
+        case .calories: .dietaryEnergyConsumed
+        case .protein: .dietaryProtein
+        case .carbohydrates: .dietaryCarbohydrates
+        case .fat: .dietaryFatTotal
+        }
     }
 
-    return servingValue * value
-  }
+    var unit: HKUnit {
+        switch self {
+        case .calories: .largeCalorie()
+        case .protein: .gram()
+        case .carbohydrates: .gram()
+        case .fat: .gram()
+        }
+    }
+
+    func value(for foodItem: FoodItemDTO) -> Double {
+        switch self {
+        case .calories: foodItem.calories
+        case .protein: foodItem.protein
+        case .carbohydrates: foodItem.carbohydrates
+        case .fat: foodItem.fat
+        }
+    }
 }

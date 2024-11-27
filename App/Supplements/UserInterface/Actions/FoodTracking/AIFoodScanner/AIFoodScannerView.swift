@@ -253,10 +253,13 @@ private extension AIFoodScannerView {
 
         if viewModel.servings.isNotEmpty {
             Button {
-                do {
-                    try save()
-                } catch {
-                    self.error = error
+                Task {
+                    do {
+                        try await save()
+                        dismiss()
+                    } catch {
+                        self.error = error
+                    }
                 }
             } label: {
                 Text("Log All")
@@ -316,16 +319,15 @@ private extension AIFoodScannerView {
 
 private extension AIFoodScannerView {
 
-    func save() throws {
+    func save() async throws {
         let meal = nutritionViewModel.suggestedMeal
-        try nutritionViewModel.log(
+        try await nutritionViewModel.log(
             foodItemServings: viewModel.servings,
             meal: meal
         )
 
         saveComplete.toggle()
         SoundPlayer.playLogHealthData()
-        dismiss()
     }
 }
 

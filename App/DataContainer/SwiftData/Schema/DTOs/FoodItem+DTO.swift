@@ -13,6 +13,7 @@ public struct FoodItemDTO: Sendable {
     public let id: String
     public let name: String
     public let brandName: String
+    public let flavour: String
     public let calories: Double
     public let protein: Double
     public let carbohydrates: Double
@@ -28,6 +29,7 @@ public struct FoodItemDTO: Sendable {
         id: String,
         name: String,
         brandName: String,
+        flavour: String,
         calories: Double,
         protein: Double,
         carbohydrates: Double,
@@ -42,6 +44,7 @@ public struct FoodItemDTO: Sendable {
         self.id = id
         self.name = name
         self.brandName = brandName
+        self.flavour = flavour
         self.calories = calories
         self.protein = protein
         self.carbohydrates = carbohydrates
@@ -62,6 +65,7 @@ public extension FoodItemRecord {
             id: id,
             name: name,
             brandName: brandName,
+            flavour: flavour,
             calories: calories,
             protein: protein,
             carbohydrates: carbohydrates,

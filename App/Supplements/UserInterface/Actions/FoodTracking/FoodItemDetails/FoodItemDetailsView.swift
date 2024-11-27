@@ -71,14 +71,13 @@ struct FoodItemDetailsView: View {
                     }
                 } else {
                     ProminentButton("Log") {
-                        do {
-                            try save()
-
-                            saveComplete.toggle()
-                            SoundPlayer.playLogHealthData()
-                            dismiss()
-                        } catch {
-                            self.error = error
+                        Task {
+                            do {
+                                try await save()
+                                dismiss()
+                            } catch {
+                                self.error = error
+                            }
                         }
                     }
                     .sensoryFeedback(.success, trigger: saveComplete)
@@ -200,19 +199,22 @@ private extension FoodItemDetailsView {
 
 private extension FoodItemDetailsView {
 
-    func save() throws {
+    func save() async throws {
         if let existingFoodItemLog {
             existingFoodItemLog.numberOfServings = numberOfServings
             existingFoodItemLog.meal = meal
 
             try modelContext.save()
         } else {
-            try nutritionViewModel.log(
+            try await nutritionViewModel.log(
                 foodItem: foodItem,
                 meal: meal,
                 numberOfServings: numberOfServings
             )
         }
+
+        saveComplete.toggle()
+        SoundPlayer.playLogHealthData()
     }
 }
 
