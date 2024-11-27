@@ -29,13 +29,28 @@ extension FoodLoggingActionCardView {
         var results: [FoodItemSection]?
         var failedBarcodeSearch: String?
         var error: Error?
+        var recentFoodItemSections = [FoodItemSection]()
 
         private var debouncedSearchQuery = ""
         private var debounceTask: Task<Void, Never>?
+
+        private let foodItemModelActor = FoodItemLogModelActor(modelContainer: ContainerHolder.shared.container)
     }
 }
 
 extension FoodLoggingActionCardView.ViewModel {
+
+    func fetchRecentFoodItemLogs(for meal: FoodItemLog.Meal) async {
+        do {
+            let recentLogs = try await foodItemModelActor.fetchRecentLogs(for: meal, limit: 10)
+
+            let foodItems = recentLogs.compactMap({ $0.foodItem?.asNetworkFoodItem() })
+
+            recentFoodItemSections = [FoodItemSection(title: "Recent", foodItems: foodItems)]
+        } catch {
+            print(error)
+        }
+    }
 
     func debounceAutocomplete(for query: String) {
         debounceTask?.cancel()

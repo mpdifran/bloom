@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import SwiftData
 import DataContainer
 
 private extension Int {
@@ -27,7 +28,6 @@ struct FoodLoggingActionCardView: View {
     @State private var shouldAutocomplete = true
     @State private var didSearchToggle = false
     @State private var presentedSheet: AnyView?
-
     @State private var showAllInSection = [Int : Bool]()
 
     @Environment(\.dismiss) private var dismiss
@@ -63,6 +63,14 @@ struct FoodLoggingActionCardView: View {
         .alert(error: $viewModel.error)
         .tint(.mutedGreen)
         .task {
+            await viewModel.fetchRecentFoodItemLogs(for: nutritionViewModel.suggestedMeal)
+        }
+        .onChange(of: nutritionViewModel.suggestedMeal) { _, newValue in
+            Task {
+                await viewModel.fetchRecentFoodItemLogs(for: newValue)
+            }
+        }
+        .task {
             guard let initialBarcodeToSearch else { return }
 
             await viewModel.performBarcodeSearch(for: initialBarcodeToSearch)
@@ -85,7 +93,31 @@ private extension FoodLoggingActionCardView {
                 noContentView
             }
         } else {
-            Spacer()
+            recentFoodItemsView
+        }
+    }
+
+    var recentFoodItemsView: some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(viewModel.recentFoodItemSections) { section in
+                    SectionTitleView(section.title)
+                        .padding(.horizontal)
+
+                    ForEachEnumerated(section.foodItems) { index, food in
+                        FoodItemCell(food: food)
+                            .id(food.id)
+                            .transition(.blurReplace)
+                            .onTapGesture {
+                                presentedSheet = FoodItemDetailsView(
+                                    foodItem: food,
+                                    existingFoodItemLog: nil
+                                ).asAny
+                            }
+                    }
+                }
+            }
+            .padding()
         }
     }
 
@@ -139,7 +171,6 @@ private extension FoodLoggingActionCardView {
             }
             .padding()
         }
-        .listStyle(.plain)
         .animation(.bouncy, value: viewModel.results)
         .animation(.bouncy, value: showAllInSection)
     }

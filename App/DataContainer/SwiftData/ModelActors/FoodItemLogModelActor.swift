@@ -59,4 +59,15 @@ public extension FoodItemLogModelActor {
         )
         return try context.fetch(descriptor).first?.asDTO()
     }
+
+    func fetchRecentLogs(for meal: FoodItemLog.Meal, limit: Int) throws -> [FoodItemLogDTO] {
+        var descriptor = FetchDescriptor<FoodItemLog>(
+//            predicate: #Predicate<FoodItemLog> { model in
+//                model.meal == meal
+//            },
+            sortBy: [SortDescriptor(\FoodItemLog.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = limit
+        return try context.fetch(descriptor).map { $0.asDTO() }
+    }
 }

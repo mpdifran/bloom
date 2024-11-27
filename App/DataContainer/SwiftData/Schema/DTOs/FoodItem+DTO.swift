@@ -22,6 +22,8 @@ public struct FoodItemDTO: Sendable {
     public let servingUnitString: String?
     public let servingValue: Double?
     public let ingredients: String?
+    public let category: FoodItemRecord.Category?
+    public let isVerified: Bool
     public let foodItemLogIDs: [String]
 
     public init(
@@ -38,6 +40,8 @@ public struct FoodItemDTO: Sendable {
         servingUnitString: String?,
         servingValue: Double?,
         ingredients: String?,
+        category: FoodItemRecord.Category?,
+        isVerified: Bool,
         foodItemLogIDs: [String]
     ) {
         self.persistentID = persistentID
@@ -53,6 +57,8 @@ public struct FoodItemDTO: Sendable {
         self.servingUnitString = servingUnitString
         self.servingValue = servingValue
         self.ingredients = ingredients
+        self.category = category
+        self.isVerified = isVerified
         self.foodItemLogIDs = foodItemLogIDs
     }
 }
@@ -74,6 +80,8 @@ public extension FoodItemRecord {
             servingUnitString: servingUnitString,
             servingValue: servingValue,
             ingredients: ingredients,
+            category: category,
+            isVerified: isVerified,
             foodItemLogIDs: logs?.map({ $0.id }) ?? []
         )
     }

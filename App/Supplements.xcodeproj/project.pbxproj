@@ -150,6 +150,7 @@
 		FF5D09982CF65CE700374F66 /* FoodItemLogDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */; };
 		FF5D099A2CF76B1200374F66 /* NutritionQuickActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09992CF76B1200374F66 /* NutritionQuickActionCell.swift */; };
 		FF5D0AA92CF7A59800374F66 /* FoodItemLogPickerHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D0AA82CF7A58C00374F66 /* FoodItemLogPickerHeader.swift */; };
+		FF5D0AAB2CF7B60700374F66 /* FoodItemRecordDTO+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D0AAA2CF7B60000374F66 /* FoodItemRecordDTO+Helpers.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -668,6 +669,7 @@
 		FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemLogDatePicker.swift; sourceTree = "<group>"; };
 		FF5D09992CF76B1200374F66 /* NutritionQuickActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionQuickActionCell.swift; sourceTree = "<group>"; };
 		FF5D0AA82CF7A58C00374F66 /* FoodItemLogPickerHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemLogPickerHeader.swift; sourceTree = "<group>"; };
+		FF5D0AAA2CF7B60000374F66 /* FoodItemRecordDTO+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItemRecordDTO+Helpers.swift"; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -2205,6 +2207,7 @@
 				FF9783552C9B614B00A8ED7E /* TargetMetric+HealthData.swift */,
 				FF2FB8A52C9DD81400F57523 /* Habit+Helpers.swift */,
 				FFB640DB2CF12E9C0013502E /* FoodItemRecord+Helpers.swift */,
+				FF5D0AAA2CF7B60000374F66 /* FoodItemRecordDTO+Helpers.swift */,
 				FF5D09952CF6236600374F66 /* FoodItemLog+Helpers.swift */,
 			);
 			path = DataContainer;
@@ -3175,6 +3178,7 @@
 				FF70E9302CBAF4F80055E932 /* JSONGenerator.swift in Sources */,
 				FFC77AF12C5839FE003E5F85 /* Collection+DataPair.swift in Sources */,
 				FF88F1352C7D0D980093D1B4 /* BowelMovementAllDataView.swift in Sources */,
+				FF5D0AAB2CF7B60700374F66 /* FoodItemRecordDTO+Helpers.swift in Sources */,
 				FF4578F12C40797F004E8661 /* SleepStageChartView.swift in Sources */,
 				FF4CAAF52C7F66CF001A59F3 /* OnboardingFocusAreasView.swift in Sources */,
 				FFCC6B8A2C9C8B8C00676CAA /* GoalReviewCell.swift in Sources */,
