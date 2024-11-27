@@ -27,6 +27,7 @@ final class NutritionTrackingViewModel {
 extension NutritionTrackingViewModel {
 
     func updateMealForCurrentTime() {
+        date = .now
         let hour = Calendar.current.component(.hour, from: date)
 
         switch hour {
@@ -49,10 +50,10 @@ extension NutritionTrackingViewModel {
         case .lunch:
             suggestedMeal = .dinner
         case .dinner:
-            suggestedMeal = .breakfast
-            date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
+            suggestedMeal = .snack
         case .snack:
             suggestedMeal = .breakfast
+            date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
         @unknown default:
             break
         }
@@ -62,7 +63,7 @@ extension NutritionTrackingViewModel {
     func reverseTimeWindow() {
         switch suggestedMeal {
         case .breakfast:
-            suggestedMeal = .dinner
+            suggestedMeal = .snack
             date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
         case .lunch:
             suggestedMeal = .breakfast
