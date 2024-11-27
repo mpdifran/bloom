@@ -36,7 +36,11 @@ struct S3Storage: ImageStorage {
   let bucketName: String
 
   func store(image: ImageFile, path: StoragePath) async throws -> ImageFileMetadata {
-    let filename = "\(UUID().uuidString).\(image.fileExtension)"
+    guard let imageType = request.imageProcessing.determineImageType(image.data) else {
+      throw Abort(.badRequest, reason: "Unsupported image type")
+    }
+    
+    let filename = "\(UUID().uuidString).\(imageType)"
 
     let putObjectRequest = S3.PutObjectRequest(
         body: .data(image.data, byteBufferAllocator: request.application.allocator),
