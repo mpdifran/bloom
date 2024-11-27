@@ -23,9 +23,11 @@ struct FoodItemDetailsView: View {
 
         if let existingFoodItemLog {
             self._numberOfServings = State(initialValue: existingFoodItemLog.numberOfServings)
+            self._date = State(initialValue: existingFoodItemLog.date)
             self._meal = State(initialValue: existingFoodItemLog.meal)
         } else {
             self._numberOfServings = State(initialValue: 1)
+            self._date = State(initialValue: NutritionTrackingViewModel.shared.date)
             self._meal = State(initialValue: NutritionTrackingViewModel.shared.suggestedMeal)
         }
     }
@@ -33,7 +35,9 @@ struct FoodItemDetailsView: View {
     @State private var nutritionViewModel = NutritionTrackingViewModel.shared
 
     @State private var numberOfServings: Double
+    @State private var date: Date
     @State private var meal: FoodItemLog.Meal
+    @State private var showDatePicker = false
     @State private var saveComplete = false
     @State private var error: Error?
 
@@ -70,7 +74,7 @@ struct FoodItemDetailsView: View {
                         isFocused = false
                     }
                 } else {
-                    ProminentButton("Log") {
+                    ProminentButton(existingFoodItemLog == nil ? "Log" : "Save") {
                         Task {
                             do {
                                 try await save()
@@ -80,6 +84,7 @@ struct FoodItemDetailsView: View {
                             }
                         }
                     }
+                    .disabled(!canSave)
                     .sensoryFeedback(.success, trigger: saveComplete)
                 }
             }
@@ -174,6 +179,33 @@ private extension FoodItemDetailsView {
 
             Divider()
 
+            LabeledContent("Date") {
+                Button {
+                    showDatePicker.toggle()
+                } label: {
+                    HStack(spacing: 2) {
+                        Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.caption)
+                    }
+                    .padding()
+                }
+                .popover(isPresented: $showDatePicker) {
+                    DatePicker(selection: $nutritionViewModel.date, displayedComponents: .date) {
+                        Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
+                    }
+                    .datePickerStyle(.graphical)
+                    .frame(width: 300)
+                    .presentationCompactAdaptation(.popover)
+                }
+                .onChange(of: date) { _, _ in
+                    showDatePicker = false
+                }
+            }
+            .frame(minHeight: 60)
+
+            Divider()
+
             LabeledContent("Meal") {
                 Picker(meal.name, selection: $meal) {
                     ForEach(FoodItemLog.Meal.allCases) { meal in
@@ -199,12 +231,22 @@ private extension FoodItemDetailsView {
 
 private extension FoodItemDetailsView {
 
+    var canSave: Bool {
+        guard let existingFoodItemLog else { return true }
+
+        return existingFoodItemLog.numberOfServings != numberOfServings ||
+            existingFoodItemLog.date != date ||
+            existingFoodItemLog.meal != meal
+    }
+
     func save() async throws {
         if let existingFoodItemLog {
-            existingFoodItemLog.numberOfServings = numberOfServings
-            existingFoodItemLog.meal = meal
-
-            try modelContext.save()
+            try await nutritionViewModel.update(
+                foodItem: existingFoodItemLog,
+                numberOfServings: numberOfServings,
+                date: date,
+                meal: meal
+            )
         } else {
             try await nutritionViewModel.log(
                 foodItem: foodItem,

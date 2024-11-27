@@ -129,6 +129,28 @@ extension NutritionTrackingViewModel {
             try await HealthStoreModifier.shared.updateNutrition(for: date)
         }
     }
+
+    func update(
+        foodItem: FoodItemLog,
+        numberOfServings: Double,
+        date: Date,
+        meal: FoodItemLog.Meal
+    ) async throws {
+        guard let localLog: FoodItemLog = try modelContext.existingModel(for: foodItem.persistentModelID) else {
+            throw NSError(description: "There was a problem saving the changes.")
+        }
+
+        let oldDate = localLog.date
+
+        localLog.numberOfServings = numberOfServings
+        localLog.date = self.date(for: meal)
+        localLog.meal = meal
+
+        try modelContext.save()
+
+        try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
+        try await HealthStoreModifier.shared.updateNutrition(for: date)
+    }
 }
 
 private extension NutritionTrackingViewModel {
@@ -142,7 +164,7 @@ private extension NutritionTrackingViewModel {
         case .dinner:
             Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: date) ?? date
         case .snack:
-            Calendar.current.date(bySettingHour: 21, minute: 0, second: 0, of: date) ?? date
+            Calendar.current.date(bySettingHour: 15, minute: 0, second: 0, of: date) ?? date
         @unknown default:
             date
         }

@@ -9,6 +9,10 @@ import SwiftUI
 import AppUI
 import DataContainer
 
+private extension Int {
+    static let sectionPeekAmount: Int = 5
+}
+
 struct FoodLoggingActionCardView: View {
 
     private let initialBarcodeToSearch: String?
@@ -42,10 +46,7 @@ struct FoodLoggingActionCardView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    HStack {
-                        FoodItemLogDatePicker()
-                        MealPicker()
-                    }
+                    FoodItemLogPickerHeader()
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") {
@@ -78,6 +79,8 @@ private extension FoodLoggingActionCardView {
         } else if let results = viewModel.results {
             if results.isNotEmpty {
                 resultsView(results: results)
+            } else if let barcode = viewModel.failedBarcodeSearch {
+                failedBarcodeSearchView(barcode: barcode)
             } else {
                 noContentView
             }
@@ -107,7 +110,7 @@ private extension FoodLoggingActionCardView {
                         .padding(.horizontal)
 
                     ForEachEnumerated(section.foodItems) { index, food in
-                        if index < 3 || showAllInSection[sectionIndex] == true {
+                        if index < .sectionPeekAmount || showAllInSection[sectionIndex] == true {
                             FoodItemCell(food: food)
                                 .id(food.id)
                                 .transition(.blurReplace)
@@ -120,7 +123,7 @@ private extension FoodLoggingActionCardView {
                         }
                     }
 
-                    if showAllInSection[sectionIndex] != true && section.foodItems.count > 3 {
+                    if showAllInSection[sectionIndex] != true && section.foodItems.count > .sectionPeekAmount {
                         Button {
                             showAllInSection[sectionIndex] = true
                         } label: {
@@ -139,6 +142,18 @@ private extension FoodLoggingActionCardView {
         .listStyle(.plain)
         .animation(.bouncy, value: viewModel.results)
         .animation(.bouncy, value: showAllInSection)
+    }
+
+    func failedBarcodeSearchView(barcode: String) -> some View {
+        VStack {
+            BarcodeView(barcode: barcode)
+            ContentUnavailableView("No Match", systemImage: "barcode")
+
+            Button("Scan to Add Item", systemImage: "text.viewfinder") {
+
+            }
+            .buttonStyle(.tertiary)
+        }
     }
 
     var noContentView: some View {

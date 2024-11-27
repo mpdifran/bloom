@@ -22,7 +22,8 @@ struct NutritionStatusCard: View {
 
             FilteredFoodItemLogsListView(
                 date: nutritionViewModel.date,
-                meal: nutritionViewModel.suggestedMeal
+                meal: nutritionViewModel.suggestedMeal,
+                presentedSheet: $presentedSheet
             )
             .animation(.default, value: nutritionViewModel.date)
             .animation(.default, value: nutritionViewModel.suggestedMeal)
@@ -53,14 +54,12 @@ private extension NutritionStatusCard {
                 Image(systemName: "chevron.backward.circle.fill")
                     .font(.title2)
                     .bold()
-                    .foregroundStyle(.tint, .tint.secondary)
+                    .foregroundStyle(.white, .tint)
             }
-            .sensoryFeedback(.impact, trigger: advanceToggle)
 
             Spacer()
 
-            FoodItemLogDatePicker()
-            MealPicker()
+            FoodItemLogPickerHeader()
 
             Spacer()
 
@@ -71,10 +70,10 @@ private extension NutritionStatusCard {
                 Image(systemName: "chevron.forward.circle.fill")
                     .font(.title2)
                     .bold()
-                    .foregroundStyle(.tint, .tint.secondary)
+                    .foregroundStyle(.white, .tint)
             }
-            .sensoryFeedback(.impact, trigger: advanceToggle)
         }
+        .sensoryFeedback(.impact, trigger: advanceToggle)
 
         Divider()
     }
@@ -84,9 +83,15 @@ private extension NutritionStatusCard {
     private struct FilteredFoodItemLogsListView: View {
 
         private let meal: FoodItemLog.Meal
+        @Binding private var presentedSheet: AnyView?
 
-        init(date: Date, meal: FoodItemLog.Meal) {
+        init(
+            date: Date,
+            meal: FoodItemLog.Meal,
+            presentedSheet: Binding<AnyView?>
+        ) {
             self.meal = meal
+            self._presentedSheet = presentedSheet
 
             let startOfDay = Calendar.current.startOfDay(for: date)
             let endOfDay = Calendar.current.endOfDay(for: date)
@@ -118,6 +123,15 @@ private extension NutritionStatusCard {
                         FoodItemLogCell(foodItemLog: foodItemLog)
                             .id(foodItemLog.id)
                             .transition(.blurReplace)
+                            .selectable()
+                            .onTapGesture {
+                                guard let foodItem = foodItemLog.foodItem else { return }
+
+                                presentedSheet = FoodItemDetailsView(
+                                    foodItem: foodItem.asNetworkFoodItem(),
+                                    existingFoodItemLog: foodItemLog
+                                ).asAny
+                            }
                             .padding(.vertical)
                         Divider()
                     }

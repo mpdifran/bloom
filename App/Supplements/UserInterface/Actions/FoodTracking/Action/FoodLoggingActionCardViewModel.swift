@@ -27,6 +27,7 @@ extension FoodLoggingActionCardView {
         var autocomplete = [String]()
         var isSearching = false
         var results: [FoodItemSection]?
+        var failedBarcodeSearch: String?
         var error: Error?
 
         private var debouncedSearchQuery = ""
@@ -76,7 +77,14 @@ extension FoodLoggingActionCardView.ViewModel {
 
         do {
             let sections = try await NetworkRequester.shared.foodSearch(upcCode: barcode)
-            self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
+
+//            guard sections.contains(where: { $0.foods.isNotEmpty }) else {
+                failedBarcodeSearch = barcode
+                results = []
+//                return
+//            }
+
+//            self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
         } catch {
             self.error = error
         }
