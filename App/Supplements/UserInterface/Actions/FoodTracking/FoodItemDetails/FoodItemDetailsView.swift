@@ -67,6 +67,26 @@ struct FoodItemDetailsView: View {
                     }
                     .bold()
                 }
+                ToolbarItem(placement: .primaryAction) {
+                    Menu("Options", systemImage: "ellipsis.circle.fill") {
+                        Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle") {
+                            Task { await markAsInaccurate() }
+                        }
+                        Divider()
+                        Button("Delete Log", systemImage: "trash", role: .destructive) {
+                            guard let log = existingFoodItemLog else { return }
+
+                            Task {
+                                do {
+                                    try await nutritionViewModel.delete(foodItemLogs: [log])
+                                    dismiss()
+                                } catch {
+                                    self.error = error
+                                }
+                            }
+                        }
+                    }
+                }
             }
             .shelf {
                 if isFocused {
@@ -92,6 +112,7 @@ struct FoodItemDetailsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .animation(.easeInOut, value: numberOfServings)
             .alert(error: $error)
+            .tint(.mutedGreen)
         }
     }
 }
@@ -221,10 +242,12 @@ private extension FoodItemDetailsView {
     }
 
     var accuracySection: some View {
-        Button("Mark as Inaccurate") {
-
+        Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle.fill") {
+            Task {
+                await markAsInaccurate()
+            }
         }
-        .foregroundStyle(.mutedRed)
+        .bold()
         .cardContainer(fill: .background.secondary)
     }
 }
@@ -257,6 +280,10 @@ private extension FoodItemDetailsView {
 
         saveComplete.toggle()
         SoundPlayer.playLogHealthData()
+    }
+
+    func markAsInaccurate() async {
+        // TODO: Implement
     }
 }
 
