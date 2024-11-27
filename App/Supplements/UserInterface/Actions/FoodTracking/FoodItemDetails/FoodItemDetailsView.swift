@@ -26,14 +26,14 @@ struct FoodItemDetailsView: View {
             self._meal = State(initialValue: existingFoodItemLog.meal)
         } else {
             self._numberOfServings = State(initialValue: 1)
-            self._meal = State(initialValue: .breakfast)
+            self._meal = State(initialValue: NutritionTrackingViewModel.shared.suggestedMeal)
         }
     }
 
     @State private var nutritionViewModel = NutritionTrackingViewModel.shared
 
     @State private var numberOfServings: Double
-    @State private var meal: FoodItemLog.Meal = .breakfast
+    @State private var meal: FoodItemLog.Meal
     @State private var saveComplete = false
     @State private var error: Error?
 

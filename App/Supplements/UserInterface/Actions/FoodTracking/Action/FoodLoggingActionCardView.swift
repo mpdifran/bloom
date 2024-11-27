@@ -42,7 +42,10 @@ struct FoodLoggingActionCardView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    MealPicker()
+                    HStack {
+                        FoodItemLogDatePicker()
+                        MealPicker()
+                    }
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") {
