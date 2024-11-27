@@ -253,6 +253,10 @@ private extension FoodLoggingActionCardView {
                 text: $searchQuery,
                 prompt: Text("What did you eat?")
             )
+            .submitLabel(.search)
+            .onSubmit {
+                performSearch()
+            }
             .padding()
             .onChange(of: searchQuery) { oldValue, newValue in
                 guard shouldAutocomplete else { return }
