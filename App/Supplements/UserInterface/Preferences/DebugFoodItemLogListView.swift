@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import AppUI
 import SwiftData
 import DataContainer
 
 struct DebugFoodItemLogListView: View {
 
     @Query(sort: \FoodItemLog.date, order: .reverse) var foodItemLogs: [FoodItemLog]
+
+    @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+    @State private var error: Error?
 
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -34,16 +38,20 @@ struct DebugFoodItemLogListView: View {
                 }
             }
         }
+        .alert(error: $error)
     }
 }
 
 private extension DebugFoodItemLogListView {
 
     func deleteLogs(_ indexSet: IndexSet) {
-        try? modelContext.transaction {
-            for index in indexSet {
-                let foodItemLog = foodItemLogs[index]
-                modelContext.delete(foodItemLog)
+        let logs = indexSet.map({ foodItemLogs[$0] })
+
+        Task {
+            do {
+                try await nutritionViewModel.delete(foodItemLogs: logs)
+            } catch {
+                self.error = error
             }
         }
     }

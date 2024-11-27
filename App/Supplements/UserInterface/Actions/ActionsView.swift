@@ -21,6 +21,29 @@ struct ActionsView: View {
                     NutritionStatusCard()
 
                     HStack {
+                        NutritionQuickActionCell(
+                            title: "AI Scan",
+                            subtitle: "Log food instantly via AI.",
+                            systemImage: "sparkles"
+                        )
+                        .onTapGesture {
+                            presentedCardSheet = AIFoodScannerView().asAny
+                        }
+                        NutritionQuickActionCell(
+                            title: "Scan Barcode",
+                            subtitle: "Scan a barcode to quickly log food.",
+                            systemImage: "barcode.viewfinder"
+                        )
+                        .onTapGesture {
+                            presentedCardSheet = FoodBarcodeScannerView(onBarcodeScan: { (barcode) in
+                                Task {
+                                    await delayShowFoodSearch(for: barcode)
+                                }
+                            }).asAny
+                        }
+                    }
+
+                    HStack {
                         ActionStatusCell(
                             title: "Log Weight",
                             systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
@@ -91,6 +114,15 @@ struct ActionsView: View {
         .tabItem {
             Label("Log", systemImage: "plus.app")
         }
+    }
+}
+
+private extension ActionsView {
+
+    func delayShowFoodSearch(for barcode: String) async {
+        await Delay(500)
+
+        presentedCardSheet = FoodLoggingActionCardView(initialBarcodeToSearch: barcode).asAny
     }
 }
 

@@ -11,6 +11,12 @@ import DataContainer
 
 struct FoodLoggingActionCardView: View {
 
+    private let initialBarcodeToSearch: String?
+
+    init(initialBarcodeToSearch: String? = nil) {
+        self.initialBarcodeToSearch = initialBarcodeToSearch
+    }
+
     @Bindable private var viewModel = ViewModel()
 
     @State private var searchQuery = ""
@@ -36,7 +42,10 @@ struct FoodLoggingActionCardView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    MealPicker()
+                    HStack {
+                        FoodItemLogDatePicker()
+                        MealPicker()
+                    }
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") {
@@ -52,6 +61,11 @@ struct FoodLoggingActionCardView: View {
         .presentationCompactAdaptation(.fullScreenCover)
         .alert(error: $viewModel.error)
         .tint(.mutedGreen)
+        .task {
+            guard let initialBarcodeToSearch else { return }
+
+            await viewModel.performBarcodeSearch(for: initialBarcodeToSearch)
+        }
     }
 }
 

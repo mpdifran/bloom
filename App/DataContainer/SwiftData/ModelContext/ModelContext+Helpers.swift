@@ -23,6 +23,12 @@ public extension ModelContext {
 
         return try fetch(fetchDescriptor).first
     }
+
+    func deleteByID<T>(_ model: T) throws where T: PersistentModel {
+        guard let localModel: T = try existingModel(for: model.persistentModelID) else { return }
+
+        delete(localModel)
+    }
 }
 
 public extension ModelContext {

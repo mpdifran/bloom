@@ -79,7 +79,7 @@ extension NutritionTrackingViewModel {
 
 extension NutritionTrackingViewModel {
 
-    func log(foodItemServings: [FoodItemServing], meal: FoodItemLog.Meal) throws {
+    func log(foodItemServings: [FoodItemServing], meal: FoodItemLog.Meal) async throws {
         try modelContext.transaction {
             for serving in foodItemServings {
                 let dbFoodItem: FoodItemRecord
@@ -101,15 +101,33 @@ extension NutritionTrackingViewModel {
                 modelContext.insert(foodItemLog)
             }
         }
+
+        try await HealthStoreModifier.shared.updateNutrition(for: date)
     }
 
     func log(
         foodItem: FoodItem,
         meal: FoodItemLog.Meal,
         numberOfServings: Double
-    ) throws {
+    ) async throws {
         let serving = FoodItemServing(serving: numberOfServings, foodItem: foodItem)
-        try log(foodItemServings: [serving], meal: meal)
+        try await log(foodItemServings: [serving], meal: meal)
+    }
+
+    func delete(foodItemLogs: [FoodItemLog]) async throws {
+        var dates = Set<Date>()
+
+        try? modelContext.transaction {
+            for foodItemLog in foodItemLogs {
+                dates.insert(foodItemLog.date)
+                
+                try modelContext.deleteByID(foodItemLog)
+            }
+        }
+
+        for date in dates {
+            try await HealthStoreModifier.shared.updateNutrition(for: date)
+        }
     }
 }
 
