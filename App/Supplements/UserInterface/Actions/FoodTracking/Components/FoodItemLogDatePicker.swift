@@ -13,17 +13,16 @@ struct FoodItemLogDatePicker: View {
     @State private var showDatePicker = false
 
     var body: some View {
-        HStack {
-            Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
-            Image(systemName: "chevron.up.chevron.down")
-                .font(.caption)
-        }
-        .foregroundStyle(.tint)
-        .bold()
-        .padding(.vertical)
-        .selectable()
-        .onTapGesture {
+        Button {
             showDatePicker.toggle()
+        } label: {
+            HStack(spacing: 2) {
+                Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.caption)
+            }
+            .bold()
+            .padding(.vertical)
         }
         .popover(isPresented: $showDatePicker) {
             DatePicker(selection: $nutritionViewModel.date, displayedComponents: .date) {

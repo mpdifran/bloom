@@ -19,7 +19,7 @@ struct MealPicker: View {
                 }
             }
         } label: {
-            HStack {
+            HStack(spacing: 2) {
                 Text(nutritionViewModel.suggestedMeal.name)
                 Image(systemName: "chevron.up.chevron.down")
                     .font(.caption)

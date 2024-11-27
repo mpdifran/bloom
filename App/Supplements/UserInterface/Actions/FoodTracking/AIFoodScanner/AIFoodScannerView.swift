@@ -221,18 +221,21 @@ private extension AIFoodScannerView {
 
     @ViewBuilder
     var foodResultsHeader: some View {
-        MealPicker()
-            .horizontallyCentered()
-            .padding(.vertical, 4)
-            .background {
-                Button {
-                    viewModel.reset()
-                } label: {
-                    Image(systemName: "arrow.counterclockwise")
-                        .bold()
-                }
-                .horizontalAlignment(.trailing)
+        HStack {
+            FoodItemLogDatePicker()
+            MealPicker()
+        }
+        .horizontallyCentered()
+        .padding(.vertical, 4)
+        .background {
+            Button {
+                viewModel.reset()
+            } label: {
+                Image(systemName: "arrow.counterclockwise")
+                    .bold()
             }
+            .horizontalAlignment(.trailing)
+        }
         Divider()
     }
 
