@@ -17,12 +17,12 @@ struct FoodSearchToolCell: View {
             Text(title)
         }
         .bold()
-        .foregroundStyle(.white)
+        .foregroundStyle(.tint)
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background {
             Capsule()
-                .fill(.tint)
+                .fill(.tint.quinary)
         }
     }
 }

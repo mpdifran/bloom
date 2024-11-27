@@ -57,6 +57,7 @@ struct AIFoodScannerView: View {
         .presentationCompactAdaptation(.fullScreenCover)
         .animation(.bouncy, value: viewModel.image)
         .animation(.default, value: viewModel.isLoading)
+        .tint(.mutedGreen)
         .onAppear {
             Task {
                 await permissionManager.checkPermission()

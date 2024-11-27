@@ -21,7 +21,7 @@ struct FoodSearchAutocompleteCell: View {
         .padding(.vertical, 10)
         .background {
             RoundedRectangle(cornerRadius: 10)
-                .fill(.tint.tertiary)
+                .fill(.tint.quinary)
         }
     }
 }

@@ -148,6 +148,7 @@
 		FF5D09942CF61F4900374F66 /* FoodItemLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09932CF61F4900374F66 /* FoodItemLogCell.swift */; };
 		FF5D09962CF6236B00374F66 /* FoodItemLog+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09952CF6236600374F66 /* FoodItemLog+Helpers.swift */; };
 		FF5D09982CF65CE700374F66 /* FoodItemLogDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */; };
+		FF5D099A2CF76B1200374F66 /* NutritionQuickActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5D09992CF76B1200374F66 /* NutritionQuickActionCell.swift */; };
 		FF648BE32BDEA51200963820 /* View+RoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */; };
 		FF6AEC912BF1775C00C34621 /* ProactiveTipRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */; };
 		FF6AEC932BF1778400C34621 /* ProactiveTipResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */; };
@@ -664,6 +665,7 @@
 		FF5D09932CF61F4900374F66 /* FoodItemLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemLogCell.swift; sourceTree = "<group>"; };
 		FF5D09952CF6236600374F66 /* FoodItemLog+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodItemLog+Helpers.swift"; sourceTree = "<group>"; };
 		FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemLogDatePicker.swift; sourceTree = "<group>"; };
+		FF5D09992CF76B1200374F66 /* NutritionQuickActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionQuickActionCell.swift; sourceTree = "<group>"; };
 		FF648BE22BDEA51200963820 /* View+RoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBackground.swift"; sourceTree = "<group>"; };
 		FF6AEC902BF1775C00C34621 /* ProactiveTipRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipRequestModel.swift; sourceTree = "<group>"; };
 		FF6AEC922BF1778400C34621 /* ProactiveTipResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProactiveTipResponseModel.swift; sourceTree = "<group>"; };
@@ -2127,6 +2129,7 @@
 				FFB640842CEFDDBE0013502E /* FoodItemMacroDistribution.swift */,
 				FF5D06DC2CF4BCB900374F66 /* MealPicker.swift */,
 				FF5D09972CF65CDC00374F66 /* FoodItemLogDatePicker.swift */,
+				FF5D09992CF76B1200374F66 /* NutritionQuickActionCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -3028,6 +3031,7 @@
 				FF78905A2C35A9EA00F9C1A5 /* SleepCoachResponse.swift in Sources */,
 				FF88F11F2C7B817D0093D1B4 /* EKEvent+Helpers.swift in Sources */,
 				FFB444A12BED46ED00486AD7 /* OnboardingHealthKitView.swift in Sources */,
+				FF5D099A2CF76B1200374F66 /* NutritionQuickActionCell.swift in Sources */,
 				FF4EFF902C93A0B7005E4A1F /* MenstruationDetailView.swift in Sources */,
 				FF70EA222CCADEAC0055E932 /* MockHealthAppPermissionView.swift in Sources */,
 				FFA134F62C3F16F900FF1829 /* ProgressArcView.swift in Sources */,
