@@ -63,8 +63,8 @@ extension FoodController {
             )
         }
 
-        let nutritionLabelMetadata = try await save(image: requestBody.nutritionLabelImage, request: request)
-        let packagingMetadata = try await save(image: requestBody.packagingImage, request: request)
+        let nutritionLabelMetadata = try await save(image: requestBody.nutritionLabelImage, request: request, path: .nutritionLabel)
+        let packagingMetadata = try await save(image: requestBody.packagingImage, request: request, path: .foodPackaging)
 
         let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
             request: request,
@@ -235,9 +235,12 @@ private extension FoodController {
     /// - Parameters:
     ///   - image: The image to save
     ///   - request: The request context for the current request.
+    ///   - path: The path in which to store the image
     /// - Returns: ImageFileMetadata
     ///   The metadata for the resulting image.
-    func save(image: ImageFile, request: Request) async throws -> ImageFileMetadata {
-        return try await request.imageStorage.store(image: image)
+    func save(image: ImageFile,
+              request: Request,
+              path: StoragePath) async throws -> ImageFileMetadata {
+        return try await request.imageStorage.store(image: image, path: path)
     }
 }

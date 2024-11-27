@@ -9,10 +9,20 @@ import BloomModel
 import Vapor
 import SotoS3
 
+
+/// Explicit enum for storage so that we limit the number of folders in our storage.
+enum StoragePath: String {
+  case nutritionLabel = "nutrition-label"
+  case foodPackaging = "food-packaging"
+}
+
 protocol ImageStorage {
 
   /// Store the provided image file
-  func store(image: ImageFile) async throws -> ImageFileMetadata
+  /// - Parameters:
+  ///   - image: The image to store
+  ///   - path: Where to store the image.
+  func store(image: ImageFile, path: StoragePath) async throws -> ImageFileMetadata
 }
 
 struct S3Storage: ImageStorage {
@@ -25,13 +35,13 @@ struct S3Storage: ImageStorage {
   let request: Request
   let bucketName: String
 
-  func store(image: BloomModel.ImageFile) async throws -> ImageFileMetadata {
+  func store(image: ImageFile, path: StoragePath) async throws -> ImageFileMetadata {
     let filename = "\(UUID().uuidString).\(image.fileExtension)"
 
     let putObjectRequest = S3.PutObjectRequest(
         body: .data(image.data, byteBufferAllocator: request.application.allocator),
         bucket: bucketName,
-        key: "testing/\(filename)"
+        key: "\(path)/\(filename)"
     )
     do {
         _ = try await request.sotoS3.putObject(putObjectRequest)

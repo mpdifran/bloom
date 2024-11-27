@@ -150,7 +150,18 @@ private extension OpenAIService {
                 Chat.Message(
                     role: .system,
                     content: [
-                        .text("You must respond in JSON. There should be a single object with properties for each nutrient. The value should be an object that contains a double for the value and a string for the unit. Only include the mass, not the daily percentage. Make sure to include calories as well. For the serving, use a property called 'serving_name' that is the name of one serving, and 'serving_value' that is the numerical value of a serving (this should be an object with value: double and unit: string as well). Make sure all JSON keys are snake case.")
+                        .text("""
+                              You must respond in JSON. There should be a single object.
+
+                        The properties of the object are:
+
+                        - Property called 'serving_name' which indicates the kind of serving such as 1 bottle or 2 brownies.
+                        - Property called 'serving_value' which contains a unit property (like fl oz or grams) and a value property (numeric value for the unit) 
+                        - Property called 'calories' which contains a unit property (kcal or Cal) and a value property for the number of calories.
+                        - Property called 'fat' which contains a unit property (such as grams or oz) and a value.
+                        - Property called 'carbohydrate' which contains a unit property (such as grams or oz) and a value.
+                        - Property called 'protein' which contains a unit property (such as grams or oz) and a value.
+                        """)
                     ]
                 ),
                 Chat.Message(
@@ -180,7 +191,7 @@ private extension OpenAIService {
 
             return try decoder.decode(OpenAINutritionLabelParseResponse.self, from: data)
         } catch {
-            request.logger.error(.init(stringLiteral: error.localizedDescription))
+            request.logger.error("Failed to parse nutrition label: \(error.localizedDescription)")
 //            request.telemetryDeck.errorOccurred(
 //                id: "OpenAIService.parseNutritionLabel",
 //                message: error.localizedDescription
