@@ -17,6 +17,10 @@ extension FoodUploadScannerView {
         var packagingImage: UIImage?
         var country: FoodCountry = .usa
 
+        init(barcode: String?) {
+            self.barcode = barcode
+        }
+
         var alertDetails: AlertDetails?
     }
 }

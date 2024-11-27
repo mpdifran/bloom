@@ -146,13 +146,21 @@ private extension FoodLoggingActionCardView {
 
     func failedBarcodeSearchView(barcode: String) -> some View {
         VStack {
+            Spacer()
             BarcodeView(barcode: barcode)
-            ContentUnavailableView("No Match", systemImage: "barcode")
+                .padding(.horizontal)
 
-            Button("Scan to Add Item", systemImage: "text.viewfinder") {
+            Text("No Match")
+                .font(.title2)
+                .bold()
+                .fontDesign(.rounded)
+                .foregroundStyle(.secondary)
 
+            Button("Add New Food", systemImage: "plus.viewfinder") {
+                presentedSheet = FoodUploadScannerView(barcode: barcode).asAny
             }
             .buttonStyle(.tertiary)
+            Spacer()
         }
     }
 

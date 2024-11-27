@@ -12,7 +12,11 @@ import CoreLocation
 
 struct FoodUploadScannerView: View {
 
-    @Bindable private var viewModel = ViewModel()
+    init(barcode: String? = nil) {
+        self._viewModel = Bindable(ViewModel(barcode: barcode))
+    }
+
+    @Bindable private var viewModel: ViewModel
 
     private var locationViewModel = LocationManagerViewModel.shared
 

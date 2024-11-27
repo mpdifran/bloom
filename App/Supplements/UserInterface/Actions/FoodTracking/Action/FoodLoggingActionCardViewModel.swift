@@ -78,13 +78,13 @@ extension FoodLoggingActionCardView.ViewModel {
         do {
             let sections = try await NetworkRequester.shared.foodSearch(upcCode: barcode)
 
-//            guard sections.contains(where: { $0.foods.isNotEmpty }) else {
+            guard sections.contains(where: { $0.foods.isNotEmpty }) else {
                 failedBarcodeSearch = barcode
                 results = []
-//                return
-//            }
+                return
+            }
 
-//            self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
+            self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
         } catch {
             self.error = error
         }
@@ -95,6 +95,9 @@ private extension FoodLoggingActionCardView.ViewModel {
 
     func performAutocomplete(query: String) async {
         guard query.isNotEmpty else { return }
+
+        failedBarcodeSearch = nil
+        results = nil
 
         do {
             self.autocomplete = try await NetworkRequester.shared.foodAutocomplete(query: query)
