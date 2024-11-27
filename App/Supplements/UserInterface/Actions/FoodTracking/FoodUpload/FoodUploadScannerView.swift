@@ -12,11 +12,13 @@ import CoreLocation
 
 struct FoodUploadScannerView: View {
 
-    init(barcode: String? = nil) {
-        self._viewModel = Bindable(ViewModel(barcode: barcode))
-    }
-
     @Bindable private var viewModel: ViewModel
+    private let onSuccess: (FoodItem) -> Void
+
+    init(barcode: String? = nil, onSuccess: @escaping (FoodItem) -> Void) {
+        self._viewModel = Bindable(ViewModel(barcode: barcode))
+        self.onSuccess = onSuccess
+    }
 
     private var locationViewModel = LocationManagerViewModel.shared
 
@@ -27,14 +29,20 @@ struct FoodUploadScannerView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack {
-                    countrySection
-                    barcodeSection
-                    packagingSection
-                    nutritionLabelSection
+            Group {
+                if viewModel.isLoading {
+                    loadingView
+                } else {
+                    ScrollView {
+                        VStack {
+                            countrySection
+                            barcodeSection
+                            packagingSection
+                            nutritionLabelSection
+                        }
+                        .padding()
+                    }
                 }
-                .padding()
             }
             .navigationTitle("Upload Food")
             .navigationBarTitleDisplayMode(.inline)
@@ -47,7 +55,7 @@ struct FoodUploadScannerView: View {
             }
             .sheet($presentedSheet)
             .shelf {
-                ProminentButton("Upload", systemImage: "arrow.up.square.fill") {
+                ProminentButton("Upload", systemImage: "arrow.up.square.fill", isLoading: viewModel.isLoading) {
                     Task { await upload() }
                 }
                 .disabled(!viewModel.canUpload)
@@ -74,7 +82,9 @@ private extension FoodUploadScannerView {
 
     func upload() async {
         do {
-            try await viewModel.upload()
+            let foodItem = try await viewModel.upload()
+            onSuccess(foodItem)
+            dismiss()
         } catch { self.error = error }
     }
 
@@ -215,8 +225,24 @@ private extension FoodUploadScannerView {
             .foregroundStyle(.secondary)
             .padding(.horizontal)
     }
+
+    var loadingView: some View {
+        VStack {
+            Spacer()
+            CircularSpinnerView()
+                .foregroundStyle(.tint)
+            Text("Uploading...")
+                .font(.title2)
+                .bold()
+                .fontDesign(.rounded)
+            Spacer()
+        }
+        .horizontallyCentered()
+    }
 }
 
 #Preview {
-    FoodUploadScannerView()
+    FoodUploadScannerView() { (_) in
+
+    }
 }

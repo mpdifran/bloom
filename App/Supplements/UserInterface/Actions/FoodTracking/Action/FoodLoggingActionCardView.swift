@@ -157,7 +157,9 @@ private extension FoodLoggingActionCardView {
                 .foregroundStyle(.secondary)
 
             Button("Add New Food", systemImage: "plus.viewfinder") {
-                presentedSheet = FoodUploadScannerView(barcode: barcode).asAny
+                presentedSheet = FoodUploadScannerView(barcode: barcode) { foodItem in
+                    viewModel.didUploadNewFood(foodItem: foodItem)
+                }.asAny
             }
             .buttonStyle(.tertiary)
             Spacer()
@@ -201,7 +203,9 @@ private extension FoodLoggingActionCardView {
                         }
                     FoodSearchToolCell(title: "Add New Food", systemImage: "plus.viewfinder")
                         .onTapGesture {
-                            presentedSheet = FoodUploadScannerView().asAny
+                            presentedSheet = FoodUploadScannerView() { foodItem in
+                                viewModel.didUploadNewFood(foodItem: foodItem)
+                            }.asAny
                         }
                 }
             }

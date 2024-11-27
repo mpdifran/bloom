@@ -89,6 +89,18 @@ extension FoodLoggingActionCardView.ViewModel {
             self.error = error
         }
     }
+
+    func didUploadNewFood(foodItem: FoodItem) {
+        let section = FoodItemSection(
+            title: "Uploaded Food",
+            foodItems: [foodItem]
+        )
+
+        failedBarcodeSearch = nil
+        isSearching = false
+        autocomplete.removeAll()
+        results = [section]
+    }
 }
 
 private extension FoodLoggingActionCardView.ViewModel {

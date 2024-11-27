@@ -68,7 +68,7 @@ struct FoodItemDetailsView: View {
                     .bold()
                 }
                 ToolbarItem(placement: .primaryAction) {
-                    Menu("Options", systemImage: "ellipsis.circle.fill") {
+                    Menu("Options", systemImage: "ellipsis.circle") {
                         Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle") {
                             Task { await markAsInaccurate() }
                         }

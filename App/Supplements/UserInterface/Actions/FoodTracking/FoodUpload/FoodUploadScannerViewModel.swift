@@ -21,6 +21,7 @@ extension FoodUploadScannerView {
             self.barcode = barcode
         }
 
+        var isLoading = false
         var alertDetails: AlertDetails?
     }
 }
@@ -35,7 +36,7 @@ extension FoodUploadScannerView.ViewModel {
         barcode != nil && nutritionLabelImage != nil && packagingImage != nil
     }
 
-    func upload() async throws {
+    func upload() async throws -> FoodItem {
         guard
             let barcode,
             let nutritionLabelImage = nutritionLabelImage?.resized(toWidth: 700),
@@ -44,12 +45,14 @@ extension FoodUploadScannerView.ViewModel {
             throw NSError(description: "Cannot upload with missing data")
         }
 
+        isLoading = true
         let response = try await NetworkRequester.shared.uploadFood(
             barcode: barcode,
             nutritionImage: nutritionLabelImage,
             packagingImage: packagingImage,
             country: country
         )
+        isLoading = false
 
         switch response.result {
         case .foodLogged:
@@ -61,5 +64,11 @@ extension FoodUploadScannerView.ViewModel {
             self.alertDetails = AlertDetails(title: "Unclear Packaging", message: "The packaging for this food is unclear. Please take another picture.")
             self.packagingImage = nil
         }
+
+        guard let foodItem = response.foodItem else {
+            throw NSError(description: "There was a problem uploading the food.")
+        }
+
+        return foodItem
     }
 }
