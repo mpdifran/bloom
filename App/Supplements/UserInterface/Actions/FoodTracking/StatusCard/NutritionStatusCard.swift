@@ -112,11 +112,11 @@ private extension NutritionStatusCard {
             Group {
                 if filteredFoodItemLogs.isEmpty {
                     VStack {
-                        Text("No Food Logged")
+                        Text("No \(meal.name) Food Logged")
                             .font(.title2)
                             .bold()
-                            .foregroundStyle(.secondary)
                     }
+                    .foregroundStyle(.tint.secondary)
                     .frame(height: 100)
                 } else {
                     ForEach(filteredFoodItemLogs) { foodItemLog in
