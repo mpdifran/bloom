@@ -54,8 +54,65 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     @Field(key: "carbohydrates")
     var carbohydrates: Double?
 
+    @Field(key: "fiber")
+    var fiber: Double?
+
+    @Field(key: "sugar")
+    var sugar: Double?
+
     @Field(key: "fat")
     var fat: Double?
+
+    @Field(key: "saturated_fat")
+    var saturatedFat: Double?
+
+    @Field(key: "trans_fat")
+    var transFat: Double?
+
+    @Field(key: "polyunsaturated_fat")
+    var polyunsaturatedFat: Double?
+
+    @Field(key: "monounsaturated_fat")
+    var monounsaturatedFat: Double?
+
+    @Field(key: "cholesterol")
+    var cholesterol: Double?
+
+    @Field(key: "sodium")
+    var sodium: Double?
+
+    @Field(key: "calcium")
+    var calcium: Double?
+
+    @Field(key: "iron")
+    var iron: Double?
+
+    @Field(key: "potassium")
+    var potassium: Double?
+
+    @Field(key: "magnesium")
+    var magnesium: Double?
+
+    @Field(key: "zinc")
+    var zinc: Double?
+
+    @Field(key: "vitamin_a")
+    var vitaminA: Double?
+
+    @Field(key: "vitamin_b6")
+    var vitaminB6: Double?
+
+    @Field(key: "vitamin_b12")
+    var vitaminB12: Double?
+
+    @Field(key: "vitamin_c")
+    var vitaminC: Double?
+
+    @Field(key: "vitamin_d")
+    var vitaminD: Double?
+
+    @Field(key: "vitamin_e")
+    var vitaminE: Double?
 
     @Field(key: "serving_name")
     var servingName: String?
