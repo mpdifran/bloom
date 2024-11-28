@@ -62,6 +62,25 @@ extension OpenAIService {
         foodItemRecord.protein = nutritionData.protein.value
         foodItemRecord.carbohydrates = nutritionData.carbohydrate.value
         foodItemRecord.fat = nutritionData.fat.value
+        foodItemRecord.saturatedFat = nutritionData.saturatedFat?.value
+        foodItemRecord.transFat = nutritionData.transFat?.value
+        foodItemRecord.polyunsaturatedFat = nutritionData.polyunsaturatedFat?.value
+        foodItemRecord.monounsaturatedFat = nutritionData.monounsaturatedFat?.value
+        foodItemRecord.fiber = nutritionData.fiber?.value
+        foodItemRecord.sugar = nutritionData.sugar?.value
+        foodItemRecord.cholesterol = nutritionData.cholesterol?.value
+        foodItemRecord.sodium = nutritionData.sodium?.value
+        foodItemRecord.calcium = nutritionData.calcium?.value
+        foodItemRecord.iron = nutritionData.iron?.value
+        foodItemRecord.potassium = nutritionData.potassium?.value
+        foodItemRecord.magnesium = nutritionData.magnesium?.value
+        foodItemRecord.zinc = nutritionData.zinc?.value
+        foodItemRecord.vitaminA = nutritionData.vitaminA?.value
+        foodItemRecord.vitaminB6 = nutritionData.vitaminB6?.value
+        foodItemRecord.vitaminB12 = nutritionData.vitaminB12?.value
+        foodItemRecord.vitaminC = nutritionData.vitaminC?.value
+        foodItemRecord.vitaminD = nutritionData.vitaminD?.value
+        foodItemRecord.vitaminE = nutritionData.vitaminE?.value
         foodItemRecord.servingName = nutritionData.servingName
         foodItemRecord.servingValue = nutritionData.servingValue.value
         foodItemRecord.servingUnit = nutritionData.servingValue.unit
@@ -88,9 +107,29 @@ extension OpenAIService {
   - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be a float in relation to the serving_quantity. If the serving_name is g and there are 100 g in a chicken breats, and there are 2 chicken breats in a serving - then this should be 200 since it is 100 g per breast, and there's 2 chicken breasts in a serving.
   - Property called 'serving_count' which indicates how many servings of the food item are in the image.
   - Property called 'calories' which is a numerical float of the calories of the item per serving.
-  - Property called 'fat', a numerical float of how many grams of fat per serving.
-  - Property called 'carbs', an numerical float of how many grams of carbs per serving.
   - Property called 'protein', an numerical float of how many grams of protein per serving.
+  - Property called 'carbs', an numerical float of how many grams of carbs per serving.
+  - Property called 'fat', a numerical float of how many grams of fat per serving.
+  - Optional property called 'saturated_fat', a numerical float of how many grams of saturated fat per serving.
+  - Optional property called 'trans_fat', a numerical float of how many grams of trans fat per serving.
+  - Optional property called 'polyunsaturated_fat', a numerical float of how many grams of polyunsaturated fat per serving.
+  - Optional property called 'monounsaturated_fat', a numerical float of how many grams of monounsaturated fat per serving.
+  - Optional property called 'fiber', a numerical float of how many grams of fiber per serving.
+  - Optional property called 'sugar', a numerical float of how many grams of sugar per serving.
+  - Optional property called 'cholesterol', a numerical float of how many milligrams of cholesterol per serving.
+  - Optional property called 'sodium', a numerical float of how many milligrams of sodium per serving.
+  - Optional property called 'calcium', a numerical float of how many milligrams of calcium per serving.
+  - Optional property called 'iron', a numerical float of how many milligrams of iron per serving.
+  - Optional property called 'potassium', a numerical float of how many milligrams of potassium per serving.
+  - Optional property called 'magnesium', a numerical float of how many milligrams of magnesium per serving.
+  - Optional property called 'zinc', a numerical float of how many milligrams of zinc per serving.
+  - Optional property called 'vitamin_a', a numerical float of how many milligrams of vitamin A per serving.
+  - Optional property called 'vitamin_b6', a numerical float of how many milligrams of vitamin B6 per serving.
+  - Optional property called 'vitamin_b12', a numerical float of how many milligrams of vitamin b12 per serving.
+  - Optional property called 'vitamin_c', a numerical float of how many milligrams of vitamin C per serving.
+  - Optional property called 'vitamin_d', a numerical float of how many milligrams of vitamin D per serving.
+  - Optional property called 'vitamin_e', a numerical float of how many milligrams of vitamin E per serving.
+  
   Make sure all JSON keys are snake case.
 """
 )
@@ -156,11 +195,30 @@ private extension OpenAIService {
                         The properties of the object are:
 
                         - Property called 'serving_name' which indicates the kind of serving such as 1 bottle or 2 brownies.
-                        - Property called 'serving_value' which contains a unit property (like fl oz or grams) and a value property (numeric value for the unit) 
-                        - Property called 'calories' which contains a unit property (kcal or Cal) and a value property for the number of calories.
-                        - Property called 'fat' which contains a unit property (such as grams or oz) and a value.
-                        - Property called 'carbohydrate' which contains a unit property (such as grams or oz) and a value.
-                        - Property called 'protein' which contains a unit property (such as grams or oz) and a value.
+                        - Property called 'serving_value' which contains a unit property (like fl oz or g) and a value property (numeric value for the unit) 
+                        - Property called 'calories' which contains a 'unit' property (kcal or Cal) and a 'value' property for the number of calories.
+                        - Property called 'protein' which contains a 'unit' property (such as g) and a 'value'.
+                        - Property called 'carbohydrate' which contains a 'unit' property (such as g) and a 'value'.
+                        - Property called 'fat' which contains a 'unit' property (such as g) and a 'value'.
+                        - Optional property called 'saturated_fat' which contains a 'unit' property (such as g) and a 'value'.
+                        - Optional property called 'trans_fat' which contains a 'unit' property (such as g) and a 'value'.
+                        - Optional property called 'polyunsaturated_fat' which contains a 'unit' property (such as g) and a 'value'.
+                        - Optional property called 'monounsaturated_fat' which contains a 'unit' property (such as g) and a 'value'.
+                        - Optional property called 'fiber' which contains a 'unit' property (such as g) and a 'value'.
+                        - Optional property called 'sugar' which contains a 'unit' property (such as g) and a 'value'.
+                        - Optional property called 'cholesterol' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'sodium' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'calcium' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'iron' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'potassium' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'magnesium' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'zinc' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'vitamin_a' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'vitamin_b6' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'vitamin_b12' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'vitamin_c' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'vitamin_d' which contains a 'unit' property (such as mg) and a 'value'.
+                        - Optional property called 'vitamin_e' which contains a 'unit' property (such as mg) and a 'value'.
                         """)
                     ]
                 ),

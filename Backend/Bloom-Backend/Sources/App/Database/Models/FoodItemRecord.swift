@@ -54,12 +54,6 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     @Field(key: "carbohydrates")
     var carbohydrates: Double?
 
-    @Field(key: "fiber")
-    var fiber: Double?
-
-    @Field(key: "sugar")
-    var sugar: Double?
-
     @Field(key: "fat")
     var fat: Double?
 
@@ -74,6 +68,12 @@ final class FoodItemRecord: Model, @unchecked Sendable {
 
     @Field(key: "monounsaturated_fat")
     var monounsaturatedFat: Double?
+
+    @Field(key: "fiber")
+    var fiber: Double?
+
+    @Field(key: "sugar")
+    var sugar: Double?
 
     @Field(key: "cholesterol")
     var cholesterol: Double?
