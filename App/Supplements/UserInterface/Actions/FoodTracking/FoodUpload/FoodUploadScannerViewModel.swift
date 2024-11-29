@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import BloomModel
+import TelemetryDeck
 
 extension FoodUploadScannerView {
     @Observable @MainActor
@@ -57,12 +58,15 @@ extension FoodUploadScannerView.ViewModel {
         switch response.result {
         case .foodLogged:
             self.alertDetails = AlertDetails(title: "Food Uploaded", message: "Food was successfully uploaded.")
+            TelemetryDeck.signal("Uploaded Food", parameters: ["foodUploadResult" : "Logged"])
         case .unclearNutritionLabel:
             self.alertDetails = AlertDetails(title: "Unclear Nutrition Label", message: "The nutrition label for this food is unclear. Please take another picture.")
             self.nutritionLabelImage = nil
+            TelemetryDeck.signal("Uploaded Food", parameters: ["foodUploadResult" : "Unclear Nutrition Label"])
         case .unclearPackaging:
             self.alertDetails = AlertDetails(title: "Unclear Packaging", message: "The packaging for this food is unclear. Please take another picture.")
             self.packagingImage = nil
+            TelemetryDeck.signal("Uploaded Food", parameters: ["foodUploadResult" : "Unclear Packaging"])
         }
 
         guard let foodItem = response.foodItem else {

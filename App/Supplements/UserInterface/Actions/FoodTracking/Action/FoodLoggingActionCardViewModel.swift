@@ -8,6 +8,7 @@
 import SwiftUI
 import BloomModel
 import DataContainer
+import TelemetryDeck
 
 private extension Int {
     static let debounceTime: Int = 300
@@ -96,9 +97,11 @@ extension FoodLoggingActionCardView.ViewModel {
             guard sections.contains(where: { $0.foods.isNotEmpty }) else {
                 failedBarcodeSearch = barcode
                 results = []
+                TelemetryDeck.signal("Food Item Barcode Scan - Fail")
                 return
             }
 
+            TelemetryDeck.signal("Food Item Barcode Scan - Match")
             self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
         } catch {
             self.error = error

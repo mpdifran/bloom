@@ -8,6 +8,7 @@
 import SwiftUI
 import BloomModel
 import DataContainer
+import TelemetryDeck
 
 extension AIFoodScannerView {
     @Observable @MainActor
@@ -35,6 +36,8 @@ extension AIFoodScannerView.ViewModel {
 
             if servings.isEmpty {
                 self.image = nil
+            } else {
+                TelemetryDeck.signal("AI Food Scan", floatValue: Double(servings.count))
             }
         } catch {
             self.error = error

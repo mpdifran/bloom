@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import BloomModel
 import DataContainer
+import TelemetryDeck
 
 @Observable @MainActor
 final class NutritionTrackingViewModel {
@@ -103,6 +104,12 @@ extension NutritionTrackingViewModel {
         }
 
         try await HealthStoreModifier.shared.updateNutrition(for: date)
+
+        TelemetryDeck.signal(
+            "Logged Food Item",
+            parameters: ["Meal" : meal.rawValue],
+            floatValue: Double(foodItemServings.count)
+        )
     }
 
     func log(
