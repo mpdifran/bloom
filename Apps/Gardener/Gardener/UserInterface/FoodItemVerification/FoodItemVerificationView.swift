@@ -8,8 +8,27 @@
 import SwiftUI
 
 struct FoodItemVerificationView: View {
+
+  @ObservedObject private var viewModel = FoodItemVerificationViewModel.shared
+
+  @State private var selectedItem: FoodItem?
+
   var body: some View {
-    Text("Verify")
+    NavigationSplitView {
+      List(viewModel.foodItems, selection: $selectedItem) { item in
+        Text(item.name)
+          .tag(item)
+      }
+    } detail: {
+      if let selectedItem {
+        FoodItemDetailView(foodItem: selectedItem)
+      } else {
+        Text("No food items to verify")
+      }
+    }
+    .task {
+      await viewModel.loadItems()
+    }
   }
 }
 
