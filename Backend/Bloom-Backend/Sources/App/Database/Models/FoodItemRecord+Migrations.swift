@@ -156,4 +156,57 @@ extension FoodItemRecord {
                 .update()
         }
     }
+
+    struct FixNutritionFieldTypes: AsyncMigration {
+        func prepare(on database: any Database) async throws {
+            let badMigration = AddNutrients()
+            try await badMigration.revert(on: database)
+
+            try await database.schema(FoodItemRecord.schema)
+                .field("fiber", .double)
+                .field("sugar", .double)
+                .field("saturated_fat", .double)
+                .field("trans_fat", .double)
+                .field("polyunsaturated_fat", .double)
+                .field("monounsaturated_fat", .double)
+                .field("cholesterol", .double)
+                .field("sodium", .double)
+                .field("calcium", .double)
+                .field("iron", .double)
+                .field("potassium", .double)
+                .field("magnesium", .double)
+                .field("zinc", .double)
+                .field("vitamin_a", .double)
+                .field("vitamin_b6", .double)
+                .field("vitamin_b12", .double)
+                .field("vitamin_c", .double)
+                .field("vitamin_d", .double)
+                .field("vitamin_e", .double)
+                .update()
+        }
+
+        func revert(on database: any Database) async throws {
+            try await database.schema(FoodItemRecord.schema)
+                .deleteField("fiber")
+                .deleteField("sugar")
+                .deleteField("saturated_fat")
+                .deleteField("trans_fat")
+                .deleteField("polyunsaturated_fat")
+                .deleteField("monounsaturated_fat")
+                .deleteField("cholesterol")
+                .deleteField("sodium")
+                .deleteField("calcium")
+                .deleteField("iron")
+                .deleteField("potassium")
+                .deleteField("magnesium")
+                .deleteField("zinc")
+                .deleteField("vitamin_a")
+                .deleteField("vitamin_b6")
+                .deleteField("vitamin_b12")
+                .deleteField("vitamin_c")
+                .deleteField("vitamin_d")
+                .deleteField("vitamin_e")
+                .update()
+        }
+    }
 }
