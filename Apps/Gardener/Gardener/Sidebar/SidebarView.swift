@@ -9,12 +9,36 @@ import SwiftUI
 
 struct SidebarView: View {
     var body: some View {
-        Form {
-            Text("Food Item Verification")
-            Text("Bulk Data Uploader")
+      List {
+        NavigationLink {
+          FoodItemVerificationView()
+        } label: {
+          createLabel(
+            title: "Food Item Verification",
+            systemImage: "fork.knife"
+          )
         }
-        .formStyle(.grouped)
+        NavigationLink {
+          BulkDataUploaderView()
+        } label: {
+          createLabel(
+            title: "Bulk Data Uploader",
+            systemImage: "tray.and.arrow.up"
+          )
+        }
+      }
     }
+}
+
+private extension SidebarView {
+  func createLabel(title: String, systemImage: String) -> some View {
+    Label(
+      title,
+      systemImage: systemImage
+    )
+    .font(.title2)
+    .padding(.vertical, 8)
+  }
 }
 
 #Preview {
