@@ -28,6 +28,12 @@ struct FoodItemVerificationView: View {
     }
     .task {
       await viewModel.loadItems()
+
+      guard viewModel.foodItems.isNotEmpty else { return }
+    }
+    .onChange(of: viewModel.foodItems) {
+      guard selectedItem == nil, let firstItem = viewModel.foodItems.first else { return }
+      selectedItem = firstItem
     }
   }
 }
