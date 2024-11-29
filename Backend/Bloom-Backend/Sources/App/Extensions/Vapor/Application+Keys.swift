@@ -60,4 +60,8 @@ extension Application {
         }
         return URL(string: urlString)
     }
+
+    var localhostUsername: String? {
+        Environment.get("POSTGRES_LOCALHOST_USERNAME")
+    }
 }

@@ -26,7 +26,7 @@ extension Application {
                 .postgres(
                     configuration: .init(
                         hostname: "localhost",
-                        username: "mpdifran",
+                        username: localhostUsername ?? "mpdifran",
                         password: "",
                         database: "bloom-food-db",
                         tls: .disable
