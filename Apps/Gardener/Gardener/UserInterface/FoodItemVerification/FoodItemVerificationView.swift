@@ -19,6 +19,12 @@ struct FoodItemVerificationView: View {
         Text(item.name)
           .tag(item)
       }
+      .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 300)
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          refreshButton
+        }
+      }
     } detail: {
       if let selectedItem {
         FoodItemDetailView(foodItem: selectedItem)
@@ -28,12 +34,24 @@ struct FoodItemVerificationView: View {
     }
     .task {
       await viewModel.loadItems()
-
-      guard viewModel.foodItems.isNotEmpty else { return }
     }
     .onChange(of: viewModel.foodItems) {
+      // Select first item by default if no selection.
       guard selectedItem == nil, let firstItem = viewModel.foodItems.first else { return }
       selectedItem = firstItem
+    }
+  }
+}
+
+private extension FoodItemVerificationView {
+  var refreshButton: some View {
+    Button {
+      Task {
+        await viewModel.loadItems()
+      }
+    } label: {
+      Image(systemName: "arrow.clockwise")
+        .imageScale(.large)
     }
   }
 }
