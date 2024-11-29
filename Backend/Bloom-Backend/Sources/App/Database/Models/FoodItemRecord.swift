@@ -126,6 +126,9 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     @Field(key: "downvote_count")
     var downvoteCount: Int?
 
+    @Field(key: "source")
+    var source: String?
+
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
@@ -138,13 +141,15 @@ final class FoodItemRecord: Model, @unchecked Sendable {
         id: String,
         name: String,
         country: Country,
-        category: Category
+        category: Category,
+        source: String
     ) {
         self.id = id
         self.name = name
         self.state = .unverified
         self.category = category
         self.country = country
+        self.source = source
     }
 }
 

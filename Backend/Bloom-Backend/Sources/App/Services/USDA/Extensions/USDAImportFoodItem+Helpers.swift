@@ -19,6 +19,7 @@ extension USDAImportFoodItem {
         foodItemRecord.name = description
         foodItemRecord.country = .usa // Assuming all USDA items are from the USA.
         foodItemRecord.category = category
+        foodItemRecord.source = "USDA"
 
         foodItemRecord.brandName = foodCategory.description
 

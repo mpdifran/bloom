@@ -13,4 +13,5 @@ let allMigrations: [Migration] = [
     FoodItemRecord.Create(),
     FoodItemRecord.AddNutrients(),
     FoodItemRecord.FixNutritionFieldTypes(),
+    FoodItemRecord.AddSourceProperty(),
 ]

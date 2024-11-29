@@ -50,7 +50,8 @@ extension OpenAIService {
             id: UUID().uuidString,
             name: packagingData.productName,
             country: countryEnum,
-            category: .branded
+            category: .branded,
+            source: "Bloom"
         )
 
         foodItemRecord.brandName = packagingData.brandName
