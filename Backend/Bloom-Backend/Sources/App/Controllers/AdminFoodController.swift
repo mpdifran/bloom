@@ -6,16 +6,20 @@
 //
 
 import Foundation
+import BloomModel
 import Vapor
 import Fluent
 
-struct AdminFoodController { }
+struct AdminFoodController {
+  private let foodDatabaseService = FoodDatabaseService()
+}
 
 extension AdminFoodController: RouteCollection {
 
     func boot(routes: any RoutesBuilder) throws {
         routes.group("v1", "admin", "food") { food in
             food.post("usda-ingest", use: ingestUSDA)
+            food.get("unverified", use: getUnverifiedFoods)
         }
     }
 }
@@ -47,4 +51,17 @@ private extension AdminFoodController {
 
         return USDAImportFoodResponse(addedFoodItemsCount: count)
     }
+
+  @Sendable
+  func getUnverifiedFoods(_ request: Request) async throws -> UnverifiedFoodItemsResponse {
+    let query = try request.query.decode(UnverifiedQuery.self)
+    let limit = query.limit ?? 100 // Default to 100 if not provided.
+
+    let foodItems = try await foodDatabaseService.getUnverifiedFoods(
+      request: request,
+      limit: limit
+    )
+
+    return UnverifiedFoodItemsResponse(foodItems: foodItems)
+  }
 }
