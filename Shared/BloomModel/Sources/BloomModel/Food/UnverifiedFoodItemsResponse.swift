@@ -8,9 +8,9 @@
 import Foundation
 
 public struct UnverifiedFoodItemsResponse: Codable, Sendable {
-  public let foodItems: [FoodItem]
+  public let foodItemRecords: [AdminFoodItemRecord]
 
-  public init(foodItems: [FoodItem]) {
-    self.foodItems = foodItems
+  public init(foodItemRecords: [AdminFoodItemRecord]) {
+    self.foodItemRecords = foodItemRecords
   }
 }
