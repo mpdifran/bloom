@@ -54,14 +54,14 @@ private extension AdminFoodController {
 
   @Sendable
   func getUnverifiedFoods(_ request: Request) async throws -> UnverifiedFoodItemsResponse {
-    let query = try request.query.decode(UnverifiedQuery.self)
+    let query = try request.query.decode(UnverifiedFoodGetRequest.self)
     let limit = query.limit ?? 100 // Default to 100 if not provided.
 
-    let foodItems = try await foodDatabaseService.getUnverifiedFoods(
+    let foodItemRecords = try await foodDatabaseService.getUnverifiedFoodItemRecords(
       request: request,
       limit: limit
     )
 
-    return UnverifiedFoodItemsResponse(foodItems: foodItems)
+    return UnverifiedFoodItemsResponse(foodItemRecords: foodItemRecords)
   }
 }

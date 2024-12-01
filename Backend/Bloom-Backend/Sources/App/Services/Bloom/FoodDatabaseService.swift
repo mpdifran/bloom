@@ -64,10 +64,10 @@ extension FoodDatabaseService {
         return results.compactMap { $0.asFoodItem() }
     }
 
-  func getUnverifiedFoods(
+  func getUnverifiedFoodItemRecords(
     request: Request,
     limit: Int
-  ) async throws -> [FoodItem] {
+  ) async throws -> [AdminFoodItemRecord] {
     guard let sqlDatabase = request.db as? SQLDatabase else {
       throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
     }
@@ -79,7 +79,7 @@ extension FoodDatabaseService {
           LIMIT \(bind: limit)
       """).all(decodingFluent: FoodItemRecord.self)
 
-    // Map database records to your FoodItem model
-    return results.compactMap { $0.asFoodItem() }
+    // Map database records to admin FoodItemRecord model.
+    return results.compactMap { $0.asAdminFoodItemRecord() }
   }
 }
