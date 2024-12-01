@@ -63,4 +63,23 @@ extension FoodDatabaseService {
         // Map database records to your FoodItem model
         return results.compactMap { $0.asFoodItem() }
     }
+
+  func getUnverifiedFoods(
+    request: Request,
+    limit: Int
+  ) async throws -> [FoodItem] {
+    guard let sqlDatabase = request.db as? SQLDatabase else {
+      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
+    }
+
+    let results = try await sqlDatabase.raw("""
+          SELECT *
+          FROM food_item_records
+          WHERE state = 'unverified'
+          LIMIT \(bind: limit)
+      """).all(decodingFluent: FoodItemRecord.self)
+
+    // Map database records to your FoodItem model
+    return results.compactMap { $0.asFoodItem() }
+  }
 }

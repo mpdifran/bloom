@@ -16,3 +16,4 @@ extension FoodSearchRequest: @retroactive Content { }
 extension FoodSearchResponse: @retroactive Content { }
 extension UploadNewFoodRequest: @retroactive Content { }
 extension UploadNewFoodResponse: @retroactive Content { }
+extension UnverifiedFoodItemsResponse: @retroactive Content { }
