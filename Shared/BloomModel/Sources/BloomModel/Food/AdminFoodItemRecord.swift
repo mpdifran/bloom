@@ -7,18 +7,19 @@
 
 import Foundation
 
-public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable{
+public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
+  /// ID is the only field required to initialize, this is how we identify in the DB for updates.
   public let id: FoodItemIdentifier
-  public var name: String
-  public var state: State
+  public var name: String?
+  public var state: State?
   public var brandName: String?
   public var flavour: String?
-  public var category: Category
+  public var category: Category?
   public var barcode: String?
   public var nutritionLabelImage: String?
   public var packagingImage: String?
   public var ingredients: String?
-  public var country: Country
+  public var country: Country?
   public var calories: Double?
   public var protein: Double?
   public var carbohydrates: Double?
@@ -52,9 +53,94 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable{
   /// Read-only.
   public var updatedAt: Date?
 
-  /// ID is the only field required to initialize, this is how we identify in the DB for updates.
   public init(id: FoodItemIdentifier) {
     self.id = id
+  }
+
+  public init(
+    id: FoodItemIdentifier,
+    name: String?,
+    state: State?,
+    brandName: String?,
+    flavour: String?,
+    category: Category?,
+    barcode: String?,
+    nutritionLabelImage: String?,
+    packagingImage: String?,
+    ingredients: String?,
+    country: Country?,
+    calories: Double?,
+    protein: Double?,
+    carbohydrates: Double?,
+    fat: Double?,
+    saturatedFat: Double?,
+    transFat: Double?,
+    polyunsaturatedFat: Double?,
+    monounsaturatedFat: Double?,
+    fiber: Double?,
+    sugar: Double?,
+    cholesterol: Double?,
+    sodium: Double?,
+    calcium: Double?,
+    iron: Double?,
+    potassium: Double?,
+    magnesium: Double?,
+    zinc: Double?,
+    vitaminA: Double?,
+    vitaminB6: Double?,
+    vitaminB12: Double?,
+    vitaminC: Double?,
+    vitaminD: Double?,
+    vitaminE: Double?,
+    servingName: String?,
+    servingValue: Double?,
+    servingUnit: String?,
+    downvoteCount: Int?,
+    source: String?,
+    createdAt: Date?,
+    updatedAt: Date?
+  ) {
+    self.id = id
+    self.name = name
+    self.state = state
+    self.brandName = brandName
+    self.flavour = flavour
+    self.category = category
+    self.barcode = barcode
+    self.nutritionLabelImage = nutritionLabelImage
+    self.packagingImage = packagingImage
+    self.ingredients = ingredients
+    self.country = country
+    self.calories = calories
+    self.protein = protein
+    self.carbohydrates = carbohydrates
+    self.fat = fat
+    self.saturatedFat = saturatedFat
+    self.transFat = transFat
+    self.polyunsaturatedFat = polyunsaturatedFat
+    self.monounsaturatedFat = monounsaturatedFat
+    self.fiber = fiber
+    self.sugar = sugar
+    self.cholesterol = cholesterol
+    self.sodium = sodium
+    self.calcium = calcium
+    self.iron = iron
+    self.potassium = potassium
+    self.magnesium = magnesium
+    self.zinc = zinc
+    self.vitaminA = vitaminA
+    self.vitaminB6 = vitaminB6
+    self.vitaminB12 = vitaminB12
+    self.vitaminC = vitaminC
+    self.vitaminD = vitaminD
+    self.vitaminE = vitaminE
+    self.servingName = servingName
+    self.servingValue = servingValue
+    self.servingUnit = servingUnit
+    self.downvoteCount = downvoteCount
+    self.source = source
+    self.createdAt = createdAt
+    self.updatedAt = updatedAt
   }
 }
 
