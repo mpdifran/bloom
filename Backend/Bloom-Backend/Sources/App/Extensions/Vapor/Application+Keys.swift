@@ -6,6 +6,8 @@
 //
 
 import Vapor
+import SignInWithApple
+import JWT
 
 extension Application {
 
@@ -17,6 +19,34 @@ extension Application {
         } else {
             logger.notice("Using local Postgres")
         }
+    }
+}
+
+// MARK: - Sign in with Apple
+
+extension Application {
+
+    var appleTeamID: String {
+        Environment.get("APPLE_TEAM_ID") ?? ""
+    }
+
+    var appBundleID: String {
+        "com.mdfprojects.Supplements"
+    }
+
+    var siwaJWKId: String {
+        Environment.get("SIWA_JWK_ID") ?? ""
+    }
+
+    var siwaPrivateKey: String {
+        Environment.get("SIWA_PRIVATE_KEY") ?? ""
+    }
+
+    func createSIWAPrivateKey() throws -> ApplePrivateKey {
+        try ApplePrivateKey(
+            kid: JWKIdentifier(string: siwaJWKId),
+            privateKey: siwaPrivateKey
+        )
     }
 }
 

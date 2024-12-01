@@ -1,5 +1,5 @@
 {
-  "originHash" : "4948227e4ee31981218ed3c92e00494d09093e74586e657f2e928ea1984ecbc4",
+  "originHash" : "4c8be2f626ef7e17ba724d8027c722cd2c5969e33007040b558b75ac5192550e",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -71,6 +71,24 @@
       "state" : {
         "revision" : "3877a5060e85ae33e3b9fe51ab581784f65ec80e",
         "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "jwt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/jwt.git",
+      "state" : {
+        "revision" : "d65f32bfd08fae5910d603028be5dec4f35b3482",
+        "version" : "4.2.2"
+      }
+    },
+    {
+      "identity" : "jwt-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/jwt-kit.git",
+      "state" : {
+        "revision" : "13e7513b3ba0afa13967daf77af2fb4ad087306c",
+        "version" : "4.13.5"
       }
     },
     {
@@ -332,6 +350,15 @@
       "state" : {
         "revision" : "9786a424db75c4e9eb53e255ce1268675b680562",
         "version" : "4.106.3"
+      }
+    },
+    {
+      "identity" : "vapor-sign-in-with-apple",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mpdifran/vapor-sign-in-with-apple.git",
+      "state" : {
+        "revision" : "31d91d6baacf9e04d718b5eacd96059b59f35fbe",
+        "version" : "1.0.2"
       }
     },
     {

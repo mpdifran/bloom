@@ -17,7 +17,7 @@ struct FoodController {
 
 extension FoodController: RouteCollection {
 
-    func boot(routes: any Vapor.RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         routes.group("v1", "food") { food in
             food.post("autocomplete", use: autocomplete)
             food.post("estimate", use: estimateFoodCalories)
