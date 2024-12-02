@@ -14,7 +14,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
             SchemaV1.self,
             SchemaV2.self,
             SchemaV3.self,
-            SchemaV4.self
+            SchemaV4.self,
+            SchemaV5.self
         ]
     }
 
@@ -23,7 +24,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
             migrateV0ToV1,
             migrateV1ToV2,
             migrateV2toV3,
-            migrateV3toV4
+            migrateV3toV4,
+            migrateV4toV5
         ]
     }
 
@@ -77,4 +79,11 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
             toVersion: SchemaV4.self
         )
     }
+
+  private static var migrateV4toV5: MigrationStage {
+      .lightweight(
+          fromVersion: SchemaV4.self,
+          toVersion: SchemaV5.self
+      )
+  }
 }
