@@ -19,7 +19,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   public var nutritionLabelImage: String?
   public var packagingImage: String?
   public var ingredients: String?
-  public var country: Country?
+  public var country: FoodItem.Country?
   public var calories: Double?
   public var protein: Double?
   public var carbohydrates: Double?
@@ -68,7 +68,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     nutritionLabelImage: String?,
     packagingImage: String?,
     ingredients: String?,
-    country: Country?,
+    country: FoodItem.Country?,
     calories: Double?,
     protein: Double?,
     carbohydrates: Double?,
@@ -155,10 +155,5 @@ public extension AdminFoodItemRecord {
     case fastfood
     case restaurant
     case branded
-  }
-
-  enum Country: String, Codable, Sendable {
-    case canada
-    case usa
   }
 }

@@ -372,7 +372,7 @@
 				FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */,
 			);
 			name = ci_scripts;
-			path = ../ci_scripts;
+			path = ../../ci_scripts;
 			sourceTree = "<group>";
 		};
 		FFACBAD02BAC7788006AAD0B = {

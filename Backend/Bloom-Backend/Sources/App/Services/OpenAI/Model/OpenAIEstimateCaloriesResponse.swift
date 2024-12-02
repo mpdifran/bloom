@@ -18,12 +18,12 @@ extension OpenAIEstimateCaloriesResponse {
         let name: String
         let servingName: String
         let servingAmountUnit: String
-        let servingAmount: Int
+        let servingAmount: Double
         let servingCount: Double
-        let calories: Int
-        let fat: Int
-        let carbs: Int
-        let protein: Int
+        let calories: Double
+        let fat: Double
+        let carbs: Double
+        let protein: Double
     }
 
     struct Quantity: Codable {
@@ -45,14 +45,35 @@ extension OpenAIEstimateCaloriesResponse.Item {
             name: name,
             brandName: nil,
             flavour: nil,
+            country: nil,
             calories: .init(value: Double(calories), unit: "kcal"),
             protein: .init(value: Double(protein), unit: "g"),
             carbohydrates: .init(value: Double(carbs), unit: "g"),
             fat: .init(value: Double(fat), unit: "g"),
+            saturatedFat: nil,
+            transFat: nil,
+            polyunsaturatedFat: nil,
+            monounsaturatedFat: nil,
+            fiber: nil,
+            sugar: nil,
+            cholesterol: nil,
+            sodium: nil,
+            calcium: nil,
+            iron: nil,
+            potassium: nil,
+            magnesium: nil,
+            zinc: nil,
+            vitaminA: nil,
+            vitaminB6: nil,
+            vitaminB12: nil,
+            vitaminC: nil,
+            vitaminD: nil,
+            vitaminE: nil,
             servingName: servingName,
-            servingQuantity: FoodItem.Quantity(
-                value: Double(servingAmount),
-                unit: servingAmountUnit),
+            servingQuantity: .init(
+                value: servingAmount,
+                unit: servingAmountUnit
+            ),
             ingredients: nil,
             category: .aiGenerated,
             isVerified: false

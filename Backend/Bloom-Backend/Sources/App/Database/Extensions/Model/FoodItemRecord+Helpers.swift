@@ -10,48 +10,52 @@ import BloomModel
 
 extension FoodItemRecord {
 
-    func asFoodItem() -> FoodItem? {
-        guard let id = id else { return nil }
+  func asFoodItem() -> FoodItem? {
+    guard let id = id else { return nil }
 
-        let servingQuantity: FoodItem.Quantity?
-        if let servingValue, let servingUnit {
-            servingQuantity = .init(value: servingValue, unit: servingUnit)
-        } else {
-            servingQuantity = nil
-        }
-
-        return FoodItem(
-            id: FoodItemIdentifier(id),
-            name: name,
-            brandName: brandName,
-            flavour: flavour,
-            calories: calories.map({ .init(value: $0, unit: "kcal")}),
-            protein: protein.map({ .init(value: $0, unit: "g")}),
-            carbohydrates: carbohydrates.map({ .init(value: $0, unit: "g")}),
-            fat: fat.map({ .init(value: $0, unit: "g")}),
-            servingName: servingName,
-            servingQuantity: servingQuantity,
-            ingredients: nil,
-            category: category.asCategory(),
-            isVerified: state == .verified
-        )
+    let servingQuantity: FoodItem.Quantity?
+    if let servingValue, let servingUnit {
+      servingQuantity = .init(value: servingValue, unit: servingUnit)
+    } else {
+      servingQuantity = nil
     }
-}
 
-extension FoodItemRecord.Category {
-
-    func asCategory() -> FoodItem.Category {
-        switch self {
-        case .generic:
-                .generic
-        case .fastfood:
-                .fastfood
-        case .restaurant:
-                .restaurant
-        case .branded:
-                .branded
-        }
-    }
+    return FoodItem(
+      id: FoodItemIdentifier(id),
+      name: name,
+      brandName: brandName,
+      flavour: flavour,
+      country: country.asCountry(),
+      calories: calories.map({ .init(value: $0, unit: "kcal")}),
+      protein: protein.map({ .init(value: $0, unit: "g")}),
+      carbohydrates: carbohydrates.map({ .init(value: $0, unit: "g")}),
+      fat: fat.map({ .init(value: $0, unit: "g")}),
+      saturatedFat: saturatedFat.map({ .init(value: $0, unit: "g") }),
+      transFat: transFat.map({ .init(value: $0, unit: "g") }),
+      polyunsaturatedFat: polyunsaturatedFat.map({ .init(value: $0, unit: "g") }),
+      monounsaturatedFat: monounsaturatedFat.map({ .init(value: $0, unit: "g") }),
+      fiber: fiber.map({ .init(value: $0, unit: "g") }),
+      sugar: sugar.map({ .init(value: $0, unit: "g") }),
+      cholesterol: cholesterol.map({ .init(value: $0, unit: "mg") }),
+      sodium: sodium.map({ .init(value: $0, unit: "mg") }),
+      calcium: calcium.map({ .init(value: $0, unit: "mg") }),
+      iron: iron.map({ .init(value: $0, unit: "mg") }),
+      potassium: potassium.map({ .init(value: $0, unit: "mg") }),
+      magnesium: magnesium.map({ .init(value: $0, unit: "mg") }),
+      zinc: zinc.map({ .init(value: $0, unit: "mg") }),
+      vitaminA: vitaminA.map({ .init(value: $0, unit: "mg") }),
+      vitaminB6: vitaminB6.map({ .init(value: $0, unit: "mg") }),
+      vitaminB12: vitaminB12.map({ .init(value: $0, unit: "mg") }),
+      vitaminC: vitaminC.map({ .init(value: $0, unit: "mg") }),
+      vitaminD: vitaminD.map({ .init(value: $0, unit: "mg") }),
+      vitaminE: vitaminE.map({ .init(value: $0, unit: "mg") }),
+      servingName: servingName,
+      servingQuantity: servingQuantity,
+      ingredients: nil,
+      category: category.asCategory(),
+      isVerified: state == .verified
+    )
+  }
 }
 
 extension FoodItemRecord {
@@ -104,6 +108,22 @@ extension FoodItemRecord {
   }
 }
 
+extension FoodItemRecord.Category {
+
+  func asCategory() -> FoodItem.Category {
+    switch self {
+    case .generic:
+        .generic
+    case .fastfood:
+        .fastfood
+    case .restaurant:
+        .restaurant
+    case .branded:
+        .branded
+    }
+  }
+}
+
 extension FoodItemRecord.State {
   func asState() -> AdminFoodItemRecord.State {
     switch self {
@@ -125,10 +145,10 @@ extension FoodItemRecord.Category {
 }
 
 extension FoodItemRecord.Country {
-  func asCountry() -> AdminFoodItemRecord.Country {
+  func asCountry() -> FoodItem.Country {
     switch self {
-    case .canada: .canada
-    case .usa: .usa
+    case .canada: return .canada
+    case .usa: return .usa
     }
   }
 }
