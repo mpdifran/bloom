@@ -45,7 +45,9 @@ extension FoodLoggingActionCardView.ViewModel {
         do {
             let recentLogs = try await foodItemModelActor.fetchRecentLogs(for: meal, limit: 10)
 
-            let foodItems = recentLogs.compactMap({ $0.foodItem?.asNetworkFoodItem() })
+            let foodItems = recentLogs
+              .compactMap({ $0.foodItem?.asNetworkFoodItem() })
+              .makingUnique()
 
             recentFoodItemSections = [FoodItemSection(title: "Recent", foodItems: foodItems)]
         } catch {
