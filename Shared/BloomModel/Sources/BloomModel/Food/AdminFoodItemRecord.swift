@@ -14,7 +14,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   public var state: State?
   public var brandName: String?
   public var flavour: String?
-  public var category: Category?
+  public var category: FoodItem.Category?
   public var barcode: String?
   public var nutritionLabelImage: String?
   public var packagingImage: String?
@@ -63,7 +63,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     state: State?,
     brandName: String?,
     flavour: String?,
-    category: Category?,
+    category: FoodItem.Category?,
     barcode: String?,
     nutritionLabelImage: String?,
     packagingImage: String?,
@@ -145,15 +145,8 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
 }
 
 public extension AdminFoodItemRecord {
-  enum State: String, Codable, Sendable {
+  enum State: String, Codable, Sendable, CaseIterable {
     case unverified
     case verified
-  }
-
-  enum Category: String, Codable, Sendable {
-    case generic
-    case fastfood
-    case restaurant
-    case branded
   }
 }

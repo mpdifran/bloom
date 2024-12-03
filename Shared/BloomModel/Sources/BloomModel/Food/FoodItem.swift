@@ -144,7 +144,7 @@ public extension FoodItem {
 }
 
 public extension FoodItem {
-    enum Category: String, Codable, Sendable {
+    enum Category: String, Codable, Sendable, CaseIterable {
         case generic
         case fastfood
         case restaurant
@@ -154,7 +154,7 @@ public extension FoodItem {
 }
 
 public extension FoodItem {
-    enum Country: String, Codable, Sendable {
+    enum Country: String, Codable, Sendable, CaseIterable {
         case canada
         case usa
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B9A93452CFE95B6005FBD2C /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9A93442CFE95B6005FBD2C /* AppUI */; };
 		FF5D0CB72CFA451D00374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0CB62CFA451D00374F66 /* BloomModel */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B9A93452CFE95B6005FBD2C /* AppUI in Frameworks */,
 				FF5D0CB72CFA451D00374F66 /* BloomModel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +73,7 @@
 			name = Gardener;
 			packageProductDependencies = (
 				FF5D0CB62CFA451D00374F66 /* BloomModel */,
+				4B9A93442CFE95B6005FBD2C /* AppUI */,
 			);
 			productName = Gardener;
 			productReference = FF5D0C9A2CFA426500374F66 /* Gardener.app */;
@@ -102,6 +105,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				FF5D0CB52CFA451D00374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */,
+				4B9A93432CFE95B6005FBD2C /* XCRemoteSwiftPackageReference "AppUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FF5D0C9B2CFA426500374F66 /* Products */;
@@ -340,7 +344,23 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		4B9A93432CFE95B6005FBD2C /* XCRemoteSwiftPackageReference "AppUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mpdifran/AppUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		4B9A93442CFE95B6005FBD2C /* AppUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B9A93432CFE95B6005FBD2C /* XCRemoteSwiftPackageReference "AppUI" */;
+			productName = AppUI;
+		};
 		FF5D0CB62CFA451D00374F66 /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BloomModel;

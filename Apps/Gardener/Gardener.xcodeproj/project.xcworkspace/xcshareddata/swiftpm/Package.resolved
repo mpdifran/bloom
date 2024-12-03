@@ -1,5 +1,5 @@
 {
-  "originHash" : "06145ec7f96e128b2f88a80d75b0790eb68099476d122174e72b0770781638df",
+  "originHash" : "6b57b055354c13e54d6493a077ef7c33f720f86d43377a71cb864528b2531ed6",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "230bcbf685e68c053a3882a2a11d71796ff87666",
         "version" : "0.1.5"
+      }
+    },
+    {
+      "identity" : "appui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mpdifran/AppUI",
+      "state" : {
+        "revision" : "514e3ee48b4ffc1a4bb314dc563f8d9406761ba3",
+        "version" : "0.5.5"
       }
     }
   ],

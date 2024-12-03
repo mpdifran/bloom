@@ -112,14 +112,10 @@ extension FoodItemRecord.Category {
 
   func asCategory() -> FoodItem.Category {
     switch self {
-    case .generic:
-        .generic
-    case .fastfood:
-        .fastfood
-    case .restaurant:
-        .restaurant
-    case .branded:
-        .branded
+    case .generic: .generic
+    case .fastfood: .fastfood
+    case .restaurant: .restaurant
+    case .branded: .branded
     }
   }
 }
@@ -133,22 +129,11 @@ extension FoodItemRecord.State {
   }
 }
 
-extension FoodItemRecord.Category {
-  func asCategory() -> AdminFoodItemRecord.Category {
-    switch self {
-    case .generic: .generic
-    case .fastfood: .fastfood
-    case .restaurant: .restaurant
-    case .branded: .branded
-    }
-  }
-}
-
 extension FoodItemRecord.Country {
   func asCountry() -> FoodItem.Country {
     switch self {
-    case .canada: return .canada
-    case .usa: return .usa
+    case .canada: .canada
+    case .usa: .usa
     }
   }
 }
