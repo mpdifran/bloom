@@ -15,9 +15,22 @@
 		FF5D0C9A2CFA426500374F66 /* Gardener.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gardener.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FF05115E2CFFA71000A2E8C2 /* Exceptions for "Gardener" folder in "Gardener" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FF5D0C992CFA426500374F66 /* Gardener */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FF5D0C9C2CFA426500374F66 /* Gardener */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FF05115E2CFFA71000A2E8C2 /* Exceptions for "Gardener" folder in "Gardener" target */,
+			);
 			path = Gardener;
 			sourceTree = "<group>";
 		};
@@ -270,6 +283,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Gardener/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Gardener;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -300,6 +314,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Gardener/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Gardener;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
