@@ -15,19 +15,19 @@ struct FoodDatabaseService { }
 
 extension FoodDatabaseService {
 
-    func searchFoods(
-        request: Request,
-        query: String,
-        category: FoodItemRecord.Category,
-        limit: Int
-    ) async throws -> [FoodItem] {
-        guard !query.isEmpty else { return [] }
+  func searchFoods(
+    request: Request,
+    query: String,
+    category: FoodItemRecord.Category,
+    limit: Int
+  ) async throws -> [FoodItem] {
+    guard !query.isEmpty else { return [] }
 
-        guard let sqlDatabase = request.db as? SQLDatabase else {
-            throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
-        }
+    guard let sqlDatabase = request.db as? SQLDatabase else {
+      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
+    }
 
-        let results = try await sqlDatabase.raw("""
+    let results = try await sqlDatabase.raw("""
             SELECT *,
                    GREATEST(
                        similarity(name, \(bind: query)) * 1.5,
@@ -43,26 +43,24 @@ extension FoodDatabaseService {
             LIMIT \(bind: limit)
         """).all(decodingFluent: FoodItemRecord.self)
 
-        // Map database records to your FoodItem model
-        return results.compactMap { $0.asFoodItem() }
+    return results.compactMap { $0.asFoodItem() }
+  }
+
+  func searchFoods(request: Request, barcode: String) async throws -> [FoodItem] {
+    guard !barcode.isEmpty else { return [] }
+
+    guard let sqlDatabase = request.db as? SQLDatabase else {
+      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
     }
 
-    func searchFoods(request: Request, barcode: String) async throws -> [FoodItem] {
-        guard !barcode.isEmpty else { return [] }
-
-        guard let sqlDatabase = request.db as? SQLDatabase else {
-            throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
-        }
-
-        let results = try await sqlDatabase.raw("""
+    let results = try await sqlDatabase.raw("""
             SELECT *
             FROM food_item_records
             WHERE barcode = \(bind: barcode)
         """).all(decodingFluent: FoodItemRecord.self)
 
-        // Map database records to your FoodItem model
-        return results.compactMap { $0.asFoodItem() }
-    }
+    return results.compactMap { $0.asFoodItem() }
+  }
 
   func getUnverifiedFoodItemRecords(
     request: Request,
@@ -79,7 +77,20 @@ extension FoodDatabaseService {
           LIMIT \(bind: limit)
       """).all(decodingFluent: FoodItemRecord.self)
 
-    // Map database records to admin FoodItemRecord model.
     return results.compactMap { $0.asAdminFoodItemRecord() }
+  }
+
+  func markFoodAsInaccurate(request: Request, foodID: FoodItemIdentifier) async throws {
+    guard let foodItem = try await FoodItemRecord.query(on: request.db)
+      .filter(\.$id == foodID.value)
+      .first() else {
+      throw Abort(.noContent)
+    }
+
+    var downvoteCount = foodItem.downvoteCount ?? 0
+    downvoteCount += 1
+    foodItem.downvoteCount = downvoteCount
+
+    try await foodItem.save(on: request.db)
   }
 }
