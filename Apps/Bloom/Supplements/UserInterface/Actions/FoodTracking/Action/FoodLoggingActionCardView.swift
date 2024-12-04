@@ -41,6 +41,7 @@ struct FoodLoggingActionCardView: View {
     NavigationStack {
       VStack(spacing: 0) {
         mainView
+        Divider()
         suggestionsBarView
         foodSearchTextBar
       }
@@ -263,6 +264,7 @@ private extension FoodLoggingActionCardView {
     }
     .scrollIndicators(.hidden)
     .animation(.bouncy, value: viewModel.autocomplete)
+    .padding(.top, 8)
   }
 
   var foodSearchTextBar: some View {
