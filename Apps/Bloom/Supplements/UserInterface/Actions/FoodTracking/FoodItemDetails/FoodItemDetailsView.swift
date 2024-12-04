@@ -39,6 +39,8 @@ struct FoodItemDetailsView: View {
   @State private var meal: FoodItemLog.Meal
   @State private var showDatePicker = false
   @State private var saveComplete = false
+  @State private var hasMarkedAsInaccurate = false
+  @State private var alertDetails: AlertDetails?
   @State private var error: Error?
 
   @FocusState private var isFocused: Bool
@@ -69,9 +71,12 @@ struct FoodItemDetailsView: View {
         }
         ToolbarItem(placement: .primaryAction) {
           Menu("Options", systemImage: "ellipsis.circle") {
-            Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle") {
-              Task { await markAsInaccurate() }
+            if !hasMarkedAsInaccurate {
+              Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle") {
+                Task { await markAsInaccurate() }
+              }
             }
+
             Divider()
             Button("Delete Log", systemImage: "trash", role: .destructive) {
               guard let log = existingFoodItemLog else { return }
@@ -110,8 +115,10 @@ struct FoodItemDetailsView: View {
       }
       .navigationTitle("Details")
       .navigationBarTitleDisplayMode(.inline)
+      .sensoryFeedback(.success, trigger: hasMarkedAsInaccurate)
       .animation(.easeInOut, value: numberOfServings)
       .alert(error: $error)
+      .alert(alertDetails: $alertDetails)
       .tint(.mutedGreen)
     }
   }
@@ -246,9 +253,16 @@ private extension FoodItemDetailsView {
   }
 
   var accuracySection: some View {
-    Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle.fill") {
-      Task {
-        await markAsInaccurate()
+    Group {
+      if hasMarkedAsInaccurate {
+        Button("Marked as Inaccurate", systemImage: "checkmark.circle.fill", role: .destructive) { }
+          .disabled(true)
+      } else {
+        Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle.fill", role: .destructive) {
+          Task {
+            await markAsInaccurate()
+          }
+        }
       }
     }
     .bold()
@@ -287,7 +301,14 @@ private extension FoodItemDetailsView {
   }
 
   func markAsInaccurate() async {
-    // TODO: Implement
+    do {
+      try await NetworkRequester.shared.markFoodAsInaccurate(foodID: foodItem.id)
+
+      alertDetails = AlertDetails(title: "Marked as Inaccurate", message: "Thank you for letting us know, we will look into it!")
+      hasMarkedAsInaccurate = true
+    } catch {
+      self.error = error
+    }
   }
 }
 
