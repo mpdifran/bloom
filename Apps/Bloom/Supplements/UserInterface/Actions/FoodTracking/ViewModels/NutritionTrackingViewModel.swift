@@ -54,7 +54,7 @@ extension NutritionTrackingViewModel {
       suggestedMeal = .snack
     case .snack:
       suggestedMeal = .breakfast
-      date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
+      advanceDay()
     @unknown default:
       break
     }
@@ -65,7 +65,7 @@ extension NutritionTrackingViewModel {
     switch suggestedMeal {
     case .breakfast:
       suggestedMeal = .snack
-      date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
+      reverseDay()
     case .lunch:
       suggestedMeal = .breakfast
     case .dinner:
@@ -75,6 +75,14 @@ extension NutritionTrackingViewModel {
     @unknown default:
       break
     }
+  }
+
+  func advanceDay() {
+    date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
+  }
+
+  func reverseDay() {
+    date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
   }
 }
 
