@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct RootView: View {
-    var body: some View {
-        NavigationSplitView {
-            SidebarView()
-                .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 300)
-        } detail: {
-            Text("Hello World")
-        }
+  var body: some View {
+    NavigationSplitView {
+      SidebarView()
+        .navigationSplitViewColumnWidth(min: 200, ideal: 300, max: 300)
+    } content: {
+      Text("Content")
+    } detail: {
+      Text("Detail")
     }
+  }
 }
 
 #Preview {
-    RootView()
+  RootView()
 }

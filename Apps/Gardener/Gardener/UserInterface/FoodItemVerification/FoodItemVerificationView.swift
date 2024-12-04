@@ -15,23 +15,22 @@ struct FoodItemVerificationView: View {
   @State private var selectedItem: AdminFoodItemRecord?
 
   var body: some View {
-    NavigationSplitView {
-      List(viewModel.foodItems, selection: $selectedItem) { item in
+    List(viewModel.foodItems, selection: $selectedItem) { item in
+      NavigationLink {
+        FoodItemDetailView(foodItem: item)
+      } label: {
         Text(item.name ?? "No name")
           .tag(item)
       }
-      .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 300)
-      .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          refreshButton
-        }
+    }
+    .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 300)
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        refreshButton
       }
-    } detail: {
-      if let selectedItem {
-        FoodItemDetailView(foodItem: selectedItem)
-      } else {
-        Text("No food items to verify")
-      }
+    }
+    .onAppear {
+      
     }
     .task {
       await viewModel.loadItems()
@@ -58,5 +57,9 @@ private extension FoodItemVerificationView {
 }
 
 #Preview {
-  FoodItemVerificationView()
+  NavigationSplitView {
+    FoodItemVerificationView()
+  } detail: {
+    Text("No Selection")
+  }
 }
