@@ -9,23 +9,23 @@ import Foundation
 
 struct OpenFoodFactsProduct: Codable {
   let id: String
-  let productName: String?
-  let brands: String?
-  let nutriments: Nutriments
+//  let productName: String?
+//  let brands: String?
+//  let nutriments: Nutriments
   let ingredients: String?
-  let quantity: String?
+//  let quantity: String?
   let selectedImages: SelectedImages?
-  let countries: String?
+  let countries: [String]?
 
   enum CodingKeys: String, CodingKey {
     case id = "id"
-    case productName = "product_name_en"
-    case brands
-    case nutriments
+//    case productName = "product_name_en"
+//    case brands
+//    case nutriments
     case ingredients = "ingredients_text_en"
-    case quantity
+//    case quantity
     case selectedImages = "selected_images"
-    case countries = "countries_lc"
+    case countries = "countries_tags_en"
   }
 }
 
@@ -57,11 +57,12 @@ extension OpenFoodFactsProduct {
 
 extension OpenFoodFactsProduct.SelectedImages {
   struct ImageSet: Codable {
-    let display: LocalizedImages
-    let small: LocalizedImages
-    let thumb: LocalizedImages
+    let display: LocalizedImages?
+    let small: LocalizedImages?
+    let thumb: LocalizedImages?
   }
   struct LocalizedImages: Codable {
-    let en: URL
+    let en: URL?
+    let fr: URL?
   }
 }

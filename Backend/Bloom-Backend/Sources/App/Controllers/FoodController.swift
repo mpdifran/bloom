@@ -150,20 +150,24 @@ private extension FoodController {
     let response = try await openFoodFactsService.fetchProductImages(request, barcode: barcode)
 
     guard let images = response.product.selectedImages else {
-      request.logger.info("Product had no images.")
+      request.logger.info("Open Food Facts product had no images.")
       return []
     }
 
     guard
-      let packaging = try await request.client.get(URI(string: images.front.display.en.absoluteString)).body,
-      let nutritionLabel = try await request.client.get(URI(string: images.nutrition.display.en.absoluteString)).body,
-      let countries = response.product.countries
+      let packageURI = images.front.display?.en?.uri ?? images.front.display?.fr?.uri, // Fallback to french if there's no English
+      let nutritionLabelURI = images.nutrition.display?.en?.uri ?? images.nutrition.display?.fr?.uri, // Fallback to french if there's no English
+      let packaging = try await request.client.get(packageURI).body,
+      let nutritionLabel = try await request.client.get(nutritionLabelURI).body
     else {
-      request.logger.info("Could not load images from Open Food Facts.")
+      request.logger.info("Could not load images from Open Food Facts Product.")
       return []
     }
 
-    let countryCodes = countries.split(separator: ",").map { $0.lowercased() }
+    guard let countries = response.product.countries else {
+      request.logger.info("Could not load countries from Open Food Facts Product.")
+      return[]
+    }
 
     let packagingData = Data(packaging.readableBytesView)
     let nutritionLabelData = Data(nutritionLabel.readableBytesView)
@@ -180,12 +184,12 @@ private extension FoodController {
     )
 
     let country: FoodCountry
-    if countryCodes.contains("ca") {
+    if countries.contains("Canada") {
       country = .canada
-    } else if countryCodes.contains("us") {
+    } else if countries.contains("United States") {
       country = .usa
     } else {
-      request.logger.info("[OpenFoodFacts] Unsupported country code: \(countryCodes).")
+      request.logger.info("[OpenFoodFacts] Unsupported country code: \(countries).")
       return []
     }
 
@@ -200,6 +204,7 @@ private extension FoodController {
     guard let foodItemRecord = aiResponse.0 else { return [] }
 
     foodItemRecord.source = "Open Food Facts"
+    foodItemRecord.ingredients = response.product.ingredients
 
     guard let foodItem = foodItemRecord.asFoodItem() else { return [] }
 

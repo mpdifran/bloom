@@ -22,8 +22,17 @@ extension OpenFoodFactsService {
     let url = baseURL
       .appending(component: "product")
       .appending(component: barcode)
+      .appending(queryItems: [
+        URLQueryItem(name: "fields", value: "id,selected_images,countries_tags_en,ingredients_text_en")
+      ])
 
     let response = try await request.client.get(URI(string: url.absoluteString), headers: defaultHeaders)
+
+//    if let body = response.body {
+//      let data = Data(buffer: body)
+//      let string = String(data: data, encoding: .utf8)
+//      print(string ?? "")
+//    }
 
     return try response.content.decode(OpenFoodFactsProductResponse.self)
   }
