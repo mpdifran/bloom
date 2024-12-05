@@ -23,6 +23,12 @@ protocol ImageStorage {
   ///   - image: The image to store
   ///   - path: Where to store the image.
   func store(image: ImageFile, path: StoragePath) async throws -> ImageFileMetadata
+
+  func generateImageURL(
+    fileName: String,
+    path: StoragePath,
+    expiration: TimeAmount
+  ) async throws -> URL?
 }
 
 struct S3Storage: ImageStorage {
@@ -55,5 +61,28 @@ struct S3Storage: ImageStorage {
     }
 
     return ImageFileMetadata(filename: filename, data: image.data)
+  }
+
+  func generateImageURL(
+    fileName: String,
+    path: StoragePath,
+    expiration: TimeAmount
+  ) async throws -> URL? {
+    let objectKey = "\(path)/\(fileName)"
+    let region = request.sotoS3.region
+    let url = URL(string: "https://\(bucketName).s3.\(region).amazonaws.com/\(objectKey)")!
+    do {
+      /// Reference: https://soto.codes/2020/12/presigned-urls.html
+      let image = try await request.sotoS3.signURL(
+        url: url,
+        httpMethod: .PUT,
+        expires: expiration
+      )
+      request.logger.info("Successfully generated signed URL for S3: \(url)")
+      return image
+    } catch {
+      request.logger.error("Failed to create S3 signed URL: \(error)")
+      return nil
+    }
   }
 }

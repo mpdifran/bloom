@@ -16,8 +16,8 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   public var flavour: String?
   public var category: FoodItem.Category?
   public var barcode: String?
-  public var nutritionLabelImage: String?
-  public var packagingImage: String?
+  public var nutritionLabelImage: URL?
+  public var packagingImage: URL?
   public var ingredients: String?
   public var country: FoodItem.Country?
   public var calories: Double?
@@ -65,8 +65,6 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     flavour: String?,
     category: FoodItem.Category?,
     barcode: String?,
-    nutritionLabelImage: String?,
-    packagingImage: String?,
     ingredients: String?,
     country: FoodItem.Country?,
     calories: Double?,
@@ -107,8 +105,6 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     self.flavour = flavour
     self.category = category
     self.barcode = barcode
-    self.nutritionLabelImage = nutritionLabelImage
-    self.packagingImage = packagingImage
     self.ingredients = ingredients
     self.country = country
     self.calories = calories

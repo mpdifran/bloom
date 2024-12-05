@@ -29,16 +29,8 @@ struct FoodItemVerificationView: View {
         refreshButton
       }
     }
-    .onAppear {
-      
-    }
     .task {
       await viewModel.loadItems()
-    }
-    .onChange(of: viewModel.foodItems) {
-      // Select first item by default if no selection.
-      guard selectedItem == nil, let firstItem = viewModel.foodItems.first else { return }
-      selectedItem = firstItem
     }
   }
 }

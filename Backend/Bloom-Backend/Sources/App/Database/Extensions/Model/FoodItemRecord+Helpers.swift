@@ -70,8 +70,6 @@ extension FoodItemRecord {
       flavour: flavour,
       category: category.asCategory(),
       barcode: barcode,
-      nutritionLabelImage: nutritionLabelImage,
-      packagingImage: packagingImage,
       ingredients: ingredients,
       country: country.asCountry(),
       calories: calories,

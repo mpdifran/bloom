@@ -77,7 +77,32 @@ extension FoodDatabaseService {
           LIMIT \(bind: limit)
       """).all(decodingFluent: FoodItemRecord.self)
 
-    return results.compactMap { $0.asAdminFoodItemRecord() }
+    var records: [AdminFoodItemRecord] = []
+    for item in results {
+      guard var adminFoodRecord = item.asAdminFoodItemRecord() else { continue }
+
+      if let nutritionLabel = item.nutritionLabelImage {
+        let imageURL = try await request.imageStorage.generateImageURL(
+          fileName: nutritionLabel,
+          path: .nutritionLabel,
+          expiration: .hours(1)
+        )
+        adminFoodRecord.nutritionLabelImage = imageURL
+      }
+
+      if let packagingImage = item.packagingImage {
+        let imageURL = try await request.imageStorage.generateImageURL(
+          fileName: packagingImage,
+          path: .foodPackaging,
+          expiration: .hours(1)
+        )
+        adminFoodRecord.packagingImage = imageURL
+      }
+
+      records.append(adminFoodRecord)
+    }
+
+    return records
   }
 
   func markFoodAsInaccurate(request: Request, foodID: FoodItemIdentifier) async throws {
