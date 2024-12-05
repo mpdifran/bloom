@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct BulkDataUploaderView: View {
+
   var body: some View {
-    Text("Upload")
+    Form {
+      NavigationLink {
+        OpenFoodFactsBulkUploader()
+      } label: {
+        Text("Open Food Facts")
+      }
+    }
+    .formStyle(.grouped)
   }
 }
 
 #Preview {
-  BulkDataUploaderView()
+  NavigationSplitView {
+    BulkDataUploaderView()
+  } detail: {
+    Text("Nothing Selected")
+  }
 }
