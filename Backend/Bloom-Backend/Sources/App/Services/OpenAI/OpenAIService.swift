@@ -11,7 +11,6 @@ import Logging
 import OpenAIKit
 import Vapor
 
-
 struct OpenAIService { }
 
 extension OpenAIService {

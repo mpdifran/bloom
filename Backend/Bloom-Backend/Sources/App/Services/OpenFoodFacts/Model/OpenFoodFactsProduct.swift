@@ -1,13 +1,13 @@
 //
-//  OpenFoodFactsFoodItem.swift
-//  Gardener
+//  OpenFoodFactsProduct.swift
+//  Bloom-Backend
 //
-//  Created by Mark DiFranco on 2024-12-04.
+//  Created by Mark DiFranco on 2024-12-05.
 //
 
 import Foundation
 
-struct OpenFoodFactsFoodItem: Codable {
+struct OpenFoodFactsProduct: Codable {
   let id: String
   let productName: String?
   let brands: String?
@@ -15,19 +15,21 @@ struct OpenFoodFactsFoodItem: Codable {
   let ingredients: String?
   let quantity: String?
   let selectedImages: SelectedImages?
+  let countries: String?
 
   enum CodingKeys: String, CodingKey {
-    case id = "_id"
+    case id = "id"
     case productName = "product_name_en"
     case brands
     case nutriments
     case ingredients = "ingredients_text_en"
     case quantity
     case selectedImages = "selected_images"
+    case countries = "countries_lc"
   }
 }
 
-extension OpenFoodFactsFoodItem {
+extension OpenFoodFactsProduct {
   struct Nutriments: Codable {
     let energyValue: Double?
     let energyUnit: String?
@@ -53,7 +55,7 @@ extension OpenFoodFactsFoodItem {
   }
 }
 
-extension OpenFoodFactsFoodItem.SelectedImages {
+extension OpenFoodFactsProduct.SelectedImages {
   struct ImageSet: Codable {
     let display: LocalizedImages
     let small: LocalizedImages

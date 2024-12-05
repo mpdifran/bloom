@@ -12,10 +12,13 @@ struct OpenFoodFactsBulkUploader: View {
 
   @State private var fileURL: URL?
   @State private var showDirectoryPicker = false
-  @State private var fileLineNumber = 0
-  @State private var totalLineNumbers = 1
+  @State private var uploadedItemCount = 0
+  @State private var currentLine = 0
+  @State private var startAtLineNumber = 0
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
+
+  @AppStorage("lastParsedLine") private var lastParsedLine = 0
 
   var body: some View {
     Form {
@@ -26,8 +29,8 @@ struct OpenFoodFactsBulkUploader: View {
     .pickFile(showPicker: $showDirectoryPicker) { fileURL in
       self.fileURL = fileURL
     }
-    .animation(.default, value: fileLineNumber)
-    .animation(.default, value: totalLineNumbers)
+    .animation(.default, value: uploadedItemCount)
+    .animation(.default, value: currentLine)
     .alert(alertDetails: $alertDetails)
     .alert(error: $error)
   }
@@ -48,14 +51,22 @@ private extension OpenFoodFactsBulkUploader {
       .onTapGesture {
         showDirectoryPicker.toggle()
       }
+
+      LabeledContent("Last Uploaded Line") {
+        Text("\(lastParsedLine)")
+      }
     }
   }
 
   var uploadSection: some View {
     Section("Upload") {
-      Text("\(fileLineNumber) food items uploaded")
-        .font(.title2)
-        .bold()
+      TextField("Line Offset", value: $startAtLineNumber, formatter: NumberFormatter.noDecimalPlaces)
+        .textFieldStyle(.roundedBorder)
+
+      LabeledContent("Current Line") {
+        Text("\(currentLine)")
+          .contentTransition(.numericText(value: Double(currentLine)))
+      }
 
       ProminentButton("Upload") {
         Task {
@@ -67,6 +78,10 @@ private extension OpenFoodFactsBulkUploader {
         }
       }
       .disabled(fileURL == nil)
+
+      LabeledContent("Uploaded") {
+        Text("\(uploadedItemCount) Food Items")
+      }
     }
   }
 }
@@ -77,29 +92,35 @@ private extension OpenFoodFactsBulkUploader {
     guard let fileURL else { return }
 
     let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
 
+    currentLine = 0
     try await FileHandle.readFileLines(from: fileURL) { line in
+      defer {
+        currentLine += 1
+        lastParsedLine = currentLine
+      }
+      guard currentLine >= startAtLineNumber else { return true }
+
       guard let data = line.data(using: .utf8) else { return true }
 
       do {
         let foodItem = try decoder.decode(OpenFoodFactsFoodItem.self, from: data)
-        print(foodItem)
+        if foodItem.selectedImages != nil {
+          print(foodItem)
+          uploadedItemCount += 1
+          return false
+        }
       } catch {
         print(error)
-        throw error
+//        throw error
       }
 
-
-
-      await MainActor.run {
-        fileLineNumber += 1
-      }
-
-      return false
+      return true
     }
 
     await MainActor.run {
-      alertDetails = AlertDetails(title: "Upload Complete", message: "Uploaded \(totalLineNumbers) food items.")
+      alertDetails = AlertDetails(title: "Upload Complete", message: "Uploaded \(uploadedItemCount) food items.")
     }
   }
 }

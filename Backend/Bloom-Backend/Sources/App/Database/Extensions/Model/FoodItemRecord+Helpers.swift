@@ -51,7 +51,7 @@ extension FoodItemRecord {
       vitaminE: vitaminE.map({ .init(value: $0, unit: "mg") }),
       servingName: servingName,
       servingQuantity: servingQuantity,
-      ingredients: nil,
+      ingredients: ingredients,
       category: category.asCategory(),
       isVerified: state == .verified
     )
