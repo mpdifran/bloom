@@ -48,10 +48,10 @@ extension OpenFoodFactsProduct {
   }
 
   struct SelectedImages: Codable {
-    let front: ImageSet
-    let ingredients: ImageSet
-    let nutrition: ImageSet
-    let packaging: ImageSet
+    let front: ImageSet?
+    let ingredients: ImageSet?
+    let nutrition: ImageSet?
+    let packaging: ImageSet?
   }
 }
 

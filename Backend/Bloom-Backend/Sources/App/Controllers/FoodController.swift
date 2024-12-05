@@ -155,8 +155,8 @@ private extension FoodController {
     }
 
     guard
-      let packageURI = images.front.display?.en?.uri ?? images.front.display?.fr?.uri, // Fallback to french if there's no English
-      let nutritionLabelURI = images.nutrition.display?.en?.uri ?? images.nutrition.display?.fr?.uri, // Fallback to french if there's no English
+      let packageURI = images.front?.display?.en?.uri ?? images.front?.display?.fr?.uri, // Fallback to french if there's no English
+      let nutritionLabelURI = images.nutrition?.display?.en?.uri ?? images.nutrition?.display?.fr?.uri, // Fallback to french if there's no English
       let packaging = try await request.client.get(packageURI).body,
       let nutritionLabel = try await request.client.get(nutritionLabelURI).body
     else {
