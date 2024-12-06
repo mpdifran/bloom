@@ -60,7 +60,7 @@ struct NutritionHabitTodayWidgetView: View {
             }
         }
         .horizontallyCentered()
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
     }
 }
 

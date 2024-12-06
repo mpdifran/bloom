@@ -62,7 +62,7 @@ struct MonthlyVitalCardCell: View {
             }
         }
         .tint(vital.color)
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
     }
 }
 

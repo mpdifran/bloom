@@ -126,7 +126,8 @@ struct TodayView: View {
                                 subtitle: todo.cadence.name,
                                 systemImage: todo.kind.systemImage,
                                 isComplete: toDoManager.completedToDoKinds.contains(todo.kind),
-                                vitalKind: todo.vitalKind
+                                vitalKind: todo.vitalKind,
+                                useSecondaryBackground: false
                             )
                             .tint(todo.kind.color)
                             .onTapGesture {
@@ -138,6 +139,7 @@ struct TodayView: View {
                 .horizontallyCentered()
                 .padding()
             }
+            .groupedBackground()
             .navigationTitle("Today")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {

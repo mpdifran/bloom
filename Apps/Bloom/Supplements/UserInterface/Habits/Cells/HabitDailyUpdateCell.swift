@@ -78,7 +78,7 @@ struct HabitDailyUpdateCell: View {
             DisclosureIndicator()
                 .padding(.leading)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
         .tint(habit.targetMetric.color)
         .standardConfetti(
             $showConfetti,
@@ -126,4 +126,5 @@ struct HabitDailyUpdateCell: View {
         }
         .padding()
     }
+    .groupedBackground()
 }
