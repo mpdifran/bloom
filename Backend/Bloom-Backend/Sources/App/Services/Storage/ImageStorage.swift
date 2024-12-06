@@ -75,10 +75,10 @@ struct S3Storage: ImageStorage {
       /// Reference: https://soto.codes/2020/12/presigned-urls.html
       let image = try await request.sotoS3.signURL(
         url: url,
-        httpMethod: .PUT,
+        httpMethod: .GET,
         expires: expiration
       )
-      request.logger.info("Successfully generated signed URL for S3: \(url)")
+      request.logger.info("Successfully generated signed URL for S3: \(image)")
       return image
     } catch {
       request.logger.error("Failed to create S3 signed URL: \(error)")
