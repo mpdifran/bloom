@@ -23,6 +23,7 @@ struct DataScannerView: UIViewControllerRepresentable {
         let viewController = DataScannerViewController(
             recognizedDataTypes: [recognizedDataType],
             qualityLevel: .fast,
+            isHighFrameRateTrackingEnabled: false,
             isGuidanceEnabled: true,
             isHighlightingEnabled: true
         )

@@ -14,6 +14,7 @@ struct FoodBarcodeScannerView: View {
     @State private var shouldCapturePhoto = false
     @State private var capturedPhoto: IdentifiableImage?
     @State private var recognizedItems = [RecognizedItem]()
+    @State private var recognizedItem: String?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -30,16 +31,20 @@ struct FoodBarcodeScannerView: View {
                 .zStackAlignment(.topLeading)
 
             scannedCodeView
-                .transition(.blurReplace)
                 .zStackAlignment(.bottom)
         }
         .animation(.default, value: recognizedBarcode)
         .presentationCompactAdaptation(.fullScreenCover)
         .onChange(of: recognizedBarcode) { oldValue, newValue in
-            guard let newValue else { return }
+            guard
+                let newValue,
+                recognizedItem == nil
+            else { return }
+
+            self.recognizedItem = newValue
 
             Task {
-                await Delay(500)
+                await Delay(1000)
                 await MainActor.run {
                     self.onBarcodeScan(newValue)
                     dismiss()
@@ -65,14 +70,11 @@ private extension FoodBarcodeScannerView {
     @ViewBuilder
     var scannedCodeView: some View {
         if let code = recognizedBarcode {
-            Text(code)
-                .font(.title2)
-                .fontDesign(.monospaced)
+            BarcodeView(barcode: code)
+                .horizontallyCentered()
+                .cardContainer(fill: .regularMaterial)
                 .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.regularMaterial)
-                }
+                .transition(.blurReplace)
         }
     }
 
