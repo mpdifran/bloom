@@ -116,12 +116,12 @@ private extension FoodController {
     let requestBody = try request.content.decode(FoodSearchRequest.self)
 
     if let barcode = requestBody.upcCode {
-      let sections = try await searchFoodsBarcodeLocalDatabase(request, barcode: barcode)
-      if sections.isNotEmpty {
-        return sections
-      } else {
-        return try await searchFoodsBarcodeOpenFoodFacts(request, barcode: barcode)
-      }
+      return try await searchFoodsBarcodeLocalDatabase(request, barcode: barcode)
+//      if sections.isNotEmpty {
+//        return sections
+//      } else {
+//        return try await searchFoodsBarcodeOpenFoodFacts(request, barcode: barcode)
+//      }
     } else if let name = requestBody.name {
       return try await searchFoodsByNameLocalDatabase(request, name: name)
     } else {
