@@ -19,8 +19,13 @@ struct FoodItemVerificationView: View {
       NavigationLink {
         FoodItemDetailView(foodItem: item)
       } label: {
-        Text(item.name ?? "No name")
-          .tag(item)
+        FoodItemCell(
+          id: item.id.value,
+          name: item.name,
+          brandName: item.brandName,
+          isVerified: item.state == .verified
+        )
+        .tag(item)
       }
     }
     .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 300)
@@ -45,6 +50,37 @@ private extension FoodItemVerificationView {
       Image(systemName: "arrow.clockwise")
         .imageScale(.large)
     }
+  }
+}
+
+private struct FoodItemCell: View {
+  let id: String
+  let name: String?
+  let brandName: String?
+  let isVerified: Bool
+
+  var body: some View {
+    HStack {
+      VStack(alignment: .leading, spacing: 4) {
+        Text(id)
+          .font(.subheadline)
+          .foregroundColor(.gray)
+        Text(name ?? "No Name")
+          .font(.headline)
+        if let brandName {
+          Text(brandName)
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+        }
+      }
+
+      Spacer()
+
+      Image(systemName: isVerified ? "checkmark.circle.fill" : "xmark.circle.fill")
+        .foregroundColor(.white)
+        .imageScale(.large)
+    }
+    .padding(.vertical, 8)
   }
 }
 

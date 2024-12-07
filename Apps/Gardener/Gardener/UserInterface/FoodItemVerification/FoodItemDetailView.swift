@@ -15,6 +15,14 @@ struct FoodItemDetailView: View {
 
   private let foodItem: AdminFoodItemRecord
 
+  enum ImageTab: String, CaseIterable {
+    case packaging = "Packaging"
+    case nutritionLabel = "Nutrition Label"
+  }
+
+  @State private var selectedImageTab: ImageTab = .nutritionLabel
+  @State private var isSaving = false
+
   init(foodItem: AdminFoodItemRecord) {
     self.foodItem = foodItem
 
@@ -35,21 +43,55 @@ private extension FoodItemDetailView {
   var images: some View {
     ScrollView {
       VStack(spacing: 48) {
-        AsyncImage(url: viewModel.packagingImage)
-          .frame(width: 500)
-        AsyncImage(url: viewModel.nutritionLabel)
-          .frame(width: 500)
+        Picker("", selection: $selectedImageTab) {
+          ForEach(ImageTab.allCases, id: \.self) { tab in
+            Text(tab.rawValue)
+              .tag(tab)
+          }
+        }
+        .pickerStyle(SegmentedPickerStyle())
+
+        switch selectedImageTab {
+        case .packaging:
+          createImage(
+            url: viewModel.packagingImage
+          )
+        case .nutritionLabel:
+          createImage(
+            url: viewModel.nutritionLabel
+          )
+        }
+
         ProminentButton(
           "Save",
-          systemImage: "tray.and.arrow.down"
+          systemImage: "tray.and.arrow.down",
+          isLoading: isSaving
         ) {
+          isSaving = true
           Task {
             await viewModel.verify()
+            isSaving = false
           }
         }
         Spacer()
       }
     }
+  }
+
+  @ViewBuilder
+  func createImage(url: URL?) -> some View {
+      if let url {
+        AsyncImage(url: url) { image in
+          image
+            .resizable()
+            .scaledToFit()
+        } placeholder: {
+          ProgressView()
+        }
+        .frame(width: 450)
+      } else {
+        Text("Not Found")
+      }
   }
 
   var formView: some View {
@@ -62,7 +104,7 @@ private extension FoodItemDetailView {
         otherNutrientsSection
         miscSection
       }
-      .frame(minWidth: 200)
+      .frame(minWidth: 350)
     }
   }
 

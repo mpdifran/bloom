@@ -14,13 +14,15 @@ final class FoodItemDetailViewModel: ObservableObject {
   @Published var foodItem: AdminFoodItemRecord
   private var initialFoodItem: AdminFoodItemRecord
 
-  // TODO: Zach - fetch images from S3
-  let packagingImage = URL(string: "https://picsum.photos/seed/package/200/300")!
-  let nutritionLabel = URL(string: "https://picsum.photos/seed/label/200/300")!
+  @Published var packagingImage: URL?
+  @Published var nutritionLabel: URL?
 
   init(foodItem: AdminFoodItemRecord) {
     self.foodItem = foodItem
     self.initialFoodItem = foodItem
+
+    packagingImage = foodItem.packagingImage
+    nutritionLabel = foodItem.nutritionLabelImage
   }
 }
 

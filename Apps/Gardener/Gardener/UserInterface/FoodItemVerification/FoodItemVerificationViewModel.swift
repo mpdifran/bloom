@@ -20,7 +20,7 @@ final class FoodItemVerificationViewModel: ObservableObject {
 extension FoodItemVerificationViewModel {
   func loadItems() async {
     do {
-      let response = try await service.getUnverifiedFoodRecords(limit: 10)
+      let response = try await service.getUnverifiedFoodRecords(limit: 50)
       foodItems = response.foodItemRecords
     } catch {
       print("Error fetching unverified food records: \(error)")
