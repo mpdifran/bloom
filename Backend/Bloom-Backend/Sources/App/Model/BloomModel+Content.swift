@@ -8,6 +8,8 @@
 import BloomModel
 import Vapor
 
+extension AdminUpdateFoodItemRequest: @retroactive Content { }
+extension AdminUpdateFoodItemResponse: @retroactive Content { }
 extension EstimateFoodCaloriesRequest: @retroactive Content { }
 extension EstimateFoodCaloriesResponse: @retroactive Content { }
 extension FoodAutocompleteRequest: @retroactive Content { }

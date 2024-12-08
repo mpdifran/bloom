@@ -68,7 +68,7 @@ extension FoodItemRecord {
       state: state.asState(),
       brandName: brandName,
       flavour: flavour,
-      category: category.asCategory(),
+      category: category.asAdminCategory(),
       barcode: barcode,
       ingredients: ingredients,
       country: country.asCountry(),
@@ -109,6 +109,15 @@ extension FoodItemRecord {
 extension FoodItemRecord.Category {
 
   func asCategory() -> FoodItem.Category {
+    switch self {
+    case .generic: .generic
+    case .fastfood: .fastfood
+    case .restaurant: .restaurant
+    case .branded: .branded
+    }
+  }
+
+  func asAdminCategory() -> AdminFoodItemRecord.Category {
     switch self {
     case .generic: .generic
     case .fastfood: .fastfood

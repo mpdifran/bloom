@@ -128,7 +128,7 @@ private extension FoodItemDetailView {
         .changeIndicator(isChanged: viewModel.propertyChanged(\.flavour))
 
       Picker("Category", selection: $viewModel.foodItem.category) {
-        ForEach(FoodItem.Category.allCases, id: \.self) { category in
+        ForEach(AdminFoodItemRecord.Category.allCases, id: \.self) { category in
           Text(category.rawValue)
             .tag(category)
         }

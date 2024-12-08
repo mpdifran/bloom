@@ -20,6 +20,7 @@ extension AdminFoodController: RouteCollection {
         routes.group("v1", "admin", "food") { food in
             food.post("usda-ingest", use: ingestUSDA)
             food.get("unverified", use: getUnverifiedFoods)
+            food.patch("update", use: updateFood)
         }
     }
 }
@@ -63,5 +64,66 @@ private extension AdminFoodController {
     )
 
     return UnverifiedFoodItemsResponse(foodItemRecords: foodItemRecords)
+  }
+
+  @Sendable
+  func updateFood(_ request: Request) async throws -> AdminUpdateFoodItemResponse {
+    let requestBody = try request.content.decode(AdminUpdateFoodItemRequest.self)
+    let updateRecord = requestBody.foodItemRecord
+
+    guard let existingRecord = try await FoodItemRecord.find(updateRecord.id.value, on: request.db) else {
+      throw Abort(.notFound)
+    }
+
+    if let name = updateRecord.name {
+      existingRecord.name = name
+    }
+    if let state = updateRecord.state {
+      existingRecord.state = state.asState()
+    }
+    existingRecord.brandName = updateRecord.brandName
+    existingRecord.flavour = updateRecord.flavour
+    if let category = updateRecord.category {
+      existingRecord.category = category.asCategory()
+    }
+    existingRecord.barcode = updateRecord.barcode
+    existingRecord.ingredients = updateRecord.ingredients
+    if let country = updateRecord.country {
+      existingRecord.country = country.asCountry()
+    }
+    existingRecord.calories = updateRecord.calories
+    existingRecord.protein = updateRecord.protein
+    existingRecord.carbohydrates = updateRecord.carbohydrates
+    existingRecord.fat = updateRecord.fat
+    existingRecord.saturatedFat = updateRecord.saturatedFat
+    existingRecord.transFat = updateRecord.transFat
+    existingRecord.polyunsaturatedFat = updateRecord.polyunsaturatedFat
+    existingRecord.monounsaturatedFat = updateRecord.monounsaturatedFat
+    existingRecord.fiber = updateRecord.fiber
+    existingRecord.sugar = updateRecord.sugar
+    existingRecord.cholesterol = updateRecord.cholesterol
+    existingRecord.sodium = updateRecord.sodium
+    existingRecord.calcium = updateRecord.calcium
+    existingRecord.iron = updateRecord.iron
+    existingRecord.potassium = updateRecord.potassium
+    existingRecord.magnesium = updateRecord.magnesium
+    existingRecord.zinc = updateRecord.zinc
+    existingRecord.vitaminA = updateRecord.vitaminA
+    existingRecord.vitaminB6 = updateRecord.vitaminB6
+    existingRecord.vitaminB12 = updateRecord.vitaminB12
+    existingRecord.vitaminC = updateRecord.vitaminC
+    existingRecord.vitaminD = updateRecord.vitaminD
+    existingRecord.vitaminE = updateRecord.vitaminE
+    existingRecord.servingName = updateRecord.servingName
+    existingRecord.servingValue = updateRecord.servingValue
+    existingRecord.servingUnit = updateRecord.servingUnit
+    existingRecord.downvoteCount = updateRecord.downvoteCount
+    existingRecord.source = updateRecord.source
+
+    try await existingRecord.save(on: request.db)
+
+    return AdminUpdateFoodItemResponse(
+      foodItemRecord: existingRecord.asAdminFoodItemRecord()
+    )
   }
 }
