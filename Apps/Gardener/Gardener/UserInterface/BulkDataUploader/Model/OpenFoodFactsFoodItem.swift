@@ -8,58 +8,45 @@
 import Foundation
 
 struct OpenFoodFactsFoodItem: Codable {
-  let id: String
-  let productName: String?
-  let brands: String?
-  let nutriments: Nutriments
-  let ingredients: String?
-  let quantity: String?
-  let selectedImages: SelectedImages?
-
-  enum CodingKeys: String, CodingKey {
-    case id = "_id"
-    case productName = "product_name_en"
-    case brands
-    case nutriments
-    case ingredients = "ingredients_text_en"
-    case quantity
-    case selectedImages = "selected_images"
-  }
+  let id: String?
+  let code: String?
+  let countriesTags: [String]
+  let ingredientsTextEn: String?
 }
 
-extension OpenFoodFactsFoodItem {
-  struct Nutriments: Codable {
-    let energyValue: Double?
-    let energyUnit: String?
-    let proteinsValue: Double?
-    let proteinsUnit: String?
-    let carbohydratesValue: Double?
-    let carbohydratesUnit: String?
-    let fatValue: Double?
-    let fatUnit: String?
-    let saturatedFatValue: Double?
-    let saturatedFatUnit: String?
-    let sodiumValue: Double?
-    let sodiumUnit: String?
-    let sugarsValue: Double?
-    let sugarsUnit: String?
-  }
-
-  struct SelectedImages: Codable {
-    let front: ImageSet
-    let ingredients: ImageSet
-    let nutrition: ImageSet
-    let packaging: ImageSet
-  }
-}
-
-extension OpenFoodFactsFoodItem.SelectedImages {
-  struct ImageSet: Codable {
-    let display: LocalizedImages
-    let small: LocalizedImages
-    let thumb: LocalizedImages
-  }
-  struct LocalizedImages: Codable {
-    let en: URL
-  }
-}
+//extension OpenFoodFactsFoodItem {
+//  struct Nutriments: Codable {
+//    let energyValue: Double?
+//    let energyUnit: String?
+//    let proteinsValue: Double?
+//    let proteinsUnit: String?
+//    let carbohydratesValue: Double?
+//    let carbohydratesUnit: String?
+//    let fatValue: Double?
+//    let fatUnit: String?
+//    let saturatedFatValue: Double?
+//    let saturatedFatUnit: String?
+//    let sodiumValue: Double?
+//    let sodiumUnit: String?
+//    let sugarsValue: Double?
+//    let sugarsUnit: String?
+//  }
+//
+//  struct SelectedImages: Codable {
+//    let front: ImageSet
+//    let ingredients: ImageSet
+//    let nutrition: ImageSet
+//    let packaging: ImageSet
+//  }
+//}
+//
+//extension OpenFoodFactsFoodItem.SelectedImages {
+//  struct ImageSet: Codable {
+//    let display: LocalizedImages
+//    let small: LocalizedImages
+//    let thumb: LocalizedImages
+//  }
+//  struct LocalizedImages: Codable {
+//    let en: URL
+//  }
+//}

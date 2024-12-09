@@ -142,6 +142,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
 
 public extension AdminFoodItemRecord {
   enum State: String, Codable, Sendable, CaseIterable {
+    case needsAIProcessing
     case unverified
     case verified
   }

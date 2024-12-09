@@ -130,6 +130,7 @@ extension FoodItemRecord.Category {
 extension FoodItemRecord.State {
   func asState() -> AdminFoodItemRecord.State {
     switch self {
+    case .needsAIProcessing: .needsAIProcessing
     case .unverified: .unverified
     case .verified: .verified
     }

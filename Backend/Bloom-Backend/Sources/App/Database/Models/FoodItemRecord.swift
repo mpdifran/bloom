@@ -188,19 +188,26 @@ final class FoodItemRecord: Model, @unchecked Sendable {
 }
 
 extension FoodItemRecord {
-  enum State: String, Codable {
+  enum State: String, Codable, FluentEnum {
+    static let schema = "state"
+
+    case needsAIProcessing
     case unverified
     case verified
   }
 
-  enum Category: String, Codable {
+  enum Category: String, Codable, FluentEnum {
+    static let schema = "category"
+
     case generic
     case fastfood
     case restaurant
     case branded
   }
 
-  enum Country: String, Codable {
+  enum Country: String, Codable, FluentEnum {
+    static let schema = "country"
+    
     case canada
     case usa
   }

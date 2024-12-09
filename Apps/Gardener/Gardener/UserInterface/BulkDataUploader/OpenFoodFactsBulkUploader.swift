@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomModel
 
 struct OpenFoodFactsBulkUploader: View {
 
@@ -15,6 +16,7 @@ struct OpenFoodFactsBulkUploader: View {
   @State private var uploadedItemCount = 0
   @State private var currentLine = 0
   @State private var startAtLineNumber = 0
+  @State private var isUploading = false
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
 
@@ -68,19 +70,25 @@ private extension OpenFoodFactsBulkUploader {
           .contentTransition(.numericText(value: Double(currentLine)))
       }
 
-      ProminentButton("Upload") {
-        Task {
-          do {
-            try await performUpload()
-          } catch {
-            self.error = error
-          }
-        }
-      }
-      .disabled(fileURL == nil)
-
       LabeledContent("Uploaded") {
         Text("\(uploadedItemCount) Food Items")
+      }
+
+      if isUploading {
+        ProminentButton("Cancel") {
+            isUploading = false
+        }
+      } else {
+        ProminentButton("Upload") {
+          Task {
+            do {
+              try await performUpload()
+            } catch {
+              self.error = error
+            }
+          }
+        }
+        .disabled(fileURL == nil)
       }
     }
   }
@@ -91,37 +99,72 @@ private extension OpenFoodFactsBulkUploader {
   func performUpload() async throws {
     guard let fileURL else { return }
 
+    isUploading = true
+
     let decoder = JSONDecoder()
     decoder.keyDecodingStrategy = .convertFromSnakeCase
 
     currentLine = 0
+    var items = [AdminOpenFoodFactsBulkUploadItem]()
+
     try await FileHandle.readFileLines(from: fileURL) { line in
+      guard isUploading else { return false }
+
       defer {
         currentLine += 1
         lastParsedLine = currentLine
       }
-      guard currentLine >= startAtLineNumber else { return true }
 
-      guard let data = line.data(using: .utf8) else { return true }
+      guard
+        currentLine >= startAtLineNumber,
+        let data = line.data(using: .utf8)
+      else { return true }
 
       do {
         let foodItem = try decoder.decode(OpenFoodFactsFoodItem.self, from: data)
-        if foodItem.selectedImages != nil {
-          print(foodItem)
-          uploadedItemCount += 1
-          return false
-        }
+
+        let validCountries: Set<String> = ["en:canada", "en:Canada", "en:united-states"]
+        guard foodItem.countriesTags.asSet().intersection(validCountries).isNotEmpty else { return true }
+        guard let code = foodItem.id, let code = foodItem.code else { return true }
+
+        let sanitizedCountries = foodItem.countriesTags.map({ $0.replacingOccurrences(of: "en:", with: "") })
+
+        let item = AdminOpenFoodFactsBulkUploadItem(
+          barcode: code,
+          countries: sanitizedCountries,
+          ingredients: foodItem.ingredientsTextEn
+        )
+
+        items.append(item)
       } catch {
         print(error)
-//        throw error
+      }
+
+      if items.count > 99 {
+        try await upload(items: items)
+        items.removeAll(keepingCapacity: true)
       }
 
       return true
     }
 
-    await MainActor.run {
-      alertDetails = AlertDetails(title: "Upload Complete", message: "Uploaded \(uploadedItemCount) food items.")
+    if items.isNotEmpty {
+      try await upload(items: items)
     }
+
+    await MainActor.run {
+      if isUploading {
+        alertDetails = AlertDetails(title: "Upload Complete", message: "Uploaded \(uploadedItemCount) food items.")
+      } else {
+        alertDetails = AlertDetails(title: "Cancelled Upload", message: "Uploaded \(uploadedItemCount) food items.")
+      }
+    }
+  }
+
+  func upload(items: [AdminOpenFoodFactsBulkUploadItem]) async throws {
+    // Make request
+
+    uploadedItemCount += items.count
   }
 }
 
