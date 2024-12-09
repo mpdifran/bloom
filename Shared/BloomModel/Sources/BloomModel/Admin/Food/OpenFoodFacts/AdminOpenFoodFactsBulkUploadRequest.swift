@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AdminOpenFoodFactsBulkUploadRequest: Codable {
+public struct AdminOpenFoodFactsBulkUploadRequest: Codable, Sendable {
   public let items: [AdminOpenFoodFactsBulkUploadItem]
 
   public init(items: [AdminOpenFoodFactsBulkUploadItem]) {

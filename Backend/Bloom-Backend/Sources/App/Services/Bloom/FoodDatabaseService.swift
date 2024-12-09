@@ -39,6 +39,7 @@ extension FoodDatabaseService {
                OR similarity(brand_name, \(bind: query)) > 0.1
                OR similarity(flavour, \(bind: query)) > 0.1)
               AND category = \(bind: category.rawValue)::category
+              AND state != 'needsAIProcessing'
             ORDER BY rank DESC
             LIMIT \(bind: limit)
         """).all(decodingFluent: FoodItemRecord.self)
@@ -57,6 +58,7 @@ extension FoodDatabaseService {
             SELECT *
             FROM food_item_records
             WHERE barcode = \(bind: barcode)
+              AND state != 'needsAIProcessing'
         """).all(decodingFluent: FoodItemRecord.self)
 
     return results.compactMap { $0.asFoodItem() }

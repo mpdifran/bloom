@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AdminOpenFoodFactsBulkUploadItem: Codable {
+public struct AdminOpenFoodFactsBulkUploadItem: Codable, Sendable {
   public let barcode: String
   public let countries: [String]
   public let ingredients: String?

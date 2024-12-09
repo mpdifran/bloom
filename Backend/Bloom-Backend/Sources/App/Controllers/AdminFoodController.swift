@@ -136,6 +136,35 @@ private extension AdminFoodController {
 
   @Sendable
   func openFoodFactsBulkUpload(_ request: Request) async throws -> Response {
+    let requestBody = try request.content.decode(AdminOpenFoodFactsBulkUploadRequest.self)
+
+    try await request.db.transaction { database in
+      for item in requestBody.items {
+        guard
+          try await foodDatabaseService.searchFoods(request: request, barcode: item.barcode).isEmpty
+        else {
+          continue
+        }
+
+        let foodItemRecord = FoodItemRecord(
+          id: item.barcode,
+          name: "",
+          country: .canada,
+          category: .branded,
+          source: "Open Food Facts"
+        )
+
+        let packagingImageURL = ""
+        let nutritionImageURL = ""
+
+        foodItemRecord.packagingImage = packagingImageURL
+        foodItemRecord.nutritionLabelImage = nutritionImageURL
+
+        foodItemRecord.state = .needsAIProcessing
+
+        try await foodItemRecord.save(on: database)
+      }
+    }
 
     return Response(status: .ok)
   }
