@@ -52,16 +52,15 @@ private extension HealthStoreModifier {
     // We need to find and delete for each quantity type. ex calories, protein, carbs, fat.
     for sampleType in FoodItemNutrient.allCases {
       do {
-        let type = HKQuantityType.quantityType(forIdentifier: sampleType.identifier)!
+        let type = HKQuantityType(sampleType.identifier)
         let samples = await HealthStoreFetcher.shared.fetchSamples(
           for: type,
           dateRange: .duringDay(date),
           writtenByApp: true
         )
-        guard samples.isNotEmpty else { return }
-        // Cast to the correct type for delete. HKSamples are also HKObjects.
-        let objects = samples as [HKObject]
-        try await healthStore.delete(objects)
+        if samples.isNotEmpty {
+          try await healthStore.delete(samples)
+        }
       } catch {
         print("Error deleting samples for \(sampleType.identifier): \(error.localizedDescription)")
       }

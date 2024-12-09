@@ -131,10 +131,7 @@ public extension DateRange {
 
   static func duringDay(_ date: Date) -> DateRange {
     let startOfDay = Calendar.current.startOfDay(for: date)
-    guard let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) else {
-      return DateRange(startOfDay, startOfDay)
-    }
-
+    let endOfDay = Calendar.current.endOfDay(for: date)
     return DateRange(startOfDay, endOfDay)
   }
 }

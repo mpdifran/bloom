@@ -18,11 +18,11 @@ enum FoodItemNutrient: CaseIterable {
   case protein
   case carbohydrates
   case fat
+  case sugar
   case saturatedFat
   case polyunsaturatedFat
   case monounsaturatedFat
   case fiber
-  case sugar
   case cholesterol
   case sodium
   case calcium

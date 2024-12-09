@@ -10,6 +10,7 @@ import SwiftData
 import BloomModel
 import DataContainer
 import TelemetryDeck
+import BloomFoundation
 
 @Observable @MainActor
 final class NutritionTrackingViewModel {
@@ -166,6 +167,27 @@ extension NutritionTrackingViewModel {
     
     try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
     try await HealthStoreModifier.shared.updateNutrition(for: date)
+  }
+}
+
+extension NutritionTrackingViewModel {
+
+  nonisolated func reSyncNutritionToHealthKit() async throws {
+    guard let earliestLog = try await earliestLogDate() else { return }
+
+    let dateRange = DateRange(earliestLog, Date())
+
+    await Calendar.current.aysncIterate(dateRange: dateRange, by: .init(day: 1)) { date in
+      do {
+        try await HealthStoreModifier.shared.updateNutrition(for: date)
+      } catch {
+        print(error)
+      }
+    }
+  }
+
+  private func earliestLogDate() throws -> Date? {
+    try modelContext.fetchOldestFoodItemLog()?.date
   }
 }
 
