@@ -10,12 +10,12 @@ import SwiftUI
 
 struct FoodItemVerificationView: View {
 
-  @ObservedObject private var viewModel = FoodItemVerificationViewModel.shared
+  @ObservedObject private var foodStore = UnverifiedFoodStore.shared
 
   @State private var selectedItem: AdminFoodItemRecord?
 
   var body: some View {
-    List(viewModel.foodItems, selection: $selectedItem) { item in
+    List(foodStore.foodItems, selection: $selectedItem) { item in
       NavigationLink {
         FoodItemDetailView(foodItem: item)
       } label: {
@@ -35,7 +35,7 @@ struct FoodItemVerificationView: View {
       }
     }
     .task {
-      await viewModel.loadItems()
+      await foodStore.loadItems()
     }
   }
 }
@@ -44,7 +44,7 @@ private extension FoodItemVerificationView {
   var refreshButton: some View {
     Button {
       Task {
-        await viewModel.loadItems()
+        await foodStore.loadItems()
       }
     } label: {
       Image(systemName: "arrow.clockwise")

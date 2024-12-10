@@ -7,6 +7,7 @@
 
 import BloomModel
 import Foundation
+import SwiftUI
 
 @MainActor
 final class FoodItemDetailViewModel: ObservableObject {
@@ -14,8 +15,19 @@ final class FoodItemDetailViewModel: ObservableObject {
   @Published var foodItem: AdminFoodItemRecord
   private var initialFoodItem: AdminFoodItemRecord
 
+  private let foodStore = UnverifiedFoodStore.shared
+
   @Published var packagingImage: URL?
   @Published var nutritionLabel: URL?
+
+  var isVerified: Bool {
+    get {
+      self.foodItem.state == .verified
+    }
+    set {
+      self.foodItem.state = newValue ? .verified : .unverified
+    }
+  }
 
   init(foodItem: AdminFoodItemRecord) {
     self.foodItem = foodItem
@@ -31,7 +43,7 @@ extension FoodItemDetailViewModel {
     foodItem[keyPath: keyPath] != initialFoodItem[keyPath: keyPath]
   }
 
-  func verify() async {
-    // Mark the log as verified
+  func save() async {
+    await foodStore.update(foodItem)
   }
 }

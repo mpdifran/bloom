@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AdminUpdateFoodItemRequest: Codable {
+public struct AdminUpdateFoodItemRequest: Codable, Sendable {
   public let foodItemRecord: AdminFoodItemRecord
 
   public init(foodItemRecord: AdminFoodItemRecord) {

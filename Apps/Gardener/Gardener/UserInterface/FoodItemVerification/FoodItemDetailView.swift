@@ -62,6 +62,12 @@ private extension FoodItemDetailView {
           )
         }
 
+        Toggle(isOn: $viewModel.isVerified) {
+          Text("Verify")
+        }
+        .toggleStyle(SwitchToggleStyle())
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.state))
+
         ProminentButton(
           "Save",
           systemImage: "tray.and.arrow.down",
@@ -69,7 +75,7 @@ private extension FoodItemDetailView {
         ) {
           isSaving = true
           Task {
-            await viewModel.verify()
+            await viewModel.save()
             isSaving = false
           }
         }
@@ -112,14 +118,6 @@ private extension FoodItemDetailView {
     Section(header: Text("Basic Information")) {
       TextField("Name", text: .init($viewModel.foodItem.name, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.name))
-
-      Picker("State", selection: $viewModel.foodItem.state) {
-        ForEach(AdminFoodItemRecord.State.allCases, id: \.self) { state in
-          Text(state.rawValue)
-            .tag(state)
-        }
-      }
-      .changeIndicator(isChanged: viewModel.propertyChanged(\.state))
 
       TextField("Brand Name", text: .init($viewModel.foodItem.brandName, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.brandName))
