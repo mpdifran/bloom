@@ -17,6 +17,7 @@ struct OpenFoodFactsBulkUploader: View {
   @State private var insertedItemCount = 0
   @State private var currentLine = 0
   @State private var startAtLineNumber = 0
+  @State private var endAtLineNumber = 0
   @State private var isUploading = false
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
@@ -63,7 +64,10 @@ private extension OpenFoodFactsBulkUploader {
 
   var uploadSection: some View {
     Section("Upload") {
-      TextField("Line Offset", value: $startAtLineNumber, formatter: NumberFormatter.noDecimalPlaces)
+      TextField("Start At Line", value: $startAtLineNumber, formatter: NumberFormatter.noDecimalPlaces)
+        .textFieldStyle(.roundedBorder)
+
+      TextField("End At Line", value: $endAtLineNumber, formatter: NumberFormatter.noDecimalPlaces)
         .textFieldStyle(.roundedBorder)
 
       LabeledContent("Current Line") {
@@ -118,6 +122,10 @@ private extension OpenFoodFactsBulkUploader {
         currentLine += 1
         lastParsedLine = currentLine
       }
+
+      guard
+        endAtLineNumber > 0, currentLine <= endAtLineNumber
+      else { return false }
 
       guard
         currentLine >= startAtLineNumber,
@@ -184,10 +192,10 @@ private extension OpenFoodFactsBulkUploader {
 
       if items.count >= 100 {
         let itemsCopy = items
-        items.removeAll(keepingCapacity: true)
         Task {
-          try await upload(items: items)
+          try await upload(items: itemsCopy)
         }
+        items.removeAll(keepingCapacity: true)
       }
 
       return true
