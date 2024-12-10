@@ -14,6 +14,7 @@ struct OpenFoodFactsBulkUploader: View {
   @State private var fileURL: URL?
   @State private var showDirectoryPicker = false
   @State private var uploadedItemCount = 0
+  @State private var insertedItemCount = 0
   @State private var currentLine = 0
   @State private var startAtLineNumber = 0
   @State private var isUploading = false
@@ -73,6 +74,9 @@ private extension OpenFoodFactsBulkUploader {
       LabeledContent("Uploaded") {
         Text("\(uploadedItemCount) Food Items")
       }
+      LabeledContent("Inserted Into DB") {
+        Text("\(insertedItemCount) Food Items")
+      }
 
       if isUploading {
         ProminentButton("Cancel") {
@@ -123,16 +127,54 @@ private extension OpenFoodFactsBulkUploader {
       do {
         let foodItem = try decoder.decode(OpenFoodFactsFoodItem.self, from: data)
 
-        let validCountries: Set<String> = ["en:canada", "en:Canada", "en:united-states"]
-        guard foodItem.countriesTags.asSet().intersection(validCountries).isNotEmpty else { return true }
-        guard let code = foodItem.id, let code = foodItem.code else { return true }
+        guard foodItem.isValid else { return true }
 
-        let sanitizedCountries = foodItem.countriesTags.map({ $0.replacingOccurrences(of: "en:", with: "") })
+//        let string = String(data: data, encoding: .utf8) ?? ""
+
+        _ = foodItem.hasValidNutrimentUnit
+
+        guard
+          let code = foodItem.id ?? foodItem.code,
+          let servingQuantity = foodItem.servingQuantity,
+          let servingUnit = foodItem.servingQuantityUnit,
+          let energy = foodItem.nutriments?.energyServing
+        else {
+          return true
+        }
 
         let item = AdminOpenFoodFactsBulkUploadItem(
+          productName: foodItem.productName,
+          brand: foodItem.brands,
           barcode: code,
-          countries: sanitizedCountries,
-          ingredients: foodItem.ingredientsTextEn
+          countries: foodItem.sanitizedCountries,
+          ingredients: foodItem.ingredientsTextEn,
+          servingQuantity: servingQuantity,
+          servingUnit: servingUnit,
+          packagingImageURL: foodItem.frontImageURL,
+          nutrientsImageURL: foodItem.nutritionImageURL,
+          energy: energy,
+          protein: foodItem.nutriments?.proteinsServing,
+          carbohydrates: foodItem.nutriments?.carbohydratesServing,
+          fat: foodItem.nutriments?.fatServing,
+          saturatedFat: foodItem.nutriments?.saturatedFatServing,
+          transFat: foodItem.nutriments?.transFatServing,
+          polyunsaturatedFat: foodItem.nutriments?.polyunsaturatedFatServing,
+          monounsaturatedFat: foodItem.nutriments?.monounsaturatedFatServing,
+          fiber: foodItem.nutriments?.fiberServing,
+          sugar: foodItem.nutriments?.sugarsServing,
+          cholesterol: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.cholesterolServing, unit: \.cholesterolUnit),
+          sodium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.sodiumServing, unit: \.sodiumUnit),
+          calcium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.calciumServing, unit: \.calciumUnit),
+          iron: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.ironServing, unit: \.ironUnit),
+          potassium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.potassiumServing, unit: \.potassiumUnit),
+          magnesium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.magnesiumServing, unit: \.magnesiumUnit),
+          zinc: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.zincServing, unit: \.zincUnit),
+          vitaminA: try foodItem.nutriments?.resolvedVitaminAServing(),
+          vitaminB6: foodItem.nutriments?.vitaminB6Serving,
+          vitaminB12: try foodItem.nutriments?.resolvedVitaminB12Serving(),
+          vitaminC: try foodItem.nutriments?.resolvedVitaminCServing(),
+          vitaminD: try foodItem.nutriments?.resolvedVitaminDServing(),
+          vitaminE: try foodItem.nutriments?.resolvedVitaminEServing()
         )
 
         items.append(item)
@@ -140,9 +182,12 @@ private extension OpenFoodFactsBulkUploader {
         print(error)
       }
 
-      if items.count > 99 {
-        try await upload(items: items)
+      if items.count >= 100 {
+        let itemsCopy = items
         items.removeAll(keepingCapacity: true)
+        Task {
+          try await upload(items: items)
+        }
       }
 
       return true
@@ -153,18 +198,22 @@ private extension OpenFoodFactsBulkUploader {
     }
 
     await MainActor.run {
+      let amount = NumberFormatter.oneDecimalPlaces.string(from: NSNumber(value: uploadedItemCount)) ?? ""
       if isUploading {
-        alertDetails = AlertDetails(title: "Upload Complete", message: "Uploaded \(uploadedItemCount) food items.")
+        alertDetails = AlertDetails(title: "Upload Complete", message: "Uploaded \(amount) food items.")
       } else {
-        alertDetails = AlertDetails(title: "Cancelled Upload", message: "Uploaded \(uploadedItemCount) food items.")
+        alertDetails = AlertDetails(title: "Cancelled Upload", message: "Uploaded \(amount) food items.")
       }
+
+      isUploading = false
     }
   }
 
   func upload(items: [AdminOpenFoodFactsBulkUploadItem]) async throws {
-    // Make request
-
+    let request = AdminOpenFoodFactsBulkUploadRequest(items: items)
+    let response = try await NetworkStack.shared.bulkUploadOpenFoodFacts(request: request)
     uploadedItemCount += items.count
+    insertedItemCount += response.insertedCount
   }
 }
 

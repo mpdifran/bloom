@@ -21,3 +21,5 @@ extension UploadNewFoodResponse: @retroactive Content { }
 extension UnverifiedFoodItemsResponse: @retroactive Content { }
 extension AuthenticationRequest: @retroactive Content { }
 extension AuthenticationResponse: @retroactive Content { }
+extension AdminOpenFoodFactsBulkUploadRequest: @retroactive Content { }
+extension AdminOpenFoodFactsBulkUploadResponse: @retroactive Content { }

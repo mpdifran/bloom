@@ -86,4 +86,14 @@ extension NetworkStack {
       response: AdminUpdateFoodItemResponse.self
     )
   }
+
+  func bulkUploadOpenFoodFacts(request: AdminOpenFoodFactsBulkUploadRequest) async throws -> AdminOpenFoodFactsBulkUploadResponse {
+    let url = URL(string: .bloomAPIBase + "v1/admin/food/open-food-facts/bulk-upload")!
+
+    return try await post(
+      url: url,
+      body: request,
+      response: AdminOpenFoodFactsBulkUploadResponse.self
+    )
+  }
 }
