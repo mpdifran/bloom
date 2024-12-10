@@ -18,6 +18,7 @@ struct OpenFoodFactsBulkUploader: View {
   @State private var currentLine = 0
   @State private var startAtLineNumber = 0
   @State private var endAtLineNumber = 0
+  @State private var bulkRequestItemCount = 20
   @State private var isUploading = false
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
@@ -70,6 +71,9 @@ private extension OpenFoodFactsBulkUploader {
       TextField("End At Line", value: $endAtLineNumber, formatter: NumberFormatter.noDecimalPlaces)
         .textFieldStyle(.roundedBorder)
 
+      TextField("Bulk Request Size", value: $bulkRequestItemCount, formatter: NumberFormatter.noDecimalPlaces)
+        .textFieldStyle(.roundedBorder)
+
       LabeledContent("Current Line") {
         Text("\(currentLine)")
           .contentTransition(.numericText(value: Double(currentLine)))
@@ -107,6 +111,9 @@ private extension OpenFoodFactsBulkUploader {
   func performUpload() async throws {
     guard let fileURL else { return }
 
+    uploadedItemCount = 0
+    insertedItemCount = 0
+    
     isUploading = true
 
     let decoder = JSONDecoder()
@@ -190,10 +197,10 @@ private extension OpenFoodFactsBulkUploader {
         print(error)
       }
 
-      if items.count >= 100 {
+      if items.count >= bulkRequestItemCount {
         let itemsCopy = items
         Task {
-          try await upload(items: itemsCopy)
+          await upload(items: itemsCopy)
         }
         items.removeAll(keepingCapacity: true)
       }
@@ -202,26 +209,30 @@ private extension OpenFoodFactsBulkUploader {
     }
 
     if items.isNotEmpty {
-      try await upload(items: items)
+      await upload(items: items)
     }
 
     await MainActor.run {
-      let amount = NumberFormatter.oneDecimalPlaces.string(from: NSNumber(value: uploadedItemCount)) ?? ""
+      let amount = NumberFormatter.oneDecimalPlaces.string(from: NSNumber(value: insertedItemCount)) ?? ""
       if isUploading {
-        alertDetails = AlertDetails(title: "Upload Complete", message: "Uploaded \(amount) food items.")
+        alertDetails = AlertDetails(title: "Upload Complete", message: "Inserted \(amount) food items into the DB.")
       } else {
-        alertDetails = AlertDetails(title: "Cancelled Upload", message: "Uploaded \(amount) food items.")
+        alertDetails = AlertDetails(title: "Cancelled Upload", message: "Inserted \(amount) food items into the DB.")
       }
 
       isUploading = false
     }
   }
 
-  func upload(items: [AdminOpenFoodFactsBulkUploadItem]) async throws {
-    let request = AdminOpenFoodFactsBulkUploadRequest(items: items)
-    let response = try await NetworkStack.shared.bulkUploadOpenFoodFacts(request: request)
+  func upload(items: [AdminOpenFoodFactsBulkUploadItem]) async {
     uploadedItemCount += items.count
-    insertedItemCount += response.insertedCount
+    let request = AdminOpenFoodFactsBulkUploadRequest(items: items)
+    do {
+      let response = try await NetworkStack.shared.bulkUploadOpenFoodFacts(request: request)
+      insertedItemCount += response.insertedCount
+    } catch {
+      print(error)
+    }
   }
 }
 
