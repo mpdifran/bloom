@@ -76,8 +76,13 @@ private struct FoodItemCell: View {
 
       Spacer()
 
-      Image(systemName: isVerified ? "checkmark.circle.fill" : "xmark.circle.fill")
-        .foregroundColor(.white)
+      Image(systemName: isVerified ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+        .if(isVerified) {
+          $0.foregroundStyle(.white, .green)
+        }
+        .if(!isVerified) {
+          $0.foregroundStyle(.white, .orange)
+        }
         .imageScale(.large)
     }
     .padding(.vertical, 8)

@@ -36,6 +36,9 @@ struct FoodItemDetailView: View {
       formView
     }
     .padding(48)
+    .shelf {
+      verifyShelfContent
+    }
   }
 }
 
@@ -61,27 +64,32 @@ private extension FoodItemDetailView {
             url: viewModel.nutritionLabel
           )
         }
+      }
+      .padding()
+    }
+  }
 
-        Toggle(isOn: $viewModel.isVerified) {
-          Text("Verify")
-        }
-        .toggleStyle(SwitchToggleStyle())
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.state))
+  var verifyShelfContent: some View {
+    VStack {
+      Toggle(isOn: $viewModel.isVerified) {
+        Text("Verify")
+      }
+      .toggleStyle(SwitchToggleStyle())
+      .changeIndicator(isChanged: viewModel.propertyChanged(\.state))
 
-        ProminentButton(
-          "Save",
-          systemImage: "tray.and.arrow.down",
-          isLoading: isSaving
-        ) {
-          isSaving = true
-          Task {
-            await viewModel.save()
-            isSaving = false
-          }
+      ProminentButton(
+        "Save",
+        systemImage: "tray.and.arrow.down",
+        isLoading: isSaving
+      ) {
+        isSaving = true
+        Task {
+          await viewModel.save()
+          isSaving = false
         }
-        Spacer()
       }
     }
+    .frame(maxWidth: 400)
   }
 
   @ViewBuilder
@@ -225,9 +233,17 @@ private extension FoodItemDetailView {
     Section(header: Text("Miscellaneous Information")) {
       TextField("Barcode", text: .init($viewModel.foodItem.barcode, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.barcode))
+      Text("\(viewModel.foodItem.barcode?.count ?? 0) digits")
+        .font(.caption)
+      Text("If code longer than 8 digits, pad with 0s until 13 digits long. 8 digit codes are fine.")
+        .font(.caption)
+        .foregroundStyle(.secondary)
 
       TextField("Ingredients", text: .init($viewModel.foodItem.ingredients, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.ingredients))
+      Text("Ignore ingredients for now. If they're there, just make sure they're formatted nice and in English.")
+        .font(.caption)
+        .foregroundStyle(.secondary)
 
       Picker("Country", selection: $viewModel.foodItem.country) {
         ForEach(FoodItem.Country.allCases, id: \.self) { country in
@@ -245,9 +261,6 @@ private extension FoodItemDetailView {
 
       TextField("Serving Unit", text: .init($viewModel.foodItem.servingUnit, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.servingUnit))
-
-      TextField("Downvote Count", value: $viewModel.foodItem.downvoteCount, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.downvoteCount))
 
       TextField("Source", text: .init($viewModel.foodItem.source, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.source))
