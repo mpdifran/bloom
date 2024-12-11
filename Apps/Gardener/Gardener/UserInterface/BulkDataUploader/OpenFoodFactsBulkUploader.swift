@@ -18,7 +18,7 @@ struct OpenFoodFactsBulkUploader: View {
   @State private var currentLine = 0
   @State private var startAtLineNumber = 0
   @State private var endAtLineNumber = 0
-  @State private var bulkRequestItemCount = 20
+  @State private var bulkRequestItemCount = 500
   @State private var isUploading = false
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
@@ -131,7 +131,7 @@ private extension OpenFoodFactsBulkUploader {
       }
 
       guard
-        endAtLineNumber > 0, currentLine <= endAtLineNumber
+        endAtLineNumber > 0, currentLine < endAtLineNumber
       else { return false }
 
       guard
