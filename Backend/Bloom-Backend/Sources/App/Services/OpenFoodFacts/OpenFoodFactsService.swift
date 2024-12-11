@@ -44,10 +44,10 @@ extension OpenFoodFactsService {
 extension OpenFoodFactsService {
 
   func bulkUpload(_ request: Request, items: [AdminOpenFoodFactsBulkUploadItem]) async throws -> Int {
-    try await request.db.transaction { database in
-      var count = 0
+    var count = 0
 
-      for item in items {
+    for item in items {
+      do {
         guard
           try await foodDatabaseService.searchFoods(request: request, barcode: item.barcode).isEmpty
         else {
@@ -110,11 +110,13 @@ extension OpenFoodFactsService {
 
         foodItemRecord.state = .unverified
 
-        try await foodItemRecord.save(on: database)
+        try await foodItemRecord.save(on: request.db)
         count += 1
+      } catch {
+        request.logger.error(error)
       }
-
-      return count
     }
+
+    return count
   }
 }
