@@ -22,6 +22,8 @@ struct FoodItemDetailView: View {
 
   @State private var selectedImageTab: ImageTab = .nutritionLabel
   @State private var isSaving = false
+  @State private var isDeleting = false
+  @State private var alertDetails: AlertDetails?
 
   init(foodItem: AdminFoodItemRecord) {
     self.foodItem = foodItem
@@ -39,6 +41,7 @@ struct FoodItemDetailView: View {
     .shelf {
       verifyShelfContent
     }
+    .alert(alertDetails: $alertDetails)
   }
 }
 
@@ -88,6 +91,35 @@ private extension FoodItemDetailView {
           isSaving = false
         }
       }
+
+      ProminentButton(
+        "Delete",
+        systemImage: "trash",
+        role: .destructive,
+        isLoading: isDeleting
+      ) {
+        alertDetails = AlertDetails(
+          title: "Are you sure?",
+          message: "This is difficult to undo",
+          buttons: [
+            .init(
+              title: "No",
+              role: .cancel,
+              action: {
+                // cancel
+              }
+            ),
+            .init(
+              title: "Delete",
+              role: .destructive,
+              action: {
+                // delete
+              }
+            )
+          ]
+        )
+      }
+      .tint(.red)
     }
     .frame(maxWidth: 400)
   }
