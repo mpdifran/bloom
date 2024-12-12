@@ -22,7 +22,7 @@ extension AdminFoodController: RouteCollection {
       food.post("usda-ingest", use: ingestUSDA)
       food.get("unverified", use: getUnverifiedFoods)
       food.patch("update", use: updateFood)
-
+      food.delete(":id", use: deleteFood)
       food.group("open-food-facts") { foodFacts in
         foodFacts.post("bulk-upload", use: openFoodFactsBulkUpload)
       }
@@ -130,6 +130,21 @@ private extension AdminFoodController {
     return AdminUpdateFoodItemResponse(
       foodItemRecord: existingRecord.asAdminFoodItemRecord()
     )
+  }
+
+  @Sendable
+  func deleteFood(_ request: Request) async throws -> Response {
+    guard let id = request.parameters.get("id") else {
+      throw Abort(.badRequest, reason: "Missing id.")
+    }
+
+    guard let record = try await FoodItemRecord.find(id, on: request.db) else {
+      throw Abort(.notFound)
+    }
+
+    try await record.delete(on: request.db)
+
+    return Response(status: .ok) // 200
   }
 }
 
