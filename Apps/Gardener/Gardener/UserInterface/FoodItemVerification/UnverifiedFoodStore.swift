@@ -47,4 +47,15 @@ extension UnverifiedFoodStore {
       print("Error updating food record: \(error)")
     }
   }
+
+  func delete(_ foodItem: AdminFoodItemRecord) async {
+    do {
+      try await service.deleteFoodRecord(id: foodItem.id)
+      guard let index = foodItems.firstIndex(where: { $0.id == foodItem.id}) else { return }
+      foodItems.remove(at: index)
+
+    } catch {
+      print("Error deleting food record: \(error)")
+    }
+  }
 }

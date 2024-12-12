@@ -113,7 +113,11 @@ private extension FoodItemDetailView {
               title: "Delete",
               role: .destructive,
               action: {
-                // delete
+                isDeleting = true
+                Task {
+                  await viewModel.delete()
+                  isDeleting = false
+                }
               }
             )
           ]
