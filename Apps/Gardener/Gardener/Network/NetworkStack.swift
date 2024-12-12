@@ -69,7 +69,7 @@ extension NetworkStack {
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = "DELETE"
 
-    let (data, _) = try await URLSession.shared.data(for: urlRequest)
+    _ = try await URLSession.shared.data(for: urlRequest)
   }
 }
 

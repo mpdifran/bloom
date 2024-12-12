@@ -130,9 +130,9 @@ private extension OpenFoodFactsBulkUploader {
         lastParsedLine = currentLine
       }
 
-      guard
-        endAtLineNumber > 0, currentLine < endAtLineNumber
-      else { return false }
+      if endAtLineNumber > 0 {
+        if currentLine >= endAtLineNumber { return false }
+      }
 
       guard
         currentLine >= startAtLineNumber,
@@ -144,15 +144,22 @@ private extension OpenFoodFactsBulkUploader {
 
         guard foodItem.isValid else { return true }
 
-//        let string = String(data: data, encoding: .utf8) ?? ""
+        let string = String(data: data, encoding: .utf8) ?? ""
 
-        _ = foodItem.hasValidNutrimentUnit
+        let code = foodItem.id ?? foodItem.code
+
+        if code == "0008346048953" {
+          print(string)
+          return false
+        }
+
+//        _ = foodItem.hasValidNutrimentUnit
 
         guard
           let code = foodItem.id ?? foodItem.code,
           let servingQuantity = foodItem.servingQuantity,
           let servingUnit = foodItem.servingQuantityUnit,
-          let energy = foodItem.nutriments?.energyServing
+          let energy = foodItem.nutriments?.energyKcal
         else {
           return true
         }
@@ -177,19 +184,19 @@ private extension OpenFoodFactsBulkUploader {
           monounsaturatedFat: foodItem.nutriments?.monounsaturatedFatServing,
           fiber: foodItem.nutriments?.fiberServing,
           sugar: foodItem.nutriments?.sugarsServing,
-          cholesterol: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.cholesterolServing, unit: \.cholesterolUnit),
-          sodium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.sodiumServing, unit: \.sodiumUnit),
-          calcium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.calciumServing, unit: \.calciumUnit),
-          iron: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.ironServing, unit: \.ironUnit),
-          potassium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.potassiumServing, unit: \.potassiumUnit),
-          magnesium: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.magnesiumServing, unit: \.magnesiumUnit),
-          zinc: try foodItem.nutriments?.resolvedMilligramBasedUnit(serving: \.zincServing, unit: \.zincUnit),
-          vitaminA: try foodItem.nutriments?.resolvedVitaminAServing(),
-          vitaminB6: foodItem.nutriments?.vitaminB6Serving,
-          vitaminB12: try foodItem.nutriments?.resolvedVitaminB12Serving(),
-          vitaminC: try foodItem.nutriments?.resolvedVitaminCServing(),
-          vitaminD: try foodItem.nutriments?.resolvedVitaminDServing(),
-          vitaminE: try foodItem.nutriments?.resolvedVitaminEServing()
+          cholesterol: foodItem.nutriments?.cholesterolServing?.mg,
+          sodium: foodItem.nutriments?.sodiumServing?.mg,
+          calcium: foodItem.nutriments?.calciumServing?.mg,
+          iron: foodItem.nutriments?.ironServing?.mg,
+          potassium: foodItem.nutriments?.potassiumServing?.mg,
+          magnesium: foodItem.nutriments?.magnesiumServing?.mg,
+          zinc: foodItem.nutriments?.zincServing?.mg,
+          vitaminA: foodItem.nutriments?.vitaminAServing?.mg,
+          vitaminB6: foodItem.nutriments?.vitaminB6Serving?.mg,
+          vitaminB12: foodItem.nutriments?.vitaminB12Serving?.mg,
+          vitaminC: foodItem.nutriments?.vitaminCServing?.mg,
+          vitaminD: foodItem.nutriments?.vitaminDServing?.mg,
+          vitaminE: foodItem.nutriments?.vitaminEServing?.mg
         )
 
         items.append(item)
