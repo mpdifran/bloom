@@ -61,6 +61,16 @@ extension NetworkStack {
 
     return try JSONDecoder.bloomModel.decode(Response.self, from: data)
   }
+
+  func delete(
+    url: URL
+  ) async throws {
+
+    var urlRequest = URLRequest(url: url)
+    urlRequest.httpMethod = "DELETE"
+
+    let (data, _) = try await URLSession.shared.data(for: urlRequest)
+  }
 }
 
 extension NetworkStack {
@@ -85,6 +95,12 @@ extension NetworkStack {
       body: request,
       response: AdminUpdateFoodItemResponse.self
     )
+  }
+
+  func deleteFoodRecord(id: FoodItemIdentifier) async throws {
+    let url = URL(string: .bloomAPIBase + "v1/admin/food/" + id.value)!
+
+    try await delete(url: url)
   }
 
   func bulkUploadOpenFoodFacts(request: AdminOpenFoodFactsBulkUploadRequest) async throws -> AdminOpenFoodFactsBulkUploadResponse {

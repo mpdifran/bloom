@@ -270,12 +270,14 @@ private extension FoodItemDetailView {
       Text("If code longer than 8 digits, pad with 0s until 13 digits long. 8 digit codes are fine.")
         .font(.caption)
         .foregroundStyle(.secondary)
+        .padding(.trailing, 40)
 
       TextField("Ingredients", text: .init($viewModel.foodItem.ingredients, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.ingredients))
       Text("Ignore ingredients for now. If they're there, just make sure they're formatted nice and in English.")
         .font(.caption)
         .foregroundStyle(.secondary)
+        .padding(.trailing, 40)
 
       Picker("Country", selection: $viewModel.foodItem.country) {
         ForEach(FoodItem.Country.allCases, id: \.self) { country in
