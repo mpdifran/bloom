@@ -24,6 +24,9 @@ struct FoodItemDetailView: View {
   @State private var isSaving = false
   @State private var isDeleting = false
   @State private var alertDetails: AlertDetails?
+  @State private var confirmationDialogDetails: ConfirmationDialogDetails?
+
+  @Environment(\.openURL) private var openURL
 
   init(foodItem: AdminFoodItemRecord) {
     self.foodItem = foodItem
@@ -42,6 +45,7 @@ struct FoodItemDetailView: View {
       verifyShelfContent
     }
     .alert(alertDetails: $alertDetails)
+    .confirmationDialog($confirmationDialogDetails)
   }
 }
 
@@ -80,39 +84,48 @@ private extension FoodItemDetailView {
       .toggleStyle(SwitchToggleStyle())
       .changeIndicator(isChanged: viewModel.propertyChanged(\.state))
 
-      ProminentButton(
-        "Save",
-        systemImage: "tray.and.arrow.down",
-        isLoading: isSaving
-      ) {
-        isSaving = true
-        Task {
-          await viewModel.save()
-          isSaving = false
+      HStack {
+        ProminentButton(
+          "Save",
+          systemImage: "tray.and.arrow.down",
+          isLoading: isSaving
+        ) {
+          isSaving = true
+          Task {
+            await viewModel.save()
+            isSaving = false
+          }
         }
-      }
+        .frame(maxWidth: 250)
 
-      ProminentButton(
-        "Delete",
-        systemImage: "trash",
-        role: .destructive,
-        isLoading: isDeleting
-      ) {
-        alertDetails = AlertDetails(
-          title: "Are you sure?",
-          message: "This is difficult to undo",
-          buttons: [
-            .init(
-              title: "No",
-              role: .cancel,
-              action: {
-                // cancel
-              }
-            ),
-            .init(
-              title: "Delete",
-              role: .destructive,
-              action: {
+        ProminentButton("Google", systemImage: "magnifyingglass") {
+          guard let url = URL(string: "https://www.google.ca/search?udm=2&q=\(viewModel.foodItem.name?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")+\(viewModel.foodItem.brandName?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")+\(viewModel.foodItem.flavour?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")") else { return }
+
+          openURL(url)
+        }
+        .tint(.blue)
+        .frame(maxWidth: 160)
+
+        if viewModel.foodItem.source == "Open Food Facts" {
+          ProminentButton("Open Food Facts") {
+            guard
+              let barcode = viewModel.foodItem.barcode,
+              let url = URL(string: "https://world.openfoodfacts.org/product/\(barcode)")
+            else { return }
+
+            openURL(url)
+          }
+          .tint(.blue)
+          .frame(maxWidth: 160)
+        }
+
+        Button(role: .destructive) {
+          confirmationDialogDetails = ConfirmationDialogDetails(
+            title: "Are Your Sure?",
+            message: "This will permanently delete this item.",
+            buttons: [
+              .init(title: "Cancel") { },
+              .init(title: "Delete", role: .destructive) {
                 isDeleting = true
                 Task {
                   await viewModel.delete()
@@ -120,13 +133,17 @@ private extension FoodItemDetailView {
                   isDeleting = false
                 }
               }
-            )
-          ]
-        )
+            ]
+          )
+        } label: {
+          Image(systemName: "trash")
+            .bold()
+            .padding(6)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(.red)
       }
-      .tint(.red)
     }
-    .frame(maxWidth: 400)
   }
 
   @ViewBuilder
@@ -149,10 +166,13 @@ private extension FoodItemDetailView {
     ScrollView {
       Form {
         infoSection
+        servingSection
         macroSection
-        vitaminSection
-        mineralSection
+        carbsSection
+        fatSection
         otherNutrientsSection
+        mineralSection
+        vitaminSection
         miscSection
       }
       .frame(minWidth: 350)
@@ -180,6 +200,19 @@ private extension FoodItemDetailView {
     }
   }
 
+  var servingSection: some View {
+    Section("Serving Info") {
+      TextField("Serving Name", text: .init($viewModel.foodItem.servingName, replacingNilWith: ""))
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.servingName))
+
+      TextField("Serving Value", value: $viewModel.foodItem.servingValue, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.servingValue))
+
+      TextField("Serving Unit", text: .init($viewModel.foodItem.servingUnit, replacingNilWith: ""))
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.servingUnit))
+    }
+  }
+
   var macroSection: some View {
     Section(header: Text("Macros")) {
       TextField("Calories", value: $viewModel.foodItem.calories, format: .number)
@@ -187,12 +220,38 @@ private extension FoodItemDetailView {
 
       TextField("Protein", value: $viewModel.foodItem.protein, format: .number)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.protein))
+    }
+  }
 
+  var carbsSection: some View {
+    Section(header: Text("Carbohydrates")) {
       TextField("Carbohydrates", value: $viewModel.foodItem.carbohydrates, format: .number)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.carbohydrates))
 
+      TextField("Fiber", value: $viewModel.foodItem.fiber, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.fiber))
+
+      TextField("Sugar", value: $viewModel.foodItem.sugar, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.sugar))
+    }
+  }
+
+  var fatSection: some View {
+    Section(header: Text("Fat")) {
       TextField("Fat", value: $viewModel.foodItem.fat, format: .number)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.fat))
+
+      TextField("Saturated Fat", value: $viewModel.foodItem.saturatedFat, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.saturatedFat))
+
+      TextField("Trans Fat", value: $viewModel.foodItem.transFat, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.transFat))
+
+      TextField("Polyunsaturated Fat", value: $viewModel.foodItem.polyunsaturatedFat, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.polyunsaturatedFat))
+
+      TextField("Monounsaturated Fat", value: $viewModel.foodItem.monounsaturatedFat, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.monounsaturatedFat))
     }
   }
 
@@ -220,6 +279,9 @@ private extension FoodItemDetailView {
 
   var mineralSection: some View {
     Section(header: Text("Minerals")) {
+      TextField("Sodium", value: $viewModel.foodItem.sodium, format: .number)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.sodium))
+
       TextField("Calcium", value: $viewModel.foodItem.calcium, format: .number)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calcium))
 
@@ -234,33 +296,11 @@ private extension FoodItemDetailView {
 
       TextField("Zinc", value: $viewModel.foodItem.zinc, format: .number)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.zinc))
-
-      TextField("Sodium", value: $viewModel.foodItem.sodium, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.sodium))
     }
   }
 
   var otherNutrientsSection: some View {
     Section(header: Text("Other Nutrients")) {
-
-      TextField("Saturated Fat", value: $viewModel.foodItem.saturatedFat, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.saturatedFat))
-
-      TextField("Trans Fat", value: $viewModel.foodItem.transFat, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.transFat))
-
-      TextField("Polyunsaturated Fat", value: $viewModel.foodItem.polyunsaturatedFat, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.polyunsaturatedFat))
-
-      TextField("Monounsaturated Fat", value: $viewModel.foodItem.monounsaturatedFat, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.monounsaturatedFat))
-
-      TextField("Fiber", value: $viewModel.foodItem.fiber, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.fiber))
-
-      TextField("Sugar", value: $viewModel.foodItem.sugar, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.sugar))
-
       TextField("Cholesterol", value: $viewModel.foodItem.cholesterol, format: .number)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.cholesterol))
     }
@@ -291,15 +331,6 @@ private extension FoodItemDetailView {
         }
       }
       .changeIndicator(isChanged: viewModel.propertyChanged(\.country))
-
-      TextField("Serving Name", text: .init($viewModel.foodItem.servingName, replacingNilWith: ""))
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.servingName))
-
-      TextField("Serving Value", value: $viewModel.foodItem.servingValue, format: .number)
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.servingValue))
-
-      TextField("Serving Unit", text: .init($viewModel.foodItem.servingUnit, replacingNilWith: ""))
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.servingUnit))
 
       TextField("Source", text: .init($viewModel.foodItem.source, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.source))
