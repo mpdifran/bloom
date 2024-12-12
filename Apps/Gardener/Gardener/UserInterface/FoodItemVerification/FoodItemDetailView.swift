@@ -180,11 +180,11 @@ private extension FoodItemDetailView {
 
   var infoSection: some View {
     Section(header: Text("Basic Information")) {
-      TextField("Name", text: .init($viewModel.foodItem.name, replacingNilWith: ""))
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.name))
-
       TextField("Brand Name", text: .init($viewModel.foodItem.brandName, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.brandName))
+
+      TextField("Name", text: .init($viewModel.foodItem.name, replacingNilWith: ""))
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.name))
 
       TextField("Flavour", text: .init($viewModel.foodItem.flavour, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.flavour))
