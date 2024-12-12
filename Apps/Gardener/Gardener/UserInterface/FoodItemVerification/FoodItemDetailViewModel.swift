@@ -46,4 +46,8 @@ extension FoodItemDetailViewModel {
   func save() async {
     await foodStore.update(foodItem)
   }
+
+  func delete() async {
+    await foodStore.delete(foodItem)
+  }
 }

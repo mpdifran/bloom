@@ -22,6 +22,8 @@ struct FoodItemDetailView: View {
 
   @State private var selectedImageTab: ImageTab = .nutritionLabel
   @State private var isSaving = false
+  @State private var isDeleting = false
+  @State private var alertDetails: AlertDetails?
 
   init(foodItem: AdminFoodItemRecord) {
     self.foodItem = foodItem
@@ -39,6 +41,7 @@ struct FoodItemDetailView: View {
     .shelf {
       verifyShelfContent
     }
+    .alert(alertDetails: $alertDetails)
   }
 }
 
@@ -88,6 +91,40 @@ private extension FoodItemDetailView {
           isSaving = false
         }
       }
+
+      ProminentButton(
+        "Delete",
+        systemImage: "trash",
+        role: .destructive,
+        isLoading: isDeleting
+      ) {
+        alertDetails = AlertDetails(
+          title: "Are you sure?",
+          message: "This is difficult to undo",
+          buttons: [
+            .init(
+              title: "No",
+              role: .cancel,
+              action: {
+                // cancel
+              }
+            ),
+            .init(
+              title: "Delete",
+              role: .destructive,
+              action: {
+                isDeleting = true
+                Task {
+                  await viewModel.delete()
+                  // TODO: Zach - show in UI that item was deleted or transition to different item.
+                  isDeleting = false
+                }
+              }
+            )
+          ]
+        )
+      }
+      .tint(.red)
     }
     .frame(maxWidth: 400)
   }
@@ -238,12 +275,14 @@ private extension FoodItemDetailView {
       Text("If code longer than 8 digits, pad with 0s until 13 digits long. 8 digit codes are fine.")
         .font(.caption)
         .foregroundStyle(.secondary)
+        .padding(.trailing, 40)
 
       TextField("Ingredients", text: .init($viewModel.foodItem.ingredients, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.ingredients))
       Text("Ignore ingredients for now. If they're there, just make sure they're formatted nice and in English.")
         .font(.caption)
         .foregroundStyle(.secondary)
+        .padding(.trailing, 40)
 
       Picker("Country", selection: $viewModel.foodItem.country) {
         ForEach(FoodItem.Country.allCases, id: \.self) { country in
