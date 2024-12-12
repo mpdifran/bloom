@@ -116,6 +116,7 @@ private extension FoodItemDetailView {
                 isDeleting = true
                 Task {
                   await viewModel.delete()
+                  // TODO: Zach - show in UI that item was deleted or transition to different item.
                   isDeleting = false
                 }
               }
