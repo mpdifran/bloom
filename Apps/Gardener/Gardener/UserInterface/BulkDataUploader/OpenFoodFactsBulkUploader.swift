@@ -144,22 +144,13 @@ private extension OpenFoodFactsBulkUploader {
 
         guard foodItem.isValid else { return true }
 
-        let string = String(data: data, encoding: .utf8) ?? ""
-
-        let code = foodItem.id ?? foodItem.code
-
-        if code == "0008346048953" {
-          print(string)
-          return false
-        }
-
-//        _ = foodItem.hasValidNutrimentUnit
+//        let string = String(data: data, encoding: .utf8) ?? ""
 
         guard
           let code = foodItem.id ?? foodItem.code,
           let servingQuantity = foodItem.servingQuantity,
           let servingUnit = foodItem.servingQuantityUnit,
-          let energy = foodItem.nutriments?.energyKcal
+          let energy = foodItem.nutriments?.energyServing
         else {
           return true
         }
@@ -170,6 +161,7 @@ private extension OpenFoodFactsBulkUploader {
           barcode: code,
           countries: foodItem.sanitizedCountries,
           ingredients: foodItem.ingredientsTextEn,
+          servingName: foodItem.formattedQuantityName(),
           servingQuantity: servingQuantity,
           servingUnit: servingUnit,
           packagingImageURL: foodItem.frontImageURL,

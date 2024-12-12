@@ -13,6 +13,7 @@ public struct AdminOpenFoodFactsBulkUploadItem: Codable, Sendable {
   public let barcode: String
   public let countries: [String]
   public let ingredients: String?
+  public let servingName: String
   public let servingQuantity: Double
   public let servingUnit: String
   public let packagingImageURL: URL?
@@ -47,6 +48,7 @@ public struct AdminOpenFoodFactsBulkUploadItem: Codable, Sendable {
     barcode: String,
     countries: [String],
     ingredients: String?,
+    servingName: String,
     servingQuantity: Double,
     servingUnit: String,
     packagingImageURL: URL?,
@@ -80,6 +82,7 @@ public struct AdminOpenFoodFactsBulkUploadItem: Codable, Sendable {
     self.barcode = barcode
     self.countries = countries
     self.ingredients = ingredients
+    self.servingName = servingName
     self.servingQuantity = servingQuantity
     self.servingUnit = servingUnit
     self.packagingImageURL = packagingImageURL

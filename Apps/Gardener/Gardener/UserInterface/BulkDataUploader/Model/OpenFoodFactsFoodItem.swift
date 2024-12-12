@@ -11,10 +11,6 @@ private extension String {
   static let imageBaseS3URL = "https://openfoodfacts-images.s3.eu-west-3.amazonaws.com/data"
 }
 
-private extension Double {
-  static let kCalsInKJoule: Double = 0.2390057361
-}
-
 struct OpenFoodFactsFoodItem: Codable {
   let id: String?
   let productName: String?
@@ -191,15 +187,6 @@ extension OpenFoodFactsFoodItem {
   }
 }
 
-extension OpenFoodFactsFoodItem.Nutriments {
-
-  var energyKcal: Double? {
-    guard let energy = energyServing else { return nil }
-
-    return energy * .kCalsInKJoule
-  }
-}
-
 extension OpenFoodFactsFoodItem {
 
   var isValid: Bool {
@@ -217,5 +204,16 @@ extension OpenFoodFactsFoodItem {
 
   var sanitizedCountries: [String] {
     countriesTags.map({ $0.replacingOccurrences(of: "en:", with: "").lowercased() })
+  }
+
+  func formattedQuantityName() -> String {
+    guard let servingSize else { return "1 serving" }
+
+    let pattern = "\\s*\\(.*?\\)"
+    let regex = try! NSRegularExpression(pattern: pattern, options: [])
+    let range = NSRange(location: 0, length: servingSize.utf16.count)
+    let result = regex.stringByReplacingMatches(in: servingSize, options: [], range: range, withTemplate: "")
+
+    return result.lowercased()
   }
 }

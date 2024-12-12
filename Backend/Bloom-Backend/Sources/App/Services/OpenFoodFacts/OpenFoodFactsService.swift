@@ -99,7 +99,7 @@ extension OpenFoodFactsService {
         foodItemRecord.vitaminC = item.vitaminC
         foodItemRecord.vitaminD = item.vitaminD
         foodItemRecord.vitaminE = item.vitaminE
-        foodItemRecord.servingName = "1 Serving"
+        foodItemRecord.servingName = item.servingName
         foodItemRecord.servingValue = item.servingQuantity
         foodItemRecord.servingUnit = item.servingUnit
 
