@@ -124,7 +124,6 @@ private extension FoodItemDetailView {
             title: "Are Your Sure?",
             message: "This will permanently delete this item.",
             buttons: [
-              .init(title: "Cancel") { },
               .init(title: "Delete", role: .destructive) {
                 isDeleting = true
                 Task {
