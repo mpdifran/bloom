@@ -27,6 +27,7 @@ struct NutritionView: View {
         .horizontallyCentered()
         .padding()
       }
+      .groupedBackground()
       .navigationBarTitleDisplayMode(.inline)
       .tint(.mutedGreen)
       .toolbar {
@@ -87,45 +88,60 @@ private extension NutritionView {
         Divider()
 
         ForEach(FoodItemLog.Meal.allCases) { meal in
-          SectionTitleView(meal.name)
+          HStack(alignment: .firstTextBaseline) {
+            SectionTitleView(meal.name)
+            Spacer()
+            Text("\(totalCalories(for: meal).format()) Cals")
+              .bold()
+              .foregroundStyle(.secondary)
+          }
+          .padding(.horizontal)
 
-          if foodItemLogs(for: meal).isEmpty {
-            VStack {
+          VStack(spacing: 0) {
+            if foodItemLogs(for: meal).isEmpty {
               Text("No Food Logged")
                 .font(.title2)
                 .foregroundStyle(.secondary)
                 .bold()
+                .padding()
+                .padding()
+            } else {
+              ForEach(foodItemLogs(for: meal)) { foodItemLog in
+                FoodItemLogCell(foodItemLog: foodItemLog)
+                  .id(foodItemLog.id)
+                  .transition(.blurReplace)
+                  .selectable()
+                  .onTapGesture {
+                    guard let foodItem = foodItemLog.foodItem else { return }
 
-              Button("Log Food", systemImage: "plus") {
-                nutritionViewModel.suggestedMeal = meal
-                presentedSheet = FoodLoggingActionCardView().asAny
+                    presentedSheet = FoodItemDetailsView(
+                      foodItem: foodItem.asNetworkFoodItem(),
+                      existingFoodItemLog: foodItemLog
+                    ).asAny
+                  }
+                  .padding()
+                Divider()
+                  .padding(.horizontal)
               }
-              .buttonStyle(.borderedProminent)
-              .frame(height: 44)
             }
-            .frame(height: 100)
-            .padding(.bottom)
 
-            Divider()
-          } else {
-            Divider()
-            ForEach(foodItemLogs(for: meal)) { foodItemLog in
-              FoodItemLogCell(foodItemLog: foodItemLog)
-                .id(foodItemLog.id)
-                .transition(.blurReplace)
-                .selectable()
-                .onTapGesture {
-                  guard let foodItem = foodItemLog.foodItem else { return }
-
-                  presentedSheet = FoodItemDetailsView(
-                    foodItem: foodItem.asNetworkFoodItem(),
-                    existingFoodItemLog: foodItemLog
-                  ).asAny
-                }
-                .padding(.vertical)
+            if foodItemLogs(for: meal).isEmpty {
               Divider()
+                .padding(.horizontal)
             }
+
+            Button {
+              nutritionViewModel.suggestedMeal = meal
+              presentedSheet = FoodLoggingActionCardView().asAny
+            } label: {
+              Label("Log Food", systemImage: "plus")
+                .horizontallyCentered()
+            }
+            .frame(height: 50)
+            .bold()
           }
+          .horizontallyCentered()
+          .cardContainer(includePadding: false)
         }
       }
     }
@@ -170,6 +186,12 @@ private extension NutritionView.FilteredFoodItemLogsListView {
   func foodItemLogs(for meal: FoodItemLog.Meal) -> [FoodItemLog] {
     foodItemLogs.filter {
       $0.meal == meal
+    }
+  }
+
+  func totalCalories(for meal: FoodItemLog.Meal) -> Double {
+    foodItemLogs(for: meal).reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalCalories
     }
   }
 
