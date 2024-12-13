@@ -128,7 +128,7 @@ private extension FoodItemNutritionLabel {
         Text(name)
         Spacer()
         if let quantity {
-          Text(quantity.value.format())
+          Text(quantity.value.format(using: .threeDecimalPlaces))
             .font(.body)
           Text(quantity.unit)
             .font(.body)

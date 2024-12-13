@@ -35,7 +35,7 @@ extension FoodItem.Preview {
         potassium: .init(value: 80, unit: "mg"),
         magnesium: nil,
         zinc: nil,
-        vitaminA: nil,
+        vitaminA: .init(value: 0.358, unit: "mg"),
         vitaminB6: nil,
         vitaminB12: nil,
         vitaminC: nil,
