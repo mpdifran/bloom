@@ -1868,7 +1868,7 @@
 			repositoryURL = "https://github.com/mpdifran/AppUI";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.2;
+				minimumVersion = 1.0.0;
 			};
 		};
 		FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {

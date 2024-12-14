@@ -30,6 +30,7 @@ struct FoodLoggingActionCardView: View {
   @State private var healthPermissionTrigger = false
   @State private var presentedSheet: AnyView?
   @State private var showAllInSection = [Int : Bool]()
+  @State private var selectedTab = FoodItemCategoryTab.branded
 
   @Environment(\.dismiss) private var dismiss
 
@@ -169,6 +170,8 @@ private extension FoodLoggingActionCardView {
   func resultsView(results: [FoodItemSection]) -> some View {
     ScrollView {
       LazyVStack {
+        TabFilter(selectedTab: $selectedTab)
+
         ForEachEnumerated(results) { (sectionIndex, section) in
           SectionTitleView(section.title)
             .padding(.horizontal)

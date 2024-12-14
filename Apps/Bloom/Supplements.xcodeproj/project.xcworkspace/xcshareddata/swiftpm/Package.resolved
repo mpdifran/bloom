@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppUI",
       "state" : {
-        "revision" : "514e3ee48b4ffc1a4bb314dc563f8d9406761ba3",
-        "version" : "0.5.5"
+        "revision" : "9f10781dc538f66b09b64b6ed9ae06381660ba63",
+        "version" : "1.0.1"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TelemetryDeck/SwiftSDK.git",
       "state" : {
-        "revision" : "1d9ac496ff02969c7b87cccac17e46ee7c148453",
-        "version" : "2.5.1"
+        "revision" : "e1a5f4ea47888e7e40cb2d40bea43ed4f1f5bfff",
+        "version" : "2.6.1"
       }
     }
   ],
