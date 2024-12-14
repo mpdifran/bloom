@@ -19,6 +19,7 @@ extension FoodDatabaseService {
     request: Request,
     query: String,
     category: FoodItemRecord.Category,
+    preferredCountry: FoodItemRecord.Country,
     limit: Int
   ) async throws -> [FoodItem] {
     guard !query.isEmpty else { return [] }
@@ -32,7 +33,8 @@ extension FoodDatabaseService {
                    GREATEST(
                        similarity(name, \(bind: query)) * 1.5,
                        similarity(brand_name, \(bind: query)),
-                       similarity(flavour, \(bind: query)) * 0.8
+                       similarity(flavour, \(bind: query)) * 0.8,
+                       similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) * 2.0
                    ) AS rank
             FROM food_item_records
             WHERE (similarity(name, \(bind: query)) > 0.1
@@ -40,7 +42,10 @@ extension FoodDatabaseService {
                OR similarity(flavour, \(bind: query)) > 0.1)
               AND category = \(bind: category.rawValue)::category
               AND state != 'needsAIProcessing'
-            ORDER BY rank DESC
+            ORDER BY
+                CASE WHEN state = 'verified' THEN 1 ELSE 2 END,
+                CASE WHEN country = \(bind: preferredCountry.rawValue)::country THEN 1 ELSE 2 END,
+                rank DESC
             LIMIT \(bind: limit)
         """).all(decodingFluent: FoodItemRecord.self)
 
