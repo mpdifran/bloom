@@ -24,6 +24,7 @@ extension AdminFoodItemRecord.State {
     switch self {
     case .needsAIProcessing: .needsAIProcessing
     case .unverified: .unverified
+    case .needsMoreInfo: .needsMoreInfo
     case .verified: .verified
     }
   }

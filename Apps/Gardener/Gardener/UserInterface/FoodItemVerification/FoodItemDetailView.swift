@@ -40,7 +40,6 @@ struct FoodItemDetailView: View {
 
       formView
     }
-    .padding(48)
     .shelf {
       verifyShelfContent
     }
@@ -78,10 +77,14 @@ private extension FoodItemDetailView {
 
   var verifyShelfContent: some View {
     VStack {
-      Toggle(isOn: $viewModel.isVerified) {
-        Text("Verify")
+      Picker("", selection: $viewModel.foodItem.state) {
+        ForEach(AdminFoodItemRecord.State.allCases) { state in
+          Text(state.name)
+            .tag(state)
+        }
       }
-      .toggleStyle(SwitchToggleStyle())
+      .pickerStyle(.segmented)
+      .frame(maxWidth: 500)
       .changeIndicator(isChanged: viewModel.propertyChanged(\.state))
 
       HStack {
@@ -173,7 +176,10 @@ private extension FoodItemDetailView {
         mineralSection
         vitaminSection
         miscSection
+        notesSection
+        timestampSection
       }
+      .formStyle(.grouped)
       .frame(minWidth: 350)
     }
   }
@@ -214,114 +220,125 @@ private extension FoodItemDetailView {
 
   var macroSection: some View {
     Section(header: Text("Macros")) {
-      TextField("Calories", value: $viewModel.foodItem.calories, format: .number)
+      UnitTextField("Calories", value: $viewModel.foodItem.calories, unit: "Cal")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calories))
 
-      TextField("Protein", value: $viewModel.foodItem.protein, format: .number)
+      UnitTextField("Protein", value: $viewModel.foodItem.protein, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.protein))
     }
   }
 
   var carbsSection: some View {
     Section(header: Text("Carbohydrates")) {
-      TextField("Carbohydrates", value: $viewModel.foodItem.carbohydrates, format: .number)
+      UnitTextField("Carbohydrates", value: $viewModel.foodItem.carbohydrates, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.carbohydrates))
 
-      TextField("Fiber", value: $viewModel.foodItem.fiber, format: .number)
+      UnitTextField("Fiber", value: $viewModel.foodItem.fiber, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.fiber))
 
-      TextField("Sugar", value: $viewModel.foodItem.sugar, format: .number)
+      UnitTextField("Sugar", value: $viewModel.foodItem.sugar, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.sugar))
     }
   }
 
   var fatSection: some View {
     Section(header: Text("Fat")) {
-      TextField("Fat", value: $viewModel.foodItem.fat, format: .number)
+      UnitTextField("Fat", value: $viewModel.foodItem.fat, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.fat))
 
-      TextField("Saturated Fat", value: $viewModel.foodItem.saturatedFat, format: .number)
+      UnitTextField("Saturated Fat", value: $viewModel.foodItem.saturatedFat, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.saturatedFat))
 
-      TextField("Trans Fat", value: $viewModel.foodItem.transFat, format: .number)
+      UnitTextField("Trans Fat", value: $viewModel.foodItem.transFat, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.transFat))
 
-      TextField("Polyunsaturated Fat", value: $viewModel.foodItem.polyunsaturatedFat, format: .number)
+      UnitTextField("Polyunsaturated Fat", value: $viewModel.foodItem.polyunsaturatedFat, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.polyunsaturatedFat))
 
-      TextField("Monounsaturated Fat", value: $viewModel.foodItem.monounsaturatedFat, format: .number)
+      UnitTextField("Monounsaturated Fat", value: $viewModel.foodItem.monounsaturatedFat, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.monounsaturatedFat))
     }
   }
 
   var vitaminSection: some View {
     Section(header: Text("Vitamins")) {
-      TextField("Vitamin A", value: $viewModel.foodItem.vitaminA, format: .number)
+      UnitTextField("Vitamin A", value: $viewModel.foodItem.vitaminA, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminA))
 
-      TextField("Vitamin B6", value: $viewModel.foodItem.vitaminB6, format: .number)
+      UnitTextField("Vitamin B6", value: $viewModel.foodItem.vitaminB6, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminB6))
 
-      TextField("Vitamin B12", value: $viewModel.foodItem.vitaminB12, format: .number)
+      UnitTextField("Vitamin B12", value: $viewModel.foodItem.vitaminB12, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminB12))
 
-      TextField("Vitamin C", value: $viewModel.foodItem.vitaminC, format: .number)
+      UnitTextField("Vitamin C", value: $viewModel.foodItem.vitaminC, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminC))
 
-      TextField("Vitamin D", value: $viewModel.foodItem.vitaminD, format: .number)
+      UnitTextField("Vitamin D", value: $viewModel.foodItem.vitaminD, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminD))
 
-      TextField("Vitamin E", value: $viewModel.foodItem.vitaminE, format: .number)
+      UnitTextField("Vitamin E", value: $viewModel.foodItem.vitaminE, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminE))
     }
   }
 
   var mineralSection: some View {
     Section(header: Text("Minerals")) {
-      TextField("Sodium", value: $viewModel.foodItem.sodium, format: .number)
+      UnitTextField("Sodium", value: $viewModel.foodItem.sodium, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.sodium))
 
-      TextField("Calcium", value: $viewModel.foodItem.calcium, format: .number)
+      UnitTextField("Calcium", value: $viewModel.foodItem.calcium, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calcium))
 
-      TextField("Iron", value: $viewModel.foodItem.iron, format: .number)
+      UnitTextField("Iron", value: $viewModel.foodItem.iron, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.iron))
 
-      TextField("Potassium", value: $viewModel.foodItem.potassium, format: .number)
+      UnitTextField("Potassium", value: $viewModel.foodItem.potassium, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.potassium))
 
-      TextField("Magnesium", value: $viewModel.foodItem.magnesium, format: .number)
+      UnitTextField("Magnesium", value: $viewModel.foodItem.magnesium, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.magnesium))
 
-      TextField("Zinc", value: $viewModel.foodItem.zinc, format: .number)
+      UnitTextField("Zinc", value: $viewModel.foodItem.zinc, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.zinc))
     }
   }
 
   var otherNutrientsSection: some View {
     Section(header: Text("Other Nutrients")) {
-      TextField("Cholesterol", value: $viewModel.foodItem.cholesterol, format: .number)
+      UnitTextField("Cholesterol", value: $viewModel.foodItem.cholesterol, unit: "mg")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.cholesterol))
     }
   }
 
   var miscSection: some View {
     Section(header: Text("Miscellaneous Information")) {
-      TextField("Barcode", text: .init($viewModel.foodItem.barcode, replacingNilWith: ""))
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.barcode))
-      Text("\(viewModel.foodItem.barcode?.count ?? 0) digits")
-        .font(.caption)
-      Text("If code longer than 8 digits, pad with 0s until 13 digits long. 8 digit codes are fine.")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .padding(.trailing, 40)
+      VStack(alignment: .leading) {
+        TextField("Barcode", text: .init($viewModel.foodItem.barcode, replacingNilWith: ""))
+          .textFieldStyle(.roundedBorder)
+          .changeIndicator(isChanged: viewModel.propertyChanged(\.barcode))
+        HStack {
+          Spacer()
+          Text("\(viewModel.foodItem.barcode?.count ?? 0) digits")
+            .font(.caption)
+        }
+        Text("If code longer than 8 digits, pad with 0s until 13 digits long. 8 digit codes are fine.")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+          .padding(.trailing, 40)
+      }
 
-      TextField("Ingredients", text: .init($viewModel.foodItem.ingredients, replacingNilWith: ""))
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.ingredients))
-      Text("Ignore ingredients for now. If they're there, just make sure they're formatted nice and in English.")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .padding(.trailing, 40)
+      VStack(alignment: .leading) {
+        Text("Ingredients")
+        TextEditor(text: Binding($viewModel.foodItem.ingredients, replacingNilWith: ""))
+          .frame(height: 60)
+          .changeIndicator(isChanged: viewModel.propertyChanged(\.ingredients))
+
+        Text("Ignore ingredients for now. If they're there, just make sure they're formatted nice and in English.")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+          .padding(.trailing, 40)
+      }
 
       Picker("Country", selection: $viewModel.foodItem.country) {
         ForEach(FoodItem.Country.allCases, id: \.self) { country in
@@ -333,20 +350,27 @@ private extension FoodItemDetailView {
 
       TextField("Source", text: .init($viewModel.foodItem.source, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.source))
+    }
+  }
 
-      HStack {
-        Text("Created At")
-        Spacer()
+  var notesSection: some View {
+    Section("Notes") {
+      TextEditor(text: Binding($viewModel.foodItem.notes, replacingNilWith: ""))
+        .frame(height: 120)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.notes))
+    }
+  }
+
+  var timestampSection: some View {
+    Section("Timestamps") {
+      LabeledContent("Created At") {
         if let createdAt = viewModel.foodItem.createdAt {
           Text(createdAt.formatted(date: .abbreviated, time: .shortened))
         } else {
           Text("N/A")
         }
       }
-
-      HStack {
-        Text("Updated At")
-        Spacer()
+      LabeledContent("Updated At") {
         if let updatedAt = viewModel.foodItem.updatedAt {
           Text(updatedAt.formatted(date: .abbreviated, time: .shortened))
         } else {

@@ -238,4 +238,26 @@ extension FoodItemRecord {
         .update()
     }
   }
+
+  struct AddNeedsMoreInfoAndNotes: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      _ = try await database.enum(State.self)
+        .case(.needsMoreInfo)
+        .update()
+
+      try await database.schema(FoodItemRecord.schema)
+        .field("notes", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      _ = try await database.enum(State.self)
+        .deleteCase(.needsMoreInfo)
+        .update()
+
+      try await database.schema(FoodItemRecord.schema)
+        .deleteField("notes")
+        .update()
+    }
+  }
 }

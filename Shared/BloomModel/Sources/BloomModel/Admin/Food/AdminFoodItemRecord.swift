@@ -11,7 +11,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   /// ID is the only field required to initialize, this is how we identify in the DB for updates.
   public let id: FoodItemIdentifier
   public var name: String?
-  public var state: State?
+  public var state: State
   public var brandName: String?
   public var flavour: String?
   public var category: Category?
@@ -48,19 +48,21 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   public var servingUnit: String?
   public var downvoteCount: Int?
   public var source: String?
+  public var notes: String?
   /// Read-only.
   public var createdAt: Date?
   /// Read-only.
   public var updatedAt: Date?
 
-  public init(id: FoodItemIdentifier) {
+  public init(id: FoodItemIdentifier, state: State = .unverified) {
     self.id = id
+    self.state = state
   }
 
   public init(
     id: FoodItemIdentifier,
     name: String?,
-    state: State?,
+    state: State,
     brandName: String?,
     flavour: String?,
     category: Category?,
@@ -95,6 +97,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     servingUnit: String?,
     downvoteCount: Int?,
     source: String?,
+    notes: String?,
     createdAt: Date?,
     updatedAt: Date?
   ) {
@@ -135,16 +138,33 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     self.servingUnit = servingUnit
     self.downvoteCount = downvoteCount
     self.source = source
+    self.notes = notes
     self.createdAt = createdAt
     self.updatedAt = updatedAt
   }
 }
 
 public extension AdminFoodItemRecord {
-  enum State: String, Codable, Sendable, CaseIterable {
+  enum State: String, Codable, Sendable, CaseIterable, Identifiable {
+    public var id: Self { self }
+
     case needsAIProcessing
     case unverified
+    case needsMoreInfo
     case verified
+
+    public var name: String {
+      switch self {
+      case .needsAIProcessing:
+        "Needs AI Processing"
+      case .unverified:
+        "Unverified"
+      case .needsMoreInfo:
+        "Needs More Info"
+      case .verified:
+        "Verified"
+      }
+    }
   }
 }
 

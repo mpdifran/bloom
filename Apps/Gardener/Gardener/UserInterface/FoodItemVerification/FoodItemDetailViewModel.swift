@@ -20,15 +20,6 @@ final class FoodItemDetailViewModel: ObservableObject {
   @Published var packagingImage: URL?
   @Published var nutritionLabel: URL?
 
-  var isVerified: Bool {
-    get {
-      self.foodItem.state == .verified
-    }
-    set {
-      self.foodItem.state = newValue ? .verified : .unverified
-    }
-  }
-
   init(foodItem: AdminFoodItemRecord) {
     self.foodItem = foodItem
     self.initialFoodItem = foodItem
@@ -39,6 +30,11 @@ final class FoodItemDetailViewModel: ObservableObject {
 }
 
 extension FoodItemDetailViewModel {
+
+  func propertyChanged<T: Equatable>(_ keyPath: KeyPath<AdminFoodItemRecord, T>) -> Bool {
+    foodItem[keyPath: keyPath] != initialFoodItem[keyPath: keyPath]
+  }
+
   func propertyChanged<T: Equatable>(_ keyPath: KeyPath<AdminFoodItemRecord, T?>) -> Bool {
     foodItem[keyPath: keyPath] != initialFoodItem[keyPath: keyPath]
   }

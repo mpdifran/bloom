@@ -129,6 +129,9 @@ final class FoodItemRecord: Model, @unchecked Sendable {
   @Field(key: "source")
   var source: String?
 
+  @Field(key: "notes")
+  var notes: String?
+
   @Timestamp(key: "created_at", on: .create)
   var createdAt: Date?
 
@@ -184,6 +187,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.servingUnit = nil
     self.downvoteCount = nil
     self.source = source
+    self.notes = notes
   }
 }
 
@@ -193,6 +197,7 @@ extension FoodItemRecord {
 
     case needsAIProcessing
     case unverified
+    case needsMoreInfo
     case verified
   }
 

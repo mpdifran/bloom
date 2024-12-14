@@ -124,6 +124,7 @@ private extension AdminFoodController {
     existingRecord.servingUnit = updateRecord.servingUnit
     existingRecord.downvoteCount = updateRecord.downvoteCount
     existingRecord.source = updateRecord.source
+    existingRecord.notes = updateRecord.notes
 
     try await existingRecord.save(on: request.db)
 

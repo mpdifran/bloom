@@ -100,6 +100,7 @@ extension FoodItemRecord {
       servingUnit: servingUnit,
       downvoteCount: downvoteCount,
       source: source,
+      notes: notes,
       createdAt: createdAt,
       updatedAt: updatedAt
     )
@@ -132,6 +133,7 @@ extension FoodItemRecord.State {
     switch self {
     case .needsAIProcessing: .needsAIProcessing
     case .unverified: .unverified
+    case .needsMoreInfo: .needsMoreInfo
     case .verified: .verified
     }
   }
