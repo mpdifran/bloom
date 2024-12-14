@@ -10,10 +10,6 @@ import AppUI
 import SwiftData
 import DataContainer
 
-private extension Int {
-  static let sectionPeekAmount: Int = 5
-}
-
 struct FoodLoggingActionCardView: View {
 
   private let initialBarcodeToSearch: String?
@@ -29,7 +25,6 @@ struct FoodLoggingActionCardView: View {
   @State private var didSearchToggle = false
   @State private var healthPermissionTrigger = false
   @State private var presentedSheet: AnyView?
-  @State private var showAllInSection = [Int : Bool]()
   @State private var selectedTab = FoodItemCategoryTab.branded
 
   @Environment(\.dismiss) private var dismiss
@@ -169,32 +164,42 @@ private extension FoodLoggingActionCardView {
   }
 
   func resultsView(results: [FoodItemSection]) -> some View {
-    ScrollView {
-      LazyVStack {
-        TabFilter(selectedTab: $selectedTab)
+    Group {
+      if let section = results.first(where: { $0.category == selectedTab.category }) {
+        ScrollView {
+          LazyVStack {
+            TabFilter(selectedTab: $selectedTab)
 
-        ForEachEnumerated(results) { (sectionIndex, section) in
-          if section.category == selectedTab.category {
             ForEachEnumerated(section.foodItems) { index, food in
-              if index < .sectionPeekAmount || showAllInSection[sectionIndex] == true {
-                FoodItemCell(food: food)
-                  .id(food.id)
-                  .transition(.blurReplace)
-                  .onTapGesture {
-                    presentedSheet = FoodItemDetailsView(
-                      foodItem: food,
-                      existingFoodItemLog: nil
-                    ).asAny
-                  }
-              }
+              FoodItemCell(food: food)
+                .id(food.id)
+                .transition(.opacity)
+                .onTapGesture {
+                  presentedSheet = FoodItemDetailsView(
+                    foodItem: food,
+                    existingFoodItemLog: nil
+                  ).asAny
+                }
+            }
+          }
+          .padding()
+        }
+      } else {
+        VStack {
+          TabFilter(selectedTab: $selectedTab)
+
+          ContentUnavailableView {
+            Label {
+              Text("No Results")
+            } icon: {
+              selectedTab.image
             }
           }
         }
+        .padding()
       }
-      .padding()
     }
     .animation(.bouncy, value: viewModel.results)
-    .animation(.bouncy, value: showAllInSection)
   }
 
   func failedBarcodeSearchView(barcode: String) -> some View {
@@ -314,7 +319,6 @@ private extension FoodLoggingActionCardView {
 
   func performSearch() {
     didSearchToggle.toggle()
-    showAllInSection.removeAll()
     isFocused = false
     Task {
       await viewModel.performSearch(for: searchQuery)
