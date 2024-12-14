@@ -19,15 +19,18 @@ public extension FoodSearchResponse {
     public struct Section: Codable, Sendable {
         public let title: String
         public let index: Int
+        public let category: FoodItem.Category
         public let foods: [FoodItem]
 
         public init(
             title: String,
             index: Int,
+            category: FoodItem.Category,
             foods: [FoodItem]
         ) {
             self.title = title
             self.index = index
+            self.category = category
             self.foods = foods
         }
     }

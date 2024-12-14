@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomModel
 
 enum FoodItemCategoryTab: TabFilterItem {
   var id: Self { self }
@@ -44,6 +45,15 @@ enum FoodItemCategoryTab: TabFilterItem {
         .mutedPurple
     case .fastFood:
         .mutedYellow
+    }
+  }
+
+  var category: FoodItem.Category {
+    switch self {
+    case .branded: .branded
+    case .generic: .generic
+    case .restaurant: .restaurant
+    case .fastFood: .fastfood
     }
   }
 }

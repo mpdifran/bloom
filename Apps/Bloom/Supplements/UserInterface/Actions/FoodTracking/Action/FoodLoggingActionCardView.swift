@@ -65,6 +65,7 @@ struct FoodLoggingActionCardView: View {
     .presentationCornerRadius(25)
     .presentationCompactAdaptation(.fullScreenCover)
     .alert(error: $viewModel.error)
+    .animation(.default, value: selectedTab)
     .tint(.mutedGreen)
     .healthDataAccessRequest(
         store: HealthPermissionChecker.shared.healthStore,
@@ -173,34 +174,20 @@ private extension FoodLoggingActionCardView {
         TabFilter(selectedTab: $selectedTab)
 
         ForEachEnumerated(results) { (sectionIndex, section) in
-          SectionTitleView(section.title)
-            .padding(.horizontal)
-
-          ForEachEnumerated(section.foodItems) { index, food in
-            if index < .sectionPeekAmount || showAllInSection[sectionIndex] == true {
-              FoodItemCell(food: food)
-                .id(food.id)
-                .transition(.blurReplace)
-                .onTapGesture {
-                  presentedSheet = FoodItemDetailsView(
-                    foodItem: food,
-                    existingFoodItemLog: nil
-                  ).asAny
-                }
+          if section.category == selectedTab.category {
+            ForEachEnumerated(section.foodItems) { index, food in
+              if index < .sectionPeekAmount || showAllInSection[sectionIndex] == true {
+                FoodItemCell(food: food)
+                  .id(food.id)
+                  .transition(.blurReplace)
+                  .onTapGesture {
+                    presentedSheet = FoodItemDetailsView(
+                      foodItem: food,
+                      existingFoodItemLog: nil
+                    ).asAny
+                  }
+              }
             }
-          }
-
-          if showAllInSection[sectionIndex] != true && section.foodItems.count > .sectionPeekAmount {
-            Button {
-              showAllInSection[sectionIndex] = true
-            } label: {
-              Text("Show All")
-                .padding(.vertical, 6)
-                .horizontallyCentered()
-            }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.capsule)
-            .foregroundStyle(.white)
           }
         }
       }

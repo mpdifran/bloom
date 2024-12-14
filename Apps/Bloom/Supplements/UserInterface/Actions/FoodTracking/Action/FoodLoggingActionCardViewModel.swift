@@ -18,6 +18,7 @@ struct FoodItemSection: Equatable, Identifiable {
   var id: String { title }
 
   let title: String
+  let category: FoodItem.Category
   let foodItems: [BloomModel.FoodItem]
 }
 
@@ -51,7 +52,13 @@ extension FoodLoggingActionCardView.ViewModel {
         .makingUnique()
 
       if foodItems.isNotEmpty {
-        recentFoodItemSections = [FoodItemSection(title: "Recent", foodItems: foodItems)]
+        recentFoodItemSections = [
+          FoodItemSection(
+            title: "Recent",
+            category: .branded,
+            foodItems: foodItems
+          )
+        ]
       } else {
         recentFoodItemSections = []
       }
@@ -89,7 +96,14 @@ extension FoodLoggingActionCardView.ViewModel {
         preferredCountry: country
       )
 
-      self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
+      self.results = sections.map(
+        {
+          FoodItemSection(
+            title: $0.title,
+            category: $0.category,
+            foodItems: $0.foods
+          )
+      })
       self.autocomplete.removeAll()
     } catch {
       self.error = error
@@ -118,7 +132,13 @@ extension FoodLoggingActionCardView.ViewModel {
       }
 
       TelemetryDeck.signal("Food Item Barcode Scan - Match")
-      self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
+      self.results = sections.map({
+        FoodItemSection(
+          title: $0.title,
+          category: .branded,
+          foodItems: $0.foods
+        )
+      })
     } catch {
       self.error = error
     }
@@ -127,6 +147,7 @@ extension FoodLoggingActionCardView.ViewModel {
   func didUploadNewFood(foodItem: FoodItem) {
     let section = FoodItemSection(
       title: "Uploaded Food",
+      category: .branded,
       foodItems: [foodItem]
     )
 

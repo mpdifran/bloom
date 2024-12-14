@@ -83,9 +83,8 @@ private extension AdminFoodController {
     if let name = updateRecord.name {
       existingRecord.name = name
     }
-    if let state = updateRecord.state {
-      existingRecord.state = state.asState()
-    }
+
+    existingRecord.state = updateRecord.state.asState()
     existingRecord.brandName = updateRecord.brandName
     existingRecord.flavour = updateRecord.flavour
     if let category = updateRecord.category {

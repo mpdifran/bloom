@@ -144,6 +144,7 @@ private extension FoodController {
     let section = FoodSearchResponse.Section(
       title: "Matched Barcode",
       index: 0,
+      category: .branded,
       foods: foodItems
     )
 
@@ -217,6 +218,7 @@ private extension FoodController {
     let section = FoodSearchResponse.Section(
       title: "Matched Barcode",
       index: 0,
+      category: .branded,
       foods: [foodItem]
     )
 
@@ -244,6 +246,7 @@ private extension FoodController {
         return FoodSearchResponse.Section(
           title: "Branded",
           index: 0,
+          category: .branded,
           foods: foodItems
         )
       }
@@ -260,6 +263,7 @@ private extension FoodController {
         return FoodSearchResponse.Section(
           title: "Restaurant",
           index: 1,
+          category: .restaurant,
           foods: foodItems
         )
       }
@@ -276,6 +280,7 @@ private extension FoodController {
         return FoodSearchResponse.Section(
           title: "Fast Food",
           index: 2,
+          category: .fastfood,
           foods: foodItems
         )
       }
@@ -292,6 +297,7 @@ private extension FoodController {
         return FoodSearchResponse.Section(
           title: "Generic",
           index: 3,
+          category: .generic,
           foods: foodItems
         )
       }
@@ -304,34 +310,6 @@ private extension FoodController {
     }
 
     return sections.sorted(by: { $0.index < $1.index })
-  }
-
-  func searchFoodsEdamam(_ request: Request) async throws -> FoodSearchResponse.Section? {
-    let requestBody = try request.content.decode(FoodSearchRequest.self)
-
-    let otherFoodItems: [FoodItem]
-    if let upcCode = requestBody.upcCode {
-      otherFoodItems = try await edamamService.searchFoods(
-        request: request,
-        upc: upcCode
-      )
-    } else if let name = requestBody.name {
-      otherFoodItems = try await edamamService.searchFoods(
-        request: request,
-        name: name,
-        brand: requestBody.brand
-      )
-    } else {
-      throw Abort(.badRequest)
-    }
-
-    guard otherFoodItems.isNotEmpty else { return nil }
-
-    return FoodSearchResponse.Section(
-      title: "Other",
-      index: 2,
-      foods: otherFoodItems
-    )
   }
 }
 
