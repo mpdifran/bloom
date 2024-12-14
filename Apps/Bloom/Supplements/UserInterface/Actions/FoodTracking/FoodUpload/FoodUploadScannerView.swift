@@ -12,237 +12,223 @@ import CoreLocation
 
 struct FoodUploadScannerView: View {
 
-    @Bindable private var viewModel: ViewModel
-    private let onSuccess: (FoodItem) -> Void
+  @Bindable private var viewModel: ViewModel
+  private let onSuccess: (FoodItem) -> Void
 
-    init(barcode: String? = nil, onSuccess: @escaping (FoodItem) -> Void) {
-        self._viewModel = Bindable(ViewModel(barcode: barcode))
-        self.onSuccess = onSuccess
-    }
+  init(barcode: String? = nil, onSuccess: @escaping (FoodItem) -> Void) {
+    self._viewModel = Bindable(ViewModel(barcode: barcode))
+    self.onSuccess = onSuccess
+  }
 
-    private var locationViewModel = LocationManagerViewModel.shared
+  private var locationViewModel = LocationManagerViewModel.shared
 
-    @State private var presentedSheet: AnyView?
-    @State private var error: Error?
+  @State private var presentedSheet: AnyView?
+  @State private var error: Error?
 
-    @Environment(\.dismiss) private var dismiss
+  @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        NavigationStack {
-            Group {
-                if viewModel.isLoading {
-                    loadingView
-                } else {
-                    ScrollView {
-                        VStack {
-                            countrySection
-                            barcodeSection
-                            packagingSection
-                            nutritionLabelSection
-                        }
-                        .padding()
-                    }
-                }
+  var body: some View {
+    NavigationStack {
+      Group {
+        if viewModel.isLoading {
+          loadingView
+        } else {
+          ScrollView {
+            VStack {
+              countrySection
+              barcodeSection
+              packagingSection
+              nutritionLabelSection
             }
-            .navigationTitle("Upload Food")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-            }
-            .sheet($presentedSheet)
-            .shelf {
-                ProminentButton("Upload", systemImage: "arrow.up.square.fill", isLoading: viewModel.isLoading) {
-                    Task { await upload() }
-                }
-                .disabled(!viewModel.canUpload)
-            }
+            .padding()
+          }
         }
-        .animation(.default, value: viewModel.barcode)
-        .animation(.default, value: viewModel.nutritionLabelImage)
-        .animation(.default, value: viewModel.packagingImage)
-        .presentationCompactAdaptation(.fullScreenCover)
-        .alert(error: $error)
-        .alert(alertDetails: $viewModel.alertDetails)
-        .onChange(of: locationViewModel.currentLocation) { oldValue, newValue in
-            guard let location = newValue else { return }
-
-            Task { await determineCountry(location: location) }
-        }
-        .onAppear {
-            viewModel.onAppear()
-        }
-    }
-}
-
-private extension FoodUploadScannerView {
-
-    func upload() async {
-        do {
-            let foodItem = try await viewModel.upload()
-            onSuccess(foodItem)
+      }
+      .navigationTitle("Upload Food")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Cancel") {
             dismiss()
-        } catch { self.error = error }
-    }
-
-    func determineCountry(location: CLLocation) async {
-        let geocoder = CLGeocoder()
-        do {
-            guard let country = try await geocoder.getCountry(from: location) else {
-                return
-            }
-            if country.lowercased() == "canada" || country.lowercased() == "ca" {
-                viewModel.country = .canada
-            }
-        } catch {
-            print(error)
+          }
         }
+      }
+      .sheet($presentedSheet)
+      .shelf {
+        ProminentButton("Upload", systemImage: "arrow.up.square.fill", isLoading: viewModel.isLoading) {
+          Task { await upload() }
+        }
+        .disabled(!viewModel.canUpload)
+      }
     }
+    .animation(.default, value: viewModel.barcode)
+    .animation(.default, value: viewModel.nutritionLabelImage)
+    .animation(.default, value: viewModel.packagingImage)
+    .presentationCompactAdaptation(.fullScreenCover)
+    .alert(error: $error)
+    .alert(alertDetails: $viewModel.alertDetails)
+    .onChange(of: locationViewModel.country) { oldValue, newValue in
+      guard let country = newValue else { return }
+
+      viewModel.country = country
+    }
+    .onAppear {
+      viewModel.onAppear()
+    }
+  }
 }
 
 private extension FoodUploadScannerView {
 
-    @ViewBuilder
-    var countrySection: some View {
-        SectionTitleView("Country")
-            .padding(.horizontal)
+  func upload() async {
+    do {
+      let foodItem = try await viewModel.upload()
+      onSuccess(foodItem)
+      dismiss()
+    } catch { self.error = error }
+  }
+}
 
-        VStack {
-            LabeledContent("Country") {
-                Picker("Country", selection: $viewModel.country) {
-                    ForEach(FoodCountry.allCases) { country in
-                        Text(country.name)
-                            .tag(country)
-                    }
-                }
-            }
+private extension FoodUploadScannerView {
+
+  @ViewBuilder
+  var countrySection: some View {
+    SectionTitleView("Country")
+      .padding(.horizontal)
+
+    VStack {
+      LabeledContent("Country") {
+        Picker("Country", selection: $viewModel.country) {
+          ForEach(FoodCountry.allCases) { country in
+            Text(country.name)
+              .tag(country)
+          }
         }
-        .cardContainer(fill: .background.secondary)
+      }
     }
+    .cardContainer(fill: .background.secondary)
+  }
 
-    @ViewBuilder
-    var barcodeSection: some View {
-        SectionTitleView("1. Barcode")
-            .padding(.horizontal)
-        VStack {
-            if let barcode = viewModel.barcode {
-                BarcodeView(barcode: barcode)
-                    .horizontallyCentered()
+  @ViewBuilder
+  var barcodeSection: some View {
+    SectionTitleView("1. Barcode")
+      .padding(.horizontal)
+    VStack {
+      if let barcode = viewModel.barcode {
+        BarcodeView(barcode: barcode)
+          .horizontallyCentered()
 
-                UploadFoodActionView(
-                    title: "Scan Again",
-                    systemImage: "barcode.viewfinder"
-                )
-            } else {
-                UploadFoodActionView(
-                    title: "Scan Barcode",
-                    systemImage: "barcode.viewfinder"
-                )
-                .frame(minHeight: 100)
-            }
-        }
-        .cardContainer(fill: .background.secondary)
-        .onTapGesture {
-            presentedSheet = FoodBarcodeScannerView { (barcode) in
-                viewModel.barcode = barcode
-            }.asAny
-        }
+        UploadFoodActionView(
+          title: "Scan Again",
+          systemImage: "barcode.viewfinder"
+        )
+      } else {
+        UploadFoodActionView(
+          title: "Scan Barcode",
+          systemImage: "barcode.viewfinder"
+        )
+        .frame(minHeight: 100)
+      }
     }
-
-    @ViewBuilder
-    var packagingSection: some View {
-        SectionTitleView("2. Packaging")
-            .padding(.horizontal)
-        VStack {
-            if let packagingImage = viewModel.packagingImage {
-                Image(uiImage: packagingImage)
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-
-                UploadFoodActionView(
-                    title: "Scan Again",
-                    systemImage: "vial.viewfinder"
-                )
-            } else {
-                UploadFoodActionView(
-                    title: "Scan Packaging",
-                    systemImage: "vial.viewfinder"
-                )
-                .frame(minHeight: 100)
-            }
-        }
-        .cardContainer(fill: .background.secondary)
-        .onTapGesture {
-            presentedSheet = CameraView(
-                capturedImage: $viewModel.packagingImage,
-                instructions: "Position your package within the frame",
-                aspectRatio: 0.8
-            ).asAny
-        }
-        Text("Make sure to get the front of the packaging, including the brand and product name.")
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .padding(.horizontal)
+    .cardContainer(fill: .background.secondary)
+    .onTapGesture {
+      presentedSheet = FoodBarcodeScannerView { (barcode) in
+        viewModel.barcode = barcode
+      }.asAny
     }
+  }
 
-    @ViewBuilder
-    var nutritionLabelSection: some View {
-        SectionTitleView("3. Nutrition Label")
-            .padding(.horizontal)
-        VStack {
-            if let nutritionLabelImage = viewModel.nutritionLabelImage {
-                Image(uiImage: nutritionLabelImage)
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+  @ViewBuilder
+  var packagingSection: some View {
+    SectionTitleView("2. Packaging")
+      .padding(.horizontal)
+    VStack {
+      if let packagingImage = viewModel.packagingImage {
+        Image(uiImage: packagingImage)
+          .resizable()
+          .scaledToFit()
+          .clipShape(RoundedRectangle(cornerRadius: 16))
 
-                UploadFoodActionView(
-                    title: "Scan Again",
-                    systemImage: "text.viewfinder"
-                )
-            } else {
-                UploadFoodActionView(
-                    title: "Scan Nutrition Label",
-                    systemImage: "text.viewfinder"
-                )
-                .frame(minHeight: 100)
-            }
-        }
-        .cardContainer(fill: .background.secondary)
-        .onTapGesture {
-            presentedSheet = CameraView(
-                capturedImage: $viewModel.nutritionLabelImage,
-                instructions: "Position the nutrition label within the frame",
-                aspectRatio: 0.8
-            ).asAny
-        }
-        Text("For best results, try and get a clear picture of the entire nutrition label.")
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .padding(.horizontal)
+        UploadFoodActionView(
+          title: "Scan Again",
+          systemImage: "vial.viewfinder"
+        )
+      } else {
+        UploadFoodActionView(
+          title: "Scan Packaging",
+          systemImage: "vial.viewfinder"
+        )
+        .frame(minHeight: 100)
+      }
     }
-
-    var loadingView: some View {
-        VStack {
-            Spacer()
-            CircularSpinnerView()
-                .foregroundStyle(.tint)
-            Text("Uploading...")
-                .font(.title2)
-                .bold()
-                .fontDesign(.rounded)
-            Spacer()
-        }
-        .horizontallyCentered()
+    .cardContainer(fill: .background.secondary)
+    .onTapGesture {
+      presentedSheet = CameraView(
+        capturedImage: $viewModel.packagingImage,
+        instructions: "Position your package within the frame",
+        aspectRatio: 0.8
+      ).asAny
     }
+    Text("Make sure to get the front of the packaging, including the brand and product name.")
+      .font(.caption)
+      .foregroundStyle(.secondary)
+      .padding(.horizontal)
+  }
+
+  @ViewBuilder
+  var nutritionLabelSection: some View {
+    SectionTitleView("3. Nutrition Label")
+      .padding(.horizontal)
+    VStack {
+      if let nutritionLabelImage = viewModel.nutritionLabelImage {
+        Image(uiImage: nutritionLabelImage)
+          .resizable()
+          .scaledToFit()
+          .clipShape(RoundedRectangle(cornerRadius: 16))
+
+        UploadFoodActionView(
+          title: "Scan Again",
+          systemImage: "text.viewfinder"
+        )
+      } else {
+        UploadFoodActionView(
+          title: "Scan Nutrition Label",
+          systemImage: "text.viewfinder"
+        )
+        .frame(minHeight: 100)
+      }
+    }
+    .cardContainer(fill: .background.secondary)
+    .onTapGesture {
+      presentedSheet = CameraView(
+        capturedImage: $viewModel.nutritionLabelImage,
+        instructions: "Position the nutrition label within the frame",
+        aspectRatio: 0.8
+      ).asAny
+    }
+    Text("For best results, try and get a clear picture of the entire nutrition label.")
+      .font(.caption)
+      .foregroundStyle(.secondary)
+      .padding(.horizontal)
+  }
+
+  var loadingView: some View {
+    VStack {
+      Spacer()
+      CircularSpinnerView()
+        .foregroundStyle(.tint)
+      Text("Uploading...")
+        .font(.title2)
+        .bold()
+        .fontDesign(.rounded)
+      Spacer()
+    }
+    .horizontallyCentered()
+  }
 }
 
 #Preview {
-    FoodUploadScannerView() { (_) in
+  FoodUploadScannerView() { (_) in
 
-    }
+  }
 }

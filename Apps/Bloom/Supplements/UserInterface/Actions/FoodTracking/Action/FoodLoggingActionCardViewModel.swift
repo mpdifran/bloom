@@ -31,6 +31,7 @@ extension FoodLoggingActionCardView {
     var failedBarcodeSearch: String?
     var error: Error?
     var recentFoodItemSections = [FoodItemSection]()
+    var country: FoodCountry = .usa
 
     private var debouncedSearchQuery = ""
     private var debounceTask: Task<Void, Never>?
@@ -82,8 +83,14 @@ extension FoodLoggingActionCardView.ViewModel {
     autocomplete.removeAll()
 
     do {
-      let sections = try await NetworkRequester.shared.foodSearch(name: query, brand: nil)
+      let sections = try await NetworkRequester.shared.foodSearch(
+        name: query,
+        brand: nil,
+        preferredCountry: country
+      )
+
       self.results = sections.map({ FoodItemSection(title: $0.title, foodItems: $0.foods) })
+      self.autocomplete.removeAll()
     } catch {
       self.error = error
     }
@@ -98,7 +105,10 @@ extension FoodLoggingActionCardView.ViewModel {
     autocomplete.removeAll()
 
     do {
-      let sections = try await NetworkRequester.shared.foodSearch(upcCode: barcode)
+      let sections = try await NetworkRequester.shared.foodSearch(
+        upcCode: barcode,
+        country: country
+      )
 
       guard sections.contains(where: { $0.foods.isNotEmpty }) else {
         failedBarcodeSearch = barcode

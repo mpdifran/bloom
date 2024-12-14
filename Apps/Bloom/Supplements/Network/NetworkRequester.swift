@@ -38,12 +38,13 @@ extension NetworkRequester {
   }
 
 
-  func foodSearch(name: String, brand: String?) async throws -> [FoodSearchResponse.Section] {
+  func foodSearch(name: String, brand: String?, preferredCountry: FoodCountry) async throws -> [FoodSearchResponse.Section] {
     let url = URL(string: .bloomAPIBase + "v1/food/search")!
 
     let request = FoodSearchRequest(
       name: name,
-      brand: brand
+      brand: brand,
+      country: preferredCountry
     )
 
     var urlRequest = URLRequest(url: url)
@@ -58,11 +59,15 @@ extension NetworkRequester {
     return response.sections
   }
 
-  func foodSearch(upcCode: String) async throws -> [FoodSearchResponse.Section] {
+  func foodSearch(
+    upcCode: String,
+    country: FoodCountry
+  ) async throws -> [FoodSearchResponse.Section] {
     let url = URL(string: .bloomAPIBase + "v1/food/search")!
 
     let request = FoodSearchRequest(
-      upcCode: upcCode
+      upcCode: upcCode,
+      country: country
     )
 
     var urlRequest = URLRequest(url: url)

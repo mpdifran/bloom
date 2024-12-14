@@ -36,6 +36,7 @@ struct FoodLoggingActionCardView: View {
   @FocusState private var isFocused: Bool
 
   private let nutritionViewModel = NutritionTrackingViewModel.shared
+  private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {
     NavigationStack {
@@ -79,6 +80,12 @@ struct FoodLoggingActionCardView: View {
         }
       }
     }
+    .onAppear {
+      if let country = locationViewModel.country {
+        viewModel.country = country
+      }
+      locationViewModel.requestLocation()
+    }
     .task {
       await checkHealthAuth()
     }
@@ -89,6 +96,11 @@ struct FoodLoggingActionCardView: View {
       Task {
         await viewModel.fetchRecentFoodItemLogs(for: newValue)
       }
+    }
+    .onChange(of: locationViewModel.country) { _, newValue in
+      guard let country = newValue else { return }
+
+      viewModel.country = country
     }
     .task {
       guard let initialBarcodeToSearch else { return }
