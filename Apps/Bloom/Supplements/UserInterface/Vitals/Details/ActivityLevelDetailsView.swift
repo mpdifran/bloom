@@ -164,7 +164,7 @@ private extension ActivityLevelDetailsView {
                             yEnd: .value("Average Activity Level", distribution[dayOfWeek, default: 1])
                         )
                         .cornerRadius(5)
-                        .foregroundStyle(ActivityLevelSummary.ActivityLevel(distribution[dayOfWeek, default: 1]).color)
+                        .foregroundStyle(ActivityLevelSummary.ActivityLevel(distribution[dayOfWeek, default: 1]).barColor)
                     }
                 }
                 .chartYScale(domain: 1...((distribution.max(keyPath: \.value) ?? 1.8) * 1.1), range: .plotDimension)
