@@ -9,69 +9,73 @@ import SwiftUI
 import HealthKit
 
 struct WorkoutHeartRateZoneCell: View {
-    let report: WorkoutTypeHeartRateReport
+  let report: WorkoutTypeHeartRateReport
 
-    var body: some View {
-        HStack {
-            Image(systemName: report.activityType.systemImage)
-                .font(.largeTitle)
-                .minimumScaleFactor(0.3)
-                .foregroundStyle(.green)
-                .frame(width: 60)
+  var body: some View {
+    HStack {
+      Image(systemName: report.activityType.systemImage)
+        .font(.largeTitle)
+        .minimumScaleFactor(0.3)
+        .foregroundStyle(.green)
+        .frame(width: 60)
 
-            VStack(alignment: .leading) {
-                Text(report.activityType.name)
-                    .font(.title3)
-                    .bold()
+      VStack(alignment: .leading, spacing: 4) {
+        Text(report.activityType.name)
+          .font(.headline)
+          .bold()
 
-                Text("\(report.workoutCount) \(report.workoutCount == 1 ? "time" : "times")")
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            MiniTargetHeartRateZoneDistributionView(distribution: report.heartZoneDistribution)
-                .frame(width: 80)
+        VStack(alignment: .leading) {
+          Text("\(report.heartZoneDistribution.scaledDurationSum.displayString(for: .minute(), formatter: .noDecimalPlaces)) zone minutes")
+          Text("\(report.workoutCount) \(report.workoutCount == 1 ? "time" : "times")")
         }
+        .bold()
+        .font(.subheadline)
+        .foregroundStyle(.secondary)
+      }
+
+      Spacer()
+
+      MiniTargetHeartRateZoneDistributionView(distribution: report.heartZoneDistribution)
+        .frame(width: 80)
     }
+  }
 }
 
 #Preview {
-    ScrollView {
-        VStack {
-            WorkoutHeartRateZoneCell(
-                report: .init(
-                    activityType: .bowling,
-                    workoutCount: 3,
-                    heartZoneDistribution: .init(
-                        totalDuration: .init(unit: .minute(), doubleValue: 30),
-                        zone1: .init(unit: .minute(), doubleValue: 9),
-                        zone2: .init(unit: .minute(), doubleValue: 7),
-                        zone3: .init(unit: .minute(), doubleValue: 5),
-                        zone4: .init(unit: .minute(), doubleValue: 5),
-                        zone5: .init(unit: .minute(), doubleValue: 4)
-                    )
-                )
-            )
-            .cardContainer(fill: .background.secondary)
+  ScrollView {
+    VStack {
+      WorkoutHeartRateZoneCell(
+        report: .init(
+          activityType: .bowling,
+          workoutCount: 3,
+          heartZoneDistribution: .init(
+            totalDuration: .init(unit: .minute(), doubleValue: 30),
+            zone1: .init(unit: .minute(), doubleValue: 9),
+            zone2: .init(unit: .minute(), doubleValue: 7),
+            zone3: .init(unit: .minute(), doubleValue: 5),
+            zone4: .init(unit: .minute(), doubleValue: 5),
+            zone5: .init(unit: .minute(), doubleValue: 4)
+          )
+        )
+      )
+      .cardContainer(fill: .background.secondary)
 
-            WorkoutHeartRateZoneCell(
-                report: .init(
-                    activityType: .walking,
-                    workoutCount: 4,
-                    heartZoneDistribution: .init(
-                        totalDuration: .init(unit: .minute(), doubleValue: 30),
-                        zone1: .init(unit: .minute(), doubleValue: 0),
-                        zone2: .init(unit: .minute(), doubleValue: 0),
-                        zone3: .init(unit: .minute(), doubleValue: 0),
-                        zone4: .init(unit: .minute(), doubleValue: 0),
-                        zone5: .init(unit: .minute(), doubleValue: 0)
-                    )
-                )
-            )
-            .cardContainer(fill: .background.secondary)
-        }
-        .padding()
+      WorkoutHeartRateZoneCell(
+        report: .init(
+          activityType: .walking,
+          workoutCount: 4,
+          heartZoneDistribution: .init(
+            totalDuration: .init(unit: .minute(), doubleValue: 30),
+            zone1: .init(unit: .minute(), doubleValue: 0),
+            zone2: .init(unit: .minute(), doubleValue: 0),
+            zone3: .init(unit: .minute(), doubleValue: 0),
+            zone4: .init(unit: .minute(), doubleValue: 0),
+            zone5: .init(unit: .minute(), doubleValue: 0)
+          )
+        )
+      )
+      .cardContainer(fill: .background.secondary)
     }
+    .padding()
+  }
 }
