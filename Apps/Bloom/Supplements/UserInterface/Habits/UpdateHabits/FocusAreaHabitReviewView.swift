@@ -53,6 +53,7 @@ struct FocusAreaHabitReviewView: View {
                     self.error = error
                 }
             }
+            .foregroundStyle(.invertedText)
             .transition(.move(edge: .bottom))
             .appear(with: 3, currentIndex: index)
         }
