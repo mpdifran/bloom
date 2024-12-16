@@ -20,7 +20,7 @@ struct FoodItemDetailView: View {
     case nutritionLabel = "Nutrition Label"
   }
 
-  @State private var selectedImageTab: ImageTab = .nutritionLabel
+  @State private var selectedImageTab: ImageTab = .packaging
   @State private var isSaving = false
   @State private var isDeleting = false
   @State private var alertDetails: AlertDetails?
@@ -35,7 +35,7 @@ struct FoodItemDetailView: View {
   }
 
   var body: some View {
-    HStack(spacing: 48) {
+    HStack(spacing: 0) {
       images
 
       formView
@@ -50,28 +50,31 @@ struct FoodItemDetailView: View {
 
 private extension FoodItemDetailView {
   var images: some View {
-    ScrollView {
-      VStack(spacing: 48) {
-        Picker("", selection: $selectedImageTab) {
-          ForEach(ImageTab.allCases, id: \.self) { tab in
-            Text(tab.rawValue)
-              .tag(tab)
-          }
-        }
-        .pickerStyle(SegmentedPickerStyle())
-
-        switch selectedImageTab {
-        case .packaging:
-          createImage(
-            url: viewModel.packagingImage
-          )
-        case .nutritionLabel:
-          createImage(
-            url: viewModel.nutritionLabel
-          )
+    VStack(spacing: 0) {
+      Picker("", selection: $selectedImageTab) {
+        ForEach(ImageTab.allCases, id: \.self) { tab in
+          Text(tab.rawValue)
+            .tag(tab)
         }
       }
+      .pickerStyle(SegmentedPickerStyle())
       .padding()
+
+      ScrollView {
+        VStack {
+          switch selectedImageTab {
+          case .packaging:
+            createImage(
+              url: viewModel.packagingImage
+            )
+          case .nutritionLabel:
+            createImage(
+              url: viewModel.nutritionLabel
+            )
+          }
+        }
+        .padding()
+      }
     }
   }
 
@@ -158,7 +161,6 @@ private extension FoodItemDetailView {
         } placeholder: {
           ProgressView()
         }
-        .frame(width: 450)
       } else {
         Text("Not Found")
       }
@@ -170,8 +172,9 @@ private extension FoodItemDetailView {
         infoSection
         servingSection
         macroSection
-        carbsSection
         fatSection
+        carbsSection
+        proteinSection
         otherNutrientsSection
         mineralSection
         vitaminSection
@@ -180,7 +183,7 @@ private extension FoodItemDetailView {
         timestampSection
       }
       .formStyle(.grouped)
-      .frame(minWidth: 350)
+      .frame(minWidth: 300, maxWidth: 350)
     }
   }
 
@@ -219,12 +222,9 @@ private extension FoodItemDetailView {
   }
 
   var macroSection: some View {
-    Section(header: Text("Macros")) {
+    Section(header: Text("Energy")) {
       UnitTextField("Calories", value: $viewModel.foodItem.calories, unit: "Cal")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calories))
-
-      UnitTextField("Protein", value: $viewModel.foodItem.protein, unit: "g")
-        .changeIndicator(isChanged: viewModel.propertyChanged(\.protein))
     }
   }
 
@@ -257,6 +257,13 @@ private extension FoodItemDetailView {
 
       UnitTextField("Monounsaturated Fat", value: $viewModel.foodItem.monounsaturatedFat, unit: "g")
         .changeIndicator(isChanged: viewModel.propertyChanged(\.monounsaturatedFat))
+    }
+  }
+
+  var proteinSection: some View {
+    Section(header: Text("Protein")) {
+      UnitTextField("Protein", value: $viewModel.foodItem.protein, unit: "g")
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.protein))
     }
   }
 
