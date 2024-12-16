@@ -187,7 +187,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.servingUnit = nil
     self.downvoteCount = nil
     self.source = source
-    self.notes = notes
+    self.notes = nil
   }
 }
 
