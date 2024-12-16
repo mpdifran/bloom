@@ -27,7 +27,7 @@ struct SleepDetailsView: View {
 
                 sleepDistributionChart
                     .cardContainer(
-                        fill: .background.secondary,
+                        fill: .background,
                         includePadding: false
                     )
 
@@ -35,6 +35,7 @@ struct SleepDetailsView: View {
             }
             .padding()
         }
+        .groupedBackground()
         .toolbar {
             ToolbarItem(placement: .principal) {
                 VitalSummaryDetailTitleView(
@@ -189,7 +190,7 @@ private extension SleepDetailsView {
             DisclosureIndicator()
         }
         .foregroundStyle(.coreSleep)
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
         .onTapGesture {
             showTodayView = true
         }
