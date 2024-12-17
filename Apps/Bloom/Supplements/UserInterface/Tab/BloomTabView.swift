@@ -18,11 +18,15 @@ struct TabBarViewModifier: ViewModifier {
 
   @Environment(TabController.self) private var tabController: TabController
 
+  @State private var logActionToggle = false
+  @State private var presentedSheet: AnyView?
+
   func body(content: Content) -> some View {
     content
       .safeAreaInset(edge: .bottom) {
         tabBar
       }
+      .sheet($presentedSheet)
   }
 }
 
@@ -42,9 +46,11 @@ extension TabBarViewModifier {
         }
         .tint(tabController.activeTab == .vitals ? .primary : .secondary)
 
-      AddTabItem(isSelected: tabController.activeTab == .actions)
+      AddTabItem()
+        .sensoryFeedback(.selection, trigger: logActionToggle)
         .onTapGesture {
-          tabController.activeTab = .actions
+          logActionToggle.toggle()
+          presentedSheet = ActionsView().asAny
         }
 
       TabItem(title: "Nutrition", image: .nutritionTab)
@@ -89,29 +95,23 @@ private struct TabItem: View {
 }
 
 private struct AddTabItem: View {
-  let isSelected: Bool
 
   var body: some View {
     Image(systemName: "plus")
-      .foregroundStyle(isSelected ? AnyShapeStyle(.white) : AnyShapeStyle(.secondary))
+      .foregroundStyle(.white)
       .font(.title3)
       .bold()
       .fontDesign(.rounded)
       .padding(10)
       .background {
-        if isSelected {
-          RoundedRectangle(cornerRadius: 18)
-            .fill(
-              LinearGradient(
-                colors: [.mutedGreen, .mutedBlue],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-              )
+        RoundedRectangle(cornerRadius: 18)
+          .fill(
+            LinearGradient(
+              colors: [.mutedGreen, .mutedBlue],
+              startPoint: .topLeading,
+              endPoint: .bottomTrailing
             )
-        } else {
-          RoundedRectangle(cornerRadius: 18)
-            .stroke(.secondary, lineWidth: 2)
-        }
+          )
       }
       .horizontallyCentered()
   }

@@ -106,8 +106,8 @@ extension ToDoModel {
             switch self {
             case .logWeight: BodyWeightActionCardView().asAny
             case .logBloodPressure: BloodPressureActionCardView().asAny
-            case .logFood: MFPRecommendationActionCard().asAny
-            case .logProtein: MFPRecommendationActionCard().asAny
+            case .logFood: FoodLoggingActionCardView().asAny
+            case .logProtein: FoodLoggingActionCardView().asAny
             }
         }
     }
