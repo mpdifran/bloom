@@ -81,6 +81,8 @@ extension FoodDatabaseService {
           SELECT *
           FROM food_item_records
           WHERE state = 'unverified'
+          AND packaging_image IS NOT NULL
+          AND nutrition_label_image IS NOT NULL
           LIMIT \(bind: limit)
       """).all(decodingFluent: FoodItemRecord.self)
 
