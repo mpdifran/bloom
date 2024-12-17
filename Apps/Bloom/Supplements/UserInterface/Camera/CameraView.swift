@@ -40,7 +40,7 @@ struct CameraView: View {
           case .granted:
             cameraView
           case .denied:
-            permissionDeniedView
+            CameraPermissionDeniedView()
           case .pending:
             // Just a black screen.
             Color.black.edgesIgnoringSafeArea(.all)
@@ -151,33 +151,6 @@ private extension CameraView {
         }
         .frame(square: 44)
         .padding()
-    }
-
-    var permissionDeniedView: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-
-            VStack(spacing: 16) {
-                Image(systemName: "camera.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.gray)
-
-                Text("Bloom requires permission to take photos.")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
-                    .padding(.horizontal)
-
-                Button {
-                    permissionManager.openSettings()
-                } label: {
-                    Text("Open Settings")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                }
-            }
-        }
     }
 }
 
