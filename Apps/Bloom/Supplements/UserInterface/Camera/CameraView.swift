@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2024-11-16.
 //
 
+import AppUI
 import AVFoundation
 import SwiftUI
 
@@ -30,6 +31,8 @@ struct CameraView: View {
     private let cameraManager: CameraManager
     private let captureSession = AVCaptureSession()
 
+    @State private var alertDetails: AlertDetails?
+
     @StateObject var permissionManager = CameraPermissionManager.shared
 
     @Environment(\.dismiss) private var dismiss
@@ -41,6 +44,9 @@ struct CameraView: View {
             cameraView
           case .denied:
             CameraPermissionDeniedView()
+              .onAppear {
+                alertDetails = permissionManager.permissionAlert
+              }
           case .pending:
             // Just a black screen.
             Color.black.edgesIgnoringSafeArea(.all)
@@ -64,16 +70,7 @@ struct CameraView: View {
                 await cameraManager.stop()
             }
         }
-        .alert(isPresented: $permissionManager.shouldShowAlert) {
-            Alert(
-                title: Text("Camera Permission Required"),
-                message: Text("Please allow camera access in Settings."),
-                primaryButton: .default(Text("Open Settings")) {
-                    permissionManager.openSettings()
-                },
-                secondaryButton: .cancel(Text("Cancel"))
-            )
-        }
+        .alert(alertDetails: $alertDetails)
     }
 }
 

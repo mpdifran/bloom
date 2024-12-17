@@ -23,6 +23,7 @@ struct AIFoodScannerView: View {
     @State private var saveComplete = false
     @State private var errorToggle = false
     @State private var error: Error?
+    @State private var alertDetails: AlertDetails?
     @FocusState private var focusedIndex: Int?
 
     @StateObject var permissionManager = CameraPermissionManager.shared
@@ -71,17 +72,8 @@ struct AIFoodScannerView: View {
                 await cameraManager.stop()
             }
         }
+        .alert(alertDetails: $alertDetails)
         .alert(error: $error)
-        .alert(isPresented: $permissionManager.shouldShowAlert) {
-            Alert(
-                title: Text("Camera Permission Required"),
-                message: Text("Please allow camera access in Settings."),
-                primaryButton: .default(Text("Open Settings")) {
-                    permissionManager.openSettings()
-                },
-                secondaryButton: .cancel(Text("Cancel"))
-            )
-        }
         .onChange(of: error as? NSError) { oldValue, newValue in
             guard newValue != nil else { return }
 
@@ -103,14 +95,17 @@ private extension AIFoodScannerView {
     var scanAreaView: some View {
         switch permissionManager.permissionState {
         case .granted:
-            cameraView
+          cameraView
         case .denied:
-            CameraPermissionDeniedView()
+          CameraPermissionDeniedView()
+            .onAppear {
+              alertDetails = permissionManager.permissionAlert
+            }
         case .pending:
-            Rectangle()
-                .fill(.black)
-                .ignoresSafeArea()
-                .aspectRatio(contentMode: .fit)
+          Rectangle()
+            .fill(.black)
+            .ignoresSafeArea()
+            .aspectRatio(contentMode: .fit)
         }
     }
 
@@ -249,6 +244,10 @@ private extension AIFoodScannerView {
             Button {
                 startScanToggle.toggle()
                 Task {
+                  guard permissionManager.permissionState == .granted else {
+                    alertDetails = permissionManager.permissionAlert
+                    return
+                  }
                     guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
 
                     viewModel.image = image
