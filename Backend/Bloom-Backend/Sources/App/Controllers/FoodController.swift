@@ -9,12 +9,16 @@ import Foundation
 import Vapor
 import BloomModel
 
+// MARK: - FoodController
+
 struct FoodController {
   private let edamamService = EdamamFoodService()
   private let openAIService = OpenAIService()
   private let foodDatabaseService = FoodDatabaseService()
   private let openFoodFactsService = OpenFoodFactsService()
 }
+
+// MARK: - RouteCollection
 
 extension FoodController: RouteCollection {
 
@@ -28,6 +32,8 @@ extension FoodController: RouteCollection {
     }
   }
 }
+
+// MARK: - Route Handlers
 
 extension FoodController {
 
@@ -45,7 +51,7 @@ extension FoodController {
 
   @Sendable
   func searchFoods(_ request: Request) async throws -> FoodSearchResponse {
-    let sections = try await searchFoodsLocalDatabase(request)
+    let sections = await searchFoodsLocalDatabase(request)
     return FoodSearchResponse(sections: sections)
   }
 
@@ -110,27 +116,35 @@ extension FoodController {
   }
 }
 
+// MARK: - Private Methods
+
 private extension FoodController {
 
-  func searchFoodsLocalDatabase(_ request: Request) async throws -> [FoodSearchResponse.Section] {
-    let requestBody = try request.content.decode(FoodSearchRequest.self)
+  func searchFoodsLocalDatabase(_ request: Request) async -> [FoodSearchResponse.Section] {
+    do {
+      let requestBody = try request.content.decode(FoodSearchRequest.self)
 
-    if let barcode = requestBody.upcCode {
-      let sections = await searchFoodsBarcodeLocalDatabase(request, barcode: barcode)
-      if sections.isNotEmpty {
-        return sections
+      if let barcode = requestBody.upcCode {
+        let sections = await searchFoodsBarcodeLocalDatabase(request, barcode: barcode)
+        if sections.isNotEmpty {
+          return sections
+        } else {
+          return await searchFoodsBarcodeOpenFoodFacts(request, barcode: barcode)
+        }
+      } else if let name = requestBody.name {
+        return await searchFoodsByNameLocalDatabase(
+          request,
+          name: name,
+          country: requestBody.country?.country ?? .usa
+        )
       } else {
-        return await searchFoodsBarcodeOpenFoodFacts(request, barcode: barcode)
+        throw Abort(.badRequest)
       }
-    } else if let name = requestBody.name {
-      return await searchFoodsByNameLocalDatabase(
-        request,
-        name: name,
-        country: requestBody.country?.country ?? .usa
-      )
-    } else {
-      throw Abort(.badRequest)
+    } catch {
+      request.logger.error(error)
     }
+
+    return []
   }
 
   func searchFoodsBarcodeLocalDatabase(_ request: Request, barcode: String) async -> [FoodSearchResponse.Section] {
@@ -328,6 +342,8 @@ private extension FoodController {
     return []
   }
 }
+
+// MARK: - Private Image Methods
 
 private extension FoodController {
 
