@@ -18,6 +18,7 @@ struct TabBarViewModifier: ViewModifier {
 
   @Environment(TabController.self) private var tabController: TabController
 
+  @State private var logActionToggle = false
   @State private var presentedSheet: AnyView?
 
   func body(content: Content) -> some View {
@@ -46,7 +47,9 @@ extension TabBarViewModifier {
         .tint(tabController.activeTab == .vitals ? .primary : .secondary)
 
       AddTabItem()
+        .sensoryFeedback(.selection, trigger: logActionToggle)
         .onTapGesture {
+          logActionToggle.toggle()
           presentedSheet = ActionsView().asAny
         }
 
