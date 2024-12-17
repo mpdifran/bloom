@@ -14,115 +14,77 @@ struct ActionsView: View {
 
   @State private var viewModel = ViewModel()
 
+  @Environment(\.dismiss) private var dismiss
+
   var body: some View {
-    NavigationStack {
-      ScrollView {
-        VStack {
-          NutritionQuickActionCell(
-            title: "Search Food",
-            subtitle: "Search and add food you've eaten.",
-            systemImage: "magnifyingglass"
-          )
+    ScrollView {
+      VStack {
+        Text("Log")
+          .font(.largeTitle)
+          .fontDesign(.rounded)
+          .bold()
+          .padding(.top)
+
+        ActionInstanceCell(image: .logFoodIcon, title: "Food")
+          .tint(.mutedGreen)
           .onTapGesture {
-            presentedCardSheet = FoodLoggingActionCardView().asAny
+            presentedCardSheet = FoodLoggingActionCardView {
+              dismiss()
+            }.asAny
           }
 
-          HStack {
-            NutritionQuickActionCell(
-              title: "AI Scan",
-              subtitle: "Log food instantly via AI.",
-              systemImage: "sparkles"
-            )
-            .onTapGesture {
-              presentedCardSheet = AIFoodScannerView().asAny
-            }
-            NutritionQuickActionCell(
-              title: "Scan Barcode",
-              subtitle: "Scan a barcode to quickly log food.",
-              systemImage: "barcode.viewfinder"
-            )
-            .onTapGesture {
-              presentedCardSheet = FoodBarcodeScannerView(onBarcodeScan: { (barcode) in
-                Task {
-                  await delayShowFoodSearch(for: barcode)
-                }
-              }).asAny
-            }
+        ActionInstanceCell(image: .logWeightIcon, title: "Weight")
+          .tint(.mutedIndigo)
+          .onTapGesture {
+            presentedCardSheet = BodyWeightActionCardView {
+              dismiss()
+            }.asAny
           }
 
-          HStack {
-            ActionStatusCell(
-              title: "Log Weight",
-              systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
-              latestValue: viewModel.weightDetails?.displayString,
-              latestTimestamp: viewModel.weightDetails?.timestampString
-            )
-            .tint(.mutedIndigo)
-            .onTapGesture {
-              presentedCardSheet = BodyWeightActionCardView().asAny
-            }
-
-            ActionStatusCell(
-              title: "Log Blood Pressure",
-              systemImage: "gauge.open.with.lines.needle.67percent.and.arrowtriangle",
-              latestValue: viewModel.bloodPressureDetails?.displayString,
-              latestTimestamp: viewModel.bloodPressureDetails?.timestampString
-            )
-            .tint(.mutedPink)
-            .onTapGesture {
-              presentedCardSheet = BloodPressureActionCardView().asAny
-            }
+        ActionInstanceCell(image: .logBloodPressureIcon, title: "Blood Pressure")
+          .tint(.mutedRed)
+          .onTapGesture {
+            presentedCardSheet = BloodPressureActionCardView {
+              dismiss()
+            }.asAny
           }
 
-          HStack {
-            ActionStatusCell(
-              title: "Log Water",
-              systemImage: "waterbottle.fill",
-              latestValue: viewModel.waterDetails?.displayString,
-              latestTimestamp: viewModel.waterDetails?.timestampString
-            )
-            .tint(.mutedBlue)
-            .onTapGesture {
-              presentedCardSheet = WaterActionCardView().asAny
-            }
-
-            ActionStatusCell(
-              title: "Log Bowel Movement",
-              systemImage: "toilet.fill",
-              latestValue: viewModel.bowelMovementDetails?.displayString,
-              latestTimestamp: viewModel.bowelMovementDetails?.timestampString
-            )
-            .tint(.brown)
-            .onTapGesture {
-              presentedCardSheet = BowelMovementActionCardView().asAny
-            }
+        ActionInstanceCell(image: .logWaterIcon, title: "Water")
+          .tint(.mutedBlue)
+          .onTapGesture {
+            presentedCardSheet = WaterActionCardView {
+              dismiss()
+            }.asAny
           }
-        }
-        .padding()
-        .onAppear {
-          viewModel.observeData()
-        }
+
+        ActionInstanceCell(image: .logBowelIcon, title: "Bowel Movement")
+          .tint(.brown)
+          .onTapGesture {
+            presentedCardSheet = BowelMovementActionCardView {
+              dismiss()
+            }.asAny
+          }
       }
-      .navigationTitle("Log")
-      .tabBar()
-      .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          Button(action: {
-            showAllDataView = true
-          }, label: {
-            Text("All Data")
-          })
-        }
-      }
-      .navigationDestination(isPresented: $showAllDataView) {
-        AllActionDataListView()
-      }
+      .padding()
+      .presentationDetentSelfSizing()
     }
+    .groupedBackground()
+    .presentationCornerRadius(30)
+    .presentationDragIndicator(.visible)
     .sheet($presentedCardSheet)
+    .onAppear {
+      viewModel.observeData()
+    }
   }
 }
 
 private extension ActionsView {
+
+  func dismissAndRun(_ closure: () -> Void) async {
+    dismiss()
+    await Delay(500)
+    closure()
+  }
 
   func delayShowFoodSearch(for barcode: String) async {
     await Delay(500)
@@ -132,7 +94,20 @@ private extension ActionsView {
 }
 
 #Preview {
-  TabView {
-    ActionsView()
+  struct PreviewView: View {
+
+      @State private var showSheet = true
+
+      var body: some View {
+          Button {
+              showSheet.toggle()
+          } label: {
+              Text("Show Sheet")
+          }
+          .sheet(isPresented: $showSheet) {
+            ActionsView()
+          }
+      }
   }
+  return PreviewView()
 }

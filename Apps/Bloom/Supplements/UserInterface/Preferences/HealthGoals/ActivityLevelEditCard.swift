@@ -9,60 +9,61 @@ import SwiftUI
 
 struct ActivityLevelEditCard: View {
 
-    @State private var selectedActivityLevel: ActivityLevelSummary.ActivityLevel?
+  @State private var selectedActivityLevel: ActivityLevelSummary.ActivityLevel?
 
-    @State private var vitalsViewModel = VitalsViewModel.shared
+  @State private var vitalsViewModel = VitalsViewModel.shared
 
-    @ObservedObject private var healthManager = HealthManager.shared
+  @ObservedObject private var healthManager = HealthManager.shared
 
-    var body: some View {
-        ActionCardView(
-            title: "Activity Level",
-            detents: [.large]
-        ) {
-            healthManager.userReportedActivityLevel = selectedActivityLevel
-            return true
-        } content: { (_, handleSave) in
-            ScrollView {
-                VStack {
-                    ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
-                        ActivityLevelSelectionCell(
-                            activityLevel: activityLevel,
-                            isRecommended: vitalsViewModel.activityLevelSummary?.details.activityLevel == activityLevel,
-                            isSelected: selectedActivityLevel == activityLevel
-                        )
-                        .onTapGesture {
-                            selectedActivityLevel = activityLevel
-                        }
-                    }
-                }
-                .padding()
+  var body: some View {
+    ActionCardView(
+      title: "Activity Level",
+      detents: [.large],
+      performDismiss: nil
+    ) {
+      healthManager.userReportedActivityLevel = selectedActivityLevel
+      return true
+    } content: { (_, handleSave) in
+      ScrollView {
+        VStack {
+          ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
+            ActivityLevelSelectionCell(
+              activityLevel: activityLevel,
+              isRecommended: vitalsViewModel.activityLevelSummary?.details.activityLevel == activityLevel,
+              isSelected: selectedActivityLevel == activityLevel
+            )
+            .onTapGesture {
+              selectedActivityLevel = activityLevel
             }
+          }
         }
-        .sensoryFeedback(.impact, trigger: selectedActivityLevel)
-        .animation(.default, value: selectedActivityLevel)
-        .tint(selectedActivityLevel?.barColor ?? .mutedBlue)
-        .onAppear {
-            selectedActivityLevel = healthManager.userReportedActivityLevel
-        }
+        .padding()
+      }
     }
+    .sensoryFeedback(.impact, trigger: selectedActivityLevel)
+    .animation(.default, value: selectedActivityLevel)
+    .tint(selectedActivityLevel?.barColor ?? .mutedBlue)
+    .onAppear {
+      selectedActivityLevel = healthManager.userReportedActivityLevel
+    }
+  }
 }
 
 #Preview {
-    struct PreviewView: View {
+  struct PreviewView: View {
 
-        @State private var showSheet = true
+    @State private var showSheet = true
 
-        var body: some View {
-            Button {
-                showSheet.toggle()
-            } label: {
-                Text("Show Sheet")
-            }
-            .sheet(isPresented: $showSheet) {
-                ActivityLevelEditCard()
-            }
-        }
+    var body: some View {
+      Button {
+        showSheet.toggle()
+      } label: {
+        Text("Show Sheet")
+      }
+      .sheet(isPresented: $showSheet) {
+        ActivityLevelEditCard()
+      }
     }
-    return PreviewView()
+  }
+  return PreviewView()
 }

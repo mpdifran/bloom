@@ -13,9 +13,14 @@ import DataContainer
 struct FoodLoggingActionCardView: View {
 
   private let initialBarcodeToSearch: String?
+  private let performDismiss: (() -> Void)?
 
-  init(initialBarcodeToSearch: String? = nil) {
+  init(
+    initialBarcodeToSearch: String? = nil,
+    performDismiss: (() -> Void)? = nil
+  ) {
     self.initialBarcodeToSearch = initialBarcodeToSearch
+    self.performDismiss = performDismiss
   }
 
   @Bindable private var viewModel = ViewModel()
@@ -49,7 +54,11 @@ struct FoodLoggingActionCardView: View {
         }
         ToolbarItem(placement: .cancellationAction) {
           Button("Done") {
-            dismiss()
+            if let performDismiss {
+              performDismiss()
+            } else {
+              dismiss()
+            }
           }
           .bold()
         }

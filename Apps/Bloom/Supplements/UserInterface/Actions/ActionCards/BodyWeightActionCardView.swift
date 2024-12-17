@@ -11,92 +11,99 @@ import TelemetryDeck
 
 struct BodyWeightActionCardView: View {
 
-    @State private var weight: Double = 0
+  private let performDismiss: (() -> Void)?
 
-    @State private var didError = false
-    @State private var error: Error?
+  init(performDismiss: (() -> Void)? = nil) {
+    self.performDismiss = performDismiss
+  }
 
-    @FocusState private var isFocused: Bool
-    @ObservedObject private var healthManager = HealthManager.shared
+  @State private var weight: Double = 0
 
-    private var unitPreferences = HealthUnitPreferences.shared
+  @State private var didError = false
+  @State private var error: Error?
 
-    var body: some View {
-        ActionCardView(
-            title: "Body Weight",
-            sampleTypes: [HKQuantityType(.bodyMass)]
-        ) {
-            await logWeight()
-        } content: { (_, handleSave) in
-            VStack {
-                Spacer()
+  @FocusState private var isFocused: Bool
+  @ObservedObject private var healthManager = HealthManager.shared
 
-                HStack {
-                    TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
-                        .selectAllTextOnBeginEditing()
-                        .focused($isFocused)
-                    Text(unitPreferences.weightUnit.sensibleUnitString)
-                }
-                .frame(width: 200)
-                .fontDesign(.rounded)
-                .keyboardType(.decimalPad)
-                .sensoryFeedback(.error, trigger: didError)
-                .textFieldStyle(.roundedBorder)
-                .font(.largeTitle)
-                .bold()
-                .multilineTextAlignment(.trailing)
+  private var unitPreferences = HealthUnitPreferences.shared
 
-                Spacer()
-            }
+  var body: some View {
+    ActionCardView(
+      title: "Body Weight",
+      sampleTypes: [HKQuantityType(.bodyMass)],
+      performDismiss: performDismiss
+    ) {
+      await logWeight()
+    } content: { (_, handleSave) in
+      VStack {
+        Spacer()
+
+        HStack {
+          TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
+            .selectAllTextOnBeginEditing()
+            .focused($isFocused)
+          Text(unitPreferences.weightUnit.sensibleUnitString)
         }
-        .alert(error: $error)
-        .tint(.mutedIndigo)
+        .frame(width: 200)
+        .fontDesign(.rounded)
+        .keyboardType(.decimalPad)
+        .sensoryFeedback(.error, trigger: didError)
+        .textFieldStyle(.roundedBorder)
+        .font(.largeTitle)
+        .bold()
+        .multilineTextAlignment(.trailing)
+
+        Spacer()
+      }
     }
+    .alert(error: $error)
+    .tint(.mutedIndigo)
+  }
 }
 
 private extension BodyWeightActionCardView {
 
-    func logWeight() async -> Bool {
-        do {
-            let date = Date.now
-            let quantity = HKQuantity(unit: unitPreferences.weightUnit, doubleValue: weight)
-            let sample = HKQuantitySample(
-                type: .init(.bodyMass),
-                quantity: quantity,
-                start: date,
-                end: date,
-                metadata: [
-                    HKMetadataKeyWasUserEntered : true
-                ]
-            )
+  func logWeight() async -> Bool {
+    do {
+      let date = Date.now
+      let quantity = HKQuantity(unit: unitPreferences.weightUnit, doubleValue: weight)
+      let sample = HKQuantitySample(
+        type: .init(.bodyMass),
+        quantity: quantity,
+        start: date,
+        end: date,
+        metadata: [
+          HKMetadataKeyWasUserEntered : true
+        ]
+      )
 
-            try await HealthStoreModifier.shared.write(sample: sample)
-            TelemetryDeck.signal("Log Weight")
-        } catch {
-            self.error = error
-            self.didError.toggle()
-            return false
-        }
-
-        return true
+      try await HealthStoreModifier.shared.write(sample: sample)
+      TelemetryDeck.signal("Log Weight")
+    } catch {
+      self.error = error
+      self.didError.toggle()
+      return false
     }
+
+    return true
+  }
 }
 
 #Preview {
-    struct PreviewView: View {
+  struct PreviewView: View {
 
-        @State private var showSheet = true
+    @State private var showSheet = true
 
-        var body: some View {
-            Button {
-                showSheet.toggle()
-            } label: {
-                Text("Show Sheet")
-            }
-            .sheet(isPresented: $showSheet) {
-                BodyWeightActionCardView()
-            }
-        }
+    var body: some View {
+      Button {
+        showSheet.toggle()
+      } label: {
+        Text("Show Sheet")
+      }
+      .sheet(isPresented: $showSheet) {
+        BodyWeightActionCardView() { }
+      }
     }
-    return PreviewView()
+  }
+  return PreviewView()
 }
