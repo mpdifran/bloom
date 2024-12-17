@@ -59,9 +59,7 @@ struct PreferencesView: View {
     .alert(alertDetails: $alertDetails)
     .alert(error: $error)
     .animation(.default, value: healthManager.healthGoal)
-    .tabItem {
-      Label("Preferences", systemImage: "slider.horizontal.below.square.and.square.filled")
-    }
+    .tabBar()
   }
 }
 

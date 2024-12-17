@@ -103,9 +103,9 @@ struct ChatView: View {
                 .onChange(of: viewModel.chatHistory.count) { _, _ in
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)
 
-                    if tabController.activeTab == .chat {
-                        viewModel.unreadChatCount = 0
-                    }
+//                    if tabController.activeTab == .chat {
+//                        viewModel.unreadChatCount = 0
+//                    }
                 }
                 .onAppear {
                     scrollViewProxy.scrollTo(viewModel.lastID(), anchor: .bottom)

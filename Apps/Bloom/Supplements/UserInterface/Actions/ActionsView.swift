@@ -104,6 +104,7 @@ struct ActionsView: View {
         }
       }
       .navigationTitle("Log")
+      .tabBar()
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
           Button(action: {
@@ -118,9 +119,6 @@ struct ActionsView: View {
       }
     }
     .sheet($presentedCardSheet)
-    .tabItem {
-      Label("Log", systemImage: "plus.app")
-    }
   }
 }
 

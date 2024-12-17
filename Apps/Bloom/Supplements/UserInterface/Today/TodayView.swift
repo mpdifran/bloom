@@ -141,6 +141,7 @@ struct TodayView: View {
             }
             .groupedBackground()
             .navigationTitle("Today")
+            .tabBar()
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Configure", systemImage: "gear") {
@@ -156,9 +157,6 @@ struct TodayView: View {
             .fullScreenCover(isPresented: $tabController.showEveningReport) {
                 EveningReportView()
             }
-        }
-        .tabItem {
-            Label("Today", systemImage: "calendar.badge.checkmark")
         }
         .onAppear {
             habitsViewModel.checkUpdateSuggestedHabits()

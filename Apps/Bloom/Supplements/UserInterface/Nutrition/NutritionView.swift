@@ -29,6 +29,7 @@ struct NutritionView: View {
       }
       .groupedBackground()
       .navigationBarTitleDisplayMode(.inline)
+      .tabBar()
       .tint(.mutedGreen)
       .toolbar {
         ToolbarItem(placement: .principal) {

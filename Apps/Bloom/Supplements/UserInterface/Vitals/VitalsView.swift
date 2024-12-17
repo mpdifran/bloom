@@ -58,10 +58,8 @@ struct VitalsView: View {
                     fatalError("Unknown case")
                 }
             }
+            .tabBar()
             .animation(.default, value: viewModel.vitals)
-        }
-        .tabItem {
-            Label("Vitals", systemImage: "bolt.heart")
         }
     }
 }

@@ -34,17 +34,19 @@ struct RootView: View {
           }
         }
       } else {
-        TabView(selection: $tabController.activeTab) {
-          TodayView()
-            .tag(Tab.today)
-          VitalsView()
-            .tag(Tab.vitals)
-          ActionsView()
-            .tag(Tab.actions)
-          NutritionView()
-            .tag(Tab.nutrition)
-          PreferencesView()
-            .tag(Tab.profile)
+        Group {
+          switch tabController.activeTab {
+          case .today:
+            TodayView()
+          case .vitals:
+            VitalsView()
+          case .actions:
+            ActionsView()
+          case .nutrition:
+            NutritionView()
+          case .profile:
+            PreferencesView()
+          }
         }
         .environment(tabController)
         .transition(.blurReplace)

@@ -13,7 +13,6 @@ enum Tab {
   case vitals
   case actions
   case nutrition
-  case chat
   case profile
 }
 
@@ -55,7 +54,7 @@ private extension TabController {
     switch response.notification.request.content.categoryIdentifier {
     case .CategoryID.chatMessage:
       dismiss()
-      select(.chat)
+//      select(.chat)
     case .CategoryID.goodMorning:
       dismiss()
       select(.today)
