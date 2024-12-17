@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2024-11-16.
 //
 
+import AppUI
 import AVFoundation
 import SwiftUI
 
@@ -30,6 +31,8 @@ struct CameraView: View {
     private let cameraManager: CameraManager
     private let captureSession = AVCaptureSession()
 
+    @State private var alertDetails: AlertDetails?
+
     @StateObject var permissionManager = CameraPermissionManager.shared
 
     @Environment(\.dismiss) private var dismiss
@@ -40,7 +43,10 @@ struct CameraView: View {
           case .granted:
             cameraView
           case .denied:
-            permissionDeniedView
+            CameraPermissionDeniedView()
+              .onAppear {
+                alertDetails = permissionManager.permissionAlert
+              }
           case .pending:
             // Just a black screen.
             Color.black.edgesIgnoringSafeArea(.all)
@@ -64,16 +70,7 @@ struct CameraView: View {
                 await cameraManager.stop()
             }
         }
-        .alert(isPresented: $permissionManager.shouldShowAlert) {
-            Alert(
-                title: Text("Camera Permission Required"),
-                message: Text("Please allow camera access in Settings."),
-                primaryButton: .default(Text("Open Settings")) {
-                    permissionManager.openSettings()
-                },
-                secondaryButton: .cancel(Text("Cancel"))
-            )
-        }
+        .alert(alertDetails: $alertDetails)
     }
 }
 
@@ -151,33 +148,6 @@ private extension CameraView {
         }
         .frame(square: 44)
         .padding()
-    }
-
-    var permissionDeniedView: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-
-            VStack(spacing: 16) {
-                Image(systemName: "camera.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.gray)
-
-                Text("Bloom requires permission to take photos.")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
-                    .padding(.horizontal)
-
-                Button {
-                    permissionManager.openSettings()
-                } label: {
-                    Text("Open Settings")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                }
-            }
-        }
     }
 }
 

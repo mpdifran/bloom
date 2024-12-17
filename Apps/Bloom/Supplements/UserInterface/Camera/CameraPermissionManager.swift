@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2024-11-18.
 //
 
+import AppUI
 import AVFoundation
 import SwiftUI
 
@@ -21,7 +22,28 @@ final class CameraPermissionManager: ObservableObject {
   }
 
   @Published var permissionState: State = .pending
-  @Published var shouldShowAlert: Bool = false
+
+  var permissionAlert: AlertDetails {
+    .init(
+      title: "Camera Permission Required",
+      message: "Please allow camera access in Settings.",
+      buttons: [
+        .init(
+          title: "Open Settings",
+          action: { [weak self] in
+            self?.openSettings()
+          }
+        ),
+        .init(
+          title: "Cancel",
+          role: .cancel,
+          action: {
+            // Cancel
+          }
+        )
+      ]
+    )
+  }
 
   func checkPermission() async {
     switch AVCaptureDevice.authorizationStatus(for: .video) {
@@ -30,7 +52,6 @@ final class CameraPermissionManager: ObservableObject {
     case .notDetermined:
       await requestPermission()
     case .denied, .restricted:
-      shouldShowAlert = true
       permissionState = .denied
     @unknown default:
       permissionState = .denied
@@ -48,11 +69,6 @@ final class CameraPermissionManager: ObservableObject {
 private extension CameraPermissionManager {
   func requestPermission() async {
     let isGranted = await AVCaptureDevice.requestAccess(for: .video)
-    if isGranted {
-      permissionState = .granted
-    } else {
-      shouldShowAlert = true
-      permissionState = .denied
-    }
+    permissionState = isGranted ? .granted : .denied
   }
 }
