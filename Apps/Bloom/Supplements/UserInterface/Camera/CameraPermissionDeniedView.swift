@@ -38,3 +38,7 @@ struct CameraPermissionDeniedView: View {
       }
   }
 }
+
+#Preview {
+  CameraPermissionDeniedView()
+}
