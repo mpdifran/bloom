@@ -239,14 +239,4 @@ extension NetworkRequester {
 
     return try JSONDecoder.main.decode(OnboardingInfoResponse.self, from: data)
   }
-
-  func askSleepCoach(request: SleepCoachRequest) async throws -> SleepCoachResponse {
-    let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/sleep-coach")!
-    return try await URLSession.shared.post(url: url, request: request)
-  }
-
-  func chatSleepCoach(request: SleepCoachRequest) async throws -> SleepCoachResponse {
-    let url = URL(string: "https://shep-test-7d27e987b8ef.herokuapp.com/sleep-coach-chat")!
-    return try await URLSession.shared.post(url: url, request: request)
-  }
 }

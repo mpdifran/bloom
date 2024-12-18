@@ -6,12 +6,21 @@
 //
 
 import Foundation
+import HealthKit
 
-struct WorkoutSummary: Codable, Equatable, Identifiable {
-    var id: String { "\(activity)-\(startDate)-\(durationSeconds)-\(caloriesBurned)" }
-    let activity: String
-    let startDate: Date
-    let durationSeconds: TimeInterval
-    let caloriesBurned: Double
-    let distance: Double
+struct WorkoutSummary: Hashable, Identifiable {
+  var id: Int { hashValue }
+
+  let workout: HKWorkout
+}
+
+extension WorkoutSummary {
+
+  var activeEnergyBurned: HKQuantity? {
+    workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()
+  }
+
+  var distance: HKQuantity? {
+    workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?.sumQuantity()
+  }
 }

@@ -32,7 +32,6 @@ struct UserInfoModel: Codable, Equatable {
     let sleepAnalysis: [SleepAnalysis]
     let activeEnergy: QuantityModel?
     let bodyFatPercentage: QuantityModel?
-    let workouts: [WorkoutSummary]
     let meditationMinutes: QuantityModel?
 }
 

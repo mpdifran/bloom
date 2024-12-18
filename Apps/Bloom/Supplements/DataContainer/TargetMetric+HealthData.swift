@@ -221,7 +221,7 @@ extension TargetMetric {
         case .runDistance:
             let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityType: .running, dateRange: dateRange)
             let totalDistance = workouts.sum { workout in
-                workout.totalDistanceWalkingRunning.doubleValue(for: defaultUnit)
+                workout.totalDistanceWalkingRunning?.doubleValue(for: defaultUnit) ?? 0
             }
             return HKQuantity(unit: defaultUnit, doubleValue: totalDistance)
         case .runDuration:
@@ -231,7 +231,7 @@ extension TargetMetric {
         case .bikeDistance:
             let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityType: .cycling, dateRange: dateRange)
             let totalDistance = workouts.sum { workout in
-                workout.totalDistanceCycling.doubleValue(for: defaultUnit)
+                workout.totalDistanceCycling?.doubleValue(for: defaultUnit) ?? 0
             }
             return HKQuantity(unit: defaultUnit, doubleValue: totalDistance)
         case .bikeDuration:
@@ -292,7 +292,7 @@ extension TargetMetric {
         case .runDistance:
             let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityType: .running, dateRange: dateRange)
             return workouts.map {
-                let total = $0.workouts.sum(where: { $0.totalDistanceWalkingRunning.doubleValue(for: unit) })
+                let total = $0.workouts.sum(where: { $0.totalDistanceWalkingRunning?.doubleValue(for: unit) ?? 0 })
                 return DateQuantitySample(date: $0.date, quantity: .init(unit: unit, doubleValue: total))
             }
         case .bikeDuration:
@@ -304,7 +304,7 @@ extension TargetMetric {
         case .bikeDistance:
             let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityType: .cycling, dateRange: dateRange)
             return workouts.map {
-                let total = $0.workouts.sum(where: { $0.totalDistanceCycling.doubleValue(for: unit) })
+                let total = $0.workouts.sum(where: { $0.totalDistanceCycling?.doubleValue(for: unit) ?? 0 })
                 return DateQuantitySample(date: $0.date, quantity: .init(unit: unit, doubleValue: total))
             }
         case .targetHeartRateZone1:

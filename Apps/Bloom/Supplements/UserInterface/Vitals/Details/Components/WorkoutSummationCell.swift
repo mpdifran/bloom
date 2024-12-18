@@ -27,6 +27,7 @@ struct WorkoutSummationCell: View {
                     .font(.headline)
                     .foregroundStyle(.secondary)
             }
+            .multilineTextAlignment(.leading)
 
             Spacer()
 
@@ -41,6 +42,7 @@ struct WorkoutSummationCell: View {
                     .bold()
                     .fontDesign(.rounded)
             }
+            DisclosureIndicator()
         }
         .cardContainer(fill: .background.secondary)
     }

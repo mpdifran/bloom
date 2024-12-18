@@ -32,11 +32,14 @@ struct WorkoutHeartRateZoneCell: View {
         .font(.subheadline)
         .foregroundStyle(.secondary)
       }
+      .multilineTextAlignment(.leading)
 
       Spacer()
 
       MiniTargetHeartRateZoneDistributionView(distribution: report.heartZoneDistribution)
         .frame(width: 80)
+
+      DisclosureIndicator()
     }
   }
 }
