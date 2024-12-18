@@ -91,20 +91,31 @@ extension FoodDatabaseService {
       guard var adminFoodRecord = item.asAdminFoodItemRecord() else { continue }
 
       if let nutritionLabel = item.nutritionLabelImage {
-        let imageURL = try await request.imageStorage.generateImageURL(
-          fileName: nutritionLabel,
-          path: .nutritionLabel,
-          expiration: .hours(1)
-        )
+        let imageURL: URL?
+        if let url = URL(string: nutritionLabel) { // TODO: Zach make this better?
+          imageURL = url
+        } else {
+          imageURL = try await request.imageStorage.generateImageURL(
+            fileName: nutritionLabel,
+            path: .nutritionLabel,
+            expiration: .hours(2)
+          )
+        }
         adminFoodRecord.nutritionLabelImage = imageURL
       }
 
       if let packagingImage = item.packagingImage {
-        let imageURL = try await request.imageStorage.generateImageURL(
-          fileName: packagingImage,
-          path: .foodPackaging,
-          expiration: .hours(1)
-        )
+        let imageURL: URL?
+        if let url = URL(string: packagingImage) { // TODO: Zach make this better?
+          imageURL = url
+        } else {
+          imageURL = try await request.imageStorage.generateImageURL(
+            fileName: packagingImage,
+            path: .foodPackaging,
+            expiration: .hours(2)
+          )
+        }
+
         adminFoodRecord.packagingImage = imageURL
       }
 
