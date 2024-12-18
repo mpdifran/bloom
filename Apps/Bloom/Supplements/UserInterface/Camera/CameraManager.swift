@@ -113,15 +113,16 @@ private extension CameraManager {
       // Choose the best available camera for close up focus (wider the better).
       let discoverySession = AVCaptureDevice.DiscoverySession(
         deviceTypes: [
-          //              .builtInUltraWideCamera,
-          //              .builtInTelephotoCamera,
+//          .builtInUltraWideCamera,
+//          .builtInTelephotoCamera,
           .builtInTripleCamera,
           .builtInDualCamera,
         ],
         mediaType: .video,
         position: .back
       )
-      guard let camera = discoverySession.devices.first else {
+
+      guard let camera = discoverySession.devices.first ?? AVCaptureDevice.default(for: .video) else {
         return
       }
 
