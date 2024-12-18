@@ -11,18 +11,43 @@ struct UnitTextField: View {
   let type: NutrientType
   @Binding var value: Double?
   @Binding var unit: NutritionUnit
+  let defaultUnit: NutritionUnit // The unit stored in the DB.
 
-  init(_ type: NutrientType, value: Binding<Double?>, unit: Binding<NutritionUnit>) {
+  init(
+    _ type: NutrientType,
+    value: Binding<Double?>,
+    unit: Binding<NutritionUnit>,
+    defaultUnit: NutritionUnit
+  ) {
     self.type = type
     self._value = value
     self._unit = unit
+    self.defaultUnit = defaultUnit
   }
 
   var body: some View {
     HStack {
-      TextField(type.displayName, value: $value, format: .number)
+      TextField(type.displayName, value: convertedValue, format: .number)
       Text(unit.displayName)
         .foregroundStyle(.secondary)
+    }
+  }
+
+  private var convertedValue: Binding<Double?> {
+    Binding {
+      NutritionUnitConverter.convert(
+        value,
+        from: defaultUnit,
+        to: unit,
+        type: type
+      )
+    } set: { newValue in
+      value = NutritionUnitConverter.convert(
+        value,
+        from: unit,
+        to: defaultUnit,
+        type: type
+      )
     }
   }
 }
@@ -32,7 +57,8 @@ struct UnitTextField: View {
     UnitTextField(
       .calories,
       value: .constant(300),
-      unit: .constant(.calories)
+      unit: .constant(.calories),
+      defaultUnit: .calories
     )
   }
   .formStyle(.grouped)
@@ -106,6 +132,30 @@ enum NutrientType {
     case .magnesium: "Magnesium"
     case .zinc: "Zinc"
     case .cholesterol: "Cholesterol"
+    }
+  }
+}
+
+struct NutritionUnitConverter {
+  static func convert(
+    _ value: Double?,
+    from: NutritionUnit,
+    to: NutritionUnit,
+    type: NutrientType
+  ) -> Double? {
+    guard let value = value else { return nil }
+
+    guard from != to else { return value } // already done
+
+    // Conversion logic between units
+    switch (from, to) {
+    case (.grams, .milligrams): return value * 1000
+    case (.milligrams, .grams): return value / 1000
+    case (.milligrams, .micrograms): return value * 1000
+    case (.micrograms, .milligrams): return value / 1000
+    case (.grams, .micrograms): return value * 1_000_000
+    case (.micrograms, .grams): return value / 1_000_000
+    default: return value // unsupported cases
     }
   }
 }

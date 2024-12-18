@@ -255,7 +255,7 @@ private extension FoodItemDetailView {
 
   var macroSection: some View {
     Section(header: Text("Energy")) {
-      UnitTextField(.calories, value: $viewModel.foodItem.calories, unit: .constant(.calories))
+      UnitTextField(.calories, value: $viewModel.foodItem.calories, unit: .constant(.calories), defaultUnit: .calories)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calories))
     }
   }
@@ -270,13 +270,13 @@ private extension FoodItemDetailView {
         }
       }
 
-      UnitTextField(.carbs, value: $viewModel.foodItem.carbohydrates, unit: $carbsUnit)
+      UnitTextField(.carbs, value: $viewModel.foodItem.carbohydrates, unit: $carbsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.carbohydrates))
 
-      UnitTextField(.fiber, value: $viewModel.foodItem.fiber, unit: $carbsUnit)
+      UnitTextField(.fiber, value: $viewModel.foodItem.fiber, unit: $carbsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.fiber))
 
-      UnitTextField(.sugar, value: $viewModel.foodItem.sugar, unit: $carbsUnit)
+      UnitTextField(.sugar, value: $viewModel.foodItem.sugar, unit: $carbsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.sugar))
     }
   }
@@ -291,26 +291,26 @@ private extension FoodItemDetailView {
         }
       }
 
-      UnitTextField(.fat, value: $viewModel.foodItem.fat, unit: $fatsUnit)
+      UnitTextField(.fat, value: $viewModel.foodItem.fat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.fat))
 
-      UnitTextField(.saturatedFat, value: $viewModel.foodItem.saturatedFat, unit: $fatsUnit)
+      UnitTextField(.saturatedFat, value: $viewModel.foodItem.saturatedFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.saturatedFat))
 
-      UnitTextField(.transFat, value: $viewModel.foodItem.transFat, unit: $fatsUnit)
+      UnitTextField(.transFat, value: $viewModel.foodItem.transFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.transFat))
 
-      UnitTextField(.polyunsaturatedFat, value: $viewModel.foodItem.polyunsaturatedFat, unit: $fatsUnit)
+      UnitTextField(.polyunsaturatedFat, value: $viewModel.foodItem.polyunsaturatedFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.polyunsaturatedFat))
 
-      UnitTextField(.monounsaturatedFat, value: $viewModel.foodItem.monounsaturatedFat, unit: $fatsUnit)
+      UnitTextField(.monounsaturatedFat, value: $viewModel.foodItem.monounsaturatedFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.monounsaturatedFat))
     }
   }
 
   var proteinSection: some View {
     Section(header: Text("Protein")) {
-      UnitTextField(.protein, value: $viewModel.foodItem.protein, unit: .constant(.grams))
+      UnitTextField(.protein, value: $viewModel.foodItem.protein, unit: .constant(.grams), defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.protein))
     }
   }
@@ -325,22 +325,22 @@ private extension FoodItemDetailView {
         }
       }
 
-      UnitTextField(.vitaminA, value: $viewModel.foodItem.vitaminA, unit: $vitaminsUnit)
+      UnitTextField(.vitaminA, value: $viewModel.foodItem.vitaminA, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminA))
 
-      UnitTextField(.vitaminB6, value: $viewModel.foodItem.vitaminB6, unit: $vitaminsUnit)
+      UnitTextField(.vitaminB6, value: $viewModel.foodItem.vitaminB6, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminB6))
 
-      UnitTextField(.vitaminB12, value: $viewModel.foodItem.vitaminB12, unit: $vitaminsUnit)
+      UnitTextField(.vitaminB12, value: $viewModel.foodItem.vitaminB12, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminB12))
 
-      UnitTextField(.vitaminC, value: $viewModel.foodItem.vitaminC, unit: $vitaminsUnit)
+      UnitTextField(.vitaminC, value: $viewModel.foodItem.vitaminC, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminC))
 
-      UnitTextField(.vitaminD, value: $viewModel.foodItem.vitaminD, unit: $vitaminsUnit)
+      UnitTextField(.vitaminD, value: $viewModel.foodItem.vitaminD, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminD))
 
-      UnitTextField(.vitaminE, value: $viewModel.foodItem.vitaminE, unit: $vitaminsUnit)
+      UnitTextField(.vitaminE, value: $viewModel.foodItem.vitaminE, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminE))
     }
   }
@@ -355,29 +355,29 @@ private extension FoodItemDetailView {
         }
       }
 
-      UnitTextField(.sodium, value: $viewModel.foodItem.sodium, unit: $mineralsUnit)
+      UnitTextField(.sodium, value: $viewModel.foodItem.sodium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.sodium))
 
-      UnitTextField(.calcium, value: $viewModel.foodItem.calcium, unit: $mineralsUnit)
+      UnitTextField(.calcium, value: $viewModel.foodItem.calcium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calcium))
 
-      UnitTextField(.iron, value: $viewModel.foodItem.iron, unit: $mineralsUnit)
+      UnitTextField(.iron, value: $viewModel.foodItem.iron, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.iron))
 
-      UnitTextField(.potassium, value: $viewModel.foodItem.potassium, unit: $mineralsUnit)
+      UnitTextField(.potassium, value: $viewModel.foodItem.potassium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.potassium))
 
-      UnitTextField(.magnesium, value: $viewModel.foodItem.magnesium, unit: $mineralsUnit)
+      UnitTextField(.magnesium, value: $viewModel.foodItem.magnesium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.magnesium))
 
-      UnitTextField(.zinc, value: $viewModel.foodItem.zinc, unit: $mineralsUnit)
+      UnitTextField(.zinc, value: $viewModel.foodItem.zinc, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.zinc))
     }
   }
 
   var otherNutrientsSection: some View {
     Section(header: Text("Other Nutrients")) {
-      UnitTextField(.cholesterol, value: $viewModel.foodItem.cholesterol, unit: .constant(.milligrams))
+      UnitTextField(.cholesterol, value: $viewModel.foodItem.cholesterol, unit: .constant(.milligrams), defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.cholesterol))
     }
   }
