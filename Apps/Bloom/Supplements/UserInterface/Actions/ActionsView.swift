@@ -33,22 +33,6 @@ struct ActionsView: View {
             }.asAny
           }
 
-        ActionInstanceCell(image: .logWeightIcon, title: "Weight")
-          .tint(.mutedIndigo)
-          .onTapGesture {
-            presentedCardSheet = BodyWeightActionCardView {
-              dismiss()
-            }.asAny
-          }
-
-        ActionInstanceCell(image: .logBloodPressureIcon, title: "Blood Pressure")
-          .tint(.mutedRed)
-          .onTapGesture {
-            presentedCardSheet = BloodPressureActionCardView {
-              dismiss()
-            }.asAny
-          }
-
         ActionInstanceCell(image: .logWaterIcon, title: "Water")
           .tint(.mutedBlue)
           .onTapGesture {
@@ -61,6 +45,22 @@ struct ActionsView: View {
           .tint(.brown)
           .onTapGesture {
             presentedCardSheet = BowelMovementActionCardView {
+              dismiss()
+            }.asAny
+          }
+
+        ActionInstanceCell(image: .logWeightIcon, title: "Weight")
+          .tint(.mutedIndigo)
+          .onTapGesture {
+            presentedCardSheet = BodyWeightActionCardView {
+              dismiss()
+            }.asAny
+          }
+
+        ActionInstanceCell(image: .logBloodPressureIcon, title: "Blood Pressure")
+          .tint(.mutedRed)
+          .onTapGesture {
+            presentedCardSheet = BloodPressureActionCardView {
               dismiss()
             }.asAny
           }
