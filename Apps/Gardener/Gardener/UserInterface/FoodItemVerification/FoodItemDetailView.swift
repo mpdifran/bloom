@@ -154,12 +154,39 @@ private extension FoodItemDetailView {
   @ViewBuilder
   func createImage(url: URL?) -> some View {
       if let url {
-        AsyncImage(url: url) { image in
-          image
-            .resizable()
-            .scaledToFit()
-        } placeholder: {
-          ProgressView()
+        AsyncImage(url: url) { phase in
+          switch phase {
+          case .empty:
+            ProgressView()
+          case .success(let image):
+            image
+              .resizable()
+              .scaledToFit()
+          case .failure(let error):
+            ContentUnavailableView {
+              Label("Failed to Load Image", image: "photo.badge.exclamationmark.fill")
+            } description: {
+              VStack {
+                Text("The image failed to load")
+                Text(error.localizedDescription)
+                Text(url.absoluteString)
+                  .foregroundStyle(.blue)
+                  .textSelection(.enabled)
+              }
+            } actions: {
+              Button("Copy URL to Clipboard") {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(url.absoluteString, forType: .string)
+                alertDetails = AlertDetails(
+                  title: "Copied!",
+                  message: "Copied the URL to your clipboard."
+                )
+              }
+              .buttonStyle(.borderedProminent)
+            }
+          @unknown default:
+            Text("Unknown error occurred")
+          }
         }
       } else {
         Text("Not Found")
