@@ -27,7 +27,11 @@ struct UnitTextField: View {
 
   var body: some View {
     HStack {
-      TextField(type.displayName, value: convertedValue, format: .number)
+      TextField(
+        type.displayName,
+        value: convertedValue,
+        format: .number
+      )
       Text(unit.displayName)
         .foregroundStyle(.secondary)
     }
@@ -134,6 +138,36 @@ enum NutrientType {
     case .cholesterol: "Cholesterol"
     }
   }
+
+  /// In milligrams.
+  /// From https://www.canada.ca/en/health-canada/services/technical-documents-labelling-requirements/table-daily-values/nutrition-labelling.html.
+  var dailyValueAmount: Double? {
+    switch self {
+    case .calories: nil // don't support this
+    case .carbs: nil // don't support this
+    case .fiber: 28000
+    case .sugar: 100000
+    case .fat: 75000
+    case .saturatedFat: 20000
+    case .transFat: 20000
+    case .polyunsaturatedFat: 20000
+    case .monounsaturatedFat: 20000
+    case .protein: nil // don't support this
+    case .vitaminA: 0.9
+    case .vitaminB6: 1.7
+    case .vitaminB12: 0.0024
+    case .vitaminC: 90
+    case .vitaminD: 0.02
+    case .vitaminE: 15
+    case .sodium: 2300
+    case .calcium: 1300
+    case .iron: 18
+    case .potassium: 3400
+    case .magnesium: 420
+    case .zinc: 11
+    case .cholesterol: 300
+    }
+  }
 }
 
 struct NutritionUnitConverter {
@@ -149,12 +183,48 @@ struct NutritionUnitConverter {
 
     // Conversion logic between units
     switch (from, to) {
-    case (.grams, .milligrams): return value * 1000
-    case (.milligrams, .grams): return value / 1000
-    case (.milligrams, .micrograms): return value * 1000
-    case (.micrograms, .milligrams): return value / 1000
-    case (.grams, .micrograms): return value * 1_000_000
-    case (.micrograms, .grams): return value / 1_000_000
+    case (.grams, .milligrams):
+      return value * 1000
+    case (.milligrams, .grams):
+      return value / 1000
+    case (.milligrams, .micrograms):
+      return value * 1000
+    case (.micrograms, .milligrams):
+      return value / 1000
+    case (.grams, .micrograms):
+      return value * 1_000_000
+    case (.micrograms, .grams):
+      return value / 1_000_000
+    case (.grams, .percentDV):
+      if let dailyValue = type.dailyValueAmount {
+        return ((1000 * value) / dailyValue) * 100
+      }
+      return nil
+    case (.milligrams, .percentDV):
+      if let dailyValue = type.dailyValueAmount {
+        return (value / dailyValue) * 100
+      }
+      return nil
+    case (.micrograms, .percentDV):
+      if let dailyValue = type.dailyValueAmount {
+        return ((value / 1000) / dailyValue) * 100
+      }
+      return nil
+    case (.percentDV, .grams):
+      if let dailyValue = type.dailyValueAmount {
+        return ((value / 100) * dailyValue) / 1000
+      }
+      return nil
+    case (.percentDV, .milligrams):
+      if let dailyValue = type.dailyValueAmount {
+        return (value / 100) * dailyValue
+      }
+      return nil
+    case (.percentDV, .micrograms):
+      if let dailyValue = type.dailyValueAmount {
+        return ((value / 100) * dailyValue) * 1000
+      }
+      return nil
     default: return value // unsupported cases
     }
   }
