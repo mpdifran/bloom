@@ -774,6 +774,18 @@ extension HealthStoreFetcher {
     let protein = await fetchNutritionalDailyAverage(for: .dietaryProtein, unit: .gram(), dateRange: dateRange)
     let carbohydrates = await fetchNutritionalDailyAverage(for: .dietaryCarbohydrates, unit: .gram(), dateRange: dateRange)
     let fat = await fetchNutritionalDailyAverage(for: .dietaryFatTotal, unit: .gram(), dateRange: dateRange)
+    let vitaminA = await fetchNutritionalDailyAverage(for: .dietaryVitaminA, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let vitaminB6 = await fetchNutritionalDailyAverage(for: .dietaryVitaminB6, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let vitaminB12 = await fetchNutritionalDailyAverage(for: .dietaryVitaminB12, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let vitaminC = await fetchNutritionalDailyAverage(for: .dietaryVitaminC, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let vitaminD = await fetchNutritionalDailyAverage(for: .dietaryVitaminD, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let vitaminE = await fetchNutritionalDailyAverage(for: .dietaryVitaminE, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let calcium = await fetchNutritionalDailyAverage(for: .dietaryCalcium, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let iron = await fetchNutritionalDailyAverage(for: .dietaryIron, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let magnesium = await fetchNutritionalDailyAverage(for: .dietaryMagnesium, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let potassium = await fetchNutritionalDailyAverage(for: .dietaryPotassium, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let sodium = await fetchNutritionalDailyAverage(for: .dietarySodium, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let zinc = await fetchNutritionalDailyAverage(for: .dietaryZinc, unit: .gramUnit(with: .milli), dateRange: dateRange)
     let fiber = await fetchNutritionalDailyAverage(for: .dietaryFiber, unit: .gram(), dateRange: dateRange)
     let sugar = await fetchNutritionalDailyAverage(for: .dietarySugar, unit: .gram(), dateRange: dateRange)
     let water = await fetchNutritionalDailyAverage(for: .dietaryWater, unit: .literUnit(with: .milli), dateRange: dateRange)
@@ -801,6 +813,18 @@ extension HealthStoreFetcher {
       averageProtein: protein,
       averageCarbohydrates: carbohydrates,
       averageFat: fat,
+      averageVitaminA: vitaminA,
+      averageVitaminB6: vitaminB6,
+      averageVitaminB12: vitaminB12,
+      averageVitaminC: vitaminC,
+      averageVitaminD: vitaminD,
+      averageVitaminE: vitaminE,
+      averageCalcium: calcium,
+      averageIron: iron,
+      averageMagnesium: magnesium,
+      averagePotassium: potassium,
+      averageSodium: sodium,
+      averageZinc: zinc,
       averageFiber: fiber,
       averageSugar: sugar,
       averageWater: water

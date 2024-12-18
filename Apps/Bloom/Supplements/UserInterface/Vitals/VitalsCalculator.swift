@@ -168,10 +168,10 @@ private extension VitalsCalculator {
                 VitalModel(
                     id: .nutrition,
                     subtitle: nutritionSummary.subtitle,
-                    status: nutritionSummary.status?.title,
-                    color: nutritionSummary.status?.color,
-                    barLevel: nutritionSummary.barLevel,
-                    hasNoData: nutritionSummary.hasNoData
+                    status: await nutritionSummary.status()?.title,
+                    color: await nutritionSummary.status()?.color,
+                    barLevel: await nutritionSummary.barLevel(),
+                    hasNoData: await nutritionSummary.hasNoData()
                 )
             )
         } else {

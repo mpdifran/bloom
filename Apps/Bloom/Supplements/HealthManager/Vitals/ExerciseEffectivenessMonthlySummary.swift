@@ -23,19 +23,19 @@ extension Double {
 
 extension ExerciseEffectivenessMonthlySummary {
     enum Level {
-        case sedentary
         case minimal
         case moderate
+        case sufficient
         case high
 
         var name: String {
             switch self {
-            case .sedentary:
-                "Sedentary"
             case .minimal:
                 "Minimal"
             case .moderate:
                 "Moderate"
+            case .sufficient:
+                "Sufficient"
             case .high:
                 "High"
             }
@@ -43,11 +43,11 @@ extension ExerciseEffectivenessMonthlySummary {
 
         var color: Color {
             switch self {
-            case .sedentary:
-                    .vitalSevere
             case .minimal:
-                    .vitalWarning
+                    .vitalSevere
             case .moderate:
+                    .vitalWarning
+            case .sufficient:
                     .vitalGood
             case .high:
                     .vitalGreat
@@ -66,17 +66,17 @@ struct ExerciseEffectivenessMonthlySummary: Hashable, Sendable {
         let minutes = scaledSum.doubleValue(for: .minute())
 
         switch level {
-        case .sedentary:
+        case .minimal:
             return VitalModel.BarLevel(
                 level: .low,
                 proportion: minutes.scaledPercent(lower: 0, upper: .maxMinimalZoneMinutes)
             )
-        case .minimal:
+        case .moderate:
             return VitalModel.BarLevel(
                 level: .medium,
                 proportion: minutes.scaledPercent(lower: .maxMinimalZoneMinutes, upper: .minZoneMinutes)
             )
-        case .moderate:
+        case .sufficient:
             return VitalModel.BarLevel(
                 level: .high,
                 proportion: minutes.scaledPercent(lower: .minZoneMinutes, upper: .minExtraZoneMinutes)
@@ -132,19 +132,19 @@ extension ExerciseEffectivenessMonthlySummary.Details {
 
     var level: ExerciseEffectivenessMonthlySummary.Level {
         if workoutReports.isEmpty {
-            return .sedentary
+            return .minimal
         }
 
         let scaledSum = overallHeartZoneDistribution.scaledDurationSum
 
         if scaledSum.doubleValue(for: .minute()) < .maxMinimalZoneMinutes {
-            return .sedentary
-        }
-        if scaledSum.doubleValue(for: .minute()) < .minZoneMinutes {
             return .minimal
         }
-        if scaledSum.doubleValue(for: .minute()) < .minExtraZoneMinutes {
+        if scaledSum.doubleValue(for: .minute()) < .minZoneMinutes {
             return .moderate
+        }
+        if scaledSum.doubleValue(for: .minute()) < .minExtraZoneMinutes {
+            return .sufficient
         }
         return .high
     }

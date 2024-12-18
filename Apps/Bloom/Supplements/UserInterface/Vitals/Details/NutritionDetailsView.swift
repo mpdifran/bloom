@@ -12,486 +12,497 @@ import HealthKit
 
 struct NutritionDetailsView: View {
 
-    private let viewModel = VitalsViewModel.shared
+  private let viewModel = VitalsViewModel.shared
 
-    @State private var dailyEnergy = [DateQuantitySample]()
-    @State private var dailyFiber = [DateQuantitySample]()
-    @State private var dailySugar = [DateQuantitySample]()
-    @State private var dailyWater = [DateQuantitySample]()
+  @State private var dailyEnergy = [DateQuantitySample]()
+  @State private var dailyFiber = [DateQuantitySample]()
+  @State private var dailySugar = [DateQuantitySample]()
+  @State private var dailyWater = [DateQuantitySample]()
 
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                netEnergyChart
-                    .cardContainer()
-                macrosChart
-                    .cardContainer(includePadding: false)
-                waterChart
-                    .cardContainer()
-                fiberChart
-                    .cardContainer()
-                sugarChart
-                    .cardContainer()
-            }
-            .padding()
-            .horizontallyCentered()
-        }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                VitalSummaryDetailTitleView(
-                    title: "Nutrition",
-                    subtitle: "Last 30 Days"
-                )
-            }
-        }
-        .navigationTitle("Nutrition")
-        .navigationBarTitleDisplayMode(.inline)
-        .groupedBackground()
-        .task {
-            let samples = await HealthStoreFetcher.shared.fetchNetEnergy(dateRange: .trailingDaysFromNow(30))
-            await MainActor.run {
-                self.dailyEnergy = samples
-            }
-        }
-        .task {
-            let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
-                for: .dietarySugar,
-                unit: .gram(),
-                dateRange: .trailingMonthsFromNow(1)
-            )
-            await MainActor.run {
-                self.dailySugar = samples
-            }
-        }
-        .task {
-            let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
-                for: .dietaryFiber,
-                unit: .gram(),
-                dateRange: .trailingMonthsFromNow(1)
-            )
-            await MainActor.run {
-                self.dailyFiber = samples
-            }
-        }
-        .task {
-            let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
-                for: .dietaryWater,
-                unit: .literUnit(with: .milli),
-                dateRange: .trailingMonthsFromNow(1)
-            )
-            await MainActor.run {
-                self.dailyWater = samples
-            }
-        }
-        .onAppear {
-            TelemetryDeck.viewScreen("Nutrition Vital Details")
-        }
+  @State private var hasVitaminData = false
+  @State private var hasMineralData = false
+
+  var body: some View {
+    ScrollView {
+      VStack(spacing: 20) {
+        netEnergyChart
+          .cardContainer()
+        macrosChart
+          .cardContainer(includePadding: false)
+        vitaminsChart
+          .cardContainer()
+        mineralsChart
+          .cardContainer()
+        waterChart
+          .cardContainer()
+        fiberChart
+          .cardContainer()
+        sugarChart
+          .cardContainer()
+      }
+      .padding()
+      .horizontallyCentered()
     }
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        VitalSummaryDetailTitleView(
+          title: "Nutrition",
+          subtitle: "Last 30 Days"
+        )
+      }
+    }
+    .navigationTitle("Nutrition")
+    .navigationBarTitleDisplayMode(.inline)
+    .groupedBackground()
+    .task {
+      let samples = await HealthStoreFetcher.shared.fetchNetEnergy(dateRange: .trailingDaysFromNow(30))
+      await MainActor.run {
+        self.dailyEnergy = samples
+      }
+    }
+    .task {
+      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+        for: .dietarySugar,
+        unit: .gram(),
+        dateRange: .trailingMonthsFromNow(1)
+      )
+      await MainActor.run {
+        self.dailySugar = samples
+      }
+    }
+    .task {
+      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+        for: .dietaryFiber,
+        unit: .gram(),
+        dateRange: .trailingMonthsFromNow(1)
+      )
+      await MainActor.run {
+        self.dailyFiber = samples
+      }
+    }
+    .task {
+      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+        for: .dietaryWater,
+        unit: .literUnit(with: .milli),
+        dateRange: .trailingMonthsFromNow(1)
+      )
+      await MainActor.run {
+        self.dailyWater = samples
+      }
+    }
+    .task {
+      self.hasVitaminData = await viewModel.nutritionSummary?.details.vitaminScore() != nil
+      self.hasMineralData = await viewModel.nutritionSummary?.details.mineralScore() != nil
+    }
+    .onAppear {
+      TelemetryDeck.viewScreen("Nutrition Vital Details")
+    }
+  }
 }
 
 private extension NutritionDetailsView {
 
-    @ViewBuilder
-    var netEnergyChart: some View {
-        if let _ = viewModel.nutritionSummary?.details.netEnergy {
-            VStack(alignment: .leading, spacing: 16) {
-                VitalDetailChartTitleView(
-                    title: "Total Daily Energy Expendature",
-                    valueLabel: "",
-                    value: ""
-                )
+  @ViewBuilder
+  var netEnergyChart: some View {
+    if let _ = viewModel.nutritionSummary?.details.netEnergy {
+      VStack(alignment: .leading, spacing: 16) {
+        VitalDetailChartTitleView(
+          title: "Total Daily Energy Expendature",
+          valueLabel: "",
+          value: ""
+        )
 
-                Chart{
-                    ForEach(dailyEnergy) { sample in
-                        BarMark(
-                            x: .value("Date", sample.date),
-                            y: .value("Net Energy", sample.quantity.doubleValue(for: .largeCalorie()))
-                        )
-                        .foregroundStyle((sample.quantity.doubleValue(for: .largeCalorie()) < 500 && sample.quantity.doubleValue(for: .largeCalorie()) > -500) ? .green : .yellow)
-                        .cornerRadius(3)
-                    }
+        Chart{
+          ForEach(dailyEnergy) { sample in
+            BarMark(
+              x: .value("Date", sample.date),
+              y: .value("Net Energy", sample.quantity.doubleValue(for: .largeCalorie()))
+            )
+            .foregroundStyle((sample.quantity.doubleValue(for: .largeCalorie()) < 500 && sample.quantity.doubleValue(for: .largeCalorie()) > -500) ? .green : .yellow)
+            .cornerRadius(3)
+          }
 
-                    RectangleMark(
-                        yStart: .value("Max", 500),
-                        yEnd: .value("Min", -500)
-                    )
-                    .foregroundStyle(.green.opacity(0.3))
+          RectangleMark(
+            yStart: .value("Max", 500),
+            yEnd: .value("Min", -500)
+          )
+          .foregroundStyle(.green.opacity(0.3))
 
-                    RuleMark(
-                        y: .value("Max", 500)
-                    )
-                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.green)
+          RuleMark(
+            y: .value("Max", 500)
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.green)
 
-                    RuleMark(
-                        y: .value("Min", -500)
-                    )
-                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.green)
-                }
-                .frame(height: 260)
-
-                if let netEnergyStatus = viewModel.nutritionSummary?.details.netEnergyStatus {
-                    HStack(alignment: .firstTextBaseline) {
-                        switch netEnergyStatus {
-                        case .deficit(let percent):
-                            Text("\(percent.doubleValue(for: .percent()).format())%")
-                                .font(.largeTitle)
-                                .fontDesign(.rounded)
-                            Text("Caloric Deficit")
-                        case .surplus(let percent):
-                            Text("\(percent.doubleValue(for: .percent()).format())%")
-                                .font(.largeTitle)
-                                .fontDesign(.rounded)
-                            Text("Caloric Surplus")
-                        }
-
-                        Spacer(minLength: 0)
-                    }
-                    .bold()
-                }
-
-                if let netEnergyDescription = viewModel.nutritionSummary?.details.netEnergyDescription {
-                    HStack {
-                        Text(netEnergyDescription)
-                            .fixedSize(horizontal: false, vertical: true)
-                        Spacer(minLength: 0)
-                    }
-                }
-            }
+          RuleMark(
+            y: .value("Min", -500)
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.green)
         }
-    }
+        .frame(height: 260)
 
-    @ViewBuilder
-    var macrosChart: some View {
-        if let details = viewModel.nutritionSummary?.details, let macros = details.macros {
-            VStack(alignment: .leading) {
-                VitalDetailChartTitleView(
-                    title: "Macros",
-                    valueLabel: "",
-                    value: details.macroStatus?.rawValue ?? ""
-                )
-                .padding(.horizontal)
-
-                Divider()
-
-                PillRangeChart(
-                    title: "Protein",
-                    quantityString: macros.protein.displayString(for: .gram()),
-                    unitString: "%",
-                    value: (macros.proteinPercent * 100),
-                    minValue: HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy().lowerBound * 100,
-                    maxValue: HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy().upperBound * 100
-                )
-                .tint(.protein)
-
-                Divider()
-
-                PillRangeChart(
-                    title: "Carbohydrates",
-                    quantityString: macros.carbohydrates.displayString(for: .gram()),
-                    unitString: "%",
-                    value: (macros.carbsPercent * 100),
-                    minValue: HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().lowerBound * 100,
-                    maxValue: HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().upperBound * 100
-                )
-                .tint(.carbohydrates)
-
-                Divider()
-
-                PillRangeChart(
-                    title: "Fat",
-                    quantityString: macros.fat.displayString(for: .gram()),
-                    unitString: "%",
-                    value: (macros.fatPercent * 100),
-                    minValue: HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy().lowerBound * 100,
-                    maxValue: HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy().upperBound * 100
-                )
-                .tint(.fat)
+        if let netEnergyStatus = viewModel.nutritionSummary?.details.netEnergyStatus {
+          HStack(alignment: .firstTextBaseline) {
+            switch netEnergyStatus {
+            case .deficit(let percent):
+              Text("\(percent.doubleValue(for: .percent()).format())%")
+                .font(.largeTitle)
+                .fontDesign(.rounded)
+              Text("Caloric Deficit")
+            case .surplus(let percent):
+              Text("\(percent.doubleValue(for: .percent()).format())%")
+                .font(.largeTitle)
+                .fontDesign(.rounded)
+              Text("Caloric Surplus")
             }
-            .padding(.vertical)
+
+            Spacer(minLength: 0)
+          }
+          .bold()
         }
-    }
 
-//    @ViewBuilder
-//    var vitaminsChart: some View {
-//        if let details = viewModel.nutritionSummary?.details, let _ = details.vitaminScore {
-//            VStack(alignment: .leading) {
-//                VitalDetailChartTitleView(
-//                    title: "Vitamins",
-//                    valueLabel: "",
-//                    value: details.vitaminStatus ?? ""
-//                )
-//
-//                Divider()
-//
-//                if let vitaminA = details.averageVitaminA?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminA() {
-//                    CapsuleRangeChart(
-//                        title: "Vitamin A",
-//                        unitString: "mcg",
-//                        value: vitaminA,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
-//                    )
-//                    .tint(.vitaminA)
-//                }
-//                if let vitaminB6 = details.averageVitaminB6?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminB6() {
-//                    CapsuleRangeChart(
-//                        title: "Vitamin B6",
-//                        unitString: "mg",
-//                        value: vitaminB6,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.vitaminB6)
-//                }
-//                if let vitaminB12 = details.averageVitaminB12?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedMinDailyIntakeForVitaminB12() {
-//                    CapsuleRangeChart(
-//                        title: "Vitamin B12",
-//                        unitString: "mcg",
-//                        value: vitaminB12,
-//                        minValue: goal.doubleValue(for: .gramUnit(with: .micro)),
-//                        maxValue: 2000
-//                    )
-//                    .tint(.vitaminB12)
-//                }
-//                if let vitaminC = details.averageVitaminC?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminC() {
-//                    CapsuleRangeChart(
-//                        title: "Vitamin C",
-//                        unitString: "mg",
-//                        value: vitaminC,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.vitaminC)
-//                }
-//                if let vitaminD = details.averageVitaminD?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminD() {
-//                    CapsuleRangeChart(
-//                        title: "Vitamin D",
-//                        unitString: "mcg",
-//                        value: vitaminD,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
-//                    )
-//                    .tint(.vitaminD)
-//                }
-//                if let vitaminE = details.averageVitaminE?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForVitaminE() {
-//                    CapsuleRangeChart(
-//                        title: "Vitamin E",
-//                        unitString: "mg",
-//                        value: vitaminE,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.vitaminE)
-//                }
-//            }
-//        }
-//    }
-
-//    @ViewBuilder
-//    var mineralsChart: some View {
-//        if let details = viewModel.nutritionSummary?.details, let _ = details.mineralScore {
-//            VStack(alignment: .leading) {
-//                VitalDetailChartTitleView(
-//                    title: "Minerals",
-//                    valueLabel: "",
-//                    value: details.mineralStatus ?? ""
-//                )
-//
-//                Divider()
-//
-//                if let calcium = details.averageCalcium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedIntakeForCalcium() {
-//                    CapsuleRangeChart(
-//                        title: "Calcium",
-//                        unitString: "mg",
-//                        value: calcium,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.calcium)
-//                }
-//                if let iron = details.averageIron?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForIron() {
-//                    CapsuleRangeChart(
-//                        title: "Iron",
-//                        unitString: "mg",
-//                        value: iron,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.iron)
-//                }
-//                if let magnesium = details.averageMagnesium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForMagnesium() {
-//                    CapsuleRangeChart(
-//                        title: "Magnesium",
-//                        unitString: "mg",
-//                        value: magnesium,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.magnesium)
-//                }
-//                if let potassium = details.averagePotassium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForPotassium() {
-//                    CapsuleRangeChart(
-//                        title: "Potassium",
-//                        unitString: "mg",
-//                        value: potassium,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.potassium)
-//                }
-//                if let sodium = details.averageSodium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForSodium() {
-//                    CapsuleRangeChart(
-//                        title: "Sodium",
-//                        unitString: "mg",
-//                        value: sodium,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.sodium)
-//                }
-//                if let zinc = details.averageZinc?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthManager.shared.recommendedDailyIntakeForZinc() {
-//                    CapsuleRangeChart(
-//                        title: "Zinc",
-//                        unitString: "mg",
-//                        value: zinc,
-//                        minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
-//                        maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
-//                    )
-//                    .tint(.zinc)
-//                }
-//            }
-//        }
-//    }
-
-    @ViewBuilder
-    var fiberChart: some View {
-        if let details = viewModel.nutritionSummary?.details, let averageFiber = details.averageFiber {
-            VStack(alignment: .leading) {
-                VitalDetailChartTitleView(
-                    title: "Fiber",
-                    value: averageFiber.displayString(for: .gram())
-                )
-
-                Chart{
-                    ForEach(dailyFiber) { sample in
-                        BarMark(
-                            x: .value("Date", sample.date),
-                            y: .value("Daily Fiber", sample.quantity.doubleValue(for: .gram()))
-                        )
-                        .foregroundStyle(.fiber)
-                    }
-
-                    if let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber() {
-                        RuleMark(
-                            y: .value("Min Fiber", goal.doubleValue(for: .gram()))
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.fiber)
-
-                        RectangleMark(
-                            yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
-                            yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
-                        )
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [
-                                    .fiber.opacity(0.3),
-                                    .clear
-                                ],
-                                startPoint: .bottom,
-                                endPoint: .top
-                            )
-                        )
-                    }
-                }
-                .frame(height: 160)
-            }
+        if let netEnergyDescription = viewModel.nutritionSummary?.details.netEnergyDescription {
+          HStack {
+            Text(netEnergyDescription)
+              .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+          }
         }
+      }
     }
+  }
 
-    @ViewBuilder
-    var sugarChart: some View {
-        if let details = viewModel.nutritionSummary?.details, let averageSugar = details.averageSugar {
-            VStack(alignment: .leading) {
-                VitalDetailChartTitleView(
-                    title: "Sugar",
-                    value: averageSugar.displayString(for: .gram())
-                )
+  @ViewBuilder
+  var macrosChart: some View {
+    if let details = viewModel.nutritionSummary?.details, let macros = details.macros {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Macros",
+          valueLabel: "",
+          value: details.macroStatus?.rawValue ?? ""
+        )
+        .padding(.horizontal)
 
-                Chart{
-                    ForEach(dailySugar) { sample in
-                        BarMark(
-                            x: .value("Date", sample.date),
-                            y: .value("Daily Sugar", sample.quantity.doubleValue(for: .gram()))
-                        )
-                        .foregroundStyle(.sugar)
-                    }
+        Divider()
 
-                    if let goal = HealthGoalProvider.shared.recommendedMaxDailyIntakeForSugar() {
-                        RuleMark(
-                            y: .value("Max Sugar", goal.doubleValue(for: .gram()))
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                        .foregroundStyle(.sugar)
+        PillRangeChart(
+          title: "Protein",
+          quantityString: macros.protein.displayString(for: .gram()),
+          unitString: "%",
+          value: (macros.proteinPercent * 100),
+          minValue: HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy().lowerBound * 100,
+          maxValue: HealthGoalProvider.shared.recommendedDailyProteinPercentOfDietaryEnergy().upperBound * 100
+        )
+        .tint(.protein)
 
-                        RectangleMark(
-                            yStart: .value("", 0),
-                            yEnd: .value("Max Sugar", goal.doubleValue(for: .gram()))
-                        )
-                        .foregroundStyle(.sugar.opacity(0.3))
-                    }
-                }
-                .frame(height: 160)
-            }
+        Divider()
+
+        PillRangeChart(
+          title: "Carbohydrates",
+          quantityString: macros.carbohydrates.displayString(for: .gram()),
+          unitString: "%",
+          value: (macros.carbsPercent * 100),
+          minValue: HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().lowerBound * 100,
+          maxValue: HealthGoalProvider.shared.recommendedDailyCarbohydratesPercentOfDietaryEnergy().upperBound * 100
+        )
+        .tint(.carbohydrates)
+
+        Divider()
+
+        PillRangeChart(
+          title: "Fat",
+          quantityString: macros.fat.displayString(for: .gram()),
+          unitString: "%",
+          value: (macros.fatPercent * 100),
+          minValue: HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy().lowerBound * 100,
+          maxValue: HealthGoalProvider.shared.recommendedDailyFatPercentOfDietaryEnergy().upperBound * 100
+        )
+        .tint(.fat)
+      }
+      .padding(.vertical)
+    }
+  }
+
+  @ViewBuilder
+  var vitaminsChart: some View {
+    if let details = viewModel.nutritionSummary?.details, hasVitaminData {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Vitamins",
+          valueLabel: "",
+          value: ""
+        )
+
+        Divider()
+
+        if let vitaminA = details.averageVitaminA?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminA() {
+          CapsuleRangeChart(
+            title: "Vitamin A",
+            unitString: "mcg",
+            value: vitaminA,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
+          )
+          .tint(.vitaminA)
         }
-    }
-
-    @ViewBuilder
-    var waterChart: some View {
-        if let details = viewModel.nutritionSummary?.details, let averageWater = details.averageWater {
-            VStack(alignment: .leading) {
-                VitalDetailChartTitleView(
-                    title: "Water",
-                    value: averageWater.displayString(for: .literUnit(with: .milli))
-                )
-
-                Chart{
-                    ForEach(dailyWater) { sample in
-                        BarMark(
-                            x: .value("Date", sample.date),
-                            y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
-                        )
-                        .foregroundStyle(.mutedBlue)
-                    }
-
-                    RuleMark(
-                        y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
-                    )
-                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                    .foregroundStyle(.mutedBlue)
-
-                    RectangleMark(
-                        yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
-                        yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
-                    )
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.mutedBlue.opacity(0.3), .clear],
-                            startPoint: .bottom,
-                            endPoint: .top
-                        )
-                    )
-                }
-                .frame(height: 160)
-            }
+        if let vitaminB6 = details.averageVitaminB6?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminB6() {
+          CapsuleRangeChart(
+            title: "Vitamin B6",
+            unitString: "mg",
+            value: vitaminB6,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.vitaminB6)
         }
+        if let vitaminB12 = details.averageVitaminB12?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForVitaminB12() {
+          CapsuleRangeChart(
+            title: "Vitamin B12",
+            unitString: "mcg",
+            value: vitaminB12,
+            minValue: goal.doubleValue(for: .gramUnit(with: .micro)),
+            maxValue: 2000
+          )
+          .tint(.vitaminB12)
+        }
+        if let vitaminC = details.averageVitaminC?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminC() {
+          CapsuleRangeChart(
+            title: "Vitamin C",
+            unitString: "mg",
+            value: vitaminC,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.vitaminC)
+        }
+        if let vitaminD = details.averageVitaminD?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminD() {
+          CapsuleRangeChart(
+            title: "Vitamin D",
+            unitString: "mcg",
+            value: vitaminD,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .micro)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .micro))
+          )
+          .tint(.vitaminD)
+        }
+        if let vitaminE = details.averageVitaminE?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminE() {
+          CapsuleRangeChart(
+            title: "Vitamin E",
+            unitString: "mg",
+            value: vitaminE,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.vitaminE)
+        }
+      }
     }
+  }
+
+  @ViewBuilder
+  var mineralsChart: some View {
+    if let details = viewModel.nutritionSummary?.details, hasMineralData {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Minerals",
+          valueLabel: "",
+          value: ""
+        )
+
+        Divider()
+
+        if let calcium = details.averageCalcium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedIntakeForCalcium() {
+          CapsuleRangeChart(
+            title: "Calcium",
+            unitString: "mg",
+            value: calcium,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.calcium)
+        }
+        if let iron = details.averageIron?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForIron() {
+          CapsuleRangeChart(
+            title: "Iron",
+            unitString: "mg",
+            value: iron,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.iron)
+        }
+        if let magnesium = details.averageMagnesium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForMagnesium() {
+          CapsuleRangeChart(
+            title: "Magnesium",
+            unitString: "mg",
+            value: magnesium,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.magnesium)
+        }
+        if let potassium = details.averagePotassium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForPotassium() {
+          CapsuleRangeChart(
+            title: "Potassium",
+            unitString: "mg",
+            value: potassium,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.potassium)
+        }
+        if let sodium = details.averageSodium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForSodium() {
+          CapsuleRangeChart(
+            title: "Sodium",
+            unitString: "mg",
+            value: sodium,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.sodium)
+        }
+        if let zinc = details.averageZinc?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForZinc() {
+          CapsuleRangeChart(
+            title: "Zinc",
+            unitString: "mg",
+            value: zinc,
+            minValue: goal.lowerDoubleValue(for: .gramUnit(with: .milli)),
+            maxValue: goal.upperDoubleValue(for: .gramUnit(with: .milli))
+          )
+          .tint(.zinc)
+        }
+      }
+    }
+  }
+
+  @ViewBuilder
+  var fiberChart: some View {
+    if let details = viewModel.nutritionSummary?.details, let averageFiber = details.averageFiber {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Fiber",
+          value: averageFiber.displayString(for: .gram())
+        )
+
+        Chart{
+          ForEach(dailyFiber) { sample in
+            BarMark(
+              x: .value("Date", sample.date),
+              y: .value("Daily Fiber", sample.quantity.doubleValue(for: .gram()))
+            )
+            .foregroundStyle(.fiber)
+          }
+
+          if let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber() {
+            RuleMark(
+              y: .value("Min Fiber", goal.doubleValue(for: .gram()))
+            )
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.fiber)
+
+            RectangleMark(
+              yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
+              yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
+            )
+            .foregroundStyle(
+              LinearGradient(
+                colors: [
+                  .fiber.opacity(0.3),
+                  .clear
+                ],
+                startPoint: .bottom,
+                endPoint: .top
+              )
+            )
+          }
+        }
+        .frame(height: 160)
+      }
+    }
+  }
+
+  @ViewBuilder
+  var sugarChart: some View {
+    if let details = viewModel.nutritionSummary?.details, let averageSugar = details.averageSugar {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Sugar",
+          value: averageSugar.displayString(for: .gram())
+        )
+
+        Chart{
+          ForEach(dailySugar) { sample in
+            BarMark(
+              x: .value("Date", sample.date),
+              y: .value("Daily Sugar", sample.quantity.doubleValue(for: .gram()))
+            )
+            .foregroundStyle(.sugar)
+          }
+
+          if let goal = HealthGoalProvider.shared.recommendedMaxDailyIntakeForSugar() {
+            RuleMark(
+              y: .value("Max Sugar", goal.doubleValue(for: .gram()))
+            )
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.sugar)
+
+            RectangleMark(
+              yStart: .value("", 0),
+              yEnd: .value("Max Sugar", goal.doubleValue(for: .gram()))
+            )
+            .foregroundStyle(.sugar.opacity(0.3))
+          }
+        }
+        .frame(height: 160)
+      }
+    }
+  }
+
+  @ViewBuilder
+  var waterChart: some View {
+    if let details = viewModel.nutritionSummary?.details, let averageWater = details.averageWater {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Water",
+          value: averageWater.displayString(for: .literUnit(with: .milli))
+        )
+
+        Chart{
+          ForEach(dailyWater) { sample in
+            BarMark(
+              x: .value("Date", sample.date),
+              y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
+            )
+            .foregroundStyle(.mutedBlue)
+          }
+
+          RuleMark(
+            y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.mutedBlue)
+
+          RectangleMark(
+            yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
+            yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
+          )
+          .foregroundStyle(
+            LinearGradient(
+              colors: [.mutedBlue.opacity(0.3), .clear],
+              startPoint: .bottom,
+              endPoint: .top
+            )
+          )
+        }
+        .frame(height: 160)
+      }
+    }
+  }
 }
 
 #Preview {
-    NavigationStack {
-        NutritionDetailsView()
-    }
+  NavigationStack {
+    NutritionDetailsView()
+  }
 }
