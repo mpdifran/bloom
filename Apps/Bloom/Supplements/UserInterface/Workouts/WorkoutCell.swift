@@ -47,7 +47,7 @@ struct WorkoutCell: View {
 
           if let distance = workout.totalDistanceWalkingRunningCycling {
             WorkoutStatView(stat: "\(distance.displayString(for: .meterUnit(with: .kilo), formatter: .twoDecimalPlaces))")
-              .tint(.pink)
+              .tint(.blue)
           }
 
           Spacer(minLength: 0)
@@ -55,17 +55,6 @@ struct WorkoutCell: View {
       }
     }
     .cardContainer()
-  }
-}
-
-private struct WorkoutStatView: View {
-  let stat: String
-
-  var body: some View {
-    Text(stat)
-      .bold()
-      .fontDesign(.rounded)
-      .foregroundStyle(.tint)
   }
 }
 

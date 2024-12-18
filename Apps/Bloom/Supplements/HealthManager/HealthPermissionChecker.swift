@@ -27,6 +27,7 @@ final class HealthPermissionChecker: Sendable {
         HKQuantityType(.basalEnergyBurned),
         HKQuantityType(.activeEnergyBurned),
         HKObjectType.workoutType(),
+        HKSeriesType.workoutRoute(),
         HKQuantityType(.distanceWalkingRunning)
     ]
 

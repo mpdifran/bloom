@@ -44,7 +44,7 @@ private extension WorkoutsListView {
     ContentUnavailableView(
       "No Workouts",
       systemImage: "figure.run",
-      description: Text("There are no workouts for this time period.")
+      description: Text("There are no workouts to show.")
     )
   }
 
@@ -66,7 +66,11 @@ private extension WorkoutsListView {
           .padding(.top)
 
           ForEach(section.workouts, id: \.hashValue) { workout in
-            WorkoutCell(workout: workout)
+            NavigationLink {
+              WorkoutDetailsView(workout: workout)
+            } label: {
+              WorkoutCell(workout: workout)
+            }
           }
         }
       }
@@ -84,5 +88,7 @@ private extension WorkoutsListView {
 }
 
 #Preview {
-  WorkoutsListView()
+  NavigationStack {
+    WorkoutsListView()
+  }
 }

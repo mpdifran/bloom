@@ -45,6 +45,12 @@ public extension DateFormatter {
     $0.doesRelativeDateFormatting = true
   }
 
+  static let justRelativeDateLong = DateFormatter().with {
+    $0.dateStyle = .long
+    $0.timeStyle = .none
+    $0.doesRelativeDateFormatting = true
+  }
+
   static let relativeDateTimeMedium = DateFormatter().with {
     $0.dateStyle = .medium
     $0.timeStyle = .medium
@@ -75,6 +81,17 @@ public extension DateFormatter {
 
   static let justDayOfWeekShort = DateFormatter().with {
     $0.setLocalizedDateFormatFromTemplate("E")
+  }
+
+  static func justRelativeDayOfWeek(date: Date) -> String {
+    if
+      Calendar.current.isDateInToday(date) ||
+        Calendar.current.isDateInTomorrow(date) ||
+        Calendar.current.isDateInYesterday(date)
+    {
+      return justRelativeDateMedium.string(from: date)
+    }
+    return justDayOfWeek.string(from: date)
   }
 
   static let timeIntervalHourMinuteShort = DateComponentsFormatter().with {
