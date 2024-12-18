@@ -18,6 +18,7 @@ struct NutritionDetailsView: View {
   @State private var dailyFiber = [DateQuantitySample]()
   @State private var dailySugar = [DateQuantitySample]()
   @State private var dailyWater = [DateQuantitySample]()
+  @State private var dailyCholesterol = [DateQuantitySample]()
 
   @State private var hasVitaminData = false
   @State private var hasMineralData = false
@@ -32,6 +33,8 @@ struct NutritionDetailsView: View {
         vitaminsChart
           .cardContainer()
         mineralsChart
+          .cardContainer()
+        cholesterolChart
           .cardContainer()
         waterChart
           .cardContainer()
@@ -88,6 +91,16 @@ struct NutritionDetailsView: View {
       )
       await MainActor.run {
         self.dailyWater = samples
+      }
+    }
+    .task {
+      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+        for: .dietaryCholesterol,
+        unit: .gramUnit(with: .milli),
+        dateRange: .trailingMonthsFromNow(1)
+      )
+      await MainActor.run {
+        self.dailyCholesterol = samples
       }
     }
     .task {
@@ -415,6 +428,43 @@ private extension NutritionDetailsView {
                 endPoint: .top
               )
             )
+          }
+        }
+        .frame(height: 160)
+      }
+    }
+  }
+
+  @ViewBuilder
+  var cholesterolChart: some View {
+    if let details = viewModel.nutritionSummary?.details, let averageCholesterol = details.averageCholesterol {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Cholesterol",
+          value: averageCholesterol.displayString(for: .gramUnit(with: .milli))
+        )
+
+        Chart{
+          ForEach(dailyCholesterol) { sample in
+            BarMark(
+              x: .value("Date", sample.date),
+              y: .value("Daily Cholesterol", sample.quantity.doubleValue(for: .gramUnit(with: .milli)))
+            )
+            .foregroundStyle(.cholesterol)
+          }
+
+          if let goal = HealthGoalProvider.shared.recommendedDailyMaxCholesterol() {
+            RuleMark(
+              y: .value("Max Cholesterol", goal.doubleValue(for: .gramUnit(with: .milli)))
+            )
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.cholesterol)
+
+            RectangleMark(
+              yStart: .value("", 0),
+              yEnd: .value("Max Cholesterol", goal.doubleValue(for: .gramUnit(with: .milli)))
+            )
+            .foregroundStyle(.cholesterol.opacity(0.3))
           }
         }
         .frame(height: 160)

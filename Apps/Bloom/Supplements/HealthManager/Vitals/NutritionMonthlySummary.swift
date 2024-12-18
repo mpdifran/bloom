@@ -117,6 +117,7 @@ extension NutritionMonthlySummary {
     let averagePotassium: HKQuantity?
     let averageSodium: HKQuantity?
     let averageZinc: HKQuantity?
+    let averageCholesterol: HKQuantity?
     let averageFiber: HKQuantity?
     let averageSugar: HKQuantity?
     let averageWater: HKQuantity?
@@ -416,7 +417,8 @@ extension NutritionMonthlySummary.Details {
     let other = [
       fiberScore,
       sugarScore,
-      waterScore
+      waterScore,
+      cholesterolScore
     ].compactMap({ $0 })
 
     if other.isEmpty {
@@ -433,6 +435,16 @@ extension NutritionMonthlySummary.Details {
     else { return nil }
 
     return average.scaledPercent(lower: 0, upper: goal)
+  }
+
+  var cholesterolScore: Double? {
+    guard
+      let average = averageCholesterol?.doubleValue(for: .gramUnit(with: .milli)),
+      average > 0,
+      let goal = HealthGoalProvider.shared.recommendedDailyMaxCholesterol()?.doubleValue(for: .gramUnit(with: .milli))
+    else { return nil }
+
+    return average.scaledPercent(lower: goal * 2, upper: goal)
   }
 
   var sugarScore: Double? {

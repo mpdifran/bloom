@@ -786,6 +786,7 @@ extension HealthStoreFetcher {
     let potassium = await fetchNutritionalDailyAverage(for: .dietaryPotassium, unit: .gramUnit(with: .milli), dateRange: dateRange)
     let sodium = await fetchNutritionalDailyAverage(for: .dietarySodium, unit: .gramUnit(with: .milli), dateRange: dateRange)
     let zinc = await fetchNutritionalDailyAverage(for: .dietaryZinc, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    let cholesterol = await fetchNutritionalDailyAverage(for: .dietaryCholesterol, unit: .gramUnit(with: .milli), dateRange: dateRange)
     let fiber = await fetchNutritionalDailyAverage(for: .dietaryFiber, unit: .gram(), dateRange: dateRange)
     let sugar = await fetchNutritionalDailyAverage(for: .dietarySugar, unit: .gram(), dateRange: dateRange)
     let water = await fetchNutritionalDailyAverage(for: .dietaryWater, unit: .literUnit(with: .milli), dateRange: dateRange)
@@ -825,6 +826,7 @@ extension HealthStoreFetcher {
       averagePotassium: potassium,
       averageSodium: sodium,
       averageZinc: zinc,
+      averageCholesterol: cholesterol,
       averageFiber: fiber,
       averageSugar: sugar,
       averageWater: water

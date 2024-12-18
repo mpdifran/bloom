@@ -213,16 +213,10 @@ extension HealthGoalProvider {
     }
   }
 
-  /// unit: mg/dL
-  /// - note: https://www.healthline.com/health/high-cholesterol/levels-by-age
+  /// unit: mg
+  /// - note: https://www.heart.org/en/news/2023/08/25/heres-the-latest-on-dietary-cholesterol-and-how-it-fits-in-with-a-healthy-diet
   func recommendedDailyMaxCholesterol() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
-    if age < 20 {
-      return HKQuantity(unit: .mgPerDL(), doubleValue: 170)
-    } else {
-      return HKQuantity(unit: .mgPerDL(), doubleValue: 200)
-    }
+    HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 300)
   }
 
   /// unit: mcg
