@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct UnitTextField: View {
-  let title: String
+  let type: NutrientType
   @Binding var value: Double?
   @Binding var unit: NutritionUnit
 
-  init(_ title: String, value: Binding<Double?>, unit: Binding<NutritionUnit>) {
-    self.title = title
+  init(_ type: NutrientType, value: Binding<Double?>, unit: Binding<NutritionUnit>) {
+    self.type = type
     self._value = value
     self._unit = unit
   }
 
   var body: some View {
     HStack {
-      TextField(title, value: $value, format: .number)
+      TextField(type.displayName, value: $value, format: .number)
       Text(unit.displayName)
         .foregroundStyle(.secondary)
     }
@@ -30,7 +30,7 @@ struct UnitTextField: View {
 #Preview {
   Form {
     UnitTextField(
-      "Calories",
+      .calories,
       value: .constant(300),
       unit: .constant(.calories)
     )
@@ -52,6 +52,60 @@ enum NutritionUnit {
     case .milligrams: "mg"
     case .micrograms: "µg"
     case .percentDV: "% DV"
+    }
+  }
+}
+
+enum NutrientType {
+  case calories
+  case carbs
+  case fiber
+  case sugar
+  case fat
+  case saturatedFat
+  case transFat
+  case polyunsaturatedFat
+  case monounsaturatedFat
+  case protein
+  case vitaminA
+  case vitaminB6
+  case vitaminB12
+  case vitaminC
+  case vitaminD
+  case vitaminE
+  case sodium
+  case calcium
+  case iron
+  case potassium
+  case magnesium
+  case zinc
+  case cholesterol
+
+  var displayName: String {
+    switch self {
+    case .calories: "Calories"
+    case .carbs: "Carbohydrates"
+    case .fiber: "Fiber"
+    case .sugar: "Sugar"
+    case .fat: "Fat"
+    case .saturatedFat: "Saturated Fat"
+    case .transFat: "Trans Fat"
+    case .polyunsaturatedFat: "Polyunsaturated Fat"
+    case .monounsaturatedFat: "Monounsaturated Fat"
+    case .protein: "Protein"
+    case .vitaminA: "Vitamin A"
+    case .vitaminB6: "Vitamin B6"
+    case .vitaminB12: "Vitamin B12"
+    case .vitaminC: "Vitamin C"
+    case .vitaminD: "Vitamin D"
+    case .vitaminE: "Vitamin E"
+    case .sodium: "Sodium"
+    case .calcium: "Calcium"
+    case .iron: "Iron"
+    case .potassium: "Potassium"
+    case .magnesium: "Magnesium"
+    case .zinc: "Zinc"
+    case .cholesterol: "Cholesterol"
     }
   }
 }
