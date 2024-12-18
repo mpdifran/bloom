@@ -38,21 +38,23 @@ struct UnitTextField: View {
   }
 
   private var convertedValue: Binding<Double?> {
-    Binding {
-      NutritionUnitConverter.convert(
-        value,
-        from: defaultUnit,
-        to: unit,
-        type: type
-      )
-    } set: { newValue in
-      value = NutritionUnitConverter.convert(
-        value,
-        from: unit,
-        to: defaultUnit,
-        type: type
-      )
-    }
+    Binding(
+      get: {
+        NutritionUnitConverter.convert(
+          value,
+          from: defaultUnit,
+          to: unit,
+          type: type
+        )
+      }, set: { newValue in
+        value = NutritionUnitConverter.convert(
+          newValue,
+          from: unit,
+          to: defaultUnit,
+          type: type
+        )
+      }
+    )
   }
 }
 
