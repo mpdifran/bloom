@@ -21,7 +21,7 @@ final class UnverifiedFoodStore: ObservableObject {
 extension UnverifiedFoodStore {
   func loadItems() async {
     do {
-      let response = try await service.getUnverifiedFoodRecords(limit: 50)
+      let response = try await service.getUnverifiedFoodRecords(limit: 500)
       foodItems = response.foodItemRecords
     } catch {
       print("Error fetching unverified food records: \(error)")
