@@ -8,28 +8,64 @@
 import SwiftUI
 
 struct UnitTextField: View {
-  let title: String
+  let type: NutrientType
   @Binding var value: Double?
-  let unit: String
+  @Binding var unit: NutritionUnit
+  let defaultUnit: NutritionUnit // The unit stored in the DB.
 
-  init(_ title: String, value: Binding<Double?>, unit: String) {
-    self.title = title
+  init(
+    _ type: NutrientType,
+    value: Binding<Double?>,
+    unit: Binding<NutritionUnit>,
+    defaultUnit: NutritionUnit
+  ) {
+    self.type = type
     self._value = value
-    self.unit = unit
+    self._unit = unit
+    self.defaultUnit = defaultUnit
   }
 
   var body: some View {
     HStack {
-      TextField(title, value: $value, format: .number)
-      Text(unit)
+      TextField(
+        type.displayName,
+        value: convertedValue,
+        format: .number
+      )
+      Text(unit.displayName)
         .foregroundStyle(.secondary)
     }
+  }
+
+  private var convertedValue: Binding<Double?> {
+    Binding(
+      get: {
+        NutritionUnitConverter.convert(
+          value,
+          from: defaultUnit,
+          to: unit,
+          type: type
+        )
+      }, set: { newValue in
+        value = NutritionUnitConverter.convert(
+          newValue,
+          from: unit,
+          to: defaultUnit,
+          type: type
+        )
+      }
+    )
   }
 }
 
 #Preview {
   Form {
-    UnitTextField("Calories", value: .constant(300), unit: "Cal")
+    UnitTextField(
+      .calories,
+      value: .constant(300),
+      unit: .constant(.calories),
+      defaultUnit: .calories
+    )
   }
   .formStyle(.grouped)
 }

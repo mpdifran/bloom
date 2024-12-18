@@ -26,6 +26,11 @@ struct FoodItemDetailView: View {
   @State private var alertDetails: AlertDetails?
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
 
+  @State private var fatsUnit: NutritionUnit = .grams
+  @State private var carbsUnit: NutritionUnit = .grams
+  @State private var mineralsUnit: NutritionUnit = .milligrams
+  @State private var vitaminsUnit: NutritionUnit = .micrograms
+
   @Environment(\.openURL) private var openURL
 
   init(foodItem: AdminFoodItemRecord) {
@@ -250,97 +255,129 @@ private extension FoodItemDetailView {
 
   var macroSection: some View {
     Section(header: Text("Energy")) {
-      UnitTextField("Calories", value: $viewModel.foodItem.calories, unit: "Cal")
+      UnitTextField(.calories, value: $viewModel.foodItem.calories, unit: .constant(.calories), defaultUnit: .calories)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calories))
     }
   }
 
   var carbsSection: some View {
     Section(header: Text("Carbohydrates")) {
-      UnitTextField("Carbohydrates", value: $viewModel.foodItem.carbohydrates, unit: "g")
+      Picker("Unit", selection: $carbsUnit) {
+        let availableUnits: [NutritionUnit] = [.micrograms, .milligrams, .grams, .percentDV]
+        ForEach(availableUnits, id: \.self) { unit in
+          Text(unit.displayName)
+            .tag(unit)
+        }
+      }
+
+      UnitTextField(.carbs, value: $viewModel.foodItem.carbohydrates, unit: $carbsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.carbohydrates))
 
-      UnitTextField("Fiber", value: $viewModel.foodItem.fiber, unit: "g")
+      UnitTextField(.fiber, value: $viewModel.foodItem.fiber, unit: $carbsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.fiber))
 
-      UnitTextField("Sugar", value: $viewModel.foodItem.sugar, unit: "g")
+      UnitTextField(.sugar, value: $viewModel.foodItem.sugar, unit: $carbsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.sugar))
     }
   }
 
   var fatSection: some View {
     Section(header: Text("Fat")) {
-      UnitTextField("Fat", value: $viewModel.foodItem.fat, unit: "g")
+      Picker("Unit", selection: $fatsUnit) {
+        let availableUnits: [NutritionUnit] = [.micrograms, .milligrams, .grams, .percentDV]
+        ForEach(availableUnits, id: \.self) { unit in
+          Text(unit.displayName)
+            .tag(unit)
+        }
+      }
+
+      UnitTextField(.fat, value: $viewModel.foodItem.fat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.fat))
 
-      UnitTextField("Saturated Fat", value: $viewModel.foodItem.saturatedFat, unit: "g")
+      UnitTextField(.saturatedFat, value: $viewModel.foodItem.saturatedFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.saturatedFat))
 
-      UnitTextField("Trans Fat", value: $viewModel.foodItem.transFat, unit: "g")
+      UnitTextField(.transFat, value: $viewModel.foodItem.transFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.transFat))
 
-      UnitTextField("Polyunsaturated Fat", value: $viewModel.foodItem.polyunsaturatedFat, unit: "g")
+      UnitTextField(.polyunsaturatedFat, value: $viewModel.foodItem.polyunsaturatedFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.polyunsaturatedFat))
 
-      UnitTextField("Monounsaturated Fat", value: $viewModel.foodItem.monounsaturatedFat, unit: "g")
+      UnitTextField(.monounsaturatedFat, value: $viewModel.foodItem.monounsaturatedFat, unit: $fatsUnit, defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.monounsaturatedFat))
     }
   }
 
   var proteinSection: some View {
     Section(header: Text("Protein")) {
-      UnitTextField("Protein", value: $viewModel.foodItem.protein, unit: "g")
+      UnitTextField(.protein, value: $viewModel.foodItem.protein, unit: .constant(.grams), defaultUnit: .grams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.protein))
     }
   }
 
   var vitaminSection: some View {
     Section(header: Text("Vitamins")) {
-      UnitTextField("Vitamin A", value: $viewModel.foodItem.vitaminA, unit: "mg")
+      Picker("Unit", selection: $vitaminsUnit) {
+        let availableUnits: [NutritionUnit] = [.micrograms, .percentDV]
+        ForEach(availableUnits, id: \.self) { unit in
+          Text(unit.displayName)
+            .tag(unit)
+        }
+      }
+
+      UnitTextField(.vitaminA, value: $viewModel.foodItem.vitaminA, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminA))
 
-      UnitTextField("Vitamin B6", value: $viewModel.foodItem.vitaminB6, unit: "mg")
+      UnitTextField(.vitaminB6, value: $viewModel.foodItem.vitaminB6, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminB6))
 
-      UnitTextField("Vitamin B12", value: $viewModel.foodItem.vitaminB12, unit: "mg")
+      UnitTextField(.vitaminB12, value: $viewModel.foodItem.vitaminB12, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminB12))
 
-      UnitTextField("Vitamin C", value: $viewModel.foodItem.vitaminC, unit: "mg")
+      UnitTextField(.vitaminC, value: $viewModel.foodItem.vitaminC, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminC))
 
-      UnitTextField("Vitamin D", value: $viewModel.foodItem.vitaminD, unit: "mg")
+      UnitTextField(.vitaminD, value: $viewModel.foodItem.vitaminD, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminD))
 
-      UnitTextField("Vitamin E", value: $viewModel.foodItem.vitaminE, unit: "mg")
+      UnitTextField(.vitaminE, value: $viewModel.foodItem.vitaminE, unit: $vitaminsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.vitaminE))
     }
   }
 
   var mineralSection: some View {
     Section(header: Text("Minerals")) {
-      UnitTextField("Sodium", value: $viewModel.foodItem.sodium, unit: "mg")
+      Picker("Unit", selection: $mineralsUnit) {
+        let availableUnits: [NutritionUnit] = [.micrograms, .milligrams, .percentDV]
+        ForEach(availableUnits, id: \.self) { unit in
+          Text(unit.displayName)
+            .tag(unit)
+        }
+      }
+
+      UnitTextField(.sodium, value: $viewModel.foodItem.sodium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.sodium))
 
-      UnitTextField("Calcium", value: $viewModel.foodItem.calcium, unit: "mg")
+      UnitTextField(.calcium, value: $viewModel.foodItem.calcium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.calcium))
 
-      UnitTextField("Iron", value: $viewModel.foodItem.iron, unit: "mg")
+      UnitTextField(.iron, value: $viewModel.foodItem.iron, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.iron))
 
-      UnitTextField("Potassium", value: $viewModel.foodItem.potassium, unit: "mg")
+      UnitTextField(.potassium, value: $viewModel.foodItem.potassium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.potassium))
 
-      UnitTextField("Magnesium", value: $viewModel.foodItem.magnesium, unit: "mg")
+      UnitTextField(.magnesium, value: $viewModel.foodItem.magnesium, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.magnesium))
 
-      UnitTextField("Zinc", value: $viewModel.foodItem.zinc, unit: "mg")
+      UnitTextField(.zinc, value: $viewModel.foodItem.zinc, unit: $mineralsUnit, defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.zinc))
     }
   }
 
   var otherNutrientsSection: some View {
     Section(header: Text("Other Nutrients")) {
-      UnitTextField("Cholesterol", value: $viewModel.foodItem.cholesterol, unit: "mg")
+      UnitTextField(.cholesterol, value: $viewModel.foodItem.cholesterol, unit: .constant(.milligrams), defaultUnit: .milligrams)
         .changeIndicator(isChanged: viewModel.propertyChanged(\.cholesterol))
     }
   }
