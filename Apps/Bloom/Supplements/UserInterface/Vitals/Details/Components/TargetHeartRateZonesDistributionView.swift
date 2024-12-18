@@ -127,7 +127,7 @@ struct HeartRateZoneBar: View {
       GeometryReader { proxy in
         Capsule()
           .fill(.tint)
-          .frame(width: ((duration.doubleValue(for: .second()) / totalDuration.doubleValue(for: .second())) / maxProportion) * proxy.size.width, height: .barHeight)
+          .frame(width: max(barProportion * proxy.size.width, .barHeight), height: .barHeight)
           .offset(y: (proxy.size.height / 2) - (CGFloat.barHeight / 2))
       }
 
@@ -139,6 +139,17 @@ struct HeartRateZoneBar: View {
       .bold()
       .font(.caption)
     }
+  }
+
+  var barProportion: CGFloat {
+    guard
+      totalDuration.doubleValue(for: .second()) > 1,
+      maxProportion > 0
+    else { return 0 }
+
+
+    let proportion = duration.doubleValue(for: .second()) / totalDuration.doubleValue(for: .second())
+    return min(max(proportion / maxProportion, 0), 1)
   }
 
   var formattedDuration: String {
