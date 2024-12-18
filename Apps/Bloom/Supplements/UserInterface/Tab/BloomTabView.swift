@@ -47,7 +47,7 @@ extension TabBarViewModifier {
         .tint(tabController.activeTab == .vitals ? .primary : .secondary)
 
       AddTabItem()
-        .sensoryFeedback(.selection, trigger: logActionToggle)
+        .sensoryFeedback(.impact, trigger: logActionToggle)
         .onTapGesture {
           logActionToggle.toggle()
           presentedSheet = ActionsView().asAny
