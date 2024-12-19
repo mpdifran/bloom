@@ -59,85 +59,64 @@ struct TodayView: View {
     NavigationStack {
       ScrollView {
         VStack {
-          TodaysDateView()
-            .padding(.bottom)
+          Group {
+            TodaysDateView()
+              .padding(.bottom)
 
-          TimelineView(.everyMinute) { context in
-            if Calendar.current.isMorning(date: .now) || danieleMode {
-              ReportCell(kind: .morning)
-                .transition(.scale)
-                .onTapGesture {
-                  presentedFullScreen = GoodMorningView().asAny
-                }
-            }
-            if reportViewModel.shouldShowEveningReport() || danieleMode {
-              ReportCell(kind: .evening)
-                .transition(.scale)
-                .onTapGesture {
-                  presentedFullScreen = EveningReportView().asAny
-                }
-            }
-            if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
-              GoalReviewCell()
-                .transition(.scale)
-                .onTapGesture {
-                  presentedFullScreen = FocusAreaReviewRootView().asAny
-                }
+            TimelineView(.everyMinute) { context in
+              if Calendar.current.isMorning(date: .now) || danieleMode {
+                ReportCell(kind: .morning)
+                  .transition(.scale)
+                  .onTapGesture {
+                    presentedFullScreen = GoodMorningView().asAny
+                  }
+              }
+              if reportViewModel.shouldShowEveningReport() || danieleMode {
+                ReportCell(kind: .evening)
+                  .transition(.scale)
+                  .onTapGesture {
+                    presentedFullScreen = EveningReportView().asAny
+                  }
+              }
+              if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
+                GoalReviewCell()
+                  .transition(.scale)
+                  .onTapGesture {
+                    presentedFullScreen = FocusAreaReviewRootView().asAny
+                  }
+              }
             }
           }
+          .padding(.horizontal)
 
-          if computedShowWeightWidget {
-            NavigationLink {
-              BodyCompositionDetailsView()
-            } label: {
-              BodyWeightTodayWidgetView()
-            }
-            .buttonStyle(.plain)
+          if toDoManager.relevantToDos.isNotEmpty {
+            todoSection
           }
 
-          if showNutritionWidget {
-            SectionTitleView("Nutrition")
-              .padding(.horizontal)
-
-            NutritionHabitTodayWidgetView()
-          }
-
-          if habits.isNotEmpty {
-            SectionTitleView("\(habits.count) Habits")
-              .padding(.horizontal)
-
-            ForEach(habits) { habit in
+          Group {
+            if computedShowWeightWidget {
               NavigationLink {
-                HabitDetailsView(habit: habit)
+                BodyCompositionDetailsView()
               } label: {
-                HabitDailyUpdateCell(habit: habit)
+                BodyWeightTodayWidgetView()
               }
               .buttonStyle(.plain)
             }
-          }
 
-          if toDoManager.relevantToDos.isNotEmpty {
-            SectionTitleView("To Do")
-              .padding(.horizontal)
+            if showNutritionWidget {
+              SectionTitleView("Nutrition")
+                .padding(.horizontal)
 
-            ForEach(toDoManager.relevantToDos) { todo in
-              ToDoActionCell(
-                title: todo.kind.name,
-                subtitle: todo.cadence.name,
-                systemImage: todo.kind.systemImage,
-                isComplete: toDoManager.completedToDoKinds.contains(todo.kind),
-                vitalKind: todo.vitalKind,
-                useSecondaryBackground: false
-              )
-              .tint(todo.kind.color)
-              .onTapGesture {
-                presentedSheet = todo.kind.sheetToPresent
-              }
+              NutritionHabitTodayWidgetView()
+            }
+
+            if habits.isNotEmpty {
+              habitsSection
             }
           }
+          .padding(.horizontal)
         }
         .horizontallyCentered()
-        .padding()
       }
       .groupedBackground()
       .navigationTitle("Today")
@@ -169,6 +148,51 @@ struct TodayView: View {
       Task {
         await toDoManager.recalculateToDos()
       }
+    }
+  }
+}
+
+private extension TodayView {
+
+  @ViewBuilder
+  var todoSection: some View {
+    SectionTitleView("\(toDoManager.relevantToDos.count) \(toDoManager.relevantToDos.count == 1 ? "To Do" : "To Do's")")
+      .padding(.horizontal)
+      .padding(.horizontal)
+
+    ScrollView(.horizontal) {
+      HStack {
+        ForEach(toDoManager.relevantToDos) { todo in
+          ToDoActionCard(
+            title: todo.kind.name,
+            subtitle: todo.cadence.name,
+            systemImage: todo.kind.systemImage,
+            isComplete: toDoManager.completedToDoKinds.contains(todo.kind),
+            vitalKind: todo.vitalKind
+          )
+          .tint(todo.kind.color)
+          .onTapGesture {
+            presentedSheet = todo.kind.sheetToPresent
+          }
+        }
+      }
+      .padding(.horizontal)
+    }
+    .scrollIndicators(.hidden)
+  }
+
+  @ViewBuilder
+  var habitsSection: some View {
+    SectionTitleView("\(habits.count) Habits")
+      .padding(.horizontal)
+
+    ForEach(habits) { habit in
+      NavigationLink {
+        HabitDetailsView(habit: habit)
+      } label: {
+        HabitDailyUpdateCell(habit: habit)
+      }
+      .buttonStyle(.plain)
     }
   }
 }
