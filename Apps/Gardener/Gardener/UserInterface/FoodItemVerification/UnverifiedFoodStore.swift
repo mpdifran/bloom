@@ -10,52 +10,13 @@ import Foundation
 import SwiftUI
 
 @MainActor
-final class UnverifiedFoodStore: ObservableObject {
-  static let shared = UnverifiedFoodStore()
-
-  @Published var foodItems: [AdminFoodItemRecord] = []
-
-  private let service = NetworkStack.shared
-}
-
-extension UnverifiedFoodStore {
-  func loadItems() async {
+final class UnverifiedFoodStore: BaseFoodStore {
+  override func loadItems() async {
     do {
       let response = try await service.getUnverifiedFoodRecords(limit: 500)
       foodItems = response.foodItemRecords
     } catch {
       print("Error fetching unverified food records: \(error)")
-    }
-  }
-
-  func update(_ foodItem: AdminFoodItemRecord) async {
-    do {
-      let request = AdminUpdateFoodItemRequest(foodItemRecord: foodItem)
-      let response = try await service.updateFoodRecord(request: request)
-      guard let updatedFoodItem = response.foodItemRecord else {
-        // Nothing to update.
-        return
-      }
-      guard let index = foodItems.firstIndex(where: { $0.id == updatedFoodItem.id}) else { return }
-      foodItems[index] = updatedFoodItem
-
-      // Copy over the images since the response won't included signed URLs.
-      foodItems[index].packagingImage = foodItem.packagingImage
-      foodItems[index].nutritionLabelImage = foodItem.nutritionLabelImage
-
-    } catch {
-      print("Error updating food record: \(error)")
-    }
-  }
-
-  func delete(_ foodItem: AdminFoodItemRecord) async {
-    do {
-      try await service.deleteFoodRecord(id: foodItem.id)
-      guard let index = foodItems.firstIndex(where: { $0.id == foodItem.id}) else { return }
-      foodItems.remove(at: index)
-
-    } catch {
-      print("Error deleting food record: \(error)")
     }
   }
 }

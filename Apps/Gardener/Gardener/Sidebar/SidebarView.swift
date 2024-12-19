@@ -26,6 +26,14 @@ struct SidebarView: View {
             systemImage: "tray.and.arrow.up"
           )
         }
+        NavigationLink {
+          FoodItemSearchView()
+        } label: {
+          createLabel(
+            title: "Food Search",
+            systemImage: "magnifyingglass"
+          )
+        }
       }
     }
 }

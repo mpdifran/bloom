@@ -15,7 +15,7 @@ final class FoodItemDetailViewModel: ObservableObject {
   @Published var foodItem: AdminFoodItemRecord
   private var initialFoodItem: AdminFoodItemRecord
 
-  private let foodStore = UnverifiedFoodStore.shared
+  @EnvironmentObject private var foodStore: UnverifiedFoodStore
 
   @Published var packagingImage: URL?
   @Published var nutritionLabel: URL?

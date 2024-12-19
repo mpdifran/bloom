@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FoodItemVerificationView: View {
 
-  @ObservedObject private var foodStore = UnverifiedFoodStore.shared
+  @StateObject private var foodStore = UnverifiedFoodStore()
 
   @State private var selectedItem: AdminFoodItemRecord?
 
@@ -37,6 +37,7 @@ struct FoodItemVerificationView: View {
     .task {
       await foodStore.loadItems()
     }
+    .environmentObject(foodStore)
   }
 }
 
