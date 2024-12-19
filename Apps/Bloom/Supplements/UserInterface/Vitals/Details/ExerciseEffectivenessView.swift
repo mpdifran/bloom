@@ -22,6 +22,7 @@ struct ExerciseEffectivenessView: View {
       .padding()
       .horizontallyCentered()
     }
+    .groupedBackground()
     .toolbar {
       ToolbarItem(placement: .principal) {
         VitalSummaryDetailTitleView(
@@ -110,7 +111,7 @@ private extension ExerciseEffectivenessView {
           heartRateZones: exerciseEffectivenessSummary.details.heartRateZones
         )
       }
-      .cardContainer(fill: .background.secondary)
+      .cardContainer()
     }
   }
 
@@ -127,7 +128,7 @@ private extension ExerciseEffectivenessView {
               WorkoutsListView(activityType: report.activityType)
             } label: {
               WorkoutHeartRateZoneCell(report: report)
-                .cardContainer(fill: .background.secondary)
+                .cardContainer()
             }
           }
         }
