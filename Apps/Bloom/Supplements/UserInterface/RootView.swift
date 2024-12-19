@@ -34,19 +34,15 @@ struct RootView: View {
           }
         }
       } else {
-        Group {
-          switch tabController.activeTab {
-          case .today:
-            TodayView()
-          case .vitals:
-            VitalsView()
-          case .actions:
-            ActionsView()
-          case .nutrition:
-            NutritionView()
-          case .profile:
-            PreferencesView()
-          }
+        ZStack {
+          TodayView()
+            .opacity(tabController.activeTab == .today ? 1 : 0)
+          VitalsView()
+            .opacity(tabController.activeTab == .vitals ? 1 : 0)
+          NutritionView()
+            .opacity(tabController.activeTab == .nutrition ? 1 : 0)
+          PreferencesView()
+            .opacity(tabController.activeTab == .profile ? 1 : 0)
         }
         .environment(tabController)
         .transition(.blurReplace)
