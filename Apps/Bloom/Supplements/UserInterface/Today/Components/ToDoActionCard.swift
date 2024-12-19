@@ -16,7 +16,7 @@ struct ToDoActionCard: View {
   let vitalKind: VitalModel.Kind?
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 26) {
+    VStack(alignment: .leading) {
       HStack {
         Image(systemName: systemImage)
           .font(.title2)
@@ -30,11 +30,16 @@ struct ToDoActionCard: View {
           .bold()
       }
 
+      Spacer()
+
       VStack(alignment: .leading) {
         Text(title)
           .font(.title3)
           .bold()
           .fontDesign(.rounded)
+          .multilineTextAlignment(.leading)
+          .lineLimit(2)
+          .minimumScaleFactor(0.5)
 
         HStack(spacing: 4) {
           Text(subtitle)
@@ -50,9 +55,10 @@ struct ToDoActionCard: View {
         .bold()
         .fontDesign(.rounded)
         .foregroundStyle(.secondary)
+        .lineLimit(1)
       }
     }
-    .frame(width: 180)
+    .frame(width: 180, height: 110)
     .cardContainer()
   }
 }
@@ -71,8 +77,8 @@ struct ToDoActionCard: View {
           )
           .tint(.mutedIndigo)
           ToDoActionCard(
-            title: "Log Weight",
-            subtitle: "Daily",
+            title: "Record Blood Pressure",
+            subtitle: "Weekly",
             systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
             isComplete: true,
             vitalKind: .nutrition
