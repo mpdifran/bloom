@@ -13,139 +13,143 @@ import TelemetryDeck
 @MainActor
 final class HabitDailyUpdateCellViewModel: ObservableObject {
 
-    @Published var dailyValue: Double = 0
-    @Published var goalCompletionState: CompletionCheckmarkView.State = .unmetGoal
-    @Published var shouldShowConfetti = false
+  @Published var dailyValue: Double = 0
+  @Published var goalCompletionState: CompletionCheckmarkView.State = .unmetGoal
+  @Published var shouldShowConfetti = false
 
-    private let habit: Habit
+  private let habit: Habit
 
-    init(habit: Habit) {
-        self.habit = habit
-        Task {
-            await observeValues()
-        }
+  init(habit: Habit) {
+    self.habit = habit
+    Task {
+      await observeValues()
     }
+  }
 
-    private var observationHandler: HKObserverQueryHandle?
-    private var backgroundHandler: HKBackgroundDeliveryHandle?
+  private var observationHandler: HKObserverQueryHandle?
+  private var backgroundHandler: HKBackgroundDeliveryHandle?
 }
 
 extension HabitDailyUpdateCellViewModel {
 
-    var formattedDailyValue: String {
-        let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
-        return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter)
+  var formattedDailyValue: String {
+    let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
+    return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter)
+  }
+
+  var formattedDailyValueNoUnits: String {
+    dailyValue.format(using: habit.targetMetric.preferredFormatter)
+  }
+
+  var goalDifferenceSummary: String {
+    let difference = habit.value - dailyValue
+    let unit = habit.unit
+    let formatter = habit.targetMetric.preferredFormatter
+
+    let defaultLogic = {
+      if difference > 0 {
+        let formatted = HKQuantity(
+          unit: unit,
+          doubleValue: difference
+        ).displayString(for: unit, formatter: formatter)
+        return "\(formatted) below your goal today."
+      } else if difference == 0 {
+        return "You met your goal today!"
+      } else {
+        let formatted = HKQuantity(
+          unit: unit,
+          doubleValue: -difference
+        ).displayString(for: unit, formatter: formatter)
+        return "\(formatted) above your goal today."
+      }
     }
 
-    var goalDifferenceSummary: String {
-        let difference = habit.value - dailyValue
-        let unit = habit.unit
-        let formatter = habit.targetMetric.preferredFormatter
-
-        let defaultLogic = {
-            if difference > 0 {
-                let formatted = HKQuantity(
-                    unit: unit,
-                    doubleValue: difference
-                ).displayString(for: unit, formatter: formatter)
-                return "\(formatted) below your goal today."
-            } else if difference == 0 {
-                return "You met your goal today!"
-            } else {
-                let formatted = HKQuantity(
-                    unit: unit,
-                    doubleValue: -difference
-                ).displayString(for: unit, formatter: formatter)
-                return "\(formatted) above your goal today."
-            }
-        }
-
-        switch habit.targetMetric.measurementStyle {
-        case .minimum:
-            return defaultLogic()
-        case .range:
-            let dailyQuantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
-            if habit.quantityMeetsGoal(dailyQuantity) {
-                return "You met your goal today!"
-            } else {
-                return defaultLogic()
-            }
-        @unknown default:
-            fatalError("Unhandled case")
-        }
+    switch habit.targetMetric.measurementStyle {
+    case .minimum:
+      return defaultLogic()
+    case .range:
+      let dailyQuantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
+      if habit.quantityMeetsGoal(dailyQuantity) {
+        return "You met your goal today!"
+      } else {
+        return defaultLogic()
+      }
+    @unknown default:
+      fatalError("Unhandled case")
     }
+  }
 }
 
 private extension HabitDailyUpdateCellViewModel {
 
-    func observeValues() async {
-        backgroundHandler = await HealthStoreFetcher.shared.enableBackgroundDelivery(
-            objectTypes: habit.targetMetric.sampleTypes,
-            frequency: .hourly
-        )
-        observationHandler = HealthManager.shared.healthStore.observeChanges(
-            sampleTypes: habit.targetMetric.sampleTypes,
-            startDate: Calendar.current.date(byAdding: .day, value: -2, to: .now) ?? .now
-        ) { [weak self] in
-            await self?.loadValues()
-        }
+  func observeValues() async {
+    backgroundHandler = await HealthStoreFetcher.shared.enableBackgroundDelivery(
+      objectTypes: habit.targetMetric.sampleTypes,
+      frequency: .hourly
+    )
+    observationHandler = HealthManager.shared.healthStore.observeChanges(
+      sampleTypes: habit.targetMetric.sampleTypes,
+      startDate: Calendar.current.date(byAdding: .day, value: -2, to: .now) ?? .now
+    ) { [weak self] in
+      await self?.loadValues()
     }
+  }
 
-    func loadValues() async {
-        let targetMetric = habit.targetMetric
-        let dailyQuantity = await targetMetric.fetchTotalQuantity(for: .today())
-        dailyValue = dailyQuantity.doubleValue(for: habit.unit)
+  func loadValues() async {
+    let targetMetric = habit.targetMetric
+    let dailyQuantity = await targetMetric.fetchTotalQuantity(for: .today())
+    dailyValue = dailyQuantity.doubleValue(for: habit.unit)
 
-        let prevHasCompletedGoal = goalCompletionState
+    let prevHasCompletedGoal = goalCompletionState
 
-        if habit.quantityMeetsGoal(dailyQuantity) {
-            goalCompletionState = .metGoal
+    if habit.quantityMeetsGoal(dailyQuantity) {
+      goalCompletionState = .metGoal
+    } else {
+      switch habit.targetMetric.measurementStyle {
+      case .minimum:
+        goalCompletionState = .unmetGoal
+      case .range:
+        if habit.quantity.compare(dailyQuantity) == .orderedDescending {
+          goalCompletionState = .unmetGoal
         } else {
-            switch habit.targetMetric.measurementStyle {
-            case .minimum:
-                goalCompletionState = .unmetGoal
-            case .range:
-                if habit.quantity.compare(dailyQuantity) == .orderedDescending {
-                    goalCompletionState = .unmetGoal
-                } else {
-                    goalCompletionState = .exceededGoal
-                }
-            @unknown default:
-                fatalError("Unknown Case")
-            }
+          goalCompletionState = .exceededGoal
         }
-
-        if
-            prevHasCompletedGoal != .metGoal &&
-            goalCompletionState == .metGoal &&
-            !Calendar.current.isDateInToday(habit.lastNotificationDate ?? .distantPast)
-        {
-            let id = habit.persistentModelID
-            do {
-                try ContainerHolder.shared.editAndSave { context in
-                    let editableHabit = try context.fetchHabit(id: id)
-                    editableHabit?.lastNotificationDate = .now
-                }
-
-                await sendHabitHitNotification()
-                shouldShowConfetti = true
-            } catch {
-                TelemetryDeck.errorOccurred(
-                    id: "HabitDailyUpdateCellViewModel.habitGoalNotification",
-                    category: .thrownException,
-                    message: error.localizedDescription
-                )
-                print(error)
-            }
-        }
+      @unknown default:
+        fatalError("Unknown Case")
+      }
     }
 
-    func sendHabitHitNotification() async {
-        if UIApplication.shared.applicationState != .active {
-            await NotificationManager.shared.sendNotification(
-                title: "You Did It!",
-                subtitle: "You've hit your \(habit.targetMetric.name) goal, great job!"
-            )
+    if
+      prevHasCompletedGoal != .metGoal &&
+        goalCompletionState == .metGoal &&
+        !Calendar.current.isDateInToday(habit.lastNotificationDate ?? .distantPast)
+    {
+      let id = habit.persistentModelID
+      do {
+        try ContainerHolder.shared.editAndSave { context in
+          let editableHabit = try context.fetchHabit(id: id)
+          editableHabit?.lastNotificationDate = .now
         }
+
+        await sendHabitHitNotification()
+        shouldShowConfetti = true
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "HabitDailyUpdateCellViewModel.habitGoalNotification",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+        print(error)
+      }
     }
+  }
+
+  func sendHabitHitNotification() async {
+    if UIApplication.shared.applicationState != .active {
+      await NotificationManager.shared.sendNotification(
+        title: "You Did It!",
+        subtitle: "You've hit your \(habit.targetMetric.name) goal, great job!"
+      )
+    }
+  }
 }

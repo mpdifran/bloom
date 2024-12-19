@@ -41,15 +41,30 @@ struct HabitDailyUpdateCell: View {
 
       VStack {
         HStack {
-          Text(viewModel.formattedDailyValue)
+          if viewModel.goalCompletionState == .metGoal {
+            HStack {
+              Image(systemName: "checkmark")
+              Text("Completed")
+            }
             .foregroundStyle(.tint)
-            .contentTransition(.numericText(value: viewModel.dailyValue))
-            .animation(.default, value: viewModel.dailyValue)
+          } else {
+            Text(viewModel.formattedDailyValue)
+              .foregroundStyle(.tint)
+              .contentTransition(.numericText(value: viewModel.dailyValue))
+              .animation(.default, value: viewModel.dailyValue)
+          }
 
           Spacer()
 
-          Text("\(habit.displayQuantity)")
-            .foregroundStyle(viewModel.goalCompletionState == .metGoal ? .primary : .tertiary)
+          if viewModel.goalCompletionState == .metGoal {
+            Text("\(viewModel.formattedDailyValueNoUnits) / \(habit.displayQuantity)")
+              .contentTransition(.numericText(value: viewModel.dailyValue))
+              .animation(.default, value: viewModel.dailyValue)
+              .foregroundStyle(.tint)
+          } else {
+            Text("\(habit.displayQuantity)")
+              .foregroundStyle(.secondary)
+          }
         }
         .font(.body)
         .bold()
