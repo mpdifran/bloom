@@ -11,8 +11,17 @@ import AppUI
 
 struct WorkoutsListView: View {
 
+  init(activityType: HKWorkoutActivityType? = nil) {
+    if let activityType {
+      self._selectedActivityType = State(initialValue: activityType)
+    }
+  }
+
   @State private var isLoading = true
   @State private var workoutSections = [WorkoutDateSection]()
+  @State private var filteredWorkoutSections = [WorkoutDateSection]()
+  @State private var activityTypes = [HKWorkoutActivityType]()
+  @State private var selectedActivityType: HKWorkoutActivityType?
 
   var body: some View {
     Group {
@@ -27,6 +36,10 @@ struct WorkoutsListView: View {
     .groupedBackground()
     .navigationTitle("Workouts")
     .navigationBarTitleDisplayMode(.inline)
+    .animation(.default, value: selectedActivityType)
+    .onChange(of: selectedActivityType) { (_, _) in
+      refreshFilteredWorkoutSections()
+    }
     .task {
       await loadWorkouts()
     }
@@ -50,40 +63,83 @@ private extension WorkoutsListView {
 
   var mainListView: some View {
     ScrollView {
-      LazyVStack(alignment: .leading) {
-        ForEach(workoutSections) { section in
-          VStack(alignment: .leading) {
-            Text("\(section.date, formatter: DateFormatter.fullMonthAndYear)")
-              .font(.title)
-              .fontDesign(.rounded)
-              .bold()
-            Text("\(section.workouts.count) \(section.workouts.count == 1 ? "workout" : "workouts")")
-              .foregroundStyle(.secondary)
-              .font(.headline)
-              .bold()
-          }
-          .fontDesign(.rounded)
-          .padding(.top)
+      VStack(alignment: .leading, spacing: 0) {
+        WorkoutActivityTypeFilterView(
+          activityTypes: activityTypes,
+          selectedActivityType: $selectedActivityType
+        )
+        .tint(.green)
 
-          ForEach(section.workouts, id: \.hashValue) { workout in
-            NavigationLink {
-              WorkoutDetailsView(workout: workout)
-            } label: {
-              WorkoutCell(workout: workout)
+        LazyVStack(alignment: .leading) {
+          ForEach(filteredWorkoutSections) { section in
+            WorkoutSectionHeaderView(section: section)
+
+            ForEach(section.workouts, id: \.hashValue) { workout in
+              NavigationLink {
+                WorkoutDetailsView(workout: workout)
+              } label: {
+                WorkoutCell(workout: workout)
+              }
             }
           }
         }
+        .padding()
       }
-      .padding()
     }
   }
 }
 
 private extension WorkoutsListView {
 
+  func refreshFilteredWorkoutSections() {
+    guard let selectedActivityType else {
+      filteredWorkoutSections = workoutSections
+      return
+    }
+
+    var sections = [WorkoutDateSection]()
+
+    for section in workoutSections {
+      guard section.workouts.contains(where: { $0.workoutActivityType == selectedActivityType }) else {
+        continue
+      }
+
+      let filteredWorkouts = section.workouts.filter({ $0.workoutActivityType == selectedActivityType })
+      let filteredSection = WorkoutDateSection(date: section.date, workouts: filteredWorkouts)
+      sections.append(filteredSection)
+    }
+
+    filteredWorkoutSections = sections
+  }
+
   func loadWorkouts() async {
-    self.workoutSections = await HealthWorkoutFetcher.shared.fetchSectionedWorkouts(dateRange: .trailingMonthsFromNow(1000))
+    let response = await HealthWorkoutFetcher.shared.fetchSectionedWorkouts(dateRange: .trailingMonthsFromNow(1000))
+
+    self.activityTypes = response.activityTypes
+    self.workoutSections = response.sections
+
+    refreshFilteredWorkoutSections()
+
     isLoading = false
+  }
+}
+
+private struct WorkoutSectionHeaderView: View {
+  let section: WorkoutDateSection
+
+  var body: some View {
+    VStack(alignment: .leading) {
+      Text("\(section.date, formatter: DateFormatter.fullMonthAndYear)")
+        .font(.title)
+        .fontDesign(.rounded)
+        .bold()
+      Text("\(section.workouts.count) \(section.workouts.count == 1 ? "workout" : "workouts")")
+        .foregroundStyle(.secondary)
+        .font(.headline)
+        .bold()
+    }
+    .fontDesign(.rounded)
+    .padding(.top)
   }
 }
 

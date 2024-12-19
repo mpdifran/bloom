@@ -19,13 +19,8 @@ struct SelfSizingPresentationDetentModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .background {
-        GeometryReader { proxy in
-          Color.clear
-            .onAppear {
-              updatePresentationDetents(geometry: proxy)
-            }
-        }
+      .readViewSize { proxy in
+        updatePresentationDetents(geometry: proxy)
       }
       .presentationDetents([presentationDetent])
   }

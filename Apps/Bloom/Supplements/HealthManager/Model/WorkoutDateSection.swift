@@ -8,7 +8,7 @@
 import HealthKit
 
 struct WorkoutDateSection: Identifiable, Hashable {
-  var id: Int { hashValue }
+  var id: Date { date }
 
   let date: Date
   let workouts: [HKWorkout]

@@ -124,7 +124,7 @@ private extension ExerciseEffectivenessView {
 
           ForEach(workoutTypeReports) { report in
             NavigationLink {
-              WorkoutsListView()
+              WorkoutsListView(activityType: report.activityType)
             } label: {
               WorkoutHeartRateZoneCell(report: report)
                 .cardContainer(fill: .background.secondary)

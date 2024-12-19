@@ -198,7 +198,7 @@ private extension ActivityLevelDetailsView {
 
         ForEach(workoutSummations) { workoutSummation in
           NavigationLink {
-            WorkoutsListView()
+            WorkoutsListView(activityType: workoutSummation.activityType)
           } label: {
             WorkoutSummationCell(workoutSummation: workoutSummation)
           }

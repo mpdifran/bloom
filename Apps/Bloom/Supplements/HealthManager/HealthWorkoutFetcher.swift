@@ -9,6 +9,11 @@ import Foundation
 import HealthKit
 import BloomFoundation
 
+struct SectionedWorkoutResponse {
+  let activityTypes: [HKWorkoutActivityType]
+  let sections: [WorkoutDateSection]
+}
+
 final actor HealthWorkoutFetcher {
   static let shared = HealthWorkoutFetcher()
 
@@ -17,9 +22,10 @@ final actor HealthWorkoutFetcher {
 
 extension HealthWorkoutFetcher {
 
-  func fetchSectionedWorkouts(activityType: HKWorkoutActivityType? = nil, dateRange: DateRange) async -> [WorkoutDateSection] {
+  func fetchSectionedWorkouts(activityType: HKWorkoutActivityType? = nil, dateRange: DateRange) async -> SectionedWorkoutResponse {
     let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityType: activityType, dateRange: dateRange)
 
+    var activityTypes = [HKWorkoutActivityType]()
     var groupedWorkouts = [Date: [HKWorkout]]()
     let calendar = Calendar.current
 
@@ -27,6 +33,10 @@ extension HealthWorkoutFetcher {
       guard let monthDate = calendar.startOfMonth(for: workout.startDate) else { continue }
 
       groupedWorkouts[monthDate, default: []].append(workout)
+
+      if !activityTypes.contains(workout.workoutActivityType) {
+        activityTypes.append(workout.workoutActivityType)
+      }
     }
 
     let sections: [WorkoutDateSection] = groupedWorkouts.map { monthDate, workouts in
@@ -35,6 +45,9 @@ extension HealthWorkoutFetcher {
     }
       .sorted { $0.date > $1.date }
 
-    return sections
+    return SectionedWorkoutResponse(
+      activityTypes: activityTypes,
+      sections: sections
+    )
   }
 }
