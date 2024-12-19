@@ -10,121 +10,105 @@ import DataContainer
 import HealthKit
 
 struct HabitDailyUpdateCell: View {
-    let habit: Habit
+  let habit: Habit
 
-    @ObservedObject private var viewModel: HabitDailyUpdateCellViewModel
+  @ObservedObject private var viewModel: HabitDailyUpdateCellViewModel
 
-    @State private var showConfetti = 0
+  @State private var showConfetti = 0
 
-    init(habit: Habit) {
-        self.habit = habit
-        self._viewModel = ObservedObject(wrappedValue: HabitDailyUpdateCellViewModel(habit: habit))
-    }
+  init(habit: Habit) {
+    self.habit = habit
+    self._viewModel = ObservedObject(wrappedValue: HabitDailyUpdateCellViewModel(habit: habit))
+  }
 
-    var body: some View {
+  var body: some View {
+    VStack(spacing: 26) {
+      HStack {
+        Image(systemName: habit.targetMetric.systemImage)
+          .font(.title2)
+          .bold()
+
+        Text(habit.targetMetric.name)
+          .font(.title3)
+          .bold()
+          .fontDesign(.rounded)
+
+        Spacer()
+
+        DisclosureIndicator()
+          .bold()
+      }
+
+      VStack {
         HStack {
-            IconGauge(
-                progress: viewModel.dailyValue / habit.value,
-                dimension: 50,
-                lineThickness: 8,
-                systemImage: viewModel.goalCompletionState == .metGoal ? "checkmark" : habit.targetMetric.systemImage,
-                color: habit.targetMetric.color
-            )
-            .bold()
-            .foregroundStyle(viewModel.goalCompletionState == .metGoal ? habit.targetMetric.color : .text)
-            .background {
-                if viewModel.goalCompletionState == .metGoal {
-                    Circle()
-                        .fill(habit.targetMetric.color.tertiary)
-                }
-            }
+          Text(viewModel.formattedDailyValue)
+            .foregroundStyle(.tint)
+            .contentTransition(.numericText(value: viewModel.dailyValue))
+            .animation(.default, value: viewModel.dailyValue)
 
-            VStack(alignment: .leading) {
-                HStack {
-                    VStack(alignment: .leading) {
-                        if let vitalKind = habit.vitalKind {
-                            Label(vitalKind.name, systemImage: vitalKind.systemImage)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+          Spacer()
 
-                        Text(habit.targetMetric.name)
-                            .bold()
-                            .fontDesign(.rounded)
-                    }
-
-                    Spacer(minLength: 0)
-
-                    VStack(alignment: .trailing) {
-                        Text(viewModel.formattedDailyValue)
-                            .font(.title3)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.tint)
-                            .bold()
-                            .contentTransition(.numericText(value: viewModel.dailyValue))
-                            .animation(.default, value: viewModel.dailyValue)
-
-                        Text("/ \(habit.displayQuantity)")
-                            .font(.caption)
-                            .bold()
-                            .foregroundStyle(.secondary)
-                            .fontDesign(.rounded)
-                    }
-                }
-            }
-
-            Spacer(minLength: 0)
-
-            DisclosureIndicator()
-                .padding(.leading)
+          Text("\(habit.displayQuantity)")
+            .foregroundStyle(viewModel.goalCompletionState == .metGoal ? .primary : .tertiary)
         }
-        .cardContainer(fill: .background)
-        .tint(habit.targetMetric.color)
-        .standardConfetti(
-            $showConfetti,
-            colors: [
-                habit.targetMetric.color,
-                habit.targetMetric.color.darker(),
-                habit.targetMetric.color.lighter()
-            ]
+        .font(.body)
+        .bold()
+        .fontDesign(.rounded)
+
+        ProgressBar(
+          value: viewModel.dailyValue,
+          target: habit.value,
+          measurementStyle: .minimum
         )
-        .animation(.default, value: viewModel.dailyValue)
-        .onShow {
-            guard viewModel.shouldShowConfetti else { return }
-
-            showConfetti += 1
-            viewModel.shouldShowConfetti = false
-        }
+      }
     }
+    .tint(habit.targetMetric.color)
+    .cardContainer()
+    .standardConfetti(
+      $showConfetti,
+      colors: [
+        habit.targetMetric.color,
+        habit.targetMetric.color.darker(),
+        habit.targetMetric.color.lighter()
+      ]
+    )
+    .animation(.default, value: viewModel.dailyValue)
+    .onShow {
+      guard viewModel.shouldShowConfetti else { return }
+
+      showConfetti += 1
+      viewModel.shouldShowConfetti = false
+    }
+  }
 }
 
 #Preview {
-    ScrollView {
-        VStack {
-            HabitDailyUpdateCell(
-                habit: .init(
-                    targetMetric: .timeInDaylight,
-                    value: 30,
-                    unitString: HKUnit.minute().unitString,
-                    startDate: .now,
-                    isSuggested: true,
-                    isUserEdited: false,
-                    vitalKind: .sleepQuality
-                )
-            )
-            HabitDailyUpdateCell(
-                habit: .init(
-                    targetMetric: .calories,
-                    value: 1800,
-                    unitString: HKUnit.largeCalorie().unitString,
-                    startDate: .now,
-                    isSuggested: true,
-                    isUserEdited: false,
-                    vitalKind: .nutrition
-                )
-            )
-        }
-        .padding()
+  ScrollView {
+    VStack {
+      HabitDailyUpdateCell(
+        habit: .init(
+          targetMetric: .timeInDaylight,
+          value: 30,
+          unitString: HKUnit.minute().unitString,
+          startDate: .now,
+          isSuggested: true,
+          isUserEdited: false,
+          vitalKind: .sleepQuality
+        )
+      )
+      HabitDailyUpdateCell(
+        habit: .init(
+          targetMetric: .calories,
+          value: 1800,
+          unitString: HKUnit.largeCalorie().unitString,
+          startDate: .now,
+          isSuggested: true,
+          isUserEdited: false,
+          vitalKind: .nutrition
+        )
+      )
     }
-    .groupedBackground()
+    .padding()
+  }
+  .groupedBackground()
 }
