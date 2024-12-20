@@ -50,7 +50,6 @@ struct FoodItemSearchView: View {
         await foodStore.loadItems()
       }
     }
-    .environmentObject(foodStore)
   }
 }
 
@@ -58,7 +57,8 @@ private extension FoodItemSearchView {
   var resultsList: some View {
     List(foodStore.foodItems, id: \.id) { item in
       NavigationLink {
-        FoodItemDetailView(foodItem: item)
+        let viewModel = FoodItemDetailViewModel(foodItem: item, foodStore: foodStore)
+        FoodItemDetailView(viewModel: viewModel)
       } label: {
         FoodItemCell(
           id: item.id.value,

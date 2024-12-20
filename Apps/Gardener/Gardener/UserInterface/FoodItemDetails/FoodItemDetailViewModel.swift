@@ -15,14 +15,15 @@ final class FoodItemDetailViewModel: ObservableObject {
   @Published var foodItem: AdminFoodItemRecord
   private var initialFoodItem: AdminFoodItemRecord
 
-  @EnvironmentObject private var foodStore: UnverifiedFoodStore
+  private let foodStore: BaseFoodStore
 
   @Published var packagingImage: URL?
   @Published var nutritionLabel: URL?
 
-  init(foodItem: AdminFoodItemRecord) {
+  init(foodItem: AdminFoodItemRecord, foodStore: BaseFoodStore) {
     self.foodItem = foodItem
     self.initialFoodItem = foodItem
+    self.foodStore = foodStore
 
     packagingImage = foodItem.packagingImage
     nutritionLabel = foodItem.nutritionLabelImage

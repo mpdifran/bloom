@@ -17,7 +17,8 @@ struct FoodItemVerificationView: View {
   var body: some View {
     List(foodStore.foodItems, selection: $selectedItem) { item in
       NavigationLink {
-        FoodItemDetailView(foodItem: item)
+        let viewModel = FoodItemDetailViewModel(foodItem: item, foodStore: foodStore)
+        FoodItemDetailView(viewModel: viewModel)
       } label: {
         FoodItemCell(
           id: item.id.value,
@@ -37,7 +38,6 @@ struct FoodItemVerificationView: View {
     .task {
       await foodStore.loadItems()
     }
-    .environmentObject(foodStore)
   }
 }
 

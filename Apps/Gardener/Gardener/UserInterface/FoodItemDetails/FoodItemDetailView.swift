@@ -13,8 +13,6 @@ struct FoodItemDetailView: View {
 
   @ObservedObject private var viewModel: FoodItemDetailViewModel
 
-  private let foodItem: AdminFoodItemRecord
-
   enum ImageTab: String, CaseIterable {
     case packaging = "Packaging"
     case nutritionLabel = "Nutrition Label"
@@ -33,10 +31,8 @@ struct FoodItemDetailView: View {
 
   @Environment(\.openURL) private var openURL
 
-  init(foodItem: AdminFoodItemRecord) {
-    self.foodItem = foodItem
-
-    viewModel = FoodItemDetailViewModel(foodItem: foodItem)
+  init(viewModel: FoodItemDetailViewModel) {
+    self.viewModel = viewModel
   }
 
   var body: some View {
@@ -473,5 +469,6 @@ private extension View {
 
 #Preview {
   let foodItem = AdminFoodItemRecord(id: FoodItemIdentifier(UUID().uuidString))
-  FoodItemDetailView(foodItem: foodItem)
+  let viewModel = FoodItemDetailViewModel(foodItem: foodItem, foodStore: BaseFoodStore())
+  FoodItemDetailView(viewModel: viewModel)
 }
