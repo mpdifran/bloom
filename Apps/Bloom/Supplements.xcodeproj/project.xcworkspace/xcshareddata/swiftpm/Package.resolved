@@ -1,5 +1,5 @@
 {
-  "originHash" : "ddd7c8d3cc657fc621e782cdba3b5aeee7f43c0677314fda88624aba83606300",
+  "originHash" : "37f33b514e48e960f5ee912f50b3d6c4390ef3dfd67f6a83b525318f226abf76",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -80,6 +80,15 @@
       "state" : {
         "revision" : "e1a5f4ea47888e7e40cb2d40bea43ed4f1f5bfff",
         "version" : "2.6.1"
+      }
+    },
+    {
+      "identity" : "valet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Square/Valet",
+      "state" : {
+        "revision" : "05c9e514fbd352a6866877ca31326b4e0b7d6d01",
+        "version" : "5.0.0"
       }
     }
   ],
