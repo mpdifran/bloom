@@ -38,7 +38,8 @@ extension HabitDailyUpdateCellViewModel {
   }
 
   var formattedDailyValueNoUnits: String {
-    dailyValue.format(using: habit.targetMetric.preferredFormatter)
+    let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
+    return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter, showUnits: false)
   }
 
   var goalDifferenceSummary: String {

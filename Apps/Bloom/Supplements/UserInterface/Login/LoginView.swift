@@ -58,10 +58,12 @@ private extension LoginView {
           break
         }
 
-        do {
-          try viewModel.authenticate(using: credential)
-        } catch {
-          self.error = error
+        Task {
+          do {
+            try await viewModel.authenticate(using: credential)
+          } catch {
+            self.error = error
+          }
         }
       default:
         break
