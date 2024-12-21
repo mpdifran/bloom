@@ -110,25 +110,25 @@ extension OpenAIService {
   - Property called 'protein', an numerical float of how many grams of protein per serving.
   - Property called 'carbs', an numerical float of how many grams of carbs per serving.
   - Property called 'fat', a numerical float of how many grams of fat per serving.
-  - Optional property called 'saturated_fat', a numerical float of how many grams of saturated fat per serving.
-  - Optional property called 'trans_fat', a numerical float of how many grams of trans fat per serving.
-  - Optional property called 'polyunsaturated_fat', a numerical float of how many grams of polyunsaturated fat per serving.
-  - Optional property called 'monounsaturated_fat', a numerical float of how many grams of monounsaturated fat per serving.
-  - Optional property called 'fiber', a numerical float of how many grams of fiber per serving.
-  - Optional property called 'sugar', a numerical float of how many grams of sugar per serving.
-  - Optional property called 'cholesterol', a numerical float of how many milligrams of cholesterol per serving.
-  - Optional property called 'sodium', a numerical float of how many milligrams of sodium per serving.
-  - Optional property called 'calcium', a numerical float of how many milligrams of calcium per serving.
-  - Optional property called 'iron', a numerical float of how many milligrams of iron per serving.
-  - Optional property called 'potassium', a numerical float of how many milligrams of potassium per serving.
-  - Optional property called 'magnesium', a numerical float of how many milligrams of magnesium per serving.
-  - Optional property called 'zinc', a numerical float of how many milligrams of zinc per serving.
-  - Optional property called 'vitamin_a', a numerical float of how many milligrams of vitamin A per serving.
-  - Optional property called 'vitamin_b6', a numerical float of how many milligrams of vitamin B6 per serving.
-  - Optional property called 'vitamin_b12', a numerical float of how many milligrams of vitamin b12 per serving.
-  - Optional property called 'vitamin_c', a numerical float of how many milligrams of vitamin C per serving.
-  - Optional property called 'vitamin_d', a numerical float of how many milligrams of vitamin D per serving.
-  - Optional property called 'vitamin_e', a numerical float of how many milligrams of vitamin E per serving.
+  - Property called 'saturated_fat', a numerical float of how many grams of saturated fat per serving.
+  - Property called 'trans_fat', a numerical float of how many grams of trans fat per serving.
+  - Property called 'polyunsaturated_fat', a numerical float of how many grams of polyunsaturated fat per serving.
+  - Property called 'monounsaturated_fat', a numerical float of how many grams of monounsaturated fat per serving.
+  - Property called 'fiber', a numerical float of how many grams of fiber per serving.
+  - Property called 'sugar', a numerical float of how many grams of sugar per serving.
+  - Property called 'cholesterol', a numerical float of how many milligrams of cholesterol per serving.
+  - Property called 'sodium', a numerical float of how many milligrams of sodium per serving.
+  - Property called 'calcium', a numerical float of how many milligrams of calcium per serving.
+  - Property called 'iron', a numerical float of how many milligrams of iron per serving.
+  - Property called 'potassium', a numerical float of how many milligrams of potassium per serving.
+  - Property called 'magnesium', a numerical float of how many milligrams of magnesium per serving.
+  - Property called 'zinc', a numerical float of how many milligrams of zinc per serving.
+  - Property called 'vitamin_a', a numerical float of how many milligrams of vitamin A per serving.
+  - Property called 'vitamin_b6', a numerical float of how many milligrams of vitamin B6 per serving.
+  - Property called 'vitamin_b12', a numerical float of how many milligrams of vitamin b12 per serving.
+  - Property called 'vitamin_c', a numerical float of how many milligrams of vitamin C per serving.
+  - Property called 'vitamin_d', a numerical float of how many milligrams of vitamin D per serving.
+  - Property called 'vitamin_e', a numerical float of how many milligrams of vitamin E per serving.
   
   Make sure all JSON keys are snake case.
 """

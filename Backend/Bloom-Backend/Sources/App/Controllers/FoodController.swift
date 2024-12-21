@@ -64,7 +64,8 @@ extension FoodController {
       barcode: requestBody.barcode
     )
 
-    if let foodItem = existingFoodItems.first {
+    // Both country and barcode need to match for it to be considered the same.
+    if let foodItem = existingFoodItems.first(where: { $0.country?.asCountry() == requestBody.country.country }) {
       return UploadNewFoodResponse(
         result: .foodLogged,
         foodItem: foodItem
