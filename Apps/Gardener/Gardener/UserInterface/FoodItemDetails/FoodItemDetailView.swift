@@ -209,9 +209,9 @@ private extension FoodItemDetailView {
         servingSection
         macroSection
         fatSection
+        otherNutrientsSection
         carbsSection
         proteinSection
-        otherNutrientsSection
         mineralSection
         vitaminSection
         miscSection
