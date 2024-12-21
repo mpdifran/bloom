@@ -113,6 +113,14 @@ private extension FoodItemDetailView {
         .tint(.blue)
         .frame(maxWidth: 160)
 
+        ProminentButton("Nutrition Label", systemImage: "text.page.fill") {
+          guard let url = URL(string: "https://www.google.ca/search?udm=2&q=\(viewModel.foodItem.name?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")+\(viewModel.foodItem.brandName?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")+\(viewModel.foodItem.flavour?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")+Nutrition+Label") else { return }
+
+          openURL(url)
+        }
+        .tint(.blue)
+        .frame(maxWidth: 160)
+
         if viewModel.foodItem.source == "Open Food Facts" {
           ProminentButton("Open Food Facts") {
             guard
