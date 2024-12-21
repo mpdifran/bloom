@@ -201,15 +201,15 @@ private extension FoodItemDetailsView {
           showDatePicker.toggle()
         } label: {
           HStack(spacing: 2) {
-            Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
+            Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
             Image(systemName: "chevron.up.chevron.down")
               .font(.caption)
           }
           .padding()
         }
         .popover(isPresented: $showDatePicker) {
-          DatePicker(selection: $nutritionViewModel.date, displayedComponents: .date) {
-            Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
+          DatePicker(selection: $date, displayedComponents: .date) {
+            Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
           }
           .datePickerStyle(.graphical)
           .frame(width: 300)
@@ -231,6 +231,11 @@ private extension FoodItemDetailsView {
 
       Divider()
 
+      LabeledContent("Serving Size", value: foodItem.displayServing)
+        .frame(minHeight: 60)
+
+      Divider()
+
       LabeledContent("Number of Servings") {
         TextField("", value: $numberOfServings, formatter: NumberFormatter.oneDecimalPlace)
           .textFieldStyle(.roundedBorder)
@@ -242,11 +247,6 @@ private extension FoodItemDetailsView {
           .selectAllTextOnBeginEditing()
       }
       .frame(minHeight: 60)
-
-      Divider()
-
-      LabeledContent("Serving Size", value: foodItem.displayServing)
-        .frame(minHeight: 60)
     }
     .padding(.horizontal)
     .cardContainer(fill: .background.secondary, includePadding: false)
