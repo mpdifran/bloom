@@ -145,4 +145,34 @@ extension FoodDatabaseService {
 
     try await foodItem.save(on: request.db)
   }
+
+  func addProductImagesIfMissing(
+    _ request: Request,
+    foodID: FoodItemIdentifier,
+    nutritionImage: ImageFile,
+    packagingImage: ImageFile
+  ) async throws {
+    guard let foodItem = try await FoodItemRecord.query(on: request.db)
+      .filter(\.$id == foodID.value)
+      .first() else {
+      throw Abort(.noContent)
+    }
+
+    if foodItem.nutritionLabelImage == nil {
+      let imageMetadata = try await request.imageStorage.store(
+        image: nutritionImage,
+        path: .nutritionLabel
+      )
+      foodItem.nutritionLabelImage = imageMetadata.filename
+    }
+    if foodItem.packagingImage == nil {
+      let imageMetadata = try await request.imageStorage.store(
+        image: packagingImage,
+        path: .foodPackaging
+      )
+      foodItem.packagingImage = imageMetadata.filename
+    }
+    
+    try await foodItem.save(on: request.db)
+  }
 }

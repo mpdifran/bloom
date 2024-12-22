@@ -66,14 +66,32 @@ extension FoodController {
 
     // Both country and barcode need to match for it to be considered the same.
     if let foodItem = existingFoodItems.first(where: { $0.country?.asCountry() == requestBody.country.country }) {
+      do {
+        // Try updating images if they're missing.
+        try await foodDatabaseService.addProductImagesIfMissing(
+          request,
+          foodID: foodItem.id,
+          nutritionImage: requestBody.nutritionLabelImage,
+          packagingImage: requestBody.packagingImage
+        )
+      } catch {
+        request.logger.error(error)
+      }
+
       return UploadNewFoodResponse(
         result: .foodLogged,
         foodItem: foodItem
       )
     }
 
-    let nutritionLabelMetadata = try await save(image: requestBody.nutritionLabelImage, request: request, path: .nutritionLabel)
-    let packagingMetadata = try await save(image: requestBody.packagingImage, request: request, path: .foodPackaging)
+    let nutritionLabelMetadata = try await request.imageStorage.store(
+      image: requestBody.nutritionLabelImage,
+      path: .nutritionLabel
+    )
+    let packagingMetadata = try await request.imageStorage.store(
+      image: requestBody.packagingImage,
+      path: .foodPackaging
+    )
 
     let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
       request: request,
@@ -270,23 +288,5 @@ private extension FoodController {
     }
 
     return []
-  }
-}
-
-// MARK: - Private Image Methods
-
-private extension FoodController {
-
-  /// Saves images using the `request.imageStorage`
-  /// - Parameters:
-  ///   - image: The image to save
-  ///   - request: The request context for the current request.
-  ///   - path: The path in which to store the image
-  /// - Returns: ImageFileMetadata
-  ///   The metadata for the resulting image.
-  func save(image: ImageFile,
-            request: Request,
-            path: StoragePath) async throws -> ImageFileMetadata {
-    return try await request.imageStorage.store(image: image, path: path)
   }
 }
