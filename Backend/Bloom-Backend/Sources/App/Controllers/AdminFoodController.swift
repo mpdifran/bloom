@@ -23,6 +23,7 @@ extension AdminFoodController: RouteCollection {
       food.get("unverified", use: getUnverifiedFoods)
       food.patch("update", use: updateFood)
       food.delete(":id", use: deleteFood)
+      food.get("search", use: searchFood)
       food.group("open-food-facts") { foodFacts in
         foodFacts.post("bulk-upload", use: openFoodFactsBulkUpload)
       }
@@ -145,6 +146,19 @@ private extension AdminFoodController {
     try await record.delete(on: request.db)
 
     return Response(status: .ok) // 200
+  }
+
+  @Sendable
+  func searchFood(_ request: Request) async throws -> AdminSearchFoodItemResponse {
+    let requestQuery = try request.query.decode(AdminSearchFoodItemGetRequest.self)
+    let query = requestQuery.query
+
+    let records = try await foodDatabaseService.adminSearchFoods(
+      request: request,
+      query: query
+    )
+
+    return AdminSearchFoodItemResponse(foodItemRecords: records)
   }
 }
 

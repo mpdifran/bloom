@@ -132,6 +132,29 @@ extension FoodDatabaseService {
     return records
   }
 
+  func adminSearchFoods(request: Request, query: String) async throws -> [AdminFoodItemRecord] {
+    guard let sqlDatabase = request.db as? SQLDatabase else {
+      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
+    }
+
+    let results = try await sqlDatabase.raw(
+        """
+            SELECT *
+            FROM food_item_records
+            WHERE SIMILARITY(name, \(bind: query)) > 0.3
+               OR SIMILARITY(brand_name, \(bind: query)) > 0.3
+               OR SIMILARITY(barcode, \(bind: query)) > 0.3
+            ORDER BY GREATEST(
+                SIMILARITY(name, \(bind: query)),
+                SIMILARITY(brand_name, \(bind: query)),
+                SIMILARITY(barcode, \(bind: query))
+            ) DESC
+        """
+    ).all(decodingFluent: FoodItemRecord.self)
+
+    return results.compactMap { $0.asAdminFoodItemRecord() }
+  }
+
   func markFoodAsInaccurate(request: Request, foodID: FoodItemIdentifier) async throws {
     guard let foodItem = try await FoodItemRecord.query(on: request.db)
       .filter(\.$id == foodID.value)
