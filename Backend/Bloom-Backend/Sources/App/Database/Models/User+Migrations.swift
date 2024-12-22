@@ -1,0 +1,30 @@
+//
+//  User+Migrations.swift
+//  Bloom-Backend
+//
+//  Created by Mark DiFranco on 2024-12-22.
+//
+
+import Foundation
+import Vapor
+import Fluent
+
+extension User {
+  struct Create: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("id", .string, .identifier(auto: false))
+        .field("access_token", .string)
+        .field("refresh_token", .string)
+        .field("id_token", .string)
+        .field("access_token_expiry", .datetime)
+        .field("created_at", .datetime)
+        .field("updated_at", .datetime)
+        .create()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema).delete()
+    }
+  }
+}

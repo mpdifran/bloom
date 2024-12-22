@@ -4,21 +4,22 @@ import Vapor
 // configures your application
 public func configure(_ app: Application) async throws {
 
-    // TelemetryDeck
-//    app.telemetryDeck.initialize(appID: "F1AC4445-7F73-4026-A19A-FF2250C34853")
+  // TelemetryDeck
+  //    app.telemetryDeck.initialize(appID: "F1AC4445-7F73-4026-A19A-FF2250C34853")
 
-    // Debug
-    app.printEnvironmentInfo()
+  // Debug
+  app.printEnvironmentInfo()
 
-//    app.http.client.configuration.decompression = .enabled(limit: .ratio(10))
+  // Routes
+  app.routes.defaultMaxBodySize = "10mb"
+  try routes(app)
 
-    // Routes
-    app.routes.defaultMaxBodySize = "10mb"
-    try routes(app)
+  // Middleware
+//  app.middleware.use(UserToken.authenticator())
 
-    // Database
-    try app.setupPostgres()
+  // Database
+  try app.setupPostgres()
 
-    // Migrations
-    allMigrations.forEach { app.migrations.add($0) }
+  // Migrations
+  allMigrations.forEach { app.migrations.add($0) }
 }
