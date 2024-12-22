@@ -189,6 +189,94 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.source = source
     self.notes = nil
   }
+
+  init(
+    id: String,
+    name: String,
+    state: FoodItemRecord.State,
+    brandName: String?,
+    flavour: String?,
+    category: FoodItemRecord.Category,
+    barcode: String?,
+    nutritionLabelImage: String?,
+    packagingImage: String?,
+    ingredients: String?,
+    country: FoodItemRecord.Country,
+    calories: Double?,
+    protein: Double?,
+    carbohydrates: Double?,
+    fat: Double?,
+    saturatedFat: Double?,
+    transFat: Double?,
+    polyunsaturatedFat: Double?,
+    monounsaturatedFat: Double?,
+    fiber: Double?,
+    sugar: Double?,
+    cholesterol: Double?,
+    sodium: Double?,
+    calcium: Double?,
+    iron: Double?,
+    potassium: Double?,
+    magnesium: Double?,
+    zinc: Double?,
+    vitaminA: Double?,
+    vitaminB6: Double?,
+    vitaminB12: Double?,
+    vitaminC: Double?,
+    vitaminD: Double?,
+    vitaminE: Double?,
+    servingName: String?,
+    servingValue: Double?,
+    servingUnit: String?,
+    downvoteCount: Int?,
+    source: String?,
+    notes: String?,
+    createdAt: Date?,
+    updatedAt: Date?
+  ) {
+    self.id = id
+    self.name = name
+    self.state = state
+    self.brandName = brandName
+    self.flavour = flavour
+    self.category = category
+    self.barcode = barcode
+    self.nutritionLabelImage = nutritionLabelImage
+    self.packagingImage = packagingImage
+    self.ingredients = ingredients
+    self.country = country
+    self.calories = calories
+    self.protein = protein
+    self.carbohydrates = carbohydrates
+    self.fat = fat
+    self.saturatedFat = saturatedFat
+    self.transFat = transFat
+    self.polyunsaturatedFat = polyunsaturatedFat
+    self.monounsaturatedFat = monounsaturatedFat
+    self.fiber = fiber
+    self.sugar = sugar
+    self.cholesterol = cholesterol
+    self.sodium = sodium
+    self.calcium = calcium
+    self.iron = iron
+    self.potassium = potassium
+    self.magnesium = magnesium
+    self.zinc = zinc
+    self.vitaminA = vitaminA
+    self.vitaminB6 = vitaminB6
+    self.vitaminB12 = vitaminB12
+    self.vitaminC = vitaminC
+    self.vitaminD = vitaminD
+    self.vitaminE = vitaminE
+    self.servingName = servingName
+    self.servingValue = servingValue
+    self.servingUnit = servingUnit
+    self.downvoteCount = downvoteCount
+    self.source = source
+    self.notes = notes
+    self.createdAt = createdAt
+    self.updatedAt = updatedAt
+  }
 }
 
 extension FoodItemRecord {

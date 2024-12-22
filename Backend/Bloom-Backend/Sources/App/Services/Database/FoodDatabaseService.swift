@@ -92,7 +92,10 @@ extension FoodDatabaseService {
 
       if let nutritionLabel = item.nutritionLabelImage {
         let imageURL: URL?
-        if nutritionLabel.hasPrefix("https://openfoodfacts-images") { // TODO: Zach make this better?
+        if
+          nutritionLabel.hasPrefix("https://openfoodfacts-images") ||
+          nutritionLabel.hasPrefix("https://images.openfoodfacts.net")
+        { // TODO: Zach make this better?
           imageURL = URL(string: nutritionLabel)
         } else {
           imageURL = try await request.imageStorage.generateImageURL(
@@ -106,7 +109,10 @@ extension FoodDatabaseService {
 
       if let packagingImage = item.packagingImage {
         let imageURL: URL?
-        if packagingImage.hasPrefix("https://openfoodfacts-images") { // TODO: Zach make this better?
+        if
+          packagingImage.hasPrefix("https://openfoodfacts-images") ||
+          packagingImage.hasPrefix("https://images.openfoodfacts.net")
+        { // TODO: Zach make this better?
           imageURL = URL(string: packagingImage)
         } else {
           imageURL = try await request.imageStorage.generateImageURL(

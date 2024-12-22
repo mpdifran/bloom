@@ -178,8 +178,8 @@ extension OpenFoodFactsFoodItem {
       case magnesiumServing
       case zincServing
       case vitaminAServing = "vitamin-aServing"
-      case vitaminB6Serving = "vitamin-bSserving"
-      case vitaminB12Serving = "vitamin-bS_serving"
+      case vitaminB6Serving = "vitamin-b6Serving"
+      case vitaminB12Serving = "vitamin-b12Serving"
       case vitaminCServing = "vitamin-cServing"
       case vitaminDServing = "vitamin-dServing"
       case vitaminEServing = "vitamin-eServing"

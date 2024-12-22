@@ -10,6 +10,56 @@ import BloomModel
 
 extension FoodItemRecord {
 
+  func duplicate() -> FoodItemRecord {
+    FoodItemRecord(
+      id: UUID().uuidString,
+      name: name,
+      state: state,
+      brandName: brandName,
+      flavour: flavour,
+      category: category,
+      barcode: barcode,
+      nutritionLabelImage: nutritionLabelImage,
+      packagingImage: packagingImage,
+      ingredients: ingredients,
+      country: country,
+      calories: calories,
+      protein: protein,
+      carbohydrates: carbohydrates,
+      fat: fat,
+      saturatedFat: saturatedFat,
+      transFat: transFat,
+      polyunsaturatedFat: polyunsaturatedFat,
+      monounsaturatedFat: monounsaturatedFat,
+      fiber: fiber,
+      sugar: sugar,
+      cholesterol: cholesterol,
+      sodium: sodium,
+      calcium: calcium,
+      iron: iron,
+      potassium: potassium,
+      magnesium: magnesium,
+      zinc: zinc,
+      vitaminA: vitaminA,
+      vitaminB6: vitaminB6,
+      vitaminB12: vitaminB12,
+      vitaminC: vitaminC,
+      vitaminD: vitaminD,
+      vitaminE: vitaminE,
+      servingName: servingName,
+      servingValue: servingValue,
+      servingUnit: servingUnit,
+      downvoteCount: downvoteCount,
+      source: source,
+      notes: notes,
+      createdAt: createdAt,
+      updatedAt: updatedAt
+    )
+  }
+}
+
+extension FoodItemRecord {
+
   func asFoodItem() -> FoodItem? {
     guard let id = id else { return nil }
 
@@ -59,6 +109,7 @@ extension FoodItemRecord {
 }
 
 extension FoodItemRecord {
+
   func asAdminFoodItemRecord() -> AdminFoodItemRecord? {
     guard let id = id else { return nil }
 

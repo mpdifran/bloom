@@ -51,7 +51,7 @@ extension FoodController {
 
   @Sendable
   func searchFoods(_ request: Request) async throws -> FoodSearchResponse {
-    let sections = await searchFoodsLocalDatabase(request)
+    let sections = try await searchFoodsLocalDatabase(request)
     return FoodSearchResponse(sections: sections)
   }
 
@@ -78,7 +78,7 @@ extension FoodController {
     let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
       request: request,
       barCode: requestBody.barcode,
-      country: requestBody.country,
+      country: requestBody.country.country,
       nutritionLabelMetadata: nutritionLabelMetadata,
       packagingMetadata: packagingMetadata
     )
@@ -121,28 +121,36 @@ extension FoodController {
 
 private extension FoodController {
 
-  func searchFoodsLocalDatabase(_ request: Request) async -> [FoodSearchResponse.Section] {
-    do {
-      let requestBody = try request.content.decode(FoodSearchRequest.self)
+  func searchFoodsLocalDatabase(_ request: Request) async throws -> [FoodSearchResponse.Section] {
+    let requestBody = try request.content.decode(FoodSearchRequest.self)
 
-      if let barcode = requestBody.upcCode {
+    if let barcode = requestBody.upcCode {
+      do {
         let sections = await searchFoodsBarcodeLocalDatabase(request, barcode: barcode)
         if sections.isNotEmpty {
           return sections
         } else {
-          return await searchFoodsBarcodeOpenFoodFacts(request, barcode: barcode)
+          let foodItems = try await openFoodFactsService.insertProduct(request, barcode: barcode)
+          return [
+            FoodSearchResponse.Section(
+              title: "Matched Barcode",
+              index: 0,
+              category: .branded,
+              foods: foodItems
+            )
+          ]
         }
-      } else if let name = requestBody.name {
-        return await searchFoodsByNameLocalDatabase(
-          request,
-          name: name,
-          country: requestBody.country?.country ?? .usa
-        )
-      } else {
-        throw Abort(.badRequest)
+      } catch {
+        request.logger.error(error)
       }
-    } catch {
-      request.logger.error(error)
+    } else if let name = requestBody.name {
+      return await searchFoodsByNameLocalDatabase(
+        request,
+        name: name,
+        country: requestBody.country?.country ?? .usa
+      )
+    } else {
+      throw Abort(.badRequest)
     }
 
     return []
@@ -162,85 +170,6 @@ private extension FoodController {
         index: 0,
         category: .branded,
         foods: foodItems
-      )
-
-      return [section]
-    } catch {
-      request.logger.error(error)
-    }
-    return []
-  }
-
-  func searchFoodsBarcodeOpenFoodFacts(_ request: Request, barcode: String) async -> [FoodSearchResponse.Section] {
-    do {
-      let response = try await openFoodFactsService.fetchProductImages(request, barcode: barcode)
-
-      guard let images = response.product.selectedImages else {
-        request.logger.info("Open Food Facts product had no images.")
-        return []
-      }
-
-      guard
-        let packageURI = images.front?.display?.en?.uri ?? images.front?.display?.fr?.uri, // Fallback to french if there's no English
-        let nutritionLabelURI = images.nutrition?.display?.en?.uri ?? images.nutrition?.display?.fr?.uri, // Fallback to french if there's no English
-        let packaging = try await request.client.get(packageURI).body,
-        let nutritionLabel = try await request.client.get(nutritionLabelURI).body
-      else {
-        request.logger.info("Could not load images from Open Food Facts Product.")
-        return []
-      }
-
-      guard let countries = response.product.countries else {
-        request.logger.info("Could not load countries from Open Food Facts Product.")
-        return[]
-      }
-
-      let packagingData = Data(packaging.readableBytesView)
-      let nutritionLabelData = Data(nutritionLabel.readableBytesView)
-
-      let packagingMetadata = try await save(
-        image: .init(data: packagingData, fileExtension: "png") ,
-        request: request,
-        path: .foodPackaging
-      )
-      let nutritionLabelMetadata = try await save(
-        image: .init(data: nutritionLabelData, fileExtension: "png"),
-        request: request,
-        path: .nutritionLabel
-      )
-
-      let country: FoodCountry
-      if countries.contains("Canada") {
-        country = .canada
-      } else if countries.contains("United States") {
-        country = .usa
-      } else {
-        request.logger.info("[OpenFoodFacts] Unsupported country code: \(countries).")
-        return []
-      }
-
-      let aiResponse = try await openAIService.parseNewFoodItem(
-        request: request,
-        barCode: barcode,
-        country: country,
-        nutritionLabelMetadata: nutritionLabelMetadata,
-        packagingMetadata: packagingMetadata
-      )
-
-      guard let foodItemRecord = aiResponse.0 else { return [] }
-
-      foodItemRecord.source = "Open Food Facts"
-      foodItemRecord.ingredients = response.product.ingredients
-
-      guard let foodItem = foodItemRecord.asFoodItem() else { return [] }
-
-      try await foodItemRecord.save(on: request.db)
-
-      let section = FoodSearchResponse.Section(
-        title: "Matched Barcode",
-        index: 0,
-        category: .branded,
-        foods: [foodItem]
       )
 
       return [section]
