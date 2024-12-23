@@ -13,7 +13,7 @@ struct FocusAreaHabitReviewView: View {
     let vitals: [VitalModel]
     let onContinue: () -> Void
 
-    @State private var index = 0
+    @State private var index = 1
     @State private var isLoading = true
     @State private var newHabits = NewHabitResult()
     @State private var error: Error?
@@ -123,7 +123,7 @@ private extension FocusAreaHabitReviewView {
 private extension FocusAreaHabitReviewView {
 
     func advanceIndex() async {
-        await Delay(1700)
+        await Delay(1000)
 
         index += 1
     }
