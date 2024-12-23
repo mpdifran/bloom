@@ -184,7 +184,7 @@ private extension OpenAIService {
           role: .system,
           content: [
             .text("""
-                              You must respond in JSON. There should be a single object.
+                        You must respond in JSON. There should be a single object.
                         
                         The properties of the object are:
                         
@@ -268,7 +268,7 @@ private extension OpenAIService {
         Chat.Message(
           role: .system,
           content: [
-            .text("You must respond in JSON. There should be a single object three properties: brand_name, product_name, and flavour (optional). Each property is a string populated with data from the image. Ensure the JSON keys are formatted in snake case. The detected strings should have the first letter of each word capitalized.")
+            .text("You must respond in JSON. There should be a single object three properties: brand_name, product_name, and flavour (optional). Each property is a string in English populated with data from the image. Ensure the JSON keys are formatted in snake case. The detected strings should have the first letter of each word capitalized. If the detected text is in French, translate it to English, or just use the English text in the image.")
           ]
         ),
         Chat.Message(
