@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SwiftData
+import DataContainer
 
 struct SettingsView: View {
 
@@ -13,11 +15,25 @@ struct SettingsView: View {
   
   @State private var presentedSheet: AnyView?
 
+  @Query private var userAddedHabits: [Habit]
+  @Query private var allHabits: [Habit]
+
+  init() {
+    _userAddedHabits = Query(
+      filter: #Predicate<Habit> { habit in
+        habit.endDate == nil && !habit.isSuggested
+      },
+      sort: \Habit.startDate,
+      order: .forward
+    )
+  }
+
   var body: some View {
     ScrollView {
       VStack(spacing: 20) {
         userSection
         healthGoalsSection
+        habitsSection
       }
       .padding()
     }
@@ -80,6 +96,35 @@ extension SettingsView {
         }
       }
     }
+  }
+
+  var habitsSection: some View {
+    VStack {
+      SectionTitleView("\(userAddedHabits.count) Habits")
+
+      ForEach(userAddedHabits) { habit in
+        SettingsHabitCell(
+          image: Image(systemName: habit.targetMetric.systemImage),
+          title: habit.targetMetric.name,
+          subtitle: habit.displayQuantity
+        )
+        .tint(habit.targetMetric.color)
+      }
+      if remainingMetrics.isNotEmpty {
+        SettingsAddHabitCell()
+          .onTapGesture {
+            presentedSheet = UserAddedGoalPicker().asAny
+          }
+      }
+    }
+  }
+
+  var remainingMetrics: [TargetMetric] {
+    TargetMetric.allCases.filter({ targetMetric in
+      !allHabits.contains(where: { habit in
+        habit.targetMetric == targetMetric
+      })
+    })
   }
 }
 
