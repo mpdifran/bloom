@@ -41,12 +41,12 @@ extension FoodController {
   func autocomplete(_ request: Request) async throws -> FoodAutocompleteResponse {
     let requestBody = try request.content.decode(FoodAutocompleteRequest.self)
 
-    let tokens = try await edamamService.autocomplete(
-      request: request,
-      query: requestBody.query
-    )
+//    let tokens = try await edamamService.autocomplete(
+//      request: request,
+//      query: requestBody.query
+//    )
 
-    return FoodAutocompleteResponse(tokens: tokens)
+    return FoodAutocompleteResponse(tokens: [])
   }
 
   @Sendable

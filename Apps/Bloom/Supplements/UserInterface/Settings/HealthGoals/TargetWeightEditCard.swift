@@ -60,9 +60,6 @@ struct TargetWeightEditCard: View {
       }
     }
     .tint(.mutedIndigo)
-    .onAppear {
-      isFocused = true
-    }
   }
 }
 

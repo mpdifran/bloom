@@ -8,20 +8,22 @@
 import SwiftUI
 
 struct SectionTitleView: View {
-    let title: String
+  let title: String
 
-    init(_ title: String) {
-        self.title = title
-    }
+  init(_ title: String) {
+    self.title = title
+  }
 
-    var body: some View {
-        Text(title)
-            .bold()
-            .zStackAlignment(.leading)
-            .padding(.top)
-    }
+  var body: some View {
+    Text(title)
+      .font(.subheadline)
+      .foregroundStyle(.secondary)
+      .bold()
+      .zStackAlignment(.leading)
+      .padding(.top)
+  }
 }
 
 #Preview {
-    SectionTitleView("Focus Areas")
+  SectionTitleView("Focus Areas")
 }

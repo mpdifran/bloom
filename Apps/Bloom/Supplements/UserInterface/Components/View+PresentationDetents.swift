@@ -23,6 +23,7 @@ struct SelfSizingPresentationDetentModifier: ViewModifier {
         updatePresentationDetents(geometry: proxy)
       }
       .presentationDetents([presentationDetent])
+      .animation(.easeInOut, value: presentationDetent)
   }
 }
 

@@ -127,6 +127,11 @@ struct TodayView: View {
             presentedSheet = TodayConfigureView().asAny
           }
         }
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Settings", systemImage: "person.circle") {
+            presentedSheet = SettingsView().asAny
+          }
+        }
       }
       .sheet($presentedSheet)
       .fullScreenCover($presentedFullScreen)

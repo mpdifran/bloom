@@ -13,6 +13,9 @@ extension View {
     self.background {
         GeometryReader { proxy in
           Color.clear
+            .onChange(of: proxy.size) {
+              handler(proxy)
+            }
             .onAppear {
               handler(proxy)
             }
