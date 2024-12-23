@@ -183,7 +183,7 @@ private extension TodayView {
 
   @ViewBuilder
   var habitsSection: some View {
-    SectionTitleView("\(habits.count) Habits")
+    SectionTitleView("Today's Goals")
       .padding(.horizontal)
 
     ForEach(habits) { habit in
