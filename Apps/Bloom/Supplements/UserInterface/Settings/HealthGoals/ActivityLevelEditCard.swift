@@ -9,61 +9,44 @@ import SwiftUI
 
 struct ActivityLevelEditCard: View {
 
-  @State private var selectedActivityLevel: ActivityLevelSummary.ActivityLevel?
-
   @State private var vitalsViewModel = VitalsViewModel.shared
 
   @ObservedObject private var healthManager = HealthManager.shared
 
+  @Environment(\.dismiss) private var dismiss
+
   var body: some View {
-    ActionCardView(
-      title: "Activity Level",
-      detents: [.large],
-      performDismiss: nil
-    ) {
-      healthManager.userReportedActivityLevel = selectedActivityLevel
-      return true
-    } content: { (_, handleSave) in
-      ScrollView {
-        VStack {
-          ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
-            ActivityLevelSelectionCell(
-              activityLevel: activityLevel,
-              isRecommended: vitalsViewModel.activityLevelSummary?.details.activityLevel == activityLevel,
-              isSelected: selectedActivityLevel == activityLevel
-            )
-            .onTapGesture {
-              selectedActivityLevel = activityLevel
-            }
+    ScrollView {
+      VStack {
+        Text("Activity Level")
+          .font(.largeTitle)
+          .bold()
+          .fontDesign(.rounded)
+
+        ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
+          ActivityLevelSelectionCell(
+            activityLevel: activityLevel,
+            isRecommended: vitalsViewModel.activityLevelSummary?.details.activityLevel == activityLevel,
+            isSelected: healthManager.userReportedActivityLevel == activityLevel
+          )
+          .selectable()
+          .onTapGesture {
+            healthManager.userReportedActivityLevel = activityLevel
+            dismiss()
           }
         }
-        .padding()
       }
+      .padding()
+      .presentationDetentSelfSizing()
     }
-    .sensoryFeedback(.impact, trigger: selectedActivityLevel)
-    .animation(.default, value: selectedActivityLevel)
-    .tint(selectedActivityLevel?.barColor ?? .mutedBlue)
-    .onAppear {
-      selectedActivityLevel = healthManager.userReportedActivityLevel
-    }
+    .sensoryFeedback(.impact, trigger: healthManager.userReportedActivityLevel)
+    .presentationCornerRadius(30)
+    .presentationDragIndicator(.visible)
   }
 }
 
 #Preview {
-  struct PreviewView: View {
-
-    @State private var showSheet = true
-
-    var body: some View {
-      Button {
-        showSheet.toggle()
-      } label: {
-        Text("Show Sheet")
-      }
-      .sheet(isPresented: $showSheet) {
-        ActivityLevelEditCard()
-      }
-    }
+  PreviewSheetPresent {
+    ActivityLevelEditCard()
   }
-  return PreviewView()
 }
