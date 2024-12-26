@@ -25,6 +25,7 @@ struct SettingsCell<Content>: View where Content: View {
   var body: some View {
     LabeledContent {
       HStack {
+        Spacer()
         contentBuilder()
         if showDisclosureIndicator {
           DisclosureIndicator()
@@ -32,6 +33,7 @@ struct SettingsCell<Content>: View where Content: View {
         }
       }
       .foregroundStyle(.secondary)
+      .fixedSize()
     } label: {
       Text(title)
         .bold()
@@ -77,7 +79,7 @@ struct SettingsCell<Content>: View where Content: View {
         }
 
         SettingsSectionContainer {
-          SettingsCell("Morning Report") {
+          SettingsCell("Morning Report on Wake Up") {
             Toggle("", isOn: .constant(true))
           }
         }
