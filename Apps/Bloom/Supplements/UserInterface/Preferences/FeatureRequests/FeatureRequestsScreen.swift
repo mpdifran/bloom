@@ -25,6 +25,7 @@ struct FeatureRequestScreen: View {
                     }
                 }
         }
+        .presentationCompactAdaptation(.fullScreenCover)
     }
 }
 

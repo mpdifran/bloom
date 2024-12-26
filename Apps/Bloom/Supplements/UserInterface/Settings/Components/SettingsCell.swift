@@ -9,72 +9,82 @@ import SwiftUI
 
 struct SettingsCell<Content>: View where Content: View {
   let title: String
-  let systemImage: String?
-  let indentationLevel: Int
+  let showDisclosureIndicator: Bool
   let contentBuilder: () -> Content
 
   init(
-    title: String,
-    systemImage: String? = nil,
-    indentationLevel: Int = 0,
+    _ title: String,
+    showDisclosureIndicator: Bool = false,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.title = title
-    self.systemImage = systemImage
-    self.indentationLevel = indentationLevel
+    self.showDisclosureIndicator = showDisclosureIndicator
     self.contentBuilder = contentBuilder
   }
 
   var body: some View {
     LabeledContent {
-      contentBuilder()
-        .foregroundStyle(.secondary)
-    } label: {
       HStack {
-        if let systemImage {
-          Image(systemName: systemImage)
-            .symbolVariant(.fill)
+        contentBuilder()
+        if showDisclosureIndicator {
+          DisclosureIndicator()
             .bold()
-            .padding(6)
-            .background {
-              RoundedRectangle(cornerRadius: 10)
-                .fill(.tint)
-            }
         }
-
-        Text(title)
       }
-      .padding(.leading, CGFloat(indentationLevel) * 20)
+      .foregroundStyle(.secondary)
+    } label: {
+      Text(title)
+        .bold()
+        .fontDesign(.rounded)
+        .minimumScaleFactor(0.7)
+        .lineLimit(2)
     }
+    .frame(height: 60)
+    .selectable()
   }
 }
 
 #Preview {
   NavigationStack {
-    List {
-      SettingsCell(title: "Goal", systemImage: "bag") {
-        Picker(selection: .constant("Maintain Weight")) {
-          Text("Maintain Weight")
-            .tag("Maintain Weight")
-          Text("Lose Weight")
-            .tag("Lose Weight")
-          Text("Gain Weight")
-            .tag("Gain Weight")
-        } label: {
-          EmptyView()
-        }
-      }
-      .tint(.mutedGreen)
+    ScrollView {
+      VStack {
+        SettingsSectionContainer {
+          SettingsCell("Goal") {
+            Picker(selection: .constant("Maintain Weight")) {
+              Text("Maintain Weight")
+                .tag("Maintain Weight")
+              Text("Lose Weight")
+                .tag("Lose Weight")
+              Text("Gain Weight")
+                .tag("Gain Weight")
+            } label: {
+              EmptyView()
+            }
+          }
 
-      NavigationLink {
-        Text("Details")
-      } label: {
-        SettingsCell(title: "Target Weight", indentationLevel: 1) {
-          Text("160 lbs")
+          Divider()
+
+          NavigationLink {
+            Text("Details")
+          } label: {
+            SettingsCell(
+              "Target Weight",
+              showDisclosureIndicator: true
+            ) {
+              Text("160 lbs")
+            }
+          }
         }
-        .tint(.mutedBlue)
+
+        SettingsSectionContainer {
+          SettingsCell("Morning Report") {
+            Toggle("", isOn: .constant(true))
+          }
+        }
       }
+      .padding()
     }
+    .groupedBackground()
     .navigationTitle("Preview")
   }
 }

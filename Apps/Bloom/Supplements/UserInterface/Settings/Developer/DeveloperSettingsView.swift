@@ -1,21 +1,15 @@
 //
-//  PreferencesView.swift
+//  DeveloperSettingsView.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-08-06.
+//  Created by Mark DiFranco on 2024-12-26.
 //
 
 import SwiftUI
 import AppUI
 import HealthKit
 
-@MainActor
-struct PreferencesView: View {
-
-  @ObservedObject private var healthManager = HealthManager.shared
-  @Bindable private var reportViewModel = ReportCoordinatorViewModel.shared
-
-  @Bindable private var unitPreferences = HealthUnitPreferences.shared
+struct DeveloperSettingsView: View {
 
   @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
@@ -27,16 +21,28 @@ struct PreferencesView: View {
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
 
+  @Environment(\.dismiss) private var dismiss
+
   private let vitalsViewModel = VitalsViewModel.shared
 
   var body: some View {
-    List {
-      healthPermissionsSection
-      developerSection
+    NavigationStack {
+      List {
+        healthPermissionsSection
+        developerSection
+      }
+      .navigationTitle("Developer Tools")
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Done") {
+            dismiss()
+          }
+          .bold()
+        }
+      }
     }
     .fullScreenCover($presentedFullScreenView)
     .sheet($presentedSheet)
-    .topSafeAreaBlur()
     .onAppear {
       Task {
         shouldPromptForNotificationPermissions = await NotificationManager.shared.shouldRequestAuthorization()
@@ -51,167 +57,13 @@ struct PreferencesView: View {
     }
     .alert(alertDetails: $alertDetails)
     .alert(error: $error)
-    .animation(.default, value: healthManager.healthGoal)
-    .tabBar()
   }
 }
 
-private extension PreferencesView {
+extension DeveloperSettingsView {
 
-  var nameSection: some View {
-    Section("User Details") {
-      LabeledContent("Name") {
-        TextField("", text: $healthManager.name, prompt: Text("Name"))
-          .multilineTextAlignment(.trailing)
-          .textContentType(.name)
-          .submitLabel(.done)
-      }
-      LabeledContent("ID") {
-        Text(UserID.value)
-          .lineLimit(1)
-          .minimumScaleFactor(0.3)
-      }
-    }
-  }
-
-  var healthGoalsSection: some View {
-    Section {
-      Picker("Goal", selection: $healthManager.healthGoal) {
-        Text("None")
-          .tag(HealthGoal.none)
-        Text("Lose Weight")
-          .tag(HealthGoal.loseWeight)
-        Text("Maintain Weight")
-          .tag(HealthGoal.maintainWeight)
-        Text("Gain Weight")
-          .tag(HealthGoal.gainWeight)
-      }
-
-      LabeledContent("Target Weight") {
-        HStack {
-          Text("\(healthManager.targetWeight.format(using: .oneDecimalPlace)) lbs")
-          DisclosureIndicator()
-        }
-      }
-      .onTapGesture {
-        presentedSheet = TargetWeightEditCard().asAny
-      }
-
-      if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
-        Picker("", selection: $healthManager.weightLossSpeed) {
-          ForEach(WeightLossSpeed.allCases) { speed in
-            Text(speed.name)
-              .tag(speed)
-          }
-        }
-        .pickerStyle(.segmented)
-      }
-
-      LabeledContent("Activity Level") {
-        HStack {
-          Text(healthManager.userReportedActivityLevel?.name ?? "Unknown")
-          DisclosureIndicator()
-        }
-      }
-      .contentShape(Rectangle())
-      .onTapGesture {
-        presentedSheet = ActivityLevelEditCard().asAny
-      }
-    } header: {
-      Text("Health Goals")
-    } footer: {
-      if healthManager.healthGoal == .loseWeight {
-        Text(healthManager.weightLossSpeed.weightLossDescription)
-      }
-    }
-  }
-
-  var appInfoSection: some View {
-    Section {
-      LabeledContent("App Version", value: appVersion ?? "Unknown")
-    } header: {
-      VStack {
-        Image(.bloomAppIcon)
-          .resizable()
-          .frame(square: 150)
-        Text("Bloom")
-          .font(.title)
-          .bold()
-          .foregroundStyle(.text)
-      }
-      .padding(.bottom)
-      .horizontallyCentered()
-      .textCase(.none)
-    }
-  }
-
-  var reportsSection: some View {
-    Section("Reports") {
-      Toggle(isOn: $reportViewModel.showMorningReportOnWakeUp) {
-        Text("Morning Report on Wake Up")
-      }
-
-      DatePicker("Evening Report", selection: $reportViewModel.eveningReportDate, displayedComponents: .hourAndMinute)
-    }
-  }
-
-  var unitsSection: some View {
-    Section("Units") {
-      Picker("Distance", selection: $unitPreferences.distanceUnit) {
-        ForEach(HKUnit.distanceUnits, id: \.unitString) { unit in
-          Text(unit.descriptiveUnitName)
-            .tag(unit)
-        }
-      }
-      Picker("Liquid Volume", selection: $unitPreferences.liquidVolumeUnit) {
-        ForEach(HKUnit.liquidVolumeUnits, id: \.unitString) { unit in
-          Text(unit.descriptiveUnitName)
-            .tag(unit)
-        }
-      }
-      Picker("Weight", selection: $unitPreferences.weightUnit) {
-        ForEach(HKUnit.weightUnits, id: \.unitString) { unit in
-          Text(unit.descriptiveUnitName)
-            .tag(unit)
-        }
-      }
-    }
-  }
-
-  var feedbackSection: some View {
-    Section("Feedback") {
-      Button {
-        if healthManager.name.isEmpty {
-          presentedSheet = UserNamePrompt {
-            showFeedbackView()
-          }
-          .asAny
-        } else {
-          showFeedbackView()
-        }
-      } label: {
-        LabeledContent("Submit Feedback") {
-          Image(systemName: "heart")
-            .foregroundStyle(.red)
-        }
-        .contentShape(Rectangle())
-      }
-      .buttonStyle(.plain)
-    }
-  }
-
-  func showFeedbackView() {
-    presentedFullScreenView = FeatureRequestScreen().asAny
-  }
-
-  @ViewBuilder
-  var femaleSection: some View {
-    if healthManager.healthStore.sex() == .female {
-      Section("Health Context") {
-        Toggle("Is Breastfeeding", isOn: healthManager.$isBreastfeeding)
-        Toggle("Is Pregnant", isOn: healthManager.$isPregnant)
-      }
-    }
+  func checkHealthAuthStatus() async {
+    self.authStatus = (try? await HealthPermissionChecker.shared.checkAccessForAllTypes()) ?? .unknown
   }
 
   @ViewBuilder
@@ -242,10 +94,6 @@ private extension PreferencesView {
         }
       }
     }
-  }
-
-  func checkHealthAuthStatus() async {
-    self.authStatus = (try? await HealthPermissionChecker.shared.checkAccessForAllTypes()) ?? .unknown
   }
 
   var developerSection: some View {
@@ -383,20 +231,6 @@ private extension PreferencesView {
   }
 }
 
-private extension PreferencesView {
-
-  var appVersion: String? {
-    guard let versionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else { return nil }
-
-    if let buildString = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-      return "\(versionString) (\(buildString))"
-    }
-    return versionString
-  }
-}
-
 #Preview {
-  TabView {
-    PreferencesView()
-  }
+  DeveloperSettingsView()
 }
