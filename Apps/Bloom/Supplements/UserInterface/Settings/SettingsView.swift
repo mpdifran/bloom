@@ -226,6 +226,8 @@ extension SettingsView {
         .horizontalAlignment(.leading)
         .font(.caption)
         .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.horizontal)
     }
   }
 
