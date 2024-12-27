@@ -68,7 +68,7 @@ extension ToDoModel {
         var name: String {
             switch self {
             case .logWeight: "Log Weight"
-            case .logBloodPressure: "Record Blood Pressure"
+            case .logBloodPressure: "Log Blood Pressure"
             case .logFood: "Log Food"
             case .logProtein: "Log Protein"
             }

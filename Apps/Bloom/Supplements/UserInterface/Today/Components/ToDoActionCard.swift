@@ -16,49 +16,26 @@ struct ToDoActionCard: View {
   let vitalKind: VitalModel.Kind?
 
   var body: some View {
-    VStack(alignment: .leading) {
-      HStack {
-        Image(systemName: systemImage)
-          .font(.title2)
-          .bold()
-          .foregroundStyle(.tint)
-
-        Spacer()
-
-        DisclosureIndicator()
-          .foregroundStyle(.tertiary)
-          .bold()
-      }
-
-      Spacer()
+    HStack {
+      CompletionCheckmarkView(state: isComplete ? .metGoal : .unmetGoal, colorize: true)
 
       VStack(alignment: .leading) {
         Text(title)
           .font(.title3)
-          .bold()
-          .fontDesign(.rounded)
-          .multilineTextAlignment(.leading)
-          .lineLimit(2)
-          .minimumScaleFactor(0.5)
 
-        HStack(spacing: 4) {
-          Text(subtitle)
-            .foregroundStyle(.secondary)
-
-          if isComplete {
-            Text("•")
-            Text("Complete")
-              .foregroundStyle(.tint)
-          }
-        }
-        .font(.subheadline)
-        .bold()
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
-        .lineLimit(1)
+        Text(subtitle)
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
       }
+      .bold()
+      .fontDesign(.rounded)
+      .lineLimit(1)
+
+      Spacer()
+
+      DisclosureIndicator()
     }
-    .frame(width: 180, height: 110)
+    .frame(width: 280)
     .cardContainer()
   }
 }
@@ -77,7 +54,7 @@ struct ToDoActionCard: View {
           )
           .tint(.mutedIndigo)
           ToDoActionCard(
-            title: "Record Blood Pressure",
+            title: "Log Blood Pressure",
             subtitle: "Weekly",
             systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
             isComplete: true,

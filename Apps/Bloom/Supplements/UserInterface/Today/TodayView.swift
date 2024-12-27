@@ -176,8 +176,10 @@ private extension TodayView {
           }
         }
       }
+      .scrollTargetLayout()
       .padding(.horizontal)
     }
+    .scrollTargetBehavior(.viewAligned)
     .scrollIndicators(.hidden)
   }
 
