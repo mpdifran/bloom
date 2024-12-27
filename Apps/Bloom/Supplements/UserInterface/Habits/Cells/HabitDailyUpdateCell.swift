@@ -22,60 +22,52 @@ struct HabitDailyUpdateCell: View {
   }
 
   var body: some View {
-    VStack(spacing: 26) {
-      HStack {
-        Image(systemName: habit.targetMetric.systemImage)
-          .font(.title2)
-          .bold()
+    HStack(spacing: 14) {
+      Image(systemName: habit.targetMetric.systemImage)
+        .font(.title)
+        .bold()
+        .foregroundStyle(.tint)
 
+      VStack(alignment: .leading, spacing: 8) {
         Text(habit.targetMetric.name)
           .font(.title3)
           .bold()
           .fontDesign(.rounded)
 
-        Spacer()
-
-        DisclosureIndicator()
-          .bold()
-      }
-
-      VStack {
-        HStack {
+        Group {
           if viewModel.goalCompletionState == .metGoal {
-            HStack {
+            HStack(spacing: 4) {
               Image(systemName: "checkmark")
-              Text("Completed")
+              Text("Completed • \(viewModel.formattedDailyValue)")
             }
             .foregroundStyle(.tint)
           } else {
-            Text(viewModel.formattedDailyValue)
-              .foregroundStyle(.tint)
-              .contentTransition(.numericText(value: viewModel.dailyValue))
-              .animation(.default, value: viewModel.dailyValue)
-          }
+            HStack(spacing: 6) {
+              ProgressBar(
+                value: viewModel.dailyValue,
+                target: habit.value,
+                measurementStyle: .minimum
+              )
+              .frame(width: 50)
 
-          Spacer()
+              Text(viewModel.formattedDailyValueNoUnits)
+                .contentTransition(.numericText(value: viewModel.dailyValue))
+                .foregroundStyle(.tint)
 
-          if viewModel.goalCompletionState == .metGoal {
-            Text("\(viewModel.formattedDailyValueNoUnits) / \(habit.displayQuantity)")
-              .contentTransition(.numericText(value: viewModel.dailyValue))
-              .animation(.default, value: viewModel.dailyValue)
-              .foregroundStyle(.tint)
-          } else {
-            Text("\(habit.displayQuantity)")
-              .foregroundStyle(.secondary)
+              Text("/ \(habit.displayQuantity)")
+                .foregroundStyle(.secondary)
+            }
+            .animation(.default, value: viewModel.dailyValue)
           }
         }
-        .font(.body)
+        .font(.subheadline)
         .bold()
         .fontDesign(.rounded)
-
-        ProgressBar(
-          value: viewModel.dailyValue,
-          target: habit.value,
-          measurementStyle: .minimum
-        )
       }
+
+      Spacer()
+
+      DisclosureIndicator()
     }
     .tint(habit.targetMetric.color)
     .cardContainer()
