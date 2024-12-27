@@ -94,6 +94,16 @@ public extension DateFormatter {
     return justDayOfWeek.string(from: date)
   }
 
+  static let timeIntervalHourAbbreviated = DateComponentsFormatter().with {
+    $0.unitsStyle = .abbreviated
+    $0.allowedUnits = [.hour]
+  }
+
+  static let timeIntervalMinuteAbbreviated = DateComponentsFormatter().with {
+    $0.unitsStyle = .abbreviated
+    $0.allowedUnits = [.minute]
+  }
+
   static let timeIntervalHourMinuteShort = DateComponentsFormatter().with {
     $0.unitsStyle = .short
     $0.allowedUnits = [.hour, .minute]

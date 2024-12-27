@@ -63,6 +63,7 @@ struct EveningReportView: View {
                 EKEventView(event: event)
             }
         }
+        .presentationCompactAdaptation(.fullScreenCover)
         .tint(.indigo)
         .task {
             await CalendarManager.shared.promptForPermission()

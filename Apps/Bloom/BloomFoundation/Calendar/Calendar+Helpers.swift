@@ -91,6 +91,22 @@ public extension Calendar {
     return hour >= 5 && hour < 11
   }
 
+  func morningTime(for date: Date) -> Date? {
+    var components = dateComponents([.year, .month, .day], from: date)
+    components.hour = 5
+    components.minute = 0
+    components.second = 0
+    return self.date(from: components)
+  }
+
+  func eveningTime(for date: Date) -> Date? {
+    var components = dateComponents([.year, .month, .day], from: date)
+    components.hour = 17
+    components.minute = 0
+    components.second = 0
+    return self.date(from: components)
+  }
+
   func sleepStartDate(previousDays: Int, endDate: Date) -> Date {
     if let startDate = date(byAdding: .day, value: -previousDays, to: endDate) {
       return date(bySettingHour: 15, minute: 0, second: 0, of: startDate) ?? startDate
