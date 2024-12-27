@@ -122,11 +122,6 @@ struct TodayView: View {
       .navigationTitle("Today")
       .tabBar()
       .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          Button("Configure", systemImage: "gear") {
-            presentedSheet = TodayConfigureView().asAny
-          }
-        }
         ToolbarItem(placement: .cancellationAction) {
           Button("Settings", systemImage: "person.circle") {
             presentedSheet = SettingsView().asAny
