@@ -209,12 +209,13 @@ extension SettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Weight Widget") {
-          Toggle("", isOn: $showWeightWidget)
-            .tint(.mutedGreen)
-        }
-
-        Divider()
+        // Turning off until we figure out widgets
+//        SettingsCell("Weight Widget") {
+//          Toggle("", isOn: $showWeightWidget)
+//            .tint(.mutedGreen)
+//        }
+//
+//        Divider()
 
         SettingsCell("Nutrition Widget") {
           Toggle("", isOn: $showNutritionTodayWidget)

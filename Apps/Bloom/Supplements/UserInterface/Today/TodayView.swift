@@ -94,14 +94,14 @@ struct TodayView: View {
           }
 
           Group {
-            if computedShowWeightWidget {
-              NavigationLink {
-                BodyCompositionDetailsView()
-              } label: {
-                BodyWeightTodayWidgetView()
-              }
-              .buttonStyle(.plain)
-            }
+//            if computedShowWeightWidget {
+//              NavigationLink {
+//                BodyCompositionDetailsView()
+//              } label: {
+//                BodyWeightTodayWidgetView()
+//              }
+//              .buttonStyle(.plain)
+//            }
 
             if showNutritionWidget {
               SectionTitleView("Nutrition")
