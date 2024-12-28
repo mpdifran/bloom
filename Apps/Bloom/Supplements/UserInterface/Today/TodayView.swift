@@ -65,14 +65,14 @@ struct TodayView: View {
 
             TimelineView(.everyMinute) { context in
               if Calendar.current.isMorning(date: .now) || danieleMode {
-                ReportCell(kind: .morning)
+                DailyReportAlertCell(kind: .morning)
                   .transition(.scale)
                   .onTapGesture {
                     presentedFullScreen = GoodMorningView().asAny
                   }
               }
               if reportViewModel.shouldShowEveningReport() || danieleMode {
-                ReportCell(kind: .evening)
+                DailyReportAlertCell(kind: .evening)
                   .transition(.scale)
                   .onTapGesture {
                     presentedFullScreen = EveningReportView().asAny

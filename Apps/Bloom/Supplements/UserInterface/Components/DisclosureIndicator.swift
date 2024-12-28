@@ -11,6 +11,8 @@ struct DisclosureIndicator: View {
     var body: some View {
         Image(systemName: "chevron.forward")
             .foregroundStyle(.secondary)
+            .bold()
+            .fontDesign(.rounded)
     }
 }
 
