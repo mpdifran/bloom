@@ -11,6 +11,8 @@ import SwiftUI
 
 @MainActor
 final class UnverifiedFoodStore: BaseFoodStore {
+  static let shared = UnverifiedFoodStore()
+
   override func loadItems() async {
     do {
       let response = try await service.getUnverifiedFoodRecords(limit: 500)

@@ -13,6 +13,8 @@ import SwiftUI
 final class FoodItemDetailViewModel: ObservableObject {
 
   @Published var foodItem: AdminFoodItemRecord
+  @Published var error: Error?
+
   private var initialFoodItem: AdminFoodItemRecord
 
   private let foodStore: BaseFoodStore
@@ -41,10 +43,18 @@ extension FoodItemDetailViewModel {
   }
 
   func save() async {
-    await foodStore.update(foodItem)
+    do {
+      try await foodStore.update(foodItem)
+    } catch {
+      self.error = error
+    }
   }
 
   func delete() async {
-    await foodStore.delete(foodItem)
+    do {
+      try await foodStore.delete(foodItem)
+    } catch {
+      self.error = error
+    }
   }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FoodItemVerificationView: View {
 
-  @StateObject private var foodStore = UnverifiedFoodStore()
+  @ObservedObject private var foodStore = UnverifiedFoodStore.shared
 
   @State private var selectedItem: AdminFoodItemRecord?
 

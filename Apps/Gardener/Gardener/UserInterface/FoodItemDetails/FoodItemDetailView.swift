@@ -45,6 +45,7 @@ struct FoodItemDetailView: View {
       verifyShelfContent
     }
     .alert(alertDetails: $alertDetails)
+    .alert(error: $viewModel.error)
     .confirmationDialog($confirmationDialogDetails)
   }
 }
@@ -173,7 +174,7 @@ private extension FoodItemDetailView {
               .scaledToFit()
           case .failure(let error):
             ContentUnavailableView {
-              Label("Failed to Load Image", image: "photo.badge.exclamationmark.fill")
+              Label("Failed to Load Image", systemImage: "photo.badge.exclamationmark.fill")
             } description: {
               VStack {
                 Text("The image failed to load")

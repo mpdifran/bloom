@@ -45,3 +45,10 @@ public class Identifier: NSObject {
     case value
   }
 }
+
+extension Identifier {
+
+  public static func == (lhs: Identifier, rhs: Identifier) -> Bool {
+    lhs.value == rhs.value
+  }
+}
