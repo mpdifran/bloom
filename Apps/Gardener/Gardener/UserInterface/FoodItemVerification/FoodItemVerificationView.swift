@@ -24,7 +24,7 @@ struct FoodItemVerificationView: View {
           id: item.id.value,
           name: item.name,
           brandName: item.brandName,
-          isVerified: item.state == .verified
+          state: item.state
         )
         .tag(item)
       }
@@ -58,7 +58,7 @@ private struct FoodItemCell: View {
   let id: String
   let name: String?
   let brandName: String?
-  let isVerified: Bool
+  let state: AdminFoodItemRecord.State
 
   var body: some View {
     HStack {
@@ -77,14 +77,23 @@ private struct FoodItemCell: View {
 
       Spacer()
 
-      Image(systemName: isVerified ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
-        .if(isVerified) {
-          $0.foregroundStyle(.white, .green)
+      Group {
+        switch state {
+        case .needsAIProcessing:
+          Image(systemName: "sparkles.rectangle.stack.fill")
+            .foregroundStyle(.white, .blue)
+        case .unverified:
+          Image(systemName: "exclamationmark.triangle.fill")
+            .foregroundStyle(.white, .yellow)
+        case .needsMoreInfo:
+          Image(systemName: "questionmark.app.fill")
+            .foregroundStyle(.white, .orange)
+        case .verified:
+          Image(systemName: "checkmark.circle.fill")
+            .foregroundStyle(.white, .green)
         }
-        .if(!isVerified) {
-          $0.foregroundStyle(.white, .orange)
-        }
-        .imageScale(.large)
+      }
+      .imageScale(.large)
     }
     .padding(.vertical, 8)
   }
