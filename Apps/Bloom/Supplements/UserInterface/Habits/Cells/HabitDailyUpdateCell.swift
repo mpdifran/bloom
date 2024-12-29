@@ -27,6 +27,7 @@ struct HabitDailyUpdateCell: View {
         .font(.title)
         .bold()
         .foregroundStyle(.tint)
+        .frame(width: 40)
 
       VStack(alignment: .leading, spacing: 8) {
         Text(habit.targetMetric.name)
