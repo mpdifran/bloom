@@ -151,7 +151,7 @@ private extension EditUserAddedHabitView {
   }
 
   func delete() throws {
-    modelContext.delete(habit)
+    habit.endDate = .now
 
     try modelContext.save()
 
