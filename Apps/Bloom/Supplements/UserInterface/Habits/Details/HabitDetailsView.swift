@@ -225,6 +225,10 @@ private extension HabitDetailsView {
     let groupedByWeekSamples = samples.grouped { sample in
       guard let weekOfYear = Calendar.current.weekOfYear(for: sample.date) else { return -1 }
 
+      // The week IDs always need to be 0 on the right and a positive incrementing number to the left for the animation to work correctly.
+      if currentWeekOfYear < weekOfYear {
+        return currentWeekOfYear - weekOfYear + 52
+      }
       return currentWeekOfYear - weekOfYear
     }
 
