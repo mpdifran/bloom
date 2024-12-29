@@ -107,6 +107,7 @@ struct ProposedHabitTargetValueEditCardView: View {
             }
             .sheet(isPresented: $showSheet) {
                 ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit)
+                .tint(.mutedBlue)
             }
         }
     }

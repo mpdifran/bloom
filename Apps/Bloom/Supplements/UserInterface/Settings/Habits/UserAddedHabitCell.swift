@@ -12,7 +12,6 @@ import HealthKit
 struct UserAddedHabitCell: View {
     let habit: Habit
 
-
     var body: some View {
         HStack {
             Image(systemName: habit.targetMetric.systemImage)

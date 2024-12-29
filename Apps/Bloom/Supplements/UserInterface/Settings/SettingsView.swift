@@ -142,6 +142,9 @@ extension SettingsView {
           subtitle: habit.displayQuantity
         )
         .tint(habit.targetMetric.color)
+        .onTapGesture {
+          presentedSheet = EditUserAddedHabitView(habit: habit) { _ in }.asAny
+        }
       }
       if remainingMetrics.isNotEmpty {
         SettingsAddHabitCell()
