@@ -59,7 +59,7 @@ extension TabBarViewModifier {
         }
         .tint(tabController.activeTab == .vitals ? .primary : .secondary)
 
-      TabItem(title: "Workouts", image: Image(systemName: "figure.run"))
+      TabItem(title: "Workouts", image: Image(.workoutsTab))
         .onTapGesture {
           tabController.activeTab = .workouts
         }
