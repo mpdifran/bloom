@@ -9,11 +9,31 @@ import SwiftUI
 
 struct WorkoutStatView: View {
   let stat: String
+  let label: String?
+
+  init(stat: String, label: String? = nil) {
+    self.stat = stat
+    self.label = label
+  }
 
   var body: some View {
-    Text(stat)
-      .bold()
-      .fontDesign(.rounded)
-      .foregroundStyle(.tint)
+    HStack {
+      if let label {
+        Text(label)
+          .font(.caption)
+      }
+      Text(stat)
+        .bold()
+        .fontDesign(.rounded)
+        .foregroundStyle(.tint)
+    }
   }
+}
+
+#Preview {
+  VStack(alignment: .trailing) {
+    WorkoutStatView(stat: "642 Cal")
+    WorkoutStatView(stat: "642 Cal", label: "Active")
+  }
+  .padding()
 }

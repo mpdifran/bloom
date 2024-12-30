@@ -11,11 +11,22 @@ import BloomFoundation
 
 extension HKWorkout {
 
-  var totalEnergyBurned: HKQuantity {
+  var activeEnergyBurned: HKQuantity {
     if let energy = statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity() {
       return energy
     }
     return HKQuantity(unit: .largeCalorie(), doubleValue: 0)
+  }
+
+  var totalEnergyBurned: HKQuantity {
+    let defaultQuantity = HKQuantity(unit: .largeCalorie(), doubleValue: 0)
+    guard let activeEnergy = statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity() else {
+      return defaultQuantity
+    }
+    guard let basalEnergy = statistics(for: HKQuantityType(.basalEnergyBurned))?.sumQuantity() else {
+      return activeEnergy
+    }
+    return basalEnergy.sum(activeEnergy, unit: .largeCalorie())
   }
 
   var totalDistanceWalkingRunning: HKQuantity? {

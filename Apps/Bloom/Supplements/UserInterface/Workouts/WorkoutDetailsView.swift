@@ -62,9 +62,15 @@ struct WorkoutDetailsView: View {
 private extension WorkoutDetailsView {
 
   var iconHeader: some View {
-    Image(systemName: workout.workoutActivityType.systemImage)
-      .font(.system(size: 80))
-      .foregroundStyle(.green)
+    Circle()
+      .fill(.background)
+      .frame(square: 130)
+      .overlay {
+        Image(systemName: workout.workoutActivityType.systemImage)
+          .font(.system(size: 60))
+          .foregroundStyle(.green)
+      }
+      .compositingGroup()
   }
 
   var detailsSection: some View {
@@ -100,9 +106,12 @@ private extension WorkoutDetailsView {
           Divider()
         }
 
-        LabeledContent("Total Energy") {
-          WorkoutStatView(stat: "\(workout.totalEnergyBurned.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces))")
-            .tint(.green)
+        LabeledContent("Energy") {
+          VStack(alignment: .trailing) {
+            WorkoutStatView(stat: "\(workout.activeEnergyBurned.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces))", label: "ACTIVE")
+            WorkoutStatView(stat: "\(workout.totalEnergyBurned.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces))", label: "TOTAL")
+          }
+          .tint(.green)
         }
         .padding(.vertical, 10)
 
