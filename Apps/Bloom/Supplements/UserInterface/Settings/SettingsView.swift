@@ -63,9 +63,8 @@ extension SettingsView {
 
   var userSection: some View {
     VStack(spacing: 16) {
-      Circle()
-        .fill(.fill)
-        .frame(square: 140)
+      UserProfilePhotoView(name: healthManager.name)
+
       TextField("", text: $healthManager.name, prompt: Text("Your Name"))
         .font(.title)
         .bold()
