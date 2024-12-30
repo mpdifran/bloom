@@ -13,7 +13,7 @@ enum Tab {
   case vitals
   case actions
   case nutrition
-  case profile
+  case workouts
 }
 
 @Observable @MainActor

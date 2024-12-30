@@ -34,17 +34,17 @@ extension TabBarViewModifier {
 
   var tabBar: some View {
     HStack {
-      TabItem(title: "Today", image: .todayTab)
+      TabItem(title: "Today", image: Image(.todayTab))
         .onTapGesture {
           tabController.activeTab = .today
         }
         .tint(tabController.activeTab == .today ? .primary : .secondary)
 
-      TabItem(title: "Vitals", image: .vitalsTab)
+      TabItem(title: "Nutrition", image: Image(.nutritionTab))
         .onTapGesture {
-          tabController.activeTab = .vitals
+          tabController.activeTab = .nutrition
         }
-        .tint(tabController.activeTab == .vitals ? .primary : .secondary)
+        .tint(tabController.activeTab == .nutrition ? .primary : .secondary)
 
       AddTabItem()
         .sensoryFeedback(.impact, trigger: logActionToggle)
@@ -53,17 +53,17 @@ extension TabBarViewModifier {
           presentedSheet = ActionsView().asAny
         }
 
-      TabItem(title: "Nutrition", image: .nutritionTab)
+      TabItem(title: "Vitals", image: Image(.vitalsTab))
         .onTapGesture {
-          tabController.activeTab = .nutrition
+          tabController.activeTab = .vitals
         }
-        .tint(tabController.activeTab == .nutrition ? .primary : .secondary)
+        .tint(tabController.activeTab == .vitals ? .primary : .secondary)
 
-      TabItem(title: "Profile", image: .profileTab)
+      TabItem(title: "Workouts", image: Image(systemName: "figure.run"))
         .onTapGesture {
-          tabController.activeTab = .profile
+          tabController.activeTab = .workouts
         }
-        .tint(tabController.activeTab == .profile ? .primary : .secondary)
+        .tint(tabController.activeTab == .workouts ? .primary : .secondary)
     }
     .sensoryFeedback(.impact, trigger: tabController.activeTab)
     .padding()
@@ -78,11 +78,13 @@ extension TabBarViewModifier {
 
 private struct TabItem: View {
   let title: String
-  let image: ImageResource
+  let image: Image
 
   var body: some View {
     VStack(spacing: 3) {
-      Image(image)
+      image
+        .font(.system(size: 27))
+
       Text(title)
         .font(.caption)
         .bold()
@@ -115,4 +117,16 @@ private struct AddTabItem: View {
       }
       .horizontallyCentered()
   }
+}
+
+#Preview {
+  @Previewable @Bindable var tabController = TabController()
+
+  VStack {
+    Spacer()
+    Text("Hello World")
+    Spacer()
+  }
+  .tabBar()
+  .environment(tabController)
 }

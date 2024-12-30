@@ -11,7 +11,13 @@ import AppUI
 
 struct WorkoutsListView: View {
 
-  init(activityType: HKWorkoutActivityType? = nil) {
+  private let titleDisplayMode: NavigationBarItem.TitleDisplayMode
+
+  init(
+    activityType: HKWorkoutActivityType? = nil,
+    titleDisplayMode: NavigationBarItem.TitleDisplayMode = .inline
+  ) {
+    self.titleDisplayMode = titleDisplayMode
     if let activityType {
       self._selectedActivityType = State(initialValue: activityType)
     }
@@ -35,7 +41,7 @@ struct WorkoutsListView: View {
     }
     .groupedBackground()
     .navigationTitle("Workouts")
-    .navigationBarTitleDisplayMode(.inline)
+    .navigationBarTitleDisplayMode(titleDisplayMode)
     .animation(.default, value: selectedActivityType)
     .onChange(of: selectedActivityType) { (_, _) in
       refreshFilteredWorkoutSections()
@@ -49,8 +55,13 @@ struct WorkoutsListView: View {
 private extension WorkoutsListView {
 
   var loadingView: some View {
-    CircularSpinnerView()
-      .foregroundStyle(.green)
+    ZStack {
+      Rectangle()
+        .fill(.clear)
+      CircularSpinnerView()
+        .foregroundStyle(.green)
+    }
+    .groupedBackground()
   }
 
   var emptyView: some View {
