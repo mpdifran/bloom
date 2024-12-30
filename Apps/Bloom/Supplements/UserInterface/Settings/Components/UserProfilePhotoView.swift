@@ -21,6 +21,7 @@ struct UserProfilePhotoView: View {
           .fontDesign(.rounded)
           .minimumScaleFactor(0.1)
           .padding()
+          .foregroundStyle(.fill.secondary)
       }
   }
 }

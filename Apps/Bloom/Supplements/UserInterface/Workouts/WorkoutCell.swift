@@ -24,6 +24,7 @@ struct WorkoutCell: View {
           Text(workout.workoutActivityType.name)
             .font(.title3)
             .bold()
+            .fontDesign(.rounded)
             .multilineTextAlignment(.leading)
 
           Spacer(minLength: 0)
