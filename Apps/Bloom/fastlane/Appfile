@@ -1,5 +1,5 @@
-app_identifier("com.mdfprojects.Supplements")
-apple_id("mpdifranco@icloud.com")
+app_identifier("com.lotus-labs.bloom")
+apple_id("hello@trybloom.app")
 
 
 # For more information about the Appfile, see:

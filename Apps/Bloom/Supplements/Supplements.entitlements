@@ -4,8 +4,6 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
-	<key>com.apple.developer.family-controls</key>
-	<true/>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
 	<key>com.apple.developer.healthkit.access</key>
@@ -14,7 +12,7 @@
 	<true/>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
-		<string>iCloud.com.supplements.bloom</string>
+		<string>iCloud.com.lotus-labs.bloom</string>
 	</array>
 	<key>com.apple.developer.icloud-services</key>
 	<array>
@@ -26,7 +24,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.supplements</string>
+		<string>group.com.lotus-labs.bloom</string>
 	</array>
 </dict>
 </plist>
