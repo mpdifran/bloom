@@ -10,10 +10,10 @@ import BloomModel
 
 extension URLRequest {
 
-    func settingJunoHeaders() -> URLRequest {
+    func settingBloomHeaders() async -> URLRequest {
         var request = self
 
-        if let authToken = User.shared.authToken {
+        if let authToken = await UserController.shared.authToken {
             request.add(header: .authorizationBearer(authToken))
         }
 

@@ -6,18 +6,19 @@
 //
 
 import Foundation
+import BloomModel
 
 extension URLRequest {
 
-    mutating func encode<T>(body: T) throws where T: Encodable {
-        method = .post
-        add(header: .contentTypeJSON)
-        httpBody = try JunoJSONEncoder().encode(body)
-    }
+  mutating func encode<T>(body: T) throws where T: Encodable {
+    method = .post
+    add(header: .contentTypeJSON)
+    httpBody = try JSONEncoder.bloomModel.encode(body)
+  }
 
-    func encoding<T>(body: T) throws -> URLRequest where T: Encodable {
-        var request = self
-        try request.encode(body: body)
-        return request
-    }
+  func encoding<T>(body: T) throws -> URLRequest where T: Encodable {
+    var request = self
+    try request.encode(body: body)
+    return request
+  }
 }

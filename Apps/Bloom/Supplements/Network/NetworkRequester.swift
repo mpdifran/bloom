@@ -20,8 +20,10 @@ final class NetworkRequester: Sendable {
 
 extension NetworkRequester {
 
-  func authenticate(request: AuthenticationRequest) async throws {
-    
+  func authenticate(request: AuthenticationRequest) async throws -> AuthenticationResponse {
+    let request = try URLRequest.Auth.signIn(request: request)
+    let (data, _) = try await URLSession.shared.data(for: request)
+    return try JSONDecoder.bloomModel.decode(AuthenticationResponse.self, from: data)
   }
 }
 

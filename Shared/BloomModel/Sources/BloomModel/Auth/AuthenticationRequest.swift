@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AuthenticationRequest: Codable, Equatable {
+public struct AuthenticationRequest: Codable, Equatable, Sendable {
     public let userIdentifier: UserIdentifier
     public let identityToken: String
     public let authorizationCode: String

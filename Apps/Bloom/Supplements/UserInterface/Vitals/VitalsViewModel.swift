@@ -33,7 +33,6 @@ final class VitalsViewModel: Sendable {
     }
 
     private var tasks = [Task<Void, Never>]()
-    private var vitalsTask: Task<Void, Never>? = nil
 }
 
 extension VitalsViewModel {

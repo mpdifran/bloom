@@ -8,6 +8,7 @@
 import BloomModel
 import Valet
 import TelemetryDeck
+import AuthenticationServices
 
 private extension String {
   static let authenticatedUserIdentifierKey = "user_identifier"
@@ -15,11 +16,12 @@ private extension String {
 }
 
 final actor UserController {
+  static let shared = UserController()
 
   @AsyncStreamable var isAuthenticated: Bool = false
 
   /// An identifier for the Sign in with Apple user. This may change if the account is unlinked and re-linked.
-  var authenticatedUserIdentifier: String?
+  var authenticatedUserIdentifier: UserIdentifier?
 
   /// The auth token for the authenticated user.
   var authToken: AuthToken?
@@ -29,7 +31,7 @@ final actor UserController {
     accessibility: .afterFirstUnlock
   )
 
-  init() {
+  private init() {
     do {
       let rawAuthToken = try valet.string(forKey: .authTokenKey)
       self.authToken = AuthToken(rawAuthToken)
@@ -41,7 +43,36 @@ final actor UserController {
 
 extension UserController {
 
-  func authenticate(userIdentifier: String, authToken: AuthToken) {
+  func verifyAuthentication() async {
+    guard let userIdentifier = authenticatedUserIdentifier else { return }
+
+    let provider = ASAuthorizationAppleIDProvider()
+
+    do {
+      let state = try await provider.credentialState(forUserID: userIdentifier.value)
+
+      switch state {
+      case .authorized:
+        // We're good
+        break
+      case .revoked, .notFound:
+        logout()
+      case .transferred:
+        // Refresh user identifier when transferring ownership of app
+        break
+      @unknown default:
+          break
+      }
+    } catch {
+      TelemetryDeck.errorOccurred(
+        id: "UserController.verifyAuthentication",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+    }
+  }
+
+  func authenticate(userIdentifier: UserIdentifier, authToken: AuthToken) {
     self.authenticatedUserIdentifier = userIdentifier
     self.authToken = authToken
 
@@ -67,7 +98,7 @@ private extension UserController {
   func storeAuthenticatedUserIdentifier() {
     do {
       if let authenticatedUserIdentifier {
-        try valet.setString(authenticatedUserIdentifier, forKey: .authenticatedUserIdentifierKey)
+        try valet.setString(authenticatedUserIdentifier.value, forKey: .authenticatedUserIdentifierKey)
       } else {
         try valet.removeObject(forKey: .authenticatedUserIdentifierKey)
       }

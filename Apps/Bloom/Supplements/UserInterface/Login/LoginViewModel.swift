@@ -54,6 +54,11 @@ extension LoginView.ViewModel {
       authorizationCode: authCode
     )
 
-    // TODO: Make request
+    let authResponse = try await NetworkRequester.shared.authenticate(request: authRequest)
+
+    await UserController.shared.authenticate(
+      userIdentifier: userIdentifier,
+      authToken: authResponse.authToken
+    )
   }
 }

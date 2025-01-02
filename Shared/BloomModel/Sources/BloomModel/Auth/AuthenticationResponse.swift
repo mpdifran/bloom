@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AuthenticationResponse: Codable {
+public struct AuthenticationResponse: Codable, Hashable, Sendable {
     public let authToken: AuthToken
 
     public init(authToken: AuthToken) {
