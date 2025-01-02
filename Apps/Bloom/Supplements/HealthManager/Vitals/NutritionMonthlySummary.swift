@@ -536,6 +536,7 @@ extension NutritionMonthlySummary.Details {
     let unit = HKUnit.gramUnit(with: .micro)
     guard
       let average = averageVitaminA?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForVitaminA()
     else { return nil }
 
@@ -549,6 +550,7 @@ extension NutritionMonthlySummary.Details {
     let unit = HKUnit.gramUnit(with: .milli)
     guard
       let average = averageVitaminB6?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForVitaminB6()
     else { return nil }
 
@@ -562,6 +564,7 @@ extension NutritionMonthlySummary.Details {
     let unit = HKUnit.gramUnit(with: .micro)
     guard
       let average = averageVitaminB12?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedMinDailyIntakeForVitaminB12()
     else { return nil }
 
@@ -575,6 +578,7 @@ extension NutritionMonthlySummary.Details {
     let unit = HKUnit.gramUnit(with: .milli)
     guard
       let average = averageVitaminC?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForVitaminC()
     else { return nil }
 
@@ -588,6 +592,7 @@ extension NutritionMonthlySummary.Details {
     let unit = HKUnit.gramUnit(with: .micro)
     guard
       let average = averageVitaminD?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForVitaminD()
     else { return nil }
 
@@ -601,6 +606,7 @@ extension NutritionMonthlySummary.Details {
     let unit = HKUnit.gramUnit(with: .milli)
     guard
       let average = averageVitaminE?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForVitaminE()
     else { return nil }
 
@@ -658,6 +664,7 @@ extension NutritionMonthlySummary.Details {
 
     guard
       let average = averageCalcium?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedIntakeForCalcium()
     else { return nil }
 
@@ -672,6 +679,7 @@ extension NutritionMonthlySummary.Details {
 
     guard
       let average = averageIron?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForIron()
     else { return nil }
 
@@ -686,6 +694,7 @@ extension NutritionMonthlySummary.Details {
 
     guard
       let average = averageMagnesium?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForMagnesium()
     else { return nil }
 
@@ -700,6 +709,7 @@ extension NutritionMonthlySummary.Details {
 
     guard
       let average = averagePotassium?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForPotassium()
     else { return nil }
 
@@ -714,6 +724,7 @@ extension NutritionMonthlySummary.Details {
 
     guard
       let average = averageSodium?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForSodium()
     else { return nil }
 
@@ -728,6 +739,7 @@ extension NutritionMonthlySummary.Details {
 
     guard
       let average = averageZinc?.doubleValue(for: unit),
+      average > 0,
       let goal = await HealthGoalProvider.shared.recommendedDailyIntakeForZinc()
     else { return nil }
 
