@@ -45,6 +45,8 @@ extension FoodItemDetailViewModel {
   func save() async {
     do {
       try await foodStore.update(foodItem)
+      // Update with a new initial state.
+      initialFoodItem = foodItem
     } catch {
       self.error = error
     }
