@@ -87,49 +87,7 @@ extension FoodDatabaseService {
           LIMIT \(bind: limit)
       """).all(decodingFluent: FoodItemRecord.self)
 
-    var records: [AdminFoodItemRecord] = []
-    for item in results {
-      guard var adminFoodRecord = item.asAdminFoodItemRecord() else { continue }
-
-      if let nutritionLabel = item.nutritionLabelImage {
-        let imageURL: URL?
-        if
-          nutritionLabel.hasPrefix("https://openfoodfacts-images") ||
-          nutritionLabel.hasPrefix("https://images.openfoodfacts.net")
-        { // TODO: Zach make this better?
-          imageURL = URL(string: nutritionLabel)
-        } else {
-          imageURL = try await request.imageStorage.generateImageURL(
-            fileName: nutritionLabel,
-            path: .nutritionLabel,
-            expiration: .hours(2)
-          )
-        }
-        adminFoodRecord.nutritionLabelImage = imageURL
-      }
-
-      if let packagingImage = item.packagingImage {
-        let imageURL: URL?
-        if
-          packagingImage.hasPrefix("https://openfoodfacts-images") ||
-          packagingImage.hasPrefix("https://images.openfoodfacts.net")
-        { // TODO: Zach make this better?
-          imageURL = URL(string: packagingImage)
-        } else {
-          imageURL = try await request.imageStorage.generateImageURL(
-            fileName: packagingImage,
-            path: .foodPackaging,
-            expiration: .hours(2)
-          )
-        }
-
-        adminFoodRecord.packagingImage = imageURL
-      }
-
-      records.append(adminFoodRecord)
-    }
-
-    return records
+    return try await createAdminRecords(request, from: results)
   }
 
   func adminSearchFoods(request: Request, query: String) async throws -> [AdminFoodItemRecord] {
@@ -152,7 +110,7 @@ extension FoodDatabaseService {
         """
     ).all(decodingFluent: FoodItemRecord.self)
 
-    return results.compactMap { $0.asAdminFoodItemRecord() }
+    return try await createAdminRecords(request, from: results)
   }
 
   func markFoodAsInaccurate(request: Request, foodID: FoodItemIdentifier) async throws {
@@ -197,5 +155,57 @@ extension FoodDatabaseService {
     }
     
     try await foodItem.save(on: request.db)
+  }
+}
+
+private extension FoodDatabaseService {
+  /// Map foodItemRecords to adminFoodItemRecords and sign images from S3.
+  func createAdminRecords(
+    _ request: Request,
+    from foodItemRecords: [FoodItemRecord]
+  ) async throws -> [AdminFoodItemRecord] {
+    var records: [AdminFoodItemRecord] = []
+    for item in foodItemRecords {
+      guard var adminFoodRecord = item.asAdminFoodItemRecord() else { continue }
+
+      if let nutritionLabel = item.nutritionLabelImage {
+        let imageURL: URL?
+        if
+          nutritionLabel.hasPrefix("https://openfoodfacts-images") ||
+          nutritionLabel.hasPrefix("https://images.openfoodfacts.net")
+        { // TODO: Zach make this better?
+          imageURL = URL(string: nutritionLabel)
+        } else {
+          imageURL = try await request.imageStorage.generateImageURL(
+            fileName: nutritionLabel,
+            path: .nutritionLabel,
+            expiration: .hours(2)
+          )
+        }
+        adminFoodRecord.nutritionLabelImage = imageURL
+      }
+
+      if let packagingImage = item.packagingImage {
+        let imageURL: URL?
+        if
+          packagingImage.hasPrefix("https://openfoodfacts-images") ||
+          packagingImage.hasPrefix("https://images.openfoodfacts.net")
+        { // TODO: Zach make this better?
+          imageURL = URL(string: packagingImage)
+        } else {
+          imageURL = try await request.imageStorage.generateImageURL(
+            fileName: packagingImage,
+            path: .foodPackaging,
+            expiration: .hours(2)
+          )
+        }
+
+        adminFoodRecord.packagingImage = imageURL
+      }
+
+      records.append(adminFoodRecord)
+    }
+
+    return records
   }
 }
