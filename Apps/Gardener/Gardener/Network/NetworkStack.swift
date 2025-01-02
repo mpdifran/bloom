@@ -103,6 +103,15 @@ extension NetworkStack {
     try await delete(url: url)
   }
 
+  func searchFoodRecord(query: String) async throws -> AdminSearchFoodItemResponse {
+    let url = URL(string: .bloomAPIBase + "v1/admin/food/search?query=\(query)")!
+
+    return try await get(
+      url: url,
+      response: AdminSearchFoodItemResponse.self
+    )
+  }
+
   func bulkUploadOpenFoodFacts(request: AdminOpenFoodFactsBulkUploadRequest) async throws -> AdminOpenFoodFactsBulkUploadResponse {
     let url = URL(string: .bloomAPIBase + "v1/admin/food/open-food-facts/bulk-upload")!
 

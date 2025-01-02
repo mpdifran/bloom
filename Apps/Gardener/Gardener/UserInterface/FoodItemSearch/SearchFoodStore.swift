@@ -20,6 +20,11 @@ final class SearchFoodStore: BaseFoodStore {
       return
     }
 
-    // TODO: make query and populate foodItems
+    do {
+      let response = try await service.searchFoodRecord(query: searchQuery)
+      foodItems = response.foodItemRecords
+    } catch {
+      print("Error searching food records: \(error)")
+    }
   }
 }
