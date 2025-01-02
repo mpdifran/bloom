@@ -67,11 +67,15 @@ private extension FoodItemDetailView {
           switch selectedImageTab {
           case .packaging:
             createImage(
-              url: viewModel.packagingImage
+              url: viewModel.packagingImage,
+              rotationAngle: viewModel.packagingImageRotation,
+              type: selectedImageTab
             )
           case .nutritionLabel:
             createImage(
-              url: viewModel.nutritionLabel
+              url: viewModel.nutritionLabel,
+              rotationAngle: viewModel.nutritionLabelRotation,
+              type: selectedImageTab
             )
           }
         }
@@ -162,16 +166,41 @@ private extension FoodItemDetailView {
   }
 
   @ViewBuilder
-  func createImage(url: URL?) -> some View {
+  func createImage(url: URL?, rotationAngle: Double, type: ImageTab) -> some View {
       if let url {
         AsyncImage(url: url) { phase in
           switch phase {
           case .empty:
             ProgressView()
           case .success(let image):
-            image
-              .resizable()
-              .scaledToFit()
+            ZStack(alignment: .topTrailing) {
+              image
+                .resizable()
+                .scaledToFit()
+                .rotationEffect(.degrees(rotationAngle))
+
+              HStack {
+                Button {
+                  viewModel.rotate(value: -90, image: type)
+                } label: {
+                  Image(systemName: "rotate.left.fill")
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(Color.black.opacity(0.5), in: Circle())
+                }
+                .padding(4)
+
+                Button {
+                  viewModel.rotate(value: 90, image: type)
+                } label: {
+                  Image(systemName: "rotate.right.fill")
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(Color.black.opacity(0.5), in: Circle())
+                }
+                .padding(4)
+              }
+            }
           case .failure(let error):
             ContentUnavailableView {
               Label("Failed to Load Image", systemImage: "photo.badge.exclamationmark.fill")
