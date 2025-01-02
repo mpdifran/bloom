@@ -9,6 +9,10 @@ import SwiftUI
 import AuthenticationServices
 import AppUI
 
+private extension Double {
+    static let animationSpeed: Double = 1.5
+}
+
 struct LoginView: View {
   @Environment(\.colorScheme) var colorScheme
 
@@ -17,8 +21,28 @@ struct LoginView: View {
 
   @State private var viewModel = ViewModel()
 
+  let timer = Timer.publish(every: .animationSpeed, tolerance: 0.1, on: .main, in: .common).autoconnect()
+  @State private var backgroundColors: [Color] = [
+    .mutedTeal,
+    .mutedBlue,
+    .mutedIndigo,
+    .mutedPink
+  ]
+
   var body: some View {
     VStack {
+
+      Spacer()
+
+      Image(.bloomAppIcon)
+        .resizable()
+        .frame(square: 200)
+
+      Text("Welcome to Bloom")
+        .font(.system(size: 50))
+        .bold()
+        .fontDesign(.rounded)
+        .multilineTextAlignment(.center)
 
       Spacer()
 
@@ -35,10 +59,34 @@ struct LoginView: View {
     }
     .padding()
     .alert(error: $error)
+    .background {
+      Rectangle()
+        .fill(
+          LinearGradient(
+            colors: backgroundColors,
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+        )
+        .overlay {
+          Rectangle()
+            .fill(.thinMaterial)
+        }
+        .ignoresSafeArea()
+    }
+    .animation(.linear(duration: .animationSpeed), value: backgroundColors)
+    .onReceive(timer) { _ in
+      shiftGradientColors()
+    }
   }
 }
 
 private extension LoginView {
+
+  func shiftGradientColors() {
+    let last = backgroundColors.removeLast()
+    backgroundColors.insert(last, at: 0)
+  }
 
   func handleSignInResult(_ result: Result<ASAuthorization, Error>) {
     switch result {
