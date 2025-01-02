@@ -20,6 +20,13 @@ final class NetworkRequester: Sendable {
 
 extension NetworkRequester {
 
+  func authenticate(request: AuthenticationRequest) async throws {
+    
+  }
+}
+
+extension NetworkRequester {
+
   func foodAutocomplete(query: String) async throws -> [String] {
     let url = URL(string: .bloomAPIBase + "v1/food/autocomplete")!
 

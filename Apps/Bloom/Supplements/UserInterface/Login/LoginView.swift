@@ -36,23 +36,35 @@ struct LoginView: View {
 
       Image(.bloomAppIcon)
         .resizable()
-        .frame(square: 200)
+        .frame(square: 160)
 
       Text("Welcome to Bloom")
-        .font(.system(size: 50))
+        .font(.system(size: 30))
         .bold()
         .fontDesign(.rounded)
         .multilineTextAlignment(.center)
 
       Spacer()
 
-      SignInWithAppleButton(
-        onRequest: { (request) in
-          authorizationState = UUID().uuidString
-          request.state = authorizationState
-        },
-        onCompletion: handleSignInResult)
-      .signInWithAppleButtonStyle(colorScheme == .light ? .black : .white)
+      Group {
+        if colorScheme == .light {
+          SignInWithAppleButton(
+            onRequest: { (request) in
+              authorizationState = UUID().uuidString
+              request.state = authorizationState
+            },
+            onCompletion: handleSignInResult)
+          .signInWithAppleButtonStyle(.white)
+        } else {
+          SignInWithAppleButton(
+            onRequest: { (request) in
+              authorizationState = UUID().uuidString
+              request.state = authorizationState
+            },
+            onCompletion: handleSignInResult)
+          .signInWithAppleButtonStyle(.black)
+        }
+      }
       .frame(height: 60)
       .frame(maxWidth: 400)
       .padding(.horizontal)
