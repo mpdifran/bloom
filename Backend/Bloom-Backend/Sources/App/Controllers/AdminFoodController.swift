@@ -76,6 +76,8 @@ private extension AdminFoodController {
   func updateFood(_ request: Request) async throws -> AdminUpdateFoodItemResponse {
     let requestBody = try request.content.decode(AdminUpdateFoodItemRequest.self)
     let updateRecord = requestBody.foodItemRecord
+    let updateNutritionLabelImage = requestBody.nutritionLabelImage
+    let updatePackagingImage = requestBody.packagingImage
 
     guard let existingRecord = try await FoodItemRecord.find(updateRecord.id.value, on: request.db) else {
       throw Abort(.notFound)
@@ -126,10 +128,55 @@ private extension AdminFoodController {
     existingRecord.source = updateRecord.source
     existingRecord.notes = updateRecord.notes
 
+    /// When there is an updated Nutrition Label, store in S3, replace filePath in DB, sign a URL, and return the URL in the admin response.
+    var signedNutritionLabelImage: URL?
+    if let updateNutritionLabelImage {
+      let imageMetadata = try await request.imageStorage.store(
+        image: updateNutritionLabelImage,
+        path: .nutritionLabel
+      )
+      signedNutritionLabelImage = try await request.imageStorage.generateImageURL(
+        fileName: imageMetadata.filename,
+        path: .nutritionLabel,
+        expiration: .hours(2)
+      )
+      existingRecord.nutritionLabelImage = imageMetadata.filename
+    }
+
+    /// When there is an updated Packaging Image, store in S3, replace filePath in DB, sign a URL, and return the URL in the admin response.
+    var signedPackagingImage: URL?
+    if let updatePackagingImage {
+      let imageMetadata = try await request.imageStorage.store(
+        image: updatePackagingImage,
+        path: .foodPackaging
+      )
+      signedPackagingImage = try await request.imageStorage.generateImageURL(
+        fileName: imageMetadata.filename,
+        path: .foodPackaging,
+        expiration: .hours(2)
+      )
+      existingRecord.packagingImage = imageMetadata.filename
+    }
+
     try await existingRecord.save(on: request.db)
 
+    var adminFoodRecord = existingRecord.asAdminFoodItemRecord()
+
+    if let signedNutritionLabelImage {
+      adminFoodRecord?.nutritionLabelImage = signedNutritionLabelImage
+    } else {
+      // Copy over existing signed URL.
+      adminFoodRecord?.nutritionLabelImage = updateRecord.nutritionLabelImage
+    }
+    if let signedPackagingImage {
+      adminFoodRecord?.packagingImage = signedPackagingImage
+    } else {
+      // Copy over existing signed URL.
+      adminFoodRecord?.packagingImage = updateRecord.packagingImage
+    }
+
     return AdminUpdateFoodItemResponse(
-      foodItemRecord: existingRecord.asAdminFoodItemRecord()
+      foodItemRecord: adminFoodRecord
     )
   }
 

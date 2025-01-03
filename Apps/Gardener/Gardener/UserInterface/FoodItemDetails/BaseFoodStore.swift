@@ -19,12 +19,36 @@ class BaseFoodStore: ObservableObject {
     print("Warning! Not implemented, please implement in subclass.")
   }
 
-  func update(_ foodItem: AdminFoodItemRecord) async throws {
-    let request = AdminUpdateFoodItemRequest(foodItemRecord: foodItem)
+  func update(
+    foodItem: AdminFoodItemRecord,
+    nutritionLabelImage: NSImage?,
+    packagingImage: NSImage?
+  ) async throws {
+    var nutritionLabelImageFile: ImageFile?
+    if let nutritionLabelImage, let nutritionData = nutritionLabelImage.pngData() {
+      nutritionLabelImageFile = ImageFile(
+        data: nutritionData,
+        fileExtension: "png"
+      )
+    }
+
+    var packagingImageFile: ImageFile?
+    if let packagingImage, let packagingData = packagingImage.pngData() {
+      packagingImageFile = ImageFile(
+        data: packagingData,
+        fileExtension: "png"
+      )
+    }
+
+    let request = AdminUpdateFoodItemRequest(
+      foodItemRecord: foodItem,
+      nutritionLabelImage: nutritionLabelImageFile,
+      packagingImage: packagingImageFile
+    )
     let response = try await service.updateFoodRecord(request: request)
 
     guard let updatedFoodItem = response.foodItemRecord else {
-      throw NSError(description: "Nil Food Item Repsonse")
+      throw NSError(description: "Nil Food Item Response")
     }
 
     guard let index = foodItems.firstIndex(where: { $0.id == updatedFoodItem.id}) else {
@@ -32,10 +56,6 @@ class BaseFoodStore: ObservableObject {
     }
 
     foodItems[index] = updatedFoodItem
-
-    // Copy over the images since the response won't included signed URLs.
-    foodItems[index].packagingImage = foodItem.packagingImage
-    foodItems[index].nutritionLabelImage = foodItem.nutritionLabelImage
   }
 
   func delete(_ foodItem: AdminFoodItemRecord) async throws {

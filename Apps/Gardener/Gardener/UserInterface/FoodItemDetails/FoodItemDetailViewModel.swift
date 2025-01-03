@@ -46,7 +46,11 @@ extension FoodItemDetailViewModel {
 
   func save() async {
     do {
-      try await foodStore.update(foodItem)
+      try await foodStore.update(
+        foodItem: foodItem,
+        nutritionLabelImage: nil, // TODO: Zach - capture images uploaded/displayed from file system.
+        packagingImage: nil
+      )
       // Update with a new initial state.
       initialFoodItem = foodItem
     } catch {
