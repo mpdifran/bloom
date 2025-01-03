@@ -129,6 +129,14 @@ private extension LoginView {
         break
       }
     case .failure(let error):
+      if let authError = error as? ASAuthorizationError {
+        switch authError.code {
+        case .canceled:
+          return // Do nothing when the user cancels
+        default:
+          break
+        }
+      }
       self.error = error
     }
   }

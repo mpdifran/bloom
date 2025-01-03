@@ -23,6 +23,8 @@ struct DeveloperSettingsView: View {
 
   @Environment(\.dismiss) private var dismiss
 
+  @State private var viewModel = ViewModel()
+
   private let vitalsViewModel = VitalsViewModel.shared
 
   var body: some View {
@@ -30,6 +32,7 @@ struct DeveloperSettingsView: View {
       List {
         healthPermissionsSection
         developerSection
+        authSection
       }
       .navigationTitle("Developer Tools")
       .toolbar {
@@ -227,6 +230,29 @@ extension DeveloperSettingsView {
         }
       }
       .buttonStyle(.plain)
+    }
+  }
+
+  var authSection: some View {
+    Section("Auth") {
+      LabeledContent("User ID") {
+        Text(viewModel.userID?.value ?? "None")
+      }
+      LabeledContent("Auth Token") {
+        Text(viewModel.authToken?.value ?? "None")
+      }
+
+      if viewModel.isAuthenticated {
+        Button("Log Out", role: .destructive) {
+          Task {
+            await UserController.shared.logout()
+          }
+        }
+      } else {
+        Button("Show Log In") {
+          presentedSheet = LoginView().asAny
+        }
+      }
     }
   }
 }
