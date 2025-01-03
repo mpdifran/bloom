@@ -11,8 +11,6 @@
 		FF1E96332C0BF57F004DAD2D /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96322C0BF57F004DAD2D /* ManagedSettings.framework */; };
 		FF1E96352C0BF57F004DAD2D /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96342C0BF57F004DAD2D /* ManagedSettingsUI.framework */; };
 		FF1E96462C0BF5E4004DAD2D /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96322C0BF57F004DAD2D /* ManagedSettings.framework */; };
-		FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
-		FF1E96742C0C1A99004DAD2D /* ScreenControl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF1E967B2C0C1B0A004DAD2D /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
 		FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -118,7 +116,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FF1E96742C0C1A99004DAD2D /* ScreenControl.framework in Embed Frameworks */,
 				FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */,
 				FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */,
 				FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */,
@@ -329,7 +326,6 @@
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1FFD682D15C27D0008B47D /* Valet in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
-				FF1E96732C0C1A99004DAD2D /* ScreenControl.framework in Frameworks */,
 				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
 				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
