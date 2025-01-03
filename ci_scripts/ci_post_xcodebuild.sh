@@ -4,21 +4,26 @@
 #  Picasso
 #
 #  Created by Mark DiFranco on 2024-03-26.
-#  
+#
 
 set -e
 
 if [[ -n $CI_ARCHIVE_PATH ]];
 then
-    echo "Found valid archive path, trying to upload dSYMs to Bugsnag."
+    echo "Found valid archive path."
 
     pushd $CI_ARCHIVE_PATH/dSYMs
 
-    echo "Start uploading dSYMs"
-    curl --http1.1 https://upload.bugsnag.com/ \
-    -F apiKey=bdabfb744461469374c2cc273b493168 \
-    -F dsym=@Supplements.app.dSYM/Contents/Resources/DWARF/Supplements \
-    -F projectRoot=./
+    if [[ $APP_NAME == "Supplements" ]]; then
+        echo "App is Bloom. Start uploading dSYMs to BugSnag."
 
-    echo "Finished uploading dSYMs"
+        curl --http1.1 https://upload.bugsnag.com/ \
+        -F apiKey=bdabfb744461469374c2cc273b493168 \
+        -F dsym=@Supplements.app.dSYM/Contents/Resources/DWARF/Supplements \
+        -F projectRoot=./
+
+        echo "Finished uploading dSYMs"
+    else
+        echo "App is not Bloom. Skipping dSYM upload."
+    fi
 fi
