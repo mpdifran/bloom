@@ -14,7 +14,7 @@ then
 
     pushd $CI_ARCHIVE_PATH/dSYMs
 
-    if [[ $APP_NAME == "Supplements" ]]; then
+    if [[ $CI_BUNDLE_ID == "com.lotus-labs.bloom" ]]; then
         echo "App is Bloom. Start uploading dSYMs to BugSnag."
 
         curl --http1.1 https://upload.bugsnag.com/ \
