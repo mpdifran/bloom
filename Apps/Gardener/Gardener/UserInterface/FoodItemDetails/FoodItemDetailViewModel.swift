@@ -20,7 +20,9 @@ final class FoodItemDetailViewModel: ObservableObject {
   private let foodStore: BaseFoodStore
 
   @Published var packagingImage: URL?
+  @Published var packagingImageRotation: Double = 0
   @Published var nutritionLabel: URL?
+  @Published var nutritionLabelRotation: Double = 0
 
   init(foodItem: AdminFoodItemRecord, foodStore: BaseFoodStore) {
     self.foodItem = foodItem
@@ -45,6 +47,8 @@ extension FoodItemDetailViewModel {
   func save() async {
     do {
       try await foodStore.update(foodItem)
+      // Update with a new initial state.
+      initialFoodItem = foodItem
     } catch {
       self.error = error
     }
@@ -55,6 +59,15 @@ extension FoodItemDetailViewModel {
       try await foodStore.delete(foodItem)
     } catch {
       self.error = error
+    }
+  }
+
+  func rotate(value: Double, image: FoodItemDetailView.ImageTab) {
+    switch image {
+    case .packaging:
+      packagingImageRotation += value
+    case .nutritionLabel:
+      nutritionLabelRotation += value
     }
   }
 }
