@@ -186,7 +186,7 @@ private extension FoodItemDetailView {
                   Image(systemName: "rotate.left.fill")
                     .foregroundColor(.white)
                     .padding(10)
-                    .background(Color.black.opacity(0.5), in: Circle())
+                    .background(.regularMaterial, in: Circle())
                 }
                 .padding(4)
 
@@ -196,7 +196,7 @@ private extension FoodItemDetailView {
                   Image(systemName: "rotate.right.fill")
                     .foregroundColor(.white)
                     .padding(10)
-                    .background(Color.black.opacity(0.5), in: Circle())
+                    .background(.regularMaterial, in: Circle())
                 }
                 .padding(4)
               }
