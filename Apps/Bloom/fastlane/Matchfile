@@ -4,7 +4,7 @@ storage_mode("git")
 
 type("development") # The default type, can be: appstore, adhoc, enterprise or development
 
-app_identifier(["com.lotus-labs.bloom"])
+app_identifier(["com.lotus-labs.bloom", "com.lotus-labs.bloom.DeviceActivityMonitorExtension", "com.lotus-labs.bloom.ShieldConfigurationExtension", "com.lotus-labs.bloom.ShieldActionExtension", "com.lotus-labs.bloom.DeviceActivityReportExtension"])
 username("hello@trybloom.app")
 
 # The docs are available on https://docs.fastlane.tools/actions/match
