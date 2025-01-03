@@ -20,7 +20,11 @@ class BaseFoodStore: ObservableObject {
   }
 
   func update(_ foodItem: AdminFoodItemRecord) async throws {
-    let request = AdminUpdateFoodItemRequest(foodItemRecord: foodItem)
+    let request = AdminUpdateFoodItemRequest(
+      foodItemRecord: foodItem,
+      nutritionLabelImage: nil,
+      packagingImage: nil
+    )
     let response = try await service.updateFoodRecord(request: request)
 
     guard let updatedFoodItem = response.foodItemRecord else {
