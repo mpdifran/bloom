@@ -8,6 +8,7 @@
 import SwiftUI
 import AuthenticationServices
 import AppUI
+import TelemetryDeck
 
 private extension Double {
     static let animationSpeed: Double = 1.5
@@ -122,6 +123,11 @@ private extension LoginView {
           do {
             try await viewModel.authenticate(using: credential)
           } catch {
+            TelemetryDeck.errorOccurred(
+              id: "LoginView.authenticate",
+              category: .thrownException,
+              message: error.localizedDescription
+            )
             self.error = error
           }
         }

@@ -18,11 +18,11 @@ extension AuthenticationController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1") { v1 in
-      routes.group("auth") { auth in
+      v1.group("auth") { auth in
         auth.post("sign-in", use: signIn)
       }
 
-      routes.group(UserToken.guardMiddleware()) { tokenProtected in
+      v1.group(UserToken.guardMiddleware()) { tokenProtected in
         tokenProtected.group("user") { user in
           user.get("logout", use: logout)
         }

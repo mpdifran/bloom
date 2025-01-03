@@ -31,7 +31,7 @@ extension Application {
     }
 
     var appBundleID: String {
-        "com.mdfprojects.Supplements"
+        "com.lotus-labs.bloom"
     }
 
     var siwaJWKId: String {
