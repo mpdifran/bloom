@@ -28,7 +28,7 @@ class BaseFoodStore: ObservableObject {
     let response = try await service.updateFoodRecord(request: request)
 
     guard let updatedFoodItem = response.foodItemRecord else {
-      throw NSError(description: "Nil Food Item Repsonse")
+      throw NSError(description: "Nil Food Item Response")
     }
 
     guard let index = foodItems.firstIndex(where: { $0.id == updatedFoodItem.id}) else {
