@@ -53,6 +53,7 @@ struct LoginView: View {
             onRequest: { (request) in
               authorizationState = UUID().uuidString
               request.state = authorizationState
+              request.requestedScopes = [.fullName, .email]
             },
             onCompletion: handleSignInResult)
           .signInWithAppleButtonStyle(.white)
@@ -61,6 +62,7 @@ struct LoginView: View {
             onRequest: { (request) in
               authorizationState = UUID().uuidString
               request.state = authorizationState
+              request.requestedScopes = [.fullName, .email]
             },
             onCompletion: handleSignInResult)
           .signInWithAppleButtonStyle(.black)

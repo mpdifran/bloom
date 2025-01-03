@@ -17,20 +17,20 @@ struct AuthenticationController {
 extension AuthenticationController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
-    routes.group("v1") { v1 in
-      v1.group("auth") { auth in
-        auth.post("sign-in", use: signIn)
+    routes.group("v1") {
+      $0.group("auth") {
+        $0.post("sign-in", use: signIn)
       }
 
-      v1.group(UserToken.guardMiddleware()) { tokenProtected in
-        tokenProtected.group("user") { user in
-          user.get("logout", use: logout)
+      $0.group(UserToken.guardMiddleware()) {
+        $0.group("user") {
+          $0.get("logout", use: logout)
         }
       }
     }
 
-    routes.group("webhook") { webhook in
-      webhook.post("apple", use: handleWebhook)
+    routes.group("webhook") {
+      $0.post("apple", use: handleWebhook)
     }
   }
 }
@@ -49,7 +49,7 @@ private extension AuthenticationController {
       privateKey: try request.application.createSIWAPrivateKey()
     )
 
-    let appleTokens = try await request.signInWithApple.generateAppleTokens(details: details)
+    let appleTokens = try await request.signInWithApple.generateAppleTokens(details: details, debug: true)
 
     let user = try await userService.storeTokens(
       request,
