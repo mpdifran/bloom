@@ -7,14 +7,14 @@
 
 import SwiftUI
 import AppUI
-import ScreenControl
+//import ScreenControl
 
 struct SleepProgramConfigurationView: View {
 
     @ObservedObject private var viewModel = SleepProgramConfigurationViewModel()
 
     @ObservedObject private var sleepProgramCoordinator = SleepProgramCoordinator.shared
-    @ObservedObject private var screenUseController = ScreenUseController.shared
+//    @ObservedObject private var screenUseController = ScreenUseController.shared
 
     @State private var isShowingFamilyActivityPicker = false
     @State private var confirmationDetails: ConfirmationDialogDetails?
@@ -79,63 +79,63 @@ private extension SleepProgramConfigurationView {
 
             Text("Screen time before bed can affect your sleep quality. Allow Bloom to restrict app usage during bedtime.")
 
-            DatePicker(
-                "Wind Down",
-                selection: $screenUseController.startDate,
-                displayedComponents: .hourAndMinute
-            )
+//            DatePicker(
+//                "Wind Down",
+//                selection: $screenUseController.startDate,
+//                displayedComponents: .hourAndMinute
+//            )
+//
+//            DatePicker(
+//                "Wake Up",
+//                selection: $screenUseController.endDate,
+//                displayedComponents: .hourAndMinute
+//            )
+//
+//            HStack {
+//                LabeledContent("Apps") {
+//                    if let summary = screenUseController.activitySelection.summaryText {
+//                        Text(summary)
+//                            .multilineTextAlignment(.trailing)
+//                    } else {
+//                        Text("No Apps Selected")
+//                    }
+//                }
+//                DisclosureIndicator()
+//            }
+//            .frame(minHeight: 37)
+//            .contentShape(Rectangle())
+//            .onTapGesture {
+//                isShowingFamilyActivityPicker = true
+//            }
+//            .familyActivityPicker(
+//                headerText: "Bloom will restrict usage of these apps during bedtime",
+//                isPresented: $isShowingFamilyActivityPicker,
+//                selection: $screenUseController.activitySelection
+//            )
 
-            DatePicker(
-                "Wake Up",
-                selection: $screenUseController.endDate,
-                displayedComponents: .hourAndMinute
-            )
-
-            HStack {
-                LabeledContent("Apps") {
-                    if let summary = screenUseController.activitySelection.summaryText {
-                        Text(summary)
-                            .multilineTextAlignment(.trailing)
-                    } else {
-                        Text("No Apps Selected")
-                    }
-                }
-                DisclosureIndicator()
-            }
-            .frame(minHeight: 37)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                isShowingFamilyActivityPicker = true
-            }
-            .familyActivityPicker(
-                headerText: "Bloom will restrict usage of these apps during bedtime",
-                isPresented: $isShowingFamilyActivityPicker,
-                selection: $screenUseController.activitySelection
-            )
-
-            if screenUseController.isMonitoring {
-                Button(action: {
-                    screenUseController.stopMonitoring()
-                }, label: {
-                    Text("Stop Monitoring")
-                        .expandHorizontally()
-                })
-                .tint(.red)
-                .buttonStyle(.primary)
-            } else {
-                Button(action: {
-                    do {
-                        try screenUseController.startMonitoring()
-                    } catch {
-                        self.error = error
-                    }
-                }, label: {
-                    Text("Start Monitoring")
-                        .expandHorizontally()
-                })
-                .tint(.green)
-                .buttonStyle(.primary)
-            }
+//            if screenUseController.isMonitoring {
+//                Button(action: {
+//                    screenUseController.stopMonitoring()
+//                }, label: {
+//                    Text("Stop Monitoring")
+//                        .expandHorizontally()
+//                })
+//                .tint(.red)
+//                .buttonStyle(.primary)
+//            } else {
+//                Button(action: {
+//                    do {
+//                        try screenUseController.startMonitoring()
+//                    } catch {
+//                        self.error = error
+//                    }
+//                }, label: {
+//                    Text("Start Monitoring")
+//                        .expandHorizontally()
+//                })
+//                .tint(.green)
+//                .buttonStyle(.primary)
+//            }
         }
         .tint(.indigo)
     }

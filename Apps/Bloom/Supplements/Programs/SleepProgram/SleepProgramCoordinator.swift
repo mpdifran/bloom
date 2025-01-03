@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import ScreenControl
+//import ScreenControl
 
 private extension String {
     static let sleepActivities = "SleepProgramCoordinator.sleepActivities"
@@ -62,7 +62,7 @@ extension SleepProgramCoordinator {
 
     func stopProgram() {
         startDate = nil
-        ScreenUseController.shared.stopMonitoring()
+//        ScreenUseController.shared.stopMonitoring()
     }
 }
 

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import ScreenControl
 import Bugsnag
 import BugsnagPerformance
 import TelemetryDeck

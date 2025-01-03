@@ -44,13 +44,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FF1E96712C0C1A99004DAD2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
-			remoteInfo = ScreenControl;
-		};
 		FF1E96882C0C1F38004DAD2D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -602,7 +595,6 @@
 			);
 			dependencies = (
 				FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */,
-				FF1E96722C0C1A99004DAD2D /* PBXTargetDependency */,
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
 				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
 			);
@@ -903,11 +895,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FF1E96722C0C1A99004DAD2D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
-			targetProxy = FF1E96712C0C1A99004DAD2D /* PBXContainerItemProxy */;
-		};
 		FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
