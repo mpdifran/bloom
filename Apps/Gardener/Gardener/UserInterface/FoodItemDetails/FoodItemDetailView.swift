@@ -63,22 +63,9 @@ private extension FoodItemDetailView {
       .padding()
 
       ScrollView {
-        VStack {
-          switch selectedImageTab {
-          case .packaging:
-            createImage(
-              url: viewModel.packagingImage,
-              rotationAngle: viewModel.packagingImageRotation,
-              type: selectedImageTab
-            )
-          case .nutritionLabel:
-            createImage(
-              url: viewModel.nutritionLabel,
-              rotationAngle: viewModel.nutritionLabelRotation,
-              type: selectedImageTab
-            )
-          }
-        }
+        createImage(
+          type: selectedImageTab
+        )
         .padding()
       }
     }
@@ -166,70 +153,63 @@ private extension FoodItemDetailView {
   }
 
   @ViewBuilder
-  func createImage(url: URL?, rotationAngle: Double, type: ImageTab) -> some View {
-      if let url {
-        AsyncImage(url: url) { phase in
-          switch phase {
-          case .empty:
-            ProgressView()
-          case .success(let image):
-            ZStack(alignment: .topTrailing) {
-              image
-                .resizable()
-                .scaledToFit()
-                .rotationEffect(.degrees(rotationAngle))
-
-              HStack {
-                Button {
-                  viewModel.rotate(value: -90, image: type)
-                } label: {
-                  Image(systemName: "rotate.left.fill")
-                    .foregroundColor(.white)
-                    .padding(10)
-                    .background(.regularMaterial, in: Circle())
-                }
-                .padding(4)
-
-                Button {
-                  viewModel.rotate(value: 90, image: type)
-                } label: {
-                  Image(systemName: "rotate.right.fill")
-                    .foregroundColor(.white)
-                    .padding(10)
-                    .background(.regularMaterial, in: Circle())
-                }
-                .padding(4)
-              }
-            }
-          case .failure(let error):
-            ContentUnavailableView {
-              Label("Failed to Load Image", systemImage: "photo.badge.exclamationmark.fill")
-            } description: {
-              VStack {
-                Text("The image failed to load")
-                Text(error.localizedDescription)
-                Text(url.absoluteString)
-                  .foregroundStyle(.blue)
-                  .textSelection(.enabled)
-              }
-            } actions: {
-              Button("Copy URL to Clipboard") {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(url.absoluteString, forType: .string)
-                alertDetails = AlertDetails(
-                  title: "Copied!",
-                  message: "Copied the URL to your clipboard."
-                )
-              }
-              .buttonStyle(.borderedProminent)
-            }
-          @unknown default:
-            Text("Unknown error occurred")
-          }
-        }
-      } else {
-        Text("Not Found")
+  func createImage(type: ImageTab) -> some View {
+    ZStack(alignment: .topTrailing) {
+      switch type {
+      case .nutritionLabel:
+        FoodItemAsyncImage(
+          url: viewModel.nutritionLabel,
+          replacementImage: viewModel.selectedNutritionLabel,
+          rotationAngle: viewModel.nutritionLabelRotation,
+          alertDetails: $alertDetails
+        )
+        .changeIndicator(isChanged: viewModel.selectedNutritionLabel != nil)
+      case .packaging:
+        FoodItemAsyncImage(
+          url: viewModel.packagingImage,
+          replacementImage: viewModel.selectedPackagingImage,
+          rotationAngle: viewModel.packagingImageRotation,
+          alertDetails: $alertDetails
+        )
+        .changeIndicator(isChanged: viewModel.selectedPackagingImage != nil)
       }
+
+      createImageToolbar(for: type)
+    }
+  }
+
+  func createImageToolbar(for type: ImageTab) -> some View {
+    HStack {
+      Button {
+        viewModel.rotate(value: -90, image: type)
+      } label: {
+        Image(systemName: "rotate.left.fill")
+          .foregroundColor(.white)
+          .padding(10)
+          .background(.regularMaterial, in: Circle())
+      }
+      .padding(4)
+
+      Button {
+        viewModel.rotate(value: 90, image: type)
+      } label: {
+        Image(systemName: "rotate.right.fill")
+          .foregroundColor(.white)
+          .padding(10)
+          .background(.regularMaterial, in: Circle())
+      }
+      .padding(4)
+
+      Button {
+        viewModel.selectImage(type)
+      } label: {
+        Image(systemName: "photo.on.rectangle")
+          .foregroundColor(.white)
+          .padding(10)
+          .background(.regularMaterial, in: Circle())
+      }
+      .padding(4)
+    }
   }
 
   var formView: some View {

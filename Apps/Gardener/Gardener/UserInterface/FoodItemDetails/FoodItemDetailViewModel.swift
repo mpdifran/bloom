@@ -21,8 +21,11 @@ final class FoodItemDetailViewModel: ObservableObject {
 
   @Published var packagingImage: URL?
   @Published var packagingImageRotation: Double = 0
+  @Published var selectedPackagingImage: NSImage?
+
   @Published var nutritionLabel: URL?
   @Published var nutritionLabelRotation: Double = 0
+  @Published var selectedNutritionLabel: NSImage?
 
   init(foodItem: AdminFoodItemRecord, foodStore: BaseFoodStore) {
     self.foodItem = foodItem
@@ -46,13 +49,20 @@ extension FoodItemDetailViewModel {
 
   func save() async {
     do {
-      try await foodStore.update(
+      let updatedFoodItem = try await foodStore.update(
         foodItem: foodItem,
-        nutritionLabelImage: nil, // TODO: Zach - capture images uploaded/displayed from file system.
-        packagingImage: nil
+        nutritionLabelImage: selectedNutritionLabel,
+        packagingImage: selectedPackagingImage
       )
       // Update with a new initial state.
-      initialFoodItem = foodItem
+      guard let updatedFoodItem else { return }
+      foodItem = updatedFoodItem
+      initialFoodItem = updatedFoodItem
+      packagingImage = updatedFoodItem.packagingImage
+      nutritionLabel = updatedFoodItem.nutritionLabelImage
+      // Reset selections, they should be on the response.
+      selectedPackagingImage = nil
+      selectedNutritionLabel = nil
     } catch {
       self.error = error
     }
@@ -72,6 +82,27 @@ extension FoodItemDetailViewModel {
       packagingImageRotation += value
     case .nutritionLabel:
       nutritionLabelRotation += value
+    }
+  }
+
+  func selectImage(_ type: FoodItemDetailView.ImageTab) {
+    let panel = NSOpenPanel()
+    panel.allowedContentTypes = [.png, .jpeg, .heic, .pdf]
+    panel.canChooseFiles = true
+    panel.canChooseDirectories = false
+    panel.allowsMultipleSelection = false
+
+    if panel.runModal() == .OK, let url = panel.url {
+      if let selectedImage = NSImage(contentsOf: url) {
+        switch type {
+        case .packaging:
+          selectedPackagingImage = selectedImage
+        case .nutritionLabel:
+          selectedNutritionLabel = selectedImage
+        }
+      } else {
+        print("Failed to load image")
+      }
     }
   }
 }
