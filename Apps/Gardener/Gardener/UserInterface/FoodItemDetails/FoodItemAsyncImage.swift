@@ -11,11 +11,17 @@ import SwiftUI
 struct FoodItemAsyncImage: View {
 
   let url: URL?
+  let replacementImage: NSImage?
   let rotationAngle: Double
   @Binding var alertDetails: AlertDetails?
 
   var body: some View {
-    if let url {
+    if let replacementImage {
+      Image(nsImage: replacementImage)
+        .resizable()
+        .scaledToFit()
+        .rotationEffect(.degrees(rotationAngle))
+    } else if let url {
       AsyncImage(url: url) { phase in
         switch phase {
         case .empty:
@@ -26,7 +32,6 @@ struct FoodItemAsyncImage: View {
               .resizable()
               .scaledToFit()
               .rotationEffect(.degrees(rotationAngle))
-
           }
         case .failure(let error):
           ContentUnavailableView {

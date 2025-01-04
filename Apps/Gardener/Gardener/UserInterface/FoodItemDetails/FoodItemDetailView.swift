@@ -159,19 +159,20 @@ private extension FoodItemDetailView {
       case .nutritionLabel:
         FoodItemAsyncImage(
           url: viewModel.nutritionLabel,
+          replacementImage: viewModel.selectedNutritionLabel,
           rotationAngle: viewModel.nutritionLabelRotation,
           alertDetails: $alertDetails
         )
       case .packaging:
         FoodItemAsyncImage(
           url: viewModel.packagingImage,
+          replacementImage: viewModel.selectedPackagingImage,
           rotationAngle: viewModel.packagingImageRotation,
           alertDetails: $alertDetails
         )
       }
 
       createImageToolbar(for: type)
-
     }
   }
 
