@@ -115,12 +115,6 @@ private extension OpenFoodFactsService {
       headers: defaultHeaders
     )
 
-    if let body = response.body {
-      let data = Data(buffer: body)
-      let string = String(data: data, encoding: .utf8)
-      print(string ?? "")
-    }
-
     return try response.content.decode(
       OpenFoodFactsProductResponse.self,
       using: JSONDecoder.openFoodFacts
