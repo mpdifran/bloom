@@ -21,8 +21,11 @@ final class FoodItemDetailViewModel: ObservableObject {
 
   @Published var packagingImage: URL?
   @Published var packagingImageRotation: Double = 0
+  @Published var selectedPackagingImage: NSImage?
+
   @Published var nutritionLabel: URL?
   @Published var nutritionLabelRotation: Double = 0
+  @Published var selectedNutritionLabel: NSImage?
 
   init(foodItem: AdminFoodItemRecord, foodStore: BaseFoodStore) {
     self.foodItem = foodItem
@@ -72,6 +75,27 @@ extension FoodItemDetailViewModel {
       packagingImageRotation += value
     case .nutritionLabel:
       nutritionLabelRotation += value
+    }
+  }
+
+  func selectImage(_ type: FoodItemDetailView.ImageTab) {
+    let panel = NSOpenPanel()
+    panel.allowedContentTypes = [.png, .jpeg, .heic, .pdf]
+    panel.canChooseFiles = true
+    panel.canChooseDirectories = false
+    panel.allowsMultipleSelection = false
+
+    if panel.runModal() == .OK, let url = panel.url {
+      if let selectedImage = NSImage(contentsOf: url) {
+        switch type {
+        case .packaging:
+          selectedPackagingImage = selectedImage
+        case .nutritionLabel:
+          selectedNutritionLabel = selectedImage
+        }
+      } else {
+        print("Failed to load image")
+      }
     }
   }
 }
