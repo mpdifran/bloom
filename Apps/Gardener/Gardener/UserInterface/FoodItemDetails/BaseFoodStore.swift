@@ -23,7 +23,7 @@ class BaseFoodStore: ObservableObject {
     foodItem: AdminFoodItemRecord,
     nutritionLabelImage: NSImage?,
     packagingImage: NSImage?
-  ) async throws {
+  ) async throws -> AdminFoodItemRecord? {
     var nutritionLabelImageFile: ImageFile?
     if let nutritionLabelImage, let nutritionData = nutritionLabelImage.pngData() {
       nutritionLabelImageFile = ImageFile(
@@ -52,10 +52,12 @@ class BaseFoodStore: ObservableObject {
     }
 
     guard let index = foodItems.firstIndex(where: { $0.id == updatedFoodItem.id}) else {
-      return
+      return nil
     }
 
     foodItems[index] = updatedFoodItem
+
+    return updatedFoodItem
   }
 
   func delete(_ foodItem: AdminFoodItemRecord) async throws {

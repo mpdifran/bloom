@@ -49,13 +49,20 @@ extension FoodItemDetailViewModel {
 
   func save() async {
     do {
-      try await foodStore.update(
+      let updatedFoodItem = try await foodStore.update(
         foodItem: foodItem,
-        nutritionLabelImage: nil, // TODO: Zach - capture images uploaded/displayed from file system.
-        packagingImage: nil
+        nutritionLabelImage: selectedNutritionLabel,
+        packagingImage: selectedPackagingImage
       )
       // Update with a new initial state.
-      initialFoodItem = foodItem
+      guard let updatedFoodItem else { return }
+      foodItem = updatedFoodItem
+      initialFoodItem = updatedFoodItem
+      packagingImage = updatedFoodItem.packagingImage
+      nutritionLabel = updatedFoodItem.nutritionLabelImage
+      // Reset selections, they should be on the response.
+      selectedPackagingImage = nil
+      selectedNutritionLabel = nil
     } catch {
       self.error = error
     }

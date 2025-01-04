@@ -163,6 +163,7 @@ private extension FoodItemDetailView {
           rotationAngle: viewModel.nutritionLabelRotation,
           alertDetails: $alertDetails
         )
+        .changeIndicator(isChanged: viewModel.selectedNutritionLabel != nil)
       case .packaging:
         FoodItemAsyncImage(
           url: viewModel.packagingImage,
@@ -170,6 +171,7 @@ private extension FoodItemDetailView {
           rotationAngle: viewModel.packagingImageRotation,
           alertDetails: $alertDetails
         )
+        .changeIndicator(isChanged: viewModel.selectedPackagingImage != nil)
       }
 
       createImageToolbar(for: type)
