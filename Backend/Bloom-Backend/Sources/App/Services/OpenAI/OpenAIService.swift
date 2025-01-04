@@ -188,7 +188,7 @@ private extension OpenAIService {
                         The properties of the object are:
                         
                         - Property called 'serving_name' which indicates the kind of serving such as 1 bottle or 2 brownies.
-                        - Property called 'serving_value' which contains a unit property (like fl oz or g) and a value property (numeric value for the unit) 
+                        - Property called 'serving_value' which contains a 'unit' property (like fl oz or g) and a 'value' property (numeric value for the unit) 
                         - Property called 'calories' which contains a 'unit' property (kcal or Cal) and a 'value' property for the number of calories.
                         - Property called 'protein' which contains a 'unit' property (such as g) and a 'value'.
                         - Property called 'carbohydrate' which contains a 'unit' property (such as g) and a 'value'.
@@ -212,6 +212,8 @@ private extension OpenAIService {
                         - Optional property called 'vitamin_c' which contains a 'unit' property (such as mg) and a 'value'.
                         - Optional property called 'vitamin_d' which contains a 'unit' property (such as mg) and a 'value'.
                         - Optional property called 'vitamin_e' which contains a 'unit' property (such as mg) and a 'value'.
+                        
+                        If the nutrition label is in French, translate it to English.
                         """)
           ]
         ),

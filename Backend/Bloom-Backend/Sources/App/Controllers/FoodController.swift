@@ -93,22 +93,28 @@ extension FoodController {
       path: .foodPackaging
     )
 
-    let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
-      request: request,
-      barCode: requestBody.barcode,
-      country: requestBody.country.country,
-      nutritionLabelMetadata: nutritionLabelMetadata,
-      packagingMetadata: packagingMetadata
-    )
+    do {
+      let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
+        request: request,
+        barCode: requestBody.barcode,
+        country: requestBody.country.country,
+        nutritionLabelMetadata: nutritionLabelMetadata,
+        packagingMetadata: packagingMetadata
+      )
 
-    try await foodItemRecord?.save(on: request.db)
+      try await foodItemRecord?.save(on: request.db)
 
-    let foodItem = foodItemRecord?.asFoodItem()
+      let foodItem = foodItemRecord?.asFoodItem()
 
-    return UploadNewFoodResponse(
-      result: result,
-      foodItem: foodItem
-    )
+      return UploadNewFoodResponse(
+        result: result,
+        foodItem: foodItem
+      )
+    } catch {
+      // TODO: Delete nutritionLabelMetadata and packagingMetadata from S3.
+
+      throw error
+    }
   }
 
   @Sendable
