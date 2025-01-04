@@ -96,9 +96,9 @@ extension OpenAIService {
             .text("""
   You must respond in JSON. There should be a list of objects, one for each food item. Each object should have the following properties:
   - Property called 'name' that is the name of the food item. The name should have the first letter of every word capitalized.
-  - Property called 'serving_name' which indicates the kind of serving such as 1 Chicken Breast or 3 Pieces of Toast. This should be a common measurable amount, and the lowest value possible. Make sure to capitalize the first letter in each word.
+  - Property called 'serving_name' which indicates the kind of serving such as 1 chicken breast or 1 piece of toast. This should be a common measurable amount, and the lowest value possible. Make sure each word is lowercased.
   - Property called 'serving_amount_unit' which indicates a measurable unit for the serving, such as g, cups, mL, or oz. 
-  - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be a float in relation to the serving_quantity. If the serving_name is g and there are 100 g in a chicken breats, and there are 2 chicken breats in a serving - then this should be 200 since it is 100 g per breast, and there's 2 chicken breasts in a serving.
+  - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be a float in relation to the serving_quantity. If the serving_amount_unit is g and there are 100 g in a chicken breast, and there are 2 chicken breats in a serving - then the value of this property should be 200.
   - Property called 'serving_count' which indicates how many servings of the food item are in the image.
   - Property called 'calories' which is a numerical float of the calories of the item per serving.
   - Property called 'protein', an numerical float of how many grams of protein per serving.
@@ -124,7 +124,7 @@ extension OpenAIService {
   - Property called 'vitamin_d', a numerical float of how many milligrams of vitamin D per serving.
   - Property called 'vitamin_e', a numerical float of how many milligrams of vitamin E per serving.
   
-  Make sure all JSON keys are snake case.
+  Make sure all JSON keys are snake case. Make sure to estimate every kind of nutrient you think are in the food item.
 """
                  )
           ]
@@ -149,7 +149,6 @@ extension OpenAIService {
       message.removeFirst("```json".count)
       message.removeLast("```".count)
       message = message.trimmingCharacters(in: .whitespacesAndNewlines)
-
 
       guard let data = message.data(using: .utf8) else { return nil }
 
