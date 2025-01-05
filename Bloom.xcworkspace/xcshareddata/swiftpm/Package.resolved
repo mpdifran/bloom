@@ -1,5 +1,5 @@
 {
-  "originHash" : "356697c2801dbbab884b9217dfb4e507fc017c450cd36d6d30efa51bd8db38b1",
+  "originHash" : "69c1e8ef2a277e4dfce9cd719a6faf86cebf7a9873bb84f7240ae2b6611af571",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -447,8 +447,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/vapor-sign-in-with-apple.git",
       "state" : {
-        "revision" : "d3779a1a6bf50d44449ea5f40345c3ed765577b7",
-        "version" : "1.0.5"
+        "revision" : "e99094826aa24e613bea31c5dc28f2c9cb0057a4",
+        "version" : "1.0.6"
       }
     },
     {

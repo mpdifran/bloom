@@ -49,7 +49,7 @@ private extension AuthenticationController {
       privateKey: try request.application.createSIWAPrivateKey()
     )
 
-    let appleTokens = try await request.signInWithApple.generateAppleTokens(details: details, debug: true)
+    let appleTokens = try await request.signInWithApple.generateAppleTokens(details: details)
 
     let user = try await userService.storeTokens(
       request,
