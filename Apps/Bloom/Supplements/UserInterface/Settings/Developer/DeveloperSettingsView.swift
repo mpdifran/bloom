@@ -23,7 +23,7 @@ struct DeveloperSettingsView: View {
 
   @Environment(\.dismiss) private var dismiss
 
-  @State private var viewModel = ViewModel()
+  @State private var viewModel = UserControllerViewModel()
 
   private let vitalsViewModel = VitalsViewModel.shared
 

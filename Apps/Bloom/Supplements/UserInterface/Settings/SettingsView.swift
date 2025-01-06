@@ -22,6 +22,7 @@ struct SettingsView: View {
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
 
+  @State private var userControllerViewModel = UserControllerViewModel()
   @State private var presentedSheet: AnyView?
 
   @Query private var userAddedHabits: [Habit]
@@ -48,6 +49,7 @@ struct SettingsView: View {
         widgetsSection
         unitsSection
         supportSection
+        authenticationSection
         developerSection
       }
       .padding()
@@ -286,7 +288,7 @@ extension SettingsView {
 
         Divider()
 
-        SettingsCell("Submit Feedback", showDisclosureIndicator: true) {
+        SettingsCell("Tell us what you think!", showDisclosureIndicator: true) {
           Image(systemName: "heart.fill")
             .foregroundStyle(.mutedRed)
         }
@@ -300,6 +302,41 @@ extension SettingsView {
             presentedSheet = FeatureRequestScreen().asAny
           }
         }
+      }
+    }
+  }
+
+  var authenticationSection: some View {
+    VStack {
+      SectionTitleView("Account")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("Status") {
+          Text(userControllerViewModel.isAuthenticated ? "Signed in" : "Signed out")
+        }
+
+        Divider()
+
+        Group {
+          if userControllerViewModel.isAuthenticated {
+            Button {
+              Task {
+                await UserController.shared.logout()
+              }
+            } label: {
+              Text("Sign Out")
+            }
+          } else {
+            Button {
+              presentedSheet = LoginView().asAny
+            } label: {
+              Text("Sign In")
+            }
+          }
+        }
+        .bold()
+        .frame(minHeight: 60)
       }
     }
   }

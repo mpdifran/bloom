@@ -1,29 +1,27 @@
 //
-//  DeveloperSettingsViewModel.swift
+//  UserControllerViewModel.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2025-01-03.
+//  Created by Mark DiFranco on 2025-01-06.
 //
 
 import SwiftUI
 import BloomModel
 
-extension DeveloperSettingsView {
-  @Observable @MainActor
-  final class ViewModel {
-    var isAuthenticated: Bool = false
-    var userID: UserIdentifier?
-    var authToken: AuthToken?
+@MainActor @Observable
+final class UserControllerViewModel {
+  var isAuthenticated: Bool = false
+  var userID: UserIdentifier?
+  var authToken: AuthToken?
 
-    init() {
-      observeData()
-    }
-
-    private var tasks = [Task<Void, Never>]()
+  init() {
+    observeData()
   }
+
+  private var tasks = [Task<Void, Never>]()
 }
 
-private extension DeveloperSettingsView.ViewModel {
+private extension UserControllerViewModel {
 
   func observeData() {
     tasks.removeAll(keepingCapacity: true)

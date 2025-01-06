@@ -11,11 +11,12 @@ import AppUI
 import TelemetryDeck
 
 private extension Double {
-    static let animationSpeed: Double = 1.5
+  static let animationSpeed: Double = 1.5
 }
 
 struct LoginView: View {
   @Environment(\.colorScheme) var colorScheme
+  @Environment(\.dismiss) var dismiss
 
   @State private var authorizationState: String?
   @State private var error: Error?
@@ -72,6 +73,10 @@ struct LoginView: View {
       .frame(maxWidth: 400)
       .padding(.horizontal)
     }
+    .overlay {
+      dismissButton
+        .zStackAlignment(.topLeading)
+    }
     .padding()
     .alert(error: $error)
     .background {
@@ -90,6 +95,7 @@ struct LoginView: View {
         .ignoresSafeArea()
     }
     .animation(.linear(duration: .animationSpeed), value: backgroundColors)
+    .presentationCompactAdaptation(.fullScreenCover)
     .onReceive(timer) { _ in
       shiftGradientColors()
     }
@@ -97,6 +103,17 @@ struct LoginView: View {
 }
 
 private extension LoginView {
+
+  var dismissButton: some View {
+    Button {
+      dismiss()
+    } label: {
+      Image(systemName: "xmark.circle.fill")
+        .foregroundStyle(.text.secondary, .regularMaterial)
+        .font(.largeTitle)
+    }
+    .frame(square: 44)
+  }
 
   func shiftGradientColors() {
     let last = backgroundColors.removeLast()
@@ -124,6 +141,7 @@ private extension LoginView {
         Task {
           do {
             try await viewModel.authenticate(using: credential)
+            dismiss()
           } catch {
             TelemetryDeck.errorOccurred(
               id: "LoginView.authenticate",

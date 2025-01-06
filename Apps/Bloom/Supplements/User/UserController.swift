@@ -33,6 +33,10 @@ final actor UserController {
 
   private init() {
     do {
+      let rawUserIdentifier = try valet.string(forKey: .authenticatedUserIdentifierKey)
+      self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
+    } catch { }
+    do {
       let rawAuthToken = try valet.string(forKey: .authTokenKey)
       self.authToken = AuthToken(rawAuthToken)
     } catch { }
