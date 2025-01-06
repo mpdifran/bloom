@@ -21,13 +21,20 @@ extension UserDatabaseService {
       .first()
   }
 
+  func fetchOrCreateUser(_ request: Request, for userID: UserIdentifier) async throws -> User {
+    if let user = try await fetchUser(request, for: userID) {
+      return user
+    }
+    return User(id: userID)
+  }
+
   @discardableResult
   func storeTokens(
     _ request: Request,
     userID: UserIdentifier,
     tokenResponse: AppleTokenResponse
   ) async throws -> User {
-    let user = User(id: userID)
+    let user = try await fetchOrCreateUser(request, for: userID)
 
     user.accessToken = tokenResponse.accessToken
     user.refreshToken = tokenResponse.refreshToken
@@ -36,7 +43,7 @@ extension UserDatabaseService {
     let expiryDate = Date().addingTimeInterval(tokenResponse.expiresIn)
     user.accessTokenExpiry = expiryDate
 
-    try await user.save(on: request.db) // This should upsert according to the docs
+    try await user.save(on: request.db)
     return user
   }
 
@@ -49,14 +56,14 @@ extension UserDatabaseService {
     familyName: String?,
     rawUserDetectionStatus: String?
   ) async throws -> User {
-    let user = User(id: userID)
+    let user = try await fetchOrCreateUser(request, for: userID)
 
     user.email = email
     user.givenName = givenName
     user.familyName = familyName
     user.rawUserDetectionStatus = rawUserDetectionStatus
 
-    try await user.save(on: request.db) // This should upsert according to the docs
+    try await user.save(on: request.db)
     return user
   }
 
