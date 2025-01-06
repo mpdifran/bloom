@@ -16,6 +16,18 @@ final class User: Model, Content, @unchecked Sendable {
   @ID(custom: "id", generatedBy: .user)
   var id: UserIdentifier?
 
+  @Field(key: "email")
+  var email: String?
+
+  @Field(key: "given_name")
+  var givenName: String?
+
+  @Field(key: "family_name")
+  var familyName: String?
+
+  @Field(key: "user_detection_status")
+  var rawUserDetectionStatus: String?
+
   @Field(key: "access_token")
   var accessToken: String?
 
@@ -37,12 +49,20 @@ final class User: Model, Content, @unchecked Sendable {
   init() { }
 
   init(id: UserIdentifier,
+       email: String? = nil,
+       givenName: String? = nil,
+       familyName: String? = nil,
+       rawUserDetectionStatus: String? = nil,
        accessToken: String? = nil,
        refreshToken: String? = nil,
        idToken: String? = nil,
        accessTokenExpiry: Date? = nil,
        lastActiveAt: Date = Date()) {
     self.id = id
+    self.email = email
+    self.givenName = givenName
+    self.familyName = familyName
+    self.rawUserDetectionStatus = rawUserDetectionStatus
     self.accessToken = accessToken
     self.refreshToken = refreshToken
     self.idToken = idToken
@@ -53,6 +73,10 @@ final class User: Model, Content, @unchecked Sendable {
 extension User: Authenticatable { }
 
 extension User {
+
+  var userDetectionStatus: AuthenticationRequest.UserDetectionStatus? {
+    AuthenticationRequest.UserDetectionStatus(rawValue: rawUserDetectionStatus ?? "")
+  }
 
   func generateToken() throws -> UserToken {
     UserToken(value: [UInt8].random(count: 32).base64,

@@ -57,6 +57,16 @@ private extension AuthenticationController {
       tokenResponse: appleTokens
     )
 
+    // Store user details
+    try await userService.storeUserDetails(
+      request,
+      userID: auth.userIdentifier,
+      email: auth.email,
+      givenName: auth.givenName,
+      familyName: auth.familyName,
+      rawUserDetectionStatus: auth.userDetectionStatus.rawValue
+    )
+
     let userToken = try user.generateToken()
     try await userToken.save(on: request.db)
 

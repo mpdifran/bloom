@@ -27,4 +27,24 @@ extension User {
       try await database.schema(User.schema).delete()
     }
   }
+
+  struct AddUserDetails: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("email", .string)
+        .field("given_name", .string)
+        .field("family_name", .string)
+        .field("user_detection_status", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("email")
+        .deleteField("given_name")
+        .deleteField("family_name")
+        .deleteField("user_detection_status")
+        .update()
+    }
+  }
 }

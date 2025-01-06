@@ -21,7 +21,12 @@ extension UserDatabaseService {
       .first()
   }
 
-  func storeTokens(_ request: Request, userID: UserIdentifier, tokenResponse: AppleTokenResponse) async throws -> User {
+  @discardableResult
+  func storeTokens(
+    _ request: Request,
+    userID: UserIdentifier,
+    tokenResponse: AppleTokenResponse
+  ) async throws -> User {
     let user = User(id: userID)
 
     user.accessToken = tokenResponse.accessToken
@@ -30,6 +35,26 @@ extension UserDatabaseService {
 
     let expiryDate = Date().addingTimeInterval(tokenResponse.expiresIn)
     user.accessTokenExpiry = expiryDate
+
+    try await user.save(on: request.db) // This should upsert according to the docs
+    return user
+  }
+
+  @discardableResult
+  func storeUserDetails(
+    _ request: Request,
+    userID: UserIdentifier,
+    email: String?,
+    givenName: String?,
+    familyName: String?,
+    rawUserDetectionStatus: String?
+  ) async throws -> User {
+    let user = User(id: userID)
+
+    user.email = email
+    user.givenName = givenName
+    user.familyName = familyName
+    user.rawUserDetectionStatus = rawUserDetectionStatus
 
     try await user.save(on: request.db) // This should upsert according to the docs
     return user

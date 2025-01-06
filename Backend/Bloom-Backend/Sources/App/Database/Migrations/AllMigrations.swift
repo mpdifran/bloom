@@ -18,4 +18,5 @@ let allMigrations: [Migration] = [
     FoodItemRecord.AddNeedsMoreInfoAndNotes(),
     User.Create(),
     UserToken.Create(),
+    User.AddUserDetails(),
 ]

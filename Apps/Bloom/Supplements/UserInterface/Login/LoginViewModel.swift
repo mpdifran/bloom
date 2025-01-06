@@ -47,11 +47,23 @@ extension LoginView.ViewModel {
       throw AuthError.invalidCredentials
     }
 
+    let userDetectionStatus: AuthenticationRequest.UserDetectionStatus
+    switch credential.realUserStatus {
+    case .unsupported: userDetectionStatus = .unsupported
+    case .unknown: userDetectionStatus = .unknown
+    case .likelyReal: userDetectionStatus = .likelyReal
+    @unknown default: userDetectionStatus = .newCase
+    }
+
     let userIdentifier = UserIdentifier(credential.user)
     let authRequest = AuthenticationRequest(
       userIdentifier: userIdentifier,
       identityToken: identityToken,
-      authorizationCode: authCode
+      authorizationCode: authCode,
+      email: credential.email,
+      givenName: credential.fullName?.givenName,
+      familyName: credential.fullName?.familyName,
+      userDetectionStatus: userDetectionStatus
     )
 
     let authResponse = try await NetworkRequester.shared.authenticate(request: authRequest)
