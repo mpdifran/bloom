@@ -9,14 +9,37 @@ import Foundation
 import BloomModel
 
 extension URLRequest {
-  static let baseURL = URL(string: "https://bloom-api-5903aeb2ee43.herokuapp.com")!
+
+  static func post(_ path: String, body: Encodable) async throws -> URLRequest {
+    let base = await APIHost.shared.resolvedHost
+    return try URLRequest(url: base.appendingPathComponent(path)).encoding(body: body)
+  }
 }
 
 extension URLRequest {
   enum Auth {
+    static func signIn(body: AuthenticationRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/auth/sign-in", body: body)
+    }
+  }
+}
 
-    static func signIn(request: AuthenticationRequest) throws -> URLRequest {
-      try URLRequest(url: baseURL.appendingPathComponent("v1/auth/sign-in")).encoding(body: request)
+extension URLRequest {
+  enum Food {
+    static func autocomplete(body: FoodAutocompleteRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/autocomplete", body: body)
+    }
+    static func search(body: FoodSearchRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/search", body: body)
+    }
+    static func uploadFood(body: UploadNewFoodRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/upload", body: body)
+    }
+    static func estimateFood(body: EstimateFoodCaloriesRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/estimate", body: body)
+    }
+    static func markAsInaccurate(body: MarkFoodInaccurateRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/mark-as-inaccurate", body: body)
     }
   }
 }

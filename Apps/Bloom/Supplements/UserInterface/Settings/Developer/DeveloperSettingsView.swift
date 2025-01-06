@@ -30,8 +30,12 @@ struct DeveloperSettingsView: View {
   var body: some View {
     NavigationStack {
       List {
+        networkSection
         healthPermissionsSection
-        developerSection
+        danieleSection
+        adminActionsSection
+        debugSection
+        designSection
         authSection
       }
       .navigationTitle("Developer Tools")
@@ -69,6 +73,21 @@ extension DeveloperSettingsView {
     self.authStatus = (try? await HealthPermissionChecker.shared.checkAccessForAllTypes()) ?? .unknown
   }
 
+  var networkSection: some View {
+    Section {
+      LabeledContent("Host") {
+        TextField("", text: APIHost.shared.$base, prompt: Text("ex: 192.168.1.1"))
+          .multilineTextAlignment(.trailing)
+          .textInputAutocapitalization(.never)
+          .autocorrectionDisabled()
+      }
+    } header: {
+      Text("Network")
+    } footer: {
+      Text("Current host: \(APIHost.shared.resolvedHost.absoluteString)")
+    }
+  }
+
   @ViewBuilder
   var healthPermissionsSection: some View {
     if authStatus == .shouldRequest || shouldPromptForNotificationPermissions {
@@ -99,28 +118,41 @@ extension DeveloperSettingsView {
     }
   }
 
-  var developerSection: some View {
-    Section("Developer") {
+  var danieleSection: some View {
+    Section("Daniele") {
       Toggle("Daniele Mode", isOn: $danieleMode)
 
       Button {
-        presentedSheet = ColorPaletteView().asAny
+        Task {
+          do {
+            let jsonString = try await JSONGenerator.shared.generateJSONString()
+            UIPasteboard.general.string = jsonString
+
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Copied to Clipboard",
+                message: "The data for your Vitals have been copied to your clipboard."
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
+          }
+        }
       } label: {
-        LabeledContent("Color Palette") {
-          Image(systemName: "paintpalette")
+        HStack {
+          Text("Copy Vitals JSON to Clipboard")
+          Spacer()
+          DisclosureIndicator()
         }
       }
       .buttonStyle(.plain)
+    }
+  }
 
-      Button {
-        hasShownOnboarding = false
-      } label: {
-        LabeledContent("Reset Onboarding") {
-          Image(systemName: "arrow.uturn.backward.square.fill")
-        }
-      }
-      .buttonStyle(.plain)
-
+  var debugSection: some View {
+    Section("Debug") {
       Button {
         presentedSheet = DebugHabitsListView().asAny
       } label: {
@@ -139,6 +171,19 @@ extension DeveloperSettingsView {
           Text("Debug Food Item Logs")
           Spacer()
           DisclosureIndicator()
+        }
+      }
+      .buttonStyle(.plain)
+    }
+  }
+
+  var adminActionsSection: some View {
+    Section("Admin Actions") {
+      Button {
+        hasShownOnboarding = false
+      } label: {
+        LabeledContent("Reset Onboarding") {
+          Image(systemName: "arrow.uturn.backward.square.fill")
         }
       }
       .buttonStyle(.plain)
@@ -190,43 +235,16 @@ extension DeveloperSettingsView {
         }
       }
       .buttonStyle(.plain)
+    }
+  }
 
+  var designSection: some View {
+    Section("Design") {
       Button {
-        Task {
-          await NotificationManager.shared.sendGoodMorningNotification(message: "Test")
-        }
+        presentedSheet = ColorPaletteView().asAny
       } label: {
-        HStack {
-          Text("Send Good Morning Notification")
-          Spacer()
-          DisclosureIndicator()
-        }
-      }
-      .buttonStyle(.plain)
-
-      Button {
-        Task {
-          do {
-            let jsonString = try await JSONGenerator.shared.generateJSONString()
-            UIPasteboard.general.string = jsonString
-
-            await MainActor.run {
-              alertDetails = AlertDetails(
-                title: "Copied to Clipboard",
-                message: "The data for your Vitals have been copied to your clipboard."
-              )
-            }
-          } catch {
-            await MainActor.run {
-              self.error = error
-            }
-          }
-        }
-      } label: {
-        HStack {
-          Text("Copy Vitals JSON to Clipboard")
-          Spacer()
-          DisclosureIndicator()
+        LabeledContent("Color Palette") {
+          Image(systemName: "paintpalette")
         }
       }
       .buttonStyle(.plain)
