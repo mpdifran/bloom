@@ -15,7 +15,7 @@ struct OnboardingButtonStyle: ButtonStyle {
             configuration.label
             Spacer(minLength: 0)
         }
-        .foregroundStyle(.white)
+        .foregroundStyle(.invertedText)
         .font(.title3)
         .fontDesign(.rounded)
         .bold()
