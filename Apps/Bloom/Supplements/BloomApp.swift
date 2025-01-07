@@ -27,7 +27,15 @@ struct BloomApp: App {
     }
 
     Task {
-      await UserController.shared.verifyAuthentication()
+      do {
+        try await UserController.shared.verifyAuthentication()
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "BloomApp.verifyAuthentication",
+          category: .appState,
+          message: error.localizedDescription
+        )
+      }
     }
 
     //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()

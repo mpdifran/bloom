@@ -66,11 +66,9 @@ extension LoginView.ViewModel {
       userDetectionStatus: userDetectionStatus
     )
 
-    let authResponse = try await NetworkRequester.shared.authenticate(request: authRequest)
-
-    await UserController.shared.authenticate(
+    try await UserController.shared.authenticate(
       userIdentifier: userIdentifier,
-      authToken: authResponse.authToken
+      authRequest: authRequest
     )
   }
 }

@@ -47,7 +47,7 @@ final actor UserController {
 
 extension UserController {
 
-  func verifyAuthentication() async {
+  func verifyAuthentication() async throws {
     guard let userIdentifier = authenticatedUserIdentifier else { return }
 
     let provider = ASAuthorizationAppleIDProvider()
@@ -60,7 +60,7 @@ extension UserController {
         // We're good
         break
       case .revoked, .notFound:
-        logout()
+        try await logout()
       case .transferred:
         // Refresh user identifier when transferring ownership of app
         break
@@ -76,9 +76,11 @@ extension UserController {
     }
   }
 
-  func authenticate(userIdentifier: UserIdentifier, authToken: AuthToken) {
+  func authenticate(userIdentifier: UserIdentifier, authRequest: AuthenticationRequest) async throws {
+    let authResponse = try await NetworkRequester.shared.authenticate(request: authRequest)
+
     self.authenticatedUserIdentifier = userIdentifier
-    self.authToken = authToken
+    self.authToken = authResponse.authToken
 
     storeAuthenticatedUserIdentifier()
     storeAuthToken()
@@ -86,7 +88,9 @@ extension UserController {
     self.isAuthenticated = self.authToken != nil
   }
 
-  func logout() {
+  func logout() async throws {
+    try await NetworkRequester.shared.signOut()
+
     authenticatedUserIdentifier = nil
     authToken = nil
 

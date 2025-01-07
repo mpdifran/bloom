@@ -24,6 +24,8 @@ struct SettingsView: View {
 
   @State private var userControllerViewModel = UserControllerViewModel()
   @State private var presentedSheet: AnyView?
+  @State private var isSigningOut: Bool = false
+  @State private var error: Error?
 
   @Query private var userAddedHabits: [Habit]
   @Query private var allHabits: [Habit]
@@ -58,6 +60,7 @@ struct SettingsView: View {
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
     .sheet($presentedSheet)
+    .alert(error: $error)
   }
 }
 
@@ -320,10 +323,8 @@ extension SettingsView {
 
         Group {
           if userControllerViewModel.isAuthenticated {
-            Button {
-              Task {
-                await UserController.shared.logout()
-              }
+            AsyncButton {
+              try await UserController.shared.logout()
             } label: {
               Text("Sign Out")
             }

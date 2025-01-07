@@ -10,6 +10,11 @@ import BloomModel
 
 extension URLRequest {
 
+  static func get(_ path: String) async -> URLRequest {
+    let base = await APIHost.shared.resolvedHost
+    return URLRequest(url: base.appendingPathComponent(path))
+  }
+
   static func post(_ path: String, body: Encodable) async throws -> URLRequest {
     let base = await APIHost.shared.resolvedHost
     return try URLRequest(url: base.appendingPathComponent(path)).encoding(body: body)
@@ -20,6 +25,14 @@ extension URLRequest {
   enum Auth {
     static func signIn(body: AuthenticationRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/auth/sign-in", body: body)
+    }
+  }
+}
+
+extension URLRequest {
+  enum User {
+    static func logout() async -> URLRequest {
+      await URLRequest.get("v1/user/logout")
     }
   }
 }

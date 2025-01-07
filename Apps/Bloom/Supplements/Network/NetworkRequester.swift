@@ -22,6 +22,11 @@ extension NetworkRequester {
       responseType: AuthenticationResponse.self
     )
   }
+
+  func signOut() async throws {
+    let request = await URLRequest.User.logout()
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
 }
 
 extension NetworkRequester {

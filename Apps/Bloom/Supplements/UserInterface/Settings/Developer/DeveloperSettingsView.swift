@@ -270,10 +270,10 @@ extension DeveloperSettingsView {
       }
 
       if viewModel.isAuthenticated {
-        Button("Log Out", role: .destructive) {
-          Task {
-            await UserController.shared.logout()
-          }
+        AsyncButton(role: .destructive) {
+          try await UserController.shared.logout()
+        } label: {
+          Text("Log Out")
         }
       } else {
         Button("Show Log In") {
