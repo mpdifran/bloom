@@ -329,7 +329,7 @@ extension SettingsView {
             }
           } else {
             Button {
-              presentedSheet = LoginView().asAny
+              presentedSheet = LoginView { }.asAny
             } label: {
               Text("Sign In")
             }

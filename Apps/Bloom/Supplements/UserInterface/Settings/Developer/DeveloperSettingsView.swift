@@ -268,7 +268,7 @@ extension DeveloperSettingsView {
         }
       } else {
         Button("Show Log In") {
-          presentedSheet = LoginView().asAny
+          presentedSheet = LoginView { }.asAny
         }
       }
     }

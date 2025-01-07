@@ -15,6 +15,8 @@ private extension Double {
 }
 
 struct LoginView: View {
+  let onFinish: () -> Void
+
   @Environment(\.colorScheme) var colorScheme
   @Environment(\.dismiss) var dismiss
 
@@ -40,7 +42,7 @@ struct LoginView: View {
         .resizable()
         .frame(square: 160)
 
-      Text("Welcome to Bloom")
+      Text("Sign in to log your food")
         .font(.system(size: 30))
         .bold()
         .fontDesign(.rounded)
@@ -107,6 +109,7 @@ private extension LoginView {
   var dismissButton: some View {
     Button {
       dismiss()
+      onFinish()
     } label: {
       Image(systemName: "xmark.circle.fill")
         .foregroundStyle(.text.secondary, .regularMaterial)
@@ -141,7 +144,10 @@ private extension LoginView {
         Task {
           do {
             try await viewModel.authenticate(using: credential)
-            dismiss()
+            await MainActor.run {
+              dismiss()
+              onFinish()
+            }
           } catch {
             TelemetryDeck.errorOccurred(
               id: "LoginView.authenticate",
@@ -169,5 +175,7 @@ private extension LoginView {
 }
 
 #Preview {
-  LoginView()
+  LoginView {
+
+  }
 }

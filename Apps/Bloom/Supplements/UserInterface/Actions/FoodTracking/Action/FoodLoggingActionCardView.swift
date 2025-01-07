@@ -31,6 +31,7 @@ struct FoodLoggingActionCardView: View {
   @State private var healthPermissionTrigger = false
   @State private var presentedSheet: AnyView?
   @State private var selectedTab = FoodItemCategoryTab.branded
+  @State private var userControllerViewModel = UserControllerViewModel()
 
   @Environment(\.dismiss) private var dismiss
 
@@ -91,6 +92,18 @@ struct FoodLoggingActionCardView: View {
         viewModel.country = country
       }
       locationViewModel.requestLocation()
+    }
+    .task {
+      let isAuthenticated = await UserController.shared.isAuthenticated
+      if !isAuthenticated {
+        await MainActor.run {
+          presentedSheet = LoginView {
+            if !userControllerViewModel.isAuthenticated {
+              dismiss()
+            }
+          }.asAny
+        }
+      }
     }
     .task {
       await checkHealthAuth()
