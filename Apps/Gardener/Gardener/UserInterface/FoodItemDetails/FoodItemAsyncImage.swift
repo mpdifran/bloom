@@ -25,7 +25,13 @@ struct FoodItemAsyncImage: View {
       AsyncImage(url: url) { phase in
         switch phase {
         case .empty:
-          ProgressView()
+          VStack {
+            Spacer()
+            ProgressView()
+              .horizontallyCentered()
+            Spacer()
+          }
+          .aspectRatio(contentMode: .fit)
         case .success(let image):
           ZStack(alignment: .topTrailing) {
             image

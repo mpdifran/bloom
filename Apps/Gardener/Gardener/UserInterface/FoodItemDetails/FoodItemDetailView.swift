@@ -183,10 +183,17 @@ private extension FoodItemDetailView {
     .overlay {
       if isImageDropTargeted {
         ZStack {
-          Color.black.opacity(0.7)
+          Rectangle()
+            .fill(.thinMaterial)
 
-          Image(systemName: "plus.circle.fill")
-            .font(.system(size: 60))
+          VStack(spacing: 30) {
+            Image(systemName: "plus.circle.fill")
+              .font(.system(size: 60))
+            Text("Replace Image")
+              .font(.largeTitle)
+              .fontDesign(.rounded)
+              .bold()
+          }
         }
       }
     }
@@ -203,6 +210,7 @@ private extension FoodItemDetailView {
           .padding(10)
           .background(.regularMaterial, in: Circle())
       }
+      .buttonStyle(.plain)
       .padding(4)
 
       Button {
@@ -213,6 +221,7 @@ private extension FoodItemDetailView {
           .padding(10)
           .background(.regularMaterial, in: Circle())
       }
+      .buttonStyle(.plain)
       .padding(4)
 
       Button {
@@ -223,6 +232,7 @@ private extension FoodItemDetailView {
           .padding(10)
           .background(.regularMaterial, in: Circle())
       }
+      .buttonStyle(.plain)
       .padding(4)
     }
   }
