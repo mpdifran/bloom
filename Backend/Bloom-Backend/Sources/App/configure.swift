@@ -10,12 +10,12 @@ public func configure(_ app: Application) async throws {
   // Debug
   app.printEnvironmentInfo()
 
+  // Middleware
+  app.middleware.use(UserToken.authenticator()) // This should be added before the routes are configured.
+
   // Routes
   app.routes.defaultMaxBodySize = "10mb"
   try routes(app)
-
-  // Middleware
-//  app.middleware.use(UserToken.authenticator())
 
   // Database
   try app.setupPostgres()
