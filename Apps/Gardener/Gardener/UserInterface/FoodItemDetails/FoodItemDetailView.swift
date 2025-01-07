@@ -47,6 +47,9 @@ struct FoodItemDetailView: View {
     .alert(alertDetails: $alertDetails)
     .alert(error: $viewModel.error)
     .confirmationDialog($confirmationDialogDetails)
+    .onDrop(of: [.fileURL, .image], isTargeted: nil) { providers in
+      viewModel.handleDrop(providers: providers, type: selectedImageTab)
+    }
   }
 }
 

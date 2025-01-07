@@ -8,6 +8,7 @@
 import BloomModel
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 @MainActor
 final class FoodItemDetailViewModel: ObservableObject {
@@ -104,5 +105,41 @@ extension FoodItemDetailViewModel {
         print("Failed to load image")
       }
     }
+  }
+
+  func handleDrop(providers: [NSItemProvider], type: FoodItemDetailView.ImageTab) -> Bool {
+    if let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) {
+      provider.loadItem(forTypeIdentifier: "public.file-url", options: nil) { [weak self] item, error in
+        guard
+          let data = item as? Data,
+              let url = URL(dataRepresentation: data, relativeTo: nil) else {
+          print("Failed to load file URL from drop")
+          return
+        }
+        if let selectedImage = NSImage(contentsOf: url) {
+          Task { @MainActor in
+            self?.selectedPackagingImage = selectedImage
+          }
+        } else {
+          print("Failed to load image from URL")
+        }
+      }
+      return true
+    }
+
+    if let provider = providers.first(where: { $0.canLoadObject(ofClass: NSImage.self) }) {
+      provider.loadObject(ofClass: NSImage.self) { [weak self] image, error in
+        guard let nsImage = image as? NSImage else {
+          print("Failed to load image from drop")
+          return
+        }
+        Task { @MainActor in
+          self?.selectedPackagingImage = nsImage
+        }
+      }
+      return true
+    }
+
+    return false
   }
 }
