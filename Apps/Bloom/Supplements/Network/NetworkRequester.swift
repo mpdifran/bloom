@@ -16,13 +16,11 @@ extension NetworkRequester {
 
   func authenticate(request: AuthenticationRequest) async throws -> AuthenticationResponse {
     let request = try await URLRequest.Auth.signIn(body: request)
-    let (data, _) = try await URLSession.shared.data(for: request)
 
-    if let string = String(data: data, encoding: .utf8) {
-      print(string)
-    }
-
-    return try JSONDecoder.bloomModel.decode(AuthenticationResponse.self, from: data)
+    return try await URLSession.shared.bloomResponse(
+      request: request,
+      responseType: AuthenticationResponse.self
+    )
   }
 }
 
@@ -31,11 +29,13 @@ extension NetworkRequester {
   func foodAutocomplete(query: String) async throws -> [String] {
     let body = FoodAutocompleteRequest(query: query)
     let request = try await URLRequest.Food.autocomplete(body: body)
-    let (data, _) = try await URLSession.shared.data(for: request)
-    let response = try JSONDecoder.bloomModel.decode(FoodAutocompleteResponse.self, from: data)
+
+    let response = try await URLSession.shared.authenticatedBloomResponse(
+      request: request,
+      responseType: FoodAutocompleteResponse.self
+    )
     return response.tokens
   }
-
 
   func foodSearch(name: String, brand: String?, preferredCountry: FoodCountry) async throws -> [FoodSearchResponse.Section] {
     let body = FoodSearchRequest(
@@ -44,8 +44,10 @@ extension NetworkRequester {
       country: preferredCountry
     )
     let request = try await URLRequest.Food.search(body: body)
-    let (data, _) = try await URLSession.shared.data(for: request)
-    let response = try JSONDecoder.bloomModel.decode(FoodSearchResponse.self, from: data)
+    let response = try await URLSession.shared.authenticatedBloomResponse(
+      request: request,
+      responseType: FoodSearchResponse.self
+    )
     return response.sections
   }
 
@@ -58,8 +60,10 @@ extension NetworkRequester {
       country: country
     )
     let request = try await URLRequest.Food.search(body: body)
-    let (data, _) = try await URLSession.shared.data(for: request)
-    let response = try JSONDecoder.bloomModel.decode(FoodSearchResponse.self, from: data)
+    let response = try await URLSession.shared.authenticatedBloomResponse(
+      request: request,
+      responseType: FoodSearchResponse.self
+    )
     return response.sections
   }
 
@@ -90,8 +94,10 @@ extension NetworkRequester {
     )
 
     let request = try await URLRequest.Food.uploadFood(body: body)
-    let (data, _) = try await URLSession.shared.data(for: request)
-    return try JSONDecoder.bloomModel.decode(UploadNewFoodResponse.self, from: data)
+    return try await URLSession.shared.authenticatedBloomResponse(
+      request: request,
+      responseType: UploadNewFoodResponse.self
+    )
   }
 
   func foodAIEstimate(image: UIImage) async throws -> EstimateFoodCaloriesResponse {
@@ -107,8 +113,10 @@ extension NetworkRequester {
     )
 
     let request = try await URLRequest.Food.estimateFood(body: body)
-    let (data, _) = try await URLSession.shared.data(for: request)
-    return try JSONDecoder.bloomModel.decode(EstimateFoodCaloriesResponse.self, from: data)
+    return try await URLSession.shared.authenticatedBloomResponse(
+      request: request,
+      responseType: EstimateFoodCaloriesResponse.self
+    )
   }
 
   func markFoodAsInaccurate(foodID: FoodItemIdentifier) async throws {
@@ -116,7 +124,7 @@ extension NetworkRequester {
       foodId: foodID
     )
     let request = try await URLRequest.Food.markAsInaccurate(body: body)
-    let _ = try await URLSession.shared.data(for: request)
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
 }
 

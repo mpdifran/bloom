@@ -23,12 +23,16 @@ struct FoodController {
 extension FoodController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
-    routes.group("v1", "food") { food in
-      food.post("autocomplete", use: autocomplete)
-      food.post("estimate", use: estimateFoodCalories)
-      food.post("search", use: searchFoods)
-      food.post("upload", use: uploadNewFood)
-      food.post("mark-as-inaccurate", use: markAsInaccurate)
+    routes.group("v1") {
+      $0.group(UserToken.guardMiddleware()) {
+        $0.group("food") {
+          $0.post("autocomplete", use: autocomplete)
+          $0.post("estimate", use: estimateFoodCalories)
+          $0.post("search", use: searchFoods)
+          $0.post("upload", use: uploadNewFood)
+          $0.post("mark-as-inaccurate", use: markAsInaccurate)
+        }
+      }
     }
   }
 }

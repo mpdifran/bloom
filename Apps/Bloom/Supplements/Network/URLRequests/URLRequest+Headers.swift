@@ -24,13 +24,11 @@ extension URLRequest {
 extension URLRequest {
     enum Header {
         case authorizationBearer(AuthToken)
-        case userIdentifier(String)
         case contentTypeJSON
     }
 
     enum HeaderKey: String {
         case authorization = "Authorization"
-        case userIdentifier = "X-BLOOM-USER-ID"
         case contentType = "Content-Type"
     }
 
@@ -38,8 +36,6 @@ extension URLRequest {
         switch header {
         case .authorizationBearer(let token):
             addValue("Bearer \(token)", for: .authorization)
-        case .userIdentifier(let userID):
-            addValue(userID, for: .userIdentifier)
         case .contentTypeJSON:
             addValue("application/json", for: .contentType)
         }
@@ -47,10 +43,6 @@ extension URLRequest {
 
     func value(for headerKey: HeaderKey) -> String? {
         value(forHTTPHeaderField: headerKey.rawValue)
-    }
-
-    var userIdentifier: UUID? {
-        UUID(uuidString: value(for: .userIdentifier) ?? "")
     }
 }
 

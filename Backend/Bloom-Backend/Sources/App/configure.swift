@@ -15,7 +15,7 @@ public func configure(_ app: Application) async throws {
   try routes(app)
 
   // Middleware
-//  app.middleware.use(UserToken.authenticator())
+  app.middleware.use(UserToken.authenticator())
 
   // Database
   try app.setupPostgres()
