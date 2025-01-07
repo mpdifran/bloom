@@ -23,6 +23,7 @@ struct FoodItemDetailView: View {
   @State private var isDeleting = false
   @State private var alertDetails: AlertDetails?
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
+  @State private var isImageDropTargeted = false
 
   @State private var fatsUnit: NutritionUnit = .grams
   @State private var carbsUnit: NutritionUnit = .grams
@@ -176,6 +177,20 @@ private extension FoodItemDetailView {
 
       createImageToolbar(for: type)
     }
+    .onDrop(of: [.fileURL, .image], isTargeted: $isImageDropTargeted) { providers in
+      viewModel.handleDrop(providers: providers, type: selectedImageTab)
+    }
+    .overlay {
+      if isImageDropTargeted {
+        ZStack {
+          Color.black.opacity(0.7)
+
+          Image(systemName: "plus.circle.fill")
+            .font(.system(size: 60))
+        }
+      }
+    }
+    .animation(.default, value: isImageDropTargeted)
   }
 
   func createImageToolbar(for type: ImageTab) -> some View {

@@ -10,4 +10,7 @@
    <FileRef
       location = "group:Backend/Bloom-Backend">
    </FileRef>
+   <FileRef
+      location = "group:Shared/BloomModel">
+   </FileRef>
 </Workspace>

@@ -8,6 +8,7 @@
 import BloomModel
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 @MainActor
 final class FoodItemDetailViewModel: ObservableObject {
@@ -93,16 +94,55 @@ extension FoodItemDetailViewModel {
     panel.allowsMultipleSelection = false
 
     if panel.runModal() == .OK, let url = panel.url {
-      if let selectedImage = NSImage(contentsOf: url) {
-        switch type {
-        case .packaging:
-          selectedPackagingImage = selectedImage
-        case .nutritionLabel:
-          selectedNutritionLabel = selectedImage
+      let selectedImage = NSImage(contentsOf: url)
+      setImage(image: selectedImage, for: type)
+    }
+  }
+
+  func handleDrop(providers: [NSItemProvider], type: FoodItemDetailView.ImageTab) -> Bool {
+    // Handle dropped URLs.
+    if let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) {
+      provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier) { [weak self] item, _ in
+        guard
+          let data = item as? Data,
+          let url = URL(dataRepresentation: data, relativeTo: nil) else {
+          print("Failed to load file URL from drop")
+          return
         }
-      } else {
-        print("Failed to load image")
+        let selectedImage = NSImage(contentsOf: url)
+        Task { @MainActor in
+          self?.setImage(image: selectedImage, for: type)
+        }
       }
+      return true
+    }
+
+    // Handle dropped images.
+    if let provider = providers.first(where: { $0.canLoadObject(ofClass: NSImage.self) }) {
+      provider.loadObject(ofClass: NSImage.self) { [weak self] image, _ in
+        guard let nsImage = image as? NSImage else {
+          print("Failed to load image from drop")
+          return
+        }
+        Task { @MainActor in
+          self?.setImage(image: nsImage, for: type)
+        }
+      }
+      return true
+    }
+
+    return false
+  }
+}
+
+private extension FoodItemDetailViewModel {
+
+  func setImage(image: NSImage?, for type: FoodItemDetailView.ImageTab) {
+    switch type {
+    case .packaging:
+      selectedPackagingImage = image
+    case .nutritionLabel:
+      selectedNutritionLabel = image
     }
   }
 }
