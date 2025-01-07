@@ -21,6 +21,8 @@ struct DeveloperSettingsView: View {
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
 
+  @ObservedObject private var apiHost = APIHost.shared
+
   @Environment(\.dismiss) private var dismiss
 
   @State private var viewModel = UserControllerViewModel()
@@ -50,6 +52,7 @@ struct DeveloperSettingsView: View {
     }
     .fullScreenCover($presentedFullScreenView)
     .sheet($presentedSheet)
+    .animation(.default, value: apiHost.overrideEnabled)
     .onAppear {
       Task {
         shouldPromptForNotificationPermissions = await NotificationManager.shared.shouldRequestAuthorization()
@@ -75,16 +78,21 @@ extension DeveloperSettingsView {
 
   var networkSection: some View {
     Section {
-      LabeledContent("Host") {
-        TextField("", text: APIHost.shared.$base, prompt: Text("ex: 192.168.1.1"))
-          .multilineTextAlignment(.trailing)
-          .textInputAutocapitalization(.never)
-          .autocorrectionDisabled()
+      Toggle("Override Host", isOn: apiHost.$overrideEnabled)
+        .tint(.mutedPurple)
+
+      if apiHost.overrideEnabled {
+        LabeledContent("Host") {
+          TextField("", text: apiHost.$base, prompt: Text("ex: 192.168.1.1"))
+            .multilineTextAlignment(.trailing)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+        }
       }
     } header: {
       Text("Network")
     } footer: {
-      Text("Current host: \(APIHost.shared.resolvedHost.absoluteString)")
+      Text("Current host: \(apiHost.resolvedHost.absoluteString)")
     }
   }
 
@@ -121,6 +129,7 @@ extension DeveloperSettingsView {
   var danieleSection: some View {
     Section("Daniele") {
       Toggle("Daniele Mode", isOn: $danieleMode)
+        .tint(.mutedPurple)
 
       Button {
         Task {

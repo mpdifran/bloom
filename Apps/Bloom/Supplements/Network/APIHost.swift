@@ -11,6 +11,7 @@ import SwiftUI
 final class APIHost: ObservableObject {
   static let shared = APIHost()
 
+  @AppStorage("APIHost.overrideEnabled", store: .group) var overrideEnabled: Bool = false
   @AppStorage("APIHost.base", store: .group) var base: String = ""
 
   private init() { }
@@ -19,7 +20,7 @@ final class APIHost: ObservableObject {
 extension APIHost {
 
   var resolvedHost: URL {
-    if let url = URL(string: base), base.isNotEmpty {
+    if let url = URL(string: base), base.isNotEmpty, overrideEnabled {
       return url
     }
     return URL(string: "https://bloom-api-5903aeb2ee43.herokuapp.com/")!
