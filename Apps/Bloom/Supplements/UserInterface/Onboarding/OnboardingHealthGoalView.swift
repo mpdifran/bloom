@@ -11,231 +11,231 @@ import HealthKit
 import TelemetryDeck
 
 struct OnboardingHealthGoalView: View {
-    let onContinue: () -> Void
+  let onContinue: () -> Void
 
-    @ObservedObject private var healthManager = HealthManager.shared
+  @ObservedObject private var healthManager = HealthManager.shared
 
-    @State private var index = 1
-    @State private var didContinue = false
-    @State private var currentWeight: HKQuantity?
+  @State private var index = 1
+  @State private var didContinue = false
+  @State private var currentWeight: HKQuantity?
 
-    @State private var presentedSheet: AnyView?
+  @State private var presentedSheet: AnyView?
 
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                Group {
-                    Text("Let's talk about your goals.")
-                        .transition(.opacity)
-                        .appear(with: 1, currentIndex: index)
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: 20) {
+        Group {
+          Text("Let's talk about your goals.")
+            .transition(.opacity)
+            .appear(with: 1, currentIndex: index)
 
-                    Text("Where would you like to focus your efforts?")
-                        .transition(.opacity)
-                        .appear(with: 2, currentIndex: index)
-                }
-                .onboardingTextStyle()
-
-                goalPickerView
-                    .transition(.blurReplace)
-                    .appear(with: 3, currentIndex: index)
-
-                if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
-                    targetWeightView
-                        .transition(.blurReplace)
-                        .appear(with: 3, currentIndex: index)
-                }
-            }
-            .horizontalAlignment(.leading)
-            .padding()
+          Text("Where would you like to focus your efforts?")
+            .transition(.opacity)
+            .appear(with: 2, currentIndex: index)
         }
-        .topSafeAreaBlur()
-        .sheet($presentedSheet)
-        .animation(.default, value: index)
-        .animation(.default, value: healthManager.healthGoal)
-        .sensoryFeedback(.selection, trigger: index)
-        .sensoryFeedback(.selection, trigger: healthManager.healthGoal)
-        .sensoryFeedback(.selection, trigger: didContinue)
-        .shelf(spacing: 0) {
-            if index >= 3 {
-                VStack {
-                    if healthManager.healthGoal == .loseWeight && healthManager.targetWeight < 1 {
-                        Text("Please enter what your ideal weight is.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Button("Looks good") {
-                        didContinue.toggle()
-                        onContinue()
-                    }
-                    .buttonStyle(.onboarding)
-                    .disabled(!canContinue)
-                }
-            }
+        .onboardingTextStyle()
+
+        goalPickerView
+          .transition(.blurReplace)
+          .appear(with: 3, currentIndex: index)
+
+        if healthManager.healthGoal.isWeightRelated {
+          targetWeightView
+            .transition(.blurReplace)
+            .appear(with: 3, currentIndex: index)
         }
-        .task {
-            while index < 3 {
-                await advanceIndex()
-            }
-        }
-        .onAppear {
-            TelemetryDeck.signal("OB Health Goals")
-        }
+      }
+      .horizontalAlignment(.leading)
+      .padding()
     }
+    .topSafeAreaBlur()
+    .sheet($presentedSheet)
+    .animation(.default, value: index)
+    .animation(.default, value: healthManager.healthGoal)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.selection, trigger: healthManager.healthGoal)
+    .sensoryFeedback(.selection, trigger: didContinue)
+    .shelf(spacing: 0) {
+      if index >= 3 {
+        VStack {
+          if healthManager.healthGoal == .loseWeight && healthManager.targetWeight < 1 {
+            Text("Please enter what your ideal weight is.")
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          }
+          Button("Looks good") {
+            didContinue.toggle()
+            onContinue()
+          }
+          .buttonStyle(.onboarding)
+          .disabled(!canContinue)
+        }
+      }
+    }
+    .task {
+      while index < 3 {
+        await advanceIndex()
+      }
+    }
+    .onAppear {
+      TelemetryDeck.signal("OB Health Goals")
+    }
+  }
 }
 
 private extension OnboardingHealthGoalView {
 
-    var goalPickerView: some View {
-        VStack {
-            OnboardingHealthGoalCell(
-                title: "Just Monitor My Health",
-                systemImage: "heart.text.clipboard",
-                isSelected: healthManager.healthGoal == .none
-            )
-            .onTapGesture {
-                healthManager.healthGoal = .none
-            }
+  var goalPickerView: some View {
+    VStack {
+      OnboardingHealthGoalCell(
+        title: "Just Monitor My Health",
+        systemImage: "heart.text.clipboard",
+        isSelected: healthManager.healthGoal == .none
+      )
+      .onTapGesture {
+        healthManager.healthGoal = .none
+      }
 
-            Divider()
+      Divider()
 
-            OnboardingHealthGoalCell(
-                title: "Lose Weight",
-                systemImage: "gauge.with.dots.needle.bottom.0percent",
-                isSelected: healthManager.healthGoal == .loseWeight
-            )
-            .onTapGesture {
-                healthManager.healthGoal = .loseWeight
-            }
+      OnboardingHealthGoalCell(
+        title: "Lose Weight",
+        systemImage: "gauge.with.dots.needle.bottom.0percent",
+        isSelected: healthManager.healthGoal == .loseWeight
+      )
+      .onTapGesture {
+        healthManager.healthGoal = .loseWeight
+      }
 
-            Divider()
+      Divider()
 
-            OnboardingHealthGoalCell(
-                title: "Maintain Weight",
-                systemImage: "gauge.with.dots.needle.bottom.50percent",
-                isSelected: healthManager.healthGoal == .maintainWeight
-            )
-            .onTapGesture {
-                healthManager.healthGoal = .maintainWeight
-            }
+      OnboardingHealthGoalCell(
+        title: "Maintain Weight",
+        systemImage: "gauge.with.dots.needle.bottom.50percent",
+        isSelected: healthManager.healthGoal == .maintainWeight
+      )
+      .onTapGesture {
+        healthManager.healthGoal = .maintainWeight
+      }
 
-            Divider()
+      Divider()
 
-            OnboardingHealthGoalCell(
-                title: "Gain Weight",
-                systemImage: "gauge.with.dots.needle.bottom.100percent",
-                isSelected: healthManager.healthGoal == .gainWeight
-            )
-            .onTapGesture {
-                healthManager.healthGoal = .gainWeight
-            }
+      OnboardingHealthGoalCell(
+        title: "Gain Weight",
+        systemImage: "gauge.with.dots.needle.bottom.100percent",
+        isSelected: healthManager.healthGoal == .gainWeight
+      )
+      .onTapGesture {
+        healthManager.healthGoal = .gainWeight
+      }
+    }
+    .cardContainer(fill: .background.secondary)
+  }
+
+
+  var targetWeightView: some View {
+    VStack(alignment: .leading) {
+      VStack(spacing: 16) {
+        LabeledContent("Target Weight") {
+          HStack {
+            Text("\(targetWeight.displayString(for: .pound()))")
+            Image(systemName: "chevron.up.chevron.down")
+          }
+          .font(.title3)
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
         }
-        .cardContainer(fill: .background.secondary)
-    }
-
-
-    var targetWeightView: some View {
-        VStack(alignment: .leading) {
-            VStack(spacing: 16) {
-                LabeledContent("Target Weight") {
-                    HStack {
-                        Text("\(targetWeight.displayString(for: .pound()))")
-                        Image(systemName: "chevron.up.chevron.down")
-                    }
-                    .font(.title3)
-                    .fontDesign(.rounded)
-                    .foregroundStyle(.tint)
-                }
-                .bold()
-                .selectable()
-                .onTapGesture {
-                    presentedSheet = TargetWeightEditCard().asAny
-                }
-
-                if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
-                    Divider()
-                    LabeledContent(healthManager.healthGoal == .loseWeight ? "Weight Loss Speed" : "Weight Gain Speed") {
-                        Menu {
-                            ForEach(WeightLossSpeed.allCases) { speed in
-                                Button(speed.name, systemImage: speed == healthManager.weightLossSpeed ? "checkmark" : "") {
-                                    healthManager.weightLossSpeed = speed
-                                }
-                            }
-                        } label: {
-                            HStack {
-                                Text(healthManager.weightLossSpeed.name)
-                                Image(systemName: "chevron.up.chevron.down")
-                            }
-                            .font(.title3)
-                            .fontDesign(.rounded)
-                            .bold()
-                        }
-                    }
-                    .bold()
-                }
-            }
-            .cardContainer(fill: .background.secondary)
-
-            if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
-                Text(healthManager.weightLossSpeed.weightLossDescription)
-                    .font(.subheadline)
-                    .bold()
-                    .fontDesign(.rounded)
-                    .padding(.horizontal)
-                    .foregroundStyle(.secondary)
-            }
-        }
-    }
-
-    var targetWeight: HKQuantity {
-        HKQuantity(unit: .pound(), doubleValue: healthManager.targetWeight)
-    }
-
-    func advanceIndex() async {
-        await Delay(1700)
-
-        index += 1
-    }
-
-    var canContinue: Bool {
-        if healthManager.healthGoal == .loseWeight {
-            if healthManager.targetWeight < 1 {
-                return false
-            }
+        .bold()
+        .selectable()
+        .onTapGesture {
+          presentedSheet = TargetWeightEditCard().asAny
         }
 
-        return true
+        if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
+          Divider()
+          LabeledContent(healthManager.healthGoal == .loseWeight ? "Weight Loss Speed" : "Weight Gain Speed") {
+            Menu {
+              ForEach(WeightLossSpeed.allCases) { speed in
+                Button(speed.name, systemImage: speed == healthManager.weightLossSpeed ? "checkmark" : "") {
+                  healthManager.weightLossSpeed = speed
+                }
+              }
+            } label: {
+              HStack {
+                Text(healthManager.weightLossSpeed.name)
+                Image(systemName: "chevron.up.chevron.down")
+              }
+              .font(.title3)
+              .fontDesign(.rounded)
+              .bold()
+            }
+          }
+          .bold()
+        }
+      }
+      .cardContainer(fill: .background.secondary)
+
+      if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
+        Text(healthManager.weightLossSpeed.weightLossDescription)
+          .font(.subheadline)
+          .bold()
+          .fontDesign(.rounded)
+          .padding(.horizontal)
+          .foregroundStyle(.secondary)
+      }
     }
+  }
+
+  var targetWeight: HKQuantity {
+    HKQuantity(unit: .pound(), doubleValue: healthManager.targetWeight)
+  }
+
+  func advanceIndex() async {
+    await Delay(1700)
+
+    index += 1
+  }
+
+  var canContinue: Bool {
+    if healthManager.healthGoal == .loseWeight {
+      if healthManager.targetWeight < 1 {
+        return false
+      }
+    }
+
+    return true
+  }
 }
 
 struct OnboardingHealthGoalCell: View {
-    let title: String
-    let systemImage: String
-    let isSelected: Bool
+  let title: String
+  let systemImage: String
+  let isSelected: Bool
 
-    var body: some View {
-        HStack {
-            Image(systemName: systemImage)
-                .foregroundStyle(.text, .tint)
-                .font(.title3)
-                .bold()
+  var body: some View {
+    HStack {
+      Image(systemName: systemImage)
+        .foregroundStyle(.text, .tint)
+        .font(.title3)
+        .bold()
 
-            Text(title)
-                .bold()
+      Text(title)
+        .bold()
 
-            Spacer()
+      Spacer()
 
-            if isSelected {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.white, .tint)
-                    .font(.title3)
-                    .contentTransition(.symbolEffect)
-            }
-        }
-        .padding(.vertical, 8)
-        .selectable()
+      if isSelected {
+        Image(systemName: "checkmark.circle.fill")
+          .foregroundStyle(.white, .tint)
+          .font(.title3)
+          .contentTransition(.symbolEffect)
+      }
     }
+    .padding(.vertical, 8)
+    .selectable()
+  }
 }
 
 #Preview {
-    OnboardingHealthGoalView { }
+  OnboardingHealthGoalView { }
 }
