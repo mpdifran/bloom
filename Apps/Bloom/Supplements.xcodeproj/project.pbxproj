@@ -24,6 +24,8 @@
 		FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */; };
 		FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */; };
 		FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0D152CFA47C500374F66 /* BloomModel */; };
+		FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = FF83DB1B2D2ECF010018FAAC /* RevenueCat */; };
+		FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */; };
 		FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -128,6 +130,7 @@
 		FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ScreenControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BloomFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +142,7 @@
 		4BD93EB02CFA889800D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Bloom.storekit,
 				Info.plist,
 			);
 			target = FFACBAD82BAC7788006AAD0B /* Supplements */;
@@ -318,6 +322,8 @@
 				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FF1FFD682D15C27D0008B47D /* Valet in Frameworks */,
+				FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */,
+				FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
 				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
@@ -350,6 +356,7 @@
 		FF1E961A2C0BEC1D004DAD2D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */,
 				FF1E961B2C0BEC1D004DAD2D /* DeviceActivity.framework */,
 				FF1E96322C0BF57F004DAD2D /* ManagedSettings.framework */,
 				FF1E96342C0BF57F004DAD2D /* ManagedSettingsUI.framework */,
@@ -616,6 +623,7 @@
 				FF8741782CE14F8E002581FA /* BloomModel */,
 				FF5D0D152CFA47C500374F66 /* BloomModel */,
 				FF1FFD672D15C27D0008B47D /* Valet */,
+				FF83DB1B2D2ECF010018FAAC /* RevenueCat */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
@@ -729,6 +737,7 @@
 				FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 				FF5D0D142CFA47C500374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */,
 				FF1FFD662D15C27D0008B47D /* XCRemoteSwiftPackageReference "Valet" */,
+				FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -1866,6 +1875,14 @@
 				minimumVersion = 1.8.1;
 			};
 		};
+		FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.14.5;
+			};
+		};
 		FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
@@ -1950,6 +1967,11 @@
 		FF5D0D152CFA47C500374F66 /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BloomModel;
+		};
+		FF83DB1B2D2ECF010018FAAC /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
 		};
 		FF8741782CE14F8E002581FA /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;

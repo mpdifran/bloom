@@ -8,15 +8,50 @@
 import Foundation
 import TelemetryDeck
 import BloomModel
+import Valet
+
+private extension String {
+  static let userID = "UserID"
+}
 
 enum UserID {
+  private static let valet = Valet.iCloudValet(
+    with: Identifier(nonEmpty: "UserController")!,
+    accessibility: .afterFirstUnlock
+  )
+
   static var value: String {
-    if let value = UserDefaults.group.string(forKey: "UserID") {
+    // Migrate from UserDefaults to Keychain
+    if let value = UserDefaults.group.string(forKey: .userID) {
+      do {
+        try valet.setString(value, forKey: .userID)
+        UserDefaults.group.removeObject(forKey: .userID)
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "UserID.value",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+      }
+    }
+
+    // This throws an error if it's not found.
+    if let value = try? valet.string(forKey: .userID) {
       TelemetryDeck.updateDefaultUserID(to: value)
       return value
     }
+
+    // Create a new ID.
     let newValue = UUID().uuidString
-    UserDefaults.group.set(newValue, forKey: "UserID")
+    do {
+      try valet.setString(newValue, forKey: .userID)
+    } catch {
+      TelemetryDeck.errorOccurred(
+        id: "UserID.value",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+    }
     TelemetryDeck.updateDefaultUserID(to: newValue)
     return newValue
   }

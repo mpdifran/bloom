@@ -10,6 +10,7 @@ import Bugsnag
 import BugsnagPerformance
 import TelemetryDeck
 import DataContainer
+import RevenueCat
 
 @main
 struct BloomApp: App {
@@ -21,6 +22,10 @@ struct BloomApp: App {
     BugsnagPerformance.start()
 
     TelemetryDeck.initialize(config: .init(appID: "764D40B8-F2CE-4372-87D3-0D68F34E08CA"))
+    #if DEBUG
+    Purchases.logLevel = .debug
+    #endif
+    Purchases.configure(withAPIKey: "appl_TarcsGdjyMRvzKeiDYYrxvhAZVo", appUserID: UserID.value)
 
     Task {
       await HealthSleepObserver.shared.observeSleep()
