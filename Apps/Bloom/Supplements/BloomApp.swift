@@ -26,6 +26,7 @@ struct BloomApp: App {
     Purchases.logLevel = .debug
     #endif
     Purchases.configure(withAPIKey: "appl_TarcsGdjyMRvzKeiDYYrxvhAZVo", appUserID: UserID.value)
+    _ = EntitlementController.shared
 
     Task {
       await HealthSleepObserver.shared.observeSleep()

@@ -13,3 +13,8 @@ extension URL {
         return URL(string: urlString)!
     }
 }
+
+extension URL {
+  static let privacyPolicy = URL(string: "https://www.trybloom.app/privacy")!
+  static let termsOfService = URL(string: "https://www.trybloom.app/tos")!
+}

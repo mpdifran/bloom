@@ -8,43 +8,49 @@
 import SwiftUI
 
 struct BloomPlusLegalSectionView: View {
-    var body: some View {
-            VStack {
-                Button {
+  let restorePurchases: () -> Void
 
-                } label: {
-                    LabeledContent("Restore Purchase") {
-                        Image(systemName: "arrow.clockwise")
-                            .foregroundStyle(.gray)
-                    }
-                    .cardContainer(fill: .background.secondary)
-                }
+  @Environment(\.openURL) private var openURL
 
-                Button {
+  var body: some View {
+    VStack {
+      Button {
+        restorePurchases()
+      } label: {
+        LabeledContent("Restore Purchase") {
+          Image(systemName: "arrow.clockwise")
+            .foregroundStyle(.gray)
+        }
+        .cardContainer(fill: .background.secondary)
+      }
 
-                } label: {
-                    LabeledContent("Privacy Policy") {
-                        Image(systemName: "hand.raised.fill")
-                            .foregroundStyle(.gray)
-                    }
-                    .cardContainer(fill: .background.secondary)
-                }
+      Button {
+        openURL(.privacyPolicy)
+      } label: {
+        LabeledContent("Privacy Policy") {
+          Image(systemName: "hand.raised.fill")
+            .foregroundStyle(.gray)
+        }
+        .cardContainer(fill: .background.secondary)
+      }
 
-                Button {
-
-                } label: {
-                    LabeledContent("Terms of Service") {
-                        Image(systemName: "list.clipboard.fill")
-                            .foregroundStyle(.gray)
-                    }
-                    .cardContainer(fill: .background.secondary)
-                }
-            }
-            .buttonStyle(.plain)
-            .bold()
+      Button {
+        openURL(.termsOfService)
+      } label: {
+        LabeledContent("Terms of Service") {
+          Image(systemName: "list.clipboard.fill")
+            .foregroundStyle(.gray)
+        }
+        .cardContainer(fill: .background.secondary)
+      }
     }
+    .buttonStyle(.plain)
+    .bold()
+  }
 }
 
 #Preview {
-    BloomPlusLegalSectionView()
+  BloomPlusLegalSectionView {
+    
+  }
 }

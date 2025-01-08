@@ -32,8 +32,10 @@ extension BloomPlusPaywall.ViewModel {
   }
 
   func purchase(_ package: Package) async throws {
-    let resultData = try await Purchases.shared.purchase(package: package)
+    _ = try await Purchases.shared.purchase(package: package)
+  }
 
-    
+  func restorePurchases() async throws {
+    _ = try await Purchases.shared.restorePurchases()
   }
 }

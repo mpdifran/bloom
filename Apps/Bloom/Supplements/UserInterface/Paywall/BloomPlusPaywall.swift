@@ -14,6 +14,7 @@ struct BloomPlusPaywall: View {
   @State private var viewModel = ViewModel()
   @State private var selectedPackage: Package?
   @State private var showContinueButton = false
+  @State private var error: Error?
 
   @State private var entitlementController = EntitlementController.shared
 
@@ -23,6 +24,7 @@ struct BloomPlusPaywall: View {
     ZStack {
       BloomPlusPaywallHeroImageView()
         .zStackAlignment(.top)
+        .clipped()
         .ignoresSafeArea(edges: .top)
 
       ScrollView {
@@ -39,6 +41,7 @@ struct BloomPlusPaywall: View {
         .padding(.horizontal)
         .zStackAlignment(.top)
     }
+    .alert(error: $error)
     .safeAreaInset(edge: .bottom) {
       if showContinueButton {
         purchaseShelf
@@ -73,7 +76,11 @@ private extension BloomPlusPaywall {
 
       VStack(spacing: 30) {
         BloomPlusUserReviewListView()
-        BloomPlusLegalSectionView()
+        BloomPlusLegalSectionView(restorePurchases: {
+          ThrowingUserTask(error: $error) {
+            try await viewModel.restorePurchases()
+          }
+        })
       }
       .padding()
     }
