@@ -7,6 +7,7 @@
 
 import Foundation
 import TelemetryDeck
+import RevenueCat
 import BloomModel
 import Valet
 
@@ -37,7 +38,7 @@ enum UserID {
 
     // This throws an error if it's not found.
     if let value = try? valet.string(forKey: .userID) {
-      TelemetryDeck.updateDefaultUserID(to: value)
+      recordUserIDValue(value)
       return value
     }
 
@@ -52,7 +53,18 @@ enum UserID {
         message: error.localizedDescription
       )
     }
-    TelemetryDeck.updateDefaultUserID(to: newValue)
+    recordUserIDValue(newValue)
     return newValue
+  }
+
+  static func recordUserIDValue(_ value: String) {
+    Task {
+      await MainActor.run {
+        TelemetryDeck.updateDefaultUserID(to: value)
+        Purchases.shared.attribution.setAttributes([
+          "$telemetryDeckUserId": TelemetryManager.shared.hashedDefaultUser
+        ])
+      }
+    }
   }
 }

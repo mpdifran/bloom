@@ -12,6 +12,11 @@ import TelemetryDeck
 import DataContainer
 import RevenueCat
 
+private extension String {
+  static let telemetryDeckAppID = "764D40B8-F2CE-4372-87D3-0D68F34E08CA"
+  static let revenueCatPublicAPIKey = "appl_TarcsGdjyMRvzKeiDYYrxvhAZVo"
+}
+
 @main
 struct BloomApp: App {
 
@@ -21,11 +26,20 @@ struct BloomApp: App {
     Bugsnag.start()
     BugsnagPerformance.start()
 
-    TelemetryDeck.initialize(config: .init(appID: "764D40B8-F2CE-4372-87D3-0D68F34E08CA"))
+    // Setup TelemetryDeck
+    TelemetryDeck.initialize(config: .init(appID: .telemetryDeckAppID, salt: "bloom_secret_salt"))
+
+    // Setup RevenueCat
     #if DEBUG
     Purchases.logLevel = .debug
     #endif
-    Purchases.configure(withAPIKey: "appl_TarcsGdjyMRvzKeiDYYrxvhAZVo", appUserID: UserID.value)
+    Purchases.configure(withAPIKey: .revenueCatPublicAPIKey, appUserID: UserID.value)
+
+    // Link TelemetryDeck with RevenueCat
+    Purchases.shared.attribution.setAttributes([
+        "$telemetryDeckUserId": TelemetryManager.shared.hashedDefaultUser,
+        "$telemetryDeckAppId": .telemetryDeckAppID
+    ])
     _ = EntitlementController.shared
 
     Task {
