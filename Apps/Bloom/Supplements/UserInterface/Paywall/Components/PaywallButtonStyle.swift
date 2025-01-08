@@ -15,7 +15,7 @@ struct PaywallButtonStyle: ButtonStyle {
             configuration.label
             Spacer(minLength: 0)
         }
-        .foregroundStyle(.white)
+        .foregroundStyle(.invertedText)
         .bold()
         .padding(.vertical, 16)
         .background {

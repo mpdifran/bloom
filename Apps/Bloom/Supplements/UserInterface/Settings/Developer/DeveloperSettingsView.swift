@@ -33,6 +33,7 @@ struct DeveloperSettingsView: View {
     NavigationStack {
       List {
         networkSection
+        userSection
         healthPermissionsSection
         danieleSection
         adminActionsSection
@@ -93,6 +94,24 @@ extension DeveloperSettingsView {
       Text("Network")
     } footer: {
       Text("Current host: \(apiHost.resolvedHost.absoluteString)")
+    }
+  }
+
+  var userSection: some View {
+    Section("User") {
+      LabeledContent("User ID") {
+        Text(UserID.value)
+          .lineLimit(1)
+          .minimumScaleFactor(0.1)
+      }
+      .selectable()
+      .onTapGesture {
+        UIPasteboard.general.string = UserID.value
+        alertDetails = AlertDetails(
+          title: "Copied to Clipboard",
+          message: "The User ID has been copied to your clipboard."
+        )
+      }
     }
   }
 
@@ -244,6 +263,17 @@ extension DeveloperSettingsView {
         }
       }
       .buttonStyle(.plain)
+
+      Button {
+        presentedSheet = BloomPlusPaywall().asAny
+      } label: {
+        HStack {
+          Text("Show Paywall")
+          Spacer()
+          DisclosureIndicator()
+        }
+        .selectable()
+      }
     }
   }
 

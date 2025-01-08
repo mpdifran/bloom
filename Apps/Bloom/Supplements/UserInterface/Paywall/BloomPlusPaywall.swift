@@ -37,6 +37,7 @@ struct BloomPlusPaywall: View {
                 purchaseShelf
             }
         }
+        .presentationCompactAdaptation(.fullScreenCover)
         .animation(.bouncy(duration: 0.7).delay(0.5), value: showContinueButton)
         .onAppear {
             showContinueButton = true
@@ -75,7 +76,6 @@ private extension BloomPlusPaywall {
                 Text("No Payment Now")
             }
             .font(.subheadline)
-            .bold()
         }
         .padding()
         .background {
