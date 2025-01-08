@@ -84,11 +84,11 @@ extension TargetMetric {
         case .waterIntake:
             return HKQuantity(unit: defaultUnit, doubleValue: 250)
         case .walkingRunningDistance:
-            return HKQuantity(unit: defaultUnit, doubleValue: 0.5)
+            return HKQuantity(unit: defaultUnit, doubleValue: 1)
         case .timeInDaylight:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
         case .meditationMinutes:
-            return HKQuantity(unit: defaultUnit, doubleValue: 1)
+            return HKQuantity(unit: defaultUnit, doubleValue: 2)
         case .exerciseMinutes:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
         case .proteinIntake:
@@ -96,7 +96,7 @@ extension TargetMetric {
         case .calories:
             return HKQuantity(unit: defaultUnit, doubleValue: 1200)
         case .runDistance:
-            return HKQuantity(unit: defaultUnit, doubleValue: 0.5)
+            return HKQuantity(unit: defaultUnit, doubleValue: 1)
         case .runDuration:
             return HKQuantity(unit: defaultUnit, doubleValue: 5)
         case .bikeDistance:
