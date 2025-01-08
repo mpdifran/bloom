@@ -42,7 +42,7 @@ struct BloomPlusOfferView: View {
             }
             Spacer(minLength: 0)
         }
-        .cardContainer(fill: .background.secondary, stroke: .tint)
+        .cardContainer(fill: .background.secondary)
     }
 }
 

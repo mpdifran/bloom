@@ -7,86 +7,106 @@
 
 import SwiftUI
 import AppUI
+import RevenueCat
 
 struct BloomPlusPaywall: View {
 
-    @State private var showContinueButton = false
+  @State private var viewModel = ViewModel()
+  @State private var selectedPackage: Package?
+  @State private var showContinueButton = false
 
-    var body: some View {
-        ZStack {
-            BloomPlusPaywallHeroImageView()
-                .zStackAlignment(.top)
-                .ignoresSafeArea(edges: .top)
+  @State private var entitlementController = EntitlementController.shared
 
-            ScrollView {
-                contentView
-                    .background {
-                        RoundedRectangle(cornerRadius: 30)
-                            .fill(.background)
-                    }
-                    .padding(.top, 170)
-            }
-            .scrollIndicators(.hidden)
+  @Environment(\.dismiss) private var dismiss
 
-            BloomPlusHeaderView()
-                .padding(.horizontal)
-                .zStackAlignment(.top)
-        }
-        .safeAreaInset(edge: .bottom) {
-            if showContinueButton {
-                purchaseShelf
-            }
-        }
-        .presentationCompactAdaptation(.fullScreenCover)
-        .animation(.bouncy(duration: 0.7).delay(0.5), value: showContinueButton)
-        .onAppear {
-            showContinueButton = true
-        }
+  var body: some View {
+    ZStack {
+      BloomPlusPaywallHeroImageView()
+        .zStackAlignment(.top)
+        .ignoresSafeArea(edges: .top)
+
+      ScrollView {
+        contentView
+          .background {
+            RoundedRectangle(cornerRadius: 30)
+              .fill(.background)
+          }
+          .padding(.top, 170)
+      }
+      .scrollIndicators(.hidden)
+
+      BloomPlusHeaderView()
+        .padding(.horizontal)
+        .zStackAlignment(.top)
     }
+    .safeAreaInset(edge: .bottom) {
+      if showContinueButton {
+        purchaseShelf
+      }
+    }
+    .task {
+      await viewModel.loadOfferings()
+    }
+    .presentationCompactAdaptation(.fullScreenCover)
+    .animation(.bouncy(duration: 0.7).delay(0.5), value: showContinueButton)
+    .onAppear {
+      showContinueButton = true
+    }
+    .onChange(of: entitlementController.hasBloomPro) { oldValue, newValue in
+      guard newValue else { return }
+
+      dismiss()
+    }
+  }
 }
 
 private extension BloomPlusPaywall {
 
-    var contentView: some View {
-        VStack {
-            BloomPlusFeaturesListView()
-                .padding(.top)
-                .padding(.top)
+  var contentView: some View {
+    VStack {
+      BloomPlusFeaturesListView(
+        packages: viewModel.packages,
+        selectedPackage: $selectedPackage
+      )
+      .padding(.top)
+      .padding(.top)
 
-            VStack(spacing: 30) {
-                BloomPlusUserReviewListView()
-                BloomPlusLegalSectionView()
-            }
-            .padding()
-        }
+      VStack(spacing: 30) {
+        BloomPlusUserReviewListView()
+        BloomPlusLegalSectionView()
+      }
+      .padding()
     }
+  }
 
-    var purchaseShelf: some View {
-        VStack {
-            Button {
+  var purchaseShelf: some View {
+    VStack {
+      AsyncButton {
+        guard let package = selectedPackage ?? viewModel.packages.first else { return }
 
-            } label: {
-                Text("Start Free Trial")
-            }
-            .buttonStyle(.paywall)
+        try await viewModel.purchase(package)
+      } label: {
+        Text("Start Free Trial")
+      }
+      .buttonStyle(.paywall)
 
-            HStack(spacing: 4) {
-                Image(systemName: "checkmark.shield.fill")
-                    .foregroundStyle(.white, .mutedGreen)
-                Text("No Payment Now")
-            }
-            .font(.subheadline)
-        }
-        .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 30)
-                .fill(.thickMaterial)
-        }
-        .padding()
-        .transition(.move(edge: .bottom))
+      HStack(spacing: 4) {
+        Image(systemName: "checkmark.shield.fill")
+          .foregroundStyle(.white, .mutedGreen)
+        Text("No Payment Now")
+      }
+      .font(.subheadline)
     }
+    .padding()
+    .background {
+      RoundedRectangle(cornerRadius: 30)
+        .fill(.thickMaterial)
+    }
+    .padding()
+    .transition(.move(edge: .bottom))
+  }
 }
 
 #Preview {
-    BloomPlusPaywall()
+  BloomPlusPaywall()
 }

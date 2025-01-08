@@ -6,48 +6,57 @@
 //
 
 import SwiftUI
+import RevenueCat
 
 struct BloomPlusFeaturesListView: View {
-    var body: some View {
-        HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 0) {
-                VStack(alignment: .leading) {
-                    Text("Bloom Plus")
-                        .font(.largeTitle)
-                        .bold()
-                        .fontDesign(.rounded)
+  let packages: [Package]
+  @Binding var selectedPackage: Package?
 
-                    Text("Your personal health coach in your pocket.")
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.horizontal)
+  var body: some View {
+    HStack(spacing: 0) {
+      VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
+          Text("Bloom Plus")
+            .font(.largeTitle)
+            .bold()
+            .fontDesign(.rounded)
 
-                TabView {
-                    BloomPlusOfferView(
-                        mainPrice: "$119.99",
-                        mainPricePeriod: "/ Year",
-                        subtitlePrice: "Try FREE for 3 Weeks"
-                    )
-                    .padding(.horizontal)
-                    .padding(.bottom, 20)
-
-                    BloomPlusOfferView(
-                        mainPrice: "$15.99",
-                        mainPricePeriod: "/ Month",
-                        subtitlePrice: ""
-                    )
-                    .padding(.horizontal)
-                    .padding(.bottom, 20)
-                }
-                .aspectRatio(1.3, contentMode: .fit)
-                .tabViewStyle(.page)
-                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-            }
-            Spacer(minLength: 0)
+          Text("Your personal health coach in your pocket.")
+            .foregroundStyle(.secondary)
         }
+        .padding(.horizontal)
+
+        TabView(selection: $selectedPackage) {
+          ForEach(packages) { package in
+            BloomPlusOfferView(
+              mainPrice: package.localizedPriceString,
+              mainPricePeriod: package.storeProduct.subscriptionPeriod?.displayString ?? "",
+              subtitlePrice: "Try FREE for 3 Weeks"
+            )
+            .padding(.horizontal)
+            .padding(.bottom, 20)
+            .tag(package)
+          }
+        }
+        .aspectRatio(1.3, contentMode: .fit)
+        .tabViewStyle(.page)
+        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+      }
+      Spacer(minLength: 0)
     }
+  }
 }
 
 #Preview {
-    BloomPlusFeaturesListView()
+  @Previewable @State var selectedPackage: Package?
+
+  BloomPlusFeaturesListView(
+    packages: [.init(
+      identifier: "preview",
+      packageType: .monthly,
+      storeProduct: .init(sk1Product: .init()),
+      offeringIdentifier: "offering"
+    )],
+    selectedPackage: $selectedPackage
+  )
 }
