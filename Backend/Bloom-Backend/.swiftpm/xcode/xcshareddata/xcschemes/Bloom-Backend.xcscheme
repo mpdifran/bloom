@@ -48,7 +48,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "/Users/mpdifran/Developer/Current/Supplements/Backend/Bloom-Backend"
+      customWorkingDirectory = "/Users/zachradford/Projects/bloom/Backend/Bloom-Backend"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
