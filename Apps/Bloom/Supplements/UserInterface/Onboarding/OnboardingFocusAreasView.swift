@@ -20,8 +20,7 @@ struct OnboardingFocusAreasView: View {
     @State private var showContinue = false
     @State private var didContinue = false
     @State private var vitalKinds = [VitalModel.Kind]()
-    @State private var proposedFocusAreas = [ProposedHabit]()
-    @State private var proposedHabits = [ProposedHabit]()
+    @State private var proposedGoals = [ProposedHabit]()
     @State private var proposedToDos = [ProposedToDo]()
     @State private var error: Error?
 
@@ -57,26 +56,13 @@ struct OnboardingFocusAreasView: View {
                     .appear(with: 3, currentIndex: index)
 
                 VStack {
-                    if proposedFocusAreas.isNotEmpty {
-                        SectionTitleView("Focus Areas")
+                    if proposedGoals.isNotEmpty {
+                        SectionTitleView("New Goals")
                             .padding(.horizontal)
 
-                        ForEachEnumerated(proposedFocusAreas) { (index, _) in
+                        ForEachEnumerated(proposedGoals) { (index, _) in
                             ProposedHabitCell(
-                                proposedHabit: $proposedFocusAreas[index],
-                                includeActions: true
-                            )
-                            .transition(.scale)
-                        }
-                    }
-
-                    if proposedHabits.isNotEmpty {
-                        SectionTitleView("New Habits")
-                            .padding(.horizontal)
-
-                        ForEachEnumerated(proposedHabits) { (index, _) in
-                            ProposedHabitCell(
-                                proposedHabit: $proposedHabits[index],
+                                proposedHabit: $proposedGoals[index],
                                 includeActions: true
                             )
                             .transition(.scale)
@@ -103,8 +89,7 @@ struct OnboardingFocusAreasView: View {
                 Button("Continue") {
                     do {
                         try habitsViewModel.performSave(
-                            proposedFocusAreas: proposedFocusAreas,
-                            proposedHabits: proposedHabits,
+                            proposedGoals: proposedGoals,
                             proposedToDos: proposedToDos
                         )
                         didContinue.toggle()
@@ -139,11 +124,7 @@ struct OnboardingFocusAreasView: View {
         .alert(error: $error)
         .task {
             let result = await habitsViewModel.generateProposedHabits()
-
-            vitalKinds = result.allVitalKinds
-
-            proposedFocusAreas = result.proposedFocusAreas
-            proposedHabits = result.proposedHabits
+            proposedGoals = result.proposedGoals
             proposedToDos = result.proposedToDos
         }
         .onAppear {

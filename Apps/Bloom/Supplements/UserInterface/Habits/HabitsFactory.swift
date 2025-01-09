@@ -34,13 +34,13 @@ extension HabitsFactory {
     let modelActor = HabitModelActor.standard()
 
     for vital in await VitalsCalculator.shared.vitals {
-        guard focusVitals.count < 2 else { break }
+      guard focusVitals.count < 2 else { break }
 
-        if let _ = await suggestNewHabit(for: vital) {
-            guard !focusVitals.contains(where: { $0.id == vital.id }) else { continue }
+      if let _ = await suggestNewHabit(for: vital) {
+        guard !focusVitals.contains(where: { $0.id == vital.id }) else { continue }
 
-            focusVitals.append(vital)
-        }
+        focusVitals.append(vital)
+      }
     }
 
     let suggestedHabits = (try? await modelActor.fetchActiveHabits(isSuggested: true)) ?? []
@@ -110,9 +110,9 @@ extension HabitsFactory {
         !newHabitResult.contains(existingHabit.targetMetric),
         let newHabit = await updatedHabit(for: existingHabit)
       {
-        newHabitResult.proposedFocusAreas.append(newHabit)
+        newHabitResult.proposedGoals.append(newHabit)
       } else if let newHabit = await suggestNewHabit(for: vital) {
-        newHabitResult.proposedFocusAreas.append(newHabit)
+        newHabitResult.proposedGoals.append(newHabit)
       }
     }
 
@@ -145,16 +145,16 @@ extension HabitsFactory {
       else { continue }
 
       // TODO: We may promote this to a habit eventually.
-      newHabitResult.proposedFocusAreas.append(newHabit)
+      newHabitResult.proposedGoals.append(newHabit)
     }
 
     // Add new habits
-    if newHabitResult.proposedFocusAreas.count < 2 && newHabitResult.proposedToDos.count == 0 {
+    if newHabitResult.proposedGoals.count < 2 && newHabitResult.proposedToDos.count == 0 {
       let vitals = await VitalsCalculator.shared.vitals
 
       for vital in vitals {
         if let newHabit = await suggestNewHabit(for: vital) {
-          newHabitResult.proposedFocusAreas.append(newHabit)
+          newHabitResult.proposedGoals.append(newHabit)
           break
         }
       }
@@ -203,8 +203,6 @@ private extension HabitsFactory {
       )
       todos.append(todo)
       return NewHabitResult(
-        proposedFocusAreas: [],
-        proposedHabits: [],
         proposedToDos: [todo]
       )
     } else if await VitalsCalculator.shared.nutritionSummary?.details.hasSufficientProteinLogs == false {
@@ -263,7 +261,7 @@ private extension HabitsFactory {
       }
 
       return NewHabitResult(
-        proposedHabits: proposedHabits
+        proposedGoals: proposedHabits
       )
     }
 
@@ -344,9 +342,7 @@ private extension HabitsFactory {
 
     if newFocusAreas.isNotEmpty {
       return NewHabitResult(
-        proposedFocusAreas: newFocusAreas,
-        proposedHabits: [],
-        proposedToDos: []
+        proposedGoals: newFocusAreas
       )
     }
     return nil
