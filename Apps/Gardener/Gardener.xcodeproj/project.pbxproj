@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4B9A93452CFE95B6005FBD2C /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9A93442CFE95B6005FBD2C /* AppUI */; };
+		4BF81F2A2D2F5C06008D3EEA /* AdminBloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF81F292D2F5C06008D3EEA /* AdminBloomModel */; };
 		FF5D0CB72CFA451D00374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0CB62CFA451D00374F66 /* BloomModel */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 			files = (
 				4B9A93452CFE95B6005FBD2C /* AppUI in Frameworks */,
 				FF5D0CB72CFA451D00374F66 /* BloomModel in Frameworks */,
+				4BF81F2A2D2F5C06008D3EEA /* AdminBloomModel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				FF5D0CB62CFA451D00374F66 /* BloomModel */,
 				4B9A93442CFE95B6005FBD2C /* AppUI */,
+				4BF81F292D2F5C06008D3EEA /* AdminBloomModel */,
 			);
 			productName = Gardener;
 			productReference = FF5D0C9A2CFA426500374F66 /* Gardener.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				FF5D0CB52CFA451D00374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */,
 				4B9A93432CFE95B6005FBD2C /* XCRemoteSwiftPackageReference "AppUI" */,
+				4BF81F282D2F5C06008D3EEA /* XCLocalSwiftPackageReference "../../Shared/AdminBloomModel" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FF5D0C9B2CFA426500374F66 /* Products */;
@@ -355,6 +359,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		4BF81F282D2F5C06008D3EEA /* XCLocalSwiftPackageReference "../../Shared/AdminBloomModel" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Shared/AdminBloomModel;
+		};
 		FF5D0CB52CFA451D00374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../Shared/BloomModel;
@@ -377,6 +385,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4B9A93432CFE95B6005FBD2C /* XCRemoteSwiftPackageReference "AppUI" */;
 			productName = AppUI;
+		};
+		4BF81F292D2F5C06008D3EEA /* AdminBloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AdminBloomModel;
 		};
 		FF5D0CB62CFA451D00374F66 /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;
