@@ -14,15 +14,15 @@ enum FoodItemCategoryTab: TabFilterItem {
 
   case branded
   case generic
-  case restaurant
-  case fastFood
+//  case restaurant
+//  case fastFood
 
   var name: String {
     switch self {
     case .branded: return "Branded"
     case .generic: return "Generic"
-    case .restaurant: return "Restaurant"
-    case .fastFood: return "Fast Food"
+//    case .restaurant: return "Restaurant"
+//    case .fastFood: return "Fast Food"
     }
   }
 
@@ -30,8 +30,8 @@ enum FoodItemCategoryTab: TabFilterItem {
     switch self {
     case .branded: return Image(systemName: "barcode")
     case .generic: return Image(systemName: "carrot")
-    case .restaurant: return Image(systemName: "fork.knife")
-    case .fastFood: return Image(systemName: "bag")
+//    case .restaurant: return Image(systemName: "fork.knife")
+//    case .fastFood: return Image(systemName: "bag")
     }
   }
 
@@ -41,10 +41,10 @@ enum FoodItemCategoryTab: TabFilterItem {
         .mutedGreen
     case .generic:
         .mutedBlue
-    case .restaurant:
-        .mutedPurple
-    case .fastFood:
-        .mutedYellow
+//    case .restaurant:
+//        .mutedPurple
+//    case .fastFood:
+//        .mutedYellow
     }
   }
 
@@ -52,8 +52,8 @@ enum FoodItemCategoryTab: TabFilterItem {
     switch self {
     case .branded: .branded
     case .generic: .generic
-    case .restaurant: .restaurant
-    case .fastFood: .fastfood
+//    case .restaurant: .restaurant
+//    case .fastFood: .fastfood
     }
   }
 }
