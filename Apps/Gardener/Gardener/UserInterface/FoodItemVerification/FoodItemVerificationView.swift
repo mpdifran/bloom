@@ -5,7 +5,7 @@
 //  Created by Zach Radford on 2024-11-29.
 //
 
-import BloomModel
+import AdminBloomModel
 import SwiftUI
 
 struct FoodItemVerificationView: View {

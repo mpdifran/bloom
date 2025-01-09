@@ -5,8 +5,9 @@
 //  Created by Mark DiFranco on 2024-11-29.
 //
 
-import Foundation
+import AdminBloomModel
 import BloomModel
+import Foundation
 
 private extension String {
     static let bloomAPIBase = "https://bloom-api-5903aeb2ee43.herokuapp.com/"
