@@ -12,6 +12,9 @@ let package = Package(
             targets: ["AdminBloomModel"]
         ),
     ],
+    dependencies: [
+        .package(name: "bloom-model", path: "../../Shared/BloomModel"),
+    ],
     targets: [
         .target(
             name: "AdminBloomModel"
