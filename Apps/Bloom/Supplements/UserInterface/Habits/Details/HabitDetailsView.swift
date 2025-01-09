@@ -144,7 +144,7 @@ private extension HabitDetailsView {
         self.habit = habit
       }.asAny
     } label: {
-      Text("Manage Value")
+      Text("Manage Goal")
         .horizontallyCentered()
     }
     .buttonStyle(.primary)
