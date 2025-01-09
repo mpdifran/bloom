@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FoodAutocompleteRequest: Codable {
+public struct FoodAutocompleteRequest: Codable, Sendable {
     public let query: String
 
     public init(query: String) {

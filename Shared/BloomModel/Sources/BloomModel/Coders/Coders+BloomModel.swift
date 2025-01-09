@@ -11,7 +11,7 @@ import Foundation
 
 public extension JSONEncoder {
 
-    public static let bloomModel: JSONEncoder = {
+    static let bloomModel: JSONEncoder = {
         let encoder = JSONEncoder()
 
         encoder.keyEncodingStrategy = .useDefaultKeys
@@ -25,7 +25,7 @@ public extension JSONEncoder {
 
 public extension JSONDecoder {
 
-    public static let bloomModel: JSONDecoder = {
+    static let bloomModel: JSONDecoder = {
         let decoder = JSONDecoder()
 
         decoder.keyDecodingStrategy = .useDefaultKeys

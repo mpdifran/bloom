@@ -5,9 +5,9 @@
 //  Created by Mark DiFranco on 2024-12-04.
 //
 
-import SwiftUI
+import AdminBloomModel
 import AppUI
-import BloomModel
+import SwiftUI
 
 struct OpenFoodFactsBulkUploader: View {
 

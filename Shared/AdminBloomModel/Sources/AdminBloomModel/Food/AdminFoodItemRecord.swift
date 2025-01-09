@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2024-12-01.
 //
 
+import BloomModel
 import Foundation
 
 public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {

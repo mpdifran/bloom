@@ -10,7 +10,8 @@ let package = Package(
     products: [
         .library(
             name: "BloomModel",
-            targets: ["BloomModel"]),
+            targets: ["BloomModel"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/mpdifran/AppFoundations.git", from: "0.1.5")

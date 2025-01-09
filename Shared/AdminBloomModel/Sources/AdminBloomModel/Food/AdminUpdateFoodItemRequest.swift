@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2024-12-07.
 //
 
+import BloomModel
 import Foundation
 
 public struct AdminUpdateFoodItemRequest: Codable, Sendable {

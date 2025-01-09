@@ -18,6 +18,7 @@ let package = Package(
         .package(url: "https://github.com/mpdifran/vapor-sign-in-with-apple.git", from: "1.1.0"),
 //        .package(url: "https://github.com/TelemetryDeck/SwiftSDK.git", from: "2.5.0"),
         .package(name: "bloom-model", path: "../../Shared/BloomModel"),
+        .package(name: "admin-bloom-model", path: "../../Shared/AdminBloomModel"),
     ],
     targets: [
         .executableTarget(
@@ -34,6 +35,7 @@ let package = Package(
 //                .product(name: "TelemetryDeck", package: "SwiftSDK"),
                 .product(name: "SotoS3", package: "soto"),
                 .product(name: "BloomModel", package: "bloom-model"),
+                .product(name: "AdminBloomModel", package: "admin-bloom-model"),
             ],
             swiftSettings: swiftSettings,
             plugins: [
