@@ -5,8 +5,9 @@
 //  Created by Mark DiFranco on 2024-12-05.
 //
 
-import Vapor
+import AdminBloomModel
 import BloomModel
+import Vapor
 
 struct OpenFoodFactsService {
   let baseURL = URL(string: "https://world.openfoodfacts.net/api/v2/")!
