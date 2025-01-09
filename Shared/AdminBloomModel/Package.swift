@@ -17,7 +17,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "AdminBloomModel"
+            name: "AdminBloomModel",
+            dependencies: [
+              .product(name: "BloomModel", package: "bloom-model"),
+            ]
         ),
     ]
 )
