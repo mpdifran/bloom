@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct EstimateFoodCaloriesRequest: Codable {
+public struct EstimateFoodCaloriesRequest: Codable, Sendable {
     public let foodImage: ImageFile
 
     public init(foodImage: ImageFile) {

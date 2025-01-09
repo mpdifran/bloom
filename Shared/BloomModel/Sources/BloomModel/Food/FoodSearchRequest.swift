@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FoodSearchRequest: Codable {
+public struct FoodSearchRequest: Codable, Sendable {
     public let name: String?
     public let brand: String?
     public let upcCode: String?

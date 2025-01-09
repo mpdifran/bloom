@@ -16,7 +16,7 @@ public struct FoodSearchResponse: Codable, Sendable {
 }
 
 public extension FoodSearchResponse {
-    public struct Section: Codable, Sendable {
+    struct Section: Codable, Sendable {
         public let title: String
         public let index: Int
         public let category: FoodItem.Category

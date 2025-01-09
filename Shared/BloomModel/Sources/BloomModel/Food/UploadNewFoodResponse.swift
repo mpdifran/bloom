@@ -21,7 +21,7 @@ public struct UploadNewFoodResponse: Codable, Sendable {
 }
 
 public extension UploadNewFoodResponse {
-    public enum Result: String, Codable, Sendable {
+    enum Result: String, Codable, Sendable {
         case foodLogged
         case unclearNutritionLabel
         case unclearPackaging

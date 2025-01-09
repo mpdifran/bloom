@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FoodAutocompleteResponse: Codable {
+public struct FoodAutocompleteResponse: Codable, Sendable {
     public let tokens: [String]
 
     public init(tokens: [String]) {

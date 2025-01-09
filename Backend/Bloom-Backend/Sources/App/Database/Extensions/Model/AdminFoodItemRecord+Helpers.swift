@@ -5,8 +5,9 @@
 //  Created by Zach Radford on 2024-12-07.
 //
 
-import Foundation
+import AdminBloomModel
 import BloomModel
+import Foundation
 
 extension AdminFoodItemRecord.Category {
   func asCategory() -> FoodItemRecord.Category {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct UploadNewFoodRequest: Codable {
+public struct UploadNewFoodRequest: Codable, Sendable {
     public let barcode: String
     public let nutritionLabelImage: ImageFile
     public let packagingImage: ImageFile
