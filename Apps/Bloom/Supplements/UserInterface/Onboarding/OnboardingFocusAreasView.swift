@@ -20,7 +20,7 @@ struct OnboardingFocusAreasView: View {
     @State private var showContinue = false
     @State private var didContinue = false
     @State private var vitalKinds = [VitalModel.Kind]()
-    @State private var proposedGoals = [ProposedHabit]()
+    @State private var proposedGoals = [ProposedGoal]()
     @State private var proposedToDos = [ProposedToDo]()
     @State private var error: Error?
 

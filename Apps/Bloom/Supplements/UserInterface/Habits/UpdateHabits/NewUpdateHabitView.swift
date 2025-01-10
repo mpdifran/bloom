@@ -14,7 +14,7 @@ struct NewUpdateHabitView: View {
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
   @State private var isLoading = true
-  @State private var proposedGoals = [ProposedHabit]()
+  @State private var proposedGoals = [ProposedGoal]()
   @State private var proposedToDos = [ProposedToDo]()
   @State private var error: Error?
 

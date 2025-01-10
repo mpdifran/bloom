@@ -13,7 +13,7 @@ import SwiftData
 struct UserAddedGoalPicker: View {
 
     @State private var selectedTargetMetric: TargetMetric?
-    @State private var proposedHabit: ProposedHabit?
+    @State private var proposedHabit: ProposedGoal?
     @State private var showQuantitySheet = false
     @State private var error: Error?
 
@@ -82,7 +82,7 @@ struct UserAddedGoalPicker: View {
                     return
                 }
 
-                proposedHabit = ProposedHabit(
+                proposedHabit = ProposedGoal(
                     habitID: nil,
                     targetMetric: newValue,
                     value: 0,

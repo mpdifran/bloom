@@ -10,11 +10,11 @@ import HealthKit
 import DataContainer
 
 struct ProposedHabitCell: View {
-    @Binding var proposedHabit: ProposedHabit
+    @Binding var proposedHabit: ProposedGoal
     let includeActions: Bool
 
     init(
-        proposedHabit: Binding<ProposedHabit>,
+        proposedHabit: Binding<ProposedGoal>,
         includeActions: Bool = true
     ) {
         self._proposedHabit = proposedHabit

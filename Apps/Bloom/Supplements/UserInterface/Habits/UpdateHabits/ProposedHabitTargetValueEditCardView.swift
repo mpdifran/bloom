@@ -11,10 +11,10 @@ import HealthKit
 import SwiftData
 
 struct ProposedHabitTargetValueEditCardView: View {
-    @Binding var proposedHabit: ProposedHabit
+    @Binding var proposedHabit: ProposedGoal
     @State private var value: Double
 
-    init(proposedHabit: Binding<ProposedHabit>) {
+    init(proposedHabit: Binding<ProposedGoal>) {
         self._proposedHabit = proposedHabit
         self._value = State(initialValue: proposedHabit.wrappedValue.value)
     }
@@ -87,7 +87,7 @@ struct ProposedHabitTargetValueEditCardView: View {
     struct PreviewView: View {
 
         @State private var showSheet = true
-        @State private var proposedHabit = ProposedHabit(
+        @State private var proposedHabit = ProposedGoal(
             habitID: nil,
             targetMetric: .stepCount,
             value: 3000,

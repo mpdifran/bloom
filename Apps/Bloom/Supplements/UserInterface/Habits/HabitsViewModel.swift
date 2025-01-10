@@ -50,7 +50,7 @@ extension HabitsViewModel {
     await HabitsFactory.shared.generateProposedHabits()
   }
 
-  func alternateTargetMetrics(for proposedHabit: ProposedHabit) async -> [TargetMetric] {
+  func alternateTargetMetrics(for proposedHabit: ProposedGoal) async -> [TargetMetric] {
     let alternativeTargetMetrics = proposedHabit.targetMetric.related
 
     guard alternativeTargetMetrics.isNotEmpty else { return [] }
@@ -69,7 +69,7 @@ extension HabitsViewModel {
   func generateProposedHabit(
     for targetMetric: TargetMetric,
     vitalKind: VitalModel.Kind?
-  ) async -> ProposedHabit {
+  ) async -> ProposedGoal {
     await HabitsFactory.shared.generateProposedHabit(
       for: targetMetric,
       vitalKind: vitalKind
@@ -77,7 +77,7 @@ extension HabitsViewModel {
   }
 
   func performSave(
-    proposedGoals: [ProposedHabit],
+    proposedGoals: [ProposedGoal],
     proposedToDos: [ProposedToDo]
   ) throws {
     for existingHabit in try modelContext.fetchActiveHabits(isSuggested: true) {

@@ -9,11 +9,11 @@ import Foundation
 import DataContainer
 
 struct NewHabitResult: Sendable, Hashable {
-  var proposedGoals: [ProposedHabit]
+  var proposedGoals: [ProposedGoal]
   var proposedToDos: [ProposedToDo]
 
   init(
-    proposedGoals: [ProposedHabit] = [],
+    proposedGoals: [ProposedGoal] = [],
     proposedToDos: [ProposedToDo] = []
   ) {
     self.proposedGoals = proposedGoals

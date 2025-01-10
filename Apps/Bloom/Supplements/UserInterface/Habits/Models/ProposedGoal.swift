@@ -1,5 +1,5 @@
 //
-//  ProposedHabit.swift
+//  ProposedGoal.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-19.
@@ -9,7 +9,7 @@ import DataContainer
 import HealthKit
 import SwiftData
 
-struct ProposedHabit: Sendable, Identifiable, Hashable {
+struct ProposedGoal: Sendable, Identifiable, Hashable {
     let id = UUID()
     let habitID: PersistentIdentifier?
     let targetMetric: TargetMetric
@@ -23,7 +23,7 @@ struct ProposedHabit: Sendable, Identifiable, Hashable {
     var hasUserEdited: Bool
 }
 
-extension ProposedHabit {
+extension ProposedGoal {
 
     var unit: HKUnit {
         HKUnit(from: unitString)

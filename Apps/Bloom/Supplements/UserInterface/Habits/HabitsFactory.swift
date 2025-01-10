@@ -166,7 +166,7 @@ extension HabitsFactory {
   func generateProposedHabit(
     for targetMetric: TargetMetric,
     vitalKind: VitalModel.Kind?
-  ) async -> ProposedHabit {
+  ) async -> ProposedGoal {
     await createHabit(
       targetMetric: targetMetric,
       unit: targetMetric.defaultUnit,
@@ -230,9 +230,9 @@ private extension HabitsFactory {
     }
 
     if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
-      var proposedHabits = [ProposedHabit]()
+      var proposedHabits = [ProposedGoal]()
       if let habit = activeHabits.first(where: { $0.targetMetric == .calories }) {
-        let calorieHabit = ProposedHabit(
+        let calorieHabit = ProposedGoal(
           habitID: habit.id,
           targetMetric: .calories,
           value: habit.value,
@@ -246,7 +246,7 @@ private extension HabitsFactory {
         proposedHabits.append(calorieHabit)
       }
       if let habit = activeHabits.first(where: { $0.targetMetric == .proteinIntake }) {
-        let proteinHabit = ProposedHabit(
+        let proteinHabit = ProposedGoal(
           habitID: habit.id,
           targetMetric: .proteinIntake,
           value: habit.value,
@@ -265,7 +265,7 @@ private extension HabitsFactory {
       )
     }
 
-    var newFocusAreas = [ProposedHabit]()
+    var newFocusAreas = [ProposedGoal]()
 
     // Calories
     let userReportedActivityLevel = await HealthManager.shared.userReportedActivityLevel ?? .sedentary
@@ -288,7 +288,7 @@ private extension HabitsFactory {
         value = suggestedValue
       }
 
-      let calorieHabit = ProposedHabit(
+      let calorieHabit = ProposedGoal(
         habitID: existingCalorieHabit?.id,
         targetMetric: .calories,
         value: value,
@@ -326,7 +326,7 @@ private extension HabitsFactory {
         value = suggestedValue
       }
 
-      let proteinHabit = ProposedHabit(
+      let proteinHabit = ProposedGoal(
         habitID: existingProteinHabit?.id,
         targetMetric: .proteinIntake,
         value: value,
@@ -351,7 +351,7 @@ private extension HabitsFactory {
 
 private extension HabitsFactory {
 
-  func updatedHabit(for habit: HabitDTO) async -> ProposedHabit? {
+  func updatedHabit(for habit: HabitDTO) async -> ProposedGoal? {
 
     // Cardio Fitness is now Heart Health
     guard habit.vitalKind != .cardioFitness else { return nil }
@@ -371,7 +371,7 @@ private extension HabitsFactory {
       value = suggestedValue
     }
 
-    return ProposedHabit(
+    return ProposedGoal(
       habitID: habit.id,
       targetMetric: habit.targetMetric,
       value: value,
@@ -384,7 +384,7 @@ private extension HabitsFactory {
     )
   }
 
-  func suggestNewHabit(for vital: VitalModel) async -> ProposedHabit? {
+  func suggestNewHabit(for vital: VitalModel) async -> ProposedGoal? {
     switch vital.id {
     case .heartHealth:
       return await createHabit(
@@ -438,13 +438,13 @@ private extension HabitsFactory {
     unit: HKUnit,
     vitalKind: VitalModel.Kind?,
     context: String?
-  ) async -> ProposedHabit {
+  ) async -> ProposedGoal {
     let average = await targetMetric.fetchDailyAverage(unit: unit, dateRange: .trailingWeeksFromNow(3)).doubleValue(for: unit)
 
     let min = targetMetric.minHabitTarget.doubleValue(for: unit)
     let value = max(min, average)
 
-    return ProposedHabit(
+    return ProposedGoal(
       habitID: nil,
       targetMetric: targetMetric,
       value: value,
