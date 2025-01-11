@@ -46,8 +46,8 @@ extension HabitsViewModel {
     shouldUpdateSuggestedHabits = mondayMorning > lastHabitRefreshDate
   }
 
-  func generateProposedHabits() async -> NewHabitResult {
-    await HabitsFactory.shared.generateProposedHabits()
+  func generateProposedHabits(vitals: [VitalModel]) async -> NewHabitResult {
+    await HabitsFactory.shared.generateProposedHabits(vitals: vitals)
   }
 
   func alternateTargetMetrics(for proposedHabit: ProposedGoal) async -> [TargetMetric] {
@@ -66,39 +66,19 @@ extension HabitsViewModel {
     return []
   }
 
-  func generateProposedHabit(
-    for targetMetric: TargetMetric,
-    vitalKind: VitalModel.Kind?
-  ) async -> ProposedGoal {
-    await HabitsFactory.shared.generateProposedHabit(
-      for: targetMetric,
-      vitalKind: vitalKind
-    )
-  }
+  func performSave(newGoals: NewHabitResult) throws {
 
-  func performSave(
-    proposedGoals: [ProposedGoal],
-    proposedToDos: [ProposedToDo]
-  ) throws {
-    for existingHabit in try modelContext.fetchActiveHabits(isSuggested: true) {
+    // End all existing habits
+    for existingHabit in try modelContext.fetchActiveHabits() {
       existingHabit.endDate = .now
     }
 
-    for proposedGoal in proposedGoals {
-      // If this is replacing an existing goal, let's end the existing one.
-      if
-        let habitID = proposedGoal.habitID,
-        let existingHabit = try modelContext.fetchHabit(id: habitID)
-      {
-        existingHabit.endDate = .now
-      }
+    var addedTargetMetrics = [TargetMetric]()
 
-      // If the user added this habit, let's end it.
-      let activeMatchingHabits = try modelContext.fetchActiveHabits(for: proposedGoal.targetMetric)
-      for habit in activeMatchingHabits {
-        habit.endDate = .now
-      }
-      
+    // Add new goals
+    for proposedGoal in newGoals.allProposedGoals {
+      guard !addedTargetMetrics.contains(proposedGoal.targetMetric) else { continue }
+
       let habit = Habit(
         targetMetric: proposedGoal.targetMetric,
         value: proposedGoal.value,
@@ -111,11 +91,12 @@ extension HabitsViewModel {
       )
 
       modelContext.insert(habit)
+      addedTargetMetrics.append(proposedGoal.targetMetric)
     }
 
     try modelContext.save()
 
-    ToDoManager.shared.apply(proposedToDos: proposedToDos)
+    ToDoManager.shared.apply(proposedToDos: newGoals.proposedToDos)
 
     lastHabitRefreshDate = .now
   }

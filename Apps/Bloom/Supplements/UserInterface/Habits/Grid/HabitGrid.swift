@@ -91,7 +91,6 @@ extension HabitGrid {
           await Delay(Int(delay * 1000))
 
           await MainActor.run {
-            print("Toggling sensory feedback")
             completionSensoryToggle.toggle()
           }
         }

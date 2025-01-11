@@ -11,143 +11,149 @@ import DataContainer
 import TelemetryDeck
 
 struct OnboardingFocusAreasView: View {
-    let onContinue: () -> Void
+  let onContinue: () -> Void
 
-    @State private var index = 1
+  @State private var index = 1
 
-    @State private var vitals = [VitalModel]()
+  @State private var vitals = [VitalModel]()
 
-    @State private var showContinue = false
-    @State private var didContinue = false
-    @State private var vitalKinds = [VitalModel.Kind]()
-    @State private var proposedGoals = [ProposedGoal]()
-    @State private var proposedToDos = [ProposedToDo]()
-    @State private var error: Error?
+  @State private var showContinue = false
+  @State private var didContinue = false
+  @State private var vitalKinds = [VitalModel.Kind]()
+  @State private var newHabitResult = NewHabitResult()
+  @State private var error: Error?
 
-    private let vitalsViewModel = VitalsViewModel.shared
+  private let vitalsViewModel = VitalsViewModel.shared
 
+  @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
-
-    @ObservedObject private var habitsViewModel = HabitsViewModel.shared
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Great! Let's determine which parts of your health we should focus on.")
-                    .onboardingTextStyle()
-                    .appear(with: 1, currentIndex: index)
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: 20) {
+        Text("Great! Let's determine which parts of your health we should focus on.")
+          .onboardingTextStyle()
+          .appear(with: 1, currentIndex: index)
 
 
-                if vitals.isEmpty {
-                    CircularSpinnerView()
-                        .foregroundStyle(.tint)
-                        .horizontallyCentered()
-                } else {
-                    Group {
-                        ForEach(vitals) { vital in
-                            MiniVitalCell(vital: vital)
-                                .transition(.scale)
-                        }
-                    }
-                }
-
-                Text("Now let's calculate some goals to tackle these based on your Health data.")
-                    .onboardingTextStyle()
-                    .appear(with: 3, currentIndex: index)
-
-                VStack {
-                    if proposedGoals.isNotEmpty {
-                        SectionTitleView("New Goals")
-                            .padding(.horizontal)
-
-                        ForEachEnumerated(proposedGoals) { (index, _) in
-                            ProposedHabitCell(
-                                proposedHabit: $proposedGoals[index],
-                                includeActions: true
-                            )
-                            .transition(.scale)
-                        }
-                    }
-
-                    if proposedToDos.isNotEmpty {
-                        SectionTitleView("To Do")
-                            .padding(.horizontal)
-
-                        ForEach(proposedToDos) { proposedToDo in
-                            ProposedToDoCell(proposedToDo: proposedToDo)
-                                .transition(.scale)
-                        }
-                    }
-                }
-                .appear(with: 4, currentIndex: index)
+        if vitals.isEmpty {
+          CircularSpinnerView()
+            .foregroundStyle(.tint)
+            .horizontallyCentered()
+        } else {
+          Group {
+            ForEach(vitals) { vital in
+              MiniVitalCell(vital: vital)
+                .transition(.scale)
             }
-            .horizontalAlignment(.leading)
-            .padding()
+          }
         }
-        .if(showContinue) {
-            $0.shelf {
-                Button("Continue") {
-                    do {
-                        try habitsViewModel.performSave(
-                            proposedGoals: proposedGoals,
-                            proposedToDos: proposedToDos
-                        )
-                        didContinue.toggle()
-                        onContinue()
-                    } catch {
-                        self.error = error
-                    }
-                }
-                .buttonStyle(.onboarding)
-            }
-        }
-        .animation(.bouncy, value: vitals.count)
-        .animation(.default, value: index)
-        .sensoryFeedback(.selection, trigger: index)
-        .sensoryFeedback(.selection, trigger: didContinue)
-        .onChange(of: vitalKinds) { _, _ in
-            loadVitals()
-        }
-        .onChange(of: index) { _, _ in
-            loadVitals()
-        }
-        .topSafeAreaBlur()
-        .task {
-            while index < 4 {
-                await advanceIndex()
-            }
 
-            await Delay(1700)
+        Text("Now let's calculate some goals to tackle these based on your Health data.")
+          .onboardingTextStyle()
+          .appear(with: 3, currentIndex: index)
 
-            showContinue = true
+        VStack {
+          if newHabitResult.focusVitals.isNotEmpty {
+            SectionTitleView("Suggested Goals")
+              .padding(.horizontal)
+
+            ForEach($newHabitResult.focusVitals) { focusVital in
+              FocusVitalGoalCell(
+                focusVital: focusVital,
+                includeActions: true
+              )
+              .transition(.scale)
+            }
+          }
+
+          if newHabitResult.proposedGoals.isNotEmpty {
+            SectionTitleView("Goals You Added")
+              .padding(.horizontal)
+
+            ForEach($newHabitResult.proposedGoals) { proposedGoal in
+              ProposedGoalCell(
+                proposedGoal: proposedGoal,
+                includeActions: true
+              )
+              .transition(.scale)
+            }
+          }
+
+          if newHabitResult.proposedToDos.isNotEmpty {
+            SectionTitleView("To Do")
+              .padding(.horizontal)
+
+            ForEach(newHabitResult.proposedToDos) { proposedToDo in
+              ProposedToDoCell(proposedToDo: proposedToDo)
+                .transition(.scale)
+            }
+          }
         }
-        .alert(error: $error)
-        .task {
-            let result = await habitsViewModel.generateProposedHabits()
-            proposedGoals = result.proposedGoals
-            proposedToDos = result.proposedToDos
-        }
-        .onAppear {
-            TelemetryDeck.signal("OB Focus Areas")
-        }
+        .appear(with: 4, currentIndex: index)
+      }
+      .horizontalAlignment(.leading)
+      .padding()
     }
+    .if(showContinue) {
+      $0.shelf {
+        Button("Continue") {
+          do {
+            try habitsViewModel.performSave(newGoals: newHabitResult)
+            didContinue.toggle()
+            onContinue()
+          } catch {
+            self.error = error
+          }
+        }
+        .buttonStyle(.onboarding)
+      }
+    }
+    .animation(.bouncy, value: vitals.count)
+    .animation(.default, value: index)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.selection, trigger: didContinue)
+    .onChange(of: vitalKinds) { _, _ in
+      loadVitals()
+    }
+    .onChange(of: index) { _, _ in
+      loadVitals()
+    }
+    .topSafeAreaBlur()
+    .task {
+      while index < 4 {
+        await advanceIndex()
+      }
+
+      await Delay(1200)
+
+      showContinue = true
+    }
+    .alert(error: $error)
+    .task {
+      let result = await habitsViewModel.generateProposedHabits(vitals: vitals)
+      self.newHabitResult = result
+    }
+    .onAppear {
+      TelemetryDeck.signal("OB Focus Areas")
+    }
+  }
 }
 
 private extension OnboardingFocusAreasView {
 
-    func advanceIndex() async {
-        await Delay(1700)
+  func advanceIndex() async {
+    await Delay(1200)
 
-        index += 1
-    }
+    index += 1
+  }
 
-    func loadVitals() {
-        guard index >= 2 && vitalKinds.isNotEmpty && vitals.isEmpty else { return }
+  func loadVitals() {
+    guard index >= 2 && vitalKinds.isNotEmpty && vitals.isEmpty else { return }
 
-        vitals = vitalsViewModel.allVitals.filter({ vitalKinds.contains($0.id) })
-    }
+    vitals = vitalsViewModel.allVitals.filter({ vitalKinds.contains($0.id) })
+  }
 }
 
 #Preview {
-    OnboardingFocusAreasView { }
+  OnboardingFocusAreasView { }
 }

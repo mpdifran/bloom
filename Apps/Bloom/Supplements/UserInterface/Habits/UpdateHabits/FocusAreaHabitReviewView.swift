@@ -43,10 +43,7 @@ struct FocusAreaHabitReviewView: View {
     .shelf {
       ProminentButton("Let's Do It!") {
         do {
-          try habitsViewModel.performSave(
-            proposedGoals: newHabits.proposedGoals,
-            proposedToDos: newHabits.proposedToDos
-          )
+          try habitsViewModel.performSave(newGoals: newHabits)
           onContinue()
         } catch {
           self.error = error
@@ -60,6 +57,7 @@ struct FocusAreaHabitReviewView: View {
     .sensoryFeedback(.success, trigger: isLoading)
     .animation(.default, value: index)
     .animation(.bouncy, value: isLoading)
+    .animation(.default, value: newHabits)
     .alert(error: $error)
     .task {
       while index < 2 {
@@ -75,12 +73,25 @@ private extension FocusAreaHabitReviewView {
 
   @ViewBuilder
   var contentView: some View {
+    if newHabits.focusVitals.isNotEmpty {
+      SectionTitleView("Suggested Goals")
+        .padding(.horizontal)
+
+      ForEach($newHabits.focusVitals) { focusVital in
+        FocusVitalGoalCell(
+          focusVital: focusVital,
+          includeActions: true
+        )
+        .transition(.scale)
+      }
+    }
+
     if newHabits.proposedGoals.isNotEmpty {
-      SectionTitleView("Proposed Goals")
+      SectionTitleView("Goals You Added")
         .padding(.horizontal)
 
       ForEachEnumerated(newHabits.proposedGoals) { (index, _) in
-        ProposedHabitCell(proposedHabit: $newHabits.proposedGoals[index])
+        ProposedGoalCell(proposedGoal: $newHabits.proposedGoals[index])
           .transition(.scale)
       }
     }

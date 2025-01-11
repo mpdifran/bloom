@@ -18,7 +18,7 @@ then
         echo "App is Bloom. Start uploading dSYMs to BugSnag."
 
         curl --http1.1 https://upload.bugsnag.com/ \
-        -F apiKey=bdabfb744461469374c2cc273b493168 \
+        -F apiKey=e24d7aa4dce2bddffd5e2db22c7ec9bd \
         -F dsym=@Supplements.app.dSYM/Contents/Resources/DWARF/Supplements \
         -F projectRoot=./
 
