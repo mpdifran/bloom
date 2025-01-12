@@ -1,5 +1,5 @@
 //
-//  HabitsFactory.swift
+//  GoalsFactory.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-23.
@@ -11,13 +11,20 @@ import DataContainer
 import HealthKit
 import TelemetryDeck
 
-final actor HabitsFactory {
-  static let shared = HabitsFactory()
+final actor GoalsFactory {
+  static let shared = GoalsFactory()
 
   private init() { }
+
+  private let activityLevelGoalFactory = ActivityLevelGoalFactory()
+  private let bowelMovementGoalFactory = BowelMovementGoalFactory()
+  private let exerciseEffectivenessGoalFactory = ExerciseEffectivenessGoalFactory()
+  private let heartHealthGoalFactory = HeartHealthGoalFactory()
+  private let sleepQualityGoalFactory = SleepQualityGoalFactory()
+  private let stressLevelGoalFactory = StressLevelGoalFactory()
 }
 
-extension HabitsFactory {
+extension GoalsFactory {
 
   func recommendedFocusVitals() async -> [VitalModel] {
     var focusVitals: [VitalModel] = []
@@ -83,7 +90,7 @@ extension HabitsFactory {
   }
 }
 
-extension HabitsFactory {
+extension GoalsFactory {
 
   func generateProposedHabits(vitals: [VitalModel]) async -> NewHabitResult {
     var vitals = vitals
@@ -123,7 +130,7 @@ extension HabitsFactory {
 
 // MARK: - Nutrition Habits
 
-private extension HabitsFactory {
+private extension GoalsFactory {
 
   func generateNutritionHabits(activeHabits: [HabitDTO]) async -> NewHabitResult? {
     var todos = [ProposedToDo]()
@@ -292,7 +299,7 @@ private extension HabitsFactory {
   }
 }
 
-private extension HabitsFactory {
+private extension GoalsFactory {
 
   func generateFocusVital(for vital: VitalModel) async -> FocusVital {
     let goalOptions = await createGoalOptions(for: vital.id)
@@ -304,88 +311,17 @@ private extension HabitsFactory {
   func createGoalOptions(for vitalKind: VitalModel.Kind) async -> [ProposedGoal] {
     switch vitalKind {
     case .heartHealth:
-      return [
-        await createHabit(
-          targetMetric: .walkingRunningDistance,
-          unit: .meterUnit(with: .kilo),
-          vitalKind: vitalKind,
-          context: "Walking or running more can help improve your heart health."
-        )
-      ]
+      return await heartHealthGoalFactory.createGoals()
     case .sleepQuality:
-      return []
+      return await sleepQualityGoalFactory.createGoals()
     case .activityLevel:
-      return [
-        await createHabit(
-          targetMetric: .stepCount,
-          unit: .count(),
-          vitalKind: vitalKind,
-          context: "Getting your steps in is an easy way to increase your activity level."
-        )
-      ]
+      return await activityLevelGoalFactory.createGoals()
     case .stressLevels:
-      return [
-        await createHabit(
-          targetMetric: .meditationMinutes,
-          unit: .minute(),
-          vitalKind: vitalKind,
-          context: "Meditation is a great way to lower stress levels."
-        )
-      ]
+      return await stressLevelGoalFactory.createGoals()
     case .exerciseEffectiveness:
-      return [
-        await createHabit(
-          targetMetric: .exerciseMinutes,
-          unit: .minute(),
-          vitalKind: vitalKind,
-          context: "Getting any type of exercise will help you get more zone minutes."
-        ),
-        await createHabit(
-          targetMetric: .runDistance,
-          unit: .meterUnit(with: .kilo),
-          vitalKind: vitalKind,
-          context: "Running is a great way to spend time in different target heart rate zones."
-        ),
-        await createHabit(
-          targetMetric: .targetHeartRateZone1,
-          unit: .minute(),
-          vitalKind: vitalKind,
-          context: "Zone 1 is the easiest way to get your zone minutes."
-        ),
-        await createHabit(
-          targetMetric: .targetHeartRateZone2,
-          unit: .minute(),
-          vitalKind: vitalKind,
-          context: "Zone 2 is a bit more intense than Zone 1, but still a good way to get your zone minutes."
-        ),
-        await createHabit(
-          targetMetric: .targetHeartRateZone3,
-          unit: .minute(),
-          vitalKind: vitalKind,
-          context: "Zone 3 is moderately intense, but every minute spent here is worth 2x the zone minutes."
-        ),
-        await createHabit(
-          targetMetric: .targetHeartRateZone4,
-          unit: .minute(),
-          vitalKind: vitalKind,
-          context: "Zone 4 is a bit more intense than Zone 3, but still gets 2x the zone minutes."
-        ),
-        await createHabit(
-          targetMetric: .targetHeartRateZone5,
-          unit: .minute(),
-          vitalKind: vitalKind,
-          context: "Zone 5 is the most intense zone, which is why every minute is worth 3x the zone minutes!"
-        )
-      ]
+      return await exerciseEffectivenessGoalFactory.createGoals()
     case .bowelMovements:
-      return [
-        await createHabit(
-          targetMetric: .waterIntake,
-          unit: .literUnit(with: .milli),
-          vitalKind: vitalKind,
-          context: "Staying hydrated can help make your bowel movements more regular."
-        )
-      ]
+      return await bowelMovementGoalFactory.createGoals()
     case .bodyComposition, .cycleTracking, .nutrition, .cardioFitness:
       return []
     @unknown default:
@@ -398,7 +334,6 @@ private extension HabitsFactory {
     // Cardio Fitness is now Heart Health
     guard habit.vitalKind != .cardioFitness else { return nil }
 
-    // TODO: Determine when to promote to Habit from Focus Area
     guard let recommendation = await GenericHabitTargetCalculator.calculateNewTarget(
       habit: habit
     ) else {
@@ -423,54 +358,6 @@ private extension HabitsFactory {
       vitalKind: habit.vitalKind,
       context: recommendation.context,
       hasUserEdited: habit.isUserEdited
-    )
-  }
-}
-
-private extension HabitsFactory {
-
-  func createHabit(
-    targetMetric: TargetMetric,
-    unit: HKUnit,
-    vitalKind: VitalModel.Kind?,
-    context: String?
-  ) async -> ProposedGoal {
-    let average = await targetMetric.fetchDailyAverage(unit: unit, dateRange: .trailingWeeksFromNow(3)).doubleValue(for: unit)
-
-    let min = targetMetric.minHabitTarget.doubleValue(for: unit)
-
-    var value = max(min, average)
-    var suggestedValue = value
-    var resolvedContext: String?
-
-    // TODO: Optimize this by sharing the model actor.
-    let modelActor = HabitModelActor.standard()
-    let existingGoal = (try? await modelActor.fetchActiveHabits(for: targetMetric))?.first
-
-    if let existingGoal {
-      // Calculate what the recommendation should be.
-      if let recommendation = await GenericHabitTargetCalculator.calculateNewTarget(habit: existingGoal) {
-        suggestedValue = recommendation.target.doubleValue(for: existingGoal.unit)
-        value = suggestedValue
-        resolvedContext = recommendation.context
-      }
-
-      // If it's been used edited, don't change the value.
-      if existingGoal.isUserEdited {
-        value = existingGoal.value
-      }
-    }
-
-    return ProposedGoal(
-      habitID: existingGoal?.id,
-      targetMetric: targetMetric,
-      value: value,
-      suggestedValue: suggestedValue,
-      previousValue: existingGoal?.value,
-      unitString: unit.unitString,
-      vitalKind: vitalKind,
-      context: resolvedContext ?? context,
-      hasUserEdited: existingGoal?.isUserEdited ?? false
     )
   }
 }

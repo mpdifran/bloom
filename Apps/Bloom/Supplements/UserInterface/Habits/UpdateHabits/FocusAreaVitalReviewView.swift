@@ -101,7 +101,7 @@ private extension FocusAreaVitalReviewView {
   }
 
   func loadVitals() async {
-    let focusVitals = await HabitsFactory.shared.recommendedFocusVitals()
+    let focusVitals = await GoalsFactory.shared.recommendedFocusVitals()
     await Delay(1700)
 
     for vital in focusVitals {

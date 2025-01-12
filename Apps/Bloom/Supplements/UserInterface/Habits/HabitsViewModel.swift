@@ -47,7 +47,7 @@ extension HabitsViewModel {
   }
 
   func generateProposedHabits(vitals: [VitalModel]) async -> NewHabitResult {
-    await HabitsFactory.shared.generateProposedHabits(vitals: vitals)
+    await GoalsFactory.shared.generateProposedHabits(vitals: vitals)
   }
 
   func alternateTargetMetrics(for proposedHabit: ProposedGoal) async -> [TargetMetric] {

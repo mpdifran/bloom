@@ -203,7 +203,7 @@ private extension OnboardingFocusAreasView {
 
     await Delay(1200)
 
-    let focusVitals = await HabitsFactory.shared.recommendedFocusVitals()
+    let focusVitals = await GoalsFactory.shared.recommendedFocusVitals()
 
     for vital in focusVitals {
       await Delay(100)

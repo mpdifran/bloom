@@ -129,7 +129,7 @@ private extension FocusAreaHabitReviewView {
   }
 
   func loadHabits() async {
-    newHabits = await HabitsFactory.shared.generateProposedHabits(vitals: vitals)
+    newHabits = await GoalsFactory.shared.generateProposedHabits(vitals: vitals)
     isLoading = false
   }
 }
