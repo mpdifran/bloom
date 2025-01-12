@@ -41,6 +41,7 @@ public extension Habit {
         HKQuantity(unit: unit, doubleValue: value)
     }
 
+  /// If you update here, you need to update the method on `HabitDTO`.
     func quantityMeetsGoal(_ otherQuantity: HKQuantity, gracePercent: Double = 0) -> Bool {
         guard quantity.is(compatibleWith: unit) else { return false }
 
