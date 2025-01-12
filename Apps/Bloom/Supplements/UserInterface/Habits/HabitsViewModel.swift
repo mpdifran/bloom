@@ -75,21 +75,21 @@ extension HabitsViewModel {
 
     var addedTargetMetrics = [TargetMetric]()
 
-    // Add new goals
-    for proposedGoal in newGoals.allProposedGoals {
+    for focusVital in newGoals.focusVitals {
+      guard
+        let proposedGoal = focusVital.proposedGoals.first,
+        !addedTargetMetrics.contains(proposedGoal.targetMetric)
+      else { continue }
+
+      let habit = createHabit(from: proposedGoal, isSuggested: true)
+      modelContext.insert(habit)
+      addedTargetMetrics.append(proposedGoal.targetMetric)
+    }
+
+    for proposedGoal in newGoals.proposedGoals {
       guard !addedTargetMetrics.contains(proposedGoal.targetMetric) else { continue }
 
-      let habit = Habit(
-        targetMetric: proposedGoal.targetMetric,
-        value: proposedGoal.value,
-        unitString: proposedGoal.unitString,
-        startDate: .now,
-        isSuggested: proposedGoal.vitalKind != nil,
-        isUserEdited: proposedGoal.hasUserEdited,
-        vitalKind: proposedGoal.vitalKind,
-        context: proposedGoal.context
-      )
-
+      let habit = createHabit(from: proposedGoal, isSuggested: false)
       modelContext.insert(habit)
       addedTargetMetrics.append(proposedGoal.targetMetric)
     }
@@ -99,6 +99,19 @@ extension HabitsViewModel {
     ToDoManager.shared.apply(proposedToDos: newGoals.proposedToDos)
 
     lastHabitRefreshDate = .now
+  }
+
+  func createHabit(from proposedGoal: ProposedGoal, isSuggested: Bool) -> Habit {
+    Habit(
+      targetMetric: proposedGoal.targetMetric,
+      value: proposedGoal.value,
+      unitString: proposedGoal.unitString,
+      startDate: .now,
+      isSuggested: isSuggested,
+      isUserEdited: proposedGoal.hasUserEdited,
+      vitalKind: proposedGoal.vitalKind,
+      context: proposedGoal.context
+    )
   }
 
   func resetHabitCheckDate() {
