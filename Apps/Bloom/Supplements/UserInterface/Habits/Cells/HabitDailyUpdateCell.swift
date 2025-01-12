@@ -21,6 +21,11 @@ struct HabitDailyUpdateCell: View {
     self._viewModel = ObservedObject(wrappedValue: HabitDailyUpdateCellViewModel(habit: habit))
   }
 
+  init(habitViewModel: HabitDailyUpdateCellViewModel) {
+    self.habit = habitViewModel.habit
+    self._viewModel = ObservedObject(wrappedValue: habitViewModel)
+  }
+
   var body: some View {
     HStack(spacing: 14) {
       Image(systemName: habit.targetMetric.systemImage)
@@ -42,6 +47,13 @@ struct HabitDailyUpdateCell: View {
               Text("Completed • \(viewModel.formattedDailyValue)")
             }
             .foregroundStyle(.tint)
+          } else if viewModel.goalCompletionState == .exceededGoal {
+            HStack(spacing: 4) {
+              Image(systemName: "chevron.up.circle.fill")
+                .foregroundStyle(.white, .mutedRed)
+              Text("Exceeded goal by \(viewModel.formattedExceededDailyValue)")
+            }
+            .foregroundStyle(.mutedRed)
           } else {
             HStack(spacing: 6) {
               ProgressBar(
@@ -113,6 +125,17 @@ struct HabitDailyUpdateCell: View {
           isSuggested: true,
           isUserEdited: false,
           vitalKind: .nutrition
+        )
+      )
+      HabitDailyUpdateCell(
+        habit: .init(
+          targetMetric: .bikeDistance,
+          value: -20,
+          unitString: HKUnit.meterUnit(with: .kilo).unitString,
+          startDate: .now,
+          isSuggested: true,
+          isUserEdited: false,
+          vitalKind: .activityLevel
         )
       )
     }

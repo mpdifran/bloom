@@ -14,26 +14,11 @@ import DataContainer
 struct TodayView: View {
 
   @Query var habits: [Habit]
-  @Query var nutritionHabits: [Habit]
 
   init() {
-    let rawCaloriesMetric = TargetMetric.calories.rawValue
-    let rawProteinMetric = TargetMetric.proteinIntake.rawValue
-
     _habits = Query(
       filter: #Predicate<Habit> { habit in
-        habit.endDate == nil &&
-        habit.rawTargetMetric != rawProteinMetric &&
-        habit.rawTargetMetric != rawCaloriesMetric
-      },
-      sort: \Habit.startDate,
-      order: .reverse
-    )
-    _nutritionHabits = Query(
-      filter: #Predicate<Habit> { habit in
-        habit.endDate == nil &&
-        habit.rawTargetMetric == rawProteinMetric ||
-        habit.rawTargetMetric == rawCaloriesMetric
+        habit.endDate == nil
       },
       sort: \Habit.startDate,
       order: .reverse
@@ -94,26 +79,9 @@ struct TodayView: View {
           }
 
           Group {
-//            if computedShowWeightWidget {
-//              NavigationLink {
-//                BodyCompositionDetailsView()
-//              } label: {
-//                BodyWeightTodayWidgetView()
-//              }
-//              .buttonStyle(.plain)
-//            }
-
-            if showNutritionWidget {
-              SectionTitleView("Nutrition")
-                .padding(.horizontal)
-
-              NutritionHabitTodayWidgetView()
-            }
-
             if habits.isNotEmpty {
               habitsSection
             }
-
             reportsSection
           }
           .padding(.horizontal)
@@ -270,24 +238,6 @@ private extension TodayView {
       return "Available in \(duration)"
     }
     return "Available soon"
-  }
-}
-
-private extension TodayView {
-
-  var computedShowWeightWidget: Bool {
-    guard showWeightWidget else { return false }
-
-    switch HealthManager.shared.healthGoal {
-    case .loseWeight, .gainWeight, .maintainWeight: return true
-    default: return false
-    }
-  }
-
-  var showNutritionWidget: Bool {
-    guard showNutritionTodayWidget else { return false }
-
-    return nutritionHabits.isNotEmpty
   }
 }
 

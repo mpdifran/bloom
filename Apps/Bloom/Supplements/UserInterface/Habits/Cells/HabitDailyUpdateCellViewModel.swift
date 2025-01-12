@@ -16,8 +16,9 @@ final class HabitDailyUpdateCellViewModel: ObservableObject {
   @Published var dailyValue: Double = 0
   @Published var goalCompletionState: CompletionCheckmarkView.State = .unmetGoal
   @Published var shouldShowConfetti = false
+  @Published var sortRank: Double = 0
 
-  private let habit: Habit
+  let habit: Habit
 
   init(habit: Habit) {
     self.habit = habit
@@ -40,6 +41,12 @@ extension HabitDailyUpdateCellViewModel {
   var formattedDailyValueNoUnits: String {
     let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
     return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter, showUnits: false)
+  }
+
+  var formattedExceededDailyValue: String {
+    let exceededAmount = dailyValue - habit.value
+    let quantity = HKQuantity(unit: habit.unit, doubleValue: exceededAmount)
+    return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter)
   }
 
   var goalDifferenceSummary: String {
@@ -120,6 +127,8 @@ private extension HabitDailyUpdateCellViewModel {
       }
     }
 
+    sortRank = calculateSortRank()
+
     if
       prevHasCompletedGoal != .metGoal &&
         goalCompletionState == .metGoal &&
@@ -152,5 +161,25 @@ private extension HabitDailyUpdateCellViewModel {
         subtitle: "You've hit your \(habit.targetMetric.name) goal, great job!"
       )
     }
+  }
+
+  func calculateSortRank() -> Double {
+    // Determine the current daily quantity
+    let dailyQuantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
+
+    // If it's met the goal, put it at the end of the list.
+    if habit.quantityMeetsGoal(dailyQuantity) {
+      return Double.greatestFiniteMagnitude
+    }
+
+    // If it's exceeded the goal, order it by closest to the goal.
+    if dailyValue > habit.value {
+      let percent = dailyValue.scaledPercent(lower: habit.value, upper: habit.value * 2)
+      return 1000 + percent * 100
+    }
+
+    // If we haven't met the goal, order it by progress ascending
+    let percent = dailyValue.scaledPercent(lower: 0, upper: habit.value)
+    return percent * 100
   }
 }

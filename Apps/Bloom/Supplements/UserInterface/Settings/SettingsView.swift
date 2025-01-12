@@ -48,7 +48,6 @@ struct SettingsView: View {
         habitsSection
         todoSection
         reportSection
-        widgetsSection
         unitsSection
         supportSection
         authenticationSection
