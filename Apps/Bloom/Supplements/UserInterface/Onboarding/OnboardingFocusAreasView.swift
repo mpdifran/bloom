@@ -13,14 +13,16 @@ import TelemetryDeck
 struct OnboardingFocusAreasView: View {
   let onContinue: () -> Void
 
-  @State private var index = 1
+  @State private var index = 0
 
   @State private var vitals = [VitalModel]()
 
+  @State private var hasApprovedOfVitals = false
   @State private var showContinue = false
   @State private var didContinue = false
-  @State private var vitalKinds = [VitalModel.Kind]()
+  @State private var hasStartedCalculateGoals = false
   @State private var newHabitResult = NewHabitResult()
+  @State private var presentedSheet: AnyView?
   @State private var error: Error?
 
   private let vitalsViewModel = VitalsViewModel.shared
@@ -39,10 +41,32 @@ struct OnboardingFocusAreasView: View {
           CircularSpinnerView()
             .foregroundStyle(.tint)
             .horizontallyCentered()
+            .appear(with: 2, currentIndex: index)
         } else {
           Group {
             ForEach(vitals) { vital in
-              MiniVitalCell(vital: vital)
+              Menu {
+                if vitals.count > 1 && index == 2 {
+                  Button("Remove", systemImage: "trash", role: .destructive) {
+                    vitals.removeAll(where: { $0.id == vital.id })
+                  }
+                }
+              } label: {
+                MiniVitalCell(vital: vital)
+              }
+              .buttonStyle(.plain)
+              .transition(.scale)
+            }
+
+            if !hasApprovedOfVitals && vitals.count < 3 {
+              AddVitalCell()
+                .onTapGesture {
+                  presentedSheet = VitalPickerView(
+                    excluding: excludingVitalKinds
+                  ) { vitalModel in
+                    vitals.append(vitalModel)
+                  }.asAny
+                }
                 .transition(.scale)
             }
           }
@@ -50,7 +74,7 @@ struct OnboardingFocusAreasView: View {
 
         Text("Now let's calculate some goals to tackle these based on your Health data.")
           .onboardingTextStyle()
-          .appear(with: 3, currentIndex: index)
+          .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
         VStack {
           if newHabitResult.focusVitals.isNotEmpty {
@@ -89,7 +113,7 @@ struct OnboardingFocusAreasView: View {
             }
           }
         }
-        .appear(with: 4, currentIndex: index)
+        .appear(with: 4, currentIndex: index, secondaryIfNotCurrentIndex: false)
       }
       .horizontalAlignment(.leading)
       .padding()
@@ -97,42 +121,41 @@ struct OnboardingFocusAreasView: View {
     .if(showContinue) {
       $0.shelf {
         Button("Continue") {
-          do {
-            try habitsViewModel.performSave(newGoals: newHabitResult)
-            didContinue.toggle()
-            onContinue()
-          } catch {
-            self.error = error
+          if !hasApprovedOfVitals {
+            hasApprovedOfVitals = true
+            Task {
+              await bulkAdvanceIndexRound2()
+            }
+          } else {
+            do {
+              try habitsViewModel.performSave(newGoals: newHabitResult)
+              didContinue.toggle()
+              onContinue()
+            } catch {
+              self.error = error
+            }
           }
         }
         .buttonStyle(.onboarding)
+        .disabled(!canContinue)
       }
     }
     .animation(.bouncy, value: vitals.count)
     .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: index)
-    .sensoryFeedback(.selection, trigger: didContinue)
-    .onChange(of: vitalKinds) { _, _ in
-      loadVitals()
-    }
+    .sensoryFeedback(.impact, trigger: didContinue)
+    .sheet($presentedSheet)
     .onChange(of: index) { _, _ in
-      loadVitals()
+      Task {
+        await loadVitals()
+        await loadGoals()
+      }
     }
     .topSafeAreaBlur()
     .task {
-      while index < 4 {
-        await advanceIndex()
-      }
-
-      await Delay(1200)
-
-      showContinue = true
+      await bulkAdvanceIndexRound1()
     }
     .alert(error: $error)
-    .task {
-      let result = await habitsViewModel.generateProposedHabits(vitals: vitals)
-      self.newHabitResult = result
-    }
     .onAppear {
       TelemetryDeck.signal("OB Focus Areas")
     }
@@ -141,16 +164,59 @@ struct OnboardingFocusAreasView: View {
 
 private extension OnboardingFocusAreasView {
 
-  func advanceIndex() async {
-    await Delay(1200)
-
-    index += 1
+  var excludingVitalKinds: [VitalModel.Kind] {
+    vitals.map { $0.id } + [.bodyComposition, .cycleTracking]
   }
 
-  func loadVitals() {
-    guard index >= 2 && vitalKinds.isNotEmpty && vitals.isEmpty else { return }
+  var canContinue: Bool {
+    index == 2 || index == 4
+  }
 
-    vitals = vitalsViewModel.allVitals.filter({ vitalKinds.contains($0.id) })
+  func bulkAdvanceIndexRound1() async {
+    while index < 2 {
+      await advanceIndex()
+    }
+
+    await Delay(1200)
+
+    showContinue = true
+  }
+
+  func bulkAdvanceIndexRound2() async {
+    while index < 4 {
+      await advanceIndex()
+    }
+
+    await Delay(1200)
+
+    showContinue = true
+  }
+
+  func advanceIndex() async {
+    index += 1
+
+    await Delay(1200)
+  }
+
+  func loadVitals() async {
+    guard index >= 2 && vitals.isEmpty else { return }
+
+    await Delay(1200)
+
+    let focusVitals = await HabitsFactory.shared.recommendedFocusVitals()
+
+    for vital in focusVitals {
+      await Delay(100)
+      self.vitals.append(vital)
+    }
+  }
+
+  func loadGoals() async {
+    guard index >= 4 && !hasStartedCalculateGoals else { return }
+
+    hasStartedCalculateGoals = true
+
+    self.newHabitResult = await habitsViewModel.generateProposedHabits(vitals: vitals)
   }
 }
 

@@ -52,6 +52,7 @@ extension NewHabitResult {
   }
 
   var allVitalKinds: [VitalModel.Kind] {
+    focusVitals.compactMap(\.vitalKind) +
     proposedGoals.compactMap(\.vitalKind) +
     proposedToDos.compactMap(\.vitalKind)
   }
