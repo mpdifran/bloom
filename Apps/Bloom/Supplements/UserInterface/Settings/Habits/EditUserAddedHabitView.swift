@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import DataContainer
+import HealthKit
 
 struct EditUserAddedHabitView: View {
   private let habit: Habit
@@ -15,6 +16,7 @@ struct EditUserAddedHabitView: View {
   private let onUpdate: (Habit?) -> Void
 
   @State private var targetValue: Double
+  @State private var unit: HKUnit
 
   init(
     habit: Habit,
@@ -25,6 +27,7 @@ struct EditUserAddedHabitView: View {
     self.canDelete = canDelete
     self.onUpdate = onUpdate
     self._targetValue = State(initialValue: habit.value)
+    self._unit = State(initialValue: habit.unit)
   }
 
   @State private var didSaveToggle = false
@@ -62,7 +65,8 @@ struct EditUserAddedHabitView: View {
           TextField("", value: $targetValue, formatter: habit.targetMetric.preferredFormatter)
             .selectAllTextOnBeginEditing()
             .focused($isFocused)
-          Text(habit.unit.sensibleUnitString)
+
+          LocalizedUnitPickerView(unit: $unit)
         }
         .fontDesign(.rounded)
         .keyboardType(.decimalPad)
@@ -111,6 +115,7 @@ private extension EditUserAddedHabitView {
 
     if Calendar.current.isDateInToday(habit.startDate) {
       habit.value = targetValue
+      habit.unitString = unit.unitString
       habit.isUserEdited = isUserEdited
       updatedHabit = habit
     } else {
@@ -120,6 +125,7 @@ private extension EditUserAddedHabitView {
 
       newHabit.startDate = .now
       newHabit.value = targetValue
+      newHabit.unitString = unit.unitString
       newHabit.isUserEdited = isUserEdited
 
       modelContext.insert(newHabit)

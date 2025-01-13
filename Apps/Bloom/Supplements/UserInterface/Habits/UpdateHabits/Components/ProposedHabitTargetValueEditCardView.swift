@@ -11,105 +11,97 @@ import HealthKit
 import SwiftData
 
 struct ProposedHabitTargetValueEditCardView: View {
-    @Binding var proposedHabit: ProposedGoal
-    @State private var value: Double
+  @Binding var proposedHabit: ProposedGoal
+  @State private var value: Double
+  @State private var unit: HKUnit
 
-    init(proposedHabit: Binding<ProposedGoal>) {
-        self._proposedHabit = proposedHabit
-        self._value = State(initialValue: proposedHabit.wrappedValue.value)
-    }
+  init(proposedHabit: Binding<ProposedGoal>) {
+    self._proposedHabit = proposedHabit
+    self._value = State(initialValue: proposedHabit.wrappedValue.value)
+    self._unit = State(initialValue: proposedHabit.wrappedValue.unit)
+  }
 
-    @FocusState private var isFocused: Bool
+  @FocusState private var isFocused: Bool
 
-    @Environment(\.dismiss) private var dismiss
+  @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        NavigationStack {
-            VStack {
-                Spacer()
+  var body: some View {
+    NavigationStack {
+      VStack {
+        Spacer()
 
-                HStack {
-                    TextField("", value: $value, formatter: proposedHabit.targetMetric.preferredFormatter)
-                        .selectAllTextOnBeginEditing()
-                        .focused($isFocused)
-                    Text(proposedHabit.unit.sensibleUnitString)
-                }
-                .fontDesign(.rounded)
-                .keyboardType(.decimalPad)
-                .textFieldStyle(.roundedBorder)
-                .font(.largeTitle)
-                .bold()
-                .multilineTextAlignment(.trailing)
-                .padding()
-                .padding(.horizontal, 30)
+        HStack {
+          TextField("", value: $value, formatter: proposedHabit.targetMetric.preferredFormatter)
+            .selectAllTextOnBeginEditing()
+            .focused($isFocused)
 
-                if proposedHabit.shouldShowSuggestedValue {
-                    Text("Recommended \(proposedHabit.displaySuggestedValue)")
-                        .bold()
-                }
-
-                if let previousQuantity = proposedHabit.displayPreviousQuantity {
-                    Text("Previously \(previousQuantity)")
-                        .foregroundStyle(.secondary)
-                        .font(.caption)
-                }
-
-                Spacer()
-            }
-            .background {
-                Rectangle()
-                    .fill(.tint.tertiary)
-                    .ignoresSafeArea()
-            }
-            .navigationTitle(proposedHabit.targetMetric.name)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) {
-                        dismiss()
-                    }
-                }
-            }
-            .shelf {
-                ProminentButton("Save") {
-                    proposedHabit.value = value
-                    proposedHabit.hasUserEdited = true
-                    dismiss()
-                }
-            }
+          LocalizedUnitPickerView(unit: $unit)
         }
-        .presentationDetents([.height(300)])
-        .presentationCornerRadius(25)
+        .fontDesign(.rounded)
+        .keyboardType(.decimalPad)
+        .textFieldStyle(.roundedBorder)
+        .font(.largeTitle)
+        .bold()
+        .multilineTextAlignment(.trailing)
+        .padding()
+        .padding(.horizontal, 30)
+
+        if proposedHabit.shouldShowSuggestedValue {
+          Text("Recommended \(proposedHabit.displaySuggestedValue)")
+            .bold()
+        }
+
+        if let previousQuantity = proposedHabit.displayPreviousQuantity {
+          Text("Previously \(previousQuantity)")
+            .foregroundStyle(.secondary)
+            .font(.caption)
+        }
+
+        Spacer()
+      }
+      .background {
+        Rectangle()
+          .fill(.tint.tertiary)
+          .ignoresSafeArea()
+      }
+      .navigationTitle(proposedHabit.targetMetric.name)
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Cancel", role: .cancel) {
+            dismiss()
+          }
+        }
+      }
+      .shelf {
+        ProminentButton("Save") {
+          proposedHabit.value = value
+          proposedHabit.unitString = unit.unitString
+          proposedHabit.hasUserEdited = true
+          dismiss()
+        }
+      }
     }
+    .presentationDetents([.height(300)])
+    .presentationCornerRadius(25)
+  }
 }
 
 #Preview {
-    struct PreviewView: View {
+  @Previewable @State var proposedGoal = ProposedGoal(
+    habitID: nil,
+    targetMetric: .stepCount,
+    value: 3000,
+    suggestedValue: 5000,
+    previousValue: 2000,
+    unitString: HKUnit.count().unitString,
+    vitalKind: .heartHealth,
+    context: "",
+    hasUserEdited: true
+  )
 
-        @State private var showSheet = true
-        @State private var proposedHabit = ProposedGoal(
-            habitID: nil,
-            targetMetric: .stepCount,
-            value: 3000,
-            suggestedValue: 5000,
-            previousValue: 2000,
-            unitString: HKUnit.count().unitString,
-            vitalKind: .heartHealth,
-            context: "",
-            hasUserEdited: true
-        )
-
-        var body: some View {
-            Button {
-                showSheet.toggle()
-            } label: {
-                Text("Show Sheet")
-            }
-            .sheet(isPresented: $showSheet) {
-                ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit)
-                .tint(.mutedBlue)
-            }
-        }
-    }
-    return PreviewView()
+  PreviewSheetPresent {
+    ProposedHabitTargetValueEditCardView(proposedHabit: $proposedGoal)
+      .tint(.mutedBlue)
+  }
 }

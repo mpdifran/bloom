@@ -16,7 +16,7 @@ struct ProposedGoal: Sendable, Identifiable, Hashable {
     var value: Double
     var suggestedValue: Double
     let previousValue: Double?
-    let unitString: String
+    var unitString: String
     let startDate: Date = Date.now
     let vitalKind: VitalModel.Kind?
     let context: String?

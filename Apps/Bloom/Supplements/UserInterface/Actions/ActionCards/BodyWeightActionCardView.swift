@@ -25,7 +25,7 @@ struct BodyWeightActionCardView: View {
   @FocusState private var isFocused: Bool
   @ObservedObject private var healthManager = HealthManager.shared
 
-  private var unitPreferences = HealthUnitPreferences.shared
+  @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   var body: some View {
     ActionCardView(
@@ -42,7 +42,8 @@ struct BodyWeightActionCardView: View {
           TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
             .selectAllTextOnBeginEditing()
             .focused($isFocused)
-          Text(unitPreferences.weightUnit.sensibleUnitString)
+
+          LocalizedUnitPickerView(unit: $unitPreferences.weightUnit)
         }
         .frame(width: 200)
         .fontDesign(.rounded)
