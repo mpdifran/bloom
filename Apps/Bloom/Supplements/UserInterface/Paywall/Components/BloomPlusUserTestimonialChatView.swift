@@ -16,6 +16,8 @@ struct BloomPlusUserTestimonialChatView: View {
         HStack(alignment: .bottom, spacing: 0) {
             if position == .leading {
                 profilePic
+            } else {
+              Spacer(minLength: 0)
             }
 
             ChatBubble(
@@ -31,9 +33,10 @@ struct BloomPlusUserTestimonialChatView: View {
 
             if position == .trailing {
                 profilePic
+            } else {
+              Spacer(minLength: 0)
             }
         }
-        .padding()
     }
 }
 

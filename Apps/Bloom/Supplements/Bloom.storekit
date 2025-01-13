@@ -20,7 +20,7 @@
     "_applicationInternalID" : "6739955926",
     "_developerTeamID" : "GUJ47GUV2Q",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 758044411.58261502,
+    "_lastSynchronizedDate" : 758495736.23577499,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -101,6 +101,41 @@
           "productID" : "bloom_pro_monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Bloom Pro - Monthly",
+          "subscriptionGroupID" : "21614173",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+            {
+              "internalID" : "AD340237",
+              "numberOfPeriods" : 1,
+              "offerID" : "one_month_free",
+              "paymentMode" : "free",
+              "referenceName" : "One Month Free",
+              "subscriptionPeriod" : "P1M"
+            }
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "39.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6740501424",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full access to Bloom",
+              "displayName" : "Bloom Pro - Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bloom_pro_yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Bloom Pro - Yearly",
           "subscriptionGroupID" : "21614173",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
