@@ -107,6 +107,7 @@ private extension FoodItemCell {
     do {
       try await nutritionViewModel.log(
         foodItem: food,
+        date: nutritionViewModel.date,
         meal: nutritionViewModel.suggestedMeal,
         numberOfServings: 1
       )

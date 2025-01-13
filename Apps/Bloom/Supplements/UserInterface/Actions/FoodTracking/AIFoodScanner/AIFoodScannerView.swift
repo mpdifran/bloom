@@ -291,10 +291,10 @@ private extension AIFoodScannerView {
 private extension AIFoodScannerView {
 
   func save() async throws {
-    let meal = nutritionViewModel.suggestedMeal
     try await nutritionViewModel.log(
       foodItemServings: viewModel.servings,
-      meal: meal
+      date: nutritionViewModel.date,
+      meal: nutritionViewModel.suggestedMeal
     )
 
     saveComplete.toggle()

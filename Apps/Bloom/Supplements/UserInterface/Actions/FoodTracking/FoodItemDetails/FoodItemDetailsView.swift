@@ -291,6 +291,7 @@ private extension FoodItemDetailsView {
     } else {
       try await nutritionViewModel.log(
         foodItem: foodItem,
+        date: date,
         meal: meal,
         numberOfServings: numberOfServings
       )

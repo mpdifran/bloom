@@ -89,7 +89,11 @@ extension NutritionTrackingViewModel {
 
 extension NutritionTrackingViewModel {
 
-  func log(foodItemServings: [FoodItemServing], meal: FoodItemLog.Meal) async throws {
+  func log(
+    foodItemServings: [FoodItemServing],
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
     try modelContext.transaction {
       for serving in foodItemServings {
         let dbFoodItem: FoodItemRecord
@@ -103,7 +107,7 @@ extension NutritionTrackingViewModel {
 
         let foodItemLog = FoodItemLog(
           id: UUID().uuidString,
-          date: date(for: meal),
+          date: calculateDate(for: meal, from: date),
           meal: meal,
           numberOfServings: serving.serving,
           foodItem: dbFoodItem
@@ -124,11 +128,16 @@ extension NutritionTrackingViewModel {
 
   func log(
     foodItem: FoodItem,
+    date: Date,
     meal: FoodItemLog.Meal,
     numberOfServings: Double
   ) async throws {
     let serving = FoodItemServing(serving: numberOfServings, foodItem: foodItem)
-    try await log(foodItemServings: [serving], meal: meal)
+    try await log(
+      foodItemServings: [serving],
+      date: date,
+      meal: meal
+    )
   }
 
   func delete(foodItemLogs: [FoodItemLog]) async throws {
@@ -160,7 +169,7 @@ extension NutritionTrackingViewModel {
     let oldDate = localLog.date
 
     localLog.numberOfServings = numberOfServings
-    localLog.date = self.date(for: meal)
+    localLog.date = calculateDate(for: meal, from: date)
     localLog.meal = meal
 
     try modelContext.save()
@@ -193,7 +202,7 @@ extension NutritionTrackingViewModel {
 
 private extension NutritionTrackingViewModel {
 
-  func date(for meal: FoodItemLog.Meal) -> Date {
+  func calculateDate(for meal: FoodItemLog.Meal, from date: Date) -> Date {
     switch meal {
     case .breakfast:
       Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: date) ?? date
