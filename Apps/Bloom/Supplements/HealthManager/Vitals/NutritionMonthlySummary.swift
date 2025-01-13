@@ -191,7 +191,14 @@ extension NutritionMonthlySummary.Details {
   }
 
   var netEnergy: Double? {
-    guard let basalEnergyBurned, let activeEnergyBurned, let dietaryEnergy else { return nil }
+    guard
+      let basalEnergyBurned,
+      let activeEnergyBurned,
+      let dietaryEnergy,
+      basalEnergyBurned.doubleValue(for: .largeCalorie()) >= 1,
+      activeEnergyBurned.doubleValue(for: .largeCalorie()) >= 1,
+      dietaryEnergy.doubleValue(for: .largeCalorie()) >= 1
+    else { return nil }
 
     return dietaryEnergy.doubleValue(for: .largeCalorie())
     - basalEnergyBurned.doubleValue(for: .largeCalorie())
