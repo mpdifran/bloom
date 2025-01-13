@@ -20,31 +20,42 @@ struct NutritionDetailsView: View {
   @State private var dailyWater = [DateQuantitySample]()
   @State private var dailyCholesterol = [DateQuantitySample]()
 
+  @State private var hasNoData = false
   @State private var hasVitaminData = false
   @State private var hasMineralData = false
 
   var body: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        netEnergyChart
-          .cardContainer()
-        macrosChart
-          .cardContainer(includePadding: false)
-        vitaminsChart
-          .cardContainer()
-        mineralsChart
-          .cardContainer()
-        cholesterolChart
-          .cardContainer()
-        waterChart
-          .cardContainer()
-        fiberChart
-          .cardContainer()
-        sugarChart
-          .cardContainer()
+    Group {
+      if hasNoData {
+        ContentUnavailableView(
+          "No Data Available",
+          systemImage: "fork.knife",
+          description: Text("No nutrition data avilable.")
+        )
+      } else {
+        ScrollView {
+          VStack(spacing: 20) {
+            netEnergyChart
+              .cardContainer()
+            macrosChart
+              .cardContainer(includePadding: false)
+            vitaminsChart
+              .cardContainer()
+            mineralsChart
+              .cardContainer()
+            cholesterolChart
+              .cardContainer()
+            waterChart
+              .cardContainer()
+            fiberChart
+              .cardContainer()
+            sugarChart
+              .cardContainer()
+          }
+          .padding()
+          .horizontallyCentered()
+        }
       }
-      .padding()
-      .horizontallyCentered()
     }
     .toolbar {
       ToolbarItem(placement: .principal) {
@@ -57,6 +68,12 @@ struct NutritionDetailsView: View {
     .navigationTitle("Nutrition")
     .navigationBarTitleDisplayMode(.inline)
     .groupedBackground()
+    .task {
+      let hasNoData = await viewModel.nutritionSummary?.hasNoData() ?? true
+      await MainActor.run {
+        self.hasNoData = hasNoData
+      }
+    }
     .task {
       let samples = await HealthStoreFetcher.shared.fetchNetEnergy(dateRange: .trailingDaysFromNow(30))
       await MainActor.run {
@@ -391,7 +408,11 @@ private extension NutritionDetailsView {
 
   @ViewBuilder
   var fiberChart: some View {
-    if let details = viewModel.nutritionSummary?.details, let averageFiber = details.averageFiber {
+    if
+      let details = viewModel.nutritionSummary?.details,
+      let averageFiber = details.averageFiber,
+      averageFiber.doubleValue(for: .gram()) >= 1
+    {
       VStack(alignment: .leading) {
         VitalDetailChartTitleView(
           title: "Fiber",
@@ -437,7 +458,11 @@ private extension NutritionDetailsView {
 
   @ViewBuilder
   var cholesterolChart: some View {
-    if let details = viewModel.nutritionSummary?.details, let averageCholesterol = details.averageCholesterol {
+    if
+      let details = viewModel.nutritionSummary?.details,
+      let averageCholesterol = details.averageCholesterol,
+      averageCholesterol.doubleValue(for: .gramUnit(with: .milli)) >= 1
+    {
       VStack(alignment: .leading) {
         VitalDetailChartTitleView(
           title: "Cholesterol",
@@ -474,7 +499,11 @@ private extension NutritionDetailsView {
 
   @ViewBuilder
   var sugarChart: some View {
-    if let details = viewModel.nutritionSummary?.details, let averageSugar = details.averageSugar {
+    if
+      let details = viewModel.nutritionSummary?.details,
+      let averageSugar = details.averageSugar,
+      averageSugar.doubleValue(for: .gram()) >= 1
+    {
       VStack(alignment: .leading) {
         VitalDetailChartTitleView(
           title: "Sugar",
@@ -511,7 +540,11 @@ private extension NutritionDetailsView {
 
   @ViewBuilder
   var waterChart: some View {
-    if let details = viewModel.nutritionSummary?.details, let averageWater = details.averageWater {
+    if
+      let details = viewModel.nutritionSummary?.details,
+      let averageWater = details.averageWater,
+      averageWater.doubleValue(for: .literUnit(with: .milli)) >= 1
+    {
       VStack(alignment: .leading) {
         VitalDetailChartTitleView(
           title: "Water",

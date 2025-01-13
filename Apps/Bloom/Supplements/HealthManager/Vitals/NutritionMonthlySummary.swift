@@ -270,7 +270,13 @@ extension NutritionMonthlySummary.Details {
   }
 
   var macros: NutritionMonthlySummary.Macros? {
-    guard let averageProtein, let averageCarbohydrates, let averageFat, let dietaryEnergy else { return nil }
+    guard
+      let averageProtein,
+      let averageCarbohydrates,
+      let averageFat,
+      let dietaryEnergy,
+      dietaryEnergy.doubleValue(for: .largeCalorie()) >= 1
+    else { return nil }
 
     let protein = averageProtein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein
     let carbs = averageCarbohydrates.doubleValue(for: .gram()) * .caloriesPerGramOfCarbs

@@ -185,7 +185,8 @@ extension HealthStoreFetcher {
     return basal?.compactMap { basalSample in
       guard
         let activeEnergy = active?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity,
-        let dietaryEnergy = dietary?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity
+        let dietaryEnergy = dietary?.first(where: { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) })?.quantity,
+        dietaryEnergy.doubleValue(for: .largeCalorie()) >= 1 
       else {
         return nil
       }
