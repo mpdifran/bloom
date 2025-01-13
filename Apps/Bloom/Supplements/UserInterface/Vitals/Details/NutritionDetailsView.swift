@@ -137,7 +137,7 @@ private extension NutritionDetailsView {
     if let _ = viewModel.nutritionSummary?.details.netEnergy {
       VStack(alignment: .leading, spacing: 16) {
         VitalDetailChartTitleView(
-          title: "Total Daily Energy Expendature",
+          title: "Net Energy Expendature",
           valueLabel: "",
           value: ""
         )

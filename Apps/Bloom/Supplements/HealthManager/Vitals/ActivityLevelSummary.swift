@@ -107,33 +107,33 @@ extension ActivityLevelSummary.ActivityLevel {
     /// Multiply this value by the person's body weight in pounds to get their target calories.
     func calorieMultiplier(for healthTargetDetails: HealthTargetDetails) -> Double? {
         switch (self, healthTargetDetails.goal, healthTargetDetails.weightLossSpeed) {
-        case (.sedentary, .loseWeight, .slow):
+        case (.sedentary, .loseWeight, .slow), (.light, .loseWeight, .slow):
             return 12
-        case (.light, .loseWeight, .slow), (.moderate, .loseWeight, .slow):
+        case (.moderate, .loseWeight, .slow):
             return 14
         case (.high, .loseWeight, .slow), (.intense, .loseWeight, .slow):
             return 16
-        case (.sedentary, .loseWeight, .moderate):
+        case (.sedentary, .loseWeight, .moderate), (.light, .loseWeight, .moderate):
             return 11
-        case (.light, .loseWeight, .moderate), (.moderate, .loseWeight, .moderate):
+        case (.moderate, .loseWeight, .moderate):
             return 13
         case (.high, .loseWeight, .moderate), (.intense, .loseWeight, .moderate):
             return 15
-        case (.sedentary, .loseWeight, .fast):
+        case (.sedentary, .loseWeight, .fast), (.light, .loseWeight, .fast):
             return 10
-        case (.light, .loseWeight, .fast), (.moderate, .loseWeight, .fast):
+        case (.moderate, .loseWeight, .fast):
             return 12
         case (.high, .loseWeight, .fast), (.intense, .loseWeight, .fast):
             return 14
-        case (.sedentary, .maintainWeight, _):
+        case (.sedentary, .maintainWeight, _), (.light, .maintainWeight, _):
             return 13
-        case (.light, .maintainWeight, _), (.moderate, .maintainWeight, _):
+        case (.moderate, .maintainWeight, _):
             return 15
         case (.high, .maintainWeight, _), (.intense, .maintainWeight, _):
             return 17
-        case (.sedentary, .gainWeight, _):
+        case (.sedentary, .gainWeight, _), (.light, .gainWeight, _):
             return 17
-        case (.light, .gainWeight, _), (.moderate, .gainWeight, _):
+        case (.moderate, .gainWeight, _):
             return 19
         case (.high, .gainWeight, _), (.intense, .gainWeight, _):
             return 21
