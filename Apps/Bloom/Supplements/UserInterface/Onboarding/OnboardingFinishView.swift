@@ -33,7 +33,7 @@ struct OnboardingFinishView: View {
           Text("One last step, \(healthManager.name)!")
             .appear(with: 1, currentIndex: index)
 
-          Text("Subscribe to Bloom Plus to start improving your health!")
+          Text("Start on your health journey with Bloom Plus")
             .multilineTextAlignment(.center)
             .appear(with: 2, currentIndex: index)
         } else {
@@ -71,7 +71,7 @@ struct OnboardingFinishView: View {
       }
     }
     .sheet($presentedSheet)
-    .onChange(of: entitlementController.hasBloomPro == nil) { oldValue, newValue in
+    .onChange(of: entitlementController.hasBloomPro) { _, _ in
       guard entitlementController.hasBloomPro == true else { return }
 
       Task {
@@ -100,7 +100,7 @@ private extension OnboardingFinishView {
 
   func advanceForSubscribed() async {
     index = 3
-    while index < 5 {
+    while index < 4 {
       await advanceIndex()
     }
   }

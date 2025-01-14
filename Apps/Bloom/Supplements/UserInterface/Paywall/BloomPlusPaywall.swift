@@ -61,7 +61,7 @@ struct BloomPlusPaywall: View {
     .onAppear {
       showContinueButton = true
     }
-    .onChange(of: entitlementController.hasBloomPro == nil) { oldValue, newValue in
+    .onChange(of: entitlementController.hasBloomPro) { _, _ in
       guard entitlementController.hasBloomPro == true else { return }
 
       dismiss()

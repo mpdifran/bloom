@@ -13,7 +13,7 @@ struct OnboardingNotificationPermissionView: View {
     let onContinue: () -> Void
 
     @State private var isAuthorized = false
-    @State private var index = 0
+    @State private var index = 1
     @State private var notificationIndex = 0
     @State private var showContinueButton = false
     @State private var didContinue = false
@@ -33,7 +33,6 @@ struct OnboardingNotificationPermissionView: View {
                 .onboardingTextStyle()
 
                 MockHomeScreenView()
-                    .horizontallyCentered()
                     .transition(.move(edge: .bottom))
                     .appear(with: 3, currentIndex: index)
                     .overlay {
@@ -56,11 +55,10 @@ struct OnboardingNotificationPermissionView: View {
 
                             Spacer(minLength: 0)
                         }
-                        .padding(16)
-                        .padding()
-                        .padding(8)
-                        .padding(.top, 30)
+                        .padding(24)
+                        .padding(.top, 46)
                     }
+                    .horizontallyCentered()
             }
             .horizontalAlignment(.leading)
             .padding()
