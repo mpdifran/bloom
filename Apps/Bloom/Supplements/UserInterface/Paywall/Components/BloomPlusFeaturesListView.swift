@@ -24,13 +24,19 @@ struct BloomPlusFeaturesListView: View {
               .foregroundStyle(.secondary)
           }
 
-          Label("Personalized goals tailored for you", systemImage: "star")
+          Label("Personalized goals tailored to you", systemImage: "star")
             .bold()
 
-          Label("Lose weight in a sustainable way", systemImage: "gauge.open.with.lines.needle.33percent.and.arrowtriangle")
+          Label("Get to your ideal body weight", systemImage: "gauge.open.with.lines.needle.33percent.and.arrowtriangle")
             .bold()
 
-          Label("Quantify your health", systemImage: "bolt.heart")
+          Label("Log nutrition with just a picture", systemImage: "camera")
+            .bold()
+
+          Label("Scan food barcodes", systemImage: "barcode.viewfinder")
+            .bold()
+
+          Label("Comprehensive view of your health", systemImage: "bolt.heart")
             .bold()
         }
         .padding(.horizontal)
