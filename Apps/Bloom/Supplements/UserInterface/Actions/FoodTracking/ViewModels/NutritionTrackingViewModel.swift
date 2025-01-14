@@ -33,11 +33,11 @@ extension NutritionTrackingViewModel {
     let hour = Calendar.current.component(.hour, from: date)
 
     switch hour {
-    case 6 ..< 10:
+    case 6 ..< 13:
       suggestedMeal = .breakfast
-    case 11 ..< 13:
+    case 11 ..< 17:
       suggestedMeal = .lunch
-    case 17 ..< 20:
+    case 17 ..< 24:
       suggestedMeal = .dinner
     default:
       break

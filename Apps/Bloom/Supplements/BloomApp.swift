@@ -87,9 +87,9 @@ struct BloomApp: App {
 private extension BloomApp {
 
   func onForeground() {
+    NutritionTrackingViewModel.shared.updateMealForCurrentTime()
     Task {
       await VitalsCalculator.shared.refreshVitals()
-      NutritionTrackingViewModel.shared.updateMealForCurrentTime()
     }
   }
 }
