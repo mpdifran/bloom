@@ -7,7 +7,6 @@
 
 import AdminBloomModel
 import AppUI
-import BloomModel
 import SwiftUI
 
 struct FoodItemDetailView: View {

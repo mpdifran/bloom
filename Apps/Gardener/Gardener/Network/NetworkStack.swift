@@ -6,7 +6,6 @@
 //
 
 import AdminBloomModel
-import BloomModel
 import Foundation
 
 private extension String {
