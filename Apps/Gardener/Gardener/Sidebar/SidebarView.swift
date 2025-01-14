@@ -35,10 +35,25 @@ struct SidebarView: View {
           )
         }
       }
+      .shelf {
+        metadataView
+      }
     }
 }
 
 private extension SidebarView {
+  var appVersion: String {
+    Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "N/A"
+  }
+
+  var buildNumber: String {
+    Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "N/A"
+  }
+
+  var metadataView: some View {
+    Text("\(appVersion) (\(buildNumber))")
+  }
+
   func createLabel(title: String, systemImage: String) -> some View {
     Label(
       title,
