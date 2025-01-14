@@ -6,14 +6,42 @@
 //
 
 import SwiftUI
+import AppUI
+import TelemetryDeck
 
 struct BloomPlusLegalSectionView: View {
   let restorePurchases: () -> Void
+
+  @State private var showOfferCodeSheet = false
+  @State private var error: Error?
 
   @Environment(\.openURL) private var openURL
 
   var body: some View {
     VStack {
+      Button {
+        showOfferCodeSheet.toggle()
+      } label: {
+        LabeledContent("Redeem Code") {
+          Image(systemName: "rectangle.and.pencil.and.ellipsis")
+            .foregroundStyle(.gray)
+        }
+        .cardContainer(fill: .background.secondary)
+      }
+      .offerCodeRedemption(isPresented: $showOfferCodeSheet) { result in
+          switch result {
+          case .failure(let error):
+              TelemetryDeck.errorOccurred(
+                  id: "PreferencesView.offerCodeRedemption",
+                  category: .thrownException,
+                  message: error.localizedDescription
+              )
+              self.error = error
+          default:
+              break
+          }
+      }
+
       Button {
         restorePurchases()
       } label: {
@@ -46,6 +74,7 @@ struct BloomPlusLegalSectionView: View {
     }
     .buttonStyle(.plain)
     .bold()
+    .alert(error: $error)
   }
 }
 
@@ -53,4 +82,5 @@ struct BloomPlusLegalSectionView: View {
   BloomPlusLegalSectionView {
     
   }
+  .padding()
 }
