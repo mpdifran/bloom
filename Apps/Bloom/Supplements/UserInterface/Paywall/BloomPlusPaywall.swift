@@ -11,6 +11,12 @@ import RevenueCat
 
 struct BloomPlusPaywall: View {
 
+  private let showDismiss: Bool
+
+  init(showDismiss: Bool = true) {
+    self.showDismiss = showDismiss
+  }
+
   @State private var viewModel = ViewModel()
   @State private var selectedPackage: Package?
   @State private var showContinueButton = false
@@ -37,7 +43,7 @@ struct BloomPlusPaywall: View {
       }
       .scrollIndicators(.hidden)
 
-      BloomPlusHeaderView()
+      BloomPlusHeaderView(showDismiss: showDismiss)
         .padding(.horizontal)
         .zStackAlignment(.top)
     }
@@ -55,10 +61,13 @@ struct BloomPlusPaywall: View {
     .onAppear {
       showContinueButton = true
     }
-    .onChange(of: entitlementController.hasBloomPro) { oldValue, newValue in
-      guard newValue else { return }
+    .onChange(of: entitlementController.hasBloomPro == nil) { oldValue, newValue in
+      guard entitlementController.hasBloomPro == true else { return }
 
       dismiss()
+    }
+    .onChange(of: viewModel.packages) { _, _ in
+      selectedPackage = viewModel.packages.first
     }
   }
 }
@@ -67,12 +76,15 @@ private extension BloomPlusPaywall {
 
   var contentView: some View {
     VStack {
-      BloomPlusFeaturesListView(
+      BloomPlusFeaturesListView()
+      .padding(.top)
+      .padding(.top)
+
+      BloomPlusPackagesView(
         packages: viewModel.packages,
         selectedPackage: $selectedPackage
       )
-      .padding(.top)
-      .padding(.top)
+      .padding()
 
       VStack(spacing: 30) {
         BloomPlusUserReviewListView()
@@ -93,16 +105,13 @@ private extension BloomPlusPaywall {
 
         try await viewModel.purchase(package)
       } label: {
-        Text("Start Free Trial")
+        if selectedPackage?.introductoryOfferTrialString != nil {
+          Text("Start Free Trial")
+        } else {
+          Text("Invest in my Health")
+        }
       }
       .buttonStyle(.paywall)
-
-      HStack(spacing: 4) {
-        Image(systemName: "checkmark.shield.fill")
-          .foregroundStyle(.white, .mutedGreen)
-        Text("No Payment Now")
-      }
-      .font(.subheadline)
     }
     .padding()
     .background {

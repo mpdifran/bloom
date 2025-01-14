@@ -14,7 +14,6 @@ import RevenueCat
 
 private extension String {
   static let telemetryDeckAppID = "764D40B8-F2CE-4372-87D3-0D68F34E08CA"
-  static let revenueCatPublicAPIKey = "appl_TarcsGdjyMRvzKeiDYYrxvhAZVo"
 }
 
 @main
@@ -30,10 +29,7 @@ struct BloomApp: App {
     TelemetryDeck.initialize(config: .init(appID: .telemetryDeckAppID, salt: "bloom_secret_salt"))
 
     // Setup RevenueCat
-    #if DEBUG
-    Purchases.logLevel = .debug
-    #endif
-    Purchases.configure(withAPIKey: .revenueCatPublicAPIKey, appUserID: UserID.value)
+    Purchases.configure()
 
     // Link TelemetryDeck with RevenueCat
     Purchases.shared.attribution.setAttributes([

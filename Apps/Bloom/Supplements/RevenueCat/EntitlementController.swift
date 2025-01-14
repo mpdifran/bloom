@@ -18,7 +18,7 @@ private extension String {
 final class EntitlementController {
   static let shared = EntitlementController()
 
-  var hasBloomPro = false
+  var hasBloomPro: Bool?
 
   private init() {
     observeCustomerInfo()

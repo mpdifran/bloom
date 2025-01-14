@@ -32,7 +32,7 @@ struct CompletionCheckmarkView: View {
             switch state {
             case .unmetGoal:
                 Image(systemName: "circle")
-                    .foregroundStyle(colorize ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+                    .foregroundStyle(colorize ? AnyShapeStyle(.tint) : AnyShapeStyle(.fill))
             case .metGoal:
                 if colorize {
                     Image(systemName: "checkmark.circle.fill")

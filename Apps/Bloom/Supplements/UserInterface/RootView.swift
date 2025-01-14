@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppUI
 
 @MainActor
 struct RootView: View {
@@ -14,6 +15,9 @@ struct RootView: View {
   @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
 
   @Bindable private var tabController = TabController()
+
+  @State private var entitlementController = EntitlementController.shared
+  @State private var presentedSheet: AnyView?
 
   @Environment(\.dismiss) private var dismiss
 
@@ -48,10 +52,18 @@ struct RootView: View {
         .transition(.blurReplace)
       }
     }
+    .sheet($presentedSheet)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
     .animation(.default, value: danieleMode)
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
       dismiss()
+    }
+    .onChange(of: entitlementController.hasBloomPro) { oldValue, newValue in
+      guard let hasBloomPro = newValue else { return }
+
+      if !hasBloomPro {
+        presentedSheet = BloomPlusPaywall(showDismiss: false).asAny
+      }
     }
   }
 }

@@ -20,7 +20,7 @@
     "_applicationInternalID" : "6739955926",
     "_developerTeamID" : "GUJ47GUV2Q",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 758495736.23577499,
+    "_lastSynchronizedDate" : 758582364.28574395,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -77,7 +77,7 @@
       "localizations" : [
 
       ],
-      "name" : "Bloom Pro",
+      "name" : "Bloom Plus",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -100,7 +100,7 @@
           ],
           "productID" : "bloom_pro_monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Bloom Pro - Monthly",
+          "referenceName" : "Bloom Plus - Monthly",
           "subscriptionGroupID" : "21614173",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
@@ -109,14 +109,7 @@
         },
         {
           "adHocOffers" : [
-            {
-              "internalID" : "AD340237",
-              "numberOfPeriods" : 1,
-              "offerID" : "one_month_free",
-              "paymentMode" : "free",
-              "referenceName" : "One Month Free",
-              "subscriptionPeriod" : "P1M"
-            }
+
           ],
           "codeOffers" : [
 
@@ -125,7 +118,12 @@
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "6740501424",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "6A877EF1",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1M"
+          },
           "localizations" : [
             {
               "description" : "Full access to Bloom",
@@ -135,7 +133,7 @@
           ],
           "productID" : "bloom_pro_yearly",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Bloom Pro - Yearly",
+          "referenceName" : "Bloom Plus - Yearly",
           "subscriptionGroupID" : "21614173",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
