@@ -80,6 +80,12 @@ struct ActionCardView<Content>: View where Content: View {
           }
         }
     }
+//    .background(.background)
+//    .cornerRadius(30)
+//    .padding(.horizontal, 10)
+//    .padding(.bottom, 10)
+//    .presentationBackground(.clear)
+//    .presentationCornerRadius(0)
     .presentationDetents(detents)
     .presentationCornerRadius(25)
     .animation(.easeInOut, value: hasInserted)
@@ -143,12 +149,14 @@ private extension ActionCardView {
 }
 
 #Preview {
-  ActionCardView(title: "Log Water", performDismiss: { }) {
-    return true
-  } content: { (hasInserted, handleSave) in
-    List {
-      Text("Log Water")
+  PreviewSheetPresent {
+    ActionCardView(title: "Log Water", performDismiss: { }) {
+      return true
+    } content: { (hasInserted, handleSave) in
+      List {
+        Text("Log Water")
+      }
     }
+    .tint(.blue)
   }
-  .tint(.blue)
 }
