@@ -7,196 +7,203 @@
 
 import Foundation
 import HealthKit
+import TelemetryDeck
 
 final class HealthPermissionChecker: Sendable {
-    static let shared = HealthPermissionChecker()
+  static let shared = HealthPermissionChecker()
 
-    let healthStore = HKHealthStore()
+  let healthStore = HKHealthStore()
 
-    private init() { }
+  private init() { }
 
-    let bodyMeasurementTypes: Set<HKObjectType> = [
-        HKCharacteristicType(.dateOfBirth),
-        HKCharacteristicType(.biologicalSex)
-    ]
+  let bodyMeasurementTypes: Set<HKObjectType> = [
+    HKCharacteristicType(.dateOfBirth),
+    HKCharacteristicType(.biologicalSex),
+    HKQuantityType(.height)
+  ]
 
-    let activityTypes: Set<HKObjectType> = [
-        HKObjectType.activitySummaryType(),
-        HKQuantityType(.appleExerciseTime),
-        HKQuantityType(.stepCount),
-        HKQuantityType(.basalEnergyBurned),
-        HKQuantityType(.activeEnergyBurned),
-        HKObjectType.workoutType(),
-        HKSeriesType.workoutRoute(),
-        HKQuantityType(.distanceWalkingRunning)
-    ]
+  let activityTypes: Set<HKObjectType> = [
+    HKObjectType.activitySummaryType(),
+    HKQuantityType(.appleExerciseTime),
+    HKQuantityType(.stepCount),
+    HKQuantityType(.basalEnergyBurned),
+    HKQuantityType(.activeEnergyBurned),
+    HKObjectType.workoutType(),
+    HKSeriesType.workoutRoute(),
+    HKQuantityType(.distanceWalkingRunning)
+  ]
 
-    let heartTypes: Set<HKObjectType> = [
-        HKQuantityType(.heartRateVariabilitySDNN),
-        HKQuantityType(.restingHeartRate),
-        HKQuantityType(.vo2Max),
-        HKQuantityType(.heartRate),
-        HKQuantityType(.bloodPressureSystolic),
-        HKQuantityType(.bloodPressureDiastolic),
-        HKQuantityType(.heartRateRecoveryOneMinute),
-    ]
+  let heartTypes: Set<HKObjectType> = [
+    HKQuantityType(.heartRateVariabilitySDNN),
+    HKQuantityType(.restingHeartRate),
+    HKQuantityType(.vo2Max),
+    HKQuantityType(.heartRate),
+    HKQuantityType(.bloodPressureSystolic),
+    HKQuantityType(.bloodPressureDiastolic),
+    HKQuantityType(.heartRateRecoveryOneMinute),
+  ]
 
-    let writeHeartTypes: Set<HKSampleType> = [
-        HKQuantityType(.bloodPressureSystolic),
-        HKQuantityType(.bloodPressureDiastolic)
-    ]
+  let writeHeartTypes: Set<HKSampleType> = [
+    HKQuantityType(.bloodPressureSystolic),
+    HKQuantityType(.bloodPressureDiastolic)
+  ]
 
-    let sleepTypes: Set<HKObjectType> = [
-        HKCategoryType(.sleepAnalysis),
-        HKQuantityType(.environmentalAudioExposure),
-        HKQuantityType(.respiratoryRate),
-        HKQuantityType(.appleSleepingWristTemperature),
-    ]
+  let sleepTypes: Set<HKObjectType> = [
+    HKCategoryType(.sleepAnalysis),
+    HKQuantityType(.environmentalAudioExposure),
+    HKQuantityType(.respiratoryRate),
+    HKQuantityType(.appleSleepingWristTemperature),
+  ]
 
-    let nutritionTypes: Set<HKObjectType> = [
-        HKQuantityType(.dietaryEnergyConsumed),
-//        HKQuantityType(.dietaryBiotin),
-//        HKQuantityType(.dietaryCaffeine),
-        HKQuantityType(.dietaryCalcium),
-        HKQuantityType(.dietaryCarbohydrates),
-//        HKQuantityType(.dietaryChloride),
-        HKQuantityType(.dietaryCholesterol),
-//        HKQuantityType(.dietaryChromium),
-//        HKQuantityType(.dietaryCopper),
-        HKQuantityType(.dietaryFatMonounsaturated),
-        HKQuantityType(.dietaryFatPolyunsaturated),
-        HKQuantityType(.dietaryFatSaturated),
-        HKQuantityType(.dietaryFatTotal),
-        HKQuantityType(.dietaryFiber),
-//        HKQuantityType(.dietaryFolate),
-//        HKQuantityType(.dietaryIodine),
-        HKQuantityType(.dietaryIron),
-        HKQuantityType(.dietaryMagnesium),
-//        HKQuantityType(.dietaryManganese),
-//        HKQuantityType(.dietaryMolybdenum),
-//        HKQuantityType(.dietaryNiacin),
-//        HKQuantityType(.dietaryPantothenicAcid),
-//        HKQuantityType(.dietaryPhosphorus),
-        HKQuantityType(.dietaryPotassium),
-        HKQuantityType(.dietaryProtein),
-//        HKQuantityType(.dietaryRiboflavin),
-//        HKQuantityType(.dietarySelenium),
-        HKQuantityType(.dietarySodium),
-        HKQuantityType(.dietarySugar),
-//        HKQuantityType(.dietaryThiamin),
-        HKQuantityType(.dietaryVitaminA),
-        HKQuantityType(.dietaryVitaminB12),
-        HKQuantityType(.dietaryVitaminB6),
-        HKQuantityType(.dietaryVitaminC),
-        HKQuantityType(.dietaryVitaminD),
-        HKQuantityType(.dietaryVitaminE),
-//        HKQuantityType(.dietaryVitaminK),
-        HKQuantityType(.dietaryWater),
-        HKQuantityType(.dietaryZinc)
-    ]
+  let nutritionTypes: Set<HKObjectType> = [
+    HKQuantityType(.dietaryEnergyConsumed),
+    //        HKQuantityType(.dietaryBiotin),
+    //        HKQuantityType(.dietaryCaffeine),
+    HKQuantityType(.dietaryCalcium),
+    HKQuantityType(.dietaryCarbohydrates),
+    //        HKQuantityType(.dietaryChloride),
+    HKQuantityType(.dietaryCholesterol),
+    //        HKQuantityType(.dietaryChromium),
+    //        HKQuantityType(.dietaryCopper),
+    HKQuantityType(.dietaryFatMonounsaturated),
+    HKQuantityType(.dietaryFatPolyunsaturated),
+    HKQuantityType(.dietaryFatSaturated),
+    HKQuantityType(.dietaryFatTotal),
+    HKQuantityType(.dietaryFiber),
+    //        HKQuantityType(.dietaryFolate),
+    //        HKQuantityType(.dietaryIodine),
+    HKQuantityType(.dietaryIron),
+    HKQuantityType(.dietaryMagnesium),
+    //        HKQuantityType(.dietaryManganese),
+    //        HKQuantityType(.dietaryMolybdenum),
+    //        HKQuantityType(.dietaryNiacin),
+    //        HKQuantityType(.dietaryPantothenicAcid),
+    //        HKQuantityType(.dietaryPhosphorus),
+    HKQuantityType(.dietaryPotassium),
+    HKQuantityType(.dietaryProtein),
+    //        HKQuantityType(.dietaryRiboflavin),
+    //        HKQuantityType(.dietarySelenium),
+    HKQuantityType(.dietarySodium),
+    HKQuantityType(.dietarySugar),
+    //        HKQuantityType(.dietaryThiamin),
+    HKQuantityType(.dietaryVitaminA),
+    HKQuantityType(.dietaryVitaminB12),
+    HKQuantityType(.dietaryVitaminB6),
+    HKQuantityType(.dietaryVitaminC),
+    HKQuantityType(.dietaryVitaminD),
+    HKQuantityType(.dietaryVitaminE),
+    //        HKQuantityType(.dietaryVitaminK),
+    HKQuantityType(.dietaryWater),
+    HKQuantityType(.dietaryZinc)
+  ]
 
-    let writeNutritionTypes: Set<HKSampleType> = [
-      HKQuantityType(.dietaryEnergyConsumed),
-      HKQuantityType(.dietaryCalcium),
-      HKQuantityType(.dietaryCarbohydrates),
-      HKQuantityType(.dietaryCholesterol),
-      HKQuantityType(.dietaryFatMonounsaturated),
-      HKQuantityType(.dietaryFatPolyunsaturated),
-      HKQuantityType(.dietaryFatSaturated),
-      HKQuantityType(.dietaryFatTotal),
-      HKQuantityType(.dietaryFiber),
-      HKQuantityType(.dietaryIron),
-      HKQuantityType(.dietaryMagnesium),
-      HKQuantityType(.dietaryPotassium),
-      HKQuantityType(.dietaryProtein),
-      HKQuantityType(.dietarySodium),
-      HKQuantityType(.dietarySugar),
-      HKQuantityType(.dietaryVitaminA),
-      HKQuantityType(.dietaryVitaminB12),
-      HKQuantityType(.dietaryVitaminB6),
-      HKQuantityType(.dietaryVitaminC),
-      HKQuantityType(.dietaryVitaminD),
-      HKQuantityType(.dietaryVitaminE),
-      HKQuantityType(.dietaryWater),
-      HKQuantityType(.dietaryZinc)
-    ]
+  let writeNutritionTypes: Set<HKSampleType> = [
+    HKQuantityType(.dietaryEnergyConsumed),
+    HKQuantityType(.dietaryCalcium),
+    HKQuantityType(.dietaryCarbohydrates),
+    HKQuantityType(.dietaryCholesterol),
+    HKQuantityType(.dietaryFatMonounsaturated),
+    HKQuantityType(.dietaryFatPolyunsaturated),
+    HKQuantityType(.dietaryFatSaturated),
+    HKQuantityType(.dietaryFatTotal),
+    HKQuantityType(.dietaryFiber),
+    HKQuantityType(.dietaryIron),
+    HKQuantityType(.dietaryMagnesium),
+    HKQuantityType(.dietaryPotassium),
+    HKQuantityType(.dietaryProtein),
+    HKQuantityType(.dietarySodium),
+    HKQuantityType(.dietarySugar),
+    HKQuantityType(.dietaryVitaminA),
+    HKQuantityType(.dietaryVitaminB12),
+    HKQuantityType(.dietaryVitaminB6),
+    HKQuantityType(.dietaryVitaminC),
+    HKQuantityType(.dietaryVitaminD),
+    HKQuantityType(.dietaryVitaminE),
+    HKQuantityType(.dietaryWater),
+    HKQuantityType(.dietaryZinc)
+  ]
 
-    let menstrualTypes: Set<HKObjectType> = [
-        HKCategoryType(.menstrualFlow)
-    ]
+  let menstrualTypes: Set<HKObjectType> = [
+    HKCategoryType(.menstrualFlow)
+  ]
 
-    let writeMenstrualTypes: Set<HKSampleType> = [
-        HKCategoryType(.menstrualFlow)
-    ]
+  let writeMenstrualTypes: Set<HKSampleType> = [
+    HKCategoryType(.menstrualFlow)
+  ]
 
-    let otherTypes: Set<HKObjectType> = [
-        HKQuantityType(.timeInDaylight),
-        HKCategoryType(.mindfulSession),
-        HKCategoryType(.appleWalkingSteadinessEvent),
-        HKQuantityType(.sixMinuteWalkTestDistance),
-        HKQuantityType(.walkingDoubleSupportPercentage),
-        HKQuantityType(.bodyFatPercentage),
-        HKQuantityType(.bodyMass)
-    ]
+  let otherTypes: Set<HKObjectType> = [
+    HKQuantityType(.timeInDaylight),
+    HKCategoryType(.mindfulSession),
+    HKCategoryType(.appleWalkingSteadinessEvent),
+    HKQuantityType(.sixMinuteWalkTestDistance),
+    HKQuantityType(.walkingDoubleSupportPercentage),
+    HKQuantityType(.bodyFatPercentage),
+    HKQuantityType(.bodyMass)
+  ]
 
-    let writeOtherTypes: Set<HKSampleType> = [
-        HKQuantityType(.bodyMass)
-    ]
+  let writeOtherTypes: Set<HKSampleType> = [
+    HKQuantityType(.bodyMass)
+  ]
 }
 
 extension HealthPermissionChecker {
 
-    func writeTypes() -> Set<HKSampleType> {
-        var set = Set<HKSampleType>()
+  func writeTypes() -> Set<HKSampleType> {
+    var set = Set<HKSampleType>()
 
-        writeNutritionTypes.forEach { set.insert($0) }
-        writeHeartTypes.forEach { set.insert($0) }
-        writeMenstrualTypes.forEach { set.insert($0) }
-        writeOtherTypes.forEach { set.insert($0) }
+    writeNutritionTypes.forEach { set.insert($0) }
+    writeHeartTypes.forEach { set.insert($0) }
+    writeMenstrualTypes.forEach { set.insert($0) }
+    writeOtherTypes.forEach { set.insert($0) }
 
-        return set
-    }
+    return set
+  }
 
-    func readTypes() -> Set<HKObjectType> {
-        var set = Set<HKObjectType>()
+  func readTypes() -> Set<HKObjectType> {
+    var set = Set<HKObjectType>()
 
-        bodyMeasurementTypes.forEach { set.insert($0) }
-        activityTypes.forEach { set.insert($0) }
-        heartTypes.forEach { set.insert($0) }
-        sleepTypes.forEach { set.insert($0) }
-        nutritionTypes.forEach { set.insert($0) }
-        menstrualTypes.forEach { set.insert($0) }
-        otherTypes.forEach { set.insert($0) }
+    bodyMeasurementTypes.forEach { set.insert($0) }
+    activityTypes.forEach { set.insert($0) }
+    heartTypes.forEach { set.insert($0) }
+    sleepTypes.forEach { set.insert($0) }
+    nutritionTypes.forEach { set.insert($0) }
+    menstrualTypes.forEach { set.insert($0) }
+    otherTypes.forEach { set.insert($0) }
 
-        return set
-    }
+    return set
+  }
 }
 
 extension HealthPermissionChecker {
 
-    func checkAccessForAllTypes() async throws -> HKAuthorizationRequestStatus {
-        try await checkAccess(readTypes: readTypes(), writeTypes: writeTypes())
-    }
+  func checkAccessForAllTypes() async throws -> HKAuthorizationRequestStatus {
+    try await checkAccess(readTypes: readTypes(), writeTypes: writeTypes())
+  }
 
-    func checkAccess(readTypes: Set<HKObjectType> = [], writeTypes: Set<HKSampleType> = []) async throws -> HKAuthorizationRequestStatus {
-        guard readTypes.isNotEmpty else { return .unknown }
+  func checkAccess(readTypes: Set<HKObjectType> = [], writeTypes: Set<HKSampleType> = []) async throws -> HKAuthorizationRequestStatus {
+    guard readTypes.isNotEmpty else { return .unknown }
 
-        return try await healthStore.getRequestStatusForAuthorization(
-            toShare: writeTypes,
-            read: readTypes
+    return try await healthStore.getRequestStatusForAuthorization(
+      toShare: writeTypes,
+      read: readTypes
+    )
+  }
+
+  func requestAccessIfNeeded() async {
+    guard HKHealthStore.isHealthDataAvailable() else { return }
+
+    let authStatus = try? await checkAccessForAllTypes()
+    if authStatus == .shouldRequest {
+      do {
+        try await healthStore.requestAuthorization(toShare: writeTypes(), read: readTypes())
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "HealthPermissionChecker",
+          category: .thrownException,
+          message: error.localizedDescription
         )
+        print(error)
+      }
     }
-
-    func requestAccessIfNeeded() async {
-        guard HKHealthStore.isHealthDataAvailable() else { return }
-
-        let authStatus = try? await checkAccessForAllTypes()
-        if authStatus == .shouldRequest {
-            do {
-                try await healthStore.requestAuthorization(toShare: writeTypes(), read: readTypes())
-            } catch {
-                print(error)
-            }
-        }
-    }
+  }
 }

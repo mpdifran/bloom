@@ -11,6 +11,7 @@ import SwiftData
 import DataContainer
 import HealthKit
 import RevenueCat
+import TelemetryDeck
 
 struct SettingsView: View {
 
@@ -25,6 +26,7 @@ struct SettingsView: View {
 
   @State private var userControllerViewModel = UserControllerViewModel()
   @State private var entitlementController = EntitlementController.shared
+  @State private var shouldRequestHealthPermissions = false
   @State private var presentedSheet: AnyView?
   @State private var isSigningOut: Bool = false
   @State private var error: Error?
@@ -46,6 +48,9 @@ struct SettingsView: View {
     ScrollView {
       VStack(spacing: 20) {
         userSection
+        if shouldRequestHealthPermissions {
+          healthPermissionsSection
+        }
         healthGoalsSection
         habitsSection
         todoSection
@@ -61,12 +66,33 @@ struct SettingsView: View {
     .groupedBackground()
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
+    .animation(.default, value: shouldRequestHealthPermissions)
     .sheet($presentedSheet)
     .alert(error: $error)
+    .task {
+      await checkHealthKitPermissions()
+    }
   }
 }
 
-extension SettingsView {
+private extension SettingsView {
+
+  func checkHealthKitPermissions() async {
+    do {
+      let shouldRequest = try await HealthPermissionChecker.shared.checkAccessForAllTypes() == .shouldRequest
+      self.shouldRequestHealthPermissions = shouldRequest
+    } catch {
+      TelemetryDeck.errorOccurred(
+        id: "SettingsView.HealthPermissionChecker.checkAccessForAllTypes",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+      print(error)
+    }
+  }
+}
+
+private extension SettingsView {
 
   var userSection: some View {
     VStack(spacing: 16) {
@@ -132,6 +158,23 @@ extension SettingsView {
               .tint(.mutedGreen)
           }
         }
+      }
+    }
+  }
+
+  var healthPermissionsSection: some View {
+    VStack {
+      SectionTitleView("Apple Health")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsHealthAppCell(title: "Grant New Permissions")
+          .onTapGesture {
+            Task {
+              await HealthPermissionChecker.shared.requestAccessIfNeeded()
+              await checkHealthKitPermissions()
+            }
+          }
       }
     }
   }
