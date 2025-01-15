@@ -54,6 +54,7 @@ struct SettingsView: View {
         healthGoalsSection
         habitsSection
         todoSection
+        userDetailsSection
         reportSection
         unitsSection
         subscriptionSection
@@ -157,6 +158,43 @@ private extension SettingsView {
             Toggle("", isOn: healthManager.$isPregnant)
               .tint(.mutedGreen)
           }
+        }
+      }
+    }
+  }
+
+  var userDetailsSection: some View {
+    VStack {
+      SectionTitleView("Health Goals")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("Birthday") {
+          DatePicker(
+            "",
+            selection: $healthManager.birthday,
+            in: ...Date(),
+            displayedComponents: .date
+          )
+        }
+
+        Divider()
+
+        SettingsCell("Sex") {
+          Picker("", selection: $healthManager.isFemale) {
+            Text("Male")
+              .tag(false)
+            Text("Female")
+              .tag(true)
+          }
+          .pickerStyle(.segmented)
+          .frame(width: 150, height: 50)
+        }
+
+        Divider()
+
+        SettingsCell("Height") {
+          HeightEditorTextField()
         }
       }
     }

@@ -49,7 +49,7 @@ struct OnboardingRootView: View {
                     setStep(.ageAndSex)
                 }
             case .ageAndSex:
-                OnboardingHealthAgeView {
+                OnboardingHealthAgeSexHeightView {
                     setStep(.vitals)
                 }
             case .vitals:

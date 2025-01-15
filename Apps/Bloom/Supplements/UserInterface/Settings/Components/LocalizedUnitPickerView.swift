@@ -20,6 +20,8 @@ struct LocalizedUnitPickerView: View {
       liquidVolumeMenu
     } else if isDistanceUnit {
       distanceMenu
+    } else if isHeightUnit {
+      heightMenu
     } else {
       Text(unit.sensibleUnitString)
     }
@@ -38,6 +40,10 @@ private extension LocalizedUnitPickerView {
 
   var isDistanceUnit: Bool {
     HKUnit.distanceUnits.contains(unit)
+  }
+
+  var isHeightUnit: Bool {
+    HKUnit.heightUnits.contains(unit)
   }
 }
 
@@ -84,18 +90,34 @@ private extension LocalizedUnitPickerView {
       Image(systemName: "chevron.up.chevron.down")
     }
   }
+
+  var heightMenu: some View {
+    Menu {
+      ForEach(HKUnit.heightUnits, id: \.unitString) { unit in
+        Button(unit.descriptiveUnitName) {
+          unitPreferences.heightUnit = unit
+          self.unit = unit
+        }
+      }
+    } label: {
+      Text(unit.sensibleUnitString)
+      Image(systemName: "chevron.up.chevron.down")
+    }
+  }
 }
 
 #Preview {
   @Previewable @State var weightUnit = HKUnit.pound()
   @Previewable @State var fluidVolumeUnit = HKUnit.literUnit(with: .milli)
   @Previewable @State var distanceUnit = HKUnit.meterUnit(with: .kilo)
+  @Previewable @State var heightUnit = HKUnit.meterUnit(with: .centi)
 
   Group {
     LocalizedUnitPickerView(unit: .constant(.minute()))
     LocalizedUnitPickerView(unit: $weightUnit)
     LocalizedUnitPickerView(unit: $fluidVolumeUnit)
     LocalizedUnitPickerView(unit: $distanceUnit)
+    LocalizedUnitPickerView(unit: $heightUnit)
   }
   .font(.title)
   .fontDesign(.rounded)

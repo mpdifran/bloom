@@ -100,6 +100,7 @@ final class HealthManager: ObservableObject {
 
   @AppStorage("HealthManager.name", store: .group) var name: String = ""
   @AppStorage("HealthManager.isFemale", store: .group) var isFemale = false
+  @AppStorage("HealthManager.height", store: .group) var heightCM: Double = 0
 
   @Published var birthday = Date.now {
     didSet { UserDefaults.group.set(birthday, forKey: "HealthManager.birthday") }
@@ -141,12 +142,23 @@ final class HealthManager: ObservableObject {
     if let activityLevelRaw = UserDefaults.group.string(forKey: "HealthManager.userReportedActivityLevel") {
       self.userReportedActivityLevel = ActivityLevelSummary.ActivityLevel(rawValue: activityLevelRaw)
     }
+
+    Task {
+      await checkHeightFromHealthKit()
+    }
   }
 }
 
-// MARK: Age and Sex
+// MARK: Age, Sex, and Height
 
 extension HealthManager {
+
+  func checkHeightFromHealthKit() async {
+    if heightCM < 1 {
+      let quantity = await HealthStoreFetcher.shared.fetchLatestSample(for: .height)?.quantity
+      heightCM = quantity?.doubleValue(for: .meterUnit(with: .centi)) ?? 0
+    }
+  }
 
   func age() -> Int {
     if let age = healthStore.age() {
@@ -160,6 +172,10 @@ extension HealthManager {
       return sex
     }
     return isFemale ? .female : .male
+  }
+
+  func height() -> HKQuantity {
+    HKQuantity(unit: .meterUnit(with: .centi), doubleValue: heightCM)
   }
 
   func sexName() -> String {

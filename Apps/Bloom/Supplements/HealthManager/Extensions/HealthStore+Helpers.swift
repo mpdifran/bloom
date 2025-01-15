@@ -79,6 +79,10 @@ extension HKHealthStore {
     try? biologicalSex().biologicalSex
   }
 
+  func height() async -> HKQuantity? {
+    await HealthStoreFetcher.shared.fetchLatestSample(for: .height)?.quantity
+  }
+
   func typeOfBlood() -> String? {
     do {
       let blood = try bloodType()
