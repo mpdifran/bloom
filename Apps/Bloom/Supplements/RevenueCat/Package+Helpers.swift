@@ -13,7 +13,7 @@ extension Package {
   var introductoryOfferString: String? {
     guard let introDiscount = storeProduct.introductoryDiscount else { return nil }
 
-    let subscriptionPeriod = introDiscount.subscriptionPeriod.displayString
+    let subscriptionPeriod = introDiscount.subscriptionPeriod.relativeDisplayString
 
     if introDiscount.price == 0 {
       return "\(subscriptionPeriod) Free"

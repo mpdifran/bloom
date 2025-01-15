@@ -9,6 +9,38 @@ import RevenueCat
 
 extension SubscriptionPeriod {
 
+  /// Returns something like "first day" or "first 2 months".
+  var relativeDisplayString: String {
+    if value == 1 {
+      switch unit {
+      case .day:
+        return "first day"
+      case .week:
+        return "first week"
+      case .month:
+        return "first month"
+      case .year:
+        return "first year"
+      @unknown default:
+        return "first unit"
+      }
+    }
+
+    switch unit {
+    case .day:
+      return "first \(value) days"
+    case .week:
+      return "first \(value) weeks"
+    case .month:
+      return "first \(value) months"
+    case .year:
+      return "first \(value) years"
+    @unknown default:
+      return "first \(value) units"
+    }
+  }
+
+  /// Returns something like "1 week" or "2 months".
   var displayString: String {
     switch unit {
     case .day:

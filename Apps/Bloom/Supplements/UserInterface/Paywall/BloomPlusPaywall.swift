@@ -19,7 +19,6 @@ struct BloomPlusPaywall: View {
 
   @State private var viewModel = ViewModel()
   @State private var selectedPackage: Package?
-  @State private var showContinueButton = false
   @State private var error: Error?
 
   @State private var entitlementController = EntitlementController.shared
@@ -48,19 +47,14 @@ struct BloomPlusPaywall: View {
         .zStackAlignment(.top)
     }
     .alert(error: $error)
-    .safeAreaInset(edge: .bottom) {
-      if showContinueButton {
-        purchaseShelf
-      }
+    .shelf {
+      purchaseShelf
     }
     .task {
       await viewModel.loadOfferings()
     }
     .presentationCompactAdaptation(.fullScreenCover)
-    .animation(.bouncy(duration: 0.7).delay(0.5), value: showContinueButton)
-    .onAppear {
-      showContinueButton = true
-    }
+    .animation(.default, value: selectedPackage)
     .onChange(of: entitlementController.hasBloomPro) { _, _ in
       guard entitlementController.hasBloomPro == true else { return }
 
@@ -100,6 +94,16 @@ private extension BloomPlusPaywall {
 
   var purchaseShelf: some View {
     VStack {
+      if let trialString = selectedPackage?.introductoryOfferTrialString {
+        HStack {
+          Image(systemName: "checkmark.seal.fill")
+            .foregroundStyle(.white, .mutedGreen)
+          Text(trialString.capitalized)
+        }
+        .font(.subheadline)
+        .bold()
+      }
+
       AsyncButton {
         guard let package = selectedPackage ?? viewModel.packages.first else { return }
 
@@ -113,13 +117,6 @@ private extension BloomPlusPaywall {
       }
       .buttonStyle(.paywall)
     }
-    .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 30)
-        .fill(.thickMaterial)
-    }
-    .padding()
-    .transition(.move(edge: .bottom))
   }
 }
 
