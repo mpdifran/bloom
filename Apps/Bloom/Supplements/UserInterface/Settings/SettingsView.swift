@@ -10,6 +10,7 @@ import AppUI
 import SwiftData
 import DataContainer
 import HealthKit
+import RevenueCat
 
 struct SettingsView: View {
 
@@ -23,6 +24,7 @@ struct SettingsView: View {
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
 
   @State private var userControllerViewModel = UserControllerViewModel()
+  @State private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
   @State private var isSigningOut: Bool = false
   @State private var error: Error?
@@ -49,9 +51,10 @@ struct SettingsView: View {
         todoSection
         reportSection
         unitsSection
+        subscriptionSection
         supportSection
         authenticationSection
-        developerSection
+//        developerSection
       }
       .padding()
     }
@@ -272,6 +275,57 @@ extension SettingsView {
               Text(unit.descriptiveUnitName)
                 .tag(unit)
             }
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder
+  var subscriptionSection: some View {
+    VStack {
+      SectionTitleView("Bloom Plus")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        if let entitlementInfo = entitlementController.bloomProEntitlement {
+          SettingsCell("Kind") {
+            Text(entitlementInfo.activeSubscriptionName)
+          }
+
+          Divider()
+
+          if let expirationDate = entitlementInfo.expirationDate {
+            if entitlementInfo.isActive {
+              SettingsCell("Next Charge Date") {
+                Text(expirationDate, style: .date)
+              }
+            } else if expirationDate > .now {
+              SettingsCell("Expires") {
+                Text(expirationDate, style: .date)
+              }
+            } else {
+              SettingsCell("Expired") {
+                Text(expirationDate, style: .date)
+              }
+            }
+
+            Divider()
+          }
+          SettingsCell("Manage Subscription") {
+            DisclosureIndicator()
+          }
+          .onTapGesture {
+            ThrowingUserTask(error: $error) {
+              try await Purchases.shared.showManageSubscriptions()
+            }
+          }
+        } else {
+          SettingsCell("Subscribe to Bloom Plus") {
+            DisclosureIndicator()
+          }
+          .onTapGesture {
+            presentedSheet = BloomPlusPaywall().asAny
           }
         }
       }

@@ -30,7 +30,9 @@ final class EntitlementController {
 }
 
 extension EntitlementController {
-
+  var bloomProEntitlement: EntitlementInfo? {
+    customerInfo?.entitlements[.Entitlements.bloomPro]
+  }
 }
 
 private extension EntitlementController {
@@ -51,9 +53,5 @@ private extension EntitlementController {
   func handleNewCustomerInfo(_ customerInfo: CustomerInfo) {
     self.customerInfo = customerInfo
     self.hasBloomPro = self.bloomProEntitlement?.isActive == true
-  }
-
-  var bloomProEntitlement: EntitlementInfo? {
-    customerInfo?.entitlements[.Entitlements.bloomPro]
   }
 }
