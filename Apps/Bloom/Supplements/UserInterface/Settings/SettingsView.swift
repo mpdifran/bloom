@@ -165,7 +165,7 @@ private extension SettingsView {
 
   var userDetailsSection: some View {
     VStack {
-      SectionTitleView("Health Goals")
+      SectionTitleView("Personal Details")
         .padding(.horizontal)
 
       SettingsSectionContainer {
@@ -353,6 +353,17 @@ private extension SettingsView {
         SettingsCell("Weight") {
           Picker("", selection: $unitPreferences.weightUnit) {
             ForEach(HKUnit.weightUnits, id: \.unitString) { unit in
+              Text(unit.descriptiveUnitName)
+                .tag(unit)
+            }
+          }
+        }
+
+        Divider()
+
+        SettingsCell("Height") {
+          Picker("", selection: $unitPreferences.heightUnit) {
+            ForEach(HKUnit.heightUnits, id: \.unitString) { unit in
               Text(unit.descriptiveUnitName)
                 .tag(unit)
             }
