@@ -17,4 +17,5 @@ extension URL {
 extension URL {
   static let privacyPolicy = URL(string: "https://www.trybloom.app/privacy")!
   static let termsOfService = URL(string: "https://www.trybloom.app/tos")!
+  static let appleWeatherAttribution = URL(string: "https://weatherkit.apple.com/legal-attribution.html")!
 }
