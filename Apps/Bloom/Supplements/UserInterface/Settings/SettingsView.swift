@@ -24,6 +24,8 @@ struct SettingsView: View {
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
 
+  @Environment(\.openURL) private var openURL
+
   @State private var userControllerViewModel = UserControllerViewModel()
   @State private var entitlementController = EntitlementController.shared
   @State private var shouldRequestHealthPermissions = false
@@ -449,6 +451,24 @@ private extension SettingsView {
           } else {
             presentedSheet = FeatureRequestScreen().asAny
           }
+        }
+
+        Divider()
+
+        SettingsCell("Privacy Policy") {
+          DisclosureIndicator()
+        }
+        .onTapGesture {
+          openURL(.privacyPolicy)
+        }
+
+        Divider()
+
+        SettingsCell("Terms of Service") {
+          DisclosureIndicator()
+        }
+        .onTapGesture {
+          openURL(.termsOfService)
         }
       }
     }
