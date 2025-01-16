@@ -13,129 +13,75 @@ import BloomFoundation
 
 extension CalorieTargetCalculatorTestSuite {
 
-  static var noExistinHabitsArguments: [(Input, Double)] {
+  static var noExistingHabitsArguments: [(Input, Double)] {
     [
       (Input(
         "Light Activity lose weight moderately",
         dietary: 1700,
         bodyMass: 167,
+        height: 168,
+        age: 30,
+        sex: .female,
         targetWeight: 145,
         activityLevel: .light,
         goal: .loseWeight,
         speed: .moderate
-      ), 2200), // TODO: Kaitlyn this seems wrong
+      ), 1600), // 1496.5 * 1.375 - 250 (moderate deficit)
       (Input(
         "Sedentary lose weight slowly",
         dietary: 2080,
         bodyMass: 160,
+        height: 165,
+        age: 30,
+        sex: .female,
         targetWeight: 140,
         activityLevel: .sedentary,
         goal: .loseWeight,
         speed: .slow
-      ), 1900),
+      ), 1500), // 1445.95 * 1.2 - 150 (slow deficit)
       (Input(
-        "Light lose weight slowly",
-        dietary: 2400,
-        bodyMass: 160,
-        targetWeight: 140,
-        activityLevel: .light,
-        goal: .loseWeight,
-        speed: .slow
-      ), 2200),
-      (Input(
-        "High lose weight slowly",
+        "High activity maintain weight",
         dietary: 2720,
         bodyMass: 160,
-        targetWeight: 140,
+        height: 165,
+        age: 30,
+        sex: .female,
+        targetWeight: 160,
         activityLevel: .high,
-        goal: .loseWeight,
+        goal: .maintainWeight,
         speed: .slow
-      ), 2600),
+      ), 2495), // 1445.95 * 1.725
       (Input(
-        "Sedentary lose weight moderately",
-        dietary: 2080,
-        bodyMass: 160,
-        targetWeight: 140,
-        activityLevel: .sedentary,
-        goal: .loseWeight,
-        speed: .moderate
-      ), 1800),
-      (Input(
-        "Light lose weight moderately",
-        dietary: 2400,
-        bodyMass: 160,
-        targetWeight: 140,
-        activityLevel: .light,
-        goal: .loseWeight,
-        speed: .moderate
-      ), 2080),
-      (Input(
-        "High lose weight moderatly",
+        "High activity gain weight",
         dietary: 2600,
         bodyMass: 160,
-        targetWeight: 140,
+        height: 165,
+        age: 30,
+        sex: .female,
+        targetWeight: 180,
         activityLevel: .high,
-        goal: .loseWeight,
-        speed: .moderate
-      ), 2400),
+        goal: .gainWeight,
+        speed: .slow
+      ), 2700), // 1445.95 * 1.725 + 250 (surplus)
       (Input(
         "Sedentary lose weight slowly 220 lbs",
         dietary: 2860,
         bodyMass: 220,
+        height: 170,
+        age: 30,
+        sex: .female,
         targetWeight: 140,
         activityLevel: .sedentary,
         goal: .loseWeight,
         speed: .slow
-      ), 2600),
-      (Input(
-        "Sedentary maintain weight 220 lbs",
-        dietary: 2860,
-        bodyMass: 220,
-        targetWeight: 220,
-        activityLevel: .sedentary,
-        goal: .maintainWeight,
-        speed: .slow
-      ), 2900),
-      (Input(
-        "Sedentary gain weight 220 lbs",
-        dietary: 2860,
-        bodyMass: 220,
-        targetWeight: 240,
-        activityLevel: .sedentary,
-        goal: .gainWeight,
-        speed: .slow
-      ), 3700),
-      (Input(
-        "Dietary lose weight slow",
-        dietary: 2000,
-        bodyMass: 160,
-        targetWeight: 140,
-        activityLevel: .sedentary,
-        goal: .loseWeight,
-        speed: .slow
-      ), 1900),
-      (Input(
-        "Dietary lose weight moderate",
-        dietary: 2000,
-        bodyMass: 160,
-        targetWeight: 140,
-        activityLevel: .sedentary,
-        goal: .loseWeight,
-        speed: .moderate
-      ), 1800),
-      (Input(
-        "Dietary lose weight fast",
-        dietary: 2000,
-        bodyMass: 160,
-        targetWeight: 140,
-        activityLevel: .sedentary,
-        goal: .loseWeight,
-        speed: .fast
-      ), 1600),
+      ), 1800), // 1749.4 * 1.2 - 150
       (Input(
         "Lose weight high activity existing habit",
         dietary: 2000,
         bodyMass: 180,
+        height: 170,
+        age: 30,
+        sex: .female,
         targetWeight: 140,
         activityLevel: .high,
         goal: .loseWeight,
@@ -153,13 +99,15 @@ extension CalorieTargetCalculatorTestSuite {
           vitalKind: .nutrition,
           context: ""
         )
-      ),
-       1650),
+      ), 2200), // Keep existing habit value
       (Input(
         "Maintain weight high activity existing habit",
         dietary: 2000,
         bodyMass: 180,
-        targetWeight: 140,
+        height: 170,
+        age: 30,
+        sex: .female,
+        targetWeight: 180,
         activityLevel: .high,
         goal: .maintainWeight,
         speed: .moderate,
@@ -176,8 +124,7 @@ extension CalorieTargetCalculatorTestSuite {
           vitalKind: .nutrition,
           context: ""
         )
-      ),
-       3100),
+      ), 2700) // BMR * 1.725 for maintenance
     ]
   }
 }

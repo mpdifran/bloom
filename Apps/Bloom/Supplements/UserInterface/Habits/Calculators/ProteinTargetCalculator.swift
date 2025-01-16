@@ -9,51 +9,38 @@ import Foundation
 import HealthKit
 import DataContainer
 
-enum ProteinTargetCalculator {
+extension Double {
+  static let targetProteinPercent: Double = 0.3
+}
 
-  static func targetProtein(
-    existingHabit: HabitDTO?,
-    protein: HKQuantity,
-    dietaryEnergy: HKQuantity,
+final class ProteinTargetCalculator {
+
+  private let calorieGoal: HKQuantity
+  private let targetDetails: HealthTargetDetails
+
+  init(
     calorieGoal: HKQuantity,
     targetDetails: HealthTargetDetails
-  ) async -> TargetMetricRecommendation? {
+  ) {
+    self.calorieGoal = calorieGoal
+    self.targetDetails = targetDetails
+  }
+}
 
+extension ProteinTargetCalculator {
+
+  func targetProtein(existingHabit: HabitDTO?) async -> TargetMetricRecommendation {
     if let existingHabit {
-      return await updateExistingHabit(
-        existingHabit: existingHabit,
-        protein: protein,
-        dietaryEnergy: dietaryEnergy,
-        calorieGoal: calorieGoal,
-        targetDetails: targetDetails
-      )
+      return await updateExistingHabit(existingHabit: existingHabit)
     }
-
-    return createNewProteinGoal(
-      protein: protein,
-      dietaryEnergy: dietaryEnergy,
-      calorieGoal: calorieGoal,
-      targetDetails: targetDetails
-    )
+    return createNewProteinGoal()
   }
 }
 
 private extension ProteinTargetCalculator {
 
-  static func createNewProteinGoal(
-    protein: HKQuantity,
-    dietaryEnergy: HKQuantity,
-    calorieGoal: HKQuantity,
-    targetDetails: HealthTargetDetails
-  ) -> TargetMetricRecommendation? {
-    guard let proteinTarget = calculateTargetProtein(
-      protein: protein,
-      dietaryEnergy: dietaryEnergy,
-      calorieGoal: calorieGoal,
-      targetDetails: targetDetails
-    ) else {
-      return nil
-    }
+  func createNewProteinGoal() -> TargetMetricRecommendation {
+    let proteinTarget = calculateTargetProtein()
 
     let context: String
     switch targetDetails.goal {
@@ -62,7 +49,7 @@ private extension ProteinTargetCalculator {
     case .gainWeight:
       context = "Eating more protein can help you gain weight sustainably."
     case .maintainWeight, .none:
-      return nil
+      context = "It's important to make sure your protein intake remains balanced."
     }
 
     return TargetMetricRecommendation(
@@ -71,82 +58,32 @@ private extension ProteinTargetCalculator {
     )
   }
 
-  static func updateExistingHabit(
-    existingHabit: HabitDTO,
-    protein: HKQuantity,
-    dietaryEnergy: HKQuantity,
-    calorieGoal: HKQuantity,
-    targetDetails: HealthTargetDetails
-  ) async -> TargetMetricRecommendation? {
-
+  func updateExistingHabit(existingHabit: HabitDTO) async -> TargetMetricRecommendation {
+    let proteinTarget = calculateTargetProtein()
     let habitGoalStatistics = await HabitGoalStatisticsCalculator.calculateStatistics(for: existingHabit)
 
-    let existingHabitTargetValue = existingHabit.value
-
+    let context: String
     if habitGoalStatistics.missedGoalCountPercentage > 0.4 {
-      // Decrease protein goal
-      let newValue = existingHabitTargetValue * (1 - (habitGoalStatistics.averagePercentMissedGoalBy / 2))
-
-      return TargetMetricRecommendation(
-        target: HKQuantity(unit: existingHabit.unit, doubleValue: newValue),
-        context: "Looks like you haven't been hitting your protein goal recently. Let's set a more achievable goal."
-      )
+      context = "Looks like you haven't been hitting your protein goal recently. Let's turn over a leaf this week!"
     } else if habitGoalStatistics.missedGoalSamples.count < 3 {
-      // Increase protein percentage
-      if let proteinTarget = calculateTargetProtein(
-        protein: protein,
-        dietaryEnergy: dietaryEnergy,
-        calorieGoal: calorieGoal,
-        targetDetails: targetDetails
-      ) {
-        return TargetMetricRecommendation(
-          target: proteinTarget,
-          context: "Great job getting your protein! Let's set a new goal to challenge you."
-        )
-      } else {
-        return nil // I guess the goals changed?
-      }
+      context = "Great job getting your protein! Keep it up!"
     } else {
-      // Keep the same
-      return TargetMetricRecommendation(
-        target: existingHabit.quantity,
-        context: "Keep up the good work! We'll keep your goal the same this week."
-      )
+      context = "Great job on getting your protein! Keep it up!"
     }
+
+    return TargetMetricRecommendation(
+      target: proteinTarget,
+      context: context
+    )
   }
 
-  static func calculateTargetProtein(
-    protein: HKQuantity,
-    dietaryEnergy: HKQuantity,
-    calorieGoal: HKQuantity,
-    targetDetails: HealthTargetDetails
-  ) -> HKQuantity? {
-    let currentProteinPercent = (protein.doubleValue(for: .gram()) * .caloriesPerGramOfProtein) / dietaryEnergy.doubleValue(for: .largeCalorie())
+  func calculateTargetProtein() -> HKQuantity {
+    let targetProteinCals = calorieGoal.doubleValue(for: .largeCalorie()) * .targetProteinPercent
+    let targetProteinGrams = targetProteinCals / .caloriesPerGramOfProtein
 
-    let targetProteinPercent: Double
-    switch targetDetails.goal {
-    case .loseWeight:
-      let targetPercent = 0.3
-      let percentDifference = targetPercent - currentProteinPercent
-
-      switch targetDetails.weightLossSpeed {
-      case .slow:
-        targetProteinPercent = currentProteinPercent + percentDifference * 0.3
-      case .moderate:
-        targetProteinPercent = currentProteinPercent + percentDifference * 0.6
-      case .fast:
-        targetProteinPercent = currentProteinPercent + percentDifference
-      }
-    case .gainWeight, .maintainWeight:
-      targetProteinPercent = 0.33
-    case .none:
-      return nil
-    }
-
-    let targetProteinCalories = targetProteinPercent * calorieGoal.doubleValue(for: .largeCalorie())
     let minProteinTarget = TargetMetric.proteinIntake.minHabitTarget.doubleValue(for: .gram())
-    let proteinGrams = max(targetProteinCalories / .caloriesPerGramOfProtein, minProteinTarget)
+    let cappedProteinGrams = max(targetProteinGrams, minProteinTarget)
 
-    return HKQuantity(unit: .gram(), doubleValue: proteinGrams.roundedToNiceNumber())
+    return HKQuantity(unit: .gram(), doubleValue: cappedProteinGrams.roundedToNiceNumber())
   }
 }

@@ -18,14 +18,12 @@ struct ProteinTargetCalculatorTestSuite {
         ContainerHolder.shared.setupForTests()
     }
 
-    @Test(
-        arguments: [
-            (30, 2000, 65, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (120, 2000, 120, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (40, 2000, 100, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
-            (100, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
-        ]
-    )
+    @Test(arguments: [
+        (30, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (120, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (40, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+        (100, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
+    ])
     func noExistingHabit(
         inputProtein: Double,
         inputDietaryEnergy: Double,
@@ -34,35 +32,31 @@ struct ProteinTargetCalculatorTestSuite {
         healthGoal: HealthGoal,
         speed: WeightLossSpeed
     ) async throws {
-        let result = try #require(
-            await ProteinTargetCalculator.targetProtein(
-                existingHabit: nil,
-                protein: HKQuantity(unit: .gram(), doubleValue: inputProtein),
-                dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: inputDietaryEnergy),
-                calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
-                targetDetails: .init(
-                    targetWeight: 160,
-                    goal: healthGoal,
-                    weightLossSpeed: speed
-                )
+        let calculator = ProteinTargetCalculator(
+            calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
+            targetDetails: .init(
+                targetWeight: 160,
+                goal: healthGoal,
+                weightLossSpeed: speed
             )
         )
-
+        
+        let result = try #require(
+            await calculator.targetProtein(existingHabit: nil)
+        )
+        
         let resultValue = result.target.doubleValue(for: .gram())
-
+        
         #expect(resultValue.isWithinRange(of: expectedProtein, precision: 0.01))
     }
 
-    @Test(
-        .disabled("Need to remove shared singleton."),
-        arguments: [
-            (30, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (120, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-            (40, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
-            (100, 2000, 40.6, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
-        ]
-    )
-    func lowTargetExistingHabit(
+    @Test(arguments: [
+        (30, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (120, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (40, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+        (100, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
+    ])
+    func existingHabit(
         inputProtein: Double,
         inputDietaryEnergy: Double,
         expectedProtein: Double,
@@ -71,23 +65,22 @@ struct ProteinTargetCalculatorTestSuite {
         speed: WeightLossSpeed
     ) async throws {
         let existingHabit = try addHabit()
-
-        let result = try #require(
-            await ProteinTargetCalculator.targetProtein(
-                existingHabit: existingHabit,
-                protein: HKQuantity(unit: .gram(), doubleValue: inputProtein),
-                dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: inputDietaryEnergy),
-                calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
-                targetDetails: .init(
-                    targetWeight: 160,
-                    goal: healthGoal,
-                    weightLossSpeed: speed
-                )
+        
+        let calculator = ProteinTargetCalculator(
+            calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
+            targetDetails: .init(
+                targetWeight: 160,
+                goal: healthGoal,
+                weightLossSpeed: speed
             )
         )
-
+        
+        let result = try #require(
+            await calculator.targetProtein(existingHabit: existingHabit)
+        )
+        
         let resultValue = result.target.doubleValue(for: .gram())
-
+        
         #expect(resultValue.isWithinRange(of: expectedProtein, precision: 0.01))
     }
 }

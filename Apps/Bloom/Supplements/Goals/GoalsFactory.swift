@@ -219,18 +219,25 @@ private extension GoalsFactory {
     var newFocusAreas = [ProposedGoal]()
 
     // Calories
-    let userReportedActivityLevel = await HealthManager.shared.userReportedActivityLevel ?? .sedentary
-
     let existingCalorieHabit = activeHabits.first(where: { $0.targetMetric == .calories })
     let newCalorieGoal: HKQuantity?
 
-    if let recommendation = await CalorieTargetCalculator.targetCalories(
-      existingHabit: existingCalorieHabit,
-      dietaryEnergy: averageDietaryEnergy,
+    let age = await HealthManager.shared.age()
+    let sex = await HealthManager.shared.sex()
+    let height = await HealthManager.shared.height()
+    let userReportedActivityLevel = await HealthManager.shared.userReportedActivityLevel ?? .sedentary
+    let targetDetails = await HealthManager.shared.healthTargetDetails
+
+    let calorieTargetCalculator = CalorieTargetCalculator(
+      age: age,
+      sex: sex,
       bodyMass: bodyMass,
+      height: height,
       activityLevel: userReportedActivityLevel,
-      targetDetails: HealthManager.shared.healthTargetDetails
-    ) {
+      targetDetails: targetDetails
+    )
+
+    if let recommendation = await calorieTargetCalculator.targetCalories(existingHabit: existingCalorieHabit) {
       let suggestedValue = recommendation.target.doubleValue(for: .largeCalorie())
       let value: Double
       if let existingCalorieHabit, existingCalorieHabit.isUserEdited == true {
@@ -258,17 +265,14 @@ private extension GoalsFactory {
 
     // Protein
     let existingProteinHabit = activeHabits.first(where: { $0.targetMetric == .proteinIntake })
-    if
-      let newCalorieGoal,
-      let averageProtein = await VitalsCalculator.shared.nutritionSummary?.details.averageProtein,
-      let recommendation = await ProteinTargetCalculator.targetProtein(
-        existingHabit: existingProteinHabit,
-        protein: averageProtein,
-        dietaryEnergy: averageDietaryEnergy,
+
+    if let newCalorieGoal {
+      let proteinTargetCalculator = ProteinTargetCalculator(
         calorieGoal: newCalorieGoal,
-        targetDetails: HealthManager.shared.healthTargetDetails
+        targetDetails: targetDetails
       )
-    {
+
+      let recommendation = await proteinTargetCalculator.targetProtein(existingHabit: existingProteinHabit)
       let suggestedValue = recommendation.target.doubleValue(for: .gram())
       let value: Double
       if let existingProteinHabit, existingProteinHabit.isUserEdited == true {

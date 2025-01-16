@@ -18,27 +18,30 @@ struct CalorieTargetCalculatorTestSuite {
         ContainerHolder.shared.setupForTests()
     }
 
-    @Test(arguments: noExistinHabitsArguments)
+    @Test(arguments: noExistingHabitsArguments)
     func noExistingHabit(
         input: Input,
         expectedOutput: Double
     ) async throws {
-        let result = try #require(
-            await CalorieTargetCalculator.targetCalories(
-                existingHabit: input.existingHabit,
-                dietaryEnergy: HKQuantity(unit: .largeCalorie(), doubleValue: input.dietaryEnergy),
-                bodyMass: HKQuantity(unit: .pound(), doubleValue: input.bodyMass),
-                activityLevel: input.activityLevel,
-                targetDetails: .init(
-                    targetWeight: input.targetWeight,
-                    goal: input.healthGoal,
-                    weightLossSpeed: input.speed
-                )
+        let calculator = CalorieTargetCalculator(
+            age: input.age,
+            sex: input.sex,
+            bodyMass: HKQuantity(unit: .pound(), doubleValue: input.bodyMass),
+            height: HKQuantity(unit: .meterUnit(with: .centi), doubleValue: input.height),
+            activityLevel: input.activityLevel,
+            targetDetails: .init(
+                targetWeight: input.targetWeight,
+                goal: input.healthGoal,
+                weightLossSpeed: input.speed
             )
         )
-
+        
+        let result = try #require(
+            await calculator.targetCalories(existingHabit: input.existingHabit)
+        )
+        
         let resultValue = result.target.doubleValue(for: .largeCalorie())
-
+        
         #expect(resultValue.isWithinRange(of: expectedOutput, precision: 0.01))
     }
 }
@@ -48,6 +51,9 @@ extension CalorieTargetCalculatorTestSuite {
         let testDescription: String
         let dietaryEnergy: Double
         let bodyMass: Double
+        let height: Double
+        let age: Int
+        let sex: HKBiologicalSex
         let targetWeight: Double
         let activityLevel: ActivityLevelSummary.ActivityLevel
         let healthGoal: HealthGoal
@@ -58,6 +64,9 @@ extension CalorieTargetCalculatorTestSuite {
             _ testDescription: String,
             dietary: Double,
             bodyMass: Double,
+            height: Double,
+            age: Int,
+            sex: HKBiologicalSex,
             targetWeight: Double,
             activityLevel: ActivityLevelSummary.ActivityLevel,
             goal: HealthGoal,
@@ -67,6 +76,9 @@ extension CalorieTargetCalculatorTestSuite {
             self.testDescription = testDescription
             self.dietaryEnergy = dietary
             self.bodyMass = bodyMass
+            self.height = height
+            self.age = age
+            self.sex = sex
             self.targetWeight = targetWeight
             self.activityLevel = activityLevel
             self.healthGoal = goal

@@ -78,6 +78,14 @@ enum WeightLossSpeed: String, CaseIterable, Identifiable {
     rawValue.capitalized
   }
 
+  var mifflinStJeorAdjustment: Double {
+    switch self {
+    case .slow: 250
+    case .moderate: 500
+    case .fast: 1000
+    }
+  }
+
   @MainActor
   var weightLossDescription: String {
     let quantity: HKQuantity
