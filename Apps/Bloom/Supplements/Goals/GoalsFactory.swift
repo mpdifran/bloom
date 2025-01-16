@@ -171,8 +171,7 @@ private extension GoalsFactory {
     }
 
     guard
-      let bodyMass = await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass,
-      let averageDietaryEnergy = await VitalsCalculator.shared.nutritionSummary?.details.dietaryEnergy
+      let bodyMass = await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass
     else {
       print("We should never get here.")
       return nil
