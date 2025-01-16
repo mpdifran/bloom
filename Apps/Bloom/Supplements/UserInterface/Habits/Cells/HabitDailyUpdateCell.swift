@@ -30,7 +30,6 @@ struct HabitDailyUpdateCell: View {
     HStack(spacing: 14) {
       Image(systemName: habit.targetMetric.systemImage)
         .font(.title)
-        .bold()
         .foregroundStyle(.tint)
         .frame(width: 40)
 
