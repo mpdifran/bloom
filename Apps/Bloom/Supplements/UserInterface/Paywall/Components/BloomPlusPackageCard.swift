@@ -23,7 +23,6 @@ struct BloomPlusPackageCard: View {
           .fontDesign(.rounded)
         Text(subtitle)
           .font(.caption)
-          .foregroundStyle(.secondary)
       }
 
       Spacer()

@@ -22,7 +22,7 @@ struct BloomPlusPackagesView: View {
       ForEach(packages) { package in
         BloomPlusPackageCard(
           title: package.sensibleName,
-          subtitle: package.monthlyPriceString ?? "",
+          subtitle: package.pricingString ?? "",
           introOffer: package.introductoryOfferString,
           isSelected: package == selectedPackage
         )

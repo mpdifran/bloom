@@ -94,11 +94,19 @@ private extension BloomPlusPaywall {
 
   var purchaseShelf: some View {
     VStack {
-      if let trialString = selectedPackage?.introductoryOfferTrialString {
+      if let selectedPackage {
         HStack {
-          Image(systemName: "checkmark.seal.fill")
-            .foregroundStyle(.white, .mutedGreen)
-          Text(trialString.capitalized)
+          if let trialString = selectedPackage.introductoryOfferTrialString {
+            Image(systemName: "checkmark.seal.fill")
+              .foregroundStyle(.white, .mutedGreen)
+            Text(trialString.capitalized)
+            Text("•")
+          }
+          if selectedPackage.isMonthly {
+            Text("Cancel Anytime")
+          } else if let monthlyString = selectedPackage.monthlyPriceString {
+            Text(monthlyString)
+          }
         }
         .font(.subheadline)
         .bold()

@@ -51,6 +51,32 @@ extension Package {
     }
   }
 
+  var pricingString: String? {
+    guard let period = storeProduct.subscriptionPeriod else { return nil }
+
+    // Determine the period string
+    let periodString: String
+    switch period.unit {
+    case .day:
+      periodString = period.value == 1 ? "day" : "\(period.value) days"
+    case .week:
+      periodString = period.value == 1 ? "week" : "\(period.value) weeks"
+    case .month:
+      periodString = period.value == 1 ? "month" : "\(period.value) months"
+    case .year:
+      periodString = period.value == 1 ? "year" : "\(period.value) years"
+    @unknown default:
+      return nil
+    }
+
+    // Combine price and period
+    return "\(localizedPriceString) / \(periodString)"
+  }
+
+  var isMonthly: Bool {
+    storeProduct.subscriptionPeriod?.unit == .month
+  }
+
   var monthlyPriceString: String? {
     guard let period = storeProduct.subscriptionPeriod else { return nil }
 
