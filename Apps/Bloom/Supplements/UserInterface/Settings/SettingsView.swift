@@ -62,7 +62,7 @@ struct SettingsView: View {
         subscriptionSection
         supportSection
         authenticationSection
-//        developerSection
+        developerSection
       }
       .padding()
     }
