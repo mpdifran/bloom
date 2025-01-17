@@ -8,106 +8,87 @@
 import SwiftUI
 
 struct ActionsView: View {
-
-  @State private var showAllDataView = false
-  @State private var presentedCardSheet: AnyView?
-
-  @State private var viewModel = ViewModel()
+  @Binding var presentedSheet: AnyView?
 
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    ScrollView {
-      VStack {
-        Text("Log")
-          .font(.largeTitle)
-          .fontDesign(.rounded)
-          .bold()
-          .padding(.top)
+    InsetCardView(background: .background.secondary) {
+      LargeTitleActionCard("Log") {
+        VStack {
+          ActionInstanceCell(image: .logFoodIcon, title: "Food")
+            .tint(.mutedGreen)
+            .onTapGesture {
+              dismissAndRun {
+                presentedSheet = FoodLoggingActionCardView().asAny
+              }
+            }
 
-        ActionInstanceCell(image: .logFoodIcon, title: "Food")
-          .tint(.mutedGreen)
-          .onTapGesture {
-            presentedCardSheet = FoodLoggingActionCardView {
-              dismiss()
-            }.asAny
-          }
+          ActionInstanceCell(image: .logWaterIcon, title: "Water")
+            .tint(.mutedBlue)
+            .onTapGesture {
+              dismissAndRun {
+                presentedSheet = WaterActionCardView().asAny
+              }
+            }
 
-        ActionInstanceCell(image: .logWaterIcon, title: "Water")
-          .tint(.mutedBlue)
-          .onTapGesture {
-            presentedCardSheet = WaterActionCardView {
-              dismiss()
-            }.asAny
-          }
+          ActionInstanceCell(image: .logBowelIcon, title: "Bowel Movement")
+            .tint(.brown)
+            .onTapGesture {
+              dismissAndRun {
+                presentedSheet = BowelMovementActionCardView().asAny
+              }
+            }
 
-        ActionInstanceCell(image: .logBowelIcon, title: "Bowel Movement")
-          .tint(.brown)
-          .onTapGesture {
-            presentedCardSheet = BowelMovementActionCardView {
-              dismiss()
-            }.asAny
-          }
+          ActionInstanceCell(image: .logWeightIcon, title: "Weight")
+            .tint(.mutedIndigo)
+            .onTapGesture {
+              dismissAndRun {
+                presentedSheet = BodyWeightActionCardView().asAny
+              }
+            }
 
-        ActionInstanceCell(image: .logWeightIcon, title: "Weight")
-          .tint(.mutedIndigo)
-          .onTapGesture {
-            presentedCardSheet = BodyWeightActionCardView {
-              dismiss()
-            }.asAny
-          }
-
-        ActionInstanceCell(image: .logBloodPressureIcon, title: "Blood Pressure")
-          .tint(.mutedRed)
-          .onTapGesture {
-            presentedCardSheet = BloodPressureActionCardView {
-              dismiss()
-            }.asAny
-          }
+          ActionInstanceCell(image: .logBloodPressureIcon, title: "Blood Pressure")
+            .tint(.mutedRed)
+            .onTapGesture {
+              dismissAndRun {
+                presentedSheet = BloodPressureActionCardView().asAny
+              }
+            }
+        }
       }
-      .padding()
-      .presentationDetentSelfSizing()
-    }
-    .groupedBackground()
-    .presentationCornerRadius(30)
-    .presentationDragIndicator(.visible)
-    .sheet($presentedCardSheet)
-    .onAppear {
-      viewModel.observeData()
     }
   }
 }
 
 private extension ActionsView {
 
-  func dismissAndRun(_ closure: () -> Void) async {
-    dismiss()
-    await Delay(500)
-    closure()
-  }
-
-  func delayShowFoodSearch(for barcode: String) async {
-    await Delay(500)
-
-    presentedCardSheet = FoodLoggingActionCardView(initialBarcodeToSearch: barcode).asAny
+  func dismissAndRun(_ closure: @escaping () -> Void) {
+    Task {
+      dismiss()
+      await Delay(200)
+      MainTask {
+        closure()
+      }
+    }
   }
 }
 
 #Preview {
   struct PreviewView: View {
+    @State private var presentedSheet: AnyView?
 
-      @State private var showSheet = true
-
-      var body: some View {
-          Button {
-              showSheet.toggle()
-          } label: {
-              Text("Show Sheet")
-          }
-          .sheet(isPresented: $showSheet) {
-            ActionsView()
-          }
+    var body: some View {
+      Button {
+        presentedSheet = ActionsView(presentedSheet: $presentedSheet).asAny
+      } label: {
+        Text("Show Sheet")
       }
+      .sheet($presentedSheet)
+      .onAppear {
+        presentedSheet = ActionsView(presentedSheet: $presentedSheet).asAny
+      }
+    }
   }
   return PreviewView()
 }

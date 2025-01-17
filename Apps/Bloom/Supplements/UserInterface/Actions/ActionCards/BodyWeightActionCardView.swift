@@ -11,12 +11,6 @@ import TelemetryDeck
 
 struct BodyWeightActionCardView: View {
 
-  private let performDismiss: (() -> Void)?
-
-  init(performDismiss: (() -> Void)? = nil) {
-    self.performDismiss = performDismiss
-  }
-
   @State private var weight: Double = 0
 
   @State private var didError = false
@@ -28,83 +22,66 @@ struct BodyWeightActionCardView: View {
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   var body: some View {
-    ActionCardView(
-      title: "Body Weight",
-      sampleTypes: [HKQuantityType(.bodyMass)],
-      performDismiss: performDismiss
-    ) {
-      await logWeight()
-    } content: { (_, handleSave) in
-      VStack {
-        Spacer()
+    InsetCardView {
+      LargeTitleActionCard("Log Weight") {
+        HealthActionCardView(
+          sampleTypes: [HKQuantityType(.bodyMass)]
+        ) {
+          try await logWeight()
+        } content: { (_, handleSave) in
+          VStack {
+            HStack {
+              Text("Weight")
 
-        HStack {
-          TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
-            .selectAllTextOnBeginEditing()
-            .focused($isFocused)
+              Spacer()
 
-          LocalizedUnitPickerView(unit: $unitPreferences.weightUnit)
+              TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
+                .selectAllTextOnBeginEditing()
+                .focused($isFocused)
+                .frame(width: 140)
+
+              LocalizedUnitPickerView(unit: $unitPreferences.weightUnit)
+            }
+            .horizontallyCentered()
+            .cardContainer(fill: .background.secondary)
+            .fontDesign(.rounded)
+            .keyboardType(.decimalPad)
+            .sensoryFeedback(.error, trigger: didError)
+            .textFieldStyle(.roundedBorder)
+            .bold()
+            .multilineTextAlignment(.trailing)
+          }
         }
-        .frame(width: 200)
-        .fontDesign(.rounded)
-        .keyboardType(.decimalPad)
-        .sensoryFeedback(.error, trigger: didError)
-        .textFieldStyle(.roundedBorder)
-        .font(.largeTitle)
-        .bold()
-        .multilineTextAlignment(.trailing)
-
-        Spacer()
       }
     }
-    .alert(error: $error)
     .tint(.mutedIndigo)
   }
 }
 
 private extension BodyWeightActionCardView {
 
-  func logWeight() async -> Bool {
-    do {
-      let date = Date.now
-      let quantity = HKQuantity(unit: unitPreferences.weightUnit, doubleValue: weight)
-      let sample = HKQuantitySample(
-        type: .init(.bodyMass),
-        quantity: quantity,
-        start: date,
-        end: date,
-        metadata: [
-          HKMetadataKeyWasUserEntered : true
-        ]
-      )
+  func logWeight() async throws -> Bool {
+    let date = Date.now
+    let quantity = HKQuantity(unit: unitPreferences.weightUnit, doubleValue: weight)
+    let sample = HKQuantitySample(
+      type: .init(.bodyMass),
+      quantity: quantity,
+      start: date,
+      end: date,
+      metadata: [
+        HKMetadataKeyWasUserEntered : true
+      ]
+    )
 
-      try await HealthStoreModifier.shared.write(sample: sample)
-      TelemetryDeck.signal("Log Weight")
-    } catch {
-      self.error = error
-      self.didError.toggle()
-      return false
-    }
+    try await HealthStoreModifier.shared.write(sample: sample)
+    TelemetryDeck.signal("Log Weight")
 
     return true
   }
 }
 
 #Preview {
-  struct PreviewView: View {
-
-    @State private var showSheet = true
-
-    var body: some View {
-      Button {
-        showSheet.toggle()
-      } label: {
-        Text("Show Sheet")
-      }
-      .sheet(isPresented: $showSheet) {
-        BodyWeightActionCardView() { }
-      }
-    }
+  PreviewSheetPresent {
+    BodyWeightActionCardView()
   }
-  return PreviewView()
 }

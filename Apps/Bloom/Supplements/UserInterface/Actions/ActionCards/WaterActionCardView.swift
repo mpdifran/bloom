@@ -29,11 +29,7 @@ struct WaterActionCardView: View {
     }
   }
 
-  private let performDismiss: (() -> Void)?
-
-  init(performDismiss: (() -> Void)? = nil) {
-    self.performDismiss = performDismiss
-
+  init() {
     let glassSizes: [WaterGlassSizeModel]
     if
       let data = UserDefaults.group.data(forKey: "WaterActionCardView.glassSizes"),
@@ -56,127 +52,102 @@ struct WaterActionCardView: View {
   }
 
   var body: some View {
-    ActionCardView(
-      title: "Log Water",
-      sampleTypes: [HKQuantityType(.dietaryWater)],
-      showSaveBar: false,
-      performDismiss: performDismiss
-    ) {
-      await logSelectedWater()
-    } content: { (hasInserted, handleSave) in
-      List {
-        ForEach(glassSizes) { glassSize in
-          HStack {
-            Image(systemName: "waterbottle")
-              .foregroundStyle(.tint)
+    InsetCardView(background: .background.secondary) {
+      LargeTitleActionCard("Log Water") {
+        HealthActionCardView(
+          sampleTypes: [HKQuantityType(.dietaryWater)],
+          showSaveBar: false
+        ) {
+            try await logSelectedWater()
+          } content: { (hasInserted, handleSave) in
+            VStack {
+              ForEach(glassSizes) { glassSize in
+                HStack {
+                  Image(systemName: "waterbottle")
+                    .foregroundStyle(.tint)
 
-            Text(glassSize.name)
-              .fontDesign(.rounded)
-              .bold()
+                  Text(glassSize.name)
+                    .fontDesign(.rounded)
+                    .bold()
 
-            Spacer()
+                  Spacer()
 
-            Text(glassSize.displayValue)
-              .bold()
-              .fontDesign(.rounded)
-              .foregroundStyle(.tint)
-          }
-          .frame(height: 44)
-          .contentShape(Rectangle())
-          .onTapGesture {
-            selectedQuantity = glassSize.quantity
-            handleSave()
-          }
-          .sensoryFeedback(.success, trigger: didIncrease)
-          .sensoryFeedback(.error, trigger: didError)
-        }
-        .onDelete { indexSet in
-          for index in indexSet {
-            glassSizes.remove(at: index)
-          }
-        }
-      }
-      .overlay {
-        ZStack {
-          if hasInserted {
-            Label("Water Logged", systemImage: "checkmark")
-              .font(.subheadline)
-              .bold()
-              .foregroundStyle(.invertedText)
-              .padding()
-              .background {
-                RoundedRectangle(cornerRadius: 13)
-                  .fill(.text)
+                  Text(glassSize.displayValue)
+                    .bold()
+                    .fontDesign(.rounded)
+                    .foregroundStyle(.tint)
+                }
+                .cardContainer()
+                .onTapGesture {
+                  selectedQuantity = glassSize.quantity
+                  handleSave()
+                }
+                .sensoryFeedback(.success, trigger: didIncrease)
+                .sensoryFeedback(.error, trigger: didError)
               }
-              .transition(.move(edge: .bottom))
-              .zStackAlignment(.bottom)
+
+              Button {
+                isShowingAddGlassSizeSheet = true
+              } label: {
+                Image(systemName: "plus")
+                  .horizontallyCentered()
+              }
+              .buttonStyle(.primary)
+            }
+            .overlay {
+              ZStack {
+                if hasInserted {
+                  Label("Water Logged", systemImage: "checkmark")
+                    .font(.subheadline)
+                    .bold()
+                    .foregroundStyle(.invertedText)
+                    .padding()
+                    .background {
+                      RoundedRectangle(cornerRadius: 13)
+                        .fill(.text)
+                    }
+                    .transition(.move(edge: .bottom))
+                    .zStackAlignment(.bottom)
+                }
+              }
+              .padding()
+            }
           }
-        }
-        .padding()
-      }
-      .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            isShowingAddGlassSizeSheet = true
-          } label: {
-            Image(systemName: "plus")
-          }
-        }
       }
     }
-    .tint(.mutedBlue)
     .sheet(isPresented: $isShowingAddGlassSizeSheet) {
       AddWaterGlassSizeView { size in
         glassSizes.append(size)
       }
     }
-    .alert(error: $error)
+    .tint(.mutedBlue)
   }
 }
 
 private extension WaterActionCardView {
 
-  func logSelectedWater() async -> Bool {
+  func logSelectedWater() async throws -> Bool {
     guard let quantity = selectedQuantity else { return false }
 
-    do {
-      let sample = HKQuantitySample(
-        type: .init(.dietaryWater),
-        quantity: quantity,
-        start: .now,
-        end: .now,
-        metadata: [
-          HKMetadataKeyWasUserEntered : true
-        ]
-      )
+    let sample = HKQuantitySample(
+      type: .init(.dietaryWater),
+      quantity: quantity,
+      start: .now,
+      end: .now,
+      metadata: [
+        HKMetadataKeyWasUserEntered : true
+      ]
+    )
 
-      try await HealthStoreModifier.shared.write(sample: sample)
-      didIncrease.toggle()
-      TelemetryDeck.signal("Log Water")
-      return true
-    } catch {
-      self.error = error
-      self.didError.toggle()
-      return false
-    }
+    try await HealthStoreModifier.shared.write(sample: sample)
+    didIncrease.toggle()
+    TelemetryDeck.signal("Log Water")
+    return true
   }
 }
 
 #Preview {
-  struct PreviewView: View {
-
-    @State private var showSheet = true
-
-    var body: some View {
-      Button {
-        showSheet.toggle()
-      } label: {
-        Text("Show Sheet")
-      }
-      .sheet(isPresented: $showSheet) {
-        WaterActionCardView() { }
-      }
-    }
+  PreviewSheetPresent {
+    WaterActionCardView()
   }
-  return PreviewView()
 }
