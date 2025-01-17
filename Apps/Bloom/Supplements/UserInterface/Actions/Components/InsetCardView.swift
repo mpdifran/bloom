@@ -21,7 +21,7 @@ struct InsetCardView<Content, S>: View where Content: View, S: ShapeStyle {
 
   init(
     includePadding: Bool = true,
-    background: S = BackgroundStyle.background,
+    background: S = BackgroundStyle.background.secondary,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.includePadding = includePadding

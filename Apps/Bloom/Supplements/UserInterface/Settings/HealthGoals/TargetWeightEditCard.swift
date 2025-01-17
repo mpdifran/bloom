@@ -22,31 +22,32 @@ struct TargetWeightEditCard: View {
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   var body: some View {
-    ActionCardView(
-      title: "Target Weight",
-      performDismiss: nil
-    ) {
-      saveTargetWeight()
-    } content: { (_, handleSave) in
-      VStack {
-        Spacer()
+    InsetCardView {
+      LargeTitleActionCard("Target Weight") {
+        HealthActionCardView {
+          saveTargetWeight()
+        } content: { _, handleSave in
+          VStack {
+            HStack {
+              Text("Weight")
 
-        HStack {
-          TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
-            .selectAllTextOnBeginEditing()
-            .focused($isFocused)
+              Spacer()
 
-          LocalizedUnitPickerView(unit: $unitPreferences.weightUnit)
+              TextField("", value: $weight, formatter: NumberFormatter.oneDecimalPlace)
+                .selectAllTextOnBeginEditing()
+                .focused($isFocused)
+                .frame(width: 140)
+
+              LocalizedUnitPickerView(unit: $unitPreferences.weightUnit)
+            }
+            .cardContainer()
+            .fontDesign(.rounded)
+            .keyboardType(.decimalPad)
+            .textFieldStyle(.roundedBorder)
+            .bold()
+            .multilineTextAlignment(.trailing)
+          }
         }
-        .frame(width: 200)
-        .fontDesign(.rounded)
-        .keyboardType(.decimalPad)
-        .textFieldStyle(.roundedBorder)
-        .font(.largeTitle)
-        .bold()
-        .multilineTextAlignment(.trailing)
-
-        Spacer()
       }
     }
     .tint(.mutedIndigo)
@@ -63,5 +64,7 @@ private extension TargetWeightEditCard {
 }
 
 #Preview {
-  TargetWeightEditCard()
+  PreviewSheetPresent {
+    TargetWeightEditCard()
+  }
 }
