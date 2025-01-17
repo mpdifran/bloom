@@ -17,7 +17,7 @@ struct BowelMovementActionCardView: View {
   @State private var duration: BowelMovement.Duration = .between5And10Min
 
   var body: some View {
-    InsetCardView(includePadding: false) {
+    InsetCardView(includePadding: false, background: .background.secondary) {
       LargeTitleActionCard("Log Bowel Movement") {
         HealthActionCardView(
           addPaddingToSaveButton: true
@@ -78,17 +78,7 @@ private extension BowelMovementActionCardView {
       Spacer(minLength: 0)
     }
     .frame(width: 130, height: 140)
-    .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 13)
-        .fill(.background.secondary)
-    }
-    .overlay {
-      if selectedStoolType == 0 {
-        RoundedRectangle(cornerRadius: 13)
-          .stroke(.tint, lineWidth: 3)
-      }
-    }
+    .cardContainer(stroke: selectedStoolType == 0 ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear))
     .id(0)
     .onTapGesture {
       selectedStoolType = 0
@@ -104,9 +94,7 @@ private extension BowelMovementActionCardView {
         }
       }
     }
-    .padding(.horizontal)
-    .padding(.vertical, 12)
-    .cardContainer(fill: .background.secondary, includePadding: false)
+    .cardContainer()
     .padding(.horizontal)
   }
 
@@ -114,9 +102,7 @@ private extension BowelMovementActionCardView {
     LabeledContent("Date") {
       DatePicker("", selection: $date)
     }
-    .padding(.horizontal)
-    .padding(.vertical, 12)
-    .cardContainer(fill: .background.secondary, includePadding: false)
+    .cardContainer()
     .padding(.horizontal)
   }
 }
@@ -164,17 +150,7 @@ private struct StoolTypeCell: View {
         .lineLimit(3)
     }
     .frame(width: 130, height: 140)
-    .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 13)
-        .fill(.background.secondary)
-    }
-    .overlay {
-      if isSelected {
-        RoundedRectangle(cornerRadius: 13)
-          .stroke(.tint, lineWidth: 3)
-      }
-    }
+    .cardContainer(stroke: isSelected ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear))
   }
 
   func description(for type: Int) -> String {

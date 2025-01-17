@@ -22,7 +22,7 @@ struct BodyWeightActionCardView: View {
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   var body: some View {
-    InsetCardView {
+    InsetCardView(background: .background.secondary) {
       LargeTitleActionCard("Log Weight") {
         HealthActionCardView(
           sampleTypes: [HKQuantityType(.bodyMass)]
@@ -43,7 +43,7 @@ struct BodyWeightActionCardView: View {
               LocalizedUnitPickerView(unit: $unitPreferences.weightUnit)
             }
             .horizontallyCentered()
-            .cardContainer(fill: .background.secondary)
+            .cardContainer()
             .fontDesign(.rounded)
             .keyboardType(.decimalPad)
             .sensoryFeedback(.error, trigger: didError)

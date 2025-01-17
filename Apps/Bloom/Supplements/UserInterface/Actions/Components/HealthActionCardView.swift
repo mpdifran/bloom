@@ -44,9 +44,11 @@ struct HealthActionCardView<Content>: View where Content: View {
 
   var body: some View {
     VStack {
-      content(hasInserted) {
-        Task {
-          await performSave()
+      VStack {
+        content(hasInserted) {
+          Task {
+            await performSave()
+          }
         }
       }
 
@@ -73,6 +75,7 @@ struct HealthActionCardView<Content>: View where Content: View {
         .if(addPaddingToSaveButton) {
           $0.padding(.horizontal)
         }
+        .padding(.top)
       }
     }
     .sensoryFeedback(.error, trigger: didError)

@@ -28,7 +28,7 @@ struct BloodPressureActionCardView: View {
   @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
-    InsetCardView {
+    InsetCardView(background: .background.secondary) {
       LargeTitleActionCard("Log Blood Pressure") {
         HealthActionCardView(
           sampleTypes: [
@@ -63,7 +63,7 @@ struct BloodPressureActionCardView: View {
                 .selectAllTextOnBeginEditing()
             }
           }
-          .cardContainer(fill: .background.secondary)
+          .cardContainer()
           .sensoryFeedback(.error, trigger: didError)
           .textFieldStyle(.roundedBorder)
           .fontDesign(.rounded)
