@@ -17,6 +17,9 @@ extension SchemaV6 {
     public var name: String = ""
     @Relationship public var items: [MealItem] = []
 
+    @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.mealItem)
+    public var logs: [MealRecord]?
+
     init(
       id: String,
       name: String,
