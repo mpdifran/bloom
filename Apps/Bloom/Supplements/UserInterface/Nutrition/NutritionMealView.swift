@@ -16,14 +16,7 @@ struct NutritionMealView: View {
   let onLogTapped: () -> Void
 
   var body: some View {
-    HStack(alignment: .firstTextBaseline) {
-      SectionTitleView(meal.name)
-      Spacer()
-      Text("\(totalCalories.format()) Cals")
-        .bold()
-        .foregroundStyle(.secondary)
-    }
-    .padding(.horizontal)
+    mealHeader
 
     VStack(spacing: 0) {
       if foodItemLogs.isEmpty {
@@ -47,20 +40,6 @@ struct NutritionMealView: View {
             .padding(.horizontal)
         }
       }
-
-      if foodItemLogs.isEmpty {
-        Divider()
-          .padding(.horizontal)
-      }
-
-      Button {
-        onLogTapped()
-      } label: {
-        Label("Log Food", systemImage: "plus")
-          .horizontallyCentered()
-      }
-      .frame(height: 50)
-      .bold()
     }
     .horizontallyCentered()
     .cardContainer(includePadding: false)
@@ -68,9 +47,58 @@ struct NutritionMealView: View {
 }
 
 private extension NutritionMealView {
+  var mealHeader: some View {
+    HStack {
+      VStack(alignment: .leading) {
+        Text(meal.name)
+          .font(.title2)
+          .fontDesign(.rounded)
+          .bold()
+
+        Text("\(totalCalories.format()) cal • \(totalProtein.format()) Protein • \(totalFat.format()) Fats • \(totalCarbs.format()) Carbs")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+          .bold()
+      }
+
+      Spacer()
+
+      Button {
+        onLogTapped()
+      } label: {
+        Label("Add", systemImage: "plus")
+          .padding(8)
+          .background(Color.white)
+          .foregroundStyle(.tint)
+          .clipShape(Capsule())
+          .bold()
+      }
+    }
+  }
+}
+
+private extension NutritionMealView {
   var totalCalories: Double {
     foodItemLogs.reduce(0) { partialResult, foodItemLog in
       partialResult + foodItemLog.totalCalories
+    }
+  }
+
+  var totalProtein: Double {
+    foodItemLogs.reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalProtein
+    }
+  }
+
+  var totalFat: Double {
+    foodItemLogs.reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalFat
+    }
+  }
+
+  var totalCarbs: Double {
+    foodItemLogs.reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalCarbs
     }
   }
 }
