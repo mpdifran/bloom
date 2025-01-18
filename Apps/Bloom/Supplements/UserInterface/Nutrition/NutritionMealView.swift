@@ -10,11 +10,21 @@ import SwiftUI
 
 struct NutritionMealView: View {
 
+  let meal: FoodItemLog.Meal
   let foodItemLogs: [FoodItemLog]
   let onCellTapped: (FoodItemLog) -> Void
   let onLogTapped: () -> Void
 
   var body: some View {
+    HStack(alignment: .firstTextBaseline) {
+      SectionTitleView(meal.name)
+      Spacer()
+      Text("\(totalCalories.format()) Cals")
+        .bold()
+        .foregroundStyle(.secondary)
+    }
+    .padding(.horizontal)
+
     VStack(spacing: 0) {
       if foodItemLogs.isEmpty {
         Text("No Food Logged")
@@ -54,5 +64,13 @@ struct NutritionMealView: View {
     }
     .horizontallyCentered()
     .cardContainer(includePadding: false)
+  }
+}
+
+private extension NutritionMealView {
+  var totalCalories: Double {
+    foodItemLogs.reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalCalories
+    }
   }
 }

@@ -89,16 +89,8 @@ private extension NutritionView {
         Divider()
 
         ForEach(FoodItemLog.Meal.allCases) { meal in
-          HStack(alignment: .firstTextBaseline) {
-            SectionTitleView(meal.name)
-            Spacer()
-            Text("\(totalCalories(for: meal).format()) Cals")
-              .bold()
-              .foregroundStyle(.secondary)
-          }
-          .padding(.horizontal)
-
           NutritionMealView(
+            meal: meal,
             foodItemLogs: foodItemLogs(for: meal)
           ) { foodItemLog in
             guard let foodItem = foodItemLog.foodItem else { return }
@@ -155,12 +147,6 @@ private extension NutritionView.FilteredFoodItemLogsListView {
   func foodItemLogs(for meal: FoodItemLog.Meal) -> [FoodItemLog] {
     foodItemLogs.filter {
       $0.meal == meal
-    }
-  }
-
-  func totalCalories(for meal: FoodItemLog.Meal) -> Double {
-    foodItemLogs(for: meal).reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalCalories
     }
   }
 
