@@ -15,6 +15,8 @@ public enum SchemaV6: VersionedSchema {
         SchemaV0.BowelMovement.self,
         SchemaV2.Habit.self,
         SchemaV5.FoodItemRecord.self,
-        SchemaV5.FoodItemLog.self
+        SchemaV6.FoodItemLog.self,
+        SchemaV6.MealRecord.self,
+        SchemaV6.MealItem.self,
     ]
 }
