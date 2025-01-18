@@ -98,51 +98,19 @@ private extension NutritionView {
           }
           .padding(.horizontal)
 
-          VStack(spacing: 0) {
-            if foodItemLogs(for: meal).isEmpty {
-              Text("No Food Logged")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-                .bold()
-                .padding()
-                .padding()
-            } else {
-              ForEach(foodItemLogs(for: meal)) { foodItemLog in
-                FoodItemLogCell(foodItemLog: foodItemLog)
-                  .id(foodItemLog.id)
-                  .transition(.blurReplace)
-                  .selectable()
-                  .onTapGesture {
-                    guard let foodItem = foodItemLog.foodItem else { return }
+          NutritionMealView(
+            foodItemLogs: foodItemLogs(for: meal)
+          ) { foodItemLog in
+            guard let foodItem = foodItemLog.foodItem else { return }
 
-                    presentedSheet = FoodItemDetailsView(
-                      foodItem: foodItem.asNetworkFoodItem(),
-                      existingFoodItemLog: foodItemLog
-                    ).asAny
-                  }
-                  .padding()
-                Divider()
-                  .padding(.horizontal)
-              }
-            }
-
-            if foodItemLogs(for: meal).isEmpty {
-              Divider()
-                .padding(.horizontal)
-            }
-
-            Button {
-              nutritionViewModel.suggestedMeal = meal
-              presentedSheet = FoodLoggingActionCardView().asAny
-            } label: {
-              Label("Log Food", systemImage: "plus")
-                .horizontallyCentered()
-            }
-            .frame(height: 50)
-            .bold()
+            presentedSheet = FoodItemDetailsView(
+              foodItem: foodItem.asNetworkFoodItem(),
+              existingFoodItemLog: foodItemLog
+            ).asAny
+          } onLogTapped: {
+            nutritionViewModel.suggestedMeal = meal
+            presentedSheet = FoodLoggingActionCardView().asAny
           }
-          .horizontallyCentered()
-          .cardContainer(includePadding: false)
         }
       }
     }
