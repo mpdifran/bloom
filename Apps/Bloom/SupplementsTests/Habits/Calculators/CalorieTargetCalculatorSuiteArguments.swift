@@ -26,7 +26,7 @@ extension CalorieTargetCalculatorTestSuite {
         activityLevel: .light,
         goal: .loseWeight,
         speed: .moderate
-      ), 1600), // 1496.5 * 1.375 - 250 (moderate deficit)
+      ), 1550), // 1496.5 * 1.375 - 250 (moderate deficit)
       (Input(
         "Sedentary lose weight slowly",
         dietary: 2080,
@@ -38,7 +38,7 @@ extension CalorieTargetCalculatorTestSuite {
         activityLevel: .sedentary,
         goal: .loseWeight,
         speed: .slow
-      ), 1500), // 1445.95 * 1.2 - 150 (slow deficit)
+      ), 1475), // 1445.95 * 1.2 - 150 (slow deficit)
       (Input(
         "High activity maintain weight",
         dietary: 2720,
@@ -62,7 +62,7 @@ extension CalorieTargetCalculatorTestSuite {
         activityLevel: .high,
         goal: .gainWeight,
         speed: .slow
-      ), 2700), // 1445.95 * 1.725 + 250 (surplus)
+      ), 2750), // 1445.95 * 1.725 + 250 (surplus)
       (Input(
         "Sedentary lose weight slowly 220 lbs",
         dietary: 2860,
@@ -74,7 +74,7 @@ extension CalorieTargetCalculatorTestSuite {
         activityLevel: .sedentary,
         goal: .loseWeight,
         speed: .slow
-      ), 1800), // 1749.4 * 1.2 - 150
+      ), 1850), // 1749.4 * 1.2 - 150
       (Input(
         "Lose weight high activity existing habit",
         dietary: 2000,
@@ -124,7 +124,98 @@ extension CalorieTargetCalculatorTestSuite {
           vitalKind: .nutrition,
           context: ""
         )
-      ), 2700) // BMR * 1.725 for maintenance
+      ), 2700), // BMR * 1.725 for maintenance
+      (Input(
+        "Client Data Slow",
+        dietary: 2000,
+        bodyMass: 153,
+        height: 155,
+        age: 32,
+        sex: .female,
+        targetWeight: 130,
+        activityLevel: .light,
+        goal: .loseWeight,
+        speed: .slow,
+        existingHabit: nil
+      ), 1600),
+      (Input(
+        "Client Data Moderate",
+        dietary: 2000,
+        bodyMass: 153,
+        height: 155,
+        age: 32,
+        sex: .female,
+        targetWeight: 130,
+        activityLevel: .light,
+        goal: .loseWeight,
+        speed: .moderate,
+        existingHabit: nil
+      ), 1350),
+      (Input(
+        "Client Data Fast",
+        dietary: 2000,
+        bodyMass: 153,
+        height: 155,
+        age: 32,
+        sex: .female,
+        targetWeight: 130,
+        activityLevel: .light,
+        goal: .loseWeight,
+        speed: .fast,
+        existingHabit: nil
+      ), 1200),
+      (Input(
+        "Client Data Maintain",
+        dietary: 2000,
+        bodyMass: 153,
+        height: 155,
+        age: 32,
+        sex: .female,
+        targetWeight: 130,
+        activityLevel: .light,
+        goal: .maintainWeight,
+        speed: .slow,
+        existingHabit: nil
+      ), 1850),
+      (Input(
+        "Client Data Gain Slow",
+        dietary: 2000,
+        bodyMass: 153,
+        height: 155,
+        age: 32,
+        sex: .female,
+        targetWeight: 130,
+        activityLevel: .light,
+        goal: .gainWeight,
+        speed: .slow,
+        existingHabit: nil
+      ), 2100),
+      (Input(
+        "Client Data Gain Moderate",
+        dietary: 2000,
+        bodyMass: 153,
+        height: 155,
+        age: 32,
+        sex: .female,
+        targetWeight: 130,
+        activityLevel: .light,
+        goal: .gainWeight,
+        speed: .moderate,
+        existingHabit: nil
+      ), 2350),
+      (Input(
+        "Client Data Gain Fast",
+        dietary: 2000,
+        bodyMass: 153,
+        height: 155,
+        age: 32,
+        sex: .female,
+        targetWeight: 130,
+        activityLevel: .light,
+        goal: .gainWeight,
+        speed: .fast,
+        existingHabit: nil
+      ), 2850),
     ]
   }
 }

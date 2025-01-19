@@ -93,7 +93,7 @@ private extension CalorieTargetCalculator {
     let cappedTargetCalories = max(targetCalories, minCalorieTarget) // Ensure we never go too low
 
     return TargetMetricRecommendation(
-      target: HKQuantity(unit: .largeCalorie(), doubleValue: cappedTargetCalories.roundedToNiceNumber()),
+      target: HKQuantity(unit: .largeCalorie(), doubleValue: cappedTargetCalories.roundedToNearest(divisor: 25)),
       context: context
     )
   }

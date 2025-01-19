@@ -84,6 +84,6 @@ private extension ProteinTargetCalculator {
     let minProteinTarget = TargetMetric.proteinIntake.minHabitTarget.doubleValue(for: .gram())
     let cappedProteinGrams = max(targetProteinGrams, minProteinTarget)
 
-    return HKQuantity(unit: .gram(), doubleValue: cappedProteinGrams.roundedToNiceNumber())
+    return HKQuantity(unit: .gram(), doubleValue: cappedProteinGrams.roundedToNearest(divisor: 1))
   }
 }

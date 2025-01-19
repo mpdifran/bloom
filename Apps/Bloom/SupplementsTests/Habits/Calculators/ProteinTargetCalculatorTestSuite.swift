@@ -19,14 +19,12 @@ struct ProteinTargetCalculatorTestSuite {
     }
 
     @Test(arguments: [
-        (30, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-        (120, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-        (40, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
-        (100, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
+        (143, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (105, 1400, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (90, 1200, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+        (116, 1550, HealthGoal.loseWeight, WeightLossSpeed.fast)
     ])
     func noExistingHabit(
-        inputProtein: Double,
-        inputDietaryEnergy: Double,
         expectedProtein: Double,
         calorieGoal: Double,
         healthGoal: HealthGoal,
@@ -51,14 +49,12 @@ struct ProteinTargetCalculatorTestSuite {
     }
 
     @Test(arguments: [
-        (30, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-        (120, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
-        (40, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
-        (100, 2000, 140, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
+        (140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (140, 1900, HealthGoal.loseWeight, WeightLossSpeed.slow),
+        (140, 1900, HealthGoal.loseWeight, WeightLossSpeed.moderate),
+        (140, 1900, HealthGoal.loseWeight, WeightLossSpeed.fast)
     ])
     func existingHabit(
-        inputProtein: Double,
-        inputDietaryEnergy: Double,
         expectedProtein: Double,
         calorieGoal: Double,
         healthGoal: HealthGoal,

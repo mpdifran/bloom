@@ -98,7 +98,7 @@ extension TargetMetric {
     case .exerciseMinutes:
       return HKQuantity(unit: defaultUnit, doubleValue: 5)
     case .proteinIntake:
-      return HKQuantity(unit: defaultUnit, doubleValue: 50) // TODO: Double check with Kaitlyn
+      return HKQuantity(unit: defaultUnit, doubleValue: 60)
     case .calories:
       return HKQuantity(unit: defaultUnit, doubleValue: 1200)
     case .runDistance:
