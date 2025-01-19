@@ -17,9 +17,7 @@ struct HeightEditorTextField: View {
   @State private var heightInches: Int
 
   init() {
-    let totalInches = HealthManager.shared.heightCM / 2.54
-    let feet = Int(floor(totalInches / 12))
-    let inches = Int(totalInches.truncatingRemainder(dividingBy: 12))
+    let (feet, inches) = HealthManager.shared.heightCM.toFeetInches()
     self._heightFeet = .init(initialValue: feet)
     self._heightInches = .init(initialValue: inches)
     self._heightCM = .init(initialValue: HealthManager.shared.heightCM)
@@ -52,9 +50,7 @@ private extension HeightEditorTextField {
   }
 
   func recalculateHeightCMFromCM() {
-    let totalInches = heightCM / 2.54
-    let feet = Int(floor(totalInches / 12))
-    let inches = Int(totalInches.truncatingRemainder(dividingBy: 12))
+    let (feet, inches) = HealthManager.shared.heightCM.toFeetInches()
 
     heightFeet = feet
     heightInches = inches
@@ -64,7 +60,7 @@ private extension HeightEditorTextField {
   func recalculateHeightCMFromInches() {
     guard !isMetric else { return } // We do this to avoid recursively setting heightCM from imperial when heightCM changes.
 
-    heightCM = Double(heightFeet) * 30.4 + Double(heightInches) * 2.54
+    heightCM = Double.from(feet: heightFeet, inches: heightInches)
     healthManager.heightCM = heightCM
   }
 }
