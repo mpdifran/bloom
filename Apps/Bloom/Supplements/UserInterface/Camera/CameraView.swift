@@ -7,154 +7,193 @@
 
 import AppUI
 import AVFoundation
+import PhotosUI
 import SwiftUI
 
 // MARK: - CameraView
 
 struct CameraView: View {
 
-    @Binding var capturedImage: UIImage?
-    private let instructions: String
-    private let aspectRatio: CGFloat
+  @Binding private var capturedImage: UIImage?
+  private let instructions: String
+  private let aspectRatio: CGFloat
 
-    init(
-        capturedImage: Binding<UIImage?>,
-        instructions: String,
-        aspectRatio: CGFloat
-    ) {
-        self.cameraManager = CameraManager.create(with: captureSession)
-        self._capturedImage = capturedImage
-        self.instructions = instructions
-        self.aspectRatio = aspectRatio
-    }
+  @State private var selectedImage: PhotosPickerItem?
 
-    private let cameraManager: CameraManager
-    private let captureSession = AVCaptureSession()
+  private let cameraManager: CameraManager
+  private let captureSession = AVCaptureSession()
 
-    @State private var alertDetails: AlertDetails?
+  @State private var alertDetails: AlertDetails?
 
-    @StateObject var permissionManager = CameraPermissionManager.shared
+  @StateObject var permissionManager = CameraPermissionManager.shared
 
-    @Environment(\.dismiss) private var dismiss
+  @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        Group {
-          switch permissionManager.permissionState {
-          case .granted:
-            cameraView
-          case .denied:
-            CameraPermissionDeniedView()
-              .onAppear {
-                alertDetails = permissionManager.permissionAlert
-              }
-          case .pending:
-            // Just a black screen.
-            Color.black.edgesIgnoringSafeArea(.all)
+  init(
+    capturedImage: Binding<UIImage?>,
+    instructions: String,
+    aspectRatio: CGFloat
+  ) {
+    self.cameraManager = CameraManager.create(with: captureSession)
+    self._capturedImage = capturedImage
+    self.instructions = instructions
+    self.aspectRatio = aspectRatio
+  }
+
+  var body: some View {
+    Group {
+      switch permissionManager.permissionState {
+      case .granted:
+        cameraView
+      case .denied:
+        CameraPermissionDeniedView()
+          .onAppear {
+            alertDetails = permissionManager.permissionAlert
           }
-        }
-        .overlay {
-            dismissButton
-                .zStackAlignment(.topLeading)
-        }
-        .presentationCompactAdaptation(.fullScreenCover)
-        .onAppear {
-            Task {
-                await permissionManager.checkPermission()
-                if permissionManager.permissionState == .granted {
-                    await cameraManager.start()
-                }
-            }
-        }
-        .onDisappear {
-            Task {
-                await cameraManager.stop()
-            }
-        }
-        .alert(alertDetails: $alertDetails)
+      case .pending:
+        // Just a black screen.
+        Color.black.edgesIgnoringSafeArea(.all)
+      }
     }
+    .overlay {
+      dismissButton
+        .zStackAlignment(.topLeading)
+    }
+    .presentationCompactAdaptation(.fullScreenCover)
+    .onAppear {
+      Task {
+        await permissionManager.checkPermission()
+        if permissionManager.permissionState == .granted {
+          await cameraManager.start()
+        }
+      }
+    }
+    .onDisappear {
+      Task {
+        await cameraManager.stop()
+      }
+    }
+    .alert(alertDetails: $alertDetails)
+  }
 }
 
 // MARK: Private Methods
 
 private extension CameraView {
 
-    var cameraView: some View {
-        ZStack {
-            Color.black
-                .ignoresSafeArea()
+  var cameraView: some View {
+    ZStack {
+      Color.black
+        .ignoresSafeArea()
 
-          CameraPreview(
-              session: captureSession
-          ) { focusPoint in
-            Task {
-              await cameraManager.setFocus(for: focusPoint)
-            }
+      CameraPreview(
+        session: captureSession
+      ) { focusPoint in
+        Task {
+          await cameraManager.setFocus(for: focusPoint)
+        }
+      }
+
+      CutoutOverlayView(aspectRatio: aspectRatio)
+        .allowsHitTesting(false) // allow tapping through the overlay.
+
+      instructionLabel
+        .padding(.top, 24)
+        .zStackAlignment(.top)
+
+
+      captureButton
+        .padding(.bottom, 24)
+        .zStackAlignment(.bottom)
+
+      pickerButton
+        .padding(.bottom, 24)
+        .padding(.leading)
+        .zStackAlignment(.bottomLeading)
+
+    }
+  }
+
+  var instructionLabel: some View {
+    Text(instructions)
+      .foregroundStyle(.white)
+      .font(.caption)
+      .bold()
+      .fontDesign(.rounded)
+      .padding()
+      .background(Color.black.opacity(0.6))
+      .cornerRadius(10)
+      .multilineTextAlignment(.center)
+  }
+
+  var captureButton: some View {
+    Button {
+      Task {
+        let image = await cameraManager.capture()
+        await MainActor.run {
+          capturedImage = image
+          dismiss()
+        }
+      }
+    } label: {
+      Circle()
+        .foregroundColor(.white)
+        .frame(width: 70, height: 70, alignment: .center)
+        .overlay(
+          Circle()
+            .stroke(Color.black.opacity(0.8), lineWidth: 2)
+            .frame(width: 59, height: 59, alignment: .center)
+        )
+    }
+  }
+
+  var pickerButton: some View {
+    PhotosPicker(
+      selection: $selectedImage,
+      matching: .images
+    ) {
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.secondary)
+        .frame(width: 70, height: 70)
+        .overlay(
+          VStack {
+            Image(systemName: "photo.on.rectangle.angled")
+              .font(.system(size: 20))
+            Text("Library")
+              .font(.caption)
           }
-
-          CutoutOverlayView(aspectRatio: aspectRatio)
-            .allowsHitTesting(false) // allow tapping through the overlay.
-
-            instructionLabel
-                .padding(.top, 24)
-                .zStackAlignment(.top)
-
-
-            captureButton
-                .padding(.bottom, 24)
-                .zStackAlignment(.bottom)
-        }
+        )
     }
-
-    var instructionLabel: some View {
-        Text(instructions)
-            .foregroundStyle(.white)
-            .font(.caption)
-            .bold()
-            .fontDesign(.rounded)
-            .padding()
-            .background(Color.black.opacity(0.6))
-            .cornerRadius(10)
-            .multilineTextAlignment(.center)
+    .task(id: selectedImage) {
+      guard
+        let selectedImage,
+        let image = try? await selectedImage.loadTransferable(type: Data.self),
+        let uiImage = UIImage(data: image)
+      else {
+        return
+      }
+      capturedImage = uiImage
+      dismiss()
     }
+  }
 
-    var captureButton: some View {
-        Button {
-            Task {
-                let image = await cameraManager.capture()
-                await MainActor.run {
-                    capturedImage = image
-                    dismiss()
-                }
-            }
-        } label: {
-            Circle()
-                .foregroundColor(.white)
-                .frame(width: 70, height: 70, alignment: .center)
-                .overlay(
-                    Circle()
-                        .stroke(Color.black.opacity(0.8), lineWidth: 2)
-                        .frame(width: 59, height: 59, alignment: .center)
-                )
-        }
+  var dismissButton: some View {
+    Button {
+      dismiss()
+    } label: {
+      Image(systemName: "xmark.circle.fill")
+        .foregroundStyle(.white, .gray)
+        .font(.title)
     }
-
-    var dismissButton: some View {
-        Button {
-            dismiss()
-        } label: {
-            Image(systemName: "xmark.circle.fill")
-                .foregroundStyle(.white, .gray)
-                .font(.title)
-        }
-        .frame(square: 44)
-        .padding()
-    }
+    .frame(square: 44)
+    .padding()
+  }
 }
 
 #Preview {
-    CameraView(
-        capturedImage: .constant(nil),
-        instructions: "Position your package within the frame",
-        aspectRatio: 0.8
-    )
+  CameraView(
+    capturedImage: .constant(nil),
+    instructions: "Position your package within the frame",
+    aspectRatio: 0.8
+  )
 }
