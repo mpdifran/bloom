@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2025-01-18.
 //
 
+import AppUI
 import DataContainer
 import SwiftUI
 
@@ -27,7 +28,7 @@ struct NutritionMealView: View {
           .padding()
           .padding()
       } else {
-        ForEach(foodItemLogs) { foodItemLog in
+        ForEachEnumerated(foodItemLogs) { index, foodItemLog in
           FoodItemLogCell(foodItemLog: foodItemLog)
             .id(foodItemLog.id)
             .transition(.blurReplace)
@@ -36,8 +37,11 @@ struct NutritionMealView: View {
               onCellTapped(foodItemLog)
             }
             .padding()
-          Divider()
-            .padding(.horizontal)
+
+          if index < foodItemLogs.count - 1 {
+            Divider()
+              .padding(.horizontal)
+          }
         }
       }
     }
