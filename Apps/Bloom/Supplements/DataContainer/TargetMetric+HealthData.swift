@@ -86,17 +86,17 @@ extension TargetMetric {
     case .stepCount:
       return HKQuantity(unit: defaultUnit, doubleValue: 4000)
     case .waterIntake:
-      return HKQuantity(unit: defaultUnit, doubleValue: 250)
+      return HKQuantity(unit: defaultUnit, doubleValue: 1000)
     case .fiberIntake:
-      return HKQuantity(unit: defaultUnit, doubleValue: 15)
+      return HKQuantity(unit: defaultUnit, doubleValue: 14)
     case .walkingRunningDistance:
-      return HKQuantity(unit: defaultUnit, doubleValue: 1)
+      return HKQuantity(unit: defaultUnit, doubleValue: 3)
     case .timeInDaylight:
       return HKQuantity(unit: defaultUnit, doubleValue: 5)
     case .meditationMinutes:
-      return HKQuantity(unit: defaultUnit, doubleValue: 2)
-    case .exerciseMinutes:
       return HKQuantity(unit: defaultUnit, doubleValue: 5)
+    case .exerciseMinutes:
+      return HKQuantity(unit: defaultUnit, doubleValue: 30)
     case .proteinIntake:
       return HKQuantity(unit: defaultUnit, doubleValue: 60)
     case .calories:
@@ -104,11 +104,11 @@ extension TargetMetric {
     case .runDistance:
       return HKQuantity(unit: defaultUnit, doubleValue: 1)
     case .runDuration:
-      return HKQuantity(unit: defaultUnit, doubleValue: 5)
+      return HKQuantity(unit: defaultUnit, doubleValue: 10)
     case .bikeDistance:
-      return HKQuantity(unit: defaultUnit, doubleValue: 1)
-    case .bikeDuration:
       return HKQuantity(unit: defaultUnit, doubleValue: 5)
+    case .bikeDuration:
+      return HKQuantity(unit: defaultUnit, doubleValue: 15)
     case .targetHeartRateZone1, .targetHeartRateZone2:
       return HKQuantity(unit: defaultUnit, doubleValue: 10)
     case .targetHeartRateZone3, .targetHeartRateZone4:
@@ -148,7 +148,7 @@ extension TargetMetric {
     case .runDuration:
       return HKQuantityRange(unit: defaultUnit, range: 30...60)
     case .bikeDistance:
-      return HKQuantityRange(unit: defaultUnit, range: 5...10)
+      return HKQuantityRange(unit: defaultUnit, range: 20...50)
     case .bikeDuration:
       return HKQuantityRange(unit: defaultUnit, range: 30...60)
     case .targetHeartRateZone1, .targetHeartRateZone2:
