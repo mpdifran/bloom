@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import RevenueCat
+import TelemetryDeck
 
 struct BloomPlusPaywall: View {
 
@@ -50,6 +51,9 @@ struct BloomPlusPaywall: View {
     .shelf {
       purchaseShelf
     }
+    .onAppear {
+      TelemetryDeck.signal("OB Paywall")
+    }
     .task {
       await viewModel.loadOfferings()
     }
@@ -58,6 +62,7 @@ struct BloomPlusPaywall: View {
     .onChange(of: entitlementController.hasBloomPro) { _, _ in
       guard entitlementController.hasBloomPro == true else { return }
 
+      TelemetryDeck.signal("OB Purchase Complete")
       dismiss()
     }
     .onChange(of: viewModel.packages) { _, _ in

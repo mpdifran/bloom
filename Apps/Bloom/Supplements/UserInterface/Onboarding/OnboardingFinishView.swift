@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import TelemetryDeck
 
 struct OnboardingFinishView: View {
   var onContinue: () -> Void
@@ -64,6 +65,7 @@ struct OnboardingFinishView: View {
         if index >= 4 {
           Button("Yes!") {
             didContinue.toggle()
+            TelemetryDeck.signal("OB Finish")
             onContinue()
           }
           .buttonStyle(.onboarding)
