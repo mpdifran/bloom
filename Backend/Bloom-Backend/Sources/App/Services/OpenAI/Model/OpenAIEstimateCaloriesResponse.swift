@@ -12,71 +12,90 @@ struct OpenAIEstimateCaloriesResponse: Codable {
   let items: [Item]
 }
 
-
 extension OpenAIEstimateCaloriesResponse {
-    struct Item: Codable {
-        let name: String
-        let servingName: String
-        let servingAmountUnit: String
-        let servingAmount: Double
-        let servingCount: Double
-        let calories: Double
-        let fat: Double
-        let carbs: Double
-        let protein: Double
-    }
+  struct Item: Codable {
+    let name: String
+    let servingName: String
+    let servingValue: Quantity
+    let servingCount: Double
+    let calories: Quantity
+    let fat: Quantity
+    let carbohydrates: Quantity
+    let protein: Quantity
+    let saturatedFat: Quantity?
+    let transFat: Quantity?
+    let polyunsaturatedFat: Quantity?
+    let monounsaturatedFat: Quantity?
+    let fiber: Quantity?
+    let sugar: Quantity?
+    let cholesterol: Quantity?
+    let sodium: Quantity?
+    let calcium: Quantity?
+    let iron: Quantity?
+    let potassium: Quantity?
+    let magnesium: Quantity?
+    let zinc: Quantity?
+    let vitaminA: Quantity?
+    let vitaminB6: Quantity?
+    let vitaminB12: Quantity?
+    let vitaminC: Quantity?
+    let vitaminD: Quantity?
+    let vitaminE: Quantity?
+  }
 
-    struct Quantity: Codable {
-        let value: Double
-        let unit: String
-    }
+  struct Quantity: Codable {
+    let value: Double
+    let unit: String
+  }
 }
 
 extension OpenAIEstimateCaloriesResponse.Item {
 
-    func asServing() -> EstimateFoodCaloriesResponse.Serving {
-        .init(servings: servingCount,
-              item: asFoodItem())
-    }
+  func asServing() -> EstimateFoodCaloriesResponse.Serving {
+    .init(
+      servings: servingCount,
+      item: asFoodItem()
+    )
+  }
 
-    func asFoodItem() -> FoodItem {
-        FoodItem(
-            id: FoodItemIdentifier(UUID().uuidString),
-            name: name,
-            brandName: nil,
-            flavour: nil,
-            country: nil,
-            calories: .init(value: Double(calories), unit: "kcal"),
-            protein: .init(value: Double(protein), unit: "g"),
-            carbohydrates: .init(value: Double(carbs), unit: "g"),
-            fat: .init(value: Double(fat), unit: "g"),
-            saturatedFat: nil,
-            transFat: nil,
-            polyunsaturatedFat: nil,
-            monounsaturatedFat: nil,
-            fiber: nil,
-            sugar: nil,
-            cholesterol: nil,
-            sodium: nil,
-            calcium: nil,
-            iron: nil,
-            potassium: nil,
-            magnesium: nil,
-            zinc: nil,
-            vitaminA: nil,
-            vitaminB6: nil,
-            vitaminB12: nil,
-            vitaminC: nil,
-            vitaminD: nil,
-            vitaminE: nil,
-            servingName: servingName,
-            servingQuantity: .init(
-                value: servingAmount,
-                unit: servingAmountUnit
-            ),
-            ingredients: nil,
-            category: .aiGenerated,
-            isVerified: false
-        )
+  func asFoodItem() -> FoodItem {
+    FoodItem(
+      id: FoodItemIdentifier(UUID().uuidString),
+      name: name,
+      brandName: nil,
+      flavour: nil,
+      country: nil,
+      calories: .init(value: calories.value, unit: calories.unit),
+      protein: .init(value: protein.value, unit: protein.unit),
+      carbohydrates: .init(value: carbohydrates.value, unit: carbohydrates.unit),
+      fat: .init(value: fat.value, unit: fat.unit),
+      saturatedFat: saturatedFat.map({ .init(value: $0.value, unit: $0.unit) }),
+      transFat: transFat.map({ .init(value: $0.value, unit: $0.unit) }),
+      polyunsaturatedFat: polyunsaturatedFat.map({ .init(value: $0.value, unit: $0.unit) }),
+      monounsaturatedFat: monounsaturatedFat.map({ .init(value: $0.value, unit: $0.unit) }),
+      fiber: fiber.map({ .init(value: $0.value, unit: $0.unit) }),
+      sugar: sugar.map({ .init(value: $0.value, unit: $0.unit) }),
+      cholesterol: cholesterol.map({ .init(value: $0.value, unit: $0.unit) }),
+      sodium: sodium.map({ .init(value: $0.value, unit: $0.unit) }),
+      calcium: calcium.map({ .init(value: $0.value, unit: $0.unit) }),
+      iron: iron.map({ .init(value: $0.value, unit: $0.unit) }),
+      potassium: potassium.map({ .init(value: $0.value, unit: $0.unit) }),
+      magnesium: magnesium.map({ .init(value: $0.value, unit: $0.unit) }),
+      zinc: zinc.map({ .init(value: $0.value, unit: $0.unit) }),
+      vitaminA: vitaminA.map({ .init(value: $0.value, unit: $0.unit) }),
+      vitaminB6: vitaminB6.map({ .init(value: $0.value, unit: $0.unit) }),
+      vitaminB12: vitaminB12.map({ .init(value: $0.value, unit: $0.unit) }),
+      vitaminC: vitaminC.map({ .init(value: $0.value, unit: $0.unit) }),
+      vitaminD: vitaminD.map({ .init(value: $0.value, unit: $0.unit) }),
+      vitaminE: vitaminE.map({ .init(value: $0.value, unit: $0.unit) }),
+      servingName: servingName,
+      servingQuantity: .init(
+        value: servingValue.value,
+        unit: servingValue.unit
+      ),
+      ingredients: nil,
+      category: .aiGenerated,
+      isVerified: false
+    )
   }
 }

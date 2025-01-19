@@ -95,36 +95,36 @@ extension OpenAIService {
           content: [
             .text("""
   You must respond in JSON. There should be a list of objects, one for each food item. Each object should have the following properties:
+
   - Property called 'name' that is the name of the food item. The name should have the first letter of every word capitalized.
-  - Property called 'serving_name' which indicates the kind of serving such as 1 chicken breast or 1 piece of toast. This should be a common measurable amount, and the lowest value possible. Make sure each word is lowercased.
-  - Property called 'serving_amount_unit' which indicates a measurable unit for the serving, such as g, cups, mL, or oz. 
-  - Property called 'serving_amount' indicates the size of the serving, such as 1 or 100. This should be a float in relation to the serving_quantity. If the serving_amount_unit is g and there are 100 g in a chicken breast, and there are 2 chicken breats in a serving - then the value of this property should be 200.
-  - Property called 'serving_count' which indicates how many servings of the food item are in the image.
-  - Property called 'calories' which is a numerical float of the calories of the item per serving.
-  - Property called 'protein', an numerical float of how many grams of protein per serving.
-  - Property called 'carbs', an numerical float of how many grams of carbs per serving.
-  - Property called 'fat', a numerical float of how many grams of fat per serving.
-  - Property called 'saturated_fat', a numerical float of how many grams of saturated fat per serving.
-  - Property called 'trans_fat', a numerical float of how many grams of trans fat per serving.
-  - Property called 'polyunsaturated_fat', a numerical float of how many grams of polyunsaturated fat per serving.
-  - Property called 'monounsaturated_fat', a numerical float of how many grams of monounsaturated fat per serving.
-  - Property called 'fiber', a numerical float of how many grams of fiber per serving.
-  - Property called 'sugar', a numerical float of how many grams of sugar per serving.
-  - Property called 'cholesterol', a numerical float of how many milligrams of cholesterol per serving.
-  - Property called 'sodium', a numerical float of how many milligrams of sodium per serving.
-  - Property called 'calcium', a numerical float of how many milligrams of calcium per serving.
-  - Property called 'iron', a numerical float of how many milligrams of iron per serving.
-  - Property called 'potassium', a numerical float of how many milligrams of potassium per serving.
-  - Property called 'magnesium', a numerical float of how many milligrams of magnesium per serving.
-  - Property called 'zinc', a numerical float of how many milligrams of zinc per serving.
-  - Property called 'vitamin_a', a numerical float of how many milligrams of vitamin A per serving.
-  - Property called 'vitamin_b6', a numerical float of how many milligrams of vitamin B6 per serving.
-  - Property called 'vitamin_b12', a numerical float of how many milligrams of vitamin b12 per serving.
-  - Property called 'vitamin_c', a numerical float of how many milligrams of vitamin C per serving.
-  - Property called 'vitamin_d', a numerical float of how many milligrams of vitamin D per serving.
-  - Property called 'vitamin_e', a numerical float of how many milligrams of vitamin E per serving.
+  - Property called 'serving_name' which indicates the kind of serving such as 1 bottle or 2 brownies. This should be a common measurable amount, and the lowest value possible. Make sure each word is lowercased.
+  - Property called 'serving_value' which contains a 'unit' property (like fl oz or g) and a 'value' property (numeric value for the unit). This should be the smallest unit of a food item, and match up with 'serving_name'. You will use 'serving_count' to indicate the total amount of food depicted by multiplying it by 'serving_value'. For example, if there are 2 chicken breasts, and each chicken breast is 100g, 'serving_value' is 100 g, and 'serving_count' is 2.
+  - Property called 'serving_count' which indicates how many servings of the food item are in the image as a float. You are allowed to use fractions up to 1 decimal place.
+  - Property called 'calories' which contains a 'unit' property (kcal or Cal) and a 'value' property for the number of calories.
+  - Property called 'protein' which contains a 'unit' property (such as g) and a 'value'.
+  - Property called 'carbohydrates' which contains a 'unit' property (such as g) and a 'value'.
+  - Property called 'fat' which contains a 'unit' property (such as g) and a 'value'.
+  - Optional property called 'saturated_fat' which contains a 'unit' property (such as g) and a 'value'.
+  - Optional property called 'trans_fat' which contains a 'unit' property (such as g) and a 'value'.
+  - Optional property called 'polyunsaturated_fat' which contains a 'unit' property (such as g) and a 'value'.
+  - Optional property called 'monounsaturated_fat' which contains a 'unit' property (such as g) and a 'value'.
+  - Optional property called 'fiber' which contains a 'unit' property (such as g) and a 'value'.
+  - Optional property called 'sugar' which contains a 'unit' property (such as g) and a 'value'.
+  - Optional property called 'cholesterol' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'sodium' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'calcium' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'iron' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'potassium' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'magnesium' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'zinc' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'vitamin_a' which contains a 'unit' property (such as mcg) and a 'value'.
+  - Optional property called 'vitamin_b6' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'vitamin_b12' which contains a 'unit' property (such as mcg) and a 'value'.
+  - Optional property called 'vitamin_c' which contains a 'unit' property (such as mg) and a 'value'.
+  - Optional property called 'vitamin_d' which contains a 'unit' property (such as mcg) and a 'value'.
+  - Optional property called 'vitamin_e' which contains a 'unit' property (such as mg) and a 'value'.
   
-  Make sure all JSON keys are snake case. Make sure to estimate every kind of nutrient you think are in the food item.
+  Make sure all JSON keys are snake case.
 """
                  )
           ]
@@ -142,7 +142,6 @@ extension OpenAIService {
         model: Model.GPT4.gpt_4o_mini,
         messages: messages
       )
-
 
       guard var message = response.choices.first?.message.content.first?.text else { return nil }
 
