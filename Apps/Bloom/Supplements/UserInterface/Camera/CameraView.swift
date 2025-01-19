@@ -152,7 +152,17 @@ private extension CameraView {
       selection: $selectedImage,
       matching: .images
     ) {
-      Text("Select")
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.secondary)
+        .frame(width: 70, height: 70)
+        .overlay(
+          VStack {
+            Image(systemName: "photo.on.rectangle.angled")
+              .font(.system(size: 20))
+            Text("Library")
+              .font(.caption)
+          }
+        )
     }
     .task(id: selectedImage) {
       guard
