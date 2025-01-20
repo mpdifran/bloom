@@ -10,10 +10,6 @@ import Foundation
 
 struct EmptyResponse: Decodable {}
 
-private extension String {
-  static let bloomAPIBase = "https://bloom-api-5903aeb2ee43.herokuapp.com/"
-}
-
 final class NetworkStack: Sendable {
   static let shared = NetworkStack()
 }
@@ -36,7 +32,7 @@ private extension NetworkStack {
     body: Content?,
     responseType: Response.Type
   ) async throws -> Response {
-    guard let url = URL(string: .bloomAPIBase + path) else {
+    guard let url = URL(string: APIHost.shared.base + path) else {
       throw NetworkError.invalidURL
     }
     var urlRequest = URLRequest(url: url)
