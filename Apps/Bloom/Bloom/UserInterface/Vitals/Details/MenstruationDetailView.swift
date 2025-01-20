@@ -11,100 +11,124 @@ import TelemetryDeck
 
 struct MenstruationDetailView: View {
 
-    private let viewModel = VitalsViewModel.shared
+  private let viewModel = VitalsViewModel.shared
 
-    @State private var selectedPhase: MenstrualCyclePhase?
+  @State private var selectedPhase: MenstrualCyclePhase?
 
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                MenstruationCalendarView(menstruationSummary: menstruationSummary)
-
-                currentStatusSection
-                detailsSection
-            }
-            .padding()
-            .horizontallyCentered()
-        }
-        .navigationTitle("Cycle Tracking")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(item: $selectedPhase) { phase in
-            CyclePhaseLearnMoreView(phase: phase)
-        }
-        .onAppear {
-            TelemetryDeck.viewScreen("Cycle Tracking Vital Details")
-        }
+  var body: some View {
+    Group {
+      if viewModel.menstrualSummary?.hasNoData == false {
+        contentView
+      } else {
+        emptyView
+      }
     }
+    .navigationTitle("Cycle Tracking")
+    .navigationBarTitleDisplayMode(.inline)
+    .navigationDestination(item: $selectedPhase) { phase in
+      CyclePhaseLearnMoreView(phase: phase)
+    }
+    .onAppear {
+      TelemetryDeck.viewScreen("Cycle Tracking Vital Details")
+    }
+  }
 }
 
 private extension MenstruationDetailView {
 
-    var menstruationSummary: MenstrualSummary? {
-        viewModel.menstrualSummary
+  var contentView: some View {
+    ScrollView {
+      VStack(spacing: 20) {
+        MenstruationCalendarView(menstruationSummary: menstruationSummary)
+
+        currentStatusSection
+        detailsSection
+      }
+      .padding()
+      .horizontallyCentered()
     }
+  }
 
-    var currentStatusSection: some View {
-        VStack {
-            LabeledContent("Next Period") {
-                Group {
-                    if let predictionDate = menstruationSummary?.nextPredictedPeriodDate {
-                        VStack(alignment: .trailing) {
-                            Text("\(predictionDate, formatter: DateFormatter.monthAndDay)")
-                            Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(predictionDate))")
-                                .font(.caption)
-                        }
-                    } else {
-                        Text("Unsure")
-                    }
-                }
-                .foregroundStyle(.mutedPink)
-                .font(.title2)
-                .bold()
-                .fontDesign(.rounded)
+  var emptyView: some View {
+    ContentUnavailableView {
+      Label("No Data Available", systemImage: "circle.dotted.and.circle")
+    } description: {
+      Text("Track your period in Apple Health to learn more about your cycle.")
+    } actions: {
+      Link(destination: .cycleTrackingWithAppleWatch) {
+        Text("Learn More")
+      }
+      .buttonStyle(.primary)
+      .tint(.mutedPink)
+    }
+  }
+
+  var menstruationSummary: MenstrualSummary? {
+    viewModel.menstrualSummary
+  }
+
+  var currentStatusSection: some View {
+    VStack {
+      LabeledContent("Next Period") {
+        Group {
+          if let predictionDate = menstruationSummary?.nextPredictedPeriodDate {
+            VStack(alignment: .trailing) {
+              Text("\(predictionDate, formatter: DateFormatter.monthAndDay)")
+              Text("\(DateFormatter.relativeTimeIntervalDaysFullFromNow(predictionDate))")
+                .font(.caption)
             }
-
-            Divider()
-
-            LabeledContent("Current Phase") {
-                Group {
-                    if let phaseDescription = menstruationSummary?.phaseName {
-                        Text(phaseDescription)
-                            .foregroundStyle(menstruationSummary?.color ?? .mutedPink)
-                    } else {
-                        Text("Unknown")
-                    }
-                }
-                .font(.title2)
-                .bold()
-                .fontDesign(.rounded)
-            }
+          } else {
+            Text("Unsure")
+          }
         }
-        .cardContainer(fill: .background.secondary)
-    }
+        .foregroundStyle(.mutedPink)
+        .font(.title2)
+        .bold()
+        .fontDesign(.rounded)
+      }
 
-    @ViewBuilder
-    var detailsSection: some View {
-        if
-            let phase = menstruationSummary?.currentPhase(),
-            let details = phase.details
-        {
-            DetailInfoCardView {
-                Text(details)
+      Divider()
 
-                if phase.coolFacts.isNotEmpty {
-                    Button("Learn More") {
-                        selectedPhase = phase
-                    }
-                    .frame(height: 44)
-                }
-            }
-            .tint(.mutedPink)
+      LabeledContent("Current Phase") {
+        Group {
+          if let phaseDescription = menstruationSummary?.phaseName {
+            Text(phaseDescription)
+              .foregroundStyle(menstruationSummary?.color ?? .mutedPink)
+          } else {
+            Text("Unknown")
+          }
         }
+        .font(.title2)
+        .bold()
+        .fontDesign(.rounded)
+      }
     }
+    .cardContainer(fill: .background.secondary)
+  }
+
+  @ViewBuilder
+  var detailsSection: some View {
+    if
+      let phase = menstruationSummary?.currentPhase(),
+      let details = phase.details
+    {
+      DetailInfoCardView {
+        Text(details)
+
+        if phase.coolFacts.isNotEmpty {
+          Button("Learn More") {
+            selectedPhase = phase
+          }
+          .frame(height: 44)
+        }
+      }
+      .tint(.mutedPink)
+    }
+  }
 }
 
 #Preview {
-    NavigationStack {
-        MenstruationDetailView()
-    }
+  NavigationStack {
+    MenstruationDetailView()
+  }
 }

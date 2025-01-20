@@ -76,6 +76,10 @@ private extension BodyWeightActionCardView {
     try await HealthStoreModifier.shared.write(sample: sample)
     TelemetryDeck.signal("Log Weight")
 
+    if await VitalsCalculator.shared.bodyCompositionSummary?.details.hasNoData != false {
+      await VitalsCalculator.shared.forceFetchVitals()
+    }
+
     return true
   }
 }

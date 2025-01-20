@@ -14,13 +14,12 @@ struct ExerciseEffectivenessView: View {
   private let viewModel = VitalsViewModel.shared
 
   var body: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        targetHeartRateZonesChart
-        workoutTypeSummary
+    Group {
+      if viewModel.exerciseEffectivenessSummary?.details.hasNoData == false {
+        contentView
+      } else {
+        emptyView
       }
-      .padding()
-      .horizontallyCentered()
     }
     .groupedBackground()
     .toolbar {
@@ -40,6 +39,25 @@ struct ExerciseEffectivenessView: View {
 }
 
 private extension ExerciseEffectivenessView {
+
+  var contentView: some View {
+    ScrollView {
+      VStack(spacing: 20) {
+        targetHeartRateZonesChart
+        workoutTypeSummary
+      }
+      .padding()
+      .horizontallyCentered()
+    }
+  }
+
+  var emptyView: some View {
+    ContentUnavailableView(
+      "No Data Available",
+      systemImage: "figure.mixed.cardio",
+      description: Text("Log a workout with your Apple Watch to get a better sense of your Exercise Effectiveness.")
+    )
+  }
 
   @ViewBuilder
   var zoneSummary: some View {

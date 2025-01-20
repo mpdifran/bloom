@@ -20,6 +20,7 @@ struct NutritionDetailsView: View {
   @State private var dailyWater = [DateQuantitySample]()
   @State private var dailyCholesterol = [DateQuantitySample]()
 
+  @State private var presentedSheet: AnyView?
   @State private var hasNoData = false
   @State private var hasVitaminData = false
   @State private var hasMineralData = false
@@ -27,11 +28,7 @@ struct NutritionDetailsView: View {
   var body: some View {
     Group {
       if hasNoData {
-        ContentUnavailableView(
-          "No Data Available",
-          systemImage: "fork.knife",
-          description: Text("No nutrition data avilable.")
-        )
+        emptyView
       } else {
         ScrollView {
           VStack(spacing: 20) {
@@ -68,6 +65,7 @@ struct NutritionDetailsView: View {
     .navigationTitle("Nutrition")
     .navigationBarTitleDisplayMode(.inline)
     .groupedBackground()
+    .sheet($presentedSheet)
     .task {
       let hasNoData = await viewModel.nutritionSummary?.hasNoData() ?? true
       await MainActor.run {
@@ -131,6 +129,20 @@ struct NutritionDetailsView: View {
 }
 
 private extension NutritionDetailsView {
+
+  var emptyView: some View {
+    ContentUnavailableView {
+      Label("No Data Available", systemImage: "fork.knife")
+    } description: {
+      Text("Track your food to get more insights into your Nutrition.")
+    } actions: {
+      Button("Log Food"){
+        presentedSheet = FoodLoggingActionCardView().asAny
+      }
+      .buttonStyle(.primary)
+      .tint(.mutedGreen)
+    }
+  }
 
   @ViewBuilder
   var netEnergyChart: some View {

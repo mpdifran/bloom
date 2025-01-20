@@ -19,15 +19,12 @@ struct ActivityLevelDetailsView: View {
   private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
   var body: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        activityLevelRatioChart
-        ratioDistributionView
-        dayOfWeekDistributionView
-        workoutSummationViews
+    Group {
+      if viewModel.activityLevelSummary?.details.hasNoData == false {
+        contentView
+      } else {
+        emptyView
       }
-      .padding()
-      .horizontallyCentered()
     }
     .toolbar {
       ToolbarItem(placement: .principal) {
@@ -57,6 +54,27 @@ struct ActivityLevelDetailsView: View {
 }
 
 private extension ActivityLevelDetailsView {
+
+  var contentView: some View {
+    ScrollView {
+      VStack(spacing: 20) {
+        activityLevelRatioChart
+        ratioDistributionView
+        dayOfWeekDistributionView
+        workoutSummationViews
+      }
+      .padding()
+      .horizontallyCentered()
+    }
+  }
+
+  var emptyView: some View {
+    ContentUnavailableView(
+      "No Data Available",
+      systemImage: "figure.tennis",
+      description: Text("Wear your Apple Watch throughout the day to get a better picture of your Activity Level.")
+    )
+  }
 
   @ViewBuilder
   var activityLevelRatioChart: some View {
