@@ -19,7 +19,7 @@
                BlueprintIdentifier = "FF1E96442C0BF5E4004DAD2D"
                BuildableName = "ShieldActionExtension.appex"
                BlueprintName = "ShieldActionExtension"
-               ReferencedContainer = "container:Supplements.xcodeproj">
+               ReferencedContainer = "container:Bloom.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -33,7 +33,7 @@
                BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
                BuildableName = "Bloom.app"
                BlueprintName = "Bloom"
-               ReferencedContainer = "container:Supplements.xcodeproj">
+               ReferencedContainer = "container:Bloom.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
             BuildableName = "Bloom.app"
             BlueprintName = "Bloom"
-            ReferencedContainer = "container:Supplements.xcodeproj">
+            ReferencedContainer = "container:Bloom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -83,7 +83,7 @@
             BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
             BuildableName = "Bloom.app"
             BlueprintName = "Bloom"
-            ReferencedContainer = "container:Supplements.xcodeproj">
+            ReferencedContainer = "container:Bloom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

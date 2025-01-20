@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Apps/Bloom/Supplements.xcodeproj">
+      location = "group:Apps/Bloom/Bloom.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Apps/Gardener/Gardener.xcodeproj">

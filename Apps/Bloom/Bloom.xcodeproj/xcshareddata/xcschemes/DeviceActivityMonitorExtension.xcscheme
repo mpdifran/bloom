@@ -16,10 +16,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FF3A8F2E2C1A8341002DA563"
-               BuildableName = "DeviceActivityReportExtension.appex"
-               BlueprintName = "DeviceActivityReportExtension"
-               ReferencedContainer = "container:Supplements.xcodeproj">
+               BlueprintIdentifier = "FF1E96182C0BEC1D004DAD2D"
+               BuildableName = "DeviceActivityMonitorExtension.appex"
+               BlueprintName = "DeviceActivityMonitorExtension"
+               ReferencedContainer = "container:Bloom.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -33,7 +33,7 @@
                BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
                BuildableName = "Bloom.app"
                BlueprintName = "Bloom"
-               ReferencedContainer = "container:Supplements.xcodeproj">
+               ReferencedContainer = "container:Bloom.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
             BuildableName = "Bloom.app"
             BlueprintName = "Bloom"
-            ReferencedContainer = "container:Supplements.xcodeproj">
+            ReferencedContainer = "container:Bloom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -83,7 +83,7 @@
             BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
             BuildableName = "Bloom.app"
             BlueprintName = "Bloom"
-            ReferencedContainer = "container:Supplements.xcodeproj">
+            ReferencedContainer = "container:Bloom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

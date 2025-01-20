@@ -19,7 +19,7 @@ then
 
         curl --http1.1 https://upload.bugsnag.com/ \
         -F apiKey=e24d7aa4dce2bddffd5e2db22c7ec9bd \
-        -F dsym=@Supplements.app.dSYM/Contents/Resources/DWARF/Supplements \
+        -F dsym=@Bloom.app.dSYM/Contents/Resources/DWARF/Bloom \
         -F projectRoot=./
 
         echo "Finished uploading dSYMs"
