@@ -9,3 +9,4 @@ public typealias BowelMovement = SchemaV0.BowelMovement
 public typealias Habit = SchemaV2.Habit
 public typealias FoodItemRecord = SchemaV5.FoodItemRecord
 public typealias FoodItemLog = SchemaV5.FoodItemLog
+// TODO: Zach - Update to V6 and introduce new typealias

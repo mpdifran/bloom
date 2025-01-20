@@ -87,3 +87,5 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       )
   }
 }
+
+// TODO: Zach - create custom plan to migrate FoodItemLog to build foodItemServings with 1 serving, etc

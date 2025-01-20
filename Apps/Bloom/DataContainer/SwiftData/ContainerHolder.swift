@@ -16,7 +16,7 @@ public final class ContainerHolder: Sendable {
     private(set) public var container: ModelContainer
 
     private init() {
-        let schema = Schema(versionedSchema: SchemaV5.self)
+        let schema = Schema(versionedSchema: SchemaV5.self) // TODO: Zach - Update to V6
         let modelConfiguration = ModelConfiguration(
             schema: schema,
             groupContainer: .identifier("group.com.lotus-labs.bloom")
