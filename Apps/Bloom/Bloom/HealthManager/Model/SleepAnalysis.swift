@@ -399,48 +399,6 @@ extension SleepAnalysis {
         heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
         respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
         wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
-      ),
-      .init(
-        startDate: Date().addingTimeInterval(-(3600*6 + 86400*4)),
-        endDate: .now.addingTimeInterval(-86400*4),
-        hasDetailedSleepCategories: true,
-        deepSleepMinutes: 52,
-        coreSleepMinutes: 274,
-        remSleepMinutes: 41,
-        awakeSleepMinutes: 23,
-        averageRestingHeartRate: 65,
-        environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
-        heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-        respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
-        wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
-      ),
-      .init(
-        startDate: Date().addingTimeInterval(-(3600*6 + 86400*5)),
-        endDate: .now.addingTimeInterval(-86400*5),
-        hasDetailedSleepCategories: true,
-        deepSleepMinutes: 35,
-        coreSleepMinutes: 293,
-        remSleepMinutes: 53,
-        awakeSleepMinutes: 36,
-        averageRestingHeartRate: 65,
-        environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
-        heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-        respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
-        wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
-      ),
-      .init(
-        startDate: Date().addingTimeInterval(-(3600*6 + 86400*6)),
-        endDate: .now.addingTimeInterval(-86400*6),
-        hasDetailedSleepCategories: true,
-        deepSleepMinutes: 72,
-        coreSleepMinutes: 312,
-        remSleepMinutes: 69,
-        awakeSleepMinutes: 18,
-        averageRestingHeartRate: 65,
-        environmentalSoundLevels: SleepAnalysis.SoundLevelDataPoint.previewData,
-        heartRate: SleepAnalysis.HeartRateDataPoint.previewData,
-        respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
-        wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
       )
     ]
   }

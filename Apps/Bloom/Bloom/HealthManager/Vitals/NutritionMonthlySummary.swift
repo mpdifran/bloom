@@ -31,7 +31,7 @@ struct NutritionMonthlySummary: Hashable, Sendable {
 extension NutritionMonthlySummary {
 
   var subtitle: String? {
-    let macros = details.macroStatus.map { "Macros \($0.rawValue)" }
+    let macros = details.macroStatus().map { "Macros \($0.rawValue)" }
     //        let vitamins = details.vitaminStatus
     //        let minerals = details.mineralStatus
 
@@ -304,42 +304,42 @@ extension NutritionMonthlySummary.Details {
     return macros.average(keyPath: \.self)
   }
 
-  var macroStatus: NutritionMonthlySummary.MacroStatus? {
-    if macrosScore == nil {
-      return nil
-    }
-    if fatScore ?? 1 < carbohydratesScore ?? 0 && fatScore ?? 1 < proteinScore ?? 0, let fatCategory {
-      switch fatCategory {
-      case .deficiency:
-        return .fatDeficiency
-      case .surplus:
-        return .fatSurplus
-      case .recommended:
-        break
-      }
-    }
-    if proteinScore ?? 1 < carbohydratesScore ?? 0 && proteinScore ?? 1 < fatScore ?? 0, let proteinCategory {
-      switch proteinCategory {
-      case .deficiency:
-        return .proteinDeficiency
-      case .surplus:
-        return .proteinSurplus
-      case .recommended:
-        break
-      }
-    }
-    if carbohydratesScore ?? 1 < proteinScore ?? 0 && carbohydratesScore ?? 1 < fatScore ?? 0, let carbohydratesCategory {
-      switch carbohydratesCategory {
-      case .deficiency:
-        return .carbDeficiency
-      case .surplus:
-        return .carbSurplus
-      case .recommended:
-        break
-      }
+  func macroStatus() -> NutritionMonthlySummary.MacroStatus? {
+    guard macrosScore != nil else { return nil }
 
+    let scores = [
+      ("fat", fatScore, fatCategory),
+      ("protein", proteinScore, proteinCategory),
+      ("carbohydrates", carbohydratesScore, carbohydratesCategory)
+    ]
+
+    // Find the lowest score and corresponding category
+    let lowestScore = scores
+      .compactMap { $0.1 != nil && $0.2 != nil ? ($0.0, $0.1!, $0.2!) : nil }
+      .min(by: { $0.1 < $1.1 })
+
+    guard let (_, _, category) = lowestScore else {
+      return .balanced
     }
-    return .balanced
+
+    switch (category, lowestScore?.0) {
+    case (.deficiency, "fat"):
+      return .fatDeficiency
+    case (.deficiency, "protein"):
+      return .proteinDeficiency
+    case (.deficiency, "carbohydrates"):
+      return .carbDeficiency
+    case (.surplus, "fat"):
+      return .fatSurplus
+    case (.surplus, "protein"):
+      return .proteinSurplus
+    case (.surplus, "carbohydrates"):
+      return .carbSurplus
+    case (.recommended, _):
+      return .balanced
+    default:
+      return .balanced
+    }
   }
 
   var proteinCategory: NutritionMonthlySummary.NutrientCategory? {
@@ -519,31 +519,31 @@ extension NutritionMonthlySummary.Details {
     return vitamins.average(keyPath: \.self)
   }
 
-//  var vitaminStatus: String? {
-//    let pairs = [
-//      ("Vitamin A", vitaminAScore),
-//      ("Vitamin B6", vitaminB6Score),
-//      ("Vitamin B12", vitaminB12Score),
-//      ("Vitamin C", vitaminCScore),
-//      ("Vitamin D", vitaminDScore),
-//      ("Vitamin E", vitaminEScore)
-//    ].compactMap({
-//      if let value = $0.1 {
-//        return ($0.0, value)
-//      }
-//      return nil
-//    })
-//
-//    guard let lowestPair = pairs.min(by: { $0.1 < $1.1 }) else { return nil }
-//
-//    if lowestPair.1 > 0.99 {
-//      return "Vitamins Balanced"
-//    } else if pairs.filter({ $0.1 < 0.99 }).count > 1 {
-//      return "Vitamin Imbalance"
-//    }
-//
-//    return "\(lowestPair.0) Imbalance"
-//  }
+  //  var vitaminStatus: String? {
+  //    let pairs = [
+  //      ("Vitamin A", vitaminAScore),
+  //      ("Vitamin B6", vitaminB6Score),
+  //      ("Vitamin B12", vitaminB12Score),
+  //      ("Vitamin C", vitaminCScore),
+  //      ("Vitamin D", vitaminDScore),
+  //      ("Vitamin E", vitaminEScore)
+  //    ].compactMap({
+  //      if let value = $0.1 {
+  //        return ($0.0, value)
+  //      }
+  //      return nil
+  //    })
+  //
+  //    guard let lowestPair = pairs.min(by: { $0.1 < $1.1 }) else { return nil }
+  //
+  //    if lowestPair.1 > 0.99 {
+  //      return "Vitamins Balanced"
+  //    } else if pairs.filter({ $0.1 < 0.99 }).count > 1 {
+  //      return "Vitamin Imbalance"
+  //    }
+  //
+  //    return "\(lowestPair.0) Imbalance"
+  //  }
 
   func vitaminAScore() async -> Double?{
     let unit = HKUnit.gramUnit(with: .micro)
@@ -646,31 +646,31 @@ extension NutritionMonthlySummary.Details {
     return minerals.average(keyPath: \.self)
   }
 
-//  var mineralStatus: String? {
-//    let pairs = [
-//      ("Calcium", calciumScore),
-//      ("Iron", ironScore),
-//      ("Magnesium", magnesiumScore),
-//      ("Potassium", potassiumScore),
-//      ("Sodium", sodiumScore),
-//      ("Zinc", zincScore)
-//    ].compactMap({
-//      if let value = $0.1 {
-//        return ($0.0, value)
-//      }
-//      return nil
-//    })
-//
-//    guard let lowestPair = pairs.min(by: { $0.1 < $1.1 }) else { return nil }
-//
-//    if lowestPair.1 > 0.99 {
-//      return "Minerals Balanced"
-//    } else if pairs.filter({ $0.1 < 0.99 }).count > 1 {
-//      return "Mineral Imbalance"
-//    }
-//
-//    return "\(lowestPair.0) Imbalance"
-//  }
+  //  var mineralStatus: String? {
+  //    let pairs = [
+  //      ("Calcium", calciumScore),
+  //      ("Iron", ironScore),
+  //      ("Magnesium", magnesiumScore),
+  //      ("Potassium", potassiumScore),
+  //      ("Sodium", sodiumScore),
+  //      ("Zinc", zincScore)
+  //    ].compactMap({
+  //      if let value = $0.1 {
+  //        return ($0.0, value)
+  //      }
+  //      return nil
+  //    })
+  //
+  //    guard let lowestPair = pairs.min(by: { $0.1 < $1.1 }) else { return nil }
+  //
+  //    if lowestPair.1 > 0.99 {
+  //      return "Minerals Balanced"
+  //    } else if pairs.filter({ $0.1 < 0.99 }).count > 1 {
+  //      return "Mineral Imbalance"
+  //    }
+  //
+  //    return "\(lowestPair.0) Imbalance"
+  //  }
 
   func calciumScore() async -> Double? {
     let unit = HKUnit.gramUnit(with: .milli)

@@ -70,27 +70,7 @@ struct FoodItemDetailsView: View {
           .bold()
         }
         ToolbarItem(placement: .primaryAction) {
-          Menu("Options", systemImage: "ellipsis.circle") {
-            if !hasMarkedAsInaccurate {
-              Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle") {
-                Task { await markAsInaccurate() }
-              }
-            }
-
-            Divider()
-            Button("Delete Log", systemImage: "trash", role: .destructive) {
-              guard let log = existingFoodItemLog else { return }
-
-              Task {
-                do {
-                  try await nutritionViewModel.delete(foodItemLogs: [log])
-                  dismiss()
-                } catch {
-                  self.error = error
-                }
-              }
-            }
-          }
+          foodItemMenu
         }
       }
       .shelf {
@@ -267,6 +247,30 @@ private extension FoodItemDetailsView {
     }
     .bold()
     .cardContainer(fill: .background.secondary)
+  }
+
+  var foodItemMenu: some View {
+    Menu("Options", systemImage: "ellipsis.circle") {
+      if !hasMarkedAsInaccurate {
+        Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle") {
+          Task { await markAsInaccurate() }
+        }
+      }
+
+      Divider()
+      Button("Delete Log", systemImage: "trash", role: .destructive) {
+        guard let log = existingFoodItemLog else { return }
+
+        Task {
+          do {
+            try await nutritionViewModel.delete(foodItemLogs: [log])
+            dismiss()
+          } catch {
+            self.error = error
+          }
+        }
+      }
+    }
   }
 }
 

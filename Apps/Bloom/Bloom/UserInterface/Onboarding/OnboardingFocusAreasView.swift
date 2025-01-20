@@ -32,112 +32,15 @@ struct OnboardingFocusAreasView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        Text("Great! Let's determine which parts of your health we should focus on.")
-          .onboardingTextStyle()
-          .appear(with: 1, currentIndex: index)
-
-
-        if vitals.isEmpty {
-          CircularSpinnerView()
-            .foregroundStyle(.tint)
-            .horizontallyCentered()
-            .appear(with: 2, currentIndex: index)
-        } else {
-          Group {
-            ForEach(vitals) { vital in
-              Menu {
-                if vitals.count > 1 && index == 2 {
-                  Button("Remove", systemImage: "trash", role: .destructive) {
-                    vitals.removeAll(where: { $0.id == vital.id })
-                  }
-                }
-              } label: {
-                MiniVitalCell(vital: vital)
-              }
-              .buttonStyle(.plain)
-              .transition(.scale)
-            }
-
-            if !hasApprovedOfVitals && vitals.count < 3 {
-              AddVitalCell()
-                .onTapGesture {
-                  presentedSheet = VitalPickerView(
-                    excluding: excludingVitalKinds
-                  ) { vitalModel in
-                    vitals.append(vitalModel)
-                  }.asAny
-                }
-                .transition(.scale)
-            }
-          }
-        }
-
-        Text("Now let's calculate some goals to tackle these based on your Health data.")
-          .onboardingTextStyle()
-          .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
-
-        VStack {
-          if newHabitResult.focusVitals.isNotEmpty {
-            SectionTitleView("Suggested Goals")
-              .padding(.horizontal)
-
-            ForEach($newHabitResult.focusVitals) { focusVital in
-              FocusVitalGoalCell(
-                focusVital: focusVital,
-                includeActions: true
-              )
-              .transition(.scale)
-            }
-          }
-
-          if newHabitResult.proposedGoals.isNotEmpty {
-            SectionTitleView("Goals You Added")
-              .padding(.horizontal)
-
-            ForEach($newHabitResult.proposedGoals) { proposedGoal in
-              ProposedGoalCell(
-                proposedGoal: proposedGoal,
-                includeActions: true
-              )
-              .transition(.scale)
-            }
-          }
-
-          if newHabitResult.proposedToDos.isNotEmpty {
-            SectionTitleView("To Do")
-              .padding(.horizontal)
-
-            ForEach(newHabitResult.proposedToDos) { proposedToDo in
-              ProposedToDoCell(proposedToDo: proposedToDo)
-                .transition(.scale)
-            }
-          }
-        }
-        .appear(with: 4, currentIndex: index, secondaryIfNotCurrentIndex: false)
+        focusAreaSection
+        goalsSection
       }
       .horizontalAlignment(.leading)
       .padding()
     }
     .if(showContinue) {
       $0.shelf {
-        Button("Continue") {
-          if !hasApprovedOfVitals {
-            hasApprovedOfVitals = true
-            Task {
-              await bulkAdvanceIndexRound2()
-            }
-          } else {
-            do {
-              try habitsViewModel.performSave(newGoals: newHabitResult)
-              didContinue.toggle()
-              onContinue()
-            } catch {
-              self.error = error
-            }
-          }
-        }
-        .buttonStyle(.onboarding)
-        .disabled(!canContinue)
+        continueShelf
       }
     }
     .animation(.bouncy, value: vitals.count)
@@ -159,6 +62,122 @@ struct OnboardingFocusAreasView: View {
     .onAppear {
       TelemetryDeck.signal("OB Focus Areas")
     }
+  }
+}
+
+private extension OnboardingFocusAreasView {
+
+  @ViewBuilder
+  var focusAreaSection: some View {
+    Text("Great! Let's determine which parts of your health we should focus on.")
+      .onboardingTextStyle()
+      .appear(with: 1, currentIndex: index)
+
+
+    if vitals.isEmpty {
+      CircularSpinnerView()
+        .foregroundStyle(.tint)
+        .horizontallyCentered()
+        .appear(with: 2, currentIndex: index)
+    } else {
+      vitalsSection
+    }
+  }
+
+  @ViewBuilder
+  var vitalsSection: some View {
+    ForEach(vitals) { vital in
+      Menu {
+        if vitals.count > 1 && index == 2 {
+          Button("Remove", systemImage: "trash", role: .destructive) {
+            vitals.removeAll(where: { $0.id == vital.id })
+          }
+        }
+      } label: {
+        MiniVitalCell(vital: vital)
+      }
+      .buttonStyle(.plain)
+      .transition(.scale)
+    }
+
+    if !hasApprovedOfVitals && vitals.count < 3 {
+      AddVitalCell()
+        .onTapGesture {
+          presentedSheet = VitalPickerView(
+            excluding: excludingVitalKinds
+          ) { vitalModel in
+            vitals.append(vitalModel)
+          }.asAny
+        }
+        .transition(.scale)
+    }
+  }
+
+  @ViewBuilder
+  var goalsSection: some View {
+    Text("Now let's calculate some goals to tackle these based on your Health data.")
+      .onboardingTextStyle()
+      .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
+
+    VStack {
+      if newHabitResult.focusVitals.isNotEmpty {
+        SectionTitleView("Suggested Goals")
+          .padding(.horizontal)
+
+        ForEach($newHabitResult.focusVitals) { focusVital in
+          FocusVitalGoalCell(
+            focusVital: focusVital,
+            includeActions: true
+          )
+          .transition(.scale)
+        }
+      }
+
+      if newHabitResult.proposedGoals.isNotEmpty {
+        SectionTitleView("Goals You Added")
+          .padding(.horizontal)
+
+        ForEach($newHabitResult.proposedGoals) { proposedGoal in
+          ProposedGoalCell(
+            proposedGoal: proposedGoal,
+            includeActions: true
+          )
+          .transition(.scale)
+        }
+      }
+
+      if newHabitResult.proposedToDos.isNotEmpty {
+        SectionTitleView("To Do")
+          .padding(.horizontal)
+
+        ForEach(newHabitResult.proposedToDos) { proposedToDo in
+          ProposedToDoCell(proposedToDo: proposedToDo)
+            .transition(.scale)
+        }
+      }
+    }
+    .appear(with: 4, currentIndex: index, secondaryIfNotCurrentIndex: false)
+  }
+
+  var continueShelf: some View {
+    Button("Continue") {
+      if !hasApprovedOfVitals {
+        hasApprovedOfVitals = true
+        Task {
+          await bulkAdvanceIndexRound2()
+        }
+      } else {
+        do {
+          try habitsViewModel.performSave(newGoals: newHabitResult)
+          didContinue.toggle()
+          onContinue()
+        } catch {
+          self.error = error
+        }
+      }
+    }
+    .buttonStyle(.onboarding)
+    .disabled(!canContinue)
   }
 }
 
