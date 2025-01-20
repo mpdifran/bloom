@@ -15,6 +15,7 @@ struct OnboardingHealthKitView: View {
   let onContinue: () -> Void
 
   @State private var showMockHealthApp = false
+  @State private var isWaitingForPermissionSheet = false
   @State private var healthPermissionTrigger = false
   @State private var isAuthorized = false
   @State private var didContinue = false
@@ -41,7 +42,7 @@ struct OnboardingHealthKitView: View {
             .onTapGesture {
               didContinue.toggle()
               presentedSheet = OnboardingHealthKitPrivacyCard {
-                healthPermissionTrigger.toggle()
+                Task { await delayShowHealthKitPermissionView() }
               }.asAny
             }
         }
@@ -67,11 +68,18 @@ struct OnboardingHealthKitView: View {
           }
           .buttonStyle(.onboarding)
         } else {
-          Button("Continue") {
+          Button {
             didContinue.toggle()
             presentedSheet = OnboardingHealthKitPrivacyCard {
               Task { await delayShowHealthKitPermissionView() }
             }.asAny
+          } label: {
+            if isWaitingForPermissionSheet {
+              CircularSpinnerView()
+                .foregroundStyle(.invertedText)
+            } else {
+              Text("Continue")
+            }
           }
           .buttonStyle(.onboarding)
         }
@@ -92,6 +100,11 @@ struct OnboardingHealthKitView: View {
       readTypes: HealthPermissionChecker.shared.readTypes(),
       trigger: healthPermissionTrigger
     ) { result in
+
+      MainTask {
+        isWaitingForPermissionSheet = false
+      }
+
       switch result {
       case .success:
         Task {
@@ -113,6 +126,7 @@ struct OnboardingHealthKitView: View {
 private extension OnboardingHealthKitView {
 
   func delayShowHealthKitPermissionView() async {
+    isWaitingForPermissionSheet = true
     await Delay(500)
     healthPermissionTrigger.toggle()
   }
