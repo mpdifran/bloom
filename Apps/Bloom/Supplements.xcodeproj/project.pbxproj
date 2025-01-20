@@ -133,9 +133,9 @@
 		FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FFACBAD92BAC7788006AAD0B /* Supplements.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Supplements.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFACBAD92BAC7788006AAD0B /* Bloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SupplementsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFF61B382BEEB7B000926042 /* BloomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BloomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -145,7 +145,7 @@
 				Bloom.storekit,
 				Info.plist,
 			);
-			target = FFACBAD82BAC7788006AAD0B /* Supplements */;
+			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
 		};
 		4BD93EB12CFA889800D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -181,7 +181,7 @@
 			membershipExceptions = (
 				BedtimeActivityView.swift,
 			);
-			target = FFACBAD82BAC7788006AAD0B /* Supplements */;
+			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
 		};
 		4BD93EE22CFA88BA00D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -203,7 +203,7 @@
 				Concurrency/AsyncStreamWrapper.swift,
 				Concurrency/MainTask.swift,
 			);
-			target = FFACBAD82BAC7788006AAD0B /* Supplements */;
+			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
 		};
 		4BD93F1D2CFA88C400D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -396,8 +396,8 @@
 		FFACBADA2BAC7788006AAD0B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FFACBAD92BAC7788006AAD0B /* Supplements.app */,
-				FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */,
+				FFACBAD92BAC7788006AAD0B /* Bloom.app */,
+				FFF61B382BEEB7B000926042 /* BloomTests.xctest */,
 				FF1E96192C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.appex */,
 				FF1E96312C0BF57F004DAD2D /* ShieldConfigurationExtension.appex */,
 				FF1E96452C0BF5E4004DAD2D /* ShieldActionExtension.appex */,
@@ -589,9 +589,9 @@
 			productReference = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		FFACBAD82BAC7788006AAD0B /* Supplements */ = {
+		FFACBAD82BAC7788006AAD0B /* Bloom */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Supplements" */;
+			buildConfigurationList = FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Bloom" */;
 			buildPhases = (
 				FFACBAD52BAC7788006AAD0B /* Sources */,
 				FFACBAD62BAC7788006AAD0B /* Frameworks */,
@@ -608,7 +608,7 @@
 			fileSystemSynchronizedGroups = (
 				4BD93D442CFA889800D1AFB8 /* Supplements */,
 			);
-			name = Supplements;
+			name = Bloom;
 			packageProductDependencies = (
 				FFD8C4D22BD1AC5E001E8D42 /* AppUI */,
 				FFF61AEA2BED52A900926042 /* AppFoundations */,
@@ -626,7 +626,7 @@
 				FF83DB1B2D2ECF010018FAAC /* RevenueCat */,
 			);
 			productName = Supplements;
-			productReference = FFACBAD92BAC7788006AAD0B /* Supplements.app */;
+			productReference = FFACBAD92BAC7788006AAD0B /* Bloom.app */;
 			productType = "com.apple.product-type.application";
 		};
 		FFCE852D2C99DBD6002C46B1 /* DataContainer */ = {
@@ -652,9 +652,9 @@
 			productReference = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		FFF61B372BEEB7B000926042 /* SupplementsTests */ = {
+		FFF61B372BEEB7B000926042 /* BloomTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FFF61B3E2BEEB7B000926042 /* Build configuration list for PBXNativeTarget "SupplementsTests" */;
+			buildConfigurationList = FFF61B3E2BEEB7B000926042 /* Build configuration list for PBXNativeTarget "BloomTests" */;
 			buildPhases = (
 				FFF61B342BEEB7B000926042 /* Sources */,
 				FFF61B352BEEB7B000926042 /* Frameworks */,
@@ -668,9 +668,9 @@
 			fileSystemSynchronizedGroups = (
 				4BD93EBC2CFA88A900D1AFB8 /* SupplementsTests */,
 			);
-			name = SupplementsTests;
+			name = BloomTests;
 			productName = SupplementsTests;
-			productReference = FFF61B382BEEB7B000926042 /* SupplementsTests.xctest */;
+			productReference = FFF61B382BEEB7B000926042 /* BloomTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -743,8 +743,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FFACBAD82BAC7788006AAD0B /* Supplements */,
-				FFF61B372BEEB7B000926042 /* SupplementsTests */,
+				FFACBAD82BAC7788006AAD0B /* Bloom */,
+				FFF61B372BEEB7B000926042 /* BloomTests */,
 				FF1E96182C0BEC1D004DAD2D /* DeviceActivityMonitorExtension */,
 				FF1E96302C0BF57F004DAD2D /* ShieldConfigurationExtension */,
 				FF1E96442C0BF5E4004DAD2D /* ShieldActionExtension */,
@@ -941,7 +941,7 @@
 		};
 		FFF61B3D2BEEB7B000926042 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FFACBAD82BAC7788006AAD0B /* Supplements */;
+			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
 			targetProxy = FFF61B3C2BEEB7B000926042 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1814,7 +1814,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Supplements" */ = {
+		FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Bloom" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FFACBAE82BAC778A006AAD0B /* Debug */,
@@ -1832,7 +1832,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FFF61B3E2BEEB7B000926042 /* Build configuration list for PBXNativeTarget "SupplementsTests" */ = {
+		FFF61B3E2BEEB7B000926042 /* Build configuration list for PBXNativeTarget "BloomTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FFF61B3F2BEEB7B000926042 /* Debug */,

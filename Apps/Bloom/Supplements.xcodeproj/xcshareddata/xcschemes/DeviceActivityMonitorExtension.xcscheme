@@ -31,8 +31,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
-               BuildableName = "Supplements.app"
-               BlueprintName = "Supplements"
+               BuildableName = "Bloom.app"
+               BlueprintName = "Bloom"
                ReferencedContainer = "container:Supplements.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
-            BuildableName = "Supplements.app"
-            BlueprintName = "Supplements"
+            BuildableName = "Bloom.app"
+            BlueprintName = "Bloom"
             ReferencedContainer = "container:Supplements.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,8 +81,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FFACBAD82BAC7788006AAD0B"
-            BuildableName = "Supplements.app"
-            BlueprintName = "Supplements"
+            BuildableName = "Bloom.app"
+            BlueprintName = "Bloom"
             ReferencedContainer = "container:Supplements.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
