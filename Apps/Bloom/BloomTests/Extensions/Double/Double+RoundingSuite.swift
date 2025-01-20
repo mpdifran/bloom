@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import Supplements
+@testable import Bloom
 
 struct Double_RoundingSuite {
 

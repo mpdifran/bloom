@@ -9,7 +9,7 @@ import Testing
 import HealthKit
 import DataContainer
 import BloomFoundation
-@testable import Supplements
+@testable import Bloom
 
 @Suite(.tags(.targetCalculator))
 struct CalorieTargetCalculatorTestSuite {
