@@ -89,7 +89,7 @@ private extension OnboardingHealthGoalView {
     VStack {
       OnboardingHealthGoalCell(
         title: "Just Monitor My Health",
-        systemImage: "heart.text.clipboard",
+        systemImage: "heart.text.square",
         isSelected: healthManager.healthGoal == .none
       )
       .onTapGesture {

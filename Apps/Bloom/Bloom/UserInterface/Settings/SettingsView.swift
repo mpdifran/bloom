@@ -383,7 +383,7 @@ private extension SettingsView {
 
       SettingsSectionContainer {
         if let entitlementInfo = entitlementController.bloomProEntitlement {
-          SettingsCell("Kind") {
+          SettingsCell("Plan") {
             Text(entitlementInfo.activeSubscriptionName)
           }
 
