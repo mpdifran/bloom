@@ -8,68 +8,64 @@
 import AdminBloomModel
 import Foundation
 
+struct EmptyResponse: Decodable {}
+
 private extension String {
-    static let bloomAPIBase = "https://bloom-api-5903aeb2ee43.herokuapp.com/"
+  static let bloomAPIBase = "https://bloom-api-5903aeb2ee43.herokuapp.com/"
 }
 
 final class NetworkStack: Sendable {
   static let shared = NetworkStack()
 }
 
-extension NetworkStack {
-  func get<Response>(
-    url: URL,
-    response: Response.Type
-  ) async throws -> Response where Response: Decodable {
+private extension NetworkStack {
+  enum Method: String {
+    case get = "GET"
+    case post = "POST"
+    case patch = "PATCH"
+    case delete = "DELETE"
+  }
 
+  enum NetworkError: Error {
+    case invalidURL
+  }
+
+  func request<Response: Decodable, Content: Encodable>(
+    path: String,
+    method: Method,
+    body: Content?,
+    responseType: Response.Type
+  ) async throws -> Response {
+    guard let url = URL(string: .bloomAPIBase + path) else {
+      throw NetworkError.invalidURL
+    }
     var urlRequest = URLRequest(url: url)
-    urlRequest.httpMethod = "GET"
+    urlRequest.httpMethod = method.rawValue
+
+    if let body {
+      urlRequest.httpBody = try JSONEncoder.bloomModel.encode(body)
+      urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    }
 
     let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
+    guard data.isNotEmpty else {
+      // If there is no data, return an EmptyResponse.
+      return EmptyResponse() as! Response
+    }
     return try JSONDecoder.bloomModel.decode(Response.self, from: data)
   }
 
-  func post<Content, Response>(
-    url: URL,
-    body: Content,
-    response: Response.Type
-  ) async throws -> Response where Content: Encodable, Response: Decodable {
-
-    var urlRequest = URLRequest(url: url)
-    urlRequest.httpMethod = "POST"
-    urlRequest.httpBody = try JSONEncoder.bloomModel.encode(body)
-    urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-    let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
-    return try JSONDecoder.bloomModel.decode(Response.self, from: data)
-  }
-
-  func patch<Content, Response>(
-    url: URL,
-    body: Content,
-    response: Response.Type
-  ) async throws -> Response where Content: Encodable, Response: Decodable {
-
-    var urlRequest = URLRequest(url: url)
-    urlRequest.httpMethod = "PATCH"
-    urlRequest.httpBody = try JSONEncoder.bloomModel.encode(body)
-    urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-    let (data, _) = try await URLSession.shared.data(for: urlRequest)
-
-    return try JSONDecoder.bloomModel.decode(Response.self, from: data)
-  }
-
-  func delete(
-    url: URL
-  ) async throws {
-
-    var urlRequest = URLRequest(url: url)
-    urlRequest.httpMethod = "DELETE"
-
-    _ = try await URLSession.shared.data(for: urlRequest)
+  func request<Response: Decodable>(
+    path: String,
+    method: Method,
+    responseType: Response.Type
+  ) async throws -> Response {
+    try await request(
+      path: path,
+      method: method,
+      body: Optional<String>.none, // handle no body.
+      responseType: responseType
+    )
   }
 }
 
@@ -77,48 +73,58 @@ extension NetworkStack {
   func getUnverifiedFoodRecords(
     limit: Int = 100
   ) async throws -> UnverifiedFoodItemsResponse {
-    let url = URL(string: .bloomAPIBase + "v1/admin/food/unverified?limit=\(limit)")!
+    let path = "v1/admin/food/unverified?limit=\(limit)"
 
-    return try await get(
-      url: url,
-      response: UnverifiedFoodItemsResponse.self
+    return try await request(
+      path: path,
+      method: .get,
+      responseType: UnverifiedFoodItemsResponse.self
     )
   }
 
   func updateFoodRecord(
-    request: AdminUpdateFoodItemRequest
+    request body: AdminUpdateFoodItemRequest
   ) async throws -> AdminUpdateFoodItemResponse {
-    let url = URL(string: .bloomAPIBase + "v1/admin/food/update")!
+    let path = "v1/admin/food/update"
 
-    return try await patch(
-      url: url,
-      body: request,
-      response: AdminUpdateFoodItemResponse.self
+    return try await request(
+      path: path,
+      method: .patch,
+      body: body,
+      responseType: AdminUpdateFoodItemResponse.self
     )
   }
 
   func deleteFoodRecord(id: FoodItemIdentifier) async throws {
-    let url = URL(string: .bloomAPIBase + "v1/admin/food/" + id.value)!
+    let path = "v1/admin/food/" + id.value
 
-    try await delete(url: url)
-  }
-
-  func searchFoodRecord(query: String) async throws -> AdminSearchFoodItemResponse {
-    let url = URL(string: .bloomAPIBase + "v1/admin/food/search?query=\(query)")!
-
-    return try await get(
-      url: url,
-      response: AdminSearchFoodItemResponse.self
+    _ = try await request(
+      path: path,
+      method: .delete,
+      responseType: EmptyResponse.self
     )
   }
 
-  func bulkUploadOpenFoodFacts(request: AdminOpenFoodFactsBulkUploadRequest) async throws -> AdminOpenFoodFactsBulkUploadResponse {
-    let url = URL(string: .bloomAPIBase + "v1/admin/food/open-food-facts/bulk-upload")!
+  func searchFoodRecord(query: String) async throws -> AdminSearchFoodItemResponse {
+    let path = "v1/admin/food/search?query=\(query)"
 
-    return try await post(
-      url: url,
-      body: request,
-      response: AdminOpenFoodFactsBulkUploadResponse.self
+    return try await request(
+      path: path,
+      method: .get,
+      responseType: AdminSearchFoodItemResponse.self
+    )
+  }
+
+  func bulkUploadOpenFoodFacts(
+    request body: AdminOpenFoodFactsBulkUploadRequest
+  ) async throws -> AdminOpenFoodFactsBulkUploadResponse {
+    let path = "v1/admin/food/open-food-facts/bulk-upload"
+
+    return try await request(
+      path: path,
+      method: .post,
+      body: body,
+      responseType: AdminOpenFoodFactsBulkUploadResponse.self
     )
   }
 }
