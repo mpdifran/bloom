@@ -132,6 +132,6 @@ extension Package {
       number: .currency
     )
 
-    return "\(formattedPrice) / month"
+    return "\(formattedPrice)/month"
   }
 }
