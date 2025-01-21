@@ -35,7 +35,7 @@ private extension OptionsView {
     } header: {
       Text("Network")
     } footer: {
-      Text(apiHost.base)
+      Text(apiHost.base.absoluteString)
     }
   }
 }
