@@ -11,10 +11,12 @@ struct OptionsView: View {
   @StateObject private var apiHost = APIHost.shared
 
   var body: some View {
-    List {
-      Text("Dev Options")
-      networkSection
+    Form {
+      Section(header: Text("Dev Options")) {
+        networkSection
+      }
     }
+    .formStyle(.grouped)
   }
 }
 
