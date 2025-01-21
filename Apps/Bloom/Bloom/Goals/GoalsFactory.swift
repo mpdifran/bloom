@@ -113,6 +113,9 @@ extension GoalsFactory {
     // Fill out habits for remaining vitals
     for vital in vitals {
       let goals = await createGoalOptions(for: vital.id)
+
+      guard goals.isNotEmpty else { continue }
+
       let focusVital = FocusVital(vitalKind: vital.id, proposedGoals: goals)
       newHabitResult.focusVitals.append(focusVital)
     }

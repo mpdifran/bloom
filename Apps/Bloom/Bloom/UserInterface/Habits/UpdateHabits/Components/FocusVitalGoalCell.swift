@@ -15,42 +15,46 @@ struct FocusVitalGoalCell: View {
   @State private var presentedSheet: AnyView?
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 0) {
-      VStack {
-        habitContentView
-
-        if proposedGoal.shouldShowSuggestedValue {
-          Divider()
-          recommendedValueDisplayView
+    if focusVital.proposedGoals.isEmpty {
+      EmptyView()
+    } else {
+      VStack(alignment: .leading, spacing: 0) {
+        VStack {
+          habitContentView
+          
+          if proposedGoal.shouldShowSuggestedValue {
+            Divider()
+            recommendedValueDisplayView
+          }
+        }
+        .cardContainer(fill: .background.secondary)
+        .padding(4)
+        
+        if includeActions {
+          if let context = proposedGoal.context, context.isNotEmpty {
+            contextView(context: context)
+            Divider()
+          }
+          
+          if remainingGoals.isNotEmpty {
+            alternateGoalMenu
+            Divider()
+          }
+          
+          if proposedGoal.shouldShowSuggestedValue {
+            setRecommendedValueButton
+            Divider()
+          }
+          
+          changeValueButton
         }
       }
-      .cardContainer(fill: .background.secondary)
-      .padding(4)
-
-      if includeActions {
-        if let context = proposedGoal.context, context.isNotEmpty {
-          contextView(context: context)
-          Divider()
-        }
-
-        if remainingGoals.isNotEmpty {
-          alternateGoalMenu
-          Divider()
-        }
-
-        if proposedGoal.shouldShowSuggestedValue {
-          setRecommendedValueButton
-          Divider()
-        }
-
-        changeValueButton
-      }
+      .cardContainer(fill: .tint, includePadding: false, cornerRadius: 30)
+      .animation(.default, value: proposedGoal.value)
+      .animation(.default, value: proposedGoal)
+      .tint(proposedGoal.targetMetric.color)
+      .sheet($presentedSheet)
     }
-    .cardContainer(fill: .tint, includePadding: false, cornerRadius: 30)
-    .animation(.default, value: proposedGoal.value)
-    .animation(.default, value: proposedGoal)
-    .tint(proposedGoal.targetMetric.color)
-    .sheet($presentedSheet)
   }
 }
 
