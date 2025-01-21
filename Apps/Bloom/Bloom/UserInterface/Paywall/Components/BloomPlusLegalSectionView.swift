@@ -22,12 +22,9 @@ struct BloomPlusLegalSectionView: View {
       Button {
         showOfferCodeSheet.toggle()
       } label: {
-        LabeledContent("Promo Code") {
-          Image(systemName: "rectangle.and.pencil.and.ellipsis")
-            .foregroundStyle(.gray)
-        }
-        .cardContainer(fill: .background)
+        Label("Promo Code", systemImage: "tag")
       }
+      .frame(minHeight: 44)
       .offerCodeRedemption(isPresented: $showOfferCodeSheet) { result in
           switch result {
           case .failure(let error):
@@ -45,34 +42,29 @@ struct BloomPlusLegalSectionView: View {
       Button {
         restorePurchases()
       } label: {
-        LabeledContent("Restore Purchase") {
-          Image(systemName: "arrow.clockwise")
-            .foregroundStyle(.gray)
-        }
-        .cardContainer(fill: .background)
+        Label("Restore Purchase", systemImage: "arrow.clockwise")
       }
+      .frame(minHeight: 44)
 
-      Button {
-        openURL(.privacyPolicy)
-      } label: {
-        LabeledContent("Privacy Policy") {
-          Image(systemName: "hand.raised.fill")
-            .foregroundStyle(.gray)
-        }
-        .cardContainer(fill: .background)
-      }
+      HStack {
+        Spacer(minLength: 0)
 
-      Button {
-        openURL(.termsOfService)
-      } label: {
-        LabeledContent("Terms of Service") {
-          Image(systemName: "list.clipboard.fill")
-            .foregroundStyle(.gray)
+        Button("Privacy Policy") {
+          openURL(.privacyPolicy)
         }
-        .cardContainer(fill: .background)
+        .frame(minHeight: 44)
+
+        Text("•")
+          .foregroundStyle(.tint)
+
+        Button("Terms of Service") {
+          openURL(.termsOfService)
+        }
+        .frame(minHeight: 44)
+
+        Spacer(minLength: 0)
       }
     }
-    .buttonStyle(.plain)
     .bold()
     .alert(error: $error)
   }
@@ -83,4 +75,5 @@ struct BloomPlusLegalSectionView: View {
     
   }
   .padding()
+  .tint(.mutedPurple)
 }

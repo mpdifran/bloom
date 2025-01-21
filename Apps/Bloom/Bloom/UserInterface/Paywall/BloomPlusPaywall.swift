@@ -84,6 +84,7 @@ private extension BloomPlusPaywall {
 
       VStack(spacing: 30) {
         BloomPlusUserReviewListView()
+        BloomPlusFAQView()
         BloomPlusLegalSectionView(restorePurchases: {
           ThrowingUserTask(error: $error) {
             try await viewModel.restorePurchases()
