@@ -38,7 +38,7 @@ struct BloomPlusPaywall: View {
         contentView
           .background {
             RoundedRectangle(cornerRadius: 30)
-              .fill(.background.secondary)
+              .fill(.paywallBackground)
           }
           .padding(.top, 170)
       }
@@ -48,7 +48,7 @@ struct BloomPlusPaywall: View {
         .padding(.horizontal)
         .zStackAlignment(.top)
     }
-    .groupedBackground()
+    .tintedBackground(tint: .paywallBackground)
     .alert(error: $error)
     .shelf {
       purchaseShelf
@@ -78,7 +78,7 @@ private extension BloomPlusPaywall {
 
   var contentView: some View {
     VStack {
-      BloomPlusFeaturesListView()
+      BloomPlusFeaturesListView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
       .padding(.top)
       .padding(.top)
 

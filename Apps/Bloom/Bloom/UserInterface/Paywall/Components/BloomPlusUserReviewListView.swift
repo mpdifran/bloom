@@ -17,32 +17,36 @@ struct BloomPlusUserReviewListView: View {
         .multilineTextAlignment(.center)
 
       BloomPlusUserTestimonialChatView(
-        testimonial: "I love using Bloom to keep track of my health. It's my new favourite app!",
+        profilePhoto: .tori,
+        testimonial: "I've improved my eating habits, and my energy levels are through the roof! Bloom has helped me prioritize my health.",
         name: "Tori M",
         position: .leading
       )
-      .tint(.mutedBlue.lighter(by: 0.2))
+      .tint(.mutedPurple)
 
       BloomPlusUserTestimonialChatView(
-        testimonial: "I lost 20 pounds in 2 months using Bloom, it's unbelievable!",
+        profilePhoto: .katie,
+        testimonial: "I love how Bloom meets you where you are. The goals are always achievable, and I know I'm moving in the right direction.",
         name: "Katie M",
         position: .trailing
       )
-      .tint(.mutedBlue)
+      .tint(.mutedPurple)
 
       BloomPlusUserTestimonialChatView(
-        testimonial: "This app has changed my life! I love it!",
+        profilePhoto: .kaitlyn,
+        testimonial: "I've tried everything, but Bloom is something else! I've reached my weight goal with an approach that fits my lifestyle perfectly.",
         name: "Kaitlyn M",
         position: .leading
       )
-      .tint(.mutedBlue.darker(by: 0.2))
+      .tint(.mutedPurple)
 
-      BloomPlusUserTestimonialChatView(
-        testimonial: "Bloom has made me so much more healthy, thank you Team Bloom! ❤️",
-        name: "Clara A",
-        position: .trailing
-      )
-      .tint(.mutedBlue.darker(by: 0.4))
+//      BloomPlusUserTestimonialChatView(
+//        profilePhoto: .katie,
+//        testimonial: "Bloom has made me so much more healthy, thank you Team Bloom! ❤️",
+//        name: "Clara A",
+//        position: .trailing
+//      )
+//      .tint(.mutedPurple)
     }
     .horizontallyCentered()
   }

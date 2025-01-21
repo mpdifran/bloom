@@ -76,6 +76,10 @@ extension Package {
     }
   }
 
+  var hasFreeIntroductoryOffer: Bool {
+    storeProduct.introductoryDiscount?.price == 0
+  }
+
   var pricingString: String? {
     guard let period = storeProduct.subscriptionPeriod else { return nil }
 

@@ -9,6 +9,14 @@ import SwiftUI
 
 extension View {
 
+  func tintedBackground<S: ShapeStyle>(tint: S) -> some View {
+    background {
+      Rectangle()
+        .fill(tint)
+        .ignoresSafeArea()
+    }
+  }
+
   func groupedBackground() -> some View {
     background {
       Rectangle()

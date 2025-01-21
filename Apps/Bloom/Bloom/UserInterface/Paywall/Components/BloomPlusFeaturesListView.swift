@@ -10,12 +10,14 @@ import RevenueCat
 
 struct BloomPlusFeaturesListView: View {
 
+  let canTryForFree: Bool
+
   var body: some View {
     VStack(spacing: 30) {
       VStack(spacing: 10) {
         bloomPlusLogo
 
-        Text("Try Bloom for free")
+        Text(canTryForFree ? "Try Bloom for Free" : "Try Bloom")
           .font(.largeTitle)
           .bold()
           .fontDesign(.rounded)
@@ -46,6 +48,18 @@ struct BloomPlusFeaturesListView: View {
           FeatureCard(
             image: Image(systemName: "barcode.viewfinder"),
             message: "Scan food barcodes with ease"
+          )
+        }
+
+        HStack {
+          FeatureCard(
+            image: Image(systemName: "figure.run"),
+            message: "Keep track of your workouts"
+          )
+
+          FeatureCard(
+            image: Image(systemName: "heart"),
+            message: "Comprehensive view of your health"
           )
         }
       }
@@ -91,6 +105,7 @@ private struct FeatureCard: View {
 
       Text(message)
         .lineLimit(2)
+        .minimumScaleFactor(0.3)
         .multilineTextAlignment(.leading)
         .font(.subheadline)
         .bold()
@@ -102,7 +117,7 @@ private struct FeatureCard: View {
 
 #Preview {
   VStack {
-    BloomPlusFeaturesListView()
+    BloomPlusFeaturesListView(canTryForFree: true)
   }
   .groupedBackground()
 }

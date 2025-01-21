@@ -8,25 +8,33 @@
 import SwiftUI
 
 struct BloomPlusPaywallHeroImageView: View {
-    var body: some View {
-        image
+  var body: some View {
+    ZStack {
+      Color.clear
+        .background {
+          image
+            .clipped()
             .background {
-                image
-                    .scaleEffect(1.5)
-                    .blur(radius: 60)
+              image
+                .scaleEffect(1.5)
+                .blur(radius: 60)
             }
+            .zStackAlignment(.top)
+        }
     }
+  }
 }
 
 private extension BloomPlusPaywallHeroImageView {
 
-    var image: some View {
-        Image(.womanInMirror)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-    }
+  var image: some View {
+    Image(.woman)
+      .resizable()
+      .aspectRatio(contentMode: .fill)
+      .frame(height: 250)
+  }
 }
 
 #Preview {
-    BloomPlusPaywallHeroImageView()
+  BloomPlusPaywallHeroImageView()
 }
