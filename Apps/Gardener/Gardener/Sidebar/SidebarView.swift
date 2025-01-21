@@ -8,37 +8,40 @@
 import SwiftUI
 
 struct SidebarView: View {
-    var body: some View {
-      List {
-        NavigationLink {
-          FoodItemVerificationView()
-        } label: {
-          createLabel(
-            title: "Food Item Verification",
-            systemImage: "fork.knife"
-          )
-        }
-        NavigationLink {
-          BulkDataUploaderView()
-        } label: {
-          createLabel(
-            title: "Bulk Data Uploader",
-            systemImage: "tray.and.arrow.up"
-          )
-        }
-        NavigationLink {
-          FoodItemSearchView()
-        } label: {
-          createLabel(
-            title: "Food Search",
-            systemImage: "magnifyingglass"
-          )
-        }
+
+  @State private var showOptions = false
+
+  var body: some View {
+    List {
+      NavigationLink {
+        FoodItemVerificationView()
+      } label: {
+        createLabel(
+          title: "Food Item Verification",
+          systemImage: "fork.knife"
+        )
       }
-      .shelf {
-        metadataView
+      NavigationLink {
+        BulkDataUploaderView()
+      } label: {
+        createLabel(
+          title: "Bulk Data Uploader",
+          systemImage: "tray.and.arrow.up"
+        )
+      }
+      NavigationLink {
+        FoodItemSearchView()
+      } label: {
+        createLabel(
+          title: "Food Search",
+          systemImage: "magnifyingglass"
+        )
       }
     }
+    .shelf {
+      metadataView
+    }
+  }
 }
 
 private extension SidebarView {
@@ -51,7 +54,19 @@ private extension SidebarView {
   }
 
   var metadataView: some View {
-    Text("\(appVersion) (\(buildNumber))")
+    VStack(spacing: 8) {
+      Button {
+        showOptions.toggle()
+      } label: {
+        Image(systemName: "gear")
+          .imageScale(.large)
+      }
+      .popover(isPresented: $showOptions) {
+        OptionsView()
+      }
+
+      Text("\(appVersion) (\(buildNumber))")
+    }
   }
 
   func createLabel(title: String, systemImage: String) -> some View {
