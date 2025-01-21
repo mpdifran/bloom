@@ -19,7 +19,7 @@ struct BloomPlusUserReviewListView: View {
       BloomPlusUserTestimonialChatView(
         profilePhoto: .tori,
         testimonial: "I've improved my eating habits, and my energy levels are through the roof! Bloom has helped me prioritize my health.",
-        name: "Tori M",
+        name: "Tori E",
         position: .leading
       )
       .tint(.mutedPurple)
@@ -35,7 +35,7 @@ struct BloomPlusUserReviewListView: View {
       BloomPlusUserTestimonialChatView(
         profilePhoto: .kaitlyn,
         testimonial: "I've tried everything, but Bloom is something else! I've reached my weight goal with an approach that fits my lifestyle perfectly.",
-        name: "Kaitlyn M",
+        name: "Kaitlyn R",
         position: .leading
       )
       .tint(.mutedPurple)
