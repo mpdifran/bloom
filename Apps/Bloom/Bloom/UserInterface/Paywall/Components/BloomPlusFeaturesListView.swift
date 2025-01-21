@@ -11,41 +11,98 @@ import RevenueCat
 struct BloomPlusFeaturesListView: View {
 
   var body: some View {
-    HStack(spacing: 0) {
-      VStack(alignment: .leading, spacing: 0) {
-        VStack(alignment: .leading, spacing: 20) {
-          VStack(alignment: .leading) {
-            Text("Bloom Plus")
-              .font(.largeTitle)
-              .bold()
-              .fontDesign(.rounded)
+    VStack(spacing: 30) {
+      VStack(spacing: 10) {
+        bloomPlusLogo
 
-            Text("Your personal health coach in your pocket.")
-              .foregroundStyle(.secondary)
-          }
+        Text("Try Bloom for free")
+          .font(.largeTitle)
+          .bold()
+          .fontDesign(.rounded)
 
-          Label("Personalized goals tailored to you", systemImage: "star")
-            .bold()
-
-          Label("Get to your ideal body weight", systemImage: "gauge.open.with.lines.needle.33percent.and.arrowtriangle")
-            .bold()
-
-          Label("Log nutrition with just a picture", systemImage: "camera")
-            .bold()
-
-          Label("Scan food barcodes", systemImage: "barcode.viewfinder")
-            .bold()
-
-          Label("Comprehensive view of your health", systemImage: "bolt.heart")
-            .bold()
-        }
-        .padding(.horizontal)
+        Text("Your personal health coach in your pocket.")
+          .foregroundStyle(.secondary)
       }
-      Spacer(minLength: 0)
+
+      VStack {
+        HStack {
+          FeatureCard(
+            image: Image(systemName: "star"),
+            message: "Personalized goals tailored to you"
+          )
+
+          FeatureCard(
+            image: Image(systemName: "gauge.open.with.lines.needle.33percent.and.arrowtriangle"),
+            message: "Get to your ideal body weight"
+          )
+        }
+
+        HStack {
+          FeatureCard(
+            image: Image(systemName: "camera"),
+            message: "Log nutrition with just a picture"
+          )
+
+          FeatureCard(
+            image: Image(systemName: "barcode.viewfinder"),
+            message: "Scan food barcodes with ease"
+          )
+        }
+      }
+    }
+    .padding(.horizontal)
+    .tint(.mutedPurple)
+  }
+}
+
+private extension BloomPlusFeaturesListView {
+
+  var bloomPlusLogo: some View {
+    HStack(spacing: 0) {
+      Text("Bloom")
+        .padding(4)
+      Text("Plus")
+        .fontDesign(.monospaced)
+        .foregroundStyle(.white)
+        .padding(4)
+        .background {
+          RoundedRectangle(cornerRadius: 6)
+            .fill(.tint)
+        }
+    }
+    .bold()
+    .font(.caption)
+    .background {
+      RoundedRectangle(cornerRadius: 6)
+        .fill(.regularMaterial)
     }
   }
 }
 
+private struct FeatureCard: View {
+  let image: Image
+  let message: String
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      image
+        .foregroundStyle(.tint)
+        .bold()
+
+      Text(message)
+        .lineLimit(2)
+        .multilineTextAlignment(.leading)
+        .font(.subheadline)
+        .bold()
+    }
+    .horizontalAlignment(.leading)
+    .cardContainer()
+  }
+}
+
 #Preview {
-  BloomPlusFeaturesListView()
+  VStack {
+    BloomPlusFeaturesListView()
+  }
+  .groupedBackground()
 }

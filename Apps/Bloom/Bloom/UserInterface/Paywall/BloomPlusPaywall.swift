@@ -20,6 +20,7 @@ struct BloomPlusPaywall: View {
 
   @State private var viewModel = ViewModel()
   @State private var selectedPackage: Package?
+  @State private var presentedSheet: AnyView?
   @State private var error: Error?
 
   @State private var entitlementController = EntitlementController.shared
@@ -37,7 +38,7 @@ struct BloomPlusPaywall: View {
         contentView
           .background {
             RoundedRectangle(cornerRadius: 30)
-              .fill(.background)
+              .fill(.background.secondary)
           }
           .padding(.top, 170)
       }
@@ -47,10 +48,12 @@ struct BloomPlusPaywall: View {
         .padding(.horizontal)
         .zStackAlignment(.top)
     }
+    .groupedBackground()
     .alert(error: $error)
     .shelf {
       purchaseShelf
     }
+    .sheet($presentedSheet)
     .onAppear {
       TelemetryDeck.signal("OB Paywall")
     }
@@ -79,12 +82,6 @@ private extension BloomPlusPaywall {
       .padding(.top)
       .padding(.top)
 
-      BloomPlusPackagesView(
-        packages: viewModel.packages,
-        selectedPackage: $selectedPackage
-      )
-      .padding()
-
       VStack(spacing: 30) {
         BloomPlusUserReviewListView()
         BloomPlusLegalSectionView(restorePurchases: {
@@ -99,36 +96,39 @@ private extension BloomPlusPaywall {
 
   var purchaseShelf: some View {
     VStack {
-      if let selectedPackage {
-        HStack {
-          if let trialString = selectedPackage.introductoryOfferTrialString {
-            Image(systemName: "checkmark.seal.fill")
-              .foregroundStyle(.white, .mutedGreen)
-            Text(trialString.capitalized)
-            Text("•")
-          }
-          if selectedPackage.isMonthly {
-            Text("Cancel Anytime")
-          } else if let monthlyString = selectedPackage.monthlyPriceString {
-            Text(monthlyString)
-          }
-        }
-        .font(.subheadline)
-        .bold()
-      }
-
       AsyncButton {
         guard let package = selectedPackage ?? viewModel.packages.first else { return }
 
         try await viewModel.purchase(package)
       } label: {
-        if selectedPackage?.introductoryOfferTrialString != nil {
-          Text("Start Free Trial")
+        if let title = selectedPackage?.introductoryPurchaseButtonTitle {
+          Text(title)
         } else {
           Text("Invest in my Health")
         }
       }
       .buttonStyle(.paywall)
+      .tint(.white)
+
+      Group {
+        if let eventualCostString = selectedPackage?.introductoryEventualCostDescription {
+          Text(eventualCostString)
+        } else if let pricingString = selectedPackage?.pricingString {
+          Text(pricingString)
+        }
+      }
+      .font(.subheadline)
+      .bold()
+
+      Button("View All Plans") {
+        presentedSheet = BloomPlusPackagePlanPicker(
+          packages: viewModel.packages,
+          selectedPackage: $selectedPackage
+        ).asAny
+      }
+      .bold()
+      .frame(minHeight: 50)
+      .foregroundStyle(.tint)
     }
   }
 }

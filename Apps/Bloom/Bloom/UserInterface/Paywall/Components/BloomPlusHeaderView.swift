@@ -19,25 +19,6 @@ struct BloomPlusHeaderView: View {
 
   var body: some View {
     HStack {
-      HStack(spacing: 0) {
-        Text("Bloom")
-          .padding(4)
-        Text("Plus")
-          .fontDesign(.monospaced)
-          .foregroundStyle(.white)
-          .padding(4)
-          .background {
-            RoundedRectangle(cornerRadius: 6)
-              .fill(.mutedBlue)
-          }
-      }
-      .bold()
-      .font(.caption)
-      .background {
-        RoundedRectangle(cornerRadius: 6)
-          .fill(.regularMaterial)
-      }
-
       Spacer()
 
       if showDismiss {

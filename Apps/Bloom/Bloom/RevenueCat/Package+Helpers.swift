@@ -32,6 +32,31 @@ extension Package {
     return "\(introDiscount.localizedPriceString) for \(subscriptionPeriod)"
   }
 
+  /// ex "Try Free For 7 Days"."
+  var introductoryPurchaseButtonTitle: String? {
+    guard let introDiscount = storeProduct.introductoryDiscount else { return nil }
+
+    let subscriptionPeriod = introDiscount.subscriptionPeriod.displayString
+
+    if introDiscount.price == 0 {
+      return "Try Free For \(subscriptionPeriod.capitalized)"
+    }
+    return "\(introDiscount.localizedPriceString) for \(subscriptionPeriod.capitalized)"
+  }
+
+  /// ex "then $49.99/year ($4.17/month)
+  var introductoryEventualCostDescription: String? {
+    guard
+      let _ = storeProduct.introductoryDiscount,
+      let pricingString
+    else { return nil }
+
+    if !isMonthly, let monthlyPriceString {
+      return "then \(pricingString) (\(monthlyPriceString))"
+    }
+    return "then \(pricingString)"
+  }
+
   var sensibleName: String {
     guard let period = storeProduct.subscriptionPeriod else {
       return "Unknown"
@@ -70,7 +95,7 @@ extension Package {
     }
 
     // Combine price and period
-    return "\(localizedPriceString) / \(periodString)"
+    return "\(localizedPriceString)/\(periodString)"
   }
 
   var isMonthly: Bool {

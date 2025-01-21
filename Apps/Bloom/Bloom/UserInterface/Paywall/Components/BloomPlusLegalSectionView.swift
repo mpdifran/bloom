@@ -22,11 +22,11 @@ struct BloomPlusLegalSectionView: View {
       Button {
         showOfferCodeSheet.toggle()
       } label: {
-        LabeledContent("Redeem Code") {
+        LabeledContent("Promo Code") {
           Image(systemName: "rectangle.and.pencil.and.ellipsis")
             .foregroundStyle(.gray)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
       }
       .offerCodeRedemption(isPresented: $showOfferCodeSheet) { result in
           switch result {
@@ -49,7 +49,7 @@ struct BloomPlusLegalSectionView: View {
           Image(systemName: "arrow.clockwise")
             .foregroundStyle(.gray)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
       }
 
       Button {
@@ -59,7 +59,7 @@ struct BloomPlusLegalSectionView: View {
           Image(systemName: "hand.raised.fill")
             .foregroundStyle(.gray)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
       }
 
       Button {
@@ -69,7 +69,7 @@ struct BloomPlusLegalSectionView: View {
           Image(systemName: "list.clipboard.fill")
             .foregroundStyle(.gray)
         }
-        .cardContainer(fill: .background.secondary)
+        .cardContainer(fill: .background)
       }
     }
     .buttonStyle(.plain)
