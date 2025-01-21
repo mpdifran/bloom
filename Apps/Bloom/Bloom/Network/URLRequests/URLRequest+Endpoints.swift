@@ -34,6 +34,9 @@ extension URLRequest {
     static func logout() async -> URLRequest {
       await URLRequest.get("v1/user/logout")
     }
+    static func deleteAccount() async -> URLRequest {
+      await URLRequest.get("v1/user/delete-account")
+    }
   }
 }
 

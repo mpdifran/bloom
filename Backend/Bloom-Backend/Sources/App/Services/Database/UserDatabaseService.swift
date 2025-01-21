@@ -73,4 +73,18 @@ extension UserDatabaseService {
     try await authToken.delete(on: request.db)
     return Response(status: .ok)
   }
+
+  func deleteAccount(_ request: Request) async throws -> Response {
+    let authToken = try request.auth.require(UserToken.self)
+
+    guard let user = try await User.find(authToken.$user.id, on: request.db) else {
+      throw Abort(.notFound, reason: "User not found")
+    }
+
+    try await authToken.delete(on: request.db)
+    request.auth.logout(User.self)
+    try await user.delete(on: request.db)
+
+    return Response(status: .ok)
+  }
 }

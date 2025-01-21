@@ -30,7 +30,7 @@ struct SettingsView: View {
   @State private var entitlementController = EntitlementController.shared
   @State private var shouldRequestHealthPermissions = false
   @State private var presentedSheet: AnyView?
-  @State private var isSigningOut: Bool = false
+  @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @State private var error: Error?
 
   @Query private var userAddedHabits: [Habit]
@@ -71,6 +71,7 @@ struct SettingsView: View {
     .presentationDragIndicator(.visible)
     .animation(.default, value: shouldRequestHealthPermissions)
     .sheet($presentedSheet)
+    .confirmationDialog($confirmationDialogDetails)
     .alert(error: $error)
     .task {
       await checkHealthKitPermissions()
@@ -503,6 +504,40 @@ private extension SettingsView {
         }
         .bold()
         .frame(minHeight: 60)
+      }
+
+      if userControllerViewModel.isAuthenticated {
+        SettingsSectionContainer {
+          AsyncButton(role: .destructive) {
+            try await withCheckedThrowingContinuation { continuation in
+              confirmationDialogDetails = ConfirmationDialogDetails(
+                title: "Are You Sure?",
+                message: "This can't be undone. Your health data and existing food logs will not be deleted, and will remain on your device.",
+                buttons: [
+                  .init(title: "Delete", role: .destructive) {
+                    Task {
+                      do {
+                        try await UserController.shared.deleteAccount()
+                        continuation.resume()
+                      } catch {
+                        continuation.resume(throwing: error)
+                      }
+                    }
+                  },
+                  .init(title: "Cancel", role: .cancel) {
+                    continuation.resume()
+                  }
+                ]
+              )
+            }
+          } label: {
+            Text("Delete Account")
+              .bold()
+              .horizontallyCentered()
+              .frame(minHeight: 60)
+          }
+          .tint(.red)
+        }
       }
     }
   }

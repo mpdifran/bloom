@@ -27,6 +27,11 @@ extension NetworkRequester {
     let request = await URLRequest.User.logout()
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
+
+  func deleteAccount() async throws {
+    let request = await URLRequest.User.deleteAccount()
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
 }
 
 extension NetworkRequester {

@@ -99,6 +99,18 @@ extension UserController {
 
     self.isAuthenticated = self.authToken != nil
   }
+
+  func deleteAccount() async throws {
+    try await NetworkRequester.shared.deleteAccount()
+
+    authenticatedUserIdentifier = nil
+    authToken = nil
+
+    storeAuthenticatedUserIdentifier()
+    storeAuthToken()
+
+    self.isAuthenticated = self.authToken != nil
+  }
 }
 
 private extension UserController {

@@ -25,6 +25,7 @@ extension AuthenticationController: RouteCollection {
       $0.group(UserToken.guardMiddleware()) {
         $0.group("user") {
           $0.get("logout", use: logout)
+          $0.get("delete-account", use: deleteAccount)
         }
       }
     }
@@ -76,6 +77,11 @@ private extension AuthenticationController {
   @Sendable
   func logout(_ request: Request) async throws -> Response {
     try await userService.logout(request)
+  }
+
+  @Sendable
+  func deleteAccount(_ request: Request) async throws -> Response {
+    try await userService.deleteAccount(request)
   }
 
   @Sendable
