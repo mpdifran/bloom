@@ -1,8 +1,8 @@
 //
-//  UserDatabaseService.swift
+//  AdminUserDatabaseService.swift
 //  Bloom-Backend
 //
-//  Created by Mark DiFranco on 2024-12-22.
+//  Created by Mark DiFranco on 2025-01-22.
 //
 
 import Foundation
@@ -11,21 +11,21 @@ import Fluent
 import BloomModel
 import SignInWithApple
 
-struct UserDatabaseService { }
+struct AdminUserDatabaseService { }
 
-extension UserDatabaseService {
+extension AdminUserDatabaseService {
 
-  func fetchUser(_ request: Request, for userID: UserIdentifier) async throws -> User? {
-    try await User.query(on: request.db)
+  func fetchUser(_ request: Request, for userID: UserIdentifier) async throws -> AdminUser? {
+    try await AdminUser.query(on: request.db)
       .filter(\.$id == userID)
       .first()
   }
 
-  func fetchOrCreateUser(_ request: Request, for userID: UserIdentifier) async throws -> User {
+  func fetchOrCreateUser(_ request: Request, for userID: UserIdentifier) async throws -> AdminUser {
     if let user = try await fetchUser(request, for: userID) {
       return user
     }
-    return User(id: userID)
+    return AdminUser(id: userID)
   }
 
   @discardableResult
@@ -33,7 +33,7 @@ extension UserDatabaseService {
     _ request: Request,
     userID: UserIdentifier,
     tokenResponse: AppleTokenResponse
-  ) async throws -> User {
+  ) async throws -> AdminUser {
     let user = try await fetchOrCreateUser(request, for: userID)
 
     user.accessToken = tokenResponse.accessToken
@@ -55,7 +55,7 @@ extension UserDatabaseService {
     givenName: String?,
     familyName: String?,
     rawUserDetectionStatus: String?
-  ) async throws -> User {
+  ) async throws -> AdminUser {
     let user = try await fetchOrCreateUser(request, for: userID)
 
     email.map { user.email = $0 }
@@ -68,23 +68,9 @@ extension UserDatabaseService {
   }
 
   func logout(_ request: Request) async throws -> Response {
-    let authToken = try request.auth.require(UserToken.self)
-    request.auth.logout(User.self)
+    let authToken = try request.auth.require(AdminUserToken.self)
+    request.auth.logout(AdminUser.self)
     try await authToken.delete(on: request.db)
-    return Response(status: .ok)
-  }
-
-  func deleteAccount(_ request: Request) async throws -> Response {
-    let authToken = try request.auth.require(UserToken.self)
-
-    guard let user = try await User.find(authToken.$user.id, on: request.db) else {
-      throw Abort(.notFound, reason: "User not found")
-    }
-
-    try await authToken.delete(on: request.db)
-    request.auth.logout(User.self)
-    try await user.delete(on: request.db)
-
     return Response(status: .ok)
   }
 }

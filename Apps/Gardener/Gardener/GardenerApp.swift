@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct GardenerApp: App {
-    var body: some Scene {
-        WindowGroup {
-            RootView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      RootView()
     }
+  }
 }

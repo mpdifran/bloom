@@ -1,8 +1,8 @@
 //
-//  User.swift
+//  AdminUser.swift
 //  Bloom-Backend
 //
-//  Created by Mark DiFranco on 2024-12-22.
+//  Created by Mark DiFranco on 2025-01-22.
 //
 
 import Foundation
@@ -10,7 +10,7 @@ import Vapor
 import Fluent
 import BloomModel
 
-final class User: Model, Content, @unchecked Sendable {
+final class AdminUser: Model, Content, @unchecked Sendable {
   static let schema = "users"
 
   @ID(custom: "id", generatedBy: .user)
@@ -70,16 +70,16 @@ final class User: Model, Content, @unchecked Sendable {
   }
 }
 
-extension User: Authenticatable { }
+extension AdminUser: Authenticatable { }
 
-extension User {
+extension AdminUser {
 
   var userDetectionStatus: AuthenticationRequest.UserDetectionStatus? {
     AuthenticationRequest.UserDetectionStatus(rawValue: rawUserDetectionStatus ?? "")
   }
 
-  func generateToken() throws -> UserToken {
-    UserToken(
+  func generateToken() throws -> AdminUserToken {
+    AdminUserToken(
       value: [UInt8].random(count: 32).base64,
       userID: try self.requireID()
     )

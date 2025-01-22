@@ -1,8 +1,8 @@
 //
-//  AuthenticationController.swift
+//  AdminAuthenticationController.swift
 //  Bloom-Backend
 //
-//  Created by Mark DiFranco on 2024-12-01.
+//  Created by Mark DiFranco on 2025-01-22.
 //
 
 import Foundation
@@ -10,14 +10,14 @@ import Vapor
 import SignInWithApple
 import BloomModel
 
-struct AuthenticationController {
-  private let userService = UserDatabaseService()
+struct AdminAuthenticationController {
+  private let adminUserService = AdminUserDatabaseService()
 }
 
-extension AuthenticationController: RouteCollection {
+extension AdminAuthenticationController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
-    routes.group("v1") {
+    routes.group("v1", "admin") {
       $0.group("auth") {
         $0.post("sign-in", use: signIn)
       }
@@ -25,41 +25,38 @@ extension AuthenticationController: RouteCollection {
       $0.group(UserToken.guardMiddleware()) {
         $0.group("user") {
           $0.get("logout", use: logout)
-          $0.get("delete-account", use: deleteAccount)
         }
       }
-    }
-
-    routes.group("webhook") {
-      $0.post("apple", use: handleWebhook)
     }
   }
 }
 
-private extension AuthenticationController {
+private extension AdminAuthenticationController {
 
   @Sendable
   func signIn(_ request: Request) async throws -> AuthenticationResponse {
     let auth = try request.content.decode(AuthenticationRequest.self)
 
+
+
     let details = AppleTokenGenerationDetails(
       teamIdentifier: request.application.appleTeamID,
-      appIdentifier: request.application.bloomAppBundleID,
+      appIdentifier: request.application.gardenerAppBundleID,
       identityToken: auth.identityToken,
       authorizationCode: auth.authorizationCode,
-      privateKey: try request.application.createBloomSiwAPrivateKey()
+      privateKey: try request.application.createGardenerSiwAPrivateKey()
     )
 
     let appleTokens = try await request.signInWithApple.generateAppleTokens(details: details)
 
-    let user = try await userService.storeTokens(
+    let user = try await adminUserService.storeTokens(
       request,
       userID: auth.userIdentifier,
       tokenResponse: appleTokens
     )
 
     // Store user details
-    try await userService.storeUserDetails(
+    try await adminUserService.storeUserDetails(
       request,
       userID: auth.userIdentifier,
       email: auth.email,
@@ -68,6 +65,16 @@ private extension AuthenticationController {
       rawUserDetectionStatus: auth.userDetectionStatus.rawValue
     )
 
+    // Only let approved people sign in.
+    let emailAllowlist = request.application.adminEmailAllowList()
+    guard
+      let email = user.email ?? auth.email,
+      emailAllowlist.contains(email)
+    else {
+      throw Abort(.forbidden)
+    }
+
+    // Create a token for auth
     let userToken = try user.generateToken()
     try await userToken.save(on: request.db)
 
@@ -76,18 +83,6 @@ private extension AuthenticationController {
 
   @Sendable
   func logout(_ request: Request) async throws -> Response {
-    try await userService.logout(request)
-  }
-
-  @Sendable
-  func deleteAccount(_ request: Request) async throws -> Response {
-    try await userService.deleteAccount(request)
-  }
-
-  @Sendable
-  func handleWebhook(_ request: Request) async throws -> Response {
-    request.logger.info("Received webhook from Sign In With Apple")
-
-    return Response(status: .ok)
+    try await adminUserService.logout(request)
   }
 }

@@ -19,4 +19,6 @@ let allMigrations: [Migration] = [
     User.Create(),
     UserToken.Create(),
     User.AddUserDetails(),
+    AdminUser.Create(),
+    AdminUserToken.Create(),
 ]

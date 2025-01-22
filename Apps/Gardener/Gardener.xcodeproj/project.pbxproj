@@ -10,6 +10,7 @@
 		4B9A93452CFE95B6005FBD2C /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9A93442CFE95B6005FBD2C /* AppUI */; };
 		4BF81F2A2D2F5C06008D3EEA /* AdminBloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = 4BF81F292D2F5C06008D3EEA /* AdminBloomModel */; };
 		FF5D0CB72CFA451D00374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0CB62CFA451D00374F66 /* BloomModel */; };
+		FFA2C4B32D419A970023401D /* Valet in Frameworks */ = {isa = PBXBuildFile; productRef = FFA2C4B22D419A970023401D /* Valet */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B9A93452CFE95B6005FBD2C /* AppUI in Frameworks */,
+				FFA2C4B32D419A970023401D /* Valet in Frameworks */,
 				FF5D0CB72CFA451D00374F66 /* BloomModel in Frameworks */,
 				4BF81F2A2D2F5C06008D3EEA /* AdminBloomModel in Frameworks */,
 			);
@@ -90,6 +92,7 @@
 				FF5D0CB62CFA451D00374F66 /* BloomModel */,
 				4B9A93442CFE95B6005FBD2C /* AppUI */,
 				4BF81F292D2F5C06008D3EEA /* AdminBloomModel */,
+				FFA2C4B22D419A970023401D /* Valet */,
 			);
 			productName = Gardener;
 			productReference = FF5D0C9A2CFA426500374F66 /* Gardener.app */;
@@ -103,7 +106,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1610;
-				LastUpgradeCheck = 1610;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					FF5D0C992CFA426500374F66 = {
 						CreatedOnToolsVersion = 16.1;
@@ -123,6 +126,7 @@
 				FF5D0CB52CFA451D00374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */,
 				4B9A93432CFE95B6005FBD2C /* XCRemoteSwiftPackageReference "AppUI" */,
 				4BF81F282D2F5C06008D3EEA /* XCLocalSwiftPackageReference "../../Shared/AdminBloomModel" */,
+				FFA2C4B12D419A970023401D /* XCRemoteSwiftPackageReference "Valet" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FF5D0C9B2CFA426500374F66 /* Products */;
@@ -189,6 +193,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -252,6 +257,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -282,6 +288,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Gardener/Preview Content\"";
 				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -313,6 +320,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Gardener/Preview Content\"";
 				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -378,6 +386,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		FFA2C4B12D419A970023401D /* XCRemoteSwiftPackageReference "Valet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Square/Valet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -393,6 +409,11 @@
 		FF5D0CB62CFA451D00374F66 /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BloomModel;
+		};
+		FFA2C4B22D419A970023401D /* Valet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFA2C4B12D419A970023401D /* XCRemoteSwiftPackageReference "Valet" */;
+			productName = Valet;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

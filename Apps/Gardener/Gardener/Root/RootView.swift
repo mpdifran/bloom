@@ -6,8 +6,13 @@
 //
 
 import SwiftUI
+import AppUI
 
 struct RootView: View {
+
+  @State private var userControllerViewModel = UserControllerViewModel()
+  @State private var presentedSheet: AnyView?
+
   var body: some View {
     NavigationSplitView {
       SidebarView()
@@ -16,6 +21,12 @@ struct RootView: View {
       Text("Content")
     } detail: {
       Text("Detail")
+    }
+    .sheet($presentedSheet)
+    .onAppear {
+      if !userControllerViewModel.isAuthenticated {
+        presentedSheet = LoginView().asAny
+      }
     }
   }
 }

@@ -19,14 +19,19 @@ struct AdminFoodController {
 extension AdminFoodController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
-    routes.group("v1", "admin", "food") { food in
-      food.post("usda-ingest", use: ingestUSDA)
-      food.get("unverified", use: getUnverifiedFoods)
-      food.patch("update", use: updateFood)
-      food.delete(":id", use: deleteFood)
-      food.get("search", use: searchFood)
-      food.group("open-food-facts") { foodFacts in
-        foodFacts.post("bulk-upload", use: openFoodFactsBulkUpload)
+    routes.group("v1", "admin") {
+      $0.group(AdminUserToken.guardMiddleware()) {
+        $0.group("food") {
+          $0.post("usda-ingest", use: ingestUSDA)
+          $0.get("unverified", use: getUnverifiedFoods)
+          $0.patch("update", use: updateFood)
+          $0.delete(":id", use: deleteFood)
+          $0.get("search", use: searchFood)
+
+          $0.group("open-food-facts") {
+            $0.post("bulk-upload", use: openFoodFactsBulkUpload)
+          }
+        }
       }
     }
   }
