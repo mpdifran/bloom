@@ -11,7 +11,7 @@ import Fluent
 import BloomModel
 
 final class AdminUser: Model, Content, @unchecked Sendable {
-  static let schema = "users"
+  static let schema = "admin_users"
 
   @ID(custom: "id", generatedBy: .user)
   var id: UserIdentifier?

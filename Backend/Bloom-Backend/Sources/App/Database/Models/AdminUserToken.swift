@@ -10,7 +10,7 @@ import Vapor
 import Fluent
 
 final class AdminUserToken: Model, Content, @unchecked Sendable {
-    static let schema = "user_tokens"
+    static let schema = "admin_user_tokens"
 
     @ID(key: .id)
     var id: UUID?
