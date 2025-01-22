@@ -12,7 +12,6 @@ public func configure(_ app: Application) async throws {
 
   // Middleware
   app.middleware.use(UserToken.authenticator()) // This should be added before the routes are configured.
-  app.middleware.use(AdminUserToken.authenticator()) // This should be added before the routes are configured.
 
   // Routes
   app.routes.defaultMaxBodySize = "10mb"
