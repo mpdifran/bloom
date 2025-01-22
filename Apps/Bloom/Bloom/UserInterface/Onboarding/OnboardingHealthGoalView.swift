@@ -226,7 +226,7 @@ struct OnboardingHealthGoalCell: View {
 
       if isSelected {
         Image(systemName: "checkmark.circle.fill")
-          .foregroundStyle(.white, .tint)
+          .foregroundStyle(.invertedText, .tint)
           .font(.title3)
           .contentTransition(.symbolEffect)
       }

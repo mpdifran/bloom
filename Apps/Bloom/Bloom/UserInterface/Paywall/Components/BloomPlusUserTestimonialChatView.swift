@@ -50,10 +50,10 @@ private extension BloomPlusUserTestimonialChatView {
         .aspectRatio(contentMode: .fit)
         .frame(square: 60)
         .clipShape(Circle())
-        .overlay {
-          Circle()
-            .stroke(.fill)
-        }
+//        .overlay {
+//          Circle()
+//            .stroke(.fill)
+//        }
       Text(name)
         .font(.caption)
         .bold()

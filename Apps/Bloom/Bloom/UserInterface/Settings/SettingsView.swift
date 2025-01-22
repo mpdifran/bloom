@@ -62,7 +62,9 @@ struct SettingsView: View {
         subscriptionSection
         supportSection
         authenticationSection
-//        developerSection
+        #if DEBUG
+        developerSection
+        #endif
       }
       .padding()
     }
@@ -303,12 +305,12 @@ private extension SettingsView {
 
       SettingsSectionContainer {
         // Turning off until we figure out widgets
-//        SettingsCell("Weight Widget") {
-//          Toggle("", isOn: $showWeightWidget)
-//            .tint(.mutedGreen)
-//        }
-//
-//        Divider()
+        //        SettingsCell("Weight Widget") {
+        //          Toggle("", isOn: $showWeightWidget)
+        //            .tint(.mutedGreen)
+        //        }
+        //
+        //        Divider()
 
         SettingsCell("Nutrition Widget") {
           Toggle("", isOn: $showNutritionTodayWidget)
@@ -390,23 +392,13 @@ private extension SettingsView {
 
           Divider()
 
-          if let expirationDate = entitlementInfo.expirationDate {
-            if entitlementInfo.isActive {
-              SettingsCell("Next Charge Date") {
-                Text(expirationDate, style: .date)
-              }
-            } else if expirationDate > .now {
-              SettingsCell("Expires") {
-                Text(expirationDate, style: .date)
-              }
-            } else {
-              SettingsCell("Expired") {
-                Text(expirationDate, style: .date)
-              }
+          if let cellInfo = entitlementInfo.statusCellInfo {
+            SettingsCell(cellInfo.title) {
+              Text(cellInfo.date, style: .date)
             }
-
             Divider()
           }
+
           SettingsCell("Manage Subscription") {
             DisclosureIndicator()
           }

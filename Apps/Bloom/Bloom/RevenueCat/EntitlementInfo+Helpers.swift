@@ -20,4 +20,45 @@ extension EntitlementInfo {
       "Subscription"
     }
   }
+
+  var statusCellInfo: EntitlementStatusCellInfo? {
+    guard let expirationDate else { return nil }
+
+    if !willRenew {
+      if isActive, expirationDate > .now {
+        return EntitlementStatusCellInfo(
+          title: "Expires",
+          date: expirationDate
+        )
+      } else {
+        return EntitlementStatusCellInfo(
+          title: "Expired",
+          date: expirationDate
+        )
+      }
+    } else {
+      switch periodType {
+      case .intro:
+        return EntitlementStatusCellInfo(
+          title: "Intro Rate Ends",
+          date: expirationDate
+        )
+      case .normal:
+        return EntitlementStatusCellInfo(
+          title: "Next Charge Date",
+          date: expirationDate
+        )
+      case .trial:
+        return EntitlementStatusCellInfo(
+          title: "Free Trial Ends",
+          date: expirationDate
+        )
+      }
+    }
+  }
+}
+
+struct EntitlementStatusCellInfo {
+  let title: String
+  let date: Date
 }

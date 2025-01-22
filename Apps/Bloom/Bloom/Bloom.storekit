@@ -20,7 +20,7 @@
     "_applicationInternalID" : "6739955926",
     "_developerTeamID" : "GUJ47GUV2Q",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 759002263.69821703,
+    "_lastSynchronizedDate" : 759243708.54985905,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -119,7 +119,7 @@
           "groupNumber" : 2,
           "internalID" : "6740501424",
           "introductoryOffer" : {
-            "internalID" : "84799377",
+            "internalID" : "F0D31E13",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P2W"

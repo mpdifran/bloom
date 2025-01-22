@@ -24,7 +24,7 @@ struct OnboardingHealthKitPrivacyCard: View {
             ScrollView {
                 Image(systemName: "hand.raised.circle.fill")
                     .font(.system(size: 100))
-                    .foregroundStyle(.white, .tint)
+                    .foregroundStyle(.invertedText, .tint)
 
                 Text("Your health data is stored securely on your device. We don’t collect or share any of your health information — only you have access to it.")
                     .font(.title3)
@@ -36,7 +36,7 @@ struct OnboardingHealthKitPrivacyCard: View {
         .sensoryFeedback(.selection, trigger: didContinue)
         .padding()
         .shelf {
-            Button("Connect to Health", systemImage: "heart.fill") {
+            Button("Continue") {
                 dismiss()
                 didContinue.toggle()
                 onContinue()

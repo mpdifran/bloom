@@ -16,6 +16,7 @@ struct DeveloperSettingsView: View {
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
+  @State private var showRCDebugOverlay = false
   @State private var presentedFullScreenView: AnyView?
   @State private var presentedSheet: AnyView?
   @State private var alertDetails: AlertDetails?
@@ -38,6 +39,7 @@ struct DeveloperSettingsView: View {
         danieleSection
         adminActionsSection
         debugSection
+        revenueCatSection
         designSection
         authSection
       }
@@ -275,6 +277,25 @@ extension DeveloperSettingsView {
         .selectable()
       }
     }
+  }
+
+  @ViewBuilder
+  var revenueCatSection: some View {
+    #if DEBUG
+    Section("RevenueCat") {
+      Button {
+        showRCDebugOverlay.toggle()
+      } label: {
+        HStack {
+          Text("Debug View")
+          Spacer()
+          DisclosureIndicator()
+        }
+      }
+      .buttonStyle(.plain)
+      .debugRevenueCatOverlay(isPresented: $showRCDebugOverlay)
+    }
+    #endif
   }
 
   var designSection: some View {
