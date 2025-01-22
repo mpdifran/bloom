@@ -70,7 +70,11 @@ extension Application {
 
   func adminEmailAllowList() -> [String] {
     let emails = Environment.get("GARDENER_ADMIN_EMAIL_ALLOWLIST") ?? ""
-    return emails.components(separatedBy: ",").map({ $0.trimmingCharacters(in: .whitespacesAndNewlines) })
+    return emails.components(separatedBy: ",").map({
+      $0
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+        .lowercased()
+    })
   }
 }
 
