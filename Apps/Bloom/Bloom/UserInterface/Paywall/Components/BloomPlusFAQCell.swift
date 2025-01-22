@@ -18,6 +18,7 @@ struct BloomPlusFAQCell: View {
       HStack {
         Text(question)
           .multilineTextAlignment(.leading)
+          .fixedSize(horizontal: false, vertical: true)
         Spacer()
         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
       }
@@ -28,6 +29,7 @@ struct BloomPlusFAQCell: View {
         Text(answer)
           .foregroundStyle(.secondary)
           .multilineTextAlignment(.leading)
+          .fixedSize(horizontal: false, vertical: true)
           .transition(.opacity)
       }
     }
