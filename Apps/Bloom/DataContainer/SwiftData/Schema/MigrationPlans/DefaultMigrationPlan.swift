@@ -15,7 +15,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
             SchemaV2.self,
             SchemaV3.self,
             SchemaV4.self,
-            SchemaV5.self
+            SchemaV5.self,
+            SchemaV6.self,
         ]
     }
 
@@ -25,7 +26,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
             migrateV1ToV2,
             migrateV2toV3,
             migrateV3toV4,
-            migrateV4toV5
+            migrateV4toV5,
+            migrateV5ToV6,
         ]
     }
 
@@ -86,6 +88,25 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
           toVersion: SchemaV5.self
       )
   }
-}
 
-// TODO: Zach - create custom plan to migrate FoodItemLog to build foodItemServings with 1 serving, etc
+  private static var migrateV5ToV6: MigrationStage {
+    MigrationStage.custom(
+      fromVersion: SchemaV5.self,
+      toVersion: SchemaV6.self,
+      willMigrate: nil,
+      didMigrate: { context in
+        let foodItemLogs = try context.fetch(FetchDescriptor<SchemaV6.FoodItemLog>())
+
+        for foodItemLog in foodItemLogs {
+          foodItemLog.foodItemServings = [
+            .init(
+              id: UUID().uuidString,
+              numberOfServings: 1,
+              foodItem: foodItemLog.foodItem
+            )
+          ]
+        }
+      }
+    )
+  }
+}

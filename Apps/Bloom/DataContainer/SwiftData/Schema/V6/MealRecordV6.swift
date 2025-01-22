@@ -15,7 +15,8 @@ extension SchemaV6 {
   public final class MealRecord: Identifiable, Hashable {
     public var id: String = ""
     public var name: String = ""
-    @Relationship public var items: [MealItem] = []
+
+    @Relationship public var items: [MealItem]? = []
 
     @Relationship(inverse: \FoodItemLog.mealItem)
     public var logs: [FoodItemLog]?

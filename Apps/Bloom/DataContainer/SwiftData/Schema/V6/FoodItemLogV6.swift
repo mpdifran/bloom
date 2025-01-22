@@ -34,6 +34,13 @@ extension SchemaV6 {
       self.meal = meal
       self.numberOfServings = numberOfServings
       self.foodItem = foodItem
+      self.foodItemServings = [
+        FoodItemServing(
+          id: UUID().uuidString,
+          numberOfServings: 1,
+          foodItem: foodItem
+        )
+      ]
     }
 
     public init(
@@ -48,6 +55,15 @@ extension SchemaV6 {
       self.meal = meal
       self.numberOfServings = numberOfServings
       self.mealItem = mealItem
+      if let mealItem, let items = mealItem.items {
+        self.foodItemServings = items.compactMap { mealItem in
+          FoodItemServing(
+            id: UUID().uuidString,
+            numberOfServings: mealItem.numberOfServings,
+            foodItem: mealItem.foodItem
+          )
+        }
+      }
     }
   }
 }
