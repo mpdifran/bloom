@@ -20,7 +20,7 @@ extension AdminFoodController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
-      $0.group(AdminUserToken.guardMiddleware()) {
+      // $0.group(AdminUserToken.guardMiddleware()) {
         $0.group("food") {
           $0.post("usda-ingest", use: ingestUSDA)
           $0.get("unverified", use: getUnverifiedFoods)
@@ -32,7 +32,7 @@ extension AdminFoodController: RouteCollection {
             $0.post("bulk-upload", use: openFoodFactsBulkUpload)
           }
         }
-      }
+      // }
     }
   }
 }

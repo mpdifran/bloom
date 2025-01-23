@@ -24,9 +24,9 @@ struct RootView: View {
     }
     .sheet($presentedSheet)
     .onAppear {
-      if !userControllerViewModel.isAuthenticated {
-        presentedSheet = LoginView().asAny
-      }
+//      if !userControllerViewModel.isAuthenticated {
+//        presentedSheet = LoginView().asAny
+//      }
     }
   }
 }
