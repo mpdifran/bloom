@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppUI
 import AuthenticationServices
 
 struct LoginView: View {
@@ -13,6 +14,7 @@ struct LoginView: View {
   @Environment(\.dismiss) var dismiss
 
   @State private var viewModel = ViewModel()
+  @State private var userControllerViewModel = UserControllerViewModel()
 
   @State private var authorizationState: String?
   @State private var error: Error?
@@ -37,10 +39,22 @@ struct LoginView: View {
 
       Spacer()
 
-      signInWithAppleButton
+      if viewModel.isAuthenticating {
+        CircularSpinnerView()
+          .tint(.black)
+          .padding()
+      } else {
+        signInWithAppleButton
+      }
     }
+    .alert(error: $error)
     .frame(square: 500)
     .interactiveDismissDisabled()
+    .onChange(of: userControllerViewModel.isAuthenticated) { _, _ in
+      if userControllerViewModel.isAuthenticated {
+        dismiss()
+      }
+    }
   }
 }
 
@@ -85,9 +99,6 @@ private extension LoginView {
         Task {
           do {
             try await viewModel.authenticate(using: credential)
-            await MainActor.run {
-              dismiss()
-            }
           } catch {
             self.error = error
           }

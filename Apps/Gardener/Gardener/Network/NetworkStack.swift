@@ -87,7 +87,7 @@ extension NetworkStack {
 
   func login(request: AuthenticationRequest) async throws -> AuthenticationResponse {
     let urlRequest = try createRequest(
-      path: "v1/admin/sign-in",
+      path: "v1/admin/auth/sign-in",
       method: .post,
       body: request
     )

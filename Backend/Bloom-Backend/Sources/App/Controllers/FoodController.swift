@@ -24,7 +24,7 @@ extension FoodController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1") {
-      $0.group(UserToken.guardMiddleware()) {
+      $0.auth(using: UserToken.self) {
         $0.group("food") {
           $0.post("autocomplete", use: autocomplete)
           $0.post("estimate", use: estimateFoodCalories)

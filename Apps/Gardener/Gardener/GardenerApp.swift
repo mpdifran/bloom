@@ -9,9 +9,24 @@ import SwiftUI
 
 @main
 struct GardenerApp: App {
+
+  init() {
+    Task {
+      do {
+        try await UserController.shared.verifyAuthentication()
+      } catch {
+        print(error)
+      }
+    }
+  }
+
   var body: some Scene {
     WindowGroup {
       RootView()
+    }
+
+    Settings {
+      PreferencesView()
     }
   }
 }

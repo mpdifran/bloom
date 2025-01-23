@@ -22,7 +22,7 @@ extension AdminAuthenticationController: RouteCollection {
         $0.post("sign-in", use: signIn)
       }
 
-      $0.group(UserToken.guardMiddleware()) {
+      $0.auth(using: AdminUserToken.self) {
         $0.group("user") {
           $0.get("logout", use: logout)
         }
@@ -36,8 +36,6 @@ private extension AdminAuthenticationController {
   @Sendable
   func signIn(_ request: Request) async throws -> AuthenticationResponse {
     let auth = try request.content.decode(AuthenticationRequest.self)
-
-
 
     let details = AppleTokenGenerationDetails(
       teamIdentifier: request.application.appleTeamID,

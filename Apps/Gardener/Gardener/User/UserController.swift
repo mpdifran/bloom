@@ -10,8 +10,8 @@ import Valet
 import AuthenticationServices
 
 private extension String {
-  static let authenticatedUserIdentifierKey = "user_identifier"
-  static let authTokenKey = "auth_token"
+  static let authenticatedUserIdentifierKey = "gardener.user_identifier"
+  static let authTokenKey = "gardener.auth_token"
 }
 
 final actor UserController {

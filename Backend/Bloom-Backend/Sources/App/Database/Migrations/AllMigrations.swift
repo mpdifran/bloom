@@ -21,4 +21,5 @@ let allMigrations: [Migration] = [
     User.AddUserDetails(),
     AdminUser.Create(),
     AdminUserToken.Create(),
+    AdminUserToken.FixUserIDColumnName(),
 ]

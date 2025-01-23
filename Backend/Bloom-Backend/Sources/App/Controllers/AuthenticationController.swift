@@ -22,7 +22,7 @@ extension AuthenticationController: RouteCollection {
         $0.post("sign-in", use: signIn)
       }
 
-      $0.group(UserToken.guardMiddleware()) {
+      $0.auth(using: UserToken.self) {
         $0.group("user") {
           $0.get("logout", use: logout)
           $0.get("delete-account", use: deleteAccount)

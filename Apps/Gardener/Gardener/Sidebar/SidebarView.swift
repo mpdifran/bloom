@@ -55,17 +55,10 @@ private extension SidebarView {
 
   var metadataView: some View {
     VStack(spacing: 8) {
-      Button {
-        showOptions.toggle()
-      } label: {
-        Image(systemName: "gear")
-          .imageScale(.large)
-      }
-      .popover(isPresented: $showOptions) {
-        OptionsView()
-      }
-
-      Text("\(appVersion) (\(buildNumber))")
+      Text("Version \(appVersion) (\(buildNumber))")
+        .font(.caption)
+        .bold()
+        .foregroundStyle(.secondary)
     }
   }
 

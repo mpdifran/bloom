@@ -10,15 +10,15 @@ import AuthenticationServices
 import BloomModel
 
 extension LoginView.ViewModel {
-    enum AuthError: LocalizedError {
-        case invalidCredentials
+  enum AuthError: LocalizedError {
+    case invalidCredentials
 
-        var errorDescription: String? {
-            switch self {
-            case .invalidCredentials: return "The provided credentials are invalid"
-            }
-        }
+    var errorDescription: String? {
+      switch self {
+      case .invalidCredentials: return "The provided credentials are invalid"
+      }
     }
+  }
 }
 
 extension LoginView {
@@ -33,7 +33,7 @@ extension LoginView.ViewModel {
 
   func authenticate(using credential: ASAuthorizationAppleIDCredential) async throws {
     isAuthenticating = true
-
+    
     defer {
       isAuthenticating = false
     }
