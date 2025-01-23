@@ -16,6 +16,7 @@ struct LoginView: View {
   @State private var viewModel = ViewModel()
   @State private var userControllerViewModel = UserControllerViewModel()
 
+  @State private var authUserID: String?
   @State private var authorizationState: String?
   @State private var error: Error?
 
@@ -38,6 +39,11 @@ struct LoginView: View {
         .bold()
 
       Spacer()
+
+      if let authUserID {
+        Text("User ID: \(authUserID)")
+          .bold()
+      }
 
       if viewModel.isAuthenticating {
         CircularSpinnerView()
@@ -95,6 +101,8 @@ private extension LoginView {
         default:
           break
         }
+
+        self.authUserID = credential.user
 
         Task {
           do {
