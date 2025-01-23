@@ -20,6 +20,7 @@ extension AdminFoodController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1", "admin") {
+      // TODO: Re-add this
       // $0.group(AdminUserToken.guardMiddleware()) {
         $0.group("food") {
           $0.post("usda-ingest", use: ingestUSDA)
