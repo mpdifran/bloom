@@ -14,32 +14,47 @@ struct BloomPlusFAQCell: View {
   @State private var isExpanded: Bool = false
 
   var body: some View {
-    VStack(alignment: .leading) {
-      HStack {
-        Text(question)
-          .multilineTextAlignment(.leading)
-          .fixedSize(horizontal: false, vertical: true)
-        Spacer()
-        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-      }
-      .bold()
-
-      if isExpanded {
-        Divider()
-        Text(answer)
-          .foregroundStyle(.secondary)
-          .multilineTextAlignment(.leading)
-          .fixedSize(horizontal: false, vertical: true)
-          .transition(.opacity)
-      }
+    DisclosureGroup(isExpanded: $isExpanded) {
+      Text(answer)
+        .foregroundStyle(.secondary)
+        .multilineTextAlignment(.leading)
+        .fixedSize(horizontal: false, vertical: true)
+        .transition(.opacity)
+    } label: {
+      Text(question)
+        .multilineTextAlignment(.leading)
+        .fixedSize(horizontal: false, vertical: true)
     }
-    .cardContainer()
-    .animation(.easeInOut, value: isExpanded)
+    .disclosureGroupStyle(BloomPlusFAQDisclosureGroupStyle())
     .sensoryFeedback(.selection, trigger: isExpanded)
     .font(.subheadline)
     .onTapGesture {
-      isExpanded.toggle()
+      withAnimation(.easeInOut) {
+        isExpanded.toggle()
+      }
     }
+  }
+}
+
+private struct BloomPlusFAQDisclosureGroupStyle: DisclosureGroupStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    VStack(alignment: .leading, spacing: 12) {
+      HStack {
+        configuration.label
+        Spacer()
+        Image(systemName: "chevron.down")
+          .foregroundStyle(.secondary)
+          .rotationEffect(.degrees(configuration.isExpanded ? -180 : 0))
+      }
+      .bold()
+      
+      if configuration.isExpanded {
+        Divider()
+        configuration.content
+      }
+    }
+    .clipped()
+    .cardContainer()
   }
 }
 
