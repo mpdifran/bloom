@@ -1,6 +1,7 @@
-app_identifier("com.lotus-labs.bloom")
 apple_id("hello@trybloom.app")
 
+team_name "Lotus Labs Incorporated"
+team_id "GUJ47GUV2Q"
 
 # For more information about the Appfile, see:
 #     https://docs.fastlane.tools/advanced/#appfile

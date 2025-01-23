@@ -15,13 +15,21 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios matchiOS
+
+```sh
+[bundle exec] fastlane ios matchiOS
+```
+
+
+
 ### ios setupMatch
 
 ```sh
 [bundle exec] fastlane ios setupMatch
 ```
 
-Sets up Match locally for development ensuring no new certificates are created.
+
 
 ### ios registerDevices
 
@@ -29,7 +37,36 @@ Sets up Match locally for development ensuring no new certificates are created.
 [bundle exec] fastlane ios registerDevices
 ```
 
-Registers new devices with the Match profiles. Devices must be added in the Developer Portal first.
+
+
+----
+
+
+## macos
+
+### macos matchMacOS
+
+```sh
+[bundle exec] fastlane macos matchMacOS
+```
+
+
+
+### macos setupMatch
+
+```sh
+[bundle exec] fastlane macos setupMatch
+```
+
+
+
+### macos registerDevices
+
+```sh
+[bundle exec] fastlane macos registerDevices
+```
+
+
 
 ----
 

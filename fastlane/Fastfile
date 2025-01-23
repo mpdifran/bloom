@@ -10,19 +10,34 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+update_fastlane
 
 default_platform(:ios)
 
 platform :ios do
-  desc "Sets up Match locally for development ensuring no new certificates are created."
+  lane :matchiOS do
+    match(type: "development", platform: "ios")
+  end
+
   lane :setupMatch do
     match(readonly: true)
   end
 
-  desc "Registers new devices with the Match profiles. Devices must be added in the Developer Portal first."
   lane :registerDevices do
-    match(force: true)
+    match(force_for_new_devices: true)
+  end
+end
+
+platform :macos do
+  lane :matchMacOS do
+    match(type: "development", platform: "macos")
+  end
+
+  lane :setupMatch do
+    match(readonly: true, platform: "macos")
+  end
+
+  lane :registerDevices do
+    match(force_for_new_devices: true, platform: "macos")
   end
 end
