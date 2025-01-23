@@ -22,7 +22,7 @@ struct TargetWeightEditCard: View {
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   var body: some View {
-    InsetCardView {
+    CardView {
       LargeTitleActionCard("Target Weight") {
         HealthActionCardView {
           saveTargetWeight()

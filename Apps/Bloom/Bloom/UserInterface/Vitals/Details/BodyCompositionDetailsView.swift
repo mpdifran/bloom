@@ -109,7 +109,7 @@ private extension BodyCompositionDetailsView {
       Text("Log your weight to learn more about your body composition.")
     } actions: {
       Button("Log Weight") {
-        presentedSheet = BodyWeightActionCardView().asAny
+        presentedSheet = BodyWeightActionCardView(performDismiss: nil).asAny
       }
       .buttonStyle(.primary)
       .tint(.mutedIndigo)

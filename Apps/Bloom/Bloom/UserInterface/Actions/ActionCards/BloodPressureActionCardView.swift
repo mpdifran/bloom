@@ -19,6 +19,12 @@ extension BloodPressureActionCardView {
 
 struct BloodPressureActionCardView: View {
 
+  let performDismiss: (() -> Void)?
+
+  init(performDismiss: (() -> Void)?) {
+    self.performDismiss = performDismiss
+  }
+
   @State private var systolic: Double = 120
   @State private var diastolic: Double = 80
   @State private var didError = false
@@ -28,7 +34,7 @@ struct BloodPressureActionCardView: View {
   @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
-    InsetCardView(background: .background.secondary) {
+    CardView {
       LargeTitleActionCard("Log Blood Pressure") {
         HealthActionCardView(
           sampleTypes: [
@@ -109,6 +115,6 @@ private extension BloodPressureActionCardView {
 
 #Preview {
   PreviewSheetPresent {
-    BloodPressureActionCardView()
+    BloodPressureActionCardView(performDismiss: nil)
   }
 }

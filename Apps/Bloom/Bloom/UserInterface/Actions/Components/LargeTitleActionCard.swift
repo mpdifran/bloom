@@ -9,13 +9,16 @@ import SwiftUI
 
 struct LargeTitleActionCard<Content>: View where Content: View {
   let title: String
+  let includePadding: Bool
   let contentBuilder: () -> Content
 
   init(
     _ title: String,
+    includePadding: Bool = true,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.title = title
+    self.includePadding = includePadding
     self.contentBuilder = contentBuilder
   }
 
@@ -25,18 +28,23 @@ struct LargeTitleActionCard<Content>: View where Content: View {
         .font(.title)
         .fontDesign(.rounded)
         .bold()
+        .lineLimit(1)
+        .minimumScaleFactor(0.3)
 
       VStack {
         contentBuilder()
       }
       .padding(.top)
     }
+    .if(includePadding) {
+      $0.padding()
+    }
   }
 }
 
 #Preview {
   PreviewSheetPresent {
-    InsetCardView {
+    CardView {
       LargeTitleActionCard("Actions") {
         Text("Hello World")
       }

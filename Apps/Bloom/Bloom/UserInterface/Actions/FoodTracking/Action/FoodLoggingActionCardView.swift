@@ -364,20 +364,7 @@ private extension FoodLoggingActionCardView {
 }
 
 #Preview {
-  struct PreviewView: View {
-
-    @State private var showSheet = true
-
-    var body: some View {
-      Button {
-        showSheet.toggle()
-      } label: {
-        Text("Show Sheet")
-      }
-      .sheet(isPresented: $showSheet) {
-        FoodLoggingActionCardView()
-      }
-    }
+  PreviewSheetPresent {
+    FoodLoggingActionCardView()
   }
-  return PreviewView()
 }

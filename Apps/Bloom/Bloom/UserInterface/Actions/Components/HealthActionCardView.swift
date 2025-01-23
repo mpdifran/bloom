@@ -156,7 +156,7 @@ private extension HealthActionCardView {
 
 #Preview {
   PreviewSheetPresent {
-    InsetCardView {
+    CardView {
       HealthActionCardView() {
         // Perform save
         return true
@@ -173,6 +173,7 @@ private extension HealthActionCardView {
           }
         }
       }
+      .padding()
     }
   }
 }

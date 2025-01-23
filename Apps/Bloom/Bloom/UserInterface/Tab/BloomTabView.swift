@@ -50,7 +50,7 @@ extension TabBarViewModifier {
         .sensoryFeedback(.impact, trigger: logActionToggle)
         .onTapGesture {
           logActionToggle.toggle()
-          presentedSheet = ActionsView(presentedSheet: $presentedSheet).asAny
+          presentedSheet = ActionsView().asAny
         }
 
       TabItem(title: "Vitals", image: Image(.vitalsTab))

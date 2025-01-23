@@ -58,7 +58,7 @@ private extension BowelMovementsDetailView {
       Text("Log your bowel movements to learn more about your regularity.")
     } actions: {
       Button("Log Bowel Movement") {
-        presentedSheet = BowelMovementActionCardView().asAny
+        presentedSheet = BowelMovementActionCardView(performDismiss: nil).asAny
       }
       .buttonStyle(.primary)
       .tint(.brown)

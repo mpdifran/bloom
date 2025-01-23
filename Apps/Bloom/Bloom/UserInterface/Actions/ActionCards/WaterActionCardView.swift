@@ -13,23 +13,11 @@ import TelemetryDeck
 
 struct WaterActionCardView: View {
 
-  @ObservedObject private var healthManager = HealthManager.shared
+  let performDismiss: (() -> Void)?
 
-  @State private var didIncrease = false
-  @State private var didError = false
-  @State private var selectedQuantity: HKQuantity?
-  @State private var isShowingAddGlassSizeSheet = false
-  @State private var error: Error?
+  init(performDismiss: (() -> Void)?) {
+    self.performDismiss = performDismiss
 
-  @State private var glassSizes: [WaterGlassSizeModel] {
-    didSet {
-      if let data = try? JSONEncoder.main.encode(glassSizes) {
-        UserDefaults.group.set(data, forKey: "WaterActionCardView.glassSizes")
-      }
-    }
-  }
-
-  init() {
     let glassSizes: [WaterGlassSizeModel]
     if
       let data = UserDefaults.group.data(forKey: "WaterActionCardView.glassSizes"),
@@ -51,12 +39,29 @@ struct WaterActionCardView: View {
     }
   }
 
+  @ObservedObject private var healthManager = HealthManager.shared
+
+  @State private var didIncrease = false
+  @State private var didError = false
+  @State private var selectedQuantity: HKQuantity?
+  @State private var isShowingAddGlassSizeSheet = false
+  @State private var error: Error?
+
+  @State private var glassSizes: [WaterGlassSizeModel] {
+    didSet {
+      if let data = try? JSONEncoder.main.encode(glassSizes) {
+        UserDefaults.group.set(data, forKey: "WaterActionCardView.glassSizes")
+      }
+    }
+  }
+
   var body: some View {
-    InsetCardView(background: .background.secondary) {
+    CardView {
       LargeTitleActionCard("Log Water") {
         HealthActionCardView(
           sampleTypes: [HKQuantityType(.dietaryWater)],
-          showSaveBar: false
+          showSaveBar: false,
+          performDismiss: performDismiss
         ) {
             try await logSelectedWater()
           } content: { (hasInserted, handleSave) in
@@ -148,6 +153,6 @@ private extension WaterActionCardView {
 
 #Preview {
   PreviewSheetPresent {
-    WaterActionCardView()
+    WaterActionCardView(performDismiss: nil)
   }
 }

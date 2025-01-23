@@ -12,15 +12,22 @@ import DataContainer
 
 struct BowelMovementActionCardView: View {
 
+  let performDismiss: (() -> Void)?
+
+  init(performDismiss: (() -> Void)?) {
+    self.performDismiss = performDismiss
+  }
+
   @State private var date = Date.now
   @State private var selectedStoolType: Int = 0
   @State private var duration: BowelMovement.Duration = .between5And10Min
 
   var body: some View {
-    InsetCardView(includePadding: false, background: .background.secondary) {
-      LargeTitleActionCard("Log Bowel Movement") {
+    CardView {
+      LargeTitleActionCard("Log Bowel Movement", includePadding: false) {
         HealthActionCardView(
-          addPaddingToSaveButton: true
+          addPaddingToSaveButton: true,
+          performDismiss: performDismiss
         ) {
           try await logBowelMovement()
         } content: { (_, _) in
@@ -169,6 +176,6 @@ private struct StoolTypeCell: View {
 
 #Preview {
   PreviewSheetPresent {
-    BowelMovementActionCardView()
+    BowelMovementActionCardView(performDismiss: nil)
   }
 }

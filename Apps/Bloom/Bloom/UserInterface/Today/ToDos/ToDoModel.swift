@@ -104,8 +104,8 @@ extension ToDoModel {
     @MainActor
     var sheetToPresent: AnyView {
       switch self {
-      case .logWeight: BodyWeightActionCardView().asAny
-      case .logBloodPressure: BloodPressureActionCardView().asAny
+      case .logWeight: BodyWeightActionCardView(performDismiss: nil).asAny
+      case .logBloodPressure: BloodPressureActionCardView(performDismiss: nil).asAny
       case .logFood: FoodLoggingActionCardView().asAny
       case .logProtein: FoodLoggingActionCardView().asAny
       }

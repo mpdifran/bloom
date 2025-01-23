@@ -8,87 +8,63 @@
 import SwiftUI
 
 struct ActionsView: View {
-  @Binding var presentedSheet: AnyView?
+
+  @State private var presentedCardSheet: AnyView?
 
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    InsetCardView(background: .background.secondary) {
+    CardView {
       LargeTitleActionCard("Log") {
         VStack {
           ActionInstanceCell(image: .logFoodIcon, title: "Food")
             .tint(.mutedGreen)
             .onTapGesture {
-              dismissAndRun {
-                presentedSheet = FoodLoggingActionCardView().asAny
-              }
+              presentedCardSheet = FoodLoggingActionCardView {
+                dismiss()
+              }.asAny
             }
 
           ActionInstanceCell(image: .logWaterIcon, title: "Water")
             .tint(.mutedBlue)
             .onTapGesture {
-              dismissAndRun {
-                presentedSheet = WaterActionCardView().asAny
-              }
+              presentedCardSheet = WaterActionCardView {
+                dismiss()
+              }.asAny
             }
 
           ActionInstanceCell(image: .logBowelIcon, title: "Bowel Movement")
             .tint(.brown)
             .onTapGesture {
-              dismissAndRun {
-                presentedSheet = BowelMovementActionCardView().asAny
-              }
+              presentedCardSheet = BowelMovementActionCardView {
+                dismiss()
+              }.asAny
             }
 
           ActionInstanceCell(image: .logWeightIcon, title: "Weight")
             .tint(.mutedIndigo)
             .onTapGesture {
-              dismissAndRun {
-                presentedSheet = BodyWeightActionCardView().asAny
-              }
+              presentedCardSheet = BodyWeightActionCardView {
+                dismiss()
+              }.asAny
             }
 
           ActionInstanceCell(image: .logBloodPressureIcon, title: "Blood Pressure")
             .tint(.mutedRed)
             .onTapGesture {
-              dismissAndRun {
-                presentedSheet = BloodPressureActionCardView().asAny
-              }
+              presentedCardSheet = BloodPressureActionCardView {
+                dismiss()
+              }.asAny
             }
         }
       }
     }
-  }
-}
-
-private extension ActionsView {
-
-  func dismissAndRun(_ closure: @escaping () -> Void) {
-    Task {
-      dismiss()
-      await Delay(200)
-      MainTask {
-        closure()
-      }
-    }
+    .sheet($presentedCardSheet)
   }
 }
 
 #Preview {
-  struct PreviewView: View {
-    @State private var presentedSheet: AnyView?
-
-    var body: some View {
-      Button {
-        presentedSheet = ActionsView(presentedSheet: $presentedSheet).asAny
-      } label: {
-        Text("Show Sheet")
-      }
-      .sheet($presentedSheet)
-      .onAppear {
-        presentedSheet = ActionsView(presentedSheet: $presentedSheet).asAny
-      }
-    }
+  PreviewSheetPresent {
+    ActionsView()
   }
-  return PreviewView()
 }

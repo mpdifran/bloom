@@ -11,6 +11,12 @@ import TelemetryDeck
 
 struct BodyWeightActionCardView: View {
 
+  let performDismiss: (() -> Void)?
+
+  init(performDismiss: (() -> Void)?) {
+    self.performDismiss = performDismiss
+  }
+
   @State private var weight: Double = 0
 
   @State private var didError = false
@@ -22,10 +28,11 @@ struct BodyWeightActionCardView: View {
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   var body: some View {
-    InsetCardView {
+    CardView {
       LargeTitleActionCard("Log Weight") {
         HealthActionCardView(
-          sampleTypes: [HKQuantityType(.bodyMass)]
+          sampleTypes: [HKQuantityType(.bodyMass)],
+          performDismiss: performDismiss
         ) {
           try await logWeight()
         } content: { (_, handleSave) in
@@ -86,6 +93,6 @@ private extension BodyWeightActionCardView {
 
 #Preview {
   PreviewSheetPresent {
-    BodyWeightActionCardView()
+    BodyWeightActionCardView(performDismiss: nil)
   }
 }
