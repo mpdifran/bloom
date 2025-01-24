@@ -25,8 +25,16 @@ struct GardenerApp: App {
       RootView()
     }
 
+    WindowGroup(id: GardenerAppWindowGroupID.createNewFoodItem.rawValue) {
+      FoodItemDetailView(viewModel: CreateNewFoodItemDetailViewModel())
+    }
+   
     Settings {
       PreferencesView()
     }
   }
+}
+
+enum GardenerAppWindowGroupID: String {
+  case createNewFoodItem
 }

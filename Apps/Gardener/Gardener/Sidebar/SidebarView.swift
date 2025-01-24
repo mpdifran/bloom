@@ -10,6 +10,8 @@ import SwiftUI
 struct SidebarView: View {
 
   @State private var showOptions = false
+  
+  @Environment(\.openWindow) private var openWindow
 
   var body: some View {
     List {
@@ -40,6 +42,16 @@ struct SidebarView: View {
     }
     .shelf {
       metadataView
+    }
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        Button {
+          openWindow(id: GardenerAppWindowGroupID.createNewFoodItem.rawValue)
+        } label: {
+          Image(systemName: "plus")
+        }
+        .accessibilityLabel("Add food item")
+      }
     }
   }
 }
