@@ -20,7 +20,7 @@ extension SchemaV6 {
     @Relationship public var foodItem: FoodItemRecord? = nil
     @Relationship public var mealItem: MealRecord? = nil
 
-    @Relationship public var foodItemServings: [FoodItemServing] = []
+    @Relationship public var foodItemServings: [FoodItemServing]? = []
 
     public init(
       id: String,

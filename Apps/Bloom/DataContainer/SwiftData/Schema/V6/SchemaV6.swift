@@ -14,8 +14,9 @@ public enum SchemaV6: VersionedSchema {
     public static let models: [any PersistentModel.Type] = [
         SchemaV0.BowelMovement.self,
         SchemaV2.Habit.self,
-        SchemaV5.FoodItemRecord.self,
+        SchemaV6.FoodItemRecord.self,
         SchemaV6.FoodItemLog.self,
+        SchemaV6.FoodItemServing.self,
         SchemaV6.MealRecord.self,
         SchemaV6.MealItem.self,
     ]
