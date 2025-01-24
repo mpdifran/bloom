@@ -26,7 +26,7 @@ struct GardenerApp: App {
     }
 
     WindowGroup(id: GardenerAppWindowGroupID.createNewFoodItem.rawValue) {
-      FoodItemDetailView(viewModel: CreateNewFoodItemDetailViewModel())
+      CreateNewFoodItemView()
     }
    
     Settings {

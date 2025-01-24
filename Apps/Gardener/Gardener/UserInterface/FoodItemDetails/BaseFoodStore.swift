@@ -59,42 +59,6 @@ class BaseFoodStore: ObservableObject {
 
     return updatedFoodItem
   }
-  
-  func create(
-    foodItem: AdminFoodItemRecord,
-    nutritionLabelImage: NSImage?,
-    packagingImage: NSImage?
-  ) async throws -> AdminFoodItemRecord? {
-    var nutritionLabelImageFile: ImageFile?
-    if let nutritionLabelImage, let nutritionData = nutritionLabelImage.pngData() {
-      nutritionLabelImageFile = ImageFile(
-        data: nutritionData,
-        fileExtension: "png"
-      )
-    }
-
-    var packagingImageFile: ImageFile?
-    if let packagingImage, let packagingData = packagingImage.pngData() {
-      packagingImageFile = ImageFile(
-        data: packagingData,
-        fileExtension: "png"
-      )
-    }
-
-    let request = AdminCreateFoodItemRequest(
-      foodItemRecord: foodItem,
-      nutritionLabelImage: nutritionLabelImageFile,
-      packagingImage: packagingImageFile
-    )
-    
-    let response = try await service.createFoodRecord(request: request)
-    
-    if let newlyCreateFoodItem = response.foodItemRecord {
-      foodItems.insert(newlyCreateFoodItem, at: .zero)
-    }
-    
-    return response.foodItemRecord
-  }
 
   func delete(_ foodItem: AdminFoodItemRecord) async throws {
     try await service.deleteFoodRecord(id: foodItem.id)

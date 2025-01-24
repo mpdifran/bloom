@@ -13,18 +13,74 @@ import UniformTypeIdentifiers
 
 @MainActor
 final class CreateNewFoodItemDetailViewModel: FoodItemDetailViewModel {
-  init() {
+  private let service = NetworkStack.shared
+  private let onSuccessfulCreation: () -> Void
+
+  init(onSuccessfulCreation: @escaping () -> Void) {
+    self.onSuccessfulCreation = onSuccessfulCreation
     super.init(
       foodItem: AdminFoodItemRecord(id: FoodItemIdentifier(UUID().uuidString)),
-      foodStore: UnverifiedFoodStore.shared
+      foodStore: UnverifiedFoodStore.shared // no needed
     )
+    saveButtonText = "Create and close window"
   }
   
   override func save() async {
-    // TODO
+    do {
+      let response = try await create(
+        foodItem: foodItem,
+        nutritionLabelImage: selectedNutritionLabel,
+        packagingImage: selectedPackagingImage
+      )
+      
+      guard let updatedFoodItem = response.foodItemRecord else { return }
+      foodItem = updatedFoodItem
+      resetInitialFoodItem(to: updatedFoodItem)
+      packagingImage = updatedFoodItem.packagingImage
+      nutritionLabel = updatedFoodItem.nutritionLabelImage
+      // Reset selections, they should be on the response.
+      selectedPackagingImage = nil
+      selectedNutritionLabel = nil
+      
+      await MainActor.run { onSuccessfulCreation() }
+      
+    } catch {
+      self.error = error
+    }
   }
   
   override func delete() async {
     // TODO
+  }
+  
+  @discardableResult
+  private func create(
+    foodItem: AdminFoodItemRecord,
+    nutritionLabelImage: NSImage?,
+    packagingImage: NSImage?
+  ) async throws -> AdminCreateFoodItemResponse {
+    var nutritionLabelImageFile: ImageFile?
+    if let nutritionLabelImage, let nutritionData = nutritionLabelImage.pngData() {
+      nutritionLabelImageFile = ImageFile(
+        data: nutritionData,
+        fileExtension: "png"
+      )
+    }
+
+    var packagingImageFile: ImageFile?
+    if let packagingImage, let packagingData = packagingImage.pngData() {
+      packagingImageFile = ImageFile(
+        data: packagingData,
+        fileExtension: "png"
+      )
+    }
+
+    let request = AdminCreateFoodItemRequest(
+      foodItemRecord: foodItem,
+      nutritionLabelImage: nutritionLabelImageFile,
+      packagingImage: packagingImageFile
+    )
+    
+    return try await service.createFoodRecord(request: request)
   }
 }

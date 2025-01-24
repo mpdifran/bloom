@@ -15,7 +15,7 @@ open class FoodItemDetailViewModel: ObservableObject {
 
   @Published var foodItem: AdminFoodItemRecord
   @Published var error: Error?
-
+  @Published var saveButtonText = "Save"
   private var initialFoodItem: AdminFoodItemRecord
 
   private let foodStore: BaseFoodStore
@@ -64,6 +64,10 @@ open class FoodItemDetailViewModel: ObservableObject {
     } catch {
       self.error = error
     }
+  }
+  
+  func resetInitialFoodItem(to newItem: AdminFoodItemRecord) {
+    initialFoodItem = newItem
   }
 }
 
