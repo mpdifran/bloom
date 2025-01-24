@@ -28,7 +28,7 @@ platform :ios do
   end
 end
 
-platform :macos do
+platform :mac do
   lane :matchMacOS do
     match(type: "development", platform: "macos")
   end

@@ -14,7 +14,7 @@ for_platform(:ios) do
   ])
 end
 
-for_platform(:macos) do
+for_platform(:mac) do
   app_identifier(["com.lotus-labs.gardener"])
 end
 

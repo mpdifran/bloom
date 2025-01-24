@@ -42,28 +42,28 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 ----
 
 
-## macos
+## Mac
 
-### macos matchMacOS
+### mac matchMacOS
 
 ```sh
-[bundle exec] fastlane macos matchMacOS
+[bundle exec] fastlane mac matchMacOS
 ```
 
 
 
-### macos setupMatch
+### mac setupMatch
 
 ```sh
-[bundle exec] fastlane macos setupMatch
+[bundle exec] fastlane mac setupMatch
 ```
 
 
 
-### macos registerDevices
+### mac registerDevices
 
 ```sh
-[bundle exec] fastlane macos registerDevices
+[bundle exec] fastlane mac registerDevices
 ```
 
 
