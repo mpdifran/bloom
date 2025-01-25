@@ -7,29 +7,59 @@
 
 import SwiftUI
 
-struct LargeTitleActionCard<Content>: View where Content: View {
+struct LargeTitleActionCard<Content, LeadingContent, TrailingContent>: View where Content: View, LeadingContent: View, TrailingContent: View {
   let title: String
   let includePadding: Bool
   let contentBuilder: () -> Content
+  let leadingContentBuilder: () -> LeadingContent
+  let trailingContentBuilder: () -> TrailingContent
 
   init(
     _ title: String,
     includePadding: Bool = true,
-    @ViewBuilder contentBuilder: @escaping () -> Content
+    @ViewBuilder contentBuilder: @escaping () -> Content,
+    @ViewBuilder leading: @escaping () -> LeadingContent = { EmptyView() },
+    @ViewBuilder trailing: @escaping () -> TrailingContent = { EmptyView() }
   ) {
     self.title = title
     self.includePadding = includePadding
     self.contentBuilder = contentBuilder
+    self.leadingContentBuilder = leading
+    self.trailingContentBuilder = trailing
   }
 
   var body: some View {
     VStack(spacing: 16) {
-      Text(title)
-        .font(.title)
-        .fontDesign(.rounded)
+      HStack {
+        ZStack {
+          trailingContentBuilder()
+            .opacity(0)
+          leadingContentBuilder()
+        }
+        .labelStyle(.iconOnly)
         .bold()
-        .lineLimit(1)
-        .minimumScaleFactor(0.3)
+        .frame(minWidth: 44, minHeight: 44)
+
+        Spacer()
+
+        Text(title)
+          .font(.title)
+          .fontDesign(.rounded)
+          .bold()
+          .lineLimit(1)
+          .minimumScaleFactor(0.3)
+
+        Spacer()
+
+        ZStack {
+          leadingContentBuilder()
+            .opacity(0)
+          trailingContentBuilder()
+        }
+        .labelStyle(.iconOnly)
+        .bold()
+        .frame(minWidth: 44, minHeight: 44)
+      }
 
       VStack {
         contentBuilder()
@@ -47,7 +77,12 @@ struct LargeTitleActionCard<Content>: View where Content: View {
     CardView {
       LargeTitleActionCard("Actions") {
         Text("Hello World")
+      } trailing: {
+        Button("Add", systemImage: "plus") {
+
+        }
       }
     }
+    .tint(.mutedBlue)
   }
 }

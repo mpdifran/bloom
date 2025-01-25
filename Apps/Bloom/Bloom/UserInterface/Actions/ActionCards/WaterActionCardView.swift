@@ -90,14 +90,6 @@ struct WaterActionCardView: View {
                 .sensoryFeedback(.success, trigger: didIncrease)
                 .sensoryFeedback(.error, trigger: didError)
               }
-
-              Button {
-                isShowingAddGlassSizeSheet = true
-              } label: {
-                Image(systemName: "plus")
-                  .horizontallyCentered()
-              }
-              .buttonStyle(.primary)
             }
             .overlay {
               ZStack {
@@ -118,6 +110,10 @@ struct WaterActionCardView: View {
               .padding()
             }
           }
+      } trailing: {
+        Button("Add", systemImage: "plus") {
+          isShowingAddGlassSizeSheet = true
+        }
       }
     }
     .sheet(isPresented: $isShowingAddGlassSizeSheet) {
