@@ -18,6 +18,9 @@ extension SchemaV6 {
 
     @Relationship public var foodItem: FoodItemRecord? = nil
 
+    @Relationship(inverse: \FoodItemLog.foodItemServings)
+    public var foodItemLogs: FoodItemLog?
+
     init(
       id: String,
       numberOfServings: Double,

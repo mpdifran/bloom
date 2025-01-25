@@ -18,19 +18,16 @@ extension SchemaV6 {
 
     @Relationship public var foodItem: FoodItemRecord? = nil
 
-    @Relationship(deleteRule: .cascade, inverse: \MealRecord.items)
-    public var mealRecord: MealRecord? = nil
+    @Relationship public var mealRecord: MealRecord? = nil
 
     init(
       id: String,
       numberOfServings: Double,
-      foodItem: FoodItemRecord?,
-      mealRecord: MealRecord?
+      foodItem: FoodItemRecord?
     ) {
       self.id = id
       self.numberOfServings = numberOfServings
       self.foodItem = foodItem
-      self.mealRecord = mealRecord
     }
   }
 }

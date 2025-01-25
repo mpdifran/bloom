@@ -55,6 +55,12 @@ extension SchemaV6 {
     @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.foodItem)
     public var logs: [FoodItemLog]?
 
+    @Relationship(inverse: \FoodItemServing.foodItem)
+    public var servings: [FoodItemServing]? = []
+
+    @Relationship(inverse: \MealItem.foodItem)
+    public var mealItems: [MealItem]? = []
+
     public init(
       id: String,
       name: String,
