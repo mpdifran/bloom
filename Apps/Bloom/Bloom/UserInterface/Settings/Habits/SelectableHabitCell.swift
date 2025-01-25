@@ -9,34 +9,36 @@ import SwiftUI
 import DataContainer
 
 struct SelectableHabitCell: View {
-    let targetMetric: TargetMetric
-    let isSelected: Bool
+  let targetMetric: TargetMetric
+  let isSelected: Bool
 
-    var body: some View {
-        HStack {
-            Image(systemName: targetMetric.systemImage)
-                .font(.title)
-                .foregroundStyle(targetMetric.color)
-                .frame(width: 40)
+  var body: some View {
+    HStack {
+      Image(systemName: targetMetric.systemImage)
+        .font(.title3)
+        .foregroundStyle(targetMetric.color)
+        .frame(width: 40)
 
-            Text(targetMetric.name)
-                .bold()
+      Text(targetMetric.name)
+        .bold()
 
-            Spacer()
+      Spacer()
 
-            if isSelected {
-                Image(systemName: "checkmark")
-                    .foregroundStyle(targetMetric.color)
-            }
-        }
-        .contentShape(Rectangle())
-        .frame(height: 50)
+      if isSelected {
+        Image(systemName: "checkmark")
+          .foregroundStyle(targetMetric.color)
+      }
     }
+    .fontDesign(.rounded)
+    .selectable()
+    .contentShape(Rectangle())
+    .frame(height: 50)
+  }
 }
 
 #Preview {
-    List {
-        SelectableHabitCell(targetMetric: .stepCount, isSelected: true)
-        SelectableHabitCell(targetMetric: .walkingRunningDistance, isSelected: false)
-    }
+  List {
+    SelectableHabitCell(targetMetric: .stepCount, isSelected: true)
+    SelectableHabitCell(targetMetric: .walkingRunningDistance, isSelected: false)
+  }
 }

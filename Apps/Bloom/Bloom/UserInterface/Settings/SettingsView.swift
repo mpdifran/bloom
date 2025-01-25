@@ -241,7 +241,7 @@ private extension SettingsView {
       if remainingMetrics.isNotEmpty {
         SettingsAddHabitCell()
           .onTapGesture {
-            presentedSheet = UserAddedGoalPicker().asAny
+            presentedSheet = NewGoalCard().asAny
           }
       }
     }

@@ -35,32 +35,21 @@ private extension SelfSizingPresentationDetentModifier {
 }
 
 #Preview {
-  struct PreviewView: View {
-
-      @State private var showSheet = true
-
-      var body: some View {
-          Button {
-              showSheet.toggle()
-          } label: {
-              Text("Show Sheet")
-          }
-          .sheet(isPresented: $showSheet) {
-            ScrollView {
-              VStack {
-                Text("1")
-                Text("2")
-                Text("3")
-                Text("4")
-                Text("5")
-                Text("6")
-              }
-              .cardContainer()
-              .padding()
-            }
-            .groupedBackground()
-          }
+  PreviewSheetPresent {
+    ScrollView {
+      VStack {
+        Text("1")
+        Text("2")
+        Text("3")
+        Text("4")
+        Text("5")
+        Text("6")
       }
+      .horizontallyCentered()
+      .cardContainer()
+      .padding()
+      .presentationDetentSelfSizing()
+    }
+    .groupedBackground()
   }
-  return PreviewView()
 }

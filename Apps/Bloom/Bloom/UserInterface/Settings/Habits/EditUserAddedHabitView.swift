@@ -61,29 +61,38 @@ struct EditUserAddedHabitView: View {
           }
         }
 
-        HStack {
-          TextField("", value: $targetValue, formatter: habit.targetMetric.preferredFormatter)
-            .selectAllTextOnBeginEditing()
-            .focused($isFocused)
+        LabeledContent("Value") {
+          HStack {
+            TextField("", value: $targetValue, formatter: habit.targetMetric.preferredFormatter)
+              .selectAllTextOnBeginEditing()
+              .frame(maxWidth: 100)
+              .focused($isFocused)
 
-          LocalizedUnitPickerView(unit: $unit)
+            LocalizedUnitPickerView(unit: $unit)
+          }
+          .fontDesign(.rounded)
+          .keyboardType(.decimalPad)
+          .textFieldStyle(.roundedBorder)
+          .bold()
+          .multilineTextAlignment(.trailing)
         }
-        .fontDesign(.rounded)
-        .keyboardType(.decimalPad)
-        .textFieldStyle(.roundedBorder)
-        .font(.largeTitle)
-        .bold()
-        .multilineTextAlignment(.trailing)
-        .padding(40)
+        .frame(minHeight: 50)
+        .cardContainer()
+        .padding(.vertical)
+        .padding(.bottom)
 
-        ProminentButton("Save") {
+        Button {
           do {
             try save()
             dismiss()
           } catch {
             self.error = error
           }
+        } label: {
+          Text("Save")
+            .horizontallyCentered()
         }
+        .buttonStyle(.primary)
         .sensoryFeedback(.success, trigger: didSaveToggle)
       }
       .padding()
@@ -93,11 +102,7 @@ struct EditUserAddedHabitView: View {
     .presentationDragIndicator(.visible)
     .confirmationDialog($confirmationDialogDetails)
     .alert(error: $error)
-    .background {
-      Rectangle()
-        .fill(.tint.tertiary)
-        .ignoresSafeArea()
-    }
+    .groupedBackground()
     .tint(habit.targetMetric.color)
   }
 }

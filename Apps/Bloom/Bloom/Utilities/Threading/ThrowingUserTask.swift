@@ -12,7 +12,9 @@ func ThrowingUserTask(error errorBinding: Binding<Error?>, task: @Sendable @esca
     do {
       try await task()
     } catch {
-      errorBinding.wrappedValue = error
+      await MainActor.run {
+        errorBinding.wrappedValue = error
+      }
     }
   }
 }
