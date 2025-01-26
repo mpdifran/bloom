@@ -11,12 +11,30 @@ import SwiftUI
 
 struct NutritionMealView: View {
 
+  @Binding private var isSwipingItem: Bool
+
   let meal: FoodItemLog.Meal
   let foodItemLogs: [FoodItemLog]
   let onCellTapped: (FoodItemLog) -> Void
   let onLogTapped: () -> Void
 
-  @State private var isSwipingItem = false
+  init(
+    meal: FoodItemLog.Meal,
+    foodItemLogs: [FoodItemLog],
+    isSwipingItem: Binding<Bool>,
+    onCellTapped: @escaping (FoodItemLog) -> Void,
+    onLogTapped: @escaping () -> Void
+  ) {
+    self.meal = meal
+    self.foodItemLogs = foodItemLogs
+    self._isSwipingItem = isSwipingItem
+    self.onCellTapped = onCellTapped
+    self.onLogTapped = onLogTapped
+  }
+
+  @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+
+  @State private var error: Error?
 
   var body: some View {
     VStack(spacing: 16) {
@@ -24,45 +42,66 @@ struct NutritionMealView: View {
 
       VStack {
         if foodItemLogs.isEmpty {
-          Text("No Food Logged")
-            .font(.title2)
-            .foregroundStyle(.secondary)
-            .bold()
-            .padding()
-            .horizontallyCentered()
-            .cardContainer()
+          noContentView
         } else {
-          ForEach(foodItemLogs) { foodItemLog in
-            Swipeable(
-              isSwipingItem: $isSwipingItem,
-              actions: [
-                .init(
-                  title: "Delete",
-                  systemImage: "trash",
-                  tint: .mutedRed,
-                  action: {
-
-                  }
-                )
-              ]
-            ) {
-              FoodItemLogCell(foodItemLog: foodItemLog)
-                .id(foodItemLog.id)
-                .transition(.blurReplace)
-                .selectable()
-                .onTapGesture {
-                  onCellTapped(foodItemLog)
-                }
-            }
-          }
+          contentView
         }
       }
     }
     .padding(.vertical)
+    .alert(error: $error)
   }
 }
 
 private extension NutritionMealView {
+
+  func delete(_ foodItemLog: FoodItemLog) {
+    Task {
+      do {
+        try await nutritionViewModel.delete(foodItemLogs: [foodItemLog])
+      } catch {
+        self.error = error
+      }
+    }
+  }
+}
+
+private extension NutritionMealView {
+
+  var noContentView: some View {
+    Text("No Food Logged")
+      .font(.title2)
+      .foregroundStyle(.secondary)
+      .bold()
+      .padding()
+      .horizontallyCentered()
+      .cardContainer()
+  }
+
+  var contentView: some View {
+    ForEach(foodItemLogs) { foodItemLog in
+      Swipeable(
+        isSwipingItem: $isSwipingItem,
+        actions: [
+          .init(
+            title: "Delete",
+            systemImage: "trash",
+            tint: .mutedRed,
+            action: {
+              delete(foodItemLog)
+            }
+          )
+        ]
+      ) {
+        FoodItemLogCell(foodItemLog: foodItemLog)
+          .id(foodItemLog.id)
+      }
+      .onTapGesture {
+        onCellTapped(foodItemLog)
+      }
+    }
+  }
+
   var mealHeader: some View {
     HStack {
       VStack(alignment: .leading, spacing: 6) {
@@ -127,10 +166,12 @@ private extension NutritionMealView {
 }
 
 #Preview {
+  @Previewable @State var isSwipingItem = false
   VStack {
     NutritionMealView(
       meal: .lunch,
-      foodItemLogs: []
+      foodItemLogs: [],
+      isSwipingItem: $isSwipingItem
     ) { _ in
 
     } onLogTapped: {

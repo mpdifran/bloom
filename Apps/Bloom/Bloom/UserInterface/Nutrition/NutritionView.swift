@@ -14,19 +14,19 @@ struct NutritionView: View {
 
   @State private var nutritionViewModel = NutritionTrackingViewModel.shared
   @State private var presentedSheet: AnyView?
+  @State private var isSwipingItem = false
 
   var body: some View {
     NavigationStack {
       ScrollView {
-        VStack {
-          FilteredFoodItemLogsListView(
-            date: nutritionViewModel.date,
-            presentedSheet: $presentedSheet
-          )
-        }
-        .horizontallyCentered()
+        FilteredFoodItemLogsListView(
+          date: nutritionViewModel.date,
+          presentedSheet: $presentedSheet,
+          isSwipingItem: $isSwipingItem
+        )
         .padding()
       }
+      .scrollDisabled(isSwipingItem)
       .groupedBackground()
       .navigationBarTitleDisplayMode(.inline)
       .tabBar()
@@ -57,12 +57,15 @@ private extension NutritionView {
   struct FilteredFoodItemLogsListView: View {
 
     @Binding private var presentedSheet: AnyView?
+    @Binding private var isSwipingItem: Bool
 
     init(
       date: Date,
-      presentedSheet: Binding<AnyView?>
+      presentedSheet: Binding<AnyView?>,
+      isSwipingItem: Binding<Bool>
     ) {
       self._presentedSheet = presentedSheet
+      self._isSwipingItem = isSwipingItem
 
       let startOfDay = Calendar.current.startOfDay(for: date)
       let endOfDay = Calendar.current.endOfDay(for: date)
@@ -91,7 +94,8 @@ private extension NutritionView {
         ForEach(FoodItemLog.Meal.allCases) { meal in
           NutritionMealView(
             meal: meal,
-            foodItemLogs: foodItemLogs(for: meal)
+            foodItemLogs: foodItemLogs(for: meal),
+            isSwipingItem: $isSwipingItem
           ) { foodItemLog in
             guard let foodItem = foodItemLog.foodItem else { return }
 

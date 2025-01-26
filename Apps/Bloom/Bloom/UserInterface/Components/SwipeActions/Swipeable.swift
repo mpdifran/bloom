@@ -36,8 +36,7 @@ struct Swipeable<Content: View>: View {
 
   var body: some View {
     Swipy(
-      isSwipingAnItem: $isSwipingItem,
-      swipeBehavior: .straight
+      isSwipingAnItem: $isSwipingItem
     ) { model in
       contentBuilder()
     } actions: {
@@ -69,7 +68,7 @@ struct Swipeable<Content: View>: View {
 
 
 #Preview {
-  
+
   @Previewable @State var isSwipingItem = false
 
   ScrollView {
@@ -128,6 +127,30 @@ struct Swipeable<Content: View>: View {
           DisclosureIndicator()
         }
         .cardContainer()
+      }
+
+      VStack {
+        Swipeable(
+          isSwipingItem: $isSwipingItem,
+          actions: [
+            .init(
+              title: "Delete",
+              systemImage: "trash",
+              tint: .mutedRed,
+              action: { }
+            )
+          ]
+        ) {
+          FoodItemLogCell(
+            foodItemLog: .init(
+              id: UUID().uuidString,
+              date: .now,
+              meal: .breakfast,
+              numberOfServings: 2,
+              foodItem: .Preview.ritzCrackers
+            )
+          )
+        }
       }
     }
     .padding()
