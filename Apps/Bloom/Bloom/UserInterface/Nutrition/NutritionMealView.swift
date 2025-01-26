@@ -16,38 +16,47 @@ struct NutritionMealView: View {
   let onCellTapped: (FoodItemLog) -> Void
   let onLogTapped: () -> Void
 
+  @State private var isSwipingItem = false
+
   var body: some View {
     VStack(spacing: 16) {
       mealHeader
 
-      VStack(spacing: 0) {
+      VStack {
         if foodItemLogs.isEmpty {
           Text("No Food Logged")
             .font(.title2)
             .foregroundStyle(.secondary)
             .bold()
             .padding()
-            .padding()
+            .horizontallyCentered()
+            .cardContainer()
         } else {
-          ForEachEnumerated(foodItemLogs) { index, foodItemLog in
-            FoodItemLogCell(foodItemLog: foodItemLog)
-              .id(foodItemLog.id)
-              .transition(.blurReplace)
-              .selectable()
-              .onTapGesture {
-                onCellTapped(foodItemLog)
-              }
-              .padding()
+          ForEach(foodItemLogs) { foodItemLog in
+            Swipeable(
+              isSwipingItem: $isSwipingItem,
+              actions: [
+                .init(
+                  title: "Delete",
+                  systemImage: "trash",
+                  tint: .mutedRed,
+                  action: {
 
-            if index < foodItemLogs.count - 1 {
-              Divider()
-                .padding(.horizontal)
+                  }
+                )
+              ]
+            ) {
+              FoodItemLogCell(foodItemLog: foodItemLog)
+                .id(foodItemLog.id)
+                .transition(.blurReplace)
+                .selectable()
+                .onTapGesture {
+                  onCellTapped(foodItemLog)
+                }
             }
           }
         }
       }
-      .horizontallyCentered()
-      .cardContainer(includePadding: false)
     }
     .padding(.vertical)
   }
