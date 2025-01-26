@@ -93,20 +93,61 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
     MigrationStage.custom(
       fromVersion: SchemaV5.self,
       toVersion: SchemaV6.self,
-      willMigrate: nil,
-      didMigrate: { context in
-        let foodItemLogs = try context.fetch(FetchDescriptor<SchemaV6.FoodItemLog>())
+      willMigrate: { context in
+        let logs = try context.fetch(FetchDescriptor<SchemaV5.FoodItemLog>())
 
-        for foodItemLog in foodItemLogs {
-          foodItemLog.foodItemServings = [
-            .init(
-              id: UUID().uuidString,
-              numberOfServings: 1,
-              foodItem: foodItemLog.foodItem
-            )
-          ]
+        for log in logs {
+          guard let foodItem = log.foodItem else { continue }
+          let newFoodItem = SchemaV6.FoodItemRecord(
+            id: foodItem.id,
+            name: foodItem.name,
+            brandName: foodItem.brandName,
+            flavour: foodItem.flavour,
+            rawCountry: foodItem.rawCountry,
+            calories: foodItem.calories,
+            protein: foodItem.protein,
+            carbohydrates: foodItem.carbohydrates,
+            fat: foodItem.fat,
+            saturatedFat: foodItem.saturatedFat,
+            transFat: foodItem.transFat,
+            polyunsaturatedFat: foodItem.polyunsaturatedFat,
+            monounsaturatedFat: foodItem.monounsaturatedFat,
+            fiber: foodItem.fiber,
+            sugar: foodItem.sugar,
+            cholesterol: foodItem.cholesterol,
+            sodium: foodItem.sodium,
+            calcium: foodItem.calcium,
+            iron: foodItem.iron,
+            potassium: foodItem.potassium,
+            magnesium: foodItem.magnesium,
+            zinc: foodItem.zinc,
+            vitaminA: foodItem.vitaminA,
+            vitaminB6: foodItem.vitaminB6,
+            vitaminB12: foodItem.vitaminB12,
+            vitaminC: foodItem.vitaminC,
+            vitaminD: foodItem.vitaminD,
+            vitaminE: foodItem.vitaminE,
+            servingName: foodItem.servingName,
+            servingUnitString: foodItem.servingUnitString,
+            servingValue: foodItem.servingValue,
+            ingredients: foodItem.ingredients,
+            category: SchemaV6.FoodItemRecord.Category.init(rawValue: foodItem.category?.rawValue ?? ""),
+            isVerified: foodItem.isVerified
+          )
+          let newLog = SchemaV6.FoodItemLog(
+            id: UUID().uuidString,
+            date: log.date,
+            meal: SchemaV6.FoodItemLog.Meal(rawValue: log.meal.rawValue) ?? .breakfast,
+            numberOfServings: log.numberOfServings,
+            foodItem: newFoodItem
+          )
+
+          context.insert(newLog)
+          context.delete(log)
         }
-      }
+        try context.save()
+      },
+      didMigrate: nil
     )
   }
 }
