@@ -12,7 +12,7 @@ import SwiftData
 
 extension SchemaV6 {
   @Model
-  public final class MealItem: Identifiable, Hashable {
+  public final class MealItemRecord: Identifiable, Hashable {
     public var id: String = ""
     public var numberOfServings: Double = 0
 

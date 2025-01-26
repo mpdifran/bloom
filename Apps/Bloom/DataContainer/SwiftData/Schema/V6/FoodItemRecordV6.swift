@@ -52,14 +52,11 @@ extension SchemaV6 {
     public var category: Category?
     public var isVerified: Bool = false
 
-    @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.foodItem)
-    public var logs: [FoodItemLog]?
-
     @Relationship(inverse: \FoodItemServing.foodItem)
     public var servings: [FoodItemServing]? = []
 
-    @Relationship(inverse: \MealItem.foodItem)
-    public var mealItems: [MealItem]? = []
+    @Relationship(inverse: \MealItemRecord.foodItem)
+    public var mealItems: [MealItemRecord]? = []
 
     public init(
       id: String,
@@ -95,8 +92,7 @@ extension SchemaV6 {
       servingValue: Double?,
       ingredients: String?,
       category: Category?,
-      isVerified: Bool,
-      logs: [FoodItemLog]
+      isVerified: Bool
     ) {
       self.id = id
       self.name = name
@@ -132,7 +128,6 @@ extension SchemaV6 {
       self.ingredients = ingredients
       self.category = category
       self.isVerified = isVerified
-      self.logs = logs
     }
   }
 }

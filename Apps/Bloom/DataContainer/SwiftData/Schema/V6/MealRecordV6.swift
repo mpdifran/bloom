@@ -16,8 +16,8 @@ extension SchemaV6 {
     public var id: String = ""
     public var name: String = ""
 
-    @Relationship(inverse: \MealItem.mealRecord)
-    public var items: [MealItem]? = []
+    @Relationship(inverse: \MealItemRecord.mealRecord)
+    public var items: [MealItemRecord]? = []
 
     @Relationship(inverse: \FoodItemLog.mealItem)
     public var logs: [FoodItemLog]?
@@ -25,7 +25,7 @@ extension SchemaV6 {
     init(
       id: String,
       name: String,
-      items: [MealItem]
+      items: [MealItemRecord]
     ) {
       self.id = id
       self.name = name

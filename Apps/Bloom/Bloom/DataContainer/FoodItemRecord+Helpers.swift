@@ -45,8 +45,7 @@ extension FoodItemRecord {
       servingValue: foodItem.servingQuantity?.value,
       ingredients: foodItem.ingredients,
       category: .init(rawValue: foodItem.category.rawValue),
-      isVerified: foodItem.isVerified,
-      logs: []
+      isVerified: foodItem.isVerified
     )
   }
 
