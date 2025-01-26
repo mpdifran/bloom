@@ -34,6 +34,8 @@ struct EditUserAddedHabitView: View {
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @State private var error: Error?
 
+  @ObservedObject private var habitsViewModel = HabitsViewModel.shared
+
   @FocusState private var isFocused: Bool
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
@@ -110,38 +112,10 @@ struct EditUserAddedHabitView: View {
 private extension EditUserAddedHabitView {
 
   func save() throws {
-    let updatedHabit: Habit
-    let isUserEdited: Bool
-    if !habit.isUserEdited {
-      isUserEdited = !habit.value.isWithinRange(of: targetValue, precision: 1)
-    } else {
-      isUserEdited = true
-    }
-
-    if Calendar.current.isDateInToday(habit.startDate) {
-      habit.value = targetValue
-      habit.unitString = unit.unitString
-      habit.isUserEdited = isUserEdited
-      updatedHabit = habit
-    } else {
-      let newHabit = habit.duplicate()
-
-      habit.endDate = .now
-
-      newHabit.startDate = .now
-      newHabit.value = targetValue
-      newHabit.unitString = unit.unitString
-      newHabit.isUserEdited = isUserEdited
-
-      modelContext.insert(newHabit)
-
-      updatedHabit = newHabit
-    }
-
-    try modelContext.save()
+    let newHabit = try habitsViewModel.update(value: targetValue, unit: unit, for: habit)
     didSaveToggle.toggle()
 
-    onUpdate(updatedHabit)
+    onUpdate(newHabit)
   }
 
   func promptDelete() {
@@ -162,10 +136,7 @@ private extension EditUserAddedHabitView {
   }
 
   func delete() throws {
-    habit.endDate = .now
-
-    try modelContext.save()
-
+    try habitsViewModel.delete(habit)
     onUpdate(nil)
   }
 }

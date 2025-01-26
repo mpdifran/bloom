@@ -12,11 +12,13 @@ import DataContainer
 import HealthKit
 import RevenueCat
 import TelemetryDeck
+import Swipy
 
 struct SettingsView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
   @ObservedObject private var toDoManager = ToDoManager.shared
+  @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
   @Bindable private var reportViewModel = ReportCoordinatorViewModel.shared
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
@@ -25,10 +27,12 @@ struct SettingsView: View {
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
 
   @Environment(\.openURL) private var openURL
+  @Environment(\.modelContext) private var modelContext
 
   @State private var userControllerViewModel = UserControllerViewModel()
   @State private var entitlementController = EntitlementController.shared
   @State private var shouldRequestHealthPermissions = false
+  @State private var isSwipingAnItem = false
   @State private var presentedSheet: AnyView?
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @State private var error: Error?
@@ -68,6 +72,7 @@ struct SettingsView: View {
       }
       .padding()
     }
+    .scrollDisabled(isSwipingAnItem)
     .groupedBackground()
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
@@ -228,14 +233,27 @@ private extension SettingsView {
         .padding(.horizontal)
 
       ForEach(userAddedHabits) { habit in
-        SettingsHabitCell(
-          image: Image(systemName: habit.targetMetric.systemImage),
-          title: habit.targetMetric.name,
-          subtitle: habit.displayQuantity
-        )
-        .tint(habit.targetMetric.color)
-        .onTapGesture {
-          presentedSheet = EditUserAddedHabitView(habit: habit) { _ in }.asAny
+        Swipeable(
+          isSwipingItem: $isSwipingAnItem,
+          actions: [
+            .init(
+              title: "Delete",
+              systemImage: "trash",
+              tint: .mutedRed
+            ) {
+              delete(habit: habit)
+            }
+          ]
+        ) {
+          SettingsHabitCell(
+            image: Image(systemName: habit.targetMetric.systemImage),
+            title: habit.targetMetric.name,
+            subtitle: habit.displayQuantity
+          )
+          .tint(habit.targetMetric.color)
+          .onTapGesture {
+            presentedSheet = EditUserAddedHabitView(habit: habit) { _ in }.asAny
+          }
         }
       }
       if remainingMetrics.isNotEmpty {
@@ -547,6 +565,17 @@ private extension SettingsView {
           presentedSheet = DeveloperSettingsView().asAny
         }
       }
+    }
+  }
+}
+
+private extension SettingsView {
+
+  func delete(habit: Habit) {
+    do {
+      try habitsViewModel.delete(habit)
+    } catch {
+      self.error = error
     }
   }
 }

@@ -1,5 +1,5 @@
 {
-  "originHash" : "d38d1c2b01cbee7abb10c859e3f29855e75b21916061af324824a90818692292",
+  "originHash" : "2e7d7cb51590f5ae52286789617ce11b4447913c5070d3cf01b7af8d4d883db4",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -431,6 +431,15 @@
       "state" : {
         "revision" : "e1a5f4ea47888e7e40cb2d40bea43ed4f1f5bfff",
         "version" : "2.6.1"
+      }
+    },
+    {
+      "identity" : "swipy",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rohanrhu/Swipy",
+      "state" : {
+        "revision" : "791a111381b64e0122edb8c3a9bd9f7ef994cb80",
+        "version" : "1.2.0"
       }
     },
     {

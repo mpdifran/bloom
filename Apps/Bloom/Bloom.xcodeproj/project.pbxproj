@@ -39,6 +39,7 @@
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF97832D2C9B546700A8ED7E /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FFC77AE22C57FCEC003E5F85 /* StatKit */; };
+		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; platformFilter = ios; };
@@ -321,6 +322,7 @@
 				FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */,
 				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
+				FFADE9942D468789004FBF2B /* Swipy in Frameworks */,
 				FF1FFD682D15C27D0008B47D /* Valet in Frameworks */,
 				FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */,
 				FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */,
@@ -624,6 +626,7 @@
 				FF5D0D152CFA47C500374F66 /* BloomModel */,
 				FF1FFD672D15C27D0008B47D /* Valet */,
 				FF83DB1B2D2ECF010018FAAC /* RevenueCat */,
+				FFADE9932D468789004FBF2B /* Swipy */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Bloom.app */;
@@ -738,6 +741,7 @@
 				FF5D0D142CFA47C500374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */,
 				FF1FFD662D15C27D0008B47D /* XCRemoteSwiftPackageReference "Valet" */,
 				FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -1905,6 +1909,14 @@
 				minimumVersion = 2.3.0;
 			};
 		};
+		FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rohanrhu/Swipy";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 		FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JimmyMAndersson/StatKit.git";
@@ -2012,6 +2024,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
+		};
+		FFADE9932D468789004FBF2B /* Swipy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */;
+			productName = Swipy;
 		};
 		FFC77AE22C57FCEC003E5F85 /* StatKit */ = {
 			isa = XCSwiftPackageProductDependency;

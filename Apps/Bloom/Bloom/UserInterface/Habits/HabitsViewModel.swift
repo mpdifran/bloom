@@ -117,4 +117,52 @@ extension HabitsViewModel {
   func resetHabitCheckDate() {
     lastHabitRefreshDate = nil
   }
+
+  func update(value: Double, unit: HKUnit, for habit: Habit) throws -> Habit {
+    guard let fetchedHabit = try modelContext.fetchHabit(id: habit.id) else { throw NSError(description: "There was a problem updating this habit.") }
+
+    let updatedHabit: Habit
+    let isUserEdited: Bool
+    if !fetchedHabit.isUserEdited {
+      isUserEdited = !fetchedHabit.value.isWithinRange(of: value, precision: 1)
+    } else {
+      isUserEdited = true
+    }
+
+    if Calendar.current.isDateInToday(fetchedHabit.startDate) {
+      fetchedHabit.value = value
+      fetchedHabit.unitString = unit.unitString
+      fetchedHabit.isUserEdited = isUserEdited
+      updatedHabit = fetchedHabit
+    } else {
+      let newHabit = habit.duplicate()
+
+      fetchedHabit.endDate = .now
+
+      newHabit.startDate = .now
+      newHabit.value = value
+      newHabit.unitString = unit.unitString
+      newHabit.isUserEdited = isUserEdited
+
+      modelContext.insert(newHabit)
+
+      updatedHabit = newHabit
+    }
+
+    try modelContext.save()
+
+    return updatedHabit
+  }
+
+  func delete(_ habit: Habit) throws {
+    guard let fetchedHabit = try modelContext.fetchHabit(id: habit.id) else { return }
+
+    if Calendar.current.isDateInToday(fetchedHabit.startDate) {
+      modelContext.delete(fetchedHabit)
+    } else {
+      fetchedHabit.endDate = .now
+    }
+
+    try modelContext.save()
+  }
 }
