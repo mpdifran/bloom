@@ -16,6 +16,8 @@ struct NewGoalCard: View {
   @State private var value: Double = 0
   @State private var unit: HKUnit = TargetMetric.stepCount.defaultUnit
   @State private var excludedTargetMetrics: [TargetMetric] = []
+  @State private var didSave = false
+  @State private var didError = false
   @State private var error: Error?
 
   @Environment(\.modelContext) private var modelContext
@@ -62,6 +64,9 @@ struct NewGoalCard: View {
           }
           .buttonStyle(.primary)
           .tint(targetMetric.color)
+          .sensoryFeedback(.success, trigger: didSave)
+          .sensoryFeedback(.error, trigger: didError)
+          .disabled(!canSave)
           .padding(.top)
           .padding(.top)
         }
@@ -73,6 +78,7 @@ struct NewGoalCard: View {
     .alert(error: $error)
     .onChange(of: targetMetric) { _, newValue in
       self.unit = newValue.defaultUnit
+      self.value = targetMetric.minHabitTarget.doubleValue(for: unit)
     }
     .onChange(of: excludedTargetMetrics) { _, _ in
       updateToValidTargetMetric()
@@ -104,8 +110,12 @@ private extension NewGoalCard {
     unit = metric.defaultUnit
   }
 
+  var canSave: Bool {
+    value >= 1
+  }
+
   func saveNewGoal() {
-    guard value >= 1 else { return }
+    guard canSave else { return }
 
     let habit = Habit(
       targetMetric: targetMetric,
@@ -119,8 +129,10 @@ private extension NewGoalCard {
 
     do {
       try modelContext.save()
+      didSave.toggle()
       dismiss()
     } catch {
+      self.didError.toggle()
       self.error = error
     }
   }
