@@ -133,28 +133,30 @@ private extension AdminFoodController {
       updatedAt: Date()
     )
     
-    async let uploadNutritionLabelImageResult = try await request.imageStorage.storeAndSignImage(
+    async let uploadNutritionLabelImageResult = await request.imageStorage.storeAndSignImage(
       imageFile: createNutritionLabelImage,
-      storagePath: .nutritionLabel
+      storagePath: .nutritionLabel,
+      logger: request.logger
     )
     
-    async let uploadPackagingImageResult = try await request.imageStorage.storeAndSignImage(
+    async let uploadPackagingImageResult = await request.imageStorage.storeAndSignImage(
       imageFile: createPackagingImage,
-      storagePath: .foodPackaging
+      storagePath: .foodPackaging,
+      logger: request.logger
     )
     
-    newRecord.nutritionLabelImage = try await uploadNutritionLabelImageResult.fileName
-    newRecord.packagingImage = try await uploadPackagingImageResult.fileName
+    newRecord.nutritionLabelImage = await uploadNutritionLabelImageResult.fileName
+    newRecord.packagingImage = await uploadPackagingImageResult.fileName
 
     try await newRecord.save(on: request.db)
 
     var adminFoodRecord = newRecord.asAdminFoodItemRecord()
     
     // Add the signed URLs to the response
-    if let signedNutritionLabelImage = try await uploadNutritionLabelImageResult.fileUrl {
+    if let signedNutritionLabelImage = await uploadNutritionLabelImageResult.fileUrl {
       adminFoodRecord?.nutritionLabelImage = signedNutritionLabelImage
     }
-    if let signedPackagingImage = try await uploadPackagingImageResult.fileUrl {
+    if let signedPackagingImage = await uploadPackagingImageResult.fileUrl {
       adminFoodRecord?.packagingImage = signedPackagingImage
     }
 
@@ -316,23 +318,29 @@ extension AdminCreateFoodItemResponse: @retroactive Content { }
 private extension ImageStorage {
   func storeAndSignImage(
     imageFile: ImageFile?,
-    storagePath: StoragePath
-  ) async throws -> (fileName: String?, fileUrl: URL?) {
+    storagePath: StoragePath,
+    logger: Logger
+  ) async -> (fileName: String?, fileUrl: URL?) {
     guard let imageFile else {
       return (fileName: nil, fileUrl: nil)
     }
     
-    let imageMetadata = try await store(
-      image: imageFile,
-      path: storagePath
-    )
-    
-    let signedUrl = try await generateImageURL(
-      fileName: imageMetadata.filename,
-      path: .nutritionLabel,
-      expiration: .hours(2)
-    )
-    
-    return (fileName: imageMetadata.filename, fileUrl: signedUrl)
+    do {
+      let imageMetadata = try await store(
+        image: imageFile,
+        path: storagePath
+      )
+      
+      let signedUrl = try await generateImageURL(
+        fileName: imageMetadata.filename,
+        path: .nutritionLabel,
+        expiration: .hours(2)
+      )
+
+      return (fileName: imageMetadata.filename, fileUrl: signedUrl)
+    } catch {
+      logger.log(level: .warning, "Failed to store and sign image for \(storagePath)")
+      return (fileName: nil, fileUrl: nil)
+    }
   }
 }

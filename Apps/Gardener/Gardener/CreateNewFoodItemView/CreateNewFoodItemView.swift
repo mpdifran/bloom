@@ -14,8 +14,7 @@ struct CreateNewFoodItemView: View {
     // TODO: maybe add a success diaglog
     Group {
       let viewModel = CreateNewFoodItemDetailViewModel {
-        // TODO: This current closes all windows, maybe look into closing only the current window
-        dismissWindow(id: GardenerAppWindowGroupID.createNewFoodItem.rawValue)
+        dismissWindow()
       }
       
       FoodItemDetailView(viewModel: viewModel)

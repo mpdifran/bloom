@@ -46,7 +46,7 @@ struct SidebarView: View {
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
         Button {
-          openWindow(id: GardenerAppWindowGroupID.createNewFoodItem.rawValue)
+          openWindow(id: .WindowGroup.createNewFoodItem)
         } label: {
           Image(systemName: "plus")
         }

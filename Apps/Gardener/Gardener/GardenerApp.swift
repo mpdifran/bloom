@@ -25,7 +25,7 @@ struct GardenerApp: App {
       RootView()
     }
 
-    WindowGroup(id: GardenerAppWindowGroupID.createNewFoodItem.rawValue) {
+    WindowGroup(id: .WindowGroup.createNewFoodItem) {
       CreateNewFoodItemView()
     }
    
@@ -35,6 +35,9 @@ struct GardenerApp: App {
   }
 }
 
-enum GardenerAppWindowGroupID: String {
-  case createNewFoodItem
+
+extension String {
+  enum WindowGroup {
+    static let createNewFoodItem = "WindowGroupID.CreateNewFoodItem"
+  }
 }
