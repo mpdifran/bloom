@@ -128,6 +128,74 @@ extension FoodDatabaseService {
     try await foodItem.save(on: request.db)
   }
 
+  func submitFoodItemIssueReport(_ request: Request, foodItemIssue: FoodItemIssue) async throws {
+    let user = try request.auth.require(User.self)
+
+    // Save images
+    let packagingImageFileName: String?
+    let nutritionLabelImageFileName: String?
+    if let packagingImage = foodItemIssue.packagingImage {
+      let imageMetadata = try await request.imageStorage.store(
+        image: packagingImage,
+        path: .foodPackaging
+      )
+      packagingImageFileName = imageMetadata.filename
+    } else {
+      packagingImageFileName = nil
+    }
+    if let nutritionImage = foodItemIssue.nutritionLabelImage {
+      let imageMetadata = try await request.imageStorage.store(
+        image: nutritionImage,
+        path: .nutritionLabel
+      )
+      nutritionLabelImageFileName = imageMetadata.filename
+    } else {
+      nutritionLabelImageFileName = nil
+    }
+
+    // Create report
+    let report = FoodItemIssueReport(
+      name: foodItemIssue.name,
+      brandName: foodItemIssue.brandName,
+      flavour: foodItemIssue.flavour,
+      barcode: foodItemIssue.barcode,
+      nutritionLabelImage: nutritionLabelImageFileName,
+      packagingImage: packagingImageFileName,
+      ingredients: foodItemIssue.ingredients,
+      calories: foodItemIssue.calories,
+      protein: foodItemIssue.protein,
+      carbohydrates: foodItemIssue.carbohydrates,
+      fat: foodItemIssue.fat,
+      saturatedFat: foodItemIssue.saturatedFat,
+      transFat: foodItemIssue.transFat,
+      polyunsaturatedFat: foodItemIssue.polyunsaturatedFat,
+      monounsaturatedFat: foodItemIssue.monounsaturatedFat,
+      fiber: foodItemIssue.fiber,
+      sugar: foodItemIssue.sugar,
+      cholesterol: foodItemIssue.cholesterol,
+      sodium: foodItemIssue.sodium,
+      calcium: foodItemIssue.calcium,
+      iron: foodItemIssue.iron,
+      potassium: foodItemIssue.potassium,
+      magnesium: foodItemIssue.magnesium,
+      zinc: foodItemIssue.zinc,
+      vitaminA: foodItemIssue.vitaminA,
+      vitaminB6: foodItemIssue.vitaminB6,
+      vitaminB12: foodItemIssue.vitaminB12,
+      vitaminC: foodItemIssue.vitaminC,
+      vitaminD: foodItemIssue.vitaminD,
+      vitaminE: foodItemIssue.vitaminE,
+      servingName: foodItemIssue.servingName,
+      servingValue: foodItemIssue.servingValue,
+      servingUnit: foodItemIssue.servingUnit,
+      notes: foodItemIssue.notes,
+      userID: user.id,
+      foodItemRecordID: foodItemIssue.foodItemID.value
+    )
+
+    try await report.save(on: request.db)
+  }
+
   func addProductImagesIfMissing(
     _ request: Request,
     foodID: FoodItemIdentifier,

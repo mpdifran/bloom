@@ -31,6 +31,7 @@ extension FoodController: RouteCollection {
           $0.post("search", use: searchFoods)
           $0.post("upload", use: uploadNewFood)
           $0.post("mark-as-inaccurate", use: markAsInaccurate)
+          $0.post("submit-food-item-issue", use: submitFoodItemIssue)
         }
       }
     }
@@ -142,6 +143,18 @@ extension FoodController {
     try await foodDatabaseService.markFoodAsInaccurate(
       request: request,
       foodID: requestBody.foodId
+    )
+
+    return Response(status: .ok)
+  }
+
+  @Sendable
+  func submitFoodItemIssue(_ request: Request) async throws -> Response {
+    let requestBody = try request.content.decode(SubmitFoodItemIssueRequest.self)
+
+    try await foodDatabaseService.submitFoodItemIssueReport(
+      request,
+      foodItemIssue: requestBody.foodItemIssue
     )
 
     return Response(status: .ok)

@@ -132,63 +132,14 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
   init() { }
 
   init(
-    id: String,
-    name: String,
-    userID: User.IDValue,
-    foodItemRecordID: FoodItemRecord.IDValue
-  ) {
-    // Make sure every property is set to something so the app doesn't crash when converting to the network food item.
-    self.id = id
-    self.name = name
-    self.brandName = nil
-    self.flavour = nil
-    self.barcode = nil
-    self.nutritionLabelImage = nil
-    self.packagingImage = nil
-    self.ingredients = nil
-    self.calories = nil
-    self.protein = nil
-    self.carbohydrates = nil
-    self.fat = nil
-    self.saturatedFat = nil
-    self.transFat = nil
-    self.polyunsaturatedFat = nil
-    self.monounsaturatedFat = nil
-    self.fiber = nil
-    self.sugar = nil
-    self.cholesterol = nil
-    self.sodium = nil
-    self.calcium = nil
-    self.iron = nil
-    self.potassium = nil
-    self.magnesium = nil
-    self.zinc = nil
-    self.vitaminA = nil
-    self.vitaminB6 = nil
-    self.vitaminB12 = nil
-    self.vitaminC = nil
-    self.vitaminD = nil
-    self.vitaminE = nil
-    self.servingName = nil
-    self.servingValue = nil
-    self.servingUnit = nil
-    self.notes = nil
-    self.$user.id = userID
-    self.$foodItemRecord.id = foodItemRecordID
-  }
-
-  init(
-    id: String,
-    name: String,
-    state: FoodItemRecord.State,
+    id: String = UUID().uuidString,
+    name: String?,
     brandName: String?,
     flavour: String?,
-    category: FoodItemRecord.Category,
     barcode: String?,
     nutritionLabelImage: String?,
     packagingImage: String?,
     ingredients: String?,
-    country: FoodItemRecord.Country,
     calories: Double?,
     protein: Double?,
     carbohydrates: Double?,
@@ -215,11 +166,7 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
     servingName: String?,
     servingValue: Double?,
     servingUnit: String?,
-    downvoteCount: Int?,
-    source: String?,
     notes: String?,
-    createdAt: Date?,
-    updatedAt: Date?,
     userID: User.IDValue?,
     foodItemRecordID: FoodItemRecord.IDValue
   ) {

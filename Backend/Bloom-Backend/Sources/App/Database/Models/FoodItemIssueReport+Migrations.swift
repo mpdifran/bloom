@@ -78,4 +78,21 @@ extension FoodItemIssueReport {
         .update()
     }
   }
+
+  struct MakeNameOptional: AsyncMigration {
+
+    func prepare(on database: any Database) async throws {
+      try await database.schema(FoodItemIssueReport.schema)
+        .deleteField("name")
+        .field("name", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(FoodItemIssueReport.schema)
+        .deleteField("name")
+        .field("name", .string, .required)
+        .update()
+    }
+  }
 }

@@ -24,4 +24,5 @@ let allMigrations: [Migration] = [
     AdminUserToken.FixUserIDColumnName(),
     FoodItemIssueReport.Create(),
     FoodItemIssueReport.FixRelations(),
+    FoodItemIssueReport.MakeNameOptional(),
 ]
