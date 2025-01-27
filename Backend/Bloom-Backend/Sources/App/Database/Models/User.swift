@@ -46,6 +46,9 @@ final class User: Model, Content, @unchecked Sendable {
   @Timestamp(key: "updated_at", on: .update)
   var updatedAt: Date?
 
+  @Children(for: \.$user)
+  var foodItemIssueReports: [FoodItemIssueReport]
+
   init() { }
 
   init(id: UserIdentifier,
