@@ -11,11 +11,11 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 @MainActor
-final class FoodItemDetailViewModel: ObservableObject {
+open class FoodItemDetailViewModel: ObservableObject {
 
   @Published var foodItem: AdminFoodItemRecord
   @Published var error: Error?
-
+  @Published var saveButtonText = "Save"
   private var initialFoodItem: AdminFoodItemRecord
 
   private let foodStore: BaseFoodStore
@@ -36,19 +36,8 @@ final class FoodItemDetailViewModel: ObservableObject {
     packagingImage = foodItem.packagingImage
     nutritionLabel = foodItem.nutritionLabelImage
   }
-}
-
-extension FoodItemDetailViewModel {
-
-  func propertyChanged<T: Equatable>(_ keyPath: KeyPath<AdminFoodItemRecord, T>) -> Bool {
-    foodItem[keyPath: keyPath] != initialFoodItem[keyPath: keyPath]
-  }
-
-  func propertyChanged<T: Equatable>(_ keyPath: KeyPath<AdminFoodItemRecord, T?>) -> Bool {
-    foodItem[keyPath: keyPath] != initialFoodItem[keyPath: keyPath]
-  }
-
-  func save() async {
+  
+  open func save() async {
     do {
       let updatedFoodItem = try await foodStore.update(
         foodItem: foodItem,
@@ -68,13 +57,27 @@ extension FoodItemDetailViewModel {
       self.error = error
     }
   }
-
-  func delete() async {
+  
+  open func delete() async {
     do {
       try await foodStore.delete(foodItem)
     } catch {
       self.error = error
     }
+  }
+  
+  func resetInitialFoodItem(to newItem: AdminFoodItemRecord) {
+    initialFoodItem = newItem
+  }
+}
+
+extension FoodItemDetailViewModel {
+  func propertyChanged<T: Equatable>(_ keyPath: KeyPath<AdminFoodItemRecord, T>) -> Bool {
+    foodItem[keyPath: keyPath] != initialFoodItem[keyPath: keyPath]
+  }
+
+  func propertyChanged<T: Equatable>(_ keyPath: KeyPath<AdminFoodItemRecord, T?>) -> Bool {
+    foodItem[keyPath: keyPath] != initialFoodItem[keyPath: keyPath]
   }
 
   func rotate(value: Double, image: FoodItemDetailView.ImageTab) {

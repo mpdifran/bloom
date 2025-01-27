@@ -119,6 +119,20 @@ extension NetworkStack {
 
     return try JSONDecoder.bloomModel.decode(UnverifiedFoodItemsResponse.self, from: data)
   }
+  
+  func createFoodRecord(
+    request: AdminCreateFoodItemRequest
+  ) async throws -> AdminCreateFoodItemResponse {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/food/create",
+      method: .post,
+      body: request
+    )
+    
+    let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+    return try JSONDecoder.bloomModel.decode(AdminCreateFoodItemResponse.self, from: data)
+  }
 
   func updateFoodRecord(
     request: AdminUpdateFoodItemRequest

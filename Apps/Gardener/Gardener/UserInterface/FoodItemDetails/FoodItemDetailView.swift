@@ -86,7 +86,7 @@ private extension FoodItemDetailView {
 
       HStack {
         ProminentButton(
-          "Save",
+          viewModel.saveButtonText,
           systemImage: "tray.and.arrow.down",
           isLoading: isSaving
         ) {

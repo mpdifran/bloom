@@ -25,8 +25,19 @@ struct GardenerApp: App {
       RootView()
     }
 
+    WindowGroup(id: .WindowGroup.createNewFoodItem) {
+      CreateNewFoodItemView()
+    }
+   
     Settings {
       PreferencesView()
     }
+  }
+}
+
+
+extension String {
+  enum WindowGroup {
+    static let createNewFoodItem = "WindowGroupID.CreateNewFoodItem"
   }
 }

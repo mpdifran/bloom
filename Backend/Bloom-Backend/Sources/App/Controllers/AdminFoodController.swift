@@ -24,6 +24,7 @@ extension AdminFoodController: RouteCollection {
         $0.group("food") {
           $0.post("usda-ingest", use: ingestUSDA)
           $0.get("unverified", use: getUnverifiedFoods)
+          $0.post("create", use: createFood)
           $0.patch("update", use: updateFood)
           $0.delete(":id", use: deleteFood)
           $0.get("search", use: searchFood)
@@ -76,6 +77,90 @@ private extension AdminFoodController {
     )
 
     return UnverifiedFoodItemsResponse(foodItemRecords: foodItemRecords)
+  }
+
+  @Sendable
+  func createFood(_ request: Request) async throws -> AdminCreateFoodItemResponse {
+    let requestBody = try request.content.decode(AdminCreateFoodItemRequest.self)
+    let createRecord = requestBody.foodItemRecord
+    let createNutritionLabelImage = requestBody.nutritionLabelImage
+    let createPackagingImage = requestBody.packagingImage
+
+    // TODO: [Hao] maybe add input validation on BE as well
+    
+    let newRecord = FoodItemRecord(
+      id: UUID().uuidString,
+      name: createRecord.name ?? "",
+      state: createRecord.state.asState(),
+      brandName: createRecord.brandName,
+      flavour: createRecord.flavour,
+      category: createRecord.category?.asCategory() ?? .generic,
+      barcode: createRecord.barcode,
+      nutritionLabelImage: nil, // Will be set below if image is provided
+      packagingImage: nil, // Will be set below if image is provided
+      ingredients: createRecord.ingredients,
+      country: createRecord.country?.asCountry() ?? .canada,
+      calories: createRecord.calories,
+      protein: createRecord.protein,
+      carbohydrates: createRecord.carbohydrates,
+      fat: createRecord.fat,
+      saturatedFat: createRecord.saturatedFat,
+      transFat: createRecord.transFat,
+      polyunsaturatedFat: createRecord.polyunsaturatedFat,
+      monounsaturatedFat: createRecord.monounsaturatedFat,
+      fiber: createRecord.fiber,
+      sugar: createRecord.sugar,
+      cholesterol: createRecord.cholesterol,
+      sodium: createRecord.sodium,
+      calcium: createRecord.calcium,
+      iron: createRecord.iron,
+      potassium: createRecord.potassium,
+      magnesium: createRecord.magnesium,
+      zinc: createRecord.zinc,
+      vitaminA: createRecord.vitaminA,
+      vitaminB6: createRecord.vitaminB6,
+      vitaminB12: createRecord.vitaminB12,
+      vitaminC: createRecord.vitaminC,
+      vitaminD: createRecord.vitaminD,
+      vitaminE: createRecord.vitaminE,
+      servingName: createRecord.servingName,
+      servingValue: createRecord.servingValue,
+      servingUnit: createRecord.servingUnit,
+      downvoteCount: createRecord.downvoteCount,
+      source: createRecord.source,
+      notes: createRecord.notes,
+      createdAt: Date(),
+      updatedAt: Date()
+    )
+    
+    async let uploadNutritionLabelImageResult = await request.imageStorage.storeAndSignImage(
+      imageFile: createNutritionLabelImage,
+      storagePath: .nutritionLabel,
+      logger: request.logger
+    )
+    
+    async let uploadPackagingImageResult = await request.imageStorage.storeAndSignImage(
+      imageFile: createPackagingImage,
+      storagePath: .foodPackaging,
+      logger: request.logger
+    )
+    
+    newRecord.nutritionLabelImage = await uploadNutritionLabelImageResult.fileName
+    newRecord.packagingImage = await uploadPackagingImageResult.fileName
+
+    try await newRecord.save(on: request.db)
+
+    var adminFoodRecord = newRecord.asAdminFoodItemRecord()
+    
+    // Add the signed URLs to the response
+    if let signedNutritionLabelImage = await uploadNutritionLabelImageResult.fileUrl {
+      adminFoodRecord?.nutritionLabelImage = signedNutritionLabelImage
+    }
+    if let signedPackagingImage = await uploadPackagingImageResult.fileUrl {
+      adminFoodRecord?.packagingImage = signedPackagingImage
+    }
+
+    return AdminCreateFoodItemResponse(foodItemRecord: adminFoodRecord)
   }
 
   @Sendable
@@ -224,5 +309,38 @@ private extension AdminFoodController {
     let count = try await openFoodFactsService.bulkUpload(request, items: requestBody.items)
 
     return AdminOpenFoodFactsBulkUploadResponse(insertedCount: count)
+  }
+}
+
+extension AdminCreateFoodItemResponse: @retroactive Content { }
+
+
+private extension ImageStorage {
+  func storeAndSignImage(
+    imageFile: ImageFile?,
+    storagePath: StoragePath,
+    logger: Logger
+  ) async -> (fileName: String?, fileUrl: URL?) {
+    guard let imageFile else {
+      return (fileName: nil, fileUrl: nil)
+    }
+    
+    do {
+      let imageMetadata = try await store(
+        image: imageFile,
+        path: storagePath
+      )
+      
+      let signedUrl = try await generateImageURL(
+        fileName: imageMetadata.filename,
+        path: .nutritionLabel,
+        expiration: .hours(2)
+      )
+
+      return (fileName: imageMetadata.filename, fileUrl: signedUrl)
+    } catch {
+      logger.log(level: .warning, "Failed to store and sign image for \(storagePath)")
+      return (fileName: nil, fileUrl: nil)
+    }
   }
 }
