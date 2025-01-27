@@ -42,7 +42,6 @@ struct OnboardingWelcomeView: View {
             .cardContainer(fill: .background.secondary)
             .focused($isFocused)
             .submitLabel(.done)
-            .disabled(index != 3)
             .onSubmit {
               didSubmitName()
             }
@@ -60,7 +59,7 @@ struct OnboardingWelcomeView: View {
             }
         }
         .transition(.blurReplace)
-        .appear(with: 3, currentIndex: index)
+        .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
         Text("Nice to meet you, \(healthManager.name)! Let's get to know each other a bit...")
           .transition(.opacity)
@@ -83,6 +82,7 @@ struct OnboardingWelcomeView: View {
           onContinue()
         }
         .buttonStyle(.onboarding)
+        .disabled(healthManager.name.isEmpty)
       }
     }
     .task {
@@ -99,6 +99,9 @@ struct OnboardingWelcomeView: View {
 private extension OnboardingWelcomeView {
 
   func didSubmitName() {
+    guard healthManager.name.isNotEmpty else { return }
+
+    isFocused = false
     withAnimation {
       index += 1
     }

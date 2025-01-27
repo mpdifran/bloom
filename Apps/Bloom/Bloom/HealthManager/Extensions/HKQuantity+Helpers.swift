@@ -22,7 +22,8 @@ extension HKQuantity {
     let localizedValue = localizedValue(for: unit)
 
     if localizedUnit == HKUnit.foot() {
-      let (feet, inches) = localizedValue.toFeetInches()
+      let centimeters = doubleValue(for: .meterUnit(with: .centi))
+      let (feet, inches) = centimeters.toFeetInches()
       return "\(feet)' \(inches)\""
     } else if showUnits {
       return "\(formatter.string(for: localizedValue) ?? "") \(localizedUnit.sensibleUnitString)"
