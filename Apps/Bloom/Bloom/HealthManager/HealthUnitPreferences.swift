@@ -125,7 +125,7 @@ extension HKUnit {
   static var heightUnits: [HKUnit] {
     [
       .meterUnit(with: .centi),
-      .inch()
+      .foot()
     ]
   }
 }

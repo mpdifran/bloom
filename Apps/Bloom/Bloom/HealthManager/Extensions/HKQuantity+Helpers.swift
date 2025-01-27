@@ -21,10 +21,8 @@ extension HKQuantity {
     let localizedUnit = unit.localizedUnit()
     let localizedValue = localizedValue(for: unit)
 
-    if localizedUnit.unitString == "in" {
-      let feet = Int(floor(localizedValue / 12))
-      let inches = Int(localizedValue.truncatingRemainder(dividingBy: 12))
-
+    if localizedUnit == HKUnit.foot() {
+      let (feet, inches) = localizedValue.toFeetInches()
       return "\(feet)' \(inches)\""
     } else if showUnits {
       return "\(formatter.string(for: localizedValue) ?? "") \(localizedUnit.sensibleUnitString)"
