@@ -191,7 +191,6 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.downvoteCount = nil
     self.source = source
     self.notes = nil
-    self.issueReports = []
   }
 
   init(
@@ -280,7 +279,6 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.notes = notes
     self.createdAt = createdAt
     self.updatedAt = updatedAt
-    self.issueReports = []
   }
 }
 
