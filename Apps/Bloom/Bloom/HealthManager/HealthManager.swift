@@ -107,7 +107,7 @@ final class HealthManager: ObservableObject {
   static let shared = HealthManager()
 
   @AppStorage("HealthManager.name", store: .group) var name: String = ""
-  @AppStorage("HealthManager.isFemale", store: .group) var isFemale = false
+  @AppStorage("HealthManager.isFemale", store: .group) var isFemale = true
   @AppStorage("HealthManager.height", store: .group) var heightCM: Double = 0
 
   @Published var birthday = Date.now {

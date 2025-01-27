@@ -25,7 +25,7 @@ private extension FoodItemLogCell {
   @ViewBuilder
   func contentView(foodItem: FoodItemRecord) -> some View {
     HStack {
-      VStack(alignment: .leading, spacing: 10) {
+      VStack(alignment: .leading) {
         HStack {
           if foodItem.isVerified {
             Image(systemName: "checkmark.shield.fill")
@@ -36,22 +36,10 @@ private extension FoodItemLogCell {
         .fontDesign(.rounded)
         .bold()
 
-        HStack(alignment: .firstTextBaseline, spacing: 2) {
-          if foodItem.brandName.isNotEmpty {
-            Text(foodItem.brandName)
-            Text("•")
-          }
-
-          if foodItem.flavour.isNotEmpty {
-            Text(foodItem.flavour)
-            Text("•")
-          }
-
-          Text(servingAmountDescription(foodItem: foodItem))
-        }
-        .bold()
-        .foregroundStyle(.secondary)
-        .font(.caption)
+        Text(subtitle(for: foodItem))
+          .bold()
+          .foregroundStyle(.secondary)
+          .font(.caption)
       }
 
       Spacer()
@@ -70,6 +58,20 @@ private extension FoodItemLogCell {
 }
 
 private extension FoodItemLogCell {
+
+  func subtitle(for foodItem: FoodItemRecord) -> String {
+    var components = [String]()
+    if foodItem.brandName.isNotEmpty {
+      components.append(foodItem.brandName)
+    }
+    if foodItem.flavour.isNotEmpty {
+      components.append(foodItem.flavour)
+    }
+
+    components.append(servingAmountDescription(foodItem: foodItem))
+
+    return components.joined(separator: " • ")
+  }
 
   func servingAmountDescription(foodItem: FoodItemRecord) -> String {
     "\(foodItemLog.totalServingAmount.format()) \(foodItem.servingUnitString ?? "")"
