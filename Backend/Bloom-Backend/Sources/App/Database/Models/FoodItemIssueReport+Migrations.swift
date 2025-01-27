@@ -59,4 +59,23 @@ extension FoodItemIssueReport {
       try await database.schema(FoodItemIssueReport.schema).delete()
     }
   }
+
+  struct FixRelations: AsyncMigration {
+
+    func prepare(on database: any Database) async throws {
+      try await database.schema(FoodItemIssueReport.schema)
+        .deleteField("user_id")
+        .field("user_id", .string, .references(User.schema, "id"))
+        .field("food_item_record_id", .string, .required, .references(FoodItemRecord.schema, "id"))
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(FoodItemIssueReport.schema)
+        .deleteField("user_id")
+        .field("user_id", .string, .required, .references(User.schema, "id"))
+        .deleteField("food_item_record_id")
+        .update()
+    }
+  }
 }

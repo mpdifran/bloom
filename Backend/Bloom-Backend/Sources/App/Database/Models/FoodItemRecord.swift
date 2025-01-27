@@ -138,6 +138,9 @@ final class FoodItemRecord: Model, @unchecked Sendable {
   @Timestamp(key: "updated_at", on: .update)
   var updatedAt: Date?
 
+  @Children(for: \.$foodItemRecord)
+  var issueReports: [FoodItemIssueReport]
+
   init() { }
 
   init(
@@ -188,6 +191,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.downvoteCount = nil
     self.source = source
     self.notes = nil
+    self.issueReports = []
   }
 
   init(
@@ -276,6 +280,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.notes = notes
     self.createdAt = createdAt
     self.updatedAt = updatedAt
+    self.issueReports = []
   }
 }
 

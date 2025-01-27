@@ -123,15 +123,19 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
   @Timestamp(key: "updated_at", on: .update)
   var updatedAt: Date?
 
-  @Parent(key: "user_id")
-  var user: User
+  @OptionalParent(key: "user_id")
+  var user: User?
+
+  @Parent(key: "food_item_record_id")
+  var foodItemRecord: FoodItemRecord
 
   init() { }
 
   init(
     id: String,
     name: String,
-    userID: User.IDValue
+    userID: User.IDValue,
+    foodItemRecordID: FoodItemRecord.IDValue
   ) {
     // Make sure every property is set to something so the app doesn't crash when converting to the network food item.
     self.id = id
@@ -170,6 +174,7 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
     self.servingUnit = nil
     self.notes = nil
     self.$user.id = userID
+    self.$foodItemRecord.id = foodItemRecordID
   }
 
   init(
@@ -215,7 +220,8 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
     notes: String?,
     createdAt: Date?,
     updatedAt: Date?,
-    userID: User.IDValue
+    userID: User.IDValue?,
+    foodItemRecordID: FoodItemRecord.IDValue
   ) {
     self.id = id
     self.name = name
@@ -255,5 +261,6 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
     self.createdAt = createdAt
     self.updatedAt = updatedAt
     self.$user.id = userID
+    self.$foodItemRecord.id = foodItemRecordID
   }
 }
