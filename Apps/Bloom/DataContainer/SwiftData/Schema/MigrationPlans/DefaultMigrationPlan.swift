@@ -7,6 +7,9 @@
 
 import SwiftData
 
+// CURRENT SCHEMA
+let currentSchema: VersionedSchema.Type = SchemaV6.self
+
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
     public static var schemas: [any VersionedSchema.Type] {
         [
@@ -97,7 +100,11 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
         let logs = try context.fetch(FetchDescriptor<SchemaV5.FoodItemLog>())
 
         for log in logs {
-          guard let foodItem = log.foodItem else { continue }
+          guard let foodItem = log.foodItem else {
+            context.delete(log) // This should never happen
+            continue
+          }
+
           let newFoodItem = SchemaV6.FoodItemRecord(
             id: foodItem.id,
             name: foodItem.name,
@@ -131,13 +138,13 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
             servingUnitString: foodItem.servingUnitString,
             servingValue: foodItem.servingValue,
             ingredients: foodItem.ingredients,
-            category: SchemaV6.FoodItemRecord.Category.init(rawValue: foodItem.category?.rawValue ?? ""),
+            category: foodItem.category?.toV6(),
             isVerified: foodItem.isVerified
           )
           let newLog = SchemaV6.FoodItemLog(
             id: UUID().uuidString,
             date: log.date,
-            meal: SchemaV6.FoodItemLog.Meal(rawValue: log.meal.rawValue) ?? .breakfast,
+            meal: log.meal.toV6(),
             numberOfServings: log.numberOfServings,
             foodItem: newFoodItem
           )
