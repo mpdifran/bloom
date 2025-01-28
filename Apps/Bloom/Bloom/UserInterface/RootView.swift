@@ -32,10 +32,21 @@ struct RootView: View {
   var body: some View {
     Group {
       if !hasShownOnboarding {
-        OnboardingRootView {
-          withAnimation {
-            hasShownOnboarding = true
+        ZStack {
+          OnboardingRootView {
+            withAnimation {
+              hasShownOnboarding = true
+            }
           }
+
+        #if DEBUG
+          Button("[DEBUG] Skip onboarding") {
+            withAnimation {
+              hasShownOnboarding = true
+            }
+          }
+          .zStackAlignment(.topTrailing)
+        #endif
         }
       } else {
         ZStack {
