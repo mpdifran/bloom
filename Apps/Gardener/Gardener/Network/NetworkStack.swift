@@ -129,7 +129,9 @@ extension NetworkStack {
       body: request
     )
     
-    let (data, _) = try await URLSession.shared.data(for: urlRequest)
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
 
     return try JSONDecoder.bloomModel.decode(AdminCreateFoodItemResponse.self, from: data)
   }
@@ -179,5 +181,26 @@ extension NetworkStack {
     let (data, _) = try await URLSession.shared.data(for: urlRequest)
 
     return try JSONDecoder.bloomModel.decode(AdminOpenFoodFactsBulkUploadResponse.self, from: data)
+  }
+  
+  private static func checkStatusCode(data: Data, response: URLResponse) async throws {
+    guard let httpResponse = response as? HTTPURLResponse else {
+      throw NetworkError.invalidResponse
+    }
+    
+    if !(200...299).contains(httpResponse.statusCode) {
+      // Try to decode the error message
+      let message: String?
+      if
+        let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+        let jsonDict = jsonObject as? [String: Any]
+      {
+        message = jsonDict["reason"] as? String
+      } else {
+        message = "Server Error"
+      }
+      
+      throw NetworkError.serverError(statusCode: httpResponse.statusCode, message: message)
+    }
   }
 }

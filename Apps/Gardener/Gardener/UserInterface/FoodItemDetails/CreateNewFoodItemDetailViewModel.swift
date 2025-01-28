@@ -45,7 +45,7 @@ final class CreateNewFoodItemDetailViewModel: FoodItemDetailViewModel {
       await MainActor.run { onSuccessfulCreation() }
       
     } catch {
-      self.error = error
+      await MainActor.run { self.error = error }
     }
   }
   
