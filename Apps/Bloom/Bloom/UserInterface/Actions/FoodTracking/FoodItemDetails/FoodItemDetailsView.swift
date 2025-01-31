@@ -75,20 +75,22 @@ struct FoodItemDetailsView: View {
       }
       .shelf {
         if isFocused {
-          ProminentButton("Done") {
+          Button {
             isFocused = false
+          } label: {
+            Text("Done")
+              .horizontallyCentered()
           }
+          .buttonStyle(.primary)
         } else {
-          ProminentButton(existingFoodItemLog == nil ? "Log" : "Save") {
-            Task {
-              do {
-                try await save()
-                dismiss()
-              } catch {
-                self.error = error
-              }
-            }
+          AsyncButton {
+            try await save()
+            dismiss()
+          } label: {
+            Text(existingFoodItemLog == nil ? "Log" : "Save")
+              .horizontallyCentered()
           }
+          .buttonStyle(.primary)
           .disabled(!canSave)
           .sensoryFeedback(.success, trigger: saveComplete)
         }
