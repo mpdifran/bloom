@@ -13,10 +13,10 @@ struct NutritionMealView: View {
 
   @Binding private var isSwipingItem: Bool
 
-  let meal: FoodItemLog.Meal
-  let foodItemLogs: [FoodItemLog]
-  let onCellTapped: (FoodItemLog) -> Void
-  let onLogTapped: () -> Void
+  private let meal: FoodItemLog.Meal
+  private let foodItemLogs: [FoodItemLog]
+  private let onCellTapped: (FoodItemLog) -> Void
+  private let onLogTapped: () -> Void
 
   init(
     meal: FoodItemLog.Meal,

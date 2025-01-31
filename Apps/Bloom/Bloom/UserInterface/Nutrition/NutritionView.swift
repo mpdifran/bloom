@@ -89,7 +89,9 @@ private extension NutritionView {
       VStack {
         topBar
 
-        Divider()
+        NutrientsRemainingView(
+          foodItemLogs: foodItemLogs
+        )
 
         ForEach(FoodItemLog.Meal.allCases) { meal in
           NutritionMealView(
@@ -129,12 +131,6 @@ private extension NutritionView.FilteredFoodItemLogsListView {
 
       Spacer()
 
-      Text("\(totalCalories.format()) Cals")
-        .font(.title3)
-        .bold()
-
-      Spacer()
-
       Button {
         nutritionViewModel.advanceDay()
         advanceToggle.toggle()
@@ -151,12 +147,6 @@ private extension NutritionView.FilteredFoodItemLogsListView {
   func foodItemLogs(for meal: FoodItemLog.Meal) -> [FoodItemLog] {
     foodItemLogs.filter {
       $0.meal == meal
-    }
-  }
-
-  var totalCalories: Double {
-    foodItemLogs.reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalCalories
     }
   }
 }
