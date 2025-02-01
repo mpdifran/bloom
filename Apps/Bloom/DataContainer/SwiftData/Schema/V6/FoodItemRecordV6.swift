@@ -52,6 +52,9 @@ extension SchemaV6 {
     public var category: Category?
     public var isVerified: Bool = false
 
+    @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.foodItem)
+    public var logs: [FoodItemLog]?
+
     @Relationship(inverse: \FoodItemServing.foodItem)
     public var servings: [FoodItemServing]? = []
 
@@ -133,6 +136,10 @@ extension SchemaV6 {
 }
 
 public extension SchemaV6.FoodItemRecord {
+  var categoryRawValue: String? {
+    category?.rawValue
+  }
+
   enum Category: String, Hashable, Codable, Sendable {
     case generic
     case fastfood

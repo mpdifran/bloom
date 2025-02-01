@@ -24,13 +24,11 @@ extension SchemaV6 {
     init(
       id: String,
       numberOfServings: Double,
-      foodItem: FoodItemRecord?,
-      foodItemLog: FoodItemLog?
+      foodItem: FoodItemRecord?
     ) {
       self.id = id
       self.numberOfServings = numberOfServings
       self.foodItem = foodItem
-      self.foodItemLog = foodItemLog
     }
   }
 }

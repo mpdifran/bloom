@@ -17,8 +17,11 @@ extension SchemaV6 {
     public var date: Date = Date.distantPast
     public var meal: Meal = Meal.breakfast
     public var numberOfServings: Double = 0
+
     @Relationship public var foodItem: SchemaV6.FoodItemRecord? = nil
+
     @Relationship public var mealItem: MealRecord? = nil
+
     @Relationship public var foodItemServings: [FoodItemServing]? = []
 
     public init(
@@ -38,6 +41,10 @@ extension SchemaV6 {
 }
 
 public extension SchemaV6.FoodItemLog {
+  var mealRawValue: String {
+    meal.rawValue
+  }
+
   enum Meal: String, Hashable, Sendable, Codable, CaseIterable, Identifiable {
     public var id: Self { self }
 
