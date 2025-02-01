@@ -93,68 +93,9 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
   }
 
   private static var migrateV5ToV6: MigrationStage {
-    MigrationStage.custom(
+    .lightweight(
       fromVersion: SchemaV5.self,
-      toVersion: SchemaV6.self,
-      willMigrate: { context in
-        let logs = try context.fetch(FetchDescriptor<SchemaV5.FoodItemLog>())
-
-        for log in logs {
-          guard let foodItem = log.foodItem else {
-            context.delete(log) // This should never happen
-            continue
-          }
-
-          let newFoodItem = SchemaV6.FoodItemRecord(
-            id: foodItem.id,
-            name: foodItem.name,
-            brandName: foodItem.brandName,
-            flavour: foodItem.flavour,
-            rawCountry: foodItem.rawCountry,
-            calories: foodItem.calories,
-            protein: foodItem.protein,
-            carbohydrates: foodItem.carbohydrates,
-            fat: foodItem.fat,
-            saturatedFat: foodItem.saturatedFat,
-            transFat: foodItem.transFat,
-            polyunsaturatedFat: foodItem.polyunsaturatedFat,
-            monounsaturatedFat: foodItem.monounsaturatedFat,
-            fiber: foodItem.fiber,
-            sugar: foodItem.sugar,
-            cholesterol: foodItem.cholesterol,
-            sodium: foodItem.sodium,
-            calcium: foodItem.calcium,
-            iron: foodItem.iron,
-            potassium: foodItem.potassium,
-            magnesium: foodItem.magnesium,
-            zinc: foodItem.zinc,
-            vitaminA: foodItem.vitaminA,
-            vitaminB6: foodItem.vitaminB6,
-            vitaminB12: foodItem.vitaminB12,
-            vitaminC: foodItem.vitaminC,
-            vitaminD: foodItem.vitaminD,
-            vitaminE: foodItem.vitaminE,
-            servingName: foodItem.servingName,
-            servingUnitString: foodItem.servingUnitString,
-            servingValue: foodItem.servingValue,
-            ingredients: foodItem.ingredients,
-            category: foodItem.category?.toV6(),
-            isVerified: foodItem.isVerified
-          )
-          let newLog = SchemaV6.FoodItemLog(
-            id: UUID().uuidString,
-            date: log.date,
-            meal: log.meal.toV6(),
-            numberOfServings: log.numberOfServings,
-            foodItem: newFoodItem
-          )
-
-          context.insert(newLog)
-          context.delete(log)
-        }
-        try context.save()
-      },
-      didMigrate: nil
+      toVersion: SchemaV6.self
     )
   }
 }

@@ -17,9 +17,8 @@ extension SchemaV6 {
     public var date: Date = Date.distantPast
     public var meal: Meal = Meal.breakfast
     public var numberOfServings: Double = 0
-
+    @Relationship public var foodItem: SchemaV6.FoodItemRecord? = nil
     @Relationship public var mealItem: MealRecord? = nil
-
     @Relationship public var foodItemServings: [FoodItemServing]? = []
 
     public init(
@@ -33,38 +32,7 @@ extension SchemaV6 {
       self.date = date
       self.meal = meal
       self.numberOfServings = numberOfServings
-      self.foodItemServings = [
-        FoodItemServing(
-          id: UUID().uuidString,
-          numberOfServings: 1,
-          foodItem: foodItem,
-          foodItemLog: self
-        )
-      ]
-    }
-
-    public init(
-      id: String,
-      date: Date,
-      meal: Meal,
-      numberOfServings: Double,
-      mealItem: MealRecord?
-    ) {
-      self.id = id
-      self.date = date
-      self.meal = meal
-      self.numberOfServings = numberOfServings
-      self.mealItem = mealItem
-      if let mealItem, let items = mealItem.items {
-        self.foodItemServings = items.compactMap { mealItem in
-          FoodItemServing(
-            id: UUID().uuidString,
-            numberOfServings: mealItem.numberOfServings,
-            foodItem: mealItem.foodItem,
-            foodItemLog: self
-          )
-        }
-      }
+      self.foodItem = foodItem
     }
   }
 }
