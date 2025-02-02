@@ -140,16 +140,3 @@ public extension SchemaV5.FoodItemRecord {
     case aiGenerated
   }
 }
-
-extension SchemaV5.FoodItemRecord.Category {
-
-  func toV6() -> SchemaV6.FoodItemRecord.Category {
-    switch self {
-    case .generic: .generic
-    case .fastfood: .fastfood
-    case .restaurant: .restaurant
-    case .branded: .branded
-    case .aiGenerated: .aiGenerated
-    }
-  }
-}
