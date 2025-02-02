@@ -1,8 +1,8 @@
 //
-//  FoodItemRecordV5.swift
+//  FoodItemRecordV6.swift
 //  Supplements
 //
-//  Created by Mark DiFranco on 2024-12-02.
+//  Created by Zach Radford on 2025-01-19.
 //
 
 import SwiftData
@@ -10,7 +10,7 @@ import SwiftData
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit
 // For CloudKit sync to work, all properties must be optional or have default values, and all relationship must be optional.
 
-extension SchemaV5 {
+extension SchemaV6 {
   @Model
   public final class FoodItemRecord: Identifiable, Hashable {
     public var id: String = ""
@@ -55,6 +55,12 @@ extension SchemaV5 {
     @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.foodItem)
     public var logs: [FoodItemLog]?
 
+    @Relationship(inverse: \FoodItemServing.foodItem)
+    public var servings: [FoodItemServing]? = []
+
+    @Relationship(inverse: \MealItemRecord.foodItem)
+    public var mealItems: [MealItemRecord]? = []
+
     public init(
       id: String,
       name: String,
@@ -89,8 +95,7 @@ extension SchemaV5 {
       servingValue: Double?,
       ingredients: String?,
       category: Category?,
-      isVerified: Bool,
-      logs: [FoodItemLog]
+      isVerified: Bool
     ) {
       self.id = id
       self.name = name
@@ -126,30 +131,16 @@ extension SchemaV5 {
       self.ingredients = ingredients
       self.category = category
       self.isVerified = isVerified
-      self.logs = logs
     }
   }
 }
 
-public extension SchemaV5.FoodItemRecord {
+public extension SchemaV6.FoodItemRecord {
   enum Category: String, Hashable, Codable, Sendable {
     case generic
     case fastfood
     case restaurant
     case branded
     case aiGenerated
-  }
-}
-
-extension SchemaV5.FoodItemRecord.Category {
-
-  func toV6() -> SchemaV6.FoodItemRecord.Category {
-    switch self {
-    case .generic: .generic
-    case .fastfood: .fastfood
-    case .restaurant: .restaurant
-    case .branded: .branded
-    case .aiGenerated: .aiGenerated
-    }
   }
 }
