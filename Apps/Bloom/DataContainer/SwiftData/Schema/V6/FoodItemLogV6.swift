@@ -50,3 +50,14 @@ public extension SchemaV6.FoodItemLog {
     case snack
   }
 }
+
+public extension SchemaV6.FoodItemLog.Meal {
+  func toV7() -> SchemaV7.FoodItemLog.Meal {
+    switch self {
+    case .breakfast: .breakfast
+    case .lunch: .lunch
+    case .dinner: .dinner
+    case .snack: .snack
+    }
+  }
+}
