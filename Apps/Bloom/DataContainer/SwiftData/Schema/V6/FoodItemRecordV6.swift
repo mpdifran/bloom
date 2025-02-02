@@ -136,10 +136,6 @@ extension SchemaV6 {
 }
 
 public extension SchemaV6.FoodItemRecord {
-  var categoryRawValue: String? {
-    category?.rawValue
-  }
-
   enum Category: String, Hashable, Codable, Sendable {
     case generic
     case fastfood

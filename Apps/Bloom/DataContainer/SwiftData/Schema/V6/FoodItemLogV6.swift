@@ -41,10 +41,6 @@ extension SchemaV6 {
 }
 
 public extension SchemaV6.FoodItemLog {
-  var mealRawValue: String {
-    meal.rawValue
-  }
-
   enum Meal: String, Hashable, Sendable, Codable, CaseIterable, Identifiable {
     public var id: Self { self }
 
@@ -52,11 +48,5 @@ public extension SchemaV6.FoodItemLog {
     case lunch
     case dinner
     case snack
-  }
-}
-
-public extension SchemaV6.FoodItemLog.Meal {
-  var name: String {
-    rawValue.capitalized
   }
 }
