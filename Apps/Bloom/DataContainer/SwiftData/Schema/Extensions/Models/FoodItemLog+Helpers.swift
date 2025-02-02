@@ -7,12 +7,6 @@
 
 import Foundation
 
-public extension FoodItemLog {
-  var mealRawValue: String {
-    meal.rawValue
-  }
-}
-
 public extension FoodItemLog.Meal {
   var name: String {
     rawValue.capitalized

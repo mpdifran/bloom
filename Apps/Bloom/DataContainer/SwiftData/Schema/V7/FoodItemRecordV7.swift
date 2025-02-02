@@ -52,9 +52,6 @@ extension SchemaV7 {
     public var category: Category?
     public var isVerified: Bool = false
 
-    @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.foodItem)
-    public var logs: [FoodItemLog]?
-
     @Relationship(inverse: \FoodItemServing.foodItem)
     public var servings: [FoodItemServing]? = []
 
