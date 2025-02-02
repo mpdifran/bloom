@@ -86,7 +86,7 @@ private extension AdminFoodController {
     let createNutritionLabelImage = requestBody.nutritionLabelImage
     let createPackagingImage = requestBody.packagingImage
 
-    // TODO: [Hao] maybe add input validation on BE as well
+    try Self.validateCreateFoodRecord(createRecord)
     
     let newRecord = FoodItemRecord(
       id: UUID().uuidString,
@@ -161,6 +161,53 @@ private extension AdminFoodController {
     }
 
     return AdminCreateFoodItemResponse(foodItemRecord: adminFoodRecord)
+  }
+
+  private static func validateCreateFoodRecord(_ createRecord: AdminFoodItemRecord) throws {
+    // Validate required fields
+    if createRecord.name == nil {
+      throw Abort(.badRequest, reason: "name must be present")
+    }
+    
+    // Validate all nutritional values are non-negative in one error message
+    var negativeFields: [String] = []
+    
+    let keyPathsToValidate: [KeyPath<AdminFoodItemRecord, Double?>] = [
+      \.calories,
+      \.protein, 
+      \.carbohydrates,
+      \.fat,
+      \.saturatedFat,
+      \.transFat,
+      \.polyunsaturatedFat,
+      \.monounsaturatedFat,
+      \.fiber,
+      \.sugar,
+      \.cholesterol,
+      \.sodium,
+      \.calcium,
+      \.iron,
+      \.potassium,
+      \.magnesium,
+      \.zinc,
+      \.vitaminA,
+      \.vitaminB6,
+      \.vitaminB12,
+      \.vitaminC,
+      \.vitaminD,
+      \.vitaminE
+    ]
+    
+    for keyPath in keyPathsToValidate {
+      if let value = createRecord[keyPath: keyPath], value < 0 {
+        negativeFields.append(String(String(describing: keyPath).split(separator: ".").last ?? ""))
+      }
+    }
+    
+    if !negativeFields.isEmpty {
+      let fieldsString = negativeFields.joined(separator: ", ")
+      throw Abort(.badRequest, reason: "The following fields cannot be negative: \(fieldsString)")
+    }
   }
 
   @Sendable
