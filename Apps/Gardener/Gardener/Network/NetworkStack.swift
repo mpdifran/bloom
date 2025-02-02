@@ -190,17 +190,8 @@ extension NetworkStack {
     
     if !(200...299).contains(httpResponse.statusCode) {
       // Try to decode the error message
-      let message: String?
-      if
-        let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
-        let jsonDict = jsonObject as? [String: Any]
-      {
-        message = jsonDict["reason"] as? String
-      } else {
-        message = "Server Error"
-      }
-      
-      throw NetworkError.serverError(statusCode: httpResponse.statusCode, message: message)
+      let errorResponse = try? JSONDecoder.bloomModel.decode(NetworkErrorResponse.self, from: data)
+      throw NetworkError.serverError(statusCode: httpResponse.statusCode, errorResponse: errorResponse)
     }
   }
 }
