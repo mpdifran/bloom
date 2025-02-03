@@ -52,10 +52,8 @@ extension SchemaV7 {
     public var category: Category?
     public var isVerified: Bool = false
 
-    @Relationship(inverse: \FoodItemServing.foodItem)
     public var servings: [FoodItemServing]? = []
 
-    @Relationship(inverse: \MealItemRecord.foodItem)
     public var mealItems: [MealItemRecord]? = []
 
     public init(
