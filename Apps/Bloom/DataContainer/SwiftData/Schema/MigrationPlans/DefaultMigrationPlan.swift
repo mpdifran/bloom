@@ -109,21 +109,23 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
         let logs = try context.fetch(FetchDescriptor<SchemaV6.FoodItemLog>())
 
         for log in logs {
-          log.foodItemServings = [
-            SchemaV6.FoodItemServing(
-              id: UUID().uuidString,
-              numberOfServings: 1,
-              foodItem: log.foodItem
-            )
-          ]
-//          let newLog = log
-//          newLog.foodItemServings = [
+//          log.foodItemServings = [
 //            SchemaV6.FoodItemServing(
 //              id: UUID().uuidString,
 //              numberOfServings: 1,
 //              foodItem: log.foodItem
 //            )
 //          ]
+          let newLog = log
+          newLog.foodItemServings = [
+            SchemaV6.FoodItemServing(
+              id: UUID().uuidString,
+              numberOfServings: 1,
+              foodItem: log.foodItem
+            )
+          ]
+          context.delete(log)
+          context.insert(newLog)
 //          guard let foodItem = log.foodItem else {
 //            context.delete(log)
 //            continue
