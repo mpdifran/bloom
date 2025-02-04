@@ -26,7 +26,7 @@ extension NetworkRequester {
   func identify(request: AuthIdentifyRequest) async throws -> AuthIdentifyResponse {
     let request = try await URLRequest.User.identify(body: request)
 
-    return try await URLSession.shared.bloomResponse(
+    return try await URLSession.shared.authenticatedBloomResponse(
       request: request,
       responseType: AuthIdentifyResponse.self
     )
