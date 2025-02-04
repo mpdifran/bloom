@@ -84,6 +84,11 @@ private extension BloomApp {
 
   func onForeground() {
     NutritionTrackingViewModel.shared.updateMealForCurrentTime()
+
+    Task {
+      await UserController.shared.identify()
+    }
+
     Task {
       await VitalsCalculator.shared.refreshVitals()
     }

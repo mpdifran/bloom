@@ -74,9 +74,9 @@ private extension AuthenticationController {
     try await userToken.save(on: request.db)
 
     let identity = AuthIdentifyResponse(
-      email: auth.email,
-      givenName: auth.givenName,
-      familyName: auth.familyName
+      email: user.email,
+      givenName: user.givenName,
+      familyName: user.familyName
     )
 
     return AuthenticationResponse(
