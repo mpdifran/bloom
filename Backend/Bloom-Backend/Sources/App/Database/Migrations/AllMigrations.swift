@@ -25,4 +25,5 @@ let allMigrations: [Migration] = [
     FoodItemIssueReport.Create(),
     FoodItemIssueReport.FixRelations(),
     FoodItemIssueReport.MakeNameOptional(),
+    User.AddAppUserID(),
 ]

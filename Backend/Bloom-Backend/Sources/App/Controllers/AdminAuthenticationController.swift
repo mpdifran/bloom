@@ -76,7 +76,14 @@ private extension AdminAuthenticationController {
     let userToken = try user.generateToken()
     try await userToken.save(on: request.db)
 
-    return AuthenticationResponse(authToken: AuthToken(userToken.value))
+    return AuthenticationResponse(
+      authToken: AuthToken(userToken.value),
+      identity: .init(
+        email: auth.email,
+        givenName: auth.givenName,
+        familyName: auth.familyName
+      )
+    )
   }
 
   @Sendable

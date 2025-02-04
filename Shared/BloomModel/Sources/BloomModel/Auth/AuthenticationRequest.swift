@@ -24,6 +24,7 @@ public struct AuthenticationRequest: Codable, Equatable, Sendable {
   public let givenName: String?
   public let familyName: String?
   public let userDetectionStatus: UserDetectionStatus
+  public let appUserID: String?
 
   public init(
     userIdentifier: UserIdentifier,
@@ -32,7 +33,8 @@ public struct AuthenticationRequest: Codable, Equatable, Sendable {
     email: String?,
     givenName: String?,
     familyName: String?,
-    userDetectionStatus: UserDetectionStatus
+    userDetectionStatus: UserDetectionStatus,
+    appUserID: String?
   ) {
     self.userIdentifier = userIdentifier
     self.identityToken = identityToken
@@ -41,5 +43,6 @@ public struct AuthenticationRequest: Codable, Equatable, Sendable {
     self.givenName = givenName
     self.familyName = familyName
     self.userDetectionStatus = userDetectionStatus
+    self.appUserID = appUserID
   }
 }

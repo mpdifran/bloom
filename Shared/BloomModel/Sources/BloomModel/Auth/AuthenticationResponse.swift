@@ -8,9 +8,14 @@
 import Foundation
 
 public struct AuthenticationResponse: Codable, Hashable, Sendable {
-    public let authToken: AuthToken
+  public let authToken: AuthToken
+  public let identity: AuthIdentifyResponse
 
-    public init(authToken: AuthToken) {
-        self.authToken = authToken
-    }
+  public init(
+    authToken: AuthToken,
+    identity: AuthIdentifyResponse
+  ) {
+    self.authToken = authToken
+    self.identity = identity
+  }
 }

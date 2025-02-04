@@ -63,7 +63,8 @@ extension LoginView.ViewModel {
       email: credential.email,
       givenName: credential.fullName?.givenName,
       familyName: credential.fullName?.familyName,
-      userDetectionStatus: userDetectionStatus
+      userDetectionStatus: userDetectionStatus,
+      appUserID: UserID.value
     )
 
     try await UserController.shared.authenticate(

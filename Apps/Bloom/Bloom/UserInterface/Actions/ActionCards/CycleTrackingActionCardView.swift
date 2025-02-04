@@ -127,7 +127,7 @@ private extension CycleTrackingActionCardView {
 
   func logCycle() async throws -> Bool {
     var isNewCycle = flowType.indicatesBeginningOfCycle
-    if let mostRecentMenstrualCycle, isCurrentPeriod {
+    if isCurrentPeriod {
       isNewCycle = false
     }
 

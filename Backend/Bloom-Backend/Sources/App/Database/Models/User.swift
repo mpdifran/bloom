@@ -16,6 +16,9 @@ final class User: Model, Content, @unchecked Sendable {
   @ID(custom: "id", generatedBy: .user)
   var id: UserIdentifier?
 
+  @Field(key: "app_user_id")
+  var appUserID: String?
+
   @Field(key: "email")
   var email: String?
 

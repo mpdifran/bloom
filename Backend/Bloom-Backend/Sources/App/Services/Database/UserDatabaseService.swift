@@ -54,7 +54,8 @@ extension UserDatabaseService {
     email: String?,
     givenName: String?,
     familyName: String?,
-    rawUserDetectionStatus: String?
+    rawUserDetectionStatus: String?,
+    appUserID: String?
   ) async throws -> User {
     let user = try await fetchOrCreateUser(request, for: userID)
 
@@ -62,8 +63,32 @@ extension UserDatabaseService {
     givenName.map { user.givenName = $0 }
     familyName.map { user.familyName = $0 }
     rawUserDetectionStatus.map { user.rawUserDetectionStatus = $0 }
+    appUserID.map { user.appUserID = $0 }
 
     try await user.save(on: request.db)
+    return user
+  }
+
+  @discardableResult
+  func storeAppUserID(
+    _ request: Request,
+    appUserID: String
+  ) async throws -> User {
+    let user = try await fetchAuthUser(request)
+
+    user.appUserID = appUserID
+
+    try await user.save(on: request.db)
+    return user
+  }
+
+  func fetchAuthUser(_ request: Request) async throws -> User {
+    let authToken = try request.auth.require(UserToken.self)
+
+    guard let user = try await User.find(authToken.$user.id, on: request.db) else {
+      throw Abort(.notFound, reason: "User not found")
+    }
+
     return user
   }
 

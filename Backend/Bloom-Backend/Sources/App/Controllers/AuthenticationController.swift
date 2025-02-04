@@ -24,6 +24,7 @@ extension AuthenticationController: RouteCollection {
 
       $0.auth(using: UserToken.self) {
         $0.group("user") {
+          $0.post("identify", use: identify)
           $0.get("logout", use: logout)
           $0.get("delete-account", use: deleteAccount)
         }
@@ -65,13 +66,36 @@ private extension AuthenticationController {
       email: auth.email,
       givenName: auth.givenName,
       familyName: auth.familyName,
-      rawUserDetectionStatus: auth.userDetectionStatus.rawValue
+      rawUserDetectionStatus: auth.userDetectionStatus.rawValue,
+      appUserID: auth.appUserID
     )
 
     let userToken = try user.generateToken()
     try await userToken.save(on: request.db)
 
-    return AuthenticationResponse(authToken: AuthToken(userToken.value))
+    let identity = AuthIdentifyResponse(
+      email: auth.email,
+      givenName: auth.givenName,
+      familyName: auth.familyName
+    )
+
+    return AuthenticationResponse(
+      authToken: AuthToken(userToken.value),
+      identity: identity
+    )
+  }
+
+  @Sendable
+  func identify(_ request: Request) async throws -> AuthIdentifyResponse {
+    let identityRequest = try request.content.decode(AuthIdentifyRequest.self)
+
+    let user = try await userService.storeAppUserID(request, appUserID: identityRequest.appUserID)
+
+    return AuthIdentifyResponse(
+      email: user.email,
+      givenName: user.givenName,
+      familyName: user.familyName
+    )
   }
 
   @Sendable
