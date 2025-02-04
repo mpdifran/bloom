@@ -33,6 +33,16 @@ struct ActionsView: View {
               }.asAny
             }
 
+          if HealthManager.shared.sex() == .female {
+            ActionInstanceCell(image: .logPeriodIcon, title: "Period")
+              .tint(.mutedPink)
+              .onTapGesture {
+                presentedCardSheet = CycleTrackingActionCardView {
+                  dismiss()
+                }.asAny
+              }
+          }
+
           ActionInstanceCell(image: .logBowelIcon, title: "Bowel Movement")
             .tint(.brown)
             .onTapGesture {

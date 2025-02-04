@@ -8,158 +8,162 @@
 import SwiftUI
 
 private extension Int {
-    static let defaultMinMenstruationDays = 3
+  static let defaultMinMenstruationDays = 3
 
-    /// Amount of days difference a typical cycle could be from the average.
-    static let standardDeviationCycleDays = 5
+  /// Amount of days difference a typical cycle could be from the average.
+  static let standardDeviationCycleDays = 5
 
-    static let typicalCycleDuration = 28
+  static let typicalCycleDuration = 28
 }
 
 struct MenstrualSummary: Hashable, Sendable {
-    let menstrualCycles: [MenstrualCycle]
+  let menstrualCycles: [MenstrualCycle]
 }
 
 extension MenstrualSummary {
 
-    var hasNoData: Bool {
-        menstrualCycles.isEmpty
+  var hasNoData: Bool {
+    menstrualCycles.isEmpty
+  }
+
+  var subtitle: String? {
+    var entries = [String]()
+
+    if let averageCycleDuration {
+      entries.append("\(averageCycleDuration) Day Cycle")
     }
 
-    var subtitle: String? {
-        var entries = [String]()
-
-        if let averageCycleDuration {
-            entries.append("\(averageCycleDuration) Day Cycle")
-        }
-
-        if isMenstruating {
-            entries.append("Menstruating")
-        } else {
-            if let date = nextPredictedPeriodDate {
-                let dateString = DateFormatter.monthAndDay.string(from: date)
-                entries.append("Next Period: \(dateString)")
-            }
-        }
-
-        guard entries.isNotEmpty else { return nil }
-
-        return entries.joined(separator: "\n")
+    if isMenstruating {
+      entries.append("Menstruating")
+    } else {
+      if let date = nextPredictedPeriodDate {
+        let dateString = DateFormatter.monthAndDay.string(from: date)
+        entries.append("Next Period: \(dateString)")
+      }
     }
 
-    var phaseName: String? {
-        if let phase = currentPhase() {
-            return phase.name
-        } else if menstrualCycles.isNotEmpty {
-            return "Calculating Cycle"
-        }
-        return nil
-    }
+    guard entries.isNotEmpty else { return nil }
 
-    var color: Color? {
-        currentPhase()?.color
+    return entries.joined(separator: "\n")
+  }
+
+  var phaseName: String? {
+    if let phase = currentPhase() {
+      return phase.name
+    } else if menstrualCycles.isNotEmpty {
+      return "Calculating Cycle"
     }
+    return nil
+  }
+
+  var color: Color? {
+    currentPhase()?.color
+  }
 }
 
 extension MenstrualSummary {
 
-    var averageMenstruationDays: Int? {
-        let doubleValue = menstrualCycles
-            .compactMap({ $0.menstruationDurationDays.map { Double($0) } })
-            .average(keyPath: \.self)
-        return Int(doubleValue)
-    }
+  var averageMenstruationDays: Int? {
+    let doubleValue = menstrualCycles
+      .compactMap({ $0.menstruationDurationDays.map { Double($0) } })
+      .average(keyPath: \.self)
+    return Int(doubleValue)
+  }
 
-    /// In days
-    var averageCycleDuration: Int? {
-        var previousCycle: MenstrualCycle?
-        var days = [Double]()
+  /// In days
+  var averageCycleDuration: Int? {
+    var previousCycle: MenstrualCycle?
+    var days = [Double]()
 
-        for current in menstrualCycles {
-            if let previous = previousCycle {
-                if let dayCount = Calendar.current.dateComponents([.day], from: previous.startDate, to: current.startDate).day {
-                    days.append(Double(dayCount))
-                }
-                previousCycle = current
-            } else {
-                previousCycle = current
-            }
+    for current in menstrualCycles {
+      if let previous = previousCycle {
+        if let dayCount = Calendar.current.dateComponents([.day], from: previous.startDate, to: current.startDate).day {
+          days.append(Double(dayCount))
         }
-
-        guard days.isNotEmpty else { return nil }
-
-        return Int(days.average(keyPath: \.self))
+        previousCycle = current
+      } else {
+        previousCycle = current
+      }
     }
 
-    var isMenstruating: Bool {
-        guard
-            let latestCycle = menstrualCycles.max(by: \.startDate),
-            let days = Calendar.current.dateComponents([.day], from: latestCycle.startDate, to: .now).day
-        else { return false }
+    guard days.isNotEmpty else { return nil }
 
-        let daysSinceStart = days + 1
+    return Int(days.average(keyPath: \.self))
+  }
 
-        if let averageMenstruationDays {
-            if daysSinceStart < averageMenstruationDays {
-                return true
-            }
-        } else {
-            if daysSinceStart < .defaultMinMenstruationDays {
-                return true
-            }
-        }
-        return false
+  var isMenstruating: Bool {
+    guard
+      let latestCycle = menstrualCycles.max(by: \.startDate),
+      let days = Calendar.current.dateComponents([.day], from: latestCycle.startDate, to: .now).day
+    else { return false }
+
+    let daysSinceStart = days + 1
+
+    if let averageMenstruationDays {
+      if daysSinceStart < averageMenstruationDays {
+        return true
+      }
+    } else {
+      if daysSinceStart < .defaultMinMenstruationDays {
+        return true
+      }
+    }
+    return false
+  }
+
+  func currentPhase() -> MenstrualCyclePhase? {
+    guard
+      let latestCycle = menstrualCycles.max(by: \.startDate),
+      let days = Calendar.current.dateComponents([.day], from: latestCycle.startDate, to: .now).day
+    else { return nil }
+
+    let cycleDuration = averageCycleDuration ?? .typicalCycleDuration
+    let daysSinceStart = days + 1
+    let ovulationDays = cycleDuration / 2
+
+    if daysSinceStart < ovulationDays {
+      return .follicular
     }
 
-    func currentPhase() -> MenstrualCyclePhase? {
-        guard
-            let latestCycle = menstrualCycles.max(by: \.startDate),
-            let days = Calendar.current.dateComponents([.day], from: latestCycle.startDate, to: .now).day
-        else { return nil }
-
-        let cycleDuration = averageCycleDuration ?? .typicalCycleDuration
-        let daysSinceStart = days + 1
-        let ovulationDays = cycleDuration / 2
-
-        if daysSinceStart < ovulationDays {
-            return .follicular
-        }
-
-        // TODO: Rework this logic
-        if daysSinceStart == ovulationDays {
-            return .ovulation
-        }
-
-        if daysSinceStart < (cycleDuration + .standardDeviationCycleDays) {
-            return .luteal
-        }
-
-        return .unknown
+    // TODO: Rework this logic
+    if daysSinceStart == ovulationDays {
+      return .ovulation
     }
 
-    var nextPredictedPeriodDate: Date? {
-        guard
-            let averageCycleDuration,
-            let mostRecentCycle = menstrualCycles.max(by: \.startDate)
-        else { return nil }
-
-        return Calendar.current.date(
-            byAdding: .day,
-            value: averageCycleDuration,
-            to: mostRecentCycle.startDate
-        )
+    if daysSinceStart < (cycleDuration + .standardDeviationCycleDays) {
+      return .luteal
     }
 
-    var nextPredictedOvulationDate: Date? {
-        guard
-            let averageCycleDuration,
-            let mostRecentCycle = menstrualCycles.max(by: \.startDate)
-        else { return nil }
+    return .unknown
+  }
 
-        return Calendar.current.date(
-            byAdding: .day,
-            value: averageCycleDuration / 2,
-            to: mostRecentCycle.startDate
-        )
-    }
+  var mostRecentCycle: MenstrualCycle? {
+    menstrualCycles.max(by: \.startDate)
+  }
+
+  var nextPredictedPeriodDate: Date? {
+    guard
+      let averageCycleDuration,
+      let mostRecentCycle
+    else { return nil }
+
+    return Calendar.current.date(
+      byAdding: .day,
+      value: averageCycleDuration,
+      to: mostRecentCycle.startDate
+    )
+  }
+
+  var nextPredictedOvulationDate: Date? {
+    guard
+      let averageCycleDuration,
+      let mostRecentCycle
+    else { return nil }
+
+    return Calendar.current.date(
+      byAdding: .day,
+      value: averageCycleDuration / 2,
+      to: mostRecentCycle.startDate
+    )
+  }
 }
