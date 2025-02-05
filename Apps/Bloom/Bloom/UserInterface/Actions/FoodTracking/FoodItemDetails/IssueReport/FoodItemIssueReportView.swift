@@ -28,6 +28,8 @@ struct FoodItemIssueReportView: View {
 
   @State private var didSubmitReport = false
 
+  @FocusState private var isKeyboardActive: Bool
+
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
@@ -47,6 +49,7 @@ struct FoodItemIssueReportView: View {
           notesSection
         }
         .padding()
+        .focused($isKeyboardActive)
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -67,22 +70,33 @@ struct FoodItemIssueReportView: View {
 
 private extension FoodItemIssueReportView {
 
+  @ViewBuilder
   var shelfContent: some View {
-    AsyncButton {
-      try await submitReport()
-    } label: {
-      Group {
-        if didSubmitReport {
-          Image(systemName: "checkmark")
-        } else {
-          Text("Submit")
-        }
+    if isKeyboardActive {
+      Button {
+        isKeyboardActive = false
+      } label: {
+        Text("Done")
+          .horizontallyCentered()
       }
-      .foregroundStyle(.invertedText)
-      .horizontallyCentered()
+      .buttonStyle(.primary)
+    } else {
+      AsyncButton {
+        try await submitReport()
+      } label: {
+        Group {
+          if didSubmitReport {
+            Image(systemName: "checkmark")
+          } else {
+            Text("Submit")
+          }
+        }
+        .foregroundStyle(.invertedText)
+        .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
+      .sensoryFeedback(.success, trigger: didSubmitReport)
     }
-    .buttonStyle(.primary)
-    .sensoryFeedback(.success, trigger: didSubmitReport)
   }
 
   func submitReport() async throws {
@@ -93,31 +107,31 @@ private extension FoodItemIssueReportView {
       name: foodItemState.name,
       brandName: foodItemState.brandName,
       flavour: foodItemState.flavour,
-      calories: foodItemState.calories,
-      protein: foodItemState.protein,
-      carbohydrates: foodItemState.carbohydrates,
-      fat: foodItemState.fat,
-      saturatedFat: foodItemState.saturatedFat,
-      transFat: foodItemState.transFat,
-      polyunsaturatedFat: foodItemState.polyunsaturatedFat,
-      monounsaturatedFat: foodItemState.monounsaturatedFat,
-      fiber: foodItemState.fiber,
-      sugar: foodItemState.sugar,
-      cholesterol: foodItemState.cholesterol,
-      sodium: foodItemState.sodium,
-      calcium: foodItemState.calcium,
-      iron: foodItemState.iron,
-      potassium: foodItemState.potassium,
-      magnesium: foodItemState.magnesium,
-      zinc: foodItemState.zinc,
-      vitaminA: foodItemState.vitaminA,
-      vitaminB6: foodItemState.vitaminB6,
-      vitaminB12: foodItemState.vitaminB12,
-      vitaminC: foodItemState.vitaminC,
-      vitaminD: foodItemState.vitaminD,
-      vitaminE: foodItemState.vitaminE,
+      calories: foodItemState.calories.mapNegativeToNil(),
+      protein: foodItemState.protein.mapNegativeToNil(),
+      carbohydrates: foodItemState.carbohydrates.mapNegativeToNil(),
+      fat: foodItemState.fat.mapNegativeToNil(),
+      saturatedFat: foodItemState.saturatedFat.mapNegativeToNil(),
+      transFat: foodItemState.transFat.mapNegativeToNil(),
+      polyunsaturatedFat: foodItemState.polyunsaturatedFat.mapNegativeToNil(),
+      monounsaturatedFat: foodItemState.monounsaturatedFat.mapNegativeToNil(),
+      fiber: foodItemState.fiber.mapNegativeToNil(),
+      sugar: foodItemState.sugar.mapNegativeToNil(),
+      cholesterol: foodItemState.cholesterol.mapNegativeToNil(),
+      sodium: foodItemState.sodium.mapNegativeToNil(),
+      calcium: foodItemState.calcium.mapNegativeToNil(),
+      iron: foodItemState.iron.mapNegativeToNil(),
+      potassium: foodItemState.potassium.mapNegativeToNil(),
+      magnesium: foodItemState.magnesium.mapNegativeToNil(),
+      zinc: foodItemState.zinc.mapNegativeToNil(),
+      vitaminA: foodItemState.vitaminA.mapNegativeToNil(),
+      vitaminB6: foodItemState.vitaminB6.mapNegativeToNil(),
+      vitaminB12: foodItemState.vitaminB12.mapNegativeToNil(),
+      vitaminC: foodItemState.vitaminC.mapNegativeToNil(),
+      vitaminD: foodItemState.vitaminD.mapNegativeToNil(),
+      vitaminE: foodItemState.vitaminE.mapNegativeToNil(),
       servingName: foodItemState.servingName,
-      servingValue: foodItemState.servingValue,
+      servingValue: foodItemState.servingValue.mapNegativeToNil(),
       servingUnit: foodItemState.servingUnit,
       ingredients: foodItemState.ingredients,
       nutritionLabelImage: nutritionLabelImageData.map { .init(data: $0, fileExtension: "png") },
@@ -462,6 +476,13 @@ private extension FoodItemIssueReportView {
       FoodItemIssueTextFieldCell(title: "Notes", text: $foodItemState.notes)
     }
     .cardContainer()
+  }
+}
+
+private extension Double {
+
+  func mapNegativeToNil() -> Double? {
+    self < 0 ? nil : self
   }
 }
 

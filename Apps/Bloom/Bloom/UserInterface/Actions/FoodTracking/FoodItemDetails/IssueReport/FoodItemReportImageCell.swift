@@ -37,6 +37,7 @@ struct FoodItemReportImageCell: View {
     }
     .cardContainer(includePadding: false)
     .selectable()
+    .sheet($presentedSheet)
     .onTapGesture {
       presentedSheet = CameraView(
         capturedImage: $image,
