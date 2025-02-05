@@ -23,6 +23,7 @@ open class FoodItemDetailViewModel: ObservableObject {
   @Published var packagingImage: URL?
   @Published var packagingImageRotation: Double = 0
   @Published var selectedPackagingImage: NSImage?
+  @Published var accuracyReport: AdminAccuracyReport? = nil
 
   @Published var nutritionLabel: URL?
   @Published var nutritionLabelRotation: Double = 0
@@ -135,6 +136,15 @@ extension FoodItemDetailViewModel {
     }
 
     return false
+  }
+  
+  func fetchAccuracyReport() async {
+    do {
+      let response = try await NetworkStack.shared.getLatestAccuracyReport(forFoodItemWithID: foodItem.id)
+      await MainActor.run {
+        self.accuracyReport = response.report
+      }
+    } catch { }
   }
 }
 

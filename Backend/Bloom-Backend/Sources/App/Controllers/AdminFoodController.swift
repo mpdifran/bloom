@@ -28,6 +28,7 @@ extension AdminFoodController: RouteCollection {
           $0.patch("update", use: updateFood)
           $0.delete(":id", use: deleteFood)
           $0.get("search", use: searchFood)
+          $0.get("accuracy-report", use: getAccuracyReport)
 
           $0.group("open-food-facts") {
             $0.post("bulk-upload", use: openFoodFactsBulkUpload)
@@ -344,6 +345,17 @@ private extension AdminFoodController {
     )
 
     return AdminSearchFoodItemResponse(foodItemRecords: records)
+  }
+  
+  @Sendable
+  func getAccuracyReport(_ request: Request) async throws -> AdminAccuracyReportGetResponse {
+    let requestQuery = try request.query.decode(AdminAccuracyReportGetRequest.self)
+    let foodItemRecordID = requestQuery.foodItemRecordID
+    
+    return try await foodDatabaseService.getLatestAccuracyReport(
+      request: request,
+      forFoodItemWithId: FoodItemIdentifier(foodItemRecordID)
+    )
   }
 }
 

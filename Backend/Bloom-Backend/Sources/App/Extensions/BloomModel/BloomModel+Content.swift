@@ -27,3 +27,4 @@ extension AdminOpenFoodFactsBulkUploadRequest: @retroactive Content { }
 extension AdminOpenFoodFactsBulkUploadResponse: @retroactive Content { }
 extension AuthIdentifyRequest: @retroactive Content { }
 extension AuthIdentifyResponse: @retroactive Content { }
+extension AdminAccuracyReportGetResponse: @retroactive Content { }

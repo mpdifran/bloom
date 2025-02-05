@@ -39,6 +39,9 @@ struct FoodItemDetailView: View {
   var body: some View {
     HStack(spacing: 0) {
       images
+        .overlay(alignment: .bottomLeading) {
+          accuracyResultView
+        }
 
       formView
     }
@@ -48,6 +51,7 @@ struct FoodItemDetailView: View {
     .alert(alertDetails: $alertDetails)
     .alert(error: $viewModel.error)
     .confirmationDialog($confirmationDialogDetails)
+    .task { await viewModel.fetchAccuracyReport() }
   }
 }
 
@@ -151,6 +155,38 @@ private extension FoodItemDetailView {
         .tint(.red)
       }
     }
+  }
+  
+  @ViewBuilder
+  var accuracyResultView: some View {
+    Group {
+      if let report = viewModel.accuracyReport {
+        Text(report.accuracyScore, format: .number.precision(.fractionLength(0)))
+      } else {
+        Text("N/A")
+      }
+    }
+    .font(.system(size: 24, weight: .bold, design: .monospaced))
+    .foregroundStyle(LinearGradient(
+      gradient: Gradient(colors: [.cyan, .blue, .purple]),
+      startPoint: .leading,
+      endPoint: .trailing
+    ))
+    .padding()
+    .background(
+      Circle()
+        .fill(.ultraThinMaterial)
+        .shadow(color: .cyan.opacity(0.8), radius: 10, x: 0, y: 0)
+    )
+    .overlay(
+      Circle()
+        .stroke(LinearGradient(
+          gradient: Gradient(colors: [.cyan, .purple]),
+          startPoint: .leading,
+          endPoint: .trailing
+        ), lineWidth: 1)
+    )
+    .opacity(0.8)
   }
 
   @ViewBuilder
