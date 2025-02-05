@@ -40,7 +40,6 @@ struct FoodItemIssueReportState {
   var servingValue: Double = 0
   var servingUnit: String = ""
   var ingredients: String = ""
-  var barcode: String = ""
   var notes: String = ""
 
   init(foodItem: FoodItem) {

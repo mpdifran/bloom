@@ -29,6 +29,7 @@ extension View {
               .stroke(stroke, lineWidth: lineWidth)
           }
       }
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
   }
 }
 

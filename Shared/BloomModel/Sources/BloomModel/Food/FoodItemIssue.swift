@@ -52,7 +52,6 @@ public struct FoodItemIssue: Codable, Sendable {
   public let servingUnit: String?
 
   public let ingredients: String?
-  public let barcode: String?
   public let nutritionLabelImage: ImageFile?
   public let packagingImage: ImageFile?
   public let notes: String?
@@ -90,7 +89,6 @@ public struct FoodItemIssue: Codable, Sendable {
     servingValue: Double?,
     servingUnit: String?,
     ingredients: String?,
-    barcode: String?,
     nutritionLabelImage: ImageFile?,
     packagingImage: ImageFile?,
     notes: String?,
@@ -126,7 +124,6 @@ public struct FoodItemIssue: Codable, Sendable {
     self.servingValue = servingValue
     self.servingUnit = servingUnit
     self.ingredients = ingredients
-    self.barcode = barcode
     self.nutritionLabelImage = nutritionLabelImage
     self.packagingImage = packagingImage
     self.notes = notes

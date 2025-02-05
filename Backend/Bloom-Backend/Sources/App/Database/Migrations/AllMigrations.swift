@@ -26,4 +26,5 @@ let allMigrations: [Migration] = [
     FoodItemIssueReport.FixRelations(),
     FoodItemIssueReport.MakeNameOptional(),
     User.AddAppUserID(),
+    FoodItemIssueReport.RemoveBarcodePropoerty(),
 ]

@@ -24,9 +24,6 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
   @Field(key: "flavour")
   var flavour: String?
 
-  @Field(key: "barcode")
-  var barcode: String?
-
   @Field(key: "nutrition_label_image")
   var nutritionLabelImage: String?
 
@@ -136,7 +133,6 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
     name: String?,
     brandName: String?,
     flavour: String?,
-    barcode: String?,
     nutritionLabelImage: String?,
     packagingImage: String?,
     ingredients: String?,
@@ -174,7 +170,6 @@ final class FoodItemIssueReport: Model, @unchecked Sendable {
     self.name = name
     self.brandName = brandName
     self.flavour = flavour
-    self.barcode = barcode
     self.nutritionLabelImage = nutritionLabelImage
     self.packagingImage = packagingImage
     self.ingredients = ingredients

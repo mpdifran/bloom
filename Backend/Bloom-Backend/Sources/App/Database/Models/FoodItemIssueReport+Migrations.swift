@@ -95,4 +95,19 @@ extension FoodItemIssueReport {
         .update()
     }
   }
+
+  struct RemoveBarcodePropoerty: AsyncMigration {
+
+    func prepare(on database: any Database) async throws {
+      try await database.schema(FoodItemIssueReport.schema)
+        .deleteField("barcode")
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(FoodItemIssueReport.schema)
+        .field("barcode", .string)
+        .update()
+    }
+  }
 }

@@ -61,5 +61,8 @@ extension URLRequest {
     static func markAsInaccurate(body: MarkFoodInaccurateRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/food/mark-as-inaccurate", body: body)
     }
+    static func submitFoodItemIssue(body: SubmitFoodItemIssueRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/submit-food-item-issue", body: body)
+    }
   }
 }

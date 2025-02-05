@@ -10,19 +10,31 @@ import BloomModel
 
 struct FoodItemIssueReportView: View {
   let foodItem: FoodItem
+  let onSubmit: () -> Void
 
-  init(foodItem: FoodItem) {
+  init(
+    foodItem: FoodItem,
+    onSubmit: @escaping () -> Void
+  ) {
     self.foodItem = foodItem
+    self.onSubmit = onSubmit
 
     self._foodItemState = State(initialValue: FoodItemIssueReportState(foodItem: foodItem))
   }
 
   @State private var foodItemState: FoodItemIssueReportState
+  @State private var packagingImage: UIImage?
+  @State private var nutritionLabelImage: UIImage?
+
+  @State private var didSubmitReport = false
+
+  @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     NavigationStack {
       ScrollView {
         VStack {
+          imageSection
           nameSection
           servingSection
           caloriesSection
@@ -36,13 +48,108 @@ struct FoodItemIssueReportView: View {
         }
         .padding()
       }
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Cancel") {
+            dismiss()
+          }
+        }
+      }
+      .shelf {
+        shelfContent
+      }
       .groupedBackground()
       .navigationTitle("Report an Issue")
     }
+    .presentationCompactAdaptation(.fullScreenCover)
   }
 }
 
 private extension FoodItemIssueReportView {
+
+  var shelfContent: some View {
+    AsyncButton {
+      try await submitReport()
+    } label: {
+      Group {
+        if didSubmitReport {
+          Image(systemName: "checkmark")
+        } else {
+          Text("Submit")
+        }
+      }
+      .foregroundStyle(.invertedText)
+      .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .sensoryFeedback(.success, trigger: didSubmitReport)
+  }
+
+  func submitReport() async throws {
+    let packagingImageData = packagingImage?.resized(toWidth: 1000)?.pngData()
+    let nutritionLabelImageData = nutritionLabelImage?.resized(toWidth: 1000)?.pngData()
+
+    let issue = FoodItemIssue(
+      name: foodItemState.name,
+      brandName: foodItemState.brandName,
+      flavour: foodItemState.flavour,
+      calories: foodItemState.calories,
+      protein: foodItemState.protein,
+      carbohydrates: foodItemState.carbohydrates,
+      fat: foodItemState.fat,
+      saturatedFat: foodItemState.saturatedFat,
+      transFat: foodItemState.transFat,
+      polyunsaturatedFat: foodItemState.polyunsaturatedFat,
+      monounsaturatedFat: foodItemState.monounsaturatedFat,
+      fiber: foodItemState.fiber,
+      sugar: foodItemState.sugar,
+      cholesterol: foodItemState.cholesterol,
+      sodium: foodItemState.sodium,
+      calcium: foodItemState.calcium,
+      iron: foodItemState.iron,
+      potassium: foodItemState.potassium,
+      magnesium: foodItemState.magnesium,
+      zinc: foodItemState.zinc,
+      vitaminA: foodItemState.vitaminA,
+      vitaminB6: foodItemState.vitaminB6,
+      vitaminB12: foodItemState.vitaminB12,
+      vitaminC: foodItemState.vitaminC,
+      vitaminD: foodItemState.vitaminD,
+      vitaminE: foodItemState.vitaminE,
+      servingName: foodItemState.servingName,
+      servingValue: foodItemState.servingValue,
+      servingUnit: foodItemState.servingUnit,
+      ingredients: foodItemState.ingredients,
+      nutritionLabelImage: nutritionLabelImageData.map { .init(data: $0, fileExtension: "png") },
+      packagingImage: packagingImageData.map { .init(data: $0, fileExtension: "png") },
+      notes: foodItemState.notes,
+      foodItemID: foodItem.id
+    )
+
+    try await NetworkRequester.shared.submitFoodIssueReport(issue: issue)
+
+    dismiss()
+    onSubmit()
+  }
+}
+
+private extension FoodItemIssueReportView {
+
+  var imageSection: some View {
+    HStack {
+      FoodItemReportImageCell(
+        systemImage: "vial.viewfinder",
+        title: "Packaging",
+        image: $packagingImage
+      )
+
+      FoodItemReportImageCell(
+        systemImage: "text.viewfinder",
+        title: "Nutrition Label",
+        image: $nutritionLabelImage
+      )
+    }
+  }
 
   var nameSection: some View {
     VStack {
@@ -359,5 +466,5 @@ private extension FoodItemIssueReportView {
 }
 
 #Preview {
-  FoodItemIssueReportView(foodItem: .Preview.ritzCrackers)
+  FoodItemIssueReportView(foodItem: .Preview.ritzCrackers) { }
 }

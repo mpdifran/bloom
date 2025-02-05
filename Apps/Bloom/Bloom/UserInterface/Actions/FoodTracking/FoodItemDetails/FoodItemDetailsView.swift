@@ -40,6 +40,7 @@ struct FoodItemDetailsView: View {
   @State private var showDatePicker = false
   @State private var saveComplete = false
   @State private var hasMarkedAsInaccurate = false
+  @State private var presentedSheet: AnyView?
   @State private var alertDetails: AlertDetails?
   @State private var error: Error?
 
@@ -99,6 +100,7 @@ struct FoodItemDetailsView: View {
       .navigationBarTitleDisplayMode(.inline)
       .sensoryFeedback(.success, trigger: hasMarkedAsInaccurate)
       .animation(.easeInOut, value: numberOfServings)
+      .sheet($presentedSheet)
       .alert(error: $error)
       .alert(alertDetails: $alertDetails)
       .tint(.mutedGreen)
@@ -237,13 +239,13 @@ private extension FoodItemDetailsView {
   var accuracySection: some View {
     Group {
       if hasMarkedAsInaccurate {
-        Button("Marked as Inaccurate", systemImage: "checkmark.circle.fill", role: .destructive) { }
+        Button("Report Submitted", systemImage: "checkmark.circle.fill", role: .destructive) { }
           .disabled(true)
       } else {
-        Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle.fill", role: .destructive) {
-          Task {
-            await markAsInaccurate()
-          }
+        Button("Report an Issue", systemImage: "exclamationmark.triangle.fill", role: .destructive) {
+          presentedSheet = FoodItemIssueReportView(foodItem: foodItem) {
+            hasMarkedAsInaccurate = true
+          }.asAny
         }
       }
     }
@@ -254,8 +256,10 @@ private extension FoodItemDetailsView {
   var foodItemMenu: some View {
     Menu("Options", systemImage: "ellipsis.circle") {
       if !hasMarkedAsInaccurate {
-        Button("Mark as Inaccurate", systemImage: "exclamationmark.triangle") {
-          Task { await markAsInaccurate() }
+        Button("Report an Issue", systemImage: "exclamationmark.triangle") {
+          presentedSheet = FoodItemIssueReportView(foodItem: foodItem) {
+            hasMarkedAsInaccurate = true
+          }.asAny
         }
       }
 
@@ -305,17 +309,6 @@ private extension FoodItemDetailsView {
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
-  }
-
-  func markAsInaccurate() async {
-    do {
-      try await NetworkRequester.shared.markFoodAsInaccurate(foodID: foodItem.id)
-
-      alertDetails = AlertDetails(title: "Marked as Inaccurate", message: "Thank you for letting us know, we will look into it!")
-      hasMarkedAsInaccurate = true
-    } catch {
-      self.error = error
-    }
   }
 }
 

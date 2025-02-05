@@ -158,7 +158,6 @@ extension FoodDatabaseService {
       name: foodItemIssue.name,
       brandName: foodItemIssue.brandName,
       flavour: foodItemIssue.flavour,
-      barcode: foodItemIssue.barcode,
       nutritionLabelImage: nutritionLabelImageFileName,
       packagingImage: packagingImageFileName,
       ingredients: foodItemIssue.ingredients,

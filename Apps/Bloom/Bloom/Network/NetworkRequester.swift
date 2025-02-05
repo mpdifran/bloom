@@ -138,6 +138,12 @@ extension NetworkRequester {
     )
   }
 
+  func submitFoodIssueReport(issue: FoodItemIssue) async throws {
+    let body = SubmitFoodItemIssueRequest(foodItemIssue: issue)
+    let request = try await URLRequest.Food.submitFoodItemIssue(body: body)
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
+
   func markFoodAsInaccurate(foodID: FoodItemIdentifier) async throws {
     let body = MarkFoodInaccurateRequest(
       foodId: foodID

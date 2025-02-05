@@ -43,8 +43,8 @@ extension FoodUploadScannerView.ViewModel {
   func upload() async throws -> FoodItem {
     guard
       let barcode,
-      let nutritionLabelImage = nutritionLabelImage?.resized(toWidth: 700),
-      let packagingImage = packagingImage?.resized(toWidth: 700)
+      let nutritionLabelImage = nutritionLabelImage?.resized(toWidth: 1000),
+      let packagingImage = packagingImage?.resized(toWidth: 1000)
     else {
       throw NSError(description: "Cannot upload with missing data")
     }
