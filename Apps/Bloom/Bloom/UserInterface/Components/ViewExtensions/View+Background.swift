@@ -20,7 +20,7 @@ extension View {
   func groupedBackground() -> some View {
     background {
       Rectangle()
-        .fill(.background.secondary)
+        .fill(.lilacBackground)
         .ignoresSafeArea()
     }
   }
