@@ -21,6 +21,7 @@ struct NewGoalCard: View {
   @State private var error: Error?
 
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.requestReview) private var requestReview
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
@@ -130,6 +131,11 @@ private extension NewGoalCard {
     do {
       try modelContext.save()
       didSave.toggle()
+
+      if RatingPromptTracker.shared.recordEvent() {
+        requestReview()
+      }
+
       dismiss()
     } catch {
       self.didError.toggle()

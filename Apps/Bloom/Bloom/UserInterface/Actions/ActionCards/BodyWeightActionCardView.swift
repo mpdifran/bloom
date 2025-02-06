@@ -25,6 +25,8 @@ struct BodyWeightActionCardView: View {
   @FocusState private var isFocused: Bool
   @ObservedObject private var healthManager = HealthManager.shared
 
+  @Environment(\.requestReview) private var requestReview
+
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   var body: some View {
@@ -82,6 +84,10 @@ private extension BodyWeightActionCardView {
 
     try await HealthStoreModifier.shared.write(sample: sample)
     TelemetryDeck.signal("Log Weight")
+
+    if RatingPromptTracker.shared.recordEvent() {
+      requestReview()
+    }
 
     if await VitalsCalculator.shared.bodyCompositionSummary?.details.hasNoData != false {
       await VitalsCalculator.shared.forceFetchVitals()

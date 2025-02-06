@@ -33,6 +33,8 @@ struct BloodPressureActionCardView: View {
   @FocusState private var focusedTextField: FocusedTextField?
   @ObservedObject private var healthManager = HealthManager.shared
 
+  @Environment(\.requestReview) private var requestReview
+
   var body: some View {
     CardView {
       LargeTitleActionCard("Log Blood Pressure") {
@@ -109,6 +111,11 @@ private extension BloodPressureActionCardView {
 
     try await HealthStoreModifier.shared.write(samples: [systolicSample, diastolicSample])
     TelemetryDeck.signal("Log Blood Pressure")
+
+    if RatingPromptTracker.shared.recordEvent() {
+      requestReview()
+    }
+
     return true
   }
 }

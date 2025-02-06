@@ -22,6 +22,8 @@ struct BowelMovementActionCardView: View {
   @State private var selectedStoolType: Int = 0
   @State private var duration: BowelMovement.Duration = .between5And10Min
 
+  @Environment(\.requestReview) private var requestReview
+
   var body: some View {
     CardView {
       LargeTitleActionCard("Log Bowel Movement", includePadding: false) {
@@ -129,6 +131,11 @@ private extension BowelMovementActionCardView {
     await VitalsCalculator.shared.fetchSwiftDataTypes()
 
     TelemetryDeck.signal("Log Bowel Movement")
+
+    if RatingPromptTracker.shared.recordEvent() {
+      requestReview()
+    }
+
     return true
   }
 }

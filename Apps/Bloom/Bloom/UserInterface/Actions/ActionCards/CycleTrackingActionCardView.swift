@@ -22,6 +22,8 @@ struct CycleTrackingActionCardView: View {
 
   @State private var vitalsViewModel = VitalsViewModel.shared
 
+  @Environment(\.requestReview) private var requestReview
+
   private let allFlowTypes: [HKCategoryValueMenstrualFlow] = [.none, .light, .medium, .heavy]
 
   var body: some View {
@@ -145,6 +147,11 @@ private extension CycleTrackingActionCardView {
 
     try await HealthStoreModifier.shared.write(sample: sample)
     TelemetryDeck.signal("Log Period")
+
+    if RatingPromptTracker.shared.recordEvent() {
+      requestReview()
+    }
+
     return true
   }
 }

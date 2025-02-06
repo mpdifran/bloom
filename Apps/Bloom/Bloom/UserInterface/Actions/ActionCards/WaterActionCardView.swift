@@ -47,6 +47,8 @@ struct WaterActionCardView: View {
   @State private var isShowingAddGlassSizeSheet = false
   @State private var error: Error?
 
+  @Environment(\.requestReview) private var requestReview
+
   @State private var glassSizes: [WaterGlassSizeModel] {
     didSet {
       if let data = try? JSONEncoder.main.encode(glassSizes) {
@@ -143,6 +145,11 @@ private extension WaterActionCardView {
     try await HealthStoreModifier.shared.write(sample: sample)
     didIncrease.toggle()
     TelemetryDeck.signal("Log Water")
+
+    if RatingPromptTracker.shared.recordEvent() {
+      requestReview()
+    }
+
     return true
   }
 }
