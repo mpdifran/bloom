@@ -25,6 +25,8 @@ struct FoodLoggingActionCardView: View {
 
   @Bindable private var viewModel = ViewModel()
 
+  @AppStorage("FoodLoggingActionCardView.hasShownExplanation", store: .group) private var hasShownExplanation = false
+
   @State private var searchQuery = ""
   @State private var shouldAutocomplete = true
   @State private var didSearchToggle = false
@@ -270,7 +272,19 @@ private extension FoodLoggingActionCardView {
         } else if searchQuery.isEmpty {
           FoodSearchToolCell(title: "AI Scan", systemImage: "sparkles")
             .onTapGesture {
+              #if DEBUG
+                // TODO: Check flag
+              presentedSheet = AIFoodScannerExplanationView {
+                Task {
+                  await Delay(300)
+                  await MainActor.run {
+                    presentedSheet = AIFoodScannerView().asAny
+                  }
+                }
+              }.asAny
+              #else
               presentedSheet = AIFoodScannerView().asAny
+              #endif
             }
           FoodSearchToolCell(title: "Scan Barcode", systemImage: "barcode.viewfinder")
             .onTapGesture {
