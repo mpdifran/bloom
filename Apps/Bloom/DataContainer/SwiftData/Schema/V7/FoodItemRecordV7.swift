@@ -1,8 +1,8 @@
 //
-//  FoodItemRecordV5.swift
-//  Supplements
+//  FoodItemRecordV7.swift
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-12-02.
+//  Created by Zach Radford on 2025-02-02.
 //
 
 import SwiftData
@@ -10,7 +10,7 @@ import SwiftData
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit
 // For CloudKit sync to work, all properties must be optional or have default values, and all relationship must be optional.
 
-extension SchemaV5 {
+extension SchemaV7 {
   @Model
   public final class FoodItemRecord: Identifiable, Hashable {
     public var id: String = ""
@@ -52,8 +52,9 @@ extension SchemaV5 {
     public var category: Category?
     public var isVerified: Bool = false
 
-    @Relationship(deleteRule: .cascade, inverse: \FoodItemLog.foodItem)
-    public var logs: [FoodItemLog]?
+    public var servings: [FoodItemServing]? = []
+
+    public var mealItems: [MealItemRecord]? = []
 
     public init(
       id: String,
@@ -89,8 +90,7 @@ extension SchemaV5 {
       servingValue: Double?,
       ingredients: String?,
       category: Category?,
-      isVerified: Bool,
-      logs: [FoodItemLog]
+      isVerified: Bool
     ) {
       self.id = id
       self.name = name
@@ -126,12 +126,11 @@ extension SchemaV5 {
       self.ingredients = ingredients
       self.category = category
       self.isVerified = isVerified
-      self.logs = logs
     }
   }
 }
 
-public extension SchemaV5.FoodItemRecord {
+public extension SchemaV7.FoodItemRecord {
   enum Category: String, Hashable, Codable, Sendable {
     case generic
     case fastfood

@@ -51,15 +51,3 @@ public extension SchemaV5.FoodItemLog.Meal {
     rawValue.capitalized
   }
 }
-
-extension SchemaV5.FoodItemLog.Meal {
-
-  func toV6() -> SchemaV6.FoodItemLog.Meal {
-    switch self {
-    case .breakfast: return .breakfast
-    case .lunch: return .lunch
-    case .dinner: return .dinner
-    case .snack: return .snack
-    }
-  }
-}
