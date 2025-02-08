@@ -41,7 +41,7 @@ private extension NutrientsRemainingView {
   var cardView: some View {
     HStack {
       VStack(alignment: .leading) {
-        Text(totalCalories.format())
+        Text(foodItemLogs.totalCalories.format())
           .font(
             .system(
               .title3,
@@ -59,11 +59,5 @@ private extension NutrientsRemainingView {
       Spacer()
     }
     .cardContainer()
-  }
-
-  var totalCalories: Double {
-    foodItemLogs.reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalCalories
-    }
   }
 }
