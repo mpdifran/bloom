@@ -194,6 +194,24 @@ extension FoodDatabaseService {
 
     try await report.save(on: request.db)
   }
+  
+  func getLatestAccuracyReport(
+    request: Request,
+    forFoodItemWithId foodID: FoodItemIdentifier
+  ) async throws -> AdminAccuracyReportGetResponse {
+    guard let accuracyReport = try await FoodItemAccuracyReport.query(on: request.db)
+      .filter(\.$foodItemRecord.$id == foodID.value)
+      .sort(\.$createdAt, .descending) // Sort to get the latest entry
+      .first() else { return AdminAccuracyReportGetResponse(report: nil) }
+    
+    return AdminAccuracyReportGetResponse(
+      report: AdminAccuracyReport(
+        accuracyScore: accuracyReport.accuracyScore,
+        evaluationNotes: accuracyReport.evaluationNotes,
+        createdAt: accuracyReport.createdAt
+      )
+    )
+  }
 
   func addProductImagesIfMissing(
     _ request: Request,

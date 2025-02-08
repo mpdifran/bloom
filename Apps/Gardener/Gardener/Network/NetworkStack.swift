@@ -183,6 +183,23 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(AdminOpenFoodFactsBulkUploadResponse.self, from: data)
   }
   
+  func getLatestAccuracyReport(
+    forFoodItemWithID id: FoodItemIdentifier
+  ) async throws -> AdminAccuracyReportGetResponse {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/food/accuracy-report",
+      method: .get,
+      queryItems: [.init(name: "food_item_record_id", value: "\(id.value)")]
+    )
+    
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(AdminAccuracyReportGetResponse.self, from: data)
+    
+  }
+  
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse
