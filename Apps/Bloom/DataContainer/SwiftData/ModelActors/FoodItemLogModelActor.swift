@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-19.
 //
 
+import BloomFoundation
 import Foundation
 import SwiftData
 
@@ -70,4 +71,30 @@ public extension FoodItemLogModelActor {
         descriptor.fetchLimit = limit
         return try context.fetch(descriptor).map { $0.asDTO() }
     }
+
+  func fetchFrequentLogs(
+    for meal: FoodItemLog.Meal,
+    dateRange: DateRange = DateRange.trailingMonthsFromNow(2)
+  ) throws -> [FoodItemLogDTO] {
+    let startDate = dateRange.start
+    let mealRawValue = meal.rawValue
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate<FoodItemLog> { model in
+        model.date >= startDate &&
+        model.mealRawValue == mealRawValue
+      }
+    )
+
+    let logs = try context.fetch(descriptor)
+
+    // Count occurrences of each food item, sort by most frequent.
+    let frequencyMap = Dictionary(grouping: logs, by: { $0.foodItem?.id })
+      .compactMapValues { $0.count }
+      .sorted { $0.value > $1.value }
+
+    // Map food logs in sorted order based on frequency.
+    return frequencyMap.compactMap { foodItemID, _ in
+      logs.first { $0.foodItem?.id == foodItemID }?.asDTO()
+    }
+  }
 }
