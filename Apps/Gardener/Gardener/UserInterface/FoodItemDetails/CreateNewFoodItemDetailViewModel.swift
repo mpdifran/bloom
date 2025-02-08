@@ -14,10 +14,10 @@ import UniformTypeIdentifiers
 @MainActor
 final class CreateNewFoodItemDetailViewModel: FoodItemDetailViewModel {
   private let service = NetworkStack.shared
-  private let onSuccessfulCreation: () -> Void
+  private let dismissWindow: () -> Void
 
-  init(onSuccessfulCreation: @escaping () -> Void) {
-    self.onSuccessfulCreation = onSuccessfulCreation
+  init(dismissWindow: @escaping () -> Void) {
+    self.dismissWindow = dismissWindow
     super.init(
       foodItem: AdminFoodItemRecord(id: FoodItemIdentifier(UUID().uuidString)),
       foodStore: UnverifiedFoodStore.shared // no needed
@@ -42,7 +42,7 @@ final class CreateNewFoodItemDetailViewModel: FoodItemDetailViewModel {
       selectedPackagingImage = nil
       selectedNutritionLabel = nil
       
-      await MainActor.run { onSuccessfulCreation() }
+      await MainActor.run { dismissWindow() }
       
     } catch {
       await MainActor.run { self.error = error }
@@ -50,7 +50,7 @@ final class CreateNewFoodItemDetailViewModel: FoodItemDetailViewModel {
   }
   
   override func delete() async {
-    // TODO
+    await MainActor.run { dismissWindow() }
   }
   
   @discardableResult
