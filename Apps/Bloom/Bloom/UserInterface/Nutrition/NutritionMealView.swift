@@ -48,7 +48,6 @@ struct NutritionMealView: View {
         }
       }
     }
-    .padding(.vertical)
     .alert(error: $error)
   }
 }

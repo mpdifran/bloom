@@ -57,7 +57,34 @@ private extension NutrientsRemainingView {
       }
 
       Spacer()
+
+      HStack {
+        NutrientLabel(value: 50, label: "Protein")
+        NutrientLabel(value: 50, label: "Fats")
+        NutrientLabel(value: 50, label: "Carbs")
+      }
+
+      DisclosureIndicator()
     }
     .cardContainer()
+  }
+}
+
+private struct NutrientLabel: View {
+  let value: Double
+  let label: String
+
+  var body: some View {
+    VStack {
+      ProgressBar(
+        value: value,
+        target: 125,
+        measurementStyle: .minimum
+      )
+
+      Text("16g")
+
+      Text(label)
+    }
   }
 }

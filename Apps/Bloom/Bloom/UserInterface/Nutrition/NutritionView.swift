@@ -92,6 +92,7 @@ private extension NutritionView {
         NutrientsRemainingView(
           foodItemLogs: foodItemLogs
         )
+        .padding(.vertical)
 
         ForEach(FoodItemLog.Meal.allCases) { meal in
           NutritionMealView(
@@ -109,6 +110,7 @@ private extension NutritionView {
             nutritionViewModel.suggestedMeal = meal
             presentedSheet = FoodLoggingActionCardView().asAny
           }
+          .padding(.vertical)
         }
       }
     }
