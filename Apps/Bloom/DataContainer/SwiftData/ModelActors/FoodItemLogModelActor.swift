@@ -78,14 +78,11 @@ public extension FoodItemLogModelActor {
   ) throws -> [FoodItemLogDTO] {
     let startDate = dateRange.start
     let endDate = dateRange.end
+    let mealRawValue = meal.rawValue
     let descriptor = FetchDescriptor<FoodItemLog>(
       predicate: #Predicate<FoodItemLog> { model in
         model.date >= startDate &&
-        model.date <= endDate
-        // TODO: Zach - we cannot query enums stored in SwiftData. Their rawValue must be on the model.
-        // https://forums.developer.apple.com/forums/thread/735638
-        // Do this in the V6 migration.
-        // && model.mealRawValue == meal.rawValue
+        model.mealRawValue == mealRawValue
       }
     )
 
