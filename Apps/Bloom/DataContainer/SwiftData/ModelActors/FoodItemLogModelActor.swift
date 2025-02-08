@@ -77,7 +77,6 @@ public extension FoodItemLogModelActor {
     dateRange: DateRange = DateRange.trailingMonthsFromNow(2)
   ) throws -> [FoodItemLogDTO] {
     let startDate = dateRange.start
-    let endDate = dateRange.end
     let mealRawValue = meal.rawValue
     let descriptor = FetchDescriptor<FoodItemLog>(
       predicate: #Predicate<FoodItemLog> { model in
