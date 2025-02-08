@@ -86,15 +86,6 @@ private extension AIFoodScannerExplanationView {
       showPackageReticule = true
       sensoryFeedbackToggle.toggle()
     }
-
-    await Delay(2000)
-
-    showSoupReticule = false
-    showPackageReticule = false
-
-    await Delay(1000)
-
-    await animateReticules()
   }
 }
 
