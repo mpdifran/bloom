@@ -121,6 +121,34 @@ extension SleepAnalysis {
     DateFormatter.justDayOfWeek.string(from: endDate)
   }
 
+  var overallDurationComponents: DateComponents {
+    DateComponents(minute: Int(overallMinutes))
+  }
+
+  var coreSleepComponents: DateComponents? {
+    guard hasDetailedSleepCategories else { return nil }
+
+    return DateComponents(minute: Int(coreSleepMinutes))
+  }
+
+  var deepSleepComponents: DateComponents? {
+    guard hasDetailedSleepCategories else { return nil }
+
+    return DateComponents(minute: Int(deepSleepMinutes))
+  }
+
+  var remSleepComponents: DateComponents? {
+    guard hasDetailedSleepCategories else { return nil }
+
+    return DateComponents(minute: Int(remSleepMinutes))
+  }
+
+  var awakeSleepComponents: DateComponents? {
+    guard hasDetailedSleepCategories else { return nil }
+
+    return DateComponents(minute: Int(awakeSleepMinutes))
+  }
+
   var overallMinutesIncludingAwake: Double {
     timeInterval / 60
   }

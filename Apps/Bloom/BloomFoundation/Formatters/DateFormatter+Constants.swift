@@ -104,6 +104,11 @@ public extension DateFormatter {
     $0.allowedUnits = [.minute]
   }
 
+  static let timeIntervalHourMinuteAbbreviated = DateComponentsFormatter().with {
+    $0.unitsStyle = .abbreviated
+    $0.allowedUnits = [.hour, .minute]
+  }
+
   static let timeIntervalHourMinuteShort = DateComponentsFormatter().with {
     $0.unitsStyle = .short
     $0.allowedUnits = [.hour, .minute]
