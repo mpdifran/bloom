@@ -12,10 +12,6 @@ import AVFoundation
 
 struct AIFoodScannerView: View {
 
-  init() {
-    self.cameraManager = CameraManager.create(with: captureSession)
-  }
-
   @State private var viewModel = ViewModel()
 
   @State private var startScanToggle = false
@@ -30,45 +26,60 @@ struct AIFoodScannerView: View {
   @Environment(\.dismiss) private var dismiss
 
   private let nutritionViewModel = NutritionTrackingViewModel.shared
-  private let cameraManager: CameraManager
-  private let captureSession = AVCaptureSession()
 
   var body: some View {
-    GeometryReader { proxy in
-      VStack(spacing: 0) {
-        scanAreaView
-          .frame(height: proxy.size.height * imageScanAspect)
-          .clipped()
+    NavigationStack {
+      ScrollView {
+        VStack {
+          HStack {
+            AICameraScannerView(
+              cameraManager: viewModel.cameraManager,
+              captureSession: viewModel.captureSession,
+              image: $viewModel.image
+            ) {
+              viewModel.reset()
+            }
+            .if(viewModel.image != nil) {
+              $0.frame(square: 100)
+            }
 
-        scannedItemsView
-          .background {
-            RoundedRectangle(cornerRadius: 30)
-              .fill(.background)
-              .ignoresSafeArea(edges: .bottom)
+            if viewModel.image != nil {
+              Text("This is the name of the food")
+
+              Spacer()
+            }
           }
-          .padding(.top, -30)
+
+          scannedItemsView
+        }
+        .padding()
+      }
+      .groupedBackground()
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Done") { dismiss() }.bold()
+        }
       }
     }
     .sensoryFeedback(.error, trigger: errorToggle)
     .sensoryFeedback(.impact, trigger: startScanToggle)
     .sensoryFeedback(.success, trigger: scanResultsToggle)
     .sensoryFeedback(.success, trigger: saveComplete)
-    .ignoresSafeArea(edges: .top)
     .presentationCompactAdaptation(.fullScreenCover)
-    .animation(.bouncy, value: viewModel.image)
+    .animation(.easeInOut, value: viewModel.image)
     .animation(.default, value: viewModel.isLoading)
     .tint(.mutedGreen)
     .onAppear {
       Task {
         await permissionManager.checkPermission()
         if permissionManager.permissionState == .granted {
-          await cameraManager.start()
+          await viewModel.cameraManager.start()
         }
       }
     }
     .onDisappear {
       Task {
-        await cameraManager.stop()
+        await viewModel.cameraManager.stop()
       }
     }
     .alert(alertDetails: $alertDetails)
@@ -82,50 +93,6 @@ struct AIFoodScannerView: View {
 }
 
 private extension AIFoodScannerView {
-
-  var imageScanAspect: CGFloat {
-    if viewModel.image == nil {
-      return 0.6
-    }
-    return 0.4
-  }
-
-  @ViewBuilder
-  var scanAreaView: some View {
-    switch permissionManager.permissionState {
-    case .granted:
-      cameraView
-    case .denied:
-      CameraPermissionDeniedView()
-        .onAppear {
-          alertDetails = permissionManager.permissionAlert
-        }
-    case .pending:
-      Rectangle()
-        .fill(.black)
-        .ignoresSafeArea()
-        .aspectRatio(contentMode: .fit)
-    }
-  }
-
-  var cameraView: some View {
-    ZStack {
-      CameraPreview(
-        session: captureSession,
-        gravity: .resizeAspectFill
-      ) { focusPoint in
-        Task {
-          await cameraManager.setFocus(for: focusPoint)
-        }
-      }
-
-      if let image = viewModel.image {
-        Image(uiImage: image)
-          .resizable()
-          .aspectRatio(contentMode: .fill)
-      }
-    }
-  }
 
   var scannedItemsView: some View {
     VStack {
@@ -178,9 +145,7 @@ private extension AIFoodScannerView {
           logFoodBottomBar
         }
       }
-      .padding()
     }
-
   }
 }
 
@@ -205,68 +170,23 @@ private extension AIFoodScannerView {
 
   @ViewBuilder
   var logFoodBottomBar: some View {
-    Button {
-      dismiss()
-    } label: {
-      Image(systemName: "xmark")
-        .bold()
-        .frame(square: 55)
-        .background {
-          RoundedRectangle(cornerRadius: 16)
-            .fill(.tint)
-        }
-        .foregroundStyle(.white)
-    }
-
     if viewModel.servings.isNotEmpty {
-      Button {
-        Task {
-          do {
-            try await save()
-            dismiss()
-          } catch {
-            self.viewModel.error = error
-          }
-        }
+      AsyncButton {
+        try await save()
+        dismiss()
       } label: {
         Text("Log")
-          .bold()
           .horizontallyCentered()
-          .frame(height: 55)
-          .background {
-            RoundedRectangle(cornerRadius: 16)
-              .fill(.tint)
-          }
-          .foregroundStyle(.white)
       }
+      .buttonStyle(.primary)
     } else {
       Button {
-        startScanToggle.toggle()
-        Task {
-          guard permissionManager.permissionState == .granted else {
-            alertDetails = permissionManager.permissionAlert
-            return
-          }
-          guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
-
-          viewModel.image = image
-          await viewModel.performAIFoodLog(for: image)
-
-          if viewModel.servings.isNotEmpty {
-            scanResultsToggle.toggle()
-          }
-        }
+        scanFoodItems()
       } label: {
         Text("Scan")
-          .bold()
           .horizontallyCentered()
-          .frame(height: 55)
-          .background {
-            RoundedRectangle(cornerRadius: 16)
-              .fill(.tint)
-          }
-          .foregroundStyle(.white)
       }
+      .buttonStyle(.primary)
       .disabled(viewModel.isLoading)
     }
   }
@@ -289,6 +209,26 @@ private extension AIFoodScannerView {
 }
 
 private extension AIFoodScannerView {
+
+  func onDetect(code: String) {
+
+  }
+
+  func scanFoodItems() {
+    startScanToggle.toggle()
+    Task {
+      guard permissionManager.permissionState == .granted else {
+        alertDetails = permissionManager.permissionAlert
+        return
+      }
+
+      await viewModel.captureImage()
+
+      if viewModel.servings.isNotEmpty {
+        scanResultsToggle.toggle()
+      }
+    }
+  }
 
   func save() async throws {
     try await nutritionViewModel.log(

@@ -13,12 +13,15 @@ import UIKit
 
 final actor CameraManager: NSObject {
 
+  @AsyncStreamable var detectedBarcode: String?
+
   private var isInitialized = false
   private var capturedImageContinuation: CheckedContinuation<UIImage?, Never>?
   private var deviceInput: AVCaptureDeviceInput?
 
   private let photoOutput = AVCapturePhotoOutput()
-  private let captureSession: AVCaptureSession
+  private let metadataOutput = AVCaptureMetadataOutput()
+  let captureSession: AVCaptureSession
 
   private init(_ session: AVCaptureSession) {
     captureSession = session
@@ -27,6 +30,8 @@ final actor CameraManager: NSObject {
   static func create(with session: AVCaptureSession) -> CameraManager {
     CameraManager(session)
   }
+
+  private var detectedCodes = Set<String>()
 }
 
 // MARK: Public Methods
@@ -165,12 +170,17 @@ private extension CameraManager {
   }
 
   func setupPhotoOutput() {
-    guard captureSession.canAddOutput(photoOutput) else {
+    if captureSession.canAddOutput(photoOutput) {
+      captureSession.addOutput(photoOutput)
+    } else {
       print("CameraManager: Could not add photo output to session")
-      return
     }
 
-    captureSession.addOutput(photoOutput)
+    if captureSession.canAddOutput(metadataOutput) {
+      captureSession.addOutput(metadataOutput)
+    } else {
+      print("CameraManager: Could not add metadata output to session")
+    }
 
     Task {
       await setPhotoOutputProperties()
@@ -190,6 +200,9 @@ private extension CameraManager {
 
     photoOutput.maxPhotoDimensions = .init(width: 4032, height: 3024)
     photoOutput.maxPhotoQualityPrioritization = .quality
+
+    metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue(label: "com.lotus-labs.camera-manager.metadata-objects"))
+    metadataOutput.metadataObjectTypes = [.ean13]
   }
 
   func resetZoomScale() {
@@ -239,6 +252,35 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
     } else {
       capturedImageContinuation?.resume(returning: nil)
     }
+  }
+}
+
+extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
+
+  nonisolated func metadataOutput(
+    _ output: AVCaptureMetadataOutput,
+    didOutput metadataObjects: [AVMetadataObject],
+    from connection: AVCaptureConnection
+  ) {
+    guard
+      let metadataObject = metadataObjects.first,
+      let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject,
+      let stringValue = readableObject.stringValue
+    else { return }
+
+    Task {
+      await onDetect(code: stringValue)
+    }
+  }
+}
+
+private extension CameraManager {
+
+  func onDetect(code: String) {
+    guard !detectedCodes.contains(code) else { return }
+
+    detectedCodes.insert(code)
+    detectedBarcode = code
   }
 }
 
