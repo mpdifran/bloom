@@ -52,7 +52,7 @@ extension EKEvent {
         $0.startDate = Date.now.addingTimeInterval(1600)
         $0.endDate = Date.now.addingTimeInterval(5200)
         $0.calendar = calendar
-        $0.structuredLocation = .init(title: "Home")
+        $0.structuredLocation = EKStructuredLocation(title: "Home")
 
         try? CalendarManager.shared.eventStore.saveCalendar(calendar, commit: false)
         try? CalendarManager.shared.eventStore.save($0, span: .thisEvent)

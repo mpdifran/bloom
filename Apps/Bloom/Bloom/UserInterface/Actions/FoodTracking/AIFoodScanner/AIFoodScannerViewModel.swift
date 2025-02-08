@@ -48,32 +48,9 @@ extension AIFoodScannerView.ViewModel {
     })
   }
 
-  func captureImage() async {
-    guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
-
-    self.image = image
-    await performAIFoodLog(for: image)
-  }
-
-  func performAIFoodLog(for image: UIImage) async {
-    guard let smallerImage = image.resized(toWidth: 800) else { return }
-
-    do {
-      hasScannedAtLeastOnce = true
-      isLoading = true
-      let response = try await NetworkRequester.shared.foodAIEstimate(image: smallerImage)
-
-      self.servings = response.servings.map({ $0.asServing() })
-      isLoading = false
-
-      if servings.isEmpty {
-        self.image = nil
-      } else {
-        TelemetryDeck.signal("AI Food Scan", floatValue: Double(servings.count))
-      }
-    } catch {
-      self.error = error
-      isLoading = false
+  func captureImage() {
+    Task.detached { [weak self] in
+      await self?.performCaptureImage()
     }
   }
 
@@ -83,5 +60,48 @@ extension AIFoodScannerView.ViewModel {
     isLoading = false
     error = nil
     servings.removeAll()
+  }
+}
+
+private extension AIFoodScannerView.ViewModel {
+
+  nonisolated func performCaptureImage() async {
+    guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
+
+    await MainActor.run {
+      self.image = image
+    }
+
+    await performAIFoodLog(for: image)
+  }
+
+  nonisolated func performAIFoodLog(for image: UIImage) async {
+    guard let smallerImage = image.resized(toWidth: 800) else { return }
+
+    do {
+      await MainActor.run {
+        hasScannedAtLeastOnce = true
+        isLoading = true
+      }
+
+      let response = try await NetworkRequester.shared.foodAIEstimate(image: smallerImage)
+      let servings = response.servings.map({ $0.asServing() })
+
+      await MainActor.run {
+        self.servings = servings
+        isLoading = false
+
+        if servings.isEmpty {
+          self.image = nil
+        } else {
+          TelemetryDeck.signal("AI Food Scan", floatValue: Double(servings.count))
+        }
+      }
+    } catch {
+      await MainActor.run {
+        self.error = error
+        isLoading = false
+      }
+    }
   }
 }

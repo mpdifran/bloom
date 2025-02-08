@@ -13,14 +13,13 @@ struct AICameraScannerView: View {
   let cameraManager: CameraManager
   let captureSession: AVCaptureSession
   @Binding var image: UIImage?
-  let reset: () -> Void
 
   @State private var alertDetails: AlertDetails?
 
   @StateObject private var permissionManager = CameraPermissionManager.shared
 
   var body: some View {
-    Group {
+    VStack {
       switch permissionManager.permissionState {
       case .granted:
         cameraView
@@ -33,7 +32,6 @@ struct AICameraScannerView: View {
         Rectangle()
           .fill(.black)
           .ignoresSafeArea()
-          .aspectRatio(contentMode: .fit)
       }
     }
     .aspectRatio(1, contentMode: .fit)
@@ -43,8 +41,16 @@ struct AICameraScannerView: View {
 
 private extension AICameraScannerView {
 
+  @ViewBuilder
   var cameraView: some View {
-    ZStack {
+    if let image {
+      GeometryReader { geometry in
+        Image(uiImage: image)
+          .resizable()
+          .aspectRatio(contentMode: .fill)
+          .frame(square: geometry.size.width)
+      }
+    } else {
       CameraPreview(
         session: captureSession,
         gravity: .resizeAspectFill
@@ -53,26 +59,7 @@ private extension AICameraScannerView {
           await cameraManager.setFocus(for: focusPoint)
         }
       }
-
-      if let image {
-        Image(uiImage: image)
-          .resizable()
-          .aspectRatio(1, contentMode: .fill)
-
-        Button {
-          reset()
-        } label: {
-          Image(systemName: "arrow.counterclockwise")
-            .bold()
-            .padding(10)
-            .background {
-              Circle()
-                .fill(.regularMaterial)
-            }
-        }
-      }
     }
-    .animation(.easeInOut, value: image)
   }
 }
 
@@ -82,11 +69,15 @@ private extension AICameraScannerView {
   let captureSession = AVCaptureSession()
   let cameraManager = CameraManager.create(with: captureSession)
 
-  AICameraScannerView(
-    cameraManager: cameraManager,
-    captureSession: captureSession,
-    image: $image
-  ) {
-
+  VStack {
+    Spacer()
+    AICameraScannerView(
+      cameraManager: cameraManager,
+      captureSession: captureSession,
+      image: $image
+    )
+    Spacer()
   }
+  .padding()
+  .groupedBackground()
 }
