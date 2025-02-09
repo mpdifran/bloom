@@ -122,15 +122,7 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
 
         try context.save()
       },
-      didMigrate: { context in
-        let logs = try context.fetch(FetchDescriptor<SchemaV7.FoodItemLog>())
-
-        for log in logs {
-          log.mealRawValue = log.meal.rawValue
-        }
-
-        try context.save()
-      }
+      didMigrate: nil
     )
   }
 }
