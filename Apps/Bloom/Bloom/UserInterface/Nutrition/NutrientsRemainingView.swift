@@ -11,10 +11,12 @@ import DataContainer
 
 struct NutrientsRemainingView: View {
 
-  private let foodItemLogs: [FoodItemLog]
+  @ObservedObject private var viewModel: NutrientsRemainingViewModel
 
-  init(foodItemLogs: [FoodItemLog]) {
-    self.foodItemLogs = foodItemLogs
+  init(date: Date) {
+    _viewModel = ObservedObject(
+      wrappedValue: NutrientsRemainingViewModel(date: date)
+    )
   }
 
   var body: some View {
@@ -39,9 +41,9 @@ private extension NutrientsRemainingView {
   }
 
   var cardView: some View {
-    HStack {
+    HStack(alignment: .bottom) {
       VStack(alignment: .leading) {
-        Text(foodItemLogs.totalCalories.format())
+        Text(viewModel.calorieTotal.format())
           .font(
             .system(
               .title3,
@@ -59,9 +61,9 @@ private extension NutrientsRemainingView {
       Spacer()
 
       HStack {
-        NutrientLabel(value: 50, label: "Protein")
-        NutrientLabel(value: 50, label: "Fats")
-        NutrientLabel(value: 50, label: "Carbs")
+        NutrientLabel(value: viewModel.proteinTotal, label: "Protein")
+        NutrientLabel(value: viewModel.fatsTotal, label: "Fats")
+        NutrientLabel(value: viewModel.carbsTotal, label: "Carbs")
       }
 
       DisclosureIndicator()
@@ -75,16 +77,18 @@ private struct NutrientLabel: View {
   let label: String
 
   var body: some View {
-    VStack {
+    VStack(alignment: .leading) {
       ProgressBar(
         value: value,
-        target: 125,
-        measurementStyle: .minimum
+        target: 125
       )
 
-      Text("16g")
+      Text(value.format())
 
       Text(label)
+        .bold()
+        .foregroundStyle(.secondary)
+        .font(.caption)
     }
   }
 }

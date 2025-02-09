@@ -64,6 +64,7 @@ private extension NutritionView {
       presentedSheet: Binding<AnyView?>,
       isSwipingItem: Binding<Bool>
     ) {
+      self.date = date
       self._presentedSheet = presentedSheet
       self._isSwipingItem = isSwipingItem
 
@@ -85,12 +86,14 @@ private extension NutritionView {
 
     @Query private var foodItemLogs: [FoodItemLog]
 
+    private let date: Date
+
     var body: some View {
       VStack {
         topBar
 
         NutrientsRemainingView(
-          foodItemLogs: foodItemLogs
+          date: date
         )
         .padding(.vertical)
 
