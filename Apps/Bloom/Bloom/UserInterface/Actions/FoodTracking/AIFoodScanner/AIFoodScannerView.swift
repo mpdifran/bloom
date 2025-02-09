@@ -52,7 +52,6 @@ struct AIFoodScannerView: View {
     .sensoryFeedback(.success, trigger: scanResultsToggle)
     .sensoryFeedback(.success, trigger: saveComplete)
     .presentationCompactAdaptation(.fullScreenCover)
-    .animation(.default, value: viewModel.image)
     .animation(.default, value: viewModel.isLoading)
     .tint(.mutedGreen)
     .onAppear {
@@ -206,8 +205,10 @@ private extension AIFoodScannerView {
   var analyzingView: some View {
     VStack {
       Spacer()
-      CircularSpinnerView()
-        .foregroundStyle(.tint)
+      ProgressView()
+        .progressViewStyle(.circular)
+//      CircularSpinnerView() // TODO: Figure out why this animation dies during loading, but the above spinner doesn't
+//        .foregroundStyle(.tint)
       Text("Analyzing...")
         .font(.title2)
         .bold()

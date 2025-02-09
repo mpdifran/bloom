@@ -252,6 +252,7 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
     } else {
       capturedImageContinuation?.resume(returning: nil)
     }
+    capturedImageContinuation = nil
   }
 }
 

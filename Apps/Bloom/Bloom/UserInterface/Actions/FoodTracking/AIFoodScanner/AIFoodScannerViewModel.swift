@@ -76,7 +76,7 @@ private extension AIFoodScannerView.ViewModel {
   }
 
   nonisolated func performAIFoodLog(for image: UIImage) async {
-    guard let smallerImage = image.resized(toWidth: 800) else { return }
+    guard let smallerImage = image.resized(toWidth: 1200) else { return }
 
     do {
       await MainActor.run {
@@ -89,7 +89,7 @@ private extension AIFoodScannerView.ViewModel {
 
       await MainActor.run {
         self.servings = servings
-        isLoading = false
+        self.isLoading = false
 
         if servings.isEmpty {
           self.image = nil
@@ -100,7 +100,9 @@ private extension AIFoodScannerView.ViewModel {
     } catch {
       await MainActor.run {
         self.error = error
-        isLoading = false
+        print(error)
+        self.isLoading = false
+        self.image = nil
       }
     }
   }
