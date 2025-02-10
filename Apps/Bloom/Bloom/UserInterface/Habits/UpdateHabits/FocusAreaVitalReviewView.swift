@@ -8,6 +8,7 @@
 import SwiftUI
 import DataContainer
 import AppUI
+import TelemetryDeck
 
 struct FocusAreaVitalReviewView: View {
   let onContinue: ([VitalModel]) -> Void
@@ -79,6 +80,9 @@ struct FocusAreaVitalReviewView: View {
       while index < 3 {
         await advanceIndex()
       }
+    }
+    .onAppear {
+      TelemetryDeck.signal("Focus Area Vital Review")
     }
   }
 }

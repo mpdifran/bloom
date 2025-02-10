@@ -8,6 +8,7 @@
 import SwiftUI
 import DataContainer
 import AppUI
+import TelemetryDeck
 
 struct FocusAreaHabitReviewView: View {
   let vitals: [VitalModel]
@@ -65,6 +66,9 @@ struct FocusAreaHabitReviewView: View {
       }
       await loadHabits()
       await advanceIndex()
+    }
+    .onAppear {
+      TelemetryDeck.signal("Focus Area Goal Review")
     }
   }
 }

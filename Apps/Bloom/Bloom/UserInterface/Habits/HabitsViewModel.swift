@@ -84,6 +84,18 @@ extension HabitsViewModel {
       let habit = createHabit(from: proposedGoal, isSuggested: true)
       modelContext.insert(habit)
       addedTargetMetrics.append(proposedGoal.targetMetric)
+
+      TelemetryDeck.signal(
+        "Update Goal",
+        parameters: [
+          "userAdded" : "false",
+          "vitalKind" : focusVital.vitalKind.name,
+          "goalKind" : proposedGoal.targetMetric.name,
+          "value" : proposedGoal.value.format(using: .twoDecimalPlaces),
+          "originalValue" : proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
+        ],
+        floatValue: proposedGoal.value
+      )
     }
 
     for proposedGoal in newGoals.proposedGoals {
@@ -92,6 +104,17 @@ extension HabitsViewModel {
       let habit = createHabit(from: proposedGoal, isSuggested: false)
       modelContext.insert(habit)
       addedTargetMetrics.append(proposedGoal.targetMetric)
+
+      TelemetryDeck.signal(
+        "Update Goal",
+        parameters: [
+          "userAdded" : "true",
+          "goalKind" : proposedGoal.targetMetric.name,
+          "value" : proposedGoal.value.format(using: .twoDecimalPlaces),
+          "originalValue" : proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
+        ],
+        floatValue: proposedGoal.value
+      )
     }
 
     try modelContext.save()
@@ -99,6 +122,8 @@ extension HabitsViewModel {
     ToDoManager.shared.apply(proposedToDos: newGoals.proposedToDos)
 
     lastHabitRefreshDate = .now
+
+    TelemetryDeck.signal("User Goal Count", floatValue: Double(addedTargetMetrics.count))
   }
 
   func createHabit(from proposedGoal: ProposedGoal, isSuggested: Bool) -> Habit {
