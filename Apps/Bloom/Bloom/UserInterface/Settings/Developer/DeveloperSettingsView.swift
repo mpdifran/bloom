@@ -90,6 +90,7 @@ extension DeveloperSettingsView {
             .multilineTextAlignment(.trailing)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
+            .selectAllTextOnBeginEditing()
         }
       }
     } header: {

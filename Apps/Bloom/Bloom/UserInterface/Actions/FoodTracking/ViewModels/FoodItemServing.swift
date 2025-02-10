@@ -8,7 +8,7 @@
 import Foundation
 import BloomModel
 
-struct FoodItemServing: Identifiable {
+struct FoodItemServing: Identifiable, Equatable {
     var id: String { foodItem.id.value }
 
     var serving: Double

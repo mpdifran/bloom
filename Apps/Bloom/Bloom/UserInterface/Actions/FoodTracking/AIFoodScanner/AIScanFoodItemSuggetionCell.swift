@@ -1,16 +1,16 @@
 //
-//  AIScanFoodItemCell.swift
-//  Supplements
+//  AIScanFoodItemSuggetionCell.swift
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-11-24.
+//  Created by Mark DiFranco on 2025-02-10.
 //
 
 import SwiftUI
 import BloomModel
 
-/// This is inspired by `FoodItemCell`.
-struct AIScanFoodItemCell: View {
-  @Binding var foodItemServing: FoodItemServing
+struct AIScanFoodItemSuggetionCell: View {
+  let foodItemServing: FoodItemServing
+  let addItem: () -> Void
 
   var body: some View {
     HStack {
@@ -18,14 +18,13 @@ struct AIScanFoodItemCell: View {
 
       Spacer()
 
-      caloriesView
-      editContentView
+      addButton
     }
     .cardContainer(fill: .background, stroke: .background.secondary)
   }
 }
 
-private extension AIScanFoodItemCell {
+private extension AIScanFoodItemSuggetionCell {
 
   var food: FoodItem {
     foodItemServing.foodItem
@@ -70,49 +69,26 @@ private extension AIScanFoodItemCell {
     }
   }
 
-  @ViewBuilder
-  var caloriesView: some View {
-    if let calories = food.calories?.value {
-      VStack(spacing: 0) {
-        Text("\(calories.format())")
-          .bold()
-          .font(.title2)
-          .foregroundStyle(.tint)
-        Text("cals")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
-      .fontDesign(.rounded)
-    }
-  }
-
-  var editContentView: some View {
-    HStack {
-      VStack {
-        TextField("", value: $foodItemServing.serving, formatter: NumberFormatter.oneDecimalPlace)
-          .textFieldStyle(.roundedBorder)
-          .multilineTextAlignment(.center)
-          .frame(width: 70)
-          .fontDesign(.rounded)
-          .keyboardType(.decimalPad)
-          .selectAllTextOnBeginEditing()
-
-        Text("servings")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
+  var addButton: some View {
+    Button {
+      addItem()
+    } label: {
+      Image(systemName: "plus.circle.fill")
+        .foregroundStyle(.white, .tint)
+        .font(.title)
     }
   }
 }
 
 #Preview {
-  AIScanFoodItemCell(
-    foodItemServing: .constant(
-      .init(
-        serving: 2,
-        foodItem: .Preview.ritzCrackers
-      )
+  AIScanFoodItemSuggetionCell(
+    foodItemServing: FoodItemServing(
+      serving: 2,
+      foodItem: .Preview.ritzCrackers
     )
-  )
+  ) {
+
+  }
+  .tint(.mutedGreen)
   .padding()
 }

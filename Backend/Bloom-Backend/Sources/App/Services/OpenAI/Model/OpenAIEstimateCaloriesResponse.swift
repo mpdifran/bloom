@@ -9,7 +9,9 @@ import Foundation
 import BloomModel
 
 struct OpenAIEstimateCaloriesResponse: Codable {
+  let name: String
   let items: [Item]
+  let optionalItems: [Item]
 }
 
 extension OpenAIEstimateCaloriesResponse {

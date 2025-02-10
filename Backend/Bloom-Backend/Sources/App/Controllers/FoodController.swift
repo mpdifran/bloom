@@ -126,14 +126,21 @@ extension FoodController {
   func estimateFoodCalories(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
     let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
 
-    let foodEstimate = await openAIService.estimateCalories(
+    guard let foodEstimate = await openAIService.estimateCalories(
       request: request,
       foodImageFile: requestBody.foodImage
+    ) else {
+      throw Abort(.internalServerError)
+    }
+
+    let servings = foodEstimate.items.map { $0.asServing() }
+    let suggestedServings = foodEstimate.optionalItems.map { $0.asServing() }
+
+    return EstimateFoodCaloriesResponse(
+      name: foodEstimate.name,
+      servings: servings,
+      suggestedServings: suggestedServings
     )
-
-    let servings = foodEstimate?.items.map({ item in item.asServing() }) ?? []
-
-    return EstimateFoodCaloriesResponse(servings: servings)
   }
 
   @Sendable

@@ -8,9 +8,9 @@
 import Foundation
 
 public struct EstimateFoodCaloriesRequest: Codable, Sendable {
-    public let foodImage: ImageFile
+  public let foodImage: ImageFile
 
-    public init(foodImage: ImageFile) {
-        self.foodImage = foodImage
-    }
+  public init(foodImage: ImageFile) {
+    self.foodImage = foodImage
+  }
 }

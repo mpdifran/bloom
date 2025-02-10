@@ -9,21 +9,29 @@ import Foundation
 
 
 public struct EstimateFoodCaloriesResponse: Codable, Sendable {
-    public let servings: [Serving]
+  public let name: String
+  public let servings: [Serving]
+  public let suggestedServings: [Serving]
 
-    public init(servings: [Serving]) {
-        self.servings = servings
-    }
+  public init(
+    name: String,
+    servings: [Serving],
+    suggestedServings: [Serving]
+  ) {
+    self.name = name
+    self.servings = servings
+    self.suggestedServings = suggestedServings
+  }
 }
 
 extension EstimateFoodCaloriesResponse {
-    public struct Serving: Codable, Sendable {
-        public let servings: Double
-        public let item: FoodItem
+  public struct Serving: Codable, Sendable {
+    public let servings: Double
+    public let item: FoodItem
 
-        public init(servings: Double, item: FoodItem) {
-            self.servings = servings
-            self.item = item
-        }
+    public init(servings: Double, item: FoodItem) {
+      self.servings = servings
+      self.item = item
     }
+  }
 }
