@@ -11,7 +11,8 @@ import UIKit
 
 // MARK: - CameraManager
 
-final actor CameraManager: NSObject {
+@MainActor
+final class CameraManager: NSObject {
 
   @AsyncStreamable var detectedBarcode: String?
 
@@ -19,17 +20,9 @@ final actor CameraManager: NSObject {
   private var capturedImageContinuation: CheckedContinuation<UIImage?, Never>?
   private var deviceInput: AVCaptureDeviceInput?
 
+  let captureSession = AVCaptureSession()
   private let photoOutput = AVCapturePhotoOutput()
   private let metadataOutput = AVCaptureMetadataOutput()
-  let captureSession: AVCaptureSession
-
-  private init(_ session: AVCaptureSession) {
-    captureSession = session
-  }
-
-  static func create(with session: AVCaptureSession) -> CameraManager {
-    CameraManager(session)
-  }
 
   private var detectedCodes = Set<String>()
 }
@@ -37,13 +30,21 @@ final actor CameraManager: NSObject {
 // MARK: Public Methods
 
 extension CameraManager {
-  func start() async {
-    configureCaptureSession()
 
-    captureSession.startRunning()
+  nonisolated func start() {
+    Task.detached { [weak self] in
+      guard let self = self else { return }
+
+      await MainActor.run {
+        self.configureCaptureSession()
+      }
+
+      let session = await self.captureSession
+      session.startRunning()
+    }
   }
 
-  func stop() async {
+  func stop() {
     guard captureSession.isRunning else { return }
 
     captureSession.stopRunning()
@@ -97,20 +98,18 @@ private extension CameraManager {
   func configureCaptureSession() {
     guard !isInitialized else { return }
 
-    captureSession.beginConfiguration()
+    captureSession.configure {
+      captureSession.sessionPreset = .photo
 
-    defer { captureSession.commitConfiguration() }
+      setupVideoInput()
+      setupPhotoOutput()
 
-    captureSession.sessionPreset = .photo
+      isInitialized = true
 
-    setupVideoInput()
-    setupPhotoOutput()
-
-    isInitialized = true
-
-    // After the camera is initialized, we need to reset the zoom scale for 1x camera (0.5x is default).
-    // We cannot set the zoom factor when setting up the video input initially, it must be done after.
-    resetZoomScale()
+      // After the camera is initialized, we need to reset the zoom scale for 1x camera (0.5x is default).
+      // We cannot set the zoom factor when setting up the video input initially, it must be done after.
+      resetZoomScale()
+    }
   }
 
   func setupVideoInput() {

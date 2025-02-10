@@ -20,8 +20,7 @@ struct CameraView: View {
 
   @State private var selectedImage: PhotosPickerItem?
 
-  private let cameraManager: CameraManager
-  private let captureSession = AVCaptureSession()
+  private let cameraManager = CameraManager()
 
   @State private var alertDetails: AlertDetails?
 
@@ -34,7 +33,6 @@ struct CameraView: View {
     instructions: String,
     aspectRatio: CGFloat
   ) {
-    self.cameraManager = CameraManager.create(with: captureSession)
     self._capturedImage = capturedImage
     self.instructions = instructions
     self.aspectRatio = aspectRatio
@@ -64,13 +62,13 @@ struct CameraView: View {
       Task {
         await permissionManager.checkPermission()
         if permissionManager.permissionState == .granted {
-          await cameraManager.start()
+          cameraManager.start()
         }
       }
     }
     .onDisappear {
       Task {
-        await cameraManager.stop()
+        cameraManager.stop()
       }
     }
     .alert(alertDetails: $alertDetails)
@@ -86,9 +84,7 @@ private extension CameraView {
       Color.black
         .ignoresSafeArea()
 
-      CameraPreview(
-        session: captureSession
-      ) { focusPoint in
+      CameraPreview(cameraManager: cameraManager) { focusPoint in
         Task {
           await cameraManager.setFocus(for: focusPoint)
         }

@@ -58,13 +58,13 @@ struct AIFoodScannerView: View {
       Task {
         await permissionManager.checkPermission()
         if permissionManager.permissionState == .granted {
-          await viewModel.cameraManager.start()
+          viewModel.cameraManager.start()
         }
       }
     }
     .onDisappear {
       Task {
-        await viewModel.cameraManager.stop()
+        viewModel.cameraManager.stop()
       }
     }
     .alert(alertDetails: $alertDetails)
@@ -88,7 +88,6 @@ private extension AIFoodScannerView {
     VStack {
       AICameraScannerView(
         cameraManager: viewModel.cameraManager,
-        captureSession: viewModel.captureSession,
         image: $viewModel.image
       )
       .fixedSize(horizontal: false, vertical: true)
@@ -120,7 +119,6 @@ private extension AIFoodScannerView {
         HStack {
           AICameraScannerView(
             cameraManager: viewModel.cameraManager,
-            captureSession: viewModel.captureSession,
             image: $viewModel.image
           )
           .frame(square: 100)

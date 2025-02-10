@@ -21,12 +21,9 @@ extension AIFoodScannerView {
     var servings = [FoodItemServing]()
     var error: Error?
 
-    let cameraManager: CameraManager
-    let captureSession = AVCaptureSession()
+    let cameraManager = CameraManager()
 
     init() {
-      self.cameraManager = CameraManager.create(with: captureSession)
-
       setupObservers()
     }
 

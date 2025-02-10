@@ -11,7 +11,6 @@ import AVFoundation
 
 struct AICameraScannerView: View {
   let cameraManager: CameraManager
-  let captureSession: AVCaptureSession
   @Binding var image: UIImage?
 
   @State private var alertDetails: AlertDetails?
@@ -43,20 +42,23 @@ private extension AICameraScannerView {
 
   @ViewBuilder
   var cameraView: some View {
-    if let image {
-      GeometryReader { geometry in
-        Image(uiImage: image)
-          .resizable()
-          .aspectRatio(contentMode: .fill)
-          .frame(square: geometry.size.width)
-      }
-    } else {
+    ZStack {
       CameraPreview(
-        session: captureSession,
+        cameraManager: cameraManager,
         gravity: .resizeAspectFill
       ) { focusPoint in
         Task {
           await cameraManager.setFocus(for: focusPoint)
+        }
+      }
+
+      if let image {
+        GeometryReader { geometry in
+          Image(uiImage: image)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(square: geometry.size.width / 4)
+            .zStackAlignment(.bottomTrailing)
         }
       }
     }
@@ -66,14 +68,12 @@ private extension AICameraScannerView {
 #Preview {
   @Previewable @State var image: UIImage?
 
-  let captureSession = AVCaptureSession()
-  let cameraManager = CameraManager.create(with: captureSession)
+  let cameraManager = CameraManager()
 
   VStack {
     Spacer()
     AICameraScannerView(
       cameraManager: cameraManager,
-      captureSession: captureSession,
       image: $image
     )
     Spacer()
