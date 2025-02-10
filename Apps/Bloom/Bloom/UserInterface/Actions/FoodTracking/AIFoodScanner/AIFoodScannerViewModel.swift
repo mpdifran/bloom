@@ -21,8 +21,6 @@ extension AIFoodScannerView {
     var servings = [FoodItemServing]()
     var error: Error?
 
-    let cameraManager = CameraManager()
-
     init() {
       setupObservers()
     }
@@ -34,21 +32,15 @@ extension AIFoodScannerView {
 extension AIFoodScannerView.ViewModel {
 
   private func setupObservers() {
-    tasks.removeAll(keepingCapacity: true)
-
-    tasks.append(Task.detached {
-      for await barcode in await self.cameraManager.$detectedBarcode {
-        await MainActor.run {
-          self.detectedBarcode = barcode
-        }
-      }
-    })
-  }
-
-  func captureImage() {
-    Task.detached { [weak self] in
-      await self?.performCaptureImage()
-    }
+//    tasks.removeAll(keepingCapacity: true)
+//
+//    tasks.append(Task.detached {
+//      for await barcode in await self.cameraManager.$detectedBarcode {
+//        await MainActor.run {
+//          self.detectedBarcode = barcode
+//        }
+//      }
+//    })
   }
 
   func reset() {
@@ -57,19 +49,6 @@ extension AIFoodScannerView.ViewModel {
     isLoading = false
     error = nil
     servings.removeAll()
-  }
-}
-
-private extension AIFoodScannerView.ViewModel {
-
-  nonisolated func performCaptureImage() async {
-    guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
-
-    await MainActor.run {
-      self.image = image
-    }
-
-    await performAIFoodLog(for: image)
   }
 
   nonisolated func performAIFoodLog(for image: UIImage) async {

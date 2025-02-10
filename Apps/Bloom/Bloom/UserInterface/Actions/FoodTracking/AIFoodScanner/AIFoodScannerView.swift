@@ -27,6 +27,7 @@ struct AIFoodScannerView: View {
 
   @Namespace private var aiFoodScannerNamespace
 
+  private let cameraManager = CameraManager()
   private let nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
@@ -58,14 +59,12 @@ struct AIFoodScannerView: View {
       Task {
         await permissionManager.checkPermission()
         if permissionManager.permissionState == .granted {
-          viewModel.cameraManager.start()
+          cameraManager.start()
         }
       }
     }
     .onDisappear {
-      Task {
-        viewModel.cameraManager.stop()
-      }
+      cameraManager.stop()
     }
     .alert(alertDetails: $alertDetails)
     .alert(error: $viewModel.error)
@@ -87,7 +86,7 @@ private extension AIFoodScannerView {
   var fixedContentView: some View {
     VStack {
       AICameraScannerView(
-        cameraManager: viewModel.cameraManager,
+        cameraManager: cameraManager,
         image: $viewModel.image
       )
       .fixedSize(horizontal: false, vertical: true)
@@ -118,7 +117,7 @@ private extension AIFoodScannerView {
       VStack {
         HStack {
           AICameraScannerView(
-            cameraManager: viewModel.cameraManager,
+            cameraManager: cameraManager,
             image: $viewModel.image
           )
           .frame(square: 100)
@@ -251,7 +250,16 @@ private extension AIFoodScannerView {
       return
     }
 
-    viewModel.captureImage()
+    Task {
+      guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
+      
+      viewModel.image = image
+      await viewModel.performAIFoodLog(for: image)
+      
+      if viewModel.servings.isNotEmpty {
+        scanResultsToggle.toggle()
+      }
+    }
   }
 
   func save() async throws {

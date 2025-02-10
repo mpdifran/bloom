@@ -25,6 +25,8 @@ final class CameraManager: NSObject {
   private let metadataOutput = AVCaptureMetadataOutput()
 
   private var detectedCodes = Set<String>()
+
+  
 }
 
 // MARK: Public Methods
