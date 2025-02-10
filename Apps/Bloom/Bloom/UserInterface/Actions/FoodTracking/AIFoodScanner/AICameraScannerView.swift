@@ -53,13 +53,7 @@ private extension AICameraScannerView {
       }
 
       if let image {
-        GeometryReader { geometry in
-          Image(uiImage: image)
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(square: geometry.size.width / 4)
-            .zStackAlignment(.bottomTrailing)
-        }
+        AICameraRoundedImageView(image: image)
       }
     }
   }

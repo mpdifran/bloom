@@ -32,11 +32,12 @@ struct AIFoodScannerView: View {
 
   var body: some View {
     NavigationStack {
-      VStack {
+      ZStack {
+        fixedContentView
+          .opacity(viewModel.servings.isNotEmpty ? 0 : 1)
+
         if viewModel.servings.isNotEmpty {
           scrollContentView
-        } else {
-          fixedContentView
         }
       }
       .groupedBackground()
@@ -116,12 +117,11 @@ private extension AIFoodScannerView {
     ScrollView {
       VStack {
         HStack {
-          AICameraScannerView(
-            cameraManager: cameraManager,
-            image: $viewModel.image
-          )
-          .frame(square: 100)
-          .matchedGeometryEffect(id: "aiCameraScannerView", in: aiFoodScannerNamespace)
+          if let image = viewModel.image {
+            AICameraRoundedImageView(image: image)
+              .frame(square: 100)
+              .matchedGeometryEffect(id: "aiCameraScannerView", in: aiFoodScannerNamespace)
+          }
 
           VStack(alignment: .leading) {
             Text("This is the name of the food")
