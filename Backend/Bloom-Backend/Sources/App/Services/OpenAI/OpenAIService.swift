@@ -158,7 +158,7 @@ extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: Model.GPT4.gpt_4o_mini,
+        model: Model.GPT4.gpt_4o,
         messages: messages
       )
 

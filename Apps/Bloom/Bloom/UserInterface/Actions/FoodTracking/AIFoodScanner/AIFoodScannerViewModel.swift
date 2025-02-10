@@ -76,6 +76,8 @@ extension AIFoodScannerView.ViewModel {
 
         if servings.isEmpty {
           self.image = nil
+          self.suggestedServings = []
+          self.scannedFoodName = nil
         } else {
           TelemetryDeck.signal("AI Food Scan", floatValue: Double(servings.count))
         }
