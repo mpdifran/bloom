@@ -18,11 +18,13 @@ final class CreateNewFoodItemDetailViewModel: FoodItemDetailViewModel {
 
   init(onSuccessfulCreation: @escaping () -> Void) {
     self.onSuccessfulCreation = onSuccessfulCreation
+    let emptyFoodItemRecord = AdminFoodItemRecord(id: FoodItemIdentifier(UUID().uuidString))
     super.init(
-      foodItem: AdminFoodItemRecord(id: FoodItemIdentifier(UUID().uuidString)),
+      foodItem: emptyFoodItemRecord,
       foodStore: UnverifiedFoodStore.shared // no needed
     )
     saveButtonText = "Create and close window"
+    accuracyReportViewModel = .init(foodItemRecord: emptyFoodItemRecord, shouldFetchReport: false)
   }
   
   override func save() async {

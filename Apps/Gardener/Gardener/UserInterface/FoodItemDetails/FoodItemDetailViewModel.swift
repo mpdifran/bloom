@@ -23,7 +23,7 @@ open class FoodItemDetailViewModel: ObservableObject {
   @Published var packagingImage: URL?
   @Published var packagingImageRotation: Double = 0
   @Published var selectedPackagingImage: NSImage?
-  @Published var accuracyReport: AdminAccuracyReport? = nil
+  @ObservedObject var accuracyReportViewModel: AIGeneratedReportViewModel
 
   @Published var nutritionLabel: URL?
   @Published var nutritionLabelRotation: Double = 0
@@ -36,6 +36,7 @@ open class FoodItemDetailViewModel: ObservableObject {
 
     packagingImage = foodItem.packagingImage
     nutritionLabel = foodItem.nutritionLabelImage
+    accuracyReportViewModel = .init(foodItemRecord: foodItem, shouldFetchReport: true)
   }
   
   open func save() async {
@@ -54,6 +55,7 @@ open class FoodItemDetailViewModel: ObservableObject {
       // Reset selections, they should be on the response.
       selectedPackagingImage = nil
       selectedNutritionLabel = nil
+      accuracyReportViewModel.setCurrentFoodRecord(to: updatedFoodItem)
     } catch {
       self.error = error
     }
@@ -136,15 +138,6 @@ extension FoodItemDetailViewModel {
     }
 
     return false
-  }
-  
-  func fetchAccuracyReport() async {
-    do {
-      let response = try await NetworkStack.shared.getLatestAccuracyReport(forFoodItemWithID: foodItem.id)
-      await MainActor.run {
-        self.accuracyReport = response.report
-      }
-    } catch { }
   }
 }
 
