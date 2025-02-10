@@ -161,6 +161,124 @@ extension OpenAIService {
       return nil
     }
   }
+
+  func evaluateFoodItemAccuracy(
+    request: Request,
+    foodItemRecord: FoodItemRecord
+  ) async throws -> (score: Int, notes: String, recommendations: [String: String]) {
+    var messages: [Chat.Message] = [
+      Chat.Message(
+        role: .system,
+        content: [
+          .text("""
+          You are an expert nutritionist and food data analyst. Your PRIMARY task is to verify that the food item record matches the provided nutrition label and packaging images. Then, use your professional nutrition expertise to evaluate if the nutritional values make sense.
+
+          IMPORTANT: Pay special attention to the downvote count - a high number of downvotes strongly indicates data inaccuracy and should significantly impact the accuracy score.
+
+          You must respond in JSON format with the following structure:
+          {
+            "accuracy_score": A score from 0 to 100 indicating overall data accuracy and completeness,
+            "evaluation_notes": A brief (2-3 sentences) summary of key issues found,
+            "recommendations": A dictionary mapping field names to their recommended correct values
+          }
+
+          Example response:
+          {
+            "accuracy_score": 70,
+            "evaluation_notes": "Values in record do not match nutrition label image. Protein content also appears physiologically unreasonable for this food type.",
+            "recommendations": {
+              "protein": "4.2",
+              "serving_size": "100g", 
+              "brand_name": "Correct Brand LLC"
+            }
+          }
+
+          Consider the following factors in your evaluation:
+          1. Match between record and provided images - THIS IS THE PRIMARY FOCUS
+          2. User feedback (downvote count) - THIS IS ALSO CRITICAL
+          3. Professional assessment of nutritional values, try to restrain from adding an entry to the `recommendations` array. Add an entry only if you are certain that the value does not match the provided nutrition label or food packeting  - THIS IS ALSO CRITICAL
+          4. Completeness of nutritional information  
+          5. Consistency between values (e.g., total fat vs sum of fat types)
+          6. Physiologically reasonable ranges for nutrients
+          7. Serving size appropriateness
+          8. Brand and product name accuracy
+          """)
+        ]
+      )
+    ]
+
+    // Just dump the entire object
+    messages.append(Chat.Message(
+      role: .user,
+      content: [.text("Evaluate this food item record: \(foodItemRecord.prettyPrint())")]
+    ))
+
+    // Add images if available
+    if let nutritionLabelImage = foodItemRecord.nutritionLabelImage,
+       let nutritionImageFile = try await request.imageStorage.retrieveImage(
+         fileName: nutritionLabelImage,
+         path: .nutritionLabel
+       ) {
+      messages.append(Chat.Message(
+        role: .user,
+        content: [
+          .imageData(nutritionImageFile.data, "image/\(nutritionImageFile.fileExtension)"),
+          .text("This is the nutrition label image for the product. Use it to verify the nutritional information.")
+        ]
+      ))
+    }
+
+    if let packagingImage = foodItemRecord.packagingImage,
+       let packagingImageFile = try await request.imageStorage.retrieveImage(
+         fileName: packagingImage,
+         path: .foodPackaging
+       ) {
+      messages.append(Chat.Message(
+        role: .user,
+        content: [
+          .imageData(packagingImageFile.data, "image/\(packagingImageFile.fileExtension)"),
+          .text("This is the packaging image for the product. Use it to verify the product name, brand, and other visible information.")
+        ]
+      ))
+    }
+
+    let response = try await request.openAI.chats.create(
+      model: Model.GPT4.gpt_4o_mini,
+      messages: messages
+    )
+
+    guard var message = response.choices.first?.message.content.first?.text else {
+      throw Abort(.internalServerError, reason: "No response from OpenAI")
+    }
+
+    // Clean up JSON string
+    if message.hasPrefix("```json") {
+      message.removeFirst("```json".count)
+      message.removeLast("```".count)
+    }
+    message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+
+    guard let data = message.data(using: .utf8) else {
+      throw Abort(.internalServerError, reason: "Could not encode OpenAI response")
+    }
+
+    struct EvaluationResponse: Codable {
+      let accuracyScore: Int
+      let evaluationNotes: String
+      let recommendations: [String: String]
+    }
+
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    
+    let evaluation = try decoder.decode(EvaluationResponse.self, from: data)
+    
+    return (
+      score: evaluation.accuracyScore,
+      notes: evaluation.evaluationNotes,
+      recommendations: evaluation.recommendations
+    )
+  }
 }
 
 private extension OpenAIService {

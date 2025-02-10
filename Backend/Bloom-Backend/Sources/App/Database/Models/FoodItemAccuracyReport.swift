@@ -34,13 +34,13 @@ final class FoodItemAccuracyReport: Model, Content, @unchecked Sendable {
   
   init(
     id: String = UUID().uuidString,
-    foodItemRecord: String?,
+    foodItemRecord: String,
     accuracyScore: Double,
     evaluationNotes: String? = nil,
     recommendations: [String: String]? = nil
   ) {
     self.id = id
-    self.foodItemRecord.id = foodItemRecord
+    self.$foodItemRecord.id = foodItemRecord
     self.accuracyScore = accuracyScore
     self.evaluationNotes = evaluationNotes
     self.recommendations = recommendations

@@ -85,6 +85,32 @@ final class AIGeneratedReportViewModel: ObservableObject {
         color: .red
       )
     }
-    
+  }
+  
+  // In the future, consider making the report generation async on the BE
+  // and use polling/web socket/SSE to get report status updates
+  func regenerateReport() async {
+    await MainActor.run {
+      accuracyReportState = .fetching
+      updateDisclaimer()
+    }
+    do {
+      let response = try await NetworkStack.shared.regenerateAccuracyReport(forFoodItemWithID: foodItemRecord.id)
+      
+      await MainActor.run {
+        if let report = response.report {
+          accuracyReportState = .fetched(report)
+          updateDisclaimer()
+        } else {
+          accuracyReportState = .noReportAvailable
+          updateDisclaimer()
+        }
+      }
+    } catch {
+      await MainActor.run {
+        accuracyReportState = .noReportAvailable
+        updateDisclaimer()
+      }
+    }
   }
 }

@@ -29,6 +29,12 @@ protocol ImageStorage {
     path: StoragePath,
     expiration: TimeAmount
   ) async throws -> URL?
+  
+  /// Retrieve image data from storage
+  /// - Parameters:
+  ///   - fileName: The name of the file to retrieve
+  ///   - path: The storage path where the file is located
+  func retrieveImage(fileName: String, path: StoragePath) async throws -> ImageFile?
 }
 
 struct S3Storage: ImageStorage {
@@ -82,6 +88,33 @@ struct S3Storage: ImageStorage {
       return image
     } catch {
       request.logger.error("Failed to create S3 signed URL: \(error)")
+      return nil
+    }
+  }
+
+  func retrieveImage(fileName: String, path: StoragePath) async throws -> ImageFile? {
+    let objectKey = "\(path)/\(fileName)"
+    
+    let getObjectRequest = S3.GetObjectRequest(
+      bucket: bucketName,
+      key: objectKey
+    )
+    
+    do {
+      let response = try await request.sotoS3.getObject(getObjectRequest)
+      guard let data = response.body?.asData() else {
+        request.logger.warning("No data in S3 response for: \(objectKey)")
+        return nil
+      }
+      
+      guard let fileExtension = fileName.split(separator: ".").last.map(String.init) else {
+        request.logger.warning("Could not determine file extension for: \(fileName)")
+        return nil
+      }
+      
+      return ImageFile(data: data, fileExtension: fileExtension)
+    } catch {
+      request.logger.error("Failed to retrieve image from S3: \(error)")
       return nil
     }
   }

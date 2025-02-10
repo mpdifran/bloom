@@ -10,6 +10,7 @@ import AdminBloomModel
 
 struct AIGeneratedReportView: View {
   @ObservedObject private var viewModel: AIGeneratedReportViewModel
+  @State private var isDetailedReportViewPresented: Bool = false
   
   init(viewModel: AIGeneratedReportViewModel) {
     self.viewModel = viewModel
@@ -18,12 +19,15 @@ struct AIGeneratedReportView: View {
   var body: some View {
     VStack {
       disclaimerView
-      reportView
-      actionMenu
+      ZStack(alignment: .bottomTrailing) {
+        reportView
+        viewMoreInfoButton
+      }
     }
+    
     .frame(maxWidth: 100)
   }
-  
+
   @ViewBuilder
   private var reportView: some View {
     switch viewModel.accuracyReportState {
@@ -56,20 +60,41 @@ struct AIGeneratedReportView: View {
     }
   }
   
+  private var viewMoreInfoButton: some View {
+    Button {
+      isDetailedReportViewPresented.toggle()
+    } label: {
+      Image(systemName: "info.circle")
+    }
+    .buttonStyle(.borderless)
+    .popover(isPresented: $isDetailedReportViewPresented) {
+      actionMenu
+    }
+  }
+  
   @ViewBuilder
   private var actionMenu: some View {
-    switch viewModel.accuracyReportState {
-    case .noReportAvailable, .fetched:
-      Menu {
-        Button("Regenerate report") { }
-      } label: {
-        Image("ellipsis.circle")
+    VStack {
+      switch viewModel.accuracyReportState {
+      case .noReportAvailable:
+        regenerateReportButton
+      case .fetched(let report):
+        if let notes = report.evaluationNotes {
+          Text(notes)
+            .frame(width: 300)
+        }
+        regenerateReportButton
+      default:
+        EmptyView()
       }
-      .menuStyle(.borderlessButton)
-    default:
-      EmptyView()
     }
+    .padding()
+  }
   
+  private var regenerateReportButton: some View {
+    Button("Regenerate report") {
+      Task { await viewModel.regenerateReport() }
+    }
   }
   
   private func fetchedReportView(report: AdminAccuracyReport) -> some View {
