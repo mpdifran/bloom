@@ -18,6 +18,7 @@ extension Double {
     var feet = Int((totalInches / 12))
     var inches = Int((totalInches.truncatingRemainder(dividingBy: 12)).rounded())
 
+    // Correcting an invalid case due to rounding..
     if inches == 12 {
       feet += 1
       inches = 0
