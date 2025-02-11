@@ -28,7 +28,6 @@ struct AIFoodScannerView: View {
 
   @Namespace private var aiFoodScannerNamespace
 
-  private let cameraManager = CameraManager()
   private let nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
@@ -61,12 +60,12 @@ struct AIFoodScannerView: View {
       Task {
         await permissionManager.checkPermission()
         if permissionManager.permissionState == .granted {
-          cameraManager.start()
+          viewModel.cameraManager.start()
         }
       }
     }
     .onDisappear {
-      cameraManager.stop()
+      viewModel.cameraManager.stop()
     }
     .alert(alertDetails: $alertDetails)
     .alert(error: $viewModel.error)
@@ -83,7 +82,7 @@ private extension AIFoodScannerView {
   var fixedContentView: some View {
     VStack {
       AICameraScannerView(
-        cameraManager: cameraManager,
+        cameraManager: viewModel.cameraManager,
         image: $viewModel.image
       )
       .fixedSize(horizontal: false, vertical: true)
@@ -131,49 +130,7 @@ private extension AIFoodScannerView {
           Spacer(minLength: 0)
         }
 
-        VStack {
-          if viewModel.servings.isNotEmpty {
-            SectionTitleView("\(viewModel.servings.count) Food Items")
-              .padding(.horizontal)
-            ForEachEnumerated(viewModel.servings) { (index, serving) in
-              Swipeable(
-                isSwipingItem: $isSwipingItem,
-                actions: [
-                  SwipeAction(
-                    title: "Delete",
-                    systemImage: "trash",
-                    tint: .mutedRed
-                  ) {
-                    viewModel.suggestedServings.insert(serving, at: 0)
-                    viewModel.servings.remove(at: index)
-                  }
-                ]
-              ) {
-                Group {
-                  if viewModel.servings.count > index { // Fixes dumb bug where viewModel.servings is empty but we try and load a cell.
-                    AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
-                      .focused($focusedIndex, equals: index)
-                      .transition(.blurReplace)
-                  }
-                }
-              }
-            }
-          }
-
-          if viewModel.suggestedServings.isNotEmpty {
-            SectionTitleView("Suggestions")
-              .padding(.horizontal)
-            ForEachEnumerated(viewModel.suggestedServings) { (index, serving) in
-              if viewModel.suggestedServings.count > index { // Fixes dumb bug where viewModel.servings is empty but we try and load a cell.
-                AIScanFoodItemSuggetionCell(foodItemServing: serving) {
-                  viewModel.servings.append(serving)
-                  viewModel.suggestedServings.remove(at: index)
-                }
-                .transition(.blurReplace)
-              }
-            }
-          }
-        }
+        servingSections
       }
       .padding()
     }
@@ -193,6 +150,52 @@ private extension AIFoodScannerView {
         textEditorButton
       } else {
         logFoodButton
+      }
+    }
+  }
+
+  var servingSections: some View {
+    VStack {
+      if viewModel.servings.isNotEmpty {
+        SectionTitleView("\(viewModel.servings.count) Food Items")
+          .padding(.horizontal)
+        ForEachEnumerated(viewModel.servings) { (index, serving) in
+          Swipeable(
+            isSwipingItem: $isSwipingItem,
+            actions: [
+              SwipeAction(
+                title: "Delete",
+                systemImage: "trash",
+                tint: .mutedRed
+              ) {
+                viewModel.suggestedServings.insert(serving, at: 0)
+                viewModel.servings.remove(at: index)
+              }
+            ]
+          ) {
+            Group {
+              if viewModel.servings.count > index { // Fixes dumb bug where viewModel.servings is empty but we try and load a cell.
+                AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
+                  .focused($focusedIndex, equals: index)
+                  .transition(.blurReplace)
+              }
+            }
+          }
+        }
+      }
+
+      if viewModel.suggestedServings.isNotEmpty {
+        SectionTitleView("Suggestions")
+          .padding(.horizontal)
+        ForEachEnumerated(viewModel.suggestedServings) { (index, serving) in
+          if viewModel.suggestedServings.count > index { // Fixes dumb bug where viewModel.servings is empty but we try and load a cell.
+            AIScanFoodItemSuggetionCell(foodItemServing: serving) {
+              viewModel.servings.append(serving)
+              viewModel.suggestedServings.remove(at: index)
+            }
+            .transition(.blurReplace)
+          }
+        }
       }
     }
   }
@@ -293,7 +296,7 @@ private extension AIFoodScannerView {
     }
 
     Task {
-      guard let image = await cameraManager.capture() else { return } // TODO: Throw error?
+      guard let image = await viewModel.cameraManager.capture() else { return } // TODO: Throw error?
       
       viewModel.image = image
       await viewModel.performAIFoodLog(for: image)

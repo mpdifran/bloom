@@ -27,6 +27,8 @@ extension AIFoodScannerView {
       setupObservers()
     }
 
+    let cameraManager = CameraManager()
+
     private var tasks = [Task<Void, Never>]()
   }
 }

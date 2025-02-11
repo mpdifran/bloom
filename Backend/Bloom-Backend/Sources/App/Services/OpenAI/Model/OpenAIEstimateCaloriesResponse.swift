@@ -21,9 +21,9 @@ extension OpenAIEstimateCaloriesResponse {
     let servingValue: Quantity
     let servingCount: Double
     let calories: Quantity
-    let fat: Quantity
-    let carbohydrates: Quantity
-    let protein: Quantity
+    let fat: Quantity?
+    let carbohydrates: Quantity?
+    let protein: Quantity?
     let saturatedFat: Quantity?
     let transFat: Quantity?
     let polyunsaturatedFat: Quantity?
@@ -68,9 +68,9 @@ extension OpenAIEstimateCaloriesResponse.Item {
       flavour: nil,
       country: nil,
       calories: .init(value: calories.value, unit: calories.unit),
-      protein: .init(value: protein.value, unit: protein.unit),
-      carbohydrates: .init(value: carbohydrates.value, unit: carbohydrates.unit),
-      fat: .init(value: fat.value, unit: fat.unit),
+      protein: protein.map({ .init(value: $0.value, unit: $0.unit) }),
+      carbohydrates: carbohydrates.map({ .init(value: $0.value, unit: $0.unit) }),
+      fat: fat.map({ .init(value: $0.value, unit: $0.unit) }),
       saturatedFat: saturatedFat.map({ .init(value: $0.value, unit: $0.unit) }),
       transFat: transFat.map({ .init(value: $0.value, unit: $0.unit) }),
       polyunsaturatedFat: polyunsaturatedFat.map({ .init(value: $0.value, unit: $0.unit) }),
