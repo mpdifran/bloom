@@ -17,14 +17,10 @@ struct AIGeneratedReportView: View {
   }
   
   var body: some View {
-    VStack {
-      disclaimerView
-      ZStack(alignment: .bottomTrailing) {
-        reportView
-        viewMoreInfoButton
-      }
+    ZStack(alignment: .bottomTrailing) {
+      reportView
+      viewMoreInfoButton
     }
-    
     .frame(maxWidth: 100)
   }
 
@@ -57,6 +53,7 @@ struct AIGeneratedReportView: View {
       Text(disclaimer.text)
         .foregroundStyle(disclaimer.color)
         .font(.footnote)
+        .frame(width: 300)
     }
   }
   
@@ -64,7 +61,12 @@ struct AIGeneratedReportView: View {
     Button {
       isDetailedReportViewPresented.toggle()
     } label: {
-      Image(systemName: "info.circle")
+      if viewModel.hasWarning {
+        Image(systemName: "exclamationmark.bubble")
+          .foregroundStyle(.red)
+      } else {
+        Image(systemName: "info.circle")
+      }
     }
     .buttonStyle(.borderless)
     .popover(isPresented: $isDetailedReportViewPresented) {
@@ -75,6 +77,8 @@ struct AIGeneratedReportView: View {
   @ViewBuilder
   private var actionMenu: some View {
     VStack {
+      disclaimerView
+      
       switch viewModel.accuracyReportState {
       case .noReportAvailable:
         regenerateReportButton
@@ -93,6 +97,7 @@ struct AIGeneratedReportView: View {
   
   private var regenerateReportButton: some View {
     Button("Regenerate report") {
+      isDetailedReportViewPresented = false
       Task { await viewModel.regenerateReport() }
     }
   }

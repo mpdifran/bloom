@@ -164,7 +164,9 @@ extension OpenAIService {
 
   func evaluateFoodItemAccuracy(
     request: Request,
-    foodItemRecord: FoodItemRecord
+    foodItemRecord: FoodItemRecord,
+    totalNumberOfIssueReports: Int,
+    sampleIssueReports: [FoodItemIssueReport]
   ) async throws -> (score: Int, notes: String, recommendations: [String: String]) {
     var messages: [Chat.Message] = [
       Chat.Message(
@@ -179,29 +181,31 @@ extension OpenAIService {
           {
             "accuracy_score": A score from 0 to 100 indicating overall data accuracy and completeness,
             "evaluation_notes": A brief (2-3 sentences) summary of key issues found,
-            "recommendations": A dictionary mapping field names to their recommended correct values
+            "recommendations": A dictionary mapping field names to their recommended correct values, all value should be in string forms as well
           }
 
           Example response:
           {
             "accuracy_score": 70,
             "evaluation_notes": "Values in record do not match nutrition label image. Protein content also appears physiologically unreasonable for this food type.",
-            "recommendations": {
-              "protein": "4.2",
-              "serving_size": "100g", 
-              "brand_name": "Correct Brand LLC"
-            }
+            "recommendations": { }
           }
-
-          Consider the following factors in your evaluation:
-          1. Match between record and provided images - THIS IS THE PRIMARY FOCUS
-          2. User feedback (downvote count) - THIS IS ALSO CRITICAL
-          3. Professional assessment of nutritional values, try to restrain from adding an entry to the `recommendations` array. Add an entry only if you are certain that the value does not match the provided nutrition label or food packeting  - THIS IS ALSO CRITICAL
-          4. Completeness of nutritional information  
-          5. Consistency between values (e.g., total fat vs sum of fat types)
-          6. Physiologically reasonable ranges for nutrients
-          7. Serving size appropriateness
-          8. Brand and product name accuracy
+          
+          Rules for Recommendations:
+          You will receive a food record, please only include fields that were provided to you.
+          Only suggest corrections if a value clearly does not match the provided nutrition label or packaging images.
+          DO NOT recommend corrections for missing values.
+          Ensure that field names in recommendations exactly match those from the provided food item record.
+          
+          Key Considerations:
+          Match between the food record and provided images – THIS IS THE PRIMARY FOCUS.
+          User feedback (downvote count) – A high downvote count and issue reports strongly indicates data inaccuracy and should significantly impact the accuracy score. THIS IS CRITICAL.
+          Restraint in recommendations – Only suggest corrections if you are certain that the value does not match the provided nutrition label or packaging.
+          Professional assessment of nutritional values – Ensure values are within physiologically reasonable ranges.
+          Completeness of nutritional information – Check if required fields are missing.
+          Consistency across values – e.g., total fat vs. sum of fat types.
+          Serving size appropriateness – Ensure serving sizes align with typical industry standards.
+          Brand and product name accuracy – Confirm that branding details match the provided packaging.
           """)
         ]
       )
@@ -212,7 +216,19 @@ extension OpenAIService {
       role: .user,
       content: [.text("Evaluate this food item record: \(foodItemRecord.prettyPrint())")]
     ))
-
+    
+    messages.append(Chat.Message(
+      role: .user,
+      content: [.text("There are \(totalNumberOfIssueReports) reports filed by users for this food item record.")]
+    ))
+    
+    if sampleIssueReports.isNotEmpty {
+      messages.append(Chat.Message(
+        role: .user,
+        content: [.text("Here are some sample reports filed by users: \(sampleIssueReports.map { $0.prettyPrint() }.joined(separator: "\n"))")]
+      ))
+    }
+    
     // Add images if available
     if let nutritionLabelImage = foodItemRecord.nutritionLabelImage,
        let nutritionImageFile = try await request.imageStorage.retrieveImage(

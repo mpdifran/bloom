@@ -40,6 +40,7 @@ final class AIGeneratedReportViewModel: ObservableObject {
   
   @Published var accuracyReportState: ReportState
   @Published var disclaimer: Disclaimer?
+  @Published var hasWarning: Bool = false
   private var foodItemRecord: AdminFoodItemRecord {
     didSet {
       Task { @MainActor in updateDisclaimer() }
@@ -79,11 +80,13 @@ final class AIGeneratedReportViewModel: ObservableObject {
     
     if reportCreatedAt >= foodItemUpdatedAt {
       disclaimer = .init(text: "Report generated on \(formattedReportCreatedAt)", color: .primary)
+      hasWarning = false
     } else {
       disclaimer = .init(
         text: "Report generated on \(formattedReportCreatedAt). Food record was updated since then",
         color: .red
       )
+      hasWarning = true
     }
   }
   

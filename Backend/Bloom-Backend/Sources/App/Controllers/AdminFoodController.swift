@@ -365,11 +365,20 @@ private extension AdminFoodController {
     let requestBody = try request.content.decode(AdminRegenerateAccuracyReportRequest.self)
     let foodItemId = requestBody.foodItemRecordID
     
-    guard let foodItemRecord = try await FoodItemRecord.find(foodItemId.value, on: request.db) else {
+    async let foodItemRecord = try await FoodItemRecord.find(foodItemId.value, on: request.db)
+    async let issueReportCount = try await FoodItemIssueReport.query(on: request.db).filter(\.$foodItemRecord.$id == foodItemId.value).count()
+    async let recentIssueReports = try await FoodItemIssueReport.query(on: request.db).filter(\.$foodItemRecord.$id == foodItemId.value).limit(5).all()
+    
+    guard let foodItemRecord = try await foodItemRecord else {
       throw Abort(.notFound)
     }
     
-    let evaluation = try await openAIService.evaluateFoodItemAccuracy(request: request, foodItemRecord: foodItemRecord)
+    let evaluation = try await openAIService.evaluateFoodItemAccuracy(
+      request: request,
+      foodItemRecord: foodItemRecord,
+      totalNumberOfIssueReports: issueReportCount,
+      sampleIssueReports: recentIssueReports
+    )
     
     // Create and save the accuracy report
     let accuracyReport = FoodItemAccuracyReport(
