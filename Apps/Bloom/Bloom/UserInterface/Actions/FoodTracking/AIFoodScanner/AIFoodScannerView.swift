@@ -187,7 +187,7 @@ private extension AIFoodScannerView {
   var servingSections: some View {
     VStack {
       if viewModel.servings.isNotEmpty {
-        SectionTitleView("\(viewModel.servings.count) Food Items")
+        SectionTitleView("\(viewModel.servings.count) \(viewModel.servings.count == 1 ? "Food Item" : "Food Items")")
           .padding(.horizontal)
         ForEachEnumerated(viewModel.servings) { (index, serving) in
           Swipeable(
@@ -248,7 +248,7 @@ private extension AIFoodScannerView {
     } label: {
       Group {
         if viewModel.servings.isNotEmpty {
-          Text("Log \(viewModel.servings.count) Food Items")
+          Text("Log \(viewModel.servings.count) \(viewModel.servings.count == 1 ? "Food Item" : "Food Items")")
         } else {
           Text("Log")
         }
@@ -272,15 +272,11 @@ private extension AIFoodScannerView {
   var instructionView: some View {
     VStack {
       Spacer()
-      ContentUnavailableView("Scan Food", systemImage: "fork.knife")
-      Spacer()
-    }
-  }
-
-  var noResultsView: some View {
-    VStack {
-      Spacer()
-      ContentUnavailableView("No Food Identified", systemImage: "fork.knife")
+      ContentUnavailableView(
+        "Magic Scan",
+        systemImage: "sparkles",
+        description: Text("Scan a barcode, or simply take a photo of your plate!")
+      )
       Spacer()
     }
   }

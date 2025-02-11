@@ -270,7 +270,7 @@ private extension FoodLoggingActionCardView {
               }
           }
         } else if searchQuery.isEmpty {
-          FoodSearchToolCell(title: "AI Scan", systemImage: "sparkles")
+          FoodSearchToolCell(title: "Magic Scan", systemImage: "sparkles")
             .onTapGesture {
               #if DEBUG
                 // TODO: Check flag
