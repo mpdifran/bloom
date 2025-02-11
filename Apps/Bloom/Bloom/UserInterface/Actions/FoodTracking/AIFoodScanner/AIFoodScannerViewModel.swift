@@ -19,6 +19,7 @@ extension AIFoodScannerView {
     var scannedFoodName: String?
     var servings = [FoodItemServing]()
     var suggestedServings = [FoodItemServing]()
+    var unknownBarcodes = [String]()
     var scanResultsToggle = false
     var country: FoodCountry = .usa
     var error: Error?
@@ -61,6 +62,13 @@ extension AIFoodScannerView.ViewModel {
 
       await self.performTakePhoto()
     }
+  }
+
+  func added(foodItem: FoodItem, for barcode: String) {
+    unknownBarcodes = unknownBarcodes.filter { $0 != barcode }
+
+    let serving = FoodItemServing(serving: 1, foodItem: foodItem)
+    servings.append(serving)
   }
 }
 
@@ -123,17 +131,13 @@ private extension AIFoodScannerView.ViewModel {
     detectedBarcodes.insert(barcode)
 
     let foodItems = await search(barcode: barcode)
-    let servings = foodItems.map { FoodItemServing(serving: 1, foodItem: $0) }
+    let barcodeServings = foodItems.map { FoodItemServing(serving: 1, foodItem: $0) }
 
-    if servings.isEmpty {
-      self.servings.append(contentsOf: servings)
+    if barcodeServings.isEmpty {
+      unknownBarcodes.append(barcode)
     } else {
-      self.suggestedServings = self.servings
-      self.servings.append(contentsOf: servings)
-    }
-
-    if servings.isNotEmpty {
       scanResultsToggle.toggle()
+      servings.append(contentsOf: barcodeServings)
     }
   }
 

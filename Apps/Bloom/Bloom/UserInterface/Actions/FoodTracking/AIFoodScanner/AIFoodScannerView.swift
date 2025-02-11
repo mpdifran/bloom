@@ -26,6 +26,7 @@ struct AIFoodScannerView: View {
   @State private var isSwipingItem = false
   @State private var saveComplete = false
   @State private var errorToggle = false
+  @State private var presentedSheet: AnyView?
   @State private var alertDetails: AlertDetails?
   @FocusState private var focusedIndex: Int?
 
@@ -78,6 +79,7 @@ struct AIFoodScannerView: View {
     .onDisappear {
       viewModel.cameraManager.stop()
     }
+    .sheet($presentedSheet)
     .alert(alertDetails: $alertDetails)
     .alert(error: $viewModel.error)
     .onChange(of: viewModel.error as? NSError) { oldValue, newValue in
@@ -225,6 +227,19 @@ private extension AIFoodScannerView {
             }
             .transition(.blurReplace)
           }
+        }
+      }
+
+      if viewModel.unknownBarcodes.isNotEmpty {
+        SectionTitleView("Barcodes")
+          .padding(.horizontal)
+        ForEach(viewModel.unknownBarcodes) { barcode in
+          AIScanUnknownBarcodeCell(barcode: barcode) {
+            presentedSheet = FoodUploadScannerView(barcode: barcode) { foodItem in
+              viewModel.added(foodItem: foodItem, for: barcode)
+            }.asAny
+          }
+          .transition(.blurReplace)
         }
       }
     }
