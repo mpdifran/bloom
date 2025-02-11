@@ -272,28 +272,19 @@ private extension FoodLoggingActionCardView {
         } else if searchQuery.isEmpty {
           FoodSearchToolCell(title: "Magic Scan", systemImage: "sparkles")
             .onTapGesture {
-              #if DEBUG
-                // TODO: Check flag
-              presentedSheet = AIFoodScannerExplanationView {
-                Task {
-                  await Delay(300)
-                  await MainActor.run {
-                    presentedSheet = AIFoodScannerView().asAny
+              if hasShownExplanation {
+                presentedSheet = AIFoodScannerView().asAny
+              } else {
+                presentedSheet = AIFoodScannerExplanationView {
+                  Task {
+                    await Delay(300)
+                    await MainActor.run {
+                      hasShownExplanation = true
+                      presentedSheet = AIFoodScannerView().asAny
+                    }
                   }
-                }
-              }.asAny
-              #else
-              presentedSheet = AIFoodScannerView().asAny
-              #endif
-            }
-          FoodSearchToolCell(title: "Scan Barcode", systemImage: "barcode.viewfinder")
-            .onTapGesture {
-              presentedSheet = FoodBarcodeScannerView { barcode in
-                isFocused = false
-                Task {
-                  await viewModel.performBarcodeSearch(for: barcode)
-                }
-              }.asAny
+                }.asAny
+              }
             }
           FoodSearchToolCell(title: "Add New Food", systemImage: "plus.viewfinder")
             .onTapGesture {
