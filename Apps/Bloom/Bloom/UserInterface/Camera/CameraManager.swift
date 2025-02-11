@@ -14,7 +14,7 @@ import UIKit
 @MainActor
 final class CameraManager: NSObject {
 
-  @AsyncStreamable var detectedBarcode: String?
+  var onNewBarcode: ((String) -> Void)?
 
   private var isInitialized = false
   private var capturedImageContinuation: CheckedContinuation<UIImage?, Never>?
@@ -23,10 +23,6 @@ final class CameraManager: NSObject {
   let captureSession = AVCaptureSession()
   private let photoOutput = AVCapturePhotoOutput()
   private let metadataOutput = AVCaptureMetadataOutput()
-
-  private var detectedCodes = Set<String>()
-
-  
 }
 
 // MARK: Public Methods
@@ -279,10 +275,7 @@ extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
 private extension CameraManager {
 
   func onDetect(code: String) {
-    guard !detectedCodes.contains(code) else { return }
-
-    detectedCodes.insert(code)
-    detectedBarcode = code
+    onNewBarcode?(code)
   }
 }
 

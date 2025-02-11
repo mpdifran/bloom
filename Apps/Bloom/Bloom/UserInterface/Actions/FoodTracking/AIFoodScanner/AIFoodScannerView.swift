@@ -10,12 +10,19 @@ import AppUI
 import BloomModel
 import AVFoundation
 
+extension AIFoodScannerView {
+  enum Mode: Equatable {
+    case base
+    case aiScanLoading
+    case aiScanResults
+  }
+}
+
 struct AIFoodScannerView: View {
 
   @State private var viewModel = ViewModel()
 
   @State private var startScanToggle = false
-  @State private var scanResultsToggle = false
   @State private var isSwipingItem = false
   @State private var saveComplete = false
   @State private var errorToggle = false
@@ -29,18 +36,20 @@ struct AIFoodScannerView: View {
   @Namespace private var aiFoodScannerNamespace
 
   private let nutritionViewModel = NutritionTrackingViewModel.shared
+  private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {
     NavigationStack {
       ZStack {
-        if viewModel.servings.isNotEmpty {
+        switch viewModel.mode {
+        case .aiScanResults:
           scrollContentView
-        } else {
+        default:
           fixedContentView
         }
       }
       .groupedBackground()
-      .navigationTitle("AI Scan")
+      .navigationTitle("Magic Scan")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -50,11 +59,13 @@ struct AIFoodScannerView: View {
     }
     .sensoryFeedback(.error, trigger: errorToggle)
     .sensoryFeedback(.impact, trigger: startScanToggle)
-    .sensoryFeedback(.success, trigger: scanResultsToggle)
+    .sensoryFeedback(.success, trigger: viewModel.scanResultsToggle)
     .sensoryFeedback(.success, trigger: saveComplete)
     .presentationCompactAdaptation(.fullScreenCover)
+    .animation(.default, value: viewModel.servings)
+    .animation(.default, value: viewModel.suggestedServings)
     .animation(.default, value: viewModel.image)
-    .animation(.default, value: viewModel.isLoading)
+    .animation(.default, value: viewModel.mode)
     .tint(.mutedGreen)
     .onAppear {
       Task {
@@ -74,36 +85,52 @@ struct AIFoodScannerView: View {
 
       errorToggle.toggle()
     }
+    .onChange(of: locationViewModel.country) { _, newValue in
+      guard let country = newValue else { return }
+
+      viewModel.country = country
+    }
   }
 }
 
 private extension AIFoodScannerView {
 
   var fixedContentView: some View {
-    VStack {
-      AICameraScannerView(
-        cameraManager: viewModel.cameraManager,
-        image: $viewModel.image
-      )
-      .fixedSize(horizontal: false, vertical: true)
-      .matchedGeometryEffect(id: "aiCameraScannerView", in: aiFoodScannerNamespace)
+    VStack(spacing: 0) {
+      if focusedIndex == nil {
+        AICameraScannerView(
+          cameraManager: viewModel.cameraManager,
+          image: $viewModel.image
+        )
+        .fixedSize(horizontal: false, vertical: true)
+        .matchedGeometryEffect(id: "aiCameraScannerView", in: aiFoodScannerNamespace)
+      }
 
-      if viewModel.isLoading {
+      switch viewModel.mode {
+      case .base:
+        if viewModel.suggestedServings.isNotEmpty || viewModel.servings.isNotEmpty {
+          ScrollView {
+            VStack {
+              servingSections
+            }
+            .scrollIndicators(.hidden)
+          }
+        } else {
+          instructionView
+        }
+      case .aiScanLoading:
         analyzingView
-      } else if !viewModel.hasScannedAtLeastOnce {
-        instructionView
-      } else if viewModel.servings.isEmpty {
-        noResultsView
+      case .aiScanResults:
+        Spacer()
       }
 
-      Button {
-        scanFoodItems()
-      } label: {
-        Text("Scan")
-          .horizontallyCentered()
+      if focusedIndex != nil {
+        textEditorButton
+      } else if viewModel.servings.isNotEmpty {
+        logFoodButton
+      } else {
+        scanFoodButton
       }
-      .buttonStyle(.primary)
-      .disabled(viewModel.isLoading)
     }
     .padding()
   }
@@ -111,25 +138,7 @@ private extension AIFoodScannerView {
   var scrollContentView: some View {
     ScrollView {
       VStack {
-        HStack(spacing: 20) {
-          if let image = viewModel.image {
-            AICameraRoundedImageView(image: image)
-              .frame(square: 100)
-              .matchedGeometryEffect(id: "aiCameraScannerView", in: aiFoodScannerNamespace)
-          }
-
-          VStack(alignment: .leading) {
-            if let name = viewModel.scannedFoodName {
-              Text(name)
-                .font(.title2)
-                .bold()
-                .fontDesign(.rounded)
-            }
-          }
-
-          Spacer(minLength: 0)
-        }
-
+        scannedItemHeader
         servingSections
       }
       .padding()
@@ -151,6 +160,27 @@ private extension AIFoodScannerView {
       } else {
         logFoodButton
       }
+    }
+  }
+
+  var scannedItemHeader: some View {
+    HStack(spacing: 20) {
+      if let image = viewModel.image {
+        AICameraRoundedImageView(image: image)
+          .frame(square: 100)
+          .matchedGeometryEffect(id: "aiCameraScannerView", in: aiFoodScannerNamespace)
+      }
+
+      VStack(alignment: .leading) {
+        if let name = viewModel.scannedFoodName {
+          Text(name)
+            .font(.title2)
+            .bold()
+            .fontDesign(.rounded)
+        }
+      }
+
+      Spacer(minLength: 0)
     }
   }
 
@@ -198,6 +228,17 @@ private extension AIFoodScannerView {
         }
       }
     }
+  }
+
+  var scanFoodButton: some View {
+    Button {
+      scanFoodItems()
+    } label: {
+      Text("Take a Photo")
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .disabled(viewModel.mode != .base)
   }
 
   var logFoodButton: some View {
@@ -283,10 +324,6 @@ private extension AIFoodScannerView {
 
 private extension AIFoodScannerView {
 
-  func onDetect(code: String) {
-
-  }
-
   func scanFoodItems() {
     startScanToggle.toggle()
 
@@ -296,14 +333,7 @@ private extension AIFoodScannerView {
     }
 
     Task {
-      guard let image = await viewModel.cameraManager.capture() else { return } // TODO: Throw error?
-      
-      viewModel.image = image
-      await viewModel.performAIFoodLog(for: image)
-      
-      if viewModel.servings.isNotEmpty {
-        scanResultsToggle.toggle()
-      }
+      await viewModel.takePhoto()
     }
   }
 
