@@ -12,7 +12,7 @@ import SwiftData
 
 struct NutritionView: View {
 
-  @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   @State private var presentedSheet: AnyView?
   @State private var isSwipingItem = false
 
@@ -80,7 +80,7 @@ private extension NutritionView {
       )
     }
 
-    @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+    @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
     @State private var advanceToggle = false
 
     @Query private var foodItemLogs: [FoodItemLog]

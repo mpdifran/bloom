@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FoodItemLogDatePicker: View {
 
-    @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+    @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
     @State private var showDatePicker = false
 
     var body: some View {

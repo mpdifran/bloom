@@ -14,7 +14,7 @@ struct DebugFoodItemLogListView: View {
 
     @Query(sort: \FoodItemLog.date, order: .reverse) var foodItemLogs: [FoodItemLog]
 
-    @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+    @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
     @State private var error: Error?
 
     @Environment(\.modelContext) var modelContext

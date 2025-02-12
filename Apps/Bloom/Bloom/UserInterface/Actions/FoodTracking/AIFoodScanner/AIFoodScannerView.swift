@@ -36,7 +36,7 @@ struct AIFoodScannerView: View {
 
   @Namespace private var aiFoodScannerNamespace
 
-  private let nutritionViewModel = NutritionTrackingViewModel.shared
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {

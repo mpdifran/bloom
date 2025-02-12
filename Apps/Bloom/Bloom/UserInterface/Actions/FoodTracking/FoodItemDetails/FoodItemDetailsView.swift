@@ -32,7 +32,7 @@ struct FoodItemDetailsView: View {
     }
   }
 
-  @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   @State private var numberOfServings: Double
   @State private var date: Date

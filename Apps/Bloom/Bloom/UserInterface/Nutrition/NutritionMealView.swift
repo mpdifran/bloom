@@ -32,7 +32,7 @@ struct NutritionMealView: View {
     self.onLogTapped = onLogTapped
   }
 
-  @State private var nutritionViewModel = NutritionTrackingViewModel.shared
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   @State private var error: Error?
 

@@ -13,7 +13,7 @@ import DataContainer
 struct FoodItemCell: View {
   let food: FoodItem
 
-  private let nutritionViewModel = NutritionTrackingViewModel.shared
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   private let foodItemLogModelActor = FoodItemLogModelActor(modelContainer: ContainerHolder.shared.container)
 
   @State private var saveComplete = false

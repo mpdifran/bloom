@@ -39,7 +39,7 @@ struct FoodLoggingActionCardView: View {
 
   @FocusState private var isFocused: Bool
 
-  private let nutritionViewModel = NutritionTrackingViewModel.shared
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {

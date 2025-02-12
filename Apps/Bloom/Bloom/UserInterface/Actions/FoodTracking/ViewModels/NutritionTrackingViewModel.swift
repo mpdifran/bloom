@@ -12,12 +12,18 @@ import DataContainer
 import TelemetryDeck
 import BloomFoundation
 
-@Observable @MainActor
-final class NutritionTrackingViewModel {
+extension String {
+  static let lastMealAutoUpdateDateKey = "NutritionTrackingViewModel.lastMealAutoUpdateDate"
+}
+
+@MainActor
+final class NutritionTrackingViewModel: ObservableObject {
   static let shared = NutritionTrackingViewModel()
 
-  var date = Date.now
-  var suggestedMeal = FoodItemLog.Meal.breakfast
+  @Published var date = Date.now
+  @Published var suggestedMeal = FoodItemLog.Meal.breakfast
+
+  @Storage(key: .lastMealAutoUpdateDateKey, defaultValue: nil) var lastMealAutoUpdateDate: Date?
 
   private let modelContext = ModelContext(ContainerHolder.shared.container)
 
@@ -29,19 +35,27 @@ final class NutritionTrackingViewModel {
 extension NutritionTrackingViewModel {
 
   func updateMealForCurrentTime() {
+    if let lastUpdateDate = lastMealAutoUpdateDate {
+      guard Date.now.timeIntervalSince(lastUpdateDate) > 60 * 5 else {
+        return
+      }
+    }
+
     date = .now
     let hour = Calendar.current.component(.hour, from: date)
 
     switch hour {
-    case 6 ..< 13:
+    case 6 ..< 11:
       suggestedMeal = .breakfast
-    case 11 ..< 17:
+    case 11 ..< 16:
       suggestedMeal = .lunch
-    case 17 ..< 24:
+    case 16 ..< 24:
       suggestedMeal = .dinner
     default:
-      break
+      return
     }
+
+    lastMealAutoUpdateDate = .now
   }
 
   /// Advances the suggested meal by one meal. If needed, the day will advance as well.
