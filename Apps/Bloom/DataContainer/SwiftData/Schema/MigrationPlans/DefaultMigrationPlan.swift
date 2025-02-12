@@ -108,21 +108,29 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       fromVersion: SchemaV6.self,
       toVersion: SchemaV7.self,
       willMigrate: { context in
-        let logs = try context.fetch(FetchDescriptor<SchemaV6.FoodItemLog>())
+        do {
+          let logs = try context.fetch(FetchDescriptor<SchemaV6.FoodItemLog>())
 
-        for log in logs {
-          let serving = SchemaV6.FoodItemServing(
-            id: UUID().uuidString,
-            numberOfServings: 1,
-            foodItem: log.foodItem
-          )
-          log.foodItemServings = [
-            serving
-          ]
-          context.insert(serving)
+          for log in logs {
+            let serving = SchemaV6.FoodItemServing(
+              id: UUID().uuidString,
+              numberOfServings: 1,
+              foodItem: log.foodItem
+            )
+            serving.foodItemLog = log
+
+            context.insert(serving)
+            if log.foodItemServings == nil {
+              log.foodItemServings = []
+            }
+            log.foodItemServings?.append(serving)
+          }
+
+          try context.save()
+        } catch {
+          print("Migration Failed: \(error)")
+          throw error
         }
-
-        try context.save()
       },
       didMigrate: nil
     )
@@ -133,13 +141,17 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       fromVersion: SchemaV7.self,
       toVersion: SchemaV8.self,
       willMigrate: { context in
-        let logs = try context.fetch(FetchDescriptor<SchemaV7.FoodItemLog>())
+        do {
+          let logs = try context.fetch(FetchDescriptor<SchemaV7.FoodItemLog>())
 
-        for log in logs {
-          log.mealRawValue = log.meal.rawValue
+          for log in logs {
+            log.mealRawValue = log.meal.rawValue
+          }
+          try context.save()
+        } catch {
+          print("Migration Failed: \(error)")
+          throw error
         }
-
-        try context.save()
       },
       didMigrate: nil
     )

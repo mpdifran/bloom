@@ -55,7 +55,7 @@ extension SchemaV7 {
       self.id = id
       self.date = date
       self.meal = meal
-      self.mealRawValue = mealRawValue
+      self.mealRawValue = meal.rawValue
       self.numberOfServings = numberOfServings
       if let mealItem, let items = mealItem.items {
         self.foodItemServings = items.compactMap { mealItem in
