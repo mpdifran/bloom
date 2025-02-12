@@ -8,7 +8,7 @@
 import SwiftData
 
 // CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV7.self
+let currentSchema: VersionedSchema.Type = SchemaV8.self
 
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
@@ -21,6 +21,7 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       SchemaV5.self,
       SchemaV6.self,
       SchemaV7.self,
+      SchemaV8.self
     ]
   }
 
@@ -33,6 +34,7 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       migrateV4toV5,
       migrateV5ToV6,
       migrateV6ToV7,
+      migrateV7ToV8
     ]
   }
 
@@ -118,6 +120,23 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
             serving
           ]
           context.insert(serving)
+        }
+
+        try context.save()
+      },
+      didMigrate: nil
+    )
+  }
+
+  private static var migrateV7ToV8: MigrationStage {
+    .custom(
+      fromVersion: SchemaV7.self,
+      toVersion: SchemaV8.self,
+      willMigrate: { context in
+        let logs = try context.fetch(FetchDescriptor<SchemaV7.FoodItemLog>())
+
+        for log in logs {
+          log.mealRawValue = log.meal.rawValue
         }
 
         try context.save()
