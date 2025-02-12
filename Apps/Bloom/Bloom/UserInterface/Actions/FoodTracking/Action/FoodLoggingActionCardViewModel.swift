@@ -54,7 +54,7 @@ extension FoodLoggingActionCardView.ViewModel {
       if foodItems.isNotEmpty {
         recentFoodItemSections = [
           FoodItemSection(
-            title: "Recent",
+            title: "Frequently Logged",
             category: .branded,
             foodItems: foodItems
           )
