@@ -95,13 +95,13 @@ private extension AIFoodScannerView.ViewModel {
 
     do {
       let response = try await NetworkRequester.shared.foodAIEstimate(image: smallerImage)
-      let servings = response.servings.map { $0.asServing() }
-      let suggestedServings = response.suggestedServings.map { $0.asServing() }
+      let newServings = response.servings.map { $0.asServing() }
+      let newSuggestedServings = response.suggestedServings.map { $0.asServing() }
 
       await MainActor.run {
         self.scannedFoodName = response.name
-        self.servings = servings
-        self.suggestedServings = suggestedServings
+        self.servings = newServings + servings
+        self.suggestedServings = newSuggestedServings + suggestedServings
 
         if servings.isEmpty {
           self.image = nil
@@ -137,7 +137,7 @@ private extension AIFoodScannerView.ViewModel {
       unknownBarcodes.append(barcode)
     } else {
       scanResultsToggle.toggle()
-      servings.append(contentsOf: barcodeServings)
+      servings = barcodeServings + servings
     }
   }
 
