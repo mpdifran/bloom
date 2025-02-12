@@ -21,6 +21,7 @@ extension AIFoodScannerView {
     var suggestedServings = [FoodItemServing]()
     var unknownBarcodes = [String]()
     var scanResultsToggle = false
+    var scanResultsErrorToggle = false
     var country: FoodCountry = .usa
     var error: Error?
 
@@ -134,6 +135,7 @@ private extension AIFoodScannerView.ViewModel {
     let barcodeServings = foodItems.map { FoodItemServing(serving: 1, foodItem: $0) }
 
     if barcodeServings.isEmpty {
+      scanResultsErrorToggle.toggle()
       unknownBarcodes.append(barcode)
     } else {
       scanResultsToggle.toggle()

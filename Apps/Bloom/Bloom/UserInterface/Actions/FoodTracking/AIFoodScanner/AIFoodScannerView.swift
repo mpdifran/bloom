@@ -61,6 +61,7 @@ struct AIFoodScannerView: View {
     .sensoryFeedback(.error, trigger: errorToggle)
     .sensoryFeedback(.impact, trigger: startScanToggle)
     .sensoryFeedback(.success, trigger: viewModel.scanResultsToggle)
+    .sensoryFeedback(.error, trigger: viewModel.scanResultsErrorToggle)
     .sensoryFeedback(.success, trigger: saveComplete)
     .presentationCompactAdaptation(.fullScreenCover)
     .animation(.default, value: viewModel.servings)
@@ -110,12 +111,13 @@ private extension AIFoodScannerView {
 
       switch viewModel.mode {
       case .base:
-        if viewModel.suggestedServings.isNotEmpty || viewModel.servings.isNotEmpty {
+        if viewModel.suggestedServings.isNotEmpty || viewModel.servings.isNotEmpty || viewModel.unknownBarcodes.isNotEmpty {
           ScrollView {
             VStack {
               servingSections
             }
             .scrollIndicators(.hidden)
+            .scrollDisabled(isSwipingItem)
           }
         } else {
           instructionView
@@ -145,6 +147,7 @@ private extension AIFoodScannerView {
       }
       .padding()
     }
+    .scrollDisabled(isSwipingItem)
     .animation(.default, value: viewModel.servings)
     .animation(.default, value: viewModel.suggestedServings)
     .toolbar {
