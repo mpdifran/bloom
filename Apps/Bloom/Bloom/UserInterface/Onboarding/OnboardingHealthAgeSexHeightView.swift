@@ -19,7 +19,10 @@ struct OnboardingHealthAgeSexHeightView: View {
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
 
   @State private var index = 1
-  @State private var isHealthDataCorrect: Bool?
+  /// The user has confirmed the health data provided is correct. If the health data was populated, the user must confirm to continue.
+  @State private var isHealthDataConfirmed: Bool = false
+  /// Set when the view appears if the user was missing health data.
+  @State private var wasMissingHealthData: Bool = false
   @State private var didContinue = false
 
   var body: some View {
@@ -29,14 +32,14 @@ struct OnboardingHealthAgeSexHeightView: View {
           let sex = healthManager.healthStore.sex(),
           let age = healthManager.healthStore.age(),
           let sexName = sex.personName,
-          healthManager.heightCM > 0
+          !wasMissingHealthData
         {
           hasHealthDataContent(age: age, sex: sexName, height: healthManager.height())
 
-          if isHealthDataCorrect == false {
+          if !isHealthDataConfirmed {
             ageSexHeightPicker
               .appear(with: 4, currentIndex: index)
-          } else if isHealthDataCorrect == true {
+          } else {
             Text("Glad to get to know you better!")
               .appear(with: 4, currentIndex: index)
           }
@@ -54,7 +57,7 @@ struct OnboardingHealthAgeSexHeightView: View {
     .topSafeAreaBlur()
     .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: index)
-    .sensoryFeedback(.selection, trigger: isHealthDataCorrect)
+    .sensoryFeedback(.selection, trigger: isHealthDataConfirmed)
     .sensoryFeedback(.selection, trigger: didContinue)
     .task {
       while index < 3 {
@@ -82,6 +85,9 @@ struct OnboardingHealthAgeSexHeightView: View {
       }
     }
     .onAppear {
+      if !isHealthDataValid {
+        wasMissingHealthData = true
+      }
       healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
       healthManager.isFemale = healthManager.healthStore.sex() == .female
 
@@ -99,13 +105,16 @@ private extension OnboardingHealthAgeSexHeightView {
   }
 
   var canShowContinueButton: Bool {
+    isHealthDataValid && index >= 3
+  }
+
+  var isHealthDataValid: Bool {
     let sex = healthManager.healthStore.sex()
     let age = healthManager.healthStore.age()
+    let sexName = sex?.personName
+    let height = healthManager.heightCM
 
-    let hasHealthData = sex != nil && age != nil && isHealthDataCorrect != nil
-    let hasNoHealthData = (sex == nil || age == nil) && index >= 3
-
-    return hasHealthData || hasNoHealthData
+    return sex != nil && age != nil && sexName != nil && height > 0
   }
 
   @ViewBuilder
@@ -118,20 +127,20 @@ private extension OnboardingHealthAgeSexHeightView {
 
     HStack {
       Button("Yes") {
-        isHealthDataCorrect = true
+        isHealthDataConfirmed = true
         index = 4
       }
       .buttonStyle(.onboarding)
-      .opacity(isHealthDataCorrect == false ? 0.3 : 1)
+      .opacity(isHealthDataConfirmed == false ? 0.3 : 1)
 
       Spacer(minLength: 20)
 
       Button("No") {
-        isHealthDataCorrect = false
+        isHealthDataConfirmed = false
         index = 4
       }
       .buttonStyle(.onboarding)
-      .opacity(isHealthDataCorrect == true ? 0.3 : 1)
+      .opacity(isHealthDataConfirmed == true ? 0.3 : 1)
     }
     .appear(with: 3, currentIndex: index)
   }

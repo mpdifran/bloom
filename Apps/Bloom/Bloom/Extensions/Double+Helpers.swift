@@ -15,8 +15,15 @@ extension Double {
 
   func toFeetInches() -> (Int, Int) {
     let totalInches = self / 2.54
-    let feet = Int((totalInches / 12).rounded(.towardZero))
-    let inches = Int((totalInches.truncatingRemainder(dividingBy: 12)).rounded())
+    var feet = Int((totalInches / 12))
+    var inches = Int((totalInches.truncatingRemainder(dividingBy: 12)).rounded())
+
+    // Correcting an invalid case due to rounding..
+    if inches == 12 {
+      feet += 1
+      inches = 0
+    }
+
     return (feet, inches)
   }
 
