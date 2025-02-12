@@ -43,7 +43,7 @@ struct OnboardingHealthVitalLevelsView: View {
       .horizontalAlignment(.leading)
       .padding()
     }
-    .topSafeAreaBlur()
+    .topSafeAreaFill(.background)
     .animation(.bouncy, value: vitals.count)
     .animation(.bouncy, value: noDataVitals.count)
     .sensoryFeedback(.impact, trigger: vitals.count)

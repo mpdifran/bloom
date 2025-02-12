@@ -71,7 +71,7 @@ struct OnboardingWelcomeView: View {
       .horizontalAlignment(.leading)
     }
     .onboardingTextStyle()
-    .topSafeAreaBlur()
+    .topSafeAreaFill(.background)
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: didContinue)
     .animation(.default, value: index)

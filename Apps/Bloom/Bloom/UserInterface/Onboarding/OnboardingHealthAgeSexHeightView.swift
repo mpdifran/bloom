@@ -54,7 +54,7 @@ struct OnboardingHealthAgeSexHeightView: View {
       .padding()
       .onboardingTextStyle()
     }
-    .topSafeAreaBlur()
+    .topSafeAreaFill(.background)
     .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: isHealthDataConfirmed)

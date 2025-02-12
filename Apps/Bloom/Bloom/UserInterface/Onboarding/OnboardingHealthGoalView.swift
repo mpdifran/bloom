@@ -48,7 +48,7 @@ struct OnboardingHealthGoalView: View {
       .horizontalAlignment(.leading)
       .padding()
     }
-    .topSafeAreaBlur()
+    .topSafeAreaFill(.background)
     .sheet($presentedSheet)
     .animation(.default, value: index)
     .animation(.default, value: healthManager.healthGoal)

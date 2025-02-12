@@ -63,7 +63,7 @@ struct OnboardingNotificationPermissionView: View {
             .horizontalAlignment(.leading)
             .padding()
         }
-        .topSafeAreaBlur()
+        .topSafeAreaFill(.background)
         .animation(.bouncy, value: notificationIndex)
         .animation(.default, value: index)
         .animation(.default, value: isAuthorized)

@@ -54,7 +54,7 @@ struct OnboardingFocusAreasView: View {
         await loadGoals()
       }
     }
-    .topSafeAreaBlur()
+    .topSafeAreaFill(.background)
     .task {
       await bulkAdvanceIndexRound1()
     }

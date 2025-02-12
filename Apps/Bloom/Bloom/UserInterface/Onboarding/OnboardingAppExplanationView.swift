@@ -51,7 +51,7 @@ struct OnboardingAppExplanationView: View {
             .padding()
             .onboardingTextStyle()
         }
-        .topSafeAreaBlur()
+        .topSafeAreaFill(.background)
         .animation(.default, value: vitalPairs.count)
         .animation(.default, value: index)
         .sensoryFeedback(.selection, trigger: vitalPairs.count)
