@@ -26,23 +26,33 @@ struct AIGeneratedReportView: View {
 
   @ViewBuilder
   private var reportView: some View {
-    switch viewModel.accuracyReportState {
-    case .notApplicable:
-      EmptyView()
-    case .pendingFetch:
-      FuturisticCircularWrapperView {
-        ProgressView()
+    VStack {
+      switch viewModel.accuracyReportState {
+      case .notApplicable:
+        EmptyView()
+      default:
+        Text("AI score")
+          .font(.caption)
       }
-      .task { await viewModel.fetchAccuracyReport() }
-    case .fetching:
-      FuturisticCircularWrapperView {
-        ProgressView()
-      }
-    case .noReportAvailable:
-      FuturisticCircularWrapperView { Text("N/A") }
-    case .fetched(let adminAccuracyReport):
-      FuturisticCircularWrapperView {
-        fetchedReportView(report: adminAccuracyReport)
+      
+      switch viewModel.accuracyReportState {
+      case .notApplicable:
+        EmptyView()
+      case .pendingFetch:
+        FuturisticCircularWrapperView {
+          ProgressView()
+        }
+        .task { await viewModel.fetchAccuracyReport() }
+      case .fetching:
+        FuturisticCircularWrapperView {
+          ProgressView()
+        }
+      case .noReportAvailable:
+        FuturisticCircularWrapperView { Text("N/A") }
+      case .fetched(let adminAccuracyReport):
+        FuturisticCircularWrapperView {
+          fetchedReportView(report: adminAccuracyReport)
+        }
       }
     }
   }

@@ -235,6 +235,21 @@ extension OpenAIService {
           Brand and product name accuracy – Confirm that branding details match the provided packaging.
           """)
         ]
+      ),
+      Chat.Message(
+        role: .system,
+        content: [
+          .text("""
+          Assign an accuracy score (0-100) based on the following factors:
+
+          0-25 (Severe Inaccuracy) → The food record is highly unreliable. Multiple major mismatches with the nutrition label, critical missing fields (e.g., calories, serving size), or physiologically impossible values. High downvote count or high number of issue reports strongly reinforces inaccuracy.
+          26-50 (Moderate Issues) → Some key fields match, but notable errors exist. Examples include incorrect serving sizes, sum of macronutrients not aligning with total values, or inconsistent calorie calculations. Moderate downvote count indicates user-reported issues.
+          51-75 (Minor Issues) → The record is mostly accurate, with small discrepancies in nutrient values. Minor fields may be missing (e.g., dietary fiber, micronutrients), but core data is correct. Low to moderate downvote count suggests minor concerns.
+          76-100 (Highly Accurate) → The record closely matches the provided nutrition label. No major inconsistencies in calories, macronutrients, or serving size. Low or no downvotes indicate high user confidence. Small non-essential fields may be missing but do not impact accuracy significantly.
+          
+          Consider user feedback (downvote count), data consistency, and number of issue reports when determining the final score.
+          """)
+        ]
       )
     ]
 
