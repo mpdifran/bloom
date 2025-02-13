@@ -12,13 +12,57 @@ import SwiftUI
 
 @MainActor
 final class NutrientsRemainingViewModel: ObservableObject {
-  @Published var title: String = ""
+  var title: String {
+    if calorieGoalQuantity != nil {
+      "Nutrients Remaining"
+    } else {
+      "Nutrients"
+    }
+  }
 
-  // TODO: Store as private HKQuantity and use computed values to expose string and doubles
-  @Published var calorieTotal: Double = 0
-  @Published var proteinTotal: Double = 0
-  @Published var fatsTotal: Double = 0
-  @Published var carbsTotal: Double = 0
+  @Published private var calorieQuantity: HKQuantity = .init(
+    unit: FoodItemNutrient.calories.unit,
+    doubleValue: 0
+  )
+  var calorieString: String {
+    calorieQuantity.displayString(for: FoodItemNutrient.calories.unit, showUnits: false)
+  }
+
+  @Published private var proteinQuantity: HKQuantity = .init(
+    unit: FoodItemNutrient.protein.unit,
+    doubleValue: 0
+  )
+  var proteinString: String {
+    proteinQuantity.displayString(for: FoodItemNutrient.protein.unit)
+  }
+  var proteinValue: Double {
+    proteinQuantity.doubleValue(for: FoodItemNutrient.protein.unit)
+  }
+
+  @Published private var fatsQuantity: HKQuantity = .init(
+    unit: FoodItemNutrient.fat.unit,
+    doubleValue: 0
+  )
+  var fatsString: String {
+    fatsQuantity.displayString(for: FoodItemNutrient.fat.unit)
+  }
+  var fatsValue: Double {
+    fatsQuantity.doubleValue(for: FoodItemNutrient.fat.unit)
+  }
+
+  @Published private var carbsQuantity: HKQuantity = .init(
+    unit: FoodItemNutrient.carbohydrates.unit,
+    doubleValue: 0
+  )
+  var carbsString: String {
+    carbsQuantity.displayString(for: FoodItemNutrient.carbohydrates.unit)
+  }
+  var carbsValue: Double {
+    carbsQuantity.doubleValue(for: FoodItemNutrient.carbohydrates.unit)
+  }
+
+  @Published var calorieGoalQuantity: HKQuantity?
+  @Published var proteinGoalQuantity: HKQuantity?
 
   private let dateRange: DateRange
 
@@ -51,38 +95,24 @@ private extension NutrientsRemainingViewModel {
   }
 
   func calculateNutrients() async {
-    await fetchCalories()
-    await fetchProtein()
-    await fetchFats()
-    await fetchCarbs()
-  }
+    calorieQuantity = await fetchNutrient(.calories)
+    proteinQuantity = await fetchNutrient(.protein)
+    fatsQuantity = await fetchNutrient(.fat)
+    carbsQuantity = await fetchNutrient(.carbohydrates)
 
-  func fetchCalories() async {
-    let nutrient = FoodItemNutrient.calories
-    let quantity = await fetchNutrient(nutrient)
+    let calorieHabit = try? await modelActor.fetchActiveHabits(for: .calories).first
+    calorieGoalQuantity = calorieHabit?.quantity
 
-    calorieTotal = quantity.doubleValue(for: nutrient.unit)
-  }
+    if let proteinHabit = try? await modelActor.fetchActiveHabits(for: .proteinIntake).first {
+      proteinGoalQuantity = proteinHabit.quantity
+    } else if let calorieHabit {
+      // If no protein goal is set but a calorie goal was set, assume 30% of calorie goal.
+      proteinGoalQuantity = HKQuantity(
+        unit: FoodItemNutrient.protein.unit,
+        doubleValue: calorieHabit.value * 0.3
+      )
+    }
 
-  func fetchProtein() async {
-    let nutrient = FoodItemNutrient.protein
-    let quantity = await fetchNutrient(nutrient)
-
-    proteinTotal = quantity.doubleValue(for: nutrient.unit)
-  }
-
-  func fetchFats() async {
-    let nutrient = FoodItemNutrient.fat
-    let quantity = await fetchNutrient(nutrient)
-
-    fatsTotal = quantity.doubleValue(for: nutrient.unit)
-  }
-
-  func fetchCarbs() async {
-    let nutrient = FoodItemNutrient.carbohydrates
-    let quantity = await fetchNutrient(nutrient)
-
-    carbsTotal = quantity.doubleValue(for: nutrient.unit)
   }
 
   func fetchNutrient(_ nutrient: FoodItemNutrient) async -> HKQuantity {

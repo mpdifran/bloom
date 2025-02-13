@@ -30,7 +30,7 @@ struct NutrientsRemainingView: View {
 
 private extension NutrientsRemainingView {
   var titleView: some View {
-    Text("Nutrients remaining")
+    Text(viewModel.title)
       .font(
         .system(
           .headline,
@@ -41,29 +41,52 @@ private extension NutrientsRemainingView {
   }
 
   var cardView: some View {
-    HStack(alignment: .bottom) {
-      VStack(alignment: .leading) {
-        Text(viewModel.calorieTotal.format())
-          .font(
-            .system(
-              .title3,
-              design: .rounded,
-              weight: .black
+    HStack {
+      HStack(alignment: .bottom) {
+        VStack(alignment: .leading) {
+          Text(viewModel.calorieString)
+            .font(
+              .system(
+                .title3,
+                design: .rounded,
+                weight: .black
+              )
             )
+
+          Text("Calories")
+            .bold()
+            .foregroundStyle(.secondary)
+            .font(.caption)
+        }
+
+        Spacer()
+
+        HStack {
+          NutrientLabel(
+            value: viewModel.proteinValue,
+            target: 100,
+            displayAmount: viewModel.proteinString,
+            label: "Protein"
           )
-
-        Text("Calories")
-          .bold()
-          .foregroundStyle(.secondary)
-          .font(.caption)
-      }
-
-      Spacer()
-
-      HStack {
-        NutrientLabel(value: viewModel.proteinTotal, label: "Protein")
-        NutrientLabel(value: viewModel.fatsTotal, label: "Fats")
-        NutrientLabel(value: viewModel.carbsTotal, label: "Carbs")
+          .frame(width: 80)
+          .tint(.mutedTeal)
+          NutrientLabel(
+            value: viewModel.fatsValue,
+            target: 100,
+            displayAmount: viewModel.fatsString,
+            label: "Fats"
+          )
+          .frame(width: 50)
+          .tint(.mutedOrange)
+          NutrientLabel(
+            value: viewModel.carbsValue,
+            target: 100,
+            displayAmount: viewModel.carbsString,
+            label: "Carbs"
+          )
+          .frame(width: 50)
+          .tint(.mutedPurple)
+        }
       }
 
       DisclosureIndicator()
@@ -74,16 +97,29 @@ private extension NutrientsRemainingView {
 
 private struct NutrientLabel: View {
   let value: Double
+  let target: Double?
+  let displayAmount: String
   let label: String
 
   var body: some View {
     VStack(alignment: .leading) {
-      ProgressBar(
-        value: value,
-        target: 125
-      )
+      if let target {
+        ProgressBar(
+          value: value,
+          target: target
+        )
+        .foregroundStyle(.tint)
+      }
 
-      Text(value.format())
+      Text(displayAmount)
+        .font(
+          .system(
+            .title3,
+            design: .rounded,
+            weight: .black
+          )
+        )
+        .foregroundStyle(.tint)
 
       Text(label)
         .bold()
