@@ -61,4 +61,20 @@ extension User {
         .update()
     }
   }
+
+  struct AddAssistantAndThreadIDs: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("assistant_id", .string)
+        .field("thread_id", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("assistant_id")
+        .deleteField("thread_id")
+        .update()
+    }
+  }
 }

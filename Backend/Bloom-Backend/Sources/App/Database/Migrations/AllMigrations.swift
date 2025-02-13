@@ -28,4 +28,5 @@ let allMigrations: [Migration] = [
     User.AddAppUserID(),
     FoodItemIssueReport.RemoveBarcodePropoerty(),
     FoodItemAccuracyReport.Create(),
+    User.AddAssistantAndThreadIDs(),
 ]
