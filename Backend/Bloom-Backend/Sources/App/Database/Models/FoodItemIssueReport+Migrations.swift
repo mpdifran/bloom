@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import Fluent
+import SQLKit
 
 extension FoodItemIssueReport {
   struct Create: AsyncMigration {
@@ -108,6 +109,32 @@ extension FoodItemIssueReport {
       try await database.schema(FoodItemIssueReport.schema)
         .field("barcode", .string)
         .update()
+    }
+  }
+
+  struct AddFoodItemRecordIndex: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        // Skip creating the index
+        return
+      }
+      
+      try await sqlDatabase
+        .create(index: "idx_food_item_record_id")
+        .on(FoodItemIssueReport.schema)
+        .column("food_item_record_id")
+        .run()
+    }
+    
+    func revert(on database: any Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        // Skip creating the index
+        return
+      }
+      
+      try await sqlDatabase
+        .drop(index: "idx_food_item_record_id")
+        .run()
     }
   }
 }
