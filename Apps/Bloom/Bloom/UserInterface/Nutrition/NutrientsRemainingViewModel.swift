@@ -61,8 +61,23 @@ final class NutrientsRemainingViewModel: ObservableObject {
     carbsQuantity.doubleValue(for: FoodItemNutrient.carbohydrates.unit)
   }
 
-  @Published var calorieGoalQuantity: HKQuantity?
-  @Published var proteinGoalQuantity: HKQuantity?
+  @Published private var calorieGoalQuantity: HKQuantity?
+  private var calorieTarget: Double? {
+    calorieGoalQuantity?.doubleValue(for: FoodItemNutrient.calories.unit)
+  }
+
+  @Published private var proteinGoalQuantity: HKQuantity?
+  var proteinTarget: Double? {
+    proteinGoalQuantity?.doubleValue(for: FoodItemNutrient.protein.unit)
+  }
+
+  var remainingTarget: Double? {
+    if let calorieTarget, let proteinTarget {
+      (calorieTarget - proteinTarget) / 2
+    } else {
+      nil
+    }
+  }
 
   private let dateRange: DateRange
 

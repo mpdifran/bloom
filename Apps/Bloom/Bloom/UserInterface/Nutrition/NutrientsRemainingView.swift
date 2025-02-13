@@ -64,7 +64,7 @@ private extension NutrientsRemainingView {
         HStack {
           NutrientLabel(
             value: viewModel.proteinValue,
-            target: 100,
+            target: viewModel.proteinTarget,
             displayAmount: viewModel.proteinString,
             label: "Protein"
           )
@@ -72,7 +72,7 @@ private extension NutrientsRemainingView {
           .tint(.mutedTeal)
           NutrientLabel(
             value: viewModel.fatsValue,
-            target: 100,
+            target: viewModel.remainingTarget,
             displayAmount: viewModel.fatsString,
             label: "Fats"
           )
@@ -80,7 +80,7 @@ private extension NutrientsRemainingView {
           .tint(.mutedOrange)
           NutrientLabel(
             value: viewModel.carbsValue,
-            target: 100,
+            target: viewModel.remainingTarget,
             displayAmount: viewModel.carbsString,
             label: "Carbs"
           )
