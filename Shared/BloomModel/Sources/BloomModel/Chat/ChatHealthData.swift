@@ -7,18 +7,19 @@
 
 import Foundation
 
+// MARK: - ChatHealthData
+
 public struct ChatHealthData: Codable, Equatable, Sendable {
-  public let restingHeartRate: [Sample]
-  public let heartRateVariability: [Sample]
+  public let heartHealth: HeartHealth?
 
   public init(
-    restingHeartRate: [Sample],
-    heartRateVariability: [Sample]
+    heartHealth: HeartHealth?
   ) {
-    self.restingHeartRate = restingHeartRate
-    self.heartRateVariability = heartRateVariability
+    self.heartHealth = heartHealth
   }
 }
+
+// MARK: - Primitives
 
 public extension ChatHealthData {
   struct Sample: Codable, Equatable, Sendable {
@@ -37,3 +38,25 @@ public extension ChatHealthData {
     }
   }
 }
+
+// MARK: - Heart Health
+
+public extension ChatHealthData {
+  struct HeartHealth: Codable, Equatable, Sendable {
+    public let vo2Max: [Sample]
+    public let restingHeartRate: [Sample]
+    public let heartRateRecovery: [Sample]
+
+    public init(
+      vo2Max: [Sample],
+      restingHeartRate: [Sample],
+      heartRateRecovery: [Sample]
+    ) {
+      self.vo2Max = vo2Max
+      self.restingHeartRate = restingHeartRate
+      self.heartRateRecovery = heartRateRecovery
+    }
+  }
+}
+
+
