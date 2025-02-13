@@ -283,7 +283,7 @@ extension NutritionMonthlySummary.Details {
     let fat = averageFat.doubleValue(for: .gram()) * .caloriesPerGramOfFat
     let remainder = dietaryEnergy.doubleValue(for: .largeCalorie()) - protein - carbs - fat
 
-    return .init(
+    return NutritionMonthlySummary.Macros(
       protein: averageProtein,
       carbohydrates: averageCarbohydrates,
       fat: averageFat,

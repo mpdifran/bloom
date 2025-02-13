@@ -70,7 +70,7 @@ private extension SupplementBubble {
 
 #Preview {
     SupplementBubble(
-        supplementReccomendation: .init(
+        supplementReccomendation: SupplementReccomendationModel(
             supplementName: "Melatonin",
             efficacyRating: 4,
             recommendedDailyDose: "2-3 mg",

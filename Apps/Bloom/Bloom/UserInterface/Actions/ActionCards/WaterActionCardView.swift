@@ -133,10 +133,10 @@ private extension WaterActionCardView {
     guard let quantity = selectedQuantity else { return false }
 
     let sample = HKQuantitySample(
-      type: .init(.dietaryWater),
+      type: HKQuantityType(.dietaryWater),
       quantity: quantity,
-      start: .now,
-      end: .now,
+      start: Date.now,
+      end: Date.now,
       metadata: [
         HKMetadataKeyWasUserEntered : true
       ]

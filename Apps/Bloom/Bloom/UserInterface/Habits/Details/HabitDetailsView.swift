@@ -274,7 +274,7 @@ struct WeekQuantitySamples: Identifiable {
 #Preview {
   NavigationStack {
     HabitDetailsView(
-      habit: .init(
+      habit: Habit(
         targetMetric: .waterIntake,
         value: 1500,
         unitString: HKUnit.literUnit(with: .milli).unitString,

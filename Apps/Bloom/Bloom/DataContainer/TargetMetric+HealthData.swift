@@ -302,25 +302,25 @@ extension TargetMetric {
       let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityType: .running, dateRange: dateRange)
       return workouts.map {
         let total = $0.workouts.sum(keyPath: \.duration)
-        return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: .second(), doubleValue: total))
       }
     case .runDistance:
       let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityType: .running, dateRange: dateRange)
       return workouts.map {
         let total = $0.workouts.sum(where: { $0.totalDistanceWalkingRunning?.doubleValue(for: unit) ?? 0 })
-        return DateQuantitySample(date: $0.date, quantity: .init(unit: unit, doubleValue: total))
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: unit, doubleValue: total))
       }
     case .bikeDuration:
       let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityType: .cycling, dateRange: dateRange)
       return workouts.map {
         let total = $0.workouts.sum(keyPath: \.duration)
-        return DateQuantitySample(date: $0.date, quantity: .init(unit: .second(), doubleValue: total))
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: .second(), doubleValue: total))
       }
     case .bikeDistance:
       let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityType: .cycling, dateRange: dateRange)
       return workouts.map {
         let total = $0.workouts.sum(where: { $0.totalDistanceCycling?.doubleValue(for: unit) ?? 0 })
-        return DateQuantitySample(date: $0.date, quantity: .init(unit: unit, doubleValue: total))
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: unit, doubleValue: total))
       }
     case .targetHeartRateZone1:
       let collatedReports = await HealthStoreFetcher.shared.fetchCollatedWorkoutHeartRateReports(dateRange: dateRange)

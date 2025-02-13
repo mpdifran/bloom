@@ -13,7 +13,7 @@ extension FoodItemRecord {
 
 extension FoodItemRecord.Preview {
     static let ritzCrackers = FoodItemRecord(
-        id: .init("1234"),
+        id: "1234",
         name: "Crackers",
         brandName: "Ritz",
         flavour: "Low Sodium",

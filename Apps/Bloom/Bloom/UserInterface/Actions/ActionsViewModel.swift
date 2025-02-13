@@ -78,7 +78,7 @@ extension ActionsView.ViewModel {
                 let timestampString = DateFormatter.relativeDateTimeShort.string(from: timestamp)
 
                 await MainActor.run {
-                    self.bloodPressureDetails = .init(
+                    self.bloodPressureDetails = ActionLatestValueDetails(
                         displayString: displayString,
                         timestampString: timestampString
                     )

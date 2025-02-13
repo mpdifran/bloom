@@ -92,7 +92,7 @@ extension SleepVitalsMonthlySummary {
 
         if
             let averageSleepLength = details.averageSleepLength,
-            let formattedDuration = DateFormatter.timeIntervalHourMinuteShort.string(from: .init(minute: Int(averageSleepLength)))
+            let formattedDuration = DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(minute: Int(averageSleepLength)))
         {
             entries.append("Avg: \(formattedDuration)")
         }

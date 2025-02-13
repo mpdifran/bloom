@@ -73,7 +73,7 @@ private extension BodyWeightActionCardView {
     let date = Date.now
     let quantity = HKQuantity(unit: unitPreferences.weightUnit, doubleValue: weight)
     let sample = HKQuantitySample(
-      type: .init(.bodyMass),
+      type: HKQuantityType(.bodyMass),
       quantity: quantity,
       start: date,
       end: date,

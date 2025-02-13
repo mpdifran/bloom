@@ -372,9 +372,9 @@ extension SleepAnalysis {
 
   static var previewData: [SleepAnalysis] {
     [
-      .init(
-        startDate: Date().addingTimeInterval(-3600*8),
-        endDate: .now,
+      SleepAnalysis(
+        startDate: Date().addingTimeInterval(-28800),
+        endDate: Date.now,
         hasDetailedSleepCategories: true,
         deepSleepMinutes: 51,
         coreSleepMinutes: 290,
@@ -386,9 +386,9 @@ extension SleepAnalysis {
         respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
         wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
       ),
-      .init(
-        startDate: Date().addingTimeInterval(-(3600*6 + 86400)),
-        endDate: .now.addingTimeInterval(-86400),
+      SleepAnalysis(
+        startDate: Date().addingTimeInterval(-(108000)),
+        endDate: Date.now.addingTimeInterval(-86400),
         hasDetailedSleepCategories: true,
         deepSleepMinutes: 36,
         coreSleepMinutes: 250,
@@ -400,9 +400,9 @@ extension SleepAnalysis {
         respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
         wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
       ),
-      .init(
-        startDate: Date().addingTimeInterval(-(3600*6 + 86400*2)),
-        endDate: .now.addingTimeInterval(-86400*2),
+      SleepAnalysis(
+        startDate: Date().addingTimeInterval(-(194400)),
+        endDate: Date.now.addingTimeInterval(-172800),
         hasDetailedSleepCategories: true,
         deepSleepMinutes: 24,
         coreSleepMinutes: 300,
@@ -414,9 +414,9 @@ extension SleepAnalysis {
         respiratoryRate: SleepAnalysis.RespiratoryRateDataPoint.previewData,
         wristTemperature: SleepAnalysis.WristTemperatureDataPoint.previewData
       ),
-      .init(
-        startDate: Date().addingTimeInterval(-(3600*6 + 86400*3)),
-        endDate: .now.addingTimeInterval(-86400*3),
+      SleepAnalysis(
+        startDate: Date().addingTimeInterval(-(280800)),
+        endDate: Date.now.addingTimeInterval(-259200),
         hasDetailedSleepCategories: true,
         deepSleepMinutes: 46,
         coreSleepMinutes: 260,
@@ -447,52 +447,52 @@ extension SleepAnalysis.SoundLevelDataPoint {
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 51,
-      startDate: Date(timeIntervalSinceNow: -3600 * 2),
+      startDate: Date(timeIntervalSinceNow: -7200),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 48,
-      startDate: Date(timeIntervalSinceNow: -3600 * 3),
+      startDate: Date(timeIntervalSinceNow: -10800),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 45,
-      startDate: Date(timeIntervalSinceNow: -3600 * 4),
+      startDate: Date(timeIntervalSinceNow: -14400),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 48,
-      startDate: Date(timeIntervalSinceNow: -3600 * 4),
+      startDate: Date(timeIntervalSinceNow: -18000),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 42,
-      startDate: Date(timeIntervalSinceNow: -3600 * 5),
+      startDate: Date(timeIntervalSinceNow: -21600),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 51,
-      startDate: Date(timeIntervalSinceNow: -3600 * 6),
+      startDate: Date(timeIntervalSinceNow: -25200),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 43,
-      startDate: Date(timeIntervalSinceNow: -3600 * 7),
+      startDate: Date(timeIntervalSinceNow: -28800),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 48,
-      startDate: Date(timeIntervalSinceNow: -3600 * 8),
+      startDate: Date(timeIntervalSinceNow: -32400),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 42,
-      startDate: Date(timeIntervalSinceNow: -3600 * 9),
+      startDate: Date(timeIntervalSinceNow: -36000),
       timeRangeSeconds: 3600
     ),
     SleepAnalysis.SoundLevelDataPoint(
       decibelAWeightedSoundPressureLevelAverage: 39,
-      startDate: Date(timeIntervalSinceNow: -3600 * 10),
+      startDate: Date(timeIntervalSinceNow: -39600),
       timeRangeSeconds: 3600
     )
   ]
@@ -513,27 +513,27 @@ extension SleepAnalysis.HeartRateDataPoint {
     ),
     SleepAnalysis.HeartRateDataPoint(
       averageHeartRate: 48,
-      startDate: Date(timeIntervalSinceNow: -900 * 2),
+      startDate: Date(timeIntervalSinceNow: -1800),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.HeartRateDataPoint(
       averageHeartRate: 57,
-      startDate: Date(timeIntervalSinceNow: -900 * 3),
+      startDate: Date(timeIntervalSinceNow: -2700),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.HeartRateDataPoint(
       averageHeartRate: 48,
-      startDate: Date(timeIntervalSinceNow: -900 * 4),
+      startDate: Date(timeIntervalSinceNow: -3600),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.HeartRateDataPoint(
       averageHeartRate: 43,
-      startDate: Date(timeIntervalSinceNow: -900 * 5),
+      startDate: Date(timeIntervalSinceNow: -4500),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.HeartRateDataPoint(
       averageHeartRate: 48,
-      startDate: Date(timeIntervalSinceNow: -900 * 6),
+      startDate: Date(timeIntervalSinceNow: -5400),
       timeRangeSeconds: 900
     ),
   ]
@@ -554,27 +554,27 @@ extension SleepAnalysis.RespiratoryRateDataPoint {
     ),
     SleepAnalysis.RespiratoryRateDataPoint(
       averageRespiratoryRate: 14,
-      startDate: Date(timeIntervalSinceNow: -900 * 2),
+      startDate: Date(timeIntervalSinceNow: -1800),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.RespiratoryRateDataPoint(
       averageRespiratoryRate: 11,
-      startDate: Date(timeIntervalSinceNow: -900 * 3),
+      startDate: Date(timeIntervalSinceNow: -2700),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.RespiratoryRateDataPoint(
       averageRespiratoryRate: 16,
-      startDate: Date(timeIntervalSinceNow: -900 * 4),
+      startDate: Date(timeIntervalSinceNow: -3600),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.RespiratoryRateDataPoint(
       averageRespiratoryRate: 14,
-      startDate: Date(timeIntervalSinceNow: -900 * 5),
+      startDate: Date(timeIntervalSinceNow: -4500),
       timeRangeSeconds: 900
     ),
     SleepAnalysis.RespiratoryRateDataPoint(
       averageRespiratoryRate: 12,
-      startDate: Date(timeIntervalSinceNow: -900 * 6),
+      startDate: Date(timeIntervalSinceNow: -5400),
       timeRangeSeconds: 900
     ),
   ]

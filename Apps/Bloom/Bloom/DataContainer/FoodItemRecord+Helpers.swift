@@ -44,7 +44,7 @@ extension FoodItemRecord {
       servingUnitString: foodItem.servingQuantity?.unit,
       servingValue: foodItem.servingQuantity?.value,
       ingredients: foodItem.ingredients,
-      category: .init(rawValue: foodItem.category.rawValue),
+      category: Category(rawValue: foodItem.category.rawValue),
       isVerified: foodItem.isVerified
     )
   }
@@ -82,7 +82,7 @@ extension FoodItemRecord {
     self.servingUnitString = foodItem.servingQuantity?.unit
     self.servingValue = foodItem.servingQuantity?.value
     self.ingredients = foodItem.ingredients
-    self.category = .init(rawValue: foodItem.category.rawValue)
+    self.category = Category(rawValue: foodItem.category.rawValue)
     self.isVerified = foodItem.isVerified
   }
 }
@@ -92,7 +92,7 @@ extension FoodItemRecord {
   func asNetworkFoodItem() -> FoodItem {
     let quantity: FoodItem.Quantity?
     if let servingValue, let servingUnitString {
-      quantity = .init(
+      quantity = FoodItem.Quantity(
         value: servingValue,
         unit: servingUnitString
       )
@@ -101,34 +101,34 @@ extension FoodItemRecord {
     }
 
     return FoodItem(
-      id: .init(id),
+      id: FoodItemIdentifier(id),
       name: name,
       brandName: brandName,
       flavour: flavour,
       country: FoodItem.Country(rawValue: rawCountry ?? ""),
-      calories: .init(value: calories, unit: "kcal"),
-      protein: .init(value: protein, unit: "g"),
-      carbohydrates: .init(value: carbohydrates, unit: "g"),
-      fat: .init(value: fat, unit: "g"),
-      saturatedFat: saturatedFat.map({ .init(value: $0, unit: "g") }),
-      transFat: transFat.map({ .init(value: $0, unit: "g") }),
-      polyunsaturatedFat: polyunsaturatedFat.map({ .init(value: $0, unit: "g") }),
-      monounsaturatedFat: monounsaturatedFat.map({ .init(value: $0, unit: "g") }),
-      fiber: fiber.map({ .init(value: $0, unit: "g") }),
-      sugar: sugar.map({ .init(value: $0, unit: "g") }),
-      cholesterol: cholesterol.map({ .init(value: $0, unit: "mg") }),
-      sodium: sodium.map({ .init(value: $0, unit: "mg") }),
-      calcium: calcium.map({ .init(value: $0, unit: "mg") }),
-      iron: iron.map({ .init(value: $0, unit: "mg") }),
-      potassium: potassium.map({ .init(value: $0, unit: "mg") }),
-      magnesium: magnesium.map({ .init(value: $0, unit: "mg") }),
-      zinc: zinc.map({ .init(value: $0, unit: "mg") }),
-      vitaminA: vitaminA.map({ .init(value: $0, unit: "mg") }),
-      vitaminB6: vitaminB6.map({ .init(value: $0, unit: "mg") }),
-      vitaminB12: vitaminB12.map({ .init(value: $0, unit: "mg") }),
-      vitaminC: vitaminC.map({ .init(value: $0, unit: "mg") }),
-      vitaminD: vitaminD.map({ .init(value: $0, unit: "mg") }),
-      vitaminE: vitaminE.map({ .init(value: $0, unit: "mg") }),
+      calories: FoodItem.Quantity(value: calories, unit: "kcal"),
+      protein: FoodItem.Quantity(value: protein, unit: "g"),
+      carbohydrates: FoodItem.Quantity(value: carbohydrates, unit: "g"),
+      fat: FoodItem.Quantity(value: fat, unit: "g"),
+      saturatedFat: saturatedFat.map({ FoodItem.Quantity(value: $0, unit: "g") }),
+      transFat: transFat.map({ FoodItem.Quantity(value: $0, unit: "g") }),
+      polyunsaturatedFat: polyunsaturatedFat.map({ FoodItem.Quantity(value: $0, unit: "g") }),
+      monounsaturatedFat: monounsaturatedFat.map({ FoodItem.Quantity(value: $0, unit: "g") }),
+      fiber: fiber.map({ FoodItem.Quantity(value: $0, unit: "g") }),
+      sugar: sugar.map({ FoodItem.Quantity(value: $0, unit: "g") }),
+      cholesterol: cholesterol.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      sodium: sodium.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      calcium: calcium.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      iron: iron.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      potassium: potassium.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      magnesium: magnesium.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      zinc: zinc.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      vitaminA: vitaminA.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      vitaminB6: vitaminB6.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      vitaminB12: vitaminB12.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      vitaminC: vitaminC.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      vitaminD: vitaminD.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
+      vitaminE: vitaminE.map({ FoodItem.Quantity(value: $0, unit: "mg") }),
       servingName: servingName,
       servingQuantity: quantity,
       ingredients: ingredients,

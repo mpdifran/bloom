@@ -481,7 +481,7 @@ extension HKHealthStore {
     }
 
     var result = [DateCollatedWorkouts]()
-    Calendar.current.iterate(dateRange: dateRange, by: .init(day: 1)) { date in
+    Calendar.current.iterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
       if
         let key = collatedWorkouts.keys.first(where: { Calendar.current.isDate($0, inSameDayAs: date) }),
         let workouts = collatedWorkouts[key]

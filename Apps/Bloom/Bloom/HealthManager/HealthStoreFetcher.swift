@@ -246,7 +246,7 @@ extension HealthStoreFetcher {
 
     var result = [DateQuantitySample]()
 
-    Calendar.current.iterate(dateRange: dateRange, by: .init(day: 1)) { date in
+    Calendar.current.iterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
       let currentDateSamples = samples.filter({ Calendar.current.isDate($0.startDate, inSameDayAs: date) })
 
       let sum = currentDateSamples.reduce(0) { (total, sample) -> Double in
@@ -551,7 +551,7 @@ extension HealthStoreFetcher {
         let samples = try await healthStore.fetchAverageStatistics(
           quantityTypeID: .respiratoryRate,
           unit: .breathsPerMinute(),
-          interval: .init(minute: timePeriod),
+          interval: DateComponents(minute: timePeriod),
           dateRange: dateRange
         )
 
@@ -663,14 +663,14 @@ extension HealthStoreFetcher {
       let unit = HKUnit.largeCalorie()
 
       guard basalSample.quantity.doubleValue(for: unit) > 0 else {
-        samples.append(.init(date: basalSample.date, value: 1))
+        samples.append(DateValueSample(date: basalSample.date, value: 1))
         continue
       }
 
       let sum = activeSample.quantity.doubleValue(for: unit) + basalSample.quantity.doubleValue(for: unit)
       let ratio = sum / basalSample.quantity.doubleValue(for: unit)
 
-      samples.append(.init(date: basalSample.date, value: ratio))
+      samples.append(DateValueSample(date: basalSample.date, value: ratio))
     }
     return samples
   }
@@ -806,7 +806,7 @@ extension HealthStoreFetcher {
     )
     let proteinCountAboveZero = collatedProtein.count(where: { $0.quantity.doubleValue(for: .gram()) > 0 })
 
-    return .init(
+    return NutritionMonthlySummary.Details(
       numberOfNutritionLogDays: dietaryEnergyCountAboveZero,
       numberOfProteinLogDays: proteinCountAboveZero,
       basalEnergyBurned: basalEnergyBurned,

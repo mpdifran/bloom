@@ -33,48 +33,48 @@ public struct ChatBubbleShape: Shape {
         var path = Path()
 
         // Top Left
-        path.move(to: .init(x: effectiveRadius, y: 0))
-        path.addLine(to: .init(x: rect.width - effectiveRadius, y: 0))
+        path.move(to: CGPoint(x: effectiveRadius, y: 0))
+        path.addLine(to: CGPoint(x: rect.width - effectiveRadius, y: 0))
 
         // Top Right
-        path.addArc(center: topRightCorner, radius: effectiveRadius, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
-        path.addLine(to: .init(x: rect.width, y: rect.height - effectiveRadius))
+        path.addArc(center: topRightCorner, radius: effectiveRadius, startAngle: Angle.degrees(-90), endAngle: Angle.degrees(0), clockwise: false)
+        path.addLine(to: CGPoint(x: rect.width, y: rect.height - effectiveRadius))
 
         // Bottom Right
         if tailPosition == .trailing {
 
-            path.addLine(to: .init(x: rect.width, y: rect.height + Self.tailExposure))
-            path.addArc(center: .init(x: rect.width - Self.tailCornerRadius, y: rect.height + Self.tailExposure),
+            path.addLine(to: CGPoint(x: rect.width, y: rect.height + Self.tailExposure))
+            path.addArc(center: CGPoint(x: rect.width - Self.tailCornerRadius, y: rect.height + Self.tailExposure),
                         radius: Self.tailCornerRadius,
-                        startAngle: .degrees(0),
-                        endAngle: .degrees(135),
+                        startAngle: Angle.degrees(0),
+                        endAngle: Angle.degrees(135),
                         clockwise: false)
 
-            path.addArc(center: bottomRightCorner, radius: effectiveRadius, startAngle: .degrees(63), endAngle: .degrees(90), clockwise: false)
+            path.addArc(center: bottomRightCorner, radius: effectiveRadius, startAngle: Angle.degrees(63), endAngle: Angle.degrees(90), clockwise: false)
 
         } else {
-            path.addArc(center: bottomRightCorner, radius: effectiveRadius, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
-            path.addLine(to: .init(x: effectiveRadius, y: rect.height))
+            path.addArc(center: bottomRightCorner, radius: effectiveRadius, startAngle: Angle.degrees(0), endAngle: Angle.degrees(90), clockwise: false)
+            path.addLine(to: CGPoint(x: effectiveRadius, y: rect.height))
         }
 
         // Bottom Left
         if tailPosition == .leading {
-            path.addArc(center: bottomLeftCorner, radius: effectiveRadius, startAngle: .degrees(90), endAngle: .degrees(120), clockwise: false)
+            path.addArc(center: bottomLeftCorner, radius: effectiveRadius, startAngle: Angle.degrees(90), endAngle: Angle.degrees(120), clockwise: false)
 
-            path.addArc(center: .init(x: Self.tailCornerRadius, y: rect.height + Self.tailExposure),
+            path.addArc(center: CGPoint(x: Self.tailCornerRadius, y: rect.height + Self.tailExposure),
                         radius: Self.tailCornerRadius,
-                        startAngle: .degrees(60),
-                        endAngle: .degrees(180),
+                        startAngle: Angle.degrees(60),
+                        endAngle: Angle.degrees(180),
                         clockwise: false)
-            path.addLine(to: .init(x: 0, y: rect.height + Self.tailExposure))
+            path.addLine(to: CGPoint(x: 0, y: rect.height + Self.tailExposure))
 
         } else {
-            path.addArc(center: bottomLeftCorner, radius: effectiveRadius, startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
-            path.addLine(to: .init(x: 0, y: effectiveRadius))
+            path.addArc(center: bottomLeftCorner, radius: effectiveRadius, startAngle: Angle.degrees(90), endAngle: Angle.degrees(180), clockwise: false)
+            path.addLine(to: CGPoint(x: 0, y: effectiveRadius))
         }
 
         // Top Left
-        path.addArc(center: topLeftCorner, radius: effectiveRadius, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+        path.addArc(center: topLeftCorner, radius: effectiveRadius, startAngle: Angle.degrees(180), endAngle: Angle.degrees(270), clockwise: false)
 
         path.closeSubpath()
         return path

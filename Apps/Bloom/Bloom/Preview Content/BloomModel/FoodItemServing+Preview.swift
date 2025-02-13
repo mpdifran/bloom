@@ -14,9 +14,9 @@ extension FoodItemServing {
 extension FoodItemServing.Preview {
 
   static let grilledSalmonSalad: [FoodItemServing] = [
-    .init(serving: 1, foodItem: .Preview.grilledSalmon),
-    .init(serving: 2, foodItem: .Preview.mixedLettuce),
-    .init(serving: 1, foodItem: .Preview.cherryTomatoes),
-    .init(serving: 1, foodItem: .Preview.slicedCarrots)
+    FoodItemServing(serving: 1, foodItem: .Preview.grilledSalmon),
+    FoodItemServing(serving: 2, foodItem: .Preview.mixedLettuce),
+    FoodItemServing(serving: 1, foodItem: .Preview.cherryTomatoes),
+    FoodItemServing(serving: 1, foodItem: .Preview.slicedCarrots)
   ]
 }

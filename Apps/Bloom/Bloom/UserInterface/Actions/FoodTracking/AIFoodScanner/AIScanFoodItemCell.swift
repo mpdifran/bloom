@@ -108,7 +108,7 @@ private extension AIScanFoodItemCell {
 #Preview {
   AIScanFoodItemCell(
     foodItemServing: .constant(
-      .init(
+      FoodItemServing(
         serving: 2,
         foodItem: .Preview.ritzCrackers
       )

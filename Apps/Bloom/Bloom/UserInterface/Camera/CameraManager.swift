@@ -59,7 +59,7 @@ extension CameraManager {
         photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
       }
 
-      photoSettings.maxPhotoDimensions = .init(width: 4032, height: 3024)
+      photoSettings.maxPhotoDimensions = CMVideoDimensions(width: 4032, height: 3024)
       photoSettings.photoQualityPrioritization = .balanced
 
       photoOutput.capturePhoto(with: photoSettings, delegate: self)
@@ -195,7 +195,7 @@ private extension CameraManager {
       return
     }
 
-    photoOutput.maxPhotoDimensions = .init(width: 4032, height: 3024)
+    photoOutput.maxPhotoDimensions = CMVideoDimensions(width: 4032, height: 3024)
     photoOutput.maxPhotoQualityPrioritization = .quality
 
     metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue(label: "com.lotus-labs.camera-manager.metadata-objects"))

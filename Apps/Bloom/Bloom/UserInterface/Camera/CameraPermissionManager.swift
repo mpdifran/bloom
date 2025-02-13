@@ -24,17 +24,17 @@ final class CameraPermissionManager: ObservableObject {
   @Published var permissionState: State = .pending
 
   var permissionAlert: AlertDetails {
-    .init(
+    AlertDetails(
       title: "Camera Permission Required",
       message: "Please allow camera access in Settings.",
       buttons: [
-        .init(
+        AlertDetails.Button(
           title: "Open Settings",
           action: { [weak self] in
             self?.openSettings()
           }
         ),
-        .init(
+        AlertDetails.Button(
           title: "Cancel",
           role: .cancel,
           action: {

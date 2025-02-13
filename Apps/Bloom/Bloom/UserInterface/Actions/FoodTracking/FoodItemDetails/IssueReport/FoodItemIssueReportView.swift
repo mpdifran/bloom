@@ -134,8 +134,8 @@ private extension FoodItemIssueReportView {
       servingValue: foodItemState.servingValue.mapNegativeToNil(),
       servingUnit: foodItemState.servingUnit,
       ingredients: foodItemState.ingredients,
-      nutritionLabelImage: nutritionLabelImageData.map { .init(data: $0, fileExtension: "png") },
-      packagingImage: packagingImageData.map { .init(data: $0, fileExtension: "png") },
+      nutritionLabelImage: nutritionLabelImageData.map { ImageFile(data: $0, fileExtension: "png") },
+      packagingImage: packagingImageData.map { ImageFile(data: $0, fileExtension: "png") },
       notes: foodItemState.notes,
       foodItemID: foodItem.id
     )

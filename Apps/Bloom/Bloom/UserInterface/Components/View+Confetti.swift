@@ -17,8 +17,8 @@ extension View {
             colors: colors,
             confettiSize: 10,
             rainHeight: 600,
-            openingAngle: .init(degrees: 20),
-            closingAngle: .init(degrees: 160),
+            openingAngle: Angle(degrees: 20),
+            closingAngle: Angle(degrees: 160),
             radius: 320,
             repetitions: 0
         )

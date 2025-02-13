@@ -179,7 +179,7 @@ extension StressMonthlySummary.Details {
         let hrvAverage = hrvValues.average(keyPath: \.self)
         let hrvStdDev = hrvValues.standardDeviation(keyPath: \.self, mean: hrvAverage)
 
-        Calendar.current.iterate(dateRange: targetDateRange, by: .init(day: 1)) { date in
+        Calendar.current.iterate(dateRange: targetDateRange, by: DateComponents(day: 1)) { date in
             let referenceDate = Calendar.current.startOfDay(for: date)
 
             let hrvStressScore = simplifiedHVRStressLevel(

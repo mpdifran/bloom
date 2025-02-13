@@ -89,10 +89,10 @@ extension NutrientIssueReportCell {
   VStack {
     NutrientIssueReportCell(
       name: "Vitamin A",
-      originalQuantity: .init(unit: .gramUnit(with: .micro), doubleValue: 200),
+      originalQuantity: HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 200),
       amount: $amount,
       unit: $unit,
-      validUnits: [.gramUnit(with: .milli), .gramUnit(with: .micro)]
+      validUnits: [HKUnit.gramUnit(with: .milli), HKUnit.gramUnit(with: .micro)]
     )
     .cardContainer()
     .padding()

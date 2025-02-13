@@ -105,7 +105,7 @@ struct HabitDailyUpdateCell: View {
   ScrollView {
     VStack {
       HabitDailyUpdateCell(
-        habit: .init(
+        habit: Habit(
           targetMetric: .timeInDaylight,
           value: 30,
           unitString: HKUnit.minute().unitString,
@@ -116,7 +116,7 @@ struct HabitDailyUpdateCell: View {
         )
       )
       HabitDailyUpdateCell(
-        habit: .init(
+        habit: Habit(
           targetMetric: .calories,
           value: 1800,
           unitString: HKUnit.largeCalorie().unitString,
@@ -127,7 +127,7 @@ struct HabitDailyUpdateCell: View {
         )
       )
       HabitDailyUpdateCell(
-        habit: .init(
+        habit: Habit(
           targetMetric: .bikeDistance,
           value: -20,
           unitString: HKUnit.meterUnit(with: .kilo).unitString,

@@ -121,7 +121,7 @@ extension HabitGrid {
     HabitGrid(model: habitGridModel)
       .padding(.spacing)
 
-    HabitGrid(model: .init())
+    HabitGrid(model: HabitGridModel())
       .padding(.spacing)
 
     Spacer()
@@ -131,23 +131,23 @@ extension HabitGrid {
     withAnimation {
       habitGridModel = HabitGridModel(
         weeks: [
-          .init(id: 16, isComplete: [false, true, true, false, false, true, false]),
-          .init(id: 15, isComplete: [true, false, true, false, true, true, true]),
-          .init(id: 14, isComplete: [false, true, true, false, false, true, true]),
-          .init(id: 13, isComplete: [true, true, true, true, false, true, false]),
-          .init(id: 12, isComplete: [false, false, true, false, false, true, true]),
-          .init(id: 11, isComplete: [true, true, false, false, false, true, true]),
-          .init(id: 10, isComplete: [false, true, true, false, false, false, true]),
-          .init(id: 9, isComplete: [true, true, true, false, true, false, false]),
-          .init(id: 8, isComplete: [false, true, false, false, false, false, false]),
-          .init(id: 7, isComplete: [true, true, true, false, true, false, false]),
-          .init(id: 6, isComplete: [true, true, true, false, true, true, true]),
-          .init(id: 5, isComplete: [true, false, false, false, true, true, false]),
-          .init(id: 4, isComplete: [false, true, true, false, false, true, false]),
-          .init(id: 3, isComplete: [true, true, false, true, false, false, false]),
-          .init(id: 2, isComplete: [true, false, false, true, false, true, true]),
-          .init(id: 1, isComplete: [false, true, true, false, false, true, false]),
-          .init(id: 0, isComplete: [true, true, false, true], todayIndex: 3),
+          HabitGridModel.Week(id: 16, isComplete: [false, true, true, false, false, true, false]),
+          HabitGridModel.Week(id: 15, isComplete: [true, false, true, false, true, true, true]),
+          HabitGridModel.Week(id: 14, isComplete: [false, true, true, false, false, true, true]),
+          HabitGridModel.Week(id: 13, isComplete: [true, true, true, true, false, true, false]),
+          HabitGridModel.Week(id: 12, isComplete: [false, false, true, false, false, true, true]),
+          HabitGridModel.Week(id: 11, isComplete: [true, true, false, false, false, true, true]),
+          HabitGridModel.Week(id: 10, isComplete: [false, true, true, false, false, false, true]),
+          HabitGridModel.Week(id: 9, isComplete: [true, true, true, false, true, false, false]),
+          HabitGridModel.Week(id: 8, isComplete: [false, true, false, false, false, false, false]),
+          HabitGridModel.Week(id: 7, isComplete: [true, true, true, false, true, false, false]),
+          HabitGridModel.Week(id: 6, isComplete: [true, true, true, false, true, true, true]),
+          HabitGridModel.Week(id: 5, isComplete: [true, false, false, false, true, true, false]),
+          HabitGridModel.Week(id: 4, isComplete: [false, true, true, false, false, true, false]),
+          HabitGridModel.Week(id: 3, isComplete: [true, true, false, true, false, false, false]),
+          HabitGridModel.Week(id: 2, isComplete: [true, false, false, true, false, true, true]),
+          HabitGridModel.Week(id: 1, isComplete: [false, true, true, false, false, true, false]),
+          HabitGridModel.Week(id: 0, isComplete: [true, true, false, true], todayIndex: 3),
         ]
       )
     }

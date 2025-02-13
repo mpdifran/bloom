@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DataContainer
 import Swipy
 
 struct SwipeAction: Identifiable {
@@ -76,13 +77,13 @@ struct Swipeable<Content: View>: View {
       Swipeable(
         isSwipingItem: $isSwipingItem,
         actions: [
-          .init(
+          SwipeAction(
             title: "Star",
             systemImage: "star",
             tint: .mutedYellow,
             action: { }
           ),
-          .init(
+          SwipeAction(
             title: "Delete",
             systemImage: "trash",
             tint: .mutedRed,
@@ -102,13 +103,13 @@ struct Swipeable<Content: View>: View {
       Swipeable(
         isSwipingItem: $isSwipingItem,
         actions: [
-          .init(
+          SwipeAction(
             title: "Favourite",
             systemImage: "heart",
             tint: .mutedBlue,
             action: { }
           ),
-          .init(
+          SwipeAction(
             title: "Delete",
             systemImage: "trash",
             tint: .mutedRed,
@@ -133,7 +134,7 @@ struct Swipeable<Content: View>: View {
         Swipeable(
           isSwipingItem: $isSwipingItem,
           actions: [
-            .init(
+            SwipeAction(
               title: "Delete",
               systemImage: "trash",
               tint: .mutedRed,
@@ -142,7 +143,7 @@ struct Swipeable<Content: View>: View {
           ]
         ) {
           FoodItemLogCell(
-            foodItemLog: .init(
+            foodItemLog: FoodItemLog(
               id: UUID().uuidString,
               date: .now,
               meal: .breakfast,

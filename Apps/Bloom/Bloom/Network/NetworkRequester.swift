@@ -101,11 +101,11 @@ extension NetworkRequester {
 
     let body = UploadNewFoodRequest(
       barcode: barcode,
-      nutritionLabelImage: .init(
+      nutritionLabelImage: ImageFile(
         data: nutritionData,
         fileExtension: "png"
       ),
-      packagingImage: .init(
+      packagingImage: ImageFile(
         data: packagingData,
         fileExtension: "png"
       ),
@@ -125,7 +125,7 @@ extension NetworkRequester {
     }
 
     let body = EstimateFoodCaloriesRequest(
-      foodImage: .init(
+      foodImage: ImageFile(
         data: imageData,
         fileExtension: "png"
       )
