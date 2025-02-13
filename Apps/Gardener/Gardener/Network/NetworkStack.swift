@@ -197,7 +197,23 @@ extension NetworkStack {
     try await Self.checkStatusCode(data: data, response: response)
 
     return try JSONDecoder.bloomModel.decode(AdminAccuracyReportGetResponse.self, from: data)
+  }
+  
+  func regenerateAccuracyReport(
+    forFoodItemWithID id: FoodItemIdentifier
+  ) async throws -> AdminAccuracyReportGetResponse {
+    let request = AdminRegenerateAccuracyReportRequest(foodItemRecordID: id)
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/food/regenerate-accuracy-report",
+      method: .post,
+      body: request
+    )
     
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(AdminAccuracyReportGetResponse.self, from: data)
   }
   
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {

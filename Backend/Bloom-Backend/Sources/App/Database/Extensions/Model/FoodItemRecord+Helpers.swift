@@ -199,3 +199,52 @@ extension FoodItemRecord.Country {
     }
   }
 }
+
+extension FoodItemRecord {
+  // consider using libraries like https://github.com/pointfreeco/swift-custom-dump in the future
+  func prettyPrint() -> String {
+    """
+    FoodItemRecord(
+      name: \(name),
+      state: \(state),
+      brandName: \(brandName?.debugDescription ?? "nil"),
+      flavour: \(flavour?.debugDescription ?? "nil"),
+      category: \(category),
+      barcode: \(barcode?.debugDescription ?? "nil"),
+      nutritionLabelImage: \(nutritionLabelImage?.debugDescription ?? "nil"),
+      packagingImage: \(packagingImage?.debugDescription ?? "nil"),
+      ingredients: \(ingredients?.debugDescription ?? "nil"),
+      country: \(country),
+      calories: \(calories?.debugDescription ?? "nil"),
+      protein: \(protein?.debugDescription ?? "nil"),
+      carbohydrates: \(carbohydrates?.debugDescription ?? "nil"),
+      fat: \(fat?.debugDescription ?? "nil"),
+      saturatedFat: \(saturatedFat?.debugDescription ?? "nil"),
+      transFat: \(transFat?.debugDescription ?? "nil"),
+      polyunsaturatedFat: \(polyunsaturatedFat?.debugDescription ?? "nil"),
+      monounsaturatedFat: \(monounsaturatedFat?.debugDescription ?? "nil"),
+      fiber: \(fiber?.debugDescription ?? "nil"),
+      sugar: \(sugar?.debugDescription ?? "nil"),
+      cholesterol: \(cholesterol?.debugDescription ?? "nil"),
+      sodium: \(sodium?.debugDescription ?? "nil"),
+      calcium: \(calcium?.debugDescription ?? "nil"),
+      iron: \(iron?.debugDescription ?? "nil"),
+      potassium: \(potassium?.debugDescription ?? "nil"),
+      magnesium: \(magnesium?.debugDescription ?? "nil"),
+      zinc: \(zinc?.debugDescription ?? "nil"),
+      vitaminA: \(vitaminA?.debugDescription ?? "nil"),
+      vitaminB6: \(vitaminB6?.debugDescription ?? "nil"),
+      vitaminB12: \(vitaminB12?.debugDescription ?? "nil"),
+      vitaminC: \(vitaminC?.debugDescription ?? "nil"),
+      vitaminD: \(vitaminD?.debugDescription ?? "nil"),
+      vitaminE: \(vitaminE?.debugDescription ?? "nil"),
+      servingName: \(servingName?.debugDescription ?? "nil"),
+      servingValue: \(servingValue?.debugDescription ?? "nil"),
+      servingUnit: \(servingUnit?.debugDescription ?? "nil"),
+      downvoteCount: \(downvoteCount ?? 0),
+      source: \(source?.debugDescription ?? "nil"),
+      notes: \(notes?.debugDescription ?? "nil")
+    )
+    """
+  }
+}

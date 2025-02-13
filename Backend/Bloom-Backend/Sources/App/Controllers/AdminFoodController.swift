@@ -14,6 +14,7 @@ import Vapor
 struct AdminFoodController {
   private let foodDatabaseService = FoodDatabaseService()
   private let openFoodFactsService = OpenFoodFactsService()
+  private let openAIService = OpenAIService()
 }
 
 extension AdminFoodController: RouteCollection {
@@ -29,6 +30,7 @@ extension AdminFoodController: RouteCollection {
           $0.delete(":id", use: deleteFood)
           $0.get("search", use: searchFood)
           $0.get("accuracy-report", use: getAccuracyReport)
+          $0.post("regenerate-accuracy-report", use: evaluateAccuracy)
 
           $0.group("open-food-facts") {
             $0.post("bulk-upload", use: openFoodFactsBulkUpload)
@@ -357,6 +359,44 @@ private extension AdminFoodController {
       forFoodItemWithId: FoodItemIdentifier(foodItemRecordID)
     )
   }
+
+  @Sendable
+  func evaluateAccuracy(_ request: Request) async throws -> AdminAccuracyReportGetResponse {
+    let requestBody = try request.content.decode(AdminRegenerateAccuracyReportRequest.self)
+    let foodItemId = requestBody.foodItemRecordID
+    
+    async let foodItemRecord = try await FoodItemRecord.find(foodItemId.value, on: request.db)
+    async let issueReportCount = try await FoodItemIssueReport.query(on: request.db).filter(\.$foodItemRecord.$id == foodItemId.value).count()
+    async let recentIssueReports = try await FoodItemIssueReport.query(on: request.db).filter(\.$foodItemRecord.$id == foodItemId.value).limit(5).all()
+    
+    guard let foodItemRecord = try await foodItemRecord else {
+      throw Abort(.notFound)
+    }
+    
+    let evaluation = try await openAIService.evaluateFoodItemAccuracy(
+      request: request,
+      foodItemRecord: foodItemRecord,
+      totalNumberOfIssueReports: issueReportCount,
+      sampleIssueReports: recentIssueReports
+    )
+    
+    // Create and save the accuracy report
+    let accuracyReport = FoodItemAccuracyReport(
+      id: UUID().uuidString,
+      foodItemRecord: foodItemId.value,
+      accuracyScore: Double(evaluation.score),
+      evaluationNotes: evaluation.notes,
+      recommendations: evaluation.recommendations
+    )
+        
+    try await accuracyReport.save(on: request.db)
+    
+    return AdminAccuracyReportGetResponse(report: .init(
+      accuracyScore: accuracyReport.accuracyScore,
+      evaluationNotes: accuracyReport.evaluationNotes,
+      createdAt: accuracyReport.createdAt
+    ))
+  }
 }
 
 private extension AdminFoodController {
@@ -370,9 +410,6 @@ private extension AdminFoodController {
     return AdminOpenFoodFactsBulkUploadResponse(insertedCount: count)
   }
 }
-
-extension AdminCreateFoodItemResponse: @retroactive Content { }
-
 
 private extension ImageStorage {
   func storeAndSignImage(
