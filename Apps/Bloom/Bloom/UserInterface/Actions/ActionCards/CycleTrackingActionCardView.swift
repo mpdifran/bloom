@@ -13,11 +13,15 @@ struct CycleTrackingActionCardView: View {
 
   let performDismiss: (() -> Void)?
 
-  init(performDismiss: (() -> Void)?) {
+  init(
+    date: Date? = nil,
+    performDismiss: (() -> Void)? = nil
+  ) {
+    self._date = State(initialValue: date ?? Date.now)
     self.performDismiss = performDismiss
   }
 
-  @State private var date = Date.now
+  @State private var date: Date
   @State private var flowType: HKCategoryValueMenstrualFlow = .none
 
   @State private var vitalsViewModel = VitalsViewModel.shared
@@ -40,6 +44,9 @@ struct CycleTrackingActionCardView: View {
           periodDateCell
         }
       }
+    }
+    .task {
+      await loadExistingSampleAndSetState()
     }
     .tint(.mutedPink)
   }
@@ -119,6 +126,20 @@ private extension CycleTrackingActionCardView {
 
 private extension CycleTrackingActionCardView {
 
+  func loadExistingSampleAndSetState() async {
+    let existingSamples = await HealthStoreFetcher.shared.fetchSamples(
+      for: HKCategoryType(.menstrualFlow),
+      dateRange: .duringDay(date)
+    )
+
+    guard
+      let firstSample = existingSamples.first as? HKCategorySample,
+      let flowType = HKCategoryValueMenstrualFlow(rawValue: firstSample.value)
+    else { return }
+
+    self.flowType = flowType
+  }
+
   func logCycle() async throws -> Bool {
     var isNewCycle = flowType.indicatesBeginningOfCycle
     if isCurrentPeriod {
@@ -129,16 +150,30 @@ private extension CycleTrackingActionCardView {
       HKMetadataKeyMenstrualCycleStart : isNewCycle
     ]
 
-    let sample = HKCategorySample(
-      type: HKCategoryType(.menstrualFlow),
-      value: flowType.rawValue,
-      start: date,
-      end: date,
-      metadata: metadata
-    )
+    let normalizedDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date
 
-    try await HealthStoreModifier.shared.write(sample: sample)
-    TelemetryDeck.signal("Log Period")
+    let existingSamples = await HealthStoreFetcher.shared.fetchSamples(
+      for: HKCategoryType(.menstrualFlow),
+      dateRange: .duringDay(date)
+    )
+    if existingSamples.isNotEmpty {
+      try await HealthStoreModifier.shared.delete(existingSamples)
+    }
+
+    if flowType != .none {
+      let sample = HKCategorySample(
+        type: HKCategoryType(.menstrualFlow),
+        value: flowType.rawValue,
+        start: normalizedDate,
+        end: normalizedDate,
+        metadata: metadata
+      )
+
+      try await HealthStoreModifier.shared.write(sample)
+      TelemetryDeck.signal("Log Period")
+    }
+
+    await VitalsCalculator.shared.forceFectchMenstrualSummary()
 
     if RatingPromptTracker.shared.recordEvent() {
       requestReview()

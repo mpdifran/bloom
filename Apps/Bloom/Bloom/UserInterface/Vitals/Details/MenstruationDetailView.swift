@@ -14,6 +14,7 @@ struct MenstruationDetailView: View {
   private let viewModel = VitalsViewModel.shared
 
   @State private var selectedPhase: MenstrualCyclePhase?
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
     Group {
@@ -28,6 +29,7 @@ struct MenstruationDetailView: View {
     .navigationDestination(item: $selectedPhase) { phase in
       CyclePhaseLearnMoreView(phase: phase)
     }
+    .sheet($presentedSheet)
     .onAppear {
       TelemetryDeck.viewScreen("Cycle Tracking Vital Details")
     }
@@ -39,7 +41,9 @@ private extension MenstruationDetailView {
   var contentView: some View {
     ScrollView {
       VStack(spacing: 20) {
-        MenstruationCalendarView(menstruationSummary: menstruationSummary)
+        MenstruationCalendarView(menstruationSummary: menstruationSummary) { date in
+          presentedSheet = CycleTrackingActionCardView(date: date).asAny
+        }
 
         currentStatusSection
         detailsSection

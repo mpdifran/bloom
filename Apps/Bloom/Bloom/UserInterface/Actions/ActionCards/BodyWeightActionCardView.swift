@@ -82,7 +82,7 @@ private extension BodyWeightActionCardView {
       ]
     )
 
-    try await HealthStoreModifier.shared.write(sample: sample)
+    try await HealthStoreModifier.shared.write(sample)
     TelemetryDeck.signal("Log Weight")
 
     if RatingPromptTracker.shared.recordEvent() {

@@ -42,7 +42,8 @@ struct BloodPressureActionCardView: View {
           sampleTypes: [
             HKQuantityType(.bloodPressureSystolic),
             HKQuantityType(.bloodPressureDiastolic)
-          ]
+          ],
+          performDismiss: performDismiss
         ) {
           try await logBloodPressure()
         } content: { (_, handleSave) in
@@ -109,7 +110,7 @@ private extension BloodPressureActionCardView {
       ]
     )
 
-    try await HealthStoreModifier.shared.write(samples: [systolicSample, diastolicSample])
+    try await HealthStoreModifier.shared.write([systolicSample, diastolicSample])
     TelemetryDeck.signal("Log Blood Pressure")
 
     if RatingPromptTracker.shared.recordEvent() {

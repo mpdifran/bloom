@@ -142,7 +142,7 @@ private extension WaterActionCardView {
       ]
     )
 
-    try await HealthStoreModifier.shared.write(sample: sample)
+    try await HealthStoreModifier.shared.write(sample)
     didIncrease.toggle()
     TelemetryDeck.signal("Log Water")
 

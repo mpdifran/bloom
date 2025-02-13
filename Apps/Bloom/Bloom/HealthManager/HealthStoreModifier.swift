@@ -24,12 +24,20 @@ final actor HealthStoreModifier {
 
 extension HealthStoreModifier {
 
-  func write(sample: HKObject) async throws {
+  func write(_ sample: HKObject) async throws {
     try await healthStore.save(sample)
   }
 
-  func write(samples: [HKObject]) async throws {
+  func write(_ samples: [HKObject]) async throws {
     try await healthStore.save(samples)
+  }
+
+  func delete(_ sample: HKObject) async throws {
+    try await healthStore.delete(sample)
+  }
+
+  func delete(_ samples: [HKObject]) async throws {
+    try await healthStore.delete(samples)
   }
 }
 
@@ -76,7 +84,7 @@ private extension HealthStoreModifier {
 
     guard samples.isNotEmpty else { return }
     // Write to HealthKit
-    try await write(samples: samples)
+    try await write(samples)
   }
 
   func createFoodSamples(_ foodItemLog: FoodItemLogDTO) -> [HKQuantitySample] {

@@ -10,6 +10,7 @@ import Metal
 
 struct MenstruationCalendarView: View {
   let menstruationSummary: MenstrualSummary?
+  let onDateSelected: (Date) -> Void
 
   @State private var referenceDate = Date.now
 
@@ -69,6 +70,10 @@ struct MenstruationCalendarView: View {
             highlightKind: highlightKind(for: date),
             isToday: Calendar.current.isDateInToday(date)
           )
+          .selectable()
+          .onTapGesture {
+            onDateSelected(date)
+          }
           .transition(.scale)
         }
       }
@@ -242,10 +247,12 @@ struct DayCapsule: View {
 #Preview {
   VStack {
     MenstruationCalendarView(
-      menstruationSummary: .init(
+      menstruationSummary: MenstrualSummary(
         menstrualCycles: []
       )
-    )
+    ) { date in
+
+    }
     Spacer()
   }
 }
