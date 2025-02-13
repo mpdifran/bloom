@@ -52,20 +52,12 @@ private extension CycleTrackingActionCardView {
     Group {
       if let mostRecentMenstrualCycle {
         if isCurrentPeriod {
-          LabeledContent("Period Began") {
+          LabeledContent("Current Period Started") {
             Text(mostRecentMenstrualCycle.startDate, formatter: DateFormatter.justRelativeDateMedium)
           }
         } else {
-          if let endDate = mostRecentMenstrualCycle.endDate {
-            LabeledContent("Last Period Ended") {
-              Text(endDate, formatter: DateFormatter.justRelativeDateMedium)
-            }
-          } else {
-            LabeledContent("Last Period Started") {
-              LabeledContent("Period Began") {
-                Text(mostRecentMenstrualCycle.startDate, formatter: DateFormatter.justRelativeDateMedium)
-              }
-            }
+          LabeledContent("Most Recent Period Started") {
+            Text(mostRecentMenstrualCycle.startDate, formatter: DateFormatter.justRelativeDateMedium)
           }
         }
       }
@@ -98,7 +90,7 @@ private extension CycleTrackingActionCardView {
 
   var dateCell: some View {
     LabeledContent("Date") {
-      DatePicker("", selection: $date)
+      DatePicker("", selection: $date, displayedComponents: .date)
     }
     .cardContainer()
   }
