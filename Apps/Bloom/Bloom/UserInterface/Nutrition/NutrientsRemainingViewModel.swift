@@ -79,23 +79,11 @@ final class NutrientsRemainingViewModel: ObservableObject {
     }
   }
 
-  private let dateRange: DateRange
-
   private let modelActor = HabitModelActor.standard()
 
   private var nutrientObservationHandler: HKObserverQueryHandle?
 
-  init(
-    date: Date
-  ) {
-    self.dateRange = .duringDay(date)
-
-    observeChanges()
-  }
-}
-
-private extension NutrientsRemainingViewModel {
-  func observeChanges() {
+  func observeChanges(for dateRange: DateRange) {
     nutrientObservationHandler = HealthManager.shared.healthStore.observeChanges(
       sampleTypes: [
         HKQuantityType(FoodItemNutrient.calories.identifier),
@@ -105,15 +93,17 @@ private extension NutrientsRemainingViewModel {
       ],
       startDate: dateRange.start
     ) { [weak self] in
-      await self?.calculateNutrients()
+      await self?.calculateNutrients(for: dateRange)
     }
   }
+}
 
-  func calculateNutrients() async {
-    calorieQuantity = await fetchNutrient(.calories)
-    proteinQuantity = await fetchNutrient(.protein)
-    fatsQuantity = await fetchNutrient(.fat)
-    carbsQuantity = await fetchNutrient(.carbohydrates)
+private extension NutrientsRemainingViewModel {
+  func calculateNutrients(for dateRange: DateRange) async {
+    calorieQuantity = await fetchNutrient(.calories, dateRange: dateRange)
+    proteinQuantity = await fetchNutrient(.protein, dateRange: dateRange)
+    fatsQuantity = await fetchNutrient(.fat, dateRange: dateRange)
+    carbsQuantity = await fetchNutrient(.carbohydrates, dateRange: dateRange)
 
     let calorieHabit = try? await modelActor.fetchActiveHabits(for: .calories).first
     calorieGoalQuantity = calorieHabit?.quantity
@@ -127,10 +117,12 @@ private extension NutrientsRemainingViewModel {
         doubleValue: calorieHabit.value * 0.3
       )
     }
-
   }
 
-  func fetchNutrient(_ nutrient: FoodItemNutrient) async -> HKQuantity {
+  func fetchNutrient(
+    _ nutrient: FoodItemNutrient,
+    dateRange: DateRange
+  ) async -> HKQuantity {
     await HealthStoreFetcher.shared.fetchTotalQuantity(
       for: nutrient.identifier,
       dateRange: dateRange

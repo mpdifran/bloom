@@ -11,19 +11,20 @@ import DataContainer
 
 struct NutrientsRemainingView: View {
 
-  @ObservedObject private var viewModel: NutrientsRemainingViewModel
-
-  init(date: Date) {
-    _viewModel = ObservedObject(
-      wrappedValue: NutrientsRemainingViewModel(date: date)
-    )
-  }
+  @StateObject private var viewModel = NutrientsRemainingViewModel()
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       titleView
 
       cardView
+    }
+    .task {
+      viewModel.observeChanges(for: .duringDay(.now))
+    }
+    .onChange(of: nutritionViewModel.date) { _, newValue in
+      viewModel.observeChanges(for: .duringDay(newValue))
     }
   }
 }
