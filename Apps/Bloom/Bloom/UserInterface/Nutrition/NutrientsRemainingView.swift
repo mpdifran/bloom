@@ -69,24 +69,26 @@ private extension NutrientsRemainingView {
             displayAmount: viewModel.proteinString,
             label: "Protein"
           )
-          .frame(width: 80)
           .tint(.mutedTeal)
+          .fixedSize(horizontal: true, vertical: false)
+
           NutrientLabel(
             value: viewModel.fatsValue,
             target: viewModel.remainingTarget,
             displayAmount: viewModel.fatsString,
             label: "Fats"
           )
-          .frame(width: 50)
           .tint(.mutedOrange)
+          .fixedSize(horizontal: true, vertical: false)
+
           NutrientLabel(
             value: viewModel.carbsValue,
             target: viewModel.remainingTarget,
             displayAmount: viewModel.carbsString,
             label: "Carbs"
           )
-          .frame(width: 50)
           .tint(.mutedPurple)
+          .fixedSize(horizontal: true, vertical: false)
         }
       }
 
@@ -112,20 +114,23 @@ private struct NutrientLabel: View {
         .foregroundStyle(.tint)
       }
 
-      Text(displayAmount)
-        .font(
-          .system(
-            .title3,
-            design: .rounded,
-            weight: .black
+      Group {
+        Text(displayAmount)
+          .font(
+            .system(
+              .title3,
+              design: .rounded,
+              weight: .black
+            )
           )
-        )
-        .foregroundStyle(.tint)
+          .foregroundStyle(.tint)
 
-      Text(label)
-        .bold()
-        .foregroundStyle(.secondary)
-        .font(.caption)
+        Text(label)
+          .bold()
+          .foregroundStyle(.secondary)
+          .font(.caption)
+      }
+      .padding(.trailing, 8)
     }
   }
 }
