@@ -25,6 +25,9 @@ struct NutritionView: View {
 
           NutrientsRemainingView()
             .padding(.vertical)
+            .onTapGesture {
+              // TODO: where does this go?
+            }
 
           FilteredFoodItemLogsListView(
             date: nutritionViewModel.date,

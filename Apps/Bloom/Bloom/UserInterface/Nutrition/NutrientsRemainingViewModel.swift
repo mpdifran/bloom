@@ -14,7 +14,7 @@ import SwiftUI
 final class NutrientsRemainingViewModel: ObservableObject {
   var title: String {
     // If no goals are set, just display total Nutrients
-    calorieGoalQuantity != nil ? "Nutrients Remaining" : "Nutrients"
+    calorieGoalQuantity != nil ? "Nutrients Remaining" : "Total Nutrients"
   }
 
   // MARK: Published Quantities
