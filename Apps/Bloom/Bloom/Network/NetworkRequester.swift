@@ -163,6 +163,11 @@ extension NetworkRequester {
       responseType: ChatMessageResponse.self
     )
   }
+
+  func deleteChatThread() async throws {
+    let request = try await URLRequest.Chat.deleteChatThread()
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
 }
 
 extension NetworkRequester {

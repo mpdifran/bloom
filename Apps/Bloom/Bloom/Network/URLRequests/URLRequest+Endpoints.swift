@@ -72,5 +72,8 @@ extension URLRequest {
     static func sendMessage(body: ChatMessageRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/chat/new-message", body: body)
     }
+    static func deleteChatThread() async throws -> URLRequest {
+      await URLRequest.get("v1/chat/delete-thread")
+    }
   }
 }
