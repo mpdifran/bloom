@@ -1,8 +1,8 @@
 //
 //  ChatHealthData.swift
-//  bloom-model
+//  Bloom
 //
-//  Created by Mark DiFranco on 2025-02-12.
+//  Created by Mark DiFranco on 2025-02-16.
 //
 
 import Foundation
@@ -58,5 +58,3 @@ public extension ChatHealthData {
     }
   }
 }
-
-

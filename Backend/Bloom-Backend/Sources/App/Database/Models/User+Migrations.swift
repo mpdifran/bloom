@@ -77,4 +77,18 @@ extension User {
         .update()
     }
   }
+
+  struct RemoveAssistantID: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("assistant_id")
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("assistant_id", .string)
+        .update()
+    }
+  }
 }

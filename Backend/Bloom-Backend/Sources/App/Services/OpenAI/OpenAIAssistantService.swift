@@ -11,44 +11,51 @@ import Logging
 import OpenAIKit
 import Vapor
 
-struct OpenAIAssistantService { }
+struct OpenAIAssistantService {
+  private let assistantProvider = OpenAIAssistantProvider()
+}
 
 extension OpenAIAssistantService {
 
-  func createOrFetchAssistantThread(_ request: Request) async throws-> OpenAIAssistantThread {
+  func createOrFetchAssistantThread(
+    _ request: Request,
+    assistantSpec: AssistantSpec
+  ) async throws-> OpenAIAssistantThread {
 
     guard let user = request.auth.get(User.self) else {
       throw Abort(.unauthorized, reason: "User authentication required.")
     }
 
-    if let assistantID = user.assistantID, let threadID = user.threadID {
+    let assistant = try await assistantProvider.createOrUpdateAssistant(
+      request,
+      assistantSpec: assistantSpec
+    )
+
+    if let threadID = user.threadID {
       return OpenAIAssistantThread(
-        assistantID: assistantID,
+        assistantID: assistant.id,
         threadID: threadID
       )
     }
 
-    return try await createHealthAssistantThread(request, user: user)
+    return try await createHealthAssistantThread(
+      request,
+      user: user,
+      assistant: assistant
+    )
   }
 
   func reportHealthData(
     _ request: Request,
     assistantThread: OpenAIAssistantThread,
-    healthData: ChatHealthData
+    healthData: String
   ) async throws {
-    let rawData = try JSONEncoder.bloomModel.encode(healthData)
-
-    guard let stringHealthData = String(data: rawData, encoding: .utf8) else {
-      throw Abort(.internalServerError)
-    }
-
     let _ = try await request.openAI.assistants.createMessage(
       threadID: assistantThread.threadID,
       message: Thread.Message(
         role: .user,
         content: [
-          .text("Here is my latest health data in JSON format."),
-          .text("```\n\(stringHealthData)\n```")
+          .text("Here is my latest health data.\n\n```\n\(healthData)\n```")
         ]
       )
     )
@@ -90,36 +97,46 @@ extension OpenAIAssistantService {
 
     return message
   }
+
+  func deleteThread(_ request: Request) async throws {
+    guard let user = request.auth.get(User.self) else {
+      throw Abort(.unauthorized, reason: "User authentication required.")
+    }
+
+    guard let threadID = user.threadID else { return }
+
+    let response = try await request.openAI.assistants.deleteThread(threadID: threadID)
+
+    guard
+      response.id == threadID,
+      response.object == .threadDeleted,
+      response.deleted
+    else {
+      throw Abort(.internalServerError, reason: "Failed to delete thread.")
+    }
+
+    user.threadID = nil
+
+    try await user.save(on: request.db)
+  }
 }
 
 private extension OpenAIAssistantService {
 
-  func createHealthAssistantThread(_ request: Request, user: User) async throws -> OpenAIAssistantThread {
-    let assistant = try await request.openAI.assistants.createAssistant(
-      model: Model.GPT4.gpt4Turbo,
-      name: "Bud",
-      instructions: """
-        Your name is Bud. When responding, you may introduce yourself as Bud.
-
-        You are a health advisor, helping users analyze and understand their health data. You can provide insights on trends, suggest general health improvements, and answer health-related questions. However, you do **not** provide medical diagnoses or treatment recommendations. If the user needs medical advice, encourage them to consult a healthcare professional.
-
-        The user will provide health data to you in JSON format. 
-        - Only reference this health data **if the user asks about it or if it’s directly relevant** to their question.
-        - If relevant, you may **gently remind** the user that you have data available to analyze.
-
-        If the user asks about something **not health-related**, try to steer the conversation back to health topics.
-
-        When giving responses, make sure to be **concise**! You cna dive into details when the user asks clarifying questions. You may ask follow-up questions if more context would improve your answer.
-        """
-    )
-
+  func createHealthAssistantThread(
+    _ request: Request,
+    user: User,
+    assistant: Assistant
+  ) async throws -> OpenAIAssistantThread {
     let thread = try await request.openAI.assistants.createThread(messages: [])
 
-    user.assistantID = assistant.id
     user.threadID = thread.id
 
     try await user.save(on: request.db)
 
-    return OpenAIAssistantThread(assistantID: assistant.id, threadID: thread.id)
+    return OpenAIAssistantThread(
+      assistantID: assistant.id,
+      threadID: thread.id
+    )
   }
 }
