@@ -15,7 +15,7 @@ extension URLSession {
     let _ = try await URLSession.shared.data(for: authRequest)
   }
 
-  func bloomResponse<Response: Decodable>(
+  func bloomRequestWithResponse<Response: Decodable>(
     request: URLRequest,
     responseType: Response.Type
   ) async throws -> Response {
@@ -23,7 +23,7 @@ extension URLSession {
     return try JSONDecoder.bloomModel.decode(Response.self, from: data)
   }
 
-  func authenticatedBloomResponse<Response: Decodable>(
+  func authenticatedBloomRequestWithResponse<Response: Decodable>(
     request: URLRequest,
     responseType: Response.Type
   ) async throws -> Response {

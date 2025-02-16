@@ -17,7 +17,7 @@ extension NetworkRequester {
   func authenticate(request: AuthenticationRequest) async throws -> AuthenticationResponse {
     let request = try await URLRequest.Auth.signIn(body: request)
 
-    return try await URLSession.shared.bloomResponse(
+    return try await URLSession.shared.bloomRequestWithResponse(
       request: request,
       responseType: AuthenticationResponse.self
     )
@@ -26,7 +26,7 @@ extension NetworkRequester {
   func identify(request: AuthIdentifyRequest) async throws -> AuthIdentifyResponse {
     let request = try await URLRequest.User.identify(body: request)
 
-    return try await URLSession.shared.authenticatedBloomResponse(
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: request,
       responseType: AuthIdentifyResponse.self
     )
@@ -49,7 +49,7 @@ extension NetworkRequester {
     let body = FoodAutocompleteRequest(query: query)
     let request = try await URLRequest.Food.autocomplete(body: body)
 
-    let response = try await URLSession.shared.authenticatedBloomResponse(
+    let response = try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: request,
       responseType: FoodAutocompleteResponse.self
     )
@@ -63,7 +63,7 @@ extension NetworkRequester {
       country: preferredCountry
     )
     let request = try await URLRequest.Food.search(body: body)
-    let response = try await URLSession.shared.authenticatedBloomResponse(
+    let response = try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: request,
       responseType: FoodSearchResponse.self
     )
@@ -79,7 +79,7 @@ extension NetworkRequester {
       country: country
     )
     let request = try await URLRequest.Food.search(body: body)
-    let response = try await URLSession.shared.authenticatedBloomResponse(
+    let response = try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: request,
       responseType: FoodSearchResponse.self
     )
@@ -113,7 +113,7 @@ extension NetworkRequester {
     )
 
     let request = try await URLRequest.Food.uploadFood(body: body)
-    return try await URLSession.shared.authenticatedBloomResponse(
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: request,
       responseType: UploadNewFoodResponse.self
     )
@@ -132,7 +132,7 @@ extension NetworkRequester {
     )
 
     let request = try await URLRequest.Food.estimateFood(body: body)
-    return try await URLSession.shared.authenticatedBloomResponse(
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: request,
       responseType: EstimateFoodCaloriesResponse.self
     )
@@ -150,6 +150,18 @@ extension NetworkRequester {
     )
     let request = try await URLRequest.Food.markAsInaccurate(body: body)
     try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
+}
+
+extension NetworkRequester {
+
+  func sendChatMessage(message: String?, healthData: String?) async throws -> ChatMessageResponse {
+    let body = ChatMessageRequest(message: message, healthData: healthData)
+    let request = try await URLRequest.Chat.sendMessage(body: body)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: ChatMessageResponse.self
+    )
   }
 }
 

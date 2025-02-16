@@ -54,6 +54,10 @@ extension ChatController {
       )
     }
 
+    guard body.message != nil || body.healthData != nil else {
+      return ChatMessageResponse(messages: [])
+    }
+
     let assistantResponse = try await openAIService.startRunAndPollForResponse(request, assistantThread: assistantThread)
     let messages = assistantResponse.content.compactMap({ $0.text })
 

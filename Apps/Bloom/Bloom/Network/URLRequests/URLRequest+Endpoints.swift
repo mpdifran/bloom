@@ -66,3 +66,11 @@ extension URLRequest {
     }
   }
 }
+
+extension URLRequest {
+  enum Chat {
+    static func sendMessage(body: ChatMessageRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/chat/new-message", body: body)
+    }
+  }
+}
