@@ -63,31 +63,31 @@ private extension NutrientsRemainingView {
         Spacer()
 
         HStack {
-          NutrientLabel(
-            value: viewModel.proteinValue,
-            target: viewModel.proteinTarget,
-            displayAmount: viewModel.proteinString,
-            label: "Protein"
-          )
-          .tint(.mutedTeal)
-          .fixedSize(horizontal: true, vertical: false)
+          Group {
+            NutrientLabel(
+              value: viewModel.proteinValue,
+              target: viewModel.proteinTarget,
+              displayAmount: viewModel.proteinString,
+              label: "Protein"
+            )
+            .tint(.mutedTeal)
 
-          NutrientLabel(
-            value: viewModel.fatsValue,
-            target: viewModel.remainingTarget,
-            displayAmount: viewModel.fatsString,
-            label: "Fats"
-          )
-          .tint(.mutedOrange)
-          .fixedSize(horizontal: true, vertical: false)
+            NutrientLabel(
+              value: viewModel.fatsValue,
+              target: viewModel.remainingTarget,
+              displayAmount: viewModel.fatsString,
+              label: "Fats"
+            )
+            .tint(.mutedOrange)
 
-          NutrientLabel(
-            value: viewModel.carbsValue,
-            target: viewModel.remainingTarget,
-            displayAmount: viewModel.carbsString,
-            label: "Carbs"
-          )
-          .tint(.mutedPurple)
+            NutrientLabel(
+              value: viewModel.carbsValue,
+              target: viewModel.remainingTarget,
+              displayAmount: viewModel.carbsString,
+              label: "Carbs"
+            )
+            .tint(.mutedPurple)
+          }
           .fixedSize(horizontal: true, vertical: false)
         }
       }
