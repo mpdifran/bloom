@@ -45,7 +45,7 @@ private extension NutrientsRemainingView {
     HStack {
       HStack(alignment: .bottom) {
         VStack(alignment: .leading) {
-          Text(viewModel.calorieString)
+          Text(viewModel.caloriesString)
             .font(
               .system(
                 .title3,

@@ -13,70 +13,120 @@ import SwiftUI
 @MainActor
 final class NutrientsRemainingViewModel: ObservableObject {
   var title: String {
-    if calorieGoalQuantity != nil {
-      "Nutrients Remaining"
-    } else {
-      "Nutrients"
-    }
+    // If no goals are set, just display total Nutrients
+    calorieGoalQuantity != nil ? "Nutrients Remaining" : "Nutrients"
   }
 
-  @Published private var calorieQuantity: HKQuantity = .init(
+  // MARK: Published Quantities
+
+  @Published private var caloriesQuantity: HKQuantity = .init(
     unit: FoodItemNutrient.calories.unit,
     doubleValue: 0
   )
-  var calorieString: String {
-    calorieQuantity.displayString(for: FoodItemNutrient.calories.unit, showUnits: false)
-  }
-
   @Published private var proteinQuantity: HKQuantity = .init(
     unit: FoodItemNutrient.protein.unit,
     doubleValue: 0
   )
-  var proteinString: String {
-    proteinQuantity.displayString(for: FoodItemNutrient.protein.unit)
-  }
-  var proteinValue: Double {
-    proteinQuantity.doubleValue(for: FoodItemNutrient.protein.unit)
-  }
-
   @Published private var fatsQuantity: HKQuantity = .init(
     unit: FoodItemNutrient.fat.unit,
     doubleValue: 0
   )
-  var fatsString: String {
-    fatsQuantity.displayString(for: FoodItemNutrient.fat.unit)
-  }
-  var fatsValue: Double {
-    fatsQuantity.doubleValue(for: FoodItemNutrient.fat.unit)
-  }
-
   @Published private var carbsQuantity: HKQuantity = .init(
     unit: FoodItemNutrient.carbohydrates.unit,
     doubleValue: 0
   )
-  var carbsString: String {
-    carbsQuantity.displayString(for: FoodItemNutrient.carbohydrates.unit)
+
+  @Published private var calorieGoalQuantity: HKQuantity?
+  @Published private var proteinGoalQuantity: HKQuantity?
+
+  // MARK: Quantity Values
+
+  /// Not needed by the UI but used in calculations.
+  private var caloriesValue: Double {
+    caloriesQuantity.doubleValue(for: FoodItemNutrient.calories.unit)
   }
+
+  var proteinValue: Double {
+    proteinQuantity.doubleValue(for: FoodItemNutrient.protein.unit)
+  }
+
+  var fatsValue: Double {
+    fatsQuantity.doubleValue(for: FoodItemNutrient.fat.unit)
+  }
+
   var carbsValue: Double {
     carbsQuantity.doubleValue(for: FoodItemNutrient.carbohydrates.unit)
   }
 
-  @Published private var calorieGoalQuantity: HKQuantity?
-  private var calorieTarget: Double? {
+  // MARK: Target Quantities
+
+  private var remainingQuantity: HKQuantity? {
+    if let remainingTarget {
+      HKQuantity(unit: .gram(), doubleValue: remainingTarget)
+    } else {
+      nil
+    }
+  }
+
+  // MARK: Target Values
+
+  private var caloriesTarget: Double? {
     calorieGoalQuantity?.doubleValue(for: FoodItemNutrient.calories.unit)
   }
 
-  @Published private var proteinGoalQuantity: HKQuantity?
   var proteinTarget: Double? {
     proteinGoalQuantity?.doubleValue(for: FoodItemNutrient.protein.unit)
   }
 
   var remainingTarget: Double? {
-    if let calorieTarget, let proteinTarget {
-      (calorieTarget - proteinTarget) / 2
+    if let caloriesTarget, let proteinTarget {
+      (caloriesTarget - proteinTarget) / 2
     } else {
+      // No targets available.
       nil
     }
+  }
+
+  // MARK: Display Strings
+
+  var caloriesString: String {
+    let quantity = if let calorieGoalQuantity {
+      calorieGoalQuantity.subtract(caloriesQuantity, unit: FoodItemNutrient.calories.unit)
+    } else {
+      caloriesQuantity
+    }
+
+    return quantity.displayString(for: FoodItemNutrient.calories.unit, showUnits: false)
+  }
+
+  var proteinString: String {
+    let quantity = if let proteinGoalQuantity {
+      proteinGoalQuantity.subtract(proteinQuantity, unit: FoodItemNutrient.protein.unit)
+    } else {
+      proteinQuantity
+    }
+
+    return quantity.displayString(for: FoodItemNutrient.protein.unit)
+  }
+
+  var fatsString: String {
+    let quantity = if let remainingQuantity {
+      remainingQuantity.subtract(fatsQuantity, unit: FoodItemNutrient.fat.unit)
+    } else {
+      fatsQuantity
+    }
+
+    return quantity.displayString(for: FoodItemNutrient.fat.unit)
+  }
+
+  var carbsString: String {
+    let quantity = if let remainingQuantity {
+      remainingQuantity.subtract(carbsQuantity, unit: FoodItemNutrient.carbohydrates.unit)
+    } else {
+      carbsQuantity
+    }
+
+    return quantity.displayString(for: FoodItemNutrient.carbohydrates.unit)
   }
 
   private let modelActor = HabitModelActor.standard()
@@ -100,7 +150,7 @@ final class NutrientsRemainingViewModel: ObservableObject {
 
 private extension NutrientsRemainingViewModel {
   func calculateNutrients(for dateRange: DateRange) async {
-    calorieQuantity = await fetchNutrient(.calories, dateRange: dateRange)
+    caloriesQuantity = await fetchNutrient(.calories, dateRange: dateRange)
     proteinQuantity = await fetchNutrient(.protein, dateRange: dateRange)
     fatsQuantity = await fetchNutrient(.fat, dateRange: dateRange)
     carbsQuantity = await fetchNutrient(.carbohydrates, dateRange: dateRange)
