@@ -1,5 +1,5 @@
 {
-  "originHash" : "e4a8c8408760d1bcc0a039e03c787ab1b5445a5a15179bc1aa0cff8ac5f7a47e",
+  "originHash" : "7669412d46bd2062d5703732a605152ec37f91c000080e8229c6c7415884b31b",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -137,6 +137,15 @@
       }
     },
     {
+      "identity" : "niocronscheduler",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MihaelIsaev/NIOCronScheduler.git",
+      "state" : {
+        "revision" : "aa67f5efde1c728772fcfc21a862412df83f14f1",
+        "version" : "2.1.0"
+      }
+    },
+    {
       "identity" : "openai-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
@@ -224,6 +233,15 @@
       "state" : {
         "revision" : "ba1e0650f4270c3b3783f048b9ba17268296ee68",
         "version" : "0.6.1"
+      }
+    },
+    {
+      "identity" : "swifcron",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MihaelIsaev/SwifCron.git",
+      "state" : {
+        "revision" : "51d388da749b002522261e6fe4171acf93ee1b74",
+        "version" : "2.0.0"
       }
     },
     {
@@ -467,6 +485,15 @@
       "state" : {
         "revision" : "2658eb6f60a9621cdd7e079ffe2758642a3334f7",
         "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "vaporcron",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MihaelIsaev/VaporCron.git",
+      "state" : {
+        "revision" : "d6253e413b4bf306cbf5aac85ef33f1fe48de814",
+        "version" : "2.6.0"
       }
     },
     {
