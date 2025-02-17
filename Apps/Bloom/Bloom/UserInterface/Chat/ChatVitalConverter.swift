@@ -153,6 +153,9 @@ private extension ChatVitalConverter {
           duration: $0.duration.name
         )
       }
+
+      guard samples.isNotEmpty else { return nil }
+
       return ChatHealthData.BowelMovements(samples: samples)
     } catch {
       print(error)
@@ -241,10 +244,10 @@ private extension ChatVitalConverter {
       ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .vo2Max()))
     }
     let rhrSamples = rhr.map {
-      ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm()))
+      ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm(), unitOverride: "bpm"))
     }
     let heartRateRecoverySamples = heartRateRecovery.map {
-      ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm()))
+      ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm(), unitOverride: "bpm"))
     }
 
     return ChatHealthData.HeartHealth(
@@ -286,6 +289,8 @@ private extension ChatVitalConverter {
     let dateRange = DateRange.fromDateToStartOfToday(date)
 
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
+
+    guard sleepAnalyses.isNotEmpty else { return nil }
 
     let sleepDays = sleepAnalyses.map { sleepAnalysis in
       let respiratoryRateQuantity: ChatHealthData.Quantity?
@@ -371,6 +376,8 @@ private extension ChatVitalConverter {
       )
     }
 
+    guard hrvSamples.isNotEmpty || bloodPressureSamples.isNotEmpty else { return nil }
+
     return ChatHealthData.Stress(
       heartRateVariability: hrvSamples,
       bloodPressureSamples: bloodPressureSamples
@@ -380,8 +387,8 @@ private extension ChatVitalConverter {
 
 extension HKQuantity {
 
-  func chatQuantity(for unit: HKUnit) -> ChatHealthData.Quantity {
-    ChatHealthData.Quantity(value: doubleValue(for: unit), unit: unit.unitString)
+  func chatQuantity(for unit: HKUnit, unitOverride: String? = nil) -> ChatHealthData.Quantity {
+    ChatHealthData.Quantity(value: doubleValue(for: unit), unit: unitOverride ?? unit.sensibleUnitString)
   }
 }
 

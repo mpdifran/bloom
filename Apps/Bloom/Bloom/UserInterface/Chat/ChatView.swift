@@ -28,8 +28,9 @@ struct ChatView: View {
             )
           }
         }
-        .padding()
+        .padding(.vertical)
       }
+      .tint(.mutedIndigo)
       .safeAreaInset(edge: .bottom) {
         ChatBar(text: $text) {
           Task {
