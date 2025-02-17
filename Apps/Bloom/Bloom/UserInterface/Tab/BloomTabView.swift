@@ -59,11 +59,19 @@ extension TabBarViewModifier {
         }
         .tint(tabController.activeTab == .vitals ? .primary : .secondary)
 
+      #if DEBUG
+      TabItem(title: "Chat", image: Image(systemName: "bubble.right"))
+        .onTapGesture {
+          tabController.activeTab = .workouts
+        }
+        .tint(tabController.activeTab == .workouts ? .primary : .secondary)
+      #else
       TabItem(title: "Workouts", image: Image(.workoutsTab))
         .onTapGesture {
           tabController.activeTab = .workouts
         }
         .tint(tabController.activeTab == .workouts ? .primary : .secondary)
+      #endif
     }
     .sensoryFeedback(.impact, trigger: tabController.activeTab)
     .padding()

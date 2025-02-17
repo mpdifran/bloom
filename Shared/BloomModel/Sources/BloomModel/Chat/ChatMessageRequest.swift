@@ -6,11 +6,11 @@
 //
 
 public struct ChatMessageRequest: Codable, Equatable, Sendable {
-  public let message: String?
+  public let message: String
   public let healthData: String?
 
   public init(
-    message: String?,
+    message: String,
     healthData: String?
   ) {
     self.message = message

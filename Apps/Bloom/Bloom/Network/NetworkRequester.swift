@@ -155,7 +155,13 @@ extension NetworkRequester {
 
 extension NetworkRequester {
 
-  func sendChatMessage(message: String?, healthData: String?) async throws -> ChatMessageResponse {
+  func reportHealthData(healthData: String) async throws {
+    let body = ChatReportHealthDataRequest(healthData: healthData)
+    let request = try await URLRequest.Chat.reportHealthData(body: body)
+    return try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
+
+  func sendChatMessage(message: String, healthData: String?) async throws -> ChatMessageResponse {
     let body = ChatMessageRequest(message: message, healthData: healthData)
     let request = try await URLRequest.Chat.sendMessage(body: body)
     return try await URLSession.shared.authenticatedBloomRequestWithResponse(

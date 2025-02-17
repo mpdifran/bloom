@@ -1,104 +1,55 @@
 //
 //  ChatViewModel.swift
-//  Supplements
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-05-08.
+//  Created by Mark DiFranco on 2025-02-16.
 //
 
 import Foundation
-import AppFoundations
-import Algorithms
+import BloomModel
 
-@MainActor
-final class ChatViewModel: ObservableObject {
-    static let shared = ChatViewModel()
+@Observable @MainActor
+final class ChatViewModel {
+  static let shared = ChatViewModel()
 
-    @Published var isWaitingForResponse = false
-    @Published var unreadChatCount = 0
-
-    @Published var chatHistory = [ChatMessage]() {
-        didSet {
-            do {
-                let data = try JSONEncoder.main.encode(Array(chatHistory.suffix(15)))
-                UserDefaults.standard.setValue(data, forKey: "chatHistory")
-            } catch {
-                print(error)
-            }
-        }
-    }
-
-    private init() { 
-        if let data = UserDefaults.standard.value(forKey: "chatHistory") as? Data {
-            do {
-                let chatHistory = try JSONDecoder.main.decode([ChatMessage].self, from: data)
-                self.chatHistory = chatHistory
-            } catch {
-                print(error)
-            }
-        }
-    }
+  var chatMessages = [ChatMessage]()
 }
 
 extension ChatViewModel {
 
-    func lastID() -> String? {
-        let lastMessage = chatHistory.last
-        if let lastReccomendation = lastMessage?.supplementReccomendation.last {
-            return lastReccomendation.id
-        }
-        return lastMessage?.id
+  func syncHealthData() async {
+    let healthData = await ChatVitalConverter.shared.convertHealthData()
+
+    do {
+      let data = try JSONEncoder.bloomModel.encode(healthData)
+      guard let stringData = String(data: data, encoding: .utf8) else { return }
+
+      try await NetworkRequester.shared.reportHealthData(healthData: stringData)
+    } catch {
+      print(error)
     }
+  }
 
-    func deleteChatHistory() {
-        chatHistory = []
+  func sendMessage(_ message: String) async {
+    let userMessage = ChatMessage(message: message, isCurrentUser: true)
+    chatMessages.append(userMessage)
+    SoundPlayer.playSendMessage()
+
+    let healthData = await ChatVitalConverter.shared.convertHealthData()
+
+    do {
+      let data = try JSONEncoder.bloomModel.encode(healthData)
+      let stringData = String(data: data, encoding: .utf8)
+
+      let response = try await NetworkRequester.shared.sendChatMessage(message: message, healthData: stringData)
+
+      let newMessages = response.messages.map {
+        ChatMessage(message: $0, isCurrentUser: false)
+      }
+      chatMessages.append(contentsOf: newMessages)
+      SoundPlayer.playReceiveMessage()
+    } catch {
+      print(error)
     }
-
-    func send(prompt: String, secretContext: String? = nil) async throws {
-        
-    }
-
-    func appendAssistantMessage(message: String) async {
-        await MainActor.run {
-            var newChatHistory = chatHistory
-
-            newChatHistory.append(
-                ChatMessage(
-                    message: message,
-                    timestamp: .now,
-                    supplementReccomendation: [],
-                    activityRecommendation: [],
-                    isCurrentUser: false
-                )
-            )
-            unreadChatCount += 1
-
-            chatHistory = newChatHistory
-
-            SoundPlayer.playReceiveMessage()
-        }
-
-        await NotificationManager.shared.sendNotification(
-            title: "Bloom",
-            subtitle: message,
-            categoryID: .CategoryID.chatMessage
-        )
-    }
-}
-
-extension ChatViewModel {
-
-    var networkChatHistory: [ChatMessageHistory] {
-        chatHistory.map { chatMessage in
-            var message = chatMessage.message ?? chatMessage.supplementReccomendation.first?.shortText ?? ""
-
-            if let secretContext = chatMessage.secretContext {
-                message += "\n\n" + secretContext
-            }
-
-            return ChatMessageHistory(
-                role: chatMessage.isCurrentUser ? .user : .assistant,
-                content: message
-            )
-        }
-    }
+  }
 }

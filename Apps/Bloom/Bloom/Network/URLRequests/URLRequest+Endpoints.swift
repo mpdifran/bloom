@@ -69,6 +69,9 @@ extension URLRequest {
 
 extension URLRequest {
   enum Chat {
+    static func reportHealthData(body: ChatReportHealthDataRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/chat/report-health-data", body: body)
+    }
     static func sendMessage(body: ChatMessageRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/chat/new-message", body: body)
     }

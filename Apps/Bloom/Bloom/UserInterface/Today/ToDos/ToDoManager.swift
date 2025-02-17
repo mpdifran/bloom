@@ -9,6 +9,7 @@ import SwiftUI
 @preconcurrency import HealthKit
 import BloomFoundation
 import DataContainer
+import Algorithms
 
 @MainActor
 final class ToDoManager: ObservableObject {

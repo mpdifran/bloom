@@ -54,12 +54,18 @@ struct ChatBar: View {
                 isTextFieldFocused = false
                 onSubmit()
             } label: {
-                Image(systemName: "arrow.up.circle")
+                Image(systemName: "arrow.up.circle.fill")
                     .font(.largeTitle)
-                    .foregroundStyle(.primary, .tint)
+                    .foregroundStyle(.thickMaterial)
                     .background {
                         Circle()
-                            .fill(.regularMaterial)
+                        .fill(
+                            AngularGradient(
+                                colors: computedGradientColors,
+                                center: .center,
+                                angle: .degrees(0)
+                            )
+                        )
                     }
             }
             .buttonStyle(.plain)

@@ -19,6 +19,7 @@ extension ChatController: RouteCollection {
     routes.group("v1") {
       $0.auth(using: UserToken.self) {
         $0.group("chat") {
+          $0.post("report-health-data", use: reportHealthData)
           $0.post("new-message", use: newChatMessage)
           $0.get("delete-thread", use: deleteThread)
         }
@@ -28,6 +29,24 @@ extension ChatController: RouteCollection {
 }
 
 extension ChatController {
+
+  @Sendable
+  func reportHealthData(_ request: Request) async throws -> Response {
+    let body = try request.content.decode(ChatReportHealthDataRequest.self)
+
+    let assistantThread = try await openAIService.createOrFetchAssistantThread(
+      request,
+      assistantSpec: .healthCoach
+    )
+
+    try await openAIService.reportHealthData(
+      request,
+      assistantThread: assistantThread,
+      healthData: body.healthData
+    )
+
+    return Response(status: .ok)
+  }
 
   @Sendable
   func newChatMessage(_ request: Request) async throws -> ChatMessageResponse {
@@ -46,17 +65,11 @@ extension ChatController {
       )
     }
 
-    if let message = body.message {
-      try await openAIService.sendChatMessage(
-        request,
-        assistantThread: assistantThread,
-        message: message
-      )
-    }
-
-    guard body.message != nil || body.healthData != nil else {
-      return ChatMessageResponse(messages: [])
-    }
+    try await openAIService.sendChatMessage(
+      request,
+      assistantThread: assistantThread,
+      message: body.message
+    )
 
     let assistantResponse = try await openAIService.startRunAndPollForResponse(request, assistantThread: assistantThread)
     let messages = assistantResponse.content.compactMap({ $0.text })
