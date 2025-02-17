@@ -53,6 +53,7 @@ private extension NutrientsRemainingView {
                 weight: .black
               )
             )
+            .foregroundStyle((Double(viewModel.caloriesString) ?? 0) < 0 ? .mutedRed : .primary)
 
           Text("Calories")
             .bold()
