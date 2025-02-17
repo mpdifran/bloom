@@ -74,7 +74,7 @@ private extension NutrientsRemainingView {
 
             NutrientLabel(
               value: viewModel.fatsValue,
-              target: viewModel.remainingTarget,
+              target: viewModel.fatsTarget,
               displayAmount: viewModel.fatsString,
               label: "Fats"
             )
@@ -82,7 +82,7 @@ private extension NutrientsRemainingView {
 
             NutrientLabel(
               value: viewModel.carbsValue,
-              target: viewModel.remainingTarget,
+              target: viewModel.carbsTarget,
               displayAmount: viewModel.carbsString,
               label: "Carbs"
             )

@@ -60,9 +60,17 @@ final class NutrientsRemainingViewModel: ObservableObject {
 
   // MARK: Target Quantities
 
-  private var remainingQuantity: HKQuantity? {
-    if let remainingTarget {
-      HKQuantity(unit: .gram(), doubleValue: remainingTarget)
+  private var fatsGoalQuantity: HKQuantity? {
+    if let fatsTarget {
+      HKQuantity(unit: FoodItemNutrient.fat.unit, doubleValue: fatsTarget)
+    } else {
+      nil
+    }
+  }
+
+  private var carbsGoalQuantity: HKQuantity? {
+    if let carbsTarget {
+      HKQuantity(unit: FoodItemNutrient.carbohydrates.unit, doubleValue: carbsTarget)
     } else {
       nil
     }
@@ -78,11 +86,27 @@ final class NutrientsRemainingViewModel: ObservableObject {
     proteinGoalQuantity?.doubleValue(for: FoodItemNutrient.protein.unit)
   }
 
-  var remainingTarget: Double? {
+  private var remainingCaloriesSplit: Double? {
     if let caloriesTarget, let proteinTarget {
-      (caloriesTarget - proteinTarget) / 2
+      let remaining = caloriesTarget - (proteinTarget * .caloriesPerGramOfProtein)
+      return remaining / 2
     } else {
-      // No targets available.
+      return nil
+    }
+  }
+
+  var fatsTarget: Double? {
+    if let remainingCaloriesSplit {
+      remainingCaloriesSplit / .caloriesPerGramOfFat
+    } else {
+      nil
+    }
+  }
+
+  var carbsTarget: Double? {
+    if let remainingCaloriesSplit {
+      remainingCaloriesSplit / .caloriesPerGramOfCarbs
+    } else {
       nil
     }
   }
@@ -110,8 +134,8 @@ final class NutrientsRemainingViewModel: ObservableObject {
   }
 
   var fatsString: String {
-    let quantity = if let remainingQuantity {
-      remainingQuantity.subtract(fatsQuantity, unit: FoodItemNutrient.fat.unit)
+    let quantity = if let fatsGoalQuantity {
+      fatsGoalQuantity.subtract(fatsQuantity, unit: FoodItemNutrient.fat.unit)
     } else {
       fatsQuantity
     }
@@ -120,8 +144,8 @@ final class NutrientsRemainingViewModel: ObservableObject {
   }
 
   var carbsString: String {
-    let quantity = if let remainingQuantity {
-      remainingQuantity.subtract(carbsQuantity, unit: FoodItemNutrient.carbohydrates.unit)
+    let quantity = if let carbsGoalQuantity {
+      carbsGoalQuantity.subtract(carbsQuantity, unit: FoodItemNutrient.carbohydrates.unit)
     } else {
       carbsQuantity
     }
@@ -162,9 +186,10 @@ private extension NutrientsRemainingViewModel {
       proteinGoalQuantity = proteinHabit.quantity
     } else if let calorieHabit {
       // If no protein goal is set but a calorie goal was set, assume 30% of calorie goal.
+      let caloriesToProtein = calorieHabit.value / .caloriesPerGramOfProtein
       proteinGoalQuantity = HKQuantity(
         unit: FoodItemNutrient.protein.unit,
-        doubleValue: calorieHabit.value * 0.3
+        doubleValue: caloriesToProtein * 0.3
       )
     }
   }
