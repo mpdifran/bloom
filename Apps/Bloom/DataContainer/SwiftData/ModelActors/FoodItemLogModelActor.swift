@@ -45,21 +45,26 @@ public extension FoodItemLogModelActor {
         return try context.fetch(descriptor).map { $0.asDTO() }
     }
 
-    func fetchLog(for date: Date, meal: FoodItemLog.Meal, foodItemID: String) throws -> FoodItemLogDTO? {
-        let startOfDay = Calendar.current.startOfDay(for: date)
-        let endOfDay = Calendar.current.endOfDay(for: date)
+  func fetchLog(for date: Date, meal: FoodItemLog.Meal, foodItemID: String) throws -> FoodItemLogDTO? {
+    let startOfDay = Calendar.current.startOfDay(for: date)
+    let endOfDay = Calendar.current.endOfDay(for: date)
+    let mealRawValue = meal.rawValue
 
-        let descriptor = FetchDescriptor<FoodItemLog>(
-            predicate: #Predicate<FoodItemLog> { model in
-                model.date >= startOfDay &&
-                model.date <= endOfDay &&
-                model.meal == meal &&
-                model.foodItem?.id == foodItemID
-            },
-            sortBy: [SortDescriptor(\FoodItemLog.date)]
-        )
-        return try context.fetch(descriptor).first?.asDTO()
-    }
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate<FoodItemLog> { model in
+        model.date >= startOfDay &&
+        model.date <= endOfDay &&
+        model.mealRawValue == mealRawValue
+      },
+      sortBy: [SortDescriptor(\FoodItemLog.date)]
+    )
+    let logs = try context.fetch(descriptor)
+
+    // foodItem is no longer on the log so we can't use it in a predicate.
+    let filteredLogs = logs.filter { $0.foodItem?.id == foodItemID }
+
+    return filteredLogs.first?.asDTO()
+  }
 
     func fetchRecentLogs(for meal: FoodItemLog.Meal, limit: Int) throws -> [FoodItemLogDTO] {
         var descriptor = FetchDescriptor<FoodItemLog>(
