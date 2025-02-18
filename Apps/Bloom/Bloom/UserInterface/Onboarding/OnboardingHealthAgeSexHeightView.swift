@@ -65,10 +65,17 @@ struct OnboardingHealthAgeSexHeightView: View {
       }
     }
     .shelf {
-      if canShowContinueButton {
+      if index >= 3 {
         VStack {
           if healthManager.age() < 1 {
             Text("You must be at least 1 years old to use Bloom.")
+              .font(.subheadline)
+              .fontDesign(.rounded)
+              .bold()
+              .foregroundStyle(.secondary)
+              .multilineTextAlignment(.center)
+          } else if healthManager.heightCM < 1 {
+            Text("Please enter a valid height.")
               .font(.subheadline)
               .fontDesign(.rounded)
               .bold()
@@ -80,12 +87,12 @@ struct OnboardingHealthAgeSexHeightView: View {
             onContinue()
           }
           .buttonStyle(.onboarding)
-          .disabled(healthManager.age() < 1)
+          .disabled(!hasValidHealthData)
         }
       }
     }
     .onAppear {
-      if !isHealthDataValid {
+      if !isHealthKitDataValid {
         wasMissingHealthData = true
       }
       healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
@@ -104,17 +111,20 @@ private extension OnboardingHealthAgeSexHeightView {
     index += 1
   }
 
-  var canShowContinueButton: Bool {
-    isHealthDataValid && index >= 3
-  }
-
-  var isHealthDataValid: Bool {
+  var isHealthKitDataValid: Bool {
     let sex = healthManager.healthStore.sex()
     let age = healthManager.healthStore.age()
     let sexName = sex?.personName
     let height = healthManager.heightCM
 
     return sex != nil && age != nil && sexName != nil && height > 0
+  }
+
+  var hasValidHealthData: Bool {
+    let age = healthManager.age()
+    let height = healthManager.heightCM
+
+    return age > 1 && height > 0
   }
 
   @ViewBuilder
