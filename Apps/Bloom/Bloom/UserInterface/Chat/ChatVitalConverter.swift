@@ -47,6 +47,10 @@ extension ChatVitalConverter {
 
     return healthData.isEmpty ? nil : healthData
   }
+
+  func resetSyncDate() {
+    lastHealthConversionDate = nil
+  }
 }
 
 private extension ChatVitalConverter {
@@ -80,7 +84,7 @@ private extension ChatVitalConverter {
   }
 
   func generateActivityLevel(from date: Date) async -> ChatHealthData.ActivityLevel? {
-    let dateRange = DateRange.fromDateToStartOfToday(date)
+    let dateRange = DateRange.fromDateToNow(date)
 
     let activityDetails = await HealthStoreFetcher.shared.fetchActivityLevelSummaryDetails(dateRange: dateRange)
 
@@ -102,7 +106,7 @@ private extension ChatVitalConverter {
   }
 
   func generateBodyComposition(from date: Date) async -> ChatHealthData.BodyCompostiion? {
-    let dateRange = DateRange.fromDateToStartOfToday(date)
+    let dateRange = DateRange.fromDateToNow(date)
 
     let bodyFatPercentage = await HealthStoreFetcher.shared.fetchCollatedAverage(
       quantityType: .bodyFatPercentage,
@@ -141,7 +145,7 @@ private extension ChatVitalConverter {
 
   func generateBowelMovements(form date: Date) async -> ChatHealthData.BowelMovements? {
     let modelActor = BowelMovementModelActor.standard()
-    let dateRange = DateRange.fromDateToStartOfToday(date)
+    let dateRange = DateRange.fromDateToNow(date)
 
     do {
       let bowelMovementSamples = try await modelActor.fetchBowelMovements(dateRange: dateRange)
@@ -168,7 +172,7 @@ private extension ChatVitalConverter {
       return nil
     }
 
-    let dateRange = DateRange.fromDateToStartOfToday(date)
+    let dateRange = DateRange.fromDateToNow(date)
 
     let heartRateReports = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
 
@@ -218,7 +222,7 @@ private extension ChatVitalConverter {
   }
 
   func generateHeartHealth(from date: Date) async -> ChatHealthData.HeartHealth? {
-    let dateRange = DateRange.fromDateToStartOfToday(date)
+    let dateRange = DateRange.fromDateToNow(date)
 
     let vo2Max = await HealthStoreFetcher.shared.fetchCollatedAverage(
       quantityType: .vo2Max,
@@ -262,7 +266,7 @@ private extension ChatVitalConverter {
       return nil
     }
 
-    let dateRange = DateRange.fromDateToStartOfToday(shiftedDate)
+    let dateRange = DateRange.fromDateToNow(shiftedDate)
 
     let cycles = await HealthStoreFetcher.shared.fetchMenstrualFlowSamples(dateRange: dateRange)
 
@@ -286,7 +290,7 @@ private extension ChatVitalConverter {
   }
 
   func generateSleep(from date: Date) async -> ChatHealthData.Sleep? {
-    let dateRange = DateRange.fromDateToStartOfToday(date)
+    let dateRange = DateRange.fromDateToNow(date)
 
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
 
@@ -333,7 +337,7 @@ private extension ChatVitalConverter {
   }
 
   func generateStress(from date: Date) async -> ChatHealthData.Stress? {
-    let dateRange = DateRange.fromDateToStartOfToday(date)
+    let dateRange = DateRange.fromDateToNow(date)
 
     let hrv = await HealthStoreFetcher.shared.fetchCollatedAverage(
       quantityType: .heartRateVariabilitySDNN,

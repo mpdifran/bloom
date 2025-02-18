@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import AppUI
 
 struct ChatView: View {
 
   @State private var text: String = ""
   @State private var viewModel = ChatViewModel.shared
+  @State private var presentedSheet: AnyView?
 
   @Environment(\.dismiss) private var dismiss
 
@@ -40,7 +42,7 @@ struct ChatView: View {
           }
         }
         .focused($isFocused)
-        .padding(.horizontal)
+        .padding()
       }
       .navigationTitle("Chat")
       .toolbar {
@@ -50,8 +52,17 @@ struct ChatView: View {
           }
           .bold()
         }
+        ToolbarItem(placement: .primaryAction) {
+          Button {
+            presentedSheet = ChatSettingsView().asAny
+          } label: {
+            Image(systemName: "gear")
+              .bold()
+          }
+        }
       }
     }
+    .sheet($presentedSheet)
     .presentationCompactAdaptation(.fullScreenCover)
   }
 }

@@ -134,6 +134,10 @@ public extension DateRange {
     return DateRange(date, endDate)
   }
 
+  static func fromDateToNow(_ date: Date) -> DateRange {
+    return DateRange(date, .now)
+  }
+
   static func duringDay(_ date: Date) -> DateRange {
     let startOfDay = Calendar.current.startOfDay(for: date)
     let endOfDay = Calendar.current.endOfDay(for: date)

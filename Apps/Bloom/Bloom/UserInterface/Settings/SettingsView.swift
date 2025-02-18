@@ -555,7 +555,7 @@ private extension SettingsView {
               .horizontallyCentered()
               .frame(minHeight: 60)
           }
-          .tint(.red)
+          .tint(.mutedRed)
         }
       }
     }
