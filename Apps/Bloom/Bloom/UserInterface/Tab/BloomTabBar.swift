@@ -16,17 +16,11 @@ extension View {
 
 struct TabBarViewModifier: ViewModifier {
 
-  @Environment(TabController.self) private var tabController: TabController
-
-  @State private var logActionToggle = false
-  @State private var presentedSheet: AnyView?
-
   func body(content: Content) -> some View {
     content
       .safeAreaInset(edge: .bottom) {
         BloomTabBar()
       }
-      .sheet($presentedSheet)
   }
 }
 
@@ -70,6 +64,7 @@ struct BloomTabBar: View {
         }
         .tint(tabController.activeTab == .workouts ? .primary : .secondary)
     }
+    .sheet($presentedSheet)
     .sensoryFeedback(.impact, trigger: tabController.activeTab)
     .padding()
     .background {
