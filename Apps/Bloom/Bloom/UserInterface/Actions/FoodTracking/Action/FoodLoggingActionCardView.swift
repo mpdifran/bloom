@@ -27,9 +27,7 @@ struct FoodLoggingActionCardView: View {
 
   @AppStorage("FoodLoggingActionCardView.hasShownExplanation", store: .group) private var hasShownExplanation = false
 
-  @State private var searchQuery = ""
   @State private var shouldAutocomplete = true
-  @State private var didSearchToggle = false
   @State private var healthPermissionTrigger = false
   @State private var presentedSheet: AnyView?
   @State private var selectedTab = FoodItemCategoryTab.branded
@@ -258,106 +256,9 @@ private extension FoodLoggingActionCardView {
     ContentUnavailableView("No Results", systemImage: "exclamationmark.magnifyingglass")
       .foregroundStyle(.secondary)
   }
-
-  var suggestionsBarView: some View {
-    ScrollView(.horizontal) {
-      HStack {
-        if viewModel.autocomplete.isNotEmpty {
-          ForEachEnumerated(viewModel.autocomplete) { (index, autocomplete) in
-            FoodSearchAutocompleteCell(query: autocomplete)
-              .transition(.scale)
-              .onTapGesture {
-                shouldAutocomplete = false
-                searchQuery = autocomplete
-                performSearch()
-                Delay(100) {
-                  shouldAutocomplete = true
-                }
-              }
-          }
-        } else if searchQuery.isEmpty {
-          FoodSearchToolCell(title: "Magic Scan", systemImage: "sparkles")
-            .onTapGesture {
-              if hasShownExplanation {
-                presentedSheet = AIFoodScannerView().asAny
-              } else {
-                presentedSheet = AIFoodScannerExplanationView {
-                  Task {
-                    await Delay(300)
-                    await MainActor.run {
-                      hasShownExplanation = true
-                      presentedSheet = AIFoodScannerView().asAny
-                    }
-                  }
-                }.asAny
-              }
-            }
-          FoodSearchToolCell(title: "Add New Food", systemImage: "plus.viewfinder")
-            .onTapGesture {
-              presentedSheet = FoodUploadScannerView() { foodItem in
-                viewModel.didUploadNewFood(foodItem: foodItem)
-              }.asAny
-            }
-        }
-      }
-      .padding(.horizontal)
-    }
-    .scrollIndicators(.hidden)
-    .animation(.bouncy, value: viewModel.autocomplete)
-    .padding(.top, 8)
-  }
-
-  var foodSearchTextBar: some View {
-    HStack {
-      TextField(
-        "",
-        text: $searchQuery,
-        prompt: Text("What did you eat?")
-      )
-      .submitLabel(.search)
-      .onSubmit {
-        performSearch()
-      }
-      .selectAllTextOnBeginEditing()
-      .padding()
-      .onChange(of: searchQuery) { oldValue, newValue in
-        guard shouldAutocomplete else { return }
-
-        viewModel.debounceAutocomplete(for: searchQuery)
-      }
-
-      Button {
-        performSearch()
-      } label: {
-        Image(systemName: "magnifyingglass.circle.fill")
-          .font(.largeTitle)
-          .foregroundStyle(.white, .tint)
-      }
-      .sensoryFeedback(.impact, trigger: didSearchToggle)
-    }
-    .focused($isFocused)
-    .padding(.horizontal, 8)
-    .background {
-      Capsule()
-        .fill(.background.secondary)
-        .onTapGesture {
-          isFocused = true
-        }
-    }
-    .padding(.horizontal)
-    .padding(.vertical, 8)
-  }
 }
 
 private extension FoodLoggingActionCardView {
-
-  func performSearch() {
-    didSearchToggle.toggle()
-    isFocused = false
-    Task {
-      await viewModel.performSearch(for: searchQuery)
-    }
-  }
 
   func checkHealthAuth() async {
     do {
