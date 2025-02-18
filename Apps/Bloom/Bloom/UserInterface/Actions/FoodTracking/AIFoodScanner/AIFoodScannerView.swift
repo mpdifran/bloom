@@ -290,11 +290,33 @@ private extension AIFoodScannerView {
   var instructionView: some View {
     VStack {
       Spacer()
-      ContentUnavailableView(
-        "Magic Scan",
-        systemImage: "sparkles",
-        description: Text("Scan a barcode, or simply take a photo of your plate!")
-      )
+
+      HStack {
+        Spacer()
+        Image(.soup)
+          .overlay {
+            CameraReticuleShapeView(lineWidth: 6, cornerRadius: 15)
+          }
+        Spacer()
+        Image(.barcodePackaging)
+          .overlay {
+            CameraReticuleShapeView(lineWidth: 6, cornerRadius: 5)
+              .frame(width: 45, height: 40)
+              .padding(.bottom, 12)
+              .padding(.trailing, 12)
+              .zStackAlignment(.bottomTrailing)
+          }
+
+        Spacer()
+      }
+      .padding(.vertical)
+
+      Text("Hold up a barcode to scan, or take a photo to estimate your whole plate.")
+        .font(.title3)
+        .fontDesign(.rounded)
+        .bold()
+        .multilineTextAlignment(.center)
+
       Spacer()
     }
   }

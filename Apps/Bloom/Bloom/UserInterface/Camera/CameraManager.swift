@@ -199,7 +199,7 @@ private extension CameraManager {
     photoOutput.maxPhotoQualityPrioritization = .quality
 
     metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue(label: "com.lotus-labs.camera-manager.metadata-objects"))
-    metadataOutput.metadataObjectTypes = [.ean13]
+    metadataOutput.metadataObjectTypes = [.ean13, .ean8]
   }
 
   func resetZoomScale() {
