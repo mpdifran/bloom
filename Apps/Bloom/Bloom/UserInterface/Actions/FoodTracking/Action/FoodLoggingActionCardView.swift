@@ -46,9 +46,15 @@ struct FoodLoggingActionCardView: View {
     NavigationStack {
       VStack(spacing: 0) {
         mainView
-        Divider()
-        suggestionsBarView
-        foodSearchTextBar
+      }
+      .safeAreaInset(edge: .bottom) {
+        FoodSearchCard { searchQuery in
+          Task {
+            await viewModel.performSearch(for: searchQuery)
+          }
+        } onUploadNewFood: { foodItem in
+          viewModel.didUploadNewFood(foodItem: foodItem)
+        }
       }
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
