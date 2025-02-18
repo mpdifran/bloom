@@ -50,7 +50,7 @@ extension ReportCoordinator {
             message = nil
         }
 
-        await NotificationManager.shared.sendGoodMorningNotification(message: message, delay: 60 * 1)
+        await NotificationManager.shared.sendGoodMorningNotification(message: message)
 
         lastMorningReportNotificationDate = .now
     }
