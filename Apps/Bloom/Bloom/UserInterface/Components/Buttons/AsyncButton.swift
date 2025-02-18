@@ -16,7 +16,7 @@ struct AsyncButton<Label: View>: View {
   init(
     role: ButtonRole? = nil,
     action: @escaping () async throws -> Void,
-    label: @escaping () -> Label
+    @ViewBuilder label: @escaping () -> Label
   ) {
     self.role = role
     self.action = action
@@ -39,15 +39,17 @@ struct AsyncButton<Label: View>: View {
         isLoading = false
       }
     } label: {
-      label()
-        .opacity(isLoading ? 0 : 1)
-        .overlay {
-          if isLoading {
-            CircularSpinnerView()
-              .horizontallyCentered()
-              .foregroundStyle(.tint)
-          }
+      VStack {
+        label()
+      }
+      .opacity(isLoading ? 0 : 1)
+      .overlay {
+        if isLoading {
+          CircularSpinnerView()
+            .horizontallyCentered()
+            .foregroundStyle(.tint)
         }
+      }
     }
     .disabled(isLoading)
     .animation(.easeInOut, value: isLoading)

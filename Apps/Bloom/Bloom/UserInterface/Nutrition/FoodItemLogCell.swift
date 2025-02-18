@@ -25,22 +25,24 @@ private extension FoodItemLogCell {
   @ViewBuilder
   func contentView(foodItem: FoodItemRecord) -> some View {
     HStack {
+      if foodItem.isVerified {
+        Image(systemName: "checkmark.shield.fill")
+          .foregroundStyle(.white, .mutedGreen)
+          .fontDesign(.rounded)
+          .bold()
+      }
+
       VStack(alignment: .leading) {
-        HStack {
-          if foodItem.isVerified {
-            Image(systemName: "checkmark.shield.fill")
-              .foregroundStyle(.white, .mutedGreen)
-          }
-          Text(foodItem.name)
-        }
-        .fontDesign(.rounded)
-        .bold()
+        Text(foodItem.name)
+          .fontDesign(.rounded)
+          .bold()
 
         Text(subtitle(for: foodItem))
           .bold()
           .foregroundStyle(.secondary)
           .font(.caption)
       }
+      .multilineTextAlignment(.leading)
 
       Spacer()
 

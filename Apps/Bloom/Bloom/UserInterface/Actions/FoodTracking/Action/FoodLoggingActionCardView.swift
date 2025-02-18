@@ -162,7 +162,7 @@ private extension FoodLoggingActionCardView {
             .padding(.horizontal)
 
           ForEachEnumerated(section.foodItems) { index, food in
-            FoodItemCell(food: food)
+            FoodItemCell(foodItem: food)
               .id(food.id)
               .transition(.blurReplace)
               .onTapGesture {
@@ -176,6 +176,7 @@ private extension FoodLoggingActionCardView {
       }
       .padding()
     }
+    .groupedBackground()
   }
 
   var searchingView: some View {
@@ -199,7 +200,7 @@ private extension FoodLoggingActionCardView {
             TabFilter(selectedTab: $selectedTab)
 
             ForEachEnumerated(section.foodItems) { index, food in
-              FoodItemCell(food: food)
+              FoodItemCell(foodItem: food)
                 .id(food.id)
                 .transition(.opacity)
                 .onTapGesture {
