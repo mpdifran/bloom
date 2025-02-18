@@ -56,6 +56,9 @@ struct AIFoodScannerView: View {
         ToolbarItem(placement: .cancellationAction) {
           Button("Done") { dismiss() }.bold()
         }
+        ToolbarItem(placement: .principal) {
+          FoodItemLogPickerHeader()
+        }
       }
     }
     .sensoryFeedback(.error, trigger: errorToggle)
