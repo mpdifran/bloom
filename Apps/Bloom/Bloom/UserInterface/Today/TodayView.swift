@@ -13,8 +13,6 @@ import DataContainer
 @MainActor
 struct TodayView: View {
 
-  @Query var habits: [Habit]
-
   init() {
     _habits = Query(
       filter: #Predicate<Habit> { habit in
@@ -24,6 +22,8 @@ struct TodayView: View {
       order: .reverse
     )
   }
+
+  @Query var habits: [Habit]
 
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   private var reportViewModel = ReportCoordinatorViewModel.shared
@@ -92,9 +92,17 @@ struct TodayView: View {
       .navigationTitle("Today")
       .tabBar()
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
+        ToolbarItem(placement: .primaryAction) {
           Button("Settings", systemImage: "person.circle") {
             presentedSheet = SettingsView().asAny
+          }
+        }
+        if danieleMode {
+          ToolbarItem(placement: .cancellationAction) {
+            Button("Chat", systemImage: "bubble") {
+              presentedSheet = ChatView().asAny
+            }
+            .bold()
           }
         }
       }

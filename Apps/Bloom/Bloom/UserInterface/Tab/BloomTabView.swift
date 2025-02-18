@@ -1,140 +1,48 @@
 //
 //  BloomTabView.swift
-//  Supplements
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-12-16.
+//  Created by Mark DiFranco on 2025-02-18.
 //
 
 import SwiftUI
 
-extension View {
-
-  func tabBar() -> some View {
-    self.modifier(TabBarViewModifier())
-  }
-}
-
-struct TabBarViewModifier: ViewModifier {
+struct BloomTabView: View {
 
   @Environment(TabController.self) private var tabController: TabController
 
-  @State private var logActionToggle = false
-  @State private var presentedSheet: AnyView?
-
-  func body(content: Content) -> some View {
-    content
-      .safeAreaInset(edge: .bottom) {
-        tabBar
-      }
-      .sheet($presentedSheet)
-  }
-}
-
-extension TabBarViewModifier {
-
-  var tabBar: some View {
-    HStack {
-      TabItem(title: "Today", image: Image(.todayTab))
-        .onTapGesture {
-          tabController.activeTab = .today
-        }
-        .tint(tabController.activeTab == .today ? .primary : .secondary)
-
-      TabItem(title: "Nutrition", image: Image(.nutritionTab))
-        .onTapGesture {
-          tabController.activeTab = .nutrition
-        }
-        .tint(tabController.activeTab == .nutrition ? .primary : .secondary)
-
-      AddTabItem()
-        .sensoryFeedback(.impact, trigger: logActionToggle)
-        .onTapGesture {
-          logActionToggle.toggle()
-          presentedSheet = ActionsView().asAny
-        }
-
-      TabItem(title: "Vitals", image: Image(.vitalsTab))
-        .onTapGesture {
-          tabController.activeTab = .vitals
-        }
-        .tint(tabController.activeTab == .vitals ? .primary : .secondary)
-
-      #if DEBUG
-      TabItem(title: "Chat", image: Image(systemName: "bubble.right"))
-        .onTapGesture {
-          tabController.activeTab = .workouts
-        }
-        .tint(tabController.activeTab == .workouts ? .primary : .secondary)
-      #else
-      TabItem(title: "Workouts", image: Image(.workoutsTab))
-        .onTapGesture {
-          tabController.activeTab = .workouts
-        }
-        .tint(tabController.activeTab == .workouts ? .primary : .secondary)
-      #endif
-    }
-    .sensoryFeedback(.impact, trigger: tabController.activeTab)
-    .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 40)
-        .fill(.background)
-        .ignoresSafeArea(edges: .bottom)
-        .shadow(color: .text.opacity(0.1), radius: 20)
-    }
-  }
-}
-
-private struct TabItem: View {
-  let title: String
-  let image: Image
+  @State private var tabBarHeight: CGFloat = 0
 
   var body: some View {
-    VStack(spacing: 3) {
-      image
-        .font(.system(size: 27))
-
-      Text(title)
-        .font(.caption)
-        .bold()
-        .fontDesign(.rounded)
-    }
-    .horizontallyCentered()
-    .foregroundStyle(.tint)
-    .selectable()
-  }
-}
-
-private struct AddTabItem: View {
-
-  var body: some View {
-    Image(systemName: "plus")
-      .foregroundStyle(.white)
-      .font(.title3)
-      .bold()
-      .fontDesign(.rounded)
-      .padding(10)
-      .background {
-        RoundedRectangle(cornerRadius: 18)
-          .fill(
-            LinearGradient(
-              colors: [.mutedGreen, .mutedBlue],
-              startPoint: .topLeading,
-              endPoint: .bottomTrailing
-            )
-          )
+    ZStack {
+      VStack {
+        switch tabController.activeTab {
+        case .today:
+          TodayView()
+        case .nutrition:
+          NutritionView()
+        case .vitals:
+          VitalsView()
+        case .workouts:
+          WorkoutsTabView()
+        case .actions:
+          EmptyView()
+        }
       }
-      .horizontallyCentered()
+      .overlay {
+        BloomTabBar()
+          .readViewSize { proxy in
+            self.tabBarHeight = proxy.size.height
+          }
+          .zStackAlignment(.bottom)
+      }
+    }
   }
 }
 
 #Preview {
   @Previewable @Bindable var tabController = TabController()
-
-  VStack {
-    Spacer()
-    Text("Hello World")
-    Spacer()
-  }
-  .tabBar()
-  .environment(tabController)
+  
+  BloomTabView()
+    .environment(tabController)
 }

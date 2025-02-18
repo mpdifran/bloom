@@ -10,8 +10,9 @@ import SwiftUI
 struct ChatView: View {
 
   @State private var text: String = ""
-
   @State private var viewModel = ChatViewModel.shared
+
+  @Environment(\.dismiss) private var dismiss
 
   @FocusState private var isFocused: Bool
 
@@ -42,8 +43,16 @@ struct ChatView: View {
         .padding(.horizontal)
       }
       .navigationTitle("Chat")
-      .tabBar()
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Done") {
+            dismiss()
+          }
+          .bold()
+        }
+      }
     }
+    .presentationCompactAdaptation(.fullScreenCover)
   }
 }
 

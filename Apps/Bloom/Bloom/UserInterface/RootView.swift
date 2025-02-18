@@ -56,13 +56,8 @@ struct RootView: View {
             .opacity(tabController.activeTab == .nutrition ? 1 : 0)
           VitalsView()
             .opacity(tabController.activeTab == .vitals ? 1 : 0)
-          #if DEBUG
-          ChatView()
-            .opacity(tabController.activeTab == .workouts ? 1 : 0)
-          #else
           WorkoutsTabView()
             .opacity(tabController.activeTab == .workouts ? 1 : 0)
-          #endif
         }
         .environment(tabController)
         .transition(.blurReplace)

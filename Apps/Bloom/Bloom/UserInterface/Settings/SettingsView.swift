@@ -25,6 +25,7 @@ struct SettingsView: View {
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
+  @AppStorage("SettingsView.showDeveloperMode") private var showDeveloperMode: Bool = true
 
   @Environment(\.openURL) private var openURL
   @Environment(\.modelContext) private var modelContext
@@ -66,9 +67,9 @@ struct SettingsView: View {
         subscriptionSection
         supportSection
         authenticationSection
-        #if DEBUG
-        developerSection
-        #endif
+        if showDeveloperMode {
+          developerSection
+        }
       }
       .padding()
     }
@@ -80,6 +81,11 @@ struct SettingsView: View {
     .sheet($presentedSheet)
     .confirmationDialog($confirmationDialogDetails)
     .alert(error: $error)
+    .onAppear {
+      #if DEBUG
+      showDeveloperMode = true
+      #endif
+    }
     .task {
       await checkHealthKitPermissions()
     }
@@ -445,6 +451,9 @@ private extension SettingsView {
       SettingsSectionContainer {
         SettingsCell("App Version") {
           Text(appVersion ?? "Unknown")
+            .onTapGesture(count: 10) {
+              showDeveloperMode = true
+            }
         }
 
         Divider()
