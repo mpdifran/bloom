@@ -312,6 +312,7 @@ private extension FoodLoggingActionCardView {
       .onSubmit {
         performSearch()
       }
+      .selectAllTextOnBeginEditing()
       .padding()
       .onChange(of: searchQuery) { oldValue, newValue in
         guard shouldAutocomplete else { return }
