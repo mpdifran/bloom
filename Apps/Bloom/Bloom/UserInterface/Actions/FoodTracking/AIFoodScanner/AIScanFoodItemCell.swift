@@ -12,6 +12,16 @@ import BloomModel
 struct AIScanFoodItemCell: View {
   @Binding var foodItemServing: FoodItemServing
 
+  /// This is needed since there's a bug when editing a @Binding of a Double, compared to a @State of a Double. The latter is much nicer, and the former is a pain in the ass.
+  @State private var internalFoodItemServingAmount: Double
+
+  @FocusState private var isFocused: Bool
+
+  init(foodItemServing: Binding<FoodItemServing>) {
+    self._foodItemServing = foodItemServing
+    self._internalFoodItemServingAmount = State(initialValue: foodItemServing.wrappedValue.serving)
+  }
+
   var body: some View {
     HStack {
       foodDetailsContentView
@@ -20,6 +30,11 @@ struct AIScanFoodItemCell: View {
 
       caloriesView
       editContentView
+    }
+    .onChange(of: isFocused) { oldValue, newValue in
+      guard !newValue && oldValue else { return }
+
+      foodItemServing.serving = internalFoodItemServingAmount
     }
     .cardContainer(fill: .background, stroke: .background.secondary)
   }
@@ -89,13 +104,14 @@ private extension AIScanFoodItemCell {
   var editContentView: some View {
     HStack {
       VStack {
-        TextField("", value: $foodItemServing.serving, formatter: NumberFormatter.oneDecimalPlace)
+        TextField("", value: $internalFoodItemServingAmount, formatter: NumberFormatter.threeDecimalPlaces)
           .textFieldStyle(.roundedBorder)
-          .multilineTextAlignment(.center)
+          .multilineTextAlignment(.trailing)
           .frame(width: 70)
           .fontDesign(.rounded)
           .keyboardType(.decimalPad)
           .selectAllTextOnBeginEditing()
+          .focused($isFocused)
 
         Text("servings")
           .font(.caption)

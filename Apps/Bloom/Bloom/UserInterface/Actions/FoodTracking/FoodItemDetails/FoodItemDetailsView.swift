@@ -221,7 +221,7 @@ private extension FoodItemDetailsView {
       Divider()
 
       LabeledContent("Number of Servings") {
-        TextField("", value: $numberOfServings, formatter: NumberFormatter.oneDecimalPlace)
+        TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
           .textFieldStyle(.roundedBorder)
           .multilineTextAlignment(.trailing)
           .frame(width: 70)
