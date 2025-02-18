@@ -25,7 +25,8 @@ struct SettingsView: View {
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
-  @AppStorage("SettingsView.showDeveloperMode") private var showDeveloperMode: Bool = true
+  @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+  @AppStorage("SettingsView.showDeveloperMode") private var showDeveloperMode: Bool = false
 
   @Environment(\.openURL) private var openURL
   @Environment(\.modelContext) private var modelContext
@@ -78,6 +79,7 @@ struct SettingsView: View {
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
     .animation(.default, value: shouldRequestHealthPermissions)
+    .animation(.easeInOut, value: showDeveloperMode)
     .sheet($presentedSheet)
     .confirmationDialog($confirmationDialogDetails)
     .alert(error: $error)
@@ -452,7 +454,10 @@ private extension SettingsView {
         SettingsCell("App Version") {
           Text(appVersion ?? "Unknown")
             .onTapGesture(count: 10) {
-              showDeveloperMode = true
+              showDeveloperMode.toggle()
+              if !showDeveloperMode {
+                danieleMode = false
+              }
             }
         }
 
@@ -573,6 +578,19 @@ private extension SettingsView {
         .onTapGesture {
           presentedSheet = DeveloperSettingsView().asAny
         }
+
+        Divider()
+
+        Button {
+          showDeveloperMode = false
+          danieleMode = false
+        } label: {
+          Text("Exit Developer Mode")
+            .bold()
+            .horizontallyCentered()
+            .frame(minHeight: 60)
+        }
+        .tint(.mutedRed)
       }
     }
   }
