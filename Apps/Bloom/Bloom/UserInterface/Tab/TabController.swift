@@ -22,6 +22,7 @@ final class TabController {
 
   var showMorningReport = false
   var showEveningReport = false
+  var showFocusAreasReview = false
   var toggleToDismiss = false
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
@@ -63,6 +64,10 @@ private extension TabController {
       dismiss()
       select(.today)
       showEveningReport = true
+    case .CategoryID.reviewFocusAreas:
+      dismiss()
+      select(.today)
+      showFocusAreasReview = true
     default:
       break
     }

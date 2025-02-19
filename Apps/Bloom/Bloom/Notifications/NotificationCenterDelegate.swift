@@ -41,6 +41,8 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
             return [.banner]
         case .CategoryID.goodMorning, .CategoryID.goodEvening:
             return [.banner]
+        case .CategoryID.reviewFocusAreas:
+            return [.banner]
         default :
             return [.banner, .sound, .list]
         }

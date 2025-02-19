@@ -114,6 +114,9 @@ struct TodayView: View {
       .fullScreenCover(isPresented: $tabController.showEveningReport) {
         EveningReportView()
       }
+      .fullScreenCover(isPresented: $tabController.showFocusAreasReview) {
+        FocusAreaReviewRootView()
+      }
     }
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
