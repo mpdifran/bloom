@@ -10,20 +10,22 @@ import BloomModel
 
 struct FoodSearchCard: View {
 
+  @Binding var searchQuery: String
   let onSearch: (String) -> Void
   let onUploadNewFood: (FoodItem) -> Void
 
   init(
+    searchQuery: Binding<String>,
     onSearch: @escaping (String) -> Void,
     onUploadNewFood: @escaping (FoodItem) -> Void
   ) {
+    self._searchQuery = searchQuery
     self.onSearch = onSearch
     self.onUploadNewFood = onUploadNewFood
   }
 
   @FocusState private var isFocused: Bool
 
-  @State private var searchQuery = ""
   @State private var didSearchToggle = false
   @State private var presentedSheet: AnyView?
 
@@ -194,6 +196,8 @@ private extension FoodSearchCard {
 }
 
 #Preview {
+  @Previewable @State var searchQuery = ""
+
   VStack {
     Spacer()
     Text("Hello World")
@@ -202,7 +206,7 @@ private extension FoodSearchCard {
   .horizontallyCentered()
   .groupedBackground()
   .safeAreaInset(edge: .bottom) {
-    FoodSearchCard { searchQuery in
+    FoodSearchCard(searchQuery: $searchQuery) { searchQuery in
 
     } onUploadNewFood: { foodItem in
 

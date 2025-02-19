@@ -15,3 +15,12 @@ extension FoodItem.Quantity {
     return HKQuantity(unit: unit, doubleValue: value)
   }
 }
+
+extension FoodItem {
+
+  func contains(searchQuery: String) -> Bool {
+    name.localizedCaseInsensitiveContains(searchQuery) ||
+    brandName?.localizedCaseInsensitiveContains(searchQuery) == true ||
+    flavour?.localizedCaseInsensitiveContains(searchQuery) == true
+  }
+}

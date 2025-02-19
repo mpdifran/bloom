@@ -27,6 +27,7 @@ struct FoodLoggingActionCardView: View {
 
   @AppStorage("FoodLoggingActionCardView.hasShownExplanation", store: .group) private var hasShownExplanation = false
 
+  @State private var searchQuery = ""
   @State private var shouldAutocomplete = true
   @State private var healthPermissionTrigger = false
   @State private var presentedSheet: AnyView?
@@ -46,7 +47,7 @@ struct FoodLoggingActionCardView: View {
         mainView
       }
       .safeAreaInset(edge: .bottom) {
-        FoodSearchCard { searchQuery in
+        FoodSearchCard(searchQuery: $searchQuery) { searchQuery in
           Task {
             await viewModel.performSearch(for: searchQuery)
           }
@@ -77,6 +78,7 @@ struct FoodLoggingActionCardView: View {
     .presentationCompactAdaptation(.fullScreenCover)
     .alert(error: $viewModel.error)
     .animation(.default, value: selectedTab)
+    .animation(.default, value: searchQuery)
     .tint(.mutedGreen)
     .healthDataAccessRequest(
         store: HealthPermissionChecker.shared.healthStore,
@@ -161,16 +163,18 @@ private extension FoodLoggingActionCardView {
           SectionTitleView(section.title)
             .padding(.horizontal)
 
-          ForEachEnumerated(section.foodItems) { index, food in
-            FoodItemCell(foodItem: food)
-              .id(food.id)
-              .transition(.blurReplace)
-              .onTapGesture {
-                presentedSheet = FoodItemDetailsView(
-                  foodItem: food,
-                  existingFoodItemLog: nil
-                ).asAny
-              }
+          ForEachEnumerated(section.foodItems) { index, foodItem in
+            if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
+              FoodItemCell(foodItem: foodItem)
+                .id(foodItem.id)
+                .transition(.blurReplace)
+                .onTapGesture {
+                  presentedSheet = FoodItemDetailsView(
+                    foodItem: foodItem,
+                    existingFoodItemLog: nil
+                  ).asAny
+                }
+            }
           }
         }
       }
