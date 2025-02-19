@@ -34,7 +34,6 @@ extension FoodLoggingActionCardView {
     var recentFoodItemSections = [FoodItemSection]()
     var country: FoodCountry = .usa
 
-    private var debouncedSearchQuery = ""
     private var debounceTask: Task<Void, Never>?
 
     private let foodItemModelActor = FoodItemLogModelActor(modelContainer: ContainerHolder.shared.container)
@@ -82,7 +81,9 @@ extension FoodLoggingActionCardView.ViewModel {
   }
 
   func performSearch(for query: String) async {
-    results = []
+    results = nil
+
+    guard query.isNotEmpty else { return }
 
     defer { isSearching = false }
     isSearching = true

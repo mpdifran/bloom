@@ -190,6 +190,8 @@ private extension FoodLoggingActionCardView {
         .foregroundStyle(.secondary)
       Spacer()
     }
+    .horizontallyCentered()
+    .groupedBackground()
   }
 
   func resultsView(results: [FoodItemSection]) -> some View {
@@ -213,6 +215,7 @@ private extension FoodLoggingActionCardView {
           }
           .padding()
         }
+        .groupedBackground()
       } else {
         VStack {
           TabFilter(selectedTab: $selectedTab)
@@ -226,6 +229,7 @@ private extension FoodLoggingActionCardView {
           }
         }
         .padding()
+        .groupedBackground()
       }
     }
     .animation(.bouncy, value: viewModel.results)

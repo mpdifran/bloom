@@ -123,6 +123,7 @@ private extension FoodSearchCard {
       if searchQuery.isNotEmpty {
         Button {
           searchQuery = ""
+          onSearch("")
         } label: {
           Image(systemName: "xmark.circle.fill")
             .font(.title3)
