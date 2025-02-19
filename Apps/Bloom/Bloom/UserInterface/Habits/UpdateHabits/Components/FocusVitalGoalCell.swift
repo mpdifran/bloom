@@ -212,7 +212,7 @@ private extension FocusVitalGoalCell {
   @Previewable @State var focusVital = FocusVital(
     vitalKind: .activityLevel,
     proposedGoals: [
-      .init(
+      ProposedGoal(
         habitID: nil,
         targetMetric: .bikeDistance,
         value: 10,
@@ -223,7 +223,7 @@ private extension FocusVitalGoalCell {
         context: "Biking can help improve your activity level.",
         hasUserEdited: false
       ),
-      .init(
+      ProposedGoal(
         habitID: nil,
         targetMetric: .runDistance,
         value: 10,

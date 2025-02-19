@@ -233,7 +233,7 @@ private extension ProposedHabitCell {
   ScrollView {
     VStack(spacing: 20) {
       ProposedHabitCell(
-        proposedHabit: .constant(.init(
+        proposedHabit: .constant(ProposedGoal(
           habitID: nil,
           targetMetric: .waterIntake,
           value: 500,
@@ -246,7 +246,7 @@ private extension ProposedHabitCell {
         ))
       )
       ProposedHabitCell(
-        proposedHabit: .constant(.init(
+        proposedHabit: .constant(ProposedGoal(
           habitID: nil,
           targetMetric: .walkingRunningDistance,
           value: 5,
@@ -259,7 +259,7 @@ private extension ProposedHabitCell {
         ))
       )
       ProposedHabitCell(
-        proposedHabit: .constant(.init(
+        proposedHabit: .constant(ProposedGoal(
           habitID: nil,
           targetMetric: .timeInDaylight,
           value: 30,

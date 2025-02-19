@@ -57,7 +57,7 @@ private extension DebugHabitCell {
 #Preview {
     List {
         DebugHabitCell(
-            habit: .init(
+            habit: Habit(
                 targetMetric: .stepCount,
                 value: 3000,
                 unitString: HKUnit.count().unitString,
@@ -67,7 +67,7 @@ private extension DebugHabitCell {
             )
         )
         DebugHabitCell(
-            habit: .init(
+            habit: Habit(
                 targetMetric: .stepCount,
                 value: 3000,
                 unitString: HKUnit.count().unitString,

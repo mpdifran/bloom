@@ -30,7 +30,7 @@ struct DebugFoodItemLogCell: View {
 
 #Preview {
     DebugFoodItemLogCell(
-        foodItemLog: .init(
+        foodItemLog: FoodItemLog(
             id: "123",
             date: .now,
             meal: .lunch,

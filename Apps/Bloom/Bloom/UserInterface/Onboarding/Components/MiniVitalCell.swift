@@ -44,7 +44,7 @@ struct MiniVitalCell: View {
 
             if let barLevel = vital.barLevel {
                 VitalStatusBarView(
-                    level: .init(barLevel: barLevel.level),
+                    level: VitalStatusBarView.Level(barLevel: barLevel.level),
                     levelPercent: barLevel.proportion
                 )
             }
@@ -56,12 +56,12 @@ struct MiniVitalCell: View {
 
 #Preview {
     MiniVitalCell(
-        vital: .init(
+        vital: VitalModel(
             id: .sleepQuality,
             subtitle: "45% Core\n12% Deep",
             status: "Good",
             color: .vitalGreat,
-            barLevel: .init(level: .optimal, proportion: 0.9),
+            barLevel: VitalModel.BarLevel(level: .optimal, proportion: 0.9),
             hasNoData: false
         )
     )

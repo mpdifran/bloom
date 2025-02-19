@@ -133,13 +133,13 @@ private extension OnboardingAppExplanationView {
         switch vitalPairs.count {
         case 0:
             vitalPairs.append(
-                .init(
-                    vital: .init(
+                VitalOffsetPair(
+                    vital: VitalModel(
                         id: .activityLevel,
                         subtitle: nil,
                         status: "Moderate",
                         color: .vitalGood,
-                        barLevel: .init(level: .high, proportion: 0.3),
+                        barLevel: VitalModel.BarLevel(level: .high, proportion: 0.3),
                         hasNoData: false
                     ),
                     rotation: .degrees(6),
@@ -148,13 +148,13 @@ private extension OnboardingAppExplanationView {
             )
         case 1:
             vitalPairs.append(
-                .init(
-                    vital: .init(
+                VitalOffsetPair(
+                    vital: VitalModel(
                         id: .sleepQuality,
                         subtitle: nil,
                         status: "Low",
                         color: .vitalWarning,
-                        barLevel: .init(level: .medium, proportion: 0.2),
+                        barLevel: VitalModel.BarLevel(level: .medium, proportion: 0.2),
                         hasNoData: false
                     ),
                     rotation: .degrees(-5),
@@ -163,8 +163,8 @@ private extension OnboardingAppExplanationView {
             )
         case 2:
             vitalPairs.append(
-                .init(
-                    vital: .init(
+                VitalOffsetPair(
+                    vital: VitalModel(
                         id: .cycleTracking,
                         subtitle: nil,
                         status: "Luteal Phase",
@@ -178,13 +178,13 @@ private extension OnboardingAppExplanationView {
             )
         case 3:
             vitalPairs.append(
-                .init(
-                    vital: .init(
+                VitalOffsetPair(
+                    vital: VitalModel(
                         id: .nutrition,
                         subtitle: nil,
                         status: "Great",
                         color: .vitalGreat,
-                        barLevel: .init(level: .optimal, proportion: 0.4),
+                        barLevel: VitalModel.BarLevel(level: .optimal, proportion: 0.4),
                         hasNoData: false
                     ),
                     rotation: .degrees(-2),

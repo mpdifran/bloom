@@ -84,7 +84,7 @@ private extension ChatGameInviteCell {
 
     var inviteMessageColor: Color {
         if isIncompatible {
-            return Color(uiColor: .init(white: 0.3, alpha: 1))
+            return Color(uiColor: UIColor(white: 0.3, alpha: 1))
         }
         if isCurrentUser && !isDirect {
             return .white

@@ -126,38 +126,38 @@ private extension SleepSegmentSummaryCell {
     List {
         Section("Segments") {
             SleepSegmentSummaryCell(
-                summary: .init(
+                summary: SleepSegmentSummary(
                     segment: .rem,
                     averagePercent: 0.27,
                     recommendedPercentMin: 0.2,
                     recommendedPercentMax: 0.25,
                     percentNightsWithValues: 0.95,
                     dataPoints: [
-                        .init(date: .now, value: 1.3)
+                        SleepSegmentSummary.DataPoint(date: .now, value: 1.3)
                     ]
                 )
             )
             SleepSegmentSummaryCell(
-                summary: .init(
+                summary: SleepSegmentSummary(
                     segment: .core,
                     averagePercent: 0.48,
                     recommendedPercentMin: 0.45,
                     recommendedPercentMax: 0.50,
                     percentNightsWithValues: 0.8,
                     dataPoints: [
-                        .init(date: .now, value: 2.5)
+                        SleepSegmentSummary.DataPoint(date: .now, value: 2.5)
                     ]
                 )
             )
             SleepSegmentSummaryCell(
-                summary: .init(
+                summary: SleepSegmentSummary(
                     segment: .deep,
                     averagePercent: 0.13,
                     recommendedPercentMin: 0.2,
                     recommendedPercentMax: 0.25,
                     percentNightsWithValues: 0.3,
                     dataPoints: [
-                        .init(date: .now, value: 0.6)
+                      SleepSegmentSummary.DataPoint(date: .now, value: 0.6)
                     ]
                 )
             )

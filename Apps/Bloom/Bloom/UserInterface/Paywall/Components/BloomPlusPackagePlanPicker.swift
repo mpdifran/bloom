@@ -93,10 +93,10 @@ private extension BloomPlusPackagePlanPicker {
   PreviewSheetPresent {
     BloomPlusPackagePlanPicker(
       packages: [
-        .init(
+        Package(
           identifier: "preview",
           packageType: .monthly,
-          storeProduct: .init(sk1Product: .init()),
+          storeProduct: StoreProduct(sk1Product: SK1Product()),
           offeringIdentifier: "offering"
         )
       ],

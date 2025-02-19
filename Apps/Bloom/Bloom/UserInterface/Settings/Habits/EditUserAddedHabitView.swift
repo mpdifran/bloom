@@ -119,11 +119,11 @@ private extension EditUserAddedHabitView {
   }
 
   func promptDelete() {
-    confirmationDialogDetails = .init(
+    confirmationDialogDetails = ConfirmationDialogDetails(
       title: "Are You Sure?",
       message: "This can't be undone",
       buttons: [
-        .init(title: "Delete", role: .destructive) {
+        ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
           do {
             try delete()
             dismiss()

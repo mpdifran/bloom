@@ -18,9 +18,9 @@ struct HeightEditorTextField: View {
 
   init() {
     let (feet, inches) = HealthManager.shared.heightCM.toFeetInches()
-    self._heightFeet = .init(initialValue: feet)
-    self._heightInches = .init(initialValue: inches)
-    self._heightCM = .init(initialValue: HealthManager.shared.heightCM)
+    self._heightFeet = State(initialValue: feet)
+    self._heightInches = State(initialValue: inches)
+    self._heightCM = State(initialValue: HealthManager.shared.heightCM)
   }
 
   var body: some View {

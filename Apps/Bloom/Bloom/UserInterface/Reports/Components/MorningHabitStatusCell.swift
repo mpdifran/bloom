@@ -37,7 +37,7 @@ struct MorningHabitStatusCell: View {
 #Preview {
     List {
         MorningHabitStatusCell(
-            habit: .init(
+            habit: Habit(
                 targetMetric: .timeInDaylight,
                 value: 30,
                 unitString: HKUnit.minute().unitString,

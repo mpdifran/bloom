@@ -183,15 +183,15 @@ private extension SleepProgramConfigurationView {
     var stopProgramSection: some View {
         Section {
             Button("Stop Program", systemImage: "exclamationmark.octagon.fill", role: .destructive) {
-                confirmationDetails = .init(
+              confirmationDetails = ConfirmationDialogDetails(
                     title: "Are You Sure?",
                     message: "This will stop the program, and you'll have to start again from a new benchmark.",
                     buttons: [
-                        .init(title: "Stop Program", role: .destructive) {
+                        ConfirmationDialogDetails.Button(title: "Stop Program", role: .destructive) {
                             sleepProgramCoordinator.stopProgram()
                             dismiss()
                         },
-                        .init(title: "Nevermind", role: .cancel) { }
+                        ConfirmationDialogDetails.Button(title: "Nevermind", role: .cancel) { }
                     ]
                 )
             }

@@ -66,7 +66,7 @@ private extension ChatSettingsView {
         title: "Are You Sure?",
         message: "This can't be undone. Your entire chat history will be deleted.",
         buttons: [
-          .init(title: "Delete", role: .destructive) {
+          ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
             Task {
               do {
                 try await viewModel.deleteChatHistory()
@@ -77,7 +77,7 @@ private extension ChatSettingsView {
               }
             }
           },
-          .init(title: "Cancel", role: .cancel) {
+          ConfirmationDialogDetails.Button(title: "Cancel", role: .cancel) {
             continuation.resume()
           }
         ]

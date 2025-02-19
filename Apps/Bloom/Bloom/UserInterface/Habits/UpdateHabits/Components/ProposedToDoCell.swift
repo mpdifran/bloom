@@ -37,7 +37,7 @@ struct ProposedToDoCell: View {
     ScrollView {
         VStack {
             ProposedToDoCell(
-                proposedToDo: .init(
+                proposedToDo: ProposedToDo(
                     todoKind: .logFood,
                     todoCadence: .daily,
                     vitalKind: .nutrition,

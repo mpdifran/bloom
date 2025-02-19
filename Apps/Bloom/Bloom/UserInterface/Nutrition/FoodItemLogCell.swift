@@ -88,7 +88,7 @@ private extension FoodItemLogCell {
   VStack {
     Spacer()
     FoodItemLogCell(
-      foodItemLog: .init(
+      foodItemLog: FoodItemLog(
         id: "1234",
         date: .now,
         meal: .breakfast,

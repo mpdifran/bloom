@@ -56,7 +56,7 @@ struct DataScannerView: UIViewControllerRepresentable {
         Task { @MainActor in
             do {
                 let photo = try await dataScannerVC.capturePhoto()
-                self.capturedPhoto = .init(image: photo)
+                self.capturedPhoto = IdentifiableImage(image: photo)
             } catch {
                 print(error.localizedDescription)
             }

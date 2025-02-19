@@ -50,7 +50,7 @@ struct EveningHabitStatusCell: View {
 #Preview {
     List {
         EveningHabitStatusCell(
-            habit: .init(
+            habit: Habit(
                 targetMetric: .timeInDaylight,
                 value: 30,
                 unitString: HKUnit.minute().unitString,
@@ -61,7 +61,7 @@ struct EveningHabitStatusCell: View {
             )
         )
         EveningHabitStatusCell(
-            habit: .init(
+            habit: Habit(
                 targetMetric: .stepCount,
                 value: 5000,
                 unitString: HKUnit.count().unitString,
@@ -72,7 +72,7 @@ struct EveningHabitStatusCell: View {
             )
         )
         EveningHabitStatusCell(
-            habit: .init(
+            habit: Habit(
                 targetMetric: .targetHeartRateZone2,
                 value: 30,
                 unitString: HKUnit.minute().unitString,

@@ -60,12 +60,12 @@ struct ProposedVitalCell: View {
   ScrollView {
     VStack {
       ProposedVitalCell(
-        vital: .init(
+        vital: VitalModel(
           id: .nutrition,
           subtitle: nil,
           status: "Unhealthy",
           color: .vitalWarning,
-          barLevel: .init(level: .medium, proportion: 0.4),
+          barLevel: VitalModel.BarLevel(level: .medium, proportion: 0.4),
           hasNoData: false
         )
       ) {
@@ -75,12 +75,12 @@ struct ProposedVitalCell: View {
       }
 
       ProposedVitalCell(
-        vital: .init(
+        vital: VitalModel(
           id: .sleepQuality,
           subtitle: nil,
           status: "Poor",
           color: .vitalSevere,
-          barLevel: .init(level: .low, proportion: 0.8),
+          barLevel: VitalModel.BarLevel(level: .low, proportion: 0.8),
           hasNoData: false
         )
       ) {

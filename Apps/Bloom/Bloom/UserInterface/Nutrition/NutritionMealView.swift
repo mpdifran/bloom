@@ -83,7 +83,7 @@ private extension NutritionMealView {
       Swipeable(
         isSwipingItem: $isSwipingItem,
         actions: [
-          .init(
+          SwipeAction(
             title: "Delete",
             systemImage: "trash",
             tint: .mutedRed,

@@ -35,7 +35,7 @@ struct UserAddedHabitCell: View {
 
 #Preview {
     UserAddedHabitCell(
-        habit: .init(
+        habit: Habit(
             targetMetric: .walkingRunningDistance,
             value: 5,
             unitString: HKUnit.meterUnit(with: .kilo).unitString,

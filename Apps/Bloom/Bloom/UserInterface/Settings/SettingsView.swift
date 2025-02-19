@@ -244,7 +244,7 @@ private extension SettingsView {
         Swipeable(
           isSwipingItem: $isSwipingAnItem,
           actions: [
-            .init(
+            SwipeAction(
               title: "Delete",
               systemImage: "trash",
               tint: .mutedRed
@@ -538,7 +538,7 @@ private extension SettingsView {
                 title: "Are You Sure?",
                 message: "This can't be undone. Your health data and existing food logs will not be deleted, and will remain on your device.",
                 buttons: [
-                  .init(title: "Delete", role: .destructive) {
+                  ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
                     Task {
                       do {
                         try await UserController.shared.deleteAccount()
@@ -548,7 +548,7 @@ private extension SettingsView {
                       }
                     }
                   },
-                  .init(title: "Cancel", role: .cancel) {
+                  ConfirmationDialogDetails.Button(title: "Cancel", role: .cancel) {
                     continuation.resume()
                   }
                 ]
