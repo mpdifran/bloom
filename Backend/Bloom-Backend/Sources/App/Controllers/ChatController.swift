@@ -79,19 +79,7 @@ extension ChatController {
 
   @Sendable
   func deleteThread(_ request: Request) async throws -> Response {
-    let body = try request.content.decode(AssistantDeleteThreadRequest.self)
-
-    let assistantSpecs = body.kinds.compactMap { kind in
-      switch kind {
-      case .healthCoach:
-        return AssistantSpec.healthCoach
-      }
-    }
-
-    for assistantSpec in assistantSpecs {
-      try await openAIService.deleteThread(request, assistantSpec: assistantSpec)
-    }
-
+    try await openAIService.deleteThread(request, assistantSpec: .healthCoach)
     return Response(status: .ok)
   }
 }
