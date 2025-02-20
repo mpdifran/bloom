@@ -93,7 +93,8 @@ private extension NutrientsRemainingView {
         }
       }
 
-      DisclosureIndicator()
+      // TODO: Zach - add back when there is navigation
+      // DisclosureIndicator()
     }
     .cardContainer()
   }
