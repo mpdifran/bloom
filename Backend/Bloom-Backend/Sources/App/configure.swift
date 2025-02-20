@@ -22,4 +22,13 @@ public func configure(_ app: Application) async throws {
   // Migrations
   allMigrations.forEach { app.migrations.add($0) }
   try await app.autoMigrate() // Perform migration
+  
+  // Jobs
+  await allJobs.forEach {
+    do {
+      try app.cron.schedule($0)
+    } catch {
+      app.logger.warning("Cron job failed to be scheduled \(error)")
+    }
+  }
 }

@@ -37,6 +37,7 @@ let package = Package(
                 .product(name: "SotoS3", package: "soto"),
                 .product(name: "BloomModel", package: "bloom-model"),
                 .product(name: "AdminBloomModel", package: "admin-bloom-model"),
+                .product(name: "VaporCron", package: "VaporCron"),
             ],
             swiftSettings: swiftSettings,
             plugins: [

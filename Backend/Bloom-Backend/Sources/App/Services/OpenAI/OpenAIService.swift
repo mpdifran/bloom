@@ -188,12 +188,28 @@ extension OpenAIService {
       return nil
     }
   }
-
+  
   func evaluateFoodItemAccuracy(
     request: Request,
     foodItemRecord: FoodItemRecord,
     totalNumberOfIssueReports: Int,
     sampleIssueReports: [FoodItemIssueReport]
+  ) async throws -> (score: Int, notes: String, recommendations: [String: String]) {
+    try await evaluateFoodItemAccuracy(
+      foodItemRecord: foodItemRecord,
+      totalNumberOfIssueReports: totalNumberOfIssueReports,
+      sampleIssueReports: sampleIssueReports,
+      imageStorage: request.imageStorage,
+      openAIClient: request.openAI
+    )
+  }
+
+  func evaluateFoodItemAccuracy(
+    foodItemRecord: FoodItemRecord,
+    totalNumberOfIssueReports: Int,
+    sampleIssueReports: [FoodItemIssueReport],
+    imageStorage: ImageStorage,
+    openAIClient: OpenAIKit.Client
   ) async throws -> (score: Int, notes: String, recommendations: [String: String]) {
     var messages: [Chat.Message] = [
       Chat.Message(
@@ -273,7 +289,7 @@ extension OpenAIService {
     
     // Add images if available
     if let nutritionLabelImage = foodItemRecord.nutritionLabelImage,
-       let nutritionImageFile = try await request.imageStorage.retrieveImage(
+       let nutritionImageFile = try await imageStorage.retrieveImage(
          fileName: nutritionLabelImage,
          path: .nutritionLabel
        ) {
@@ -287,7 +303,7 @@ extension OpenAIService {
     }
 
     if let packagingImage = foodItemRecord.packagingImage,
-       let packagingImageFile = try await request.imageStorage.retrieveImage(
+       let packagingImageFile = try await imageStorage.retrieveImage(
          fileName: packagingImage,
          path: .foodPackaging
        ) {
@@ -300,7 +316,7 @@ extension OpenAIService {
       ))
     }
 
-    let response = try await request.openAI.chats.create(
+    let response = try await openAIClient.chats.create(
       model: Model.GPT4.gpt_4o_mini,
       messages: messages
     )

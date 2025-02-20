@@ -9,7 +9,6 @@ import BloomModel
 import Vapor
 import SotoS3
 
-
 /// Explicit enum for storage so that we limit the number of folders in our storage.
 enum StoragePath: String {
   case nutritionLabel = "nutrition-label"
@@ -40,30 +39,53 @@ protocol ImageStorage {
 struct S3Storage: ImageStorage {
 
   init(request: Request, bucketName: String) {
-    self.request = request
+    self.init(
+      bucketName: bucketName,
+      imageProcessing: request.imageProcessing,
+      sotoS3: request.sotoS3,
+      logger: request.logger,
+      byteBufferAllocator: request.byteBufferAllocator
+    )
+  }
+  
+  init(
+    bucketName: String,
+    imageProcessing: ImageProcessing,
+    sotoS3: S3,
+    logger: Logger,
+    byteBufferAllocator: ByteBufferAllocator
+  ) {
     self.bucketName = bucketName
+    self.imageProcessing = imageProcessing
+    self.sotoS3 = sotoS3
+    self.logger = logger
+    self.byteBufferAllocator = byteBufferAllocator
   }
 
-  let request: Request
   let bucketName: String
+  
+  private let imageProcessing: ImageProcessing
+  private let sotoS3: S3
+  private let logger: Logger
+  private let byteBufferAllocator: ByteBufferAllocator
 
   func store(image: ImageFile, path: StoragePath) async throws -> ImageFileMetadata {
-    guard let imageType = request.imageProcessing.determineImageType(image.data) else {
+    guard let imageType = imageProcessing.determineImageType(image.data) else {
       throw Abort(.badRequest, reason: "Unsupported image type")
     }
     
     let filename = "\(UUID().uuidString).\(imageType)"
 
     let putObjectRequest = S3.PutObjectRequest(
-        body: .data(image.data, byteBufferAllocator: request.application.allocator),
+        body: .data(image.data, byteBufferAllocator: byteBufferAllocator),
         bucket: bucketName,
         key: "\(path)/\(filename)"
     )
     do {
-        _ = try await request.sotoS3.putObject(putObjectRequest)
-        request.logger.info("Saved image to S3: \(bucketName) - \(putObjectRequest.key)")
+        _ = try await sotoS3.putObject(putObjectRequest)
+        logger.info("Saved image to S3: \(bucketName) - \(putObjectRequest.key)")
     } catch {
-        request.logger.error("Failed to save content to S3: \(error)")
+        logger.error("Failed to save content to S3: \(error)")
     }
 
     return ImageFileMetadata(filename: filename, data: image.data)
@@ -75,19 +97,19 @@ struct S3Storage: ImageStorage {
     expiration: TimeAmount
   ) async throws -> URL? {
     let objectKey = "\(path)/\(fileName)"
-    let region = request.sotoS3.region
+    let region = sotoS3.region
     let url = URL(string: "https://\(bucketName).s3.\(region).amazonaws.com/\(objectKey)")!
     do {
       /// Reference: https://soto.codes/2020/12/presigned-urls.html
-      let image = try await request.sotoS3.signURL(
+      let image = try await sotoS3.signURL(
         url: url,
         httpMethod: .GET,
         expires: expiration
       )
-      request.logger.info("Successfully generated signed URL for S3: \(image)")
+      logger.info("Successfully generated signed URL for S3: \(image)")
       return image
     } catch {
-      request.logger.error("Failed to create S3 signed URL: \(error)")
+      logger.error("Failed to create S3 signed URL: \(error)")
       return nil
     }
   }
@@ -101,20 +123,20 @@ struct S3Storage: ImageStorage {
     )
     
     do {
-      let response = try await request.sotoS3.getObject(getObjectRequest)
+      let response = try await sotoS3.getObject(getObjectRequest)
       guard let data = response.body?.asData() else {
-        request.logger.warning("No data in S3 response for: \(objectKey)")
+        logger.warning("No data in S3 response for: \(objectKey)")
         return nil
       }
       
       guard let fileExtension = fileName.split(separator: ".").last.map(String.init) else {
-        request.logger.warning("Could not determine file extension for: \(fileName)")
+        logger.warning("Could not determine file extension for: \(fileName)")
         return nil
       }
       
       return ImageFile(data: data, fileExtension: fileExtension)
     } catch {
-      request.logger.error("Failed to retrieve image from S3: \(error)")
+      logger.error("Failed to retrieve image from S3: \(error)")
       return nil
     }
   }
