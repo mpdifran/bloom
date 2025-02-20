@@ -128,7 +128,7 @@ extension FoodItemIssueReport {
     
     func revert(on database: any Database) async throws {
       guard let sqlDatabase = database as? SQLDatabase else {
-        // Skip creating the index
+        // Skip removing the index
         return
       }
       
