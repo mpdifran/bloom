@@ -134,9 +134,9 @@ final class HealthPermissionChecker: Sendable {
   let otherTypes: Set<HKObjectType> = [
     HKQuantityType(.timeInDaylight),
     HKCategoryType(.mindfulSession),
-    HKCategoryType(.appleWalkingSteadinessEvent),
-    HKQuantityType(.sixMinuteWalkTestDistance),
-    HKQuantityType(.walkingDoubleSupportPercentage),
+//    HKCategoryType(.appleWalkingSteadinessEvent),
+//    HKQuantityType(.sixMinuteWalkTestDistance),
+//    HKQuantityType(.walkingDoubleSupportPercentage),
     HKQuantityType(.bodyFatPercentage),
     HKQuantityType(.bodyMass)
   ]
