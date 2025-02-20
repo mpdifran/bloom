@@ -22,4 +22,7 @@ public func configure(_ app: Application) async throws {
   // Migrations
   allMigrations.forEach { app.migrations.add($0) }
   try await app.autoMigrate() // Perform migration
+
+  // APNs
+  try app.configureAPNs()
 }

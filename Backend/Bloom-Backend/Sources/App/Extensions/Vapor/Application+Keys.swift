@@ -22,6 +22,19 @@ extension Application {
   }
 }
 
+// MARK: - APNs
+
+extension Application {
+
+  var bloomAPNsJWKID: String {
+    Environment.get("APNS_JWK_ID") ?? ""
+  }
+
+  var bloomAPNsPrivateKey: String {
+    Environment.get("APNS_PRIVATE_KEY") ?? ""
+  }
+}
+
 // MARK: - Sign in with Apple
 
 extension Application {

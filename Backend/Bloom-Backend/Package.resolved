@@ -1,6 +1,24 @@
 {
-  "originHash" : "747663448d07f7dce538355a291e8f83db745b81f8f5e165aba67dbf9b8280bf",
+  "originHash" : "750239a2b6be606efd94070067bd19a656356830598422f7aa4583a8a8b23a66",
   "pins" : [
+    {
+      "identity" : "apns",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/apns.git",
+      "state" : {
+        "revision" : "dedccc1243efbfcaf86dd1810a3759c4ab36cdb4",
+        "version" : "4.2.0"
+      }
+    },
+    {
+      "identity" : "apnswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server-community/APNSwift.git",
+      "state" : {
+        "revision" : "36fec7e6ca5e99c6049771601770a5488021e19a",
+        "version" : "5.1.0"
+      }
+    },
     {
       "identity" : "appfoundations",
       "kind" : "remoteSourceControl",
@@ -101,12 +119,21 @@
       }
     },
     {
+      "identity" : "niocronscheduler",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MihaelIsaev/NIOCronScheduler.git",
+      "state" : {
+        "revision" : "aa67f5efde1c728772fcfc21a862412df83f14f1",
+        "version" : "2.1.0"
+      }
+    },
+    {
       "identity" : "openai-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "40f35e14e5e0a7129f98c2ee4c28bc80256dedc9",
-        "version" : "1.1.1"
+        "revision" : "2c2775a451c390b16b2a92149113ba3e8459415a",
+        "version" : "1.1.2"
       }
     },
     {
@@ -170,6 +197,15 @@
       "state" : {
         "revision" : "e0b35ff07601465dd9f3af19a1c23083acaae3bd",
         "version" : "3.32.0"
+      }
+    },
+    {
+      "identity" : "swifcron",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MihaelIsaev/SwifCron.git",
+      "state" : {
+        "revision" : "51d388da749b002522261e6fe4171acf93ee1b74",
+        "version" : "2.0.0"
       }
     },
     {
@@ -359,6 +395,15 @@
       "state" : {
         "revision" : "2658eb6f60a9621cdd7e079ffe2758642a3334f7",
         "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "vaporcron",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MihaelIsaev/VaporCron.git",
+      "state" : {
+        "revision" : "d6253e413b4bf306cbf5aac85ef33f1fe48de814",
+        "version" : "2.6.0"
       }
     },
     {
