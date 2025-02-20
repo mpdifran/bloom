@@ -15,15 +15,26 @@ struct NutritionView: View {
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   @State private var presentedSheet: AnyView?
   @State private var isSwipingItem = false
+  @State private var advanceToggle = false
 
   var body: some View {
     NavigationStack {
       ScrollView {
-        FilteredFoodItemLogsListView(
-          date: nutritionViewModel.date,
-          presentedSheet: $presentedSheet,
-          isSwipingItem: $isSwipingItem
-        )
+        VStack {
+          topBar
+
+          NutrientsRemainingView()
+            .padding(.vertical)
+            .onTapGesture {
+              // TODO: where does this go?
+            }
+
+          FilteredFoodItemLogsListView(
+            date: nutritionViewModel.date,
+            presentedSheet: $presentedSheet,
+            isSwipingItem: $isSwipingItem
+          )
+        }
         .padding()
       }
       .scrollDisabled(isSwipingItem)
@@ -50,6 +61,35 @@ struct NutritionView: View {
     .tabItem {
       Label("Nutrition", systemImage: "carrot")
     }
+  }
+}
+
+private extension NutritionView {
+  var topBar: some View {
+    HStack {
+      Button {
+        nutritionViewModel.reverseDay()
+        advanceToggle.toggle()
+      } label: {
+        Image(systemName: "chevron.backward.circle.fill")
+          .font(.title2)
+          .bold()
+          .foregroundStyle(.white, .tint)
+      }
+
+      Spacer()
+
+      Button {
+        nutritionViewModel.advanceDay()
+        advanceToggle.toggle()
+      } label: {
+        Image(systemName: "chevron.forward.circle.fill")
+          .font(.title2)
+          .bold()
+          .foregroundStyle(.white, .tint)
+      }
+    }
+    .sensoryFeedback(.impact, trigger: advanceToggle)
   }
 }
 
@@ -81,33 +121,27 @@ private extension NutritionView {
     }
 
     @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
-    @State private var advanceToggle = false
 
     @Query private var foodItemLogs: [FoodItemLog]
 
     var body: some View {
-      VStack {
-        topBar
+      ForEach(FoodItemLog.Meal.allCases) { meal in
+        NutritionMealView(
+          meal: meal,
+          foodItemLogs: foodItemLogs(for: meal),
+          isSwipingItem: $isSwipingItem
+        ) { foodItemLog in
+          guard let foodItem = foodItemLog.foodItem else { return }
 
-        Divider()
-
-        ForEach(FoodItemLog.Meal.allCases) { meal in
-          NutritionMealView(
-            meal: meal,
-            foodItemLogs: foodItemLogs(for: meal),
-            isSwipingItem: $isSwipingItem
-          ) { foodItemLog in
-            guard let foodItem = foodItemLog.foodItem else { return }
-
-            presentedSheet = FoodItemDetailsView(
-              foodItem: foodItem.asNetworkFoodItem(),
-              existingFoodItemLog: foodItemLog
-            ).asAny
-          } onLogTapped: {
-            nutritionViewModel.suggestedMeal = meal
-            presentedSheet = FoodLoggingActionCardView().asAny
-          }
+          presentedSheet = FoodItemDetailsView(
+            foodItem: foodItem.asNetworkFoodItem(),
+            existingFoodItemLog: foodItemLog
+          ).asAny
+        } onLogTapped: {
+          nutritionViewModel.suggestedMeal = meal
+          presentedSheet = FoodLoggingActionCardView().asAny
         }
+        .padding(.vertical)
       }
     }
   }
@@ -115,48 +149,9 @@ private extension NutritionView {
 
 private extension NutritionView.FilteredFoodItemLogsListView {
 
-  var topBar: some View {
-    HStack {
-      Button {
-        nutritionViewModel.reverseDay()
-        advanceToggle.toggle()
-      } label: {
-        Image(systemName: "chevron.backward.circle.fill")
-          .font(.title2)
-          .bold()
-          .foregroundStyle(.white, .tint)
-      }
-
-      Spacer()
-
-      Text("\(totalCalories.format()) Cals")
-        .font(.title3)
-        .bold()
-
-      Spacer()
-
-      Button {
-        nutritionViewModel.advanceDay()
-        advanceToggle.toggle()
-      } label: {
-        Image(systemName: "chevron.forward.circle.fill")
-          .font(.title2)
-          .bold()
-          .foregroundStyle(.white, .tint)
-      }
-    }
-    .sensoryFeedback(.impact, trigger: advanceToggle)
-  }
-
   func foodItemLogs(for meal: FoodItemLog.Meal) -> [FoodItemLog] {
     foodItemLogs.filter {
       $0.meal == meal
-    }
-  }
-
-  var totalCalories: Double {
-    foodItemLogs.reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalCalories
     }
   }
 }

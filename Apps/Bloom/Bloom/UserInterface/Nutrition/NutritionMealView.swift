@@ -13,10 +13,10 @@ struct NutritionMealView: View {
 
   @Binding private var isSwipingItem: Bool
 
-  let meal: FoodItemLog.Meal
-  let foodItemLogs: [FoodItemLog]
-  let onCellTapped: (FoodItemLog) -> Void
-  let onLogTapped: () -> Void
+  private let meal: FoodItemLog.Meal
+  private let foodItemLogs: [FoodItemLog]
+  private let onCellTapped: (FoodItemLog) -> Void
+  private let onLogTapped: () -> Void
 
   init(
     meal: FoodItemLog.Meal,
@@ -48,7 +48,6 @@ struct NutritionMealView: View {
         }
       }
     }
-    .padding(.vertical)
     .alert(error: $error)
   }
 }
@@ -114,7 +113,7 @@ private extension NutritionMealView {
             )
           )
 
-        Text("\(totalCalories.format()) cal • \(totalProtein.format()) Protein • \(totalFat.format()) Fats • \(totalCarbs.format()) Carbs")
+        Text("\(foodItemLogs.totalCalories.format()) cal • \(foodItemLogs.totalProtein.format()) Protein • \(foodItemLogs.totalFat.format()) Fats • \(foodItemLogs.totalCarbs.format()) Carbs")
           .font(.caption)
           .foregroundStyle(.secondary)
           .bold()
@@ -135,32 +134,6 @@ private extension NutritionMealView {
           .background(.background)
           .clipShape(Capsule())
       }
-    }
-  }
-}
-
-private extension NutritionMealView {
-  var totalCalories: Double {
-    foodItemLogs.reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalCalories
-    }
-  }
-
-  var totalProtein: Double {
-    foodItemLogs.reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalProtein
-    }
-  }
-
-  var totalFat: Double {
-    foodItemLogs.reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalFat
-    }
-  }
-
-  var totalCarbs: Double {
-    foodItemLogs.reduce(0) { partialResult, foodItemLog in
-      partialResult + foodItemLog.totalCarbs
     }
   }
 }
