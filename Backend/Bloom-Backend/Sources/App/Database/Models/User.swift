@@ -31,8 +31,8 @@ final class User: Model, Content, @unchecked Sendable {
   @Field(key: "user_detection_status")
   var rawUserDetectionStatus: String?
 
-  @Field(key: "thread_id")
-  var threadID: String?
+  @Field(key: "health_coach_thread_id")
+  var healthCoachThreadID: String?
 
   @Field(key: "access_token")
   var accessToken: String?

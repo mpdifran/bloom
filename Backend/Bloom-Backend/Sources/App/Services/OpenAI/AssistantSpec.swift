@@ -13,9 +13,10 @@ import Foundation
 struct AssistantSpec: Sendable {
   let id: String
   let name: String
-  let instructions: String
   let model: ModelID
   let temperature: Double
+  let threadIDKeyPath: WritableKeyPath<User, String?>
+  let instructions: String
 }
 
 // MARK: - Health Coach Spec
@@ -24,6 +25,9 @@ extension AssistantSpec {
   static let healthCoach: AssistantSpec = AssistantSpec(
     id: "assistant.health-coach",
     name: "Bud",
+    model: Model.GPT4.gpt_4o_mini,
+    temperature: 0.4,
+    threadIDKeyPath: \.healthCoachThreadID,
     instructions: """
     Your name is Bud. When responding, you may introduce yourself as Bud.
     
@@ -41,8 +45,6 @@ extension AssistantSpec {
     Provide direct, high-level insights and avoid unnecessary elaboration. Offer deeper explanations only when explicitly asked.
     
     If a user asks for more information, provide it incrementally.
-    """,
-    model: Model.GPT4.gpt_4o_mini,
-    temperature: 0.4
+    """
   )
 }

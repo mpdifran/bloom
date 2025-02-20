@@ -91,4 +91,20 @@ extension User {
         .update()
     }
   }
+
+  struct RenameThreadID: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("thread_id")
+        .field("health_coach_thread_id", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("health_coach_thread_id")
+        .field("thread_id", .string)
+        .update()
+    }
+  }
 }

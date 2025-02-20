@@ -31,7 +31,7 @@ extension OpenAIAssistantService {
       assistantSpec: assistantSpec
     )
 
-    if let threadID = user.threadID {
+    if let threadID = user[keyPath: assistantSpec.threadIDKeyPath] {
       return OpenAIAssistantThread(
         assistantID: assistant.id,
         threadID: threadID
@@ -40,8 +40,8 @@ extension OpenAIAssistantService {
 
     return try await createHealthAssistantThread(
       request,
-      user: user,
-      assistant: assistant
+      assistant: assistant,
+      assistantSpec: assistantSpec
     )
   }
 
@@ -98,12 +98,12 @@ extension OpenAIAssistantService {
     return message
   }
 
-  func deleteThread(_ request: Request) async throws {
-    guard let user = request.auth.get(User.self) else {
+  func deleteThread(_ request: Request, assistantSpec: AssistantSpec) async throws {
+    guard var user = request.auth.get(User.self) else {
       throw Abort(.unauthorized, reason: "User authentication required.")
     }
 
-    guard let threadID = user.threadID else { return }
+    guard let threadID = user[keyPath: assistantSpec.threadIDKeyPath] else { return }
 
     let response = try await request.openAI.assistants.deleteThread(threadID: threadID)
 
@@ -115,7 +115,7 @@ extension OpenAIAssistantService {
       throw Abort(.internalServerError, reason: "Failed to delete thread.")
     }
 
-    user.threadID = nil
+    user[keyPath: assistantSpec.threadIDKeyPath] = nil
 
     try await user.save(on: request.db)
   }
@@ -125,12 +125,16 @@ private extension OpenAIAssistantService {
 
   func createHealthAssistantThread(
     _ request: Request,
-    user: User,
-    assistant: Assistant
+    assistant: Assistant,
+    assistantSpec: AssistantSpec
   ) async throws -> OpenAIAssistantThread {
+    guard var user = request.auth.get(User.self) else {
+      throw Abort(.unauthorized, reason: "User authentication required.")
+    }
+
     let thread = try await request.openAI.assistants.createThread(messages: [])
 
-    user.threadID = thread.id
+    user[keyPath: assistantSpec.threadIDKeyPath] = thread.id
 
     try await user.save(on: request.db)
 

@@ -21,7 +21,7 @@ extension ChatController: RouteCollection {
         $0.group("chat") {
           $0.post("report-health-data", use: reportHealthData)
           $0.post("new-message", use: newChatMessage)
-          $0.get("delete-thread", use: deleteThread)
+          $0.post("delete-thread", use: deleteThread)
         }
       }
     }
@@ -79,7 +79,18 @@ extension ChatController {
 
   @Sendable
   func deleteThread(_ request: Request) async throws -> Response {
-    try await openAIService.deleteThread(request)
+    let body = try request.content.decode(AssistantDeleteThreadRequest.self)
+
+    let assistantSpecs = body.kinds.compactMap { kind in
+      switch kind {
+      case .healthCoach:
+        return AssistantSpec.healthCoach
+      }
+    }
+
+    for assistantSpec in assistantSpecs {
+      try await openAIService.deleteThread(request, assistantSpec: assistantSpec)
+    }
 
     return Response(status: .ok)
   }
