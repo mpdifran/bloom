@@ -143,13 +143,9 @@ struct Swipeable<Content: View>: View {
           ]
         ) {
           FoodItemLogCell(
-            foodItemLog: FoodItemLog(
-              id: UUID().uuidString,
-              date: .now,
-              meal: .breakfast,
-              numberOfServings: 2,
-              foodItem: .Preview.ritzCrackers
-            )
+            foodItem: .Preview.ritzCrackers,
+            totalCalories: 300,
+            totalServingAmount: 2
           )
         }
       }

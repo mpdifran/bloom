@@ -9,10 +9,12 @@ import SwiftUI
 import DataContainer
 
 struct FoodItemLogCell: View {
-  let foodItemLog: FoodItemLog
+  let foodItem: FoodItemRecord?
+  let totalCalories: Double
+  let totalServingAmount: Double
 
   var body: some View {
-    if let foodItem = foodItemLog.foodItem {
+    if let foodItem {
       contentView(foodItem: foodItem)
     } else {
       EmptyView()
@@ -46,7 +48,7 @@ private extension FoodItemLogCell {
 
       Spacer()
 
-      Text("\(foodItemLog.totalCalories.format()) cals")
+      Text("\(totalCalories.format()) cals")
         .font(.subheadline)
         .bold()
         .foregroundStyle(.secondary)
@@ -76,11 +78,7 @@ private extension FoodItemLogCell {
   }
 
   func servingAmountDescription(foodItem: FoodItemRecord) -> String {
-    "\(foodItemLog.totalServingAmount.format()) \(foodItem.servingUnitString ?? "")"
-  }
-
-  func servingDescription(foodItem: FoodItemRecord) -> String {
-    "\(foodItemLog.numberOfServings.format(using: .oneDecimalPlace)) servings"
+    "\(totalServingAmount.format()) \(foodItem.servingUnitString ?? "")"
   }
 }
 
@@ -88,13 +86,9 @@ private extension FoodItemLogCell {
   VStack {
     Spacer()
     FoodItemLogCell(
-      foodItemLog: FoodItemLog(
-        id: "1234",
-        date: .now,
-        meal: .breakfast,
-        numberOfServings: 2,
-        foodItem: .Preview.ritzCrackers
-      )
+      foodItem: .Preview.ritzCrackers,
+      totalCalories: 300,
+      totalServingAmount: 2
     )
     Spacer()
   }

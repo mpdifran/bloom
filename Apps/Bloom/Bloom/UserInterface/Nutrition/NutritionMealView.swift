@@ -92,7 +92,11 @@ private extension NutritionMealView {
           )
         ]
       ) {
-        FoodItemLogCell(foodItemLog: foodItemLog)
+        FoodItemLogCell(
+          foodItem: foodItemLog.foodItem,
+          totalCalories: foodItemLog.totalCalories,
+          totalServingAmount: foodItemLog.totalServingAmount
+        )
           .id(foodItemLog.id)
       }
       .onTapGesture {
