@@ -32,3 +32,4 @@ extension AdminAccuracyReportGetResponse: @retroactive Content { }
 extension AdminRegenerateAccuracyReportRequest: @retroactive Content { }
 extension ChatMessageRequest: @retroactive Content { }
 extension ChatMessageResponse: @retroactive Content { }
+extension SuggestGoalsResponse: @retroactive Content { }

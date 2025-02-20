@@ -32,4 +32,6 @@ let allMigrations: [Migration] = [
     AssistantRecord.Create(),
     User.RemoveAssistantID(),
     FoodItemIssueReport.AddFoodItemRecordIndex(),
+    User.RenameThreadID(),
+    User.AddHealthGoalSetterThreadID(),
 ]

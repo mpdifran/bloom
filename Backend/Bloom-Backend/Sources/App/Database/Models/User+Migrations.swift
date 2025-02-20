@@ -107,4 +107,18 @@ extension User {
         .update()
     }
   }
+
+  struct AddHealthGoalSetterThreadID: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("health_goal_setter_thread_id", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("health_goal_setter_thread_id")
+        .update()
+    }
+  }
 }

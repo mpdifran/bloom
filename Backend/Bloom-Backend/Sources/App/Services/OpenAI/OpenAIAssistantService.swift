@@ -80,22 +80,22 @@ extension OpenAIAssistantService {
   func startRunAndPollForResponse(
     _ request: Request,
     assistantThread: OpenAIAssistantThread
-  ) async throws -> Message {
+  ) async throws -> [Message] {
     let run = try await request.openAI.assistants.createRun(
       assistantID: assistantThread.assistantID,
       threadID: assistantThread.threadID
     )
-    let message = try await request.openAI.assistants.pollRunForAssistantResponse(
+    let (_, messages) = try await request.openAI.assistants.pollRunForAssistantResponse(
       threadID: assistantThread.threadID,
       runID: run.id,
       pollInterval: 0.5
     )
 
-    guard let message else {
+    guard messages.isNotEmpty else {
       throw Abort(.internalServerError)
     }
 
-    return message
+    return messages
   }
 
   func deleteThread(_ request: Request, assistantSpec: AssistantSpec) async throws {

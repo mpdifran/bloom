@@ -1,35 +1,22 @@
 //
-//  AssistantSpec.swift
+//  AssistantSpec+HealthCoach.swift
 //  Bloom-Backend
 //
-//  Created by Mark DiFranco on 2025-02-15.
+//  Created by Mark DiFranco on 2025-02-20.
 //
 
 import Foundation
 @preconcurrency import OpenAIKit
 
-// MARK: - AssistantSpec
-
-struct AssistantSpec: Sendable {
-  let id: String
-  let name: String
-  let model: ModelID
-  let temperature: Double
-  let threadIDKeyPath: WritableKeyPath<User, String?>
-  let instructions: String
-}
-
-// MARK: - Health Coach Spec
-
 extension AssistantSpec {
   static let healthCoach: AssistantSpec = AssistantSpec(
     id: "assistant.health-coach",
-    name: "Bud",
+    name: assistantName,
     model: Model.GPT4.gpt_4o_mini,
     temperature: 0.4,
     threadIDKeyPath: \.healthCoachThreadID,
     instructions: """
-    Your name is Bud. When responding, you may introduce yourself as Bud.
+    Your name is \(assistantName). When responding, you may introduce yourself as \(assistantName).
     
     You are a health advisor, helping users analyze and understand their health data. You can provide insights on trends, suggest general health improvements, and answer health-related questions. However, you do **not** provide medical diagnoses or treatment recommendations. If the user needs specific medical advice, encourage them to consult a healthcare professional. It is ok to provide general health advice based on the user's health data, however.
     
@@ -45,6 +32,7 @@ extension AssistantSpec {
     Provide direct, high-level insights and avoid unnecessary elaboration. Offer deeper explanations only when explicitly asked.
     
     If a user asks for more information, provide it incrementally.
-    """
+    """,
+    tools: []
   )
 }

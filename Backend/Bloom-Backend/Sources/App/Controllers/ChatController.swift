@@ -71,8 +71,13 @@ extension ChatController {
       message: body.message
     )
 
-    let assistantResponse = try await openAIService.startRunAndPollForResponse(request, assistantThread: assistantThread)
-    let messages = assistantResponse.content.compactMap({ $0.text })
+    let assistantResponse = try await openAIService.startRunAndPollForResponse(
+      request,
+      assistantThread: assistantThread
+    )
+    let messages = assistantResponse.flatMap { message in
+      message.content.compactMap({ $0.text })
+    }
 
     return ChatMessageResponse(messages: messages)
   }

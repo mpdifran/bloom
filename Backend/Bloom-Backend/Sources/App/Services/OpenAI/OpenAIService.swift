@@ -180,11 +180,11 @@ extension OpenAIService {
       do {
         return try decoder.decode(OpenAIEstimateCaloriesResponse.self, from: data)
       } catch {
-        request.logger.error(.init(stringLiteral: String(data: data, encoding: .utf8) ?? ""))
+        request.logger.error(String(data: data, encoding: .utf8) ?? "")
         throw error
       }
     } catch {
-      request.logger.error(.init(stringLiteral: error.localizedDescription))
+      request.logger.error(error)
       return nil
     }
   }
@@ -474,7 +474,7 @@ private extension OpenAIService {
 
       return try decoder.decode(OpenAIPackagingParseResponse.self, from: data)
     } catch {
-      request.logger.error(.init(stringLiteral: error.localizedDescription))
+      request.logger.error(error)
       //            request.telemetryDeck.errorOccurred(
       //                id: "OpenAIService.parsePackaging",
       //                message: error.localizedDescription

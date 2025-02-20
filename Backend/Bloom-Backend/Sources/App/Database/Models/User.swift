@@ -34,6 +34,9 @@ final class User: Model, Content, @unchecked Sendable {
   @Field(key: "health_coach_thread_id")
   var healthCoachThreadID: String?
 
+  @Field(key: "health_goal_setter_thread_id")
+  var healthGoalSetterThreadID: String?
+
   @Field(key: "access_token")
   var accessToken: String?
 
@@ -62,6 +65,8 @@ final class User: Model, Content, @unchecked Sendable {
        givenName: String? = nil,
        familyName: String? = nil,
        rawUserDetectionStatus: String? = nil,
+       healthCoachThreadID: String? = nil,
+       healthGoalSetterThreadID: String? = nil,
        accessToken: String? = nil,
        refreshToken: String? = nil,
        idToken: String? = nil,
@@ -72,6 +77,8 @@ final class User: Model, Content, @unchecked Sendable {
     self.givenName = givenName
     self.familyName = familyName
     self.rawUserDetectionStatus = rawUserDetectionStatus
+    self.healthCoachThreadID = healthCoachThreadID
+    self.healthGoalSetterThreadID = healthGoalSetterThreadID
     self.accessToken = accessToken
     self.refreshToken = refreshToken
     self.idToken = idToken
