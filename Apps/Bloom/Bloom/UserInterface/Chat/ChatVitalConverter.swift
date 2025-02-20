@@ -75,34 +75,44 @@ private extension ChatVitalConverter {
     let age = await HealthManager.shared.age()
     let sex = await HealthManager.shared.sex().name
     let height = await HealthManager.shared.height()
+    let healthGoal = await HealthManager.shared.healthGoal.name
 
     return ChatHealthData.Demographics(
       age: age,
       sex: sex,
-      height: height.chatQuantity(for: .meterUnit(with: .centi))
+      height: height.chatQuantity(for: .meterUnit(with: .centi)),
+      healthGoal: healthGoal
     )
   }
 
   func generateActivityLevel(from date: Date) async -> ChatHealthData.ActivityLevel? {
     let dateRange = DateRange.fromDateToNow(date)
 
-    let activityDetails = await HealthStoreFetcher.shared.fetchActivityLevelSummaryDetails(dateRange: dateRange)
+    let unit = HKUnit.largeCalorie()
+    let basalEnergy = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .basalEnergyBurned,
+      unit: unit,
+      dateRange: dateRange
+    )
+    let activeEnergy = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+      for: .activeEnergyBurned,
+      unit: unit,
+      dateRange: dateRange
+    )
 
-    guard activityDetails.energyRatioSamples.isNotEmpty else {
-      return nil
+    guard basalEnergy.isNotEmpty || activeEnergy.isNotEmpty else { return nil }
+
+    let basalSamples = basalEnergy.map { sample in
+      ChatHealthData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit))
+    }
+    let activeSamples = activeEnergy.map { sample in
+      ChatHealthData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit))
     }
 
-    let samples = activityDetails.energyRatioSamples.map {
-      ChatHealthData.Sample(
-        date: $0.date,
-        quantity: ChatHealthData.Quantity(
-          value: $0.value,
-          unit: "total energy / basal energy"
-        )
-      )
-    }
-
-    return ChatHealthData.ActivityLevel(activityLevelRatios: samples)
+    return ChatHealthData.ActivityLevel(
+      basalEnergyBurned: basalSamples,
+      activeEnergyBurned: activeSamples
+    )
   }
 
   func generateBodyComposition(from date: Date) async -> ChatHealthData.BodyCompostiion? {

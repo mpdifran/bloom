@@ -126,6 +126,7 @@ extension ChatHealthData {
     let age: Int?
     let sex: String?
     let height: Quantity?
+    let healthGoal: String?
   }
 }
 
@@ -133,7 +134,8 @@ extension ChatHealthData {
 
 extension ChatHealthData {
   struct ActivityLevel: SendableNetworkModel {
-    let activityLevelRatios: [Sample]
+    let basalEnergyBurned: [Sample]
+    let activeEnergyBurned: [Sample]
   }
 }
 
