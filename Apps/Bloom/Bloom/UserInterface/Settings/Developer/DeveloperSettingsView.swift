@@ -156,13 +156,16 @@ extension DeveloperSettingsView {
       Button {
         Task {
           do {
-            let jsonString = try await JSONGenerator.shared.generateJSONString()
+            let chatHealthData = await ChatVitalConverter.shared.convertHealthData()
+
+            let jsonData = try JSONEncoder().encode(chatHealthData)
+            let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
             UIPasteboard.general.string = jsonString
 
             await MainActor.run {
               alertDetails = AlertDetails(
                 title: "Copied to Clipboard",
-                message: "The data for your Vitals have been copied to your clipboard."
+                message: "Your health data has been copied to your clipboard."
               )
             }
           } catch {
@@ -173,7 +176,7 @@ extension DeveloperSettingsView {
         }
       } label: {
         HStack {
-          Text("Copy Vitals JSON to Clipboard")
+          Text("Copy Health Data to Clipboard")
           Spacer()
           DisclosureIndicator()
         }

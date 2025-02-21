@@ -18,7 +18,9 @@ extension GoalController: RouteCollection {
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1") {
       $0.auth(using: UserToken.self) {
-        $0.post("suggest-goals", use: suggestGoals)
+        $0.group("goals") {
+          $0.post("suggest-goals", use: suggestGoals)
+        }
       }
     }
   }
@@ -49,7 +51,9 @@ private extension GoalController {
 
     let assistantResponse = try await openAIService.startRunAndPollForResponse(
       request,
-      assistantThread: assistantThread
+      assistantThread: assistantThread,
+      tools: [.function(.suggestedGoal)],
+      toolChoice: body.isConversation ? .auto : .function(.Function.suggestGoal)
     )
     let contents = assistantResponse.flatMap{ $0.content }
 
@@ -62,10 +66,10 @@ private extension GoalController {
         request.logger.warning("Refusal: \(reason)")
       case .imageURL(_, _), .imageFile(_, _):
         request.logger.warning("Image returned")
-      case .functionCall(let callID, let functionName, let arguments):
+      case .functionCall(_, let functionName, let arguments):
         request.logger.info("Function call")
         switch functionName {
-        case "suggestGoal":
+        case .Function.suggestGoal:
           guard let data = arguments.data(using: .utf8) else { continue }
 
           let decoder = JSONDecoder()
