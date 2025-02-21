@@ -75,11 +75,16 @@ extension ChatController {
       request,
       assistantThread: assistantThread
     )
-    let messages = assistantResponse.flatMap { message in
-      message.content.compactMap({ $0.text })
-    }
 
-    return ChatMessageResponse(messages: messages)
+    switch assistantResponse {
+    case .requiresAction(_, _):
+      throw Abort(.internalServerError, reason: "Unexpected tool call.")
+    case .messages(_, let messages):
+      let textMessages = messages.flatMap { message in
+        message.content.compactMap({ $0.text })
+      }
+      return ChatMessageResponse(messages: textMessages)
+    }
   }
 
   @Sendable

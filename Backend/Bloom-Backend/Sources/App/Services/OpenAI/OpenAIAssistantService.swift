@@ -77,29 +77,52 @@ extension OpenAIAssistantService {
     )
   }
 
+  func createRun(
+    _ request: Request,
+    assistantThread: OpenAIAssistantThread,
+    tools: [Assistant.Tool]? = nil,
+    toolChoice: Run.ToolChoice? = nil
+  ) async throws -> Run {
+    try await request.openAI.assistants.createRun(
+      assistantID: assistantThread.assistantID,
+      threadID: assistantThread.threadID,
+      tools: tools,
+      toolChoice: toolChoice
+    )
+  }
+
   func startRunAndPollForResponse(
     _ request: Request,
     assistantThread: OpenAIAssistantThread,
     tools: [Assistant.Tool]? = nil,
     toolChoice: Run.ToolChoice? = nil
-  ) async throws -> [Message] {
+  ) async throws -> PollRunResponse {
     let run = try await request.openAI.assistants.createRun(
       assistantID: assistantThread.assistantID,
       threadID: assistantThread.threadID,
       tools: tools,
       toolChoice: toolChoice
     )
-    let (_, messages) = try await request.openAI.assistants.pollRunForAssistantResponse(
+    return try await request.openAI.assistants.pollRunForAssistantResponse(
       threadID: assistantThread.threadID,
       runID: run.id,
       pollInterval: 1
     )
+  }
 
-    guard messages.isNotEmpty else {
-      throw Abort(.internalServerError)
-    }
-
-    return messages
+  @discardableResult
+  func submitSuccessfulToolOputput(
+    _ request: Request,
+    threadID: String,
+    runID: String,
+    toolCalls: [Run.ToolCall]
+  ) async throws -> Run {
+    let toolOutputs = toolCalls.map { ToolOutput(toolCallID: $0.id, output: "") }
+    return try await request.openAI.assistants.submitToolOutput(
+      threadID: threadID,
+      runID: runID,
+      toolOutputs: toolOutputs
+    )
   }
 
   func deleteThread(_ request: Request, assistantSpec: AssistantSpec) async throws {

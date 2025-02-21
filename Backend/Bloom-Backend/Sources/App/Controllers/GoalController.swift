@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import BloomModel
+import OpenAIKit
 
 struct GoalController {
   private let openAIService = OpenAIAssistantService()
@@ -49,28 +50,39 @@ private extension GoalController {
       message: "Please take a look at my current goals and health metrics, and suggest edits to my goals, or suggest new goals. "
     )
 
-    let assistantResponse = try await openAIService.startRunAndPollForResponse(
+    let run = try await openAIService.createRun(
       request,
       assistantThread: assistantThread,
       tools: [.function(.suggestedGoal)],
       toolChoice: body.isConversation ? .auto : .function(.Function.suggestGoal)
     )
-    let contents = assistantResponse.flatMap{ $0.content }
 
-    var suggestedGoals = [SuggestedGoal]()
-    for content in contents {
-      switch content {
-      case .text(let text):
-        request.logger.info(text)
-      case .refusal(let reason):
-        request.logger.warning("Refusal: \(reason)")
-      case .imageURL(_, _), .imageFile(_, _):
-        request.logger.warning("Image returned")
-      case .functionCall(_, let functionName, let arguments):
-        request.logger.info("Function call")
-        switch functionName {
+    return try await recursivelyPollRun(
+      request,
+      assistantThread: assistantThread,
+      run: run
+    )
+  }
+
+  func recursivelyPollRun(
+    _ request: Request,
+    assistantThread: OpenAIAssistantThread,
+    run: Run,
+    suggestedGoals: [SuggestedGoal] = []
+  ) async throws -> SuggestGoalsResponse {
+    let assistantResponse = try await request.openAI.assistants.pollRunForAssistantResponse(
+      threadID: assistantThread.threadID,
+      runID: run.id
+    )
+
+    var suggestedGoals = suggestedGoals
+
+    switch assistantResponse {
+    case .requiresAction(let run, let toolCalls):
+      for toolCall in toolCalls {
+        switch toolCall.function.name {
         case .Function.suggestGoal:
-          guard let data = arguments.data(using: .utf8) else { continue }
+          guard let data = toolCall.function.arguments.data(using: .utf8) else { continue }
 
           let decoder = JSONDecoder()
           do {
@@ -85,14 +97,29 @@ private extension GoalController {
             )
           } catch {
             request.logger.error(error)
-            request.logger.error(arguments)
+            request.logger.error(toolCall.function.arguments)
           }
         default:
-          request.logger.warning("Unknown function call: \(functionName) arguments: \(arguments)")
+          request.logger.warning("Unknown function call: \(toolCall.function.name) arguments: \(toolCall.function.arguments)")
         }
       }
-    }
 
-    return SuggestGoalsResponse(goals: suggestedGoals)
+      let run = try await openAIService.submitSuccessfulToolOputput(
+        request,
+        threadID: assistantThread.threadID,
+        runID: run.id,
+        toolCalls: toolCalls
+      )
+
+      return try await recursivelyPollRun(
+        request,
+        assistantThread: assistantThread,
+        run: run,
+        suggestedGoals: suggestedGoals
+      )
+    case .messages(_, let messages):
+      // This means the run completed.
+      return SuggestGoalsResponse(goals: suggestedGoals)
+    }
   }
 }
