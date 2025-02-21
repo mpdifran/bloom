@@ -41,13 +41,13 @@ public extension SuggestedGoal {
 
 public extension SuggestedGoal {
   enum Unit: String, Codable, Equatable, Sendable, CaseIterable {
+    case g
     case mg
     case mcg
-    case g
     case steps
     case mL
-    case minute
-    case hour
+    case min
+    case hr
     case oz
     case km
     case mi
