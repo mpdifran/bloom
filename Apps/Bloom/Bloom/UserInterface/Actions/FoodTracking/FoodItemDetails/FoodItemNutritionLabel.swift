@@ -19,7 +19,7 @@ struct FoodItemNutritionLabel: View {
         .fontDesign(.rounded)
         .bold()
         .horizontallyCentered()
-        .padding(.vertical)
+        .padding(.bottom)
 
       NutritionLine(
         name: "Calories",

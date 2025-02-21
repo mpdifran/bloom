@@ -58,11 +58,13 @@ struct FoodItemDetailsView: View {
           editSection
 
           FoodItemNutritionLabel(foodItem: foodItem)
+            .cardContainer()
 
           accuracySection
         }
         .padding()
       }
+      .groupedBackground()
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button("Done") {
@@ -122,11 +124,13 @@ private extension FoodItemDetailsView {
             }
           }
           .font(.title)
+          .fontDesign(.rounded)
           .bold()
 
           if let flavour = foodItem.flavour {
             Text(flavour)
               .font(.body)
+              .fontDesign(.rounded)
               .foregroundStyle(.secondary)
           }
         }
@@ -140,6 +144,7 @@ private extension FoodItemDetailsView {
               .foregroundStyle(.mutedGreen)
               .bold()
           }
+          .fontDesign(.rounded)
         }
       }
       .padding(.horizontal)
@@ -173,7 +178,7 @@ private extension FoodItemDetailsView {
         numberOfServings: numberOfServings
       )
     }
-    .cardContainer(fill: .background.secondary)
+    .cardContainer()
   }
 
   var editSection: some View {
@@ -233,7 +238,7 @@ private extension FoodItemDetailsView {
       .frame(minHeight: 60)
     }
     .padding(.horizontal)
-    .cardContainer(fill: .background.secondary, includePadding: false)
+    .cardContainer(includePadding: false)
   }
 
   var accuracySection: some View {
@@ -250,7 +255,7 @@ private extension FoodItemDetailsView {
       }
     }
     .bold()
-    .cardContainer(fill: .background.secondary)
+    .cardContainer()
   }
 
   var foodItemMenu: some View {
