@@ -11,8 +11,12 @@ import HealthKit
 extension FoodItem.Quantity {
 
   var hkQuantity: HKQuantity {
-    let unit = HKUnit(from: unit)
-    return HKQuantity(unit: unit, doubleValue: value)
+    let hkUnit = HKUnit(from: unit)
+    return HKQuantity(unit: hkUnit, doubleValue: value)
+  }
+
+  func doubleValue(for unit: HKUnit) -> Double {
+    hkQuantity.doubleValue(for: unit)
   }
 }
 

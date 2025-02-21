@@ -52,8 +52,8 @@ extension SchemaV8 {
     public var category: Category?
     public var isVerified: Bool = false
 
+    // If adding more relationships, make sure to update ModelContext+Helpers.swift merge(foodItems:) function.
     public var servings: [FoodItemServing]? = []
-
     public var mealItems: [MealItemRecord]? = []
 
     public init(

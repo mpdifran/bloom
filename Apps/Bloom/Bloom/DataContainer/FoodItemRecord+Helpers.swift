@@ -17,29 +17,29 @@ extension FoodItemRecord {
       brandName: foodItem.brandName ?? "",
       flavour: foodItem.flavour ?? "",
       rawCountry: foodItem.country?.rawValue,
-      calories: foodItem.calories?.value ?? 0,
-      protein: foodItem.protein?.value ?? 0,
-      carbohydrates: foodItem.carbohydrates?.value ?? 0,
-      fat: foodItem.fat?.value ?? 0,
-      saturatedFat: foodItem.saturatedFat?.value,
-      transFat: foodItem.transFat?.value,
-      polyunsaturatedFat: foodItem.polyunsaturatedFat?.value,
-      monounsaturatedFat: foodItem.monounsaturatedFat?.value,
-      fiber: foodItem.fiber?.value,
-      sugar: foodItem.sugar?.value,
-      cholesterol: foodItem.cholesterol?.value,
-      sodium: foodItem.sodium?.value,
-      calcium: foodItem.calcium?.value,
-      iron: foodItem.iron?.value,
-      potassium: foodItem.potassium?.value,
-      magnesium: foodItem.magnesium?.value,
-      zinc: foodItem.zinc?.value,
-      vitaminA: foodItem.vitaminA?.value,
-      vitaminB6: foodItem.vitaminB6?.value,
-      vitaminB12: foodItem.vitaminB12?.value,
-      vitaminC: foodItem.vitaminC?.value,
-      vitaminD: foodItem.vitaminD?.value,
-      vitaminE: foodItem.vitaminE?.value,
+      calories: foodItem.calories?.doubleValue(for: .largeCalorie()) ?? 0,
+      protein: foodItem.protein?.doubleValue(for: .gram()) ?? 0,
+      carbohydrates: foodItem.carbohydrates?.doubleValue(for: .gram()) ?? 0,
+      fat: foodItem.fat?.doubleValue(for: .gram()) ?? 0,
+      saturatedFat: foodItem.saturatedFat?.doubleValue(for: .gram()),
+      transFat: foodItem.transFat?.doubleValue(for: .gram()),
+      polyunsaturatedFat: foodItem.polyunsaturatedFat?.doubleValue(for: .gram()),
+      monounsaturatedFat: foodItem.monounsaturatedFat?.doubleValue(for: .gram()),
+      fiber: foodItem.fiber?.doubleValue(for: .gram()),
+      sugar: foodItem.sugar?.doubleValue(for: .gram()),
+      cholesterol: foodItem.cholesterol?.doubleValue(for: .gramUnit(with: .milli)),
+      sodium: foodItem.sodium?.doubleValue(for: .gramUnit(with: .milli)),
+      calcium: foodItem.calcium?.doubleValue(for: .gramUnit(with: .milli)),
+      iron: foodItem.iron?.doubleValue(for: .gramUnit(with: .milli)),
+      potassium: foodItem.potassium?.doubleValue(for: .gramUnit(with: .milli)),
+      magnesium: foodItem.magnesium?.doubleValue(for: .gramUnit(with: .milli)),
+      zinc: foodItem.zinc?.doubleValue(for: .gramUnit(with: .milli)),
+      vitaminA: foodItem.vitaminA?.doubleValue(for: .gramUnit(with: .milli)),
+      vitaminB6: foodItem.vitaminB6?.doubleValue(for: .gramUnit(with: .milli)),
+      vitaminB12: foodItem.vitaminB12?.doubleValue(for: .gramUnit(with: .milli)),
+      vitaminC: foodItem.vitaminC?.doubleValue(for: .gramUnit(with: .milli)),
+      vitaminD: foodItem.vitaminD?.doubleValue(for: .gramUnit(with: .milli)),
+      vitaminE: foodItem.vitaminE?.doubleValue(for: .gramUnit(with: .milli)),
       servingName: foodItem.servingName,
       servingUnitString: foodItem.servingQuantity?.unit,
       servingValue: foodItem.servingQuantity?.value,
@@ -49,41 +49,147 @@ extension FoodItemRecord {
     )
   }
 
-  func apply(foodItem: FoodItem) {
-    self.id = foodItem.id.value
-    self.name = foodItem.name
-    self.brandName = foodItem.brandName ?? ""
-    self.flavour = foodItem.flavour ?? ""
-    self.rawCountry = foodItem.country?.rawValue
-    self.calories = foodItem.calories?.value ?? 0
-    self.protein = foodItem.protein?.value ?? 0
-    self.carbohydrates = foodItem.carbohydrates?.value ?? 0
-    self.fat = foodItem.fat?.value ?? 0
-    self.saturatedFat = foodItem.saturatedFat?.value
-    self.transFat = foodItem.transFat?.value
-    self.polyunsaturatedFat = foodItem.polyunsaturatedFat?.value
-    self.monounsaturatedFat = foodItem.monounsaturatedFat?.value
-    self.fiber = foodItem.fiber?.value
-    self.sugar = foodItem.sugar?.value
-    self.cholesterol = foodItem.cholesterol?.value
-    self.sodium = foodItem.sodium?.value
-    self.calcium = foodItem.calcium?.value
-    self.iron = foodItem.iron?.value
-    self.potassium = foodItem.potassium?.value
-    self.magnesium = foodItem.magnesium?.value
-    self.zinc = foodItem.zinc?.value
-    self.vitaminA = foodItem.vitaminA?.value
-    self.vitaminB6 = foodItem.vitaminB6?.value
-    self.vitaminB12 = foodItem.vitaminB12?.value
-    self.vitaminC = foodItem.vitaminC?.value
-    self.vitaminD = foodItem.vitaminD?.value
-    self.vitaminE = foodItem.vitaminE?.value
-    self.servingName = foodItem.servingName
-    self.servingUnitString = foodItem.servingQuantity?.unit
-    self.servingValue = foodItem.servingQuantity?.value
-    self.ingredients = foodItem.ingredients
-    self.category = Category(rawValue: foodItem.category.rawValue)
-    self.isVerified = foodItem.isVerified
+  func apply(foodItem: FoodItem) -> Bool {
+    var didChange = false
+
+    if self.id != foodItem.id.value {
+      self.id = foodItem.id.value
+      didChange = true
+    }
+    if self.name != foodItem.name {
+      self.name = foodItem.name
+      didChange = true
+    }
+    if self.brandName != foodItem.brandName ?? "" {
+      self.brandName = foodItem.brandName ?? ""
+      didChange = true
+    }
+    if self.flavour != foodItem.flavour ?? "" {
+      self.flavour = foodItem.flavour ?? ""
+      didChange = true
+    }
+    if self.rawCountry != foodItem.country?.rawValue {
+      self.rawCountry = foodItem.country?.rawValue
+      didChange = true
+    }
+    if self.calories != foodItem.calories?.doubleValue(for: .largeCalorie()) ?? 0 {
+      self.calories = foodItem.calories?.doubleValue(for: .largeCalorie()) ?? 0
+      didChange = true
+    }
+    if self.protein != foodItem.protein?.doubleValue(for: .gram()) ?? 0 {
+      self.protein = foodItem.protein?.doubleValue(for: .gram()) ?? 0
+      didChange = true
+    }
+    if self.carbohydrates != foodItem.carbohydrates?.doubleValue(for: .gram()) ?? 0 {
+      self.carbohydrates = foodItem.carbohydrates?.doubleValue(for: .gram()) ?? 0
+      didChange = true
+    }
+    if self.fat != foodItem.fat?.doubleValue(for: .gram()) ?? 0 {
+      self.fat = foodItem.fat?.doubleValue(for: .gram()) ?? 0
+      didChange = true
+    }
+    if self.saturatedFat != foodItem.saturatedFat?.doubleValue(for: .gram()) {
+      self.saturatedFat = foodItem.saturatedFat?.doubleValue(for: .gram())
+      didChange = true
+    }
+    if self.transFat != foodItem.transFat?.doubleValue(for: .gram()) {
+      self.transFat = foodItem.transFat?.doubleValue(for: .gram())
+      didChange = true
+    }
+    if self.polyunsaturatedFat != foodItem.polyunsaturatedFat?.doubleValue(for: .gram()) {
+      self.polyunsaturatedFat = foodItem.polyunsaturatedFat?.doubleValue(for: .gram())
+      didChange = true
+    }
+    if self.monounsaturatedFat != foodItem.monounsaturatedFat?.doubleValue(for: .gram()) {
+      self.monounsaturatedFat = foodItem.monounsaturatedFat?.doubleValue(for: .gram())
+      didChange = true
+    }
+    if self.fiber != foodItem.fiber?.doubleValue(for: .gram()) {
+      self.fiber = foodItem.fiber?.doubleValue(for: .gram())
+      didChange = true
+    }
+    if self.sugar != foodItem.sugar?.doubleValue(for: .gram()) {
+      self.sugar = foodItem.sugar?.doubleValue(for: .gram())
+      didChange = true
+    }
+    if self.cholesterol != foodItem.cholesterol?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.cholesterol = foodItem.cholesterol?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.sodium != foodItem.sodium?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.sodium = foodItem.sodium?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.calcium != foodItem.calcium?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.calcium = foodItem.calcium?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.iron != foodItem.iron?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.iron = foodItem.iron?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.potassium != foodItem.potassium?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.potassium = foodItem.potassium?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.magnesium != foodItem.magnesium?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.magnesium = foodItem.magnesium?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.zinc != foodItem.zinc?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.zinc = foodItem.zinc?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.vitaminA != foodItem.vitaminA?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.vitaminA = foodItem.vitaminA?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.vitaminB6 != foodItem.vitaminB6?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.vitaminB6 = foodItem.vitaminB6?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.vitaminB12 != foodItem.vitaminB12?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.vitaminB12 = foodItem.vitaminB12?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.vitaminC != foodItem.vitaminC?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.vitaminC = foodItem.vitaminC?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.vitaminD != foodItem.vitaminD?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.vitaminD = foodItem.vitaminD?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.vitaminE != foodItem.vitaminE?.doubleValue(for: .gramUnit(with: .milli)) {
+      self.vitaminE = foodItem.vitaminE?.doubleValue(for: .gramUnit(with: .milli))
+      didChange = true
+    }
+    if self.servingName != foodItem.servingName {
+      self.servingName = foodItem.servingName
+      didChange = true
+    }
+    if self.servingUnitString != foodItem.servingQuantity?.unit {
+      self.servingUnitString = foodItem.servingQuantity?.unit
+      didChange = true
+    }
+    if self.servingValue != foodItem.servingQuantity?.value {
+      self.servingValue = foodItem.servingQuantity?.value
+      didChange = true
+    }
+    if self.ingredients != foodItem.ingredients {
+      self.ingredients = foodItem.ingredients
+      didChange = true
+    }
+    if self.category?.rawValue != foodItem.category.rawValue {
+      self.category = Category(rawValue: foodItem.category.rawValue)
+      didChange = true
+    }
+    if self.isVerified != foodItem.isVerified {
+      self.isVerified = foodItem.isVerified
+      didChange = true
+    }
+
+    return didChange
   }
 }
 
@@ -106,7 +212,7 @@ extension FoodItemRecord {
       brandName: brandName,
       flavour: flavour,
       country: FoodItem.Country(rawValue: rawCountry ?? ""),
-      calories: FoodItem.Quantity(value: calories, unit: "kcal"),
+      calories: FoodItem.Quantity(value: calories, unit: "Cal"),
       protein: FoodItem.Quantity(value: protein, unit: "g"),
       carbohydrates: FoodItem.Quantity(value: carbohydrates, unit: "g"),
       fat: FoodItem.Quantity(value: fat, unit: "g"),
@@ -141,5 +247,9 @@ extension FoodItemRecord {
     guard let dbCategory = self.category else { return .generic }
 
     return FoodItem.Category(rawValue: dbCategory.rawValue) ?? .generic
+  }
+
+  func logDates() -> [Date] {
+    servings?.compactMap({ $0.foodItemLog?.date }) ?? []
   }
 }

@@ -108,20 +108,28 @@ extension NutritionTrackingViewModel {
     date: Date,
     meal: FoodItemLog.Meal
   ) async throws {
+    var dates = [Date]()
     try modelContext.transaction {
       for serving in foodItemServings {
         let dbFoodItem: FoodItemRecord
-        if let existingFoodItem = try modelContext.fetchFoodItem(for: serving.foodItem.id.value) {
-          dbFoodItem = existingFoodItem
-          dbFoodItem.apply(foodItem: serving.foodItem)
+        let existingFoodItems = try modelContext.fetchAllFoodItem(for: serving.foodItem.id.value)
+        if existingFoodItems.isNotEmpty, let foodItem = try modelContext.merge(existingFoodItems) {
+          dbFoodItem = foodItem
+          if dbFoodItem.apply(foodItem: serving.foodItem) {
+            // If we updated the food item properties, we should resync every day it was logged.
+            dates.append(contentsOf: dbFoodItem.logDates())
+          }
         } else {
           dbFoodItem = FoodItemRecord(foodItem: serving.foodItem)
           modelContext.insert(dbFoodItem)
         }
 
+        let logDate = calculateDate(for: meal, from: date)
+        dates.append(logDate)
+
         let foodItemLog = FoodItemLog(
           id: UUID().uuidString,
-          date: calculateDate(for: meal, from: date),
+          date: logDate,
           meal: meal,
           numberOfServings: serving.serving,
           foodItem: dbFoodItem
@@ -131,7 +139,9 @@ extension NutritionTrackingViewModel {
       }
     }
 
-    try await HealthStoreModifier.shared.updateNutrition(for: date)
+    for updateDate in dates {
+      try await HealthStoreModifier.shared.updateNutrition(for: updateDate)
+    }
 
     TelemetryDeck.signal(
       "Logged Food Item",
