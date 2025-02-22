@@ -1,5 +1,5 @@
 {
-  "originHash" : "2d045863c172fa777d9660155d6456eb4befe6fc013c23435353a364f005565e",
+  "originHash" : "dad0bef0453793aa371408fa628e5b9a78c645b5934a29b3d042b975c3dbc95b",
   "pins" : [
     {
       "identity" : "apns",
@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "0d47f284f80ed159bf1f256a1e8fb0030f478ea5",
-        "version" : "1.2.0"
+        "revision" : "1a1ffc42b09d55ac119a90ca6d3f6779bdeb2a0f",
+        "version" : "1.2.2"
       }
     },
     {
@@ -204,8 +204,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
       "state" : {
-        "revision" : "1467e98e21bbe67e14ac04da34d71b09f08eba08",
-        "version" : "5.17.0"
+        "revision" : "48f72340a22d13d6fd09a6bef0cba541109c111b",
+        "version" : "5.18.0"
       }
     },
     {

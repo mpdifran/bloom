@@ -70,7 +70,8 @@ private extension GoalController {
   ) async throws -> SuggestGoalsResponse {
     let assistantResponse = try await request.openAI.assistants.pollRunForAssistantResponse(
       threadID: assistantThread.threadID,
-      runID: run.id
+      runID: run.id,
+      pollInterval: 0.5
     )
 
     var suggestedGoals = suggestedGoals

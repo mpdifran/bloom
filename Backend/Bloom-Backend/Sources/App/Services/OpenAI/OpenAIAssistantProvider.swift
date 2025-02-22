@@ -70,7 +70,8 @@ private extension OpenAIAssistantProvider {
       assistant.name == assistantSpec.name,
       assistant.instructions == assistantSpec.instructions,
       assistant.model == assistantSpec.model.id,
-      assistant.temperature == assistantSpec.temperature
+      assistant.temperature == assistantSpec.temperature,
+      assistant.tools == assistantSpec.tools
     else {
       request.logger.info("Updating Assistant \(assistantSpec.id)")
       let updatedAssistant = try await request.openAI.assistants.modifyAssistant(
@@ -78,6 +79,7 @@ private extension OpenAIAssistantProvider {
         model: assistantSpec.model,
         name: assistantSpec.name,
         instructions: assistantSpec.instructions,
+        tools: assistantSpec.tools,
         temperature: assistantSpec.temperature
       )
 

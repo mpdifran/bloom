@@ -7,7 +7,13 @@
 
 import Foundation
 import DataContainer
+import BloomFoundation
 import BloomModel
+import HealthKit
+
+private extension Int {
+  static let goalHistoryDays: Int = 30
+}
 
 final actor ChatGoalConverter {
   static let shared = ChatGoalConverter()
@@ -23,30 +29,86 @@ extension ChatGoalConverter {
     do {
       let activeGoals = try await modelActor.fetchActiveHabits()
 
-      let excludedTargetMetrics = [
-        TargetMetric.calories,
-        TargetMetric.proteinIntake
-      ]
-      let goals = activeGoals
-        .filter {
-          !excludedTargetMetrics.contains($0.targetMetric)
-        }
-        .compactMap { targetMetric -> GoalSummary? in
-          guard let metric = targetMetric.targetMetric.metric else { return nil }
+      let targetMetrics = activeGoals.compactMap { goal -> TargetMetric? in
+        guard goal.targetMetric.metric != nil else { return nil }
 
-          return GoalSummary(
-            metric: metric,
-            value: targetMetric.value,
-            unit: targetMetric.unit.sensibleUnitString
-          )
-        }
+        return goal.targetMetric
+      }
 
-      return CurrentGoalsData(currentGoals: goals)
+      var goalSummaries = [GoalSummary]()
+      for targetMetric in targetMetrics {
+        let summaries = try await createGoalSummaries(for: targetMetric)
+        goalSummaries.append(contentsOf: summaries)
+      }
+
+      return CurrentGoalsData(currentGoals: goalSummaries)
     } catch {
       print(error)
     }
     return nil
   }
+}
+
+private extension ChatGoalConverter {
+
+  func createGoalSummaries(for targetMetric: TargetMetric) async throws -> [GoalSummary] {
+
+    guard let metric = targetMetric.metric else { return [] }
+
+    let habits = try await modelActor.fetchHabits(for: targetMetric)
+    let dateRange = DateRange.trailingDaysFromNow(.goalHistoryDays)
+
+    let samples = await targetMetric.fetchCollatedDailyQuantity(
+      unit: targetMetric.defaultUnit,
+      dateRange: dateRange
+    )
+
+    var goalSummaries = [GoalSummary]()
+    var currentHabit: HabitDTO?
+    var currentDates = [String]()
+    Calendar.current.iterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
+      if currentHabit?.isDateWithinHabit(date: date) != true {
+        let newHabit = habits.first { $0.isDateWithinHabit(date: date) }
+        if let currentHabit, (currentHabit.value != newHabit?.value || currentHabit.unitString != newHabit?.unitString) {
+          goalSummaries.append(
+            createGoalSummary(from: currentHabit, metric: metric, dates: currentDates)
+          )
+          currentDates = []
+        }
+        currentHabit = newHabit
+      }
+
+      guard let currentHabit else { return }
+      guard let sample = samples.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) }) else { return }
+
+      if currentHabit.quantityMeetsGoal(sample.quantity) {
+        currentDates.append(DateFormatter.justDateShort.string(from: date))
+      }
+    }
+
+    if let currentHabit {
+      goalSummaries.append(
+        createGoalSummary(from: currentHabit, metric: metric, dates: currentDates)
+      )
+    }
+
+    return goalSummaries
+  }
+}
+
+func createGoalSummary(
+  from habit: HabitDTO,
+  metric: SuggestedGoal.Metric,
+  dates: [String]
+) -> GoalSummary {
+  GoalSummary(
+    metric: metric,
+    value: habit.value,
+    unit: habit.unit.sensibleUnitString,
+    startDate: habit.startDate,
+    endDate: habit.endDate,
+    goalMetOnDates: dates
+  )
 }
 
 extension TargetMetric {

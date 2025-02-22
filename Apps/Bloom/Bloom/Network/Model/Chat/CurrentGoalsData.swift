@@ -16,4 +16,7 @@ struct GoalSummary: Codable, Equatable, Sendable {
   let metric: SuggestedGoal.Metric
   let value: Double
   let unit: String
+  let startDate: Date
+  let endDate: Date?
+  let goalMetOnDates: [String]
 }
