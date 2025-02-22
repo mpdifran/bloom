@@ -49,7 +49,7 @@ extension HKUnit {
   var sensibleUnitString: String {
     switch self {
     case .count():
-      "Steps"
+      "steps"
     case.fluidOunceUS():
       "oz"
     case .fluidOunceImperial():

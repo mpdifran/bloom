@@ -10,27 +10,34 @@ import Foundation
 public struct SuggestedGoal: Codable, Equatable, Sendable {
   public let metric: Metric
   public let value: Double
-  public let unit: String
+  public let unit: Unit
+  public let summary: String
 
   public init(
     metric: Metric,
     value: Double,
-    unit: String
+    unit: Unit,
+    summary: String
   ) {
     self.metric = metric
     self.value = value
     self.unit = unit
+    self.summary = summary
   }
 }
 
 public extension SuggestedGoal {
   enum Metric: String, Codable, Equatable, Sendable, CaseIterable {
-    case steps
     case waterIntake
-    case exerciseMinutes
     case fiberIntake
+    case meditationMinutes
+    case exerciseMinutes
+    case stepCount
+    case walkingRunningDistance
+    case runDistance
+    case runDuration
     case bikeDistance
-    case runningDistance
+    case bikeDuration
     case targetHeartRateZone1Minutes
     case targetHeartRateZone2Minutes
     case targetHeartRateZone3Minutes

@@ -38,16 +38,14 @@ private extension GoalController {
       assistantSpec: .healthGoalSetterSpec
     )
 
-    try await openAIService.reportHealthData(
+    try await openAIService.sendUserContent(
       request,
       assistantThread: assistantThread,
-      healthData: body.healthData
-    )
-
-    try await openAIService.sendChatMessage(
-      request,
-      assistantThread: assistantThread,
-      message: "Please take a look at my current goals and health metrics, and suggest edits to my goals, or suggest new goals. "
+      content: [
+        .text("Here is my health data: \n\n```\n\(body.healthData)\n```"),
+        .text("Here are my current goals: \n\n```\n\(body.currentGoals)\n```"),
+        .text("Please take a look at my current goals and health metrics, and suggest edits to my goals, or suggest new goals.")
+      ]
     )
 
     let run = try await openAIService.createRun(
@@ -86,15 +84,9 @@ private extension GoalController {
 
           let decoder = JSONDecoder()
           do {
-            let typedArguments = try decoder.decode(SuggestGoalArguments.self, from: data)
+            let suggestedGoal = try decoder.decode(SuggestedGoal.self, from: data)
 
-            suggestedGoals.append(
-              SuggestedGoal(
-                metric: typedArguments.metric,
-                value: typedArguments.value,
-                unit: typedArguments.unit
-              )
-            )
+            suggestedGoals.append(suggestedGoal)
           } catch {
             request.logger.error(error)
             request.logger.error(toolCall.function.arguments)

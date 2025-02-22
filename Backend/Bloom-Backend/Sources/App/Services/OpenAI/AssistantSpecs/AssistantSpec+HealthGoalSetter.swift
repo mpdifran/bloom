@@ -50,12 +50,17 @@ extension Assistant.Tool.Function {
           type: .string,
           description: "The unit to measure the goal with.",
           enum: SuggestedGoal.Unit.self
+        ),
+        "summary" : Assistant.Tool.Function.Parameter(
+          type: .string,
+          description: "The rationale behind recommending this goal."
         )
       ],
       required: [
         "metric",
         "value",
-        "unit"
+        "unit",
+        "summary"
       ]
     )
   )
@@ -65,10 +70,4 @@ extension String {
   enum Function {
     static let suggestGoal = "suggestGoal"
   }
-}
-
-struct SuggestGoalArguments: Decodable, Sendable, Equatable {
-  let metric: SuggestedGoal.Metric
-  let value: Double
-  let unit: String
 }

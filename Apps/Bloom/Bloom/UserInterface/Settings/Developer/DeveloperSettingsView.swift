@@ -182,6 +182,36 @@ extension DeveloperSettingsView {
         }
       }
       .buttonStyle(.plain)
+
+      Button {
+        Task {
+          do {
+            let goalsData = await ChatGoalConverter.shared.convertGoalData()
+
+            let jsonData = try JSONEncoder().encode(goalsData)
+            let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
+            UIPasteboard.general.string = jsonString
+
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Copied to Clipboard",
+                message: "Your current goals have been copied to your clipboard."
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
+          }
+        }
+      } label: {
+        HStack {
+          Text("Copy Goals to Clipboard")
+          Spacer()
+          DisclosureIndicator()
+        }
+      }
+      .buttonStyle(.plain)
     }
   }
 

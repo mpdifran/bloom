@@ -62,9 +62,9 @@ private extension ChatVitalConverter {
   }
 
   func determineSearchStartDate() -> Date {
-    if let lastDate = lastHealthConversionDate {
-      return max(maxHistoricalDate, lastDate)
-    }
+//    if let lastDate = lastHealthConversionDate {
+//      return max(maxHistoricalDate, lastDate)
+//    }
     return maxHistoricalDate
   }
 }

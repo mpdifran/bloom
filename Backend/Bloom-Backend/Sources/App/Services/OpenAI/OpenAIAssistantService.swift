@@ -45,6 +45,20 @@ extension OpenAIAssistantService {
     )
   }
 
+  func sendUserContent(
+    _ request: Request,
+    assistantThread: OpenAIAssistantThread,
+    content: [OpenAIKit.Thread.Message.Content]
+  ) async throws {
+    let _ = try await request.openAI.assistants.createMessage(
+      threadID: assistantThread.threadID,
+      message: Thread.Message(
+        role: .user,
+        content: content
+      )
+    )
+  }
+
   func reportHealthData(
     _ request: Request,
     assistantThread: OpenAIAssistantThread,
