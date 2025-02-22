@@ -120,7 +120,6 @@ extension NutritionMonthlySummary {
     let averageCholesterol: HKQuantity?
     let averageFiber: HKQuantity?
     let averageSugar: HKQuantity?
-    let averageWater: HKQuantity?
   }
 
   enum NetEnergyStatus {
@@ -430,7 +429,6 @@ extension NutritionMonthlySummary.Details {
     let other = [
       fiberScore,
       sugarScore,
-      waterScore,
       cholesterolScore
     ].compactMap({ $0 })
 
@@ -478,29 +476,6 @@ extension NutritionMonthlySummary.Details {
   //
   //        return average.scaledPercent(lower: goal * 2, upper: goal)
   //    }
-
-  var waterStatus: String? {
-    guard
-      let average = averageWater?.doubleValue(for: .literUnit(with: .milli)),
-      average > 0
-    else { return nil }
-
-    if average < 1000 {
-      return "Dehydrated"
-    } else if average < 2000 {
-      return "Slightly Dehydrated"
-    }
-    return "Hydrated"
-  }
-
-  var waterScore: Double? {
-    guard
-      let average = averageWater?.doubleValue(for: .literUnit(with: .milli)),
-      average > 0
-    else { return nil }
-
-    return average.scaledPercent(lower: 0, upper: 2000) // TODO: Make this more official
-  }
 
   func vitaminScore() async -> Double? {
     let vitamins = [

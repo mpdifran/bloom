@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 import TelemetryDeck
+import HealthKit
 
 struct BowelMovementsDetailView: View {
 
@@ -15,6 +16,10 @@ struct BowelMovementsDetailView: View {
 
   @State private var presentedSheet: AnyView?
   @State private var selectedBristolType = 0
+
+  @State private var dailyWater = [DateQuantitySample]()
+  @State private var averageWater: HKQuantity?
+  @State private var dailyFiber = [DateQuantitySample]()
 
   var body: some View {
     Group {
@@ -31,6 +36,28 @@ struct BowelMovementsDetailView: View {
     .onAppear {
       TelemetryDeck.viewScreen("Bowel Movements Vital Details")
     }
+    .task {
+      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+        for: .dietaryFiber,
+        unit: .gram(),
+        dateRange: .trailingMonthsFromNow(1)
+      )
+      await MainActor.run {
+        self.dailyFiber = samples
+      }
+    }
+    .task {
+      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
+        for: .dietaryWater,
+        unit: .literUnit(with: .milli),
+        dateRange: .trailingMonthsFromNow(1)
+      )
+      await MainActor.run {
+        self.dailyWater = samples
+        let averageLitres = samples.map({ $0.quantity.doubleValue(for: .liter()) }).average(keyPath: \.self)
+        self.averageWater = HKQuantity(unit: .liter(), doubleValue: averageLitres)
+      }
+    }
   }
 }
 
@@ -45,6 +72,8 @@ private extension BowelMovementsDetailView {
       VStack(spacing: 20) {
         stoolTypeChart
         timeOfDayChart
+        waterChart
+        fiberChart
       }
       .padding()
       .horizontallyCentered()
@@ -219,6 +248,98 @@ private extension BowelMovementsDetailView {
     case .overnight: .mutedIndigo
     @unknown default:
       fatalError("Unhandled case")
+    }
+  }
+}
+
+private extension BowelMovementsDetailView {
+
+  @ViewBuilder
+  var fiberChart: some View {
+    if
+      let details = viewModel.nutritionSummary?.details,
+      let averageFiber = details.averageFiber,
+      averageFiber.doubleValue(for: .gram()) >= 1
+    {
+      VStack(alignment: .leading) {
+        VitalDetailChartTitleView(
+          title: "Fiber",
+          value: averageFiber.displayString(for: .gram())
+        )
+
+        Chart{
+          ForEach(dailyFiber) { sample in
+            BarMark(
+              x: .value("Date", sample.date),
+              y: .value("Daily Fiber", sample.quantity.doubleValue(for: .gram()))
+            )
+            .foregroundStyle(.fiber)
+          }
+
+          if let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber() {
+            RuleMark(
+              y: .value("Min Fiber", goal.doubleValue(for: .gram()))
+            )
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.fiber)
+
+            RectangleMark(
+              yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
+              yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
+            )
+            .foregroundStyle(
+              LinearGradient(
+                colors: [
+                  .fiber.opacity(0.3),
+                  .clear
+                ],
+                startPoint: .bottom,
+                endPoint: .top
+              )
+            )
+          }
+        }
+        .frame(height: 160)
+      }
+    }
+  }
+
+  @ViewBuilder
+  var waterChart: some View {
+    VStack(alignment: .leading) {
+      VitalDetailChartTitleView(
+        title: "Water",
+        value: averageWater?.displayString(for: .literUnit(with: .milli)) ?? ""
+      )
+
+      Chart{
+        ForEach(dailyWater) { sample in
+          BarMark(
+            x: .value("Date", sample.date),
+            y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
+          )
+          .foregroundStyle(.mutedBlue)
+        }
+
+        RuleMark(
+          y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
+        )
+        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+        .foregroundStyle(.mutedBlue)
+
+        RectangleMark(
+          yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
+          yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
+        )
+        .foregroundStyle(
+          LinearGradient(
+            colors: [.mutedBlue.opacity(0.3), .clear],
+            startPoint: .bottom,
+            endPoint: .top
+          )
+        )
+      }
+      .frame(height: 160)
     }
   }
 }

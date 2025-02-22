@@ -52,8 +52,7 @@ extension JSONGenerator {
             averageCarbohydrates: calc.nutritionSummary?.details.averageCarbohydrates.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
             averagFat: calc.nutritionSummary?.details.averageFat.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
             averageFiber: calc.nutritionSummary?.details.averageFiber.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
-            averageSugar: calc.nutritionSummary?.details.averageSugar.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) }),
-            averageWater: calc.nutritionSummary?.details.averageWater.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .literUnit(with: .milli)), unit: .literUnit(with: .milli)) })
+            averageSugar: calc.nutritionSummary?.details.averageSugar.map({ SummaryJSON.Quantity(value: $0.doubleValue(for: .gram()), unit: .gram()) })
         )
 
         let bms = await calc.bowelMovementSummary?.bowelMovements.map({ SummaryJSON.BM(date: $0.date, bristolStoolType: $0.bristolStoolType, duration: $0.duration.name) }) ?? []
@@ -111,7 +110,6 @@ extension SummaryJSON {
         let averagFat: Quantity?
         let averageFiber: Quantity?
         let averageSugar: Quantity?
-        let averageWater: Quantity?
     }
 }
 

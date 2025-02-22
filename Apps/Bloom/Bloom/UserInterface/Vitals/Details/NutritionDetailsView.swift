@@ -17,7 +17,6 @@ struct NutritionDetailsView: View {
   @State private var dailyEnergy = [DateQuantitySample]()
   @State private var dailyFiber = [DateQuantitySample]()
   @State private var dailySugar = [DateQuantitySample]()
-  @State private var dailyWater = [DateQuantitySample]()
   @State private var dailyCholesterol = [DateQuantitySample]()
 
   @State private var presentedSheet: AnyView?
@@ -41,8 +40,6 @@ struct NutritionDetailsView: View {
             mineralsChart
               .cardContainer()
             cholesterolChart
-              .cardContainer()
-            waterChart
               .cardContainer()
             fiberChart
               .cardContainer()
@@ -96,16 +93,6 @@ struct NutritionDetailsView: View {
       )
       await MainActor.run {
         self.dailyFiber = samples
-      }
-    }
-    .task {
-      let samples = await HealthStoreFetcher.shared.fetchCollatedQuantity(
-        for: .dietaryWater,
-        unit: .literUnit(with: .milli),
-        dateRange: .trailingMonthsFromNow(1)
-      )
-      await MainActor.run {
-        self.dailyWater = samples
       }
     }
     .task {
@@ -544,51 +531,6 @@ private extension NutritionDetailsView {
             )
             .foregroundStyle(.sugar.opacity(0.3))
           }
-        }
-        .frame(height: 160)
-      }
-    }
-  }
-
-  @ViewBuilder
-  var waterChart: some View {
-    if
-      let details = viewModel.nutritionSummary?.details,
-      let averageWater = details.averageWater,
-      averageWater.doubleValue(for: .literUnit(with: .milli)) >= 1
-    {
-      VStack(alignment: .leading) {
-        VitalDetailChartTitleView(
-          title: "Water",
-          value: averageWater.displayString(for: .literUnit(with: .milli))
-        )
-
-        Chart{
-          ForEach(dailyWater) { sample in
-            BarMark(
-              x: .value("Date", sample.date),
-              y: .value("Water", sample.quantity.localizedValue(for: .literUnit(with: .milli)))
-            )
-            .foregroundStyle(.mutedBlue)
-          }
-
-          RuleMark(
-            y: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli)))
-          )
-          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-          .foregroundStyle(.mutedBlue)
-
-          RectangleMark(
-            yStart: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 2000).localizedValue(for: .literUnit(with: .milli))),
-            yEnd: .value("Min Water", HKQuantity(unit: .literUnit(with: .milli), doubleValue: 4000).localizedValue(for: .literUnit(with: .milli)))
-          )
-          .foregroundStyle(
-            LinearGradient(
-              colors: [.mutedBlue.opacity(0.3), .clear],
-              startPoint: .bottom,
-              endPoint: .top
-            )
-          )
         }
         .frame(height: 160)
       }

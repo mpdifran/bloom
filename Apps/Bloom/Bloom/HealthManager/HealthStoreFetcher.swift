@@ -790,7 +790,6 @@ extension HealthStoreFetcher {
     let cholesterol = await fetchNutritionalDailyAverage(for: .dietaryCholesterol, unit: .gramUnit(with: .milli), dateRange: dateRange)
     let fiber = await fetchNutritionalDailyAverage(for: .dietaryFiber, unit: .gram(), dateRange: dateRange)
     let sugar = await fetchNutritionalDailyAverage(for: .dietarySugar, unit: .gram(), dateRange: dateRange)
-    let water = await fetchNutritionalDailyAverage(for: .dietaryWater, unit: .literUnit(with: .milli), dateRange: dateRange)
 
     let collatedDietaryEnergy = await fetchCollatedQuantity(
       for: .dietaryEnergyConsumed,
@@ -829,8 +828,7 @@ extension HealthStoreFetcher {
       averageZinc: zinc,
       averageCholesterol: cholesterol,
       averageFiber: fiber,
-      averageSugar: sugar,
-      averageWater: water
+      averageSugar: sugar
     )
   }
 
