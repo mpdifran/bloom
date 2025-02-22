@@ -37,8 +37,9 @@ extension ChatGoalConverter {
 
       var goalSummaries = [GoalSummary]()
       for targetMetric in targetMetrics {
-        let summaries = try await createGoalSummaries(for: targetMetric)
-        goalSummaries.append(contentsOf: summaries)
+        if let summary = try await createGoalSummary(for: targetMetric) {
+          goalSummaries.append(summary)
+        }
       }
 
       return CurrentGoalsData(currentGoals: goalSummaries)
@@ -51,9 +52,9 @@ extension ChatGoalConverter {
 
 private extension ChatGoalConverter {
 
-  func createGoalSummaries(for targetMetric: TargetMetric) async throws -> [GoalSummary] {
+  func createGoalSummary(for targetMetric: TargetMetric) async throws -> GoalSummary? {
 
-    guard let metric = targetMetric.metric else { return [] }
+    guard let metric = targetMetric.metric else { return nil }
 
     let habits = try await modelActor.fetchHabits(for: targetMetric)
     let dateRange = DateRange.trailingDaysFromNow(.goalHistoryDays)
@@ -63,15 +64,19 @@ private extension ChatGoalConverter {
       dateRange: dateRange
     )
 
-    var goalSummaries = [GoalSummary]()
     var currentHabit: HabitDTO?
+    var goalHistories = [GoalSummary.GoalHistory]()
     var currentDates = [String]()
     Calendar.current.iterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
       if currentHabit?.isDateWithinHabit(date: date) != true {
         let newHabit = habits.first { $0.isDateWithinHabit(date: date) }
         if let currentHabit, (currentHabit.value != newHabit?.value || currentHabit.unitString != newHabit?.unitString) {
-          goalSummaries.append(
-            createGoalSummary(from: currentHabit, metric: metric, dates: currentDates)
+          goalHistories.append(
+            GoalSummary.GoalHistory(
+              value: currentHabit.value,
+              unit: currentHabit.unit.sensibleUnitString,
+              goalMet: currentDates
+            )
           )
           currentDates = []
         }
@@ -87,28 +92,17 @@ private extension ChatGoalConverter {
     }
 
     if let currentHabit {
-      goalSummaries.append(
-        createGoalSummary(from: currentHabit, metric: metric, dates: currentDates)
+      goalHistories.append(
+        GoalSummary.GoalHistory(
+          value: currentHabit.value,
+          unit: currentHabit.unitString,
+          goalMet: currentDates
+        )
       )
     }
 
-    return goalSummaries
+    return GoalSummary(metric: metric, history: goalHistories)
   }
-}
-
-func createGoalSummary(
-  from habit: HabitDTO,
-  metric: SuggestedGoal.Metric,
-  dates: [String]
-) -> GoalSummary {
-  GoalSummary(
-    metric: metric,
-    value: habit.value,
-    unit: habit.unit.sensibleUnitString,
-    startDate: habit.startDate,
-    endDate: habit.endDate,
-    goalMetOnDates: dates
-  )
 }
 
 extension TargetMetric {

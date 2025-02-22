@@ -11,18 +11,15 @@ public struct SuggestedGoal: Codable, Equatable, Sendable {
   public let metric: Metric
   public let value: Double
   public let unit: Unit
-  public let summary: String
 
   public init(
     metric: Metric,
     value: Double,
-    unit: Unit,
-    summary: String
+    unit: Unit
   ) {
     self.metric = metric
     self.value = value
     self.unit = unit
-    self.summary = summary
   }
 }
 

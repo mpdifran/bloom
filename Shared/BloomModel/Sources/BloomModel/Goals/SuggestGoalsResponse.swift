@@ -8,9 +8,14 @@
 import Foundation
 
 public struct SuggestGoalsResponse: Codable, Equatable, Sendable {
+  public let summary: String?
   public let goals: [SuggestedGoal]
 
-  public init(goals: [SuggestedGoal]) {
+  public init(
+    summary: String?,
+    goals: [SuggestedGoal]
+  ) {
+    self.summary = summary
     self.goals = goals
   }
 }

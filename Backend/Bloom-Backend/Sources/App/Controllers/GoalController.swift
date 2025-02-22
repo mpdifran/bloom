@@ -38,13 +38,18 @@ private extension GoalController {
       assistantSpec: .healthGoalSetterSpec
     )
 
+    try await openAIService.cancelCurrentlyActiveRuns(
+      request,
+      assistantThread: assistantThread
+    )
+
     try await openAIService.sendUserContent(
       request,
       assistantThread: assistantThread,
       content: [
         .text("Here is my health data: \n\n```\n\(body.healthData)\n```"),
         .text("Here are my current goals: \n\n```\n\(body.currentGoals)\n```"),
-        .text("Please take a look at my current goals and health metrics, and suggest edits to my goals, or suggest new goals.")
+        .text("Please take a look at my current goals and health metrics, and suggest edits to my goals.")
       ]
     )
 
@@ -71,7 +76,7 @@ private extension GoalController {
     let assistantResponse = try await request.openAI.assistants.pollRunForAssistantResponse(
       threadID: assistantThread.threadID,
       runID: run.id,
-      pollInterval: 0.5
+      pollInterval: 1
     )
 
     var suggestedGoals = suggestedGoals
@@ -93,7 +98,7 @@ private extension GoalController {
             request.logger.error(toolCall.function.arguments)
           }
         default:
-          request.logger.warning("Unknown function call: \(toolCall.function.name) arguments: \(toolCall.function.arguments)")
+          request.logger.warning("[\(Date())] Unknown function call: \(toolCall.function.name) arguments: \(toolCall.function.arguments)")
         }
       }
 
@@ -111,8 +116,11 @@ private extension GoalController {
         suggestedGoals: suggestedGoals
       )
     case .messages(_, let messages):
-      // This means the run completed.
-      return SuggestGoalsResponse(goals: suggestedGoals)
+      let message = messages.flatMap({ $0.content }).compactMap({ $0.text }).last
+      return SuggestGoalsResponse(
+        summary: message,
+        goals: suggestedGoals
+      )
     }
   }
 }

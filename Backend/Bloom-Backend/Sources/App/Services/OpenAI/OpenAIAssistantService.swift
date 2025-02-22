@@ -45,6 +45,29 @@ extension OpenAIAssistantService {
     )
   }
 
+  func cancelCurrentlyActiveRuns(
+    _ request: Request,
+    assistantThread: OpenAIAssistantThread
+  ) async throws {
+    let runs = try await request.openAI.assistants.listRuns(threadID: assistantThread.threadID)
+
+    for run in runs.data {
+      if run.status.isActive {
+        let run = try await request.openAI.assistants.cancelRun(
+          threadID: assistantThread.threadID,
+          runID: run.id
+        )
+
+        do {
+          let _ = try await request.openAI.assistants.pollRunForAssistantResponse(
+            threadID: assistantThread.threadID,
+            runID: run.id
+          )
+        } catch { } // An error is thrown if the state is cancelled.
+      }
+    }
+  }
+
   func sendUserContent(
     _ request: Request,
     assistantThread: OpenAIAssistantThread,
