@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import HealthKit
 import SwiftData
+import Charts
 
 struct HabitDetailsView: View {
   @State private var habit: Habit
@@ -23,7 +24,9 @@ struct HabitDetailsView: View {
       Task { await loadHabitGridModel() }
     }
   }
-  @State private var dayStats = [Calendar.Weekday : Int]()
+  @State private var dailySamples = [DateQuantitySample]()
+  @State private var averageValue: HKQuantity?
+  @State private var dayStats = [Calendar.Weekday : Double]()
   @State private var habitGridModel = HabitGridModel()
   @State private var presentedSheet: AnyView?
 
@@ -38,6 +41,9 @@ struct HabitDetailsView: View {
           .padding(.bottom)
 
         statsSection
+          .padding(.horizontal)
+
+        historyChart
           .padding(.horizontal)
 
         editSection
@@ -63,20 +69,12 @@ struct HabitDetailsView: View {
 
 private extension HabitDetailsView {
 
-  var average: HKQuantity {
-    let averageValue = allSamplesTwelveWeeks.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
-    return HKQuantity(unit: habit.unit, doubleValue: averageValue)
-  }
-
   var titleSection: some View {
     HStack {
-      Image(systemName: habit.targetMetric.systemImage)
-        .font(.largeTitle)
-        .foregroundStyle(.tint)
-
       Text(habit.targetMetric.name)
-        .font(.title3)
+        .font(.title)
         .bold()
+        .fontDesign(.rounded)
 
       Spacer()
 
@@ -93,45 +91,53 @@ private extension HabitDetailsView {
     .padding()
   }
 
+  @ViewBuilder
   var statsSection: some View {
-    VStack(alignment: .leading) {
-      Text("Over Last 12 Weeks")
-        .font(.headline)
-        .bold()
-
-      LabeledContent("Daily Average") {
-        Text("\(average.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter))")
-          .fontDesign(.rounded)
+    if dayStats.isNotEmpty {
+      VStack {
+        Text("Over Last 12 Weeks")
+          .font(.headline)
           .bold()
-          .foregroundStyle(.text)
-      }
-      .frame(height: 44)
+          .padding(.bottom)
 
-      if let bestDay = dayStats.max(by: { $0.value < $1.value })?.key.name {
-        Divider()
+        HStack {
+          Spacer()
 
-        LabeledContent("Best Day") {
-          Text(bestDay)
-            .fontDesign(.rounded)
-            .bold()
-            .foregroundStyle(.text)
+          if let worstDay = dayStats.min(by: { $0.value < $1.value })?.key.name {
+            VStack {
+              Text(worstDay)
+                .font(.title)
+                .bold()
+                .fontDesign(.rounded)
+
+              Text("Worst Day")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .bold()
+            }
+          }
+
+          Spacer()
+
+          if let bestDay = dayStats.max(by: { $0.value < $1.value })?.key.name {
+            VStack {
+              Text(bestDay)
+                .font(.title)
+                .bold()
+                .fontDesign(.rounded)
+
+              Text("Best Day")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .bold()
+            }
+          }
+
+          Spacer()
         }
-        .frame(height: 44)
       }
-
-      if let worstDay = dayStats.min(by: { $0.value < $1.value })?.key.name {
-        Divider()
-
-        LabeledContent("Worst Day") {
-          Text(worstDay)
-            .fontDesign(.rounded)
-            .bold()
-            .foregroundStyle(.text)
-        }
-        .frame(height: 44)
-      }
+      .cardContainer(fill: .background.secondary)
     }
-    .cardContainer(fill: .background.secondary)
   }
 
   var editSection: some View {
@@ -148,6 +154,67 @@ private extension HabitDetailsView {
         .horizontallyCentered()
     }
     .buttonStyle(.primary)
+  }
+
+  var historyChart: some View {
+    VStack(alignment: .leading) {
+      VitalDetailChartTitleView(
+        title: "Daily Values",
+        value: averageValue?.displayString(for: habit.unit) ?? ""
+      )
+
+      Chart{
+        ForEach(dailySamples) { sample in
+          BarMark(
+            x: .value("Date", sample.date),
+            y: .value(habit.targetMetric.name, sample.quantity.localizedValue(for: habit.unit))
+          )
+          .foregroundStyle(.tint)
+        }
+
+        switch habit.targetMetric.measurementStyle {
+        case .minimum:
+          RuleMark(
+            y: .value("Goal", HKQuantity(unit: habit.unit, doubleValue: habit.value).localizedValue(for: habit.unit))
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.tint)
+
+          RectangleMark(
+            yStart: .value("Min Goal", HKQuantity(unit: habit.unit, doubleValue: habit.value).localizedValue(for: habit.unit)),
+            yEnd: .value("Max Goal", HKQuantity(unit: habit.unit, doubleValue: habit.value * 2).localizedValue(for: habit.unit))
+          )
+          .foregroundStyle(
+            LinearGradient(
+              colors: [habit.targetMetric.color.opacity(0.3), .clear],
+              startPoint: .bottom,
+              endPoint: .top
+            )
+          )
+        case .range:
+          RectangleMark(
+            yStart: .value("Min Goal", habit.rangeMinGoal.localizedValue(for: habit.unit)),
+            yEnd: .value("Max Goal", habit.rangeMaxGoal.localizedValue(for: habit.unit))
+          )
+          .foregroundStyle(.tint.opacity(0.3))
+
+          RuleMark(
+            y: .value("Min Goal", habit.rangeMinGoal.localizedValue(for: habit.unit))
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.tint)
+
+          RuleMark(
+            y: .value("Max Goal", habit.rangeMaxGoal.localizedValue(for: habit.unit))
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.tint)
+        @unknown default:
+          fatalError("Unknown goal type")
+        }
+      }
+      .frame(height: 200)
+    }
   }
 }
 
@@ -246,21 +313,27 @@ private extension HabitDetailsView {
       )
     }.sorted(keyPath: \.referenceDate)
 
-    var stats = [Calendar.Weekday : Int]()
+    var statsIntermediate = [Calendar.Weekday : [Double]]()
     for sample in twelveWeeksSamples {
       guard let weekday = Calendar.current.weekday(for: sample.date) else { continue }
 
-      if habit.quantityMeetsGoal(sample.quantity) {
-        stats[weekday, default: 0] += 1
-      }
+      statsIntermediate[weekday, default: []].append(sample.quantity.doubleValue(for: habit.unit))
     }
-
+    var stats = [Calendar.Weekday : Double]()
+    for weekday in statsIntermediate.keys {
+      stats[weekday] = statsIntermediate[weekday]?.average(keyPath: \.self) ?? 0
+    }
     let statsConstant = stats
+
+    let averageValue = twelveWeeksSamples.map({ $0.quantity.doubleValue(for: habit.unit) }).average(keyPath: \.self)
+    let averageQuantity = HKQuantity(unit: habit.unit, doubleValue: averageValue)
 
     await MainActor.run {
       self.allSamplesTwelveWeeks = twelveWeeksSamples
       self.weekQuantitySamples = weekSamples
       self.dayStats = statsConstant
+      self.dailySamples = samples.suffix(30)
+      self.averageValue = averageQuantity
     }
   }
 }
