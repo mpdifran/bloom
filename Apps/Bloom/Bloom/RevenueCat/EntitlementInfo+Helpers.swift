@@ -53,6 +53,11 @@ extension EntitlementInfo {
           title: "Free Trial Ends",
           date: expirationDate
         )
+      case .prepaid:
+        return EntitlementStatusCellInfo(
+          title: "Prepaid Period Ends",
+          date: expirationDate
+        )
       }
     }
   }

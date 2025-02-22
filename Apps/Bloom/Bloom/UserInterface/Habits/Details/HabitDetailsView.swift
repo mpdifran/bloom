@@ -45,15 +45,25 @@ struct HabitDetailsView: View {
 
         historyChart
           .padding(.horizontal)
-
-        editSection
-          .padding(.horizontal)
       }
       .toolbar {
         ToolbarItem(placement: .principal) {
           Image(systemName: habit.targetMetric.systemImage)
             .symbolVariant(.fill)
             .bold()
+        }
+        ToolbarItem(placement: .primaryAction) {
+          Menu("Options", systemImage: "ellipsis.circle") {
+            Button("Edit Goal", systemImage: "slider.horizontal.3") {
+              presentedSheet = EditUserAddedHabitView(habit: habit) { habit in
+                guard let habit else {
+                  dismiss()
+                  return
+                }
+                self.habit = habit
+              }.asAny
+            }
+          }
         }
       }
     }
@@ -138,22 +148,6 @@ private extension HabitDetailsView {
       }
       .cardContainer(fill: .background.secondary)
     }
-  }
-
-  var editSection: some View {
-    Button {
-      presentedSheet = EditUserAddedHabitView(habit: habit) { habit in
-        guard let habit else {
-          dismiss()
-          return
-        }
-        self.habit = habit
-      }.asAny
-    } label: {
-      Text("Manage Goal")
-        .horizontallyCentered()
-    }
-    .buttonStyle(.primary)
   }
 
   var historyChart: some View {
