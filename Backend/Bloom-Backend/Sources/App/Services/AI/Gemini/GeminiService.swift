@@ -19,7 +19,7 @@ extension GeminiService {
     foodImageFile: ImageFile
   ) async -> AIEstimateCaloriesResponse? {
 
-    let model = request.gemini.flash1_5
+    let model = request.gemini.flash2_0
 
     let imagePart = ModelContent.Part.data(
       mimetype: "image/\(foodImageFile.fileExtension)",

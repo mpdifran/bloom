@@ -11,6 +11,7 @@ import Vapor
 
 struct GeminiModelProvider: Sendable {
   let flash1_5: GenerativeModel
+  let flash2_0: GenerativeModel
 
   init() {
     guard let apiKey = Environment.get("GEMINI_API_KEY") else {
@@ -18,5 +19,6 @@ struct GeminiModelProvider: Sendable {
     }
 
     self.flash1_5 = GenerativeModel(name: "gemini-1.5-flash-latest", apiKey: apiKey)
+    self.flash2_0 = GenerativeModel(name: "gemini-2.0-flash", apiKey: apiKey)
   }
 }
