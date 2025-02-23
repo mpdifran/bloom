@@ -131,4 +131,10 @@ private extension FoodItemMacroDistribution {
     fat: 3,
     numberOfServings: 2
   )
+  FoodItemMacroDistribution(
+    protein: 0,
+    carbohydrates: 0,
+    fat: 0,
+    numberOfServings: 2
+  )
 }
