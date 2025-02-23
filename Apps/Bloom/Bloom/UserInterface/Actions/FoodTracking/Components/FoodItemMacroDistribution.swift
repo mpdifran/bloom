@@ -100,15 +100,15 @@ private extension FoodItemMacroDistribution {
   }
 
   var proteinPercent: CGFloat {
-    CGFloat((protein * .caloriesPerGramOfProtein) / total)
+    total > 0 ? CGFloat((protein * .caloriesPerGramOfProtein) / total) : 1/3
   }
 
   var carbohydratesPercent: CGFloat {
-    CGFloat((carbohydrates * .caloriesPerGramOfCarbs) / total)
+    total > 0 ? CGFloat((carbohydrates * .caloriesPerGramOfCarbs) / total) : 1/3
   }
 
   var fatPercent: CGFloat {
-    CGFloat((fat * .caloriesPerGramOfFat) / total)
+    total > 0 ? CGFloat((fat * .caloriesPerGramOfFat) / total) : 1/3
   }
 
   var total: Double {
