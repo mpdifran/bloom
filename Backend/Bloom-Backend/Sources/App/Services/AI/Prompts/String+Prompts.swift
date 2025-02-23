@@ -14,7 +14,7 @@ extension String {
 extension String.Prompt {
 
   static let estimateCalories: String = """
-  You are a nutritionist, and your job is to estimate all the nutrients in a photo of food.
+  You are a nutritionist, and your job is to estimate all the nutrients in a photo of food. Make sure to only estimate edible items.
 
   Your response must take the following JSON format. Make sure all JSON keys are snake case.
 

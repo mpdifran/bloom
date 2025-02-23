@@ -14,7 +14,6 @@ import BloomModel
 struct FoodController {
   private let edamamService = EdamamFoodService()
   private let openAIService = OpenAIService()
-  private let geminiService = GeminiService()
   private let foodDatabaseService = FoodDatabaseService()
   private let openFoodFactsService = OpenFoodFactsService()
 }
@@ -126,7 +125,7 @@ extension FoodController {
   func estimateFoodCalories(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
     let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
 
-    guard let foodEstimate = await geminiService.estimateCalories(
+    guard let foodEstimate = await openAIService.estimateCalories(
       request,
       foodImageFile: requestBody.foodImage
     ) else {

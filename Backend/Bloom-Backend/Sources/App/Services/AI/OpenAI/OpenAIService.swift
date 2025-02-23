@@ -87,7 +87,8 @@ extension OpenAIService {
     foodImageFile: ImageFile
   ) async -> AIEstimateCaloriesResponse? {
     do {
-      let openAI = request.openAI
+      let openAI = request.gemini
+      let model = Model.Gemini.flash2_0
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -106,7 +107,7 @@ extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: Model.GPT4.gpt_4o_mini,
+        model: model,
         messages: messages
       )
 

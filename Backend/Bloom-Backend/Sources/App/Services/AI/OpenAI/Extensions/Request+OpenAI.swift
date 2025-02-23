@@ -10,17 +10,31 @@ import Vapor
 
 extension Request {
 
-    private struct OpenAIKey: StorageKey {
-        typealias Value = OpenAIKit.Client
-    }
+  private struct OpenAIKey: StorageKey {
+    typealias Value = OpenAIKit.Client
+  }
 
-    public var openAI: OpenAIKit.Client {
-        if let client = application.storage[OpenAIKey.self] {
-            return client
-        } else {
-            let client = application.openAI
-            application.storage[OpenAIKey.self] = client
-            return client
-        }
+  public var openAI: OpenAIKit.Client {
+    if let client = application.storage[OpenAIKey.self] {
+      return client
+    } else {
+      let client = application.openAI
+      application.storage[OpenAIKey.self] = client
+      return client
     }
+  }
+
+  private struct GeminiKey: StorageKey {
+    typealias Value = OpenAIKit.Client
+  }
+
+  public var gemini: OpenAIKit.Client {
+    if let client = application.storage[GeminiKey.self] {
+      return client
+    } else {
+      let client = application.gemini
+      application.storage[GeminiKey.self] = client
+      return client
+    }
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "originHash" : "f87abcec7c1ff77c53e794683b468e12f37f4b377b9e4d51bacf1a4e18bf80d1",
+  "originHash" : "885c5564e1548efb51b7196191839a4daba7ec24c97c50ed3e6f10ff50ab15d5",
   "pins" : [
     {
       "identity" : "apns",
@@ -119,15 +119,6 @@
       }
     },
     {
-      "identity" : "generative-ai-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google-gemini/generative-ai-swift.git",
-      "state" : {
-        "revision" : "44b8ce120425f9cf53ca756f3434ca2c2696f8bd",
-        "version" : "0.5.6"
-      }
-    },
-    {
       "identity" : "jmespath.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adam-fowler/jmespath.swift.git",
@@ -177,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "9e9f23562930727aeda2a397af2b9ce178abc71b",
-        "version" : "1.2.4"
+        "revision" : "4bb89bf840e210009bf63b457707a95c8a43558b",
+        "version" : "1.3.3"
       }
     },
     {
