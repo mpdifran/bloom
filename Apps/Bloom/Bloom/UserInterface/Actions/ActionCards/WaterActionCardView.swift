@@ -138,7 +138,7 @@ private extension WaterActionCardView {
       start: Date.now,
       end: Date.now,
       metadata: [
-        HKMetadataKeyWasUserEntered : true
+        HKMetadataKeyWasUserEntered: true
       ]
     )
 

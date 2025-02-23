@@ -128,11 +128,11 @@ extension FoodLoggingActionCardView.ViewModel {
       guard sections.contains(where: { $0.foods.isNotEmpty }) else {
         failedBarcodeSearch = barcode
         results = []
-        TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult" : "Fail"])
+        TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult": "Fail"])
         return
       }
 
-      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult" : "Match"])
+      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult": "Match"])
       self.results = sections.map({
         FoodItemSection(
           title: $0.title,

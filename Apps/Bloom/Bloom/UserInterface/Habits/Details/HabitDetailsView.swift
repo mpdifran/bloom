@@ -26,7 +26,7 @@ struct HabitDetailsView: View {
   }
   @State private var dailySamples = [DateQuantitySample]()
   @State private var averageValue: HKQuantity?
-  @State private var dayStats = [Calendar.Weekday : Double]()
+  @State private var dayStats = [Calendar.Weekday: Double]()
   @State private var habitGridModel = HabitGridModel()
   @State private var presentedSheet: AnyView?
 
@@ -311,13 +311,13 @@ private extension HabitDetailsView {
       )
     }.sorted(keyPath: \.referenceDate)
 
-    var statsIntermediate = [Calendar.Weekday : [Double]]()
+    var statsIntermediate = [Calendar.Weekday: [Double]]()
     for sample in twelveWeeksSamples {
       guard let weekday = Calendar.current.weekday(for: sample.date) else { continue }
 
       statsIntermediate[weekday, default: []].append(sample.quantity.doubleValue(for: habit.unit))
     }
-    var stats = [Calendar.Weekday : Double]()
+    var stats = [Calendar.Weekday: Double]()
     for weekday in statsIntermediate.keys {
       stats[weekday] = statsIntermediate[weekday]?.average(keyPath: \.self) ?? 0
     }

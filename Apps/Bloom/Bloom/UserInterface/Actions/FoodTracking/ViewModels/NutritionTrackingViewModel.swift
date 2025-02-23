@@ -145,7 +145,7 @@ extension NutritionTrackingViewModel {
 
     TelemetryDeck.signal(
       "Logged Food Item",
-      parameters: ["Meal" : meal.rawValue],
+      parameters: ["Meal": meal.rawValue],
       floatValue: Double(foodItemServings.count)
     )
   }

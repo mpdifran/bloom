@@ -93,7 +93,7 @@ public extension ScreenUseController {
         }
     }
 
-    func startMonitoring(events: [DeviceActivityEvent.Name : DeviceActivityEvent] = [:]) throws {
+    func startMonitoring(events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [:]) throws {
         let startComponents = Calendar.current.dateComponents([.hour, .minute], from: startDate)
         let endComponents = Calendar.current.dateComponents([.hour, .minute], from: endDate)
 
@@ -146,7 +146,7 @@ public extension ScreenUseController {
         try deviceActivityCenter.startMonitoring(
             .timeExtension,
             during: schedule,
-            events: [.timeExtension : event]
+            events: [.timeExtension: event]
         )
     }
 

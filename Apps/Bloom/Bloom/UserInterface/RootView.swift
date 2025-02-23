@@ -25,8 +25,8 @@ struct RootView: View {
     let largeTitleFont = UIFont.systemFont(ofSize: 35, weight: .bold)
     let regularTitleFont = UIFont.systemFont(ofSize: 17, weight: .bold)
 
-    UINavigationBar.appearance().largeTitleTextAttributes = [.font : largeTitleFont.rounded]
-    UINavigationBar.appearance().titleTextAttributes = [.font : regularTitleFont.rounded]
+    UINavigationBar.appearance().largeTitleTextAttributes = [.font: largeTitleFont.rounded]
+    UINavigationBar.appearance().titleTextAttributes = [.font: regularTitleFont.rounded]
   }
 
   var body: some View {

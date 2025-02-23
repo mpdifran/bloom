@@ -10,13 +10,13 @@ import DataContainer
 
 private enum Constants {
     static let stoolTypeScoreMap = [
-        1 : 0.7,
-        2 : 0.95,
-        3 : 1.1,
-        4 : 1.1,
-        5 : 0.95,
-        6 : 0.7,
-        7 : 0.2,
+        1: 0.7,
+        2: 0.95,
+        3: 1.1,
+        4: 1.1,
+        5: 0.95,
+        6: 0.7,
+        7: 0.2,
     ]
 }
 
@@ -175,12 +175,12 @@ extension BowelMovementMonthlySummary {
         }
     }
 
-    var timeOfDayDistribution: [Calendar.TimeOfDay : [BowelMovementDTO]] {
+    var timeOfDayDistribution: [Calendar.TimeOfDay: [BowelMovementDTO]] {
         bowelMovements
             .grouped(by: { Calendar.current.timeOfDay(for: $0.date) })
     }
 
-    var stoolTypeDistribution: [Int : [BowelMovementDTO]] {
+    var stoolTypeDistribution: [Int: [BowelMovementDTO]] {
         bowelMovements.grouped(by: { $0.bristolStoolType })
     }
 

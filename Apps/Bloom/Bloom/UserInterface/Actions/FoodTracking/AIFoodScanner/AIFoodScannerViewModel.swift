@@ -137,11 +137,11 @@ private extension AIFoodScannerView.ViewModel {
     if barcodeServings.isEmpty {
       scanResultsErrorToggle.toggle()
       unknownBarcodes.append(barcode)
-      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult" : "Fail"])
+      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult": "Fail"])
     } else {
       scanResultsToggle.toggle()
       servings = barcodeServings + servings
-      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult" : "Match"])
+      TelemetryDeck.signal("Food Item Barcode Scan", parameters: ["barcodeScanResult": "Match"])
     }
   }
 

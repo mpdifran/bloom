@@ -146,8 +146,8 @@ private extension CycleTrackingActionCardView {
       isNewCycle = false
     }
 
-    let metadata: [String : Any] = [
-      HKMetadataKeyMenstrualCycleStart : isNewCycle
+    let metadata: [String: Any] = [
+      HKMetadataKeyMenstrualCycleStart: isNewCycle
     ]
 
     let normalizedDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date

@@ -11,6 +11,6 @@ import TelemetryDeck
 extension TelemetryDeck {
 
     static func viewScreen(_ screenName: String) {
-        signal("View Screen", parameters: ["Screen Name" : screenName])
+        signal("View Screen", parameters: ["Screen Name": screenName])
     }
 }

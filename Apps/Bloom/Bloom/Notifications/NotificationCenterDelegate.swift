@@ -43,7 +43,7 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
             return [.banner]
         case .CategoryID.reviewFocusAreas:
             return [.banner]
-        default :
+        default: 
             return [.banner, .sound, .list]
         }
     }

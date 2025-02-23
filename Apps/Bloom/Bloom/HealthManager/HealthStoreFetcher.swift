@@ -19,7 +19,7 @@ final actor HealthStoreFetcher {
   static let shared = HealthStoreFetcher()
 
   private let healthStore = HKHealthStore()
-  private var backgroundDeliveryReferenceCounts = [HKObjectType : Int]()
+  private var backgroundDeliveryReferenceCounts = [HKObjectType: Int]()
 
   private init() { }
 }

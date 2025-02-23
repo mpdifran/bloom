@@ -467,7 +467,7 @@ extension HKHealthStore {
   ) async throws -> [DateCollatedWorkouts] {
     let workouts = try await fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)
 
-    var collatedWorkouts = [Date : [HKWorkout]]()
+    var collatedWorkouts = [Date: [HKWorkout]]()
 
     for workout in workouts {
       if let existingDate = collatedWorkouts.keys.first(where: {
@@ -525,8 +525,8 @@ extension HKHealthStore {
           return
         }
 
-        var calories = [HKWorkoutActivityType : Double]()
-        var workoutCount = [HKWorkoutActivityType : Int]()
+        var calories = [HKWorkoutActivityType: Double]()
+        var workoutCount = [HKWorkoutActivityType: Int]()
 
         for sample in workoutSamples {
           guard

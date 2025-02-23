@@ -78,7 +78,7 @@ private extension BodyWeightActionCardView {
       start: date,
       end: date,
       metadata: [
-        HKMetadataKeyWasUserEntered : true
+        HKMetadataKeyWasUserEntered: true
       ]
     )
 
