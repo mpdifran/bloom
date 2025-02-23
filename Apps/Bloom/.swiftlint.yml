@@ -1,2 +1,10 @@
 only_rules:
   - colon
+  - custom_rules
+
+custom_rules:
+  no_init_shorthand:
+    name: "No .init shorthand"
+    regex: "\\.init\\("
+    message: "Avoid using .init shorthand. Use the full type name instead."
+    severity: warning
