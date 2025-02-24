@@ -19,6 +19,7 @@ struct SettingsView: View {
   @ObservedObject private var healthManager = HealthManager.shared
   @ObservedObject private var toDoManager = ToDoManager.shared
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
+  @ObservedObject private var apiHost = APIHost.shared
 
   @Bindable private var reportViewModel = ReportCoordinatorViewModel.shared
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
@@ -582,6 +583,7 @@ private extension SettingsView {
         Divider()
 
         Button {
+          apiHost.overrideEnabled = false
           showDeveloperMode = false
           danieleMode = false
         } label: {
