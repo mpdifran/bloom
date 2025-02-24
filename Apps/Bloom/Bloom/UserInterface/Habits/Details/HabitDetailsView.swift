@@ -42,6 +42,7 @@ struct HabitDetailsView: View {
 
         statsSection
           .padding(.horizontal)
+          .padding(.bottom)
 
         historyChart
           .padding(.horizontal)
@@ -105,11 +106,6 @@ private extension HabitDetailsView {
   var statsSection: some View {
     if dayStats.isNotEmpty {
       VStack {
-        Text("Over Last 12 Weeks")
-          .font(.headline)
-          .bold()
-          .padding(.bottom)
-
         HStack {
           Spacer()
 
@@ -119,13 +115,19 @@ private extension HabitDetailsView {
                 .font(.title)
                 .bold()
                 .fontDesign(.rounded)
+                .minimumScaleFactor(0.3)
 
               Text("Worst Day")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .bold()
             }
+            .frame(maxWidth: .infinity)
           }
+
+          Spacer()
+
+          Divider()
 
           Spacer()
 
@@ -135,18 +137,20 @@ private extension HabitDetailsView {
                 .font(.title)
                 .bold()
                 .fontDesign(.rounded)
+                .minimumScaleFactor(0.3)
 
               Text("Best Day")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .bold()
             }
+            .frame(maxWidth: .infinity)
           }
 
           Spacer()
         }
+        .cardContainer(fill: .background.secondary)
       }
-      .cardContainer(fill: .background.secondary)
     }
   }
 
@@ -163,7 +167,7 @@ private extension HabitDetailsView {
             x: .value("Date", sample.date),
             y: .value(habit.targetMetric.name, sample.quantity.localizedValue(for: habit.unit))
           )
-          .foregroundStyle(.tint)
+          .foregroundStyle(habit.quantityMeetsGoal(sample.quantity) ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.3)))
         }
 
         switch habit.targetMetric.measurementStyle {
