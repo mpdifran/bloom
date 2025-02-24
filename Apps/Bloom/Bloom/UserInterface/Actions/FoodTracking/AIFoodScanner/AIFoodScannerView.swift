@@ -50,7 +50,7 @@ struct AIFoodScannerView: View {
         }
       }
       .groupedBackground()
-      .navigationTitle("Magic Scan")
+      .navigationTitle("AI Scan")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {

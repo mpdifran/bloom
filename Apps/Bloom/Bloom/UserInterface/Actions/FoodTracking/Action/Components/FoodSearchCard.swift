@@ -62,9 +62,9 @@ private extension FoodSearchCard {
       showMagicScan()
     } label: {
       HStack {
-        Image(systemName: "sparkles")
+        Image(systemName: "viewfinder")
           .foregroundStyle(.tint)
-        Text("Magic Scan")
+        Text("AI Scan")
           .foregroundStyle(.primary)
       }
       .horizontallyCentered()
