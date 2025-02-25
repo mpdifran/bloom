@@ -21,6 +21,8 @@ struct BowelMovementsDetailView: View {
   @State private var averageWater: HKQuantity?
   @State private var dailyFiber = [DateQuantitySample]()
 
+  @State private var navigationPushView: AnyView?
+
   var body: some View {
     Group {
       if viewModel.bowelMovementSummary?.hasNoData == false {
@@ -33,6 +35,7 @@ struct BowelMovementsDetailView: View {
     .navigationTitle("Bowel Movements")
     .navigationBarTitleDisplayMode(.inline)
     .sheet($presentedSheet)
+    .navigationDestination($navigationPushView)
     .onAppear {
       TelemetryDeck.viewScreen("Bowel Movements Vital Details")
     }
@@ -74,6 +77,7 @@ private extension BowelMovementsDetailView {
         timeOfDayChart
         waterChart
         fiberChart
+        showAllDataCell
       }
       .padding()
       .horizontallyCentered()
@@ -340,6 +344,19 @@ private extension BowelMovementsDetailView {
         )
       }
       .frame(height: 160)
+    }
+  }
+
+  var showAllDataCell: some View {
+    HStack {
+      Text("Show All Logs")
+        .bold()
+      Spacer()
+      DisclosureIndicator()
+    }
+    .cardContainer(fill: .background.secondary)
+    .onTapGesture {
+      navigationPushView = BowelMovementAllDataView().asAny
     }
   }
 }
