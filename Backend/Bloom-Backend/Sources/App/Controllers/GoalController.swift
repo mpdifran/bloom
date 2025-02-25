@@ -49,7 +49,10 @@ private extension GoalController {
       content: [
         .text("Here is my health data: \n\n```\n\(body.healthData)\n```"),
         .text("Here are my current goals: \n\n```\n\(body.currentGoals)\n```"),
-        .text("Please take a look at my current goals and health metrics, and suggest edits to my goals.")
+        .text("""
+        Analyze my health data, and identify the 1-2 main areas of my health that I should focus on. Ensure my goals 
+        align with those focus areas. Update my goals, or give me new goals to help improve my health.
+        """)
       ]
     )
 

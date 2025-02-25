@@ -14,7 +14,7 @@ protocol SendableNetworkModel: Codable, Equatable, Sendable { }
 struct ChatHealthData: SendableNetworkModel {
   let demographics: Demographics
   let activityLevel: ActivityLevel?
-  let bodyComposition: BodyCompostiion?
+  let bodyComposition: BodyComposition?
   let bowelMovements: BowelMovements?
   let exerciseEffectiveness: ExerciseEffectiveness?
   let heartHealth: HeartHealth?
@@ -115,7 +115,7 @@ extension ChatHealthData {
   struct BloodPressureSample: SendableNetworkModel {
     let date: Date
     let systolic: Quantity
-    let distolic: Quantity
+    let diastolic: Quantity
   }
 }
 
@@ -142,7 +142,7 @@ extension ChatHealthData {
 // MARK: - Body Composition
 
 extension ChatHealthData {
-  struct BodyCompostiion: SendableNetworkModel {
+  struct BodyComposition: SendableNetworkModel {
     let bodyFatPercentage: [Sample]
     let bodyMass: [Sample]
   }

@@ -158,7 +158,7 @@ extension DeveloperSettingsView {
           do {
             let chatHealthData = await ChatVitalConverter.shared.convertHealthData()
 
-            let jsonData = try JSONEncoder().encode(chatHealthData)
+            let jsonData = try JSONEncoder.bloomModel.encode(chatHealthData)
             let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
             UIPasteboard.general.string = jsonString
 
@@ -188,7 +188,7 @@ extension DeveloperSettingsView {
           do {
             let goalsData = await ChatGoalConverter.shared.convertGoalData()
 
-            let jsonData = try JSONEncoder().encode(goalsData)
+            let jsonData = try JSONEncoder.bloomModel.encode(goalsData)
             let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
             UIPasteboard.general.string = jsonString
 
