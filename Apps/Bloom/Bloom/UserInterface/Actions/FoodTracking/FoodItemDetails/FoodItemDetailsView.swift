@@ -278,6 +278,7 @@ private extension FoodItemDetailsView {
   var foodItemMenu: some View {
     Menu("Options", systemImage: "ellipsis.circle") {
       if !hasMarkedAsInaccurate {
+        // TODO: Only show this when the FoodItem is not AI generated.
         Button("Report an Issue", systemImage: "exclamationmark.triangle") {
           presentedSheet = FoodItemIssueReportView(foodItem: foodItem) {
             hasMarkedAsInaccurate = true
@@ -285,16 +286,19 @@ private extension FoodItemDetailsView {
         }
       }
 
-      Divider()
-      Button("Delete Log", systemImage: "trash", role: .destructive) {
-        guard let log = existingFoodItemLog else { return }
+      if existingFoodItemLog != nil {
+        Divider()
 
-        Task {
-          do {
-            try await nutritionViewModel.delete(foodItemLogs: [log])
-            dismiss()
-          } catch {
-            self.error = error
+        Button("Delete Log", systemImage: "trash", role: .destructive) {
+          guard let log = existingFoodItemLog else { return }
+
+          Task {
+            do {
+              try await nutritionViewModel.delete(foodItemLogs: [log])
+              dismiss()
+            } catch {
+              self.error = error
+            }
           }
         }
       }

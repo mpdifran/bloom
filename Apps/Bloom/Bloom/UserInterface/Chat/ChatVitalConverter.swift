@@ -115,7 +115,7 @@ private extension ChatVitalConverter {
     )
   }
 
-  func generateBodyComposition(from date: Date) async -> ChatHealthData.BodyCompostiion? {
+  func generateBodyComposition(from date: Date) async -> ChatHealthData.BodyComposition? {
     let dateRange = DateRange.fromDateToNow(date)
 
     let bodyFatPercentage = await HealthStoreFetcher.shared.fetchCollatedAverage(
@@ -147,7 +147,7 @@ private extension ChatVitalConverter {
       )
     }
 
-    return ChatHealthData.BodyCompostiion(
+    return ChatHealthData.BodyComposition(
       bodyFatPercentage: bodyFatSamples,
       bodyMass: bodyMassSamples
     )
@@ -385,7 +385,7 @@ private extension ChatVitalConverter {
         ChatHealthData.BloodPressureSample(
           date: systolicSample.date,
           systolic: systolicSample.quantity.chatQuantity(for: .millimeterOfMercury()),
-          distolic: diastolicSample.quantity.chatQuantity(for: .millimeterOfMercury())
+          diastolic: diastolicSample.quantity.chatQuantity(for: .millimeterOfMercury())
         )
       )
     }
