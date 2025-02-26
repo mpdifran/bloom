@@ -216,6 +216,13 @@ private extension AIFoodScannerView {
                 AIScanFoodItemCell(foodItemServing: $viewModel.servings[index])
                   .focused($focusedIndex, equals: index)
                   .transition(.blurReplace)
+                  .onTapGesture {
+                    presentedSheet = FoodItemDetailsView(
+                      foodItem: serving.foodItem,
+                      existingFoodItemLog: nil,
+                      mode: .viewOnly
+                    ).asAny
+                  }
               }
             }
           }
@@ -232,6 +239,13 @@ private extension AIFoodScannerView {
               viewModel.suggestedServings.remove(at: index)
             }
             .transition(.blurReplace)
+            .onTapGesture {
+              presentedSheet = FoodItemDetailsView(
+                foodItem: serving.foodItem,
+                existingFoodItemLog: nil,
+                mode: .viewOnly
+              ).asAny
+            }
           }
         }
       }

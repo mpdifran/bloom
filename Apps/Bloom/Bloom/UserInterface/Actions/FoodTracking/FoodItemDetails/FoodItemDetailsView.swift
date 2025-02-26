@@ -10,16 +10,26 @@ import AppUI
 import BloomModel
 import DataContainer
 
+extension FoodItemDetailsView {
+  enum Mode {
+    case editAndView
+    case viewOnly
+  }
+}
+
 struct FoodItemDetailsView: View {
   let foodItem: BloomModel.FoodItem
   let existingFoodItemLog: FoodItemLog?
+  let mode: Mode
 
   init(
     foodItem: BloomModel.FoodItem,
-    existingFoodItemLog: FoodItemLog?
+    existingFoodItemLog: FoodItemLog?,
+    mode: Mode = .editAndView
   ) {
     self.foodItem = foodItem
     self.existingFoodItemLog = existingFoodItemLog
+    self.mode = mode
 
     if let existingFoodItemLog {
       self._numberOfServings = State(initialValue: existingFoodItemLog.numberOfServings)
@@ -85,12 +95,12 @@ struct FoodItemDetailsView: View {
               .horizontallyCentered()
           }
           .buttonStyle(.primary)
-        } else {
+        } else if mode == .editAndView {
           AsyncButton {
             try await save()
             dismiss()
           } label: {
-            Text(existingFoodItemLog == nil ? "Log" : "Save")
+            Text(existingFoodItemLog == nil ? "Log" : "Update")
               .horizontallyCentered()
           }
           .buttonStyle(.primary)
@@ -181,61 +191,68 @@ private extension FoodItemDetailsView {
     .cardContainer()
   }
 
-  var editSection: some View {
-    VStack(spacing: 0) {
-      HStack(spacing: 0) {
-        Spacer()
+  var dateMealPickers: some View {
+    HStack(spacing: 0) {
+      Spacer()
 
-        Button {
-          showDatePicker.toggle()
-        } label: {
-          HStack(spacing: 2) {
-            Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
-            Image(systemName: "chevron.up.chevron.down")
-              .font(.caption)
-          }
-          .padding()
+      Button {
+        showDatePicker.toggle()
+      } label: {
+        HStack(spacing: 2) {
+          Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
+          Image(systemName: "chevron.up.chevron.down")
+            .font(.caption)
         }
-        .popover(isPresented: $showDatePicker) {
-          DatePicker(selection: $date, displayedComponents: .date) {
-            Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
-          }
-          .datePickerStyle(.graphical)
-          .frame(width: 300)
-          .presentationCompactAdaptation(.popover)
+        .padding()
+      }
+      .popover(isPresented: $showDatePicker) {
+        DatePicker(selection: $date, displayedComponents: .date) {
+          Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
         }
-        .onChange(of: date) { _, _ in
-          showDatePicker = false
-        }
-
-        Picker(meal.name, selection: $meal) {
-          ForEach(FoodItemLog.Meal.allCases) { meal in
-            Text(meal.name)
-              .tag(meal)
-          }
-        }
-
-        Spacer()
+        .datePickerStyle(.graphical)
+        .frame(width: 300)
+        .presentationCompactAdaptation(.popover)
+      }
+      .onChange(of: date) { _, _ in
+        showDatePicker = false
       }
 
-      Divider()
+      Picker(meal.name, selection: $meal) {
+        ForEach(FoodItemLog.Meal.allCases) { meal in
+          Text(meal.name)
+            .tag(meal)
+        }
+      }
+
+      Spacer()
+    }
+  }
+
+  var editSection: some View {
+    VStack(spacing: 0) {
+      if mode == .editAndView {
+        dateMealPickers
+        Divider()
+      }
 
       LabeledContent("Serving Size", value: foodItem.displayServing)
         .frame(minHeight: 60)
 
-      Divider()
+      if mode == .editAndView {
+        Divider()
 
-      LabeledContent("Number of Servings") {
-        TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
-          .textFieldStyle(.roundedBorder)
-          .multilineTextAlignment(.trailing)
-          .frame(width: 70)
-          .fontDesign(.rounded)
-          .keyboardType(.decimalPad)
-          .focused($isFocused)
-          .selectAllTextOnBeginEditing()
+        LabeledContent("Number of Servings") {
+          TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
+            .textFieldStyle(.roundedBorder)
+            .multilineTextAlignment(.trailing)
+            .frame(width: 70)
+            .fontDesign(.rounded)
+            .keyboardType(.decimalPad)
+            .focused($isFocused)
+            .selectAllTextOnBeginEditing()
+        }
+        .frame(minHeight: 60)
       }
-      .frame(minHeight: 60)
     }
     .padding(.horizontal)
     .cardContainer(includePadding: false)
