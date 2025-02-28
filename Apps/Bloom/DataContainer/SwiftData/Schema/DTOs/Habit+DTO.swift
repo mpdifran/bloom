@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-public struct HabitDTO: Sendable {
+public struct HabitDTO: Equatable, Sendable {
   public let id: PersistentIdentifier!
   public let targetMetric: TargetMetric
   public let value: Double

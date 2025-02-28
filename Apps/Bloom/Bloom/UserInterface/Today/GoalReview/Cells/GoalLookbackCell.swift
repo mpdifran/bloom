@@ -10,6 +10,7 @@ import DataContainer
 
 struct GoalLookbackCell: View {
   let goal: HabitDTO
+  let history: [Bool]
 
   var body: some View {
     HStack {
@@ -23,9 +24,7 @@ struct GoalLookbackCell: View {
           .bold()
           .multilineTextAlignment(.leading)
 
-        HabitGridRowWeekLookbackView(
-          completionHistory: [true, false, false, true, true, true, false]
-        )
+        HabitGridRowWeekLookbackView(completionHistory: history)
       }
 
       Spacer()
@@ -52,8 +51,8 @@ struct GoalLookbackCell: View {
 #Preview {
   ScrollView {
     VStack {
-      GoalLookbackCell(goal: .Preview.steps)
-      GoalLookbackCell(goal: .Preview.heartRateZone5)
+      GoalLookbackCell(goal: .Preview.steps, history: [true, false, false, true, false, true, false])
+      GoalLookbackCell(goal: .Preview.heartRateZone5, history: [false, true, false, true, true, true, false])
     }
     .horizontallyCentered()
     .padding()
