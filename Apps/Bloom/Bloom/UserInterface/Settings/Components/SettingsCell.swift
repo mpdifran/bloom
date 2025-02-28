@@ -33,7 +33,6 @@ struct SettingsCell<Content>: View where Content: View {
         }
       }
       .foregroundStyle(.secondary)
-      .fixedSize()
     } label: {
       Text(title)
         .bold()
@@ -81,6 +80,12 @@ struct SettingsCell<Content>: View where Content: View {
         SettingsSectionContainer {
           SettingsCell("Morning Report on Wake Up") {
             Toggle("", isOn: .constant(true))
+          }
+
+          Divider()
+
+          SettingsCell("User ID") {
+            Text("21345-3terdgf-xbbfxg-hrae-g4a-t5s4ysrt-htxr-g")
           }
         }
       }

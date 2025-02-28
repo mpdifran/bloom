@@ -561,7 +561,6 @@ private extension SettingsView {
               .horizontallyCentered()
               .frame(minHeight: 60)
           }
-          .tint(.mutedRed)
         }
       }
     }
@@ -579,20 +578,6 @@ private extension SettingsView {
         .onTapGesture {
           presentedSheet = DeveloperSettingsView().asAny
         }
-
-        Divider()
-
-        Button {
-          apiHost.overrideEnabled = false
-          showDeveloperMode = false
-          danieleMode = false
-        } label: {
-          Text("Exit Developer Mode")
-            .bold()
-            .horizontallyCentered()
-            .frame(minHeight: 60)
-        }
-        .tint(.mutedRed)
       }
     }
   }

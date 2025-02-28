@@ -13,6 +13,7 @@ struct DeveloperSettingsView: View {
 
   @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
+  @AppStorage("SettingsView.showDeveloperMode") private var showDeveloperMode: Bool = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -32,17 +33,21 @@ struct DeveloperSettingsView: View {
 
   var body: some View {
     NavigationStack {
-      List {
-        networkSection
-        userSection
-        healthPermissionsSection
-        danieleSection
-        adminActionsSection
-        debugSection
-        revenueCatSection
-        designSection
-        authSection
+      ScrollView {
+        VStack(spacing: 20) {
+          networkSection
+          userSection
+          healthPermissionsSection
+          danieleSection
+          adminActionsSection
+          debugSection
+          designSection
+          authSection
+          developerModeSection
+        }
+        .padding()
       }
+      .groupedBackground()
       .navigationTitle("Developer Tools")
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -53,6 +58,8 @@ struct DeveloperSettingsView: View {
         }
       }
     }
+    .presentationCornerRadius(30)
+    .presentationDragIndicator(.visible)
     .fullScreenCover($presentedFullScreenView)
     .sheet($presentedSheet)
     .animation(.default, value: apiHost.overrideEnabled)
@@ -70,6 +77,7 @@ struct DeveloperSettingsView: View {
     }
     .alert(alertDetails: $alertDetails)
     .alert(error: $error)
+    .tint(.mutedPurple)
   }
 }
 
@@ -80,40 +88,55 @@ extension DeveloperSettingsView {
   }
 
   var networkSection: some View {
-    Section {
-      Toggle("Override Host", isOn: apiHost.$overrideEnabled)
-        .tint(.mutedPurple)
+    VStack(alignment: .leading) {
+      SectionTitleView("Network")
+        .padding(.horizontal)
 
-      if apiHost.overrideEnabled {
-        LabeledContent("Host") {
-          TextField("", text: apiHost.$base, prompt: Text("ex: 192.168.1.1"))
-            .multilineTextAlignment(.trailing)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-            .selectAllTextOnBeginEditing()
+      SettingsSectionContainer {
+        SettingsCell("Override Host") {
+          Toggle("", isOn: apiHost.$overrideEnabled)
+        }
+
+        if apiHost.overrideEnabled {
+          Divider()
+
+          SettingsCell("Host") {
+            TextField("", text: apiHost.$base, prompt: Text("ex: 192.168.1.1"))
+              .multilineTextAlignment(.trailing)
+              .textInputAutocapitalization(.never)
+              .autocorrectionDisabled()
+              .selectAllTextOnBeginEditing()
+          }
         }
       }
-    } header: {
-      Text("Network")
-    } footer: {
+
       Text("Current host: \(apiHost.resolvedHost.absoluteString)")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .padding(.horizontal)
     }
   }
 
   var userSection: some View {
-    Section("User") {
-      LabeledContent("User ID") {
-        Text(UserID.value)
-          .lineLimit(1)
-          .minimumScaleFactor(0.1)
-      }
-      .selectable()
-      .onTapGesture {
-        UIPasteboard.general.string = UserID.value
-        alertDetails = AlertDetails(
-          title: "Copied to Clipboard",
-          message: "The User ID has been copied to your clipboard."
-        )
+    VStack(alignment: .leading) {
+      SectionTitleView("User")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("User ID") {
+          Text(UserID.value)
+            .lineLimit(2)
+            .multilineTextAlignment(.trailing)
+            .minimumScaleFactor(0.1)
+        }
+        .selectable()
+        .onTapGesture {
+          UIPasteboard.general.string = UserID.value
+          alertDetails = AlertDetails(
+            title: "Copied to Clipboard",
+            message: "The User ID has been copied to your clipboard."
+          )
+        }
       }
     }
   }
@@ -121,40 +144,63 @@ extension DeveloperSettingsView {
   @ViewBuilder
   var healthPermissionsSection: some View {
     if authStatus == .shouldRequest || shouldPromptForNotificationPermissions {
-      Section("Permissions") {
-        if authStatus == .shouldRequest {
-          Button(action: {
-            Task {
+      VStack {
+        SectionTitleView("Permissions")
+          .padding(.horizontal)
+
+        SettingsSectionContainer {
+          if authStatus == .shouldRequest {
+            AsyncButton {
               await HealthPermissionChecker.shared.requestAccessIfNeeded()
+            } label: {
+              LabeledContent("HealthKit Permissions") {
+                Image(systemName: "arrow.up.forward.app.fill")
+              }
+              .bold()
+              .fontDesign(.rounded)
+              .foregroundStyle(.tint)
+              .selectable()
             }
-          }, label: {
-            LabeledContent("HealthKit Permissions") {
-              Image(systemName: "arrow.up.forward.app.fill")
+            .frame(height: 60)
+          }
+
+          if authStatus == .shouldRequest && shouldPromptForNotificationPermissions {
+            Divider()
+          }
+
+          if shouldPromptForNotificationPermissions {
+            Button {
+              NotificationManager.shared.requestAuthorization()
+            } label: {
+              LabeledContent("Notification Permissions") {
+                Image(systemName: "arrow.up.forward.app.fill")
+              }
+              .bold()
+              .fontDesign(.rounded)
+              .foregroundStyle(.tint)
+              .selectable()
             }
-          })
-          .buttonStyle(.plain)
-        }
-        if shouldPromptForNotificationPermissions {
-          Button(action: {
-            NotificationManager.shared.requestAuthorization()
-          }, label: {
-            LabeledContent("Notification Permissions") {
-              Image(systemName: "arrow.up.forward.app.fill")
-            }
-          })
-          .buttonStyle(.plain)
+            .frame(height: 60)
+          }
         }
       }
     }
   }
 
   var danieleSection: some View {
-    Section("Daniele") {
-      Toggle("Daniele Mode", isOn: $danieleMode)
-        .tint(.mutedPurple)
+    VStack {
+      SectionTitleView("Feature Flags")
+        .padding(.horizontal)
 
-      Button {
-        Task {
+      SettingsSectionContainer {
+        SettingsCell("Daniele Mode") {
+          Toggle("", isOn: $danieleMode)
+            .tint(.mutedPurple)
+        }
+
+        Divider()
+
+        AsyncButton {
           do {
             let chatHealthData = await ChatVitalConverter.shared.convertHealthData()
 
@@ -173,18 +219,20 @@ extension DeveloperSettingsView {
               self.error = error
             }
           }
+        } label: {
+          LabeledContent("Copy Health Data to Clipboard") {
+            Image(systemName: "document.on.document")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
         }
-      } label: {
-        HStack {
-          Text("Copy Health Data to Clipboard")
-          Spacer()
-          DisclosureIndicator()
-        }
-      }
-      .buttonStyle(.plain)
+        .frame(height: 60)
 
-      Button {
-        Task {
+        Divider()
+
+        AsyncButton {
           do {
             let goalsData = await ChatGoalConverter.shared.convertGoalData()
 
@@ -203,85 +251,100 @@ extension DeveloperSettingsView {
               self.error = error
             }
           }
+        } label: {
+          LabeledContent("Copy Goals to Clipboard") {
+            Image(systemName: "document.on.document")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
         }
-      } label: {
-        HStack {
-          Text("Copy Goals to Clipboard")
-          Spacer()
-          DisclosureIndicator()
-        }
+        .frame(height: 60)
       }
-      .buttonStyle(.plain)
     }
   }
 
   var debugSection: some View {
-    Section("Debug") {
-      Button {
-        presentedSheet = DebugHabitsListView().asAny
-      } label: {
-        HStack {
-          Text("Debug Habits")
-          Spacer()
-          DisclosureIndicator()
-        }
-      }
-      .buttonStyle(.plain)
+    VStack {
+      SectionTitleView("SwiftData")
+        .padding(.horizontal)
 
-      Button {
-        presentedSheet = DebugFoodItemLogListView().asAny
-      } label: {
-        HStack {
-          Text("Debug Food Item Logs")
-          Spacer()
-          DisclosureIndicator()
-        }
+      SettingsSectionContainer {
+        SettingsCell("View Habits", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = DebugHabitsListView().asAny
+          }
+
+        Divider()
+
+        SettingsCell("View Food Item Logs", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = DebugFoodItemLogListView().asAny
+          }
       }
-      .buttonStyle(.plain)
     }
   }
 
   var adminActionsSection: some View {
-    Section("Admin Actions") {
-      Button {
-        hasShownOnboarding = false
-      } label: {
-        LabeledContent("Reset Onboarding") {
-          Image(systemName: "arrow.uturn.backward.square.fill")
-        }
-      }
-      .buttonStyle(.plain)
+    VStack {
+      SectionTitleView("Admin Actions")
+        .padding(.horizontal)
 
-      Button {
-        HabitsViewModel.shared.resetHabitCheckDate()
-        alertDetails = AlertDetails(title: "Focus Area Review", message: "You will now be prompted to review your focus areas.")
-      } label: {
-        HStack {
-          Text("Prompt Focus Area Review")
-          Spacer()
-          DisclosureIndicator()
+      SettingsSectionContainer {
+        Button {
+          hasShownOnboarding = false
+        } label: {
+          LabeledContent("Reset Onboarding") {
+            Image(systemName: "arrow.uturn.backward.square.fill")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
         }
-      }
-      .buttonStyle(.plain)
 
-      Button {
-        Task {
+        Divider()
+
+        Button {
+          HabitsViewModel.shared.resetHabitCheckDate()
+          alertDetails = AlertDetails(
+            title: "Goal Review",
+            message: "You will now be prompted to review your goals on the Today tab."
+          )
+        } label: {
+          LabeledContent("Prompt Goal Review") {
+            Image(systemName: "repeat")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
           await VitalsCalculator.shared.forceFetchVitals()
           await MainActor.run {
             alertDetails = AlertDetails(title: "Vitals Recalculated", message: "Your Vitals have been recalculated.")
           }
+        } label: {
+          LabeledContent("Recalculate Vitals") {
+            Image(systemName: "arrow.clockwise.heart.fill")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
         }
-      } label: {
-        HStack {
-          Text("Recalculate Vitals")
-          Spacer()
-          DisclosureIndicator()
-        }
-      }
-      .buttonStyle(.plain)
 
-      Button {
-        Task {
+        Divider()
+
+        AsyncButton {
           do {
             try await NutritionTrackingViewModel.shared.reSyncNutritionToHealthKit()
             await MainActor.run {
@@ -290,79 +353,125 @@ extension DeveloperSettingsView {
           } catch {
             self.error = error
           }
+        } label: {
+          LabeledContent("Sync Nutrition to HealthKit") {
+            Image(systemName: "carrot")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
         }
-      } label: {
-        HStack {
-          Text("Re-Sync Nutrition to HealthKit")
-          Spacer()
-          DisclosureIndicator()
-        }
-      }
-      .buttonStyle(.plain)
 
-      Button {
-        presentedSheet = BloomPlusPaywall().asAny
-      } label: {
-        HStack {
-          Text("Show Paywall")
-          Spacer()
-          DisclosureIndicator()
+        Divider()
+
+        Button {
+          presentedSheet = BloomPlusPaywall().asAny
+        } label: {
+          LabeledContent("Show Paywall") {
+            Image(systemName: "dollarsign.square.fill")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
         }
-        .selectable()
+
+        #if DEBUG
+        Divider()
+
+        Button {
+          showRCDebugOverlay.toggle()
+        } label: {
+          LabeledContent("Debug RevenueCat") {
+            Image(systemName: "cat.fill")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+        .debugRevenueCatOverlay(isPresented: $showRCDebugOverlay)
+        #endif
       }
     }
-  }
-
-  @ViewBuilder
-  var revenueCatSection: some View {
-    #if DEBUG
-    Section("RevenueCat") {
-      Button {
-        showRCDebugOverlay.toggle()
-      } label: {
-        HStack {
-          Text("Debug View")
-          Spacer()
-          DisclosureIndicator()
-        }
-      }
-      .buttonStyle(.plain)
-      .debugRevenueCatOverlay(isPresented: $showRCDebugOverlay)
-    }
-    #endif
   }
 
   var designSection: some View {
-    Section("Design") {
-      Button {
-        presentedSheet = ColorPaletteView().asAny
-      } label: {
-        LabeledContent("Color Palette") {
-          Image(systemName: "paintpalette")
+    VStack {
+      SectionTitleView("Design")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        Button {
+          presentedSheet = ColorPaletteView().asAny
+        } label: {
+          LabeledContent("Color Palette") {
+            Image(systemName: "paintpalette")
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
         }
       }
-      .buttonStyle(.plain)
     }
   }
 
   var authSection: some View {
-    Section("Auth") {
-      LabeledContent("User ID") {
-        Text(viewModel.userID?.value ?? "None")
-      }
-      LabeledContent("Auth Token") {
-        Text(viewModel.authToken?.value ?? "None")
-      }
+    VStack {
+      SectionTitleView("Auth")
+        .padding(.horizontal)
 
-      if viewModel.isAuthenticated {
-        AsyncButton(role: .destructive) {
-          try await UserController.shared.logout()
-        } label: {
-          Text("Log Out")
+      SettingsSectionContainer {
+        SettingsCell("User ID") {
+          Text(viewModel.userID?.value ?? "None")
         }
-      } else {
-        Button("Show Log In") {
-          presentedSheet = LoginView { }.asAny
+
+        Divider()
+
+        SettingsCell("Auth Token") {
+          Text(viewModel.authToken?.value ?? "None")
+        }
+
+        Divider()
+
+        if viewModel.isAuthenticated {
+          AsyncButton(role: .destructive) {
+            try await UserController.shared.logout()
+          } label: {
+            Text("Log Out")
+              .frame(height: 60)
+          }
+        } else {
+          Button("Show Log In") {
+            presentedSheet = LoginView { }.asAny
+          }
+          .frame(height: 60)
+        }
+      }
+    }
+  }
+
+  var developerModeSection: some View {
+    VStack {
+      SettingsSectionContainer {
+        Button(role: .destructive) {
+          apiHost.overrideEnabled = false
+          showDeveloperMode = false
+          danieleMode = false
+          dismiss()
+        } label: {
+          Text("Exit Developer Mode")
+            .bold()
+            .fontDesign(.rounded)
+            .horizontallyCentered()
+            .frame(minHeight: 60)
+            .selectable()
         }
       }
     }
