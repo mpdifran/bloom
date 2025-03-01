@@ -10,6 +10,6 @@ only_rules:
 custom_rules:
   no_init_shorthand:
     name: "No .init shorthand"
-    regex: "(?<!super)\\.init\\("
+    regex: "(?<!super)(?<!self)\\.init\\("
     message: "Avoid using .init shorthand. Use the full type name instead."
     severity: warning
