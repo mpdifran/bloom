@@ -27,7 +27,7 @@ public class AsyncStreamable<Value> where Value: Sendable {
   }
 
   private var _wrappedValue: Value
-  private var subscriptions: [UUID : AsyncStream<Value>.Continuation] = [:]
+  private var subscriptions: [UUID: AsyncStream<Value>.Continuation] = [:]
 
   public var projectedValue: AsyncStream<Value> {
     AsyncStream { continuation in

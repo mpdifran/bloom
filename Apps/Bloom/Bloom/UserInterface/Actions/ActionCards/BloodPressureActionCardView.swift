@@ -97,7 +97,7 @@ private extension BloodPressureActionCardView {
       start: .now,
       end: .now,
       metadata: [
-        HKMetadataKeyWasUserEntered : true
+        HKMetadataKeyWasUserEntered: true
       ]
     )
     let diastolicSample = HKQuantitySample(
@@ -106,7 +106,7 @@ private extension BloodPressureActionCardView {
       start: .now,
       end: .now,
       metadata: [
-        HKMetadataKeyWasUserEntered : true
+        HKMetadataKeyWasUserEntered: true
       ]
     )
 

@@ -1,0 +1,15 @@
+only_rules:
+  - colon
+  # - indentation_width
+  - custom_rules
+
+# TODO: Zach - apply format then enable this rule
+# indentation_width:
+#   indentation_width: 2
+
+custom_rules:
+  no_init_shorthand:
+    name: "No .init shorthand"
+    regex: "(?<!super)(?<!self)\\.init\\("
+    message: "Avoid using .init shorthand. Use the full type name instead."
+    severity: warning

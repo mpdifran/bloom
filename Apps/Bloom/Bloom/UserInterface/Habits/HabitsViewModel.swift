@@ -88,11 +88,11 @@ extension HabitsViewModel {
       TelemetryDeck.signal(
         "Update Goal",
         parameters: [
-          "userAdded" : "false",
-          "vitalKind" : focusVital.vitalKind.name,
-          "goalKind" : proposedGoal.targetMetric.name,
-          "value" : proposedGoal.value.format(using: .twoDecimalPlaces),
-          "originalValue" : proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
+          "userAdded": "false",
+          "vitalKind": focusVital.vitalKind.name,
+          "goalKind": proposedGoal.targetMetric.name,
+          "value": proposedGoal.value.format(using: .twoDecimalPlaces),
+          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
         ],
         floatValue: proposedGoal.value
       )
@@ -108,10 +108,10 @@ extension HabitsViewModel {
       TelemetryDeck.signal(
         "Update Goal",
         parameters: [
-          "userAdded" : "true",
-          "goalKind" : proposedGoal.targetMetric.name,
-          "value" : proposedGoal.value.format(using: .twoDecimalPlaces),
-          "originalValue" : proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
+          "userAdded": "true",
+          "goalKind": proposedGoal.targetMetric.name,
+          "value": proposedGoal.value.format(using: .twoDecimalPlaces),
+          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
         ],
         floatValue: proposedGoal.value
       )

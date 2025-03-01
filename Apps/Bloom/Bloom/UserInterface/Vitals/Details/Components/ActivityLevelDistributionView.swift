@@ -15,7 +15,7 @@ private extension CGFloat {
 }
 
 struct ActivityLevelDistributionView: View {
-    let ratioDistribution: [ActivityLevelSummary.ActivityLevel : Int]
+    let ratioDistribution: [ActivityLevelSummary.ActivityLevel: Int]
 
     var body: some View {
         GeometryReader { proxy in
@@ -94,7 +94,7 @@ private extension ActivityLevelDistributionView {
     ScrollView {
         ActivityLevelDistributionView(
             ratioDistribution: [
-                .sedentary : 10,
+                .sedentary: 10,
                 .light: 13,
                 .moderate: 4,
                 .high: 1,

@@ -39,7 +39,7 @@ final class ReportCoordinatorViewModel {
   }
 
   private init() {
-    UserDefaults.group.register(defaults: [.showMorningReportOnWakeUp : true])
+    UserDefaults.group.register(defaults: [.showMorningReportOnWakeUp: true])
 
     if let date = UserDefaults.group.object(forKey: .morningReportDate) as? Date {
       self.morningReportDate = date

@@ -144,7 +144,7 @@ final class HealthManager: ObservableObject {
     self.weightLossSpeed = healthDefaults.getWeightLossSpeed()
 
     if let activityLevel = healthDefaults.getActivityLevel() {
-      self.userReportedActivityLevel = healthDefaults.getActivityLevel()
+      self.userReportedActivityLevel = activityLevel
     }
 
     Task {

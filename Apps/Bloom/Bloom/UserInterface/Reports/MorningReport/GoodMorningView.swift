@@ -436,10 +436,10 @@ private extension GoodMorningView {
             .foregroundStyle(.text)
           }
           .chartForegroundStyleScale([
-            "Past Line" : gradientFor(minTemp: minTemp, maxTemp: maxTemp, opacity: 0.5),
-            "Future Line" : gradientFor(minTemp: minTemp, maxTemp: maxTemp),
-            "Past Area" : gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.2),
-            "Future Area" : gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.5)
+            "Past Line": gradientFor(minTemp: minTemp, maxTemp: maxTemp, opacity: 0.5),
+            "Future Line": gradientFor(minTemp: minTemp, maxTemp: maxTemp),
+            "Past Area": gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.2),
+            "Future Area": gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.5)
           ])
           .chartLegend(.hidden)
           .chartYScale(domain: (minTemp.localizedValue - 5)...(maxTemp.localizedValue + 5), range: .plotDimension)

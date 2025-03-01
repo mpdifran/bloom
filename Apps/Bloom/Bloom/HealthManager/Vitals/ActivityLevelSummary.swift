@@ -257,8 +257,8 @@ extension ActivityLevelSummary.Details {
     return firstLevel == .sedentary && secondLevel == .sedentary && thirdLevel == .sedentary
   }
 
-  var activityLevelRatioDistribution: [ActivityLevelSummary.ActivityLevel : Int] {
-    var ratioDistribution = [ActivityLevelSummary.ActivityLevel : Int]()
+  var activityLevelRatioDistribution: [ActivityLevelSummary.ActivityLevel: Int] {
+    var ratioDistribution = [ActivityLevelSummary.ActivityLevel: Int]()
     for sample in energyRatioSamples {
       for level in ActivityLevelSummary.ActivityLevel.allCases {
         if level.range.contains(sample.value) {
@@ -270,14 +270,14 @@ extension ActivityLevelSummary.Details {
     return ratioDistribution
   }
   
-  func dayOfWeekActivityLevelRatioDistribution() -> [Int : Double] {
-    var collection = [Int : [Double]]()
+  func dayOfWeekActivityLevelRatioDistribution() -> [Int: Double] {
+    var collection = [Int: [Double]]()
     for sample in energyRatioSamples {
       let dayOfWeek = Calendar.current.component(.weekday, from: sample.date)
       collection[dayOfWeek, default: []].append(sample.value)
     }
 
-    var result = [Int : Double]()
+    var result = [Int: Double]()
     for key in collection.keys {
       result[key] = collection[key, default: []].average(keyPath: \.self)
     }
