@@ -106,9 +106,9 @@ enum WeightLossSpeed: String, CaseIterable, Identifiable {
 final class HealthManager: ObservableObject {
   static let shared = HealthManager()
 
-  @AppStorage(HealthDefaults.Key.name.value, store: .group) var name: String = ""
-  @AppStorage(HealthDefaults.Key.isFemale.value, store: .group) var isFemale = true
-  @AppStorage(HealthDefaults.Key.height.value, store: .group) var heightCM: Double = 0
+  @AppStorage(.HealthDefaults.name.key, store: .group) var name: String = ""
+  @AppStorage(.HealthDefaults.isFemale.key, store: .group) var isFemale = true
+  @AppStorage(.HealthDefaults.height.key, store: .group) var heightCM: Double = 0
 
   @Published var birthday = Date.now {
     didSet { healthDefaults.setBirthday(birthday) }
@@ -131,9 +131,9 @@ final class HealthManager: ObservableObject {
     )
   }
 
-  @AppStorage(HealthDefaults.Key.targetWeight.value, store: .group) var targetWeight: Double = 0
-  @AppStorage(HealthDefaults.Key.isPregnant.value, store: .group) var isPregnant = false
-  @AppStorage(HealthDefaults.Key.isBreastFeeding.value, store: .group) var isBreastfeeding = false
+  @AppStorage(.HealthDefaults.targetWeight.key, store: .group) var targetWeight: Double = 0
+  @AppStorage(.HealthDefaults.isPregnant.key, store: .group) var isPregnant = false
+  @AppStorage(.HealthDefaults.isBreastFeeding.key, store: .group) var isBreastfeeding = false
 
   let healthStore = HKHealthStore()
   let healthDefaults = HealthDefaults()

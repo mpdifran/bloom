@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct HealthDefaults {
-  enum Key: String {
+extension String {
+  /// Namespace for Health User Default Keys
+  enum HealthDefaults: String {
     case name = "HealthManager.name"
     case isFemale = "HealthManager.isFemale"
     case height = "HealthManager.height"
@@ -20,20 +21,22 @@ struct HealthDefaults {
     case isPregnant = "HealthManager.isPregnant"
     case isBreastFeeding = "HealthManager.isBreastfeeding"
 
-    var value: String { rawValue }
+    var key: String { rawValue }
   }
+}
 
+struct HealthDefaults {
   nonisolated(unsafe) private static let store: UserDefaults = .group
 }
 
 private extension HealthDefaults {
-  func getValue<T>(for key: Key) -> T? {
-    HealthDefaults.store.value(forKey: key.rawValue) as? T
+  func getValue<T>(for key: String.HealthDefaults) -> T? {
+    HealthDefaults.store.value(forKey: key.key) as? T
   }
 
   @MainActor
-  func setValue<T>(_ value: T, for key: Key) {
-    HealthDefaults.store.set(value, forKey: key.rawValue)
+  func setValue<T>(_ value: T, for key: String.HealthDefaults) {
+    HealthDefaults.store.set(value, forKey: key.key)
   }
 }
 
