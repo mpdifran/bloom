@@ -10,14 +10,14 @@ import SwiftData
 
 public protocol SharedModelActor {
 
-    init(modelContainer: ModelContainer)
+  init(modelContainer: ModelContainer)
 
-    static func standard() -> Self
+  static func standard() -> Self
 }
 
 extension SharedModelActor {
 
-    public static func standard() -> Self {
-        .init(modelContainer: ContainerHolder.shared.container)
-    }
+  public static func standard() -> Self {
+    Self.init(modelContainer: ContainerHolder.shared.container)
+  }
 }

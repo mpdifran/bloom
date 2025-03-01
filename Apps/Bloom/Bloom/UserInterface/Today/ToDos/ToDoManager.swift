@@ -243,12 +243,12 @@ private extension ToDoManager {
         if let todo = userAddableToDos.first(where: { $0.kind == .logWeight }) {
             todos.append(todo)
         } else {
-            todos.append(.init(kind: .logWeight, cadence: .never, vitalKind: nil))
+            todos.append(ToDoModel(kind: .logWeight, cadence: .never, vitalKind: nil))
         }
         if let todo = userAddableToDos.first(where: { $0.kind == .logBloodPressure }) {
             todos.append(todo)
         } else {
-            todos.append(.init(kind: .logBloodPressure, cadence: .never, vitalKind: nil))
+            todos.append(ToDoModel(kind: .logBloodPressure, cadence: .never, vitalKind: nil))
         }
 
         userAddableToDos = todos

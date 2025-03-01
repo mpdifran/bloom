@@ -111,7 +111,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .sleepQuality))
+      vitals.append(VitalModel(id: .sleepQuality))
     }
     if let activityLevelSummary {
       vitals.append(
@@ -125,7 +125,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .activityLevel))
+      vitals.append(VitalModel(id: .activityLevel))
     }
     if let heartHealthSummary {
       await vitals.append(
@@ -139,7 +139,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .heartHealth))
+      vitals.append(VitalModel(id: .heartHealth))
     }
     if let bodyCompositionSummary {
       await vitals.append(
@@ -153,7 +153,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .bodyComposition))
+      vitals.append(VitalModel(id: .bodyComposition))
     }
     if let stressSummary {
       vitals.append(
@@ -167,7 +167,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .stressLevels))
+      vitals.append(VitalModel(id: .stressLevels))
     }
     if let nutritionSummary {
       vitals.append(
@@ -181,7 +181,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .nutrition))
+      vitals.append(VitalModel(id: .nutrition))
     }
     if let exerciseEffectivenessSummary {
       vitals.append(
@@ -195,7 +195,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .exerciseEffectiveness))
+      vitals.append(VitalModel(id: .exerciseEffectiveness))
     }
     if await HealthManager.shared.sex() == .female {
       if let menstrualSummary {
@@ -210,7 +210,7 @@ private extension VitalsCalculator {
           )
         )
       } else {
-        vitals.append(.init(id: .cycleTracking))
+        vitals.append(VitalModel(id: .cycleTracking))
       }
     }
     if let bowelMovementSummary {
@@ -225,7 +225,7 @@ private extension VitalsCalculator {
         )
       )
     } else {
-      vitals.append(.init(id: .bowelMovements))
+      vitals.append(VitalModel(id: .bowelMovements))
     }
 
     vitals.sort(by: { lhs, rhs in

@@ -48,32 +48,32 @@ struct WorkoutHeartRateZoneCell: View {
   ScrollView {
     VStack {
       WorkoutHeartRateZoneCell(
-        report: .init(
+        report: WorkoutTypeHeartRateReport(
           activityType: .bowling,
           workoutCount: 3,
-          heartZoneDistribution: .init(
-            totalDuration: .init(unit: .minute(), doubleValue: 30),
-            zone1: .init(unit: .minute(), doubleValue: 9),
-            zone2: .init(unit: .minute(), doubleValue: 7),
-            zone3: .init(unit: .minute(), doubleValue: 5),
-            zone4: .init(unit: .minute(), doubleValue: 5),
-            zone5: .init(unit: .minute(), doubleValue: 4)
+          heartZoneDistribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution(
+            totalDuration: HKQuantity(unit: .minute(), doubleValue: 30),
+            zone1: HKQuantity(unit: .minute(), doubleValue: 9),
+            zone2: HKQuantity(unit: .minute(), doubleValue: 7),
+            zone3: HKQuantity(unit: .minute(), doubleValue: 5),
+            zone4: HKQuantity(unit: .minute(), doubleValue: 5),
+            zone5: HKQuantity(unit: .minute(), doubleValue: 4)
           )
         )
       )
       .cardContainer(fill: .background.secondary)
 
       WorkoutHeartRateZoneCell(
-        report: .init(
+        report: WorkoutTypeHeartRateReport(
           activityType: .walking,
           workoutCount: 4,
-          heartZoneDistribution: .init(
-            totalDuration: .init(unit: .minute(), doubleValue: 30),
-            zone1: .init(unit: .minute(), doubleValue: 0),
-            zone2: .init(unit: .minute(), doubleValue: 0),
-            zone3: .init(unit: .minute(), doubleValue: 0),
-            zone4: .init(unit: .minute(), doubleValue: 0),
-            zone5: .init(unit: .minute(), doubleValue: 0)
+          heartZoneDistribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution(
+            totalDuration: HKQuantity(unit: .minute(), doubleValue: 30),
+            zone1: HKQuantity(unit: .minute(), doubleValue: 0),
+            zone2: HKQuantity(unit: .minute(), doubleValue: 0),
+            zone3: HKQuantity(unit: .minute(), doubleValue: 0),
+            zone4: HKQuantity(unit: .minute(), doubleValue: 0),
+            zone5: HKQuantity(unit: .minute(), doubleValue: 0)
           )
         )
       )

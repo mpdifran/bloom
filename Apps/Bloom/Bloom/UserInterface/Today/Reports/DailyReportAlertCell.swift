@@ -89,7 +89,7 @@ struct DailyReportAlertCell: View {
       stroke: LinearGradient(
         colors: strokeGradientColors,
         startPoint: .bottomLeading,
-        endPoint: .init(x: 0.1, y: 0)
+        endPoint: UnitPoint(x: 0.1, y: 0)
       ),
       lineWidth: 3
     )

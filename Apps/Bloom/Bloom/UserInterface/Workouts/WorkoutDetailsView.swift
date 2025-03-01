@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import HealthKit
+@preconcurrency import HealthKit
 import Charts
 import CoreLocation
 import MapKit
@@ -22,7 +22,7 @@ struct WorkoutDetailsView: View {
   @State private var workoutRoutes = [WorkoutRoute]()
 
   @State private var mapCameraPosition: MapCameraPosition = .camera(
-    .init(centerCoordinate: .init(latitude: 37.7749, longitude: -122.4194), distance: 1000)
+    MapCamera(centerCoordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194), distance: 1000)
   )
 
   @State private var tasks = [Task<Void, Never>]()

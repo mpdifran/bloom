@@ -48,20 +48,20 @@ private extension ShieldConfigurationExtension {
             backgroundBlurStyle: .systemThickMaterialDark,
             backgroundColor: deepSleep,
             icon: UIImage(systemName: "moon.zzz.fill")?.withTintColor(bloomTint),
-            title: .init(
+            title: ShieldConfiguration.Label(
                 text: "Bloom - Bedtime",
                 color: .white
             ),
-            subtitle: .init(
+            subtitle: ShieldConfiguration.Label(
                 text: message,
                 color: .white
             ),
-            primaryButtonLabel: .init(
+            primaryButtonLabel: ShieldConfiguration.Label(
                 text: "Close App",
                 color: .white
             ),
             primaryButtonBackgroundColor: bloomTint,
-            secondaryButtonLabel: .init(
+            secondaryButtonLabel: ShieldConfiguration.Label(
                 text: "10 More Minutes",
                 color: bloomTint
             )

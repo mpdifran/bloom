@@ -165,15 +165,15 @@ struct HeartRateZoneBar: View {
 #Preview {
   ScrollView {
     TargetHeartRateZonesDistributionView(
-      distribution: .init(
-        totalDuration: .init(unit: .minute(), doubleValue: 30),
-        zone1: .init(unit: .minute(), doubleValue: 3),
-        zone2: .init(unit: .minute(), doubleValue: 8),
-        zone3: .init(unit: .minute(), doubleValue: 9),
-        zone4: .init(unit: .minute(), doubleValue: 6),
-        zone5: .init(unit: .minute(), doubleValue: 4)
+      distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution(
+        totalDuration: HKQuantity(unit: .minute(), doubleValue: 30),
+        zone1: HKQuantity(unit: .minute(), doubleValue: 3),
+        zone2: HKQuantity(unit: .minute(), doubleValue: 8),
+        zone3: HKQuantity(unit: .minute(), doubleValue: 9),
+        zone4: HKQuantity(unit: .minute(), doubleValue: 6),
+        zone5: HKQuantity(unit: .minute(), doubleValue: 4)
       ),
-      heartRateZones: .init(
+      heartRateZones: HeartRateZones(
         heartRateReserve: 120,
         restingHeartRate: 60,
         maxHeartRate: 180,

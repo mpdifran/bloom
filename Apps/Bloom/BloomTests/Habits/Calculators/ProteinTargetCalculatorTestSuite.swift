@@ -32,7 +32,7 @@ struct ProteinTargetCalculatorTestSuite {
     ) async throws {
         let calculator = ProteinTargetCalculator(
             calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
-            targetDetails: .init(
+            targetDetails: HealthTargetDetails(
                 targetWeight: 160,
                 goal: healthGoal,
                 weightLossSpeed: speed
@@ -64,7 +64,7 @@ struct ProteinTargetCalculatorTestSuite {
         
         let calculator = ProteinTargetCalculator(
             calorieGoal: HKQuantity(unit: .largeCalorie(), doubleValue: calorieGoal),
-            targetDetails: .init(
+            targetDetails: HealthTargetDetails(
                 targetWeight: 160,
                 goal: healthGoal,
                 weightLossSpeed: speed

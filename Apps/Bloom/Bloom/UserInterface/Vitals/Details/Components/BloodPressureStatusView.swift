@@ -133,12 +133,12 @@ private extension BloodPressureStatusView {
 
     var framesForSelectedCategory: [RectangleFrame] {
         switch selectedCategory {
-        case .low: [.init(40, 60, 70, 90)]
-        case .normal: [.init(40, 80, 90, 120), .init(60, 80, 70, 90)]
-        case .elevated: [.init(40, 90, 120, 140), .init(80, 90, 70, 120)]
-        case .hypertensionStage1: [.init(40, 100, 140, 160), .init(90, 100, 70, 140)]
-        case .hypertensionStage2: [.init(40, 110, 160, 180), .init(100, 110, 70, 160)]
-        case .hypertensiveCrisis: [.init(40, 120, 180, 200), .init(110, 120, 70, 180)]
+        case .low: [RectangleFrame(40, 60, 70, 90)]
+        case .normal: [RectangleFrame(40, 80, 90, 120), RectangleFrame(60, 80, 70, 90)]
+        case .elevated: [RectangleFrame(40, 90, 120, 140), RectangleFrame(80, 90, 70, 120)]
+        case .hypertensionStage1: [RectangleFrame(40, 100, 140, 160), RectangleFrame(90, 100, 70, 140)]
+        case .hypertensionStage2: [RectangleFrame(40, 110, 160, 180), RectangleFrame(100, 110, 70, 160)]
+        case .hypertensiveCrisis: [RectangleFrame(40, 120, 180, 200), RectangleFrame(110, 120, 70, 180)]
         }
     }
 }
