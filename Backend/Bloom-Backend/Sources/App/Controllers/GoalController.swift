@@ -20,7 +20,7 @@ extension GoalController: RouteCollection {
     routes.group("v1") {
       $0.auth(using: UserToken.self) {
         $0.group("goals") {
-          $0.post("suggest-goals", use: suggestGoals)
+          $0.post("suggest", use: suggestGoals)
         }
       }
     }

@@ -49,33 +49,7 @@ struct TodayView: View {
             TodaysDateView()
               .padding(.bottom)
 
-            TimelineView(.everyMinute) { context in
-              if Calendar.current.isMorning(date: .now) || danieleMode {
-                DailyReportAlertCell(kind: .morning)
-                  .transition(.scale)
-                  .onTapGesture {
-                    presentedFullScreen = GoodMorningView().asAny
-                  }
-              }
-              if reportViewModel.shouldShowEveningReport() || danieleMode {
-                DailyReportAlertCell(kind: .evening)
-                  .transition(.scale)
-                  .onTapGesture {
-                    presentedFullScreen = EveningReportView().asAny
-                  }
-              }
-              if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
-                GoalReviewCell()
-                  .transition(.scale)
-                  .onTapGesture {
-                    if aiGoalSetting {
-                      presentedFullScreen = GoalLookbackView().asAny
-                    } else {
-                      presentedFullScreen = FocusAreaReviewRootView().asAny
-                    }
-                  }
-              }
-            }
+            alertsSection
           }
           .padding(.horizontal)
 
@@ -139,6 +113,37 @@ struct TodayView: View {
 }
 
 private extension TodayView {
+
+  @ViewBuilder
+  var alertsSection: some View {
+    TimelineView(.everyMinute) { context in
+      if Calendar.current.isMorning(date: .now) || danieleMode {
+        DailyReportAlertCell(kind: .morning)
+          .transition(.scale)
+          .onTapGesture {
+            presentedFullScreen = GoodMorningView().asAny
+          }
+      }
+      if reportViewModel.shouldShowEveningReport() || danieleMode {
+        DailyReportAlertCell(kind: .evening)
+          .transition(.scale)
+          .onTapGesture {
+            presentedFullScreen = EveningReportView().asAny
+          }
+      }
+      if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
+        GoalReviewCell()
+          .transition(.scale)
+          .onTapGesture {
+            if aiGoalSetting {
+              presentedFullScreen = BaseReviewGoalsView().asAny
+            } else {
+              presentedFullScreen = FocusAreaReviewRootView().asAny
+            }
+          }
+      }
+    }
+  }
 
   @ViewBuilder
   var todoSection: some View {

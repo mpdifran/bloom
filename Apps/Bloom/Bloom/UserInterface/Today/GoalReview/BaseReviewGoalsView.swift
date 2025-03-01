@@ -15,20 +15,21 @@ extension BaseReviewGoalsView {
 }
 
 struct BaseReviewGoalsView: View {
-  @State private var step: Step = .goalLookback
+  @State private var proposedGoalsResult: ProposedGoalsResult?
 
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     Group {
-      switch step {
-      case .goalLookback:
-        GoalLookbackView()
-      case .proposeNewGoals:
-        Text("TODO")
+      if let result = proposedGoalsResult {
+        ProposedNewGoalsView(proposedGoalsResult: result)
+      } else {
+        GoalLookbackView { proposedGoalsResult in
+          self.proposedGoalsResult = proposedGoalsResult
+        }
       }
     }
-    .animation(.easeInOut(duration: 1), value: step)
+    .animation(.easeInOut(duration: 1), value: proposedGoalsResult)
     .presentationCompactAdaptation(.fullScreenCover)
   }
 }

@@ -28,6 +28,13 @@ final actor ChatVitalConverter {
 
 extension ChatVitalConverter {
 
+  func convertHealthDataString() async throws -> String {
+    guard let healthData = await convertHealthData() else { return "" }
+
+    let data = try JSONEncoder.bloomModel.encode(healthData)
+    return String(data: data, encoding: .utf8) ?? "{}"
+  }
+
   func convertHealthData() async -> ChatHealthData? {
     let startDate = determineSearchStartDate()
 

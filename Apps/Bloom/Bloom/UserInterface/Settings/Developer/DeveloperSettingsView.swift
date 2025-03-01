@@ -208,11 +208,8 @@ extension DeveloperSettingsView {
 
         AsyncButton {
           do {
-            let chatHealthData = await ChatVitalConverter.shared.convertHealthData()
-
-            let jsonData = try JSONEncoder.bloomModel.encode(chatHealthData)
-            let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
-            UIPasteboard.general.string = jsonString
+            let chatHealthData = try await ChatVitalConverter.shared.convertHealthDataString()
+            UIPasteboard.general.string = chatHealthData
 
             await MainActor.run {
               alertDetails = AlertDetails(
@@ -240,11 +237,8 @@ extension DeveloperSettingsView {
 
         AsyncButton {
           do {
-            let goalsData = await ChatGoalConverter.shared.convertGoalData()
-
-            let jsonData = try JSONEncoder.bloomModel.encode(goalsData)
-            let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
-            UIPasteboard.general.string = jsonString
+            let goalsData = try await ChatGoalConverter.shared.convertGoalDataString()
+            UIPasteboard.general.string = goalsData
 
             await MainActor.run {
               alertDetails = AlertDetails(

@@ -178,6 +178,22 @@ extension NetworkRequester {
 
 extension NetworkRequester {
 
+  func suggestGoals(healthData: String, currentGoals: String) async throws -> SuggestGoalsResponse {
+    let body = SuggestGoalsRequest(
+      healthData: healthData,
+      currentGoals: currentGoals,
+      isConversation: false
+    )
+    let request = try await URLRequest.Goals.suggestGoals(body: body)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: SuggestGoalsResponse.self
+    )
+  }
+}
+
+extension NetworkRequester {
+
   func sendQuery(
     userInfo: UserInfoModel?,
     currentGoals: [String],

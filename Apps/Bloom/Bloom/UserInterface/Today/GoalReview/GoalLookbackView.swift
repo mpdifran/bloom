@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 
 struct GoalLookbackView: View {
+  let onCalculateProposedGoals: (ProposedGoalsResult) -> Void
 
   @State var viewModel = ViewModel()
 
@@ -24,9 +25,10 @@ struct GoalLookbackView: View {
     }
     .shelf {
       AsyncButton {
-        await viewModel.proposeNewGoals()
+        let proposedGoals = try await viewModel.proposeNewGoals()
+        onCalculateProposedGoals(proposedGoals)
       } label: {
-        Text("Continue")
+        Text("Update Goals")
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
@@ -92,5 +94,5 @@ private extension GoalLookbackView {
 }
 
 #Preview {
-  GoalLookbackView()
+  GoalLookbackView { (_) in }
 }

@@ -243,6 +243,7 @@
 		4BD93EED2CFA88BD00D1AFB8 /* ScreenControl */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4BD93EF52CFA88BD00D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ScreenControl; sourceTree = "<group>"; };
 		4BD93F0B2CFA88C400D1AFB8 /* BloomFoundation */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4BD93F1C2CFA88C400D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4BD93F1D2CFA88C400D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BloomFoundation; sourceTree = "<group>"; };
 		4BD93F212CFA88C900D1AFB8 /* fastlane */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = fastlane; path = ../../fastlane; sourceTree = "<group>"; };
+		FF0B2C5B2D73C82500196463 /* Scripts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Scripts; sourceTree = "<group>"; };
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -387,6 +388,7 @@
 				4BD93EED2CFA88BD00D1AFB8 /* ScreenControl */,
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
 				4BD93F0B2CFA88C400D1AFB8 /* BloomFoundation */,
+				FF0B2C5B2D73C82500196463 /* Scripts */,
 				FF9782D12C9A1CC700A8ED7E /* ci_scripts */,
 				4BD93F212CFA88C900D1AFB8 /* fastlane */,
 				FF9782D82C9A22C900A8ED7E /* Umbrella */,
@@ -595,7 +597,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Bloom" */;
 			buildPhases = (
-				4BDE10302D68115B005E5C6D /* Swiftlint */,
+				4BDE10302D68115B005E5C6D /* SwiftLint */,
 				FFACBAD52BAC7788006AAD0B /* Sources */,
 				FFACBAD62BAC7788006AAD0B /* Frameworks */,
 				FFACBAD72BAC7788006AAD0B /* Resources */,
@@ -836,7 +838,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4BDE10302D68115B005E5C6D /* Swiftlint */ = {
+		4BDE10302D68115B005E5C6D /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -846,14 +848,14 @@
 			);
 			inputPaths = (
 			);
-			name = Swiftlint;
+			name = SwiftLint;
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint --fix && swiftlint\nelse\n  echo \"SwiftLint not installed. Install it via Homebrew: brew install swiftlint\"\nfi\n";
+			shellScript = "#!/bin/bash\n\n# Run the SwiftLint script\n\"${SRCROOT}/Scripts/swiftlint.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

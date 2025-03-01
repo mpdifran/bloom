@@ -25,6 +25,12 @@ final actor ChatGoalConverter {
 
 extension ChatGoalConverter {
 
+  func convertGoalDataString() async throws -> String {
+    let goalsData = await convertGoalData()
+    let jsonData = try JSONEncoder.bloomModel.encode(goalsData)
+    return String(data: jsonData, encoding: .utf8) ?? "{}"
+  }
+
   func convertGoalData() async -> CurrentGoalsData? {
     do {
       let activeGoals = try await modelActor.fetchActiveHabits()

@@ -12,7 +12,7 @@ import BloomFoundation
 extension GoalLookbackView {
   @MainActor @Observable
   final class ViewModel {
-    let modelActor = HabitModelActor.standard()
+    private let modelActor = HabitModelActor.standard()
   }
 }
 
@@ -48,7 +48,7 @@ extension GoalLookbackView.ViewModel {
     return []
   }
 
-  func proposeNewGoals() async {
-    
+  func proposeNewGoals() async throws -> ProposedGoalsResult {
+    try await AIGoalManager.shared.proposeNewGoals()
   }
 }

@@ -80,3 +80,11 @@ extension URLRequest {
     }
   }
 }
+
+extension URLRequest {
+  enum Goals {
+    static func suggestGoals(body: SuggestGoalsRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/goals/suggest", body: body)
+    }
+  }
+}

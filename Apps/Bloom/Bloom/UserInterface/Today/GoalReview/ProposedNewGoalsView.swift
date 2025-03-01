@@ -8,12 +8,25 @@
 import SwiftUI
 
 struct ProposedNewGoalsView: View {
+
+  init(proposedGoalsResult: ProposedGoalsResult) {
+    self._proposedGoalsResult = State(initialValue: proposedGoalsResult)
+  }
+
+  @State private var proposedGoalsResult: ProposedGoalsResult
+
   var body: some View {
     ScrollView {
       VStack(alignment: .leading) {
-        Text("")
-          .onboardingTextStyle()
-          .transition(.opacity)
+        if let summary = proposedGoalsResult.summary {
+          Text(summary)
+            .onboardingTextStyle()
+            .transition(.opacity)
+        }
+
+        ForEach($proposedGoalsResult.goals) { goal in
+          ProposedGoalCell(proposedGoal: goal)
+        }
       }
       .padding()
     }
@@ -22,5 +35,22 @@ struct ProposedNewGoalsView: View {
 }
 
 #Preview {
-  ProposedNewGoalsView()
+  ProposedNewGoalsView(
+    proposedGoalsResult: ProposedGoalsResult(
+      summary: "I've made some tweaks to your goals!",
+      goals: [
+        ProposedGoal(
+          habitID: nil,
+          targetMetric: .bikeDistance,
+          value: 10,
+          suggestedValue: 10,
+          previousValue: 5,
+          unitString: "km",
+          vitalKind: nil,
+          context: "Bike more for better health.",
+          hasUserEdited: false
+        )
+      ]
+    )
+  )
 }
