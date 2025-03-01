@@ -275,7 +275,7 @@ private extension WorkoutDetailsView {
 
   func updateCamera() {
     mapCameraPosition = .camera(
-      .init(
+      MapCamera(
         centerCoordinate: region().center,
         distance: calculateRegionDistance()
       )
@@ -354,13 +354,13 @@ private extension WorkoutDetailsView {
 #Preview {
   NavigationStack {
     WorkoutDetailsView(
-      workout: .init(
+      workout: HKWorkout(
         activityType: .cycling,
         start: Date().addingTimeInterval(-483856),
         end: Date().addingTimeInterval(-480000),
         duration: 3856,
-        totalEnergyBurned: .init(unit: .largeCalorie(), doubleValue: 642),
-        totalDistance: .init(unit: .meterUnit(with: .kilo), doubleValue: 9.6),
+        totalEnergyBurned: HKQuantity(unit: .largeCalorie(), doubleValue: 642),
+        totalDistance: HKQuantity(unit: .meterUnit(with: .kilo), doubleValue: 9.6),
         metadata: nil
       )
     )

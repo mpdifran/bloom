@@ -12,4 +12,4 @@ custom_rules:
     name: "No .init shorthand"
     regex: "(?<!super)(?<!self)(?<!Self)\\.init\\("
     message: "Avoid using .init shorthand. Use the full type name instead."
-    severity: warning
+    severity: error
