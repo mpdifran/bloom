@@ -57,7 +57,7 @@ struct BloomApp: App {
     //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
   }
 
-  @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
 
   var body: some Scene {
     WindowGroup {

@@ -175,6 +175,18 @@ public extension DateRange {
     return DateRange(startDate, endDate)
   }
 
+  static func trailingDaysFromEndOfYesterday(_ numberOfDays: Int) -> DateRange {
+    guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now) else {
+      return DateRange(.now, .now)
+    }
+    let endDate = Calendar.current.endOfDay(for: yesterday)
+
+    guard let startDate = Calendar.current.date(byAdding: .day, value: -numberOfDays, to: endDate) else {
+      return DateRange(endDate, endDate)
+    }
+    return DateRange(startDate, endDate)
+  }
+
   static func trailingDaysFromStartOfWeek(_ numberOfDays: Int) -> DateRange {
     guard
       let endDate = Calendar.current.startOfWeek(for: .now),

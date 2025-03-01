@@ -11,9 +11,10 @@ import HealthKit
 
 struct DeveloperSettingsView: View {
 
-  @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
-  @AppStorage("SettingsView.showDeveloperMode") private var showDeveloperMode: Bool = false
+  @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
+  @AppStorage(.FeatureFlag.aiGoalSetting) private var aiGoalSetting = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -38,7 +39,7 @@ struct DeveloperSettingsView: View {
           networkSection
           userSection
           healthPermissionsSection
-          danieleSection
+          featureFlagSection
           adminActionsSection
           debugSection
           designSection
@@ -187,15 +188,20 @@ extension DeveloperSettingsView {
     }
   }
 
-  var danieleSection: some View {
+  var featureFlagSection: some View {
     VStack {
       SectionTitleView("Feature Flags")
         .padding(.horizontal)
 
       SettingsSectionContainer {
+        SettingsCell("AI Goal Review") {
+          Toggle("", isOn: $aiGoalSetting)
+        }
+
+        Divider()
+
         SettingsCell("Daniele Mode") {
           Toggle("", isOn: $danieleMode)
-            .tint(.mutedPurple)
         }
 
         Divider()

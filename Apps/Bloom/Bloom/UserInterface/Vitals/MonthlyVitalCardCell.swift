@@ -19,7 +19,7 @@ extension MonthlyVitalCardCell {
 struct MonthlyVitalCardCell: View {
     let vital: VitalModel
 
-    @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+    @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
 
     var body: some View {
         HStack {

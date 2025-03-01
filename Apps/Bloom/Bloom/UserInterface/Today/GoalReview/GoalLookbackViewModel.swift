@@ -1,5 +1,5 @@
 //
-//  ReviewGoalsViewModel.swift
+//  GoalLookbackViewModel.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-02-26.
@@ -9,21 +9,19 @@ import SwiftUI
 import DataContainer
 import BloomFoundation
 
-extension ReviewGoalsView {
+extension GoalLookbackView {
   @MainActor @Observable
   final class ViewModel {
     let modelActor = HabitModelActor.standard()
-
-    var goalLookbackDetails = [GoalLookbackDetails]()
   }
 }
 
-extension ReviewGoalsView.ViewModel {
+extension GoalLookbackView.ViewModel {
 
-  func loadGoalHistory() async {
+  func loadGoalHistory() async -> [GoalLookbackDetails] {
     do {
       let activeGoals = try await modelActor.fetchActiveHabits()
-      let dateRange = DateRange.trailingDaysFromNow(7)
+      let dateRange = DateRange.trailingDaysFromEndOfYesterday(6)
 
       var goalLookbacks = [GoalLookbackDetails]()
 
@@ -43,9 +41,14 @@ extension ReviewGoalsView.ViewModel {
           print(error)
         }
       }
-      self.goalLookbackDetails = goalLookbacks
+      return goalLookbacks
     } catch {
       print(error)
     }
+    return []
+  }
+
+  func proposeNewGoals() async {
+    
   }
 }

@@ -26,8 +26,8 @@ struct SettingsView: View {
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
-  @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
-  @AppStorage("SettingsView.showDeveloperMode") private var showDeveloperMode: Bool = false
+  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
+  @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
 
   @Environment(\.openURL) private var openURL
   @Environment(\.modelContext) private var modelContext
@@ -455,10 +455,7 @@ private extension SettingsView {
         SettingsCell("App Version") {
           Text(appVersion ?? "Unknown")
             .onTapGesture(count: 10) {
-              showDeveloperMode.toggle()
-              if !showDeveloperMode {
-                danieleMode = false
-              }
+              showDeveloperMode = true
             }
         }
 

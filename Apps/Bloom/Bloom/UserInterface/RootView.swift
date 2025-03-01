@@ -12,7 +12,7 @@ import AppUI
 struct RootView: View {
 
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
-  @AppStorage("PreferencesView.danieleMode") private var danieleMode = false
+  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
 
   @Bindable private var tabController = TabController()
 

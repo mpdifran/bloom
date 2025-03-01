@@ -10,7 +10,7 @@ import DataContainer
 
 struct GoalLookbackCell: View {
   let goal: HabitDTO
-  let history: [Bool]
+  let history: [HabitGoalMetSample]
 
   var body: some View {
     HStack {
@@ -30,7 +30,7 @@ struct GoalLookbackCell: View {
       Spacer()
 
       VStack {
-        Text("27%")
+        Text(percentage)
           .font(.title2)
           .fontDesign(.rounded)
           .bold()
@@ -48,11 +48,43 @@ struct GoalLookbackCell: View {
   }
 }
 
+private extension GoalLookbackCell {
+
+  var percentage: String {
+    let trueCount = history.count(where: { $0.goalMet == true })
+    let percent = Double(trueCount) / Double(history.count)
+
+    return (NumberFormatter.noDecimalPlaces.string(from: NSNumber(value: percent * 100)) ?? "0") + "%"
+  }
+}
+
 #Preview {
   ScrollView {
     VStack {
-      GoalLookbackCell(goal: .Preview.steps, history: [true, false, false, true, false, true, false])
-      GoalLookbackCell(goal: .Preview.heartRateZone5, history: [false, true, false, true, true, true, false])
+      GoalLookbackCell(
+        goal: .Preview.steps,
+        history: [
+          HabitGoalMetSample(date: Date().addingTimeInterval(-518_400), goalMet: false),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-432_000), goalMet: true),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-345_600), goalMet: true),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-259_200), goalMet: false),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-172_800), goalMet: true),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-86_400), goalMet: false),
+          HabitGoalMetSample(date: Date(), goalMet: true)
+        ]
+      )
+      GoalLookbackCell(
+        goal: .Preview.heartRateZone5,
+        history: [
+          HabitGoalMetSample(date: Date().addingTimeInterval(-518_400), goalMet: false),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-432_000), goalMet: true),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-345_600), goalMet: true),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-259_200), goalMet: false),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-172_800), goalMet: true),
+          HabitGoalMetSample(date: Date().addingTimeInterval(-86_400), goalMet: false),
+          HabitGoalMetSample(date: Date(), goalMet: true)
+        ]
+      )
     }
     .horizontallyCentered()
     .padding()

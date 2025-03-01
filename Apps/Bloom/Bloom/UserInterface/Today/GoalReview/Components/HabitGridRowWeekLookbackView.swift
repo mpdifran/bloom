@@ -17,11 +17,11 @@ private extension Double {
 }
 
 struct HabitGridRowWeekLookbackView: View {
-  let completionHistory: [Bool]
+  let completionHistory: [HabitGoalMetSample]
   let animationDelay: Double
 
   init(
-    completionHistory: [Bool],
+    completionHistory: [HabitGoalMetSample],
     animationDelay: Double = 0
   ) {
     self.completionHistory = completionHistory
@@ -38,12 +38,12 @@ struct HabitGridRowWeekLookbackView: View {
         VStack(spacing: .spacing) {
           HabitGridCell(
             id: "\(index)",
-            isComplete: completionHistory.safeAccess(at: UInt(index)),
+            isComplete: completionHistory.safeAccess(at: UInt(index))?.goalMet,
             isToday: false
           )
           .frame(height: .minCellWidth)
 
-          Text(weekdays.safeAccess(at: UInt(index)) ?? "")
+          Text(weekdayName(for: completionHistory.safeAccess(at: UInt(index))?.date))
             .font(.caption)
             .bold()
             .foregroundStyle(.secondary)
@@ -65,13 +65,20 @@ struct HabitGridRowWeekLookbackView: View {
 
 private extension HabitGridRowWeekLookbackView {
 
+  func weekdayName(for date: Date?) -> String {
+    guard let date = date else { return "" }
+
+    let weekday = Calendar.current.component(.weekday, from: date)
+    return weekdays.safeAccess(at: UInt(weekday - 1)) ?? ""
+  }
+
   func calculateDelay(for index: Int) -> Double {
     Double(index) * Double.cellDelay
   }
 
   func delayedSensoryFeedback() {
     for index in 0 ..< 7 {
-      guard completionHistory.safeAccess(at: UInt(index)) == true else { continue }
+      guard completionHistory.safeAccess(at: UInt(index))?.goalMet == true else { continue }
 
       let delay = calculateDelay(for: index)
 
@@ -87,7 +94,7 @@ private extension HabitGridRowWeekLookbackView {
 }
 
 #Preview {
-  @Previewable @State var completionHistory: [Bool] = []
+  @Previewable @State var completionHistory: [HabitGoalMetSample] = []
 
   HabitGridRowWeekLookbackView(
     completionHistory: completionHistory,
@@ -95,6 +102,14 @@ private extension HabitGridRowWeekLookbackView {
   )
   .tint(.mutedPink)
   .onAppear {
-    completionHistory = [true, false, false, true, true, false, true]
+    completionHistory = [
+      HabitGoalMetSample(date: Date().addingTimeInterval(-518_400), goalMet: false),
+      HabitGoalMetSample(date: Date().addingTimeInterval(-432_000), goalMet: true),
+      HabitGoalMetSample(date: Date().addingTimeInterval(-345_600), goalMet: true),
+      HabitGoalMetSample(date: Date().addingTimeInterval(-259_200), goalMet: false),
+      HabitGoalMetSample(date: Date().addingTimeInterval(-172_800), goalMet: true),
+      HabitGoalMetSample(date: Date().addingTimeInterval(-86_400), goalMet: false),
+      HabitGoalMetSample(date: Date(), goalMet: true)
+    ]
   }
 }
