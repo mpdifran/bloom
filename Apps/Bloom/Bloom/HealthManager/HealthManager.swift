@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import HealthKit
+@preconcurrency import HealthKit
 import AppFoundations
 import SwiftData
 import BloomFoundation
@@ -106,21 +106,21 @@ enum WeightLossSpeed: String, CaseIterable, Identifiable {
 final class HealthManager: ObservableObject {
   static let shared = HealthManager()
 
-  @AppStorage("HealthManager.name", store: .group) var name: String = ""
-  @AppStorage("HealthManager.isFemale", store: .group) var isFemale = true
-  @AppStorage("HealthManager.height", store: .group) var heightCM: Double = 0
+  @AppStorage(.HealthDefaults.name.key, store: .group) var name: String = ""
+  @AppStorage(.HealthDefaults.isFemale.key, store: .group) var isFemale = true
+  @AppStorage(.HealthDefaults.height.key, store: .group) var heightCM: Double = 0
 
   @Published var birthday = Date.now {
-    didSet { UserDefaults.group.set(birthday, forKey: "HealthManager.birthday") }
+    didSet { healthDefaults.setBirthday(birthday) }
   }
   @Published var healthGoal: HealthGoal = .none {
-    didSet { UserDefaults.group.set(healthGoal.rawValue, forKey: "HealthManager.healthGoal") }
+    didSet { healthDefaults.setHealthGoal(healthGoal) }
   }
   @Published var weightLossSpeed: WeightLossSpeed = .moderate {
-    didSet { UserDefaults.group.set(weightLossSpeed.rawValue, forKey: "HealthManager.weightLossSpeed") }
+    didSet { healthDefaults.setWeightLossSpeed(weightLossSpeed) }
   }
   @Published var userReportedActivityLevel: ActivityLevelSummary.ActivityLevel? {
-    didSet { UserDefaults.group.set(userReportedActivityLevel?.rawValue, forKey: "HealthManager.userReportedActivityLevel") }
+    didSet { healthDefaults.setUserReportedActivityLevel(userReportedActivityLevel) }
   }
 
   var healthTargetDetails: HealthTargetDetails {
@@ -131,24 +131,20 @@ final class HealthManager: ObservableObject {
     )
   }
 
-  @AppStorage("HealthManager.targetWeight", store: .group) var targetWeight: Double = 0
-  @AppStorage("HealthManager.isPregnant", store: .group) var isPregnant = false
-  @AppStorage("HealthManager.isBreastfeeding", store: .group) var isBreastfeeding = false
+  @AppStorage(.HealthDefaults.targetWeight.key, store: .group) var targetWeight: Double = 0
+  @AppStorage(.HealthDefaults.isPregnant.key, store: .group) var isPregnant = false
+  @AppStorage(.HealthDefaults.isBreastFeeding.key, store: .group) var isBreastfeeding = false
 
   let healthStore = HKHealthStore()
+  let healthDefaults = HealthDefaults()
 
   private init() {
-    if let birthday = UserDefaults.group.object(forKey: "HealthManager.birthday") as? Date {
-      self.birthday = birthday
-    }
-    if let healthGoalRaw = UserDefaults.group.string(forKey: "HealthManager.healthGoal") {
-      self.healthGoal = HealthGoal(rawValue: healthGoalRaw) ?? .none
-    }
-    if let weightLossSpeedRaw = UserDefaults.group.string(forKey: "HealthManager.weightLossSpeed") {
-      self.weightLossSpeed = WeightLossSpeed(rawValue: weightLossSpeedRaw) ?? .moderate
-    }
-    if let activityLevelRaw = UserDefaults.group.string(forKey: "HealthManager.userReportedActivityLevel") {
-      self.userReportedActivityLevel = ActivityLevelSummary.ActivityLevel(rawValue: activityLevelRaw)
+    self.birthday = healthDefaults.getBirthday()
+    self.healthGoal = healthDefaults.getHealthGoal()
+    self.weightLossSpeed = healthDefaults.getWeightLossSpeed()
+
+    if let activityLevel = healthDefaults.getActivityLevel() {
+      self.userReportedActivityLevel = healthDefaults.getActivityLevel()
     }
 
     Task {
