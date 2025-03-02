@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-07.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import BloomModel
@@ -23,7 +24,7 @@ struct FoodItemCell: View {
   var body: some View {
     HStack {
       if foodItem.isVerified {
-        Image(systemName: "checkmark.shield.fill")
+        Image(systemSymbol: .checkmarkShieldFill)
           .foregroundStyle(.white, .mutedGreen)
           .fontDesign(.rounded)
           .bold()
@@ -57,11 +58,11 @@ struct FoodItemCell: View {
         try await quickLogFood()
       } label: {
         if !hasLoggedThisFoodItem {
-          Image(systemName: "plus.circle.fill")
+          Image(systemSymbol: .plusCircleFill)
             .foregroundStyle(.tint, .tint.tertiary)
             .font(.largeTitle)
         } else {
-          Image(systemName: "checkmark.circle.fill")
+          Image(systemSymbol: .checkmarkCircleFill)
             .foregroundStyle(.white, .tint)
             .font(.largeTitle)
         }

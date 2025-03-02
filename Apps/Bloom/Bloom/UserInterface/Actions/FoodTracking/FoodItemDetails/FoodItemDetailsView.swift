@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-21.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import BloomModel
@@ -148,7 +149,7 @@ private extension FoodItemDetailsView {
 
         if foodItem.isVerified {
           HStack(spacing: 2) {
-            Image(systemName: "checkmark.shield.fill")
+            Image(systemSymbol: .checkmarkShieldFill)
               .foregroundStyle(.white, .mutedGreen)
             Text("Verified")
               .foregroundStyle(.mutedGreen)
@@ -200,7 +201,7 @@ private extension FoodItemDetailsView {
       } label: {
         HStack(spacing: 2) {
           Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
-          Image(systemName: "chevron.up.chevron.down")
+          Image(systemSymbol: .chevronUpChevronDown)
             .font(.caption)
         }
         .padding()

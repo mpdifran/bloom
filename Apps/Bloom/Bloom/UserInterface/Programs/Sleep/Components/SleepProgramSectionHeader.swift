@@ -5,70 +5,71 @@
 //  Created by Mark DiFranco on 2024-05-31.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct SleepProgramSectionHeader: View {
-    let title: String
-    let subtitle: String
-    let systemImage: String
-    let isMulticolored: Bool
+  let title: String
+  let subtitle: String
+  let symbol: SFSymbol
+  let isMulticolored: Bool
 
-    init(
-        title: String,
-        subtitle: String,
-        systemImage: String,
-        isMulticolored: Bool = false
-    ) {
-        self.title = title
-        self.subtitle = subtitle
-        self.systemImage = systemImage
-        self.isMulticolored = isMulticolored
-    }
+  init(
+    title: String,
+    subtitle: String,
+    symbol: SFSymbol,
+    isMulticolored: Bool = false
+  ) {
+    self.title = title
+    self.subtitle = subtitle
+    self.symbol = symbol
+    self.isMulticolored = isMulticolored
+  }
 
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(title)
-                    .font(.title)
-                    .bold()
-                    .fontDesign(.rounded)
+  var body: some View {
+    HStack {
+      VStack(alignment: .leading) {
+        Text(title)
+          .font(.title)
+          .bold()
+          .fontDesign(.rounded)
 
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+        Text(subtitle)
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
+      }
 
-            Spacer()
+      Spacer()
 
-            Image(systemName: systemImage)
-                .font(.system(size: 40))
-                .if(isMulticolored) {
-                    $0.foregroundStyle(.white, .tint)
-                }
-                .if(!isMulticolored) {
-                    $0.foregroundStyle(.tint)
-                }
-
+      Image(systemSymbol: symbol)
+        .font(.system(size: 40))
+        .if(isMulticolored) {
+          $0.foregroundStyle(.white, .tint)
         }
-        .zStackAlignment(.center)
+        .if(!isMulticolored) {
+          $0.foregroundStyle(.tint)
+        }
+
     }
+    .zStackAlignment(.center)
+  }
 }
 
 #Preview {
-    List {
-        SleepProgramSectionHeader(
-            title: "Workouts",
-            subtitle: "Last Two Weeks",
-            systemImage: "figure.run"
-        )
-        .tint(.green)
+  List {
+    SleepProgramSectionHeader(
+      title: "Workouts",
+      subtitle: "Last Two Weeks",
+      symbol: .figureRun
+    )
+    .tint(.green)
 
-        SleepProgramSectionHeader(
-            title: "Resting Heart Rate",
-            subtitle: "Last Two Weeks",
-            systemImage: "arrow.down.heart.fill",
-            isMulticolored: true
-        )
-        .tint(.pink)
-    }
+    SleepProgramSectionHeader(
+      title: "Resting Heart Rate",
+      subtitle: "Last Two Weeks",
+      symbol: .arrowDownHeartFill,
+      isMulticolored: true
+    )
+    .tint(.pink)
+  }
 }

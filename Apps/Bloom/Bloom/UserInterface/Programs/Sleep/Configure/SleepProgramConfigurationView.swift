@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-06-05.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 //import ScreenControl
@@ -51,7 +52,7 @@ private extension SleepProgramConfigurationView {
     var statusSection: some View {
         Section {
             HStack {
-                Image(systemName: "bed.double.fill")
+              Image(systemSymbol: .bedDoubleFill)
                     .font(.title2)
                     .foregroundStyle(.tint)
                 
@@ -74,7 +75,7 @@ private extension SleepProgramConfigurationView {
             SleepProgramSectionHeader(
                 title: "Device Use",
                 subtitle: "During Bedtime",
-                systemImage: "apps.iphone"
+                symbol: .appsIphone
             )
 
             Text("Screen time before bed can affect your sleep quality. Allow Bloom to restrict app usage during bedtime.")
@@ -145,7 +146,7 @@ private extension SleepProgramConfigurationView {
             SleepProgramSectionHeader(
                 title: "Environment",
                 subtitle: "During Bedtime",
-                systemImage: "thermometer.snowflake"
+                symbol: .thermometerSnowflake
             )
             .tint(.remSleep)
 

@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-11.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 import DataContainer
@@ -68,7 +69,7 @@ private extension ProposedGoalCell {
 
   var habitContentView: some View {
     HStack {
-      Image(systemName: proposedGoal.targetMetric.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: proposedGoal.targetMetric.systemImage))
         .font(.title)
         .foregroundStyle(.tint)
 
@@ -86,7 +87,7 @@ private extension ProposedGoalCell {
             .foregroundStyle(.secondary)
             .bold()
             .contentTransition(.numericText(value: proposedGoal.previousValue ?? 0))
-          Image(systemName: "arrow.down")
+          Image(systemSymbol: .arrowDown)
             .font(.caption)
             .foregroundStyle(.secondary)
         } else if proposedGoal.isNewHabit {
@@ -109,7 +110,7 @@ private extension ProposedGoalCell {
 
   var recommendedValueDisplayView: some View {
     HStack(spacing: 4) {
-      Image(systemName: "star.circle.fill")
+      Image(systemSymbol: .starCircleFill)
       Text("Recommended")
 
       Spacer()
@@ -128,7 +129,7 @@ private extension ProposedGoalCell {
       proposedGoal.value = proposedGoal.suggestedValue
     } label: {
       LabeledContent("Set Recommended Value") {
-        Image(systemName: "star.circle.fill")
+        Image(systemSymbol: .starCircleFill)
           .foregroundStyle(.primary)
           .bold()
       }
@@ -147,7 +148,7 @@ private extension ProposedGoalCell {
         .asAny
     } label: {
       LabeledContent("Change Value") {
-        Image(systemName: "chart.xyaxis.line")
+        Image(systemSymbol: .chartXyaxisLine)
           .foregroundStyle(.primary)
           .bold()
       }

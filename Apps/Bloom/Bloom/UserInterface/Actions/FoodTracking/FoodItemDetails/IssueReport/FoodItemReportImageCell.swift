@@ -5,11 +5,12 @@
 //  Created by Mark DiFranco on 2025-02-04.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 
 struct FoodItemReportImageCell: View {
-  let systemImage: String
+  let symbol: SFSymbol
   let title: String
   @Binding var image: UIImage?
 
@@ -17,7 +18,7 @@ struct FoodItemReportImageCell: View {
 
   var body: some View {
     VStack {
-      Image(systemName: systemImage)
+      Image(systemSymbol: symbol)
         .font(.title3)
         .bold()
       Text(title)
@@ -55,12 +56,12 @@ struct FoodItemReportImageCell: View {
     VStack {
       HStack {
         FoodItemReportImageCell(
-          systemImage: "vial.viewfinder",
+          symbol: .vialViewfinder,
           title: "Packaging",
           image: $image
         )
         FoodItemReportImageCell(
-          systemImage: "text.viewfinder",
+          symbol: .textViewfinder,
           title: "Nutrition Label",
           image: $image
         )
@@ -68,12 +69,12 @@ struct FoodItemReportImageCell: View {
 
       HStack {
         FoodItemReportImageCell(
-          systemImage: "vial.viewfinder",
+          symbol: .vialViewfinder,
           title: "Packaging",
           image: .constant(.woman)
         )
         FoodItemReportImageCell(
-          systemImage: "text.viewfinder",
+          symbol: .textViewfinder,
           title: "Nutrition Label",
           image: .constant(.woman)
         )

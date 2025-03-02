@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-11.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -75,7 +76,7 @@ private extension FocusVitalGoalCell {
 
   var habitContentView: some View {
     HStack {
-      Image(systemName: proposedGoal.targetMetric.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: proposedGoal.targetMetric.systemImage))
         .font(.title)
         .foregroundStyle(.tint)
 
@@ -86,7 +87,7 @@ private extension FocusVitalGoalCell {
         if let vitalKind = proposedGoal.vitalKind {
           HStack(spacing: 6) {
             Text("Helps with \(vitalKind.name)")
-            Image(systemName: vitalKind.systemImage)
+            Image(systemSymbol: SFSymbol(rawValue: vitalKind.systemImage))
           }
           .font(.caption)
           .foregroundStyle(.secondary)
@@ -102,7 +103,7 @@ private extension FocusVitalGoalCell {
             .foregroundStyle(.secondary)
             .bold()
             .contentTransition(.numericText(value: proposedGoal.previousValue ?? 0))
-          Image(systemName: "arrow.down")
+          Image(systemSymbol: .arrowDown)
             .font(.caption)
             .foregroundStyle(.secondary)
         } else if proposedGoal.isNewHabit {
@@ -125,7 +126,7 @@ private extension FocusVitalGoalCell {
 
   var recommendedValueDisplayView: some View {
     HStack(spacing: 4) {
-      Image(systemName: "star.circle.fill")
+      Image(systemSymbol: .starCircleFill)
       Text("Recommended")
 
       Spacer()
@@ -154,12 +155,12 @@ private extension FocusVitalGoalCell {
           focusVital.proposedGoals.removeAll(where: { $0 == goal })
           focusVital.proposedGoals.insert(goal, at: 0)
         } label: {
-          Label(goal.targetMetric.name, systemImage: goal.targetMetric.systemImage)
+          Label(goal.targetMetric.name, systemSymbol: SFSymbol(rawValue: goal.targetMetric.systemImage))
         }
       }
     } label: {
       LabeledContent("Change Goal") {
-        Image(systemName: "trophy.fill")
+        Image(systemSymbol: .trophyFill)
           .foregroundStyle(.primary)
           .bold()
       }
@@ -176,7 +177,7 @@ private extension FocusVitalGoalCell {
       focusVital.proposedGoals[0].value = proposedGoal.suggestedValue
     } label: {
       LabeledContent("Set Recommended Value") {
-        Image(systemName: "star.circle.fill")
+        Image(systemSymbol: .starCircleFill)
           .foregroundStyle(.primary)
           .bold()
       }
@@ -195,7 +196,7 @@ private extension FocusVitalGoalCell {
         .asAny
     } label: {
       LabeledContent("Change Value") {
-        Image(systemName: "chart.xyaxis.line")
+        Image(systemSymbol: .chartXyaxisLine)
           .foregroundStyle(.primary)
           .bold()
       }

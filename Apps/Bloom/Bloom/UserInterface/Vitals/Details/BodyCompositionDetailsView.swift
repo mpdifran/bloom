@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-04.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Charts
 import HealthKit
@@ -104,7 +105,7 @@ private extension BodyCompositionDetailsView {
 
   var emptyView: some View {
     ContentUnavailableView {
-      Label("No Data Available", systemImage: "gauge.with.needle")
+      Label("No Data Available", systemSymbol: .gaugeWithNeedle)
     } description: {
       Text("Log your weight to learn more about your body composition.")
     } actions: {

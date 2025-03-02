@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-19.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 
@@ -16,7 +17,7 @@ struct WorkoutActivityTypeFilterView: View {
     ScrollViewReader { scrollReader in
       ScrollView(.horizontal) {
         HStack {
-          ActivityTypeCell(title: "All", systemImage: "figure", isSelected: selectedActivityType == nil)
+          ActivityTypeCell(title: "All", symbol: .figure, isSelected: selectedActivityType == nil)
             .id("All")
             .onTapGesture {
               selectedActivityType = nil
@@ -28,7 +29,7 @@ struct WorkoutActivityTypeFilterView: View {
           ForEach(activityTypes, id: \.self) { activityType in
             ActivityTypeCell(
               title: activityType.name,
-              systemImage: activityType.systemImage,
+              symbol: SFSymbol(rawValue: activityType.systemImage),
               isSelected: selectedActivityType == activityType
             )
             .id(activityType.name)
@@ -56,12 +57,12 @@ struct WorkoutActivityTypeFilterView: View {
 
 private struct ActivityTypeCell: View {
   let title: String
-  let systemImage: String
+  let symbol: SFSymbol
   let isSelected: Bool
 
   var body: some View {
     HStack {
-      Image(systemName: systemImage)
+      Image(systemSymbol: symbol)
       Text(title)
     }
     .bold()

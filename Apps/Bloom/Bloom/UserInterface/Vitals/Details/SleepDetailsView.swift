@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-11.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Charts
 import TelemetryDeck
@@ -77,7 +78,7 @@ private extension SleepDetailsView {
 
   var emptyView: some View {
     ContentUnavailableView {
-      Label("No Data Available", systemImage: "moon.zzz.fill")
+      Label("No Data Available", systemSymbol: .moonZzzFill)
     } description: {
       Text("Enable Sleep Focus and wear your Apple watch to bed in order to track your sleep.")
     } actions: {
@@ -209,7 +210,7 @@ private extension SleepDetailsView {
 
   var viewDailySleepDataButton: some View {
     HStack {
-      Label("View All Data", systemImage: "bed.double.fill")
+      Label("View All Data", systemSymbol: .bedDoubleFill)
       Spacer()
       DisclosureIndicator()
     }

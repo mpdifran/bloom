@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-13.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import HealthKit
@@ -89,7 +90,7 @@ private extension OnboardingHealthGoalView {
     VStack {
       OnboardingHealthGoalCell(
         title: "Just Monitor My Health",
-        systemImage: "heart.text.square",
+        symbol: .heartTextSquare,
         isSelected: healthManager.healthGoal == .none
       )
       .onTapGesture {
@@ -100,7 +101,7 @@ private extension OnboardingHealthGoalView {
 
       OnboardingHealthGoalCell(
         title: "Lose Weight",
-        systemImage: "gauge.with.dots.needle.bottom.0percent",
+        symbol: .gaugeWithDotsNeedle0percent,
         isSelected: healthManager.healthGoal == .loseWeight
       )
       .onTapGesture {
@@ -111,7 +112,7 @@ private extension OnboardingHealthGoalView {
 
       OnboardingHealthGoalCell(
         title: "Maintain Weight",
-        systemImage: "gauge.with.dots.needle.bottom.50percent",
+        symbol: .gaugeWithDotsNeedleBottom50percent,
         isSelected: healthManager.healthGoal == .maintainWeight
       )
       .onTapGesture {
@@ -122,7 +123,7 @@ private extension OnboardingHealthGoalView {
 
       OnboardingHealthGoalCell(
         title: "Gain Weight",
-        systemImage: "gauge.with.dots.needle.bottom.100percent",
+        symbol: .gaugeWithDotsNeedleBottom100percent,
         isSelected: healthManager.healthGoal == .gainWeight
       )
       .onTapGesture {
@@ -139,7 +140,7 @@ private extension OnboardingHealthGoalView {
         LabeledContent("Target Weight") {
           HStack {
             Text("\(targetWeight.displayString(for: .pound()))")
-            Image(systemName: "chevron.up.chevron.down")
+            Image(systemSymbol: .chevronUpChevronDown)
           }
           .font(.title3)
           .fontDesign(.rounded)
@@ -163,7 +164,7 @@ private extension OnboardingHealthGoalView {
             } label: {
               HStack {
                 Text(healthManager.weightLossSpeed.name)
-                Image(systemName: "chevron.up.chevron.down")
+                Image(systemSymbol: .chevronUpChevronDown)
               }
               .font(.title3)
               .fontDesign(.rounded)
@@ -209,12 +210,12 @@ private extension OnboardingHealthGoalView {
 
 struct OnboardingHealthGoalCell: View {
   let title: String
-  let systemImage: String
+  let symbol: SFSymbol
   let isSelected: Bool
 
   var body: some View {
     HStack {
-      Image(systemName: systemImage)
+      Image(systemSymbol: symbol)
         .foregroundStyle(.text, .tint)
         .font(.title3)
         .bold()
@@ -225,7 +226,7 @@ struct OnboardingHealthGoalCell: View {
       Spacer()
 
       if isSelected {
-        Image(systemName: "checkmark.circle.fill")
+        Image(systemSymbol: .checkmarkCircleFill)
           .foregroundStyle(.invertedText, .tint)
           .font(.title3)
           .contentTransition(.symbolEffect)

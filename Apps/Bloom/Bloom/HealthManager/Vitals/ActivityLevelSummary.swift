@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-24.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -56,13 +57,13 @@ extension ActivityLevelSummary.ActivityLevel {
     }
   }
 
-  var systemImage: String {
+  var symbol: SFSymbol {
     switch self {
-    case .sedentary: "figure.stand"
-    case .light: "figure.mixed.cardio"
-    case .moderate: "figure.run"
-    case .high: "figure.highintensity.intervaltraining"
-    case .intense: "figure.climbing"
+    case .sedentary: .figureStand
+    case .light: .figureMixedCardio
+    case .moderate: .figureRun
+    case .high: .figureHighintensityIntervaltraining
+    case .intense: .figureClimbing
     }
   }
 

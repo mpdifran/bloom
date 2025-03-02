@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-19.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 import HealthKit
@@ -28,7 +29,7 @@ struct HabitDailyUpdateCell: View {
 
   var body: some View {
     HStack(spacing: 14) {
-      Image(systemName: habit.targetMetric.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: habit.targetMetric.systemImage)) // TODO: Zach - see if we need to map symbols from DataContainer
         .font(.title)
         .foregroundStyle(.tint)
         .frame(width: 40)
@@ -42,13 +43,13 @@ struct HabitDailyUpdateCell: View {
         Group {
           if viewModel.goalCompletionState == .metGoal {
             HStack(spacing: 4) {
-              Image(systemName: "checkmark")
+              Image(systemSymbol: .checkmark)
               Text("Completed • \(viewModel.formattedDailyValue)")
             }
             .foregroundStyle(.tint)
           } else if viewModel.goalCompletionState == .exceededGoal {
             HStack(spacing: 4) {
-              Image(systemName: "chevron.up.circle.fill")
+              Image(systemSymbol: .chevronUpCircleFill)
                 .foregroundStyle(.white, .mutedRed)
               Text("Exceeded goal by \(viewModel.formattedExceededDailyValue)")
             }

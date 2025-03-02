@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-11.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Charts
 import BloomFoundation
@@ -20,7 +21,7 @@ struct SleepStageChartView: View {
         VStack {
             SleepSectionTitleView(
                 title: "Sleep Stages",
-                systemImage: "bed.double.fill"
+                symbol: .bedDoubleFill
             )
             .tint(.coreSleep)
             chartView

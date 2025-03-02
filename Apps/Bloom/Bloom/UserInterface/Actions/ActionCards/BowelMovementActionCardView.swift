@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 import SwiftData
 import TelemetryDeck
 import DataContainer
@@ -81,7 +82,7 @@ private extension BowelMovementActionCardView {
         .font(.subheadline)
         .bold()
       Spacer(minLength: 0)
-      Image(systemName: "questionmark.app.fill")
+      Image(systemSymbol: .questionmarkAppFill)
         .font(.largeTitle)
 
       Spacer(minLength: 0)

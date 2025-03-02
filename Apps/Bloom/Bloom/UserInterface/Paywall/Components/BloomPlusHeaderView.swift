@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-10-08.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct BloomPlusHeaderView: View {
@@ -25,7 +26,7 @@ struct BloomPlusHeaderView: View {
         Button {
           dismiss()
         } label: {
-          Image(systemName: "xmark.circle.fill")
+          Image(systemSymbol: .xmarkCircleFill)
             .foregroundStyle(.white, .gray)
             .font(.title)
         }

@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-21.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct BloomPlusFAQCell: View {
@@ -42,7 +43,7 @@ private struct BloomPlusFAQDisclosureGroupStyle: DisclosureGroupStyle {
       HStack {
         configuration.label
         Spacer()
-        Image(systemName: "chevron.down")
+        Image(systemSymbol: .chevronDown)
           .foregroundStyle(.secondary)
           .rotationEffect(.degrees(configuration.isExpanded ? -180 : 0))
       }

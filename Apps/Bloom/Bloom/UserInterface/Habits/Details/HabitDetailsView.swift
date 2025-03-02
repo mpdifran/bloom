@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-20.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 import HealthKit
@@ -50,7 +51,7 @@ struct HabitDetailsView: View {
       }
       .toolbar {
         ToolbarItem(placement: .principal) {
-          Image(systemName: habit.targetMetric.systemImage)
+          Image(systemSymbol: SFSymbol(rawValue: habit.targetMetric.systemImage))
             .symbolVariant(.fill)
             .bold()
         }

@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-08.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct WristTemperatureSummaryCell: View {
@@ -15,7 +16,7 @@ struct WristTemperatureSummaryCell: View {
             VStack {
                 SleepSectionTitleView(
                     title: "Wrist Temperature",
-                    systemImage: "thermometer.medium"
+                    symbol: .thermometerMedium
                 )
 
                 HStack {

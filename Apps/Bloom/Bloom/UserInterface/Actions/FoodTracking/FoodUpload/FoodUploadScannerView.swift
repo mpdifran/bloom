@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-13.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import BloomModel
@@ -55,7 +56,11 @@ struct FoodUploadScannerView: View {
       }
       .sheet($presentedSheet)
       .shelf {
-        ProminentButton("Upload", systemImage: "arrow.up.square.fill", isLoading: viewModel.isLoading) {
+        ProminentButton(
+          "Upload",
+          systemImage: SFSymbol.arrowUpSquareFill.rawValue,
+          isLoading: viewModel.isLoading
+        ) {
           Task { await upload() }
         }
         .disabled(!viewModel.canUpload)
@@ -120,12 +125,12 @@ private extension FoodUploadScannerView {
 
         UploadFoodActionView(
           title: "Scan Again",
-          systemImage: "barcode.viewfinder"
+          symbol: .barcodeViewfinder
         )
       } else {
         UploadFoodActionView(
           title: "Scan Barcode",
-          systemImage: "barcode.viewfinder"
+          symbol: .barcodeViewfinder
         )
         .frame(minHeight: 100)
       }
@@ -151,12 +156,12 @@ private extension FoodUploadScannerView {
 
         UploadFoodActionView(
           title: "Scan Again",
-          systemImage: "vial.viewfinder"
+          symbol: .vialViewfinder
         )
       } else {
         UploadFoodActionView(
           title: "Scan Packaging",
-          systemImage: "vial.viewfinder"
+          symbol: .vialViewfinder
         )
         .frame(minHeight: 100)
       }
@@ -188,12 +193,12 @@ private extension FoodUploadScannerView {
 
         UploadFoodActionView(
           title: "Scan Again",
-          systemImage: "text.viewfinder"
+          symbol: .textViewfinder
         )
       } else {
         UploadFoodActionView(
           title: "Scan Nutrition Label",
-          systemImage: "text.viewfinder"
+          symbol: .textViewfinder
         )
         .frame(minHeight: 100)
       }

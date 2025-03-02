@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-24.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import BloomModel
@@ -203,7 +204,7 @@ private extension AIFoodScannerView {
             actions: [
               SwipeAction(
                 title: "Delete",
-                systemImage: "trash",
+                symbol: .trash,
                 tint: .mutedRed
               ) {
                 viewModel.suggestedServings.insert(serving, at: 0)
@@ -366,7 +367,7 @@ private extension AIFoodScannerView {
         Button {
           viewModel.reset()
         } label: {
-          Image(systemName: "arrow.counterclockwise")
+          Image(systemSymbol: .arrowCounterclockwise)
             .bold()
         }
         .horizontalAlignment(.trailing)

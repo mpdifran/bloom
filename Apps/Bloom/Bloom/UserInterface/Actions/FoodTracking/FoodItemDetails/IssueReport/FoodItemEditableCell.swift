@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-03.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 enum FoodItemEditableCellMode {
@@ -67,7 +68,7 @@ private extension FoodItemEditableCell {
           Button {
             resetState(.clearValue)
           } label: {
-            Image(systemName: "xmark.circle")
+            Image(systemSymbol: .xmarkCircle)
               .foregroundStyle(.secondary)
           }
           .frame(height: 44)
@@ -76,7 +77,7 @@ private extension FoodItemEditableCell {
         Button {
           resetState(.resetValue)
         } label: {
-          Image(systemName: "arrow.uturn.left")
+          Image(systemSymbol: .arrowUturnLeft)
             .foregroundStyle(.mutedOrange)
         }
         .frame(height: 44)

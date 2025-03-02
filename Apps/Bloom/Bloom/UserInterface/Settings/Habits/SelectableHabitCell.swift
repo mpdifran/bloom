@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-21.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -14,7 +15,7 @@ struct SelectableHabitCell: View {
 
   var body: some View {
     HStack {
-      Image(systemName: targetMetric.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: targetMetric.systemImage))
         .font(.title3)
         .foregroundStyle(targetMetric.color)
         .frame(width: 40)
@@ -26,7 +27,7 @@ struct SelectableHabitCell: View {
       Spacer()
 
       if isSelected {
-        Image(systemName: "checkmark")
+        Image(systemSymbol: .checkmark)
           .font(.title3)
           .bold()
           .foregroundStyle(targetMetric.color)

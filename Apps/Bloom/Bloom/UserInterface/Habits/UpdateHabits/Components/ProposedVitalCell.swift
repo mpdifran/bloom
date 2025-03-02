@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-04.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -21,10 +22,17 @@ struct ProposedVitalCell: View {
         changeVital()
       } label: {
         LabeledContent("Change Vital") {
-          Image(systemName: "arrow.trianglehead.clockwise.heart.fill")
-            .foregroundStyle(.white)
-            .font(.title2)
-            .bold()
+          if #available(iOS 18.0, *) {
+            Image(systemSymbol: .arrowTriangleheadClockwiseHeartFill)
+              .foregroundStyle(.white)
+              .font(.title2)
+              .bold()
+          } else {
+            Image(systemSymbol: .heartFill)
+              .foregroundStyle(.white)
+              .font(.title2)
+              .bold()
+          }
         }
         .foregroundStyle(.white)
         .bold()
@@ -39,7 +47,7 @@ struct ProposedVitalCell: View {
         removeVital()
       } label: {
         LabeledContent("Remove Vital") {
-          Image(systemName: "xmark.app.fill")
+          Image(systemSymbol: .xmarkAppFill)
             .foregroundStyle(.white)
             .font(.title2)
             .bold()

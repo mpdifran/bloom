@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-06.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct SleepRespiratoryRateSummaryCell: View {
@@ -15,7 +16,7 @@ struct SleepRespiratoryRateSummaryCell: View {
             VStack {
                 SleepSectionTitleView(
                     title: "Respiratory Rate",
-                    systemImage: "lungs.fill"
+                    symbol: .lungsFill
                 )
 
                 SleepRespiratoryRateChartView(respiratoryRates: respiratoryRates)

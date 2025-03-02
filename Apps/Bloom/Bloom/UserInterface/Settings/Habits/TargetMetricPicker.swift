@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-25.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -25,9 +26,9 @@ struct TargetMetricPicker: View {
 
   var body: some View {
     HStack {
-      Label(selectedTargetMetric.name, systemImage: selectedTargetMetric.systemImage)
+      Label(selectedTargetMetric.name, systemSymbol: SFSymbol(rawValue: selectedTargetMetric.systemImage))
         .lineLimit(1)
-      Image(systemName: "chevron.up.chevron.down")
+      Image(systemSymbol: .chevronUpChevronDown)
     }
     .bold()
     .foregroundStyle(.tint)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 @preconcurrency import HealthKit
 import AppFoundations
 import SwiftData
@@ -53,7 +54,11 @@ extension HealthGoal {
     case .loseWeight, .maintainWeight, .gainWeight:
       Image(.logWeightIcon)
     case .none:
-      Image(systemName: "heart.text.clipboard.fill")
+      if #available(iOS 18.0, *) {
+        Image(systemSymbol: .heartTextClipboardFill)
+      } else {
+        Image(systemSymbol: .heartTextSquareFill)
+      }
     }
   }
 

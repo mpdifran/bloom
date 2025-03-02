@@ -11,7 +11,6 @@ import DataContainer
 struct ToDoActionCard: View {
   let title: String
   let subtitle: String
-  let systemImage: String
   let isComplete: Bool
   let vitalKind: VitalModel.Kind?
 
@@ -48,7 +47,6 @@ struct ToDoActionCard: View {
           ToDoActionCard(
             title: "Log Weight",
             subtitle: "Daily",
-            systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
             isComplete: false,
             vitalKind: nil
           )
@@ -56,7 +54,6 @@ struct ToDoActionCard: View {
           ToDoActionCard(
             title: "Log Blood Pressure",
             subtitle: "Weekly",
-            systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
             isComplete: true,
             vitalKind: .nutrition
           )

@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-26.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 import Swipy
@@ -12,7 +13,7 @@ import Swipy
 struct SwipeAction: Identifiable {
   let id = UUID()
   let title: String
-  let systemImage: String
+  let symbol: SFSymbol
   let tint: Color
   let action: () -> Void
 }
@@ -53,7 +54,7 @@ struct Swipeable<Content: View>: View {
             } label: {
               SwipeActionButtonContent(
                 swipeAction.title,
-                systemImage: swipeAction.systemImage
+                symbol: swipeAction.symbol
               )
             }
             .buttonStyle(.swipeAction)
@@ -79,13 +80,13 @@ struct Swipeable<Content: View>: View {
         actions: [
           SwipeAction(
             title: "Star",
-            systemImage: "star",
+            symbol: .star,
             tint: .mutedYellow,
             action: { }
           ),
           SwipeAction(
             title: "Delete",
-            systemImage: "trash",
+            symbol: .trash,
             tint: .mutedRed,
             action: { }
           )
@@ -105,13 +106,13 @@ struct Swipeable<Content: View>: View {
         actions: [
           SwipeAction(
             title: "Favourite",
-            systemImage: "heart",
+            symbol: .heart,
             tint: .mutedBlue,
             action: { }
           ),
           SwipeAction(
             title: "Delete",
-            systemImage: "trash",
+            symbol: .trash,
             tint: .mutedRed,
             action: { }
           )
@@ -136,7 +137,7 @@ struct Swipeable<Content: View>: View {
           actions: [
             SwipeAction(
               title: "Delete",
-              systemImage: "trash",
+              symbol: .trash,
               tint: .mutedRed,
               action: { }
             )

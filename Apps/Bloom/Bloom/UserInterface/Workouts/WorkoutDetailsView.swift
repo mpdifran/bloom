@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-18.
 //
 
+import SFSafeSymbols
 import SwiftUI
 @preconcurrency import HealthKit
 import Charts
@@ -66,7 +67,7 @@ private extension WorkoutDetailsView {
       .fill(.background)
       .frame(square: 130)
       .overlay {
-        Image(systemName: workout.workoutActivityType.systemImage)
+        Image(systemSymbol: SFSymbol(rawValue: workout.workoutActivityType.systemImage))
           .font(.system(size: 60))
           .foregroundStyle(.green)
       }

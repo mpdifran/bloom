@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-16.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import SwiftData
@@ -145,14 +146,14 @@ private extension SettingsView {
         Group {
           if let activityLevel = healthManager.userReportedActivityLevel {
             SettingsHealthGoalCell(
-              image: Image(systemName: activityLevel.systemImage),
+              image: Image(systemSymbol: activityLevel.symbol),
               value: activityLevel.name,
               subtitle: "Activity level"
             )
             .tint(activityLevel.barColor)
           } else {
             SettingsHealthGoalCell(
-              image: Image(systemName: "figure"),
+              image: Image(systemSymbol: .figure),
               value: "No level set",
               subtitle: "Activity level"
             )
@@ -255,7 +256,7 @@ private extension SettingsView {
           actions: [
             SwipeAction(
               title: "Delete",
-              systemImage: "trash",
+              symbol: .trash,
               tint: .mutedRed
             ) {
               delete(habit: habit)
@@ -263,7 +264,7 @@ private extension SettingsView {
           ]
         ) {
           SettingsHabitCell(
-            image: Image(systemName: habit.targetMetric.systemImage),
+            image: Image(systemSymbol: SFSymbol(rawValue: habit.targetMetric.systemImage)),
             title: habit.targetMetric.name,
             subtitle: habit.displayQuantity
           )
@@ -297,7 +298,7 @@ private extension SettingsView {
 
       ForEachEnumerated(toDoManager.userAddableToDos) { (index, todo) in
         SettingsHabitCell(
-          image: Image(systemName: todo.kind.systemImage),
+          image: Image(systemSymbol: todo.kind.symbol),
           title: todo.kind.name,
           subtitle: todo.cadence.name
         )
@@ -470,7 +471,7 @@ private extension SettingsView {
         Divider()
 
         SettingsCell("Tell us what you think!", showDisclosureIndicator: true) {
-          Image(systemName: "heart.fill")
+          Image(systemSymbol: .heartFill)
             .foregroundStyle(.mutedRed)
         }
         .onTapGesture {

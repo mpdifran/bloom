@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-10-08.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import TelemetryDeck
@@ -22,7 +23,7 @@ struct BloomPlusLegalSectionView: View {
       Button {
         showOfferCodeSheet.toggle()
       } label: {
-        Label("Promo Code", systemImage: "tag")
+        Label("Promo Code", systemSymbol: .tag)
       }
       .frame(minHeight: 44)
       .offerCodeRedemption(isPresented: $showOfferCodeSheet) { result in
@@ -42,7 +43,7 @@ struct BloomPlusLegalSectionView: View {
       Button {
         restorePurchases()
       } label: {
-        Label("Restore Purchase", systemImage: "arrow.clockwise")
+        Label("Restore Purchase", systemSymbol: .arrowClockwise)
       }
       .frame(minHeight: 44)
 

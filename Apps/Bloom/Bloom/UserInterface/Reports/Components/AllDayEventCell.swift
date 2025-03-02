@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-30.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import EventKit
 
@@ -26,7 +27,7 @@ struct AllDayEventCell: View {
                 if let location = event.structuredLocation?.title {
                     if let url = URL(string: location), let host = url.host() {
                         HStack(spacing: 2) {
-                            Image(systemName: "video")
+                          Image(systemSymbol: .video)
                                 .font(.caption)
 
                             Text(host)
@@ -34,7 +35,7 @@ struct AllDayEventCell: View {
                         .foregroundStyle(.secondary)
                     } else {
                         HStack(spacing: 2) {
-                            Image(systemName: "location")
+                          Image(systemSymbol: .location)
                                 .font(.caption)
 
                             Text(location)

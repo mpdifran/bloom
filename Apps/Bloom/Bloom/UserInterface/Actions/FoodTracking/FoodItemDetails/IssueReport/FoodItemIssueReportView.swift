@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-30.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import BloomModel
 
@@ -86,7 +87,7 @@ private extension FoodItemIssueReportView {
       } label: {
         Group {
           if didSubmitReport {
-            Image(systemName: "checkmark")
+            Image(systemSymbol: .checkmark)
           } else {
             Text("Submit")
           }
@@ -152,13 +153,13 @@ private extension FoodItemIssueReportView {
   var imageSection: some View {
     HStack {
       FoodItemReportImageCell(
-        systemImage: "vial.viewfinder",
+        symbol: .vialViewfinder,
         title: "Packaging",
         image: $packagingImage
       )
 
       FoodItemReportImageCell(
-        systemImage: "text.viewfinder",
+        symbol: .textViewfinder,
         title: "Nutrition Label",
         image: $nutritionLabelImage
       )

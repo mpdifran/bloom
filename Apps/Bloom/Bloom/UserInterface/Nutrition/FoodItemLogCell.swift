@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-26.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -28,7 +29,7 @@ private extension FoodItemLogCell {
   func contentView(foodItem: FoodItemRecord) -> some View {
     HStack {
       if foodItem.isVerified {
-        Image(systemName: "checkmark.shield.fill")
+        Image(systemSymbol: .checkmarkShieldFill)
           .foregroundStyle(.white, .mutedGreen)
           .fontDesign(.rounded)
           .bold()

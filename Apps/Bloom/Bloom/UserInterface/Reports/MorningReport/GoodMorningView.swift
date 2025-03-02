@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-06-12.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import AppFoundations
@@ -201,7 +202,7 @@ private extension GoodMorningView {
       case .intense:
         Section("Activity Level") {
           HStack {
-            Image(systemName: VitalModel.Kind.activityLevel.systemImage)
+            Image(systemSymbol: SFSymbol(rawValue: VitalModel.Kind.activityLevel.systemImage))
               .font(.largeTitle)
               .foregroundStyle(.green)
               .frame(width: 50)
@@ -222,7 +223,7 @@ private extension GoodMorningView {
         if vitalsViewModel.activityLevelSummary?.details.hasSedentaryStreakLast3Days == true {
           Section("Activity Level") {
             HStack {
-              Image(systemName: VitalModel.Kind.activityLevel.systemImage)
+              Image(systemSymbol: SFSymbol(rawValue: VitalModel.Kind.activityLevel.systemImage))
                 .font(.largeTitle)
                 .foregroundStyle(.green)
                 .frame(width: 50)
@@ -271,7 +272,7 @@ private extension GoodMorningView {
       case .follicular, .luteal:
         Section("Cycle Phase") {
           HStack {
-            Image(systemName: "circle.dotted.and.circle")
+            Image(systemSymbol: .circleDottedAndCircle)
               .font(.largeTitle)
               .foregroundStyle(phase.color!)
               .frame(width: 50)

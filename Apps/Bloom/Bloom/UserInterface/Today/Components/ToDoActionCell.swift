@@ -5,13 +5,14 @@
 //  Created by Mark DiFranco on 2024-09-06.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
 struct ToDoActionCell: View {
     let title: String
     let subtitle: String
-    let systemImage: String
+    let symbol: SFSymbol
     let isComplete: Bool
     let vitalKind: VitalModel.Kind?
     let useSecondaryBackground: Bool
@@ -19,14 +20,14 @@ struct ToDoActionCell: View {
     init(
         title: String,
         subtitle: String,
-        systemImage: String,
+        symbol: SFSymbol,
         isComplete: Bool,
         vitalKind: VitalModel.Kind?,
         useSecondaryBackground: Bool = true
     ) {
         self.title = title
         self.subtitle = subtitle
-        self.systemImage = systemImage
+        self.symbol = symbol
         self.isComplete = isComplete
         self.vitalKind = vitalKind
         self.useSecondaryBackground = useSecondaryBackground
@@ -40,7 +41,7 @@ struct ToDoActionCell: View {
             )
 
             LabeledContent {
-                Image(systemName: systemImage)
+                Image(systemSymbol: symbol)
                     .foregroundStyle(.tint)
             } label: {
                 VStack(alignment: .leading) {
@@ -72,7 +73,7 @@ struct ToDoActionCell: View {
             ToDoActionCell(
                 title: "Log Weight",
                 subtitle: "Daily",
-                systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
+                symbol: .gaugeWithDotsNeedleBottom50percentBadgePlus,
                 isComplete: false,
                 vitalKind: nil
             )
@@ -80,7 +81,7 @@ struct ToDoActionCell: View {
             ToDoActionCell(
                 title: "Log Weight",
                 subtitle: "Daily",
-                systemImage: "gauge.with.dots.needle.bottom.50percent.badge.plus",
+                symbol: .gaugeWithDotsNeedleBottom50percentBadgePlus,
                 isComplete: true,
                 vitalKind: .nutrition
             )

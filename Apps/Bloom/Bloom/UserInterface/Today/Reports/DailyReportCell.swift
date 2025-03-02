@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-27.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 extension DailyReportCell {
@@ -12,10 +13,10 @@ extension DailyReportCell {
     case morning
     case evening
 
-    var systemImage: String {
+    var symbol: SFSymbol {
       switch self {
-      case .morning: "sun.horizon"
-      case .evening: "moon"
+      case .morning: .sunHorizon
+      case .evening: .moon
       }
     }
 
@@ -65,7 +66,7 @@ struct DailyReportCell: View {
   var body: some View {
     VStack(alignment: .leading) {
       HStack {
-        Image(systemName: kind.systemImage)
+        Image(systemSymbol: kind.symbol)
           .foregroundStyle(iconForegroundStyle)
 
         Spacer()

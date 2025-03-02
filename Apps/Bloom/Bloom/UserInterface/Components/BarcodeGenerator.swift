@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-13.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import CoreImage.CIFilterBuiltins
 
@@ -25,7 +26,7 @@ struct BarcodeGenerator {
             }
         }
 
-        return Image(systemName: "barcode")
+      return Image(systemSymbol: .barcode)
     }
 }
 

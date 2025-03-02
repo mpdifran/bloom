@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2025-01-18.
 //
 
+import SFSafeSymbols
 import AppUI
 import DataContainer
 import SwiftUI
@@ -84,7 +85,7 @@ private extension NutritionMealView {
         actions: [
           SwipeAction(
             title: "Delete",
-            systemImage: "trash",
+            symbol: .trash,
             tint: .mutedRed,
             action: {
               delete(foodItemLog)
@@ -128,7 +129,7 @@ private extension NutritionMealView {
       Button {
         onLogTapped()
       } label: {
-        Label("Add", systemImage: "plus")
+        Label("Add", systemSymbol: .plus)
           .padding(.vertical, 8)
           .padding(.horizontal, 12)
           .foregroundStyle(.tint)

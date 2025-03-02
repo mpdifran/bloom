@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-29.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Charts
 import TelemetryDeck
@@ -86,7 +87,7 @@ private extension BowelMovementsDetailView {
 
   var emptyView: some View {
     ContentUnavailableView {
-      Label("No Data Available", systemImage: "toilet.fill")
+      Label("No Data Available", systemSymbol: .toiletFill)
     } description: {
       Text("Log your bowel movements to learn more about your regularity.")
     } actions: {

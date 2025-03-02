@@ -5,6 +5,7 @@
 //  Created by Zach Radford on 2024-11-16.
 //
 
+import SFSafeSymbols
 import AppUI
 import AVFoundation
 import PhotosUI
@@ -153,7 +154,7 @@ private extension CameraView {
         .frame(width: 70, height: 70)
         .overlay(
           VStack {
-            Image(systemName: "photo.on.rectangle.angled")
+            Image(systemSymbol: .photoOnRectangleAngled)
               .font(.system(size: 20))
             Text("Library")
               .font(.caption)
@@ -177,7 +178,7 @@ private extension CameraView {
     Button {
       dismiss()
     } label: {
-      Image(systemName: "xmark.circle.fill")
+      Image(systemSymbol: .xmarkCircleFill)
         .foregroundStyle(.white, .gray)
         .font(.title)
     }

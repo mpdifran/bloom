@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-26.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import HealthKit
@@ -155,7 +156,7 @@ extension DeveloperSettingsView {
               await HealthPermissionChecker.shared.requestAccessIfNeeded()
             } label: {
               LabeledContent("HealthKit Permissions") {
-                Image(systemName: "arrow.up.forward.app.fill")
+                Image(systemSymbol: .arrowUpForwardAppFill)
               }
               .bold()
               .fontDesign(.rounded)
@@ -174,7 +175,7 @@ extension DeveloperSettingsView {
               NotificationManager.shared.requestAuthorization()
             } label: {
               LabeledContent("Notification Permissions") {
-                Image(systemName: "arrow.up.forward.app.fill")
+                Image(systemSymbol: .arrowUpForwardAppFill)
               }
               .bold()
               .fontDesign(.rounded)
@@ -224,7 +225,9 @@ extension DeveloperSettingsView {
           }
         } label: {
           LabeledContent("Copy Health Data to Clipboard") {
-            Image(systemName: "document.on.document")
+            if #available(iOS 18.0, *) {
+              Image(systemSymbol: .documentOnDocument)
+            }
           }
           .bold()
           .fontDesign(.rounded)
@@ -253,7 +256,11 @@ extension DeveloperSettingsView {
           }
         } label: {
           LabeledContent("Copy Goals to Clipboard") {
-            Image(systemName: "document.on.document")
+            if #available(iOS 18.0, *) {
+              Image(systemSymbol: .documentOnDocument)
+            } else {
+              // Fallback on earlier versions
+            }
           }
           .bold()
           .fontDesign(.rounded)
@@ -296,7 +303,7 @@ extension DeveloperSettingsView {
           hasShownOnboarding = false
         } label: {
           LabeledContent("Reset Onboarding") {
-            Image(systemName: "arrow.uturn.backward.square.fill")
+            Image(systemSymbol: .arrowUturnBackwardSquareFill)
           }
           .bold()
           .fontDesign(.rounded)
@@ -315,7 +322,7 @@ extension DeveloperSettingsView {
           )
         } label: {
           LabeledContent("Prompt Goal Review") {
-            Image(systemName: "repeat")
+            Image(systemSymbol: .repeat)
           }
           .bold()
           .fontDesign(.rounded)
@@ -333,7 +340,7 @@ extension DeveloperSettingsView {
           }
         } label: {
           LabeledContent("Recalculate Vitals") {
-            Image(systemName: "arrow.clockwise.heart.fill")
+            Image(systemSymbol: .arrowClockwiseHeartFill)
           }
           .bold()
           .fontDesign(.rounded)
@@ -355,7 +362,7 @@ extension DeveloperSettingsView {
           }
         } label: {
           LabeledContent("Sync Nutrition to HealthKit") {
-            Image(systemName: "carrot")
+            Image(systemSymbol: .carrot)
           }
           .bold()
           .fontDesign(.rounded)
@@ -370,7 +377,7 @@ extension DeveloperSettingsView {
           presentedSheet = BloomPlusPaywall().asAny
         } label: {
           LabeledContent("Show Paywall") {
-            Image(systemName: "dollarsign.square.fill")
+            Image(systemSymbol: .dollarsignSquareFill)
           }
           .bold()
           .fontDesign(.rounded)
@@ -386,7 +393,7 @@ extension DeveloperSettingsView {
           showRCDebugOverlay.toggle()
         } label: {
           LabeledContent("Debug RevenueCat") {
-            Image(systemName: "cat.fill")
+            Image(systemSymbol: .catFill)
           }
           .bold()
           .fontDesign(.rounded)
@@ -410,7 +417,7 @@ extension DeveloperSettingsView {
           presentedSheet = ColorPaletteView().asAny
         } label: {
           LabeledContent("Color Palette") {
-            Image(systemName: "paintpalette")
+            Image(systemSymbol: .paintpalette)
           }
           .bold()
           .fontDesign(.rounded)

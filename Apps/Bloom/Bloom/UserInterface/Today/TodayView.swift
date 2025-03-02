@@ -157,7 +157,6 @@ private extension TodayView {
           ToDoActionCard(
             title: todo.kind.name,
             subtitle: todo.cadence.name,
-            systemImage: todo.kind.systemImage,
             isComplete: toDoManager.completedToDoKinds.contains(todo.kind),
             vitalKind: todo.vitalKind
           )

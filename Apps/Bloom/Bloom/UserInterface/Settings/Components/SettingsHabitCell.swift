@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-23.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct SettingsHabitCell: View {
@@ -50,7 +51,7 @@ struct SettingsHabitCell: View {
   ScrollView {
     VStack {
       SettingsHabitCell(
-        image: Image(systemName: "figure.run"),
+        image: Image(systemSymbol: .figureRun),
         title: "Running distance",
         subtitle: "3 km"
       )
