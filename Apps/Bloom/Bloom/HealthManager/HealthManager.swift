@@ -177,10 +177,7 @@ extension HealthManager {
   }
 
   func sex() -> HKBiologicalSex {
-    if let sex = healthStore.sex() {
-      return sex
-    }
-    return isFemale ? .female : .male
+    isFemale ? .female : .male
   }
 
   func height() -> HKQuantity {

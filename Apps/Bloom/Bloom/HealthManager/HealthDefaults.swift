@@ -62,6 +62,10 @@ extension HealthDefaults {
 }
 
 extension HealthDefaults {
+  func getIsFemale() -> Bool {
+    getValue(for: .isFemale) ?? false
+  }
+
   func getBirthday() -> Date {
     getValue(for: .birthday) ?? Date.now
   }
