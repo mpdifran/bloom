@@ -29,7 +29,7 @@ struct CalorieTargetCalculatorTestSuite {
             bodyMass: HKQuantity(unit: .pound(), doubleValue: input.bodyMass),
             height: HKQuantity(unit: .meterUnit(with: .centi), doubleValue: input.height),
             activityLevel: input.activityLevel,
-            targetDetails: .init(
+            targetDetails: HealthTargetDetails(
                 targetWeight: input.targetWeight,
                 goal: input.healthGoal,
                 weightLossSpeed: input.speed

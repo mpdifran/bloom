@@ -52,14 +52,14 @@ struct WorkoutSummationCell: View {
     ScrollView {
         VStack {
             WorkoutSummationCell(
-                workoutSummation: .init(
+                workoutSummation: WorkoutSummation(
                     activityType: .cycling,
                     totalCalories: 1342,
                     instances: 5
                 )
             )
             WorkoutSummationCell(
-                workoutSummation: .init(
+                workoutSummation: WorkoutSummation(
                     activityType: .traditionalStrengthTraining,
                     totalCalories: 832,
                     instances: 2

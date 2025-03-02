@@ -134,7 +134,7 @@ private struct LabelledText: View {
     SleepScoreDetailsView(sleepAnalysis: SleepAnalysis.previewData[0])
 
     SleepScoreDetailsView(
-      sleepAnalysis: .init(
+      sleepAnalysis: SleepAnalysis(
         startDate: .now.addingTimeInterval(-30000),
         endDate: .now,
         hasDetailedSleepCategories: false,

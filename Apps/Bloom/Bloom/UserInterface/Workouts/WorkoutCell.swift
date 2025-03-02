@@ -63,7 +63,7 @@ struct WorkoutCell: View {
   ScrollView {
     VStack {
       WorkoutCell(
-        workout: .init(
+        workout: HKWorkout(
           activityType: .americanFootball,
           start: Date().addingTimeInterval(-3000),
           end: .now

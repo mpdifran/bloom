@@ -101,7 +101,7 @@ public extension ScreenUseController {
             intervalStart: startComponents,
             intervalEnd: endComponents,
             repeats: true,
-            warningTime: .init(minute: .sleepWarningTimeMinutes)
+            warningTime: DateComponents(minute: .sleepWarningTimeMinutes)
         )
         try deviceActivityCenter.startMonitoring(.sleep, during: schedule, events: events)
         isMonitoring = deviceActivityCenter.activities.contains(.sleep)
@@ -133,14 +133,14 @@ public extension ScreenUseController {
             intervalStart: startComponents,
             intervalEnd: endComponents,
             repeats: false,
-            warningTime: .init(minute: .timeExtensionWarningTimeMinutes)
+            warningTime: DateComponents(minute: .timeExtensionWarningTimeMinutes)
         )
 
         let event = DeviceActivityEvent(
             applications: extensionActivitySelection.applicationTokens,
             categories: extensionActivitySelection.categoryTokens,
             webDomains: extensionActivitySelection.webDomainTokens,
-            threshold: .init(minute: .timeExtensionTimeMinutes)
+            threshold: DateComponents(minute: .timeExtensionTimeMinutes)
         )
 
         try deviceActivityCenter.startMonitoring(

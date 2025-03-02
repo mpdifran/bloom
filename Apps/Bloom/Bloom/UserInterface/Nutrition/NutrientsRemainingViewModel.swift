@@ -19,19 +19,19 @@ final class NutrientsRemainingViewModel: ObservableObject {
 
   // MARK: Published Quantities
 
-  @Published private var caloriesQuantity: HKQuantity = .init(
+  @Published private var caloriesQuantity = HKQuantity(
     unit: FoodItemNutrient.calories.unit,
     doubleValue: 0
   )
-  @Published private var proteinQuantity: HKQuantity = .init(
+  @Published private var proteinQuantity = HKQuantity(
     unit: FoodItemNutrient.protein.unit,
     doubleValue: 0
   )
-  @Published private var fatsQuantity: HKQuantity = .init(
+  @Published private var fatsQuantity = HKQuantity(
     unit: FoodItemNutrient.fat.unit,
     doubleValue: 0
   )
-  @Published private var carbsQuantity: HKQuantity = .init(
+  @Published private var carbsQuantity = HKQuantity(
     unit: FoodItemNutrient.carbohydrates.unit,
     doubleValue: 0
   )
