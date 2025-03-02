@@ -26,6 +26,8 @@ extension String {
 }
 
 struct HealthDefaults {
+  static let shared = HealthDefaults()
+
   nonisolated(unsafe) private static let store: UserDefaults = .group
 }
 
