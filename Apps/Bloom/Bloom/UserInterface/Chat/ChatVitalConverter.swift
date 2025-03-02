@@ -11,7 +11,7 @@ import HealthKit
 import DataContainer
 
 private extension Int {
-  static let maxHealthHistoryDays: Int = 30
+  static let maxHealthHistoryDays: Int = 7
 }
 
 private extension String {

@@ -29,32 +29,22 @@ struct GoalLookbackCell: View {
 
       Spacer()
 
-      VStack {
-        Text(percentage)
-          .font(.title2)
+      VStack(alignment: .trailing) {
+        Text(goal.quantity.displayString(for: goal.unit, showUnits: false))
+          .font(.title3)
           .fontDesign(.rounded)
           .bold()
           .foregroundStyle(.tint)
           .contentTransition(.numericText(value: goal.value))
           .animation(.default, value: goal.value)
 
-        Text("Goal Met")
+        Text(goal.unit.sensibleUnitString)
           .font(.caption)
           .foregroundStyle(.secondary)
       }
     }
     .cardContainer()
     .tint(goal.targetMetric.color)
-  }
-}
-
-private extension GoalLookbackCell {
-
-  var percentage: String {
-    let trueCount = history.count(where: { $0.goalMet == true })
-    let percent = Double(trueCount) / Double(history.count)
-
-    return (NumberFormatter.noDecimalPlaces.string(from: NSNumber(value: percent * 100)) ?? "0") + "%"
   }
 }
 

@@ -18,9 +18,11 @@ struct ProposedNewGoalsView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading) {
-        if let summary = proposedGoalsResult.summary {
+        if let summary = createMarkdownSummary() {
           Text(summary)
-            .onboardingTextStyle()
+            .font(.title3)
+            .bold()
+            .fontDesign(.rounded)
             .transition(.opacity)
         }
 
@@ -31,6 +33,21 @@ struct ProposedNewGoalsView: View {
       .padding()
     }
     .groupedBackground()
+  }
+}
+
+private extension ProposedNewGoalsView {
+
+  func createMarkdownSummary() -> AttributedString? {
+    guard let summary = proposedGoalsResult.summary else { return nil }
+
+    let editedSummary = summary.replacingOccurrences(of: "\n", with: "  \n")
+    do {
+      return try AttributedString(markdown: editedSummary)
+    } catch {
+      print(error)
+    }
+    return AttributedString(summary)
   }
 }
 

@@ -47,7 +47,6 @@ struct AsyncButton<Label: View>: View {
         if isLoading {
           CircularSpinnerView()
             .horizontallyCentered()
-            .foregroundStyle(.tint)
         }
       }
     }
@@ -71,7 +70,7 @@ struct AsyncButton<Label: View>: View {
     throw NSError(description: "Sir, this is a preview.")
   } label: {
     Text("Throw Error")
-      .padding()
   }
+  .buttonStyle(.primary)
   .tint(.mutedBlue)
 }
