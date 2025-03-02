@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B13A26E2D74E7FD00459D05 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 4B13A26D2D74E7FD00459D05 /* SFSafeSymbols */; };
 		FF1E961C2C0BEC1D004DAD2D /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E961B2C0BEC1D004DAD2D /* DeviceActivity.framework */; };
 		FF1E96332C0BF57F004DAD2D /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96322C0BF57F004DAD2D /* ManagedSettings.framework */; };
 		FF1E96352C0BF57F004DAD2D /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96342C0BF57F004DAD2D /* ManagedSettingsUI.framework */; };
@@ -326,6 +327,7 @@
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FFADE9942D468789004FBF2B /* Swipy in Frameworks */,
 				FF1FFD682D15C27D0008B47D /* Valet in Frameworks */,
+				4B13A26E2D74E7FD00459D05 /* SFSafeSymbols in Frameworks */,
 				FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */,
 				FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
@@ -632,6 +634,7 @@
 				FF1FFD672D15C27D0008B47D /* Valet */,
 				FF83DB1B2D2ECF010018FAAC /* RevenueCat */,
 				FFADE9932D468789004FBF2B /* Swipy */,
+				4B13A26D2D74E7FD00459D05 /* SFSafeSymbols */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Bloom.app */;
@@ -747,6 +750,7 @@
 				FF1FFD662D15C27D0008B47D /* XCRemoteSwiftPackageReference "Valet" */,
 				FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 				FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */,
+				4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -1889,6 +1893,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.2.0;
+			};
+		};
 		FF1FFD662D15C27D0008B47D /* XCRemoteSwiftPackageReference "Valet" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Square/Valet";
@@ -1980,6 +1992,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4B13A26D2D74E7FD00459D05 /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
 		FF1FFD672D15C27D0008B47D /* Valet */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF1FFD662D15C27D0008B47D /* XCRemoteSwiftPackageReference "Valet" */;
