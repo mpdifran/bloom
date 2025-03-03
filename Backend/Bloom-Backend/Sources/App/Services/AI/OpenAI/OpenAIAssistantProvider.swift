@@ -71,6 +71,7 @@ private extension OpenAIAssistantProvider {
       assistant.instructions == assistantSpec.instructions,
       assistant.model == assistantSpec.model.id,
       assistant.temperature == assistantSpec.temperature,
+      assistant.topP == assistantSpec.topP,
       assistant.tools == assistantSpec.tools
     else {
       request.logger.info("Updating Assistant \(assistantSpec.id)")
@@ -80,7 +81,8 @@ private extension OpenAIAssistantProvider {
         name: assistantSpec.name,
         instructions: assistantSpec.instructions,
         tools: assistantSpec.tools,
-        temperature: assistantSpec.temperature
+        temperature: assistantSpec.temperature,
+        topP: assistantSpec.topP
       )
 
       try await persistAssistant(

@@ -71,7 +71,6 @@ struct BloomPlusPackagePlanPicker: View {
         }
       }
     }
-    .padding()
     .presentationDragIndicator(.visible)
     .presentationCornerRadius(30)
     .presentationDetentSelfSizing()

@@ -8,7 +8,7 @@
 import BloomModel
 import Foundation
 import Logging
-import OpenAIKit
+@preconcurrency import OpenAIKit
 import Vapor
 
 struct OpenAIService { }
@@ -114,10 +114,10 @@ extension OpenAIService {
       guard var message = response.choices.first?.message.content.first?.text else { return nil }
 
       if message.hasPrefix("```json") {
-          message.removeFirst("```json".count)
+        message.removeFirst("```json".count)
       }
       if message.hasSuffix("```") {
-          message.removeLast("```".count)
+        message.removeLast("```".count)
       }
       message = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -150,16 +150,16 @@ extension OpenAIService {
         content: [
           .text("""
           You are an expert nutritionist and food data analyst. Your PRIMARY task is to verify that the food item record matches the provided nutrition label and packaging images. Then, use your professional nutrition expertise to evaluate if the nutritional values make sense.
-
+          
           IMPORTANT: Pay special attention to the downvote count - a high number of downvotes strongly indicates data inaccuracy and should significantly impact the accuracy score.
-
+          
           You must respond in JSON format with the following structure:
           {
             "accuracy_score": A score from 0 to 100 indicating overall data accuracy and completeness,
             "evaluation_notes": A brief (2-3 sentences) summary of key issues found,
             "recommendations": A dictionary mapping field names to their recommended correct values, all value should be in string forms as well
           }
-
+          
           Example response:
           {
             "accuracy_score": 70,
@@ -190,7 +190,7 @@ extension OpenAIService {
         content: [
           .text("""
           Assign an accuracy score (0-100) based on the following factors:
-
+          
           0-25 (Severe Inaccuracy) → The food record is highly unreliable. Multiple major mismatches with the nutrition label, critical missing fields (e.g., calories, serving size), or physiologically impossible values. High downvote count or high number of issue reports strongly reinforces inaccuracy.
           26-50 (Moderate Issues) → Some key fields match, but notable errors exist. Examples include incorrect serving sizes, sum of macronutrients not aligning with total values, or inconsistent calorie calculations. Moderate downvote count indicates user-reported issues.
           51-75 (Minor Issues) → The record is mostly accurate, with small discrepancies in nutrient values. Minor fields may be missing (e.g., dietary fiber, micronutrients), but core data is correct. Low to moderate downvote count suggests minor concerns.
@@ -207,24 +207,24 @@ extension OpenAIService {
       role: .user,
       content: [.text("Evaluate this food item record: \(foodItemRecord.prettyPrint())")]
     ))
-    
+
     messages.append(Chat.Message(
       role: .user,
       content: [.text("There are \(totalNumberOfIssueReports) reports filed by users for this food item record.")]
     ))
-    
+
     if sampleIssueReports.isNotEmpty {
       messages.append(Chat.Message(
         role: .user,
         content: [.text("Here are some sample reports filed by users: \(sampleIssueReports.map { $0.prettyPrint() }.joined(separator: "\n"))")]
       ))
     }
-    
+
     // Add images if available
     if let nutritionLabelImage = foodItemRecord.nutritionLabelImage,
        let nutritionImageFile = try await request.imageStorage.retrieveImage(
-         fileName: nutritionLabelImage,
-         path: .nutritionLabel
+        fileName: nutritionLabelImage,
+        path: .nutritionLabel
        ) {
       messages.append(Chat.Message(
         role: .user,
@@ -237,8 +237,8 @@ extension OpenAIService {
 
     if let packagingImage = foodItemRecord.packagingImage,
        let packagingImageFile = try await request.imageStorage.retrieveImage(
-         fileName: packagingImage,
-         path: .foodPackaging
+        fileName: packagingImage,
+        path: .foodPackaging
        ) {
       messages.append(Chat.Message(
         role: .user,
@@ -261,6 +261,8 @@ extension OpenAIService {
     // Clean up JSON string
     if message.hasPrefix("```json") {
       message.removeFirst("```json".count)
+    }
+    if message.hasSuffix("```") {
       message.removeLast("```".count)
     }
     message = message.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -277,9 +279,9 @@ extension OpenAIService {
 
     let decoder = JSONDecoder()
     decoder.keyDecodingStrategy = .convertFromSnakeCase
-    
+
     let evaluation = try decoder.decode(EvaluationResponse.self, from: data)
-    
+
     return (
       score: evaluation.accuracyScore,
       notes: evaluation.evaluationNotes,
@@ -357,8 +359,12 @@ private extension OpenAIService {
 
       guard var message = response.choices.first?.message.content.first?.text else { return nil }
 
-      message.removeFirst("```json".count)
-      message.removeLast("```".count)
+      if message.hasPrefix("```json") {
+        message.removeFirst("```json".count)
+      }
+      if message.hasSuffix("```") {
+        message.removeLast("```".count)
+      }
       message = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
       guard let data = message.data(using: .utf8) else { return nil }
@@ -412,8 +418,12 @@ private extension OpenAIService {
 
       guard var message = response.choices.first?.message.content.first?.text else { return nil }
 
-      message.removeFirst("```json".count)
-      message.removeLast("```".count)
+      if message.hasPrefix("```json") {
+        message.removeFirst("```json".count)
+      }
+      if message.hasSuffix("```") {
+        message.removeLast("```".count)
+      }
       message = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
       guard let data = message.data(using: .utf8) else { return nil }
@@ -431,4 +441,94 @@ private extension OpenAIService {
       return nil
     }
   }
+}
+
+extension OpenAIService {
+
+  func suggestGoals(
+    _ request: Request,
+    healthData: String,
+    currentGoals: String
+  ) async throws -> SuggestGoalsResponse {
+    let messages: [Chat.Message] = [
+      Chat.Message(
+        role: .system,
+        content: [.text(.Prompt.suggestGoals)]
+      ),
+      Chat.Message(
+        role: .user,
+        content: [.text("Here is my health data:\n\n```\n\(healthData)\n```\n")]
+      ),
+      Chat.Message(
+        role: .user,
+        content: [.text("Here are my current goals:\n\n```\n\(currentGoals)\n```\n")]
+      ),
+      Chat.Message(
+        role: .user,
+        content: [.text("Analyze my health data, and identify the main areas of my health that I should focus on. Ensure my goals align with those focus areas. Update my goals, or give me new goals to help improve my health.")]
+      )
+    ]
+
+    let chat = try await request.openAI.chats.create(
+      model: Model.GPT4.gpt_4o_mini,
+      messages: messages,
+      responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
+    )
+
+    guard var message = chat.choices.first?.message.content.first?.text else {
+      throw Abort(.internalServerError)
+    }
+
+    if message.hasPrefix("```json") {
+      message.removeFirst("```json".count)
+    }
+    if message.hasSuffix("```") {
+      message.removeLast("```".count)
+    }
+    message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+
+    guard let data = message.data(using: .utf8) else {
+      throw Abort(.internalServerError)
+    }
+
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+    let response = try decoder.decode(OpenAISuggestGoalsResponse.self, from: data)
+
+    return SuggestGoalsResponse(summary: nil, goals: response.suggestedGoals)
+  }
+}
+
+private extension ResponseSchema {
+  static let suggestedGoals = ResponseSchema(
+    name: "suggestedGoals",
+    schema: Schema.Object(
+      properties: [
+        "suggestedGoals": Schema.Parameter(
+          description: "A list of the suggested goals.",
+          arrayOf: Schema.Object(
+            properties: [
+              "metric" : Schema.Parameter(
+                enum: SuggestedGoal.Metric.self,
+                description: "The metric that the goal will be measured by."
+              ),
+              "value" : Schema.Parameter(
+                type: .number,
+                description: "The numeric value of the goal."
+              ),
+              "unit" : Schema.Parameter(
+                enum: SuggestedGoal.Unit.self,
+                description: "The unit to measure the goal with."
+              ),
+              "notes" : Schema.Parameter(
+                type: .string,
+                description: "A short, 1 sentence note about the goal."
+              )
+            ]
+          )
+        )
+      ]
+    )
+  )
 }

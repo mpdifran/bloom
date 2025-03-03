@@ -96,4 +96,11 @@ extension String.Prompt {
   
   Return: Response
   """
+
+  static let suggestGoals: String = """
+  Read the user's health data, detect trends, and suggest or edit achievable goals to improve well-being.
+  Adjust goals dynamically based on progress.
+  Do not list the goals in your response.
+  Keep responses short, positive, and engaging.
+  """
 }

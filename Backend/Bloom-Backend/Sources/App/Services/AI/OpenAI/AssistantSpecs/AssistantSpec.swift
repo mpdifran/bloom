@@ -16,8 +16,29 @@ struct AssistantSpec: Sendable {
   let id: String
   let name: String
   let model: ModelID
-  let temperature: Double
+  let temperature: Double?
+  let topP: Double?
   let threadIDKeyPath: WritableKeyPath<User, String?>
   let instructions: String
   let tools: [Assistant.Tool]
+
+  init(
+    id: String,
+    name: String,
+    model: ModelID,
+    temperature: Double? = nil,
+    topP: Double? = nil,
+    threadIDKeyPath: WritableKeyPath<User, String?>,
+    instructions: String,
+    tools: [Assistant.Tool]
+  ) {
+    self.id = id
+    self.name = name
+    self.model = model
+    self.temperature = temperature
+    self.topP = topP
+    self.threadIDKeyPath = threadIDKeyPath
+    self.instructions = instructions
+    self.tools = tools
+  }
 }

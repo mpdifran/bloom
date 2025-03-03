@@ -45,8 +45,18 @@ extension ChatHealthData {
   }
 
   struct Quantity: SendableNetworkModel {
-    let value: Double
+    let value: String
     let unit: String
+
+    init(value: String, unit: String) {
+      self.value = value
+      self.unit = unit
+    }
+
+    init(value: Double, unit: String, numberFormatter: NumberFormatter) {
+      self.value = numberFormatter.string(for: value) ?? ""
+      self.unit = unit
+    }
   }
 
   struct QuantityRange: SendableNetworkModel {
