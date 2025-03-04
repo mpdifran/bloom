@@ -66,31 +66,75 @@ extension ResponseSchema {
         "vitaminE": Schema.Parameter(ref: "quantity")
       ],
       references: [
-        "quantity": Schema.Object(
-          properties: [
-            "value": Schema.Parameter(
-              type: .number,
-              description: "The value of the quantity."
-            ),
-            "unit": Schema.Parameter(
-              enum: Unit.self,
-              description: "The unit of the quantity."
-            )
-          ]
-        )
+        "quantity": Schema.Object.quantity
       ]
     )
   )
+}
 
-  enum Unit: String, Codable, CaseIterable {
-    case g
-    case mg
-    case mcg
-    case kcal
-    case Cal
-    case mL
-    case oz
-  }
+// MARK: - AI Estimate
+
+extension ResponseSchema {
+  static let aiEstimate = ResponseSchema(
+    name: "aiEstimate",
+    schema: Schema.Object(
+      properties: [
+        "name": Schema.Parameter(
+          type: .string,
+          description: "A name for all the food in the image."
+        ),
+        "foodItems": Schema.Parameter(
+          description: "The individual food items detected in the image. You should have high confidence these food items exist in the photo.",
+          arrayOf: .AIEstimate.item
+        ),
+        "optionalFoodItems": Schema.Parameter(
+          description: "Extra individual food items that may be in the photo. This could be things like butter or cooking oil that are difficult to identify from the photo, or an alternate food you have a low confidence on. Only add FoodItemServings to this list if they are NOT included in `items` already. You should try and put at least 5 items in this list.",
+          arrayOf: .AIEstimate.item
+        )
+      ],
+      references: [
+        "quantity": Schema.Object.quantity
+      ]
+    )
+  )
+}
+
+extension Schema.Object {
+  enum AIEstimate { }
+}
+
+extension Schema.Object.AIEstimate {
+  static let item = Schema.Object(
+    properties: [
+      "name": Schema.Parameter(type: .string, description: "The name of the individual food item"),
+      "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. E.g. 1 bottle or 12 chips"),
+      "servingValue": Schema.Parameter(ref: "quantity"),
+      "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the item present in the image."),
+      "calories": Schema.Parameter(ref: "quantity"),
+      "fat": Schema.Parameter(ref: "quantity"),
+      "carbohydrates": Schema.Parameter(ref: "quantity"),
+      "protein": Schema.Parameter(ref: "quantity"),
+      "saturatedFat": Schema.Parameter(ref: "quantity"),
+      "transFat": Schema.Parameter(ref: "quantity"),
+      "polyunsaturatedFat": Schema.Parameter(ref: "quantity"),
+      "monounsaturatedFat": Schema.Parameter(ref: "quantity"),
+      "fiber": Schema.Parameter(ref: "quantity"),
+      "sugar": Schema.Parameter(ref: "quantity"),
+      "cholesterol": Schema.Parameter(ref: "quantity"),
+      "sodium": Schema.Parameter(ref: "quantity"),
+      "calcium": Schema.Parameter(ref: "quantity"),
+      "iron": Schema.Parameter(ref: "quantity"),
+      "potassium": Schema.Parameter(ref: "quantity"),
+      "magnesium": Schema.Parameter(ref: "quantity"),
+      "zinc": Schema.Parameter(ref: "quantity"),
+      "vitaminA": Schema.Parameter(ref: "quantity"),
+      "vitaminB6": Schema.Parameter(ref: "quantity"),
+      "vitaminB12": Schema.Parameter(ref: "quantity"),
+      "vitaminC": Schema.Parameter(ref: "quantity"),
+      "vitaminD": Schema.Parameter(ref: "quantity"),
+      "vitaminE": Schema.Parameter(ref: "quantity")
+    ]
+  )
 }
 
 // MARK: - Goals
@@ -128,4 +172,30 @@ extension ResponseSchema {
   )
 }
 
+// MARK: - Schema.Object Primitives
 
+extension Schema.Object {
+
+  static let quantity = Schema.Object(
+    properties: [
+      "value": Schema.Parameter(
+        type: .number,
+        description: "The value of the quantity."
+      ),
+      "unit": Schema.Parameter(
+        enum: Unit.self,
+        description: "The unit of the quantity."
+      )
+    ]
+  )
+
+  enum Unit: String, Codable, CaseIterable {
+    case g
+    case mg
+    case mcg
+    case kcal
+    case Cal
+    case mL
+    case oz
+  }
+}

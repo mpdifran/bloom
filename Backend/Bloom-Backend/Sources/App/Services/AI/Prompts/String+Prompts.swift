@@ -95,9 +95,9 @@ extension String.Prompt {
 
   Response = {
     'name': str, // A name for all the food you see in the photo.
-    'items': list[FoodItemServing], // An array of individual FoodItemServings identified in the photo. You should have 
+    'foodItems': list[FoodItemServing], // An array of individual FoodItemServings identified in the photo. You should have 
       high confidence that these food items exist in the photo.
-    'optional_items': list[FoodItemServing], // An array of extra individual FoodItemServings that may be in the photo. 
+    'optionalFoodItems': list[FoodItemServing], // An array of extra individual FoodItemServings that may be in the photo. 
       This could be things like butter or cooking oil that are difficult to identify from the photo, or an alternate 
       food you have a low confidence on. Only add FoodItemServings to this list if they are NOT included in `items` 
       already. You should try and put at least 5 items in this list.

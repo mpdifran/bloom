@@ -8,13 +8,13 @@
 import Foundation
 import BloomModel
 
-struct AIEstimateCaloriesResponse: Codable {
+struct OpenAIEstimateCaloriesResponse: Codable {
   let name: String
-  let items: [Item]
-  let optionalItems: [Item]
+  let foodItems: [Item]
+  let optionalFoodItems: [Item]
 }
 
-extension AIEstimateCaloriesResponse {
+extension OpenAIEstimateCaloriesResponse {
   struct Item: Codable {
     let name: String
     let servingName: String
@@ -51,7 +51,7 @@ extension AIEstimateCaloriesResponse {
   }
 }
 
-extension AIEstimateCaloriesResponse.Item {
+extension OpenAIEstimateCaloriesResponse.Item {
 
   func asServing() -> EstimateFoodCaloriesResponse.Serving {
     .init(

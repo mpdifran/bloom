@@ -85,7 +85,7 @@ extension OpenAIService {
   func estimateCalories(
     _ request: Request,
     foodImageFile: ImageFile
-  ) async -> AIEstimateCaloriesResponse? {
+  ) async -> OpenAIEstimateCaloriesResponse? {
     do {
       let openAI = request.gemini
       let model = Model.Gemini.flash2_0
@@ -111,27 +111,7 @@ extension OpenAIService {
         messages: messages
       )
 
-      guard var message = response.choices.first?.message.content.first?.text else { return nil }
-
-      if message.hasPrefix("```json") {
-        message.removeFirst("```json".count)
-      }
-      if message.hasSuffix("```") {
-        message.removeLast("```".count)
-      }
-      message = message.trimmingCharacters(in: .whitespacesAndNewlines)
-
-      guard let data = message.data(using: .utf8) else { return nil }
-
-      let decoder = JSONDecoder()
-      decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-      do {
-        return try decoder.decode(AIEstimateCaloriesResponse.self, from: data)
-      } catch {
-        request.logger.error(String(data: data, encoding: .utf8) ?? "")
-        throw error
-      }
+      return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
       request.logger.error(error)
       return nil
