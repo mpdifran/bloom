@@ -21,8 +21,6 @@ private extension String {
 final actor ChatVitalConverter {
   static let shared = ChatVitalConverter()
 
-  @Storage(key: .lastHealthConversionDate, defaultValue: nil) var lastHealthConversionDate: Date?
-
   private init() { }
 }
 
@@ -50,13 +48,7 @@ extension ChatVitalConverter {
       stress: generateStress(from: startDate)
     )
 
-    lastHealthConversionDate = Calendar.current.startOfDay(for: .now)
-
     return healthData.isEmpty ? nil : healthData
-  }
-
-  func resetSyncDate() {
-    lastHealthConversionDate = nil
   }
 }
 
@@ -69,16 +61,17 @@ private extension ChatVitalConverter {
   }
 
   func determineSearchStartDate() -> Date {
-//    if let lastDate = lastHealthConversionDate {
-//      return max(maxHistoricalDate, lastDate)
-//    }
     return maxHistoricalDate
   }
 }
 
 private extension ChatVitalConverter {
 
-  func generateDemographics() async -> ChatHealthData.Demographics {
+  func generateDemographics() async -> ChatHealthData.Demographics? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .demographics) else {
+      return nil
+    }
+
     let age = await HealthManager.shared.age()
     let sex = await HealthManager.shared.sex().name
     let height = await HealthManager.shared.height()
@@ -93,6 +86,10 @@ private extension ChatVitalConverter {
   }
 
   func generateActivityLevel(from date: Date) async -> ChatHealthData.ActivityLevel? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .activityLevel) else {
+      return nil
+    }
+
     let dateRange = DateRange.fromDateToNow(date)
 
     let unit = HKUnit.largeCalorie()
@@ -123,6 +120,10 @@ private extension ChatVitalConverter {
   }
 
   func generateBodyComposition(from date: Date) async -> ChatHealthData.BodyComposition? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bodyComposition) else {
+      return nil
+    }
+
     let dateRange = DateRange.fromDateToNow(date)
 
     let bodyFatPercentage = await HealthStoreFetcher.shared.fetchCollatedAverage(
@@ -161,6 +162,10 @@ private extension ChatVitalConverter {
   }
 
   func generateBowelMovements(form date: Date) async -> ChatHealthData.BowelMovements? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bowelMovements) else {
+      return nil
+    }
+
     let modelActor = BowelMovementModelActor.standard()
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -185,6 +190,10 @@ private extension ChatVitalConverter {
   }
 
   func generateExerciseEffectiveness(from date: Date) async -> ChatHealthData.ExerciseEffectiveness? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .exerciseEffectiveness) else {
+      return nil
+    }
+
     guard let heartRateZones = await HealthStoreFetcher.shared.heartRateZones() else {
       return nil
     }
@@ -239,6 +248,10 @@ private extension ChatVitalConverter {
   }
 
   func generateHeartHealth(from date: Date) async -> ChatHealthData.HeartHealth? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .heartHealth) else {
+      return nil
+    }
+
     let dateRange = DateRange.fromDateToNow(date)
 
     let vo2Max = await HealthStoreFetcher.shared.fetchCollatedAverage(
@@ -279,6 +292,10 @@ private extension ChatVitalConverter {
   }
 
   func generateMenstrualHealth(from date: Date) async -> ChatHealthData.MenstrualHealth? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .menstrualHealth) else {
+      return nil
+    }
+
     guard let shiftedDate = Calendar.current.date(byAdding: .month, value: -1, to: date) else {
       return nil
     }
@@ -307,6 +324,10 @@ private extension ChatVitalConverter {
   }
 
   func generateSleep(from date: Date) async -> ChatHealthData.Sleep? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .sleep) else {
+      return nil
+    }
+
     let dateRange = DateRange.fromDateToNow(date)
 
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
@@ -366,6 +387,10 @@ private extension ChatVitalConverter {
   }
 
   func generateStress(from date: Date) async -> ChatHealthData.Stress? {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .stress) else {
+      return nil
+    }
+
     let dateRange = DateRange.fromDateToNow(date)
 
     let hrv = await HealthStoreFetcher.shared.fetchCollatedAverage(

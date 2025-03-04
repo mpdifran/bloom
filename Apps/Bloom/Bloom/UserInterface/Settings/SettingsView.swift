@@ -20,6 +20,7 @@ struct SettingsView: View {
   @ObservedObject private var toDoManager = ToDoManager.shared
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   @ObservedObject private var apiHost = APIHost.shared
+  @ObservedObject private var permissionsManager = ExternalHealthMetricPermissionManager.shared
 
   @Bindable private var reportViewModel = ReportCoordinatorViewModel.shared
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
@@ -57,13 +58,11 @@ struct SettingsView: View {
     ScrollView {
       VStack(spacing: 20) {
         userSection
-        if shouldRequestHealthPermissions {
-          healthPermissionsSection
-        }
         healthGoalsSection
         habitsSection
         todoSection
         userDetailsSection
+        healthPermissionsSection
         reportSection
         unitsSection
         subscriptionSection
@@ -221,16 +220,25 @@ private extension SettingsView {
 
   var healthPermissionsSection: some View {
     VStack {
-      SectionTitleView("Apple Health")
+      SectionTitleView("Health & Privacy")
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsHealthAppCell(title: "Grant New Permissions")
-          .onTapGesture {
-            Task {
-              await HealthPermissionChecker.shared.requestAccessIfNeeded()
-              await checkHealthKitPermissions()
+        if shouldRequestHealthPermissions {
+          SettingsHealthAppCell(title: "Grant New Permissions")
+            .onTapGesture {
+              Task {
+                await HealthPermissionChecker.shared.requestAccessIfNeeded()
+                await checkHealthKitPermissions()
+              }
             }
+        }
+
+        SettingsCell("Third Party Health Sharing", showDisclosureIndicator: true) {
+          Text("\(permissionsManager.enabledPermissions.count) enabled")
+        }
+          .onTapGesture {
+            self.presentedSheet = ExternalHealthPrivacyView(mode: .all, onDismiss: { }).asAny
           }
       }
     }

@@ -23,22 +23,24 @@ struct SettingsCell<Content>: View where Content: View {
   }
 
   var body: some View {
-    LabeledContent {
-      HStack {
+    HStack {
+      Text(title)
+        .bold()
+        .fontDesign(.rounded)
+        .minimumScaleFactor(0.7)
+        .lineLimit(2)
+        .layoutPriority(10)
+
+      Group {
         Spacer()
         contentBuilder()
+          .layoutPriority(0)
         if showDisclosureIndicator {
           DisclosureIndicator()
             .bold()
         }
       }
       .foregroundStyle(.secondary)
-    } label: {
-      Text(title)
-        .bold()
-        .fontDesign(.rounded)
-        .minimumScaleFactor(0.7)
-        .lineLimit(2)
     }
     .frame(height: 60)
     .selectable()

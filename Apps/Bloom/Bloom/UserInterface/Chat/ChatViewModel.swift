@@ -56,6 +56,5 @@ extension ChatViewModel {
   func deleteChatHistory() async throws {
     try await NetworkRequester.shared.deleteChatThread()
     chatMessages.removeAll()
-    await ChatVitalConverter.shared.resetSyncDate()
   }
 }

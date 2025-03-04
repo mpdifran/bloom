@@ -15,6 +15,9 @@ struct GoalLookbackView: View {
 
   @State private var index = 0
   @State private var goalLookbackDetails = [GoalLookbackDetails]()
+  @State private var presentedSheet: AnyView?
+
+  @ObservedObject private var permissionsManager = ExternalHealthMetricPermissionManager.shared
 
   var body: some View {
     ScrollView {
@@ -25,8 +28,7 @@ struct GoalLookbackView: View {
     }
     .shelf {
       AsyncButton {
-        let proposedGoals = try await viewModel.proposeNewGoals()
-        onCalculateProposedGoals(proposedGoals)
+        try await calculateGoals()
       } label: {
         Text("Update Goals")
           .horizontallyCentered()
@@ -37,6 +39,7 @@ struct GoalLookbackView: View {
     .animation(.bouncy, value: goalLookbackDetails)
     .sensoryFeedback(.selection, trigger: goalLookbackDetails.count)
     .sensoryFeedback(.selection, trigger: index)
+    .sheet($presentedSheet)
     .task {
       await advanceToGoalReview()
     }
@@ -90,6 +93,19 @@ private extension GoalLookbackView {
   func delayAdvanceIndex() async {
     await Delay(1000)
     index += 1
+  }
+
+  func calculateGoals() async throws {
+    if permissionsManager.hasUndeterminedPermissions() {
+      await withCheckedContinuation { continuation in
+        presentedSheet = ExternalHealthPrivacyView {
+          continuation.resume()
+        }.asAny
+      }
+    }
+
+    let proposedGoals = try await viewModel.proposeNewGoals()
+    onCalculateProposedGoals(proposedGoals)
   }
 }
 

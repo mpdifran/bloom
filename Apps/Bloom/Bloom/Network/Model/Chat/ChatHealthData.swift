@@ -12,7 +12,7 @@ protocol SendableNetworkModel: Codable, Equatable, Sendable { }
 // MARK: - ChatHealthData
 
 struct ChatHealthData: SendableNetworkModel {
-  let demographics: Demographics
+  let demographics: Demographics?
   let activityLevel: ActivityLevel?
   let bodyComposition: BodyComposition?
   let bowelMovements: BowelMovements?
@@ -25,6 +25,7 @@ struct ChatHealthData: SendableNetworkModel {
 
 extension ChatHealthData {
   var isEmpty: Bool {
+    demographics == nil &&
     activityLevel == nil &&
     bodyComposition == nil &&
     bowelMovements == nil &&
