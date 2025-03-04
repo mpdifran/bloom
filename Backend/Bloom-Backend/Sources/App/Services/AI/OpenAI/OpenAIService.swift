@@ -308,39 +308,7 @@ private extension OpenAIService {
         Chat.Message(
           role: .system,
           content: [
-            .text("""
-                        You must respond in JSON. There should be a single object.
-                        
-                        The properties of the object are:
-                        
-                        - Property called 'serving_name' which indicates the kind of serving such as 1 bottle or 2 brownies.
-                        - Property called 'serving_value' which contains a 'unit' property (like fl oz or g) and a 'value' property (numeric value for the unit) 
-                        - Property called 'calories' which contains a 'unit' property (kcal or Cal) and a 'value' property for the number of calories.
-                        - Property called 'protein' which contains a 'unit' property (such as g) and a 'value'.
-                        - Property called 'carbohydrate' which contains a 'unit' property (such as g) and a 'value'.
-                        - Property called 'fat' which contains a 'unit' property (such as g) and a 'value'.
-                        - Optional property called 'saturated_fat' which contains a 'unit' property (such as g) and a 'value'.
-                        - Optional property called 'trans_fat' which contains a 'unit' property (such as g) and a 'value'.
-                        - Optional property called 'polyunsaturated_fat' which contains a 'unit' property (such as g) and a 'value'.
-                        - Optional property called 'monounsaturated_fat' which contains a 'unit' property (such as g) and a 'value'.
-                        - Optional property called 'fiber' which contains a 'unit' property (such as g) and a 'value'.
-                        - Optional property called 'sugar' which contains a 'unit' property (such as g) and a 'value'.
-                        - Optional property called 'cholesterol' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'sodium' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'calcium' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'iron' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'potassium' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'magnesium' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'zinc' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'vitamin_a' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'vitamin_b6' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'vitamin_b12' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'vitamin_c' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'vitamin_d' which contains a 'unit' property (such as mg) and a 'value'.
-                        - Optional property called 'vitamin_e' which contains a 'unit' property (such as mg) and a 'value'.
-                        
-                        If the nutrition label is in French, translate it to English.
-                        """)
+            .text(.Prompt.nutritionLabelParse)
           ]
         ),
         Chat.Message(
@@ -354,31 +322,17 @@ private extension OpenAIService {
 
       let response = try await openAI.chats.create(
         model: Model.GPT4.gpt_4o_mini,
-        messages: messages
+        messages: messages,
+        responseFormat: ResponseFormat(type: .jsonSchema(.nutritionLabelParse))
       )
 
-      guard var message = response.choices.first?.message.content.first?.text else { return nil }
-
-      if message.hasPrefix("```json") {
-        message.removeFirst("```json".count)
-      }
-      if message.hasSuffix("```") {
-        message.removeLast("```".count)
-      }
-      message = message.trimmingCharacters(in: .whitespacesAndNewlines)
-
-      guard let data = message.data(using: .utf8) else { return nil }
-
-      let decoder = JSONDecoder()
-      decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-      return try decoder.decode(OpenAINutritionLabelParseResponse.self, from: data)
+      return try response.parse(OpenAINutritionLabelParseResponse.self)
     } catch {
       request.logger.error("Failed to parse nutrition label: \(error.localizedDescription)")
-      //            request.telemetryDeck.errorOccurred(
-      //                id: "OpenAIService.parseNutritionLabel",
-      //                message: error.localizedDescription
-      //            )
+//      request.telemetryDeck.errorOccurred(
+//        id: "OpenAIService.parseNutritionLabel",
+//        message: error.localizedDescription
+//      )
       return nil
     }
   }
@@ -399,45 +353,31 @@ private extension OpenAIService {
         Chat.Message(
           role: .system,
           content: [
-            .text("You must respond in JSON. There should be a single object three properties: brand_name, product_name, and flavour (optional). Each property is a string in English populated with data from the image. Ensure the JSON keys are formatted in snake case. The detected strings should have the first letter of each word capitalized. If the detected text is in French, translate it to English, or just use the English text in the image.")
+            .text(.Prompt.packagingParse)
           ]
         ),
         Chat.Message(
           role: .user,
           content: [
             .imageData(packagingMetadata.data, "image/\(fileExtension)"),
-            .text("Return the brand name, product name, and any flavour (it there is one) you see in the packaging.")
+            .text("Return the brand name, product name, and any flavour (it there is one).")
           ]
         )
       ]
 
       let response = try await openAI.chats.create(
         model: Model.GPT4.gpt_4o_mini,
-        messages: messages
+        messages: messages,
+        responseFormat: ResponseFormat(type: .jsonSchema(.packagingParse))
       )
 
-      guard var message = response.choices.first?.message.content.first?.text else { return nil }
-
-      if message.hasPrefix("```json") {
-        message.removeFirst("```json".count)
-      }
-      if message.hasSuffix("```") {
-        message.removeLast("```".count)
-      }
-      message = message.trimmingCharacters(in: .whitespacesAndNewlines)
-
-      guard let data = message.data(using: .utf8) else { return nil }
-
-      let decoder = JSONDecoder()
-      decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-      return try decoder.decode(OpenAIPackagingParseResponse.self, from: data)
+      return try response.parse(OpenAIPackagingParseResponse.self)
     } catch {
       request.logger.error(error)
-      //            request.telemetryDeck.errorOccurred(
-      //                id: "OpenAIService.parsePackaging",
-      //                message: error.localizedDescription
-      //            )
+//      request.telemetryDeck.errorOccurred(
+//        id: "OpenAIService.parsePackaging",
+//        message: error.localizedDescription
+//      )
       return nil
     }
   }
@@ -457,11 +397,11 @@ extension OpenAIService {
       ),
       Chat.Message(
         role: .user,
-        content: [.text("Here is my health data:\n\n```\n\(healthData)\n```\n")]
+        content: [.text("Here is my health data:\n\n```json\n\(healthData)\n```\n")]
       ),
       Chat.Message(
         role: .user,
-        content: [.text("Here are my current goals:\n\n```\n\(currentGoals)\n```\n")]
+        content: [.text("Here are my current goals:\n\n```json\n\(currentGoals)\n```\n")]
       ),
       Chat.Message(
         role: .user,
@@ -475,60 +415,10 @@ extension OpenAIService {
       responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
     )
 
-    guard var message = chat.choices.first?.message.content.first?.text else {
+    guard let response = try chat.parse(OpenAISuggestGoalsResponse.self) else {
       throw Abort(.internalServerError)
     }
-
-    if message.hasPrefix("```json") {
-      message.removeFirst("```json".count)
-    }
-    if message.hasSuffix("```") {
-      message.removeLast("```".count)
-    }
-    message = message.trimmingCharacters(in: .whitespacesAndNewlines)
-
-    guard let data = message.data(using: .utf8) else {
-      throw Abort(.internalServerError)
-    }
-
-    let decoder = JSONDecoder()
-    decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-    let response = try decoder.decode(OpenAISuggestGoalsResponse.self, from: data)
 
     return SuggestGoalsResponse(summary: nil, goals: response.suggestedGoals)
   }
-}
-
-private extension ResponseSchema {
-  static let suggestedGoals = ResponseSchema(
-    name: "suggestedGoals",
-    schema: Schema.Object(
-      properties: [
-        "suggestedGoals": Schema.Parameter(
-          description: "A list of the suggested goals.",
-          arrayOf: Schema.Object(
-            properties: [
-              "metric" : Schema.Parameter(
-                enum: SuggestedGoal.Metric.self,
-                description: "The metric that the goal will be measured by."
-              ),
-              "value" : Schema.Parameter(
-                type: .number,
-                description: "The numeric value of the goal."
-              ),
-              "unit" : Schema.Parameter(
-                enum: SuggestedGoal.Unit.self,
-                description: "The unit to measure the goal with."
-              ),
-              "notes" : Schema.Parameter(
-                type: .string,
-                description: "A short, 1 sentence note about the goal."
-              )
-            ]
-          )
-        )
-      ]
-    )
-  )
 }

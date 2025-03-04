@@ -13,6 +13,15 @@ extension String {
 
 extension String.Prompt {
 
+  static let packagingParse: String = """
+  Read the packaging in the photo and determine the brand, product name, and optional flavour. Each string should have
+  the first letter of each word capitalized. If the text is in French, or Spanish, convert it to English, or prefer English text.
+  """
+
+  static let nutritionLabelParse: String = """
+  Read the nutrition label in the photo, and determine the nutrients in the food item. If the nutrition label is in French, or Spanish, translate it to English.
+  """
+
   static let estimateCalories: String = """
   You are a nutritionist, and your job is to estimate all the nutrients in a photo of food. Make sure to only estimate 
   edible items.
