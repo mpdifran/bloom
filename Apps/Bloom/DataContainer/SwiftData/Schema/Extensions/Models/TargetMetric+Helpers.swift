@@ -25,6 +25,10 @@ public extension TargetMetric {
     case .runDuration: "Running Duration"
     case .bikeDistance: "Bike Distance"
     case .bikeDuration: "Bike Duration"
+    case .mobilityAndFlexibilityDuration: "Mobility & Flexibility"
+    case .strengthTrainingDuration: "Strength Training"
+    case .cardioDuration: "Cardio Workouts"
+    case .highIntensityIntervalTrainingDuration: "HIIT Workouts"
     case .targetHeartRateZone1: "Target Heart Rate Zone 1"
     case .targetHeartRateZone2: "Target Heart Rate Zone 2"
     case .targetHeartRateZone3: "Target Heart Rate Zone 3"
@@ -47,6 +51,10 @@ public extension TargetMetric {
     case .walkingRunningDistance: "figure.walk"
     case .runDistance, .runDuration: "figure.run"
     case .bikeDistance, .bikeDuration: "figure.outdoor.cycle"
+    case .mobilityAndFlexibilityDuration: "figure.yoga"
+    case .strengthTrainingDuration: "figure.strengthtraining.traditional"
+    case .cardioDuration: "figure.mixed.cardio"
+    case .highIntensityIntervalTrainingDuration: "figure.highintensity.intervaltraining"
     case .targetHeartRateZone1: "1.circle.fill"
     case .targetHeartRateZone2: "2.circle.fill"
     case .targetHeartRateZone3: "3.circle.fill"
@@ -67,7 +75,7 @@ public extension TargetMetric {
     case .exerciseMinutes: .mutedGreen
     case .proteinIntake: .protein
     case .calories: .mutedOrange
-    case .runDistance, .runDuration, .bikeDistance, .bikeDuration: .mutedGreen
+    case .runDistance, .runDuration, .bikeDistance, .bikeDuration, .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration: .mutedGreen
     case .targetHeartRateZone1: .heartRateZone1
     case .targetHeartRateZone2: .heartRateZone2
     case .targetHeartRateZone3: .heartRateZone3

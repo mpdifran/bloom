@@ -33,7 +33,7 @@ extension TargetMetric {
       [HKQuantityType(.stepCount)]
     case .walkingRunningDistance:
       [HKQuantityType(.distanceWalkingRunning)]
-    case .runDistance, .runDuration, .bikeDistance, .bikeDuration:
+    case .runDistance, .runDuration, .bikeDistance, .bikeDuration, .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration:
       [HKWorkoutType.workoutType()]
     case .targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5:
       [HKWorkoutType.workoutType()]
@@ -72,6 +72,8 @@ extension TargetMetric {
         .meterUnit(with: .kilo)
     case .bikeDuration:
         .minute()
+    case .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration:
+        .minute()
     case .targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5:
         .minute()
     @unknown default:
@@ -109,6 +111,14 @@ extension TargetMetric {
       return HKQuantity(unit: defaultUnit, doubleValue: 5)
     case .bikeDuration:
       return HKQuantity(unit: defaultUnit, doubleValue: 15)
+    case .mobilityAndFlexibilityDuration:
+      return HKQuantity(unit: defaultUnit, doubleValue: 10)
+    case .strengthTrainingDuration:
+      return HKQuantity(unit: defaultUnit, doubleValue: 15)
+    case .cardioDuration:
+      return HKQuantity(unit: defaultUnit, doubleValue: 15)
+    case .highIntensityIntervalTrainingDuration:
+      return HKQuantity(unit: defaultUnit, doubleValue: 10)
     case .targetHeartRateZone1, .targetHeartRateZone2:
       return HKQuantity(unit: defaultUnit, doubleValue: 10)
     case .targetHeartRateZone3, .targetHeartRateZone4:
@@ -151,6 +161,14 @@ extension TargetMetric {
       return HKQuantityRange(unit: defaultUnit, range: 20...50)
     case .bikeDuration:
       return HKQuantityRange(unit: defaultUnit, range: 30...60)
+    case .mobilityAndFlexibilityDuration:
+      return HKQuantityRange(unit: defaultUnit, range: 30...120)
+    case .strengthTrainingDuration:
+      return HKQuantityRange(unit: defaultUnit, range: 30...60)
+    case .cardioDuration:
+      return HKQuantityRange(unit: defaultUnit, range: 30...120)
+    case .highIntensityIntervalTrainingDuration:
+      return HKQuantityRange(unit: defaultUnit, range: 15...30)
     case .targetHeartRateZone1, .targetHeartRateZone2:
       return HKQuantityRange(unit: defaultUnit, range: 20...30)
     case .targetHeartRateZone3, .targetHeartRateZone4:
@@ -187,6 +205,8 @@ extension TargetMetric {
     case .runDistance, .bikeDistance:
       NumberFormatter.oneDecimalPlace
     case .runDuration, .bikeDuration:
+      NumberFormatter.noDecimalPlaces
+    case .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration:
       NumberFormatter.noDecimalPlaces
     case .targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5:
       NumberFormatter.noDecimalPlaces
@@ -249,6 +269,22 @@ extension TargetMetric {
       return HKQuantity(unit: defaultUnit, doubleValue: totalDistance)
     case .bikeDuration:
       let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityType: .cycling, dateRange: dateRange)
+      let totalDuration = workouts.sum { $0.duration }
+      return HKQuantity(unit: .second(), doubleValue: totalDuration)
+    case .mobilityAndFlexibilityDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityTypes: .mobilityAndFlexibilityTypes, dateRange: dateRange)
+      let totalDuration = workouts.sum { $0.duration }
+      return HKQuantity(unit: .second(), doubleValue: totalDuration)
+    case .strengthTrainingDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityTypes: .strengthTrainingTypes, dateRange: dateRange)
+      let totalDuration = workouts.sum { $0.duration }
+      return HKQuantity(unit: .second(), doubleValue: totalDuration)
+    case .cardioDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityTypes: .cardioTypes, dateRange: dateRange)
+      let totalDuration = workouts.sum { $0.duration }
+      return HKQuantity(unit: .second(), doubleValue: totalDuration)
+    case .highIntensityIntervalTrainingDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchWorkouts(activityTypes: .highIntensityIntervalTrainingTypes, dateRange: dateRange)
       let totalDuration = workouts.sum { $0.duration }
       return HKQuantity(unit: .second(), doubleValue: totalDuration)
     case .targetHeartRateZone1:
@@ -321,6 +357,30 @@ extension TargetMetric {
       return workouts.map {
         let total = $0.workouts.sum(where: { $0.totalDistanceCycling?.doubleValue(for: unit) ?? 0 })
         return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: unit, doubleValue: total))
+      }
+    case .mobilityAndFlexibilityDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityTypes: .mobilityAndFlexibilityTypes, dateRange: dateRange)
+      return workouts.map {
+        let total = $0.workouts.sum(keyPath: \.duration)
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: .second(), doubleValue: total))
+      }
+    case .strengthTrainingDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityTypes: .strengthTrainingTypes, dateRange: dateRange)
+      return workouts.map {
+        let total = $0.workouts.sum(keyPath: \.duration)
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: .second(), doubleValue: total))
+      }
+    case .cardioDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityTypes: .cardioTypes, dateRange: dateRange)
+      return workouts.map {
+        let total = $0.workouts.sum(keyPath: \.duration)
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: .second(), doubleValue: total))
+      }
+    case .highIntensityIntervalTrainingDuration:
+      let workouts = await HealthStoreFetcher.shared.fetchCollatedWorkouts(activityTypes: .highIntensityIntervalTrainingTypes, dateRange: dateRange)
+      return workouts.map {
+        let total = $0.workouts.sum(keyPath: \.duration)
+        return DateQuantitySample(date: $0.date, quantity: HKQuantity(unit: .second(), doubleValue: total))
       }
     case .targetHeartRateZone1:
       let collatedReports = await HealthStoreFetcher.shared.fetchCollatedWorkoutHeartRateReports(dateRange: dateRange)

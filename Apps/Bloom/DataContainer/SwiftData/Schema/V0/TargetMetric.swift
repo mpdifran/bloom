@@ -24,6 +24,10 @@ public enum TargetMetric: String, Identifiable, Codable, CaseIterable, Sendable 
   case runDuration
   case bikeDistance
   case bikeDuration
+  case mobilityAndFlexibilityDuration
+  case strengthTrainingDuration
+  case cardioDuration
+  case highIntensityIntervalTrainingDuration
   case targetHeartRateZone1
   case targetHeartRateZone2
   case targetHeartRateZone3

@@ -40,12 +40,13 @@ struct HabitDetailsView: View {
         HabitGrid(model: habitGridModel)
           .padding(.bottom)
 
-        statsSection
-          .padding(.horizontal)
-          .padding(.bottom)
-
-        historyChart
-          .padding(.horizontal)
+        Group {
+          statsSection
+            .padding(.bottom)
+          historyChart
+          notesSection
+        }
+        .padding(.horizontal)
       }
       .toolbar {
         ToolbarItem(placement: .principal) {
@@ -214,6 +215,48 @@ private extension HabitDetailsView {
       .frame(height: 200)
     }
   }
+
+  @ViewBuilder
+  var notesSection: some View {
+    if let habitSummaryText {
+      VStack {
+        SectionTitleView("Notes")
+          .padding(.horizontal)
+        Text(habitSummaryText)
+          .horizontalAlignment(.leading)
+          .multilineTextAlignment(.leading)
+          .cardContainer(fill: .background.secondary)
+      }
+    }
+  }
+}
+
+private extension HabitDetailsView {
+
+  var habitSummaryText: String? {
+    var workoutTypes = [HKWorkoutActivityType]()
+    switch habit.targetMetric {
+    case .mobilityAndFlexibilityDuration:
+      workoutTypes = .mobilityAndFlexibilityTypes
+    case .strengthTrainingDuration:
+      workoutTypes = .strengthTrainingTypes
+    case .cardioDuration:
+      workoutTypes = .cardioTypes
+    case .highIntensityIntervalTrainingDuration:
+      workoutTypes = .highIntensityIntervalTrainingTypes
+    default:
+      return nil
+    }
+
+    let listFormatter = ListFormatter()
+    let workoutNames = workoutTypes.map(\.name)
+
+    guard let workouts = listFormatter.string(from: workoutNames) else {
+      return nil
+    }
+
+    return "This goal tracks time spent performing \(workouts) workouts."
+  }
 }
 
 private extension HabitDetailsView {
@@ -342,7 +385,7 @@ struct WeekQuantitySamples: Identifiable {
   let samples: [DateQuantitySample]
 }
 
-#Preview {
+#Preview("Water Intake") {
   NavigationStack {
     HabitDetailsView(
       habit: Habit(
@@ -353,6 +396,22 @@ struct WeekQuantitySamples: Identifiable {
         isSuggested: true,
         isUserEdited: false,
         vitalKind: .nutrition
+      )
+    )
+  }
+}
+
+#Preview("Strength Training") {
+  NavigationStack {
+    HabitDetailsView(
+      habit: Habit(
+        targetMetric: .strengthTrainingDuration,
+        value: 30,
+        unitString: HKUnit.minute().unitString,
+        startDate: .now,
+        isSuggested: true,
+        isUserEdited: false,
+        vitalKind: .exerciseEffectiveness
       )
     )
   }
