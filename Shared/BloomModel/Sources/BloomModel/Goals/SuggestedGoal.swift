@@ -38,6 +38,10 @@ public extension SuggestedGoal {
     case runDuration
     case bikeDistance
     case bikeDuration
+    case mobilityAndFlexibilityDuration
+    case strengthTrainingDuration
+    case cardioDuration
+    case highIntensityIntervalTrainingDuration
     case targetHeartRateZone1Minutes
     case targetHeartRateZone2Minutes
     case targetHeartRateZone3Minutes

@@ -22,6 +22,10 @@ extension SuggestedGoal.Metric {
     case .runDuration: TargetMetric.runDuration
     case .bikeDistance: TargetMetric.bikeDistance
     case .bikeDuration: TargetMetric.bikeDuration
+    case .mobilityAndFlexibilityDuration: TargetMetric.mobilityAndFlexibilityDuration
+    case .strengthTrainingDuration: TargetMetric.strengthTrainingDuration
+    case .cardioDuration: TargetMetric.cardioDuration
+    case .highIntensityIntervalTrainingDuration: TargetMetric.highIntensityIntervalTrainingDuration
     case .targetHeartRateZone1Minutes: TargetMetric.targetHeartRateZone1
     case .targetHeartRateZone2Minutes: TargetMetric.targetHeartRateZone2
     case .targetHeartRateZone3Minutes: TargetMetric.targetHeartRateZone3
