@@ -35,9 +35,22 @@ struct ProposedNewGoalsView: View {
           ProposedGoalCell(proposedGoal: goal)
             .transition(.scale)
         }
+
+        if proposedGoalsResult.removedGoals.isNotEmpty {
+          SectionTitleView("Removed Goals")
+            .padding(.horizontal)
+
+          ForEachEnumerated(proposedGoalsResult.removedGoals) { (index, goal) in
+            RemovedGoalCell(proposedGoal: goal) {
+              proposedGoalsResult.removedGoals.remove(at: index)
+              proposedGoalsResult.goals.append(goal)
+            }
+          }
+        }
       }
       .padding()
     }
+    .animation(.default, value: proposedGoalsResult)
     .groupedBackground()
     .shelf {
       AsyncButton {
@@ -69,6 +82,19 @@ struct ProposedNewGoalsView: View {
           unitString: "km",
           vitalKind: nil,
           context: "Bike more for better health.",
+          hasUserEdited: false
+        )
+      ],
+      removedGoals: [
+        ProposedGoal(
+          habitID: nil,
+          targetMetric: .proteinIntake,
+          value: 120,
+          suggestedValue: 120,
+          previousValue: 120,
+          unitString: "g",
+          vitalKind: nil,
+          context: nil,
           hasUserEdited: false
         )
       ],

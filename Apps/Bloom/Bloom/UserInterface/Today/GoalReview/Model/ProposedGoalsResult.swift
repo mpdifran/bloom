@@ -9,5 +9,6 @@ import Foundation
 
 struct ProposedGoalsResult: Equatable, Sendable {
   var goals: [ProposedGoal]
+  var removedGoals: [ProposedGoal]
   var todos: [ProposedToDo]
 }

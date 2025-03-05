@@ -37,8 +37,12 @@ extension AIGoalManager {
       allGoals.append(contentsOf: aiGoals)
     }
 
+    let allTargetMetrics = allGoals.map { $0.targetMetric }
+    let removedGoals = try await calculateRemovedGoals(excluding: allTargetMetrics)
+
     return ProposedGoalsResult(
       goals: allGoals,
+      removedGoals: removedGoals,
       todos: allToDos
     )
   }
@@ -200,5 +204,24 @@ private extension AIGoalManager {
     guard goals.isNotEmpty else { return nil }
 
     return (goals, [])
+  }
+
+  func calculateRemovedGoals(excluding targetMetrics: [TargetMetric]) async throws -> [ProposedGoal] {
+    let activeGoals = try await modelActor.fetchActiveHabits()
+    let removedGoals = activeGoals.filter({ !targetMetrics.contains($0.targetMetric) })
+
+    return removedGoals.map { goal in
+      ProposedGoal(
+        habitID: goal.id,
+        targetMetric: goal.targetMetric,
+        value: goal.value,
+        suggestedValue: goal.value,
+        previousValue: goal.value,
+        unitString: goal.unitString,
+        vitalKind: nil,
+        context: nil,
+        hasUserEdited: goal.isUserEdited
+      )
+    }
   }
 }
