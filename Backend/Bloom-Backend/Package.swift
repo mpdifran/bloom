@@ -4,7 +4,8 @@ import PackageDescription
 let package = Package(
     name: "Bloom-Backend",
     platforms: [
-       .macOS(.v13)
+       .macOS(.v13),
+       .iOS(.v17)
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.99.3"),

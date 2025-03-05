@@ -125,11 +125,10 @@ private extension GoalController {
         run: run,
         suggestedGoals: suggestedGoals
       )
-    case .messages(_, let messages):
-      let message = messages.flatMap({ $0.content }).compactMap({ $0.text }).last
+    case .messages(_, _):
       return SuggestGoalsResponse(
-        summary: message,
-        goals: suggestedGoals
+        goals: suggestedGoals,
+        reminders: []
       )
     }
   }

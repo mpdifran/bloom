@@ -76,6 +76,8 @@ private extension AIGoalManager {
   }
 
   func calculateNutritionGoals() async -> ([ProposedGoal], [ProposedToDo])? {
+    guard await HealthManager.shared.healthGoal.isWeightRelated else { return nil }
+
     var todos = [ProposedToDo]()
     // Ensure the user has logged their weight
     if await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass == nil {
@@ -83,7 +85,7 @@ private extension AIGoalManager {
         todoKind: .logWeight,
         todoCadence: .daily,
         vitalKind: .nutrition,
-        context: "Bloom needs more data before it can suggest a focus area. Please log your weight."
+        context: "Bloom needs more data before it can suggest nutrition goals. Please log your weight."
       )
       todos.append(todo)
     }
@@ -94,7 +96,7 @@ private extension AIGoalManager {
         todoKind: .logFood,
         todoCadence: .daily,
         vitalKind: .nutrition,
-        context: "Bloom needs more data before it can suggest a focus area. Please log your food for at least 7 days."
+        context: "Bloom needs more data before it can suggest nutrition goals. Please log your food for at least 7 days."
       )
       todos.append(todo)
     } else if await VitalsCalculator.shared.nutritionSummary?.details.hasSufficientProteinLogs == false {
@@ -102,7 +104,7 @@ private extension AIGoalManager {
         todoKind: .logProtein,
         todoCadence: .daily,
         vitalKind: .nutrition,
-        context: "Bloom needs more data before it can suggest a focus area. Please ensure you're logging protein for at least 7 days."
+        context: "Bloom needs more data before it can suggest nutrition goals. Please ensure you're logging protein for at least 7 days."
       )
       todos.append(todo)
     }

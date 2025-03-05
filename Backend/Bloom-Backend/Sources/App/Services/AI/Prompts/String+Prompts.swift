@@ -107,9 +107,17 @@ extension String.Prompt {
   """
 
   static let suggestGoals: String = """
-  Read the user's health data, detect trends, and suggest or edit achievable goals to improve well-being.
-  Adjust goals dynamically based on progress.
-  Do not list the goals in your response.
+  Perform the following steps:
+  
+  1) Look at the user's health data and analyze the trends.
+  2) Identify the areas of the user's health that are the most important to focus on.
+  3) Analyze the user's current goals, determine how often they met them over the last 7 days, and decide if they align with the health focus areas.
+  4) Suggest new goals, or edit existing goals to align better with the user's health focus areas.
+  5) Make sure the goals are set gently. Don't set the value too high if the user is new to the metric.
+  6) Only if your suggestion doesn't fit into a goal, set a reminder. Strongly prefer setting a goal over a reminder.
+  
+  Notes:
   Keep responses short, positive, and engaging.
+  Don't overwhelm the user with too many goals or reminders.
   """
 }

@@ -166,6 +166,17 @@ extension ResponseSchema {
               )
             ]
           )
+        ),
+        "suggestedReminders": Schema.Parameter(
+          description: "A list of things the user should be reminded to do. These should only be used when you can't use a goal.",
+          arrayOf: Schema.Object(
+            properties: [
+              "title" : Schema.Parameter(
+                type: .string,
+                description: "The name of the reminder that will be displayed to the user. This should be 1-5 words. Examples: 'Stretch', 'Perform Breathing Exercises'"
+              )
+            ]
+          )
         )
       ]
     )

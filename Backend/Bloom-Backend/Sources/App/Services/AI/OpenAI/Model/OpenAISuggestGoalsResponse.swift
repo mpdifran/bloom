@@ -10,4 +10,5 @@ import BloomModel
 
 struct OpenAISuggestGoalsResponse: Codable {
   let suggestedGoals: [SuggestedGoal]
+  let suggestedReminders: [SuggestedReminder]
 }

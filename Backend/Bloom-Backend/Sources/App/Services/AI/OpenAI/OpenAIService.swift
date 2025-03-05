@@ -383,10 +383,6 @@ extension OpenAIService {
       Chat.Message(
         role: .user,
         content: [.text("Here are my current goals:\n\n```json\n\(currentGoals)\n```\n")]
-      ),
-      Chat.Message(
-        role: .user,
-        content: [.text("Analyze my health data, and identify the main areas of my health that I should focus on. Ensure my goals align with those focus areas. Update my goals, or give me new goals to help improve my health.")]
       )
     ]
 
@@ -400,6 +396,9 @@ extension OpenAIService {
       throw Abort(.internalServerError)
     }
 
-    return SuggestGoalsResponse(summary: nil, goals: response.suggestedGoals)
+    return SuggestGoalsResponse(
+      goals: response.suggestedGoals,
+      reminders: response.suggestedReminders
+    )
   }
 }
