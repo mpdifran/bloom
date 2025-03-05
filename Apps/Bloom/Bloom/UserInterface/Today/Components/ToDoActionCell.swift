@@ -48,7 +48,6 @@ struct ToDoActionCell: View {
 
                     HStack(spacing: 2) {
                         if let vitalKind {
-                            Image(systemName: vitalKind.systemImage)
                             Text(vitalKind.name)
                             Text("•")
                         }

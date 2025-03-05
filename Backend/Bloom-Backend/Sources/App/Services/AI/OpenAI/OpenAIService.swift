@@ -10,6 +10,7 @@ import Foundation
 import Logging
 @preconcurrency import OpenAIKit
 import Vapor
+import AppFoundations
 
 struct OpenAIService { }
 

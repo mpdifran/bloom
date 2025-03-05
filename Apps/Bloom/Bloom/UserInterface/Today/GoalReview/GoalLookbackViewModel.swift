@@ -19,33 +19,28 @@ extension GoalLookbackView {
 extension GoalLookbackView.ViewModel {
 
   func loadGoalHistory() async -> [GoalLookbackDetails] {
-    do {
-      let activeGoals = try await modelActor.fetchActiveHabits()
-      let dateRange = DateRange.trailingDaysFromEndOfYesterday(6)
+    let activeGoals = (try? await modelActor.fetchActiveHabits()) ?? []
+    let dateRange = DateRange.trailingDaysFromEndOfYesterday(6)
 
-      var goalLookbacks = [GoalLookbackDetails]()
+    var goalLookbacks = [GoalLookbackDetails]()
 
-      for goal in activeGoals {
-        do {
-          let history = try await HabitGoalStatisticsCalculator.calculateGoalMetHistory(
-            targetMetric: goal.targetMetric,
-            dateRange: dateRange
-          )
+    for goal in activeGoals {
+      do {
+        let history = try await HabitGoalStatisticsCalculator.calculateGoalMetHistory(
+          targetMetric: goal.targetMetric,
+          dateRange: dateRange
+        )
 
-          let details = GoalLookbackDetails(
-            goal: goal,
-            goalMetHistory: history
-          )
-          goalLookbacks.append(details)
-        } catch {
-          print(error)
-        }
+        let details = GoalLookbackDetails(
+          goal: goal,
+          goalMetHistory: history
+        )
+        goalLookbacks.append(details)
+      } catch {
+        print(error)
       }
-      return goalLookbacks
-    } catch {
-      print(error)
     }
-    return []
+    return goalLookbacks
   }
 
   func proposeNewGoals() async throws -> ProposedGoalsResult {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppUI
 
 struct ProposedNewGoalsView: View {
 
@@ -15,46 +16,49 @@ struct ProposedNewGoalsView: View {
 
   @State private var proposedGoalsResult: ProposedGoalsResult
 
+  @ObservedObject private var habitsViewModel = HabitsViewModel.shared
+
+  @Environment(\.dismiss) private var dismiss
+
   var body: some View {
     ScrollView {
       VStack(alignment: .leading) {
-        if let summary = createMarkdownSummary() {
-          Text(summary)
-            .font(.title3)
-            .bold()
-            .fontDesign(.rounded)
-            .transition(.opacity)
+        Text("Here are your personalized goals!")
+          .onboardingTextStyle()
+
+        ForEach(proposedGoalsResult.todos) { todo in
+          ProposedToDoCell(proposedToDo: todo)
+            .transition(.scale)
         }
 
         ForEach($proposedGoalsResult.goals) { goal in
           ProposedGoalCell(proposedGoal: goal)
+            .transition(.scale)
         }
       }
       .padding()
     }
     .groupedBackground()
-  }
-}
-
-private extension ProposedNewGoalsView {
-
-  func createMarkdownSummary() -> AttributedString? {
-    guard let summary = proposedGoalsResult.summary else { return nil }
-
-    let editedSummary = summary.replacingOccurrences(of: "\n", with: "  \n")
-    do {
-      return try AttributedString(markdown: editedSummary)
-    } catch {
-      print(error)
+    .shelf {
+      AsyncButton {
+        let newHabits = NewHabitResult(
+          proposedGoals: proposedGoalsResult.goals,
+          proposedToDos: proposedGoalsResult.todos
+        )
+        try habitsViewModel.performSave(newGoals: newHabits)
+        dismiss()
+      } label: {
+        Text("Let's Do It!")
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
     }
-    return AttributedString(summary)
   }
 }
 
 #Preview {
   ProposedNewGoalsView(
     proposedGoalsResult: ProposedGoalsResult(
-      summary: "I've made some tweaks to your goals!",
       goals: [
         ProposedGoal(
           habitID: nil,
@@ -66,6 +70,14 @@ private extension ProposedNewGoalsView {
           vitalKind: nil,
           context: "Bike more for better health.",
           hasUserEdited: false
+        )
+      ],
+      todos: [
+        ProposedToDo(
+          todoKind: .logFood,
+          todoCadence: .daily,
+          vitalKind: .nutrition,
+          context: "Log your food daily in order to get nutrition goals."
         )
       ]
     )

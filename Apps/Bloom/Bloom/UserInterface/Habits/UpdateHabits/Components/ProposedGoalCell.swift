@@ -35,7 +35,7 @@ struct ProposedGoalCell: View {
           recommendedValueDisplayView
         }
       }
-      .cardContainer(fill: .background.secondary)
+      .cardContainer()
       .padding(4)
 
       if includeActions {

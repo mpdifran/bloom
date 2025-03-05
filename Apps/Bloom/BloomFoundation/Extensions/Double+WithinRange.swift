@@ -17,4 +17,13 @@ public extension Double {
     let difference = abs(self - value) / abs(value)
     return difference <= precision
   }
+
+  func isWithinPercent(of value: Double, percent: Double) -> Bool {
+    guard value != 0 else {
+      return abs(self) <= percent
+    }
+
+    let difference = abs(self - value) / abs(value)
+    return difference <= percent
+  }
 }

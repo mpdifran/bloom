@@ -8,6 +8,6 @@
 import Foundation
 
 struct ProposedGoalsResult: Equatable, Sendable {
-  let summary: String?
   var goals: [ProposedGoal]
+  var todos: [ProposedToDo]
 }

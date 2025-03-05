@@ -25,7 +25,9 @@ struct BaseReviewGoalsView: View {
         ProposedNewGoalsView(proposedGoalsResult: result)
       } else {
         GoalLookbackView { proposedGoalsResult in
-          self.proposedGoalsResult = proposedGoalsResult
+          withAnimation {
+            self.proposedGoalsResult = proposedGoalsResult
+          }
         }
       }
     }

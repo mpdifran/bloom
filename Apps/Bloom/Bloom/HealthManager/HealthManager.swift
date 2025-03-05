@@ -245,7 +245,7 @@ extension HealthManager {
     case .gainWeight:
       return weight > targetWeight
     case .maintainWeight:
-      return false
+      return weight.isWithinPercent(of: targetWeight, percent: 0.05)
     case .none:
       return false
     }
