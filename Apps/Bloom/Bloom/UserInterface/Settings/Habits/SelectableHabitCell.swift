@@ -20,15 +20,19 @@ struct SelectableHabitCell: View {
         .frame(width: 40)
 
       Text(targetMetric.name)
+        .font(.title3)
         .bold()
 
       Spacer()
 
       if isSelected {
         Image(systemName: "checkmark")
+          .font(.title3)
+          .bold()
           .foregroundStyle(targetMetric.color)
       }
     }
+    .foregroundStyle(.text)
     .fontDesign(.rounded)
     .selectable()
     .contentShape(Rectangle())

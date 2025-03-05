@@ -33,13 +33,13 @@ struct TargetMetricPicker: View {
     .foregroundStyle(.tint)
     .tint(selectedTargetMetric.color)
     .selectable()
+    .sheet($presentedSheet)
     .onTapGesture {
       presentedSheet = TargetMetricSelectionView(
         selectedTargetMetric: $selectedTargetMetric,
         excludingTargetMetrics: excludedTargetMetrics
       ).asAny
     }
-    .sheet($presentedSheet)
   }
 }
 
