@@ -141,7 +141,7 @@ final class HealthManager: ObservableObject {
   @AppStorage(.HealthDefaults.isBreastFeeding.key, store: .group) var isBreastfeeding = false
 
   let healthStore = HKHealthStore()
-  let healthDefaults = HealthDefaults()
+  let healthDefaults = HealthDefaults.shared
 
   private init() {
     self.birthday = healthDefaults.getBirthday()
@@ -177,10 +177,7 @@ extension HealthManager {
   }
 
   func sex() -> HKBiologicalSex {
-    if let sex = healthStore.sex() {
-      return sex
-    }
-    return isFemale ? .female : .male
+    isFemale ? .female : .male
   }
 
   func height() -> HKQuantity {

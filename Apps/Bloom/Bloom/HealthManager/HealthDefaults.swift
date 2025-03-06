@@ -26,6 +26,8 @@ extension String {
 }
 
 struct HealthDefaults {
+  static let shared = HealthDefaults()
+
   nonisolated(unsafe) private static let store: UserDefaults = .group
 }
 
@@ -60,6 +62,10 @@ extension HealthDefaults {
 }
 
 extension HealthDefaults {
+  func getIsFemale() -> Bool {
+    getValue(for: .isFemale) ?? true
+  }
+
   func getBirthday() -> Date {
     getValue(for: .birthday) ?? Date.now
   }

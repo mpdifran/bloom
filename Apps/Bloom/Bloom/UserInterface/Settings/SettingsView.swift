@@ -164,7 +164,7 @@ private extension SettingsView {
         }
       }
 
-      if healthManager.healthStore.sex() == .female {
+      if healthManager.sex() == .female {
         SettingsSectionContainer {
           SettingsCell("Breastfeeding") {
             Toggle("", isOn: healthManager.$isBreastfeeding)

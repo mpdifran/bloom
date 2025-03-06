@@ -271,24 +271,21 @@ private extension BodyCompositionDetailsView {
     ranges[selectedRangeIndex]
   }
 
-  @ViewBuilder
   var bodyFatPercentageRangePicker: some View {
-    if let goal = HealthGoalProvider.shared.goalBodyFatPercentage() {
-      Button {
-        selectedRangeIndex = (selectedRangeIndex + 1) % ranges.count
-        feedbackGenerator.impactOccurred()
-      } label: {
-        HStack {
-          Text(range.name)
+    Button {
+      selectedRangeIndex = (selectedRangeIndex + 1) % ranges.count
+      feedbackGenerator.impactOccurred()
+    } label: {
+      HStack {
+        Text(range.name)
 
-          Spacer()
+        Spacer()
 
-          Text(range.rangeDescription(from: goal))
-        }
+        Text(range.rangeDescription(from: HealthGoalProvider.shared.goalBodyFatPercentage()))
       }
-      .buttonStyle(.zone)
-      .tint(range.color)
     }
+    .buttonStyle(.zone)
+    .tint(range.color)
   }
 
   @ViewBuilder

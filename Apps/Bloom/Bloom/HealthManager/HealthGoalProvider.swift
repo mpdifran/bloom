@@ -12,7 +12,15 @@ final class HealthGoalProvider: Sendable {
 
   private let healthStore = HKHealthStore()
 
+  private let healthDefaults = HealthDefaults.shared
+
   private init() { }
+}
+
+private extension HealthGoalProvider {
+  var isFemale: Bool {
+    healthDefaults.getIsFemale()
+  }
 }
 
 // MARK: Heart
@@ -21,46 +29,42 @@ extension HealthGoalProvider {
 
   func goalRestingHeartRateForUser() -> (Double, Double) {
     let age = healthStore.age()
-    let sexObject = try? healthStore.biologicalSex()
 
     if let age {
-      switch (age, sexObject?.biologicalSex) {
+      switch (age, isFemale) {
 
-      case (18...25, .male):
+      case (18...25, false):
         return (60, 70)
-      case (26...35, .male), (18...25, .female):
+      case (26...35, false), (18...25, true):
         return (70, 75)
-      case (36...45, .male), (26...35, .female):
+      case (36...45, false), (26...35, true):
         return (75, 80)
-      case (46...55, .male), (36...45, .female):
+      case (46...55, false), (36...45, true):
         return (80, 85)
-      case (56...65, .male), (46...55, .female):
+      case (56...65, false), (46...55, true):
         return (85, 90)
-      case (66..., .male), (56...65, .female):
+      case (66..., false), (56...65, true):
         return (90, 95)
-      case (66..., .female):
+      case (66..., true):
         return (95, 100)
       default:
         break
       }
     }
 
-    switch sexObject?.biologicalSex {
-    case .female:
+    if isFemale {
       return (65, 105)
-    default:
+    } else {
       return (60, 100)
     }
   }
 
   func goalVO2MaxForUser() -> (Double, Double, Double)? {
     guard
-      let age = healthStore.age(),
-      let sexObject = try? healthStore.biologicalSex()
+      let age = healthStore.age()
     else { return nil }
 
-    switch sexObject.biologicalSex {
-    case .male:
+    if isFemale {
       switch age {
       case 20...29: return (57.0, 48.0, 38.0)
       case 30...39: return (52.0, 43.0, 34.0)
@@ -69,7 +73,7 @@ extension HealthGoalProvider {
       case 60...: return (36.0, 28.0, 18.0)
       default: return nil
       }
-    case .female:
+    } else {
       switch age {
       case 20...29: return (47.0, 38.0, 29.0)
       case 30...39: return (38.0, 30.0, 24.0)
@@ -78,8 +82,6 @@ extension HealthGoalProvider {
       case 60...: return (25.0, 20.0, 15.0)
       default: return nil
       }
-    default:
-      return nil
     }
   }
 
@@ -113,28 +115,23 @@ extension HealthGoalProvider {
   }
 
   /// - note: https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage
-  func goalBodyFatPercentage() -> BodyFatPercentageGoalThresholds? {
-    guard let sexObject = try? healthStore.biologicalSex() else { return nil }
-
-    switch sexObject.biologicalSex {
-    case .female:
-      return BodyFatPercentageGoalThresholds(
+  func goalBodyFatPercentage() -> BodyFatPercentageGoalThresholds {
+    if isFemale {
+      BodyFatPercentageGoalThresholds(
         maxEssentialFat: 0.14,
         maxAthleteFat: 0.21,
         maxFitFat: 0.25,
         maxHealthyFat: 0.32,
         maxHighFat: 0.50
       )
-    case .male:
-      return BodyFatPercentageGoalThresholds(
+    } else {
+      BodyFatPercentageGoalThresholds(
         maxEssentialFat: 0.06,
         maxAthleteFat: 0.14,
         maxFitFat: 0.18,
         maxHealthyFat: 0.25,
         maxHighFat: 0.43
       )
-    default:
-      return nil
     }
   }
 
@@ -245,25 +242,29 @@ extension HealthGoalProvider {
     } else if age < 9 {
       return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 15)
     } else if age < 14 {
-      if healthStore.sex() == .male {
+      if isFemale {
+        return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 21)
+      } else {
         return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 25)
       }
-      return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 21)
     } else if age < 19 {
-      if healthStore.sex() == .male {
+      if isFemale {
+        return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 24)
+      } else {
         return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 35)
       }
-      return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 24)
     } else if age < 51 {
-      if healthStore.sex() == .male {
+      if isFemale {
+        return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 25)
+      } else {
         return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 35)
       }
-      return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 25)
     } else {
-      if healthStore.sex() == .male {
+      if isFemale {
+        return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 20)
+      } else {
         return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 30)
       }
-      return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 20)
     }
   }
 
@@ -340,7 +341,7 @@ extension HealthGoalProvider {
   func adequateDailyIntakeForProtein() -> HKQuantity? {
     guard let age = healthStore.age() else { return nil }
 
-    if healthStore.sex() == .female {
+    if isFemale {
       if age < 4 {
         return HKQuantity(unit: .gram(), doubleValue: 13)
       } else if age < 9 {
@@ -373,7 +374,7 @@ extension HealthGoalProvider {
     if age < 19 {
       return HKQuantity(unit: .gram(), doubleValue: 25)
     }
-    if healthStore.sex() == .female {
+    if isFemale {
       return HKQuantity(unit: .gram(), doubleValue: 25)
     }
     return HKQuantity(unit: .gram(), doubleValue: 38)
@@ -387,15 +388,17 @@ extension HealthGoalProvider {
     if age < 19 {
       return HKQuantity(unit: .gram(), doubleValue: 14)
     } else if age < 51 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantity(unit: .gram(), doubleValue: 25)
+      } else {
+        return HKQuantity(unit: .gram(), doubleValue: 31)
       }
-      return HKQuantity(unit: .gram(), doubleValue: 31)
     } else {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantity(unit: .gram(), doubleValue: 22)
+      } else {
+        return HKQuantity(unit: .gram(), doubleValue: 28)
       }
-      return HKQuantity(unit: .gram(), doubleValue: 28)
     }
   }
 
@@ -430,15 +433,17 @@ extension HealthGoalProvider {
     } else if age < 14 {
       return HKQuantityRange(unit: .gramUnit(with: .micro), range: 600...1700)
     } else if age < 19 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .micro), range: 700...2800)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .micro), range: 900...2800)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .micro), range: 900...2800)
     } else {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .micro), range: 700...3000)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .micro), range: 900...3000)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .micro), range: 900...3000)
     }
   }
 
@@ -473,17 +478,19 @@ extension HealthGoalProvider {
     } else if age < 14 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1...60)
     } else if age < 19 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.2...80)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.3...80)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.3...80)
     } else if age < 51 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.3...100)
     } else {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.5...100)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.7...100)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1.7...100)
     }
   }
 
@@ -545,15 +552,17 @@ extension HealthGoalProvider {
     } else if age < 14 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 45...1200)
     } else if age < 19 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 65...1800)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 75...1800)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 75...1800)
     } else {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 75...2000)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 90...2000)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 90...2000)
     }
   }
 
@@ -646,10 +655,11 @@ extension HealthGoalProvider {
     } else if age < 51 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2500)
     } else if age < 70 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2000)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1000...2000)
     } else {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 1200...2000)
     }
@@ -681,15 +691,17 @@ extension HealthGoalProvider {
     } else if age < 14 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...40)
     } else if age < 19 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 15...45)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...45)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...45)
     } else if age < 51 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 18...45)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...45)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...45)
     } else {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...45)
     }
@@ -731,15 +743,17 @@ extension HealthGoalProvider {
     } else if age < 14 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 240...590)
     } else if age < 19 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 360...710)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 410...760)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 410...760)
     } else {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 320...670)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 420...770)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 420...770)
     }
   }
 
@@ -773,25 +787,29 @@ extension HealthGoalProvider {
     } else if age < 9 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2300...10000)
     } else if age < 14 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2300...10000)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2500...10000)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2500...10000)
     } else if age < 19 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2300...10000)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3000...10000)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3000...10000)
     } else if age < 51 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2600...10000)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3400...10000)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3400...10000)
     } else {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 2600...10000)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3400...10000)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 3400...10000)
     }
   }
 
@@ -847,15 +865,17 @@ extension HealthGoalProvider {
     } else if age < 14 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...23)
     } else if age < 19 {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 9...34)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...34)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...34)
     } else {
-      if healthStore.sex() == .female {
+      if isFemale {
         return HKQuantityRange(unit: .gramUnit(with: .milli), range: 8...40)
+      } else {
+        return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...40)
       }
-      return HKQuantityRange(unit: .gramUnit(with: .milli), range: 11...40)
     }
   }
 }
