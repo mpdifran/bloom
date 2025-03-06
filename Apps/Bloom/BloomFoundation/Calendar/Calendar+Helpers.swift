@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Calendar {
-  enum Weekday: Int {
+  enum Weekday: Int, Sendable {
     case sunday = 1
     case monday
     case tuesday
@@ -37,7 +37,7 @@ public extension Calendar {
     }
   }
 
-  enum TimeOfDay: CaseIterable, Identifiable {
+  enum TimeOfDay: CaseIterable, Identifiable, Sendable {
     public var id: Self { self }
 
     case morning
