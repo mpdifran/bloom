@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-25.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -21,7 +22,7 @@ struct MealPicker: View {
     } label: {
       HStack(spacing: 2) {
         Text(nutritionViewModel.suggestedMeal.name)
-        Image(systemName: "chevron.up.chevron.down")
+        Image(systemSymbol: .chevronUpChevronDown)
           .font(.caption)
       }
       .bold()

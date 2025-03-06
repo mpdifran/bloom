@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-16.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 extension View {
@@ -99,7 +100,7 @@ private struct TabItem: View {
 private struct AddTabItem: View {
 
   var body: some View {
-    Image(systemName: "plus")
+    Image(systemSymbol: .plus)
       .foregroundStyle(.white)
       .font(.title3)
       .bold()

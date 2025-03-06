@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-05.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Charts
 import TelemetryDeck
@@ -119,7 +120,7 @@ private extension NutritionDetailsView {
 
   var emptyView: some View {
     ContentUnavailableView {
-      Label("No Data Available", systemImage: "fork.knife")
+      Label("No Data Available", systemSymbol: .forkKnife)
     } description: {
       Text("Track your food to get more insights into your Nutrition.")
     } actions: {

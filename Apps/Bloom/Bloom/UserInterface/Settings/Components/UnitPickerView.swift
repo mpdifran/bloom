@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-30.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 
@@ -24,7 +25,7 @@ struct UnitPickerView: View {
         }
       } label: {
         Text(unit.sensibleUnitString)
-        Image(systemName: "chevron.up.chevron.down")
+        Image(systemSymbol: .chevronUpChevronDown)
       }
     }
   }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 import AppUI
 import HealthKit
 
@@ -63,7 +64,7 @@ struct HealthActionCardView<Content>: View where Content: View {
         } label: {
           Group {
             if hasInserted {
-              Image(systemName: "checkmark")
+              Image(systemSymbol: .checkmark)
             } else {
               Text("Save")
             }

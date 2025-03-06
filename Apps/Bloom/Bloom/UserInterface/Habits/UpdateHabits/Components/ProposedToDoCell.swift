@@ -15,7 +15,7 @@ struct ProposedToDoCell: View {
             ToDoActionCell(
                 title: proposedToDo.todoKind.name,
                 subtitle: proposedToDo.todoCadence.name,
-                systemImage: proposedToDo.todoKind.systemImage,
+                symbol: proposedToDo.todoKind.symbol,
                 isComplete: false,
                 vitalKind: proposedToDo.vitalKind,
                 useSecondaryBackground: false

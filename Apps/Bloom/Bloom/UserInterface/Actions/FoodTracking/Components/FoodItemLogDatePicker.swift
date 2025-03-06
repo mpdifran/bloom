@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-26.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct FoodItemLogDatePicker: View {
@@ -18,7 +19,7 @@ struct FoodItemLogDatePicker: View {
         } label: {
             HStack(spacing: 2) {
                 Text("\(nutritionViewModel.date, formatter: DateFormatter.justRelativeDateMedium)")
-                Image(systemName: "chevron.up.chevron.down")
+              Image(systemSymbol: .chevronUpChevronDown)
                     .font(.caption)
             }
             .bold()

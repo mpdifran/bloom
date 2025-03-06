@@ -5,26 +5,27 @@
 //  Created by Mark DiFranco on 2024-10-30.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct IconGauge: View {
     let progress: CGFloat
     let dimension: CGFloat
     let lineThickness: CGFloat
-    let systemImage: String
+    let symbol: SFSymbol
     let color: Color
 
     init(
         progress: CGFloat,
         dimension: CGFloat,
         lineThickness: CGFloat,
-        systemImage: String,
+        symbol: SFSymbol,
         color: Color
     ) {
         self.progress = progress
         self.dimension = dimension
         self.lineThickness = lineThickness
-        self.systemImage = systemImage
+        self.symbol = symbol
         self.color = color
     }
 
@@ -67,7 +68,7 @@ struct IconGauge: View {
                 )
                 .transition(.opacity)
 
-            Image(systemName: systemImage)
+            Image(systemSymbol: symbol)
         }
         .padding(lineThickness / 2)
         .frame(width: dimension, height: dimension, alignment: .center)
@@ -88,7 +89,7 @@ private extension IconGauge {
             progress: 0.2,
             dimension: 50,
             lineThickness: 10,
-            systemImage: "carrot",
+            symbol: .carrot,
             color: .mutedGreen
         )
 
@@ -96,7 +97,7 @@ private extension IconGauge {
             progress: 1,
             dimension: 70,
             lineThickness: 15,
-            systemImage: "fork.knife",
+            symbol: .forkKnife,
             color: .mutedOrange
         )
     }

@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-26.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -14,7 +15,7 @@ struct GoalLookbackCell: View {
 
   var body: some View {
     HStack {
-      Image(systemName: goal.targetMetric.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: goal.targetMetric.systemImage))
         .font(.title)
         .foregroundStyle(.tint)
         .frame(square: 50)

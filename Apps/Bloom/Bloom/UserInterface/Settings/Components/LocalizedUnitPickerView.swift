@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-13.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 
@@ -59,7 +60,7 @@ private extension LocalizedUnitPickerView {
       }
     } label: {
       Text(unit.sensibleUnitString)
-      Image(systemName: "chevron.up.chevron.down")
+      Image(systemSymbol: .chevronUpChevronDown)
     }
   }
 
@@ -73,7 +74,7 @@ private extension LocalizedUnitPickerView {
       }
     } label: {
       Text(unit.sensibleUnitString)
-      Image(systemName: "chevron.up.chevron.down")
+      Image(systemSymbol: .chevronUpChevronDown)
     }
   }
 
@@ -87,7 +88,7 @@ private extension LocalizedUnitPickerView {
       }
     } label: {
       Text(unit.sensibleUnitString)
-      Image(systemName: "chevron.up.chevron.down")
+      Image(systemSymbol: .chevronUpChevronDown)
     }
   }
 
@@ -101,7 +102,7 @@ private extension LocalizedUnitPickerView {
       }
     } label: {
       Text(unit.sensibleUnitString)
-      Image(systemName: "chevron.up.chevron.down")
+      Image(systemSymbol: .chevronUpChevronDown)
     }
   }
 }

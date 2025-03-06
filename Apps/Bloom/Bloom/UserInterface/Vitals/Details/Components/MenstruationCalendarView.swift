@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-12.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Metal
 
@@ -25,7 +26,7 @@ struct MenstruationCalendarView: View {
         Button {
           referenceDate = Calendar.current.date(byAdding: .month, value: -1, to: referenceDate) ?? .now
         } label: {
-          Image(systemName: "chevron.backward")
+          Image(systemSymbol: .chevronBackward)
             .foregroundStyle(.mutedPink)
         }
         .frame(square: 44)
@@ -35,7 +36,7 @@ struct MenstruationCalendarView: View {
         Button {
           referenceDate = Calendar.current.date(byAdding: .month, value: 1, to: referenceDate) ?? .now
         } label: {
-          Image(systemName: "chevron.forward")
+          Image(systemSymbol: .chevronForward)
             .foregroundStyle(.mutedPink)
         }
         .frame(square: 44)

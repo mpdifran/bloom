@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-06-03.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Charts
 
@@ -46,7 +47,7 @@ struct SleepDurationSummaryCell: View {
 
 //            if summary.percentNightsWithValues < 0.8 && summary.segment != .awake {
 //                HStack(alignment: .top) {
-//                    Image(systemName: "exclamationmark.triangle.fill")
+//                    Image(systemSymbol: .exclamationmarkTriangleFill)
 //                        .foregroundStyle(.orange)
 //                    Text("Only \(summary.percentNightsWithValues, specifier: "%.0f")% of the last month of data contain values. Make sure to wear your watch every night!")
 //                        .font(.caption)
@@ -70,13 +71,13 @@ private extension SleepDurationSummaryCell {
     @ViewBuilder
     var trendImage: some View {
         if averageDuration < 7 {
-            Image(systemName: "chevron.down.circle")
+          Image(systemSymbol: .chevronDownCircle)
                 .foregroundStyle(.primary, .green)
         } else if averageDuration > 9 {
-            Image(systemName: "chevron.up.circle")
+          Image(systemSymbol: .chevronUpCircle)
                 .foregroundStyle(.primary, .green)
         } else {
-            Image(systemName: "checkmark.circle.fill")
+          Image(systemSymbol: .checkmarkCircleFill)
                 .foregroundStyle(.white, .green)
         }
     }

@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-17.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 
@@ -13,7 +14,7 @@ struct WorkoutCell: View {
 
   var body: some View {
     HStack {
-      Image(systemName: workout.workoutActivityType.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: workout.workoutActivityType.systemImage))
           .font(.largeTitle)
           .minimumScaleFactor(0.3)
           .foregroundStyle(.green)

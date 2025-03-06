@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-18.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 
@@ -39,7 +40,7 @@ private extension ChatSettingsView {
       SettingsSectionContainer {
         Group {
           if didDeleteChatHistory {
-            Label("Chat History Deleted", systemImage: "checkmark")
+            Label("Chat History Deleted", systemSymbol: .checkmark)
               .bold()
               .horizontallyCentered()
               .frame(minHeight: 60)

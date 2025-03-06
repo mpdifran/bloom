@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 import AppUI
 @preconcurrency import HealthKit
 import HealthKitUI
@@ -70,7 +71,7 @@ struct WaterActionCardView: View {
             VStack {
               ForEach(glassSizes) { glassSize in
                 HStack {
-                  Image(systemName: "waterbottle")
+                  Image(systemSymbol: .waterbottle)
                     .foregroundStyle(.tint)
 
                   Text(glassSize.name)
@@ -96,7 +97,7 @@ struct WaterActionCardView: View {
             .overlay {
               ZStack {
                 if hasInserted {
-                  Label("Water Logged", systemImage: "checkmark")
+                  Label("Water Logged", systemSymbol: .checkmark)
                     .font(.subheadline)
                     .bold()
                     .foregroundStyle(.invertedText)

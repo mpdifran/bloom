@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-21.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 
@@ -13,7 +14,7 @@ struct WorkoutHeartRateZoneCell: View {
 
   var body: some View {
     HStack {
-      Image(systemName: report.activityType.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: report.activityType.systemImage))
         .font(.largeTitle)
         .minimumScaleFactor(0.3)
         .foregroundStyle(.green)

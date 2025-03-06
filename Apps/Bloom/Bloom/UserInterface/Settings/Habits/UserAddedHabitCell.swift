@@ -5,43 +5,44 @@
 //  Created by Mark DiFranco on 2024-09-21.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 import HealthKit
 
 struct UserAddedHabitCell: View {
-    let habit: Habit
+  let habit: Habit
 
-    var body: some View {
-        HStack {
-            Image(systemName: habit.targetMetric.systemImage)
-                .font(.title)
-                .foregroundStyle(habit.targetMetric.color)
-                .frame(width: 40)
+  var body: some View {
+    HStack {
+      Image(systemSymbol: SFSymbol(rawValue: habit.targetMetric.systemImage))
+        .font(.title)
+        .foregroundStyle(habit.targetMetric.color)
+        .frame(width: 40)
 
-            Text(habit.targetMetric.name)
-                .bold()
+      Text(habit.targetMetric.name)
+        .bold()
 
-            Spacer()
+      Spacer()
 
-            Text(habit.displayQuantity)
-                .font(.subheadline)
-                .bold()
-                .fontDesign(.rounded)
-                .foregroundStyle(habit.targetMetric.color)
-        }
+      Text(habit.displayQuantity)
+        .font(.subheadline)
+        .bold()
+        .fontDesign(.rounded)
+        .foregroundStyle(habit.targetMetric.color)
     }
+  }
 }
 
 #Preview {
-    UserAddedHabitCell(
-        habit: Habit(
-            targetMetric: .walkingRunningDistance,
-            value: 5,
-            unitString: HKUnit.meterUnit(with: .kilo).unitString,
-            startDate: .now,
-            isSuggested: false,
-            isUserEdited: true
-        )
+  UserAddedHabitCell(
+    habit: Habit(
+      targetMetric: .walkingRunningDistance,
+      value: 5,
+      unitString: HKUnit.meterUnit(with: .kilo).unitString,
+      startDate: .now,
+      isSuggested: false,
+      isUserEdited: true
     )
+  )
 }

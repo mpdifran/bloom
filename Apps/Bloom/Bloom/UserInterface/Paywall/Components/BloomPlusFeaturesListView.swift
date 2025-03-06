@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-10-08.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import RevenueCat
 
@@ -29,36 +30,36 @@ struct BloomPlusFeaturesListView: View {
       VStack {
         HStack {
           FeatureCard(
-            image: Image(systemName: "star"),
+            image: Image(systemSymbol: .star),
             message: "Personalized goals tailored to you"
           )
 
           FeatureCard(
-            image: Image(systemName: "gauge.open.with.lines.needle.33percent.and.arrowtriangle"),
+            image: Image(systemSymbol: .gaugeOpenWithLinesNeedle33percentAndArrowtriangle),
             message: "Get to your ideal body weight"
           )
         }
 
         HStack {
           FeatureCard(
-            image: Image(systemName: "camera"),
+            image: Image(systemSymbol: .camera),
             message: "Log nutrition with just a picture"
           )
 
           FeatureCard(
-            image: Image(systemName: "barcode.viewfinder"),
+            image: Image(systemSymbol: .barcodeViewfinder),
             message: "Scan food barcodes with ease"
           )
         }
 
         HStack {
           FeatureCard(
-            image: Image(systemName: "figure.run"),
+            image: Image(systemSymbol: .figureRun),
             message: "Keep track of your workouts"
           )
 
           FeatureCard(
-            image: Image(systemName: "heart"),
+            image: Image(systemSymbol: .heart),
             message: "Comprehensive view of your health"
           )
         }

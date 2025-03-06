@@ -5,28 +5,29 @@
 //  Created by Mark DiFranco on 2024-10-18.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct BloomPlusLaurelView: View {
-    let title: String
+  let title: String
 
-    var body: some View {
-        HStack {
-            Image(systemName: "laurel.leading")
-                .font(.largeTitle)
+  var body: some View {
+    HStack {
+      Image(systemSymbol: .laurelLeading)
+        .font(.largeTitle)
 
-            Text(title)
-                .multilineTextAlignment(.center)
-                .bold()
-
-            Image(systemName: "laurel.trailing")
-                .font(.largeTitle)
-        }
+      Text(title)
+        .multilineTextAlignment(.center)
         .bold()
-        .frame(maxWidth: 160)
+
+      Image(systemSymbol: .laurelTrailing)
+        .font(.largeTitle)
     }
+    .bold()
+    .frame(maxWidth: 160)
+  }
 }
 
 #Preview {
-    BloomPlusLaurelView(title: "Best Health App 2025")
+  BloomPlusLaurelView(title: "Best Health App 2025")
 }

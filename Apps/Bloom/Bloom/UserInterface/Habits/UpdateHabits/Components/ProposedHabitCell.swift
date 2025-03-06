@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-20.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 import DataContainer
@@ -68,7 +69,7 @@ struct ProposedHabitCell: View {
         //                    Text("Test")
         //                } label: {
         //                    LabeledContent("Change Vital") {
-        //                        Image(systemName: "bolt.heart")
+        //                        Image(systemSymbol: .boltHeart)
         //                            .foregroundStyle(.tint)
         //                    }
         //                }
@@ -80,7 +81,7 @@ struct ProposedHabitCell: View {
         //                    Text("Test")
         //                } label: {
         //                    LabeledContent("Change Habit") {
-        //                        Image(systemName: "trophy")
+        //                        Image(systemSymbol: .trophy)
         //                            .foregroundStyle(.tint)
         //                    }
         //                }
@@ -101,7 +102,7 @@ private extension ProposedHabitCell {
 
   var habitContentView: some View {
     HStack {
-      Image(systemName: proposedHabit.targetMetric.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: proposedHabit.targetMetric.systemImage))
         .font(.title)
         .foregroundStyle(.tint)
 
@@ -112,7 +113,7 @@ private extension ProposedHabitCell {
         if let vitalKind = proposedHabit.vitalKind {
           HStack(spacing: 6) {
             Text("Helps with \(vitalKind.name)")
-            Image(systemName: vitalKind.systemImage)
+            Image(systemSymbol: SFSymbol(rawValue: vitalKind.systemImage))
           }
           .font(.caption)
           .foregroundStyle(.secondary)
@@ -128,7 +129,7 @@ private extension ProposedHabitCell {
             .foregroundStyle(.secondary)
             .bold()
             .contentTransition(.numericText(value: proposedHabit.previousValue ?? 0))
-          Image(systemName: "arrow.down")
+          Image(systemSymbol: .arrowDown)
             .font(.caption)
             .foregroundStyle(.secondary)
         } else if proposedHabit.isNewHabit {
@@ -151,7 +152,7 @@ private extension ProposedHabitCell {
 
   var recommendedValueDisplayView: some View {
     HStack(spacing: 4) {
-      Image(systemName: "star.circle.fill")
+      Image(systemSymbol: .starCircleFill)
       Text("Recommended")
 
       Spacer()
@@ -170,7 +171,7 @@ private extension ProposedHabitCell {
       proposedHabit.value = proposedHabit.suggestedValue
     } label: {
       LabeledContent("Set Recommended Value") {
-        Image(systemName: "star.circle.fill")
+        Image(systemSymbol: .starCircleFill)
           .foregroundStyle(.primary)
           .bold()
       }
@@ -194,12 +195,15 @@ private extension ProposedHabitCell {
 //            )
           }
         } label: {
-          Label(alternativeTargetMetric.name, systemImage: alternativeTargetMetric.systemImage)
+          Label(
+            alternativeTargetMetric.name,
+            systemSymbol: SFSymbol(rawValue: alternativeTargetMetric.systemImage)
+          )
         }
       }
     } label: {
       LabeledContent("Change Habit") {
-        Image(systemName: "trophy.fill")
+        Image(systemSymbol: .trophyFill)
           .foregroundStyle(.primary)
           .bold()
       }
@@ -216,7 +220,7 @@ private extension ProposedHabitCell {
       presentedSheet = ProposedHabitTargetValueEditCardView(proposedHabit: $proposedHabit).tint(proposedHabit.targetMetric.color).asAny
     } label: {
       LabeledContent("Set Custom Value") {
-        Image(systemName: "chart.xyaxis.line")
+        Image(systemSymbol: .chartXyaxisLine)
           .foregroundStyle(.primary)
           .bold()
       }

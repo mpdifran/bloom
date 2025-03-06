@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-11.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct ZoneButtonStyle: ButtonStyle {
@@ -36,7 +37,7 @@ extension ButtonStyle where Self == ZoneButtonStyle {
 
             Spacer()
 
-            Image(systemName: "sparkles")
+          Image(systemSymbol: .sparkles)
         }
     }
     .buttonStyle(.zone)

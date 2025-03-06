@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-24.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import DataContainer
 
@@ -23,7 +24,7 @@ struct MonthlyVitalCardCell: View {
 
   var body: some View {
     HStack {
-      Image(systemName: vital.id.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: vital.id.systemImage))
         .bold()
         .font(.title)
         .fontDesign(.rounded)

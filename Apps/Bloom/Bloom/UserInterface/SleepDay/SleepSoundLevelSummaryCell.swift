@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-06-26.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct SleepSoundLevelSummaryCell: View {
@@ -15,7 +16,7 @@ struct SleepSoundLevelSummaryCell: View {
             VStack {
                 SleepSectionTitleView(
                     title: "Sound Levels",
-                    systemImage: "speaker.zzz.fill"
+                    symbol: .speakerZzzFill
                 )
 
                 SleepSoundLevelChartView(soundLevels: soundLevels)

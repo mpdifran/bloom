@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-16.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 
@@ -56,7 +57,7 @@ struct ChatView: View {
           Button {
             presentedSheet = ChatSettingsView().asAny
           } label: {
-            Image(systemName: "gear")
+            Image(systemSymbol: .gear)
               .bold()
           }
         }

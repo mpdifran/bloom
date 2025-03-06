@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-01-26.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Swipy
 
@@ -48,26 +49,26 @@ struct SwipeActionStack<Content: View>: View {
 
 struct SwipeActionButtonContent: View {
   let title: String
-  let systemImage: String
+  let symbol: SFSymbol
 
-  init(_ title: String, systemImage: String) {
+  init(_ title: String, symbol: SFSymbol) {
     self.title = title
-    self.systemImage = systemImage
+    self.symbol = symbol
   }
 
   var body: some View {
     ViewThatFits {
       VStack(spacing: 10) {
-        Image(systemName: systemImage)
+        Image(systemSymbol: symbol)
         Text(title)
           .font(.caption)
       }
       VStack(spacing: 5) {
-        Image(systemName: systemImage)
+        Image(systemSymbol: symbol)
         Text(title)
           .font(.caption)
       }
-      Image(systemName: systemImage)
+      Image(systemSymbol: symbol)
     }
   }
 }
@@ -95,7 +96,7 @@ struct SwipeActionButtonContent: View {
             Button {
               model.unswipe()
             } label: {
-              SwipeActionButtonContent("Star", systemImage: "star")
+              SwipeActionButtonContent("Star", symbol: .star)
             }
             .buttonStyle(.swipeAction)
             .tint(.mutedYellow)
@@ -104,7 +105,7 @@ struct SwipeActionButtonContent: View {
             Button {
               model.unswipe()
             } label: {
-              SwipeActionButtonContent("Delete", systemImage: "trash")
+              SwipeActionButtonContent("Delete", symbol: .trash)
             }
             .buttonStyle(.swipeAction)
             .tint(.mutedRed)
@@ -134,7 +135,7 @@ struct SwipeActionButtonContent: View {
             Button {
               model.unswipe()
             } label: {
-              SwipeActionButtonContent("Favourite", systemImage: "heart")
+              SwipeActionButtonContent("Favourite", symbol: .heart)
             }
             .buttonStyle(.swipeAction)
             .tint(.mutedBlue)
@@ -143,7 +144,7 @@ struct SwipeActionButtonContent: View {
             Button {
               model.unswipe()
             } label: {
-              SwipeActionButtonContent("Delete", systemImage: "trash")
+              SwipeActionButtonContent("Delete", symbol: .trash)
             }
             .buttonStyle(.swipeAction)
             .tint(.mutedRed)

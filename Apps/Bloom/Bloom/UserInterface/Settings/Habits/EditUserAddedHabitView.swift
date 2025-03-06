@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-29.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import DataContainer
@@ -53,7 +54,7 @@ struct EditUserAddedHabitView: View {
             Button {
               promptDelete()
             } label: {
-              Image(systemName: "trash")
+              Image(systemSymbol: .trash)
                 .bold()
                 .font(.title3)
                 .foregroundStyle(.mutedRed)

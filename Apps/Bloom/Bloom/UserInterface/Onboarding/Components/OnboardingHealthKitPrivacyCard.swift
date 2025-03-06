@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-10-30.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 
@@ -21,7 +22,7 @@ struct OnboardingHealthKitPrivacyCard: View {
         .font(.title)
         .bold()
 
-      Image(systemName: "hand.raised.circle.fill")
+      Image(systemSymbol: .handRaisedCircleFill)
         .font(.system(size: 100))
         .foregroundStyle(.invertedText, .tint)
 
@@ -33,7 +34,7 @@ struct OnboardingHealthKitPrivacyCard: View {
       Link(destination: .privacyPolicy) {
         HStack {
           Text("Privacy Policy")
-          Image(systemName: "arrow.up.right.square.fill")
+          Image(systemSymbol: .arrowUpRightCircleFill)
         }
         .bold()
         .foregroundStyle(.mutedBlue)

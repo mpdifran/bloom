@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-12.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 import TelemetryDeck
@@ -55,7 +56,7 @@ private extension MenstruationDetailView {
 
   var emptyView: some View {
     ContentUnavailableView {
-      Label("No Data Available", systemImage: "circle.dotted.and.circle")
+      Label("No Data Available", systemSymbol: .circleDottedAndCircle)
     } description: {
       Text("Track your period in Apple Health to learn more about your cycle.")
     } actions: {

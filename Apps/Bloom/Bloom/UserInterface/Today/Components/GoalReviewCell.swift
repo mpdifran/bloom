@@ -5,13 +5,14 @@
 //  Created by Mark DiFranco on 2024-09-19.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct GoalReviewCell: View {
 
   var body: some View {
     HStack {
-      Image(systemName: "sparkles")
+      Image(systemSymbol: .sparkles)
         .foregroundStyle(
           LinearGradient(
             colors: [.mutedTeal, .mutedBlue, .mutedIndigo],

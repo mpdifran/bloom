@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-10.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import BloomModel
 
@@ -34,7 +35,7 @@ private extension AIScanFoodItemSuggetionCell {
     VStack(alignment: .leading) {
       HStack(spacing: 4) {
         if food.isVerified {
-          Image(systemName: "checkmark.shield.fill")
+          Image(systemSymbol: .checkmarkShieldFill)
             .foregroundStyle(.white, .mutedGreen)
           Text("Verified")
             .foregroundStyle(.mutedGreen)
@@ -73,7 +74,7 @@ private extension AIScanFoodItemSuggetionCell {
     Button {
       addItem()
     } label: {
-      Image(systemName: "plus.circle.fill")
+      Image(systemSymbol: .plusCircleFill)
         .foregroundStyle(.white, .tint)
         .font(.title)
     }

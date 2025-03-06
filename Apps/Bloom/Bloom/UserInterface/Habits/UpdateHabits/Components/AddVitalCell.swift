@@ -5,12 +5,13 @@
 //  Created by Mark DiFranco on 2024-12-16.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct AddVitalCell: View {
     var body: some View {
       LabeledContent("Add Vital") {
-        Image(systemName: "plus.app.fill")
+        Image(systemSymbol: .plusAppFill)
           .foregroundStyle(.invertedText)
           .font(.title2)
           .bold()

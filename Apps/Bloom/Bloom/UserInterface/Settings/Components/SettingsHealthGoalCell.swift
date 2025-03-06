@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-23.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct SettingsHealthGoalCell: View {
@@ -67,7 +68,7 @@ struct SettingsHealthGoalCell: View {
         .tint(.mutedIndigo)
 
         SettingsHealthGoalCell(
-          image: Image(systemName: "figure.highintensity.intervaltraining"),
+          image: Image(systemSymbol: .figureHighintensityIntervaltraining),
           value: "High",
           subtitle: "Activity level"
         )

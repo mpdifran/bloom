@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-11.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 
@@ -18,7 +19,7 @@ struct AIScanUnknownBarcodeCell: View {
         BarcodeView(barcode: barcode)
           .frame(height: 80)
 
-        Label("Unknown Barcode", systemImage: "exclamationmark.triangle.fill")
+        Label("Unknown Barcode", systemSymbol: .exclamationmarkTriangleFill)
           .font(.caption)
           .bold()
           .foregroundStyle(.mutedRed)

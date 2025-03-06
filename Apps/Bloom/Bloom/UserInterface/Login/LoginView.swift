@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-19.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AuthenticationServices
 import AppUI
@@ -111,7 +112,7 @@ private extension LoginView {
       dismiss()
       onFinish()
     } label: {
-      Image(systemName: "xmark.circle.fill")
+      Image(systemSymbol: .xmarkCircleFill)
         .foregroundStyle(.text.secondary, .regularMaterial)
         .font(.largeTitle)
     }

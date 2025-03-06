@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-09-10.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 import DataContainer
@@ -74,12 +75,12 @@ extension ToDoModel {
       }
     }
 
-    var systemImage: String {
+    var symbol: SFSymbol {
       switch self {
-      case .logWeight: "gauge.with.dots.needle.bottom.50percent.badge.plus"
-      case .logBloodPressure: "gauge.open.with.lines.needle.67percent.and.arrowtriangle"
-      case .logFood: "fork.knife"
-      case .logProtein: "fork.knife"
+      case .logWeight: .gaugeWithDotsNeedleBottom50percentBadgePlus
+      case .logBloodPressure: .gaugeOpenWithLinesNeedle67percentAndArrowtriangle
+      case .logFood: .forkKnife
+      case .logProtein: .forkKnife
       }
     }
 

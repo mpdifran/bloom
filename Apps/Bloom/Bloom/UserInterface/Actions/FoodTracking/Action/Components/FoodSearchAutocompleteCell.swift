@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-11-07.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct FoodSearchAutocompleteCell: View {
@@ -12,7 +13,7 @@ struct FoodSearchAutocompleteCell: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            Image(systemName: "magnifyingglass")
+          Image(systemSymbol: .magnifyingglass)
             Text(query.capitalized)
         }
         .foregroundStyle(.tint)

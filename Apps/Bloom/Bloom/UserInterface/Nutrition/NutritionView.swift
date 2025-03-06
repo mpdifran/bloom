@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-04.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import DataContainer
@@ -50,7 +51,7 @@ struct NutritionView: View {
           Button {
             presentedSheet = FoodLoggingActionCardView().asAny
           } label: {
-            Image(systemName: "plus")
+            Image(systemSymbol: .plus)
               .bold()
           }
         }
@@ -59,7 +60,7 @@ struct NutritionView: View {
     .tint(.mutedGreen)
     .sheet($presentedSheet)
     .tabItem {
-      Label("Nutrition", systemImage: "carrot")
+      Label("Nutrition", systemSymbol: .carrot)
     }
   }
 }
@@ -71,7 +72,7 @@ private extension NutritionView {
         nutritionViewModel.reverseDay()
         advanceToggle.toggle()
       } label: {
-        Image(systemName: "chevron.backward.circle.fill")
+        Image(systemSymbol: .chevronBackwardCircleFill)
           .font(.title2)
           .bold()
           .foregroundStyle(.white, .tint)
@@ -83,7 +84,7 @@ private extension NutritionView {
         nutritionViewModel.advanceDay()
         advanceToggle.toggle()
       } label: {
-        Image(systemName: "chevron.forward.circle.fill")
+        Image(systemSymbol: .chevronForwardCircleFill)
           .font(.title2)
           .bold()
           .foregroundStyle(.white, .tint)

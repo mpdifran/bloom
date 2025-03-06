@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-12-14.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import BloomModel
@@ -28,10 +29,10 @@ enum FoodItemCategoryTab: TabFilterItem {
 
   var image: Image {
     switch self {
-    case .branded: return Image(systemName: "barcode")
-    case .generic: return Image(systemName: "carrot")
-//    case .restaurant: return Image(systemName: "fork.knife")
-//    case .fastFood: return Image(systemName: "bag")
+    case .branded: return Image(systemSymbol: .barcode)
+    case .generic: return Image(systemSymbol: .carrot)
+//    case .restaurant: return Image(systemSymbol: .forkKnife)
+//    case .fastFood: return Image(systemSymbol: .bag)
     }
   }
 

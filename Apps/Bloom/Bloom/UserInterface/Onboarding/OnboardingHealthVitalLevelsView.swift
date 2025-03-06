@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-08-15.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 import DataContainer
@@ -134,13 +135,13 @@ private extension OnboardingHealthVitalLevelsView {
 }
 
 private struct VitalLevelView: View {
-  let systemImage: String
+  let symbol: SFSymbol
   let title: String
   let description: String
 
   var body: some View {
     HStack(alignment: .top) {
-      Image(systemName: systemImage)
+      Image(systemSymbol: symbol)
         .font(.title)
         .bold()
         .foregroundStyle(.white, .tint)

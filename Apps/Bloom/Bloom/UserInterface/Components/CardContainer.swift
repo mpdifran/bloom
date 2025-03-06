@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-31.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import AppUI
 
@@ -44,7 +45,7 @@ extension View {
       .cardContainer()
 
       HStack {
-        Label("Good Morning", systemImage: "sunrise.fill")
+        Label("Good Morning", systemSymbol: .sunriseFill)
           .foregroundStyle(.mutedGreen)
 
         Spacer()

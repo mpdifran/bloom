@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-03-05.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import HealthKit
 import DataContainer
@@ -56,7 +57,7 @@ private extension RemovedGoalCell {
 
   var habitContentView: some View {
     HStack {
-      Image(systemName: proposedGoal.targetMetric.systemImage)
+      Image(systemSymbol: SFSymbol(rawValue: proposedGoal.targetMetric.systemImage))
         .font(.title)
         .foregroundStyle(.tint)
 
@@ -84,7 +85,7 @@ private extension RemovedGoalCell {
       addBack()
     } label: {
       LabeledContent("Add Back") {
-        Image(systemName: "arrow.uturn.up.circle.fill")
+        Image(systemSymbol: .arrowUturnUpCircleFill)
           .foregroundStyle(.primary)
           .bold()
       }

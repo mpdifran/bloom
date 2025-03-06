@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-03-04.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import Symbols
 import AppUI
@@ -106,7 +107,7 @@ private extension ExternalHealthPrivacyView {
 
   var headerSection: some View {
     VStack(spacing: 12) {
-      Image(systemName: "hand.raised.circle.fill")
+      Image(systemSymbol: .handRaisedCircleFill)
         .foregroundStyle(.white, .mutedBlue)
         .font(.system(size: 100))
 

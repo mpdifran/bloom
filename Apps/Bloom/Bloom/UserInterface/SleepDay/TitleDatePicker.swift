@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2024-07-11.
 //
 
+import SFSafeSymbols
 import SwiftUI
 
 struct TitleDatePicker: View {
@@ -15,7 +16,7 @@ struct TitleDatePicker: View {
     var body: some View {
         HStack {
             Text("\(date, formatter: DateFormatter.justRelativeDateMedium)")
-            Image(systemName: "chevron.down")
+          Image(systemSymbol: .chevronDown)
                 .font(.caption)
         }
         .contentShape(Rectangle())

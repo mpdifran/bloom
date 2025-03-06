@@ -5,6 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-18.
 //
 
+import SFSafeSymbols
 import SwiftUI
 import BloomModel
 
@@ -67,7 +68,7 @@ private extension FoodSearchCard {
       showMagicScan()
     } label: {
       HStack {
-        Image(systemName: "viewfinder")
+        Image(systemSymbol: .viewfinder)
           .foregroundStyle(.tint)
         Text("AI Scan")
           .foregroundStyle(.primary)
@@ -84,7 +85,7 @@ private extension FoodSearchCard {
       showFoodUploadView()
     } label: {
       HStack {
-        Image(systemName: "plus.viewfinder")
+        Image(systemSymbol: .plusViewfinder)
           .foregroundStyle(.tint)
         Text("Add New Food")
           .foregroundStyle(.primary)
@@ -101,7 +102,7 @@ private extension FoodSearchCard {
 
     } label: {
       HStack {
-        Image(systemName: "plus")
+        Image(systemSymbol: .plus)
           .foregroundStyle(.tint)
         Text("Quick Add")
           .foregroundStyle(.primary)
@@ -115,7 +116,7 @@ private extension FoodSearchCard {
 
   var searchTextField: some View {
     HStack {
-      Image(systemName: "magnifyingglass")
+      Image(systemSymbol: .magnifyingglass)
         .foregroundStyle(.tint)
         .font(.title3)
 
@@ -132,7 +133,7 @@ private extension FoodSearchCard {
           searchQuery = ""
           onSearch("")
         } label: {
-          Image(systemName: "xmark.circle.fill")
+          Image(systemSymbol: .xmarkCircleFill)
             .font(.title3)
             .fontDesign(.rounded)
             .bold()
@@ -144,7 +145,7 @@ private extension FoodSearchCard {
         Button {
           isFocused = false
         } label: {
-          Image(systemName: "chevron.down.circle.fill")
+          Image(systemSymbol: .chevronDownCircleFill)
             .font(.title3)
             .fontDesign(.rounded)
             .bold()
