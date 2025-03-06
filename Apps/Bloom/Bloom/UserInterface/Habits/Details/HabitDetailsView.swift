@@ -97,6 +97,7 @@ private extension HabitDetailsView {
     .bold()
     .fontDesign(.rounded)
     .padding()
+    .padding(.vertical)
   }
 
   @ViewBuilder
@@ -183,45 +184,56 @@ private extension HabitDetailsView {
           .foregroundStyle(viewModel.habit.quantityMeetsGoal(sample.quantity) ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.3)))
         }
 
-        switch viewModel.habit.targetMetric.measurementStyle {
-        case .minimum:
-          RuleMark(
-            y: .value("Goal", HKQuantity(unit: viewModel.habit.unit, doubleValue: viewModel.habit.value).localizedValue(for: viewModel.habit.unit))
-          )
-          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-          .foregroundStyle(.tint)
-
-          RectangleMark(
-            yStart: .value("Min Goal", HKQuantity(unit: viewModel.habit.unit, doubleValue: viewModel.habit.value).localizedValue(for: viewModel.habit.unit)),
-            yEnd: .value("Max Goal", HKQuantity(unit: viewModel.habit.unit, doubleValue: viewModel.habit.value * 2).localizedValue(for: viewModel.habit.unit))
-          )
-          .foregroundStyle(
-            LinearGradient(
-              colors: [viewModel.habit.targetMetric.color.opacity(0.3), .clear],
-              startPoint: .bottom,
-              endPoint: .top
+        ForEach(viewModel.goalRanges) { range in
+          switch viewModel.habit.targetMetric.measurementStyle {
+          case .minimum:
+            RectangleMark(
+              xStart: .value("Start", range.startDate),
+              xEnd: .value("End", range.endDate),
+              yStart: .value("Min Goal", range.minGoal),
+              yEnd: .value("Max Goal", range.maxGoal)
             )
-          )
-        case .range:
-          RectangleMark(
-            yStart: .value("Min Goal", viewModel.habit.rangeMinGoal.localizedValue(for: viewModel.habit.unit)),
-            yEnd: .value("Max Goal", viewModel.habit.rangeMaxGoal.localizedValue(for: viewModel.habit.unit))
-          )
-          .foregroundStyle(.tint.opacity(0.3))
+            .foregroundStyle(
+              LinearGradient(
+                colors: [viewModel.habit.targetMetric.color.opacity(0.3), .clear],
+                startPoint: .bottom,
+                endPoint: .top
+              )
+            )
+            RuleMark(
+              xStart: .value("Start", range.startDate),
+              xEnd: .value("End", range.endDate),
+              y: .value("Goal", range.minGoal)
+            )
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.tint)
+          case .range:
+            RectangleMark(
+              xStart: .value("Start", range.startDate),
+              xEnd: .value("End", range.endDate),
+              yStart: .value("Min Goal", range.minGoal),
+              yEnd: .value("Max Goal", range.maxGoal)
+            )
+            .foregroundStyle(.tint.opacity(0.3))
 
-          RuleMark(
-            y: .value("Min Goal", viewModel.habit.rangeMinGoal.localizedValue(for: viewModel.habit.unit))
-          )
-          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-          .foregroundStyle(.tint)
+            RuleMark(
+              xStart: .value("Start", range.startDate),
+              xEnd: .value("End", range.endDate),
+              y: .value("Min Goal", viewModel.habit.rangeMinGoal.localizedValue(for: viewModel.habit.unit))
+            )
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.tint)
 
-          RuleMark(
-            y: .value("Max Goal", viewModel.habit.rangeMaxGoal.localizedValue(for: viewModel.habit.unit))
-          )
-          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-          .foregroundStyle(.tint)
-        @unknown default:
-          fatalError("Unknown goal type")
+            RuleMark(
+              xStart: .value("Start", range.startDate),
+              xEnd: .value("End", range.endDate),
+              y: .value("Max Goal", viewModel.habit.rangeMaxGoal.localizedValue(for: viewModel.habit.unit))
+            )
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.tint)
+          @unknown default:
+            fatalError("Unknown goal type")
+          }
         }
       }
       .frame(height: 200)

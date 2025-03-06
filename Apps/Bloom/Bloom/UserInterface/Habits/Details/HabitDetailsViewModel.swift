@@ -9,10 +9,21 @@ import SwiftUI
 import HealthKit
 import DataContainer
 
+struct GoalRange: Identifiable, Sendable, Hashable {
+  var id: Int { hashValue }
+
+  let startDate: Date
+  let endDate: Date
+  let minGoal: Double
+  let maxGoal: Double
+}
+
 extension HabitDetailsView {
   @MainActor @Observable
   final class ViewModel {
-    var habit: Habit
+    var habit: Habit {
+      didSet { Task { await calculateGoalRanges() } }
+    }
     var todayValue: HKQuantity
     var dailySamples = [DateQuantitySample]()
     var averageValue: HKQuantity?
@@ -22,13 +33,19 @@ extension HabitDetailsView {
     var weekQuantitySamples = [WeekQuantitySamples]() {
       didSet { Task { await loadHabitGridModel() } }
     }
+    var goalRanges = [GoalRange]()
 
     init(habit: Habit) {
       self.habit = habit
       self.todayValue = HKQuantity(unit: habit.unit, doubleValue: 0)
 
       observeChanges()
+      Task {
+        await calculateGoalRanges()
+      }
     }
+
+    private let modelActor = HabitModelActor.standard()
 
     private var hasLoadedTodayAtLeastOnce = false
     private var observationHandler: HKObserverQueryHandle?
@@ -184,6 +201,56 @@ extension HabitDetailsView.ViewModel {
 
     await MainActor.run {
       self.habitGridModel = model
+    }
+  }
+}
+
+private extension HabitDetailsView.ViewModel {
+
+  nonisolated func calculateGoalRanges() async {
+    let targetMetric = await targetMetric()
+
+    do {
+      let habits = try await modelActor.fetchHabits(for: targetMetric)
+
+      var previousDate: Date = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
+      var ranges = [GoalRange]()
+
+      for habit in habits {
+        let minGoal: Double
+        let maxGoal: Double
+        switch targetMetric.measurementStyle {
+        case .minimum:
+          minGoal = await habit.quantity.localizedValue(for: habit.unit)
+          maxGoal = minGoal * 3
+        case .range:
+          minGoal = await habit.rangeMinGoal.localizedValue(for: habit.unit)
+          maxGoal = await habit.rangeMaxGoal.localizedValue(for: habit.unit)
+        @unknown default:
+          print("ERROR: Unknown measurementStyle")
+          continue
+        }
+
+        let endDate = habit.endDate ?? .now
+        guard previousDate < endDate else { continue }
+
+        let goalRange = GoalRange(
+          startDate: previousDate,
+          endDate: endDate,
+          minGoal: minGoal,
+          maxGoal: maxGoal
+        )
+        ranges.append(goalRange)
+        previousDate = endDate
+      }
+
+      let rangesConstant = ranges
+
+      await MainActor.run {
+        self.goalRanges = rangesConstant
+      }
+    } catch {
+      print(error)
     }
   }
 }
