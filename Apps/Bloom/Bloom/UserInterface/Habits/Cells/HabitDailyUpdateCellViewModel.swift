@@ -33,20 +33,26 @@ final class HabitDailyUpdateCellViewModel: ObservableObject {
 
 extension HabitDailyUpdateCellViewModel {
 
+  var formatter: NumberFormatter {
+    var formatter = habit.targetMetric.preferredFormatter
+    formatter.roundingMode = .down
+    return formatter
+  }
+
   var formattedDailyValue: String {
     let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
-    return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter)
+    return quantity.displayString(for: habit.unit, formatter: formatter)
   }
 
   var formattedDailyValueNoUnits: String {
     let quantity = HKQuantity(unit: habit.unit, doubleValue: dailyValue)
-    return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter, showUnits: false)
+    return quantity.displayString(for: habit.unit, formatter: formatter, showUnits: false)
   }
 
   var formattedExceededDailyValue: String {
     let exceededAmount = dailyValue - habit.value
     let quantity = HKQuantity(unit: habit.unit, doubleValue: exceededAmount)
-    return quantity.displayString(for: habit.unit, formatter: habit.targetMetric.preferredFormatter)
+    return quantity.displayString(for: habit.unit, formatter: formatter)
   }
 
   var goalDifferenceSummary: String {
