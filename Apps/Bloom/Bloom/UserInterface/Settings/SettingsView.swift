@@ -235,7 +235,7 @@ private extension SettingsView {
             }
         }
 
-        SettingsCell("Third Party Health Sharing", showDisclosureIndicator: true) {
+        SettingsCell("Bloom Intelligence Health Sharing", showDisclosureIndicator: true) {
           Text("\(permissionsManager.enabledPermissions.count) enabled")
         }
           .onTapGesture {

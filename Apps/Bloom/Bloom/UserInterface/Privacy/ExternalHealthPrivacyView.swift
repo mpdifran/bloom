@@ -109,12 +109,12 @@ private extension ExternalHealthPrivacyView {
     VStack(spacing: 12) {
       Image(systemSymbol: .handRaisedCircleFill)
         .foregroundStyle(.white, .mutedBlue)
-        .font(.system(size: 100))
+        .font(.system(size: 60))
 
-      Text("External Health Sharing")
-        .font(.title)
+      Text("Bloom Intelligence\nHealth Sharing")
+        .font(.title2)
 
-      Text("Please select which health metrics you would like to share with Bloom Intelligence. Your health data will be shared with OpenAI and will be kept completely private.")
+      Text("Your health data is not tied to any personally identifiable information, and is not stored on our servers.")
         .foregroundStyle(.secondary)
 
       Link("Privacy Policy", destination: .privacyPolicy)
