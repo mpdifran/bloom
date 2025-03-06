@@ -162,7 +162,7 @@ extension ResponseSchema {
               ),
               "notes" : Schema.Parameter(
                 type: .string,
-                description: "A short, 1 sentence note about the goal."
+                description: "A short, 1 sentence note about why this goal is being recommended."
               )
             ]
           )
