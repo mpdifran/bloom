@@ -273,7 +273,7 @@ public extension Calendar {
     }
   }
 
-  func aysncIterate(dateRange: DateRange, by dateComponents: DateComponents, iterator: (Date) async -> Void) async {
+  func asyncIterate(dateRange: DateRange, by dateComponents: DateComponents, iterator: (Date) async -> Void) async {
     guard dateRange.end > dateRange.start else { return }
 
     var currentDate = dateRange.start

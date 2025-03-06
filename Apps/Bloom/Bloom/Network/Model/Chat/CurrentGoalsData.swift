@@ -10,17 +10,24 @@ import BloomModel
 
 struct CurrentGoalsData: SendableNetworkModel {
   let currentGoals: [GoalSummary]
+  let metricSummaries: [MetricSummary]
 }
 
-struct GoalSummary: Codable, Equatable, Sendable {
+struct GoalSummary: SendableNetworkModel {
   let metric: SuggestedGoal.Metric
   let history: [GoalHistory]
 }
 
 extension GoalSummary {
-  struct GoalHistory: Codable, Equatable, Sendable {
-    let value: Double
-    let unit: String
-    let goalMet: [String]
+  struct GoalHistory: SendableNetworkModel {
+    let goal: String
+    let lastSevenDaysGoalMet: [String]
   }
+}
+
+struct MetricSummary: SendableNetworkModel {
+  let metric: SuggestedGoal.Metric
+  let sevenDayAverage: String
+  let thirtyDayAverage: String
+  let sixtyDayAverage: String
 }

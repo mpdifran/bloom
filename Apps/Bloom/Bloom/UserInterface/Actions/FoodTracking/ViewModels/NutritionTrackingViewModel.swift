@@ -210,7 +210,7 @@ extension NutritionTrackingViewModel {
 
     let dateRange = DateRange(earliestLog, Date())
 
-    await Calendar.current.aysncIterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
+    await Calendar.current.asyncIterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
       do {
         try await HealthStoreModifier.shared.updateNutrition(for: date)
       } catch {

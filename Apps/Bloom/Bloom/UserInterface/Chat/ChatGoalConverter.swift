@@ -48,7 +48,12 @@ extension ChatGoalConverter {
         }
       }
 
-      return CurrentGoalsData(currentGoals: goalSummaries)
+      let metricSummaries = await createMetricSummaries()
+
+      return CurrentGoalsData(
+        currentGoals: goalSummaries,
+        metricSummaries: metricSummaries
+      )
     } catch {
       print(error)
     }
@@ -73,15 +78,14 @@ private extension ChatGoalConverter {
     var currentHabit: HabitDTO?
     var goalHistories = [GoalSummary.GoalHistory]()
     var currentDates = [String]()
-    Calendar.current.iterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
+    await Calendar.current.asyncIterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
       if currentHabit?.isDateWithinHabit(date: date) != true {
         let newHabit = habits.first { $0.isDateWithinHabit(date: date) }
         if let currentHabit, (currentHabit.value != newHabit?.value || currentHabit.unitString != newHabit?.unitString) {
-          goalHistories.append(
+          await goalHistories.append(
             GoalSummary.GoalHistory(
-              value: currentHabit.value,
-              unit: currentHabit.unit.sensibleUnitString,
-              goalMet: currentDates
+              goal: currentHabit.quantity.displayString(for: currentHabit.unit),
+              lastSevenDaysGoalMet: currentDates
             )
           )
           currentDates = []
@@ -98,58 +102,46 @@ private extension ChatGoalConverter {
     }
 
     if let currentHabit {
-      goalHistories.append(
+      await goalHistories.append(
         GoalSummary.GoalHistory(
-          value: currentHabit.value,
-          unit: currentHabit.unitString,
-          goalMet: currentDates
+          goal: currentHabit.quantity.displayString(for: currentHabit.unit),
+          lastSevenDaysGoalMet: currentDates
         )
       )
     }
 
     return GoalSummary(metric: metric, history: goalHistories)
   }
-}
 
-extension TargetMetric {
-  var metric: SuggestedGoal.Metric? {
-    switch self {
-    case .calories, .proteinIntake, .none:
-      return nil
-    case .waterIntake:
-      return .waterIntake
-    case .fiberIntake:
-      return .fiberIntake
-    case .timeInDaylight:
-        return nil // TODO: We need to figure out how to handle the fact that not all watches measure this.
-    case .meditationMinutes:
-      return  .meditationMinutes
-    case .exerciseMinutes:
-      return .exerciseMinutes
-    case .stepCount:
-      return .stepCount
-    case .walkingRunningDistance:
-      return .walkingRunningDistance
-    case .runDistance:
-      return .runDistance
-    case .runDuration:
-      return .runDuration
-    case .bikeDistance:
-      return .bikeDistance
-    case .bikeDuration:
-      return .bikeDuration
-    case .targetHeartRateZone1:
-      return .targetHeartRateZone1Minutes
-    case .targetHeartRateZone2:
-      return .targetHeartRateZone2Minutes
-    case .targetHeartRateZone3:
-      return .targetHeartRateZone3Minutes
-    case .targetHeartRateZone4:
-      return .targetHeartRateZone4Minutes
-    case .targetHeartRateZone5:
-      return .targetHeartRateZone5Minutes
-    @unknown default:
-      return nil
+  func createMetricSummaries() async -> [MetricSummary] {
+    var metricSummaries = [MetricSummary]()
+
+    for metric in SuggestedGoal.Metric.allCases {
+      let targetMetric = metric.targetMetric
+      let unit = targetMetric.defaultUnit
+
+      let sevenDayAverage = await targetMetric.fetchDailyAverage(
+        unit: unit,
+        dateRange: .trailingDaysFromEndOfYesterday(7)
+      )
+      let thirtyDayAverage = await targetMetric.fetchDailyAverage(
+        unit: unit,
+        dateRange: .trailingDaysFromEndOfYesterday(30)
+      )
+      let sixtyDayAverage = await targetMetric.fetchDailyAverage(
+        unit: unit,
+        dateRange: .trailingDaysFromEndOfYesterday(60)
+      )
+
+      let summary = await MetricSummary(
+        metric: metric,
+        sevenDayAverage: sevenDayAverage.displayString(for: unit),
+        thirtyDayAverage: thirtyDayAverage.displayString(for: unit),
+        sixtyDayAverage: sixtyDayAverage.displayString(for: unit)
+      )
+      metricSummaries.append(summary)
     }
+
+    return metricSummaries
   }
 }
