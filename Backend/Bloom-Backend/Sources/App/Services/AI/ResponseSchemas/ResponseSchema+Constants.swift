@@ -97,6 +97,29 @@ extension ResponseSchema {
       ]
     )
   )
+
+  static let textAIEstimate = ResponseSchema(
+    name: "aiEstimate",
+    schema: Schema.Object(
+      properties: [
+        "name": Schema.Parameter(
+          type: .string,
+          description: "A name for all the food described."
+        ),
+        "foodItems": Schema.Parameter(
+          description: "The individual food items described by the user. You should have high confidence these food items are what the user is referring to.",
+          arrayOf: .AIEstimate.item
+        ),
+        "optionalFoodItems": Schema.Parameter(
+          description: "Extra individual food items that may be present. This could be things like butter or cooking oil that the user forgot to mention. Only add FoodItemServings to this list if they are NOT included in `items` already. You should try and put at least 3 items in this list.",
+          arrayOf: .AIEstimate.item
+        )
+      ],
+      references: [
+        "quantity": Schema.Object.quantity
+      ]
+    )
+  )
 }
 
 extension Schema.Object {
@@ -106,10 +129,10 @@ extension Schema.Object {
 extension Schema.Object.AIEstimate {
   static let item = Schema.Object(
     properties: [
-      "name": Schema.Parameter(type: .string, description: "The name of the individual food item"),
-      "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. E.g. 1 bottle or 12 chips"),
+      "name": Schema.Parameter(type: .string, description: "The name of the individual food item. Capitalize the first letter in each word. Do not list the number of servings here."),
+      "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. E.g. 1 bottle or 12 chips. It should not contain the name of the item itself, and should contain a number."),
       "servingValue": Schema.Parameter(ref: "quantity"),
-      "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the item present in the image."),
+      "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the item."),
       "calories": Schema.Parameter(ref: "quantity"),
       "fat": Schema.Parameter(ref: "quantity"),
       "carbohydrates": Schema.Parameter(ref: "quantity"),

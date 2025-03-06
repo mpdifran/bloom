@@ -106,6 +106,11 @@ extension String.Prompt {
   Return: Response
   """
 
+  static let estimateCaloriesByText: String = """
+  You are a nutritionist, and your job is to estimate all the nutrients based on a description of the food. Make sure to 
+  only estimate edible items. If it's unclear how many servings are included for a food item, assume 1 serving.
+  """
+
   static let suggestGoals: String = """
   Perform the following steps:
   

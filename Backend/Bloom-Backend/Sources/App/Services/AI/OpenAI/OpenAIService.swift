@@ -85,13 +85,14 @@ extension OpenAIService {
 
   func estimateCalories(
     _ request: Request,
-    foodImageFile: ImageFile
+    foodImageFile: ImageFile,
+    foodDescription: String?
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
       let openAI = request.gemini
       let model = Model.Gemini.flash2_0
 
-      let messages: [Chat.Message] = [
+      var messages: [Chat.Message] = [
         Chat.Message(
           role: .system,
           content: [
@@ -107,9 +108,50 @@ extension OpenAIService {
         )
       ]
 
+      if let foodDescription {
+        messages.append(
+          Chat.Message(
+            role: .user,
+            content: [
+              .text(foodDescription)
+            ]
+          )
+        )
+      }
+
+      let response = try await openAI.chats.create(model: model, messages: messages)
+
+      return try response.parse(OpenAIEstimateCaloriesResponse.self)
+    } catch {
+      request.logger.error(error)
+      return nil
+    }
+  }
+
+  func estimateCalories(_ request: Request, textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
+    do {
+      let openAI = request.openAI
+      let model = Model.GPT4.gpt_4o_mini
+
+      let messages: [Chat.Message] = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text(.Prompt.estimateCaloriesByText)
+          ]
+        ),
+        Chat.Message(
+          role: .user,
+          content: [
+            .text(textDescription)
+          ]
+        )
+      ]
+
       let response = try await openAI.chats.create(
         model: model,
-        messages: messages
+        messages: messages,
+        responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
       )
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
