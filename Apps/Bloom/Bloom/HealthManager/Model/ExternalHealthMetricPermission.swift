@@ -16,6 +16,7 @@ struct ExternalHealthMetricPermission: Identifiable {
 extension ExternalHealthMetricPermission {
   static let all: [ExternalHealthMetricPermission] = [
     .demographics,
+    .goalHistory,
     .activityLevel,
     .bodyComposition,
     .bowelMovements,
@@ -33,6 +34,12 @@ extension ExternalHealthMetricPermission {
     id: "demographics",
     name: "Demographics",
     description: "Health data such as age, sex, height, and your health goals."
+  )
+
+  static let goalHistory = ExternalHealthMetricPermission(
+    id: "goal-history",
+    name: "Goal History",
+    description: "Health data related to historical averages of goals over the preceding 6 months."
   )
 
   static let activityLevel = ExternalHealthMetricPermission(

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SettingsAddHabitCell: View {
   var body: some View {
-    Label("Add a habit", systemSymbol: .plus)
+    Label("Add a goal", systemSymbol: .plus)
       .bold()
       .fontDesign(.rounded)
       .horizontallyCentered()

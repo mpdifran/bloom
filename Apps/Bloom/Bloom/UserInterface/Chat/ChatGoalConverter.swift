@@ -114,6 +114,10 @@ private extension ChatGoalConverter {
   }
 
   func createMetricSummaries() async -> [MetricSummary] {
+    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .goalHistory) else {
+      return []
+    }
+
     var metricSummaries = [MetricSummary]()
 
     for metric in SuggestedGoal.Metric.allCases {

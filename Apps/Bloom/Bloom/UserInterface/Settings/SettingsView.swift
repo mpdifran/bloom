@@ -247,7 +247,7 @@ private extension SettingsView {
 
   var habitsSection: some View {
     VStack {
-      SectionTitleView("\(userAddedHabits.count) Habits")
+      SectionTitleView("\(userAddedHabits.count) Goals")
         .padding(.horizontal)
 
       ForEach(userAddedHabits) { habit in
