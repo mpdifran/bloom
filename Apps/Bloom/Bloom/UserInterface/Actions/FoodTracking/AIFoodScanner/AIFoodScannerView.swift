@@ -72,7 +72,6 @@ struct AIFoodScannerView: View {
     .animation(.default, value: viewModel.suggestedServings)
     .animation(.default, value: viewModel.image)
     .animation(.default, value: viewModel.mode)
-    .tint(.mutedGreen)
     .onAppear {
       Task {
         await permissionManager.checkPermission()

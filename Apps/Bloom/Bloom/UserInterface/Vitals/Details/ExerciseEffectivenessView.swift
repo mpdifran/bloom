@@ -148,6 +148,7 @@ private extension ExerciseEffectivenessView {
               WorkoutHeartRateZoneCell(report: report)
                 .cardContainer()
             }
+            .buttonStyle(.plain)
           }
         }
       }

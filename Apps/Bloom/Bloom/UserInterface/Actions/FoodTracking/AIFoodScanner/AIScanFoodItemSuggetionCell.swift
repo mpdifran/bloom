@@ -90,6 +90,5 @@ private extension AIScanFoodItemSuggetionCell {
   ) {
 
   }
-  .tint(.mutedGreen)
   .padding()
 }

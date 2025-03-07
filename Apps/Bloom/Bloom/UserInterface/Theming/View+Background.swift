@@ -17,14 +17,6 @@ extension View {
     }
   }
 
-  func groupedBackground() -> some View {
-    background {
-      Rectangle()
-        .fill(.lilacBackground)
-        .ignoresSafeArea()
-    }
-  }
-
   func gradientRootBackground() -> some View {
     background {
       Rectangle()
@@ -68,5 +60,4 @@ extension View {
     .gradientRootBackground()
     .navigationTitle("Today")
   }
-
 }

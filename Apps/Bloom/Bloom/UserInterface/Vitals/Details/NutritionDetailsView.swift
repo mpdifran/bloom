@@ -128,7 +128,6 @@ private extension NutritionDetailsView {
         presentedSheet = FoodLoggingActionCardView().asAny
       }
       .buttonStyle(.primary)
-      .tint(.mutedGreen)
     }
   }
 

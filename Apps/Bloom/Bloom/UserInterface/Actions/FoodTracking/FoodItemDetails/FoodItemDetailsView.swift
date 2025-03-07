@@ -116,7 +116,6 @@ struct FoodItemDetailsView: View {
       .sheet($presentedSheet)
       .alert(error: $error)
       .alert(alertDetails: $alertDetails)
-      .tint(.mutedGreen)
     }
   }
 }

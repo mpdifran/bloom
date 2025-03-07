@@ -16,6 +16,8 @@ struct RootView: View {
 
   @Bindable private var tabController = TabController()
 
+  @Bindable private var themeController = ThemeController()
+
   @State private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
 
@@ -84,6 +86,8 @@ struct RootView: View {
         presentedSheet = BloomPlusPaywall(showDismiss: false).asAny
       }
     }
+    .tint(themeController.theme.color)
+    .environment(themeController)
   }
 }
 

@@ -11,6 +11,8 @@ struct CardView<Content>: View where Content: View {
 
   let contentBuilder: () -> Content
 
+  @Environment(ThemeController.self) private var themeController
+
   init(
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
@@ -25,7 +27,7 @@ struct CardView<Content>: View where Content: View {
     .presentationDetentSelfSizing()
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
-    .presentationBackground(.background.secondary)
+    .presentationBackground(themeController.theme.backgroundColor)
   }
 }
 
@@ -39,4 +41,5 @@ struct CardView<Content>: View where Content: View {
       .padding()
     }
   }
+  .environment(ThemeController())
 }

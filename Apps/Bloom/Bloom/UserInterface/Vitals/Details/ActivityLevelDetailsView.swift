@@ -220,6 +220,7 @@ private extension ActivityLevelDetailsView {
           } label: {
             WorkoutSummationCell(workoutSummation: workoutSummation)
           }
+          .buttonStyle(.plain)
         }
       }
     }

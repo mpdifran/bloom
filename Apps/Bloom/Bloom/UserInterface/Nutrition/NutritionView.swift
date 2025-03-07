@@ -42,7 +42,6 @@ struct NutritionView: View {
       .groupedBackground()
       .navigationBarTitleDisplayMode(.inline)
       .tabBar()
-      .tint(.mutedGreen)
       .toolbar {
         ToolbarItem(placement: .principal) {
           FoodItemLogDatePicker()
@@ -57,7 +56,6 @@ struct NutritionView: View {
         }
       }
     }
-    .tint(.mutedGreen)
     .sheet($presentedSheet)
     .tabItem {
       Label("Nutrition", systemSymbol: .carrot)

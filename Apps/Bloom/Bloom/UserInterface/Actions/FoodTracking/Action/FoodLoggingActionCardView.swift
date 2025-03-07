@@ -79,7 +79,6 @@ struct FoodLoggingActionCardView: View {
     .alert(error: $viewModel.error)
     .animation(.default, value: selectedTab)
     .animation(.default, value: searchQuery)
-    .tint(.mutedGreen)
     .healthDataAccessRequest(
         store: HealthPermissionChecker.shared.healthStore,
         shareTypes: HealthPermissionChecker.shared.writeNutritionTypes,

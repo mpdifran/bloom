@@ -91,6 +91,7 @@ private extension WorkoutsListView {
               } label: {
                 WorkoutCell(workout: workout)
               }
+              .buttonStyle(.plain)
             }
           }
         }

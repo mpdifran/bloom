@@ -38,13 +38,17 @@ struct BloomTabBar: View {
         .onTapGesture {
           tabController.activeTab = .today
         }
-        .tint(tabController.activeTab == .today ? .primary : .secondary)
+        .if(tabController.activeTab != .today) {
+          $0.tint(.secondary)
+        }
 
       TabItem(title: "Nutrition", image: Image(.nutritionTab))
         .onTapGesture {
           tabController.activeTab = .nutrition
         }
-        .tint(tabController.activeTab == .nutrition ? .primary : .secondary)
+        .if(tabController.activeTab != .nutrition) {
+          $0.tint(.secondary)
+        }
 
       AddTabItem()
         .sensoryFeedback(.impact, trigger: logActionToggle)
@@ -57,13 +61,17 @@ struct BloomTabBar: View {
         .onTapGesture {
           tabController.activeTab = .vitals
         }
-        .tint(tabController.activeTab == .vitals ? .primary : .secondary)
+        .if(tabController.activeTab != .vitals) {
+          $0.tint(.secondary)
+        }
 
       TabItem(title: "Workouts", image: Image(.workoutsTab))
         .onTapGesture {
           tabController.activeTab = .workouts
         }
-        .tint(tabController.activeTab == .workouts ? .primary : .secondary)
+        .if(tabController.activeTab != .workouts) {
+          $0.tint(.secondary)
+        }
     }
     .sheet($presentedSheet)
     .sensoryFeedback(.impact, trigger: tabController.activeTab)
@@ -99,6 +107,8 @@ private struct TabItem: View {
 
 private struct AddTabItem: View {
 
+  @Environment(ThemeController.self) private var themeController
+
   var body: some View {
     Image(systemSymbol: .plus)
       .foregroundStyle(.white)
@@ -110,7 +120,9 @@ private struct AddTabItem: View {
         RoundedRectangle(cornerRadius: 18)
           .fill(
             LinearGradient(
-              colors: [.mutedGreen, .mutedBlue],
+              colors: [
+                themeController.theme.color // TODO: Add more
+              ],
               startPoint: .topLeading,
               endPoint: .bottomTrailing
             )
@@ -122,6 +134,7 @@ private struct AddTabItem: View {
 
 #Preview {
   @Previewable @Bindable var tabController = TabController()
+  @Previewable @Bindable var themeController = ThemeController()
 
   VStack {
     Spacer()
@@ -130,4 +143,5 @@ private struct AddTabItem: View {
   }
   .tabBar()
   .environment(tabController)
+  .environment(themeController)
 }
