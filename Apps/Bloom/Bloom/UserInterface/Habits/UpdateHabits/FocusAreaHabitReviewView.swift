@@ -42,14 +42,14 @@ struct FocusAreaHabitReviewView: View {
       .padding()
     }
     .shelf {
-      ProminentButton("Let's Do It!") {
-        do {
-          try habitsViewModel.performSave(newGoals: newHabits)
-          onContinue()
-        } catch {
-          self.error = error
-        }
+      AsyncButton {
+        try habitsViewModel.performSave(newGoals: newHabits)
+        onContinue()
+      } label: {
+        Text("Let's Do It!")
+          .horizontallyCentered()
       }
+      .buttonStyle(.primary)
       .foregroundStyle(.invertedText)
       .transition(.move(edge: .bottom))
       .appear(with: 3, currentIndex: index)

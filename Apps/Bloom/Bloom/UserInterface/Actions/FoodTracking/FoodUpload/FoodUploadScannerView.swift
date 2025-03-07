@@ -56,13 +56,13 @@ struct FoodUploadScannerView: View {
       }
       .sheet($presentedSheet)
       .shelf {
-        ProminentButton(
-          "Upload",
-          systemImage: SFSymbol.arrowUpSquareFill.rawValue,
-          isLoading: viewModel.isLoading
-        ) {
-          Task { await upload() }
+        AsyncButton {
+          await upload()
+        } label: {
+          Label("Upload", systemSymbol: .arrowUpCircleFill)
+            .horizontallyCentered()
         }
+        .buttonStyle(.primary)
         .disabled(!viewModel.canUpload)
       }
     }

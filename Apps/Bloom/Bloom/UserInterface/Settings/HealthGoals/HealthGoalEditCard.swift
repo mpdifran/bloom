@@ -30,9 +30,13 @@ struct HealthGoalEditCard: View {
           weightSection
         }
 
-        ProminentButton("Done") {
+        Button {
           dismiss()
+        } label: {
+          Text("Done")
+            .horizontallyCentered()
         }
+        .buttonStyle(.primary)
         .padding(.top)
       }
       .padding()

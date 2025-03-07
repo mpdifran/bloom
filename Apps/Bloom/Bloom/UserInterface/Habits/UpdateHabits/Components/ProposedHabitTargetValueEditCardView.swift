@@ -74,12 +74,16 @@ struct ProposedHabitTargetValueEditCardView: View {
         }
       }
       .shelf {
-        ProminentButton("Save") {
+        Button {
           proposedHabit.value = value
           proposedHabit.unitString = unit.unitString
           proposedHabit.hasUserEdited = true
           dismiss()
+        } label: {
+          Text("Save")
+            .horizontallyCentered()
         }
+        .buttonStyle(.primary)
       }
     }
     .presentationDetents([.height(300)])

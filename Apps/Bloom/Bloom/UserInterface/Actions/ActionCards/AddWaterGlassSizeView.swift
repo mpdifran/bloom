@@ -10,102 +10,102 @@ import AppUI
 
 struct AddWaterGlassSizeView: View {
 
-    let onAdd: (WaterGlassSizeModel) -> Void
+  let onAdd: (WaterGlassSizeModel) -> Void
 
-    init(onAdd: @escaping (WaterGlassSizeModel) -> Void) {
-        self.onAdd = onAdd
-    }
+  init(onAdd: @escaping (WaterGlassSizeModel) -> Void) {
+    self.onAdd = onAdd
+  }
 
-    @State private var name: String = ""
-    @State private var quantityValue: Double = 0
+  @State private var name: String = ""
+  @State private var quantityValue: Double = 0
 
-    @FocusState private var isFocused: Bool
+  @FocusState private var isFocused: Bool
 
-    @Environment(\.dismiss) var dismiss
+  @Environment(\.dismiss) var dismiss
 
-    private var unitPreferences = HealthUnitPreferences.shared
+  private var unitPreferences = HealthUnitPreferences.shared
 
-    var body: some View {
-        NavigationStack {
-            VStack {
-                Spacer()
+  var body: some View {
+    NavigationStack {
+      VStack {
+        VStack {
+          LabeledContent("Name") {
+            TextField("", text: $name, prompt: Text("My Waterbottle"))
+              .fontDesign(.rounded)
+              .bold()
+              .multilineTextAlignment(.trailing)
+          }
 
-                VStack {
-                    LabeledContent("Name") {
-                        TextField("", text: $name, prompt: Text("My Waterbottle"))
-                            .fontDesign(.rounded)
-                            .bold()
-                            .multilineTextAlignment(.trailing)
-                    }
+          Divider()
 
-                    Divider()
+          LabeledContent("Quantity") {
+            HStack {
 
-                    LabeledContent("Quantity") {
-                        HStack {
-
-                            Spacer()
-                            TextField("", value: $quantityValue, formatter: NumberFormatter.noDecimalPlaces)
-                                .selectAllTextOnBeginEditing()
-                                .focused($isFocused)
-                            Text(unitPreferences.liquidVolumeUnit.sensibleUnitString)
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(width: 200)
-                        .fontDesign(.rounded)
-                        .keyboardType(.decimalPad)
-                        .bold()
-                        .multilineTextAlignment(.trailing)
-                    }
-                }
-                .cardContainer(fill: .background.secondary)
-
-                Spacer()
+              Spacer()
+              TextField("", value: $quantityValue, formatter: NumberFormatter.noDecimalPlaces)
+                .selectAllTextOnBeginEditing()
+                .focused($isFocused)
+              Text(unitPreferences.liquidVolumeUnit.sensibleUnitString)
+                .foregroundStyle(.secondary)
             }
-            .padding()
-            .navigationTitle("Add Glass Size")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-            }
-            .shelf {
-                ProminentButton("Add") {
-                    let size = WaterGlassSizeModel(
-                        name: name,
-                        quantityValue: quantityValue,
-                        unit: unitPreferences.liquidVolumeUnit
-                    )
-                    onAdd(size)
-                    dismiss()
-                }
-            }
+            .frame(width: 200)
+            .fontDesign(.rounded)
+            .keyboardType(.decimalPad)
+            .bold()
+            .multilineTextAlignment(.trailing)
+          }
         }
-        .presentationDetents([.medium])
-        .presentationCornerRadius(25)
-        .tint(.mutedBlue)
+        .cardContainer(fill: .background.secondary)
+      }
+      .padding()
+      .navigationTitle("Add Glass Size")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Cancel") {
+            dismiss()
+          }
+        }
+      }
+      .presentationDetentSelfSizing()
+      .shelf {
+        Button {
+          let size = WaterGlassSizeModel(
+            name: name,
+            quantityValue: quantityValue,
+            unit: unitPreferences.liquidVolumeUnit
+          )
+          onAdd(size)
+          dismiss()
+        } label: {
+          Text("Add")
+            .horizontallyCentered()
+        }
+        .buttonStyle(.primary)
+      }
     }
+    .presentationCornerRadius(25)
+    .tint(.mutedBlue)
+  }
 }
 
 #Preview {
-    struct PreviewView: View {
+  struct PreviewView: View {
 
-        @State private var showSheet = true
+    @State private var showSheet = true
 
-        var body: some View {
-            Button {
-                showSheet.toggle()
-            } label: {
-                Text("Show Sheet")
-            }
-            .sheet(isPresented: $showSheet) {
-                AddWaterGlassSizeView { size in
+    var body: some View {
+      Button {
+        showSheet.toggle()
+      } label: {
+        Text("Show Sheet")
+      }
+      .sheet(isPresented: $showSheet) {
+        AddWaterGlassSizeView { size in
 
-                }
-            }
         }
+      }
     }
-    return PreviewView()
+  }
+  return PreviewView()
 }

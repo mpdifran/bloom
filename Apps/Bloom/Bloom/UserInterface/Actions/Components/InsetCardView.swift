@@ -54,8 +54,14 @@ struct InsetCardView<Content, S>: View where Content: View, S: ShapeStyle {
   PreviewSheetPresent {
     InsetCardView {
       Text("Hello World")
-      ProminentButton("Save") { }
-        .tint(.mutedBlue)
+      Button {
+
+      } label: {
+        Text("Save")
+          .horizontallyCentered()
+      }
+      .buttonStyle(.primary)
+      .tint(.mutedBlue)
     }
   }
 }

@@ -60,9 +60,13 @@ struct FocusAreaVitalReviewView: View {
       .padding()
     }
     .shelf {
-      ProminentButton("Looks Good!") {
+      Button {
         onContinue(vitals)
+      } label: {
+        Text("Looks Good!")
+          .horizontallyCentered()
       }
+      .buttonStyle(.primary)
       .foregroundStyle(.invertedText)
       .transition(.move(edge: .bottom))
       .appear(with: 3, currentIndex: index)
