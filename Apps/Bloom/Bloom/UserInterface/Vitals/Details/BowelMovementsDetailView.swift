@@ -75,6 +75,7 @@ private extension BowelMovementsDetailView {
     ScrollView {
       VStack(spacing: 20) {
         stoolTypeChart
+        lastBowelMovementSection
         timeOfDayChart
         waterChart
         fiberChart
@@ -218,6 +219,25 @@ private extension BowelMovementsDetailView {
     case 2, 5: .vitalGood
     case 3, 4: .vitalGreat
     default: .brown
+    }
+  }
+
+  @ViewBuilder
+  var lastBowelMovementSection: some View {
+    if let lastBowelMovement = summary?.bowelMovements.max(by: { $0.date < $1.date }) {
+      HStack {
+        Text("Last Bowel Movement")
+          .multilineTextAlignment(.leading)
+          .bold()
+
+        Spacer(minLength: 0)
+
+        Text("\(lastBowelMovement.date, formatter: DateFormatter.relativeDateMediumTimeShort)")
+          .foregroundStyle(.secondary)
+          .multilineTextAlignment(.trailing)
+      }
+      .fontDesign(.rounded)
+      .cardContainer(fill: .background.secondary)
     }
   }
 

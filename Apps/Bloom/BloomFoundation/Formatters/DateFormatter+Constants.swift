@@ -51,6 +51,12 @@ public extension DateFormatter {
     $0.doesRelativeDateFormatting = true
   }
 
+  static let relativeDateMediumTimeShort = DateFormatter().with {
+    $0.dateStyle = .medium
+    $0.timeStyle = .short
+    $0.doesRelativeDateFormatting = true
+  }
+
   static let relativeDateTimeMedium = DateFormatter().with {
     $0.dateStyle = .medium
     $0.timeStyle = .medium
