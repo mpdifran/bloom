@@ -96,14 +96,14 @@ extension OpenAIService {
         Chat.Message(
           role: .system,
           content: [
-            .text(.Prompt.estimateCalories)
+            .text(.Prompt.estimateCalories),
+            .text(try .Prompt.jsonSchemaDefinition(.aiEstimate))
           ]
         ),
         Chat.Message(
           role: .user,
           content: [
-            .imageData(foodImageFile.data, "image/\(foodImageFile.fileExtension)"),
-            .text("Estimate the nutrient information for each food in the image.")
+            .imageData(foodImageFile.data, "image/\(foodImageFile.fileExtension)")
           ]
         )
       ]
@@ -138,6 +138,7 @@ extension OpenAIService {
           role: .system,
           content: [
             .text(.Prompt.estimateCaloriesByText)
+//            .text(try .Prompt.jsonSchemaDefinition(.textAIEstimate))
           ]
         ),
         Chat.Message(
@@ -151,10 +152,14 @@ extension OpenAIService {
       let response = try await openAI.chats.create(
         model: model,
         messages: messages,
-        temperature: 0.2,
-        topP: 0.5,
+        temperature: 0.1,
+        topP: 0.4,
         responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
       )
+
+//      if var message = response.choices.first?.message.content.first?.text {
+//        request.logger.info(message)
+//      }
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {

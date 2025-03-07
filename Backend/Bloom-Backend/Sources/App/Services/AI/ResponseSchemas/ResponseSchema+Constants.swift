@@ -81,7 +81,7 @@ extension ResponseSchema {
       properties: [
         "name": Schema.Parameter(
           type: .string,
-          description: "A name for all the food in the image."
+          description: "A short, concise name to describe the food in the image."
         ),
         "foodItems": Schema.Parameter(
           description: "The individual food items detected in the image. You should have high confidence these food items exist in the photo.",
@@ -104,7 +104,7 @@ extension ResponseSchema {
       properties: [
         "name": Schema.Parameter(
           type: .string,
-          description: "A name for all the food described."
+          description: "A short, concise name to summarize the food the user described."
         ),
         "foodItems": Schema.Parameter(
           description: "The individual food items described by the user. You should have high confidence these food items are what the user is referring to.",
@@ -129,8 +129,10 @@ extension Schema.Object {
 extension Schema.Object.AIEstimate {
   static let item = Schema.Object(
     properties: [
-      "name": Schema.Parameter(type: .string, description: "The name of the individual food item. Capitalize the first letter in each word. Do not list the number of servings here."),
-      "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. E.g. 1 bottle or 12 chips. It should not contain the name of the item itself, and should contain a number."),
+      "name": Schema.Parameter(type: .string, description: "The name of the individual food item. Do not include the brand name or flavour here, if there are any. Capitalize the first letter in each word. Do not list the number of servings here."),
+      "brandName": Schema.Parameter(type: .optionalString, description: "The brand name of the product, if known. If unknown, omit this property. Capitalize the first letter in each word."),
+      "flavour": Schema.Parameter(type: .optionalString, description: "The flavour of the food item. This typically applies to branded products. If unknown, omit this property. Capitalize the first letter in each word. This should not contain the same value as name. ex 'name': 'Lemonade', 'flavour': 'Strawberry'"),
+      "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. E.g. 1 cup or 12 chips. It should not contain the name of the item itself, and should contain a number. This should be the typical standard serving unit for measuring this food item."),
       "servingValue": Schema.Parameter(ref: "quantity"),
       "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the item."),
       "calories": Schema.Parameter(ref: "quantity"),

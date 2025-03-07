@@ -24,6 +24,8 @@ extension Chat {
     }
     message = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
+    message = message.replacingOccurrences(of: "\\'", with: "'")
+
     guard let data = message.data(using: .utf8) else { return nil }
 
     let decoder = JSONDecoder()

@@ -17,6 +17,8 @@ struct OpenAIEstimateCaloriesResponse: Codable {
 extension OpenAIEstimateCaloriesResponse {
   struct Item: Codable {
     let name: String
+    let brandName: String?
+    let flavour: String?
     let servingName: String
     let servingValue: Quantity
     let servingCount: Double
@@ -64,8 +66,8 @@ extension OpenAIEstimateCaloriesResponse.Item {
     FoodItem(
       id: FoodItemIdentifier(UUID().uuidString),
       name: name,
-      brandName: nil,
-      flavour: nil,
+      brandName: brandName,
+      flavour: flavour,
       country: nil,
       calories: .init(value: calories.value, unit: calories.unit),
       protein: protein.map({ .init(value: $0.value, unit: $0.unit) }),
