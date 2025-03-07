@@ -151,6 +151,8 @@ extension OpenAIService {
       let response = try await openAI.chats.create(
         model: model,
         messages: messages,
+        temperature: 0.2,
+        topP: 0.5,
         responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
       )
 

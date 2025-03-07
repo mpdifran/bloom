@@ -119,7 +119,7 @@ extension NetworkRequester {
     )
   }
 
-  func foodAIEstimate(image: UIImage) async throws -> EstimateFoodCaloriesResponse {
+  func foodAIEstimate(image: UIImage, foodDescription: String?) async throws -> EstimateFoodCaloriesResponse {
     guard let imageData = image.pngData() else {
       throw NSError(description: "There was an issue uploading the image.")
     }
@@ -128,8 +128,19 @@ extension NetworkRequester {
       foodImage: ImageFile(
         data: imageData,
         fileExtension: "png"
-      )
+      ),
+      foodDescription: foodDescription
     )
+
+    let request = try await URLRequest.Food.estimateFood(body: body)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: EstimateFoodCaloriesResponse.self
+    )
+  }
+
+  func foodAITextEstimate(foodDescription: String) async throws -> EstimateFoodCaloriesResponse {
+    let body = EstimateFoodCaloriesRequest(foodDescription: foodDescription)
 
     let request = try await URLRequest.Food.estimateFood(body: body)
     return try await URLSession.shared.authenticatedBloomRequestWithResponse(

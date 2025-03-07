@@ -37,6 +37,7 @@ struct FoodSearchCard: View {
       if !isFocused {
         HStack {
           magicScanButton
+          textFoodButton
           addFoodButton
         }
       }
@@ -64,54 +65,27 @@ struct FoodSearchCard: View {
 private extension FoodSearchCard {
 
   var magicScanButton: some View {
-    Button {
+    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Scan") {
       showMagicScan()
-    } label: {
-      HStack {
-        Image(systemSymbol: .viewfinder)
-          .foregroundStyle(.tint)
-        Text("AI Scan")
-          .foregroundStyle(.primary)
-      }
-      .horizontallyCentered()
-      .cardContainer()
     }
-    .buttonStyle(.plain)
-    .bold()
+  }
+
+  var textFoodButton: some View {
+    FoodSearchActionButton(symbol: .quoteBubble, title: "Text") {
+      showTextFoodGenerationView()
+    }
   }
 
   var addFoodButton: some View {
-    Button {
+    FoodSearchActionButton(symbol: .plusViewfinder, title: "Upload") {
       showFoodUploadView()
-    } label: {
-      HStack {
-        Image(systemSymbol: .plusViewfinder)
-          .foregroundStyle(.tint)
-        Text("Add New Food")
-          .foregroundStyle(.primary)
-      }
-      .horizontallyCentered()
-      .cardContainer()
     }
-    .buttonStyle(.plain)
-    .bold()
   }
 
   var quickAddButton: some View {
-    Button {
+    FoodSearchActionButton(symbol: .plus, title: "Quick Add") {
 
-    } label: {
-      HStack {
-        Image(systemSymbol: .plus)
-          .foregroundStyle(.tint)
-        Text("Quick Add")
-          .foregroundStyle(.primary)
-      }
-      .horizontallyCentered()
-      .cardContainer()
     }
-    .buttonStyle(.plain)
-    .bold()
   }
 
   var searchTextField: some View {
@@ -198,6 +172,10 @@ private extension FoodSearchCard {
     presentedSheet = FoodUploadScannerView() { foodItem in
       onUploadNewFood(foodItem)
     }.asAny
+  }
+
+  func showTextFoodGenerationView() {
+    presentedSheet = AIFoodTextGenerationView().asAny
   }
 }
 

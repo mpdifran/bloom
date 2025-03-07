@@ -95,7 +95,7 @@ private extension AIFoodScannerView.ViewModel {
     }
 
     do {
-      let response = try await NetworkRequester.shared.foodAIEstimate(image: smallerImage)
+      let response = try await NetworkRequester.shared.foodAIEstimate(image: smallerImage, foodDescription: nil)
       let newServings = response.servings.map { $0.asServing() }
       let newSuggestedServings = response.suggestedServings.map { $0.asServing() }
 

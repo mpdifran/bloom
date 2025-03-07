@@ -13,7 +13,7 @@ public struct EstimateFoodCaloriesRequest: Codable, Sendable {
 
   public init(
     foodImage: ImageFile,
-    foodDescription: String?
+    foodDescription: String? = nil
   ) {
     self.foodImage = foodImage
     self.foodDescription = foodDescription

@@ -107,6 +107,7 @@ extension DeveloperSettingsView {
               .multilineTextAlignment(.trailing)
               .textInputAutocapitalization(.never)
               .autocorrectionDisabled()
+              .submitLabel(.done)
               .selectAllTextOnBeginEditing()
           }
         }
