@@ -27,6 +27,8 @@ extension AIFoodTextGenerationView.ViewModel {
   }
 
   nonisolated func estimateFood(for foodDescription: String) async throws {
+    guard foodDescription.isNotEmpty else { return }
+
     defer {
       Task { await MainActor.run { isEstimating = false } }
     }
