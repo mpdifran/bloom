@@ -266,7 +266,8 @@ private extension NutritionDetailsView {
 
         Divider()
 
-        if let vitaminA = details.averageVitaminA?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminA() {
+        if let vitaminA = details.averageVitaminA?.doubleValue(for: .gramUnit(with: .micro)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminA()
           CapsuleRangeChart(
             title: "Vitamin A",
             unitString: "mcg",
@@ -276,7 +277,8 @@ private extension NutritionDetailsView {
           )
           .tint(.vitaminA)
         }
-        if let vitaminB6 = details.averageVitaminB6?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminB6() {
+        if let vitaminB6 = details.averageVitaminB6?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminB6()
           CapsuleRangeChart(
             title: "Vitamin B6",
             unitString: "mg",
@@ -286,7 +288,8 @@ private extension NutritionDetailsView {
           )
           .tint(.vitaminB6)
         }
-        if let vitaminB12 = details.averageVitaminB12?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForVitaminB12() {
+        if let vitaminB12 = details.averageVitaminB12?.doubleValue(for: .gramUnit(with: .micro)) {
+          let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForVitaminB12()
           CapsuleRangeChart(
             title: "Vitamin B12",
             unitString: "mcg",
@@ -296,7 +299,8 @@ private extension NutritionDetailsView {
           )
           .tint(.vitaminB12)
         }
-        if let vitaminC = details.averageVitaminC?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminC() {
+        if let vitaminC = details.averageVitaminC?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminC()
           CapsuleRangeChart(
             title: "Vitamin C",
             unitString: "mg",
@@ -306,7 +310,8 @@ private extension NutritionDetailsView {
           )
           .tint(.vitaminC)
         }
-        if let vitaminD = details.averageVitaminD?.doubleValue(for: .gramUnit(with: .micro)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminD() {
+        if let vitaminD = details.averageVitaminD?.doubleValue(for: .gramUnit(with: .micro)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminD()
           CapsuleRangeChart(
             title: "Vitamin D",
             unitString: "mcg",
@@ -316,7 +321,8 @@ private extension NutritionDetailsView {
           )
           .tint(.vitaminD)
         }
-        if let vitaminE = details.averageVitaminE?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminE() {
+        if let vitaminE = details.averageVitaminE?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForVitaminE()
           CapsuleRangeChart(
             title: "Vitamin E",
             unitString: "mg",
@@ -342,7 +348,8 @@ private extension NutritionDetailsView {
 
         Divider()
 
-        if let calcium = details.averageCalcium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedIntakeForCalcium() {
+        if let calcium = details.averageCalcium?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedIntakeForCalcium()
           CapsuleRangeChart(
             title: "Calcium",
             unitString: "mg",
@@ -352,7 +359,8 @@ private extension NutritionDetailsView {
           )
           .tint(.calcium)
         }
-        if let iron = details.averageIron?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForIron() {
+        if let iron = details.averageIron?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForIron()
           CapsuleRangeChart(
             title: "Iron",
             unitString: "mg",
@@ -362,7 +370,8 @@ private extension NutritionDetailsView {
           )
           .tint(.iron)
         }
-        if let magnesium = details.averageMagnesium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForMagnesium() {
+        if let magnesium = details.averageMagnesium?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForMagnesium()
           CapsuleRangeChart(
             title: "Magnesium",
             unitString: "mg",
@@ -372,7 +381,8 @@ private extension NutritionDetailsView {
           )
           .tint(.magnesium)
         }
-        if let potassium = details.averagePotassium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForPotassium() {
+        if let potassium = details.averagePotassium?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForPotassium()
           CapsuleRangeChart(
             title: "Potassium",
             unitString: "mg",
@@ -382,7 +392,8 @@ private extension NutritionDetailsView {
           )
           .tint(.potassium)
         }
-        if let sodium = details.averageSodium?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForSodium() {
+        if let sodium = details.averageSodium?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForSodium()
           CapsuleRangeChart(
             title: "Sodium",
             unitString: "mg",
@@ -392,7 +403,8 @@ private extension NutritionDetailsView {
           )
           .tint(.sodium)
         }
-        if let zinc = details.averageZinc?.doubleValue(for: .gramUnit(with: .milli)), let goal = HealthGoalProvider.shared.recommendedDailyIntakeForZinc() {
+        if let zinc = details.averageZinc?.doubleValue(for: .gramUnit(with: .milli)) {
+          let goal = HealthGoalProvider.shared.recommendedDailyIntakeForZinc()
           CapsuleRangeChart(
             title: "Zinc",
             unitString: "mg",
@@ -428,28 +440,27 @@ private extension NutritionDetailsView {
             .foregroundStyle(.fiber)
           }
 
-          if let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber() {
-            RuleMark(
-              y: .value("Min Fiber", goal.doubleValue(for: .gram()))
-            )
-            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-            .foregroundStyle(.fiber)
+          let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber()
+          RuleMark(
+            y: .value("Min Fiber", goal.doubleValue(for: .gram()))
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.fiber)
 
-            RectangleMark(
-              yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
-              yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
+          RectangleMark(
+            yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
+            yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
+          )
+          .foregroundStyle(
+            LinearGradient(
+              colors: [
+                .fiber.opacity(0.3),
+                .clear
+              ],
+              startPoint: .bottom,
+              endPoint: .top
             )
-            .foregroundStyle(
-              LinearGradient(
-                colors: [
-                  .fiber.opacity(0.3),
-                  .clear
-                ],
-                startPoint: .bottom,
-                endPoint: .top
-              )
-            )
-          }
+          )
         }
         .frame(height: 160)
       }
@@ -519,19 +530,18 @@ private extension NutritionDetailsView {
             .foregroundStyle(.sugar)
           }
 
-          if let goal = HealthGoalProvider.shared.recommendedMaxDailyIntakeForSugar() {
-            RuleMark(
-              y: .value("Max Sugar", goal.doubleValue(for: .gram()))
-            )
-            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-            .foregroundStyle(.sugar)
+          let goal = HealthGoalProvider.shared.recommendedMaxDailyIntakeForSugar()
+          RuleMark(
+            y: .value("Max Sugar", goal.doubleValue(for: .gram()))
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.sugar)
 
-            RectangleMark(
-              yStart: .value("", 0),
-              yEnd: .value("Max Sugar", goal.doubleValue(for: .gram()))
-            )
-            .foregroundStyle(.sugar.opacity(0.3))
-          }
+          RectangleMark(
+            yStart: .value("", 0),
+            yEnd: .value("Max Sugar", goal.doubleValue(for: .gram()))
+          )
+          .foregroundStyle(.sugar.opacity(0.3))
         }
         .frame(height: 160)
       }

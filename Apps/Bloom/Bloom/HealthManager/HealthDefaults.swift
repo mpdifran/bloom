@@ -100,3 +100,9 @@ extension HealthDefaults {
     }
   }
 }
+
+extension Date {
+  func toAge() -> Int {
+    Calendar.current.dateComponents([.year], from: self, to: .now).year ?? 0
+  }
+}

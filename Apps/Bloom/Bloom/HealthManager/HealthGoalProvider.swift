@@ -21,6 +21,10 @@ private extension HealthGoalProvider {
   var isFemale: Bool {
     healthDefaults.getIsFemale()
   }
+
+  var age: Int {
+    healthDefaults.getBirthday().toAge()
+  }
 }
 
 // MARK: Heart
@@ -28,28 +32,23 @@ private extension HealthGoalProvider {
 extension HealthGoalProvider {
 
   func goalRestingHeartRateForUser() -> (Double, Double) {
-    let age = healthStore.age()
-
-    if let age {
-      switch (age, isFemale) {
-
-      case (18...25, false):
-        return (60, 70)
-      case (26...35, false), (18...25, true):
-        return (70, 75)
-      case (36...45, false), (26...35, true):
-        return (75, 80)
-      case (46...55, false), (36...45, true):
-        return (80, 85)
-      case (56...65, false), (46...55, true):
-        return (85, 90)
-      case (66..., false), (56...65, true):
-        return (90, 95)
-      case (66..., true):
-        return (95, 100)
-      default:
-        break
-      }
+    switch (age, isFemale) {
+    case (18...25, false):
+      return (60, 70)
+    case (26...35, false), (18...25, true):
+      return (70, 75)
+    case (36...45, false), (26...35, true):
+      return (75, 80)
+    case (46...55, false), (36...45, true):
+      return (80, 85)
+    case (56...65, false), (46...55, true):
+      return (85, 90)
+    case (66..., false), (56...65, true):
+      return (90, 95)
+    case (66..., true):
+      return (95, 100)
+    default:
+      break
     }
 
     if isFemale {
@@ -60,10 +59,6 @@ extension HealthGoalProvider {
   }
 
   func goalVO2MaxForUser() -> (Double, Double, Double)? {
-    guard
-      let age = healthStore.age()
-    else { return nil }
-
     if isFemale {
       switch age {
       case 20...29: return (57.0, 48.0, 38.0)
@@ -87,8 +82,6 @@ extension HealthGoalProvider {
 
   /// - note: https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887
   func heartRateZones() async -> HeartRateZones? {
-    guard let age = healthStore.age() else { return nil }
-
     let projectedMax = 208 - (Double(age) * 0.7)
 
     guard let restingHeartRate = try? await healthStore.fetchDailyAverageQuantity(
@@ -158,9 +151,7 @@ extension HealthGoalProvider {
 
   /// unit: micrograms (mcg)
   /// - note: https://ods.od.nih.gov/factsheets/Biotin-HealthProfessional/
-  func adequateDailyIntakeForBiotin() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
+  func adequateDailyIntakeForBiotin() -> HKQuantity {
     if age < 4 {
       return HKQuantity(unit: .gramUnit(with: .micro), doubleValue: 8)
     } else if age < 9 {
@@ -176,9 +167,7 @@ extension HealthGoalProvider {
 
   /// unit: milligrams (mg)
   /// - note: https://www.opss.org/article/caffeine-performance
-  func recommendedMaxDailyCaffeine() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedMaxDailyCaffeine() -> HKQuantity {
     if age < 12 {
       return HKQuantity(unit: .gramUnit(with: .milli), doubleValue: 0)
     } else if age < 19 {
@@ -197,8 +186,6 @@ extension HealthGoalProvider {
   /// unit: grams
   /// - note: https://nutritionsource.hsph.harvard.edu/chloride/
   func adequateDailyIntakeForChloride() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
     if age < 14 {
       return nil
     } else if age < 51 {
@@ -218,9 +205,7 @@ extension HealthGoalProvider {
 
   /// unit: mcg
   /// - note: https://ods.od.nih.gov/factsheets/chromium-Consumer/
-  func adequateDailyIntakeForChromium() async -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
+  func adequateDailyIntakeForChromium() async -> HKQuantity {
     let isPregnant = await HealthManager.shared.isPregnant
     let isBreastfeeding = await HealthManager.shared.isBreastfeeding
 
@@ -270,9 +255,7 @@ extension HealthGoalProvider {
 
   /// unit: mcg
   /// - note: https://ods.od.nih.gov/factsheets/Copper-Consumer/
-  func recommendedDailyIntakeForCopper() async -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForCopper() async -> HKQuantityRange {
     let isPregnant = await HealthManager.shared.isPregnant
     let isBreastfeeding = await HealthManager.shared.isBreastfeeding
 
@@ -304,9 +287,7 @@ extension HealthGoalProvider {
 
   /// unit: mcg
   /// - note: https://ods.od.nih.gov/factsheets/Folate-Consumer/
-  func recommendedDailyIntakeForFolate() async -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForFolate() async -> HKQuantityRange {
     let isPregnant = await HealthManager.shared.isPregnant
     let isBreastfeeding = await HealthManager.shared.isBreastfeeding
 
@@ -338,9 +319,7 @@ extension HealthGoalProvider {
 
   /// unit: gram
   /// - note: https://www.medicalnewstoday.com/articles/protein-intake#calculating-requirements
-  func adequateDailyIntakeForProtein() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
+  func adequateDailyIntakeForProtein() -> HKQuantity {
     if isFemale {
       if age < 4 {
         return HKQuantity(unit: .gram(), doubleValue: 13)
@@ -368,9 +347,7 @@ extension HealthGoalProvider {
 
   /// unit: g
   /// - note: https://www.medicalnewstoday.com/articles/324673#recommended-limits
-  func recommendedMaxDailyIntakeForSugar() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedMaxDailyIntakeForSugar() -> HKQuantity {
     if age < 19 {
       return HKQuantity(unit: .gram(), doubleValue: 25)
     }
@@ -382,9 +359,7 @@ extension HealthGoalProvider {
 
   /// unit: g
   /// - note: https://www.healthline.com/health/food-nutrition/how-much-fiber-per-day
-  func recommendedMinDailyIntakeForFiber() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedMinDailyIntakeForFiber() -> HKQuantity {
     if age < 19 {
       return HKQuantity(unit: .gram(), doubleValue: 14)
     } else if age < 51 {
@@ -405,9 +380,7 @@ extension HealthGoalProvider {
   /// unit: mcg
   /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
   @MainActor
-  func recommendedDailyIntakeForVitaminA() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForVitaminA() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -450,9 +423,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html#tbl2
   @MainActor
-  func recommendedDailyIntakeForVitaminB6() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForVitaminB6() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -497,9 +468,7 @@ extension HealthGoalProvider {
   /// unit: mcg
   /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
   @MainActor
-  func recommendedMinDailyIntakeForVitaminB12() -> HKQuantity? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedMinDailyIntakeForVitaminB12() -> HKQuantity {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -524,9 +493,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html#tbl2
   @MainActor
-  func recommendedDailyIntakeForVitaminC() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForVitaminC() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -569,9 +536,7 @@ extension HealthGoalProvider {
   /// unit: mcg
   /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
   @MainActor
-  func recommendedDailyIntakeForVitaminD() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForVitaminD() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -593,9 +558,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/reference-values-vitamins.html
   @MainActor
-  func recommendedDailyIntakeForVitaminE() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForVitaminE() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -630,9 +593,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://ods.od.nih.gov/factsheets/calcium-HealthProfessional/
   @MainActor
-  func recommendedIntakeForCalcium() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedIntakeForCalcium() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -668,9 +629,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/
   @MainActor
-  func recommendedDailyIntakeForIron() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForIron() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -711,9 +670,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://ods.od.nih.gov/factsheets/magnesium-healthprofessional/
   @MainActor
-  func recommendedDailyIntakeForMagnesium() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForMagnesium() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -761,9 +718,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/
   @MainActor
-  func recommendedDailyIntakeForPotassium() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForPotassium() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 
@@ -816,9 +771,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://www.verywellhealth.com/how-much-sodium-per-day-7971716#toc-for-overall-health-how-much-sodium-to-get-per-day
   @MainActor
-  func recommendedDailyIntakeForSodium() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForSodium() -> HKQuantityRange {
     if age < 4 {
       return HKQuantityRange(unit: .gramUnit(with: .milli), range: 500...1000)
     } else if age < 9 {
@@ -837,9 +790,7 @@ extension HealthGoalProvider {
   /// unit: mg
   /// - note: https://ods.od.nih.gov/factsheets/zinc-healthprofessional/
   @MainActor
-  func recommendedDailyIntakeForZinc() -> HKQuantityRange? {
-    guard let age = healthStore.age() else { return nil }
-
+  func recommendedDailyIntakeForZinc() -> HKQuantityRange {
     let isPregnant = HealthManager.shared.isPregnant
     let isBreastfeeding = HealthManager.shared.isBreastfeeding
 

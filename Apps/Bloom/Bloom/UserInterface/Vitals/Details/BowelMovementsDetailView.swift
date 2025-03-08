@@ -301,28 +301,27 @@ private extension BowelMovementsDetailView {
             .foregroundStyle(.fiber)
           }
 
-          if let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber() {
-            RuleMark(
-              y: .value("Min Fiber", goal.doubleValue(for: .gram()))
-            )
-            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-            .foregroundStyle(.fiber)
+          let goal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber()
+          RuleMark(
+            y: .value("Min Fiber", goal.doubleValue(for: .gram()))
+          )
+          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+          .foregroundStyle(.fiber)
 
-            RectangleMark(
-              yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
-              yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
+          RectangleMark(
+            yStart: .value("Max Fiber", goal.doubleValue(for: .gram()) * 2),
+            yEnd: .value("Min Fiber", goal.doubleValue(for: .gram()))
+          )
+          .foregroundStyle(
+            LinearGradient(
+              colors: [
+                .fiber.opacity(0.3),
+                .clear
+              ],
+              startPoint: .bottom,
+              endPoint: .top
             )
-            .foregroundStyle(
-              LinearGradient(
-                colors: [
-                  .fiber.opacity(0.3),
-                  .clear
-                ],
-                startPoint: .bottom,
-                endPoint: .top
-              )
-            )
-          }
+          )
         }
         .frame(height: 160)
       }

@@ -139,7 +139,7 @@ extension TargetMetric {
     case .waterIntake:
       return HKQuantityRange(unit: defaultUnit, range: 1750...3000)
     case .fiberIntake:
-      let fiberGoal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber()?.doubleValue(for: .gram()) ?? 25
+      let fiberGoal = HealthGoalProvider.shared.recommendedMinDailyIntakeForFiber().doubleValue(for: .gram())
       return HKQuantityRange(unit: defaultUnit, range: fiberGoal...fiberGoal*2)
     case .walkingRunningDistance:
       return HKQuantityRange(unit: defaultUnit, range: 5...8)
