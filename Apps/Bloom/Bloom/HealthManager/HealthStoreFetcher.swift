@@ -961,8 +961,8 @@ extension HealthStoreFetcher {
 
   /// - note: https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887
   func heartRateZones() async -> HeartRateZones? {
-    guard let age = healthStore.age() else { return nil }
-
+    // Use age stored in HealthManager (defaults) over HealthKit.
+    let age = await HealthManager.shared.age()
     let projectedMax = 208 - (Double(age) * 0.7)
 
     guard let restingHeartRate = try? await healthStore.fetchDailyAverageQuantity(
