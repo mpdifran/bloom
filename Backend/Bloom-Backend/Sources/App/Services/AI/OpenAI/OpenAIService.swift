@@ -149,13 +149,18 @@ extension OpenAIService {
         )
       ]
 
+//      let schema = ResponseSchema.textAIEstimate
+//      let encoder = JSONEncoder()
+//      let data = try encoder.encode(schema)
+//      request.logger.info(String(data: data, encoding: .utf8) ?? "")
+
       let response = try await openAI.chats.create(
         model: model,
         messages: messages,
-        temperature: 0.1,
-        topP: 0.4,
         responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
       )
+
+//      request.logger.info(String(describing: response))
 
 //      if var message = response.choices.first?.message.content.first?.text {
 //        request.logger.info(message)
