@@ -66,20 +66,20 @@ extension HealthGoalProvider {
 
     if isFemale {
       switch age {
-      case 20...29: return (57.0, 48.0, 38.0)
-      case 30...39: return (52.0, 43.0, 34.0)
-      case 40...49: return (47.0, 38.0, 31.0)
-      case 50...59: return (41.0, 33.0, 26.0)
-      case 60...: return (36.0, 28.0, 18.0)
-      default: return nil
-      }
-    } else {
-      switch age {
       case 20...29: return (47.0, 38.0, 29.0)
       case 30...39: return (38.0, 30.0, 24.0)
       case 40...49: return (34.0, 27.0, 21.0)
       case 50...59: return (29.0, 23.0, 19.0)
       case 60...: return (25.0, 20.0, 15.0)
+      default: return nil
+      }
+    } else {
+      switch age {
+      case 20...29: return (57.0, 48.0, 38.0)
+      case 30...39: return (52.0, 43.0, 34.0)
+      case 40...49: return (47.0, 38.0, 31.0)
+      case 50...59: return (41.0, 33.0, 26.0)
+      case 60...: return (36.0, 28.0, 18.0)
       default: return nil
       }
     }
