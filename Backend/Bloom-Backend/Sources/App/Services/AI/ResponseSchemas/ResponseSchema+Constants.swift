@@ -111,7 +111,7 @@ extension ResponseSchema {
           arrayOf: .AIEstimate.item
         ),
         "optionalFoodItems": Schema.Parameter(
-          description: "Extra individual food items that may be present. This could be things like butter or cooking oil that the user forgot to mention. Only add FoodItemServings to this list if they are NOT included in `items` already. You should try and put at least 3 items in this list.",
+          description: "Extra individual food items that may be present. This could be things like butter or cooking oil that the user forgot to mention. Only add FoodItemServings to this list if they are NOT included in `items` already. You should try and put 0 to 3 items in this list.",
           arrayOf: .AIEstimate.item
         )
       ],

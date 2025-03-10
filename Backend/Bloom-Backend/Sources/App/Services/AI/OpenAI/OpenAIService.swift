@@ -138,7 +138,6 @@ extension OpenAIService {
           role: .system,
           content: [
             .text(.Prompt.estimateCaloriesByText)
-//            .text(try .Prompt.jsonSchemaDefinition(.textAIEstimate))
           ]
         ),
         Chat.Message(
@@ -149,22 +148,13 @@ extension OpenAIService {
         )
       ]
 
-//      let schema = ResponseSchema.textAIEstimate
-//      let encoder = JSONEncoder()
-//      let data = try encoder.encode(schema)
-//      request.logger.info(String(data: data, encoding: .utf8) ?? "")
-
       let response = try await openAI.chats.create(
         model: model,
         messages: messages,
+        temperature: 0.3,
+        topP: 0.6,
         responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
       )
-
-//      request.logger.info(String(describing: response))
-
-//      if var message = response.choices.first?.message.content.first?.text {
-//        request.logger.info(message)
-//      }
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
@@ -289,33 +279,15 @@ extension OpenAIService {
       messages: messages
     )
 
-    guard var message = response.choices.first?.message.content.first?.text else {
-      throw Abort(.internalServerError, reason: "No response from OpenAI")
-    }
-
-    // Clean up JSON string
-    if message.hasPrefix("```json") {
-      message.removeFirst("```json".count)
-    }
-    if message.hasSuffix("```") {
-      message.removeLast("```".count)
-    }
-    message = message.trimmingCharacters(in: .whitespacesAndNewlines)
-
-    guard let data = message.data(using: .utf8) else {
-      throw Abort(.internalServerError, reason: "Could not encode OpenAI response")
-    }
-
     struct EvaluationResponse: Codable {
       let accuracyScore: Int
       let evaluationNotes: String
       let recommendations: [String: String]
     }
 
-    let decoder = JSONDecoder()
-    decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-    let evaluation = try decoder.decode(EvaluationResponse.self, from: data)
+    guard let evaluation = try response.parse(EvaluationResponse.self) else {
+      throw Abort(.internalServerError, reason: "Could not decode response.")
+    }
 
     return (
       score: evaluation.accuracyScore,
