@@ -106,25 +106,36 @@ private extension ExternalHealthPrivacyView {
 private extension ExternalHealthPrivacyView {
 
   var headerSection: some View {
-    VStack(spacing: 12) {
-      Image(systemSymbol: .handRaisedCircleFill)
-        .foregroundStyle(.white, .mutedBlue)
-        .font(.system(size: 60))
+    VStack(spacing: 0) {
+      VStack(alignment: .leading, spacing: 12) {
+        HStack {
+          Image(systemSymbol: .handRaisedCircleFill)
+            .foregroundStyle(.white, .mutedBlue)
+            .font(.system(size: 40))
 
-      Text("Bloom Intelligence\nHealth Sharing")
-        .font(.title2)
+          Text("External Health Sharing")
+            .font(.title3)
+        }
 
-      Text("Your health data is not tied to any personally identifiable information, and is not stored on our servers.")
-        .foregroundStyle(.secondary)
+        Text("Please select which health data you want to share with us. Your health data is not tied to any personally identifiable information, and is not stored on our servers.")
+          .foregroundStyle(.secondary)
+          .multilineTextAlignment(.leading)
+
+        Divider()
+      }
+      .horizontalAlignment(.leading)
+      .padding(.horizontal)
+      .padding(.top)
 
       Link("Privacy Policy", destination: .privacyPolicy)
         .bold()
-        .frame(minHeight: 44)
+        .frame(minHeight: 50)
+        .horizontallyCentered()
     }
     .bold()
     .fontDesign(.rounded)
     .multilineTextAlignment(.center)
-    .horizontallyCentered()
+    .cardContainer(includePadding: false)
   }
 
   @ViewBuilder

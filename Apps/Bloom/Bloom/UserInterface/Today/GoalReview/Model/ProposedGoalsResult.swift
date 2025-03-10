@@ -11,4 +11,18 @@ struct ProposedGoalsResult: Equatable, Sendable {
   var goals: [ProposedGoal]
   var removedGoals: [ProposedGoal]
   var todos: [ProposedToDo]
+
+  init(
+    goals: [ProposedGoal] = [],
+    removedGoals: [ProposedGoal] = [],
+    todos: [ProposedToDo] = []
+  ) {
+    self.goals = goals
+    self.removedGoals = removedGoals
+    self.todos = todos
+  }
+
+  var isEmpty: Bool {
+    goals.isEmpty && removedGoals.isEmpty && todos.isEmpty
+  }
 }

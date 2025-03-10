@@ -20,7 +20,7 @@ struct OnboardingHealthAgeSexHeightView: View {
 
   @State private var index = 1
   /// The user has confirmed the health data provided is correct. If the health data was populated, the user must confirm to continue.
-  @State private var isHealthDataConfirmed: Bool = false
+  @State private var isHealthDataConfirmed: Bool?
   /// Set when the view appears if the user was missing health data.
   @State private var wasMissingHealthData: Bool = false
   @State private var didContinue = false
@@ -36,7 +36,7 @@ struct OnboardingHealthAgeSexHeightView: View {
         {
           hasHealthDataContent(age: age, sex: sexName, height: healthManager.height())
 
-          if !isHealthDataConfirmed {
+          if isHealthDataConfirmed == false {
             ageSexHeightPicker
               .appear(with: 4, currentIndex: index)
           } else {

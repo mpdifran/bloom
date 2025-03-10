@@ -40,11 +40,16 @@ struct RootView: View {
           }
 
         #if DEBUG
-          Button("[DEBUG] Skip onboarding") {
+          Button {
             withAnimation {
               hasShownOnboarding = true
             }
+          } label: {
+            Text("Skip")
+              .padding()
           }
+          .bold()
+          .fontDesign(.rounded)
           .zStackAlignment(.topTrailing)
         #endif
         }

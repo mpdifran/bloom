@@ -37,7 +37,7 @@ private extension HealthDefaults {
   }
 
   @MainActor
-  func setValue<T>(_ value: T, for key: String.HealthDefaults) {
+  func setValue(_ value: Any?, for key: String.HealthDefaults) {
     HealthDefaults.store.set(value, forKey: key.key)
   }
 }
