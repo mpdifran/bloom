@@ -22,6 +22,8 @@ final class ExternalHealthMetricPermissionManager: ObservableObject {
     store: .group
   ) private var determinedPermissionIDs: [String]
 
+  @AppStorage(.FeatureFlag.alwaysAskForAIGoalSettingPermission) private var alwaysAskForAIGoalSettingPermission = false
+
   private init() { }
 }
 
@@ -43,6 +45,10 @@ extension ExternalHealthMetricPermissionManager {
   }
 
   func hasUndeterminedPermissions() -> Bool {
+    if alwaysAskForAIGoalSettingPermission {
+      return true
+    }
+
     let determinedSet = determinedPermissionIDs.asSet()
     let currentSet = ExternalHealthMetricPermission.all.map(\.id).asSet()
 

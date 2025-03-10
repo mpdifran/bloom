@@ -16,6 +16,7 @@ struct DeveloperSettingsView: View {
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
   @AppStorage(.FeatureFlag.aiGoalSetting) private var aiGoalSetting = false
+  @AppStorage(.FeatureFlag.alwaysAskForAIGoalSettingPermission) private var alwaysAskForAIGoalSettingPermission = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -202,12 +203,48 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        SettingsCell("Always Ask Permission") {
+          Toggle("", isOn: $alwaysAskForAIGoalSettingPermission)
+        }
+
+        Divider()
+
         SettingsCell("Daniele Mode") {
           Toggle("", isOn: $danieleMode)
         }
 
         Divider()
+      }
+    }
+  }
 
+  var debugSection: some View {
+    VStack {
+      SectionTitleView("SwiftData")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("View Goals", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = DebugHabitsListView().asAny
+          }
+
+        Divider()
+
+        SettingsCell("View Food Item Logs", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = DebugFoodItemLogListView().asAny
+          }
+      }
+    }
+  }
+
+  var adminActionsSection: some View {
+    VStack {
+      SectionTitleView("Admin Actions")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
         AsyncButton {
           do {
             let chatHealthData = try await ChatVitalConverter.shared.convertHealthDataString()
@@ -269,37 +306,9 @@ extension DeveloperSettingsView {
           .selectable()
         }
         .frame(height: 60)
-      }
-    }
-  }
-
-  var debugSection: some View {
-    VStack {
-      SectionTitleView("SwiftData")
-        .padding(.horizontal)
-
-      SettingsSectionContainer {
-        SettingsCell("View Habits", showDisclosureIndicator: true) { }
-          .onTapGesture {
-            presentedSheet = DebugHabitsListView().asAny
-          }
 
         Divider()
 
-        SettingsCell("View Food Item Logs", showDisclosureIndicator: true) { }
-          .onTapGesture {
-            presentedSheet = DebugFoodItemLogListView().asAny
-          }
-      }
-    }
-  }
-
-  var adminActionsSection: some View {
-    VStack {
-      SectionTitleView("Admin Actions")
-        .padding(.horizontal)
-
-      SettingsSectionContainer {
         Button {
           hasShownOnboarding = false
         } label: {
@@ -472,6 +481,8 @@ extension DeveloperSettingsView {
           apiHost.overrideEnabled = false
           showDeveloperMode = false
           danieleMode = false
+          aiGoalSetting = false
+          alwaysAskForAIGoalSettingPermission = false
           dismiss()
         } label: {
           Text("Exit Developer Mode")
