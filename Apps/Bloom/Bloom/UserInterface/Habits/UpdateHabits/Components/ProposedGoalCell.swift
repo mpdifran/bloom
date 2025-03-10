@@ -127,6 +127,7 @@ private extension ProposedGoalCell {
   var setRecommendedValueButton: some View {
     Button {
       proposedGoal.value = proposedGoal.suggestedValue
+      proposedGoal.hasUserEdited = false
     } label: {
       LabeledContent("Set Recommended Value") {
         Image(systemSymbol: .starCircleFill)
