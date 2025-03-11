@@ -16,92 +16,80 @@ private extension Double {
 }
 
 struct LoginView: View {
+  let showDismissButton: Bool
   let onFinish: () -> Void
 
-  @Environment(\.colorScheme) var colorScheme
+  init(
+    showDismissButton: Bool = true,
+    onFinish: @escaping () -> Void
+  ) {
+    self.showDismissButton = showDismissButton
+    self.onFinish = onFinish
+  }
+
   @Environment(\.dismiss) var dismiss
+
+  @State private var viewModel = ViewModel()
 
   @State private var authorizationState: String?
   @State private var error: Error?
 
-  @State private var viewModel = ViewModel()
-
-  let timer = Timer.publish(every: .animationSpeed, tolerance: 0.1, on: .main, in: .common).autoconnect()
-  @State private var backgroundColors: [Color] = [
-    .mutedTeal,
-    .mutedBlue,
-    .mutedIndigo,
-    .mutedPink
-  ]
-
   var body: some View {
-    VStack {
+    ZStack {
+      BloomPlusPaywallHeroImageView()
+        .zStackAlignment(.top)
+        .clipped()
+        .ignoresSafeArea(edges: .top)
 
-      Spacer()
 
-      Image(.bloomAppIcon)
-        .resizable()
-        .frame(square: 160)
+      VStack {
+        ScrollView {
+          VStack {
+            DisplayAppIcon()
+              .frame(width: 80)
 
-      Text("Sign in to log your food")
-        .font(.system(size: 30))
-        .bold()
-        .fontDesign(.rounded)
-        .multilineTextAlignment(.center)
+            Text("Welcome to Bloom")
+              .font(.title)
+              .fontDesign(.rounded)
+              .bold()
 
-      Spacer()
+            BloomPlusFeaturesListView()
 
-      Group {
-        if colorScheme == .light {
-          SignInWithAppleButton(
-            onRequest: { (request) in
-              authorizationState = UUID().uuidString
-              request.state = authorizationState
-              request.requestedScopes = [.fullName, .email]
-            },
-            onCompletion: handleSignInResult)
-          .signInWithAppleButtonStyle(.white)
-        } else {
-          SignInWithAppleButton(
-            onRequest: { (request) in
-              authorizationState = UUID().uuidString
-              request.state = authorizationState
-              request.requestedScopes = [.fullName, .email]
-            },
-            onCompletion: handleSignInResult)
-          .signInWithAppleButtonStyle(.black)
+            Link("Privacy Policy", destination: .privacyPolicy)
+              .frame(height: 44)
+              .foregroundStyle(.tint)
+          }
+          .padding(.top)
         }
+
       }
-      .frame(height: 60)
-      .frame(maxWidth: 400)
-      .padding(.horizontal)
+      .shelf {
+        SignInWithAppleButton(
+          onRequest: { (request) in
+            authorizationState = UUID().uuidString
+            request.state = authorizationState
+            request.requestedScopes = [.fullName, .email]
+          },
+          onCompletion: handleSignInResult
+        )
+        .signInWithAppleButtonStyle(.black)
+        .frame(height: 60)
+        .frame(maxWidth: 400)
+        .clipShape(RoundedRectangle(cornerRadius: 17))
+      }
+      .groupedBackground()
+      .padding(.top, 170)
     }
     .overlay {
-      dismissButton
-        .zStackAlignment(.topLeading)
+      if showDismissButton {
+        dismissButton
+          .padding()
+          .zStackAlignment(.topLeading)
+      }
     }
-    .padding()
+    .groupedBackground()
     .alert(error: $error)
-    .background {
-      Rectangle()
-        .fill(
-          LinearGradient(
-            colors: backgroundColors,
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-          )
-        )
-        .overlay {
-          Rectangle()
-            .fill(.thinMaterial)
-        }
-        .ignoresSafeArea()
-    }
-    .animation(.linear(duration: .animationSpeed), value: backgroundColors)
     .presentationCompactAdaptation(.fullScreenCover)
-    .onReceive(timer) { _ in
-      shiftGradientColors()
-    }
   }
 }
 
@@ -113,15 +101,10 @@ private extension LoginView {
       onFinish()
     } label: {
       Image(systemSymbol: .xmarkCircleFill)
-        .foregroundStyle(.text.secondary, .regularMaterial)
+        .foregroundStyle(.text.secondary, .fill)
         .font(.largeTitle)
     }
     .frame(square: 44)
-  }
-
-  func shiftGradientColors() {
-    let last = backgroundColors.removeLast()
-    backgroundColors.insert(last, at: 0)
   }
 
   func handleSignInResult(_ result: Result<ASAuthorization, Error>) {
@@ -130,16 +113,9 @@ private extension LoginView {
       switch authorization.credential {
       case let credential as ASAuthorizationAppleIDCredential:
         guard credential.state == authorizationState else {
-          // TODO: Something fishy is going on
-          print("Invalid state returned: \(credential.state ?? ""), expected \(authorizationState ?? "")")
+          // Something fishy is going on... Just give them a generic error.
+          self.error = NSError(description: "There was a problem loging in. Please try again later.")
           return
-        }
-
-        switch credential.realUserStatus {
-        case .unknown:
-          print("Unknown user status, something fishy might be going on.")
-        default:
-          break
         }
 
         Task {

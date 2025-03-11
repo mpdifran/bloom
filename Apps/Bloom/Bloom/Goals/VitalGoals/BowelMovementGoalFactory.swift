@@ -25,7 +25,7 @@ extension BowelMovementGoalFactory {
       ),
       await goalFactory.createHabit(
         targetMetric: .fiberIntake,
-        unit: .literUnit(with: .milli),
+        unit: .gram(),
         vitalKind: vitalKind,
         context: "Eating fiber can help make your bowel movements more regular."
       )

@@ -14,7 +14,7 @@ struct OnboardingWelcomeView: View {
 
   @State private var index = 1
   @State private var didContinue = false
-
+  @State private var isNameUnknown: Bool?
   @FocusState private var isFocused: Bool
 
   @ObservedObject private var healthManager = HealthManager.shared
@@ -22,50 +22,15 @@ struct OnboardingWelcomeView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        Image(.bloomAppIcon)
-          .resizable()
-          .scaledToFit()
-          .frame(width: 100)
-
-        Text("Hey there!")
-          .appear(with: 1, currentIndex: index)
-
-        Text("I'm Bloom, your new personal Health Assistant.")
-          .transition(.opacity)
-          .appear(with: 2, currentIndex: index)
-
-        Group {
-          Text("What's your first name?")
-
-          TextField("", text: $healthManager.name, prompt: Text("Your Name"))
-            .textContentType(.givenName)
-            .cardContainer(fill: .background.secondary)
-            .focused($isFocused)
-            .submitLabel(.done)
-            .onSubmit {
-              didSubmitName()
-            }
-            .onAppear {
-              isFocused = true
-            }
-            .onChange(of: healthManager.name) { oldValue, newValue in
-              if
-                newValue.isNotEmpty &&
-                newValue.count >= 2 &&
-                oldValue.isEmpty
-              {
-                didSubmitName()
-              }
-            }
+        if let isNameUnknown {
+          if isNameUnknown {
+            unknownNameContent
+          } else {
+            knownNameContent
+          }
+        } else {
+          EmptyView()
         }
-        .transition(.blurReplace)
-        .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
-
-        Text("Nice to meet you, \(healthManager.name)! Let's get to know each other a bit...")
-          .transition(.opacity)
-          .appear(with: 4, currentIndex: index)
-
-        Spacer()
       }
       .padding()
       .horizontalAlignment(.leading)
@@ -89,10 +54,83 @@ struct OnboardingWelcomeView: View {
       while index < 3 {
         await advanceIndex()
       }
+
+      if isNameUnknown == false {
+        await advanceIndex()
+      }
     }
     .onAppear {
+      if isNameUnknown == nil {
+        isNameUnknown = healthManager.name.isEmpty
+      }
       TelemetryDeck.signal("OB Welcome")
     }
+  }
+}
+
+private extension OnboardingWelcomeView {
+
+  @ViewBuilder
+  var knownNameContent: some View {
+    DisplayAppIcon()
+      .frame(width: 100)
+
+    Text("Hey \(healthManager.name)!")
+      .appear(with: 1, currentIndex: index)
+
+    Text("I'm Bloom, your new personal Health Assistant.")
+      .transition(.opacity)
+      .appear(with: 2, currentIndex: index)
+
+    Text("It's nice to meet you! Let's get to know each other a bit...")
+      .transition(.opacity)
+      .appear(with: 3, currentIndex: index)
+  }
+
+  @ViewBuilder
+  var unknownNameContent: some View {
+    DisplayAppIcon()
+      .frame(width: 100)
+
+    Text("Hey there!")
+      .appear(with: 1, currentIndex: index)
+
+    Text("I'm Bloom, your new personal Health Assistant.")
+      .transition(.opacity)
+      .appear(with: 2, currentIndex: index)
+
+    Group {
+      Text("What's your first name?")
+
+      TextField("", text: $healthManager.name, prompt: Text("Your Name"))
+        .textContentType(.givenName)
+        .cardContainer(fill: .background.secondary)
+        .focused($isFocused)
+        .submitLabel(.done)
+        .onSubmit {
+          didSubmitName()
+        }
+        .onAppear {
+          isFocused = true
+        }
+        .onChange(of: healthManager.name) { oldValue, newValue in
+          if
+            newValue.isNotEmpty &&
+            newValue.count >= 2 &&
+            oldValue.isEmpty
+          {
+            didSubmitName()
+          }
+        }
+    }
+    .transition(.blurReplace)
+    .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
+
+    Text("Nice to meet you, \(healthManager.name)! Let's get to know each other a bit...")
+      .transition(.opacity)
+      .appear(with: 4, currentIndex: index)
+
+    Spacer()
   }
 }
 

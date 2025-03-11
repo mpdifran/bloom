@@ -16,6 +16,7 @@ struct RootView: View {
 
   @Bindable private var tabController = TabController()
 
+  @State private var userControllerViewModel = UserControllerViewModel()
   @State private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
 
@@ -31,7 +32,9 @@ struct RootView: View {
 
   var body: some View {
     Group {
-      if !hasShownOnboarding {
+      if !userControllerViewModel.isAuthenticated {
+        LoginView(showDismissButton: false) { }
+      } else if !hasShownOnboarding {
         ZStack {
           OnboardingRootView {
             withAnimation {

@@ -78,9 +78,13 @@ private extension BloomPlusPaywall {
 
   var contentView: some View {
     VStack {
-      BloomPlusFeaturesListView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
-      .padding(.top)
-      .padding(.top)
+      VStack(spacing: 30) {
+        BloomPlusTryBloomHeaderView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
+          .tint(.mutedPurple)
+          .padding(.top)
+          .padding(.top)
+        BloomPlusFeaturesListView()
+      }
 
       VStack(spacing: 30) {
         BloomPlusUserReviewListView()

@@ -23,9 +23,7 @@ struct OnboardingFinishView: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 20) {
-        Image(.bloomAppIcon)
-          .resizable()
-          .scaledToFit()
+        DisplayAppIcon()
           .frame(width: 150)
           .transition(.blurReplace)
           .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)

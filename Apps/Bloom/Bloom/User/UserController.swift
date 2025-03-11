@@ -127,6 +127,15 @@ extension UserController {
     storeAuthToken()
 
     self.isAuthenticated = self.authToken != nil
+
+    // Set the user's name automatically if it's not already provided.
+    if let name = authResponse.identity.givenName {
+      await MainActor.run {
+        guard HealthManager.shared.name.isEmpty else { return }
+
+        HealthManager.shared.name = name
+      }
+    }
   }
 
   func logout() async throws {

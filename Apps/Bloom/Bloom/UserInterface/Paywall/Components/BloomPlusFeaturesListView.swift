@@ -11,86 +11,46 @@ import RevenueCat
 
 struct BloomPlusFeaturesListView: View {
 
-  let canTryForFree: Bool
-
   var body: some View {
-    VStack(spacing: 30) {
-      VStack(spacing: 10) {
-        bloomPlusLogo
+    VStack {
+      HStack {
+        FeatureCard(
+          image: Image(systemSymbol: .star),
+          message: "Personalized goals tailored to you"
+        )
 
-        Text(canTryForFree ? "Try Bloom for Free" : "Try Bloom")
-          .font(.largeTitle)
-          .bold()
-          .fontDesign(.rounded)
-
-        Text("Your personal health coach in your pocket.")
-          .foregroundStyle(.secondary)
+        FeatureCard(
+          image: Image(systemSymbol: .gaugeOpenWithLinesNeedle33percentAndArrowtriangle),
+          message: "Get to your ideal body weight"
+        )
       }
 
-      VStack {
-        HStack {
-          FeatureCard(
-            image: Image(systemSymbol: .star),
-            message: "Personalized goals tailored to you"
-          )
+      HStack {
+        FeatureCard(
+          image: Image(systemSymbol: .camera),
+          message: "Log nutrition with just a picture"
+        )
 
-          FeatureCard(
-            image: Image(systemSymbol: .gaugeOpenWithLinesNeedle33percentAndArrowtriangle),
-            message: "Get to your ideal body weight"
-          )
-        }
+        FeatureCard(
+          image: Image(systemSymbol: .barcodeViewfinder),
+          message: "Scan food barcodes with ease"
+        )
+      }
 
-        HStack {
-          FeatureCard(
-            image: Image(systemSymbol: .camera),
-            message: "Log nutrition with just a picture"
-          )
+      HStack {
+        FeatureCard(
+          image: Image(systemSymbol: .figureRun),
+          message: "Keep track of your workouts"
+        )
 
-          FeatureCard(
-            image: Image(systemSymbol: .barcodeViewfinder),
-            message: "Scan food barcodes with ease"
-          )
-        }
-
-        HStack {
-          FeatureCard(
-            image: Image(systemSymbol: .figureRun),
-            message: "Keep track of your workouts"
-          )
-
-          FeatureCard(
-            image: Image(systemSymbol: .heart),
-            message: "Comprehensive view of your health"
-          )
-        }
+        FeatureCard(
+          image: Image(systemSymbol: .heart),
+          message: "Comprehensive view of your health"
+        )
       }
     }
     .padding(.horizontal)
     .tint(.mutedPurple)
-  }
-}
-
-private extension BloomPlusFeaturesListView {
-
-  var bloomPlusLogo: some View {
-    HStack(spacing: 0) {
-      Text("Bloom")
-        .padding(4)
-      Text("Plus")
-        .fontDesign(.monospaced)
-        .foregroundStyle(.white)
-        .padding(4)
-        .background {
-          RoundedRectangle(cornerRadius: 6)
-            .fill(.tint)
-        }
-    }
-    .bold()
-    .font(.caption)
-    .background {
-      RoundedRectangle(cornerRadius: 6)
-        .fill(.regularMaterial)
-    }
   }
 }
 
@@ -118,7 +78,7 @@ private struct FeatureCard: View {
 
 #Preview {
   VStack {
-    BloomPlusFeaturesListView(canTryForFree: true)
+    BloomPlusFeaturesListView()
   }
   .groupedBackground()
 }

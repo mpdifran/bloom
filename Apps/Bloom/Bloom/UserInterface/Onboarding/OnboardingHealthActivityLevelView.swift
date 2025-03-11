@@ -16,7 +16,7 @@ struct OnboardingHealthActivityLevelView: View {
 
   @State private var vitalsViewModel = VitalsViewModel.shared
 
-  @State private var index = 0
+  @State private var index = 1
   @State private var activityLevels = [ActivityLevelSummary.ActivityLevel]()
   @State private var didContinue = false
 

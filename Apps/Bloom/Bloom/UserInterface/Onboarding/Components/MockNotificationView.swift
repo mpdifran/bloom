@@ -14,9 +14,7 @@ struct MockNotificationView: View {
 
     var body: some View {
         HStack(alignment: .top) {
-            Image(.bloomAppIcon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            DisplayAppIcon()
                 .frame(width: 40)
 
             VStack(alignment: .leading) {
