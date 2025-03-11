@@ -57,7 +57,7 @@ extension ExternalHealthMetricPermissionManager {
 
   func markPermissionsAsDetermined(_ permissions: [ExternalHealthMetricPermission]) {
     var existingSet = determinedPermissionIDs.asSet()
-    var newSet = permissions.map(\.id).asSet()
+    let newSet = permissions.map(\.id).asSet()
     existingSet.formUnion(newSet)
     self.determinedPermissionIDs = Array(existingSet)
   }

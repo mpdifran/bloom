@@ -50,6 +50,37 @@ public extension SuggestedGoal {
   }
 }
 
+public extension SuggestedGoal.Metric {
+  static var validUnitDescription: String {
+    var output = ""
+
+    for metric in allCases {
+      output.append("For \(metric.rawValue), use \(metric.validUnits.map({ $0.rawValue }))\n")
+    }
+
+    return output
+  }
+
+  var validUnits: [SuggestedGoal.Unit] {
+    switch self {
+    case .waterIntake:
+      return [.mL, .oz]
+    case .fiberIntake:
+      return [.g]
+    case .meditationMinutes, .exerciseMinutes, .runDuration, .bikeDuration, .mobilityAndFlexibilityDuration,
+         .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration,
+         .targetHeartRateZone1Minutes, .targetHeartRateZone2Minutes,
+         .targetHeartRateZone3Minutes, .targetHeartRateZone4Minutes,
+         .targetHeartRateZone5Minutes:
+      return [.min, .hr]
+    case .stepCount:
+      return [.steps]
+    case .walkingRunningDistance, .runDistance, .bikeDistance:
+      return [.km, .mi]
+    }
+  }
+}
+
 public extension SuggestedGoal {
   enum Unit: String, Codable, Equatable, Sendable, CaseIterable {
     case g

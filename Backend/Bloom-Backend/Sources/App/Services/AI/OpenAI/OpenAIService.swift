@@ -403,6 +403,10 @@ extension OpenAIService {
         content: [.text(.Prompt.suggestGoals)]
       ),
       Chat.Message(
+        role: .system,
+        content: [.text(SuggestedGoal.Metric.validUnitDescription)]
+      ),
+      Chat.Message(
         role: .user,
         content: [.text("Here is my health data:\n\n```json\n\(healthData)\n```\n")]
       ),
@@ -411,6 +415,8 @@ extension OpenAIService {
         content: [.text("Here are my current goals:\n\n```json\n\(currentGoals)\n```\n")]
       )
     ]
+
+    request.logger.info(SuggestedGoal.Metric.validUnitDescription)
 
     let chat = try await request.openAI.chats.create(
       model: Model.GPT4.gpt_4o_mini,
