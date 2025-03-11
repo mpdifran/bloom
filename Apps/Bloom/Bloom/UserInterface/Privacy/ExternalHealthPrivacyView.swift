@@ -127,10 +127,20 @@ private extension ExternalHealthPrivacyView {
       .padding(.horizontal)
       .padding(.top)
 
-      Link("Privacy Policy", destination: .privacyPolicy)
-        .bold()
-        .frame(minHeight: 50)
-        .horizontallyCentered()
+      HStack {
+        Link("Privacy Policy", destination: .privacyPolicy)
+          .bold()
+          .frame(minHeight: 50)
+          .horizontallyCentered()
+
+        Divider()
+          .padding(.vertical, 4)
+
+        Link("Questions? Email Us!", destination: .emailBloom)
+          .bold()
+          .frame(minHeight: 50)
+          .horizontallyCentered()
+      }
     }
     .bold()
     .fontDesign(.rounded)

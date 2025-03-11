@@ -23,6 +23,12 @@ extension URL {
   static let termsOfService = URL(string: "https://www.trybloom.app/tos")!
 }
 
+// MARK: - Email
+
+extension URL {
+  static let emailBloom = URL(string: "mailto:hello@trybloom.app")!
+}
+
 // MARK: - Apple
 
 extension URL {
