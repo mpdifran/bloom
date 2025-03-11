@@ -180,10 +180,7 @@ extension HealthManager {
   }
 
   func age() -> Int {
-    if let age = healthStore.age() {
-      return age
-    }
-    return Calendar.current.dateComponents([.year], from: birthday, to: .now).year ?? 0
+    birthday.toAge()
   }
 
   func sex() -> HKBiologicalSex {
