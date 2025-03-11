@@ -50,7 +50,14 @@ extension ChatGoalConverter {
 
       let metricSummaries = await createMetricSummaries()
 
+      let unitPreferences = CurrentGoalsData.UnitPreferences(
+        distanceUnit: await HealthUnitPreferences.shared.distanceUnit.unitString,
+        liquidVolumeUnit: await HealthUnitPreferences.shared.liquidVolumeUnit.unitString,
+        weightUnit: await HealthUnitPreferences.shared.weightUnit.unitString
+      )
+
       return CurrentGoalsData(
+        unitPreferences: unitPreferences,
         currentGoals: goalSummaries,
         metricSummaries: metricSummaries
       )

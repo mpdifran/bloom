@@ -9,8 +9,17 @@ import Foundation
 import BloomModel
 
 struct CurrentGoalsData: SendableNetworkModel {
+  let unitPreferences: UnitPreferences
   let currentGoals: [GoalSummary]
   let metricSummaries: [MetricSummary]
+}
+
+extension CurrentGoalsData {
+  struct UnitPreferences: SendableNetworkModel {
+    let distanceUnit: String
+    let liquidVolumeUnit: String
+    let weightUnit: String
+  }
 }
 
 struct GoalSummary: SendableNetworkModel {
