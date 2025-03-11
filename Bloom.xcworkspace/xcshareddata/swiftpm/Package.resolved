@@ -1,5 +1,5 @@
 {
-  "originHash" : "afd093db8c47974446450beb264f185eec1679327d6f69f3fe598884f728bb15",
+  "originHash" : "832a6f5e2d995ca5d533a03924fc8dbcc328005cb41fe70511ccf5664acf2657",
   "pins" : [
     {
       "identity" : "apns",
@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "5d41918a6eaccb2f343f4b883d06728fc3b3447e",
-        "version" : "1.3.8"
+        "revision" : "643938ae72d41b464e1045461d597a4b3dd8206a",
+        "version" : "1.4.0"
       }
     },
     {
@@ -204,8 +204,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
       "state" : {
-        "revision" : "48f72340a22d13d6fd09a6bef0cba541109c111b",
-        "version" : "5.18.0"
+        "revision" : "a037a1fa19548b6ebc778b8d425df914d16b96e3",
+        "version" : "5.19.0"
       }
     },
     {
@@ -330,8 +330,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "45305d32cfb830faebcaa9a7aea66ad342637518",
-        "version" : "3.11.1"
+        "revision" : "a98e4be0dd9f0377a818f2198a2bc87bbd2bfcea",
+        "version" : "3.11.2"
       }
     },
     {
@@ -483,8 +483,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TelemetryDeck/SwiftSDK.git",
       "state" : {
-        "revision" : "65bfb4ce809c58deee31b4889ee650b01ed04a88",
-        "version" : "2.8.2"
+        "revision" : "f1abd709eb527979a878b2d35683dbb71b493854",
+        "version" : "2.9.0"
       }
     },
     {
