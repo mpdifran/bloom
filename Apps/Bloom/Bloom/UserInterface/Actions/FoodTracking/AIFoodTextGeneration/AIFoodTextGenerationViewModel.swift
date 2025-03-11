@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TelemetryDeck
 
 extension AIFoodTextGenerationView {
   @MainActor @Observable
@@ -37,16 +38,27 @@ extension AIFoodTextGenerationView.ViewModel {
       isEstimating = true
     }
 
-    let response = try await NetworkRequester.shared.foodAITextEstimate(foodDescription: foodDescription)
+    do {
+      let response = try await NetworkRequester.shared.foodAITextEstimate(foodDescription: foodDescription)
 
-    let newServings = response.servings.map { $0.asServing() }
-    let newSuggestedServings = response.suggestedServings.map { $0.asServing() }
+      let newServings = response.servings.map { $0.asServing() }
+      let newSuggestedServings = response.suggestedServings.map { $0.asServing() }
 
-    await MainActor.run {
-      self.foodName = response.name
-      self.servings = newServings
-      self.suggestedServings = newSuggestedServings
-      self.isEstimating = false
+      await MainActor.run {
+        self.foodName = response.name
+        self.servings = newServings
+        self.suggestedServings = newSuggestedServings
+        self.isEstimating = false
+        TelemetryDeck.signal("Food Item AI Text Generation", parameters: ["AITextGenerationResult": "Success"])
+      }
+    } catch {
+      TelemetryDeck.signal("Food Item AI Text Generation", parameters: ["AITextGenerationResult": "Fail"])
+      TelemetryDeck.errorOccurred(
+        id: "AIFoodTextGenerationView.ViewModel.estimateFood",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+      throw error
     }
   }
 }
