@@ -26,7 +26,7 @@ struct OnboardingHealthKitPrivacyCard: View {
         .font(.system(size: 100))
         .foregroundStyle(.invertedText, .tint)
 
-      Text("Your health data is stored securely on your device. We don’t collect or share any of your health information — only you have access to it.")
+      Text("Your health data is stored securely on your device. We only share anonymous health data you explicitly opt in to sharing — and it's never stored.")
         .font(.title3)
         .bold()
         .multilineTextAlignment(.center)

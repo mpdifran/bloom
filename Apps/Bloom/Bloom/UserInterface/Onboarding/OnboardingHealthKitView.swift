@@ -55,7 +55,7 @@ struct OnboardingHealthKitView: View {
     .sheet($presentedSheet)
     .shelf {
       VStack {
-        Text("Your Health data never leaves your device")
+        Text("Your Health data never leaves your device without you explicitly opting in, and always remains anonymous.")
           .font(.subheadline)
           .fontDesign(.rounded)
           .bold()
