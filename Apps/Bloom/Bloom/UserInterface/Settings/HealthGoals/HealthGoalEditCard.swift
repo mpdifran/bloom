@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import SFSafeSymbols
 
 struct HealthGoalEditCard: View {
 
@@ -26,8 +27,13 @@ struct HealthGoalEditCard: View {
           .fontDesign(.rounded)
 
         healthGoalSection
+
         if healthManager.healthGoal.isWeightRelated {
           weightSection
+
+          if healthManager.healthGoal.supportsWeightChangeSpeed {
+            weightSpeedSection
+          }
         }
 
         Button {
@@ -43,6 +49,7 @@ struct HealthGoalEditCard: View {
       .presentationDetentSelfSizing()
     }
     .animation(.easeInOut, value: healthManager.healthGoal)
+    .animation(.easeInOut, value: healthManager.weightLossSpeed)
     .groupedBackground()
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
@@ -67,29 +74,68 @@ private extension HealthGoalEditCard {
   }
 
   var weightSection: some View {
-    VStack {
+    HStack {
+      Text("Target Weight")
+        .font(.title3)
+        .bold()
+        .fontDesign(.rounded)
+
+      Spacer()
+
+      Text(healthManager.targetWeightQuantity().displayString(for: .pound(), formatter: .oneDecimalPlace))
+        .font(.title3)
+        .bold()
+        .fontDesign(.rounded)
+        .foregroundStyle(.tint)
+      DisclosureIndicator()
+    }
+    .cardContainer()
+    .selectable()
+    .tint(.mutedIndigo)
+    .onTapGesture {
+      presentedSheet = TargetWeightEditCard().asAny
+    }
+  }
+
+  var weightSpeedSection: some View {
+    VStack(alignment: .leading) {
       HStack {
-        Text("Target Weight")
+        Text("Speed")
           .font(.title3)
           .bold()
           .fontDesign(.rounded)
 
         Spacer()
 
-        Text(healthManager.targetWeightQuantity().displayString(for: .pound(), formatter: .oneDecimalPlace))
+        Menu {
+          ForEach(WeightLossSpeed.allCases) { speed in
+            Button(speed.name, systemImage: speed == healthManager.weightLossSpeed ? "checkmark" : "") {
+              healthManager.weightLossSpeed = speed
+            }
+          }
+        } label: {
+          HStack {
+            Text(healthManager.weightLossSpeed.name)
+            Image(systemSymbol: .chevronUpChevronDown)
+          }
           .font(.title3)
-          .bold()
           .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-        DisclosureIndicator()
+          .bold()
+        }
       }
-      .cardContainer()
-      .selectable()
-      .tint(.mutedIndigo)
-      .onTapGesture {
-        presentedSheet = TargetWeightEditCard().asAny
-      }
+
+      Divider()
+
+      Text(healthManager.weightLossSpeed.weightLossDescription)
+        .font(.body)
+        .foregroundStyle(.secondary)
+        .bold()
+        .fontDesign(.rounded)
+        .contentTransition(.numericText())
     }
+    .cardContainer()
+    .selectable()
+    .tint(.mutedIndigo)
   }
 }
 

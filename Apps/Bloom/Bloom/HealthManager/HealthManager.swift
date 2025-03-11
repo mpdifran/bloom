@@ -36,6 +36,16 @@ extension HealthGoal {
       false
     }
   }
+
+  var supportsWeightChangeSpeed: Bool {
+    switch self {
+    case .gainWeight, .loseWeight:
+      true
+    default:
+      false
+    }
+  }
+
   var name: String {
     switch self {
     case .none:

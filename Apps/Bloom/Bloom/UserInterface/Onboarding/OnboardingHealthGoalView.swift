@@ -152,7 +152,7 @@ private extension OnboardingHealthGoalView {
           presentedSheet = TargetWeightEditCard().asAny
         }
 
-        if healthManager.healthGoal == .loseWeight || healthManager.healthGoal == .gainWeight {
+        if healthManager.healthGoal.supportsWeightChangeSpeed {
           Divider()
           LabeledContent(healthManager.healthGoal == .loseWeight ? "Weight Loss Speed" : "Weight Gain Speed") {
             Menu {

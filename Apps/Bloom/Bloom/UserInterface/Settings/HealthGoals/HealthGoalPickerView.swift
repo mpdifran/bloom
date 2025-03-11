@@ -16,7 +16,7 @@ struct HealthGoalPickerView: View {
   var body: some View {
     ScrollView {
       VStack {
-        Text("Goals")
+        Text("Select a Goal")
           .font(.title)
           .bold()
           .fontDesign(.rounded)
@@ -75,5 +75,7 @@ private struct HealthGoalCell: View {
 }
 
 #Preview {
-  HealthGoalPickerView()
+  PreviewSheetPresent {
+    HealthGoalPickerView()
+  }
 }
