@@ -34,6 +34,7 @@ extension HabitDetailsView {
       didSet { Task { await loadHabitGridModel() } }
     }
     var goalRanges = [GoalRange]()
+    var habitHistory = [HabitDTO]()
 
     init(habit: Habit) {
       self.habit = habit
@@ -68,6 +69,15 @@ private extension HabitDetailsView.ViewModel {
 }
 
 extension HabitDetailsView.ViewModel {
+
+  func sampleMeetsGoal(_ sample: DateQuantitySample) -> Bool {
+    let oldestHabit = habitHistory.min(by: { $0.startDate < $1.startDate })
+    let matchingHabit = habitHistory.first(where: { $0.isDateWithinHabit(date: sample.date) })
+
+    guard let habit = matchingHabit ?? oldestHabit else { return false }
+
+    return habit.quantityMeetsGoal(sample.quantity)
+  }
 
   func habitUnit() -> HKUnit {
     habit.unit
@@ -151,11 +161,9 @@ extension HabitDetailsView.ViewModel {
   nonisolated func loadHabitGridModel() async {
     let targetMetric = await targetMetric()
 
-    let context = ContainerHolder.shared.createContext()
-
-    let habitHistory: [Habit]
+    let habitHistory: [HabitDTO]
     do {
-      habitHistory = try context.fetchHabits(for: targetMetric)
+      habitHistory = try await modelActor.fetchHabits(for: targetMetric)
     } catch {
       print(error)
       return
@@ -167,7 +175,7 @@ extension HabitDetailsView.ViewModel {
       let todayIndex = weekSamples.samples.firstIndex(where: { Calendar.current.isDateInToday($0.date) })
 
       let isCompleteArray = weekSamples.samples.map { sample in
-        let referenceHabit: Habit
+        let referenceHabit: HabitDTO
         if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: sample.date) }) {
           referenceHabit = habit
         } else if let oldestHabit, sample.date < oldestHabit.startDate {
@@ -201,6 +209,7 @@ extension HabitDetailsView.ViewModel {
 
     await MainActor.run {
       self.habitGridModel = model
+      self.habitHistory = habitHistory
     }
   }
 }

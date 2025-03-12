@@ -181,7 +181,7 @@ private extension HabitDetailsView {
             x: .value("Date", sample.date),
             y: .value(viewModel.habit.targetMetric.name, sample.quantity.localizedValue(for: viewModel.habit.unit))
           )
-          .foregroundStyle(viewModel.habit.quantityMeetsGoal(sample.quantity) ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.3)))
+          .foregroundStyle(viewModel.sampleMeetsGoal(sample) ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.3)))
         }
 
         ForEach(viewModel.goalRanges) { range in
