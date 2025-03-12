@@ -15,7 +15,7 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
-  @AppStorage(.FeatureFlag.aiGoalSetting) private var aiGoalSetting = false
+  @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
   @AppStorage(.FeatureFlag.alwaysAskForAIGoalSettingPermission) private var alwaysAskForAIGoalSettingPermission = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
@@ -198,7 +198,7 @@ extension DeveloperSettingsView {
 
       SettingsSectionContainer {
         SettingsCell("AI Goal Review") {
-          Toggle("", isOn: $aiGoalSetting)
+          Toggle("", isOn: $legacyGoalSetting)
         }
 
         Divider()
@@ -481,7 +481,7 @@ extension DeveloperSettingsView {
           apiHost.overrideEnabled = false
           showDeveloperMode = false
           danieleMode = false
-          aiGoalSetting = false
+          legacyGoalSetting = false
           alwaysAskForAIGoalSettingPermission = false
           dismiss()
         } label: {

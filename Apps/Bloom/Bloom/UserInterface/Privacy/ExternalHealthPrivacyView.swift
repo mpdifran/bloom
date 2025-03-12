@@ -89,6 +89,9 @@ private extension ExternalHealthPrivacyView {
       if showAllPermissions {
         return ExternalHealthMetricPermission.all
       }
+      if manager.undeterminedPermissions.isEmpty {
+        return ExternalHealthMetricPermission.all
+      }
       return manager.undeterminedPermissions
     }
   }

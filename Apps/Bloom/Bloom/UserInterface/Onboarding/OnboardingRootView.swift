@@ -31,7 +31,7 @@ struct OnboardingRootView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
 
-  @AppStorage(.FeatureFlag.aiGoalSetting) private var aiGoalSetting = false
+  @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
 
   @Environment(\.dismiss) private var dismiss
 
@@ -67,12 +67,12 @@ struct OnboardingRootView: View {
           setStep(.focusAreas)
         }
       case .focusAreas:
-        if aiGoalSetting {
-          OnboardingAIGoalsView {
+        if legacyGoalSetting {
+          OnboardingFocusAreasView {
             setStep(.notifications)
           }
         } else {
-          OnboardingFocusAreasView {
+          OnboardingAIGoalsView {
             setStep(.notifications)
           }
         }

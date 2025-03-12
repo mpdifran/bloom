@@ -51,6 +51,9 @@ struct OnboardingWelcomeView: View {
       }
     }
     .task {
+      if isNameUnknown == nil {
+        isNameUnknown = healthManager.name.isEmpty
+      }
       while index < 3 {
         await advanceIndex()
       }
@@ -60,9 +63,6 @@ struct OnboardingWelcomeView: View {
       }
     }
     .onAppear {
-      if isNameUnknown == nil {
-        isNameUnknown = healthManager.name.isEmpty
-      }
       TelemetryDeck.signal("OB Welcome")
     }
   }

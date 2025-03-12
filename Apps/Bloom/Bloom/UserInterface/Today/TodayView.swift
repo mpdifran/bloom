@@ -37,7 +37,7 @@ struct TodayView: View {
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
-  @AppStorage(.FeatureFlag.aiGoalSetting) private var aiGoalSetting = false
+  @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
 
   var body: some View {
     @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
@@ -135,10 +135,10 @@ private extension TodayView {
         GoalReviewCell()
           .transition(.scale)
           .onTapGesture {
-            if aiGoalSetting {
-              presentedFullScreen = BaseReviewGoalsView().asAny
-            } else {
+            if legacyGoalSetting {
               presentedFullScreen = FocusAreaReviewRootView().asAny
+            } else {
+              presentedFullScreen = BaseReviewGoalsView().asAny
             }
           }
       }

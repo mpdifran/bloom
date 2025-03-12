@@ -22,7 +22,7 @@ final class UserController: ObservableObject {
   static let shared = UserController()
 
   /// Whether the user is authenticated or not.
-  @Published var isAuthenticated: Bool = false
+  @Published var isAuthenticated: Bool
 
   /// An identifier for the Sign in with Apple user. This may change if the account is unlinked and re-linked.
   @Published var authenticatedUserIdentifier: UserIdentifier?
@@ -36,16 +36,18 @@ final class UserController: ObservableObject {
       self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
     } catch { }
 
+    var isAuthenticated = false
     do {
       let rawAuthToken = try valet.string(forKey: .authTokenKey)
       self.authToken = AuthToken(rawAuthToken)
+      isAuthenticated = true
     } catch { }
 
     if let lastIdentifyDate = UserDefaults.group.object(forKey: "UserController.lastIdentifyDate") as? Date {
       self.lastIdentifyDate = lastIdentifyDate
     }
 
-    self.isAuthenticated = authToken != nil
+    self._isAuthenticated = Published(initialValue: isAuthenticated)
   }
 
   @AppStorage("UserController.email", store: .group) var email: String?
