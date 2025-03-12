@@ -66,7 +66,7 @@ extension HabitsViewModel {
     return []
   }
 
-  func performSave(newGoals: NewHabitResult) throws {
+  func performSave(newGoals: NewHabitResult, isAI: Bool = false) throws {
 
     // End all existing habits
     for existingHabit in try modelContext.fetchActiveHabits() {
@@ -92,7 +92,9 @@ extension HabitsViewModel {
           "vitalKind": focusVital.vitalKind.name,
           "goalKind": proposedGoal.targetMetric.name,
           "value": proposedGoal.value.format(using: .twoDecimalPlaces),
-          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
+          "suggestedValue": proposedGoal.suggestedValue.format(using: .twoDecimalPlaces),
+          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None",
+          "isAI": isAI ? "true" : "false"
         ],
         floatValue: proposedGoal.value
       )
@@ -111,7 +113,9 @@ extension HabitsViewModel {
           "userAdded": "true",
           "goalKind": proposedGoal.targetMetric.name,
           "value": proposedGoal.value.format(using: .twoDecimalPlaces),
-          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None"
+          "suggestedValue": proposedGoal.suggestedValue.format(using: .twoDecimalPlaces),
+          "originalValue": proposedGoal.previousValue?.format(using: .twoDecimalPlaces) ?? "None",
+          "isAI": isAI ? "true" : "false"
         ],
         floatValue: proposedGoal.value
       )

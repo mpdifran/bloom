@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import TelemetryDeck
 
 struct ProposedNewGoalsView: View {
 
@@ -58,13 +59,16 @@ struct ProposedNewGoalsView: View {
           proposedGoals: proposedGoalsResult.goals,
           proposedToDos: proposedGoalsResult.todos
         )
-        try habitsViewModel.performSave(newGoals: newHabits)
+        try habitsViewModel.performSave(newGoals: newHabits, isAI: true)
         dismiss()
       } label: {
         Text("Let's Do It!")
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
+    }
+    .onAppear {
+      TelemetryDeck.signal("Focus Area AI Goals")
     }
   }
 }

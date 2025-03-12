@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import TelemetryDeck
 
 struct GoalLookbackView: View {
   let onCalculateProposedGoals: (ProposedGoalsResult) -> Void
@@ -52,6 +53,9 @@ struct GoalLookbackView: View {
         goalLookbackDetails.append(detail)
         await Delay(100)
       }
+    }
+    .onAppear {
+      TelemetryDeck.signal("Focus Area Goal Lookback")
     }
   }
 }
