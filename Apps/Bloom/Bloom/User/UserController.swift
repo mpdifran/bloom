@@ -17,35 +17,25 @@ private extension String {
   static let authTokenKey = "auth_token"
 }
 
-final actor UserController {
+@MainActor
+final class UserController: ObservableObject {
   static let shared = UserController()
 
-  @AsyncStreamable var isAuthenticated: Bool = false
-
-  @AppStorage("UserController.email", store: .group) private var email: String?
-  @AppStorage("UserController.givenName", store: .group) private var givenName: String?
-  @AppStorage("UserController.familyName", store: .group) private var familyName: String?
-
-  private var lastIdentifyDate: Date? {
-    didSet { UserDefaults.group.set(lastIdentifyDate, forKey: "UserController.lastIdentifyDate") }
-  }
+  /// Whether the user is authenticated or not.
+  @Published var isAuthenticated: Bool = false
 
   /// An identifier for the Sign in with Apple user. This may change if the account is unlinked and re-linked.
-  var authenticatedUserIdentifier: UserIdentifier?
+  @Published var authenticatedUserIdentifier: UserIdentifier?
 
   /// The auth token for the authenticated user.
-  var authToken: AuthToken?
-
-  private let valet = Valet.iCloudValet(
-    with: Identifier(nonEmpty: "UserController")!,
-    accessibility: .afterFirstUnlock
-  )
+  @Published var authToken: AuthToken?
 
   private init() {
     do {
       let rawUserIdentifier = try valet.string(forKey: .authenticatedUserIdentifierKey)
       self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
     } catch { }
+
     do {
       let rawAuthToken = try valet.string(forKey: .authTokenKey)
       self.authToken = AuthToken(rawAuthToken)
@@ -55,8 +45,21 @@ final actor UserController {
       self.lastIdentifyDate = lastIdentifyDate
     }
 
-    self._isAuthenticated.update(authToken != nil)
+    self.isAuthenticated = authToken != nil
   }
+
+  @AppStorage("UserController.email", store: .group) var email: String?
+  @AppStorage("UserController.givenName", store: .group) var givenName: String?
+  @AppStorage("UserController.familyName", store: .group) var familyName: String?
+
+  private var lastIdentifyDate: Date? {
+    didSet { UserDefaults.group.set(lastIdentifyDate, forKey: "UserController.lastIdentifyDate") }
+  }
+
+  private let valet = Valet.iCloudValet(
+    with: Identifier(nonEmpty: "UserController")!,
+    accessibility: .afterFirstUnlock
+  )
 }
 
 extension UserController {

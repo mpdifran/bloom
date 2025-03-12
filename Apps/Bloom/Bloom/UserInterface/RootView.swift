@@ -16,9 +16,10 @@ struct RootView: View {
 
   @Bindable private var tabController = TabController()
 
-  @State private var userControllerViewModel = UserControllerViewModel()
   @State private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
+
+  @ObservedObject private var userController = UserController.shared
 
   @Environment(\.dismiss) private var dismiss
 
@@ -32,7 +33,7 @@ struct RootView: View {
 
   var body: some View {
     Group {
-      if !userControllerViewModel.isAuthenticated {
+      if !userController.isAuthenticated {
         LoginView(showDismissButton: false) { }
       } else if !hasShownOnboarding {
         ZStack {
@@ -72,6 +73,7 @@ struct RootView: View {
       }
     }
     .sheet($presentedSheet)
+    .animation(.easeInOut(duration: 1), value: userController.isAuthenticated)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
     .animation(.default, value: danieleMode)
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in

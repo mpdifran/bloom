@@ -32,12 +32,12 @@ struct FoodLoggingActionCardView: View {
   @State private var healthPermissionTrigger = false
   @State private var presentedSheet: AnyView?
   @State private var selectedTab = FoodItemCategoryTab.branded
-  @State private var userControllerViewModel = UserControllerViewModel()
 
   @Environment(\.dismiss) private var dismiss
 
   @FocusState private var isFocused: Bool
 
+  @ObservedObject private var userController = UserController.shared
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   private var locationViewModel = LocationManagerViewModel.shared
 
@@ -102,11 +102,10 @@ struct FoodLoggingActionCardView: View {
       locationViewModel.requestLocation()
     }
     .task {
-      let isAuthenticated = await UserController.shared.isAuthenticated
-      if !isAuthenticated {
+      if !userController.isAuthenticated {
         await MainActor.run {
           presentedSheet = LoginView {
-            if !userControllerViewModel.isAuthenticated {
+            if !userController.isAuthenticated {
               dismiss()
             }
           }.asAny

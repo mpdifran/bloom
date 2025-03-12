@@ -34,7 +34,7 @@ struct SettingsView: View {
   @Environment(\.openURL) private var openURL
   @Environment(\.modelContext) private var modelContext
 
-  @State private var userControllerViewModel = UserControllerViewModel()
+  @ObservedObject private var userController = UserController.shared
   @State private var entitlementController = EntitlementController.shared
   @State private var shouldRequestHealthPermissions = false
   @State private var isSwipingAnItem = false
@@ -512,14 +512,14 @@ private extension SettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Status") {
-          Text(userControllerViewModel.isAuthenticated ? "Signed in" : "Signed out")
+        SettingsCell("Email") {
+          Text(userController.email ?? "--")
         }
 
         Divider()
 
         Group {
-          if userControllerViewModel.isAuthenticated {
+          if userController.isAuthenticated {
             AsyncButton {
               try await UserController.shared.logout()
             } label: {
@@ -537,7 +537,7 @@ private extension SettingsView {
         .frame(minHeight: 60)
       }
 
-      if userControllerViewModel.isAuthenticated {
+      if userController.isAuthenticated {
         SettingsSectionContainer {
           AsyncButton(role: .destructive) {
             try await withCheckedThrowingContinuation { continuation in

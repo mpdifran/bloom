@@ -30,7 +30,7 @@ struct DeveloperSettingsView: View {
 
   @Environment(\.dismiss) private var dismiss
 
-  @State private var viewModel = UserControllerViewModel()
+  @ObservedObject private var userController = UserController.shared
 
   private let vitalsViewModel = VitalsViewModel.shared
 
@@ -446,18 +446,18 @@ extension DeveloperSettingsView {
 
       SettingsSectionContainer {
         SettingsCell("User ID") {
-          Text(viewModel.userID?.value ?? "None")
+          Text(userController.authenticatedUserIdentifier?.value ?? "None")
         }
 
         Divider()
 
         SettingsCell("Auth Token") {
-          Text(viewModel.authToken?.value ?? "None")
+          Text(userController.authToken?.value ?? "None")
         }
 
         Divider()
 
-        if viewModel.isAuthenticated {
+        if userController.isAuthenticated {
           AsyncButton(role: .destructive) {
             try await UserController.shared.logout()
           } label: {
