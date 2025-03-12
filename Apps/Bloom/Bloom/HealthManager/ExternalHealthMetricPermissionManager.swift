@@ -44,6 +44,14 @@ extension ExternalHealthMetricPermissionManager {
       .filter { getIsEnabled(for: $0) }
   }
 
+  var permissionsDictionary: [String : String] {
+    var result = [String : String]()
+    for permission in ExternalHealthMetricPermission.all {
+      result[permission.id] = getIsEnabled(for: permission) ? "Enabled" : "Disabled"
+    }
+    return result
+  }
+
   func hasUndeterminedPermissions() -> Bool {
     if alwaysAskForAIGoalSettingPermission {
       return true

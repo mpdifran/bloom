@@ -9,6 +9,7 @@ import SFSafeSymbols
 import SwiftUI
 import Symbols
 import AppUI
+import TelemetryDeck
 
 extension ExternalHealthPrivacyView {
   enum Mode {
@@ -206,6 +207,11 @@ private extension ExternalHealthPrivacyView {
       manager.set(for: permissions, isEnabled: false)
     }
     manager.markPermissionsAsDetermined(permissions)
+
+    TelemetryDeck.signal(
+      "Updated External Health Permissions",
+      parameters: manager.permissionsDictionary
+    )
 
     dismiss()
 

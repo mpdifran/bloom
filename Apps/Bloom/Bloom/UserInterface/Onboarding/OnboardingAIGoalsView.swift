@@ -12,6 +12,7 @@ import TelemetryDeck
 
 extension OnboardingAIGoalsView {
   enum Mode {
+    case permissionRequired
     case loading
     case loaded
     case failed
@@ -33,7 +34,7 @@ struct OnboardingAIGoalsView: View {
   var body: some View {
     Group {
       switch mode {
-      case .loaded, .loading:
+      case .permissionRequired, .loaded, .loading:
         mainScrollContent
       case .failed:
         loadFailedView
@@ -44,7 +45,11 @@ struct OnboardingAIGoalsView: View {
     .alert(error: $error)
     .sheet($presentedSheet)
     .task {
-      await loadAIGoals()
+      if permissionsManager.hasUndeterminedPermissions() {
+        mode = .permissionRequired
+      } else {
+        await loadAIGoals()
+      }
     }
     .onAppear {
       TelemetryDeck.signal("OB Focus Areas")
@@ -61,6 +66,8 @@ private extension OnboardingAIGoalsView {
           .onboardingTextStyle()
 
         switch mode {
+        case .permissionRequired:
+          EmptyView()
         case .loading:
           CircularSpinnerView()
             .foregroundStyle(.tint)
@@ -108,6 +115,10 @@ private extension OnboardingAIGoalsView {
         Text("We failed to load your goals, please try again.")
       } actions: {
         AsyncButton {
+          TelemetryDeck.signal(
+            "OB Focus Area Result Failed Event",
+            parameters: ["event" : "Retry AI Goal Setting on Fail"]
+          )
           await loadAIGoals()
         } label: {
           Text("Try Again")
@@ -115,6 +126,10 @@ private extension OnboardingAIGoalsView {
         .buttonStyle(.primary)
 
         Button {
+          TelemetryDeck.signal(
+            "OB Focus Area Result Failed Event",
+            parameters: ["event" : "Skip AI Goal Setting on Fail"]
+          )
           onContinue()
         } label: {
           Text("Skip")
@@ -125,17 +140,56 @@ private extension OnboardingAIGoalsView {
     }
   }
 
+  @ViewBuilder
   var shelfContent: some View {
-    AsyncButton {
-      try await saveAIGoals()
-    } label: {
-      Text("Continue")
+    switch mode {
+    case .permissionRequired:
+      AsyncButton {
+        TelemetryDeck.signal(
+          "OB Focus Area Event",
+          parameters: ["event" : "Select Health Data to Share"]
+        )
+        await loadAIGoals()
+      } label: {
+        Text("Select Health Data to Share")
+      }
+      .buttonStyle(.onboarding)
+
+      HStack {
+        Button {
+          TelemetryDeck.signal(
+            "OB Focus Area Event",
+            parameters: ["event" : "Skip AI Goal Setting"]
+          )
+          onContinue()
+        } label: {
+          Text("Skip")
+            .bold()
+        }
+        .frame(height: 50)
+      }
+    case .loaded:
+      AsyncButton {
+        try await saveAIGoals()
+      } label: {
+        Text("Continue")
+      }
+      .buttonStyle(.onboarding)
+    case .loading, .failed:
+      EmptyView()
     }
-    .buttonStyle(.onboarding)
   }
 }
 
 private extension OnboardingAIGoalsView {
+
+  func showUndeterminedPermissionsSheet() async {
+    await withCheckedContinuation { continuation in
+      presentedSheet = ExternalHealthPrivacyView {
+        continuation.resume()
+      }.asAny
+    }
+  }
 
   func loadAIGoals() async {
     self.mode = .loading
@@ -153,9 +207,17 @@ private extension OnboardingAIGoalsView {
 
       self.proposedGoals = result
       self.mode = .loaded
+      TelemetryDeck.signal(
+        "OB Focus Area Result",
+        parameters: ["result" : "AI Goal Loading Succeeded"]
+      )
     } catch {
       self.error = error
       self.mode = .failed
+      TelemetryDeck.signal(
+        "OB Focus Area Result",
+        parameters: ["result" : "AI Goal Loading Failed"]
+      )
     }
   }
 
@@ -165,6 +227,9 @@ private extension OnboardingAIGoalsView {
       proposedToDos: proposedGoals.todos
     )
     try habitsViewModel.performSave(newGoals: newHabits)
+
+    TelemetryDeck.signal("OB Focus Area - Saved Goals")
+
     onContinue()
   }
 }
