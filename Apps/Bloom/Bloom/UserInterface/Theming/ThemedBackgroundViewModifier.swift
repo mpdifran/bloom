@@ -29,20 +29,21 @@ extension View {
 }
 
 #Preview {
-  NavigationStack {
-    ScrollView {
-      VStack {
-        Text("Hello World")
-          .bold()
-          .fontDesign(.rounded)
-          .horizontallyCentered()
-          .cardContainer()
+  PreviewEnvironment {
+    NavigationStack {
+      ScrollView {
+        VStack {
+          Text("Hello World")
+            .bold()
+            .fontDesign(.rounded)
+            .horizontallyCentered()
+            .cardContainer()
+        }
+        .horizontallyCentered()
+        .padding()
       }
-      .horizontallyCentered()
-      .padding()
+      .groupedBackground()
+      .navigationTitle("Today")
     }
-    .groupedBackground()
-    .navigationTitle("Today")
   }
-  .environment(ThemeController())
 }

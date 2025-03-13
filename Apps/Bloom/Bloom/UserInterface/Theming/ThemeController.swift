@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TelemetryDeck
 
 private extension String {
   enum Key {
@@ -14,20 +15,33 @@ private extension String {
 }
 
 extension ThemeController {
-  enum Theme: String {
-    case ultramarine
+  enum Theme: String, CaseIterable, Identifiable {
+    var id: Self { self }
+
     case lilac
+    case ultramarine
     case sunflower
   }
 }
 
 extension ThemeController.Theme {
+  var name: String {
+    switch self {
+    case .lilac:
+      "Lilac"
+    case .ultramarine:
+      "Ultramarine"
+    case .sunflower:
+      "Sunflower"
+    }
+  }
+
   var color: Color {
     switch self {
-    case .ultramarine:
-      return .marineTint
     case .lilac:
       return .lilacTint
+    case .ultramarine:
+      return .marineTint
     case .sunflower:
       return .sunflowerTint
     }
@@ -35,12 +49,34 @@ extension ThemeController.Theme {
 
   var backgroundColor: Color {
     switch self {
-    case .ultramarine:
-      return .marineBackground
     case .lilac:
       return .lilacBackground
+    case .ultramarine:
+      return .marineBackground
     case .sunflower:
       return .sunflowerBackground
+    }
+  }
+
+  var appIcon: ImageResource {
+    switch self {
+    case .lilac:
+      return .bloomDisplayAppIconPurple
+    case .ultramarine:
+      return .bloomDisplayAppIconBlue
+    case .sunflower:
+      return .bloomDisplayAppIconOrange
+    }
+  }
+
+  var alternateIconName: String? {
+    switch self {
+    case .lilac:
+      nil
+    case .ultramarine:
+      "BloomAppIconBlue"
+    case .sunflower:
+      "BloomAppIconOrange"
     }
   }
 }
@@ -48,13 +84,34 @@ extension ThemeController.Theme {
 @MainActor @Observable
 final class ThemeController {
 
-  var theme: Theme = .lilac {
-    didSet { UserDefaults.group.set(theme.rawValue, forKey: .Key.theme) }
-  }
+  private(set) var theme: Theme = .lilac
 
   init() {
     if let rawTheme = UserDefaults.group.string(forKey: .Key.theme), let theme = Theme(rawValue: rawTheme) {
       self.theme = theme
+      Task {
+        await self.updateAppIconForTheme()
+      }
+    }
+  }
+
+  func set(theme: ThemeController.Theme) async {
+    self.theme = theme
+    UserDefaults.group.set(theme.rawValue, forKey: .Key.theme)
+
+    await updateAppIconForTheme()
+  }
+
+  func updateAppIconForTheme() async {
+    do {
+      try await UIApplication.shared.setAlternateIconName(theme.alternateIconName)
+    } catch {
+      print(error)
+      TelemetryDeck.errorOccurred(
+        id: "ThemeController.updateTheme",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
     }
   }
 }

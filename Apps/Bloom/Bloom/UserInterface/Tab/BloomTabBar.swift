@@ -133,15 +133,12 @@ private struct AddTabItem: View {
 }
 
 #Preview {
-  @Previewable @Bindable var tabController = TabController()
-  @Previewable @Bindable var themeController = ThemeController()
-
-  VStack {
-    Spacer()
-    Text("Hello World")
-    Spacer()
+  PreviewEnvironment {
+    VStack {
+      Spacer()
+      Text("Hello World")
+      Spacer()
+    }
+    .tabBar()
   }
-  .tabBar()
-  .environment(tabController)
-  .environment(themeController)
 }

@@ -42,58 +42,61 @@ struct SettingsCell<Content>: View where Content: View {
       }
       .foregroundStyle(.secondary)
     }
-    .frame(height: 60)
+    .frame(minHeight: 60)
     .selectable()
   }
 }
 
 #Preview {
-  NavigationStack {
-    ScrollView {
-      VStack {
-        SettingsSectionContainer {
-          SettingsCell("Goal") {
-            Picker(selection: .constant("Maintain Weight")) {
-              Text("Maintain Weight")
-                .tag("Maintain Weight")
-              Text("Lose Weight")
-                .tag("Lose Weight")
-              Text("Gain Weight")
-                .tag("Gain Weight")
+  PreviewEnvironment {
+    NavigationStack {
+      ScrollView {
+        VStack {
+          SettingsSectionContainer {
+            SettingsCell("Goal") {
+              Picker(selection: .constant("Maintain Weight")) {
+                Text("Maintain Weight")
+                  .tag("Maintain Weight")
+                Text("Lose Weight")
+                  .tag("Lose Weight")
+                Text("Gain Weight")
+                  .tag("Gain Weight")
+              } label: {
+                EmptyView()
+              }
+            }
+
+            Divider()
+
+            NavigationLink {
+              Text("Details")
             } label: {
-              EmptyView()
+              SettingsCell(
+                "Target Weight",
+                showDisclosureIndicator: true
+              ) {
+                Text("160 lbs")
+              }
             }
+            .buttonStyle(.plain)
           }
 
-          Divider()
+          SettingsSectionContainer {
+            SettingsCell("Morning Report on Wake Up") {
+              Toggle("", isOn: .constant(true))
+            }
 
-          NavigationLink {
-            Text("Details")
-          } label: {
-            SettingsCell(
-              "Target Weight",
-              showDisclosureIndicator: true
-            ) {
-              Text("160 lbs")
+            Divider()
+
+            SettingsCell("User ID") {
+              Text("21345-3terdgf-xbbfxg-hrae-g4a-t5s4ysrt-htxr-g")
             }
           }
         }
-
-        SettingsSectionContainer {
-          SettingsCell("Morning Report on Wake Up") {
-            Toggle("", isOn: .constant(true))
-          }
-
-          Divider()
-
-          SettingsCell("User ID") {
-            Text("21345-3terdgf-xbbfxg-hrae-g4a-t5s4ysrt-htxr-g")
-          }
-        }
+        .padding()
       }
-      .padding()
+      .groupedBackground()
+      .navigationTitle("Preview")
     }
-    .groupedBackground()
-    .navigationTitle("Preview")
   }
 }

@@ -32,14 +32,15 @@ struct CardView<Content>: View where Content: View {
 }
 
 #Preview {
-  PreviewSheetPresent {
-    CardView {
-      VStack {
-        Text("Hello")
-        Text("World")
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      CardView {
+        VStack {
+          Text("Hello")
+          Text("World")
+        }
+        .padding()
       }
-      .padding()
     }
   }
-  .environment(ThemeController())
 }

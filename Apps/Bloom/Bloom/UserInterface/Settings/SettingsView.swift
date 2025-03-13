@@ -33,6 +33,7 @@ struct SettingsView: View {
 
   @Environment(\.openURL) private var openURL
   @Environment(\.modelContext) private var modelContext
+  @Environment(ThemeController.self) private var themeController
 
   @ObservedObject private var userController = UserController.shared
   @State private var entitlementController = EntitlementController.shared
@@ -60,6 +61,7 @@ struct SettingsView: View {
       VStack(spacing: 20) {
         userSection
         healthGoalsSection
+        themeSection
         habitsSection
         todoSection
         userDetailsSection
@@ -241,6 +243,31 @@ private extension SettingsView {
           .onTapGesture {
             self.presentedSheet = ExternalHealthPrivacyView(mode: .all, onDismiss: { }).asAny
           }
+      }
+    }
+  }
+
+  var themeSection: some View {
+    VStack {
+      SectionTitleView("Theme")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("Current Theme", showDisclosureIndicator: true) {
+          HStack {
+            DisplayAppIcon()
+              .frame(square: 30)
+              .padding(.vertical)
+
+            Text(themeController.theme.name)
+              .bold()
+              .fontDesign(.rounded)
+          }
+        }
+        .selectable()
+        .onTapGesture {
+          presentedSheet = ThemeSelectionCard().asAny
+        }
       }
     }
   }
@@ -613,7 +640,9 @@ private extension SettingsView {
 }
 
 #Preview {
-  PreviewSheetPresent {
-    SettingsView()
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      SettingsView()
+    }
   }
 }

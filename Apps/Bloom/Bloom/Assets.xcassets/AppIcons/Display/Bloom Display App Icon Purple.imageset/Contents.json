@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "Bloom Display App Icon Purple.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

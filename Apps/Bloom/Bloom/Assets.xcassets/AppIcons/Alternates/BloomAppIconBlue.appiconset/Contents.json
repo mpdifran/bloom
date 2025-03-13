@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Bloom App Icon Purple.png",
+      "filename" : "Bloom App Icon Blue.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Bloom App Icon Purple Dark.png",
+      "filename" : "Bloom App Icon Blue Dark.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "Bloom App Icon Purple Dark 1.png",
+      "filename" : "Bloom App Icon Blue Dark 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
