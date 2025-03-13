@@ -16,6 +16,7 @@ struct ProposedNewGoalsView: View {
   }
 
   @State private var proposedGoalsResult: ProposedGoalsResult
+  @State private var presentedSheet: AnyView?
 
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
@@ -48,6 +49,17 @@ struct ProposedNewGoalsView: View {
             }
           }
         }
+
+        Button {
+          presentedSheet = ReportGoalIssueCard().asAny
+        } label: {
+          Label("Give Feedback", systemSymbol: .heartFill)
+        }
+        .buttonStyle(.primary)
+        .tint(.mutedYellow)
+        .padding(.vertical)
+        .padding(.top)
+        .horizontallyCentered()
       }
       .padding()
     }
@@ -67,6 +79,7 @@ struct ProposedNewGoalsView: View {
       }
       .buttonStyle(.primary)
     }
+    .sheet($presentedSheet)
     .onAppear {
       TelemetryDeck.signal("Focus Area AI Goals")
     }

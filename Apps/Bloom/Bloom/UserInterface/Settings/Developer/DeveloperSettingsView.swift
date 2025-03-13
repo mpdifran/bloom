@@ -198,7 +198,7 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("AI Goal Review") {
+        SettingsCell("Legacy Goal Review") {
           Toggle("", isOn: $legacyGoalSetting)
         }
 
