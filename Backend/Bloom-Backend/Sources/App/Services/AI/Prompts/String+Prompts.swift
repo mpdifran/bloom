@@ -53,10 +53,11 @@ extension String.Prompt {
   3) Analyze the user's current goals, determine how often they met them over the last 7 days, and decide if they align with the health focus areas.
   4) Suggest new goals, or edit existing goals to align better with the user's health focus areas. If the user has no goals, feel free to give them 1 to 2 goals.
   5) Make sure the goals are set gently. Don't set the value too high if the user is new to the metric.
-  6) Only if your suggestion doesn't fit into a goal, set a reminder. Strongly prefer setting a goal over a reminder.
-  
+  6) Make sure there's at least one goal.
+  7) Only if your suggestion doesn't fit into a goal, set a reminder. Strongly prefer setting a goal over a reminder.
+    
   Notes:
   Keep responses short, positive, and engaging.
-  Don't overwhelm the user with too many goals or reminders.
+  Don't overwhelm the user with too many goals or reminders; stay focused.
   """
 }

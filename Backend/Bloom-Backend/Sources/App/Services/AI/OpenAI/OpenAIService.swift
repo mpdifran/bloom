@@ -416,8 +416,6 @@ extension OpenAIService {
       )
     ]
 
-    request.logger.info(SuggestedGoal.Metric.validUnitDescription)
-
     let chat = try await request.openAI.chats.create(
       model: Model.GPT4.gpt_4o_mini,
       messages: messages,
