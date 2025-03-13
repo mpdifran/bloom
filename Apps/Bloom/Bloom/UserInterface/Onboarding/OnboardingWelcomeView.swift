@@ -73,7 +73,7 @@ private extension OnboardingWelcomeView {
   @ViewBuilder
   var knownNameContent: some View {
     DisplayAppIcon()
-      .frame(width: 100)
+      .frame(width: 140)
 
     Text("Hey \(healthManager.name)!")
       .appear(with: 1, currentIndex: index)
@@ -90,7 +90,7 @@ private extension OnboardingWelcomeView {
   @ViewBuilder
   var unknownNameContent: some View {
     DisplayAppIcon()
-      .frame(width: 100)
+      .frame(width: 140)
 
     Text("Hey there!")
       .appear(with: 1, currentIndex: index)

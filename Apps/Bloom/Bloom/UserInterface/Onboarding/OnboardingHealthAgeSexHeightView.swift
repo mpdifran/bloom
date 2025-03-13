@@ -87,7 +87,7 @@ struct OnboardingHealthAgeSexHeightView: View {
             onContinue()
           }
           .buttonStyle(.onboarding)
-          .disabled(!hasValidHealthData)
+          .disabled(!hasValidHealthData || isHealthDataConfirmed == nil)
         }
       }
     }
