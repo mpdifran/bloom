@@ -44,8 +44,8 @@ extension ExternalHealthMetricPermissionManager {
       .filter { getIsEnabled(for: $0) }
   }
 
-  var permissionsDictionary: [String : String] {
-    var result = [String : String]()
+  var permissionsDictionary: [String: String] {
+    var result = [String: String]()
     for permission in ExternalHealthMetricPermission.all {
       result[permission.id] = getIsEnabled(for: permission) ? "Enabled" : "Disabled"
     }
@@ -88,5 +88,13 @@ extension ExternalHealthMetricPermissionManager {
   func set(isEnabled: Bool, for healthMetric: ExternalHealthMetricPermission) {
     UserDefaults.group.set(isEnabled, forKey: healthMetric.id)
     objectWillChange.send()
+  }
+}
+
+extension ExternalHealthMetricPermissionManager {
+
+  func resetDeterminedPermissions() {
+    set(for: ExternalHealthMetricPermission.all, isEnabled: false)
+    determinedPermissionIDs = []
   }
 }

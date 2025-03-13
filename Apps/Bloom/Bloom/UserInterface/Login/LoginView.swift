@@ -54,10 +54,18 @@ struct LoginView: View {
               .bold()
 
             BloomPlusFeaturesListView()
+              .padding(.bottom)
 
-            Link("Privacy Policy", destination: .privacyPolicy)
-              .frame(height: 44)
-              .foregroundStyle(.tint)
+            HStack {
+              Link("Privacy Policy", destination: .privacyPolicy)
+                .frame(height: 44)
+
+              Text("•")
+
+              Link("Terms of Service", destination: .termsOfService)
+                .frame(height: 44)
+            }
+            .foregroundStyle(.tint)
           }
           .padding(.top)
         }

@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ExternalHealthMetricPermissionCell: View {
   let permission: ExternalHealthMetricPermission
-
-  @ObservedObject private var manager = ExternalHealthMetricPermissionManager.shared
+  @Binding var isEnabled: Bool
 
   var body: some View {
     HStack {
@@ -25,11 +24,7 @@ struct ExternalHealthMetricPermissionCell: View {
 
       Spacer()
 
-      Toggle("", isOn: Binding(get: {
-        manager.getIsEnabled(for: permission)
-      }, set: { newValue in
-        manager.set(isEnabled: newValue, for: permission)
-      }))
+      Toggle("", isOn: $isEnabled)
         .layoutPriority(0)
         .foregroundStyle(.tint)
     }
@@ -37,11 +32,19 @@ struct ExternalHealthMetricPermissionCell: View {
 }
 
 #Preview {
+  @Previewable @State var isHeartEnabled = true
+  @Previewable @State var isBodyEnabled = false
   ScrollView {
     VStack {
-      ExternalHealthMetricPermissionCell(permission: .heartHealth)
+      ExternalHealthMetricPermissionCell(
+        permission: .heartHealth,
+        isEnabled: $isHeartEnabled
+      )
       Divider()
-      ExternalHealthMetricPermissionCell(permission: .heartHealth)
+      ExternalHealthMetricPermissionCell(
+        permission: .bodyComposition,
+        isEnabled: $isBodyEnabled
+      )
     }
     .cardContainer()
     .padding()

@@ -117,7 +117,7 @@ private extension OnboardingAIGoalsView {
         AsyncButton {
           TelemetryDeck.signal(
             "OB Focus Area Result Failed Event",
-            parameters: ["event" : "Retry AI Goal Setting on Fail"]
+            parameters: ["event": "Retry AI Goal Setting on Fail"]
           )
           await loadAIGoals()
         } label: {
@@ -128,7 +128,7 @@ private extension OnboardingAIGoalsView {
         Button {
           TelemetryDeck.signal(
             "OB Focus Area Result Failed Event",
-            parameters: ["event" : "Skip AI Goal Setting on Fail"]
+            parameters: ["event": "Skip AI Goal Setting on Fail"]
           )
           onContinue()
         } label: {
@@ -147,7 +147,7 @@ private extension OnboardingAIGoalsView {
       AsyncButton {
         TelemetryDeck.signal(
           "OB Focus Area Event",
-          parameters: ["event" : "Select Health Data to Share"]
+          parameters: ["event": "Select Health Data to Share"]
         )
         await loadAIGoals()
       } label: {
@@ -159,7 +159,7 @@ private extension OnboardingAIGoalsView {
         Button {
           TelemetryDeck.signal(
             "OB Focus Area Event",
-            parameters: ["event" : "Skip AI Goal Setting"]
+            parameters: ["event": "Skip AI Goal Setting"]
           )
           onContinue()
         } label: {
@@ -209,14 +209,14 @@ private extension OnboardingAIGoalsView {
       self.mode = .loaded
       TelemetryDeck.signal(
         "OB Focus Area Result",
-        parameters: ["result" : "AI Goal Loading Succeeded"]
+        parameters: ["result": "AI Goal Loading Succeeded"]
       )
     } catch {
       self.error = error
       self.mode = .failed
       TelemetryDeck.signal(
         "OB Focus Area Result",
-        parameters: ["result" : "AI Goal Loading Failed"]
+        parameters: ["result": "AI Goal Loading Failed"]
       )
     }
   }

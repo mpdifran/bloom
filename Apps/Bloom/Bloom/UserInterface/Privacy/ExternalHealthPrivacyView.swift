@@ -33,6 +33,7 @@ struct ExternalHealthPrivacyView: View {
   @State private var showAllPermissions = false
   @State private var turnOnAllToggle = false
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
+  @State private var permissionStates = [String: Bool]()
 
   @ObservedObject private var manager = ExternalHealthMetricPermissionManager.shared
 
@@ -43,6 +44,7 @@ struct ExternalHealthPrivacyView: View {
       ScrollView {
         VStack(spacing: 20) {
           headerSection
+          turnOnAllButton
           permissionsSection
         }
         .padding()
@@ -52,31 +54,28 @@ struct ExternalHealthPrivacyView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Don't Allow") {
+          Button("Cancel") {
             Task {
               await recordPermissions(didAllow: false)
             }
           }
         }
-        ToolbarItem(placement: .primaryAction) {
-          Button("Allow") {
-            Task {
-              await recordPermissions(didAllow: true)
-            }
-          }
-          .bold()
-          .disabled(!hasAtLeastOnePermissionEnabled)
-        }
       }
       .shelf {
-        enableAllButton
+        allowButton
       }
     }
     .animation(.default, value: showAllPermissions)
     .animation(.default, value: hasAtLeastOnePermissionEnabled)
+    .animation(.default, value: permissionStates)
     .presentationCompactAdaptation(.fullScreenCover)
     .confirmationDialog($confirmationDialogDetails)
     .tint(.mutedBlue)
+    .onAppear {
+      for permission in ExternalHealthMetricPermission.all {
+        permissionStates[permission.id] = manager.getIsEnabled(for: permission)
+      }
+    }
   }
 }
 
@@ -97,13 +96,31 @@ private extension ExternalHealthPrivacyView {
     }
   }
 
+  var enabledPermissionsCount: Int {
+    permissions.count(where: { getIsEnabled(for: $0) })
+  }
+
   var canShowAllPermissions: Bool {
     let hasDeterminedPermissions = manager.determinedPermissions.isNotEmpty
     return mode == .onlyUndetermined && !showAllPermissions && hasDeterminedPermissions
   }
 
+  var hasAllPermissionsEnabled: Bool {
+    !permissions.contains(where: { !getIsEnabled(for: $0) })
+  }
+
   var hasAtLeastOnePermissionEnabled: Bool {
-    permissions.first(where: { manager.getIsEnabled(for: $0) }) != nil
+    permissions.first(where: { getIsEnabled(for: $0) }) != nil
+  }
+
+  func getIsEnabled(for permission: ExternalHealthMetricPermission) -> Bool {
+    permissionStates[permission.id, default: false]
+  }
+
+  func set(for permissions: [ExternalHealthMetricPermission], isEnabled: Bool) {
+    for permission in permissions {
+      permissionStates[permission.id] = isEnabled
+    }
   }
 }
 
@@ -121,35 +138,61 @@ private extension ExternalHealthPrivacyView {
             .font(.title3)
         }
 
-        Text("Please select which health data you want to share with us. Your health data is not tied to any personally identifiable information, and is not stored on our servers.")
+        Text("Please select which health data you want to share. Your health data is not tied to any personally identifiable information, and is not stored on our servers.")
           .foregroundStyle(.secondary)
           .multilineTextAlignment(.leading)
 
         Divider()
       }
-      .horizontalAlignment(.leading)
       .padding(.horizontal)
       .padding(.top)
 
-      HStack {
-        Link("Privacy Policy", destination: .privacyPolicy)
-          .bold()
-          .frame(minHeight: 50)
-          .horizontallyCentered()
-
-        Divider()
-          .padding(.vertical, 4)
-
-        Link("Questions? Email Us!", destination: .emailBloom)
-          .bold()
-          .frame(minHeight: 50)
-          .horizontallyCentered()
-      }
+      privacyEmailView
+        .padding(.horizontal)
     }
+    .horizontalAlignment(.leading)
     .bold()
     .fontDesign(.rounded)
     .multilineTextAlignment(.center)
     .cardContainer(includePadding: false)
+  }
+
+  var privacyEmailView: some View {
+    HStack {
+      Link("Privacy Policy", destination: .privacyPolicy)
+        .bold()
+        .frame(height: 50)
+        .horizontallyCentered()
+
+      Link("Questions? Email Us!", destination: .emailBloom)
+        .bold()
+        .frame(height: 50)
+        .horizontallyCentered()
+    }
+  }
+
+  var turnOnAllButton: some View {
+    VStack {
+      if hasAllPermissionsEnabled {
+        Text("Turn Off All")
+      } else {
+        Text("Turn On All")
+      }
+    }
+    .horizontallyCentered()
+    .bold()
+    .foregroundStyle(.tint)
+    .cardContainer()
+    .onTapGesture {
+      if hasAllPermissionsEnabled {
+        set(for: permissions, isEnabled: false)
+        turnOnAllToggle.toggle()
+      } else {
+        set(for: permissions, isEnabled: true)
+        turnOnAllToggle.toggle()
+      }
+    }
+    .sensoryFeedback(.impact, trigger: turnOnAllToggle)
   }
 
   @ViewBuilder
@@ -160,7 +203,10 @@ private extension ExternalHealthPrivacyView {
           if index != 0 {
             Divider()
           }
-          ExternalHealthMetricPermissionCell(permission: permission)
+          ExternalHealthMetricPermissionCell(
+            permission: permission,
+            isEnabled: Binding($permissionStates[permission.id], replacingNilWith: false)
+          )
         }
       }
       .cardContainer()
@@ -174,38 +220,29 @@ private extension ExternalHealthPrivacyView {
     }
   }
 
-  var enableAllButton: some View {
-    Group {
-      if manager.hasAllPermissionsEnabled(for: permissions) {
-        Button {
-          manager.set(for: permissions, isEnabled: false)
-          turnOnAllToggle.toggle()
-        } label: {
-          Text("Turn Off All")
-            .horizontallyCentered()
-        }
-        .buttonStyle(.primary)
-      } else {
-        Button {
-          manager.set(for: permissions, isEnabled: true)
-          turnOnAllToggle.toggle()
-        } label: {
-          Text("Turn On All")
-            .horizontallyCentered()
-        }
-        .buttonStyle(.primary)
-      }
+  var allowButton: some View {
+    AsyncButton {
+      await recordPermissions(didAllow: true)
+    } label: {
+      Text("Allow \(enabledPermissionsCount) \(enabledPermissionsCount == 1 ? "Category" : "Categories")")
+        .contentTransition(.numericText(value: Double(enabledPermissionsCount)))
+        .bold()
+        .horizontallyCentered()
     }
-    .sensoryFeedback(.impact, trigger: turnOnAllToggle)
+    .buttonStyle(.primary)
   }
 }
 
 private extension ExternalHealthPrivacyView {
 
   func recordPermissions(didAllow: Bool) async {
-    if !didAllow {
-      manager.set(for: permissions, isEnabled: false)
+    if didAllow {
+      for permission in ExternalHealthMetricPermission.all {
+        let isAllowed = permissionStates[permission.id, default: false]
+        manager.set(isEnabled: isAllowed, for: permission)
+      }
     }
+
     manager.markPermissionsAsDetermined(permissions)
 
     TelemetryDeck.signal(

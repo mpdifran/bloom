@@ -9,28 +9,38 @@ import SwiftUI
 
 struct PrimaryButtonStyle: ButtonStyle {
 
-    func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            configuration.label
-        }
-        .bold()
-        .padding(.vertical, 16)
-        .padding(.horizontal)
-        .background(.tint)
-        .foregroundStyle(.invertedText)
-        .clipShape(RoundedRectangle(cornerRadius: 17))
+  @Environment(\.isEnabled) private var isEnabled
+
+  func makeBody(configuration: Configuration) -> some View {
+    HStack {
+      configuration.label
     }
+    .bold()
+    .padding(.vertical, 16)
+    .padding(.horizontal)
+    .background(isEnabled ? AnyShapeStyle(.tint) : AnyShapeStyle(.fill))
+    .foregroundStyle(.invertedText)
+    .clipShape(RoundedRectangle(cornerRadius: 17))
+  }
 }
 
 extension ButtonStyle where Self == PrimaryButtonStyle {
-    static var primary: some ButtonStyle { PrimaryButtonStyle() }
+  static var primary: some ButtonStyle { PrimaryButtonStyle() }
 }
 
 #Preview {
+  VStack {
     Button("Tap Me", systemImage: "sparkles") {
 
     }
     .buttonStyle(.primary)
-    .padding()
-    .tint(.blue)
+
+    Button("I'm Disabled") {
+
+    }
+    .buttonStyle(.primary)
+    .disabled(true)
+  }
+  .padding()
+  .tint(.blue)
 }
