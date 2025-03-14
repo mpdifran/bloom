@@ -88,7 +88,7 @@ extension ResponseSchema {
           arrayOf: .AIEstimate.item
         ),
         "optionalFoodItems": Schema.Parameter(
-          description: "Extra individual food items that may be in the photo. This could be things like butter or cooking oil that are difficult to identify from the photo, or an alternate food you have a low confidence on. Only add FoodItemServings to this list if they are NOT included in `items` already. You should try and put at least 5 items in this list.",
+          description: "Extra individual food items that may be in the photo. This could be things like butter or cooking oil that are difficult to identify from the photo, or an alternate options for food you have a low confidence on. Only add FoodItemServings to this list if they are NOT included in `items` already. You should try and put at least 1-3 items in this list.",
           arrayOf: .AIEstimate.item
         )
       ],
