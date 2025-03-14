@@ -103,7 +103,7 @@ extension OpenAIService {
         Chat.Message(
           role: .user,
           content: [
-            .imageData(foodImageFile.attemptResizeData(width: 250), "image/\(foodImageFile.fileExtension)")
+            .imageData(foodImageFile.data, "image/\(foodImageFile.fileExtension)")
           ]
         )
       ]
