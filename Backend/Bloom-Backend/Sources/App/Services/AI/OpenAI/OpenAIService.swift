@@ -89,21 +89,21 @@ extension OpenAIService {
     foodDescription: String?
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let openAI = request.gemini
-      let model = Model.Gemini.flash2_0
+      let openAI = request.openAI
+      let model = Model.GPT4.gpt_4o_mini
 
       var messages: [Chat.Message] = [
         Chat.Message(
           role: .system,
           content: [
-            .text(.Prompt.estimateCalories),
-            .text(try .Prompt.jsonSchemaDefinition(.aiEstimate))
+            .text(.Prompt.estimateCalories)
+//            .text(try .Prompt.jsonSchemaDefinition(.aiEstimate))
           ]
         ),
         Chat.Message(
           role: .user,
           content: [
-            .imageData(foodImageFile.data, "image/\(foodImageFile.fileExtension)")
+            .imageData(foodImageFile.attemptResizeData(width: 200), "image/\(foodImageFile.fileExtension)")
           ]
         )
       ]
@@ -119,7 +119,13 @@ extension OpenAIService {
         )
       }
 
-      let response = try await openAI.chats.create(model: model, messages: messages)
+      let response = try await openAI.chats.create(
+        model: model,
+        messages: messages,
+        temperature: 0.3,
+        topP: 0.5,
+        responseFormat: ResponseFormat(type: .jsonSchema(.aiEstimate))
+      )
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
