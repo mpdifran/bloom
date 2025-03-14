@@ -19,6 +19,7 @@ struct CurrentThemeView: View {
         .font(.headline)
         .bold()
         .fontDesign(.rounded)
+        .contentTransition(.interpolate)
     }
     .padding(.vertical, 8)
     .padding(.horizontal, 12)
@@ -26,6 +27,7 @@ struct CurrentThemeView: View {
       Capsule()
         .fill(.background)
     }
+    .animation(.easeInOut, value: themeController.theme)
   }
 }
 
