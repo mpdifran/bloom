@@ -2,6 +2,18 @@
 
 The source code for Bloom's backend, built using Vapor.
 
+## Setup
+
+You'll need to install `gd` in order to build the backend. 
+
+```
+brew config # Make sure you're running the arm64 version.
+```
+
+```
+brew install gd
+```
+
 ## Environment
 
 Place a `.env` file in the same directory as this README to export environment variables. This file is automatically ignored by git.

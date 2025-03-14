@@ -7,58 +7,36 @@
 
 import Vapor
 import BloomModel
-import CoreGraphics
-import ImageIO
-import UniformTypeIdentifiers
+import SwiftGD
 
 extension ImageFile {
 
   /// Attempts to resize the image data to a new dimension, falling back to the original data if it fails.
   /// - parameter width: The desired width of the image.
-  func attemptResizeData(width: CGFloat) -> Data {
-    guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil),
-          let originalImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
-      return data
+  func attemptResizeData(width: Int) -> Data {
+    do {
+      let image = try Image(data: data)
+
+      let aspectRatio = Double(image.size.height) / Double(image.size.width)
+      let targetHeight = Int(Double(width) * aspectRatio)
+
+      let resizedImage = image.resizedTo(width: width, height: targetHeight)
+
+      switch fileExtension.lowercased() {
+      case "png":
+        return try resizedImage?.export(as: .png) ?? data
+      case "gif":
+        return try resizedImage?.export(as: .gif) ?? data
+      case "bmp":
+        return try resizedImage?.export(as: .bmp(compression: false)) ?? data
+      case "tiff", "tif":
+        return try resizedImage?.export(as: .tiff) ?? data
+      default:
+        return try resizedImage?.export(as: .jpg(quality: 80)) ?? data
+      }
+    } catch {
+      print(error)
     }
-
-    let originalWidth = CGFloat(originalImage.width)
-    let originalHeight = CGFloat(originalImage.height)
-    let aspectRatio = originalHeight / originalWidth
-    let targetHeight = width * aspectRatio
-
-    let options: [CFString: Any] = [
-      kCGImageSourceThumbnailMaxPixelSize: max(width, targetHeight),
-      kCGImageSourceCreateThumbnailFromImageAlways: true
-    ]
-
-    guard let resizedImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
-      return data
-    }
-
-    let imageType: CFString
-    switch fileExtension.lowercased() {
-    case "png":
-        imageType = UTType.png.identifier as CFString
-    case "gif":
-        imageType = UTType.gif.identifier as CFString
-    case "bmp":
-        imageType = UTType.bmp.identifier as CFString
-    case "tiff", "tif":
-        imageType = UTType.tiff.identifier as CFString
-    default:
-        imageType = UTType.jpeg.identifier as CFString  // Default to JPEG
-    }
-
-    let resizedData = NSMutableData()
-    guard let destination = CGImageDestinationCreateWithData(resizedData, imageType, 1, nil) else {
-      return data
-    }
-
-    CGImageDestinationAddImage(destination, resizedImage, nil)
-    guard CGImageDestinationFinalize(destination) else {
-      return data
-    }
-
-    return resizedData as Data
+    return data
   }
 }
