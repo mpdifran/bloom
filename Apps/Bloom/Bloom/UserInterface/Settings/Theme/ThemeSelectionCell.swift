@@ -14,7 +14,7 @@ struct ThemeSelectionCell: View {
   var body: some View {
     HStack {
       Text(theme.name)
-        .font(.title3)
+        .font(.headline)
         .foregroundStyle(isSelected ? AnyShapeStyle(.white) : AnyShapeStyle(theme.color))
         .bold()
         .fontDesign(.rounded)
@@ -22,7 +22,7 @@ struct ThemeSelectionCell: View {
       Spacer()
 
       DisplayAppIcon(overrideAppIcon: theme.appIcon)
-        .frame(square: 60)
+        .frame(square: 40)
     }
     .cardContainer(
       fill: isSelected ? AnyShapeStyle(theme.color) : AnyShapeStyle(.background)

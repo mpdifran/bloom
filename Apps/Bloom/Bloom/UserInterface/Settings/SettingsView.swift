@@ -61,7 +61,6 @@ struct SettingsView: View {
       VStack(spacing: 20) {
         userSection
         healthGoalsSection
-        themeSection
         habitsSection
         todoSection
         userDetailsSection
@@ -125,6 +124,12 @@ private extension SettingsView {
         .bold()
         .fontDesign(.rounded)
         .multilineTextAlignment(.center)
+
+      CurrentThemeView()
+        .selectable()
+        .onTapGesture {
+          presentedSheet = ThemeSelectionCard().asAny
+        }
     }
     .padding(.top, 40)
   }
@@ -243,31 +248,6 @@ private extension SettingsView {
           .onTapGesture {
             self.presentedSheet = ExternalHealthPrivacyView(mode: .all, onDismiss: { }).asAny
           }
-      }
-    }
-  }
-
-  var themeSection: some View {
-    VStack {
-      SectionTitleView("Theme")
-        .padding(.horizontal)
-
-      SettingsSectionContainer {
-        SettingsCell("Current Theme", showDisclosureIndicator: true) {
-          HStack {
-            DisplayAppIcon()
-              .frame(square: 30)
-              .padding(.vertical)
-
-            Text(themeController.theme.name)
-              .bold()
-              .fontDesign(.rounded)
-          }
-        }
-        .selectable()
-        .onTapGesture {
-          presentedSheet = ThemeSelectionCard().asAny
-        }
       }
     }
   }
