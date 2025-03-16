@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct ThemeSelectionCell: View {
   let theme: ThemeController.Theme
@@ -13,20 +14,25 @@ struct ThemeSelectionCell: View {
 
   var body: some View {
     HStack {
+      DisplayAppIcon(overrideAppIcon: theme.appIcon)
+        .frame(square: 40)
+
       Text(theme.name)
         .font(.headline)
-        .foregroundStyle(isSelected ? AnyShapeStyle(.white) : AnyShapeStyle(theme.color))
+        .foregroundStyle(theme.color)
         .bold()
         .fontDesign(.rounded)
 
       Spacer()
 
-      DisplayAppIcon(overrideAppIcon: theme.appIcon)
-        .frame(square: 40)
+      if isSelected {
+        Image(systemSymbol: .checkmark)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(theme.color)
+      }
     }
-    .cardContainer(
-      fill: isSelected ? AnyShapeStyle(theme.color) : AnyShapeStyle(.background)
-    )
+    .cardContainer()
   }
 }
 
@@ -37,5 +43,8 @@ struct ThemeSelectionCell: View {
       ThemeSelectionCell(theme: .ultramarine, isSelected: false)
       ThemeSelectionCell(theme: .sunflower, isSelected: false)
     }
+    .padding()
+    .horizontallyCentered()
+    .groupedBackground()
   }
 }
