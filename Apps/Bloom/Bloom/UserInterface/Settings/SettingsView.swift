@@ -116,13 +116,14 @@ private extension SettingsView {
 
   var userSection: some View {
     VStack(spacing: 16) {
-      UserProfilePhotoView(name: healthManager.name)
+      UserProfilePhotoView()
 
       TextField("", text: $healthManager.name, prompt: Text("Your Name"))
         .font(.title)
         .bold()
         .fontDesign(.rounded)
         .multilineTextAlignment(.center)
+        .submitLabel(.done)
 
       CurrentThemeView()
         .selectable()

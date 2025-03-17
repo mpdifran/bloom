@@ -8,26 +8,34 @@
 import SwiftUI
 
 struct UserProfilePhotoView: View {
-  let name: String
+  let dimension: CGFloat
+
+  init(dimension: CGFloat = 140) {
+    self.dimension = dimension
+  }
+
+  @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
     Circle()
-      .fill(.fill)
-      .frame(square: 140)
+      .fill(.tint.secondary)
+      .frame(square: dimension)
       .overlay {
-        Text(name.prefix(1))
-          .font(.system(size: 100))
+        Text(healthManager.name.prefix(1))
+          .font(.system(size: dimension / 1.4, weight: .heavy))
           .bold()
           .fontDesign(.rounded)
-          .minimumScaleFactor(0.1)
-          .padding()
-          .foregroundStyle(.fill.secondary)
+          .minimumScaleFactor(0.05)
+          .padding(dimension / 10)
+          .foregroundStyle(.tint)
+          .contentTransition(.numericText())
       }
+      .animation(.default, value: healthManager.name)
   }
 }
 
 #Preview {
-  UserProfilePhotoView(name: "Mark")
-  UserProfilePhotoView(name: "Katie")
-  UserProfilePhotoView(name: "Tori")
+  UserProfilePhotoView()
+  UserProfilePhotoView(dimension: 80)
+  UserProfilePhotoView(dimension: 30)
 }

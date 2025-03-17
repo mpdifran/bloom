@@ -16,7 +16,7 @@ struct EditUserProfileCardView: View {
 
   var body: some View {
     VStack {
-      UserProfilePhotoView(name: healthManager.name)
+      UserProfilePhotoView()
 
       TextField("", text: $healthManager.name, prompt: Text("Your Name"))
         .font(.title)

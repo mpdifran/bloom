@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import SwiftData
 import DataContainer
+import SFSafeSymbols
 
 @MainActor
 struct TodayView: View {
@@ -72,8 +73,10 @@ struct TodayView: View {
       .tabBar()
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
-          Button("Settings", systemImage: "person.circle") {
+          Button {
             presentedSheet = SettingsView().asAny
+          } label: {
+            UserProfilePhotoView(dimension: 32)
           }
         }
         if danieleMode {
@@ -266,6 +269,7 @@ private extension TodayView {
 }
 
 #Preview {
-  TodayView()
-    .environment(TabController())
+  PreviewEnvironment {
+    TodayView()
+  }
 }
