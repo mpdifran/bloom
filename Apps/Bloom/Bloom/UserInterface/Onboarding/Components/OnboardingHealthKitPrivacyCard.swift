@@ -30,6 +30,7 @@ struct OnboardingHealthKitPrivacyCard: View {
         .font(.title3)
         .bold()
         .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
 
       Link(destination: .privacyPolicy) {
         HStack {
