@@ -100,6 +100,8 @@ final class ThemeController {
     UserDefaults.group.set(theme.rawValue, forKey: .Key.theme)
 
     await updateAppIconForTheme()
+
+    TelemetryDeck.signal("Updated Theme", parameters: ["selectedTheme": theme.name])
   }
 
   func updateAppIconForTheme() async {
