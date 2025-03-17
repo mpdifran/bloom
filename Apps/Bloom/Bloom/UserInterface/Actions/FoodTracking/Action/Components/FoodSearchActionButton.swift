@@ -59,6 +59,5 @@ struct FoodSearchActionButton: View {
     }
   }
   .padding()
-  .tint(.mutedPurple)
   .groupedBackground()
 }

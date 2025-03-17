@@ -20,7 +20,7 @@ struct PaywallButtonStyle: ButtonStyle {
     .padding(.vertical, 16)
     .background {
       RoundedRectangle(cornerRadius: 20)
-        .fill(.mutedPurple)
+        .fill(.tint)
     }
   }
 }

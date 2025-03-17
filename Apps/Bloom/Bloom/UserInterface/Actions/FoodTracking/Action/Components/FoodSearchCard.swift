@@ -195,6 +195,5 @@ private extension FoodSearchCard {
     } onUploadNewFood: { foodItem in
 
     }
-    .tint(.mutedPurple)
   }
 }

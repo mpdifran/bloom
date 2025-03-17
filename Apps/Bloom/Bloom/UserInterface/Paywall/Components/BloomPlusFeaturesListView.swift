@@ -50,7 +50,6 @@ struct BloomPlusFeaturesListView: View {
       }
     }
     .padding(.horizontal)
-    .tint(.mutedPurple)
   }
 }
 

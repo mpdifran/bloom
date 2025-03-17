@@ -76,5 +76,4 @@ struct BloomPlusLegalSectionView: View {
     
   }
   .padding()
-  .tint(.mutedPurple)
 }

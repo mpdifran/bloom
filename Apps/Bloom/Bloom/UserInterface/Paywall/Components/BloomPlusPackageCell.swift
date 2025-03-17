@@ -85,5 +85,4 @@ struct BloomPlusPackageCell: View {
   }
   .padding()
   .groupedBackground()
-  .tint(.mutedPurple)
 }

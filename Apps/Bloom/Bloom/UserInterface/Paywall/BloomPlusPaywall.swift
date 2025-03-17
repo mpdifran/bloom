@@ -80,7 +80,6 @@ private extension BloomPlusPaywall {
     VStack {
       VStack(spacing: 30) {
         BloomPlusTryBloomHeaderView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
-          .tint(.mutedPurple)
           .padding(.top)
           .padding(.top)
         BloomPlusFeaturesListView()
@@ -106,14 +105,16 @@ private extension BloomPlusPaywall {
 
         try await viewModel.purchase(package)
       } label: {
-        if let title = selectedPackage?.introductoryPurchaseButtonTitle {
-          Text(title)
-        } else {
-          Text("Invest in my Health")
+        Group {
+          if let title = selectedPackage?.introductoryPurchaseButtonTitle {
+            Text(title)
+          } else {
+            Text("Invest in my Health")
+          }
         }
+        .horizontallyCentered()
       }
-      .buttonStyle(.paywall)
-      .tint(.white)
+      .buttonStyle(.primary)
 
       Group {
         if let eventualCostString = selectedPackage?.introductoryEventualCostDescription {
@@ -139,5 +140,7 @@ private extension BloomPlusPaywall {
 }
 
 #Preview {
-  BloomPlusPaywall()
+  PreviewEnvironment {
+    BloomPlusPaywall()
+  }
 }

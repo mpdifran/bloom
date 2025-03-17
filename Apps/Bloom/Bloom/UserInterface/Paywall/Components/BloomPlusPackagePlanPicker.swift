@@ -75,7 +75,6 @@ struct BloomPlusPackagePlanPicker: View {
     .presentationCornerRadius(30)
     .presentationDetentSelfSizing()
     .alert(error: $error)
-    .tint(.mutedPurple)
   }
 }
 

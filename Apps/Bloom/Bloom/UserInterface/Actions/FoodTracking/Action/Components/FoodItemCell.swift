@@ -140,5 +140,4 @@ private extension FoodItemCell {
     .padding()
   }
   .groupedBackground()
-  .tint(.mutedPurple)
 }

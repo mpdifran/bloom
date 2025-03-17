@@ -87,7 +87,7 @@ final class ThemeController {
   private(set) var theme: Theme = .lilac
 
   init() {
-    UserDefaults.group.register(defaults: [.Key.theme : Theme.lilac.rawValue])
+    UserDefaults.group.register(defaults: [.Key.theme: Theme.lilac.rawValue])
     if let rawTheme = UserDefaults.group.string(forKey: .Key.theme), let theme = Theme(rawValue: rawTheme) {
       Task {
         await set(theme: theme)

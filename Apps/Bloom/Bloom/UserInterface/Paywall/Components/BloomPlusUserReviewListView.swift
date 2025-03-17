@@ -22,7 +22,6 @@ struct BloomPlusUserReviewListView: View {
         name: "Tori E",
         position: .leading
       )
-      .tint(.mutedPurple)
 
       BloomPlusUserTestimonialChatView(
         profilePhoto: .katie,
@@ -30,7 +29,6 @@ struct BloomPlusUserReviewListView: View {
         name: "Katie M",
         position: .trailing
       )
-      .tint(.mutedPurple)
 
       BloomPlusUserTestimonialChatView(
         profilePhoto: .kaitlyn,
@@ -38,7 +36,6 @@ struct BloomPlusUserReviewListView: View {
         name: "Kaitlyn R",
         position: .leading
       )
-      .tint(.mutedPurple)
 
 //      BloomPlusUserTestimonialChatView(
 //        profilePhoto: .katie,
@@ -46,7 +43,6 @@ struct BloomPlusUserReviewListView: View {
 //        name: "Clara A",
 //        position: .trailing
 //      )
-//      .tint(.mutedPurple)
     }
     .horizontallyCentered()
   }
