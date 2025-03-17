@@ -54,7 +54,7 @@ struct OnboardingFocusAreasView: View {
         await loadGoals()
       }
     }
-    .topSafeAreaFill(.background)
+    .groupedBackground()
     .task {
       await bulkAdvanceIndexRound1()
     }
@@ -240,5 +240,7 @@ private extension OnboardingFocusAreasView {
 }
 
 #Preview {
-  OnboardingFocusAreasView { }
+  PreviewEnvironment {
+    OnboardingFocusAreasView { }
+  }
 }

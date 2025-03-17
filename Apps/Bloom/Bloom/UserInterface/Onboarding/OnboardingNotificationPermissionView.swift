@@ -10,131 +10,133 @@ import AppUI
 import TelemetryDeck
 
 struct OnboardingNotificationPermissionView: View {
-    let onContinue: () -> Void
+  let onContinue: () -> Void
 
-    @State private var isAuthorized = false
-    @State private var index = 1
-    @State private var notificationIndex = 0
-    @State private var showContinueButton = false
-    @State private var didContinue = false
+  @State private var isAuthorized = false
+  @State private var index = 1
+  @State private var notificationIndex = 0
+  @State private var showContinueButton = false
+  @State private var didContinue = false
 
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                Group {
-                    Text("Almost done!")
-                        .transition(.opacity)
-                        .appear(with: 1, currentIndex: index)
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: 20) {
+        Group {
+          Text("Almost done!")
+            .transition(.opacity)
+            .appear(with: 1, currentIndex: index)
 
-                    Text("We'd love to keep in touch with you when it's important.")
-                        .transition(.opacity)
-                        .appear(with: 2, currentIndex: index)
-                }
-                .onboardingTextStyle()
+          Text("We'd love to keep in touch with you when it's important.")
+            .transition(.opacity)
+            .appear(with: 2, currentIndex: index)
+        }
+        .onboardingTextStyle()
 
-                MockHomeScreenView()
-                    .transition(.move(edge: .bottom))
-                    .appear(with: 3, currentIndex: index)
-                    .overlay {
-                        VStack {
-                            MockNotificationView(
-                                title: "Your Morning Report is ready",
-                                message: "",
-                                timestamp: "Now"
-                            )
-                            .transition(.move(edge: .top))
-                            .appear(with: 2, currentIndex: notificationIndex, secondaryIfNotCurrentIndex: false)
+        MockHomeScreenView()
+          .transition(.move(edge: .bottom))
+          .appear(with: 3, currentIndex: index)
+          .overlay {
+            VStack {
+              MockNotificationView(
+                title: "Your Morning Report is ready",
+                message: "",
+                timestamp: "Now"
+              )
+              .transition(.move(edge: .top))
+              .appear(with: 2, currentIndex: notificationIndex, secondaryIfNotCurrentIndex: false)
 
-                            MockNotificationView(
-                                title: "You met your steps goal! 🎉",
-                                message: "",
-                                timestamp: "5m ago"
-                            )
-                            .transition(.move(edge: .top))
-                            .appear(with: 1, currentIndex: notificationIndex, secondaryIfNotCurrentIndex: false)
+              MockNotificationView(
+                title: "You met your steps goal! 🎉",
+                message: "",
+                timestamp: "5m ago"
+              )
+              .transition(.move(edge: .top))
+              .appear(with: 1, currentIndex: notificationIndex, secondaryIfNotCurrentIndex: false)
 
-                            Spacer(minLength: 0)
-                        }
-                        .padding(24)
-                        .padding(.top, 46)
-                    }
-                    .horizontallyCentered()
+              Spacer(minLength: 0)
             }
-            .horizontalAlignment(.leading)
-            .padding()
-        }
-        .topSafeAreaFill(.background)
-        .animation(.bouncy, value: notificationIndex)
-        .animation(.default, value: index)
-        .animation(.default, value: isAuthorized)
-        .animation(.default, value: showContinueButton)
-        .sensoryFeedback(.selection, trigger: index)
-        .sensoryFeedback(.success, trigger: notificationIndex)
-        .sensoryFeedback(.selection, trigger: didContinue)
-        .task {
-            while index < 3 {
-                await advanceIndex()
-            }
-
-            await showNotifications()
-
-            await Delay(800)
-
-            showContinueButton = true
-        }
-        .shelf {
-            if showContinueButton {
-                if isAuthorized {
-                    Button("Let's go!") {
-                        didContinue.toggle()
-                        onContinue()
-                    }
-                    .buttonStyle(.onboarding)
-                } else {
-                    VStack {
-                        Button("Enable Notifications", systemImage: "bell.badge.fill") {
-                            NotificationManager.shared.requestAuthorization()
-                            isAuthorized = true
-                        }
-                        .buttonStyle(.onboarding)
-
-                        Button("Skip") {
-                            // TODO: Add welcome to Bloom screen
-                            onContinue()
-                        }
-                        .bold()
-                        .frame(height: 44)
-                    }
-                }
-            }
-        }
-        .onAppear {
-            TelemetryDeck.signal("OB Notifications")
-        }
+            .padding(24)
+            .padding(.top, 46)
+          }
+          .horizontallyCentered()
+      }
+      .horizontalAlignment(.leading)
+      .padding()
     }
+    .groupedBackground()
+    .animation(.bouncy, value: notificationIndex)
+    .animation(.default, value: index)
+    .animation(.default, value: isAuthorized)
+    .animation(.default, value: showContinueButton)
+    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.success, trigger: notificationIndex)
+    .sensoryFeedback(.selection, trigger: didContinue)
+    .task {
+      while index < 3 {
+        await advanceIndex()
+      }
+
+      await showNotifications()
+
+      await Delay(800)
+
+      showContinueButton = true
+    }
+    .shelf {
+      if showContinueButton {
+        if isAuthorized {
+          Button("Let's go!") {
+            didContinue.toggle()
+            onContinue()
+          }
+          .buttonStyle(.onboarding)
+        } else {
+          VStack {
+            Button("Enable Notifications", systemImage: "bell.badge.fill") {
+              NotificationManager.shared.requestAuthorization()
+              isAuthorized = true
+            }
+            .buttonStyle(.onboarding)
+
+            Button("Skip") {
+              // TODO: Add welcome to Bloom screen
+              onContinue()
+            }
+            .bold()
+            .frame(height: 44)
+          }
+        }
+      }
+    }
+    .onAppear {
+      TelemetryDeck.signal("OB Notifications")
+    }
+  }
 }
 
 extension OnboardingNotificationPermissionView {
 
-    func advanceIndex() async {
-        await Delay(1700)
+  func advanceIndex() async {
+    await Delay(1700)
 
-        index += 1
+    index += 1
+  }
+
+  func showNotifications() async {
+    while notificationIndex < 2 {
+      await advanceNotificationIndex()
     }
+  }
 
-    func showNotifications() async {
-        while notificationIndex < 2 {
-            await advanceNotificationIndex()
-        }
-    }
+  func advanceNotificationIndex() async {
+    await Delay(800)
 
-    func advanceNotificationIndex() async {
-        await Delay(800)
-
-        notificationIndex += 1
-    }
+    notificationIndex += 1
+  }
 }
 
 #Preview {
+  PreviewEnvironment {
     OnboardingNotificationPermissionView { }
+  }
 }

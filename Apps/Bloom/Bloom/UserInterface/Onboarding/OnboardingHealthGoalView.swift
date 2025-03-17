@@ -49,7 +49,7 @@ struct OnboardingHealthGoalView: View {
       .horizontalAlignment(.leading)
       .padding()
     }
-    .topSafeAreaFill(.background)
+    .groupedBackground()
     .sheet($presentedSheet)
     .animation(.default, value: index)
     .animation(.default, value: healthManager.healthGoal)
@@ -59,7 +59,7 @@ struct OnboardingHealthGoalView: View {
     .shelf(spacing: 0) {
       if index >= 3 {
         VStack {
-          if healthManager.healthGoal == .loseWeight && healthManager.targetWeight < 1 {
+          if healthManager.healthGoal.isWeightRelated && healthManager.targetWeight < 1 {
             Text("Please enter what your ideal weight is.")
               .font(.caption)
               .foregroundStyle(.secondary)
@@ -227,7 +227,7 @@ struct OnboardingHealthGoalCell: View {
 
       if isSelected {
         Image(systemSymbol: .checkmarkCircleFill)
-          .foregroundStyle(.invertedText, .tint)
+          .foregroundStyle(.white, .tint)
           .font(.title3)
           .contentTransition(.symbolEffect)
       }
@@ -238,5 +238,7 @@ struct OnboardingHealthGoalCell: View {
 }
 
 #Preview {
-  OnboardingHealthGoalView { }
+  PreviewEnvironment {
+    OnboardingHealthGoalView { }
+  }
 }

@@ -49,13 +49,14 @@ struct OnboardingHealthKitView: View {
       }
       .padding()
     }
+    .groupedBackground()
     .animation(.bouncy, value: showMockHealthApp)
     .sensoryFeedback(.selection, trigger: didContinue)
     .horizontalAlignment(.leading)
     .sheet($presentedSheet)
     .shelf {
       VStack {
-        Text("Your Health data never leaves your device without you explicitly opting in, and always remains anonymous.")
+        Text("Your Health data always remains anonymous and can never be traced back to you.")
           .font(.subheadline)
           .fontDesign(.rounded)
           .bold()
@@ -159,5 +160,7 @@ private extension OnboardingHealthKitView {
 }
 
 #Preview {
-  OnboardingHealthKitView { }
+  PreviewEnvironment {
+    OnboardingHealthKitView { }
+  }
 }

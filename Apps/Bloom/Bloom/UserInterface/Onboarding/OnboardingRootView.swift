@@ -101,5 +101,7 @@ private extension OnboardingRootView {
 }
 
 #Preview {
-  OnboardingRootView() { }
+  PreviewEnvironment {
+    OnboardingRootView() { }
+  }
 }

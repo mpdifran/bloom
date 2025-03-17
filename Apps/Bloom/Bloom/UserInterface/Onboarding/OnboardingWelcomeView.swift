@@ -74,7 +74,7 @@ private extension OnboardingWelcomeView {
 
     EditUserProfileCardView()
       .focused($isFocused)
-      .transition(.move(edge: .bottom))
+      .transition(.blurReplace)
       .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
       .onAppear {
         isFocused = true

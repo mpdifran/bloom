@@ -54,7 +54,7 @@ struct OnboardingHealthAgeSexHeightView: View {
       .padding()
       .onboardingTextStyle()
     }
-    .topSafeAreaFill(.background)
+    .groupedBackground()
     .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: isHealthDataConfirmed)
@@ -159,7 +159,7 @@ private extension OnboardingHealthAgeSexHeightView {
   var doesNotHaveHealthDataContent: some View {
     Text("Uh oh, looks like I wasn't able to get some important information.")
       .appear(with: 1, currentIndex: index)
-    Text("Do you mind providing it for me?")
+    Text("Do you mind providing it?")
       .appear(with: 2, currentIndex: index)
   }
 
@@ -202,5 +202,7 @@ private extension OnboardingHealthAgeSexHeightView {
 }
 
 #Preview {
-  OnboardingHealthAgeSexHeightView { }
+  PreviewEnvironment {
+    OnboardingHealthAgeSexHeightView { }
+  }
 }

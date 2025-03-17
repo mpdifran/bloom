@@ -17,62 +17,56 @@ struct OnboardingHealthKitPrivacyCard: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    VStack(spacing: 25) {
-      Text("Health Data Privacy")
-        .font(.title)
-        .bold()
+    CardView {
+      LargeTitleActionCard("Health Data Privacy") {
+        VStack {
+          Image(systemSymbol: .handRaisedCircleFill)
+            .font(.system(size: 100))
+            .foregroundStyle(.invertedText, .tint)
 
-      Image(systemSymbol: .handRaisedCircleFill)
-        .font(.system(size: 100))
-        .foregroundStyle(.invertedText, .tint)
+          Text("We'll only use your health data anonymously to provide you insights and goals.")
+            .font(.title3)
+            .bold()
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
 
-      Text("Your health data is stored securely on your device. We only have access to anonymous health data you explicitly opt in to sharing — and it's never stored.")
-        .font(.title3)
-        .bold()
-        .multilineTextAlignment(.center)
-        .fixedSize(horizontal: false, vertical: true)
+          HStack {
+            Link(destination: .privacyPolicy) {
+              Text("Privacy Policy")
+                .bold()
+                .foregroundStyle(.tint)
+            }
+            .frame(minHeight: 44)
 
-      Link(destination: .privacyPolicy) {
-        HStack {
-          Text("Privacy Policy")
-          Image(systemSymbol: .arrowUpRightCircleFill)
+            Text("•")
+
+            Link(destination: .emailBloom) {
+              Text("Questions? Email Us!")
+                .bold()
+                .foregroundStyle(.tint)
+            }
+            .frame(minHeight: 44)
+          }
+
+          Button("Continue") {
+            dismiss()
+            didContinue.toggle()
+            onContinue()
+          }
+          .buttonStyle(.onboarding)
+          .padding(.top)
         }
-        .bold()
-        .foregroundStyle(.mutedBlue)
       }
-
-      Button("Continue") {
-        dismiss()
-        didContinue.toggle()
-        onContinue()
-      }
-      .buttonStyle(.onboarding)
-      .padding(.top)
     }
     .fontDesign(.rounded)
     .sensoryFeedback(.selection, trigger: didContinue)
-    .padding()
-    .presentationCornerRadius(50)
-    .presentationDetentSelfSizing()
   }
 }
 
 #Preview {
-
-  struct PreviewView: View {
-
-    @State private var showSheet = true
-
-    var body: some View {
-      Button {
-        showSheet.toggle()
-      } label: {
-        Text("Show Sheet")
-      }
-      .sheet(isPresented: $showSheet) {
-        OnboardingHealthKitPrivacyCard { }
-      }
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      OnboardingHealthKitPrivacyCard { }
     }
   }
-  return PreviewView()
 }

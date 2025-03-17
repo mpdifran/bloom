@@ -28,7 +28,7 @@ struct OnboardingHealthActivityLevelView: View {
       .horizontalAlignment(.leading)
       .padding()
     }
-    .topSafeAreaFill(.background)
+    .groupedBackground()
     .animation(.default, value: index)
     .animation(.bouncy, value: activityLevels.count)
     .animation(.default, value: healthManager.userReportedActivityLevel)
@@ -127,5 +127,7 @@ private extension OnboardingHealthActivityLevelView {
 }
 
 #Preview {
-  OnboardingHealthActivityLevelView { }
+  PreviewEnvironment {
+    OnboardingHealthActivityLevelView { }
+  }
 }

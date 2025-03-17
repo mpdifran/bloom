@@ -44,7 +44,7 @@ struct OnboardingHealthVitalLevelsView: View {
       .horizontalAlignment(.leading)
       .padding()
     }
-    .topSafeAreaFill(.background)
+    .groupedBackground()
     .animation(.bouncy, value: vitals.count)
     .animation(.bouncy, value: noDataVitals.count)
     .sensoryFeedback(.impact, trigger: vitals.count)
@@ -162,5 +162,7 @@ private struct VitalLevelView: View {
 }
 
 #Preview {
-  OnboardingHealthVitalLevelsView { }
+  PreviewEnvironment {
+    OnboardingHealthVitalLevelsView { }
+  }
 }

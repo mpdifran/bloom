@@ -48,6 +48,7 @@ struct OnboardingFinishView: View {
       .onboardingTextStyle()
       .padding()
     }
+    .groupedBackground()
     .animation(.default, value: index)
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: didContinue)
@@ -113,5 +114,7 @@ private extension OnboardingFinishView {
 }
 
 #Preview {
-  OnboardingFinishView { }
+  PreviewEnvironment {
+    OnboardingFinishView { }
+  }
 }

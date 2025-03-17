@@ -38,6 +38,7 @@ struct OnboardingAIGoalsView: View {
         loadFailedView
       }
     }
+    .groupedBackground()
     .sensoryFeedback(.impact, trigger: didContinue)
     .animation(.default, value: proposedGoals)
     .alert(error: $error)
@@ -202,5 +203,7 @@ private extension OnboardingAIGoalsView {
 }
 
 #Preview {
-  OnboardingAIGoalsView { }
+  PreviewEnvironment {
+    OnboardingAIGoalsView { }
+  }
 }
