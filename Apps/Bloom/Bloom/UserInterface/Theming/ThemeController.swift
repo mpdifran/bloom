@@ -87,10 +87,10 @@ final class ThemeController {
   private(set) var theme: Theme = .lilac
 
   init() {
+    UserDefaults.group.register(defaults: [.Key.theme : Theme.lilac.rawValue])
     if let rawTheme = UserDefaults.group.string(forKey: .Key.theme), let theme = Theme(rawValue: rawTheme) {
-      self.theme = theme
       Task {
-        await self.updateAppIconForTheme()
+        await set(theme: theme)
       }
     }
   }
