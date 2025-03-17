@@ -94,7 +94,11 @@ struct TodayView: View {
         EveningReportView()
       }
       .fullScreenCover(isPresented: $tabController.showFocusAreasReview) {
-        FocusAreaReviewRootView()
+        if legacyGoalSetting {
+          FocusAreaReviewRootView()
+        } else {
+          BaseReviewGoalsView()
+        }
       }
     }
     .onAppear {
