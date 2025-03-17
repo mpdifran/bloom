@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import TelemetryDeck
 
 extension String {
   /// Namespace for Health User Default Keys
@@ -50,6 +51,7 @@ extension HealthDefaults {
 
   func setHealthGoal(_ healthGoal: HealthGoal) {
     setValue(healthGoal.rawValue, for: .healthGoal)
+    TelemetryDeck.signal("Update Health Goal", parameters: ["healthGoal": healthGoal.name])
   }
 
   func setWeightLossSpeed(_ weightLossSpeed: WeightLossSpeed) {
