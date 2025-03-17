@@ -26,6 +26,10 @@ struct CurrentThemeView: View {
     .background {
       Capsule()
         .fill(.background)
+        .overlay {
+          Capsule()
+            .stroke(.fill)
+        }
     }
     .animation(.easeInOut, value: themeController.theme)
   }

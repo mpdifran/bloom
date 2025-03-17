@@ -29,6 +29,7 @@ struct ThemeSelectionCell: View {
         Image(systemSymbol: .checkmark)
           .bold()
           .fontDesign(.rounded)
+          .font(.body)
           .foregroundStyle(theme.color)
       }
     }

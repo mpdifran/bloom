@@ -24,19 +24,10 @@ struct ThemeSelectionCard: View {
               themeSelectionToggle.toggle()
               Task {
                 await themeController.set(theme: theme)
+                dismiss()
               }
             }
         }
-
-        Button {
-          dismiss()
-        } label: {
-          Text("Done")
-            .horizontallyCentered()
-        }
-        .buttonStyle(.primary)
-        .padding(.top)
-        .padding(.top)
       }
     }
     .sensoryFeedback(.impact, trigger: themeSelectionToggle)
