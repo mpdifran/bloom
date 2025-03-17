@@ -18,8 +18,6 @@ struct GoalLookbackView: View {
   @State private var goalLookbackDetails = [GoalLookbackDetails]()
   @State private var presentedSheet: AnyView?
 
-  @ObservedObject private var permissionsManager = ExternalHealthMetricPermissionManager.shared
-
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
@@ -100,13 +98,13 @@ private extension GoalLookbackView {
   }
 
   func calculateGoals() async throws {
-    if permissionsManager.hasUndeterminedPermissions() {
-      await withCheckedContinuation { continuation in
-        presentedSheet = ExternalHealthPrivacyView {
-          continuation.resume()
-        }.asAny
-      }
-    }
+//    if permissionsManager.hasUndeterminedPermissions() {
+//      await withCheckedContinuation { continuation in
+//        presentedSheet = ExternalHealthPrivacyView {
+//          continuation.resume()
+//        }.asAny
+//      }
+//    }
 
     let proposedGoals = try await viewModel.proposeNewGoals()
     onCalculateProposedGoals(proposedGoals)

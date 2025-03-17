@@ -259,7 +259,9 @@ private extension ExternalHealthPrivacyView {
 }
 
 #Preview {
-  ExternalHealthPrivacyView(mode: .all) {
+  PreviewEnvironment {
+    ExternalHealthPrivacyView(mode: .all) {
 
+    }
   }
 }

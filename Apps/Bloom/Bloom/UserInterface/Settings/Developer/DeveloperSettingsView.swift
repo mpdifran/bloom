@@ -27,7 +27,6 @@ struct DeveloperSettingsView: View {
   @State private var error: Error?
 
   @ObservedObject private var apiHost = APIHost.shared
-  @ObservedObject private var externalHealthManager = ExternalHealthMetricPermissionManager.shared
 
   @Environment(\.dismiss) private var dismiss
 
@@ -389,21 +388,6 @@ extension DeveloperSettingsView {
         } label: {
           LabeledContent("Show Paywall") {
             Image(systemSymbol: .dollarsignSquareFill)
-          }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
-
-        Divider()
-
-        Button {
-          externalHealthManager.resetDeterminedPermissions()
-        } label: {
-          LabeledContent("Reset Determined External Permissions") {
-            Image(systemSymbol: .handRaised)
           }
           .bold()
           .fontDesign(.rounded)

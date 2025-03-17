@@ -12,7 +12,6 @@ import TelemetryDeck
 
 extension OnboardingAIGoalsView {
   enum Mode {
-    case permissionRequired
     case loading
     case loaded
     case failed
@@ -28,13 +27,12 @@ struct OnboardingAIGoalsView: View {
   @State private var presentedSheet: AnyView?
   @State private var error: Error?
 
-  @ObservedObject private var permissionsManager = ExternalHealthMetricPermissionManager.shared
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
 
   var body: some View {
     Group {
       switch mode {
-      case .permissionRequired, .loaded, .loading:
+      case .loaded, .loading:
         mainScrollContent
       case .failed:
         loadFailedView
@@ -45,11 +43,7 @@ struct OnboardingAIGoalsView: View {
     .alert(error: $error)
     .sheet($presentedSheet)
     .task {
-      if permissionsManager.hasUndeterminedPermissions() {
-        mode = .permissionRequired
-      } else {
-        await loadAIGoals()
-      }
+      await loadAIGoals()
     }
     .onAppear {
       TelemetryDeck.signal("OB Focus Areas")
@@ -66,8 +60,6 @@ private extension OnboardingAIGoalsView {
           .onboardingTextStyle()
 
         switch mode {
-        case .permissionRequired:
-          EmptyView()
         case .loading:
           CircularSpinnerView()
             .foregroundStyle(.tint)
@@ -143,31 +135,6 @@ private extension OnboardingAIGoalsView {
   @ViewBuilder
   var shelfContent: some View {
     switch mode {
-    case .permissionRequired:
-      AsyncButton {
-        TelemetryDeck.signal(
-          "OB Focus Area Event",
-          parameters: ["event": "Select Health Data to Share"]
-        )
-        await loadAIGoals()
-      } label: {
-        Text("Select Health Data to Share")
-      }
-      .buttonStyle(.onboarding)
-
-      HStack {
-        Button {
-          TelemetryDeck.signal(
-            "OB Focus Area Event",
-            parameters: ["event": "Skip AI Goal Setting"]
-          )
-          onContinue()
-        } label: {
-          Text("Skip")
-            .bold()
-        }
-        .frame(height: 50)
-      }
     case .loaded:
       AsyncButton {
         try await saveAIGoals()
@@ -194,13 +161,13 @@ private extension OnboardingAIGoalsView {
   func loadAIGoals() async {
     self.mode = .loading
 
-    if permissionsManager.hasUndeterminedPermissions() {
-      await withCheckedContinuation { continuation in
-        presentedSheet = ExternalHealthPrivacyView {
-          continuation.resume()
-        }.asAny
-      }
-    }
+//    if permissionsManager.hasUndeterminedPermissions() {
+//      await withCheckedContinuation { continuation in
+//        presentedSheet = ExternalHealthPrivacyView {
+//          continuation.resume()
+//        }.asAny
+//      }
+//    }
 
     do {
       let result = try await AIGoalManager.shared.proposeNewGoals()

@@ -68,9 +68,9 @@ private extension ChatVitalConverter {
 private extension ChatVitalConverter {
 
   func generateDemographics() async -> ChatHealthData.Demographics? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .demographics) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .demographics) else {
+//      return nil
+//    }
 
     let age = await HealthManager.shared.age()
     let sex = await HealthManager.shared.sex().name
@@ -86,9 +86,9 @@ private extension ChatVitalConverter {
   }
 
   func generateActivityLevel(from date: Date) async -> ChatHealthData.ActivityLevel? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .activityLevel) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .activityLevel) else {
+//      return nil
+//    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -120,9 +120,9 @@ private extension ChatVitalConverter {
   }
 
   func generateBodyComposition(from date: Date) async -> ChatHealthData.BodyComposition? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bodyComposition) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bodyComposition) else {
+//      return nil
+//    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -162,9 +162,9 @@ private extension ChatVitalConverter {
   }
 
   func generateBowelMovements(form date: Date) async -> ChatHealthData.BowelMovements? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bowelMovements) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .bowelMovements) else {
+//      return nil
+//    }
 
     let modelActor = BowelMovementModelActor.standard()
     let dateRange = DateRange.fromDateToNow(date)
@@ -190,9 +190,9 @@ private extension ChatVitalConverter {
   }
 
   func generateExerciseEffectiveness(from date: Date) async -> ChatHealthData.ExerciseEffectiveness? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .exerciseEffectiveness) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .exerciseEffectiveness) else {
+//      return nil
+//    }
 
     guard let heartRateZones = await HealthStoreFetcher.shared.heartRateZones() else {
       return nil
@@ -248,9 +248,9 @@ private extension ChatVitalConverter {
   }
 
   func generateHeartHealth(from date: Date) async -> ChatHealthData.HeartHealth? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .heartHealth) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .heartHealth) else {
+//      return nil
+//    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -292,9 +292,9 @@ private extension ChatVitalConverter {
   }
 
   func generateMenstrualHealth(from date: Date) async -> ChatHealthData.MenstrualHealth? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .menstrualHealth) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .menstrualHealth) else {
+//      return nil
+//    }
 
     guard let shiftedDate = Calendar.current.date(byAdding: .month, value: -1, to: date) else {
       return nil
@@ -324,9 +324,9 @@ private extension ChatVitalConverter {
   }
 
   func generateSleep(from date: Date) async -> ChatHealthData.Sleep? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .sleep) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .sleep) else {
+//      return nil
+//    }
 
     let dateRange = DateRange.fromDateToNow(date)
 
@@ -387,9 +387,9 @@ private extension ChatVitalConverter {
   }
 
   func generateStress(from date: Date) async -> ChatHealthData.Stress? {
-    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .stress) else {
-      return nil
-    }
+//    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .stress) else {
+//      return nil
+//    }
 
     let dateRange = DateRange.fromDateToNow(date)
 

@@ -21,7 +21,6 @@ struct SettingsView: View {
   @ObservedObject private var toDoManager = ToDoManager.shared
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   @ObservedObject private var apiHost = APIHost.shared
-  @ObservedObject private var permissionsManager = ExternalHealthMetricPermissionManager.shared
 
   @Bindable private var reportViewModel = ReportCoordinatorViewModel.shared
   @Bindable private var unitPreferences = HealthUnitPreferences.shared
@@ -60,11 +59,11 @@ struct SettingsView: View {
     ScrollView {
       VStack(spacing: 20) {
         userSection
+        healthPermissionsSection
         healthGoalsSection
         habitsSection
         todoSection
         userDetailsSection
-        healthPermissionsSection
         reportSection
         unitsSection
         subscriptionSection
@@ -226,13 +225,14 @@ private extension SettingsView {
     }
   }
 
+  @ViewBuilder
   var healthPermissionsSection: some View {
-    VStack {
-      SectionTitleView("Health & Privacy")
-        .padding(.horizontal)
+    if shouldRequestHealthPermissions {
+      VStack {
+        SectionTitleView("Health Permissions")
+          .padding(.horizontal)
 
-      SettingsSectionContainer {
-        if shouldRequestHealthPermissions {
+        SettingsSectionContainer {
           SettingsHealthAppCell(title: "Grant New Permissions")
             .onTapGesture {
               Task {
@@ -241,13 +241,6 @@ private extension SettingsView {
               }
             }
         }
-
-        SettingsCell("External Health Sharing", showDisclosureIndicator: true) {
-          Text("\(permissionsManager.enabledPermissions.count) enabled")
-        }
-          .onTapGesture {
-            self.presentedSheet = ExternalHealthPrivacyView(mode: .all, onDismiss: { }).asAny
-          }
       }
     }
   }
