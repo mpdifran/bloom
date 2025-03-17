@@ -89,7 +89,7 @@ private extension AIFoodScannerView.ViewModel {
   }
 
   nonisolated func performAIFoodLog(for image: UIImage) async {
-    guard let smallerImage = image.resized(toWidth: 1200) else {
+    guard let smallerImage = image.resized(toWidth: 600) else {
       await MainActor.run { mode = .base }
       return
     }
