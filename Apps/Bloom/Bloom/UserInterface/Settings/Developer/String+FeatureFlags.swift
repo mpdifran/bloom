@@ -11,7 +11,6 @@ extension String {
   enum FeatureFlag {
     static let developerMode = "FeatureFlag.developerMode"
     static let legacyGoalSetting = "FeatureFlag.legacyGoalSetting"
-    static let alwaysAskForAIGoalSettingPermission = "FeatureFlag.alwaysAskForAIGoalSettingPermission"
     static let danieleMode = "PreferencesView.danieleMode"
   }
 }

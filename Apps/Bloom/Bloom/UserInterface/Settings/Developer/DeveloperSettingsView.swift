@@ -16,7 +16,6 @@ struct DeveloperSettingsView: View {
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
   @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
-  @AppStorage(.FeatureFlag.alwaysAskForAIGoalSettingPermission) private var alwaysAskForAIGoalSettingPermission = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -199,12 +198,6 @@ extension DeveloperSettingsView {
       SettingsSectionContainer {
         SettingsCell("Legacy Goal Review") {
           Toggle("", isOn: $legacyGoalSetting)
-        }
-
-        Divider()
-
-        SettingsCell("Always Ask Permission") {
-          Toggle("", isOn: $alwaysAskForAIGoalSettingPermission)
         }
 
         Divider()
@@ -482,7 +475,6 @@ extension DeveloperSettingsView {
           showDeveloperMode = false
           danieleMode = false
           legacyGoalSetting = false
-          alwaysAskForAIGoalSettingPermission = false
           dismiss()
         } label: {
           Text("Exit Developer Mode")
