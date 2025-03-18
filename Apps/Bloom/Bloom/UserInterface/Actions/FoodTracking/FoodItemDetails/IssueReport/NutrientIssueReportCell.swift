@@ -20,7 +20,8 @@ struct NutrientIssueReportCell: View {
   var body: some View {
     FoodItemEditableCell(
       title: name,
-      mode: mode) { resetMode in
+      mode: mode
+    ) { resetMode in
         switch resetMode {
         case .clearValue:
           amount = -1
@@ -33,12 +34,10 @@ struct NutrientIssueReportCell: View {
           .multilineTextAlignment(.trailing)
           .frame(width: 100)
           .bold()
+          .foregroundStyle(mode == .modifiedValue ? .mutedOrange : .primary)
           .focused($isFocused)
           .fontDesign(.rounded)
           .keyboardType(.decimalPad)
-          .if(mode == .modifiedValue) {
-            $0.foregroundStyle(.mutedOrange)
-          }
           .selectAllTextOnBeginEditing()
           .opacity(amount < 0 ? 0 : 1)
           .overlay {
