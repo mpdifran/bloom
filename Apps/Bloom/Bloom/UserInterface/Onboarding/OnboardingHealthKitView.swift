@@ -28,7 +28,7 @@ struct OnboardingHealthKitView: View {
         Group {
           Text("Let's calculate your Vitals!")
             .padding(.top, 30)
-          Text("Bloom needs access to your Health data in order to set personalized goals.")
+          Text("Bloom needs access to your Health data in order give you guidance on your health.")
             .font(.title3)
             .foregroundStyle(.secondary)
         }
@@ -41,9 +41,7 @@ struct OnboardingHealthKitView: View {
             .transition(.move(edge: .bottom))
             .onTapGesture {
               didContinue.toggle()
-              presentedSheet = OnboardingHealthKitPrivacyCard {
-                Task { await delayShowHealthKitPermissionView() }
-              }.asAny
+              showHealthKitPermissionView()
             }
         }
       }
@@ -56,7 +54,7 @@ struct OnboardingHealthKitView: View {
     .sheet($presentedSheet)
     .shelf {
       VStack {
-        Text("Your Health data always remains anonymous and can never be traced back to you.")
+        Text("Your Health data always remains anonymous.")
           .font(.subheadline)
           .fontDesign(.rounded)
           .bold()
@@ -71,9 +69,7 @@ struct OnboardingHealthKitView: View {
         } else {
           Button {
             didContinue.toggle()
-            presentedSheet = OnboardingHealthKitPrivacyCard {
-              Task { await delayShowHealthKitPermissionView() }
-            }.asAny
+            showHealthKitPermissionView()
           } label: {
             if isWaitingForPermissionSheet {
               CircularSpinnerView()
@@ -126,9 +122,8 @@ struct OnboardingHealthKitView: View {
 
 private extension OnboardingHealthKitView {
 
-  func delayShowHealthKitPermissionView() async {
+  func showHealthKitPermissionView() {
     isWaitingForPermissionSheet = true
-    await Delay(500)
     healthPermissionTrigger.toggle()
   }
 

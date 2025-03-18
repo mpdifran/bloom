@@ -87,7 +87,7 @@ struct OnboardingHealthAgeSexHeightView: View {
             onContinue()
           }
           .buttonStyle(.onboarding)
-          .disabled(!hasValidHealthData || isHealthDataConfirmed == nil)
+          .disabled(shouldDisableContinue)
         }
       }
     }
@@ -104,6 +104,14 @@ struct OnboardingHealthAgeSexHeightView: View {
 }
 
 private extension OnboardingHealthAgeSexHeightView {
+
+  var shouldDisableContinue: Bool {
+    if wasMissingHealthData {
+      return !hasValidHealthData
+    }
+
+    return !hasValidHealthData || isHealthDataConfirmed == nil
+  }
 
   func advanceIndex() async {
     await Delay(1700)

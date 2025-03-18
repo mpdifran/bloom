@@ -89,6 +89,7 @@ final class ThemeController {
   init() {
     UserDefaults.group.register(defaults: [.Key.theme: Theme.lilac.rawValue])
     if let rawTheme = UserDefaults.group.string(forKey: .Key.theme), let theme = Theme(rawValue: rawTheme) {
+      self.theme = theme
       Task {
         await set(theme: theme)
       }
@@ -96,7 +97,11 @@ final class ThemeController {
   }
 
   func set(theme: ThemeController.Theme) async {
+    let didChange = theme != self.theme
     self.theme = theme
+
+    guard didChange else { return }
+
     UserDefaults.group.set(theme.rawValue, forKey: .Key.theme)
 
     await updateAppIconForTheme()
