@@ -99,19 +99,15 @@ extension ResponseSchema {
   )
 
   static let textAIEstimate = ResponseSchema(
-    name: "aiEstimate",
+    name: "textAIEstimate",
     schema: Schema.Object(
       properties: [
         "name": Schema.Parameter(
           type: .string,
-          description: "A short, concise name to summarize the food the user described."
+          description: "A short, concise name to summarize all the food the user described."
         ),
         "foodItems": Schema.Parameter(
-          description: "The individual food items described by the user. You should have high confidence these food items are what the user is referring to.",
-          arrayOf: .AIEstimate.item
-        ),
-        "optionalFoodItems": Schema.Parameter(
-          description: "Extra individual food items that may be present. This could be things like butter or cooking oil that the user forgot to mention, or food items that are commonly associated with the user's description. Only add FoodItemServings to this list if they are NOT included in `items` already. You should try and put 0 to 3 items in this list.",
+          description: "The individual food items described by the user.",
           arrayOf: .AIEstimate.item
         )
       ],
@@ -132,7 +128,7 @@ extension Schema.Object.AIEstimate {
       "name": Schema.Parameter(type: .string, description: "The name of the individual food item. Do not include the brand name or flavour here, if there are any. Capitalize the first letter in each word. Do not list the number of servings here."),
       "brandName": Schema.Parameter(type: .optionalString, description: "The brand name of the product, if known. If unknown, omit this property. Capitalize the first letter in each word."),
       "flavour": Schema.Parameter(type: .optionalString, description: "The flavour of the food item. This typically applies to branded products. If unknown, omit this property. Capitalize the first letter in each word. This should not contain the same value as name. ex 'name': 'Lemonade', 'flavour': 'Strawberry'"),
-      "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. E.g. 1 cup or 12 chips. It should not contain the name of the item itself, and should contain a number. This should be the typical standard serving unit for measuring this food item."),
+      "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. E.g. 1 cup or 12 chips. It should not contain the name of the item itself, and should contain a number. This should be the typical common denominator standard serving unit for measuring this food item."),
       "servingValue": Schema.Parameter(ref: "quantity"),
       "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the item."),
       "calories": Schema.Parameter(ref: "quantity"),

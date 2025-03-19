@@ -135,7 +135,7 @@ extension FoodController {
       }
 
       let servings = foodEstimate.foodItems.map { $0.asServing() }
-      let suggestedServings = foodEstimate.optionalFoodItems.map { $0.asServing() }
+      let suggestedServings = foodEstimate.optionalFoodItems?.map { $0.asServing() } ?? []
 
       return EstimateFoodCaloriesResponse(
         name: foodEstimate.name,
@@ -148,7 +148,7 @@ extension FoodController {
       }
 
       let servings = foodEstimate.foodItems.map { $0.asServing() }
-      let suggestedServings = foodEstimate.optionalFoodItems.map { $0.asServing() }
+      let suggestedServings = foodEstimate.optionalFoodItems?.map { $0.asServing() } ?? []
 
       return EstimateFoodCaloriesResponse(
         name: foodEstimate.name,

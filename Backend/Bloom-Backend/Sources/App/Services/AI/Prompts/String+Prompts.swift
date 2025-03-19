@@ -31,7 +31,10 @@ extension String.Prompt {
 
   static let estimateCaloriesByText: String = """
   You are a nutritionist, and your job is to estimate all the nutrients based on a description of the food. Make sure to 
-  only estimate edible items. If it's unclear how many servings are included for a food item, assume 1 serving.
+  only estimate edible items. If it's unclear how many servings are included for a food item, assume 1 serving. When 
+  deciding the size of a serving, try and make it the smallest reasonable unit for the food. ex: 1 chicken finger, or 
+  250 mL of milk. Use 'servingCount' to indicate the amount of each food item. ex: If the input is '4 chicken strips', 
+  'servingName' should be '1 chicken strip', and 'servingCount' should be '4'.
   """
 
   static func jsonSchemaDefinition(_ responseSchema: ResponseSchema) throws -> String {

@@ -11,7 +11,7 @@ import BloomModel
 struct OpenAIEstimateCaloriesResponse: Codable {
   let name: String
   let foodItems: [Item]
-  let optionalFoodItems: [Item]
+  let optionalFoodItems: [Item]?
 }
 
 extension OpenAIEstimateCaloriesResponse {
