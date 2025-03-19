@@ -103,36 +103,79 @@ extension NutritionTrackingViewModel {
 
 extension NutritionTrackingViewModel {
 
+  /// Logs as a single ``FoodItemLog`` with multiple ``FoodItemServing``s, applying the name and image.
+  func logMeal(
+    name: String,
+    image: UIImage?,
+    numberOfServings: Double,
+    foodItemServings: [FoodItemServingAmount],
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    var dates = [Date]()
+
+    try modelContext.transaction {
+      let servings = try foodItemServings.map {
+        let (modifiedDates, foodItem) = try upsertAndMerge(foodItem: $0.foodItem)
+
+        dates.append(contentsOf: modifiedDates)
+
+        return FoodItemServing(
+          numberOfServings: $0.serving,
+          foodItem: foodItem
+        )
+      }
+
+      let logDate = calculateDate(for: meal, from: date)
+      dates.append(logDate)
+
+      let foodItemLog = FoodItemLog(
+        id: UUID().uuidString,
+        name: name,
+        date: logDate,
+        meal: meal,
+        numberOfServings: numberOfServings,
+        imageData: image?.pngData(),
+        foodItemServings: servings
+      )
+
+      modelContext.insert(foodItemLog)
+    }
+
+    for updateDate in dates {
+      try await HealthStoreModifier.shared.updateNutrition(for: updateDate)
+    }
+
+    TelemetryDeck.signal(
+      "Logged Food Item",
+      parameters: ["Meal": meal.rawValue],
+      floatValue: Double(foodItemServings.count)
+    )
+  }
+
+  /// Logs each serving as an individual `FoodItemLog`.
   func log(
-    foodItemServings: [FoodItemServing],
+    foodItemServings: [FoodItemServingAmount],
     date: Date,
     meal: FoodItemLog.Meal
   ) async throws {
     var dates = [Date]()
     try modelContext.transaction {
       for serving in foodItemServings {
-        let dbFoodItem: FoodItemRecord
-        let existingFoodItems = try modelContext.fetchAllFoodItem(for: serving.foodItem.id.value)
-        if existingFoodItems.isNotEmpty, let foodItem = try modelContext.merge(existingFoodItems) {
-          dbFoodItem = foodItem
-          if dbFoodItem.apply(foodItem: serving.foodItem) {
-            // If we updated the food item properties, we should resync every day it was logged.
-            dates.append(contentsOf: dbFoodItem.logDates())
-          }
-        } else {
-          dbFoodItem = FoodItemRecord(foodItem: serving.foodItem)
-          modelContext.insert(dbFoodItem)
-        }
+        let (modifiedDates, foodItem) = try upsertAndMerge(foodItem: serving.foodItem)
 
+        dates.append(contentsOf: modifiedDates)
         let logDate = calculateDate(for: meal, from: date)
         dates.append(logDate)
 
         let foodItemLog = FoodItemLog(
           id: UUID().uuidString,
+          name: nil,
           date: logDate,
           meal: meal,
           numberOfServings: serving.serving,
-          foodItem: dbFoodItem
+          imageData: nil,
+          foodItem: foodItem
         )
 
         modelContext.insert(foodItemLog)
@@ -156,7 +199,7 @@ extension NutritionTrackingViewModel {
     meal: FoodItemLog.Meal,
     numberOfServings: Double
   ) async throws {
-    let serving = FoodItemServing(serving: numberOfServings, foodItem: foodItem)
+    let serving = FoodItemServingAmount(serving: numberOfServings, foodItem: foodItem)
     try await log(
       foodItemServings: [serving],
       date: date,
@@ -225,6 +268,26 @@ extension NutritionTrackingViewModel {
 }
 
 private extension NutritionTrackingViewModel {
+
+  /// Upserts the `foodItem` into the database if it exists, or creates a new record. If the upsert modifies the database record, a list of affected dates is returned.
+  /// You can use these dates to re-sync HealthKit.
+  /// - parameter foodItem: The food item to upsert.
+  /// - returns: A list of dates that should be re-synced with HealthKit, and the FoodItemRecord.
+  func upsertAndMerge(foodItem: FoodItem) throws -> ([Date], FoodItemRecord) {
+    let existingFoodItems = try modelContext.fetchAllFoodItems(for: foodItem.id.value)
+    if existingFoodItems.isNotEmpty, let dbFoodItem = try modelContext.merge(existingFoodItems) {
+      var dates = [Date]()
+      if dbFoodItem.apply(foodItem: foodItem) {
+        // If we updated the food item properties, we should resync every day it was logged.
+        dates.append(contentsOf: dbFoodItem.logDates())
+      }
+      return (dates, dbFoodItem)
+    } else {
+      let insertedFoodItem = FoodItemRecord(foodItem: foodItem)
+      modelContext.insert(insertedFoodItem)
+      return ([], insertedFoodItem)
+    }
+  }
 
   func calculateDate(for meal: FoodItemLog.Meal, from date: Date) -> Date {
     switch meal {

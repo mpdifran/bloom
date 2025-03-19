@@ -12,8 +12,8 @@ extension AIFoodTextGenerationView {
   @MainActor @Observable
   final class ViewModel {
     var foodName: String?
-    var servings = [FoodItemServing]()
-    var suggestedServings = [FoodItemServing]()
+    var servings = [FoodItemServingAmount]()
+    var suggestedServings = [FoodItemServingAmount]()
     var isEstimating = false
   }
 }

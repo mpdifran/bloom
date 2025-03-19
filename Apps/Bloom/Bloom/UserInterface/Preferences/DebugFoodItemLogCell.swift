@@ -32,9 +32,11 @@ struct DebugFoodItemLogCell: View {
     DebugFoodItemLogCell(
         foodItemLog: FoodItemLog(
             id: "123",
+            name: "My Favourite Crackers",
             date: .now,
             meal: .lunch,
             numberOfServings: 2,
+            imageData: nil,
             foodItem: .Preview.ritzCrackers
         )
     )

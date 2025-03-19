@@ -11,14 +11,14 @@ import BloomModel
 
 /// This is inspired by `FoodItemCell`.
 struct AIScanFoodItemCell: View {
-  @Binding var foodItemServing: FoodItemServing
+  @Binding var foodItemServing: FoodItemServingAmount
 
   /// This is needed since there's a bug when editing a @Binding of a Double, compared to a @State of a Double. The latter is much nicer, and the former is a pain in the ass.
   @State private var internalFoodItemServingAmount: Double
 
   @FocusState private var isFocused: Bool
 
-  init(foodItemServing: Binding<FoodItemServing>) {
+  init(foodItemServing: Binding<FoodItemServingAmount>) {
     self._foodItemServing = foodItemServing
     self._internalFoodItemServingAmount = State(initialValue: foodItemServing.wrappedValue.serving)
   }
@@ -125,7 +125,7 @@ private extension AIScanFoodItemCell {
 #Preview {
   AIScanFoodItemCell(
     foodItemServing: .constant(
-      FoodItemServing(
+      FoodItemServingAmount(
         serving: 2,
         foodItem: .Preview.ritzCrackers
       )

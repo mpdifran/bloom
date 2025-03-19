@@ -7,8 +7,8 @@
 
 public typealias BowelMovement = SchemaV0.BowelMovement
 public typealias Habit = SchemaV2.Habit
-public typealias FoodItemRecord = SchemaV8.FoodItemRecord
-public typealias FoodItemLog = SchemaV8.FoodItemLog
-public typealias FoodItemServing = SchemaV8.FoodItemServing
-public typealias MealItemRecord = SchemaV8.MealItemRecord
-public typealias MealRecord = SchemaV8.MealRecord
+public typealias FoodItemRecord = SchemaV9.FoodItemRecord
+public typealias FoodItemLog = SchemaV9.FoodItemLog
+public typealias FoodItemServing = SchemaV9.FoodItemServing
+public typealias MealItemRecord = SchemaV9.MealItemRecord
+public typealias MealRecord = SchemaV9.MealRecord

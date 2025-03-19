@@ -10,15 +10,18 @@ import SwiftUI
 import DataContainer
 
 struct FoodItemLogCell: View {
-  let foodItem: FoodItemRecord?
-  let totalCalories: Double
-  let totalServingAmount: Double
+  let foodItemLog: FoodItemLog
+  let showDetails: (FoodItemServing) -> Void
+
+  @State private var isExpanded = false
 
   var body: some View {
-    if let foodItem {
-      contentView(foodItem: foodItem)
+    if foodItemLog.hasSingleServing, let serving = foodItemLog.firstFoodItemServing {
+      foodItemContentView(serving: serving)
+        .selectable()
+        .cardContainer()
     } else {
-      EmptyView()
+      foodItemLogDisclosureView
     }
   }
 }
@@ -26,39 +29,109 @@ struct FoodItemLogCell: View {
 private extension FoodItemLogCell {
 
   @ViewBuilder
-  func contentView(foodItem: FoodItemRecord) -> some View {
-    HStack {
-      if foodItem.isVerified {
-        Image(systemSymbol: .checkmarkShieldFill)
-          .foregroundStyle(.white, .mutedGreen)
-          .fontDesign(.rounded)
-          .bold()
-      }
+  func foodItemContentView(serving: FoodItemServing) -> some View {
+    if let foodItem = serving.foodItem {
+      HStack {
+        if foodItem.isVerified {
+          verifiedBadge
+        }
 
-      VStack(alignment: .leading) {
-        Text(foodItem.name)
-          .fontDesign(.rounded)
-          .bold()
+        VStack(alignment: .leading) {
+          Text(foodItem.name)
+            .font(.body)
+            .fontDesign(.rounded)
+            .bold()
 
-        Text(subtitle(for: foodItem))
+          Text(subtitle(for: foodItem))
+            .bold()
+            .foregroundStyle(.secondary)
+            .font(.caption)
+        }
+        .multilineTextAlignment(.leading)
+
+        Spacer()
+
+        Text("\(serving.totalCalories.format()) cals")
+          .font(.subheadline)
           .bold()
           .foregroundStyle(.secondary)
-          .font(.caption)
+          .fontDesign(.rounded)
+
+        DisclosureIndicator()
       }
-      .multilineTextAlignment(.leading)
-
-      Spacer()
-
-      Text("\(totalCalories.format()) cals")
-        .font(.subheadline)
-        .bold()
-        .foregroundStyle(.secondary)
-        .fontDesign(.rounded)
-
-      DisclosureIndicator()
+      .selectable()
+      .onTapGesture {
+        showDetails(serving)
+      }
     }
-    .selectable()
-    .cardContainer()
+  }
+
+  var foodItemLogDisclosureView: some View {
+    DisclosureGroup(isExpanded: $isExpanded) {
+      ForEach(foodItemLog.foodItemServings ?? []) { serving in
+        VStack(spacing: 0) {
+          Divider()
+
+          foodItemContentView(serving: serving)
+            .padding(.vertical)
+        }
+        .padding(.horizontal)
+      }
+    } label: {
+      foodItemLogContentView
+    }
+    .disclosureGroupStyle(.foodItemLogCell)
+  }
+
+  var foodItemLogContentView: some View {
+    HStack(alignment: .center, spacing: 0) {
+      if let image = foodItemLog.image {
+        Image(uiImage: image)
+          .resizable()
+          .scaledToFill()
+          .frame(square: 80)
+          .clipShape(RoundedRectangle(cornerRadius: 18))
+          .padding(.vertical, 8)
+          .padding(.leading, 8)
+      }
+
+      HStack {
+        VStack(alignment: .leading) {
+          Text(foodItemLog.name ?? "")
+            .font(.body)
+            .fontDesign(.rounded)
+            .lineLimit(2)
+            .multilineTextAlignment(.leading)
+            .bold()
+            .fixedSize(horizontal: false, vertical: true)
+
+          Text("\(foodItemLog.foodItemServings?.count ?? 0) items")
+            .bold()
+            .foregroundStyle(.secondary)
+            .font(.caption)
+        }
+
+        Spacer()
+
+        Text("\(foodItemLog.totalCalories.format()) cals")
+          .font(.subheadline)
+          .bold()
+          .foregroundStyle(.secondary)
+          .fontDesign(.rounded)
+      }
+      .padding(.vertical)
+      .padding(.leading)
+    }
+  }
+}
+
+private extension FoodItemLogCell {
+
+  var verifiedBadge: some View {
+    Image(systemSymbol: .checkmarkShieldFill)
+      .foregroundStyle(.white, .mutedGreen)
+      .fontDesign(.rounded)
+      .bold()
   }
 }
 
@@ -79,21 +152,64 @@ private extension FoodItemLogCell {
   }
 
   func servingAmountDescription(foodItem: FoodItemRecord) -> String {
-    "\(totalServingAmount.format()) \(foodItem.servingUnitString ?? "")"
+    guard let servingValue = foodItem.servingValue else { return "" }
+
+    return "\(servingValue.format()) \(foodItem.servingUnitString ?? "")"
   }
 }
 
 #Preview {
-  VStack {
-    Spacer()
-    FoodItemLogCell(
-      foodItem: .Preview.ritzCrackers,
-      totalCalories: 300,
-      totalServingAmount: 2
-    )
-    Spacer()
+  PreviewEnvironment {
+    ScrollView {
+      VStack(spacing: 10) {
+        FoodItemLogCell(
+          foodItemLog: FoodItemLog(
+            id: "123",
+            name: "My Favourite Crackers",
+            date: .now,
+            meal: .snack,
+            numberOfServings: 2,
+            imageData: nil,
+            foodItem: .Preview.ritzCrackers
+          )
+        ) { (_) in }
+
+        FoodItemLogCell(
+          foodItemLog: FoodItemLog(
+            id: "456",
+            name: "My Favourite Crackers",
+            date: .now,
+            meal: .snack,
+            numberOfServings: 2,
+            imageData: UIImage.mockProduct.pngData(),
+            foodItemServings: [
+              FoodItemServing(
+                numberOfServings: 2,
+                foodItem: .Preview.ritzCrackers
+              ),
+              FoodItemServing(
+                numberOfServings: 3,
+                foodItem: .Preview.shreddedCheddar
+              )
+            ]
+          )
+        ) { (_) in }
+
+        FoodItemLogCell(
+          foodItemLog: FoodItemLog(
+            id: "123",
+            name: "My Favourite Crackers",
+            date: .now,
+            meal: .snack,
+            numberOfServings: 2,
+            imageData: nil,
+            foodItem: .Preview.ritzCrackers
+          )
+        ) { (_) in }
+      }
+      .horizontallyCentered()
+      .padding()
+    }
+    .groupedBackground()
   }
-  .horizontallyCentered()
-  .padding()
-  .groupedBackground()
 }

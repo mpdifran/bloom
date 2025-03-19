@@ -1,5 +1,5 @@
 //
-//  FoodItemServing.swift
+//  FoodItemServingAmount.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-11-24.
@@ -8,7 +8,7 @@
 import Foundation
 import BloomModel
 
-struct FoodItemServing: Identifiable, Equatable {
+struct FoodItemServingAmount: Identifiable, Equatable {
     var id: String { foodItem.id.value }
 
     var serving: Double
@@ -17,7 +17,7 @@ struct FoodItemServing: Identifiable, Equatable {
 
 extension EstimateFoodCaloriesResponse.Serving {
 
-    func asServing() -> FoodItemServing {
-        FoodItemServing(serving: servings, foodItem: item)
+    func asServing() -> FoodItemServingAmount {
+        FoodItemServingAmount(serving: servings, foodItem: item)
     }
 }

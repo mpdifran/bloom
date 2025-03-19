@@ -129,8 +129,8 @@ private extension NutritionView {
           meal: meal,
           foodItemLogs: foodItemLogs(for: meal),
           isSwipingItem: $isSwipingItem
-        ) { foodItemLog in
-          guard let foodItem = foodItemLog.foodItem else { return }
+        ) { foodItemServing in
+          guard let foodItem = foodItemServing.foodItem else { return }
 
           presentedSheet = FoodItemDetailsView(
             foodItem: foodItem.asNetworkFoodItem(),

@@ -10,7 +10,7 @@ import SwiftUI
 import BloomModel
 
 struct AIScanFoodItemSuggetionCell: View {
-  let foodItemServing: FoodItemServing
+  let foodItemServing: FoodItemServingAmount
   let addItem: () -> Void
 
   var body: some View {
@@ -83,7 +83,7 @@ private extension AIScanFoodItemSuggetionCell {
 
 #Preview {
   AIScanFoodItemSuggetionCell(
-    foodItemServing: FoodItemServing(
+    foodItemServing: FoodItemServingAmount(
       serving: 2,
       foodItem: .Preview.ritzCrackers
     )

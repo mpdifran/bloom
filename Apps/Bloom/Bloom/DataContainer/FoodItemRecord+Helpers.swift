@@ -49,6 +49,8 @@ extension FoodItemRecord {
     )
   }
 
+  /// Applies the food item to the FoodItemRecord, and returns whether the record was modified or not.
+  /// - returns: `true` if the record was modified, `false` otherwise.
   func apply(foodItem: FoodItem) -> Bool {
     var didChange = false
 

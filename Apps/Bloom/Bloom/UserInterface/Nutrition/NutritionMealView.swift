@@ -16,14 +16,14 @@ struct NutritionMealView: View {
 
   private let meal: FoodItemLog.Meal
   private let foodItemLogs: [FoodItemLog]
-  private let onCellTapped: (FoodItemLog) -> Void
+  private let onCellTapped: (FoodItemServing) -> Void
   private let onLogTapped: () -> Void
 
   init(
     meal: FoodItemLog.Meal,
     foodItemLogs: [FoodItemLog],
     isSwipingItem: Binding<Bool>,
-    onCellTapped: @escaping (FoodItemLog) -> Void,
+    onCellTapped: @escaping (FoodItemServing) -> Void,
     onLogTapped: @escaping () -> Void
   ) {
     self.meal = meal
@@ -93,15 +93,10 @@ private extension NutritionMealView {
           )
         ]
       ) {
-        FoodItemLogCell(
-          foodItem: foodItemLog.foodItem,
-          totalCalories: foodItemLog.totalCalories,
-          totalServingAmount: foodItemLog.totalServingAmount
-        )
-          .id(foodItemLog.id)
-      }
-      .onTapGesture {
-        onCellTapped(foodItemLog)
+        FoodItemLogCell(foodItemLog: foodItemLog) { serving in
+          onCellTapped(serving)
+        }
+        .id(foodItemLog.id)
       }
     }
   }

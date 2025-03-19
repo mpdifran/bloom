@@ -100,7 +100,7 @@ public extension ModelContext {
     return try fetch(descriptor).first
   }
 
-  func fetchAllFoodItem(for id: String) throws -> [FoodItemRecord] {
+  func fetchAllFoodItems(for id: String) throws -> [FoodItemRecord] {
     let descriptor = FetchDescriptor<FoodItemRecord>(
       predicate: #Predicate<FoodItemRecord> { model in
         model.id == id

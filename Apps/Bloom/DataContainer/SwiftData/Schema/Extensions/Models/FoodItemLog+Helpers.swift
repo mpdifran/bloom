@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 public extension FoodItemLog.Meal {
   var name: String {
@@ -19,5 +20,87 @@ public extension FoodItemLog {
   // TODO: Zach - clean up once meals are implemented.
   var foodItem: FoodItemRecord? {
     foodItemServings?.first?.foodItem
+  }
+
+  var hasSingleServing: Bool {
+    foodItemServings?.count == 1
+  }
+
+  var firstFoodItemServing: FoodItemServing? {
+    foodItemServings?.first
+  }
+
+  var firstFoodItem: FoodItemRecord? {
+    foodItemServings?.first?.foodItem
+  }
+
+  var image: UIImage? {
+    guard let imageData else { return nil }
+
+    return UIImage(data: imageData)
+  }
+
+  var isFullyVerified: Bool {
+    foodItemServings?.contains(where: { $0.foodItem?.isVerified == false }) == false
+  }
+}
+
+public extension FoodItemLog {
+
+  var totalCalories: Double {
+    let calories = foodItemServings?.reduce(0, { partialResult, serving in
+      partialResult + serving.totalCalories
+    }) ?? 0
+    return numberOfServings * calories
+  }
+
+  var totalProtein: Double {
+    let value = foodItemServings?.reduce(0, { partialResult, serving in
+      let value = (serving.foodItem?.protein ?? 0) * serving.numberOfServings
+      return partialResult + value
+    }) ?? 0
+    return numberOfServings * value
+  }
+
+  var totalCarbs: Double {
+    let value = foodItemServings?.reduce(0, { partialResult, serving in
+      let value = (serving.foodItem?.carbohydrates ?? 0) * serving.numberOfServings
+      return partialResult + value
+    }) ?? 0
+    return numberOfServings * value
+  }
+
+  var totalFat: Double {
+    let value = foodItemServings?.reduce(0, { partialResult, serving in
+      let value = (serving.foodItem?.fat ?? 0) * serving.numberOfServings
+      return partialResult + value
+    }) ?? 0
+    return numberOfServings * value
+  }
+}
+
+public extension [FoodItemLog] {
+  var totalCalories: Double {
+    reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalCalories
+    }
+  }
+
+  var totalProtein: Double {
+    reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalProtein
+    }
+  }
+
+  var totalCarbs: Double {
+    reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalCarbs
+    }
+  }
+
+  var totalFat: Double {
+    reduce(0) { partialResult, foodItemLog in
+      partialResult + foodItemLog.totalFat
+    }
   }
 }

@@ -144,9 +144,15 @@ struct Swipeable<Content: View>: View {
           ]
         ) {
           FoodItemLogCell(
-            foodItem: .Preview.ritzCrackers,
-            totalCalories: 300,
-            totalServingAmount: 2
+            foodItemLog: FoodItemLog(
+              id: "123",
+              name: nil,
+              date: .now,
+              meal: .breakfast,
+              numberOfServings: 2,
+              imageData: nil,
+              foodItem: .Preview.ritzCrackers
+            )
           )
         }
       }

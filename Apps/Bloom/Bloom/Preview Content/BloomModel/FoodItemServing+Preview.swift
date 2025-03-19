@@ -7,16 +7,16 @@
 
 import BloomModel
 
-extension FoodItemServing {
+extension FoodItemServingAmount {
     enum Preview { }
 }
 
-extension FoodItemServing.Preview {
+extension FoodItemServingAmount.Preview {
 
-  static let grilledSalmonSalad: [FoodItemServing] = [
-    FoodItemServing(serving: 1, foodItem: .Preview.grilledSalmon),
-    FoodItemServing(serving: 2, foodItem: .Preview.mixedLettuce),
-    FoodItemServing(serving: 1, foodItem: .Preview.cherryTomatoes),
-    FoodItemServing(serving: 1, foodItem: .Preview.slicedCarrots)
+  static let grilledSalmonSalad: [FoodItemServingAmount] = [
+    FoodItemServingAmount(serving: 1, foodItem: .Preview.grilledSalmon),
+    FoodItemServingAmount(serving: 2, foodItem: .Preview.mixedLettuce),
+    FoodItemServingAmount(serving: 1, foodItem: .Preview.cherryTomatoes),
+    FoodItemServingAmount(serving: 1, foodItem: .Preview.slicedCarrots)
   ]
 }
