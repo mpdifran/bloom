@@ -256,8 +256,9 @@ private extension FoodItemDetailsView {
             // TODO: Mark - Show meal editor
           } label: {
             Text("Edit Parent Meal")
+              .bold()
               .horizontallyCentered()
-              .frame(minHeight: 44)
+              .frame(minHeight: 50)
           }
         }
         Divider()
@@ -373,11 +374,59 @@ private extension FoodItemDetailsView {
   }
 }
 
-#Preview {
+#Preview("No Existing Log") {
   PreviewEnvironment {
     FoodItemDetailsView(
       foodItem: .Preview.ritzCrackers,
       existingFoodItemLog: nil
+    )
+  }
+}
+
+#Preview("Single FoodItemServing") {
+  PreviewEnvironment {
+    FoodItemDetailsView(
+      foodItem: .Preview.ritzCrackers,
+      existingFoodItemLog: FoodItemLog(
+        id: "789",
+        name: "Cracker Snack",
+        date: .now,
+        meal: .breakfast,
+        numberOfServings: 1,
+        imageData: UIImage.mockProduct.pngData(),
+        foodItemServings: [
+          FoodItemServing(
+            numberOfServings: 1,
+            foodItem: .Preview.ritzCrackers
+          )
+        ]
+      )
+    )
+  }
+}
+
+#Preview("Multiple FoodItemServings") {
+  PreviewEnvironment {
+    FoodItemDetailsView(
+      foodItem: .Preview.ritzCrackers,
+      existingFoodItemLog: FoodItemLog(
+        id: "789",
+        name: "Cracker Snack",
+        date: .now,
+        meal: .breakfast,
+        numberOfServings: 1,
+        imageData: UIImage.mockProduct.pngData(),
+        foodItemServings: [
+          FoodItemServing(
+            numberOfServings: 1,
+            foodItem: .Preview.ritzCrackers
+          ),
+          FoodItemServing(
+            numberOfServings: 2,
+            foodItem: .Preview.shreddedCheddar
+          )
+        ]
+      )
     )
   }
 }
