@@ -43,6 +43,7 @@ extension SchemaV9 {
       self.foodItemServings = foodItemServings
     }
 
+    @available(*, deprecated, message: "Use the initializer with foodItemServings instead.")
     public init(
       id: String,
       name: String?,

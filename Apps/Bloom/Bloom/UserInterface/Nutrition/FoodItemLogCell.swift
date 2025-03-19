@@ -11,7 +11,7 @@ import DataContainer
 
 struct FoodItemLogCell: View {
   let foodItemLog: FoodItemLog
-  let showDetails: (FoodItemServing) -> Void
+  let showDetails: (FoodItemRecord) -> Void
 
   @State private var isExpanded = false
 
@@ -61,7 +61,7 @@ private extension FoodItemLogCell {
       }
       .selectable()
       .onTapGesture {
-        showDetails(serving)
+        showDetails(foodItem)
       }
     }
   }

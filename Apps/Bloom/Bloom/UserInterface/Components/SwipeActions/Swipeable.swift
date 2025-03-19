@@ -149,10 +149,18 @@ struct Swipeable<Content: View>: View {
               name: nil,
               date: .now,
               meal: .breakfast,
-              numberOfServings: 2,
+              numberOfServings: 1,
               imageData: nil,
-              foodItem: .Preview.ritzCrackers
-            )
+              foodItemServings: [
+                FoodItemServing(
+                  numberOfServings: 2,
+                  foodItem: .Preview.ritzCrackers
+                )
+              ]
+            ),
+            showDetails: { (_) in
+
+            }
           )
         }
       }

@@ -160,6 +160,7 @@ extension NutritionTrackingViewModel {
     meal: FoodItemLog.Meal
   ) async throws {
     var dates = [Date]()
+
     try modelContext.transaction {
       for serving in foodItemServings {
         let (modifiedDates, foodItem) = try upsertAndMerge(foodItem: serving.foodItem)
@@ -168,17 +169,26 @@ extension NutritionTrackingViewModel {
         let logDate = calculateDate(for: meal, from: date)
         dates.append(logDate)
 
-        let foodItemLog = FoodItemLog(
-          id: UUID().uuidString,
-          name: nil,
-          date: logDate,
-          meal: meal,
-          numberOfServings: serving.serving,
-          imageData: nil,
-          foodItem: foodItem
-        )
+        try modelContext.transaction {
+          let foodItemServing = FoodItemServing(
+            numberOfServings: serving.serving,
+            foodItem: foodItem
+          )
+          modelContext.insert(foodItemServing)
 
-        modelContext.insert(foodItemLog)
+          let foodItemLog = FoodItemLog(
+            id: UUID().uuidString,
+            name: nil,
+            date: logDate,
+            meal: meal,
+            numberOfServings: 1,
+            imageData: nil,
+            foodItemServings: [foodItemServing]
+          )
+          modelContext.insert(foodItemLog)
+
+          try modelContext.save()
+        }
       }
     }
 
@@ -224,23 +234,73 @@ extension NutritionTrackingViewModel {
   }
 
   func update(
-    foodItem: FoodItemLog,
+    foodItemLog: FoodItemLog,
+    foodItemID: String,
     numberOfServings: Double,
-    date: Date,
-    meal: FoodItemLog.Meal
+    dateMeal: (Date, FoodItemLog.Meal)? = nil
   ) async throws {
-    guard let localLog: FoodItemLog = try modelContext.existingModel(for: foodItem.persistentModelID) else {
+    guard let localLog: FoodItemLog = try modelContext.existingModel(for: foodItemLog.persistentModelID) else {
       throw NSError(description: "There was a problem saving the changes.")
     }
 
     let oldDate = localLog.date
 
-    localLog.numberOfServings = numberOfServings
-    localLog.date = calculateDate(for: meal, from: date)
-    localLog.meal = meal
+    try modelContext.transaction {
+      if
+        let serving = foodItemLog.serving(for: foodItemID),
+        let localServing: FoodItemServing = try modelContext.existingModel(for: serving.persistentModelID)
+      {
+        localServing.numberOfServings = numberOfServings
+      }
 
-    try modelContext.save()
-    
+      if let (date, meal) = dateMeal {
+        localLog.date = calculateDate(for: meal, from: date)
+        localLog.meal = meal
+      }
+
+      try modelContext.save()
+    }
+
+    try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
+    if let (date, _) = dateMeal {
+      try await HealthStoreModifier.shared.updateNutrition(for: date)
+    }
+  }
+
+  @available(*, deprecated, message: "Use update(foodItemLog:foodItemID:numberOfServings:dateMeal:) instead.")
+  func update(
+    foodItem: FoodItemLog,
+    numberOfServings: Double,
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    guard foodItem.hasSingleServing else {
+      throw NSError(description: "This item cannot be edited at this time.")
+    }
+
+    guard
+      let localLog: FoodItemLog = try modelContext.existingModel(for: foodItem.persistentModelID),
+      let foodItemID = foodItem.firstFoodItemServing?.foodItem?.id
+    else {
+      throw NSError(description: "There was a problem saving the changes.")
+    }
+
+    let oldDate = localLog.date
+
+    try modelContext.transaction {
+      if
+        let serving = foodItem.serving(for: foodItemID),
+        let localServing: FoodItemServing = try modelContext.existingModel(for: serving.persistentModelID)
+      {
+        localServing.numberOfServings = numberOfServings
+      }
+
+      localLog.date = calculateDate(for: meal, from: date)
+      localLog.meal = meal
+
+      try modelContext.save()
+    }
+
     try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
     try await HealthStoreModifier.shared.updateNutrition(for: date)
   }

@@ -16,14 +16,14 @@ struct NutritionMealView: View {
 
   private let meal: FoodItemLog.Meal
   private let foodItemLogs: [FoodItemLog]
-  private let onCellTapped: (FoodItemServing) -> Void
+  private let onCellTapped: (FoodItemLog, FoodItemRecord) -> Void
   private let onLogTapped: () -> Void
 
   init(
     meal: FoodItemLog.Meal,
     foodItemLogs: [FoodItemLog],
     isSwipingItem: Binding<Bool>,
-    onCellTapped: @escaping (FoodItemServing) -> Void,
+    onCellTapped: @escaping (FoodItemLog, FoodItemRecord) -> Void,
     onLogTapped: @escaping () -> Void
   ) {
     self.meal = meal
@@ -93,8 +93,8 @@ private extension NutritionMealView {
           )
         ]
       ) {
-        FoodItemLogCell(foodItemLog: foodItemLog) { serving in
-          onCellTapped(serving)
+        FoodItemLogCell(foodItemLog: foodItemLog) { foodItem in
+          onCellTapped(foodItemLog, foodItem)
         }
         .id(foodItemLog.id)
       }
@@ -145,7 +145,7 @@ private extension NutritionMealView {
       meal: .lunch,
       foodItemLogs: [],
       isSwipingItem: $isSwipingItem
-    ) { _ in
+    ) { (_, _) in
 
     } onLogTapped: {
 

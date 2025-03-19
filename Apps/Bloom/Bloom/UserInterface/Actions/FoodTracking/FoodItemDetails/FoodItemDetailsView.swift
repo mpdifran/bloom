@@ -33,7 +33,11 @@ struct FoodItemDetailsView: View {
     self.mode = mode
 
     if let existingFoodItemLog {
-      self._numberOfServings = State(initialValue: existingFoodItemLog.numberOfServings)
+      if let serving = existingFoodItemLog.serving(for: foodItem.id.value) {
+        self._numberOfServings = State(initialValue: serving.numberOfServings)
+      } else {
+        self._numberOfServings = State(initialValue: 1)
+      }
       self._date = State(initialValue: existingFoodItemLog.date)
       self._meal = State(initialValue: existingFoodItemLog.meal)
     } else {
@@ -77,6 +81,23 @@ struct FoodItemDetailsView: View {
       }
       .groupedBackground()
       .toolbar {
+        ToolbarItem(placement: .principal) {
+          VStack {
+            Text("Details")
+              .bold()
+            if foodItem.isVerified {
+              HStack(spacing: 2) {
+                Image(systemSymbol: .checkmarkShieldFill)
+                  .foregroundStyle(.white, .mutedGreen)
+                Text("Verified")
+                  .foregroundStyle(.mutedGreen)
+                  .bold()
+              }
+              .font(.caption)
+              .fontDesign(.rounded)
+            }
+          }
+        }
         ToolbarItem(placement: .cancellationAction) {
           Button("Done") {
             dismiss()
@@ -145,17 +166,6 @@ private extension FoodItemDetailsView {
           }
         }
         Spacer()
-
-        if foodItem.isVerified {
-          HStack(spacing: 2) {
-            Image(systemSymbol: .checkmarkShieldFill)
-              .foregroundStyle(.white, .mutedGreen)
-            Text("Verified")
-              .foregroundStyle(.mutedGreen)
-              .bold()
-          }
-          .fontDesign(.rounded)
-        }
       }
       .padding(.horizontal)
     }
@@ -228,10 +238,28 @@ private extension FoodItemDetailsView {
     }
   }
 
+  var canEditDateAndMeal: Bool {
+    guard let existingFoodItemLog else {
+      return true
+    }
+
+    return existingFoodItemLog.hasSingleServing
+  }
+
   var editSection: some View {
     VStack(spacing: 0) {
       if mode == .editAndView {
-        dateMealPickers
+        if canEditDateAndMeal {
+          dateMealPickers
+        } else {
+          Button {
+            // TODO: Mark - Show meal editor
+          } label: {
+            Text("Edit Parent Meal")
+              .horizontallyCentered()
+              .frame(minHeight: 44)
+          }
+        }
         Divider()
       }
 
@@ -289,6 +317,7 @@ private extension FoodItemDetailsView {
       if existingFoodItemLog != nil {
         Divider()
 
+        // TODO: Mark - Should this delete the serving, and if servings are empty, delete the log?
         Button("Delete Log", systemImage: "trash", role: .destructive) {
           guard let log = existingFoodItemLog else { return }
 
@@ -308,21 +337,27 @@ private extension FoodItemDetailsView {
 
 private extension FoodItemDetailsView {
 
+  var foodItemServing: FoodItemServing? {
+    existingFoodItemLog?.serving(for: foodItem.id.value)
+  }
+
   var canSave: Bool {
     guard let existingFoodItemLog else { return true }
 
-    return existingFoodItemLog.numberOfServings != numberOfServings ||
+    return foodItemServing?.numberOfServings != numberOfServings ||
     existingFoodItemLog.date != date ||
     existingFoodItemLog.meal != meal
   }
 
   func save() async throws {
     if let existingFoodItemLog {
+      let isSingleServing = existingFoodItemLog.hasSingleServing
+
       try await nutritionViewModel.update(
-        foodItem: existingFoodItemLog,
+        foodItemLog: existingFoodItemLog,
+        foodItemID: foodItem.id.value,
         numberOfServings: numberOfServings,
-        date: date,
-        meal: meal
+        dateMeal: isSingleServing ? (date, meal) : nil
       )
     } else {
       try await nutritionViewModel.log(
@@ -339,8 +374,10 @@ private extension FoodItemDetailsView {
 }
 
 #Preview {
-  FoodItemDetailsView(
-    foodItem: .Preview.ritzCrackers,
-    existingFoodItemLog: nil
-  )
+  PreviewEnvironment {
+    FoodItemDetailsView(
+      foodItem: .Preview.ritzCrackers,
+      existingFoodItemLog: nil
+    )
+  }
 }

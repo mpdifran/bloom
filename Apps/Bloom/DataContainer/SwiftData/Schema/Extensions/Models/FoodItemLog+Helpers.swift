@@ -30,8 +30,8 @@ public extension FoodItemLog {
     foodItemServings?.first
   }
 
-  var firstFoodItem: FoodItemRecord? {
-    foodItemServings?.first?.foodItem
+  func serving(for foodItemID: String) -> FoodItemServing? {
+    foodItemServings?.first(where: { $0.foodItem?.id == foodItemID })
   }
 
   var image: UIImage? {

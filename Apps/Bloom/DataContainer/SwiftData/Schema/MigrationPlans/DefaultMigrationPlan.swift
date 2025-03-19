@@ -144,12 +144,14 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       toVersion: SchemaV8.self,
       willMigrate: { context in
         do {
-          let logs = try context.fetch(FetchDescriptor<SchemaV7.FoodItemLog>())
+          try context.transaction {
+            let logs = try context.fetch(FetchDescriptor<SchemaV7.FoodItemLog>())
 
-          for log in logs {
-            log.mealRawValue = log.meal.rawValue
+            for log in logs {
+              log.mealRawValue = log.meal.rawValue
+            }
+            try context.save()
           }
-          try context.save()
         } catch {
           print("Migration Failed: \(error)")
           throw error
@@ -160,9 +162,31 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
   }
 
   private static var migrateV8ToV9: MigrationStage {
-    .lightweight(
+    .custom(
       fromVersion: SchemaV8.self,
-      toVersion: SchemaV9.self
+      toVersion: SchemaV9.self,
+      willMigrate: nil,
+      didMigrate: { context in
+        do {
+          try context.transaction {
+            let logs = try context.fetch(FetchDescriptor<SchemaV9.FoodItemLog>())
+
+            for log in logs {
+              // Move the serving amount from the log to the serving, since that is what the UI now works with.
+              if log.hasSingleServing {
+                guard let serving = log.firstFoodItemServing else { continue }
+
+                serving.numberOfServings = log.numberOfServings
+                log.numberOfServings = 1
+              }
+            }
+            try context.save()
+          }
+        } catch {
+          print("Migration Failed: \(error)")
+          throw error
+        }
+      }
     )
   }
 }
