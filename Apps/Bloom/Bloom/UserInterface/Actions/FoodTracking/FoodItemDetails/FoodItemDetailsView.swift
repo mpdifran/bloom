@@ -315,19 +315,20 @@ private extension FoodItemDetailsView {
         }
       }
 
-      if existingFoodItemLog != nil {
-        Divider()
+      // TODO: Mark - Add delete option for the food item serving.
 
-        // TODO: Mark - Should this delete the serving, and if servings are empty, delete the log?
-        Button("Delete Log", systemImage: "trash", role: .destructive) {
-          guard let log = existingFoodItemLog else { return }
+      if let existingFoodItemLog {
+        if existingFoodItemLog.hasSingleServing {
+          Divider()
 
-          Task {
-            do {
-              try await nutritionViewModel.delete(foodItemLogs: [log])
-              dismiss()
-            } catch {
-              self.error = error
+          Button("Delete Log", systemImage: "trash", role: .destructive) {
+            Task {
+              do {
+                try await nutritionViewModel.delete(foodItemLogs: [existingFoodItemLog])
+                dismiss()
+              } catch {
+                self.error = error
+              }
             }
           }
         }

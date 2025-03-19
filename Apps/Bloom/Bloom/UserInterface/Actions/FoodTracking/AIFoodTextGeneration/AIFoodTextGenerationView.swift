@@ -231,7 +231,10 @@ private extension AIFoodTextGenerationView {
   }
 
   func save() async throws {
-    try await nutritionViewModel.log(
+    try await nutritionViewModel.logMeal(
+      name: viewModel.foodName ?? "My Meal",
+      image: nil,
+      numberOfServings: 1,
       foodItemServings: viewModel.servings,
       date: nutritionViewModel.date,
       meal: nutritionViewModel.suggestedMeal

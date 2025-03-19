@@ -391,7 +391,10 @@ private extension AIFoodScannerView {
   }
 
   func save() async throws {
-    try await nutritionViewModel.log(
+    try await nutritionViewModel.logMeal(
+      name: viewModel.scannedFoodName ?? "My Scanned Meal",
+      image: viewModel.image,
+      numberOfServings: 1,
       foodItemServings: viewModel.servings,
       date: nutritionViewModel.date,
       meal: nutritionViewModel.suggestedMeal
@@ -403,5 +406,7 @@ private extension AIFoodScannerView {
 }
 
 #Preview {
-  AIFoodScannerView()
+  PreviewEnvironment {
+    AIFoodScannerView()
+  }
 }
