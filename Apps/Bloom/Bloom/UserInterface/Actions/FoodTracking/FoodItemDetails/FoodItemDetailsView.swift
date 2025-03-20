@@ -251,17 +251,18 @@ private extension FoodItemDetailsView {
       if mode == .editAndView {
         if canEditDateAndMeal {
           dateMealPickers
-        } else {
+          Divider()
+        } else if let foodItemLog = existingFoodItemLog {
           Button {
-            // TODO: Mark - Show meal editor
+            presentedSheet = FoodItemLogDetailsView(foodItemLog: foodItemLog).asAny
           } label: {
-            Text("Edit Parent Meal")
+            Text("Edit Meal")
               .bold()
               .horizontallyCentered()
-              .frame(minHeight: 50)
+              .frame(minHeight: 60)
           }
+          Divider()
         }
-        Divider()
       }
 
       LabeledContent("Serving Size", value: foodItem.displayServing)

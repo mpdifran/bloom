@@ -267,6 +267,35 @@ extension NutritionTrackingViewModel {
     }
   }
 
+  func update(
+    foodItemLog: FoodItemLog,
+    numberOfServings: Double,
+    foodItemNumberOfServings: [String: Double],
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    guard let localLog: FoodItemLog = try modelContext.existingModel(for: foodItemLog.persistentModelID) else {
+      throw NSError(description: "There was a problem saving the changes.")
+    }
+
+    let oldDate = localLog.date
+
+    try modelContext.transaction {
+      foodItemLog.numberOfServings = numberOfServings
+      foodItemLog.date = date
+      foodItemLog.meal = meal
+
+      for serving in localLog.foodItemServings ?? [] {
+        serving.numberOfServings = foodItemNumberOfServings[serving.id, default: 1]
+      }
+
+      try modelContext.save()
+    }
+
+    try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
+    try await HealthStoreModifier.shared.updateNutrition(for: date)
+  }
+
   @available(*, deprecated, message: "Use update(foodItemLog:foodItemID:numberOfServings:dateMeal:) instead.")
   func update(
     foodItem: FoodItemLog,

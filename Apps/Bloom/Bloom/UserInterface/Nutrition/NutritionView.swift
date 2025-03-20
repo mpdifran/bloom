@@ -134,6 +134,8 @@ private extension NutritionView {
             foodItem: foodItem.asNetworkFoodItem(),
             existingFoodItemLog: foodItemLog
           ).asAny
+        } showMealDetails: { foodItemLog in
+          presentedSheet = FoodItemLogDetailsView(foodItemLog: foodItemLog).asAny
         } onLogTapped: {
           nutritionViewModel.suggestedMeal = meal
           presentedSheet = FoodLoggingActionCardView().asAny

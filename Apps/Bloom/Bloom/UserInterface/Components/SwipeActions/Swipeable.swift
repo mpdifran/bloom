@@ -160,8 +160,9 @@ struct Swipeable<Content: View>: View {
             ),
             showDetails: { (_) in
 
+            }) { (_) in
+              
             }
-          )
         }
       }
     }

@@ -12,6 +12,7 @@ import DataContainer
 struct FoodItemLogCell: View {
   let foodItemLog: FoodItemLog
   let showDetails: (FoodItemRecord) -> Void
+  let showMealDetails: (FoodItemLog) -> Void
 
   @State private var isExpanded = false
 
@@ -76,6 +77,19 @@ private extension FoodItemLogCell {
             .padding(.vertical)
         }
         .padding(.horizontal)
+      }
+
+      Divider()
+        .padding(.horizontal)
+
+      Button {
+        showMealDetails(foodItemLog)
+      } label: {
+        Text("Edit Meal")
+          .foregroundStyle(.tint)
+          .bold()
+          .horizontallyCentered()
+          .frame(minHeight: 60)
       }
     } label: {
       foodItemLogContentView
@@ -165,19 +179,25 @@ private extension FoodItemLogCell {
         FoodItemLogCell(
           foodItemLog: FoodItemLog(
             id: "123",
-            name: "My Favourite Crackers",
+            name: nil,
             date: .now,
             meal: .snack,
-            numberOfServings: 2,
+            numberOfServings: 1,
             imageData: nil,
-            foodItem: .Preview.ritzCrackers
+            foodItemServings: [
+              FoodItemServing(
+                numberOfServings: 2,
+                foodItem: .Preview.ritzCrackers
+              )
+            ]
           )
         ) { (_) in }
+        showMealDetails: { (_) in }
 
         FoodItemLogCell(
           foodItemLog: FoodItemLog(
             id: "456",
-            name: "My Favourite Crackers",
+            name: "Crackers with Cheese",
             date: .now,
             meal: .snack,
             numberOfServings: 2,
@@ -194,18 +214,25 @@ private extension FoodItemLogCell {
             ]
           )
         ) { (_) in }
+        showMealDetails: { (_) in }
 
         FoodItemLogCell(
           foodItemLog: FoodItemLog(
-            id: "123",
-            name: "My Favourite Crackers",
+            id: "789",
+            name: nil,
             date: .now,
             meal: .snack,
-            numberOfServings: 2,
+            numberOfServings: 1,
             imageData: nil,
-            foodItem: .Preview.ritzCrackers
+            foodItemServings: [
+              FoodItemServing(
+                numberOfServings: 2,
+                foodItem: .Preview.ritzCrackers
+              )
+            ]
           )
         ) { (_) in }
+        showMealDetails: { (_) in }
       }
       .horizontallyCentered()
       .padding()
