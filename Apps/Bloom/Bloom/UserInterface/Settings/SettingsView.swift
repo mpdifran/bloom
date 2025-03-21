@@ -35,7 +35,7 @@ struct SettingsView: View {
   @Environment(ThemeController.self) private var themeController
 
   @ObservedObject private var userController = UserController.shared
-  @State private var entitlementController = EntitlementController.shared
+  @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var shouldRequestHealthPermissions = false
   @State private var isSwipingAnItem = false
   @State private var presentedSheet: AnyView?

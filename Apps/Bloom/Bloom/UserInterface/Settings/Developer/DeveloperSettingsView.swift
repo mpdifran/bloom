@@ -16,6 +16,7 @@ struct DeveloperSettingsView: View {
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
   @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
+  @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -79,7 +80,6 @@ struct DeveloperSettingsView: View {
     }
     .alert(alertDetails: $alertDetails)
     .alert(error: $error)
-    .tint(.mutedPurple)
   }
 }
 
@@ -196,6 +196,12 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
+        SettingsCell("Bypass Paywall") {
+          Toggle("", isOn: $bypassPaywall)
+        }
+
+        Divider()
+
         SettingsCell("Legacy Goal Review") {
           Toggle("", isOn: $legacyGoalSetting)
         }

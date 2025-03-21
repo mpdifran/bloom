@@ -5,8 +5,9 @@
 //  Created by Mark DiFranco on 2025-01-08.
 //
 
-import Foundation
+import SwiftUI
 import RevenueCat
+import Combine
 
 private extension String {
   enum Entitlements {
@@ -14,11 +15,13 @@ private extension String {
   }
 }
 
-@MainActor @Observable
-final class EntitlementController {
+@MainActor
+final class EntitlementController: ObservableObject {
   static let shared = EntitlementController()
 
-  var hasBloomPro: Bool?
+  @Published var hasBloomPro: Bool?
+
+  @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
 
   private init() {
     observeCustomerInfo()
@@ -27,6 +30,7 @@ final class EntitlementController {
   private var customerInfo: CustomerInfo?
 
   private var tasks = [Task<Void, Never>]()
+  private var bypassPaywallCancellable: AnyCancellable?
 }
 
 extension EntitlementController {
@@ -52,6 +56,11 @@ private extension EntitlementController {
   @MainActor
   func handleNewCustomerInfo(_ customerInfo: CustomerInfo) {
     self.customerInfo = customerInfo
-    self.hasBloomPro = self.bloomProEntitlement?.isActive == true
+
+    if bypassPaywall {
+      self.hasBloomPro = true
+    } else {
+      self.hasBloomPro = self.bloomProEntitlement?.isActive == true
+    }
   }
 }

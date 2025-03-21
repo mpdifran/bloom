@@ -18,7 +18,7 @@ struct OnboardingFinishView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
 
-  @State private var entitlementController = EntitlementController.shared
+  @ObservedObject private var entitlementController = EntitlementController.shared
 
   var body: some View {
     ScrollView {

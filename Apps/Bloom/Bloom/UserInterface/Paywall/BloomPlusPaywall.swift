@@ -23,7 +23,7 @@ struct BloomPlusPaywall: View {
   @State private var presentedSheet: AnyView?
   @State private var error: Error?
 
-  @State private var entitlementController = EntitlementController.shared
+  @ObservedObject private var entitlementController = EntitlementController.shared
 
   @Environment(\.dismiss) private var dismiss
 
