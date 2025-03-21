@@ -63,9 +63,6 @@
             ReferencedContainer = "container:Bloom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <StoreKitConfigurationFileReference
-         identifier = "../Apps/Bloom/Bloom/Bloom.storekit">
-      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
