@@ -13,6 +13,18 @@ struct FoodItemLogCell: View {
   let foodItemLog: FoodItemLog
   let showDetails: (FoodItemRecord) -> Void
   let showMealDetails: (FoodItemLog) -> Void
+  let image: UIImage?
+
+  init(
+    foodItemLog: FoodItemLog,
+    showDetails: @escaping (FoodItemRecord) -> Void,
+    showMealDetails: @escaping (FoodItemLog) -> Void
+  ) {
+    self.foodItemLog = foodItemLog
+    self.showDetails = showDetails
+    self.showMealDetails = showMealDetails
+    self.image = foodItemLog.image
+  }
 
   @State private var isExpanded = false
 
@@ -99,7 +111,7 @@ private extension FoodItemLogCell {
 
   var foodItemLogContentView: some View {
     HStack(alignment: .center, spacing: 0) {
-      if let image = foodItemLog.image {
+      if let image {
         Image(uiImage: image)
           .resizable()
           .scaledToFill()
