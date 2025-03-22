@@ -47,6 +47,7 @@ extension FoodLoggingActionCardView.ViewModel {
       let recentLogs = try await foodItemModelActor.fetchFrequentLogs(for: meal)
 
       let foodItems = recentLogs
+        .flatMap({ $0.foodItemServings })
         .compactMap({ $0.foodItem?.asNetworkFoodItem() })
         .makingUnique()
 

@@ -88,7 +88,7 @@ private extension HealthStoreModifier {
   }
 
   func createFoodSamples(_ foodItemLog: FoodItemLogDTO) -> [HKQuantitySample] {
-    FoodItemNutrient.allCases.compactMap { type in
+    FoodItemNutrient.allCases.flatMap { type in
       createFoodSample(
         foodItemLog,
         type: type
@@ -99,34 +99,35 @@ private extension HealthStoreModifier {
   func createFoodSample(
     _ foodItemLog: FoodItemLogDTO,
     type: FoodItemNutrient
-  ) -> HKQuantitySample? {
-    guard
-      let foodItem = foodItemLog.foodItem,
-      let amount = type.value(for: foodItem),
-      amount > 0
-    else { return nil }
+  ) -> [HKQuantitySample] {
+    foodItemLog.foodItemServings.compactMap { (foodItemServing) in
+      guard
+        let foodItem = foodItemServing.foodItem,
+        let amount = type.value(for: foodItem),
+        amount > 0
+      else { return nil }
 
+      let totalAmount = amount * foodItemServing.numberOfServings * foodItemLog.numberOfServings
 
-    let totalValue = foodItemLog.numberOfServings * amount
+      let quantity = HKQuantity(
+        unit: type.unit,
+        doubleValue: totalAmount
+      )
 
-    let quantity = HKQuantity(
-      unit: type.unit,
-      doubleValue: totalValue
-    )
+      let metaData = HealthMetadata.create(
+        [
+          .food(foodItem.displayFullName),
+          .meal(foodItemLog.meal.name)
+        ]
+      )
 
-    let metaData = HealthMetadata.create(
-      [
-        .food(foodItem.displayFullName),
-        .meal(foodItemLog.meal.name)
-      ]
-    )
-
-    return HKQuantitySample(
-      type: .quantityType(forIdentifier: type.identifier)!,
-      quantity: quantity,
-      start: foodItemLog.date,
-      end: foodItemLog.date,
-      metadata: metaData
-    )
+      return HKQuantitySample(
+        type: .quantityType(forIdentifier: type.identifier)!,
+        quantity: quantity,
+        start: foodItemLog.date,
+        end: foodItemLog.date,
+        metadata: metaData
+      )
+    }
   }
 }

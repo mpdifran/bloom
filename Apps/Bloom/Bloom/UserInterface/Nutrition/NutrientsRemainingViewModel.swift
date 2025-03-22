@@ -160,7 +160,7 @@ final class NutrientsRemainingViewModel: ObservableObject {
   func observeChanges(for dateRange: DateRange) {
     nutrientObservationHandler = HealthManager.shared.healthStore.observeChanges(
       sampleTypes: [
-        HKQuantityType(FoodItemNutrient.calories.identifier),
+        HKQuantityType(.dietaryEnergyConsumed),
         HKQuantityType(.dietaryProtein),
         HKQuantityType(.dietaryFatTotal),
         HKQuantityType(.dietaryCarbohydrates),
