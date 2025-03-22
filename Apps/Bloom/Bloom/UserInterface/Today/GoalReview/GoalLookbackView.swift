@@ -14,7 +14,6 @@ struct GoalLookbackView: View {
 
   @State var viewModel = ViewModel()
 
-  @State private var index = 0
   @State private var goalLookbackDetails = [GoalLookbackDetails]()
   @State private var presentedSheet: AnyView?
 
@@ -37,11 +36,7 @@ struct GoalLookbackView: View {
     .groupedBackground()
     .animation(.bouncy, value: goalLookbackDetails)
     .sensoryFeedback(.selection, trigger: goalLookbackDetails.count)
-    .sensoryFeedback(.selection, trigger: index)
     .sheet($presentedSheet)
-    .task {
-      await advanceToGoalReview()
-    }
     .task {
       let details = await viewModel.loadGoalHistory()
 
@@ -80,22 +75,10 @@ private extension GoalLookbackView {
         }
       }
     }
-    .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
   }
 }
 
 private extension GoalLookbackView {
-
-  func advanceToGoalReview() async {
-    while index < 1 {
-      await delayAdvanceIndex()
-    }
-  }
-
-  func delayAdvanceIndex() async {
-    await Delay(1000)
-    index += 1
-  }
 
   func calculateGoals() async throws {
 //    if permissionsManager.hasUndeterminedPermissions() {
