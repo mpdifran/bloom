@@ -45,12 +45,12 @@ struct OnboardingHealthKitView: View {
             }
         }
       }
+      .horizontalAlignment(.leading)
       .padding()
     }
     .groupedBackground()
     .animation(.bouncy, value: showMockHealthApp)
     .sensoryFeedback(.selection, trigger: didContinue)
-    .horizontalAlignment(.leading)
     .sheet($presentedSheet)
     .shelf {
       VStack {
@@ -60,6 +60,7 @@ struct OnboardingHealthKitView: View {
           .bold()
           .foregroundStyle(.secondary)
           .multilineTextAlignment(.center)
+
         if isAuthorized {
           Button("Let's go!") {
             didContinue.toggle()
@@ -80,11 +81,12 @@ struct OnboardingHealthKitView: View {
           }
           .buttonStyle(.onboarding)
         }
-        //                Text("Bloom is not a substitute for professional medical advice. Always consult your physician first.")
-        //                    .multilineTextAlignment(.center)
-        //                    .foregroundStyle(.secondary)
-        //                    .font(.caption)
-        //                    .fontDesign(.rounded)
+
+        Link(destination: .privacyPolicy) {
+          Text("Privacy Policy")
+            .bold()
+            .frame(minHeight: 50)
+        }
       }
     }
     .task {

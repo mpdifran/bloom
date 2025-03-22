@@ -28,26 +28,25 @@ struct OnboardingHealthAgeSexHeightView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        if
-          let sex = healthManager.healthStore.sex(),
-          let age = healthManager.healthStore.age(),
-          let sexName = sex.personName,
-          !wasMissingHealthData
-        {
-          hasHealthDataContent(age: age, sex: sexName, height: healthManager.height())
+        if wasMissingHealthData {
+          doesNotHaveHealthDataContent
+
+          ageSexHeightPicker
+            .appear(with: 3, currentIndex: index)
+        } else {
+          hasHealthDataContent(
+            age: healthManager.age(),
+            sex: healthManager.isFemale ? "female" : "male",
+            height: healthManager.height()
+          )
 
           if isHealthDataConfirmed == false {
             ageSexHeightPicker
               .appear(with: 4, currentIndex: index)
           } else {
             Text("Glad to get to know you better!")
-              .appear(with: 4, currentIndex: index)
+              .appear(with: 4, currentIndex: index, secondaryIfNotCurrentIndex: false)
           }
-        } else {
-          doesNotHaveHealthDataContent
-
-          ageSexHeightPicker
-            .appear(with: 3, currentIndex: index)
         }
       }
       .horizontalAlignment(.leading)
@@ -56,6 +55,9 @@ struct OnboardingHealthAgeSexHeightView: View {
     }
     .groupedBackground()
     .animation(.default, value: index)
+    .animation(.default, value: healthManager.birthday)
+    .animation(.default, value: healthManager.heightCM)
+    .animation(.default, value: healthManager.isFemale)
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: isHealthDataConfirmed)
     .sensoryFeedback(.selection, trigger: didContinue)
@@ -68,7 +70,7 @@ struct OnboardingHealthAgeSexHeightView: View {
       if index >= 3 {
         VStack {
           if healthManager.age() < 1 {
-            Text("You must be at least 1 years old to use Bloom.")
+            Text("You must be at least 1 year old to use Bloom.")
               .font(.subheadline)
               .fontDesign(.rounded)
               .bold()
@@ -114,7 +116,7 @@ private extension OnboardingHealthAgeSexHeightView {
   }
 
   func advanceIndex() async {
-    await Delay(1700)
+    await Delay(1000)
 
     index += 1
   }
@@ -132,16 +134,17 @@ private extension OnboardingHealthAgeSexHeightView {
     let age = healthManager.age()
     let height = healthManager.heightCM
 
-    return age > 1 && height > 0
+    return age >= 1 && height > 0
   }
 
   @ViewBuilder
   func hasHealthDataContent(age: Int, sex: String, height: HKQuantity) -> some View {
     Text("Looks Great!")
-      .appear(with: 1, currentIndex: index)
+      .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
     Text("According to your Health data, you're a \(age) year old \(sex). Your height is \(height.displayString(for: .meterUnit(with: .centi))). Is that correct?")
-      .appear(with: 2, currentIndex: index)
+      .contentTransition(.numericText())
+      .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
     HStack {
       Button("Yes") {
@@ -166,9 +169,9 @@ private extension OnboardingHealthAgeSexHeightView {
   @ViewBuilder
   var doesNotHaveHealthDataContent: some View {
     Text("Uh oh, looks like I wasn't able to get some important information.")
-      .appear(with: 1, currentIndex: index)
+      .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
     Text("Do you mind providing it?")
-      .appear(with: 2, currentIndex: index)
+      .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
   }
 
   var ageSexHeightPicker: some View {

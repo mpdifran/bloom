@@ -13,9 +13,14 @@ import TelemetryDeck
 struct BloomPlusPaywall: View {
 
   private let showDismiss: Bool
+  private let onPurchase: () -> Void
 
-  init(showDismiss: Bool = true) {
+  init(
+    showDismiss: Bool = true,
+    onPurchase: @escaping () -> Void = { }
+  ) {
     self.showDismiss = showDismiss
+    self.onPurchase = onPurchase
   }
 
   @State private var viewModel = ViewModel()
@@ -55,7 +60,7 @@ struct BloomPlusPaywall: View {
     }
     .sheet($presentedSheet)
     .onAppear {
-      TelemetryDeck.signal("OB Paywall")
+      TelemetryDeck.signal("View Paywall")
     }
     .task {
       await viewModel.loadOfferings()
@@ -65,8 +70,9 @@ struct BloomPlusPaywall: View {
     .onChange(of: entitlementController.hasBloomPro) { _, _ in
       guard entitlementController.hasBloomPro == true else { return }
 
-      TelemetryDeck.signal("OB Purchase Complete")
+      TelemetryDeck.signal("Paywall Purchase Complete")
       dismiss()
+      onPurchase()
     }
     .onChange(of: viewModel.packages) { _, _ in
       selectedPackage = viewModel.packages.first

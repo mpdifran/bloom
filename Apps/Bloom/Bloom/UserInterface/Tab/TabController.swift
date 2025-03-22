@@ -23,6 +23,7 @@ final class TabController {
   var showMorningReport = false
   var showEveningReport = false
   var showFocusAreasReview = false
+  var showPaywall = false
   var toggleToDismiss = false
 
   private var notificationCenterDelegate: NotificationCenterDelegate!
@@ -67,7 +68,11 @@ private extension TabController {
     case .CategoryID.reviewFocusAreas:
       dismiss()
       select(.today)
-      showFocusAreasReview = true
+      if EntitlementController.shared.hasBloomPro == true {
+        showFocusAreasReview = true
+      } else {
+        showPaywall = true
+      }
     default:
       break
     }

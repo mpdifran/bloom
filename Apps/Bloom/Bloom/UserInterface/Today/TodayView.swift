@@ -103,6 +103,9 @@ struct TodayView: View {
           BaseReviewGoalsView()
         }
       }
+      .fullScreenCover(isPresented: $tabController.showPaywall) {
+        BloomPlusPaywall()
+      }
     }
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
@@ -145,7 +148,9 @@ private extension TodayView {
             if legacyGoalSetting {
               presentedFullScreen = FocusAreaReviewRootView().asAny
             } else {
-              presentedFullScreen = BaseReviewGoalsView().asAny
+              EntitledPresent(presentedSheet: $presentedFullScreen) {
+                BaseReviewGoalsView()
+              }
             }
           }
       }
@@ -169,7 +174,13 @@ private extension TodayView {
           )
           .tint(todo.kind.color)
           .onTapGesture {
-            presentedSheet = todo.kind.sheetToPresent
+            if todo.kind.requiresBloomPlusEntitlement {
+              EntitledPresent(presentedSheet: $presentedSheet) {
+                todo.kind.sheetToPresent
+              }
+            } else {
+              presentedSheet = todo.kind.sheetToPresent
+            }
           }
         }
       }

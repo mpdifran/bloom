@@ -20,9 +20,11 @@ struct ActionsView: View {
           ActionInstanceCell(image: .logFoodIcon, title: "Food")
             .tint(.mutedGreen)
             .onTapGesture {
-              presentedCardSheet = FoodLoggingActionCardView {
-                dismiss()
-              }.asAny
+              EntitledPresent(presentedSheet: $presentedCardSheet) {
+                FoodLoggingActionCardView {
+                  dismiss()
+                }
+              }
             }
 
           ActionInstanceCell(image: .logWaterIcon, title: "Water")
@@ -74,7 +76,9 @@ struct ActionsView: View {
 }
 
 #Preview {
-  PreviewSheetPresent {
-    ActionsView()
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      ActionsView()
+    }
   }
 }

@@ -111,5 +111,12 @@ extension ToDoModel {
       case .logProtein: FoodLoggingActionCardView().asAny
       }
     }
+
+    var requiresBloomPlusEntitlement: Bool {
+      switch self {
+      case .logWeight, .logBloodPressure: false
+      case .logFood, .logProtein: true
+      }
+    }
   }
 }

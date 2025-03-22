@@ -5,8 +5,8 @@
 //  Created by Mark DiFranco on 2024-10-25.
 //
 
-import SFSafeSymbols
 import SwiftUI
+import SFSafeSymbols
 
 struct ActivityLevelSelectionCell: View {
   let activityLevel: ActivityLevelSummary.ActivityLevel
@@ -47,10 +47,17 @@ struct ActivityLevelSelectionCell: View {
       }
 
       Spacer(minLength: 0)
+
+      if isSelected {
+        Image(systemSymbol: .checkmark)
+          .bold()
+          .font(.body)
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+      }
     }
     .selectable()
     .cardContainer(
-      fill: isSelected ? AnyShapeStyle(.tint.tertiary) : AnyShapeStyle(.background.secondary),
       stroke: isSelected ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear)
     )
     .tint(activityLevel.barColor)
@@ -58,16 +65,19 @@ struct ActivityLevelSelectionCell: View {
 }
 
 #Preview {
-  ScrollView {
-    VStack {
-      ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
-        ActivityLevelSelectionCell(
-          activityLevel: activityLevel,
-          isRecommended: activityLevel == .high,
-          isSelected: activityLevel == .intense
-        )
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        ForEach(ActivityLevelSummary.ActivityLevel.allCases) { activityLevel in
+          ActivityLevelSelectionCell(
+            activityLevel: activityLevel,
+            isRecommended: activityLevel == .high,
+            isSelected: activityLevel == .intense
+          )
+        }
       }
+      .padding()
     }
-    .padding()
+    .groupedBackground()
   }
 }

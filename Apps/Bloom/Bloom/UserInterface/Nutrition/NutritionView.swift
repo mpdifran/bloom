@@ -48,7 +48,9 @@ struct NutritionView: View {
         }
         ToolbarItem(placement: .primaryAction) {
           Button {
-            presentedSheet = FoodLoggingActionCardView().asAny
+            EntitledPresent(presentedSheet: $presentedSheet) {
+              FoodLoggingActionCardView()
+            }
           } label: {
             Image(systemSymbol: .plus)
               .bold()
@@ -138,7 +140,9 @@ private extension NutritionView {
           presentedSheet = FoodItemLogDetailsView(foodItemLog: foodItemLog).asAny
         } onLogTapped: {
           nutritionViewModel.suggestedMeal = meal
-          presentedSheet = FoodLoggingActionCardView().asAny
+          EntitledPresent(presentedSheet: $presentedSheet) {
+            FoodLoggingActionCardView()
+          }
         }
         .padding(.vertical)
       }
