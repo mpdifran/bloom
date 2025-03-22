@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AppUI
+import SFSafeSymbols
 import BloomModel
 import DataContainer
 
@@ -21,6 +23,8 @@ struct FoodItemLogDetailsView: View {
 
   @State private var saveComplete = false
   @State private var showDatePicker = false
+  @State private var isSwipingItem = false
+  @State private var error: Error?
 
   @State private var numberOfServings: Double
   @State private var foodItemNumberOfServings: [String: Double]
@@ -52,6 +56,7 @@ struct FoodItemLogDetailsView: View {
         }
         .padding()
       }
+      .scrollDisabled(isSwipingItem)
       .groupedBackground()
       .navigationTitle("Details")
       .navigationBarTitleDisplayMode(.inline)
@@ -68,6 +73,7 @@ struct FoodItemLogDetailsView: View {
       }
       .animation(.easeInOut, value: numberOfServings)
       .animation(.easeInOut, value: foodItemNumberOfServings)
+      .alert(error: $error)
     }
   }
 }
@@ -199,11 +205,30 @@ private extension FoodItemLogDetailsView {
 
       VStack {
         ForEach(foodItemLog.foodItemServings ?? []) { serving in
-          FoodItemLogFoodItemCell(
-            foodItemServing: serving,
-            numberOfServings: Binding($foodItemNumberOfServings[serving.id], replacingNilWith: 1)
-          )
-          .focused($focusedServingID, equals: serving.id)
+          Swipeable(
+            isSwipingItem: $isSwipingItem,
+            actions: [
+              SwipeAction(
+                title: "Delete",
+                symbol: .trash,
+                tint: .mutedRed,
+                action: {
+                  delete(serving)
+                }
+              )
+            ]
+          ) {
+            FoodItemLogFoodItemCell(
+              foodItemServing: serving,
+              numberOfServings: Binding($foodItemNumberOfServings[serving.id], replacingNilWith: 1)
+            )
+            .focused($focusedServingID, equals: serving.id)
+            .contextMenu {
+              Button("Delete", systemSymbol: .trash, role: .destructive) {
+                delete(serving)
+              }
+            }
+          }
         }
       }
     }
@@ -305,6 +330,16 @@ private extension FoodItemLogDetailsView {
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
+  }
+
+  func delete(_ foodItemServing: FoodItemServing) {
+    Task {
+      do {
+        try await nutritionViewModel.delete(foodItemServing: foodItemServing)
+      } catch {
+        self.error = error
+      }
+    }
   }
 }
 

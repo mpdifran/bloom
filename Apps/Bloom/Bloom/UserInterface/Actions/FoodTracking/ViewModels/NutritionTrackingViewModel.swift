@@ -114,7 +114,7 @@ extension NutritionTrackingViewModel {
   ) async throws {
     var dates = [Date]()
 
-    try modelContext.transaction {
+    try modelContext.savingTransaction {
       let servings = try foodItemServings.map {
         let (modifiedDates, foodItem) = try upsertAndMerge(foodItem: $0.foodItem)
 
@@ -161,7 +161,7 @@ extension NutritionTrackingViewModel {
   ) async throws {
     var dates = [Date]()
 
-    try modelContext.transaction {
+    try modelContext.savingTransaction {
       for serving in foodItemServings {
         let (modifiedDates, foodItem) = try upsertAndMerge(foodItem: serving.foodItem)
 
@@ -186,8 +186,6 @@ extension NutritionTrackingViewModel {
             foodItemServings: [foodItemServing]
           )
           modelContext.insert(foodItemLog)
-
-          try modelContext.save()
         }
       }
     }
@@ -220,12 +218,28 @@ extension NutritionTrackingViewModel {
   func delete(foodItemLogs: [FoodItemLog]) async throws {
     var dates = Set<Date>()
 
-    try? modelContext.transaction {
+    try modelContext.savingTransaction {
       for foodItemLog in foodItemLogs {
         dates.insert(foodItemLog.date)
 
         try modelContext.deleteByID(foodItemLog)
       }
+    }
+
+    for date in dates {
+      try await HealthStoreModifier.shared.updateNutrition(for: date)
+    }
+  }
+
+  func delete(foodItemServing: FoodItemServing) async throws {
+    var dates = Set<Date>()
+
+    try modelContext.savingTransaction {
+      if let date = foodItemServing.foodItemLog?.date {
+        dates.insert(date)
+      }
+
+      try modelContext.deleteByID(foodItemServing)
     }
 
     for date in dates {
@@ -245,7 +259,7 @@ extension NutritionTrackingViewModel {
 
     let oldDate = localLog.date
 
-    try modelContext.transaction {
+    try modelContext.savingTransaction {
       if
         let serving = foodItemLog.serving(for: foodItemID),
         let localServing: FoodItemServing = try modelContext.existingModel(for: serving.persistentModelID)
@@ -257,8 +271,6 @@ extension NutritionTrackingViewModel {
         localLog.date = calculateDate(for: meal, from: date)
         localLog.meal = meal
       }
-
-      try modelContext.save()
     }
 
     try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
@@ -280,7 +292,7 @@ extension NutritionTrackingViewModel {
 
     let oldDate = localLog.date
 
-    try modelContext.transaction {
+    try modelContext.savingTransaction {
       foodItemLog.numberOfServings = numberOfServings
       foodItemLog.date = date
       foodItemLog.meal = meal
@@ -288,8 +300,6 @@ extension NutritionTrackingViewModel {
       for serving in localLog.foodItemServings ?? [] {
         serving.numberOfServings = foodItemNumberOfServings[serving.id, default: 1]
       }
-
-      try modelContext.save()
     }
 
     try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
@@ -316,7 +326,7 @@ extension NutritionTrackingViewModel {
 
     let oldDate = localLog.date
 
-    try modelContext.transaction {
+    try modelContext.savingTransaction {
       if
         let serving = foodItem.serving(for: foodItemID),
         let localServing: FoodItemServing = try modelContext.existingModel(for: serving.persistentModelID)
@@ -326,8 +336,6 @@ extension NutritionTrackingViewModel {
 
       localLog.date = calculateDate(for: meal, from: date)
       localLog.meal = meal
-
-      try modelContext.save()
     }
 
     try await HealthStoreModifier.shared.updateNutrition(for: oldDate)

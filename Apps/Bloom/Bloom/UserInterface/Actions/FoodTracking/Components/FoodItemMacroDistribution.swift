@@ -10,20 +10,31 @@ import BloomModel
 
 private extension CGFloat {
   static let barHeight: CGFloat = 12
+  static let smallBarHeight: CGFloat = 8
+}
+
+extension FoodItemMacroDistribution {
+  enum DisplayType {
+    case small
+    case regular
+  }
 }
 
 struct FoodItemMacroDistribution: View {
+  let displayType: DisplayType
   let protein: Double
   let carbohydrates: Double
   let fat: Double
   let numberOfServings: Double
 
   init(
+    displayType: DisplayType = .regular,
     protein: Double?,
     carbohydrates: Double?,
     fat: Double?,
     numberOfServings: Double
   ) {
+    self.displayType = displayType
     self.protein = protein ?? 0
     self.carbohydrates = carbohydrates ?? 0
     self.fat = fat ?? 0
@@ -35,9 +46,10 @@ struct FoodItemMacroDistribution: View {
       HStack {
         VStack {
           Text("\(proteinValue.format()) g")
+            .font(displayType == .small ? .caption : .body)
             .contentTransition(.numericText(value: proteinValue))
           Text("Protein")
-            .font(.caption)
+            .font(displayType == .small ? .caption2 : .caption)
             .foregroundStyle(.secondary)
         }
 
@@ -45,9 +57,10 @@ struct FoodItemMacroDistribution: View {
 
         VStack {
           Text("\(carbsValue.format()) g")
+            .font(displayType == .small ? .caption : .body)
             .contentTransition(.numericText(value: carbsValue))
           Text("Carbs")
-            .font(.caption)
+            .font(displayType == .small ? .caption2 : .caption)
             .foregroundStyle(.secondary)
         }
 
@@ -55,9 +68,10 @@ struct FoodItemMacroDistribution: View {
 
         VStack {
           Text("\(fatValue.format()) g")
+            .font(displayType == .small ? .caption : .body)
             .contentTransition(.numericText(value: fatValue))
           Text("Fat")
-            .font(.caption)
+            .font(displayType == .small ? .caption2 : .caption)
             .foregroundStyle(.secondary)
         }
       }
@@ -79,7 +93,7 @@ struct FoodItemMacroDistribution: View {
             .frame(width: proxy.size.width * fatPercent)
         }
       }
-      .frame(height: .barHeight)
+      .frame(height: displayType == .small ? .smallBarHeight : .barHeight)
       .clipShape(Capsule())
     }
   }
@@ -119,22 +133,28 @@ private extension FoodItemMacroDistribution {
 }
 
 #Preview {
-  FoodItemMacroDistribution(
-    protein: 12,
-    carbohydrates: 40,
-    fat: 2,
-    numberOfServings: 1
-  )
-  FoodItemMacroDistribution(
-    protein: 1,
-    carbohydrates: 2,
-    fat: 3,
-    numberOfServings: 2
-  )
-  FoodItemMacroDistribution(
-    protein: 0,
-    carbohydrates: 0,
-    fat: 0,
-    numberOfServings: 2
-  )
+  PreviewEnvironment {
+    VStack {
+      FoodItemMacroDistribution(
+        protein: 12,
+        carbohydrates: 40,
+        fat: 2,
+        numberOfServings: 1
+      )
+      FoodItemMacroDistribution(
+        displayType: .small,
+        protein: 1,
+        carbohydrates: 2,
+        fat: 3,
+        numberOfServings: 2
+      )
+      FoodItemMacroDistribution(
+        protein: 0,
+        carbohydrates: 0,
+        fat: 0,
+        numberOfServings: 2
+      )
+    }
+    .padding()
+  }
 }

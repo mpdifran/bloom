@@ -12,6 +12,16 @@ internal import AppFoundations
 
 public extension ModelContext {
 
+  func savingTransaction(block: () throws -> Void) throws {
+    try transaction {
+      try block()
+      try save()
+    }
+  }
+}
+
+public extension ModelContext {
+
   func existingModel<T>(for objectID: PersistentIdentifier) throws -> T? where T: PersistentModel {
     if let registered: T = registeredModel(for: objectID) {
       return registered

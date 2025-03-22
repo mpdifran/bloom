@@ -31,6 +31,7 @@ extension View {
           }
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+      .contentShape(RoundedRectangle(cornerRadius: cornerRadius))
   }
 }
 

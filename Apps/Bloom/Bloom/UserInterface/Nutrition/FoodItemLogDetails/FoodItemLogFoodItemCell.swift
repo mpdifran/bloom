@@ -13,34 +13,35 @@ struct FoodItemLogFoodItemCell: View {
   @Binding var numberOfServings: Double
 
   var body: some View {
-    HStack {
-      if foodItemServing.foodItem?.isVerified == true {
-        Image(systemSymbol: .checkmarkShieldFill)
-          .foregroundStyle(.white, .mutedGreen)
-          .fontDesign(.rounded)
-          .bold()
-      }
+    VStack {
+      HStack {
+        if foodItemServing.foodItem?.isVerified == true {
+          Image(systemSymbol: .checkmarkShieldFill)
+            .foregroundStyle(.white, .mutedGreen)
+            .fontDesign(.rounded)
+            .bold()
+        }
 
-      VStack(alignment: .leading) {
-        Text(foodItemServing.foodItem?.name ?? "")
-          .fontDesign(.rounded)
+        VStack(alignment: .leading) {
+          Text(foodItemServing.foodItem?.name ?? "")
+            .fontDesign(.rounded)
 
-        Text(subtitle)
-          .foregroundStyle(.secondary)
-          .font(.caption)
-      }
-      .bold()
-      .multilineTextAlignment(.leading)
-
-      Spacer()
-
-      Text("\(foodItemServing.totalCalories.format()) cals")
-        .font(.subheadline)
+          Text(subtitle)
+            .foregroundStyle(.secondary)
+            .font(.caption)
+        }
         .bold()
-        .foregroundStyle(.secondary)
-        .fontDesign(.rounded)
+        .multilineTextAlignment(.leading)
 
-      VStack {
+        Spacer()
+
+        Text("\(totalCalories.format()) cals")
+          .font(.subheadline)
+          .bold()
+          .foregroundStyle(.secondary)
+          .fontDesign(.rounded)
+          .contentTransition(.numericText(value: totalCalories))
+
         TextField("", value: $numberOfServings, formatter: NumberFormatter.threeDecimalPlaces)
           .textFieldStyle(.roundedBorder)
           .multilineTextAlignment(.trailing)
@@ -49,6 +50,16 @@ struct FoodItemLogFoodItemCell: View {
           .keyboardType(.decimalPad)
           .selectAllTextOnBeginEditing()
       }
+
+      Divider()
+
+      FoodItemMacroDistribution(
+        displayType: .small,
+        protein: foodItemServing.foodItem?.protein,
+        carbohydrates: foodItemServing.foodItem?.carbohydrates,
+        fat: foodItemServing.foodItem?.fat,
+        numberOfServings: numberOfServings
+      )
     }
     .cardContainer()
   }
@@ -69,6 +80,10 @@ private extension FoodItemLogFoodItemCell {
     }
 
     return components.joined(separator: " • ")
+  }
+
+  var totalCalories: Double {
+    (foodItemServing.foodItem?.calories ?? 0) * numberOfServings
   }
 
   var formattedServingQuantity: String? {
