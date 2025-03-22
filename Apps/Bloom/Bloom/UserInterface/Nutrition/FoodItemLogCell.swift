@@ -213,7 +213,7 @@ private extension FoodItemLogCell {
             date: .now,
             meal: .snack,
             numberOfServings: 2,
-            imageData: UIImage.mockProduct.pngData(),
+            imageData: UIImage(named: "CrackersAndCheese")?.pngData(),
             foodItemServings: [
               FoodItemServing(
                 numberOfServings: 2,

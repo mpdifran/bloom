@@ -395,7 +395,7 @@ private extension FoodItemDetailsView {
         date: .now,
         meal: .breakfast,
         numberOfServings: 1,
-        imageData: UIImage.mockProduct.pngData(),
+        imageData: UIImage(named: "MockProductImage")?.pngData(),
         foodItemServings: [
           FoodItemServing(
             numberOfServings: 1,
@@ -417,7 +417,7 @@ private extension FoodItemDetailsView {
         date: .now,
         meal: .breakfast,
         numberOfServings: 1,
-        imageData: UIImage.mockProduct.pngData(),
+        imageData: UIImage(named: "CheeseAndCrackers")?.pngData(),
         foodItemServings: [
           FoodItemServing(
             numberOfServings: 1,

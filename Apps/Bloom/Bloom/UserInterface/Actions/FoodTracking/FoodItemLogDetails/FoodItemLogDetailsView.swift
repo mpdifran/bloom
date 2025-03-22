@@ -317,7 +317,7 @@ private extension FoodItemLogDetailsView {
         date: .now,
         meal: .snack,
         numberOfServings: 3,
-        imageData: UIImage.crackersAndCheese.pngData(),
+        imageData: UIImage(named: "CrackersAndCheese")?.pngData(),
         foodItemServings: [
           FoodItemServing(
             numberOfServings: 2,
