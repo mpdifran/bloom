@@ -81,11 +81,6 @@ struct RootView: View {
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
       dismiss()
     }
-    .onChange(of: entitlementController.hasBloomPro) { _, _ in
-      if entitlementController.hasBloomPro == false, hasShownOnboarding {
-        presentedSheet = BloomPlusPaywall(showDismiss: false).asAny
-      }
-    }
     .tint(themeController.theme.color)
     .environment(themeController)
   }
