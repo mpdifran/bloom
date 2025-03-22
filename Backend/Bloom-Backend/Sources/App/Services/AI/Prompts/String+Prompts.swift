@@ -62,5 +62,6 @@ extension String.Prompt {
   Notes:
   Keep responses short, positive, and engaging.
   Don't overwhelm the user with too many goals or reminders; stay focused.
+  Always return at least one goal.
   """
 }
