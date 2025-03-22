@@ -96,6 +96,9 @@ struct LoginView: View {
       }
     }
     .groupedBackground()
+    .onAppear {
+      TelemetryDeck.signal("View Login")
+    }
     .alert(error: $error)
     .presentationCompactAdaptation(.fullScreenCover)
   }
@@ -129,6 +132,7 @@ private extension LoginView {
         Task {
           do {
             try await viewModel.authenticate(using: credential)
+            TelemetryDeck.signal("Did Log In")
             await MainActor.run {
               dismiss()
               onFinish()
@@ -160,7 +164,9 @@ private extension LoginView {
 }
 
 #Preview {
-  LoginView {
+  PreviewEnvironment {
+    LoginView {
 
+    }
   }
 }
