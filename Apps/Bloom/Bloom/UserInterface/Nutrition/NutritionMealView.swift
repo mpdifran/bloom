@@ -44,7 +44,7 @@ struct NutritionMealView: View {
     VStack(spacing: 16) {
       mealHeader
 
-      VStack {
+      VStack(spacing: 8) {
         if foodItemLogs.isEmpty {
           noContentView
         } else {
@@ -83,25 +83,16 @@ private extension NutritionMealView {
 
   var contentView: some View {
     ForEach(foodItemLogs) { foodItemLog in
-      Swipeable(
-        isSwipingItem: $isSwipingItem,
-        actions: [
-          SwipeAction(
-            title: "Delete",
-            symbol: .trash,
-            tint: .mutedRed,
-            action: {
-              delete(foodItemLog)
-            }
-          )
-        ]
-      ) {
-        FoodItemLogCell(foodItemLog: foodItemLog) { foodItem in
-          onCellTapped(foodItemLog, foodItem)
-        } showMealDetails: { foodItemLog in
-          showMealDetails(foodItemLog)
+      FoodItemLogCell(foodItemLog: foodItemLog) { foodItem in
+        onCellTapped(foodItemLog, foodItem)
+      } showMealDetails: { foodItemLog in
+        showMealDetails(foodItemLog)
+      }
+      .id(foodItemLog.id)
+      .contextMenu {
+        Button("Delete", systemSymbol: .trash, role: .destructive) {
+          delete(foodItemLog)
         }
-        .id(foodItemLog.id)
       }
     }
   }

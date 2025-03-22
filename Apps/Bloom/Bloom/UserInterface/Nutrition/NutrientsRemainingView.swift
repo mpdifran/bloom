@@ -71,15 +71,7 @@ private extension NutrientsRemainingView {
               displayAmount: viewModel.proteinString,
               label: "Protein"
             )
-            .tint(.mutedTeal)
-
-            NutrientLabel(
-              value: viewModel.fatsValue,
-              target: viewModel.fatsTarget,
-              displayAmount: viewModel.fatsString,
-              label: "Fats"
-            )
-            .tint(.mutedOrange)
+            .tint(.protein)
 
             NutrientLabel(
               value: viewModel.carbsValue,
@@ -87,7 +79,15 @@ private extension NutrientsRemainingView {
               displayAmount: viewModel.carbsString,
               label: "Carbs"
             )
-            .tint(.mutedPurple)
+            .tint(.carbohydrates)
+
+            NutrientLabel(
+              value: viewModel.fatsValue,
+              target: viewModel.fatsTarget,
+              displayAmount: viewModel.fatsString,
+              label: "Fats"
+            )
+            .tint(.fat)
           }
           .fixedSize(horizontal: true, vertical: false)
         }

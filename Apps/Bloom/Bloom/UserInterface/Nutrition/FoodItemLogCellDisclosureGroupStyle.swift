@@ -14,6 +14,8 @@ extension DisclosureGroupStyle where Self == FoodItemLogCellDisclosureGroupStyle
 
 struct FoodItemLogCellDisclosureGroupStyle: DisclosureGroupStyle {
 
+  @State private var selectionToggle = false
+
   func makeBody(configuration: Configuration) -> some View {
     VStack(spacing: 0) {
       HStack {
@@ -31,6 +33,7 @@ struct FoodItemLogCellDisclosureGroupStyle: DisclosureGroupStyle {
         withAnimation {
           configuration.isExpanded.toggle()
         }
+        selectionToggle.toggle()
       }
 
       if configuration.isExpanded {
@@ -40,6 +43,7 @@ struct FoodItemLogCellDisclosureGroupStyle: DisclosureGroupStyle {
     }
     .animation(.easeInOut, value: configuration.isExpanded)
     .cardContainer(includePadding: false)
+    .sensoryFeedback(.selection, trigger: selectionToggle)
   }
 }
 
