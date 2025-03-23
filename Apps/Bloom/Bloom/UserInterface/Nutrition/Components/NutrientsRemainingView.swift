@@ -111,7 +111,8 @@ private struct NutrientLabel: View {
       if let target {
         ProgressBar(
           value: value,
-          target: target
+          target: target,
+          measurementStyle: .remaining
         )
         .foregroundStyle(.tint)
       }

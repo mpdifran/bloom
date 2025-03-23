@@ -14,6 +14,7 @@ extension ProgressBar {
   enum MeasurementStyle {
     case minimum
     case range
+    case remaining
   }
 }
 
@@ -93,12 +94,14 @@ private extension ProgressBar {
       let fullPercentage = 1 / (1 + .rangePercent)
 
       return proxy.size.width * fullPercentage * progress
+    case .remaining:
+      return proxy.size.width * (1 - clampedProgress)
     }
   }
 
   func targetRangeOffset(proxy: GeometryProxy) -> CGFloat {
     switch measurementStyle {
-    case .minimum:
+    case .minimum, .remaining:
       return 0
     case .range:
       let upperTarget = target * (1 + .rangePercent)
@@ -114,7 +117,7 @@ private extension ProgressBar {
 
   func targetRangeWidth(proxy: GeometryProxy) -> CGFloat {
     switch measurementStyle {
-    case .minimum:
+    case .minimum, .remaining:
       return 0
     case .range:
       let upperTarget = target * (1 + .rangePercent)
@@ -138,6 +141,12 @@ private extension ProgressBar {
     ProgressBar(value: 100, target: 100)
     ProgressBar(value: 150, target: 100)
 
+    ProgressBar(
+      value: 10,
+      target: 100,
+      measurementStyle: .remaining
+    )
+
     ProgressBar(value: 60, target: 100, measurementStyle: .range)
     ProgressBar(value: 89, target: 100, measurementStyle: .range)
     ProgressBar(value: 90, target: 100, measurementStyle: .range)
@@ -147,5 +156,5 @@ private extension ProgressBar {
     ProgressBar(value: 200, target: 100, measurementStyle: .range)
   }
   .padding()
-  .tint(.mutedYellow)
+  .tint(.mutedPink)
 }
