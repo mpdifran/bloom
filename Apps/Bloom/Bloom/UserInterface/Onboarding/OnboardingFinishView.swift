@@ -46,6 +46,7 @@ struct OnboardingFinishView: View {
         Button("Yes!") {
           didContinue.toggle()
           TelemetryDeck.signal("OB Finish")
+          TelemetryDeck.stopAndSendDurationSignal("Onboarding")
           onContinue()
         }
         .buttonStyle(.onboarding)
