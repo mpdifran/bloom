@@ -136,3 +136,15 @@ private struct NutrientLabel: View {
     }
   }
 }
+
+#Preview {
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        NutrientsRemainingView()
+      }
+      .padding()
+    }
+    .groupedBackground()
+  }
+}
