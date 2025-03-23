@@ -15,7 +15,6 @@ struct NutritionView: View {
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   @State private var presentedSheet: AnyView?
-  @State private var isSwipingItem = false
   @State private var advanceToggle = false
 
   var body: some View {
@@ -32,13 +31,11 @@ struct NutritionView: View {
 
           FilteredFoodItemLogsListView(
             date: nutritionViewModel.date,
-            presentedSheet: $presentedSheet,
-            isSwipingItem: $isSwipingItem
+            presentedSheet: $presentedSheet
           )
         }
         .padding()
       }
-      .scrollDisabled(isSwipingItem)
       .groupedBackground()
       .navigationBarTitleDisplayMode(.inline)
       .tabBar()
@@ -98,15 +95,12 @@ private extension NutritionView {
   struct FilteredFoodItemLogsListView: View {
 
     @Binding private var presentedSheet: AnyView?
-    @Binding private var isSwipingItem: Bool
 
     init(
       date: Date,
-      presentedSheet: Binding<AnyView?>,
-      isSwipingItem: Binding<Bool>
+      presentedSheet: Binding<AnyView?>
     ) {
       self._presentedSheet = presentedSheet
-      self._isSwipingItem = isSwipingItem
 
       let startOfDay = Calendar.current.startOfDay(for: date)
       let endOfDay = Calendar.current.endOfDay(for: date)
@@ -126,25 +120,26 @@ private extension NutritionView {
     @Query private var foodItemLogs: [FoodItemLog]
 
     var body: some View {
-      ForEach(FoodItemLog.Meal.allCases) { meal in
-        NutritionMealView(
-          meal: meal,
-          foodItemLogs: foodItemLogs(for: meal),
-          isSwipingItem: $isSwipingItem
-        ) { foodItemLog, foodItem in
-          presentedSheet = FoodItemDetailsView(
-            foodItem: foodItem.asNetworkFoodItem(),
-            existingFoodItemLog: foodItemLog
-          ).asAny
-        } showMealDetails: { foodItemLog in
-          presentedSheet = FoodItemLogDetailsView(foodItemLog: foodItemLog).asAny
-        } onLogTapped: {
-          nutritionViewModel.suggestedMeal = meal
-          EntitledPresent(presentedSheet: $presentedSheet) {
-            FoodLoggingActionCardView()
+      Group {
+        ForEach(FoodItemLog.Meal.allCases) { meal in
+          NutritionMealView(
+            meal: meal,
+            foodItemLogs: foodItemLogs(for: meal)
+          ) { foodItemLog, foodItem in
+            presentedSheet = FoodItemDetailsView(
+              foodItem: foodItem.asNetworkFoodItem(),
+              existingFoodItemLog: foodItemLog
+            ).asAny
+          } showMealDetails: { foodItemLog in
+            presentedSheet = FoodItemLogDetailsView(foodItemLog: foodItemLog).asAny
+          } onLogTapped: {
+            nutritionViewModel.suggestedMeal = meal
+            EntitledPresent(presentedSheet: $presentedSheet) {
+              FoodLoggingActionCardView()
+            }
           }
+          .padding(.vertical)
         }
-        .padding(.vertical)
       }
     }
   }

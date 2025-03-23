@@ -19,6 +19,7 @@ struct AIFoodTextGenerationView: View {
   @State private var presentedSheet: AnyView?
   @State private var error: Error?
 
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
@@ -204,7 +205,7 @@ private extension AIFoodTextGenerationView {
 
   var saveButton: some View {
     AsyncButton {
-      try await save()
+      try save()
       dismiss()
     } label: {
       Group {
@@ -230,8 +231,8 @@ private extension AIFoodTextGenerationView {
     }
   }
 
-  func save() async throws {
-    try await nutritionViewModel.logMeal(
+  func save() throws {
+    try modelContext.log(
       name: viewModel.foodName ?? "My Meal",
       image: nil,
       numberOfServings: 1,

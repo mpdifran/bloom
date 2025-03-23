@@ -12,10 +12,11 @@ import BloomModel
 import DataContainer
 
 struct FoodItemLogDetailsView: View {
-  private var foodItemLog: FoodItemLog
+  private let foodItemLog: FoodItemLog
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
   @FocusState private var isFocused: Bool
@@ -31,7 +32,9 @@ struct FoodItemLogDetailsView: View {
   @State private var date: Date
   @State private var meal: FoodItemLog.Meal
 
-  init(foodItemLog: FoodItemLog) {
+  init(
+    foodItemLog: FoodItemLog
+  ) {
     self.foodItemLog = foodItemLog
 
     var foodItemServings = [String: Double]()
@@ -286,7 +289,7 @@ private extension FoodItemLogDetailsView {
       .buttonStyle(.primary)
     } else {
       AsyncButton {
-        try await save()
+        try save()
         dismiss()
       } label: {
         Text("Update")
@@ -319,8 +322,8 @@ private extension FoodItemLogDetailsView {
     return false
   }
 
-  func save() async throws {
-    try await nutritionViewModel.update(
+  func save() throws {
+    try modelContext.update(
       foodItemLog: foodItemLog,
       numberOfServings: numberOfServings,
       foodItemNumberOfServings: foodItemNumberOfServings,
@@ -333,12 +336,10 @@ private extension FoodItemLogDetailsView {
   }
 
   func delete(_ foodItemServing: FoodItemServing) {
-    Task {
-      do {
-        try await nutritionViewModel.delete(foodItemServing: foodItemServing)
-      } catch {
-        self.error = error
-      }
+    do {
+      try modelContext.delete(foodItemServing: foodItemServing)
+    } catch {
+      self.error = error
     }
   }
 }

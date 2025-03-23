@@ -12,8 +12,6 @@ import SwiftUI
 
 struct NutritionMealView: View {
 
-  @Binding private var isSwipingItem: Bool
-
   private let meal: FoodItemLog.Meal
   private let foodItemLogs: [FoodItemLog]
   private let onCellTapped: (FoodItemLog, FoodItemRecord) -> Void
@@ -23,20 +21,20 @@ struct NutritionMealView: View {
   init(
     meal: FoodItemLog.Meal,
     foodItemLogs: [FoodItemLog],
-    isSwipingItem: Binding<Bool>,
     onCellTapped: @escaping (FoodItemLog, FoodItemRecord) -> Void,
     showMealDetails: @escaping (FoodItemLog) -> Void,
     onLogTapped: @escaping () -> Void
   ) {
     self.meal = meal
     self.foodItemLogs = foodItemLogs
-    self._isSwipingItem = isSwipingItem
     self.onCellTapped = onCellTapped
     self.showMealDetails = showMealDetails
     self.onLogTapped = onLogTapped
   }
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
+
+  @Environment(\.modelContext) private var modelContext
 
   @State private var error: Error?
 
@@ -59,12 +57,10 @@ struct NutritionMealView: View {
 private extension NutritionMealView {
 
   func delete(_ foodItemLog: FoodItemLog) {
-    Task {
-      do {
-        try await nutritionViewModel.delete(foodItemLogs: [foodItemLog])
-      } catch {
-        self.error = error
-      }
+    do {
+      try modelContext.delete(foodItemLogs: [foodItemLog])
+    } catch {
+      self.error = error
     }
   }
 }
@@ -135,20 +131,20 @@ private extension NutritionMealView {
 }
 
 #Preview {
-  @Previewable @State var isSwipingItem = false
-  VStack {
-    NutritionMealView(
-      meal: .lunch,
-      foodItemLogs: [],
-      isSwipingItem: $isSwipingItem
-    ) { (_, _) in
-
-    } showMealDetails: { (_) in
-
-    } onLogTapped: {
-
+  PreviewEnvironment {
+    VStack {
+      NutritionMealView(
+        meal: .lunch,
+        foodItemLogs: []
+      ) { (_, _) in
+        
+      } showMealDetails: { (_) in
+        
+      } onLogTapped: {
+        
+      }
+      .padding()
     }
-    .padding()
+    .groupedBackground()
   }
-  .groupedBackground()
 }

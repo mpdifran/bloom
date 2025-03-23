@@ -119,7 +119,7 @@ struct FoodItemDetailsView: View {
           .buttonStyle(.primary)
         } else if mode == .editAndView {
           AsyncButton {
-            try await save()
+            try save()
             dismiss()
           } label: {
             Text(existingFoodItemLog == nil ? "Log" : "Update")
@@ -323,13 +323,11 @@ private extension FoodItemDetailsView {
           Divider()
 
           Button("Delete Log", systemImage: "trash", role: .destructive) {
-            Task {
-              do {
-                try await nutritionViewModel.delete(foodItemLogs: [existingFoodItemLog])
-                dismiss()
-              } catch {
-                self.error = error
-              }
+            do {
+              try modelContext.delete(foodItemLogs: [existingFoodItemLog])
+              dismiss()
+            } catch {
+              self.error = error
             }
           }
         }
@@ -352,18 +350,18 @@ private extension FoodItemDetailsView {
     existingFoodItemLog.meal != meal
   }
 
-  func save() async throws {
+  func save() throws {
     if let existingFoodItemLog {
       let isSingleServing = existingFoodItemLog.hasSingleServing
 
-      try await nutritionViewModel.update(
+      try modelContext.update(
         foodItemLog: existingFoodItemLog,
         foodItemID: foodItem.id.value,
         numberOfServings: numberOfServings,
         dateMeal: isSingleServing ? (date, meal) : nil
       )
     } else {
-      try await nutritionViewModel.log(
+      try modelContext.log(
         foodItem: foodItem,
         date: date,
         meal: meal,

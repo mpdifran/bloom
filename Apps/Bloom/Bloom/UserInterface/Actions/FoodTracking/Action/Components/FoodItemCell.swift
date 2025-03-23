@@ -21,6 +21,8 @@ struct FoodItemCell: View {
   @State private var hasLoggedThisFoodItem = false
   @State private var error: Error?
 
+  @Environment(\.modelContext) private var modelContext
+
   var body: some View {
     HStack {
       if foodItem.isVerified {
@@ -55,7 +57,7 @@ struct FoodItemCell: View {
       AsyncButton {
         guard !hasLoggedThisFoodItem else { return }
 
-        try await quickLogFood()
+        try quickLogFood()
       } label: {
         if !hasLoggedThisFoodItem {
           Image(systemSymbol: .plusCircleFill)
@@ -100,8 +102,8 @@ private extension FoodItemCell {
     return "\(quantity.value.format(using: .twoDecimalPlaces)) \(quantity.unit)"
   }
 
-  func quickLogFood() async throws {
-    try await nutritionViewModel.log(
+  func quickLogFood() throws {
+    try modelContext.log(
       foodItem: foodItem,
       date: nutritionViewModel.date,
       meal: nutritionViewModel.suggestedMeal,

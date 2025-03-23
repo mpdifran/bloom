@@ -33,6 +33,7 @@ struct AIFoodScannerView: View {
 
   @StateObject var permissionManager = CameraPermissionManager.shared
 
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
   @Namespace private var aiFoodScannerNamespace
@@ -278,7 +279,7 @@ private extension AIFoodScannerView {
 
   var logFoodButton: some View {
     AsyncButton {
-      try await save()
+      try save()
       dismiss()
     } label: {
       Group {
@@ -390,8 +391,8 @@ private extension AIFoodScannerView {
     }
   }
 
-  func save() async throws {
-    try await nutritionViewModel.logMeal(
+  func save() throws {
+    try modelContext.log(
       name: viewModel.scannedFoodName ?? "My Scanned Meal",
       image: viewModel.image,
       numberOfServings: 1,
