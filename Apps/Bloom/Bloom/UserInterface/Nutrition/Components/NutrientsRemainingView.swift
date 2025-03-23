@@ -63,7 +63,7 @@ private extension NutrientsRemainingView {
 
         Spacer()
 
-        HStack {
+        HStack(alignment: .bottom) {
           Group {
             NutrientLabel(
               value: viewModel.proteinValue,
