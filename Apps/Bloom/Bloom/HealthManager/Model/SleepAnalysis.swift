@@ -306,7 +306,7 @@ extension SleepAnalysis {
       (coreSleepScore, "You didn't get enough Core sleep."),
       (remSleepScore, "You didn't get enough REM sleep."),
       (awakeSleepScore, awakeSleepDescription)
-    ]
+    ].filter({ $0.0 <= 6 })
 
     if let minPairingText = pairings.min(by: { (lhs, rhs) in
       (lhs.0 ?? .infinity) < (rhs.0 ?? .infinity)
