@@ -87,6 +87,7 @@ struct OnboardingHealthAgeSexHeightView: View {
           Button("Continue") {
             didContinue.toggle()
             onContinue()
+            TelemetryDeck.stopAndSendDurationSignal("OB Age+Sex Duration")
           }
           .buttonStyle(.onboarding)
           .disabled(shouldDisableContinue)
@@ -96,11 +97,31 @@ struct OnboardingHealthAgeSexHeightView: View {
     .onAppear {
       if !isHealthKitDataValid {
         wasMissingHealthData = true
+        TelemetryDeck.signal(
+          "OB Age+Sex - Health Data Check",
+          parameters: [
+            "sex" : healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
+            "age" : healthManager.healthStore.age() == nil ? "Not Present" : "Present",
+            "height" : healthManager.heightCM > 0 ? "Not Present" : "Present",
+            "isMissingHealthData" : "yes"
+          ]
+        )
+      } else {
+        TelemetryDeck.signal(
+          "OB Age+Sex - Health Data Check",
+          parameters: [
+            "sex" : healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
+            "age" : healthManager.healthStore.age() == nil ? "Not Present" : "Present",
+            "height" : healthManager.heightCM > 0 ? "Not Present" : "Present",
+            "isMissingHealthData" : "no"
+          ]
+        )
       }
       healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
       healthManager.isFemale = healthManager.healthStore.sex() == .female
 
       TelemetryDeck.signal("OB Age+Sex")
+      TelemetryDeck.startDurationSignal("OB Age+Sex Duration")
     }
   }
 }
@@ -150,6 +171,10 @@ private extension OnboardingHealthAgeSexHeightView {
       Button("Yes") {
         isHealthDataConfirmed = true
         index = 4
+        TelemetryDeck.signal(
+          "OB Age+Sex - Confirmation",
+          parameters: ["health-data-confirmation" : "yes"]
+        )
       }
       .buttonStyle(.onboarding)
       .opacity(isHealthDataConfirmed == false ? 0.3 : 1)
@@ -159,6 +184,10 @@ private extension OnboardingHealthAgeSexHeightView {
       Button("No") {
         isHealthDataConfirmed = false
         index = 4
+        TelemetryDeck.signal(
+          "OB Age+Sex - Confirmation",
+          parameters: ["health-data-confirmation" : "no"]
+        )
       }
       .buttonStyle(.onboarding)
       .opacity(isHealthDataConfirmed == true ? 0.3 : 1)
