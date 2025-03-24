@@ -14,6 +14,7 @@ struct GoalLookbackView: View {
 
   @State var viewModel = ViewModel()
 
+  @State private var hasGoals = true
   @State private var goalLookbackDetails = [GoalLookbackDetails]()
   @State private var presentedSheet: AnyView?
 
@@ -28,20 +29,21 @@ struct GoalLookbackView: View {
       AsyncButton {
         try await calculateGoals()
       } label: {
-        Text("Update Goals")
+        Text(hasGoals ? "Update Goals" : "Get Goals")
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
     }
     .groupedBackground()
     .animation(.bouncy, value: goalLookbackDetails)
+    .animation(.default, value: hasGoals)
     .sensoryFeedback(.selection, trigger: goalLookbackDetails.count)
     .sheet($presentedSheet)
     .task {
       let details = await viewModel.loadGoalHistory()
-
       await Delay(1000)
 
+      hasGoals = details.isNotEmpty
       for detail in details {
         goalLookbackDetails.append(detail)
         await Delay(100)
@@ -62,10 +64,13 @@ private extension GoalLookbackView {
         .onboardingTextStyle()
         .transition(.opacity)
 
-      if goalLookbackDetails.isEmpty {
-        CircularSpinnerView()
-          .foregroundStyle(.tint)
-      } else {
+      if hasGoals {
+        if goalLookbackDetails.isEmpty {
+          CircularSpinnerView()
+            .foregroundStyle(.tint)
+            .frame(height: 300)
+        }
+
         ForEach(goalLookbackDetails) { details in
           GoalLookbackCell(
             goal: details.goal,
@@ -73,6 +78,13 @@ private extension GoalLookbackView {
           )
           .transition(.scale)
         }
+      } else {
+        ContentUnavailableView(
+          "No Goals",
+          systemSymbol: .sparkles,
+          description: Text("You don't have any goals set.")
+        )
+        .frame(height: 300)
       }
     }
   }
@@ -95,5 +107,7 @@ private extension GoalLookbackView {
 }
 
 #Preview {
-  GoalLookbackView { (_) in }
+  PreviewEnvironment {
+    GoalLookbackView { (_) in }
+  }
 }
