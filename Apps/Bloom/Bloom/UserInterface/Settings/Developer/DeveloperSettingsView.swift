@@ -12,11 +12,12 @@ import HealthKit
 
 struct DeveloperSettingsView: View {
 
-  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
   @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
+  @AppStorage(.FeatureFlag.aiChat) private var aiChat = false
+  @AppStorage(.FeatureFlag.alwaysShowReports) private var alwaysShowReports = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -202,14 +203,20 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        SettingsCell("AI Chat") {
+          Toggle("", isOn: $aiChat)
+        }
+
+        Divider()
+
         SettingsCell("Legacy Goal Review") {
           Toggle("", isOn: $legacyGoalSetting)
         }
 
         Divider()
 
-        SettingsCell("Daniele Mode") {
-          Toggle("", isOn: $danieleMode)
+        SettingsCell("Always Show Reports") {
+          Toggle("", isOn: $alwaysShowReports)
         }
 
         Divider()
@@ -479,8 +486,9 @@ extension DeveloperSettingsView {
         Button(role: .destructive) {
           apiHost.overrideEnabled = false
           showDeveloperMode = false
-          danieleMode = false
           legacyGoalSetting = false
+          aiChat = false
+          alwaysShowReports = false
           dismiss()
         } label: {
           Text("Exit Developer Mode")

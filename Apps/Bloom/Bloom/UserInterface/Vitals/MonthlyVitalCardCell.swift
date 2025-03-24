@@ -20,8 +20,6 @@ extension MonthlyVitalCardCell {
 struct MonthlyVitalCardCell: View {
   let vital: VitalModel
 
-  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
-
   var body: some View {
     HStack {
       Image(systemSymbol: SFSymbol(rawValue: vital.id.systemImage))

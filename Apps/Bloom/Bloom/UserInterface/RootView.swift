@@ -12,7 +12,6 @@ import AppUI
 struct RootView: View {
 
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
-  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
 
   @Bindable private var tabController = TabController()
 
@@ -77,7 +76,6 @@ struct RootView: View {
     .sheet($presentedSheet)
     .animation(.easeInOut(duration: 1), value: userController.isAuthenticated)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
-    .animation(.default, value: danieleMode)
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
       dismiss()
     }

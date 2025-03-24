@@ -27,7 +27,6 @@ struct SettingsView: View {
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
-  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
 
   @Environment(\.openURL) private var openURL

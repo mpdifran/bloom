@@ -37,7 +37,8 @@ struct TodayView: View {
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
-  @AppStorage(.FeatureFlag.danieleMode) private var danieleMode = false
+  @AppStorage(.FeatureFlag.alwaysShowReports) private var alwaysShowReports = false
+  @AppStorage(.FeatureFlag.aiChat) private var aiChat = false
   @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
 
   var body: some View {
@@ -79,7 +80,7 @@ struct TodayView: View {
             UserProfilePhotoView(dimension: 32)
           }
         }
-        if danieleMode {
+        if aiChat {
           ToolbarItem(placement: .cancellationAction) {
             Button("Chat", systemImage: "bubble") {
               presentedSheet = ChatView().asAny
@@ -127,21 +128,21 @@ private extension TodayView {
   @ViewBuilder
   var alertsSection: some View {
     TimelineView(.everyMinute) { context in
-      if Calendar.current.isMorning(date: .now) || danieleMode {
+      if Calendar.current.isMorning(date: .now) || alwaysShowReports {
         DailyReportAlertCell(kind: .morning)
           .transition(.scale)
           .onTapGesture {
             presentedFullScreen = GoodMorningView().asAny
           }
       }
-      if reportViewModel.shouldShowEveningReport() || danieleMode {
+      if reportViewModel.shouldShowEveningReport() || alwaysShowReports {
         DailyReportAlertCell(kind: .evening)
           .transition(.scale)
           .onTapGesture {
             presentedFullScreen = EveningReportView().asAny
           }
       }
-      if habitsViewModel.shouldUpdateSuggestedHabits || danieleMode {
+      if habitsViewModel.shouldUpdateSuggestedHabits {
         GoalReviewCell()
           .transition(.scale)
           .onTapGesture {
