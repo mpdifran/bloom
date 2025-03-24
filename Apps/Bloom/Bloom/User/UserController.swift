@@ -103,7 +103,10 @@ extension UserController {
         }
       }
 
-      let requestBody = AuthIdentifyRequest(appUserID: UserID.value)
+      let requestBody = AuthIdentifyRequest(
+        appUserID: UserID.value,
+        appVersion: Bundle.main.appVersion ?? "Unknown"
+      )
       let response = try await NetworkRequester.shared.identify(request: requestBody)
 
       self.email = response.email

@@ -72,11 +72,13 @@ extension UserDatabaseService {
   @discardableResult
   func storeAppUserID(
     _ request: Request,
-    appUserID: String
+    appUserID: String,
+    appVersion: String
   ) async throws -> User {
     let user = try await fetchAuthUser(request)
 
     user.appUserID = appUserID
+    user.appVersion = appVersion
 
     try await user.save(on: request.db)
     return user

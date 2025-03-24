@@ -89,7 +89,11 @@ private extension AuthenticationController {
   func identify(_ request: Request) async throws -> AuthIdentifyResponse {
     let identityRequest = try request.content.decode(AuthIdentifyRequest.self)
 
-    let user = try await userService.storeAppUserID(request, appUserID: identityRequest.appUserID)
+    let user = try await userService.storeAppUserID(
+      request,
+      appUserID: identityRequest.appUserID,
+      appVersion: identityRequest.appVersion
+    )
 
     return AuthIdentifyResponse(
       email: user.email,

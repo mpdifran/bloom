@@ -28,6 +28,9 @@ final class User: Model, Content, @unchecked Sendable {
   @Field(key: "family_name")
   var familyName: String?
 
+  @Field(key: "app_version")
+  var appVersion: String?
+
   @Field(key: "user_detection_status")
   var rawUserDetectionStatus: String?
 
@@ -64,6 +67,7 @@ final class User: Model, Content, @unchecked Sendable {
        email: String? = nil,
        givenName: String? = nil,
        familyName: String? = nil,
+       appVersion: String? = nil,
        rawUserDetectionStatus: String? = nil,
        healthCoachThreadID: String? = nil,
        healthGoalSetterThreadID: String? = nil,
@@ -76,6 +80,7 @@ final class User: Model, Content, @unchecked Sendable {
     self.email = email
     self.givenName = givenName
     self.familyName = familyName
+    self.appVersion = appVersion
     self.rawUserDetectionStatus = rawUserDetectionStatus
     self.healthCoachThreadID = healthCoachThreadID
     self.healthGoalSetterThreadID = healthGoalSetterThreadID

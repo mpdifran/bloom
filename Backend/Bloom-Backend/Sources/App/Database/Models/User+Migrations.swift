@@ -121,4 +121,18 @@ extension User {
         .update()
     }
   }
+
+  struct AddAppVersion: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("app_version", .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("app_version")
+        .update()
+    }
+  }
 }

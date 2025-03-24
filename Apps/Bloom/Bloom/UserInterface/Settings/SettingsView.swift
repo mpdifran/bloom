@@ -463,7 +463,7 @@ private extension SettingsView {
 
       SettingsSectionContainer {
         SettingsCell("App Version") {
-          Text(appVersion ?? "Unknown")
+          Text(Bundle.main.appVersion ?? "Unknown")
             .onTapGesture(count: 10) {
               showDeveloperMode = true
             }
@@ -598,18 +598,6 @@ private extension SettingsView {
     } catch {
       self.error = error
     }
-  }
-}
-
-private extension SettingsView {
-
-  var appVersion: String? {
-    guard let versionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else { return nil }
-
-    if let buildString = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-      return "\(versionString) (\(buildString))"
-    }
-    return versionString
   }
 }
 

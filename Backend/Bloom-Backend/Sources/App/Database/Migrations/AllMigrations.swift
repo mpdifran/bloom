@@ -34,4 +34,5 @@ let allMigrations: [Migration] = [
     FoodItemIssueReport.AddFoodItemRecordIndex(),
     User.RenameThreadID(),
     User.AddHealthGoalSetterThreadID(),
+    User.AddAppVersion(),
 ]

@@ -100,20 +100,20 @@ struct OnboardingHealthAgeSexHeightView: View {
         TelemetryDeck.signal(
           "OB Age+Sex - Health Data Check",
           parameters: [
-            "sex" : healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
-            "age" : healthManager.healthStore.age() == nil ? "Not Present" : "Present",
-            "height" : healthManager.heightCM > 0 ? "Not Present" : "Present",
-            "isMissingHealthData" : "yes"
+            "sex": healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
+            "age": healthManager.healthStore.age() == nil ? "Not Present" : "Present",
+            "height": healthManager.heightCM > 0 ? "Not Present" : "Present",
+            "isMissingHealthData": "yes"
           ]
         )
       } else {
         TelemetryDeck.signal(
           "OB Age+Sex - Health Data Check",
           parameters: [
-            "sex" : healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
-            "age" : healthManager.healthStore.age() == nil ? "Not Present" : "Present",
-            "height" : healthManager.heightCM > 0 ? "Not Present" : "Present",
-            "isMissingHealthData" : "no"
+            "sex": healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
+            "age": healthManager.healthStore.age() == nil ? "Not Present" : "Present",
+            "height": healthManager.heightCM > 0 ? "Not Present" : "Present",
+            "isMissingHealthData": "no"
           ]
         )
       }
@@ -173,7 +173,7 @@ private extension OnboardingHealthAgeSexHeightView {
         index = 4
         TelemetryDeck.signal(
           "OB Age+Sex - Confirmation",
-          parameters: ["health-data-confirmation" : "yes"]
+          parameters: ["health-data-confirmation": "yes"]
         )
       }
       .buttonStyle(.onboarding)
@@ -186,7 +186,7 @@ private extension OnboardingHealthAgeSexHeightView {
         index = 4
         TelemetryDeck.signal(
           "OB Age+Sex - Confirmation",
-          parameters: ["health-data-confirmation" : "no"]
+          parameters: ["health-data-confirmation": "no"]
         )
       }
       .buttonStyle(.onboarding)
