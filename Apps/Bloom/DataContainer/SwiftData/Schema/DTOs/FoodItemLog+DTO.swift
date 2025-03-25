@@ -46,3 +46,29 @@ public extension FoodItemLog {
     )
   }
 }
+
+public extension FoodItemLogDTO {
+
+  func totalNutrient(
+    foodItem: FoodItemDTO,
+    keyPath: KeyPath<FoodItemDTO, Double>
+  ) -> Double {
+    guard let serving = foodItemServings.first(where: { $0.foodItem?.id == foodItem.id }) else { return 0 }
+
+    let value = foodItem[keyPath: keyPath]
+
+    return numberOfServings * serving.numberOfServings * value
+  }
+
+  func totalNutrient(
+    foodItem: FoodItemDTO,
+    keyPath: KeyPath<FoodItemDTO, Double?>
+  ) -> Double? {
+    guard
+      let serving = foodItemServings.first(where: { $0.foodItem?.id == foodItem.id }),
+      let value = foodItem[keyPath: keyPath]
+    else { return nil }
+
+    return numberOfServings * serving.numberOfServings * value
+  }
+}

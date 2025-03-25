@@ -22,6 +22,8 @@ final actor ChatVitalConverter {
   static let shared = ChatVitalConverter()
 
   private init() { }
+
+  private let foodLogModelActor = FoodItemLogModelActor.standard()
 }
 
 extension ChatVitalConverter {
@@ -44,6 +46,7 @@ extension ChatVitalConverter {
       exerciseEffectiveness: generateExerciseEffectiveness(from: startDate),
       heartHealth: generateHeartHealth(from: startDate),
       menstrualHealth: generateMenstrualHealth(from: startDate),
+      nutrition: generateNutritionHealth(from: startDate),
       sleep: generateSleep(from: startDate),
       stress: generateStress(from: startDate)
     )
@@ -289,6 +292,70 @@ private extension ChatVitalConverter {
       restingHeartRate: rhrSamples,
       heartRateRecoveryOneMinute: heartRateRecoverySamples
     )
+  }
+
+  func generateNutritionHealth(from date: Date) async -> ChatHealthData.Nutrition? {
+    let dateRange = DateRange.fromDateToNow(date)
+
+    var logs = [ChatHealthData.FoodLogDay]()
+
+    await Calendar.current.asyncIterate(
+      dateRange: dateRange,
+      by: DateComponents(day: 1)
+    ) { [foodLogModelActor] (date) in
+      do {
+        let foodLogs = try await foodLogModelActor.fetchLogs(for: date)
+
+        var breakfast = [ChatHealthData.FoodItem]()
+        var lunch = [ChatHealthData.FoodItem]()
+        var dinner = [ChatHealthData.FoodItem]()
+        var snack = [ChatHealthData.FoodItem]()
+
+        for foodLog in foodLogs {
+          for serving in foodLog.foodItemServings {
+            guard let foodItem = serving.foodItem else { continue }
+
+            let networkFoodItem = ChatHealthData.FoodItem(foodItemLog: foodLog, foodItem: foodItem)
+
+            switch foodLog.meal {
+            case .breakfast:
+              breakfast.append(networkFoodItem)
+            case .lunch:
+              lunch.append(networkFoodItem)
+            case .dinner:
+              dinner.append(networkFoodItem)
+            case .snack:
+              snack.append(networkFoodItem)
+            @unknown default:
+              print("UNKNOWN MEAL CASE")
+              break
+            }
+          }
+        }
+
+        guard
+          breakfast.isNotEmpty ||
+          lunch.isNotEmpty ||
+          dinner.isNotEmpty ||
+          snack.isNotEmpty
+        else { return }
+
+        let dayLog = ChatHealthData.FoodLogDay(
+          date: date,
+          breakfast: breakfast,
+          lunch: lunch,
+          dinner: dinner,
+          snack: snack
+        )
+        logs.append(dayLog)
+      } catch {
+        print(error)
+      }
+    }
+
+    guard logs.isNotEmpty else { return nil }
+
+    return ChatHealthData.Nutrition(foodLogs: logs)
   }
 
   func generateMenstrualHealth(from date: Date) async -> ChatHealthData.MenstrualHealth? {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DataContainer
 
 protocol SendableNetworkModel: Codable, Equatable, Sendable { }
 
@@ -19,6 +20,7 @@ struct ChatHealthData: SendableNetworkModel {
   let exerciseEffectiveness: ExerciseEffectiveness?
   let heartHealth: HeartHealth?
   let menstrualHealth: MenstrualHealth?
+  let nutrition: Nutrition?
   let sleep: Sleep?
   let stress: Stress?
 }
@@ -69,6 +71,43 @@ extension ChatHealthData {
     let date: Date
     let bristolStoolType: Int
     let duration: String
+  }
+
+  struct FoodLogDay: SendableNetworkModel {
+    let date: Date
+    let breakfast: [FoodItem]
+    let lunch: [FoodItem]
+    let dinner: [FoodItem]
+    let snack: [FoodItem]
+  }
+
+  struct FoodItem: SendableNetworkModel {
+    let name: String
+    let brandName: String
+    let calories: Quantity
+    let protein: Quantity
+    let carbohydrates: Quantity
+    let fat: Quantity
+    let saturatedFat: Quantity?
+    let transFat: Quantity?
+    let polyunsaturatedFat: Quantity?
+    let monounsaturatedFat: Quantity?
+    let fiber: Quantity?
+    let sugar: Quantity?
+    let cholesterol: Quantity?
+    let sodium: Quantity?
+    let calcium: Quantity?
+    let iron: Quantity?
+    let potassium: Quantity?
+    let magnesium: Quantity?
+    let zinc: Quantity?
+    let vitaminA: Quantity?
+    let vitaminB6: Quantity?
+    let vitaminB12: Quantity?
+    let vitaminC: Quantity?
+    let vitaminD: Quantity?
+    let vitaminE: Quantity?
+    let ingredients: String?
   }
 
   struct HeartRateZones: SendableNetworkModel {
@@ -127,6 +166,170 @@ extension ChatHealthData {
     let date: Date
     let systolic: Quantity
     let diastolic: Quantity
+  }
+}
+
+extension ChatHealthData.FoodItem {
+
+  init(foodItemLog: FoodItemLogDTO, foodItem: FoodItemDTO) {
+    self.init(
+      name: foodItem.name,
+      brandName: foodItem.brandName,
+      calories: ChatHealthData.Quantity(
+        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.calories),
+        unit: "Cals",
+        numberFormatter: .noDecimalPlaces
+      ),
+      protein: ChatHealthData.Quantity(
+        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.protein),
+        unit: "g",
+        numberFormatter: .noDecimalPlaces
+      ),
+      carbohydrates: ChatHealthData.Quantity(
+        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.carbohydrates),
+        unit: "g",
+        numberFormatter: .noDecimalPlaces
+      ),
+      fat: ChatHealthData.Quantity(
+        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.fat),
+        unit: "g",
+        numberFormatter: .noDecimalPlaces
+      ),
+      saturatedFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.saturatedFat).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "g",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      transFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.transFat).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "g",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      polyunsaturatedFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.polyunsaturatedFat).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "g",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      monounsaturatedFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.monounsaturatedFat).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "g",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      fiber: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.fiber).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "g",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      sugar: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.sugar).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "g",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      cholesterol: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.cholesterol).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      sodium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.sodium).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      calcium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.calcium).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      iron: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.iron).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      potassium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.potassium).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      magnesium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.magnesium).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      zinc: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.zinc).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      vitaminA: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminA).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      vitaminB6: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminB6).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      vitaminB12: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminB12).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      vitaminC: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminC).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      vitaminD: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminD).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      vitaminE: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminE).map {
+        ChatHealthData.Quantity(
+          value: $0,
+          unit: "mg",
+          numberFormatter: .noDecimalPlaces
+        )
+      },
+      ingredients: foodItem.ingredients
+    )
   }
 }
 
@@ -191,6 +394,14 @@ extension ChatHealthData {
 extension ChatHealthData {
   struct MenstrualHealth: SendableNetworkModel {
     let cycles: [MenstrualCycle]
+  }
+}
+
+// MARK: - Nutrition
+
+extension ChatHealthData {
+  struct Nutrition: SendableNetworkModel {
+    let foodLogs: [FoodLogDay]
   }
 }
 
