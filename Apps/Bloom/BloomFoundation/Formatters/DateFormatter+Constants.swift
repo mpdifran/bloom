@@ -81,6 +81,10 @@ public extension DateFormatter {
     $0.setLocalizedDateFormatFromTemplate("MMM d")
   }
 
+  static let justDay = DateFormatter().with {
+    $0.setLocalizedDateFormatFromTemplate("d")
+  }
+
   static let justDayOfWeek = DateFormatter().with {
     $0.setLocalizedDateFormatFromTemplate("EEEE")
   }
