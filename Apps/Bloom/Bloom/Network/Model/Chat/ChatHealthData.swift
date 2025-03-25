@@ -7,6 +7,7 @@
 
 import Foundation
 import DataContainer
+import HealthKit
 
 protocol SendableNetworkModel: Codable, Equatable, Sendable { }
 
@@ -172,12 +173,34 @@ extension ChatHealthData {
 extension ChatHealthData.FoodItem {
 
   init(foodItemLog: FoodItemLogDTO, foodItem: FoodItemDTO) {
+    func optionalQuantity(
+      foodItemLog: FoodItemLogDTO,
+      foodItem: FoodItemDTO,
+      keyPath: KeyPath<FoodItemDTO, Double?>,
+      storedUnit: HKUnit,
+      desiredUnit: HKUnit,
+      numberFormatter: NumberFormatter
+    ) -> ChatHealthData.Quantity? {
+      guard
+        let value = foodItemLog.totalNutrient(foodItem: foodItem, keyPath: keyPath),
+        value > 0
+      else { return nil }
+
+      let quantity = HKQuantity(unit: storedUnit, doubleValue: value)
+
+      return ChatHealthData.Quantity(
+        value: quantity.doubleValue(for: desiredUnit),
+        unit: desiredUnit.unitString,
+        numberFormatter: numberFormatter
+      )
+    }
+
     self.init(
       name: foodItem.name,
       brandName: foodItem.brandName,
       calories: ChatHealthData.Quantity(
         value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.calories),
-        unit: "Cals",
+        unit: "Cal",
         numberFormatter: .noDecimalPlaces
       ),
       protein: ChatHealthData.Quantity(
@@ -195,139 +218,158 @@ extension ChatHealthData.FoodItem {
         unit: "g",
         numberFormatter: .noDecimalPlaces
       ),
-      saturatedFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.saturatedFat).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "g",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      transFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.transFat).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "g",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      polyunsaturatedFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.polyunsaturatedFat).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "g",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      monounsaturatedFat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.monounsaturatedFat).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "g",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      fiber: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.fiber).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "g",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      sugar: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.sugar).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "g",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      cholesterol: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.cholesterol).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      sodium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.sodium).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      calcium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.calcium).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      iron: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.iron).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      potassium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.potassium).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      magnesium: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.magnesium).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      zinc: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.zinc).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      vitaminA: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminA).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      vitaminB6: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminB6).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      vitaminB12: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminB12).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      vitaminC: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminC).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      vitaminD: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminD).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
-      vitaminE: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.vitaminE).map {
-        ChatHealthData.Quantity(
-          value: $0,
-          unit: "mg",
-          numberFormatter: .noDecimalPlaces
-        )
-      },
+      saturatedFat: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.saturatedFat,
+        storedUnit: .gram(),
+        desiredUnit: .gram(),
+        numberFormatter: .noDecimalPlaces
+      ),
+      transFat: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.transFat,
+        storedUnit: .gram(),
+        desiredUnit: .gram(),
+        numberFormatter: .noDecimalPlaces
+      ),
+      polyunsaturatedFat: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.polyunsaturatedFat,
+        storedUnit: .gram(),
+        desiredUnit: .gram(),
+        numberFormatter: .noDecimalPlaces
+      ),
+      monounsaturatedFat: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.monounsaturatedFat,
+        storedUnit: .gram(),
+        desiredUnit: .gram(),
+        numberFormatter: .noDecimalPlaces
+      ),
+      fiber: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.fiber,
+        storedUnit: .gram(),
+        desiredUnit: .gram(),
+        numberFormatter: .noDecimalPlaces
+      ),
+      sugar: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.sugar,
+        storedUnit: .gram(),
+        desiredUnit: .gram(),
+        numberFormatter: .noDecimalPlaces
+      ),
+      cholesterol: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.cholesterol,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      sodium: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.sodium,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      calcium: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.calcium,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      iron: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.iron,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      potassium: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.potassium,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      magnesium: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.magnesium,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      zinc: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.zinc,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      vitaminA: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.vitaminA,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .micro),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      vitaminB6: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.vitaminB6,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      vitaminB12: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.vitaminB12,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .micro),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      vitaminC: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.vitaminC,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      vitaminD: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.vitaminD,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .micro),
+        numberFormatter: .threeDecimalPlaces
+      ),
+      vitaminE: optionalQuantity(
+        foodItemLog: foodItemLog,
+        foodItem: foodItem,
+        keyPath: \.vitaminE,
+        storedUnit: .gramUnit(with: .milli),
+        desiredUnit: .gramUnit(with: .milli),
+        numberFormatter: .threeDecimalPlaces
+      ),
       ingredients: foodItem.ingredients
     )
   }
