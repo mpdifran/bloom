@@ -82,7 +82,7 @@ struct TodayView: View {
         }
         if aiChat {
           ToolbarItem(placement: .cancellationAction) {
-            Button("Chat", systemImage: "bubble") {
+            Button("Chat", systemSymbol: .arrowUpCircleFill) {
               presentedSheet = ChatView().asAny
             }
             .bold()

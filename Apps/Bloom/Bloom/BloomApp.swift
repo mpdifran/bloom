@@ -38,22 +38,6 @@ struct BloomApp: App {
     ])
     _ = EntitlementController.shared
 
-    Task {
-      await HealthSleepObserver.shared.observeSleep()
-    }
-
-    Task {
-      do {
-        try await UserController.shared.verifyAuthentication()
-      } catch {
-        TelemetryDeck.errorOccurred(
-          id: "BloomApp.verifyAuthentication",
-          category: .appState,
-          message: error.localizedDescription
-        )
-      }
-    }
-
     //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
   }
 
@@ -66,6 +50,20 @@ struct BloomApp: App {
         }
         .task {
           await VitalsCalculator.shared.refreshVitals()
+        }
+        .task {
+          await HealthSleepObserver.shared.observeSleep()
+        }
+        .task {
+          do {
+            try await UserController.shared.verifyAuthentication()
+          } catch {
+            TelemetryDeck.errorOccurred(
+              id: "BloomApp.verifyAuthentication",
+              category: .appState,
+              message: error.localizedDescription
+            )
+          }
         }
     }
     .modelContainer(ContainerHolder.shared.container)
