@@ -10,6 +10,13 @@ import AppUI
 import SwiftData
 import DataContainer
 
+extension FoodLoggingActionCardView {
+  enum FoodItemHistoryTab {
+    case frequent
+    case recent
+  }
+}
+
 struct FoodLoggingActionCardView: View {
 
   private let initialBarcodeToSearch: String?
@@ -32,6 +39,7 @@ struct FoodLoggingActionCardView: View {
   @State private var healthPermissionTrigger = false
   @State private var presentedSheet: AnyView?
   @State private var selectedTab = FoodItemCategoryTab.branded
+  @State private var selectedHistoryTab = FoodItemHistoryTab.frequent
 
   @Environment(\.dismiss) private var dismiss
 
@@ -150,7 +158,63 @@ private extension FoodLoggingActionCardView {
         noContentView
       }
     } else {
-      recentFoodItemsView
+      VStack {
+        switch selectedHistoryTab {
+        case .frequent:
+          frequentFoodItemsView
+        case .recent:
+          recentFoodItemsView
+        }
+      }
+      .safeAreaInset(edge: .top) {
+        foodItemHistoryHeader
+          .background(.bar)
+      }
+      .animation(.easeInOut, value: selectedHistoryTab)
+      .groupedBackground()
+    }
+  }
+
+  var foodItemHistoryHeader: some View {
+    Picker("", selection: $selectedHistoryTab) {
+      Text("Frequent")
+        .bold()
+        .fontDesign(.rounded)
+        .tag(FoodItemHistoryTab.frequent)
+      Text("Recent")
+        .bold()
+        .fontDesign(.rounded)
+        .tag(FoodItemHistoryTab.recent)
+    }
+    .pickerStyle(.segmented)
+    .padding(.horizontal)
+    .padding(.vertical, 12)
+  }
+
+  var frequentFoodItemsView: some View {
+    ScrollView {
+      LazyVStack {
+        ForEach(viewModel.frequentFoodItemSections) { section in
+          SectionTitleView(section.title)
+            .padding(.horizontal)
+
+          ForEachEnumerated(section.foodItems) { index, foodItem in
+            if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
+              FoodItemCell(foodItem: foodItem)
+                .id(foodItem.id)
+                .transition(.blurReplace)
+                .onTapGesture {
+                  presentedSheet = FoodItemDetailsView(
+                    foodItem: foodItem,
+                    existingFoodItemLog: nil
+                  ).asAny
+                }
+            }
+          }
+        }
+      }
+      .padding(.horizontal)
+      .padding(.bottom)
     }
   }
 
@@ -176,9 +240,9 @@ private extension FoodLoggingActionCardView {
           }
         }
       }
-      .padding()
+      .padding(.horizontal)
+      .padding(.bottom)
     }
-    .groupedBackground()
   }
 
   var searchingView: some View {
@@ -284,7 +348,9 @@ private extension FoodLoggingActionCardView {
 }
 
 #Preview {
-  PreviewSheetPresent {
-    FoodLoggingActionCardView()
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      FoodLoggingActionCardView()
+    }
   }
 }

@@ -31,6 +31,7 @@ extension FoodLoggingActionCardView {
     var results: [FoodItemSection]?
     var failedBarcodeSearch: String?
     var error: Error?
+    var frequentFoodItemSections = [FoodItemSection]()
     var recentFoodItemSections = [FoodItemSection]()
     var country: FoodCountry = .usa
 
@@ -44,19 +45,28 @@ extension FoodLoggingActionCardView.ViewModel {
 
   func fetchRecentFoodItemLogs(for meal: FoodItemLog.Meal) async {
     do {
-      let recentLogs = try await foodItemModelActor.fetchFrequentLogs(for: meal)
+      let frequentFoodItems = try await foodItemModelActor.fetchFrequentLogs(for: meal)
 
-      let foodItems = recentLogs
-        .flatMap({ $0.foodItemServings })
-        .compactMap({ $0.foodItem?.asNetworkFoodItem() })
-        .makingUnique()
-
-      if foodItems.isNotEmpty {
-        recentFoodItemSections = [
+      if frequentFoodItems.isNotEmpty {
+        frequentFoodItemSections = [
           FoodItemSection(
             title: "Frequently Logged",
             category: .branded,
-            foodItems: foodItems
+            foodItems: frequentFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
+          )
+        ]
+      } else {
+        frequentFoodItemSections = []
+      }
+
+      let recentFoodItems = try await foodItemModelActor.fetchRecentLogs(for: meal)
+
+      if recentFoodItems.isNotEmpty {
+        recentFoodItemSections = [
+          FoodItemSection(
+            title: "Recently Logged",
+            category: .branded,
+            foodItems: recentFoodItems.makingUnique().map({ $0.asNetworkFoodItem() })
           )
         ]
       } else {

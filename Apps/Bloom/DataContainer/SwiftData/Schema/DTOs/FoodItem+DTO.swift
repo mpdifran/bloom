@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-public struct FoodItemDTO: Sendable {
+public struct FoodItemDTO: Sendable, Equatable {
   public let persistentID: PersistentIdentifier
   public let id: String
   public let name: String

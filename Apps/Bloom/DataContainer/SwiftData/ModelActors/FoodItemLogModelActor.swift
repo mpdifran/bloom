@@ -79,40 +79,57 @@ public extension FoodItemLogModelActor {
     return filteredLogs.first?.asDTO()
   }
 
-  func fetchRecentLogs(for meal: FoodItemLog.Meal, limit: Int) throws -> [FoodItemLogDTO] {
-    var descriptor = FetchDescriptor<FoodItemLog>(
-      //            predicate: #Predicate<FoodItemLog> { model in
-      //                model.meal == meal
-      //            },
+  func fetchRecentLogs(
+    for meal: FoodItemLog.Meal,
+    dateRange: DateRange = DateRange.trailingMonthsFromNow(1)
+  ) throws -> [FoodItemDTO] {
+    let startDate = dateRange.start
+    let endDate = dateRange.end
+    let mealRawValue = meal.rawValue
+
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate<FoodItemLog> { model in
+        model.date >= startDate &&
+        model.date <= endDate &&
+        model.mealRawValue == mealRawValue
+      },
       sortBy: [SortDescriptor(\FoodItemLog.date, order: .reverse)]
     )
-    descriptor.fetchLimit = limit
-    return try context.fetch(descriptor).map { $0.asDTO() }
+    let results = try context.fetch(descriptor)
+
+    return results
+      .compactMap { $0.foodItemServings }
+      .flatMap { $0 }
+      .compactMap { $0.foodItem?.asDTO() }
   }
 
   func fetchFrequentLogs(
     for meal: FoodItemLog.Meal,
     dateRange: DateRange = DateRange.trailingMonthsFromNow(2)
-  ) throws -> [FoodItemLogDTO] {
+  ) throws -> [FoodItemDTO] {
     let startDate = dateRange.start
+    let endDate = dateRange.end
     let mealRawValue = meal.rawValue
+
     let descriptor = FetchDescriptor<FoodItemLog>(
       predicate: #Predicate<FoodItemLog> { model in
         model.date >= startDate &&
+        model.date <= endDate &&
         model.mealRawValue == mealRawValue
       }
     )
 
     let logs = try context.fetch(descriptor)
 
-    // Count occurrences of each food item, sort by most frequent.
-    let frequencyMap = Dictionary(grouping: logs, by: { $0.foodItem?.id })
-      .compactMapValues { $0.count }
-      .sorted { $0.value > $1.value }
+    // Flatten all servings across logs, extract FoodItems, and count frequency.
+    let allServings = logs.flatMap { $0.foodItemServings ?? [] }
+    let frequencyMap = Dictionary(grouping: allServings, by: { $0.foodItem?.id })
+      .compactMapValues { ($0.first?.foodItem, $0.count) }
+      .sorted { $0.value.1 > $1.value.1 }
 
-    // Map food logs in sorted order based on frequency.
-    return frequencyMap.compactMap { foodItemID, _ in
-      logs.first { $0.foodItem?.id == foodItemID }?.asDTO()
+    // Map food items in sorted order based on frequency.
+    return frequencyMap.compactMap { (foodItemID, value) in
+      value.0?.asDTO()
     }
   }
 }
