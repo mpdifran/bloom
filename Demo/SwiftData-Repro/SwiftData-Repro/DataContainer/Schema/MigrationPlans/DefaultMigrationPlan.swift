@@ -8,8 +8,9 @@
 import Foundation
 import SwiftData
 
+// TODO: update this
 // CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV0.self
+let currentSchema: VersionedSchema.Type = SchemaV4.self
 
 enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
