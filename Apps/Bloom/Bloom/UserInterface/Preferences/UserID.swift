@@ -16,8 +16,15 @@ private extension String {
 }
 
 enum UserID {
+  @available(*, deprecated, message: "Use `sharedValet` instead.")
   private static let valet = Valet.iCloudValet(
     with: Identifier(nonEmpty: "UserController")!,
+    accessibility: .afterFirstUnlock
+  )
+
+  private static let sharedValet = Valet.sharedGroupValet(
+    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "com.lotus-labs.bloom")!,
+    identifier: Identifier(nonEmpty: "UserID")!,
     accessibility: .afterFirstUnlock
   )
 
@@ -25,7 +32,7 @@ enum UserID {
     // Migrate from UserDefaults to Keychain
     if let value = UserDefaults.group.string(forKey: .userID) {
       do {
-        try valet.setString(value, forKey: .userID)
+        try sharedValet.setString(value, forKey: .userID)
         UserDefaults.group.removeObject(forKey: .userID)
       } catch {
         TelemetryDeck.errorOccurred(
@@ -36,8 +43,14 @@ enum UserID {
       }
     }
 
-    // This throws an error if it's not found.
+    // Migrate from iCloud Valet to Shared Group Valet
     if let value = try? valet.string(forKey: .userID) {
+      try? sharedValet.setString(value, forKey: .userID)
+      try? valet.removeObject(forKey: .userID)
+    }
+
+    // This throws an error if it's not found.
+    if let value = try? sharedValet.string(forKey: .userID) {
       recordUserIDValue(value)
       return value
     }
@@ -45,7 +58,7 @@ enum UserID {
     // Create a new ID.
     let newValue = UUID().uuidString
     do {
-      try valet.setString(newValue, forKey: .userID)
+      try sharedValet.setString(newValue, forKey: .userID)
     } catch {
       TelemetryDeck.errorOccurred(
         id: "UserID.value",

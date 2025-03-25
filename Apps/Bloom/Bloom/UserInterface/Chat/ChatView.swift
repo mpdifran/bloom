@@ -30,6 +30,7 @@ struct ChatView: View {
               isCurrentUser: chatMessage.isCurrentUser,
               showTail: true
             )
+            .transition(chatMessage.isCurrentUser ? .move(edge: .trailing) : .move(edge: .leading))
           }
         }
         .padding(.vertical)
@@ -64,6 +65,7 @@ struct ChatView: View {
       }
     }
     .sheet($presentedSheet)
+    .animation(.bouncy, value: viewModel.chatMessages)
     .presentationCompactAdaptation(.fullScreenCover)
   }
 }

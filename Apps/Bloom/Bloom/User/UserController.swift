@@ -31,17 +31,29 @@ final class UserController: ObservableObject {
   @Published var authToken: AuthToken?
 
   private init() {
+    // Migrate from iCloud Valet to Shared Group Valet
+    for key in [String.authenticatedUserIdentifierKey, String.authTokenKey] {
+      if let value = try? valet.string(forKey: key) {
+        try? sharedValet.setString(value, forKey: key)
+        try? valet.removeObject(forKey: key)
+      }
+    }
+
     do {
-      let rawUserIdentifier = try valet.string(forKey: .authenticatedUserIdentifierKey)
+      let rawUserIdentifier = try sharedValet.string(forKey: .authenticatedUserIdentifierKey)
       self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
-    } catch { }
+    } catch {
+      print(error)
+    }
 
     var isAuthenticated = false
     do {
-      let rawAuthToken = try valet.string(forKey: .authTokenKey)
+      let rawAuthToken = try sharedValet.string(forKey: .authTokenKey)
       self.authToken = AuthToken(rawAuthToken)
       isAuthenticated = true
-    } catch { }
+    } catch {
+      print(error)
+    }
 
     if let lastIdentifyDate = UserDefaults.group.object(forKey: "UserController.lastIdentifyDate") as? Date {
       self.lastIdentifyDate = lastIdentifyDate
@@ -58,8 +70,15 @@ final class UserController: ObservableObject {
     didSet { UserDefaults.group.set(lastIdentifyDate, forKey: "UserController.lastIdentifyDate") }
   }
 
+  @available(*, deprecated, message: "Use `sharedValet` instead.")
   private let valet = Valet.iCloudValet(
     with: Identifier(nonEmpty: "UserController")!,
+    accessibility: .afterFirstUnlock
+  )
+
+  private let sharedValet = Valet.sharedGroupValet(
+    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "com.lotus-labs.bloom")!,
+    identifier: Identifier(nonEmpty: "UserController")!,
     accessibility: .afterFirstUnlock
   )
 }
@@ -196,9 +215,9 @@ private extension UserController {
   func storeAuthenticatedUserIdentifier() {
     do {
       if let authenticatedUserIdentifier {
-        try valet.setString(authenticatedUserIdentifier.value, forKey: .authenticatedUserIdentifierKey)
+        try sharedValet.setString(authenticatedUserIdentifier.value, forKey: .authenticatedUserIdentifierKey)
       } else {
-        try valet.removeObject(forKey: .authenticatedUserIdentifierKey)
+        try sharedValet.removeObject(forKey: .authenticatedUserIdentifierKey)
       }
     } catch {
       TelemetryDeck.errorOccurred(
@@ -213,9 +232,9 @@ private extension UserController {
   func storeAuthToken() {
     do {
       if let authToken {
-        try valet.setString(authToken.value, forKey: .authTokenKey)
+        try sharedValet.setString(authToken.value, forKey: .authTokenKey)
       } else {
-        try valet.removeObject(forKey: .authTokenKey)
+        try sharedValet.removeObject(forKey: .authTokenKey)
       }
     } catch {
       TelemetryDeck.errorOccurred(
