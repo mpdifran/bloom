@@ -37,7 +37,7 @@ extension FoodLoggingActionCardView {
 
     private var debounceTask: Task<Void, Never>?
 
-    private let foodItemModelActor = FoodItemLogModelActor(modelContainer: ContainerHolder.shared.container)
+    private let foodItemModelActor = FoodItemLogModelActor.standard()
   }
 }
 

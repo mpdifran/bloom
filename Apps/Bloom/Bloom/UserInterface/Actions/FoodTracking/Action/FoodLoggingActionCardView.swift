@@ -81,8 +81,6 @@ struct FoodLoggingActionCardView: View {
       }
     }
     .sheet($presentedSheet)
-    .presentationDetents([.large])
-    .presentationCornerRadius(25)
     .presentationCompactAdaptation(.fullScreenCover)
     .alert(error: $viewModel.error)
     .animation(.default, value: selectedTab)

@@ -12,15 +12,18 @@ import BloomModel
 struct FoodSearchCard: View {
 
   @Binding var searchQuery: String
+  let enableTools: Bool
   let onSearch: (String) -> Void
   let onUploadNewFood: (FoodItem) -> Void
 
   init(
     searchQuery: Binding<String>,
+    enableTools: Bool = true,
     onSearch: @escaping (String) -> Void,
     onUploadNewFood: @escaping (FoodItem) -> Void
   ) {
     self._searchQuery = searchQuery
+    self.enableTools = enableTools
     self.onSearch = onSearch
     self.onUploadNewFood = onUploadNewFood
   }
@@ -34,7 +37,7 @@ struct FoodSearchCard: View {
 
   var body: some View {
     VStack {
-      if !isFocused {
+      if !isFocused && enableTools {
         HStack {
           magicScanButton
           textFoodButton
