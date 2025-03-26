@@ -177,7 +177,7 @@ private struct CenterScrollTargetBehaviour: ScrollTargetBehavior {
   func updateTarget(_ target: inout ScrollTarget, context: TargetContext) {
     guard enabled else { return }
 
-    let xProposed = target.rect.midX
+    let xProposed = target.rect.midX + context.velocity.dx * 5
     guard let nearestEntry = cardFrames
       .frames
       .min(by: { ($0.value.midX - xProposed).magnitude < ($1.value.midX - xProposed).magnitude })

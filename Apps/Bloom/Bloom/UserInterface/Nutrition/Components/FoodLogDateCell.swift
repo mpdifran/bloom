@@ -40,6 +40,7 @@ struct FoodLogDateCell: View {
     .fontWeight(.heavy)
     .fontDesign(.rounded)
     .cardContainer()
+    .animation(.easeInOut, value: isSelected)
     .opacity(opacity)
   }
 }
