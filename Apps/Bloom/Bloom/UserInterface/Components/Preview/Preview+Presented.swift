@@ -31,6 +31,7 @@ struct PreviewSheetPresent<Content>: View where Content: View {
       } label: {
         Text("Developer Settings")
       }
+      .frame(height: 60)
     }
     .sheet(isPresented: $showSheet) {
       content()

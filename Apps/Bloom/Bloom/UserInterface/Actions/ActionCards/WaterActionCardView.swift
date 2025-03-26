@@ -70,28 +70,18 @@ struct WaterActionCardView: View {
           } content: { (hasInserted, handleSave) in
             VStack {
               ForEach(glassSizes) { glassSize in
-                HStack {
-                  Image(systemSymbol: .waterbottle)
-                    .foregroundStyle(.tint)
-
-                  Text(glassSize.name)
-                    .fontDesign(.rounded)
-                    .bold()
-
-                  Spacer()
-
-                  Text(glassSize.displayValue)
-                    .bold()
-                    .fontDesign(.rounded)
-                    .foregroundStyle(.tint)
-                }
-                .cardContainer()
-                .onTapGesture {
-                  selectedQuantity = glassSize.quantity
-                  handleSave()
-                }
-                .sensoryFeedback(.success, trigger: didIncrease)
-                .sensoryFeedback(.error, trigger: didError)
+                WaterGlassSizeCell(model: glassSize)
+                  .onTapGesture {
+                    selectedQuantity = glassSize.quantity
+                    handleSave()
+                  }
+                  .contextMenu {
+                    Button("Delete", systemSymbol: .trash, role: .destructive) {
+                      glassSizes.removeAll(where: { $0 == glassSize })
+                    }
+                  }
+                  .sensoryFeedback(.success, trigger: didIncrease)
+                  .sensoryFeedback(.error, trigger: didError)
               }
             }
             .overlay {
@@ -156,7 +146,9 @@ private extension WaterActionCardView {
 }
 
 #Preview {
-  PreviewSheetPresent {
-    WaterActionCardView(performDismiss: nil)
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      WaterActionCardView(performDismiss: nil)
+    }
   }
 }
