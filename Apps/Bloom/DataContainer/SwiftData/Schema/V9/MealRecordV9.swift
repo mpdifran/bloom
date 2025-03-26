@@ -24,7 +24,7 @@ extension SchemaV9 {
     @Relationship(inverse: \FoodItemLog.mealItem)
     public var logs: [FoodItemLog]?
 
-    init(
+    public init(
       id: String,
       name: String,
       imageData: Data?,

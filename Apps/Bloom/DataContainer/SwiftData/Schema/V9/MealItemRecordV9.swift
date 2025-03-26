@@ -21,7 +21,7 @@ extension SchemaV9 {
 
     @Relationship public var mealRecord: MealRecord? = nil
 
-    init(
+    public init(
       id: String,
       numberOfServings: Double,
       foodItem: FoodItemRecord?
