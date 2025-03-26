@@ -73,6 +73,10 @@ public extension DateFormatter {
     $0.setLocalizedDateFormatFromTemplate("MMMM")
   }
 
+  static let justShortMonth = DateFormatter().with {
+    $0.setLocalizedDateFormatFromTemplate("MMM")
+  }
+
   static let fullMonthAndYear = DateFormatter().with {
     $0.setLocalizedDateFormatFromTemplate("MMMM yyyy")
   }
@@ -91,6 +95,10 @@ public extension DateFormatter {
 
   static let justDayOfWeekShort = DateFormatter().with {
     $0.setLocalizedDateFormatFromTemplate("E")
+  }
+
+  static let justRelativeDateShortWithDayOfWeek = DateFormatter().with {
+    $0.setLocalizedDateFormatFromTemplate("E, MMM d yyyy")
   }
 
   static func justRelativeDayOfWeek(date: Date) -> String {

@@ -14,8 +14,10 @@ import SwiftData
 struct NutritionView: View {
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
+
   @State private var presentedSheet: AnyView?
-  @State private var advanceToggle = false
+
+  @Environment(\.modelContext) private var modelContext
 
   var body: some View {
     NavigationStack {
@@ -23,26 +25,31 @@ struct NutritionView: View {
         VStack {
           topBar
 
-          NutrientsRemainingView()
-            .padding(.vertical)
-            .onTapGesture {
-              // TODO: where does this go?
-            }
+          Group {
+            NutrientsRemainingView()
+              .transition(.blurReplace)
+              .padding(.vertical)
+              .onTapGesture {
+                // TODO: where does this go?
+              }
 
-          FilteredFoodItemLogsListView(
-            date: nutritionViewModel.date,
-            presentedSheet: $presentedSheet
-          )
+            FilteredFoodItemLogsListView(
+              date: nutritionViewModel.date,
+              presentedSheet: $presentedSheet
+            )
+            .transition(.blurReplace)
+          }
+          .padding(.horizontal)
         }
-        .padding()
+        .padding(.vertical)
       }
       .groupedBackground()
-      .navigationBarTitleDisplayMode(.inline)
+      .navigationTitle("Nutrition")
       .tabBar()
       .toolbar {
-        ToolbarItem(placement: .principal) {
-          FoodItemLogDatePicker()
-        }
+//        ToolbarItem(placement: .principal) {
+//          FoodItemLogDatePicker()
+//        }
         ToolbarItem(placement: .primaryAction) {
           Button {
             EntitledPresent(presentedSheet: $presentedSheet) {
@@ -55,6 +62,7 @@ struct NutritionView: View {
         }
       }
     }
+    .animation(.easeInOut, value: nutritionViewModel.date)
     .sheet($presentedSheet)
     .tabItem {
       Label("Nutrition", systemSymbol: .carrot)
@@ -64,30 +72,12 @@ struct NutritionView: View {
 
 private extension NutritionView {
   var topBar: some View {
-    HStack {
-      Button {
-        nutritionViewModel.reverseDay()
-        advanceToggle.toggle()
-      } label: {
-        Image(systemSymbol: .chevronBackwardCircleFill)
-          .font(.title2)
-          .bold()
-          .foregroundStyle(.white, .tint)
+    FoodLogDatePicker(date: $nutritionViewModel.date) { date in
+      if let state = nutritionViewModel.dateStates.first(where: { Calendar.current.isDate(date, inSameDayAs: $0.date) })?.state {
+        return state
       }
-
-      Spacer()
-
-      Button {
-        nutritionViewModel.advanceDay()
-        advanceToggle.toggle()
-      } label: {
-        Image(systemSymbol: .chevronForwardCircleFill)
-          .font(.title2)
-          .bold()
-          .foregroundStyle(.white, .tint)
-      }
+      return .inProgress(0)
     }
-    .sensoryFeedback(.impact, trigger: advanceToggle)
   }
 }
 
@@ -155,7 +145,7 @@ private extension NutritionView.FilteredFoodItemLogsListView {
 }
 
 #Preview {
-  TabView {
+  PreviewEnvironment {
     NutritionView()
   }
 }

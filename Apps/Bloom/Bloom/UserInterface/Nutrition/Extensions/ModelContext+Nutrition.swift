@@ -55,9 +55,7 @@ extension ModelContext {
     }
 
     Task {
-      for updateDate in dates {
-        try await HealthStoreModifier.shared.updateNutrition(for: updateDate)
-      }
+      try await NutritionTrackingViewModel.shared.updateNutrition(for: dates.asSet())
     }
 
     TelemetryDeck.signal(
@@ -105,9 +103,7 @@ extension ModelContext {
     }
 
     Task {
-      for updateDate in dates {
-        try await HealthStoreModifier.shared.updateNutrition(for: updateDate)
-      }
+      try await NutritionTrackingViewModel.shared.updateNutrition(for: dates.asSet())
     }
 
     TelemetryDeck.signal(
@@ -148,9 +144,7 @@ extension ModelContext {
     }
 
     Task {
-      for date in dates {
-        try await HealthStoreModifier.shared.updateNutrition(for: date)
-      }
+      try await NutritionTrackingViewModel.shared.updateNutrition(for: dates)
     }
   }
 
@@ -166,9 +160,7 @@ extension ModelContext {
     }
 
     Task {
-      for date in dates {
-        try await HealthStoreModifier.shared.updateNutrition(for: date)
-      }
+      try await NutritionTrackingViewModel.shared.updateNutrition(for: dates)
     }
   }
 }
@@ -203,11 +195,13 @@ extension ModelContext {
       }
     }
 
+    var dates = Set<Date>([oldDate])
+    if let (date, _) = dateMeal {
+      dates.insert(date)
+    }
+
     Task {
-      try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
-      if let (date, _) = dateMeal {
-        try await HealthStoreModifier.shared.updateNutrition(for: date)
-      }
+      try await NutritionTrackingViewModel.shared.updateNutrition(for: dates)
     }
   }
 
@@ -235,8 +229,7 @@ extension ModelContext {
     }
 
     Task {
-      try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
-      try await HealthStoreModifier.shared.updateNutrition(for: date)
+      try await NutritionTrackingViewModel.shared.updateNutrition(for: [oldDate, date])
     }
   }
 
@@ -273,8 +266,7 @@ extension ModelContext {
     }
 
     Task {
-      try await HealthStoreModifier.shared.updateNutrition(for: oldDate)
-      try await HealthStoreModifier.shared.updateNutrition(for: date)
+      try await NutritionTrackingViewModel.shared.updateNutrition(for: [oldDate, date])
     }
   }
 }

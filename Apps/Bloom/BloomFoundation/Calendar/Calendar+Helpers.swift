@@ -289,3 +289,14 @@ public extension Calendar {
     }
   }
 }
+
+public extension Calendar {
+
+  func dateCollection(for dateRange: DateRange) -> [Date] {
+    var dates = [Date]()
+    iterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
+      dates.append(date)
+    }
+    return dates
+  }
+}

@@ -299,3 +299,18 @@ public extension DateRange {
     return DateRange(startDate, endDate)
   }
 }
+
+// MARK: Windows
+
+public extension DateRange {
+
+  static func window(around date: Date, numberOfDays: Int) -> DateRange {
+    guard
+      let startDate = Calendar.current.date(byAdding: .day, value: -numberOfDays, to: date),
+      let endDate = Calendar.current.date(byAdding: .day, value: numberOfDays, to: date)
+    else {
+      return DateRange(date, date)
+    }
+    return DateRange(startDate, endDate)
+  }
+}

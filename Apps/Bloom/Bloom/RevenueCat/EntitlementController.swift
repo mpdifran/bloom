@@ -21,7 +21,13 @@ final class EntitlementController: ObservableObject {
 
   @Published var hasBloomPro: Bool?
 
-  @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
+  @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false {
+    didSet {
+      guard bypassPaywall else { return }
+
+      hasBloomPro = true
+    }
+  }
 
   private init() {
     observeCustomerInfo()

@@ -16,12 +16,18 @@ extension String {
   static let lastMealAutoUpdateDateKey = "NutritionTrackingViewModel.lastMealAutoUpdateDate"
 }
 
+struct DateState {
+  let date: Date
+  let state: FoodLogDateCell.State
+}
+
 @MainActor
 final class NutritionTrackingViewModel: ObservableObject {
   static let shared = NutritionTrackingViewModel()
 
   @Published var date = Date.now
   @Published var suggestedMeal = FoodItemLog.Meal.breakfast
+  @Published var dateStates = [DateState]()
 
   @Storage(key: .lastMealAutoUpdateDateKey, defaultValue: nil) var lastMealAutoUpdateDate: Date?
 
@@ -29,6 +35,9 @@ final class NutritionTrackingViewModel: ObservableObject {
 
   private init() {
     updateMealForCurrentTime()
+    Task {
+      await refreshDateStates()
+    }
   }
 }
 
@@ -98,6 +107,52 @@ extension NutritionTrackingViewModel {
 
   func reverseDay() {
     date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
+  }
+
+  func updateNutrition(for dates: Set<Date>) async throws {
+    for date in dates {
+      try await HealthStoreModifier.shared.updateNutrition(for: date)
+    }
+    await refreshDateStates()
+  }
+
+  func refreshDateStates() async {
+    let dateRange = DateRange.window(around: .now, numberOfDays: 30)
+    let modelActor = FoodItemLogModelActor.standard()
+
+    var newDateStates = [DateState]()
+
+    await withTaskGroup(of: DateState?.self) { group in
+      Calendar.current.iterate(
+        dateRange: dateRange,
+        by: DateComponents(day: 1)
+      ) { date in
+        group.addTask {
+          guard let logs = try? await modelActor.fetchLogs(for: date) else { return nil }
+
+          let validMeals: Set<FoodItemLog.Meal> = [.breakfast, .lunch, .dinner]
+          let meals = logs
+            .filter { validMeals.contains($0.meal) }
+            .map { $0.meal }
+            .asSet()
+
+          if meals.count == validMeals.count {
+            return DateState(date: date, state: .complete)
+          } else {
+            let percentComplete = Double(meals.count) / Double(validMeals.count)
+            return DateState(date: date, state: .inProgress(percentComplete))
+          }
+        }
+      }
+      
+      for await state in group {
+        if let state = state {
+          newDateStates.append(state)
+        }
+      }
+    }
+
+    self.dateStates = newDateStates
   }
 }
 

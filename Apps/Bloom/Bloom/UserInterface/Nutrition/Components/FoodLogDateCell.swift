@@ -13,7 +13,6 @@ private extension CGFloat {
 
 extension FoodLogDateCell {
   enum State {
-    case notStarted
     case inProgress(Double)
     case complete
     case exceeded
@@ -31,7 +30,7 @@ struct FoodLogDateCell: View {
         Text(dayOfWeek)
           .font(.caption2)
         Text(day)
-          .font(.headline)
+          .font(.body)
       }
       .foregroundStyle(textColor)
 
@@ -72,18 +71,13 @@ private extension FoodLogDateCell {
     DateFormatter.justDay.string(from: date)
   }
 
+  var month: String {
+    DateFormatter.justShortMonth.string(from: date)
+  }
+
   @ViewBuilder
   var progressIndicator: some View {
     switch state {
-    case .notStarted:
-      Image(systemSymbol: .checkmarkCircleFill)
-        .font(.title2)
-        .opacity(0)
-        .overlay {
-          Circle()
-            .stroke(.fill, lineWidth: .progressBarLineWidth)
-            .padding(3)
-        }
     case .inProgress(let progress):
       Image(systemSymbol: .checkmarkCircleFill)
         .font(.title2)
@@ -142,12 +136,12 @@ private extension FoodLogDateCell {
         )
         FoodLogDateCell(
           date: Calendar.current.date(byAdding: .day, value: 2, to: .now)!,
-          state: .notStarted,
+          state: .inProgress(0),
           isSelected: false
         )
         FoodLogDateCell(
           date: Calendar.current.date(byAdding: .day, value: 3, to: .now)!,
-          state: .notStarted,
+          state: .inProgress(0),
           isSelected: false
         )
       }
