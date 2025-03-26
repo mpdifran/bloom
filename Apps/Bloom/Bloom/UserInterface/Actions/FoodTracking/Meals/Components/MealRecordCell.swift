@@ -28,6 +28,11 @@ struct MealRecordCell: View {
           RoundedRectangle(cornerRadius: 18)
             .fill(.fill)
             .frame(height: .imageHeight)
+            .overlay {
+              Image(systemSymbol: .photoFillOnRectangleFill)
+                .font(.largeTitle)
+                .foregroundStyle(.fill.secondary)
+            }
         }
       }
       .padding(.horizontal, 8)
@@ -36,7 +41,7 @@ struct MealRecordCell: View {
       HStack {
         VStack(alignment: .leading) {
           Text(mealRecord.name)
-            .font(.title3)
+            .font(.body)
             .bold()
             .fontDesign(.rounded)
 
