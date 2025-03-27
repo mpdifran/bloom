@@ -35,6 +35,14 @@ struct ImagePicker<Label>: View where Label: View {
       Button("Files", systemSymbol: .folder) {
         presentedSheet = FilesImagePicker(image: $image).asAny
       }
+
+      Divider()
+
+      if image != nil {
+        Button("Delete", systemSymbol: .trash, role: .destructive) {
+          self.image = nil
+        }
+      }
     } label: {
       labelBuilder()
     }
@@ -47,8 +55,21 @@ struct ImagePicker<Label>: View where Label: View {
   @Previewable @State var presentedSheet: AnyView?
 
   PreviewEnvironment {
+    if let image {
+      Image(uiImage: image)
+        .resizable()
+        .frame(square: 200)
+        .clipShape(RoundedRectangle(cornerRadius: 26))
+    } else {
+      RoundedRectangle(cornerRadius: 26)
+        .fill(.fill)
+        .frame(square: 200)
+    }
+
     ImagePicker(image: $image, presentedSheet: $presentedSheet) {
       Text("Pick an Image")
+        .frame(height: 50)
+        .bold()
     }
   }
   .sheet($presentedSheet)

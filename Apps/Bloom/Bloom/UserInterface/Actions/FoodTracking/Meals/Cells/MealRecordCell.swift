@@ -89,6 +89,7 @@ struct MealRecordCell: View {
     }
     .padding(.bottom)
     .cardContainer(includePadding: false)
+    .selectable()
   }
 }
 

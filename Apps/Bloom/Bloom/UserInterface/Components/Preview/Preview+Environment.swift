@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import DataContainer
 
 struct PreviewEnvironment<Content>: View where Content: View {
   let content: () -> Content
 
   init(@ViewBuilder content: @escaping () -> Content) {
     self.content = content
+    ContainerHolder.shared.setupForTests()
   }
 
   @Bindable private var tabController = TabController()

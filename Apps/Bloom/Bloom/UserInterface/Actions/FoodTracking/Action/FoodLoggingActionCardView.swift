@@ -95,7 +95,7 @@ struct FoodLoggingActionCardView: View {
         ToolbarItem(placement: .primaryAction) {
           Menu {
             Button {
-              presentedSheet = CreateMealView().asAny
+              presentedSheet = CreateEditMealView().asAny
             } label: {
               Label("Create Meal", systemSymbol: .forkKnife)
             }
@@ -292,7 +292,7 @@ private extension FoodLoggingActionCardView {
         Text("You haven't saved any meals yet.")
       } actions: {
         Button {
-          presentedSheet = CreateMealView().asAny
+          presentedSheet = CreateEditMealView().asAny
         } label: {
           Text("Add a Meal")
         }
@@ -303,6 +303,9 @@ private extension FoodLoggingActionCardView {
         LazyVStack {
           ForEach(meals) { mealRecord in
             MealRecordCell(mealRecord: mealRecord)
+              .onTapGesture {
+                presentedSheet = CreateEditMealView(existingMealRecord: mealRecord).asAny
+              }
           }
         }
         .padding(.horizontal)

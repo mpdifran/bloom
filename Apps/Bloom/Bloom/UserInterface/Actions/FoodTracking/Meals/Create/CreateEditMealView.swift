@@ -1,25 +1,58 @@
 //
-//  CreateMealView.swift
+//  CreateEditMealView.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-03-27.
 //
 
 import SwiftUI
+import AppUI
 import BloomModel
 import DataContainer
 
-struct CreateMealView: View {
+struct CreateEditMealView: View {
+
+  var existingMealRecord: MealRecord?
+
+  init(existingMealRecord: MealRecord? = nil) {
+    self.existingMealRecord = existingMealRecord
+
+    guard let meal = existingMealRecord else { return }
+
+    self._image = State(initialValue: meal.image)
+    self._name = State(initialValue: meal.name)
+
+    var foodItemsServings = [FoodItemIdentifier: Double]()
+    var foodItems = [FoodItem]()
+    for mealItem in meal.items ?? [] {
+      guard let foodItem = mealItem.foodItem?.asNetworkFoodItem() else { continue }
+
+      foodItemsServings[foodItem.id] = mealItem.numberOfServings
+      foodItems.append(foodItem)
+    }
+
+    self._foodItemsServings = State(initialValue: foodItemsServings)
+    self._foodItems = State(initialValue: foodItems)
+
+    initialFoodItems = foodItems
+    initialFoodItemsServings = foodItemsServings
+  }
+
+  private var initialFoodItems = [FoodItem]()
+  private var initialFoodItemsServings = [FoodItemIdentifier: Double]()
 
   @State private var image: UIImage?
-  @State private var name: String = ""
+  @State private var name: String = "My Meal"
   @State private var foodItems = [FoodItem]()
   @State private var foodItemsServings = [FoodItemIdentifier: Double]()
 
   @FocusState private var isFocused: Bool
   @FocusState private var focusedFoodItem: FoodItemIdentifier?
+
   @State private var saveCompleteToggle = false
+  @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @State private var presentedSheet: AnyView?
+  @State private var error: Error?
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
@@ -33,12 +66,16 @@ struct CreateMealView: View {
           mealDetailsSection
           macroSummarySection
           foodItemsSection
+
+          if isEditing {
+            deleteSection
+          }
         }
         .horizontallyCentered()
         .padding()
       }
       .groupedBackground()
-      .navigationTitle("New Meal")
+      .navigationTitle(isEditing ? "Edit Meal" : "New Meal")
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button("Cancel") {
@@ -55,13 +92,14 @@ struct CreateMealView: View {
     .animation(.default, value: image)
     .animation(.default, value: foodItemsServings)
     .sheet($presentedSheet)
+    .alert(error: $error)
   }
 }
 
-private extension CreateMealView {
+private extension CreateEditMealView {
 
   var mealDetailsSection: some View {
-    HStack(spacing: 16) {
+    HStack(alignment: .top, spacing: 8) {
       ImagePicker(image: $image, presentedSheet: $presentedSheet) {
         if let image {
           Image(uiImage: image)
@@ -86,20 +124,25 @@ private extension CreateMealView {
       .padding(8)
 
       VStack(alignment: .leading) {
-        TextField("", text: $name, prompt: Text("Name"))
+        TextEditor(text: $name)
           .font(.title)
           .fontDesign(.rounded)
           .bold()
           .submitLabel(.done)
           .focused($isFocused)
+          .frame(height: 100)
       }
-      .padding(.vertical)
-      .padding(.trailing)
+      .padding(.vertical, 8)
+      .padding(.trailing, 8)
     }
     .cardContainer(includePadding: false)
   }
 
+  @ViewBuilder
   var macroSummarySection: some View {
+    SectionTitleView("Macros")
+      .padding(.horizontal)
+
     VStack {
       Group {
         Text(totalCalories.format() + " ")
@@ -159,6 +202,30 @@ private extension CreateMealView {
     .cardContainer(includePadding: false)
   }
 
+  var deleteSection: some View {
+    Button(role: .destructive) {
+      confirmationDialogDetails = ConfirmationDialogDetails(
+        title: "Are You Sure?",
+        message: "Once you delete this meal, it can't be undone.",
+        buttons: [
+          ConfirmationDialogDetails.Button(
+            title: "Delete",
+            role: .destructive
+          ) { delete() }
+        ]
+      )
+    } label: {
+      Label("Delete", systemSymbol: .trash)
+        .bold()
+        .horizontallyCentered()
+    }
+    .frame(height: 50)
+    .cardContainer(includePadding: false)
+    .confirmationDialog($confirmationDialogDetails)
+    .padding(.top)
+    .padding(.top)
+  }
+
   @ViewBuilder
   var shelfContent: some View {
     if isFocused || focusedFoodItem != nil {
@@ -175,7 +242,7 @@ private extension CreateMealView {
         try await save()
         dismiss()
       } label: {
-        Text("Create")
+        Text(isEditing ? "Save" : "Create")
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
@@ -185,7 +252,7 @@ private extension CreateMealView {
   }
 }
 
-private extension CreateMealView {
+private extension CreateEditMealView {
 
   var totalCalories: Double {
     foodItems.reduce(0) { partialResult, foodItem in
@@ -216,10 +283,22 @@ private extension CreateMealView {
   }
 }
 
-private extension CreateMealView {
+private extension CreateEditMealView {
+
+  var isEditing: Bool {
+    existingMealRecord != nil
+  }
 
   var canSave: Bool {
-    name.isNotEmpty && foodItems.isNotEmpty
+    if let existingMealRecord {
+      return
+        existingMealRecord.name != name ||
+        existingMealRecord.imageData != image?.pngData() ||
+        initialFoodItems != foodItems ||
+        initialFoodItemsServings != foodItemsServings
+    } else {
+      return name.isNotEmpty && foodItems.isNotEmpty
+    }
   }
 
   func save() async throws {
@@ -230,7 +309,21 @@ private extension CreateMealView {
       throw NSError(description: "At least one food item must be added.")
     }
 
+    let datesToUpdate: Set<Date>
+    if let existingMealRecord {
+      datesToUpdate = try update(mealRecord: existingMealRecord)
+    } else {
+      datesToUpdate = try create()
+    }
+
+    try await NutritionTrackingViewModel.shared.updateNutrition(for: datesToUpdate)
+
+    saveCompleteToggle.toggle()
+  }
+
+  func create() throws -> Set<Date> {
     var datesToUpdate = Set<Date>()
+
     try modelContext.savingTransaction {
 
       var mealItemRecords = [MealItemRecord]()
@@ -261,14 +354,69 @@ private extension CreateMealView {
       modelContext.insert(meal)
     }
 
-    try await NutritionTrackingViewModel.shared.updateNutrition(for: datesToUpdate)
+    return datesToUpdate
+  }
 
-    saveCompleteToggle.toggle()
+  func update(mealRecord: MealRecord) throws -> Set<Date> {
+    var datesToUpdate = Set<Date>()
+
+    try modelContext.savingTransaction {
+      mealRecord.name = self.name
+      mealRecord.imageData = self.image?.pngData()
+
+      // Create new meal items, or fetch existing ones.
+      var mealItems = [MealItemRecord]()
+      for foodItem in foodItems {
+        let numberOfServings = foodItemsServings[foodItem.id, default: 1]
+
+        if let existingMealItem = mealRecord.items?.first(where: { $0.foodItem?.id == foodItem.id.value }) {
+          existingMealItem.numberOfServings = numberOfServings
+          mealItems.append(existingMealItem)
+        } else {
+          let (dates, foodItemRecord) = try nutritionViewModel.upsertAndMerge(
+            modelContext: modelContext,
+            foodItem: foodItem
+          )
+          let mealItemRecord = MealItemRecord(
+            numberOfServings: numberOfServings,
+            foodItem: foodItemRecord
+          )
+          modelContext.insert(mealItemRecord)
+          mealItems.append(mealItemRecord)
+          datesToUpdate.formUnion(dates)
+        }
+      }
+
+      // Delete old meal items.
+      let mealItemsToDelete = mealRecord.items?.filter { item in
+        !mealItems.contains(where: { $0.id == item.id })
+      }
+      mealItemsToDelete?.forEach({ modelContext.delete($0) })
+
+      mealRecord.items = mealItems
+    }
+
+    return datesToUpdate
+  }
+
+  func delete() {
+    guard let model = existingMealRecord else { return }
+
+    modelContext.delete(model)
+    dismiss()
   }
 }
 
-#Preview {
+#Preview("Create") {
   PreviewEnvironment {
-    CreateMealView()
+    CreateEditMealView()
+  }
+}
+
+#Preview("Edit") {
+  PreviewEnvironment {
+    CreateEditMealView(
+      existingMealRecord: .Preview.crackersAndCheese
+    )
   }
 }
