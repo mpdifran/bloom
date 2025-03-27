@@ -29,6 +29,7 @@ struct CreateMealView: View {
       ScrollView {
         VStack {
           mealDetailsSection
+          macroSummarySection
           foodItemsSection
         }
         .horizontallyCentered()
@@ -50,6 +51,7 @@ struct CreateMealView: View {
     .presentationCompactAdaptation(.fullScreenCover)
     .animation(.default, value: foodItems)
     .animation(.default, value: image)
+    .animation(.default, value: foodItemsServings)
     .sheet($presentedSheet)
   }
 }
@@ -95,7 +97,37 @@ private extension CreateMealView {
     .cardContainer(includePadding: false)
   }
 
+  var macroSummarySection: some View {
+    VStack {
+      Group {
+        Text(totalCalories.format() + " ")
+        +
+        Text("Cal")
+          .foregroundStyle(.secondary)
+          .font(.title3)
+      }
+      .font(.title)
+      .bold()
+      .fontDesign(.rounded)
+      .contentTransition(.numericText(value: totalCalories))
+
+      Divider()
+
+      FoodItemMacroDistribution(
+        protein: totalProtein,
+        carbohydrates: totalCarbs,
+        fat: totalFat,
+        numberOfServings: 1
+      )
+    }
+    .cardContainer()
+  }
+
+  @ViewBuilder
   var foodItemsSection: some View {
+    SectionTitleView("Food Items")
+      .padding(.horizontal)
+
     VStack(spacing: 0) {
       ForEach(foodItems) { foodItem in
         CreateMealFoodItemCell(
@@ -147,6 +179,37 @@ private extension CreateMealView {
       .buttonStyle(.primary)
       .disabled(!canSave)
       .sensoryFeedback(.success, trigger: saveCompleteToggle)
+    }
+  }
+}
+
+private extension CreateMealView {
+
+  var totalCalories: Double {
+    foodItems.reduce(0) { partialResult, foodItem in
+      let numberOfServings = foodItemsServings[foodItem.id, default: 1]
+      return partialResult + (foodItem.calories?.value ?? 0) * numberOfServings
+    }
+  }
+
+  var totalProtein: Double {
+    foodItems.reduce(0) { partialResult, foodItem in
+      let numberOfServings = foodItemsServings[foodItem.id, default: 1]
+      return partialResult + (foodItem.protein?.value ?? 0) * numberOfServings
+    }
+  }
+
+  var totalCarbs: Double {
+    foodItems.reduce(0) { partialResult, foodItem in
+      let numberOfServings = foodItemsServings[foodItem.id, default: 1]
+      return partialResult + (foodItem.carbohydrates?.value ?? 0) * numberOfServings
+    }
+  }
+
+  var totalFat: Double {
+    foodItems.reduce(0) { partialResult, foodItem in
+      let numberOfServings = foodItemsServings[foodItem.id, default: 1]
+      return partialResult + (foodItem.fat?.value ?? 0) * numberOfServings
     }
   }
 }

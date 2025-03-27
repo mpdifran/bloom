@@ -119,14 +119,14 @@ private extension FoodItemLogDetailsView {
       Group {
         Text(totalCalories.format() + " ")
         +
-        Text("cal")
+        Text("Cal")
           .foregroundStyle(.secondary)
           .font(.title3)
       }
       .font(.title)
       .bold()
       .fontDesign(.rounded)
-      .contentTransition(.numericText(value: foodItemLog.totalCalories))
+      .contentTransition(.numericText(value: totalCalories))
 
       Divider()
 

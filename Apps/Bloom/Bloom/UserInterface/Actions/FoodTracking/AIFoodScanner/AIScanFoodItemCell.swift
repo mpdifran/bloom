@@ -94,7 +94,7 @@ private extension AIScanFoodItemCell {
           .bold()
           .font(.title2)
           .foregroundStyle(.tint)
-        Text("cals")
+        Text("Cal")
           .font(.caption)
           .foregroundStyle(.secondary)
       }
