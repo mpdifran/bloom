@@ -463,6 +463,64 @@ extension NutritionTrackingViewModel {
   }
 }
 
+// MARK: - MealRecords
+
+extension NutritionTrackingViewModel {
+
+  func log(
+    modelContext: ModelContext,
+    mealRecord: MealRecord,
+    numberOfServings: Double,
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    guard let items = mealRecord.items else {
+      throw NSError(description: "This meal has no food items.")
+    }
+
+    var dates = [Date]()
+
+    try modelContext.savingTransaction {
+      let servings = items.map { item in
+        let serving = FoodItemServing(
+          numberOfServings: item.numberOfServings,
+          foodItem: item.foodItem
+        )
+        modelContext.insert(serving)
+        return serving
+      }
+
+      let logDate = calculateDate(for: meal, from: date)
+      dates.append(logDate)
+
+      let foodItemLog = FoodItemLog(
+        id: UUID().uuidString,
+        name: mealRecord.name,
+        date: logDate,
+        meal: meal,
+        numberOfServings: numberOfServings,
+        imageData: mealRecord.imageData,
+        foodItemServings: servings
+      )
+      modelContext.insert(foodItemLog)
+    }
+
+    try await updateNutrition(for: dates.asSet())
+
+    TelemetryDeck.signal(
+      "Logged Food Item",
+      parameters: ["Meal": meal.rawValue],
+      floatValue: Double(items.count)
+    )
+
+    TelemetryDeck.signal(
+      "Logged Meal",
+      parameters: ["Meal": meal.rawValue],
+      floatValue: Double(items.count)
+    )
+  }
+}
+
 // MARK: - Private Methods
 
 private extension NutritionTrackingViewModel {

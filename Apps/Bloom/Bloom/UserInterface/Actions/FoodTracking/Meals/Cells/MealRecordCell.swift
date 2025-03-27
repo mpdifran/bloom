@@ -15,6 +15,13 @@ private extension CGFloat {
 struct MealRecordCell: View {
   let mealRecord: MealRecord
 
+  @State private var saveComplete = false
+  @State private var hasLoggedThisMeal = false
+
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
+
+  @Environment(\.modelContext) private var modelContext
+
   var body: some View {
     VStack {
       Group {
@@ -61,13 +68,22 @@ struct MealRecordCell: View {
           .bold()
           .fontDesign(.rounded)
 
-        Button {
+        AsyncButton {
+          guard !hasLoggedThisMeal else { return }
 
+          try await performQuickAdd()
         } label: {
-          Image(systemSymbol: .plusCircleFill)
-            .foregroundStyle(.tint, .tint.tertiary)
-            .font(.largeTitle)
+          if !hasLoggedThisMeal {
+            Image(systemSymbol: .plusCircleFill)
+              .foregroundStyle(.tint, .tint.tertiary)
+              .font(.largeTitle)
+          } else {
+            Image(systemSymbol: .checkmarkCircleFill)
+              .foregroundStyle(.white, .tint)
+              .font(.largeTitle)
+          }
         }
+        .sensoryFeedback(.success, trigger: saveComplete)
       }
       .padding(.horizontal)
     }
@@ -90,6 +106,20 @@ private extension MealRecordCell {
     let totalCalories = mealRecord.totalCalories
 
     return "\(NumberFormatter.noDecimalPlaces.string(for: totalCalories) ?? "0") Cals"
+  }
+
+  func performQuickAdd() async throws {
+    try await nutritionViewModel.log(
+      modelContext: modelContext,
+      mealRecord: mealRecord,
+      numberOfServings: 1,
+      date: nutritionViewModel.date,
+      meal: nutritionViewModel.suggestedMeal
+    )
+
+    hasLoggedThisMeal = true
+    saveComplete.toggle()
+    SoundPlayer.playLogHealthData()
   }
 }
 
