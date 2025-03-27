@@ -17,7 +17,7 @@ public final actor MealRecordModelActor: SharedModelActor {
 
 public extension MealRecordModelActor {
 
-  func fetchAllMealRecords() async throws -> [MealRecordDTO] {
+  func fetchAllMealRecords() throws -> [MealRecordDTO] {
     let descriptor = FetchDescriptor<MealRecord>()
     return try context.fetch(descriptor).map { $0.asDTO() }
   }

@@ -13,7 +13,7 @@ private extension CGFloat {
 }
 
 struct MealRecordCell: View {
-  let mealRecord: MealRecordDTO
+  let mealRecord: MealRecord
 
   var body: some View {
     VStack {
@@ -81,10 +81,10 @@ struct MealRecordCell: View {
     ScrollView {
       VStack {
         MealRecordCell(
-          mealRecord: MealRecord.Preview.crackersAndCheese.asDTO()
+          mealRecord: MealRecord.Preview.crackersAndCheese
         )
         MealRecordCell(
-          mealRecord: MealRecord.Preview.crackersAndCheeseNoImage.asDTO()
+          mealRecord: MealRecord.Preview.crackersAndCheeseNoImage
         )
       }
       .horizontallyCentered()

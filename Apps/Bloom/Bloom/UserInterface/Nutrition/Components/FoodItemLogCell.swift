@@ -28,9 +28,8 @@ struct FoodItemLogCell: View {
 
   var body: some View {
     if foodItemLog.hasSingleServing, let serving = foodItemLog.firstFoodItemServing {
-      foodItemContentView(serving: serving)
-        .selectable()
-        .cardContainer()
+      foodItemContentView(serving: serving, includeImage: true)
+        .cardContainer(includePadding: false)
     } else {
       foodItemLogDisclosureView
     }
@@ -40,35 +39,50 @@ struct FoodItemLogCell: View {
 private extension FoodItemLogCell {
 
   @ViewBuilder
-  func foodItemContentView(serving: FoodItemServing) -> some View {
+  func foodItemContentView(serving: FoodItemServing, includeImage: Bool = false) -> some View {
     if let foodItem = serving.foodItem {
-      HStack {
-        if foodItem.isVerified {
-          verifiedBadge
+      HStack(spacing: 0) {
+        if let image = foodItemLog.image, includeImage {
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+            .frame(square: 80)
+            .clipShape(RoundedRectangle(cornerRadius: 18))
+            .padding(.vertical, 8)
+            .padding(.leading, 8)
         }
 
-        VStack(alignment: .leading) {
-          Text(foodItem.name)
-            .font(.body)
-            .fontDesign(.rounded)
-            .bold()
+        HStack {
+          if foodItem.isVerified {
+            verifiedBadge
+          }
 
-          Text(subtitle(for: foodItem))
+          VStack(alignment: .leading) {
+            Text(foodItem.name)
+              .font(.body)
+              .fontDesign(.rounded)
+              .bold()
+
+            Text(subtitle(for: foodItem))
+              .bold()
+              .foregroundStyle(.secondary)
+              .font(.caption)
+          }
+          .multilineTextAlignment(.leading)
+
+          Spacer()
+
+          Text("\(serving.totalCalories.format()) cals")
+            .font(.subheadline)
             .bold()
             .foregroundStyle(.secondary)
-            .font(.caption)
+            .fontDesign(.rounded)
+
+          DisclosureIndicator()
         }
-        .multilineTextAlignment(.leading)
-
-        Spacer()
-
-        Text("\(serving.totalCalories.format()) cals")
-          .font(.subheadline)
-          .bold()
-          .foregroundStyle(.secondary)
-          .fontDesign(.rounded)
-
-        DisclosureIndicator()
+        .if(includeImage) {
+          $0.padding()
+        }
       }
       .selectable()
       .onTapGesture {
@@ -229,11 +243,11 @@ private extension FoodItemLogCell {
         FoodItemLogCell(
           foodItemLog: FoodItemLog(
             id: "789",
-            name: nil,
+            name: "Crcaker Snack",
             date: .now,
             meal: .snack,
             numberOfServings: 1,
-            imageData: nil,
+            imageData: UIImage(named: "CrackersAndCheese")?.pngData(),
             foodItemServings: [
               FoodItemServing(
                 numberOfServings: 2,

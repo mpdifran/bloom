@@ -25,7 +25,7 @@ extension SchemaV9 {
     public var logs: [FoodItemLog]?
 
     public init(
-      id: String,
+      id: String = UUID().uuidString,
       name: String,
       imageData: Data?,
       items: [MealItemRecord]

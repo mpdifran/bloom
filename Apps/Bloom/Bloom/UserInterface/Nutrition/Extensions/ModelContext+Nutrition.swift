@@ -271,9 +271,9 @@ extension ModelContext {
   }
 }
 
-// MARK: - Private Methods
+// MARK: - FoodItemRecord Methods
 
-private extension ModelContext {
+extension ModelContext {
 
   /// Upserts the `foodItem` into the database if it exists, or creates a new record. If the upsert modifies the database record, a list of affected dates is returned.
   /// You can use these dates to re-sync HealthKit.
@@ -294,6 +294,11 @@ private extension ModelContext {
       return ([], insertedFoodItem)
     }
   }
+}
+
+// MARK: - Private Methods
+
+private extension ModelContext {
 
   func calculateDate(for meal: FoodItemLog.Meal, from date: Date) -> Date {
     switch meal {

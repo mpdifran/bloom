@@ -84,7 +84,7 @@ struct FoodItemLogDetailsView: View {
 private extension FoodItemLogDetailsView {
 
   var nameSection: some View {
-    HStack {
+    HStack(spacing: 24) {
       if let image = foodItemLog.image {
         Image(uiImage: image)
           .resizable()

@@ -144,30 +144,40 @@ struct FoodItemDetailsView: View {
 private extension FoodItemDetailsView {
 
   var nameSection: some View {
-    VStack {
-      HStack {
-        VStack(alignment: .leading) {
-          Group {
-            if let brandName = foodItem.brandName {
-              Text(brandName) + Text(" ") + Text(foodItem.name)
-            } else {
-              Text(foodItem.name)
-            }
-          }
-          .font(.title)
-          .fontDesign(.rounded)
-          .bold()
+    HStack(spacing: 24) {
+      if let image = existingFoodItemLog?.image {
+        Image(uiImage: image)
+          .resizable()
+          .scaledToFill()
+          .frame(square: 100)
+          .clipShape(
+            RoundedRectangle(cornerRadius: 26)
+          )
+      }
 
-          if let flavour = foodItem.flavour {
-            Text(flavour)
-              .font(.body)
-              .fontDesign(.rounded)
-              .foregroundStyle(.secondary)
+      VStack(alignment: .leading) {
+        Group {
+          if let brandName = foodItem.brandName {
+            Text(brandName) + Text(" ") + Text(foodItem.name)
+          } else {
+            Text(foodItem.name)
           }
         }
-        Spacer()
+        .font(.title)
+        .fontDesign(.rounded)
+        .bold()
+
+        if let flavour = foodItem.flavour {
+          Text(flavour)
+            .font(.body)
+            .fontDesign(.rounded)
+            .foregroundStyle(.secondary)
+        }
       }
-      .padding(.horizontal)
+      Spacer()
+    }
+    .if(existingFoodItemLog?.image == nil) {
+      $0.padding(.horizontal)
     }
   }
 

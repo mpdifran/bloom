@@ -11,9 +11,21 @@ import SwiftData
 import DataContainer
 
 extension FoodLoggingActionCardView {
-  enum FoodItemHistoryTab {
+  enum FoodItemHistoryTab: CaseIterable {
     case frequent
     case recent
+    case meals
+
+    var name: String {
+      switch self {
+      case .frequent:
+        "Frequent"
+      case .recent:
+        "Recent"
+      case .meals:
+        "Meals"
+      }
+    }
   }
 }
 
@@ -49,6 +61,8 @@ struct FoodLoggingActionCardView: View {
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
   private var locationViewModel = LocationManagerViewModel.shared
 
+  @Query var meals: [MealRecord]
+
   var body: some View {
     NavigationStack {
       VStack(spacing: 0) {
@@ -77,6 +91,32 @@ struct FoodLoggingActionCardView: View {
             }
           }
           .bold()
+        }
+        ToolbarItem(placement: .primaryAction) {
+          Menu {
+            Button {
+              presentedSheet = CreateMealView().asAny
+            } label: {
+              Label("Create Meal", systemSymbol: .forkKnife)
+            }
+
+            Divider()
+
+            Button {
+              presentedSheet = FoodUploadScannerView { foodItem in
+                viewModel.results = [FoodItemSection(
+                  title: "Uploaded Food",
+                  category: .branded,
+                  foodItems: [foodItem]
+                )]
+              }.asAny
+            } label: {
+              Label("Upload a Food", systemSymbol: .plusViewfinder)
+            }
+          } label: {
+            Image(systemSymbol: .plus)
+              .bold()
+          }
         }
       }
     }
@@ -162,6 +202,8 @@ private extension FoodLoggingActionCardView {
           frequentFoodItemsView
         case .recent:
           recentFoodItemsView
+        case .meals:
+          mealsView
         }
       }
       .safeAreaInset(edge: .top) {
@@ -175,14 +217,12 @@ private extension FoodLoggingActionCardView {
 
   var foodItemHistoryHeader: some View {
     Picker("", selection: $selectedHistoryTab) {
-      Text("Frequent")
-        .bold()
-        .fontDesign(.rounded)
-        .tag(FoodItemHistoryTab.frequent)
-      Text("Recent")
-        .bold()
-        .fontDesign(.rounded)
-        .tag(FoodItemHistoryTab.recent)
+      ForEach(FoodItemHistoryTab.allCases, id: \.self) { historyTab in
+        Text(historyTab.name)
+          .bold()
+          .fontDesign(.rounded)
+          .tag(historyTab)
+      }
     }
     .pickerStyle(.segmented)
     .padding(.horizontal)
@@ -240,6 +280,34 @@ private extension FoodLoggingActionCardView {
       }
       .padding(.horizontal)
       .padding(.bottom)
+    }
+  }
+
+  @ViewBuilder
+  var mealsView: some View {
+    if meals.isEmpty {
+      ContentUnavailableView {
+        Label("No Meals", systemSymbol: .forkKnife)
+      } description: {
+        Text("You haven't saved any meals yet.")
+      } actions: {
+        Button {
+          presentedSheet = CreateMealView().asAny
+        } label: {
+          Text("Add a Meal")
+        }
+        .buttonStyle(.primary)
+      }
+    } else {
+      ScrollView {
+        LazyVStack {
+          ForEach(meals) { mealRecord in
+            MealRecordCell(mealRecord: mealRecord)
+          }
+        }
+        .padding(.horizontal)
+        .padding(.bottom)
+      }
     }
   }
 

@@ -127,6 +127,8 @@ private extension FoodItemPicker {
         frequentFoodItemsView
       case .recent:
         recentFoodItemsView
+      case .meals:
+        EmptyView()
       }
     }
     .safeAreaInset(edge: .top) {

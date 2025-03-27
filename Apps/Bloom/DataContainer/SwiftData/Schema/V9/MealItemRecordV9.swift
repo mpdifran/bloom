@@ -22,7 +22,7 @@ extension SchemaV9 {
     @Relationship public var mealRecord: MealRecord? = nil
 
     public init(
-      id: String,
+      id: String = UUID().uuidString,
       numberOfServings: Double,
       foodItem: FoodItemRecord?
     ) {
