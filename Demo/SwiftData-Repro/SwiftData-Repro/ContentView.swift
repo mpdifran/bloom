@@ -89,7 +89,6 @@ enum TestData {
     servingValue: 20,
     ingredients: "Yogurt (Milk);  Rhubarb (8%);  Sugar;  Tapioca Starch;  Natural Flavourings;  Colour (Plain Caramel);  Stabiliser (Pectin);  Milk Minerals;  Cultures (Lactobacillus Bulgaricus;  Streptococcus Thermophilus;  Lactococcus Lactis;  Bifidobacterium Lactis (Bifidus Actiregularis®))",
     category: .branded,
-    isVerified: true,
-    logs: []
+    isVerified: true
   )
 }
