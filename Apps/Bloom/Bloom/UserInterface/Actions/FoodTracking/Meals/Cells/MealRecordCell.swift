@@ -45,7 +45,7 @@ struct MealRecordCell: View {
             .bold()
             .fontDesign(.rounded)
 
-          Text("23g Protein • 7g Fat • 42g Carbs")
+          Text(macrosDescription)
             .font(.caption)
             .foregroundStyle(.secondary)
             .bold()
@@ -55,7 +55,7 @@ struct MealRecordCell: View {
 
         Spacer()
 
-        Text("607 cals")
+        Text(caloriesDescription)
           .font(.subheadline)
           .foregroundStyle(.secondary)
           .bold()
@@ -73,6 +73,23 @@ struct MealRecordCell: View {
     }
     .padding(.bottom)
     .cardContainer(includePadding: false)
+  }
+}
+
+private extension MealRecordCell {
+
+  var macrosDescription: String {
+    let protein = NumberFormatter.noDecimalPlaces.string(for: mealRecord.totalProtein) ?? "0"
+    let carbs = NumberFormatter.noDecimalPlaces.string(for: mealRecord.totalCarbs) ?? "0"
+    let fat = NumberFormatter.noDecimalPlaces.string(for: mealRecord.totalFat) ?? "0"
+
+    return "\(protein)g Protein • \(carbs)g Carbs • \(fat)g Fat"
+  }
+
+  var caloriesDescription: String {
+    let totalCalories = mealRecord.totalCalories
+
+    return "\(NumberFormatter.noDecimalPlaces.string(for: totalCalories) ?? "0") Cals"
   }
 }
 
