@@ -12,8 +12,6 @@ public enum SchemaV9: VersionedSchema {
   public static let versionIdentifier = Schema.Version(9, 0, 0)
 
   public static let models: [any PersistentModel.Type] = [
-    SchemaV0.BowelMovement.self,
-    SchemaV2.Habit.self,
     SchemaV9.FoodItemRecord.self,
     SchemaV9.FoodItemLog.self,
     SchemaV9.FoodItemServing.self,

@@ -5,10 +5,6 @@
 //  Created by Zach Radford on 2025-03-24.
 //
 
-// These don't change
-public typealias BowelMovement = SchemaV0.BowelMovement
-public typealias Habit = SchemaV2.Habit
-
 
 // TODO: update alongside migration
 public typealias FoodItemRecord = SchemaV5.FoodItemRecord
