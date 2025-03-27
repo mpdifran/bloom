@@ -216,7 +216,9 @@ private extension FoodItemLogDetailsView {
                 symbol: .trash,
                 tint: .mutedRed,
                 action: {
-                  delete(serving)
+                  Task {
+                    await delete(serving)
+                  }
                 }
               )
             ]
@@ -228,7 +230,9 @@ private extension FoodItemLogDetailsView {
             .focused($focusedServingID, equals: serving.id)
             .contextMenu {
               Button("Delete", systemSymbol: .trash, role: .destructive) {
-                delete(serving)
+                Task {
+                  await delete(serving)
+                }
               }
             }
           }
@@ -289,7 +293,7 @@ private extension FoodItemLogDetailsView {
       .buttonStyle(.primary)
     } else {
       AsyncButton {
-        try save()
+        try await save()
         dismiss()
       } label: {
         Text("Update")
@@ -322,8 +326,9 @@ private extension FoodItemLogDetailsView {
     return false
   }
 
-  func save() throws {
-    try modelContext.update(
+  func save() async throws {
+    try await nutritionViewModel.update(
+      modelContext: modelContext,
       foodItemLog: foodItemLog,
       numberOfServings: numberOfServings,
       foodItemNumberOfServings: foodItemNumberOfServings,
@@ -335,9 +340,9 @@ private extension FoodItemLogDetailsView {
     SoundPlayer.playLogHealthData()
   }
 
-  func delete(_ foodItemServing: FoodItemServing) {
+  func delete(_ foodItemServing: FoodItemServing) async {
     do {
-      try modelContext.delete(foodItemServing: foodItemServing)
+      try await nutritionViewModel.delete(modelContext: modelContext, foodItemServing: foodItemServing)
     } catch {
       self.error = error
     }

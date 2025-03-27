@@ -56,9 +56,9 @@ struct NutritionMealView: View {
 
 private extension NutritionMealView {
 
-  func delete(_ foodItemLog: FoodItemLog) {
+  func delete(_ foodItemLog: FoodItemLog) async {
     do {
-      try modelContext.delete(foodItemLogs: [foodItemLog])
+      try await nutritionViewModel.delete(modelContext: modelContext, foodItemLogs: [foodItemLog])
     } catch {
       self.error = error
     }
@@ -87,7 +87,9 @@ private extension NutritionMealView {
       .id(foodItemLog.id)
       .contextMenu {
         Button("Delete", systemSymbol: .trash, role: .destructive) {
-          delete(foodItemLog)
+          Task {
+            await delete(foodItemLog)
+          }
         }
       }
     }

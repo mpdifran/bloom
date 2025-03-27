@@ -279,7 +279,7 @@ private extension AIFoodScannerView {
 
   var logFoodButton: some View {
     AsyncButton {
-      try save()
+      try await save()
       dismiss()
     } label: {
       Group {
@@ -391,8 +391,9 @@ private extension AIFoodScannerView {
     }
   }
 
-  func save() throws {
-    try modelContext.log(
+  func save() async throws {
+    try await nutritionViewModel.log(
+      modelContext: modelContext,
       name: viewModel.scannedFoodName ?? "My Scanned Meal",
       image: viewModel.image,
       numberOfServings: 1,

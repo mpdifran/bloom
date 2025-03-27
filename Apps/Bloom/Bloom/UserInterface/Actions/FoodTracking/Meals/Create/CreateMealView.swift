@@ -21,6 +21,8 @@ struct CreateMealView: View {
   @State private var saveCompleteToggle = false
   @State private var presentedSheet: AnyView?
 
+  @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
+
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
@@ -234,7 +236,10 @@ private extension CreateMealView {
       var mealItemRecords = [MealItemRecord]()
 
       for foodItem in foodItems {
-        let (dates, foodItemRecord) = try modelContext.upsertAndMerge(foodItem: foodItem)
+        let (dates, foodItemRecord) = try nutritionViewModel.upsertAndMerge(
+          modelContext: modelContext,
+          foodItem: foodItem
+        )
 
         let numberOfServings = foodItemsServings[foodItem.id, default: 1]
 

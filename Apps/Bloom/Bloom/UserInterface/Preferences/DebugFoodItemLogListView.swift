@@ -26,7 +26,11 @@ struct DebugFoodItemLogListView: View {
         ForEach(foodItemLogs) { log in
           DebugFoodItemLogCell(foodItemLog: log)
         }
-        .onDelete(perform: deleteLogs)
+        .onDelete { indexSet in
+          Task {
+            await deleteLogs(indexSet)
+          }
+        }
       }
       .navigationTitle("Debug Food Item Logs")
       .navigationBarTitleDisplayMode(.inline)
@@ -44,11 +48,11 @@ struct DebugFoodItemLogListView: View {
 
 private extension DebugFoodItemLogListView {
 
-  func deleteLogs(_ indexSet: IndexSet) {
+  func deleteLogs(_ indexSet: IndexSet) async {
     let logs = indexSet.map({ foodItemLogs[$0] })
 
     do {
-      try modelContext.delete(foodItemLogs: logs)
+      try await nutritionViewModel.delete(modelContext: modelContext, foodItemLogs: logs)
     } catch {
       self.error = error
     }

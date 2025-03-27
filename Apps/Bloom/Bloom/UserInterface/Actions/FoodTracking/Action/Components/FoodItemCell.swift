@@ -57,7 +57,7 @@ struct FoodItemCell: View {
       AsyncButton {
         guard !hasLoggedThisFoodItem else { return }
 
-        try quickLogFood()
+        try await quickLogFood()
       } label: {
         if !hasLoggedThisFoodItem {
           Image(systemSymbol: .plusCircleFill)
@@ -102,8 +102,9 @@ private extension FoodItemCell {
     return "\(quantity.value.format(using: .twoDecimalPlaces)) \(quantity.unit)"
   }
 
-  func quickLogFood() throws {
-    try modelContext.log(
+  func quickLogFood() async throws {
+    try await nutritionViewModel.log(
+      modelContext: modelContext,
       foodItem: foodItem,
       date: nutritionViewModel.date,
       meal: nutritionViewModel.suggestedMeal,

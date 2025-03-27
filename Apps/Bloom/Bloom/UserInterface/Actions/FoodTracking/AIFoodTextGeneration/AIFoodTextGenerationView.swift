@@ -205,7 +205,7 @@ private extension AIFoodTextGenerationView {
 
   var saveButton: some View {
     AsyncButton {
-      try save()
+      try await save()
       dismiss()
     } label: {
       Group {
@@ -231,8 +231,9 @@ private extension AIFoodTextGenerationView {
     }
   }
 
-  func save() throws {
-    try modelContext.log(
+  func save() async throws {
+    try await nutritionViewModel.log(
+      modelContext: modelContext,
       name: viewModel.foodName ?? "My Meal",
       image: nil,
       numberOfServings: 1,

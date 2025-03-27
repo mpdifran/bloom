@@ -31,8 +31,6 @@ final class NutritionTrackingViewModel: ObservableObject {
 
   @Storage(key: .lastMealAutoUpdateDateKey, defaultValue: nil) var lastMealAutoUpdateDate: Date?
 
-  private let modelContext = ModelContext(ContainerHolder.shared.container)
-
   private init() {
     updateMealForCurrentTime()
     Task {
@@ -173,6 +171,314 @@ extension NutritionTrackingViewModel {
   }
 
   private func earliestLogDate() throws -> Date? {
-    try modelContext.fetchOldestFoodItemLog()?.date
+    let modelContext = ModelContext(ContainerHolder.shared.container)
+    return try modelContext.fetchOldestFoodItemLog()?.date
+  }
+}
+
+// MARK: - Logging
+
+extension NutritionTrackingViewModel {
+
+  func log(
+    modelContext: ModelContext,
+    name: String,
+    image: UIImage?,
+    numberOfServings: Double,
+    foodItemServings: [FoodItemServingAmount],
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    var dates = [Date]()
+
+    try modelContext.savingTransaction {
+      let servings = try foodItemServings.map {
+        let (modifiedDates, foodItem) = try upsertAndMerge(modelContext: modelContext, foodItem: $0.foodItem)
+
+        dates.append(contentsOf: modifiedDates)
+
+        return FoodItemServing(
+          numberOfServings: $0.serving,
+          foodItem: foodItem
+        )
+      }
+
+      let logDate = calculateDate(for: meal, from: date)
+      dates.append(logDate)
+
+      let foodItemLog = FoodItemLog(
+        id: UUID().uuidString,
+        name: name,
+        date: logDate,
+        meal: meal,
+        numberOfServings: numberOfServings,
+        imageData: image?.pngData(),
+        foodItemServings: servings
+      )
+
+      modelContext.insert(foodItemLog)
+    }
+
+    try await updateNutrition(for: dates.asSet())
+
+    TelemetryDeck.signal(
+      "Logged Food Item",
+      parameters: ["Meal": meal.rawValue],
+      floatValue: Double(foodItemServings.count)
+    )
+  }
+
+  /// Logs each serving as an individual `FoodItemLog`.
+  func logIndividual(
+    modelContext: ModelContext,
+    foodItemServings: [FoodItemServingAmount],
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    var dates = [Date]()
+
+    try modelContext.savingTransaction {
+      for serving in foodItemServings {
+        let (modifiedDates, foodItem) = try upsertAndMerge(modelContext: modelContext, foodItem: serving.foodItem)
+
+        dates.append(contentsOf: modifiedDates)
+        let logDate = calculateDate(for: meal, from: date)
+        dates.append(logDate)
+
+        try modelContext.transaction {
+          let foodItemServing = FoodItemServing(
+            numberOfServings: serving.serving,
+            foodItem: foodItem
+          )
+          modelContext.insert(foodItemServing)
+
+          let foodItemLog = FoodItemLog(
+            id: UUID().uuidString,
+            name: nil,
+            date: logDate,
+            meal: meal,
+            numberOfServings: 1,
+            imageData: nil,
+            foodItemServings: [foodItemServing]
+          )
+          modelContext.insert(foodItemLog)
+        }
+      }
+    }
+
+    try await updateNutrition(for: dates.asSet())
+
+    TelemetryDeck.signal(
+      "Logged Food Item",
+      parameters: ["Meal": meal.rawValue],
+      floatValue: Double(foodItemServings.count)
+    )
+  }
+
+  func log(
+    modelContext: ModelContext,
+    foodItem: FoodItem,
+    date: Date,
+    meal: FoodItemLog.Meal,
+    numberOfServings: Double
+  ) async throws {
+    let serving = FoodItemServingAmount(serving: numberOfServings, foodItem: foodItem)
+    try await logIndividual(
+      modelContext: modelContext,
+      foodItemServings: [serving],
+      date: date,
+      meal: meal
+    )
+  }
+}
+
+// MARK: - Delete Methods
+
+extension NutritionTrackingViewModel {
+
+  func delete(
+    modelContext: ModelContext,
+    foodItemLogs: [FoodItemLog]
+  ) async throws {
+    var dates = Set<Date>()
+
+    try modelContext.savingTransaction {
+      for foodItemLog in foodItemLogs {
+        dates.insert(foodItemLog.date)
+
+        try modelContext.deleteByID(foodItemLog)
+      }
+    }
+
+    try await updateNutrition(for: dates)
+  }
+
+  func delete(
+    modelContext: ModelContext,
+    foodItemServing: FoodItemServing
+  ) async throws {
+    var dates = Set<Date>()
+
+    try modelContext.savingTransaction {
+      if let date = foodItemServing.foodItemLog?.date {
+        dates.insert(date)
+      }
+
+      try modelContext.deleteByID(foodItemServing)
+    }
+
+    try await updateNutrition(for: dates)
+  }
+}
+
+// MARK: - Update Methods
+
+extension NutritionTrackingViewModel {
+
+  func update(
+    modelContext: ModelContext,
+    foodItemLog: FoodItemLog,
+    foodItemID: String,
+    numberOfServings: Double,
+    dateMeal: (Date, FoodItemLog.Meal)? = nil
+  ) async throws {
+    guard let localLog: FoodItemLog = try modelContext.existingModel(for: foodItemLog.persistentModelID) else {
+      throw NSError(description: "There was a problem saving the changes.")
+    }
+
+    let oldDate = localLog.date
+
+    try modelContext.savingTransaction {
+      if
+        let serving = foodItemLog.serving(for: foodItemID),
+        let localServing: FoodItemServing = try modelContext.existingModel(for: serving.persistentModelID)
+      {
+        localServing.numberOfServings = numberOfServings
+      }
+
+      if let (date, meal) = dateMeal {
+        localLog.date = calculateDate(for: meal, from: date)
+        localLog.meal = meal
+      }
+    }
+
+    var dates = Set<Date>([oldDate])
+    if let (date, _) = dateMeal {
+      dates.insert(date)
+    }
+
+    try await updateNutrition(for: dates)
+  }
+
+  func update(
+    modelContext: ModelContext,
+    foodItemLog: FoodItemLog,
+    numberOfServings: Double,
+    foodItemNumberOfServings: [String: Double],
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    guard let localLog: FoodItemLog = try modelContext.existingModel(for: foodItemLog.persistentModelID) else {
+      throw NSError(description: "There was a problem saving the changes.")
+    }
+
+    let oldDate = localLog.date
+
+    try modelContext.savingTransaction {
+      foodItemLog.numberOfServings = numberOfServings
+      foodItemLog.date = date
+      foodItemLog.meal = meal
+
+      for serving in localLog.foodItemServings ?? [] {
+        serving.numberOfServings = foodItemNumberOfServings[serving.id, default: 1]
+      }
+    }
+
+    try await updateNutrition(for: [oldDate, date])
+  }
+
+  @available(*, deprecated, message: "Use update(foodItemLog:foodItemID:numberOfServings:dateMeal:) instead.")
+  func update(
+    modelContext: ModelContext,
+    foodItem: FoodItemLog,
+    numberOfServings: Double,
+    date: Date,
+    meal: FoodItemLog.Meal
+  ) async throws {
+    guard foodItem.hasSingleServing else {
+      throw NSError(description: "This item cannot be edited at this time.")
+    }
+
+    guard
+      let localLog: FoodItemLog = try modelContext.existingModel(for: foodItem.persistentModelID),
+      let foodItemID = foodItem.firstFoodItemServing?.foodItem?.id
+    else {
+      throw NSError(description: "There was a problem saving the changes.")
+    }
+
+    let oldDate = localLog.date
+
+    try modelContext.savingTransaction {
+      if
+        let serving = foodItem.serving(for: foodItemID),
+        let localServing: FoodItemServing = try modelContext.existingModel(for: serving.persistentModelID)
+      {
+        localServing.numberOfServings = numberOfServings
+      }
+
+      localLog.date = calculateDate(for: meal, from: date)
+      localLog.meal = meal
+    }
+
+    try await updateNutrition(for: [oldDate, date])
+  }
+}
+
+// MARK: - FoodItemRecord Methods
+
+extension NutritionTrackingViewModel {
+
+  /// Upserts the `foodItem` into the database if it exists, or creates a new record. If the upsert modifies the database record, a list of affected dates is returned.
+  /// You can use these dates to re-sync HealthKit.
+  /// - parameter modelContext: The ModelContext to use.
+  /// - parameter foodItem: The food item to upsert.
+  /// - returns: A list of dates that should be re-synced with HealthKit, and the FoodItemRecord.
+  func upsertAndMerge(
+    modelContext: ModelContext,
+    foodItem: FoodItem
+  ) throws -> ([Date], FoodItemRecord) {
+    let existingFoodItems = try modelContext.fetchAllFoodItems(for: foodItem.id.value)
+    if existingFoodItems.isNotEmpty, let dbFoodItem = try modelContext.merge(existingFoodItems) {
+      var dates = [Date]()
+      if dbFoodItem.apply(foodItem: foodItem) {
+        // If we updated the food item properties, we should resync every day it was logged.
+        dates.append(contentsOf: dbFoodItem.logDates())
+      }
+      return (dates, dbFoodItem)
+    } else {
+      let insertedFoodItem = FoodItemRecord(foodItem: foodItem)
+      modelContext.insert(insertedFoodItem)
+      return ([], insertedFoodItem)
+    }
+  }
+}
+
+// MARK: - Private Methods
+
+private extension NutritionTrackingViewModel {
+
+  func calculateDate(for meal: FoodItemLog.Meal, from date: Date) -> Date {
+    switch meal {
+    case .breakfast:
+      Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: date) ?? date
+    case .lunch:
+      Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date
+    case .dinner:
+      Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: date) ?? date
+    case .snack:
+      Calendar.current.date(bySettingHour: 15, minute: 0, second: 0, of: date) ?? date
+    @unknown default:
+      date
+    }
   }
 }
