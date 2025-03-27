@@ -62,7 +62,7 @@ private extension CreateMealView {
 
   var mealDetailsSection: some View {
     HStack(spacing: 16) {
-      Group {
+      ImagePicker(image: $image, presentedSheet: $presentedSheet) {
         if let image {
           Image(uiImage: image)
             .resizable()
