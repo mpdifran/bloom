@@ -8,12 +8,12 @@
 import Foundation
 import SwiftUI
 
-//public extension FoodItemLog {
-//  var hasSingleServing: Bool {
-//    foodItemServings?.count == 1
-//  }
-//
-//  var firstFoodItemServing: FoodItemServing? {
-//    foodItemServings?.first
-//  }
-//}
+public extension SchemaV9.FoodItemLog {
+  var hasSingleServing: Bool {
+    foodItemServings?.count == 1
+  }
+
+  var firstFoodItemServing: SchemaV9.FoodItemServing? {
+    foodItemServings?.first
+  }
+}
