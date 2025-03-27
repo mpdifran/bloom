@@ -8,25 +8,6 @@
 import Foundation
 import SwiftData
 
-// TODO: update alongside migration
-//public typealias FoodItemRecord = SchemaV6.FoodItemRecord
-//public typealias FoodItemLog = SchemaV6.FoodItemLog
-//
-//public typealias FoodItemServing = SchemaV6.FoodItemServing
-//public typealias MealItemRecord = SchemaV6.MealItemRecord
-//public typealias MealRecord = SchemaV6.MealRecord
-
-public typealias FoodItemRecord = SchemaV7.FoodItemRecord
-public typealias FoodItemLog = SchemaV7.FoodItemLog
-
-public typealias FoodItemServing = SchemaV7.FoodItemServing
-public typealias MealItemRecord = SchemaV7.MealItemRecord
-public typealias MealRecord = SchemaV7.MealRecord
-
-// TODO: update this
-// CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV7.self
-
 enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
     [
