@@ -80,21 +80,32 @@ public extension FoodItemLogModelActor {
   }
 
   func fetchRecentLogs(
-    for meal: FoodItemLog.Meal,
+    for meal: FoodItemLog.Meal?,
     dateRange: DateRange = DateRange.trailingMonthsFromNow(1)
   ) throws -> [FoodItemDTO] {
     let startDate = dateRange.start
     let endDate = dateRange.end
-    let mealRawValue = meal.rawValue
 
-    let descriptor = FetchDescriptor<FoodItemLog>(
-      predicate: #Predicate<FoodItemLog> { model in
-        model.date >= startDate &&
-        model.date <= endDate &&
-        model.mealRawValue == mealRawValue
-      },
-      sortBy: [SortDescriptor(\FoodItemLog.date, order: .reverse)]
-    )
+    let descriptor: FetchDescriptor<FoodItemLog>
+    if let mealRawValue = meal?.rawValue {
+      descriptor = FetchDescriptor<FoodItemLog>(
+        predicate: #Predicate<FoodItemLog> { model in
+          model.date >= startDate &&
+          model.date <= endDate &&
+          model.mealRawValue == mealRawValue
+        },
+        sortBy: [SortDescriptor(\FoodItemLog.date, order: .reverse)]
+      )
+    } else {
+      descriptor = FetchDescriptor<FoodItemLog>(
+        predicate: #Predicate<FoodItemLog> { model in
+          model.date >= startDate &&
+          model.date <= endDate
+        },
+        sortBy: [SortDescriptor(\FoodItemLog.date, order: .reverse)]
+      )
+    }
+
     let results = try context.fetch(descriptor)
 
     return results
@@ -104,20 +115,29 @@ public extension FoodItemLogModelActor {
   }
 
   func fetchFrequentLogs(
-    for meal: FoodItemLog.Meal,
+    for meal: FoodItemLog.Meal?,
     dateRange: DateRange = DateRange.trailingMonthsFromNow(2)
   ) throws -> [FoodItemDTO] {
     let startDate = dateRange.start
     let endDate = dateRange.end
-    let mealRawValue = meal.rawValue
 
-    let descriptor = FetchDescriptor<FoodItemLog>(
-      predicate: #Predicate<FoodItemLog> { model in
-        model.date >= startDate &&
-        model.date <= endDate &&
-        model.mealRawValue == mealRawValue
-      }
-    )
+    let descriptor: FetchDescriptor<FoodItemLog>
+    if let mealRawValue = meal?.rawValue {
+      descriptor = FetchDescriptor<FoodItemLog>(
+        predicate: #Predicate<FoodItemLog> { model in
+          model.date >= startDate &&
+          model.date <= endDate &&
+          model.mealRawValue == mealRawValue
+        }
+      )
+    } else {
+      descriptor = FetchDescriptor<FoodItemLog>(
+        predicate: #Predicate<FoodItemLog> { model in
+          model.date >= startDate &&
+          model.date <= endDate
+        }
+      )
+    }
 
     let logs = try context.fetch(descriptor)
 

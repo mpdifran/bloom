@@ -57,9 +57,15 @@ struct FoodItemPicker: View {
             dismiss()
           }
         }
+        ToolbarItem(placement: .principal) {
+          MealPicker()
+        }
       }
     }
     .animation(.default, value: searchQuery)
+    .animation(.default, value: nutritionViewModel.suggestedMeal)
+    .animation(.default, value: viewModel.frequentFoodItemSections)
+    .animation(.default, value: viewModel.recentFoodItemSections)
     .sheet($presentedSheet)
     .alert(error: $viewModel.error)
     .presentationCompactAdaptation(.fullScreenCover)
