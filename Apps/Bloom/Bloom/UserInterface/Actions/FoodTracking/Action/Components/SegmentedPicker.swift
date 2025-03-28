@@ -10,7 +10,7 @@ import AppUI
 
 private extension CGFloat {
   static let cornerRadius: CGFloat = 16
-  static let selectionIndicatorPadding: CGFloat = 8
+  static let selectionIndicatorPadding: CGFloat = 6
   static let componentHeight: CGFloat = 50
 }
 
