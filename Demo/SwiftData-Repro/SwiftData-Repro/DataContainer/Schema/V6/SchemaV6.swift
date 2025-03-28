@@ -9,13 +9,14 @@ import Foundation
 @preconcurrency import SwiftData
 
 public enum SchemaV6: VersionedSchema {
-    public static let versionIdentifier = Schema.Version(6, 0, 0)
+  public static let versionIdentifier = Schema.Version(6, 0, 0)
 
-    public static let models: [any PersistentModel.Type] = [
-        SchemaV6.FoodItemRecord.self,
-        SchemaV6.FoodItemLog.self,
-        SchemaV6.FoodItemServing.self,
-        SchemaV6.MealRecord.self,
-        SchemaV6.MealItemRecord.self,
-    ]
+  public static let models: [any PersistentModel.Type] = [
+    SchemaV2.Habit.self,
+    SchemaV6.FoodItemRecord.self,
+    SchemaV6.FoodItemLog.self,
+    SchemaV6.FoodItemServing.self,
+    SchemaV6.MealRecord.self,
+    SchemaV6.MealItemRecord.self,
+  ]
 }

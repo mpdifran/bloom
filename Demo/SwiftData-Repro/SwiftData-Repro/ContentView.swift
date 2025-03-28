@@ -12,23 +12,38 @@ struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
 
   @Query private var logs: [FoodItemLog]
+  @Query private var habits: [Habit]
 
   var body: some View {
     NavigationStack {
-      List(logs) { log in
-        FoodItemLogView(log: log)
+      List {
+        ForEach(logs) { log in
+          FoodItemLogView(log: log)
+        }
+        ForEach(habits) { habit in
+          HabitView(habit: habit)
+        }
       }
       .toolbar {
-          ToolbarItem {
-              Button(action: addItem) {
-                  Label("Add Item", systemImage: "plus")
-              }
+        ToolbarItem {
+          Button {
+            addFood()
+          } label: {
+            Text("Add Food")
           }
+        }
+        ToolbarItem {
+          Button {
+            addHabit()
+          } label: {
+            Text("Add Habit")
+          }
+        }
       }
     }
   }
 
-  private func addItem() {
+  private func addFood() {
     let newLog = FoodItemLog(
       id: UUID().uuidString,
       date: .now,
@@ -37,6 +52,19 @@ struct ContentView: View {
       foodItem: TestData.ritzCrackers
     )
     modelContext.insert(newLog)
+    try? modelContext.save()
+  }
+
+  private func addHabit() {
+    let newHabit = Habit(
+      targetMetric: .proteinIntake,
+      value: 7,
+      unitString: "g",
+      startDate: .now,
+      isSuggested: true,
+      isUserEdited: false
+    )
+    modelContext.insert(newHabit)
     try? modelContext.save()
   }
 }
@@ -51,6 +79,21 @@ struct FoodItemLogView: View {
       Text(log.meal.rawValue)
       Text("\(log.numberOfServings)")
     }
+    .background(.red)
+  }
+}
+
+struct HabitView: View {
+  let habit: Habit
+
+  var body: some View {
+    VStack {
+      Text(habit.rawTargetMetric)
+      Text("\(habit.value)")
+      Text(habit.unitString)
+      Text(habit.startDate, style: .date)
+    }
+    .background(.blue)
   }
 }
 

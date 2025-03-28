@@ -12,6 +12,7 @@ public enum SchemaV7: VersionedSchema {
   public static let versionIdentifier = Schema.Version(7, 0, 0)
 
   public static let models: [any PersistentModel.Type] = [
+    SchemaV2.Habit.self,
     SchemaV7.FoodItemRecord.self,
     SchemaV7.FoodItemLog.self,
     SchemaV7.FoodItemServing.self,

@@ -7,11 +7,15 @@
 
 import SwiftData
 
+// This doesn't change across migrations
+public typealias Habit = SchemaV2.Habit
+
 // MARK: - V5
 
 let currentSchema: VersionedSchema.Type = SchemaV5.self
 
 let currentSchemas: [any VersionedSchema.Type] = [
+  SchemaV2.self,
   SchemaV5.self,
 ]
 
@@ -25,6 +29,7 @@ public typealias FoodItemLog = SchemaV5.FoodItemLog
 //let currentSchema: VersionedSchema.Type = SchemaV6.self
 //
 //let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV2.self,
 //  SchemaV5.self,
 //  SchemaV6.self,
 //]
@@ -44,6 +49,7 @@ public typealias FoodItemLog = SchemaV5.FoodItemLog
 //let currentSchema: VersionedSchema.Type = SchemaV7.self
 //
 //let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV2.self,
 //  SchemaV5.self,
 //  SchemaV6.self,
 //  SchemaV7.self,
@@ -65,6 +71,7 @@ public typealias FoodItemLog = SchemaV5.FoodItemLog
 //let currentSchema: VersionedSchema.Type = SchemaV8.self
 //
 //let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV2.self,
 //  SchemaV5.self,
 //  SchemaV6.self,
 //  SchemaV7.self,
@@ -88,6 +95,7 @@ public typealias FoodItemLog = SchemaV5.FoodItemLog
 //let currentSchema: VersionedSchema.Type = SchemaV9.self
 //
 //let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV2.self,
 //  SchemaV5.self,
 //  SchemaV6.self,
 //  SchemaV7.self,
