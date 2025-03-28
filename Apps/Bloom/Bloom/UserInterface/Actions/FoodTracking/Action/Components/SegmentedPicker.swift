@@ -37,11 +37,11 @@ struct SegmentedPicker<Enum>: View where Enum: NamedCaseIterable {
       ZStack(alignment: .leading) {
 
         RoundedRectangle(cornerRadius: .cornerRadius)
-          .fill(.background)
+          .fill(.background.secondary)
           .frame(height: geometry.size.height)
 
         RoundedRectangle(cornerRadius: .cornerRadius - .selectionIndicatorPadding)
-          .fill(.background.secondary)
+          .fill(.background)
           .frame(
             width: max(segmentWidth - 2 * CGFloat.selectionIndicatorPadding, 0),
             height: max(geometry.size.height - 2 * CGFloat.selectionIndicatorPadding, 0)
