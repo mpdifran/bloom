@@ -50,7 +50,7 @@ struct AIFoodTextGenerationView: View {
       }
       .groupedBackground()
       .scrollDisabled(isSwipingItem)
-      .shelf {
+      .shelf(backgroundFill: .background.secondary) {
         if focusedIndex != nil {
           textEditorButton
         } else {
@@ -248,5 +248,7 @@ private extension AIFoodTextGenerationView {
 }
 
 #Preview {
-  AIFoodTextGenerationView()
+  PreviewEnvironment {
+    AIFoodTextGenerationView()
+  }
 }
