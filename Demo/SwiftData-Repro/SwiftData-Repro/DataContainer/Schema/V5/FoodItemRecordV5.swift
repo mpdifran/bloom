@@ -89,8 +89,7 @@ extension SchemaV5 {
       servingValue: Double?,
       ingredients: String?,
       category: Category?,
-      isVerified: Bool,
-      logs: [FoodItemLog]
+      isVerified: Bool
     ) {
       self.id = id
       self.name = name
@@ -126,7 +125,6 @@ extension SchemaV5 {
       self.ingredients = ingredients
       self.category = category
       self.isVerified = isVerified
-      self.logs = logs
     }
   }
 }

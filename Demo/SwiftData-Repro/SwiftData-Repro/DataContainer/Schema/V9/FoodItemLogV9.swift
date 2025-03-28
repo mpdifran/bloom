@@ -47,11 +47,11 @@ extension SchemaV9 {
     @available(*, deprecated, message: "Use the initializer with foodItemServings instead.")
     public init(
       id: String,
-      name: String?,
+      name: String? = nil, // ZACH: Added default param to avoid editing test code.
       date: Date,
       meal: Meal,
       numberOfServings: Double,
-      imageData: Data?,
+      imageData: Data? = nil, // ZACH: Added default param to avoid editing test code.
       foodItem: FoodItemRecord?
     ) {
       self.id = id

@@ -11,14 +11,28 @@ import SwiftData
 
 let currentSchema: VersionedSchema.Type = SchemaV5.self
 
+let currentSchemas: [any VersionedSchema.Type] = [
+  SchemaV5.self,
+]
+
+let currentStages: [MigrationStage] = []
+
 public typealias FoodItemRecord = SchemaV5.FoodItemRecord
 public typealias FoodItemLog = SchemaV5.FoodItemLog
 
 // MARK: - V6
-/// Note:  Need to remove 'logs: []' from TextData in ContentView so the next migration builds.
 
 //let currentSchema: VersionedSchema.Type = SchemaV6.self
-
+//
+//let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV5.self,
+//  SchemaV6.self,
+//]
+//
+//let currentStages: [MigrationStage] = [
+//  DefaultMigrationPlan.migrateV5ToV6,
+//]
+//
 //public typealias FoodItemRecord = SchemaV6.FoodItemRecord
 //public typealias FoodItemLog = SchemaV6.FoodItemLog
 //public typealias FoodItemServing = SchemaV6.FoodItemServing
@@ -28,7 +42,18 @@ public typealias FoodItemLog = SchemaV5.FoodItemLog
 // MARK: - V7
 
 //let currentSchema: VersionedSchema.Type = SchemaV7.self
-
+//
+//let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV5.self,
+//  SchemaV6.self,
+//  SchemaV7.self,
+//]
+//
+//let currentStages: [MigrationStage] = [
+//  DefaultMigrationPlan.migrateV5ToV6,
+//  DefaultMigrationPlan.migrateV6ToV7,
+//]
+//
 //public typealias FoodItemRecord = SchemaV7.FoodItemRecord
 //public typealias FoodItemLog = SchemaV7.FoodItemLog
 //public typealias FoodItemServing = SchemaV7.FoodItemServing
@@ -38,7 +63,20 @@ public typealias FoodItemLog = SchemaV5.FoodItemLog
 // MARK: - V8
 
 //let currentSchema: VersionedSchema.Type = SchemaV8.self
-
+//
+//let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV5.self,
+//  SchemaV6.self,
+//  SchemaV7.self,
+//  SchemaV8.self,
+//]
+//
+//let currentStages: [MigrationStage] = [
+//  DefaultMigrationPlan.migrateV5ToV6,
+//  DefaultMigrationPlan.migrateV6ToV7,
+//  DefaultMigrationPlan.migrateV7ToV8,
+//]
+//
 //public typealias FoodItemRecord = SchemaV8.FoodItemRecord
 //public typealias FoodItemLog = SchemaV8.FoodItemLog
 //public typealias FoodItemServing = SchemaV8.FoodItemServing
@@ -48,7 +86,22 @@ public typealias FoodItemLog = SchemaV5.FoodItemLog
 // MARK: - V9
 
 //let currentSchema: VersionedSchema.Type = SchemaV9.self
-
+//
+//let currentSchemas: [any VersionedSchema.Type] = [
+//  SchemaV5.self,
+//  SchemaV6.self,
+//  SchemaV7.self,
+//  SchemaV8.self,
+//  SchemaV9.self,
+//]
+//
+//let currentStages: [MigrationStage] = [
+//  DefaultMigrationPlan.migrateV5ToV6,
+//  DefaultMigrationPlan.migrateV6ToV7,
+//  DefaultMigrationPlan.migrateV7ToV8,
+//  DefaultMigrationPlan.migrateV8ToV9,
+//]
+//
 //public typealias FoodItemRecord = SchemaV9.FoodItemRecord
 //public typealias FoodItemLog = SchemaV9.FoodItemLog
 //public typealias FoodItemServing = SchemaV9.FoodItemServing

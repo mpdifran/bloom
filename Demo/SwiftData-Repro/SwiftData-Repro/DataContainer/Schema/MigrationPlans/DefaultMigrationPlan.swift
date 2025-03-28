@@ -9,33 +9,18 @@ import Foundation
 import SwiftData
 
 enum DefaultMigrationPlan: SchemaMigrationPlan {
-  public static var schemas: [any VersionedSchema.Type] {
-    [
-      SchemaV5.self,
-      SchemaV6.self,
-      SchemaV7.self,
-      SchemaV8.self,
-      SchemaV9.self
-    ]
-  }
+  public static var schemas: [any VersionedSchema.Type] { currentSchemas }
 
-  public static var stages: [MigrationStage] {
-    [
-      migrateV5ToV6,
-      migrateV6ToV7,
-      migrateV7ToV8,
-      migrateV8ToV9
-    ]
-  }
+  public static var stages: [MigrationStage] { currentStages }
 
-  private static var migrateV5ToV6: MigrationStage {
+  static var migrateV5ToV6: MigrationStage {
     .lightweight(
       fromVersion: SchemaV5.self,
       toVersion: SchemaV6.self
     )
   }
 
-  private static var migrateV6ToV7: MigrationStage {
+  static var migrateV6ToV7: MigrationStage {
     .custom(
       fromVersion: SchemaV6.self,
       toVersion: SchemaV7.self,
@@ -68,7 +53,7 @@ enum DefaultMigrationPlan: SchemaMigrationPlan {
     )
   }
 
-  private static var migrateV7ToV8: MigrationStage {
+  static var migrateV7ToV8: MigrationStage {
     .custom(
       fromVersion: SchemaV7.self,
       toVersion: SchemaV8.self,
@@ -91,7 +76,7 @@ enum DefaultMigrationPlan: SchemaMigrationPlan {
     )
   }
 
-  private static var migrateV8ToV9: MigrationStage {
+  static var migrateV8ToV9: MigrationStage {
     .custom(
       fromVersion: SchemaV8.self,
       toVersion: SchemaV9.self,
