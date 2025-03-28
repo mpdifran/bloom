@@ -10,6 +10,22 @@ import AppUI
 import BloomModel
 import DataContainer
 
+extension FoodItemPicker {
+  enum FoodItemHistoryTab: NamedCaseIterable {
+    case frequent
+    case recent
+
+    var name: String {
+      switch self {
+      case .frequent:
+        return "Frequent"
+      case .recent:
+        return "Recent"
+      }
+    }
+  }
+}
+
 struct FoodItemPicker: View {
   let selectionHandler: (FoodItem) -> Void
 
@@ -23,7 +39,7 @@ struct FoodItemPicker: View {
 
   @State private var searchQuery = ""
   @State private var selectedTab = FoodItemCategoryTab.branded
-  @State private var selectedHistoryTab = FoodLoggingActionCardView.FoodItemHistoryTab.frequent
+  @State private var selectedHistoryTab = FoodItemHistoryTab.frequent
   @State private var presentedSheet: AnyView?
 
   @Environment(\.dismiss) private var dismiss
@@ -133,8 +149,6 @@ private extension FoodItemPicker {
         frequentFoodItemsView
       case .recent:
         recentFoodItemsView
-      case .meals:
-        EmptyView()
       }
     }
     .safeAreaInset(edge: .top) {
@@ -145,19 +159,9 @@ private extension FoodItemPicker {
   }
 
   var foodItemHistoryHeader: some View {
-    Picker("", selection: $selectedHistoryTab) {
-      Text("Frequent")
-        .bold()
-        .fontDesign(.rounded)
-        .tag(FoodLoggingActionCardView.FoodItemHistoryTab.frequent)
-      Text("Recent")
-        .bold()
-        .fontDesign(.rounded)
-        .tag(FoodLoggingActionCardView.FoodItemHistoryTab.recent)
-    }
-    .pickerStyle(.segmented)
-    .padding(.horizontal)
-    .padding(.vertical, 12)
+    SegmentedPicker(selectedValue: $selectedHistoryTab)
+      .padding(.horizontal)
+      .padding(.vertical, 8)
   }
 
   var frequentFoodItemsView: some View {

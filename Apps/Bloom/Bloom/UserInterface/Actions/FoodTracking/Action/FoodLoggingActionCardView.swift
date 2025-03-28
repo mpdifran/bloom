@@ -11,7 +11,7 @@ import SwiftData
 import DataContainer
 
 extension FoodLoggingActionCardView {
-  enum FoodItemHistoryTab: CaseIterable {
+  enum FoodItemHistoryTab: NamedCaseIterable {
     case frequent
     case recent
     case meals
@@ -216,17 +216,9 @@ private extension FoodLoggingActionCardView {
   }
 
   var foodItemHistoryHeader: some View {
-    Picker("", selection: $selectedHistoryTab) {
-      ForEach(FoodItemHistoryTab.allCases, id: \.self) { historyTab in
-        Text(historyTab.name)
-          .bold()
-          .fontDesign(.rounded)
-          .tag(historyTab)
-      }
-    }
-    .pickerStyle(.segmented)
-    .padding(.horizontal)
-    .padding(.vertical, 12)
+    SegmentedPicker(selectedValue: $selectedHistoryTab)
+      .padding(.horizontal)
+      .padding(.vertical, 8)
   }
 
   var frequentFoodItemsView: some View {
