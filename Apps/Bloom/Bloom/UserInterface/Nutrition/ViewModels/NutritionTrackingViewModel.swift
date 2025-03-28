@@ -467,6 +467,110 @@ extension NutritionTrackingViewModel {
 
 extension NutritionTrackingViewModel {
 
+  func createMeal(
+    modelContext: ModelContext,
+    name: String,
+    image: UIImage?,
+    foodItemServings: [FoodItemServingAmount]
+  ) async throws {
+    guard name.isNotEmpty else {
+      throw NSError(description: "Name must not be empty.")
+    }
+    guard foodItemServings.isNotEmpty else {
+      throw NSError(description: "At least one food item must be added.")
+    }
+
+    var datesToUpdate = Set<Date>()
+
+    try modelContext.savingTransaction {
+
+      var mealItemRecords = [MealItemRecord]()
+
+      for foodItemServing in foodItemServings {
+        let (dates, foodItemRecord) = try upsertAndMerge(
+          modelContext: modelContext,
+          foodItem: foodItemServing.foodItem
+        )
+
+        let numberOfServings = foodItemServing.serving
+
+        let mealItemRecord = MealItemRecord(
+          numberOfServings: numberOfServings,
+          foodItem: foodItemRecord
+        )
+        modelContext.insert(mealItemRecord)
+        mealItemRecords.append(mealItemRecord)
+        datesToUpdate.formUnion(dates)
+      }
+
+      let meal = MealRecord(
+        name: name,
+        imageData: image?.pngData(),
+        items: mealItemRecords
+      )
+
+      modelContext.insert(meal)
+    }
+
+    try await updateNutrition(for: datesToUpdate)
+  }
+
+  func updateMeal(
+    modelContext: ModelContext,
+    mealRecord: MealRecord,
+    name: String,
+    image: UIImage?,
+    foodItemServings: [FoodItemServingAmount]
+  ) async throws {
+    guard name.isNotEmpty else {
+      throw NSError(description: "Name must not be empty.")
+    }
+    guard foodItemServings.isNotEmpty else {
+      throw NSError(description: "At least one food item must be added.")
+    }
+    
+    var datesToUpdate = Set<Date>()
+    
+    try modelContext.savingTransaction {
+      mealRecord.name = name
+      mealRecord.imageData = image?.pngData()
+      
+      // Create new meal items, or fetch existing ones.
+      var mealItems = [MealItemRecord]()
+      for foodItemServing in foodItemServings {
+        let numberOfServings = foodItemServing.serving
+        let foodItem = foodItemServing.foodItem
+        
+        if let existingMealItem = mealRecord.items?.first(where: { $0.foodItem?.id == foodItem.id.value }) {
+          existingMealItem.numberOfServings = numberOfServings
+          mealItems.append(existingMealItem)
+        } else {
+          let (dates, foodItemRecord) = try upsertAndMerge(
+            modelContext: modelContext,
+            foodItem: foodItem
+          )
+          let mealItemRecord = MealItemRecord(
+            numberOfServings: numberOfServings,
+            foodItem: foodItemRecord
+          )
+          modelContext.insert(mealItemRecord)
+          mealItems.append(mealItemRecord)
+          datesToUpdate.formUnion(dates)
+        }
+      }
+      
+      // Delete old meal items.
+      let mealItemsToDelete = mealRecord.items?.filter { item in
+        !mealItems.contains(where: { $0.id == item.id })
+      }
+      mealItemsToDelete?.forEach({ modelContext.delete($0) })
+      
+      mealRecord.items = mealItems
+    }
+    
+    try await updateNutrition(for: datesToUpdate)
+  }
+
   func log(
     modelContext: ModelContext,
     mealRecord: MealRecord,

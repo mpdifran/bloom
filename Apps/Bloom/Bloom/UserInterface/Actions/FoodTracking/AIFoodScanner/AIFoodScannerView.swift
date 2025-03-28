@@ -23,6 +23,7 @@ struct AIFoodScannerView: View {
 
   @State private var viewModel = ViewModel()
 
+  @State private var saveAsMeal = false
   @State private var startScanToggle = false
   @State private var isSwipingItem = false
   @State private var saveComplete = false
@@ -167,6 +168,7 @@ private extension AIFoodScannerView {
       if focusedIndex != nil {
         textEditorButton
       } else {
+        saveAsMealView
         logFoodButton
       }
     }
@@ -277,6 +279,15 @@ private extension AIFoodScannerView {
     .disabled(viewModel.mode != .base)
   }
 
+  var saveAsMealView: some View {
+    LabeledContent("Save as a meal") {
+      Toggle("", isOn: $saveAsMeal)
+    }
+    .bold()
+    .fontDesign(.rounded)
+    .padding(.vertical)
+  }
+
   var logFoodButton: some View {
     AsyncButton {
       try await save()
@@ -307,7 +318,7 @@ private extension AIFoodScannerView {
 
   var instructionView: some View {
     VStack {
-      Spacer()
+      Spacer(minLength: 0)
 
       HStack {
         Spacer()
@@ -325,7 +336,7 @@ private extension AIFoodScannerView {
               .zStackAlignment(.bottomTrailing)
           }
 
-        Spacer()
+        Spacer(minLength: 0)
       }
       .padding(.vertical)
 
@@ -334,6 +345,7 @@ private extension AIFoodScannerView {
         .fontDesign(.rounded)
         .bold()
         .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
 
       Spacer()
     }
@@ -401,6 +413,15 @@ private extension AIFoodScannerView {
       date: nutritionViewModel.date,
       meal: nutritionViewModel.suggestedMeal
     )
+
+    if saveAsMeal {
+      try await nutritionViewModel.createMeal(
+        modelContext: modelContext,
+        name: viewModel.scannedFoodName ?? "My Scanned Meal",
+        image: viewModel.image,
+        foodItemServings: viewModel.servings
+      )
+    }
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

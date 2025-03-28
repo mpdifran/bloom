@@ -309,94 +309,31 @@ private extension CreateEditMealView {
       throw NSError(description: "At least one food item must be added.")
     }
 
-    let datesToUpdate: Set<Date>
-    if let existingMealRecord {
-      datesToUpdate = try update(mealRecord: existingMealRecord)
-    } else {
-      datesToUpdate = try create()
+    let foodItemServings = foodItems.map { foodItem in
+      FoodItemServingAmount(
+        serving: foodItemsServings[foodItem.id, default: 1],
+        foodItem: foodItem
+      )
     }
 
-    try await NutritionTrackingViewModel.shared.updateNutrition(for: datesToUpdate)
+    if let existingMealRecord {
+      try await nutritionViewModel.updateMeal(
+        modelContext: modelContext,
+        mealRecord: existingMealRecord,
+        name: name,
+        image: image,
+        foodItemServings: foodItemServings
+      )
+    } else {
+      try await nutritionViewModel.createMeal(
+        modelContext: modelContext,
+        name: name,
+        image: image,
+        foodItemServings: foodItemServings
+      )
+    }
 
     saveCompleteToggle.toggle()
-  }
-
-  func create() throws -> Set<Date> {
-    var datesToUpdate = Set<Date>()
-
-    try modelContext.savingTransaction {
-
-      var mealItemRecords = [MealItemRecord]()
-
-      for foodItem in foodItems {
-        let (dates, foodItemRecord) = try nutritionViewModel.upsertAndMerge(
-          modelContext: modelContext,
-          foodItem: foodItem
-        )
-
-        let numberOfServings = foodItemsServings[foodItem.id, default: 1]
-
-        let mealItemRecord = MealItemRecord(
-          numberOfServings: numberOfServings,
-          foodItem: foodItemRecord
-        )
-        modelContext.insert(mealItemRecord)
-        mealItemRecords.append(mealItemRecord)
-        datesToUpdate.formUnion(dates)
-      }
-
-      let meal = MealRecord(
-        name: name,
-        imageData: image?.pngData(),
-        items: mealItemRecords
-      )
-
-      modelContext.insert(meal)
-    }
-
-    return datesToUpdate
-  }
-
-  func update(mealRecord: MealRecord) throws -> Set<Date> {
-    var datesToUpdate = Set<Date>()
-
-    try modelContext.savingTransaction {
-      mealRecord.name = self.name
-      mealRecord.imageData = self.image?.pngData()
-
-      // Create new meal items, or fetch existing ones.
-      var mealItems = [MealItemRecord]()
-      for foodItem in foodItems {
-        let numberOfServings = foodItemsServings[foodItem.id, default: 1]
-
-        if let existingMealItem = mealRecord.items?.first(where: { $0.foodItem?.id == foodItem.id.value }) {
-          existingMealItem.numberOfServings = numberOfServings
-          mealItems.append(existingMealItem)
-        } else {
-          let (dates, foodItemRecord) = try nutritionViewModel.upsertAndMerge(
-            modelContext: modelContext,
-            foodItem: foodItem
-          )
-          let mealItemRecord = MealItemRecord(
-            numberOfServings: numberOfServings,
-            foodItem: foodItemRecord
-          )
-          modelContext.insert(mealItemRecord)
-          mealItems.append(mealItemRecord)
-          datesToUpdate.formUnion(dates)
-        }
-      }
-
-      // Delete old meal items.
-      let mealItemsToDelete = mealRecord.items?.filter { item in
-        !mealItems.contains(where: { $0.id == item.id })
-      }
-      mealItemsToDelete?.forEach({ modelContext.delete($0) })
-
-      mealRecord.items = mealItems
-    }
-
-    return datesToUpdate
   }
 
   func delete() {
