@@ -294,10 +294,13 @@ private extension FoodLoggingActionCardView {
       ScrollView {
         LazyVStack {
           ForEach(meals) { mealRecord in
-            MealRecordCell(mealRecord: mealRecord)
-              .onTapGesture {
-                presentedSheet = CreateEditMealView(existingMealRecord: mealRecord).asAny
-              }
+            if searchQuery.isEmpty || mealRecord.contains(searchQuery: searchQuery) {
+              MealRecordCell(mealRecord: mealRecord)
+                .transition(.blurReplace)
+                .onTapGesture {
+                  presentedSheet = CreateEditMealView(existingMealRecord: mealRecord).asAny
+                }
+            }
           }
         }
         .padding(.horizontal)
