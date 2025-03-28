@@ -115,7 +115,7 @@ private extension SettingsView {
 
   var userSection: some View {
     VStack(spacing: 16) {
-      UserProfilePhotoView()
+      UserProfilePhotoView(canEdit: true)
 
       TextField("", text: $healthManager.name, prompt: Text("Your Name"))
         .font(.title)

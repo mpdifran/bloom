@@ -60,11 +60,26 @@ final class UserController: ObservableObject {
     }
 
     self._isAuthenticated = Published(initialValue: isAuthenticated)
+
+    if let data = try? Data(contentsOf: profilePhotoURL) {
+      profilePhoto = UIImage(data: data)
+    }
   }
 
   @AppStorage("UserController.email", store: .group) var email: String?
   @AppStorage("UserController.givenName", store: .group) var givenName: String?
   @AppStorage("UserController.familyName", store: .group) var familyName: String?
+  @Published var profilePhoto: UIImage? {
+    didSet {
+      if let data = profilePhoto?.resized(toWidth: 300)?.pngData() {
+        try? data.write(to: profilePhotoURL)
+      } else {
+        try? FileManager.default.removeItem(at: profilePhotoURL)
+      }
+    }
+  }
+
+  private let profilePhotoURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: .groupSuiteName)!.appendingPathComponent("profile_photo.png")
 
   private var lastIdentifyDate: Date? {
     didSet { UserDefaults.group.set(lastIdentifyDate, forKey: "UserController.lastIdentifyDate") }

@@ -39,6 +39,8 @@ struct BloomApp: App {
     _ = EntitlementController.shared
 
     //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+
+    migrateUserDefaults()
   }
 
   var body: some Scene {
@@ -87,6 +89,20 @@ private extension BloomApp {
 
     Task {
       await VitalsCalculator.shared.refreshVitals()
+    }
+  }
+
+  func migrateUserDefaults() {
+    let keys = UserDefaults.legacyGroup.dictionaryRepresentation().keys
+
+    for key in keys {
+      if
+        UserDefaults.group.value(forKey: key) == nil,
+        let value = UserDefaults.legacyGroup.value(forKey: key)
+      {
+        UserDefaults.group.set(value, forKey: key)
+        UserDefaults.legacyGroup.removeObject(forKey: key)
+      }
     }
   }
 }
