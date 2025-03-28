@@ -179,18 +179,20 @@ private extension NutrientsRemainingViewModel {
     fatsQuantity = await fetchNutrient(.fat, dateRange: dateRange)
     carbsQuantity = await fetchNutrient(.carbohydrates, dateRange: dateRange)
 
-    let calorieHabit = try? await modelActor.fetchActiveHabits(for: .calories).first
-    calorieGoalQuantity = calorieHabit?.quantity
+    if let calorieHabit = try? await modelActor.fetchActiveHabits(for: .calories).first {
+      calorieGoalQuantity = calorieHabit.quantity
 
-    if let proteinHabit = try? await modelActor.fetchActiveHabits(for: .proteinIntake).first {
-      proteinGoalQuantity = proteinHabit.quantity
-    } else if let calorieHabit {
-      // If no protein goal is set but a calorie goal was set, assume 30% of calorie goal.
-      let caloriesToProtein = calorieHabit.value / .caloriesPerGramOfProtein
-      proteinGoalQuantity = HKQuantity(
-        unit: FoodItemNutrient.protein.unit,
-        doubleValue: caloriesToProtein * 0.3
-      )
+      // Only set the protein target if there's a calorie target
+      if let proteinHabit = try? await modelActor.fetchActiveHabits(for: .proteinIntake).first {
+        proteinGoalQuantity = proteinHabit.quantity
+      } else {
+        // If no protein goal is set but a calorie goal was set, assume 30% of calorie goal.
+        let caloriesToProtein = calorieHabit.value / .caloriesPerGramOfProtein
+        proteinGoalQuantity = HKQuantity(
+          unit: FoodItemNutrient.protein.unit,
+          doubleValue: caloriesToProtein * 0.3
+        )
+      }
     }
   }
 
