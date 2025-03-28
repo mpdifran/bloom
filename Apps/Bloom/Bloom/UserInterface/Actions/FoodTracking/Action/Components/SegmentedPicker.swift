@@ -43,8 +43,8 @@ struct SegmentedPicker<Enum>: View where Enum: NamedCaseIterable {
         RoundedRectangle(cornerRadius: .cornerRadius - .selectionIndicatorPadding)
           .fill(.background.secondary)
           .frame(
-            width: segmentWidth - 2 * CGFloat.selectionIndicatorPadding,
-            height: geometry.size.height - 2 * CGFloat.selectionIndicatorPadding
+            width: max(segmentWidth - 2 * CGFloat.selectionIndicatorPadding, 0),
+            height: max(geometry.size.height - 2 * CGFloat.selectionIndicatorPadding, 0)
           )
           .offset(x: calculateCurrentX(for: segmentWidth) + dragOffset)
           .animation(.easeInOut(duration: 0.3), value: selectedValue)
