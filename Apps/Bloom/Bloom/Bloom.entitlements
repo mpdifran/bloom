@@ -19,9 +19,7 @@
 		<string>iCloud.com.lotus-labs.bloom</string>
 	</array>
 	<key>com.apple.developer.icloud-services</key>
-	<array>
-		<string>CloudKit</string>
-	</array>
+	<array/>
 	<key>com.apple.developer.usernotifications.time-sensitive</key>
 	<true/>
 	<key>com.apple.developer.weatherkit</key>
