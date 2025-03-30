@@ -19,7 +19,8 @@ public final class ContainerHolder: Sendable {
     let schema = Schema(versionedSchema: currentSchema)
     let modelConfiguration = ModelConfiguration(
       schema: schema,
-      groupContainer: .identifier("group.com.lotus-labs.bloom")
+      groupContainer: .identifier("group.com.lotus-labs.bloom"),
+      cloudKitDatabase: .none
     )
 
     do {
