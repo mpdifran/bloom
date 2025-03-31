@@ -353,9 +353,58 @@ private extension ChatVitalConverter {
       }
     }
 
-    guard logs.isNotEmpty else { return nil }
+    let nutritionalAverages = await generateNutritionalAverages(from: date)
 
-    return ChatHealthData.Nutrition(foodLogs: logs)
+    return ChatHealthData.Nutrition(
+      nutritionAverages: nutritionalAverages,
+      foodLogs: logs
+    )
+  }
+
+  func generateNutritionalAverages(from date: Date) async -> ChatHealthData.NutritionAverages {
+    let dateRange = DateRange.fromDateToNow(date)
+
+    let numberOfDays = Calendar.current.dateComponents([.day], from: dateRange.start, to: dateRange.end).day
+
+    return ChatHealthData.NutritionAverages(
+      dateRange: "Last \(numberOfDays ?? 0) days",
+      averageProtein: await formattedAverage(for: .dietaryProtein, unit: .gram(), dateRange: dateRange),
+      averageCarbohydrates: await formattedAverage(for: .dietaryCarbohydrates, unit: .gram(), dateRange: dateRange),
+      averageFat: await formattedAverage(for: .dietaryFatTotal, unit: .gram(), dateRange: dateRange),
+      averageSaturatedFat: await formattedAverage(for: .dietaryFatSaturated, unit: .gram(), dateRange: dateRange),
+      averagePolyunsaturatedFat: await formattedAverage(for: .dietaryFatPolyunsaturated, unit: .gram(), dateRange: dateRange),
+      averageMonounsaturatedFat: await formattedAverage(for: .dietaryFatMonounsaturated, unit: .gram(), dateRange: dateRange),
+      averageFiber: await formattedAverage(for: .dietaryFiber, unit: .gram(), dateRange: dateRange),
+      averageSugar: await formattedAverage(for: .dietarySugar, unit: .gram(), dateRange: dateRange),
+      averageCholesterol: await formattedAverage(for: .dietaryCholesterol, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageCalcium: await formattedAverage(for: .dietaryCalcium, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageIron: await formattedAverage(for: .dietaryIron, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageMagnesium: await formattedAverage(for: .dietaryMagnesium, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averagePotassium: await formattedAverage(for: .dietaryPotassium, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageSodium: await formattedAverage(for: .dietarySodium, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageZinc: await formattedAverage(for: .dietaryZinc, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageVitaminA: await formattedAverage(for: .dietaryVitaminA, unit: .gramUnit(with: .micro), dateRange: dateRange),
+      averageVitaminB6: await formattedAverage(for: .dietaryVitaminB6, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageVitaminB12: await formattedAverage(for: .dietaryVitaminB12, unit: .gramUnit(with: .micro), dateRange: dateRange),
+      averageVitaminC: await formattedAverage(for: .dietaryVitaminC, unit: .gramUnit(with: .milli), dateRange: dateRange),
+      averageVitaminD: await formattedAverage(for: .dietaryVitaminD, unit: .gramUnit(with: .micro), dateRange: dateRange),
+      averageVitaminE: await formattedAverage(for: .dietaryVitaminE, unit: .gramUnit(with: .milli), dateRange: dateRange)
+    )
+  }
+
+  func formattedAverage(
+    for quantityType: HKQuantityTypeIdentifier,
+    unit: HKUnit,
+    dateRange: DateRange
+  ) async -> String? {
+    let quantity = await HealthStoreFetcher.shared.fetchNutritionalDailyAverage(
+      for: quantityType,
+      unit: unit,
+      dateRange: dateRange
+    )
+    guard quantity.doubleValue(for: unit) >= 0.001 else { return nil }
+
+    return await quantity.displayString(for: unit)
   }
 
   func generateMenstrualHealth(from date: Date) async -> ChatHealthData.MenstrualHealth? {

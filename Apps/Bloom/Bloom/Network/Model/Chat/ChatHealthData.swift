@@ -111,6 +111,31 @@ extension ChatHealthData {
     let ingredients: String?
   }
 
+  struct NutritionAverages: SendableNetworkModel {
+    let dateRange: String
+    let averageProtein: String?
+    let averageCarbohydrates: String?
+    let averageFat: String?
+    let averageSaturatedFat: String?
+    let averagePolyunsaturatedFat: String?
+    let averageMonounsaturatedFat: String?
+    let averageFiber: String?
+    let averageSugar: String?
+    let averageCholesterol: String?
+    let averageCalcium: String?
+    let averageIron: String?
+    let averageMagnesium: String?
+    let averagePotassium: String?
+    let averageSodium: String?
+    let averageZinc: String?
+    let averageVitaminA: String?
+    let averageVitaminB6: String?
+    let averageVitaminB12: String?
+    let averageVitaminC: String?
+    let averageVitaminD: String?
+    let averageVitaminE: String?
+  }
+
   struct HeartRateZones: SendableNetworkModel {
     let heartRateReserve: Quantity
     let restingHeartRate: Quantity
@@ -443,6 +468,7 @@ extension ChatHealthData {
 
 extension ChatHealthData {
   struct Nutrition: SendableNetworkModel {
+    let nutritionAverages: ChatHealthData.NutritionAverages
     let foodLogs: [FoodLogDay]
   }
 }
