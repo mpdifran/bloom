@@ -430,10 +430,11 @@ extension OpenAIService {
       throw Abort(.internalServerError)
     }
 
+    request.logger.debug("AI Goal Thought Process: \(response.thoughtProcess)")
+
     return SuggestGoalsResponse(
       goals: response.suggestedGoals,
-      reminders: response.suggestedReminders,
-      thoughtProcess: response.thoughtProcess.map { $0.step }
+      reminders: response.suggestedReminders
     )
   }
 }
