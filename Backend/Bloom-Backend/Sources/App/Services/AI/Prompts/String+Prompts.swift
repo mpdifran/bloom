@@ -39,13 +39,13 @@ extension String.Prompt {
 
   static func jsonSchemaDefinition(_ responseSchema: ResponseSchema) throws -> String {
     let encoder = JSONEncoder()
-    let data = try encoder.encode(responseSchema)
+    let data = try encoder.encode(responseSchema.schema)
 
     guard
       let schema = String(data: data, encoding: .utf8)
     else { throw Abort(.internalServerError, reason: "Could not create JSON Schema.") }
 
-    return "Your response must be in JSON, and use the following JSON Schema format. Note: you do not need to escape single quotes.\n\n\(schema)"
+    return "Your response must be in JSON, and use the following JSON format exactly. Note: you do not need to escape single quotes.\n\n\(schema)"
   }
 
   static let suggestGoals: String = """
