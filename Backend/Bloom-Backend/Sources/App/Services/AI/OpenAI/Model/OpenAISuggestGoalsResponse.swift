@@ -11,4 +11,9 @@ import BloomModel
 struct OpenAISuggestGoalsResponse: Codable {
   let suggestedGoals: [SuggestedGoal]
   let suggestedReminders: [SuggestedReminder]
+  let thoughtProcess: [ThoughtProcessStep]
+}
+
+struct ThoughtProcessStep: Codable {
+  let step: String
 }

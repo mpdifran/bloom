@@ -198,6 +198,17 @@ extension ResponseSchema {
               )
             ]
           )
+        ),
+        "thoughtProcess": Schema.Parameter(
+          description: "A list of your thought process, step by step, in coming up with the response. Outline what your conclusions are, and what went into deciding them.",
+          arrayOf: Schema.Object(
+            properties: [
+              "step": Schema.Parameter(
+                type: .string,
+                description: "A step in your thought process."
+              )
+            ]
+          )
         )
       ]
     )

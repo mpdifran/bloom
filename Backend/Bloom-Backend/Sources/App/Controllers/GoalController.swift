@@ -128,7 +128,8 @@ private extension GoalController {
     case .messages(_, _):
       return SuggestGoalsResponse(
         goals: suggestedGoals,
-        reminders: []
+        reminders: [],
+        thoughtProcess: []
       )
     }
   }

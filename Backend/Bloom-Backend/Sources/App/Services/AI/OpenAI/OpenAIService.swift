@@ -432,7 +432,8 @@ extension OpenAIService {
 
     return SuggestGoalsResponse(
       goals: response.suggestedGoals,
-      reminders: response.suggestedReminders
+      reminders: response.suggestedReminders,
+      thoughtProcess: response.thoughtProcess.map { $0.step }
     )
   }
 }
