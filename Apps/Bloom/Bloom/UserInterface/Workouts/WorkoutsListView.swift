@@ -98,6 +98,9 @@ private extension WorkoutsListView {
         .padding()
       }
     }
+    .refreshable {
+      await loadWorkouts()
+    }
   }
 }
 
