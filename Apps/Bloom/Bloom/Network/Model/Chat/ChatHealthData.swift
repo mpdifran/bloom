@@ -85,29 +85,29 @@ extension ChatHealthData {
   struct FoodItem: SendableNetworkModel {
     let name: String
     let brandName: String
-    let calories: Quantity
-    let protein: Quantity
-    let carbohydrates: Quantity
-    let fat: Quantity
-    let saturatedFat: Quantity?
-    let transFat: Quantity?
-    let polyunsaturatedFat: Quantity?
-    let monounsaturatedFat: Quantity?
-    let fiber: Quantity?
-    let sugar: Quantity?
-    let cholesterol: Quantity?
-    let sodium: Quantity?
-    let calcium: Quantity?
-    let iron: Quantity?
-    let potassium: Quantity?
-    let magnesium: Quantity?
-    let zinc: Quantity?
-    let vitaminA: Quantity?
-    let vitaminB6: Quantity?
-    let vitaminB12: Quantity?
-    let vitaminC: Quantity?
-    let vitaminD: Quantity?
-    let vitaminE: Quantity?
+    let calories: String
+    let protein: String
+    let carbohydrates: String
+    let fat: String
+    let saturatedFat: String?
+    let transFat: String?
+    let polyunsaturatedFat: String?
+    let monounsaturatedFat: String?
+    let fiber: String?
+    let sugar: String?
+    let cholesterol: String?
+    let sodium: String?
+    let calcium: String?
+    let iron: String?
+    let potassium: String?
+    let magnesium: String?
+    let zinc: String?
+    let vitaminA: String?
+    let vitaminB6: String?
+    let vitaminB12: String?
+    let vitaminC: String?
+    let vitaminD: String?
+    let vitaminE: String?
     let ingredients: String?
   }
 
@@ -205,44 +205,27 @@ extension ChatHealthData.FoodItem {
       storedUnit: HKUnit,
       desiredUnit: HKUnit,
       numberFormatter: NumberFormatter
-    ) -> ChatHealthData.Quantity? {
+    ) -> String? {
       guard
         let value = foodItemLog.totalNutrient(foodItem: foodItem, keyPath: keyPath),
         value > 0
       else { return nil }
 
       let quantity = HKQuantity(unit: storedUnit, doubleValue: value)
+      let desiredValue = quantity.doubleValue(for: desiredUnit)
 
-      return ChatHealthData.Quantity(
-        value: quantity.doubleValue(for: desiredUnit),
-        unit: desiredUnit.unitString,
-        numberFormatter: numberFormatter
-      )
+      guard let format = numberFormatter.string(for: desiredValue) else { return nil }
+
+      return "\(format) \(desiredUnit.unitString)"
     }
 
     self.init(
       name: foodItem.name,
       brandName: foodItem.brandName,
-      calories: ChatHealthData.Quantity(
-        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.calories),
-        unit: "Cal",
-        numberFormatter: .noDecimalPlaces
-      ),
-      protein: ChatHealthData.Quantity(
-        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.protein),
-        unit: "g",
-        numberFormatter: .noDecimalPlaces
-      ),
-      carbohydrates: ChatHealthData.Quantity(
-        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.carbohydrates),
-        unit: "g",
-        numberFormatter: .noDecimalPlaces
-      ),
-      fat: ChatHealthData.Quantity(
-        value: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.fat),
-        unit: "g",
-        numberFormatter: .noDecimalPlaces
-      ),
+      calories: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.calories, unit: "Cal"),
+      protein: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.protein, unit: "g"),
+      carbohydrates: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.carbohydrates, unit: "g"),
+      fat: foodItemLog.totalNutrient(foodItem: foodItem, keyPath: \.fat, unit: "g"),
       saturatedFat: optionalQuantity(
         foodItemLog: foodItemLog,
         foodItem: foodItem,

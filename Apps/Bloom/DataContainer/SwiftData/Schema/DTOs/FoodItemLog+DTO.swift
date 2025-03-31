@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import BloomFoundation
 
 public struct FoodItemLogDTO: Sendable {
   public let persistentID: PersistentIdentifier
@@ -51,6 +52,16 @@ public extension FoodItemLogDTO {
 
   func totalNutrient(
     foodItem: FoodItemDTO,
+    keyPath: KeyPath<FoodItemDTO, Double>,
+    unit: String,
+    formatter: NumberFormatter = .noDecimalPlaces
+  ) -> String {
+    let value = totalNutrient(foodItem: foodItem, keyPath: keyPath)
+    return (formatter.string(for: value) ?? "") + " \(unit)"
+  }
+
+  func totalNutrient(
+    foodItem: FoodItemDTO,
     keyPath: KeyPath<FoodItemDTO, Double>
   ) -> Double {
     guard let serving = foodItemServings.first(where: { $0.foodItem?.id == foodItem.id }) else { return 0 }
@@ -58,6 +69,18 @@ public extension FoodItemLogDTO {
     let value = foodItem[keyPath: keyPath]
 
     return numberOfServings * serving.numberOfServings * value
+  }
+
+  func totalNutrient(
+    foodItem: FoodItemDTO,
+    keyPath: KeyPath<FoodItemDTO, Double?>,
+    unit: String,
+    formatter: NumberFormatter = .noDecimalPlaces
+  ) -> String? {
+    let value = totalNutrient(foodItem: foodItem, keyPath: keyPath)
+    guard let formattedValue = formatter.string(for: value) else { return nil }
+
+    return "\(formattedValue) \(unit)"
   }
 
   func totalNutrient(

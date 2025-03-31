@@ -70,8 +70,8 @@ private extension OpenAIAssistantProvider {
       assistant.name == assistantSpec.name,
       assistant.instructions == assistantSpec.instructions,
       assistant.model == assistantSpec.model.id,
-      assistant.temperature == assistantSpec.temperature,
-      assistant.topP == assistantSpec.topP,
+      (assistant.temperature == assistantSpec.temperature || assistantSpec.temperature == nil),
+      (assistant.topP == assistantSpec.topP || assistantSpec.topP == nil),
       assistant.tools == assistantSpec.tools
     else {
       request.logger.info("Updating Assistant \(assistantSpec.id)")
