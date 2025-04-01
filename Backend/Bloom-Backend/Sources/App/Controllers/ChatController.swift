@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import BloomModel
+import WebSocketKit
 
 struct ChatController {
   private let openAIService = OpenAIAssistantService()
