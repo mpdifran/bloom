@@ -505,7 +505,7 @@ extension NutritionTrackingViewModel {
 
       let meal = MealRecord(
         name: name,
-        imageData: image?.pngData(),
+        imageData: image?.resized(toWidth: 300)?.pngData(),
         items: mealItemRecords
       )
 
@@ -533,7 +533,7 @@ extension NutritionTrackingViewModel {
     
     try modelContext.savingTransaction {
       mealRecord.name = name
-      mealRecord.imageData = image?.pngData()
+      mealRecord.imageData = image?.resized(toWidth: 300)?.pngData()
       
       // Create new meal items, or fetch existing ones.
       var mealItems = [MealItemRecord]()
