@@ -28,9 +28,10 @@ struct WorkoutsListView: View {
   @State private var filteredWorkoutSections = [WorkoutDateSection]()
   @State private var activityTypes = [HKWorkoutActivityType]()
   @State private var selectedActivityType: HKWorkoutActivityType?
+  @State private var triggerHealthPermissionSheet = false
 
   var body: some View {
-    Group {
+    ScrollView {
       if isLoading {
         loadingView
       } else if workoutSections.isNotEmpty {
@@ -47,6 +48,25 @@ struct WorkoutsListView: View {
       refreshFilteredWorkoutSections()
     }
     .task {
+      await loadWorkouts()
+    }
+    .healthDataAccessRequest(
+      store: HealthPermissionChecker.shared.healthStore,
+      readTypes: HealthPermissionChecker.shared.activityTypes,
+      trigger: triggerHealthPermissionSheet
+    ) { result in
+      switch result {
+      case .success:
+        Task {
+          await loadWorkouts()
+        }
+      case .failure:
+        // No-op?
+        break
+      }
+    }
+    .refreshable {
+      await checkHealthAuth()
       await loadWorkouts()
     }
   }
@@ -70,36 +90,32 @@ private extension WorkoutsListView {
       systemImage: "figure.run",
       description: Text("There are no workouts to show.")
     )
+    .padding(.vertical, 50)
   }
 
   var mainListView: some View {
-    ScrollView {
-      VStack(alignment: .leading, spacing: 0) {
-        WorkoutActivityTypeFilterView(
-          activityTypes: activityTypes,
-          selectedActivityType: $selectedActivityType
-        )
-        .tint(.green)
+    VStack(alignment: .leading, spacing: 0) {
+      WorkoutActivityTypeFilterView(
+        activityTypes: activityTypes,
+        selectedActivityType: $selectedActivityType
+      )
+      .tint(.green)
 
-        LazyVStack(alignment: .leading) {
-          ForEach(filteredWorkoutSections) { section in
-            WorkoutSectionHeaderView(section: section)
+      LazyVStack(alignment: .leading) {
+        ForEach(filteredWorkoutSections) { section in
+          WorkoutSectionHeaderView(section: section)
 
-            ForEach(section.workouts, id: \.hashValue) { workout in
-              NavigationLink {
-                WorkoutDetailsView(workout: workout)
-              } label: {
-                WorkoutCell(workout: workout)
-              }
-              .buttonStyle(.plain)
+          ForEach(section.workouts, id: \.hashValue) { workout in
+            NavigationLink {
+              WorkoutDetailsView(workout: workout)
+            } label: {
+              WorkoutCell(workout: workout)
             }
+            .buttonStyle(.plain)
           }
         }
-        .padding()
       }
-    }
-    .refreshable {
-      await loadWorkouts()
+      .padding()
     }
   }
 }
@@ -136,6 +152,20 @@ private extension WorkoutsListView {
     refreshFilteredWorkoutSections()
 
     isLoading = false
+  }
+
+  func checkHealthAuth() async {
+    do {
+      let authStatus = try await HealthPermissionChecker.shared.checkAccess(
+        readTypes: HealthPermissionChecker.shared.activityTypes
+      )
+
+      if authStatus == .shouldRequest {
+        triggerHealthPermissionSheet.toggle()
+      }
+    } catch {
+      print(error)
+    }
   }
 }
 
