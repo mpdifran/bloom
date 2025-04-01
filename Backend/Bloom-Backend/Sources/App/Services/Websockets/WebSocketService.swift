@@ -7,45 +7,33 @@
 
 import WebSocketKit
 
-struct WebSocketService {
-  let socket: WebSocket
+final actor WebSocketService {
+  static let shared = WebSocketService()
 
-  init(socket: WebSocket) {
-    self.socket = socket
-    setupSocket()
-  }
+  var sockets = [String : WebSocket]()
+
+  private init() { }
 }
 
 extension WebSocketService {
 
-  func send(_ message: String) {
-    socket.send(message)
+  func register(socket: WebSocket, for userID: String) {
+    sockets[userID] = socket
+
+    socket.onText { (socket, text) in
+
+    }
+
+    socket.onClose.whenComplete { [weak self] (result) in
+      Task { await self?.removeSocket(for: userID) }
+    }
+  }
+
+  func removeSocket(for userID: String) {
+    sockets.removeValue(forKey: userID)
   }
 }
 
 private extension WebSocketService {
 
-  func setupSocket() {
-    socket.onText(onText(socket:text:))
-    socket.onBinary(onBinary(socket:buffer:))
-    socket.onClose.whenComplete(onClose(result:))
-  }
-}
-
-private extension WebSocketService {
-
-  @Sendable
-  func onText(socket: WebSocket, text: String) {
-
-  }
-
-  @Sendable
-  func onBinary(socket: WebSocket, buffer: ByteBuffer) {
-
-  }
-
-  @Sendable
-  func onClose(result: Result<Void, any Error>) {
-
-  }
 }
