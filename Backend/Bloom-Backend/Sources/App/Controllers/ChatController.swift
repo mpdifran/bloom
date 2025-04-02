@@ -19,8 +19,6 @@ extension ChatController: RouteCollection {
       $0.auth(using: UserToken.self) {
         $0.group("chat") {
           $0.webSocket("create-web-socket", shouldUpgrade: prepareForWebSocket, onUpgrade: createWebSocket)
-          $0.post("report-health-data", use: reportHealthData)
-          $0.post("new-message", use: newChatMessage)
           $0.post("delete-thread", use: deleteThread)
         }
       }
@@ -50,61 +48,6 @@ extension ChatController {
       socket: webSocket,
       forUserID: userID
     )
-  }
-
-  @Sendable
-  func reportHealthData(_ request: Request) async throws -> Response {
-    let body = try request.content.decode(ChatReportHealthDataRequest.self)
-    let user = try request.auth.require(User.self)
-
-    let assistantThread = try await request.openAIAssistantService.createOrFetchAssistantThread(
-      user: user,
-      assistantSpec: .healthCoach
-    )
-
-    try await request.openAIAssistantService.reportHealthData(
-      assistantThread: assistantThread,
-      healthData: body.healthData
-    )
-
-    return Response(status: .ok)
-  }
-
-  @Sendable
-  func newChatMessage(_ request: Request) async throws -> ChatMessageResponse {
-    let body = try request.content.decode(ChatMessageRequest.self)
-    let user = try request.auth.require(User.self)
-
-    let assistantThread = try await request.openAIAssistantService.createOrFetchAssistantThread(
-      user: user,
-      assistantSpec: .healthCoach
-    )
-
-    if let healthData = body.healthData {
-      try await request.openAIAssistantService.reportHealthData(
-        assistantThread: assistantThread,
-        healthData: healthData
-      )
-    }
-
-    try await request.openAIAssistantService.sendChatMessage(
-      assistantThread: assistantThread,
-      message: body.message
-    )
-
-    let assistantResponse = try await request.openAIAssistantService.startRunAndPollForResponse(
-      assistantThread: assistantThread
-    )
-
-    switch assistantResponse {
-    case .requiresAction(_, _):
-      throw Abort(.internalServerError, reason: "Unexpected tool call.")
-    case .messages(_, let messages):
-      let textMessages = messages.flatMap { message in
-        message.content.compactMap({ $0.text })
-      }
-      return ChatMessageResponse(messages: textMessages)
-    }
   }
 
   @Sendable

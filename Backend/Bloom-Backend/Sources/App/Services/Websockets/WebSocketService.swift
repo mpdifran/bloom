@@ -82,7 +82,7 @@ private extension WebSocketService {
     do {
       try await block()
     } catch {
-      let errorMessage = WebSocketMessage.Error(message: error.localizedDescription)
+      let errorMessage = SocketMessage.Error(message: error.localizedDescription)
       do {
         try socket.send(errorMessage)
       } catch {

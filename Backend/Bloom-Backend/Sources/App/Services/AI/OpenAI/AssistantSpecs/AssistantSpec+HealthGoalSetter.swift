@@ -63,8 +63,6 @@ extension Assistant.Tool.Function {
   )
 }
 
-extension String {
-  enum Function {
-    static let suggestGoal = "suggestGoal"
-  }
+extension String.Function {
+  static let suggestGoal = "suggestGoal"
 }

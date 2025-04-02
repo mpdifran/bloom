@@ -107,13 +107,18 @@ extension OpenAIAssistantService {
     assistantThread: OpenAIAssistantThread,
     message: String
   ) async throws {
+    try await sendChatMessage(assistantThread: assistantThread, messages: [message])
+  }
+
+  func sendChatMessage(
+    assistantThread: OpenAIAssistantThread,
+    messages: [String]
+  ) async throws {
     let _ = try await openAI.assistants.createMessage(
       threadID: assistantThread.threadID,
       message: Thread.Message(
         role: .user,
-        content: [
-          .text(message)
-        ]
+        content: messages.map { .text($0) }
       )
     )
   }
@@ -153,9 +158,8 @@ extension OpenAIAssistantService {
   func submitSuccessfulToolOputput(
     threadID: String,
     runID: String,
-    toolCalls: [Run.ToolCall]
+    toolOutputs: [ToolOutput]
   ) async throws -> Run {
-    let toolOutputs = toolCalls.map { ToolOutput(toolCallID: $0.id, output: "") }
     return try await openAI.assistants.submitToolOutput(
       threadID: threadID,
       runID: runID,
