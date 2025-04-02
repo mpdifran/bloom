@@ -12,12 +12,14 @@ import Foundation
 import SQLKit
 import Vapor
 
-struct FoodDatabaseService { }
+struct FoodDatabaseService {
+  let db: any Database
+  let imageStorage: ImageStorage
+}
 
 extension FoodDatabaseService {
 
   func searchFoods(
-    request: Request,
     query: String,
     category: FoodItemRecord.Category,
     preferredCountry: FoodItemRecord.Country,
@@ -25,7 +27,7 @@ extension FoodDatabaseService {
   ) async throws -> [FoodItem] {
     guard !query.isEmpty else { return [] }
 
-    guard let sqlDatabase = request.db as? SQLDatabase else {
+    guard let sqlDatabase = db as? SQLDatabase else {
       throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
     }
 
@@ -54,10 +56,10 @@ extension FoodDatabaseService {
     return results.compactMap { $0.asFoodItem() }
   }
 
-  func searchFoods(request: Request, barcode: String) async throws -> [FoodItem] {
+  func searchFoods(barcode: String) async throws -> [FoodItem] {
     guard !barcode.isEmpty else { return [] }
 
-    guard let sqlDatabase = request.db as? SQLDatabase else {
+    guard let sqlDatabase = db as? SQLDatabase else {
       throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
     }
 
@@ -72,10 +74,9 @@ extension FoodDatabaseService {
   }
 
   func getUnverifiedFoodItemRecords(
-    request: Request,
     limit: Int
   ) async throws -> [AdminFoodItemRecord] {
-    guard let sqlDatabase = request.db as? SQLDatabase else {
+    guard let sqlDatabase = db as? SQLDatabase else {
       throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
     }
 
@@ -88,11 +89,11 @@ extension FoodDatabaseService {
           LIMIT \(bind: limit)
       """).all(decodingFluent: FoodItemRecord.self)
 
-    return try await createAdminRecords(request, from: results)
+    return try await createAdminRecords(from: results)
   }
 
-  func adminSearchFoods(request: Request, query: String) async throws -> [AdminFoodItemRecord] {
-    guard let sqlDatabase = request.db as? SQLDatabase else {
+  func adminSearchFoods(query: String) async throws -> [AdminFoodItemRecord] {
+    guard let sqlDatabase = db as? SQLDatabase else {
       throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
     }
 
@@ -111,11 +112,11 @@ extension FoodDatabaseService {
         """
     ).all(decodingFluent: FoodItemRecord.self)
 
-    return try await createAdminRecords(request, from: results)
+    return try await createAdminRecords(from: results)
   }
 
-  func markFoodAsInaccurate(request: Request, foodID: FoodItemIdentifier) async throws {
-    guard let foodItem = try await FoodItemRecord.query(on: request.db)
+  func markFoodAsInaccurate(foodID: FoodItemIdentifier) async throws {
+    guard let foodItem = try await FoodItemRecord.query(on: db)
       .filter(\.$id == foodID.value)
       .first() else {
       throw Abort(.noContent)
@@ -125,17 +126,15 @@ extension FoodDatabaseService {
     downvoteCount += 1
     foodItem.downvoteCount = downvoteCount
 
-    try await foodItem.save(on: request.db)
+    try await foodItem.save(on: db)
   }
 
-  func submitFoodItemIssueReport(_ request: Request, foodItemIssue: FoodItemIssue) async throws {
-    let user = try request.auth.require(User.self)
-
+  func submitFoodItemIssueReport(user: User, foodItemIssue: FoodItemIssue) async throws {
     // Save images
     let packagingImageFileName: String?
     let nutritionLabelImageFileName: String?
     if let packagingImage = foodItemIssue.packagingImage {
-      let imageMetadata = try await request.imageStorage.store(
+      let imageMetadata = try await imageStorage.store(
         image: packagingImage,
         path: .foodPackaging
       )
@@ -144,7 +143,7 @@ extension FoodDatabaseService {
       packagingImageFileName = nil
     }
     if let nutritionImage = foodItemIssue.nutritionLabelImage {
-      let imageMetadata = try await request.imageStorage.store(
+      let imageMetadata = try await imageStorage.store(
         image: nutritionImage,
         path: .nutritionLabel
       )
@@ -192,14 +191,13 @@ extension FoodDatabaseService {
       foodItemRecordID: foodItemIssue.foodItemID.value
     )
 
-    try await report.save(on: request.db)
+    try await report.save(on: db)
   }
   
   func getLatestAccuracyReport(
-    request: Request,
     forFoodItemWithId foodID: FoodItemIdentifier
   ) async throws -> AdminAccuracyReportGetResponse {
-    guard let accuracyReport = try await FoodItemAccuracyReport.query(on: request.db)
+    guard let accuracyReport = try await FoodItemAccuracyReport.query(on: db)
       .filter(\.$foodItemRecord.$id == foodID.value)
       .sort(\.$createdAt, .descending) // Sort to get the latest entry
       .first() else { return AdminAccuracyReportGetResponse(report: nil) }
@@ -214,40 +212,38 @@ extension FoodDatabaseService {
   }
 
   func addProductImagesIfMissing(
-    _ request: Request,
     foodID: FoodItemIdentifier,
     nutritionImage: ImageFile,
     packagingImage: ImageFile
   ) async throws {
-    guard let foodItem = try await FoodItemRecord.query(on: request.db)
+    guard let foodItem = try await FoodItemRecord.query(on: db)
       .filter(\.$id == foodID.value)
       .first() else {
       throw Abort(.noContent)
     }
 
     if foodItem.nutritionLabelImage == nil {
-      let imageMetadata = try await request.imageStorage.store(
+      let imageMetadata = try await imageStorage.store(
         image: nutritionImage,
         path: .nutritionLabel
       )
       foodItem.nutritionLabelImage = imageMetadata.filename
     }
     if foodItem.packagingImage == nil {
-      let imageMetadata = try await request.imageStorage.store(
+      let imageMetadata = try await imageStorage.store(
         image: packagingImage,
         path: .foodPackaging
       )
       foodItem.packagingImage = imageMetadata.filename
     }
     
-    try await foodItem.save(on: request.db)
+    try await foodItem.save(on: db)
   }
 }
 
 private extension FoodDatabaseService {
   /// Map foodItemRecords to adminFoodItemRecords and sign images from S3.
   func createAdminRecords(
-    _ request: Request,
     from foodItemRecords: [FoodItemRecord]
   ) async throws -> [AdminFoodItemRecord] {
     var records: [AdminFoodItemRecord] = []
@@ -262,7 +258,7 @@ private extension FoodDatabaseService {
         { // TODO: Zach make this better?
           imageURL = URL(string: nutritionLabel)
         } else {
-          imageURL = try await request.imageStorage.generateImageURL(
+          imageURL = try await imageStorage.generateImageURL(
             fileName: nutritionLabel,
             path: .nutritionLabel,
             expiration: .hours(2)
@@ -279,7 +275,7 @@ private extension FoodDatabaseService {
         { // TODO: Zach make this better?
           imageURL = URL(string: packagingImage)
         } else {
-          imageURL = try await request.imageStorage.generateImageURL(
+          imageURL = try await imageStorage.generateImageURL(
             fileName: packagingImage,
             path: .foodPackaging,
             expiration: .hours(2)

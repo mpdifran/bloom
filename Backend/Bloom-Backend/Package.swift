@@ -15,8 +15,6 @@ let package = Package(
         .package(url: "https://github.com/vapor/websocket-kit.git", from: "2.15.0"),
         .package(url: "https://github.com/MihaelIsaev/VaporCron.git", from: "2.6.0"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
-        .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.0.0"),
-        .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.0.0"),
         .package(url: "https://github.com/soto-project/soto.git", from: "6.0.0"),
         .package(url: "https://github.com/mpdifran/openai-kit.git", from: "1.3.8"),
         .package(url: "https://github.com/mpdifran/vapor-sign-in-with-apple.git", from: "1.1.0"),
@@ -36,17 +34,13 @@ let package = Package(
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
                 .product(name: "OpenAIKit", package: "openai-kit"),
-                .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime"),
                 .product(name: "SignInWithApple", package: "vapor-sign-in-with-apple"),
                 .product(name: "SotoS3", package: "soto"),
                 .product(name: "AppFoundations", package: "AppFoundations"),
                 .product(name: "BloomModel", package: "bloom-model"),
                 .product(name: "AdminBloomModel", package: "admin-bloom-model"),
             ],
-            swiftSettings: swiftSettings,
-            plugins: [
-                .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator"),
-            ]
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "AppTests",

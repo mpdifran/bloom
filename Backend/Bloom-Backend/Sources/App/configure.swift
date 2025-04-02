@@ -21,8 +21,8 @@ public func configure(_ app: Application) async throws {
   allMigrations.forEach { app.migrations.add($0) }
   try await app.autoMigrate() // Perform migration
 
-  // Web Sockets
-  await WebSocketService.shared.link(to: app.db)
+  // Websockets
+  app.setupWebSocketService()
 
   // APNs
   try app.configureAPNs()

@@ -11,11 +11,7 @@ import Fluent
 import Foundation
 import Vapor
 
-struct AdminFoodController {
-  private let foodDatabaseService = FoodDatabaseService()
-  private let openFoodFactsService = OpenFoodFactsService()
-  private let openAIService = OpenAIService()
-}
+struct AdminFoodController { }
 
 extension AdminFoodController: RouteCollection {
 
@@ -74,10 +70,7 @@ private extension AdminFoodController {
     let query = try request.query.decode(UnverifiedFoodGetRequest.self)
     let limit = query.limit ?? 500 // Default to 100 if not provided.
 
-    let foodItemRecords = try await foodDatabaseService.getUnverifiedFoodItemRecords(
-      request: request,
-      limit: limit
-    )
+    let foodItemRecords = try await request.foodDatabaseService.getUnverifiedFoodItemRecords(limit: limit)
 
     return UnverifiedFoodItemsResponse(foodItemRecords: foodItemRecords)
   }
@@ -341,10 +334,7 @@ private extension AdminFoodController {
     let requestQuery = try request.query.decode(AdminSearchFoodItemGetRequest.self)
     let query = requestQuery.query
 
-    let records = try await foodDatabaseService.adminSearchFoods(
-      request: request,
-      query: query
-    )
+    let records = try await request.foodDatabaseService.adminSearchFoods(query: query)
 
     return AdminSearchFoodItemResponse(foodItemRecords: records)
   }
@@ -352,12 +342,9 @@ private extension AdminFoodController {
   @Sendable
   func getAccuracyReport(_ request: Request) async throws -> AdminAccuracyReportGetResponse {
     let requestQuery = try request.query.decode(AdminAccuracyReportGetRequest.self)
-    let foodItemRecordID = requestQuery.foodItemRecordID
-    
-    return try await foodDatabaseService.getLatestAccuracyReport(
-      request: request,
-      forFoodItemWithId: FoodItemIdentifier(foodItemRecordID)
-    )
+    let foodItemRecordID = FoodItemIdentifier(requestQuery.foodItemRecordID)
+
+    return try await request.foodDatabaseService.getLatestAccuracyReport(forFoodItemWithId: foodItemRecordID)
   }
 
   @Sendable
@@ -373,8 +360,7 @@ private extension AdminFoodController {
       throw Abort(.notFound)
     }
     
-    let evaluation = try await openAIService.evaluateFoodItemAccuracy(
-      request: request,
+    let evaluation = try await request.openAIService.evaluateFoodItemAccuracy(
       foodItemRecord: foodItemRecord,
       totalNumberOfIssueReports: issueReportCount,
       sampleIssueReports: recentIssueReports
@@ -405,7 +391,7 @@ private extension AdminFoodController {
   func openFoodFactsBulkUpload(_ request: Request) async throws -> AdminOpenFoodFactsBulkUploadResponse {
     let requestBody = try request.content.decode(AdminOpenFoodFactsBulkUploadRequest.self)
 
-    let count = try await openFoodFactsService.bulkUpload(request, items: requestBody.items)
+    let count = try await request.openFoodFactsService.bulkUpload(items: requestBody.items)
 
     return AdminOpenFoodFactsBulkUploadResponse(insertedCount: count)
   }

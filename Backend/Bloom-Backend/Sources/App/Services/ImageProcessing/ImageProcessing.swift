@@ -17,12 +17,7 @@ enum ImageType: String {
     case webp
 }
 
-protocol ImageProcessing {
-    /// Determines an image type from the data representation of the image.
-    func determineImageType(_ imageData: Data) -> ImageType?
-}
-
-public struct ImageProcessor: ImageProcessing {
+public struct ImageProcessor: Sendable {
 
   func determineImageType(_ imageData: Data) -> ImageType? {
       if imageData.starts(with: [0x89, 0x50, 0x4E, 0x47]) { // PNG

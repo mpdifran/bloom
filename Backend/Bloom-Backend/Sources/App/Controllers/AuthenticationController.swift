@@ -10,9 +10,7 @@ import Vapor
 import SignInWithApple
 import BloomModel
 
-struct AuthenticationController {
-  private let userService = UserDatabaseService()
-}
+struct AuthenticationController { }
 
 extension AuthenticationController: RouteCollection {
 
@@ -53,15 +51,13 @@ private extension AuthenticationController {
 
     let appleTokens = try await request.signInWithApple.generateAppleTokens(details: details)
 
-    let user = try await userService.storeTokens(
-      request,
+    let user = try await request.userDatabaseService.storeTokens(
       userID: auth.userIdentifier,
       tokenResponse: appleTokens
     )
 
     // Store user details
-    try await userService.storeUserDetails(
-      request,
+    try await request.userDatabaseService.storeUserDetails(
       userID: auth.userIdentifier,
       email: auth.email,
       givenName: auth.givenName,
@@ -87,10 +83,11 @@ private extension AuthenticationController {
 
   @Sendable
   func identify(_ request: Request) async throws -> AuthIdentifyResponse {
+    let user = try request.auth.require(User.self)
     let identityRequest = try request.content.decode(AuthIdentifyRequest.self)
 
-    let user = try await userService.storeAppUserID(
-      request,
+    try await request.userDatabaseService.storeAppUserID(
+      user: user,
       appUserID: identityRequest.appUserID,
       appVersion: identityRequest.appVersion
     )
@@ -104,12 +101,12 @@ private extension AuthenticationController {
 
   @Sendable
   func logout(_ request: Request) async throws -> Response {
-    try await userService.logout(request)
+    try await request.userDatabaseService.logout(auth: request.auth)
   }
 
   @Sendable
   func deleteAccount(_ request: Request) async throws -> Response {
-    try await userService.deleteAccount(request)
+    try await request.userDatabaseService.deleteAccount(auth: request.auth)
   }
 
   @Sendable

@@ -12,25 +12,27 @@ import Logging
 import BloomModel
 import OpenAIKit
 
-struct OpenAIAssistantProvider { }
+struct OpenAIAssistantProvider {
+  let db: any Database
+  let openAI: OpenAIKit.Client
+  let logger: Logger
+}
 
 extension OpenAIAssistantProvider {
 
   func createOrUpdateAssistant(
-    _ request: Request,
     assistantSpec: AssistantSpec
   ) async throws -> Assistant {
 
     let assistantID: String
-    if let existingAssistant = try await fetchAssisantRecord(request, assistantSpec: assistantSpec) {
+    if let existingAssistant = try await fetchAssisantRecord(assistantSpec: assistantSpec) {
       assistantID = existingAssistant.assistantID
     } else {
-      let assistant = try await createAsssistant(request, assistantSpec: assistantSpec)
+      let assistant = try await createAsssistant(assistantSpec: assistantSpec)
       assistantID = assistant.id
     }
 
     return try await updateAssistantDetails(
-      request,
       assistantID: assistantID,
       assistantSpec: assistantSpec
     )
@@ -39,32 +41,31 @@ extension OpenAIAssistantProvider {
 
 private extension OpenAIAssistantProvider {
 
-  func fetchAssisantRecord(_ request: Request, assistantSpec: AssistantSpec) async throws -> AssistantRecord? {
+  func fetchAssisantRecord(assistantSpec: AssistantSpec) async throws -> AssistantRecord? {
     try await AssistantRecord
-      .query(on: request.db)
+      .query(on: db)
       .filter(\.$id == assistantSpec.id)
       .first()
   }
 
-  func createAsssistant(_ request: Request, assistantSpec: AssistantSpec) async throws -> Assistant {
-    let assistant = try await request.openAI.assistants.createAssistant(
+  func createAsssistant(assistantSpec: AssistantSpec) async throws -> Assistant {
+    let assistant = try await openAI.assistants.createAssistant(
       model: assistantSpec.model,
       name: assistantSpec.name,
       instructions: assistantSpec.instructions,
       temperature: assistantSpec.temperature
     )
 
-    try await persistAssistant(request, assistant: assistant, assistantSpec: assistantSpec)
+    try await persistAssistant(assistant: assistant, assistantSpec: assistantSpec)
 
     return assistant
   }
 
   func updateAssistantDetails(
-    _ request: Request,
     assistantID: String,
     assistantSpec: AssistantSpec
   ) async throws -> Assistant {
-    let assistant = try await request.openAI.assistants.retrieveAssistant(assistantID: assistantID)
+    let assistant = try await openAI.assistants.retrieveAssistant(assistantID: assistantID)
 
     guard
       assistant.name == assistantSpec.name,
@@ -74,8 +75,8 @@ private extension OpenAIAssistantProvider {
       (assistant.topP == assistantSpec.topP || assistantSpec.topP == nil),
       assistant.tools == assistantSpec.tools
     else {
-      request.logger.info("Updating Assistant \(assistantSpec.id)")
-      let updatedAssistant = try await request.openAI.assistants.modifyAssistant(
+      logger.info("Updating Assistant \(assistantSpec.id)")
+      let updatedAssistant = try await openAI.assistants.modifyAssistant(
         assistantID: assistantID,
         model: assistantSpec.model,
         name: assistantSpec.name,
@@ -86,7 +87,6 @@ private extension OpenAIAssistantProvider {
       )
 
       try await persistAssistant(
-        request,
         assistant: updatedAssistant,
         assistantSpec: assistantSpec
       )
@@ -98,12 +98,11 @@ private extension OpenAIAssistantProvider {
   }
 
   func persistAssistant(
-    _ request: Request,
     assistant: Assistant,
     assistantSpec: AssistantSpec
   ) async throws {
     let assistantRecord: AssistantRecord
-    if let existingAssistantRecord = try await fetchAssisantRecord(request, assistantSpec: assistantSpec) {
+    if let existingAssistantRecord = try await fetchAssisantRecord(assistantSpec: assistantSpec) {
       existingAssistantRecord.assistantID = assistant.id
       existingAssistantRecord.name = assistantSpec.name
 
@@ -115,6 +114,6 @@ private extension OpenAIAssistantProvider {
         assistantID: assistant.id
       )
     }
-    try await assistantRecord.save(on: request.db)
+    try await assistantRecord.save(on: db)
   }
 }

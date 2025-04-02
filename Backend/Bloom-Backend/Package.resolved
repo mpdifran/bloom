@@ -137,15 +137,6 @@
       }
     },
     {
-      "identity" : "openapikit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mattpolzin/OpenAPIKit",
-      "state" : {
-        "revision" : "5b5ee49624dda5b3e3b85aff184f44a007862fb7",
-        "version" : "3.3.0"
-      }
-    },
-    {
       "identity" : "postgres-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/postgres-kit.git",

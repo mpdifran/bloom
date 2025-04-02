@@ -8,27 +8,45 @@
 import AdminBloomModel
 import BloomModel
 import Vapor
+import Fluent
 
 struct OpenFoodFactsService {
-  let baseURL = URL(string: "https://world.openfoodfacts.net/api/v2/")!
-  var defaultHeaders: HTTPHeaders = {
+  let db: Database
+  let client: Client
+  let logger: Logger
+  let foodDatabaseService: FoodDatabaseService
+  let openAIService: OpenAIService
+
+  init(
+    db: Database,
+    client: Client,
+    logger: Logger,
+    foodDatabaseService: FoodDatabaseService,
+    openAIService: OpenAIService
+  ) {
+    self.db = db
+    self.client = client
+    self.logger = logger
+    self.foodDatabaseService = foodDatabaseService
+    self.openAIService = openAIService
+  }
+
+  private let baseURL = URL(string: "https://world.openfoodfacts.net/api/v2/")!
+  private var defaultHeaders: HTTPHeaders = {
     var headers = HTTPHeaders()
     headers.add(name: .userAgent, value: "Bloom-Backend/1.0 (hello@trybloom.app)")
     return headers
   }()
-
-  private let foodDatabaseService = FoodDatabaseService()
-  private let openAIService = OpenAIService()
 }
 
 extension OpenFoodFactsService {
 
-  func insertProduct(_ request: Request, barcode: String) async throws -> [FoodItem] {
-    let productResponse = try await fetchProduct(request, barcode: barcode)
+  func insertProduct(barcode: String) async throws -> [FoodItem] {
+    let productResponse = try await fetchProduct(barcode: barcode)
     let product = productResponse.product
 
     guard product.standardizedCountries.isNotEmpty else {
-      request.logger.info("Unknown OFF countries: \(product.countries ?? [])")
+      logger.info("Unknown OFF countries: \(product.countries ?? [])")
       return []
     }
 
@@ -36,7 +54,7 @@ extension OpenFoodFactsService {
       let energyKCal = product.nutriments.energyServing,
       let productName = product.productName
     else {
-      return try await parseImagesWithAI(request, barcode: barcode, product: product)
+      return try await parseImagesWithAI(barcode: barcode, product: product)
     }
 
     var foodItems = [FoodItem]()
@@ -82,7 +100,7 @@ extension OpenFoodFactsService {
       foodItemRecord.servingUnit = product.servingQuantityUnit ?? "g" // Assume grams if no unit is present??
       foodItemRecord.ingredients = product.ingredients
 
-      try await foodItemRecord.save(on: request.db)
+      try await foodItemRecord.save(on: db)
 
       if let item = foodItemRecord.asFoodItem() {
         foodItems.append(item)
@@ -96,7 +114,6 @@ extension OpenFoodFactsService {
 private extension OpenFoodFactsService {
 
   func fetchProduct(
-    _ request: Request,
     barcode: String
   ) async throws -> OpenFoodFactsProductResponse {
     let url = baseURL
@@ -111,7 +128,7 @@ private extension OpenFoodFactsService {
         ]
       )
 
-    let response = try await request.client.get(
+    let response = try await client.get(
       URI(string: url.absoluteString),
       headers: defaultHeaders
     )
@@ -123,7 +140,6 @@ private extension OpenFoodFactsService {
   }
 
   func parseImagesWithAI(
-    _ request: Request,
     barcode: String,
     product: OpenFoodFactsProduct
   ) async throws -> [FoodItem] {
@@ -138,8 +154,8 @@ private extension OpenFoodFactsService {
     guard
       let packageURI = images.front?.bestAvailableImage?.uri,
       let nutritionURI = images.nutrition?.bestAvailableImage?.uri,
-      let packaging = try await request.client.get(packageURI).body,
-      let nutritionLabel = try await request.client.get(nutritionURI).body
+      let packaging = try await client.get(packageURI).body,
+      let nutritionLabel = try await client.get(nutritionURI).body
     else {
       return []
     }
@@ -158,7 +174,6 @@ private extension OpenFoodFactsService {
     )
 
     let aiResponse = try await openAIService.parseNewFoodItem(
-      request: request,
       barCode: barcode,
       country: firstCountry,
       nutritionLabelMetadata: nutritionMetadata,
@@ -170,7 +185,7 @@ private extension OpenFoodFactsService {
     foodItemRecord.source = "Open Food Facts"
     foodItemRecord.ingredients = product.ingredients
 
-    try await foodItemRecord.save(on: request.db)
+    try await foodItemRecord.save(on: db)
 
     var foodItems = [FoodItem]()
     if let foodItem = foodItemRecord.asFoodItem() {
@@ -184,10 +199,10 @@ private extension OpenFoodFactsService {
       duplicateFoodItemRecord.country = remainingCountry
 
       do {
-        try await foodItemRecord.save(on: request.db)
+        try await foodItemRecord.save(on: db)
       } catch {
         // We don't want to fail the whole method if a duplicate country fails to save.
-        request.logger.report(error: error)
+        logger.report(error: error)
       }
 
       if let foodItem = duplicateFoodItemRecord.asFoodItem() {
@@ -201,13 +216,13 @@ private extension OpenFoodFactsService {
 
 extension OpenFoodFactsService {
 
-  func bulkUpload(_ request: Request, items: [AdminOpenFoodFactsBulkUploadItem]) async throws -> Int {
+  func bulkUpload(items: [AdminOpenFoodFactsBulkUploadItem]) async throws -> Int {
     var count = 0
 
     for item in items {
       do {
         guard
-          try await foodDatabaseService.searchFoods(request: request, barcode: item.barcode).isEmpty
+          try await foodDatabaseService.searchFoods(barcode: item.barcode).isEmpty
         else {
           continue // TODO: Do we want to update in this case?
         }
@@ -218,7 +233,7 @@ extension OpenFoodFactsService {
         } else if item.countries.contains("united-states") {
           country = .usa
         } else {
-          request.logger.info("Unknown country for bulk uplaoded Open Food Facts item: \(item.countries)")
+          logger.info("Unknown country for bulk uplaoded Open Food Facts item: \(item.countries)")
           continue
         }
 
@@ -268,10 +283,10 @@ extension OpenFoodFactsService {
 
         foodItemRecord.state = .unverified
 
-        try await foodItemRecord.save(on: request.db)
+        try await foodItemRecord.save(on: db)
         count += 1
       } catch {
-        request.logger.error(error)
+        logger.error(error)
       }
     }
 

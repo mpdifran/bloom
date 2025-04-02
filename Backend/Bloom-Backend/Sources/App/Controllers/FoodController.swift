@@ -11,12 +11,7 @@ import BloomModel
 
 // MARK: - FoodController
 
-struct FoodController {
-  private let edamamService = EdamamFoodService()
-  private let openAIService = OpenAIService()
-  private let foodDatabaseService = FoodDatabaseService()
-  private let openFoodFactsService = OpenFoodFactsService()
-}
+struct FoodController { }
 
 // MARK: - RouteCollection
 
@@ -63,17 +58,13 @@ extension FoodController {
   func uploadNewFood(_ request: Request) async throws -> UploadNewFoodResponse {
     let requestBody = try request.content.decode(UploadNewFoodRequest.self)
 
-    let existingFoodItems = try await foodDatabaseService.searchFoods(
-      request: request,
-      barcode: requestBody.barcode
-    )
+    let existingFoodItems = try await request.foodDatabaseService.searchFoods(barcode: requestBody.barcode)
 
     // Both country and barcode need to match for it to be considered the same.
     if let foodItem = existingFoodItems.first(where: { $0.country?.asCountry() == requestBody.country.country }) {
       do {
         // Try updating images if they're missing.
-        try await foodDatabaseService.addProductImagesIfMissing(
-          request,
+        try await request.foodDatabaseService.addProductImagesIfMissing(
           foodID: foodItem.id,
           nutritionImage: requestBody.nutritionLabelImage,
           packagingImage: requestBody.packagingImage
@@ -98,8 +89,7 @@ extension FoodController {
     )
 
     do {
-      let (foodItemRecord, result) = try await openAIService.parseNewFoodItem(
-        request: request,
+      let (foodItemRecord, result) = try await request.openAIService.parseNewFoodItem(
         barCode: requestBody.barcode,
         country: requestBody.country.country,
         nutritionLabelMetadata: nutritionLabelMetadata,
@@ -126,8 +116,7 @@ extension FoodController {
     let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
 
     if let foodImage = requestBody.foodImage {
-      guard let foodEstimate = await openAIService.estimateCalories(
-        request,
+      guard let foodEstimate = await request.openAIService.estimateCalories(
         foodImageFile: foodImage,
         foodDescription: requestBody.foodDescription
       ) else {
@@ -143,7 +132,7 @@ extension FoodController {
         suggestedServings: suggestedServings
       )
     } else if let textDescription = requestBody.foodDescription {
-      guard let foodEstimate = await openAIService.estimateCalories(request, textDescription: textDescription) else {
+      guard let foodEstimate = await request.openAIService.estimateCalories(textDescription: textDescription) else {
         throw Abort(.internalServerError)
       }
 
@@ -164,20 +153,19 @@ extension FoodController {
   func markAsInaccurate(_ request: Request) async throws -> Response {
     let requestBody = try request.content.decode(MarkFoodInaccurateRequest.self)
 
-    try await foodDatabaseService.markFoodAsInaccurate(
-      request: request,
-      foodID: requestBody.foodId
-    )
+    try await request.foodDatabaseService.markFoodAsInaccurate(foodID: requestBody.foodId)
 
     return Response(status: .ok)
   }
 
   @Sendable
   func submitFoodItemIssue(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
     let requestBody = try request.content.decode(SubmitFoodItemIssueRequest.self)
 
-    try await foodDatabaseService.submitFoodItemIssueReport(
-      request,
+
+    try await request.foodDatabaseService.submitFoodItemIssueReport(
+      user: user,
       foodItemIssue: requestBody.foodItemIssue
     )
 
@@ -198,7 +186,7 @@ private extension FoodController {
         if sections.isNotEmpty {
           return sections
         } else {
-          let foodItems = try await openFoodFactsService.insertProduct(request, barcode: barcode)
+          let foodItems = try await request.openFoodFactsService.insertProduct(barcode: barcode)
           return [
             FoodSearchResponse.Section(
               title: "Matched Barcode",
@@ -226,10 +214,7 @@ private extension FoodController {
 
   func searchFoodsBarcodeLocalDatabase(_ request: Request, barcode: String) async -> [FoodSearchResponse.Section] {
     do {
-      let foodItems = try await foodDatabaseService.searchFoods(
-        request: request,
-        barcode: barcode
-      )
+      let foodItems = try await request.foodDatabaseService.searchFoods(barcode: barcode)
 
       guard foodItems.isNotEmpty else { return [] }
 
@@ -257,8 +242,7 @@ private extension FoodController {
 
       try await withThrowingTaskGroup(of: FoodSearchResponse.Section?.self) { group in
         group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            request: request,
+          let foodItems = try await request.foodDatabaseService.searchFoods(
             query: name,
             category: .branded,
             preferredCountry: country,
@@ -274,8 +258,7 @@ private extension FoodController {
           )
         }
         group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            request: request,
+          let foodItems = try await request.foodDatabaseService.searchFoods(
             query: name,
             category: .restaurant,
             preferredCountry: country,
@@ -291,8 +274,7 @@ private extension FoodController {
           )
         }
         group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            request: request,
+          let foodItems = try await request.foodDatabaseService.searchFoods(
             query: name,
             category: .fastfood,
             preferredCountry: country,
@@ -308,8 +290,7 @@ private extension FoodController {
           )
         }
         group.addTask {
-          let foodItems = try await foodDatabaseService.searchFoods(
-            request: request,
+          let foodItems = try await request.foodDatabaseService.searchFoods(
             query: name,
             category: .generic,
             preferredCountry: country,

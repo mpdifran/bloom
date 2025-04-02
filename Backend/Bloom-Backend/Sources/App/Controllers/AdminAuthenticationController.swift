@@ -10,9 +10,7 @@ import Vapor
 import SignInWithApple
 import BloomModel
 
-struct AdminAuthenticationController {
-  private let adminUserService = AdminUserDatabaseService()
-}
+struct AdminAuthenticationController { }
 
 extension AdminAuthenticationController: RouteCollection {
 
@@ -47,15 +45,13 @@ private extension AdminAuthenticationController {
 
     let appleTokens = try await request.signInWithApple.generateAppleTokens(details: details)
 
-    let user = try await adminUserService.storeTokens(
-      request,
+    let user = try await request.adminUserDatabaseService.storeTokens(
       userID: auth.userIdentifier,
       tokenResponse: appleTokens
     )
 
     // Store user details
-    try await adminUserService.storeUserDetails(
-      request,
+    try await request.adminUserDatabaseService.storeUserDetails(
       userID: auth.userIdentifier,
       email: auth.email,
       givenName: auth.givenName,
@@ -88,6 +84,6 @@ private extension AdminAuthenticationController {
 
   @Sendable
   func logout(_ request: Request) async throws -> Response {
-    try await adminUserService.logout(request)
+    try await request.adminUserDatabaseService.logout(auth: request.auth)
   }
 }

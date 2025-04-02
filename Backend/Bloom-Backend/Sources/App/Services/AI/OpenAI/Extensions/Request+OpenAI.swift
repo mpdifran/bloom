@@ -10,31 +10,23 @@ import Vapor
 
 extension Request {
 
-  private struct OpenAIKey: StorageKey {
-    typealias Value = OpenAIKit.Client
+  var openAI: OpenAIKit.Client {
+    application.openAI
   }
 
-  public var openAI: OpenAIKit.Client {
-    if let client = application.storage[OpenAIKey.self] {
-      return client
-    } else {
-      let client = application.openAI
-      application.storage[OpenAIKey.self] = client
-      return client
-    }
+  var gemini: OpenAIKit.Client {
+    application.gemini
   }
 
-  private struct GeminiKey: StorageKey {
-    typealias Value = OpenAIKit.Client
+  var openAIService: OpenAIService {
+    application.openAIService
   }
 
-  public var gemini: OpenAIKit.Client {
-    if let client = application.storage[GeminiKey.self] {
-      return client
-    } else {
-      let client = application.gemini
-      application.storage[GeminiKey.self] = client
-      return client
-    }
+  var openAIAssistantService: OpenAIAssistantService {
+    application.openAIAssistantService(db: db)
+  }
+
+  var openAIAssistantProvider: OpenAIAssistantProvider {
+    application.openAIAssistantProvider(db: db)
   }
 }

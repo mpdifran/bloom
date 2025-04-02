@@ -12,12 +12,28 @@ import Logging
 import Vapor
 import AppFoundations
 
-struct OpenAIService { }
+struct OpenAIService: Sendable {
+  let openAI: OpenAIKit.Client
+  let gemini: OpenAIKit.Client
+  let imageStorage: ImageStorage
+  let logger: Logger
+
+  init(
+    openAI: OpenAIKit.Client,
+    gemini: OpenAIKit.Client,
+    imageStorage: ImageStorage,
+    logger: Logger
+  ) {
+    self.openAI = openAI
+    self.gemini = gemini
+    self.imageStorage = imageStorage
+    self.logger = logger
+  }
+}
 
 extension OpenAIService {
 
   func parseNewFoodItem(
-    request: Request,
     barCode: String,
     country: FoodItemRecord.Country,
     nutritionLabelMetadata: ImageFileMetadata,
@@ -26,12 +42,10 @@ extension OpenAIService {
 
     let (nutritionData, packagingData) = await asyncParallelize {
       await parseNutritionLabel(
-        request: request,
         nutritionLabelMetadata: nutritionLabelMetadata
       )
     } task2: {
       await parsePackaging(
-        request: request,
         packagingMetadata: packagingMetadata
       )
     }
@@ -84,12 +98,10 @@ extension OpenAIService {
   }
 
   func estimateCalories(
-    _ request: Request,
     foodImageFile: ImageFile,
     foodDescription: String?
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let openAI = request.openAI
       let model = Model.GPT4.gpt_4o_mini
 
       var messages: [Chat.Message] = [
@@ -127,14 +139,13 @@ extension OpenAIService {
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
-      request.logger.error(error)
+      logger.error(error)
       return nil
     }
   }
 
-  func estimateCalories(_ request: Request, textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
+  func estimateCalories(textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let openAI = request.openAI
       let model = Model.GPT4.gpt_4o_mini
 
       let messages: [Chat.Message] = [
@@ -162,13 +173,12 @@ extension OpenAIService {
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
     } catch {
-      request.logger.error(error)
+      logger.error(error)
       return nil
     }
   }
 
   func evaluateFoodItemAccuracy(
-    request: Request,
     foodItemRecord: FoodItemRecord,
     totalNumberOfIssueReports: Int,
     sampleIssueReports: [FoodItemIssueReport]
@@ -251,7 +261,7 @@ extension OpenAIService {
 
     // Add images if available
     if let nutritionLabelImage = foodItemRecord.nutritionLabelImage,
-       let nutritionImageFile = try await request.imageStorage.retrieveImage(
+       let nutritionImageFile = try await imageStorage.retrieveImage(
         fileName: nutritionLabelImage,
         path: .nutritionLabel
        ) {
@@ -265,7 +275,7 @@ extension OpenAIService {
     }
 
     if let packagingImage = foodItemRecord.packagingImage,
-       let packagingImageFile = try await request.imageStorage.retrieveImage(
+       let packagingImageFile = try await imageStorage.retrieveImage(
         fileName: packagingImage,
         path: .foodPackaging
        ) {
@@ -278,7 +288,7 @@ extension OpenAIService {
       ))
     }
 
-    let response = try await request.openAI.chats.create(
+    let response = try await openAI.chats.create(
       model: Model.GPT4.gpt_4o_mini,
       messages: messages
     )
@@ -304,14 +314,11 @@ extension OpenAIService {
 private extension OpenAIService {
 
   func parseNutritionLabel(
-    request: Request,
     nutritionLabelMetadata: ImageFileMetadata
   ) async -> OpenAINutritionLabelParseResponse? {
     do {
-      let openAI = request.openAI
-
       guard let imageFileExtension = nutritionLabelMetadata.fileExtension else {
-        request.logger.warning("Image file extension could not be determined \(nutritionLabelMetadata.filename)")
+        logger.warning("Image file extension could not be determined \(nutritionLabelMetadata.filename)")
         return nil
       }
 
@@ -339,8 +346,8 @@ private extension OpenAIService {
 
       return try response.parse(OpenAINutritionLabelParseResponse.self)
     } catch {
-      request.logger.error("Failed to parse nutrition label: \(error.localizedDescription)")
-//      request.telemetryDeck.errorOccurred(
+      logger.error("Failed to parse nutrition label: \(error.localizedDescription)")
+//      telemetryDeck.errorOccurred(
 //        id: "OpenAIService.parseNutritionLabel",
 //        message: error.localizedDescription
 //      )
@@ -349,14 +356,11 @@ private extension OpenAIService {
   }
 
   func parsePackaging(
-    request: Request,
     packagingMetadata: ImageFileMetadata
   ) async -> OpenAIPackagingParseResponse? {
     do {
-      let openAI = request.openAI
-
       guard let fileExtension = packagingMetadata.fileExtension else {
-        request.logger.warning("Image file extension could not be determined \(packagingMetadata.filename)")
+        logger.warning("Image file extension could not be determined \(packagingMetadata.filename)")
         return nil
       }
 
@@ -384,8 +388,8 @@ private extension OpenAIService {
 
       return try response.parse(OpenAIPackagingParseResponse.self)
     } catch {
-      request.logger.error(error)
-//      request.telemetryDeck.errorOccurred(
+      logger.error(error)
+//      telemetryDeck.errorOccurred(
 //        id: "OpenAIService.parsePackaging",
 //        message: error.localizedDescription
 //      )
@@ -397,7 +401,6 @@ private extension OpenAIService {
 extension OpenAIService {
 
   func suggestGoals(
-    _ request: Request,
     healthData: String,
     currentGoals: String
   ) async throws -> SuggestGoalsResponse {
@@ -420,7 +423,7 @@ extension OpenAIService {
       )
     ]
 
-    let chat = try await request.openAI.chats.create(
+    let chat = try await openAI.chats.create(
       model: Model.GPT4.gpt_4o_mini,
       messages: messages,
       responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
@@ -430,7 +433,7 @@ extension OpenAIService {
       throw Abort(.internalServerError)
     }
 
-    request.logger.debug("AI Goal Thought Process: \(response.thoughtProcess)")
+    logger.debug("AI Goal Thought Process: \(response.thoughtProcess)")
 
     return SuggestGoalsResponse(
       goals: response.suggestedGoals,

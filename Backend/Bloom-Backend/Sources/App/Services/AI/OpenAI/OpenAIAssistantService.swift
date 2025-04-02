@@ -10,24 +10,32 @@ import Foundation
 import Logging
 import OpenAIKit
 import Vapor
+import Fluent
 
 struct OpenAIAssistantService {
-  private let assistantProvider = OpenAIAssistantProvider()
+  let openAI: OpenAIKit.Client
+  let db: any Database
+  let assistantProvider: OpenAIAssistantProvider
+
+  init(
+    openAI: OpenAIKit.Client,
+    db: any Database,
+    assistantProvider: OpenAIAssistantProvider
+  ) {
+    self.openAI = openAI
+    self.db = db
+    self.assistantProvider = assistantProvider
+  }
 }
 
 extension OpenAIAssistantService {
 
   func createOrFetchAssistantThread(
-    _ request: Request,
+    user: User,
     assistantSpec: AssistantSpec
   ) async throws-> OpenAIAssistantThread {
 
-    guard let user = request.auth.get(User.self) else {
-      throw Abort(.unauthorized, reason: "User authentication required.")
-    }
-
     let assistant = try await assistantProvider.createOrUpdateAssistant(
-      request,
       assistantSpec: assistantSpec
     )
 
@@ -39,27 +47,26 @@ extension OpenAIAssistantService {
     }
 
     return try await createHealthAssistantThread(
-      request,
+      user: user,
       assistant: assistant,
       assistantSpec: assistantSpec
     )
   }
 
   func cancelCurrentlyActiveRuns(
-    _ request: Request,
     assistantThread: OpenAIAssistantThread
   ) async throws {
-    let runs = try await request.openAI.assistants.listRuns(threadID: assistantThread.threadID)
+    let runs = try await openAI.assistants.listRuns(threadID: assistantThread.threadID)
 
     for run in runs.data {
       if run.status.isActive {
-        let run = try await request.openAI.assistants.cancelRun(
+        let run = try await openAI.assistants.cancelRun(
           threadID: assistantThread.threadID,
           runID: run.id
         )
 
         do {
-          let _ = try await request.openAI.assistants.pollRunForAssistantResponse(
+          let _ = try await openAI.assistants.pollRunForAssistantResponse(
             threadID: assistantThread.threadID,
             runID: run.id
           )
@@ -69,11 +76,10 @@ extension OpenAIAssistantService {
   }
 
   func sendUserContent(
-    _ request: Request,
     assistantThread: OpenAIAssistantThread,
     content: [OpenAIKit.Thread.Message.Content]
   ) async throws {
-    let _ = try await request.openAI.assistants.createMessage(
+    let _ = try await openAI.assistants.createMessage(
       threadID: assistantThread.threadID,
       message: Thread.Message(
         role: .user,
@@ -83,11 +89,10 @@ extension OpenAIAssistantService {
   }
 
   func reportHealthData(
-    _ request: Request,
     assistantThread: OpenAIAssistantThread,
     healthData: String
   ) async throws {
-    let _ = try await request.openAI.assistants.createMessage(
+    let _ = try await openAI.assistants.createMessage(
       threadID: assistantThread.threadID,
       message: Thread.Message(
         role: .user,
@@ -99,11 +104,10 @@ extension OpenAIAssistantService {
   }
 
   func sendChatMessage(
-    _ request: Request,
     assistantThread: OpenAIAssistantThread,
     message: String
   ) async throws {
-    let _ = try await request.openAI.assistants.createMessage(
+    let _ = try await openAI.assistants.createMessage(
       threadID: assistantThread.threadID,
       message: Thread.Message(
         role: .user,
@@ -115,12 +119,11 @@ extension OpenAIAssistantService {
   }
 
   func createRun(
-    _ request: Request,
     assistantThread: OpenAIAssistantThread,
     tools: [Assistant.Tool]? = nil,
     toolChoice: Run.ToolChoice? = nil
   ) async throws -> Run {
-    try await request.openAI.assistants.createRun(
+    try await openAI.assistants.createRun(
       assistantID: assistantThread.assistantID,
       threadID: assistantThread.threadID,
       tools: tools,
@@ -129,18 +132,17 @@ extension OpenAIAssistantService {
   }
 
   func startRunAndPollForResponse(
-    _ request: Request,
     assistantThread: OpenAIAssistantThread,
     tools: [Assistant.Tool]? = nil,
     toolChoice: Run.ToolChoice? = nil
   ) async throws -> PollRunResponse {
-    let run = try await request.openAI.assistants.createRun(
+    let run = try await openAI.assistants.createRun(
       assistantID: assistantThread.assistantID,
       threadID: assistantThread.threadID,
       tools: tools,
       toolChoice: toolChoice
     )
-    return try await request.openAI.assistants.pollRunForAssistantResponse(
+    return try await openAI.assistants.pollRunForAssistantResponse(
       threadID: assistantThread.threadID,
       runID: run.id,
       pollInterval: 1
@@ -149,27 +151,26 @@ extension OpenAIAssistantService {
 
   @discardableResult
   func submitSuccessfulToolOputput(
-    _ request: Request,
     threadID: String,
     runID: String,
     toolCalls: [Run.ToolCall]
   ) async throws -> Run {
     let toolOutputs = toolCalls.map { ToolOutput(toolCallID: $0.id, output: "") }
-    return try await request.openAI.assistants.submitToolOutput(
+    return try await openAI.assistants.submitToolOutput(
       threadID: threadID,
       runID: runID,
       toolOutputs: toolOutputs
     )
   }
 
-  func deleteThread(_ request: Request, assistantSpec: AssistantSpec) async throws {
-    guard var user = request.auth.get(User.self) else {
+  func deleteThread(auth: Request.Authentication, assistantSpec: AssistantSpec) async throws {
+    guard var user = auth.get(User.self) else {
       throw Abort(.unauthorized, reason: "User authentication required.")
     }
 
     guard let threadID = user[keyPath: assistantSpec.threadIDKeyPath] else { return }
 
-    let response = try await request.openAI.assistants.deleteThread(threadID: threadID)
+    let response = try await openAI.assistants.deleteThread(threadID: threadID)
 
     guard
       response.id == threadID,
@@ -181,26 +182,23 @@ extension OpenAIAssistantService {
 
     user[keyPath: assistantSpec.threadIDKeyPath] = nil
 
-    try await user.save(on: request.db)
+    try await user.save(on: db)
   }
 }
 
 private extension OpenAIAssistantService {
 
   func createHealthAssistantThread(
-    _ request: Request,
+    user: User,
     assistant: Assistant,
     assistantSpec: AssistantSpec
   ) async throws -> OpenAIAssistantThread {
-    guard var user = request.auth.get(User.self) else {
-      throw Abort(.unauthorized, reason: "User authentication required.")
-    }
+    let thread = try await openAI.assistants.createThread(messages: [])
 
-    let thread = try await request.openAI.assistants.createThread(messages: [])
-
+    var user = user
     user[keyPath: assistantSpec.threadIDKeyPath] = thread.id
 
-    try await user.save(on: request.db)
+    try await user.save(on: db)
 
     return OpenAIAssistantThread(
       assistantID: assistant.id,
