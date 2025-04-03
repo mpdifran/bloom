@@ -11,7 +11,6 @@ import BloomModel
 struct CurrentGoalsData: SendableNetworkModel {
   let unitPreferences: UnitPreferences
   let currentGoals: [GoalSummary]
-  let metricSummaries: [MetricSummary]
 }
 
 extension CurrentGoalsData {

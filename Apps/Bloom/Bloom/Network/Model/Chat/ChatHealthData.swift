@@ -14,7 +14,7 @@ protocol SendableNetworkModel: Codable, Equatable, Sendable { }
 // MARK: - ChatHealthData
 
 struct ChatHealthData: SendableNetworkModel {
-  let demographics: Demographics?
+  let demographics: UserInfo?
   let activityLevel: ActivityLevel?
   let bodyComposition: BodyComposition?
   let bowelMovements: BowelMovements?
@@ -112,7 +112,6 @@ extension ChatHealthData {
   }
 
   struct NutritionAverages: SendableNetworkModel {
-    let dateRange: String
     let averageProtein: String?
     let averageCarbohydrates: String?
     let averageFat: String?
@@ -383,14 +382,16 @@ extension ChatHealthData.FoodItem {
   }
 }
 
-// MARK: - Demographics
+// MARK: - UserInfo
 
 extension ChatHealthData {
-  struct Demographics: SendableNetworkModel {
+  struct UserInfo: SendableNetworkModel {
     let age: Int?
     let sex: String?
     let height: Quantity?
     let healthGoal: String?
+    let currentDate: Date
+    let timeZone: String
   }
 }
 
@@ -470,5 +471,17 @@ extension ChatHealthData {
   struct Stress: SendableNetworkModel {
     let heartRateVariability: [Sample]
     let bloodPressureSamples: [BloodPressureSample]
+  }
+}
+
+// MARK: - Workouts
+
+extension ChatHealthData {
+  struct Workout: SendableNetworkModel {
+    let name: String
+    let duration: String
+    let activeEnergy: String
+    let totalEnergy: String
+    let distance: String?
   }
 }

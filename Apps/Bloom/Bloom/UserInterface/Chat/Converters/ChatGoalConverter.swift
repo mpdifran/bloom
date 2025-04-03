@@ -58,8 +58,8 @@ extension ChatGoalConverter {
 
       return CurrentGoalsData(
         unitPreferences: unitPreferences,
-        currentGoals: goalSummaries,
-        metricSummaries: metricSummaries
+        currentGoals: goalSummaries
+//        metricSummaries: metricSummaries
       )
     } catch {
       print(error)
@@ -68,7 +68,7 @@ extension ChatGoalConverter {
   }
 }
 
-private extension ChatGoalConverter {
+extension ChatGoalConverter {
 
   func createGoalSummary(for targetMetric: TargetMetric) async throws -> GoalSummary? {
 

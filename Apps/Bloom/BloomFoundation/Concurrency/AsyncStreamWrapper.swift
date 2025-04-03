@@ -8,7 +8,7 @@
 import Foundation
 
 @propertyWrapper
-public class AsyncStreamable<Value> where Value: Sendable {
+public final class AsyncStreamable<Value>: @unchecked Sendable where Value: Sendable {
 
   public var wrappedValue: Value {
     get { _wrappedValue }

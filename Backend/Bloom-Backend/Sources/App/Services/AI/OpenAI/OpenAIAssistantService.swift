@@ -167,10 +167,8 @@ extension OpenAIAssistantService {
     )
   }
 
-  func deleteThread(auth: Request.Authentication, assistantSpec: AssistantSpec) async throws {
-    guard var user = auth.get(User.self) else {
-      throw Abort(.unauthorized, reason: "User authentication required.")
-    }
+  func deleteThread(user: User, assistantSpec: AssistantSpec) async throws {
+    var user = user
 
     guard let threadID = user[keyPath: assistantSpec.threadIDKeyPath] else { return }
 

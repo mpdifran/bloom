@@ -81,7 +81,13 @@ private extension ChatWebSocketService {
   func performRun(thread: OpenAIAssistantThread) async throws {
     try sendIsAssistantTyping(isTyping: true)
 
-    let assistantResponse = try await assistantService.startRunAndPollForResponse(assistantThread: thread)
+    let assistantResponse = try await assistantService.startRunAndPollForResponse(
+      assistantThread: thread,
+      tools: [
+        Assistant.Tool.function(.queryUserHealthData)
+      ],
+      toolChoice: .function(.Function.queryUserHealthData)
+    )
 
     switch assistantResponse {
     case .requiresAction(let run, let toolCalls):
@@ -108,8 +114,8 @@ private extension ChatWebSocketService {
       }
 
       let messagesResponse = SocketMessage.MessagesResponse(texts: textMessages)
-      try socket.send(messagesResponse)
       try sendIsAssistantTyping(isTyping: false)
+      try socket.sendContent(messagesResponse)
     }
   }
 
@@ -118,11 +124,11 @@ private extension ChatWebSocketService {
       id: run.id,
       queries: queries
     )
-    try socket.send(dataQueryResponse)
+    try socket.sendContent(dataQueryResponse)
   }
 
   func sendIsAssistantTyping(isTyping: Bool) throws {
     let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
-    try socket.send(typingIndicator)
+    try socket.sendContent(typingIndicator)
   }
 }

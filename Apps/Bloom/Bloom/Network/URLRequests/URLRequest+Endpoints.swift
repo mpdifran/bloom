@@ -19,6 +19,11 @@ extension URLRequest {
     let base = await APIHost.shared.resolvedHost
     return try URLRequest(url: base.appendingPathComponent(path)).encoding(body: body)
   }
+
+  static func websocket(_ path: String) async -> URLRequest {
+    let base = await APIHost.shared.resolvedWebSocketHost
+    return URLRequest(url: base.appendingPathComponent(path))
+  }
 }
 
 extension URLRequest {
@@ -75,7 +80,10 @@ extension URLRequest {
     static func sendMessage(body: ChatMessageRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/chat/new-message", body: body)
     }
-    static func deleteChatThread() async throws -> URLRequest {
+    static func webSocket() async -> URLRequest {
+      await URLRequest.websocket("v1/chat/web-socket")
+    }
+    static func deleteChatThread() async -> URLRequest {
       await URLRequest.get("v1/chat/delete-thread")
     }
   }

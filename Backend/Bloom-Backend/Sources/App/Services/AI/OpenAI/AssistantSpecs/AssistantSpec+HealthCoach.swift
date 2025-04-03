@@ -41,8 +41,8 @@ extension Assistant.Tool.Function {
     description: "A function to query health data about the user. You can use this function to help answer the user's questions.",
     parameters: Schema.Object(
       properties: [
-        "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format."),
-        "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format."),
+        "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z)"),
+        "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z)"),
         "dataType": Schema.Parameter(
           enum: SocketMessage.QueryDataType.self,
           description: "The type of data to query."

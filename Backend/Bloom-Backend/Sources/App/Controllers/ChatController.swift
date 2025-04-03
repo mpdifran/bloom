@@ -18,8 +18,8 @@ extension ChatController: RouteCollection {
     routes.group("v1") {
       $0.auth(using: UserToken.self) {
         $0.group("chat") {
-          $0.webSocket("create-web-socket", shouldUpgrade: prepareForWebSocket, onUpgrade: createWebSocket)
-          $0.post("delete-thread", use: deleteThread)
+          $0.webSocket("web-socket", onUpgrade: createWebSocket)
+          $0.get("delete-thread", use: deleteThread)
         }
       }
     }
@@ -29,21 +29,15 @@ extension ChatController: RouteCollection {
 extension ChatController {
 
   @Sendable
-  func prepareForWebSocket(_ request: Request) async throws -> HTTPHeaders? {
-    let user = try request.auth.require(User.self)
-    guard let userID = user.id else { throw Abort(.forbidden) }
-
-    return HTTPHeaders([("UserID", userID.value)])
-  }
-
-  @Sendable
   func createWebSocket(_ request: Request, webSocket: WebSocket) async {
-    guard let userIDRaw = request.headers["UserID"].first else {
-      request.logger.warning("UserID header not found or malformed.")
+    guard
+      let user = try? request.auth.require(User.self),
+      let userID = user.id
+    else {
+      request.logger.warning("No authorized user found.")
       return
     }
 
-    let userID = UserIdentifier(userIDRaw)
     await request.webSocketService.registerChat(
       socket: webSocket,
       forUserID: userID
@@ -52,8 +46,10 @@ extension ChatController {
 
   @Sendable
   func deleteThread(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
+
     try await request.openAIAssistantService.deleteThread(
-      auth: request.auth,
+      user: user,
       assistantSpec: .healthCoach
     )
     return Response(status: .ok)

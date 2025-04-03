@@ -25,4 +25,12 @@ extension APIHost {
     }
     return URL(string: "https://bloom-api-5903aeb2ee43.herokuapp.com/")!
   }
+
+  var resolvedWebSocketHost: URL {
+    let webSocketBase = base.replacingOccurrences(of: "https://", with: "wss://")
+    if let url = URL(string: webSocketBase), webSocketBase.isNotEmpty, overrideEnabled {
+      return url
+    }
+    return URL(string: "wss://bloom-api-5903aeb2ee43.herokuapp.com/")!
+  }
 }

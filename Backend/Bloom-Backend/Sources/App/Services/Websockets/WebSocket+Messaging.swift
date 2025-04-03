@@ -11,9 +11,9 @@ import BloomModel
 
 extension WebSocket {
 
-  func send<Content>(_ content: Content) throws where Content: Codable {
+  func sendContent<Content>(_ content: Content) throws where Content: Codable {
     let encoder = JSONEncoder.bloomModel
     let data = try encoder.encode(content)
-    try send(data)
+    send(data)
   }
 }

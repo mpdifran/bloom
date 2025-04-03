@@ -37,37 +37,39 @@ extension WebSocketService {
 
     let db = createDB(for: socket)
 
-    socket.onText { [weak self] (socket, text) in
-      Task {
-        await self?.handleErrors(socket: socket) { [weak self] in
-          guard let data = text.data(using: .utf8) else {
-            throw Abort(.preconditionFailed)
-          }
+    socket.eventLoop.execute {
+      socket.onText { [weak self] (socket, text) in
+        Task {
+          await self?.handleErrors(socket: socket) { [weak self] in
+            guard let data = text.data(using: .utf8) else {
+              throw Abort(.preconditionFailed)
+            }
 
-          try await self?.onData(
-            socket: socket,
-            db: db,
-            data: data,
-            userID: userID
-          )
+            try await self?.onData(
+              socket: socket,
+              db: db,
+              data: data,
+              userID: userID
+            )
+          }
         }
       }
-    }
-    socket.onBinary { [weak self] (socket, byteBuffer) in
-      Task {
-        await self?.handleErrors(socket: socket) { [weak self] in
-          let data = Data(buffer: byteBuffer)
-          try await self?.onData(
-            socket: socket,
-            db: db,
-            data: data,
-            userID: userID
-          )
+      socket.onBinary { [weak self] (socket, byteBuffer) in
+        Task {
+          await self?.handleErrors(socket: socket) { [weak self] in
+            let data = Data(buffer: byteBuffer)
+            try await self?.onData(
+              socket: socket,
+              db: db,
+              data: data,
+              userID: userID
+            )
+          }
         }
       }
-    }
-    socket.onClose.whenComplete { [weak self] (result) in
-      Task { await self?.removeSocket(for: userID) }
+      socket.onClose.whenComplete { [weak self] (result) in
+        Task { await self?.removeSocket(for: userID) }
+      }
     }
   }
 
@@ -84,7 +86,7 @@ private extension WebSocketService {
     } catch {
       let errorMessage = SocketMessage.Error(message: error.localizedDescription)
       do {
-        try socket.send(errorMessage)
+        try socket.sendContent(errorMessage)
       } catch {
         logger.report(error: error)
       }

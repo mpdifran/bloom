@@ -68,9 +68,9 @@ private extension ChatVitalConverter {
   }
 }
 
-private extension ChatVitalConverter {
+extension ChatVitalConverter {
 
-  func generateDemographics() async -> ChatHealthData.Demographics? {
+  func generateDemographics() async -> ChatHealthData.UserInfo? {
 //    guard await ExternalHealthMetricPermissionManager.shared.getIsEnabled(for: .demographics) else {
 //      return nil
 //    }
@@ -80,11 +80,13 @@ private extension ChatVitalConverter {
     let height = await HealthManager.shared.height()
     let healthGoal = await HealthManager.shared.healthGoal.name
 
-    return ChatHealthData.Demographics(
+    return ChatHealthData.UserInfo(
       age: age,
       sex: sex,
       height: height.chatQuantity(for: .meterUnit(with: .centi), numberFormatter: .oneDecimalPlace),
-      healthGoal: healthGoal
+      healthGoal: healthGoal,
+      currentDate: .now,
+      timeZone: TimeZone.current.identifier
     )
   }
 
@@ -327,7 +329,7 @@ private extension ChatVitalConverter {
             case .snack:
               snack.append(networkFoodItem)
             @unknown default:
-              print("UNKNOWN MEAL CASE")
+              print("UNKNOWN MEAL CASE: \(foodLog.meal.name)")
               break
             }
           }
@@ -364,10 +366,7 @@ private extension ChatVitalConverter {
   func generateNutritionalAverages(from date: Date) async -> ChatHealthData.NutritionAverages {
     let dateRange = DateRange.fromDateToNow(date)
 
-    let numberOfDays = Calendar.current.dateComponents([.day], from: dateRange.start, to: dateRange.end).day
-
     return ChatHealthData.NutritionAverages(
-      dateRange: "Last \(numberOfDays ?? 0) days",
       averageProtein: await formattedAverage(for: .dietaryProtein, unit: .gram(), dateRange: dateRange),
       averageCarbohydrates: await formattedAverage(for: .dietaryCarbohydrates, unit: .gram(), dateRange: dateRange),
       averageFat: await formattedAverage(for: .dietaryFatTotal, unit: .gram(), dateRange: dateRange),
