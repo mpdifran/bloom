@@ -11,7 +11,7 @@ import BloomFoundation
 import HealthKit
 import DataContainer
 
-final class ChatHealthQueryPerformer {
+final class ChatHealthQueryPerformer: Sendable {
 
   init() { }
 
@@ -25,7 +25,9 @@ final class ChatHealthQueryPerformer {
 extension ChatHealthQueryPerformer {
 
   func perform(query: SocketMessage.Query) async -> String {
-    switch query.dataType {
+    print("Querying Health Data [\(query.dataType.rawValue)] \(query.startDate) to \(query.endDate)")
+
+    return switch query.dataType {
     case .foodLogs:
       await fetchFoodLogs(query: query)
     case .nutrition:
@@ -144,7 +146,7 @@ private extension ChatHealthQueryPerformer {
   }
 
   func fetchGoals(query: SocketMessage.Query) async -> String {
-    let dateRange = query.dateRange
+//    let dateRange = query.dateRange
 
     do {
       let activeGoals = try await modelActor.fetchActiveHabits()

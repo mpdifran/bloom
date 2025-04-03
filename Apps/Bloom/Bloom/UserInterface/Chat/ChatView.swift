@@ -14,7 +14,6 @@ struct ChatView: View {
   @State private var text: String = ""
   @State private var viewModel = ChatViewModel.shared
   @State private var presentedSheet: AnyView?
-  @State private var error: Error?
 
   @Environment(\.dismiss) private var dismiss
 
@@ -35,6 +34,11 @@ struct ChatView: View {
               .id(chatMessage.id)
               .transition(chatMessage.isCurrentUser ? .move(edge: .trailing) : .move(edge: .leading))
             }
+
+            if viewModel.assistantIsTyping {
+              TypingIndicatorCell(isDirect: false)
+                .transition(.move(edge: .leading))
+            }
           }
           .padding(.vertical)
         }
@@ -42,8 +46,8 @@ struct ChatView: View {
           ChatBar(text: $text) {
             let textToSend = text
             text = ""
-            ThrowingUserTask(error: $error) {
-              try await viewModel.sendMessage(textToSend)
+            Task {
+              await viewModel.sendMessage(textToSend)
             }
           }
           .focused($isFocused)
@@ -76,7 +80,7 @@ struct ChatView: View {
       }
       .groupedBackground()
       .sheet($presentedSheet)
-      .alert(error: $error)
+      .alert(error: $viewModel.error)
       .animation(.bouncy, value: viewModel.chatMessages)
       .presentationCompactAdaptation(.fullScreenCover)
     }
