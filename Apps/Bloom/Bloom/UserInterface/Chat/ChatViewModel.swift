@@ -10,8 +10,6 @@ import BloomModel
 
 @Observable @MainActor
 final class ChatViewModel {
-  static let shared = ChatViewModel()
-
   var assistantIsTyping = false
   var chatMessages = [ChatMessage]()
   var error: Error?

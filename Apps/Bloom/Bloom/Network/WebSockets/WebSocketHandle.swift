@@ -21,10 +21,12 @@ final actor WebSocketHandle {
 
   private let encoder = JSONEncoder.bloomModel
   private var observerTask: Task<Void, Error>?
+  private var pingTask: Task<Void, Never>?
   private var error: Error?
 
   deinit {
     observerTask?.cancel()
+    task.cancel(with: .normalClosure, reason: nil)
   }
 }
 
@@ -51,6 +53,12 @@ extension WebSocketHandle {
       }
     }
     task.resume()
+
+    self.pingTask = schedulePing()
+  }
+
+  func stop() {
+    task.cancel(with: .normalClosure, reason: nil)
   }
 
   func send<T: Encodable>(payload: T) async throws {
@@ -63,6 +71,32 @@ extension WebSocketHandle {
 }
 
 private extension WebSocketHandle {
+
+  func schedulePing() -> Task<Void, Never> {
+    Task {
+      while !Task.isCancelled {
+        do {
+          await Delay(20_000)
+          try await self.sendPing()
+        } catch {
+          print("Ping error: \(error)")
+        }
+      }
+    }
+  }
+
+  func sendPing() async throws {
+    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+      print("WebSocketHandle: Sending ping")
+      task.sendPing { error in
+        if let error = error {
+          continuation.resume(throwing: error)
+        } else {
+          continuation.resume(returning: ())
+        }
+      }
+    }
+  }
 
   func handle(data: Data) {
     self.data = data

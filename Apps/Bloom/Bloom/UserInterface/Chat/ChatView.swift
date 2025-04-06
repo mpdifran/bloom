@@ -12,7 +12,7 @@ import AppUI
 struct ChatView: View {
 
   @State private var text: String = ""
-  @State private var viewModel = ChatViewModel.shared
+  @State private var viewModel = ChatViewModel()
   @State private var presentedSheet: AnyView?
 
   @Environment(\.dismiss) private var dismiss

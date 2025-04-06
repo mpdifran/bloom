@@ -11,7 +11,7 @@ import AppUI
 
 struct ChatSettingsView: View {
 
-  @State private var viewModel = ChatViewModel.shared
+  @State private var viewModel = ChatViewModel()
 
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @State private var didDeleteChatHistory = false

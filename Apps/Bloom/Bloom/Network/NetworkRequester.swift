@@ -167,7 +167,8 @@ extension NetworkRequester {
 extension NetworkRequester {
 
   func openChatWebsocket() async -> WebSocketHandle {
-    let task = await URLSession.shared.webSocketTask(with: .Chat.webSocket())
+    let request = await URLRequest.Chat.webSocket().settingBloomHeaders()
+    let task = URLSession.shared.webSocketTask(with: request)
     return WebSocketHandle(task: task)
   }
 

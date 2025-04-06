@@ -67,6 +67,16 @@ extension WebSocketService {
           }
         }
       }
+      socket.onPing { [weak self] (socket, byteBuffer) in
+        self?.logger.debug("Received ping on socket for user \(userID)")
+        Task {
+          do {
+            try await socket.sendPing()
+          } catch {
+            self?.logger.report(error: error)
+          }
+        }
+      }
       socket.onClose.whenComplete { [weak self] (result) in
         Task { await self?.removeSocket(for: userID) }
       }
