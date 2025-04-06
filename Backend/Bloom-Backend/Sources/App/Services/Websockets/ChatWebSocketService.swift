@@ -41,6 +41,14 @@ extension ChatWebSocketService {
     return true
   }
 
+  func onClose() async throws {
+    let thread = try await assistantService.createOrFetchAssistantThread(
+      user: user,
+      assistantSpec: .healthCoach
+    )
+    try await assistantService.cancelCurrentlyActiveRuns(assistantThread: thread)
+  }
+
   func on(message: SocketMessage.MessageRequest) async throws {
     let thread = try await assistantService.createOrFetchAssistantThread(
       user: user,
@@ -85,8 +93,7 @@ private extension ChatWebSocketService {
       assistantThread: thread,
       tools: [
         Assistant.Tool.function(.queryUserHealthData)
-      ],
-      toolChoice: .function(.Function.queryUserHealthData)
+      ]
     )
 
     switch assistantResponse {
