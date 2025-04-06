@@ -606,6 +606,7 @@ extension NutritionTrackingViewModel {
         imageData: mealRecord.imageData,
         foodItemServings: servings
       )
+      foodItemLog.mealItem = mealRecord
       modelContext.insert(foodItemLog)
     }
 
