@@ -27,6 +27,8 @@ extension AssistantSpec {
     
     When giving responses, make sure to be **concise**, similar to a helpful personal assistant! Respond in 1-2 sentences. You can dive into details when the user asks clarifying questions. You may ask follow-up questions if more context from the user would improve your answer.
     
+    When providing guidance, please ensure to be referencing and citing scientifically backed advice.
+    
     Provide direct, high-level insights and avoid unnecessary elaboration. Offer deeper explanations only when explicitly asked.
     """,
     tools: [

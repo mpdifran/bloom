@@ -16,8 +16,11 @@ final actor WebSocketHandle {
   }
 
   @AsyncStreamable var data: Data?
+  @AsyncStreamable var hasDisconnected = false
 
   private var hasStarted = false
+
+  private var taskDelegate: TaskDelegate?
 
   private let encoder = JSONEncoder.bloomModel
   private var observerTask: Task<Void, Error>?
@@ -53,6 +56,10 @@ extension WebSocketHandle {
       }
     }
     task.resume()
+    taskDelegate = TaskDelegate { [weak self] (error) in
+      await self?.markDisconnected(error: error)
+    }
+    task.delegate = taskDelegate
 
     self.pingTask = schedulePing()
   }
@@ -102,7 +109,30 @@ private extension WebSocketHandle {
     self.data = data
   }
 
+  func markDisconnected(error: Error?) {
+    self.error = error
+    hasDisconnected = true
+  }
+
   func set(error: Error) {
     self.error = error
+  }
+}
+
+extension WebSocketHandle {
+  final class TaskDelegate: NSObject, URLSessionTaskDelegate {
+    private let onComplete: @Sendable (Error?) async -> Void
+
+    init(onComplete: @escaping @Sendable (Error?) async -> Void) {
+      self.onComplete = onComplete
+
+      super.init()
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+      Task {
+        await onComplete(error)
+      }
+    }
   }
 }

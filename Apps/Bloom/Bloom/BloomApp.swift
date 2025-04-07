@@ -30,6 +30,7 @@ struct BloomApp: App {
 
     // Setup RevenueCat
     Purchases.configure()
+    Purchases.logLevel = .warn
 
     // Link TelemetryDeck with RevenueCat
     Purchases.shared.attribution.setAttributes([

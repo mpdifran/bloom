@@ -21,6 +21,10 @@ final class ChatViewModel {
 
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
+
+  deinit {
+    print("Deinit ChatViewModel")
+  }
 }
 
 extension ChatViewModel {
@@ -65,9 +69,9 @@ private extension ChatViewModel {
 
     webSocketDataTask = Task.detached { [weak self] in
       for await data in await handle.$data {
-        guard let data else { return }
-
-        await self?.parse(data: data)
+        if let data {
+          await self?.parse(data: data)
+        }
       }
     }
 
@@ -91,6 +95,11 @@ private extension ChatViewModel {
         id: queryResponse.id,
         queryData: queryData
       )
+
+      if let testData = try? encoder.encode(dataRequest) {
+        print("Query Data: \(String(data: testData, encoding: .utf8) ?? "")")
+      }
+
       do {
         try await webSocketHandle?.send(payload: dataRequest)
       } catch {
