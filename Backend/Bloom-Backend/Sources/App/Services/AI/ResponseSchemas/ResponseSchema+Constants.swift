@@ -165,36 +165,36 @@ extension ResponseSchema {
     name: "suggestedGoals",
     schema: Schema.Object(
       properties: [
-//        "suggestedGoals": Schema.Parameter(
-//          description: "A list of the suggested goals.",
-//          arrayOf: Schema.Object(
-//            properties: [
-//              "metric" : Schema.Parameter(
-//                enum: SuggestedGoal.Metric.self,
-//                description: "The metric that the goal will be measured by."
-//              ),
-//              "value" : Schema.Parameter(
-//                type: .number,
-//                description: "The numeric value of the goal."
-//              ),
-//              "unit" : Schema.Parameter(
-//                enum: SuggestedGoal.Unit.self,
-//                description: "The unit to measure the goal with."
-//              ),
-//              "notes" : Schema.Parameter(
-//                type: .string,
-//                description: "A short, 1 sentence note about why this goal is being recommended."
-//              )
-//            ]
-//          )
-//        ),
         "suggestedGoals": Schema.Parameter(
-          description: "A list of things the user should focus on.",
+          description: "A list of the suggested goals.",
+          arrayOf: Schema.Object(
+            properties: [
+              "metric" : Schema.Parameter(
+                enum: SuggestedGoal.Metric.self,
+                description: "The metric that the goal will be measured by."
+              ),
+              "value" : Schema.Parameter(
+                type: .number,
+                description: "The numeric value of the goal."
+              ),
+              "unit" : Schema.Parameter(
+                enum: SuggestedGoal.Unit.self,
+                description: "The unit to measure the goal with."
+              ),
+              "notes" : Schema.Parameter(
+                type: .string,
+                description: "A short, 1 sentence note about why this goal is being recommended."
+              )
+            ]
+          )
+        ),
+        "suggestedReminders": Schema.Parameter(
+          description: "A list of things the user should be reminded to do. These should only be used when you can't use a goal.",
           arrayOf: Schema.Object(
             properties: [
               "title" : Schema.Parameter(
                 type: .string,
-                description: "The name of the actionable goal that will be displayed to the user. This should include the target amount."
+                description: "The name of the reminder that will be displayed to the user. This should be 1-5 words. Examples: 'Stretch', 'Perform Breathing Exercises'"
               )
             ]
           )

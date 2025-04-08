@@ -409,10 +409,10 @@ extension OpenAIService {
         role: .system,
         content: [.text(.Prompt.suggestGoals)]
       ),
-//      Chat.Message(
-//        role: .system,
-//        content: [.text(SuggestedGoal.Metric.validUnitDescription)]
-//      ),
+      Chat.Message(
+        role: .system,
+        content: [.text(SuggestedGoal.Metric.validUnitDescription)]
+      ),
       Chat.Message(
         role: .user,
         content: [.text("Here is my health data:\n\n```json\n\(healthData)\n```\n")]
@@ -424,7 +424,7 @@ extension OpenAIService {
     ]
 
     let chat = try await openAI.chats.create(
-      model: Model.GPT4.gpt_4o,
+      model: Model.GPT4.gpt_4o_mini,
       messages: messages,
       responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
     )
@@ -439,8 +439,8 @@ extension OpenAIService {
     }
 
     return SuggestGoalsResponse(
-      goals: [],//response.suggestedGoals,
-      reminders: response.suggestedGoals
+      goals: response.suggestedGoals,
+      reminders: response.suggestedReminders
     )
   }
 }
