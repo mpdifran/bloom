@@ -36,6 +36,7 @@ final actor WebSocketHandle {
 extension WebSocketHandle {
 
   func start() async {
+    guard !hasStarted else { return }
     self.observerTask = Task.detached { [weak self, task] in
       do {
         while true {
@@ -55,11 +56,12 @@ extension WebSocketHandle {
         await self?.set(error: error)
       }
     }
-    task.resume()
     taskDelegate = TaskDelegate { [weak self] (error) in
       await self?.markDisconnected(error: error)
     }
     task.delegate = taskDelegate
+    task.resume()
+    hasStarted = true
 
     self.pingTask = schedulePing()
   }
@@ -112,6 +114,7 @@ private extension WebSocketHandle {
   func markDisconnected(error: Error?) {
     self.error = error
     hasDisconnected = true
+    hasStarted = false
   }
 
   func set(error: Error) {

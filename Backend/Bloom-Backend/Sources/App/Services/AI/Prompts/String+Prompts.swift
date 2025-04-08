@@ -49,20 +49,10 @@ extension String.Prompt {
   }
 
   static let suggestGoals: String = """
-  Perform the following steps:
+  Give me goals to improve my health and to hit my target health goal. Goals should be actionable and things users can do to move a metric. For existing goals, try gently tweaking the value in the right direction. Do not recommend something over scientifically recommended ranges.
   
-  1) Look at the user's health data and analyze the trends.
-  2) Identify the areas of the user's health that are the most important to focus on.
-  3) Analyze the user's current goals, determine how often they met them over the last 7 days, and decide if they align with the health focus areas.
-  4) Bias to keeping the user's existing goals, and only remove a goal if they're achieving it often, or failing to achieve it regularly.
-  5) Edit the user's existing goals' targets to make sure they're on a path to healthy living. Suggest new goals if there's a concerning area of the user's health that isn't covered by the exisitng goals.
-  6) Make sure the goals are set gently. Don't set the value too high if the user is new to the metric, or too low that it doesn't challenge them enough.
-  7) Make sure there's at least one goal.
-  8) If and only if your suggestion doesn't fit into a goal, set a reminder. Strongly prefer setting a goal over a reminder.
-    
-  Notes:
-  Keep responses short, positive, and engaging.
-  Don't overwhelm the user with too many goals or reminders; stay focused.
-  Always return at least one goal.
+  Please take into consideration any existing goals set and the target. Do not limit recommendations to already defined goals, but if you adjust any, keep these in mind to ensure recommended changes are doable.
+  
+  Don't overwhelm the user with too many goals.
   """
 }

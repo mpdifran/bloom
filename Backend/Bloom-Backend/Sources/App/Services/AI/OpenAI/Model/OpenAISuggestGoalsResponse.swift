@@ -9,8 +9,8 @@ import Foundation
 import BloomModel
 
 struct OpenAISuggestGoalsResponse: Codable {
-  let suggestedGoals: [SuggestedGoal]
-  let suggestedReminders: [SuggestedReminder]
+//  let suggestedGoals: [SuggestedGoal]
+  let suggestedGoals: [SuggestedReminder]
   let thoughtProcess: [ThoughtProcessStep]
 }
 

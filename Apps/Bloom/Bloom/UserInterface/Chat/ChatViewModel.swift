@@ -16,6 +16,7 @@ final class ChatViewModel {
 
   private var webSocketHandle: WebSocketHandle?
   private var webSocketDataTask: Task<Void, Never>?
+  private var webSocketDisconnectionTask: Task<Void, Never>?
 
   private let queryPerformer = ChatHealthQueryPerformer()
 
@@ -74,6 +75,13 @@ private extension ChatViewModel {
         }
       }
     }
+    webSocketDisconnectionTask = Task.detached { [weak self] in
+      for await isDisconnected in await handle.$hasDisconnected {
+        if isDisconnected {
+          await self?.onDisconnection()
+        }
+      }
+    }
 
     webSocketHandle = handle
     return handle
@@ -128,5 +136,12 @@ private extension ChatViewModel {
         }
         return results
     }
+  }
+
+  func onDisconnection() {
+    webSocketHandle = nil
+    webSocketDataTask = nil
+    webSocketDisconnectionTask = nil
+    assistantIsTyping = false
   }
 }

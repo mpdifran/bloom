@@ -97,7 +97,7 @@ private extension ChatWebSocketService {
       tools: [
         Assistant.Tool.function(.queryUserHealthData)
       ],
-      toolChoice: .function(.Function.queryUserHealthData),
+//      toolChoice: .function(.Function.queryUserHealthData),
       existingRun: existingRun
     )
 

@@ -40,6 +40,7 @@ struct ChatView: View {
                 .transition(.move(edge: .leading))
             }
           }
+          .horizontallyCentered()
           .padding(.vertical)
         }
         .safeAreaInset(edge: .bottom) {
