@@ -14,15 +14,18 @@ struct ChatWebSocketService: Sendable {
   let user: User
   let socket: WebSocket
   let assistantService: OpenAIAssistantService
+  let logger: Logger
 
   init(
     user: User,
     socket: WebSocket,
-    assistantService: OpenAIAssistantService
+    assistantService: OpenAIAssistantService,
+    logger: Logger
   ) {
     self.user = user
     self.socket = socket
     self.assistantService = assistantService
+    self.logger = logger
   }
 
   private let decoder = JSONDecoder.bloomModel
@@ -74,26 +77,28 @@ extension ChatWebSocketService {
 
     let toolOutputs = queryRequest.queryData.map { ToolOutput(toolCallID: $0.id, output: $0.data) }
 
-    try await assistantService.submitSuccessfulToolOputput(
+    let run = try await assistantService.submitSuccessfulToolOputput(
       threadID: thread.threadID,
       runID: queryRequest.id,
       toolOutputs: toolOutputs
     )
 
-    try await performRun(thread: thread)
+    try await performRun(thread: thread, existingRun: run)
   }
 }
 
 private extension ChatWebSocketService {
 
-  func performRun(thread: OpenAIAssistantThread) async throws {
+  func performRun(thread: OpenAIAssistantThread, existingRun: Run? = nil) async throws {
     try sendIsAssistantTyping(isTyping: true)
 
     let assistantResponse = try await assistantService.startRunAndPollForResponse(
       assistantThread: thread,
       tools: [
         Assistant.Tool.function(.queryUserHealthData)
-      ]
+      ],
+      toolChoice: .function(.Function.queryUserHealthData),
+      existingRun: existingRun
     )
 
     switch assistantResponse {

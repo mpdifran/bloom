@@ -139,8 +139,17 @@ extension OpenAIAssistantService {
   func startRunAndPollForResponse(
     assistantThread: OpenAIAssistantThread,
     tools: [Assistant.Tool]? = nil,
-    toolChoice: Run.ToolChoice? = nil
+    toolChoice: Run.ToolChoice? = nil,
+    existingRun: Run? = nil
   ) async throws -> PollRunResponse {
+    if let existingRun {
+      return try await openAI.assistants.pollRunForAssistantResponse(
+        threadID: assistantThread.threadID,
+        runID: existingRun.id,
+        pollInterval: 1
+      )
+    }
+
     let run = try await openAI.assistants.createRun(
       assistantID: assistantThread.assistantID,
       threadID: assistantThread.threadID,
@@ -154,7 +163,6 @@ extension OpenAIAssistantService {
     )
   }
 
-  @discardableResult
   func submitSuccessfulToolOputput(
     threadID: String,
     runID: String,

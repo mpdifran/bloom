@@ -106,6 +106,7 @@ private extension WebSocketService {
       let errorMessage = SocketMessage.Error(message: error.localizedDescription)
       do {
         try socket.sendContent(errorMessage)
+        try await socket.close(code: .unexpectedServerError)
       } catch {
         logger.report(error: error)
       }

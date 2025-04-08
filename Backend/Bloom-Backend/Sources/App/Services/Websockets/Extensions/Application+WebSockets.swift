@@ -34,7 +34,8 @@ extension Application {
     ChatWebSocketService(
       user: user,
       socket: socket,
-      assistantService: openAIAssistantService(db: db)
+      assistantService: openAIAssistantService(db: db),
+      logger: logger
     )
   }
 }
