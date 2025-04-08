@@ -115,6 +115,8 @@ private extension WebSocketHandle {
     self.error = error
     hasDisconnected = true
     hasStarted = false
+    pingTask?.cancel()
+    pingTask = nil
   }
 
   func set(error: Error) {
