@@ -17,6 +17,7 @@ final actor WebSocketHandle {
 
   @AsyncStreamable var data: Data?
   @AsyncStreamable var hasDisconnected = false
+  @AsyncStreamable var error: Error?
 
   private var hasStarted = false
 
@@ -25,7 +26,6 @@ final actor WebSocketHandle {
   private let encoder = JSONEncoder.bloomModel
   private var observerTask: Task<Void, Error>?
   private var pingTask: Task<Void, Never>?
-  private var error: Error?
 
   deinit {
     observerTask?.cancel()
