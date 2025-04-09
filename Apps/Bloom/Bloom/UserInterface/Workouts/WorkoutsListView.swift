@@ -13,28 +13,23 @@ struct WorkoutsListView: View {
 
   private let titleDisplayMode: NavigationBarItem.TitleDisplayMode
 
+  @StateObject private var viewModel = WorkoutsListViewModel()
+
   init(
     activityType: HKWorkoutActivityType? = nil,
     titleDisplayMode: NavigationBarItem.TitleDisplayMode = .inline
   ) {
     self.titleDisplayMode = titleDisplayMode
     if let activityType {
-      self._selectedActivityType = State(initialValue: activityType)
+      viewModel.selectedActivityType = activityType
     }
   }
 
-  @State private var isLoading = true
-  @State private var workoutSections = [WorkoutDateSection]()
-  @State private var filteredWorkoutSections = [WorkoutDateSection]()
-  @State private var activityTypes = [HKWorkoutActivityType]()
-  @State private var selectedActivityType: HKWorkoutActivityType?
-  @State private var triggerHealthPermissionSheet = false
-
   var body: some View {
     ScrollView {
-      if isLoading {
+      if viewModel.isLoading {
         loadingView
-      } else if workoutSections.isNotEmpty {
+      } else if viewModel.workoutSections.isNotEmpty {
         mainListView
       } else {
         emptyView
@@ -43,22 +38,22 @@ struct WorkoutsListView: View {
     .groupedBackground()
     .navigationTitle("Workouts")
     .navigationBarTitleDisplayMode(titleDisplayMode)
-    .animation(.default, value: selectedActivityType)
-    .onChange(of: selectedActivityType) { (_, _) in
-      refreshFilteredWorkoutSections()
+    .animation(.default, value: viewModel.selectedActivityType)
+    .onChange(of: viewModel.selectedActivityType) { (_, _) in
+      viewModel.refreshFilteredWorkoutSections()
     }
     .task {
-      await loadWorkouts()
+      await viewModel.loadWorkouts()
     }
     .healthDataAccessRequest(
       store: HealthPermissionChecker.shared.healthStore,
       readTypes: HealthPermissionChecker.shared.activityTypes,
-      trigger: triggerHealthPermissionSheet
+      trigger: viewModel.triggerHealthPermissionSheet
     ) { result in
       switch result {
       case .success:
         Task {
-          await loadWorkouts()
+          await viewModel.loadWorkouts()
         }
       case .failure:
         // No-op?
@@ -66,8 +61,8 @@ struct WorkoutsListView: View {
       }
     }
     .refreshable {
-      await checkHealthAuth()
-      await loadWorkouts()
+      await viewModel.checkHealthAuth()
+      await viewModel.loadWorkouts()
     }
   }
 }
@@ -96,13 +91,13 @@ private extension WorkoutsListView {
   var mainListView: some View {
     VStack(alignment: .leading, spacing: 0) {
       WorkoutActivityTypeFilterView(
-        activityTypes: activityTypes,
-        selectedActivityType: $selectedActivityType
+        activityTypes: viewModel.activityTypes,
+        selectedActivityType: $viewModel.selectedActivityType
       )
       .tint(.green)
 
       LazyVStack(alignment: .leading) {
-        ForEach(filteredWorkoutSections) { section in
+        ForEach(viewModel.filteredWorkoutSections) { section in
           WorkoutSectionHeaderView(section: section)
 
           ForEach(section.workouts, id: \.hashValue) { workout in
@@ -116,55 +111,6 @@ private extension WorkoutsListView {
         }
       }
       .padding()
-    }
-  }
-}
-
-private extension WorkoutsListView {
-
-  func refreshFilteredWorkoutSections() {
-    guard let selectedActivityType else {
-      filteredWorkoutSections = workoutSections
-      return
-    }
-
-    var sections = [WorkoutDateSection]()
-
-    for section in workoutSections {
-      guard section.workouts.contains(where: { $0.workoutActivityType == selectedActivityType }) else {
-        continue
-      }
-
-      let filteredWorkouts = section.workouts.filter({ $0.workoutActivityType == selectedActivityType })
-      let filteredSection = WorkoutDateSection(date: section.date, workouts: filteredWorkouts)
-      sections.append(filteredSection)
-    }
-
-    filteredWorkoutSections = sections
-  }
-
-  func loadWorkouts() async {
-    let response = await HealthWorkoutFetcher.shared.fetchSectionedWorkouts(dateRange: .trailingMonthsFromNow(1000))
-
-    self.activityTypes = response.activityTypes
-    self.workoutSections = response.sections
-
-    refreshFilteredWorkoutSections()
-
-    isLoading = false
-  }
-
-  func checkHealthAuth() async {
-    do {
-      let authStatus = try await HealthPermissionChecker.shared.checkAccess(
-        readTypes: HealthPermissionChecker.shared.activityTypes
-      )
-
-      if authStatus == .shouldRequest {
-        triggerHealthPermissionSheet.toggle()
-      }
-    } catch {
-      print(error)
     }
   }
 }
