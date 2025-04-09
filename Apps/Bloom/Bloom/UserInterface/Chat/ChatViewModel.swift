@@ -5,7 +5,7 @@
 //  Created by Mark DiFranco on 2025-02-16.
 //
 
-import Foundation
+import SwiftUI
 import BloomModel
 
 @Observable @MainActor
@@ -31,17 +31,29 @@ final class ChatViewModel {
 
 extension ChatViewModel {
 
-  func sendMessage(_ message: String) async {
+  func sendMessage(_ message: String, image: UIImage?) async {
     do {
-      let userMessage = ChatMessage(message: message, isCurrentUser: true)
+      let userMessage = ChatMessage(
+        message: message,
+        image: image,
+        isCurrentUser: true
+      )
       chatMessages.append(userMessage)
 
       let demographics = await ChatVitalConverter.shared.generateDemographics()
       let data = try encoder.encode(demographics)
       let stringData = String(data: data, encoding: .utf8) ?? ""
 
+      let imageFile: ImageFile?
+      if let data = image?.resized(toWidth: 300)?.pngData() {
+        imageFile = ImageFile(data: data, fileExtension: "png")
+      } else {
+        imageFile = nil
+      }
+
       let socketMessage = SocketMessage.MessageRequest(
         text: message,
+        image: imageFile,
         userInfo: stringData
       )
 
@@ -100,6 +112,7 @@ private extension ChatViewModel {
       for message in messagesResponse.texts {
         let chatMessage = ChatMessage(
           message: message,
+          image: nil,
           isCurrentUser: false
         )
         chatMessages.append(chatMessage)

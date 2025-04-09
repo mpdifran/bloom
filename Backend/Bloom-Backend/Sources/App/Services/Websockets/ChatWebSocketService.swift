@@ -11,20 +11,23 @@ import OpenAIKit
 import BloomModel
 
 struct ChatWebSocketService: Sendable {
-  let user: User
-  let socket: WebSocket
-  let assistantService: OpenAIAssistantService
-  let logger: Logger
+  private let user: User
+  private let socket: WebSocket
+  private let assistantService: OpenAIAssistantService
+  private let imageStorage: ImageStorage
+  private let logger: Logger
 
   init(
     user: User,
     socket: WebSocket,
     assistantService: OpenAIAssistantService,
+    imageStorage: ImageStorage,
     logger: Logger
   ) {
     self.user = user
     self.socket = socket
     self.assistantService = assistantService
+    self.imageStorage = imageStorage
     self.logger = logger
   }
 
@@ -58,12 +61,17 @@ extension ChatWebSocketService {
       assistantSpec: .healthCoach
     )
 
-    try await assistantService.sendChatMessage(
+    var content = [OpenAIKit.Thread.Message.Content]()
+    content.append(.text("Here are some details about me:\n\n\(message.userInfo)"))
+    if let image = message.image {
+      // TODO: Leverage the files API to upload the image
+//      content.append(.imageData(image.data, "image/\(image.fileExtension)"))
+    }
+    content.append(.text(message.text))
+
+    try await assistantService.sendChatContent(
       assistantThread: thread,
-      messages: [
-        "Here are some details about me:\n\n\(message.userInfo)",
-        message.text
-      ]
+      content: content
     )
 
     try await performRun(thread: thread)

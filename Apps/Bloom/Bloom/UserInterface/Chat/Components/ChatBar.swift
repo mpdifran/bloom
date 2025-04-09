@@ -13,73 +13,100 @@ private extension Double {
 }
 
 struct ChatBar: View {
-  @Binding var text: String
-  let onSubmit: () -> Void
 
-  @State private var gradientColors: [Color] = [.pink, .indigo, .purple]
+  let onSubmit: (String, UIImage?) -> Void
 
-  @FocusState private var isTextFieldFocused: Bool
+  init(_ onSubmit: @escaping (String, UIImage?) -> Void) {
+    self.onSubmit = onSubmit
+  }
 
-  let timer = Timer.publish(every: .animationSpeed, tolerance: 0.1, on: .main, in: .common).autoconnect()
+  @State private var text: String = ""
+  @State private var image: UIImage?
+  @State private var didSendToggle = false
+  @State private var presentedSheet: AnyView?
+
+  @FocusState private var isFocused: Bool
 
   var body: some View {
-    HStack(alignment: .bottom) {
+    VStack {
+      if image != nil {
+        imageSection
+      }
+      chatTextField
+    }
+    .padding()
+    .background {
+      RoundedRectangle(cornerRadius: 40)
+        .fill(.background.secondary)
+        .ignoresSafeArea(edges: .bottom)
+        .shadow(color: .text.opacity(0.1), radius: 20)
+        .overlay {
+          RoundedRectangle(cornerRadius: 40)
+            .stroke(.fill)
+            .ignoresSafeArea(edges: .bottom)
+        }
+    }
+    .sensoryFeedback(.selection, trigger: isFocused)
+    .animation(.easeInOut, value: text.isEmpty)
+    .animation(.easeInOut, value: image)
+    .sheet($presentedSheet)
+  }
+}
+
+private extension ChatBar {
+
+  var imageSection: some View {
+    ScrollView(.horizontal) {
+      HStack {
+        if let image {
+          EditableChatImageView(image: image) {
+            self.image = nil
+          }
+        }
+      }
+      .padding(.horizontal)
+    }
+  }
+
+  var chatTextField: some View {
+    HStack(alignment: .bottom, spacing: 16) {
+      ImagePicker(image: $image, presentedSheet: $presentedSheet) {
+        Image(systemSymbol: .plusCircleFill)
+          .foregroundStyle(.white, .tint)
+          .font(.title)
+          .frame(square: 24)
+      }
+
       TextField(
         "",
         text: $text,
-        prompt: Text("Chat with Bloom").foregroundStyle(.primary),
+        prompt: Text("Message"),
         axis: .vertical
       )
-      .focused($isTextFieldFocused)
-      .onSubmit(onSubmit)
-      .submitLabel(.send)
-      .padding(.horizontal, 10)
-      .padding(12)
-      .background {
-        RoundedRectangle(cornerRadius: 25)
-          .fill(.thickMaterial)
-          .padding(2)
-          .background {
-            RoundedRectangle(cornerRadius: 27)
-              .fill(
-                AngularGradient(
-                  colors: computedGradientColors,
-                  center: .center,
-                  angle: .degrees(0)
-                )
-              )
-          }
-      }
+      .focused($isFocused)
+      .scrollDismissesKeyboard(.interactively)
+      .frame(minHeight: 24)
 
       Button {
-        isTextFieldFocused = false
-        onSubmit()
+        submit()
       } label: {
         Image(systemSymbol: .arrowUpCircleFill)
-          .font(.largeTitle)
-          .foregroundStyle(.thickMaterial)
-          .background {
-            Circle()
-              .fill(
-                AngularGradient(
-                  colors: computedGradientColors,
-                  center: .center,
-                  angle: .degrees(0)
-                )
-              )
-          }
+          .foregroundStyle(.white, .tint)
+          .font(.title)
+          .frame(square: 24)
       }
-      .buttonStyle(.plain)
+      .disabled(text.isEmpty)
     }
-    .animation(.linear(duration: .animationSpeed), value: gradientColors)
-    .onReceive(timer) { (_) in
-      shiftGradientColors()
+    .submitLabel(.send)
+    .sensoryFeedback(.impact, trigger: didSendToggle)
+    .onSubmit {
+      submit()
     }
+    .cardContainer()
     .onChange(of: text) { oldValue, newValue in
       if let newLineIndex = newValue.lastIndex(of: "\n") {
         text.remove(at: newLineIndex)
-        isTextFieldFocused = false
-        onSubmit()
+        submit()
       }
     }
   }
@@ -87,33 +114,44 @@ struct ChatBar: View {
 
 private extension ChatBar {
 
-  var computedGradientColors: [Color] {
-    let first = gradientColors.first!
-    return gradientColors + [first]
+  func submit() {
+    didSendToggle.toggle()
+    isFocused = false
+    onSubmit(text, image)
+    text = ""
+    image = nil
   }
 
-  func shiftGradientColors() {
-    let last = gradientColors.removeLast()
-    gradientColors.insert(last, at: 0)
-  }
+//  var computedGradientColors: [Color] {
+//    let first = gradientColors.first!
+//    return gradientColors + [first]
+//  }
+//
+//  func shiftGradientColors() {
+//    let last = gradientColors.removeLast()
+//    gradientColors.insert(last, at: 0)
+//  }
 }
 
 #Preview {
-  NavigationStack {
-    ScrollView {
-      VStack {
-        ChatBubbleCell(message: "Hello World, it's me!", isDirect: false, isCurrentUser: false, showTail: true)
-        ChatBubbleCell(message: "Oh, ok, sounds good.", isDirect: false, isCurrentUser: true, showTail: true)
-        ChatBubbleCell(message: "What does that mean?", isDirect: false, isCurrentUser: false, showTail: true)
-        ChatBubbleCell(message: "Huh?", isDirect: false, isCurrentUser: false, showTail: true)
-        ChatBubbleCell(message: "You know what it means.", isDirect: false, isCurrentUser: true, showTail: true)
+  PreviewEnvironment {
+    NavigationStack {
+      ScrollView {
+        VStack {
+          ChatBubbleCell(message: "Hello World, it's me!", isDirect: false, isCurrentUser: false, showTail: true)
+          ChatBubbleCell(message: "Oh, ok, sounds good.", isDirect: false, isCurrentUser: true, showTail: true)
+          ChatBubbleCell(message: "What does that mean?", isDirect: false, isCurrentUser: false, showTail: true)
+          ChatBubbleCell(message: "Huh?", isDirect: false, isCurrentUser: false, showTail: true)
+          ChatBubbleCell(message: "You know what it means.", isDirect: false, isCurrentUser: true, showTail: true)
+        }
       }
-    }
-    .groupedBackground()
-    .navigationTitle("Preview")
-    .safeAreaInset(edge: .bottom) {
-      ChatBar(text: .constant("This is a message"), onSubmit: { })
-        .padding()
+      .groupedBackground()
+      .navigationTitle("Chat")
+      .safeAreaInset(edge: .bottom) {
+        ChatBar { (text, image) in
+
+        }
+      }
     }
   }
 }

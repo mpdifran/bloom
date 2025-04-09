@@ -123,6 +123,19 @@ extension OpenAIAssistantService {
     )
   }
 
+  func sendChatContent(
+    assistantThread: OpenAIAssistantThread,
+    content: [OpenAIKit.Thread.Message.Content]
+  ) async throws {
+    let _ = try await openAI.assistants.createMessage(
+      threadID: assistantThread.threadID,
+      message: Thread.Message(
+        role: .user,
+        content: content
+      )
+    )
+  }
+
   func createRun(
     assistantThread: OpenAIAssistantThread,
     tools: [Assistant.Tool]? = nil,

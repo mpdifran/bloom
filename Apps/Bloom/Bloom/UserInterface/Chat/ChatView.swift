@@ -11,7 +11,6 @@ import AppUI
 
 struct ChatView: View {
 
-  @State private var text: String = ""
   @State private var viewModel = ChatViewModel()
   @State private var presentedSheet: AnyView?
 
@@ -25,6 +24,12 @@ struct ChatView: View {
         ScrollView {
           VStack {
             ForEach(viewModel.chatMessages) { chatMessage in
+              if let image = chatMessage.image {
+                ChatImageCell(
+                  image: image,
+                  isCurrentUser: chatMessage.isCurrentUser
+                )
+              }
               ChatBubbleCell(
                 message: chatMessage.message,
                 isDirect: false,
@@ -44,15 +49,12 @@ struct ChatView: View {
           .padding(.vertical)
         }
         .safeAreaInset(edge: .bottom) {
-          ChatBar(text: $text) {
-            let textToSend = text
-            text = ""
+          ChatBar { (text, image) in
             Task {
-              await viewModel.sendMessage(textToSend)
+              await viewModel.sendMessage(text, image: image)
             }
           }
           .focused($isFocused)
-          .padding()
         }
         .navigationTitle("Chat")
         .toolbar {

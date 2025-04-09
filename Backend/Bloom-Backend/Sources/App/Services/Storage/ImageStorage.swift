@@ -14,6 +14,7 @@ import SotoS3
 enum StoragePath: String {
   case nutritionLabel = "nutrition-label"
   case foodPackaging = "food-packaging"
+  case chatImages = "chat-images"
 }
 
 protocol ImageStorage: Sendable {

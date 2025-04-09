@@ -185,18 +185,20 @@ private extension FoodSearchCard {
 #Preview {
   @Previewable @State var searchQuery = ""
 
-  VStack {
-    Spacer()
-    Text("Hello World")
-    Spacer()
-  }
-  .horizontallyCentered()
-  .groupedBackground()
-  .safeAreaInset(edge: .bottom) {
-    FoodSearchCard(searchQuery: $searchQuery) { searchQuery in
-
-    } onUploadNewFood: { foodItem in
-
+  PreviewEnvironment {
+    VStack {
+      Spacer()
+      Text("Hello World")
+      Spacer()
+    }
+    .horizontallyCentered()
+    .groupedBackground()
+    .safeAreaInset(edge: .bottom) {
+      FoodSearchCard(searchQuery: $searchQuery) { searchQuery in
+        
+      } onUploadNewFood: { foodItem in
+        
+      }
     }
   }
 }

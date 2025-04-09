@@ -35,6 +35,7 @@ extension Application {
       user: user,
       socket: socket,
       assistantService: openAIAssistantService(db: db),
+      imageStorage: imageStorage,
       logger: logger
     )
   }
