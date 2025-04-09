@@ -17,6 +17,15 @@ final class WorkoutsListViewModel: ObservableObject {
   @Published private(set) var activityTypes = [HKWorkoutActivityType]()
   @Published private(set) var triggerHealthPermissionSheet = false
 
+  private var backgroundDeliveryHandle: HKBackgroundDeliveryHandle?
+  private var observationHandler: HKObserverQueryHandle?
+
+  init() {
+    Task {
+      await observeChanges()
+    }
+  }
+
   func refreshFilteredWorkoutSections() {
     guard let selectedActivityType else {
       filteredWorkoutSections = workoutSections
@@ -39,6 +48,8 @@ final class WorkoutsListViewModel: ObservableObject {
   }
 
   func loadWorkouts() async {
+    guard await checkHealthAuth() else { return }
+
     let response = await HealthWorkoutFetcher.shared.fetchSectionedWorkouts(dateRange: .trailingMonthsFromNow(1000))
 
     self.activityTypes = response.activityTypes
@@ -49,17 +60,36 @@ final class WorkoutsListViewModel: ObservableObject {
     isLoading = false
   }
 
-  func checkHealthAuth() async {
+  private func checkHealthAuth() async -> Bool {
     do {
       let authStatus = try await HealthPermissionChecker.shared.checkAccess(
         readTypes: HealthPermissionChecker.shared.activityTypes
       )
 
-      if authStatus == .shouldRequest {
+      let needsAuth = authStatus == .shouldRequest
+      if needsAuth {
         triggerHealthPermissionSheet.toggle()
       }
+
+      return !needsAuth
     } catch {
       print(error)
+      return false
+    }
+  }
+
+  func observeChanges() async {
+    let sampleType = HKCategoryType.workoutType()
+    backgroundDeliveryHandle = await HealthStoreFetcher.shared.enableBackgroundDelivery(
+      objectType: sampleType,
+        frequency: .immediate
+    )
+
+    observationHandler = HealthManager.shared.healthStore.observeChanges(
+      sampleType: sampleType,
+        startDate: Calendar.current.date(byAdding: .day, value: -1, to: .now) ?? .now
+    ) { [weak self] in
+        await self?.loadWorkouts()
     }
   }
 }

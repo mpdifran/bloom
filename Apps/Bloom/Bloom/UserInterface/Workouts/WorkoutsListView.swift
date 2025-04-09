@@ -26,7 +26,7 @@ struct WorkoutsListView: View {
   }
 
   var body: some View {
-    ScrollView {
+    Group {
       if viewModel.isLoading {
         loadingView
       } else if viewModel.workoutSections.isNotEmpty {
@@ -60,10 +60,6 @@ struct WorkoutsListView: View {
         break
       }
     }
-    .refreshable {
-      await viewModel.checkHealthAuth()
-      await viewModel.loadWorkouts()
-    }
   }
 }
 
@@ -85,32 +81,33 @@ private extension WorkoutsListView {
       systemImage: "figure.run",
       description: Text("There are no workouts to show.")
     )
-    .padding(.vertical, 50)
   }
 
   var mainListView: some View {
-    VStack(alignment: .leading, spacing: 0) {
-      WorkoutActivityTypeFilterView(
-        activityTypes: viewModel.activityTypes,
-        selectedActivityType: $viewModel.selectedActivityType
-      )
-      .tint(.green)
+    ScrollView {
+      VStack(alignment: .leading, spacing: 0) {
+        WorkoutActivityTypeFilterView(
+          activityTypes: viewModel.activityTypes,
+          selectedActivityType: $viewModel.selectedActivityType
+        )
+        .tint(.green)
 
-      LazyVStack(alignment: .leading) {
-        ForEach(viewModel.filteredWorkoutSections) { section in
-          WorkoutSectionHeaderView(section: section)
+        LazyVStack(alignment: .leading) {
+          ForEach(viewModel.filteredWorkoutSections) { section in
+            WorkoutSectionHeaderView(section: section)
 
-          ForEach(section.workouts, id: \.hashValue) { workout in
-            NavigationLink {
-              WorkoutDetailsView(workout: workout)
-            } label: {
-              WorkoutCell(workout: workout)
+            ForEach(section.workouts, id: \.hashValue) { workout in
+              NavigationLink {
+                WorkoutDetailsView(workout: workout)
+              } label: {
+                WorkoutCell(workout: workout)
+              }
+              .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
           }
         }
+        .padding()
       }
-      .padding()
     }
   }
 }
