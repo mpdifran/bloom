@@ -8,6 +8,12 @@
 import SwiftUI
 import HealthKit
 
+// TODO: ZACH
+// - check health permission before fetching or observing anything on init
+// - add another state (in addition to empty) to request permissions with a button
+// - when permission is given - actually load everything
+// - shouldn't need refreshable if observers work
+
 @MainActor
 final class WorkoutsListViewModel: ObservableObject {
   @Published var selectedActivityType: HKWorkoutActivityType?
