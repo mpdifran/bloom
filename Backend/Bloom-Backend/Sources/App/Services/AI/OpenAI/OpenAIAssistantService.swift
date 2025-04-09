@@ -212,7 +212,11 @@ extension OpenAIAssistantService {
 extension OpenAIAssistantService {
 
   func uploadFile(data: Data) async throws -> OpenAIKit.File {
-    try await openAI.files.upload(file: data, purpose: .assistants)
+    try await openAI.files.upload(
+      file: data,
+      fileName: "\(UUID().uuidString).png",
+      purpose: .assistants
+    )
   }
 }
 

@@ -8,16 +8,16 @@
 public extension SocketMessage {
   struct MessageRequest: Codable, Equatable, Sendable {
     public let text: String
-    public let image: ImageFile?
+    public let imageFileIDs: [String]
     public let userInfo: String
 
     public init(
       text: String,
-      image: ImageFile?,
+      imageFileIDs: [String],
       userInfo: String
     ) {
       self.text = text
-      self.image = image
+      self.imageFileIDs = imageFileIDs
       self.userInfo = userInfo
     }
   }

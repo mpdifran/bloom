@@ -44,16 +44,16 @@ extension ChatViewModel {
       let data = try encoder.encode(demographics)
       let stringData = String(data: data, encoding: .utf8) ?? ""
 
-      let imageFile: ImageFile?
+      let fileIDs: [String]
       if let data = image?.resized(toWidth: 300)?.pngData() {
-        imageFile = ImageFile(data: data, fileExtension: "png")
+        fileIDs = try await NetworkRequester.shared.uploadChatImages(images: [data]).fileIDs
       } else {
-        imageFile = nil
+        fileIDs = []
       }
 
       let socketMessage = SocketMessage.MessageRequest(
         text: message,
-        image: imageFile,
+        imageFileIDs: fileIDs,
         userInfo: stringData
       )
 

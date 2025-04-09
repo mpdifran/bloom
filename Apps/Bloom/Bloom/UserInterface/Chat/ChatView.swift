@@ -85,8 +85,8 @@ struct ChatView: View {
       .sheet($presentedSheet)
       .alert(error: $viewModel.error)
       .animation(.bouncy, value: viewModel.chatMessages)
-      .presentationCompactAdaptation(.fullScreenCover)
     }
+    .presentationCompactAdaptation(.fullScreenCover)
   }
 }
 

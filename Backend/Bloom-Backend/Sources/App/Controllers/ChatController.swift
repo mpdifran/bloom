@@ -19,6 +19,7 @@ extension ChatController: RouteCollection {
       $0.auth(using: UserToken.self) {
         $0.group("chat") {
           $0.webSocket("web-socket", onUpgrade: createWebSocket)
+          $0.post("upload-image", use: uploadImage)
           $0.get("delete-thread", use: deleteThread)
         }
       }
@@ -42,6 +43,28 @@ extension ChatController {
       socket: webSocket,
       forUserID: userID
     )
+  }
+
+  @Sendable
+  func uploadImage(_ request: Request) async throws -> ChatUploadFileResponse {
+    let body = try request.content.decode(ChatUploadFileRequest.self)
+
+    let fileIDs = try await withThrowingTaskGroup(of: String.self) { group in
+      for image in body.images {
+        group.addTask {
+          let file = try await request.openAIAssistantService.uploadFile(data: image)
+          return file.id
+        }
+      }
+
+      var fileIDs = [String]()
+      for try await fileID in group {
+        fileIDs.append(fileID)
+      }
+      return fileIDs
+    }
+
+    return ChatUploadFileResponse(fileIDs: fileIDs)
   }
 
   @Sendable

@@ -22,7 +22,7 @@ struct EditableChatImageView: View {
           onRemove()
         } label: {
           Image(systemSymbol: .xmarkCircleFill)
-            .foregroundStyle(.white, .background.tertiary)
+            .foregroundStyle(.tint, .background.tertiary)
             .frame(square: 30)
         }
         .offset(x: 10, y: -10)

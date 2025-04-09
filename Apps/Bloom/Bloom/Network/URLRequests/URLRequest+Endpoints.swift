@@ -83,6 +83,9 @@ extension URLRequest {
     static func webSocket() async -> URLRequest {
       await URLRequest.websocket("v1/chat/web-socket")
     }
+    static func uploadImage(body: ChatUploadFileRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/chat/upload-image", body: body)
+    }
     static func deleteChatThread() async -> URLRequest {
       await URLRequest.get("v1/chat/delete-thread")
     }

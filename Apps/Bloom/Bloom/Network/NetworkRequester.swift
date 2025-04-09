@@ -172,6 +172,15 @@ extension NetworkRequester {
     return WebSocketHandle(task: task)
   }
 
+  func uploadChatImages(images: [Data]) async throws -> ChatUploadFileResponse {
+    let body = ChatUploadFileRequest(images: images)
+    let request = try await URLRequest.Chat.uploadImage(body: body)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: request,
+      responseType: ChatUploadFileResponse.self
+    )
+  }
+
   func deleteChatThread() async throws {
     let request = await URLRequest.Chat.deleteChatThread()
     try await URLSession.shared.authenticatedBloomRequest(request: request)
