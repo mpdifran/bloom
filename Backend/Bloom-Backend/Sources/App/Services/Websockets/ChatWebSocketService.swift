@@ -64,8 +64,8 @@ extension ChatWebSocketService {
     var content = [OpenAIKit.Thread.Message.Content]()
     content.append(.text("Here are some details about me:\n\n\(message.userInfo)"))
     if let image = message.image {
-      // TODO: Leverage the files API to upload the image
-//      content.append(.imageData(image.data, "image/\(image.fileExtension)"))
+      let file = try await assistantService.uploadFile(data: image.data)
+      content.append(.imageFile(file.id, .auto))
     }
     content.append(.text(message.text))
 

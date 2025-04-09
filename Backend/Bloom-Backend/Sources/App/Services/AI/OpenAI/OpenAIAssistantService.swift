@@ -209,6 +209,13 @@ extension OpenAIAssistantService {
   }
 }
 
+extension OpenAIAssistantService {
+
+  func uploadFile(data: Data) async throws -> OpenAIKit.File {
+    try await openAI.files.upload(file: data, purpose: .assistants)
+  }
+}
+
 private extension OpenAIAssistantService {
 
   func createHealthAssistantThread(
