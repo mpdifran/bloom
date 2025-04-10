@@ -38,45 +38,47 @@ struct FoodLogDatePicker: View {
   private static let geometry = NamedCoordinateSpace.named("FoodLogDatePicker.geometry")
 
   var body: some View {
-    VStack(alignment: .leading) {
-      headerView
+    TimelineView(.periodic(from: Calendar.current.startOfTomorrow(for: .now), by: 60)) { _ in
+      VStack(alignment: .leading) {
+        headerView
 
-      ScrollViewReader { scrollViewProxy in
-        ScrollView(.horizontal, showsIndicators: false) {
-          LazyHStack(spacing: 10) {
-            ForEach(dates, id: \.self) { cellDate in
-              Button {
-                withAnimation {
-                  scrollID = "\(cellDate.timeIntervalSince1970)"
+        ScrollViewReader { scrollViewProxy in
+          ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 10) {
+              ForEach(dates, id: \.self) { cellDate in
+                Button {
+                  withAnimation {
+                    scrollID = "\(cellDate.timeIntervalSince1970)"
+                  }
+                } label: {
+                  FoodLogDateCell(
+                    date: cellDate,
+                    state: stateForDate(cellDate),
+                    isSelected: isSameDay(cellDate, internalDate)
+                  )
                 }
-              } label: {
-                FoodLogDateCell(
-                  date: cellDate,
-                  state: stateForDate(cellDate),
-                  isSelected: isSameDay(cellDate, internalDate)
-                )
-              }
-              .buttonStyle(.plain)
-              .id("\(cellDate.timeIntervalSince1970)")
-              .backgroundPreference(key: CardFrames.self) { proxy in
-                CardFrames(frames: [cellDate: proxy.frame(in: Self.geometry)])
+                .buttonStyle(.plain)
+                .id("\(cellDate.timeIntervalSince1970)")
+                .backgroundPreference(key: CardFrames.self) { proxy in
+                  CardFrames(frames: [cellDate: proxy.frame(in: Self.geometry)])
+                }
               }
             }
+            .padding(.horizontal, viewWidth / 2)
+            .coordinateSpace(Self.geometry)
+            .scrollTargetLayout()
+            .onScrollEnded(in: Self.geometry.coordinateSpace) { offset in
+              self.date = internalDate
+            }
           }
-          .padding(.horizontal, viewWidth / 2)
-          .coordinateSpace(Self.geometry)
-          .scrollTargetLayout()
-          .onScrollEnded(in: Self.geometry.coordinateSpace) { offset in
-            self.date = internalDate
-          }
-        }
-        .scrollTargetBehavior(
-          CenterScrollTargetBehaviour(
-            cardFrames: cardFrames,
-            enabled: shouldControlScrollOffset
+          .scrollTargetBehavior(
+            CenterScrollTargetBehaviour(
+              cardFrames: cardFrames,
+              enabled: shouldControlScrollOffset
+            )
           )
-        )
-        .scrollPosition(id: $scrollID, anchor: .center)
+          .scrollPosition(id: $scrollID, anchor: .center)
+        }
       }
     }
     .readViewSize { proxy in
