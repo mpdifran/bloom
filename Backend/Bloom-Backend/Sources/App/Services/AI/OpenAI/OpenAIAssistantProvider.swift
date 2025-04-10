@@ -53,7 +53,9 @@ private extension OpenAIAssistantProvider {
       model: assistantSpec.model,
       name: assistantSpec.name,
       instructions: assistantSpec.instructions,
-      temperature: assistantSpec.temperature
+      tools: assistantSpec.tools,
+      temperature: assistantSpec.temperature,
+      topP: assistantSpec.topP
     )
 
     try await persistAssistant(assistant: assistant, assistantSpec: assistantSpec)
@@ -68,12 +70,12 @@ private extension OpenAIAssistantProvider {
     let assistant = try await openAI.assistants.retrieveAssistant(assistantID: assistantID)
 
     guard
+      assistant.model == assistantSpec.model.id,
       assistant.name == assistantSpec.name,
       assistant.instructions == assistantSpec.instructions,
-      assistant.model == assistantSpec.model.id,
+      assistant.tools == assistantSpec.tools,
       (assistant.temperature == assistantSpec.temperature || assistantSpec.temperature == nil),
-      (assistant.topP == assistantSpec.topP || assistantSpec.topP == nil),
-      assistant.tools == assistantSpec.tools
+      (assistant.topP == assistantSpec.topP || assistantSpec.topP == nil)
     else {
       logger.info("Updating Assistant \(assistantSpec.id)")
       let updatedAssistant = try await openAI.assistants.modifyAssistant(

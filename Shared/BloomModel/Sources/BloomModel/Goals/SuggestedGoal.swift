@@ -28,6 +28,8 @@ public struct SuggestedGoal: Codable, Equatable, Sendable {
 
 public extension SuggestedGoal {
   enum Metric: String, Codable, Equatable, Sendable, CaseIterable {
+    case calories
+    case proteinIntake
     case waterIntake
     case fiberIntake
     case meditationMinutes
@@ -63,6 +65,10 @@ public extension SuggestedGoal.Metric {
 
   var validUnits: [SuggestedGoal.Unit] {
     switch self {
+    case .calories:
+      return [.cal]
+    case .proteinIntake:
+      return [.g]
     case .waterIntake:
       return [.mL, .oz]
     case .fiberIntake:
@@ -93,5 +99,6 @@ public extension SuggestedGoal {
     case oz
     case km
     case mi
+    case cal
   }
 }

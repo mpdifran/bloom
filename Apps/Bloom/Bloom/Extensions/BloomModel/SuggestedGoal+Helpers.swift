@@ -12,6 +12,8 @@ extension SuggestedGoal.Metric {
 
   var targetMetric: TargetMetric {
     switch self {
+    case .calories: TargetMetric.calories
+    case .proteinIntake: TargetMetric.proteinIntake
     case .stepCount: TargetMetric.stepCount
     case .waterIntake: TargetMetric.waterIntake
     case .fiberIntake: TargetMetric.fiberIntake
@@ -38,8 +40,12 @@ extension SuggestedGoal.Metric {
 extension TargetMetric {
   var metric: SuggestedGoal.Metric? {
     switch self {
-    case .calories, .proteinIntake, .none:
+    case .none:
       return nil
+    case .calories:
+      return .calories
+    case .proteinIntake:
+      return .proteinIntake
     case .waterIntake:
       return .waterIntake
     case .fiberIntake:

@@ -146,36 +146,23 @@ private extension ChatHealthQueryPerformer {
   }
 
   func fetchGoals(query: SocketMessage.Query) async -> String {
-//    let dateRange = query.dateRange
-
     do {
-      let activeGoals = try await modelActor.fetchActiveHabits()
-
-      let targetMetrics = activeGoals.compactMap { goal -> TargetMetric? in
-        guard goal.targetMetric.metric != nil else { return nil }
-
-        return goal.targetMetric
-      }
+      let activeGoals = try await modelActor.fetchActiveHabits().filter { $0.targetMetric.metric != nil }
 
       var goalSummaries = [GoalSummary]()
-      for targetMetric in targetMetrics {
-        if let summary = try await ChatGoalConverter.shared.createGoalSummary(for: targetMetric) {
-          goalSummaries.append(summary)
-        }
+      for goal in activeGoals {
+        guard let metric = goal.targetMetric.metric else { continue }
+
+        let summary = await GoalSummary(
+          metric: metric,
+          goal: goal.displayQuantity
+        )
+        goalSummaries.append(summary)
       }
 
-      let unitPreferences = CurrentGoalsData.UnitPreferences(
-        distanceUnit: await HealthUnitPreferences.shared.distanceUnit.unitString,
-        liquidVolumeUnit: await HealthUnitPreferences.shared.liquidVolumeUnit.unitString,
-        weightUnit: await HealthUnitPreferences.shared.weightUnit.unitString
-      )
+      let currentGoalsData = CurrentGoalsData(currentGoals: goalSummaries)
 
-      let currentGoals = CurrentGoalsData(
-        unitPreferences: unitPreferences,
-        currentGoals: goalSummaries
-      )
-
-      return convertToString(value: currentGoals)
+      return convertToString(value: currentGoalsData)
     } catch {
       return "There was an error querying this data."
     }

@@ -34,7 +34,7 @@ final class HabitDailyUpdateCellViewModel: ObservableObject {
 extension HabitDailyUpdateCellViewModel {
 
   var formatter: NumberFormatter {
-    var formatter = habit.targetMetric.preferredFormatter
+    let formatter = habit.targetMetric.preferredFormatter
     formatter.roundingMode = .down
     return formatter
   }

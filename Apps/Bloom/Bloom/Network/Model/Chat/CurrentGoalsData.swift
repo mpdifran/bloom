@@ -9,33 +9,10 @@ import Foundation
 import BloomModel
 
 struct CurrentGoalsData: SendableNetworkModel {
-  let unitPreferences: UnitPreferences
   let currentGoals: [GoalSummary]
-}
-
-extension CurrentGoalsData {
-  struct UnitPreferences: SendableNetworkModel {
-    let distanceUnit: String
-    let liquidVolumeUnit: String
-    let weightUnit: String
-  }
 }
 
 struct GoalSummary: SendableNetworkModel {
   let metric: SuggestedGoal.Metric
-  let history: [GoalHistory]
-}
-
-extension GoalSummary {
-  struct GoalHistory: SendableNetworkModel {
-    let goal: String
-    let lastSevenDaysGoalMet: [String]
-  }
-}
-
-struct MetricSummary: SendableNetworkModel {
-  let metric: SuggestedGoal.Metric
-  let sevenDayAverage: String
-  let thirtyDayAverage: String
-  let sixtyDayAverage: String
+  let goal: String
 }
