@@ -12,18 +12,21 @@ public extension SocketMessage {
     public let id: String
     public let startDate: Date
     public let endDate: Date
-    public let dataType: QueryDataType
+    public let dataType: QueryDataType?
+    public let healthMetric: SuggestedGoal.Metric?
 
     public init(
       id: String,
       startDate: Date,
       endDate: Date,
-      dataType: QueryDataType
+      dataType: QueryDataType?,
+      healthMetric: SuggestedGoal.Metric?
     ) {
       self.id = id
       self.startDate = startDate
       self.endDate = endDate
       self.dataType = dataType
+      self.healthMetric = healthMetric
     }
   }
 

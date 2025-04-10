@@ -30,7 +30,8 @@ extension AssistantSpec {
     Provide direct, high-level insights and avoid unnecessary elaboration. Offer deeper explanations only when explicitly asked.
     """,
     tools: [
-      .function(.queryUserHealthData)
+      .function(.queryUserHealthData),
+      .function(.queryUserHealthMetrics)
     ]
   )
 }
@@ -38,14 +39,14 @@ extension AssistantSpec {
 extension Assistant.Tool.Function {
   static let queryUserHealthData = Assistant.Tool.Function(
     name: .Function.queryUserHealthData,
-    description: "A function to query health data about the user. You can use this function to help answer the user's questions.",
+    description: "A function to query health data about the user. You can use this function to help answer the user's questions. Some data may be missing if the user hasn't recorded it.",
     parameters: Schema.Object(
       properties: [
         "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z)"),
         "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z)"),
         "dataType": Schema.Parameter(
           enum: SocketMessage.QueryDataType.self,
-          description: "The type of data to query."
+          description: "The type of health data to query"
         )
       ],
       required: [
@@ -55,8 +56,24 @@ extension Assistant.Tool.Function {
       ]
     )
   )
+
+  static let queryUserHealthMetrics = Assistant.Tool.Function(
+    name: .Function.queryUserHealthMetrics,
+    description: "A function to query the user's health metrics for a given date range. Some data may be missing if the user hasn't recorded it.",
+    parameters: Schema.Object(
+      properties: [
+        "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z)"),
+        "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z)"),
+        "healthMetric": Schema.Parameter(
+          enum: SuggestedGoal.Metric.self,
+          description: "A health metric to query historical data for. Either specify this or dataType, but not both."
+        )
+      ]
+    )
+  )
 }
 
 extension String.Function {
   static let queryUserHealthData = "queryUserHealthData"
+  static let queryUserHealthMetrics = "queryUserHealthMetrics"
 }

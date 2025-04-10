@@ -25,34 +25,63 @@ final class ChatHealthQueryPerformer: Sendable {
 extension ChatHealthQueryPerformer {
 
   func perform(query: SocketMessage.Query) async -> String {
-    print("Querying Health Data [\(query.dataType.rawValue)] \(query.startDate) to \(query.endDate)")
+    var output = ""
+    if let dataType = query.dataType {
+      print("Querying Health Data [\(dataType.rawValue)] \(query.startDate) to \(query.endDate)")
 
-    return switch query.dataType {
-    case .foodLogs:
-      await fetchFoodLogs(query: query)
-    case .nutrition:
-      await fetchNutrition(query: query)
-    case .goals:
-      await fetchGoals(query: query)
-    case .activityLevel:
-      await fetchActivityLevel(query: query)
-    case .bodyWeight:
-      await fetchBodyWeight(query: query)
-    case .bowelMovements:
-      await fetchBowelMovements(query: query)
-    case .heart:
-      await fetchHeart(query: query)
-    case .menstruation:
-      await fetchMenstruation(query: query)
-    case .sleep:
-      await fetchSleep(query: query)
-    case .stress:
-      await fetchStress(query: query)
-    case .workouts:
-      await fetchWorkouts(query: query)
-    case .targetHeartRateZoneMinutes:
-      await fetchTargetHeartRateZoneMinutes(query: query)
+      switch dataType {
+      case .foodLogs:
+        output += await fetchFoodLogs(query: query)
+      case .nutrition:
+        output += await fetchNutrition(query: query)
+      case .goals:
+        output += await fetchGoals(query: query)
+      case .activityLevel:
+        output += await fetchActivityLevel(query: query)
+      case .bodyWeight:
+        output += await fetchBodyWeight(query: query)
+      case .bowelMovements:
+        output += await fetchBowelMovements(query: query)
+      case .heart:
+        output += await fetchHeart(query: query)
+      case .menstruation:
+        output += await fetchMenstruation(query: query)
+      case .sleep:
+        output += await fetchSleep(query: query)
+      case .stress:
+        output += await fetchStress(query: query)
+      case .workouts:
+        output += await fetchWorkouts(query: query)
+      case .targetHeartRateZoneMinutes:
+        output += await fetchTargetHeartRateZoneMinutes(query: query)
+      }
     }
+    if let healthMetric = query.healthMetric {
+      print("Querying Health Metric [\(healthMetric)] \(query.startDate) to \(query.endDate)")
+
+      let targetMetric = healthMetric.targetMetric
+      let unit = targetMetric.defaultUnit
+      let dailyQuantities = await targetMetric.fetchCollatedDailyQuantity(
+        unit: unit,
+        dateRange: query.dateRange
+      )
+
+      var samples = [ChatHealthMetricData.Sample]()
+      for dailyQuantity in dailyQuantities {
+        await samples.append(
+          ChatHealthMetricData.Sample(
+            date: DateFormatter.justDateShort.string(from: dailyQuantity.date),
+            value: dailyQuantity.quantity.displayString(for: unit)
+          )
+        )
+      }
+
+      let result = ChatHealthMetricData(samples: samples)
+
+      output += "\n\n"
+      output += convertToString(value: result)
+    }
+    return output
   }
 }
 

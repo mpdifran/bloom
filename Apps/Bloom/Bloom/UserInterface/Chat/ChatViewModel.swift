@@ -125,10 +125,6 @@ private extension ChatViewModel {
         queryData: queryData
       )
 
-      if let testData = try? encoder.encode(dataRequest) {
-        print("Query Data: \(String(data: testData, encoding: .utf8) ?? "")")
-      }
-
       do {
         try await webSocketHandle?.send(payload: dataRequest)
       } catch {

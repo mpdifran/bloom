@@ -102,9 +102,10 @@ private extension ChatWebSocketService {
     let assistantResponse = try await assistantService.startRunAndPollForResponse(
       assistantThread: thread,
       tools: [
-        Assistant.Tool.function(.queryUserHealthData)
+        Assistant.Tool.function(.queryUserHealthData),
+        Assistant.Tool.function(.queryUserHealthMetrics)
       ],
-//      toolChoice: .function(.Function.queryUserHealthData),
+//      toolChoice: .function(.Function.queryUserHealthMetrics),
       existingRun: existingRun
     )
 
@@ -119,7 +120,18 @@ private extension ChatWebSocketService {
             id: toolCall.id,
             startDate: queryArguments.startDate,
             endDate: queryArguments.endDate,
-            dataType: queryArguments.dataType
+            dataType: queryArguments.dataType,
+            healthMetric: nil
+          )
+          queries.append(query)
+        case .Function.queryUserHealthMetrics:
+          let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthMetricsArguments.self, using: decoder)
+          let query = SocketMessage.Query(
+            id: toolCall.id,
+            startDate: queryArguments.startDate,
+            endDate: queryArguments.endDate,
+            dataType: nil,
+            healthMetric: queryArguments.healthMetric
           )
           queries.append(query)
         default:
