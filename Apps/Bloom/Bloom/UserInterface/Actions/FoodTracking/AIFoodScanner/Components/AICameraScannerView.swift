@@ -33,7 +33,6 @@ struct AICameraScannerView: View {
           .ignoresSafeArea()
       }
     }
-    .aspectRatio(1, contentMode: .fit)
     .clipShape(RoundedRectangle(cornerRadius: 30))
   }
 }

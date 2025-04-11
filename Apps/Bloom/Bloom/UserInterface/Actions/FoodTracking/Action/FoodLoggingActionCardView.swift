@@ -69,7 +69,7 @@ struct FoodLoggingActionCardView: View {
         mainView
       }
       .safeAreaInset(edge: .bottom) {
-        FoodSearchCard(searchQuery: $searchQuery) { searchQuery in
+        FoodSearchCard(searchQuery: $searchQuery, toolbarMode: .logTools) { searchQuery in
           Task {
             await viewModel.performSearch(for: searchQuery)
           }

@@ -58,13 +58,15 @@ struct FoodItemPicker: View {
       .safeAreaInset(edge: .bottom) {
         FoodSearchCard(
           searchQuery: $searchQuery,
-          enableTools: false
+          toolbarMode: .pickerTools
         ) { searchQuery in
           Task {
             await viewModel.performSearch(for: searchQuery)
           }
         } onUploadNewFood: { foodItem in
           // Do nothing since tools are disabled.
+        } onFoodItemPicked: { foodItem in
+          select(foodItem: foodItem)
         }
       }
       .toolbar {
@@ -171,7 +173,7 @@ private extension FoodItemPicker {
           SectionTitleView(section.title)
             .padding(.horizontal)
 
-          ForEachEnumerated(section.foodItems) { index, foodItem in
+          ForEach(section.foodItems) { foodItem in
             if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
               FoodItemPickerCell(foodItem: foodItem) {
                 select(foodItem: foodItem)
@@ -201,7 +203,7 @@ private extension FoodItemPicker {
           SectionTitleView(section.title)
             .padding(.horizontal)
 
-          ForEachEnumerated(section.foodItems) { index, foodItem in
+          ForEach(section.foodItems) { foodItem in
             if searchQuery.isEmpty || foodItem.contains(searchQuery: searchQuery) {
               FoodItemPickerCell(foodItem: foodItem) {
                 select(foodItem: foodItem)
@@ -231,7 +233,7 @@ private extension FoodItemPicker {
           LazyVStack {
             TabFilter(selectedTab: $selectedTab)
 
-            ForEachEnumerated(section.foodItems) { index, food in
+            ForEach(section.foodItems) { food in
               FoodItemPickerCell(foodItem: food) {
                 select(foodItem: food)
               }

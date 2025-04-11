@@ -40,7 +40,7 @@ struct AIFoodScannerView: View {
   @Namespace private var aiFoodScannerNamespace
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
-  private var locationViewModel = LocationManagerViewModel.shared
+  @State private var locationViewModel = LocationManagerViewModel.shared
 
   var body: some View {
     NavigationStack {
@@ -110,6 +110,7 @@ private extension AIFoodScannerView {
           cameraManager: viewModel.cameraManager,
           image: $viewModel.image
         )
+        .aspectRatio(1, contentMode: .fit)
         .fixedSize(horizontal: false, vertical: true)
         .matchedGeometryEffect(id: "aiCameraScannerView", in: aiFoodScannerNamespace)
       }

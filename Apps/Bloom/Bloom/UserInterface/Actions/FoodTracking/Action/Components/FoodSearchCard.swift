@@ -9,23 +9,34 @@ import SFSafeSymbols
 import SwiftUI
 import BloomModel
 
+extension FoodSearchCard {
+  enum ToolbarMode {
+    case logTools
+    case pickerTools
+    case noTools
+  }
+}
+
 struct FoodSearchCard: View {
 
   @Binding var searchQuery: String
-  let enableTools: Bool
+  let toolbarMode: ToolbarMode
   let onSearch: (String) -> Void
   let onUploadNewFood: (FoodItem) -> Void
+  let onFoodItemPicked: ((FoodItem) -> Void)?
 
   init(
     searchQuery: Binding<String>,
-    enableTools: Bool = true,
+    toolbarMode: ToolbarMode,
     onSearch: @escaping (String) -> Void,
-    onUploadNewFood: @escaping (FoodItem) -> Void
+    onUploadNewFood: @escaping (FoodItem) -> Void,
+    onFoodItemPicked: ((FoodItem) -> Void)? = nil
   ) {
     self._searchQuery = searchQuery
-    self.enableTools = enableTools
+    self.toolbarMode = toolbarMode
     self.onSearch = onSearch
     self.onUploadNewFood = onUploadNewFood
+    self.onFoodItemPicked = onFoodItemPicked
   }
 
   @FocusState private var isFocused: Bool
@@ -37,11 +48,21 @@ struct FoodSearchCard: View {
 
   var body: some View {
     VStack {
-      if !isFocused && enableTools {
-        HStack {
-          magicScanButton
-          textFoodButton
-          addFoodButton
+      if !isFocused {
+        switch toolbarMode {
+        case .logTools:
+          HStack {
+            magicScanButton
+            textFoodButton
+            addFoodButton
+          }
+        case .pickerTools:
+          HStack {
+            barcodeScannerPickerButton
+            Spacer()
+          }
+        case .noTools:
+          EmptyView()
         }
       }
       searchTextField
@@ -51,7 +72,6 @@ struct FoodSearchCard: View {
       RoundedRectangle(cornerRadius: 40)
         .fill(.background.secondary)
         .ignoresSafeArea(edges: .bottom)
-        .shadow(color: .text.opacity(0.1), radius: 20)
         .overlay {
           RoundedRectangle(cornerRadius: 40)
             .stroke(.fill)
@@ -82,6 +102,12 @@ private extension FoodSearchCard {
   var addFoodButton: some View {
     FoodSearchActionButton(symbol: .plusViewfinder, title: "Upload") {
       showFoodUploadView()
+    }
+  }
+
+  var barcodeScannerPickerButton: some View {
+    FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Scan") {
+      showBarcodeScannerPicker()
     }
   }
 
@@ -177,12 +203,18 @@ private extension FoodSearchCard {
     }.asAny
   }
 
+  func showBarcodeScannerPicker() {
+    presentedSheet = BarcodeScannerPickerView(selectFoodItem: { foodItem in
+      onFoodItemPicked?(foodItem)
+    }).asAny
+  }
+
   func showTextFoodGenerationView() {
     presentedSheet = AIFoodTextGenerationView().asAny
   }
 }
 
-#Preview {
+#Preview("Log Tools") {
   @Previewable @State var searchQuery = ""
 
   PreviewEnvironment {
@@ -194,10 +226,52 @@ private extension FoodSearchCard {
     .horizontallyCentered()
     .groupedBackground()
     .safeAreaInset(edge: .bottom) {
-      FoodSearchCard(searchQuery: $searchQuery) { searchQuery in
-        
+      FoodSearchCard(searchQuery: $searchQuery, toolbarMode: .logTools) { searchQuery in
+
       } onUploadNewFood: { foodItem in
-        
+
+      }
+    }
+  }
+}
+
+#Preview("Picker Tools") {
+  @Previewable @State var searchQuery = ""
+
+  PreviewEnvironment {
+    VStack {
+      Spacer()
+      Text("Hello World")
+      Spacer()
+    }
+    .horizontallyCentered()
+    .groupedBackground()
+    .safeAreaInset(edge: .bottom) {
+      FoodSearchCard(searchQuery: $searchQuery, toolbarMode: .pickerTools) { searchQuery in
+
+      } onUploadNewFood: { foodItem in
+
+      }
+    }
+  }
+}
+
+#Preview("No Tools") {
+  @Previewable @State var searchQuery = ""
+
+  PreviewEnvironment {
+    VStack {
+      Spacer()
+      Text("Hello World")
+      Spacer()
+    }
+    .horizontallyCentered()
+    .groupedBackground()
+    .safeAreaInset(edge: .bottom) {
+      FoodSearchCard(searchQuery: $searchQuery, toolbarMode: .noTools) { searchQuery in
+
+      } onUploadNewFood: { foodItem in
+
       }
     }
   }

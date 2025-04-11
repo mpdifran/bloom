@@ -66,7 +66,7 @@ extension AIFoodScannerView.ViewModel {
   }
 
   func added(foodItem: FoodItem, for barcode: String) {
-    unknownBarcodes = unknownBarcodes.filter { $0 != barcode }
+    unknownBarcodes.removeAll(where: { $0 == barcode })
 
     let serving = FoodItemServingAmount(serving: 1, foodItem: foodItem)
     servings.append(serving)
