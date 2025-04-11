@@ -31,6 +31,7 @@ struct ChatView: View {
               statusTextView
 
               TypingIndicatorCell(isDirect: false)
+                .id("typing-indicator")
                 .transition(.blurReplace)
             }
           }
@@ -67,6 +68,18 @@ struct ChatView: View {
             withAnimation {
               scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
             }
+          }
+        }
+        .onChange(of: viewModel.assistantTypingStatus) { _, _ in
+          guard viewModel.assistantIsTyping else { return }
+          withAnimation {
+            scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
+          }
+        }
+        .onChange(of: viewModel.assistantIsTyping) { _, assistantIsTyping in
+          guard assistantIsTyping else { return }
+          withAnimation {
+            scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
           }
         }
       }
