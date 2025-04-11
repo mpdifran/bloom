@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "ca2fc2bfa664a31da441b0d873bb72e0f2b2f3b7",
-        "version" : "1.4.1"
+        "revision" : "9688136b6decfa8550e89c930196963a8473ebe0",
+        "version" : "1.4.2"
       }
     },
     {
@@ -195,8 +195,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
       "state" : {
-        "revision" : "4667fb080dea489e3a9a6b5d50e1a8e7deddf878",
-        "version" : "5.20.2"
+        "revision" : "adde1aa9c5fdb8cb9178ae1eed0981adcff07dd3",
+        "version" : "5.21.0"
       }
     },
     {
@@ -312,8 +312,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "a6ce32a18b81b04ce7e897d1d98df6eb2da04786",
-        "version" : "3.12.2"
+        "revision" : "e8d6eba1fef23ae5b359c46b03f7d94be2f41fed",
+        "version" : "3.12.3"
       }
     },
     {
@@ -339,8 +339,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-http-types.git",
       "state" : {
-        "revision" : "ef18d829e8b92d731ad27bb81583edd2094d1ce3",
-        "version" : "1.3.1"
+        "revision" : "a0a57e949a8903563aba4615869310c0ebf14c03",
+        "version" : "1.4.0"
       }
     },
     {
@@ -447,8 +447,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TelemetryDeck/SwiftSDK.git",
       "state" : {
-        "revision" : "5cb2982470dc4830c4e7de5da4a5af1c50c304b4",
-        "version" : "2.9.2"
+        "revision" : "501270cd33082c3fa430b724e849855482ed051c",
+        "version" : "2.9.3"
       }
     },
     {

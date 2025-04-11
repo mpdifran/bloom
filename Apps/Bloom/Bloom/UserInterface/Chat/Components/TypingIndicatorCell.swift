@@ -29,7 +29,7 @@ public struct TypingIndicatorCell: View {
             showTail: true,
             shouldFill: !isDirect,
             foregroundStyle: Color(uiColor: .label),
-            backgroundStyle: .chatGrey
+            backgroundStyle: .background
         ) {
             tripleDotAnimation
         }
@@ -76,11 +76,14 @@ extension Animation {
     }
 }
 
-struct TypingIndicatorCell_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            TypingIndicatorCell(isDirect: false)
-            TypingIndicatorCell(isDirect: true)
+#Preview {
+    PreviewEnvironment {
+        ScrollView {
+            VStack {
+                TypingIndicatorCell(isDirect: false)
+                TypingIndicatorCell(isDirect: true)
+            }
         }
+        .groupedBackground()
     }
 }

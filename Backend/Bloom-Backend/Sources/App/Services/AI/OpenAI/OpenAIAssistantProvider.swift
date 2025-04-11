@@ -55,7 +55,8 @@ private extension OpenAIAssistantProvider {
       instructions: assistantSpec.instructions,
       tools: assistantSpec.tools,
       temperature: assistantSpec.temperature,
-      topP: assistantSpec.topP
+      topP: assistantSpec.topP,
+      responseFormat: assistantSpec.responseFormat
     )
 
     try await persistAssistant(assistant: assistant, assistantSpec: assistantSpec)
@@ -75,7 +76,8 @@ private extension OpenAIAssistantProvider {
       assistant.instructions == assistantSpec.instructions,
       assistant.tools == assistantSpec.tools,
       (assistant.temperature == assistantSpec.temperature || assistantSpec.temperature == nil),
-      (assistant.topP == assistantSpec.topP || assistantSpec.topP == nil)
+      (assistant.topP == assistantSpec.topP || assistantSpec.topP == nil),
+      (assistant.responseFormat == assistantSpec.responseFormat) || assistantSpec.responseFormat == nil
     else {
       logger.info("Updating Assistant \(assistantSpec.id)")
       let updatedAssistant = try await openAI.assistants.modifyAssistant(
@@ -85,7 +87,8 @@ private extension OpenAIAssistantProvider {
         instructions: assistantSpec.instructions,
         tools: assistantSpec.tools,
         temperature: assistantSpec.temperature,
-        topP: assistantSpec.topP
+        topP: assistantSpec.topP,
+        responseFormat: assistantSpec.responseFormat
       )
 
       try await persistAssistant(

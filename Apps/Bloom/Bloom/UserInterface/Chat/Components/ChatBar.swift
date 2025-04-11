@@ -39,7 +39,6 @@ struct ChatBar: View {
       RoundedRectangle(cornerRadius: 40)
         .fill(.background.secondary)
         .ignoresSafeArea(edges: .bottom)
-        .shadow(color: .text.opacity(0.1), radius: 20)
         .overlay {
           RoundedRectangle(cornerRadius: 40)
             .stroke(.fill)
