@@ -7,21 +7,26 @@
 
 import SwiftUI
 
+extension ChatMessage {
+  enum Content: Hashable {
+    case text(String)
+    case image(UIImage)
+    case goals([ProposedGoal])
+  }
+}
+
 struct ChatMessage: Identifiable, Hashable {
   let id: String
-  let message: String
-  let image: UIImage?
+  let content: Content
   let isCurrentUser: Bool
 
   init(
     id: String = UUID().uuidString,
-    message: String,
-    image: UIImage?,
+    content: Content,
     isCurrentUser: Bool
   ) {
     self.id = id
-    self.message = message
-    self.image = image
+    self.content = content
     self.isCurrentUser = isCurrentUser
   }
 }

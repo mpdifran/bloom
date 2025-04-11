@@ -24,32 +24,12 @@ struct ChatView: View {
         ScrollView {
           VStack {
             ForEach(viewModel.chatMessages) { chatMessage in
-              if let image = chatMessage.image {
-                ChatImageCell(
-                  image: image,
-                  isCurrentUser: chatMessage.isCurrentUser
-                )
-              }
-              ChatBubbleCell(
-                message: chatMessage.message,
-                isDirect: false,
-                isCurrentUser: chatMessage.isCurrentUser,
-                showTail: true
-              )
-              .id(chatMessage.id)
-              .transition(chatMessage.isCurrentUser ? .move(edge: .trailing) : .move(edge: .leading))
-              .contextMenu {
-                Button("Resend", systemSymbol: .arrowUturnBackward) {
-                  Task {
-                    await viewModel.sendMessage(chatMessage.message, image: nil)
-                  }
-                }
-              }
+              chatCell(for: chatMessage)
             }
 
             if viewModel.assistantIsTyping {
               TypingIndicatorCell(isDirect: false)
-                .transition(.move(edge: .leading))
+                .transition(.blurReplace)
             }
           }
           .horizontallyCentered()
@@ -94,6 +74,46 @@ struct ChatView: View {
       .animation(.bouncy, value: viewModel.chatMessages)
     }
     .presentationCompactAdaptation(.fullScreenCover)
+  }
+}
+
+private extension ChatView {
+
+  @ViewBuilder
+  func chatCell(for chatMessage: ChatMessage) -> some View {
+    switch chatMessage.content {
+    case .text(let message):
+      ChatBubbleCell(
+        message: message,
+        isDirect: false,
+        isCurrentUser: chatMessage.isCurrentUser,
+        showTail: true
+      )
+      .id(chatMessage.id)
+      .transition(.blurReplace)
+      .contextMenu {
+        if chatMessage.isCurrentUser {
+          Button("Resend", systemSymbol: .arrowUturnBackward) {
+            Task {
+              await viewModel.sendMessage(message, image: nil)
+            }
+          }
+        }
+      }
+    case .image(let image):
+      ChatImageCell(
+        image: image,
+        isCurrentUser: chatMessage.isCurrentUser
+      )
+      .id(chatMessage.id)
+      .transition(.blurReplace)
+    case .goals(let goals):
+      ChatGoalsCell(
+        goals: goals
+      )
+      .id(chatMessage.id)
+      .transition(.blurReplace)
+    }
   }
 }
 

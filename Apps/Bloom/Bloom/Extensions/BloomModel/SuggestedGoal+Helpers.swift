@@ -7,6 +7,7 @@
 
 import DataContainer
 import BloomModel
+import HealthKit
 
 extension SuggestedGoal.Metric {
 
@@ -88,6 +89,36 @@ extension TargetMetric {
       return .targetHeartRateZone5Minutes
     @unknown default:
       fatalError("Unknown Target Metric")
+    }
+  }
+}
+
+extension SuggestedGoal.Unit {
+
+  var hkUnit: HKUnit {
+    switch self {
+    case .g:
+        .gram()
+    case .mg:
+        .gramUnit(with: .milli)
+    case .mcg:
+        .gramUnit(with: .micro)
+    case .steps:
+        .count()
+    case .mL:
+        .literUnit(with: .milli)
+    case .min:
+        .minute()
+    case .hr:
+        .hour()
+    case .oz:
+        .ounce()
+    case .km:
+        .meterUnit(with: .kilo)
+    case .mi:
+        .mile()
+    case .cal:
+        .largeCalorie()
     }
   }
 }

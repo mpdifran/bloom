@@ -143,6 +143,20 @@ extension HabitsViewModel {
     )
   }
 
+  func apply(proposedGoals: [ProposedGoal]) throws {
+    try modelContext.savingTransaction {
+      for proposedGoal in proposedGoals {
+        let existingHabits = try modelContext.fetchActiveHabits(for: proposedGoal.targetMetric)
+        existingHabits.forEach {
+          $0.endDate = .now
+        }
+
+        let habit = createHabit(from: proposedGoal, isSuggested: true)
+        modelContext.insert(habit)
+      }
+    }
+  }
+
   func resetHabitCheckDate() {
     lastHabitRefreshDate = nil
   }

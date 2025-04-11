@@ -28,11 +28,29 @@ extension AssistantSpec {
     When giving responses, make sure to be **concise**, similar to a helpful personal assistant! Respond in 1-2 sentences. You can dive into details when the user asks clarifying questions. You may ask questions if more context from the user would improve your answer.
     
     Provide direct, high-level insights and avoid unnecessary elaboration. Offer deeper explanations only when explicitly asked.
+    
+    When responding you must use the following JSON format:
+    
+    Response: {
+      "message": String, // A text message you want to send to the user.
+      "healthMetricGoals": [HealthMetricGoal], // an optional list of goals for health metrics you want the user to keep track of. The user will be able to add these goals in their Bloom app.
+    }
+
+    HealthMetricGoal: {
+      "metric": HealthMetric, // The metric you want the user to monitor.
+      "value": Float, // The numeric value of the goal
+      "unit": HealthMetricUnit // This is the unit 
+    }
+    
+    HealthMetric: An enum with the following string cases: \(SuggestedGoal.Metric.stringCaseList())
+    
+    HealthMetricUnit: An enum with the following string cases: \(SuggestedGoal.Unit.stringCaseList())
     """,
     tools: [
       .function(.queryUserHealthData),
       .function(.queryUserHealthMetrics)
-    ]
+    ],
+    responseFormat: ResponseFormat(type: .jsonObject)
 //    responseFormat: ResponseFormat(
 //      type: .jsonSchema(.healthCoachResponse)
 //    )

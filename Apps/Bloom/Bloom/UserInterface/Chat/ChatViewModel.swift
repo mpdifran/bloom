@@ -7,6 +7,7 @@
 
 import SwiftUI
 import BloomModel
+import DataContainer
 
 @Observable @MainActor
 final class ChatViewModel {
@@ -24,6 +25,8 @@ final class ChatViewModel {
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
 
+  private let modelActor = HabitModelActor.standard()
+
   deinit {
     print("Deinit ChatViewModel")
   }
@@ -33,9 +36,16 @@ extension ChatViewModel {
 
   func sendMessage(_ message: String, image: UIImage?) async {
     do {
+      if let image {
+        let imageMessage = ChatMessage(
+          content: .image(image),
+          isCurrentUser: true
+        )
+        chatMessages.append(imageMessage)
+      }
+
       let userMessage = ChatMessage(
-        message: message,
-        image: image,
+        content: .text(message),
         isCurrentUser: true
       )
       chatMessages.append(userMessage)
@@ -108,11 +118,33 @@ private extension ChatViewModel {
   }
 
   func parse(data: Data) async {
-    if let messagesResponse = try? decoder.decode(SocketMessage.MessagesResponse.self, from: data) {
-      for message in messagesResponse.texts {
+    if let messagesResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
+      let chatMessage = ChatMessage(
+        content: .text(messagesResponse.message),
+        isCurrentUser: false
+      )
+      chatMessages.append(chatMessage)
+
+      if let healthGoals = messagesResponse.healthMetricGoals {
+        var proposedGoals = [ProposedGoal]()
+        for healthGoal in healthGoals {
+          let habit = try? await modelActor.fetchActiveHabits(for: healthGoal.metric.targetMetric).first
+
+          let proposedGoal = ProposedGoal(
+            habitID: habit?.id,
+            targetMetric: healthGoal.metric.targetMetric,
+            value: habit?.isUserEdited == true ? habit!.value : healthGoal.value,
+            suggestedValue: healthGoal.value,
+            previousValue: habit?.value,
+            unitString: healthGoal.unit.hkUnit.unitString,
+            vitalKind: nil,
+            context: "",
+            hasUserEdited: habit?.isUserEdited == true
+          )
+          proposedGoals.append(proposedGoal)
+        }
         let chatMessage = ChatMessage(
-          message: message,
-          image: nil,
+          content: .goals(proposedGoals),
           isCurrentUser: false
         )
         chatMessages.append(chatMessage)

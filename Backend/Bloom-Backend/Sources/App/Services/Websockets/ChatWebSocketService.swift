@@ -140,13 +140,25 @@ private extension ChatWebSocketService {
       }
       try sendDataQueryResponse(run: run, queries: queries)
     case .messages(_, let messages):
-      let textMessages = messages.flatMap { message in
-        message.content.compactMap({ $0.text })
+      let response = messages
+        .flatMap { message in
+          message.content.compactMap({ $0.text?.data(using: .utf8) })
+        }
+        .compactMap { (data) -> SocketMessage.MessageResponse? in
+          do {
+            return try JSONDecoder.bloomModel.decode(SocketMessage.MessageResponse.self, from: data)
+          } catch {
+            return nil
+          }
+        }
+        .first
+
+      guard let response else {
+        throw Abort(.internalServerError, reason: "Could not decode message from Assistant.")
       }
 
-      let messagesResponse = SocketMessage.MessagesResponse(texts: textMessages)
       try sendIsAssistantTyping(isTyping: false)
-      try socket.sendContent(messagesResponse)
+      try socket.sendContent(response)
     }
   }
 

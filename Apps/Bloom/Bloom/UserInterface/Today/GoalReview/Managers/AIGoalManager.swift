@@ -57,18 +57,18 @@ private extension AIGoalManager {
 
     var proposedGoals = [ProposedGoal]()
     for goal in response.goals {
-      guard let habit = try await modelActor.fetchActiveHabits(for: goal.metric.targetMetric).first else { continue }
+      let habit = try await modelActor.fetchActiveHabits(for: goal.metric.targetMetric).first
 
       let proposedGoal = ProposedGoal(
-        habitID: habit.id,
+        habitID: habit?.id,
         targetMetric: goal.metric.targetMetric,
-        value: habit.isUserEdited ? habit.value : goal.value,
+        value: habit?.isUserEdited == true ? habit!.value : goal.value,
         suggestedValue: goal.value,
-        previousValue: habit.value,
-        unitString: habit.unitString,
+        previousValue: habit?.value,
+        unitString: goal.unit.hkUnit.unitString,
         vitalKind: nil,
         context: goal.notes,
-        hasUserEdited: habit.isUserEdited
+        hasUserEdited: habit?.isUserEdited == true
       )
       proposedGoals.append(proposedGoal)
     }

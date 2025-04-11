@@ -22,11 +22,32 @@ public extension SocketMessage {
     }
   }
 
-  struct MessagesResponse: Codable, Equatable, Sendable {
-    public let texts: [String]
+  struct MessageResponse: Codable, Equatable, Sendable {
+    public let message: String
+    public let healthMetricGoals: [HealthMetricGoal]?
 
-    public init(texts: [String]) {
-      self.texts = texts
+    public init(
+      message: String,
+      healthMetricGoals: [HealthMetricGoal]
+    ) {
+      self.message = message
+      self.healthMetricGoals = healthMetricGoals
+    }
+  }
+
+  struct HealthMetricGoal: Codable, Equatable, Sendable {
+    public let metric: SuggestedGoal.Metric
+    public let value: Double
+    public let unit: SuggestedGoal.Unit
+
+    public init(
+      metric: SuggestedGoal.Metric,
+      value: Double,
+      unit: SuggestedGoal.Unit
+    ) {
+      self.metric = metric
+      self.value = value
+      self.unit = unit
     }
   }
 }
