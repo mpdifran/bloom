@@ -28,6 +28,8 @@ struct ChatView: View {
             }
 
             if viewModel.assistantIsTyping {
+              statusTextView
+
               TypingIndicatorCell(isDirect: false)
                 .transition(.blurReplace)
             }
@@ -72,6 +74,7 @@ struct ChatView: View {
       .sheet($presentedSheet)
       .alert(error: $viewModel.error)
       .animation(.bouncy, value: viewModel.chatMessages)
+      .animation(.bouncy, value: viewModel.assistantTypingStatus)
     }
     .presentationCompactAdaptation(.fullScreenCover)
   }
@@ -113,6 +116,25 @@ private extension ChatView {
       )
       .id(chatMessage.id)
       .transition(.blurReplace)
+    }
+  }
+
+  @ViewBuilder
+  var statusTextView: some View {
+    if let status = viewModel.assistantTypingStatus {
+      HStack {
+        Text(status)
+          .font(.subheadline)
+          .bold()
+          .foregroundStyle(.secondary)
+          .fontDesign(.rounded)
+          .multilineTextAlignment(.leading)
+          .lineLimit(2)
+          .contentTransition(.numericText())
+
+        Spacer(minLength: 60)
+      }
+      .padding(.horizontal)
     }
   }
 }
