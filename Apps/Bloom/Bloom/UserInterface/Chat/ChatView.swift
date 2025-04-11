@@ -38,6 +38,13 @@ struct ChatView: View {
               )
               .id(chatMessage.id)
               .transition(chatMessage.isCurrentUser ? .move(edge: .trailing) : .move(edge: .leading))
+              .contextMenu {
+                Button("Resend", systemSymbol: .arrowUturnBackward) {
+                  Task {
+                    await viewModel.sendMessage(chatMessage.message, image: nil)
+                  }
+                }
+              }
             }
 
             if viewModel.assistantIsTyping {
