@@ -13,10 +13,20 @@ struct ActionsView: View {
 
   @Environment(\.dismiss) private var dismiss
 
+  @AppStorage(.FeatureFlag.aiChat) private var aiChat = false
+
   var body: some View {
     CardView {
-      LargeTitleActionCard("Log") {
+      LargeTitleActionCard("Actions") {
         VStack {
+          if aiChat {
+            ActionInstanceCell(image: .logWeightIcon, title: "New Chat")
+              .tint(.mutedLightBlue)
+              .onTapGesture {
+                presentedCardSheet = ChatView().asAny
+              }
+          }
+
           ActionInstanceCell(image: .logFoodIcon, title: "Food")
             .tint(.mutedGreen)
             .onTapGesture {

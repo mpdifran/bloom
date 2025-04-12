@@ -504,5 +504,7 @@ extension DeveloperSettingsView {
 }
 
 #Preview {
-  DeveloperSettingsView()
+  PreviewEnvironment {
+    DeveloperSettingsView()
+  }
 }
