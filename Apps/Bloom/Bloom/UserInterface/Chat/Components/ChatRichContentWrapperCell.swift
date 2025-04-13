@@ -22,10 +22,11 @@ struct ChatRichContentWrapperCell: View {
     Group {
       if isLoading {
         HStack {
-          CircularSpinnerView()
-            .foregroundStyle(.tint)
+          ProgressView()
+            .progressViewStyle(.circular)
             .padding()
             .cardContainer()
+            .padding(.leading)
 
           Spacer(minLength: 60)
         }
@@ -65,9 +66,9 @@ private extension ChatRichContentWrapperCell {
       }
       if proposedGoals.isNotEmpty {
         self.goals = proposedGoals
-        self.isLoading = false
       }
     }
+    self.isLoading = false
   }
 }
 

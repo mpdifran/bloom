@@ -148,7 +148,7 @@ private extension ChatViewModel {
           )
           modelContext.insert(message)
 
-          if let healthGoals = messagesResponse.healthMetricGoals {
+          if let healthGoals = messagesResponse.healthMetricGoals, healthGoals.isNotEmpty {
             let data = try JSONEncoder.bloomModel.encode(healthGoals)
             let richContentMessage = ChatMessage(
               isCurrentUser: false,

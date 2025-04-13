@@ -27,7 +27,7 @@ struct ChatView: View {
     NavigationStack {
       ScrollViewReader { scrollViewProxy in
         ScrollView {
-          VStack {
+          LazyVStack {
             ForEach(chatMessages) { chatMessage in
               chatCell(for: chatMessage)
             }
@@ -69,11 +69,7 @@ struct ChatView: View {
           }
         }
         .onChange(of: chatMessages) { _, messages in
-          if let lastMessage = messages.last {
-            withAnimation {
-              scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
-            }
-          }
+          scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
         }
         .onChange(of: viewModel.assistantTypingStatus) { _, _ in
           guard viewModel.assistantIsTyping else { return }
@@ -86,6 +82,9 @@ struct ChatView: View {
           withAnimation {
             scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
           }
+        }
+        .onAppear {
+          scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
         }
       }
       .groupedBackground()
@@ -153,6 +152,18 @@ private extension ChatView {
         Spacer(minLength: 60)
       }
       .padding(.horizontal)
+    }
+  }
+
+  func scrollToLastMessage(scrollProxy: ScrollViewProxy, animated: Bool) {
+    if let lastMessage = chatMessages.last {
+      if animated {
+        withAnimation {
+          scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
+        }
+      } else {
+        scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
+      }
     }
   }
 }
