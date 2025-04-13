@@ -8,6 +8,8 @@
 import SFSafeSymbols
 import SwiftUI
 import AppUI
+import SwiftData
+import DataContainer
 
 struct ChatView: View {
 
@@ -18,12 +20,15 @@ struct ChatView: View {
 
   @FocusState private var isFocused: Bool
 
+  @Query(sort: \ChatMessage.date)
+  private var chatMessages: [ChatMessage]
+
   var body: some View {
     NavigationStack {
       ScrollViewReader { scrollViewProxy in
         ScrollView {
           VStack {
-            ForEach(viewModel.chatMessages) { chatMessage in
+            ForEach(chatMessages) { chatMessage in
               chatCell(for: chatMessage)
             }
 
@@ -63,7 +68,7 @@ struct ChatView: View {
             }
           }
         }
-        .onChange(of: viewModel.chatMessages) { _, messages in
+        .onChange(of: chatMessages) { _, messages in
           if let lastMessage = messages.last {
             withAnimation {
               scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
@@ -86,7 +91,7 @@ struct ChatView: View {
       .groupedBackground()
       .sheet($presentedSheet)
       .alert(error: $viewModel.error)
-      .animation(.bouncy, value: viewModel.chatMessages)
+      .animation(.bouncy, value: chatMessages)
       .animation(.bouncy, value: viewModel.assistantTypingStatus)
     }
     .presentationCompactAdaptation(.fullScreenCover)
@@ -98,7 +103,7 @@ private extension ChatView {
   @ViewBuilder
   func chatCell(for chatMessage: ChatMessage) -> some View {
     switch chatMessage.content {
-    case .text(let message):
+    case .message(let message):
       ChatBubbleCell(
         message: message,
         isDirect: false,
@@ -116,19 +121,19 @@ private extension ChatView {
           }
         }
       }
-    case .image(let image):
-      ChatImageCell(
-        image: image,
-        isCurrentUser: chatMessage.isCurrentUser
-      )
-      .id(chatMessage.id)
-      .transition(.blurReplace)
-    case .goals(let goals):
-      ChatGoalsCell(
-        goals: goals
-      )
-      .id(chatMessage.id)
-      .transition(.blurReplace)
+    case .imageData(let imageData):
+      if let image = UIImage(data: imageData) {
+        ChatImageCell(
+          image: image,
+          isCurrentUser: chatMessage.isCurrentUser
+        )
+        .id(chatMessage.id)
+        .transition(.blurReplace)
+      }
+    case .richContent(let richContent):
+      ChatRichContentWrapperCell(data: richContent)
+        .id(chatMessage.id)
+        .transition(.blurReplace)
     }
   }
 

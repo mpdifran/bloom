@@ -42,11 +42,14 @@ struct ActivityLevelEditCard: View {
     .sensoryFeedback(.impact, trigger: healthManager.userReportedActivityLevel)
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
+    .groupedBackground()
   }
 }
 
 #Preview {
-  PreviewSheetPresent {
-    ActivityLevelEditCard()
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      ActivityLevelEditCard()
+    }
   }
 }

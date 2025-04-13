@@ -1,0 +1,76 @@
+//
+//  ChatRichContentWrapperCell.swift
+//  Bloom
+//
+//  Created by Mark DiFranco on 2025-04-13.
+//
+
+import SwiftUI
+import AppUI
+import BloomModel
+import DataContainer
+
+struct ChatRichContentWrapperCell: View {
+  let data: Data
+
+  @State private var isLoading = true
+  @State private var goals: [ProposedGoal]?
+
+  private let modelActor = HabitModelActor.standard()
+
+  var body: some View {
+    Group {
+      if isLoading {
+        HStack {
+          CircularSpinnerView()
+            .foregroundStyle(.tint)
+            .padding()
+            .cardContainer()
+
+          Spacer(minLength: 60)
+        }
+      } else {
+        if let goals {
+          ChatGoalsCell(goals: goals)
+        }
+      }
+    }
+    .animation(.easeInOut, value: isLoading)
+    .task {
+      await loadContent()
+    }
+  }
+}
+
+private extension ChatRichContentWrapperCell {
+
+  func loadContent() async {
+    if let healthGoals = try? JSONDecoder.bloomModel.decode([SocketMessage.HealthMetricGoal].self, from: data) {
+      var proposedGoals = [ProposedGoal]()
+      for healthGoal in healthGoals {
+        let habit = try? await modelActor.fetchActiveHabits(for: healthGoal.metric.targetMetric).first
+
+        let proposedGoal = ProposedGoal(
+          habitID: habit?.id,
+          targetMetric: healthGoal.metric.targetMetric,
+          value: habit?.isUserEdited == true ? habit!.value : healthGoal.value,
+          suggestedValue: healthGoal.value,
+          previousValue: habit?.value,
+          unitString: healthGoal.unit.hkUnit.unitString,
+          vitalKind: nil,
+          context: "",
+          hasUserEdited: habit?.isUserEdited == true
+        )
+        proposedGoals.append(proposedGoal)
+      }
+      if proposedGoals.isNotEmpty {
+        self.goals = proposedGoals
+        self.isLoading = false
+      }
+    }
+  }
+}
+
+#Preview {
+  ChatRichContentWrapperCell(data: Data())
+}

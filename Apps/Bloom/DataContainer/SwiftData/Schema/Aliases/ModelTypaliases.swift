@@ -12,3 +12,4 @@ public typealias FoodItemLog = SchemaV9.FoodItemLog
 public typealias FoodItemServing = SchemaV9.FoodItemServing
 public typealias MealItemRecord = SchemaV9.MealItemRecord
 public typealias MealRecord = SchemaV9.MealRecord
+public typealias ChatMessage = SchemaV10.ChatMessage

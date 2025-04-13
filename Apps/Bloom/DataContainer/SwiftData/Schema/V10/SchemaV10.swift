@@ -1,15 +1,15 @@
 //
-//  SchemaV9.swift
+//  SchemaV10.swift
 //  Bloom
 //
-//  Created by Mark DiFranco on 2025-02-12.
+//  Created by Mark DiFranco on 2025-04-13.
 //
 
 import Foundation
 @preconcurrency import SwiftData
 
-public enum SchemaV9: VersionedSchema {
-  public static let versionIdentifier = Schema.Version(9, 0, 0)
+public enum SchemaV10: VersionedSchema {
+  public static let versionIdentifier = Schema.Version(10, 0, 0)
 
   public static let models: [any PersistentModel.Type] = [
     SchemaV0.BowelMovement.self,
@@ -19,5 +19,6 @@ public enum SchemaV9: VersionedSchema {
     SchemaV9.FoodItemServing.self,
     SchemaV9.MealRecord.self,
     SchemaV9.MealItemRecord.self,
+    SchemaV10.ChatMessage.self
   ]
 }

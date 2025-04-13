@@ -40,4 +40,12 @@ public extension ModelContext {
 
     delete(localModel)
   }
+
+  func deleteAll<T>(_ modelType: T.Type) throws where T: PersistentModel {
+    let fetchDescriptor = FetchDescriptor<T>()
+    let models = try fetch(fetchDescriptor)
+    for model in models {
+      delete(model)
+    }
+  }
 }

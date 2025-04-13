@@ -8,12 +8,12 @@
 import SwiftUI
 import BloomModel
 import DataContainer
+import SwiftData
 
 @Observable @MainActor
 final class ChatViewModel {
   var assistantTypingStatus: String?
   var assistantIsTyping = false
-  var chatMessages = [ChatMessage]()
   var error: Error?
 
   private var webSocketHandle: WebSocketHandle?
@@ -40,7 +40,7 @@ final class ChatViewModel {
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
 
-  private let modelActor = HabitModelActor.standard()
+  private let modelContext = ContainerHolder.shared.createContext()
 
   deinit {
     print("Deinit ChatViewModel")
@@ -51,27 +51,31 @@ extension ChatViewModel {
 
   func sendMessage(_ message: String, image: UIImage?) async {
     do {
-      if let image {
-        let imageMessage = ChatMessage(
-          content: .image(image),
-          isCurrentUser: true
-        )
-        chatMessages.append(imageMessage)
-      }
+      let imageData = image?.resized(toWidth: 300)?.pngData()
 
-      let userMessage = ChatMessage(
-        content: .text(message),
-        isCurrentUser: true
-      )
-      chatMessages.append(userMessage)
+      try modelContext.savingTransaction {
+        if let imageData {
+          let imageMessage = ChatMessage(
+            isCurrentUser: true,
+            imageData: imageData
+          )
+          modelContext.insert(imageMessage)
+        }
+
+        let userMessage = ChatMessage(
+          isCurrentUser: true,
+          message: message
+        )
+        modelContext.insert(userMessage)
+      }
 
       let demographics = await ChatVitalConverter.shared.generateDemographics()
       let data = try encoder.encode(demographics)
       let stringData = String(data: data, encoding: .utf8) ?? ""
 
       let fileIDs: [String]
-      if let data = image?.resized(toWidth: 300)?.pngData() {
-        fileIDs = try await NetworkRequester.shared.uploadChatImages(images: [data]).fileIDs
+      if let imageData {
+        fileIDs = try await NetworkRequester.shared.uploadChatImages(images: [imageData]).fileIDs
       } else {
         fileIDs = []
       }
@@ -93,7 +97,7 @@ extension ChatViewModel {
 
   func deleteChatHistory() async throws {
     try await NetworkRequester.shared.deleteChatThread()
-    chatMessages.removeAll()
+    try modelContext.deleteAll(ChatMessage.self)
   }
 }
 
@@ -135,37 +139,26 @@ private extension ChatViewModel {
 
   func parse(data: Data) async {
     if let messagesResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
-      let chatMessage = ChatMessage(
-        content: .text(messagesResponse.message),
-        isCurrentUser: false
-      )
-      chatMessages.append(chatMessage)
 
-      if let healthGoals = messagesResponse.healthMetricGoals {
-        var proposedGoals = [ProposedGoal]()
-        for healthGoal in healthGoals {
-          let habit = try? await modelActor.fetchActiveHabits(for: healthGoal.metric.targetMetric).first
+      do {
+        try modelContext.savingTransaction {
+          let message = ChatMessage(
+            isCurrentUser: false,
+            message: messagesResponse.message
+          )
+          modelContext.insert(message)
 
-          let proposedGoal = ProposedGoal(
-            habitID: habit?.id,
-            targetMetric: healthGoal.metric.targetMetric,
-            value: habit?.isUserEdited == true ? habit!.value : healthGoal.value,
-            suggestedValue: healthGoal.value,
-            previousValue: habit?.value,
-            unitString: healthGoal.unit.hkUnit.unitString,
-            vitalKind: nil,
-            context: "",
-            hasUserEdited: habit?.isUserEdited == true
-          )
-          proposedGoals.append(proposedGoal)
+          if let healthGoals = messagesResponse.healthMetricGoals {
+            let data = try JSONEncoder.bloomModel.encode(healthGoals)
+            let richContentMessage = ChatMessage(
+              isCurrentUser: false,
+              richContent: data
+            )
+            modelContext.insert(richContentMessage)
+          }
         }
-        if proposedGoals.isNotEmpty {
-          let chatMessage = ChatMessage(
-            content: .goals(proposedGoals),
-            isCurrentUser: false
-          )
-          chatMessages.append(chatMessage)
-        }
+      } catch {
+        self.error = error
       }
     } else if let queryResponse = try? decoder.decode(SocketMessage.DataQueryResponse.self, from: data) {
       let queryData = await perform(queryResponse: queryResponse)
