@@ -17,7 +17,6 @@ struct ChatGoalsCell: View {
   }
 
   @State private var didAddGoals = false
-  @State private var addGoalsToggle = false
 
   var body: some View {
     HStack {
@@ -86,7 +85,8 @@ private extension ChatGoalsCell {
       .horizontallyCentered()
     }
     .buttonStyle(.primary)
-    .sensoryFeedback(.success, trigger: addGoalsToggle)
+    .sensoryFeedback(.success, trigger: didAddGoals)
+    .animation(.default, value: didAddGoals)
     .disabled(didAddGoals)
   }
 }
@@ -96,8 +96,8 @@ private extension ChatGoalsCell {
   func addGoals() throws {
     try HabitsViewModel.shared.apply(proposedGoals: goals)
 
-    addGoalsToggle.toggle()
     SoundPlayer.playLogHealthData()
+    didAddGoals = true
   }
 }
 
