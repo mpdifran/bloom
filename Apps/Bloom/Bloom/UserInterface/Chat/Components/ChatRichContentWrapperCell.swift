@@ -11,7 +11,9 @@ import BloomModel
 import DataContainer
 
 struct ChatRichContentWrapperCell: View {
+  let chatMessageID: String
   let data: Data
+  let hasPerformedAction: Bool
 
   @State private var isLoading = true
   @State private var goals: [ProposedGoal]?
@@ -36,7 +38,11 @@ struct ChatRichContentWrapperCell: View {
         }
       } else {
         if let goals {
-          ChatGoalsCell(goals: goals)
+          ChatGoalsCell(
+            chatMessageID: chatMessageID,
+            goals: goals,
+            hasPerformedAction: hasPerformedAction
+          )
         }
       }
     }
@@ -86,7 +92,11 @@ private extension ChatRichContentWrapperCell {
           isCurrentUser: false,
           showTail: true
         )
-        ChatRichContentWrapperCell(data: Data())
+        ChatRichContentWrapperCell(
+          chatMessageID: "123",
+          data: Data(),
+          hasPerformedAction: false
+        )
       }
       .padding()
     }

@@ -130,9 +130,15 @@ private extension ChatView {
         .transition(.blurReplace)
       }
     case .richContent(let richContent):
-      ChatRichContentWrapperCell(data: richContent)
+      ChatRichContentWrapperCell(
+        chatMessageID: chatMessage.id,
+        data: richContent,
+        hasPerformedAction: chatMessage.hasPerformedAction
+      )
         .id(chatMessage.id)
         .transition(.blurReplace)
+    @unknown default:
+      EmptyView()
     }
   }
 

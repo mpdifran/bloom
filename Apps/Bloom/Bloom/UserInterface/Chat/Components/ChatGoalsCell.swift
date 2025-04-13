@@ -10,13 +10,25 @@ import AppUI
 import SFSafeSymbols
 
 struct ChatGoalsCell: View {
+  let chatMessageID: String
   let goals: [ProposedGoal]
+  let hasPerformedAction: Bool
 
-  init(goals: [ProposedGoal]) {
+  init(
+    chatMessageID: String,
+    goals: [ProposedGoal],
+    hasPerformedAction: Bool
+  ) {
+    self.chatMessageID = chatMessageID
     self.goals = goals
+    self.hasPerformedAction = hasPerformedAction
+
+    self._didAddGoals = State(initialValue: hasPerformedAction)
   }
 
-  @State private var didAddGoals = false
+  @State private var didAddGoals: Bool
+
+  @Environment(\.modelContext) private var modelContext
 
   var body: some View {
     HStack {
@@ -95,6 +107,7 @@ private extension ChatGoalsCell {
 
   func addGoals() throws {
     try HabitsViewModel.shared.apply(proposedGoals: goals)
+    try modelContext.markChatMessageActionTaken(id: chatMessageID)
 
     SoundPlayer.playLogHealthData()
     didAddGoals = true
@@ -106,6 +119,7 @@ private extension ChatGoalsCell {
     ScrollView {
       VStack {
         ChatGoalsCell(
+          chatMessageID: "1234",
           goals: [
             ProposedGoal(
               habitID: nil,
@@ -129,7 +143,8 @@ private extension ChatGoalsCell {
               context: nil,
               hasUserEdited: false
             )
-          ]
+          ],
+          hasPerformedAction: false
         )
       }
     }
