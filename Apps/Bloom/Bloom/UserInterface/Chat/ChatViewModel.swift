@@ -120,13 +120,14 @@ private extension ChatViewModel {
         }
       }
     }
-    webSocketErrorTask = Task.detached { [weak self] in
-      for await error in await handle.$error {
-        if let error {
-          await self?.on(error: error)
-        }
-      }
-    }
+    // These errors are too noisy
+//    webSocketErrorTask = Task.detached { [weak self] in
+//      for await error in await handle.$error {
+//        if let error {
+//          await self?.on(error: error)
+//        }
+//      }
+//    }
 
     webSocketHandle = handle
     return handle
@@ -186,7 +187,7 @@ private extension ChatViewModel {
         self.queryAreas.removeAll()
       }
     } else if let errorMessage = try? decoder.decode(SocketMessage.Error.self, from: data) {
-      self.error = NSError(description: errorMessage.message)
+//      self.error = NSError(description: errorMessage.message)
     } else {
       print("Unknown SocketMessage:\n\n\(String(data: data, encoding: .utf8) ?? "")")
     }
