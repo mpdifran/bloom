@@ -22,11 +22,15 @@ struct ChatRichContentWrapperCell: View {
     Group {
       if isLoading {
         HStack {
-          ProgressView()
-            .progressViewStyle(.circular)
-            .padding()
-            .cardContainer()
-            .padding(.leading)
+          HStack {
+            Spacer()
+            ProgressView()
+              .progressViewStyle(.circular)
+              .padding()
+            Spacer()
+          }
+          .cardContainer()
+          .padding(.leading)
 
           Spacer(minLength: 60)
         }
@@ -73,5 +77,19 @@ private extension ChatRichContentWrapperCell {
 }
 
 #Preview {
-  ChatRichContentWrapperCell(data: Data())
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        ChatBubbleCell(
+          message: "Here's some rich content",
+          isDirect: false,
+          isCurrentUser: false,
+          showTail: true
+        )
+        ChatRichContentWrapperCell(data: Data())
+      }
+      .padding()
+    }
+    .groupedBackground()
+  }
 }
