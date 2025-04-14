@@ -19,6 +19,8 @@ private extension String {
 @main
 struct BloomApp: App {
 
+//  @UIApplicationDelegateAdaptor(BloomAppDelegate.self) var appDelegate
+
   private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
 
   init() {

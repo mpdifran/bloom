@@ -40,6 +40,9 @@ final class User: Model, Content, @unchecked Sendable {
   @Field(key: "health_goal_setter_thread_id")
   var healthGoalSetterThreadID: String?
 
+  @Field(key: "apns_device_token")
+  var apnsDeviceToken: String?
+
   @Field(key: "access_token")
   var accessToken: String?
 
@@ -63,19 +66,22 @@ final class User: Model, Content, @unchecked Sendable {
 
   init() { }
 
-  init(id: UserIdentifier,
-       email: String? = nil,
-       givenName: String? = nil,
-       familyName: String? = nil,
-       appVersion: String? = nil,
-       rawUserDetectionStatus: String? = nil,
-       healthCoachThreadID: String? = nil,
-       healthGoalSetterThreadID: String? = nil,
-       accessToken: String? = nil,
-       refreshToken: String? = nil,
-       idToken: String? = nil,
-       accessTokenExpiry: Date? = nil,
-       lastActiveAt: Date = Date()) {
+  init(
+    id: UserIdentifier,
+    email: String? = nil,
+    givenName: String? = nil,
+    familyName: String? = nil,
+    appVersion: String? = nil,
+    rawUserDetectionStatus: String? = nil,
+    healthCoachThreadID: String? = nil,
+    healthGoalSetterThreadID: String? = nil,
+    apnsDeviceToken: String? = nil,
+    accessToken: String? = nil,
+    refreshToken: String? = nil,
+    idToken: String? = nil,
+    accessTokenExpiry: Date? = nil,
+    lastActiveAt: Date = Date()
+  ) {
     self.id = id
     self.email = email
     self.givenName = givenName
@@ -84,6 +90,7 @@ final class User: Model, Content, @unchecked Sendable {
     self.rawUserDetectionStatus = rawUserDetectionStatus
     self.healthCoachThreadID = healthCoachThreadID
     self.healthGoalSetterThreadID = healthGoalSetterThreadID
+    self.apnsDeviceToken = apnsDeviceToken
     self.accessToken = accessToken
     self.refreshToken = refreshToken
     self.idToken = idToken

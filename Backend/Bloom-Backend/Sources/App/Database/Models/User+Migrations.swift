@@ -135,4 +135,18 @@ extension User {
         .update()
     }
   }
+
+  struct AddAPNSDeviceToken: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("apns_device_token", .string)
+        .update()
+    }
+    
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("apns_device_token")
+        .update()
+    }
+  }
 }

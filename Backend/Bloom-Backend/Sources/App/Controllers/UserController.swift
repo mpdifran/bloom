@@ -1,5 +1,5 @@
 //
-//  AuthenticationController.swift
+//  UserController.swift
 //  Bloom-Backend
 //
 //  Created by Mark DiFranco on 2024-12-01.
@@ -10,9 +10,9 @@ import Vapor
 import SignInWithApple
 import BloomModel
 
-struct AuthenticationController { }
+struct UserController { }
 
-extension AuthenticationController: RouteCollection {
+extension UserController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
     routes.group("v1") {
@@ -23,6 +23,7 @@ extension AuthenticationController: RouteCollection {
       $0.auth(using: UserToken.self) {
         $0.group("user") {
           $0.post("identify", use: identify)
+          $0.post("register-device-token", use: registerDeviceToken)
           $0.get("logout", use: logout)
           $0.get("delete-account", use: deleteAccount)
         }
@@ -35,7 +36,7 @@ extension AuthenticationController: RouteCollection {
   }
 }
 
-private extension AuthenticationController {
+private extension UserController {
 
   @Sendable
   func signIn(_ request: Request) async throws -> AuthenticationResponse {
@@ -97,6 +98,17 @@ private extension AuthenticationController {
       givenName: user.givenName,
       familyName: user.familyName
     )
+  }
+
+  @Sendable
+  func registerDeviceToken(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
+    let body = try request.content.decode(RegisterUserPushNotificationTokenRequest.self)
+
+    user.apnsDeviceToken = body.deviceToken
+    try await user.save(on: request.db)
+
+    return Response(status: .ok)
   }
 
   @Sendable

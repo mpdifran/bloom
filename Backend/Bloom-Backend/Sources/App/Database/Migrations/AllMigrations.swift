@@ -35,4 +35,5 @@ let allMigrations: [Migration] = [
     User.RenameThreadID(),
     User.AddHealthGoalSetterThreadID(),
     User.AddAppVersion(),
+    User.AddAPNSDeviceToken(),
 ]
