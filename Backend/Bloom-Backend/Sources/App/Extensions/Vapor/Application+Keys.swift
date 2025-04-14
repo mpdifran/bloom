@@ -136,3 +136,26 @@ extension Application {
     Environment.get("POSTGRES_LOCALHOST_USERNAME")
   }
 }
+
+// MARK: - Redis
+
+extension Application {
+
+  var redisURL: URL? {
+    guard let urlString = Environment.get("REDIS_URL") else { return nil }
+
+    return URL(string: urlString)
+  }
+
+  var redisHostname: String {
+    Environment.get("REDIS_HOST") ?? "127.0.0.1"
+  }
+
+  var redisPort: Int {
+    Environment.get("REDIS_PORT").flatMap(Int.init) ?? 6379
+  }
+
+  var redisPassword: String? {
+    Environment.get("REDIS_PASSWORD")
+  }
+}

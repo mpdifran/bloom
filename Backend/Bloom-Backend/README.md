@@ -32,6 +32,25 @@ ngrok http http://localhost:8080
 
 Bloom on your device will now send requests to your local machine.
 
+### Redis
+Install Redis locally using the following command:
+
+```
+brew install redis
+```
+
+Run Redis as a background service using the following:
+
+```
+brew services start redis
+```
+
+-or- Run Redis temporarily in the terminal with the following:
+
+```
+/opt/homebrew/opt/redis/bin/redis-server /opt/homebrew/etc/redis.conf
+```
+
 ## Reverting the Database
 
 If you're making database changes locally, and you want to undo a recent new migration, you can run the following script:

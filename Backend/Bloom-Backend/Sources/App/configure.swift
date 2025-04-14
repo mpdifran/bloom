@@ -10,6 +10,9 @@ public func configure(_ app: Application) async throws {
   // Debug
   app.printEnvironmentInfo()
 
+  // Redis
+  try app.setupRedis()
+
   // Middleware
 
   // Routes
