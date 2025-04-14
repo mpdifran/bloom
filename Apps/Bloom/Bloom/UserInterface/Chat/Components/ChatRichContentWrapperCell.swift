@@ -64,7 +64,7 @@ private extension ChatRichContentWrapperCell {
         let proposedGoal = ProposedGoal(
           habitID: habit?.id,
           targetMetric: healthGoal.metric.targetMetric,
-          value: habit?.isUserEdited == true ? habit!.value : healthGoal.value,
+          value: healthGoal.value,
           suggestedValue: healthGoal.value,
           previousValue: habit?.value,
           unitString: healthGoal.unit.hkUnit.unitString,
