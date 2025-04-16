@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import TelemetryDeck
 
 class BloomAppDelegate: NSObject, UIApplicationDelegate {
 
@@ -24,13 +25,29 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
       .map({ data in String(format: "%02.2hhx", data) })
       .joined()
 
-    
+    Task {
+      do {
+        try await NetworkRequester.shared.register(deviceToken: token)
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "BloomAppDelegate.didRegisterForRemoteNotificationsWithDeviceToken",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+        print(error)
+      }
+    }
   }
 
   func application(
     _ application: UIApplication,
     didFailToRegisterForRemoteNotificationsWithError error: any Error
   ) {
-
+    TelemetryDeck.errorOccurred(
+      id: "BloomAppDelegate.didFailToRegisterForRemoteNotificationsWithError",
+      category: .thrownException,
+      message: error.localizedDescription
+    )
+    print(error)
   }
 }

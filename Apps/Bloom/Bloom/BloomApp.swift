@@ -19,7 +19,7 @@ private extension String {
 @main
 struct BloomApp: App {
 
-//  @UIApplicationDelegateAdaptor(BloomAppDelegate.self) var appDelegate
+  @UIApplicationDelegateAdaptor(BloomAppDelegate.self) var appDelegate
 
   private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
 
@@ -43,6 +43,7 @@ struct BloomApp: App {
 
     //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
 
+    checkRegisterForRemoteNotifications()
     migrateUserDefaults()
   }
 
@@ -93,6 +94,12 @@ private extension BloomApp {
     Task {
       await VitalsCalculator.shared.refreshVitals()
     }
+  }
+
+  func checkRegisterForRemoteNotifications() {
+    guard UserController.shared.isAuthenticated else { return }
+
+    UIApplication.shared.registerForRemoteNotifications()
   }
 
   func migrateUserDefaults() {

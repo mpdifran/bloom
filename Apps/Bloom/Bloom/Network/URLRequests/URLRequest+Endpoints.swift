@@ -39,7 +39,9 @@ extension URLRequest {
     static func identify(body: AuthIdentifyRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/user/identify", body: body)
     }
-
+    static func registerDeviceToken(body: RegisterUserPushNotificationTokenRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/user/register-device-token", body: body)
+    }
     static func logout() async -> URLRequest {
       await URLRequest.get("v1/user/logout")
     }

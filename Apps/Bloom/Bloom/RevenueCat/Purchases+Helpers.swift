@@ -15,7 +15,7 @@ extension Purchases {
 
   static func configure() {
     #if DEBUG
-    Purchases.logLevel = .debug
+    Purchases.logLevel = .error
     #endif
     Purchases.configure(withAPIKey: .revenueCatPublicAPIKey, appUserID: UserID.value)
   }

@@ -32,6 +32,11 @@ extension NetworkRequester {
     )
   }
 
+  func register(deviceToken: String) async throws -> Void {
+    let request = try await URLRequest.User.registerDeviceToken(body: RegisterUserPushNotificationTokenRequest(deviceToken: deviceToken))
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
+
   func signOut() async throws {
     let request = await URLRequest.User.logout()
     try await URLSession.shared.authenticatedBloomRequest(request: request)

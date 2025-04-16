@@ -23,7 +23,11 @@ extension APIHost {
     if let url = URL(string: base), base.isNotEmpty, overrideEnabled {
       return url
     }
+    #if DEBUG
+    return URL(string: "https://bloom-development-2c786f378e64.herokuapp.com/")!
+    #else
     return URL(string: "https://bloom-api-5903aeb2ee43.herokuapp.com/")!
+    #endif
   }
 
   var resolvedWebSocketHost: URL {
@@ -31,6 +35,10 @@ extension APIHost {
     if let url = URL(string: webSocketBase), webSocketBase.isNotEmpty, overrideEnabled {
       return url
     }
+    #if DEBUG
+    return URL(string: "wss://bloom-development-2c786f378e64.herokuapp.com/")!
+    #else
     return URL(string: "wss://bloom-api-5903aeb2ee43.herokuapp.com/")!
+    #endif
   }
 }

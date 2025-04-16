@@ -178,6 +178,8 @@ extension UserController {
         HealthManager.shared.name = name
       }
     }
+
+    UIApplication.shared.registerForRemoteNotifications()
   }
 
   func logout() async throws {

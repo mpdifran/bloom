@@ -21,7 +21,7 @@ extension Application {
         keyIdentifier: bloomAPNsJWKID,
         teamIdentifier: appleTeamID
       ),
-      environment: .development
+      environment: environment == .production ? .production : .development
     )
 
     apns.containers.use(
