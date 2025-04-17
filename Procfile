@@ -1,1 +1,1 @@
-web: App serve --env production --hostname 0.0.0.0 --port $PORT --auto-migrate
+web: App serve --env ${VAPOR_ENV:-development} --hostname 0.0.0.0 --port $PORT --auto-migrate
