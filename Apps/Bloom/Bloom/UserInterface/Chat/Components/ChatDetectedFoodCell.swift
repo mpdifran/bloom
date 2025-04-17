@@ -28,6 +28,7 @@ struct ChatDetectedFoodCell: View {
 
   @State private var hasAddedFood: Bool
   @State private var saveComplete = false
+  @State private var presentedSheet: AnyView?
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
@@ -50,6 +51,13 @@ struct ChatDetectedFoodCell: View {
             Divider()
           }
           ChatDetectedFoodItemCell(foodItemServing: serving)
+            .onTapGesture {
+              presentedSheet = FoodItemDetailsView(
+                foodItem: serving.foodItem,
+                existingFoodItemLog: nil,
+                mode: .viewOnly
+              ).asAny
+            }
         }
 
         Divider()
@@ -65,6 +73,7 @@ struct ChatDetectedFoodCell: View {
       Spacer(minLength: 60)
     }
     .padding(.horizontal)
+    .sheet($presentedSheet)
   }
 }
 

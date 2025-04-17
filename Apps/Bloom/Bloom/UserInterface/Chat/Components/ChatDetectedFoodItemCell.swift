@@ -42,6 +42,7 @@ private extension ChatDetectedFoodItemCell {
       .foregroundStyle(.secondary)
       .font(.caption)
     }
+    .selectable()
   }
 
   @ViewBuilder
