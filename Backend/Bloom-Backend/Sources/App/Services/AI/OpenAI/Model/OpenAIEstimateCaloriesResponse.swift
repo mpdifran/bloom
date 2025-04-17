@@ -15,7 +15,7 @@ struct OpenAIEstimateCaloriesResponse: Codable {
 }
 
 extension OpenAIEstimateCaloriesResponse {
-  struct Item: Codable {
+  struct Item: Codable, Equatable, Sendable {
     let name: String
     let brandName: String?
     let flavour: String?
@@ -47,7 +47,7 @@ extension OpenAIEstimateCaloriesResponse {
     let vitaminE: Quantity?
   }
 
-  struct Quantity: Codable {
+  struct Quantity: Codable, Equatable, Sendable {
     let value: Double
     let unit: String
   }

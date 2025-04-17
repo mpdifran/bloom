@@ -25,13 +25,16 @@ public extension SocketMessage {
   struct MessageResponse: Codable, Equatable, Sendable {
     public let message: String
     public let healthMetricGoals: [HealthMetricGoal]?
+    public let detectedFood: DetectedFood?
 
     public init(
       message: String,
-      healthMetricGoals: [HealthMetricGoal]
+      healthMetricGoals: [HealthMetricGoal]?,
+      detectedFood: DetectedFood?
     ) {
       self.message = message
       self.healthMetricGoals = healthMetricGoals
+      self.detectedFood = detectedFood
     }
   }
 
@@ -48,6 +51,16 @@ public extension SocketMessage {
       self.metric = metric
       self.value = value
       self.unit = unit
+    }
+  }
+
+  struct DetectedFood: Codable, Equatable, Sendable {
+    public let name: String
+    public let foodItemServings: [EstimateFoodCaloriesResponse.Serving]
+
+    public init(name: String, foodItemServings: [EstimateFoodCaloriesResponse.Serving]) {
+      self.name = name
+      self.foodItemServings = foodItemServings
     }
   }
 }

@@ -17,6 +17,8 @@ struct ChatRichContentWrapperCell: View {
 
   @State private var isLoading = true
   @State private var goals: [ProposedGoal]?
+  @State private var foodItemsName: String?
+  @State private var foodItemServings: [FoodItemServingAmount]?
 
   private let modelActor = HabitModelActor.standard()
 
@@ -41,6 +43,13 @@ struct ChatRichContentWrapperCell: View {
           ChatGoalsCell(
             chatMessageID: chatMessageID,
             goals: goals,
+            hasPerformedAction: hasPerformedAction
+          )
+        } else if let foodItemsName, let foodItemServings {
+          ChatDetectedFoodCell(
+            chatMessageID: chatMessageID,
+            name: foodItemsName,
+            servings: foodItemServings,
             hasPerformedAction: hasPerformedAction
           )
         }
@@ -78,6 +87,12 @@ private extension ChatRichContentWrapperCell {
         self.goals = proposedGoals
       }
     }
+
+    if let detectedFood = try? JSONDecoder.bloomModel.decode(SocketMessage.DetectedFood.self, from: data) {
+      self.foodItemsName = detectedFood.name
+      self.foodItemServings = detectedFood.foodItemServings.map { $0.asServing() }
+    }
+
     self.isLoading = false
   }
 }

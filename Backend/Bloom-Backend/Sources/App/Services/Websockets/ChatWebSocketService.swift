@@ -144,12 +144,29 @@ private extension ChatWebSocketService {
         .flatMap { message in
           message.content.compactMap({ $0.text?.data(using: .utf8) })
         }
-        .compactMap { (data) -> SocketMessage.MessageResponse? in
+        .compactMap { (data) -> ChatAssistantResponse? in
           do {
-            return try JSONDecoder.bloomModel.decode(SocketMessage.MessageResponse.self, from: data)
+            return try JSONDecoder.bloomModel.decode(ChatAssistantResponse.self, from: data)
           } catch {
             return nil
           }
+        }
+        .map { (response) -> SocketMessage.MessageResponse in
+          let detectedFood: SocketMessage.DetectedFood?
+          if let responseFood = response.detectedFood {
+            detectedFood = SocketMessage.DetectedFood(
+              name: responseFood.name,
+              foodItemServings: responseFood.foodItems.map { $0.asServing() }
+            )
+          } else {
+            detectedFood = nil
+          }
+
+          return SocketMessage.MessageResponse(
+            message: response.message,
+            healthMetricGoals: response.healthMetricGoals,
+            detectedFood: detectedFood
+          )
         }
         .first
 

@@ -32,6 +32,7 @@ extension AssistantSpec {
     Response: {
       "message": String, // A text message you want to send to the user.
       "healthMetricGoals": [HealthMetricGoal], // an optional list of goals for health metrics you want the user to keep track of. The user will be able to add these goals in their Bloom app.
+      "detectedFood": DetectedFood? // An optional object to use when you need to return food items to the user. Sometimes, the user may send you a photo of food, or describe food for you. You can use this property to provide the food items to the user, so they can log it in Bloom.
     }
 
     HealthMetricGoal: {
@@ -43,6 +44,46 @@ extension AssistantSpec {
     HealthMetric: An enum with the following string cases: \(SuggestedGoal.Metric.stringCaseList())
     
     HealthMetricUnit: An enum with the following string cases: \(SuggestedGoal.Unit.stringCaseList())
+    
+    Quantity: {
+      "value": Double // A value, measured in the specified units
+      "unit": String // The units the value is measured in
+    }
+    
+    DetectedFood: {
+      "name": String, // The name you would give the food.
+      "foodItems": [FoodItem] // A list of individual food items you detected.
+    }
+    
+    FoodItem: {
+      "name": String, // The name of this food item
+      "servingName": String, // A name for a single serving of the food item. E.g. 1 cup or 12 chips. It should not contain the name of the item itself, and should contain a number. This should be the typical common denominator standard serving unit for measuring this food item.
+      "servingValue": Quantity, // The amount of the food in a standard unit, typically measured in g, mL, oz, etc.'
+      "servingCount": Double, // The number of servings of the food item you detect.
+      "calories": Quantity, // An estimate of the amount of calories
+      "fat": Quantity, // An estimate of the amount of fat
+      "carbohydrates": Quantity, // An estimate of the amount of carbohydrates
+      "protein": Quantity, // An estimate of the amount of protein
+      "saturatedFat": Quantity, // An optional estimate of the amount of saturatedFat
+      "transFat": Quantity, // An optional estimate of the amount of transFat
+      "polyunsaturatedFat": Quantity, // An optional estimate of the amount of polyunsaturatedFat
+      "monounsaturatedFat": Quantity, // An optional estimate of the amount of monounsaturatedFat
+      "fiber": Quantity, // An optional estimate of the amount of fiber
+      "sugar": Quantity, // An optional estimate of the amount of sugar
+      "cholesterol": Quantity, // An optional estimate of the amount of cholesterol
+      "sodium": Quantity, // An optional estimate of the amount of sodium
+      "calcium": Quantity, // An optional estimate of the amount of calcium
+      "iron": Quantity, // An optional estimate of the amount of iron
+      "potassium": Quantity, // An optional estimate of the amount of potassium
+      "magnesium": Quantity, // An optional estimate of the amount of magnesium
+      "zinc": Quantity, // An optional estimate of the amount of zinc
+      "vitaminA": Quantity, // An optional estimate of the amount of vitaminA
+      "vitaminB6": Quantity, // An optional estimate of the amount of vitaminB6
+      "vitaminB12": Quantity, // An optional estimate of the amount of vitaminB12
+      "vitaminC": Quantity, // An optional estimate of the amount of vitaminC
+      "vitaminD": Quantity, // An optional estimate of the amount of vitaminD
+      "vitaminE": Quantity, // An optional estimate of the amount of vitaminE
+    }
     """,
     tools: [
       .function(.queryUserHealthData),

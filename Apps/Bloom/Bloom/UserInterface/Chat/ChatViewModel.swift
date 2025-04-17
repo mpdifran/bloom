@@ -156,6 +156,14 @@ private extension ChatViewModel {
             )
             modelContext.insert(richContentMessage)
           }
+          if let detectedFood = messagesResponse.detectedFood {
+            let data = try JSONEncoder.bloomModel.encode(detectedFood)
+            let richContentMessage = ChatMessage(
+              isCurrentUser: false,
+              richContent: data
+            )
+            modelContext.insert(richContentMessage)
+          }
         }
       } catch {
         self.error = error
