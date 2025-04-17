@@ -44,7 +44,12 @@ extension Application {
   }
 
   var bloomAppBundleID: String {
-    "com.lotus-labs.bloom"
+    switch environment {
+    case .production:
+      "com.lotus-labs.bloom"
+    default:
+      "com.lotus-labs.bloom.dev"
+    }
   }
 
   var bloomSiwAJWKId: String {
