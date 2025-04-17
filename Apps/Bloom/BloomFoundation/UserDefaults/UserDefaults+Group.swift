@@ -8,7 +8,12 @@
 import Foundation
 
 public extension String {
-  static let groupSuiteName: String = "group.com.lotus-labs.bloom"
+  static var groupSuiteName: String {
+      guard let suiteName = Bundle.main.object(forInfoDictionaryKey: "BLOOM_APP_GROUP_ID") as? String else {
+          fatalError("BLOOM_APP_GROUP_ID is not set in Info.plist")
+      }
+      return suiteName
+  }
 }
 
 public extension UserDefaults {

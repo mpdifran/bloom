@@ -12,28 +12,35 @@ import FluentPostgresDriver
 
 extension Application {
 
-    func setupPostgres() throws {
-        if let postgresURL = postgresURL {
-            let postgresConfig = try SQLPostgresConfiguration(url: postgresURL)
-            databases.use(
-                .postgres(
-                    configuration: postgresConfig
-                ),
-                as: .psql
-            )
-        } else {
-            databases.use(
-                .postgres(
-                    configuration: .init(
-                        hostname: "localhost",
-                        username: localhostUsername ?? "mpdifran",
-                        password: "",
-                        database: "bloom-food-db",
-                        tls: .disable
-                    )
-                ),
-                as: .psql
-            )
-        }
+  func setupPostgres() throws {
+    if let postgresURL = postgresURL {
+      let postgresConfig = try SQLPostgresConfiguration(url: postgresURL)
+      databases.use(
+        .postgres(
+          configuration: postgresConfig
+        ),
+        as: .psql
+      )
+    } else {
+      let databaseName = switch environment {
+      case .production:
+        "bloom-food-db"
+      default:
+        "bloom-db-dev"
+      }
+
+      databases.use(
+        .postgres(
+          configuration: .init(
+            hostname: "localhost",
+            username: localhostUsername ?? "mpdifran",
+            password: "",
+            database: databaseName,
+            tls: .disable
+          )
+        ),
+        as: .psql
+      )
     }
+  }
 }

@@ -13,6 +13,7 @@ final class APIHost: ObservableObject {
 
   @AppStorage("APIHost.overrideEnabled", store: .group) var overrideEnabled: Bool = false
   @AppStorage("APIHost.base", store: .group) var base: String = ""
+  @AppStorage("APIHost.wsBase", store: .group) var wsBase: String = ""
 
   private init() { }
 }
@@ -23,22 +24,21 @@ extension APIHost {
     if let url = URL(string: base), base.isNotEmpty, overrideEnabled {
       return url
     }
-    #if DEBUG
-    return URL(string: "https://bloom-development-2c786f378e64.herokuapp.com/")!
-    #else
-    return URL(string: "https://bloom-api-5903aeb2ee43.herokuapp.com/")!
-    #endif
+    guard let urlString = Bundle.main.infoDictionary?["BLOOM_BASE_URL"] as? String else {
+      fatalError("No base URL set.")
+    }
+
+    return URL(string: urlString.replacingOccurrences(of: "\\", with: ""))!
   }
 
   var resolvedWebSocketHost: URL {
-    let webSocketBase = base.replacingOccurrences(of: "https://", with: "wss://")
-    if let url = URL(string: webSocketBase), webSocketBase.isNotEmpty, overrideEnabled {
+    if let url = URL(string: wsBase), wsBase.isNotEmpty, overrideEnabled {
       return url
     }
-    #if DEBUG
-    return URL(string: "wss://bloom-development-2c786f378e64.herokuapp.com/")!
-    #else
-    return URL(string: "wss://bloom-api-5903aeb2ee43.herokuapp.com/")!
-    #endif
+    guard let urlString = Bundle.main.infoDictionary?["BLOOM_BASE_WS_URL"] as? String else {
+      fatalError("No WebSocket base URL set.")
+    }
+
+    return URL(string: urlString.replacingOccurrences(of: "\\", with: ""))!
   }
 }

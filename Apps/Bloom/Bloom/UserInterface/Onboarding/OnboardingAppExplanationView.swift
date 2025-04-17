@@ -165,11 +165,11 @@ private extension OnboardingAppExplanationView {
       vitalPairs.append(
         VitalOffsetPair(
           vital: VitalModel(
-            id: .cycleTracking,
+            id: .heartHealth,
             subtitle: nil,
-            status: "Luteal Phase",
-            color: .mutedIndigo,
-            barLevel: nil,
+            status: "Healthy",
+            color: .vitalGood,
+            barLevel: VitalModel.BarLevel(level: .high, proportion: 0.8),
             hasNoData: false
           ),
           rotation: .degrees(2),

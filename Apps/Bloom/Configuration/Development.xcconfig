@@ -1,0 +1,16 @@
+//
+//  Development.xcconfig
+//  Bloom
+//
+//  Created by Mark DiFranco on 2025-04-16.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+BLOOM_APP_NAME = Bloom [Dev]
+BLOOM_APP_BUNDLE_ID = com.lotus-labs.bloom.dev
+BLOOM_BASE_URL = https:\/\/bloom-development-2c786f378e64.herokuapp.com
+BLOOM_BASE_WS_URL = wss:\/\/bloom-development-2c786f378e64.herokuapp.com
+BLOOM_APP_GROUP_ID = group.com.lotus-labs.bloom.dev
+OTHER_SWIFT_FLAGS = $(inherited) -DDEVELOPMENT

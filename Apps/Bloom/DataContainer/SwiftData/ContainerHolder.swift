@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import BloomFoundation
 internal import TelemetryDeck
 
 public final class ContainerHolder: Sendable {
@@ -19,7 +20,7 @@ public final class ContainerHolder: Sendable {
     let schema = Schema(versionedSchema: currentSchema)
     let modelConfiguration = ModelConfiguration(
       schema: schema,
-      groupContainer: .identifier("group.com.lotus-labs.bloom"),
+      groupContainer: .identifier(.groupSuiteName),
       cloudKitDatabase: .none
     )
 

@@ -6,8 +6,12 @@
 	<array>
 		<string>proactive-tip</string>
 	</array>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
+	<key>BLOOM_APP_GROUP_ID</key>
+	<string>$(BLOOM_APP_GROUP_ID)</string>
+	<key>BLOOM_BASE_URL</key>
+	<string>$(BLOOM_BASE_URL)</string>
+	<key>BLOOM_BASE_WS_URL</key>
+	<string>$(BLOOM_BASE_WS_URL)</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Show you your upcoming events every morning.</string>
 	<key>UIBackgroundModes</key>

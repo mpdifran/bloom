@@ -111,10 +111,21 @@ extension DeveloperSettingsView {
               .submitLabel(.done)
               .selectAllTextOnBeginEditing()
           }
+
+          Divider()
+
+          SettingsCell("WS Host") {
+            TextField("", text: apiHost.$wsBase, prompt: Text("ex: 192.168.1.1"))
+              .multilineTextAlignment(.trailing)
+              .textInputAutocapitalization(.never)
+              .autocorrectionDisabled()
+              .submitLabel(.done)
+              .selectAllTextOnBeginEditing()
+          }
         }
       }
 
-      Text("Current host: \(apiHost.resolvedHost.absoluteString)")
+      Text("Current host: \(apiHost.resolvedHost.absoluteString)\nCurrent WS Host: \(apiHost.resolvedWebSocketHost.absoluteString)")
         .font(.caption)
         .foregroundStyle(.secondary)
         .padding(.horizontal)
