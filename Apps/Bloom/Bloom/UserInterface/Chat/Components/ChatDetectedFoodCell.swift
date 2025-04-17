@@ -52,8 +52,13 @@ struct ChatDetectedFoodCell: View {
           ChatDetectedFoodItemCell(foodItemServing: serving)
         }
 
+        Divider()
+
+        MealPicker()
+          .horizontallyCentered()
+          .disabled(hasAddedFood)
+
         logFoodButton
-          .padding(.top)
       }
       .cardContainer()
 
