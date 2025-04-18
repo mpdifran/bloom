@@ -33,6 +33,7 @@ struct ChatDetectedFoodCell: View {
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.requestReview) private var requestReview
 
   var body: some View {
     HStack {
@@ -112,6 +113,10 @@ private extension ChatDetectedFoodCell {
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
     hasAddedFood = true
+
+    if RatingPromptTracker.shared.recordEvent() {
+      requestReview()
+    }
   }
 }
 

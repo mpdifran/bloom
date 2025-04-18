@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import HealthKit
 import BloomModel
 import DataContainer
 
@@ -19,6 +20,12 @@ struct ChatRichContentWrapperCell: View {
   @State private var goals: [ProposedGoal]?
   @State private var foodItemsName: String?
   @State private var foodItemServings: [FoodItemServingAmount]?
+  @State private var waterQuantity: HKQuantity?
+  @State private var bristolStoolType: Int?
+  @State private var duration: BowelMovement.Duration?
+  @State private var weightQuantity: HKQuantity?
+  @State private var systolic: Double?
+  @State private var diastolic: Double?
 
   private let modelActor = HabitModelActor.standard()
 
@@ -52,6 +59,32 @@ struct ChatRichContentWrapperCell: View {
             servings: foodItemServings,
             hasPerformedAction: hasPerformedAction
           )
+        } else if let waterQuantity {
+          ChatLogWaterCell(
+            chatMessageID: chatMessageID,
+            waterQuantity: waterQuantity,
+            hasPerformedAction: hasPerformedAction
+          )
+        } else if let bristolStoolType, let duration {
+          ChatLogBowelMovementCell(
+            chatMessageID: chatMessageID,
+            bristolStoolType: bristolStoolType,
+            duration: duration,
+            hasPerformedAction: hasPerformedAction
+          )
+        } else if let weightQuantity {
+          ChatLogWeightCell(
+            chatMessageID: chatMessageID,
+            weightQuantity: weightQuantity,
+            hasPerformedAction: hasPerformedAction
+          )
+        } else if let systolic, let diastolic {
+          ChatLogBloodPressureCell(
+            chatMessageID: chatMessageID,
+            systolic: systolic,
+            diastolic: diastolic,
+            hasPerformedAction: hasPerformedAction
+          )
         }
       }
     }
@@ -66,6 +99,7 @@ private extension ChatRichContentWrapperCell {
 
   func loadContent() async {
     if let healthGoals = try? JSONDecoder.bloomModel.decode([SocketMessage.HealthMetricGoal].self, from: data) {
+
       var proposedGoals = [ProposedGoal]()
       for healthGoal in healthGoals {
         let habit = try? await modelActor.fetchActiveHabits(for: healthGoal.metric.targetMetric).first
@@ -86,11 +120,43 @@ private extension ChatRichContentWrapperCell {
       if proposedGoals.isNotEmpty {
         self.goals = proposedGoals
       }
-    }
 
-    if let detectedFood = try? JSONDecoder.bloomModel.decode(SocketMessage.DetectedFood.self, from: data) {
+    } else if let detectedFood = try? JSONDecoder.bloomModel.decode(SocketMessage.DetectedFood.self, from: data) {
+
       self.foodItemsName = detectedFood.name
       self.foodItemServings = detectedFood.foodItemServings.map { $0.asServing() }
+
+    } else if let logWater = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWaterConsumption.self, from: data) {
+
+      self.waterQuantity = HKQuantity(
+        unit: HKUnit(from: logWater.quantity.unit),
+        doubleValue: logWater.quantity.value
+      )
+
+    } else if let logBowelMovement = try? JSONDecoder.bloomModel.decode(SocketMessage.LogBowelMovement.self, from: data) {
+
+      self.bristolStoolType = logBowelMovement.bristolStoolType
+      self.duration = switch logBowelMovement.duration {
+      case .lessThan5Min:
+          .lessThan5Min
+      case .between5And10Min:
+          .between5And10Min
+      case .moreThan10Min:
+          .moreThan10Min
+      }
+
+    } else if let logWeight = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWeight.self, from: data) {
+
+      self.weightQuantity = HKQuantity(
+        unit: HKUnit(from: logWeight.quantity.unit),
+        doubleValue: logWeight.quantity.value
+      )
+
+    } else if let logBloodPressure = try? JSONDecoder.bloomModel.decode(SocketMessage.LogBloodPressure.self, from: data) {
+
+      self.systolic = Double(logBloodPressure.systolic)
+      self.diastolic = Double(logBloodPressure.diastolic)
+      
     }
 
     self.isLoading = false

@@ -165,7 +165,11 @@ private extension ChatWebSocketService {
           return SocketMessage.MessageResponse(
             message: response.message,
             healthMetricGoals: response.healthMetricGoals,
-            detectedFood: detectedFood
+            detectedFood: detectedFood,
+            logWaterConsumption: response.logWaterConsumption,
+            logBowelMovement: response.logBowelMovement,
+            logWeight: response.logWeight,
+            logBloodPressure: response.logBloodPressure
           )
         }
         .first

@@ -29,6 +29,7 @@ struct ChatGoalsCell: View {
   @State private var didAddGoals: Bool
 
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.requestReview) private var requestReview
 
   var body: some View {
     HStack {
@@ -111,6 +112,10 @@ private extension ChatGoalsCell {
 
     SoundPlayer.playLogHealthData()
     didAddGoals = true
+
+    if RatingPromptTracker.shared.recordEvent() {
+      requestReview()
+    }
   }
 }
 

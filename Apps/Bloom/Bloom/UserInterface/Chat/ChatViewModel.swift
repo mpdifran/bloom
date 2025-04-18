@@ -164,6 +164,38 @@ private extension ChatViewModel {
             )
             modelContext.insert(richContentMessage)
           }
+          if let logWater = messagesResponse.logWaterConsumption {
+            let data = try JSONEncoder.bloomModel.encode(logWater)
+            let richContentMessage = ChatMessage(
+              isCurrentUser: false,
+              richContent: data
+            )
+            modelContext.insert(richContentMessage)
+          }
+          if let logBowelMovement = messagesResponse.logBowelMovement {
+            let data = try JSONEncoder.bloomModel.encode(logBowelMovement)
+            let richContentMessage = ChatMessage(
+              isCurrentUser: false,
+              richContent: data
+            )
+            modelContext.insert(richContentMessage)
+          }
+          if let logWeight = messagesResponse.logWeight {
+            let data = try JSONEncoder.bloomModel.encode(logWeight)
+            let richContentMessage = ChatMessage(
+              isCurrentUser: false,
+              richContent: data
+            )
+            modelContext.insert(richContentMessage)
+          }
+          if let logBloodPressure = messagesResponse.logBloodPressure {
+            let data = try JSONEncoder.bloomModel.encode(logBloodPressure)
+            let richContentMessage = ChatMessage(
+              isCurrentUser: false,
+              richContent: data
+            )
+            modelContext.insert(richContentMessage)
+          }
         }
       } catch {
         self.error = error

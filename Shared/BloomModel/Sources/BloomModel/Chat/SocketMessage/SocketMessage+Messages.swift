@@ -26,17 +26,32 @@ public extension SocketMessage {
     public let message: String
     public let healthMetricGoals: [HealthMetricGoal]?
     public let detectedFood: DetectedFood?
+    public let logWaterConsumption: LogWaterConsumption?
+    public let logBowelMovement: LogBowelMovement?
+    public let logWeight: LogWeight?
+    public let logBloodPressure: LogBloodPressure?
 
     public init(
       message: String,
       healthMetricGoals: [HealthMetricGoal]?,
-      detectedFood: DetectedFood?
+      detectedFood: DetectedFood?,
+      logWaterConsumption: LogWaterConsumption?,
+      logBowelMovement: LogBowelMovement?,
+      logWeight: LogWeight?,
+      logBloodPressure: LogBloodPressure?
     ) {
       self.message = message
       self.healthMetricGoals = healthMetricGoals
       self.detectedFood = detectedFood
+      self.logWaterConsumption = logWaterConsumption
+      self.logBowelMovement = logBowelMovement
+      self.logWeight = logWeight
+      self.logBloodPressure = logBloodPressure
     }
   }
+}
+
+public extension SocketMessage {
 
   struct HealthMetricGoal: Codable, Equatable, Sendable {
     public let metric: SuggestedGoal.Metric
@@ -61,6 +76,48 @@ public extension SocketMessage {
     public init(name: String, foodItemServings: [EstimateFoodCaloriesResponse.Serving]) {
       self.name = name
       self.foodItemServings = foodItemServings
+    }
+  }
+
+  struct LogWaterConsumption: Codable, Equatable, Sendable {
+    public let quantity: Quantity
+
+    public init(quantity: Quantity) {
+      self.quantity = quantity
+    }
+  }
+
+  struct LogBowelMovement: Codable, Equatable, Sendable {
+    public let bristolStoolType: Int
+    public let duration: Duration
+
+    public init(bristolStoolType: Int, duration: Duration) {
+      self.bristolStoolType = bristolStoolType
+      self.duration = duration
+    }
+
+    public enum Duration: String, Codable, Equatable, Sendable, CaseIterable {
+      case lessThan5Min
+      case between5And10Min
+      case moreThan10Min
+    }
+  }
+
+  struct LogWeight: Codable, Equatable, Sendable {
+    public let quantity: Quantity
+
+    public init(quantity: Quantity) {
+      self.quantity = quantity
+    }
+  }
+
+  struct LogBloodPressure: Codable, Equatable, Sendable {
+    public let systolic: Int
+    public let diastolic: Int
+
+    public init(systolic: Int, diastolic: Int) {
+      self.systolic = systolic
+      self.diastolic = diastolic
     }
   }
 }

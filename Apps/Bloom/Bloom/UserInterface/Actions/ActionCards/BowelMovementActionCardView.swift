@@ -183,7 +183,9 @@ private struct StoolTypeCell: View {
 }
 
 #Preview {
-  PreviewSheetPresent {
-    BowelMovementActionCardView(performDismiss: nil)
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      BowelMovementActionCardView(performDismiss: nil)
+    }
   }
 }

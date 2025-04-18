@@ -12,6 +12,10 @@ struct ChatAssistantResponse: Codable, Equatable, Sendable {
   let message: String
   let healthMetricGoals: [SocketMessage.HealthMetricGoal]?
   let detectedFood: DetectedFood?
+  let logWaterConsumption: SocketMessage.LogWaterConsumption?
+  let logBowelMovement: SocketMessage.LogBowelMovement?
+  let logWeight: SocketMessage.LogWeight?
+  let logBloodPressure: SocketMessage.LogBloodPressure?
 }
 
 struct DetectedFood: Codable, Equatable, Sendable {
