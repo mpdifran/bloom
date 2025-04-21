@@ -13,6 +13,7 @@ struct ProposedGoal: Sendable, Identifiable, Hashable {
   let id = UUID()
   let habitID: PersistentIdentifier?
   let targetMetric: TargetMetric
+  let timePeriod: GoalTimePeriod
   var value: Double
   var suggestedValue: Double
   let previousValue: Double?

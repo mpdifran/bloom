@@ -59,6 +59,7 @@ private extension DebugHabitCell {
         DebugHabitCell(
             habit: Habit(
                 targetMetric: .stepCount,
+                timePeriod: .daily,
                 value: 3000,
                 unitString: HKUnit.count().unitString,
                 startDate: .now,
@@ -69,6 +70,7 @@ private extension DebugHabitCell {
         DebugHabitCell(
             habit: Habit(
                 targetMetric: .stepCount,
+                timePeriod: .daily,
                 value: 3000,
                 unitString: HKUnit.count().unitString,
                 startDate: .now.addingTimeInterval(133254523),

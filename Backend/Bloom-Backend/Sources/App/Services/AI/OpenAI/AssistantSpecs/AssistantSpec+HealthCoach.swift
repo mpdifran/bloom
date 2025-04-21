@@ -42,12 +42,15 @@ extension AssistantSpec {
     }
 
     HealthMetricGoal: {
-      "metric": HealthMetric, // The metric you want the user to monitor.
+      "metric": HealthMetric, // The metric you want the user to monitor
+      "timePeriod": TimePeriod, // The time period of the goal
       "value": Float, // The numeric value of the goal
       "unit": HealthMetricUnit // This is the unit 
     }
     
     HealthMetric: An enum with the following string cases: \(SuggestedGoal.Metric.stringCaseList())
+    
+    TimePeriod: An enum with the following string cases: \(SuggestedGoal.TimePeriod.stringCaseList())
     
     HealthMetricUnit: An enum with the following string cases: \(SuggestedGoal.Unit.stringCaseList())
     

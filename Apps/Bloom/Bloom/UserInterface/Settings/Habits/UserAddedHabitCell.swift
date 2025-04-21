@@ -20,13 +20,18 @@ struct UserAddedHabitCell: View {
         .foregroundStyle(habit.targetMetric.color)
         .frame(width: 40)
 
-      Text(habit.targetMetric.name)
-        .bold()
+      VStack(alignment: .leading) {
+        Text(habit.targetMetric.name)
+          .bold()
+        Text(habit.timePeriod.name)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
 
       Spacer()
 
       Text(habit.displayQuantity)
-        .font(.subheadline)
+        .font(.body)
         .bold()
         .fontDesign(.rounded)
         .foregroundStyle(habit.targetMetric.color)
@@ -35,14 +40,17 @@ struct UserAddedHabitCell: View {
 }
 
 #Preview {
-  UserAddedHabitCell(
-    habit: Habit(
-      targetMetric: .walkingRunningDistance,
-      value: 5,
-      unitString: HKUnit.meterUnit(with: .kilo).unitString,
-      startDate: .now,
-      isSuggested: false,
-      isUserEdited: true
+  PreviewEnvironment {
+    UserAddedHabitCell(
+      habit: Habit(
+        targetMetric: .walkingRunningDistance,
+        timePeriod: .daily,
+        value: 5,
+        unitString: HKUnit.meterUnit(with: .kilo).unitString,
+        startDate: .now,
+        isSuggested: false,
+        isUserEdited: true
+      )
     )
-  )
+  }
 }

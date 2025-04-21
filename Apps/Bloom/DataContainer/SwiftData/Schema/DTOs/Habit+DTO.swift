@@ -11,6 +11,7 @@ import SwiftData
 public struct HabitDTO: Equatable, Sendable {
   public let id: PersistentIdentifier!
   public let targetMetric: TargetMetric
+  public let timePeriod: GoalTimePeriod
   public let value: Double
   public let unitString: String
   public let startDate: Date
@@ -24,6 +25,7 @@ public struct HabitDTO: Equatable, Sendable {
   public init(
     id: PersistentIdentifier!,
     targetMetric: TargetMetric,
+    timePeriod: GoalTimePeriod,
     value: Double,
     unitString: String,
     startDate: Date,
@@ -36,6 +38,7 @@ public struct HabitDTO: Equatable, Sendable {
   ) {
     self.id = id
     self.targetMetric = targetMetric
+    self.timePeriod = timePeriod
     self.value = value
     self.unitString = unitString
     self.startDate = startDate
@@ -54,6 +57,7 @@ public extension Habit {
     HabitDTO(
       id: persistentModelID,
       targetMetric: targetMetric,
+      timePeriod: timePeriod,
       value: value,
       unitString: unitString,
       startDate: startDate,

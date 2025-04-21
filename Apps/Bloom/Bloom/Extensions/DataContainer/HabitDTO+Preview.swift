@@ -16,6 +16,7 @@ extension HabitDTO.Preview {
   static let steps = HabitDTO(
     id: nil,
     targetMetric: .stepCount,
+    timePeriod: .daily,
     value: 5000,
     unitString: "count",
     startDate: Date().addingTimeInterval(604_800),
@@ -30,6 +31,7 @@ extension HabitDTO.Preview {
   static let heartRateZone5 = HabitDTO(
     id: nil,
     targetMetric: .targetHeartRateZone5,
+    timePeriod: .daily,
     value: 15,
     unitString: "min",
     startDate: Date().addingTimeInterval(604_800),

@@ -143,6 +143,22 @@ public extension DateRange {
     let endOfDay = Calendar.current.endOfDay(for: date)
     return DateRange(startOfDay, endOfDay)
   }
+
+  static func startOfMonthToNow() -> DateRange {
+    let endDate = Date.now
+    guard let startOfMonth = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: endDate)) else {
+        return DateRange(endDate, endDate)
+    }
+    return DateRange(startOfMonth, endDate)
+  }
+
+  static func startOfYearToNow() -> DateRange {
+    let endDate = Date.now
+    guard let startOfYear = Calendar.current.date(from: Calendar.current.dateComponents([.year], from: endDate)) else {
+        return DateRange(endDate, endDate)
+    }
+    return DateRange(startOfYear, endDate)
+  }
 }
 
 // MARK: Trailing Ranges

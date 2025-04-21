@@ -42,12 +42,11 @@ struct SettingsView: View {
   @State private var error: Error?
 
   @Query private var userAddedHabits: [Habit]
-  @Query private var allHabits: [Habit]
 
   init() {
     _userAddedHabits = Query(
       filter: #Predicate<Habit> { habit in
-        habit.endDate == nil && !habit.isSuggested
+        habit.endDate == nil
       },
       sort: \Habit.startDate,
       order: .forward
@@ -251,26 +250,18 @@ private extension SettingsView {
         .padding(.horizontal)
 
       ForEach(userAddedHabits) { habit in
-        Swipeable(
-          isSwipingItem: $isSwipingAnItem,
-          actions: [
-            SwipeAction(
-              title: "Delete",
-              symbol: .trash,
-              tint: .mutedRed
-            ) {
-              delete(habit: habit)
-            }
-          ]
-        ) {
-          SettingsHabitCell(
-            image: Image(systemSymbol: SFSymbol(rawValue: habit.targetMetric.systemImage)),
-            title: habit.targetMetric.name,
-            subtitle: habit.displayQuantity
-          )
-          .tint(habit.targetMetric.color)
-          .onTapGesture {
-            presentedSheet = EditUserAddedHabitView(habit: habit) { _ in }.asAny
+        SettingsHabitCell(
+          image: Image(systemSymbol: SFSymbol(rawValue: habit.targetMetric.systemImage)),
+          title: habit.targetMetric.name,
+          subtitle: "\(habit.displayQuantity) • \(habit.timePeriod.name)"
+        )
+        .tint(habit.targetMetric.color)
+        .onTapGesture {
+          presentedSheet = EditUserAddedHabitView(habit: habit) { _ in }.asAny
+        }
+        .contextMenu {
+          Button("Delete", systemSymbol: .trash, role: .destructive) {
+            delete(habit: habit)
           }
         }
       }
@@ -285,7 +276,7 @@ private extension SettingsView {
 
   var remainingMetrics: [TargetMetric] {
     TargetMetric.allCases.filter({ targetMetric in
-      !allHabits.contains(where: { habit in
+      !userAddedHabits.contains(where: { habit in
         habit.targetMetric == targetMetric
       })
     })

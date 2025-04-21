@@ -13,6 +13,7 @@ import HealthKit
 struct NewGoalCard: View {
 
   @State private var targetMetric: TargetMetric = .stepCount
+  @State private var timePeriod: GoalTimePeriod = .daily
   @State private var value: Double = 0
   @State private var unit: HKUnit = TargetMetric.stepCount.defaultUnit
   @State private var excludedTargetMetrics: [TargetMetric] = []
@@ -39,6 +40,17 @@ struct NewGoalCard: View {
 
             Divider()
 
+            LabeledContent("Period") {
+              GoalTimePeriodPicker(
+                selectedTimePeriod: $timePeriod,
+                targetMetric: targetMetric
+              )
+            }
+            .tint(targetMetric.color)
+            .frame(minHeight: 50)
+
+            Divider()
+
             LabeledContent("Value") {
               HStack {
                 TextField("", value: $value, formatter: targetMetric.preferredFormatter)
@@ -46,6 +58,7 @@ struct NewGoalCard: View {
                   .frame(maxWidth: 100)
 
                 LocalizedUnitPickerView(unit: $unit)
+                  .tint(targetMetric.color)
               }
               .fontDesign(.rounded)
               .keyboardType(.decimalPad)
@@ -80,6 +93,10 @@ struct NewGoalCard: View {
     .onChange(of: targetMetric) { _, newValue in
       self.unit = newValue.defaultUnit
       self.value = targetMetric.minHabitTarget.doubleValue(for: unit)
+
+      if !targetMetric.supportedTimePeriods.contains(where: { $0 == timePeriod }) {
+        timePeriod = targetMetric.supportedTimePeriods.first ?? .daily
+      }
     }
     .onChange(of: excludedTargetMetrics) { _, _ in
       updateToValidTargetMetric()
@@ -120,6 +137,7 @@ private extension NewGoalCard {
 
     let habit = Habit(
       targetMetric: targetMetric,
+      timePeriod: timePeriod,
       value: value,
       unitString: unit.unitString,
       startDate: .now,
@@ -145,7 +163,9 @@ private extension NewGoalCard {
 }
 
 #Preview {
-  PreviewSheetPresent {
-    NewGoalCard()
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      NewGoalCard()
+    }
   }
 }

@@ -104,9 +104,17 @@ private extension ChatRichContentWrapperCell {
       for healthGoal in healthGoals {
         let habit = try? await modelActor.fetchActiveHabits(for: healthGoal.metric.targetMetric).first
 
+        let timePeriod: GoalTimePeriod = switch healthGoal.timePeriod {
+          case .daily: .daily
+          case .weekly: .weekly
+          case .monthly: .monthly
+          case .yearly: .yearly
+        }
+
         let proposedGoal = ProposedGoal(
           habitID: habit?.id,
           targetMetric: healthGoal.metric.targetMetric,
+          timePeriod: timePeriod,
           value: healthGoal.value,
           suggestedValue: healthGoal.value,
           previousValue: habit?.value,

@@ -55,15 +55,18 @@ public extension SocketMessage {
 
   struct HealthMetricGoal: Codable, Equatable, Sendable {
     public let metric: SuggestedGoal.Metric
+    public let timePeriod: SuggestedGoal.TimePeriod
     public let value: Double
     public let unit: SuggestedGoal.Unit
 
     public init(
       metric: SuggestedGoal.Metric,
+      timePeriod: SuggestedGoal.TimePeriod,
       value: Double,
       unit: SuggestedGoal.Unit
     ) {
       self.metric = metric
+      self.timePeriod = timePeriod
       self.value = value
       self.unit = unit
     }

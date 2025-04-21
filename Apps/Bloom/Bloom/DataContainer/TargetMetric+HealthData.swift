@@ -42,6 +42,19 @@ extension TargetMetric {
     }
   }
 
+  var supportedTimePeriods: [GoalTimePeriod] {
+    switch self {
+    case .none:
+      []
+    case .calories, .proteinIntake, .waterIntake, .fiberIntake:
+      [.daily]
+    case .timeInDaylight, .meditationMinutes, .exerciseMinutes, .stepCount, .walkingRunningDistance, .runDistance, .runDuration, .bikeDistance, .bikeDuration, .mobilityAndFlexibilityDuration, .strengthTrainingDuration, .cardioDuration, .highIntensityIntervalTrainingDuration, .targetHeartRateZone1, .targetHeartRateZone2, .targetHeartRateZone3, .targetHeartRateZone4, .targetHeartRateZone5:
+      [.daily, .weekly, .monthly, .yearly]
+    @unknown default:
+      fatalError("Unhandled TargetMetric case.")
+    }
+  }
+
   var defaultUnit: HKUnit {
     switch self {
     case .none:

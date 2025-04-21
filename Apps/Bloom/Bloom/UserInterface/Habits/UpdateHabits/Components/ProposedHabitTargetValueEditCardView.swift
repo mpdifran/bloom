@@ -95,6 +95,7 @@ struct ProposedHabitTargetValueEditCardView: View {
   @Previewable @State var proposedGoal = ProposedGoal(
     habitID: nil,
     targetMetric: .stepCount,
+    timePeriod: .daily,
     value: 3000,
     suggestedValue: 5000,
     previousValue: 2000,

@@ -106,7 +106,7 @@ private extension HabitDetailsView {
       VStack {
 
         HStack {
-          Text("Goal")
+          Text("\(viewModel.habit.timePeriod.name) Goal")
 
           Spacer()
 
@@ -294,6 +294,7 @@ struct WeekQuantitySamples: Identifiable {
     HabitDetailsView(
       habit: Habit(
         targetMetric: .waterIntake,
+        timePeriod: .daily,
         value: 1500,
         unitString: HKUnit.literUnit(with: .milli).unitString,
         startDate: .now,
@@ -310,6 +311,7 @@ struct WeekQuantitySamples: Identifiable {
     HabitDetailsView(
       habit: Habit(
         targetMetric: .strengthTrainingDuration,
+        timePeriod: .weekly,
         value: 30,
         unitString: HKUnit.minute().unitString,
         startDate: .now,

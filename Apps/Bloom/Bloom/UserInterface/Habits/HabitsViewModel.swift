@@ -133,6 +133,7 @@ extension HabitsViewModel {
   func createHabit(from proposedGoal: ProposedGoal, isSuggested: Bool) -> Habit {
     Habit(
       targetMetric: proposedGoal.targetMetric,
+      timePeriod: proposedGoal.timePeriod,
       value: proposedGoal.value,
       unitString: proposedGoal.unitString,
       startDate: .now,
@@ -161,7 +162,12 @@ extension HabitsViewModel {
     lastHabitRefreshDate = nil
   }
 
-  func update(value: Double, unit: HKUnit, for habit: Habit) throws -> Habit {
+  func update(
+    timePeriod: GoalTimePeriod,
+    value: Double,
+    unit: HKUnit,
+    for habit: Habit
+  ) throws -> Habit {
     guard let fetchedHabit = try modelContext.fetchHabit(id: habit.id) else { throw NSError(description: "There was a problem updating this habit.") }
 
     let updatedHabit: Habit
@@ -173,6 +179,7 @@ extension HabitsViewModel {
     }
 
     if Calendar.current.isDateInToday(fetchedHabit.startDate) {
+      fetchedHabit.timePeriod = timePeriod
       fetchedHabit.value = value
       fetchedHabit.unitString = unit.unitString
       fetchedHabit.isUserEdited = isUserEdited
@@ -183,6 +190,7 @@ extension HabitsViewModel {
       fetchedHabit.endDate = .now
 
       newHabit.startDate = .now
+      newHabit.timePeriod = timePeriod
       newHabit.value = value
       newHabit.unitString = unit.unitString
       newHabit.isUserEdited = isUserEdited

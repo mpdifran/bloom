@@ -37,7 +37,7 @@ struct SelectableHabitCell: View {
     .fontDesign(.rounded)
     .selectable()
     .contentShape(Rectangle())
-    .frame(height: 50)
+    .frame(height: 40)
   }
 }
 

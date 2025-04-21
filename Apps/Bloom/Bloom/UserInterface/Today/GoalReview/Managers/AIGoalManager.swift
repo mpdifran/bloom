@@ -62,6 +62,7 @@ private extension AIGoalManager {
       let proposedGoal = ProposedGoal(
         habitID: habit?.id,
         targetMetric: goal.metric.targetMetric,
+        timePeriod: .daily,
         value: habit?.isUserEdited == true ? habit!.value : goal.value,
         suggestedValue: goal.value,
         previousValue: habit?.value,
@@ -157,6 +158,7 @@ private extension AIGoalManager {
       let calorieHabit = ProposedGoal(
         habitID: existingCalorieHabit?.id,
         targetMetric: .calories,
+        timePeriod: .daily,
         value: value,
         suggestedValue: suggestedValue,
         previousValue: existingCalorieHabit?.value,
@@ -192,6 +194,7 @@ private extension AIGoalManager {
       let proteinHabit = ProposedGoal(
         habitID: existingProteinHabit?.id,
         targetMetric: .proteinIntake,
+        timePeriod: .daily,
         value: value,
         suggestedValue: suggestedValue,
         previousValue: existingProteinHabit?.value,
@@ -216,6 +219,7 @@ private extension AIGoalManager {
       ProposedGoal(
         habitID: goal.id,
         targetMetric: goal.targetMetric,
+        timePeriod: .daily,
         value: goal.value,
         suggestedValue: goal.value,
         previousValue: goal.value,

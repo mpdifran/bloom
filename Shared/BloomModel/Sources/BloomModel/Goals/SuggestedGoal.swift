@@ -9,17 +9,20 @@ import Foundation
 
 public struct SuggestedGoal: Codable, Equatable, Sendable {
   public let metric: Metric
+  public let timePeriod: TimePeriod
   public let value: Double
   public let unit: Unit
   public let notes: String
 
   public init(
     metric: Metric,
+    timePeriod: TimePeriod,
     value: Double,
     unit: Unit,
     notes: String
   ) {
     self.metric = metric
+    self.timePeriod = timePeriod
     self.value = value
     self.unit = unit
     self.notes = notes
@@ -49,6 +52,15 @@ public extension SuggestedGoal {
     case targetHeartRateZone3Minutes
     case targetHeartRateZone4Minutes
     case targetHeartRateZone5Minutes
+  }
+}
+
+public extension SuggestedGoal {
+  enum TimePeriod: String, Codable, Equatable, Sendable, CaseIterable {
+    case daily
+    case weekly
+    case monthly
+    case yearly
   }
 }
 
@@ -83,6 +95,15 @@ public extension SuggestedGoal.Metric {
       return [.steps]
     case .walkingRunningDistance, .runDistance, .bikeDistance:
       return [.km, .mi]
+    }
+  }
+
+  var supportedTimePeriods: [SuggestedGoal.TimePeriod] {
+    switch self {
+    case .calories, .proteinIntake, .waterIntake, .fiberIntake:
+      return [.daily]
+    default:
+      return [.daily, .weekly, .monthly, .yearly]
     }
   }
 }

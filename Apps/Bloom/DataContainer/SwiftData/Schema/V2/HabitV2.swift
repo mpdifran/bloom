@@ -50,10 +50,3 @@ extension SchemaV2 {
         }
     }
 }
-
-public extension SchemaV2.Habit {
-
-    var targetMetric: TargetMetric {
-        TargetMetric(rawValue: rawTargetMetric) ?? .none
-    }
-}

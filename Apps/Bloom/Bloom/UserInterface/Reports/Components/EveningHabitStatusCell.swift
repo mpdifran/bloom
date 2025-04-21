@@ -53,6 +53,7 @@ struct EveningHabitStatusCell: View {
     EveningHabitStatusCell(
       habit: Habit(
         targetMetric: .timeInDaylight,
+        timePeriod: .daily,
         value: 30,
         unitString: HKUnit.minute().unitString,
         startDate: .now,
@@ -64,6 +65,7 @@ struct EveningHabitStatusCell: View {
     EveningHabitStatusCell(
       habit: Habit(
         targetMetric: .stepCount,
+        timePeriod: .daily,
         value: 5000,
         unitString: HKUnit.count().unitString,
         startDate: .now,
@@ -75,6 +77,7 @@ struct EveningHabitStatusCell: View {
     EveningHabitStatusCell(
       habit: Habit(
         targetMetric: .targetHeartRateZone2,
+        timePeriod: .daily,
         value: 30,
         unitString: HKUnit.minute().unitString,
         startDate: .now,

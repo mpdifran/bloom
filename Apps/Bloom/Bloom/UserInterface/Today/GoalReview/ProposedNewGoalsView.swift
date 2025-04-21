@@ -93,6 +93,7 @@ struct ProposedNewGoalsView: View {
         ProposedGoal(
           habitID: nil,
           targetMetric: .bikeDistance,
+          timePeriod: .daily,
           value: 10,
           suggestedValue: 10,
           previousValue: 5,
@@ -106,6 +107,7 @@ struct ProposedNewGoalsView: View {
         ProposedGoal(
           habitID: nil,
           targetMetric: .proteinIntake,
+          timePeriod: .daily,
           value: 120,
           suggestedValue: 120,
           previousValue: 120,

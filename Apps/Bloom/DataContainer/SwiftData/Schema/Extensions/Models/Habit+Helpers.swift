@@ -18,6 +18,7 @@ public extension Habit {
   func duplicate() -> Habit {
     Habit(
       targetMetric: targetMetric,
+      timePeriod: timePeriod,
       value: value,
       unitString: unitString,
       startDate: startDate,
@@ -28,6 +29,27 @@ public extension Habit {
       vitalKind: vitalKind,
       context: context
     )
+  }
+}
+
+public extension Habit {
+
+  var targetMetric: TargetMetric {
+    get {
+      TargetMetric(rawValue: rawTargetMetric) ?? .none
+    }
+    set {
+      rawTargetMetric = newValue.rawValue
+    }
+  }
+
+  var timePeriod: GoalTimePeriod {
+    get {
+      GoalTimePeriod(rawValue: rawTimePeriod) ?? .daily
+    }
+    set {
+      rawTimePeriod = newValue.rawValue
+    }
   }
 }
 

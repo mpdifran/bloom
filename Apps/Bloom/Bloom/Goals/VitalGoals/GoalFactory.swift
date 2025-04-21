@@ -49,6 +49,7 @@ extension GoalFactory {
     return ProposedGoal(
       habitID: existingGoal?.id,
       targetMetric: targetMetric,
+      timePeriod: .daily,
       value: value,
       suggestedValue: suggestedValue,
       previousValue: existingGoal?.value,

@@ -62,10 +62,17 @@ private extension ChatGoalsCell {
           .foregroundStyle(.tint)
           .frame(width: 40)
 
-        Text(goal.targetMetric.name)
-          .font(.body)
-          .bold()
-          .fontDesign(.rounded)
+        VStack(alignment: .leading) {
+          Text(goal.targetMetric.name)
+            .font(.body)
+            .bold()
+            .fontDesign(.rounded)
+            .lineLimit(2)
+
+          Text(goal.timePeriod.name)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
 
         Spacer()
 
@@ -129,6 +136,7 @@ private extension ChatGoalsCell {
             ProposedGoal(
               habitID: nil,
               targetMetric: .bikeDistance,
+              timePeriod: .daily,
               value: 10,
               suggestedValue: 10,
               previousValue: nil,
@@ -140,6 +148,7 @@ private extension ChatGoalsCell {
             ProposedGoal(
               habitID: nil,
               targetMetric: .runDuration,
+              timePeriod: .daily,
               value: 15,
               suggestedValue: 15,
               previousValue: nil,

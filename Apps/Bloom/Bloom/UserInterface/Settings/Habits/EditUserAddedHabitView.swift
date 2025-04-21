@@ -17,6 +17,7 @@ struct EditUserAddedHabitView: View {
   private let onUpdate: (Habit?) -> Void
 
   @State private var targetValue: Double
+  @State private var timePeriod: GoalTimePeriod
   @State private var unit: HKUnit
 
   init(
@@ -28,6 +29,7 @@ struct EditUserAddedHabitView: View {
     self.canDelete = canDelete
     self.onUpdate = onUpdate
     self._targetValue = State(initialValue: habit.value)
+    self._timePeriod = State(initialValue: habit.timePeriod)
     self._unit = State(initialValue: habit.unit)
   }
 
@@ -64,39 +66,49 @@ struct EditUserAddedHabitView: View {
           }
         }
 
-        LabeledContent("Value") {
-          HStack {
-            TextField("", value: $targetValue, formatter: habit.targetMetric.preferredFormatter)
-              .selectAllTextOnBeginEditing()
-              .frame(maxWidth: 100)
-              .focused($isFocused)
+        VStack {
+          LabeledContent("Value") {
+            HStack {
+              TextField("", value: $targetValue, formatter: habit.targetMetric.preferredFormatter)
+                .selectAllTextOnBeginEditing()
+                .frame(maxWidth: 100)
+                .focused($isFocused)
 
-            LocalizedUnitPickerView(unit: $unit)
+              LocalizedUnitPickerView(unit: $unit)
+            }
+            .fontDesign(.rounded)
+            .keyboardType(.decimalPad)
+            .textFieldStyle(.roundedBorder)
+            .bold()
+            .multilineTextAlignment(.trailing)
           }
-          .fontDesign(.rounded)
-          .keyboardType(.decimalPad)
-          .textFieldStyle(.roundedBorder)
-          .bold()
-          .multilineTextAlignment(.trailing)
+          .frame(minHeight: 50)
+
+          Divider()
+
+          LabeledContent("Period") {
+            GoalTimePeriodPicker(
+              selectedTimePeriod: $timePeriod,
+              targetMetric: habit.targetMetric
+            )
+            .fontDesign(.rounded)
+            .bold()
+          }
         }
-        .frame(minHeight: 50)
         .cardContainer()
         .padding(.vertical)
-        .padding(.bottom)
 
-        Button {
-          do {
-            try save()
-            dismiss()
-          } catch {
-            self.error = error
-          }
+
+        AsyncButton {
+          try save()
+          dismiss()
         } label: {
           Text("Save")
             .horizontallyCentered()
         }
         .buttonStyle(.primary)
         .sensoryFeedback(.success, trigger: didSaveToggle)
+        .padding(.top)
       }
       .padding()
       .presentationDetentSelfSizing()
@@ -113,7 +125,12 @@ struct EditUserAddedHabitView: View {
 private extension EditUserAddedHabitView {
 
   func save() throws {
-    let newHabit = try habitsViewModel.update(value: targetValue, unit: unit, for: habit)
+    let newHabit = try habitsViewModel.update(
+      timePeriod: timePeriod,
+      value: targetValue,
+      unit: unit,
+      for: habit
+    )
     didSaveToggle.toggle()
 
     onUpdate(newHabit)
@@ -145,6 +162,7 @@ private extension EditUserAddedHabitView {
 #Preview {
   @Previewable @State var habit = Habit(
     targetMetric: .bikeDistance,
+    timePeriod: .daily,
     value: 10,
     unitString: "km",
     startDate: .now,
@@ -152,9 +170,11 @@ private extension EditUserAddedHabitView {
     isUserEdited: false
   )
 
-  PreviewSheetPresent {
-    EditUserAddedHabitView(habit: habit) { _ in
+  PreviewEnvironment {
+    PreviewSheetPresent {
+      EditUserAddedHabitView(habit: habit) { _ in
 
+      }
     }
   }
 }

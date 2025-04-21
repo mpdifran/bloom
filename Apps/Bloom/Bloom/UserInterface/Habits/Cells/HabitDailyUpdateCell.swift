@@ -67,7 +67,7 @@ struct HabitDailyUpdateCell: View {
                 .contentTransition(.numericText(value: viewModel.dailyValue))
                 .foregroundStyle(.tint)
 
-              Text("/ \(habit.displayQuantity)")
+              Text("/ \(habit.displayQuantity) • \(habit.timePeriod.name)")
                 .foregroundStyle(.secondary)
             }
             .animation(.default, value: viewModel.dailyValue)
@@ -103,43 +103,48 @@ struct HabitDailyUpdateCell: View {
 }
 
 #Preview {
-  ScrollView {
-    VStack {
-      HabitDailyUpdateCell(
-        habit: Habit(
-          targetMetric: .timeInDaylight,
-          value: 30,
-          unitString: HKUnit.minute().unitString,
-          startDate: .now,
-          isSuggested: true,
-          isUserEdited: false,
-          vitalKind: .sleepQuality
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        HabitDailyUpdateCell(
+          habit: Habit(
+            targetMetric: .timeInDaylight,
+            timePeriod: .daily,
+            value: 30,
+            unitString: HKUnit.minute().unitString,
+            startDate: .now,
+            isSuggested: true,
+            isUserEdited: false,
+            vitalKind: .sleepQuality
+          )
         )
-      )
-      HabitDailyUpdateCell(
-        habit: Habit(
-          targetMetric: .calories,
-          value: 1800,
-          unitString: HKUnit.largeCalorie().unitString,
-          startDate: .now,
-          isSuggested: true,
-          isUserEdited: false,
-          vitalKind: .nutrition
+        HabitDailyUpdateCell(
+          habit: Habit(
+            targetMetric: .calories,
+            timePeriod: .daily,
+            value: 1800,
+            unitString: HKUnit.largeCalorie().unitString,
+            startDate: .now,
+            isSuggested: true,
+            isUserEdited: false,
+            vitalKind: .nutrition
+          )
         )
-      )
-      HabitDailyUpdateCell(
-        habit: Habit(
-          targetMetric: .bikeDistance,
-          value: -20,
-          unitString: HKUnit.meterUnit(with: .kilo).unitString,
-          startDate: .now,
-          isSuggested: true,
-          isUserEdited: false,
-          vitalKind: .activityLevel
+        HabitDailyUpdateCell(
+          habit: Habit(
+            targetMetric: .bikeDistance,
+            timePeriod: .weekly,
+            value: 20,
+            unitString: HKUnit.meterUnit(with: .kilo).unitString,
+            startDate: .now,
+            isSuggested: true,
+            isUserEdited: false,
+            vitalKind: .activityLevel
+          )
         )
-      )
+      }
+      .padding()
     }
-    .padding()
+    .groupedBackground()
   }
-  .groupedBackground()
 }

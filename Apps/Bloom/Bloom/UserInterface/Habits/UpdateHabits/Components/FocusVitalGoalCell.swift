@@ -216,6 +216,7 @@ private extension FocusVitalGoalCell {
       ProposedGoal(
         habitID: nil,
         targetMetric: .bikeDistance,
+        timePeriod: .daily,
         value: 10,
         suggestedValue: 10,
         previousValue: 5,
@@ -227,6 +228,7 @@ private extension FocusVitalGoalCell {
       ProposedGoal(
         habitID: nil,
         targetMetric: .runDistance,
+        timePeriod: .daily,
         value: 10,
         suggestedValue: 12,
         previousValue: 5,

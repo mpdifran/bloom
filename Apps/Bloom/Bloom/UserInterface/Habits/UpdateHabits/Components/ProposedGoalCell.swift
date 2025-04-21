@@ -166,6 +166,7 @@ private extension ProposedGoalCell {
   @Previewable @State var waterGoal = ProposedGoal(
     habitID: nil,
     targetMetric: .waterIntake,
+    timePeriod: .daily,
     value: 500,
     suggestedValue: 800,
     previousValue: 250,
@@ -178,6 +179,7 @@ private extension ProposedGoalCell {
   @Previewable @State var walkingGoal = ProposedGoal(
     habitID: nil,
     targetMetric: .walkingRunningDistance,
+    timePeriod: .daily,
     value: 5,
     suggestedValue: 5,
     previousValue: 5,
@@ -190,6 +192,7 @@ private extension ProposedGoalCell {
   @Previewable @State var daylightGoal = ProposedGoal(
     habitID: nil,
     targetMetric: .timeInDaylight,
+    timePeriod: .daily,
     value: 30,
     suggestedValue: 30,
     previousValue: nil,

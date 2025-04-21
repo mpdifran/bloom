@@ -186,6 +186,7 @@ private extension GoalsFactory {
         let calorieHabit = ProposedGoal(
           habitID: habit.id,
           targetMetric: .calories,
+          timePeriod: .daily,
           value: habit.value,
           suggestedValue: habit.value,
           previousValue: nil,
@@ -200,6 +201,7 @@ private extension GoalsFactory {
         let proteinHabit = ProposedGoal(
           habitID: habit.id,
           targetMetric: .proteinIntake,
+          timePeriod: .daily,
           value: habit.value,
           suggestedValue: habit.value,
           previousValue: nil,
@@ -251,6 +253,7 @@ private extension GoalsFactory {
       let calorieHabit = ProposedGoal(
         habitID: existingCalorieHabit?.id,
         targetMetric: .calories,
+        timePeriod: .daily,
         value: value,
         suggestedValue: suggestedValue,
         previousValue: existingCalorieHabit?.value,
@@ -286,6 +289,7 @@ private extension GoalsFactory {
       let proteinHabit = ProposedGoal(
         habitID: existingProteinHabit?.id,
         targetMetric: .proteinIntake,
+        timePeriod: .daily,
         value: value,
         suggestedValue: suggestedValue,
         previousValue: existingProteinHabit?.value,
@@ -357,6 +361,7 @@ private extension GoalsFactory {
     return ProposedGoal(
       habitID: habit.id,
       targetMetric: habit.targetMetric,
+      timePeriod: habit.timePeriod,
       value: value,
       suggestedValue: suggestedValue,
       previousValue: habit.value,

@@ -8,7 +8,7 @@
 import SwiftData
 
 // CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV10.self
+let currentSchema: VersionedSchema.Type = SchemaV11.self
 
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
@@ -23,7 +23,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       SchemaV7.self,
       SchemaV8.self,
       SchemaV9.self,
-      SchemaV10.self
+      SchemaV10.self,
+      SchemaV11.self
     ]
   }
 
@@ -38,7 +39,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       migrateV6ToV7,
       migrateV7ToV8,
       migrateV8ToV9,
-      migrateV9ToV10
+      migrateV9ToV10,
+      migrateV10ToV11
     ]
   }
 
@@ -196,6 +198,28 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
     .lightweight(
       fromVersion: SchemaV9.self,
       toVersion: SchemaV10.self
+    )
+  }
+
+  private static var migrateV10ToV11: MigrationStage {
+    .custom(
+      fromVersion: SchemaV10.self,
+      toVersion: SchemaV11.self,
+      willMigrate: nil,
+      didMigrate: { context in
+        do {
+          try context.savingTransaction {
+            let habits = try context.fetch(FetchDescriptor<SchemaV11.Habit>())
+
+            for habit in habits {
+              habit.timePeriod = .daily
+            }
+          }
+        } catch {
+          print("Migration Failed: \(error)")
+          throw error
+        }
+      }
     )
   }
 }
