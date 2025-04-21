@@ -219,8 +219,8 @@ private extension ChatViewModel {
       if !typingIndicator.isTyping {
         self.queryAreas.removeAll()
       }
-    } else if let errorMessage = try? decoder.decode(SocketMessage.Error.self, from: data) {
-//      self.error = NSError(description: errorMessage.message)
+    } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
+      print(error.errorMessage)
     } else {
       print("Unknown SocketMessage:\n\n\(String(data: data, encoding: .utf8) ?? "")")
     }

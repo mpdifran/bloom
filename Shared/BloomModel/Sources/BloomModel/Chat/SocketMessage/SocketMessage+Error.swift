@@ -7,10 +7,10 @@
 
 public extension SocketMessage {
   struct Error: Codable, Equatable, Sendable {
-    public let message: String
+    public let errorMessage: String
 
-    public init(message: String) {
-      self.message = message
+    public init(errorMessage: String) {
+      self.errorMessage = errorMessage
     }
   }
 }
