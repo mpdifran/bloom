@@ -11,7 +11,13 @@ import HealthKit
 extension FoodItem.Quantity {
 
   var hkQuantity: HKQuantity {
-    let hkUnit = HKUnit(from: unit)
+    let formattedUnit: String
+    if unit == "cal" {
+      formattedUnit = "Cal"
+    } else {
+      formattedUnit = unit
+    }
+    let hkUnit = HKUnit(from: formattedUnit)
     return HKQuantity(unit: hkUnit, doubleValue: value)
   }
 

@@ -34,7 +34,7 @@ extension AssistantSpec {
     Response: {
       "message": String, // A text message you want to send to the user.
       "healthMetricGoals": [HealthMetricGoal], // an optional list of goals for health metrics you want the user to keep track of. The user will be able to add these goals in their Bloom app.
-      "detectedFood": DetectedFood?, // An optional object to use when you need to return food items to the user. Sometimes, the user may send you a photo of food, or describe food for you. You can use this property to provide the food items to the user, so they can log it in Bloom.
+      "detectedFood": DetectedFood?, // An optional object to use when you need to return food items to the user. Sometimes, the user may send you a photo of food, or describe food for you. You can use this property to provide the food items to the user, so they can log it in Bloom. Try and provide estimates for as many nutrients as is reasonable.
       "logWaterConsumption": LogWaterConsumption, // If the user indicates they drank some water, you can use this object to help them log it in Bloom.
       "logBowelMovement": LogBowelMovement, // If the user indicates they took a bowel movement, you can use this object to help them log it in Bloom.
       "logWeight": LogWeight, // If the user indicates they've weighed themselves, you can use this object to help them log it in Bloom.
@@ -69,7 +69,7 @@ extension AssistantSpec {
       "servingName": String, // A name for a single serving of the food item. E.g. 1 cup or 12 chips. It should not contain the name of the item itself, and should contain a number. This should be the typical common denominator standard serving unit for measuring this food item.
       "servingValue": Quantity, // The amount of the food in a standard unit, typically measured in g, mL, oz, etc.'
       "servingCount": Double, // The number of servings of the food item you detect.
-      "calories": Quantity, // An estimate of the amount of calories
+      "calories": Quantity, // An estimate of the amount of calories. The unit is always 'Cal'.
       "fat": Quantity, // An estimate of the amount of fat
       "carbohydrates": Quantity, // An estimate of the amount of carbohydrates
       "protein": Quantity, // An estimate of the amount of protein
