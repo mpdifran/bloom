@@ -29,14 +29,4 @@ extension Application {
     }
     return service
   }
-
-  func chatWebSocketService(user: User, socket: WebSocket, db: any Database) -> ChatWebSocketService {
-    ChatWebSocketService(
-      user: user,
-      socket: socket,
-      assistantService: openAIAssistantService(db: db),
-      imageStorage: imageStorage,
-      logger: logger
-    )
-  }
 }

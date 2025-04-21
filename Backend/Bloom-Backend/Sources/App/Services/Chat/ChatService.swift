@@ -1,65 +1,72 @@
 //
-//  ChatWebSocketService.swift
+//  ChatService.swift
 //  Bloom-Backend
 //
-//  Created by Mark DiFranco on 2025-04-01.
+//  Created by Mark DiFranco on 2025-04-21.
 //
 
+import Foundation
 import Vapor
-import WebSocketKit
-import OpenAIKit
 import BloomModel
+import OpenAIKit
+import Fluent
 
-struct ChatWebSocketService: Sendable {
-  private let user: User
-  private let socket: WebSocket
-  private let assistantService: OpenAIAssistantService
-  private let imageStorage: ImageStorage
+// MARK: - ChatService
+
+final class ChatService: Sendable {
+
+  private let application: Application
   private let logger: Logger
 
   init(
-    user: User,
-    socket: WebSocket,
-    assistantService: OpenAIAssistantService,
-    imageStorage: ImageStorage,
+    application: Application,
     logger: Logger
   ) {
-    self.user = user
-    self.socket = socket
-    self.assistantService = assistantService
-    self.imageStorage = imageStorage
+    self.application = application
     self.logger = logger
   }
 
   private let decoder = JSONDecoder.bloomModel
 }
 
-extension ChatWebSocketService {
+// MARK: - Public Methods
 
-  func parse(data: Data) async throws -> Bool {
+extension ChatService {
+
+  func parse(
+    data: Data,
+    for userID: UserIdentifier,
+    db: any Database
+  ) async throws -> Bool {
     if let message = try? decoder.decode(SocketMessage.MessageRequest.self, from: data) {
-      try await on(message: message)
+      try await on(message: message, userID: userID, db: db)
     } else if let queryRequest = try? decoder.decode(SocketMessage.DataQueryRequest.self, from: data) {
-      try await onDataQuery(queryRequest: queryRequest)
+      try await onDataQuery(queryRequest: queryRequest, userID: userID, db: db)
     } else {
       return false
     }
     return true
   }
+}
 
-  func onClose() async throws {
-    let thread = try await assistantService.createOrFetchAssistantThread(
-      user: user,
-      assistantSpec: .healthCoach
-    )
-    try await assistantService.cancelCurrentlyActiveRuns(assistantThread: thread)
-  }
+// MARK: - Incoming Message Handlers
 
-  func on(message: SocketMessage.MessageRequest) async throws {
-    let thread = try await assistantService.createOrFetchAssistantThread(
-      user: user,
+private extension ChatService {
+
+  func on(
+    message: SocketMessage.MessageRequest,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+    let assistantService = application.openAIAssistantService(db: db)
+
+    guard let thread = try await assistantService.createOrFetchAssistantThread(
+      userID: userID,
       assistantSpec: .healthCoach
-    )
+    ) else {
+      logger.info("Received WebSocket message from unknown user \(userID).")
+      return
+    }
 
     var content = [OpenAIKit.Thread.Message.Content]()
     content.append(.text("Here are some details about me:\n\n\(message.userInfo)"))
@@ -73,14 +80,27 @@ extension ChatWebSocketService {
       content: content
     )
 
-    try await performRun(thread: thread)
+    try await performRun(
+      thread: thread,
+      userID: userID,
+      db: db
+    )
   }
 
-  func onDataQuery(queryRequest: SocketMessage.DataQueryRequest) async throws {
-    let thread = try await assistantService.createOrFetchAssistantThread(
-      user: user,
+  func onDataQuery(
+    queryRequest: SocketMessage.DataQueryRequest,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+    let assistantService = application.openAIAssistantService(db: db)
+
+    guard let thread = try await assistantService.createOrFetchAssistantThread(
+      userID: userID,
       assistantSpec: .healthCoach
-    )
+    ) else {
+      logger.info("Received WebSocket message from unknown user \(userID).")
+      return
+    }
 
     let toolOutputs = queryRequest.queryData.map { ToolOutput(toolCallID: $0.id, output: $0.data) }
 
@@ -90,14 +110,68 @@ extension ChatWebSocketService {
       toolOutputs: toolOutputs
     )
 
-    try await performRun(thread: thread, existingRun: run)
+    try await performRun(
+      thread: thread,
+      existingRun: run,
+      userID: userID,
+      db: db
+    )
   }
 }
 
-private extension ChatWebSocketService {
+// MARK: - WebSocket Helpers
 
-  func performRun(thread: OpenAIAssistantThread, existingRun: Run? = nil) async throws {
-    try sendIsAssistantTyping(isTyping: true)
+private extension ChatService {
+
+  func sendSocketContentIfAvailable<Content>(
+    _ content: Content,
+    userID: UserIdentifier
+  ) async throws where Content: Encodable {
+    let webSocketService = application.webSocketService
+
+    guard let socket = await webSocketService.webSocket(for: userID) else {
+      return
+    }
+
+    try socket.sendContent(content)
+  }
+
+  func sendIsAssistantTyping(
+    isTyping: Bool,
+    userID: UserIdentifier
+  ) async throws {
+    let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
+    try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
+  }
+
+  func sendDataQueryResponse(
+    run: Run,
+    queries: [SocketMessage.Query],
+    userID: UserIdentifier
+  ) async throws {
+    let dataQueryResponse = SocketMessage.DataQueryResponse(
+      id: run.id,
+      queries: queries
+    )
+    try await sendSocketContentIfAvailable(dataQueryResponse, userID: userID)
+  }
+
+
+}
+
+// MARK: - Run Management
+
+private extension ChatService {
+
+  func performRun(
+    thread: OpenAIAssistantThread,
+    existingRun: Run? = nil,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+    let assistantService = application.openAIAssistantService(db: db)
+
+    try await sendIsAssistantTyping(isTyping: true, userID: userID)
 
     let assistantResponse = try await assistantService.startRunAndPollForResponse(
       assistantThread: thread,
@@ -138,7 +212,7 @@ private extension ChatWebSocketService {
           throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
         }
       }
-      try sendDataQueryResponse(run: run, queries: queries)
+      try await sendDataQueryResponse(run: run, queries: queries, userID: userID)
     case .messages(_, let messages):
       let response = messages
         .flatMap { message in
@@ -162,7 +236,7 @@ private extension ChatWebSocketService {
           } else {
             detectedFood = nil
           }
-
+          
           return SocketMessage.MessageResponse(
             message: response.message,
             healthMetricGoals: response.healthMetricGoals,
@@ -174,26 +248,14 @@ private extension ChatWebSocketService {
           )
         }
         .first
-
+      
       guard let response else {
         throw Abort(.internalServerError, reason: "Could not decode message from Assistant.")
       }
+      
+      try await sendIsAssistantTyping(isTyping: false, userID: userID)
 
-      try sendIsAssistantTyping(isTyping: false)
-      try socket.sendContent(response)
+      try await sendSocketContentIfAvailable(response, userID: userID) // TODO: Send push notification if no socket.
     }
-  }
-
-  func sendDataQueryResponse(run: Run, queries: [SocketMessage.Query]) throws {
-    let dataQueryResponse = SocketMessage.DataQueryResponse(
-      id: run.id,
-      queries: queries
-    )
-    try socket.sendContent(dataQueryResponse)
-  }
-
-  func sendIsAssistantTyping(isTyping: Bool) throws {
-    let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
-    try socket.sendContent(typingIndicator)
   }
 }

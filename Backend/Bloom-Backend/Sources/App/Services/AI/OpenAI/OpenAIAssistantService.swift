@@ -13,9 +13,10 @@ import Vapor
 import Fluent
 
 struct OpenAIAssistantService {
-  let openAI: OpenAIKit.Client
-  let db: any Database
-  let assistantProvider: OpenAIAssistantProvider
+  private let openAI: OpenAIKit.Client
+  private let db: any Database
+  private let assistantProvider: OpenAIAssistantProvider
+  private let userDatabaseService: UserDatabaseService
 
   init(
     openAI: OpenAIKit.Client,
@@ -25,15 +26,26 @@ struct OpenAIAssistantService {
     self.openAI = openAI
     self.db = db
     self.assistantProvider = assistantProvider
+    self.userDatabaseService = UserDatabaseService(db: db)
   }
 }
 
 extension OpenAIAssistantService {
 
   func createOrFetchAssistantThread(
+    userID: UserIdentifier,
+    assistantSpec: AssistantSpec
+  ) async throws -> OpenAIAssistantThread? {
+    guard let user = try await userDatabaseService.fetchUser(for: userID) else {
+      return nil
+    }
+    return try await createOrFetchAssistantThread(user: user, assistantSpec: assistantSpec)
+  }
+
+  func createOrFetchAssistantThread(
     user: User,
     assistantSpec: AssistantSpec
-  ) async throws-> OpenAIAssistantThread {
+  ) async throws -> OpenAIAssistantThread {
 
     let assistant = try await assistantProvider.createOrUpdateAssistant(
       assistantSpec: assistantSpec

@@ -36,7 +36,6 @@ extension WebSocketService {
     chatSockets[userID] = socket
 
     let db = createDB(for: socket)
-
     socket.eventLoop.execute {
       socket.onText { [weak self] (socket, text) in
         Task {
@@ -46,10 +45,9 @@ extension WebSocketService {
             }
 
             try await self?.onData(
-              socket: socket,
-              db: db,
               data: data,
-              userID: userID
+              userID: userID,
+              db: db
             )
           }
         }
@@ -59,10 +57,9 @@ extension WebSocketService {
           await self?.handleErrors(socket: socket) { [weak self] in
             let data = Data(buffer: byteBuffer)
             try await self?.onData(
-              socket: socket,
-              db: db,
               data: data,
-              userID: userID
+              userID: userID,
+              db: db
             )
           }
         }
@@ -80,16 +77,13 @@ extension WebSocketService {
       socket.onClose.whenComplete { [weak self] (result) in
         Task {
           await self?.removeSocket(for: userID)
-          if let chatWebSocketService = try await self?.createChatWebSocketService(
-            userID: userID,
-            socket: socket,
-            db: db
-          ) {
-            try await chatWebSocketService.onClose()
-          }
         }
       }
     }
+  }
+
+  func webSocket(for userID: UserIdentifier) -> WebSocket? {
+    chatSockets[userID]
   }
 
   func removeSocket(for userID: UserIdentifier) {
@@ -125,32 +119,18 @@ private extension WebSocketService {
   }
 
   func onData(
-    socket: WebSocket,
-    db: any Database,
     data: Data,
-    userID: UserIdentifier
+    userID: UserIdentifier,
+    db: any Database
   ) async throws {
-    let chatWebSocketService = try await createChatWebSocketService(userID: userID, socket: socket, db: db)
-
-    if try await chatWebSocketService.parse(data: data) {
+    if try await application.chatService.parse(
+      data: data,
+      for: userID,
+      db: db
+    ) {
       // success
     } else {
       throw Abort(.badRequest)
     }
   }
-
-  func createChatWebSocketService(userID: UserIdentifier, socket: WebSocket, db: any Database) async throws -> ChatWebSocketService {
-    let userDatabaseService = application.userDatabaseService(db: db)
-
-    guard let user = try await userDatabaseService.fetchUser(for: userID) else {
-      throw Abort(.forbidden)
-    }
-
-    return application.chatWebSocketService(
-      user: user,
-      socket: socket,
-      db: db
-    )
-  }
 }
-

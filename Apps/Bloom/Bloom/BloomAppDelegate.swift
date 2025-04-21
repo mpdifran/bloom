@@ -50,4 +50,12 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     )
     print(error)
   }
+
+//  func application(
+//    _ application: UIApplication,
+//    didReceiveRemoteNotification userInfo: [AnyHashable : Any]
+//  ) async -> UIBackgroundFetchResult {
+//
+//    return .newData
+//  }
 }
