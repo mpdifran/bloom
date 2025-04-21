@@ -47,6 +47,7 @@ struct ChatView: View {
           ChatBar { (text, image) in
             Task {
               await viewModel.sendMessage(text, image: image)
+              scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
             }
           }
           .focused($isFocused)
@@ -68,9 +69,6 @@ struct ChatView: View {
             }
           }
         }
-        .onChange(of: chatMessages) { _, messages in
-          scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
-        }
         .onChange(of: viewModel.assistantTypingStatus) { _, _ in
           guard viewModel.assistantIsTyping else { return }
           withAnimation {
@@ -83,7 +81,8 @@ struct ChatView: View {
             scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
           }
         }
-        .onAppear {
+        .task {
+          await Delay(300)
           scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
         }
       }

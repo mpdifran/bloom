@@ -148,6 +148,7 @@ private extension ChatWebSocketService {
           do {
             return try JSONDecoder.bloomModel.decode(ChatAssistantResponse.self, from: data)
           } catch {
+            logger.report(error: error)
             return nil
           }
         }
