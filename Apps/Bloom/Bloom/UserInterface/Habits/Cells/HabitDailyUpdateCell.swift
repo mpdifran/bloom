@@ -32,13 +32,19 @@ struct HabitDailyUpdateCell: View {
       Image(systemSymbol: SFSymbol(rawValue: habit.targetMetric.systemImage)) // TODO: Zach - see if we need to map symbols from DataContainer
         .font(.title)
         .foregroundStyle(.tint)
-        .frame(width: 40)
+        .frame(width: 45)
 
-      VStack(alignment: .leading, spacing: 8) {
+      VStack(alignment: .leading, spacing: 0) {
+        Text(habit.timePeriod.name)
+          .font(.caption)
+          .bold()
+          .fontDesign(.rounded)
+
         Text(habit.targetMetric.name)
           .font(.title3)
           .bold()
           .fontDesign(.rounded)
+          .padding(.bottom, 8)
 
         Group {
           if viewModel.goalCompletionState == .metGoal {
@@ -67,7 +73,7 @@ struct HabitDailyUpdateCell: View {
                 .contentTransition(.numericText(value: viewModel.dailyValue))
                 .foregroundStyle(.tint)
 
-              Text("/ \(habit.displayQuantity) • \(habit.timePeriod.name)")
+              Text("/ \(habit.displayQuantity)")
                 .foregroundStyle(.secondary)
             }
             .animation(.default, value: viewModel.dailyValue)
