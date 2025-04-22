@@ -88,6 +88,10 @@ extension ChatController {
 
     await SoundPlayer.playSendMessage()
   }
+
+  func handlePushData(_ data: Data) async {
+    await parse(data: data)
+  }
 }
 
 private extension ChatController {

@@ -35,6 +35,8 @@ extension WebSocketService {
   func registerChat(socket: WebSocket, forUserID userID: UserIdentifier) {
     chatSockets[userID] = socket
 
+    // TODO: Poll current run status, and send typing indicator if Run is active
+
     let db = createDB(for: socket)
     socket.eventLoop.execute {
       socket.onText { [weak self] (socket, text) in

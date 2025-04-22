@@ -7,6 +7,7 @@
 
 import UIKit
 import TelemetryDeck
+import BloomModel
 
 class BloomAppDelegate: NSObject, UIApplicationDelegate {
 
@@ -51,11 +52,24 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     print(error)
   }
 
-//  func application(
-//    _ application: UIApplication,
-//    didReceiveRemoteNotification userInfo: [AnyHashable : Any]
-//  ) async -> UIBackgroundFetchResult {
-//
-//    return .newData
-//  }
+  func application(
+    _ application: UIApplication,
+    didReceiveRemoteNotification userInfo: [AnyHashable: Any]
+  ) async -> UIBackgroundFetchResult {
+    let decoder = JSONDecoder.bloomModel
+    do {
+      let data = try JSONSerialization.data(withJSONObject: userInfo, options: [])
+      await ChatController.shared.handlePushData(data)
+
+      return .newData
+    } catch {
+      TelemetryDeck.errorOccurred(
+        id: "BloomAppDelegate.didReceiveRemoteNotification",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+      print("Error decoding push payload:", error)
+      return .failed
+    }
+  }
 }
