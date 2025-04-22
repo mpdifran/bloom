@@ -23,7 +23,7 @@ enum UserID {
   )
 
   private static let sharedValet = Valet.sharedGroupValet(
-    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "com.lotus-labs.bloom")!,
+    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: Bundle.main.bundleIdentifier!)!,
     identifier: Identifier(nonEmpty: "UserID")!,
     accessibility: .afterFirstUnlock
   )
