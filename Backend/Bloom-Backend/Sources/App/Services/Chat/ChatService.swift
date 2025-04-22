@@ -72,6 +72,8 @@ private extension ChatService {
       return
     }
 
+    try await assistantService.cancelCurrentlyActiveRuns(assistantThread: thread)
+
     var content = [OpenAIKit.Thread.Message.Content]()
     content.append(.text("Here are some details about me:\n\n\(message.userInfo)"))
     for fileID in message.imageFileIDs {
@@ -219,7 +221,7 @@ private extension ChatService {
       )
 
       if let apnsUniqueID = result.apnsUniqueID {
-        logger.debug("Sent APNS message to \(userID): \(apnsUniqueID)")
+        logger.debug("Sent silent APNS message to \(userID): \(apnsUniqueID)")
       }
     } else {
       logger.debug("Could not relay message to user \(userID).")
