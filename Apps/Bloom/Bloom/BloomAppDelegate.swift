@@ -56,7 +56,6 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didReceiveRemoteNotification userInfo: [AnyHashable: Any]
   ) async -> UIBackgroundFetchResult {
-    let decoder = JSONDecoder.bloomModel
     do {
       let data = try JSONSerialization.data(withJSONObject: userInfo, options: [])
       await ChatController.shared.handlePushData(data)
