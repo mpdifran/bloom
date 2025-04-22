@@ -19,6 +19,7 @@ extension ChatController: RouteCollection {
       $0.auth(using: UserToken.self) {
         $0.group("chat") {
           $0.webSocket("web-socket", onUpgrade: createWebSocket)
+          $0.post("query-response", use: queryResponse)
           $0.post("upload-image", use: uploadImage)
           $0.get("delete-thread", use: deleteThread)
         }
@@ -43,6 +44,20 @@ extension ChatController {
       socket: webSocket,
       forUserID: userID
     )
+  }
+
+  @Sendable
+  func queryResponse(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else { throw Abort(.unauthorized) }
+    guard let byteBuffer = request.body.data else { throw Abort(.badRequest, reason: "Request body is missing") }
+
+    let data = Data(buffer: byteBuffer)
+    if try await request.chatService.parse(data: data, for: userID, db: request.db) {
+      return Response(status: .ok)
+    }
+    return Response(status: .internalServerError)
   }
 
   @Sendable

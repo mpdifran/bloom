@@ -230,6 +230,60 @@ private extension ChatService {
 //      let _ = try await application.redis.expire(key, after: .seconds(86400)).get()
     }
   }
+
+  func ensureContentSilentlySent<Content>(
+    _ content: Content,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws where Content: Encodable, Content: Sendable {
+    if let socket = await socket(for: userID) {
+      try socket.sendContent(content)
+      return
+    }
+
+    let userDatabaseService = application.userDatabaseService(db: db)
+
+    guard let user = try await userDatabaseService.fetchUser(for: userID) else {
+      logger.info("Attempting to send message to unknown user \(userID).")
+      return
+    }
+
+    let threadID = "bud-assistant-query" // This is used for the APNs but also redis
+
+    if let deviceToken = user.apnsDeviceToken {
+      let expirationTime = Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
+      let expiration = APNSNotificationExpiration.timeIntervalSince1970InSeconds(expirationTime)
+      let priority = APNSPriority.immediately
+      let topic = application.bloomAppBundleID
+
+      let silentNotification = APNSBackgroundNotification(
+        expiration: expiration,
+        topic: topic,
+        payload: content
+      )
+
+      let result = try await application.apns.client.send(
+        APNSRequest(
+          message: silentNotification,
+          deviceToken: deviceToken,
+          pushType: .background,
+          expiration: expiration,
+          priority: priority,
+          apnsID: nil,
+          topic: topic,
+          collapseID: nil
+        )
+      )
+
+      if let apnsUniqueID = result.apnsUniqueID {
+        logger.debug("Sent APNS message to \(userID): \(apnsUniqueID)")
+      }
+    } else {
+      logger.debug("Could not relay silent message to user \(userID).")
+
+      // TODO: Store in redis? Or cancel run?
+    }
+  }
 }
 
 // MARK: - Run Management

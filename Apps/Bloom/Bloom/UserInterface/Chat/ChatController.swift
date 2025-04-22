@@ -202,7 +202,11 @@ private extension ChatController {
       )
 
       do {
-        try await webSocketHandle?.send(payload: dataRequest)
+        if let webSocketHandle {
+          try await webSocketHandle.send(payload: dataRequest)
+        } else {
+          try await NetworkRequester.shared.submitQueryResponse(body: dataRequest)
+        }
       } catch {
         self.error = error
       }

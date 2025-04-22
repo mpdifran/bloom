@@ -12,6 +12,8 @@ final class NetworkRequester: Sendable {
   static let shared = NetworkRequester()
 }
 
+// MARK: - Authentication
+
 extension NetworkRequester {
 
   func authenticate(request: AuthenticationRequest) async throws -> AuthenticationResponse {
@@ -47,6 +49,8 @@ extension NetworkRequester {
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
 }
+
+// MARK: - Food
 
 extension NetworkRequester {
 
@@ -169,12 +173,19 @@ extension NetworkRequester {
   }
 }
 
+// MARK: - Chat
+
 extension NetworkRequester {
 
   func openChatWebsocket() async -> WebSocketHandle {
     let request = await URLRequest.Chat.webSocket().settingBloomHeaders()
     let task = URLSession.shared.webSocketTask(with: request)
     return WebSocketHandle(task: task)
+  }
+
+  func submitQueryResponse(body: SocketMessage.DataQueryRequest) async throws {
+    let request = try await URLRequest.Chat.submitQueryResponse(body: body)
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
 
   func uploadChatImages(images: [Data]) async throws -> ChatUploadFileResponse {
@@ -192,6 +203,8 @@ extension NetworkRequester {
   }
 }
 
+// MARK: - Goals
+
 extension NetworkRequester {
 
   func suggestGoals(healthData: String, currentGoals: String) async throws -> SuggestGoalsResponse {
@@ -207,6 +220,8 @@ extension NetworkRequester {
     )
   }
 }
+
+// MARK: - Legacy
 
 extension NetworkRequester {
 

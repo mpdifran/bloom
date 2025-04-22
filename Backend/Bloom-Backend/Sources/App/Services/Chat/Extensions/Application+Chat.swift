@@ -6,8 +6,6 @@
 //
 
 import Vapor
-import WebSocketKit
-import Fluent
 
 extension Application {
 
