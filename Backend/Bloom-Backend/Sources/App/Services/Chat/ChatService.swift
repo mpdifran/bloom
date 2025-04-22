@@ -10,6 +10,9 @@ import Vapor
 import BloomModel
 import OpenAIKit
 import Fluent
+import APNS
+import APNSCore
+import Redis
 
 // MARK: - ChatService
 
@@ -26,6 +29,7 @@ final class ChatService: Sendable {
     self.logger = logger
   }
 
+  private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
 }
 
@@ -119,20 +123,23 @@ private extension ChatService {
   }
 }
 
-// MARK: - WebSocket Helpers
+// MARK: - Communication Methods
 
 private extension ChatService {
+
+  func socket(for userID: UserIdentifier) async -> WebSocket? {
+    let webSocketService = application.webSocketService
+
+    return await webSocketService.webSocket(for: userID)
+  }
 
   func sendSocketContentIfAvailable<Content>(
     _ content: Content,
     userID: UserIdentifier
   ) async throws where Content: Encodable {
-    let webSocketService = application.webSocketService
-
-    guard let socket = await webSocketService.webSocket(for: userID) else {
+    guard let socket = await socket(for: userID) else {
       return
     }
-
     try socket.sendContent(content)
   }
 
@@ -156,7 +163,73 @@ private extension ChatService {
     try await sendSocketContentIfAvailable(dataQueryResponse, userID: userID)
   }
 
+  func ensureContentSent<Content>(
+    _ content: Content,
+    title: String,
+    message: String,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws where Content: Encodable, Content: Sendable {
+    if let socket = await socket(for: userID) {
+      try socket.sendContent(content)
+      return
+    }
 
+    let userDatabaseService = application.userDatabaseService(db: db)
+
+    guard let user = try await userDatabaseService.fetchUser(for: userID) else {
+      logger.info("Attempting to send message to unknown user \(userID).")
+      return
+    }
+
+    let threadID = "bud-assistant-chat" // This is used for the APNs but also redis
+
+    if let deviceToken = user.apnsDeviceToken {
+      let expirationTime = Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
+      let expiration = APNSNotificationExpiration.timeIntervalSince1970InSeconds(expirationTime)
+      let priority = APNSPriority.immediately
+      let topic = application.bloomAppBundleID
+
+      let alertContent = APNSAlertNotificationContent(
+        title: .raw(title),
+        body: .raw(message)
+      )
+
+      let alertNotification = APNSAlertNotification(
+        alert: alertContent,
+        expiration: expiration,
+        priority: priority,
+        topic: topic,
+        payload: content,
+        sound: .default, // Can add badge here eventually
+        threadID: threadID
+      )
+
+      let result = try await application.apns.client.send(
+        APNSRequest(
+          message: alertNotification,
+          deviceToken: deviceToken,
+          pushType: .alert,
+          expiration: expiration,
+          priority: priority,
+          apnsID: nil,
+          topic: topic,
+          collapseID: nil
+        )
+      )
+
+      if let apnsUniqueID = result.apnsUniqueID {
+        logger.debug("Sent APNS message to \(userID): \(apnsUniqueID)")
+      }
+    } else {
+      logger.debug("Could not relay message to user \(userID).")
+//      let key = RedisKey("\(threadID):\(userID.value)")
+//      let data = try encoder.encode(content)
+//
+//      let result = try await application.redis.rpush([data], into: key).get()
+//      let _ = try await application.redis.expire(key, after: .seconds(86400)).get()
+    }
+  }
 }
 
 // MARK: - Run Management
@@ -254,8 +327,13 @@ private extension ChatService {
       }
       
       try await sendIsAssistantTyping(isTyping: false, userID: userID)
-
-      try await sendSocketContentIfAvailable(response, userID: userID) // TODO: Send push notification if no socket.
+      try await ensureContentSent(
+        response,
+        title: "Bud",
+        message: response.message,
+        userID: userID,
+        db: db
+      )
     }
   }
 }

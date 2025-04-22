@@ -97,10 +97,10 @@ private extension WebSocketService {
     do {
       try await block()
     } catch {
+      logger.report(error: error)
       let errorMessage = SocketMessage.Error(errorMessage: error.localizedDescription)
       do {
         try socket.sendContent(errorMessage)
-        try await socket.close(code: .unexpectedServerError)
       } catch {
         logger.report(error: error)
       }
@@ -123,11 +123,7 @@ private extension WebSocketService {
     userID: UserIdentifier,
     db: any Database
   ) async throws {
-    if try await application.chatService.parse(
-      data: data,
-      for: userID,
-      db: db
-    ) {
+    if try await application.chatService.parse(data: data, for: userID, db: db) {
       // success
     } else {
       throw Abort(.badRequest)
