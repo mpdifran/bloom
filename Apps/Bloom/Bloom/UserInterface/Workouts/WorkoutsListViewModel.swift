@@ -8,20 +8,19 @@
 import SwiftUI
 import HealthKit
 
-// TODO: ZACH
-// - check health permission before fetching or observing anything on init
-// - add another state (in addition to empty) to request permissions with a button
-// - when permission is given - actually load everything
-// - shouldn't need refreshable if observers work
-
 @MainActor
 final class WorkoutsListViewModel: ObservableObject {
+  enum State {
+    case loading
+    case loaded
+    case needsPermission
+  }
+
   @Published var selectedActivityType: HKWorkoutActivityType?
-  @Published private(set) var isLoading = true
+  @Published private(set) var state: State = .loading
   @Published private(set) var workoutSections = [WorkoutDateSection]()
   @Published private(set) var filteredWorkoutSections = [WorkoutDateSection]()
   @Published private(set) var activityTypes = [HKWorkoutActivityType]()
-  @Published private(set) var triggerHealthPermissionSheet = false
 
   private var backgroundDeliveryHandle: HKBackgroundDeliveryHandle?
   private var observationHandler: HKObserverQueryHandle?
@@ -63,7 +62,7 @@ final class WorkoutsListViewModel: ObservableObject {
 
     refreshFilteredWorkoutSections()
 
-    isLoading = false
+    state = .loaded
   }
 
   private func checkHealthAuth() async -> Bool {
@@ -74,7 +73,7 @@ final class WorkoutsListViewModel: ObservableObject {
 
       let needsAuth = authStatus == .shouldRequest
       if needsAuth {
-        triggerHealthPermissionSheet.toggle()
+        state = .needsPermission
       }
 
       return !needsAuth

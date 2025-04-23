@@ -15,6 +15,8 @@ struct WorkoutsListView: View {
 
   @StateObject private var viewModel = WorkoutsListViewModel()
 
+  @State private var triggerHealthPermissionSheet = false
+
   init(
     activityType: HKWorkoutActivityType? = nil,
     titleDisplayMode: NavigationBarItem.TitleDisplayMode = .inline
@@ -27,12 +29,17 @@ struct WorkoutsListView: View {
 
   var body: some View {
     Group {
-      if viewModel.isLoading {
+      switch viewModel.state {
+      case .loading:
         loadingView
-      } else if viewModel.workoutSections.isNotEmpty {
-        mainListView
-      } else {
-        emptyView
+      case .loaded:
+        if viewModel.workoutSections.isNotEmpty {
+          mainListView
+        } else {
+          emptyView
+        }
+      case .needsPermission:
+        needsPermissionView
       }
     }
     .groupedBackground()
@@ -48,7 +55,7 @@ struct WorkoutsListView: View {
     .healthDataAccessRequest(
       store: HealthPermissionChecker.shared.healthStore,
       readTypes: HealthPermissionChecker.shared.activityTypes,
-      trigger: viewModel.triggerHealthPermissionSheet
+      trigger: triggerHealthPermissionSheet
     ) { result in
       switch result {
       case .success:
@@ -81,6 +88,38 @@ private extension WorkoutsListView {
       systemImage: "figure.run",
       description: Text("There are no workouts to show.")
     )
+  }
+
+  var needsPermissionView: some View {
+    VStack(spacing: 16) {
+      Spacer()
+
+      Image(systemSymbol: .figureRun)
+        .font(.system(size: 80))
+        .foregroundColor(.gray)
+
+      Text("Allow Access to Workouts")
+        .font(.title2)
+        .fontWeight(.semibold)
+        .multilineTextAlignment(.center)
+
+      Text("To show your workout history, we need access to your Health data. You can manage this permission at any time.")
+        .font(.title3)
+        .fontWeight(.semibold)
+        .multilineTextAlignment(.center)
+        .foregroundColor(.gray)
+        .padding(.horizontal)
+
+      Button {
+        triggerHealthPermissionSheet = true
+      } label: {
+        Text("Allow Access")
+          .fontWeight(.bold)
+          .foregroundColor(.white)
+      }
+
+      Spacer()
+    }
   }
 
   var mainListView: some View {
