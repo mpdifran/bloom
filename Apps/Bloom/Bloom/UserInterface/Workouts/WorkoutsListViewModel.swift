@@ -14,6 +14,7 @@ final class WorkoutsListViewModel: ObservableObject {
     case loading
     case loaded
     case needsPermission
+    case permissionDenied
   }
 
   @Published var selectedActivityType: HKWorkoutActivityType?
@@ -71,12 +72,24 @@ final class WorkoutsListViewModel: ObservableObject {
         readTypes: HealthPermissionChecker.shared.activityTypes
       )
 
-      let needsAuth = authStatus == .shouldRequest
-      if needsAuth {
+      if authStatus == .shouldRequest {
         state = .needsPermission
+        return false
       }
 
-      return !needsAuth
+      // Check if the types required were denied after we've already requested.
+      let isAnyDenied = HealthPermissionChecker.shared.activityTypes.contains {
+        HealthPermissionChecker.shared.healthStore.authorizationStatus(for: $0) == .sharingDenied
+      }
+
+      if isAnyDenied {
+        state = .permissionDenied
+        return false
+      }
+
+      // We're good.
+      return true
+
     } catch {
       print(error)
       return false

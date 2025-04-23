@@ -39,7 +39,9 @@ struct WorkoutsListView: View {
           emptyView
         }
       case .needsPermission:
-        needsPermissionView
+        needsPermissionView(alreadyRequested: false)
+      case .permissionDenied:
+        needsPermissionView(alreadyRequested: true)
       }
     }
     .groupedBackground()
@@ -90,7 +92,7 @@ private extension WorkoutsListView {
     )
   }
 
-  var needsPermissionView: some View {
+  func needsPermissionView(alreadyRequested: Bool) -> some View {
     VStack(spacing: 16) {
       Spacer()
 
@@ -110,12 +112,18 @@ private extension WorkoutsListView {
         .foregroundColor(.gray)
         .padding(.horizontal)
 
-      Button {
-        triggerHealthPermissionSheet = true
-      } label: {
-        Text("Allow Access")
+      if alreadyRequested {
+        Text("Privacy & Security → Health → Bloom")
           .fontWeight(.bold)
           .foregroundColor(.white)
+      } else {
+        Button {
+          triggerHealthPermissionSheet = true
+        } label: {
+          Text("Allow Access")
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+        }
       }
 
       Spacer()
