@@ -129,19 +129,6 @@ private extension TodayView {
             presentedFullScreen = EveningReportView().asAny
           }
       }
-      if habitsViewModel.shouldUpdateSuggestedHabits {
-        GoalReviewCell()
-          .transition(.scale)
-          .onTapGesture {
-            if legacyGoalSetting {
-              presentedFullScreen = FocusAreaReviewRootView().asAny
-            } else {
-              EntitledPresent(presentedSheet: $presentedFullScreen) {
-                BaseReviewGoalsView()
-              }
-            }
-          }
-      }
     }
   }
 

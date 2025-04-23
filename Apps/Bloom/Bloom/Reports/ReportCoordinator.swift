@@ -31,7 +31,6 @@ extension ReportCoordinator {
 
     func scheduleNotifications() async {
         await scheduleEveningReport()
-        await NotificationManager.shared.scheduleFocusAreaNotification()
     }
 
     func didDetectWakeUp(sleepAnalysis: SleepAnalysis? = nil) async {
