@@ -44,10 +44,7 @@ struct NutritionView: View {
       }
       .navigationTitle("Nutrition")
       .toolbar {
-//        ToolbarItem(placement: .principal) {
-//          FoodItemLogDatePicker()
-//        }
-        ToolbarItem(placement: .primaryAction) {
+        ToolbarItem(placement: .cancellationAction) {
           Button {
             EntitledPresent(presentedSheet: $presentedSheet) {
               FoodLoggingActionCardView()
@@ -55,6 +52,14 @@ struct NutritionView: View {
           } label: {
             Image(systemSymbol: .plus)
               .bold()
+          }
+        }
+
+        ToolbarItem(placement: .primaryAction) {
+          Button {
+            presentedSheet = SettingsView().asAny
+          } label: {
+            UserProfilePhotoView(dimension: 32)
           }
         }
       }

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Glur
 
 extension View {
   func chatLauncher() -> some View {
@@ -80,6 +79,7 @@ struct ChatLauncherView: View {
     .onChange(of: isFocused) { oldValue, newValue in
       if newValue {
         tabController.isShowingChat = true
+        tabController.scrollToLatestMessageToggle.toggle()
       }
     }
     .alert(error: $error)

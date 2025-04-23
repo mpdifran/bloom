@@ -14,6 +14,7 @@ struct VitalsView: View {
   private let viewModel = VitalsViewModel.shared
 
   @State private var path = NavigationPath()
+  @State private var presentedSheet: AnyView?
 
   @Environment(TabController.self) private var tabController: TabController
 
@@ -55,7 +56,17 @@ struct VitalsView: View {
         }
       }
       .animation(.default, value: viewModel.vitals)
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          Button {
+            presentedSheet = SettingsView().asAny
+          } label: {
+            UserProfilePhotoView(dimension: 32)
+          }
+        }
+      }
     }
+    .sheet($presentedSheet)
   }
 }
 

@@ -56,6 +56,9 @@ struct ChatView: View {
       .onAppear {
         scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
       }
+      .onChange(of: tabController.scrollToLatestMessageToggle) { oldValue, newValue in
+        scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
+      }
       .onChange(of: tabController.isShowingChat) { oldValue, newValue in
         if newValue {
           scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
@@ -67,6 +70,7 @@ struct ChatView: View {
     .alert(error: $viewModel.error)
     .animation(.bouncy, value: chatMessages)
     .animation(.bouncy, value: viewModel.assistantTypingStatus)
+    .topSafeAreaBlur()
   }
 }
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
 
-  func topSafeAreaBlur(fill: Material = .thick) -> some View {
+  func topSafeAreaBlur(fill: Material = .regular) -> some View {
     safeAreaInset(edge: .top) {
       Rectangle()
         .fill(fill)

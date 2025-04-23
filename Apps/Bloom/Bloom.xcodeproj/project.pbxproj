@@ -40,7 +40,6 @@
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF97832D2C9B546700A8ED7E /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FFC77AE22C57FCEC003E5F85 /* StatKit */; };
-		FFA306232DB82289004CC9A0 /* Glur in Frameworks */ = {isa = PBXBuildFile; productRef = FFA306222DB82289004CC9A0 /* Glur */; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -339,7 +338,6 @@
 				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
 				FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */,
 				FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */,
-				FFA306232DB82289004CC9A0 /* Glur in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,7 +637,6 @@
 				FF83DB1B2D2ECF010018FAAC /* RevenueCat */,
 				FFADE9932D468789004FBF2B /* Swipy */,
 				4B13A26D2D74E7FD00459D05 /* SFSafeSymbols */,
-				FFA306222DB82289004CC9A0 /* Glur */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Bloom.app */;
@@ -756,7 +753,6 @@
 				FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 				FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */,
 				4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
-				FFA306212DB82289004CC9A0 /* XCRemoteSwiftPackageReference "Glur" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -2871,14 +2867,6 @@
 				minimumVersion = 2.3.0;
 			};
 		};
-		FFA306212DB82289004CC9A0 /* XCRemoteSwiftPackageReference "Glur" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/joogps/Glur.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.4;
-			};
-		};
 		FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rohanrhu/Swipy";
@@ -2999,11 +2987,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
-		};
-		FFA306222DB82289004CC9A0 /* Glur */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FFA306212DB82289004CC9A0 /* XCRemoteSwiftPackageReference "Glur" */;
-			productName = Glur;
 		};
 		FFADE9932D468789004FBF2B /* Swipy */ = {
 			isa = XCSwiftPackageProductDependency;

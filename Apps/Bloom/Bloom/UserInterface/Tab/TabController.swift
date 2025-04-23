@@ -50,6 +50,7 @@ extension Tab {
 final class TabController {
   var activeTab = Tab.today
   var isShowingChat = false
+  var scrollToLatestMessageToggle = false
   var chatLauncherSafeAreaInset: CGFloat = 0
 
   var showMorningReport = false
