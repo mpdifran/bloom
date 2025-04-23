@@ -30,25 +30,21 @@ struct NutritionDetailsView: View {
       if hasNoData {
         emptyView
       } else {
-        ScrollView {
-          VStack(spacing: 20) {
-            netEnergyChart
-              .cardContainer()
-            macrosChart
-              .cardContainer(includePadding: false)
-            vitaminsChart
-              .cardContainer()
-            mineralsChart
-              .cardContainer()
-            cholesterolChart
-              .cardContainer()
-            fiberChart
-              .cardContainer()
-            sugarChart
-              .cardContainer()
-          }
-          .padding()
-          .horizontallyCentered()
+        BloomScrollView(spacing: 20) {
+          netEnergyChart
+            .cardContainer()
+          macrosChart
+            .cardContainer(includePadding: false)
+          vitaminsChart
+            .cardContainer()
+          mineralsChart
+            .cardContainer()
+          cholesterolChart
+            .cardContainer()
+          fiberChart
+            .cardContainer()
+          sugarChart
+            .cardContainer()
         }
       }
     }

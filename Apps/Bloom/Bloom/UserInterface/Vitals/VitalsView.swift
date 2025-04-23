@@ -15,33 +15,29 @@ struct VitalsView: View {
 
   @State private var path = NavigationPath()
 
+  @Environment(TabController.self) private var tabController: TabController
+
   var body: some View {
     NavigationStack(path: $path) {
-      ScrollView {
-        VStack {
-          ForEach(viewModel.vitals) { vital in
+      BloomScrollView {
+        ForEach(viewModel.vitals) { vital in
+          NavigationLink(value: vital.id) {
+            MonthlyVitalCardCell(vital: vital)
+          }
+          .buttonStyle(.plain)
+        }
+
+        if viewModel.noDataVitals.isNotEmpty {
+          SectionTitleView("No Data")
+            .padding(.horizontal)
+          ForEach(viewModel.noDataVitals) { vital in
             NavigationLink(value: vital.id) {
               MonthlyVitalCardCell(vital: vital)
             }
             .buttonStyle(.plain)
           }
-
-          if viewModel.noDataVitals.isNotEmpty {
-            SectionTitleView("No Data")
-              .padding(.horizontal)
-            ForEach(viewModel.noDataVitals) { vital in
-              NavigationLink(value: vital.id) {
-                MonthlyVitalCardCell(vital: vital)
-              }
-              .buttonStyle(.plain)
-            }
-          }
         }
-        .horizontallyCentered()
-        .padding()
       }
-      .tabBar()
-      .groupedBackground()
       .navigationTitle("Vitals")
       .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
         switch vitalKind {
@@ -54,7 +50,6 @@ struct VitalsView: View {
         case .exerciseEffectiveness: ExerciseEffectivenessView()
         case .cycleTracking: MenstruationDetailView()
         case .bowelMovements: BowelMovementsDetailView()
-          //                default: Text("Not Yet Implemented").navigationTitle(vitalKind.name)
         @unknown default:
           fatalError("Unknown case")
         }

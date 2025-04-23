@@ -8,17 +8,49 @@
 import SwiftUI
 import UserNotifications
 
-enum Tab {
+enum Tab: CaseIterable, Identifiable {
+  var id: Self { self }
+
   case today
-  case vitals
-  case actions
   case nutrition
+  case vitals
   case workouts
+}
+
+extension Tab {
+
+  var name: String {
+    switch self {
+    case .today:
+      "Today"
+    case .vitals:
+      "Vitals"
+    case .nutrition:
+      "Nutrition"
+    case .workouts:
+      "Workouts"
+    }
+  }
+
+  var tabImage: Image {
+    switch self {
+    case .today:
+      Image(.todayTab)
+    case .vitals:
+      Image(.vitalsTab)
+    case .nutrition:
+      Image(.nutritionTab)
+    case .workouts:
+      Image(.workoutsTab)
+    }
+  }
 }
 
 @Observable @MainActor
 final class TabController {
   var activeTab = Tab.today
+  var isShowingChat = false
+  var chatLauncherSafeAreaInset: CGFloat = 0
 
   var showMorningReport = false
   var showEveningReport = false

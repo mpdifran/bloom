@@ -89,17 +89,14 @@ struct BodyCompositionDetailsView: View {
 private extension BodyCompositionDetailsView {
 
   var contentView: some View {
-    ScrollView {
+    BloomScrollView {
+      bodyMassChart
       VStack {
-        bodyMassChart
-
         bodyFatPercentageChart
-
         bodyFatPercentageRangePicker
-
-        detailsSection
       }
-      .padding()
+      .cardContainer()
+      detailsSection
     }
   }
 
@@ -133,45 +130,48 @@ private extension BodyCompositionDetailsView {
   var bodyMassChart: some View {
     if bodyMassSamples.isNotEmpty {
       VStack {
-        VitalDetailChartTitleView(title: "Body Weight", value: "\(averageWeight.displayString(for: .pound(), formatter: .oneDecimalPlace))")
+        VStack {
+          VitalDetailChartTitleView(title: "Body Weight", value: "\(averageWeight.displayString(for: .pound(), formatter: .oneDecimalPlace))")
 
-        Chart {
-          ForEach(bodyMassSamples) { sample in
-            LineMark(
-              x: .value("Date", sample.date, unit: .day),
-              y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
-            )
-            .foregroundStyle(.tint)
+          Chart {
+            ForEach(bodyMassSamples) { sample in
+              LineMark(
+                x: .value("Date", sample.date, unit: .day),
+                y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
+              )
+              .foregroundStyle(.tint)
 
-            PointMark(
-              x: .value("Date", sample.date, unit: .day),
-              y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
-            )
-            .foregroundStyle(.tint)
-            .symbolSize(40)
+              PointMark(
+                x: .value("Date", sample.date, unit: .day),
+                y: .value("Body Weight", sample.quantity.localizedValue(for: .pound()))
+              )
+              .foregroundStyle(.tint)
+              .symbolSize(40)
+            }
           }
-        }
-        .tint(.mutedIndigo)
-        .chartYScale(domain: bodyMassChartMin...bodyMassChartMax, range: .plotDimension)
-        .frame(height: 200)
-        .chartXAxis {
-          AxisMarks(values: .stride(by: .weekOfYear)) { _ in
-            AxisGridLine()
-            AxisTick()
-            AxisValueLabel()
-          }
-        }
-        .chartYAxis {
-          AxisMarks(position: .trailing, values: .automatic) { value in
-            AxisGridLine()
-            AxisTick()
-            if let doubleValue = value.as(Double.self) {
-              AxisValueLabel("\(doubleValue.format()) \(HKUnit.pound().localizedUnit())")
-            } else {
+          .tint(.mutedIndigo)
+          .chartYScale(domain: bodyMassChartMin...bodyMassChartMax, range: .plotDimension)
+          .frame(height: 200)
+          .chartXAxis {
+            AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+              AxisGridLine()
+              AxisTick()
               AxisValueLabel()
             }
           }
+          .chartYAxis {
+            AxisMarks(position: .trailing, values: .automatic) { value in
+              AxisGridLine()
+              AxisTick()
+              if let doubleValue = value.as(Double.self) {
+                AxisValueLabel("\(doubleValue.format()) \(HKUnit.pound().localizedUnit())")
+              } else {
+                AxisValueLabel()
+              }
+            }
+          }
         }
+        .cardContainer()
 
         if let bodyMassTrendDescription = viewModel.bodyCompositionSummary?.bodyMassTrendDescription {
           DetailInfoCardView {

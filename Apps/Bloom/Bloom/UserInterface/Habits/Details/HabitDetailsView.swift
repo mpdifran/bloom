@@ -24,38 +24,36 @@ struct HabitDetailsView: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        titleSection
+    BloomScrollView(spacing: 20) {
+      titleSection
 
-        HabitGrid(model: viewModel.habitGridModel)
+      HabitGrid(model: viewModel.habitGridModel)
+        .padding(.bottom)
+
+      Group {
+        statsSection
           .padding(.bottom)
-
-        Group {
-          statsSection
-            .padding(.bottom)
-          historyChart
-          notesSection
-        }
-        .padding(.horizontal)
+        historyChart
+        notesSection
       }
-      .toolbar {
-        ToolbarItem(placement: .principal) {
-          Image(systemSymbol: SFSymbol(rawValue: viewModel.habit.targetMetric.systemImage))
-            .symbolVariant(.fill)
-            .bold()
-        }
-        ToolbarItem(placement: .primaryAction) {
-          Menu("Options", systemImage: "ellipsis.circle") {
-            Button("Edit Goal", systemImage: "slider.horizontal.3") {
-              presentedSheet = EditUserAddedHabitView(habit: viewModel.habit) { habit in
-                guard let habit else {
-                  dismiss()
-                  return
-                }
-                self.viewModel.habit = habit
-              }.asAny
-            }
+      .padding(.horizontal)
+    }
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Image(systemSymbol: SFSymbol(rawValue: viewModel.habit.targetMetric.systemImage))
+          .symbolVariant(.fill)
+          .bold()
+      }
+      ToolbarItem(placement: .primaryAction) {
+        Menu("Options", systemImage: "ellipsis.circle") {
+          Button("Edit Goal", systemImage: "slider.horizontal.3") {
+            presentedSheet = EditUserAddedHabitView(habit: viewModel.habit) { habit in
+              guard let habit else {
+                dismiss()
+                return
+              }
+              self.viewModel.habit = habit
+            }.asAny
           }
         }
       }

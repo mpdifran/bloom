@@ -45,7 +45,7 @@ struct WorkoutSummationCell: View {
       }
       DisclosureIndicator()
     }
-    .cardContainer(fill: .background.secondary)
+    .cardContainer()
   }
 }
 

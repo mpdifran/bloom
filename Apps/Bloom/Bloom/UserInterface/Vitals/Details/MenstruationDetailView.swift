@@ -40,17 +40,13 @@ struct MenstruationDetailView: View {
 private extension MenstruationDetailView {
 
   var contentView: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        MenstruationCalendarView(menstruationSummary: menstruationSummary) { date in
-          presentedSheet = CycleTrackingActionCardView(date: date).asAny
-        }
-
-        currentStatusSection
-        detailsSection
+    BloomScrollView(spacing: 20) {
+      MenstruationCalendarView(menstruationSummary: menstruationSummary) { date in
+        presentedSheet = CycleTrackingActionCardView(date: date).asAny
       }
-      .padding()
-      .horizontallyCentered()
+
+      currentStatusSection
+      detailsSection
     }
   }
 

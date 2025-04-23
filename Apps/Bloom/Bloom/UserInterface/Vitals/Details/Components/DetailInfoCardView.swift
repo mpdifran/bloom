@@ -8,31 +8,31 @@
 import SwiftUI
 
 struct DetailInfoCardView<Content>: View where Content: View {
-    let content: Content
+  let content: Content
 
-    init(@ViewBuilder _ contentBuilder: () -> Content) {
-        self.content = contentBuilder()
+  init(@ViewBuilder _ contentBuilder: () -> Content) {
+    self.content = contentBuilder()
+  }
+
+  var body: some View {
+    HStack(spacing: 0) {
+      VStack(alignment: .leading, spacing: 15) {
+        Text("Details")
+          .font(.headline)
+          .bold()
+
+        content
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      Spacer(minLength: 0)
     }
-
-    var body: some View {
-        HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 15) {
-                Text("Details")
-                    .font(.headline)
-                    .bold()
-
-                content
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            Spacer(minLength: 0)
-        }
-        .cardContainer(fill: .background.secondary)
-    }
+    .cardContainer()
+  }
 }
 
 #Preview {
-    DetailInfoCardView {
-        Text("This is some information presented in the card.")
-    }
-    .padding()
+  DetailInfoCardView {
+    Text("This is some information presented in the card.")
+  }
+  .padding()
 }

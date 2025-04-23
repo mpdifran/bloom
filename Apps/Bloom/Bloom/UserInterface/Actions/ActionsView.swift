@@ -19,14 +19,6 @@ struct ActionsView: View {
     CardView {
       LargeTitleActionCard("Actions") {
         VStack {
-          if aiChat {
-            ActionInstanceCell(image: .logWeightIcon, title: "New Chat")
-              .tint(.mutedLightBlue)
-              .onTapGesture {
-                presentedCardSheet = ChatView().asAny
-              }
-          }
-
           ActionInstanceCell(image: .logFoodIcon, title: "Food")
             .tint(.mutedGreen)
             .onTapGesture {

@@ -25,8 +25,6 @@ struct BloomTabView: View {
           VitalsView()
         case .workouts:
           WorkoutsTabView()
-        case .actions:
-          EmptyView()
         }
       }
       .overlay {
@@ -42,7 +40,9 @@ struct BloomTabView: View {
 
 #Preview {
   @Previewable @Bindable var tabController = TabController()
-  
-  BloomTabView()
-    .environment(tabController)
+
+  PreviewEnvironment {
+    BloomTabView()
+      .environment(tabController)
+  }
 }

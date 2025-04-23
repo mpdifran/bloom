@@ -41,13 +41,9 @@ struct ExerciseEffectivenessView: View {
 private extension ExerciseEffectivenessView {
 
   var contentView: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        targetHeartRateZonesChart
-        workoutTypeSummary
-      }
-      .padding()
-      .horizontallyCentered()
+    BloomScrollView(spacing: 20) {
+      targetHeartRateZonesChart
+      workoutTypeSummary
     }
   }
 

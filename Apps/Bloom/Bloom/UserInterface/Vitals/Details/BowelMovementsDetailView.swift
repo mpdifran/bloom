@@ -72,17 +72,13 @@ private extension BowelMovementsDetailView {
   }
 
   var contentView: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        stoolTypeChart
-        lastBowelMovementSection
-        timeOfDayChart
-        waterChart
-        fiberChart
-        showAllDataCell
-      }
-      .padding()
-      .horizontallyCentered()
+    BloomScrollView(spacing: 20) {
+      stoolTypeChart
+      lastBowelMovementSection
+      timeOfDayChart
+      waterChart
+      fiberChart
+      showAllDataCell
     }
   }
 
@@ -104,51 +100,54 @@ private extension BowelMovementsDetailView {
   var stoolTypeChart: some View {
     if let summary {
       VStack(alignment: .leading, spacing: 20) {
-        VitalDetailChartTitleView(
-          title: "Bristol Stool Types",
-          value: ""
-        )
+        VStack {
+          VitalDetailChartTitleView(
+            title: "Bristol Stool Types",
+            value: ""
+          )
 
-        Chart {
-          ForEach(summary.bowelMovements) { bowelMovement in
-            if bowelMovement.isValidBristolStoolType {
-              LineMark(
-                x: .value("Date", bowelMovement.date),
-                y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
-              )
-              .foregroundStyle(.fill)
+          Chart {
+            ForEach(summary.bowelMovements) { bowelMovement in
+              if bowelMovement.isValidBristolStoolType {
+                LineMark(
+                  x: .value("Date", bowelMovement.date),
+                  y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
+                )
+                .foregroundStyle(.fill)
 
-              PointMark(
-                x: .value("Date", bowelMovement.date),
-                y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
-              )
-              .foregroundStyle(chartForegroundColor(for: bowelMovement.bristolStoolType))
+                PointMark(
+                  x: .value("Date", bowelMovement.date),
+                  y: .value("Bristol Stool Type", "Type \(bowelMovement.bristolStoolType)")
+                )
+                .foregroundStyle(chartForegroundColor(for: bowelMovement.bristolStoolType))
+              }
+            }
+
+            if selectedBristolType != 0 {
+              RectangleMark(y: .value("Bristol Stool Type", "Type \(selectedBristolType)"))
+                .foregroundStyle(color(for: selectedBristolType).opacity(0.3))
             }
           }
+          .chartXAxis {
+            AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+              AxisGridLine()
+              AxisTick()
+              AxisValueLabel()
+            }
+          }
+          .chartXScale(numDaysToNow: 30)
+          .chartYScale(domain: ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"])
+          .chartYAxis {
+            AxisMarks { _ in
+              AxisGridLine()
+              AxisValueLabel(offsetsMarks: false)
+            }
+          }
+          .frame(height: 350)
 
-          if selectedBristolType != 0 {
-            RectangleMark(y: .value("Bristol Stool Type", "Type \(selectedBristolType)"))
-              .foregroundStyle(color(for: selectedBristolType).opacity(0.3))
-          }
+          typePicker
         }
-        .chartXAxis {
-          AxisMarks(values: .stride(by: .weekOfYear)) { _ in
-            AxisGridLine()
-            AxisTick()
-            AxisValueLabel()
-          }
-        }
-        .chartXScale(numDaysToNow: 30)
-        .chartYScale(domain: ["Type 1", "Type 2", "Type 3", "Type 4", "Type 5", "Type 6", "Type 7"])
-        .chartYAxis {
-          AxisMarks { _ in
-            AxisGridLine()
-            AxisValueLabel(offsetsMarks: false)
-          }
-        }
-        .frame(height: 350)
-
-        typePicker
+        .cardContainer()
 
         detailsCardForSelectedStoolType
       }
@@ -237,7 +236,7 @@ private extension BowelMovementsDetailView {
           .multilineTextAlignment(.trailing)
       }
       .fontDesign(.rounded)
-      .cardContainer(fill: .background.secondary)
+      .cardContainer()
     }
   }
 
@@ -262,6 +261,7 @@ private extension BowelMovementsDetailView {
         }
         .frame(height: 250)
       }
+      .cardContainer()
     }
   }
 
@@ -325,6 +325,7 @@ private extension BowelMovementsDetailView {
         }
         .frame(height: 160)
       }
+      .cardContainer()
     }
   }
 
@@ -365,6 +366,7 @@ private extension BowelMovementsDetailView {
       }
       .frame(height: 160)
     }
+    .cardContainer()
   }
 
   var showAllDataCell: some View {
@@ -374,7 +376,7 @@ private extension BowelMovementsDetailView {
       Spacer()
       DisclosureIndicator()
     }
-    .cardContainer(fill: .background.secondary)
+    .cardContainer()
     .onTapGesture {
       navigationPushView = BowelMovementAllDataView().asAny
     }

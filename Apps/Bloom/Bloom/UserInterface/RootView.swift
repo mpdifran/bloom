@@ -59,16 +59,19 @@ struct RootView: View {
         #endif
         }
       } else {
-        ZStack {
-          TodayView()
-            .opacity(tabController.activeTab == .today ? 1 : 0)
-          NutritionView()
-            .opacity(tabController.activeTab == .nutrition ? 1 : 0)
-          VitalsView()
-            .opacity(tabController.activeTab == .vitals ? 1 : 0)
-          WorkoutsTabView()
-            .opacity(tabController.activeTab == .workouts ? 1 : 0)
+        Group {
+          switch tabController.activeTab {
+          case .today:
+            TodayView()
+          case .nutrition:
+            NutritionView()
+          case .vitals:
+            VitalsView()
+          case .workouts:
+            WorkoutsTabView()
+          }
         }
+        .chatLauncher()
         .environment(tabController)
         .transition(.blurReplace)
       }

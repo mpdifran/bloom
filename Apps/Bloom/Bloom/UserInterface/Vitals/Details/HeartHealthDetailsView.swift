@@ -79,15 +79,10 @@ struct HeartHealthDetailsView: View {
 private extension HeartHealthDetailsView {
 
   var contentView: some View {
-    ScrollView {
+    BloomScrollView {
       vo2MaxChart
-        .padding()
-
       restingHeartRateChart
-        .padding()
-
       heartRateRecoveryChart
-        .padding()
     }
   }
 
@@ -148,66 +143,71 @@ private extension HeartHealthDetailsView {
 
   var vo2MaxChart: some View {
     VStack(alignment: .leading) {
-      VitalDetailChartTitleView(title: "VO₂ Max", value: viewModel.heartHealthSummary?.details.averageVO2Max?.displayString(for: .vo2Max()) ?? "")
+      VStack {
+        VitalDetailChartTitleView(title: "VO₂ Max", value: viewModel.heartHealthSummary?.details.averageVO2Max?.displayString(for: .vo2Max()) ?? "")
 
-      Group {
-        if vo2MaxSamples.isEmpty {
-          ContentUnavailableView(
-            "No Data Available",
-            systemImage: "heart.fill",
-            description: Text("There are no VO₂ Max samples in the past month.")
-          )
-        } else {
-          Chart {
-            if let selectedFitnessLevelRanges {
-              RectangleMark(
-                yStart: .value("Min", selectedFitnessLevelRanges.0),
-                yEnd: .value("Max", selectedFitnessLevelRanges.1)
-              )
-              .foregroundStyle(fitnessLevel.color.opacity(0.3))
+        Group {
+          if vo2MaxSamples.isEmpty {
+            ContentUnavailableView(
+              "No Data Available",
+              systemImage: "heart.fill",
+              description: Text("There are no VO₂ Max samples in the past month.")
+            )
+          } else {
+            Chart {
+              if let selectedFitnessLevelRanges {
+                RectangleMark(
+                  yStart: .value("Min", selectedFitnessLevelRanges.0),
+                  yEnd: .value("Max", selectedFitnessLevelRanges.1)
+                )
+                .foregroundStyle(fitnessLevel.color.opacity(0.3))
 
-              RuleMark(y: .value("Min", selectedFitnessLevelRanges.0))
-                .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                .foregroundStyle(fitnessLevel.color)
-              RuleMark(y: .value("Max", selectedFitnessLevelRanges.1))
-                .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                .foregroundStyle(fitnessLevel.color)
+                RuleMark(y: .value("Min", selectedFitnessLevelRanges.0))
+                  .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                  .foregroundStyle(fitnessLevel.color)
+                RuleMark(y: .value("Max", selectedFitnessLevelRanges.1))
+                  .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                  .foregroundStyle(fitnessLevel.color)
+              }
+
+              ForEach(vo2MaxSamples) { sample in
+                LineMark(
+                  x: .value("Date", sample.date),
+                  y: .value("VO₂ Max", sample.quantity.doubleValue(for: .vo2Max()))
+                )
+                .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
+                PointMark(
+                  x: .value("Date", sample.date),
+                  y: .value("VO₂ Max", sample.quantity.doubleValue(for: .vo2Max()))
+                )
+                .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
+              }
             }
+            .chartYScale(domain: chartMin...chartMax, range: .plotDimension)
+          }
+        }
+        .frame(height: 250)
 
-            ForEach(vo2MaxSamples) { sample in
-              LineMark(
-                x: .value("Date", sample.date),
-                y: .value("VO₂ Max", sample.quantity.doubleValue(for: .vo2Max()))
-              )
-              .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
-              PointMark(
-                x: .value("Date", sample.date),
-                y: .value("VO₂ Max", sample.quantity.doubleValue(for: .vo2Max()))
-              )
-              .foregroundStyle(viewModel.heartHealthSummary?.details.cardioFitnessLevel?.color ?? .mutedPink)
+        if vo2MaxSamples.isNotEmpty {
+          Button {
+            selectedFitnessLevelIndex = (selectedFitnessLevelIndex + 1) % fitnessLevels.count
+            feedbackGenerator.impactOccurred()
+          } label: {
+            HStack {
+              Text("Fitness Level")
+
+              Spacer()
+
+              Text(fitnessLevel.name)
             }
           }
-          .chartYScale(domain: chartMin...chartMax, range: .plotDimension)
+          .buttonStyle(.zone)
+          .tint(fitnessLevel.color)
         }
       }
-      .frame(height: 250)
+      .cardContainer()
 
       if vo2MaxSamples.isNotEmpty {
-        Button {
-          selectedFitnessLevelIndex = (selectedFitnessLevelIndex + 1) % fitnessLevels.count
-          feedbackGenerator.impactOccurred()
-        } label: {
-          HStack {
-            Text("Fitness Level")
-
-            Spacer()
-
-            Text(fitnessLevel.name)
-          }
-        }
-        .buttonStyle(.zone)
-        .tint(fitnessLevel.color)
-
         DetailInfoCardView {
           Text(fitnessLevel.summary)
           Text("Fitness levels derived from the Fitness Registry and Importance of Exercise National Database (FRIEND).")
@@ -270,6 +270,7 @@ private extension HeartHealthDetailsView {
       .chartXScale(domain: 0...maxValue, range: .plotDimension)
       .frame(height: 150)
     }
+    .cardContainer()
   }
 
   var maxValue: Double {
@@ -286,52 +287,54 @@ private extension HeartHealthDetailsView {
 
   var restingHeartRateChart: some View {
     VStack(alignment: .leading) {
-      VitalDetailChartTitleView(
-        title: "Resting Heart Rate",
-        value: viewModel.heartHealthSummary?.details.displayRestingHeartRate ?? ""
-      )
+      VStack {
+        VitalDetailChartTitleView(
+          title: "Resting Heart Rate",
+          value: viewModel.heartHealthSummary?.details.displayRestingHeartRate ?? ""
+        )
 
-      Chart {
-        ForEach(restingHeartRateSamples) { sample in
-          LineMark(
-            x: .value("Date", sample.date),
-            y: .value("Resting Heart Rate", sample.quantity.doubleValue(for: .bpm()))
+        Chart {
+          ForEach(restingHeartRateSamples) { sample in
+            LineMark(
+              x: .value("Date", sample.date),
+              y: .value("Resting Heart Rate", sample.quantity.doubleValue(for: .bpm()))
+            )
+            .foregroundStyle(.mutedRed)
+            .interpolationMethod(.catmullRom)
+          }
+          let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
+
+          RuleMark(y: .value("Max RHR", goal.1))
+            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            .foregroundStyle(.mutedRed)
+
+          RectangleMark(
+            yStart: .value("", goal.1 - 20),
+            yEnd: .value("Max RHR", goal.1)
           )
-          .foregroundStyle(.mutedRed)
-          .interpolationMethod(.catmullRom)
+          .foregroundStyle(
+            LinearGradient(
+              colors: [
+                .mutedRed.opacity(0.3),
+                .clear
+              ],
+              startPoint: .top,
+              endPoint: .bottom
+            )
+          )
         }
-        let goal = HealthGoalProvider.shared.goalRestingHeartRateForUser()
-
-        RuleMark(y: .value("Max RHR", goal.1))
-          .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-          .foregroundStyle(.mutedRed)
-
-        RectangleMark(
-          yStart: .value("", goal.1 - 20),
-          yEnd: .value("Max RHR", goal.1)
+        .chartYScale(
+          domain: rhrChartMin...rhrChartMax,
+          range: .plotDimension(padding: 10)
         )
-        .foregroundStyle(
-          LinearGradient(
-            colors: [
-              .mutedRed.opacity(0.3),
-              .clear
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-          )
-        )
+        .frame(height: 160)
       }
-      .chartYScale(
-        domain: rhrChartMin...rhrChartMax,
-        range: .plotDimension(padding: 10)
-      )
-      .frame(height: 160)
+      .cardContainer()
 
       if let restingHeartRateDescription {
         DetailInfoCardView {
           Text(restingHeartRateDescription)
         }
-        .padding(.top)
       }
     }
   }

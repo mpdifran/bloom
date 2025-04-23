@@ -60,19 +60,16 @@ struct SleepDetailsView: View {
 private extension SleepDetailsView {
 
   var contentView: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        sleepQualityChart
+    BloomScrollView(spacing: 20) {
+      sleepQualityChart
 
-        sleepDistributionChart
-          .cardContainer(
-            fill: .background,
-            includePadding: false
-          )
+      sleepDistributionChart
+        .cardContainer(
+          fill: .background,
+          includePadding: false
+        )
 
-        viewDailySleepDataButton
-      }
-      .padding()
+      viewDailySleepDataButton
     }
   }
 
@@ -130,6 +127,7 @@ private extension SleepDetailsView {
       .buttonStyle(.zone)
       .tint(selectedSleepQuality?.color ?? .coreSleep)
     }
+    .cardContainer()
   }
 
   func color(for sleepScore: Double) -> Color {

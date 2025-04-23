@@ -45,47 +45,34 @@ struct TodayView: View {
     @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
 
     NavigationStack {
-      ScrollView {
-        VStack {
-          Group {
-            TodaysDateView()
-              .padding(.bottom)
+      BloomScrollView(padding: .bottom) {
+        Group {
+          TodaysDateView()
+            .padding(.bottom)
 
-            alertsSection
-          }
-          .padding(.horizontal)
-
-          if toDoManager.relevantToDos.isNotEmpty {
-            todoSection
-          }
-
-          Group {
-            if habits.isNotEmpty {
-              habitsSection
-            }
-            reportsSection
-          }
-          .padding(.horizontal)
+          alertsSection
         }
-        .horizontallyCentered()
+        .padding(.horizontal)
+
+        if toDoManager.relevantToDos.isNotEmpty {
+          todoSection
+        }
+
+        Group {
+          if habits.isNotEmpty {
+            habitsSection
+          }
+          reportsSection
+        }
+        .padding(.horizontal)
       }
-      .groupedBackground()
       .navigationTitle("Today")
-      .tabBar()
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
           Button {
             presentedSheet = SettingsView().asAny
           } label: {
             UserProfilePhotoView(dimension: 32)
-          }
-        }
-        if aiChat {
-          ToolbarItem(placement: .cancellationAction) {
-            Button("Chat", systemSymbol: .arrowUpCircleFill) {
-              presentedSheet = ChatView().asAny
-            }
-            .bold()
           }
         }
       }

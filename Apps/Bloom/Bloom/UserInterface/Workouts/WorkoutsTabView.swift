@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct WorkoutsTabView: View {
+
+  @Environment(TabController.self) private var tabController: TabController
+
   var body: some View {
     NavigationStack {
       WorkoutsListView(titleDisplayMode: .large)
-        .tabBar()
+        .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
     }
   }
 }

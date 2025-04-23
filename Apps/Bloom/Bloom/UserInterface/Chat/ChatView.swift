@@ -17,82 +17,56 @@ struct ChatView: View {
   @State private var presentedSheet: AnyView?
 
   @Environment(\.dismiss) private var dismiss
-
-  @FocusState private var isFocused: Bool
+  @Environment(TabController.self) private var tabController: TabController
 
   @Query(sort: \ChatMessage.date)
   private var chatMessages: [ChatMessage]
 
   var body: some View {
-    NavigationStack {
-      ScrollViewReader { scrollViewProxy in
-        ScrollView {
-          LazyVStack {
-            ForEach(chatMessages) { chatMessage in
-              chatCell(for: chatMessage)
-            }
+    ScrollViewReader { scrollViewProxy in
+      ScrollView {
+        LazyVStack {
+          ForEach(chatMessages) { chatMessage in
+            chatCell(for: chatMessage)
+          }
 
-            if viewModel.assistantIsTyping {
-              statusTextView
+          if viewModel.assistantIsTyping {
+            statusTextView
 
-              TypingIndicatorCell(isDirect: false)
-                .id("typing-indicator")
-                .transition(.blurReplace)
-            }
-          }
-          .horizontallyCentered()
-          .padding(.vertical)
-        }
-        .safeAreaInset(edge: .bottom) {
-          ChatBar { (text, image) in
-            Task {
-              await viewModel.sendMessage(text, image: image)
-              scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
-            }
-          }
-          .focused($isFocused)
-        }
-        .navigationTitle("Chat")
-        .toolbar {
-          ToolbarItem(placement: .cancellationAction) {
-            Button("Done") {
-              dismiss()
-            }
-            .bold()
-          }
-          ToolbarItem(placement: .primaryAction) {
-            Button {
-              presentedSheet = ChatSettingsView().asAny
-            } label: {
-              Image(systemSymbol: .gear)
-                .bold()
-            }
+            TypingIndicatorCell(isDirect: false)
+              .id("typing-indicator")
+              .transition(.blurReplace)
           }
         }
-        .onChange(of: viewModel.assistantTypingStatus) { _, _ in
-          guard viewModel.assistantIsTyping else { return }
-          withAnimation {
-            scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
-          }
+        .horizontallyCentered()
+        .padding(.vertical)
+      }
+      .onChange(of: viewModel.assistantTypingStatus) { _, _ in
+        guard viewModel.assistantIsTyping else { return }
+        withAnimation {
+          scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
         }
-        .onChange(of: viewModel.assistantIsTyping) { _, assistantIsTyping in
-          guard assistantIsTyping else { return }
-          withAnimation {
-            scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
-          }
+      }
+      .onChange(of: viewModel.assistantIsTyping) { _, assistantIsTyping in
+        guard assistantIsTyping else { return }
+        withAnimation {
+          scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
         }
-        .task {
-          await Delay(300)
+      }
+      .onAppear {
+        scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
+      }
+      .onChange(of: tabController.isShowingChat) { oldValue, newValue in
+        if newValue {
           scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
         }
       }
-      .groupedBackground()
-      .sheet($presentedSheet)
-      .alert(error: $viewModel.error)
-      .animation(.bouncy, value: chatMessages)
-      .animation(.bouncy, value: viewModel.assistantTypingStatus)
     }
-    .presentationCompactAdaptation(.fullScreenCover)
+    .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
+    .sheet($presentedSheet)
+    .alert(error: $viewModel.error)
+    .animation(.bouncy, value: chatMessages)
+    .animation(.bouncy, value: viewModel.assistantTypingStatus)
   }
 }
 

@@ -56,15 +56,11 @@ struct ActivityLevelDetailsView: View {
 private extension ActivityLevelDetailsView {
 
   var contentView: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        activityLevelRatioChart
-        ratioDistributionView
-        dayOfWeekDistributionView
-        workoutSummationViews
-      }
-      .padding()
-      .horizontallyCentered()
+    BloomScrollView(spacing: 20) {
+      activityLevelRatioChart
+      ratioDistributionView
+      dayOfWeekDistributionView
+      workoutSummationViews
     }
   }
 
@@ -80,42 +76,45 @@ private extension ActivityLevelDetailsView {
   var activityLevelRatioChart: some View {
     if let activityLevelSummary = viewModel.activityLevelSummary {
       VStack(alignment: .leading) {
-        VitalDetailChartTitleView(
-          title: "Energy Ratio",
-          value: activityLevelSummary.details.activityLevel?.name ?? "Unknown"
-        )
-
-        Chart {
-          ForEach(activityLevelSummary.details.energyRatioSamples) { ratio in
-            BarMark(
-              x: .value("Date", ratio.date),
-              yStart: .value("", 1),
-              yEnd: .value("Ratio", ratio.value)
-            )
-            .foregroundStyle(color(for: ratio.value))
-          }
-
-          RectangleMark(
-            yStart: .value("Min", selectedLevel.range.lowerBound),
-            yEnd: .value("Max", min(selectedLevel.range.upperBound, chartMax))
+        VStack {
+          VitalDetailChartTitleView(
+            title: "Energy Ratio",
+            value: activityLevelSummary.details.activityLevel?.name ?? "Unknown"
           )
-          .foregroundStyle(selectedLevel.color.opacity(0.3))
 
-          RuleMark(y: .value("Min", selectedLevel.range.lowerBound))
-            .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-            .foregroundStyle(selectedLevel.color)
+          Chart {
+            ForEach(activityLevelSummary.details.energyRatioSamples) { ratio in
+              BarMark(
+                x: .value("Date", ratio.date),
+                yStart: .value("", 1),
+                yEnd: .value("Ratio", ratio.value)
+              )
+              .foregroundStyle(color(for: ratio.value))
+            }
 
-          if selectedLevel.range.upperBound < chartMax {
-            RuleMark(y: .value("Max", min(selectedLevel.range.upperBound, chartMax)))
+            RectangleMark(
+              yStart: .value("Min", selectedLevel.range.lowerBound),
+              yEnd: .value("Max", min(selectedLevel.range.upperBound, chartMax))
+            )
+            .foregroundStyle(selectedLevel.color.opacity(0.3))
+
+            RuleMark(y: .value("Min", selectedLevel.range.lowerBound))
               .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
               .foregroundStyle(selectedLevel.color)
-          }
-        }
-        .chartYScale(domain: 1...chartMax, range: .plotDimension(startPadding: 10, endPadding: 0))
-        .frame(height: 300)
-        .clipped()
 
-        levelPicker
+            if selectedLevel.range.upperBound < chartMax {
+              RuleMark(y: .value("Max", min(selectedLevel.range.upperBound, chartMax)))
+                .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                .foregroundStyle(selectedLevel.color)
+            }
+          }
+          .chartYScale(domain: 1...chartMax, range: .plotDimension(startPadding: 10, endPadding: 0))
+          .frame(height: 300)
+          .clipped()
+
+          levelPicker
+        }
+        .cardContainer()
 
         DetailInfoCardView {
           Text("Energy Ratio is the ratio between your Basal Energy and TDEE (Total Daily Energy Exertion) for a given day. The higher the ratio, the more active you were.")
@@ -165,7 +164,7 @@ private extension ActivityLevelDetailsView {
       VitalDetailChartTitleView(title: "By Level", value: "")
       ActivityLevelDistributionView(ratioDistribution: viewModel.activityLevelSummary?.details.activityLevelRatioDistribution ?? [:])
     }
-    .cardContainer(fill: .background.secondary)
+    .cardContainer()
   }
 
   @ViewBuilder
@@ -203,7 +202,7 @@ private extension ActivityLevelDetailsView {
         }
         .frame(height: 200)
       }
-      .cardContainer(fill: .background.secondary)
+      .cardContainer()
     }
   }
 

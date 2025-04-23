@@ -73,7 +73,7 @@ private extension WorkoutsListView {
   }
 
   var mainListView: some View {
-    ScrollView {
+    BloomScrollView(padding: []) {
       VStack(alignment: .leading, spacing: 0) {
         WorkoutActivityTypeFilterView(
           activityTypes: activityTypes,

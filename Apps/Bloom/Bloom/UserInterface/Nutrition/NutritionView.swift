@@ -19,33 +19,30 @@ struct NutritionView: View {
 
   @Environment(\.modelContext) private var modelContext
 
+  @Environment(TabController.self) private var tabController: TabController
+
   var body: some View {
     NavigationStack {
-      ScrollView {
-        VStack {
-          topBar
+      BloomScrollView(padding: .vertical) {
+        topBar
 
-          Group {
-            NutrientsRemainingView()
-              .transition(.blurReplace)
-              .padding(.vertical)
-              .onTapGesture {
-                // TODO: where does this go?
-              }
-
-            FilteredFoodItemLogsListView(
-              date: nutritionViewModel.date,
-              presentedSheet: $presentedSheet
-            )
+        Group {
+          NutrientsRemainingView()
             .transition(.blurReplace)
-          }
-          .padding(.horizontal)
+            .padding(.vertical)
+            .onTapGesture {
+              // TODO: where does this go?
+            }
+
+          FilteredFoodItemLogsListView(
+            date: nutritionViewModel.date,
+            presentedSheet: $presentedSheet
+          )
+          .transition(.blurReplace)
         }
-        .padding(.vertical)
+        .padding(.horizontal)
       }
-      .groupedBackground()
       .navigationTitle("Nutrition")
-      .tabBar()
       .toolbar {
 //        ToolbarItem(placement: .principal) {
 //          FoodItemLogDatePicker()
