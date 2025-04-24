@@ -80,6 +80,29 @@ private extension OpenAIAssistantProvider {
       (assistant.responseFormat == assistantSpec.responseFormat) || assistantSpec.responseFormat == nil
     else {
       logger.info("Updating Assistant \(assistantSpec.id)")
+
+      if assistant.model != assistantSpec.model.id {
+        logger.info("Changing assistant model from \(assistant.model) to \(assistantSpec.model.id).")
+      }
+      if assistant.name != assistantSpec.name {
+        logger.info("Changing assistant name from \(assistant.name ?? "") to \(assistantSpec.name).")
+      }
+      if assistant.instructions != assistantSpec.instructions {
+        logger.info("Changing assistant instructions from \(assistant.instructions ?? "") to \(assistantSpec.instructions).")
+      }
+      if assistant.tools != assistantSpec.tools {
+        logger.info("Changing assistant tools from \(assistant.tools) to \(assistantSpec.tools).")
+      }
+      if assistant.temperature != assistantSpec.temperature && assistantSpec.temperature != nil {
+        logger.info("Changing assistant temperature from \(String(describing: assistant.temperature)) to \(String(describing: assistantSpec.temperature)).")
+      }
+      if assistant.topP != assistantSpec.topP && assistantSpec.topP != nil {
+        logger.info("Changing assistant topP from \(String(describing: assistant.topP)) to \(String(describing: assistantSpec.topP)).")
+      }
+      if assistant.responseFormat != assistantSpec.responseFormat && assistantSpec.responseFormat != nil {
+        logger.info("Changing assistant response format from \(String(describing: assistant.responseFormat)) to \(String(describing: assistantSpec.responseFormat)).")
+      }
+
       let updatedAssistant = try await openAI.assistants.modifyAssistant(
         assistantID: assistantID,
         model: assistantSpec.model,

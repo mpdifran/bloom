@@ -156,13 +156,14 @@ private extension ChatService {
   func sendDataQueryResponse(
     run: Run,
     queries: [SocketMessage.Query],
-    userID: UserIdentifier
+    userID: UserIdentifier,
+    db: any Database
   ) async throws {
     let dataQueryResponse = SocketMessage.DataQueryResponse(
       id: run.id,
       queries: queries
     )
-    try await sendSocketContentIfAvailable(dataQueryResponse, userID: userID)
+    try await ensureContentSilentlySent(dataQueryResponse, userID: userID, db: db)
   }
 
   func ensureContentSent<Content>(
@@ -221,7 +222,7 @@ private extension ChatService {
       )
 
       if let apnsUniqueID = result.apnsUniqueID {
-        logger.debug("Sent silent APNS message to \(userID): \(apnsUniqueID)")
+        logger.debug("Sent APNS message to \(userID): \(apnsUniqueID)")
       }
     } else {
       logger.debug("Could not relay message to user \(userID).")
@@ -278,7 +279,7 @@ private extension ChatService {
       )
 
       if let apnsUniqueID = result.apnsUniqueID {
-        logger.debug("Sent APNS message to \(userID): \(apnsUniqueID)")
+        logger.debug("Sent silent APNS message to \(userID): \(apnsUniqueID)")
       }
     } else {
       logger.debug("Could not relay silent message to user \(userID).")
@@ -308,7 +309,6 @@ private extension ChatService {
         Assistant.Tool.function(.queryUserHealthData),
         Assistant.Tool.function(.queryUserHealthMetrics)
       ],
-//      toolChoice: .function(.Function.queryUserHealthMetrics),
       existingRun: existingRun
     )
 
@@ -317,31 +317,14 @@ private extension ChatService {
       var queries = [SocketMessage.Query]()
       for toolCall in toolCalls {
         switch toolCall.function.name {
-        case .Function.queryUserHealthData:
-          let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthDataArguments.self, using: decoder)
-          let query = SocketMessage.Query(
-            id: toolCall.id,
-            startDate: queryArguments.startDate,
-            endDate: queryArguments.endDate,
-            dataType: queryArguments.dataType,
-            healthMetric: nil
-          )
-          queries.append(query)
-        case .Function.queryUserHealthMetrics:
-          let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthMetricsArguments.self, using: decoder)
-          let query = SocketMessage.Query(
-            id: toolCall.id,
-            startDate: queryArguments.startDate,
-            endDate: queryArguments.endDate,
-            dataType: nil,
-            healthMetric: queryArguments.healthMetric
-          )
+        case .Function.queryUserHealthData, .Function.queryUserHealthMetrics:
+          let query = try await performQuery(toolCall: toolCall)
           queries.append(query)
         default:
           throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
         }
       }
-      try await sendDataQueryResponse(run: run, queries: queries, userID: userID)
+      try await sendDataQueryResponse(run: run, queries: queries, userID: userID, db: db)
     case .messages(_, let messages):
       let response = messages
         .flatMap { message in
@@ -390,6 +373,36 @@ private extension ChatService {
         userID: userID,
         db: db
       )
+    }
+  }
+}
+
+// MARK: - Function Handlers
+
+private extension ChatService {
+
+  func performQuery(toolCall: Run.ToolCall) async throws -> SocketMessage.Query {
+    switch toolCall.function.name {
+    case .Function.queryUserHealthData:
+      let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthDataArguments.self, using: decoder)
+      return SocketMessage.Query(
+        id: toolCall.id,
+        startDate: queryArguments.startDate,
+        endDate: queryArguments.endDate,
+        dataType: queryArguments.dataType,
+        healthMetric: nil
+      )
+    case .Function.queryUserHealthMetrics:
+      let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthMetricsArguments.self, using: decoder)
+      return SocketMessage.Query(
+        id: toolCall.id,
+        startDate: queryArguments.startDate,
+        endDate: queryArguments.endDate,
+        dataType: nil,
+        healthMetric: queryArguments.healthMetric
+      )
+    default:
+      throw Abort(.internalServerError, reason: "Improper tool handling")
     }
   }
 }
