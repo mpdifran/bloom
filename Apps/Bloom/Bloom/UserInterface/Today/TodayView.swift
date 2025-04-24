@@ -38,7 +38,6 @@ struct TodayView: View {
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage(.FeatureFlag.alwaysShowReports) private var alwaysShowReports = false
-  @AppStorage(.FeatureFlag.aiChat) private var aiChat = false
   @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
 
   var body: some View {

@@ -13,8 +13,6 @@ struct ActionsView: View {
 
   @Environment(\.dismiss) private var dismiss
 
-  @AppStorage(.FeatureFlag.aiChat) private var aiChat = false
-
   var body: some View {
     CardView {
       LargeTitleActionCard("Actions") {

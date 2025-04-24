@@ -9,6 +9,7 @@ import SFSafeSymbols
 import SwiftUI
 import AppUI
 import HealthKit
+import DataContainer
 
 struct DeveloperSettingsView: View {
 
@@ -16,7 +17,6 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
   @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
-  @AppStorage(.FeatureFlag.aiChat) private var aiChat = false
   @AppStorage(.FeatureFlag.alwaysShowReports) private var alwaysShowReports = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
@@ -34,6 +34,7 @@ struct DeveloperSettingsView: View {
   @ObservedObject private var userController = UserController.shared
 
   private let vitalsViewModel = VitalsViewModel.shared
+  private let modelContext = ContainerHolder.shared.createContext()
 
   var body: some View {
     NavigationStack {
@@ -214,12 +215,6 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        SettingsCell("AI Chat") {
-          Toggle("", isOn: $aiChat)
-        }
-
-        Divider()
-
         SettingsCell("Legacy Goal Review") {
           Toggle("", isOn: $legacyGoalSetting)
         }
@@ -326,11 +321,16 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        Button {
-          hasShownOnboarding = false
+        AsyncButton {
+          try await NetworkRequester.shared.deleteChatThread()
+          try modelContext.deleteAll(ChatMessage.self)
+          alertDetails = AlertDetails(
+            title: "Chat History Deleted",
+            message: "Your chat history has been deleted."
+          )
         } label: {
-          LabeledContent("Reset Onboarding") {
-            Image(systemSymbol: .arrowUturnBackwardSquareFill)
+          LabeledContent("Delete Chat History") {
+            Image(systemSymbol: .trash)
           }
           .bold()
           .fontDesign(.rounded)
@@ -342,14 +342,10 @@ extension DeveloperSettingsView {
         Divider()
 
         Button {
-          HabitsViewModel.shared.resetHabitCheckDate()
-          alertDetails = AlertDetails(
-            title: "Goal Review",
-            message: "You will now be prompted to review your goals on the Today tab."
-          )
+          hasShownOnboarding = false
         } label: {
-          LabeledContent("Prompt Goal Review") {
-            Image(systemSymbol: .repeat)
+          LabeledContent("Reset Onboarding") {
+            Image(systemSymbol: .arrowUturnBackwardSquareFill)
           }
           .bold()
           .fontDesign(.rounded)
@@ -498,7 +494,6 @@ extension DeveloperSettingsView {
           apiHost.overrideEnabled = false
           showDeveloperMode = false
           legacyGoalSetting = false
-          aiChat = false
           alwaysShowReports = false
           dismiss()
         } label: {

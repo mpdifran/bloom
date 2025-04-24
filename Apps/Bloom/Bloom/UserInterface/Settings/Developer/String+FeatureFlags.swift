@@ -12,7 +12,6 @@ extension String {
     static let developerMode = "FeatureFlag.developerMode"
     static let legacyGoalSetting = "FeatureFlag.legacyGoalSetting"
     static let bypassPaywall = "FeatureFlag.bypassPaywall"
-    static let aiChat = "FeatureFlag.aiChat"
     static let alwaysShowReports = "FeatureFlag.alwaysShowReports"
   }
 }
