@@ -112,7 +112,7 @@ extension SuggestedGoal.Unit {
     case .hr:
         .hour()
     case .oz:
-        .ounce()
+        .fluidOunceUS()
     case .km:
         .meterUnit(with: .kilo)
     case .mi:
