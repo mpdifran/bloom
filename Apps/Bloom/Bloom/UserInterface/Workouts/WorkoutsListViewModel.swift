@@ -69,7 +69,7 @@ final class WorkoutsListViewModel: ObservableObject {
   private func checkHealthAuth() async -> Bool {
     do {
       let authStatus = try await HealthPermissionChecker.shared.checkAccess(
-        readTypes: HealthPermissionChecker.shared.activityTypes
+        readTypes: [HKObjectType.workoutType()]
       )
 
       if authStatus == .shouldRequest {
@@ -78,14 +78,14 @@ final class WorkoutsListViewModel: ObservableObject {
       }
 
       // Check if the types required were denied after we've already requested.
-      let isAnyDenied = HealthPermissionChecker.shared.activityTypes.contains {
-        HealthPermissionChecker.shared.healthStore.authorizationStatus(for: $0) == .sharingDenied
-      }
-
-      if isAnyDenied {
-        state = .permissionDenied
-        return false
-      }
+//      let isDenied = HealthPermissionChecker.shared.healthStore.authorizationStatus(
+//        for: HKObjectType.workoutType()
+//      ) == .sharingDenied
+//
+//      if isDenied {
+//        state = .permissionDenied
+//        return false
+//      }
 
       // We're good.
       return true

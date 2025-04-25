@@ -44,6 +44,7 @@ struct WorkoutsListView: View {
         needsPermissionView(alreadyRequested: true)
       }
     }
+    .horizontallyCentered()
     .groupedBackground()
     .navigationTitle("Workouts")
     .navigationBarTitleDisplayMode(titleDisplayMode)
