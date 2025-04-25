@@ -31,22 +31,16 @@ struct WorkoutDetailsView: View {
   @State private var selectedZone = 0
 
   var body: some View {
-    ScrollView {
-      VStack {
-        VStack {
-          iconHeader
-          detailsSection
+    BloomScrollView {
+      iconHeader
+      detailsSection
 
-          if let heartRateReport {
-            heartRateReportSection(heartRateReport: heartRateReport)
-            heartRateChart(heartRateReport: heartRateReport)
-          }
-        }
+      if let heartRateReport {
+        heartRateReportSection(heartRateReport: heartRateReport)
+        heartRateChart(heartRateReport: heartRateReport)
       }
-      .padding()
     }
     .navigationTitle(workout.workoutActivityType.name)
-    .groupedBackground()
     .onChange(of: workoutRoutes) { (_ ,_) in
       updateCamera()
     }
