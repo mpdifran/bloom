@@ -126,7 +126,7 @@ private extension ChatLauncherView {
   }
 
   var chatMessageBar: some View {
-    HStack {
+    HStack(alignment: .bottom) {
       if tabController.isShowingChat {
         ImagePicker(image: $image, presentedSheet: $presentedSheet) {
           Image(systemSymbol: .cameraCircleFill)
