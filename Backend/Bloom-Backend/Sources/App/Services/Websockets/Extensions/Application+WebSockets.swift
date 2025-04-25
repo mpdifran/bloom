@@ -15,18 +15,17 @@ extension Application {
     typealias Value = WebSocketService
   }
 
-  func setupWebSocketService() {
-    let service = WebSocketService(
+  var webSocketService: WebSocketService {
+    if let existing = storage[WebSocketServiceKey.self] {
+      return existing
+    }
+
+    let webSocketService = WebSocketService(
       application: self,
       logger: logger
     )
-    storage[WebSocketServiceKey.self] = service
-  }
+    storage[WebSocketServiceKey.self] = webSocketService
 
-  var webSocketService: WebSocketService {
-    guard let service = storage[WebSocketServiceKey.self] else {
-      fatalError("WebSocket service not setup")
-    }
-    return service
+    return webSocketService
   }
 }

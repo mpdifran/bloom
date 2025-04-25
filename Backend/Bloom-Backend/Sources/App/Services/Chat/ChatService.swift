@@ -306,7 +306,6 @@ private extension ChatService {
 
     try await sendIsAssistantTyping(isTyping: true, userID: userID)
 
-    logger.debug("Starting assistant run for \(userID)")
     let assistantResponse = try await assistantService.startRunAndPollForResponse(
       assistantThread: thread,
       tools: [
@@ -315,8 +314,6 @@ private extension ChatService {
       ],
       existingRun: existingRun
     )
-
-    logger.debug("Finished assistant run for \(userID)")
 
     switch assistantResponse {
     case .requiresAction(let run, let toolCalls):

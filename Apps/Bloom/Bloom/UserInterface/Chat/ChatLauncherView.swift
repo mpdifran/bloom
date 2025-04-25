@@ -151,6 +151,14 @@ private extension ChatLauncherView {
           await submit()
         }
       }
+      .onChange(of: text) { oldValue, newValue in
+        if let newLineIndex = newValue.lastIndex(of: "\n") {
+          text.remove(at: newLineIndex)
+          Task {
+            await submit()
+          }
+        }
+      }
 
       if tabController.isShowingChat {
         if text.isEmpty {

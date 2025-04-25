@@ -1,4 +1,6 @@
 import Vapor
+import WebSocketKit
+import NIOWebSocket
 //import TelemetryDeck
 
 // configures your application
@@ -23,9 +25,6 @@ public func configure(_ app: Application) async throws {
   try app.setupPostgres()
   allMigrations.forEach { app.migrations.add($0) }
   try await app.autoMigrate() // Perform migration
-
-  // Websockets
-  app.setupWebSocketService()
 
   // APNs
   try app.configureAPNs()

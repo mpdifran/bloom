@@ -10,6 +10,10 @@ import Vapor
 import BloomModel
 import WebSocketKit
 
+private extension WebSocketMaxFrameSize {
+  static let frameSize = WebSocketMaxFrameSize(integerLiteral: 1 << 17)
+}
+
 struct ChatController { }
 
 extension ChatController: RouteCollection {
@@ -18,7 +22,7 @@ extension ChatController: RouteCollection {
     routes.group("v1") {
       $0.auth(using: UserToken.self) {
         $0.group("chat") {
-          $0.webSocket("web-socket", onUpgrade: createWebSocket)
+          $0.webSocket("web-socket", maxFrameSize: .frameSize, onUpgrade: createWebSocket)
           $0.post("query-response", use: queryResponse)
           $0.post("upload-image", use: uploadImage)
           $0.get("delete-thread", use: deleteThread)
