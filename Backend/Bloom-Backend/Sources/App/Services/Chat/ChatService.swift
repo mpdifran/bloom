@@ -143,6 +143,7 @@ private extension ChatService {
       return
     }
     try socket.sendContent(content)
+    logger.debug("Sent web socket message to \(userID)")
   }
 
   func sendIsAssistantTyping(
@@ -175,6 +176,7 @@ private extension ChatService {
   ) async throws where Content: Encodable, Content: Sendable {
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
+      logger.debug("Sent web socket message to \(userID)")
       return
     }
 
@@ -241,6 +243,7 @@ private extension ChatService {
   ) async throws where Content: Encodable, Content: Sendable {
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
+      logger.debug("Sent web socket message to \(userID)")
       return
     }
 
@@ -303,6 +306,7 @@ private extension ChatService {
 
     try await sendIsAssistantTyping(isTyping: true, userID: userID)
 
+    logger.debug("Starting assistant run for \(userID)")
     let assistantResponse = try await assistantService.startRunAndPollForResponse(
       assistantThread: thread,
       tools: [
@@ -311,6 +315,8 @@ private extension ChatService {
       ],
       existingRun: existingRun
     )
+
+    logger.debug("Finished assistant run for \(userID)")
 
     switch assistantResponse {
     case .requiresAction(let run, let toolCalls):

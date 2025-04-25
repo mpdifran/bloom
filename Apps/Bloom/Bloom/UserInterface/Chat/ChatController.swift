@@ -221,6 +221,7 @@ private extension ChatController {
         self.queryAreas.removeAll()
       }
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
+      self.error = NSError(description: error.errorMessage)
       print(error.errorMessage)
     } else {
       print("Unknown SocketMessage:\n\n\(String(data: data, encoding: .utf8) ?? "")")
