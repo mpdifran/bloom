@@ -243,6 +243,8 @@ private extension ChatLauncherView {
 private extension ChatLauncherView {
 
   func submit() async {
+    guard text.isNotEmpty else { return }
+
     didSendToggle.toggle()
 
     let textToSend = text
