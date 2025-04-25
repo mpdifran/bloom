@@ -137,8 +137,8 @@ private extension ChatRichContentWrapperCell {
     } else if let logWater = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWaterConsumption.self, from: data) {
 
       self.waterQuantity = HKQuantity(
-        unit: HKUnit(from: logWater.quantity.unit),
-        doubleValue: logWater.quantity.value
+        unit: HKUnit(from: logWater.unit.rawValue),
+        doubleValue: logWater.amount
       )
 
     } else if let logBowelMovement = try? JSONDecoder.bloomModel.decode(SocketMessage.LogBowelMovement.self, from: data) {

@@ -95,9 +95,10 @@ extension AssistantSpec {
     }
     
     LogWaterConsumption {
-      "quantity": Quantity // The amount of water you determined the user drank
+      "amount": Double, // The amount of water drank.
+      "unit": Unit // An enum with the following cases: \(SocketMessage.LogWaterConsumption.Unit.stringCaseList())
     }
-    
+
     LogBowelMovement {
       "bristolStoolType": Int, // The bristol stool type of the bowel movement
       "duration": Duration // An enum with the following cases: \(SocketMessage.LogBowelMovement.Duration.stringCaseList())
