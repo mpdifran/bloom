@@ -24,19 +24,22 @@ struct HabitDetailsView: View {
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
-    BloomScrollView(spacing: 20) {
-      titleSection
+    BloomScrollView(spacing: 20, padding: []) {
+      VStack {
+        titleSection
 
-      HabitGrid(model: viewModel.habitGridModel)
-        .padding(.bottom)
-
-      Group {
-        statsSection
+        HabitGrid(model: viewModel.habitGridModel)
           .padding(.bottom)
+      }
+      .background(.background)
+
+      VStack {
+        statsSection
         historyChart
         notesSection
       }
       .padding(.horizontal)
+      .padding(.bottom)
     }
     .toolbar {
       ToolbarItem(placement: .principal) {
@@ -82,6 +85,7 @@ private extension HabitDetailsView {
         .foregroundStyle(viewModel.habit.targetMetric.color)
         .lineLimit(1)
         .minimumScaleFactor(0.25)
+        .fixedSize(horizontal: false, vertical: true)
         .contentTransition(.numericText(value: viewModel.todayValue.doubleValue(for: viewModel.habit.unit)))
 
       HStack {
@@ -162,7 +166,7 @@ private extension HabitDetailsView {
           Spacer()
         }
       }
-      .cardContainer(fill: .background.secondary)
+      .cardContainer()
     }
   }
 
@@ -236,6 +240,7 @@ private extension HabitDetailsView {
       }
       .frame(height: 200)
     }
+    .cardContainer()
   }
 
   @ViewBuilder
@@ -247,7 +252,7 @@ private extension HabitDetailsView {
         Text(habitSummaryText)
           .horizontalAlignment(.leading)
           .multilineTextAlignment(.leading)
-          .cardContainer(fill: .background.secondary)
+          .cardContainer()
       }
     }
   }
@@ -288,35 +293,39 @@ struct WeekQuantitySamples: Identifiable {
 }
 
 #Preview("Water Intake") {
-  NavigationStack {
-    HabitDetailsView(
-      habit: Habit(
-        targetMetric: .waterIntake,
-        timePeriod: .daily,
-        value: 1500,
-        unitString: HKUnit.literUnit(with: .milli).unitString,
-        startDate: .now,
-        isSuggested: true,
-        isUserEdited: false,
-        vitalKind: .nutrition
+  PreviewEnvironment {
+    NavigationStack {
+      HabitDetailsView(
+        habit: Habit(
+          targetMetric: .waterIntake,
+          timePeriod: .daily,
+          value: 1500,
+          unitString: HKUnit.literUnit(with: .milli).unitString,
+          startDate: .now,
+          isSuggested: true,
+          isUserEdited: false,
+          vitalKind: .nutrition
+        )
       )
-    )
+    }
   }
 }
 
 #Preview("Strength Training") {
-  NavigationStack {
-    HabitDetailsView(
-      habit: Habit(
-        targetMetric: .strengthTrainingDuration,
-        timePeriod: .weekly,
-        value: 30,
-        unitString: HKUnit.minute().unitString,
-        startDate: .now,
-        isSuggested: true,
-        isUserEdited: false,
-        vitalKind: .exerciseEffectiveness
+  PreviewEnvironment {
+    NavigationStack {
+      HabitDetailsView(
+        habit: Habit(
+          targetMetric: .strengthTrainingDuration,
+          timePeriod: .weekly,
+          value: 30,
+          unitString: HKUnit.minute().unitString,
+          startDate: .now,
+          isSuggested: true,
+          isUserEdited: false,
+          vitalKind: .exerciseEffectiveness
+        )
       )
-    )
+    }
   }
 }
