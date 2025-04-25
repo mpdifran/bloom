@@ -14,6 +14,7 @@ import SwiftData
 final class ChatViewModel {
   var assistantTypingStatus: String?
   var assistantIsTyping = false
+  var scrollToLatestMessageToggle = false
   var error: Error?
 
   init() {
@@ -22,6 +23,7 @@ final class ChatViewModel {
 
   private var typingStatusTask: Task<Void, Never>?
   private var isTypingTask: Task<Void, Never>?
+  private var scrollToLatestMessageTask: Task<Void, Never>?
   private var errorTask: Task<Void, Never>?
 
   private let modelContext = ContainerHolder.shared.createContext()
@@ -64,6 +66,13 @@ private extension ChatViewModel {
       for await error in await ChatController.shared.$error {
         await MainActor.run { [weak self] in
           self?.error = error
+        }
+      }
+    }
+    scrollToLatestMessageTask = Task.detached { [weak self] in
+      for await scrollToLatestMessageToggle in await ChatController.shared.$scrollToLatestMessageToggle {
+        await MainActor.run { [weak self] in
+          self?.scrollToLatestMessageToggle = scrollToLatestMessageToggle
         }
       }
     }

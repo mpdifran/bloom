@@ -79,7 +79,6 @@ struct ChatLauncherView: View {
     .onChange(of: isFocused) { oldValue, newValue in
       if newValue {
         tabController.isShowingChat = true
-        tabController.scrollToLatestMessageToggle.toggle()
       }
     }
     .alert(error: $error)
@@ -237,7 +236,6 @@ private extension ChatLauncherView {
 
   func submit() async {
     didSendToggle.toggle()
-    isFocused = false
 
     let textToSend = text
     let imageToSend = image
