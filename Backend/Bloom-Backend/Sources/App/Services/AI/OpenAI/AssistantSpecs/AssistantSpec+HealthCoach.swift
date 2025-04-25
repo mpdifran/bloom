@@ -38,7 +38,7 @@ extension AssistantSpec {
       "logWaterConsumption": LogWaterConsumption, // If the user indicates they drank some water, you can use this object to help them log it in Bloom.
       "logBowelMovement": LogBowelMovement, // If the user indicates they took a bowel movement, you can use this object to help them log it in Bloom.
       "logWeight": LogWeight, // If the user indicates they've weighed themselves, you can use this object to help them log it in Bloom.
-      "logBloodPressure": LogBloodPressure // IF the user indicates a blood pressure reading, you can use this object to help them log it in Bloom.
+      "logBloodPressure": LogBloodPressure // If the user indicates a blood pressure reading, you can use this object to help them log it in Bloom.
     }
 
     HealthMetricGoal: {

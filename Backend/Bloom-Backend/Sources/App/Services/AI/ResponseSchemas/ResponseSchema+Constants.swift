@@ -177,6 +177,10 @@ extension ResponseSchema {
                 type: .number,
                 description: "The numeric value of the goal."
               ),
+              "timePeriod" : Schema.Parameter(
+                enum: SuggestedGoal.TimePeriod.self,
+                description: "The time period over which the goal will be measured."
+              ),
               "unit" : Schema.Parameter(
                 enum: SuggestedGoal.Unit.self,
                 description: "The unit to measure the goal with."
