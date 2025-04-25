@@ -120,20 +120,22 @@ private extension ChatController {
         }
       }
     }
-    // These errors are too noisy
-    //    webSocketErrorTask = Task.detached { [weak self] in
-    //      for await error in await handle.$error {
-    //        if let error {
-    //          await self?.on(error: error)
-    //        }
-    //      }
-    //    }
+    webSocketErrorTask = Task.detached {
+      for await error in await handle.$error {
+        if let error {
+          print(error)
+//          await self?.on(error: error)
+        }
+      }
+    }
 
     webSocketHandle = handle
     return handle
   }
 
   func parse(data: Data) async {
+    print("Recevied data: \(String(data: data, encoding: .utf8) ?? "")")
+
     if let messagesResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
       do {

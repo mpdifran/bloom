@@ -77,6 +77,13 @@ extension WebSocketService {
         }
       }
       socket.onClose.whenComplete { [weak self] (result) in
+        switch result {
+        case .success(let success):
+          break
+        case .failure(let failure):
+          self?.logger.debug("On Socket close")
+          self?.logger.report(error: failure)
+        }
         Task {
           await self?.removeSocket(for: userID)
         }
