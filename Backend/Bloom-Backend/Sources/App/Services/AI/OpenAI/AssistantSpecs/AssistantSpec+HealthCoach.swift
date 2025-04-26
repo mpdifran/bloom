@@ -9,6 +9,8 @@ import Foundation
 import BloomModel
 @preconcurrency import OpenAIKit
 
+// MARK: - AssistantSpec
+
 extension AssistantSpec {
   static let healthCoach: AssistantSpec = AssistantSpec(
     id: "assistant.health-coach",
@@ -118,10 +120,16 @@ extension AssistantSpec {
       .function(.queryUserHealthMetrics)
     ],
     responseFormat: ResponseFormat(type: .jsonObject)
-//    responseFormat: ResponseFormat(
-//      type: .jsonSchema(.healthCoachResponse)
-//    )
   )
+}
+
+// MARK: - Functions
+
+// MARK: Query Functions
+
+extension String.Function {
+  static let queryUserHealthData = "queryUserHealthData"
+  static let queryUserHealthMetrics = "queryUserHealthMetrics"
 }
 
 extension Assistant.Tool.Function {
@@ -161,20 +169,160 @@ extension Assistant.Tool.Function {
   )
 }
 
+// MARK: Write Data to Client
+
 extension String.Function {
-  static let queryUserHealthData = "queryUserHealthData"
-  static let queryUserHealthMetrics = "queryUserHealthMetrics"
+  static let setGoals = "setGoals"
+  static let logFood = "logFood"
+  static let logWater = "logWater"
+  static let logBowelMovement = "logBowelMovement"
+  static let logWeight = "logWeight"
+  static let logBloodPressure = "logBloodPressure"
 }
 
-extension ResponseSchema {
-
-  static let healthCoachResponse = ResponseSchema(
-    name: "response",
-    schema: Schema.Object(
+extension Assistant.Tool.Function {
+  static let setGoals = Assistant.Tool.Function(
+    name: .Function.setGoals,
+    description: "Can be used to modify the user's goals. They will be presented with them, and will first have to approve them before they're saved in Bloom",
+    parameters: Schema.Object(
       properties: [
-        "message": Schema.Parameter(
+        "newGoals" : Schema.Parameter(
+          description: "A list of goals for the user to add",
+          arrayOf: Schema.Object(
+            properties: [
+              "metric" : Schema.Parameter(
+                enum: SuggestedGoal.Metric.self,
+                description: "Which health metric the goal is for"
+              ),
+              "timePeriod" : Schema.Parameter(
+                enum: SuggestedGoal.TimePeriod.self,
+                description: "The time period in which the goal must be met"
+              ),
+              "value": Schema.Parameter(
+                type: .number,
+                description: "The value of the goal"
+              ),
+              "unit": Schema.Parameter(
+                enum: SuggestedGoal.Unit.self,
+                description: "The unit in which the value is measured in"
+              )
+            ]
+          )
+        )
+      ]
+    )
+  )
+
+  static let logFood = Assistant.Tool.Function(
+    name: .Function.logFood,
+    description: "This can be used to log food items for the user",
+    parameters: Schema.Object(
+      properties: [
+        "name": Schema.Parameter(type: .string, description: "The name you would give the food."),
+        "foodItems": Schema.Parameter(
+          description: "A list of individual food items detected.",
+          arrayOf: Schema.Object(
+            properties: [
+              "name": Schema.Parameter(type: .string, description: "The name of this food item"),
+              "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. It should not contain the name of the item itself, and should contain a number."),
+              "servingValue": Schema.Parameter(ref: "quantity"),
+              "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the food item you detect."),
+              "calories": Schema.Parameter(ref: "quantity"),
+              "fat": Schema.Parameter(ref: "quantity"),
+              "carbohydrates": Schema.Parameter(ref: "quantity"),
+              "protein": Schema.Parameter(ref: "quantity"),
+              "saturatedFat": Schema.Parameter(ref: "quantity"),
+              "transFat": Schema.Parameter(ref: "quantity"),
+              "polyunsaturatedFat": Schema.Parameter(ref: "quantity"),
+              "monounsaturatedFat": Schema.Parameter(ref: "quantity"),
+              "fiber": Schema.Parameter(ref: "quantity"),
+              "sugar": Schema.Parameter(ref: "quantity"),
+              "cholesterol": Schema.Parameter(ref: "quantity"),
+              "sodium": Schema.Parameter(ref: "quantity"),
+              "calcium": Schema.Parameter(ref: "quantity"),
+              "iron": Schema.Parameter(ref: "quantity"),
+              "potassium": Schema.Parameter(ref: "quantity"),
+              "magnesium": Schema.Parameter(ref: "quantity"),
+              "zinc": Schema.Parameter(ref: "quantity"),
+              "vitaminA": Schema.Parameter(ref: "quantity"),
+              "vitaminB6": Schema.Parameter(ref: "quantity"),
+              "vitaminB12": Schema.Parameter(ref: "quantity"),
+              "vitaminC": Schema.Parameter(ref: "quantity"),
+              "vitaminD": Schema.Parameter(ref: "quantity"),
+              "vitaminE": Schema.Parameter(ref: "quantity")
+            ]
+          )
+        )
+      ],
+      references: [
+        "quantity" : .quantity
+      ]
+    )
+  )
+
+  static let logWater = Assistant.Tool.Function(
+    name: .Function.logWater,
+    description: "This can be used to log water for the user",
+    parameters: Schema.Object(
+      properties: [
+        "value" : Schema.Parameter(
+          type: .number,
+          description: "The amount of water to log"
+        ),
+        "unit" : Schema.Parameter(
+          enum: SocketMessage.LogWaterConsumption.Unit.self,
+          description: "The unit the value is measured in"
+        )
+      ]
+    )
+  )
+
+  static let logBowelMovement = Assistant.Tool.Function(
+    name: .Function.logBowelMovement,
+    description: "This can be used to log a bowel movement for the user",
+    parameters: Schema.Object(
+      properties: [
+        "bristolStoolType": Schema.Parameter(
+          type: .integer,
+          description: "The bristol stool type of the bowel movement"
+        ),
+        "duration": Schema.Parameter(
+          enum: SocketMessage.LogBowelMovement.Duration.self,
+          description: "The duration of the bowel movement"
+        )
+      ]
+    )
+  )
+
+  static let logWeight = Assistant.Tool.Function(
+    name: .Function.logWeight,
+    description: "This can be used to log the user's weight",
+    parameters: Schema.Object(
+      properties: [
+        "value": Schema.Parameter(
+          type: .number,
+          description: "The user's weight"
+        ),
+        "unit": Schema.Parameter(
           type: .string,
-          description: "A chat message you want to send to the user."
+          description: "The unit to measure the weight with"
+        )
+      ]
+    )
+  )
+
+  static let logBloodPressure = Assistant.Tool.Function(
+    name: .Function.logBloodPressure,
+    description: "This can be used to log the user's blood pressure",
+    parameters: Schema.Object(
+      properties: [
+        "systolic": Schema.Parameter(
+          type: .integer,
+          description: "The systolic measurement of blood pressure"
+        ),
+        "diastolic": Schema.Parameter(
+          type: .integer,
+          description: "The diastolic measurement of blood pressure"
         )
       ]
     )
