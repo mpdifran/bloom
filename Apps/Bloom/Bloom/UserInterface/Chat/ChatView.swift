@@ -24,6 +24,11 @@ struct ChatView: View {
 
   var body: some View {
     ScrollViewReader { scrollViewProxy in
+      /// The chat view uses a double-flip technique to achieve correct scrolling behaviour:
+      /// 1. The content inside the ScrollView is flipped upside down so new messages appear at the bottom.
+      /// 2. The entire ScrollView is then flipped upside down to correct the orientation.
+      /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
+      /// Views must be added in the opposite order they appear in a VStack since they are flipped.
       ScrollView {
         LazyVStack {
           Group {
@@ -35,16 +40,17 @@ struct ChatView: View {
               statusTextView
             }
 
+            // Messages must be in reverse order since the View is flipped.
             ForEach(chatMessages.reversed()) { chatMessage in
               chatCell(for: chatMessage)
             }
           }
-          .flippedUpsideDown()
+          .flippedUpsideDown() // Flip the content.
         }
         .horizontallyCentered()
         .padding(.vertical)
       }
-      .flippedUpsideDown()
+      .flippedUpsideDown() // Flip the ScrollView.
     }
     .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
     .sheet($presentedSheet)
