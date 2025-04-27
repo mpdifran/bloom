@@ -26,44 +26,25 @@ struct ChatView: View {
     ScrollViewReader { scrollViewProxy in
       ScrollView {
         LazyVStack {
-          ForEach(chatMessages) { chatMessage in
-            chatCell(for: chatMessage)
-          }
+          Group {
+            if viewModel.assistantIsTyping {
+              TypingIndicatorCell(isDirect: false)
+                .id("typing-indicator")
+                .transition(.blurReplace)
 
-          if viewModel.assistantIsTyping {
-            statusTextView
+              statusTextView
+            }
 
-            TypingIndicatorCell(isDirect: false)
-              .id("typing-indicator")
-              .transition(.blurReplace)
+            ForEach(chatMessages.reversed()) { chatMessage in
+              chatCell(for: chatMessage)
+            }
           }
+          .flippedUpsideDown()
         }
         .horizontallyCentered()
         .padding(.vertical)
       }
-      .onChange(of: viewModel.assistantTypingStatus) { _, _ in
-        guard viewModel.assistantIsTyping else { return }
-        withAnimation {
-          scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
-        }
-      }
-      .onChange(of: viewModel.assistantIsTyping) { _, assistantIsTyping in
-        guard assistantIsTyping else { return }
-        withAnimation {
-          scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
-        }
-      }
-      .onAppear {
-        scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
-      }
-      .onChange(of: viewModel.scrollToLatestMessageToggle) { oldValue, newValue in
-        scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
-      }
-      .onChange(of: tabController.isShowingChat) { oldValue, newValue in
-        if newValue {
-          scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
-        }
-      }
+      .flippedUpsideDown()
     }
     .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
     .sheet($presentedSheet)
@@ -75,6 +56,12 @@ struct ChatView: View {
 }
 
 private extension ChatView {
+
+  var scrollAnchor: some View {
+    Color.clear
+      .frame(height: 1)
+      .id("scroll-anchor")
+  }
 
   @ViewBuilder
   func chatCell(for chatMessage: ChatMessage) -> some View {
@@ -137,22 +124,24 @@ private extension ChatView {
       .padding(.horizontal)
     }
   }
-
-  func scrollToLastMessage(scrollProxy: ScrollViewProxy, animated: Bool) {
-    if let lastMessage = chatMessages.last {
-      if animated {
-        withAnimation {
-          scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
-        }
-      } else {
-        scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
-      }
-    }
-  }
 }
 
 #Preview {
   PreviewEnvironment {
     ChatView()
   }
+}
+
+struct FlippedUpsideDown: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+        .rotationEffect(.degrees(180))
+            .scaleEffect(x: -1, y: 1, anchor: .center)
+    }
+}
+
+extension View {
+    func flippedUpsideDown() -> some View {
+        modifier(FlippedUpsideDown())
+    }
 }
