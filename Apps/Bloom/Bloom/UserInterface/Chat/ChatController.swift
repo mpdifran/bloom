@@ -14,7 +14,6 @@ final actor ChatController: ObservableObject {
 
   @AsyncStreamable var assistantTypingStatus: String?
   @AsyncStreamable var assistantIsTyping = false
-  @AsyncStreamable var scrollToLatestMessageToggle = false
   @AsyncStreamable var error: Error?
 
   private init() { }
@@ -66,8 +65,6 @@ extension ChatController {
       )
       modelContext.insert(userMessage)
     }
-
-    scrollToLatestMessageToggle.toggle()
 
     let demographics = await ChatVitalConverter.shared.generateDemographics()
     let data = try encoder.encode(demographics)
@@ -195,7 +192,6 @@ private extension ChatController {
             modelContext.insert(richContentMessage)
           }
         }
-        scrollToLatestMessageToggle.toggle()
       } catch {
         self.error = error
       }
