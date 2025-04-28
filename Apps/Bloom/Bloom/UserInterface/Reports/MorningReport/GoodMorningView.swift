@@ -479,37 +479,47 @@ private extension GoodMorningView {
     maxTemp: Measurement<UnitTemperature>,
     opacity: Double = 1
   ) -> LinearGradient {
-    var colors = [Color]()
+    // Convert to Celsius and apply shift
+    let minC = minTemp.converted(to: .celsius).value - minTempShift
+    let maxC = maxTemp.converted(to: .celsius).value
 
-    let min = minTemp.converted(to: .celsius).value - minTempShift
-    let max = minTemp.converted(to: .celsius).value
+    // Define temperature bands and associated colors
+    let thresholds: [(limit: Double, color: Color)] = [
+        (-10, .belowMinus10),
+        (0,   .below0),
+        (10,  .above10),
+        (15,  .above15),
+        (20,  .above20),
+        (25,  .above25),
+        (30,  .above30),
+        (35,  .above35),
+        (40,  .above40)
+    ]
 
-    if min < -10 {
-      colors.append(.belowMinus10.opacity(opacity))
+    var colors: [Color] = []
+
+    // Include color for any part of the range <= -10°C
+    if minC <= thresholds[0].limit {
+        colors.append(thresholds[0].color.opacity(opacity))
     }
-    if (min < 0 && max > 0) || (min > -10 && max < 10) {
-      colors.append(.below0.opacity(opacity))
+
+    // Include colors for each band intersecting the [minC, maxC] range
+    for index in 1 ..< thresholds.count {
+        let lower = thresholds[index - 1].limit
+        let upper = thresholds[index].limit
+        if maxC > lower && minC < upper {
+            colors.append(thresholds[index].color.opacity(opacity))
+        }
     }
-    if (min < 10 && max > 10) || (min > 10 && max < 15) {
-      colors.append(.above10.opacity(opacity))
+
+    // Include color for any part of the range > 40°C
+    if maxC > thresholds.last!.limit {
+        colors.append(thresholds.last!.color.opacity(opacity))
     }
-    if (min < 15 && max > 15) || (min > 15 && max < 20) {
-      colors.append(.above15.opacity(opacity))
-    }
-    if (min < 20 && max > 20) || (min > 20 && max < 25) {
-      colors.append(.above20.opacity(opacity))
-    }
-    if (min < 25 && max > 25) || (min > 25 && max < 30) {
-      colors.append(.above25.opacity(opacity))
-    }
-    if (min < 30 && max > 30) || (min > 30 && max < 35) {
-      colors.append(.above30.opacity(opacity))
-    }
-    if (min < 35 && max > 35) || (min > 35 && max < 40) {
-      colors.append(.above35.opacity(opacity))
-    }
-    if max > 40 {
-      colors.append(.above40.opacity(opacity))
+
+    // Fallback if no colors were added
+    if colors.isEmpty {
+        colors.append(thresholds[1].color.opacity(opacity))
     }
 
     return LinearGradient(colors: colors, startPoint: .bottom, endPoint: .top)
