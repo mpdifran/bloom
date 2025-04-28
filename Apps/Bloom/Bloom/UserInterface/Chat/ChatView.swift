@@ -15,6 +15,7 @@ struct ChatView: View {
 
   @State private var viewModel = ChatViewModel()
   @State private var presentedSheet: AnyView?
+  @State private var isAtBottom = false
 
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
@@ -29,28 +30,50 @@ struct ChatView: View {
       /// 2. The entire ScrollView is then flipped upside down to correct the orientation.
       /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
       /// Views must be added in the opposite order they appear in a VStack since they are flipped.
-      ScrollView {
-        LazyVStack {
-          Group {
-            if viewModel.assistantIsTyping {
-              TypingIndicatorCell(isDirect: false)
-                .id("typing-indicator")
-                .transition(.blurReplace)
+      ZStack(alignment: .bottom) {
+        ScrollView {
+          LazyVStack {
+            Group {
+              // Dummy view to help the ScrollView know where its bottom is.
+              bottomAnchorView
 
-              statusTextView
-            }
+              if viewModel.assistantIsTyping {
+                TypingIndicatorCell(isDirect: false)
+                  .id("typing-indicator")
+                  .transition(.blurReplace)
 
-            // Messages must be in reverse order since the View is flipped.
-            ForEach(chatMessages.reversed()) { chatMessage in
-              chatCell(for: chatMessage)
+                statusTextView
+              }
+
+              // Messages must be in reverse order since the View is flipped.
+              ForEach(chatMessages.reversed()) { chatMessage in
+                chatCell(for: chatMessage)
+              }
             }
+            .flippedUpsideDown() // Flip the content.
           }
-          .flippedUpsideDown() // Flip the content.
+          .horizontallyCentered()
+          .padding(.vertical)
         }
-        .horizontallyCentered()
-        .padding(.vertical)
+        .flippedUpsideDown() // Flip the ScrollView.
+
+        if !isAtBottom {
+          Button {
+            withAnimation {
+              scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+            }
+          } label: {
+            Image(systemSymbol: .arrowDown)
+              .font(.body)
+              .foregroundStyle(.text, .fill)
+              .frame(square: 32)
+              .background(Circle().fill(.ultraThinMaterial))
+              .shadow(radius: 2)
+          }
+          .padding(.bottom, 8)
+          .transition(.scale.combined(with: .opacity))
+        }
       }
-      .flippedUpsideDown() // Flip the ScrollView.
     }
     .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
     .sheet($presentedSheet)
@@ -122,6 +145,22 @@ private extension ChatView {
       }
       .padding(.horizontal)
     }
+  }
+
+  var bottomAnchorView: some View {
+    Color.clear
+      .frame(height: 1)
+      .id("bottom-anchor")
+      .onAppear {
+        withAnimation {
+          isAtBottom = true
+        }
+      }
+      .onDisappear {
+        withAnimation {
+          isAtBottom = false
+        }
+      }
   }
 }
 
