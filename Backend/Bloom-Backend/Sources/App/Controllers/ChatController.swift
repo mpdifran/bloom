@@ -23,7 +23,7 @@ extension ChatController: RouteCollection {
       $0.auth(using: UserToken.self) {
         $0.group("chat") {
           $0.webSocket("web-socket", maxFrameSize: .frameSize, onUpgrade: createWebSocket)
-          $0.post("query-response", use: queryResponse)
+          $0.post("submit-tool-call-response", use: submitToolCallResponses)
           $0.post("upload-image", use: uploadImage)
           $0.get("delete-thread", use: deleteThread)
         }
@@ -51,7 +51,7 @@ extension ChatController {
   }
 
   @Sendable
-  func queryResponse(_ request: Request) async throws -> Response {
+  func submitToolCallResponses(_ request: Request) async throws -> Response {
     let user = try request.auth.require(User.self)
 
     guard let userID = user.id else { throw Abort(.unauthorized) }

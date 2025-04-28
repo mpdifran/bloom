@@ -183,8 +183,8 @@ extension NetworkRequester {
     return WebSocketHandle(task: task)
   }
 
-  func submitQueryResponse(body: SocketMessage.DataQueryRequest) async throws {
-    let request = try await URLRequest.Chat.submitQueryResponse(body: body)
+  func submitToolCallResponse(body: SocketMessage.ToolCallsResponse) async throws {
+    let request = try await URLRequest.Chat.submitToolCallResponse(body: body)
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
 

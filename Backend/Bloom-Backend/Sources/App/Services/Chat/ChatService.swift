@@ -44,8 +44,8 @@ extension ChatService {
   ) async throws -> Bool {
     if let message = try? decoder.decode(SocketMessage.MessageRequest.self, from: data) {
       try await on(message: message, userID: userID, db: db)
-    } else if let queryRequest = try? decoder.decode(SocketMessage.DataQueryRequest.self, from: data) {
-      try await onDataQuery(queryRequest: queryRequest, userID: userID, db: db)
+    } else if let toolCallResponse = try? decoder.decode(SocketMessage.ToolCallsResponse.self, from: data) {
+      try await onToolCallsResponse(response: toolCallResponse, userID: userID, db: db)
     } else {
       return false
     }
@@ -93,8 +93,8 @@ private extension ChatService {
     )
   }
 
-  func onDataQuery(
-    queryRequest: SocketMessage.DataQueryRequest,
+  func onToolCallsResponse(
+    response: SocketMessage.ToolCallsResponse,
     userID: UserIdentifier,
     db: any Database
   ) async throws {
@@ -108,11 +108,13 @@ private extension ChatService {
       return
     }
 
-    let toolOutputs = queryRequest.queryData.map { ToolOutput(toolCallID: $0.id, output: $0.data) }
+    let toolOutputs = response.toolCallResults.map {
+      ToolOutput(toolCallID: $0.toolCallID, output: $0.data)
+    }
 
     let run = try await assistantService.submitSuccessfulToolOputput(
       threadID: thread.threadID,
-      runID: queryRequest.id,
+      runID: response.runID,
       toolOutputs: toolOutputs
     )
 
@@ -152,19 +154,6 @@ private extension ChatService {
   ) async throws {
     let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
     try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
-  }
-
-  func sendDataQueryResponse(
-    run: Run,
-    queries: [SocketMessage.Query],
-    userID: UserIdentifier,
-    db: any Database
-  ) async throws {
-    let dataQueryResponse = SocketMessage.DataQueryResponse(
-      id: run.id,
-      queries: queries
-    )
-    try await ensureContentSilentlySent(dataQueryResponse, userID: userID, db: db)
   }
 
   func ensureContentSent<Content>(
@@ -310,64 +299,55 @@ private extension ChatService {
       assistantThread: thread,
       tools: [
         Assistant.Tool.function(.queryUserHealthData),
-        Assistant.Tool.function(.queryUserHealthMetrics)
+        Assistant.Tool.function(.queryUserHealthMetrics),
+        Assistant.Tool.function(.setGoals),
+        Assistant.Tool.function(.logFood),
+        Assistant.Tool.function(.logWater),
+        Assistant.Tool.function(.logWeight),
+        Assistant.Tool.function(.logBloodPressure),
+        Assistant.Tool.function(.logBowelMovement)
       ],
+      toolChoice: .auto,
       existingRun: existingRun
     )
 
     switch assistantResponse {
     case .requiresAction(let run, let toolCalls):
-      var queries = [SocketMessage.Query]()
+      var toolCallWrappers = [SocketMessage.ToolCallWrapper]()
       for toolCall in toolCalls {
         switch toolCall.function.name {
         case .Function.queryUserHealthData, .Function.queryUserHealthMetrics:
-          let query = try await performQuery(toolCall: toolCall)
-          queries.append(query)
+          toolCallWrappers.append(try await performQuery(toolCall: toolCall))
+        case .Function.setGoals:
+          toolCallWrappers.append(try await setGoals(toolCall: toolCall))
+        case .Function.logFood:
+          toolCallWrappers.append(try await logFood(toolCall: toolCall))
+        case .Function.logWater:
+          toolCallWrappers.append(try await logWater(toolCall: toolCall))
+        case .Function.logWeight:
+          toolCallWrappers.append(try await logWeight(toolCall: toolCall))
+        case .Function.logBloodPressure:
+          toolCallWrappers.append(try await logBloodPressure(toolCall: toolCall))
+        case .Function.logBowelMovement:
+          toolCallWrappers.append(try await logBowelMovements(toolCall: toolCall))
         default:
           throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
         }
       }
-      try await sendDataQueryResponse(run: run, queries: queries, userID: userID, db: db)
+      let toolCallRequest = SocketMessage.ToolCallsRequest(
+        runID: run.id,
+        toolCalls: toolCallWrappers
+      )
+      try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
     case .messages(_, let messages):
-      let response = messages
-        .flatMap { message in
-          message.content.compactMap({ $0.text?.data(using: .utf8) })
-        }
-        .compactMap { (data) -> ChatAssistantResponse? in
-          do {
-            return try JSONDecoder.bloomModel.decode(ChatAssistantResponse.self, from: data)
-          } catch {
-            logger.report(error: error)
-            return nil
-          }
-        }
-        .map { (response) -> SocketMessage.MessageResponse in
-          let detectedFood: SocketMessage.DetectedFood?
-          if let responseFood = response.detectedFood {
-            detectedFood = SocketMessage.DetectedFood(
-              name: responseFood.name,
-              foodItemServings: responseFood.foodItems.map { $0.asServing() }
-            )
-          } else {
-            detectedFood = nil
-          }
-          
-          return SocketMessage.MessageResponse(
-            message: response.message,
-            healthMetricGoals: response.healthMetricGoals,
-            detectedFood: detectedFood,
-            logWaterConsumption: response.logWaterConsumption,
-            logBowelMovement: response.logBowelMovement,
-            logWeight: response.logWeight,
-            logBloodPressure: response.logBloodPressure
-          )
-        }
-        .first
-      
-      guard let response else {
+      let message = messages.flatMap { $0.content.compactMap({ $0.text }) }.first
+
+      guard let message else {
         throw Abort(.internalServerError, reason: "Could not decode message from Assistant.")
       }
-      
+
+      let response = SocketMessage.MessageResponse(message: message)
+
       try await sendIsAssistantTyping(isTyping: false, userID: userID)
       try await ensureContentSent(
         response,
@@ -384,28 +364,114 @@ private extension ChatService {
 
 private extension ChatService {
 
-  func performQuery(toolCall: Run.ToolCall) async throws -> SocketMessage.Query {
+  func performQuery(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
     switch toolCall.function.name {
     case .Function.queryUserHealthData:
       let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthDataArguments.self, using: decoder)
-      return SocketMessage.Query(
-        id: toolCall.id,
+      let query = SocketMessage.Query(
         startDate: queryArguments.startDate,
         endDate: queryArguments.endDate,
         dataType: queryArguments.dataType,
         healthMetric: nil
       )
+      return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .query(query))
     case .Function.queryUserHealthMetrics:
       let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthMetricsArguments.self, using: decoder)
-      return SocketMessage.Query(
-        id: toolCall.id,
+      let query = SocketMessage.Query(
         startDate: queryArguments.startDate,
         endDate: queryArguments.endDate,
         dataType: nil,
         healthMetric: queryArguments.healthMetric
       )
+      return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .query(query))
     default:
       throw Abort(.internalServerError, reason: "Improper tool handling")
     }
+  }
+
+  func setGoals(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.setGoals else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let arguments = try toolCall.decodeArguments(type: SetGoalsArguments.self, using: decoder)
+
+    return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .newGoals(arguments.newGoals))
+  }
+
+  func logFood(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.logFood else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let arguments = try toolCall.decodeArguments(type: DetectedFood.self, using: decoder)
+
+    let detectedFood = SocketMessage.DetectedFood(
+      name: arguments.name,
+      foodItemServings: arguments.foodItems.map { $0.asServing() }
+    )
+
+    return SocketMessage.ToolCallWrapper(
+      toolCallID: toolCall.id,
+      kind: .detectedFood(detectedFood)
+    )
+  }
+
+  func logWater(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.logWater else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    do {
+      let arguments = try toolCall.decodeArguments(type: SocketMessage.LogWaterConsumption.self, using: decoder)
+
+      return SocketMessage.ToolCallWrapper(
+        toolCallID: toolCall.id,
+        kind: .logWater(arguments)
+      )
+    } catch {
+      print(toolCall.function.arguments)
+      print(error)
+      throw error
+    }
+  }
+
+  func logWeight(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.logWeight else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogWeight.self, using: decoder)
+
+    return SocketMessage.ToolCallWrapper(
+      toolCallID: toolCall.id,
+      kind: .logWeight(arguments)
+    )
+  }
+
+  func logBloodPressure(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.logBloodPressure else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogBloodPressure.self, using: decoder)
+
+    return SocketMessage.ToolCallWrapper(
+      toolCallID: toolCall.id,
+      kind: .logBloodPressure(arguments)
+    )
+  }
+
+  func logBowelMovements(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.logBowelMovement else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogBowelMovement.self, using: decoder)
+
+    return SocketMessage.ToolCallWrapper(
+      toolCallID: toolCall.id,
+      kind: .logBowelMovement(arguments)
+    )
   }
 }

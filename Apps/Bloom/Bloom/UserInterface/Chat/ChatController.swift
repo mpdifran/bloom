@@ -145,73 +145,61 @@ private extension ChatController {
             message: messagesResponse.message
           )
           modelContext.insert(message)
-
-          if let healthGoals = messagesResponse.healthMetricGoals, healthGoals.isNotEmpty {
-            let data = try JSONEncoder.bloomModel.encode(healthGoals)
-            let richContentMessage = ChatMessage(
-              isCurrentUser: false,
-              richContent: data
-            )
-            modelContext.insert(richContentMessage)
-          }
-          if let detectedFood = messagesResponse.detectedFood {
-            let data = try JSONEncoder.bloomModel.encode(detectedFood)
-            let richContentMessage = ChatMessage(
-              isCurrentUser: false,
-              richContent: data
-            )
-            modelContext.insert(richContentMessage)
-          }
-          if let logWater = messagesResponse.logWaterConsumption {
-            let data = try JSONEncoder.bloomModel.encode(logWater)
-            let richContentMessage = ChatMessage(
-              isCurrentUser: false,
-              richContent: data
-            )
-            modelContext.insert(richContentMessage)
-          }
-          if let logBowelMovement = messagesResponse.logBowelMovement {
-            let data = try JSONEncoder.bloomModel.encode(logBowelMovement)
-            let richContentMessage = ChatMessage(
-              isCurrentUser: false,
-              richContent: data
-            )
-            modelContext.insert(richContentMessage)
-          }
-          if let logWeight = messagesResponse.logWeight {
-            let data = try JSONEncoder.bloomModel.encode(logWeight)
-            let richContentMessage = ChatMessage(
-              isCurrentUser: false,
-              richContent: data
-            )
-            modelContext.insert(richContentMessage)
-          }
-          if let logBloodPressure = messagesResponse.logBloodPressure {
-            let data = try JSONEncoder.bloomModel.encode(logBloodPressure)
-            let richContentMessage = ChatMessage(
-              isCurrentUser: false,
-              richContent: data
-            )
-            modelContext.insert(richContentMessage)
-          }
         }
         scrollToLatestMessageToggle.toggle()
       } catch {
         self.error = error
       }
-    } else if let queryResponse = try? decoder.decode(SocketMessage.DataQueryResponse.self, from: data) {
-      let queryData = await perform(queryResponse: queryResponse)
-
-      let dataRequest = SocketMessage.DataQueryRequest(
-        id: queryResponse.id,
-        queryData: queryData
-      )
-
+    } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       do {
-        if let webSocketHandle {
-          try await webSocketHandle.send(payload: dataRequest)
+        let toolCallsResponses: [SocketMessage.ToolCallResult] = try await withThrowingTaskGroup(of: SocketMessage.ToolCallResult.self, returning: [SocketMessage.ToolCallResult].self) { [self, queryPerformer] taskGroup in
+          for toolCall in toolCallRequest.toolCalls {
+            taskGroup.addTask {
+              switch toolCall.kind {
+              case .query(let query):
+                if let title = query.dataType?.name ?? query.healthMetric?.name {
+                  await self.record(queryArea: title)
+                }
+                let data = await queryPerformer.perform(query: query)
+                return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID, data: data)
+              case .newGoals(let goals):
+                let data = try JSONEncoder.bloomModel.encode(goals)
+                try await self.insertRichChatMessage(data: data)
+              case .detectedFood(let food):
+                let data = try JSONEncoder.bloomModel.encode(food)
+                try await self.insertRichChatMessage(data: data)
+              case .logWater(let logWater):
+                let data = try JSONEncoder.bloomModel.encode(logWater)
+                try await self.insertRichChatMessage(data: data)
+              case .logWeight(let logWeight):
+                let data = try JSONEncoder.bloomModel.encode(logWeight)
+                try await self.insertRichChatMessage(data: data)
+              case .logBloodPressure(let logBloodPressure):
+                let data = try JSONEncoder.bloomModel.encode(logBloodPressure)
+                try await self.insertRichChatMessage(data: data)
+              case .logBowelMovement(let logBowelMovement):
+                let data = try JSONEncoder.bloomModel.encode(logBowelMovement)
+                try await self.insertRichChatMessage(data: data)
+              }
+              return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID)
+            }
+          }
+          var results = [SocketMessage.ToolCallResult]()
+          for try await response in taskGroup {
+            results.append(response)
+          }
+          return results
+        }
+
+        let responseMessage = SocketMessage.ToolCallsResponse(
+          runID: toolCallRequest.runID,
+          toolCallResults: toolCallsResponses
+        )
+
+        if let socket = webSocketHandle {
+          try await socket.send(payload: responseMessage)
         } else {
-          try await NetworkRequester.shared.submitQueryResponse(body: dataRequest)
+          try await NetworkRequester.shared.submitToolCallResponse(body: responseMessage)
         }
       } catch {
         self.error = error
@@ -230,24 +218,14 @@ private extension ChatController {
     }
   }
 
-  func perform(queryResponse: SocketMessage.DataQueryResponse) async -> [SocketMessage.QueryData] {
-    let titles = queryResponse.queries.flatMap { query in
-      [query.dataType?.name, query.healthMetric?.name].compactMap { $0 }
-    }
-    queryAreas.append(contentsOf: titles)
+  func record(queryArea: String) {
+    queryAreas.append(queryArea)
+  }
 
-    return await withTaskGroup(of: SocketMessage.QueryData.self, returning: [SocketMessage.QueryData].self) { taskGroup in
-      for query in queryResponse.queries {
-        taskGroup.addTask { [queryPerformer] in
-          let data = await queryPerformer.perform(query: query)
-          return SocketMessage.QueryData(id: query.id, data: data)
-        }
-      }
-      var results: [SocketMessage.QueryData] = []
-      for await result in taskGroup {
-        results.append(result)
-      }
-      return results
+  func insertRichChatMessage(data: Data) throws {
+    try modelContext.savingTransaction {
+      let richContentMessage = ChatMessage(isCurrentUser: false, richContent: data)
+      modelContext.insert(richContentMessage)
     }
   }
 

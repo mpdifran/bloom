@@ -85,8 +85,8 @@ extension URLRequest {
     static func webSocket() async -> URLRequest {
       await URLRequest.websocket("v1/chat/web-socket")
     }
-    static func submitQueryResponse(body: SocketMessage.DataQueryRequest) async throws -> URLRequest {
-      try await URLRequest.post("v1/chat/query-response", body: body)
+    static func submitToolCallResponse(body: SocketMessage.ToolCallsResponse) async throws -> URLRequest {
+      try await URLRequest.post("v1/chat/submit-tool-call-response", body: body)
     }
     static func uploadImage(body: ChatUploadFileRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/chat/upload-image", body: body)

@@ -12,8 +12,6 @@ import OpenAIKit
 extension Run.ToolCall {
 
   func decodeArguments<T: Decodable>(type: T.Type, using decoder: JSONDecoder) throws -> T {
-    guard let data = function.arguments.data(using: .utf8) else { throw Abort(.badRequest) }
-
-    return try decoder.decode(type, from: data)
+    try decoder.decode(type, from: Data(function.arguments.utf8))
   }
 }

@@ -156,8 +156,8 @@ private extension ChatRichContentWrapperCell {
     } else if let logWeight = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWeight.self, from: data) {
 
       self.weightQuantity = HKQuantity(
-        unit: HKUnit(from: logWeight.quantity.unit),
-        doubleValue: logWeight.quantity.value
+        unit: HKUnit(from: logWeight.unit.rawValue),
+        doubleValue: logWeight.value
       )
 
     } else if let logBloodPressure = try? JSONDecoder.bloomModel.decode(SocketMessage.LogBloodPressure.self, from: data) {
