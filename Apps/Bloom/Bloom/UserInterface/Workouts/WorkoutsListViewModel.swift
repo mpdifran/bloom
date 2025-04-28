@@ -17,13 +17,13 @@ final class WorkoutsListViewModel: ObservableObject {
     case permissionDenied
   }
 
-  @Published var selectedActivityType: HKWorkoutActivityType?
+  var onWorkoutsUpdated: (() -> Void)?
+
   @Published private(set) var state: State = .loading
   @Published private(set) var workoutSections = [WorkoutDateSection]()
   @Published private(set) var filteredWorkoutSections = [WorkoutDateSection]()
   @Published private(set) var activityTypes = [HKWorkoutActivityType]()
 
-  private var backgroundDeliveryHandle: HKBackgroundDeliveryHandle?
   private var observationHandler: HKObserverQueryHandle?
 
   init() {
@@ -32,8 +32,8 @@ final class WorkoutsListViewModel: ObservableObject {
     }
   }
 
-  func refreshFilteredWorkoutSections() {
-    guard let selectedActivityType else {
+  func refreshFilteredWorkoutSections(for activityType: HKWorkoutActivityType?) {
+    guard let activityType else {
       filteredWorkoutSections = workoutSections
       return
     }
@@ -41,11 +41,11 @@ final class WorkoutsListViewModel: ObservableObject {
     var sections = [WorkoutDateSection]()
 
     for section in workoutSections {
-      guard section.workouts.contains(where: { $0.workoutActivityType == selectedActivityType }) else {
+      guard section.workouts.contains(where: { $0.workoutActivityType == activityType }) else {
         continue
       }
 
-      let filteredWorkouts = section.workouts.filter({ $0.workoutActivityType == selectedActivityType })
+      let filteredWorkouts = section.workouts.filter({ $0.workoutActivityType == activityType })
       let filteredSection = WorkoutDateSection(date: section.date, workouts: filteredWorkouts)
       sections.append(filteredSection)
     }
@@ -53,7 +53,7 @@ final class WorkoutsListViewModel: ObservableObject {
     filteredWorkoutSections = sections
   }
 
-  func loadWorkouts() async {
+  func loadWorkouts(for activityType: HKWorkoutActivityType?) async {
     guard await checkHealthAuth() else { return }
 
     let response = await HealthWorkoutFetcher.shared.fetchSectionedWorkouts(dateRange: .trailingMonthsFromNow(1000))
@@ -61,7 +61,7 @@ final class WorkoutsListViewModel: ObservableObject {
     self.activityTypes = response.activityTypes
     self.workoutSections = response.sections
 
-    refreshFilteredWorkoutSections()
+    refreshFilteredWorkoutSections(for: activityType)
 
     state = .loaded
   }
@@ -98,16 +98,13 @@ final class WorkoutsListViewModel: ObservableObject {
 
   func observeChanges() async {
     let sampleType = HKCategoryType.workoutType()
-    backgroundDeliveryHandle = await HealthStoreFetcher.shared.enableBackgroundDelivery(
-      objectType: sampleType,
-        frequency: .immediate
-    )
-
     observationHandler = HealthManager.shared.healthStore.observeChanges(
       sampleType: sampleType,
         startDate: Calendar.current.date(byAdding: .day, value: -1, to: .now) ?? .now
     ) { [weak self] in
-        await self?.loadWorkouts()
+      await MainActor.run { [weak self] in
+        self?.onWorkoutsUpdated?()
+      }
     }
   }
 }

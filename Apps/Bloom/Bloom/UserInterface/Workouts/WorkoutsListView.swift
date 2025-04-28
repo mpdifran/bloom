@@ -15,6 +15,7 @@ struct WorkoutsListView: View {
 
   @StateObject private var viewModel = WorkoutsListViewModel()
 
+  @State private var selectedActivityType: HKWorkoutActivityType?
   @State private var triggerHealthPermissionSheet = false
 
   init(
@@ -23,7 +24,7 @@ struct WorkoutsListView: View {
   ) {
     self.titleDisplayMode = titleDisplayMode
     if let activityType {
-      viewModel.selectedActivityType = activityType
+      self._selectedActivityType = State(initialValue: activityType)
     }
   }
 
@@ -48,12 +49,17 @@ struct WorkoutsListView: View {
     .groupedBackground()
     .navigationTitle("Workouts")
     .navigationBarTitleDisplayMode(titleDisplayMode)
-    .animation(.default, value: viewModel.selectedActivityType)
-    .onChange(of: viewModel.selectedActivityType) { (_, _) in
-      viewModel.refreshFilteredWorkoutSections()
+    .animation(.default, value: selectedActivityType)
+    .onChange(of: selectedActivityType) { (_, newValue) in
+      viewModel.refreshFilteredWorkoutSections(for: newValue)
     }
     .task {
-      await viewModel.loadWorkouts()
+      await viewModel.loadWorkouts(for: selectedActivityType)
+    }
+    .onAppear {
+      viewModel.onWorkoutsUpdated = {
+        viewModel.refreshFilteredWorkoutSections(for: selectedActivityType)
+      }
     }
     .healthDataAccessRequest(
       store: HealthPermissionChecker.shared.healthStore,
@@ -63,7 +69,7 @@ struct WorkoutsListView: View {
       switch result {
       case .success:
         Task {
-          await viewModel.loadWorkouts()
+          await viewModel.loadWorkouts(for: selectedActivityType)
         }
       case .failure:
         // No-op?
@@ -136,7 +142,7 @@ private extension WorkoutsListView {
       VStack(alignment: .leading, spacing: 0) {
         WorkoutActivityTypeFilterView(
           activityTypes: viewModel.activityTypes,
-          selectedActivityType: $viewModel.selectedActivityType
+          selectedActivityType: $selectedActivityType
         )
         .tint(.green)
 
