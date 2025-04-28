@@ -74,6 +74,7 @@ struct ChatLauncherView: View {
         .ignoresSafeArea(edges: .bottom)
     }
     .animation(.bouncy, value: image)
+    .animation(.easeOut, value: tabController.isShowingChat)
     .sensoryFeedback(.impact, trigger: didSendToggle)
     .sensoryFeedback(.selection, trigger: selectionToggle)
     .onChange(of: isFocused) { oldValue, newValue in
@@ -134,6 +135,11 @@ private extension ChatLauncherView {
             .font(.title)
             .frame(square: 24)
         }
+      }
+
+      if !tabController.isShowingChat {
+        Image(systemSymbol: .sparkles)
+          .foregroundStyle(.secondary)
       }
 
       TextField(
@@ -198,7 +204,8 @@ private extension ChatLauncherView {
       }
     }
     .frame(minWidth: 120)
-    .cardContainer(fill: .background)
+    .padding(12)
+    .cardContainer(fill: .background, includePadding: false)
     .onTapGesture {
       isFocused = true
     }
@@ -221,7 +228,8 @@ private extension ChatLauncherView {
     } label: {
       tabController.activeTab.tabImage
         .frame(square: 24)
-        .cardContainer(fill: .background)
+        .padding(12)
+        .cardContainer(fill: .background, includePadding: false)
     }
   }
 
@@ -235,7 +243,8 @@ private extension ChatLauncherView {
         .fontDesign(.rounded)
         .fontWeight(.semibold)
         .frame(square: 24)
-        .cardContainer(fill: .background)
+        .padding(12)
+        .cardContainer(fill: .background, includePadding: false)
     }
   }
 }
