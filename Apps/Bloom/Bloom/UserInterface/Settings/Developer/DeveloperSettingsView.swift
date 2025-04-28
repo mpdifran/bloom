@@ -324,6 +324,8 @@ extension DeveloperSettingsView {
         AsyncButton {
           try await NetworkRequester.shared.deleteChatThread()
           try modelContext.deleteAll(ChatMessage.self)
+          try modelContext.save()
+
           alertDetails = AlertDetails(
             title: "Chat History Deleted",
             message: "Your chat history has been deleted."

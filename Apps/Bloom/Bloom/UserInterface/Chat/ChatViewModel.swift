@@ -42,6 +42,7 @@ extension ChatViewModel {
   func deleteChatHistory() async throws {
     try await NetworkRequester.shared.deleteChatThread()
     try modelContext.deleteAll(ChatMessage.self)
+    try modelContext.save()
   }
 }
 
