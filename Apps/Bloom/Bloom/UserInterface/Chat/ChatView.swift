@@ -20,7 +20,7 @@ struct ChatView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
 
-  @Query(sort: \ChatMessage.date)
+  @Query(sort: \ChatMessage.date, order: .reverse)
   private var chatMessages: [ChatMessage]
 
   var body: some View {
@@ -45,8 +45,8 @@ struct ChatView: View {
                 statusTextView
               }
 
-              // Messages must be in reverse order since the View is flipped.
-              ForEach(chatMessages.reversed()) { chatMessage in
+              // Messages are already in reverse order from the query
+              ForEach(chatMessages) { chatMessage in
                 chatCell(for: chatMessage)
               }
             }
