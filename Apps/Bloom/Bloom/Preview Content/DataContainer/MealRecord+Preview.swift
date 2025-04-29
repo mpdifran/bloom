@@ -15,7 +15,7 @@ extension MealRecord {
 }
 
 extension MealRecord.Preview {
-  static let crackersAndCheese = MealRecord(
+  nonisolated(unsafe) static let crackersAndCheese = MealRecord(
     id: "1234",
     name: "Crackers and Cheese",
     imageData: UIImage(named: "CrackersAndCheese")?.pngData(),
@@ -33,7 +33,7 @@ extension MealRecord.Preview {
     ]
   )
 
-  static let crackersAndCheeseNoImage = MealRecord(
+  nonisolated(unsafe) static let crackersAndCheeseNoImage = MealRecord(
     id: "1234",
     name: "Crackers and Cheese",
     imageData: nil,

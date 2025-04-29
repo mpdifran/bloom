@@ -201,12 +201,12 @@ extension HealthStoreFetcher {
     } ?? []
   }
 
-  func fetchWorkouts(activityType: HKWorkoutActivityType? = nil, dateRange: DateRange) async -> [HKWorkout] {
-    (try? await healthStore.fetchWorkouts(activityType: activityType, dateRange: dateRange)) ?? []
+  func fetchWorkouts(activityType: HKWorkoutActivityType? = nil, dateRange: DateRange, limit: Int? = nil) async -> [HKWorkout] {
+    (try? await healthStore.fetchWorkouts(activityType: activityType, dateRange: dateRange, limit: limit)) ?? []
   }
 
-  func fetchWorkouts(activityTypes: [HKWorkoutActivityType], dateRange: DateRange) async -> [HKWorkout] {
-    (try? await healthStore.fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)) ?? []
+  func fetchWorkouts(activityTypes: [HKWorkoutActivityType], dateRange: DateRange, limit: Int? = nil) async -> [HKWorkout] {
+    (try? await healthStore.fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange, limit: limit)) ?? []
   }
 
   func fetchCollatedWorkouts(

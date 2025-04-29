@@ -13,3 +13,5 @@ public typealias FoodItemServing = SchemaV9.FoodItemServing
 public typealias MealItemRecord = SchemaV9.MealItemRecord
 public typealias MealRecord = SchemaV9.MealRecord
 public typealias ChatMessage = SchemaV10.ChatMessage
+public typealias WorkoutTemplate = SchemaV12.WorkoutTemplate
+public typealias WorkoutStep = SchemaV12.WorkoutStep

@@ -409,15 +409,21 @@ extension HKHealthStore {
 
   func fetchWorkouts(
     activityType: HKWorkoutActivityType? = nil,
-    dateRange: DateRange
+    dateRange: DateRange,
+    limit: Int? = nil
   ) async throws -> [HKWorkout] {
     let activityTypes = activityType.map({ [$0] }) ?? []
-    return try await fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)
+    return try await fetchWorkouts(
+      activityTypes: activityTypes,
+      dateRange: dateRange,
+      limit: limit
+    )
   }
 
   func fetchWorkouts(
     activityTypes: [HKWorkoutActivityType],
-    dateRange: DateRange
+    dateRange: DateRange,
+    limit: Int? = nil
   ) async throws -> [HKWorkout] {
     try await withCheckedThrowingContinuation { continuation in
       let basePredicate = HKQuery.predicateForSamples(
@@ -441,7 +447,7 @@ extension HKHealthStore {
       let query = HKSampleQuery(
         sampleType: .workoutType(),
         predicate: predicate,
-        limit: HKObjectQueryNoLimit,
+        limit: limit ?? HKObjectQueryNoLimit,
         sortDescriptors: sortDescriptors
       ) { (query, samples, error) in
         if let error {
@@ -465,7 +471,10 @@ extension HKHealthStore {
     activityTypes: [HKWorkoutActivityType],
     dateRange: DateRange
   ) async throws -> [DateCollatedWorkouts] {
-    let workouts = try await fetchWorkouts(activityTypes: activityTypes, dateRange: dateRange)
+    let workouts = try await fetchWorkouts(
+      activityTypes: activityTypes,
+      dateRange: dateRange
+    )
 
     var collatedWorkouts = [Date: [HKWorkout]]()
 
