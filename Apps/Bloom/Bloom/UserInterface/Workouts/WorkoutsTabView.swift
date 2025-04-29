@@ -43,13 +43,13 @@ struct WorkoutsTabView: View {
             UserProfilePhotoView(dimension: 32)
           }
         }
-        ToolbarItem(placement: .cancellationAction) {
-          Button {
-
-          } label: {
-            Label("Add Workout Template", systemSymbol: .plus)
-          }
-        }
+//        ToolbarItem(placement: .cancellationAction) {
+//          Button {
+//
+//          } label: {
+//            Label("Add Workout Template", systemSymbol: .plus)
+//          }
+//        }
       }
       .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
       .navigationDestination($pushedView)
