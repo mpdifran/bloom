@@ -50,12 +50,12 @@ struct ChatView: View {
                 chatCell(for: chatMessage)
               }
             }
-            .flippedUpsideDown() // Flip the content.
+            .flippedVertically() // Flip the content.
           }
           .horizontallyCentered()
           .padding(.vertical)
         }
-        .flippedUpsideDown() // Flip the ScrollView.
+        .flippedVertically() // Flip the ScrollView.
 
         if !isAtBottom {
           Button {
@@ -71,7 +71,7 @@ struct ChatView: View {
               .shadow(radius: 2)
           }
           .padding(.bottom, 8)
-          .transition(.scale.combined(with: .opacity))
+          .transition(.scale.combined(with: .blurReplace))
         }
       }
     }
