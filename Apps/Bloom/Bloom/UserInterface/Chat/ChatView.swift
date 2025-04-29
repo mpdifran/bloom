@@ -15,53 +15,63 @@ struct ChatView: View {
 
   @State private var viewModel = ChatViewModel()
   @State private var presentedSheet: AnyView?
+  @State private var isAtBottom = false
 
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
 
-  @Query(sort: \ChatMessage.date)
+  @Query(sort: \ChatMessage.date, order: .reverse)
   private var chatMessages: [ChatMessage]
 
   var body: some View {
     ScrollViewReader { scrollViewProxy in
-      ScrollView {
-        LazyVStack {
-          ForEach(chatMessages) { chatMessage in
-            chatCell(for: chatMessage)
-          }
+      /// The chat view uses a double-flip technique to achieve correct scrolling behaviour:
+      /// 1. The content inside the ScrollView is flipped upside down so new messages appear at the bottom.
+      /// 2. The entire ScrollView is then flipped upside down to correct the orientation.
+      /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
+      /// Views must be added in the opposite order they appear in a VStack since they are flipped.
+      ZStack(alignment: .bottom) {
+        ScrollView {
+          LazyVStack {
+            Group {
+              // Dummy view to help the ScrollView know where its bottom is.
+              bottomAnchorView
 
-          if viewModel.assistantIsTyping {
-            statusTextView
+              if viewModel.assistantIsTyping {
+                TypingIndicatorCell(isDirect: false)
+                  .id("typing-indicator")
+                  .transition(.blurReplace)
 
-            TypingIndicatorCell(isDirect: false)
-              .id("typing-indicator")
-              .transition(.blurReplace)
+                statusTextView
+              }
+
+              // Messages are already in reverse order from the query
+              ForEach(chatMessages) { chatMessage in
+                chatCell(for: chatMessage)
+              }
+            }
+            .flippedVertically() // Flip the content.
           }
+          .horizontallyCentered()
+          .padding(.vertical)
         }
-        .horizontallyCentered()
-        .padding(.vertical)
-      }
-      .onChange(of: viewModel.assistantTypingStatus) { _, _ in
-        guard viewModel.assistantIsTyping else { return }
-        withAnimation {
-          scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
-        }
-      }
-      .onChange(of: viewModel.assistantIsTyping) { _, assistantIsTyping in
-        guard assistantIsTyping else { return }
-        withAnimation {
-          scrollViewProxy.scrollTo("typing-indicator", anchor: .bottom)
-        }
-      }
-      .onAppear {
-        scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
-      }
-      .onChange(of: viewModel.scrollToLatestMessageToggle) { oldValue, newValue in
-        scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
-      }
-      .onChange(of: tabController.isShowingChat) { oldValue, newValue in
-        if newValue {
-          scrollToLastMessage(scrollProxy: scrollViewProxy, animated: false)
+        .flippedVertically() // Flip the ScrollView.
+
+        if !isAtBottom {
+          Button {
+            withAnimation {
+              scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+            }
+          } label: {
+            Image(systemSymbol: .arrowDown)
+              .font(.body)
+              .foregroundStyle(.text, .fill)
+              .frame(square: 32)
+              .background(Circle().fill(.ultraThinMaterial))
+              .shadow(radius: 2)
+          }
+          .padding(.bottom, 8)
+          .transition(.scale.combined(with: .blurReplace))
         }
       }
     }
@@ -75,7 +85,6 @@ struct ChatView: View {
 }
 
 private extension ChatView {
-
   @ViewBuilder
   func chatCell(for chatMessage: ChatMessage) -> some View {
     switch chatMessage.content {
@@ -138,16 +147,20 @@ private extension ChatView {
     }
   }
 
-  func scrollToLastMessage(scrollProxy: ScrollViewProxy, animated: Bool) {
-    if let lastMessage = chatMessages.last {
-      if animated {
+  var bottomAnchorView: some View {
+    Color.clear
+      .frame(height: 1)
+      .id("bottom-anchor")
+      .onAppear {
         withAnimation {
-          scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
+          isAtBottom = true
         }
-      } else {
-        scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
       }
-    }
+      .onDisappear {
+        withAnimation {
+          isAtBottom = false
+        }
+      }
   }
 }
 
