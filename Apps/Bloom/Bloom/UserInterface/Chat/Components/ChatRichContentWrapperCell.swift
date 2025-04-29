@@ -26,6 +26,7 @@ struct ChatRichContentWrapperCell: View {
   @State private var weightQuantity: HKQuantity?
   @State private var systolic: Double?
   @State private var diastolic: Double?
+  @State private var workoutTemplate: SocketMessage.WorkoutTemplate?
 
   private let modelActor = HabitModelActor.standard()
 
@@ -83,6 +84,12 @@ struct ChatRichContentWrapperCell: View {
             chatMessageID: chatMessageID,
             systolic: systolic,
             diastolic: diastolic,
+            hasPerformedAction: hasPerformedAction
+          )
+        } else if let workoutTemplate {
+          ChatWorkoutTemplateCell(
+            chatMessageID: chatMessageID,
+            workoutTemplate: workoutTemplate,
             hasPerformedAction: hasPerformedAction
           )
         }
@@ -165,6 +172,9 @@ private extension ChatRichContentWrapperCell {
       self.systolic = Double(logBloodPressure.systolic)
       self.diastolic = Double(logBloodPressure.diastolic)
       
+    } else if let workoutTemplate = try? JSONDecoder.bloomModel.decode(SocketMessage.WorkoutTemplate.self, from: data) {
+
+      self.workoutTemplate = workoutTemplate
     }
 
     self.isLoading = false

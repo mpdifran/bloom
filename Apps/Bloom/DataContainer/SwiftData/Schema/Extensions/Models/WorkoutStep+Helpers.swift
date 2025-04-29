@@ -48,8 +48,10 @@ public extension WorkoutStep {
     return HKQuantity(unit: distanceUnit.hkUnit, doubleValue: distance)
   }
 
-  var durationDescription: String {
-    DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
+  var durationDescription: String? {
+    guard duration > 0 else { return nil }
+
+    return DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
   }
 }
 

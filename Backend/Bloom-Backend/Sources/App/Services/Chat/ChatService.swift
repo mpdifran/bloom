@@ -305,7 +305,8 @@ private extension ChatService {
         Assistant.Tool.function(.logWater),
         Assistant.Tool.function(.logWeight),
         Assistant.Tool.function(.logBloodPressure),
-        Assistant.Tool.function(.logBowelMovement)
+        Assistant.Tool.function(.logBowelMovement),
+        Assistant.Tool.function(.createWorkout),
       ],
       toolChoice: .auto,
       existingRun: existingRun
@@ -330,6 +331,8 @@ private extension ChatService {
           toolCallWrappers.append(try await logBloodPressure(toolCall: toolCall))
         case .Function.logBowelMovement:
           toolCallWrappers.append(try await logBowelMovements(toolCall: toolCall))
+        case .Function.createWorkout:
+          toolCallWrappers.append(try await createWorkout(toolCall: toolCall))
         default:
           throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
         }
@@ -422,18 +425,12 @@ private extension ChatService {
       throw Abort(.internalServerError, reason: "Improper tool handling")
     }
 
-    do {
-      let arguments = try toolCall.decodeArguments(type: SocketMessage.LogWaterConsumption.self, using: decoder)
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogWaterConsumption.self, using: decoder)
 
-      return SocketMessage.ToolCallWrapper(
-        toolCallID: toolCall.id,
-        kind: .logWater(arguments)
-      )
-    } catch {
-      print(toolCall.function.arguments)
-      print(error)
-      throw error
-    }
+    return SocketMessage.ToolCallWrapper(
+      toolCallID: toolCall.id,
+      kind: .logWater(arguments)
+    )
   }
 
   func logWeight(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
@@ -472,6 +469,19 @@ private extension ChatService {
     return SocketMessage.ToolCallWrapper(
       toolCallID: toolCall.id,
       kind: .logBowelMovement(arguments)
+    )
+  }
+
+  func createWorkout(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.createWorkout else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.WorkoutTemplate.self, using: decoder)
+
+    return SocketMessage.ToolCallWrapper(
+      toolCallID: toolCall.id,
+      kind: .createWorkout(arguments)
     )
   }
 }

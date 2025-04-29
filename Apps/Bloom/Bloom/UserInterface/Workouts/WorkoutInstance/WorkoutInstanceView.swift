@@ -47,7 +47,7 @@ private extension WorkoutInstanceView {
   var headerView: some View {
     HStack(spacing: 30) {
       WorkoutTemplateIconView(
-        workoutTemplate: workoutTemplate,
+        workoutType: workoutTemplate.appleWorkoutType,
         dimension: 120
       )
     }

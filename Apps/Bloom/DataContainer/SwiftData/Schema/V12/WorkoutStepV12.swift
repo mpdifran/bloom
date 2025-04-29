@@ -26,9 +26,9 @@ extension SchemaV12 {
     public init(
       id: String,
       title: String,
-      numberOfReps: Int? = nil,
-      distance: Double? = nil,
-      distanceUnit: DistanceUnit? = nil,
+      numberOfReps: Int?,
+      distance: Double?,
+      distanceUnit: DistanceUnit?,
       duration: TimeInterval,
       overrideAppleWorkoutType: HKWorkoutActivityType?,
       kind: Kind

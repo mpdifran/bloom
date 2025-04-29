@@ -42,7 +42,8 @@ extension AssistantSpec {
       .function(.logWater),
       .function(.logWeight),
       .function(.logBloodPressure),
-      .function(.logBowelMovement)
+      .function(.logBowelMovement),
+      .function(.createWorkout)
     ],
     responseFormat: ResponseFormat(type: .text)
   )
@@ -102,6 +103,7 @@ extension String.Function {
   static let logBowelMovement = "logBowelMovement"
   static let logWeight = "logWeight"
   static let logBloodPressure = "logBloodPressure"
+  static let createWorkout = "createWorkout"
 }
 
 extension Assistant.Tool.Function {
@@ -112,7 +114,7 @@ extension Assistant.Tool.Function {
       properties: [
         "newGoals" : Schema.Parameter(
           description: "A list of goals for the user to add",
-          arrayOf: Schema.Object(
+          arrayOf: .object(Schema.Object(
             properties: [
               "metric" : Schema.Parameter(
                 enum: SuggestedGoal.Metric.self,
@@ -131,7 +133,7 @@ extension Assistant.Tool.Function {
                 description: "The unit in which the value is measured in"
               )
             ]
-          )
+          ))
         )
       ]
     )
@@ -145,7 +147,7 @@ extension Assistant.Tool.Function {
         "name": Schema.Parameter(type: .string, description: "The name you would give the food."),
         "foodItems": Schema.Parameter(
           description: "A list of individual food items detected.",
-          arrayOf: Schema.Object(
+          arrayOf: .object(Schema.Object(
             properties: [
               "name": Schema.Parameter(type: .string, description: "The name of this food item"),
               "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. It should not contain the name of the item itself, and should contain a number."),
@@ -175,7 +177,7 @@ extension Assistant.Tool.Function {
               "vitaminD": Schema.Parameter(ref: "quantity"),
               "vitaminE": Schema.Parameter(ref: "quantity")
             ]
-          )
+          ))
         )
       ],
       references: [
@@ -247,6 +249,67 @@ extension Assistant.Tool.Function {
         "diastolic": Schema.Parameter(
           type: .integer,
           description: "The diastolic measurement of blood pressure"
+        )
+      ]
+    )
+  )
+
+  static let createWorkout = Assistant.Tool.Function(
+    name: .Function.createWorkout,
+    description: "This can be used to create a workout for the user to perform.",
+    parameters: Schema.Object(
+      properties: [
+        "title": Schema.Parameter(
+            type: .string,
+            description: "The title of the workout."
+        ),
+        "appleWorkoutType": Schema.Parameter(
+            enum: SocketMessage.AppleWorkoutType.self,
+            description: "The Apple workout type for the workout. This will be the default workout started. You can override this workout for specific steps if needed."
+        ),
+        "requiredEquipment": Schema.Parameter(
+          description: "The list of equipment required for the workout.",
+          arrayOf: .parameter(
+            Schema.Parameter(
+                enum: SocketMessage.WorkoutTemplate.Equipment.self,
+                description: "Required equipment."
+            )
+          )
+        ),
+        "steps": Schema.Parameter(
+          description: "An array of workout steps. Each step *must* have either a distance or a duration.",
+          arrayOf: .object(Schema.Object(
+            properties: [
+                "title": Schema.Parameter(
+                    type: .string,
+                    description: "The title of the workout step."
+                ),
+                "numberOfReps": Schema.Parameter(
+                    type: .optionalInteger,
+                    description: "An optional number of repetitions for the step, if applicable."
+                ),
+                "distance": Schema.Parameter(
+                    type: .optionalNumber,
+                    description: "The distance to cover in the step, if appicable."
+                ),
+                "distanceUnit": Schema.Parameter(
+                    optionalEnum: SocketMessage.WorkoutStep.DistanceUnit.self,
+                    description: "An optional unit for the distance, if applicable. Only provide if distance is provided."
+                ),
+                "duration": Schema.Parameter(
+                    type: .optionalNumber,
+                    description: "An optional duration of the step in seconds. Make sure to give the user enough time to perform the exercise, but don't make this too long. If you've provided a distance, you do not necessarily need to provide a duration."
+                ),
+                "overrideAppleWorkoutType": Schema.Parameter(
+                    enum: SocketMessage.AppleWorkoutType.self,
+                    description: "An optional override for the Apple workout type for this step. Only specify this if it's different from the root WorkoutTemplate's workout type."
+                ),
+                "kind": Schema.Parameter(
+                    enum: SocketMessage.WorkoutStep.Kind.self,
+                    description: "The kind of step: exercise or rest."
+                )
+            ]
+          ))
         )
       ]
     )

@@ -94,4 +94,171 @@ public extension SocketMessage {
       self.diastolic = diastolic
     }
   }
+
+  struct WorkoutTemplate: Codable, Hashable, Sendable {
+    public var title: String
+    public var appleWorkoutType: AppleWorkoutType
+    public var requiredEquipment: [Equipment]
+    public var steps: [WorkoutStep]
+
+    public init(
+      title: String,
+      appleWorkoutType: AppleWorkoutType,
+      requiredEquipment: [Equipment],
+      steps: [WorkoutStep]
+    ) {
+      self.title = title
+      self.appleWorkoutType = appleWorkoutType
+      self.requiredEquipment = requiredEquipment
+      self.steps = steps
+    }
+  }
+
+  struct WorkoutStep: Codable, Hashable, Sendable {
+    public let title: String
+    public var numberOfReps: Int?
+    public var distance: Double?
+    public var distanceUnit: DistanceUnit?
+    public var duration: TimeInterval?
+    public var overrideAppleWorkoutType: AppleWorkoutType?
+    public var kind: Kind
+
+    public init(
+      title: String,
+      numberOfReps: Int?,
+      distance: Double?,
+      distanceUnit: DistanceUnit?,
+      duration: TimeInterval?,
+      overrideAppleWorkoutType: AppleWorkoutType?,
+      kind: Kind
+    ) {
+      self.title = title
+      self.numberOfReps = numberOfReps
+      self.distance = distance
+      self.distanceUnit = distanceUnit
+      self.duration = duration
+      self.overrideAppleWorkoutType = overrideAppleWorkoutType
+      self.kind = kind
+    }
+  }
+}
+
+public extension SocketMessage.WorkoutTemplate {
+  enum Equipment: String, Codable, Hashable, Sendable, CaseIterable {
+    case dumbbells
+    case barbell
+    case kettlebell
+    case batBell
+    case chinUpBar
+    case treadmill
+    case stationaryBike
+    case bike
+    case elliptical
+    case rowingMachine
+    case skiMachine
+    case yogaMat
+    case resistanceBand
+    case weightedVest
+  }
+}
+
+public extension SocketMessage.WorkoutStep {
+  enum Kind: String, Codable, Hashable, Sendable, CaseIterable {
+    case exercise
+    case rest
+  }
+
+  enum DistanceUnit: String, Codable, Hashable, Sendable, CaseIterable {
+    case meter
+    case kilometer
+    case mile
+    case yard
+    case foot
+  }
+}
+
+public extension SocketMessage {
+  enum AppleWorkoutType: String, Codable, Hashable, Sendable, CaseIterable {
+    case americanFootball
+    case archery
+    case australianFootball
+    case badminton
+    case baseball
+    case basketball
+    case bowling
+    case boxing
+    case climbing
+    case cricket
+    case crossTraining
+    case curling
+    case cycling
+    case elliptical
+    case equestrianSports
+    case fencing
+    case fishing
+    case functionalStrengthTraining
+    case golf
+    case gymnastics
+    case handball
+    case hiking
+    case hockey
+    case hunting
+    case lacrosse
+    case martialArts
+    case mindAndBody
+    case paddleSports
+    case play
+    case preparationAndRecovery
+    case racquetball
+    case rowing
+    case rugby
+    case running
+    case sailing
+    case skatingSports
+    case snowSports
+    case soccer
+    case softball
+    case squash
+    case stairClimbing
+    case surfingSports
+    case swimming
+    case tableTennis
+    case tennis
+    case trackAndField
+    case traditionalStrengthTraining
+    case volleyball
+    case walking
+    case waterFitness
+    case waterPolo
+    case waterSports
+    case wrestling
+    case yoga
+    case barre
+    case coreTraining
+    case crossCountrySkiing
+    case downhillSkiing
+    case flexibility
+    case highIntensityIntervalTraining
+    case jumpRope
+    case kickboxing
+    case pilates
+    case snowboarding
+    case stairs
+    case stepTraining
+    case wheelchairWalkPace
+    case wheelchairRunPace
+    case taiChi
+    case mixedCardio
+    case handCycling
+    case discSports
+    case fitnessGaming
+    case cardioDance
+    case socialDance
+    case pickleball
+    case cooldown
+    case swimBikeRun
+    case transition
+    case underwaterDiving
+    case other
+  }
 }

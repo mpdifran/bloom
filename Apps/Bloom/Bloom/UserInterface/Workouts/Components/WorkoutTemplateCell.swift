@@ -14,7 +14,7 @@ struct WorkoutTemplateCell: View {
 
   var body: some View {
     HStack(spacing: 20) {
-      WorkoutTemplateIconView(workoutTemplate: workoutTemplate)
+      WorkoutTemplateIconView(workoutType: workoutTemplate.appleWorkoutType)
 
       VStack(alignment: .leading) {
         Text(workoutTemplate.title)

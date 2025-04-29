@@ -176,6 +176,9 @@ private extension ChatController {
               case .logBowelMovement(let logBowelMovement):
                 let data = try JSONEncoder.bloomModel.encode(logBowelMovement)
                 try await self.insertRichChatMessage(data: data)
+              case .createWorkout(let createWorkout):
+                let data = try JSONEncoder.bloomModel.encode(createWorkout)
+                try await self.insertRichChatMessage(data: data)
               }
               return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID)
             }

@@ -33,20 +33,20 @@ public extension WorkoutTemplate {
   }
 
   enum Equipment: String, CaseIterable, Codable {
-    case dumbbells = "dumbbells"
-    case barbell = "barbell"
-    case kettlebell = "kettlebell"
-    case batBell = "batBell"
-    case chinUpBar = "chinUpBar"
-    case treadmill = "treadmill"
-    case stationaryBike = "stationaryBike"
-    case bike = "bike"
-    case elliptical = "elliptical"
-    case rowingMachine = "rowingMachine"
-    case skiMachine = "skiMachine"
-    case yogaMat = "yogaMat"
-    case resistanceBand = "resistanceBand"
-    case weightedVest = "weightedVest"
+    case dumbbells
+    case barbell
+    case kettlebell
+    case batBell
+    case chinUpBar
+    case treadmill
+    case stationaryBike
+    case bike
+    case elliptical
+    case rowingMachine
+    case skiMachine
+    case yogaMat
+    case resistanceBand
+    case weightedVest
   }
 }
 

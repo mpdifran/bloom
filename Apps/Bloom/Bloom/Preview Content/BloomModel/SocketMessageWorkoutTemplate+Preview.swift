@@ -1,26 +1,23 @@
 //
-//  WorkoutTemplate+Preview.swift
+//  SocketMessageWorkoutTemplate+Preview.swift
 //  Bloom
 //
-//  Created by Mark DiFranco on 2025-04-28.
+//  Created by Mark DiFranco on 2025-04-29.
 //
 
-import DataContainer
+import BloomModel
 
-extension WorkoutTemplate {
+extension SocketMessage.WorkoutTemplate {
   enum Preview { }
 }
 
-extension WorkoutTemplate.Preview {
-  nonisolated(unsafe) static let deadlifts = WorkoutTemplate(
-    id: "1234",
+extension SocketMessage.WorkoutTemplate.Preview {
+  static let deadlifts = SocketMessage.WorkoutTemplate(
     title: "Deadlifts and Running",
-    creationDate: .now,
     appleWorkoutType: .traditionalStrengthTraining,
     requiredEquipment: [.barbell],
     steps: [
-      WorkoutStep(
-        id: "1",
+      SocketMessage.WorkoutStep(
         title: "Deadlift",
         numberOfReps: 8,
         distance: nil,
@@ -29,18 +26,16 @@ extension WorkoutTemplate.Preview {
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),
-      WorkoutStep(
-        id: "2",
+      SocketMessage.WorkoutStep(
         title: "Run",
         numberOfReps: nil,
         distance: 2,
         distanceUnit: .kilometer,
-        duration: 180,
+        duration: nil,
         overrideAppleWorkoutType: .running,
         kind: .exercise
       ),
-      WorkoutStep(
-        id: "3",
+      SocketMessage.WorkoutStep(
         title: "Deadlift",
         numberOfReps: 8,
         distance: nil,
@@ -49,18 +44,16 @@ extension WorkoutTemplate.Preview {
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),
-      WorkoutStep(
-        id: "4",
+      SocketMessage.WorkoutStep(
         title: "Run",
         numberOfReps: nil,
         distance: 2,
         distanceUnit: .kilometer,
-        duration: 180,
+        duration: nil,
         overrideAppleWorkoutType: .running,
         kind: .exercise
       ),
-      WorkoutStep(
-        id: "5",
+      SocketMessage.WorkoutStep(
         title: "Deadlift",
         numberOfReps: 8,
         distance: nil,
@@ -68,7 +61,7 @@ extension WorkoutTemplate.Preview {
         duration: 120,
         overrideAppleWorkoutType: nil,
         kind: .exercise
-      ),
+      )
     ]
   )
 }

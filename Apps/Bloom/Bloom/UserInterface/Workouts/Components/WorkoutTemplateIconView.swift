@@ -8,16 +8,17 @@
 import SwiftUI
 import DataContainer
 import SFSafeSymbols
+import HealthKit
 
 struct WorkoutTemplateIconView: View {
-  let workoutTemplate: WorkoutTemplate
+  let workoutType: HKWorkoutActivityType
   let dimension: CGFloat
 
   init(
-    workoutTemplate: WorkoutTemplate,
+    workoutType: HKWorkoutActivityType,
     dimension: CGFloat = 64
   ) {
-    self.workoutTemplate = workoutTemplate
+    self.workoutType = workoutType
     self.dimension = dimension
   }
 
@@ -26,7 +27,7 @@ struct WorkoutTemplateIconView: View {
       .fill(.green)
       .frame(square: dimension)
       .overlay {
-        Image(systemSymbol: SFSymbol(rawValue: workoutTemplate.appleWorkoutType.systemImage))
+        Image(systemSymbol: SFSymbol(rawValue: workoutType.systemImage))
           .font(.system(size: dimension / 2))
           .minimumScaleFactor(0.05)
           .foregroundStyle(.background)
@@ -36,9 +37,9 @@ struct WorkoutTemplateIconView: View {
 
 #Preview {
   PreviewEnvironment {
-    WorkoutTemplateIconView(workoutTemplate: .Preview.deadlifts)
+    WorkoutTemplateIconView(workoutType: .traditionalStrengthTraining)
     WorkoutTemplateIconView(
-      workoutTemplate: .Preview.deadlifts,
+      workoutType: .running,
       dimension: 180
     )
   }

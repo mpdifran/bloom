@@ -34,7 +34,9 @@ struct WorkoutStepCell: View {
 
 
         HStack(spacing: 4) {
-          Text(step.durationDescription)
+          if let duration = step.durationDescription {
+            Text(duration)
+          }
           if let reps = step.numberOfReps {
             Text("•")
             Text("\(reps) Reps")
