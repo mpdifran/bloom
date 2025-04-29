@@ -79,6 +79,9 @@ private extension WorkoutsTabView {
 
         ForEach(workoutTemplates) { workoutTemplate in
           WorkoutTemplateCell(workoutTemplate: workoutTemplate)
+            .onTapGesture {
+              presentedSheet = WorkoutInstanceView(workoutTemplate: workoutTemplate).asAny
+            }
         }
 
         Button {
@@ -100,6 +103,10 @@ private extension WorkoutsTabView {
 
       ForEach(workouts, id: \.hashValue) { workout in
         WorkoutCell(workout: workout)
+          .onTapGesture {
+            pushedView = WorkoutDetailsView(workout: workout)
+              .asAny
+          }
       }
 
       Button {
