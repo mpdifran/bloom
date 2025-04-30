@@ -33,20 +33,28 @@ struct ChatWorkoutTemplateCell: View {
   var body: some View {
     HStack {
       VStack(alignment: .leading) {
-        HStack {
-          Text(workoutTemplate.title)
-            .font(.title3)
-            .bold()
-            .fontDesign(.rounded)
-            .multilineTextAlignment(.leading)
-            .lineLimit(3)
-
-          Spacer()
-
+        HStack(alignment: .top) {
           WorkoutTemplateIconView(
             workoutType: workoutTemplate.appleWorkoutType.hkWorkoutType,
-            dimension: 40
+            dimension: 50
           )
+
+          VStack(alignment: .leading) {
+            Text(workoutTemplate.title)
+              .font(.title3)
+              .bold()
+              .fontDesign(.rounded)
+              .lineLimit(2)
+
+            Text(workoutTemplate.equipmentDescription + " required")
+              .font(.caption)
+              .foregroundStyle(.secondary)
+              .fixedSize(horizontal: false, vertical: true)
+              .lineLimit(3)
+          }
+          .multilineTextAlignment(.leading)
+
+          Spacer(minLength: 0)
         }
 
         ForEach(workoutTemplate.steps, id: \.self) { step in

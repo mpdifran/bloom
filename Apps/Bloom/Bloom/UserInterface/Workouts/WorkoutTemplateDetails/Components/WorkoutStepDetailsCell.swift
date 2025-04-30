@@ -23,12 +23,12 @@ struct WorkoutStepDetailsCell: View {
 
       VStack(alignment: .leading) {
         Text(step.title)
-          .font(.title2)
+          .font(.title3)
           .bold()
           .fontDesign(.rounded)
 
         Text(step.parameterDescription)
-          .font(.caption)
+          .font(.subheadline)
           .foregroundStyle(.secondary)
       }
 

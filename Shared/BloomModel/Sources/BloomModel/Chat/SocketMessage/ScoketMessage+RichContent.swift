@@ -159,6 +159,25 @@ public extension SocketMessage.WorkoutTemplate {
     case yogaMat
     case resistanceBand
     case weightedVest
+
+    public var name: String {
+      switch self {
+      case .dumbbells: "Dumbbells"
+      case .barbell: "Barbell"
+      case .kettlebell: "Kettlebell"
+      case .batBell: "Batbell"
+      case .chinUpBar: "Chin-up Bar"
+      case .treadmill: "Treadmill"
+      case .stationaryBike: "Stationary Bike"
+      case .bike: "Bike"
+      case .elliptical: "Elliptical"
+      case .rowingMachine: "Rowing Machine"
+      case .skiMachine: "Ski Machine"
+      case .yogaMat: "Yoga Mat"
+      case .resistanceBand: "Resistance Band"
+      case .weightedVest: "Weighted Vest"
+      }
+    }
   }
 }
 
