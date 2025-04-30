@@ -112,7 +112,7 @@ private extension WorkoutInstanceView {
 
   var stepsSection: some View {
     VStack {
-      ZStack {
+      ZStack(alignment: .top) {
         ForEach(completedIndices, id: \.self) { index in
           let position = completedIndices.firstIndex(of: index)!
           let distance = min(completedIndices.count - position, 2)

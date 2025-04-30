@@ -13,9 +13,12 @@ import HealthKit
 struct WorkoutTemplatesListView: View {
 
   @State private var pushedView: AnyView?
+  @State private var error: Error?
 
   @Query
   private var workoutTemplates: [WorkoutTemplate]
+
+  @Environment(\.modelContext) private var modelContext
 
   var body: some View {
     BloomScrollView {
@@ -24,10 +27,21 @@ struct WorkoutTemplatesListView: View {
           .onTapGesture {
             pushedView = WorkoutTemplateDetailsView(workoutTemplate: workoutTemplate).asAny
           }
+          .contextMenu {
+            Button("Delete", systemSymbol: .trash, role: .destructive) {
+              do {
+                try modelContext.savingTransaction {
+                  modelContext.delete(workoutTemplate)
+                }
+              } catch { self.error = error }
+            }
+            .tint(.red)
+          }
       }
     }
     .navigationTitle("Workout Templates")
     .navigationDestination($pushedView)
+    .alert(error: $error)
   }
 }
 

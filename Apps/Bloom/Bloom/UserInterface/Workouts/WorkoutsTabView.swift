@@ -17,9 +17,12 @@ struct WorkoutsTabView: View {
   @State private var presentedSheet: AnyView?
   @State private var pushedView: AnyView?
   @State private var workouts = [HKWorkout]()
+  @State private var error: Error?
 
   @Query
   private var workoutTemplates: [WorkoutTemplate]
+
+  @Environment(\.modelContext) private var modelContext
 
   init() {
     var fetchDescriptor = FetchDescriptor<WorkoutTemplate>()
@@ -43,18 +46,12 @@ struct WorkoutsTabView: View {
             UserProfilePhotoView(dimension: 32)
           }
         }
-//        ToolbarItem(placement: .cancellationAction) {
-//          Button {
-//
-//          } label: {
-//            Label("Add Workout Template", systemSymbol: .plus)
-//          }
-//        }
       }
       .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
       .navigationDestination($pushedView)
     }
     .sheet($presentedSheet)
+    .alert(error: $error)
     .task {
       await loadWorkouts()
     }
@@ -81,6 +78,16 @@ private extension WorkoutsTabView {
           WorkoutTemplateCell(workoutTemplate: workoutTemplate)
             .onTapGesture {
               pushedView = WorkoutTemplateDetailsView(workoutTemplate: workoutTemplate).asAny
+            }
+            .contextMenu {
+              Button("Delete", systemSymbol: .trash, role: .destructive) {
+                do {
+                  try modelContext.savingTransaction {
+                    modelContext.delete(workoutTemplate)
+                  }
+                } catch { self.error = error }
+              }
+              .tint(.red)
             }
         }
 
