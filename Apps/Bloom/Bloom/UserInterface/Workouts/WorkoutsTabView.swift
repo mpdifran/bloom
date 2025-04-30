@@ -80,12 +80,12 @@ private extension WorkoutsTabView {
         ForEach(workoutTemplates) { workoutTemplate in
           WorkoutTemplateCell(workoutTemplate: workoutTemplate)
             .onTapGesture {
-              presentedSheet = WorkoutInstanceView(workoutTemplate: workoutTemplate).asAny
+              pushedView = WorkoutTemplateDetailsView(workoutTemplate: workoutTemplate).asAny
             }
         }
 
         Button {
-
+          pushedView = WorkoutTemplatesListView().asAny
         } label: {
           Text("Show All")
             .bold()

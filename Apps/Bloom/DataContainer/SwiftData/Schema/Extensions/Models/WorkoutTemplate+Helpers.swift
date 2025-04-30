@@ -18,6 +18,15 @@ public extension WorkoutTemplate {
     }
   }
 
+  var stepsDescription: String {
+    guard let steps else { return "" }
+
+    if steps.count == 1 {
+      return "1 exercise"
+    }
+    return "\(steps.count) exercises"
+  }
+
   var durationDescription: String {
     guard let steps else { return "" }
 
@@ -28,11 +37,15 @@ public extension WorkoutTemplate {
     return DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
   }
 
+  var equipmentDescription: String {
+    ListFormatter.localizedString(byJoining: equipment.map(\.name))
+  }
+
   var equipment: [Equipment] {
     rawRequiredEquipment.compactMap({ Equipment(rawValue: $0) })
   }
 
-  enum Equipment: String, CaseIterable, Codable {
+  enum Equipment: String, CaseIterable, Codable, Identifiable {
     case dumbbells
     case barbell
     case kettlebell
@@ -47,6 +60,8 @@ public extension WorkoutTemplate {
     case yogaMat
     case resistanceBand
     case weightedVest
+
+    public var id: Self { self }
   }
 }
 

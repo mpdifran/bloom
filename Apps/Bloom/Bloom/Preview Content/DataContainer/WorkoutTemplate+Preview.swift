@@ -17,7 +17,7 @@ extension WorkoutTemplate.Preview {
     title: "Deadlifts and Running",
     creationDate: .now,
     appleWorkoutType: .traditionalStrengthTraining,
-    requiredEquipment: [.barbell],
+    requiredEquipment: [.barbell, .dumbbells, .treadmill],
     steps: [
       WorkoutStep(
         id: "1",
@@ -25,7 +25,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: 8,
         distance: nil,
         distanceUnit: nil,
-        duration: 5,
+        duration: 120,
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),
@@ -35,7 +35,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: nil,
         distance: 2,
         distanceUnit: .kilometer,
-        duration: 5,
+        duration: 180,
         overrideAppleWorkoutType: .running,
         kind: .exercise
       ),
@@ -45,7 +45,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: 8,
         distance: nil,
         distanceUnit: nil,
-        duration: 5,
+        duration: 120,
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),
@@ -55,17 +55,27 @@ extension WorkoutTemplate.Preview {
         numberOfReps: nil,
         distance: 2,
         distanceUnit: .kilometer,
-        duration: 5,
+        duration: 180,
         overrideAppleWorkoutType: .running,
         kind: .exercise
       ),
       WorkoutStep(
         id: "5",
+        title: "Rest",
+        numberOfReps: nil,
+        distance: nil,
+        distanceUnit: nil,
+        duration: 60,
+        overrideAppleWorkoutType: .preparationAndRecovery,
+        kind: .rest
+      ),
+      WorkoutStep(
+        id: "6",
         title: "Deadlift",
         numberOfReps: 8,
         distance: nil,
         distanceUnit: nil,
-        duration: 5,
+        duration: 120,
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),

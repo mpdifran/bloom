@@ -27,36 +27,46 @@ struct WorkoutInstanceView: View {
   @State private var currentTime: TimeInterval = 0
   @State private var status: Status = .readyToBegin
 
+  @Environment(\.dismiss) private var dismiss
+
   @Namespace private var stepTransitionNamespace
 
   private let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
 
   var body: some View {
-    BloomScrollView {
-      timerView
-      stepsSection
+    VStack(spacing: 0) {
+      headerView
+        .background {
+          Rectangle()
+            .fill(.background)
+            .ignoresSafeArea()
+        }
+
+      BloomScrollView {
+        stepsSection
+      }
     }
     .shelf {
       controlButtons
     }
     .animation(.easeInOut, value: status)
     .animation(.easeInOut, value: completedIndices)
-    .navigationTitle(workoutTemplate.title)
-    .navigationBarTitleDisplayMode(.inline)
+    .presentationCompactAdaptation(.fullScreenCover)
   }
 }
 
 private extension WorkoutInstanceView {
 
   var headerView: some View {
-    HStack(spacing: 30) {
+    VStack(spacing: 20) {
       WorkoutTemplateIconView(
         workoutType: workoutTemplate.appleWorkoutType,
-        dimension: 120
+        dimension: 40
       )
+
+      timerView
+        .frame(minHeight: 140)
     }
-    .padding(.bottom, 20)
-    .background(.background)
   }
 
   var timerView: some View {
@@ -74,9 +84,7 @@ private extension WorkoutInstanceView {
           currentTime = elapsedTime + Date().timeIntervalSince(startDate)
         }
     }
-    .padding(.vertical, 40)
     .horizontallyCentered()
-    .cardContainer()
   }
 
   var equipmentSection: some View {
@@ -116,7 +124,7 @@ private extension WorkoutInstanceView {
           )
           .matchedGeometryEffect(id: steps[index].id, in: stepTransitionNamespace)
           .scaleEffect(max(0.5, 1 - CGFloat(distance) * 0.05))
-          .offset(x: 0, y: -(CGFloat(distance) * 20))
+          .offset(x: 0, y: -(CGFloat(distance) * 15))
         }
 
         if let currentIndex = steps.indices.firstIndex(where: { state(for: $0) == .current }) {
@@ -196,6 +204,7 @@ private extension WorkoutInstanceView {
           }
           startDate = nil
           status = .ended
+          dismiss()
         } label: {
           Label("End", systemSymbol: .stopFill)
             .horizontallyCentered()
@@ -219,6 +228,7 @@ private extension WorkoutInstanceView {
           try await WorkoutController.shared.endWorkout()
           startDate = nil
           status = .ended
+          dismiss()
         } label: {
           Label("End", systemSymbol: .stopFill)
             .horizontallyCentered()
@@ -285,8 +295,6 @@ private extension WorkoutInstanceView {
 
 #Preview {
   PreviewEnvironment {
-    NavigationStack {
-      WorkoutInstanceView(workoutTemplate: .Preview.deadlifts)
-    }
+    WorkoutInstanceView(workoutTemplate: .Preview.deadlifts)
   }
 }

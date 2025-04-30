@@ -53,6 +53,12 @@ public extension WorkoutStep {
 
     return DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
   }
+
+  var repsDescription: String? {
+    guard let numberOfReps else { return nil }
+
+    return "\(numberOfReps) Reps"
+  }
 }
 
 public extension WorkoutStep.DistanceUnit {
