@@ -50,7 +50,7 @@ public extension SocketMessage {
     public enum Unit: String, Codable, Equatable, Sendable, CaseIterable {
       case mL
       case ozUS = "fl_oz_us"
-      case ozUK = "fl_oz" // TODO: Double check this.
+      case ozUK = "fl_oz_imp"
     }
   }
 

@@ -25,7 +25,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: 8,
         distance: nil,
         distanceUnit: nil,
-        duration: 120,
+        duration: 5,
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),
@@ -35,7 +35,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: nil,
         distance: 2,
         distanceUnit: .kilometer,
-        duration: 180,
+        duration: 5,
         overrideAppleWorkoutType: .running,
         kind: .exercise
       ),
@@ -45,7 +45,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: 8,
         distance: nil,
         distanceUnit: nil,
-        duration: 120,
+        duration: 5,
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),
@@ -55,7 +55,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: nil,
         distance: 2,
         distanceUnit: .kilometer,
-        duration: 180,
+        duration: 5,
         overrideAppleWorkoutType: .running,
         kind: .exercise
       ),
@@ -65,7 +65,7 @@ extension WorkoutTemplate.Preview {
         numberOfReps: 8,
         distance: nil,
         distanceUnit: nil,
-        duration: 120,
+        duration: 5,
         overrideAppleWorkoutType: nil,
         kind: .exercise
       ),

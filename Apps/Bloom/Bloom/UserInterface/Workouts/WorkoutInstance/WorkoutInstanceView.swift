@@ -27,6 +27,8 @@ struct WorkoutInstanceView: View {
   @State private var currentTime: TimeInterval = 0
   @State private var status: Status = .readyToBegin
 
+  @Namespace private var stepTransitionNamespace
+
   private let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
 
   var body: some View {
@@ -37,6 +39,8 @@ struct WorkoutInstanceView: View {
     .shelf {
       controlButtons
     }
+    .animation(.easeInOut, value: status)
+    .animation(.easeInOut, value: completedIndices)
     .navigationTitle(workoutTemplate.title)
     .navigationBarTitleDisplayMode(.inline)
   }
@@ -100,18 +104,55 @@ private extension WorkoutInstanceView {
 
   var stepsSection: some View {
     VStack {
-      SectionTitleView("Steps")
-        .padding(.horizontal)
+      ZStack {
+        ForEach(completedIndices, id: \.self) { index in
+          let position = completedIndices.firstIndex(of: index)!
+          let distance = min(completedIndices.count - position, 2)
 
-      ForEachEnumerated(workoutTemplate.steps ?? []) { index, step in
-        WorkoutStepCell(
-          step: step,
-          state: state(for: index),
-          currentTime: currentTime(for: index)
-        )
-        .transition(.scale)
+          WorkoutStepCell(
+            step: steps[index],
+            state: .complete,
+            currentTime: steps[index].duration
+          )
+          .matchedGeometryEffect(id: steps[index].id, in: stepTransitionNamespace)
+          .scaleEffect(max(0.5, 1 - CGFloat(distance) * 0.05))
+          .offset(x: 0, y: -(CGFloat(distance) * 20))
+        }
+
+        if let currentIndex = steps.indices.firstIndex(where: { state(for: $0) == .current }) {
+          WorkoutStepCell(
+            step: steps[currentIndex],
+            state: .current,
+            currentTime: currentTime(for: currentIndex)
+          )
+          .matchedGeometryEffect(id: steps[currentIndex].id, in: stepTransitionNamespace)
+        }
+      }
+      .padding(.top, CGFloat(min(completedIndices.count, 2) * 20))
+
+      ForEachEnumerated(steps) { index, step in
+        if state(for: index) == .upcoming {
+          WorkoutStepCell(
+            step: step,
+            state: state(for: index),
+            currentTime: currentTime(for: index)
+          )
+          .matchedGeometryEffect(id: steps[index].id, in: stepTransitionNamespace, properties: .frame, isSource: true)
+        }
       }
     }
+    .padding(.top)
+  }
+}
+
+private extension WorkoutInstanceView {
+
+  var steps: [WorkoutStep] {
+    workoutTemplate.steps ?? []
+  }
+
+  var completedIndices: [Int] {
+    steps.indices.filter { state(for: $0) == .complete }
   }
 }
 
@@ -143,7 +184,7 @@ private extension WorkoutInstanceView {
           startDate = nil
           status = .paused
         } label: {
-          Label("Pause", systemSymbol: .pause)
+          Label("Pause", systemSymbol: .pauseFill)
             .horizontallyCentered()
         }
         .tint(.yellow)
@@ -156,7 +197,7 @@ private extension WorkoutInstanceView {
           startDate = nil
           status = .ended
         } label: {
-          Label("End", systemSymbol: .stop)
+          Label("End", systemSymbol: .stopFill)
             .horizontallyCentered()
         }
         .tint(.red)
@@ -169,7 +210,7 @@ private extension WorkoutInstanceView {
           startDate = Date()
           status = .running
         } label: {
-          Label("Resume", systemSymbol: .play)
+          Label("Resume", systemSymbol: .playFill)
             .horizontallyCentered()
         }
         .tint(.green)
@@ -179,7 +220,7 @@ private extension WorkoutInstanceView {
           startDate = nil
           status = .ended
         } label: {
-          Label("End", systemSymbol: .stop)
+          Label("End", systemSymbol: .stopFill)
             .horizontallyCentered()
         }
         .tint(.red)
@@ -193,7 +234,7 @@ private extension WorkoutInstanceView {
         currentTime = 0
         status = .running
       } label: {
-        Label("Restart Workout", systemSymbol: SFSymbol(rawValue: workoutTemplate.appleWorkoutType.systemImage))
+        Label("Restart Workout", systemSymbol: .arrowCounterclockwise)
           .horizontallyCentered()
       }
       .buttonStyle(.primary)
@@ -249,5 +290,3 @@ private extension WorkoutInstanceView {
     }
   }
 }
-
-

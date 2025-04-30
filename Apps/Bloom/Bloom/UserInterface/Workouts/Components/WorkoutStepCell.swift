@@ -65,7 +65,7 @@ struct WorkoutStepCell: View {
       }
     }
     .foregroundStyle(textColor)
-    .cardContainer(fill: containerBackground)
+    .cardContainer(fill: containerBackground, stroke: borderStyle)
     .animation(.default, value: state)
   }
 }
@@ -106,11 +106,22 @@ private extension WorkoutStepCell {
   var containerBackground: some ShapeStyle {
     switch state {
     case .complete:
-      AnyShapeStyle(.background.secondary)
+      AnyShapeStyle(.background)
     case .current:
       AnyShapeStyle(.green)
     case .upcoming:
       AnyShapeStyle(.background)
+    }
+  }
+
+  var borderStyle: some ShapeStyle {
+    switch state {
+    case .complete:
+      AnyShapeStyle(.fill)
+    case .current:
+      AnyShapeStyle(.clear)
+    case .upcoming:
+      AnyShapeStyle(.clear)
     }
   }
 }
