@@ -56,6 +56,7 @@ struct ChatView: View {
           .padding(.vertical)
         }
         .flippedVertically() // Flip the ScrollView.
+        .scrollDismissesKeyboard(.interactively)
 
         if !isAtBottom {
           Button {

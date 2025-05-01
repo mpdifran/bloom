@@ -149,7 +149,6 @@ private extension ChatLauncherView {
         axis: .vertical
       )
       .focused($isFocused)
-      .scrollDismissesKeyboard(.interactively)
       .frame(minHeight: 24)
       .submitLabel(.send)
       .onSubmit {
@@ -267,7 +266,6 @@ private extension ChatLauncherView {
     } catch {
       self.error = error
     }
-//    scrollToLastMessage(scrollProxy: scrollViewProxy, animated: true)
   }
 }
 
