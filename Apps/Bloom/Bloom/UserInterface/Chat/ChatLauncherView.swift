@@ -167,26 +167,16 @@ private extension ChatLauncherView {
 
       if tabController.isShowingChat {
         if text.isEmpty {
-          if isFocused {
-            Button {
-              isFocused = false
-              selectionToggle.toggle()
-            } label: {
-              Image(systemSymbol: .chevronDownCircleFill)
-                .foregroundStyle(.text, .fill)
-                .font(.title)
-                .frame(square: 24)
-            }
-          } else {
-            Button {
-              tabController.isShowingChat = false
-              selectionToggle.toggle()
-            } label: {
-              Image(systemSymbol: .xmarkCircleFill)
-                .foregroundStyle(.text, .fill)
-                .font(.title)
-                .frame(square: 24)
-            }
+          Button {
+            tabController.isShowingChat = false
+            // Dismiss the keyboard
+            isFocused = false
+            selectionToggle.toggle()
+          } label: {
+            Image(systemSymbol: .xmarkCircleFill)
+              .foregroundStyle(.text, .fill)
+              .font(.title)
+              .frame(square: 24)
           }
         } else {
           Button {
