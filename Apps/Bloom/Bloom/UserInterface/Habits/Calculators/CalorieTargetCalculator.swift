@@ -8,6 +8,7 @@
 import Foundation
 import HealthKit
 import DataContainer
+import CoreHealth
 
 final class CalorieTargetCalculator {
   private let age: Int

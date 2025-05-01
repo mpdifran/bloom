@@ -10,6 +10,7 @@ import SwiftUI
 import Charts
 import HealthKit
 import TelemetryDeck
+import CoreHealth
 
 struct BodyCompositionDetailsView: View {
 

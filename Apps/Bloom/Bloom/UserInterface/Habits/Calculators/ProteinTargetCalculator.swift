@@ -8,6 +8,7 @@
 import Foundation
 import HealthKit
 import DataContainer
+import CoreHealth
 
 extension Double {
   static let targetProteinPercent: Double = 0.3

@@ -7,6 +7,7 @@
 
 import SFSafeSymbols
 import SwiftUI
+import CoreHealth
 
 struct SleepScoreDetailsView: View {
   let sleepAnalysis: SleepAnalysis

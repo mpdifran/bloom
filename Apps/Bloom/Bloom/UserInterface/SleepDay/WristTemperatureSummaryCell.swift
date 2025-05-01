@@ -7,6 +7,7 @@
 
 import SFSafeSymbols
 import SwiftUI
+import CoreHealth
 
 struct WristTemperatureSummaryCell: View {
     let wristTemperature: SleepAnalysis.WristTemperatureDataPoint

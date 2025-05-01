@@ -8,6 +8,7 @@
 import SwiftUI
 @preconcurrency import HealthKit
 import TelemetryDeck
+import CoreHealth
 
 struct BodyWeightActionCardView: View {
 

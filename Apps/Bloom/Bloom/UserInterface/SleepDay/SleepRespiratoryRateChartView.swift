@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import CoreHealth
 
 struct SleepRespiratoryRateChartView: View {
     let respiratoryRates: [SleepAnalysis.RespiratoryRateDataPoint]

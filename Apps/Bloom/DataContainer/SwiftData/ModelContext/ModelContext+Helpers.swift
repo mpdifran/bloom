@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 import BloomFoundation
-internal import AppFoundations
+import AppFoundations
 
 public extension ModelContext {
 

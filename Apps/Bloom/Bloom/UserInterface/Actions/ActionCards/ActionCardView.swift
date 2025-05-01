@@ -10,6 +10,7 @@ import SFSafeSymbols
 import HealthKit
 import SwiftData
 import DataContainer
+import CoreHealth
 
 struct ActionCardView<Content>: View where Content: View {
   let title: String

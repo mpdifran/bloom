@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import TelemetryDeck
+import CoreHealth
 
 struct OnboardingHealthActivityLevelView: View {
   let onContinue: () -> Void

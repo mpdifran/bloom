@@ -11,6 +11,7 @@ import Combine
 import AppFoundations
 import DataContainer
 import SwiftData
+import CoreHealth
 
 @Observable @MainActor
 final class VitalsViewModel: Sendable {

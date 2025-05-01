@@ -10,6 +10,7 @@ import SwiftUI
 import AppUI
 import HealthKit
 import DataContainer
+import CoreHealth
 
 struct DeveloperSettingsView: View {
 

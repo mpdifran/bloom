@@ -11,6 +11,7 @@ import SwiftUI
 import Charts
 import CoreLocation
 import MapKit
+import CoreHealth
 
 struct WorkoutDetailsView: View {
   let workout: HKWorkout

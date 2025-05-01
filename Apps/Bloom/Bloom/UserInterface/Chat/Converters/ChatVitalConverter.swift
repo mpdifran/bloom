@@ -9,6 +9,7 @@ import Foundation
 import BloomFoundation
 import HealthKit
 import DataContainer
+@preconcurrency import CoreHealth
 
 private extension Int {
   static let maxHealthHistoryDays: Int = 7

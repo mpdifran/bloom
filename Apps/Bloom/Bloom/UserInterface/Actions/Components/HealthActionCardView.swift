@@ -9,6 +9,7 @@ import SwiftUI
 import SFSafeSymbols
 import AppUI
 import HealthKit
+import CoreHealth
 
 struct HealthActionCardView<Content>: View where Content: View {
   let sampleTypes: Set<HKSampleType>

@@ -8,6 +8,7 @@
 import SwiftUI
 import DataContainer
 import TelemetryDeck
+import CoreHealth
 
 struct ChatLogBowelMovementCell: View {
   let chatMessageID: String

@@ -1,5 +1,5 @@
 {
-  "originHash" : "59b5874b794c3a454646c08af1af573b8667856f888b63828d83bfc85e917270",
+  "originHash" : "2f9d9d5ed7204ed7c694b7f6ce031c8e636af7cfbca81b416454ddbd84ec6790",
   "pins" : [
     {
       "identity" : "apns",
@@ -260,15 +260,6 @@
       "state" : {
         "revision" : "baf0d8684a43f16cd11ebcc67300c8ab5cb5d078",
         "version" : "3.33.0"
-      }
-    },
-    {
-      "identity" : "statkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JimmyMAndersson/StatKit.git",
-      "state" : {
-        "revision" : "ba1e0650f4270c3b3783f048b9ba17268296ee68",
-        "version" : "0.6.1"
       }
     },
     {

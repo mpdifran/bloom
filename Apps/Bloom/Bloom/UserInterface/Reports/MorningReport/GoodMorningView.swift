@@ -16,6 +16,7 @@ import Charts
 import DataContainer
 import SwiftData
 import CoreLocation
+import CoreHealth
 
 @MainActor
 struct GoodMorningView: View {

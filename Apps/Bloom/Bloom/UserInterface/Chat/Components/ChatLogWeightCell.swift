@@ -10,6 +10,7 @@ import AppUI
 import HealthKit
 import SFSafeSymbols
 import TelemetryDeck
+import CoreHealth
 
 struct ChatLogWeightCell: View {
   let chatMessageID: String

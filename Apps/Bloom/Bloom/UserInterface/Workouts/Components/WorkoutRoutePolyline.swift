@@ -8,6 +8,7 @@
 import Foundation
 import MapKit
 import SwiftUI
+import CoreHealth
 
 struct WorkoutRoutePolyline: UIViewRepresentable {
   let routes: [WorkoutRoute]

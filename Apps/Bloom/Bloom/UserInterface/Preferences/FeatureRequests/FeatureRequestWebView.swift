@@ -7,6 +7,7 @@
 
 import SwiftUI
 import WebKit
+import CoreHealth
 
 struct FeatureRequestWebView: UIViewRepresentable {
 

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SFSafeSymbols
+import CoreHealth
 
 struct ActivityLevelSelectionCell: View {
   let activityLevel: ActivityLevelSummary.ActivityLevel

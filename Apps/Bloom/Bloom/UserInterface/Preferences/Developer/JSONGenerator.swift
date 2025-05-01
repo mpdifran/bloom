@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import CoreHealth
 
 final actor JSONGenerator {
   static let shared = JSONGenerator()

@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import AppUI
+import BloomFoundation
 
 extension View {
 

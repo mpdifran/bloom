@@ -7,6 +7,7 @@
 
 import SFSafeSymbols
 import SwiftUI
+import CoreHealth
 
 private extension CGFloat {
   static let lineWidth: CGFloat = 20

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHealth
 
 struct CyclePhaseCoolFactCell: View {
     let coolFact: MenstrualCyclePhase.CoolFact

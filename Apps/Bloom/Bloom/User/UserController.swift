@@ -11,6 +11,7 @@ import Valet
 import TelemetryDeck
 import RevenueCat
 import AuthenticationServices
+import CoreHealth
 
 private extension String {
   static let authenticatedUserIdentifierKey = "user_identifier"

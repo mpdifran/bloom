@@ -8,6 +8,7 @@
 import AppUI
 import SwiftUI
 import DataContainer
+import BloomFoundation
 
 struct NutrientsRemainingView: View {
 

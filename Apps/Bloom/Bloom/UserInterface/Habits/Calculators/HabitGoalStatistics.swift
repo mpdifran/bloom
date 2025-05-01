@@ -7,6 +7,7 @@
 
 import DataContainer
 import HealthKit
+import CoreHealth
 
 struct HabitGoalStatistics {
     let metGoalSamples: [HabitSamplePair]

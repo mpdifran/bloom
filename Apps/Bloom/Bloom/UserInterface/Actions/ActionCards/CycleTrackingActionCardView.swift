@@ -8,6 +8,7 @@
 import SwiftUI
 import HealthKit
 import TelemetryDeck
+import CoreHealth
 
 struct CycleTrackingActionCardView: View {
 

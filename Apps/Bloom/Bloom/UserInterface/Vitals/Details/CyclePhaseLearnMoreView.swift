@@ -7,6 +7,7 @@
 
 import SwiftUI
 import TelemetryDeck
+import CoreHealth
 
 struct CyclePhaseLearnMoreView: View {
     let phase: MenstrualCyclePhase

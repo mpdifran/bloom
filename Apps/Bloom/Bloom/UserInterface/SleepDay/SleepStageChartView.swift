@@ -9,6 +9,7 @@ import SFSafeSymbols
 import SwiftUI
 import Charts
 import BloomFoundation
+import CoreHealth
 @preconcurrency import HealthKit
 
 @MainActor

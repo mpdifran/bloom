@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import CoreHealth
 
 struct EditUserProfileCardView: View {
 

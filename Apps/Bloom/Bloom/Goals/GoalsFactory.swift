@@ -10,6 +10,7 @@ import SwiftData
 import DataContainer
 import HealthKit
 import TelemetryDeck
+import CoreHealth
 
 final actor GoalsFactory {
   static let shared = GoalsFactory()

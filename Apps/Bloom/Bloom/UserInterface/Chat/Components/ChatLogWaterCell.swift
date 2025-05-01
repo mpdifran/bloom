@@ -9,6 +9,7 @@ import SwiftUI
 import HealthKit
 import SFSafeSymbols
 import TelemetryDeck
+import CoreHealth
 
 struct ChatLogWaterCell: View {
   let chatMessageID: String

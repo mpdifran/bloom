@@ -8,6 +8,7 @@
 import SwiftUI
 import HealthKit
 import AppUI
+import CoreHealth
 
 struct WorkoutsListView: View {
 

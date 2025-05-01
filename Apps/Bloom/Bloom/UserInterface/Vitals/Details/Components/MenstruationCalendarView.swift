@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import Metal
+import CoreHealth
 
 struct MenstruationCalendarView: View {
   let menstruationSummary: MenstrualSummary?

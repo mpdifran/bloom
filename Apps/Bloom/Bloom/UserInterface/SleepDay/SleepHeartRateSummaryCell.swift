@@ -7,6 +7,7 @@
 
 import SFSafeSymbols
 import SwiftUI
+import CoreHealth
 
 struct SleepHeartRateSummaryCell: View {
     let heartRates: [SleepAnalysis.HeartRateDataPoint]

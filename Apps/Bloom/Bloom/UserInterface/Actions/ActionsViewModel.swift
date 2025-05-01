@@ -9,6 +9,7 @@ import Foundation
 @preconcurrency import HealthKit
 import DataContainer
 import SwiftData
+import CoreHealth
 
 struct ActionLatestValueDetails: Sendable {
     let displayString: String

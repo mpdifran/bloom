@@ -10,6 +10,7 @@ import SwiftUI
 import Charts
 import TelemetryDeck
 import HealthKit
+import CoreHealth
 
 struct BowelMovementsDetailView: View {
 

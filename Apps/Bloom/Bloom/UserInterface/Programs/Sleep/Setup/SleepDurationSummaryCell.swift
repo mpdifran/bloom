@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import Charts
+import CoreHealth
 
 struct SleepDurationSummaryCell: View {
     let sleepAnalyses: [SleepAnalysis]

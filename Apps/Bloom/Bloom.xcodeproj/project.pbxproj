@@ -32,19 +32,28 @@
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
 		FF9782E82C9A22F200A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E72C9A22F200A8ED7E /* AppFoundations */; };
-		FF9782EA2C9A231900A8ED7E /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E92C9A231900A8ED7E /* StatKit */; };
 		FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782EB2C9A233300A8ED7E /* Algorithms */; };
 		FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; platformFilter = ios; };
 		FF9782F52C9B1ECD00A8ED7E /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */; };
 		FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
-		FF97832D2C9B546700A8ED7E /* StatKit in Frameworks */ = {isa = PBXBuildFile; productRef = FFC77AE22C57FCEC003E5F85 /* StatKit */; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; platformFilter = ios; };
 		FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFE41D232C8BE1A000E3E559 /* ConfettiSwiftUI */; };
+		FFECC1D42DC2C327002F6AAA /* CoreHealth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; };
+		FFECC1D52DC2C327002F6AAA /* CoreHealth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FFECC1DB2DC2C341002F6AAA /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
+		FFECC2202DC2C499002F6AAA /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FFECC2252DC2C4AB002F6AAA /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
+		FFECC2392DC3BDAE002F6AAA /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FFECCF632DC3C8E0002F6AAA /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FFECCF622DC3C8E0002F6AAA /* SFSafeSymbols */; };
+		FFECCF692DC3FA02002F6AAA /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFECCF682DC3FA02002F6AAA /* AppFoundations */; };
+		FFECCF6B2DC3FA3D002F6AAA /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FFECCF6A2DC3FA3D002F6AAA /* SFSafeSymbols */; };
+		FFECCF6D2DC3FA4C002F6AAA /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FFECCF6C2DC3FA4C002F6AAA /* Algorithms */; };
+		FFECCF6F2DC3FA7A002F6AAA /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFECCF6E2DC3FA7A002F6AAA /* AppFoundations */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +106,55 @@
 			remoteGlobalIDString = FFCE852D2C99DBD6002C46B1;
 			remoteInfo = DataContainer;
 		};
+		FFECC1D22DC2C327002F6AAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFECC1CD2DC2C326002F6AAA;
+			remoteInfo = CoreHealth;
+		};
+		FFECC1DC2DC2C346002F6AAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E96832C0C1F38004DAD2D;
+			remoteInfo = BloomFoundation;
+		};
+		FFECC2222DC2C499002F6AAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
+			remoteInfo = Umbrella;
+		};
+		FFECC2272DC2C4AB002F6AAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFCE852D2C99DBD6002C46B1;
+			remoteInfo = DataContainer;
+		};
+		FFECC23A2DC3BDB4002F6AAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
+			remoteInfo = Umbrella;
+		};
+		FFECCF642DC3F004002F6AAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
+			remoteInfo = Umbrella;
+		};
+		FFECCF662DC3F007002F6AAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E96832C0C1F38004DAD2D;
+			remoteInfo = BloomFoundation;
+		};
 		FFF61B3C2BEEB7B000926042 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -116,6 +174,7 @@
 				FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */,
 				FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */,
 				FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */,
+				FFECC1D52DC2C327002F6AAA /* CoreHealth.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +197,7 @@
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBAD92BAC7788006AAD0B /* Bloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreHealth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFF61B382BEEB7B000926042 /* BloomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BloomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -203,7 +263,6 @@
 		4BD93F1C2CFA88C400D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Concurrency/AsyncStreamWrapper.swift,
 				Concurrency/MainTask.swift,
 			);
 			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
@@ -211,7 +270,6 @@
 		4BD93F1D2CFA88C400D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Concurrency/AsyncStreamWrapper.swift,
 				Concurrency/MainTask.swift,
 			);
 			publicHeaders = (
@@ -249,6 +307,7 @@
 		FF67B2482DAFF5D70086E697 /* Configuration */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configuration; sourceTree = "<group>"; };
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
+		FFECC1CF2DC2C327002F6AAA /* CoreHealth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreHealth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,6 +350,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFECC2392DC3BDAE002F6AAA /* Umbrella.framework in Frameworks */,
+				FFECCF692DC3FA02002F6AAA /* AppFoundations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,11 +367,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFECCF632DC3C8E0002F6AAA /* SFSafeSymbols in Frameworks */,
 				FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */,
 				FF9782E82C9A22F200A8ED7E /* AppFoundations in Frameworks */,
 				FF9782EC2C9A233300A8ED7E /* Algorithms in Frameworks */,
 				FF9782F52C9B1ECD00A8ED7E /* TelemetryDeck in Frameworks */,
-				FF9782EA2C9A231900A8ED7E /* StatKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,12 +380,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */,
-				FF97832D2C9B546700A8ED7E /* StatKit in Frameworks */,
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
 				FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */,
 				FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */,
 				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
+				FFECC1D42DC2C327002F6AAA /* CoreHealth.framework in Frameworks */,
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
 				FFADE9942D468789004FBF2B /* Swipy in Frameworks */,
 				FF1FFD682D15C27D0008B47D /* Valet in Frameworks */,
@@ -347,6 +408,19 @@
 			files = (
 				FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */,
 				FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFECC1CB2DC2C326002F6AAA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFECC2202DC2C499002F6AAA /* Umbrella.framework in Frameworks */,
+				FFECC2252DC2C4AB002F6AAA /* DataContainer.framework in Frameworks */,
+				FFECCF6B2DC3FA3D002F6AAA /* SFSafeSymbols in Frameworks */,
+				FFECCF6D2DC3FA4C002F6AAA /* Algorithms in Frameworks */,
+				FFECC1DB2DC2C341002F6AAA /* BloomFoundation.framework in Frameworks */,
+				FFECCF6F2DC3FA7A002F6AAA /* AppFoundations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +465,7 @@
 				4BD93ED32CFA88B600D1AFB8 /* ShieldActionExtension */,
 				4BD93EDB2CFA88BA00D1AFB8 /* DeviceActivityReportExtension */,
 				4BD93EED2CFA88BD00D1AFB8 /* ScreenControl */,
+				FFECC1CF2DC2C327002F6AAA /* CoreHealth */,
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
 				4BD93F0B2CFA88C400D1AFB8 /* BloomFoundation */,
 				FF67B2482DAFF5D70086E697 /* Configuration */,
@@ -416,6 +491,7 @@
 				FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */,
 				FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */,
 				FF9782D72C9A22C900A8ED7E /* Umbrella.framework */,
+				FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -445,6 +521,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFCE85292C99DBD6002C46B1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFECC1C92DC2C326002F6AAA /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -541,6 +624,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FFECC23B2DC3BDB4002F6AAA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4BD93F0B2CFA88C400D1AFB8 /* BloomFoundation */,
@@ -591,9 +675,9 @@
 			packageProductDependencies = (
 				FF9782E52C9A22EE00A8ED7E /* AppUI */,
 				FF9782E72C9A22F200A8ED7E /* AppFoundations */,
-				FF9782E92C9A231900A8ED7E /* StatKit */,
 				FF9782EB2C9A233300A8ED7E /* Algorithms */,
 				FF9782F42C9B1ECD00A8ED7E /* TelemetryDeck */,
+				FFECCF622DC3C8E0002F6AAA /* SFSafeSymbols */,
 			);
 			productName = Umbrella;
 			productReference = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */;
@@ -615,6 +699,7 @@
 				FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */,
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
 				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
+				FFECC1D32DC2C327002F6AAA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4BD93D442CFA889800D1AFB8 /* Bloom */,
@@ -624,7 +709,6 @@
 				FFD8C4D22BD1AC5E001E8D42 /* AppUI */,
 				FFF61AEA2BED52A900926042 /* AppFoundations */,
 				FF8B8B202BFD1EF500BA2128 /* Algorithms */,
-				FFC77AE22C57FCEC003E5F85 /* StatKit */,
 				FF4A21BB2C88FA5600278019 /* Bugsnag */,
 				FF4A21BD2C88FA5600278019 /* BugsnagNetworkRequestPlugin */,
 				FF4A21C02C88FA9D00278019 /* BugsnagPerformance */,
@@ -654,6 +738,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				FFECCF672DC3F007002F6AAA /* PBXTargetDependency */,
+				FFECCF652DC3F004002F6AAA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
@@ -663,6 +749,35 @@
 			);
 			productName = DataContainer;
 			productReference = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		FFECC1CD2DC2C326002F6AAA /* CoreHealth */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FFECC1D62DC2C327002F6AAA /* Build configuration list for PBXNativeTarget "CoreHealth" */;
+			buildPhases = (
+				FFECC1C92DC2C326002F6AAA /* Headers */,
+				FFECC1CA2DC2C326002F6AAA /* Sources */,
+				FFECC1CB2DC2C326002F6AAA /* Frameworks */,
+				FFECC1CC2DC2C326002F6AAA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FFECC1DD2DC2C346002F6AAA /* PBXTargetDependency */,
+				FFECC2232DC2C499002F6AAA /* PBXTargetDependency */,
+				FFECC2282DC2C4AB002F6AAA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FFECC1CF2DC2C327002F6AAA /* CoreHealth */,
+			);
+			name = CoreHealth;
+			packageProductDependencies = (
+				FFECCF6A2DC3FA3D002F6AAA /* SFSafeSymbols */,
+				FFECCF6C2DC3FA4C002F6AAA /* Algorithms */,
+				FFECCF6E2DC3FA7A002F6AAA /* AppFoundations */,
+			);
+			productName = CoreHealth;
+			productReference = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		FFF61B372BEEB7B000926042 /* BloomTests */ = {
@@ -693,7 +808,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1540;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					FF1E96182C0BEC1D004DAD2D = {
@@ -724,6 +839,9 @@
 					FFCE852D2C99DBD6002C46B1 = {
 						CreatedOnToolsVersion = 16.0;
 					};
+					FFECC1CD2DC2C326002F6AAA = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					FFF61B372BEEB7B000926042 = {
 						CreatedOnToolsVersion = 15.3;
 						TestTargetID = FFACBAD82BAC7788006AAD0B;
@@ -743,7 +861,6 @@
 				FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */,
 				FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */,
 				FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
-				FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */,
 				FF4A21BA2C88FA5600278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
 				FF4A21BF2C88FA9D00278019 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 				FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
@@ -765,6 +882,7 @@
 				FF1E96442C0BF5E4004DAD2D /* ShieldActionExtension */,
 				FF3A8F2E2C1A8341002DA563 /* DeviceActivityReportExtension */,
 				FF1E966C2C0C1A99004DAD2D /* ScreenControl */,
+				FFECC1CD2DC2C326002F6AAA /* CoreHealth */,
 				FFCE852D2C99DBD6002C46B1 /* DataContainer */,
 				FF1E96832C0C1F38004DAD2D /* BloomFoundation */,
 				FF9782D62C9A22C900A8ED7E /* Umbrella */,
@@ -830,6 +948,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFCE852C2C99DBD6002C46B1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFECC1CC2DC2C326002F6AAA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -932,6 +1057,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FFECC1CA2DC2C326002F6AAA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FFF61B342BEEB7B000926042 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -977,6 +1109,43 @@
 			target = FFCE852D2C99DBD6002C46B1 /* DataContainer */;
 			targetProxy = FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */;
 		};
+		FFECC1D32DC2C327002F6AAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFECC1CD2DC2C326002F6AAA /* CoreHealth */;
+			targetProxy = FFECC1D22DC2C327002F6AAA /* PBXContainerItemProxy */;
+		};
+		FFECC1DD2DC2C346002F6AAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
+			targetProxy = FFECC1DC2DC2C346002F6AAA /* PBXContainerItemProxy */;
+		};
+		FFECC2232DC2C499002F6AAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+			targetProxy = FFECC2222DC2C499002F6AAA /* PBXContainerItemProxy */;
+		};
+		FFECC2282DC2C4AB002F6AAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFCE852D2C99DBD6002C46B1 /* DataContainer */;
+			targetProxy = FFECC2272DC2C4AB002F6AAA /* PBXContainerItemProxy */;
+		};
+		FFECC23B2DC3BDB4002F6AAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+			targetProxy = FFECC23A2DC3BDB4002F6AAA /* PBXContainerItemProxy */;
+		};
+		FFECCF652DC3F004002F6AAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+			targetProxy = FFECCF642DC3F004002F6AAA /* PBXContainerItemProxy */;
+		};
+		FFECCF672DC3F007002F6AAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
+			targetProxy = FFECCF662DC3F007002F6AAA /* PBXContainerItemProxy */;
+		};
 		FFF61B3D2BEEB7B000926042 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
@@ -1011,6 +1180,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.DeviceActivityMonitorExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1043,6 +1216,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.DeviceActivityMonitorExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1075,6 +1252,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.ShieldConfigurationExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1107,6 +1288,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.ShieldConfigurationExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1139,6 +1324,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.ShieldActionExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1171,6 +1360,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.ShieldActionExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1206,6 +1399,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).ScreenControl";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -1244,6 +1441,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).ScreenControl";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -1258,6 +1459,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -1283,6 +1485,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomFoundation";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1298,6 +1504,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -1323,6 +1530,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomFoundation";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -1359,6 +1570,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.DeviceActivityReportExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1392,6 +1607,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.DeviceActivityReportExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1531,6 +1750,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.BloomTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1564,6 +1787,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.DeviceActivityMonitorExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1596,6 +1823,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.ShieldConfigurationExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1628,6 +1859,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.ShieldActionExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1661,6 +1896,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.DeviceActivityReportExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1696,6 +1935,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).ScreenControl";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -1752,6 +1995,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -1777,6 +2021,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomFoundation";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1816,6 +2064,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).Umbrella";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -1951,6 +2203,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.BloomTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1984,6 +2240,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.DeviceActivityMonitorExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2016,6 +2276,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.ShieldConfigurationExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2048,6 +2312,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.ShieldActionExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2081,6 +2349,10 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.DeviceActivityReportExtension";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2116,6 +2388,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).ScreenControl";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -2172,6 +2448,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -2197,6 +2474,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomFoundation";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -2235,6 +2516,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).Umbrella";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -2273,6 +2558,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).Umbrella";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -2311,6 +2600,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).Umbrella";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -2637,6 +2930,186 @@
 			};
 			name = Release;
 		};
+		FFECC1D72DC2C327002F6AAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.CoreHealth";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FFECC1D82DC2C327002F6AAA /* Debug [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.CoreHealth";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Debug [Dev]";
+		};
+		FFECC1D92DC2C327002F6AAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.CoreHealth";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FFECC1DA2DC2C327002F6AAA /* Release [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.CoreHealth";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Release [Dev]";
+		};
 		FFF61B3F2BEEB7B000926042 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
@@ -2650,6 +3123,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.BloomTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2670,6 +3147,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.BloomTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2790,6 +3271,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FFECC1D62DC2C327002F6AAA /* Build configuration list for PBXNativeTarget "CoreHealth" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FFECC1D72DC2C327002F6AAA /* Debug */,
+				FFECC1D82DC2C327002F6AAA /* Debug [Dev] */,
+				FFECC1D92DC2C327002F6AAA /* Release */,
+				FFECC1DA2DC2C327002F6AAA /* Release [Dev] */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FFF61B3E2BEEB7B000926042 /* Build configuration list for PBXNativeTarget "BloomTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2873,14 +3365,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.2.0;
-			};
-		};
-		FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/JimmyMAndersson/StatKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.6.1;
 			};
 		};
 		FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */ = {
@@ -2973,11 +3457,6 @@
 			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
 			productName = AppFoundations;
 		};
-		FF9782E92C9A231900A8ED7E /* StatKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */;
-			productName = StatKit;
-		};
 		FF9782EB2C9A233300A8ED7E /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
@@ -2993,11 +3472,6 @@
 			package = FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */;
 			productName = Swipy;
 		};
-		FFC77AE22C57FCEC003E5F85 /* StatKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FFC77AE12C57FCEC003E5F85 /* XCRemoteSwiftPackageReference "StatKit" */;
-			productName = StatKit;
-		};
 		FFD8C4D22BD1AC5E001E8D42 /* AppUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */;
@@ -3007,6 +3481,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
 			productName = ConfettiSwiftUI;
+		};
+		FFECCF622DC3C8E0002F6AAA /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
+		FFECCF682DC3FA02002F6AAA /* AppFoundations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
+			productName = AppFoundations;
+		};
+		FFECCF6A2DC3FA3D002F6AAA /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
+		FFECCF6C2DC3FA4C002F6AAA /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		FFECCF6E2DC3FA7A002F6AAA /* AppFoundations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
+			productName = AppFoundations;
 		};
 		FFF61AEA2BED52A900926042 /* AppFoundations */ = {
 			isa = XCSwiftPackageProductDependency;

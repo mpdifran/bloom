@@ -9,6 +9,7 @@ import SFSafeSymbols
 import SwiftUI
 import Charts
 import TelemetryDeck
+import CoreHealth
 
 struct SleepDetailsView: View {
 

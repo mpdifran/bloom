@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import HealthKit
 import TelemetryDeck
+import CoreHealth
 
 @MainActor
 final class HabitDailyUpdateCellViewModel: ObservableObject {

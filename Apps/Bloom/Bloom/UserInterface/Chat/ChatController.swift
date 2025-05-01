@@ -8,6 +8,7 @@
 import SwiftUI
 import DataContainer
 import BloomModel
+import BloomFoundation
 
 final actor ChatController: ObservableObject {
   static let shared = ChatController()

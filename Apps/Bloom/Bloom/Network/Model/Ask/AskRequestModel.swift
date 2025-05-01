@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import CoreHealth
 
 struct AskRequestModel: Codable {
     let userInfo: UserInfoModel?
@@ -26,7 +27,7 @@ struct UserInfoModel: Codable, Equatable {
     let dailyExerciseMinutes: QuantityModel?
     let dailySteps: QuantityModel?
     let dailyHeartRateVariability: QuantityModel?
-    let restingHeartRate: [DateQuantitySampleLegacy]
+    let restingHeartRate: [String] // TODO: Delete
     let vO2Max: QuantityModel?
     let timeInDaylight: QuantityModel?
     let sleepAnalysis: [SleepAnalysis]

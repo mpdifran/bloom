@@ -11,6 +11,7 @@ import DataContainer
 import HealthKit
 import SwiftData
 import Charts
+import CoreHealth
 
 struct HabitDetailsView: View {
   @State private var viewModel: ViewModel

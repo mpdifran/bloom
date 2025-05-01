@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import SFSafeSymbols
+import CoreHealth
 
 struct HealthGoalEditCard: View {
 

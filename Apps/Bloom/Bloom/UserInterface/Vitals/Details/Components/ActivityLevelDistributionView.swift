@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHealth
 
 private extension CGFloat {
     static let spacing: CGFloat = 10

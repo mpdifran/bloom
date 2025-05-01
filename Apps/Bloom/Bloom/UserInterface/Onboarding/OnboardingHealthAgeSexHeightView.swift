@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import HealthKitUI
 import TelemetryDeck
+import CoreHealth
 
 @MainActor
 struct OnboardingHealthAgeSexHeightView: View {

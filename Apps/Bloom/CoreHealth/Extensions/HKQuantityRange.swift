@@ -1,0 +1,48 @@
+//
+//  HKQuantityRange.swift
+//  Supplements
+//
+//  Created by Mark DiFranco on 2024-08-03.
+//
+
+import Foundation
+import HealthKit
+
+public struct HKQuantityRange {
+  public let unit: HKUnit
+  public let range: ClosedRange<Double>
+
+  public init(unit: HKUnit, range: ClosedRange<Double>) {
+    self.unit = unit
+    self.range = range
+  }
+}
+
+public extension HKQuantityRange {
+
+    var lower: HKQuantity {
+        HKQuantity(unit: self.unit, doubleValue: range.lowerBound)
+    }
+
+    var upper: HKQuantity {
+        HKQuantity(unit: self.unit, doubleValue: range.upperBound)
+    }
+
+    func lowerDoubleValue(for unit: HKUnit) -> Double {
+        let quantity = HKQuantity(unit: self.unit, doubleValue: range.lowerBound)
+        return quantity.doubleValue(for: unit)
+    }
+
+    func upperDoubleValue(for unit: HKUnit) -> Double {
+        let quantity = HKQuantity(unit: self.unit, doubleValue: range.upperBound)
+        return quantity.doubleValue(for: unit)
+    }
+
+    func contains(quantity: HKQuantity) -> Bool {
+        guard quantity.is(compatibleWith: unit) else { return false }
+
+        let quantityValue = quantity.doubleValue(for: unit)
+
+        return range.contains(quantityValue)
+    }
+}

@@ -10,6 +10,7 @@ import BloomModel
 import BloomFoundation
 import HealthKit
 import DataContainer
+import CoreHealth
 
 final class ChatHealthQueryPerformer: Sendable {
 

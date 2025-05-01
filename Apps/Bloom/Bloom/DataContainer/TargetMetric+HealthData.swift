@@ -8,6 +8,7 @@
 @preconcurrency import HealthKit
 import DataContainer
 import BloomFoundation
+@preconcurrency import CoreHealth
 
 extension TargetMetric {
 

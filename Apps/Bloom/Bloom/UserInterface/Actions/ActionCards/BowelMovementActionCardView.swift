@@ -10,6 +10,7 @@ import SFSafeSymbols
 import SwiftData
 import TelemetryDeck
 import DataContainer
+import CoreHealth
 
 struct BowelMovementActionCardView: View {
 

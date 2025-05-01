@@ -14,6 +14,7 @@ import HealthKit
 import RevenueCat
 import TelemetryDeck
 import Swipy
+import CoreHealth
 
 struct SettingsView: View {
 

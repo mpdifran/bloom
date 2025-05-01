@@ -8,6 +8,7 @@
 import SwiftUI
 import HealthKit
 import DataContainer
+import CoreHealth
 
 struct GoalRange: Identifiable, Sendable, Hashable {
   var id: Int { hashValue }

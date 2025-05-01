@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import HealthKit
+import CoreHealth
 
 struct LocalizedUnitPickerView: View {
   @Binding var unit: HKUnit

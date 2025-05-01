@@ -11,6 +11,7 @@ import AppUI
 @preconcurrency import HealthKit
 import HealthKitUI
 import TelemetryDeck
+import CoreHealth
 
 struct WaterActionCardView: View {
 

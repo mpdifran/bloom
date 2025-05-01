@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import HealthKit
+import CoreHealth
 
 struct WorkoutHeartRateZoneCell: View {
   let report: WorkoutTypeHeartRateReport

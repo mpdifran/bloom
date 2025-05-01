@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreHealth
 
 struct ProactiveTipRequestModel: Codable {
     let stressMonthlySummary: StressSummary?

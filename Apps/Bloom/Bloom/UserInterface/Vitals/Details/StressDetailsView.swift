@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 import TelemetryDeck
+import CoreHealth
 
 extension StressDetailsView {
   enum StressContributor: CaseIterable, Hashable {

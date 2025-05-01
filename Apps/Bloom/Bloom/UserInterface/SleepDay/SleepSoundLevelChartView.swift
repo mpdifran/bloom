@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import CoreHealth
 
 struct SleepSoundLevelChartView: View {
     let soundLevels: [SleepAnalysis.SoundLevelDataPoint]

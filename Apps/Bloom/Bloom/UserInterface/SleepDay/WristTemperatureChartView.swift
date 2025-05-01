@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import CoreHealth
 
 struct WristTemperatureChartView: View {
     let wristTemperature: SleepAnalysis.WristTemperatureDataPoint

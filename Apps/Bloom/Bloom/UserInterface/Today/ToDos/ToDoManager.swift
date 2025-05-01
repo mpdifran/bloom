@@ -10,6 +10,7 @@ import SwiftUI
 import BloomFoundation
 import DataContainer
 import Algorithms
+import CoreHealth
 
 @MainActor
 final class ToDoManager: ObservableObject {

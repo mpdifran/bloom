@@ -9,6 +9,7 @@ import Foundation
 import DataContainer
 import HealthKit
 import AppFoundations
+import CoreHealth
 
 final actor AIGoalManager {
   static let shared = AIGoalManager()

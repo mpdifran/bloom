@@ -7,6 +7,7 @@
 
 import SFSafeSymbols
 import SwiftUI
+import CoreHealth
 
 struct SleepSoundLevelSummaryCell: View {
     let soundLevels: [SleepAnalysis.SoundLevelDataPoint]

@@ -7,6 +7,7 @@
 
 import Foundation
 import BloomModel
+import BloomFoundation
 
 final actor WebSocketHandle {
   let task: URLSessionWebSocketTask

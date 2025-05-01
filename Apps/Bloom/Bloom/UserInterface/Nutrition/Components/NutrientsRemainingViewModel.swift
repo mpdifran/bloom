@@ -9,6 +9,7 @@ import BloomFoundation
 import DataContainer
 import HealthKit
 import SwiftUI
+import CoreHealth
 
 @MainActor
 final class NutrientsRemainingViewModel: ObservableObject {

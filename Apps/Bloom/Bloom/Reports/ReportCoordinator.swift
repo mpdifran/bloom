@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHealth
 
 private extension String {
     static let lastMorningReportNotificationDate = "ReportCoordinator.lastMorningReportNotificationDate"

@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import SwiftData
 import HealthKit
+import CoreHealth
 
 struct WorkoutsTabView: View {
 

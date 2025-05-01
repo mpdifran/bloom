@@ -7,6 +7,7 @@
 
 import SwiftUI
 @preconcurrency import HealthKit
+import CoreHealth
 
 extension BodyWeightTodayWidgetView {
     @Observable @MainActor

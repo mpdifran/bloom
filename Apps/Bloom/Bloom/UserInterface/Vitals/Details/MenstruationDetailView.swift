@@ -9,6 +9,7 @@ import SFSafeSymbols
 import SwiftUI
 import HealthKit
 import TelemetryDeck
+import CoreHealth
 
 struct MenstruationDetailView: View {
 

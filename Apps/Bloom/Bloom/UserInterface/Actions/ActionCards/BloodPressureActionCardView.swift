@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 @preconcurrency import HealthKit
 import TelemetryDeck
+import CoreHealth
 
 extension BloodPressureActionCardView {
   enum FocusedTextField {

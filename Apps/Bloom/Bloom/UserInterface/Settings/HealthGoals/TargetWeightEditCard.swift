@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import CoreHealth
 
 struct TargetWeightEditCard: View {
 
