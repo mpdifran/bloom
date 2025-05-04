@@ -170,14 +170,14 @@ private extension WorkoutExerciseSetCell {
           exerciseSet: exerciseSet,
           mode: WorkoutExerciseSetCell.Mode(
             index: index,
-            currentIndex: currentIndex,
+            currentIndex: currentIndex
           ),
           isPeeking: index == peekIndex
         )
         .onTapGesture {
           let mode = WorkoutExerciseSetCell.Mode(
             index: index,
-            currentIndex: currentIndex,
+            currentIndex: currentIndex
           )
           guard mode == .upcoming || mode == .upNext else { return }
 
