@@ -127,7 +127,7 @@ private extension WorkoutInstanceView {
   var headerView: some View {
     VStack(spacing: 20) {
       WorkoutActivityTypeTimelineView(
-        activityTypes: workoutPlan.sets?.map(\.appleWorkoutType) ?? [],
+        activityTypes: workoutPlan.orderedSets.map(\.appleWorkoutType) ?? [],
         currentIndex: currentSetIndex
       )
       .padding(.horizontal)

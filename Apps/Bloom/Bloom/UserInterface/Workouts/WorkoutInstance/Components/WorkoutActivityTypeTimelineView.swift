@@ -11,7 +11,7 @@ import SFSafeSymbols
 import AppUI
 
 private extension CGFloat {
-  static let dimension: CGFloat = 40
+  static let dimension: CGFloat = 35
 }
 
 struct WorkoutActivityTypeTimelineView: View {
