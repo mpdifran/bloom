@@ -1,5 +1,5 @@
 //
-//  WorkoutTemplateCell.swift
+//  WorkoutPlanCell.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-04-28.
@@ -9,22 +9,22 @@ import SwiftUI
 import DataContainer
 import SFSafeSymbols
 
-struct WorkoutTemplateCell: View {
-  let workoutTemplate: WorkoutTemplate
+struct WorkoutPlanCell: View {
+  let workoutPlan: WorkoutPlan
 
   var body: some View {
     HStack(spacing: 20) {
-      WorkoutTemplateIconView(workoutType: workoutTemplate.appleWorkoutType)
+      WorkoutPlanIconView(workoutType: workoutPlan.representativeAppleWorkoutType)
 
       VStack(alignment: .leading) {
-        Text(workoutTemplate.title)
+        Text(workoutPlan.title)
           .font(.title3)
           .bold()
           .fontDesign(.rounded)
           .multilineTextAlignment(.leading)
           .lineLimit(2)
 
-        Text(workoutTemplate.durationDescription)
+        Text(workoutPlan.durationDescription)
           .foregroundStyle(.secondary)
           .font(.subheadline)
           .lineLimit(2)
@@ -41,7 +41,7 @@ struct WorkoutTemplateCell: View {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      WorkoutTemplateCell(workoutTemplate: .Preview.deadlifts)
+      WorkoutPlanCell(workoutPlan: .Preview.deadlifts)
     }
   }
 }

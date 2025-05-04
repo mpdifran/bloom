@@ -1,5 +1,5 @@
 //
-//  WorkoutStepCell.swift
+//  WorkoutSetCell.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-04-28.
@@ -11,7 +11,7 @@ import AppUI
 import SFSafeSymbols
 import HealthKit
 
-extension WorkoutStepCell {
+extension WorkoutSetCell {
   enum State {
     case complete
     case current
@@ -19,32 +19,24 @@ extension WorkoutStepCell {
   }
 }
 
-struct WorkoutStepCell: View {
-  let step: WorkoutStep
+struct WorkoutSetCell: View {
+  let set: WorkoutSet
   let state: State
   let currentTime: TimeInterval
 
   var body: some View {
     HStack {
       VStack(alignment: .leading) {
-        Text(step.title)
+        Text(set.title)
           .font(.title3)
           .bold()
           .fontDesign(.rounded)
 
 
         HStack(spacing: 4) {
-          if let duration = step.durationDescription {
-            Text(duration)
-          }
-          if let reps = step.numberOfReps {
-            Text("•")
-            Text("\(reps) Reps")
-          }
-          if let distanceQuantity = step.distanceQuantity, let unit = step.distanceUnit {
-            Text("•")
-            Text(distanceQuantity.displayString(for: unit.hkUnit))
-          }
+          Text(set.durationDescription)
+          Text("•")
+          Text("\(set.numberOfSets) Sets")
         }
       }
 
@@ -59,7 +51,7 @@ struct WorkoutStepCell: View {
       }
 
       if state == .current {
-        Image(systemSymbol: workoutSymbol)
+        Image(systemSymbol: SFSymbol(rawValue: set.appleWorkoutType.systemImage))
           .font(.title)
           .bold()
       }
@@ -70,19 +62,7 @@ struct WorkoutStepCell: View {
   }
 }
 
-private extension WorkoutStepCell {
-
-  var workoutSymbol: SFSymbol {
-    if let overrideWorkoutType = step.overrideAppleWorkoutType {
-      return SFSymbol(rawValue: overrideWorkoutType.systemImage)
-    }
-
-    if let workoutType = step.workoutTemplate?.appleWorkoutType {
-      return SFSymbol(rawValue: workoutType.systemImage)
-    }
-
-    return SFSymbol(rawValue: HKWorkoutActivityType.other.systemImage)
-  }
+private extension WorkoutSetCell {
 
   var timeString: String {
     let totalMilliseconds = Int(currentTime * 1000)
@@ -131,21 +111,19 @@ private extension WorkoutStepCell {
 
   PreviewEnvironment {
     BloomScrollView {
-      ForEachEnumerated(WorkoutTemplate.Preview.deadlifts.steps ?? []) { index, step in
-        if index >= selectedIndex {
-          WorkoutStepCell(
-            step: step,
-            state: state(for: index, selectedIndex: selectedIndex),
-            currentTime: 134.2
-          )
-        }
+      ForEachEnumerated(WorkoutPlan.Preview.deadlifts.sets ?? []) { index, set in
+        WorkoutSetCell(
+          set: set,
+          state: state(for: index, selectedIndex: selectedIndex),
+          currentTime: 134.2
+        )
       }
     }
     .animation(.default, value: selectedIndex)
     .shelf {
       Button {
         selectedIndex += 1
-        if selectedIndex == (WorkoutTemplate.Preview.deadlifts.steps ?? []).count {
+        if selectedIndex == (WorkoutPlan.Preview.deadlifts.sets ?? []).count {
           selectedIndex = 0
         }
       } label: {
@@ -159,7 +137,7 @@ private extension WorkoutStepCell {
 }
 
 
-private func state(for index: Int, selectedIndex: Int) -> WorkoutStepCell.State {
+private func state(for index: Int, selectedIndex: Int) -> WorkoutSetCell.State {
   if index < selectedIndex {
     .complete
   } else if index == selectedIndex {

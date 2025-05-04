@@ -1,108 +1,119 @@
 //
-//  SocketMessageWorkoutTemplate+Preview.swift
+//  WorkoutPlan+Preview.swift
 //  Bloom
 //
-//  Created by Mark DiFranco on 2025-04-29.
+//  Created by Mark DiFranco on 2025-04-28.
 //
 
-import BloomModel
+import DataContainer
 
-extension SocketMessage.WorkoutPlan {
+extension WorkoutPlan {
   enum Preview { }
 }
 
-extension SocketMessage.WorkoutPlan.Preview {
-  static let deadlifts = SocketMessage.WorkoutPlan(
+extension WorkoutPlan.Preview {
+  nonisolated(unsafe) static let deadlifts = WorkoutPlan(
+    id: "1234",
     title: "Deadlifts and Running",
     summary: "This workout focuses on building strength in your lower body using dumbbells and bodyweight exercises.",
+    creationDate: .now,
     requiredEquipment: [.barbell],
     sets: [
-      SocketMessage.WorkoutSet(
+      WorkoutSet(
+        id: "1",
         title: "Warm Up",
         focus: "Warming up your body.",
         numberOfSets: 3,
         format: .warmup,
         duration: nil,
-        appleWorkoutType: .preparationAndRecovery,
         restBetweenExercises: 30,
+        appleWorkoutType: .preparationAndRecovery,
         exercises: [
-          SocketMessage.WorkoutExercise(
+          WorkoutExercise(
+            id: "a",
             title: "Jumping Jacks",
-            description: "Jump to warm up!",
+            summary: "Jump to warm up!",
             numberOfReps: nil,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
-            duration: 60
+            duration: 60,
+            kind: .exercise
           )
         ]
       ),
-      SocketMessage.WorkoutSet(
-        title: "Strength Training",
+      WorkoutSet(
+        id: "2",
+        title: "Deadlifts",
         focus: "Posterior Chain.",
         numberOfSets: 5,
         format: .standard,
         duration: nil,
-        appleWorkoutType: .traditionalStrengthTraining,
         restBetweenExercises: 60,
+        appleWorkoutType: .traditionalStrengthTraining,
         exercises: [
-          SocketMessage.WorkoutExercise(
+          WorkoutExercise(
+            id: "b",
             title: "Deadlift",
-            description: "Romanian deadlift, keep your weight on your heels.",
+            summary: "Romanian deadlift, keep your weight on your heels.",
             numberOfReps: 8,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
-            duration: 180
+            duration: 180,
+            kind: .exercise
           ),
-          SocketMessage.WorkoutExercise(
+          WorkoutExercise(
+            id: "e",
             title: "Nordic Curls",
-            description: "Lower yourself to the ground using your hamstrings.",
+            summary: "Lower yourself to the ground using your hamstrings.",
             numberOfReps: 10,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
-            duration: 180
+            duration: 180,
+            kind: .exercise
           )
         ]
       ),
-      SocketMessage.WorkoutSet(
+      WorkoutSet(
+        id: "3",
         title: "Running",
         focus: "Cardio.",
-        numberOfSets: 4,
+        numberOfSets: 1,
         format: .amrap,
         duration: 900,
-        appleWorkoutType: .running,
         restBetweenExercises: 0,
+        appleWorkoutType: .running,
         exercises: [
-          SocketMessage.WorkoutExercise(
+          WorkoutExercise(
+            id: "c",
             title: "Run",
-            description: "Just run.",
-            numberOfReps: 1,
-            kind: .exercise,
+            summary: "Just run.",
+            numberOfReps: nil,
             distance: 200,
             distanceUnit: .meter,
-            duration: 300
+            duration: 300,
+            kind: .exercise
           )
         ]
       ),
-      SocketMessage.WorkoutSet(
+      WorkoutSet(
+        id: "4",
         title: "Cool Down",
         focus: "Cooling down to avoid injury.",
         numberOfSets: 3,
         format: .coolDown,
         duration: nil,
-        appleWorkoutType: .cooldown,
         restBetweenExercises: 15,
+        appleWorkoutType: .cooldown,
         exercises: [
-          SocketMessage.WorkoutExercise(
+          WorkoutExercise(
+            id: "d",
             title: "Stretch legs",
-            description: "Avoid injury by stretching.",
+            summary: "Avoid injury by stretching.",
             numberOfReps: 4,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
-            duration: 120
+            duration: 120,
+            kind: .exercise
           )
         ]
       )

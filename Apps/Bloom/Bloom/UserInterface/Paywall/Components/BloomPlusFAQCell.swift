@@ -60,14 +60,13 @@ private struct BloomPlusFAQDisclosureGroupStyle: DisclosureGroupStyle {
 }
 
 #Preview {
-  ScrollView {
-    VStack {
+  PreviewEnvironment {
+    BloomScrollView {
       BloomPlusFAQCell(
         question: "Why do I have to start a free trial?",
         answer: "It's just the best app."
       )
+      .padding()
     }
-    .padding()
   }
-  .groupedBackground()
 }

@@ -1,5 +1,5 @@
 //
-//  WorkoutTemplateIconView.swift
+//  WorkoutPlanIconView.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-04-28.
@@ -10,7 +10,7 @@ import DataContainer
 import SFSafeSymbols
 import HealthKit
 
-struct WorkoutTemplateIconView: View {
+struct WorkoutPlanIconView: View {
   let workoutType: HKWorkoutActivityType
   let dimension: CGFloat
 
@@ -37,8 +37,8 @@ struct WorkoutTemplateIconView: View {
 
 #Preview {
   PreviewEnvironment {
-    WorkoutTemplateIconView(workoutType: .traditionalStrengthTraining)
-    WorkoutTemplateIconView(
+    WorkoutPlanIconView(workoutType: .traditionalStrengthTraining)
+    WorkoutPlanIconView(
       workoutType: .running,
       dimension: 180
     )

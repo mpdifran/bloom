@@ -7,8 +7,13 @@
 
 import Foundation
 import BloomModel
+import HealthKit
 
-extension SocketMessage.WorkoutTemplate {
+extension SocketMessage.WorkoutPlan {
+
+  var representativeAppleWorkoutType: HKWorkoutActivityType {
+    sets.first(where: { $0.format != .warmup && $0.format != .coolDown })?.appleWorkoutType.hkWorkoutType ?? .other
+  }
 
   var equipmentDescription: String {
     ListFormatter.localizedString(byJoining: requiredEquipment.map(\.name))

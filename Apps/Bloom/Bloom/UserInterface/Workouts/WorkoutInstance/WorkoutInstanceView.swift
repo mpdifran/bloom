@@ -20,16 +20,30 @@ extension WorkoutInstanceView {
 }
 
 struct WorkoutInstanceView: View {
-  let workoutTemplate: WorkoutTemplate
+  private let workoutPlan: WorkoutPlan
+  private let exerciseSets: [WorkoutExerciseSet]
+
+  init(workoutPlan: WorkoutPlan) {
+    self.workoutPlan = workoutPlan
+    self.exerciseSets = workoutPlan.expandedExerciseSets()
+  }
 
   @State private var startDate: Date? = nil
   @State private var elapsedTime: TimeInterval = 0
   @State private var currentTime: TimeInterval = 0
+
+  @State private var restStartDate: Date? = nil
+  @State private var elapsedRestTime: TimeInterval = 0
+  @State private var currentRestTime: TimeInterval = 0
+
   @State private var status: Status = .readyToBegin
+
+  @State private var currentIndex = 0
+  @State private var peekingIndex: Int?
 
   @Environment(\.dismiss) private var dismiss
 
-  @Namespace private var stepTransitionNamespace
+  @Namespace private var setTransitionNamespace
 
   private let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
 
@@ -42,16 +56,69 @@ struct WorkoutInstanceView: View {
             .ignoresSafeArea()
         }
 
-      BloomScrollView {
-        stepsSection
+      ScrollViewReader { scrollProxy in
+        ScrollView {
+          VStack {
+            stepsSection
+          }
+          .padding()
+        }
+        .background {
+          Rectangle()
+            .fill(.background.secondary)
+            .ignoresSafeArea()
+        }
+        .onChange(of: currentIndex) { oldValue, newValue in
+          let exerciseSet = exerciseSets[newValue]
+          withAnimation {
+            scrollProxy.scrollTo(exerciseSet.id, anchor: .top)
+          }
+
+          if isRestTime {
+            resetRestTimer()
+          }
+        }
       }
     }
     .shelf {
       controlButtons
     }
     .animation(.easeInOut, value: status)
-    .animation(.easeInOut, value: completedIndices)
+    .animation(.easeInOut, value: currentIndex)
+    .sensoryFeedback(.selection, trigger: status)
+    .sensoryFeedback(.impact, trigger: currentIndex)
     .presentationCompactAdaptation(.fullScreenCover)
+  }
+}
+
+private extension WorkoutInstanceView {
+
+  var isRestTime: Bool {
+    switch exerciseSets[currentIndex].kind {
+    case .rest:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var currentRestDuration: TimeInterval {
+    switch exerciseSets[currentIndex].kind {
+    case .rest(let rest):
+      return rest
+    default:
+      return 0
+    }
+  }
+
+  var remainingRestTime: TimeInterval {
+    currentRestDuration - currentRestTime + 1
+  }
+
+  func resetRestTimer() {
+    restStartDate = Date()
+    elapsedRestTime = 0
+    currentRestTime = 0
   }
 }
 
@@ -59,108 +126,96 @@ private extension WorkoutInstanceView {
 
   var headerView: some View {
     VStack(spacing: 20) {
-      WorkoutTemplateIconView(
-        workoutType: workoutTemplate.appleWorkoutType,
-        dimension: 40
+      WorkoutActivityTypeTimelineView(
+        activityTypes: workoutPlan.sets?.map(\.appleWorkoutType) ?? [],
+        currentIndex: currentSetIndex
       )
+      .padding(.horizontal)
 
       timerView
-        .frame(minHeight: 140)
+        .frame(minHeight: 180)
     }
   }
 
   var timerView: some View {
     VStack {
       Text(timeString)
-        .font(.system(size: 55))
-        .fontDesign(.rounded)
-        .fontWeight(.heavy)
-        .monospacedDigit()
-        .foregroundStyle(.green)
+        .font(.system(size: isRestTime ? 30 : 55))
+        .foregroundStyle(.yellow)
         .contentTransition(.numericText(value: currentTime))
-        .onReceive(timer) { _ in
-          guard status == .running, let startDate = startDate else { return }
 
-          currentTime = elapsedTime + Date().timeIntervalSince(startDate)
-        }
-    }
-    .horizontallyCentered()
-  }
-
-  var equipmentSection: some View {
-    VStack {
-      SectionTitleView("Equipment")
-        .padding(.horizontal)
-
-      Text(equipmentDescription)
-        .horizontalAlignment(.leading)
-        .cardContainer()
-    }
-  }
-
-  var appleWorkoutSection: some View {
-    VStack {
-      LabeledContent("Workout Type") {
-        Text(workoutTemplate.appleWorkoutType.name)
-          .multilineTextAlignment(.trailing)
+      if isRestTime {
+        Text(restTimeString)
+          .font(.system(size: 55))
+          .foregroundStyle(.blue)
+          .contentTransition(.numericText(value: remainingRestTime))
+          .animation(.default, value: remainingRestTime)
+          .transition(.scale)
       }
-      .frame(height: 50)
     }
+    .fontDesign(.rounded)
+    .fontWeight(.heavy)
+    .monospacedDigit()
     .horizontallyCentered()
-    .cardContainer()
+    .onReceive(timer) { _ in
+      guard status == .running else { return }
+
+      if let startDate {
+        currentTime = elapsedTime + Date().timeIntervalSince(startDate)
+      }
+
+      if let restStartDate {
+        currentRestTime = elapsedRestTime + Date().timeIntervalSince(restStartDate)
+      }
+
+      if isRestTime && remainingRestTime <= 0 {
+        currentIndex += 1
+      }
+    }
   }
 
   var stepsSection: some View {
-    VStack {
-      ZStack(alignment: .top) {
-        ForEach(completedIndices, id: \.self) { index in
-          let position = completedIndices.firstIndex(of: index)!
-          let distance = min(completedIndices.count - position, 2)
+    VStack(spacing: 0) {
+      ForEachEnumerated(exerciseSets) { (index, exerciseSet) in
+        WorkoutExerciseSetCell(
+          exerciseSet: exerciseSet,
+          mode: WorkoutExerciseSetCell.Mode(index: index, currentIndex: currentIndex),
+          isPeeking: peekingIndex == index
+        )
+        .padding(.top, 8)
+        .onTapGesture {
+          let mode = WorkoutExerciseSetCell.Mode(index: index, currentIndex: currentIndex)
 
-          WorkoutStepCell(
-            step: steps[index],
-            state: .complete,
-            currentTime: steps[index].duration
-          )
-          .matchedGeometryEffect(id: steps[index].id, in: stepTransitionNamespace)
-          .scaleEffect(max(0.5, 1 - CGFloat(distance) * 0.05))
-          .offset(x: 0, y: -(CGFloat(distance) * 15))
+          if mode != .current {
+            if peekingIndex == index {
+              peekingIndex = nil
+            } else {
+              peekingIndex = index
+            }
+          }
         }
-
-        if let currentIndex = steps.indices.firstIndex(where: { state(for: $0) == .current }) {
-          WorkoutStepCell(
-            step: steps[currentIndex],
-            state: .current,
-            currentTime: currentTime(for: currentIndex)
-          )
-          .matchedGeometryEffect(id: steps[currentIndex].id, in: stepTransitionNamespace)
-        }
-      }
-      .padding(.top, CGFloat(min(completedIndices.count, 2) * 20))
-
-      ForEachEnumerated(steps) { index, step in
-        if state(for: index) == .upcoming {
-          WorkoutStepCell(
-            step: step,
-            state: state(for: index),
-            currentTime: currentTime(for: index)
-          )
-          .matchedGeometryEffect(id: steps[index].id, in: stepTransitionNamespace, properties: .frame, isSource: true)
+        .contextMenu {
+          if status == .running {
+            Button("Jump to Here", systemSymbol: .arrowTurnRightDown) {
+              currentIndex = index
+            }
+          }
         }
       }
     }
-    .padding(.top)
   }
 }
 
 private extension WorkoutInstanceView {
 
-  var steps: [WorkoutStep] {
-    workoutTemplate.steps ?? []
+  var sets: [WorkoutSet] {
+    workoutPlan.sets ?? []
   }
 
-  var completedIndices: [Int] {
-    steps.indices.filter { state(for: $0) == .complete }
+  var currentSetIndex: Int {
+    let currentExerciseSet = exerciseSets[currentIndex]
+
+    return sets.firstIndex(where: { $0.id == currentExerciseSet.set.id }) ?? 0
   }
 }
 
@@ -170,119 +225,146 @@ private extension WorkoutInstanceView {
   var controlButtons: some View {
     switch status {
     case .readyToBegin:
-      AsyncButton {
-        try await WorkoutController.shared.startWorkout(type: workoutTemplate.appleWorkoutType)
-        startDate = Date()
-        elapsedTime = 0
-        currentTime = 0
-        status = .running
-      } label: {
-        Label("Start Workout", systemSymbol: SFSymbol(rawValue: workoutTemplate.appleWorkoutType.systemImage))
-          .horizontallyCentered()
-      }
-      .buttonStyle(.primary)
-      .tint(.green)
+      startWorkoutButton
     case .running:
-      HStack {
-        AsyncButton {
-          try await WorkoutController.shared.pauseWorkout()
-          if let start = startDate {
-            elapsedTime += Date().timeIntervalSince(start)
-          }
-          startDate = nil
-          status = .paused
-        } label: {
-          Label("Pause", systemSymbol: .pauseFill)
-            .horizontallyCentered()
+      VStack {
+        HStack {
+          previousButton
+          nextButton
         }
-        .tint(.yellow)
-
-        AsyncButton {
-          try await WorkoutController.shared.endWorkout()
-          if let start = startDate {
-            elapsedTime += Date().timeIntervalSince(start)
-          }
-          startDate = nil
-          status = .ended
-          dismiss()
-        } label: {
-          Label("End", systemSymbol: .stopFill)
-            .horizontallyCentered()
+        HStack {
+          pauseButton
+          endButton
         }
-        .tint(.red)
       }
-      .buttonStyle(.primary)
     case .paused:
-      HStack(spacing: 16) {
-        AsyncButton {
-          try await WorkoutController.shared.resumeWorkout()
-          startDate = Date()
-          status = .running
-        } label: {
-          Label("Resume", systemSymbol: .playFill)
-            .horizontallyCentered()
-        }
-        .tint(.green)
-
-        AsyncButton {
-          try await WorkoutController.shared.endWorkout()
-          startDate = nil
-          status = .ended
-          dismiss()
-        } label: {
-          Label("End", systemSymbol: .stopFill)
-            .horizontallyCentered()
-        }
-        .tint(.red)
+      HStack {
+        resumeButton
+        endButton
       }
-      .buttonStyle(.primary)
     case .ended:
-      AsyncButton {
-        try await WorkoutController.shared.startWorkout(type: workoutTemplate.appleWorkoutType)
-        startDate = Date()
-        elapsedTime = 0
-        currentTime = 0
-        status = .running
-      } label: {
-        Label("Restart Workout", systemSymbol: .arrowCounterclockwise)
-          .horizontallyCentered()
-      }
-      .buttonStyle(.primary)
-      .tint(.green)
+      restartButton
     }
+  }
+
+  var startWorkoutButton: some View {
+    AsyncButton {
+      try await WorkoutController.shared.startWorkout(type: workoutPlan.representativeAppleWorkoutType)
+      startDate = Date()
+      elapsedTime = 0
+      currentTime = 0
+      restStartDate = Date()
+      elapsedRestTime = 0
+      currentRestTime = 0
+      status = .running
+    } label: {
+      Label("Start Workout", systemSymbol: SFSymbol(rawValue: workoutPlan.representativeAppleWorkoutType.systemImage))
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.green)
+  }
+
+  var previousButton: some View {
+    AsyncButton {
+      currentIndex -= 1
+    } label: {
+      Label("Previous", systemSymbol: .backwardFill)
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.green)
+    .disabled(currentIndex == 0)
+  }
+
+  var nextButton: some View {
+    AsyncButton {
+      currentIndex += 1
+    } label: {
+      Label("Next", systemSymbol: .forwardFill)
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.green)
+    .disabled(currentIndex + 1 == exerciseSets.count)
+  }
+
+  var pauseButton: some View {
+    AsyncButton {
+      try await WorkoutController.shared.pauseWorkout()
+      if let start = startDate {
+        elapsedTime += Date().timeIntervalSince(start)
+      }
+      startDate = nil
+      if let restStartDate {
+        elapsedRestTime += Date().timeIntervalSince(restStartDate)
+      }
+      restStartDate = nil
+      status = .paused
+    } label: {
+      Label("Pause", systemSymbol: .pauseFill)
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.yellow)
+  }
+
+  var endButton: some View {
+    AsyncButton {
+      try await WorkoutController.shared.endWorkout()
+      if let startDate {
+        elapsedTime += Date().timeIntervalSince(startDate)
+      }
+      if let restStartDate {
+        elapsedRestTime += Date().timeIntervalSince(restStartDate)
+      }
+      startDate = nil
+      restStartDate = nil
+      status = .ended
+      dismiss()
+    } label: {
+      Label("End", systemSymbol: .stopFill)
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.red)
+  }
+
+  var resumeButton: some View {
+    AsyncButton {
+      try await WorkoutController.shared.resumeWorkout()
+      startDate = Date()
+      restStartDate = Date()
+      status = .running
+    } label: {
+      Label("Resume", systemSymbol: .playFill)
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.green)
+  }
+
+  var restartButton: some View {
+    AsyncButton {
+      try await WorkoutController.shared.startWorkout(type: workoutPlan.representativeAppleWorkoutType)
+      currentIndex = 0
+      startDate = Date()
+      elapsedTime = 0
+      currentTime = 0
+      restStartDate = Date()
+      elapsedRestTime = 0
+      currentRestTime = 0
+      status = .running
+    } label: {
+      Label("Restart Workout", systemSymbol: .arrowCounterclockwise)
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.green)
   }
 }
 
 private extension WorkoutInstanceView {
-
-  func state(for stepIndex: Int) -> WorkoutStepCell.State {
-    guard let steps = workoutTemplate.steps else { return .upcoming }
-    guard status != .readyToBegin else { return .upcoming }
-
-    let start = steps.prefix(stepIndex).reduce(0) { $0 + $1.duration }
-    let end = start + steps[stepIndex].duration
-    if currentTime >= end {
-      return .complete
-    } else if currentTime >= start {
-      return .current
-    } else {
-      return .upcoming
-    }
-  }
-
-  func currentTime(for index: Int) -> TimeInterval {
-    guard let steps = workoutTemplate.steps else { return 0 }
-
-    let elapsedBefore = steps.prefix(index).reduce(0) { $0 + $1.duration }
-    let timeInStep = currentTime - elapsedBefore
-
-    return min(max(timeInStep, 0), steps[index].duration)
-  }
-
-  var equipmentDescription: String {
-    let names = workoutTemplate.equipment.map({ $0.name })
-    return ListFormatter.localizedString(byJoining: names)
-  }
 
   var timeString: String {
     let totalMilliseconds = Int(currentTime * 1000)
@@ -291,10 +373,17 @@ private extension WorkoutInstanceView {
     let milliseconds = (totalMilliseconds % 1000) / 100
     return String(format: "%02d:%02d.%01d", minutes, seconds, milliseconds)
   }
+
+  var restTimeString: String {
+    let dateComponents = DateComponents(second: Int(max(remainingRestTime, 0)))
+    let timeString = DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: dateComponents) ?? ""
+
+    return "Rest \(timeString)"
+  }
 }
 
 #Preview {
   PreviewEnvironment {
-    WorkoutInstanceView(workoutTemplate: .Preview.deadlifts)
+    WorkoutInstanceView(workoutPlan: .Preview.deadlifts)
   }
 }

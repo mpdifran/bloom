@@ -142,6 +142,11 @@ public extension DateFormatter {
     $0.allowedUnits = [.hour, .minute, .second]
   }
 
+  static let timeIntervalHourMinuteSecondAbbreviated = DateComponentsFormatter().with {
+    $0.unitsStyle = .abbreviated
+    $0.allowedUnits = [.hour, .minute, .second]
+  }
+
   static let timeIntervalHourMinuteSecondPadded = DateComponentsFormatter().with {
     $0.allowedUnits = [.hour, .minute, .second]
     $0.unitsStyle = .positional

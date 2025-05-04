@@ -1,5 +1,5 @@
 //
-//  Workout+Helpers.swift
+//  WorkoutPlan+Helpers.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-04-28.
@@ -8,32 +8,25 @@
 import Foundation
 import HealthKit
 
-public extension WorkoutTemplate {
-  var appleWorkoutType: HKWorkoutActivityType {
-    get {
-      HKWorkoutActivityType(rawValue: UInt(rawAppleWorkoutType) ?? 0) ?? .other
-    }
-    set {
-      rawAppleWorkoutType = "\(newValue.rawValue)"
-    }
+public extension WorkoutPlan {
+
+  var representativeAppleWorkoutType: HKWorkoutActivityType {
+    sets?.first(where: { $0.format != .warmup && $0.format != .coolDown })?.appleWorkoutType ?? .other
   }
 
-  var stepsDescription: String {
-    guard let steps else { return "" }
+  var setsDescription: String {
+    guard let setsNames = sets?.map({ $0.title }) else { return "" }
 
-    if steps.count == 1 {
-      return "1 exercise"
-    }
-    return "\(steps.count) exercises"
+    return ListFormatter.localizedString(byJoining: setsNames)
   }
 
   var durationDescription: String {
-    guard let steps else { return "" }
+    guard let sets else { return "" }
 
-    let duration = steps
-      .reduce(0) { (result, step) in
-        result + step.duration
-      }
+    let duration = sets.reduce(0) { partialResult, set in
+      partialResult + set.representativeDuration
+    }
+
     return DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
   }
 
@@ -43,6 +36,30 @@ public extension WorkoutTemplate {
 
   var equipment: [Equipment] {
     rawRequiredEquipment.compactMap({ Equipment(rawValue: $0) })
+  }
+
+  func expandedExerciseSets() -> [WorkoutExerciseSet] {
+    var exerciseSets = [WorkoutExerciseSet]()
+    for set in sets ?? [] {
+      for setCount in 0 ..< set.numberOfSets {
+        for exercise in set.exercises ?? [] {
+          let exerciseSet = WorkoutExerciseSet(
+            set: set,
+            exercise: exercise,
+            setNumber: setCount
+          )
+          exerciseSets.append(exerciseSet)
+
+          let restSet = WorkoutExerciseSet(
+            set: set,
+            rest: set.restBetweenExercises,
+            setNumber: setCount
+          )
+          exerciseSets.append(restSet)
+        }
+      }
+    }
+    return exerciseSets
   }
 
   enum Equipment: String, CaseIterable, Codable, Identifiable {
@@ -65,7 +82,7 @@ public extension WorkoutTemplate {
   }
 }
 
-public extension WorkoutTemplate.Equipment {
+public extension WorkoutPlan.Equipment {
 
   var name: String {
     switch self {

@@ -167,7 +167,8 @@ public extension HKWorkoutActivityType {
     case .play:
       "figure.play"
     case .preparationAndRecovery:
-      "figure.mind.and.body"
+      "figure.cooldown"
+//      "figure.mind.and.body"
     case .racquetball:
       "figure.racquetball"
     case .rowing:

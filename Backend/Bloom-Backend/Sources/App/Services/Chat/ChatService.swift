@@ -306,7 +306,7 @@ private extension ChatService {
         Assistant.Tool.function(.logWeight),
         Assistant.Tool.function(.logBloodPressure),
         Assistant.Tool.function(.logBowelMovement),
-        Assistant.Tool.function(.createWorkout),
+        Assistant.Tool.function(.createWorkoutPlan),
       ],
       toolChoice: .auto,
       existingRun: existingRun
@@ -331,7 +331,7 @@ private extension ChatService {
           toolCallWrappers.append(try await logBloodPressure(toolCall: toolCall))
         case .Function.logBowelMovement:
           toolCallWrappers.append(try await logBowelMovements(toolCall: toolCall))
-        case .Function.createWorkout:
+        case .Function.createWorkoutPlan:
           toolCallWrappers.append(try await createWorkout(toolCall: toolCall))
         default:
           throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
@@ -473,11 +473,11 @@ private extension ChatService {
   }
 
   func createWorkout(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.createWorkout else {
+    guard toolCall.function.name == .Function.createWorkoutPlan else {
       throw Abort(.internalServerError, reason: "Improper tool handling")
     }
 
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.WorkoutTemplate.self, using: decoder)
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.WorkoutPlan.self, using: decoder)
 
     return SocketMessage.ToolCallWrapper(
       toolCallID: toolCall.id,

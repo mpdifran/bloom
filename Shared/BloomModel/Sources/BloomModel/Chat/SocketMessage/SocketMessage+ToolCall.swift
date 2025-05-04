@@ -40,7 +40,7 @@ public extension SocketMessage.ToolCallWrapper {
     case logWater(SocketMessage.LogWaterConsumption)
     case logBloodPressure(SocketMessage.LogBloodPressure)
     case logBowelMovement(SocketMessage.LogBowelMovement)
-    case createWorkout(SocketMessage.WorkoutTemplate)
+    case createWorkout(SocketMessage.WorkoutPlan)
   }
 }
 

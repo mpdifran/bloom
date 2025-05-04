@@ -1,5 +1,5 @@
 //
-//  ChatWorkoutTemplateCell.swift
+//  ChatWorkoutPlanCell.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-04-29.
@@ -10,17 +10,17 @@ import BloomModel
 import DataContainer
 import TelemetryDeck
 
-struct ChatWorkoutTemplateCell: View {
+struct ChatWorkoutPlanCell: View {
   let chatMessageID: String
-  let workoutTemplate: SocketMessage.WorkoutTemplate
+  let workoutPlan: SocketMessage.WorkoutPlan
 
   init(
     chatMessageID: String,
-    workoutTemplate: SocketMessage.WorkoutTemplate,
+    workoutPlan: SocketMessage.WorkoutPlan,
     hasPerformedAction: Bool
   ) {
     self.chatMessageID = chatMessageID
-    self.workoutTemplate = workoutTemplate
+    self.workoutPlan = workoutPlan
     self._hasSavedWorkout = State(initialValue: hasPerformedAction)
   }
 
@@ -34,19 +34,19 @@ struct ChatWorkoutTemplateCell: View {
     HStack {
       VStack(alignment: .leading) {
         HStack(alignment: .top) {
-          WorkoutTemplateIconView(
-            workoutType: workoutTemplate.appleWorkoutType.hkWorkoutType,
+          WorkoutPlanIconView(
+            workoutType: workoutPlan.representativeAppleWorkoutType,
             dimension: 50
           )
 
           VStack(alignment: .leading) {
-            Text(workoutTemplate.title)
+            Text(workoutPlan.title)
               .font(.title3)
               .bold()
               .fontDesign(.rounded)
               .lineLimit(2)
 
-            Text(workoutTemplate.equipmentDescription + " required")
+            Text(workoutPlan.equipmentDescription + " required")
               .font(.caption)
               .foregroundStyle(.secondary)
               .fixedSize(horizontal: false, vertical: true)
@@ -57,7 +57,7 @@ struct ChatWorkoutTemplateCell: View {
           Spacer(minLength: 0)
         }
 
-        ForEach(workoutTemplate.steps, id: \.self) { step in
+        ForEach(workoutPlan.sets, id: \.self) { step in
           Divider()
 
           VStack(alignment: .leading) {
@@ -66,7 +66,10 @@ struct ChatWorkoutTemplateCell: View {
               .bold()
               .fontDesign(.rounded)
 
-            Text(step.parameterDescription)
+            Text(step.exercisesDescription)
+              .font(.caption)
+
+            Text(step.focus)
               .font(.caption)
               .foregroundStyle(.secondary)
           }
@@ -92,33 +95,49 @@ struct ChatWorkoutTemplateCell: View {
   }
 }
 
-extension ChatWorkoutTemplateCell {
+extension ChatWorkoutPlanCell {
 
   func save() throws {
     try modelContext.savingTransaction {
-      let steps = workoutTemplate.steps.map { step in
-        WorkoutStep(
+      let sets = workoutPlan.sets.map { set in
+        let exercises = set.exercises.map { exercise in
+          WorkoutExercise(
+            id: UUID().uuidString,
+            title: exercise.title,
+            summary: exercise.description,
+            numberOfReps: exercise.numberOfReps,
+            distance: exercise.distance,
+            distanceUnit: exercise.distanceUnit?.swiftDataUnit,
+            duration: exercise.duration,
+            kind: exercise.kind.hkKind
+          )
+        }
+
+        let set = WorkoutSet(
           id: UUID().uuidString,
-          title: step.title,
-          numberOfReps: step.numberOfReps,
-          distance: step.distance,
-          distanceUnit: step.distanceUnit?.swiftDataUnit,
-          duration: step.duration ?? 0,
-          overrideAppleWorkoutType: step.overrideAppleWorkoutType?.hkWorkoutType,
-          kind: step.kind.hkKind
+          title: set.title,
+          focus: set.focus,
+          numberOfSets: set.numberOfSets,
+          format: set.format.hkFormat,
+          duration: set.duration,
+          restBetweenExercises: set.restBetweenExercises,
+          appleWorkoutType: set.appleWorkoutType.hkWorkoutType
         )
+        set.exercises = exercises
+
+        return set
       }
 
-      let workoutTemplateModel = WorkoutTemplate(
+      let workoutPlanModel = WorkoutPlan(
         id: UUID().uuidString,
-        title: workoutTemplate.title,
+        title: workoutPlan.title,
+        summary: workoutPlan.summary,
         creationDate: .now,
-        appleWorkoutType: workoutTemplate.appleWorkoutType.hkWorkoutType,
-        requiredEquipment: workoutTemplate.requiredEquipment.map({ $0.hkEquipment }),
-        steps: steps
+        requiredEquipment: workoutPlan.requiredEquipment.map({ $0.hkEquipment })
       )
+      workoutPlanModel.sets = sets
 
-      modelContext.insert(workoutTemplateModel)
+      modelContext.insert(workoutPlanModel)
     }
 
     TelemetryDeck.signal("Save Workout")
@@ -138,14 +157,14 @@ extension ChatWorkoutTemplateCell {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      ChatWorkoutTemplateCell(
+      ChatWorkoutPlanCell(
         chatMessageID: "1234",
-        workoutTemplate: .Preview.deadlifts,
+        workoutPlan: .Preview.deadlifts,
         hasPerformedAction: false
       )
-      ChatWorkoutTemplateCell(
+      ChatWorkoutPlanCell(
         chatMessageID: "1234",
-        workoutTemplate: .Preview.deadlifts,
+        workoutPlan: .Preview.deadlifts,
         hasPerformedAction: false
       )
     }

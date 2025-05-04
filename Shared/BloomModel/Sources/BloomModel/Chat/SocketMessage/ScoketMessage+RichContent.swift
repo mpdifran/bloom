@@ -95,55 +95,86 @@ public extension SocketMessage {
     }
   }
 
-  struct WorkoutTemplate: Codable, Hashable, Sendable {
-    public var title: String
-    public var appleWorkoutType: AppleWorkoutType
-    public var requiredEquipment: [Equipment]
-    public var steps: [WorkoutStep]
+  struct WorkoutPlan: Codable, Hashable, Sendable {
+    public let title: String
+    public let summary: String
+    public let requiredEquipment: [Equipment]
+    public let sets: [WorkoutSet]
 
     public init(
       title: String,
-      appleWorkoutType: AppleWorkoutType,
+      summary: String,
       requiredEquipment: [Equipment],
-      steps: [WorkoutStep]
+      sets: [WorkoutSet]
     ) {
       self.title = title
-      self.appleWorkoutType = appleWorkoutType
+      self.summary = summary
       self.requiredEquipment = requiredEquipment
-      self.steps = steps
+      self.sets = sets
     }
   }
 
-  struct WorkoutStep: Codable, Hashable, Sendable {
+  struct WorkoutSet: Codable, Hashable, Sendable {
     public let title: String
-    public var numberOfReps: Int?
-    public var distance: Double?
-    public var distanceUnit: DistanceUnit?
-    public var duration: TimeInterval?
-    public var overrideAppleWorkoutType: AppleWorkoutType?
-    public var kind: Kind
+    public let focus: String
+    public let numberOfSets: Int
+    public let format: Format
+    public let duration: TimeInterval?
+    public let appleWorkoutType: AppleWorkoutType
+    public let restBetweenExercises: TimeInterval
+    public let exercises: [WorkoutExercise]
 
     public init(
       title: String,
-      numberOfReps: Int?,
-      distance: Double?,
-      distanceUnit: DistanceUnit?,
+      focus: String,
+      numberOfSets: Int,
+      format: Format,
       duration: TimeInterval?,
-      overrideAppleWorkoutType: AppleWorkoutType?,
-      kind: Kind
+      appleWorkoutType: AppleWorkoutType,
+      restBetweenExercises: TimeInterval,
+      exercises: [WorkoutExercise]
     ) {
       self.title = title
+      self.focus = focus
+      self.numberOfSets = numberOfSets
+      self.format = format
+      self.duration = duration
+      self.appleWorkoutType = appleWorkoutType
+      self.restBetweenExercises = restBetweenExercises
+      self.exercises = exercises
+    }
+  }
+
+  struct WorkoutExercise: Codable, Hashable, Sendable {
+    public let title: String
+    public let description: String
+    public let numberOfReps: Int?
+    public let kind: Kind
+    public let distance: Double?
+    public let distanceUnit: DistanceUnit?
+    public let duration: TimeInterval
+
+    public init(
+      title: String,
+      description: String,
+      numberOfReps: Int?,
+      kind: Kind,
+      distance: Double?,
+      distanceUnit: DistanceUnit?,
+      duration: TimeInterval
+    ) {
+      self.title = title
+      self.description = description
       self.numberOfReps = numberOfReps
+      self.kind = kind
       self.distance = distance
       self.distanceUnit = distanceUnit
       self.duration = duration
-      self.overrideAppleWorkoutType = overrideAppleWorkoutType
-      self.kind = kind
     }
   }
 }
 
-public extension SocketMessage.WorkoutTemplate {
+public extension SocketMessage.WorkoutPlan {
   enum Equipment: String, Codable, Hashable, Sendable, CaseIterable {
     case dumbbells
     case barbell
@@ -181,10 +212,22 @@ public extension SocketMessage.WorkoutTemplate {
   }
 }
 
-public extension SocketMessage.WorkoutStep {
+public extension SocketMessage.WorkoutSet {
+  enum Format: String, Codable, Hashable, Sendable, CaseIterable {
+    case warmup
+    case standard
+    case amrap
+    case emom
+    case tabata
+    case roundsForTime
+    case coolDown
+  }
+}
+
+public extension SocketMessage.WorkoutExercise {
   enum Kind: String, Codable, Hashable, Sendable, CaseIterable {
     case exercise
-    case rest
+    case stretch
   }
 
   enum DistanceUnit: String, Codable, Hashable, Sendable, CaseIterable {

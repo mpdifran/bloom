@@ -21,15 +21,15 @@ struct WorkoutsTabView: View {
   @State private var error: Error?
 
   @Query
-  private var workoutTemplates: [WorkoutTemplate]
+  private var workoutPlans: [WorkoutPlan]
 
   @Environment(\.modelContext) private var modelContext
 
   init() {
-    var fetchDescriptor = FetchDescriptor<WorkoutTemplate>()
-    fetchDescriptor.sortBy = [SortDescriptor(\WorkoutTemplate.creationDate, order: .reverse)]
+    var fetchDescriptor = FetchDescriptor<WorkoutPlan>()
+    fetchDescriptor.sortBy = [SortDescriptor(\WorkoutPlan.creationDate, order: .reverse)]
     fetchDescriptor.fetchLimit = 3
-    self._workoutTemplates = Query(fetchDescriptor)
+    self._workoutPlans = Query(fetchDescriptor)
   }
 
   var body: some View {
@@ -70,21 +70,21 @@ private extension WorkoutsTabView {
 
   @ViewBuilder
   var workoutTemplatesSection: some View {
-    if workoutTemplates.isNotEmpty {
+    if workoutPlans.isNotEmpty {
       VStack {
-        SectionTitleView("Workout Templates")
+        SectionTitleView("Workout Plans")
           .padding(.horizontal)
 
-        ForEach(workoutTemplates) { workoutTemplate in
-          WorkoutTemplateCell(workoutTemplate: workoutTemplate)
+        ForEach(workoutPlans) { workoutPlan in
+          WorkoutPlanCell(workoutPlan: workoutPlan)
             .onTapGesture {
-              pushedView = WorkoutTemplateDetailsView(workoutTemplate: workoutTemplate).asAny
+              pushedView = WorkoutPlanDetailsView(workoutPlan: workoutPlan).asAny
             }
             .contextMenu {
               Button("Delete", systemSymbol: .trash, role: .destructive) {
                 do {
                   try modelContext.savingTransaction {
-                    modelContext.delete(workoutTemplate)
+                    modelContext.delete(workoutPlan)
                   }
                 } catch { self.error = error }
               }
@@ -93,7 +93,7 @@ private extension WorkoutsTabView {
         }
 
         Button {
-          pushedView = WorkoutTemplatesListView().asAny
+          pushedView = WorkoutPlansListView().asAny
         } label: {
           Text("Show All")
             .bold()

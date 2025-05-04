@@ -18,23 +18,19 @@ extension AssistantSpec {
     model: Model.GPT4.gpt_4o,
     threadIDKeyPath: \.healthCoachThreadID,
     instructions: """
-    Your name is \(assistantName). You are a health coach for a mobile app called Bloom. You should respond as if we're good friends. Feel free to be a little sassy and fun!
+    Your name is \(assistantName). You are a health coach for a mobile app called Bloom. You’re here to support the user like a good friend — feel free to be a little sassy and fun!
     
-    Make sure to incorporate the user's personal data in your responses. You can provide insights on trends, suggest general health improvements, and answer health-related questions. However, you do **not** provide medical diagnoses or treatment recommendations. If the user needs specific medical advice, encourage them to consult a healthcare professional. It is ok to provide general "best practice" health advice based on the user's health data, however.
+    Use the user’s personal health data to offer friendly insights, track trends, and suggest general improvements. You may discuss best practices based on their data but do not offer medical diagnoses or treatment recommendations. If specific medical advice is needed, encourage the user to speak to a healthcare professional.
     
-    You can help the user log data to Bloom, like water consumption, food logs, etc. You can use the provided functions to help the user log this data. The user will be presented the data in a chat bubble, with a button that allows them to log it if they want.
+    You can:
+      •  Help the user log data like water intake, food logs, and workouts. Use the provided functions to do this — your messages will include buttons for the user to confirm each action.
+      •  Use the setGoals function to help the user set trackable health goals. Do not describe goals in plain text; use the function so they can monitor progress in the app.
+      •  Access the user’s health data by calling queryUserHealthData or queryUserHealthMetrics. Never show or reference raw JSON — refer to the data conversationally.
+      •  Provide workout plans through the \(String.Function.createWorkoutPlan) function. Do not summarize individual steps in the message — the workout will be shown visually alongside your response.
     
-    You can help the user set health goals using the setGoals function. Use this function instead of describing the goals in text. This will allow them to track it over time in the app.
-    
-    The user will provide health data to you in JSON format as you request it via the queryUserHealthData or queryUserHealthMetrics function. Do not reference health data back to the user in JSON form. Reference it instead at a high level.
-    
-    When you provide a workout to the user, you do not need to summarize each step. The workout you provide to the \(String.Function.createWorkout) function will be displayed alongside your message.
-    
-    If the user asks about something **not health-related**, try to steer the conversation back to health topics.
-    
-    Reply in plain text when no function is needed.
-    
-    When giving responses, you can dive into details when the user asks clarifying questions. You may ask questions if more context from the user would improve your answer. Offer deeper explanations only when explicitly asked.
+    You’re also here for broader support: physical health, mental health, feelings, thoughts, and general well-being — all are fair game. Be casual and supportive.
+
+    Reply in plain text unless a function is needed. Ask follow-up questions when more context would improve your advice, and only go into detail when the user asks for it.
     """,
     tools: [
       .function(.queryUserHealthData),
@@ -45,7 +41,7 @@ extension AssistantSpec {
       .function(.logWeight),
       .function(.logBloodPressure),
       .function(.logBowelMovement),
-      .function(.createWorkout)
+      .function(.createWorkoutPlan)
     ],
     responseFormat: ResponseFormat(type: .text)
   )
@@ -105,7 +101,7 @@ extension String.Function {
   static let logBowelMovement = "logBowelMovement"
   static let logWeight = "logWeight"
   static let logBloodPressure = "logBloodPressure"
-  static let createWorkout = "createWorkout"
+  static let createWorkoutPlan = "createWorkoutPlan"
 }
 
 extension Assistant.Tool.Function {
@@ -256,62 +252,101 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let createWorkout = Assistant.Tool.Function(
-    name: .Function.createWorkout,
-    description: "This can be used to create a workout for the user to perform.",
+  static let createWorkoutPlan = Assistant.Tool.Function(
+    name: .Function.createWorkoutPlan,
+    description: "This can be used to create a workout plan for the user to perform.",
     parameters: Schema.Object(
       properties: [
         "title": Schema.Parameter(
-            type: .string,
-            description: "The title of the workout."
+          type: .string,
+          description: "The title of the workout plan"
         ),
-        "appleWorkoutType": Schema.Parameter(
-            enum: SocketMessage.AppleWorkoutType.self,
-            description: "The Apple workout type for the workout. This will be the default workout started. You can override this workout for specific steps if needed."
+        "summary": Schema.Parameter(
+          type: .string,
+          description: "A short summary of the workout and what it will focus on."
         ),
         "requiredEquipment": Schema.Parameter(
           description: "The list of equipment required for the workout.",
           arrayOf: .parameter(
             Schema.Parameter(
-                enum: SocketMessage.WorkoutTemplate.Equipment.self,
-                description: "Required equipment."
+              enum: SocketMessage.WorkoutPlan.Equipment.self,
+              description: "Required equipment."
             )
           )
         ),
-        "steps": Schema.Parameter(
-          description: "An array of workout steps. Each step *must* have either a distance or a duration.",
-          arrayOf: .object(Schema.Object(
-            properties: [
+        "sets": Schema.Parameter(
+          description: "A list of sets in the workout. The workout should start with a warm up, and end with a cool down.",
+          arrayOf: .object(
+            Schema.Object(
+              properties: [
                 "title": Schema.Parameter(
-                    type: .string,
-                    description: "The title of the workout step."
+                  type: .string,
+                  description: "The title of the workout set."
                 ),
-                "numberOfReps": Schema.Parameter(
-                    type: .optionalInteger,
-                    description: "An optional number of repetitions for the step, if applicable."
+                "focus": Schema.Parameter(
+                  type: .string,
+                  description: "The focus of this set."
                 ),
-                "distance": Schema.Parameter(
-                    type: .optionalNumber,
-                    description: "The distance to cover in the step, if appicable."
+                "numberOfSets": Schema.Parameter(
+                  type: .optionalInteger,
+                  description: "How many times the set will be repeated by the user. Usually a value between 3 and 6."
                 ),
-                "distanceUnit": Schema.Parameter(
-                    optionalEnum: SocketMessage.WorkoutStep.DistanceUnit.self,
-                    description: "An optional unit for the distance, if applicable. Only provide if distance is provided."
+                "format": Schema.Parameter(
+                  enum: SocketMessage.WorkoutSet.Format.self,
+                  description: "What format the set will take. If the format is time based, provide a duration."
                 ),
                 "duration": Schema.Parameter(
-                    type: .optionalNumber,
-                    description: "An optional duration of the step in seconds. Make sure to give the user enough time to perform the exercise, but don't make this too long. If you've provided a distance, you do not necessarily need to provide a duration."
+                  type: .optionalNumber,
+                  description: "An optional duration of the set in seconds. This should only be provided for formats that are time based."
                 ),
-                "overrideAppleWorkoutType": Schema.Parameter(
-                    enum: SocketMessage.AppleWorkoutType.self,
-                    description: "An optional override for the Apple workout type for this step. Only specify this if it's different from the root WorkoutTemplate's workout type."
+                "appleWorkoutType": Schema.Parameter(
+                  enum: SocketMessage.AppleWorkoutType.self,
+                  description: "The Apple workout type for this step."
                 ),
-                "kind": Schema.Parameter(
-                    enum: SocketMessage.WorkoutStep.Kind.self,
-                    description: "The kind of step: exercise or rest."
+                "restBetweenExercises": Schema.Parameter(
+                  type: .number,
+                  description: "The duration of rest between exercises in this set, in seconds."
+                ),
+                "exercises": Schema.Parameter(
+                  description: "The exercises to perform in this set. Each set should have 1 or 2 exercises, but you can add more if appropriate.",
+                  arrayOf: .object(
+                    Schema.Object(
+                      properties: [
+                        "title": Schema.Parameter(
+                          type: .string,
+                          description: "The title for the exercise"
+                        ),
+                        "description": Schema.Parameter(
+                          type: .string,
+                          description: "A short description of the exercise"
+                        ),
+                        "numberOfReps": Schema.Parameter(
+                          type: .optionalInteger,
+                          description: "The number of repetitions of this exercise the user will perform"
+                        ),
+                        "kind": Schema.Parameter(
+                          enum: SocketMessage.WorkoutExercise.Kind.self,
+                          description: "The kind of exercise this will be"
+                        ),
+                        "distance": Schema.Parameter(
+                          type: .optionalNumber,
+                          description: "A distance to cover, if applicable for this exercise"
+                        ),
+                        "distanceUnit": Schema.Parameter(
+                          optionalEnum: SocketMessage.WorkoutExercise.DistanceUnit.self,
+                          description: "The unit to measure the distance in, if applicable"
+                        ),
+                        "duration": Schema.Parameter(
+                          type: .number,
+                          description: "The duration for this exercise, or an estimation of how long this exercise will take"
+                        )
+                      ]
+                    )
+                  )
                 )
-            ]
-          ))
+              ]
+            )
+          )
         )
       ]
     )

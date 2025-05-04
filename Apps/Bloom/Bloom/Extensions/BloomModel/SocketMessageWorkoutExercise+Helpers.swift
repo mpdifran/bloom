@@ -1,5 +1,5 @@
 //
-//  SocketMessageWorkoutStep+Helpers.swift
+//  SocketMessageWorkoutExercise+Helpers.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-04-29.
@@ -10,7 +10,7 @@ import BloomModel
 import DataContainer
 import HealthKit
 
-extension SocketMessage.WorkoutStep {
+extension SocketMessage.WorkoutExercise {
 
   var distanceQuantity: HKQuantity? {
     guard let distance, let distanceUnit else { return nil }
@@ -29,10 +29,8 @@ extension SocketMessage.WorkoutStep {
       .joined(separator: " • ")
   }
 
-  var durationDescription: String? {
-    guard let duration else { return nil }
-
-    return DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
+  var durationDescription: String {
+    DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
   }
 
   @MainActor
@@ -49,9 +47,9 @@ extension SocketMessage.WorkoutStep {
   }
 }
 
-extension SocketMessage.WorkoutTemplate.Equipment {
+extension SocketMessage.WorkoutPlan.Equipment {
 
-  var hkEquipment: WorkoutTemplate.Equipment {
+  var hkEquipment: WorkoutPlan.Equipment {
     switch self {
     case .dumbbells: .dumbbells
     case .barbell: .barbell
@@ -71,9 +69,9 @@ extension SocketMessage.WorkoutTemplate.Equipment {
   }
 }
 
-extension SocketMessage.WorkoutStep.DistanceUnit {
+extension SocketMessage.WorkoutExercise.DistanceUnit {
 
-  var swiftDataUnit: WorkoutStep.DistanceUnit {
+  var swiftDataUnit: WorkoutExercise.DistanceUnit {
     switch self {
     case .meter: .meter
     case .kilometer: .kilometer
@@ -84,12 +82,12 @@ extension SocketMessage.WorkoutStep.DistanceUnit {
   }
 }
 
-extension SocketMessage.WorkoutStep.Kind {
+extension SocketMessage.WorkoutExercise.Kind {
 
-  var hkKind: WorkoutStep.Kind {
+  var hkKind: WorkoutExercise.Kind {
     switch self {
     case .exercise: .exercise
-    case .rest: .rest
+    case .stretch: .stretch
     }
   }
 }

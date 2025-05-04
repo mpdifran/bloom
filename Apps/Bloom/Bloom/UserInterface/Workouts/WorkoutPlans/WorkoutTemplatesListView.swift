@@ -1,5 +1,5 @@
 //
-//  WorkoutTemplatesListView.swift
+//  WorkoutPlansListView.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-04-30.
@@ -10,28 +10,28 @@ import DataContainer
 import SwiftData
 import HealthKit
 
-struct WorkoutTemplatesListView: View {
+struct WorkoutPlansListView: View {
 
   @State private var pushedView: AnyView?
   @State private var error: Error?
 
   @Query
-  private var workoutTemplates: [WorkoutTemplate]
+  private var workoutPlans: [WorkoutPlan]
 
   @Environment(\.modelContext) private var modelContext
 
   var body: some View {
     BloomScrollView {
-      ForEach(workoutTemplates) { workoutTemplate in
-        WorkoutTemplateCell(workoutTemplate: workoutTemplate)
+      ForEach(workoutPlans) { workoutPlan in
+        WorkoutPlanCell(workoutPlan: workoutPlan)
           .onTapGesture {
-            pushedView = WorkoutTemplateDetailsView(workoutTemplate: workoutTemplate).asAny
+            pushedView = WorkoutPlanDetailsView(workoutPlan: workoutPlan).asAny
           }
           .contextMenu {
             Button("Delete", systemSymbol: .trash, role: .destructive) {
               do {
                 try modelContext.savingTransaction {
-                  modelContext.delete(workoutTemplate)
+                  modelContext.delete(workoutPlan)
                 }
               } catch { self.error = error }
             }
@@ -39,12 +39,12 @@ struct WorkoutTemplatesListView: View {
           }
       }
     }
-    .navigationTitle("Workout Templates")
+    .navigationTitle("Workout Plans")
     .navigationDestination($pushedView)
     .alert(error: $error)
   }
 }
 
 #Preview {
-  WorkoutTemplatesListView()
+  WorkoutPlansListView()
 }

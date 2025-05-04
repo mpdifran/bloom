@@ -40,3 +40,24 @@ extension SchemaV12 {
     }
   }
 }
+
+public extension SchemaV12.WorkoutTemplate {
+  enum Equipment: String, CaseIterable, Codable, Identifiable {
+    case dumbbells
+    case barbell
+    case kettlebell
+    case batBell
+    case chinUpBar
+    case treadmill
+    case stationaryBike
+    case bike
+    case elliptical
+    case rowingMachine
+    case skiMachine
+    case yogaMat
+    case resistanceBand
+    case weightedVest
+
+    public var id: Self { self }
+  }
+}

@@ -9,9 +9,14 @@ import SwiftUI
 
 struct SectionTitleView: View {
   let title: String
+  let includeTopPadding: Bool
 
-  init(_ title: String) {
+  init(
+    _ title: String,
+    includeTopPadding: Bool = true
+  ) {
     self.title = title
+    self.includeTopPadding = includeTopPadding
   }
 
   var body: some View {
@@ -20,7 +25,7 @@ struct SectionTitleView: View {
       .foregroundStyle(.secondary)
       .bold()
       .zStackAlignment(.leading)
-      .padding(.top)
+      .padding(includeTopPadding ? .top : [])
   }
 }
 

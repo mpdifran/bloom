@@ -26,7 +26,7 @@ struct ChatRichContentWrapperCell: View {
   @State private var weightQuantity: HKQuantity?
   @State private var systolic: Double?
   @State private var diastolic: Double?
-  @State private var workoutTemplate: SocketMessage.WorkoutTemplate?
+  @State private var workoutPlan: SocketMessage.WorkoutPlan?
 
   private let modelActor = HabitModelActor.standard()
 
@@ -86,12 +86,14 @@ struct ChatRichContentWrapperCell: View {
             diastolic: diastolic,
             hasPerformedAction: hasPerformedAction
           )
-        } else if let workoutTemplate {
-          ChatWorkoutTemplateCell(
+        } else if let workoutPlan {
+          ChatWorkoutPlanCell(
             chatMessageID: chatMessageID,
-            workoutTemplate: workoutTemplate,
+            workoutPlan: workoutPlan,
             hasPerformedAction: hasPerformedAction
           )
+        } else {
+          ChatUnknownContentCell()
         }
       }
     }
@@ -172,9 +174,9 @@ private extension ChatRichContentWrapperCell {
       self.systolic = Double(logBloodPressure.systolic)
       self.diastolic = Double(logBloodPressure.diastolic)
       
-    } else if let workoutTemplate = try? JSONDecoder.bloomModel.decode(SocketMessage.WorkoutTemplate.self, from: data) {
+    } else if let workoutPlan = try? JSONDecoder.bloomModel.decode(SocketMessage.WorkoutPlan.self, from: data) {
 
-      self.workoutTemplate = workoutTemplate
+      self.workoutPlan = workoutPlan
     }
 
     self.isLoading = false
@@ -185,16 +187,16 @@ private extension ChatRichContentWrapperCell {
   PreviewEnvironment {
     ScrollView {
       VStack {
+        ChatRichContentWrapperCell(
+          chatMessageID: "123",
+          data: Data(),
+          hasPerformedAction: false
+        )
         ChatBubbleCell(
           message: "Here's some rich content",
           isDirect: false,
           isCurrentUser: false,
           showTail: true
-        )
-        ChatRichContentWrapperCell(
-          chatMessageID: "123",
-          data: Data(),
-          hasPerformedAction: false
         )
       }
       .padding()

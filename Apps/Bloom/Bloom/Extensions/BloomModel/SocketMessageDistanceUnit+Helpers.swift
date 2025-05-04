@@ -8,7 +8,7 @@
 import BloomModel
 import HealthKit
 
-extension SocketMessage.WorkoutStep.DistanceUnit {
+extension SocketMessage.WorkoutExercise.DistanceUnit {
 
   var hkUnit: HKUnit {
     switch self {
