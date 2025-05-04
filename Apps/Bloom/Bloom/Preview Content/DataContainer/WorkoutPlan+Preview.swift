@@ -21,6 +21,7 @@ extension WorkoutPlan.Preview {
     sets: [
       WorkoutSet(
         id: "1",
+        index: 0,
         title: "Warm Up",
         focus: "Warming up your body.",
         numberOfSets: 3,
@@ -31,6 +32,7 @@ extension WorkoutPlan.Preview {
         exercises: [
           WorkoutExercise(
             id: "a",
+            index: 0,
             title: "Jumping Jacks",
             summary: "Jump to warm up!",
             numberOfReps: nil,
@@ -43,6 +45,7 @@ extension WorkoutPlan.Preview {
       ),
       WorkoutSet(
         id: "2",
+        index: 1,
         title: "Deadlifts",
         focus: "Posterior Chain.",
         numberOfSets: 5,
@@ -53,6 +56,7 @@ extension WorkoutPlan.Preview {
         exercises: [
           WorkoutExercise(
             id: "b",
+            index: 0,
             title: "Deadlift",
             summary: "Romanian deadlift, keep your weight on your heels.",
             numberOfReps: 8,
@@ -63,6 +67,7 @@ extension WorkoutPlan.Preview {
           ),
           WorkoutExercise(
             id: "e",
+            index: 1,
             title: "Nordic Curls",
             summary: "Lower yourself to the ground using your hamstrings.",
             numberOfReps: 10,
@@ -75,6 +80,7 @@ extension WorkoutPlan.Preview {
       ),
       WorkoutSet(
         id: "3",
+        index: 2,
         title: "Running",
         focus: "Cardio.",
         numberOfSets: 1,
@@ -85,6 +91,7 @@ extension WorkoutPlan.Preview {
         exercises: [
           WorkoutExercise(
             id: "c",
+            index: 0,
             title: "Run",
             summary: "Just run.",
             numberOfReps: nil,
@@ -97,6 +104,7 @@ extension WorkoutPlan.Preview {
       ),
       WorkoutSet(
         id: "4",
+        index: 3,
         title: "Cool Down",
         focus: "Cooling down to avoid injury.",
         numberOfSets: 3,
@@ -107,6 +115,7 @@ extension WorkoutPlan.Preview {
         exercises: [
           WorkoutExercise(
             id: "d",
+            index: 0,
             title: "Stretch legs",
             summary: "Avoid injury by stretching.",
             numberOfReps: 4,

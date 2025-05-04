@@ -209,7 +209,7 @@ private extension WorkoutInstanceView {
 private extension WorkoutInstanceView {
 
   var sets: [WorkoutSet] {
-    workoutPlan.sets ?? []
+    workoutPlan.orderedSets
   }
 
   var currentSetIndex: Int {

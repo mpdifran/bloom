@@ -89,7 +89,7 @@ private extension WorkoutPlanDetailsView {
       SectionTitleView("Plan")
         .padding(.horizontal)
 
-      ForEach(workoutPlan.sets ?? []) { set in
+      ForEach(workoutPlan.orderedSets) { set in
         WorkoutSetDetailsDisclosureCell(set: set)
       }
     }

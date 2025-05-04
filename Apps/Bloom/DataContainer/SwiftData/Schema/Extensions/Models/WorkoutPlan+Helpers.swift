@@ -38,11 +38,15 @@ public extension WorkoutPlan {
     rawRequiredEquipment.compactMap({ Equipment(rawValue: $0) })
   }
 
+  var orderedSets: [WorkoutSet] {
+    sets?.sorted(keyPath: \.index) ?? []
+  }
+
   func expandedExerciseSets() -> [WorkoutExerciseSet] {
     var exerciseSets = [WorkoutExerciseSet]()
-    for set in sets ?? [] {
+    for set in orderedSets {
       for setCount in 0 ..< set.numberOfSets {
-        for exercise in set.exercises ?? [] {
+        for exercise in set.orderedExercises {
           let exerciseSet = WorkoutExerciseSet(
             set: set,
             exercise: exercise,

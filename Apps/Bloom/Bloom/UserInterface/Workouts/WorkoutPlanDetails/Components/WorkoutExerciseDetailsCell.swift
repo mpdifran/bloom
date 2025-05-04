@@ -40,7 +40,7 @@ struct WorkoutExerciseDetailsCell: View {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      ForEach(WorkoutPlan.Preview.deadlifts.sets ?? []) { set in
+      ForEach(WorkoutPlan.Preview.deadlifts.orderedSets) { set in
         ForEach(set.exercises ?? []) { exercise in
           WorkoutExerciseDetailsCell(exercise: exercise)
             .cardContainer()

@@ -100,22 +100,29 @@ extension ChatWorkoutPlanCell {
 
   func save() throws {
     try modelContext.savingTransaction {
-      let sets = workoutPlan.sets.map { set in
-        let exercises = set.exercises.map { exercise in
-          WorkoutExercise(
-            id: UUID().uuidString,
-            title: exercise.title,
-            summary: exercise.description,
-            numberOfReps: exercise.numberOfReps,
-            distance: exercise.distance,
-            distanceUnit: exercise.distanceUnit?.swiftDataUnit,
-            duration: exercise.duration,
-            kind: exercise.kind.hkKind
+      var sets = [WorkoutSet]()
+
+      for (setIndex, set) in workoutPlan.sets.enumerated() {
+        var exercises = [WorkoutExercise]()
+        for (exerciseIndex, exercise) in set.exercises.enumerated() {
+          exercises.append(
+            WorkoutExercise(
+              id: UUID().uuidString,
+              index: exerciseIndex,
+              title: exercise.title,
+              summary: exercise.description,
+              numberOfReps: exercise.numberOfReps,
+              distance: exercise.distance,
+              distanceUnit: exercise.distanceUnit?.swiftDataUnit,
+              duration: exercise.duration,
+              kind: exercise.kind.hkKind
+            )
           )
         }
 
         let set = WorkoutSet(
           id: UUID().uuidString,
+          index: setIndex,
           title: set.title,
           focus: set.focus,
           numberOfSets: set.numberOfSets,
@@ -125,8 +132,7 @@ extension ChatWorkoutPlanCell {
           appleWorkoutType: set.appleWorkoutType.hkWorkoutType
         )
         set.exercises = exercises
-
-        return set
+        sets.append(set)
       }
 
       let workoutPlanModel = WorkoutPlan(

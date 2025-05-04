@@ -57,7 +57,7 @@ private extension WorkoutSetDetailsDisclosureCell {
 
   var content: some View {
     VStack(alignment: .leading) {
-      ForEach(set.exercises ?? []) { exercise in
+      ForEach(set.orderedExercises) { exercise in
         Divider()
 
         WorkoutExerciseDetailsCell(exercise: exercise)
@@ -106,7 +106,7 @@ private struct WorkoutSetDetailsDisclosureGroupStyle: DisclosureGroupStyle {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      ForEach(WorkoutPlan.Preview.deadlifts.sets ?? []) { set in
+      ForEach(WorkoutPlan.Preview.deadlifts.orderedSets) { set in
         WorkoutSetDetailsDisclosureCell(set: set)
       }
     }

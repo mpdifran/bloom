@@ -111,7 +111,7 @@ private extension WorkoutSetCell {
 
   PreviewEnvironment {
     BloomScrollView {
-      ForEachEnumerated(WorkoutPlan.Preview.deadlifts.sets ?? []) { index, set in
+      ForEachEnumerated(WorkoutPlan.Preview.deadlifts.orderedSets) { index, set in
         WorkoutSetCell(
           set: set,
           state: state(for: index, selectedIndex: selectedIndex),
@@ -123,7 +123,7 @@ private extension WorkoutSetCell {
     .shelf {
       Button {
         selectedIndex += 1
-        if selectedIndex == (WorkoutPlan.Preview.deadlifts.sets ?? []).count {
+        if selectedIndex == (WorkoutPlan.Preview.deadlifts.orderedSets).count {
           selectedIndex = 0
         }
       } label: {

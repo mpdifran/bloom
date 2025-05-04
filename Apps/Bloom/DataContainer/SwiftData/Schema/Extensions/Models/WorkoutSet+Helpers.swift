@@ -27,6 +27,10 @@ public extension WorkoutSet {
     }
   }
 
+  var orderedExercises: [WorkoutExercise] {
+    exercises?.sorted(keyPath: \.index) ?? []
+  }
+
   var representativeDuration: TimeInterval {
     if let duration {
       return duration * Double(numberOfSets)

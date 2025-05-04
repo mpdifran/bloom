@@ -1,8 +1,8 @@
 //
-//  WorkoutPlanV13.swift
+//  WorkoutPlanV14.swift
 //  Bloom
 //
-//  Created by Mark DiFranco on 2025-05-02.
+//  Created by Mark DiFranco on 2025-05-04.
 //
 
 import SwiftUI
@@ -12,7 +12,7 @@ import HealthKit
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit
 // For CloudKit sync to work, all properties must be optional or have default values, and all relationship must be optional.
 
-extension SchemaV13 {
+extension SchemaV14 {
   @Model
   public final class WorkoutPlan: Identifiable, Hashable {
     public var id: String
@@ -28,7 +28,7 @@ extension SchemaV13 {
       title: String,
       summary: String,
       creationDate: Date,
-      requiredEquipment: [SchemaV14.WorkoutPlan.Equipment],
+      requiredEquipment: [Equipment],
       sets: [WorkoutSet] = []
     ) {
       self.id = id
