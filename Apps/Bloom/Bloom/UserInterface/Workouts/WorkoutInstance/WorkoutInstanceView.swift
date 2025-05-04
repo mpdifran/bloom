@@ -68,7 +68,7 @@ struct WorkoutInstanceView: View {
             .fill(.background.secondary)
             .ignoresSafeArea()
         }
-        .onChange(of: currentIndex) { oldValue, newValue in
+        .onChange(of: currentIndex ?? -1) { oldValue, newValue in
           let exerciseSet = exerciseSets[newValue]
           withAnimation {
             scrollProxy.scrollTo(exerciseSet.id, anchor: .top)

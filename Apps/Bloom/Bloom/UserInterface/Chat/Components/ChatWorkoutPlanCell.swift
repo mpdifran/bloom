@@ -45,6 +45,7 @@ struct ChatWorkoutPlanCell: View {
               .bold()
               .fontDesign(.rounded)
               .lineLimit(2)
+              .fixedSize(horizontal: false, vertical: true)
 
             Text(workoutPlan.equipmentDescription + " required")
               .font(.caption)
