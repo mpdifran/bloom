@@ -144,6 +144,24 @@ public final class HealthPermissionChecker: Sendable {
   public let writeOtherTypes: Set<HKSampleType> = [
     HKQuantityType(.bodyMass)
   ]
+
+  public let readWatchTypes: Set<HKObjectType> = [
+    HKQuantityType(.heartRate),
+    HKQuantityType(.activeEnergyBurned),
+    HKQuantityType(.distanceWalkingRunning),
+    HKQuantityType(.cyclingSpeed),
+    HKQuantityType(.cyclingPower),
+    HKQuantityType(.cyclingCadence),
+    HKQuantityType(.distanceCycling),
+    HKQuantityType(.dietaryWater),
+    HKQuantityType.workoutType(),
+    HKObjectType.activitySummaryType()
+  ]
+
+  public let writeWatchTypes: Set<HKObjectType> = [
+    HKQuantityType.workoutType(),
+    HKQuantityType(.dietaryWater) // Not sure if we need this.
+  ]
 }
 
 public extension HealthPermissionChecker {
@@ -151,10 +169,14 @@ public extension HealthPermissionChecker {
   func writeTypes() -> Set<HKSampleType> {
     var set = Set<HKSampleType>()
 
+    #if os(iOS)
     writeNutritionTypes.forEach { set.insert($0) }
     writeHeartTypes.forEach { set.insert($0) }
     writeMenstrualTypes.forEach { set.insert($0) }
     writeOtherTypes.forEach { set.insert($0) }
+    #elseif os(watchOS)
+    writeWatchTypes.forEach { set.insert($0) }
+    #endif
 
     return set
   }
@@ -162,6 +184,7 @@ public extension HealthPermissionChecker {
   func readTypes() -> Set<HKObjectType> {
     var set = Set<HKObjectType>()
 
+    #if os(iOS)
     bodyMeasurementTypes.forEach { set.insert($0) }
     activityTypes.forEach { set.insert($0) }
     heartTypes.forEach { set.insert($0) }
@@ -169,6 +192,9 @@ public extension HealthPermissionChecker {
     nutritionTypes.forEach { set.insert($0) }
     menstrualTypes.forEach { set.insert($0) }
     otherTypes.forEach { set.insert($0) }
+    #elseif os(watchOS)
+    readWatchTypes.forEach { set.insert($0) }
+    #endif
 
     return set
   }
