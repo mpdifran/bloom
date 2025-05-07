@@ -77,7 +77,6 @@ public extension WorkoutSet {
     case amrap
     case emom
     case tabata
-    case roundsForTime
     case coolDown
 
     public var name: String {
@@ -92,8 +91,6 @@ public extension WorkoutSet {
         "EMOM"
       case .tabata:
         "Tabata"
-      case .roundsForTime:
-        "RFT"
       case .coolDown:
         "Cool-Down"
       }

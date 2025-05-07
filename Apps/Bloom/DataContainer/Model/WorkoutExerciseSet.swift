@@ -9,7 +9,8 @@ import Foundation
 
 public extension WorkoutExerciseSet {
   enum Kind: Hashable {
-    case exercise(WorkoutExercise)
+    case standard(WorkoutExercise)
+    case grouped([WorkoutExercise], WorkoutSet.Format)
     case rest(TimeInterval)
   }
 }
@@ -27,7 +28,19 @@ public struct WorkoutExerciseSet: Identifiable, Hashable {
   ) {
     self.id = UUID().uuidString
     self.set = set
-    self.kind = .exercise(exercise)
+    self.kind = .standard(exercise)
+    self.setNumber = setNumber
+  }
+
+  public init(
+    set: WorkoutSet,
+    exercises: [WorkoutExercise],
+    format: WorkoutSet.Format,
+    setNumber: Int
+  ) {
+    self.id = UUID().uuidString
+    self.set = set
+    self.kind = .grouped(exercises, format)
     self.setNumber = setNumber
   }
 

@@ -219,7 +219,6 @@ public extension SocketMessage.WorkoutSet {
     case amrap
     case emom
     case tabata
-    case roundsForTime
     case coolDown
   }
 }

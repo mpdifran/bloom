@@ -32,9 +32,10 @@ struct WorkoutInstanceView: View {
   @State private var elapsedTime: TimeInterval = 0
   @State private var currentTime: TimeInterval = 0
 
-  @State private var restStartDate: Date? = nil
-  @State private var elapsedRestTime: TimeInterval = 0
-  @State private var currentRestTime: TimeInterval = 0
+  @State private var isSubTimerActive = false
+  @State private var subTimerStartDate: Date? = nil
+  @State private var elapsedSubTime: TimeInterval = 0
+  @State private var currentSubTime: TimeInterval = 0
 
   @State private var status: Status = .readyToBegin
 
@@ -68,14 +69,18 @@ struct WorkoutInstanceView: View {
             .fill(.background.secondary)
             .ignoresSafeArea()
         }
-        .onChange(of: currentIndex ?? -1) { oldValue, newValue in
+        .onChange(of: currentIndex) { oldValue, newValue in
           let exerciseSet = exerciseSets[newValue]
           withAnimation {
             scrollProxy.scrollTo(exerciseSet.id, anchor: .top)
           }
 
-          if isRestTime {
-            resetRestTimer()
+          if shouldShowSubTimer {
+            resetSubTimer()
+
+            if shouldAutoStartSubTimer {
+              isSubTimerActive = true
+            }
           }
         }
       }
@@ -93,32 +98,54 @@ struct WorkoutInstanceView: View {
 
 private extension WorkoutInstanceView {
 
-  var isRestTime: Bool {
+  var shouldShowSubTimer: Bool {
     switch exerciseSets[currentIndex].kind {
     case .rest:
-      return true
+      true
+    case .grouped(_, let format):
+      switch format {
+      case .amrap, .emom, .tabata:
+        true
+      default:
+        false
+      }
     default:
-      return false
+      false
     }
   }
 
-  var currentRestDuration: TimeInterval {
+  var shouldAutoStartSubTimer: Bool {
     switch exerciseSets[currentIndex].kind {
-    case .rest(let rest):
-      return rest
+    case .rest:
+      true
+    default:
+      false
+    }
+  }
+
+  var currentSubDuration: TimeInterval {
+    let exerciseSet = exerciseSets[currentIndex]
+    switch exerciseSet.kind {
+    case .rest(let restTime):
+      return restTime
+    case .grouped:
+      return exerciseSet.set.duration ?? 0
     default:
       return 0
     }
   }
 
-  var remainingRestTime: TimeInterval {
-    currentRestDuration - currentRestTime + 1
+  var remainingSubTime: TimeInterval {
+    guard currentSubDuration > 0 else { return 0 }
+
+    return min(currentSubDuration - currentSubTime + 1, currentSubDuration)
   }
 
-  func resetRestTimer() {
-    restStartDate = Date()
-    elapsedRestTime = 0
-    currentRestTime = 0
+  func resetSubTimer() {
+    subTimerStartDate = Date()
+    elapsedSubTime = 0
+    currentSubTime = 0
+    isSubTimerActive = false
   }
 }
 
@@ -127,29 +154,31 @@ private extension WorkoutInstanceView {
   var headerView: some View {
     VStack(spacing: 20) {
       WorkoutActivityTypeTimelineView(
-        activityTypes: workoutPlan.orderedSets.map(\.appleWorkoutType) ?? [],
+        activityTypes: workoutPlan.orderedSets.map(\.appleWorkoutType),
         currentIndex: currentSetIndex
       )
-      .padding(.horizontal)
 
       timerView
         .frame(minHeight: 180)
     }
+    .padding(.horizontal)
   }
 
   var timerView: some View {
     VStack {
       Text(timeString)
-        .font(.system(size: isRestTime ? 30 : 55))
+        .font(.system(size: shouldShowSubTimer ? 30 : 55))
         .foregroundStyle(.yellow)
         .contentTransition(.numericText(value: currentTime))
 
-      if isRestTime {
-        Text(restTimeString)
+      if shouldShowSubTimer {
+        Text(subTimeString)
           .font(.system(size: 55))
-          .foregroundStyle(.blue)
-          .contentTransition(.numericText(value: remainingRestTime))
-          .animation(.default, value: remainingRestTime)
+          .minimumScaleFactor(0.3)
+          .lineLimit(1)
+          .foregroundStyle(subTimeColor)
+          .contentTransition(.numericText(value: remainingSubTime))
+          .animation(.default, value: remainingSubTime)
           .transition(.scale)
       }
     }
@@ -164,12 +193,14 @@ private extension WorkoutInstanceView {
         currentTime = elapsedTime + Date().timeIntervalSince(startDate)
       }
 
-      if let restStartDate {
-        currentRestTime = elapsedRestTime + Date().timeIntervalSince(restStartDate)
-      }
+      if isSubTimerActive {
+        if let subTimerStartDate {
+          currentSubTime = elapsedSubTime + Date().timeIntervalSince(subTimerStartDate)
+        }
 
-      if isRestTime && remainingRestTime <= 0 {
-        currentIndex += 1
+        if shouldShowSubTimer && remainingSubTime <= 0 {
+          currentIndex += 1
+        }
       }
     }
   }
@@ -180,7 +211,8 @@ private extension WorkoutInstanceView {
         WorkoutExerciseSetCell(
           exerciseSet: exerciseSet,
           mode: WorkoutExerciseSetCell.Mode(index: index, currentIndex: currentIndex),
-          isPeeking: peekingIndex == index
+          isPeeking: peekingIndex == index,
+          currentSubTime: index == currentIndex ? currentSubTime : nil
         )
         .padding(.top, 8)
         .onTapGesture {
@@ -230,7 +262,12 @@ private extension WorkoutInstanceView {
       VStack {
         HStack {
           previousButton
-          nextButton
+
+          if shouldShowSubTimer && !isSubTimerActive {
+            startTimerButton
+          } else {
+            nextButton
+          }
         }
         HStack {
           pauseButton
@@ -253,9 +290,9 @@ private extension WorkoutInstanceView {
       startDate = Date()
       elapsedTime = 0
       currentTime = 0
-      restStartDate = Date()
-      elapsedRestTime = 0
-      currentRestTime = 0
+      subTimerStartDate = Date()
+      elapsedSubTime = 0
+      currentSubTime = 0
       status = .running
     } label: {
       Label("Start Workout", systemSymbol: SFSymbol(rawValue: workoutPlan.representativeAppleWorkoutType.systemImage))
@@ -289,6 +326,18 @@ private extension WorkoutInstanceView {
     .disabled(currentIndex + 1 == exerciseSets.count)
   }
 
+  var startTimerButton: some View {
+    AsyncButton {
+      resetSubTimer()
+      isSubTimerActive = true
+    } label: {
+      Label("Start Timer", systemSymbol: .timer)
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .tint(.blue)
+  }
+
   var pauseButton: some View {
     AsyncButton {
       try await WorkoutController.shared.pauseWorkout()
@@ -296,10 +345,10 @@ private extension WorkoutInstanceView {
         elapsedTime += Date().timeIntervalSince(start)
       }
       startDate = nil
-      if let restStartDate {
-        elapsedRestTime += Date().timeIntervalSince(restStartDate)
+      if let subTimerStartDate {
+        elapsedSubTime += Date().timeIntervalSince(subTimerStartDate)
       }
-      restStartDate = nil
+      subTimerStartDate = nil
       status = .paused
     } label: {
       Label("Pause", systemSymbol: .pauseFill)
@@ -315,11 +364,11 @@ private extension WorkoutInstanceView {
       if let startDate {
         elapsedTime += Date().timeIntervalSince(startDate)
       }
-      if let restStartDate {
-        elapsedRestTime += Date().timeIntervalSince(restStartDate)
+      if let subTimerStartDate {
+        elapsedSubTime += Date().timeIntervalSince(subTimerStartDate)
       }
       startDate = nil
-      restStartDate = nil
+      subTimerStartDate = nil
       status = .ended
       dismiss()
     } label: {
@@ -334,7 +383,7 @@ private extension WorkoutInstanceView {
     AsyncButton {
       try await WorkoutController.shared.resumeWorkout()
       startDate = Date()
-      restStartDate = Date()
+      subTimerStartDate = Date()
       status = .running
     } label: {
       Label("Resume", systemSymbol: .playFill)
@@ -351,9 +400,7 @@ private extension WorkoutInstanceView {
       startDate = Date()
       elapsedTime = 0
       currentTime = 0
-      restStartDate = Date()
-      elapsedRestTime = 0
-      currentRestTime = 0
+      resetSubTimer()
       status = .running
     } label: {
       Label("Restart Workout", systemSymbol: .arrowCounterclockwise)
@@ -374,11 +421,60 @@ private extension WorkoutInstanceView {
     return String(format: "%02d:%02d.%01d", minutes, seconds, milliseconds)
   }
 
-  var restTimeString: String {
-    let dateComponents = DateComponents(second: Int(max(remainingRestTime, 0)))
+  var subTimeString: String {
+    let dateComponents = DateComponents(second: Int(max(remainingSubTime, 0)))
     let timeString = DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: dateComponents) ?? ""
 
-    return "Rest \(timeString)"
+    let exerciseSet = exerciseSets[currentIndex]
+
+    switch exerciseSet.kind {
+    case .rest:
+      return "Rest \(timeString)"
+    case .grouped(_, let format):
+      switch format {
+      case .amrap:
+        return "\(timeString)"
+      case .emom:
+        let remainingRoundTime = Int(remainingSubTime) % 60
+        let dateComponents = DateComponents(second: Int(max(remainingRoundTime, 0)))
+        let roundTimeString = DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: dateComponents) ?? ""
+
+        return "Round \(roundTimeString)"
+      case .tabata:
+        let cycleDuration = 30.0 // 20s work + 10s rest
+        let workDuration = 20.0
+
+        let elapsedInCycle = currentSubTime.truncatingRemainder(dividingBy: cycleDuration)
+        let roundNumber = Int(currentSubTime / cycleDuration) + 1
+
+        if elapsedInCycle < workDuration {
+          let remainingTime = workDuration - elapsedInCycle
+          let dateComponents = DateComponents(second: Int(max(remainingTime, 0)))
+          let timeString = DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: dateComponents) ?? ""
+
+          return "Round \(roundNumber): \(timeString)"
+        } else {
+          let remainingTime = cycleDuration - elapsedInCycle
+          let dateComponents = DateComponents(second: Int(max(remainingTime, 0)))
+          let timeString = DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: dateComponents) ?? ""
+
+          return "Rest: \(timeString)"
+        }
+      default:
+        return ""
+      }
+    default:
+      return ""
+    }
+  }
+
+  var subTimeColor: Color {
+    switch exerciseSets[currentIndex].kind {
+    case .rest:
+      return .blue
+    default:
+      return .green
+    }
   }
 }
 

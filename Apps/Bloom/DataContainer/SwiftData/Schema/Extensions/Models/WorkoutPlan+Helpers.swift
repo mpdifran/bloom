@@ -45,21 +45,43 @@ public extension WorkoutPlan {
   func expandedExerciseSets() -> [WorkoutExerciseSet] {
     var exerciseSets = [WorkoutExerciseSet]()
     for set in orderedSets {
-      for setCount in 0 ..< set.numberOfSets {
-        for exercise in set.orderedExercises {
+      for setNumber in 0 ..< set.numberOfSets {
+        switch set.format {
+        case .warmup, .coolDown:
+          for exercise in set.orderedExercises {
+            let exerciseSet = WorkoutExerciseSet(
+              set: set,
+              exercise: exercise,
+              setNumber: setNumber
+            )
+            exerciseSets.append(exerciseSet)
+          }
+        case .standard:
+          for exercise in set.orderedExercises {
+            let exerciseSet = WorkoutExerciseSet(
+              set: set,
+              exercise: exercise,
+              setNumber: setNumber
+            )
+            exerciseSets.append(exerciseSet)
+
+            if set.restBetweenExercises > 0 {
+              let restSet = WorkoutExerciseSet(
+                set: set,
+                rest: set.restBetweenExercises,
+                setNumber: setNumber
+              )
+              exerciseSets.append(restSet)
+            }
+          }
+        case .amrap, .emom, .tabata:
           let exerciseSet = WorkoutExerciseSet(
             set: set,
-            exercise: exercise,
-            setNumber: setCount
+            exercises: set.orderedExercises,
+            format: set.format,
+            setNumber: setNumber
           )
           exerciseSets.append(exerciseSet)
-
-          let restSet = WorkoutExerciseSet(
-            set: set,
-            rest: set.restBetweenExercises,
-            setNumber: setCount
-          )
-          exerciseSets.append(restSet)
         }
       }
     }

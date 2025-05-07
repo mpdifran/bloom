@@ -27,7 +27,6 @@ extension SocketMessage.WorkoutSet.Format {
     case .amrap: .amrap
     case .emom: .emom
     case .tabata: .tabata
-    case .roundsForTime: .roundsForTime
     case .coolDown: .coolDown
     }
   }

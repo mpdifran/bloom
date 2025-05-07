@@ -85,7 +85,7 @@ private extension WorkoutPlanDetailsView {
 
   var setsSection: some View {
     VStack {
-      SectionTitleView("Plan")
+      SectionTitleView("Segments")
         .padding(.horizontal)
 
       ForEach(workoutPlan.orderedSets) { set in

@@ -24,7 +24,7 @@ extension WorkoutPlan.Preview {
         index: 0,
         title: "Warm Up",
         focus: "Warming up your body.",
-        numberOfSets: 3,
+        numberOfSets: 2,
         format: .warmup,
         duration: nil,
         restBetweenExercises: 30,
@@ -48,7 +48,7 @@ extension WorkoutPlan.Preview {
         index: 1,
         title: "Deadlifts",
         focus: "Posterior Chain.",
-        numberOfSets: 5,
+        numberOfSets: 2,
         format: .standard,
         duration: nil,
         restBetweenExercises: 60,
@@ -81,7 +81,7 @@ extension WorkoutPlan.Preview {
       WorkoutSet(
         id: "3",
         index: 2,
-        title: "Running",
+        title: "Conditioning",
         focus: "Cardio.",
         numberOfSets: 1,
         format: .amrap,
@@ -99,12 +99,58 @@ extension WorkoutPlan.Preview {
             distanceUnit: .meter,
             duration: 300,
             kind: .exercise
+          ),
+          WorkoutExercise(
+            id: "f",
+            index: 1,
+            title: "Jumping Jacks",
+            summary: "Get that heart rate up by doing some jumping jacks!",
+            numberOfReps: 20,
+            distance: nil,
+            distanceUnit: nil,
+            duration: 30,
+            kind: .exercise
           )
         ]
       ),
       WorkoutSet(
         id: "4",
         index: 3,
+        title: "Conditioning",
+        focus: "Cardio.",
+        numberOfSets: 1,
+        format: .emom,
+        duration: 900,
+        restBetweenExercises: 0,
+        appleWorkoutType: .highIntensityIntervalTraining,
+        exercises: [
+          WorkoutExercise(
+            id: "h",
+            index: 0,
+            title: "Push Ups",
+            summary: "Push them ups.",
+            numberOfReps: 5,
+            distance: 200,
+            distanceUnit: .meter,
+            duration: 30,
+            kind: .exercise
+          ),
+          WorkoutExercise(
+            id: "g",
+            index: 1,
+            title: "Jumping Jacks",
+            summary: "Get that heart rate up by doing some jumping jacks!",
+            numberOfReps: 10,
+            distance: nil,
+            distanceUnit: nil,
+            duration: 30,
+            kind: .exercise
+          )
+        ]
+      ),
+      WorkoutSet(
+        id: "5",
+        index: 4,
         title: "Cool Down",
         focus: "Cooling down to avoid injury.",
         numberOfSets: 3,

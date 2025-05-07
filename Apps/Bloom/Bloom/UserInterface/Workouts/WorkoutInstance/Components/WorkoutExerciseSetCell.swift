@@ -28,6 +28,17 @@ extension WorkoutExerciseSetCell {
         self = .upcoming
       }
     }
+
+    var color: Color {
+      switch self {
+      case .current:
+        return .black
+      case .complete:
+        return .secondary
+      default:
+        return .text
+      }
+    }
   }
 }
 
@@ -35,14 +46,47 @@ struct WorkoutExerciseSetCell: View {
   let exerciseSet: WorkoutExerciseSet
   let mode: Mode
   let isPeeking: Bool
+  let currentSubTime: TimeInterval?
 
   var body: some View {
     Group {
       switch exerciseSet.kind {
-      case .exercise(let workoutExercise):
-        exerciseContent(exercise: workoutExercise)
+      case .standard(let workoutExercise):
+        WorkoutExerciseSetCellStandardExercise(
+          exerciseSet: exerciseSet,
+          exercise: workoutExercise,
+          mode: mode,
+          isPeeking: isPeeking
+        )
+      case .grouped(let exercises, let format):
+        switch format {
+        case .amrap:
+          WorkoutExerciseSetCellAMRAP(
+            exerciseSet: exerciseSet,
+            exercises: exercises,
+            mode: mode,
+            isPeeking: isPeeking,
+            subTime: currentSubTime
+          )
+        case .emom:
+          WorkoutExerciseSetCellEMOM(
+            exerciseSet: exerciseSet,
+            exercises: exercises,
+            currentTime: nil,
+            mode: mode,
+            isPeeking: isPeeking
+          )
+        default:
+          EmptyView()
+        }
       case .rest(let timeInterval):
-        restContent(rest: timeInterval)
+        WorkoutExerciseSetCellRest(
+          exerciseSet: exerciseSet,
+          restTime: timeInterval,
+          mode: mode,
+          isPeeking: isPeeking,
+          subTime: currentSubTime
+        )
       @unknown default:
         EmptyView()
       }
@@ -52,108 +96,6 @@ struct WorkoutExerciseSetCell: View {
     .animation(.easeInOut, value: mode)
     .animation(.easeInOut, value: isPeeking)
     .id(exerciseSet.id)
-  }
-}
-
-private extension WorkoutExerciseSetCell {
-
-  func exerciseContent(exercise: WorkoutExercise) -> some View {
-    VStack {
-      cellHeaderView
-
-      HStack {
-        VStack(alignment: .leading) {
-          Spacer(minLength: 0)
-
-          if mode == .current || mode == .upNext || isPeeking {
-            Image(systemSymbol: exerciseSet.set.systemSymbol)
-              .font(.largeTitle)
-          }
-
-          Text(exercise.title)
-            .font(.title2)
-            .bold()
-
-          if mode == .current || isPeeking {
-            Text(exercise.summary)
-              .fixedSize(horizontal: false, vertical: true)
-              .font(.body)
-          }
-
-          Spacer(minLength: 0)
-        }
-
-        Spacer()
-
-        Text(exercise.measurementDescription)
-          .font(.title2)
-          .bold()
-      }
-    }
-    .fontDesign(.rounded)
-    .foregroundStyle(foregroundColor)
-    .cardContainer(fill: mode == .current ? AnyShapeStyle(.tint) : AnyShapeStyle(.background))
-    .tint(.green)
-  }
-
-  func restContent(rest: TimeInterval) -> some View {
-    VStack {
-      cellHeaderView
-
-      HStack {
-        VStack(alignment: .leading) {
-          if mode == .current {
-            Image(systemSymbol: .figureStand)
-              .font(.largeTitle)
-          }
-          Text("Rest")
-        }
-
-        Spacer()
-
-        Text(DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: DateComponents(second: Int(rest))) ?? "")
-      }
-      .font(.title2)
-      .bold()
-    }
-    .fontDesign(.rounded)
-    .foregroundStyle(foregroundColor)
-    .cardContainer(fill: mode == .current ? AnyShapeStyle(.tint) : AnyShapeStyle(.background))
-    .tint(.blue)
-  }
-
-  var cellHeaderView: some View {
-    HStack {
-      switch mode {
-      case .current:
-        Text("Current")
-      case .upNext:
-        Text("Up Next")
-      case .complete:
-        Text("Complete")
-      default:
-        EmptyView()
-      }
-      Spacer()
-      Text("Set \(exerciseSet.setNumber + 1) of \(exerciseSet.set.numberOfSets)")
-    }
-    .font(.subheadline)
-    .foregroundStyle(.secondary)
-    .bold()
-  }
-}
-
-private extension WorkoutExerciseSetCell {
-
-  var foregroundColor: Color {
-    switch mode {
-    case .current:
-      return .black
-    case .complete:
-      return .secondary
-    default:
-      return .text
-    }
   }
 }
 
@@ -172,7 +114,8 @@ private extension WorkoutExerciseSetCell {
             index: index,
             currentIndex: currentIndex
           ),
-          isPeeking: index == peekIndex
+          isPeeking: index == peekIndex,
+          currentSubTime: nil
         )
         .onTapGesture {
           let mode = WorkoutExerciseSetCell.Mode(

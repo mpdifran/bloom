@@ -293,7 +293,7 @@ extension Assistant.Tool.Function {
                 ),
                 "format": Schema.Parameter(
                   enum: SocketMessage.WorkoutSet.Format.self,
-                  description: "What format the set will take. Use the format that makes the most sense for the set. AMRAP stands for 'As Many Rounds As Possible', and requires an overll duration. EMOM stands for 'Every Minute on the Minute', and each exercise is performed for 1 minute or less. Tabata is a specific format that requires 20 seconds of work, and 10 seconds of rest. This is repeated 8 times for a total duration of 4 minutes. Rounds for time is a format where the user needs to complete a certain number of rounds as fast as possible. You can use standard format for a regular set, and warmup/cooldown to start and end the workout."
+                  description: "What format the set will take. Use the format that makes the most sense for the set. AMRAP stands for 'As Many Rounds As Possible', and requires an overll duration. EMOM stands for 'Every Minute on the Minute', and each exercise is performed for 1 minute or less. Tabata is a specific format that requires 20 seconds of work, and 10 seconds of rest. This is repeated 8 times for a total duration of 4 minutes. You can use standard format for a regular set, and warmup/cooldown to start and end the workout."
                 ),
                 "duration": Schema.Parameter(
                   type: .optionalNumber,
