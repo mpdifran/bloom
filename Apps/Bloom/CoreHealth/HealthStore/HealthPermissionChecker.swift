@@ -158,7 +158,7 @@ public final class HealthPermissionChecker: Sendable {
     HKObjectType.activitySummaryType()
   ]
 
-  public let writeWatchTypes: Set<HKObjectType> = [
+  public let writeWatchTypes: Set<HKSampleType> = [
     HKQuantityType.workoutType(),
     HKQuantityType(.dietaryWater) // Not sure if we need this.
   ]

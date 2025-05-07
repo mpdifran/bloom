@@ -9,8 +9,8 @@ import Foundation
 import HealthKit
 
 #if os(watchOS)
-extension WorkoutManager {
-
+public extension WorkoutManager {
+  
   func startWorkout(workoutConfiguration: HKWorkoutConfiguration) async throws {
     session = try HKWorkoutSession(healthStore: healthStore, configuration: workoutConfiguration)
     builder = session?.associatedWorkoutBuilder()
@@ -20,21 +20,26 @@ extension WorkoutManager {
     /**
      Start mirroring the session to the companion device.
      */
-    try await session?.startMirroringToCompanionDevice()
+    do {
+      try await session?.startMirroringToCompanionDevice()
+    } catch {
+      print(error)
+    }
     /**
      Start the workout session activity.
      */
     let startDate = Date()
     session?.startActivity(with: startDate)
     try await builder?.beginCollection(at: startDate)
+    print("Started session")
   }
-
+  
   func handleReceivedData(_ data: Data) throws {
     guard let decodedQuantity = try NSKeyedUnarchiver.unarchivedObject(ofClass: HKQuantity.self, from: data) else {
       return
     }
     water += decodedQuantity.doubleValue(for: HKUnit.fluidOunceUS())
-
+    
     let sampleDate = Date()
     Task {
       let waterSample = [HKQuantitySample(type: HKQuantityType(.dietaryWater), quantity: decodedQuantity, start: sampleDate, end: sampleDate)]
@@ -48,21 +53,21 @@ extension WorkoutManager {
 // so the methods need to be nonisolated explicitly.
 //
 extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
-  nonisolated func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
+  nonisolated public func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
     /**
      HealthKit calls this method on an anonymous serial background queue.
      Use Task to provide an asynchronous context so MainActor can come to play.
      */
     Task { @MainActor in
       var allStatistics: [HKStatistics] = []
-
+      
       for type in collectedTypes {
         if let quantityType = type as? HKQuantityType, let statistics = workoutBuilder.statistics(for: quantityType) {
           updateForStatistics(statistics)
           allStatistics.append(statistics)
         }
       }
-
+      
       let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: allStatistics, requiringSecureCoding: true)
       guard let archivedData = archivedData, !archivedData.isEmpty else {
         print("Encoded cycling data is empty")
@@ -74,8 +79,8 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
       await sendData(archivedData)
     }
   }
-
-  nonisolated func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {
+  
+  nonisolated public func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {
   }
 }
 #endif

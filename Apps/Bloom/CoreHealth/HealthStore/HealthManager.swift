@@ -71,7 +71,7 @@ public extension HealthGoal {
     case .loseWeight, .maintainWeight, .gainWeight:
       Image(.logWeightIcon)
     case .none:
-      if #available(iOS 18.0, *) {
+      if #available(iOS 18.0, *), #available(watchOS 11.0, *) {
         Image(systemSymbol: .heartTextClipboardFill)
       } else {
         Image(systemSymbol: .heartTextSquareFill)

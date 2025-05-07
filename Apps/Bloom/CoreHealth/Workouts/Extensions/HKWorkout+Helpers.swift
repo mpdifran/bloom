@@ -11,6 +11,13 @@ import BloomFoundation
 
 public extension HKWorkout {
 
+  var totalTimeString: String {
+      let formatter = DateComponentsFormatter()
+      formatter.allowedUnits = [.hour, .minute, .second]
+      formatter.zeroFormattingBehavior = .pad
+      return formatter.string(from: duration) ?? ""
+  }
+
   var activeEnergyBurned: HKQuantity {
     if let energy = statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity() {
       return energy
@@ -27,6 +34,17 @@ public extension HKWorkout {
       return activeEnergy
     }
     return basalEnergy.sum(activeEnergy, unit: .largeCalorie())
+  }
+
+  var averageHeartRate: HKQuantity {
+    let defaultQuantity = HKQuantity(unit: .bpm(), doubleValue: 0)
+    guard
+      let statistics = statistics(for: HKQuantityType(.heartRate)),
+      let average = statistics.averageQuantity()
+    else {
+      return defaultQuantity
+    }
+    return average
   }
 
   var totalDistanceWalkingRunning: HKQuantity? {

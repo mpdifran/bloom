@@ -68,7 +68,6 @@ private extension WorkoutPlanDetailsView {
       VStack(alignment: .leading) {
         if workoutPlan.equipment.isEmpty {
           Text("No equipment required.")
-            .foregroundStyle(.secondary)
         } else {
           Text(workoutPlan.equipmentDescription)
         }

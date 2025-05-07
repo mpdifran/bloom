@@ -24,7 +24,7 @@ public final class WorkoutManager: NSObject, ObservableObject {
   @Published public var water: Double = 0
   @Published public var elapsedTimeInterval: TimeInterval = 0
 
-  let healthStore = HKHealthStore()
+  public let healthStore = HKHealthStore()
   internal(set) public var session: HKWorkoutSession?
 
   private override init() {
@@ -41,7 +41,7 @@ public final class WorkoutManager: NSObject, ObservableObject {
   private let asynStreamTuple = AsyncStream.makeStream(of: WorkoutSessionSateChange.self, bufferingPolicy: .bufferingNewest(1))
 
 #if os(watchOS)
-  var builder: HKLiveWorkoutBuilder?
+  internal(set) public var builder: HKLiveWorkoutBuilder?
 #else
   /// A date for synchronizing the elapsed time between iOS and watchOS.
   var contextDate: Date?
@@ -78,6 +78,7 @@ public extension WorkoutManager {
 private extension WorkoutManager {
   func consumeSessionStateChange(_ change: WorkoutSessionSateChange) async {
     sessionState = change.newState
+    print("Updated session to \(sessionState.name).")
     /**
      Wait for the session to transition states before ending the builder.
      */
@@ -101,7 +102,7 @@ private extension WorkoutManager {
       finishedWorkout = try await builder.finishWorkout()
       session?.end()
     } catch {
-      Logger.shared.log("Failed to end workout: \(error))")
+      print("Failed to end workout: \(error))")
       return
     }
     workout = finishedWorkout

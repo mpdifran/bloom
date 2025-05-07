@@ -18,8 +18,8 @@ extension ThemeController {
   enum Theme: String, CaseIterable, Identifiable {
     var id: Self { self }
 
-    case lilac
     case ultramarine
+    case lilac
     case sunflower
   }
 }
@@ -72,9 +72,9 @@ extension ThemeController.Theme {
   var alternateIconName: String? {
     switch self {
     case .lilac:
-      nil
+      "BloomAppIconLilac"
     case .ultramarine:
-      "BloomAppIconBlue"
+      nil
     case .sunflower:
       "BloomAppIconOrange"
     }
@@ -84,7 +84,7 @@ extension ThemeController.Theme {
 @MainActor @Observable
 final class ThemeController {
 
-  private(set) var theme: Theme = .lilac
+  private(set) var theme: Theme = .ultramarine
 
   init() {
     UserDefaults.group.register(defaults: [.Key.theme: Theme.lilac.rawValue])

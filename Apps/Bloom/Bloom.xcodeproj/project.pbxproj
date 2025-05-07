@@ -25,6 +25,21 @@
 		FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */; };
 		FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */; };
 		FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0D152CFA47C500374F66 /* BloomModel */; };
+		FF7577572DC92C3600E31C86 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577562DC92C3600E31C86 /* SFSafeSymbols */; };
+		FF7577582DC9625D00E31C86 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
+		FF7577592DC9625D00E31C86 /* BloomFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF75775B2DC9625F00E31C86 /* CoreHealth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; };
+		FF75775C2DC9625F00E31C86 /* CoreHealth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF75775D2DC9626000E31C86 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
+		FF75775E2DC9626000E31C86 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF75775F2DC9626200E31C86 /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FF7577602DC9626200E31C86 /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF7577622DC9A34500E31C86 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577612DC9A34500E31C86 /* AppFoundations */; };
+		FF7577642DC9A34900E31C86 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577632DC9A34900E31C86 /* AppUI */; };
+		FF7577662DC9A65D00E31C86 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577652DC9A65D00E31C86 /* TelemetryDeck */; };
+		FF7577682DC9A68200E31C86 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577672DC9A68200E31C86 /* TelemetryDeck */; };
+		FF75776A2DC9A69F00E31C86 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577692DC9A69F00E31C86 /* TelemetryDeck */; };
+		FF75776C2DCA381D00E31C86 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF75776B2DCA381D00E31C86 /* TelemetryDeck */; };
 		FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = FF83DB1B2D2ECF010018FAAC /* RevenueCat */; };
 		FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */; };
 		FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
@@ -38,6 +53,7 @@
 		FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
+		FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9BEA262DCAABD200D90BAF /* Algorithms */; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -91,6 +107,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
 			remoteInfo = ScreenControl;
+		};
+		FF75774E2DC92C0700E31C86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E96832C0C1F38004DAD2D;
+			remoteInfo = BloomFoundation;
+		};
+		FF7577502DC92C0700E31C86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFECC1CD2DC2C326002F6AAA;
+			remoteInfo = CoreHealth;
+		};
+		FF7577522DC92C0700E31C86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFCE852D2C99DBD6002C46B1;
+			remoteInfo = DataContainer;
+		};
+		FF7577542DC92C0700E31C86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
+			remoteInfo = Umbrella;
 		};
 		FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -179,6 +223,30 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF7577392DC91A3900E31C86 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF75775A2DC9625D00E31C86 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FF7577592DC9625D00E31C86 /* BloomFoundation.framework in Embed Frameworks */,
+				FF75775E2DC9626000E31C86 /* DataContainer.framework in Embed Frameworks */,
+				FF7577602DC9626200E31C86 /* Umbrella.framework in Embed Frameworks */,
+				FF75775C2DC9625F00E31C86 /* CoreHealth.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -192,6 +260,7 @@
 		FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ScreenControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BloomFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BloomWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -305,6 +374,7 @@
 		4BD93F212CFA88C900D1AFB8 /* fastlane */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = fastlane; path = ../../fastlane; sourceTree = "<group>"; };
 		FF0B2C5B2D73C82500196463 /* Scripts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Scripts; sourceTree = "<group>"; };
 		FF67B2482DAFF5D70086E697 /* Configuration */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configuration; sourceTree = "<group>"; };
+		FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BloomWatch Watch App"; sourceTree = "<group>"; };
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
 		FFECC1CF2DC2C327002F6AAA /* CoreHealth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreHealth; sourceTree = "<group>"; };
@@ -363,6 +433,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF75772B2DC91A3700E31C86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */,
+				FF7577582DC9625D00E31C86 /* BloomFoundation.framework in Frameworks */,
+				FF7577572DC92C3600E31C86 /* SFSafeSymbols in Frameworks */,
+				FF75775B2DC9625F00E31C86 /* CoreHealth.framework in Frameworks */,
+				FF75775F2DC9626200E31C86 /* Umbrella.framework in Frameworks */,
+				FF75775D2DC9626000E31C86 /* DataContainer.framework in Frameworks */,
+				FF7577622DC9A34500E31C86 /* AppFoundations in Frameworks */,
+				FF7577642DC9A34900E31C86 /* AppUI in Frameworks */,
+				FF7577662DC9A65D00E31C86 /* TelemetryDeck in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FF9782D42C9A22C900A8ED7E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -384,6 +470,7 @@
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
 				FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */,
 				FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */,
+				FF75776C2DCA381D00E31C86 /* TelemetryDeck in Frameworks */,
 				FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */,
 				FFECC1D42DC2C327002F6AAA /* CoreHealth.framework in Frameworks */,
 				FF4A21BE2C88FA5600278019 /* BugsnagNetworkRequestPlugin in Frameworks */,
@@ -408,6 +495,7 @@
 			files = (
 				FF9782ED2C9A234000A8ED7E /* Umbrella.framework in Frameworks */,
 				FFCE85632C99DCF8002C46B1 /* BloomFoundation.framework in Frameworks */,
+				FF7577682DC9A68200E31C86 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +508,7 @@
 				FFECCF6B2DC3FA3D002F6AAA /* SFSafeSymbols in Frameworks */,
 				FFECCF6D2DC3FA4C002F6AAA /* Algorithms in Frameworks */,
 				FFECC1DB2DC2C341002F6AAA /* BloomFoundation.framework in Frameworks */,
+				FF75776A2DC9A69F00E31C86 /* TelemetryDeck in Frameworks */,
 				FFECCF6F2DC3FA7A002F6AAA /* AppFoundations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -459,6 +548,7 @@
 			isa = PBXGroup;
 			children = (
 				4BD93D442CFA889800D1AFB8 /* Bloom */,
+				FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */,
 				4BD93EBC2CFA88A900D1AFB8 /* BloomTests */,
 				4BD93EC52CFA88B000D1AFB8 /* DeviceActivityMonitorExtension */,
 				4BD93ECC2CFA88B300D1AFB8 /* ShieldConfigurationExtension */,
@@ -492,6 +582,7 @@
 				FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */,
 				FF9782D72C9A22C900A8ED7E /* Umbrella.framework */,
 				FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */,
+				FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -655,6 +746,38 @@
 			productReference = FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */;
 			productType = "com.apple.product-type.extensionkit-extension";
 		};
+		FF75772D2DC91A3700E31C86 /* BloomWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF75773E2DC91A3900E31C86 /* Build configuration list for PBXNativeTarget "BloomWatch Watch App" */;
+			buildPhases = (
+				FF75772A2DC91A3700E31C86 /* Sources */,
+				FF75772B2DC91A3700E31C86 /* Frameworks */,
+				FF75772C2DC91A3700E31C86 /* Resources */,
+				FF75775A2DC9625D00E31C86 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF75774F2DC92C0700E31C86 /* PBXTargetDependency */,
+				FF7577512DC92C0700E31C86 /* PBXTargetDependency */,
+				FF7577532DC92C0700E31C86 /* PBXTargetDependency */,
+				FF7577552DC92C0700E31C86 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */,
+			);
+			name = "BloomWatch Watch App";
+			packageProductDependencies = (
+				FF7577562DC92C3600E31C86 /* SFSafeSymbols */,
+				FF7577612DC9A34500E31C86 /* AppFoundations */,
+				FF7577632DC9A34900E31C86 /* AppUI */,
+				FF7577652DC9A65D00E31C86 /* TelemetryDeck */,
+				FF9BEA262DCAABD200D90BAF /* Algorithms */,
+			);
+			productName = "BloomWatch Watch App";
+			productReference = FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		FF9782D62C9A22C900A8ED7E /* Umbrella */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FF9782E02C9A22C900A8ED7E /* Build configuration list for PBXNativeTarget "Umbrella" */;
@@ -692,6 +815,7 @@
 				FFACBAD62BAC7788006AAD0B /* Frameworks */,
 				FFACBAD72BAC7788006AAD0B /* Resources */,
 				FF1E96622C0BF96D004DAD2D /* Embed Frameworks */,
+				FF7577392DC91A3900E31C86 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
@@ -721,6 +845,7 @@
 				FF83DB1B2D2ECF010018FAAC /* RevenueCat */,
 				FFADE9932D468789004FBF2B /* Swipy */,
 				4B13A26D2D74E7FD00459D05 /* SFSafeSymbols */,
+				FF75776B2DCA381D00E31C86 /* TelemetryDeck */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Bloom.app */;
@@ -746,6 +871,7 @@
 			);
 			name = DataContainer;
 			packageProductDependencies = (
+				FF7577672DC9A68200E31C86 /* TelemetryDeck */,
 			);
 			productName = DataContainer;
 			productReference = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */;
@@ -775,6 +901,7 @@
 				FFECCF6A2DC3FA3D002F6AAA /* SFSafeSymbols */,
 				FFECCF6C2DC3FA4C002F6AAA /* Algorithms */,
 				FFECCF6E2DC3FA7A002F6AAA /* AppFoundations */,
+				FF7577692DC9A69F00E31C86 /* TelemetryDeck */,
 			);
 			productName = CoreHealth;
 			productReference = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */;
@@ -830,6 +957,9 @@
 					FF3A8F2E2C1A8341002DA563 = {
 						CreatedOnToolsVersion = 15.4;
 					};
+					FF75772D2DC91A3700E31C86 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					FF9782D62C9A22C900A8ED7E = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -876,6 +1006,7 @@
 			projectRoot = "";
 			targets = (
 				FFACBAD82BAC7788006AAD0B /* Bloom */,
+				FF75772D2DC91A3700E31C86 /* BloomWatch Watch App */,
 				FFF61B372BEEB7B000926042 /* BloomTests */,
 				FF1E96182C0BEC1D004DAD2D /* DeviceActivityMonitorExtension */,
 				FF1E96302C0BF57F004DAD2D /* ShieldConfigurationExtension */,
@@ -927,6 +1058,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FF3A8F2D2C1A8341002DA563 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF75772C2DC91A3700E31C86 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1036,6 +1174,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF75772A2DC91A3700E31C86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FF9782D32C9A22C900A8ED7E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1098,6 +1243,26 @@
 			isa = PBXTargetDependency;
 			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
 			targetProxy = FF3A8F412C1A835F002DA563 /* PBXContainerItemProxy */;
+		};
+		FF75774F2DC92C0700E31C86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
+			targetProxy = FF75774E2DC92C0700E31C86 /* PBXContainerItemProxy */;
+		};
+		FF7577512DC92C0700E31C86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFECC1CD2DC2C326002F6AAA /* CoreHealth */;
+			targetProxy = FF7577502DC92C0700E31C86 /* PBXContainerItemProxy */;
+		};
+		FF7577532DC92C0700E31C86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFCE852D2C99DBD6002C46B1 /* DataContainer */;
+			targetProxy = FF7577522DC92C0700E31C86 /* PBXContainerItemProxy */;
+		};
+		FF7577552DC92C0700E31C86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+			targetProxy = FF7577542DC92C0700E31C86 /* PBXContainerItemProxy */;
 		};
 		FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1457,6 +1622,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -1494,7 +1660,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -1503,6 +1668,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -1539,7 +1705,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -1685,7 +1850,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
-				WATCHOS_DEPLOYMENT_TARGET = 9.6;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = "Debug [Dev]";
 		};
@@ -1719,6 +1884,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1954,6 +2120,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -1988,7 +2155,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = "Debug [Dev]";
 		};
@@ -1997,6 +2163,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -2034,7 +2201,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = "Debug [Dev]";
 		};
@@ -2043,6 +2209,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -2077,7 +2244,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = "Debug [Dev]";
 		};
@@ -2142,7 +2308,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 9.6;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = "Release [Dev]";
 		};
@@ -2176,6 +2342,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2411,6 +2578,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -2445,7 +2613,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = "Release [Dev]";
 		};
@@ -2454,6 +2621,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -2490,7 +2658,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = "Release [Dev]";
 		};
@@ -2499,6 +2666,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -2533,7 +2701,150 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = "Release [Dev]";
+		};
+		FF75773A2DC91A3900E31C86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BloomWatch Watch App/BloomWatch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = GUJ47GUV2Q;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match Development com.lotus-labs.bloom.watchkitapp";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		FF75773B2DC91A3900E31C86 /* Debug [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BloomWatch Watch App/BloomWatch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = GUJ47GUV2Q;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match Development com.lotus-labs.bloom.dev.watchkitapp";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = "Debug [Dev]";
+		};
+		FF75773C2DC91A3900E31C86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BloomWatch Watch App/BloomWatch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = GUJ47GUV2Q;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match Development com.lotus-labs.bloom.watchkitapp";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		FF75773D2DC91A3900E31C86 /* Release [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BloomWatch Watch App/BloomWatch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = GUJ47GUV2Q;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match Development com.lotus-labs.bloom.dev.watchkitapp";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = "Release [Dev]";
 		};
@@ -2542,6 +2853,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -2576,7 +2888,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -2585,6 +2896,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -2619,7 +2931,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -2691,7 +3002,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
-				WATCHOS_DEPLOYMENT_TARGET = 9.6;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = Debug;
 		};
@@ -2756,7 +3067,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 9.6;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = Release;
 		};
@@ -2790,6 +3101,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2839,6 +3151,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID).watchkitapp";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2863,6 +3176,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -2897,7 +3211,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -2906,6 +3219,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -2940,13 +3254,13 @@
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
 		FFECC1D72DC2C327002F6AAA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
@@ -2992,6 +3306,7 @@
 		FFECC1D82DC2C327002F6AAA /* Debug [Dev] */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
@@ -3037,6 +3352,7 @@
 		FFECC1D92DC2C327002F6AAA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
@@ -3082,6 +3398,7 @@
 		FFECC1DA2DC2C327002F6AAA /* Release [Dev] */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
@@ -3241,6 +3558,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FF75773E2DC91A3900E31C86 /* Build configuration list for PBXNativeTarget "BloomWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF75773A2DC91A3900E31C86 /* Debug */,
+				FF75773B2DC91A3900E31C86 /* Debug [Dev] */,
+				FF75773C2DC91A3900E31C86 /* Release */,
+				FF75773D2DC91A3900E31C86 /* Release [Dev] */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FF9782E02C9A22C900A8ED7E /* Build configuration list for PBXNativeTarget "Umbrella" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -3386,7 +3714,7 @@
 			repositoryURL = "https://github.com/mpdifran/AppUI";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.1.0;
 			};
 		};
 		FFE41D222C8BE1A000E3E559 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
@@ -3447,6 +3775,41 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = BloomModel;
 		};
+		FF7577562DC92C3600E31C86 /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
+		FF7577612DC9A34500E31C86 /* AppFoundations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
+			productName = AppFoundations;
+		};
+		FF7577632DC9A34900E31C86 /* AppUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFD8C4D12BD1AC5E001E8D42 /* XCRemoteSwiftPackageReference "AppUI" */;
+			productName = AppUI;
+		};
+		FF7577652DC9A65D00E31C86 /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
+		FF7577672DC9A68200E31C86 /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
+		FF7577692DC9A69F00E31C86 /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
+		FF75776B2DCA381D00E31C86 /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
 		FF83DB1B2D2ECF010018FAAC /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
@@ -3480,6 +3843,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
+		};
+		FF9BEA262DCAABD200D90BAF /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF8B8B1F2BFD1EF500BA2128 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 		FFADE9932D468789004FBF2B /* Swipy */ = {
 			isa = XCSwiftPackageProductDependency;

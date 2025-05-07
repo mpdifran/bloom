@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
 
-    func selectable() -> some View {
-        contentShape(Rectangle())
-    }
+  func selectable() -> some View {
+    contentShape(Rectangle())
+  }
 }
