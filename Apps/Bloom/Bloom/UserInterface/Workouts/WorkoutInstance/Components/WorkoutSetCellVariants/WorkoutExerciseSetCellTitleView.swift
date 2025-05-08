@@ -53,6 +53,7 @@ struct WorkoutExerciseSetCellTitleView: View {
       Spacer()
 
       Text(measurementDescription)
+        .monospacedDigit()
         .contentTransition(.numericText())
     }
     .font(.title2)

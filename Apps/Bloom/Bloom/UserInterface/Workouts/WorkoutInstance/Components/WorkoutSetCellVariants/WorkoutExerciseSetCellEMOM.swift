@@ -43,7 +43,8 @@ struct WorkoutExerciseSetCellEMOM: View {
     .foregroundStyle(mode.color)
     .cardContainer(fill: mode == .current ? AnyShapeStyle(.tint) : AnyShapeStyle(.background))
     .tint(.green)
-    .animation(.easeInOut, value: currentIndex)
+    .animation(.default, value: currentIndex)
+    .animation(.default, value: currentTime)
   }
 }
 

@@ -43,7 +43,8 @@ struct WorkoutExerciseSetCellTabata: View {
     .foregroundStyle(mode.color)
     .cardContainer(fill: mode == .current ? AnyShapeStyle(.tint) : AnyShapeStyle(.background))
     .tint(.green)
-    .animation(.easeInOut, value: currentIndex)
+    .animation(.default, value: currentIndex)
+    .animation(.default, value: subTime)
   }
 }
 
@@ -89,7 +90,6 @@ private extension WorkoutExerciseSetCellTabata {
     let workDuration = 20.0
 
     let elapsedInCycle = subTime.truncatingRemainder(dividingBy: cycleDuration)
-    let roundNumber = Int(subTime / cycleDuration) + 1
 
     return elapsedInCycle >= workDuration
   }

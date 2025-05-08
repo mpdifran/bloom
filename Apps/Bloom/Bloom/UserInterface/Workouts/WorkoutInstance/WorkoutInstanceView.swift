@@ -452,13 +452,13 @@ private extension WorkoutInstanceView {
           let dateComponents = DateComponents(second: Int(max(remainingTime, 0)))
           let timeString = DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: dateComponents) ?? ""
 
-          return "Round \(roundNumber): \(timeString)"
+          return "Work \(timeString)"
         } else {
           let remainingTime = cycleDuration - elapsedInCycle
           let dateComponents = DateComponents(second: Int(max(remainingTime, 0)))
           let timeString = DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: dateComponents) ?? ""
 
-          return "Rest: \(timeString)"
+          return "Rest \(timeString)"
         }
       default:
         return ""

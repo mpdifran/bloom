@@ -15,8 +15,32 @@ enum SoundPlayer {
     playSoundFile(name: "nano/WorkoutCountdown_Haptic.caf")
   }
 
+  // Good for indicating rest is over.
   static func playIntervalUpcoming() {
     playSoundFile(name: "nano/IntervalUpcoming.caf")
+  }
+
+  static func playIntervalEnded() {
+    playSoundFile(name: "nano/IntervalEnded.caf")
+  }
+
+  // Good for indicating rest.
+  static func alertActivityGoalClose() {
+    playSoundFile(name: "nano/Alert_ActivityGoalClose_Haptic.caf")
+  }
+
+  // Good for indicating rest.
+  static func alertActivityGoalBehind() {
+    playSoundFile(name: "nano/Alert_ActivityGoalBehind_Haptic.caf")
+  }
+
+  // Good for indicating rest is over.
+  static func playWorkoutPaceAbove() {
+    playSoundFile(name: "nano/WorkoutPaceAbove.caf")
+  }
+
+  static func healthReadingFail() {
+    playSoundFile(name: "nano/HealthReadingFail_Haptic.caf")
   }
 
   static func playWorkoutAutodetected() {
@@ -29,6 +53,10 @@ enum SoundPlayer {
 
   static func playHeadGestureDoubleNod() {
     playSoundFile(name: "nano/HeadGesturesDoubleNod.caf")
+  }
+
+  static func playSenderConfirmation() {
+    playSoundFile(name: "nano/SenderConfirmation.caf")
   }
 
   static func playLogHealthData() {
