@@ -20,7 +20,7 @@ struct ChatView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
 
-  @Query(sort: \ChatMessage.date, order: .reverse)
+  @Query(sort: \ChatMessage.date)
   private var chatMessages: [ChatMessage]
 
   var body: some View {
@@ -31,31 +31,21 @@ struct ChatView: View {
       /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
       /// Views must be added in the opposite order they appear in a VStack since they are flipped.
       ZStack(alignment: .bottom) {
-        ScrollView {
-          LazyVStack {
-            Group {
-              // Dummy view to help the ScrollView know where its bottom is.
-              bottomAnchorView
-
-              if viewModel.assistantIsTyping {
-                TypingIndicatorCell(isDirect: false)
-                  .id("typing-indicator")
-                  .transition(.blurReplace)
-
-                statusTextView
-              }
-
-              // Messages are already in reverse order from the query
-              ForEach(chatMessages) { chatMessage in
-                chatCell(for: chatMessage)
-              }
-            }
-            .flippedVertically() // Flip the content.
+        ChatList {
+          ForEach(chatMessages) { chatMessage in
+            chatCell(for: chatMessage)
           }
-          .horizontallyCentered()
-          .padding(.vertical)
+
+          if viewModel.assistantIsTyping {
+            statusTextView
+
+            TypingIndicatorCell(isDirect: false)
+              .id("typing-indicator")
+              .transition(.blurReplace)
+          }
+
+          bottomAnchorView
         }
-        .flippedVertically() // Flip the ScrollView.
 
         if !isAtBottom {
           Button {
