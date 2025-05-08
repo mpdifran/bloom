@@ -72,7 +72,7 @@ private extension WorkoutExerciseSetCellAMRAP {
     if let subTime {
       time = min(duration - subTime + 1, duration)
     } else {
-      time = duration ?? 0
+      time = duration
     }
     return DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: DateComponents(second: Int(time))) ?? ""
   }

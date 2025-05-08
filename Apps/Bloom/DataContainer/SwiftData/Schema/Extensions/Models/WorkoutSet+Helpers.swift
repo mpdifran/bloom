@@ -32,6 +32,9 @@ public extension WorkoutSet {
   }
 
   var representativeDuration: TimeInterval {
+    if format == .tabata {
+      return 240
+    }
     if let duration {
       return duration * Double(numberOfSets)
     } else {
@@ -66,7 +69,7 @@ public extension WorkoutSet {
   }
 
   var durationDescription: String {
-    DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(representativeDuration))) ?? ""
+    DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: DateComponents(second: Int(representativeDuration))) ?? ""
   }
 }
 

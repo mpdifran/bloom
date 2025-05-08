@@ -72,9 +72,17 @@ struct WorkoutExerciseSetCell: View {
           WorkoutExerciseSetCellEMOM(
             exerciseSet: exerciseSet,
             exercises: exercises,
-            currentTime: nil,
+            currentTime: currentSubTime,
             mode: mode,
             isPeeking: isPeeking
+          )
+        case .tabata:
+          WorkoutExerciseSetCellTabata(
+            exerciseSet: exerciseSet,
+            exercises: exercises,
+            mode: mode,
+            isPeeking: isPeeking,
+            subTime: currentSubTime
           )
         default:
           EmptyView()

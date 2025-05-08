@@ -42,12 +42,12 @@ public extension ShapeStyle where Self == Color {
   static var sugar: Self       { Color("Sugar", bundle: BundleToken.bundle) }
 
   // Nutrition - Vitamins
-  static var vitaminA: Self   { Color("VitaminA", bundle: BundleToken.bundle) }
-  static var vitaminB6: Self  { Color("VitaminB6", bundle: BundleToken.bundle) }
-  static var vitaminB12: Self { Color("VitaminB12", bundle: BundleToken.bundle) }
-  static var vitaminC: Self   { Color("VitaminC", bundle: BundleToken.bundle) }
-  static var vitaminD: Self   { Color("VitaminD", bundle: BundleToken.bundle) }
-  static var vitaminE: Self   { Color("VitaminE", bundle: BundleToken.bundle) }
+  static var vitaminA: Self   { Color("Vitamin A", bundle: BundleToken.bundle) }
+  static var vitaminB6: Self  { Color("Vitamin B6", bundle: BundleToken.bundle) }
+  static var vitaminB12: Self { Color("Vitamin B12", bundle: BundleToken.bundle) }
+  static var vitaminC: Self   { Color("Vitamin C", bundle: BundleToken.bundle) }
+  static var vitaminD: Self   { Color("Vitamin D", bundle: BundleToken.bundle) }
+  static var vitaminE: Self   { Color("Vitamin E", bundle: BundleToken.bundle) }
 
   // Sleep
   static var awakeSleep: Self { Color("AwakeSleep", bundle: BundleToken.bundle) }

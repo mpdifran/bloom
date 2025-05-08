@@ -23,7 +23,7 @@ struct WorkoutExerciseSetCellEMOM: View {
       WorkoutExerciseSetCellTitleView(
         symbol: exerciseSet.set.systemSymbol,
         title: exerciseSet.set.title,
-        measurementDescription: exerciseSet.set.durationDescription,
+        measurementDescription: timeDescription,
         measurementSubtitle: "EMOM",
         mode: mode,
         isPeeking: isPeeking
@@ -44,6 +44,20 @@ struct WorkoutExerciseSetCellEMOM: View {
     .cardContainer(fill: mode == .current ? AnyShapeStyle(.tint) : AnyShapeStyle(.background))
     .tint(.green)
     .animation(.easeInOut, value: currentIndex)
+  }
+}
+
+private extension WorkoutExerciseSetCellEMOM {
+
+  var timeDescription: String {
+    let duration = exerciseSet.set.duration ?? 0
+    let time: TimeInterval
+    if let currentTime {
+      time = min(duration - currentTime + 1, duration)
+    } else {
+      time = duration
+    }
+    return DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: DateComponents(second: Int(time))) ?? ""
   }
 }
 

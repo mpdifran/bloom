@@ -151,6 +151,30 @@ extension WorkoutPlan.Preview {
       WorkoutSet(
         id: "5",
         index: 4,
+        title: "Tabata Curls",
+        focus: "Curling",
+        numberOfSets: 1,
+        format: .tabata,
+        duration: 240,
+        restBetweenExercises: 0,
+        appleWorkoutType: .highIntensityIntervalTraining,
+        exercises: [
+          WorkoutExercise(
+            id: "h",
+            index: 0,
+            title: "Bicep Curls",
+            summary: "Curl it!",
+            numberOfReps: nil,
+            distance: nil,
+            distanceUnit: nil,
+            duration: 20,
+            kind: .exercise
+          )
+        ]
+      ),
+      WorkoutSet(
+        id: "6",
+        index: 5,
         title: "Cool Down",
         focus: "Cooling down to avoid injury.",
         numberOfSets: 3,

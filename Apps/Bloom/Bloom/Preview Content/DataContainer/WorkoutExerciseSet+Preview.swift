@@ -31,4 +31,11 @@ extension WorkoutExerciseSet.Preview {
     format: .emom,
     setNumber: 0
   )
+
+  nonisolated(unsafe) static let tabata = WorkoutExerciseSet(
+    set: .Preview.tabata,
+    exercises: WorkoutSet.Preview.tabata.exercises ?? [],
+    format: .tabata,
+    setNumber: 0
+  )
 }

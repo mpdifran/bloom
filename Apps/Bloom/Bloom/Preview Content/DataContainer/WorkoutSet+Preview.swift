@@ -130,4 +130,29 @@ extension WorkoutSet.Preview {
       )
     ]
   )
+
+  nonisolated(unsafe) static let tabata = WorkoutSet(
+    id: "2",
+    index: 0,
+    title: "Tabata Bicep Curls",
+    focus: "Strengthen the biceps.",
+    numberOfSets: 1,
+    format: .tabata,
+    duration: 480,
+    restBetweenExercises: 0,
+    appleWorkoutType: .functionalStrengthTraining,
+    exercises: [
+      WorkoutExercise(
+        id: "b",
+        index: 0,
+        title: "Bicep Curls",
+        summary: "Curl your biceps without moving your body.",
+        numberOfReps: nil,
+        distance: nil,
+        distanceUnit: nil,
+        duration: 20,
+        kind: .exercise
+      )
+    ]
+  )
 }
