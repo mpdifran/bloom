@@ -7,8 +7,11 @@
 
 import SwiftUI
 
-struct ChatLayout: _VariadicView_MultiViewRoot {
-
+private struct ChatVariadicView: _VariadicView_MultiViewRoot {
+  /// The chat view uses a double-flip technique to achieve correct scrolling behaviour:
+  /// 1. The content inside the ScrollView is flipped upside down so new messages appear at the bottom.
+  /// 2. The entire ScrollView is then flipped upside down to correct the orientation.
+  /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
   func body(children: _VariadicView.Children) -> some View {
     List {
       ForEach(children.reversed()) { child in
@@ -17,15 +20,16 @@ struct ChatLayout: _VariadicView_MultiViewRoot {
           .listRowBackground(Color.clear)
           .listRowInsets(EdgeInsets())
           .listRowSeparator(.hidden)
-          .padding(.vertical, 4)
       }
     }
     .listStyle(.plain)
+    .environment(\.defaultMinListRowHeight, 0)
+    .listRowSpacing(4)
     .flippedVertically()
   }
 }
 
-struct ChatList<Content: View>: View {
+struct ChatLayout<Content: View>: View {
 
   var content: Content
 
@@ -34,7 +38,7 @@ struct ChatList<Content: View>: View {
   }
 
   var body: some View {
-    _VariadicView.Tree(ChatLayout()) {
+    _VariadicView.Tree(ChatVariadicView()) {
       content
     }
   }

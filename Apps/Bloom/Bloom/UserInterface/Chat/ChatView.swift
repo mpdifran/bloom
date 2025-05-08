@@ -25,13 +25,8 @@ struct ChatView: View {
 
   var body: some View {
     ScrollViewReader { scrollViewProxy in
-      /// The chat view uses a double-flip technique to achieve correct scrolling behaviour:
-      /// 1. The content inside the ScrollView is flipped upside down so new messages appear at the bottom.
-      /// 2. The entire ScrollView is then flipped upside down to correct the orientation.
-      /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
-      /// Views must be added in the opposite order they appear in a VStack since they are flipped.
       ZStack(alignment: .bottom) {
-        ChatList {
+        ChatLayout {
           ForEach(chatMessages) { chatMessage in
             chatCell(for: chatMessage)
           }
@@ -44,7 +39,7 @@ struct ChatView: View {
               .transition(.blurReplace)
           }
 
-          bottomAnchorView
+           bottomAnchorView
         }
 
         if !isAtBottom {
@@ -139,7 +134,7 @@ private extension ChatView {
 
   var bottomAnchorView: some View {
     Color.clear
-      .frame(height: 1)
+      .frame(height: 0.1)
       .id("bottom-anchor")
       .onAppear {
         withAnimation {
