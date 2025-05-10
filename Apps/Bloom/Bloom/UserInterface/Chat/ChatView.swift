@@ -27,9 +27,7 @@ struct ChatView: View {
     ScrollViewReader { scrollViewProxy in
       ZStack(alignment: .bottom) {
         ChatLayout {
-          ForEach(chatMessages) { chatMessage in
-            chatCell(for: chatMessage)
-          }
+          chatMessagesView
 
           if viewModel.assistantIsTyping {
             statusTextView
@@ -42,21 +40,10 @@ struct ChatView: View {
            bottomAnchorView
         }
 
-        if !isAtBottom {
-          Button {
-            withAnimation {
-              scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-            }
-          } label: {
-            Image(systemSymbol: .arrowDown)
-              .font(.body)
-              .foregroundStyle(.text, .fill)
-              .frame(square: 32)
-              .background(Circle().fill(.ultraThinMaterial))
-              .shadow(radius: 2)
+        scrollToBottomButton {
+          withAnimation {
+            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
           }
-          .padding(.bottom, 8)
-          .transition(.scale.combined(with: .blurReplace))
         }
       }
     }
@@ -70,6 +57,17 @@ struct ChatView: View {
 }
 
 private extension ChatView {
+  @ViewBuilder
+  var chatMessagesView: some View {
+    if chatMessages.isEmpty {
+      ChatPromptsView()
+    } else {
+      ForEach(chatMessages) { chatMessage in
+        chatCell(for: chatMessage)
+      }
+    }
+  }
+
   @ViewBuilder
   func chatCell(for chatMessage: ChatMessage) -> some View {
     switch chatMessage.content {
@@ -146,6 +144,24 @@ private extension ChatView {
           isAtBottom = false
         }
       }
+  }
+
+  @ViewBuilder
+  func scrollToBottomButton(_ onTap: @escaping () -> Void) -> some View {
+    if !isAtBottom {
+      Button {
+        onTap()
+      } label: {
+        Image(systemSymbol: .arrowDown)
+          .font(.body)
+          .foregroundStyle(.text, .fill)
+          .frame(square: 32)
+          .background(Circle().fill(.ultraThinMaterial))
+          .shadow(radius: 2)
+      }
+      .padding(.bottom, 8)
+      .transition(.scale.combined(with: .blurReplace))
+    }
   }
 }
 
