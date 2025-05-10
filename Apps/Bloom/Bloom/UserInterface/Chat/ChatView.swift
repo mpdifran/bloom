@@ -20,42 +20,27 @@ struct ChatView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
 
-  @Query(sort: \ChatMessage.date, order: .reverse)
+  @Query(sort: \ChatMessage.date)
   private var chatMessages: [ChatMessage]
 
   var body: some View {
     ScrollViewReader { scrollViewProxy in
-      /// The chat view uses a double-flip technique to achieve correct scrolling behaviour:
-      /// 1. The content inside the ScrollView is flipped upside down so new messages appear at the bottom.
-      /// 2. The entire ScrollView is then flipped upside down to correct the orientation.
-      /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
-      /// Views must be added in the opposite order they appear in a VStack since they are flipped.
       ZStack(alignment: .bottom) {
-        ScrollView {
-          LazyVStack {
-            Group {
-              // Dummy view to help the ScrollView know where its bottom is.
-              bottomAnchorView
-
-              if viewModel.assistantIsTyping {
-                TypingIndicatorCell(isDirect: false)
-                  .id("typing-indicator")
-                  .transition(.blurReplace)
-
-                statusTextView
-              }
-
-              // Messages are already in reverse order from the query
-              ForEach(chatMessages) { chatMessage in
-                chatCell(for: chatMessage)
-              }
-            }
-            .flippedVertically() // Flip the content.
+        ChatLayout {
+          ForEach(chatMessages) { chatMessage in
+            chatCell(for: chatMessage)
           }
-          .horizontallyCentered()
-          .padding(.vertical)
+
+          if viewModel.assistantIsTyping {
+            statusTextView
+
+            TypingIndicatorCell(isDirect: false)
+              .id("typing-indicator")
+              .transition(.blurReplace)
+          }
+
+           bottomAnchorView
         }
-        .flippedVertically() // Flip the ScrollView.
 
         if !isAtBottom {
           Button {
@@ -149,7 +134,7 @@ private extension ChatView {
 
   var bottomAnchorView: some View {
     Color.clear
-      .frame(height: 1)
+      .frame(height: 0.1)
       .id("bottom-anchor")
       .onAppear {
         withAnimation {
