@@ -46,6 +46,9 @@ struct BloomApp: App {
 
     checkRegisterForRemoteNotifications()
     migrateUserDefaults()
+
+    // Listen for workouts starting from Apple Watch
+    WorkoutManager.shared.setupRemoteSessionHandler()
   }
 
   var body: some Scene {

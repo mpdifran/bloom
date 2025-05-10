@@ -19,12 +19,15 @@ struct LaunchWorkoutCell: View {
       Image(systemSymbol: SFSymbol(rawValue: workoutType.systemImage))
         .font(.largeTitle)
       Text(workoutType.name)
-        .font(.headline)
+        .font(.title3)
         .bold()
         .fontDesign(.rounded)
+        .foregroundStyle(.white)
+        .multilineTextAlignment(.leading)
+        .lineLimit(3)
     }
     .padding(8)
-    .foregroundStyle(.black)
+    .foregroundStyle(.green)
     .listRowBackground(listRowBackground)
     .selectable()
   }
@@ -34,7 +37,7 @@ private extension LaunchWorkoutCell {
 
   var listRowBackground: some View {
     RoundedRectangle(cornerRadius: 20)
-      .fill(.green)
+      .fill(.background.secondary)
   }
 }
 

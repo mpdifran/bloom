@@ -11,19 +11,18 @@ import HealthKit
 public extension WorkoutPlan {
 
   var representativeAppleWorkoutType: HKWorkoutActivityType {
-    sets?.first(where: { $0.format != .warmup && $0.format != .coolDown })?.appleWorkoutType ?? .other
+    orderedSets.first(where: { $0.format != .warmup && $0.format != .coolDown })?.appleWorkoutType ?? .other
   }
 
   var setsDescription: String {
-    guard let setsNames = sets?.map({ $0.title }) else { return "" }
+    let setsNames = orderedSets.map({ $0.title })
 
     return ListFormatter.localizedString(byJoining: setsNames)
   }
 
   var durationDescription: String {
-    guard let sets else { return "" }
 
-    let duration = sets.reduce(0) { partialResult, set in
+    let duration = orderedSets.reduce(0) { partialResult, set in
       partialResult + set.representativeDuration
     }
 

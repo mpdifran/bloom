@@ -21,6 +21,7 @@ struct WorkoutPlanCell: View {
           .font(.title3)
           .bold()
           .fontDesign(.rounded)
+          .fixedSize(horizontal: false, vertical: true)
           .multilineTextAlignment(.leading)
           .lineLimit(2)
 

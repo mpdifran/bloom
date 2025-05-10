@@ -19,7 +19,7 @@ struct ChatLauncherViewModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .blur(radius: tabController.isShowingChat ? 15 : 0)
+      .blur(radius: tabController.isShowingChat ? 30 : 0)
       .overlay {
         if tabController.isShowingChat {
           ChatView()
@@ -250,6 +250,7 @@ private extension ChatLauncherView {
 
     text = ""
     image = nil
+    isFocused = false
 
     do {
       try await ChatController.shared.send(message: textToSend, image: imageToSend)

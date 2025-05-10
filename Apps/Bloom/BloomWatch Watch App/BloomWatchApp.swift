@@ -24,6 +24,9 @@ struct BloomWatch_Watch_AppApp: App {
       NavigationStack {
         LaunchWorkoutListView()
       }
+      .task {
+        await HealthPermissionChecker.shared.requestAccessIfNeeded()
+      }
       .onAppear {
         if workoutManager.sessionState.isActive && presentedFullScreen == nil {
           presentedFullScreen = ActiveWorkoutView().asAny

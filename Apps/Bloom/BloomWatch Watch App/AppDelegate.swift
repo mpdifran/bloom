@@ -16,9 +16,22 @@ class AppDelegate: NSObject, WKApplicationDelegate {
     Task {
       do {
         WorkoutManager.shared.resetWorkout()
-        try await WorkoutManager.shared.startWorkout(workoutConfiguration: workoutConfiguration)
+        try await WorkoutManager.shared.startWorkout(
+          workoutConfiguration: workoutConfiguration,
+          shouldMirror: true
+        )
       } catch {
         print(error)
+      }
+    }
+  }
+
+  func handleActiveWorkoutRecovery() {
+    Task {
+      do {
+        try await WorkoutManager.shared.handleActiveWorkoutRecovery()
+      } catch {
+        print("Error handling active workout recovery: \(error)")
       }
     }
   }

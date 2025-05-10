@@ -9,7 +9,7 @@ import Foundation
 import HealthKit
 
 #if os(iOS)
-extension WorkoutManager {
+public extension WorkoutManager {
 
   func startWatchWorkout(workoutType: HKWorkoutActivityType) async throws {
     let configuration = HKWorkoutConfiguration()
@@ -18,7 +18,7 @@ extension WorkoutManager {
     try await healthStore.startWatchApp(toHandle: configuration)
   }
 
-  func retrieveRemoteSession() {
+  func setupRemoteSessionHandler() {
     healthStore.workoutSessionMirroringStartHandler = { mirroredSession in
       Task { @MainActor in
         self.resetWorkout()

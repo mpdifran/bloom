@@ -15,44 +15,64 @@ struct ActiveWorkoutControlsView: View {
 
   var body: some View {
     VStack {
-      Button {
-        startWorkout()
-      } label: {
-        Label("Start", systemSymbol: .playFill)
-      }
-      .disabled(workoutManager.sessionState.isActive)
-      .tint(.green)
+      HStack {
+        endButton
 
-      Button {
-        workoutManager.sessionState == .running ? workoutManager.session?.pause() : workoutManager.session?.resume()
-      } label: {
-        let title = workoutManager.sessionState == .running ? "Pause" : "Resume"
-        let systemSymbol: SFSymbol = workoutManager.sessionState == .running ? .pauseFill : .playFill
-        Label(title, systemSymbol: systemSymbol)
+        if workoutManager.sessionState == .running {
+          pauseButton
+        } else {
+          resumeButton
+        }
       }
-      .disabled(!workoutManager.sessionState.isActive)
-      .tint(.blue)
+      Spacer()
+    }
+  }
+}
 
+private extension ActiveWorkoutControlsView {
+
+  var pauseButton: some View {
+    VStack {
       Button {
-        workoutManager.session?.stopActivity(with: .now)
+        workoutManager.session?.pause()
       } label: {
-        Label("End", systemSymbol: .xmarkApp)
+        Image(systemSymbol: .pause)
       }
-      .tint(.red)
-      .disabled(!workoutManager.sessionState.isActive)
+      .tint(.yellow)
+      .bold()
+      .font(.title2)
+
+      Text("Pause")
     }
   }
 
-  private func startWorkout() {
-    Task {
-      do {
-        let configuration = HKWorkoutConfiguration()
-        configuration.activityType = .cycling
-        configuration.locationType = .outdoor
-        try await workoutManager.startWorkout(workoutConfiguration: configuration)
-      } catch {
-        print("Failed to start workout \(error))")
+  var resumeButton: some View {
+    VStack {
+      Button {
+        workoutManager.session?.resume()
+      } label: {
+        Image(systemSymbol: .play)
       }
+      .tint(.green)
+      .bold()
+      .font(.title2)
+
+      Text("Resume")
+    }
+  }
+
+  var endButton: some View {
+    VStack {
+      Button {
+        workoutManager.session?.stopActivity(with: .now)
+      } label: {
+        Image(systemSymbol: .xmark)
+      }
+      .tint(.red)
+      .bold()
+      .font(.title2)
+
+      Text("End")
     }
   }
 }

@@ -2722,8 +2722,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.lotus-labs.bloom";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2758,8 +2760,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.lotus-labs.bloom";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2794,8 +2798,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.lotus-labs.bloom";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2830,8 +2836,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "BloomWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Bloom;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Help identify areas of concern with your health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Help identify areas of concern with your health.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BLOOM_APP_BUNDLE_ID)";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.lotus-labs.bloom";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

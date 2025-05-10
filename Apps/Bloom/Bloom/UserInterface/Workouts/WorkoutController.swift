@@ -6,6 +6,7 @@
 //
 
 import HealthKit
+import CoreHealth
 
 final actor WorkoutController {
   static let shared = WorkoutController()
@@ -16,18 +17,18 @@ final actor WorkoutController {
 extension WorkoutController {
 
   func startWorkout(type: HKWorkoutActivityType) async throws {
-    // TODO: Implement
+//    try await WorkoutManager.shared.startWatchWorkout(workoutType: type)
   }
 
   func resumeWorkout() async throws {
-    
+//    await WorkoutManager.shared.session?.resume()
   }
 
   func pauseWorkout() async throws {
-
+//    await WorkoutManager.shared.session?.pause()
   }
 
   func endWorkout() async throws {
-    
+//    await WorkoutManager.shared.session?.end()
   }
 }

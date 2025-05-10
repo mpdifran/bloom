@@ -8,6 +8,8 @@
 import Foundation
 import HealthKit
 import Combine
+import WatchConnectivity
+import BloomFoundation
 
 @MainActor
 public final class WorkoutManager: NSObject, ObservableObject {
@@ -76,6 +78,7 @@ public extension WorkoutManager {
 }
 
 private extension WorkoutManager {
+
   func consumeSessionStateChange(_ change: WorkoutSessionSateChange) async {
     sessionState = change.newState
     print("Updated session to \(sessionState.name).")
@@ -153,13 +156,16 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
     from fromState: HKWorkoutSessionState,
     date: Date
   ) {
-    print("Session state changed from \(fromState.rawValue) to \(toState.rawValue)")
     /**
      Yield the new state change to the async stream synchronously.
      asynStreamTuple is a constant, so it's nonisolated.
      */
     let sessionSateChange = WorkoutSessionSateChange(newState: toState, date: date)
     asynStreamTuple.continuation.yield(sessionSateChange)
+  }
+
+  nonisolated public func workoutSession(_ workoutSession: HKWorkoutSession, didGenerate event: HKWorkoutEvent) {
+    print("Event Generated: \(event)")
   }
 
   nonisolated public func workoutSession(

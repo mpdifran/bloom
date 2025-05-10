@@ -31,6 +31,7 @@ struct LaunchWorkoutListView: View {
           }
       }
     }
+    .listStyle(.carousel)
     .navigationTitle("Workout")
     .alert(error: $error)
   }
@@ -43,7 +44,10 @@ private extension LaunchWorkoutListView {
     configuration.activityType = workoutType
     configuration.locationType = .unknown
 
-    try await workoutManager.startWorkout(workoutConfiguration: configuration)
+    try await workoutManager.startWorkout(
+      workoutConfiguration: configuration,
+      shouldMirror: false
+    )
   }
 }
 

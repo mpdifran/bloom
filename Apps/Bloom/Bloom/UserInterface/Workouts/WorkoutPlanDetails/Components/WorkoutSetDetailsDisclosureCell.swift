@@ -39,7 +39,7 @@ private extension WorkoutSetDetailsDisclosureCell {
           .bold()
           .fontDesign(.rounded)
 
-        Text("\(set.format.name) • \(set.setsDescription) • \(set.exercisesCountDescription)")
+        Text("\(set.format.name) • \(set.setsDescription)")
           .font(.subheadline)
           .fixedSize(horizontal: false, vertical: true)
 

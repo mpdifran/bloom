@@ -8,11 +8,13 @@
 import SwiftUI
 import CoreHealth
 import AppUI
+import WatchKit
 
 private extension ActiveWorkoutView {
   enum Tab {
     case controls
     case metrics
+    case nowPlaying
   }
 }
 
@@ -29,6 +31,7 @@ struct ActiveWorkoutView: View {
     TabView(selection: $selection) {
       ActiveWorkoutControlsView().tag(Tab.controls)
       ActiveWorkoutMetricsView().tag(Tab.metrics)
+      NowPlayingView().tag(Tab.nowPlaying)
     }
     .navigationTitle(title)
     .navigationBarBackButtonHidden(true)

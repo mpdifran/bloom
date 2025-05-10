@@ -9,15 +9,10 @@ import SwiftUI
 import AppUI
 import DataContainer
 import SFSafeSymbols
+import HealthKit
+import CoreHealth
 
-extension WorkoutInstanceView {
-  enum Status {
-    case readyToBegin
-    case running
-    case paused
-    case ended
-  }
-}
+// MARK: - WorkoutInstanceView
 
 struct WorkoutInstanceView: View {
   private let workoutPlan: WorkoutPlan
@@ -25,7 +20,9 @@ struct WorkoutInstanceView: View {
 
   init(workoutPlan: WorkoutPlan) {
     self.workoutPlan = workoutPlan
-    self.exerciseSets = workoutPlan.expandedExerciseSets()
+    let exerciseSets = workoutPlan.expandedExerciseSets()
+    self.exerciseSets = exerciseSets
+    self._currentWorkoutType = State(initialValue: exerciseSets.first?.set.appleWorkoutType ?? .other)
   }
 
   @State private var startDate: Date? = nil
@@ -37,11 +34,14 @@ struct WorkoutInstanceView: View {
   @State private var elapsedSubTime: TimeInterval = 0
   @State private var currentSubTime: TimeInterval = 0
 
-  @State private var status: Status = .readyToBegin
+  @State private var sessionState: HKWorkoutSessionState = .notStarted
 
   @State private var currentIndex = 0
   @State private var peekingIndex: Int?
 
+  @State private var currentWorkoutType: HKWorkoutActivityType
+
+  @State private var error: Error?
   @Environment(\.dismiss) private var dismiss
 
   @Namespace private var setTransitionNamespace
@@ -70,16 +70,19 @@ struct WorkoutInstanceView: View {
             .ignoresSafeArea()
         }
         .onChange(of: currentIndex) { oldValue, newValue in
-          let exerciseSet = exerciseSets[newValue]
-          withAnimation {
-            scrollProxy.scrollTo(exerciseSet.id, anchor: .top)
-          }
+          onCurrentIndexChanges(newCurrentIndex: newValue, scrollProxy: scrollProxy)
+        }
+        .onChange(of: sessionState) { oldValue, newValue in
+          onSessionStateChange(oldSessionState: oldValue, newSessionState: newValue)
+        }
+        .onChange(of: currentWorkoutType) { oldValue, newValue in
+          guard newValue != oldValue else { return }
 
-          if shouldShowSubTimer {
-            resetSubTimer()
-
-            if shouldAutoStartSubTimer {
-              isSubTimerActive = true
+          Task {
+            do {
+              try await onNewWorkoutType(newWorkoutType: newValue)
+            } catch {
+              self.error = error
             }
           }
         }
@@ -88,13 +91,86 @@ struct WorkoutInstanceView: View {
     .shelf {
       controlButtons
     }
-    .animation(.easeInOut, value: status)
+    .task {
+      do {
+        try await startWorkout()
+      } catch {
+        self.error = error
+      }
+    }
+    .animation(.easeInOut, value: sessionState)
     .animation(.easeInOut, value: currentIndex)
-    .sensoryFeedback(.selection, trigger: status)
+    .sensoryFeedback(.selection, trigger: sessionState)
     .sensoryFeedback(.impact, trigger: currentIndex)
     .presentationCompactAdaptation(.fullScreenCover)
+    .alert(error: $error)
   }
 }
+
+// MARK: - On Change Handlers
+
+private extension WorkoutInstanceView {
+
+  func onCurrentIndexChanges(newCurrentIndex: Int, scrollProxy: ScrollViewProxy) {
+    let exerciseSet = exerciseSets[newCurrentIndex]
+
+    currentWorkoutType = exerciseSet.set.appleWorkoutType
+
+    withAnimation {
+      scrollProxy.scrollTo(exerciseSet.id, anchor: .top)
+    }
+
+    if shouldShowSubTimer {
+      resetSubTimer()
+
+      if shouldAutoStartSubTimer {
+        isSubTimerActive = true
+      }
+    }
+  }
+
+  func onNewWorkoutType(newWorkoutType: HKWorkoutActivityType) async throws {
+    try await WorkoutController.shared.startWorkout(type: newWorkoutType)
+  }
+
+  func onSessionStateChange(
+    oldSessionState: HKWorkoutSessionState,
+    newSessionState: HKWorkoutSessionState
+  ) {
+//    self.sessionState = newSessionState // Add this back if we integrate with the watch later
+
+    switch (oldSessionState, newSessionState) {
+    case (.notStarted, .running), (.prepared, .running):
+      // Workout started
+      currentIndex = 0
+      resetTimer()
+      resetSubTimer()
+
+    case (.running, .paused):
+      // Workout paused
+      if let subStart = subTimerStartDate {
+        elapsedSubTime += Date().timeIntervalSince(subStart)
+      }
+      subTimerStartDate = nil
+
+    case (.paused, .running):
+      // Workout resumed
+      subTimerStartDate = Date()
+
+    case (.running, .ended), (.running, .stopped), (.paused, .ended), (.paused, .stopped):
+      // Workout ended
+      if let subStart = subTimerStartDate {
+        elapsedSubTime += Date().timeIntervalSince(subStart)
+      }
+      subTimerStartDate = nil
+
+    default:
+      break
+    }
+  }
+}
+
+// MARK: - Timer Helpers
 
 private extension WorkoutInstanceView {
 
@@ -141,6 +217,12 @@ private extension WorkoutInstanceView {
     return min(currentSubDuration - currentSubTime + 1, currentSubDuration)
   }
 
+  func resetTimer() {
+    startDate = Date()
+    elapsedTime = 0
+    currentTime = 0
+  }
+
   func resetSubTimer() {
     subTimerStartDate = Date()
     elapsedSubTime = 0
@@ -148,6 +230,8 @@ private extension WorkoutInstanceView {
     isSubTimerActive = false
   }
 }
+
+// MARK: - View Components
 
 private extension WorkoutInstanceView {
 
@@ -169,7 +253,6 @@ private extension WorkoutInstanceView {
       Text(timeString)
         .font(.system(size: shouldShowSubTimer ? 30 : 55))
         .foregroundStyle(.yellow)
-        .contentTransition(.numericText(value: currentTime))
 
       if shouldShowSubTimer {
         Text(subTimeString)
@@ -187,7 +270,7 @@ private extension WorkoutInstanceView {
     .monospacedDigit()
     .horizontallyCentered()
     .onReceive(timer) { _ in
-      guard status == .running else { return }
+      guard sessionState == .running else { return }
 
       if let startDate {
         currentTime = elapsedTime + Date().timeIntervalSince(startDate)
@@ -227,7 +310,7 @@ private extension WorkoutInstanceView {
           }
         }
         .contextMenu {
-          if status == .running {
+          if sessionState == .running {
             Button("Jump to Here", systemSymbol: .arrowTurnRightDown) {
               currentIndex = index
             }
@@ -237,6 +320,8 @@ private extension WorkoutInstanceView {
     }
   }
 }
+
+// MARK: - Sets
 
 private extension WorkoutInstanceView {
 
@@ -251,12 +336,14 @@ private extension WorkoutInstanceView {
   }
 }
 
+// MARK: - Control Buttons
+
 private extension WorkoutInstanceView {
 
   @ViewBuilder
   var controlButtons: some View {
-    switch status {
-    case .readyToBegin:
+    switch sessionState {
+    case .notStarted, .prepared:
       startWorkoutButton
     case .running:
       VStack {
@@ -279,21 +366,16 @@ private extension WorkoutInstanceView {
         resumeButton
         endButton
       }
-    case .ended:
+    case .ended, .stopped:
       restartButton
+    @unknown default:
+      EmptyView()
     }
   }
 
   var startWorkoutButton: some View {
     AsyncButton {
-      try await WorkoutController.shared.startWorkout(type: workoutPlan.representativeAppleWorkoutType)
-      startDate = Date()
-      elapsedTime = 0
-      currentTime = 0
-      subTimerStartDate = Date()
-      elapsedSubTime = 0
-      currentSubTime = 0
-      status = .running
+      try await startWorkout()
     } label: {
       Label("Start Workout", systemSymbol: SFSymbol(rawValue: workoutPlan.representativeAppleWorkoutType.systemImage))
         .horizontallyCentered()
@@ -328,8 +410,7 @@ private extension WorkoutInstanceView {
 
   var startTimerButton: some View {
     AsyncButton {
-      resetSubTimer()
-      isSubTimerActive = true
+      startSubTimer()
     } label: {
       Label("Start Timer", systemSymbol: .timer)
         .horizontallyCentered()
@@ -340,16 +421,7 @@ private extension WorkoutInstanceView {
 
   var pauseButton: some View {
     AsyncButton {
-      try await WorkoutController.shared.pauseWorkout()
-      if let start = startDate {
-        elapsedTime += Date().timeIntervalSince(start)
-      }
-      startDate = nil
-      if let subTimerStartDate {
-        elapsedSubTime += Date().timeIntervalSince(subTimerStartDate)
-      }
-      subTimerStartDate = nil
-      status = .paused
+      try await pauseWorkout()
     } label: {
       Label("Pause", systemSymbol: .pauseFill)
         .horizontallyCentered()
@@ -360,16 +432,7 @@ private extension WorkoutInstanceView {
 
   var endButton: some View {
     AsyncButton {
-      try await WorkoutController.shared.endWorkout()
-      if let startDate {
-        elapsedTime += Date().timeIntervalSince(startDate)
-      }
-      if let subTimerStartDate {
-        elapsedSubTime += Date().timeIntervalSince(subTimerStartDate)
-      }
-      startDate = nil
-      subTimerStartDate = nil
-      status = .ended
+      try await endWorkout()
       dismiss()
     } label: {
       Label("End", systemSymbol: .stopFill)
@@ -381,10 +444,7 @@ private extension WorkoutInstanceView {
 
   var resumeButton: some View {
     AsyncButton {
-      try await WorkoutController.shared.resumeWorkout()
-      startDate = Date()
-      subTimerStartDate = Date()
-      status = .running
+      try await resumeWorkout()
     } label: {
       Label("Resume", systemSymbol: .playFill)
         .horizontallyCentered()
@@ -395,13 +455,7 @@ private extension WorkoutInstanceView {
 
   var restartButton: some View {
     AsyncButton {
-      try await WorkoutController.shared.startWorkout(type: workoutPlan.representativeAppleWorkoutType)
-      currentIndex = 0
-      startDate = Date()
-      elapsedTime = 0
-      currentTime = 0
-      resetSubTimer()
-      status = .running
+      try await restartWorkout()
     } label: {
       Label("Restart Workout", systemSymbol: .arrowCounterclockwise)
         .horizontallyCentered()
@@ -410,6 +464,66 @@ private extension WorkoutInstanceView {
     .tint(.green)
   }
 }
+
+// MARK: - Button Actions
+
+private extension WorkoutInstanceView {
+
+  func startWorkout() async throws {
+    try await WorkoutController.shared.startWorkout(type: currentWorkoutType)
+    resetTimer()
+    resetSubTimer()
+
+    sessionState = .running
+  }
+
+  func pauseWorkout() async throws {
+    try await WorkoutController.shared.pauseWorkout()
+    if let start = startDate {
+      elapsedTime += Date().timeIntervalSince(start)
+    }
+    startDate = nil
+    if let subTimerStartDate {
+      elapsedSubTime += Date().timeIntervalSince(subTimerStartDate)
+    }
+    subTimerStartDate = nil
+    sessionState = .paused
+  }
+
+  func resumeWorkout() async throws {
+    try await WorkoutController.shared.resumeWorkout()
+    startDate = Date()
+    subTimerStartDate = Date()
+
+    sessionState = .running
+  }
+
+  func endWorkout() async throws {
+    try await WorkoutController.shared.endWorkout()
+    if let startDate {
+      elapsedTime += Date().timeIntervalSince(startDate)
+    }
+    if let subTimerStartDate {
+      elapsedSubTime += Date().timeIntervalSince(subTimerStartDate)
+    }
+    startDate = nil
+    subTimerStartDate = nil
+
+    sessionState = .ended
+  }
+
+  func startSubTimer() {
+    resetSubTimer()
+    isSubTimerActive = true
+  }
+
+  func restartWorkout() async throws {
+    currentIndex = 0
+    try await startWorkout()
+  }
+}
+
+// MARK: - Time String Formatting
 
 private extension WorkoutInstanceView {
 
@@ -445,7 +559,6 @@ private extension WorkoutInstanceView {
         let workDuration = 20.0
 
         let elapsedInCycle = currentSubTime.truncatingRemainder(dividingBy: cycleDuration)
-        let roundNumber = Int(currentSubTime / cycleDuration) + 1
 
         if elapsedInCycle < workDuration {
           let remainingTime = workDuration - elapsedInCycle

@@ -96,12 +96,12 @@ public extension Color {
   static let sugar       = Color("Sugar", bundle: BundleToken.bundle)
 
   // Nutrition - Vitamins
-  static let vitaminA   = Color("VitaminA", bundle: BundleToken.bundle)
-  static let vitaminB6  = Color("VitaminB6", bundle: BundleToken.bundle)
-  static let vitaminB12 = Color("VitaminB12", bundle: BundleToken.bundle)
-  static let vitaminC   = Color("VitaminC", bundle: BundleToken.bundle)
-  static let vitaminD   = Color("VitaminD", bundle: BundleToken.bundle)
-  static let vitaminE   = Color("VitaminE", bundle: BundleToken.bundle)
+  static let vitaminA   = Color("Vitamin A", bundle: BundleToken.bundle)
+  static let vitaminB6  = Color("Vitamin B6", bundle: BundleToken.bundle)
+  static let vitaminB12 = Color("Vitamin B12", bundle: BundleToken.bundle)
+  static let vitaminC   = Color("Vitamin C", bundle: BundleToken.bundle)
+  static let vitaminD   = Color("Vitamin D", bundle: BundleToken.bundle)
+  static let vitaminE   = Color("Vitamin E", bundle: BundleToken.bundle)
 
   // Sleep
   static let awakeSleep = Color("AwakeSleep", bundle: BundleToken.bundle)

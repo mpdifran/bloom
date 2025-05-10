@@ -11,19 +11,20 @@ import HealthKit
 #if os(watchOS)
 public extension WorkoutManager {
   
-  func startWorkout(workoutConfiguration: HKWorkoutConfiguration) async throws {
+  func startWorkout(workoutConfiguration: HKWorkoutConfiguration, shouldMirror: Bool) async throws {
     session = try HKWorkoutSession(healthStore: healthStore, configuration: workoutConfiguration)
     builder = session?.associatedWorkoutBuilder()
     session?.delegate = self
     builder?.delegate = self
     builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: workoutConfiguration)
+
+    try await session?.prepare() // ChatGPT said this is important to do before trying to mirror.
+
     /**
      Start mirroring the session to the companion device.
      */
-    do {
+    if shouldMirror {
       try await session?.startMirroringToCompanionDevice()
-    } catch {
-      print(error)
     }
     /**
      Start the workout session activity.
@@ -45,6 +46,15 @@ public extension WorkoutManager {
       let waterSample = [HKQuantitySample(type: HKQuantityType(.dietaryWater), quantity: decodedQuantity, start: sampleDate, end: sampleDate)]
       try await builder?.addSamples(waterSample)
     }
+  }
+
+  func handleActiveWorkoutRecovery() async throws {
+    let session = try await healthStore.recoverActiveWorkoutSession()
+
+    builder = session?.associatedWorkoutBuilder()
+    session?.delegate = self
+    builder?.delegate = self
+    builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: workoutConfiguration)
   }
 }
 
