@@ -18,26 +18,28 @@ struct PreviewSheetPresent<Content>: View where Content: View {
   @State private var developerSettings = false
 
   var body: some View {
-    VStack {
-      Button {
-        showSheet.toggle()
-      } label: {
-        Text("Show Sheet")
+    PreviewEnvironment {
+      VStack {
+        Button {
+          showSheet.toggle()
+        } label: {
+          Text("Show Sheet")
+        }
+        .buttonStyle(.primary)
+        
+        Button {
+          developerSettings.toggle()
+        } label: {
+          Text("Developer Settings")
+        }
+        .frame(height: 60)
       }
-      .buttonStyle(.primary)
-
-      Button {
-        developerSettings.toggle()
-      } label: {
-        Text("Developer Settings")
+      .sheet(isPresented: $showSheet) {
+        content()
       }
-      .frame(height: 60)
-    }
-    .sheet(isPresented: $showSheet) {
-      content()
-    }
-    .sheet(isPresented: $developerSettings) {
-      DeveloperSettingsView()
+      .sheet(isPresented: $developerSettings) {
+        DeveloperSettingsView()
+      }
     }
   }
 }

@@ -73,21 +73,21 @@ private extension CalorieTargetCalculator {
     }
 
     let tdeeEstimate = bmr * activityLevel.mifflinStJeorMultiplier
-    let shift: Double
-    let context: String
-    switch targetDetails.goal {
-    case .loseWeight:
-      shift = -targetDetails.weightLossSpeed.mifflinStJeorAdjustment
-      context = "Maintaining a calorie deficit is an important part of losing weight."
-    case .maintainWeight:
-      shift = 0
-      context = "Try and maintain the same calorie intake to maintain your current weight."
-    case .gainWeight:
-      shift = targetDetails.weightLossSpeed.mifflinStJeorAdjustment
-      context = "Maintaining a calorie surplus is an important part of gaining weight."
-    case .none:
-      return nil
-    }
+    let shift: Double = 0
+    let context: String = ""
+//    switch targetDetails.goal {
+//    case .loseWeight:
+//      shift = -targetDetails.weightLossSpeed.mifflinStJeorAdjustment
+//      context = "Maintaining a calorie deficit is an important part of losing weight."
+//    case .maintainWeight:
+//      shift = 0
+//      context = "Try and maintain the same calorie intake to maintain your current weight."
+//    case .gainWeight:
+//      shift = targetDetails.weightLossSpeed.mifflinStJeorAdjustment
+//      context = "Maintaining a calorie surplus is an important part of gaining weight."
+//    case .none:
+//      return nil
+//    }
 
     let targetCalories = tdeeEstimate + shift
     let minCalorieTarget = TargetMetric.calories.minHabitTarget.doubleValue(for: .largeCalorie())

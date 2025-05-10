@@ -79,7 +79,7 @@ extension ChatVitalConverter {
     let age = await HealthManager.shared.age()
     let sex = await HealthManager.shared.sex().name
     let height = await HealthManager.shared.height()
-    let healthGoal = await HealthManager.shared.healthGoal.name
+    let healthGoal = await HealthManager.shared.healthGoal
 
     return ChatHealthData.UserInfo(
       age: age,

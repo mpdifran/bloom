@@ -78,7 +78,8 @@ private extension AIGoalManager {
   }
 
   func calculateNutritionGoals() async -> ([ProposedGoal], [ProposedToDo])? {
-    guard await HealthManager.shared.healthGoal.isWeightRelated else { return nil }
+    return nil
+//    guard await HealthManager.shared.healthGoal.isWeightRelated else { return nil }
 
     var todos = [ProposedToDo]()
     // Ensure the user has logged their weight
@@ -122,9 +123,9 @@ private extension AIGoalManager {
       return nil
     }
 
-    if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
-      return nil
-    }
+//    if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
+//      return nil
+//    }
 
     var goals = [ProposedGoal]()
 

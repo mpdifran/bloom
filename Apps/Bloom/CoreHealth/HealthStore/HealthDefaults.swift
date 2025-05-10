@@ -51,9 +51,9 @@ public extension HealthDefaults {
     setValue(birthday, for: .birthday)
   }
 
-  func setHealthGoal(_ healthGoal: HealthGoal) {
-    setValue(healthGoal.rawValue, for: .healthGoal)
-    TelemetryDeck.signal("Update Health Goal", parameters: ["healthGoal": healthGoal.name])
+  func set(healthGoal: String) {
+    setValue(healthGoal, for: .healthGoal)
+    TelemetryDeck.signal("Update Health Goal", parameters: ["healthGoal": healthGoal])
   }
 
   func setWeightLossSpeed(_ weightLossSpeed: WeightLossSpeed) {
@@ -74,14 +74,14 @@ public extension HealthDefaults {
     getValue(for: .birthday) ?? Date.now
   }
 
-  func getHealthGoal() -> HealthGoal {
-    if
-      let value: String = getValue(for: .healthGoal),
-      let goal = HealthGoal(rawValue: value) {
-      goal
-    } else {
-      .none
+  func getHealthGoal() -> String {
+    let value: String? = getValue(for: .healthGoal)
+
+    if let value, let healthGoalEnum = HealthGoal(rawValue: value) {
+      return healthGoalEnum.name
     }
+
+    return value ?? ""
   }
 
   func getWeightLossSpeed() -> WeightLossSpeed {

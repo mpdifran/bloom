@@ -140,9 +140,9 @@ private extension SettingsView {
 
       HStack {
         SettingsHealthGoalCell(
-          image: Image(.logWeightIcon),
-          value: healthManager.healthGaolAssociatedValueString(),
-          subtitle: healthManager.healthGoalDisplayString()
+          image: Image(systemSymbol: .scope),
+          value: "Goal",
+          subtitle: healthManager.healthGoal
         )
         .tint(.mutedIndigo)
         .onTapGesture {
@@ -153,8 +153,8 @@ private extension SettingsView {
           if let activityLevel = healthManager.userReportedActivityLevel {
             SettingsHealthGoalCell(
               image: Image(systemSymbol: activityLevel.symbol),
-              value: activityLevel.name,
-              subtitle: "Activity level"
+              value: "Activity level",
+              subtitle: activityLevel.name
             )
             .tint(activityLevel.barColor)
           } else {

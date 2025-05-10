@@ -75,19 +75,20 @@ extension GoalsFactory {
   }
 
   private func shouldFocusOnNutrition() async -> Bool {
-    if let bodyMass = await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass {
-      if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
-        return false
-      }
-      return true
-    }
-
-    switch await HealthManager.shared.healthGoal {
-    case .gainWeight, .maintainWeight, .loseWeight:
-      return true
-    case .none:
-      return false
-    }
+    return false
+//    if let bodyMass = await VitalsCalculator.shared.bodyCompositionSummary?.details.averageBodyMass {
+//      if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
+//        return false
+//      }
+//      return true
+//    }
+//
+//    switch await HealthManager.shared.healthGoal {
+//    case .gainWeight, .maintainWeight, .loseWeight:
+//      return true
+//    case .none:
+//      return false
+//    }
   }
 }
 
@@ -181,45 +182,45 @@ private extension GoalsFactory {
       return nil
     }
 
-    if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
-      var proposedHabits = [ProposedGoal]()
-      if let habit = activeHabits.first(where: { $0.targetMetric == .calories }) {
-        let calorieHabit = ProposedGoal(
-          habitID: habit.id,
-          targetMetric: .calories,
-          timePeriod: .daily,
-          value: habit.value,
-          suggestedValue: habit.value,
-          previousValue: nil,
-          unitString: HKUnit.largeCalorie().unitString,
-          vitalKind: .nutrition,
-          context: "You've met your target weight! Let's make this a permanent habit.",
-          hasUserEdited: habit.isUserEdited
-        )
-        proposedHabits.append(calorieHabit)
-      }
-      if let habit = activeHabits.first(where: { $0.targetMetric == .proteinIntake }) {
-        let proteinHabit = ProposedGoal(
-          habitID: habit.id,
-          targetMetric: .proteinIntake,
-          timePeriod: .daily,
-          value: habit.value,
-          suggestedValue: habit.value,
-          previousValue: nil,
-          unitString: HKUnit.gram().unitString,
-          vitalKind: .nutrition,
-          context: "You've met your target weight! Let's make this a permanent habit.",
-          hasUserEdited: habit.isUserEdited
-        )
-        proposedHabits.append(proteinHabit)
-      }
-
-      let focusVitals = proposedHabits.map {
-        FocusVital(vitalKind: .nutrition, proposedGoals: [$0])
-      }
-
-      return NewHabitResult(focusVitals: focusVitals)
-    }
+//    if await HealthManager.shared.hasMetWeightGoal(for: bodyMass) {
+//      var proposedHabits = [ProposedGoal]()
+//      if let habit = activeHabits.first(where: { $0.targetMetric == .calories }) {
+//        let calorieHabit = ProposedGoal(
+//          habitID: habit.id,
+//          targetMetric: .calories,
+//          timePeriod: .daily,
+//          value: habit.value,
+//          suggestedValue: habit.value,
+//          previousValue: nil,
+//          unitString: HKUnit.largeCalorie().unitString,
+//          vitalKind: .nutrition,
+//          context: "You've met your target weight! Let's make this a permanent habit.",
+//          hasUserEdited: habit.isUserEdited
+//        )
+//        proposedHabits.append(calorieHabit)
+//      }
+//      if let habit = activeHabits.first(where: { $0.targetMetric == .proteinIntake }) {
+//        let proteinHabit = ProposedGoal(
+//          habitID: habit.id,
+//          targetMetric: .proteinIntake,
+//          timePeriod: .daily,
+//          value: habit.value,
+//          suggestedValue: habit.value,
+//          previousValue: nil,
+//          unitString: HKUnit.gram().unitString,
+//          vitalKind: .nutrition,
+//          context: "You've met your target weight! Let's make this a permanent habit.",
+//          hasUserEdited: habit.isUserEdited
+//        )
+//        proposedHabits.append(proteinHabit)
+//      }
+//
+//      let focusVitals = proposedHabits.map {
+//        FocusVital(vitalKind: .nutrition, proposedGoals: [$0])
+//      }
+//
+//      return NewHabitResult(focusVitals: focusVitals)
+//    }
 
     var newFocusAreas = [ProposedGoal]()
 

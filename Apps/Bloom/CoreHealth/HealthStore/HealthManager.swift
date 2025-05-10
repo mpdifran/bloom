@@ -13,18 +13,23 @@ import SwiftData
 import BloomFoundation
 import Combine
 
-public struct HealthTargetDetails {
+public struct HealthTargetDetails: Sendable {
   public let targetWeight: Double
-  public let goal: HealthGoal
+  public let goal: String
   public let weightLossSpeed: WeightLossSpeed
 
-  public init(targetWeight: Double, goal: HealthGoal, weightLossSpeed: WeightLossSpeed) {
+  public init(
+    targetWeight: Double,
+    goal: String,
+    weightLossSpeed: WeightLossSpeed
+  ) {
     self.targetWeight = targetWeight
     self.goal = goal
     self.weightLossSpeed = weightLossSpeed
   }
 }
 
+/// This is Legacy. Health Goal is now a freeform String.
 public enum HealthGoal: String, CaseIterable, Identifiable {
   public var id: Self { self}
 
@@ -89,7 +94,7 @@ public extension HealthGoal {
   }
 }
 
-public enum WeightLossSpeed: String, CaseIterable, Identifiable {
+public enum WeightLossSpeed: String, CaseIterable, Identifiable, Sendable {
   public var id: Self { self }
 
   case slow
@@ -135,8 +140,8 @@ public final class HealthManager: ObservableObject {
   @Published public var birthday = Date.now {
     didSet { healthDefaults.setBirthday(birthday) }
   }
-  @Published public var healthGoal: HealthGoal = .none {
-    didSet { healthDefaults.setHealthGoal(healthGoal) }
+  @Published public var healthGoal: String {
+    didSet { healthDefaults.set(healthGoal: healthGoal) }
   }
   @Published public var weightLossSpeed: WeightLossSpeed = .moderate {
     didSet { healthDefaults.setWeightLossSpeed(weightLossSpeed) }
@@ -215,55 +220,5 @@ public extension HealthManager {
 
   func targetWeightQuantity() -> HKQuantity {
     HKQuantity(unit: .pound(), doubleValue: targetWeight)
-  }
-
-  func healthGaolAssociatedValueString() -> String {
-    switch healthGoal {
-    case .loseWeight, .gainWeight, .maintainWeight:
-      targetWeightQuantity().displayString(for: .pound(), formatter: .oneDecimalPlace)
-    case .none:
-      ""
-    }
-  }
-
-  func healthGoalDisplayString() -> String {
-    switch (healthGoal, weightLossSpeed) {
-    case (.loseWeight, .slow):
-      "Lose Weight Slowly"
-    case (.loseWeight, .moderate):
-      "Lose Weight Moderately"
-    case (.loseWeight, .fast):
-      "Lose Weight Fast"
-    case (.gainWeight, .slow):
-      "Gain Weight Slowly"
-    case (.gainWeight, .moderate):
-      "Gain Weight Moderately"
-    case (.gainWeight, .fast):
-      "Gain Weight Fast"
-    case (.maintainWeight, _):
-      "Maintain Weight"
-    case (.none, _):
-      "Monitor Health"
-    }
-  }
-}
-
-// MARK: Health Goals
-
-public extension HealthManager {
-
-  func hasMetWeightGoal(for bodyMass: HKQuantity) -> Bool {
-    let weight = bodyMass.doubleValue(for: .pound())
-
-    switch healthGoal {
-    case .loseWeight:
-      return weight < targetWeight
-    case .gainWeight:
-      return weight > targetWeight
-    case .maintainWeight:
-      return weight.isWithinPercent(of: targetWeight, percent: 0.05)
-    case .none:
-      return false
-    }
   }
 }

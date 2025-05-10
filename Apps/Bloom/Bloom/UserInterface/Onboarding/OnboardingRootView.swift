@@ -14,10 +14,8 @@ extension OnboardingRootView {
     case appExplanation
     case healthKit
     case ageAndSex
-    case healthGoals
-    case activityLevel
-    case focusAreas
     case vitals
+    case healthGoals
     case notifications
     case finish
   }
@@ -61,21 +59,7 @@ struct OnboardingRootView: View {
         }
       case .healthGoals:
         OnboardingHealthGoalView {
-          setStep(.activityLevel)
-        }
-      case .activityLevel:
-        OnboardingHealthActivityLevelView {
-          setStep(.focusAreas)
-        }
-      case .focusAreas:
-        if legacyGoalSetting {
-          OnboardingFocusAreasView {
-            setStep(.notifications)
-          }
-        } else {
-          OnboardingAIGoalsView {
-            setStep(.notifications)
-          }
+          setStep(.notifications)
         }
       case .notifications:
         OnboardingNotificationPermissionView {

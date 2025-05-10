@@ -36,46 +36,47 @@ struct SettingsHealthGoalCell: View {
           .bold()
           .fontDesign(.rounded)
           .multilineTextAlignment(.leading)
-          .lineLimit(2)
-          .minimumScaleFactor(0.5)
+          .lineLimit(1)
 
-        HStack(spacing: 4) {
-          Text(subtitle)
-            .foregroundStyle(.secondary)
-        }
-        .font(.subheadline)
-        .bold()
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
-        .lineLimit(1)
+        Text(subtitle)
+          .foregroundStyle(.secondary)
+          .font(.subheadline)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.secondary)
+          .minimumScaleFactor(0.75)
+          .lineLimit(2)
+          .fixedSize(horizontal: false, vertical: true)
       }
     }
-    .frame(height: 90)
+    .frame(height: 110)
     .cardContainer()
     .selectable()
   }
 }
 
 #Preview {
-  ScrollView {
-    VStack {
-      HStack {
-        SettingsHealthGoalCell(
-          image: Image(.logWeightIcon),
-          value: "152 lbs",
-          subtitle: "Maintain weight"
-        )
-        .tint(.mutedIndigo)
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        HStack {
+          SettingsHealthGoalCell(
+            image: Image(.logWeightIcon),
+            value: "152 lbs",
+            subtitle: "Maintain weight and learn to fly"
+          )
+          .tint(.mutedIndigo)
 
-        SettingsHealthGoalCell(
-          image: Image(systemSymbol: .figureHighintensityIntervaltraining),
-          value: "High",
-          subtitle: "Activity level"
-        )
-        .tint(.activityLevelHigh)
+          SettingsHealthGoalCell(
+            image: Image(systemSymbol: .figureHighintensityIntervaltraining),
+            value: "High",
+            subtitle: "Activity level"
+          )
+          .tint(.activityLevelHigh)
+        }
       }
+      .padding()
     }
-    .padding()
+    .groupedBackground()
   }
-  .groupedBackground()
 }

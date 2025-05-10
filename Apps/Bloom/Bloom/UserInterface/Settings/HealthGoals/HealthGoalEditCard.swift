@@ -27,15 +27,7 @@ struct HealthGoalEditCard: View {
           .bold()
           .fontDesign(.rounded)
 
-        healthGoalSection
-
-        if healthManager.healthGoal.isWeightRelated {
-          weightSection
-
-          if healthManager.healthGoal.supportsWeightChangeSpeed {
-            weightSpeedSection
-          }
-        }
+        healthGoalTextField
 
         Button {
           dismiss()
@@ -61,82 +53,18 @@ struct HealthGoalEditCard: View {
 
 private extension HealthGoalEditCard {
 
-  var healthGoalSection: some View {
-    VStack {
-      HealthGoalCell(
-        title: healthManager.healthGoal.name,
-        image: healthManager.healthGoal.image
-      )
-      .tint(healthManager.healthGoal.color)
-      .onTapGesture {
-        presentedSheet = HealthGoalPickerView().asAny
-      }
-    }
-  }
-
-  var weightSection: some View {
-    HStack {
-      Text("Target Weight")
-        .font(.title3)
-        .bold()
-        .fontDesign(.rounded)
-
-      Spacer()
-
-      Text(healthManager.targetWeightQuantity().displayString(for: .pound(), formatter: .oneDecimalPlace))
-        .font(.title3)
-        .bold()
-        .fontDesign(.rounded)
-        .foregroundStyle(.tint)
-      DisclosureIndicator()
-    }
+  var healthGoalTextField: some View {
+    TextField(
+      "",
+      text: $healthManager.healthGoal,
+      prompt: Text("Describe your health goal"),
+      axis: .vertical
+    )
+    .font(.title2)
+    .fontDesign(.rounded)
+    .bold()
+    .multilineTextAlignment(.center)
     .cardContainer()
-    .selectable()
-    .tint(.mutedIndigo)
-    .onTapGesture {
-      presentedSheet = TargetWeightEditCard().asAny
-    }
-  }
-
-  var weightSpeedSection: some View {
-    VStack(alignment: .leading) {
-      HStack {
-        Text("Speed")
-          .font(.title3)
-          .bold()
-          .fontDesign(.rounded)
-
-        Spacer()
-
-        Menu {
-          ForEach(WeightLossSpeed.allCases) { speed in
-            Button(speed.name, systemImage: speed == healthManager.weightLossSpeed ? "checkmark" : "") {
-              healthManager.weightLossSpeed = speed
-            }
-          }
-        } label: {
-          HStack {
-            Text(healthManager.weightLossSpeed.name)
-            Image(systemSymbol: .chevronUpChevronDown)
-          }
-          .font(.title3)
-          .fontDesign(.rounded)
-          .bold()
-        }
-      }
-
-      Divider()
-
-      Text(healthManager.weightLossSpeed.weightLossDescription)
-        .font(.body)
-        .foregroundStyle(.secondary)
-        .bold()
-        .fontDesign(.rounded)
-        .contentTransition(.numericText())
-    }
-    .cardContainer()
-    .selectable()
-    .tint(.mutedIndigo)
   }
 }
 

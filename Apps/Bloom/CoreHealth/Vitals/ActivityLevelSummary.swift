@@ -10,7 +10,7 @@ import SwiftUI
 import DataContainer
 
 public extension ActivityLevelSummary {
-  enum ActivityLevel: String, CaseIterable, Identifiable {
+  enum ActivityLevel: String, CaseIterable, Identifiable, Sendable {
     public var id: Self { self }
 
     case sedentary
@@ -107,40 +107,42 @@ public extension ActivityLevelSummary.ActivityLevel {
 
   /// Multiply this value by the person's body weight in pounds to get their target calories.
   func calorieMultiplier(for healthTargetDetails: HealthTargetDetails) -> Double? {
-    switch (self, healthTargetDetails.goal, healthTargetDetails.weightLossSpeed) {
-    case (.sedentary, .loseWeight, .slow), (.light, .loseWeight, .slow):
-      return 12
-    case (.moderate, .loseWeight, .slow):
-      return 14
-    case (.high, .loseWeight, .slow), (.intense, .loseWeight, .slow):
-      return 16
-    case (.sedentary, .loseWeight, .moderate), (.light, .loseWeight, .moderate):
-      return 11
-    case (.moderate, .loseWeight, .moderate):
-      return 13
-    case (.high, .loseWeight, .moderate), (.intense, .loseWeight, .moderate):
-      return 15
-    case (.sedentary, .loseWeight, .fast), (.light, .loseWeight, .fast):
-      return 10
-    case (.moderate, .loseWeight, .fast):
-      return 12
-    case (.high, .loseWeight, .fast), (.intense, .loseWeight, .fast):
-      return 14
-    case (.sedentary, .maintainWeight, _), (.light, .maintainWeight, _):
-      return 13
-    case (.moderate, .maintainWeight, _):
-      return 15
-    case (.high, .maintainWeight, _), (.intense, .maintainWeight, _):
-      return 17
-    case (.sedentary, .gainWeight, _), (.light, .gainWeight, _):
-      return 17
-    case (.moderate, .gainWeight, _):
-      return 19
-    case (.high, .gainWeight, _), (.intense, .gainWeight, _):
-      return 21
-    default:
-      return nil
-    }
+    return nil
+
+//    switch (self, healthTargetDetails.goal, healthTargetDetails.weightLossSpeed) {
+//    case (.sedentary, .loseWeight, .slow), (.light, .loseWeight, .slow):
+//      return 12
+//    case (.moderate, .loseWeight, .slow):
+//      return 14
+//    case (.high, .loseWeight, .slow), (.intense, .loseWeight, .slow):
+//      return 16
+//    case (.sedentary, .loseWeight, .moderate), (.light, .loseWeight, .moderate):
+//      return 11
+//    case (.moderate, .loseWeight, .moderate):
+//      return 13
+//    case (.high, .loseWeight, .moderate), (.intense, .loseWeight, .moderate):
+//      return 15
+//    case (.sedentary, .loseWeight, .fast), (.light, .loseWeight, .fast):
+//      return 10
+//    case (.moderate, .loseWeight, .fast):
+//      return 12
+//    case (.high, .loseWeight, .fast), (.intense, .loseWeight, .fast):
+//      return 14
+//    case (.sedentary, .maintainWeight, _), (.light, .maintainWeight, _):
+//      return 13
+//    case (.moderate, .maintainWeight, _):
+//      return 15
+//    case (.high, .maintainWeight, _), (.intense, .maintainWeight, _):
+//      return 17
+//    case (.sedentary, .gainWeight, _), (.light, .gainWeight, _):
+//      return 17
+//    case (.moderate, .gainWeight, _):
+//      return 19
+//    case (.high, .gainWeight, _), (.intense, .gainWeight, _):
+//      return 21
+//    default:
+//      return nil
+//    }
   }
 
   /// Multiply this by the person's BMR to get an estimate of their TDEE.

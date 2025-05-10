@@ -43,15 +43,15 @@ private extension ProteinTargetCalculator {
   func createNewProteinGoal() -> TargetMetricRecommendation {
     let proteinTarget = calculateTargetProtein()
 
-    let context: String
-    switch targetDetails.goal {
-    case .loseWeight:
-      context = "Eating more protein can help you stay satiated and lose weight sustainably."
-    case .gainWeight:
-      context = "Eating more protein can help you gain weight sustainably."
-    case .maintainWeight, .none:
-      context = "It's important to make sure your protein intake remains balanced."
-    }
+    let context: String = "It's important to make sure your protein intake remains balanced."
+//    switch targetDetails.goal {
+//    case .loseWeight:
+//      context = "Eating more protein can help you stay satiated and lose weight sustainably."
+//    case .gainWeight:
+//      context = "Eating more protein can help you gain weight sustainably."
+//    case .maintainWeight, .none:
+//      context = "It's important to make sure your protein intake remains balanced."
+//    }
 
     return TargetMetricRecommendation(
       target: proteinTarget,
