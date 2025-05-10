@@ -27,9 +27,7 @@ struct ChatView: View {
     ScrollViewReader { scrollViewProxy in
       ZStack(alignment: .bottom) {
         ChatLayout {
-          ForEach(chatMessages) { chatMessage in
-            chatCell(for: chatMessage)
-          }
+          chatMessagesView
 
           if viewModel.assistantIsTyping {
             statusTextView
@@ -59,6 +57,17 @@ struct ChatView: View {
 }
 
 private extension ChatView {
+  @ViewBuilder
+  var chatMessagesView: some View {
+    if chatMessages.isEmpty {
+      ChatPromptsView()
+    } else {
+      ForEach(chatMessages) { chatMessage in
+        chatCell(for: chatMessage)
+      }
+    }
+  }
+
   @ViewBuilder
   func chatCell(for chatMessage: ChatMessage) -> some View {
     switch chatMessage.content {
