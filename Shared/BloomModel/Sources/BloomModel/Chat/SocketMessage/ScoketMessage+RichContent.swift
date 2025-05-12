@@ -9,6 +9,35 @@ import Foundation
 
 public extension SocketMessage {
 
+  struct DetectedFood: Codable, Equatable, Sendable {
+    public let name: String
+    public let meal: Meal
+    public let foodItemServings: [EstimateFoodCaloriesResponse.Serving]
+
+    public init(
+      name: String,
+      meal: Meal,
+      foodItemServings: [EstimateFoodCaloriesResponse.Serving]
+    ) {
+      self.name = name
+      self.meal = meal
+      self.foodItemServings = foodItemServings
+    }
+  }
+}
+
+public extension SocketMessage.DetectedFood {
+
+  enum Meal: String, Codable, Equatable, Sendable, CaseIterable {
+    case breakfast
+    case lunch
+    case dinner
+    case snack
+  }
+}
+
+public extension SocketMessage {
+
   struct HealthMetricGoal: Codable, Equatable, Sendable {
     public let metric: SuggestedGoal.Metric
     public let timePeriod: SuggestedGoal.TimePeriod
@@ -25,16 +54,6 @@ public extension SocketMessage {
       self.timePeriod = timePeriod
       self.value = value
       self.unit = unit
-    }
-  }
-
-  struct DetectedFood: Codable, Equatable, Sendable {
-    public let name: String
-    public let foodItemServings: [EstimateFoodCaloriesResponse.Serving]
-
-    public init(name: String, foodItemServings: [EstimateFoodCaloriesResponse.Serving]) {
-      self.name = name
-      self.foodItemServings = foodItemServings
     }
   }
 

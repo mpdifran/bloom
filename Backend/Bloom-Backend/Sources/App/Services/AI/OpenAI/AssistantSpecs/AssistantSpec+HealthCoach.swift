@@ -143,6 +143,10 @@ extension Assistant.Tool.Function {
     parameters: Schema.Object(
       properties: [
         "name": Schema.Parameter(type: .string, description: "The name you would give the food."),
+        "meal":Schema.Parameter(
+          enum: SocketMessage.DetectedFood.Meal.self,
+          description: "The meal you think this food is for. You can use the current time, as well as the type of food to determine this."
+        ),
         "foodItems": Schema.Parameter(
           description: "A list of individual food items detected.",
           arrayOf: .object(Schema.Object(
