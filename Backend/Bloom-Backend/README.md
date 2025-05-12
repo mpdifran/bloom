@@ -62,3 +62,4 @@ If you're making database changes locally, and you want to undo a recent new mig
 This will undo only the single most recent migration. You can run it multiple times to undo multiple migrations. 
 
 > NOTE: Do not bother reverting a change already deployed to production. It's too much of a headache, just create another migration.
+
