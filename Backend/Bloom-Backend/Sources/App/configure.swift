@@ -31,8 +31,10 @@ public func configure(_ app: Application) async throws {
 
   // Database
   try app.setupPostgres()
+  app.logger.info("4.1")
   allMigrations.forEach { app.migrations.add($0) }
-  try await app.autoMigrate() // Perform migration
+//  app.logger.info("4.2")
+//  try await app.autoMigrate() // Perform migration
 
   app.logger.info("5")
 

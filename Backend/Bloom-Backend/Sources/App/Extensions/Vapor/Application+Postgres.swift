@@ -14,6 +14,7 @@ extension Application {
 
   func setupPostgres() throws {
     if let postgresURL = postgresURL {
+      logger.info("Setting up Postgres via URL")
       let postgresConfig = try SQLPostgresConfiguration(url: postgresURL)
       databases.use(
         .postgres(
@@ -22,6 +23,7 @@ extension Application {
         as: .psql
       )
     } else {
+      logger.info("Setting up Postgres via localhost")
       let databaseName = switch environment {
       case .production:
         "bloom-food-db"
