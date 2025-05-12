@@ -26,6 +26,7 @@ private struct ChatVariadicView: _VariadicView_MultiViewRoot {
     .environment(\.defaultMinListRowHeight, 0)
     .listRowSpacing(4)
     .flippedVertically()
+    .padding(.top, -8)
   }
 }
 
