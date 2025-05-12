@@ -39,6 +39,7 @@ struct ChatView: View {
 
            bottomAnchorView
         }
+        .scrollDismissesKeyboard(.interactively)
 
         scrollToBottomButton {
           withAnimation {
