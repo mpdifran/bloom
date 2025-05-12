@@ -1,5 +1,5 @@
 {
-  "originHash" : "750239a2b6be606efd94070067bd19a656356830598422f7aa4583a8a8b23a66",
+  "originHash" : "9867f98428efa6479c71e47a5c0a5a610a1b76ec78239b9a2b3d9b8f24fd3374",
   "pins" : [
     {
       "identity" : "apns",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppFoundations.git",
       "state" : {
-        "revision" : "230bcbf685e68c053a3882a2a11d71796ff87666",
-        "version" : "0.1.5"
+        "revision" : "bbdb9e848abdfed815425f4f10c91e0a466979e9",
+        "version" : "0.1.6"
       }
     },
     {
@@ -132,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "2c2775a451c390b16b2a92149113ba3e8459415a",
-        "version" : "1.1.2"
+        "revision" : "a8d15c2e68951e4f759c288b06170f6fabcbf117",
+        "version" : "1.4.11"
       }
     },
     {
@@ -152,6 +152,24 @@
       "state" : {
         "revision" : "cd5318a01a1efcb1e0b3c82a0ce5c9fefaf1cb2d",
         "version" : "1.22.1"
+      }
+    },
+    {
+      "identity" : "redis",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/redis.git",
+      "state" : {
+        "revision" : "b4527022376f93ade3fa366f2c3465ed3489fca4",
+        "version" : "4.11.1"
+      }
+    },
+    {
+      "identity" : "redistack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server/RediStack.git",
+      "state" : {
+        "revision" : "622ce440f90d79b58e45f3a3efdd64c51d1dfd17",
+        "version" : "1.6.2"
       }
     },
     {
@@ -206,15 +224,6 @@
       "state" : {
         "revision" : "f6919dfc309e7f1b56224378b11e28bab5bccc42",
         "version" : "1.2.0"
-      }
-    },
-    {
-      "identity" : "swift-argument-parser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-argument-parser",
-      "state" : {
-        "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
-        "version" : "1.5.0"
       }
     },
     {
@@ -335,24 +344,6 @@
       }
     },
     {
-      "identity" : "swift-openapi-generator",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-openapi-generator",
-      "state" : {
-        "revision" : "9727261219af435e7e668b8813187e9bf5d61927",
-        "version" : "1.4.0"
-      }
-    },
-    {
-      "identity" : "swift-openapi-runtime",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-openapi-runtime",
-      "state" : {
-        "revision" : "daa2fb54fe4a7f5187d7286047d5144c8cb97477",
-        "version" : "1.6.0"
-      }
-    },
-    {
       "identity" : "swift-service-lifecycle",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/swift-service-lifecycle.git",
@@ -404,15 +395,6 @@
       "state" : {
         "revision" : "4232d34efa49f633ba61afde365d3896fc7f8740",
         "version" : "2.15.0"
-      }
-    },
-    {
-      "identity" : "yams",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/Yams",
-      "state" : {
-        "revision" : "3036ba9d69cf1fd04d433527bc339dc0dc75433d",
-        "version" : "5.1.3"
       }
     }
   ],
