@@ -411,6 +411,7 @@ private extension ChatService {
 
     let detectedFood = SocketMessage.DetectedFood(
       name: arguments.name,
+      meal: arguments.meal,
       foodItemServings: arguments.foodItems.map { $0.asServing() }
     )
 
