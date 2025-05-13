@@ -181,6 +181,7 @@ extension NutritionTrackingViewModel {
 
 extension NutritionTrackingViewModel {
 
+  @discardableResult
   func log(
     modelContext: ModelContext,
     name: String,
@@ -189,8 +190,9 @@ extension NutritionTrackingViewModel {
     foodItemServings: [FoodItemServingAmount],
     date: Date,
     meal: FoodItemLog.Meal
-  ) async throws {
+  ) async throws -> String {
     var dates = [Date]()
+    let foodLogID = UUID().uuidString
 
     try modelContext.savingTransaction {
       let servings = try foodItemServings.map {
@@ -208,7 +210,7 @@ extension NutritionTrackingViewModel {
       dates.append(logDate)
 
       let foodItemLog = FoodItemLog(
-        id: UUID().uuidString,
+        id: foodLogID,
         name: name,
         date: logDate,
         meal: meal,
@@ -227,6 +229,8 @@ extension NutritionTrackingViewModel {
       parameters: ["Meal": meal.rawValue],
       floatValue: Double(foodItemServings.count)
     )
+
+    return foodLogID
   }
 
   /// Logs each serving as an individual `FoodItemLog`.

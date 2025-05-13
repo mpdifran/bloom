@@ -89,7 +89,7 @@ private extension ChatLogWeightCell {
       await VitalsCalculator.shared.forceFetchVitals()
     }
 
-    try modelContext.markChatMessageActionTaken(id: chatMessageID)
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

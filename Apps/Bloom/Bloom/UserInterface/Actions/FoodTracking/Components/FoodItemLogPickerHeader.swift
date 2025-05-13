@@ -9,14 +9,14 @@ import SwiftUI
 
 struct FoodItemLogPickerHeader: View {
 
-    var body: some View {
-        HStack(spacing: 8) {
-            FoodItemLogDatePicker()
-            MealPicker()
-        }
+  var body: some View {
+    HStack(spacing: 8) {
+      FoodItemLogDatePicker()
+      MealPicker()
     }
+  }
 }
 
 #Preview {
-    FoodItemLogPickerHeader()
+  FoodItemLogPickerHeader()
 }

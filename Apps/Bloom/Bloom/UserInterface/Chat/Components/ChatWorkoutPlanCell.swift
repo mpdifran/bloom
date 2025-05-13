@@ -149,7 +149,7 @@ extension ChatWorkoutPlanCell {
 
     TelemetryDeck.signal("Save Workout")
 
-    try modelContext.markChatMessageActionTaken(id: chatMessageID)
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

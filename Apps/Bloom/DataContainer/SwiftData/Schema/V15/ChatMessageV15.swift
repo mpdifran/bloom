@@ -1,8 +1,8 @@
 //
-//  ChatMessageV10.swift
+//  ChatMessageV15.swift
 //  Bloom
 //
-//  Created by Mark DiFranco on 2025-04-13.
+//  Created by Mark DiFranco on 2025-05-13.
 //
 
 import SwiftData
@@ -10,7 +10,7 @@ import SwiftData
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit
 // For CloudKit sync to work, all properties must be optional or have default values, and all relationship must be optional.
 
-extension SchemaV10 {
+extension SchemaV15 {
   @Model
   public final class ChatMessage: Identifiable, Hashable {
     public var id: String = ""
@@ -18,6 +18,7 @@ extension SchemaV10 {
     public var date: Date = Date.distantPast
     public var message: String? = nil
     public var richContent: Data? = nil
+    public var dbID: String? = nil
     public var hasPerformedAction: Bool = false
 
     @Attribute(.externalStorage) public var imageData: Data? = nil
@@ -27,6 +28,7 @@ extension SchemaV10 {
       isCurrentUser: Bool,
       date: Date = .now,
       message: String,
+      dbID: String? = nil,
       hasPerformedAction: Bool = false
     ) {
       self.id = id
@@ -35,6 +37,7 @@ extension SchemaV10 {
       self.message = message
       self.richContent = nil
       self.imageData = nil
+      self.dbID = dbID
       self.hasPerformedAction = hasPerformedAction
     }
 
@@ -43,6 +46,7 @@ extension SchemaV10 {
       isCurrentUser: Bool,
       date: Date = .now,
       richContent: Data,
+      dbID: String? = nil,
       hasPerformedAction: Bool = false
     ) {
       self.id = id
@@ -51,6 +55,7 @@ extension SchemaV10 {
       self.message = nil
       self.richContent = richContent
       self.imageData = nil
+      self.dbID = dbID
       self.hasPerformedAction = hasPerformedAction
     }
 
@@ -59,6 +64,7 @@ extension SchemaV10 {
       isCurrentUser: Bool,
       date: Date = .now,
       imageData: Data,
+      dbID: String? = nil,
       hasPerformedAction: Bool = false
     ) {
       self.id = id
@@ -67,6 +73,7 @@ extension SchemaV10 {
       self.message = nil
       self.richContent = nil
       self.imageData = imageData
+      self.dbID = dbID
       self.hasPerformedAction = hasPerformedAction
     }
   }

@@ -18,10 +18,10 @@ public extension ModelContext {
     return try fetch(descriptor).first
   }
 
-  func markChatMessageActionTaken(id: String) throws {
+  func markChatMessageActionTaken(id: String, hasPerformedAction: Bool) throws {
     guard let chatMessage = try fetchFirstChatMessage(id: id) else { return }
 
-    chatMessage.hasPerformedAction = true
+    chatMessage.hasPerformedAction = hasPerformedAction
 
     try save()
   }

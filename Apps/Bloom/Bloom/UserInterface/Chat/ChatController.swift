@@ -164,7 +164,12 @@ private extension ChatController {
                 try await self.insertRichChatMessage(data: data)
               case .detectedFood(let food):
                 let data = try JSONEncoder.bloomModel.encode(food)
-                try await self.insertRichChatMessage(data: data)
+                let foodLogID = try await self.autoLog(detectedFood: food)
+                try await self.insertRichChatMessage(
+                  data: data,
+                  markActionTaken: true,
+                  dbID: foodLogID
+                )
               case .logWater(let logWater):
                 let data = try JSONEncoder.bloomModel.encode(logWater)
                 try await self.insertRichChatMessage(data: data)
@@ -222,11 +227,40 @@ private extension ChatController {
     queryAreas.append(queryArea)
   }
 
-  func insertRichChatMessage(data: Data) throws {
+  func insertRichChatMessage(
+    data: Data,
+    markActionTaken: Bool = false,
+    dbID: String? = nil
+  ) throws {
     try modelContext.savingTransaction {
-      let richContentMessage = ChatMessage(isCurrentUser: false, richContent: data)
+      let richContentMessage = ChatMessage(
+        isCurrentUser: false,
+        richContent: data,
+        dbID: dbID,
+        hasPerformedAction: markActionTaken
+      )
       modelContext.insert(richContentMessage)
     }
+  }
+
+  func autoLog(detectedFood: SocketMessage.DetectedFood) async throws -> String {
+    let servings = detectedFood.foodItemServings.map { $0.asServing() }
+
+    return try await Task { @MainActor in
+      let modelContext = ContainerHolder.shared.createContext()
+      let foodLogID = try await NutritionTrackingViewModel.shared.log(
+        modelContext: modelContext,
+        name: detectedFood.name,
+        image: nil, // TODO: Link image from chat?
+        numberOfServings: 1,
+        foodItemServings: servings,
+        date: .now,
+        meal: detectedFood.meal.asMeal
+      )
+      SoundPlayer.playLogHealthData()
+      return foodLogID
+    }
+    .value
   }
 
   func on(error: Error) {

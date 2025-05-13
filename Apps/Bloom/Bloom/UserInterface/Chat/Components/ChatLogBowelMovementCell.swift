@@ -106,7 +106,7 @@ private extension ChatLogBowelMovementCell {
 
     TelemetryDeck.signal("Log Bowel Movement")
 
-    try modelContext.markChatMessageActionTaken(id: chatMessageID)
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

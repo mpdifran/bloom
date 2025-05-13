@@ -115,7 +115,7 @@ private extension ChatGoalsCell {
 
   func addGoals() throws {
     try HabitsViewModel.shared.apply(proposedGoals: goals)
-    try modelContext.markChatMessageActionTaken(id: chatMessageID)
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
 
     SoundPlayer.playLogHealthData()
     didAddGoals = true

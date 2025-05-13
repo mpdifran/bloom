@@ -15,10 +15,12 @@ struct ChatRichContentWrapperCell: View {
   let chatMessageID: String
   let data: Data
   let hasPerformedAction: Bool
+  let dbID: String?
 
   @State private var isLoading = true
   @State private var goals: [ProposedGoal]?
   @State private var foodItemsName: String?
+  @State private var meal: FoodItemLog.Meal?
   @State private var foodItemServings: [FoodItemServingAmount]?
   @State private var waterQuantity: HKQuantity?
   @State private var bristolStoolType: Int?
@@ -53,12 +55,14 @@ struct ChatRichContentWrapperCell: View {
             goals: goals,
             hasPerformedAction: hasPerformedAction
           )
-        } else if let foodItemsName, let foodItemServings {
+        } else if let foodItemsName, let foodItemServings, let meal {
           ChatDetectedFoodCell(
             chatMessageID: chatMessageID,
             name: foodItemsName,
+            meal: meal,
             servings: foodItemServings,
-            hasPerformedAction: hasPerformedAction
+            hasPerformedAction: hasPerformedAction,
+            dbID: dbID
           )
         } else if let waterQuantity {
           ChatLogWaterCell(
@@ -141,6 +145,7 @@ private extension ChatRichContentWrapperCell {
     } else if let detectedFood = try? JSONDecoder.bloomModel.decode(SocketMessage.DetectedFood.self, from: data) {
 
       self.foodItemsName = detectedFood.name
+      self.meal = detectedFood.meal.asMeal
       self.foodItemServings = detectedFood.foodItemServings.map { $0.asServing() }
 
     } else if let logWater = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWaterConsumption.self, from: data) {
@@ -190,7 +195,8 @@ private extension ChatRichContentWrapperCell {
         ChatRichContentWrapperCell(
           chatMessageID: "123",
           data: Data(),
-          hasPerformedAction: false
+          hasPerformedAction: false,
+          dbID: "1234"
         )
         ChatBubbleCell(
           message: "Here's some rich content",

@@ -103,10 +103,11 @@ private extension ChatView {
       ChatRichContentWrapperCell(
         chatMessageID: chatMessage.id,
         data: richContent,
-        hasPerformedAction: chatMessage.hasPerformedAction
+        hasPerformedAction: chatMessage.hasPerformedAction,
+        dbID: chatMessage.dbID
       )
-        .id(chatMessage.id)
-        .transition(.blurReplace)
+      .id(chatMessage.id)
+      .transition(.blurReplace)
     @unknown default:
       EmptyView()
     }

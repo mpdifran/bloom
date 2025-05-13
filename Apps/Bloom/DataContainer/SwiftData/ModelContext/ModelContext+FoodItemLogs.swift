@@ -16,4 +16,13 @@ public extension ModelContext {
     descriptor.fetchLimit = 1
     return try fetch(descriptor).first
   }
+
+  func fetchFoodItemLog(id: String) throws -> FoodItemLog?   {
+    let descriptor = FetchDescriptor<FoodItemLog>(
+      predicate: #Predicate<FoodItemLog> { model in
+        model.id == id
+      }
+    )
+    return try fetch(descriptor).first
+  }
 }

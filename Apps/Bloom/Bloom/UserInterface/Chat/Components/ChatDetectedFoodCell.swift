@@ -8,26 +8,36 @@
 import SwiftUI
 import AppUI
 import BloomModel
+import DataContainer
 
 struct ChatDetectedFoodCell: View {
   let chatMessageID: String
   let name: String
   let servings: [FoodItemServingAmount]
+  let dbID: String?
 
   init(
     chatMessageID: String,
     name: String,
+    meal: FoodItemLog.Meal,
     servings: [FoodItemServingAmount],
-    hasPerformedAction: Bool
+    hasPerformedAction: Bool,
+    dbID: String?
   ) {
     self.chatMessageID = chatMessageID
     self.name = name
     self.servings = servings
+    self.dbID = dbID
+    self._meal = State(initialValue: meal)
     self._hasAddedFood = State(initialValue: hasPerformedAction)
+
+    loadMealIfLogged()
   }
 
+  @State private var meal: FoodItemLog.Meal
   @State private var hasAddedFood: Bool
   @State private var saveComplete = false
+  @State private var saveUndone = false
   @State private var presentedSheet: AnyView?
 
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
@@ -63,7 +73,7 @@ struct ChatDetectedFoodCell: View {
 
         Divider()
 
-        MealPicker()
+        MealBindingPicker(meal: $meal)
           .horizontallyCentered()
           .disabled(hasAddedFood)
 
@@ -82,11 +92,21 @@ private extension ChatDetectedFoodCell {
 
   var logFoodButton: some View {
     AsyncButton {
-      try await save()
+      if hasAddedFood {
+        if let _ = dbID {
+          try unsave()
+        }
+      } else {
+        try await save()
+      }
     } label: {
       Group {
         if hasAddedFood {
-          Label("Food Logged", systemSymbol: .checkmark)
+          if let _ = dbID {
+            Label("Undo", systemSymbol: .arrowCounterclockwise)
+          } else {
+            Label("Food Logged", systemSymbol: .checkmark)
+          }
         } else {
           Label("Log Food", systemSymbol: .forkKnife)
         }
@@ -95,7 +115,19 @@ private extension ChatDetectedFoodCell {
     }
     .buttonStyle(.primary)
     .sensoryFeedback(.success, trigger: saveComplete)
-    .disabled(hasAddedFood)
+    .sensoryFeedback(.stop, trigger: saveUndone)
+    .disabled(hasAddedFood && dbID == nil)
+  }
+
+  func loadMealIfLogged() {
+    guard
+      let dbID,
+      let log = try? modelContext.fetchFoodItemLog(id: dbID)
+    else {
+      return
+    }
+
+    self.meal = log.meal
   }
 
   func save() async throws {
@@ -108,15 +140,30 @@ private extension ChatDetectedFoodCell {
       date: nutritionViewModel.date,
       meal: nutritionViewModel.suggestedMeal
     )
-    try modelContext.markChatMessageActionTaken(id: chatMessageID)
+    hasAddedFood = true
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasAddedFood)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
-    hasAddedFood = true
 
     if RatingPromptTracker.shared.recordEvent() {
       requestReview()
     }
+  }
+
+  func unsave() throws {
+    guard let dbID else { return }
+
+    try modelContext.delete(
+      model: FoodItemLog.self,
+      where: #Predicate<FoodItemLog> { log in
+        log.id == dbID
+      }
+    )
+    hasAddedFood = false
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasAddedFood)
+
+    saveUndone.toggle()
   }
 }
 
@@ -127,6 +174,7 @@ private extension ChatDetectedFoodCell {
         ChatDetectedFoodCell(
           chatMessageID: "1234",
           name: "Crackers and Sliced Carrots",
+          meal: .breakfast,
           servings: [
             FoodItemServingAmount(
               serving: 2,
@@ -137,11 +185,13 @@ private extension ChatDetectedFoodCell {
               foodItem: .Preview.slicedCarrots
             )
           ],
-          hasPerformedAction: false
+          hasPerformedAction: false,
+          dbID: "1234"
         )
         ChatDetectedFoodCell(
           chatMessageID: "1234",
           name: "Crackers and Sliced Carrots",
+          meal: .breakfast,
           servings: [
             FoodItemServingAmount(
               serving: 2,
@@ -152,7 +202,8 @@ private extension ChatDetectedFoodCell {
               foodItem: .Preview.slicedCarrots
             )
           ],
-          hasPerformedAction: true
+          hasPerformedAction: true,
+          dbID: "1234"
         )
       }
       .padding()

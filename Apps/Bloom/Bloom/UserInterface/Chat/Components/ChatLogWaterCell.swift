@@ -83,7 +83,7 @@ private extension ChatLogWaterCell {
 
     TelemetryDeck.signal("Log Water")
 
-    try modelContext.markChatMessageActionTaken(id: chatMessageID)
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

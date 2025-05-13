@@ -96,7 +96,7 @@ private extension ChatLogBloodPressureCell {
     try await HealthStoreModifier.shared.write([systolicSample, diastolicSample])
     TelemetryDeck.signal("Log Blood Pressure")
 
-    try modelContext.markChatMessageActionTaken(id: chatMessageID)
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
