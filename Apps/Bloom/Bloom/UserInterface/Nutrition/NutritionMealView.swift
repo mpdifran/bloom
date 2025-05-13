@@ -91,6 +91,7 @@ private extension NutritionMealView {
             await delete(foodItemLog)
           }
         }
+        .tint(.red)
       }
     }
   }

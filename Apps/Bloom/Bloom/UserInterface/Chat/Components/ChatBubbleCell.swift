@@ -30,7 +30,7 @@ public struct ChatBubbleCell: View {
                showTail: showTail,
                shouldFill: !isDirect,
                foregroundStyle: foregroundColor,
-               backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary)) {
+               backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)) {
       Text(message.formattedMarkdown)
     }
   }

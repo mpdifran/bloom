@@ -25,4 +25,12 @@ public extension ModelContext {
 
     try save()
   }
+
+  func storeDBID(id: String, dbID: String) throws {
+    guard let chatMessage = try fetchFirstChatMessage(id: id) else { return }
+
+    chatMessage.dbID = dbID
+
+    try save()
+  }
 }

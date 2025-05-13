@@ -48,6 +48,7 @@ struct ChatView: View {
         }
       }
     }
+    .groupedBackground()
     .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
     .sheet($presentedSheet)
     .alert(error: $viewModel.error)

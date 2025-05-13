@@ -30,8 +30,6 @@ struct ChatDetectedFoodCell: View {
     self.dbID = dbID
     self._meal = State(initialValue: meal)
     self._hasAddedFood = State(initialValue: hasPerformedAction)
-
-    loadMealIfLogged()
   }
 
   @State private var meal: FoodItemLog.Meal
@@ -83,65 +81,77 @@ struct ChatDetectedFoodCell: View {
 
       Spacer(minLength: 60)
     }
+    .animation(.default, value: hasAddedFood)
     .padding(.horizontal)
     .sheet($presentedSheet)
+    .onAppear {
+      loadMealIfLogged()
+    }
   }
 }
 
 private extension ChatDetectedFoodCell {
 
   var logFoodButton: some View {
-    AsyncButton {
-      if hasAddedFood {
-        if let _ = dbID {
+    Group {
+      if hasAddedFood, let _ = dbID {
+        AsyncButton {
           try unsave()
-        }
-      } else {
-        try await save()
-      }
-    } label: {
-      Group {
-        if hasAddedFood {
-          if let _ = dbID {
-            Label("Undo", systemSymbol: .arrowCounterclockwise)
-          } else {
-            Label("Food Logged", systemSymbol: .checkmark)
+        } label: {
+          HStack {
+            Image(systemSymbol: .arrowCounterclockwise)
+            Text("Undo")
           }
-        } else {
-          Label("Log Food", systemSymbol: .forkKnife)
+          .horizontallyCentered()
         }
+        .foregroundStyle(.tint)
+        .bold()
+      } else {
+        AsyncButton {
+          try await save()
+        } label: {
+          Group {
+            if hasAddedFood {
+              Label("Food Logged", systemSymbol: .checkmark)
+            } else {
+              Label("Log Food", systemSymbol: .forkKnife)
+            }
+          }
+          .horizontallyCentered()
+        }
+        .buttonStyle(.primary)
+        .disabled(hasAddedFood)
       }
-      .horizontallyCentered()
     }
-    .buttonStyle(.primary)
+    .sensoryFeedback(.impact, trigger: saveUndone)
     .sensoryFeedback(.success, trigger: saveComplete)
-    .sensoryFeedback(.stop, trigger: saveUndone)
-    .disabled(hasAddedFood && dbID == nil)
   }
 
   func loadMealIfLogged() {
-    guard
-      let dbID,
-      let log = try? modelContext.fetchFoodItemLog(id: dbID)
-    else {
-      return
-    }
+    guard let dbID else { return }
 
-    self.meal = log.meal
+    if let log = try? modelContext.fetchFoodItemLog(id: dbID) {
+      self.meal = log.meal
+    } else {
+      hasAddedFood = false
+      try? modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: false)
+    }
   }
 
   func save() async throws {
-    try await nutritionViewModel.log(
+    let foodLogID = try await nutritionViewModel.log(
       modelContext: modelContext,
       name: name,
       image: nil,
       numberOfServings: 1,
       foodItemServings: servings,
-      date: nutritionViewModel.date,
-      meal: nutritionViewModel.suggestedMeal
+      date: .now,
+      meal: meal
     )
+
     hasAddedFood = true
     try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasAddedFood)
+    try modelContext.storeDBID(id: chatMessageID, dbID: foodLogID)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
