@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import BloomModel
 import BloomFoundation
+import TelemetryDeck
 
 final actor ChatController: ObservableObject {
   static let shared = ChatController()
@@ -88,6 +89,15 @@ extension ChatController {
     try await socket.send(payload: socketMessage)
 
     await SoundPlayer.playSendMessage()
+
+    TelemetryDeck.signal(
+      "Send Chat Message",
+      parameters: [
+        "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No"
+      ]
+    )
+
+    await TelemetryDeck.startDurationSignal("Chat Message Duration")
   }
 
   func handlePushData(_ data: Data) async {
@@ -144,6 +154,7 @@ private extension ChatController {
           )
           modelContext.insert(message)
         }
+        await TelemetryDeck.stopAndSendDurationSignal("Chat Message Duration")
       } catch {
         self.error = error
       }
