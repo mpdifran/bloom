@@ -312,16 +312,6 @@ private extension SettingsView {
           Toggle("", isOn: $reportViewModel.showMorningReportOnWakeUp)
             .tint(.mutedGreen)
         }
-
-        Divider()
-
-        SettingsCell("Evening Report") {
-          DatePicker(
-            "",
-            selection: $reportViewModel.eveningReportDate,
-            displayedComponents: .hourAndMinute
-          )
-        }
       }
     }
   }

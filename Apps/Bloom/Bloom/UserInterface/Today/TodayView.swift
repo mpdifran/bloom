@@ -61,7 +61,10 @@ struct TodayView: View {
           if habits.isNotEmpty {
             habitsSection
           }
-          reportsSection
+
+          if !shouldShowMorningReportAlert {
+            reportsSection
+          }
         }
         .padding(.horizontal)
       }
@@ -114,21 +117,18 @@ private extension TodayView {
   @ViewBuilder
   var alertsSection: some View {
     TimelineView(.everyMinute) { context in
-      if Calendar.current.isMorning(date: .now) || alwaysShowReports {
+      if shouldShowMorningReportAlert {
         DailyReportAlertCell(kind: .morning)
           .transition(.scale)
           .onTapGesture {
             presentedFullScreen = GoodMorningView().asAny
           }
       }
-      if reportViewModel.shouldShowEveningReport() || alwaysShowReports {
-        DailyReportAlertCell(kind: .evening)
-          .transition(.scale)
-          .onTapGesture {
-            presentedFullScreen = EveningReportView().asAny
-          }
-      }
     }
+  }
+
+  var shouldShowMorningReportAlert: Bool {
+    Calendar.current.isMorning(date: .now) || alwaysShowReports
   }
 
   @ViewBuilder
@@ -197,15 +197,7 @@ private extension TodayView {
           presentedSheet = GoodMorningView().asAny
         }
 
-        DailyReportCell(
-          kind: .evening,
-          availabilityText: eveningReportCellAvailabilityText
-        )
-        .onTapGesture {
-          guard eveningReportCellAvailabilityText == nil else { return }
-
-          presentedSheet = EveningReportView().asAny
-        }
+        Spacer()
       }
     }
   }
@@ -225,27 +217,6 @@ private extension TodayView {
       return "Available in \(duration)"
     } else if
       let duration = DateFormatter.timeIntervalMinuteAbbreviated.string(from: .now, to: morningTime)
-    {
-      return "Available in \(duration)"
-    }
-    return "Available soon"
-  }
-
-  var eveningReportCellAvailabilityText: String? {
-    guard
-      let eveningReportDate = reportViewModel.eveningReportStartDate,
-      eveningReportDate > .now
-    else {
-      return nil
-    }
-
-    if
-      eveningReportDate.timeIntervalSinceNow > 3600,
-      let duration = DateFormatter.timeIntervalHourAbbreviated.string(from: .now, to: eveningReportDate)
-    {
-      return "Available in \(duration)"
-    } else if
-      let duration = DateFormatter.timeIntervalMinuteAbbreviated.string(from: .now, to: eveningReportDate)
     {
       return "Available in \(duration)"
     }

@@ -45,6 +45,7 @@ struct BloomApp: App {
     //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
 
     checkRegisterForRemoteNotifications()
+    NotificationManager.shared.removeAllScheduledNotifications()
     migrateUserDefaults()
 
     // Listen for workouts starting from Apple Watch

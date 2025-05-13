@@ -9,7 +9,6 @@ import SwiftUI
 
 private extension String {
   static let morningReportDate = "ReportCoordinator.morningReportDate"
-  static let eveningReportDate = "ReportCoordinator.eveningReportDate"
   static let showMorningReportOnWakeUp = "ReportCoordinator.showMorningReportOnWakeUp"
 }
 
@@ -20,15 +19,6 @@ final class ReportCoordinatorViewModel {
   var morningReportDate: Date = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now {
     didSet {
       UserDefaults.group.set(morningReportDate, forKey: .morningReportDate)
-    }
-  }
-
-  var eveningReportDate: Date = Calendar.current.date(bySettingHour: 22, minute: 0, second: 0, of: .now) ?? .now {
-    didSet {
-      UserDefaults.group.set(eveningReportDate, forKey: .eveningReportDate)
-      Task {
-        await ReportCoordinator.shared.scheduleNotifications()
-      }
     }
   }
 
@@ -44,26 +34,6 @@ final class ReportCoordinatorViewModel {
     if let date = UserDefaults.group.object(forKey: .morningReportDate) as? Date {
       self.morningReportDate = date
     }
-    if let date = UserDefaults.group.object(forKey: .eveningReportDate) as? Date {
-      self.eveningReportDate = date
-    }
     showMorningReportOnWakeUp = UserDefaults.group.bool(forKey: .showMorningReportOnWakeUp)
-
-    Task {
-      await ReportCoordinator.shared.scheduleNotifications()
-    }
-  }
-}
-
-extension ReportCoordinatorViewModel {
-
-  var eveningReportStartDate: Date? {
-    Calendar.current.applyHourMinuteSecond(to: .now, from: eveningReportDate)
-  }
-
-  func shouldShowEveningReport() -> Bool {
-    guard let eveningReportStartDate else { return false }
-
-    return eveningReportStartDate < .now
   }
 }

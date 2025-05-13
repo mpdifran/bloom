@@ -30,10 +30,6 @@ final actor ReportCoordinator {
 
 extension ReportCoordinator {
 
-    func scheduleNotifications() async {
-        await scheduleEveningReport()
-    }
-
     func didDetectWakeUp(sleepAnalysis: SleepAnalysis? = nil) async {
         guard await ReportCoordinatorViewModel.shared.showMorningReportOnWakeUp else { return }
 
@@ -53,15 +49,5 @@ extension ReportCoordinator {
         await NotificationManager.shared.sendGoodMorningNotification(message: message)
 
         lastMorningReportNotificationDate = .now
-    }
-}
-
-private extension ReportCoordinator {
-
-    func scheduleEveningReport() async {
-        let eveningReportDate = await ReportCoordinatorViewModel.shared.eveningReportDate
-        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: eveningReportDate)
-
-        await NotificationManager.shared.scheduleEveningReportNotification(dateComponents: dateComponents)
     }
 }

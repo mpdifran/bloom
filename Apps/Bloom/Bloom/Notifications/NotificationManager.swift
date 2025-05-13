@@ -27,6 +27,8 @@ final class NotificationManager: Sendable {
   static let shared = NotificationManager()
 
   private init() { }
+
+  private let center = UNUserNotificationCenter.current()
 }
 
 extension NotificationManager {
@@ -88,21 +90,7 @@ extension NotificationManager {
     )
   }
 
-  func scheduleEveningReportNotification(dateComponents: DateComponents) async {
-    let content = UNMutableNotificationContent()
-    content.title = "Evening Report"
-    content.subtitle = "Check out your personalized summary of the day."
-    content.sound = .default
-    content.categoryIdentifier = .CategoryID.goodEvening
-
-    let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-
-    try? await UNUserNotificationCenter.current().add(
-      UNNotificationRequest(
-        identifier: .NotificationID.goodEvening,
-        content: content,
-        trigger: trigger
-      )
-    )
+  func removeAllScheduledNotifications() {
+    center.removeAllPendingNotificationRequests()
   }
 }
