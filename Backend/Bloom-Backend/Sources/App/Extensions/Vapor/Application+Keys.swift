@@ -14,7 +14,7 @@ extension Application {
   func printEnvironmentInfo() {
     logger.notice("Environment: \(environment.name)")
 //    if environment != .production {
-      logger.logLevel = .trace
+      logger.logLevel = .debug
 //    }
 
     if let _ = postgresURL {
