@@ -99,6 +99,13 @@ private extension BloomApp {
     Task {
       await VitalsCalculator.shared.refreshVitals()
     }
+
+    TelemetryDeck.signal(
+      "Health Goal",
+      parameters: [
+        "healthGoal": HealthDefaults.shared.getHealthGoal()
+      ]
+    )
   }
 
   func checkRegisterForRemoteNotifications() {

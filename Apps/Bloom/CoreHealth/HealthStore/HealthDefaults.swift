@@ -53,7 +53,6 @@ public extension HealthDefaults {
 
   func set(healthGoal: String) {
     setValue(healthGoal, for: .healthGoal)
-    TelemetryDeck.signal("Update Health Goal", parameters: ["healthGoal": healthGoal])
   }
 
   func setWeightLossSpeed(_ weightLossSpeed: WeightLossSpeed) {
