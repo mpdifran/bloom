@@ -26,6 +26,7 @@ private struct ChatVariadicView: _VariadicView_MultiViewRoot {
     .environment(\.defaultMinListRowHeight, 0)
     .listRowSpacing(4)
     .flippedVertically()
+    .padding(.top, -8) // since we don't have access to the tableView contentInset, cut into the top by the scroll content offset magic number.
   }
 }
 

@@ -10,7 +10,8 @@ import SwiftUI
 struct FlippedVertically: ViewModifier {
   func body(content: Content) -> some View {
     content
-      .scaleEffect(x: 1, y: -1, anchor: .center)
+      .rotationEffect(.degrees(180))
+      .scaleEffect(x: -1, y: 1, anchor: .center)
   }
 }
 
