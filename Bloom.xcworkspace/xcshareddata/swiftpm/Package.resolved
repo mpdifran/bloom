@@ -1,5 +1,5 @@
 {
-  "originHash" : "9b44bd1a9bd5b2872475a3cdb07e66ab759d40b8dba70b9b9cfc86a12a493b10",
+  "originHash" : "62d214c12062ae03df9443309332e58f04f112ea5cc5f83f33f7b874a996be6f",
   "pins" : [
     {
       "identity" : "apns",
@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/openai-kit.git",
       "state" : {
-        "revision" : "b32749ed29da3d51efb13edff83fcc90565101c9",
-        "version" : "1.4.18"
+        "revision" : "3be6555b945ddeeb013729a46e5d6bbdb1e0a10f",
+        "version" : "1.4.19"
       }
     },
     {
