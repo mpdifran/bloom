@@ -47,20 +47,20 @@ extension OpenAIAssistantService {
     assistantSpec: AssistantSpec
   ) async throws -> OpenAIAssistantThread {
 
-    let assistant = try await assistantProvider.createOrUpdateAssistant(
+    let assistantID = try await assistantProvider.createOrUpdateAssistant(
       assistantSpec: assistantSpec
     )
 
     if let threadID = user[keyPath: assistantSpec.threadIDKeyPath] {
       return OpenAIAssistantThread(
-        assistantID: assistant.id,
+        assistantID: assistantID,
         threadID: threadID
       )
     }
 
     return try await createHealthAssistantThread(
       user: user,
-      assistant: assistant,
+      assistantID: assistantID,
       assistantSpec: assistantSpec
     )
   }
@@ -261,7 +261,7 @@ private extension OpenAIAssistantService {
 
   func createHealthAssistantThread(
     user: User,
-    assistant: Assistant,
+    assistantID: String,
     assistantSpec: AssistantSpec
   ) async throws -> OpenAIAssistantThread {
     let thread = try await openAI.assistants.createThread(messages: [])
@@ -272,7 +272,7 @@ private extension OpenAIAssistantService {
     try await user.save(on: db)
 
     return OpenAIAssistantThread(
-      assistantID: assistant.id,
+      assistantID: assistantID,
       threadID: thread.id
     )
   }

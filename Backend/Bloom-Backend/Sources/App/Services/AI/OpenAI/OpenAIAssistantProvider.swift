@@ -20,10 +20,10 @@ struct OpenAIAssistantProvider {
 
 extension OpenAIAssistantProvider {
 
+  /// - returns: The Assistant ID.
   func createOrUpdateAssistant(
     assistantSpec: AssistantSpec
-  ) async throws -> Assistant {
-
+  ) async throws -> String {
     let assistantID: String
     if let existingAssistant = try await fetchAssisantRecord(assistantSpec: assistantSpec) {
       assistantID = existingAssistant.assistantID
@@ -32,10 +32,12 @@ extension OpenAIAssistantProvider {
       assistantID = assistant.id
     }
 
-    return try await updateAssistantDetails(
+    try await updateAssistantDetails(
       assistantID: assistantID,
       assistantSpec: assistantSpec
     )
+
+    return assistantID
   }
 }
 
@@ -67,12 +69,11 @@ private extension OpenAIAssistantProvider {
   func updateAssistantDetails(
     assistantID: String,
     assistantSpec: AssistantSpec
-  ) async throws -> Assistant {
-
+  ) async throws {
     let assistantSpecHash = "\(assistantSpec.hashValue)"
     if let existingAssistantRecord = try await fetchAssisantRecord(assistantSpec: assistantSpec) {
       if existingAssistantRecord.assistantSpecHash == assistantSpecHash {
-        return try await openAI.assistants.retrieveAssistant(assistantID: assistantID)
+        return
       }
     }
 
@@ -93,8 +94,6 @@ private extension OpenAIAssistantProvider {
       assistant: updatedAssistant,
       assistantSpec: assistantSpec
     )
-
-    return updatedAssistant
   }
 
   func persistAssistant(

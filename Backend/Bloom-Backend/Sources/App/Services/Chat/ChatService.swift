@@ -64,6 +64,8 @@ private extension ChatService {
   ) async throws {
     let assistantService = application.openAIAssistantService(db: db)
 
+    try await sendIsAssistantTyping(isTyping: true, userID: userID)
+
     guard let thread = try await assistantService.createOrFetchAssistantThread(
       userID: userID,
       assistantSpec: .healthCoach
@@ -290,8 +292,6 @@ private extension ChatService {
     db: any Database
   ) async throws -> AsyncThrowingStream<ThreadStreamEvent, Error> {
     let assistantService = application.openAIAssistantService(db: db)
-
-    try await sendIsAssistantTyping(isTyping: true, userID: userID)
 
     return try await assistantService.streamRun(
       assistantThread: thread,
