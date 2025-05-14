@@ -95,7 +95,8 @@ private extension BloomPlusPackagePlanPicker {
           identifier: "preview",
           packageType: .monthly,
           storeProduct: StoreProduct(sk1Product: SK1Product()),
-          offeringIdentifier: "offering"
+          offeringIdentifier: "offering",
+          webCheckoutUrl: nil
         )
       ],
       selectedPackage: $selectedPackage
