@@ -80,7 +80,8 @@ extension OpenAIAssistantService {
         do {
           let _ = try await openAI.assistants.pollRunForAssistantResponse(
             threadID: assistantThread.threadID,
-            runID: run.id
+            runID: run.id,
+            pollInterval: 0.5
           )
         } catch { } // An error is thrown if the state is cancelled.
       }
