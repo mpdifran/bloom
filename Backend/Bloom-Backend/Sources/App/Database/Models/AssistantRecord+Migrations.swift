@@ -13,16 +13,30 @@ extension AssistantRecord {
   struct Create: AsyncMigration {
     func prepare(on database: any Database) async throws {
       try await database.schema(AssistantRecord.schema)
-        .field("id", .string, .identifier(auto: false))
-        .field("name", .string)
-        .field("assistant_id", .string)
-        .field("created_at", .datetime)
-        .field("updated_at", .datetime)
+        .field(.AssistantRecord.id, .string, .identifier(auto: false))
+        .field(.AssistantRecord.name, .string)
+        .field(.AssistantRecord.assistantID, .string)
+        .field(.AssistantRecord.createdAt, .datetime)
+        .field(.AssistantRecord.updatedAt, .datetime)
         .create()
     }
 
     func revert(on database: any Database) async throws {
       try await database.schema(AssistantRecord.schema).delete()
+    }
+  }
+
+  struct AddAssistantSpecHash: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(AssistantRecord.schema)
+        .field(.AssistantRecord.assistantSpecHash, .string)
+        .update()
+    }
+
+    func revert(on database: any Database) async throws {
+      try await database.schema(AssistantRecord.schema)
+        .deleteField(.AssistantRecord.assistantSpecHash)
+        .update()
     }
   }
 }

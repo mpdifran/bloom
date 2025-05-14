@@ -13,7 +13,7 @@ extension AssistantSpec {
   static let healthGoalSetterSpec = AssistantSpec(
     id: "assistant.health-goal-setter",
     name: assistantName,
-    model: Model.GPT4.gpt_4o_mini,
+    model: .GPT4.gpt_4o_mini,
     temperature: 0.1,
     topP: 0.2,
     threadIDKeyPath: \.healthGoalSetterThreadID,

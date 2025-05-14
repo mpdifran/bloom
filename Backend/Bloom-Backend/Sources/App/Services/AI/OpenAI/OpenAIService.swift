@@ -102,7 +102,7 @@ extension OpenAIService {
     foodDescription: String?
   ) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = Model.GPT4.gpt_4o_mini
+      let model = ModelID.GPT4.gpt_4o_mini
 
       var messages: [Chat.Message] = [
         Chat.Message(
@@ -146,7 +146,7 @@ extension OpenAIService {
 
   func estimateCalories(textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
     do {
-      let model = Model.GPT4.gpt_4o_mini
+      let model = ModelID.GPT4.gpt_4o_mini
 
       let messages: [Chat.Message] = [
         Chat.Message(
@@ -289,7 +289,7 @@ extension OpenAIService {
     }
 
     let response = try await openAI.chats.create(
-      model: Model.GPT4.gpt_4o_mini,
+      model: .GPT4.gpt_4o_mini,
       messages: messages
     )
 
@@ -339,7 +339,7 @@ private extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: Model.GPT4.gpt_4o_mini,
+        model: .GPT4.gpt_4o_mini,
         messages: messages,
         responseFormat: ResponseFormat(type: .jsonSchema(.nutritionLabelParse))
       )
@@ -381,7 +381,7 @@ private extension OpenAIService {
       ]
 
       let response = try await openAI.chats.create(
-        model: Model.GPT4.gpt_4o_mini,
+        model: .GPT4.gpt_4o_mini,
         messages: messages,
         responseFormat: ResponseFormat(type: .jsonSchema(.packagingParse))
       )
@@ -424,7 +424,7 @@ extension OpenAIService {
     ]
 
     let chat = try await openAI.chats.create(
-      model: Model.GPT4.gpt_4o_mini,
+      model: .GPT4.gpt_4o_mini,
       messages: messages,
       responseFormat: ResponseFormat(type: .jsonSchema(.suggestedGoals))
     )

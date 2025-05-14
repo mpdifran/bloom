@@ -12,7 +12,7 @@ extension AssistantSpec {
   static let assistantName = "Bud"
 }
 
-struct AssistantSpec: Sendable {
+struct AssistantSpec: Hashable, Sendable {
   let id: String
   let name: String
   let model: ModelID

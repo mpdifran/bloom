@@ -24,6 +24,9 @@ public func configure(_ app: Application) async throws {
   // Database
   try app.setupPostgres()
   allMigrations.forEach { app.migrations.add($0) }
+  if app.environment == .development {
+    try await app.autoMigrate()
+  }
 
   // APNs
   try app.configureAPNs()

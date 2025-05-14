@@ -13,19 +13,22 @@ import BloomModel
 final class AssistantRecord: Model, Content, @unchecked Sendable {
   static let schema = "assistants"
 
-  @ID(custom: "id", generatedBy: .user)
+  @ID(custom: .AssistantRecord.id, generatedBy: .user)
   var id: String?
 
-  @Field(key: "name")
+  @Field(key: .AssistantRecord.name)
   var name: String
 
-  @Field(key: "assistant_id")
+  @Field(key: .AssistantRecord.assistantID)
   var assistantID: String
 
-  @Timestamp(key: "created_at", on: .create)
+  @Field(key: .AssistantRecord.assistantSpecHash)
+  var assistantSpecHash: String?
+
+  @Timestamp(key: .AssistantRecord.createdAt, on: .create)
   var createdAt: Date?
 
-  @Timestamp(key: "updated_at", on: .update)
+  @Timestamp(key: .AssistantRecord.updatedAt, on: .update)
   var updatedAt: Date?
 
   init() { }
@@ -33,10 +36,23 @@ final class AssistantRecord: Model, Content, @unchecked Sendable {
   init(
     id: String,
     name: String,
-    assistantID: String
+    assistantID: String,
+    assistantSpecHash: String
   ) {
     self.id = id
     self.name = name
     self.assistantID = assistantID
+    self.assistantSpecHash = assistantSpecHash
+  }
+}
+
+extension FieldKey {
+  enum AssistantRecord {
+    static let id = FieldKey("id")
+    static let name = FieldKey("name")
+    static let assistantID = FieldKey("assistant_id")
+    static let assistantSpecHash = FieldKey("assistant_spec_hash")
+    static let createdAt = FieldKey("created_at")
+    static let updatedAt = FieldKey("updated_at")
   }
 }
