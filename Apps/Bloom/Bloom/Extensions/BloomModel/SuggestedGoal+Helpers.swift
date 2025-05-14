@@ -36,6 +36,32 @@ extension SuggestedGoal.Metric {
     case .targetHeartRateZone5Minutes: TargetMetric.targetHeartRateZone5
     }
   }
+
+  var name: String {
+    switch self {
+    case .calories: "caloric intake"
+    case .proteinIntake: "protein intake"
+    case .waterIntake: "water intake"
+    case .fiberIntake: "fiber intake"
+    case .meditationMinutes: "meditation minutes"
+    case .exerciseMinutes: "exercise minutes"
+    case .stepCount: "steps"
+    case .walkingRunningDistance: "walking-running distance"
+    case .runDistance: "running distance"
+    case .runDuration: "running duration"
+    case .bikeDistance: "biking distance"
+    case .bikeDuration: "biking duration"
+    case .mobilityAndFlexibilityDuration: "mobility and flexibility workouts"
+    case .strengthTrainingDuration: "strength training workouts"
+    case .cardioDuration: "cardio workouts"
+    case .highIntensityIntervalTrainingDuration: "HIIT workouts"
+    case .targetHeartRateZone1Minutes: "target heart rate zone 1 minutes"
+    case .targetHeartRateZone2Minutes: "target heart rate zone 2 minutes"
+    case .targetHeartRateZone3Minutes: "target heart rate zone 3 minutes"
+    case .targetHeartRateZone4Minutes: "target heart rate zone 4 minutes"
+    case .targetHeartRateZone5Minutes: "target heart rate zone 5 minutes"
+    }
+  }
 }
 
 extension TargetMetric {

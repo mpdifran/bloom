@@ -86,11 +86,13 @@ private extension ChatService {
       content: content
     )
 
-    try await performRun(
+    let stream = try await performRun(
       thread: thread,
       userID: userID,
       db: db
     )
+
+    try await handleRunStream(stream: stream, userID: userID, db: db)
   }
 
   func onToolCallsResponse(
@@ -112,18 +114,15 @@ private extension ChatService {
       ToolOutput(toolCallID: $0.toolCallID, output: $0.data)
     }
 
-    let run = try await assistantService.submitSuccessfulToolOputput(
-      threadID: thread.threadID,
-      runID: response.runID,
-      toolOutputs: toolOutputs
-    )
-
-    try await performRun(
+    let stream = try await submitToolResponse(
       thread: thread,
-      existingRun: run,
+      runID: response.runID,
+      toolOutputs: toolOutputs,
       userID: userID,
       db: db
     )
+
+    try await handleRunStream(stream: stream, userID: userID, db: db)
   }
 }
 
@@ -287,15 +286,14 @@ private extension ChatService {
 
   func performRun(
     thread: OpenAIAssistantThread,
-    existingRun: Run? = nil,
     userID: UserIdentifier,
     db: any Database
-  ) async throws {
+  ) async throws -> AsyncThrowingStream<ThreadStreamEvent, Error> {
     let assistantService = application.openAIAssistantService(db: db)
 
     try await sendIsAssistantTyping(isTyping: true, userID: userID)
 
-    let assistantResponse = try await assistantService.startRunAndPollForResponse(
+    return try await assistantService.streamRun(
       assistantThread: thread,
       tools: [
         Assistant.Tool.function(.queryUserHealthData),
@@ -308,58 +306,114 @@ private extension ChatService {
         Assistant.Tool.function(.logBowelMovement),
         Assistant.Tool.function(.createWorkoutPlan),
       ],
-      toolChoice: .auto,
-      existingRun: existingRun
+      toolChoice: .auto
     )
+  }
 
-    switch assistantResponse {
-    case .requiresAction(let run, let toolCalls):
-      var toolCallWrappers = [SocketMessage.ToolCallWrapper]()
-      for toolCall in toolCalls {
-        switch toolCall.function.name {
-        case .Function.queryUserHealthData, .Function.queryUserHealthMetrics:
-          toolCallWrappers.append(try await performQuery(toolCall: toolCall))
-        case .Function.setGoals:
-          toolCallWrappers.append(try await setGoals(toolCall: toolCall))
-        case .Function.logFood:
-          toolCallWrappers.append(try await logFood(toolCall: toolCall))
-        case .Function.logWater:
-          toolCallWrappers.append(try await logWater(toolCall: toolCall))
-        case .Function.logWeight:
-          toolCallWrappers.append(try await logWeight(toolCall: toolCall))
-        case .Function.logBloodPressure:
-          toolCallWrappers.append(try await logBloodPressure(toolCall: toolCall))
-        case .Function.logBowelMovement:
-          toolCallWrappers.append(try await logBowelMovements(toolCall: toolCall))
-        case .Function.createWorkoutPlan:
-          toolCallWrappers.append(try await createWorkout(toolCall: toolCall))
+  func submitToolResponse(
+    thread: OpenAIAssistantThread,
+    runID: String,
+    toolOutputs: [ToolOutput],
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws -> AsyncThrowingStream<ThreadStreamEvent, Error> {
+    let assistantService = application.openAIAssistantService(db: db)
+
+    return try await assistantService.submitSuccessfulToolOputputAndStreamRun(
+      threadID: thread.threadID,
+      runID: runID,
+      toolOutputs: toolOutputs
+    )
+  }
+
+  func handleRunStream(
+    stream: AsyncThrowingStream<ThreadStreamEvent, Error>,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+
+    var messageID = UUID().uuidString
+    for try await event in stream {
+      switch event {
+      case .run(let run):
+        switch run.status {
+        case .requiresAction:
+          guard let toolCalls = run.requiredAction?.submitToolOutputs.toolCalls else { continue }
+
+          try await sendToolCalls(run: run, toolCalls: toolCalls, userID: userID, db: db)
         default:
-          throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
+          break
+        }
+      case .message(let message):
+        let messages = message.content.compactMap {
+          switch $0 {
+          case .text(let text): return text
+          default: return nil
+          }
+        }
+
+        if message.content.isNotEmpty {
+          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+        }
+
+        for message in messages {
+          let response = SocketMessage.MessageResponse(id: messageID, message: message)
+          try await ensureContentSent(
+            response,
+            title: "Bud",
+            message: message,
+            userID: userID,
+            db: db
+          )
+          messageID = UUID().uuidString // Ensure all these messages have unique IDs.
+        }
+      case .messageDelta(let delta):
+        let chunks = delta.delta.content
+          .sorted(by: { $0.index < $1.index })
+          .map { $0.text.value }
+
+        for chunk in chunks {
+          let messageChunk = SocketMessage.MessageChunkResponse(id: messageID, chunk: chunk)
+          try await sendSocketContentIfAvailable(messageChunk, userID: userID)
         }
       }
-      let toolCallRequest = SocketMessage.ToolCallsRequest(
-        runID: run.id,
-        toolCalls: toolCallWrappers
-      )
-      try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
-    case .messages(_, let messages):
-      let message = messages.flatMap { $0.content.compactMap({ $0.text }) }.first
-
-      guard let message else {
-        throw Abort(.internalServerError, reason: "Could not decode message from Assistant.")
-      }
-
-      let response = SocketMessage.MessageResponse(message: message)
-
-      try await sendIsAssistantTyping(isTyping: false, userID: userID)
-      try await ensureContentSent(
-        response,
-        title: "Bud",
-        message: response.message,
-        userID: userID,
-        db: db
-      )
     }
+  }
+
+  func sendToolCalls(
+    run: Run,
+    toolCalls: [Run.ToolCall],
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+    var toolCallWrappers = [SocketMessage.ToolCallWrapper]()
+    for toolCall in toolCalls {
+      switch toolCall.function.name {
+      case .Function.queryUserHealthData, .Function.queryUserHealthMetrics:
+        toolCallWrappers.append(try await performQuery(toolCall: toolCall))
+      case .Function.setGoals:
+        toolCallWrappers.append(try await setGoals(toolCall: toolCall))
+      case .Function.logFood:
+        toolCallWrappers.append(try await logFood(toolCall: toolCall))
+      case .Function.logWater:
+        toolCallWrappers.append(try await logWater(toolCall: toolCall))
+      case .Function.logWeight:
+        toolCallWrappers.append(try await logWeight(toolCall: toolCall))
+      case .Function.logBloodPressure:
+        toolCallWrappers.append(try await logBloodPressure(toolCall: toolCall))
+      case .Function.logBowelMovement:
+        toolCallWrappers.append(try await logBowelMovements(toolCall: toolCall))
+      case .Function.createWorkoutPlan:
+        toolCallWrappers.append(try await createWorkout(toolCall: toolCall))
+      default:
+        throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
+      }
+    }
+    let toolCallRequest = SocketMessage.ToolCallsRequest(
+      runID: run.id,
+      toolCalls: toolCallWrappers
+    )
+    try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
   }
 }
 

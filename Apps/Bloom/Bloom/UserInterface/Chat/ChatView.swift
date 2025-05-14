@@ -29,7 +29,17 @@ struct ChatView: View {
         ChatLayout {
           chatMessagesView
 
-          if viewModel.assistantIsTyping {
+          if let inProgressMessage = viewModel.inProgressMessage {
+            ChatBubbleCell(
+              message: inProgressMessage.message,
+              isDirect: false,
+              isCurrentUser: false,
+              showTail: true
+            )
+            .id(inProgressMessage.id)
+            .transition(.blurReplace)
+            .contentTransition(.numericText())
+          } else if viewModel.assistantIsTyping {
             statusTextView
 
             TypingIndicatorCell(isDirect: false)
@@ -54,6 +64,7 @@ struct ChatView: View {
     .alert(error: $viewModel.error)
     .animation(.bouncy, value: chatMessages)
     .animation(.bouncy, value: viewModel.assistantTypingStatus)
+    .animation(.bouncy, value: viewModel.inProgressMessage)
     .topSafeAreaBlur()
   }
 }

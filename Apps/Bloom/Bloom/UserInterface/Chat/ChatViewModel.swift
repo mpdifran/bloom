@@ -14,6 +14,7 @@ import SwiftData
 final class ChatViewModel {
   var assistantTypingStatus: String?
   var assistantIsTyping = false
+  var inProgressMessage: ChatController.InProgressMessage?
   var error: Error?
 
   init() {
@@ -22,6 +23,7 @@ final class ChatViewModel {
 
   private var typingStatusTask: Task<Void, Never>?
   private var isTypingTask: Task<Void, Never>?
+  private var inProgressMessageTask: Task<Void, Never>?
   private var errorTask: Task<Void, Never>?
 
   private let modelContext = ContainerHolder.shared.createContext()
@@ -58,6 +60,13 @@ private extension ChatViewModel {
       for await isTyping in await ChatController.shared.$assistantIsTyping {
         await MainActor.run { [weak self] in
           self?.assistantIsTyping = isTyping
+        }
+      }
+    }
+    inProgressMessageTask = Task.detached { [weak self] in
+      for await inProgressMessage in await ChatController.shared.$inProgressMessage {
+        await MainActor.run { [weak self] in
+          self?.inProgressMessage = inProgressMessage
         }
       }
     }

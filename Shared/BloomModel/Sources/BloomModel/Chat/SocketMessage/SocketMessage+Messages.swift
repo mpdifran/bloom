@@ -22,10 +22,28 @@ public extension SocketMessage {
     }
   }
 
+  struct MessageChunkResponse: Codable, Equatable, Sendable {
+    public let id: String
+    public let chunk: String
+
+    public init(
+      id: String,
+      chunk: String
+    ) {
+      self.id = id
+      self.chunk = chunk
+    }
+  }
+
   struct MessageResponse: Codable, Equatable, Sendable {
+    public let id: String
     public let message: String
 
-    public init(message: String) {
+    public init(
+      id: String,
+      message: String
+    ) {
+      self.id = id
       self.message = message
     }
   }

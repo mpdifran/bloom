@@ -11,11 +11,19 @@ import BloomModel
 import BloomFoundation
 import TelemetryDeck
 
+extension ChatController {
+  struct InProgressMessage: Identifiable, Hashable, Sendable {
+    let id: String
+    var message: String
+  }
+}
+
 final actor ChatController: ObservableObject {
   static let shared = ChatController()
 
   @AsyncStreamable var assistantTypingStatus: String?
   @AsyncStreamable var assistantIsTyping = false
+  @AsyncStreamable var inProgressMessage: InProgressMessage?
   @AsyncStreamable var error: Error?
 
   private init() { }
@@ -144,19 +152,28 @@ private extension ChatController {
   func parse(data: Data) async {
     print("Recevied data: \(String(data: data, encoding: .utf8) ?? "")")
 
-    if let messagesResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
+    if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
       do {
         try modelContext.savingTransaction {
           let message = ChatMessage(
+            id: messageResponse.id,
             isCurrentUser: false,
-            message: messagesResponse.message
+            message: messageResponse.message
           )
           modelContext.insert(message)
         }
+        self.inProgressMessage = nil
         await TelemetryDeck.stopAndSendDurationSignal("Chat Message Duration")
       } catch {
         self.error = error
+      }
+    } else if let messageChunk = try? decoder.decode(SocketMessage.MessageChunkResponse.self, from: data) {
+
+      if let inProgressMessage = self.inProgressMessage {
+        self.inProgressMessage?.message += messageChunk.chunk
+      } else {
+        self.inProgressMessage = InProgressMessage(id: messageChunk.id, message: messageChunk.chunk)
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       do {
@@ -285,54 +302,5 @@ private extension ChatController {
     webSocketErrorTask = nil
     assistantIsTyping = false
     queryAreas.removeAll()
-  }
-}
-
-private extension SocketMessage.QueryDataType {
-
-  var name: String {
-    switch self {
-    case .foodLogs: "food logs"
-    case .nutrition: "nutrition"
-    case .goals: "goals"
-    case .activityLevel: "activity level"
-    case .bodyWeight: "body weight"
-    case .bowelMovements: "bowel movements"
-    case .heart: "heart health"
-    case .menstruation: "cycle tracking"
-    case .sleep: "sleep"
-    case .stress: "stress"
-    case .workouts: "workouts"
-    case .targetHeartRateZoneMinutes: "target heart rate zones"
-    }
-  }
-}
-
-private extension SuggestedGoal.Metric {
-
-  var name: String {
-    switch self {
-    case .calories: "caloric intake"
-    case .proteinIntake: "protein intake"
-    case .waterIntake: "water intake"
-    case .fiberIntake: "fiber intake"
-    case .meditationMinutes: "meditation minutes"
-    case .exerciseMinutes: "exercise minutes"
-    case .stepCount: "steps"
-    case .walkingRunningDistance: "walking-running distance"
-    case .runDistance: "running distance"
-    case .runDuration: "running duration"
-    case .bikeDistance: "biking distance"
-    case .bikeDuration: "biking duration"
-    case .mobilityAndFlexibilityDuration: "mobility and flexibility workouts"
-    case .strengthTrainingDuration: "strength training workouts"
-    case .cardioDuration: "cardio workouts"
-    case .highIntensityIntervalTrainingDuration: "HIIT workouts"
-    case .targetHeartRateZone1Minutes: "target heart rate zone 1 minutes"
-    case .targetHeartRateZone2Minutes: "target heart rate zone 2 minutes"
-    case .targetHeartRateZone3Minutes: "target heart rate zone 3 minutes"
-    case .targetHeartRateZone4Minutes: "target heart rate zone 4 minutes"
-    case .targetHeartRateZone5Minutes: "target heart rate zone 5 minutes"
-    }
   }
 }

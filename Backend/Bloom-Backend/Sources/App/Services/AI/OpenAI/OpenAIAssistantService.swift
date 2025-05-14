@@ -161,6 +161,19 @@ extension OpenAIAssistantService {
     )
   }
 
+  func streamRun(
+    assistantThread: OpenAIAssistantThread,
+    tools: [Assistant.Tool]? = nil,
+    toolChoice: Run.ToolChoice? = nil
+  ) async throws -> AsyncThrowingStream<ThreadStreamEvent, Error> {
+    try await openAI.assistants.createAndStreamRun(
+      assistantID: assistantThread.assistantID,
+      threadID: assistantThread.threadID,
+      tools: tools,
+      toolChoice: toolChoice
+    )
+  }
+
   func startRunAndPollForResponse(
     assistantThread: OpenAIAssistantThread,
     tools: [Assistant.Tool]? = nil,
@@ -194,6 +207,18 @@ extension OpenAIAssistantService {
     toolOutputs: [ToolOutput]
   ) async throws -> Run {
     return try await openAI.assistants.submitToolOutput(
+      threadID: threadID,
+      runID: runID,
+      toolOutputs: toolOutputs
+    )
+  }
+
+  func submitSuccessfulToolOputputAndStreamRun(
+    threadID: String,
+    runID: String,
+    toolOutputs: [ToolOutput]
+  ) async throws -> AsyncThrowingStream<ThreadStreamEvent, Error> {
+    return try await openAI.assistants.submitToolOutputAndStreamRun(
       threadID: threadID,
       runID: runID,
       toolOutputs: toolOutputs
