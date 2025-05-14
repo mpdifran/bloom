@@ -13,8 +13,6 @@ import CoreHealth
 
 struct WorkoutsTabView: View {
 
-  @Environment(TabController.self) private var tabController: TabController
-
   @State private var presentedSheet: AnyView?
   @State private var pushedView: AnyView?
   @State private var workouts = [HKWorkout]()
@@ -48,7 +46,6 @@ struct WorkoutsTabView: View {
           }
         }
       }
-      .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
       .navigationDestination($pushedView)
     }
     .sheet($presentedSheet)
