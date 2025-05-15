@@ -9,7 +9,13 @@ import Foundation
 import BloomModel
 
 struct QueryUserHealthDataArguments: Codable, Equatable, Sendable {
-  public let startDate: Date
-  public let endDate: Date
-  public let dataType: SocketMessage.QueryDataType
+  let queries: [Query]
+}
+
+extension QueryUserHealthDataArguments {
+  struct Query: Codable, Equatable, Sendable {
+    let startDate: Date
+    let endDate: Date
+    let dataType: SocketMessage.QueryDataType
+  }
 }

@@ -33,7 +33,7 @@ public extension SocketMessage {
 
 public extension SocketMessage.ToolCallWrapper {
   enum Kind: Codable, Equatable, Sendable {
-    case query(SocketMessage.Query)
+    case queries([SocketMessage.Query])
     case newGoals([SocketMessage.HealthMetricGoal])
     case detectedFood(SocketMessage.DetectedFood)
     case logWeight(SocketMessage.LogWeight)

@@ -181,12 +181,28 @@ private extension ChatController {
           for toolCall in toolCallRequest.toolCalls {
             taskGroup.addTask {
               switch toolCall.kind {
-              case .query(let query):
-                if let title = query.dataType?.name ?? query.healthMetric?.name {
-                  await self.record(queryArea: title)
+              case .queries(let queries):
+
+                let queryNames = queries.map { $0.dataType.name }
+                await self.record(queryAreas: queryNames)
+
+                let results: [String] = await withTaskGroup(of: String.self) { group in
+                  for query in queries {
+                    group.addTask {
+                      await queryPerformer.perform(query: query)
+                    }
+                  }
+                  var allResults = [String]()
+                  for await result in group {
+                    allResults.append(result)
+                  }
+                  return allResults
                 }
-                let data = await queryPerformer.perform(query: query)
+
+                let data = results.joined(separator: "\n\n")
+
                 return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID, data: data)
+
               case .newGoals(let goals):
                 let data = try JSONEncoder.bloomModel.encode(goals)
                 try await self.insertRichChatMessage(data: data)
@@ -235,7 +251,22 @@ private extension ChatController {
           try await NetworkRequester.shared.submitToolCallResponse(body: responseMessage)
         }
       } catch {
-        self.error = error
+        // If we throw, just return an empty set.
+        let responseMessage = SocketMessage.ToolCallsResponse(
+          runID: toolCallRequest.runID,
+          toolCallResults: toolCallRequest.toolCalls.map { SocketMessage.ToolCallResult(toolCallID: $0.toolCallID) }
+        )
+        if let socket = webSocketHandle {
+          try? await socket.send(payload: responseMessage)
+        } else {
+          try? await NetworkRequester.shared.submitToolCallResponse(body: responseMessage)
+        }
+        TelemetryDeck.errorOccurred(
+          id: "ChatController.handleToolCallRequest",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+//        self.error = error
       }
     } else if let typingIndicator = try? decoder.decode(SocketMessage.TypingIndicator.self, from: data) {
       self.assistantIsTyping = typingIndicator.isTyping
@@ -251,8 +282,8 @@ private extension ChatController {
     }
   }
 
-  func record(queryArea: String) {
-    queryAreas.append(queryArea)
+  func record(queryAreas: [String]) {
+    self.queryAreas.append(contentsOf: queryAreas)
   }
 
   func insertRichChatMessage(

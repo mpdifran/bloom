@@ -146,7 +146,6 @@ private extension ChatService {
       return
     }
     try socket.sendContent(content)
-    logger.debug("Sent web socket message to \(userID)")
   }
 
   func sendIsAssistantTyping(
@@ -166,7 +165,6 @@ private extension ChatService {
   ) async throws where Content: Encodable, Content: Sendable {
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
-      logger.debug("Sent web socket message to \(userID)")
       return
     }
 
@@ -233,7 +231,6 @@ private extension ChatService {
   ) async throws where Content: Encodable, Content: Sendable {
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
-      logger.debug("Sent web socket message to \(userID)")
       return
     }
 
@@ -297,7 +294,6 @@ private extension ChatService {
       assistantThread: thread,
       tools: [
         Assistant.Tool.function(.queryUserHealthData),
-        Assistant.Tool.function(.queryUserHealthMetrics),
         Assistant.Tool.function(.setGoals),
         Assistant.Tool.function(.logFood),
         Assistant.Tool.function(.logWater),
@@ -389,7 +385,7 @@ private extension ChatService {
     var toolCallWrappers = [SocketMessage.ToolCallWrapper]()
     for toolCall in toolCalls {
       switch toolCall.function.name {
-      case .Function.queryUserHealthData, .Function.queryUserHealthMetrics:
+      case .Function.queryUserHealthData:
         toolCallWrappers.append(try await performQuery(toolCall: toolCall))
       case .Function.setGoals:
         toolCallWrappers.append(try await setGoals(toolCall: toolCall))
@@ -425,22 +421,16 @@ private extension ChatService {
     switch toolCall.function.name {
     case .Function.queryUserHealthData:
       let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthDataArguments.self, using: decoder)
-      let query = SocketMessage.Query(
-        startDate: queryArguments.startDate,
-        endDate: queryArguments.endDate,
-        dataType: queryArguments.dataType,
-        healthMetric: nil
-      )
-      return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .query(query))
-    case .Function.queryUserHealthMetrics:
-      let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthMetricsArguments.self, using: decoder)
-      let query = SocketMessage.Query(
-        startDate: queryArguments.startDate,
-        endDate: queryArguments.endDate,
-        dataType: nil,
-        healthMetric: queryArguments.healthMetric
-      )
-      return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .query(query))
+
+      let queries = queryArguments.queries.map { arguments in
+        SocketMessage.Query(
+          startDate: arguments.startDate,
+          endDate: arguments.endDate,
+          dataType: arguments.dataType
+        )
+      }
+
+      return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .queries(queries))
     default:
       throw Abort(.internalServerError, reason: "Improper tool handling")
     }

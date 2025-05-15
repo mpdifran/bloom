@@ -18,13 +18,11 @@ extension AssistantSpec {
     model: .GPT3.gpt3_5Turbo,
     threadIDKeyPath: \.healthCoachThreadID,
     instructions: """
-    Your name is \(assistantName). You are a health coach for a mobile app called Bloom. You’re here to support the user like a good friend — feel free to be a little sassy and fun!
+    Your name is \(assistantName). You are a health coach for a mobile app called Bloom. You’re here to support the user like a good friend — feel free to be a little sassy and fun! You can respond to the user in a similar way to how they respond to you.
     
     Use the user’s personal health data to offer friendly insights, track trends, and suggest general improvements. You may discuss best practices based on their data but do not offer medical diagnoses or treatment recommendations. If specific medical advice is needed, encourage the user to speak to a healthcare professional.
     
-    If necessary, you can query the user's relevant health data for a better picture answering their questions using \(String.Function.queryUserHealthData) and \(String.Function.queryUserHealthMetrics). When you do this, never show or reference raw JSON — refer to the data conversationally.
-    
-    You should opt to use a function over text output when possible, since the contents will be shown to the user in a more organized way.
+    When the user is asking something about their specific health data, you must query the data using \(String.Function.queryUserHealthData). When you do this, never show or reference raw JSON — refer to the data conversationally.
     
     If the user shows you a picture of food, you can automatically log it for them using the \(String.Function.logFood) function. The data you pass here will appear in the chat history for the user.
     
@@ -35,11 +33,10 @@ extension AssistantSpec {
     
     You’re also here for broader support: physical health, mental health, feelings, thoughts, and general well-being — all are fair game. Be casual and supportive.
 
-    Reply in plain text unless a function is needed. Ask follow-up questions when more context would improve your advice, and only go into detail when the user asks for it.
+    Ask follow-up questions when more context would improve your advice, and only go into detail when the user asks for it.
     """,
     tools: [
       .function(.queryUserHealthData),
-      .function(.queryUserHealthMetrics),
       .function(.setGoals),
       .function(.logFood),
       .function(.logWater),
@@ -62,35 +59,28 @@ extension AssistantSpec {
 
 extension String.Function {
   static let queryUserHealthData = "queryUserHealthData"
-  static let queryUserHealthMetrics = "queryUserHealthMetrics"
 }
 
 extension Assistant.Tool.Function {
   static let queryUserHealthData = Assistant.Tool.Function(
     name: .Function.queryUserHealthData,
-    description: "A function to query health data about the user. You can use this function to help answer the user's questions. Some data may be missing if the user hasn't recorded it.",
+    description: "A function to query health data about the user. You can use this function to help answer the user's questions. You are allowed to include multiple data types to get a better picture of the user's health. Some data may be missing if the user hasn't recorded it.",
     parameters: Schema.Object(
       properties: [
-        "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z)"),
-        "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z)"),
-        "dataType": Schema.Parameter(
-          enum: SocketMessage.QueryDataType.self,
-          description: "The type of health data to query"
-        )
-      ]
-    )
-  )
-
-  static let queryUserHealthMetrics = Assistant.Tool.Function(
-    name: .Function.queryUserHealthMetrics,
-    description: "A function to query the user's health metrics for a given date range. Some data may be missing if the user hasn't recorded it.",
-    parameters: Schema.Object(
-      properties: [
-        "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z)"),
-        "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z)"),
-        "healthMetric": Schema.Parameter(
-          enum: SuggestedGoal.Metric.self,
-          description: "A health metric to query historical data for. Either specify this or dataType, but not both."
+        "queries" : Schema.Parameter(
+          description: "A list of user health data queries you would like to perform.",
+          arrayOf: .object(
+            Schema.Object(
+              properties: [
+                "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z)"),
+                "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z)"),
+                "dataType": Schema.Parameter(
+                  enum: SocketMessage.QueryDataType.self,
+                  description: "The type of health data to query"
+                )
+              ]
+            )
+          )
         )
       ]
     )
