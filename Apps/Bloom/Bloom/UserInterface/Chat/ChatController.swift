@@ -105,7 +105,8 @@ extension ChatController {
       ]
     )
 
-    await TelemetryDeck.startDurationSignal("Chat Message Duration")
+    await TelemetryDeck.startDurationSignal("Chat TTFT")
+    await TelemetryDeck.startDurationSignal("Chat TTFTC")
   }
 
   func handlePushData(_ data: Data) async {
@@ -150,8 +151,6 @@ private extension ChatController {
   }
 
   func parse(data: Data) async {
-    print("Recevied data: \(String(data: data, encoding: .utf8) ?? "")")
-
     if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
       do {
@@ -164,7 +163,6 @@ private extension ChatController {
           modelContext.insert(message)
         }
         self.inProgressMessage = nil
-        await TelemetryDeck.stopAndSendDurationSignal("Chat Message Duration")
       } catch {
         self.error = error
       }
@@ -174,8 +172,10 @@ private extension ChatController {
         self.inProgressMessage?.message += messageChunk.chunk
       } else {
         self.inProgressMessage = InProgressMessage(id: messageChunk.id, message: messageChunk.chunk)
+        await TelemetryDeck.stopAndSendDurationSignal("Chat TTFT")
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
+      await TelemetryDeck.stopAndSendDurationSignal("Chat TTFTC")
       do {
         let toolCallsResponses: [SocketMessage.ToolCallResult] = try await withThrowingTaskGroup(of: SocketMessage.ToolCallResult.self, returning: [SocketMessage.ToolCallResult].self) { [self, queryPerformer] taskGroup in
           for toolCall in toolCallRequest.toolCalls {

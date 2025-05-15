@@ -253,6 +253,7 @@ private extension HabitDetailsView {
         Text(habitSummaryText)
           .horizontalAlignment(.leading)
           .multilineTextAlignment(.leading)
+          .fixedSize(horizontal: false, vertical: true)
           .cardContainer()
       }
     }
