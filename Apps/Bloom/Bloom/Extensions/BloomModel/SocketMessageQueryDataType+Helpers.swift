@@ -11,7 +11,6 @@ extension SocketMessage.QueryDataType {
 
   var name: String {
     switch self {
-    case .foodLogs: "food logs"
     case .nutrition: "nutrition"
     case .goals: "goals"
     case .activityLevel: "activity level"

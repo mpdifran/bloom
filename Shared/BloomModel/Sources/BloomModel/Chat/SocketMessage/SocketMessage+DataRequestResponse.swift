@@ -27,7 +27,6 @@ public extension SocketMessage {
 
 public extension SocketMessage {
   enum QueryDataType: String, Codable, Equatable, Sendable, CaseIterable {
-    case foodLogs
     case nutrition
     case goals
     case activityLevel

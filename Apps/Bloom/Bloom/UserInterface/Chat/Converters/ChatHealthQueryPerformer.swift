@@ -29,10 +29,11 @@ extension ChatHealthQueryPerformer {
     print("Querying Health Data [\(query.dataType.rawValue)] \(query.startDate) to \(query.endDate)")
 
     switch query.dataType {
-    case .foodLogs:
-      return await fetchFoodLogs(query: query)
     case .nutrition:
-      return await fetchNutrition(query: query)
+      let nutrition = await fetchNutrition(query: query)
+      let foodLogs = await fetchFoodLogs(query: query)
+
+      return foodLogs + "\n\n" + nutrition
     case .goals:
       return await fetchGoals(query: query)
     case .activityLevel:
