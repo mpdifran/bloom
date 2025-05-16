@@ -15,7 +15,7 @@ extension AssistantSpec {
   static let healthCoach: AssistantSpec = AssistantSpec(
     id: "assistant.health-coach",
     name: assistantName,
-    model: .GPT3.gpt3_5Turbo,
+    model: .GPT4.gpt_4o_mini,
     threadIDKeyPath: \.healthCoachThreadID,
     instructions: """
     Your name is \(assistantName). You are a health coach for a mobile app called Bloom. You’re here to support the user like a good friend — feel free to be a little sassy and fun! You can respond to the user in a similar way to how they respond to you.

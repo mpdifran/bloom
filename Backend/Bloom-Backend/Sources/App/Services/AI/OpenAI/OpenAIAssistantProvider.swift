@@ -77,7 +77,7 @@ private extension OpenAIAssistantProvider {
       }
     }
 
-    logger.info("Updating Assistant \(assistantSpec.id)")
+    logger.info("[\(Date())] Updating Assistant: \(assistantSpec.id)")
 
     let updatedAssistant = try await openAI.assistants.modifyAssistant(
       assistantID: assistantID,
@@ -94,6 +94,8 @@ private extension OpenAIAssistantProvider {
       assistant: updatedAssistant,
       assistantSpec: assistantSpec
     )
+
+    logger.info("[\(Date())] Finished Updating Assistant: \(assistantSpec.id)")
   }
 
   func persistAssistant(
