@@ -37,6 +37,7 @@ public extension SocketMessage.ToolCallWrapper {
     case newGoals([SocketMessage.HealthMetricGoal])
     case detectedFood(SocketMessage.DetectedFood)
     case logWeight(SocketMessage.LogWeight)
+    case logPeriod(SocketMessage.LogPeriod)
     case logWater(SocketMessage.LogWaterConsumption)
     case logBloodPressure(SocketMessage.LogBloodPressure)
     case logBowelMovement(SocketMessage.LogBowelMovement)

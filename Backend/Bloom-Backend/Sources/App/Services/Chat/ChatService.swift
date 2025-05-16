@@ -298,6 +298,7 @@ private extension ChatService {
         Assistant.Tool.function(.logFood),
         Assistant.Tool.function(.logWater),
         Assistant.Tool.function(.logWeight),
+        Assistant.Tool.function(.logPeriod),
         Assistant.Tool.function(.logBloodPressure),
         Assistant.Tool.function(.logBowelMovement),
         Assistant.Tool.function(.createWorkoutPlan),
@@ -395,6 +396,8 @@ private extension ChatService {
         toolCallWrappers.append(try await logWater(toolCall: toolCall))
       case .Function.logWeight:
         toolCallWrappers.append(try await logWeight(toolCall: toolCall))
+      case .Function.logPeriod:
+        toolCallWrappers.append(try await logPeriod(toolCall: toolCall))
       case .Function.logBloodPressure:
         toolCallWrappers.append(try await logBloodPressure(toolCall: toolCall))
       case .Function.logBowelMovement:
@@ -488,6 +491,18 @@ private extension ChatService {
     return SocketMessage.ToolCallWrapper(
       toolCallID: toolCall.id,
       kind: .logWeight(arguments)
+    )
+  }
+
+  func logPeriod(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.function.name == .Function.logPeriod else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogPeriod.self, using: decoder)
+
+    return SocketMessage.ToolCallWrapper(
+      toolCallID: toolCall.id, kind: .logPeriod(arguments)
     )
   }
 

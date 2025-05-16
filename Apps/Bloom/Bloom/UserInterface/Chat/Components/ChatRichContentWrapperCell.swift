@@ -26,6 +26,7 @@ struct ChatRichContentWrapperCell: View {
   @State private var bristolStoolType: Int?
   @State private var duration: BowelMovement.Duration?
   @State private var weightQuantity: HKQuantity?
+  @State private var flowType: HKCategoryValueMenstrualFlow?
   @State private var systolic: Double?
   @State private var diastolic: Double?
   @State private var workoutPlan: SocketMessage.WorkoutPlan?
@@ -83,6 +84,12 @@ struct ChatRichContentWrapperCell: View {
             weightQuantity: weightQuantity,
             hasPerformedAction: hasPerformedAction
           )
+        } else if let flowType {
+          ChatLogPeriodCell(
+            chatMessageID: chatMessageID,
+            flow: flowType,
+            hasPerformedAction: hasPerformedAction
+          )
         } else if let systolic, let diastolic {
           ChatLogBloodPressureCell(
             chatMessageID: chatMessageID,
@@ -118,10 +125,10 @@ private extension ChatRichContentWrapperCell {
         let habit = try? await modelActor.fetchActiveHabits(for: healthGoal.metric.targetMetric).first
 
         let timePeriod: GoalTimePeriod = switch healthGoal.timePeriod {
-          case .daily: .daily
-          case .weekly: .weekly
-          case .monthly: .monthly
-          case .yearly: .yearly
+        case .daily: .daily
+        case .weekly: .weekly
+        case .monthly: .monthly
+        case .yearly: .yearly
         }
 
         let proposedGoal = ProposedGoal(
@@ -173,6 +180,10 @@ private extension ChatRichContentWrapperCell {
         unit: HKUnit(from: logWeight.unit.rawValue),
         doubleValue: logWeight.value
       )
+
+    } else if let logPeriod = try? JSONDecoder.bloomModel.decode(SocketMessage.LogPeriod.self, from: data) {
+      
+      self.flowType = logPeriod.flow.hkFlow
 
     } else if let logBloodPressure = try? JSONDecoder.bloomModel.decode(SocketMessage.LogBloodPressure.self, from: data) {
 

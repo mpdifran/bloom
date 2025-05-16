@@ -7,6 +7,7 @@
 
 import Foundation
 import DataContainer
+internal import TelemetryDeck
 @preconcurrency import HealthKit
 
 // MARK: - HealthStoreModifier
@@ -55,7 +56,65 @@ public extension HealthStoreModifier {
   }
 }
 
+// MARK: Cycle Tracking
+
+public extension HealthStoreModifier {
+
+  func log(flowType: HKCategoryValueMenstrualFlow, date: Date) async throws {
+    var isNewCycle = flowType.indicatesBeginningOfCycle
+    if await isCurrentPeriod() {
+      isNewCycle = false
+    }
+
+    let metadata: [String: Any] = [
+      HKMetadataKeyMenstrualCycleStart: isNewCycle
+    ]
+
+    let normalizedDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date
+
+    let existingSamples = await HealthStoreFetcher.shared.fetchSamples(
+      for: HKCategoryType(.menstrualFlow),
+      dateRange: .duringDay(date)
+    )
+    if existingSamples.isNotEmpty {
+      try await HealthStoreModifier.shared.delete(existingSamples)
+    }
+
+    if flowType != .none {
+      let sample = HKCategorySample(
+        type: HKCategoryType(.menstrualFlow),
+        value: flowType.rawValue,
+        start: normalizedDate,
+        end: normalizedDate,
+        metadata: metadata
+      )
+
+      try await HealthStoreModifier.shared.write(sample)
+      TelemetryDeck.signal("Log Period")
+    }
+
+    await VitalsCalculator.shared.forceFectchMenstrualSummary()
+  }
+}
+
 private extension HealthStoreModifier {
+
+  func isCurrentPeriod() async -> Bool {
+    await VitalsCalculator.shared.forceFectchMenstrualSummary()
+
+    guard let mostRecentMenstrualCycle = await VitalsCalculator.shared.menstrualSummary?.mostRecentCycle else { return false }
+
+    let referenceDate = mostRecentMenstrualCycle.endDate ?? mostRecentMenstrualCycle.startDate
+
+    let daysSinceLastCycle = Calendar.current.dateComponents(
+      [.day],
+      from: referenceDate,
+      to: .now
+    ).day ?? 0
+
+    return daysSinceLastCycle < 7
+  }
+
   func clearExistingEntries(for date: Date) async throws {
     // We need to find and delete for each quantity type. ex calories, protein, carbs, fat.
     for sampleType in FoodItemNutrient.allCases {

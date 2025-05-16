@@ -142,39 +142,7 @@ private extension CycleTrackingActionCardView {
   }
 
   func logCycle() async throws -> Bool {
-    var isNewCycle = flowType.indicatesBeginningOfCycle
-    if isCurrentPeriod {
-      isNewCycle = false
-    }
-
-    let metadata: [String: Any] = [
-      HKMetadataKeyMenstrualCycleStart: isNewCycle
-    ]
-
-    let normalizedDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date) ?? date
-
-    let existingSamples = await HealthStoreFetcher.shared.fetchSamples(
-      for: HKCategoryType(.menstrualFlow),
-      dateRange: .duringDay(date)
-    )
-    if existingSamples.isNotEmpty {
-      try await HealthStoreModifier.shared.delete(existingSamples)
-    }
-
-    if flowType != .none {
-      let sample = HKCategorySample(
-        type: HKCategoryType(.menstrualFlow),
-        value: flowType.rawValue,
-        start: normalizedDate,
-        end: normalizedDate,
-        metadata: metadata
-      )
-
-      try await HealthStoreModifier.shared.write(sample)
-      TelemetryDeck.signal("Log Period")
-    }
-
-    await VitalsCalculator.shared.forceFectchMenstrualSummary()
+    try await HealthStoreModifier.shared.log(flowType: flowType, date: date)
 
     if RatingPromptTracker.shared.recordEvent() {
       requestReview()

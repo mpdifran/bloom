@@ -220,6 +220,9 @@ private extension ChatController {
               case .logWeight(let logWeight):
                 let data = try JSONEncoder.bloomModel.encode(logWeight)
                 try await self.insertRichChatMessage(data: data)
+              case .logPeriod(let logPeriod):
+                let data = try JSONEncoder.bloomModel.encode(logPeriod)
+                try await self.insertRichChatMessage(data: data)
               case .logBloodPressure(let logBloodPressure):
                 let data = try JSONEncoder.bloomModel.encode(logBloodPressure)
                 try await self.insertRichChatMessage(data: data)

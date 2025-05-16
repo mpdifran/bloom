@@ -57,6 +57,15 @@ public extension SocketMessage {
     }
   }
 
+  enum LogKind: String, Codable, Equatable, Sendable, CaseIterable {
+    case food
+    case water
+    case bowelMovement
+    case weight
+    case bloodPressure
+    case period
+  }
+
   struct LogWaterConsumption: Codable, Equatable, Sendable {
     public let amount: Double
     public let unit: Unit
@@ -86,6 +95,21 @@ public extension SocketMessage {
       case lessThan5Min
       case between5And10Min
       case moreThan10Min
+    }
+  }
+
+  struct LogPeriod: Codable, Equatable, Sendable {
+    public let flow: FlowLevel
+
+    public init(flow: FlowLevel) {
+      self.flow = flow
+    }
+
+    public enum FlowLevel: String, Codable, Equatable, Sendable, CaseIterable {
+      case none
+      case light
+      case medium
+      case heavy
     }
   }
 
