@@ -10,14 +10,38 @@ import Redis
 
 extension Application {
 
+//  func setupRedis() throws {
+//    if let redisURL {
+//      redis.configuration = try RedisConfiguration(url: redisURL)
+//    } else {
+//      redis.configuration = try RedisConfiguration(
+//        hostname: redisHostname,
+//        port: redisPort,
+//        password: redisPassword
+//      )
+//    }
+//  }
+
   func setupRedis() throws {
     if let redisURL {
-      redis.configuration = try RedisConfiguration(url: redisURL)
+      var tlsConfig: TLSConfiguration? = nil
+
+      if redisURL.absoluteString.starts(with: "rediss://") {
+        // Accept self-signed certs
+        tlsConfig = .makeClientConfiguration()
+        tlsConfig?.certificateVerification = .none
+      }
+
+      redis.configuration = try RedisConfiguration(url: redisURL, tlsConfiguration: tlsConfig)
     } else {
+      var tlsConfig = TLSConfiguration.makeClientConfiguration()
+      tlsConfig.certificateVerification = .none
+
       redis.configuration = try RedisConfiguration(
         hostname: redisHostname,
         port: redisPort,
-        password: redisPassword
+        password: redisPassword,
+        tlsConfiguration: tlsConfig
       )
     }
   }
