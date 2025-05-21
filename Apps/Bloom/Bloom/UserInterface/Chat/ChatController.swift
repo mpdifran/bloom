@@ -167,12 +167,17 @@ private extension ChatController {
   }
 
   func parse(data: Data) async {
+    let string = String(data: data, encoding: .utf8)!
+
+    print("Data: \(string)")
+
     if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
-      do {
-        self.inProgressMessages = []
-        self.inProgressMessagesIndex = 0
+      self.inProgressMessagesIndex = 0
+      self.inProgressMessages = []
+      self.queryAreas.removeAll()
 
+      do {
         try modelContext.savingTransaction {
           let message = ChatMessage(
             id: messageResponse.id,
@@ -186,6 +191,8 @@ private extension ChatController {
       }
     } else if let messageChunk = try? decoder.decode(SocketMessage.MessageChunkResponse.self, from: data) {
 
+      self.queryAreas.removeAll()
+
       if self.inProgressMessages.count > self.inProgressMessagesIndex {
         self.inProgressMessages[self.inProgressMessagesIndex].message += messageChunk.chunk
       } else {
@@ -195,6 +202,9 @@ private extension ChatController {
         await TelemetryDeck.stopAndSendDurationSignal("Chat TTFT")
       }
     } else if let richContentMessage = try? decoder.decode(SocketMessage.RichMessageResponse.self, from: data) {
+
+      self.queryAreas.removeAll()
+
       let data: Data
       switch richContentMessage.kind {
       case .newGoals(let content):
@@ -322,7 +332,7 @@ private extension ChatController {
     } else if let typingIndicator = try? decoder.decode(SocketMessage.TypingIndicator.self, from: data) {
       self.assistantIsTyping = typingIndicator.isTyping
 
-      if !typingIndicator.isTyping {
+      if self.assistantIsTyping {
         self.queryAreas.removeAll()
       }
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {

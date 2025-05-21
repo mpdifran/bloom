@@ -29,8 +29,8 @@ struct ChatView: View {
         ChatLayout {
           chatMessagesView
 
-          ForEach(viewModel.inProgressMessages) { inProgressMessage in
-            Group {
+          if viewModel.inProgressMessages.isNotEmpty {
+            ForEach(viewModel.inProgressMessages) { inProgressMessage in
               if let data = inProgressMessage.data {
                 ChatRichContentWrapperCell(
                   chatMessageID: "",
@@ -38,6 +38,9 @@ struct ChatView: View {
                   hasPerformedAction: false,
                   dbID: nil
                 )
+                .id(inProgressMessage.id)
+                .transition(.blurReplace)
+                .contentTransition(.opacity)
               } else {
                 ChatBubbleCell(
                   message: inProgressMessage.message,
@@ -45,11 +48,11 @@ struct ChatView: View {
                   isCurrentUser: false,
                   showTail: true
                 )
+                .id(inProgressMessage.id)
+                .transition(.blurReplace)
+                .contentTransition(.opacity)
               }
             }
-            .id(inProgressMessage.id)
-            .transition(.blurReplace)
-            .contentTransition(.numericText())
           }
 
           statusTextView
@@ -73,10 +76,12 @@ struct ChatView: View {
     }
     .groupedBackground()
     .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
+    .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
     .sheet($presentedSheet)
     .alert(error: $viewModel.error)
     .animation(.easeInOut, value: chatMessages)
     .animation(.easeInOut, value: viewModel.assistantTypingStatus)
+    .animation(.easeInOut, value: viewModel.assistantIsTyping)
     .animation(.easeInOut, value: viewModel.inProgressMessages)
     .topSafeAreaBlur()
   }

@@ -32,16 +32,15 @@ extension Application {
         tlsConfig?.certificateVerification = .none
       }
 
-      redis.configuration = try RedisConfiguration(url: redisURL, tlsConfiguration: tlsConfig)
+      redis.configuration = try RedisConfiguration(
+        url: redisURL,
+        tlsConfiguration: tlsConfig
+      )
     } else {
-      var tlsConfig = TLSConfiguration.makeClientConfiguration()
-      tlsConfig.certificateVerification = .none
-
       redis.configuration = try RedisConfiguration(
         hostname: redisHostname,
         port: redisPort,
-        password: redisPassword,
-        tlsConfiguration: tlsConfig
+        password: redisPassword
       )
     }
   }

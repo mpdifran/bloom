@@ -130,35 +130,41 @@ private extension ChatServiceV2 {
       user: userID.value
     )
 
+    var toolCalls = [OpenAIKit.Response.OutputItem.FunctionToolCall]()
+
     for try await event in stream {
-      Task {
-//        print("[TRACE] \(event)")
-        do {
-          switch event {
-          case .inProgress:
-            try await sendIsAssistantTyping(isTyping: true, userID: userID)
-          case .completed, .failed:
-            try await sendIsAssistantTyping(isTyping: false, userID: userID)
-          case .outputTextDelta(let event):
-            try await bufferChunk(event: event, userID: userID, db: db)
-          case .outputTextDone(let event):
-            try await sendCompletedMessage(event: event, userID: userID, db: db)
-          case .outputItemDone(let event):
-            switch event.item {
-            case .functionToolCall(let call):
-              try await send(toolCall: call, userID: userID, db: db)
-            default:
-              break
-            }
-          case .error(let event):
-              print(event.error)
+//      print("[TRACE] \(event)")
+      do {
+        switch event {
+        case .inProgress:
+          try await sendIsAssistantTyping(isTyping: true, userID: userID)
+        case .completed:
+          if toolCalls.isNotEmpty {
+            try await send(toolCalls: toolCalls, userID: userID, db: db)
+          }
+
+          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+        case .failed:
+          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+        case .outputTextDelta(let event):
+          try await bufferChunk(event: event, userID: userID, db: db)
+        case .outputTextDone(let event):
+          try await sendCompletedMessage(event: event, userID: userID, db: db)
+        case .outputItemDone(let event):
+          switch event.item {
+          case .functionToolCall(let call):
+            toolCalls.append(call)
           default:
             break
-//            print("[TRACE] \(event)")
           }
-        } catch {
-          print("[TRACE] \(error)")
+        case .error(let event):
+          print(event.error)
+        default:
+          break
+//          print("[TRACE] \(event)")
         }
+      } catch {
+        print("[TRACE] \(error)")
       }
     }
   }
@@ -326,26 +332,31 @@ private extension ChatServiceV2 {
 private extension ChatServiceV2 {
 
   func send(
-    toolCall: OpenAIKit.Response.OutputItem.FunctionToolCall,
+    toolCalls: [OpenAIKit.Response.OutputItem.FunctionToolCall],
     userID: UserIdentifier,
     db: any Database
   ) async throws {
 
     // Cache the tool call
-    try await chatHistory.append(userID: userID, inputItems: [.item(.functionToolCall(toolCall))])
+    let inputItems = toolCalls.map {
+      OpenAIKit.Response.InputItem.item(.functionToolCall($0))
+    }
+    try await chatHistory.append(userID: userID, inputItems: inputItems)
 
-    let toolCallWrapper: SocketMessage.ToolCallWrapper
+    var toolCallWrappers = [SocketMessage.ToolCallWrapper]()
 
-    switch toolCall.name {
-    case .Function.queryUserHealthData:
-      toolCallWrapper = try await performQuery(toolCall: toolCall)
-    default:
-      throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.name)")
+    for toolCall in toolCalls {
+      switch toolCall.name {
+      case .Function.queryUserHealthData:
+        toolCallWrappers.append(try await performQuery(toolCall: toolCall))
+      default:
+        throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.name)")
+      }
     }
 
     let toolCallRequest = SocketMessage.ToolCallsRequest(
-      runID: "", // There is no run ID for the Responses API. We don't use it.
-      toolCalls: [toolCallWrapper] // There is only ever one tool call, since they can come in parallel.
+      runID: "",
+      toolCalls: toolCallWrappers
     )
     try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
   }
