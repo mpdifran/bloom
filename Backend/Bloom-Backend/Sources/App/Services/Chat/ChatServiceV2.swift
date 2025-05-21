@@ -205,7 +205,7 @@ private extension ChatServiceV2 {
     for partition in partitions {
       switch partition {
       case .text(let index, let content):
-        print("[TRACE] Assistant Message: \(content)")
+        logger.trace("Assistant Message: \(content)")
         let response = SocketMessage.MessageResponse(id: event.itemId + "-\(index)", message: content)
         try await ensureContentSent(
           response,
@@ -217,7 +217,7 @@ private extension ChatServiceV2 {
       case .json(let index, let content):
         guard let kind = try parseKind(from: content) else { continue }
 
-        print("[TRACE] Assistant Rich Content: \(content)")
+        logger.trace("Assistant Rich Content: \(content)")
 
         let response = SocketMessage.RichMessageResponse(
           id: event.itemId + "-\(index)",
