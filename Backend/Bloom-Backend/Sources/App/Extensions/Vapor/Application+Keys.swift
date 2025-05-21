@@ -8,14 +8,17 @@
 import Vapor
 import SignInWithApple
 import JWT
+import OpenAIKit
 
 extension Application {
 
   func printEnvironmentInfo() {
     logger.notice("Environment: \(environment.name)")
 //    if environment != .production {
-      logger.logLevel = .debug
+      logger.logLevel = .info
 //    }
+
+    LogHelper.shared.set(logLevel: .warning)
 
     if let _ = postgresURL {
       logger.notice("Postgres URL set")

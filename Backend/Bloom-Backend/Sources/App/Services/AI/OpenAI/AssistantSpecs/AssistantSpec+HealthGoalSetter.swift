@@ -30,8 +30,8 @@ extension AssistantSpec {
   )
 }
 
-extension Assistant.Tool.Function {
-  static let suggestedGoal = Assistant.Tool.Function(
+extension Function {
+  static let suggestedGoal = Function(
     name: .Function.suggestGoal,
     description: "A function to suggest a goal to the user.",
     parameters: Schema.Object(

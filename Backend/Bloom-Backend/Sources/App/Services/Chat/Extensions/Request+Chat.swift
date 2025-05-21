@@ -12,4 +12,12 @@ extension Request {
   var chatService: ChatService {
     application.chatService
   }
+
+  var chatServiceV2: ChatServiceV2 {
+    application.chatServiceV2
+  }
+
+  var chatHistory: ChatHistory {
+    application.chatHistory
+  }
 }

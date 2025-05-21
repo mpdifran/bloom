@@ -47,4 +47,31 @@ public extension SocketMessage {
       self.message = message
     }
   }
+
+  struct RichMessageResponse: Codable, Equatable, Sendable {
+    public let id: String
+    public let kind: Kind
+    public let isTemporary: Bool
+
+    public init(
+      id: String,
+      kind: Kind,
+      isTemporary: Bool
+    ) {
+      self.id = id
+      self.kind = kind
+      self.isTemporary = isTemporary
+    }
+
+    public enum Kind: Codable, Equatable, Sendable {
+      case newGoals([SocketMessage.HealthMetricGoal])
+      case detectedFood(SocketMessage.DetectedFood)
+      case logWeight(SocketMessage.LogWeight)
+      case logPeriod(SocketMessage.LogPeriod)
+      case logWater(SocketMessage.LogWaterConsumption)
+      case logBloodPressure(SocketMessage.LogBloodPressure)
+      case logBowelMovement(SocketMessage.LogBowelMovement)
+      case createWorkout(SocketMessage.WorkoutPlan)
+    }
+  }
 }

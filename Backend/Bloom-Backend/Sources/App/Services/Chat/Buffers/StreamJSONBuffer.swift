@@ -1,0 +1,127 @@
+//
+//  StreamJSONBuffer.swift
+//  Bloom-Backend
+//
+//  Created by Mark DiFranco on 2025-05-21.
+//
+
+import Foundation
+import BloomModel
+
+extension StreamJSONBuffer {
+  enum FilteredData {
+    case chunk(String)
+    case json(String)
+  }
+  enum CompletedPartitions {
+    case text(Int, String)
+    case json(Int, String)
+  }
+}
+
+final actor StreamJSONBuffer {
+  private var prefixBuffers = [UserIdentifier : String]()
+  private var buffers =  [UserIdentifier : String]()
+
+  func filter(_ delta: String, for userID: UserIdentifier) -> FilteredData {
+    let fenceOpen = "```json"
+    let fenceClose = "```"
+
+    // 1. If buffering JSON content already
+    if let existingJSON = buffers[userID] {
+      // Look for closing fence
+      if let closeRange = delta.range(of: fenceClose) {
+        let beforeClose = String(delta[..<closeRange.lowerBound])
+        buffers[userID]! += beforeClose
+        let jsonString = buffers.removeValue(forKey: userID)!
+        return .json(jsonString)
+      } else {
+        buffers[userID]! += delta
+        return .chunk("")
+      }
+    }
+
+    // 2. If in prefix detection of an opening fence
+    if let prefix = prefixBuffers[userID] {
+      let updated = prefix + delta
+      // Continue gathering until we have at least the length of fenceOpen
+      if updated.count >= fenceOpen.count {
+        prefixBuffers.removeValue(forKey: userID)
+        if let range = updated.range(of: fenceOpen) {
+          let before = String(updated[..<range.lowerBound])
+          let after = String(updated[range.upperBound...])
+          buffers[userID] = after
+          return .chunk(before)
+        } else {
+          // Not an opening fence after all
+          return .chunk(updated)
+        }
+      } else {
+        // Still potentially completing the fence; buffer silently
+        prefixBuffers[userID] = updated
+        return .chunk("")
+      }
+    }
+
+    // 3. Not buffering and no prefix state
+    if let openRange = delta.range(of: fenceOpen) {
+      // full marker found in this chunk
+      let before = String(delta[..<openRange.lowerBound])
+      let after = String(delta[openRange.upperBound...])
+      buffers[userID] = after
+      return .chunk(before)
+    }
+
+    // 4. Partial fence start: detect backticks but not full marker
+    if delta.contains(fenceOpen.prefix(1)) {
+      // Begin prefix detection
+      prefixBuffers[userID] = delta
+      return .chunk("")
+    }
+
+    // 5. Normal text
+    return .chunk(delta)
+  }
+
+  func processCompletedMessage(_ message: String, for userID: UserIdentifier) -> [CompletedPartitions] {
+    var events: [CompletedPartitions] = []
+    let fenceOpen = "```json"
+    let fenceClose = "```"
+    var searchStart = message.startIndex
+    var index = 0
+
+    while let openRange = message.range(of: fenceOpen, range: searchStart..<message.endIndex) {
+      // Text before the JSON fence
+      let textPart = String(message[searchStart..<openRange.lowerBound])
+      if !textPart.isEmpty {
+        index += 1
+        events.append(.text(index, textPart))
+      }
+      // Look for closing fence after the opening
+      let jsonStart = openRange.upperBound
+      guard let closeRange = message.range(of: fenceClose, range: jsonStart..<message.endIndex) else {
+        // No closing fence; treat the rest as text
+        let remainder = String(message[jsonStart..<message.endIndex])
+        if !remainder.isEmpty {
+          index += 1
+          events.append(.text(index, remainder))
+        }
+        return events
+      }
+      // JSON content between fences
+      let jsonPart = String(message[jsonStart..<closeRange.lowerBound])
+      index += 1
+      events.append(.json(index, jsonPart))
+      // Continue after the closing fence
+      searchStart = closeRange.upperBound
+    }
+
+    // Any trailing text after last fence
+    let trailing = String(message[searchStart..<message.endIndex])
+    if !trailing.isEmpty {
+      index += 1
+      events.append(.text(index, trailing))
+    }
+    return events
+  }
+}

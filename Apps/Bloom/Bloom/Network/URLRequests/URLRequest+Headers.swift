@@ -19,17 +19,25 @@ extension URLRequest {
 
     return request
   }
+
+  func settingAPIVersionHeader(version: String) -> URLRequest {
+    var request = self
+    request.add(header: .apiVersion(version))
+    return request
+  }
 }
 
 extension URLRequest {
   enum Header {
     case authorizationBearer(AuthToken)
     case contentTypeJSON
+    case apiVersion(String)
   }
 
   enum HeaderKey: String {
     case authorization = "Authorization"
     case contentType = "Content-Type"
+    case apiVersion = "X-Bloom-API-Version"
   }
 
   mutating func add(header: Header) {
@@ -38,6 +46,8 @@ extension URLRequest {
       addValue("Bearer \(token.value)", for: .authorization)
     case .contentTypeJSON:
       addValue("application/json", for: .contentType)
+    case .apiVersion(let version):
+      addValue(version, for: .apiVersion)
     }
   }
 

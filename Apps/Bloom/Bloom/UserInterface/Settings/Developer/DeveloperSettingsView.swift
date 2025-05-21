@@ -16,9 +16,8 @@ struct DeveloperSettingsView: View {
 
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
-  @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
+  @AppStorage(.FeatureFlag.chatV2) private var chatV2 = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
-  @AppStorage(.FeatureFlag.alwaysShowReports) private var alwaysShowReports = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -216,17 +215,9 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        SettingsCell("Legacy Goal Review") {
-          Toggle("", isOn: $legacyGoalSetting)
+        SettingsCell("Chat V2") {
+          Toggle("", isOn: $chatV2)
         }
-
-        Divider()
-
-        SettingsCell("Always Show Reports") {
-          Toggle("", isOn: $alwaysShowReports)
-        }
-
-        Divider()
       }
     }
   }
@@ -496,8 +487,8 @@ extension DeveloperSettingsView {
         Button(role: .destructive) {
           apiHost.overrideEnabled = false
           showDeveloperMode = false
-          legacyGoalSetting = false
-          alwaysShowReports = false
+          bypassPaywall = false
+          chatV2 = false
           dismiss()
         } label: {
           Text("Exit Developer Mode")

@@ -29,25 +29,38 @@ struct ChatView: View {
         ChatLayout {
           chatMessagesView
 
-          if let inProgressMessage = viewModel.inProgressMessage {
-            ChatBubbleCell(
-              message: inProgressMessage.message,
-              isDirect: false,
-              isCurrentUser: false,
-              showTail: true
-            )
+          ForEach(viewModel.inProgressMessages) { inProgressMessage in
+            Group {
+              if let data = inProgressMessage.data {
+                ChatRichContentWrapperCell(
+                  chatMessageID: "",
+                  data: data,
+                  hasPerformedAction: false,
+                  dbID: nil
+                )
+              } else {
+                ChatBubbleCell(
+                  message: inProgressMessage.message,
+                  isDirect: false,
+                  isCurrentUser: false,
+                  showTail: true
+                )
+              }
+            }
             .id(inProgressMessage.id)
             .transition(.blurReplace)
             .contentTransition(.numericText())
-          } else if viewModel.assistantIsTyping {
-            statusTextView
+          }
 
+          statusTextView
+
+          if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
             TypingIndicatorCell(isDirect: false)
               .id("typing-indicator")
               .transition(.blurReplace)
           }
 
-           bottomAnchorView
+          bottomAnchorView
         }
         .scrollDismissesKeyboard(.interactively)
 
@@ -62,9 +75,9 @@ struct ChatView: View {
     .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
     .sheet($presentedSheet)
     .alert(error: $viewModel.error)
-    .animation(.bouncy, value: chatMessages)
-    .animation(.bouncy, value: viewModel.assistantTypingStatus)
-    .animation(.bouncy, value: viewModel.inProgressMessage)
+    .animation(.easeInOut, value: chatMessages)
+    .animation(.easeInOut, value: viewModel.assistantTypingStatus)
+    .animation(.easeInOut, value: viewModel.inProgressMessages)
     .topSafeAreaBlur()
   }
 }

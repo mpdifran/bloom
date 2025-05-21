@@ -10,6 +10,13 @@ import FluentKit
 import WebSocketKit
 import BloomModel
 
+extension WebSocketService {
+  enum Version {
+    case v1
+    case v2
+  }
+}
+
 final actor WebSocketService {
 
   private let application: Application
@@ -32,7 +39,11 @@ final actor WebSocketService {
 
 extension WebSocketService {
 
-  func registerChat(socket: WebSocket, forUserID userID: UserIdentifier) {
+  func registerChat(
+    socket: WebSocket,
+    forUserID userID: UserIdentifier,
+    version: Version
+  ) {
     chatSockets[userID] = socket
 
     // TODO: Poll current run status, and send typing indicator if Run is active
@@ -49,7 +60,8 @@ extension WebSocketService {
             try await self?.onData(
               data: data,
               userID: userID,
-              db: db
+              db: db,
+              version: version
             )
           }
         }
@@ -61,7 +73,8 @@ extension WebSocketService {
             try await self?.onData(
               data: data,
               userID: userID,
-              db: db
+              db: db,
+              version: version
             )
           }
         }
@@ -129,12 +142,23 @@ private extension WebSocketService {
   func onData(
     data: Data,
     userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    version: Version
   ) async throws {
-    if try await application.chatService.parse(data: data, for: userID, db: db) {
-      // success
-    } else {
-      throw Abort(.badRequest)
+
+    switch version {
+    case .v1:
+      if try await application.chatService.parse(data: data, for: userID, db: db) {
+        // success
+      } else {
+        throw Abort(.badRequest)
+      }
+    case .v2:
+      if try await application.chatServiceV2.parse(data: data, for: userID, db: db) {
+        // success
+      } else {
+        throw Abort(.badRequest)
+      }
     }
   }
 }

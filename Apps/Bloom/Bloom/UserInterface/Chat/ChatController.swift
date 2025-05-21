@@ -15,6 +15,19 @@ extension ChatController {
   struct InProgressMessage: Identifiable, Hashable, Sendable {
     let id: String
     var message: String
+    let data: Data?
+
+    init(id: String, message: String) {
+      self.id = id
+      self.message = message
+      self.data = nil
+    }
+
+    init(id: String, data: Data) {
+      self.id = id
+      self.message = ""
+      self.data = data
+    }
   }
 }
 
@@ -23,8 +36,11 @@ final actor ChatController: ObservableObject {
 
   @AsyncStreamable var assistantTypingStatus: String?
   @AsyncStreamable var assistantIsTyping = false
-  @AsyncStreamable var inProgressMessage: InProgressMessage?
+  @AsyncStreamable var inProgressMessages = [InProgressMessage]()
+  private var inProgressMessagesIndex = 0
   @AsyncStreamable var error: Error?
+
+  @AppStorage(.FeatureFlag.chatV2) private var chatV2 = false
 
   private init() { }
 
@@ -121,7 +137,7 @@ private extension ChatController {
       return existingHandle
     }
 
-    let handle = await NetworkRequester.shared.openChatWebsocket()
+    let handle = await NetworkRequester.shared.openChatWebsocket(isV2: chatV2)
 
     webSocketDataTask = Task.detached { [weak self] in
       for await data in await handle.$data {
@@ -154,6 +170,9 @@ private extension ChatController {
     if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
       do {
+        self.inProgressMessages = []
+        self.inProgressMessagesIndex = 0
+
         try modelContext.savingTransaction {
           let message = ChatMessage(
             id: messageResponse.id,
@@ -162,17 +181,46 @@ private extension ChatController {
           )
           modelContext.insert(message)
         }
-        self.inProgressMessage = nil
       } catch {
         self.error = error
       }
     } else if let messageChunk = try? decoder.decode(SocketMessage.MessageChunkResponse.self, from: data) {
 
-      if let inProgressMessage = self.inProgressMessage {
-        self.inProgressMessage?.message += messageChunk.chunk
+      if self.inProgressMessages.count > self.inProgressMessagesIndex {
+        self.inProgressMessages[self.inProgressMessagesIndex].message += messageChunk.chunk
       } else {
-        self.inProgressMessage = InProgressMessage(id: messageChunk.id, message: messageChunk.chunk)
+        let inProgressMessage = InProgressMessage(id: UUID().uuidString, message: messageChunk.chunk)
+        self.inProgressMessages.append(inProgressMessage)
+
         await TelemetryDeck.stopAndSendDurationSignal("Chat TTFT")
+      }
+    } else if let richContentMessage = try? decoder.decode(SocketMessage.RichMessageResponse.self, from: data) {
+      let data: Data
+      switch richContentMessage.kind {
+      case .newGoals(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      case .detectedFood(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      case .logWeight(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      case .logPeriod(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      case .logWater(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      case .logBloodPressure(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      case .logBowelMovement(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      case .createWorkout(let content):
+        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+      }
+
+      if richContentMessage.isTemporary {
+        let inProgressMessage = InProgressMessage(id: UUID().uuidString, data: data)
+        self.inProgressMessages.append(inProgressMessage)
+        self.inProgressMessagesIndex += 2 // One for the JSON, and we immediately move to the next message
+      } else {
+        try? self.insertRichChatMessage(data: data) // TODO: Handle errors?!
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       await TelemetryDeck.stopAndSendDurationSignal("Chat TTFTC")

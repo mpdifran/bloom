@@ -43,8 +43,6 @@ extension AssistantSpec {
     You’re also here for broader support: physical health, mental health, feelings, thoughts, and general well-being — all are fair game. Be casual, curious, and supportive.
 
     Ask follow-up questions when more context would improve your advice, and only go into detail when the user asks for it.
-    
-    Include a section at the end of your response with a rationale for your decision, and your step by step process for arriving there.
     """,
     tools: [
       .function(.queryUserHealthData),
@@ -73,8 +71,8 @@ extension String.Function {
   static let queryUserHealthData = "queryUserHealthData"
 }
 
-extension Assistant.Tool.Function {
-  static let queryUserHealthData = Assistant.Tool.Function(
+extension Function {
+  static let queryUserHealthData = Function(
     name: .Function.queryUserHealthData,
     description: "A function to query health data about the user. You can use this function to help answer the user's questions. You are allowed to include multiple data types to get a better picture of the user's health. Some data may be missing if the user hasn't recorded it.",
     parameters: Schema.Object(
@@ -113,8 +111,8 @@ extension String.Function {
   static let createWorkoutPlan = "createWorkoutPlanOrStretchRoutine"
 }
 
-extension Assistant.Tool.Function {
-  static let setGoals = Assistant.Tool.Function(
+extension Function {
+  static let setGoals = Function(
     name: .Function.setGoals,
     description: "Can be used to modify the user's goals. They will be presented with them, and will first have to approve them before they're saved in Bloom",
     parameters: Schema.Object(
@@ -146,7 +144,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let logHealthData = Assistant.Tool.Function(
+  static let logHealthData = Function(
     name: .Function.logHealthData,
     description: "You can use this function to log health data on behalf of the user. This function supports logging food, water intake, bowel movements, weight, blood pressure, and periods.",
     parameters: Schema.Object(
@@ -275,7 +273,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let logFood = Assistant.Tool.Function(
+  static let logFood = Function(
     name: .Function.logFood,
     description: "This can be used to log food items for the user",
     parameters: Schema.Object(
@@ -326,7 +324,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let logWater = Assistant.Tool.Function(
+  static let logWater = Function(
     name: .Function.logWater,
     description: "This can be used to log water for the user",
     parameters: Schema.Object(
@@ -343,7 +341,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let logBowelMovement = Assistant.Tool.Function(
+  static let logBowelMovement = Function(
     name: .Function.logBowelMovement,
     description: "This can be used to log a bowel movement for the user",
     parameters: Schema.Object(
@@ -360,7 +358,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let logWeight = Assistant.Tool.Function(
+  static let logWeight = Function(
     name: .Function.logWeight,
     description: "This can be used to log the user's weight",
     parameters: Schema.Object(
@@ -377,7 +375,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let logPeriod = Assistant.Tool.Function(
+  static let logPeriod = Function(
     name: .Function.logPeriod,
     description: "This can be used to log a period on behalf of the user. Only use this function for female users.",
     parameters: Schema.Object(
@@ -390,7 +388,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let logBloodPressure = Assistant.Tool.Function(
+  static let logBloodPressure = Function(
     name: .Function.logBloodPressure,
     description: "This can be used to log the user's blood pressure",
     parameters: Schema.Object(
@@ -407,7 +405,7 @@ extension Assistant.Tool.Function {
     )
   )
 
-  static let createWorkoutPlan = Assistant.Tool.Function(
+  static let createWorkoutPlan = Function(
     name: .Function.createWorkoutPlan,
     description: "This can be used to create a workout plan for the user to perform.",
     parameters: Schema.Object(

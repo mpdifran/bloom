@@ -44,9 +44,12 @@ extension ChatController {
       return
     }
 
+    let version: WebSocketService.Version = request.headers["X-Bloom-API-Version"].first == "v2" ? .v2 : .v1
+
     await request.webSocketService.registerChat(
       socket: webSocket,
-      forUserID: userID
+      forUserID: userID,
+      version: version
     )
   }
 
@@ -90,10 +93,12 @@ extension ChatController {
   func deleteThread(_ request: Request) async throws -> Response {
     let user = try request.auth.require(User.self)
 
-    try await request.openAIAssistantService.deleteThread(
-      user: user,
-      assistantSpec: .healthCoach
-    )
+    guard let userID = user.id else {
+      throw Abort(.internalServerError, reason: "User ID unexpectedly nil after authentication.")
+    }
+
+    try await request.chatHistory.clearHistory(for: userID)
+
     return Response(status: .ok)
   }
 }
