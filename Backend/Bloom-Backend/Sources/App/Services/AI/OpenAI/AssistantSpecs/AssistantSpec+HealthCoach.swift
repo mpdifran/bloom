@@ -71,8 +71,8 @@ extension String.Function {
   static let queryUserHealthData = "queryUserHealthData"
 }
 
-extension Function {
-  static let queryUserHealthData = Function(
+extension Assistant.Tool.Function {
+  static let queryUserHealthData = Assistant.Tool.Function(
     name: .Function.queryUserHealthData,
     description: "A function to query health data about the user. You can use this function to help answer the user's questions. You are allowed to include multiple data types to get a better picture of the user's health. Some data may be missing if the user hasn't recorded it.",
     parameters: Schema.Object(
@@ -111,8 +111,8 @@ extension String.Function {
   static let createWorkoutPlan = "createWorkoutPlanOrStretchRoutine"
 }
 
-extension Function {
-  static let setGoals = Function(
+extension Assistant.Tool.Function {
+  static let setGoals = Assistant.Tool.Function(
     name: .Function.setGoals,
     description: "Can be used to modify the user's goals. They will be presented with them, and will first have to approve them before they're saved in Bloom",
     parameters: Schema.Object(
@@ -144,7 +144,7 @@ extension Function {
     )
   )
 
-  static let logHealthData = Function(
+  static let logHealthData = Assistant.Tool.Function(
     name: .Function.logHealthData,
     description: "You can use this function to log health data on behalf of the user. This function supports logging food, water intake, bowel movements, weight, blood pressure, and periods.",
     parameters: Schema.Object(
@@ -273,7 +273,7 @@ extension Function {
     )
   )
 
-  static let logFood = Function(
+  static let logFood = Assistant.Tool.Function(
     name: .Function.logFood,
     description: "This can be used to log food items for the user",
     parameters: Schema.Object(
@@ -324,7 +324,7 @@ extension Function {
     )
   )
 
-  static let logWater = Function(
+  static let logWater = Assistant.Tool.Function(
     name: .Function.logWater,
     description: "This can be used to log water for the user",
     parameters: Schema.Object(
@@ -341,7 +341,7 @@ extension Function {
     )
   )
 
-  static let logBowelMovement = Function(
+  static let logBowelMovement = Assistant.Tool.Function(
     name: .Function.logBowelMovement,
     description: "This can be used to log a bowel movement for the user",
     parameters: Schema.Object(
@@ -358,7 +358,7 @@ extension Function {
     )
   )
 
-  static let logWeight = Function(
+  static let logWeight = Assistant.Tool.Function(
     name: .Function.logWeight,
     description: "This can be used to log the user's weight",
     parameters: Schema.Object(
@@ -375,7 +375,7 @@ extension Function {
     )
   )
 
-  static let logPeriod = Function(
+  static let logPeriod = Assistant.Tool.Function(
     name: .Function.logPeriod,
     description: "This can be used to log a period on behalf of the user. Only use this function for female users.",
     parameters: Schema.Object(
@@ -388,7 +388,7 @@ extension Function {
     )
   )
 
-  static let logBloodPressure = Function(
+  static let logBloodPressure = Assistant.Tool.Function(
     name: .Function.logBloodPressure,
     description: "This can be used to log the user's blood pressure",
     parameters: Schema.Object(
@@ -405,7 +405,7 @@ extension Function {
     )
   )
 
-  static let createWorkoutPlan = Function(
+  static let createWorkoutPlan = Assistant.Tool.Function(
     name: .Function.createWorkoutPlan,
     description: "This can be used to create a workout plan for the user to perform.",
     parameters: Schema.Object(
