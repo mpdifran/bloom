@@ -15,7 +15,7 @@ extension Application {
   func printEnvironmentInfo() {
     logger.notice("Environment: \(environment.name)")
     if environment != .production {
-      logger.logLevel = .debug
+      logger.logLevel = .info
     } else {
       logger.logLevel = .notice
     }

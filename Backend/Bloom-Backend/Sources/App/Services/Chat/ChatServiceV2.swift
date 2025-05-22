@@ -129,7 +129,7 @@ private extension ChatServiceV2 {
     db: any Database
   ) async throws {
 
-    let inputHistory = try await chatHistory.load(for: userID)
+    let inputHistory = filter(inputItems: try await chatHistory.load(for: userID))
 
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
       input: inputHistory,
@@ -175,6 +175,46 @@ private extension ChatServiceV2 {
       } catch {
         print("[TRACE] \(error)")
       }
+    }
+  }
+
+  func filter(inputItems: [OpenAIKit.Response.InputItem]) -> [OpenAIKit.Response.InputItem] {
+    var toolCallIDs = Set<String>()
+    var toolCallOutputIDs = Set<String>()
+    for inputItem in inputItems {
+      switch inputItem {
+      case .item(let item):
+        switch item {
+        case .functionToolCall(let call):
+          toolCallIDs.insert(call.callId)
+        case .functionToolCallOutput(let output):
+          toolCallOutputIDs.insert(output.callId)
+        default:
+          break
+        }
+      default:
+        break
+      }
+    }
+
+    // If there's any tool calls that don't have responses, the AI doesn't like that. Remove them.
+    let toRemoveCallIDs = toolCallIDs.subtracting(toolCallOutputIDs)
+
+    return inputItems.filter { inputItem in
+      switch inputItem {
+      case .item(let item):
+        switch item {
+        case .functionToolCall(let call):
+          if toRemoveCallIDs.contains(call.callId) {
+            return false
+          }
+        default:
+          break
+        }
+      default:
+        break
+      }
+      return true
     }
   }
 }
