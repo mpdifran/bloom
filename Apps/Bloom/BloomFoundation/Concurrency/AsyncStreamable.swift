@@ -1,5 +1,5 @@
 //
-//  AsyncStreamWrapper.swift
+//  AsyncStreamable.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-10-10.

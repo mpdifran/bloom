@@ -64,9 +64,9 @@ private extension ChatViewModel {
       }
     }
     inProgressMessageTask = Task.detached { [weak self] in
-      for await inProgressMessages in await ChatController.shared.$inProgressMessages {
+      for await messages in await ChatController.shared.$inProgressMessages {
         await MainActor.run { [weak self] in
-          self?.inProgressMessages = inProgressMessages
+          self?.inProgressMessages = messages
         }
       }
     }

@@ -63,6 +63,41 @@ final actor ChatController: ObservableObject {
   private var webSocketDisconnectionTask: Task<Void, Never>?
   private var webSocketErrorTask: Task<Void, Never>?
 
+  private var throttleTask: Task<Void, Never>?
+  private let throttleInterval: UInt64 = 200_000_000  // 100 ms in nanoseconds
+  private var lastEmitTime: UInt64 = 0
+  private var pendingInternalInProgressMessages: [InProgressMessage]?
+  private var internalInProgressMessages = [InProgressMessage]() {
+    didSet {
+      let now = DispatchTime.now().uptimeNanoseconds
+      let newValue = internalInProgressMessages
+      // If enough time has passed since last emit, send immediately
+      if now - lastEmitTime >= throttleInterval {
+        lastEmitTime = now
+        inProgressMessages = newValue
+      } else {
+        // Buffer the latest value
+        pendingInternalInProgressMessages = newValue
+        // Schedule a trailing emit if not already scheduled
+        if throttleTask == nil {
+          // Calculate remaining wait time
+          let wait = throttleInterval - (now - lastEmitTime)
+          throttleTask = Task {
+            // Sleep for the remainder of the interval
+            try? await Task.sleep(nanoseconds: wait)
+            // After interval, emit the buffered value if still present
+            if let valueToEmit = pendingInternalInProgressMessages {
+              lastEmitTime = DispatchTime.now().uptimeNanoseconds
+              inProgressMessages = valueToEmit
+              pendingInternalInProgressMessages = nil
+            }
+            throttleTask = nil
+          }
+        }
+      }
+    }
+  }
+
   private let listFormatter = ListFormatter()
   private let modelContext = ContainerHolder.shared.createContext()
   private let queryPerformer = ChatHealthQueryPerformer()
@@ -170,14 +205,10 @@ private extension ChatController {
   }
 
   func parse(data: Data) async {
-    let string = String(data: data, encoding: .utf8)!
-
-    print("Data: \(string)")
-
     if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
       self.inProgressMessagesIndex = 0
-      self.inProgressMessages = []
+      self.internalInProgressMessages = []
       self.queryAreas.removeAll()
 
       do {
@@ -196,11 +227,11 @@ private extension ChatController {
 
       self.queryAreas.removeAll()
 
-      if self.inProgressMessages.count > self.inProgressMessagesIndex {
-        self.inProgressMessages[self.inProgressMessagesIndex].message += messageChunk.chunk
+      if self.internalInProgressMessages.count > self.inProgressMessagesIndex {
+        self.internalInProgressMessages[self.inProgressMessagesIndex].message += messageChunk.chunk
       } else {
         let inProgressMessage = InProgressMessage(id: UUID().uuidString, message: messageChunk.chunk)
-        self.inProgressMessages.append(inProgressMessage)
+        self.internalInProgressMessages.append(inProgressMessage)
 
         await TelemetryDeck.stopAndSendDurationSignal("Chat TTFT")
       }
@@ -230,7 +261,7 @@ private extension ChatController {
 
       if richContentMessage.isTemporary {
         let inProgressMessage = InProgressMessage(id: UUID().uuidString, data: data)
-        self.inProgressMessages.append(inProgressMessage)
+        self.internalInProgressMessages.append(inProgressMessage)
         self.inProgressMessagesIndex += 2 // One for the JSON, and we immediately move to the next message
       } else {
         try? self.insertRichChatMessage(data: data) // TODO: Handle errors?!

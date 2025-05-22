@@ -31,27 +31,25 @@ struct ChatView: View {
 
           if viewModel.inProgressMessages.isNotEmpty {
             ForEach(viewModel.inProgressMessages) { inProgressMessage in
-              if let data = inProgressMessage.data {
-                ChatRichContentWrapperCell(
-                  chatMessageID: "",
-                  data: data,
-                  hasPerformedAction: false,
-                  dbID: nil
-                )
-                .id(inProgressMessage.id)
-                .transition(.blurReplace)
-                .contentTransition(.opacity)
-              } else {
-                ChatBubbleCell(
-                  message: inProgressMessage.message,
-                  isDirect: false,
-                  isCurrentUser: false,
-                  showTail: true
-                )
-                .id(inProgressMessage.id)
-                .transition(.blurReplace)
-                .contentTransition(.opacity)
+              Group {
+                if let data = inProgressMessage.data {
+                  ChatRichContentWrapperCell(
+                    chatMessageID: "",
+                    data: data,
+                    hasPerformedAction: false,
+                    dbID: nil
+                  )
+                } else {
+                  ChatBubbleCell(
+                    message: inProgressMessage.message,
+                    isDirect: false,
+                    isCurrentUser: false,
+                    showTail: true
+                  )
+                }
               }
+              .id(inProgressMessage.id)
+              .transition(.blurReplace)
             }
           }
 
@@ -82,7 +80,6 @@ struct ChatView: View {
     .animation(.easeInOut, value: chatMessages)
     .animation(.easeInOut, value: viewModel.assistantTypingStatus)
     .animation(.easeInOut, value: viewModel.assistantIsTyping)
-    .animation(.easeInOut, value: viewModel.inProgressMessages)
     .topSafeAreaBlur()
   }
 }

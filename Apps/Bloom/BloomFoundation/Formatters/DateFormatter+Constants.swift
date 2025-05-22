@@ -168,4 +168,8 @@ public extension DateFormatter {
     }
     return "in " + (timeIntervalDaysFull.string(from: .now, to: date) ?? "")
   }
+
+  static let millisecondBasedLogInterval = DateFormatter().with {
+    $0.dateFormat = "HH:mm:ss.SSS"
+  }
 }
