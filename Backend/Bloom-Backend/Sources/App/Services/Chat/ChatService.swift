@@ -64,8 +64,6 @@ private extension ChatService {
   ) async throws {
     let assistantService = application.openAIAssistantService(db: db)
 
-    try await sendIsAssistantTyping(isTyping: true, userID: userID)
-
     guard let thread = try await assistantService.createOrFetchAssistantThread(
       userID: userID,
       assistantSpec: .healthCoach
@@ -74,14 +72,19 @@ private extension ChatService {
       return
     }
 
-    try await assistantService.cancelCurrentlyActiveRuns(assistantThread: thread)
-
     var content = [OpenAIKit.Thread.Message.Content]()
     content.append(.text("Here are some details about me:\n\n\(message.userInfo)"))
     for fileID in message.imageFileIDs {
       content.append(.imageFile(fileID, .auto))
     }
-    content.append(.text(message.text))
+    if message.text.isNotEmpty {
+      content.append(.text(message.text))
+    }
+
+    guard content.isNotEmpty else { return }
+
+    try await sendIsAssistantTyping(isTyping: true, userID: userID)
+    try await assistantService.cancelCurrentlyActiveRuns(assistantThread: thread)
 
     try await assistantService.sendChatContent(
       assistantThread: thread,

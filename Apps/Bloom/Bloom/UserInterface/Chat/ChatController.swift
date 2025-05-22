@@ -75,6 +75,7 @@ extension ChatController {
 
   func send(message: String, image: UIImage?) async throws {
     let imageData = image?.resized(toWidth: 300)?.pngData()
+    let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
     try modelContext.savingTransaction {
       if let imageData {
@@ -85,11 +86,13 @@ extension ChatController {
         modelContext.insert(imageMessage)
       }
 
-      let userMessage = ChatMessage(
-        isCurrentUser: true,
-        message: message
-      )
-      modelContext.insert(userMessage)
+      if trimmedMessage.isNotEmpty {
+        let userMessage = ChatMessage(
+          isCurrentUser: true,
+          message: message
+        )
+        modelContext.insert(userMessage)
+      }
     }
 
     let demographics = await ChatVitalConverter.shared.generateDemographics()
@@ -104,7 +107,7 @@ extension ChatController {
     }
 
     let socketMessage = SocketMessage.MessageRequest(
-      text: message,
+      text: trimmedMessage,
       imageFileIDs: fileIDs,
       userInfo: stringData
     )

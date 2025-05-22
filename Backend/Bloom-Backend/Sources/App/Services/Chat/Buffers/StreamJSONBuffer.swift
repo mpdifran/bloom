@@ -28,7 +28,7 @@ final actor StreamJSONBuffer {
     let fenceClose = "```"
 
     // 1. If buffering JSON content already
-    if let existingJSON = buffers[userID] {
+    if buffers[userID] != nil {
       // Look for closing fence
       if let closeRange = delta.range(of: fenceClose) {
         let beforeClose = String(delta[..<closeRange.lowerBound])

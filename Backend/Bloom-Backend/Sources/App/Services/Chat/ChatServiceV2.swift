@@ -76,7 +76,12 @@ private extension ChatServiceV2 {
     // System Messages
     input.append(
       .message(
-        .init(role: .system, content: [.text(.init(text: "Here are some details about the user:\n\(message.userInfo)"))])
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Here are some details about the user's current preferences:\n\(message.userInfo)"))
+          ]
+        )
       )
     )
 
@@ -85,7 +90,11 @@ private extension ChatServiceV2 {
     for fileID in message.imageFileIDs {
       userContent.append(.image(.init(detail: .auto, fileId: fileID)))
     }
-    userContent.append(.text(.init(text: message.text)))
+    if message.text.isNotEmpty {
+      userContent.append(.text(.init(text: message.text)))
+    }
+
+    guard userContent.isNotEmpty else { return }
 
     input.append(.message(.init(role: .user, content: userContent)))
 
