@@ -26,42 +26,44 @@ struct ChatView: View {
   var body: some View {
     ScrollViewReader { scrollViewProxy in
       ZStack(alignment: .bottom) {
-        ChatLayout {
-          chatMessagesView
+        ScrollView {
+          LazyVStack(spacing: 4) {
+            chatMessagesView
 
-          if viewModel.inProgressMessages.isNotEmpty {
-            ForEach(viewModel.inProgressMessages) { inProgressMessage in
-              if let data = inProgressMessage.data {
-                ChatRichContentWrapperCell(
-                  chatMessageID: "",
-                  data: data,
-                  hasPerformedAction: false,
-                  dbID: nil
-                )
-                .id(inProgressMessage.id)
-                .transition(.blurReplace)
-              } else {
-                ChatBubbleCell(
-                  message: inProgressMessage.message,
-                  isDirect: false,
-                  isCurrentUser: false,
-                  showTail: true
-                )
-                .id(inProgressMessage.id)
-                .transition(.blurReplace)
+            if viewModel.inProgressMessages.isNotEmpty {
+              ForEach(viewModel.inProgressMessages) { inProgressMessage in
+                if let data = inProgressMessage.data {
+                  ChatRichContentWrapperCell(
+                    chatMessageID: "",
+                    data: data,
+                    hasPerformedAction: false,
+                    dbID: nil
+                  )
+                  .id(inProgressMessage.id)
+                  .transition(.blurReplace)
+                } else {
+                  ChatBubbleCell(
+                    message: inProgressMessage.message,
+                    isDirect: false,
+                    isCurrentUser: false,
+                    showTail: true
+                  )
+                  .id(inProgressMessage.id)
+                  .transition(.blurReplace)
+                }
               }
             }
+
+            statusTextView
+
+            if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
+              TypingIndicatorCell(isDirect: false)
+                .id("typing-indicator")
+                .transition(.blurReplace)
+            }
+
+            bottomAnchorView
           }
-
-          statusTextView
-
-          if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
-            TypingIndicatorCell(isDirect: false)
-              .id("typing-indicator")
-              .transition(.blurReplace)
-          }
-
-          bottomAnchorView
         }
         .scrollDismissesKeyboard(.interactively)
 
@@ -69,6 +71,26 @@ struct ChatView: View {
           withAnimation {
             scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
           }
+        }
+      }
+      .onChange(of: viewModel.inProgressMessages) { _, _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+        }
+      }
+      .onChange(of: viewModel.assistantIsTyping) { _, _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+        }
+      }
+      .onChange(of: viewModel.assistantTypingStatus) { _, _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+        }
+      }
+      .onChange(of: chatMessages.count) { _, _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
         }
       }
     }
