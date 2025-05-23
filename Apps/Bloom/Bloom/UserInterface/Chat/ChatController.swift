@@ -230,7 +230,7 @@ private extension ChatController {
       if self.internalInProgressMessages.count > self.inProgressMessagesIndex {
         self.internalInProgressMessages[self.inProgressMessagesIndex].message += messageChunk.chunk
       } else {
-        let inProgressMessage = InProgressMessage(id: UUID().uuidString, message: messageChunk.chunk)
+        let inProgressMessage = InProgressMessage(id: messageChunk.id, message: messageChunk.chunk)
         self.internalInProgressMessages.append(inProgressMessage)
 
         await TelemetryDeck.stopAndSendDurationSignal("Chat TTFT")
@@ -260,11 +260,11 @@ private extension ChatController {
       }
 
       if richContentMessage.isTemporary {
-        let inProgressMessage = InProgressMessage(id: UUID().uuidString, data: data)
+        let inProgressMessage = InProgressMessage(id: richContentMessage.id, data: data)
         self.internalInProgressMessages.append(inProgressMessage)
         self.inProgressMessagesIndex += 2 // One for the JSON, and we immediately move to the next message
       } else {
-        try? self.insertRichChatMessage(data: data) // TODO: Handle errors?!
+        try? self.insertRichChatMessage(id: richContentMessage.id, data: data) // TODO: Handle errors?!
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       await TelemetryDeck.stopAndSendDurationSignal("Chat TTFTC")
@@ -297,33 +297,34 @@ private extension ChatController {
 
               case .newGoals(let goals):
                 let data = try JSONEncoder.bloomModel.encode(goals)
-                try await self.insertRichChatMessage(data: data)
+                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
               case .detectedFood(let food):
                 let data = try JSONEncoder.bloomModel.encode(food)
                 let foodLogID = try await self.autoLog(detectedFood: food)
                 try await self.insertRichChatMessage(
+                  id: UUID().uuidString,
                   data: data,
                   markActionTaken: true,
                   dbID: foodLogID
                 )
               case .logWater(let logWater):
                 let data = try JSONEncoder.bloomModel.encode(logWater)
-                try await self.insertRichChatMessage(data: data)
+                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
               case .logWeight(let logWeight):
                 let data = try JSONEncoder.bloomModel.encode(logWeight)
-                try await self.insertRichChatMessage(data: data)
+                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
               case .logPeriod(let logPeriod):
                 let data = try JSONEncoder.bloomModel.encode(logPeriod)
-                try await self.insertRichChatMessage(data: data)
+                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
               case .logBloodPressure(let logBloodPressure):
                 let data = try JSONEncoder.bloomModel.encode(logBloodPressure)
-                try await self.insertRichChatMessage(data: data)
+                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
               case .logBowelMovement(let logBowelMovement):
                 let data = try JSONEncoder.bloomModel.encode(logBowelMovement)
-                try await self.insertRichChatMessage(data: data)
+                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
               case .createWorkout(let createWorkout):
                 let data = try JSONEncoder.bloomModel.encode(createWorkout)
-                try await self.insertRichChatMessage(data: data)
+                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
               }
               return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID)
             }
@@ -382,12 +383,14 @@ private extension ChatController {
   }
 
   func insertRichChatMessage(
+    id: String,
     data: Data,
     markActionTaken: Bool = false,
     dbID: String? = nil
   ) throws {
     try modelContext.savingTransaction {
       let richContentMessage = ChatMessage(
+        id: id,
         isCurrentUser: false,
         richContent: data,
         dbID: dbID,

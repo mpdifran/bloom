@@ -145,6 +145,8 @@ private extension ChatServiceV2 {
 //      print("[TRACE] \(event)")
       do {
         switch event {
+        case .created:
+          await jsonBuffer.resetIndex(for: userID)
         case .inProgress:
           try await sendIsAssistantTyping(isTyping: true, userID: userID)
         case .completed:
@@ -228,16 +230,16 @@ private extension ChatServiceV2 {
     userID: UserIdentifier,
     db: any Database
   ) async throws {
-    let filteredData = await jsonBuffer.filter(event.delta, for: userID)
+    guard let filteredData = await jsonBuffer.filter(event.delta, for: userID) else { return }
 
     switch filteredData {
-    case .chunk(let chunk):
-      let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId, chunk: chunk)
+    case .chunk(let index, let chunk):
+      let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId + "-\(index)", chunk: chunk)
       try await sendSocketContentIfAvailable(messageChunk, userID: userID)
-    case .json(let json):
+    case .json(let index, let json):
       guard let kind = try parseKind(from: json) else { return }
 
-      let message = SocketMessage.RichMessageResponse(id: event.itemId, kind: kind, isTemporary: true)
+      let message = SocketMessage.RichMessageResponse(id: event.itemId + "-\(index)", kind: kind, isTemporary: true)
       try await ensureContentSilentlySent(message, userID: userID, db: db)
     }
   }
