@@ -31,25 +31,25 @@ struct ChatView: View {
 
           if viewModel.inProgressMessages.isNotEmpty {
             ForEach(viewModel.inProgressMessages) { inProgressMessage in
-              Group {
-                if let data = inProgressMessage.data {
-                  ChatRichContentWrapperCell(
-                    chatMessageID: "",
-                    data: data,
-                    hasPerformedAction: false,
-                    dbID: nil
-                  )
-                } else {
-                  ChatBubbleCell(
-                    message: inProgressMessage.message,
-                    isDirect: false,
-                    isCurrentUser: false,
-                    showTail: true
-                  )
-                }
+              if let data = inProgressMessage.data {
+                ChatRichContentWrapperCell(
+                  chatMessageID: "",
+                  data: data,
+                  hasPerformedAction: false,
+                  dbID: nil
+                )
+                .id(inProgressMessage.id)
+                .transition(.blurReplace)
+              } else {
+                ChatBubbleCell(
+                  message: inProgressMessage.message,
+                  isDirect: false,
+                  isCurrentUser: false,
+                  showTail: true
+                )
+                .id(inProgressMessage.id)
+                .transition(.blurReplace)
               }
-              .id(inProgressMessage.id)
-              .transition(.blurReplace)
             }
           }
 
@@ -77,9 +77,9 @@ struct ChatView: View {
     .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
     .sheet($presentedSheet)
     .alert(error: $viewModel.error)
-    .animation(.easeInOut, value: chatMessages)
-    .animation(.easeInOut, value: viewModel.assistantTypingStatus)
-    .animation(.easeInOut, value: viewModel.assistantIsTyping)
+    .animation(.default, value: chatMessages)
+    .animation(.default, value: viewModel.assistantTypingStatus)
+    .animation(.default, value: viewModel.assistantIsTyping)
     .topSafeAreaBlur()
   }
 }
