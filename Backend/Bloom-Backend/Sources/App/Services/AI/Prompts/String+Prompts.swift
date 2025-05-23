@@ -95,7 +95,7 @@ extension String.Prompt {
     \(Schema.Object.newGoals.asString())
     
     If the user is referencing consumption of food, or shows you a picture of food, you can use this function. Do your best to estimate contents based on the information provided:
-    \(Schema.Object.logFood.asString())
+    \(String.FunctionSchema.logFood)
     
     If the user mentions drinking water, or shows you a photo of water, you can use this function:
     \(Schema.Object.logWater.asString())

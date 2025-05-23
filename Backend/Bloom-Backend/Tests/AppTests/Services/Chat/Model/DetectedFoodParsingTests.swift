@@ -16,16 +16,17 @@ struct DetectedFoodParsingTests {
   private let decoder = JSONDecoder.bloomModel
 
   @Test(arguments: [
-    String.AIJSON.turkeySandwich
+    (String.AIJSON.turkeySandwich, 4)
   ])
   func parsingJSONFromAI(
-    inputJSON: String
+    inputJSON: String,
+    expectedNumberOfFoodItems: Int
   ) async throws {
     let data = inputJSON.data(using: .utf8)!
 
     let sut = try decoder.decode(DetectedFood.self, from: data)
 
-    #expect(sut.foodItems.count == 4)
+    #expect(sut.foodItems.count == expectedNumberOfFoodItems)
   }
 }
 
