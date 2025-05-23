@@ -27,7 +27,7 @@ struct ChatView: View {
     ScrollViewReader { scrollViewProxy in
       ZStack(alignment: .bottom) {
         ScrollView {
-          LazyVStack(spacing: 4) {
+          LazyVStack(spacing: 6) {
             chatMessagesView
 
             if viewModel.inProgressMessages.isNotEmpty {
@@ -78,9 +78,17 @@ struct ChatView: View {
           scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
         }
       }
-      .onChange(of: viewModel.inProgressMessages) { _, _ in
+      .onChange(of: viewModel.inProgressMessages) { _, newValue in
         withAnimation {
           scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+        }
+        if newValue.isEmpty {
+          Task {
+            await Delay(300)
+            await MainActor.run {
+              scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+            }
+          }
         }
       }
       .onChange(of: viewModel.assistantIsTyping) { _, _ in

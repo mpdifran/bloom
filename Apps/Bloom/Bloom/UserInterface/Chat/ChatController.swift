@@ -207,10 +207,6 @@ private extension ChatController {
   func parse(data: Data) async {
     if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
-      self.inProgressMessagesIndex = 0
-      self.internalInProgressMessages = []
-      self.queryAreas.removeAll()
-
       do {
         try modelContext.savingTransaction {
           let message = ChatMessage(
@@ -223,6 +219,11 @@ private extension ChatController {
       } catch {
         self.error = error
       }
+
+      self.inProgressMessagesIndex = 0
+      self.internalInProgressMessages = []
+      self.queryAreas.removeAll()
+
     } else if let messageChunk = try? decoder.decode(SocketMessage.MessageChunkResponse.self, from: data) {
 
       self.queryAreas.removeAll()
