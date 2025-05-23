@@ -230,17 +230,20 @@ private extension ChatServiceV2 {
     userID: UserIdentifier,
     db: any Database
   ) async throws {
-    guard let filteredData = await jsonBuffer.filter(event.delta, for: userID) else { return }
 
-    switch filteredData {
-    case .chunk(let index, let chunk):
-      let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId + "-\(index)", chunk: chunk)
-      try await sendSocketContentIfAvailable(messageChunk, userID: userID)
-    case .json(let index, let json):
-      guard let kind = try parseKind(from: json) else { return }
+    let filteredData = await jsonBuffer.filter(event.delta, for: userID)
 
-      let message = SocketMessage.RichMessageResponse(id: event.itemId + "-\(index)", kind: kind, isTemporary: true)
-      try await ensureContentSilentlySent(message, userID: userID, db: db)
+    for data in filteredData {
+      switch data {
+      case .chunk(let index, let chunk):
+        let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId + "-\(index)", chunk: chunk)
+        try await sendSocketContentIfAvailable(messageChunk, userID: userID)
+      case .json(let index, let json):
+        guard let kind = try parseKind(from: json) else { return }
+
+        let message = SocketMessage.RichMessageResponse(id: event.itemId + "-\(index)", kind: kind, isTemporary: true)
+        try await ensureContentSilentlySent(message, userID: userID, db: db)
+      }
     }
   }
 

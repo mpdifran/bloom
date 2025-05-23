@@ -30,7 +30,7 @@ final actor StreamJSONBuffer {
     lastPartitionWasJSON[userID] = nil
   }
 
-  func filter(_ delta: String, for userID: UserIdentifier) -> FilteredData? {
+  func filter(_ delta: String, for userID: UserIdentifier) -> [FilteredData] {
     let currentIndex = indices[userID, default: 1]
     let fenceOpen = "```json"
     let fenceClose = "```"
@@ -43,14 +43,17 @@ final actor StreamJSONBuffer {
 
       if let closeRange = buffer.range(of: fenceClose) {
         let jsonString = String(buffer[..<closeRange.lowerBound])
-//        let after = String(buffer[closeRange.upperBound...])
-//        buffers[userID, default: ""] = after // Do we need to store after here?
+        let after = String(buffer[closeRange.upperBound...])
         buffers.removeValue(forKey: userID)
         indices[userID, default: 1] += 1
-        print("Detected close range. CurrentIndex: \(currentIndex), index: \(indices[userID, default: 1])")
-        return .json(currentIndex, jsonString)
+        if after.isNotEmpty {
+          let nextIndex = indices[userID, default: 1]
+          return [.json(currentIndex, jsonString), .chunk(nextIndex, after)]
+        } else {
+          return [.json(currentIndex, jsonString)]
+        }
       } else {
-        return nil
+        return []
       }
     }
 
@@ -58,23 +61,26 @@ final actor StreamJSONBuffer {
     if let prefix = prefixBuffers[userID] {
       let updated = prefix + delta
       // Continue gathering until we have at least the length of fenceOpen
-      if updated.count >= fenceOpen.count {
+      if updated.contains(fenceOpen) || updated.count >= fenceOpen.count * 2 {
         prefixBuffers.removeValue(forKey: userID)
         if let range = updated.range(of: fenceOpen) {
           let before = String(updated[..<range.lowerBound])
           let after = String(updated[range.upperBound...])
           buffers[userID] = after
           indices[userID, default: 1] += 1
-          print("Detected open range. CurrentIndex: \(currentIndex), index: \(indices[userID, default: 1])")
-          return .chunk(currentIndex, before)
+          if before.isNotEmpty {
+            return [.chunk(currentIndex, before)]
+          } else {
+            return []
+          }
         } else {
           // Not an opening fence after all
-          return .chunk(currentIndex, updated)
+          return [.chunk(currentIndex, updated)]
         }
       } else {
         // Still potentially completing the fence; buffer silently
         prefixBuffers[userID] = updated
-        return nil
+        return []
       }
     }
 
@@ -85,19 +91,22 @@ final actor StreamJSONBuffer {
       let after = String(delta[openRange.upperBound...])
       buffers[userID] = after
       indices[userID, default: 1] += 1
-      print("Detected open range. CurrentIndex: \(currentIndex), index: \(indices[userID, default: 1])")
-      return .chunk(currentIndex, before)
+      if before.isNotEmpty {
+        return [.chunk(currentIndex, before)]
+      } else {
+        return []
+      }
     }
 
     // 4. Partial fence start: detect backticks but not full marker
     if delta.contains(fenceOpen.prefix(1)) {
       // Begin prefix detection
       prefixBuffers[userID] = delta
-      return nil
+      return []
     }
 
     // 5. Normal text
-    return .chunk(currentIndex, delta)
+    return [.chunk(currentIndex, delta)]
   }
 
   func processCompletedMessage(_ message: String, for userID: UserIdentifier) -> [CompletedPartitions] {
