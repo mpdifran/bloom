@@ -284,7 +284,8 @@ private extension ChatServiceV2 {
   }
 
   func parseKind(from json: String) throws -> SocketMessage.RichMessageResponse.Kind? {
-    let data = json.data(using: .utf8) ?? Data()
+    let trimmedJSON = json.trimmingCharacters(in: .whitespacesAndNewlines)
+    let data = trimmedJSON.data(using: .utf8) ?? Data()
 
     if let kind = handleNewGoals(data: data) {
       return kind
@@ -311,7 +312,7 @@ private extension ChatServiceV2 {
       return kind
     }
 
-    logger.error("Could not parse JSON as Rich Message:\n\n\(json)\n\n")
+    logger.error("Could not parse JSON as Rich Message:\n\(json)\n")
     return nil
   }
 

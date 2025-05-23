@@ -8,7 +8,7 @@
 import Foundation
 
 
-public struct EstimateFoodCaloriesResponse: Codable, Equatable, Sendable {
+public struct EstimateFoodCaloriesResponse: Codable, Hashable, Sendable {
   public let name: String
   public let servings: [Serving]
   public let suggestedServings: [Serving]
@@ -25,7 +25,7 @@ public struct EstimateFoodCaloriesResponse: Codable, Equatable, Sendable {
 }
 
 extension EstimateFoodCaloriesResponse {
-  public struct Serving: Codable, Equatable, Sendable {
+  public struct Serving: Codable, Hashable, Sendable {
     public let servings: Double
     public let item: FoodItem
 

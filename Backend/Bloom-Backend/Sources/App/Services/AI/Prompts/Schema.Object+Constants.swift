@@ -50,8 +50,7 @@ extension Schema.Object {
         arrayOf: .object(Schema.Object(
           properties: [
             "name": Schema.Parameter(type: .string, description: "The name of this food item"),
-            "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. It should not contain the name of the item itself, and should contain a number."),
-            "servingValue": Schema.Parameter(ref: "quantity"),
+            "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. It should not contain the name of the item itself, and should contain a number. It should include the mass of the serving in brackets. Example: \"6 crackers (20 g)\""),
             "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the food item you detect."),
             "calories": Schema.Parameter(ref: "quantity"),
             "fat": Schema.Parameter(ref: "quantity"),

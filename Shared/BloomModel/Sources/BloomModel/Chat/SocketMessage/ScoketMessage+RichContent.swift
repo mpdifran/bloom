@@ -9,7 +9,7 @@ import Foundation
 
 public extension SocketMessage {
 
-  struct DetectedFood: Codable, Equatable, Sendable {
+  struct DetectedFood: Codable, Hashable, Sendable {
     public let name: String
     public let meal: Meal
     public let foodItemServings: [EstimateFoodCaloriesResponse.Serving]
@@ -28,7 +28,7 @@ public extension SocketMessage {
 
 public extension SocketMessage.DetectedFood {
 
-  enum Meal: String, Codable, Equatable, Sendable, CaseIterable {
+  enum Meal: String, Codable, Hashable, Sendable, CaseIterable {
     case breakfast
     case lunch
     case dinner
