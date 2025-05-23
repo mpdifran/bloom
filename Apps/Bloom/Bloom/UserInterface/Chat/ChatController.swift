@@ -379,7 +379,11 @@ private extension ChatController {
   }
 
   func record(queryAreas: [String]) {
-    self.queryAreas.append(contentsOf: queryAreas)
+    for area in queryAreas {
+      guard !self.queryAreas.contains(area) else { continue }
+
+      self.queryAreas.append(area)
+    }
   }
 
   func insertRichChatMessage(
