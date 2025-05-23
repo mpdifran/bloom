@@ -390,7 +390,7 @@ extension ChatHealthData {
     let sex: String?
     let height: Quantity?
     let healthGoal: String?
-    let currentDate: Date
+    let currentDate: String
     let timeZone: String
   }
 }

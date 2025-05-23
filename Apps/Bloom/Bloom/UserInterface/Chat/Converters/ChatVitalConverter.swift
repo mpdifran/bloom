@@ -86,7 +86,7 @@ extension ChatVitalConverter {
       sex: sex,
       height: height.chatQuantity(for: .meterUnit(with: .centi), numberFormatter: .oneDecimalPlace),
       healthGoal: healthGoal,
-      currentDate: .now,
+      currentDate: DateFormatter.dateTimeMedium.string(from: .now),
       timeZone: TimeZone.current.identifier
     )
   }
