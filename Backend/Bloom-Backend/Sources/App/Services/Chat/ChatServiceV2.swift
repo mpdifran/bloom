@@ -281,28 +281,28 @@ private extension ChatServiceV2 {
   func parseKind(from json: String) throws -> SocketMessage.RichMessageResponse.Kind? {
     let data = json.data(using: .utf8) ?? Data()
 
-    if let kind = try handleNewGoals(data: data) {
+    if let kind = handleNewGoals(data: data) {
       return kind
     }
-    if let kind = try handleLogFood(data: data) {
+    if let kind = handleLogFood(data: data) {
       return kind
     }
-    if let kind = try handleLogWater(data: data) {
+    if let kind = handleLogWater(data: data) {
       return kind
     }
-    if let kind = try handleLogWeight(data: data) {
+    if let kind = handleLogWeight(data: data) {
       return kind
     }
-    if let kind = try handleLogPeriod(data: data) {
+    if let kind = handleLogPeriod(data: data) {
       return kind
     }
-    if let kind = try handleLogBloodPressure(data: data) {
+    if let kind = handleLogBloodPressure(data: data) {
       return kind
     }
-    if let kind = try handleLogBowelMovements(data: data) {
+    if let kind = handleLogBowelMovements(data: data) {
       return kind
     }
-    if let kind = try handleCreateWorkout(data: data) {
+    if let kind = handleCreateWorkout(data: data) {
       return kind
     }
 
@@ -310,16 +310,14 @@ private extension ChatServiceV2 {
     return nil
   }
 
-  func handleNewGoals(
-    data: Data
-  ) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleNewGoals(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     guard let arguments = try? decoder.decode(SetGoalsArguments.self, from: data) else {
       return nil
     }
     return .newGoals(arguments.newGoals)
   }
 
-  func handleLogFood(data: Data) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleLogFood(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     guard let arguments = try? decoder.decode(DetectedFood.self, from: data) else {
       return nil
     }
@@ -333,42 +331,42 @@ private extension ChatServiceV2 {
     return .detectedFood(food)
   }
 
-  func handleLogWater(data: Data) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleLogWater(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content = try? decoder.decode(SocketMessage.LogWaterConsumption.self, from: data) {
       return .logWater(content)
     }
     return nil
   }
 
-  func handleLogWeight(data: Data) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleLogWeight(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content = try? decoder.decode(SocketMessage.LogWeight.self, from: data) {
       return .logWeight(content)
     }
     return nil
   }
 
-  func handleLogPeriod(data: Data) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleLogPeriod(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content = try? decoder.decode(SocketMessage.LogPeriod.self, from: data) {
       return .logPeriod(content)
     }
     return nil
   }
 
-  func handleLogBloodPressure(data: Data) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleLogBloodPressure(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content = try? decoder.decode(SocketMessage.LogBloodPressure.self, from: data) {
       return .logBloodPressure(content)
     }
     return nil
   }
 
-  func handleLogBowelMovements(data: Data) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleLogBowelMovements(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content = try? decoder.decode(SocketMessage.LogBowelMovement.self, from: data) {
       return .logBowelMovement(content)
     }
     return nil
   }
 
-  func handleCreateWorkout(data: Data) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func handleCreateWorkout(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content =  try? decoder.decode(SocketMessage.WorkoutPlan.self, from: data) {
       return .createWorkout(content)
     }
