@@ -40,7 +40,7 @@ extension Schema.Object {
 
   static let logFood = Schema.Object(
     properties: [
-      "name": Schema.Parameter(type: .string, description: "The name you would give the food."),
+      "name": Schema.Parameter(type: .string, description: "The name you would give the food. Capitalize using title case."),
       "meal":Schema.Parameter(
         enum: SocketMessage.DetectedFood.Meal.self,
         description: "The meal you think this food is for. You can use the current time, as well as the type of food to determine this."
@@ -49,7 +49,7 @@ extension Schema.Object {
         description: "A list of individual food items detected.",
         arrayOf: .object(Schema.Object(
           properties: [
-            "name": Schema.Parameter(type: .string, description: "The name of this food item"),
+            "name": Schema.Parameter(type: .string, description: "The name of this food item. Capitalize using title case."),
             "servingName": Schema.Parameter(type: .string, description: "A name for a single serving of the food item. It should not contain the name of the item itself, and should contain a number. It should include the mass of the serving in brackets. Example: \"6 crackers (20 g)\""),
             "servingCount": Schema.Parameter(type: .number, description: "The number of servings of the food item you detect."),
             "calories": Schema.Parameter(ref: "quantity"),

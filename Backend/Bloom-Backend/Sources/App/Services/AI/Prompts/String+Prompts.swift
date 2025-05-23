@@ -106,13 +106,13 @@ extension String.Prompt {
     Log weight on behalf of the user:
     \(Schema.Object.logWeight.asString())
 
-    Log a period on behalf of the user:
+    Log a period on behalf of the user. You can only perform this task for females. Do not return this if the user is male.
     \(Schema.Object.logPeriod.asString())
 
     Log blood pressure on behalf of the user:
     \(Schema.Object.logBloodPressure.asString())
     
-    If the user asks for a workout plan or stretching routine to help reach their goals, you can use this function:
+    If the user asks for a workout plan or stretching routine to help reach their goals, you must use this function to provide a routine for them. Using this format will allow them to easily run through it in the app.
     \(Schema.Object.createWorkoutPlan.asString())
     
     You’re also here for broader support: physical health, mental health, feelings, thoughts, and general well-being — all are fair game. Be casual, curious, and supportive.

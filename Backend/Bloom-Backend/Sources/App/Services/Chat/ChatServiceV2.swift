@@ -126,8 +126,13 @@ private extension ChatServiceV2 {
 
   func streamResponse(
     userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    isRetry: Bool = false
   ) async throws {
+
+    if isRetry {
+      logger.info("Chat stream request failed, retrying once.")
+    }
 
     let inputHistory = filter(inputItems: try await chatHistory.load(for: userID))
 
@@ -157,6 +162,9 @@ private extension ChatServiceV2 {
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
         case .failed:
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          if !isRetry {
+            try await streamResponse(userID: userID, db: db, isRetry: true)
+          }
         case .outputTextDelta(let event):
           try await bufferChunk(event: event, userID: userID, db: db)
         case .outputTextDone(let event):
@@ -170,12 +178,17 @@ private extension ChatServiceV2 {
           }
         case .error(let event):
           print(event.error)
+          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+
+          if !isRetry {
+            try await streamResponse(userID: userID, db: db, isRetry: true)
+          }
         default:
+          logger.trace("\(event)")
           break
-//          print("[TRACE] \(event)")
         }
       } catch {
-        print("[TRACE] \(error)")
+        logger.error("\(error)")
       }
     }
   }
@@ -201,6 +214,7 @@ private extension ChatServiceV2 {
 
     // If there's any tool calls that don't have responses, the AI doesn't like that. Remove them.
     let toRemoveCallIDs = toolCallIDs.subtracting(toolCallOutputIDs)
+    let toRemoveCallOutputIDs = toolCallOutputIDs.subtracting(toolCallIDs)
 
     return inputItems.filter { inputItem in
       switch inputItem {
@@ -208,6 +222,10 @@ private extension ChatServiceV2 {
         switch item {
         case .functionToolCall(let call):
           if toRemoveCallIDs.contains(call.callId) {
+            return false
+          }
+        case .functionToolCallOutput(let callOutput):
+          if toRemoveCallOutputIDs.contains(callOutput.callId) {
             return false
           }
         default:
