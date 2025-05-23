@@ -78,6 +78,7 @@ struct ChatLauncherView: View {
     .sensoryFeedback(.impact, trigger: didSendToggle)
     .sensoryFeedback(.selection, trigger: selectionToggle)
     .onChange(of: isFocused) { oldValue, newValue in
+      tabController.isChatBarFocused = newValue
       if newValue {
         tabController.isShowingChat = true
       }

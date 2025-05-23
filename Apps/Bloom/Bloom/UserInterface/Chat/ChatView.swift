@@ -73,6 +73,11 @@ struct ChatView: View {
           }
         }
       }
+      .onChange(of: tabController.isChatBarFocused) { _, _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+        }
+      }
       .onChange(of: viewModel.inProgressMessages) { _, _ in
         withAnimation {
           scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
