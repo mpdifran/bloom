@@ -14,7 +14,7 @@ import DataContainer
 struct ChatView: View {
 
   @State private var viewModel = ChatViewModel()
-  private let cellBuilder = ChatCellBuilder()
+  @State private var cellBuilder = ChatCellBuilder()
   @State private var presentedSheet: AnyView?
   @State private var isAtBottom = false
 
@@ -52,9 +52,7 @@ struct ChatView: View {
     .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
     .sheet($presentedSheet)
     .alert(error: $viewModel.error)
-    .animation(.default, value: chatMessages)
-    .animation(.default, value: viewModel.assistantTypingStatus)
-    .animation(.default, value: viewModel.assistantIsTyping)
+    .animation(.default, value: cellBuilder.models)
     .topSafeAreaBlur()
     .onChange(of: chatMessages) { updateCells() }
     .onChange(of: viewModel.inProgressMessages) { updateCells() }
