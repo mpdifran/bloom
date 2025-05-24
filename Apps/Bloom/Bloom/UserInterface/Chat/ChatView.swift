@@ -21,13 +21,13 @@ struct ChatView: View {
   @Environment(TabController.self) private var tabController: TabController
 
   @Query private var chatMessages: [ChatMessage]
-  
+
   init() {
     var descriptor = FetchDescriptor<ChatMessage>(
       sortBy: [SortDescriptor(\.date, order: .reverse)]
     )
     descriptor.fetchLimit = 20
-    
+
     _chatMessages = Query(descriptor, animation: .default)
   }
 
@@ -39,46 +39,44 @@ struct ChatView: View {
             ChatPromptsView()
               .zStackAlignment(.bottom)
           } else {
-            ScrollView {
-              LazyVStack(spacing: 6) {
-                ForEach(chatMessages.reversed()) { chatMessage in
-                  chatCell(for: chatMessage)
-                }
+            ChatLayout {
+              ForEach(chatMessages.reversed()) { chatMessage in
+                chatCell(for: chatMessage)
+              }
 
-                if viewModel.inProgressMessages.isNotEmpty {
-                  ForEach(viewModel.inProgressMessages) { inProgressMessage in
-                    if let data = inProgressMessage.data {
-                      ChatRichContentWrapperCell(
-                        chatMessageID: "",
-                        data: data,
-                        hasPerformedAction: false,
-                        dbID: nil
-                      )
-                      .id(inProgressMessage.id)
-                      .transition(.blurReplace)
-                    } else {
-                      ChatBubbleCell(
-                        message: inProgressMessage.message,
-                        isDirect: false,
-                        isCurrentUser: false,
-                        showTail: true
-                      )
-                      .id(inProgressMessage.id)
-                      .transition(.blurReplace)
-                    }
+              if viewModel.inProgressMessages.isNotEmpty {
+                ForEach(viewModel.inProgressMessages) { inProgressMessage in
+                  if let data = inProgressMessage.data {
+                    ChatRichContentWrapperCell(
+                      chatMessageID: "",
+                      data: data,
+                      hasPerformedAction: false,
+                      dbID: nil
+                    )
+                    .id(inProgressMessage.id)
+                    .transition(.blurReplace)
+                  } else {
+                    ChatBubbleCell(
+                      message: inProgressMessage.message,
+                      isDirect: false,
+                      isCurrentUser: false,
+                      showTail: true
+                    )
+                    .id(inProgressMessage.id)
+                    .transition(.blurReplace)
                   }
                 }
-
-                statusTextView
-
-                if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
-                  TypingIndicatorCell(isDirect: false)
-                    .id("typing-indicator")
-                    .transition(.blurReplace)
-                }
-
-                bottomAnchorView
               }
+
+              statusTextView
+
+              if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
+                TypingIndicatorCell(isDirect: false)
+                  .id("typing-indicator")
+                  .transition(.blurReplace)
+              }
+
+              bottomAnchorView
             }
             .scrollDismissesKeyboard(.interactively)
           }
@@ -88,6 +86,16 @@ struct ChatView: View {
               scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
             }
           }
+
+          statusTextView
+
+          if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
+            TypingIndicatorCell(isDirect: false)
+              .id("typing-indicator")
+              .transition(.blurReplace)
+          }
+
+          bottomAnchorView
         }
         .onChange(of: tabController.isChatBarFocused) { _, _ in
           withAnimation {
