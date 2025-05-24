@@ -14,6 +14,7 @@ import DataContainer
 struct ChatView: View {
 
   @State private var viewModel = ChatViewModel()
+  private let cellBuilder = ChatCellBuilder()
   @State private var presentedSheet: AnyView?
   @State private var isAtBottom = false
 
@@ -40,35 +41,13 @@ struct ChatView: View {
               .zStackAlignment(.bottom)
           } else {
             ChatLayout {
-              ForEach(chatMessages.reversed()) { chatMessage in
-                chatCell(for: chatMessage)
+              ForEach(cellBuilder.models) { model in
+                ChatCell(
+                  model: model
+                )
+                .id(model.id)
+                .transition(.blurReplace)
               }
-
-              if viewModel.inProgressMessages.isNotEmpty {
-                ForEach(viewModel.inProgressMessages) { inProgressMessage in
-                  if let data = inProgressMessage.data {
-                    ChatRichContentWrapperCell(
-                      chatMessageID: "",
-                      data: data,
-                      hasPerformedAction: false,
-                      dbID: nil
-                    )
-                    .id(inProgressMessage.id)
-                    .transition(.blurReplace)
-                  } else {
-                    ChatBubbleCell(
-                      message: inProgressMessage.message,
-                      isDirect: false,
-                      isCurrentUser: false,
-                      showTail: true
-                    )
-                    .id(inProgressMessage.id)
-                    .transition(.blurReplace)
-                  }
-                }
-              }
-
-              statusTextView
 
               if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
                 TypingIndicatorCell(isDirect: false)
@@ -86,16 +65,6 @@ struct ChatView: View {
               scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
             }
           }
-
-          statusTextView
-
-          if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
-            TypingIndicatorCell(isDirect: false)
-              .id("typing-indicator")
-              .transition(.blurReplace)
-          }
-
-          bottomAnchorView
         }
         .onChange(of: tabController.isChatBarFocused) { _, _ in
           withAnimation {
@@ -139,10 +108,17 @@ struct ChatView: View {
       .animation(.default, value: chatMessages)
       .animation(.default, value: viewModel.assistantTypingStatus)
       .animation(.default, value: viewModel.assistantIsTyping)
+      .onChange(of: chatMessages) { updateCells() }
+      .onChange(of: viewModel.inProgressMessages) { updateCells() }
+      .onChange(of: viewModel.assistantTypingStatus) { updateCells() }
+      .onChange(of: viewModel.assistantIsTyping) { updateCells() }
       .navigationTitle("Bud")
       .navigationBarTitleDisplayMode(.inline)
       .task {
         await viewModel.maintainWebSocketConnection()
+      }
+      .task {
+        updateCells()
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -166,67 +142,13 @@ struct ChatView: View {
 
 private extension ChatView {
 
-  @ViewBuilder
-  func chatCell(for chatMessage: ChatMessage) -> some View {
-    switch chatMessage.content {
-    case .message(let message):
-      ChatBubbleCell(
-        message: message,
-        isDirect: false,
-        isCurrentUser: chatMessage.isCurrentUser,
-        showTail: true
-      )
-      .id(chatMessage.id)
-      .transition(.blurReplace)
-      .contextMenu {
-        if chatMessage.isCurrentUser {
-          Button("Resend", systemSymbol: .arrowUturnBackward) {
-            Task {
-              await viewModel.sendMessage(message, image: nil)
-            }
-          }
-        }
-      }
-    case .imageData(let imageData):
-      if let image = UIImage(data: imageData) {
-        ChatImageCell(
-          image: image,
-          isCurrentUser: chatMessage.isCurrentUser
-        )
-        .id(chatMessage.id)
-        .transition(.blurReplace)
-      }
-    case .richContent(let richContent):
-      ChatRichContentWrapperCell(
-        chatMessageID: chatMessage.id,
-        data: richContent,
-        hasPerformedAction: chatMessage.hasPerformedAction,
-        dbID: chatMessage.dbID
-      )
-      .id(chatMessage.id)
-      .transition(.blurReplace)
-    @unknown default:
-      EmptyView()
-    }
-  }
-
-  @ViewBuilder
-  var statusTextView: some View {
-    if let status = viewModel.assistantTypingStatus {
-      HStack {
-        Text(status)
-          .font(.subheadline)
-          .bold()
-          .foregroundStyle(.secondary)
-          .fontDesign(.rounded)
-          .multilineTextAlignment(.leading)
-          .lineLimit(2)
-          .contentTransition(.numericText())
-
-        Spacer(minLength: 60)
-      }
-      .padding(.horizontal)
-    }
+  func updateCells() {
+    cellBuilder.build(
+      messages: chatMessages,
+      inProgressMessages: viewModel.inProgressMessages,
+      statusText: viewModel.assistantTypingStatus,
+      assistantIsTyping: viewModel.assistantIsTyping
+    )
   }
 
   var bottomAnchorView: some View {
