@@ -186,6 +186,18 @@ public extension SocketMessage {
       self.restBetweenExercises = restBetweenExercises
       self.exercises = exercises
     }
+
+    public init(from decoder: any Decoder) throws {
+      let container: KeyedDecodingContainer<SocketMessage.WorkoutSet.CodingKeys> = try decoder.container(keyedBy: SocketMessage.WorkoutSet.CodingKeys.self)
+      self.title = try container.decode(String.self, forKey: SocketMessage.WorkoutSet.CodingKeys.title)
+      self.focus = try container.decode(String.self, forKey: SocketMessage.WorkoutSet.CodingKeys.focus)
+      self.numberOfSets = try container.decodeIfPresent(Int.self, forKey: SocketMessage.WorkoutSet.CodingKeys.numberOfSets) ?? 1
+      self.format = try container.decodeIfPresent(SocketMessage.WorkoutSet.Format.self, forKey: SocketMessage.WorkoutSet.CodingKeys.format) ?? .standard
+      self.duration = try container.decodeIfPresent(TimeInterval.self, forKey: SocketMessage.WorkoutSet.CodingKeys.duration)
+      self.appleWorkoutType = try container.decode(SocketMessage.AppleWorkoutType.self, forKey: SocketMessage.WorkoutSet.CodingKeys.appleWorkoutType)
+      self.restBetweenExercises = try container.decodeIfPresent(TimeInterval.self, forKey: SocketMessage.WorkoutSet.CodingKeys.restBetweenExercises) ?? 0
+      self.exercises = try container.decode([SocketMessage.WorkoutExercise].self, forKey: SocketMessage.WorkoutSet.CodingKeys.exercises)
+    }
   }
 
   struct WorkoutExercise: Codable, Hashable, Sendable {

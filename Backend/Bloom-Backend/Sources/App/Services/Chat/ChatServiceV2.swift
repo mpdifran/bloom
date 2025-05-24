@@ -33,7 +33,7 @@ final class ChatServiceV2: Sendable {
     self.logger = logger
   }
 
-  private let modelID = ModelID.GPT4.gpt_4o_mini
+  private let modelID = ModelID.OSeries.o4Mini
 
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
@@ -140,6 +140,7 @@ private extension ChatServiceV2 {
       input: inputHistory,
       model: modelID,
       instructions: .Prompt.chatAssistant,
+      reasoning: .init(effort: .low, summary: .detailed),
       tools: [Response.Tool.function(.queryUserHealthData)],
       user: userID.value
     )
@@ -173,6 +174,8 @@ private extension ChatServiceV2 {
           switch event.item {
           case .functionToolCall(let call):
             toolCalls.append(call)
+          case .reasoning(let reasoning):
+            try await chatHistory.append(userID: userID, inputItems: [.item(.reasoning(reasoning))])
           default:
             break
           }

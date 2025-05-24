@@ -131,7 +131,7 @@ extension String.FunctionSchema {
       "format": Format,            // Required. The format of the set (e.g., AMRAP, EMOM, Tabata).
       "duration": Double?,         // Optional. Duration in seconds for time‑based formats.
       "appleWorkoutType": AppleWorkoutType, // Required. The Apple workout type for this step.
-      "restBetweenExercises": Double?, // Required. Rest duration in seconds (0 if none).
+      "restBetweenExercises": Double?, // Optional. Rest duration in seconds (0 or null if none).
       "exercises": [Exercise]      // Required. The exercises in this set (1–2 exercises typical).
     }
 

@@ -12,7 +12,7 @@ import BloomModel
 import OpenAIKit
 
 private extension Int {
-  static let historyLimit: Int = 6
+  static let historyLimit: Int = 10
 }
 
 final actor ChatHistory {
