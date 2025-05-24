@@ -155,6 +155,15 @@ public extension SocketMessage {
       self.requiredEquipment = requiredEquipment
       self.sets = sets
     }
+
+    public init(from decoder: any Decoder) throws {
+      let container: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
+      self.title = try container.decode(String.self, forKey: .title)
+      self.summary = try container.decode(String.self, forKey: .summary)
+      let equipmentStrings = try container.decodeIfPresent([String].self, forKey: .requiredEquipment) ?? []
+      self.requiredEquipment = equipmentStrings.compactMap { SocketMessage.WorkoutPlan.Equipment(rawValue: $0) }
+      self.sets = try container.decode([SocketMessage.WorkoutSet].self, forKey: .sets)
+    }
   }
 
   struct WorkoutSet: Codable, Hashable, Sendable {
@@ -225,6 +234,17 @@ public extension SocketMessage {
       self.distance = distance
       self.distanceUnit = distanceUnit
       self.duration = duration
+    }
+
+    public init(from decoder: any Decoder) throws {
+      let container: KeyedDecodingContainer<SocketMessage.WorkoutExercise.CodingKeys> = try decoder.container(keyedBy: SocketMessage.WorkoutExercise.CodingKeys.self)
+      self.title = try container.decode(String.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.title)
+      self.description = try container.decode(String.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.description)
+      self.numberOfReps = try container.decodeIfPresent(Int.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.numberOfReps)
+      self.kind = try container.decodeIfPresent(SocketMessage.WorkoutExercise.Kind.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.kind) ?? .exercise
+      self.distance = try container.decodeIfPresent(Double.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.distance)
+      self.distanceUnit = try container.decodeIfPresent(SocketMessage.WorkoutExercise.DistanceUnit.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.distanceUnit)
+      self.duration = try container.decode(TimeInterval.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.duration)
     }
   }
 }
