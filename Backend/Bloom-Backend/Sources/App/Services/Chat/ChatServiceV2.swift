@@ -264,6 +264,11 @@ private extension ChatServiceV2 {
 
         let message = SocketMessage.RichMessageResponse(id: event.itemId + "-\(index)", kind: kind, isTemporary: true)
         try await ensureContentSilentlySent(message, userID: userID, db: db)
+
+      case .collectingJSON:
+        try await sendIsAssistantTyping(isTyping: true, userID: userID)
+      case .streamingText:
+        try await sendIsAssistantTyping(isTyping: false, userID: userID)
       }
     }
   }

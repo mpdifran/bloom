@@ -9,6 +9,8 @@ import SwiftUI
 import DataContainer
 import BloomModel
 import BloomFoundation
+import CoreHealth
+import HealthKit
 import TelemetryDeck
 
 extension ChatController {
@@ -403,6 +405,31 @@ private extension ChatController {
       )
       modelContext.insert(richContentMessage)
     }
+  }
+
+  func autoLog(logWater: SocketMessage.LogWaterConsumption) async throws -> String {
+    let quantity = HKQuantity(
+      unit: HKUnit(from: logWater.unit.rawValue),
+      doubleValue: logWater.amount
+    )
+
+    let sample = HKQuantitySample(
+      type: HKQuantityType(.dietaryWater),
+      quantity: quantity,
+      start: Date.now,
+      end: Date.now,
+      metadata: [
+        HKMetadataKeyWasUserEntered: true
+      ]
+    )
+
+    try await HealthStoreModifier.shared.write(sample)
+
+    TelemetryDeck.signal("Log Water")
+
+    SoundPlayer.playLogHealthData()
+
+    return sample.uuid.uuidString
   }
 
   func autoLog(detectedFood: SocketMessage.DetectedFood) async throws -> String {

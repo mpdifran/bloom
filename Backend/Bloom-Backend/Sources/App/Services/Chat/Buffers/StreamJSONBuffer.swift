@@ -9,11 +9,13 @@ import Foundation
 import BloomModel
 
 extension StreamJSONBuffer {
-  enum FilteredData {
+  enum FilteredData: Hashable, Sendable {
     case chunk(Int, String)
     case json(Int, String)
+    case streamingText
+    case collectingJSON
   }
-  enum CompletedPartitions {
+  enum CompletedPartitions: Hashable, Sendable {
     case text(Int, String)
     case json(Int, String)
   }
@@ -48,9 +50,9 @@ final actor StreamJSONBuffer {
         indices[userID, default: 1] += 1
         if after.isNotEmpty {
           let nextIndex = indices[userID, default: 1]
-          return [.json(currentIndex, jsonString), .chunk(nextIndex, after)]
+          return [.json(currentIndex, jsonString), .streamingText, .chunk(nextIndex, after)]
         } else {
-          return [.json(currentIndex, jsonString)]
+          return [.json(currentIndex, jsonString), .streamingText]
         }
       } else {
         return []
@@ -69,9 +71,9 @@ final actor StreamJSONBuffer {
           buffers[userID] = after
           indices[userID, default: 1] += 1
           if before.isNotEmpty {
-            return [.chunk(currentIndex, before)]
+            return [.chunk(currentIndex, before), .collectingJSON]
           } else {
-            return []
+            return [.collectingJSON]
           }
         } else {
           // Not an opening fence after all
@@ -92,9 +94,9 @@ final actor StreamJSONBuffer {
       buffers[userID] = after
       indices[userID, default: 1] += 1
       if before.isNotEmpty {
-        return [.chunk(currentIndex, before)]
+        return [.chunk(currentIndex, before), .collectingJSON]
       } else {
-        return []
+        return [.collectingJSON]
       }
     }
 

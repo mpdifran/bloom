@@ -40,6 +40,11 @@ public extension HealthStoreModifier {
   func delete(_ samples: [HKObject]) async throws {
     try await healthStore.delete(samples)
   }
+
+  func deleteSample(uuid: UUID, ofType sampleType: HKSampleType) async throws {
+    let predicate = HKQuery.predicateForObjects(with: [uuid])
+    try await healthStore.deleteObjects(of: sampleType, predicate: predicate)
+  }
 }
 
 // MARK: Nutrition

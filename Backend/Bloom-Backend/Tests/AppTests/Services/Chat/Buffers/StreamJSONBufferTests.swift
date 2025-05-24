@@ -43,25 +43,60 @@ struct StreamJSONBufferTests {
       filteredData.append(contentsOf: data)
     }
 
-    let indices = filteredData.map {
+    let indices = filteredData.compactMap {
       switch $0 {
       case .chunk(let index, _):
         return index
       case .json(let index, _):
         return index
+      case .collectingJSON, .streamingText:
+        return nil
       }
     }
-    let data = filteredData.map {
+    let data = filteredData.compactMap {
       switch $0 {
       case .chunk(_, let chunk):
         return chunk
       case .json(_, let json):
         return json
+      case .collectingJSON, .streamingText:
+        return nil
       }
     }
 
     #expect(indices == expectedIndices)
     #expect(data == expectedData)
+  }
+
+  @Test
+  func checkCollectingJSONState() async {
+    let inputMessage = "1234```json{...}```5678"
+    let chunkLength = 2
+    let length = inputMessage.count
+
+    var filteredData = [StreamJSONBuffer.FilteredData]()
+    for offset in stride(from: 0, to: length, by: chunkLength) {
+      let end = min(offset + chunkLength, length)
+      let startIndex = inputMessage.index(inputMessage.startIndex, offsetBy: offset)
+      let endIndex = inputMessage.index(inputMessage.startIndex, offsetBy: end)
+      let chunk = String(inputMessage[startIndex..<endIndex])
+
+      let data = await sut.filter(chunk, for: userID)
+      filteredData.append(contentsOf: data)
+    }
+
+    let expectedResult: [StreamJSONBuffer.FilteredData] = [
+      .chunk(1, "12"),
+      .chunk(1, "34"),
+      .collectingJSON,
+      .json(2, "{...}"),
+      .streamingText,
+      .chunk(3, "5"),
+      .chunk(3, "67"),
+      .chunk(3, "8")
+    ]
+
+    #expect(filteredData == expectedResult)
   }
 
   @Test(arguments: [
