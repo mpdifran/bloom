@@ -17,16 +17,19 @@ struct NutritionMealView: View {
   private let onCellTapped: (FoodItemLog, FoodItemRecord) -> Void
   private let showMealDetails: (FoodItemLog) -> Void
   private let onLogTapped: () -> Void
+  @Binding private var presentedSheet: AnyView?
 
   init(
     meal: FoodItemLog.Meal,
     foodItemLogs: [FoodItemLog],
+    presentedSheet: Binding<AnyView?>,
     onCellTapped: @escaping (FoodItemLog, FoodItemRecord) -> Void,
     showMealDetails: @escaping (FoodItemLog) -> Void,
     onLogTapped: @escaping () -> Void
   ) {
     self.meal = meal
     self.foodItemLogs = foodItemLogs
+    self._presentedSheet = presentedSheet
     self.onCellTapped = onCellTapped
     self.showMealDetails = showMealDetails
     self.onLogTapped = onLogTapped
@@ -86,6 +89,15 @@ private extension NutritionMealView {
       }
       .id(foodItemLog.id)
       .contextMenu {
+        Button("Duplicate", systemSymbol: .docOnDoc) {
+          presentedSheet = DuplicateFoodLogView(
+            foodItemLog: foodItemLog,
+            performDismiss: nil
+          ).asAny
+        }
+
+        Divider()
+
         Button("Delete", systemSymbol: .trash, role: .destructive) {
           Task {
             await delete(foodItemLog)
@@ -138,7 +150,8 @@ private extension NutritionMealView {
     VStack {
       NutritionMealView(
         meal: .lunch,
-        foodItemLogs: []
+        foodItemLogs: [],
+        presentedSheet: .constant(nil)
       ) { (_, _) in
         
       } showMealDetails: { (_) in

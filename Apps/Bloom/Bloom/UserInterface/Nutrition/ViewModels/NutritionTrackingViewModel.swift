@@ -635,6 +635,66 @@ extension NutritionTrackingViewModel {
   }
 }
 
+// MARK: - Duplicate Methods
+
+extension NutritionTrackingViewModel {
+  
+  func duplicate(
+    modelContext: ModelContext,
+    foodItemLog: FoodItemLog,
+    toDate date: Date,
+    toMeal meal: FoodItemLog.Meal
+  ) async throws {
+    var dates = [Date]()
+    
+    try modelContext.savingTransaction {
+      // Create new servings from the existing ones
+      var newServings: [FoodItemServing] = []
+      
+      if let existingServings = foodItemLog.foodItemServings {
+        for serving in existingServings {
+          if let foodItem = serving.foodItem {
+            let newServing = FoodItemServing(
+              numberOfServings: serving.numberOfServings,
+              foodItem: foodItem
+            )
+            modelContext.insert(newServing)
+            newServings.append(newServing)
+          }
+        }
+      }
+      
+      let logDate = calculateDate(for: meal, from: date)
+      dates.append(logDate)
+      
+      // Create the duplicate food log
+      let duplicatedLog = FoodItemLog(
+        id: UUID().uuidString,
+        name: foodItemLog.name,
+        date: logDate,
+        meal: meal,
+        numberOfServings: foodItemLog.numberOfServings,
+        imageData: foodItemLog.imageData,
+        foodItemServings: newServings
+      )
+      
+      // Copy meal item reference if it exists
+      if let mealItem = foodItemLog.mealItem {
+        duplicatedLog.mealItem = mealItem
+      }
+      
+      modelContext.insert(duplicatedLog)
+    }
+    
+    try await updateNutrition(for: dates.asSet())
+    
+    TelemetryDeck.signal(
+      "Duplicated Food Log",
+      parameters: ["Meal": meal.rawValue]
+    )
+  }
+}
+
 // MARK: - Private Methods
 
 private extension NutritionTrackingViewModel {

@@ -116,7 +116,8 @@ private extension NutritionView {
         ForEach(FoodItemLog.Meal.allCases) { meal in
           NutritionMealView(
             meal: meal,
-            foodItemLogs: foodItemLogs(for: meal)
+            foodItemLogs: foodItemLogs(for: meal),
+            presentedSheet: $presentedSheet
           ) { foodItemLog, foodItem in
             presentedSheet = FoodItemDetailsView(
               foodItem: foodItem.asNetworkFoodItem(),
