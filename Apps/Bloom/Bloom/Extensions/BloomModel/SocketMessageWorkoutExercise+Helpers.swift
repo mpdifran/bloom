@@ -81,13 +81,3 @@ extension SocketMessage.WorkoutExercise.DistanceUnit {
     }
   }
 }
-
-extension SocketMessage.WorkoutExercise.Kind {
-
-  var hkKind: WorkoutExercise.Kind {
-    switch self {
-    case .exercise: .exercise
-    case .stretch: .stretch
-    }
-  }
-}

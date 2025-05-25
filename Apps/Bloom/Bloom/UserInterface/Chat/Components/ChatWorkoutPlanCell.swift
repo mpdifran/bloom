@@ -115,7 +115,7 @@ extension ChatWorkoutPlanCell {
               distance: exercise.distance,
               distanceUnit: exercise.distanceUnit?.swiftDataUnit,
               duration: exercise.duration,
-              kind: exercise.kind.hkKind
+              kind: .exercise
             )
           )
         }

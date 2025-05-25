@@ -128,7 +128,7 @@ extension String.FunctionSchema {
       "title": String,             // Required. The title of the workout set.
       "focus": String,             // Required. A sentence describing what this set will focus on.
       "numberOfSets": Int?,        // Optional. How many times to repeat this set (usually 3–6).
-      "format": Format,            // Required. The format of the set (e.g., AMRAP, EMOM, Tabata).
+      "format": Format,            // Required. The format of the set (e.g., amrap, emom, tabata).
       "duration": Double?,         // Optional. Duration in seconds for time‑based formats.
       "appleWorkoutType": AppleWorkoutType, // Required. The Apple workout type for this step.
       "restBetweenExercises": Double?, // Optional. Rest duration in seconds (0 or null if none).
@@ -143,13 +143,10 @@ extension String.FunctionSchema {
       "title": String,             // Required. The name of the exercise.
       "description": String,       // Required. A short description of the exercise.
       "numberOfReps": Int?,        // Optional. Number of repetitions if applicable.
-      "kind": Kind,                // Required. The kind of exercise (e.g., strength, cardio).
       "distance": Double?,         // Optional. Distance to cover if applicable.
       "distanceUnit": DistanceUnit?, // Optional. The unit for distance.
       "duration": Double           // Required. Duration in seconds or estimated time to complete.
     }
-
-    Kind: An enum with the following cases: \(SocketMessage.WorkoutExercise.Kind.stringCaseList())
   
     DistanceUnit: An enum with the following cases: \(SocketMessage.WorkoutExercise.DistanceUnit.stringCaseList())
   """

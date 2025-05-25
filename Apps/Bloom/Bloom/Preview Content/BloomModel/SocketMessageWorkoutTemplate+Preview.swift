@@ -30,7 +30,6 @@ extension SocketMessage.WorkoutPlan.Preview {
             title: "Jumping Jacks",
             description: "Jump to warm up!",
             numberOfReps: nil,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
             duration: 60
@@ -50,7 +49,6 @@ extension SocketMessage.WorkoutPlan.Preview {
             title: "Deadlift",
             description: "Romanian deadlift, keep your weight on your heels.",
             numberOfReps: 8,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
             duration: 180
@@ -59,7 +57,6 @@ extension SocketMessage.WorkoutPlan.Preview {
             title: "Nordic Curls",
             description: "Lower yourself to the ground using your hamstrings.",
             numberOfReps: 10,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
             duration: 180
@@ -79,7 +76,6 @@ extension SocketMessage.WorkoutPlan.Preview {
             title: "Run",
             description: "Just run.",
             numberOfReps: 1,
-            kind: .exercise,
             distance: 200,
             distanceUnit: .meter,
             duration: 300
@@ -99,7 +95,6 @@ extension SocketMessage.WorkoutPlan.Preview {
             title: "Stretch legs",
             description: "Avoid injury by stretching.",
             numberOfReps: 4,
-            kind: .exercise,
             distance: nil,
             distanceUnit: nil,
             duration: 120

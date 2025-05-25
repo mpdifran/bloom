@@ -214,10 +214,6 @@ extension Schema.Object {
                         type: .optionalInteger,
                         description: "The number of repetitions of this exercise the user will perform"
                       ),
-                      "kind": Schema.Parameter(
-                        enum: SocketMessage.WorkoutExercise.Kind.self,
-                        description: "The kind of exercise this will be"
-                      ),
                       "distance": Schema.Parameter(
                         type: .optionalNumber,
                         description: "A distance to cover, if applicable for this exercise"

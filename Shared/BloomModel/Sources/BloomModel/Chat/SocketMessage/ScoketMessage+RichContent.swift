@@ -213,7 +213,6 @@ public extension SocketMessage {
     public let title: String
     public let description: String
     public let numberOfReps: Int?
-    public let kind: Kind
     public let distance: Double?
     public let distanceUnit: DistanceUnit?
     public let duration: TimeInterval
@@ -222,7 +221,6 @@ public extension SocketMessage {
       title: String,
       description: String,
       numberOfReps: Int?,
-      kind: Kind,
       distance: Double?,
       distanceUnit: DistanceUnit?,
       duration: TimeInterval
@@ -230,7 +228,6 @@ public extension SocketMessage {
       self.title = title
       self.description = description
       self.numberOfReps = numberOfReps
-      self.kind = kind
       self.distance = distance
       self.distanceUnit = distanceUnit
       self.duration = duration
@@ -241,7 +238,6 @@ public extension SocketMessage {
       self.title = try container.decode(String.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.title)
       self.description = try container.decode(String.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.description)
       self.numberOfReps = try container.decodeIfPresent(Int.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.numberOfReps)
-      self.kind = try container.decodeIfPresent(SocketMessage.WorkoutExercise.Kind.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.kind) ?? .exercise
       self.distance = try container.decodeIfPresent(Double.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.distance)
       self.distanceUnit = try container.decodeIfPresent(SocketMessage.WorkoutExercise.DistanceUnit.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.distanceUnit)
       self.duration = try container.decode(TimeInterval.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.duration)
@@ -299,11 +295,6 @@ public extension SocketMessage.WorkoutSet {
 }
 
 public extension SocketMessage.WorkoutExercise {
-  enum Kind: String, Codable, Hashable, Sendable, CaseIterable {
-    case exercise
-    case stretch
-  }
-
   enum DistanceUnit: String, Codable, Hashable, Sendable, CaseIterable {
     case meter
     case kilometer
