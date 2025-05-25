@@ -25,11 +25,9 @@ final actor StreamJSONBuffer {
   private var indices = [UserIdentifier : Int]()
   private var prefixBuffers = [UserIdentifier : String]()
   private var buffers =  [UserIdentifier : String]()
-  private var lastPartitionWasJSON = [UserIdentifier : Bool]()
 
   func resetIndex(for userID: UserIdentifier) {
     indices[userID] = nil
-    lastPartitionWasJSON[userID] = nil
   }
 
   func filter(_ delta: String, for userID: UserIdentifier) -> [FilteredData] {
