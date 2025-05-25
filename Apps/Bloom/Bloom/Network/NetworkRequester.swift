@@ -177,11 +177,11 @@ extension NetworkRequester {
 
 extension NetworkRequester {
 
-  func openChatWebsocket(isV2: Bool) async -> WebSocketHandle {
+  func openChatWebsocket(isV1: Bool) async -> WebSocketHandle {
     var request = await URLRequest.Chat.webSocket().settingBloomHeaders()
 
-    if isV2 {
-      request = request.settingAPIVersionHeader(version: "v2")
+    if isV1 {
+      request = request.settingAPIVersionHeader(version: "v1")
     }
 
     let task = URLSession.shared.webSocketTask(with: request)

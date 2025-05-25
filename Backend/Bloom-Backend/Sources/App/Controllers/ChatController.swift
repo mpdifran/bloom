@@ -44,7 +44,7 @@ extension ChatController {
       return
     }
 
-    let version: WebSocketService.Version = request.headers["X-Bloom-API-Version"].first == "v2" ? .v2 : .v1
+    let version: WebSocketService.Version = request.headers["X-Bloom-API-Version"].first == "v1" ? .v1 : .v2
 
     await request.webSocketService.registerChat(
       socket: webSocket,
@@ -61,7 +61,16 @@ extension ChatController {
     guard let byteBuffer = request.body.data else { throw Abort(.badRequest, reason: "Request body is missing") }
 
     let data = Data(buffer: byteBuffer)
-    if try await request.chatService.parse(data: data, for: userID, db: request.db) {
+    let version = request.headers["X-Bloom-API-Version"].first == "v1" ? WebSocketService.Version.v1 : .v2
+    
+    let success = switch version {
+    case .v1:
+      try await request.chatService.parse(data: data, for: userID, db: request.db)
+    case .v2:
+      try await request.chatServiceV2.parse(data: data, for: userID, db: request.db)
+    }
+    
+    if success {
       return Response(status: .ok)
     }
     return Response(status: .internalServerError)

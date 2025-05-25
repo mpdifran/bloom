@@ -16,7 +16,7 @@ struct DeveloperSettingsView: View {
 
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
-  @AppStorage(.FeatureFlag.chatV2) private var chatV2 = false
+  @AppStorage(.FeatureFlag.enableLegacyChat) private var enableLegacyChat = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
@@ -215,8 +215,8 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        SettingsCell("Chat V2") {
-          Toggle("", isOn: $chatV2)
+        SettingsCell("Enable Legacy Chat") {
+          Toggle("", isOn: $enableLegacyChat)
         }
       }
     }
@@ -488,7 +488,7 @@ extension DeveloperSettingsView {
           apiHost.overrideEnabled = false
           showDeveloperMode = false
           bypassPaywall = false
-          chatV2 = false
+          enableLegacyChat = false
           dismiss()
         } label: {
           Text("Exit Developer Mode")

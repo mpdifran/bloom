@@ -42,7 +42,7 @@ final actor ChatController: ObservableObject {
   private var inProgressMessagesIndex = 0
   @AsyncStreamable var error: Error?
 
-  @AppStorage(.FeatureFlag.chatV2) private var chatV2 = false
+  @AppStorage(.FeatureFlag.enableLegacyChat) private var enableLegacyChat = false
 
   private init() { }
 
@@ -177,7 +177,7 @@ private extension ChatController {
       return existingHandle
     }
 
-    let handle = await NetworkRequester.shared.openChatWebsocket(isV2: chatV2)
+    let handle = await NetworkRequester.shared.openChatWebsocket(isV1: enableLegacyChat)
 
     webSocketDataTask = Task.detached { [weak self] in
       for await data in await handle.$data {
