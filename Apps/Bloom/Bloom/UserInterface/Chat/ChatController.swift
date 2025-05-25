@@ -546,26 +546,26 @@ private extension ChatController {
     return bloodPressure.uuid.uuidString
   }
 
-//  func autoLog(logBowelMovement: SocketMessage.LogBowelMovement) async throws -> String {
-//    // Store the bowel movement in SwiftData since HealthKit doesn't have a direct type for this
-//    var bowelMovementID = ""
-//    
-//    try modelContext.savingTransaction {
-//      let bowelMovement = BowelMovement(
-//        date: .now,
-//        bristolStoolType: logBowelMovement.bristolStoolType,
-//        duration: logBowelMovement.duration.asBowelMovementDuration
-//      )
-//      modelContext.insert(bowelMovement)
-//      bowelMovementID = bowelMovement.id
-//    }
-//    
-//    TelemetryDeck.signal("Log Bowel Movement")
-//    
-//    SoundPlayer.playLogHealthData()
-//    
-//    return bowelMovementID
-//  }
+  func autoLog(logBowelMovement: SocketMessage.LogBowelMovement) async throws -> String {
+    // Store the bowel movement in SwiftData since HealthKit doesn't have a direct type for this
+    let recordID = UUID().uuidString
+    
+    try modelContext.savingTransaction {
+      let bowelMovement = BowelMovement(
+        date: .now,
+        bristolStoolType: logBowelMovement.bristolStoolType,
+        duration: logBowelMovement.duration.asBowelMovementDuration,
+        recordID: recordID
+      )
+      modelContext.insert(bowelMovement)
+    }
+    
+    TelemetryDeck.signal("Log Bowel Movement")
+    
+    SoundPlayer.playLogHealthData()
+    
+    return recordID
+  }
 
   func on(error: Error) {
     self.error = error
