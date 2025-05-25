@@ -14,20 +14,24 @@ struct ChatLogBowelMovementCell: View {
   let chatMessageID: String
   let bristolStoolType: Int
   let duration: BowelMovement.Duration
+  let dbID: String?
 
   init(
     chatMessageID: String,
     bristolStoolType: Int,
     duration: BowelMovement.Duration,
-    hasPerformedAction: Bool
+    hasPerformedAction: Bool,
+    dbID: String?
   ) {
     self.chatMessageID = chatMessageID
     self.bristolStoolType = bristolStoolType
     self.duration = duration
+    self.dbID = dbID
     self._hasLoggedBowelMovement = State(initialValue: hasPerformedAction)
   }
 
   @State private var saveComplete = false
+  @State private var saveUndone = false
   @State private var hasLoggedBowelMovement: Bool
 
   @Environment(\.modelContext) private var modelContext
@@ -65,21 +69,38 @@ struct ChatLogBowelMovementCell: View {
           Spacer()
         }
 
-        AsyncButton {
-          try await logBowelMovement()
-        } label: {
-          Group {
-            if hasLoggedBowelMovement {
-              Label("Logged", systemSymbol: .checkmark)
-            } else {
-              Text("Log Bowel Movement")
+        Group {
+          if hasLoggedBowelMovement, let _ = dbID {
+            AsyncButton {
+              try await undoLogBowelMovement()
+            } label: {
+              HStack {
+                Image(systemSymbol: .arrowCounterclockwise)
+                Text("Undo")
+              }
+              .horizontallyCentered()
             }
+            .foregroundStyle(.tint)
+            .bold()
+          } else {
+            AsyncButton {
+              try await logBowelMovement()
+            } label: {
+              Group {
+                if hasLoggedBowelMovement {
+                  Label("Logged", systemSymbol: .checkmark)
+                } else {
+                  Text("Log Bowel Movement")
+                }
+              }
+              .horizontallyCentered()
+            }
+            .buttonStyle(.primary)
+            .disabled(hasLoggedBowelMovement)
           }
-          .horizontallyCentered()
         }
-        .buttonStyle(.primary)
+        .sensoryFeedback(.impact, trigger: saveUndone)
         .sensoryFeedback(.success, trigger: saveComplete)
-        .disabled(hasLoggedBowelMovement)
       }
       .cardContainer()
 
@@ -93,11 +114,14 @@ struct ChatLogBowelMovementCell: View {
 private extension ChatLogBowelMovementCell {
 
   func logBowelMovement() async throws {
+    let recordID = UUID().uuidString
+    
     try modelContext.savingTransaction {
       let model = BowelMovement(
         date: .now,
         bristolStoolType: bristolStoolType,
-        duration: duration
+        duration: duration,
+        recordID: recordID
       )
       modelContext.insert(model)
     }
@@ -106,15 +130,33 @@ private extension ChatLogBowelMovementCell {
 
     TelemetryDeck.signal("Log Bowel Movement")
 
-    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
+    hasLoggedBowelMovement = true
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedBowelMovement)
+    try modelContext.storeDBID(id: chatMessageID, dbID: recordID)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
-    hasLoggedBowelMovement = true
 
     if RatingPromptTracker.shared.recordEvent() {
       requestReview()
     }
+  }
+
+  func undoLogBowelMovement() async throws {
+    guard let dbID else { return }
+    
+    // Delete the bowel movement from SwiftData
+    try modelContext.delete(
+      model: BowelMovement.self,
+      where: #Predicate<BowelMovement> { movement in
+        movement.recordID == dbID
+      }
+    )
+    
+    hasLoggedBowelMovement = false
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedBowelMovement)
+    
+    saveUndone.toggle()
   }
 }
 
@@ -126,13 +168,15 @@ private extension ChatLogBowelMovementCell {
           chatMessageID: "1234",
           bristolStoolType: 4,
           duration: .between5And10Min,
-          hasPerformedAction: false
+          hasPerformedAction: false,
+          dbID: nil
         )
         ChatLogBowelMovementCell(
           chatMessageID: "5678",
           bristolStoolType: 2,
           duration: .moreThan10Min,
-          hasPerformedAction: true
+          hasPerformedAction: true,
+          dbID: "sample-uuid"
         )
       }
       .padding()

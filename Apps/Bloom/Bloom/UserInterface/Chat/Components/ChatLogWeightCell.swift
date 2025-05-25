@@ -15,18 +15,22 @@ import CoreHealth
 struct ChatLogWeightCell: View {
   let chatMessageID: String
   let weightQuantity: HKQuantity
+  let dbID: String?
 
   init(
     chatMessageID: String,
     weightQuantity: HKQuantity,
-    hasPerformedAction: Bool
+    hasPerformedAction: Bool,
+    dbID: String?
   ) {
     self.chatMessageID = chatMessageID
     self.weightQuantity = weightQuantity
+    self.dbID = dbID
     self._hasLoggedWeight = State(initialValue: hasPerformedAction)
   }
 
   @State private var saveComplete = false
+  @State private var saveUndone = false
   @State private var hasLoggedWeight: Bool
 
   @Environment(\.modelContext) private var modelContext
@@ -42,21 +46,38 @@ struct ChatLogWeightCell: View {
           .foregroundStyle(.tint)
           .padding()
 
-        AsyncButton {
-          try await logWeight()
-        } label: {
-          Group {
-            if hasLoggedWeight {
-              Label("Weight Logged", systemSymbol: .checkmark)
-            } else {
-              Text("Log Weight")
+        Group {
+          if hasLoggedWeight, let _ = dbID {
+            AsyncButton {
+              try await undoLogWeight()
+            } label: {
+              HStack {
+                Image(systemSymbol: .arrowCounterclockwise)
+                Text("Undo")
+              }
+              .horizontallyCentered()
             }
+            .foregroundStyle(.tint)
+            .bold()
+          } else {
+            AsyncButton {
+              try await logWeight()
+            } label: {
+              Group {
+                if hasLoggedWeight {
+                  Label("Weight Logged", systemSymbol: .checkmark)
+                } else {
+                  Text("Log Weight")
+                }
+              }
+              .horizontallyCentered()
+            }
+            .buttonStyle(.primary)
+            .disabled(hasLoggedWeight)
           }
-          .horizontallyCentered()
         }
-        .buttonStyle(.primary)
+        .sensoryFeedback(.impact, trigger: saveUndone)
         .sensoryFeedback(.success, trigger: saveComplete)
-        .disabled(hasLoggedWeight)
       }
       .cardContainer()
 
@@ -89,15 +110,31 @@ private extension ChatLogWeightCell {
       await VitalsCalculator.shared.forceFetchVitals()
     }
 
-    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: true)
+    hasLoggedWeight = true
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedWeight)
+    try modelContext.storeDBID(id: chatMessageID, dbID: sample.uuid.uuidString)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
-    hasLoggedWeight = true
 
     if RatingPromptTracker.shared.recordEvent() {
       requestReview()
     }
+  }
+
+  func undoLogWeight() async throws {
+    guard let dbID, let uuid = UUID(uuidString: dbID) else { return }
+    
+    // Delete the sample from HealthKit
+    try await HealthStoreModifier.shared.deleteSample(
+      uuid: uuid,
+      ofType: HKQuantityType(.bodyMass)
+    )
+    
+    hasLoggedWeight = false
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedWeight)
+    
+    saveUndone.toggle()
   }
 }
 
@@ -108,12 +145,14 @@ private extension ChatLogWeightCell {
         ChatLogWeightCell(
           chatMessageID: "1234",
           weightQuantity: HKQuantity(unit: .pound(), doubleValue: 179),
-          hasPerformedAction: false
+          hasPerformedAction: false,
+          dbID: nil
         )
         ChatLogWeightCell(
           chatMessageID: "5678",
           weightQuantity: HKQuantity(unit: .pound(), doubleValue: 160),
-          hasPerformedAction: true
+          hasPerformedAction: true,
+          dbID: "sample-uuid"
         )
       }
       .padding()

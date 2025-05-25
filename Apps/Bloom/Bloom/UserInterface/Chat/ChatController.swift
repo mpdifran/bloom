@@ -243,23 +243,44 @@ private extension ChatController {
       self.queryAreas.removeAll()
 
       let data: Data
+      var dbID: String?
+      
       switch richContentMessage.kind {
       case .newGoals(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
       case .detectedFood(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(detectedFood: content)
+        }
       case .logWeight(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(logWeight: content)
+        }
       case .logPeriod(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(logPeriod: content)
+        }
       case .logWater(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(logWater: content)
+        }
       case .logBloodPressure(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(logBloodPressure: content)
+        }
       case .logBowelMovement(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(logBowelMovement: content)
+        }
       case .createWorkout(let content):
         data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        // Workouts might need special handling - not auto-logging for now
       }
 
       if richContentMessage.isTemporary {
@@ -267,7 +288,12 @@ private extension ChatController {
         self.internalInProgressMessages.append(inProgressMessage)
         self.inProgressMessagesIndex += 2 // One for the JSON, and we immediately move to the next message
       } else {
-        try? self.insertRichChatMessage(id: richContentMessage.id, data: data) // TODO: Handle errors?!
+        try? self.insertRichChatMessage(
+          id: richContentMessage.id, 
+          data: data,
+          markActionTaken: dbID != nil,
+          dbID: dbID
+        )
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       await TelemetryDeck.stopAndSendDurationSignal("Chat TTFTC")

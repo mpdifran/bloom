@@ -9,24 +9,30 @@ import SwiftUI
 import HealthKit
 import BloomModel
 import CoreHealth
+import TelemetryDeck
 
 struct ChatLogPeriodCell: View {
   let chatMessageID: String
+  let dbID: String?
 
   init(
     chatMessageID: String,
     flow: HKCategoryValueMenstrualFlow,
-    hasPerformedAction: Bool
+    hasPerformedAction: Bool,
+    dbID: String?
   ) {
     self.chatMessageID = chatMessageID
+    self.dbID = dbID
     self._flowType = State(initialValue: flow)
     self._hasLoggedPeriod = State(initialValue: hasPerformedAction)
   }
 
   @State private var flowType: HKCategoryValueMenstrualFlow
   @State private var saveComplete = false
+  @State private var saveUndone = false
   @State private var hasLoggedPeriod: Bool
 
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.requestReview) private var requestReview
 
   private let allFlowTypes: [HKCategoryValueMenstrualFlow] = [.none, .light, .medium, .heavy]
@@ -57,21 +63,38 @@ struct ChatLogPeriodCell: View {
         }
         .padding(.bottom)
 
-        AsyncButton {
-          try await save()
-        } label: {
-          Group {
-            if hasLoggedPeriod {
-              Label("Period Logged", systemSymbol: .checkmark)
-            } else {
-              Text("Log")
+        Group {
+          if hasLoggedPeriod, let _ = dbID {
+            AsyncButton {
+              try await undoSave()
+            } label: {
+              HStack {
+                Image(systemSymbol: .arrowCounterclockwise)
+                Text("Undo")
+              }
+              .horizontallyCentered()
             }
+            .foregroundStyle(.tint)
+            .bold()
+          } else {
+            AsyncButton {
+              try await save()
+            } label: {
+              Group {
+                if hasLoggedPeriod {
+                  Label("Period Logged", systemSymbol: .checkmark)
+                } else {
+                  Text("Log")
+                }
+              }
+              .horizontallyCentered()
+            }
+            .buttonStyle(.primary)
+            .disabled(hasLoggedPeriod)
           }
-          .horizontallyCentered()
         }
-        .buttonStyle(.primary)
+        .sensoryFeedback(.impact, trigger: saveUndone)
         .sensoryFeedback(.success, trigger: saveComplete)
-        .disabled(hasLoggedPeriod)
       }
       .cardContainer()
 
@@ -85,7 +108,21 @@ struct ChatLogPeriodCell: View {
 private extension ChatLogPeriodCell {
 
   func save() async throws {
-    try await HealthStoreModifier.shared.log(flowType: flowType, date: .now)
+    let sample = HKCategorySample(
+      type: HKCategoryType(.menstrualFlow),
+      value: flowType.rawValue,
+      start: Date.now,
+      end: Date.now,
+      metadata: [
+        HKMetadataKeyWasUserEntered: true
+      ]
+    )
+    
+    try await HealthStoreModifier.shared.write(sample)
+
+    hasLoggedPeriod = true
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedPeriod)
+    try modelContext.storeDBID(id: chatMessageID, dbID: sample.uuid.uuidString)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
@@ -93,6 +130,21 @@ private extension ChatLogPeriodCell {
     if RatingPromptTracker.shared.recordEvent() {
       requestReview()
     }
+  }
+
+  func undoSave() async throws {
+    guard let dbID, let uuid = UUID(uuidString: dbID) else { return }
+    
+    // Delete the sample from HealthKit
+    try await HealthStoreModifier.shared.deleteSample(
+      uuid: uuid,
+      ofType: HKCategoryType(.menstrualFlow)
+    )
+    
+    hasLoggedPeriod = false
+    try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedPeriod)
+    
+    saveUndone.toggle()
   }
 }
 
@@ -102,12 +154,14 @@ private extension ChatLogPeriodCell {
       ChatLogPeriodCell(
         chatMessageID: "1234",
         flow: .medium,
-        hasPerformedAction: false
+        hasPerformedAction: false,
+        dbID: nil
       )
       ChatLogPeriodCell(
         chatMessageID: "5678",
         flow: .heavy,
-        hasPerformedAction: true
+        hasPerformedAction: true,
+        dbID: "sample-uuid"
       )
     }
   }

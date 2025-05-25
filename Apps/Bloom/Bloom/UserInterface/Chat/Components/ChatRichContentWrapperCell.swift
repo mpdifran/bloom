@@ -69,33 +69,38 @@ struct ChatRichContentWrapperCell: View {
           ChatLogWaterCell(
             chatMessageID: chatMessageID,
             waterQuantity: waterQuantity,
-            hasPerformedAction: hasPerformedAction
+            hasPerformedAction: hasPerformedAction,
+            dbID: dbID
           )
         } else if let bristolStoolType, let duration {
           ChatLogBowelMovementCell(
             chatMessageID: chatMessageID,
             bristolStoolType: bristolStoolType,
             duration: duration,
-            hasPerformedAction: hasPerformedAction
+            hasPerformedAction: hasPerformedAction,
+            dbID: dbID
           )
         } else if let weightQuantity {
           ChatLogWeightCell(
             chatMessageID: chatMessageID,
             weightQuantity: weightQuantity,
-            hasPerformedAction: hasPerformedAction
+            hasPerformedAction: hasPerformedAction,
+            dbID: dbID
           )
         } else if let flowType {
           ChatLogPeriodCell(
             chatMessageID: chatMessageID,
             flow: flowType,
-            hasPerformedAction: hasPerformedAction
+            hasPerformedAction: hasPerformedAction,
+            dbID: dbID
           )
         } else if let systolic, let diastolic {
           ChatLogBloodPressureCell(
             chatMessageID: chatMessageID,
             systolic: systolic,
             diastolic: diastolic,
-            hasPerformedAction: hasPerformedAction
+            hasPerformedAction: hasPerformedAction,
+            dbID: dbID
           )
         } else if let workoutPlan {
           ChatWorkoutPlanCell(
