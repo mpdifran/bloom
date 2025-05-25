@@ -54,10 +54,9 @@ public extension HealthStoreModifier {
   func updateNutrition(for date: Date) async throws {
     // Fetch logs from local database.
     let foodLogs = try await foodItemLogModel.fetchLogs(for: date)
-    // Fetch and delete all entries for the day.
-    try await clearExistingEntries(for: date)
-    // Write food logs to HealthKit.
-    try await recordFoodLogs(foodLogs)
+    
+    // Perform bulk deletion and insertion in a more efficient manner
+    try await performBulkNutritionUpdate(for: date, with: foodLogs)
   }
 }
 
@@ -120,22 +119,45 @@ private extension HealthStoreModifier {
     return daysSinceLastCycle < 7
   }
 
-  func clearExistingEntries(for date: Date) async throws {
-    // We need to find and delete for each quantity type. ex calories, protein, carbs, fat.
-    for sampleType in FoodItemNutrient.allCases {
-      do {
-        let type = HKQuantityType(sampleType.identifier)
-        let samples = await HealthStoreFetcher.shared.fetchSamples(
-          for: type,
-          dateRange: .duringDay(date),
-          writtenByApp: true
-        )
-        if samples.isNotEmpty {
-          try await healthStore.delete(samples)
+  /// Performs an optimized bulk update of nutrition data
+  /// This method batches all operations to minimize HealthKit transactions
+  func performBulkNutritionUpdate(for date: Date, with foodLogs: [FoodItemLogDTO]) async throws {
+    // Step 1: Collect all samples to delete in a single batch
+    var samplesToDelete: [HKSample] = []
+    
+    // Fetch all existing samples for the day in parallel
+    await withTaskGroup(of: [HKSample].self) { group in
+      for nutrientType in FoodItemNutrient.allCases {
+        group.addTask {
+          let type = HKQuantityType(nutrientType.identifier)
+          let samples = await HealthStoreFetcher.shared.fetchSamples(
+            for: type,
+            dateRange: .duringDay(date),
+            writtenByApp: true
+          )
+          return samples
         }
-      } catch {
-        print("Error deleting samples for \(sampleType.identifier): \(error.localizedDescription)")
       }
+      
+      for await samples in group {
+        samplesToDelete.append(contentsOf: samples)
+      }
+    }
+    
+    // Step 2: Create all new samples
+    let newSamples = foodLogs.flatMap { log in
+      createFoodSamples(log)
+    }
+    
+    // Step 3: Perform bulk operations
+    // Delete all old samples in one operation
+    if samplesToDelete.isNotEmpty {
+      try await healthStore.delete(samplesToDelete)
+    }
+    
+    // Write all new samples in one operation
+    if newSamples.isNotEmpty {
+      try await healthStore.save(newSamples)
     }
   }
 
