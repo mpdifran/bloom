@@ -112,7 +112,11 @@ extension NutritionTrackingViewModel {
     for date in dates {
       try await HealthStoreModifier.shared.updateNutrition(for: date)
     }
-    await refreshDateStates()
+    
+    // Refresh date states in the background to avoid blocking
+    Task {
+      await refreshDateStates()
+    }
   }
 
   func refreshDateStates() async {
