@@ -40,12 +40,14 @@ public final class HealthPermissionChecker: Sendable {
     HKQuantityType(.heartRate),
     HKQuantityType(.bloodPressureSystolic),
     HKQuantityType(.bloodPressureDiastolic),
+    HKCorrelationType(.bloodPressure),
     HKQuantityType(.heartRateRecoveryOneMinute),
   ]
 
   public let writeHeartTypes: Set<HKSampleType> = [
     HKQuantityType(.bloodPressureSystolic),
-    HKQuantityType(.bloodPressureDiastolic)
+    HKQuantityType(.bloodPressureDiastolic),
+    HKCorrelationType(.bloodPressure)
   ]
 
   public let sleepTypes: Set<HKObjectType> = [

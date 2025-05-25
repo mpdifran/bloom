@@ -452,6 +452,121 @@ private extension ChatController {
     .value
   }
 
+  func autoLog(logWeight: SocketMessage.LogWeight) async throws -> String {
+    let unit: HKUnit = logWeight.unit == .kg ? .gramUnit(with: .kilo) : .pound()
+    let quantity = HKQuantity(unit: unit, doubleValue: logWeight.value)
+    
+    let sample = HKQuantitySample(
+      type: HKQuantityType(.bodyMass),
+      quantity: quantity,
+      start: Date.now,
+      end: Date.now,
+      metadata: [
+        HKMetadataKeyWasUserEntered: true
+      ]
+    )
+    
+    try await HealthStoreModifier.shared.write(sample)
+    
+    TelemetryDeck.signal("Log Weight")
+    
+    SoundPlayer.playLogHealthData()
+    
+    return sample.uuid.uuidString
+  }
+
+  func autoLog(logPeriod: SocketMessage.LogPeriod) async throws -> String {
+    let flowValue: HKCategoryValueMenstrualFlow
+    switch logPeriod.flow {
+    case .none:
+      flowValue = .unspecified
+    case .light:
+      flowValue = .light
+    case .medium:
+      flowValue = .medium
+    case .heavy:
+      flowValue = .heavy
+    }
+    
+    let sample = HKCategorySample(
+      type: HKCategoryType(.menstrualFlow),
+      value: flowValue.rawValue,
+      start: Date.now,
+      end: Date.now,
+      metadata: [
+        HKMetadataKeyWasUserEntered: true
+      ]
+    )
+    
+    try await HealthStoreModifier.shared.write(sample)
+    
+    TelemetryDeck.signal("Log Period")
+    
+    SoundPlayer.playLogHealthData()
+    
+    return sample.uuid.uuidString
+  }
+
+  func autoLog(logBloodPressure: SocketMessage.LogBloodPressure) async throws -> String {
+    let systolicQuantity = HKQuantity(unit: .millimeterOfMercury(), doubleValue: Double(logBloodPressure.systolic))
+    let diastolicQuantity = HKQuantity(unit: .millimeterOfMercury(), doubleValue: Double(logBloodPressure.diastolic))
+    
+    let correlationType = HKCorrelationType(.bloodPressure)
+    
+    let systolicSample = HKQuantitySample(
+      type: HKQuantityType(.bloodPressureSystolic),
+      quantity: systolicQuantity,
+      start: Date.now,
+      end: Date.now
+    )
+    
+    let diastolicSample = HKQuantitySample(
+      type: HKQuantityType(.bloodPressureDiastolic),
+      quantity: diastolicQuantity,
+      start: Date.now,
+      end: Date.now
+    )
+    
+    let bloodPressure = HKCorrelation(
+      type: correlationType,
+      start: Date.now,
+      end: Date.now,
+      objects: [systolicSample, diastolicSample],
+      metadata: [
+        HKMetadataKeyWasUserEntered: true
+      ]
+    )
+    
+    try await HealthStoreModifier.shared.write(bloodPressure)
+    
+    TelemetryDeck.signal("Log Blood Pressure")
+    
+    SoundPlayer.playLogHealthData()
+    
+    return bloodPressure.uuid.uuidString
+  }
+
+//  func autoLog(logBowelMovement: SocketMessage.LogBowelMovement) async throws -> String {
+//    // Store the bowel movement in SwiftData since HealthKit doesn't have a direct type for this
+//    var bowelMovementID = ""
+//    
+//    try modelContext.savingTransaction {
+//      let bowelMovement = BowelMovement(
+//        date: .now,
+//        bristolStoolType: logBowelMovement.bristolStoolType,
+//        duration: logBowelMovement.duration.asBowelMovementDuration
+//      )
+//      modelContext.insert(bowelMovement)
+//      bowelMovementID = bowelMovement.id
+//    }
+//    
+//    TelemetryDeck.signal("Log Bowel Movement")
+//    
+//    SoundPlayer.playLogHealthData()
+//    
+//    return bowelMovementID
+//  }
+
   func on(error: Error) {
     self.error = error
   }
