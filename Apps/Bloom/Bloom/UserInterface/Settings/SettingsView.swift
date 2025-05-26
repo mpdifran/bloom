@@ -62,6 +62,7 @@ struct SettingsView: View {
         healthGoalsSection
         habitsSection
         todoSection
+        workoutEquipmentSection
         userDetailsSection
         reportSection
         unitsSection
@@ -297,6 +298,26 @@ private extension SettingsView {
         .tint(todo.kind.color)
         .onTapGesture {
           presentedSheet = ToDoCadenceConfigureView(todo: $toDoManager.userAddableToDos[index]).asAny
+        }
+      }
+    }
+  }
+  
+  var workoutEquipmentSection: some View {
+    VStack {
+      SectionTitleView("Workouts")
+        .padding(.horizontal)
+      
+      SettingsSectionContainer {
+        SettingsCell("Workout Equipment") {
+          HStack {
+            Text("\(healthManager.selectedWorkoutEquipment.count) selected")
+              .foregroundStyle(.secondary)
+            DisclosureIndicator()
+          }
+        }
+        .onTapGesture {
+          presentedSheet = WorkoutEquipmentView().asAny
         }
       }
     }

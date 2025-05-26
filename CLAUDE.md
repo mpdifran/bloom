@@ -88,3 +88,12 @@ swift run   # Requires Redis: brew install redis && brew services start redis
 - SwiftData migrations must be carefully planned - no automatic rollback
 - Watch connectivity requires proper session handling
 - Family Controls APIs have strict entitlement requirements
+
+### Preview Development
+- Whenever you're making a #Preview, wrap the object in PreviewEnvironment {}. This exposes all the environment objects to the preview.
+
+### ScrollView Guidelines
+- Use BloomScrollView for any scrollviews in the app. If the view is presented modally, and the chat bar is not visible, you can set showsChatBar to false. Otherwise the safe area will be inset at the bottom of the scroll view.
+
+### List View Development
+- Whenever you're building a cell in a list, use .cardContainer() to wrap it properly. You don't need to add padding, the view modifier will take care of that.
