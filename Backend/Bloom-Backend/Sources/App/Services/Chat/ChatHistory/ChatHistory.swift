@@ -58,11 +58,72 @@ extension ChatHistory {
   func clearHistory(for userID: UserIdentifier) async throws {
     _ = try await redis.delete(.chatHistory(userID: userID)).get()
   }
+  
+  func storeLastResponseID(
+    _ responseID: String,
+    for userID: UserIdentifier
+  ) async throws {
+    let key = RedisKey.lastResponseID(userID: userID)
+    _ = try await redis.set(key, to: responseID).get()
+  }
+  
+  func getLastResponseID(
+    for userID: UserIdentifier
+  ) async throws -> String? {
+    let key = RedisKey.lastResponseID(userID: userID)
+    return try await redis.get(key).get().string
+  }
+  
+  func clearLastResponseID(
+    for userID: UserIdentifier
+  ) async throws {
+    let key = RedisKey.lastResponseID(userID: userID)
+    _ = try await redis.delete(key).get()
+  }
+  
+  func storeFunctionCallID(
+    _ callID: String,
+    for userID: UserIdentifier
+  ) async throws {
+    let key = RedisKey.functionCallIDs(userID: userID)
+    _ = try await redis.sadd(callID, to: key).get()
+  }
+  
+  func removeFunctionCallID(
+    _ callID: String,
+    for userID: UserIdentifier
+  ) async throws {
+    let key = RedisKey.functionCallIDs(userID: userID)
+    _ = try await redis.srem(callID, from: key).get()
+  }
+  
+  func getFunctionCallIDs(
+    for userID: UserIdentifier
+  ) async throws -> Set<String> {
+    let key = RedisKey.functionCallIDs(userID: userID)
+    let members = try await redis.smembers(of: key).get()
+    return Set(members.compactMap { $0.string })
+  }
+  
+  func clearFunctionCallIDs(
+    for userID: UserIdentifier
+  ) async throws {
+    let key = RedisKey.functionCallIDs(userID: userID)
+    _ = try await redis.delete(key).get()
+  }
 }
 
 private extension RedisKey {
 
   static func chatHistory(userID: UserIdentifier) -> RedisKey {
     RedisKey("chat_history:\(userID)")
+  }
+  
+  static func lastResponseID(userID: UserIdentifier) -> RedisKey {
+    RedisKey("chat_last_response_id:\(userID)")
+  }
+  
+  static func functionCallIDs(userID: UserIdentifier) -> RedisKey {
+    RedisKey("chat_function_call_ids:\(userID)")
   }
 }

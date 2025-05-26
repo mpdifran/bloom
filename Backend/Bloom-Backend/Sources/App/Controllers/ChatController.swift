@@ -107,6 +107,7 @@ extension ChatController {
     }
 
     try await request.chatHistory.clearHistory(for: userID)
+    try await request.chatHistory.clearFunctionCallIDs(for: userID)
 
     return Response(status: .ok)
   }

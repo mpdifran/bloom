@@ -71,10 +71,10 @@ private extension ChatServiceV2 {
     db: any Database
   ) async throws {
 
-    var input = [OpenAIKit.Response.InputItem]()
+    var inputs = [OpenAIKit.Response.InputItem]()
 
     // System Messages
-    input.append(
+    inputs.append(
       .message(
         .init(
           role: .system,
@@ -96,11 +96,15 @@ private extension ChatServiceV2 {
 
     guard userContent.isNotEmpty else { return }
 
-    input.append(.message(.init(role: .user, content: userContent)))
+    inputs.append(.message(.init(role: .user, content: userContent)))
 
     // Cache inputs
-    try await chatHistory.append(userID: userID, inputItems: input)
-    try await streamResponse(userID: userID, db: db)
+//    try await chatHistory.append(userID: userID, inputItems: inputs)
+    try await streamResponse(
+      inputs: inputs,
+      userID: userID,
+      db: db
+    )
   }
 
   func onToolCallsResponse(
@@ -114,9 +118,18 @@ private extension ChatServiceV2 {
       return OpenAIKit.Response.InputItem.item(.functionToolCallOutput(output))
     }
 
+    // Remove function calls
+    for toolCallResult in response.toolCallResults {
+      try await chatHistory.removeFunctionCallID(toolCallResult.toolCallID, for: userID)
+    }
+
     // Cache inputs
-    try await chatHistory.append(userID: userID, inputItems: inputs)
-    try await streamResponse(userID: userID, db: db)
+//    try await chatHistory.append(userID: userID, inputItems: inputs)
+    try await streamResponse(
+      inputs: inputs,
+      userID: userID,
+      db: db
+    )
   }
 }
 
@@ -125,6 +138,7 @@ private extension ChatServiceV2 {
 private extension ChatServiceV2 {
 
   func streamResponse(
+    inputs: [OpenAIKit.Response.InputItem],
     userID: UserIdentifier,
     db: any Database,
     isRetry: Bool = false
@@ -134,12 +148,14 @@ private extension ChatServiceV2 {
       logger.info("Chat stream request failed, retrying once.")
     }
 
-    let inputHistory = filter(inputItems: try await chatHistory.load(for: userID))
+    let previousResponseID = try await chatHistory.getLastResponseID(for: userID)
+    let fortifiedInputs = try await fortify(inputs: inputs, userID: userID)
 
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
-      input: inputHistory,
+      input: fortifiedInputs,
       model: modelID,
       instructions: .Prompt.chatAssistant,
+      previousResponseID: previousResponseID,
       reasoning: .init(effort: .low, summary: .detailed),
       tools: [Response.Tool.function(.queryUserHealthData)],
       user: userID.value
@@ -147,25 +163,37 @@ private extension ChatServiceV2 {
 
     var toolCalls = [OpenAIKit.Response.OutputItem.FunctionToolCall]()
 
+    func performRetry() async throws {
+      guard !isRetry else { return }
+
+      try await chatHistory.clearLastResponseID(for: userID)
+      try await chatHistory.clearFunctionCallIDs(for: userID)
+
+      try await streamResponse(
+        inputs: inputs,
+        userID: userID,
+        db: db,
+        isRetry: true
+      )
+    }
+
     for try await event in stream {
-//      print("[TRACE] \(event)")
       do {
         switch event {
         case .created:
           await jsonBuffer.resetIndex(for: userID)
         case .inProgress:
           try await sendIsAssistantTyping(isTyping: true, userID: userID)
-        case .completed:
+        case .completed(let event):
           if toolCalls.isNotEmpty {
             try await send(toolCalls: toolCalls, userID: userID, db: db)
           }
 
+          try await chatHistory.storeLastResponseID(event.response.id, for: userID)
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
         case .failed:
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
-          if !isRetry {
-            try await streamResponse(userID: userID, db: db, isRetry: true)
-          }
+          try await performRetry()
         case .outputTextDelta(let event):
           try await bufferChunk(event: event, userID: userID, db: db)
         case .outputTextDone(let event):
@@ -174,20 +202,16 @@ private extension ChatServiceV2 {
           switch event.item {
           case .functionToolCall(let call):
             toolCalls.append(call)
-          case .reasoning(let reasoning):
-            try await chatHistory.append(userID: userID, inputItems: [.item(.reasoning(reasoning))])
+            try await chatHistory.storeFunctionCallID(call.callId, for: userID)
           default:
             break
           }
         case .error(let event):
           print(event.error)
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
-
-          if !isRetry {
-            try await streamResponse(userID: userID, db: db, isRetry: true)
-          }
+          try await performRetry()
         default:
-          logger.trace("\(event)")
+          logger.debug("\(event)")
           break
         }
       } catch {
@@ -196,49 +220,25 @@ private extension ChatServiceV2 {
     }
   }
 
-  func filter(inputItems: [OpenAIKit.Response.InputItem]) -> [OpenAIKit.Response.InputItem] {
-    var toolCallIDs = Set<String>()
-    var toolCallOutputIDs = Set<String>()
-    for inputItem in inputItems {
-      switch inputItem {
-      case .item(let item):
-        switch item {
-        case .functionToolCall(let call):
-          toolCallIDs.insert(call.callId)
-        case .functionToolCallOutput(let output):
-          toolCallOutputIDs.insert(output.callId)
-        default:
-          break
-        }
-      default:
-        break
-      }
-    }
+  func fortify(
+    inputs: [OpenAIKit.Response.InputItem],
+    userID: UserIdentifier
+  ) async throws -> [OpenAIKit.Response.InputItem] {
+    // Check for any pending function calls and inject error outputs
+    let pendingCallIDs = try await chatHistory.getFunctionCallIDs(for: userID)
+    var modifiedInputs = inputs
 
-    // If there's any tool calls that don't have responses, the AI doesn't like that. Remove them.
-    let toRemoveCallIDs = toolCallIDs.subtracting(toolCallOutputIDs)
-    let toRemoveCallOutputIDs = toolCallOutputIDs.subtracting(toolCallIDs)
+    for callID in pendingCallIDs {
+      let errorOutput = Response.InputItem.FunctionToolCallOutput(
+        callId: callID,
+        output: "There was an error running this tool"
+      )
+      modifiedInputs.append(.item(.functionToolCallOutput(errorOutput)))
 
-    return inputItems.filter { inputItem in
-      switch inputItem {
-      case .item(let item):
-        switch item {
-        case .functionToolCall(let call):
-          if toRemoveCallIDs.contains(call.callId) {
-            return false
-          }
-        case .functionToolCallOutput(let callOutput):
-          if toRemoveCallOutputIDs.contains(callOutput.callId) {
-            return false
-          }
-        default:
-          break
-        }
-      default:
-        break
-      }
-      return true
+      // Remove the function call ID since we're handling it
+      try await chatHistory.removeFunctionCallID(callID, for: userID)
     }
+    return modifiedInputs
   }
 }
 
