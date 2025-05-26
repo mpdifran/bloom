@@ -141,7 +141,7 @@ extension String.FunctionSchema {
 
     Exercise: {
       "title": String,             // Required. The name of the exercise.
-      "description": String,       // Required. A short description of the exercise.
+      "instructions": String,      // Required. A short summary of how to perform the exercise.
       "numberOfReps": Int?,        // Optional. Number of repetitions if applicable.
       "distance": Double?,         // Optional. Distance to cover if applicable.
       "distanceUnit": DistanceUnit?, // Optional. The unit for distance.

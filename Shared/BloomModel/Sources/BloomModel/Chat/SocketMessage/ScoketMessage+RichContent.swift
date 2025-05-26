@@ -197,21 +197,38 @@ public extension SocketMessage {
     }
 
     public init(from decoder: any Decoder) throws {
-      let container: KeyedDecodingContainer<SocketMessage.WorkoutSet.CodingKeys> = try decoder.container(keyedBy: SocketMessage.WorkoutSet.CodingKeys.self)
-      self.title = try container.decode(String.self, forKey: SocketMessage.WorkoutSet.CodingKeys.title)
-      self.focus = try container.decode(String.self, forKey: SocketMessage.WorkoutSet.CodingKeys.focus)
-      self.numberOfSets = try container.decodeIfPresent(Int.self, forKey: SocketMessage.WorkoutSet.CodingKeys.numberOfSets) ?? 1
-      self.format = try container.decodeIfPresent(SocketMessage.WorkoutSet.Format.self, forKey: SocketMessage.WorkoutSet.CodingKeys.format) ?? .standard
-      self.duration = try container.decodeIfPresent(TimeInterval.self, forKey: SocketMessage.WorkoutSet.CodingKeys.duration)
-      self.appleWorkoutType = try container.decode(SocketMessage.AppleWorkoutType.self, forKey: SocketMessage.WorkoutSet.CodingKeys.appleWorkoutType)
-      self.restBetweenExercises = try container.decodeIfPresent(TimeInterval.self, forKey: SocketMessage.WorkoutSet.CodingKeys.restBetweenExercises) ?? 0
-      self.exercises = try container.decode([SocketMessage.WorkoutExercise].self, forKey: SocketMessage.WorkoutSet.CodingKeys.exercises)
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+
+      self.title = try container.decode(String.self, forKey: .title)
+      self.focus = try container.decode(String.self, forKey: .focus)
+      self.numberOfSets = (try? container.decodeIfPresent(Int.self, forKey: .numberOfSets)) ?? 1
+      self.format = (try? container.decodeIfPresent(SocketMessage.WorkoutSet.Format.self, forKey: .format)) ?? .standard
+      self.duration = try container.decodeIfPresent(TimeInterval.self, forKey: .duration)
+
+      // If we can't parse the Apple Workout Type, set a sensible default
+      if let workoutType = (try? container.decode(SocketMessage.AppleWorkoutType.self, forKey: .appleWorkoutType)) {
+        self.appleWorkoutType = workoutType
+      } else {
+        switch format {
+        case .warmup:
+          self.appleWorkoutType = .preparationAndRecovery
+        case .cooldown:
+          self.appleWorkoutType = .cooldown
+        case .amrap, .emom, .tabata:
+          self.appleWorkoutType = .highIntensityIntervalTraining
+        case .standard:
+          self.appleWorkoutType = .other
+        }
+      }
+
+      self.restBetweenExercises = (try? container.decodeIfPresent(TimeInterval.self, forKey: .restBetweenExercises)) ?? 0
+      self.exercises = try container.decode([SocketMessage.WorkoutExercise].self, forKey: .exercises)
     }
   }
 
   struct WorkoutExercise: Codable, Hashable, Sendable {
     public let title: String
-    public let description: String
+    public let instructions: String
     public let numberOfReps: Int?
     public let distance: Double?
     public let distanceUnit: DistanceUnit?
@@ -219,14 +236,14 @@ public extension SocketMessage {
 
     public init(
       title: String,
-      description: String,
+      instructions: String,
       numberOfReps: Int?,
       distance: Double?,
       distanceUnit: DistanceUnit?,
       duration: TimeInterval
     ) {
       self.title = title
-      self.description = description
+      self.instructions = instructions
       self.numberOfReps = numberOfReps
       self.distance = distance
       self.distanceUnit = distanceUnit
@@ -234,13 +251,14 @@ public extension SocketMessage {
     }
 
     public init(from decoder: any Decoder) throws {
-      let container: KeyedDecodingContainer<SocketMessage.WorkoutExercise.CodingKeys> = try decoder.container(keyedBy: SocketMessage.WorkoutExercise.CodingKeys.self)
-      self.title = try container.decode(String.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.title)
-      self.description = try container.decode(String.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.description)
-      self.numberOfReps = try container.decodeIfPresent(Int.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.numberOfReps)
-      self.distance = try container.decodeIfPresent(Double.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.distance)
-      self.distanceUnit = try container.decodeIfPresent(SocketMessage.WorkoutExercise.DistanceUnit.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.distanceUnit)
-      self.duration = try container.decode(TimeInterval.self, forKey: SocketMessage.WorkoutExercise.CodingKeys.duration)
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+
+      self.title = try container.decode(String.self, forKey: .title)
+      self.instructions = try container.decode(String.self, forKey: .instructions)
+      self.numberOfReps = (try? container.decodeIfPresent(Int.self, forKey: .numberOfReps)) ?? 1
+      self.distance = try? container.decodeIfPresent(Double.self, forKey: .distance)
+      self.distanceUnit = try? container.decodeIfPresent(SocketMessage.WorkoutExercise.DistanceUnit.self, forKey: .distanceUnit)
+      self.duration = try container.decode(TimeInterval.self, forKey: .duration)
     }
   }
 }
@@ -290,7 +308,7 @@ public extension SocketMessage.WorkoutSet {
     case amrap
     case emom
     case tabata
-    case coolDown
+    case cooldown
   }
 }
 

@@ -110,7 +110,7 @@ extension ChatWorkoutPlanCell {
               id: UUID().uuidString,
               index: exerciseIndex,
               title: exercise.title,
-              summary: exercise.description,
+              summary: exercise.instructions,
               numberOfReps: exercise.numberOfReps,
               distance: exercise.distance,
               distanceUnit: exercise.distanceUnit?.swiftDataUnit,

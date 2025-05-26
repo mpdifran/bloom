@@ -28,7 +28,7 @@ extension SocketMessage.WorkoutPlan.Preview {
         exercises: [
           SocketMessage.WorkoutExercise(
             title: "Jumping Jacks",
-            description: "Jump to warm up!",
+            instructions: "Jump to warm up!",
             numberOfReps: nil,
             distance: nil,
             distanceUnit: nil,
@@ -47,7 +47,7 @@ extension SocketMessage.WorkoutPlan.Preview {
         exercises: [
           SocketMessage.WorkoutExercise(
             title: "Deadlift",
-            description: "Romanian deadlift, keep your weight on your heels.",
+            instructions: "Romanian deadlift, keep your weight on your heels.",
             numberOfReps: 8,
             distance: nil,
             distanceUnit: nil,
@@ -55,7 +55,7 @@ extension SocketMessage.WorkoutPlan.Preview {
           ),
           SocketMessage.WorkoutExercise(
             title: "Nordic Curls",
-            description: "Lower yourself to the ground using your hamstrings.",
+            instructions: "Lower yourself to the ground using your hamstrings.",
             numberOfReps: 10,
             distance: nil,
             distanceUnit: nil,
@@ -74,7 +74,7 @@ extension SocketMessage.WorkoutPlan.Preview {
         exercises: [
           SocketMessage.WorkoutExercise(
             title: "Run",
-            description: "Just run.",
+            instructions: "Just run.",
             numberOfReps: 1,
             distance: 200,
             distanceUnit: .meter,
@@ -86,14 +86,14 @@ extension SocketMessage.WorkoutPlan.Preview {
         title: "Cool Down",
         focus: "Cooling down to avoid injury.",
         numberOfSets: 3,
-        format: .coolDown,
+        format: .cooldown,
         duration: nil,
         appleWorkoutType: .cooldown,
         restBetweenExercises: 15,
         exercises: [
           SocketMessage.WorkoutExercise(
             title: "Stretch legs",
-            description: "Avoid injury by stretching.",
+            instructions: "Avoid injury by stretching.",
             numberOfReps: 4,
             distance: nil,
             distanceUnit: nil,

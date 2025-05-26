@@ -12,7 +12,7 @@ import HealthKit
 extension SocketMessage.WorkoutPlan {
 
   var representativeAppleWorkoutType: HKWorkoutActivityType {
-    sets.first(where: { $0.format != .warmup && $0.format != .coolDown })?.appleWorkoutType.hkWorkoutType ?? .other
+    sets.first(where: { $0.format != .warmup && $0.format != .cooldown })?.appleWorkoutType.hkWorkoutType ?? .other
   }
 
   var equipmentDescription: String {
