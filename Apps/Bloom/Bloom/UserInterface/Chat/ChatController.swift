@@ -66,7 +66,7 @@ final actor ChatController: ObservableObject {
   private var webSocketErrorTask: Task<Void, Never>?
 
   private var throttleTask: Task<Void, Never>?
-  private let throttleInterval: UInt64 = 50_000_000  // 50 ms in nanoseconds
+  private let throttleInterval: UInt64 = 100_000_000  // 100 ms in nanoseconds
   private var lastEmitTime: UInt64 = 0
   private var pendingInternalInProgressMessages: [InProgressMessage]?
   private var internalInProgressMessages = [InProgressMessage]() {

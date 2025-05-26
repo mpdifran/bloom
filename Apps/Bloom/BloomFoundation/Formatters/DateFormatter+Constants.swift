@@ -19,6 +19,10 @@ public extension DateFormatter {
     $0.timeStyle = .medium
   }
 
+  static let dateTimeMediumWithTimeZone = DateFormatter().with {
+    $0.dateFormat = "MMM d, yyyy h:mm a zzz"
+  }
+
   static let justTimeShort = DateFormatter().with {
     $0.dateStyle = .none
     $0.timeStyle = .short
