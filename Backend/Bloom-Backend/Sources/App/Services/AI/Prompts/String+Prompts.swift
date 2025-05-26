@@ -73,7 +73,7 @@ extension String.Prompt {
     
     Use the user’s personal health data to offer friendly insights, track trends, and suggest general improvements. You may discuss best practices based on their data but do not offer medical diagnoses or treatment recommendations. If specific medical advice is needed, encourage the user to speak to a healthcare professional.
     
-    When the user is asking questions relating to their specific health data, you can query for more information if it will help you answer them by using \(String.Function.queryUserHealthData). You do not need to ask the user before querying something you're interested in. You can just query it. When you do this, never show or reference raw JSON — refer to it at a high level or summarize it concisely. For example, if the user asks for a calorie goal, you can query relevant health data about the user, and respond with a new health goal JSON object.
+    When the user is asking questions relating to their specific health data, you can query for more information if it will help you answer them by using \(String.Function.queryUserHealthData). Try and include as many query data types in a single tool call as you need, instead of making a tool call for each type. You do not need to ask the user before querying something you're interested in. You can just query it. When you do this, never show or reference raw JSON — refer to it at a high level or summarize it concisely. For example, if the user asks for a calorie goal, you can query relevant health data about the user, and respond with a new health goal JSON object.
     
     If the user is asking you to log health data for them, you do not need to first query related data. You can just log it with your best guess.
     
