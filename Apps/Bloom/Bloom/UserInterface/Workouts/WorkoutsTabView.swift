@@ -38,6 +38,13 @@ struct WorkoutsTabView: View {
       }
       .navigationTitle("Workouts")
       .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button {
+            presentedSheet = WorkoutEquipmentView().asAny
+          } label: {
+            Label("Equipment", systemSymbol: .dumbbellFill)
+          }
+        }
         ToolbarItem(placement: .primaryAction) {
           Button {
             presentedSheet = SettingsView().asAny

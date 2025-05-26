@@ -149,6 +149,10 @@ public final class HealthManager: ObservableObject {
   @Published public var userReportedActivityLevel: ActivityLevelSummary.ActivityLevel? {
     didSet { healthDefaults.setUserReportedActivityLevel(userReportedActivityLevel) }
   }
+  
+  @Published public var selectedWorkoutEquipment: Set<String> = [] {
+    didSet { healthDefaults.setSelectedWorkoutEquipment(Array(selectedWorkoutEquipment)) }
+  }
 
   public var healthTargetDetails: HealthTargetDetails {
     HealthTargetDetails(
@@ -169,6 +173,7 @@ public final class HealthManager: ObservableObject {
     self.birthday = healthDefaults.getBirthday()
     self.healthGoal = healthDefaults.getHealthGoal()
     self.weightLossSpeed = healthDefaults.getWeightLossSpeed()
+    self.selectedWorkoutEquipment = Set(healthDefaults.getSelectedWorkoutEquipment())
 
     if let activityLevel = healthDefaults.getActivityLevel() {
       self.userReportedActivityLevel = activityLevel

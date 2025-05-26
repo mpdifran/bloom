@@ -392,6 +392,7 @@ extension ChatHealthData {
     let healthGoal: String?
     let currentDate: String
     let timeZone: String
+    let workoutEquipment: [String]
   }
 }
 

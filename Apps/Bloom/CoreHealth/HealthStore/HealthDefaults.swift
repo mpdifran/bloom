@@ -21,6 +21,7 @@ public extension String {
     case targetWeight = "HealthManager.targetWeight"
     case isPregnant = "HealthManager.isPregnant"
     case isBreastFeeding = "HealthManager.isBreastfeeding"
+    case selectedWorkoutEquipment = "HealthManager.selectedWorkoutEquipment"
 
     var key: String { rawValue }
   }
@@ -62,6 +63,10 @@ public extension HealthDefaults {
   func setUserReportedActivityLevel(_ activityLevel: ActivityLevelSummary.ActivityLevel?) {
     setValue(activityLevel?.rawValue, for: .userReportedActivityLevel)
   }
+  
+  func setSelectedWorkoutEquipment(_ equipment: [String]) {
+    setValue(equipment, for: .selectedWorkoutEquipment)
+  }
 }
 
 public extension HealthDefaults {
@@ -101,6 +106,10 @@ public extension HealthDefaults {
     } else {
       nil
     }
+  }
+  
+  func getSelectedWorkoutEquipment() -> [String] {
+    getValue(for: .selectedWorkoutEquipment) ?? []
   }
 }
 
