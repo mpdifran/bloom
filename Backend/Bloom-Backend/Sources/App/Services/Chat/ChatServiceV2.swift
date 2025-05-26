@@ -191,6 +191,9 @@ private extension ChatServiceV2 {
 
           try await chatHistory.storeLastResponseID(event.response.id, for: userID)
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          if toolCalls.isEmpty {
+            try await sendResponseCompleted(userID: userID, db: db)
+          }
         case .failed:
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
           try await performRetry()
@@ -487,6 +490,11 @@ private extension ChatServiceV2 {
   ) async throws {
     let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
     try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
+  }
+
+  func sendResponseCompleted(userID: UserIdentifier, db: any Database) async throws {
+    let responseCompleted = SocketMessage.ResponseCompleted()
+    try await ensureContentSilentlySent(responseCompleted, userID: userID, db: db)
   }
 
   func ensureContentSent<Content>(
