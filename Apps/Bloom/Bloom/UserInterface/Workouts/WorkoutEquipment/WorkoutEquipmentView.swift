@@ -33,6 +33,16 @@ struct WorkoutEquipmentView: View {
           .bold()
         }
       }
+      .shelf {
+        Button {
+          toggleAllEquipment()
+        } label: {
+          Text(selectAllButtonTitle)
+            .bold()
+            .horizontallyCentered()
+        }
+        .buttonStyle(.primary)
+      }
     }
   }
 }
@@ -81,11 +91,31 @@ private extension WorkoutEquipmentView {
       }
     }
   }
+  
+  func toggleAllEquipment() {
+    withAnimation(.easeInOut(duration: 0.2)) {
+      if healthManager.selectedWorkoutEquipment.count == SocketMessage.WorkoutPlan.Equipment.allCases.count {
+        // All selected, so deselect all
+        healthManager.selectedWorkoutEquipment.removeAll()
+      } else {
+        // Not all selected, so select all
+        healthManager.selectedWorkoutEquipment = Set(SocketMessage.WorkoutPlan.Equipment.allCases.map(\.rawValue))
+      }
+    }
+  }
 }
 
 // MARK: - Helpers
 
 private extension WorkoutEquipmentView {
+  
+  var selectAllButtonTitle: String {
+    if healthManager.selectedWorkoutEquipment.count == SocketMessage.WorkoutPlan.Equipment.allCases.count {
+      return "Deselect All"
+    } else {
+      return "Select All"
+    }
+  }
   
   func equipmentDescription(for equipment: SocketMessage.WorkoutPlan.Equipment) -> String {
     switch equipment {
