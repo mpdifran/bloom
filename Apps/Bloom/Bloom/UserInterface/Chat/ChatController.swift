@@ -399,7 +399,7 @@ private extension ChatController {
       if self.assistantIsTyping {
         self.queryAreas.removeAll()
       }
-    } else if let responseCompleted = try? decoder.decode(SocketMessage.ResponseCompleted.self, from: data) {
+    } else if let _ = try? decoder.decode(SocketMessage.ResponseCompleted.self, from: data) {
 
       TelemetryDeck.signal("Response Completed")
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
