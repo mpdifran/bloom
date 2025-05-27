@@ -531,10 +531,14 @@ private extension ChatServiceV2 {
     userID: UserIdentifier,
     db: any Database
   ) async throws where Content: Encodable, Content: Sendable {
+    logger.debug("ensureContentSent")
+
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
       return
     }
+
+    logger.debug("Could not send over web socket. Attempting APNs.")
 
     let userDatabaseService = application.userDatabaseService(db: db)
 
@@ -583,7 +587,7 @@ private extension ChatServiceV2 {
         logger.debug("Sent APNS message to \(userID): \(apnsUniqueID)")
       }
     } else {
-      logger.debug("Could not relay message to user \(userID).")
+      logger.debug("Could not relay message to user \(userID). No Device Token set.")
 //      let key = RedisKey("\(threadID):\(userID.value)")
 //      let data = try encoder.encode(content)
 //
@@ -597,10 +601,14 @@ private extension ChatServiceV2 {
     userID: UserIdentifier,
     db: any Database
   ) async throws where Content: Encodable, Content: Sendable {
+    logger.debug("ensureContentSilentlySent")
+
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
       return
     }
+
+    logger.debug("Could not send over web socket. Attempting APNs.")
 
     let userDatabaseService = application.userDatabaseService(db: db)
 
@@ -640,7 +648,7 @@ private extension ChatServiceV2 {
         logger.debug("Sent silent APNS message to \(userID): \(apnsUniqueID)")
       }
     } else {
-      logger.debug("Could not relay silent message to user \(userID).")
+      logger.debug("Could not relay silent message to user \(userID). No Device Token set.")
 
       // TODO: Store in redis? Or cancel run?
     }
