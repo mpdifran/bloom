@@ -24,112 +24,128 @@ struct ChatView: View {
   private var chatMessages: [ChatMessage]
 
   var body: some View {
-    ScrollViewReader { scrollViewProxy in
-      ZStack(alignment: .bottom) {
-        ScrollView {
-          LazyVStack(spacing: 6) {
-            chatMessagesView
-
-            if viewModel.inProgressMessages.isNotEmpty {
-              ForEach(viewModel.inProgressMessages) { inProgressMessage in
-                if let data = inProgressMessage.data {
-                  ChatRichContentWrapperCell(
-                    chatMessageID: "",
-                    data: data,
-                    hasPerformedAction: false,
-                    dbID: nil
-                  )
-                  .id(inProgressMessage.id)
-                  .transition(.blurReplace)
-                } else {
-                  ChatBubbleCell(
-                    message: inProgressMessage.message,
-                    isDirect: false,
-                    isCurrentUser: false,
-                    showTail: true
-                  )
-                  .id(inProgressMessage.id)
-                  .transition(.blurReplace)
+    NavigationStack {
+      ScrollViewReader { scrollViewProxy in
+        ZStack(alignment: .bottom) {
+          if chatMessages.isEmpty {
+            ChatPromptsView()
+              .zStackAlignment(.bottom)
+          } else {
+            ScrollView {
+              LazyVStack(spacing: 6) {
+                ForEach(chatMessages) { chatMessage in
+                  chatCell(for: chatMessage)
                 }
+
+                if viewModel.inProgressMessages.isNotEmpty {
+                  ForEach(viewModel.inProgressMessages) { inProgressMessage in
+                    if let data = inProgressMessage.data {
+                      ChatRichContentWrapperCell(
+                        chatMessageID: "",
+                        data: data,
+                        hasPerformedAction: false,
+                        dbID: nil
+                      )
+                      .id(inProgressMessage.id)
+                      .transition(.blurReplace)
+                    } else {
+                      ChatBubbleCell(
+                        message: inProgressMessage.message,
+                        isDirect: false,
+                        isCurrentUser: false,
+                        showTail: true
+                      )
+                      .id(inProgressMessage.id)
+                      .transition(.blurReplace)
+                    }
+                  }
+                }
+
+                statusTextView
+
+                if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
+                  TypingIndicatorCell(isDirect: false)
+                    .id("typing-indicator")
+                    .transition(.blurReplace)
+                }
+
+                bottomAnchorView
               }
             }
+            .scrollDismissesKeyboard(.interactively)
+          }
 
-            statusTextView
-
-            if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
-              TypingIndicatorCell(isDirect: false)
-                .id("typing-indicator")
-                .transition(.blurReplace)
+          scrollToBottomButton {
+            withAnimation {
+              scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
             }
-
-            bottomAnchorView
           }
         }
-        .scrollDismissesKeyboard(.interactively)
-
-        scrollToBottomButton {
+        .onChange(of: tabController.isChatBarFocused) { _, _ in
+          withAnimation {
+            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+          }
+        }
+        .onChange(of: viewModel.inProgressMessages) { _, newValue in
+          withAnimation {
+            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+          }
+          if newValue.isEmpty {
+            Task {
+              await Delay(300)
+              await MainActor.run {
+                scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+              }
+            }
+          }
+        }
+        .onChange(of: viewModel.assistantIsTyping) { _, _ in
+          withAnimation {
+            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+          }
+        }
+        .onChange(of: viewModel.assistantTypingStatus) { _, _ in
+          withAnimation {
+            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+          }
+        }
+        .onChange(of: chatMessages.count) { _, _ in
           withAnimation {
             scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
           }
         }
       }
-      .onChange(of: tabController.isChatBarFocused) { _, _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+      .groupedBackground()
+      .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
+      .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
+      .sheet($presentedSheet)
+      .alert(error: $viewModel.error)
+      .animation(.default, value: chatMessages)
+      .animation(.default, value: viewModel.assistantTypingStatus)
+      .animation(.default, value: viewModel.assistantIsTyping)
+      .navigationTitle("Bud")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Done") {
+            tabController.isShowingChat = false
+            tabController.isChatBarFocused = false
+          }
+          .bold()
         }
-      }
-      .onChange(of: viewModel.inProgressMessages) { _, newValue in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-        }
-        if newValue.isEmpty {
-          Task {
-            await Delay(300)
-            await MainActor.run {
-              scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-            }
+        ToolbarItem(placement: .primaryAction) {
+          Button {
+            presentedSheet = ChatSettingsView().asAny
+          } label: {
+            Label("Settings", systemSymbol: .gear)
           }
         }
       }
-      .onChange(of: viewModel.assistantIsTyping) { _, _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-        }
-      }
-      .onChange(of: viewModel.assistantTypingStatus) { _, _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-        }
-      }
-      .onChange(of: chatMessages.count) { _, _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-        }
-      }
     }
-    .groupedBackground()
-    .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
-    .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
-    .sheet($presentedSheet)
-    .alert(error: $viewModel.error)
-    .animation(.default, value: chatMessages)
-    .animation(.default, value: viewModel.assistantTypingStatus)
-    .animation(.default, value: viewModel.assistantIsTyping)
-    .topSafeAreaBlur()
   }
 }
 
 private extension ChatView {
-  @ViewBuilder
-  var chatMessagesView: some View {
-    if chatMessages.isEmpty {
-      ChatPromptsView()
-    } else {
-      ForEach(chatMessages) { chatMessage in
-        chatCell(for: chatMessage)
-      }
-    }
-  }
 
   @ViewBuilder
   func chatCell(for chatMessage: ChatMessage) -> some View {
@@ -212,7 +228,7 @@ private extension ChatView {
 
   @ViewBuilder
   func scrollToBottomButton(_ onTap: @escaping () -> Void) -> some View {
-    if !isAtBottom {
+    if chatMessages.isNotEmpty && !isAtBottom {
       Button {
         onTap()
       } label: {

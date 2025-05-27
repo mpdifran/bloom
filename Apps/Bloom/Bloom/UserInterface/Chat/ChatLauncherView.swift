@@ -83,6 +83,9 @@ struct ChatLauncherView: View {
         tabController.isShowingChat = true
       }
     }
+    .onChange(of: tabController.isChatBarFocused) { oldValue, newValue in
+      isFocused = newValue
+    }
     .alert(error: $error)
     .sheet($presentedSheet)
 //    contentBuilder()
@@ -169,7 +172,6 @@ private extension ChatLauncherView {
       if tabController.isShowingChat {
         if text.isEmpty {
           Button {
-            tabController.isShowingChat = false
             isFocused = false
             selectionToggle.toggle()
           } label: {
