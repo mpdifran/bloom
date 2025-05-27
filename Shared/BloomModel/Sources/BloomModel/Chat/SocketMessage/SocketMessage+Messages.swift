@@ -72,6 +72,7 @@ public extension SocketMessage {
       case logBloodPressure(SocketMessage.LogBloodPressure)
       case logBowelMovement(SocketMessage.LogBowelMovement)
       case createWorkout(SocketMessage.WorkoutPlan)
+      case invalid(String)
     }
   }
 }

@@ -263,7 +263,7 @@ private extension ChatServiceV2 {
         let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId + "-\(index)", chunk: chunk)
         try await sendSocketContentIfAvailable(messageChunk, userID: userID)
       case .json(let index, let json):
-        guard let kind = try parseKind(from: json) else { return }
+        let kind = try parseKind(from: json)
 
         let message = SocketMessage.RichMessageResponse(id: event.itemId + "-\(index)", kind: kind, isTemporary: true)
         try await ensureContentSilentlySent(message, userID: userID, db: db)
@@ -298,7 +298,7 @@ private extension ChatServiceV2 {
           db: db
         )
       case .json(let index, let content):
-        guard let kind = try parseKind(from: content) else { continue }
+        let kind = try parseKind(from: content)
 
         logger.trace("Assistant Rich Content: \(content)")
 
@@ -312,7 +312,7 @@ private extension ChatServiceV2 {
     }
   }
 
-  func parseKind(from json: String) throws -> SocketMessage.RichMessageResponse.Kind? {
+  func parseKind(from json: String) throws -> SocketMessage.RichMessageResponse.Kind {
     let trimmedJSON = json.trimmingCharacters(in: .whitespacesAndNewlines)
     let data = trimmedJSON.data(using: .utf8) ?? Data()
 
@@ -342,7 +342,7 @@ private extension ChatServiceV2 {
     }
 
     logger.error("Could not parse JSON as Rich Message:\n\(json)\n")
-    return nil
+    return .invalid(json)
   }
 
   func handleNewGoals(data: Data) -> SocketMessage.RichMessageResponse.Kind? {

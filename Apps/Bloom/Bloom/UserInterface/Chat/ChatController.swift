@@ -242,46 +242,50 @@ private extension ChatController {
 
       self.queryAreas.removeAll()
 
-      let data: Data
+      var data: Data?
       var dbID: String?
       
       switch richContentMessage.kind {
       case .newGoals(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
       case .detectedFood(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(detectedFood: content)
         }
       case .logWeight(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(logWeight: content)
         }
       case .logPeriod(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(logPeriod: content)
         }
       case .logWater(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(logWater: content)
         }
       case .logBloodPressure(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(logBloodPressure: content)
         }
       case .logBowelMovement(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(logBowelMovement: content)
         }
       case .createWorkout(let content):
-        data = (try? JSONEncoder.bloomModel.encode(content)) ?? Data()
+        data = try? JSONEncoder.bloomModel.encode(content)
         // Workouts might need special handling - not auto-logging for now
+      case .invalid(let json):
+        TelemetryDeck.signal("Chat - Invalid JSON", parameters: ["json" : json])
       }
+
+      guard let data else { return }
 
       if richContentMessage.isTemporary {
         let inProgressMessage = InProgressMessage(id: richContentMessage.id, data: data)
