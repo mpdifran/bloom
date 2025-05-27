@@ -44,6 +44,21 @@ extension ChatViewModel {
     try modelContext.deleteAll(ChatMessage.self)
     try modelContext.save()
   }
+  
+  func maintainWebSocketConnection() async {
+    // Initial connection
+    await ChatController.shared.ensureWebSocketConnected()
+    
+    // Monitor for disconnections and reconnect
+    while !Task.isCancelled {
+      if await ChatController.shared.isDisconnected {
+        await ChatController.shared.reconnectWebSocket()
+      }
+      
+      // Check every 5 seconds
+      try? await Task.sleep(for: .seconds(5))
+    }
+  }
 }
 
 private extension ChatViewModel {

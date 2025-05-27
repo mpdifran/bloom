@@ -109,6 +109,24 @@ final actor ChatController: ObservableObject {
 }
 
 extension ChatController {
+  
+  var isDisconnected: Bool {
+    webSocketHandle == nil
+  }
+  
+  func ensureWebSocketConnected() async {
+    if webSocketHandle == nil {
+      _ = await createOrGetWebSocketHandle()
+    }
+  }
+  
+  func reconnectWebSocket() async {
+    // Clean up existing connection
+    onDisconnection()
+    
+    // Create new connection
+    _ = await createOrGetWebSocketHandle()
+  }
 
   func send(message: String, image: UIImage?) async throws {
     let imageData = image?.resized(toWidth: 300)?.pngData()
@@ -282,7 +300,7 @@ private extension ChatController {
         data = try? JSONEncoder.bloomModel.encode(content)
         // Workouts might need special handling - not auto-logging for now
       case .invalid(let json):
-        TelemetryDeck.signal("Chat - Invalid JSON", parameters: ["json" : json])
+        TelemetryDeck.signal("Chat - Invalid JSON", parameters: ["json": json])
       }
 
       guard let data else { return }

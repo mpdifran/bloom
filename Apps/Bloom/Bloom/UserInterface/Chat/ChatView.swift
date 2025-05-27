@@ -133,6 +133,9 @@ struct ChatView: View {
       .animation(.default, value: viewModel.assistantIsTyping)
       .navigationTitle("Bud")
       .navigationBarTitleDisplayMode(.inline)
+      .task {
+        await viewModel.maintainWebSocketConnection()
+      }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button("Done") {
