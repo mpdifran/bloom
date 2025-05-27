@@ -20,8 +20,16 @@ struct ChatView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
 
-  @Query(sort: \ChatMessage.date)
-  private var chatMessages: [ChatMessage]
+  @Query private var chatMessages: [ChatMessage]
+  
+  init() {
+    var descriptor = FetchDescriptor<ChatMessage>(
+      sortBy: [SortDescriptor(\.date, order: .reverse)]
+    )
+    descriptor.fetchLimit = 20
+    
+    _chatMessages = Query(descriptor, animation: .default)
+  }
 
   var body: some View {
     NavigationStack {
@@ -33,7 +41,7 @@ struct ChatView: View {
           } else {
             ScrollView {
               LazyVStack(spacing: 6) {
-                ForEach(chatMessages) { chatMessage in
+                ForEach(chatMessages.reversed()) { chatMessage in
                   chatCell(for: chatMessage)
                 }
 
