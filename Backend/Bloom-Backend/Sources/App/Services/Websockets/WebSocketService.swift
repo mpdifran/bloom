@@ -46,6 +46,17 @@ extension WebSocketService {
   ) {
     chatSockets[userID] = socket
 
+    // Flush any cached streaming content when reconnected
+    Task {
+      do {
+        if version == .v2 {
+          try await application.chatServiceV2.flushCachedStreamingContent(userID: userID)
+        }
+      } catch {
+        logger.error("Failed to flush cached content for user \(userID): \(error)")
+      }
+    }
+
     // TODO: Poll current run status, and send typing indicator if Run is active
 
     let db = createDB(for: socket)

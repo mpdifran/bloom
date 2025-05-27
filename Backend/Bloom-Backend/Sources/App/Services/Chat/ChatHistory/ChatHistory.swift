@@ -111,6 +111,56 @@ extension ChatHistory {
     let key = RedisKey.functionCallIDs(userID: userID)
     _ = try await redis.delete(key).get()
   }
+  
+  func cacheStreamingContent<Content>(
+    _ content: Content,
+    userID: UserIdentifier
+  ) async throws where Content: Encodable {
+    let key = RedisKey.streamingContent(userID: userID)
+    let data = try encoder.encode(content)
+    
+    // Push to Redis list (queue)
+    _ = try await redis.rpush([data], into: key).get()
+    
+    // Set expiration to 1 hour
+    _ = try await redis.expire(key, after: .seconds(3600)).get()
+  }
+  
+  func flushCachedStreamingContent(
+    userID: UserIdentifier
+  ) async throws -> [(messageChunk: SocketMessage.MessageChunkResponse?, richMessage: SocketMessage.RichMessageResponse?)] {
+    let key = RedisKey.streamingContent(userID: userID)
+    
+    // Get all cached messages
+    let cachedData = try await redis.lrange(from: key, firstIndex: 0, lastIndex: -1).get()
+    
+    guard !cachedData.isEmpty else { return [] }
+    
+    // Parse cached messages
+    var messages: [(messageChunk: SocketMessage.MessageChunkResponse?, richMessage: SocketMessage.RichMessageResponse?)] = []
+    
+    for value in cachedData {
+      guard let data = value.data else { continue }
+      
+      if let messageChunk = try? decoder.decode(SocketMessage.MessageChunkResponse.self, from: data) {
+        messages.append((messageChunk: messageChunk, richMessage: nil))
+      } else if let richMessage = try? decoder.decode(SocketMessage.RichMessageResponse.self, from: data) {
+        messages.append((messageChunk: nil, richMessage: richMessage))
+      }
+    }
+    
+    // Clear the cache
+    _ = try await redis.delete(key).get()
+    
+    return messages
+  }
+  
+  func clearStreamingContent(
+    userID: UserIdentifier
+  ) async throws {
+    let key = RedisKey.streamingContent(userID: userID)
+    _ = try await redis.delete(key).get()
+  }
 }
 
 private extension RedisKey {
@@ -125,5 +175,9 @@ private extension RedisKey {
   
   static func functionCallIDs(userID: UserIdentifier) -> RedisKey {
     RedisKey("chat_function_call_ids:\(userID)")
+  }
+  
+  static func streamingContent(userID: UserIdentifier) -> RedisKey {
+    RedisKey("chat_streaming_content:\(userID)")
   }
 }

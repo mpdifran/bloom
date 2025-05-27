@@ -59,6 +59,23 @@ extension ChatServiceV2 {
     }
     return true
   }
+  
+  func flushCachedStreamingContent(userID: UserIdentifier) async throws {
+    let messages = try await chatHistory.flushCachedStreamingContent(userID: userID)
+    
+    guard !messages.isEmpty else { return }
+    
+    logger.debug("Flushing \(messages.count) cached messages for user \(userID)")
+    
+    // Send all cached messages
+    for message in messages {
+      if let messageChunk = message.messageChunk {
+        _ = try await sendSocketContentIfAvailable(messageChunk, userID: userID)
+      } else if let richMessage = message.richMessage {
+        _ = try await sendSocketContentIfAvailable(richMessage, userID: userID)
+      }
+    }
+  }
 }
 
 // MARK: - Incoming Message Handlers
@@ -261,12 +278,18 @@ private extension ChatServiceV2 {
       switch data {
       case .chunk(let index, let chunk):
         let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId + "-\(index)", chunk: chunk)
-        try await sendSocketContentIfAvailable(messageChunk, userID: userID)
+        let wasSent = try await sendSocketContentIfAvailable(messageChunk, userID: userID)
+        if !wasSent {
+          try await chatHistory.cacheStreamingContent(messageChunk, userID: userID)
+        }
       case .json(let index, let json):
         let kind = try parseKind(from: json)
 
         let message = SocketMessage.RichMessageResponse(id: event.itemId + "-\(index)", kind: kind, isTemporary: true)
-        try await ensureContentSilentlySent(message, userID: userID, db: db)
+        let wasSent = try await sendSocketContentIfAvailable(message, userID: userID)
+        if !wasSent {
+          try await chatHistory.cacheStreamingContent(message, userID: userID)
+        }
 
       case .collectingJSON:
         try await sendIsAssistantTyping(isTyping: true, userID: userID)
@@ -293,7 +316,7 @@ private extension ChatServiceV2 {
         try await ensureContentSent(
           response,
           title: "Bud",
-          message: event.text,
+          message: content.truncated(to: 200),
           userID: userID,
           db: db
         )
@@ -310,6 +333,9 @@ private extension ChatServiceV2 {
         try await ensureContentSilentlySent(response, userID: userID, db: db)
       }
     }
+    
+    // Clear any cached streaming content since this message is now complete
+    try await chatHistory.clearStreamingContent(userID: userID)
   }
 
   func parseKind(from json: String) throws -> SocketMessage.RichMessageResponse.Kind {
@@ -477,11 +503,12 @@ private extension ChatServiceV2 {
   func sendSocketContentIfAvailable<Content>(
     _ content: Content,
     userID: UserIdentifier
-  ) async throws where Content: Encodable {
+  ) async throws -> Bool where Content: Encodable {
     guard let socket = await socket(for: userID) else {
-      return
+      return false
     }
     try socket.sendContent(content)
+    return true
   }
 
   func sendIsAssistantTyping(
@@ -489,7 +516,7 @@ private extension ChatServiceV2 {
     userID: UserIdentifier
   ) async throws {
     let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
-    try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
+    _ = try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
   }
 
   func sendResponseCompleted(userID: UserIdentifier, db: any Database) async throws {
