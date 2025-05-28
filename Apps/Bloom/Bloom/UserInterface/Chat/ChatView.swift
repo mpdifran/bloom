@@ -40,13 +40,16 @@ struct ChatView: View {
         .navigationTitle("Bud")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbarContent }
+        .safeAreaInset(edge: .bottom) {
+          ChatMessageBar()
+        }
     }
+    .presentationCompactAdaptation(.fullScreenCover)
   }
   
   private var chatContentWithModifiers: some View {
     chatContent
       .groupedBackground()
-      .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
       .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
       .sheet($presentedSheet)
       .alert(error: $viewModel.error)
@@ -66,8 +69,7 @@ struct ChatView: View {
   private var toolbarContent: some ToolbarContent {
     ToolbarItem(placement: .cancellationAction) {
       Button("Done") {
-        tabController.isShowingChat = false
-        tabController.isChatBarFocused = false
+        dismiss()
       }
       .bold()
     }
@@ -95,7 +97,6 @@ struct ChatView: View {
       }
       .modifier(ScrollBehaviorModifier(
         scrollViewProxy: scrollViewProxy,
-        isChatBarFocused: tabController.isChatBarFocused,
         messageCount: chatMessages.count
       ))
     }
@@ -123,20 +124,12 @@ struct ChatView: View {
 
 struct ScrollBehaviorModifier: ViewModifier {
   let scrollViewProxy: ScrollViewProxy
-  let isChatBarFocused: Bool
   let messageCount: Int
   
   @State private var lastMessageCount = 0
   
   func body(content: Content) -> some View {
     content
-      .onChange(of: isChatBarFocused) { _, newValue in
-        guard newValue else { return }
-        
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-        }
-      }
       .onChange(of: messageCount) { oldCount, newCount in
         // Only scroll when new messages are added
         guard newCount > oldCount else { return }
