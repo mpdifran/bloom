@@ -171,6 +171,7 @@ private extension ChatCell {
         isCurrentUser: false,
         showTail: true
       )
+      .contentTransition(.opacity)
     }
   }
 
