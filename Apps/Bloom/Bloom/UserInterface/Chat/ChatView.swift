@@ -51,7 +51,7 @@ struct ChatView: View {
       .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
       .sheet($presentedSheet)
       .alert(error: $viewModel.error)
-      .animation(.default, value: cellBuilder.models.count)
+      .animation(.default, value: cellBuilder.models)
       .modifier(ChatUpdateModifier(
         chatMessages: chatMessages,
         inProgressMessages: viewModel.inProgressMessages,
@@ -141,8 +141,6 @@ struct ChatView: View {
 struct ScrollBehaviorModifier: ViewModifier {
   let scrollViewProxy: ScrollViewProxy
   let messages: [ChatMessage]
-
-  @State private var lastMessageCount = 0
   
   func body(content: Content) -> some View {
     content
