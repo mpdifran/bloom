@@ -82,25 +82,16 @@ final class ChatCellBuilder {
     // Update message ID set
     self.existingMessageIds = Set(messages.map { $0.id })
     
-    // Process in-progress messages
+    // Process in-progress messages - always create fresh models since they update frequently
     for inProgressMessage in inProgressMessages {
       if !existingMessageIds.contains(inProgressMessage.id) {
-        // Check cache first
-        if let cachedModel = cachedMessageModels[inProgressMessage.id],
-           case .inProgress(let cachedInProgress) = cachedModel.contentType,
-           cachedInProgress == inProgressMessage {
-          newModels.append(cachedModel)
-          usedCacheIds.insert(inProgressMessage.id)
-        } else {
-          // Create new model
-          let inProgressModel = ChatCellModel(
-            id: inProgressMessage.id,
-            contentType: .inProgress(inProgressMessage)
-          )
-          newModels.append(inProgressModel)
-          cachedMessageModels[inProgressMessage.id] = inProgressModel
-          usedCacheIds.insert(inProgressMessage.id)
-        }
+        // Always create new model for in-progress messages (no caching)
+        let inProgressModel = ChatCellModel(
+          id: inProgressMessage.id,
+          contentType: .inProgress(inProgressMessage)
+        )
+        newModels.append(inProgressModel)
+        // Don't cache in-progress messages since they're constantly updating
       }
     }
     
