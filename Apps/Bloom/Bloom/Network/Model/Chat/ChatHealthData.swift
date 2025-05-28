@@ -75,7 +75,7 @@ extension ChatHealthData {
   }
 
   struct FoodLogDay: SendableNetworkModel {
-    let date: Date
+    let date: String
     let breakfast: [FoodItem]
     let lunch: [FoodItem]
     let dinner: [FoodItem]

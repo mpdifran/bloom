@@ -346,7 +346,7 @@ extension ChatVitalConverter {
         else { return }
 
         let dayLog = ChatHealthData.FoodLogDay(
-          date: date,
+          date: DateFormatter.justDateShort.string(from: date),
           breakfast: breakfast,
           lunch: lunch,
           dinner: dinner,

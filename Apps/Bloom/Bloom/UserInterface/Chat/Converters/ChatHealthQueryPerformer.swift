@@ -20,7 +20,16 @@ final class ChatHealthQueryPerformer: Sendable {
   private let bowelMovementModelActor = BowelMovementModelActor.standard()
   private let modelActor = HabitModelActor.standard()
 
-  private let encoder = JSONEncoder.bloomModel
+  private let encoder: JSONEncoder = {
+    let encoder = JSONEncoder()
+    encoder.keyEncodingStrategy = .convertToSnakeCase
+    encoder.dateEncodingStrategy = .custom { date, encoder in
+      var container = encoder.singleValueContainer()
+      let dateString = DateFormatter.dateTimeMediumWithTimeZone.string(from: date)
+      try container.encode(dateString)
+    }
+    return encoder
+  }()
 }
 
 extension ChatHealthQueryPerformer {
@@ -104,7 +113,7 @@ private extension ChatHealthQueryPerformer {
     for dailyQuantity in dailyQuantities {
       await samples.append(
         ChatHealthMetricData.Sample(
-          date: DateFormatter.justDateShort.string(from: dailyQuantity.date),
+          date: dailyQuantity.date,
           value: dailyQuantity.quantity.displayString(for: unit)
         )
       )
@@ -158,7 +167,7 @@ private extension ChatHealthQueryPerformer {
         else { return }
 
         let dayLog = ChatHealthData.FoodLogDay(
-          date: date,
+          date: DateFormatter.justDateShort.string(from: date),
           breakfast: breakfast,
           lunch: lunch,
           dinner: dinner,

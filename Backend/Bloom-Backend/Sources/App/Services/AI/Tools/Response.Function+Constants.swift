@@ -20,8 +20,8 @@ extension Response.Function {
           arrayOf: .object(
             Schema.Object(
               properties: [
-                "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z)"),
-                "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z)"),
+                "startDate" : Schema.Parameter(type: .string, description: "The start date of the query in ISO-8601 format (e.g., 2025-01-03T12:00:00Z). This time must be in the user's timezone."),
+                "endDate" : Schema.Parameter(type: .string, description: "The end date of the query in ISO-8601 format (e.g., 2025-04-03T12:00:00Z). This time must be in the user's timezone."),
                 "dataType": Schema.Parameter(
                   enum: SocketMessage.QueryDataType.self,
                   description: "The type of health data to query"

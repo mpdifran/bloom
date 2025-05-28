@@ -13,7 +13,7 @@ struct ChatHealthMetricData: SendableNetworkModel {
 
 extension ChatHealthMetricData {
   struct Sample: SendableNetworkModel {
-    let date: String
+    let date: Date
     let value: String
   }
 }

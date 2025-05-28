@@ -114,7 +114,6 @@ struct ChatView: View {
 private extension ChatView {
 
   func updateCells() {
-    print("Updating Cells")
     cellBuilder.build(
       messages: chatMessages,
       inProgressMessages: viewModel.inProgressMessages,
