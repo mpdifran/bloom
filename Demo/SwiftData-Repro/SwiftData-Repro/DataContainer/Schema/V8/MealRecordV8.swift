@@ -5,7 +5,6 @@
 //  Created by Mark DiFranco on 2025-02-12.
 //
 
-
 import SwiftData
 
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit

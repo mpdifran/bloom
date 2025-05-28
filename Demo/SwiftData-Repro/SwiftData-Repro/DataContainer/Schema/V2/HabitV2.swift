@@ -18,8 +18,8 @@ extension SchemaV2 {
     public var value: Double = 0
     public var unitString: String = ""
     public var startDate: Date = Date.now
-    public var endDate: Date? = nil
-    public var lastNotificationDate: Date? = nil
+    public var endDate: Date?
+    public var lastNotificationDate: Date?
     public var isSuggested: Bool = false
     public var isUserEdited: Bool = false
     public var vitalKind: VitalModel.Kind?

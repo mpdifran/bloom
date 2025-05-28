@@ -17,6 +17,8 @@ struct ChatView: View {
   @State private var cellBuilder = ChatCellBuilder()
   @State private var presentedSheet: AnyView?
   @State private var isAtBottom = false
+  @State private var lastMessageCount = 0
+  @State private var updateTask: Task<Void, Never>?
 
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
@@ -34,92 +36,170 @@ struct ChatView: View {
 
   var body: some View {
     NavigationStack {
-      ScrollViewReader { scrollViewProxy in
-        ZStack(alignment: .bottom) {
-          if cellBuilder.models.isEmpty {
-            ChatPromptsView()
-              .zStackAlignment(.bottom)
-          } else {
-            ChatLayout {
-              ForEach(cellBuilder.models) { model in
-                ChatCell(
-                  model: model
-                )
-                .id(model.id)
-                .transition(.blurReplace)
-              }
-
-              bottomAnchorView
-            }
-            .scrollDismissesKeyboard(.interactively)
-          }
-
-          scrollToBottomButton {
-            withAnimation {
-              scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-            }
-          }
-        }
-        .onChange(of: tabController.isChatBarFocused) { _, newValue in
-          guard newValue else { return }
-
-          withAnimation {
-            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-          }
-        }
-        .onChange(of: chatMessages) { _, _ in
-          withAnimation {
-            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-          }
-        }
-      }
+      chatContentWithModifiers
+    }
+    .navigationTitle("Bud")
+    .navigationBarTitleDisplayMode(.inline)
+    .toolbar { toolbarContent }
+  }
+  
+  private var chatContentWithModifiers: some View {
+    chatContent
       .groupedBackground()
       .safeAreaPadding(.bottom, tabController.chatLauncherSafeAreaInset)
       .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
       .sheet($presentedSheet)
       .alert(error: $viewModel.error)
-      .animation(.default, value: cellBuilder.models)
-      .onChange(of: chatMessages) { updateCells() }
-      .onChange(of: viewModel.inProgressMessages) { updateCells() }
-      .onChange(of: viewModel.assistantTypingStatus) { updateCells() }
-      .onChange(of: viewModel.assistantIsTyping) { updateCells() }
-      .navigationTitle("Bud")
-      .navigationBarTitleDisplayMode(.inline)
-      .task {
-        await viewModel.maintainWebSocketConnection()
+      .animation(.default, value: cellBuilder.models.count)
+      .modifier(ChatUpdateModifier(
+        chatMessages: chatMessages,
+        inProgressMessages: viewModel.inProgressMessages,
+        assistantTypingStatus: viewModel.assistantTypingStatus,
+        assistantIsTyping: viewModel.assistantIsTyping,
+        updateCells: updateCells
+      ))
+      .task { await viewModel.maintainWebSocketConnection() }
+      .task { updateCells() }
+  }
+  
+  @ToolbarContentBuilder
+  private var toolbarContent: some ToolbarContent {
+    ToolbarItem(placement: .cancellationAction) {
+      Button("Done") {
+        tabController.isShowingChat = false
+        tabController.isChatBarFocused = false
       }
-      .task {
-        updateCells()
-      }
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            tabController.isShowingChat = false
-            tabController.isChatBarFocused = false
-          }
-          .bold()
-        }
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            presentedSheet = ChatSettingsView().asAny
-          } label: {
-            Label("Settings", systemSymbol: .gear)
-          }
-        }
+      .bold()
+    }
+    
+    ToolbarItem(placement: .primaryAction) {
+      Button {
+        presentedSheet = ChatSettingsView().asAny
+      } label: {
+        Label("Settings", systemSymbol: .gear)
       }
     }
+  }
+  
+  @ViewBuilder
+  private var chatContent: some View {
+    ScrollViewReader { scrollViewProxy in
+      ZStack(alignment: .bottom) {
+        messageList
+        
+        scrollToBottomButton {
+          withAnimation {
+            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+          }
+        }
+      }
+      .modifier(ScrollBehaviorModifier(
+        scrollViewProxy: scrollViewProxy,
+        isChatBarFocused: tabController.isChatBarFocused,
+        messageCount: chatMessages.count
+      ))
+    }
+  }
+  
+  @ViewBuilder
+  private var messageList: some View {
+    if cellBuilder.models.isEmpty {
+      ChatPromptsView()
+        .zStackAlignment(.bottom)
+    } else {
+      ChatLayout {
+        ForEach(cellBuilder.models) { model in
+          ChatCell(model: model)
+            .id(model.id)
+            .transition(.blurReplace)
+        }
+        
+        bottomAnchorView
+      }
+      .scrollDismissesKeyboard(.interactively)
+    }
+  }
+}
+
+struct ScrollBehaviorModifier: ViewModifier {
+  let scrollViewProxy: ScrollViewProxy
+  let isChatBarFocused: Bool
+  let messageCount: Int
+  
+  @State private var lastMessageCount = 0
+  
+  func body(content: Content) -> some View {
+    content
+      .onChange(of: isChatBarFocused) { _, newValue in
+        guard newValue else { return }
+        
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+        }
+      }
+      .onChange(of: messageCount) { oldCount, newCount in
+        // Only scroll when new messages are added
+        guard newCount > oldCount else { return }
+        
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+        }
+      }
+  }
+}
+
+struct ChatUpdateModifier: ViewModifier {
+  let chatMessages: [ChatMessage]
+  let inProgressMessages: [ChatController.InProgressMessage]
+  let assistantTypingStatus: String?
+  let assistantIsTyping: Bool
+  let updateCells: () -> Void
+  
+  func body(content: Content) -> some View {
+    content
+      .onChange(of: chatMessages) { _, _ in
+        Task { @MainActor in
+          updateCells()
+        }
+      }
+      .onChange(of: inProgressMessages) { _, _ in
+        Task { @MainActor in
+          updateCells()
+        }
+      }
+      .onChange(of: assistantTypingStatus) { _, _ in
+        Task { @MainActor in
+          updateCells()
+        }
+      }
+      .onChange(of: assistantIsTyping) { _, _ in
+        Task { @MainActor in
+          updateCells()
+        }
+      }
   }
 }
 
 private extension ChatView {
 
   func updateCells() {
-    cellBuilder.build(
-      messages: chatMessages,
-      inProgressMessages: viewModel.inProgressMessages,
-      statusText: viewModel.assistantTypingStatus,
-      assistantIsTyping: viewModel.assistantIsTyping
-    )
+    // Cancel any pending update
+    updateTask?.cancel()
+    
+    // Schedule a new update with a small delay to batch rapid changes
+    updateTask = Task { @MainActor in
+      // Small delay to batch multiple rapid updates
+      try? await Task.sleep(nanoseconds: 10_000_000) // 10ms
+      
+      guard !Task.isCancelled else { return }
+      
+      cellBuilder.build(
+        messages: chatMessages,
+        inProgressMessages: viewModel.inProgressMessages,
+        statusText: viewModel.assistantTypingStatus,
+        assistantIsTyping: viewModel.assistantIsTyping
+      )
+    }
   }
 
   var bottomAnchorView: some View {

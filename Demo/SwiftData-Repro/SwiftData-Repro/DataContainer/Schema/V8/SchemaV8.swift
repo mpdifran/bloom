@@ -17,6 +17,6 @@ public enum SchemaV8: VersionedSchema {
     SchemaV8.FoodItemLog.self,
     SchemaV8.FoodItemServing.self,
     SchemaV8.MealRecord.self,
-    SchemaV8.MealItemRecord.self,
+    SchemaV8.MealItemRecord.self
   ]
 }

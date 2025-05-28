@@ -18,7 +18,7 @@ extension SchemaV5 {
     public var date: Date = Date.distantPast
     public var meal: Meal = Meal.breakfast
     public var numberOfServings: Double = 0
-    @Relationship public var foodItem: SchemaV5.FoodItemRecord? = nil
+    @Relationship public var foodItem: SchemaV5.FoodItemRecord?
 
     public init(
       id: String,

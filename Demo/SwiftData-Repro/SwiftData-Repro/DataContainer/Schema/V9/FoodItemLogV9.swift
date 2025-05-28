@@ -15,14 +15,14 @@ extension SchemaV9 {
   @Model
   public final class FoodItemLog: Identifiable, Hashable {
     public var id: String = ""
-    public var name: String? = nil
+    public var name: String?
     public var date: Date = Date.distantPast
     public var mealRawValue: String = Meal.breakfast.rawValue
     public var numberOfServings: Double = 0
 
-    @Attribute(.externalStorage) public var imageData: Data? = nil
+    @Attribute(.externalStorage) public var imageData: Data?
 
-    @Relationship public var mealItem: MealRecord? = nil
+    @Relationship public var mealItem: MealRecord?
 
     @Relationship public var foodItemServings: [FoodItemServing]? = []
 

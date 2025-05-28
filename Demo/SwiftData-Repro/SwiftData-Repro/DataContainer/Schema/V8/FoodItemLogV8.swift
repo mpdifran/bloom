@@ -19,7 +19,7 @@ extension SchemaV8 {
     public var mealRawValue: String = Meal.breakfast.rawValue
     public var numberOfServings: Double = 0
 
-    @Relationship public var mealItem: MealRecord? = nil
+    @Relationship public var mealItem: MealRecord?
 
     @Relationship public var foodItemServings: [FoodItemServing]? = []
 

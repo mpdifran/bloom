@@ -16,9 +16,9 @@ extension SchemaV6 {
     public var id: String = ""
     public var numberOfServings: Double = 0
 
-    @Relationship public var foodItem: FoodItemRecord? = nil
+    @Relationship public var foodItem: FoodItemRecord?
 
-    @Relationship public var mealRecord: MealRecord? = nil
+    @Relationship public var mealRecord: MealRecord?
 
     init(
       id: String,

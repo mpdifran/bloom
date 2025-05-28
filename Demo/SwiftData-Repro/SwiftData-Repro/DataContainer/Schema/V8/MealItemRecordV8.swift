@@ -5,7 +5,6 @@
 //  Created by Mark DiFranco on 2025-02-12.
 //
 
-
 import SwiftData
 
 // https://www.hackingwithswift.com/books/ios-swiftui/syncing-swiftdata-with-cloudkit
@@ -17,9 +16,9 @@ extension SchemaV8 {
     public var id: String = ""
     public var numberOfServings: Double = 0
 
-    @Relationship public var foodItem: FoodItemRecord? = nil
+    @Relationship public var foodItem: FoodItemRecord?
 
-    @Relationship public var mealRecord: MealRecord? = nil
+    @Relationship public var mealRecord: MealRecord?
 
     init(
       id: String,

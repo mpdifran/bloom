@@ -16,7 +16,7 @@ extension SchemaV9 {
   public final class MealRecord: Identifiable, Hashable {
     public var id: String = ""
     public var name: String = ""
-    @Attribute(.externalStorage) public var imageData: Data? = nil
+    @Attribute(.externalStorage) public var imageData: Data?
 
     @Relationship(inverse: \MealItemRecord.mealRecord)
     public var items: [MealItemRecord]? = []

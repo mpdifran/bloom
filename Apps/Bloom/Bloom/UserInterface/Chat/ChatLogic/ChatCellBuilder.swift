@@ -27,82 +27,130 @@ struct ChatCellModel: Identifiable, Equatable {
 final class ChatCellBuilder {
   private(set) var models: [ChatCellModel] = []
   private var existingMessageIds: Set<String> = []
-
+  private var cachedMessageModels: [String: ChatCellModel] = [:]
+  private var lastStatusText: String?
+  private var lastTypingState: Bool = false
+  
   func build(
     messages: [ChatMessage],
     inProgressMessages: [ChatController.InProgressMessage],
     statusText: String?,
     assistantIsTyping: Bool
   ) {
-    var newModels: [ChatCellModel] = []
-    newModels.reserveCapacity(messages.count + inProgressMessages.count + 2)
-
     // Handle empty state
     if messages.isEmpty && inProgressMessages.isEmpty && !assistantIsTyping {
       let promptsModel = ChatCellModel(
         id: "prompts",
         contentType: .prompts
       )
-      newModels.append(promptsModel)
       
       // Only update if actually different
-      if self.models != newModels {
-        self.models = newModels
+      if self.models.count != 1 || self.models.first != promptsModel {
+        self.models = [promptsModel]
         self.existingMessageIds.removeAll()
+        self.cachedMessageModels.removeAll()
       }
       return
     }
-
-    // Build set of message IDs for duplicate checking
-    var messageIds = Set<String>()
-    messageIds.reserveCapacity(messages.count)
     
-    // Add regular messages (reverse since query returns newest first)
-    for message in messages.reversed() {
-      messageIds.insert(message.id)
-      let messageModel = ChatCellModel(
-        id: message.id,
-        contentType: .message(message)
-      )
-      newModels.append(messageModel)
-    }
+    // Start building new models array
+    var newModels: [ChatCellModel] = []
+    newModels.reserveCapacity(messages.count + inProgressMessages.count + 2)
     
-    // Update our cached set of IDs
-    self.existingMessageIds = messageIds
+    // Track which cached models are still valid
+    var usedCacheIds = Set<String>()
     
-    // Add in-progress messages (only if not duplicates)
-    for inProgressMessage in inProgressMessages {
-      if !messageIds.contains(inProgressMessage.id) {
-        let inProgressModel = ChatCellModel(
-          id: inProgressMessage.id,
-          contentType: .inProgress(inProgressMessage)
+    // Process regular messages (reverse since query returns newest first)
+    let reversedMessages = messages.reversed()
+    for message in reversedMessages {
+      // Check if we have a cached model for this message
+      if let cachedModel = cachedMessageModels[message.id] {
+        newModels.append(cachedModel)
+        usedCacheIds.insert(message.id)
+      } else {
+        // Create new model and cache it
+        let messageModel = ChatCellModel(
+          id: message.id,
+          contentType: .message(message)
         )
-        newModels.append(inProgressModel)
+        newModels.append(messageModel)
+        cachedMessageModels[message.id] = messageModel
+        usedCacheIds.insert(message.id)
       }
     }
     
-    // Add status text if present
-    if let statusText = statusText {
+    // Update message ID set
+    self.existingMessageIds = Set(messages.map { $0.id })
+    
+    // Process in-progress messages
+    for inProgressMessage in inProgressMessages {
+      if !existingMessageIds.contains(inProgressMessage.id) {
+        // Check cache first
+        if let cachedModel = cachedMessageModels[inProgressMessage.id],
+           case .inProgress(let cachedInProgress) = cachedModel.contentType,
+           cachedInProgress == inProgressMessage {
+          newModels.append(cachedModel)
+          usedCacheIds.insert(inProgressMessage.id)
+        } else {
+          // Create new model
+          let inProgressModel = ChatCellModel(
+            id: inProgressMessage.id,
+            contentType: .inProgress(inProgressMessage)
+          )
+          newModels.append(inProgressModel)
+          cachedMessageModels[inProgressMessage.id] = inProgressModel
+          usedCacheIds.insert(inProgressMessage.id)
+        }
+      }
+    }
+    
+    // Handle status text - only update if changed
+    if let statusText = statusText, statusText != lastStatusText {
       let statusModel = ChatCellModel(
-        id: "status-\(statusText.hashValue)",
+        id: "status-text",
         contentType: .statusText(statusText)
       )
       newModels.append(statusModel)
+      lastStatusText = statusText
+    } else if statusText == nil && lastStatusText != nil {
+      lastStatusText = nil
+    } else if statusText == lastStatusText {
+      // Reuse existing status model if text hasn't changed
+      if let existingStatusModel = models.first(where: { $0.id == "status-text" }) {
+        newModels.append(existingStatusModel)
+      }
     }
-
-    // Add typing indicator if needed
-    if inProgressMessages.isEmpty && assistantIsTyping {
+    
+    // Handle typing indicator - only update if state changed
+    let shouldShowTyping = inProgressMessages.isEmpty && assistantIsTyping
+    if shouldShowTyping && !lastTypingState {
       let typingIndicatorModel = ChatCellModel(
         id: "typing-indicator",
         contentType: .typingIndicator
       )
       newModels.append(typingIndicatorModel)
+      lastTypingState = true
+    } else if shouldShowTyping && lastTypingState {
+      // Reuse existing typing indicator
+      if let existingTypingModel = models.first(where: { $0.id == "typing-indicator" }) {
+        newModels.append(existingTypingModel)
+      }
+    } else {
+      lastTypingState = false
     }
-
+    
+    // Clean up unused cache entries
+    cachedMessageModels = cachedMessageModels.filter { usedCacheIds.contains($0.key) }
+    
     // Only update if the models have actually changed
-    if self.models != newModels {
+    if !modelsAreEqual(self.models, newModels) {
       self.models = newModels
     }
+  }
+  
+  private func modelsAreEqual(_ lhs: [ChatCellModel], _ rhs: [ChatCellModel]) -> Bool {
+    guard lhs.count == rhs.count else { return false }
+    return zip(lhs, rhs).allSatisfy { $0 == $1 }
   }
 }
 

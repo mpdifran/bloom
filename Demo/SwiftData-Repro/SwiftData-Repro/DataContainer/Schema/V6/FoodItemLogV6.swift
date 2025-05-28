@@ -19,9 +19,9 @@ extension SchemaV6 {
     public var meal: Meal = Meal.breakfast
     public var numberOfServings: Double = 0
 
-    @Relationship public var foodItem: SchemaV6.FoodItemRecord? = nil
+    @Relationship public var foodItem: SchemaV6.FoodItemRecord?
 
-    @Relationship public var mealItem: MealRecord? = nil
+    @Relationship public var mealItem: MealRecord?
 
     @Relationship public var foodItemServings: [FoodItemServing]? = []
 

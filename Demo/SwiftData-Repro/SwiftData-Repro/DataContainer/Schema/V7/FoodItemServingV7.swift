@@ -16,7 +16,7 @@ extension SchemaV7 {
     public var id: String = ""
     public var numberOfServings: Double = 0
 
-    @Relationship public var foodItem: FoodItemRecord? = nil
+    @Relationship public var foodItem: FoodItemRecord?
 
     @Relationship(inverse: \FoodItemLog.foodItemServings)
     public var foodItemLog: FoodItemLog?
