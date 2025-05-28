@@ -147,7 +147,8 @@ extension ChatHealthData {
   }
 
   struct HeartRateZoneWorkoutSample: SendableNetworkModel {
-    let date: Date
+    let start: Date
+    let end: Date
     let workout: String
     let workoutDuration: Quantity
     let zone1Duration: Quantity
@@ -175,8 +176,8 @@ extension ChatHealthData {
   }
 
   struct SleepDay: SendableNetworkModel {
-    let startDate: Date
-    let endDate: Date
+    let start: Date
+    let end: Date
     let deepSleep: Quantity?
     let coreSleep: Quantity?
     let remSleep: Quantity?
@@ -480,6 +481,8 @@ extension ChatHealthData {
 extension ChatHealthData {
   struct Workout: SendableNetworkModel {
     let name: String
+    let start: Date
+    let end: Date
     let duration: String
     let activeEnergy: String
     let totalEnergy: String

@@ -214,7 +214,8 @@ extension ChatVitalConverter {
 
     let samples = heartRateReports.map {
       ChatHealthData.HeartRateZoneWorkoutSample(
-        date: $0.workout.startDate,
+        start: $0.workout.startDate,
+        end: $0.workout.endDate,
         workout: $0.workout.workoutActivityType.name,
         workoutDuration: $0.heartZoneDistribution.totalDuration.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),
         zone1Duration: $0.heartZoneDistribution.zone1.chatQuantity(for: .minute(), numberFormatter: .noDecimalPlaces),
@@ -488,8 +489,8 @@ extension ChatVitalConverter {
       }
 
       return ChatHealthData.SleepDay(
-        startDate: sleepAnalysis.startDate,
-        endDate: sleepAnalysis.endDate,
+        start: sleepAnalysis.startDate,
+        end: sleepAnalysis.endDate,
         deepSleep: sleepAnalysis.hasDetailedSleepCategories ? ChatHealthData.Quantity(value: sleepAnalysis.deepSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
         coreSleep: sleepAnalysis.hasDetailedSleepCategories ? ChatHealthData.Quantity(value: sleepAnalysis.coreSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
         remSleep: sleepAnalysis.hasDetailedSleepCategories ? ChatHealthData.Quantity(value: sleepAnalysis.remSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
