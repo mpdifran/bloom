@@ -53,7 +53,7 @@ struct ChatLauncherView: View {
     .padding()
     .background {
       RoundedRectangle(cornerRadius: 40)
-        .fill(.background.secondary)
+        .fill(.ultraThinMaterial)
         .ignoresSafeArea(edges: .bottom)
     }
     .sensoryFeedback(.selection, trigger: selectionToggle)
