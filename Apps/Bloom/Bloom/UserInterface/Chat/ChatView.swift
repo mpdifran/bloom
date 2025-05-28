@@ -10,6 +10,7 @@ import SwiftUI
 import AppUI
 import SwiftData
 import DataContainer
+import UIKit
 
 struct ChatView: View {
 
@@ -40,9 +41,6 @@ struct ChatView: View {
         .navigationTitle("Bud")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbarContent }
-        .safeAreaInset(edge: .bottom) {
-          ChatMessageBar()
-        }
     }
     .presentationCompactAdaptation(.fullScreenCover)
   }
@@ -91,14 +89,32 @@ struct ChatView: View {
         
         scrollToBottomButton {
           withAnimation {
-            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+            scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
           }
         }
       }
+      .safeAreaInset(edge: .bottom) {
+        ChatMessageBar()
+      }
       .modifier(ScrollBehaviorModifier(
         scrollViewProxy: scrollViewProxy,
-        messageCount: chatMessages.count
+        messages: chatMessages
       ))
+      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
+        }
+      }
+      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
+        }
+      }
+      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+        withAnimation {
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
+        }
+      }
     }
   }
   
@@ -124,18 +140,15 @@ struct ChatView: View {
 
 struct ScrollBehaviorModifier: ViewModifier {
   let scrollViewProxy: ScrollViewProxy
-  let messageCount: Int
-  
+  let messages: [ChatMessage]
+
   @State private var lastMessageCount = 0
   
   func body(content: Content) -> some View {
     content
-      .onChange(of: messageCount) { oldCount, newCount in
-        // Only scroll when new messages are added
-        guard newCount > oldCount else { return }
-        
+      .onChange(of: messages) { _, _ in
         withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
+          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
         }
       }
   }

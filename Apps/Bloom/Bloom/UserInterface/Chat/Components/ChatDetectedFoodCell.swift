@@ -78,8 +78,6 @@ struct ChatDetectedFoodCell: View {
         logFoodButton
       }
       .cardContainer()
-
-      Spacer(minLength: 60)
     }
     .animation(.default, value: hasAddedFood)
     .padding(.horizontal)

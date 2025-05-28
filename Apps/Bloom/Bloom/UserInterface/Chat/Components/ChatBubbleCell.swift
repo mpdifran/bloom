@@ -26,12 +26,16 @@ public struct ChatBubbleCell: View {
   }
 
   public var body: some View {
-    ChatBubble(position: isCurrentUser ? .trailing : .leading,
-               showTail: showTail,
-               shouldFill: !isDirect,
-               foregroundStyle: foregroundColor,
-               backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)) {
+    ChatBubble(
+      position: isCurrentUser ? .trailing : .leading,
+      showTail: showTail,
+      shouldFill: !isDirect,
+      includePadding: isCurrentUser,
+      foregroundStyle: foregroundColor,
+      backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)
+    ) {
       Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
+        .fixedSize(horizontal: false, vertical: true)
     }
   }
 }

@@ -19,8 +19,6 @@ struct ChatUnknownContentCell: View {
         Spacer()
       }
       .cardContainer()
-
-      Spacer(minLength: 60)
     }
     .padding(.horizontal)
     .tint(.mutedYellow)

@@ -46,8 +46,6 @@ struct ChatRichContentWrapperCell: View {
           }
           .cardContainer()
           .padding(.leading)
-
-          Spacer(minLength: 60)
         }
       } else {
         if let goals {

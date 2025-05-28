@@ -103,8 +103,6 @@ struct ChatLogBowelMovementCell: View {
         .sensoryFeedback(.success, trigger: saveComplete)
       }
       .cardContainer()
-
-      Spacer(minLength: 60)
     }
     .padding(.horizontal)
     .tint(.brown)

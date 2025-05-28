@@ -88,8 +88,6 @@ struct ChatWorkoutPlanCell: View {
         .padding(.top)
       }
       .cardContainer()
-
-      Spacer(minLength: 60)
     }
     .padding(.horizontal)
     .tint(.green)

@@ -40,8 +40,6 @@ struct ChatGoalsCell: View {
           .padding(.top)
       }
       .cardContainer()
-
-      Spacer(minLength: 60)
     }
     .padding(.horizontal)
     .animation(.default, value: didAddGoals)
