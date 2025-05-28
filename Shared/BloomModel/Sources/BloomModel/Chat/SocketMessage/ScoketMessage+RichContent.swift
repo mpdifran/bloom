@@ -92,9 +92,9 @@ public extension SocketMessage {
     }
 
     public enum Duration: String, Codable, Equatable, Sendable, CaseIterable {
-      case lessThan5Min
-      case between5And10Min
-      case moreThan10Min
+      case lessThan5Min = "< 5 min"
+      case between5And10Min = "5 to 10 min"
+      case moreThan10Min = "> 10 min"
     }
   }
 
