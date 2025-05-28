@@ -78,7 +78,7 @@ struct GoodMorningView: View {
         .buttonStyle(.primary)
       }
       .navigationDestination(isPresented: $showSleepTodayView) {
-        SleepDayView()
+        SleepDayView(showsChatBar: false)
       }
       .navigationDestination(isPresented: $showMenstruationDetails) {
         MenstruationDetailView()
