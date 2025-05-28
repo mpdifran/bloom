@@ -30,6 +30,13 @@ public extension DateRange {
   func containsTodayDate() -> Bool {
     return Calendar.current.isDateInToday(end) || end > .now
   }
+
+  func extendToEndOfDay() -> DateRange {
+    DateRange(
+      start,
+      Calendar.current.endOfDay(for: end)
+    )
+  }
 }
 
 // MARK: Today

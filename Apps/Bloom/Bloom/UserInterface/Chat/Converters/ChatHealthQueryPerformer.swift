@@ -126,7 +126,7 @@ private extension ChatHealthQueryPerformer {
     var logs = [ChatHealthData.FoodLogDay]()
 
     await Calendar.current.asyncIterate(
-      dateRange: query.dateRange,
+      dateRange: query.dateRange.extendToEndOfDay(), // Food logs have hard coded times. Do this to make sure we capture everything within a day.
       by: DateComponents(day: 1)
     ) { [foodLogModelActor] (date) in
       do {
