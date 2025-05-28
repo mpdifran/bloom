@@ -134,7 +134,7 @@ private extension ChatLauncherView {
     HStack(alignment: .bottom) {
       if tabController.isShowingChat {
         ImagePicker(image: $image, presentedSheet: $presentedSheet) {
-          Image(systemSymbol: .cameraCircleFill)
+          Image(systemSymbol: .plusCircleFill)
             .foregroundStyle(.white, .tint)
             .font(.title)
             .frame(square: 24)
