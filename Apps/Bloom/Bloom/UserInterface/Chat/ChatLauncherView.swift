@@ -252,7 +252,6 @@ private extension ChatLauncherView {
 
     text = ""
     image = nil
-    isFocused = false
 
     do {
       try await ChatController.shared.send(message: textToSend, image: imageToSend)

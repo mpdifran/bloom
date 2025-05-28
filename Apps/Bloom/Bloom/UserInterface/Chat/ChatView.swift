@@ -36,7 +36,7 @@ struct ChatView: View {
     NavigationStack {
       ScrollViewReader { scrollViewProxy in
         ZStack(alignment: .bottom) {
-          if chatMessages.isEmpty {
+          if cellBuilder.models.isEmpty {
             ChatPromptsView()
               .zStackAlignment(.bottom)
           } else {
@@ -47,12 +47,6 @@ struct ChatView: View {
                 )
                 .id(model.id)
                 .transition(.blurReplace)
-              }
-
-              if viewModel.inProgressMessages.isEmpty && viewModel.assistantIsTyping {
-                TypingIndicatorCell(isDirect: false)
-                  .id("typing-indicator")
-                  .transition(.blurReplace)
               }
 
               bottomAnchorView
@@ -66,35 +60,14 @@ struct ChatView: View {
             }
           }
         }
-        .onChange(of: tabController.isChatBarFocused) { _, _ in
+        .onChange(of: tabController.isChatBarFocused) { _, newValue in
+          guard newValue else { return }
+
           withAnimation {
             scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
           }
         }
-        .onChange(of: viewModel.inProgressMessages) { _, newValue in
-          withAnimation {
-            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-          }
-          if newValue.isEmpty {
-            Task {
-              await Delay(300)
-              await MainActor.run {
-                scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-              }
-            }
-          }
-        }
-        .onChange(of: viewModel.assistantIsTyping) { _, _ in
-          withAnimation {
-            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-          }
-        }
-        .onChange(of: viewModel.assistantTypingStatus) { _, _ in
-          withAnimation {
-            scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
-          }
-        }
-        .onChange(of: chatMessages.count) { _, _ in
+        .onChange(of: chatMessages) { _, _ in
           withAnimation {
             scrollViewProxy.scrollTo("bottom-anchor", anchor: .top)
           }
@@ -141,6 +114,7 @@ struct ChatView: View {
 private extension ChatView {
 
   func updateCells() {
+    print("Updating Cells")
     cellBuilder.build(
       messages: chatMessages,
       inProgressMessages: viewModel.inProgressMessages,

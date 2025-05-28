@@ -243,6 +243,7 @@ private extension ChatController {
       self.inProgressMessagesIndex = 0
       self.internalInProgressMessages = []
       self.queryAreas.removeAll()
+      self.assistantIsTyping = false
 
     } else if let messageChunk = try? decoder.decode(SocketMessage.MessageChunkResponse.self, from: data) {
 

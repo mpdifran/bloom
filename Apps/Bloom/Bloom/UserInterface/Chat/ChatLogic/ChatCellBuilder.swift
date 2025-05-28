@@ -26,6 +26,7 @@ struct ChatCellModel: Identifiable, Equatable {
 @Observable
 final class ChatCellBuilder {
   private(set) var models: [ChatCellModel] = []
+  private var existingMessageIds: Set<String> = []
 
   func build(
     messages: [ChatMessage],
@@ -33,53 +34,75 @@ final class ChatCellBuilder {
     statusText: String?,
     assistantIsTyping: Bool
   ) {
-    var models: [ChatCellModel] = []
+    var newModels: [ChatCellModel] = []
+    newModels.reserveCapacity(messages.count + inProgressMessages.count + 2)
 
+    // Handle empty state
     if messages.isEmpty && inProgressMessages.isEmpty && !assistantIsTyping {
       let promptsModel = ChatCellModel(
         id: "prompts",
         contentType: .prompts
       )
-      models.append(promptsModel)
-      self.models = models
-      // Prompts is the empty state. Return early.
+      newModels.append(promptsModel)
+      
+      // Only update if actually different
+      if self.models != newModels {
+        self.models = newModels
+        self.existingMessageIds.removeAll()
+      }
       return
     }
 
-    for message in messages {
+    // Build set of message IDs for duplicate checking
+    var messageIds = Set<String>()
+    messageIds.reserveCapacity(messages.count)
+    
+    // Add regular messages (reverse since query returns newest first)
+    for message in messages.reversed() {
+      messageIds.insert(message.id)
       let messageModel = ChatCellModel(
         id: message.id,
         contentType: .message(message)
       )
-      models.append(messageModel)
-    }
-
-    for inProgressMessage in inProgressMessages {
-      let inProgressModel = ChatCellModel(
-        id: inProgressMessage.id,
-        contentType: .inProgress(inProgressMessage)
-      )
-      models.append(inProgressModel)
+      newModels.append(messageModel)
     }
     
+    // Update our cached set of IDs
+    self.existingMessageIds = messageIds
+    
+    // Add in-progress messages (only if not duplicates)
+    for inProgressMessage in inProgressMessages {
+      if !messageIds.contains(inProgressMessage.id) {
+        let inProgressModel = ChatCellModel(
+          id: inProgressMessage.id,
+          contentType: .inProgress(inProgressMessage)
+        )
+        newModels.append(inProgressModel)
+      }
+    }
+    
+    // Add status text if present
     if let statusText = statusText {
       let statusModel = ChatCellModel(
-        id: statusText,
+        id: "status-\(statusText.hashValue)",
         contentType: .statusText(statusText)
       )
-      models.append(statusModel)
+      newModels.append(statusModel)
     }
 
+    // Add typing indicator if needed
     if inProgressMessages.isEmpty && assistantIsTyping {
       let typingIndicatorModel = ChatCellModel(
         id: "typing-indicator",
         contentType: .typingIndicator
       )
-      models.append(typingIndicatorModel)
+      newModels.append(typingIndicatorModel)
     }
 
-
-    self.models = models
+    // Only update if the models have actually changed
+    if self.models != newModels {
+      self.models = newModels
+    }
   }
 }
 

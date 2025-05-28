@@ -13,13 +13,18 @@ private struct ChatVariadicView: _VariadicView_MultiViewRoot {
   /// 2. The entire ScrollView is then flipped upside down to correct the orientation.
   /// This creates the illusion of messages scrolling up from the bottom while maintaining proper layout.
   func body(children: _VariadicView.Children) -> some View {
+    let childrenArray = Array(children)
+    let reversedIndices = Array((0..<childrenArray.count).reversed())
+    
     List {
-      ForEach(children.reversed()) { child in
-        child
-          .flippedVertically()
-          .listRowBackground(Color.clear)
-          .listRowInsets(EdgeInsets())
-          .listRowSeparator(.hidden)
+      ForEach(reversedIndices, id: \.self) { index in
+        if index < childrenArray.count {
+          childrenArray[index]
+            .flippedVertically()
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
+        }
       }
     }
     .listStyle(.plain)
