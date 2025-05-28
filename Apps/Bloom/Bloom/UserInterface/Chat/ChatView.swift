@@ -37,10 +37,10 @@ struct ChatView: View {
   var body: some View {
     NavigationStack {
       chatContentWithModifiers
+        .navigationTitle("Bud")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbarContent }
     }
-    .navigationTitle("Bud")
-    .navigationBarTitleDisplayMode(.inline)
-    .toolbar { toolbarContent }
   }
   
   private var chatContentWithModifiers: some View {
