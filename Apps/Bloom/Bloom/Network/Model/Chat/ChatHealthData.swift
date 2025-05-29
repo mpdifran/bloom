@@ -487,5 +487,8 @@ extension ChatHealthData {
     let activeEnergy: String
     let totalEnergy: String
     let distance: String?
+    let averageHeartRate: String?
+    let elevationAscended: String?
+    let elevationDescended: String?
   }
 }

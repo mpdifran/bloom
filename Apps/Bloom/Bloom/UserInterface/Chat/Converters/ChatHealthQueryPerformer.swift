@@ -511,6 +511,28 @@ private extension ChatHealthQueryPerformer {
 
     var workoutData = [ChatHealthData.Workout]()
     for workout in workouts {
+      let averageHeartRateString: String?
+      let avgHR = workout.averageHeartRate
+      if avgHR.doubleValue(for: .bpm()) > 0 {
+        averageHeartRateString = await avgHR.displayString(for: .bpm())
+      } else {
+        averageHeartRateString = nil
+      }
+      
+      let elevationAscendedString: String?
+      if let elevationAscended = workout.elevationAscended {
+        elevationAscendedString = await elevationAscended.displayString(for: .meter())
+      } else {
+        elevationAscendedString = nil
+      }
+      
+      let elevationDescendedString: String?
+      if let elevationDescended = workout.elevationDescended {
+        elevationDescendedString = await elevationDescended.displayString(for: .meter())
+      } else {
+        elevationDescendedString = nil
+      }
+      
       let data = await ChatHealthData.Workout(
         name: workout.workoutActivityType.name,
         start: workout.startDate,
@@ -518,7 +540,10 @@ private extension ChatHealthQueryPerformer {
         duration: DateFormatter.timeIntervalHourMinuteSecondShort.string(from: workout.duration) ?? "00:00",
         activeEnergy: await workout.activeEnergyBurned.displayString(for: .largeCalorie()),
         totalEnergy: await workout.totalEnergyBurned.displayString(for: .largeCalorie()),
-        distance: workout.totalDistanceWalkingRunningCycling?.displayString(for: .meterUnit(with: .kilo))
+        distance: workout.totalDistanceWalkingRunningCycling?.displayString(for: .meterUnit(with: .kilo)),
+        averageHeartRate: averageHeartRateString,
+        elevationAscended: elevationAscendedString,
+        elevationDescended: elevationDescendedString
       )
       workoutData.append(data)
     }

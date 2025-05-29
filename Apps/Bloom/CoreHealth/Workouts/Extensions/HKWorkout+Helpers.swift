@@ -64,6 +64,14 @@ public extension HKWorkout {
     return HKQuantity(unit: .meter(), doubleValue: totalDistance)
   }
 
+  var elevationAscended: HKQuantity? {
+    metadata?[HKMetadataKeyElevationAscended] as? HKQuantity
+  }
+  
+  var elevationDescended: HKQuantity? {
+    metadata?[HKMetadataKeyElevationDescended] as? HKQuantity
+  }
+
   // TODO: Why do we have this??
 //  var duration: TimeInterval {
 //    endDate.timeIntervalSince(startDate)

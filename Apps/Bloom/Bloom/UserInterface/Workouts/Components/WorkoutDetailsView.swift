@@ -120,6 +120,28 @@ private extension WorkoutDetailsView {
           }
           .padding(.vertical, 10)
         }
+        
+        if let elevationAscended = workout.elevationAscended,
+           let elevationDescended = workout.elevationDescended {
+          Divider()
+          
+          LabeledContent("Elevation") {
+            VStack(alignment: .trailing) {
+              WorkoutStatView(stat: "\(elevationAscended.displayString(for: .meter(), formatter: .noDecimalPlaces))", label: "ASC")
+              WorkoutStatView(stat: "\(elevationDescended.displayString(for: .meter(), formatter: .noDecimalPlaces))", label: "DESC")
+            }
+            .tint(.orange)
+          }
+          .padding(.vertical, 10)
+        } else if let elevationAscended = workout.elevationAscended {
+          Divider()
+          
+          LabeledContent("Elevation") {
+            WorkoutStatView(stat: "\(elevationAscended.displayString(for: .meter(), formatter: .noDecimalPlaces))", label: "ASC")
+              .tint(.orange)
+          }
+          .padding(.vertical, 10)
+        }
       }
       .cardContainer()
     }
@@ -348,17 +370,22 @@ private extension WorkoutDetailsView {
 }
 
 #Preview {
-  NavigationStack {
-    WorkoutDetailsView(
-      workout: HKWorkout(
-        activityType: .cycling,
-        start: Date().addingTimeInterval(-483856),
-        end: Date().addingTimeInterval(-480000),
-        duration: 3856,
-        totalEnergyBurned: HKQuantity(unit: .largeCalorie(), doubleValue: 642),
-        totalDistance: HKQuantity(unit: .meterUnit(with: .kilo), doubleValue: 9.6),
-        metadata: nil
+  PreviewEnvironment {
+    NavigationStack {
+      WorkoutDetailsView(
+        workout: HKWorkout(
+          activityType: .cycling,
+          start: Date().addingTimeInterval(-483856),
+          end: Date().addingTimeInterval(-480000),
+          duration: 3856,
+          totalEnergyBurned: HKQuantity(unit: .largeCalorie(), doubleValue: 642),
+          totalDistance: HKQuantity(unit: .meterUnit(with: .kilo), doubleValue: 9.6),
+          metadata: [
+            HKMetadataKeyElevationAscended: HKQuantity(unit: .meter(), doubleValue: 120),
+            HKMetadataKeyElevationDescended: HKQuantity(unit: .meter(), doubleValue: 80)
+          ]
+        )
       )
-    )
+    }
   }
 }
