@@ -13,6 +13,7 @@ public extension ChatMessageDTO {
     case message(String)
     case imageData(Data)
     case richContent(Data)
+    case invalid
   }
 }
 
@@ -23,14 +24,15 @@ public struct ChatMessageDTO: Sendable, Equatable, Identifiable {
   public let date: Date
   public let content: Content
   public let hasPerformedAction: Bool
+  public let dbID: String?
 }
 
 public extension ChatMessage {
 
   func asDTO() -> ChatMessageDTO {
     let content: ChatMessageDTO.Content
-    if let richContent {
-      content = .richContent(richContent)
+    if let richContentData = richContent {
+      content = .richContent(richContentData)
     } else if let imageData {
       content = .imageData(imageData)
     } else {
@@ -42,7 +44,8 @@ public extension ChatMessage {
       isCurrentUser: isCurrentUser,
       date: date,
       content: content,
-      hasPerformedAction: hasPerformedAction
+      hasPerformedAction: hasPerformedAction,
+      dbID: dbID
     )
   }
 }

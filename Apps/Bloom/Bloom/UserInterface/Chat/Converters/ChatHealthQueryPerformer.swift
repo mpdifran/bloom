@@ -37,65 +37,69 @@ extension ChatHealthQueryPerformer {
   func perform(query: SocketMessage.Query) async -> String {
     print("Querying Health Data [\(query.dataType.rawValue)] \(query.startDate) to \(query.endDate)")
 
+    let results: String
     switch query.dataType {
     case .nutrition:
       let nutrition = await fetchNutrition(query: query)
       let foodLogs = await fetchFoodLogs(query: query)
 
-      return foodLogs + "\n\n" + nutrition
+      results = foodLogs + "\n\n" + nutrition
     case .goals:
-      return await fetchGoals(query: query)
+      results = await fetchGoals(query: query)
     case .activityLevel:
-      return await fetchActivityLevel(query: query)
+      results = await fetchActivityLevel(query: query)
     case .bodyWeight:
-      return await fetchBodyWeight(query: query)
+      results = await fetchBodyWeight(query: query)
     case .bowelMovements:
-      return await fetchBowelMovements(query: query)
+      results = await fetchBowelMovements(query: query)
     case .heart:
-      return await fetchHeart(query: query)
+      results = await fetchHeart(query: query)
     case .menstruation:
-      return await fetchMenstruation(query: query)
+      results = await fetchMenstruation(query: query)
     case .sleep:
-      return await fetchSleep(query: query)
+      results = await fetchSleep(query: query)
     case .stress:
-      return await fetchStress(query: query)
+      results = await fetchStress(query: query)
     case .workouts:
-      return await fetchWorkouts(query: query)
+      results = await fetchWorkouts(query: query)
     case .targetHeartRateZoneMinutes:
-      return await fetchTargetHeartRateZoneMinutes(query: query)
+      results = await fetchTargetHeartRateZoneMinutes(query: query)
     case .caloricIntake:
-      return await fetchHealthMetric(.calories, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.calories, dateRange: query.dateRange)
     case .proteinIntake:
-      return await fetchHealthMetric(.proteinIntake, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.proteinIntake, dateRange: query.dateRange)
     case .waterIntake:
-      return await fetchHealthMetric(.waterIntake, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.waterIntake, dateRange: query.dateRange)
     case .fiberIntake:
-      return await fetchHealthMetric(.fiberIntake, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.fiberIntake, dateRange: query.dateRange)
     case .meditationMinutes:
-      return await fetchHealthMetric(.meditationMinutes, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.meditationMinutes, dateRange: query.dateRange)
     case .exerciseMinutes:
-      return await fetchHealthMetric(.exerciseMinutes, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.exerciseMinutes, dateRange: query.dateRange)
     case .stepCount:
-      return await fetchHealthMetric(.stepCount, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.stepCount, dateRange: query.dateRange)
     case .walkingRunningDistance:
-      return await fetchHealthMetric(.walkingRunningDistance, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.walkingRunningDistance, dateRange: query.dateRange)
     case .runDistance:
-      return await fetchHealthMetric(.runDistance, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.runDistance, dateRange: query.dateRange)
     case .runDuration:
-      return await fetchHealthMetric(.runDuration, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.runDuration, dateRange: query.dateRange)
     case .bikeDistance:
-      return await fetchHealthMetric(.bikeDistance, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.bikeDistance, dateRange: query.dateRange)
     case .bikeDuration:
-      return await fetchHealthMetric(.bikeDuration, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.bikeDuration, dateRange: query.dateRange)
     case .mobilityAndFlexibilityDuration:
-      return await fetchHealthMetric(.mobilityAndFlexibilityDuration, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.mobilityAndFlexibilityDuration, dateRange: query.dateRange)
     case .strengthTrainingDuration:
-      return await fetchHealthMetric(.strengthTrainingDuration, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.strengthTrainingDuration, dateRange: query.dateRange)
     case .cardioDuration:
-      return await fetchHealthMetric(.cardioDuration, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.cardioDuration, dateRange: query.dateRange)
     case .highIntensityIntervalTrainingDuration:
-      return await fetchHealthMetric(.highIntensityIntervalTrainingDuration, dateRange: query.dateRange)
+      results = await fetchHealthMetric(.highIntensityIntervalTrainingDuration, dateRange: query.dateRange)
     }
+
+    print("Returning Health Data [\(query.dataType.rawValue)]\n\(results)")
+    return results
   }
 }
 
@@ -108,6 +112,8 @@ private extension ChatHealthQueryPerformer {
       unit: unit,
       dateRange: dateRange
     )
+
+    guard dailyQuantities.isNotEmpty else { return "No data" }
 
     var samples = [ChatHealthMetricData.Sample]()
     for dailyQuantity in dailyQuantities {

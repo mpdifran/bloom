@@ -15,25 +15,11 @@ import UIKit
 struct ChatView: View {
 
   @State private var viewModel = ChatViewModel()
-  @State private var cellBuilder = ChatCellBuilder()
   @State private var presentedSheet: AnyView?
   @State private var isAtBottom = false
-  @State private var lastMessageCount = 0
-  @State private var updateTask: Task<Void, Never>?
 
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
-
-  @Query private var chatMessages: [ChatMessage]
-
-  init() {
-    var descriptor = FetchDescriptor<ChatMessage>(
-      sortBy: [SortDescriptor(\.date, order: .reverse)]
-    )
-    descriptor.fetchLimit = 20
-
-    _chatMessages = Query(descriptor, animation: .default)
-  }
 
   var body: some View {
     NavigationStack {
@@ -48,19 +34,11 @@ struct ChatView: View {
   private var chatContentWithModifiers: some View {
     chatContent
       .groupedBackground()
-      .sensoryFeedback(.selection, trigger: viewModel.inProgressMessages)
+      .sensoryFeedback(.selection, trigger: viewModel.cellModels)
       .sheet($presentedSheet)
       .alert(error: $viewModel.error)
-      .animation(.default, value: cellBuilder.models)
-      .modifier(ChatUpdateModifier(
-        chatMessages: chatMessages,
-        inProgressMessages: viewModel.inProgressMessages,
-        assistantTypingStatus: viewModel.assistantTypingStatus,
-        assistantIsTyping: viewModel.assistantIsTyping,
-        updateCells: updateCells
-      ))
+      .animation(.default, value: viewModel.cellModels)
       .task { await viewModel.maintainWebSocketConnection() }
-      .task { updateCells() }
   }
   
   @ToolbarContentBuilder
@@ -98,7 +76,7 @@ struct ChatView: View {
       }
       .modifier(ScrollBehaviorModifier(
         scrollViewProxy: scrollViewProxy,
-        messages: chatMessages
+        cellModels: viewModel.cellModels
       ))
       .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
         withAnimation {
@@ -120,12 +98,12 @@ struct ChatView: View {
   
   @ViewBuilder
   private var messageList: some View {
-    if cellBuilder.models.isEmpty {
+    if viewModel.cellModels.isEmpty {
       ChatPromptsView()
         .zStackAlignment(.bottom)
     } else {
       ChatLayout {
-        ForEach(cellBuilder.models) { model in
+        ForEach(viewModel.cellModels) { model in
           ChatCell(model: model)
             .id(model.id)
             .transition(.blurReplace)
@@ -140,11 +118,11 @@ struct ChatView: View {
 
 struct ScrollBehaviorModifier: ViewModifier {
   let scrollViewProxy: ScrollViewProxy
-  let messages: [ChatMessage]
+  let cellModels: [ChatCellModel]
   
   func body(content: Content) -> some View {
     content
-      .onChange(of: messages) { _, _ in
+      .onChange(of: cellModels) { _, _ in
         withAnimation {
           scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
         }
@@ -152,59 +130,7 @@ struct ScrollBehaviorModifier: ViewModifier {
   }
 }
 
-struct ChatUpdateModifier: ViewModifier {
-  let chatMessages: [ChatMessage]
-  let inProgressMessages: [ChatController.InProgressMessage]
-  let assistantTypingStatus: String?
-  let assistantIsTyping: Bool
-  let updateCells: () -> Void
-  
-  func body(content: Content) -> some View {
-    content
-      .onChange(of: chatMessages) { _, _ in
-        Task { @MainActor in
-          updateCells()
-        }
-      }
-      .onChange(of: inProgressMessages) { _, _ in
-        Task { @MainActor in
-          updateCells()
-        }
-      }
-      .onChange(of: assistantTypingStatus) { _, _ in
-        Task { @MainActor in
-          updateCells()
-        }
-      }
-      .onChange(of: assistantIsTyping) { _, _ in
-        Task { @MainActor in
-          updateCells()
-        }
-      }
-  }
-}
-
 private extension ChatView {
-
-  func updateCells() {
-    // Cancel any pending update
-    updateTask?.cancel()
-    
-    // Schedule a new update with a small delay to batch rapid changes
-    updateTask = Task { @MainActor in
-      // Small delay to batch multiple rapid updates
-      try? await Task.sleep(nanoseconds: 10_000_000) // 10ms
-      
-      guard !Task.isCancelled else { return }
-      
-      cellBuilder.build(
-        messages: chatMessages,
-        inProgressMessages: viewModel.inProgressMessages,
-        statusText: viewModel.assistantTypingStatus,
-        assistantIsTyping: viewModel.assistantIsTyping
-      )
-    }
-  }
 
   var bottomAnchorView: some View {
     Color.clear
@@ -224,7 +150,7 @@ private extension ChatView {
 
   @ViewBuilder
   func scrollToBottomButton(_ onTap: @escaping () -> Void) -> some View {
-    if chatMessages.isNotEmpty && !isAtBottom {
+    if viewModel.cellModels.isNotEmpty && !isAtBottom {
       Button {
         onTap()
       } label: {

@@ -12,21 +12,15 @@ import SwiftData
 
 @Observable @MainActor
 final class ChatViewModel {
-  var assistantTypingStatus: String?
-  var assistantIsTyping = false
-  var inProgressMessages = [ChatController.InProgressMessage]()
+  var cellModels = [ChatCellModel]()
   var error: Error?
 
   init() {
     setupObservers()
   }
 
-  private var typingStatusTask: Task<Void, Never>?
-  private var isTypingTask: Task<Void, Never>?
-  private var inProgressMessageTask: Task<Void, Never>?
+  private var cellModelsTask: Task<Void, Never>?
   private var errorTask: Task<Void, Never>?
-
-  private let modelContext = ContainerHolder.shared.createContext()
 }
 
 extension ChatViewModel {
@@ -41,8 +35,19 @@ extension ChatViewModel {
 
   func deleteChatHistory() async throws {
     try await NetworkRequester.shared.deleteChatThread()
-    try modelContext.deleteAll(ChatMessage.self)
-    try modelContext.save()
+    try await ChatHistoryModifier.shared.deleteAllMessages()
+  }
+  
+  func updateMessageAction(id: String, hasPerformedAction: Bool) async {
+    do {
+      try await ChatHistoryModifier.shared.updateMessageAction(id: id, hasPerformedAction: hasPerformedAction)
+    } catch {
+      self.error = error
+    }
+  }
+  
+  func loadMoreMessages() async {
+    await ChatHistoryModifier.shared.loadMoreMessages()
   }
   
   func maintainWebSocketConnection() async {
@@ -64,24 +69,10 @@ extension ChatViewModel {
 private extension ChatViewModel {
 
   func setupObservers() {
-    typingStatusTask = Task.detached { [weak self] in
-      for await assistantTypingStatus in await ChatController.shared.$assistantTypingStatus {
+    cellModelsTask = Task.detached { [weak self] in
+      for await cellModels in await ChatHistoryModifier.shared.$cellModels {
         await MainActor.run { [weak self] in
-          self?.assistantTypingStatus = assistantTypingStatus
-        }
-      }
-    }
-    isTypingTask = Task.detached { [weak self] in
-      for await isTyping in await ChatController.shared.$assistantIsTyping {
-        await MainActor.run { [weak self] in
-          self?.assistantIsTyping = isTyping
-        }
-      }
-    }
-    inProgressMessageTask = Task.detached { [weak self] in
-      for await messages in await ChatController.shared.$inProgressMessages {
-        await MainActor.run { [weak self] in
-          self?.inProgressMessages = messages
+          self?.cellModels = cellModels
         }
       }
     }

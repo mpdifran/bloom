@@ -168,14 +168,7 @@ private extension ChatRichContentWrapperCell {
     } else if let logBowelMovement = try? JSONDecoder.bloomModel.decode(SocketMessage.LogBowelMovement.self, from: data) {
 
       self.bristolStoolType = logBowelMovement.bristolStoolType
-      self.duration = switch logBowelMovement.duration {
-      case .lessThan5Min:
-          .lessThan5Min
-      case .between5And10Min:
-          .between5And10Min
-      case .moreThan10Min:
-          .moreThan10Min
-      }
+      self.duration = logBowelMovement.duration.asBowelMovementDuration
 
     } else if let logWeight = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWeight.self, from: data) {
 

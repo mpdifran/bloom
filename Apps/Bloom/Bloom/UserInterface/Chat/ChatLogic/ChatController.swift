@@ -132,22 +132,20 @@ extension ChatController {
     let imageData = image?.resized(toWidth: 300)?.pngData()
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
-    try modelContext.savingTransaction {
-      if let imageData {
-        let imageMessage = ChatMessage(
-          isCurrentUser: true,
-          imageData: imageData
-        )
-        modelContext.insert(imageMessage)
-      }
+    if let imageData {
+      let imageMessage = ChatMessage(
+        isCurrentUser: true,
+        imageData: imageData
+      )
+      try await ChatHistoryModifier.shared.addMessage(imageMessage)
+    }
 
-      if trimmedMessage.isNotEmpty {
-        let userMessage = ChatMessage(
-          isCurrentUser: true,
-          message: message
-        )
-        modelContext.insert(userMessage)
-      }
+    if trimmedMessage.isNotEmpty {
+      let userMessage = ChatMessage(
+        isCurrentUser: true,
+        message: message
+      )
+      try await ChatHistoryModifier.shared.addMessage(userMessage)
     }
 
     let demographics = await ChatVitalConverter.shared.generateDemographics()
@@ -228,14 +226,12 @@ private extension ChatController {
     if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
 
       do {
-        try modelContext.savingTransaction {
-          let message = ChatMessage(
-            id: messageResponse.id,
-            isCurrentUser: false,
-            message: messageResponse.message
-          )
-          modelContext.insert(message)
-        }
+        let message = ChatMessage(
+          id: messageResponse.id,
+          isCurrentUser: false,
+          message: messageResponse.message
+        )
+        try await ChatHistoryModifier.shared.addMessage(message)
       } catch {
         self.error = error
       }
@@ -311,7 +307,7 @@ private extension ChatController {
         self.internalInProgressMessages.append(inProgressMessage)
         self.inProgressMessagesIndex += 2 // One for the JSON, and we immediately move to the next message
       } else {
-        try? self.insertRichChatMessage(
+        try? await self.insertRichChatMessage(
           id: richContentMessage.id, 
           data: data,
           markActionTaken: dbID != nil,
@@ -446,17 +442,15 @@ private extension ChatController {
     data: Data,
     markActionTaken: Bool = false,
     dbID: String? = nil
-  ) throws {
-    try modelContext.savingTransaction {
-      let richContentMessage = ChatMessage(
-        id: id,
-        isCurrentUser: false,
-        richContent: data,
-        dbID: dbID,
-        hasPerformedAction: markActionTaken
-      )
-      modelContext.insert(richContentMessage)
-    }
+  ) async throws {
+    let richContentMessage = ChatMessage(
+      id: id,
+      isCurrentUser: false,
+      richContent: data,
+      dbID: dbID,
+      hasPerformedAction: markActionTaken
+    )
+    try await ChatHistoryModifier.shared.addMessage(richContentMessage)
   }
 
   func autoLog(logWater: SocketMessage.LogWaterConsumption) async throws -> String {
