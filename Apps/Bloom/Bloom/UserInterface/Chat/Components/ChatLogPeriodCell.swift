@@ -80,14 +80,8 @@ struct ChatLogPeriodCell: View {
             AsyncButton {
               try await save()
             } label: {
-              Group {
-                if hasLoggedPeriod {
-                  Label("Period Logged", systemSymbol: .checkmark)
-                } else {
-                  Text("Log")
-                }
-              }
-              .horizontallyCentered()
+              Text("Log")
+                .horizontallyCentered()
             }
             .buttonStyle(.primary)
             .disabled(hasLoggedPeriod)
@@ -106,21 +100,13 @@ struct ChatLogPeriodCell: View {
 private extension ChatLogPeriodCell {
 
   func save() async throws {
-    let sample = HKCategorySample(
-      type: HKCategoryType(.menstrualFlow),
-      value: flowType.rawValue,
-      start: Date.now,
-      end: Date.now,
-      metadata: [
-        HKMetadataKeyWasUserEntered: true
-      ]
-    )
-    
-    try await HealthStoreModifier.shared.write(sample)
+    let uuid = try await HealthStoreModifier.shared.log(flowType: flowType, date: .now)
 
     hasLoggedPeriod = true
     try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedPeriod)
-    try modelContext.storeDBID(id: chatMessageID, dbID: sample.uuid.uuidString)
+    if let uuid {
+      try modelContext.storeDBID(id: chatMessageID, dbID: uuid.uuidString)
+    }
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()

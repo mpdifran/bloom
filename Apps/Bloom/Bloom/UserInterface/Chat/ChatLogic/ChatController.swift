@@ -527,7 +527,7 @@ private extension ChatController {
     return sample.uuid.uuidString
   }
 
-  func autoLog(logPeriod: SocketMessage.LogPeriod) async throws -> String {
+  func autoLog(logPeriod: SocketMessage.LogPeriod) async throws -> String? {
     let flowValue: HKCategoryValueMenstrualFlow
     switch logPeriod.flow {
     case .none:
@@ -539,24 +539,14 @@ private extension ChatController {
     case .heavy:
       flowValue = .heavy
     }
-    
-    let sample = HKCategorySample(
-      type: HKCategoryType(.menstrualFlow),
-      value: flowValue.rawValue,
-      start: Date.now,
-      end: Date.now,
-      metadata: [
-        HKMetadataKeyWasUserEntered: true
-      ]
-    )
-    
-    try await HealthStoreModifier.shared.write(sample)
-    
+
+    let uuid = try await HealthStoreModifier.shared.log(flowType: flowValue, date: .now)
+
     TelemetryDeck.signal("Log Period")
     
     SoundPlayer.playLogHealthData()
     
-    return sample.uuid.uuidString
+    return uuid?.uuidString
   }
 
   func autoLog(logBloodPressure: SocketMessage.LogBloodPressure) async throws -> String {

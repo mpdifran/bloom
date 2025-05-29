@@ -49,7 +49,6 @@ struct MenstruationCalendarView: View {
         ForEach(daysOfWeek, id: \.self) { day in
           Text(day)
             .font(.caption)
-            .foregroundStyle(.secondary)
         }
       }
 
@@ -146,11 +145,11 @@ private extension MenstruationCalendarView {
 }
 
 extension DayCapsule {
-  enum HighlightKind {
-    case none
+  enum HighlightKind: CaseIterable {
     case full
-    case ring
+    case none
     case partial
+    case ring
     case fadedPartial
 
     var useWhiteText: Bool {
@@ -169,7 +168,7 @@ struct DayCapsule: View {
 
   var body: some View {
     Capsule()
-      .fill(.background.secondary)
+      .fill(.background)
       .aspectRatio(0.7, contentMode: .fit)
       .overlay {
         if isToday {
@@ -184,7 +183,7 @@ struct DayCapsule: View {
             switch highlightKind {
             case .none:
               Circle()
-                .fill(.background.tertiary)
+                .fill(.background.secondary)
             case .full:
               Circle()
                 .fill(.mutedPink)
@@ -231,30 +230,31 @@ struct DayCapsule: View {
 }
 
 #Preview("DayCapsule") {
-  VStack {
-    HStack {
-      DayCapsule(dayNumber: "1", highlightKind: .none, isToday: false)
-      DayCapsule(dayNumber: "2", highlightKind: .full, isToday: false)
-      DayCapsule(dayNumber: "3", highlightKind: .fadedPartial, isToday: false)
-      DayCapsule(dayNumber: "4", highlightKind: .partial, isToday: false)
-      DayCapsule(dayNumber: "5", highlightKind: .partial, isToday: false)
-      DayCapsule(dayNumber: "6", highlightKind: .fadedPartial, isToday: true)
-      DayCapsule(dayNumber: "7", highlightKind: .ring, isToday: false)
+  PreviewEnvironment {
+    BloomScrollView {
+      HStack {
+        DayCapsule(dayNumber: "1", highlightKind: .none, isToday: false)
+        DayCapsule(dayNumber: "2", highlightKind: .full, isToday: false)
+        DayCapsule(dayNumber: "3", highlightKind: .fadedPartial, isToday: false)
+        DayCapsule(dayNumber: "4", highlightKind: .partial, isToday: false)
+        DayCapsule(dayNumber: "5", highlightKind: .partial, isToday: false)
+        DayCapsule(dayNumber: "6", highlightKind: .fadedPartial, isToday: true)
+        DayCapsule(dayNumber: "7", highlightKind: .ring, isToday: false)
+      }
     }
-    .padding()
-    Spacer()
   }
 }
 
 #Preview {
-  VStack {
-    MenstruationCalendarView(
-      menstruationSummary: MenstrualSummary(
-        menstrualCycles: []
-      )
-    ) { date in
+  PreviewEnvironment {
+    BloomScrollView {
+      MenstruationCalendarView(
+        menstruationSummary: MenstrualSummary(
+          menstrualCycles: []
+        )
+      ) { date in
 
+      }
     }
-    Spacer()
   }
 }

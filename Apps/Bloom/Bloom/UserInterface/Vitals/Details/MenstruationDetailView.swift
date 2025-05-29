@@ -46,6 +46,8 @@ private extension MenstruationDetailView {
         presentedSheet = CycleTrackingActionCardView(date: date).asAny
       }
 
+      MenstruationCalendarLegendView()
+
       currentStatusSection
       detailsSection
     }
@@ -105,7 +107,7 @@ private extension MenstruationDetailView {
         .fontDesign(.rounded)
       }
     }
-    .cardContainer(fill: .background.secondary)
+    .cardContainer()
   }
 
   @ViewBuilder

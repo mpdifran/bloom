@@ -64,7 +64,8 @@ public extension HealthStoreModifier {
 
 public extension HealthStoreModifier {
 
-  func log(flowType: HKCategoryValueMenstrualFlow, date: Date) async throws {
+  @discardableResult
+  func log(flowType: HKCategoryValueMenstrualFlow, date: Date) async throws -> UUID? {
     var isNewCycle = flowType.indicatesBeginningOfCycle
     if await isCurrentPeriod() {
       isNewCycle = false
@@ -84,6 +85,7 @@ public extension HealthStoreModifier {
       try await HealthStoreModifier.shared.delete(existingSamples)
     }
 
+    var uuid: UUID?
     if flowType != .none {
       let sample = HKCategorySample(
         type: HKCategoryType(.menstrualFlow),
@@ -95,9 +97,12 @@ public extension HealthStoreModifier {
 
       try await HealthStoreModifier.shared.write(sample)
       TelemetryDeck.signal("Log Period")
+      uuid = sample.uuid
     }
 
     await VitalsCalculator.shared.forceFectchMenstrualSummary()
+
+    return uuid
   }
 }
 
