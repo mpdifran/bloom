@@ -59,7 +59,24 @@ extension ChatServiceV2 {
     }
     return true
   }
-  
+
+  func uploadImages(imageData: [Data]) async throws -> [String] {
+    try await withThrowingTaskGroup(of: String.self) { [openAIService] group in
+      for image in imageData {
+        group.addTask {
+          let file = try await openAIService.openAI.files.upload(file: image, purpose: .userData)
+          return file.id
+        }
+      }
+
+      var fileIDs = [String]()
+      for try await fileID in group {
+        fileIDs.append(fileID)
+      }
+      return fileIDs
+    }
+  }
+
   func flushCachedStreamingContent(userID: UserIdentifier) async throws {
     let messages = try await chatHistory.flushCachedStreamingContent(userID: userID)
     
@@ -223,6 +240,10 @@ private extension ChatServiceV2 {
           case .functionToolCall(let call):
             toolCalls.append(call)
             try await chatHistory.storeFunctionCallID(call.callId, for: userID)
+          case .reasoning(let reasoning):
+            for summary in reasoning.summary {
+              logger.debug("Reasoning: \(summary.text)")
+            }
           default:
             break
           }

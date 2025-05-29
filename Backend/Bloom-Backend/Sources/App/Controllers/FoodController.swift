@@ -18,8 +18,8 @@ struct FoodController { }
 extension FoodController: RouteCollection {
 
   func boot(routes: any RoutesBuilder) throws {
-    routes.group("v1") {
-      $0.auth(using: UserToken.self) {
+    routes.auth(using: UserToken.self) {
+      $0.group("v1") {
         $0.group("food") {
           $0.post("autocomplete", use: autocomplete)
           $0.post("estimate", use: estimateFoodCalories)
@@ -29,11 +29,16 @@ extension FoodController: RouteCollection {
           $0.post("submit-food-item-issue", use: submitFoodItemIssue)
         }
       }
+      $0.group("v2") {
+        $0.group("food") {
+          $0.post("estimate", use: estimateFoodCaloriesV2)
+        }
+      }
     }
   }
 }
 
-// MARK: - Route Handlers
+// MARK: - Route Handlers V1
 
 extension FoodController {
 
@@ -170,6 +175,49 @@ extension FoodController {
     )
 
     return Response(status: .ok)
+  }
+}
+
+// MARK: - Route Handlers V2
+
+extension FoodController {
+
+  @Sendable
+  func estimateFoodCaloriesV2(_ request: Request) async throws -> EstimateFoodCaloriesResponse {
+    let requestBody = try request.content.decode(EstimateFoodCaloriesRequest.self)
+
+    if let foodImage = requestBody.foodImage {
+      guard let foodEstimate = await request.openAIService.estimateCaloriesV2(
+        foodImageFile: foodImage,
+        foodDescription: requestBody.foodDescription
+      ) else {
+        throw Abort(.internalServerError)
+      }
+
+      let servings = foodEstimate.foodItems.map { $0.asServing() }
+      let suggestedServings = foodEstimate.optionalFoodItems?.map { $0.asServing() } ?? []
+
+      return EstimateFoodCaloriesResponse(
+        name: foodEstimate.name,
+        servings: servings,
+        suggestedServings: suggestedServings
+      )
+    } else if let textDescription = requestBody.foodDescription {
+      guard let foodEstimate = await request.openAIService.estimateCaloriesV2(textDescription: textDescription) else {
+        throw Abort(.internalServerError)
+      }
+
+      let servings = foodEstimate.foodItems.map { $0.asServing() }
+      let suggestedServings = foodEstimate.optionalFoodItems?.map { $0.asServing() } ?? []
+
+      return EstimateFoodCaloriesResponse(
+        name: foodEstimate.name,
+        servings: servings,
+        suggestedServings: suggestedServings
+      )
+    }
+
+    throw Abort(.badRequest)
   }
 }
 

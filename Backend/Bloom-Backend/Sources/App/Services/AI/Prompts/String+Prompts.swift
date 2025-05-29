@@ -25,8 +25,7 @@ extension String.Prompt {
   """
 
   static let estimateCalories: String = """
-  You are a nutritionist, and your job is to estimate all the nutrients in a photo of food. Make sure to only estimate 
-  edible items.
+  Estimate nutrients for the food in this image. Only include edible items. Be concise.
   """
 
   static let estimateCaloriesByText: String = """

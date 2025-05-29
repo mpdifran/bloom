@@ -41,7 +41,7 @@ public extension HKWorkoutActivityType {
     case .lacrosse: return "Lacrosse"
     case .martialArts: return "Martial Arts"
     case .mindAndBody: return "Mind and Body"
-    case .paddleSports: return "Paddle Sports"
+    case .paddleSports: return "Paddling"
     case .play: return "Play"
     case .preparationAndRecovery: return "Preparation and Recovery"
     case .racquetball: return "Racquetball"
@@ -163,7 +163,7 @@ public extension HKWorkoutActivityType {
     case .mixedMetabolicCardioTraining:
       "figure.mixed.cardio"
     case .paddleSports:
-      "figure.pickleball"
+      "oar.2.crossed"
     case .play:
       "figure.play"
     case .preparationAndRecovery:

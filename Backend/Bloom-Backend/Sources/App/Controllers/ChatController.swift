@@ -61,9 +61,8 @@ extension ChatController {
     guard let byteBuffer = request.body.data else { throw Abort(.badRequest, reason: "Request body is missing") }
 
     let data = Data(buffer: byteBuffer)
-    let version = request.headers["X-Bloom-API-Version"].first == "v1" ? WebSocketService.Version.v1 : .v2
     
-    let success = switch version {
+    let success = switch request.version {
     case .v1:
       try await request.chatService.parse(data: data, for: userID, db: request.db)
     case .v2:
@@ -80,19 +79,25 @@ extension ChatController {
   func uploadImage(_ request: Request) async throws -> ChatUploadFileResponse {
     let body = try request.content.decode(ChatUploadFileRequest.self)
 
-    let fileIDs = try await withThrowingTaskGroup(of: String.self) { group in
-      for image in body.images {
-        group.addTask {
-          let file = try await request.openAIAssistantService.uploadFile(data: image)
-          return file.id
+    let fileIDs: [String]
+    switch request.version {
+    case .v1:
+      fileIDs = try await withThrowingTaskGroup(of: String.self) { group in
+        for image in body.images {
+          group.addTask {
+            let file = try await request.openAIAssistantService.uploadFile(data: image)
+            return file.id
+          }
         }
-      }
 
-      var fileIDs = [String]()
-      for try await fileID in group {
-        fileIDs.append(fileID)
+        var fileIDs = [String]()
+        for try await fileID in group {
+          fileIDs.append(fileID)
+        }
+        return fileIDs
       }
-      return fileIDs
+    case .v2:
+      fileIDs = try await request.chatServiceV2.uploadImages(imageData: body.images)
     }
 
     return ChatUploadFileResponse(fileIDs: fileIDs)
@@ -106,8 +111,13 @@ extension ChatController {
       throw Abort(.internalServerError, reason: "User ID unexpectedly nil after authentication.")
     }
 
-    try await request.chatHistory.clearHistory(for: userID)
-    try await request.chatHistory.clearFunctionCallIDs(for: userID)
+    switch request.version {
+    case .v1:
+      try await request.openAIAssistantService.deleteThread(user: user, assistantSpec: .healthCoach)
+    case .v2:
+      try await request.chatHistory.clearHistory(for: userID)
+      try await request.chatHistory.clearFunctionCallIDs(for: userID)
+    }
 
     return Response(status: .ok)
   }

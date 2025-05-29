@@ -144,6 +144,37 @@ extension OpenAIService {
     }
   }
 
+  func estimateCaloriesV2(
+    foodImageFile: ImageFile,
+    foodDescription: String?
+  ) async -> OpenAIEstimateCaloriesResponse? {
+    do {
+      let file = try await openAI.files.upload(
+        file: foodImageFile.data,
+        fileName: "image.\(foodImageFile.fileExtension)",
+        purpose: .userData
+      )
+
+      var inputs = [OpenAIKit.Response.InputItem]()
+      inputs.append(.message(.init(role: .user, content: [.image(.init(detail: .low, fileId: file.id))])))
+      if let foodDescription {
+        inputs.append(.message(.init(role: .user, content: [.text(.init(text: foodDescription))])))
+      }
+
+      let response = try await openAI.responses.createResponse(
+        input: inputs,
+        model: .GPT4.gpt_4o_mini,
+        instructions: .Prompt.estimateCalories,
+        text: Text(format: .init(type: .jsonSchema(.aiEstimate)))
+      )
+
+      return try response.parse(OpenAIEstimateCaloriesResponse.self)
+    } catch {
+      logger.error(error)
+      return nil
+    }
+  }
+
   func estimateCalories(textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
     do {
       let model = ModelID.GPT4.gpt_4o_mini
@@ -169,6 +200,25 @@ extension OpenAIService {
         temperature: 0.3,
         topP: 0.6,
         responseFormat: ResponseFormat(type: .jsonSchema(.textAIEstimate))
+      )
+
+      return try response.parse(OpenAIEstimateCaloriesResponse.self)
+    } catch {
+      logger.error(error)
+      return nil
+    }
+  }
+
+  func estimateCaloriesV2(textDescription: String) async -> OpenAIEstimateCaloriesResponse? {
+    do {
+      var inputs = [OpenAIKit.Response.InputItem]()
+      inputs.append(.message(.init(role: .user, content: [.text(.init(text: textDescription))])))
+
+      let response = try await openAI.responses.createResponse(
+        input: inputs,
+        model: .GPT4.gpt_4o_mini,
+        instructions: .Prompt.estimateCaloriesByText,
+        text: Text(format: .init(type: .jsonSchema(.textAIEstimate)))
       )
 
       return try response.parse(OpenAIEstimateCaloriesResponse.self)
