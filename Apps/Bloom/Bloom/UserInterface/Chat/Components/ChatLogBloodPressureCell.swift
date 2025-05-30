@@ -90,40 +90,14 @@ struct ChatLogBloodPressureCell: View {
 private extension ChatLogBloodPressureCell {
 
   func logBloodPressure() async throws {
-    let systolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: systolic)
-    let diastolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: diastolic)
-
-    let correlationType = HKCorrelationType(.bloodPressure)
-    
-    let systolicSample = HKQuantitySample(
-      type: HKQuantityType(.bloodPressureSystolic),
-      quantity: systolicQuantity,
-      start: .now,
-      end: .now
+    let combinedDBID = try await HealthStoreModifier.shared.log(
+      systolic: systolic,
+      diastolic: diastolic
     )
-    let diastolicSample = HKQuantitySample(
-      type: HKQuantityType(.bloodPressureDiastolic),
-      quantity: diastolicQuantity,
-      start: .now,
-      end: .now
-    )
-
-    let bloodPressure = HKCorrelation(
-      type: correlationType,
-      start: .now,
-      end: .now,
-      objects: [systolicSample, diastolicSample],
-      metadata: [
-        HKMetadataKeyWasUserEntered: true
-      ]
-    )
-
-    try await HealthStoreModifier.shared.write(bloodPressure)
-    TelemetryDeck.signal("Log Blood Pressure")
 
     hasLoggedBloodPressure = true
     try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedBloodPressure)
-    try modelContext.storeDBID(id: chatMessageID, dbID: bloodPressure.uuid.uuidString)
+    try modelContext.storeDBID(id: chatMessageID, dbID: combinedDBID)
 
     saveComplete.toggle()
     SoundPlayer.playLogHealthData()
@@ -134,13 +108,9 @@ private extension ChatLogBloodPressureCell {
   }
 
   func undoLogBloodPressure() async throws {
-    guard let dbID, let uuid = UUID(uuidString: dbID) else { return }
+    guard let dbID else { return }
     
-    // Delete the correlation from HealthKit
-    try await HealthStoreModifier.shared.deleteSample(
-      uuid: uuid,
-      ofType: HKCorrelationType(.bloodPressure)
-    )
+    try await HealthStoreModifier.shared.deleteBloodPressure(combinedUUID: dbID)
     
     hasLoggedBloodPressure = false
     try modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: hasLoggedBloodPressure)

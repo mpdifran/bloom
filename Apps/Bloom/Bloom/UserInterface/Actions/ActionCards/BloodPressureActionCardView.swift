@@ -42,8 +42,7 @@ struct BloodPressureActionCardView: View {
         HealthActionCardView(
           sampleTypes: [
             HKQuantityType(.bloodPressureSystolic),
-            HKQuantityType(.bloodPressureDiastolic),
-            HKCorrelationType(.bloodPressure)
+            HKQuantityType(.bloodPressureDiastolic)
           ],
           performDismiss: performDismiss
         ) {
@@ -90,34 +89,10 @@ struct BloodPressureActionCardView: View {
 private extension BloodPressureActionCardView {
 
   func logBloodPressure() async throws -> Bool {
-    let systolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: systolic)
-    let diastolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: diastolic)
-
-    let systolicSample = HKQuantitySample(
-      type: HKQuantityType(.bloodPressureSystolic),
-      quantity: systolicQuantity,
-      start: .now,
-      end: .now
+    try await HealthStoreModifier.shared.log(
+      systolic: systolic,
+      diastolic: diastolic
     )
-    let diastolicSample = HKQuantitySample(
-      type: HKQuantityType(.bloodPressureDiastolic),
-      quantity: diastolicQuantity,
-      start: .now,
-      end: .now
-    )
-
-    let bloodPressure = HKCorrelation(
-      type: HKCorrelationType(.bloodPressure),
-      start: .now,
-      end: .now,
-      objects: [systolicSample, diastolicSample],
-      metadata: [
-        HKMetadataKeyWasUserEntered: true
-      ]
-    )
-
-    try await HealthStoreModifier.shared.write(bloodPressure)
-    TelemetryDeck.signal("Log Blood Pressure")
 
     if RatingPromptTracker.shared.recordEvent() {
       requestReview()

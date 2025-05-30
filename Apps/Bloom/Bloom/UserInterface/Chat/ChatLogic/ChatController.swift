@@ -544,42 +544,14 @@ private extension ChatController {
   }
 
   func autoLog(logBloodPressure: SocketMessage.LogBloodPressure) async throws -> String {
-    let systolicQuantity = HKQuantity(unit: .millimeterOfMercury(), doubleValue: Double(logBloodPressure.systolic))
-    let diastolicQuantity = HKQuantity(unit: .millimeterOfMercury(), doubleValue: Double(logBloodPressure.diastolic))
-    
-    let correlationType = HKCorrelationType(.bloodPressure)
-    
-    let systolicSample = HKQuantitySample(
-      type: HKQuantityType(.bloodPressureSystolic),
-      quantity: systolicQuantity,
-      start: Date.now,
-      end: Date.now
+    let combinedDBID = try await HealthStoreModifier.shared.log(
+      systolic: Double(logBloodPressure.systolic),
+      diastolic: Double(logBloodPressure.diastolic)
     )
-    
-    let diastolicSample = HKQuantitySample(
-      type: HKQuantityType(.bloodPressureDiastolic),
-      quantity: diastolicQuantity,
-      start: Date.now,
-      end: Date.now
-    )
-    
-    let bloodPressure = HKCorrelation(
-      type: correlationType,
-      start: Date.now,
-      end: Date.now,
-      objects: [systolicSample, diastolicSample],
-      metadata: [
-        HKMetadataKeyWasUserEntered: true
-      ]
-    )
-    
-    try await HealthStoreModifier.shared.write(bloodPressure)
-    
-    TelemetryDeck.signal("Log Blood Pressure")
     
     SoundPlayer.playLogHealthData()
     
-    return bloodPressure.uuid.uuidString
+    return combinedDBID
   }
 
   func autoLog(logBowelMovement: SocketMessage.LogBowelMovement) async throws -> String {

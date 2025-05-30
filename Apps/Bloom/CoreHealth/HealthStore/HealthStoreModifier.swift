@@ -12,6 +12,10 @@ internal import TelemetryDeck
 
 // MARK: - HealthStoreModifier
 
+enum HealthStoreError: Error {
+  case invalidUUID
+}
+
 public final actor HealthStoreModifier {
   public static let shared = HealthStoreModifier()
 
@@ -57,6 +61,59 @@ public extension HealthStoreModifier {
     
     // Perform bulk deletion and insertion in a more efficient manner
     try await performBulkNutritionUpdate(for: date, with: foodLogs)
+  }
+}
+
+// MARK: Blood Pressure
+
+public extension HealthStoreModifier {
+
+  @discardableResult
+  func log(systolic: Double, diastolic: Double, date: Date = .now) async throws -> String {
+    let metadata = [
+      HKMetadataKeyWasUserEntered: true
+    ]
+    
+    let systolicQuantity = HKQuantity(unit: .millimeterOfMercury(), doubleValue: systolic)
+    let diastolicQuantity = HKQuantity(unit: .millimeterOfMercury(), doubleValue: diastolic)
+    
+    let systolicSample = HKQuantitySample(
+      type: HKQuantityType(.bloodPressureSystolic),
+      quantity: systolicQuantity,
+      start: date,
+      end: date,
+      metadata: metadata
+    )
+    
+    let diastolicSample = HKQuantitySample(
+      type: HKQuantityType(.bloodPressureDiastolic),
+      quantity: diastolicQuantity,
+      start: date,
+      end: date,
+      metadata: metadata
+    )
+    
+    // Write individual samples (correlations cannot be written by third-party apps)
+    try await write([systolicSample, diastolicSample])
+    
+    TelemetryDeck.signal("Log Blood Pressure")
+    
+    // Return combined UUID string for storage
+    return "\(systolicSample.uuid.uuidString)|\(diastolicSample.uuid.uuidString)"
+  }
+  
+  func deleteBloodPressure(combinedUUID: String) async throws {
+    // Split the pipe-separated UUIDs
+    let uuidStrings = combinedUUID.split(separator: "|").map(String.init)
+    guard uuidStrings.count == 2,
+          let systolicUUID = UUID(uuidString: uuidStrings[0]),
+          let diastolicUUID = UUID(uuidString: uuidStrings[1]) else {
+      throw HealthStoreError.invalidUUID
+    }
+    
+    // Delete both samples
+    try await deleteSample(uuid: systolicUUID, ofType: HKQuantityType(.bloodPressureSystolic))
+    try await deleteSample(uuid: diastolicUUID, ofType: HKQuantityType(.bloodPressureDiastolic))
   }
 }
 
