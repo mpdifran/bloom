@@ -126,6 +126,11 @@ extension UserController {
   func verifyAuthentication() async throws {
     guard let userIdentifier = authenticatedUserIdentifier else { return }
 
+    #if targetEnvironment(simulator)
+    // Skip verification on simulator as it will always fail
+    // Simulator doesn't maintain Apple ID credential state properly
+    return
+    #else
     let provider = ASAuthorizationAppleIDProvider()
 
     do {
@@ -150,6 +155,7 @@ extension UserController {
         message: error.localizedDescription
       )
     }
+    #endif
   }
 
   func identify() async {
