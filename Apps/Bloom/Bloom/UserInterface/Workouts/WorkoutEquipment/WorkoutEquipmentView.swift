@@ -53,6 +53,9 @@ private extension WorkoutEquipmentView {
   
   func equipmentCell(_ equipment: SocketMessage.WorkoutPlan.Equipment) -> some View {
     HStack {
+      Image(equipment.image)
+        .foregroundStyle(.tint)
+
       VStack(alignment: .leading, spacing: 4) {
         Text(equipment.name)
           .font(.headline)

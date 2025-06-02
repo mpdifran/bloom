@@ -124,6 +124,22 @@ public extension ImageResource {
   static let logPeriodIcon        = ImageResource(name: "LogPeriodIcon", bundle: BundleToken.bundle)
   static let logWaterIcon         = ImageResource(name: "LogWaterIcon", bundle: BundleToken.bundle)
   static let logWeightIcon        = ImageResource(name: "LogWeightIcon", bundle: BundleToken.bundle)
+  
+  // Workout Equipment
+  static let barbell         = ImageResource(name: "Barbell", bundle: BundleToken.bundle)
+  static let batbell         = ImageResource(name: "Batbell", bundle: BundleToken.bundle)
+  static let bike            = ImageResource(name: "Bike", bundle: BundleToken.bundle)
+  static let chinUpBar       = ImageResource(name: "ChinUpBar", bundle: BundleToken.bundle)
+  static let dumbbells       = ImageResource(name: "Dumbbells", bundle: BundleToken.bundle)
+  static let elliptical      = ImageResource(name: "Elliptical", bundle: BundleToken.bundle)
+  static let kettlebell      = ImageResource(name: "Kettlebell", bundle: BundleToken.bundle)
+  static let resistanceBand  = ImageResource(name: "ResistanceBand", bundle: BundleToken.bundle)
+  static let rowingMachine   = ImageResource(name: "RowingMachine", bundle: BundleToken.bundle)
+  static let skiMachine      = ImageResource(name: "SkiMachine", bundle: BundleToken.bundle)
+  static let stationaryBike  = ImageResource(name: "StationaryBike", bundle: BundleToken.bundle)
+  static let treadmill       = ImageResource(name: "Treadmill", bundle: BundleToken.bundle)
+  static let weightedVest    = ImageResource(name: "WeightedVest", bundle: BundleToken.bundle)
+  static let yogaMat         = ImageResource(name: "YogaMat", bundle: BundleToken.bundle)
 }
 
 private class BundleToken {
