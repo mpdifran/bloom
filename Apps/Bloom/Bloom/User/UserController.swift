@@ -49,6 +49,7 @@ final class UserController: ObservableObject {
     }
 
     #if targetEnvironment(simulator)
+    print("[UserController] Using UserDefaults fallback for simulator authentication")
     // Simulator-specific code path - use UserDefaults only
     if let rawUserIdentifier = UserDefaults.group.string(forKey: .simulatorUserIdentifierKey) {
       self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
