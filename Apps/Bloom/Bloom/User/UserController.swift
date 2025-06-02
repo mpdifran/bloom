@@ -18,6 +18,14 @@ private extension String {
   static let authTokenKey = "auth_token"
 }
 
+#if targetEnvironment(simulator)
+// Simulator-specific UserDefaults keys for development purposes
+private extension String {
+  static let simulatorUserIdentifierKey = "simulator_user_identifier"
+  static let simulatorAuthTokenKey = "simulator_auth_token"
+}
+#endif
+
 @MainActor
 final class UserController: ObservableObject {
   static let shared = UserController()
@@ -40,6 +48,19 @@ final class UserController: ObservableObject {
       }
     }
 
+    #if targetEnvironment(simulator)
+    // Simulator-specific code path - use UserDefaults only
+    if let rawUserIdentifier = UserDefaults.group.string(forKey: .simulatorUserIdentifierKey) {
+      self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
+    }
+    
+    var isAuthenticated = false
+    if let rawAuthToken = UserDefaults.group.string(forKey: .simulatorAuthTokenKey) {
+      self.authToken = AuthToken(rawAuthToken)
+      isAuthenticated = true
+    }
+    #else
+    // Real device code path
     do {
       let rawUserIdentifier = try sharedValet.string(forKey: .authenticatedUserIdentifierKey)
       self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
@@ -55,6 +76,7 @@ final class UserController: ObservableObject {
     } catch {
       print(error)
     }
+    #endif
 
     if let lastIdentifyDate = UserDefaults.group.object(forKey: "UserController.lastIdentifyDate") as? Date {
       self.lastIdentifyDate = lastIdentifyDate
@@ -104,6 +126,11 @@ extension UserController {
   func verifyAuthentication() async throws {
     guard let userIdentifier = authenticatedUserIdentifier else { return }
 
+    #if targetEnvironment(simulator)
+    // Skip verification on simulator as it will always fail
+    // Simulator doesn't maintain Apple ID credential state properly
+    return
+    #else
     let provider = ASAuthorizationAppleIDProvider()
 
     do {
@@ -128,6 +155,7 @@ extension UserController {
         message: error.localizedDescription
       )
     }
+    #endif
   }
 
   func identify() async {
@@ -231,6 +259,15 @@ private extension UserController {
   }
 
   func storeAuthenticatedUserIdentifier() {
+    #if targetEnvironment(simulator)
+    // Simulator code path - UserDefaults only
+    if let authenticatedUserIdentifier {
+      UserDefaults.group.set(authenticatedUserIdentifier.value, forKey: .simulatorUserIdentifierKey)
+    } else {
+      UserDefaults.group.removeObject(forKey: .simulatorUserIdentifierKey)
+    }
+    #else
+    // Real device code path
     do {
       if let authenticatedUserIdentifier {
         try sharedValet.setString(authenticatedUserIdentifier.value, forKey: .authenticatedUserIdentifierKey)
@@ -245,9 +282,19 @@ private extension UserController {
       )
       print(error)
     }
+    #endif
   }
 
   func storeAuthToken() {
+    #if targetEnvironment(simulator)
+    // Simulator code path - UserDefaults only
+    if let authToken {
+      UserDefaults.group.set(authToken.value, forKey: .simulatorAuthTokenKey)
+    } else {
+      UserDefaults.group.removeObject(forKey: .simulatorAuthTokenKey)
+    }
+    #else
+    // Real device code path
     do {
       if let authToken {
         try sharedValet.setString(authToken.value, forKey: .authTokenKey)
@@ -262,5 +309,6 @@ private extension UserController {
       )
       print(error)
     }
+    #endif
   }
 }
