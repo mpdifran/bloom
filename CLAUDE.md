@@ -98,3 +98,10 @@ swift run   # Requires Redis: brew install redis && brew services start redis
 
 ### List View Development
 - Whenever you're building a cell in a list, use .cardContainer() to wrap it properly. You don't need to add padding, the view modifier will take care of that.
+
+## Documentation Guidelines
+
+When you discover new patterns, conventions, or important details about the codebase:
+1. **Update CLAUDE.md** - Add project-specific instructions, commands, or guidelines
+2. **Update ARCHITECTURE.md** - Document architectural patterns, conventions, and best practices
+3. Always document learnings to help maintain consistency and knowledge across sessions

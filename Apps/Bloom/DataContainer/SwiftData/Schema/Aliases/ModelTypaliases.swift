@@ -16,3 +16,6 @@ public typealias ChatMessage = SchemaV15.ChatMessage
 public typealias WorkoutPlan = SchemaV14.WorkoutPlan
 public typealias WorkoutSet = SchemaV14.WorkoutSet
 public typealias WorkoutExercise = SchemaV14.WorkoutExercise
+public typealias Reminder = SchemaV18.Reminder
+public typealias ReminderOccurrence = SchemaV18.ReminderOccurrence
+public typealias ReminderCompletionRecord = SchemaV18.ReminderCompletionRecord

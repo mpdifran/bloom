@@ -90,6 +90,27 @@ struct ChatHealthData: SendableNetworkModel {
     let demographics: UserInfo?
     let activityLevel: ActivityLevel?
 }
+
+// DTOs for thread-safe data passing (located in DataContainer/SwiftData/Schema/DTOs/)
+// Each DTO is in its own file and includes all model properties
+struct ReminderDTO: Sendable, Equatable, Identifiable {
+    public let persistentModelID: PersistentIdentifier
+    public let id: String
+    public let title: String
+    // ... all other properties from the model
+}
+
+// Models have asDTO() method defined in the DTO file
+extension SchemaV18.Reminder {
+    public func asDTO() -> ReminderDTO {
+        ReminderDTO(
+            persistentModelID: persistentModelID,
+            id: id,
+            title: title
+            // ... map all properties
+        )
+    }
+}
 ```
 
 ### HealthKit Integration
@@ -306,6 +327,38 @@ enum DataContainerMigrationPlan: SchemaMigrationPlan {
 }
 ```
 
+### Schema Evolution Pattern
+When creating a new schema version, all models must be prefixed with their schema version:
+```swift
+enum SchemaV18: VersionedSchema {
+    static let models: [any PersistentModel.Type] = [
+        SchemaV17.BowelMovement.self,  // Reference existing models from their version
+        SchemaV15.ChatMessage.self,
+        SchemaV9.FoodItemRecord.self,
+        SchemaV18.Reminder.self,        // New models also use version prefix
+        SchemaV18.ReminderOccurrence.self,
+        SchemaV18.ReminderCompletionRecord.self
+    ]
+}
+```
+This approach maintains clear version tracking and avoids ambiguity about which version of a model is being used.
+
+### Model Organization Pattern
+SwiftData models are organized to separate core definitions from helper methods:
+```
+Schema/
+├── V18/
+│   ├── SchemaV18.swift         # Schema definition
+│   └── Reminder.swift          # Core model definition (properties, relationships, init)
+├── Extensions/
+│   └── Models/
+│       └── Reminder+Helpers.swift  # Extension methods, computed properties
+└── DTOs/
+    └── ReminderDTO.swift       # DTO with all properties and asDTO() extension
+```
+
+Keep model definitions lean with only stored properties, relationships, and initializers. Move all helper methods, computed properties, and business logic to extension files.
+
 ## Error Handling
 
 ### User-Facing Errors
@@ -370,6 +423,7 @@ print("Querying Health Data [\(query.dataType.rawValue)]")
 6. **List Cells**: Use `.cardContainer()` for consistent styling
 7. **Create files only when necessary**: Prefer editing existing files
 8. **Follow existing patterns**: Check similar features before implementing
+9. **Code Indentation**: Use 2 spaces for indentation (not tabs)
 
 ## Custom JSON Encoding
 
