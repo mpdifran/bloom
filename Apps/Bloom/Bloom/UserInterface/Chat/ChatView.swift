@@ -17,28 +17,29 @@ struct ChatView: View {
   @State private var viewModel = ChatViewModel()
   @State private var presentedSheet: AnyView?
   @State private var isAtBottom = false
+  @State private var scrollToBottomTrigger = false
 
   @Environment(\.dismiss) private var dismiss
   @Environment(TabController.self) private var tabController: TabController
 
   var body: some View {
     NavigationStack {
-      chatContentWithModifiers
+      chatContent
+        .groupedBackground()
+        .sensoryFeedback(.selection, trigger: viewModel.cellModels)
+        .animation(.default, value: viewModel.cellModels)
         .navigationTitle("Bud")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbarContent }
+        .toolbar {
+          toolbarContent
+        }
     }
     .presentationCompactAdaptation(.fullScreenCover)
-  }
-  
-  private var chatContentWithModifiers: some View {
-    chatContent
-      .groupedBackground()
-      .sensoryFeedback(.selection, trigger: viewModel.cellModels)
-      .sheet($presentedSheet)
-      .alert(error: $viewModel.error)
-      .animation(.default, value: viewModel.cellModels)
-      .task { await viewModel.maintainWebSocketConnection() }
+    .sheet($presentedSheet)
+    .alert(error: $viewModel.error)
+    .task {
+      await viewModel.maintainWebSocketConnection()
+    }
   }
   
   @ToolbarContentBuilder
@@ -61,39 +62,16 @@ struct ChatView: View {
   
   @ViewBuilder
   private var chatContent: some View {
-    ScrollViewReader { scrollViewProxy in
-      ZStack(alignment: .bottom) {
-        messageList
-        
-        scrollToBottomButton {
-          withAnimation {
-            scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
-          }
-        }
-      }
+    messageList
+//      .overlay {
+//        scrollToBottomButton {
+//          scrollToBottomTrigger = true
+//        }
+//        .zStackAlignment(.bottom)
+//      }
       .safeAreaInset(edge: .bottom) {
         ChatMessageBar()
       }
-      .modifier(ScrollBehaviorModifier(
-        scrollViewProxy: scrollViewProxy,
-        cellModels: viewModel.cellModels
-      ))
-      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
-        }
-      }
-      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
-        }
-      }
-      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
-        }
-      }
-    }
   }
   
   @ViewBuilder
@@ -102,51 +80,24 @@ struct ChatView: View {
       ChatPromptsView()
         .zStackAlignment(.bottom)
     } else {
-      ChatLayout {
-        ForEach(viewModel.cellModels) { model in
-          ChatCell(model: model)
-            .id(model.id)
-            .transition(.blurReplace)
+      ChatLayoutView(
+        cellModels: $viewModel.cellModels,
+        scrollToBottomTrigger: $scrollToBottomTrigger,
+        onLoadMore: {
+          await viewModel.loadMoreMessages()
+        },
+        onIsAtBottomChanged: { atBottom in
+          withAnimation {
+            isAtBottom = atBottom
+          }
         }
-        
-        bottomAnchorView
-      }
-      .scrollDismissesKeyboard(.interactively)
+      )
     }
   }
 }
 
-struct ScrollBehaviorModifier: ViewModifier {
-  let scrollViewProxy: ScrollViewProxy
-  let cellModels: [ChatCellModel]
-  
-  func body(content: Content) -> some View {
-    content
-      .onChange(of: cellModels) { _, _ in
-        withAnimation {
-          scrollViewProxy.scrollTo("bottom-anchor", anchor: .bottom)
-        }
-      }
-  }
-}
 
 private extension ChatView {
-
-  var bottomAnchorView: some View {
-    Color.clear
-      .frame(height: 0.1)
-      .id("bottom-anchor")
-      .onAppear {
-        withAnimation {
-          isAtBottom = true
-        }
-      }
-      .onDisappear {
-        withAnimation {
-          isAtBottom = false
-        }
-      }
-  }
 
   @ViewBuilder
   func scrollToBottomButton(_ onTap: @escaping () -> Void) -> some View {

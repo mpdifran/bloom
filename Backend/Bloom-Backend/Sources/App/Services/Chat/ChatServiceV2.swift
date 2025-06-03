@@ -39,6 +39,7 @@ final class ChatServiceV2: Sendable {
   private let decoder = JSONDecoder.bloomModel
 
   private let jsonBuffer = StreamJSONBuffer()
+  private let typingStateTracker = TypingStateTracker()
 }
 
 // MARK: - Public Methods
@@ -216,6 +217,7 @@ private extension ChatServiceV2 {
         switch event {
         case .created:
           await jsonBuffer.resetIndex(for: userID)
+          await typingStateTracker.reset(for: userID)
         case .inProgress:
           try await sendIsAssistantTyping(isTyping: true, userID: userID)
         case .completed(let event):
@@ -298,6 +300,9 @@ private extension ChatServiceV2 {
     for data in filteredData {
       switch data {
       case .chunk(let index, let chunk):
+        // Turn off typing indicator when we start streaming text chunks
+        try await sendIsAssistantTyping(isTyping: false, userID: userID)
+        
         let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId + "-\(index)", chunk: chunk)
         let wasSent = try await sendSocketContentIfAvailable(messageChunk, userID: userID)
         if !wasSent {
@@ -536,8 +541,12 @@ private extension ChatServiceV2 {
     isTyping: Bool,
     userID: UserIdentifier
   ) async throws {
-    let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
-    _ = try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
+    // Only send if the state actually changed
+    let stateChanged = await typingStateTracker.setTypingIfChanged(isTyping, for: userID)
+    if stateChanged {
+      let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
+      _ = try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
+    }
   }
 
   func sendResponseCompleted(userID: UserIdentifier, db: any Database) async throws {

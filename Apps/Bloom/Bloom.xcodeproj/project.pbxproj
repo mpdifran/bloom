@@ -25,6 +25,8 @@
 		FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C22C88FA9D00278019 /* BugsnagPerformanceSwift */; };
 		FF4A21C52C88FA9D00278019 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF4A21C42C88FA9D00278019 /* BugsnagPerformanceSwiftUI */; };
 		FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0D152CFA47C500374F66 /* BloomModel */; };
+		FF5D62DA2DEDEC2D00C05976 /* ChatLayout in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D62D92DEDEC2D00C05976 /* ChatLayout */; };
+		FF5D70CC2DEE306D00C05976 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D70CB2DEE306D00C05976 /* DifferenceKit */; };
 		FF7577572DC92C3600E31C86 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577562DC92C3600E31C86 /* SFSafeSymbols */; };
 		FF7577582DC9625D00E31C86 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF7577592DC9625D00E31C86 /* BloomFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -481,10 +483,12 @@
 				FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */,
 				FF1E968A2C0C1F38004DAD2D /* BloomFoundation.framework in Frameworks */,
 				FF4A21C12C88FA9D00278019 /* BugsnagPerformance in Frameworks */,
+				FF5D70CC2DEE306D00C05976 /* DifferenceKit in Frameworks */,
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
 				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
 				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
 				FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */,
+				FF5D62DA2DEDEC2D00C05976 /* ChatLayout in Frameworks */,
 				FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -846,6 +850,8 @@
 				FFADE9932D468789004FBF2B /* Swipy */,
 				4B13A26D2D74E7FD00459D05 /* SFSafeSymbols */,
 				FF75776B2DCA381D00E31C86 /* TelemetryDeck */,
+				FF5D62D92DEDEC2D00C05976 /* ChatLayout */,
+				FF5D70CB2DEE306D00C05976 /* DifferenceKit */,
 			);
 			productName = Supplements;
 			productReference = FFACBAD92BAC7788006AAD0B /* Bloom.app */;
@@ -1000,6 +1006,8 @@
 				FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 				FFADE9922D468789004FBF2B /* XCRemoteSwiftPackageReference "Swipy" */,
 				4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
+				FF5D62D82DEDEC2D00C05976 /* XCRemoteSwiftPackageReference "ChatLayout" */,
+				FF5D70CA2DEE306D00C05976 /* XCRemoteSwiftPackageReference "DifferenceKit" */,
 			);
 			productRefGroup = FFACBADA2BAC7788006AAD0B /* Products */;
 			projectDirPath = "";
@@ -3685,6 +3693,22 @@
 				minimumVersion = 1.8.1;
 			};
 		};
+		FF5D62D82DEDEC2D00C05976 /* XCRemoteSwiftPackageReference "ChatLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ekazaev/ChatLayout.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.13;
+			};
+		};
+		FF5D70CA2DEE306D00C05976 /* XCRemoteSwiftPackageReference "DifferenceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ra1028/DifferenceKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 		FF83DB1A2D2ECF010018FAAC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
@@ -3782,6 +3806,16 @@
 		FF5D0D152CFA47C500374F66 /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BloomModel;
+		};
+		FF5D62D92DEDEC2D00C05976 /* ChatLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D62D82DEDEC2D00C05976 /* XCRemoteSwiftPackageReference "ChatLayout" */;
+			productName = ChatLayout;
+		};
+		FF5D70CB2DEE306D00C05976 /* DifferenceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D70CA2DEE306D00C05976 /* XCRemoteSwiftPackageReference "DifferenceKit" */;
+			productName = DifferenceKit;
 		};
 		FF7577562DC92C3600E31C86 /* SFSafeSymbols */ = {
 			isa = XCSwiftPackageProductDependency;
