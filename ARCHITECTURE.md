@@ -212,6 +212,27 @@ extension NSObject {
 }
 ```
 
+### Public Extension Pattern
+When creating extensions for types that need to be accessed across modules, use `public extension` rather than making individual members public:
+
+```swift
+// Preferred: Make the entire extension public
+public extension ReminderDTO {
+    var nextNotificationDate: Date? { /* implementation */ }
+    var color: Color { /* implementation */ }
+    func someMethod() { /* implementation */ }
+}
+
+// Avoid: Making individual members public
+extension ReminderDTO {
+    public var nextNotificationDate: Date? { /* implementation */ }
+    public var color: Color { /* implementation */ }
+    public func someMethod() { /* implementation */ }
+}
+```
+
+This pattern is cleaner, more maintainable, and makes the public interface intent clear at the extension level.
+
 ### Collection Extensions
 ```swift
 extension Collection {
@@ -435,6 +456,7 @@ print("Querying Health Data [\(query.dataType.rawValue)]")
 8. **Follow existing patterns**: Check similar features before implementing
 9. **Code Indentation**: Use 2 spaces for indentation (not tabs)
 10. **SF Symbols**: Always use SFSafeSymbols for type-safe symbol definitions instead of string literals
+11. **SwiftData Models**: Never make SwiftData models conform to `Sendable`. Use DTOs for thread-safe data transfer and avoid `@preconcurrency import` or `nonisolated(unsafe)` with SwiftData models
 
 ## Custom JSON Encoding
 

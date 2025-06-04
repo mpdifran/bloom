@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Before Starting Any Work
+
+**IMPORTANT**: Always read and review `ARCHITECTURE.md` before beginning any development work. This file contains:
+- Established patterns and conventions
+- Preferred coding styles and approaches
+- Common utilities and extensions
+- Testing patterns
+- Code organization principles
+
+Following these patterns ensures consistency across the codebase and prevents architectural drift.
+
 ## Project Overview
 
 Bloom is a comprehensive health and wellness ecosystem consisting of:

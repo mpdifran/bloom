@@ -3,7 +3,7 @@ import SwiftData
 
 extension SchemaV18 {
   @Model
-  public final class ReminderCompletionRecord: Hashable, Identifiable, @unchecked Sendable {
+  public final class ReminderCompletionRecord: Hashable, Identifiable {
     public var id = UUID().uuidString
     public var completedDate: Date = Date()
     

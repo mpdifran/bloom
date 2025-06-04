@@ -40,29 +40,31 @@ struct ToDoActionCard: View {
 }
 
 #Preview {
-  ScrollView {
-    VStack {
-      ScrollView(.horizontal) {
-        HStack {
-          ToDoActionCard(
-            title: "Log Weight",
-            subtitle: "Daily",
-            isComplete: false,
-            vitalKind: nil
-          )
-          .tint(.mutedIndigo)
-          ToDoActionCard(
-            title: "Log Blood Pressure",
-            subtitle: "Weekly",
-            isComplete: true,
-            vitalKind: .nutrition
-          )
-          .tint(.mutedBlue)
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        ScrollView(.horizontal) {
+          HStack {
+            ToDoActionCard(
+              title: "Log Weight",
+              subtitle: "Daily",
+              isComplete: false,
+              vitalKind: nil
+            )
+            .tint(.mutedIndigo)
+            ToDoActionCard(
+              title: "Log Blood Pressure",
+              subtitle: "Weekly",
+              isComplete: true,
+              vitalKind: .nutrition
+            )
+            .tint(.mutedBlue)
+          }
+          .padding()
         }
-        .padding()
+        .scrollIndicators(.hidden)
       }
-      .scrollIndicators(.hidden)
     }
+    .groupedBackground()
   }
-  .groupedBackground()
 }
