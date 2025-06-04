@@ -52,7 +52,7 @@ struct EditReminderOccurrenceView: View {
     CardView {
       LargeTitleActionCard(existingOccurrence == nil ? "New Notification" : "Edit Notification") {
         frequencySection
-        deleteSection
+        saveSection
           .padding(.top)
       } leading: {
         Button {
@@ -61,11 +61,7 @@ struct EditReminderOccurrenceView: View {
           Text("Cancel")
         }
       } trailing: {
-        Button {
-          saveOccurrence()
-        } label: {
-          Text("Save")
-        }
+        deleteButton
       }
     }
     .animation(.default, value: cadenceType)
@@ -126,6 +122,7 @@ private extension EditReminderOccurrenceView {
         }
       }
     }
+    .sensoryFeedback(.selection, trigger: selectedWeekdays)
   }
   
   var monthlyContent: some View {
@@ -162,18 +159,25 @@ private extension EditReminderOccurrenceView {
   }
 
   @ViewBuilder
-  var deleteSection: some View {
+  var deleteButton: some View {
     if existingOccurrence != nil, let onDelete {
       Button(role: .destructive) {
         onDelete()
         dismiss()
       } label: {
-        Label("Delete Notification", systemSymbol: .trash)
-          .foregroundStyle(.white)
-          .horizontallyCentered()
+        Text("Delete")
       }
-      .cardContainer(fill: .mutedRed)
     }
+  }
+
+  var saveSection: some View {
+    Button {
+      saveOccurrence()
+    } label: {
+      Text("Save")
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
   }
 
   var isValid: Bool {

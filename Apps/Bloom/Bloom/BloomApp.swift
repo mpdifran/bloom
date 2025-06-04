@@ -76,6 +76,10 @@ struct BloomApp: App {
             )
           }
         }
+        .task {
+          // Schedule all reminder notifications on app launch
+          await RemindersManager.shared.rescheduleAllReminders()
+        }
     }
     .modelContainer(ContainerHolder.shared.container)
     //        .backgroundTask(.appRefresh("proactive-tip")) {
@@ -98,6 +102,11 @@ private extension BloomApp {
 
     Task {
       await VitalsCalculator.shared.refreshVitals()
+    }
+
+    Task {
+      // Reschedule reminders when app comes to foreground
+      await RemindersManager.shared.rescheduleAllReminders()
     }
 
     TelemetryDeck.signal(

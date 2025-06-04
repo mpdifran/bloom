@@ -3,6 +3,7 @@ import SwiftData
 import BloomFoundation
 import DataContainer
 import SFSafeSymbols
+import AppUI
 
 struct CreateEditReminderView: View {
   @Environment(\.dismiss) private var dismiss
@@ -13,8 +14,13 @@ struct CreateEditReminderView: View {
   @State private var occurrences: [ReminderOccurrence]
   @State private var showingAddOccurrence = false
   @State private var editingOccurrence: ReminderOccurrence?
+  @State private var isSaving = false
+  @State private var saveError: Error?
+  @State private var isDeleting = false
+  @State private var deleteError: Error?
   
   private let existingReminder: Reminder?
+  private let remindersManager = RemindersManager.shared
   
   init(reminder: Reminder? = nil) {
     self.existingReminder = reminder
@@ -29,6 +35,9 @@ struct CreateEditReminderView: View {
         titleSection
         occurrencesSection
       }
+      .shelf {
+        saveButton
+      }
       .navigationTitle(existingReminder == nil ? "New Reminder" : "Edit Reminder")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
@@ -37,16 +46,21 @@ struct CreateEditReminderView: View {
             dismiss()
           }
         }
-        
-        ToolbarItem(placement: .confirmationAction) {
-          Button("Save") {
-            saveReminder()
+
+        if existingReminder != nil {
+          ToolbarItem(placement: .confirmationAction) {
+            Button("Delete", role: .destructive) {
+              deleteReminder()
+            }
+            .tint(.mutedRed)
+            .bold()
+            .disabled(isDeleting || isSaving)
           }
-          .bold()
-          .disabled(title.isEmpty || occurrences.isEmpty)
         }
       }
       .animation(.default, value: occurrences)
+      .alert(error: $saveError)
+      .alert(error: $deleteError)
       .sheet(isPresented: $showingAddOccurrence) {
         EditReminderOccurrenceView(occurrence: nil) { newOccurrence in
           occurrences.append(newOccurrence)
@@ -126,27 +140,74 @@ struct CreateEditReminderView: View {
       .cardContainer()
     }
   }
-  
+
+  var saveButton: some View {
+    Button {
+      saveReminder()
+    } label: {
+      Text("Save")
+        .horizontallyCentered()
+    }
+    .buttonStyle(.primary)
+    .disabled(title.isEmpty || occurrences.isEmpty || isSaving)
+  }
+
   private func saveReminder() {
+    guard !isSaving else { return }
+    
+    isSaving = true
     let colorHex = selectedColor.toHex() ?? ""
     
-    if let existingReminder {
-      // Update existing reminder
-      existingReminder.title = title
-      existingReminder.colorHex = colorHex
-      existingReminder.occurrences = occurrences
-      existingReminder.modifiedDate = Date()
-    } else {
-      // Create new reminder
-      let newReminder = Reminder(
-        title: title,
-        colorHex: colorHex,
-        occurrences: occurrences
-      )
-      modelContext.insert(newReminder)
+    Task {
+      do {
+        if let existingReminder {
+          // Update existing reminder
+          _ = try await remindersManager.updateReminder(
+            withID: existingReminder.id,
+            title: title,
+            colorHex: colorHex,
+            occurrences: occurrences
+          )
+        } else {
+          // Create new reminder
+          _ = try await remindersManager.createReminder(
+            title: title,
+            colorHex: colorHex,
+            occurrences: occurrences
+          )
+        }
+        
+        await MainActor.run {
+          dismiss()
+        }
+      } catch {
+        await MainActor.run {
+          saveError = error
+          isSaving = false
+        }
+      }
     }
+  }
+  
+  private func deleteReminder() {
+    guard !isDeleting, let existingReminder else { return }
     
-    dismiss()
+    isDeleting = true
+    
+    Task {
+      do {
+        try await remindersManager.deleteReminder(withID: existingReminder.id)
+        
+        await MainActor.run {
+          dismiss()
+        }
+      } catch {
+        await MainActor.run {
+          deleteError = error
+          isDeleting = false
+        }
+      }
+    }
   }
 }
 
