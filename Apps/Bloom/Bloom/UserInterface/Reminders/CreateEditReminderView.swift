@@ -123,7 +123,7 @@ struct CreateEditReminderView: View {
         .padding(.horizontal)
 
       VStack(alignment: .leading) {
-        ForEach(occurrences) { occurrence in
+        ForEach(sortedOccurrences) { occurrence in
           ReminderOccurrenceCell(occurrence: occurrence)
             .onTapGesture {
               editingOccurrence = occurrence
@@ -148,6 +148,22 @@ struct CreateEditReminderView: View {
         .fontDesign(.rounded)
       }
       .cardContainer()
+    }
+  }
+  
+  private var sortedOccurrences: [ReminderOccurrence] {
+    occurrences.sorted { first, second in
+      // First sort by cadence type priority
+      let cadenceOrder: [SchemaV18.ReminderCadenceType] = [.daily, .weekly, .monthly, .yearly]
+      let firstIndex = cadenceOrder.firstIndex(of: first.cadenceType) ?? cadenceOrder.count
+      let secondIndex = cadenceOrder.firstIndex(of: second.cadenceType) ?? cadenceOrder.count
+      
+      if firstIndex != secondIndex {
+        return firstIndex < secondIndex
+      }
+      
+      // If same cadence type, sort by time of day
+      return first.timeOfDay < second.timeOfDay
     }
   }
 
@@ -237,6 +253,38 @@ struct CreateEditReminderView: View {
           ReminderOccurrence(
             cadenceType: .daily,
             timeOfDay: 9 * 3600
+          )
+        ]
+      )
+    )
+  }
+}
+
+#Preview("Multiple Occurrences") {
+  PreviewEnvironment {
+    CreateEditReminderView(
+      reminder: Reminder(
+        title: "Health routine",
+        colorHex: "007AFF",
+        occurrences: [
+          // Intentionally unsorted to test sorting
+          ReminderOccurrence(
+            cadenceType: .monthly,
+            timeOfDay: 8 * 3600,
+            dayOfMonth: 1
+          ),
+          ReminderOccurrence(
+            cadenceType: .daily,
+            timeOfDay: 22 * 3600 // 10 PM
+          ),
+          ReminderOccurrence(
+            cadenceType: .weekly,
+            timeOfDay: 14 * 3600, // 2 PM
+            daysOfWeek: [2, 4] // Monday, Wednesday
+          ),
+          ReminderOccurrence(
+            cadenceType: .daily,
+            timeOfDay: 9 * 3600 // 9 AM
           )
         ]
       )

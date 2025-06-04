@@ -50,6 +50,5 @@ struct ReminderOccurrenceCell: View {
         )
       )
     }
-    .padding()
   }
 }

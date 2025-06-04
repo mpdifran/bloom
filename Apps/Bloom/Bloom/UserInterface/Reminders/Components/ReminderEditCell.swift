@@ -68,6 +68,22 @@ struct ReminderEditCell: View {
           ]
         )
       )
+      
+      ReminderEditCell(
+        reminder: Reminder(
+          title: "Take medication",
+          occurrences: [
+            ReminderOccurrence(
+              cadenceType: .daily,
+              timeOfDay: 9 * 3600 // 9 AM
+            ),
+            ReminderOccurrence(
+              cadenceType: .daily,
+              timeOfDay: 22 * 3600 // 10 PM
+            )
+          ]
+        )
+      )
     }
   }
 }
