@@ -43,6 +43,7 @@ struct SettingsView: View {
   @State private var error: Error?
 
   @Query private var userAddedHabits: [Habit]
+  @Query private var reminders: [Reminder]
 
   init() {
     _userAddedHabits = Query(
@@ -61,7 +62,7 @@ struct SettingsView: View {
         healthPermissionsSection
         healthGoalsSection
         habitsSection
-        todoSection
+        remindersSection
         workoutEquipmentSection
         userDetailsSection
         reportSection
@@ -283,25 +284,6 @@ private extension SettingsView {
       })
     })
   }
-
-  var todoSection: some View {
-    VStack {
-      SectionTitleView("To Dos")
-        .padding(.horizontal)
-
-      ForEachEnumerated(toDoManager.userAddableToDos) { (index, todo) in
-        SettingsHabitCell(
-          image: Image(systemSymbol: todo.kind.symbol),
-          title: todo.kind.name,
-          subtitle: todo.cadence.name
-        )
-        .tint(todo.kind.color)
-        .onTapGesture {
-          presentedSheet = ToDoCadenceConfigureView(todo: $toDoManager.userAddableToDos[index]).asAny
-        }
-      }
-    }
-  }
   
   var workoutEquipmentSection: some View {
     VStack {
@@ -318,6 +300,26 @@ private extension SettingsView {
         }
         .onTapGesture {
           presentedSheet = WorkoutEquipmentView().asAny
+        }
+      }
+    }
+  }
+  
+  var remindersSection: some View {
+    VStack {
+      SectionTitleView("Reminders")
+        .padding(.horizontal)
+      
+      SettingsSectionContainer {
+        SettingsCell("Reminders") {
+          HStack {
+            Text("\(reminders.count)")
+              .foregroundStyle(.secondary)
+            DisclosureIndicator()
+          }
+        }
+        .onTapGesture {
+          presentedSheet = RemindersEditListView().asAny
         }
       }
     }

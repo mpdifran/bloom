@@ -28,4 +28,8 @@ public extension NumberFormatter {
     $0.maximumFractionDigits = 3
     $0.numberStyle = .decimal
   }
+
+  static let ordinal = NumberFormatter().with {
+    $0.numberStyle = .ordinal
+  }
 }

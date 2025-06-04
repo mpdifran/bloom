@@ -265,6 +265,8 @@ UserInterface/
 │   └── Converters/
 ```
 
+Keep views modular - extract reusable components into separate files in the Components/ folder rather than defining them inline. This improves reusability and keeps files focused.
+
 ## Naming Conventions
 
 ### ViewModels
@@ -282,6 +284,11 @@ UserInterface/
 ### View Extensions
 - Pattern: `View+{Feature}.swift`
 - Example: `View+FlippedVertically.swift`
+
+### UI Component Naming
+- **Cell**: Components used within a view (e.g., `ReminderEditCell`, `FoodItemCell`)
+- **Card**: Modal views that don't cover the entire screen (e.g., `HealthGoalEditCard`, `NewGoalCard`)
+- **View**: Full screens or complex components (e.g., `SettingsView`, `CreateEditReminderView`)
 
 ## Concurrency Patterns
 
@@ -418,12 +425,16 @@ print("Querying Health Data [\(query.dataType.rawValue)]")
 1. **Always use workspace**: `open Bloom.xcworkspace`
 2. **Run SwiftLint**: `./Apps/Bloom/Scripts/swiftlint.sh`
 3. **Strict Concurrency**: Swift 6 with complete checking enabled
-4. **Preview Development**: Wrap previews in `PreviewEnvironment {}`
+4. **Preview Development**: 
+   - Wrap previews in `PreviewEnvironment {}`
+   - No need for `#if DEBUG` - previews are automatically excluded from release builds
+   - Every view should have a preview for development
 5. **ScrollView Usage**: Use `BloomScrollView` for consistent behavior
 6. **List Cells**: Use `.cardContainer()` for consistent styling
 7. **Create files only when necessary**: Prefer editing existing files
 8. **Follow existing patterns**: Check similar features before implementing
 9. **Code Indentation**: Use 2 spaces for indentation (not tabs)
+10. **SF Symbols**: Always use SFSafeSymbols for type-safe symbol definitions instead of string literals
 
 ## Custom JSON Encoding
 

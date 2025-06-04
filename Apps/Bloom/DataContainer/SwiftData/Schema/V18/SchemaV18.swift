@@ -1,10 +1,10 @@
 import Foundation
 @preconcurrency import SwiftData
 
-enum SchemaV18: VersionedSchema {
-  static let versionIdentifier = Schema.Version(0, 18, 0)
-  
-  static let models: [any PersistentModel.Type] = [
+public enum SchemaV18: VersionedSchema {
+  public static let versionIdentifier = Schema.Version(0, 18, 0)
+
+  public static let models: [any PersistentModel.Type] = [
     SchemaV17.BowelMovement.self,
     SchemaV15.ChatMessage.self,
     SchemaV9.FoodItemRecord.self,

@@ -30,4 +30,20 @@ extension Reminder {
     }
     modifiedDate = Date()
   }
+  
+  public var cadenceDescriptions: [String] {
+    occurrences?.map { $0.cadenceDescription } ?? []
+  }
+  
+  public var combinedCadenceDescription: String {
+    let descriptions = cadenceDescriptions
+    
+    if descriptions.isEmpty {
+      return "No schedule set"
+    } else if descriptions.count == 1 {
+      return descriptions[0]
+    } else {
+      return descriptions.joined(separator: " • ")
+    }
+  }
 }
