@@ -501,6 +501,194 @@ enum ChatCellType: Equatable {
 }
 ```
 
+## AI Chat Integration Patterns
+
+### Adding New AI Capabilities
+When adding new capabilities for the AI assistant to create or manage data, follow this pattern:
+
+#### 1. Create SocketMessage Models (BloomModel)
+Define models in `Shared/BloomModel/Sources/BloomModel/Chat/SocketMessage/SocketMessage+{Feature}.swift`:
+
+```swift
+public extension SocketMessage {
+  struct CreateReminder: Codable, Equatable, Sendable {
+    public let title: String
+    public let color: String
+    public let occurrences: [ReminderOccurrence]
+    
+    public init(title: String, color: String, occurrences: [ReminderOccurrence]) {
+      self.title = title
+      self.color = color
+      self.occurrences = occurrences
+    }
+  }
+  
+  // Use string-based enums for better AI comprehension
+  enum CadenceType: String, Codable, CaseIterable, Sendable {
+    case daily = "daily"
+    case weekly = "weekly"
+    case monthly = "monthly"
+    case yearly = "yearly"
+  }
+}
+```
+
+**Key principles:**
+- Use string raw values for enums (better AI understanding)
+- Include clear documentation in comments
+- Follow existing SocketMessage naming patterns
+- Make all types `Codable, Equatable, Sendable`
+
+#### 2. Add Function Schema (Backend)
+Define the JSON schema in `Backend/Bloom-Backend/Sources/App/Services/AI/Prompts/String+FunctionSchema.swift`:
+
+```swift
+static let createReminder: String = """
+  Create Reminder: {
+    "title": String,                     // Required. Short title using title case. Examples: "Take Vitamins", "Log Weight"
+    "color": String,                     // Required. A hex color code (e.g., "#FF0000").
+    "occurrences": [ReminderOccurrence] // Required. When the reminder should occur.
+  }
+
+  ReminderOccurrence: {
+    "cadenceType": CadenceType,  // Required. How often the reminder repeats.
+    "hour": Int,                 // Required. Hour in 24-hour format (0-23).
+    "minute": Int,               // Required. Minute of the hour (0-59).
+    "daysOfWeek": [Weekday]?     // Optional. Days for weekly reminders.
+  }
+
+  CadenceType: An enum with the following cases: \(SocketMessage.CadenceType.stringCaseList())
+  
+  Weekday: An enum with the following cases: \(SocketMessage.Weekday.stringCaseList())
+  """
+```
+
+**Key principles:**
+- Provide clear descriptions and examples
+- Use comments to explain field purposes and constraints
+- Reference enum cases dynamically using `stringCaseList()`
+- Mark optional fields clearly
+
+#### 3. Update Chat Assistant Prompt (Backend)
+Add the new capability to `Backend/Bloom-Backend/Sources/App/Services/AI/Prompts/String+Prompts.swift`:
+
+```swift
+// In the chatAssistant prompt string:
+If the user wants to set up a reminder for health-related activities (like taking medication, logging weight, drinking water, etc.), you can create reminders for them:
+\(String.FunctionSchema.createReminder)
+```
+
+**Key principles:**
+- Describe when to use the new capability
+- Include relevant examples in the description
+- Reference the function schema using string interpolation
+
+#### 4. Backend Integration
+Add parsing support in `Backend/Bloom-Backend/Sources/App/Services/Chat/ChatServiceV2.swift`:
+
+**a) Add handler method:**
+```swift
+func handleCreateReminder(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+  if let content = try? decoder.decode(SocketMessage.CreateReminder.self, from: data) {
+    return .createReminder(content)
+  }
+  return nil
+}
+```
+
+**b) Update parseKind method:**
+```swift
+if let kind = handleCreateReminder(data: data) {
+  return kind
+}
+```
+
+**c) Add case to RichMessageResponse.Kind enum:**
+```swift
+case createReminder(SocketMessage.CreateReminder)
+```
+
+#### 5. Robust Parsing with Soft Defaults
+Implement custom `init(from decoder:)` for AI-generated content to handle parsing errors gracefully:
+
+```swift
+public init(from decoder: any Decoder) throws {
+  let container = try decoder.container(keyedBy: CodingKeys.self)
+  
+  // Title with fallback
+  self.title = (try? container.decode(String.self, forKey: .title))?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Reminder"
+  
+  // Color validation with fallback
+  if let colorString = try? container.decode(String.self, forKey: .color),
+     colorString.hasPrefix("#") && colorString.count >= 7 {
+    self.color = colorString
+  } else {
+    self.color = "#007AFF" // Default blue
+  }
+  
+  // Hour/minute validation with clamping
+  let rawHour = (try? container.decode(Int.self, forKey: .hour)) ?? 9
+  self.hour = max(0, min(23, rawHour))
+}
+```
+
+**Key principles for soft parsing:**
+- Always provide sensible defaults for critical fields
+- Validate and clamp numeric values to acceptable ranges
+- Trim whitespace from string inputs
+- Handle empty arrays appropriately
+- Use nil-coalescing (`??`) and optional try (`try?`) patterns
+- Follow the patterns established in `SocketMessage.WorkoutPlan` and `SocketMessage.WorkoutSet`
+
+#### 6. Client-Side Rich Content Display
+Add support for displaying AI-generated content in the chat UI by updating `ChatRichContentWrapperCell`:
+
+**a) Add state variable:**
+```swift
+@State private var createReminder: SocketMessage.CreateReminder?
+```
+
+**b) Add UI case in body:**
+```swift
+} else if let createReminder {
+  ReminderCell(
+    reminder: createReminder.asReminderDTO(),
+    occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
+    isCompleted: false  // Hard-coded for display only
+  )
+  .padding(.leading)
+```
+
+**c) Add decoding logic in loadContent():**
+```swift
+} else if let createReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.CreateReminder.self, from: data) {
+  self.createReminder = createReminder
+```
+
+**d) Create conversion helpers** in separate extension file:
+```swift
+extension SocketMessage.CreateReminder {
+  func asReminderDTO() -> ReminderDTO {
+    // Convert SocketMessage data to DTO for existing UI components
+  }
+}
+```
+
+**Key principles for chat rich content:**
+- Reuse existing UI components (like `ReminderCell`) when possible
+- Create conversion methods to transform SocketMessage types to app DTOs
+- Hard-code display-only properties (like `isCompleted: false`)
+- Follow existing padding and layout patterns
+- Handle the case in the same pattern as other rich content types
+
+#### 7. Implementation Considerations
+- **Client Integration**: Implement the client-side handling for the new data type
+- **Validation**: Additional validation can be added on the client side if needed
+- **User Experience**: Soft parsing ensures AI mistakes don't break the user experience
+- **Logging**: Consider logging when defaults are used for debugging AI behavior
+
+This pattern ensures consistent AI integration while maintaining type safety, graceful error handling, and clear documentation for the AI model.
+
 This architecture emphasizes:
 - **Consistency**: Follow existing patterns
 - **Type Safety**: Leverage Swift's type system

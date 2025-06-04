@@ -150,4 +150,29 @@ extension String.FunctionSchema {
   
     DistanceUnit: An enum with the following cases: \(SocketMessage.WorkoutExercise.DistanceUnit.stringCaseList())
   """
+
+  static let createReminder: String = """
+    Create Reminder: {
+      "id": String?,                       // Optional. ID of existing reminder to update. Leave null for new reminders.
+      "title": String,                     // Required. Short title for the reminder using title case. Examples: "Take Vitamins", "Log Weight"
+      "color": String,                     // Required. A hex color code for the reminder (e.g., "#FF0000").
+      "occurrences": [ReminderOccurrence] // Required. When the reminder should occur.
+    }
+
+    ReminderOccurrence: {
+      "cadenceType": CadenceType,  // Required. How often the reminder repeats.
+      "hour": Int,                 // Required. Hour of day in 24-hour format (0-23).
+      "minute": Int,               // Required. Minute of the hour (0-59).
+      "daysOfWeek": [Weekday]?,    // Optional. Days of week for weekly reminders.
+      "dayOfMonth": Int?,          // Optional. Day of month for monthly reminders (1-31).
+      "monthOfYear": Month?,       // Optional. Month for yearly reminders.
+      "dayOfYear": Int?            // Optional. Day of month for yearly reminders (1-31).
+    }
+
+    CadenceType: An enum with the following cases: \(SocketMessage.CadenceType.stringCaseList())
+    
+    Weekday: An enum with the following cases: \(SocketMessage.Weekday.stringCaseList())
+    
+    Month: An enum with the following cases: \(SocketMessage.Month.stringCaseList())
+    """
 }

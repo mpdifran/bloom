@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 public struct ReminderOccurrenceDTO: Sendable, Equatable, Identifiable {
-  public let persistentModelID: PersistentIdentifier
+  public let persistentModelID: PersistentIdentifier?
   public let id: String
   public let cadenceType: SchemaV18.ReminderCadenceType
   public let timeOfDay: TimeInterval
@@ -12,7 +12,7 @@ public struct ReminderOccurrenceDTO: Sendable, Equatable, Identifiable {
   public let dayOfYear: Int?
   
   public init(
-    persistentModelID: PersistentIdentifier,
+    persistentModelID: PersistentIdentifier? = nil,
     id: String,
     cadenceType: SchemaV18.ReminderCadenceType,
     timeOfDay: TimeInterval,

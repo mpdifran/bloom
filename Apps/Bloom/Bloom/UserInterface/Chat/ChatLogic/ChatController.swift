@@ -296,6 +296,11 @@ private extension ChatController {
       case .createWorkout(let content):
         data = try? JSONEncoder.bloomModel.encode(content)
         // Workouts might need special handling - not auto-logging for now
+      case .createReminder(let content):
+        data = try? JSONEncoder.bloomModel.encode(content)
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(createReminder: content)
+        }
       case .invalid(let json):
         TelemetryDeck.signal("Chat - Invalid JSON", parameters: ["json": json])
       }
@@ -573,6 +578,47 @@ private extension ChatController {
     SoundPlayer.playLogHealthData()
     
     return recordID
+  }
+
+  func autoLog(createReminder: SocketMessage.CreateReminder) async throws -> String {
+    if let existingID = createReminder.id {
+      // Update existing reminder
+      _ = try await RemindersManager.shared.updateReminder(
+        withID: existingID,
+        title: createReminder.title,
+        colorHex: createReminder.color,
+        occurrences: createReminder.occurrences.map { occurrence in
+          ReminderOccurrence(
+            cadenceType: occurrence.cadenceType.asReminderCadenceType,
+            timeOfDay: TimeInterval(occurrence.hour * 3600 + occurrence.minute * 60),
+            daysOfWeek: occurrence.daysOfWeek?.map { $0.asWeekdayInt },
+            dayOfMonth: occurrence.dayOfMonth,
+            monthOfYear: occurrence.monthOfYear?.asMonthInt,
+            dayOfYear: occurrence.dayOfYear
+          )
+        }
+      )
+      TelemetryDeck.signal("Update Reminder")
+      return existingID
+    } else {
+      // Create new reminder
+      let reminder = try await RemindersManager.shared.createReminder(
+        title: createReminder.title,
+        colorHex: createReminder.color,
+        occurrences: createReminder.occurrences.map { occurrence in
+          ReminderOccurrence(
+            cadenceType: occurrence.cadenceType.asReminderCadenceType,
+            timeOfDay: TimeInterval(occurrence.hour * 3600 + occurrence.minute * 60),
+            daysOfWeek: occurrence.daysOfWeek?.map { $0.asWeekdayInt },
+            dayOfMonth: occurrence.dayOfMonth,
+            monthOfYear: occurrence.monthOfYear?.asMonthInt,
+            dayOfYear: occurrence.dayOfYear
+          )
+        }
+      )
+      TelemetryDeck.signal("Create Reminder")
+      return reminder.id
+    }
   }
 
   func on(error: Error) {

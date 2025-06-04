@@ -30,6 +30,7 @@ struct ChatRichContentWrapperCell: View {
   @State private var systolic: Double?
   @State private var diastolic: Double?
   @State private var workoutPlan: SocketMessage.WorkoutPlan?
+  @State private var createReminder: SocketMessage.CreateReminder?
 
   private let modelActor = HabitModelActor.standard()
 
@@ -105,6 +106,12 @@ struct ChatRichContentWrapperCell: View {
             chatMessageID: chatMessageID,
             workoutPlan: workoutPlan,
             hasPerformedAction: hasPerformedAction
+          )
+        } else if let createReminder {
+          ReminderCell(
+            reminder: createReminder.asReminderDTO(),
+            occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
+            isCompleted: false
           )
         } else {
           ChatUnknownContentCell()
@@ -189,6 +196,10 @@ private extension ChatRichContentWrapperCell {
     } else if let workoutPlan = try? JSONDecoder.bloomModel.decode(SocketMessage.WorkoutPlan.self, from: data) {
 
       self.workoutPlan = workoutPlan
+      
+    } else if let createReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.CreateReminder.self, from: data) {
+
+      self.createReminder = createReminder
     }
 
     self.isLoading = false

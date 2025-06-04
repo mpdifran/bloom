@@ -96,6 +96,8 @@ extension ChatHealthQueryPerformer {
       results = await fetchHealthMetric(.cardioDuration, dateRange: query.dateRange)
     case .highIntensityIntervalTrainingDuration:
       results = await fetchHealthMetric(.highIntensityIntervalTrainingDuration, dateRange: query.dateRange)
+    case .reminders:
+      results = await fetchReminders(query: query)
     }
 
     print("Returning Health Data [\(query.dataType.rawValue)]\n\(results)")
@@ -639,5 +641,74 @@ private extension ChatHealthQueryPerformer {
     guard quantity.doubleValue(for: unit) >= 0.001 else { return nil }
 
     return await quantity.displayString(for: unit)
+  }
+  
+  func fetchReminders(query: SocketMessage.Query) async -> String {
+    do {
+      let reminderModelActor = ReminderModelActor.standard()
+      let reminders = try await reminderModelActor.fetchAllReminders()
+      
+      let reminderData: [ChatReminderData.Reminder] = reminders.map { reminder in
+        let occurrenceData = reminder.occurrences.map { occurrence in
+          let monthName = occurrence.monthOfYear != nil ? monthName(for: occurrence.monthOfYear!) : nil
+          return ChatReminderData.Occurrence(
+            id: occurrence.id,
+            cadenceType: occurrence.cadenceType.displayName,
+            timeOfDay: formatTimeOfDay(occurrence.timeOfDay),
+            daysOfWeek: occurrence.daysOfWeek?.compactMap { weekdayName(for: $0) },
+            dayOfMonth: occurrence.dayOfMonth,
+            monthOfYear: monthName,
+            dayOfYear: occurrence.dayOfYear
+          )
+        }
+        
+        let filteredCompletions = reminder.completionRecords.compactMap { completion in
+          let startDate = query.startDate
+          let endDate = query.endDate
+          let completedDate = completion.completedDate
+          if startDate <= completedDate && completedDate <= endDate {
+            return ChatReminderData.Completion(
+              id: completion.id,
+              completedDate: completedDate
+            )
+          }
+          return nil
+        }
+        
+        return ChatReminderData.Reminder(
+          id: reminder.id,
+          title: reminder.title,
+          color: reminder.colorHex,
+          createdDate: reminder.createdDate,
+          modifiedDate: reminder.modifiedDate,
+          occurrences: occurrenceData,
+          completions: filteredCompletions
+        )
+      }
+      
+      let response = ChatReminderData(reminders: reminderData)
+      return convertToString(value: response)
+    } catch {
+      return "There was an error querying reminder data."
+    }
+  }
+  
+  private func formatTimeOfDay(_ timeInterval: TimeInterval) -> String {
+    let hours = Int(timeInterval / 3600)
+    let minutes = Int((timeInterval.truncatingRemainder(dividingBy: 3600)) / 60)
+    
+    let calendar = Calendar.current
+    let date = calendar.date(bySettingHour: hours, minute: minutes, second: 0, of: Date()) ?? Date()
+    return DateFormatter.justTimeShort.string(from: date)
+  }
+  
+  private func weekdayName(for weekday: Int) -> String? {
+    guard weekday >= 1 && weekday <= 7 else { return nil }
+    return Calendar.current.weekdaySymbols[weekday - 1]
+  }
+  
+  private func monthName(for month: Int) -> String? {
+    guard month >= 1 && month <= 12 else { return nil }
+    return Calendar.current.monthSymbols[month - 1]
   }
 }

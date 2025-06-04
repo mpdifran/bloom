@@ -392,6 +392,9 @@ private extension ChatServiceV2 {
     if let kind = handleCreateWorkout(data: data) {
       return kind
     }
+    if let kind = handleCreateReminder(data: data) {
+      return kind
+    }
 
     logger.error("Could not parse JSON as Rich Message:\n\(json)\n")
     return .invalid(json)
@@ -456,6 +459,13 @@ private extension ChatServiceV2 {
   func handleCreateWorkout(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content =  try? decoder.decode(SocketMessage.WorkoutPlan.self, from: data) {
       return .createWorkout(content)
+    }
+    return nil
+  }
+
+  func handleCreateReminder(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.CreateReminder.self, from: data) {
+      return .createReminder(content)
     }
     return nil
   }

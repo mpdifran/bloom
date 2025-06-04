@@ -18,13 +18,11 @@ struct ReminderCell: View {
   @State private var completeToggle = false
   @State private var unCompleteToggle = false
   
-  init(reminder: ReminderDTO, isCompleted: Bool) {
-    self.reminder = reminder
-    self.occurrence = nil
-    self.isCompleted = isCompleted
-  }
-  
-  init(reminder: ReminderDTO, occurrence: ReminderOccurrenceDTO, isCompleted: Bool) {
+  init(
+    reminder: ReminderDTO,
+    occurrence: ReminderOccurrenceDTO? = nil,
+    isCompleted: Bool
+  ) {
     self.reminder = reminder
     self.occurrence = occurrence
     self.isCompleted = isCompleted

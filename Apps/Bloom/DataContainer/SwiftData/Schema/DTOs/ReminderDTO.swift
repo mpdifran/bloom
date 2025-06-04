@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 public struct ReminderDTO: Sendable, Equatable, Identifiable {
-  public let persistentModelID: PersistentIdentifier
+  public let persistentModelID: PersistentIdentifier?
   public let id: String
   public let createdDate: Date
   public let modifiedDate: Date
@@ -12,7 +12,7 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
   public let completionRecords: [ReminderCompletionRecordDTO]
   
   public init(
-    persistentModelID: PersistentIdentifier,
+    persistentModelID: PersistentIdentifier? = nil,
     id: String,
     createdDate: Date,
     modifiedDate: Date,
