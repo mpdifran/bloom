@@ -115,6 +115,14 @@ final class RemindersManager: ObservableObject {
     await fetchReminders()
   }
   
+  /// Marks a reminder as uncompleted for today
+  func markReminderUncompleted(withID id: String) async throws {
+    try await modelActor.markReminderUncompleted(reminderID: id)
+    
+    // Refresh to update completion records
+    await fetchReminders()
+  }
+  
   /// Reschedules all reminder notifications (e.g., after app launch)
   func rescheduleAllReminders() async {
     do {

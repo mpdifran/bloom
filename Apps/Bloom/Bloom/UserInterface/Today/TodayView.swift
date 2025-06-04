@@ -23,9 +23,15 @@ struct TodayView: View {
       sort: \Habit.startDate,
       order: .reverse
     )
+    
+    _reminders = Query(
+      sort: \Reminder.modifiedDate,
+      order: .reverse
+    )
   }
 
   @Query var habits: [Habit]
+  @Query var reminders: [Reminder]
 
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   private var reportViewModel = ReportCoordinatorViewModel.shared
@@ -35,9 +41,6 @@ struct TodayView: View {
 
   @State private var presentedFullScreen: AnyView?
   @State private var presentedSheet: AnyView?
-  @State private var todaysReminders: [ReminderDTO] = []
-  @State private var completedReminderIDs: Set<String> = []
-  @State private var recentlyCompletedReminderIDs: Set<String> = []
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
@@ -57,7 +60,7 @@ struct TodayView: View {
         }
         .padding(.horizontal)
 
-        if todaysReminders.isNotEmpty {
+        if filteredTodaysOccurrences.isNotEmpty {
           remindersSection
         }
 
@@ -103,15 +106,9 @@ struct TodayView: View {
     }
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
-      Task {
-        await loadTodaysReminders()
-      }
     }
     .onForeground {
       habitsViewModel.checkUpdateSuggestedHabits()
-      Task {
-        await loadTodaysReminders()
-      }
     }
   }
 }
@@ -137,27 +134,39 @@ private extension TodayView {
 
   @ViewBuilder
   var remindersSection: some View {
-    SectionTitleView("\(todaysReminders.count) \(todaysReminders.count == 1 ? "Reminder" : "Reminders")")
+    SectionTitleView(reminderSectionTitle)
       .padding(.horizontal)
       .padding(.horizontal)
 
     ScrollView(.horizontal) {
       HStack {
-        ForEach(sortedReminders) { reminder in
+        ForEach(sortedOccurrences) { occurrence in
           ReminderCell(
-            reminder: reminder,
-            isCompleted: isReminderCompleted(reminder)
+            reminder: occurrence.reminder,
+            occurrence: occurrence.occurrence,
+            isCompleted: occurrence.isCompleted
           )
           .onTapGesture {
-            handleReminderTap(reminder)
+            handleOccurrenceTap(occurrence)
           }
+          .contextMenu {
+            Button("Edit", systemSymbol: .sliderHorizontal3) {
+              handleEditReminder(occurrence.reminder)
+            }
+          }
+          .transition(.scale.combined(with: .opacity))
         }
       }
       .scrollTargetLayout()
       .padding(.horizontal)
+      .animation(.bouncy(duration: 0.6), value: sortedOccurrences.map(\.id))
     }
     .scrollTargetBehavior(.viewAligned)
     .scrollIndicators(.hidden)
+  }
+
+  var reminderSectionTitle: String {
+    "\(filteredTodaysOccurrences.count) \(filteredTodaysOccurrences.count == 1 ? "Reminder" : "Reminders")"
   }
 
   @ViewBuilder
@@ -220,128 +229,99 @@ private extension TodayView {
   
   // MARK: - Reminder Helpers
   
-  func loadTodaysReminders() async {
-    do {
-      // Fetch ALL reminders first, then filter for today's + overdue
-      await remindersManager.fetchReminders()
-      let allReminders = remindersManager.reminders
+  /// Filtered reminder occurrences that should show on today's view
+  var filteredTodaysOccurrences: [ReminderOccurrenceDisplay] {
+    let reminderDTOs = reminders.map { $0.asDTO() }
+    return reminderDTOs
+      .filter { reminder in
+        reminder.hasNotificationToday || reminder.isOverdueToday(completionRecords: reminder.completionRecords)
+      }
+      .flatMap { $0.todaysOccurrenceDisplays() }
+  }
+  
+  var sortedOccurrences: [ReminderOccurrenceDisplay] {
+    return filteredTodaysOccurrences.sorted { occurrence1, occurrence2 in
+      let isOverdue1 = isOccurrenceOverdue(occurrence1)
+      let isOverdue2 = isOccurrenceOverdue(occurrence2)
+      let isCompleted1 = occurrence1.isCompleted
+      let isCompleted2 = occurrence2.isCompleted
       
-      if allReminders.isEmpty {
-        await MainActor.run {
-          todaysReminders = []
-          updateCompletedReminderIDs()
+      // Both are completed - sort by completion time (most recent first)
+      if isCompleted1 && isCompleted2 {
+        let completion1 = occurrence1.completionDate
+        let completion2 = occurrence2.completionDate
+        
+        // If we have completion dates, sort by most recent first (descending)
+        if let date1 = completion1, let date2 = completion2 {
+          return date1 > date2 // Most recent first
         }
-        return
+        // Fallback to scheduled time (most recent first)
+        return occurrence1.scheduledTime > occurrence2.scheduledTime
       }
       
-      // Filter to only show reminders that have notifications today or are overdue
-      let filteredReminders = allReminders.filter { reminder in
-        hasNotificationToday(reminder) || isOverdue(reminder)
+      // One is completed, one is not - uncompleted items come first
+      if isCompleted1 != isCompleted2 {
+        return !isCompleted1
       }
       
-      await MainActor.run {
-        todaysReminders = filteredReminders
-        updateCompletedReminderIDs()
-      }
-    } catch {
-      print("Failed to load today's reminders: \(error)")
-    }
-  }
-  
-  func hasNotificationToday(_ reminder: ReminderDTO) -> Bool {
-    guard let nextNotificationDate = reminder.nextNotificationDate else { return false }
-    return Calendar.current.isDateInToday(nextNotificationDate)
-  }
-  
-  func isOverdue(_ reminder: ReminderDTO) -> Bool {
-    guard let nextDate = reminder.nextNotificationDate else { return false }
-    let isCompleted = remindersManager.isReminderCompletedToday(reminder)
-    return nextDate < Date() && !isCompleted
-  }
-  
-  func updateCompletedReminderIDs() {
-    completedReminderIDs = Set(
-      todaysReminders
-        .filter { remindersManager.isReminderCompletedToday($0) }
-        .map { $0.id }
-    )
-  }
-  
-  var sortedReminders: [ReminderDTO] {
-    return todaysReminders.sorted { reminder1, reminder2 in
-      let isOverdue1 = isOverdue(reminder1)
-      let isOverdue2 = isOverdue(reminder2)
-      let isCompleted1 = isReminderCompleted(reminder1)
-      let isCompleted2 = isReminderCompleted(reminder2)
+      // Both uncompleted - sort by urgency
       
-      // If one is completed and recently completed, keep it in place temporarily
-      if recentlyCompletedReminderIDs.contains(reminder1.id) && !recentlyCompletedReminderIDs.contains(reminder2.id) {
-        return true
-      }
-      if recentlyCompletedReminderIDs.contains(reminder2.id) && !recentlyCompletedReminderIDs.contains(reminder1.id) {
-        return false
+      // Overdue items first
+      if isOverdue1 != isOverdue2 {
+        return isOverdue1
       }
       
-      // If both recently completed or neither, normal sorting applies
-      
-      // Overdue items first (unless completed)
-      if isOverdue1 && !isCompleted1 && !(isOverdue2 && !isCompleted2) {
-        return true
-      }
-      if isOverdue2 && !isCompleted2 && !(isOverdue1 && !isCompleted1) {
-        return false
-      }
-      
-      // Within overdue items, sort by most overdue (earliest missed notification)
-      if isOverdue1 && !isCompleted1 && isOverdue2 && !isCompleted2 {
-        let lastMissed1 = reminder1.lastMissedNotificationDate ?? Date.distantPast
-        let lastMissed2 = reminder2.lastMissedNotificationDate ?? Date.distantPast
-        return lastMissed1 < lastMissed2
-      }
-      
-      // Completed items at the end
-      if isCompleted1 && !isCompleted2 {
-        return false
-      }
-      if isCompleted2 && !isCompleted1 {
-        return true
-      }
-      
-      // For non-overdue items, sort by next notification time
-      let nextTime1 = reminder1.nextNotificationDate ?? Date.distantFuture
-      let nextTime2 = reminder2.nextNotificationDate ?? Date.distantFuture
-      return nextTime1 < nextTime2
+      // Both not overdue or both overdue - sort by scheduled time
+      return occurrence1.scheduledTime < occurrence2.scheduledTime
     }
   }
   
   func isReminderCompleted(_ reminder: ReminderDTO) -> Bool {
-    return completedReminderIDs.contains(reminder.id)
+    return remindersManager.isReminderCompletedToday(reminder)
+  }
+  
+  func isOccurrenceOverdue(_ occurrence: ReminderOccurrenceDisplay) -> Bool {
+    return occurrence.scheduledTime < Date() && !occurrence.isCompleted
   }
   
   func handleReminderTap(_ reminder: ReminderDTO) {
-    // Provide success haptic feedback
-    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-    impactFeedback.impactOccurred()
+    let isCurrentlyCompleted = isReminderCompleted(reminder)
     
-    // Mark as completed
     Task {
       do {
-        try await remindersManager.markReminderCompleted(withID: reminder.id)
-        
-        await MainActor.run {
-          completedReminderIDs.insert(reminder.id)
-          recentlyCompletedReminderIDs.insert(reminder.id)
-        }
-        
-        // After 2 seconds, remove from recently completed and allow re-sorting
-        try await Task.sleep(for: .seconds(2))
-        
-        await MainActor.run {
-          recentlyCompletedReminderIDs.remove(reminder.id)
+        if isCurrentlyCompleted {
+          // Uncomplete the reminder
+          try await remindersManager.markReminderUncompleted(withID: reminder.id)
+        } else {
+          // Complete the reminder
+          try await remindersManager.markReminderCompleted(withID: reminder.id)
         }
       } catch {
-        print("Failed to mark reminder as completed: \(error)")
+        print("Failed to mark reminder as \(isCurrentlyCompleted ? "uncompleted" : "completed"): \(error)")
       }
+    }
+  }
+  
+  func handleOccurrenceTap(_ occurrence: ReminderOccurrenceDisplay) {
+    Task {
+      do {
+        if occurrence.isCompleted {
+          // Uncomplete the reminder (removes the most recent completion)
+          try await remindersManager.markReminderUncompleted(withID: occurrence.reminder.id)
+        } else {
+          // Complete the reminder (adds a new completion)
+          try await remindersManager.markReminderCompleted(withID: occurrence.reminder.id)
+        }
+      } catch {
+        print("Failed to mark occurrence as \(occurrence.isCompleted ? "uncompleted" : "completed"): \(error)")
+      }
+    }
+  }
+  
+  func handleEditReminder(_ reminderDTO: ReminderDTO) {
+    // Find the actual Reminder model from the DTO ID
+    if let reminder = reminders.first(where: { $0.id == reminderDTO.id }) {
+      presentedSheet = CreateEditReminderView(reminder: reminder).asAny
     }
   }
 }

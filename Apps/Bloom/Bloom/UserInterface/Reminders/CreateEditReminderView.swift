@@ -18,7 +18,8 @@ struct CreateEditReminderView: View {
   @State private var saveError: Error?
   @State private var isDeleting = false
   @State private var deleteError: Error?
-  
+  @State private var confirmationDetails: ConfirmationDialogDetails?
+
   private let existingReminder: Reminder?
   private let remindersManager = RemindersManager.shared
   
@@ -50,7 +51,15 @@ struct CreateEditReminderView: View {
         if existingReminder != nil {
           ToolbarItem(placement: .confirmationAction) {
             Button("Delete", role: .destructive) {
-              deleteReminder()
+              confirmationDetails = ConfirmationDialogDetails(
+                title: "Delete Reminder",
+                message: "Are you sure you want to delete \"\(title.isEmpty ? "this reminder" : title)\"? This action cannot be undone.",
+                buttons: [
+                  ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
+                    deleteReminder()
+                  }
+                ]
+              )
             }
             .tint(.mutedRed)
             .bold()
@@ -61,6 +70,7 @@ struct CreateEditReminderView: View {
       .animation(.default, value: occurrences)
       .alert(error: $saveError)
       .alert(error: $deleteError)
+      .confirmationDialog($confirmationDetails)
       .sheet(isPresented: $showingAddOccurrence) {
         EditReminderOccurrenceView(occurrence: nil) { newOccurrence in
           occurrences.append(newOccurrence)

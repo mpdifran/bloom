@@ -86,27 +86,38 @@ class NotificationService: UNNotificationServiceExtension {
     private func isNotificationSuppressedByCompletion(_ request: UNNotificationRequest, reminderDTO: ReminderDTO) -> Bool {
         let now = Date()
         let calendar = Calendar.current
+        let today = calendar.startOfDay(for: now)
         
-        // Parse the notification identifier to determine which occurrence this is for
-        let identifier = request.identifier
+        // Get today's completion records sorted by completion time
+        let todaysCompletions = reminderDTO.completionRecords
+            .filter { calendar.isDate($0.completedDate, inSameDayAs: today) }
+            .sorted { $0.completedDate < $1.completedDate }
         
-        // Find the matching occurrence
-        guard let occurrence = findOccurrenceForNotification(identifier: identifier, reminder: reminderDTO) else {
-            return false
-        }
+        // Get all occurrences scheduled for today with their times
+        var occurrenceTimePairs: [(ReminderOccurrenceDTO, Date)] = []
         
-        // Check completion records for this logical occurrence
-        for completionRecord in reminderDTO.completionRecords {
-            if isCompletionRelevantForNotification(
-                completionDate: completionRecord.completedDate,
-                notificationDate: now,
-                occurrence: occurrence
-            ) {
-                return true // Suppress the notification
+        for occurrence in reminderDTO.occurrences {
+            let scheduledTimes = getScheduledTimesToday(for: occurrence)
+            for scheduledTime in scheduledTimes {
+                occurrenceTimePairs.append((occurrence, scheduledTime))
             }
         }
         
-        return false // Show the notification
+        // Sort by scheduled time
+        occurrenceTimePairs.sort { $0.1 < $1.1 }
+        
+        // Find which occurrence index this notification represents
+        let identifier = request.identifier
+        guard let notificationOccurrence = findOccurrenceForNotification(identifier: identifier, reminder: reminderDTO),
+              let occurrenceIndex = occurrenceTimePairs.firstIndex(where: { 
+                  $0.0.id == notificationOccurrence.id 
+              }) else {
+            return false
+        }
+        
+        // Check if this occurrence is covered by completions
+        // Completions cover occurrences in chronological order
+        return occurrenceIndex < todaysCompletions.count
     }
     
     private func findOccurrenceForNotification(identifier: String, reminder: ReminderDTO) -> ReminderOccurrenceDTO? {
@@ -133,39 +144,74 @@ class NotificationService: UNNotificationServiceExtension {
         return nil
     }
     
-    private func isCompletionRelevantForNotification(
-        completionDate: Date,
-        notificationDate: Date,
-        occurrence: ReminderOccurrenceDTO
-    ) -> Bool {
+    private func getScheduledTimesToday(for occurrence: ReminderOccurrenceDTO) -> [Date] {
         let calendar = Calendar.current
+        let now = Date()
+        let today = calendar.startOfDay(for: now)
         
         switch occurrence.cadenceType {
         case .daily:
-            // Completion on the same day suppresses that day's notifications
-            return calendar.isDate(completionDate, inSameDayAs: notificationDate)
+            // Daily reminders occur once per day at the specified time
+            let hour = Int(occurrence.timeOfDay) / 3600
+            let minute = (Int(occurrence.timeOfDay) % 3600) / 60
+            
+            if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
+                return [scheduledTime]
+            }
+            return []
             
         case .weekly:
-            // Completion on the same day of the week suppresses that day's notifications
-            return calendar.isDate(completionDate, inSameDayAs: notificationDate)
+            // Check if today is one of the scheduled days
+            guard let daysOfWeek = occurrence.daysOfWeek,
+                  let todayWeekday = calendar.dateComponents([.weekday], from: now).weekday,
+                  daysOfWeek.contains(todayWeekday) else {
+                return []
+            }
+            
+            let hour = Int(occurrence.timeOfDay) / 3600
+            let minute = (Int(occurrence.timeOfDay) % 3600) / 60
+            
+            if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
+                return [scheduledTime]
+            }
+            return []
             
         case .monthly:
-            // Completion on the same day of the month in the same month suppresses notifications
-            let completionComponents = calendar.dateComponents([.year, .month, .day], from: completionDate)
-            let notificationComponents = calendar.dateComponents([.year, .month, .day], from: notificationDate)
+            // Check if today is the scheduled day of month
+            guard let dayOfMonth = occurrence.dayOfMonth,
+                  let todayDay = calendar.dateComponents([.day], from: now).day,
+                  dayOfMonth == todayDay else {
+                return []
+            }
             
-            return completionComponents.year == notificationComponents.year &&
-                   completionComponents.month == notificationComponents.month &&
-                   completionComponents.day == notificationComponents.day
+            let hour = Int(occurrence.timeOfDay) / 3600
+            let minute = (Int(occurrence.timeOfDay) % 3600) / 60
+            
+            if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
+                return [scheduledTime]
+            }
+            return []
             
         case .yearly:
-            // Completion on the same day and month in the same year suppresses notifications
-            let completionComponents = calendar.dateComponents([.year, .month, .day], from: completionDate)
-            let notificationComponents = calendar.dateComponents([.year, .month, .day], from: notificationDate)
+            // Check if today is the scheduled month and day
+            guard let monthOfYear = occurrence.monthOfYear,
+                  let dayOfYear = occurrence.dayOfYear else {
+                return []
+            }
             
-            return completionComponents.year == notificationComponents.year &&
-                   completionComponents.month == notificationComponents.month &&
-                   completionComponents.day == notificationComponents.day
+            let todayComponents = calendar.dateComponents([.month, .day], from: now)
+            guard monthOfYear == todayComponents.month,
+                  dayOfYear == todayComponents.day else {
+                return []
+            }
+            
+            let hour = Int(occurrence.timeOfDay) / 3600
+            let minute = (Int(occurrence.timeOfDay) % 3600) / 60
+            
+            if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
+                return [scheduledTime]
+            }
+            return []
         }
     }
 }

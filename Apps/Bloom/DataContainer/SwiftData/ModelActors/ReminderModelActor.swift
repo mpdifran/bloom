@@ -106,4 +106,32 @@ public extension ReminderModelActor {
     try context.save()
     return completionRecord.asDTO()
   }
+  
+  func markReminderUncompleted(
+    reminderID: String,
+    completionDate: Date = Date()
+  ) throws {
+    let calendar = Calendar.current
+    let targetDay = calendar.startOfDay(for: completionDate)
+    
+    let descriptor = FetchDescriptor<ReminderCompletionRecord>(
+      predicate: #Predicate<ReminderCompletionRecord> { record in
+        record.reminder?.id == reminderID
+      }
+    )
+    
+    let completionRecords = try context.fetch(descriptor)
+    
+    // Find completion records from the target date
+    let recordsToDelete = completionRecords.filter { record in
+      calendar.isDate(record.completedDate, inSameDayAs: targetDay)
+    }
+    
+    // Delete the completion records
+    for record in recordsToDelete {
+      context.delete(record)
+    }
+    
+    try context.save()
+  }
 }

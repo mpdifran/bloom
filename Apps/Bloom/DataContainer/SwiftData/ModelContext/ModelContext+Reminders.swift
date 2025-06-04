@@ -48,9 +48,8 @@ public extension ModelContext {
                 let daysOfWeek = occurrence.daysOfWeek else {
             return false
           }
-          // Convert from 1-based (Calendar) to 0-based (our storage)
-          let todayIndex = todayWeekday - 1
-          return daysOfWeek.contains(todayIndex)
+          // Both Calendar weekday and our storage are now 1-based
+          return daysOfWeek.contains(todayWeekday)
           
         case .monthly:
           // Check if today's day of month matches

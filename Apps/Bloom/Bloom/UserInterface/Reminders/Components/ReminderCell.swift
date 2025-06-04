@@ -12,7 +12,35 @@ import SwiftData
 
 struct ReminderCell: View {
   let reminder: ReminderDTO
+  let occurrence: ReminderOccurrenceDTO?
   let isCompleted: Bool
+
+  @State private var completeToggle = false
+  @State private var unCompleteToggle = false
+  
+  init(reminder: ReminderDTO, isCompleted: Bool) {
+    self.reminder = reminder
+    self.occurrence = nil
+    self.isCompleted = isCompleted
+  }
+  
+  init(reminder: ReminderDTO, occurrence: ReminderOccurrenceDTO, isCompleted: Bool) {
+    self.reminder = reminder
+    self.occurrence = occurrence
+    self.isCompleted = isCompleted
+  }
+  
+  /// The scheduled time for this specific occurrence (if available)
+  private var scheduledTime: Date? {
+    guard let occurrence = occurrence else { return nil }
+    
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: Date())
+    let hour = Int(occurrence.timeOfDay) / 3600
+    let minute = (Int(occurrence.timeOfDay) % 3600) / 60
+    
+    return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today)
+  }
 
   var body: some View {
     HStack {
@@ -32,9 +60,18 @@ struct ReminderCell: View {
 
       Spacer()
     }
+    .sensoryFeedback(.success, trigger: completeToggle)
+    .sensoryFeedback(.impact, trigger: unCompleteToggle)
     .tint(reminder.color)
     .cardContainer()
     .frame(width: 280)
+    .onChange(of: isCompleted) { oldValue, newValue in
+      if newValue {
+        completeToggle.toggle()
+      } else {
+        unCompleteToggle.toggle()
+      }
+    }
   }
   
   private var subtitleText: String {
@@ -48,12 +85,27 @@ struct ReminderCell: View {
   }
   
   private var isOverdue: Bool {
-    guard let nextDate = reminder.nextNotificationDate else { return false }
-    return nextDate < Date() && !isCompleted
+    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+      // Use specific occurrence time
+      return scheduledTime < Date() && !isCompleted
+    } else {
+      // Fall back to reminder's general overdue status
+      return reminder.isOverdueToday(completionRecords: reminder.completionRecords)
+    }
   }
   
   private var overdueText: String {
-    guard let lastMissed = reminder.lastMissedNotificationDate else {
+    let targetTime: Date?
+    
+    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+      // Use specific occurrence time
+      targetTime = scheduledTime
+    } else {
+      // Fall back to reminder's last missed date
+      targetTime = reminder.lastMissedNotificationDate
+    }
+    
+    guard let lastMissed = targetTime else {
       return "Overdue"
     }
     
@@ -73,7 +125,17 @@ struct ReminderCell: View {
   }
   
   private var nextNotificationText: String {
-    guard let nextDate = reminder.nextNotificationDate else {
+    let targetTime: Date?
+    
+    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+      // Use specific occurrence time
+      targetTime = scheduledTime
+    } else {
+      // Fall back to reminder's next notification date
+      targetTime = reminder.nextNotificationDate
+    }
+    
+    guard let nextDate = targetTime else {
       return "No upcoming notifications"
     }
     

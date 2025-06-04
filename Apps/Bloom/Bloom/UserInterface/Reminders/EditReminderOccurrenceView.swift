@@ -174,7 +174,7 @@ private extension EditReminderOccurrenceView {
     Button {
       saveOccurrence()
     } label: {
-      Text("Save")
+      Text(existingOccurrence == nil ? "Add" : "Update")
         .horizontallyCentered()
     }
     .buttonStyle(.primary)

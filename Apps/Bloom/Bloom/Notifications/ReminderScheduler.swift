@@ -95,7 +95,8 @@ actor ReminderScheduler {
     var requests: [UNNotificationRequest] = []
     
     let content = UNMutableNotificationContent()
-    content.title = reminder.title
+    content.title = "Bloom Reminder"
+    content.subtitle = reminder.title
     content.sound = .default
     content.categoryIdentifier = reminder.id
     
@@ -129,7 +130,7 @@ actor ReminderScheduler {
       
       for dayOfWeek in daysOfWeek {
         var dateComponents = DateComponents()
-        dateComponents.weekday = dayOfWeek + 1 // Convert 0-based to 1-based
+        dateComponents.weekday = dayOfWeek // Already 1-based (1=Sunday, 7=Saturday)
         dateComponents.hour = hour
         dateComponents.minute = minute
         
