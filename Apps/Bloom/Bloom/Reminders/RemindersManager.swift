@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import DataContainer
+import UserNotifications
 
 @MainActor
 final class RemindersManager: ObservableObject {
@@ -107,6 +108,9 @@ final class RemindersManager: ObservableObject {
   func markReminderCompleted(withID id: String) async throws {
     _ = try await modelActor.markReminderCompleted(reminderID: id)
     
+    // Remove delivered notifications for this reminder
+    await removeDeliveredNotifications(withID: id)
+    
     // Refresh to update completion records
     await fetchReminders()
   }
@@ -137,5 +141,54 @@ final class RemindersManager: ObservableObject {
     // This would calculate the next occurrence based on the reminder's occurrences
     // Implementation depends on your specific requirements
     return nil
+  }
+  
+  // MARK: - Private Methods
+  
+  /// Removes delivered notifications for a specific reminder
+  private func removeDeliveredNotifications(withID reminderID: String) async {
+    // Find the reminder
+    guard let reminder = reminders.first(where: { $0.id == reminderID }) else {
+      print("Could not find reminder with ID \(reminderID) to remove notifications")
+      return
+    }
+    
+    let center = UNUserNotificationCenter.current()
+    
+    // Get all delivered notifications
+    let deliveredNotifications = await center.deliveredNotifications()
+    
+    // Find notification identifiers that match this reminder
+    var identifiersToRemove: [String] = []
+    
+    for occurrence in reminder.occurrences {
+      switch occurrence.cadenceType {
+      case .daily, .monthly, .yearly:
+        // For these cadence types, the identifier is just the occurrence ID
+        identifiersToRemove.append(occurrence.id)
+        
+      case .weekly:
+        // For weekly reminders, check each day of the week
+        if let daysOfWeek = occurrence.daysOfWeek {
+          for dayOfWeek in daysOfWeek {
+            identifiersToRemove.append("\(occurrence.id)_\(dayOfWeek)")
+          }
+        }
+        
+      @unknown default:
+        // Handle any future cadence types
+        identifiersToRemove.append(occurrence.id)
+      }
+    }
+    
+    // Filter to only identifiers that actually have delivered notifications
+    let deliveredIdentifiers = Set(deliveredNotifications.map { $0.request.identifier })
+    let matchingIdentifiers = identifiersToRemove.filter { deliveredIdentifiers.contains($0) }
+    
+    if !matchingIdentifiers.isEmpty {
+      // Remove the delivered notifications
+      center.removeDeliveredNotifications(withIdentifiers: matchingIdentifiers)
+      print("Removed \(matchingIdentifiers.count) delivered notifications for reminder '\(reminder.title)'")
+    }
   }
 }

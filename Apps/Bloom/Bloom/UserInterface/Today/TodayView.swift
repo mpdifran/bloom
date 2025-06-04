@@ -10,6 +10,7 @@ import AppUI
 import SwiftData
 import DataContainer
 import SFSafeSymbols
+import BloomFoundation
 
 @MainActor
 struct TodayView: View {
@@ -28,12 +29,15 @@ struct TodayView: View {
 
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   private var reportViewModel = ReportCoordinatorViewModel.shared
-  @ObservedObject private var toDoManager = ToDoManager.shared
+  @ObservedObject private var remindersManager = RemindersManager.shared
 
   @Environment(TabController.self) private var tabController: TabController
 
   @State private var presentedFullScreen: AnyView?
   @State private var presentedSheet: AnyView?
+  @State private var todaysReminders: [ReminderDTO] = []
+  @State private var completedReminderIDs: Set<String> = []
+  @State private var recentlyCompletedReminderIDs: Set<String> = []
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
@@ -53,8 +57,8 @@ struct TodayView: View {
         }
         .padding(.horizontal)
 
-        if toDoManager.relevantToDos.isNotEmpty {
-          todoSection
+        if todaysReminders.isNotEmpty {
+          remindersSection
         }
 
         Group {
@@ -100,13 +104,13 @@ struct TodayView: View {
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
       Task {
-        await toDoManager.recalculateToDos()
+        await loadTodaysReminders()
       }
     }
     .onForeground {
       habitsViewModel.checkUpdateSuggestedHabits()
       Task {
-        await toDoManager.recalculateToDos()
+        await loadTodaysReminders()
       }
     }
   }
@@ -132,29 +136,20 @@ private extension TodayView {
   }
 
   @ViewBuilder
-  var todoSection: some View {
-    SectionTitleView("\(toDoManager.relevantToDos.count) \(toDoManager.relevantToDos.count == 1 ? "To Do" : "To Do's")")
+  var remindersSection: some View {
+    SectionTitleView("\(todaysReminders.count) \(todaysReminders.count == 1 ? "Reminder" : "Reminders")")
       .padding(.horizontal)
       .padding(.horizontal)
 
     ScrollView(.horizontal) {
       HStack {
-        ForEach(toDoManager.relevantToDos) { todo in
-          ToDoActionCard(
-            title: todo.kind.name,
-            subtitle: todo.cadence.name,
-            isComplete: toDoManager.completedToDoKinds.contains(todo.kind),
-            vitalKind: todo.vitalKind
+        ForEach(sortedReminders) { reminder in
+          ReminderCell(
+            reminder: reminder,
+            isCompleted: isReminderCompleted(reminder)
           )
-          .tint(todo.kind.color)
           .onTapGesture {
-            if todo.kind.requiresBloomPlusEntitlement {
-              EntitledPresent(presentedSheet: $presentedSheet) {
-                todo.kind.sheetToPresent
-              }
-            } else {
-              presentedSheet = todo.kind.sheetToPresent
-            }
+            handleReminderTap(reminder)
           }
         }
       }
@@ -221,6 +216,133 @@ private extension TodayView {
       return "Available in \(duration)"
     }
     return "Available soon"
+  }
+  
+  // MARK: - Reminder Helpers
+  
+  func loadTodaysReminders() async {
+    do {
+      // Fetch ALL reminders first, then filter for today's + overdue
+      await remindersManager.fetchReminders()
+      let allReminders = remindersManager.reminders
+      
+      if allReminders.isEmpty {
+        await MainActor.run {
+          todaysReminders = []
+          updateCompletedReminderIDs()
+        }
+        return
+      }
+      
+      // Filter to only show reminders that have notifications today or are overdue
+      let filteredReminders = allReminders.filter { reminder in
+        hasNotificationToday(reminder) || isOverdue(reminder)
+      }
+      
+      await MainActor.run {
+        todaysReminders = filteredReminders
+        updateCompletedReminderIDs()
+      }
+    } catch {
+      print("Failed to load today's reminders: \(error)")
+    }
+  }
+  
+  func hasNotificationToday(_ reminder: ReminderDTO) -> Bool {
+    guard let nextNotificationDate = reminder.nextNotificationDate else { return false }
+    return Calendar.current.isDateInToday(nextNotificationDate)
+  }
+  
+  func isOverdue(_ reminder: ReminderDTO) -> Bool {
+    guard let nextDate = reminder.nextNotificationDate else { return false }
+    let isCompleted = remindersManager.isReminderCompletedToday(reminder)
+    return nextDate < Date() && !isCompleted
+  }
+  
+  func updateCompletedReminderIDs() {
+    completedReminderIDs = Set(
+      todaysReminders
+        .filter { remindersManager.isReminderCompletedToday($0) }
+        .map { $0.id }
+    )
+  }
+  
+  var sortedReminders: [ReminderDTO] {
+    return todaysReminders.sorted { reminder1, reminder2 in
+      let isOverdue1 = isOverdue(reminder1)
+      let isOverdue2 = isOverdue(reminder2)
+      let isCompleted1 = isReminderCompleted(reminder1)
+      let isCompleted2 = isReminderCompleted(reminder2)
+      
+      // If one is completed and recently completed, keep it in place temporarily
+      if recentlyCompletedReminderIDs.contains(reminder1.id) && !recentlyCompletedReminderIDs.contains(reminder2.id) {
+        return true
+      }
+      if recentlyCompletedReminderIDs.contains(reminder2.id) && !recentlyCompletedReminderIDs.contains(reminder1.id) {
+        return false
+      }
+      
+      // If both recently completed or neither, normal sorting applies
+      
+      // Overdue items first (unless completed)
+      if isOverdue1 && !isCompleted1 && !(isOverdue2 && !isCompleted2) {
+        return true
+      }
+      if isOverdue2 && !isCompleted2 && !(isOverdue1 && !isCompleted1) {
+        return false
+      }
+      
+      // Within overdue items, sort by most overdue (earliest missed notification)
+      if isOverdue1 && !isCompleted1 && isOverdue2 && !isCompleted2 {
+        let lastMissed1 = reminder1.lastMissedNotificationDate ?? Date.distantPast
+        let lastMissed2 = reminder2.lastMissedNotificationDate ?? Date.distantPast
+        return lastMissed1 < lastMissed2
+      }
+      
+      // Completed items at the end
+      if isCompleted1 && !isCompleted2 {
+        return false
+      }
+      if isCompleted2 && !isCompleted1 {
+        return true
+      }
+      
+      // For non-overdue items, sort by next notification time
+      let nextTime1 = reminder1.nextNotificationDate ?? Date.distantFuture
+      let nextTime2 = reminder2.nextNotificationDate ?? Date.distantFuture
+      return nextTime1 < nextTime2
+    }
+  }
+  
+  func isReminderCompleted(_ reminder: ReminderDTO) -> Bool {
+    return completedReminderIDs.contains(reminder.id)
+  }
+  
+  func handleReminderTap(_ reminder: ReminderDTO) {
+    // Provide success haptic feedback
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    impactFeedback.impactOccurred()
+    
+    // Mark as completed
+    Task {
+      do {
+        try await remindersManager.markReminderCompleted(withID: reminder.id)
+        
+        await MainActor.run {
+          completedReminderIDs.insert(reminder.id)
+          recentlyCompletedReminderIDs.insert(reminder.id)
+        }
+        
+        // After 2 seconds, remove from recently completed and allow re-sorting
+        try await Task.sleep(for: .seconds(2))
+        
+        await MainActor.run {
+          recentlyCompletedReminderIDs.remove(reminder.id)
+        }
+      } catch {
+        print("Failed to mark reminder as completed: \(error)")
+      }
+    }
   }
 }
 

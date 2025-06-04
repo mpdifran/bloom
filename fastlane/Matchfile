@@ -12,12 +12,14 @@ for_platform(:ios) do
     "com.lotus-labs.bloom.ShieldConfigurationExtension",
     "com.lotus-labs.bloom.ShieldActionExtension",
     "com.lotus-labs.bloom.DeviceActivityReportExtension",
+    "com.lotus-labs.bloom.NotificationServiceExtension",
     "com.lotus-labs.bloom.dev",
     "com.lotus-labs.bloom.dev.watchkitapp",
     "com.lotus-labs.bloom.dev.DeviceActivityMonitorExtension",
     "com.lotus-labs.bloom.dev.ShieldConfigurationExtension",
     "com.lotus-labs.bloom.dev.ShieldActionExtension",
-    "com.lotus-labs.bloom.dev.DeviceActivityReportExtension"
+    "com.lotus-labs.bloom.dev.DeviceActivityReportExtension",
+    "com.lotus-labs.bloom.dev.NotificationServiceExtension"
   ])
 end
 
