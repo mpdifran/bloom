@@ -6,22 +6,8 @@
 //
 
 import Foundation
-import UserNotifications
-
-extension String {
-  enum NotificationID {
-    static let goodMorning = "good-morning"
-    static let goodEvening = "good-evening"
-    static let reviewFocusAreas = "review-focus-areas"
-  }
-  enum CategoryID {
-    static let goodMorning = "good-morning"
-    static let goodEvening = "good-evening"
-    static let reviewFocusAreas = "review-focus-areas"
-    static let chatMessage = "chat-message"
-    static let goalsMessage = "goals-message"
-  }
-}
+@preconcurrency import UserNotifications
+import BloomFoundation
 
 final class NotificationManager: Sendable {
   static let shared = NotificationManager()

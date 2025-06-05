@@ -9,6 +9,7 @@ import Foundation
 import UserNotifications
 import SwiftData
 import DataContainer
+import BloomFoundation
 
 actor ReminderScheduler {
   static let shared = ReminderScheduler()
@@ -95,10 +96,11 @@ actor ReminderScheduler {
     var requests: [UNNotificationRequest] = []
     
     let content = UNMutableNotificationContent()
-    content.title = "Bloom Reminder"
+    content.title = "Reminder"
     content.subtitle = reminder.title
     content.sound = .default
-    content.categoryIdentifier = reminder.id
+    content.categoryIdentifier = .CategoryID.reminders
+    content.threadIdentifier = reminder.id
     
     // Convert timeOfDay (seconds since midnight) to date components
     let hour = Int(occurrence.timeOfDay) / 3600
@@ -221,12 +223,10 @@ actor ReminderScheduler {
   private func cancelAllReminderNotifications() async {
     let pendingRequests = await notificationCenter.pendingNotificationRequests()
     
-    // Filter for reminder notifications (those with UUID-like category identifiers)
+    // Filter for reminder notifications (those with reminders category)
     let reminderIdentifiers = pendingRequests
       .filter { request in
-        // Check if category identifier looks like a UUID (reminder ID)
-        let categoryID = request.content.categoryIdentifier
-        return UUID(uuidString: categoryID) != nil
+        request.content.categoryIdentifier == .CategoryID.reminders
       }
       .map { $0.identifier }
     

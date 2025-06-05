@@ -134,35 +134,39 @@ private extension TodayView {
 
   @ViewBuilder
   var remindersSection: some View {
-    SectionTitleView(reminderSectionTitle)
-      .padding(.horizontal)
-      .padding(.horizontal)
+    TimelineView(.everyMinute) { context in
+      VStack(alignment: .leading) {
+        SectionTitleView(reminderSectionTitle)
+          .padding(.horizontal)
+          .padding(.horizontal)
 
-    ScrollView(.horizontal) {
-      HStack {
-        ForEach(sortedOccurrences) { occurrence in
-          ReminderCell(
-            reminder: occurrence.reminder,
-            occurrence: occurrence.occurrence,
-            isCompleted: occurrence.isCompleted
-          )
-          .onTapGesture {
-            handleOccurrenceTap(occurrence)
-          }
-          .contextMenu {
-            Button("Edit", systemSymbol: .sliderHorizontal3) {
-              handleEditReminder(occurrence.reminder)
+        ScrollView(.horizontal) {
+          HStack {
+            ForEach(sortedOccurrences) { occurrence in
+              ReminderCell(
+                reminder: occurrence.reminder,
+                occurrence: occurrence.occurrence,
+                isCompleted: occurrence.isCompleted
+              )
+              .onTapGesture {
+                handleOccurrenceTap(occurrence)
+              }
+              .contextMenu {
+                Button("Edit", systemSymbol: .sliderHorizontal3) {
+                  handleEditReminder(occurrence.reminder)
+                }
+              }
+              .transition(.scale.combined(with: .opacity))
             }
           }
-          .transition(.scale.combined(with: .opacity))
+          .scrollTargetLayout()
+          .padding(.horizontal)
+          .animation(.bouncy(duration: 0.6), value: sortedOccurrences.map(\.id))
         }
+        .scrollTargetBehavior(.viewAligned)
+        .scrollIndicators(.hidden)
       }
-      .scrollTargetLayout()
-      .padding(.horizontal)
-      .animation(.bouncy(duration: 0.6), value: sortedOccurrences.map(\.id))
     }
-    .scrollTargetBehavior(.viewAligned)
-    .scrollIndicators(.hidden)
   }
 
   var reminderSectionTitle: String {

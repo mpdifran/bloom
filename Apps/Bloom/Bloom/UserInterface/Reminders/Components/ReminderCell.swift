@@ -50,7 +50,7 @@ struct ReminderCell: View {
 
         Text(subtitleText)
           .font(.subheadline)
-          .foregroundStyle(isOverdue ? .red : .secondary)
+          .foregroundStyle(subtitleTextColor)
       }
       .bold()
       .fontDesign(.rounded)
@@ -75,17 +75,43 @@ struct ReminderCell: View {
   private var subtitleText: String {
     guard !reminder.occurrences.isEmpty else { return "No schedule" }
     
-    if isOverdue {
+    if isDueNow {
+      return "Due now"
+    } else if isOverdue {
       return overdueText
     } else {
       return nextNotificationText
     }
   }
   
+  private var subtitleTextColor: Color {
+    if isOverdue {
+      return .red
+    } else {
+      return .secondary
+    }
+  }
+  
+  private var isDueNow: Bool {
+    // Only check if not completed
+    guard !isCompleted else { return false }
+    
+    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+      // Check if we're within the "due now" window (scheduled time to 5 minutes after)
+      let now = Date()
+      let fiveMinutesAfter = scheduledTime.addingTimeInterval(5 * 60)
+      return scheduledTime <= now && now <= fiveMinutesAfter
+    }
+    
+    return false
+  }
+  
   private var isOverdue: Bool {
     if let occurrence = occurrence, let scheduledTime = scheduledTime {
       // Use specific occurrence time
-      return scheduledTime < Date() && !isCompleted
+      // It's overdue if it's past the 5-minute "due now" window
+      let fiveMinutesAfter = scheduledTime.addingTimeInterval(5 * 60)
+      return fiveMinutesAfter < Date() && !isCompleted
     } else {
       // Fall back to reminder's general overdue status
       return reminder.isOverdueToday(completionRecords: reminder.completionRecords)

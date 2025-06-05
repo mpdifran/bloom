@@ -47,9 +47,15 @@ class NotificationService: UNNotificationServiceExtension {
     
     private func shouldSuppressReminderNotification(_ request: UNNotificationRequest) -> Bool {
         // Check if this is a reminder notification by looking at the category identifier
-        let categoryID = request.content.categoryIdentifier
-        guard UUID(uuidString: categoryID) != nil else {
-            // Not a reminder notification (reminder IDs are UUIDs)
+        guard request.content.categoryIdentifier == .CategoryID.reminders else {
+            // Not a reminder notification
+            return false
+        }
+        
+        // Get the reminder ID from the thread identifier
+        let reminderID = request.content.threadIdentifier
+        guard !reminderID.isEmpty else {
+            // No reminder ID found
             return false
         }
         
@@ -61,7 +67,7 @@ class NotificationService: UNNotificationServiceExtension {
             // Find the reminder by ID
             let descriptor = FetchDescriptor<Reminder>(
                 predicate: #Predicate<Reminder> { reminder in
-                    reminder.id == categoryID
+                    reminder.id == reminderID
                 }
             )
             
