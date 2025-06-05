@@ -39,40 +39,42 @@ struct ReminderCell: View {
     
     return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today)
   }
-
+  
   var body: some View {
-    HStack {
-      CompletionCheckmarkView(state: isCompleted ? .metGoal : .unmetGoal, colorize: true)
+    TimelineView(.everyMinute) { _ in
+      HStack {
+        CompletionCheckmarkView(state: isCompleted ? .metGoal : .unmetGoal, colorize: true)
 
-      VStack(alignment: .leading) {
-        Text(reminder.title)
-          .font(.title3)
+        VStack(alignment: .leading) {
+          Text(reminder.title)
+            .font(.title3)
 
-        Text(subtitleText)
-          .font(.subheadline)
-          .foregroundStyle(subtitleTextColor)
+          Text(subtitleText())
+            .font(.subheadline)
+            .foregroundStyle(subtitleTextColor())
+        }
+        .bold()
+        .fontDesign(.rounded)
+        .lineLimit(1)
+
+        Spacer()
       }
-      .bold()
-      .fontDesign(.rounded)
-      .lineLimit(1)
-
-      Spacer()
-    }
-    .sensoryFeedback(.success, trigger: completeToggle)
-    .sensoryFeedback(.impact, trigger: unCompleteToggle)
-    .tint(reminder.color)
-    .cardContainer()
-    .frame(width: 280)
-    .onChange(of: isCompleted) { oldValue, newValue in
-      if newValue {
-        completeToggle.toggle()
-      } else {
-        unCompleteToggle.toggle()
+      .sensoryFeedback(.success, trigger: completeToggle)
+      .sensoryFeedback(.impact, trigger: unCompleteToggle)
+      .tint(reminder.color)
+      .cardContainer()
+      .frame(width: 280)
+      .onChange(of: isCompleted) { _, newValue in
+        if newValue {
+          completeToggle.toggle()
+        } else {
+          unCompleteToggle.toggle()
+        }
       }
     }
   }
   
-  private var subtitleText: String {
+  private func subtitleText() -> String {
     guard !reminder.occurrences.isEmpty else { return "No schedule" }
     
     if isDueNow {
@@ -84,7 +86,7 @@ struct ReminderCell: View {
     }
   }
   
-  private var subtitleTextColor: Color {
+  private func subtitleTextColor() -> Color {
     if isOverdue {
       return .red
     } else {
@@ -95,19 +97,18 @@ struct ReminderCell: View {
   private var isDueNow: Bool {
     // Only check if not completed
     guard !isCompleted else { return false }
-    
-    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+
+    if let _ = occurrence, let scheduledTime = scheduledTime {
       // Check if we're within the "due now" window (scheduled time to 5 minutes after)
       let now = Date()
       let fiveMinutesAfter = scheduledTime.addingTimeInterval(5 * 60)
       return scheduledTime <= now && now <= fiveMinutesAfter
     }
-    
     return false
   }
   
   private var isOverdue: Bool {
-    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+    if let _ = occurrence, let scheduledTime = scheduledTime {
       // Use specific occurrence time
       // It's overdue if it's past the 5-minute "due now" window
       let fiveMinutesAfter = scheduledTime.addingTimeInterval(5 * 60)
@@ -121,7 +122,7 @@ struct ReminderCell: View {
   private var overdueText: String {
     let targetTime: Date?
     
-    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+    if let _ = occurrence, let scheduledTime = scheduledTime {
       // Use specific occurrence time
       targetTime = scheduledTime
     } else {
@@ -151,7 +152,7 @@ struct ReminderCell: View {
   private var nextNotificationText: String {
     let targetTime: Date?
     
-    if let occurrence = occurrence, let scheduledTime = scheduledTime {
+    if let _ = occurrence, let scheduledTime = scheduledTime {
       // Use specific occurrence time
       targetTime = scheduledTime
     } else {
