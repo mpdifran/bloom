@@ -681,13 +681,52 @@ extension SocketMessage.CreateReminder {
 - Follow existing padding and layout patterns
 - Handle the case in the same pattern as other rich content types
 
-#### 7. Implementation Considerations
+#### 7. Chat History Support
+For AI-generated content to appear properly in chat history (after restart or refresh), update the chat history system:
+
+**a) Update ProcessedRichContent enum** in `ChatCellModel.swift`:
+```swift
+enum ProcessedRichContent: Equatable {
+  case goals([ProposedGoal])
+  case detectedFood(name: String, meal: FoodItemLog.Meal, servings: [FoodItemServingAmount])
+  case createReminder(SocketMessage.CreateReminder)  // Add new case
+  // ... other cases
+}
+```
+
+**b) Update ChatHistoryModifier** in `ChatHistoryModifier.swift`:
+Add processing logic in the `processRichContent` method:
+```swift
+} else if let createReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.CreateReminder.self, from: data) {
+  return .createReminder(createReminder)
+}
+```
+
+**c) Update ChatProcessedRichContentWrapperCell** in `ChatProcessedRichContentWrapperCell.swift`:
+Add case to the switch statement:
+```swift
+case .createReminder(let createReminder):
+  ReminderCell(
+    reminder: createReminder.asReminderDTO(),
+    occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
+    isCompleted: false
+  )
+```
+
+**Key principles for chat history:**
+- Process rich content data in ChatHistoryModifier to avoid async loading in UI
+- Use ProcessedRichContent enum to represent pre-processed data
+- Reuse the same UI components as live chat for consistency
+- Follow the existing switch statement patterns
+
+#### 8. Implementation Considerations
 - **Client Integration**: Implement the client-side handling for the new data type
 - **Validation**: Additional validation can be added on the client side if needed
 - **User Experience**: Soft parsing ensures AI mistakes don't break the user experience
 - **Logging**: Consider logging when defaults are used for debugging AI behavior
+- **Chat History**: Always update the chat history system to ensure AI-generated content persists across app restarts
 
-This pattern ensures consistent AI integration while maintaining type safety, graceful error handling, and clear documentation for the AI model.
+This pattern ensures consistent AI integration while maintaining type safety, graceful error handling, persistence across sessions, and clear documentation for the AI model.
 
 This architecture emphasizes:
 - **Consistency**: Follow existing patterns

@@ -86,6 +86,14 @@ struct ChatProcessedRichContentWrapperCell: View {
           hasPerformedAction: hasPerformedAction
         )
         
+      case .createReminder(let createReminder):
+        ReminderCell(
+          reminder: createReminder.asReminderDTO(),
+          occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
+          isCompleted: false
+        )
+        .horizontalAlignment(.leading)
+        .padding(.leading)
       case .unknown:
         ChatUnknownContentCell()
       }

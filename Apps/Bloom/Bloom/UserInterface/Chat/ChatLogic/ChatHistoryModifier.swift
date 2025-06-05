@@ -292,6 +292,9 @@ actor ChatHistoryModifier {
       
     } else if let workoutPlan = try? JSONDecoder.bloomModel.decode(SocketMessage.WorkoutPlan.self, from: data) {
       return .workoutPlan(workoutPlan)
+      
+    } else if let createReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.CreateReminder.self, from: data) {
+      return .createReminder(createReminder)
     }
     
     return .unknown

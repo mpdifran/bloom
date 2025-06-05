@@ -113,6 +113,8 @@ struct ChatRichContentWrapperCell: View {
             occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
             isCompleted: false
           )
+          .horizontalAlignment(.leading)
+          .padding(.leading)
         } else {
           ChatUnknownContentCell()
         }
