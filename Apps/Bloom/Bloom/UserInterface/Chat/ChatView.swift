@@ -63,12 +63,12 @@ struct ChatView: View {
   @ViewBuilder
   private var chatContent: some View {
     messageList
-//      .overlay {
-//        scrollToBottomButton {
-//          scrollToBottomTrigger = true
-//        }
-//        .zStackAlignment(.bottom)
-//      }
+      .overlay {
+        scrollToBottomButton {
+          scrollToBottomTrigger = true
+        }
+        .zStackAlignment(.bottom)
+      }
       .safeAreaInset(edge: .bottom) {
         ChatMessageBar()
       }

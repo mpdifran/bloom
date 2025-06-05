@@ -204,8 +204,6 @@ private extension TodayView {
 
           presentedSheet = GoodMorningView().asAny
         }
-
-        Spacer()
       }
     }
   }

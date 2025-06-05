@@ -14,4 +14,9 @@ public extension ReminderDTO {
   var color: Color {
     return Color(hex: colorHex) ?? .accentColor
   }
+  
+  /// Returns a combined description of all cadence types and times
+  var combinedCadenceDescription: String {
+    return occurrences.combinedCadenceDescription()
+  }
 }

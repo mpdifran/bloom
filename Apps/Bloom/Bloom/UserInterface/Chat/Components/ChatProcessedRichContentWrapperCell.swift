@@ -87,13 +87,10 @@ struct ChatProcessedRichContentWrapperCell: View {
         )
         
       case .createReminder(let createReminder):
-        ReminderCell(
+        ChatReminderCell(
           reminder: createReminder.asReminderDTO(),
-          occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
-          isCompleted: false
+          occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO()
         )
-        .horizontalAlignment(.leading)
-        .padding(.leading)
       case .unknown:
         ChatUnknownContentCell()
       }
