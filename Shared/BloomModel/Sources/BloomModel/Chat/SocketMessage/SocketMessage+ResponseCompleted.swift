@@ -10,13 +10,15 @@ import Foundation
 public extension SocketMessage {
   struct ResponseCompleted: Codable, Equatable, Sendable {
     public var type: `Type`
+    public let requestID: String?
 
     public enum `Type`: String, Codable, Equatable, Sendable {
       case responseCompleted
     }
 
-    public init() {
+    public init(requestID: String? = nil) {
       self.type = .responseCompleted
+      self.requestID = requestID
     }
   }
 }

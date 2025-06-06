@@ -106,6 +106,8 @@ final actor ChatController: ObservableObject {
 
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
+  
+  private var currentRequestID: String?
 }
 
 extension ChatController {
@@ -159,10 +161,15 @@ extension ChatController {
       fileIDs = []
     }
 
+    // Generate a new request ID
+    let requestID = "request_\(UUID().uuidString)"
+    currentRequestID = requestID
+    
     let socketMessage = SocketMessage.MessageRequest(
       text: trimmedMessage,
       imageFileIDs: fileIDs,
-      userInfo: stringData
+      userInfo: stringData,
+      requestID: requestID
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -321,6 +328,19 @@ private extension ChatController {
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       await TelemetryDeck.stopAndSendDurationSignal("Chat TTFTC")
+
+      // Extract the request ID from the tool call request
+      let requestIDForResponse = toolCallRequest.requestID
+
+      if let requestIDForResponse {
+        TelemetryDeck.signal(
+          "Chat Tool Call",
+          parameters: [
+            "requestID" : requestIDForResponse
+          ]
+        )
+      }
+
       do {
         let toolCallsResponses: [SocketMessage.ToolCallResult] = try await withThrowingTaskGroup(of: SocketMessage.ToolCallResult.self, returning: [SocketMessage.ToolCallResult].self) { [self, queryPerformer] taskGroup in
           for toolCall in toolCallRequest.toolCalls {
@@ -391,7 +411,8 @@ private extension ChatController {
 
         let responseMessage = SocketMessage.ToolCallsResponse(
           runID: toolCallRequest.runID,
-          toolCallResults: toolCallsResponses
+          toolCallResults: toolCallsResponses,
+          requestID: requestIDForResponse
         )
 
         if let socket = webSocketHandle {
@@ -403,7 +424,8 @@ private extension ChatController {
         // If we throw, just return an empty set.
         let responseMessage = SocketMessage.ToolCallsResponse(
           runID: toolCallRequest.runID,
-          toolCallResults: toolCallRequest.toolCalls.map { SocketMessage.ToolCallResult(toolCallID: $0.toolCallID) }
+          toolCallResults: toolCallRequest.toolCalls.map { SocketMessage.ToolCallResult(toolCallID: $0.toolCallID) },
+          requestID: requestIDForResponse
         )
         if let socket = webSocketHandle {
           try? await socket.send(payload: responseMessage)
@@ -426,6 +448,9 @@ private extension ChatController {
     } else if let _ = try? decoder.decode(SocketMessage.ResponseCompleted.self, from: data) {
 
       TelemetryDeck.signal("Response Completed")
+      
+      // Clear the current request ID when the response completes
+      currentRequestID = nil
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
       self.error = NSError(description: error.errorMessage)
       print(error.errorMessage)

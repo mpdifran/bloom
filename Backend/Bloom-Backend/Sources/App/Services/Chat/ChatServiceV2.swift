@@ -40,6 +40,7 @@ final class ChatServiceV2: Sendable {
 
   private let jsonBuffer = StreamJSONBuffer()
   private let typingStateTracker = TypingStateTracker()
+  private let requestIDTracker = RequestIDTracker()
 }
 
 // MARK: - Public Methods
@@ -106,6 +107,9 @@ private extension ChatServiceV2 {
     db: any Database
   ) async throws {
 
+    // Store the requestID for this user's conversation
+    await requestIDTracker.setCurrentRequestID(message.requestID, for: userID)
+
     var inputs = [OpenAIKit.Response.InputItem]()
 
     // System Messages
@@ -147,6 +151,11 @@ private extension ChatServiceV2 {
     userID: UserIdentifier,
     db: any Database
   ) async throws {
+
+    // Update the requestID if provided in the response
+    if let requestID = response.requestID {
+      await requestIDTracker.setCurrentRequestID(requestID, for: userID)
+    }
 
     let inputs = response.toolCallResults.map {
       let output = Response.InputItem.FunctionToolCallOutput(callId: $0.toolCallID, output: $0.data)
@@ -296,6 +305,7 @@ private extension ChatServiceV2 {
   ) async throws {
 
     let filteredData = await jsonBuffer.filter(event.delta, for: userID)
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
 
     for data in filteredData {
       switch data {
@@ -303,7 +313,11 @@ private extension ChatServiceV2 {
         // Turn off typing indicator when we start streaming text chunks
         try await sendIsAssistantTyping(isTyping: false, userID: userID)
         
-        let messageChunk = SocketMessage.MessageChunkResponse(id: event.itemId + "-\(index)", chunk: chunk)
+        let messageChunk = SocketMessage.MessageChunkResponse(
+          id: event.itemId + "-\(index)", 
+          chunk: chunk,
+          requestID: currentRequestID
+        )
         let wasSent = try await sendSocketContentIfAvailable(messageChunk, userID: userID)
         if !wasSent {
           try await chatHistory.cacheStreamingContent(messageChunk, userID: userID)
@@ -311,7 +325,12 @@ private extension ChatServiceV2 {
       case .json(let index, let json):
         let kind = try parseKind(from: json)
 
-        let message = SocketMessage.RichMessageResponse(id: event.itemId + "-\(index)", kind: kind, isTemporary: true)
+        let message = SocketMessage.RichMessageResponse(
+          id: event.itemId + "-\(index)", 
+          kind: kind, 
+          isTemporary: true,
+          requestID: currentRequestID
+        )
         let wasSent = try await sendSocketContentIfAvailable(message, userID: userID)
         if !wasSent {
           try await chatHistory.cacheStreamingContent(message, userID: userID)
@@ -333,12 +352,17 @@ private extension ChatServiceV2 {
     try await chatHistory.append(userID: userID, inputItems: [.itemReference(.init(id: event.itemId))])
 
     let partitions = await jsonBuffer.processCompletedMessage(event.text, for: userID)
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
 
     for partition in partitions {
       switch partition {
       case .text(let index, let content):
         logger.trace("Assistant Message: \(content)")
-        let response = SocketMessage.MessageResponse(id: event.itemId + "-\(index)", message: content)
+        let response = SocketMessage.MessageResponse(
+          id: event.itemId + "-\(index)", 
+          message: content,
+          requestID: currentRequestID
+        )
         try await ensureContentSent(
           response,
           title: "Bud",
@@ -354,7 +378,8 @@ private extension ChatServiceV2 {
         let response = SocketMessage.RichMessageResponse(
           id: event.itemId + "-\(index)",
           kind: kind,
-          isTemporary: false
+          isTemporary: false,
+          requestID: currentRequestID
         )
         try await ensureContentSilentlySent(response, userID: userID, db: db)
       }
@@ -498,9 +523,11 @@ private extension ChatServiceV2 {
       }
     }
 
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
     let toolCallRequest = SocketMessage.ToolCallsRequest(
       runID: "",
-      toolCalls: toolCallWrappers
+      toolCalls: toolCallWrappers,
+      requestID: currentRequestID
     )
     try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
   }
@@ -560,8 +587,12 @@ private extension ChatServiceV2 {
   }
 
   func sendResponseCompleted(userID: UserIdentifier, db: any Database) async throws {
-    let responseCompleted = SocketMessage.ResponseCompleted()
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
+    let responseCompleted = SocketMessage.ResponseCompleted(requestID: currentRequestID)
     try await ensureContentSilentlySent(responseCompleted, userID: userID, db: db)
+    
+    // Clear the requestID after the response is completed
+    await requestIDTracker.clearRequestID(for: userID)
   }
 
   func ensureContentSent<Content>(

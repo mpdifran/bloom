@@ -11,10 +11,12 @@ public extension SocketMessage {
   struct ToolCallsRequest: Codable, Equatable, Sendable {
     public let runID: String
     public let toolCalls: [ToolCallWrapper]
+    public let requestID: String?
 
-    public init(runID: String, toolCalls: [ToolCallWrapper]) {
+    public init(runID: String, toolCalls: [ToolCallWrapper], requestID: String? = nil) {
       self.runID = runID
       self.toolCalls = toolCalls
+      self.requestID = requestID
     }
   }
 }
@@ -49,13 +51,16 @@ public extension SocketMessage {
   struct ToolCallsResponse: Codable, Equatable, Sendable {
     public let runID: String
     public let toolCallResults: [ToolCallResult]
+    public let requestID: String?
 
     public init(
       runID: String,
-      toolCallResults: [ToolCallResult]
+      toolCallResults: [ToolCallResult],
+      requestID: String? = nil
     ) {
       self.runID = runID
       self.toolCallResults = toolCallResults
+      self.requestID = requestID
     }
   }
 }

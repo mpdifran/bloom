@@ -10,41 +10,50 @@ public extension SocketMessage {
     public let text: String
     public let imageFileIDs: [String]
     public let userInfo: String
+    public let requestID: String?
 
     public init(
       text: String,
       imageFileIDs: [String],
-      userInfo: String
+      userInfo: String,
+      requestID: String? = nil
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
       self.userInfo = userInfo
+      self.requestID = requestID
     }
   }
 
   struct MessageChunkResponse: Codable, Equatable, Sendable {
     public let id: String
     public let chunk: String
+    public let requestID: String?
 
     public init(
       id: String,
-      chunk: String
+      chunk: String,
+      requestID: String? = nil
     ) {
       self.id = id
       self.chunk = chunk
+      self.requestID = requestID
     }
   }
 
   struct MessageResponse: Codable, Equatable, Sendable {
     public let id: String
     public let message: String
+    public let requestID: String?
 
     public init(
       id: String,
-      message: String
+      message: String,
+      requestID: String? = nil
     ) {
       self.id = id
       self.message = message
+      self.requestID = requestID
     }
   }
 
@@ -52,15 +61,18 @@ public extension SocketMessage {
     public let id: String
     public let kind: Kind
     public let isTemporary: Bool
+    public let requestID: String?
 
     public init(
       id: String,
       kind: Kind,
-      isTemporary: Bool
+      isTemporary: Bool,
+      requestID: String? = nil
     ) {
       self.id = id
       self.kind = kind
       self.isTemporary = isTemporary
+      self.requestID = requestID
     }
 
     public enum Kind: Codable, Equatable, Sendable {
