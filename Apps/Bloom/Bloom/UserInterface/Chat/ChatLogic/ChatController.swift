@@ -186,7 +186,8 @@ extension ChatController {
     TelemetryDeck.signal(
       "Send Chat Message",
       parameters: [
-        "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No"
+        "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No",
+        "name": await HealthManager.shared.name
       ]
     )
 
