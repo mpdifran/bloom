@@ -20,3 +20,4 @@ public typealias Reminder = SchemaV18.Reminder
 public typealias ReminderOccurrence = SchemaV18.ReminderOccurrence
 public typealias ReminderCompletionRecord = SchemaV18.ReminderCompletionRecord
 public typealias ReminderCadenceType = SchemaV18.ReminderCadenceType
+public typealias UserFact = SchemaV19.UserFact
