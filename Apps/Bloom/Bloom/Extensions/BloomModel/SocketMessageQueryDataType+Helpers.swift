@@ -39,7 +39,6 @@ extension SocketMessage.QueryDataType {
     case .cardioDuration: "cardio duration"
     case .highIntensityIntervalTrainingDuration: "high intensity interval training duration"
     case .reminders: "reminders"
-    case .userFacts: "user facts"
     }
   }
 }

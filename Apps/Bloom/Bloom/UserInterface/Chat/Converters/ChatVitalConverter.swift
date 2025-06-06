@@ -81,6 +81,18 @@ extension ChatVitalConverter {
     let height = await HealthManager.shared.height()
     let healthGoal = await HealthManager.shared.healthGoal
     let workoutEquipment = Array(await HealthManager.shared.selectedWorkoutEquipment)
+    
+    // Fetch user facts
+    let userFactModelActor = UserFactModelActor.standard()
+    let userFactDTOs = try? await userFactModelActor.fetchAllUserFacts()
+    let userFacts = userFactDTOs?.map { dto in
+      ChatUserFactsData.UserFact(
+        id: dto.id,
+        fact: dto.fact,
+        dateAdded: dto.dateAdded,
+        revisitDate: dto.revisitDate
+      )
+    } ?? []
 
     return ChatHealthData.UserInfo(
       age: age,
@@ -89,7 +101,8 @@ extension ChatVitalConverter {
       healthGoal: healthGoal,
       currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
       timeZone: TimeZone.current.identifier,
-      workoutEquipment: workoutEquipment
+      workoutEquipment: workoutEquipment,
+      userFacts: userFacts
     )
   }
 

@@ -55,6 +55,5 @@ public extension SocketMessage {
     case cardioDuration
     case highIntensityIntervalTrainingDuration
     case reminders
-    case userFacts
   }
 }

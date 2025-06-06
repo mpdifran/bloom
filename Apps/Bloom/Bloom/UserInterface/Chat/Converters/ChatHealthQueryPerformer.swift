@@ -98,8 +98,6 @@ extension ChatHealthQueryPerformer {
       results = await fetchHealthMetric(.highIntensityIntervalTrainingDuration, dateRange: query.dateRange)
     case .reminders:
       results = await fetchReminders(query: query)
-    case .userFacts:
-      results = await fetchUserFacts(query: query)
     }
 
     print("Returning Health Data [\(query.dataType.rawValue)]\n\(results)")
@@ -695,26 +693,6 @@ private extension ChatHealthQueryPerformer {
     }
   }
 
-  func fetchUserFacts(query: SocketMessage.Query) async -> String {
-    do {
-      let userFactModelActor = UserFactModelActor.standard()
-      let userFacts = try await userFactModelActor.fetchAllUserFacts()
-      
-      let userFactData: [ChatUserFactsData.UserFact] = userFacts.map { userFact in
-        ChatUserFactsData.UserFact(
-          id: userFact.id,
-          fact: userFact.fact,
-          dateAdded: userFact.dateAdded,
-          revisitDate: userFact.revisitDate
-        )
-      }
-      
-      let response = ChatUserFactsData(userFacts: userFactData)
-      return convertToString(value: response)
-    } catch {
-      return "There was an error querying user facts data."
-    }
-  }
   
   private func formatTimeOfDay(_ timeInterval: TimeInterval) -> String {
     let hours = Int(timeInterval / 3600)
