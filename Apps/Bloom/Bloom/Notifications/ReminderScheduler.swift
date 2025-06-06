@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UserNotifications
+@preconcurrency import UserNotifications
 import SwiftData
 import DataContainer
 import BloomFoundation
@@ -96,8 +96,8 @@ actor ReminderScheduler {
     var requests: [UNNotificationRequest] = []
     
     let content = UNMutableNotificationContent()
-    content.title = "Reminder"
-    content.subtitle = reminder.title
+    content.title = reminder.title
+    content.subtitle = "Reminder"
     content.sound = .default
     content.categoryIdentifier = .CategoryID.reminders
     content.threadIdentifier = reminder.id
@@ -191,6 +191,8 @@ actor ReminderScheduler {
         trigger: trigger
       )
       requests.append(request)
+    @unknown default:
+      break
     }
     
     return requests
