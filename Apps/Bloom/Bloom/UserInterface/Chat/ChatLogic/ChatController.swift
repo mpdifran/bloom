@@ -187,7 +187,7 @@ extension ChatController {
       "Send Chat Message",
       parameters: [
         "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No",
-        "name": await HealthManager.shared.name
+        "name": await UserController.shared.fullUserIdentifier
       ]
     )
 

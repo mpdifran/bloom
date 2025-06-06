@@ -124,6 +124,17 @@ final class UserController: ObservableObject {
 
 extension UserController {
 
+  var fullUserIdentifier: String {
+    let name = [givenName, familyName].compactMap({ $0 }).joined(separator: " ")
+    if name.isNotEmpty {
+      return name
+    }
+    if let email {
+      return email
+    }
+    return "Anonymous"
+  }
+
   func verifyAuthentication() async throws {
     guard let userIdentifier = authenticatedUserIdentifier else { return }
 

@@ -112,15 +112,11 @@ class ChatLayoutViewController: UICollectionViewController {
   }
   
   @objc private func keyboardWillShow(_ notification: Notification) {
-    if isAtBottom {
-      scrollToBottom(animated: true)
-    }
+    scrollToBottom(animated: true)
   }
   
   @objc private func keyboardDidShow(_ notification: Notification) {
-    if isAtBottom {
-      scrollToBottom(animated: true)
-    }
+    scrollToBottom(animated: true)
   }
   
   func updateCellModels(_ newModels: [ChatCellModel]) {
