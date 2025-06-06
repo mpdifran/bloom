@@ -108,6 +108,8 @@ final actor ChatController: ObservableObject {
   private let decoder = JSONDecoder.bloomModel
   
   private var currentRequestID: String?
+  private var toolCallIDs = Set<String>()
+  private var toolRequestCount = 0
 }
 
 extension ChatController {
@@ -131,6 +133,10 @@ extension ChatController {
   }
 
   func send(message: String, image: UIImage?) async throws {
+    // Send any pending telemetry before starting a new message
+    sendToolCallCountTelemetry()
+    sendToolRequestCountTelemetry()
+    
     let imageData = image?.resized(toWidth: 300)?.pngData()
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -332,13 +338,12 @@ private extension ChatController {
       // Extract the request ID from the tool call request
       let requestIDForResponse = toolCallRequest.requestID
 
-      if let requestIDForResponse {
-        TelemetryDeck.signal(
-          "Chat Tool Call",
-          parameters: [
-            "requestID": requestIDForResponse
-          ]
-        )
+      // Increment tool request count
+      toolRequestCount += 1
+
+      // Collect all tool call IDs
+      for toolCall in toolCallRequest.toolCalls {
+        toolCallIDs.insert(toolCall.toolCallID)
       }
 
       do {
@@ -448,6 +453,10 @@ private extension ChatController {
     } else if let _ = try? decoder.decode(SocketMessage.ResponseCompleted.self, from: data) {
 
       TelemetryDeck.signal("Response Completed")
+      
+      // Send telemetry before clearing
+      sendToolCallCountTelemetry()
+      sendToolRequestCountTelemetry()
       
       // Clear the current request ID when the response completes
       currentRequestID = nil
@@ -657,5 +666,29 @@ private extension ChatController {
     webSocketErrorTask = nil
     assistantIsTyping = false
     queryAreas.removeAll()
+  }
+  
+  func sendToolCallCountTelemetry() {
+    guard !toolCallIDs.isEmpty else { return }
+    
+    TelemetryDeck.signal(
+      "Chat Tool Call Count",
+      floatValue: Double(toolCallIDs.count)
+    )
+    
+    // Reset the tool call IDs after sending
+    toolCallIDs.removeAll()
+  }
+  
+  func sendToolRequestCountTelemetry() {
+    guard toolRequestCount > 0 else { return }
+    
+    TelemetryDeck.signal(
+      "Chat Tool Request Count",
+      floatValue: Double(toolRequestCount)
+    )
+    
+    // Reset the tool request count after sending
+    toolRequestCount = 0
   }
 }
