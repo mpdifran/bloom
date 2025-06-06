@@ -61,10 +61,10 @@ struct SettingsView: View {
         userSection
         healthPermissionsSection
         healthGoalsSection
+        personalizationSection
         habitsSection
         remindersSection
         workoutEquipmentSection
-        userDetailsSection
         reportSection
         unitsSection
         subscriptionSection
@@ -171,57 +171,20 @@ private extension SettingsView {
           presentedSheet = ActivityLevelEditCard().asAny
         }
       }
-
-      if healthManager.sex() == .female {
-        SettingsSectionContainer {
-          SettingsCell("Breastfeeding") {
-            Toggle("", isOn: healthManager.$isBreastfeeding)
-              .tint(.mutedGreen)
-          }
-
-          Divider()
-
-          SettingsCell("Pregnant") {
-            Toggle("", isOn: healthManager.$isPregnant)
-              .tint(.mutedGreen)
-          }
-        }
-      }
     }
   }
 
-  var userDetailsSection: some View {
+  var personalizationSection: some View {
     VStack {
-      SectionTitleView("Personal Details")
+      SectionTitleView("Personalization")
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Birthday") {
-          DatePicker(
-            "",
-            selection: $healthManager.birthday,
-            in: ...Date(),
-            displayedComponents: .date
-          )
+        SettingsCell("Personal Details", showDisclosureIndicator: true) {
+          EmptyView()
         }
-
-        Divider()
-
-        SettingsCell("Sex") {
-          Picker("", selection: $healthManager.isFemale) {
-            Text("Male")
-              .tag(false)
-            Text("Female")
-              .tag(true)
-          }
-          .pickerStyle(.segmented)
-          .frame(width: 150, height: 50)
-        }
-
-        Divider()
-
-        SettingsCell("Height") {
-          HeightEditorTextField()
+        .onTapGesture {
+          presentedSheet = PersonalizationSettingsView().asAny
         }
       }
     }

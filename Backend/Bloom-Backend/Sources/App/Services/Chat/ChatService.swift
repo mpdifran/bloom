@@ -407,6 +407,9 @@ private extension ChatService {
         toolCallWrappers.append(try await logBowelMovements(toolCall: toolCall))
       case .Function.createWorkoutPlan:
         toolCallWrappers.append(try await createWorkout(toolCall: toolCall))
+      case .Function.createUserFact, .Function.deleteUserFact:
+        // Stub for legacy service - not implemented
+        throw Abort(.internalServerError, reason: "User facts not supported in legacy ChatService")
       default:
         throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
       }

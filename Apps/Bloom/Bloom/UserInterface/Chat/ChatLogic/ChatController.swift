@@ -404,6 +404,31 @@ private extension ChatController {
               case .createWorkout(let createWorkout):
                 let data = try JSONEncoder.bloomModel.encode(createWorkout)
                 try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
+              case .createUserFact(let createUserFact):
+                let userFactModelActor = UserFactModelActor.standard()
+                let userFactDTO = try await userFactModelActor.createUserFact(
+                  fact: createUserFact.fact,
+                  revisitDate: createUserFact.revisitDate
+                )
+                let chatUserFact = ChatUserFactsData.UserFact(
+                  id: userFactDTO.id,
+                  fact: userFactDTO.fact,
+                  dateAdded: userFactDTO.dateAdded,
+                  revisitDate: userFactDTO.revisitDate
+                )
+                let responseData = try JSONEncoder.bloomModel.encode(chatUserFact)
+                let responseString = String(data: responseData, encoding: .utf8) ?? "{}"
+                return SocketMessage.ToolCallResult(
+                  toolCallID: toolCall.toolCallID,
+                  data: "Created: \(responseString)"
+                )
+              case .deleteUserFact(let deleteUserFact):
+                let userFactModelActor = UserFactModelActor.standard()
+                try await userFactModelActor.deleteUserFact(withID: deleteUserFact.factID)
+                return SocketMessage.ToolCallResult(
+                  toolCallID: toolCall.toolCallID,
+                  data: "Deleted user fact with ID: \(deleteUserFact.factID)"
+                )
               }
               return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID)
             }

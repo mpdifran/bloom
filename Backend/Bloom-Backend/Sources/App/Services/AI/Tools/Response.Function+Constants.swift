@@ -33,4 +33,25 @@ extension Response.Function {
       ]
     )
   )
+
+  static let createUserFact = Response.Function(
+    name: .Function.createUserFact,
+    description: "Store a fact about the user for future reference",
+    parameters: Schema.Object(
+      properties: [
+        "fact": Schema.Parameter(type: .string, description: "The fact to store about the user"),
+        "revisitDate": Schema.Parameter(type: .string, description: "ISO8601 date when to revisit this fact to see if it's still valid")
+      ]
+    )
+  )
+
+  static let deleteUserFact = Response.Function(
+    name: .Function.deleteUserFact,
+    description: "Delete a stored user fact",
+    parameters: Schema.Object(
+      properties: [
+        "factID": Schema.Parameter(type: .string, description: "The ID of the fact to delete")
+      ]
+    )
+  )
 }

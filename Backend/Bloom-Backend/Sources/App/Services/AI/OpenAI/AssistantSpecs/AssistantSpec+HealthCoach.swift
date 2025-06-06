@@ -69,6 +69,8 @@ extension AssistantSpec {
 
 extension String.Function {
   static let queryUserHealthData = "queryUserHealthData"
+  static let createUserFact = "createUserFact"
+  static let deleteUserFact = "deleteUserFact"
 }
 
 extension Assistant.Tool.Function {

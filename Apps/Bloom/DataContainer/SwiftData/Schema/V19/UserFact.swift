@@ -13,7 +13,7 @@ extension SchemaV19 {
     public var revisitDate: Date = Date()
     
     public init(
-      id: String = UUID().uuidString,
+      id: String = "userfact_" + UUID().uuidString,
       fact: String = "",
       dateAdded: Date = Date(),
       revisitDate: Date = Date()
