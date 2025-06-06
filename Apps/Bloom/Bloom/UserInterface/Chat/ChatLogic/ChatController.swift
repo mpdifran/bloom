@@ -336,7 +336,7 @@ private extension ChatController {
         TelemetryDeck.signal(
           "Chat Tool Call",
           parameters: [
-            "requestID" : requestIDForResponse
+            "requestID": requestIDForResponse
           ]
         )
       }
