@@ -294,7 +294,9 @@ actor ChatHistoryModifier {
       return .workoutPlan(workoutPlan)
       
     } else if let createReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.CreateReminder.self, from: data) {
-      return .createReminder(createReminder)
+      // Extract the reminder ID to store in ProcessedRichContent
+      let reminderID = createReminder.id ?? UUID().uuidString
+      return .createReminder(reminderID: reminderID)
     }
     
     return .unknown

@@ -36,7 +36,7 @@ extension Response.Function {
 
   static let createUserFact = Response.Function(
     name: .Function.createUserFact,
-    description: "Store one or more facts about the user for future reference",
+    description: "Store one or more learned facts about the user for future reference. This function should be used as a last resort if no other function or tool can be used. This information is stored in your memory only.",
     parameters: Schema.Object(
       properties: [
         "facts": Schema.Parameter(

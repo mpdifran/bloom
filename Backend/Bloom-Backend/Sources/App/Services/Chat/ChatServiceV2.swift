@@ -118,7 +118,7 @@ private extension ChatServiceV2 {
         .init(
           role: .system,
           content: [
-            .text(.init(text: "Here are some details about the user's current preferences:\n\(message.userInfo)"))
+            .text(.init(text: "Here are some details about the user's current preferences. Do not record user facts from this data. \n\(message.userInfo)"))
           ]
         )
       )
@@ -203,8 +203,8 @@ private extension ChatServiceV2 {
       reasoning: .init(effort: .low, summary: .detailed),
       tools: [
         Response.Tool.function(.queryUserHealthData),
-        Response.Tool.function(.createUserFact),
-        Response.Tool.function(.deleteUserFact)
+//        Response.Tool.function(.createUserFact),
+//        Response.Tool.function(.deleteUserFact)
       ],
       user: userID.value
     )
@@ -259,11 +259,13 @@ private extension ChatServiceV2 {
             for summary in reasoning.summary {
               logger.debug("Reasoning: \(summary.text)")
             }
+            if reasoning.summary.isEmpty {
+              logger.debug("Reasoning: None")
+            }
           default:
             break
           }
         case .error(let event):
-          print(event.error)
           try await sendIsAssistantTyping(isTyping: false, userID: userID)
           try await performRetry()
         default:
