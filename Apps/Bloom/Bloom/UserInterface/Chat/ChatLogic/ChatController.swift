@@ -404,30 +404,32 @@ private extension ChatController {
               case .createWorkout(let createWorkout):
                 let data = try JSONEncoder.bloomModel.encode(createWorkout)
                 try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .createUserFact(let createUserFact):
+              case .createUserFacts(let createUserFacts):
                 let userFactModelActor = UserFactModelActor.standard()
-                let userFactDTO = try await userFactModelActor.createUserFact(
-                  fact: createUserFact.fact,
-                  revisitDate: createUserFact.revisitDate
-                )
-                let chatUserFact = ChatUserFactsData.UserFact(
-                  id: userFactDTO.id,
-                  fact: userFactDTO.fact,
-                  dateAdded: userFactDTO.dateAdded,
-                  revisitDate: userFactDTO.revisitDate
-                )
-                let responseData = try JSONEncoder.bloomModel.encode(chatUserFact)
-                let responseString = String(data: responseData, encoding: .utf8) ?? "{}"
+                let factInputs = createUserFacts.facts.map { fact in
+                  (fact: fact.fact, dateAdded: Date(), revisitDate: fact.revisitDate)
+                }
+                let userFactDTOs = try await userFactModelActor.createUserFacts(factInputs)
+                let chatUserFacts = userFactDTOs.map { dto in
+                  ChatUserFactsData.UserFact(
+                    id: dto.id,
+                    fact: dto.fact,
+                    dateAdded: dto.dateAdded,
+                    revisitDate: dto.revisitDate
+                  )
+                }
+                let responseData = try JSONEncoder.bloomModel.encode(chatUserFacts)
+                let responseString = String(data: responseData, encoding: .utf8) ?? "[]"
                 return SocketMessage.ToolCallResult(
                   toolCallID: toolCall.toolCallID,
-                  data: "Created: \(responseString)"
+                  data: "Created \(chatUserFacts.count) user facts: \(responseString)"
                 )
-              case .deleteUserFact(let deleteUserFact):
+              case .deleteUserFacts(let deleteUserFacts):
                 let userFactModelActor = UserFactModelActor.standard()
-                try await userFactModelActor.deleteUserFact(withID: deleteUserFact.factID)
+                let deletedCount = try await userFactModelActor.deleteUserFacts(withIDs: deleteUserFacts.factIDs)
                 return SocketMessage.ToolCallResult(
                   toolCallID: toolCall.toolCallID,
-                  data: "Deleted user fact with ID: \(deleteUserFact.factID)"
+                  data: "Deleted \(deletedCount) user facts"
                 )
               }
               return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID)

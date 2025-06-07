@@ -523,9 +523,9 @@ private extension ChatServiceV2 {
       case .Function.queryUserHealthData:
         toolCallWrappers.append(try await performQuery(toolCall: toolCall))
       case .Function.createUserFact:
-        toolCallWrappers.append(try await createUserFact(toolCall: toolCall))
+        toolCallWrappers.append(try await createUserFacts(toolCall: toolCall))
       case .Function.deleteUserFact:
-        toolCallWrappers.append(try await deleteUserFact(toolCall: toolCall))
+        toolCallWrappers.append(try await deleteUserFacts(toolCall: toolCall))
       default:
         throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.name)")
       }
@@ -560,28 +560,28 @@ private extension ChatServiceV2 {
     return SocketMessage.ToolCallWrapper(toolCallID: toolCall.callId, kind: .queries(queries))
   }
 
-  func createUserFact(
+  func createUserFacts(
     toolCall: OpenAIKit.Response.OutputItem.FunctionToolCall
   ) async throws -> SocketMessage.ToolCallWrapper {
     guard toolCall.name == .Function.createUserFact else {
       throw Abort(.internalServerError, reason: "Improper tool handling")
     }
 
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.CreateUserFact.self, using: decoder)
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.CreateUserFacts.self, using: decoder)
 
-    return SocketMessage.ToolCallWrapper(toolCallID: toolCall.callId, kind: .createUserFact(arguments))
+    return SocketMessage.ToolCallWrapper(toolCallID: toolCall.callId, kind: .createUserFacts(arguments))
   }
 
-  func deleteUserFact(
+  func deleteUserFacts(
     toolCall: OpenAIKit.Response.OutputItem.FunctionToolCall
   ) async throws -> SocketMessage.ToolCallWrapper {
     guard toolCall.name == .Function.deleteUserFact else {
       throw Abort(.internalServerError, reason: "Improper tool handling")
     }
 
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.DeleteUserFact.self, using: decoder)
+    let arguments = try toolCall.decodeArguments(type: SocketMessage.DeleteUserFacts.self, using: decoder)
 
-    return SocketMessage.ToolCallWrapper(toolCallID: toolCall.callId, kind: .deleteUserFact(arguments))
+    return SocketMessage.ToolCallWrapper(toolCallID: toolCall.callId, kind: .deleteUserFacts(arguments))
   }
 }
 

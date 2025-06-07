@@ -44,8 +44,8 @@ public extension SocketMessage.ToolCallWrapper {
     case logBloodPressure(SocketMessage.LogBloodPressure)
     case logBowelMovement(SocketMessage.LogBowelMovement)
     case createWorkout(SocketMessage.WorkoutPlan)
-    case createUserFact(SocketMessage.CreateUserFact)
-    case deleteUserFact(SocketMessage.DeleteUserFact)
+    case createUserFacts(SocketMessage.CreateUserFacts)
+    case deleteUserFacts(SocketMessage.DeleteUserFacts)
   }
 }
 

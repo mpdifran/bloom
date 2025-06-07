@@ -93,4 +93,39 @@ public extension UserFactModelActor {
     context.delete(userFact)
     try context.save()
   }
+  
+  // MARK: - Bulk Operations
+  
+  func createUserFacts(_ factInputs: [(fact: String, dateAdded: Date, revisitDate: Date)]) throws -> [UserFactDTO] {
+    var createdFacts: [UserFactDTO] = []
+    
+    for input in factInputs {
+      let userFact = UserFact(
+        fact: input.fact,
+        dateAdded: input.dateAdded,
+        revisitDate: input.revisitDate
+      )
+      context.insert(userFact)
+      createdFacts.append(userFact.asDTO())
+    }
+    
+    try context.save()
+    return createdFacts
+  }
+  
+  func deleteUserFacts(withIDs ids: [String]) throws -> Int {
+    let descriptor = FetchDescriptor<UserFact>(
+      predicate: #Predicate<UserFact> { userFact in
+        ids.contains(userFact.id)
+      }
+    )
+    let userFactsToDelete = try context.fetch(descriptor)
+    
+    for userFact in userFactsToDelete {
+      context.delete(userFact)
+    }
+    
+    try context.save()
+    return userFactsToDelete.count
+  }
 }
