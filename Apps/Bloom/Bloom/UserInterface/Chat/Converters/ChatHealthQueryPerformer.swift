@@ -115,7 +115,9 @@ private extension ChatHealthQueryPerformer {
       dateRange: dateRange
     )
 
-    guard dailyQuantities.isNotEmpty else { return "No data" }
+    guard dailyQuantities.isNotEmpty else { 
+      return convertToString(value: ChatHealthMetricData(samples: []))
+    }
 
     var samples = [ChatHealthMetricData.Sample]()
     for dailyQuantity in dailyQuantities {
@@ -254,7 +256,9 @@ private extension ChatHealthQueryPerformer {
       dateRange: dateRange
     )
 
-    guard basalEnergy.isNotEmpty || activeEnergy.isNotEmpty else { return "No data" }
+    guard basalEnergy.isNotEmpty || activeEnergy.isNotEmpty else { 
+      return convertToString(value: ChatHealthData.ActivityLevel(basalEnergyBurned: [], activeEnergyBurned: []))
+    }
 
     let basalSamples = basalEnergy.map { sample in
       ChatHealthData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit, numberFormatter: .noDecimalPlaces))
@@ -285,7 +289,9 @@ private extension ChatHealthQueryPerformer {
       dateRange: dateRange
     )
 
-    guard bodyFatPercentage.isNotEmpty || bodyMass.isNotEmpty else { return "No data" }
+    guard bodyFatPercentage.isNotEmpty || bodyMass.isNotEmpty else { 
+      return convertToString(value: ChatHealthData.BodyComposition(bodyFatPercentage: [], bodyMass: []))
+    }
 
     let bodyFatSamples = bodyFatPercentage.map {
       ChatHealthData.Sample(
@@ -321,7 +327,9 @@ private extension ChatHealthQueryPerformer {
         )
       }
 
-      guard samples.isNotEmpty else { return "No data" }
+      guard samples.isNotEmpty else { 
+        return convertToString(value: ChatHealthData.BowelMovements(samples: []))
+      }
 
       let bowelMovements = ChatHealthData.BowelMovements(samples: samples)
 
@@ -351,7 +359,7 @@ private extension ChatHealthQueryPerformer {
     )
 
     guard vo2Max.isNotEmpty || rhr.isNotEmpty || heartRateRecovery.isNotEmpty else {
-      return "No data"
+      return convertToString(value: ChatHealthData.Goals(habits: []))
     }
 
     let vo2MaxSamples = vo2Max.map {
@@ -390,7 +398,9 @@ private extension ChatHealthQueryPerformer {
       )
     }
 
-    guard cycleSamples.isNotEmpty else { return "No data" }
+    guard cycleSamples.isNotEmpty else { 
+      return convertToString(value: ChatHealthData.Menstruation(samples: []))
+    }
 
     let menstrualHealth = ChatHealthData.MenstrualHealth(cycles: cycleSamples)
 
@@ -401,7 +411,9 @@ private extension ChatHealthQueryPerformer {
     let dateRange = query.dateRange
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
 
-    guard sleepAnalyses.isNotEmpty else { return "No data" }
+    guard sleepAnalyses.isNotEmpty else { 
+      return convertToString(value: ChatHealthData.Sleep(samples: []))
+    }
 
     let sleepDays = sleepAnalyses.map { sleepAnalysis in
       let respiratoryRateQuantity: ChatHealthData.Quantity?
@@ -500,7 +512,9 @@ private extension ChatHealthQueryPerformer {
       )
     }
 
-    guard hrvSamples.isNotEmpty || bloodPressureSamples.isNotEmpty else { return "No data" }
+    guard hrvSamples.isNotEmpty || bloodPressureSamples.isNotEmpty else { 
+      return convertToString(value: ChatHealthData.HeartHealth(heartRateVariability: [], bloodPressure: []))
+    }
 
     let stress = ChatHealthData.Stress(
       heartRateVariability: hrvSamples,
@@ -515,7 +529,9 @@ private extension ChatHealthQueryPerformer {
 
     let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: dateRange)
 
-    guard workouts.isNotEmpty else { return "No data" }
+    guard workouts.isNotEmpty else { 
+      return convertToString(value: ChatHealthData.Workouts(summaries: []))
+    }
 
     var workoutData = [ChatHealthData.Workout]()
     for workout in workouts {
@@ -568,7 +584,9 @@ private extension ChatHealthQueryPerformer {
 
     let heartRateReports = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
 
-    guard heartRateReports.isNotEmpty else { return "No data" }
+    guard heartRateReports.isNotEmpty else { 
+      return convertToString(value: ChatHealthData.TargetHeartRateZoneMinutes(heartRateReports: []))
+    }
 
     let samples = heartRateReports.map {
       ChatHealthData.HeartRateZoneWorkoutSample(
