@@ -47,11 +47,11 @@ struct ChatReminderCell: View {
 
         Spacer()
 
-//        DisclosureIndicator()
+        DisclosureIndicator()
       }
       .tint(reminder.color)
       .cardContainer()
-      .frame(width: 280)
+      .frame(width: 300)
 
       Spacer()
     }

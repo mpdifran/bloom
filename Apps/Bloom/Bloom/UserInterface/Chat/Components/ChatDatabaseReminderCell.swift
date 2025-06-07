@@ -14,6 +14,7 @@ struct ChatDatabaseReminderCell: View {
   let reminderID: String
   
   @Query private var reminders: [SchemaV18.Reminder]
+  @State private var showingEditReminder = false
   
   init(reminderID: String) {
     self.reminderID = reminderID
@@ -47,16 +48,19 @@ struct ChatDatabaseReminderCell: View {
             occurrence: reminder.occurrences?.first?.asDTO(),
             isCompleted: false
           )
+          .onTapGesture {
+            showingEditReminder = true
+          }
         } else {
           // Reminder deleted - show grayed out state
           HStack {
             CompletionCheckmarkView(state: .unmetGoal, colorize: false)
 
             VStack(alignment: .leading) {
-              Text("Reminder no longer available")
+              Text("Reminder Deleted")
                 .font(.title3)
 
-              Text("This reminder has been deleted")
+              Text("No longer available")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
@@ -72,13 +76,19 @@ struct ChatDatabaseReminderCell: View {
           .foregroundStyle(.secondary)
           .tint(.gray)
           .cardContainer()
-          .frame(width: 280)
+          .frame(width: 300)
         }
       }
       
       Spacer()
     }
-    .padding(.leading)
+    .sheet(isPresented: $showingEditReminder) {
+      if let reminder {
+        NavigationStack {
+          CreateEditReminderView(reminder: reminder)
+        }
+      }
+    }
   }
 }
 
