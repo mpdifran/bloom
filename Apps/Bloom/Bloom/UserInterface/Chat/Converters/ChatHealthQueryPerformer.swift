@@ -359,7 +359,13 @@ private extension ChatHealthQueryPerformer {
     )
 
     guard vo2Max.isNotEmpty || rhr.isNotEmpty || heartRateRecovery.isNotEmpty else {
-      return convertToString(value: ChatHealthData.Goals(habits: []))
+      return convertToString(
+        value: ChatHealthData.HeartHealth(
+          vo2Max: [],
+          restingHeartRate: [],
+          heartRateRecoveryOneMinute: []
+        )
+      )
     }
 
     let vo2MaxSamples = vo2Max.map {
@@ -399,7 +405,7 @@ private extension ChatHealthQueryPerformer {
     }
 
     guard cycleSamples.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.Menstruation(samples: []))
+      return convertToString(value: ChatHealthData.MenstrualHealth(cycles: []))
     }
 
     let menstrualHealth = ChatHealthData.MenstrualHealth(cycles: cycleSamples)
@@ -412,7 +418,7 @@ private extension ChatHealthQueryPerformer {
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
 
     guard sleepAnalyses.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.Sleep(samples: []))
+      return convertToString(value: ChatHealthData.Sleep(sleepDetails: []))
     }
 
     let sleepDays = sleepAnalyses.map { sleepAnalysis in
@@ -513,7 +519,7 @@ private extension ChatHealthQueryPerformer {
     }
 
     guard hrvSamples.isNotEmpty || bloodPressureSamples.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.HeartHealth(heartRateVariability: [], bloodPressure: []))
+      return convertToString(value: ChatHealthData.Stress(heartRateVariability: [], bloodPressureSamples: []))
     }
 
     let stress = ChatHealthData.Stress(
@@ -530,7 +536,7 @@ private extension ChatHealthQueryPerformer {
     let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: dateRange)
 
     guard workouts.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.Workouts(summaries: []))
+      return convertToString(value: [ChatHealthData.Workout]())
     }
 
     var workoutData = [ChatHealthData.Workout]()
@@ -577,7 +583,7 @@ private extension ChatHealthQueryPerformer {
 
   func fetchTargetHeartRateZoneMinutes(query: SocketMessage.Query) async -> String {
     guard let heartRateZones = await HealthStoreFetcher.shared.heartRateZones() else {
-      return "No Data"
+      return convertToString(value: [ChatHealthData.HeartRateZoneWorkoutSample]())
     }
 
     let dateRange = query.dateRange
@@ -585,7 +591,7 @@ private extension ChatHealthQueryPerformer {
     let heartRateReports = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
 
     guard heartRateReports.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.TargetHeartRateZoneMinutes(heartRateReports: []))
+      return convertToString(value: [ChatHealthData.HeartRateZoneWorkoutSample]())
     }
 
     let samples = heartRateReports.map {
