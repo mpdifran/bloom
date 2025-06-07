@@ -200,7 +200,7 @@ private extension ChatServiceV2 {
       model: modelID,
       instructions: .Prompt.chatAssistant,
       previousResponseID: previousResponseID,
-      reasoning: .init(effort: .low, summary: .detailed),
+//      reasoning: .init(effort: .low, summary: .auto),
       tools: [
         Response.Tool.function(.queryUserHealthData),
 //        Response.Tool.function(.createUserFact),
