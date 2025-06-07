@@ -88,6 +88,8 @@ struct ChatProcessedRichContentWrapperCell: View {
         
       case .createReminder(let reminderID):
         ChatDatabaseReminderCell(reminderID: reminderID)
+      case .deleteReminder(let reminderID):
+        ChatDatabaseReminderCell(reminderID: reminderID)
       case .unknown:
         ChatUnknownContentCell()
       }

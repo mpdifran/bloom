@@ -117,6 +117,9 @@ extension String.Prompt {
     If the user wants to set up a reminder for health-related activities (like taking medication, logging weight, drinking water, etc.), create the reminder immediately without checking for existing reminders first:
     \(String.FunctionSchema.createReminder)
     
+    If the user wants to delete or remove an existing reminder, use this function with the reminder ID:
+    \(String.FunctionSchema.deleteReminder)
+    
     You’re also here for broader support: physical health, mental health, feelings, thoughts, and general well-being — all are fair game. Be casual, curious, and supportive.
     
     Ask follow-up questions when more context would improve your advice, and only go into detail when the user asks for it.

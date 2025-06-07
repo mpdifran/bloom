@@ -31,6 +31,7 @@ struct ChatRichContentWrapperCell: View {
   @State private var diastolic: Double?
   @State private var workoutPlan: SocketMessage.WorkoutPlan?
   @State private var createReminder: SocketMessage.CreateReminder?
+  @State private var deleteReminder: SocketMessage.DeleteReminder?
 
   private let modelActor = HabitModelActor.standard()
 
@@ -115,6 +116,8 @@ struct ChatRichContentWrapperCell: View {
           )
           .horizontalAlignment(.leading)
           .padding(.leading)
+        } else if let deleteReminder {
+          ChatDatabaseReminderCell(reminderID: deleteReminder.reminderID)
         } else {
           ChatUnknownContentCell()
         }
@@ -202,6 +205,10 @@ private extension ChatRichContentWrapperCell {
     } else if let createReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.CreateReminder.self, from: data) {
 
       self.createReminder = createReminder
+      
+    } else if let deleteReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.DeleteReminder.self, from: data) {
+
+      self.deleteReminder = deleteReminder
     }
 
     self.isLoading = false

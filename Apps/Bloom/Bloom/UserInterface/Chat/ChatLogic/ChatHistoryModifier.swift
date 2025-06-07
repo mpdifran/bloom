@@ -297,6 +297,10 @@ actor ChatHistoryModifier {
       // Extract the reminder ID to store in ProcessedRichContent
       let reminderID = createReminder.id ?? UUID().uuidString
       return .createReminder(reminderID: reminderID)
+      
+    } else if let deleteReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.DeleteReminder.self, from: data) {
+      // Use the reminder ID from the delete message
+      return .deleteReminder(reminderID: deleteReminder.reminderID)
     }
     
     return .unknown

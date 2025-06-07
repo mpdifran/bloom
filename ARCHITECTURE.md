@@ -728,6 +728,16 @@ case .createReminder(let createReminder):
 
 This pattern ensures consistent AI integration while maintaining type safety, graceful error handling, persistence across sessions, and clear documentation for the AI model.
 
+#### Deprecated: AssistantSpec Files
+**⚠️ IMPORTANT:** The `AssistantSpec+HealthCoach.swift` and `AssistantSpec+HealthGoalSetter.swift` files in the backend are **deprecated and no longer used**. These files were part of an older AI assistant configuration system that has been replaced.
+
+The current AI system uses:
+- Function schemas in `String+FunctionSchema.swift`
+- Chat prompts in `String+Prompts.swift` 
+- Direct function definitions in `Response.Function+Constants.swift`
+
+**Do not update or reference the AssistantSpec files** - they are legacy code that should eventually be removed from the codebase.
+
 This architecture emphasizes:
 - **Consistency**: Follow existing patterns
 - **Type Safety**: Leverage Swift's type system

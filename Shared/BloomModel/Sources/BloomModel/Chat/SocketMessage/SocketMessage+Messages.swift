@@ -85,6 +85,7 @@ public extension SocketMessage {
       case logBowelMovement(SocketMessage.LogBowelMovement)
       case createWorkout(SocketMessage.WorkoutPlan)
       case createReminder(SocketMessage.CreateReminder)
+      case deleteReminder(SocketMessage.DeleteReminder)
       case invalid(String)
     }
   }

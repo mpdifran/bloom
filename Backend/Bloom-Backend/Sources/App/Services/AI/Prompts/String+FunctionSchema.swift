@@ -175,4 +175,10 @@ extension String.FunctionSchema {
     
     Month: An enum with the following cases: \(SocketMessage.Month.stringCaseList())
     """
+
+  static let deleteReminder: String = """
+    Delete Reminder: {
+      "reminderID": String // Required. The ID of the reminder to delete.
+    }
+    """
 }

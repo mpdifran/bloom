@@ -315,6 +315,11 @@ private extension ChatController {
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(createReminder: content)
         }
+      case .deleteReminder(let content):
+        data = try? JSONEncoder.bloomModel.encode(content)
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(deleteReminder: content)
+        }
       case .invalid(let json):
         TelemetryDeck.signal("Chat - Invalid JSON", parameters: ["json": json])
       }
@@ -681,6 +686,17 @@ private extension ChatController {
       TelemetryDeck.signal("Create Reminder")
       return reminder.id
     }
+  }
+
+  func autoLog(deleteReminder: SocketMessage.DeleteReminder) async throws -> String {
+    // Delete the reminder using RemindersManager
+    try await RemindersManager.shared.deleteReminder(withID: deleteReminder.reminderID)
+    
+    TelemetryDeck.signal("Delete Reminder")
+    
+    // Note: Not playing sound for deletions as it might be jarring
+    
+    return deleteReminder.reminderID
   }
 
   func on(error: Error) {

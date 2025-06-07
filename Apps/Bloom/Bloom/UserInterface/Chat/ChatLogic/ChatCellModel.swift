@@ -21,6 +21,7 @@ enum ProcessedRichContent: Equatable {
   case logPeriod(HKCategoryValueMenstrualFlow)
   case logBloodPressure(systolic: Double, diastolic: Double)
   case createReminder(reminderID: String)
+  case deleteReminder(reminderID: String)
   case workoutPlan(SocketMessage.WorkoutPlan)
   case unknown
 }
