@@ -206,6 +206,7 @@ private extension ChatServiceV2 {
 //        Response.Tool.function(.createUserFact),
 //        Response.Tool.function(.deleteUserFact)
       ],
+      truncation: .auto,
       user: userID.value
     )
 
