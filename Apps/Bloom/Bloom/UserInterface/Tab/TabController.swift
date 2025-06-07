@@ -105,6 +105,9 @@ private extension TabController {
       } else {
         showPaywall = true
       }
+    case .CategoryID.reminders:
+      dismiss()
+      select(.today)
     default:
       break
     }
