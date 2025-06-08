@@ -105,8 +105,8 @@ final class RemindersManager: ObservableObject {
   }
   
   /// Marks a reminder as completed for today
-  func markReminderCompleted(withID id: String) async throws {
-    _ = try await modelActor.markReminderCompleted(reminderID: id)
+  func markReminderCompleted(withID id: String, occurrenceID: String? = nil) async throws {
+    _ = try await modelActor.markReminderCompleted(reminderID: id, occurrenceID: occurrenceID)
     
     // Remove delivered notifications for this reminder
     await removeDeliveredNotifications(withID: id)
@@ -116,8 +116,8 @@ final class RemindersManager: ObservableObject {
   }
   
   /// Marks a reminder as uncompleted for today
-  func markReminderUncompleted(withID id: String) async throws {
-    try await modelActor.markReminderUncompleted(reminderID: id)
+  func markReminderUncompleted(withID id: String, occurrenceID: String? = nil) async throws {
+    try await modelActor.markReminderUncompleted(reminderID: id, occurrenceID: occurrenceID)
     
     // Refresh to update completion records
     await fetchReminders()
@@ -195,28 +195,23 @@ final class RemindersManager: ObservableObject {
     // 2. Remove notifications for today's completed occurrences
     let todaysCompletions = reminder.completionRecords
       .filter { calendar.isDate($0.completedDate, inSameDayAs: today) }
-      .sorted { $0.completedDate < $1.completedDate }
     
-    // Get all occurrences scheduled for today with their times
-    var occurrenceTimePairs: [(occurrence: ReminderOccurrenceDTO, scheduledTime: Date, identifier: String)] = []
-    
-    for occurrence in reminder.occurrences {
-      let scheduledTimes = getScheduledTimesToday(for: occurrence, calendar: calendar, today: today)
-      for (scheduledTime, identifier) in scheduledTimes {
-        occurrenceTimePairs.append((occurrence, scheduledTime, identifier))
+    // For each completed occurrence, find and remove its notification
+    for completion in todaysCompletions {
+      guard let occurrenceID = completion.occurrenceID else { continue }
+      
+      // Find the notification identifier for this occurrence
+      // The identifier format should match what's used in scheduling
+      let possibleIdentifiers = [
+        occurrenceID, // For daily, monthly, yearly
+        "\(occurrenceID)_\(calendar.component(.weekday, from: today))" // For weekly with specific day
+      ]
+      
+      for identifier in possibleIdentifiers {
+        if deliveredNotifications.contains(where: { $0.request.identifier == identifier }) {
+          identifiersToRemove.insert(identifier)
+        }
       }
-    }
-    
-    // Sort by scheduled time
-    occurrenceTimePairs.sort { $0.scheduledTime < $1.scheduledTime }
-    
-    // Add identifiers for completed occurrences
-    let completedIdentifiers = occurrenceTimePairs
-      .prefix(todaysCompletions.count)
-      .map { $0.identifier }
-    
-    for identifier in completedIdentifiers {
-      identifiersToRemove.insert(identifier)
     }
     
     // Find which of these identifiers actually have delivered notifications
@@ -227,8 +222,10 @@ final class RemindersManager: ObservableObject {
       // Remove the delivered notifications
       center.removeDeliveredNotifications(withIdentifiers: Array(matchingIdentifiers))
       
-      let oldCount = identifiersToRemove.subtracting(Set(completedIdentifiers)).count
-      let completedCount = matchingIdentifiers.intersection(Set(completedIdentifiers)).count
+      let oldCount = matchingIdentifiers.filter { identifier in
+        !todaysCompletions.contains { $0.occurrenceID == identifier }
+      }.count
+      let completedCount = matchingIdentifiers.count - oldCount
       
       if oldCount > 0 && completedCount > 0 {
         print("Removed \(oldCount) old and \(completedCount) completed notifications for '\(reminder.title)'")
@@ -238,68 +235,5 @@ final class RemindersManager: ObservableObject {
         print("Removed \(completedCount) completed notifications for '\(reminder.title)'")
       }
     }
-  }
-  
-  /// Helper method to get scheduled times and identifiers for an occurrence today
-  private func getScheduledTimesToday(
-    for occurrence: ReminderOccurrenceDTO,
-    calendar: Calendar,
-    today: Date
-  ) -> [(Date, String)] {
-    let hour = Int(occurrence.timeOfDay) / 3600
-    let minute = (Int(occurrence.timeOfDay) % 3600) / 60
-    
-    switch occurrence.cadenceType {
-    case .daily:
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [(scheduledTime, occurrence.id)]
-      }
-      
-    case .weekly:
-      // Check if today is one of the scheduled days
-      guard let daysOfWeek = occurrence.daysOfWeek,
-            let todayWeekday = calendar.dateComponents([.weekday], from: Date()).weekday,
-            daysOfWeek.contains(todayWeekday) else {
-        return []
-      }
-      
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [(scheduledTime, "\(occurrence.id)_\(todayWeekday)")]
-      }
-      
-    case .monthly:
-      // Check if today is the scheduled day of month
-      guard let dayOfMonth = occurrence.dayOfMonth,
-            let todayDay = calendar.dateComponents([.day], from: Date()).day,
-            dayOfMonth == todayDay else {
-        return []
-      }
-      
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [(scheduledTime, occurrence.id)]
-      }
-      
-    case .yearly:
-      // Check if today is the scheduled month and day
-      guard let monthOfYear = occurrence.monthOfYear,
-            let dayOfYear = occurrence.dayOfYear else {
-        return []
-      }
-      
-      let todayComponents = calendar.dateComponents([.month, .day], from: Date())
-      guard monthOfYear == todayComponents.month,
-            dayOfYear == todayComponents.day else {
-        return []
-      }
-      
-      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today) {
-        return [(scheduledTime, occurrence.id)]
-      }
-      
-    @unknown default:
-      return []
-    }
-    
-    return []
   }
 }

@@ -13,14 +13,14 @@ import SwiftData
 struct ChatDatabaseReminderCell: View {
   let reminderID: String
   
-  @Query private var reminders: [SchemaV18.Reminder]
+  @Query private var reminders: [Reminder]
   @State private var showingEditReminder = false
   
   init(reminderID: String) {
     self.reminderID = reminderID
     
     // Query for the specific reminder by ID
-    let predicate = #Predicate<SchemaV18.Reminder> { reminder in
+    let predicate = #Predicate<Reminder> { reminder in
       reminder.id == reminderID
     }
     
@@ -30,7 +30,7 @@ struct ChatDatabaseReminderCell: View {
     )
   }
   
-  var reminder: SchemaV18.Reminder? {
+  var reminder: Reminder? {
     reminders.first
   }
   

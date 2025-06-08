@@ -26,7 +26,7 @@ public extension Array where Element == ReminderOccurrenceDTO {
     var descriptions: [String] = []
     
     // Process each cadence type in a specific order
-    let orderedCadenceTypes: [SchemaV18.ReminderCadenceType] = [.daily, .weekly, .monthly, .yearly]
+    let orderedCadenceTypes: [ReminderCadenceType] = [.daily, .weekly, .monthly, .yearly]
     
     for cadenceType in orderedCadenceTypes {
       guard let occurrencesForType = groupedOccurrences[cadenceType], !occurrencesForType.isEmpty else { continue }

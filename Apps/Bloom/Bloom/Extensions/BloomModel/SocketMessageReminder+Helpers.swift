@@ -9,7 +9,7 @@ import BloomModel
 import DataContainer
 
 extension SocketMessage.CadenceType {
-  var asReminderCadenceType: SchemaV18.ReminderCadenceType {
+  var asReminderCadenceType: ReminderCadenceType {
     switch self {
     case .daily:
       return .daily

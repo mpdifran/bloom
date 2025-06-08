@@ -88,6 +88,7 @@ public extension ReminderModelActor {
   
   func markReminderCompleted(
     reminderID: String,
+    occurrenceID: String? = nil,
     completionDate: Date = Date()
   ) throws -> ReminderCompletionRecordDTO? {
     let descriptor = FetchDescriptor<Reminder>(
@@ -97,8 +98,14 @@ public extension ReminderModelActor {
     )
     guard let reminder = try context.fetch(descriptor).first else { return nil }
     
+    var occurrence: ReminderOccurrence? = nil
+    if let occurrenceID = occurrenceID {
+      occurrence = reminder.occurrences?.first { $0.id == occurrenceID }
+    }
+    
     let completionRecord = ReminderCompletionRecord(
       reminder: reminder,
+      occurrence: occurrence,
       completedDate: completionDate
     )
     context.insert(completionRecord)
@@ -109,6 +116,7 @@ public extension ReminderModelActor {
   
   func markReminderUncompleted(
     reminderID: String,
+    occurrenceID: String? = nil,
     completionDate: Date = Date()
   ) throws {
     let calendar = Calendar.current
@@ -116,7 +124,11 @@ public extension ReminderModelActor {
     
     let descriptor = FetchDescriptor<ReminderCompletionRecord>(
       predicate: #Predicate<ReminderCompletionRecord> { record in
-        record.reminder?.id == reminderID
+        if let occurrenceID = occurrenceID {
+          return record.reminder?.id == reminderID && record.occurrence?.id == occurrenceID
+        } else {
+          return record.reminder?.id == reminderID
+        }
       }
     )
     
@@ -127,9 +139,18 @@ public extension ReminderModelActor {
       calendar.isDate(record.completedDate, inSameDayAs: targetDay)
     }
     
-    // Delete the completion records
-    for record in recordsToDelete {
-      context.delete(record)
+    // If we have an occurrenceID, only delete the first matching record
+    // Otherwise, delete all records from that day (old behavior)
+    if occurrenceID != nil && !recordsToDelete.isEmpty {
+      // Delete only the most recent completion for this specific occurrence
+      if let recordToDelete = recordsToDelete.sorted(by: { $0.completedDate > $1.completedDate }).first {
+        context.delete(recordToDelete)
+      }
+    } else {
+      // Delete all completion records from that day
+      for record in recordsToDelete {
+        context.delete(record)
+      }
     }
     
     try context.save()

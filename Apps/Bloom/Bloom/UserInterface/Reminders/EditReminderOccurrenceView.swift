@@ -6,7 +6,7 @@ import SFSafeSymbols
 struct EditReminderOccurrenceView: View {
   @Environment(\.dismiss) private var dismiss
 
-  @State private var cadenceType: SchemaV18.ReminderCadenceType
+  @State private var cadenceType: ReminderCadenceType
   @State private var selectedTime: Date
   @State private var selectedWeekdays: Set<Int>
   @State private var selectedDayOfMonth: Int
@@ -74,7 +74,7 @@ private extension EditReminderOccurrenceView {
     VStack {
       LabeledContent("Repeats") {
         Picker("Repeat", selection: $cadenceType) {
-          ForEach(SchemaV18.ReminderCadenceType.allCases, id: \.self) { type in
+          ForEach(ReminderCadenceType.allCases, id: \.self) { type in
             Text(type.displayName).tag(type)
           }
         }

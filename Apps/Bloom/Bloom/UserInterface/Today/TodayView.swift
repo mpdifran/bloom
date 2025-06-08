@@ -308,11 +308,17 @@ private extension TodayView {
     Task {
       do {
         if occurrence.isCompleted {
-          // Uncomplete the reminder (removes the most recent completion)
-          try await remindersManager.markReminderUncompleted(withID: occurrence.reminder.id)
+          // Uncomplete the reminder (removes the completion for this specific occurrence)
+          try await remindersManager.markReminderUncompleted(
+            withID: occurrence.reminder.id,
+            occurrenceID: occurrence.occurrence.id
+          )
         } else {
-          // Complete the reminder (adds a new completion)
-          try await remindersManager.markReminderCompleted(withID: occurrence.reminder.id)
+          // Complete the reminder (adds a new completion for this specific occurrence)
+          try await remindersManager.markReminderCompleted(
+            withID: occurrence.reminder.id,
+            occurrenceID: occurrence.occurrence.id
+          )
         }
       } catch {
         print("Failed to mark occurrence as \(occurrence.isCompleted ? "uncompleted" : "completed"): \(error)")

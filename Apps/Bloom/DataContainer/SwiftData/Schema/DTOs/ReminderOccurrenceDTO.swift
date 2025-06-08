@@ -4,7 +4,7 @@ import SwiftData
 public struct ReminderOccurrenceDTO: Sendable, Equatable, Identifiable {
   public let persistentModelID: PersistentIdentifier?
   public let id: String
-  public let cadenceType: SchemaV18.ReminderCadenceType
+  public let cadenceType: ReminderCadenceType
   public let timeOfDay: TimeInterval
   public let daysOfWeek: [Int]?
   public let dayOfMonth: Int?
@@ -14,7 +14,7 @@ public struct ReminderOccurrenceDTO: Sendable, Equatable, Identifiable {
   public init(
     persistentModelID: PersistentIdentifier? = nil,
     id: String,
-    cadenceType: SchemaV18.ReminderCadenceType,
+    cadenceType: ReminderCadenceType,
     timeOfDay: TimeInterval,
     daysOfWeek: [Int]?,
     dayOfMonth: Int?,
@@ -32,7 +32,7 @@ public struct ReminderOccurrenceDTO: Sendable, Equatable, Identifiable {
   }
 }
 
-extension SchemaV18.ReminderOccurrence {
+extension ReminderOccurrence {
   public func asDTO() -> ReminderOccurrenceDTO {
     ReminderOccurrenceDTO(
       persistentModelID: persistentModelID,

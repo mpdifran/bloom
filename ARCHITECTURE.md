@@ -356,20 +356,64 @@ enum DataContainerMigrationPlan: SchemaMigrationPlan {
 ```
 
 ### Schema Evolution Pattern
-When creating a new schema version, all models must be prefixed with their schema version:
+
+**CRITICAL RULE**: Never modify shipped schema files! Once shipped, create new versions for changes.
+
+#### When to Create New Schema Version:
+- **Before shipping**: You can modify existing schemas freely
+- **After shipping**: Must create new schema version for any changes
+
+#### Schema Modification Process:
+1. **Ask if shipped**: Confirm whether the current schema has been shipped to users
+2. **If not shipped**: Modify existing schema files directly
+3. **If shipped**: Follow versioning process:
+   - Create new schema version (e.g., V19 → V20)
+   - Copy affected model files to new version directory with version suffix
+   - Modify models in new version only
+   - Update typealias to point to new version
+   - Create migration stage
+   - Update migration plan
+
+#### File Naming Convention:
+SwiftData model files must include the version number in the filename:
+```
+V20/
+├── ReminderV20.swift           # Correct: includes version
+├── ReminderOccurrenceV20.swift
+└── ReminderCompletionRecordV20.swift
+```
+This prevents naming conflicts and makes version tracking explicit.
+
+#### Schema Version Declaration:
 ```swift
-enum SchemaV18: VersionedSchema {
+enum SchemaV20: VersionedSchema {
     static let models: [any PersistentModel.Type] = [
         SchemaV17.BowelMovement.self,  // Reference existing models from their version
         SchemaV15.ChatMessage.self,
-        SchemaV9.FoodItemRecord.self,
-        SchemaV18.Reminder.self,        // New models also use version prefix
-        SchemaV18.ReminderOccurrence.self,
-        SchemaV18.ReminderCompletionRecord.self
+        SchemaV20.Reminder.self,        // Updated models use new version
+        SchemaV20.ReminderOccurrence.self,
+        SchemaV20.ReminderCompletionRecord.self
     ]
 }
 ```
-This approach maintains clear version tracking and avoids ambiguity about which version of a model is being used.
+
+#### Typealias Pattern:
+Use typealias to avoid schema-specific code throughout the app:
+```swift
+// In ModelTypealiases.swift
+public typealias ReminderCompletionRecord = SchemaV20.ReminderCompletionRecord
+
+// In DTOs - use typealias, not specific schema version
+extension ReminderCompletionRecord {
+    public func asDTO() -> ReminderCompletionRecordDTO { }
+}
+```
+
+#### Migration Types:
+- **Lightweight**: For adding optional properties, simple changes
+- **Custom**: For complex data transformations, relationship changes
+
+This approach maintains clear version tracking while minimizing code duplication through typealias usage.
 
 ### Model Organization Pattern
 SwiftData models are organized to separate core definitions from helper methods:

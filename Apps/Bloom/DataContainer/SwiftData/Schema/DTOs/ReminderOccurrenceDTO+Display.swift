@@ -39,10 +39,9 @@ public extension ReminderDTO {
     let now = Date()
     let today = calendar.startOfDay(for: now)
     
-    // Get today's completion records sorted by completion time
+    // Get today's completion records
     let todaysCompletions = completionRecords
       .filter { calendar.isDate($0.completedDate, inSameDayAs: today) }
-      .sorted { $0.completedDate < $1.completedDate }
     
     // Get all occurrences that are scheduled for today with their times
     var occurrenceTimePairs: [(ReminderOccurrenceDTO, Date)] = []
@@ -57,20 +56,31 @@ public extension ReminderDTO {
     // Sort by scheduled time
     occurrenceTimePairs.sort { $0.1 < $1.1 }
     
-    // Create displays based on completion count
+    // Create displays checking specific occurrence completions
     var displays: [ReminderOccurrenceDisplay] = []
     
-    for (index, pair) in occurrenceTimePairs.enumerated() {
+    // Track which occurrences have been shown as uncompleted
+    var hasShownUncompleted = false
+    
+    for pair in occurrenceTimePairs {
       let (occurrence, scheduledTime) = pair
       
-      // Check if this occurrence is completed based on completion count
-      let isCompleted = index < todaysCompletions.count
+      // Check if this specific occurrence is completed
+      let isCompleted = todaysCompletions.contains { completion in
+        completion.occurrenceID == occurrence.id
+      }
       
       // Get the specific completion date for this occurrence (if completed)
-      let completionDate = isCompleted ? todaysCompletions[index].completedDate : nil
+      let completionDate = todaysCompletions.first { $0.occurrenceID == occurrence.id }?.completedDate
       
-      // Show if completed or if it's the next uncompleted occurrence
-      if isCompleted || index == todaysCompletions.count {
+      // Check if the notification time has passed
+      let notificationTimePassed = scheduledTime <= now
+      
+      // Show if:
+      // 1. Already completed, OR
+      // 2. First uncompleted occurrence, OR
+      // 3. Notification time has passed (to show multiple occurrences when their times have elapsed)
+      if isCompleted || !hasShownUncompleted || notificationTimePassed {
         displays.append(ReminderOccurrenceDisplay(
           reminder: self,
           occurrence: occurrence,
@@ -78,6 +88,10 @@ public extension ReminderDTO {
           isCompleted: isCompleted,
           completionDate: completionDate
         ))
+        
+        if !isCompleted {
+          hasShownUncompleted = true
+        }
       }
     }
     

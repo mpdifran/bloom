@@ -154,7 +154,7 @@ struct CreateEditReminderView: View {
   private var sortedOccurrences: [ReminderOccurrence] {
     occurrences.sorted { first, second in
       // First sort by cadence type priority
-      let cadenceOrder: [SchemaV18.ReminderCadenceType] = [.daily, .weekly, .monthly, .yearly]
+      let cadenceOrder: [ReminderCadenceType] = [.daily, .weekly, .monthly, .yearly]
       let firstIndex = cadenceOrder.firstIndex(of: first.cadenceType) ?? cadenceOrder.count
       let secondIndex = cadenceOrder.firstIndex(of: second.cadenceType) ?? cadenceOrder.count
       

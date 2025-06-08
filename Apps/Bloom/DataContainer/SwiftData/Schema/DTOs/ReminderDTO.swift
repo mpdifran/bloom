@@ -32,7 +32,7 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
   }
 }
 
-extension SchemaV18.Reminder {
+extension Reminder {
   public func asDTO() -> ReminderDTO {
     ReminderDTO(
       persistentModelID: persistentModelID,
