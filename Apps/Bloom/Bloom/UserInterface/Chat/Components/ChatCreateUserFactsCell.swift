@@ -29,7 +29,8 @@ struct ChatCreateUserFactsCell: View {
             .font(.body)
             .bold()
             .fontDesign(.rounded)
-            .foregroundColor(.primary)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.leading)
         }
 
         Spacer(minLength: 0)

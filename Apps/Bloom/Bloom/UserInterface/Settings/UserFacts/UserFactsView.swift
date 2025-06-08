@@ -24,7 +24,7 @@ struct UserFactsView: View {
           userFactsList
         }
       }
-      .navigationTitle("Bud Memory")
+      .navigationTitle("Bud's Memory")
       .navigationBarTitleDisplayMode(.inline)
       .alert(error: $error)
     }

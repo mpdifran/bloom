@@ -100,7 +100,7 @@ private extension PersonalizationSettingsView {
         NavigationLink {
           UserFactsView()
         } label: {
-          SettingsCell("Bud Memory", showDisclosureIndicator: true) {
+          SettingsCell("Bud's Memory", showDisclosureIndicator: true) {
             EmptyView()
           }
         }

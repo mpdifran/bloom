@@ -16,16 +16,23 @@ struct UserFactCell: View {
   
   var body: some View {
     HStack {
+      Image(systemSymbol: .brainHeadProfileFill)
+        .foregroundStyle(.tint)
+
       VStack(alignment: .leading) {
+        Text("Memory")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+
         Text(userFact.fact)
-          .font(.headline)
+          .font(.body)
           .bold()
           .fontDesign(.rounded)
           .fixedSize(horizontal: false, vertical: true)
           .multilineTextAlignment(.leading)
 
         Text("Revisit: \(userFact.revisitDate, format: .dateTime.day().month().year())")
-          .font(.caption)
+          .font(.subheadline)
           .foregroundStyle(.secondary)
       }
 
@@ -39,6 +46,7 @@ struct UserFactCell: View {
       .buttonStyle(.plain)
     }
     .cardContainer()
+    .tint(.mutedYellow)
   }
 }
 
@@ -67,6 +75,5 @@ struct UserFactCell: View {
         // Delete action
       }
     }
-    .padding()
   }
 }
