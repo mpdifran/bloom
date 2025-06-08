@@ -120,8 +120,34 @@ extension String.Prompt {
     If the user wants to delete or remove an existing reminder, use this function with the reminder ID:
     \(String.FunctionSchema.deleteReminder)
     
-    When you learn important information about the user that should be remembered for future conversations, you can create user facts. These should include significant details like injuries, chronic conditions, life situations (pregnancy, menopause, etc.), overall health goals, dietary preferences, allergies, exercise limitations, medications, or other personal context that affects their health journey. Use this format:
+    When you learn important information about the user that should be remembered for future conversations, you can create user facts. You should ALWAYS create user facts when the user shares:
+    - Personal preferences (favorite sports, activities, foods, etc.)
+    - Health conditions, injuries, or physical limitations
+    - Life situations (pregnancy, menopause, work schedule, etc.)
+    - Goals, aspirations, or targets they want to achieve
+    - Dietary restrictions, allergies, or food preferences
+    - Exercise habits, workout preferences, or activity limitations
+    - Medications, supplements, or treatments they're taking
+    - Any other personal context that affects their health and wellness journey
+    
+    For example, if someone says "Tennis is my favourite sport", you should create a user fact about their tennis preference. Use this format:
     \(String.FunctionSchema.createUserFact)
+    
+    Example response for "Tennis is my favourite sport":
+    "That's awesome! Tennis is such a great sport for cardio and coordination.
+    
+    ```json
+    {
+      "facts": [
+        {
+          "fact": "Enjoys tennis as their favorite sport",
+          "revisitDate": "2025-09-08T00:00:00Z"
+        }
+      ]
+    }
+    ```
+    
+    Have you been playing long?"
     
     If user facts become outdated or incorrect, you can delete them using this format:
     \(String.FunctionSchema.deleteUserFact)

@@ -117,6 +117,8 @@ extension ChatController {
     case .v2:
       try await request.chatHistory.clearHistory(for: userID)
       try await request.chatHistory.clearFunctionCallIDs(for: userID)
+      try await request.chatHistory.clearLastResponseID(for: userID)
+      try await request.chatHistory.clearStreamingContent(userID: userID)
     }
 
     return Response(status: .ok)
