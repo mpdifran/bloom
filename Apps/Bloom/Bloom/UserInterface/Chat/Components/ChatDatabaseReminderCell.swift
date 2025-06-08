@@ -77,6 +77,7 @@ struct ChatDatabaseReminderCell: View {
           .tint(.gray)
           .cardContainer()
           .frame(width: 300)
+          .padding(.horizontal)
         }
       }
       

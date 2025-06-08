@@ -87,7 +87,7 @@ actor ChatHistoryModifier {
       // Check if this message has rich content
       if case .richContent(let data) = message.content {
         // Process rich content and create appropriate cell model
-        if let processedContent = await processRichContent(from: data) {
+        if let processedContent = await processRichContent(from: data, dbID: message.dbID) {
           models.append(ChatCellModel(
             id: message.id,
             contentType: .richContent(
@@ -119,7 +119,7 @@ actor ChatHistoryModifier {
       if !messages.contains(where: { $0.id == inProgressMessage.id }) {
         // Check if this in-progress message has rich content
         if let data = inProgressMessage.data {
-          if let processedContent = await processRichContent(from: data) {
+          if let processedContent = await processRichContent(from: data, dbID: nil) {
             models.append(ChatCellModel(
               id: inProgressMessage.id,
               contentType: .richContent(
@@ -223,7 +223,7 @@ actor ChatHistoryModifier {
   }
   
   // Process rich content data synchronously to avoid async loading in UI
-  private func processRichContent(from data: Data) async -> ProcessedRichContent? {
+  private func processRichContent(from data: Data, dbID: String?) async -> ProcessedRichContent? {
     if let healthGoals = try? JSONDecoder.bloomModel.decode([SocketMessage.HealthMetricGoal].self, from: data) {
       var proposedGoals = [ProposedGoal]()
       for healthGoal in healthGoals {
@@ -295,7 +295,7 @@ actor ChatHistoryModifier {
       
     } else if let createReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.CreateReminder.self, from: data) {
       // Extract the reminder ID to store in ProcessedRichContent
-      let reminderID = createReminder.id ?? UUID().uuidString
+      let reminderID = dbID ?? createReminder.id ?? UUID().uuidString
       return .createReminder(reminderID: reminderID)
       
     } else if let deleteReminder = try? JSONDecoder.bloomModel.decode(SocketMessage.DeleteReminder.self, from: data) {

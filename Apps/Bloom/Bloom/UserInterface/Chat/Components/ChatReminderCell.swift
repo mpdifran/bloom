@@ -55,7 +55,7 @@ struct ChatReminderCell: View {
 
       Spacer()
     }
-    .padding(.leading)
+    .padding(.horizontal)
   }
 }
 
