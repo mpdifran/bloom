@@ -79,7 +79,7 @@ extension ChatVitalConverter {
     let age = await HealthManager.shared.age()
     let sex = await HealthManager.shared.sex().name
     let height = await HealthManager.shared.height()
-    let healthGoal = await HealthManager.shared.healthGoal
+    let focus = await HealthManager.shared.focus
     let workoutEquipment = Array(await HealthManager.shared.selectedWorkoutEquipment)
     
     // Fetch user facts
@@ -98,7 +98,7 @@ extension ChatVitalConverter {
       age: age,
       sex: sex,
       height: height.chatQuantity(for: .meterUnit(with: .centi), numberFormatter: .oneDecimalPlace),
-      healthGoal: healthGoal,
+      focus: focus.isNotEmpty ? focus : nil,
       currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
       timeZone: TimeZone.current.identifier,
       workoutEquipment: workoutEquipment,

@@ -140,8 +140,8 @@ public final class HealthManager: ObservableObject {
   @Published public var birthday = Date.now {
     didSet { healthDefaults.setBirthday(birthday) }
   }
-  @Published public var healthGoal: String {
-    didSet { healthDefaults.set(healthGoal: healthGoal) }
+  @Published public var focus: String {
+    didSet { healthDefaults.set(focus: focus) }
   }
   @Published public var weightLossSpeed: WeightLossSpeed = .moderate {
     didSet { healthDefaults.setWeightLossSpeed(weightLossSpeed) }
@@ -157,7 +157,7 @@ public final class HealthManager: ObservableObject {
   public var healthTargetDetails: HealthTargetDetails {
     HealthTargetDetails(
       targetWeight: targetWeight,
-      goal: healthGoal,
+      goal: focus,
       weightLossSpeed: weightLossSpeed
     )
   }
@@ -171,7 +171,7 @@ public final class HealthManager: ObservableObject {
 
   private init() {
     self.birthday = healthDefaults.getBirthday()
-    self.healthGoal = healthDefaults.getHealthGoal()
+    self.focus = healthDefaults.getFocus()
     self.weightLossSpeed = healthDefaults.getWeightLossSpeed()
     self.selectedWorkoutEquipment = Set(healthDefaults.getSelectedWorkoutEquipment())
 

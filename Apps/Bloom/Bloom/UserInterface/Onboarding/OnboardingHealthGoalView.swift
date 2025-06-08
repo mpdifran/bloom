@@ -58,9 +58,9 @@ struct OnboardingHealthGoalView: View {
     .groupedBackground()
     .sheet($presentedSheet)
     .animation(.default, value: index)
-    .animation(.default, value: healthManager.healthGoal)
+    .animation(.default, value: healthManager.focus)
     .sensoryFeedback(.selection, trigger: index)
-    .sensoryFeedback(.selection, trigger: healthManager.healthGoal)
+    .sensoryFeedback(.selection, trigger: healthManager.focus)
     .sensoryFeedback(.selection, trigger: didContinue)
     .shelf(includePadding: false) {
       if index >= 3 {
@@ -78,7 +78,7 @@ struct OnboardingHealthGoalView: View {
         .padding(.vertical)
       }
     }
-    .animation(.easeInOut, value: healthManager.healthGoal)
+    .animation(.easeInOut, value: healthManager.focus)
     .task {
       while index < 3 {
         await advanceIndex()
@@ -96,8 +96,8 @@ private extension OnboardingHealthGoalView {
   var goalTextFieldView: some View {
     TextField(
       "",
-      text: $healthManager.healthGoal,
-      prompt: Text("Describe your health goal"),
+      text: $healthManager.focus,
+      prompt: Text("Describe your health focus"),
       axis: .vertical
     )
     .multilineTextAlignment(.center)
@@ -119,14 +119,14 @@ var healthGoalSuggestionsView: some View {
             .bold()
             .fontDesign(.rounded)
             .lineLimit(1)
-            .cardContainer(fill: healthManager.healthGoal == suggestion
+            .cardContainer(fill: healthManager.focus == suggestion
                            ? AnyShapeStyle(Color.accentColor)
                            : AnyShapeStyle(.background.secondary))
             .fixedSize(horizontal: true, vertical: false)
-            .foregroundColor(healthManager.healthGoal == suggestion ? .white : .primary)
+            .foregroundColor(healthManager.focus == suggestion ? .white : .primary)
             .onTapGesture {
               withAnimation {
-                healthManager.healthGoal = suggestion
+                healthManager.focus = suggestion
                 scrollProxy.scrollTo(suggestion, anchor: .center)
               }
             }
@@ -144,10 +144,10 @@ var healthGoalSuggestionsView: some View {
       OnboardingHealthGoalCell(
         title: "Just Monitor My Health",
         symbol: .heartTextSquare,
-        isSelected: healthManager.healthGoal == "Monitor My Health"
+        isSelected: healthManager.focus == "Monitor My Health"
       )
       .onTapGesture {
-        healthManager.healthGoal = "Monitor My Health"
+        healthManager.focus = "Monitor My Health"
       }
 
       Divider()
@@ -155,10 +155,10 @@ var healthGoalSuggestionsView: some View {
       OnboardingHealthGoalCell(
         title: "Lose Weight",
         symbol: .gaugeWithDotsNeedle0percent,
-        isSelected: healthManager.healthGoal == "Lose Weight"
+        isSelected: healthManager.focus == "Lose Weight"
       )
       .onTapGesture {
-        healthManager.healthGoal = "Lose Weight"
+        healthManager.focus = "Lose Weight"
       }
 
       Divider()
@@ -166,10 +166,10 @@ var healthGoalSuggestionsView: some View {
       OnboardingHealthGoalCell(
         title: "Maintain Weight",
         symbol: .gaugeWithDotsNeedleBottom50percent,
-        isSelected: healthManager.healthGoal == "Maintain Weight"
+        isSelected: healthManager.focus == "Maintain Weight"
       )
       .onTapGesture {
-        healthManager.healthGoal = "Maintain Weight"
+        healthManager.focus = "Maintain Weight"
       }
 
       Divider()
@@ -177,10 +177,10 @@ var healthGoalSuggestionsView: some View {
       OnboardingHealthGoalCell(
         title: "Gain Weight",
         symbol: .gaugeWithDotsNeedleBottom100percent,
-        isSelected: healthManager.healthGoal == "Gain Weight"
+        isSelected: healthManager.focus == "Gain Weight"
       )
       .onTapGesture {
-        healthManager.healthGoal = "Gain Weight"
+        healthManager.focus = "Gain Weight"
       }
     }
     .cardContainer(fill: .background.secondary)

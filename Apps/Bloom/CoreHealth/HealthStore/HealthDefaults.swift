@@ -15,7 +15,7 @@ public extension String {
     case isFemale = "HealthManager.isFemale"
     case height = "HealthManager.height"
     case birthday = "HealthManager.birthday"
-    case healthGoal = "HealthManager.healthGoal"
+    case focus = "HealthManager.healthGoal"
     case weightLossSpeed = "HealthManager.weightLossSpeed"
     case userReportedActivityLevel = "HealthManager.userReportedActivityLevel"
     case targetWeight = "HealthManager.targetWeight"
@@ -52,8 +52,8 @@ public extension HealthDefaults {
     setValue(birthday, for: .birthday)
   }
 
-  func set(healthGoal: String) {
-    setValue(healthGoal, for: .healthGoal)
+  func set(focus: String) {
+    setValue(focus, for: .focus)
   }
 
   func setWeightLossSpeed(_ weightLossSpeed: WeightLossSpeed) {
@@ -78,8 +78,8 @@ public extension HealthDefaults {
     getValue(for: .birthday) ?? Date.now
   }
 
-  func getHealthGoal() -> String {
-    let value: String? = getValue(for: .healthGoal)
+  func getFocus() -> String {
+    let value: String? = getValue(for: .focus)
 
     if let value, let healthGoalEnum = HealthGoal(rawValue: value) {
       return healthGoalEnum.name

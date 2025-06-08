@@ -112,7 +112,7 @@ private extension BloomApp {
     TelemetryDeck.signal(
       "Health Goal",
       parameters: [
-        "healthGoal": HealthDefaults.shared.getHealthGoal()
+        "healthGoal": HealthDefaults.shared.getFocus()
       ]
     )
   }

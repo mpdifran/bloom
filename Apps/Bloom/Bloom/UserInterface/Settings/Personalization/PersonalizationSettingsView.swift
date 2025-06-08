@@ -93,7 +93,7 @@ private extension PersonalizationSettingsView {
   
   var userFactsSection: some View {
     VStack {
-      SectionTitleView("AI Memory")
+      SectionTitleView("Bud Memory")
         .padding(.horizontal)
 
       SettingsSectionContainer {

@@ -137,14 +137,14 @@ private extension SettingsView {
 
   var healthGoalsSection: some View {
     VStack {
-      SectionTitleView("Health Goals")
+      SectionTitleView("Health Focus")
         .padding(.horizontal)
 
       HStack {
         SettingsHealthGoalCell(
           image: Image(systemSymbol: .scope),
-          value: "Goal",
-          subtitle: healthManager.healthGoal
+          value: "Focus",
+          subtitle: healthManager.focus
         )
         .tint(.mutedIndigo)
         .onTapGesture {

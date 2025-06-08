@@ -390,7 +390,7 @@ extension ChatHealthData {
     let age: Int?
     let sex: String?
     let height: Quantity?
-    let healthGoal: String?
+    let focus: String?
     let currentDate: String
     let timeZone: String
     let workoutEquipment: [String]

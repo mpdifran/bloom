@@ -22,12 +22,12 @@ struct HealthGoalEditCard: View {
   var body: some View {
     ScrollView {
       VStack {
-        Text("Health Goal")
+        Text("Health Focus")
           .font(.largeTitle)
           .bold()
           .fontDesign(.rounded)
 
-        healthGoalTextField
+        focusTextField
 
         Button {
           dismiss()
@@ -41,7 +41,7 @@ struct HealthGoalEditCard: View {
       .padding()
       .presentationDetentSelfSizing()
     }
-    .animation(.easeInOut, value: healthManager.healthGoal)
+    .animation(.easeInOut, value: healthManager.focus)
     .animation(.easeInOut, value: healthManager.weightLossSpeed)
     .groupedBackground()
     .presentationCornerRadius(30)
@@ -53,11 +53,11 @@ struct HealthGoalEditCard: View {
 
 private extension HealthGoalEditCard {
 
-  var healthGoalTextField: some View {
+  var focusTextField: some View {
     TextField(
       "",
-      text: $healthManager.healthGoal,
-      prompt: Text("Describe your health goal"),
+      text: $healthManager.focus,
+      prompt: Text("Describe your health focus"),
       axis: .vertical
     )
     .font(.title2)
