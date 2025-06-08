@@ -50,20 +50,29 @@ public extension SocketMessage {
   }
   
   struct DeleteUserFacts: Codable, Equatable, Sendable {
-    public let factIDs: [String]
+    public let facts: [DeletedFact]
     
-    public init(factIDs: [String]) {
-      self.factIDs = factIDs
+    public struct DeletedFact: Codable, Equatable, Sendable {
+      public let id: String
+      public let fact: String
+      
+      public init(id: String, fact: String) {
+        self.id = id
+        self.fact = fact
+      }
+    }
+    
+    public init(facts: [DeletedFact]) {
+      self.facts = facts
     }
     
     public init(from decoder: any Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
       
-      // Try to decode as array
-      if let factIDs = try? container.decode([String].self, forKey: .factIDs) {
-        self.factIDs = factIDs.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+      if let facts = try? container.decode([DeletedFact].self, forKey: .facts) {
+        self.facts = facts
       } else {
-        self.factIDs = []
+        self.facts = []
       }
     }
   }

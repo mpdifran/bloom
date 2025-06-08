@@ -90,6 +90,17 @@ struct ChatProcessedRichContentWrapperCell: View {
         ChatDatabaseReminderCell(reminderID: reminderID)
       case .deleteReminder(let reminderID):
         ChatDatabaseReminderCell(reminderID: reminderID)
+      case .createUserFacts(let createUserFacts):
+        ChatCreateUserFactsCell(
+          chatMessageID: chatMessageID,
+          userFacts: createUserFacts
+        )
+      case .deleteUserFacts(let deleteUserFacts):
+        ChatDeleteUserFactsCell(
+          chatMessageID: chatMessageID,
+          deleteUserFacts: deleteUserFacts,
+          hasPerformedAction: hasPerformedAction
+        )
       case .unknown:
         ChatUnknownContentCell()
       }

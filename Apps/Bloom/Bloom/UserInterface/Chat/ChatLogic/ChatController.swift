@@ -320,6 +320,16 @@ private extension ChatController {
         if !richContentMessage.isTemporary {
           dbID = try? await self.autoLog(deleteReminder: content)
         }
+      case .createUserFacts(let content):
+        data = try? JSONEncoder.bloomModel.encode(content)
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(createUserFacts: content)
+        }
+      case .deleteUserFacts(let content):
+        data = try? JSONEncoder.bloomModel.encode(content)
+        if !richContentMessage.isTemporary {
+          dbID = try? await self.autoLog(deleteUserFacts: content)
+        }
       case .invalid(let json):
         TelemetryDeck.signal("Chat - Invalid JSON", parameters: ["json": json])
       }
@@ -431,7 +441,8 @@ private extension ChatController {
                 )
               case .deleteUserFacts(let deleteUserFacts):
                 let userFactModelActor = UserFactModelActor.standard()
-                let deletedCount = try await userFactModelActor.deleteUserFacts(withIDs: deleteUserFacts.factIDs)
+                let factIDs = deleteUserFacts.facts.map(\.id)
+                let deletedCount = try await userFactModelActor.deleteUserFacts(withIDs: factIDs)
                 return SocketMessage.ToolCallResult(
                   toolCallID: toolCall.toolCallID,
                   data: "Deleted \(deletedCount) user facts"
@@ -697,6 +708,35 @@ private extension ChatController {
     // Note: Not playing sound for deletions as it might be jarring
     
     return deleteReminder.reminderID
+  }
+
+  func autoLog(createUserFacts: SocketMessage.CreateUserFacts) async throws -> String {
+    let userFactModelActor = UserFactModelActor.standard()
+    let factInputs = createUserFacts.facts.map { fact in
+      (fact: fact.fact, dateAdded: Date(), revisitDate: fact.revisitDate)
+    }
+    
+    let createdFacts = try await userFactModelActor.createUserFacts(factInputs)
+    
+    TelemetryDeck.signal("Create User Facts", parameters: [
+      "count": String(createdFacts.count)
+    ])
+    
+    // Return the first fact ID for dbID tracking
+    return createdFacts.first?.id ?? UUID().uuidString
+  }
+
+  func autoLog(deleteUserFacts: SocketMessage.DeleteUserFacts) async throws -> String {
+    let userFactModelActor = UserFactModelActor.standard()
+    let factIDs = deleteUserFacts.facts.map { $0.id }
+    let deletedCount = try await userFactModelActor.deleteUserFacts(withIDs: factIDs)
+    
+    TelemetryDeck.signal("Delete User Facts", parameters: [
+      "count": String(deletedCount)
+    ])
+    
+    // Return the first fact ID for dbID tracking
+    return deleteUserFacts.facts.first?.id ?? UUID().uuidString
   }
 
   func on(error: Error) {

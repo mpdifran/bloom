@@ -24,7 +24,7 @@ struct UserFactsView: View {
           userFactsList
         }
       }
-      .navigationTitle("User Facts")
+      .navigationTitle("Bud Memory")
       .navigationBarTitleDisplayMode(.inline)
       .alert(error: $error)
     }
@@ -35,15 +35,15 @@ private extension UserFactsView {
   
   var emptyStateView: some View {
     VStack(spacing: 16) {
-      Image(systemSymbol: .personTextRectangle)
+      Image(systemSymbol: .brainHeadProfileFill)
         .font(.system(size: 48))
-        .foregroundStyle(.secondary)
-      
-      Text("No User Facts")
+        .foregroundStyle(.mutedYellow)
+
+      Text("No Memories")
         .font(.title2)
         .fontWeight(.semibold)
       
-      Text("When you share personal information with Bud, it will be stored here for future reference.")
+      Text("Bud will remember key information about you when you share it.")
         .multilineTextAlignment(.center)
         .foregroundStyle(.secondary)
     }

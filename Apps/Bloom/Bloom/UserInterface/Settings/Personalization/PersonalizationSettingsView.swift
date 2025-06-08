@@ -93,14 +93,14 @@ private extension PersonalizationSettingsView {
   
   var userFactsSection: some View {
     VStack {
-      SectionTitleView("Bud Memory")
+      SectionTitleView("Bud")
         .padding(.horizontal)
 
       SettingsSectionContainer {
         NavigationLink {
           UserFactsView()
         } label: {
-          SettingsCell("User Facts", showDisclosureIndicator: true) {
+          SettingsCell("Bud Memory", showDisclosureIndicator: true) {
             EmptyView()
           }
         }

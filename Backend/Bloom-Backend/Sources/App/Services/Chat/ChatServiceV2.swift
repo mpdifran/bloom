@@ -430,6 +430,12 @@ private extension ChatServiceV2 {
     if let kind = handleDeleteReminder(data: data) {
       return kind
     }
+    if let kind = handleCreateUserFacts(data: data) {
+      return kind
+    }
+    if let kind = handleDeleteUserFacts(data: data) {
+      return kind
+    }
 
     logger.error("Could not parse JSON as Rich Message:\n\(json)\n")
     return .invalid(json)
@@ -508,6 +514,20 @@ private extension ChatServiceV2 {
   func handleDeleteReminder(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
     if let content = try? decoder.decode(SocketMessage.DeleteReminder.self, from: data) {
       return .deleteReminder(content)
+    }
+    return nil
+  }
+
+  func handleCreateUserFacts(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.CreateUserFacts.self, from: data) {
+      return .createUserFacts(content)
+    }
+    return nil
+  }
+
+  func handleDeleteUserFacts(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.DeleteUserFacts.self, from: data) {
+      return .deleteUserFacts(content)
     }
     return nil
   }

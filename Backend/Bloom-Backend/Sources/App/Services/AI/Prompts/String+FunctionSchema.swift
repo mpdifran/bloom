@@ -181,4 +181,26 @@ extension String.FunctionSchema {
       "reminderID": String // Required. The ID of the reminder to delete.
     }
     """
+
+  static let createUserFact: String = """
+    Create User Fact: {
+      "facts": [UserFact] // Required. A list of user facts to create and store.
+    }
+    
+    UserFact: {
+      "fact": String,        // Required. The user fact to store for future reference.
+      "revisitDate": String  // Required. ISO-8601 date when this fact should be revisited (e.g., "2025-07-01T00:00:00Z").
+    }
+    """
+
+  static let deleteUserFact: String = """
+    Delete User Fact: {
+      "facts": [DeletedFact] // Required. A list of user facts to delete.
+    }
+    
+    DeletedFact: {
+      "id": String,   // Required. The ID of the user fact to delete.
+      "fact": String  // Required. The content of the user fact being deleted.
+    }
+    """
 }

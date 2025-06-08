@@ -22,6 +22,8 @@ enum ProcessedRichContent: Equatable {
   case logBloodPressure(systolic: Double, diastolic: Double)
   case createReminder(reminderID: String)
   case deleteReminder(reminderID: String)
+  case createUserFacts(SocketMessage.CreateUserFacts)
+  case deleteUserFacts(SocketMessage.DeleteUserFacts)
   case workoutPlan(SocketMessage.WorkoutPlan)
   case unknown
 }
