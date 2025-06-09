@@ -14,7 +14,15 @@ import SwiftData
 struct UserFactsView: View {
   @Query(sort: \UserFact.dateAdded, order: .reverse) private var userFacts: [UserFact]
   @State private var error: Error?
-  
+
+  let showDoneButton: Bool
+
+  init(showDoneButton: Bool = false) {
+    self.showDoneButton = showDoneButton
+  }
+
+  @Environment(\.dismiss) private var dismiss
+
   var body: some View {
     NavigationStack {
       Group {
@@ -26,8 +34,19 @@ struct UserFactsView: View {
       }
       .navigationTitle("Bud's Memory")
       .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        if showDoneButton {
+          ToolbarItem(placement: .cancellationAction) {
+            Button("Done") {
+              dismiss()
+            }
+            .bold()
+          }
+        }
+      }
       .alert(error: $error)
     }
+    .presentationCompactAdaptation(.fullScreenCover)
   }
 }
 

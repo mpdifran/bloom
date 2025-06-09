@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppUI
 import BloomModel
 import DataContainer
 import SFSafeSymbols
@@ -14,6 +15,8 @@ struct ChatDeleteUserFactsCell: View {
   let chatMessageID: String
   let deleteUserFacts: SocketMessage.DeleteUserFacts
   let hasPerformedAction: Bool
+  
+  @State private var presentedSheet: AnyView?
   
   var body: some View {
     ForEach(deleteUserFacts.facts, id: \.id) { deletedFact in
@@ -40,7 +43,12 @@ struct ChatDeleteUserFactsCell: View {
       }
       .cardContainer()
       .tint(.mutedYellow)
+      .padding(.horizontal)
+      .onTapGesture {
+        presentedSheet = UserFactsView(showDoneButton: true).asAny
+      }
     }
+    .sheet($presentedSheet)
   }
 }
 

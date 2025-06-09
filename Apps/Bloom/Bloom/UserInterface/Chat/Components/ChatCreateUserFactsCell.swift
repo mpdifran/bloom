@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppUI
 import BloomModel
 import DataContainer
 import SFSafeSymbols
@@ -13,6 +14,8 @@ import SFSafeSymbols
 struct ChatCreateUserFactsCell: View {
   let chatMessageID: String
   let userFacts: SocketMessage.CreateUserFacts
+  
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
     ForEach(userFacts.facts, id: \.fact) { fact in
@@ -39,7 +42,12 @@ struct ChatCreateUserFactsCell: View {
       }
       .cardContainer()
       .tint(.mutedYellow)
+      .padding(.horizontal)
+      .onTapGesture {
+        presentedSheet = UserFactsView(showDoneButton: true).asAny
+      }
     }
+    .sheet($presentedSheet)
   }
 }
 
