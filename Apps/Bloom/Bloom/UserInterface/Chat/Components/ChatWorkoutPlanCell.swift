@@ -26,6 +26,7 @@ struct ChatWorkoutPlanCell: View {
 
   @State private var saveComplete = false
   @State private var hasSavedWorkout = false
+  @State private var showingDetails = false
 
   @Environment(\.modelContext) private var modelContext
   @Environment(\.requestReview) private var requestReview
@@ -47,7 +48,7 @@ struct ChatWorkoutPlanCell: View {
               .lineLimit(2)
               .fixedSize(horizontal: false, vertical: true)
 
-            Text(workoutPlan.equipmentDescription + " required")
+            Text(subtitle)
               .font(.caption)
               .foregroundStyle(.secondary)
               .fixedSize(horizontal: false, vertical: true)
@@ -56,45 +57,49 @@ struct ChatWorkoutPlanCell: View {
           .multilineTextAlignment(.leading)
 
           Spacer(minLength: 0)
+
+          DisclosureIndicator()
         }
 
-        ForEach(workoutPlan.sets, id: \.self) { step in
-          Divider()
-
-          VStack(alignment: .leading) {
-            Text(step.title)
-              .font(.body)
-              .bold()
-              .fontDesign(.rounded)
-
-            Text(step.exercisesDescription)
-              .font(.caption)
-
-            Text(step.focus)
-              .font(.caption)
-              .foregroundStyle(.secondary)
-          }
-        }
+        Text(workoutPlan.summary)
+          .font(.subheadline)
+          .fixedSize(horizontal: false, vertical: true)
+          .multilineTextAlignment(.leading)
 
         AsyncButton {
           try save()
         } label: {
-          Text("Save Workout")
+          Text(hasSavedWorkout ? "Workout Saved" : "Save Workout")
             .horizontallyCentered()
         }
         .buttonStyle(.primary)
         .sensoryFeedback(.success, trigger: saveComplete)
         .disabled(hasSavedWorkout)
-        .padding(.top)
       }
       .cardContainer()
+      .onTapGesture {
+        showingDetails = true
+      }
     }
     .padding(.horizontal)
     .tint(.green)
+    .sheet(isPresented: $showingDetails) {
+      NavigationStack {
+        ChatWorkoutPlanDetailsView(
+          chatMessageID: chatMessageID,
+          workoutPlan: workoutPlan,
+          hasSavedWorkout: $hasSavedWorkout
+        )
+      }
+    }
   }
 }
 
 extension ChatWorkoutPlanCell {
+
+  var subtitle: String {
+    "\(workoutPlan.durationDescription) • \(workoutPlan.equipmentDescription)"
+  }
 
   func save() throws {
     try modelContext.savingTransaction {

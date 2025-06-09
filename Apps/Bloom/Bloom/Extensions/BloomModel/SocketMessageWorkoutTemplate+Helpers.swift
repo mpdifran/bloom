@@ -16,6 +16,9 @@ extension SocketMessage.WorkoutPlan {
   }
 
   var equipmentDescription: String {
-    ListFormatter.localizedString(byJoining: requiredEquipment.map(\.name))
+    if requiredEquipment.isEmpty {
+      return "No equipment required"
+    }
+    return ListFormatter.localizedString(byJoining: requiredEquipment.map(\.name)) + " required"
   }
 }

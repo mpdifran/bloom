@@ -45,6 +45,17 @@ extension SocketMessage.WorkoutExercise {
 
     return "\(numberOfReps) Reps"
   }
+
+  @MainActor
+  var measurementDescription: String {
+    if let repsDescription {
+      return repsDescription
+    } else if let distanceQuantity, let distanceUnit {
+      return distanceQuantity.displayString(for: distanceUnit.hkUnit)
+    } else {
+      return DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: DateComponents(second: Int(duration))) ?? ""
+    }
+  }
 }
 
 extension SocketMessage.WorkoutPlan.Equipment {

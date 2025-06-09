@@ -44,3 +44,14 @@ extension SocketMessage.WorkoutPlan.Equipment {
     }
   }
 }
+
+extension SocketMessage.WorkoutPlan {
+
+  var durationDescription: String {
+    let duration = sets.reduce(0) { partialResult, set in
+      partialResult + set.representativeDuration
+    }
+
+    return DateFormatter.timeIntervalHourMinuteShort.string(from: DateComponents(second: Int(duration))) ?? ""
+  }
+}

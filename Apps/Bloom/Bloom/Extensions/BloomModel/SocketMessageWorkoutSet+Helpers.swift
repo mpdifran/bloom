@@ -16,6 +16,28 @@ extension SocketMessage.WorkoutSet {
     let exerciseNames = exercises.map(\.title)
     return ListFormatter.localizedString(byJoining: exerciseNames)
   }
+
+  var representativeDuration: TimeInterval {
+    if format == .tabata {
+      return 240
+    }
+    if let duration {
+      return duration * Double(numberOfSets)
+    } else {
+      let duration = exercises.reduce(0) { partialResult, exercise in
+        partialResult + exercise.duration
+      }
+
+      return duration * Double(numberOfSets)
+    }
+  }
+
+  var setsDescription: String {
+    if numberOfSets == 1 {
+      return "1 Set"
+    }
+    return "\(numberOfSets) Sets"
+  }
 }
 
 extension SocketMessage.WorkoutSet.Format {
@@ -28,6 +50,23 @@ extension SocketMessage.WorkoutSet.Format {
     case .emom: .emom
     case .tabata: .tabata
     case .cooldown: .coolDown
+    }
+  }
+
+  var name: String {
+    switch self {
+    case .warmup:
+      "Warm-Up"
+    case .standard:
+      "Standard"
+    case .amrap:
+      "AMRAP"
+    case .emom:
+      "EMOM"
+    case .tabata:
+      "Tabata"
+    case .cooldown:
+      "Cool-Down"
     }
   }
 }
