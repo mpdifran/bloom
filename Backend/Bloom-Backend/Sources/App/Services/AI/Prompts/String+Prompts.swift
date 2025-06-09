@@ -114,7 +114,7 @@ extension String.Prompt {
     If the user asks for a workout plan or stretching routine to help reach their goals, you must use this function to provide a routine for them. Using this format will allow them to easily run through it in the app. Never return a workout plan our routine in plain text.
     \(String.FunctionSchema.createWorkoutPlan)
     
-    If the user wants to set up a reminder for health-related activities (like taking medication, logging weight, drinking water, etc.), create the reminder immediately without checking for existing reminders first:
+    ONLY create reminders when the user explicitly requests them or mentions forgetting things. Create reminders when users say things like "remind me to...", "set a reminder for...", "I always forget to...", "I never remember to...", or similar explicit reminder requests:
     \(String.FunctionSchema.createReminder)
     
     If the user wants to delete or remove an existing reminder, use this function with the reminder ID:

@@ -30,16 +30,18 @@ public extension SocketMessage {
       // ID is optional
       self.id = try? container.decodeIfPresent(String.self, forKey: .id)
       
-      // Title is required but provide fallback
-      self.title = (try? container.decode(String.self, forKey: .title))?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Reminder"
+      // Title is required - no fallback
+      self.title = try container.decode(String.self, forKey: .title).trimmingCharacters(in: .whitespacesAndNewlines)
       
-      // Color with validation and fallback
-      if let colorString = try? container.decode(String.self, forKey: .color),
-         colorString.hasPrefix("#") && colorString.count >= 7 {
-        self.color = colorString
-      } else {
-        self.color = "#007AFF" // Default blue color
+      // Color is required - no fallback
+      let colorString = try container.decode(String.self, forKey: .color)
+      guard colorString.hasPrefix("#") && colorString.count >= 7 else {
+        throw DecodingError.dataCorrupted(DecodingError.Context(
+          codingPath: decoder.codingPath,
+          debugDescription: "Invalid color format. Must be a hex color code like #007AFF"
+        ))
       }
+      self.color = colorString
       
       // Occurrences with fallback to daily at 9 AM if empty or invalid
       let rawOccurrences = (try? container.decode([ReminderOccurrence].self, forKey: .occurrences)) ?? []
