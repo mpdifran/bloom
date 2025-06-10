@@ -21,6 +21,7 @@ final class ChatServiceV2: Sendable {
   private let application: Application
   private let openAIService: OpenAIService
   private let chatHistory: ChatHistory
+  private let toolCallTracker: ToolCallTracker
   private let logger: Logger
 
   init(
@@ -30,6 +31,7 @@ final class ChatServiceV2: Sendable {
     self.application = application
     self.openAIService = application.openAIService
     self.chatHistory = application.chatHistory
+    self.toolCallTracker = application.toolCallTracker
     self.logger = logger
   }
 
@@ -194,6 +196,18 @@ private extension ChatServiceV2 {
 
     let previousResponseID = try await chatHistory.getLastResponseID(for: userID)
     let fortifiedInputs = try await fortify(inputs: inputs, userID: userID)
+    
+    // Get current request ID and check if we should include tools
+    let shouldIncludeTools: Bool
+    if let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID) {
+      shouldIncludeTools = await toolCallTracker.shouldIncludeTools(for: currentRequestID)
+    } else {
+      shouldIncludeTools = true
+    }
+
+    let tools: [OpenAIKit.Response.Tool] = shouldIncludeTools ? [
+      Response.Tool.function(.queryUserHealthData)
+    ] : []
 
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
       input: fortifiedInputs,
@@ -201,11 +215,7 @@ private extension ChatServiceV2 {
       instructions: .Prompt.chatAssistant,
       previousResponseID: previousResponseID,
 //      reasoning: .init(effort: .low, summary: .auto),
-      tools: [
-        Response.Tool.function(.queryUserHealthData),
-//        Response.Tool.function(.createUserFact),
-//        Response.Tool.function(.deleteUserFact)
-      ],
+      tools: tools,
       truncation: .auto,
       user: userID.value
     )
@@ -543,6 +553,11 @@ private extension ChatServiceV2 {
     db: any Database
   ) async throws {
 
+    // Increment tool call count once for this tool call request
+    if let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID) {
+      _ = await toolCallTracker.incrementToolCallCount(for: currentRequestID)
+    }
+
     // Cache the tool call
     let inputItems = toolCalls.map {
       OpenAIKit.Response.InputItem.item(.functionToolCall($0))
@@ -655,6 +670,11 @@ private extension ChatServiceV2 {
     let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
     let responseCompleted = SocketMessage.ResponseCompleted(requestID: currentRequestID)
     try await ensureContentSilentlySent(responseCompleted, userID: userID, db: db)
+    
+    // Clear tool call tracking for this request
+    if let requestID = currentRequestID {
+      await toolCallTracker.clearRequest(requestID)
+    }
     
     // Clear the requestID after the response is completed
     await requestIDTracker.clearRequestID(for: userID)

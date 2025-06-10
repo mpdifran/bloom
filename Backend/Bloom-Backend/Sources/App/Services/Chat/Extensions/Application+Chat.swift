@@ -68,3 +68,20 @@ extension Application {
     return service
   }
 }
+
+extension Application {
+
+  private struct ToolCallTrackerKey: StorageKey {
+    typealias Value = ToolCallTracker
+  }
+
+  var toolCallTracker: ToolCallTracker {
+    if let tracker = storage[ToolCallTrackerKey.self] {
+      return tracker
+    }
+
+    let tracker = ToolCallTracker()
+    storage[ToolCallTrackerKey.self] = tracker
+    return tracker
+  }
+}
