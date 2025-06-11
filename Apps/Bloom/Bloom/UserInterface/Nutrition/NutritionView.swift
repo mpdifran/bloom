@@ -27,7 +27,7 @@ struct NutritionView: View {
         topBar
 
         Group {
-          NutrientsRemainingView()
+          NutrientsWidgetView()
             .transition(.blurReplace)
             .padding(.vertical)
             .onTapGesture {

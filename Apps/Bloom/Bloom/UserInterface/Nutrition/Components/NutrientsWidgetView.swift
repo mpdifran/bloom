@@ -1,5 +1,5 @@
 //
-//  NutrientsRemainingView.swift
+//  NutrientsWidgetView.swift
 //  Bloom
 //
 //  Created by Zach Radford on 2025-01-30.
@@ -10,9 +10,9 @@ import SwiftUI
 import DataContainer
 import BloomFoundation
 
-struct NutrientsRemainingView: View {
+struct NutrientsWidgetView: View {
 
-  @StateObject private var viewModel = NutrientsRemainingViewModel()
+  @StateObject private var viewModel = NutrientsWidgetViewModel()
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared
 
   var body: some View {
@@ -30,7 +30,7 @@ struct NutrientsRemainingView: View {
   }
 }
 
-private extension NutrientsRemainingView {
+private extension NutrientsWidgetView {
   var titleView: some View {
     Text(viewModel.title)
       .font(
@@ -54,7 +54,6 @@ private extension NutrientsRemainingView {
                 weight: .black
               )
             )
-            .foregroundStyle((Double(viewModel.caloriesString) ?? 0) < 0 ? .mutedRed : .primary)
 
           Text("Calories")
             .bold()
@@ -113,7 +112,7 @@ private struct NutrientLabel: View {
         ProgressBar(
           value: value,
           target: target,
-          measurementStyle: .remaining
+          measurementStyle: .minimum
         )
         .foregroundStyle(.tint)
       }
@@ -143,7 +142,7 @@ private struct NutrientLabel: View {
   PreviewEnvironment {
     ScrollView {
       VStack {
-        NutrientsRemainingView()
+        NutrientsWidgetView()
       }
       .padding()
     }

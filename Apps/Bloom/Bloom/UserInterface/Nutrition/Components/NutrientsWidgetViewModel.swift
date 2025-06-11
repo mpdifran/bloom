@@ -1,5 +1,5 @@
 //
-//  NutrientsRemainingViewModel.swift
+//  NutrientsWidgetViewModel.swift
 //  Bloom
 //
 //  Created by Zach Radford on 2025-02-09.
@@ -12,10 +12,9 @@ import SwiftUI
 import CoreHealth
 
 @MainActor
-final class NutrientsRemainingViewModel: ObservableObject {
+final class NutrientsWidgetViewModel: ObservableObject {
   var title: String {
-    // If no goals are set, just display total Nutrients
-    calorieGoalQuantity != nil ? "Nutrients Remaining" : "Total Nutrients"
+    "Macros"
   }
 
   // MARK: Published Quantities
@@ -115,43 +114,19 @@ final class NutrientsRemainingViewModel: ObservableObject {
   // MARK: Display Strings
 
   var caloriesString: String {
-    let quantity = if let calorieGoalQuantity {
-      calorieGoalQuantity.subtract(caloriesQuantity, unit: FoodItemNutrient.calories.unit)
-    } else {
-      caloriesQuantity
-    }
-
-    return quantity.displayString(for: FoodItemNutrient.calories.unit, showUnits: false)
+    caloriesQuantity.displayString(for: FoodItemNutrient.calories.unit, showUnits: false)
   }
 
   var proteinString: String {
-    let quantity = if let proteinGoalQuantity {
-      proteinGoalQuantity.subtract(proteinQuantity, unit: FoodItemNutrient.protein.unit)
-    } else {
-      proteinQuantity
-    }
-
-    return quantity.displayString(for: FoodItemNutrient.protein.unit)
+    proteinQuantity.displayString(for: FoodItemNutrient.protein.unit)
   }
 
   var fatsString: String {
-    let quantity = if let fatsGoalQuantity {
-      fatsGoalQuantity.subtract(fatsQuantity, unit: FoodItemNutrient.fat.unit)
-    } else {
-      fatsQuantity
-    }
-
-    return quantity.displayString(for: FoodItemNutrient.fat.unit)
+    fatsQuantity.displayString(for: FoodItemNutrient.fat.unit)
   }
 
   var carbsString: String {
-    let quantity = if let carbsGoalQuantity {
-      carbsGoalQuantity.subtract(carbsQuantity, unit: FoodItemNutrient.carbohydrates.unit)
-    } else {
-      carbsQuantity
-    }
-
-    return quantity.displayString(for: FoodItemNutrient.carbohydrates.unit)
+    carbsQuantity.displayString(for: FoodItemNutrient.carbohydrates.unit)
   }
 
   private let modelActor = HabitModelActor.standard()
@@ -173,7 +148,7 @@ final class NutrientsRemainingViewModel: ObservableObject {
   }
 }
 
-private extension NutrientsRemainingViewModel {
+private extension NutrientsWidgetViewModel {
   func calculateNutrients(for dateRange: DateRange) async {
     caloriesQuantity = await fetchNutrient(.calories, dateRange: dateRange)
     proteinQuantity = await fetchNutrient(.protein, dateRange: dateRange)
