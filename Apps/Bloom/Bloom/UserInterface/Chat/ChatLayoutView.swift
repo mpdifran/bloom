@@ -179,6 +179,28 @@ class ChatLayoutViewController: UICollectionViewController {
     
     return true // This is the last message with this responseID
   }
+  
+  private func isLastCellInResponse(at index: Int, responseID: String) -> Bool {
+    // Check if this is the last cell (of any type) with this responseID
+    for i in (index + 1)..<cellModels.count {
+      let cellModel = cellModels[i]
+      
+      switch cellModel.contentType {
+      case .message(let chatMessage):
+        if chatMessage.responseID == responseID {
+          return false // Found another message with same responseID after this one
+        }
+      case .richContent(_, _, _, _, let richContentResponseID, _):
+        if richContentResponseID == responseID {
+          return false // Found another rich content with same responseID after this one
+        }
+      default:
+        break // Other cell types don't have responseID
+      }
+    }
+    
+    return true // This is the last cell with this responseID
+  }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -217,13 +239,19 @@ extension ChatLayoutViewController {
         return UICollectionViewCell()
       }
       
-    case .richContent(let chatMessageID, let content, let hasPerformedAction, let dbID):
+    case .richContent(let chatMessageID, let content, let hasPerformedAction, let dbID, let responseID, let requestID):
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatProcessedRichContentCell", for: indexPath) as! ChatProcessedRichContentCollectionViewCell
+      
+      let isLastInResponse = responseID != nil && self.isLastCellInResponse(at: indexPath.item, responseID: responseID!)
+      
       cell.configure(
         chatMessageID: chatMessageID,
         content: content,
         hasPerformedAction: hasPerformedAction,
-        dbID: dbID
+        dbID: dbID,
+        showReportButton: isLastInResponse,
+        responseID: responseID,
+        requestID: requestID
       )
       return cell
       

@@ -16,10 +16,16 @@ struct ChatProcessedRichContentWrapperCell: View {
   let content: ProcessedRichContent
   let hasPerformedAction: Bool
   let dbID: String?
+  let showReportButton: Bool
+  let responseID: String?
+  let requestID: String?
+  
+  @State private var showReportSheet = false
 
   var body: some View {
-    Group {
-      switch content {
+    VStack(alignment: .leading) {
+      Group {
+        switch content {
       case .goals(let goals):
         ChatGoalsCell(
           chatMessageID: chatMessageID,
@@ -103,6 +109,28 @@ struct ChatProcessedRichContentWrapperCell: View {
         )
       case .unknown:
         ChatUnknownContentCell()
+        }
+      }
+      
+      if showReportButton, 
+         responseID != nil,
+         requestID != nil {
+        Button("Report a Problem") {
+          showReportSheet = true
+        }
+        .bold()
+        .font(.caption)
+        .padding(.horizontal)
+        .padding(.horizontal)
+      }
+    }
+    .sheet(isPresented: $showReportSheet) {
+      if let responseID = responseID,
+         let requestID = requestID {
+        ChatReportReviewView(
+          responseID: responseID,
+          requestID: requestID
+        )
       }
     }
   }
@@ -116,7 +144,10 @@ struct ChatProcessedRichContentWrapperCell: View {
           chatMessageID: "123",
           content: .logPeriod(.medium),
           hasPerformedAction: false,
-          dbID: "1234"
+          dbID: "1234",
+          showReportButton: false,
+          responseID: nil,
+          requestID: nil
         )
         ChatBubbleCell(
           message: "Here's some processed rich content",

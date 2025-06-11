@@ -94,7 +94,9 @@ actor ChatHistoryModifier {
               chatMessageID: message.id,
               content: processedContent,
               hasPerformedAction: message.hasPerformedAction,
-              dbID: message.dbID
+              dbID: message.dbID,
+              responseID: message.responseID,
+              requestID: message.requestID
             )
           ))
         } else {
@@ -126,7 +128,9 @@ actor ChatHistoryModifier {
                 chatMessageID: inProgressMessage.id,
                 content: processedContent,
                 hasPerformedAction: false,
-                dbID: nil
+                dbID: nil,
+                responseID: nil,
+                requestID: nil
               )
             ))
           } else {

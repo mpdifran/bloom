@@ -149,8 +149,8 @@ struct ChatRichContentWrapperCell: View {
       .animation(.easeInOut, value: isLoading)
       
       if showReportButton && !isLoading, 
-         let responseID = responseID,
-         let requestID = requestID {
+         responseID != nil,
+         requestID != nil {
         Button("Report a Problem") {
           showReportSheet = true
         }

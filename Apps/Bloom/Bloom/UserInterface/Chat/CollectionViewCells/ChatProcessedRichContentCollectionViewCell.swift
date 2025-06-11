@@ -33,13 +33,19 @@ class ChatProcessedRichContentCollectionViewCell: UICollectionViewCell {
     chatMessageID: String,
     content: ProcessedRichContent,
     hasPerformedAction: Bool,
-    dbID: String?
+    dbID: String?,
+    showReportButton: Bool = false,
+    responseID: String? = nil,
+    requestID: String? = nil
   ) {
     let view = ChatProcessedRichContentWrapperCell(
       chatMessageID: chatMessageID,
       content: content,
       hasPerformedAction: hasPerformedAction,
-      dbID: dbID
+      dbID: dbID,
+      showReportButton: showReportButton,
+      responseID: responseID,
+      requestID: requestID
     )
     
     updateHostingController(with: AnyView(view))

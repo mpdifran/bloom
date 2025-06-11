@@ -31,7 +31,7 @@ enum ProcessedRichContent: Equatable {
 enum ChatCellType: Equatable {
   case message(ChatMessageDTO)
   case inProgress(ChatController.InProgressMessage)
-  case richContent(chatMessageID: String, content: ProcessedRichContent, hasPerformedAction: Bool, dbID: String?)
+  case richContent(chatMessageID: String, content: ProcessedRichContent, hasPerformedAction: Bool, dbID: String?, responseID: String?, requestID: String?)
   case typingIndicator
   case statusText(String)
   case prompts
