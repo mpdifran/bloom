@@ -172,3 +172,12 @@ extension Application {
     Environment.get("REDIS_PASSWORD")
   }
 }
+
+// MARK: - Chat Configuration
+
+extension Application {
+
+  var maxChatToolCallsPerMessage: Int {
+    Environment.get("MAX_CHAT_TOOL_CALLS_PER_MESSAGE").flatMap(Int.init) ?? 5
+  }
+}

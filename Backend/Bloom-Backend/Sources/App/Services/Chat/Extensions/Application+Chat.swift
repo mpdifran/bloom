@@ -80,7 +80,7 @@ extension Application {
       return tracker
     }
 
-    let tracker = ToolCallTracker()
+    let tracker = ToolCallTracker(maxToolCallsPerRequest: maxChatToolCallsPerMessage)
     storage[ToolCallTrackerKey.self] = tracker
     return tracker
   }
