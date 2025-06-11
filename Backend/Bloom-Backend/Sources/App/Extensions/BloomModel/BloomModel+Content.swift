@@ -35,3 +35,4 @@ extension ChatMessageResponse: @retroactive Content { }
 extension SuggestGoalsResponse: @retroactive Content { }
 extension ChatUploadFileRequest: @retroactive Content { }
 extension ChatUploadFileResponse: @retroactive Content { }
+extension AdminChatIssueReportsResponse: @retroactive Content { }

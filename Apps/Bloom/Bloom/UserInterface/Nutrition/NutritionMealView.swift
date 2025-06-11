@@ -131,7 +131,7 @@ private extension NutritionMealView {
           }
         }
 
-        Text("\(foodItemLogs.totalCalories.format()) Cals • \(foodItemLogs.totalProtein.format()) g Protein • \(foodItemLogs.totalFat.format()) g Fats • \(foodItemLogs.totalCarbs.format()) g Carbs")
+        Text("\(foodItemLogs.totalCalories.format()) Cals • \(foodItemLogs.totalProtein.format()) g Protein •  \(foodItemLogs.totalCarbs.format()) g Carbs • \(foodItemLogs.totalFat.format()) g Fats")
           .font(.caption)
           .foregroundStyle(.secondary)
           .bold()

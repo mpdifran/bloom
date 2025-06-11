@@ -39,6 +39,14 @@ struct SidebarView: View {
           systemImage: "magnifyingglass"
         )
       }
+      NavigationLink {
+        ChatIssueReportsView()
+      } label: {
+        createLabel(
+          title: "Chat Issue Reports",
+          systemImage: "exclamationmark.bubble"
+        )
+      }
     }
     .shelf {
       metadataView

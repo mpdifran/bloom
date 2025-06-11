@@ -1,0 +1,33 @@
+{
+  "originHash" : "0b1bd7a1e8b2314d3ef52905a33320477ff911e0eda3a9886c01c5aedf1a1ed1",
+  "pins" : [
+    {
+      "identity" : "appfoundations",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mpdifran/AppFoundations.git",
+      "state" : {
+        "revision" : "bbdb9e848abdfed815425f4f10c91e0a466979e9",
+        "version" : "0.1.6"
+      }
+    },
+    {
+      "identity" : "appui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mpdifran/AppUI",
+      "state" : {
+        "revision" : "5cf918eadbbcbe728ca922864b86c8daf29d74f1",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "valet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Square/Valet",
+      "state" : {
+        "revision" : "05c9e514fbd352a6866877ca31326b4e0b7d6d01",
+        "version" : "5.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

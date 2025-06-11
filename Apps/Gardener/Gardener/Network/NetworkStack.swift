@@ -216,6 +216,24 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(AdminAccuracyReportGetResponse.self, from: data)
   }
   
+  func getChatIssueReports(
+    limit: Int = 100,
+    offset: Int = 0
+  ) async throws -> AdminChatIssueReportsResponse {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/chat/issue-reports",
+      method: .get,
+      queryItems: [
+        .init(name: "limit", value: "\(limit)"),
+        .init(name: "offset", value: "\(offset)")
+      ]
+    )
+
+    let (data, _) = try await URLSession.shared.data(for: urlRequest)
+
+    return try JSONDecoder.bloomModel.decode(AdminChatIssueReportsResponse.self, from: data)
+  }
+  
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse

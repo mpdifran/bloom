@@ -190,7 +190,7 @@ private extension FoodItemDetailsView {
       Group {
         Text(caloriesValue.format() + " ")
         +
-        Text("Cal")
+        Text("Cals")
           .foregroundStyle(.secondary)
           .font(.title3)
       }
