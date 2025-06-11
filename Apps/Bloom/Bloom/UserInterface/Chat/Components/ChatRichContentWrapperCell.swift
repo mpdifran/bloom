@@ -16,6 +16,27 @@ struct ChatRichContentWrapperCell: View {
   let data: Data
   let hasPerformedAction: Bool
   let dbID: String?
+  let showReportButton: Bool
+  let responseID: String?
+  let requestID: String?
+
+  init(
+    chatMessageID: String,
+    data: Data,
+    hasPerformedAction: Bool,
+    dbID: String?,
+    showReportButton: Bool = false,
+    responseID: String? = nil,
+    requestID: String? = nil
+  ) {
+    self.chatMessageID = chatMessageID
+    self.data = data
+    self.hasPerformedAction = hasPerformedAction
+    self.dbID = dbID
+    self.showReportButton = showReportButton
+    self.responseID = responseID
+    self.requestID = requestID
+  }
 
   @State private var isLoading = true
   @State private var goals: [ProposedGoal]?
@@ -32,98 +53,122 @@ struct ChatRichContentWrapperCell: View {
   @State private var workoutPlan: SocketMessage.WorkoutPlan?
   @State private var createReminder: SocketMessage.CreateReminder?
   @State private var deleteReminder: SocketMessage.DeleteReminder?
+  @State private var showReportSheet = false
 
   private let modelActor = HabitModelActor.standard()
 
   var body: some View {
-    Group {
-      if isLoading {
-        HStack {
+    VStack(alignment: .leading) {
+      Group {
+        if isLoading {
           HStack {
-            Spacer()
-            ProgressView()
-              .progressViewStyle(.circular)
-              .padding()
-            Spacer()
+            HStack {
+              Spacer()
+              ProgressView()
+                .progressViewStyle(.circular)
+                .padding()
+              Spacer()
+            }
+            .cardContainer()
+            .padding(.leading)
           }
-          .cardContainer()
-          .padding(.leading)
-        }
-      } else {
-        if let goals {
-          ChatGoalsCell(
-            chatMessageID: chatMessageID,
-            goals: goals,
-            hasPerformedAction: hasPerformedAction
-          )
-        } else if let foodItemsName, let foodItemServings, let meal {
-          ChatDetectedFoodCell(
-            chatMessageID: chatMessageID,
-            name: foodItemsName,
-            meal: meal,
-            servings: foodItemServings,
-            hasPerformedAction: hasPerformedAction,
-            dbID: dbID
-          )
-        } else if let waterQuantity {
-          ChatLogWaterCell(
-            chatMessageID: chatMessageID,
-            waterQuantity: waterQuantity,
-            hasPerformedAction: hasPerformedAction,
-            dbID: dbID
-          )
-        } else if let bristolStoolType, let duration {
-          ChatLogBowelMovementCell(
-            chatMessageID: chatMessageID,
-            bristolStoolType: bristolStoolType,
-            duration: duration,
-            hasPerformedAction: hasPerformedAction,
-            dbID: dbID
-          )
-        } else if let weightQuantity {
-          ChatLogWeightCell(
-            chatMessageID: chatMessageID,
-            weightQuantity: weightQuantity,
-            hasPerformedAction: hasPerformedAction,
-            dbID: dbID
-          )
-        } else if let flowType {
-          ChatLogPeriodCell(
-            chatMessageID: chatMessageID,
-            flow: flowType,
-            hasPerformedAction: hasPerformedAction,
-            dbID: dbID
-          )
-        } else if let systolic, let diastolic {
-          ChatLogBloodPressureCell(
-            chatMessageID: chatMessageID,
-            systolic: systolic,
-            diastolic: diastolic,
-            hasPerformedAction: hasPerformedAction,
-            dbID: dbID
-          )
-        } else if let workoutPlan {
-          ChatWorkoutPlanCell(
-            chatMessageID: chatMessageID,
-            workoutPlan: workoutPlan,
-            hasPerformedAction: hasPerformedAction
-          )
-        } else if let createReminder {
-          ReminderCell(
-            reminder: createReminder.asReminderDTO(),
-            occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
-            isCompleted: false
-          )
-          .horizontalAlignment(.leading)
-          .padding(.leading)
-        } else if let deleteReminder {
-          ChatDatabaseReminderCell(reminderID: deleteReminder.reminderID)
         } else {
-          ChatUnknownContentCell()
+          if let goals {
+            ChatGoalsCell(
+              chatMessageID: chatMessageID,
+              goals: goals,
+              hasPerformedAction: hasPerformedAction
+            )
+          } else if let foodItemsName, let foodItemServings, let meal {
+            ChatDetectedFoodCell(
+              chatMessageID: chatMessageID,
+              name: foodItemsName,
+              meal: meal,
+              servings: foodItemServings,
+              hasPerformedAction: hasPerformedAction,
+              dbID: dbID
+            )
+          } else if let waterQuantity {
+            ChatLogWaterCell(
+              chatMessageID: chatMessageID,
+              waterQuantity: waterQuantity,
+              hasPerformedAction: hasPerformedAction,
+              dbID: dbID
+            )
+          } else if let bristolStoolType, let duration {
+            ChatLogBowelMovementCell(
+              chatMessageID: chatMessageID,
+              bristolStoolType: bristolStoolType,
+              duration: duration,
+              hasPerformedAction: hasPerformedAction,
+              dbID: dbID
+            )
+          } else if let weightQuantity {
+            ChatLogWeightCell(
+              chatMessageID: chatMessageID,
+              weightQuantity: weightQuantity,
+              hasPerformedAction: hasPerformedAction,
+              dbID: dbID
+            )
+          } else if let flowType {
+            ChatLogPeriodCell(
+              chatMessageID: chatMessageID,
+              flow: flowType,
+              hasPerformedAction: hasPerformedAction,
+              dbID: dbID
+            )
+          } else if let systolic, let diastolic {
+            ChatLogBloodPressureCell(
+              chatMessageID: chatMessageID,
+              systolic: systolic,
+              diastolic: diastolic,
+              hasPerformedAction: hasPerformedAction,
+              dbID: dbID
+            )
+          } else if let workoutPlan {
+            ChatWorkoutPlanCell(
+              chatMessageID: chatMessageID,
+              workoutPlan: workoutPlan,
+              hasPerformedAction: hasPerformedAction
+            )
+          } else if let createReminder {
+            ReminderCell(
+              reminder: createReminder.asReminderDTO(),
+              occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
+              isCompleted: false
+            )
+            .horizontalAlignment(.leading)
+            .padding(.leading)
+          } else if let deleteReminder {
+            ChatDatabaseReminderCell(reminderID: deleteReminder.reminderID)
+          } else {
+            ChatUnknownContentCell()
+          }
         }
       }
+      .animation(.easeInOut, value: isLoading)
+      
+      if showReportButton && !isLoading, 
+         let responseID = responseID,
+         let requestID = requestID {
+        Button("Report a Problem") {
+          showReportSheet = true
+        }
+        .bold()
+        .font(.caption)
+        .padding(.horizontal)
+        .padding(.horizontal)
+      }
     }
-    .animation(.easeInOut, value: isLoading)
+    .sheet(isPresented: $showReportSheet) {
+      if let responseID = responseID,
+         let requestID = requestID {
+        ChatReportReviewView(
+          responseID: responseID,
+          requestID: requestID
+        )
+      }
+    }
     .task {
       await loadContent()
     }
@@ -223,7 +268,10 @@ private extension ChatRichContentWrapperCell {
           chatMessageID: "123",
           data: Data(),
           hasPerformedAction: false,
-          dbID: "1234"
+          dbID: "1234",
+          showReportButton: false,
+          responseID: nil,
+          requestID: nil
         )
         ChatBubbleCell(
           message: "Here's some rich content",

@@ -14,6 +14,7 @@ struct ChatIssueReportDetailView: View {
   @State private var messages: [AdminChatMessage] = []
   @State private var isLoadingMessages = false
   @State private var messagesError: Error?
+  @State private var selectedRoles: Set<String> = ["user", "assistant", "system", "admin"]
   
   var body: some View {
     ScrollView {
@@ -26,13 +27,14 @@ struct ChatIssueReportDetailView: View {
           notesSection(notes)
         }
         
-        technicalDetailsSection
-        
         messagesSection
       }
       .padding()
     }
     .navigationTitle("Issue Report")
+    .shelf {
+      filterToolbar
+    }
     .task {
       await loadMessages()
     }
@@ -43,13 +45,27 @@ private extension ChatIssueReportDetailView {
   
   var headerSection: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text("Report ID")
+      Text("Report Details")
         .font(.headline)
         .foregroundColor(.secondary)
       
-      Text(report.id)
-        .font(.system(.body, design: .monospaced))
-        .textSelection(.enabled)
+      VStack(alignment: .leading, spacing: 4) {
+        HStack {
+          Text("Report ID:")
+            .fontWeight(.medium)
+          Text(report.id)
+            .font(.system(.body, design: .monospaced))
+            .textSelection(.enabled)
+        }
+        
+        HStack {
+          Text("Response ID:")
+            .fontWeight(.medium)
+          Text(report.responseID)
+            .font(.system(.body, design: .monospaced))
+            .textSelection(.enabled)
+        }
+      }
       
       Text("Submitted \(report.createdAt.formatted(date: .abbreviated, time: .shortened))")
         .font(.caption)
@@ -106,27 +122,6 @@ private extension ChatIssueReportDetailView {
     .cornerRadius(8)
   }
   
-  var technicalDetailsSection: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Text("Technical Details")
-        .font(.headline)
-        .foregroundColor(.secondary)
-      
-      VStack(alignment: .leading, spacing: 4) {
-        HStack {
-          Text("Response ID:")
-            .fontWeight(.medium)
-          Text(report.responseID)
-            .font(.system(.body, design: .monospaced))
-            .textSelection(.enabled)
-        }
-      }
-    }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding()
-    .background(Color(.controlBackgroundColor))
-    .cornerRadius(8)
-  }
   
   var messagesSection: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -159,7 +154,7 @@ private extension ChatIssueReportDetailView {
           .padding()
       } else {
         VStack(alignment: .leading, spacing: 12) {
-          ForEach(messages) { message in
+          ForEach(filteredMessages) { message in
             MessageBubbleView(message: message)
           }
         }
@@ -169,6 +164,62 @@ private extension ChatIssueReportDetailView {
     .padding()
     .background(Color(.controlBackgroundColor))
     .cornerRadius(8)
+  }
+  
+  var filterToolbar: some View {
+    HStack {
+      Text("Show:")
+        .fontWeight(.medium)
+      
+      Spacer()
+      
+      ForEach(availableRoles, id: \.self) { role in
+        Button(action: {
+          toggleRole(role)
+        }) {
+          HStack(spacing: 4) {
+            Image(systemName: selectedRoles.contains(role) ? "checkmark.circle.fill" : "circle")
+              .foregroundColor(selectedRoles.contains(role) ? .blue : .secondary)
+            Text(roleDisplayName(for: role))
+              .foregroundColor(selectedRoles.contains(role) ? .primary : .secondary)
+          }
+        }
+        .buttonStyle(.plain)
+      }
+    }
+    .padding(.horizontal)
+  }
+  
+  var availableRoles: [String] {
+    let roles = Set(messages.map { $0.role })
+    return ["user", "assistant", "system", "admin"].filter { roles.contains($0) }
+  }
+  
+  var filteredMessages: [AdminChatMessage] {
+    messages.filter { selectedRoles.contains($0.role) }
+  }
+  
+  func toggleRole(_ role: String) {
+    if selectedRoles.contains(role) {
+      selectedRoles.remove(role)
+    } else {
+      selectedRoles.insert(role)
+    }
+  }
+  
+  func roleDisplayName(for role: String) -> String {
+    switch role {
+    case "user":
+      return "User"
+    case "assistant":
+      return "Assistant"
+    case "system":
+      return "System"
+    case "admin":
+      return "Admin"
+    default:
+      return role.capitalized
+    }
   }
   
   func loadMessages() async {
@@ -191,25 +242,59 @@ struct MessageBubbleView: View {
   
   var body: some View {
     HStack {
-      if message.role == "assistant" {
-        messageBubble
-          .frame(maxWidth: 500, alignment: .leading)
-        Spacer()
-      } else {
-        Spacer()
-        messageBubble
-          .frame(maxWidth: 500, alignment: .trailing)
+      if !isLeftAligned {
+        Spacer(minLength: 60)
       }
+      messageBubble
+
+      if isLeftAligned {
+        Spacer(minLength: 60)
+      }
+    }
+  }
+  
+  private var isLeftAligned: Bool {
+    // Assistant messages align left, user, system, and admin messages align right
+    message.role == "assistant"
+  }
+  
+  private var roleDisplayName: String {
+    switch message.role {
+    case "user":
+      return "User"
+    case "assistant":
+      return "Assistant"
+    case "system":
+      return "System"
+    case "admin":
+      return "Admin"
+    default:
+      return message.role.capitalized
+    }
+  }
+  
+  private var bubbleColor: Color {
+    switch message.role {
+    case "user":
+      return Color.blue.opacity(0.1)
+    case "admin":
+      return Color.purple.opacity(0.1)
+    case "system":
+      return Color.orange.opacity(0.1)
+    case "assistant":
+      return Color(.controlBackgroundColor)
+    default:
+      return Color(.controlBackgroundColor)
     }
   }
   
   private var messageBubble: some View {
     VStack(alignment: .leading, spacing: 4) {
-      Text(message.role == "user" ? "User" : "Assistant")
+      Text(roleDisplayName)
         .font(.caption)
         .fontWeight(.medium)
         .foregroundColor(.secondary)
-      
+
       if let content = message.content {
         Text(content)
           .font(.body)
@@ -221,11 +306,7 @@ struct MessageBubbleView: View {
       }
     }
     .padding(12)
-    .background(
-      message.role == "user" 
-        ? Color.blue.opacity(0.1) 
-        : Color(.controlBackgroundColor)
-    )
+    .background(bubbleColor)
     .cornerRadius(12)
     .overlay(
       RoundedRectangle(cornerRadius: 12)

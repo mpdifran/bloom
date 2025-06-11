@@ -99,8 +99,10 @@ extension AdminChatController {
     }
     
     // Fetch the response from OpenAI
+    let isAnonymous = report.$user.id == nil
     let messages = try await fetchMessagesFromOpenAI(
       responseID: report.responseID,
+      isAnonymous: isAnonymous,
       request: request
     )
     
@@ -112,6 +114,7 @@ extension AdminChatController {
   
   private func fetchMessagesFromOpenAI(
     responseID: String,
+    isAnonymous: Bool,
     request: Request
   ) async throws -> [AdminChatMessage] {
     do {
@@ -120,12 +123,16 @@ extension AdminChatController {
       let inputItems = try await request.openAI.responses.listInputItems(responseID: responseID)
 
       var messages: [AdminChatMessage] = []
-      var messageIndex = 0
       
-      // Process input items (user messages)
-      for inputItem in inputItems.data {
+      // Process input items (user messages) - reverse to get chronological order
+      for inputItem in inputItems.data.reversed() {
         switch inputItem {
         case .message(let message):
+          // Skip system messages for anonymous reports
+          if isAnonymous && message.role == .system {
+            continue
+          }
+          
           for content in message.content {
             switch content {
             case .text(let text):
@@ -134,7 +141,6 @@ extension AdminChatController {
                 role: message.role.rawValue,
                 content: text.text
               ))
-              messageIndex += 1
             case .image(let image):
               messages.append(AdminChatMessage(
                 id: message.id ?? UUID().uuidString,
@@ -142,7 +148,6 @@ extension AdminChatController {
                 content: nil,
                 imageFileID: image.fileId
               ))
-              messageIndex += 1
             default:
               break
             }
@@ -156,8 +161,8 @@ extension AdminChatController {
       for output in response.output {
         switch output {
         case .message(let message):
-          if let textContent = message.content.first(where: {
-            if case .outputText = $0 { return true }
+          if let textContent = message.content.first(where: { content in
+            if case .outputText = content { return true }
             return false
           }) {
             if case .outputText(let text) = textContent {

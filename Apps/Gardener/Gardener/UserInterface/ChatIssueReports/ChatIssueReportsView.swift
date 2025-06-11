@@ -85,7 +85,6 @@ struct ChatIssueReportRow: View {
           systemImage: report.isAnonymous ? "person.slash" : "person"
         )
         .font(.caption)
-        .foregroundColor(report.isAnonymous ? .orange : .blue)
         
         Spacer()
         

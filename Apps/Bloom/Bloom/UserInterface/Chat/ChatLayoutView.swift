@@ -208,7 +208,8 @@ extension ChatLayoutViewController {
         return cell
       case .richContent:
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatRichContentCell", for: indexPath) as! ChatRichContentCollectionViewCell
-        cell.configure(with: chatMessage)
+        let isLastInResponse = self.isLastMessageInResponse(at: indexPath.item, chatMessage: chatMessage)
+        cell.configure(with: chatMessage, isLastInResponse: isLastInResponse)
         return cell
       case .invalid:
         return UICollectionViewCell()

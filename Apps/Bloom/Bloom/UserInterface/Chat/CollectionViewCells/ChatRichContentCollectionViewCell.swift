@@ -27,14 +27,17 @@ class ChatRichContentCollectionViewCell: UICollectionViewCell {
     contentView.backgroundColor = .clear
   }
   
-  func configure(with chatMessage: ChatMessageDTO) {
+  func configure(with chatMessage: ChatMessageDTO, isLastInResponse: Bool = false) {
     guard case .richContent(let data) = chatMessage.content else { return }
     
     let view = ChatRichContentWrapperCell(
       chatMessageID: chatMessage.id,
       data: data,
       hasPerformedAction: chatMessage.hasPerformedAction,
-      dbID: chatMessage.dbID
+      dbID: chatMessage.dbID,
+      showReportButton: isLastInResponse,
+      responseID: chatMessage.responseID,
+      requestID: chatMessage.requestID
     )
     
     updateHostingController(with: AnyView(view))
@@ -47,7 +50,10 @@ class ChatRichContentCollectionViewCell: UICollectionViewCell {
       chatMessageID: "",
       data: data,
       hasPerformedAction: false,
-      dbID: nil
+      dbID: nil,
+      showReportButton: false,
+      responseID: nil,
+      requestID: nil
     )
     
     updateHostingController(with: AnyView(view))
