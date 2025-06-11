@@ -94,6 +94,9 @@ extension URLRequest {
     static func deleteChatThread() async -> URLRequest {
       await URLRequest.get("v1/chat/delete-thread")
     }
+    static func reportIssue(body: SubmitChatMessageIssueRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/chat/report-issue", body: body)
+    }
   }
 }
 

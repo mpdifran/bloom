@@ -137,13 +137,18 @@ extension ChatController {
     sendToolCallCountTelemetry()
     sendToolRequestCountTelemetry()
     
+    // Generate a new request ID
+    let requestID = "request_\(UUID().uuidString)"
+    currentRequestID = requestID
+    
     let imageData = image?.resized(toWidth: 300)?.pngData()
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
     if let imageData {
       let imageMessage = ChatMessage(
         isCurrentUser: true,
-        imageData: imageData
+        imageData: imageData,
+        requestID: requestID
       )
       try await ChatHistoryModifier.shared.addMessage(imageMessage)
     }
@@ -151,7 +156,8 @@ extension ChatController {
     if trimmedMessage.isNotEmpty {
       let userMessage = ChatMessage(
         isCurrentUser: true,
-        message: message
+        message: message,
+        requestID: requestID
       )
       try await ChatHistoryModifier.shared.addMessage(userMessage)
     }
@@ -166,10 +172,6 @@ extension ChatController {
     } else {
       fileIDs = []
     }
-
-    // Generate a new request ID
-    let requestID = "request_\(UUID().uuidString)"
-    currentRequestID = requestID
     
     let socketMessage = SocketMessage.MessageRequest(
       text: trimmedMessage,
@@ -243,7 +245,9 @@ private extension ChatController {
         let message = ChatMessage(
           id: messageResponse.id,
           isCurrentUser: false,
-          message: messageResponse.message
+          message: messageResponse.message,
+          responseID: messageResponse.responseID,
+          requestID: messageResponse.requestID
         )
         try await ChatHistoryModifier.shared.addMessage(message)
       } catch {
@@ -345,7 +349,9 @@ private extension ChatController {
           id: richContentMessage.id, 
           data: data,
           markActionTaken: dbID != nil,
-          dbID: dbID
+          dbID: dbID,
+          responseID: richContentMessage.responseID,
+          requestID: richContentMessage.requestID
         )
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
@@ -388,67 +394,7 @@ private extension ChatController {
                 let data = results.joined(separator: "\n\n")
 
                 return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID, data: data)
-
-              case .newGoals(let goals):
-                let data = try JSONEncoder.bloomModel.encode(goals)
-                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .detectedFood(let food):
-                let data = try JSONEncoder.bloomModel.encode(food)
-                let foodLogID = try await self.autoLog(detectedFood: food)
-                try await self.insertRichChatMessage(
-                  id: UUID().uuidString,
-                  data: data,
-                  markActionTaken: true,
-                  dbID: foodLogID
-                )
-              case .logWater(let logWater):
-                let data = try JSONEncoder.bloomModel.encode(logWater)
-                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .logWeight(let logWeight):
-                let data = try JSONEncoder.bloomModel.encode(logWeight)
-                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .logPeriod(let logPeriod):
-                let data = try JSONEncoder.bloomModel.encode(logPeriod)
-                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .logBloodPressure(let logBloodPressure):
-                let data = try JSONEncoder.bloomModel.encode(logBloodPressure)
-                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .logBowelMovement(let logBowelMovement):
-                let data = try JSONEncoder.bloomModel.encode(logBowelMovement)
-                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .createWorkout(let createWorkout):
-                let data = try JSONEncoder.bloomModel.encode(createWorkout)
-                try await self.insertRichChatMessage(id: UUID().uuidString, data: data)
-              case .createUserFacts(let createUserFacts):
-                let userFactModelActor = UserFactModelActor.standard()
-                let factInputs = createUserFacts.facts.map { fact in
-                  (fact: fact.fact, dateAdded: Date(), revisitDate: fact.revisitDate)
-                }
-                let userFactDTOs = try await userFactModelActor.createUserFacts(factInputs)
-                let chatUserFacts = userFactDTOs.map { dto in
-                  ChatUserFactsData.UserFact(
-                    id: dto.id,
-                    fact: dto.fact,
-                    dateAdded: dto.dateAdded,
-                    revisitDate: dto.revisitDate
-                  )
-                }
-                let responseData = try JSONEncoder.bloomModel.encode(chatUserFacts)
-                let responseString = String(data: responseData, encoding: .utf8) ?? "[]"
-                return SocketMessage.ToolCallResult(
-                  toolCallID: toolCall.toolCallID,
-                  data: "Created \(chatUserFacts.count) user facts: \(responseString)"
-                )
-              case .deleteUserFacts(let deleteUserFacts):
-                let userFactModelActor = UserFactModelActor.standard()
-                let factIDs = deleteUserFacts.facts.map(\.id)
-                let deletedCount = try await userFactModelActor.deleteUserFacts(withIDs: factIDs)
-                return SocketMessage.ToolCallResult(
-                  toolCallID: toolCall.toolCallID,
-                  data: "Deleted \(deletedCount) user facts"
-                )
               }
-              return SocketMessage.ToolCallResult(toolCallID: toolCall.toolCallID)
             }
           }
           var results = [SocketMessage.ToolCallResult]()
@@ -524,14 +470,18 @@ private extension ChatController {
     id: String,
     data: Data,
     markActionTaken: Bool = false,
-    dbID: String? = nil
+    dbID: String? = nil,
+    responseID: String? = nil,
+    requestID: String? = nil
   ) async throws {
     let richContentMessage = ChatMessage(
       id: id,
       isCurrentUser: false,
       richContent: data,
       dbID: dbID,
-      hasPerformedAction: markActionTaken
+      hasPerformedAction: markActionTaken,
+      responseID: responseID,
+      requestID: requestID
     )
     try await ChatHistoryModifier.shared.addMessage(richContentMessage)
   }

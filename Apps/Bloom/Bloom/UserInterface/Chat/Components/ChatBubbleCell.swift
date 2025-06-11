@@ -12,30 +12,67 @@ public struct ChatBubbleCell: View {
   let isDirect: Bool
   let isCurrentUser: Bool
   let showTail: Bool
+  let showReportButton: Bool
+  let responseID: String?
+  let requestID: String?
 
   public init(
     message: String,
     isDirect: Bool,
     isCurrentUser: Bool,
-    showTail: Bool
+    showTail: Bool,
+    showReportButton: Bool = false,
+    responseID: String? = nil,
+    requestID: String? = nil
   ) {
     self.message = message
     self.isDirect = isDirect
     self.isCurrentUser = isCurrentUser
     self.showTail = showTail
+    self.showReportButton = showReportButton
+    self.responseID = responseID
+    self.requestID = requestID
   }
 
+  @State private var showReportSheet = false
+
+  @Bindable private var themeController = ThemeController.shared
+
   public var body: some View {
-    ChatBubble(
-      position: isCurrentUser ? .trailing : .leading,
-      showTail: showTail,
-      shouldFill: !isDirect,
-      includePadding: isCurrentUser,
-      foregroundStyle: foregroundColor,
-      backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)
-    ) {
-      Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
-        .fixedSize(horizontal: false, vertical: true)
+    VStack(alignment: .leading) {
+      ChatBubble(
+        position: isCurrentUser ? .trailing : .leading,
+        showTail: showTail,
+        shouldFill: !isDirect,
+        includePadding: isCurrentUser,
+        foregroundStyle: foregroundColor,
+        backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)
+      ) {
+        Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      
+      if showReportButton && !isCurrentUser, 
+         responseID != nil,
+         requestID != nil {
+        Button("Report a Problem") {
+          showReportSheet = true
+        }
+        .bold()
+        .font(.caption)
+        .padding(.horizontal)
+        .padding(.horizontal)
+      }
+    }
+    .sheet(isPresented: $showReportSheet) {
+      if let responseID = responseID,
+         let requestID = requestID {
+        ChatReportReviewView(
+          responseID: responseID,
+          requestID: requestID
+        )
+        .environment(themeController)
+      }
     }
   }
 }
@@ -64,7 +101,15 @@ private extension ChatBubbleCell {
         ChatBubbleCell(message: "Hey, how's it going?", isDirect: false, isCurrentUser: false, showTail: true)
         ChatBubbleCell(message: "It's actually going great!", isDirect: false, isCurrentUser: true, showTail: true)
         ChatBubbleCell(message: "PS It's actually not going great...", isDirect: true, isCurrentUser: true, showTail: true)
-        ChatBubbleCell(message: "Oh no what's up?", isDirect: true, isCurrentUser: false, showTail: true)
+        ChatBubbleCell(
+          message: "Oh no what's up?", 
+          isDirect: true, 
+          isCurrentUser: false, 
+          showTail: true, 
+          showReportButton: true,
+          responseID: "response_123",
+          requestID: "request_456"
+        )
       }
     }
     .groupedBackground()

@@ -162,6 +162,23 @@ class ChatLayoutViewController: UICollectionViewController {
     let lastIndexPath = IndexPath(item: cellModels.count - 1, section: 0)
     collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: animated)
   }
+  
+  private func isLastMessageInResponse(at index: Int, chatMessage: ChatMessageDTO) -> Bool {
+    // Only show report button for assistant messages with responseID
+    guard !chatMessage.isCurrentUser, let responseID = chatMessage.responseID else {
+      return false
+    }
+    
+    // Check if this is the last message with this responseID
+    for i in (index + 1)..<cellModels.count {
+      if case .message(let nextMessage) = cellModels[i].contentType,
+         nextMessage.responseID == responseID {
+        return false // Found another message with same responseID after this one
+      }
+    }
+    
+    return true // This is the last message with this responseID
+  }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -182,7 +199,8 @@ extension ChatLayoutViewController {
       switch chatMessage.content {
       case .message:
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatMessageCell", for: indexPath) as! ChatMessageCollectionViewCell
-        cell.configure(with: chatMessage)
+        let isLastInResponse = self.isLastMessageInResponse(at: indexPath.item, chatMessage: chatMessage)
+        cell.configure(with: chatMessage, isLastInResponse: isLastInResponse)
         return cell
       case .imageData:
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatImageCell", for: indexPath) as! ChatImageCollectionViewCell

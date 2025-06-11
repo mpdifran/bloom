@@ -25,6 +25,8 @@ public struct ChatMessageDTO: Sendable, Equatable, Identifiable {
   public let content: Content
   public let hasPerformedAction: Bool
   public let dbID: String?
+  public let requestID: String?
+  public let responseID: String?
 }
 
 public extension ChatMessage {
@@ -45,7 +47,9 @@ public extension ChatMessage {
       date: date,
       content: content,
       hasPerformedAction: hasPerformedAction,
-      dbID: dbID
+      dbID: dbID,
+      requestID: requestID,
+      responseID: responseID
     )
   }
 }

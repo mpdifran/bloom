@@ -27,14 +27,17 @@ class ChatMessageCollectionViewCell: UICollectionViewCell {
     contentView.backgroundColor = .clear
   }
   
-  func configure(with chatMessage: ChatMessageDTO) {
+  func configure(with chatMessage: ChatMessageDTO, isLastInResponse: Bool = false) {
     guard case .message(let message) = chatMessage.content else { return }
     
     let view = ChatBubbleCell(
       message: message,
       isDirect: false,
       isCurrentUser: chatMessage.isCurrentUser,
-      showTail: true
+      showTail: true,
+      showReportButton: isLastInResponse,
+      responseID: chatMessage.responseID,
+      requestID: chatMessage.requestID
     )
     
     updateHostingController(with: AnyView(view))

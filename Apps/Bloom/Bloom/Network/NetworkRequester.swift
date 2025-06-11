@@ -206,6 +206,11 @@ extension NetworkRequester {
     let request = await URLRequest.Chat.deleteChatThread()
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
+
+  func submitChatMessageIssueReport(request: SubmitChatMessageIssueRequest) async throws {
+    let urlRequest = try await URLRequest.Chat.reportIssue(body: request)
+    try await URLSession.shared.authenticatedBloomRequest(request: urlRequest)
+  }
 }
 
 // MARK: - Goals

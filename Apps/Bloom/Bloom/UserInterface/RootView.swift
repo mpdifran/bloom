@@ -15,7 +15,7 @@ struct RootView: View {
 
   @Bindable private var tabController = TabController()
 
-  @Bindable private var themeController = ThemeController()
+  @Bindable private var themeController = ThemeController.shared
 
   @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?

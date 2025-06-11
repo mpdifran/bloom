@@ -17,7 +17,7 @@ struct PreviewEnvironment<Content>: View where Content: View {
   }
 
   @Bindable private var tabController = TabController()
-  @Bindable private var themeController = ThemeController()
+  @Bindable private var themeController = ThemeController.shared
 
   var body: some View {
     content()

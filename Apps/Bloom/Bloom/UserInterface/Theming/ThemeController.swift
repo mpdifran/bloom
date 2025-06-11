@@ -83,11 +83,12 @@ extension ThemeController.Theme {
 
 @MainActor @Observable
 final class ThemeController {
+  static let shared = ThemeController()
 
   private(set) var theme: Theme = .ultramarine
 
-  init() {
-    UserDefaults.group.register(defaults: [.Key.theme: Theme.lilac.rawValue])
+  private init() {
+    UserDefaults.group.register(defaults: [.Key.theme: Theme.ultramarine.rawValue])
     if let rawTheme = UserDefaults.group.string(forKey: .Key.theme), let theme = Theme(rawValue: rawTheme) {
       self.theme = theme
       Task {
