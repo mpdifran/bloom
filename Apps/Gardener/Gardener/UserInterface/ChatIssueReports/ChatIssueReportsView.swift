@@ -81,7 +81,7 @@ struct ChatIssueReportRow: View {
       
       HStack {
         Label(
-          report.isAnonymous ? "Anonymous" : "Identified",
+          report.isAnonymous ? "Anonymous" : (report.userName ?? "Unknown User"),
           systemImage: report.isAnonymous ? "person.slash" : "person"
         )
         .font(.caption)

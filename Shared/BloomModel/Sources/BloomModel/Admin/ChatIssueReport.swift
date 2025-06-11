@@ -13,6 +13,7 @@ public struct AdminChatIssueReport: Codable, Sendable, Identifiable, Hashable {
   public let notes: String?
   public let isAnonymous: Bool
   public let userID: UserIdentifier?
+  public let userName: String?
   public let createdAt: Date
   
   public init(
@@ -21,6 +22,7 @@ public struct AdminChatIssueReport: Codable, Sendable, Identifiable, Hashable {
     notes: String?,
     isAnonymous: Bool,
     userID: UserIdentifier?,
+    userName: String?,
     createdAt: Date
   ) {
     self.id = id
@@ -28,6 +30,7 @@ public struct AdminChatIssueReport: Codable, Sendable, Identifiable, Hashable {
     self.notes = notes
     self.isAnonymous = isAnonymous
     self.userID = userID
+    self.userName = userName
     self.createdAt = createdAt
   }
 }

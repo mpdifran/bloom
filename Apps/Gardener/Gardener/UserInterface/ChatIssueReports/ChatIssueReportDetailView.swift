@@ -71,7 +71,7 @@ private extension ChatIssueReportDetailView {
         Image(systemName: report.isAnonymous ? "person.slash" : "person")
           .foregroundColor(report.isAnonymous ? .orange : .blue)
         
-        Text(report.isAnonymous ? "Anonymous Submission" : "Identified User")
+        Text(report.isAnonymous ? "Anonymous" : (report.userName ?? "Unknown User"))
           .fontWeight(.medium)
         
         Spacer()
@@ -242,6 +242,7 @@ struct MessageBubbleView: View {
       notes: "The AI response was not helpful and contained incorrect information about nutrition facts.",
       isAnonymous: false,
       userID: AdminBloomModel.UserIdentifier("user_555"),
+      userName: "John Doe",
       createdAt: Date()
     )
   )

@@ -51,12 +51,32 @@ extension AdminChatController {
         return nil
       }
       
+      let isAnonymous = report.$user.id == nil
+      let userName: String?
+      
+      if isAnonymous {
+        userName = nil
+      } else if let user = report.user {
+        // Combine given name and family name
+        let givenName = user.givenName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let familyName = user.familyName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        if !givenName.isEmpty || !familyName.isEmpty {
+          userName = [givenName, familyName].filter { !$0.isEmpty }.joined(separator: " ")
+        } else {
+          userName = "Unknown User"
+        }
+      } else {
+        userName = "Unknown User"
+      }
+      
       return AdminChatIssueReport(
         id: id,
         responseID: report.responseID,
         notes: report.notes,
-        isAnonymous: report.$user.id == nil,
+        isAnonymous: isAnonymous,
         userID: report.$user.id,
+        userName: userName,
         createdAt: createdAt
       )
     }
