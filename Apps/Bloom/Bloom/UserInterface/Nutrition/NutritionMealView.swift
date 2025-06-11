@@ -111,16 +111,27 @@ private extension NutritionMealView {
   var mealHeader: some View {
     HStack {
       VStack(alignment: .leading, spacing: 6) {
-        Text(meal.name)
-          .font(
-            .system(
-              .headline,
-              design: .rounded,
-              weight: .black
+        HStack(spacing: 12) {
+          Text(meal.name)
+            .font(
+              .system(
+                .headline,
+                design: .rounded,
+                weight: .black
+              )
             )
-          )
+          
+          if !foodItemLogs.isEmpty {
+            MacroDistributionBar(
+              proteinGrams: foodItemLogs.totalProtein,
+              carbsGrams: foodItemLogs.totalCarbs,
+              fatGrams: foodItemLogs.totalFat
+            )
+            .frame(width: 60)
+          }
+        }
 
-        Text("\(foodItemLogs.totalCalories.format()) cal • \(foodItemLogs.totalProtein.format()) Protein • \(foodItemLogs.totalFat.format()) Fats • \(foodItemLogs.totalCarbs.format()) Carbs")
+        Text("\(foodItemLogs.totalCalories.format()) Cals • \(foodItemLogs.totalProtein.format()) g Protein • \(foodItemLogs.totalFat.format()) g Fats • \(foodItemLogs.totalCarbs.format()) g Carbs")
           .font(.caption)
           .foregroundStyle(.secondary)
           .bold()
