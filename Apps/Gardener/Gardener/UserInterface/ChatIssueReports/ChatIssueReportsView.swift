@@ -98,7 +98,7 @@ struct ChatIssueReportRow: View {
       if let notes = report.notes, !notes.isEmpty {
         Text(notes)
           .font(.caption)
-          .lineLimit(2)
+          .lineLimit(3)
           .foregroundColor(.secondary)
       }
     }

@@ -9,6 +9,7 @@ import Foundation
 import Vapor
 import Fluent
 import BloomModel
+import OpenAIKit
 
 struct AdminChatController { }
 
@@ -19,6 +20,7 @@ extension AdminChatController: RouteCollection {
       $0.auth(using: AdminUserToken.self) {
         $0.group("chat") {
           $0.get("issue-reports", use: getIssueReports)
+          $0.get("issue-reports", ":reportID", "messages", use: getIssueReportMessages)
         }
       }
     }
@@ -63,5 +65,98 @@ extension AdminChatController {
       reports: adminReports,
       totalCount: totalCount
     )
+  }
+  
+  @Sendable
+  func getIssueReportMessages(_ request: Request) async throws -> AdminChatIssueReportMessagesResponse {
+    guard let reportID = request.parameters.get("reportID") else {
+      throw Abort(.badRequest, reason: "Report ID is required")
+    }
+    
+    // Fetch the report to get the responseID
+    guard let report = try await ChatMessageIssueReport.find(reportID, on: request.db) else {
+      throw Abort(.notFound, reason: "Report not found")
+    }
+    
+    // Fetch the response from OpenAI
+    let messages = try await fetchMessagesFromOpenAI(
+      responseID: report.responseID,
+      request: request
+    )
+    
+    return AdminChatIssueReportMessagesResponse(
+      reportID: reportID,
+      messages: messages
+    )
+  }
+  
+  private func fetchMessagesFromOpenAI(
+    responseID: String,
+    request: Request
+  ) async throws -> [AdminChatMessage] {
+    do {
+      // Fetch the response and input items from OpenAI
+      let response = try await request.openAI.responses.getResponse(responseID: responseID)
+      let inputItems = try await request.openAI.responses.listInputItems(responseID: responseID)
+
+      var messages: [AdminChatMessage] = []
+      var messageIndex = 0
+      
+      // Process input items (user messages)
+      for inputItem in inputItems.data {
+        switch inputItem {
+        case .message(let message):
+          for content in message.content {
+            switch content {
+            case .text(let text):
+              messages.append(AdminChatMessage(
+                id: message.id ?? UUID().uuidString,
+                role: message.role.rawValue,
+                content: text.text
+              ))
+              messageIndex += 1
+            case .image(let image):
+              messages.append(AdminChatMessage(
+                id: message.id ?? UUID().uuidString,
+                role: message.role.rawValue,
+                content: nil,
+                imageFileID: image.fileId
+              ))
+              messageIndex += 1
+            default:
+              break
+            }
+          }
+        default:
+          break
+        }
+      }
+      
+      // Process output items (assistant messages)
+      for output in response.output {
+        switch output {
+        case .message(let message):
+          if let textContent = message.content.first(where: {
+            if case .outputText = $0 { return true }
+            return false
+          }) {
+            if case .outputText(let text) = textContent {
+              messages.append(AdminChatMessage(
+                id: message.id,
+                role: message.role.rawValue,
+                content: text.text
+              ))
+            }
+          }
+        default:
+          break
+        }
+      }
+      
+      return messages
+    } catch {
+      request.logger.error("Failed to fetch messages from OpenAI: \(error)")
+      throw Abort(.serviceUnavailable, reason: "Unable to fetch chat messages")
+    }
   }
 }

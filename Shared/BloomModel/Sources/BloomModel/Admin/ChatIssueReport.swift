@@ -41,3 +41,38 @@ public struct AdminChatIssueReportsResponse: Codable, Sendable {
     self.totalCount = totalCount
   }
 }
+
+public struct AdminChatMessage: Codable, Sendable, Identifiable {
+  public let id: String
+  public let role: String // "user" or "assistant"
+  public let content: String?
+  public let imageFileID: String?
+  public let timestamp: Date?
+  public let metadata: [String: String]?
+  
+  public init(
+    id: String,
+    role: String,
+    content: String?,
+    imageFileID: String? = nil,
+    timestamp: Date? = nil,
+    metadata: [String: String]? = nil
+  ) {
+    self.id = id
+    self.role = role
+    self.content = content
+    self.imageFileID = imageFileID
+    self.timestamp = timestamp
+    self.metadata = metadata
+  }
+}
+
+public struct AdminChatIssueReportMessagesResponse: Codable, Sendable {
+  public let reportID: String
+  public let messages: [AdminChatMessage]
+  
+  public init(reportID: String, messages: [AdminChatMessage]) {
+    self.reportID = reportID
+    self.messages = messages
+  }
+}

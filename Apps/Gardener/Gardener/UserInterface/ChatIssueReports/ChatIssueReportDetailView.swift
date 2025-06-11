@@ -11,6 +11,10 @@ import SwiftUI
 struct ChatIssueReportDetailView: View {
   let report: AdminChatIssueReport
   
+  @State private var messages: [AdminChatMessage] = []
+  @State private var isLoadingMessages = false
+  @State private var messagesError: Error?
+  
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
@@ -23,10 +27,15 @@ struct ChatIssueReportDetailView: View {
         }
         
         technicalDetailsSection
+        
+        messagesSection
       }
       .padding()
     }
     .navigationTitle("Issue Report")
+    .task {
+      await loadMessages()
+    }
   }
 }
 
@@ -118,6 +127,111 @@ private extension ChatIssueReportDetailView {
     .background(Color(.controlBackgroundColor))
     .cornerRadius(8)
   }
+  
+  var messagesSection: some View {
+    VStack(alignment: .leading, spacing: 8) {
+      Text("Chat Messages")
+        .font(.headline)
+        .foregroundColor(.secondary)
+      
+      if isLoadingMessages {
+        HStack {
+          ProgressView()
+            .scaleEffect(0.8)
+          Text("Loading messages...")
+            .font(.caption)
+            .foregroundColor(.secondary)
+        }
+        .padding()
+      } else if let error = messagesError {
+        VStack(alignment: .leading, spacing: 4) {
+          Label("Failed to load messages", systemImage: "exclamationmark.triangle")
+            .foregroundColor(.red)
+          Text(error.localizedDescription)
+            .font(.caption)
+            .foregroundColor(.secondary)
+        }
+        .padding()
+      } else if messages.isEmpty {
+        Text("No messages available")
+          .font(.body)
+          .foregroundColor(.secondary)
+          .padding()
+      } else {
+        VStack(alignment: .leading, spacing: 12) {
+          ForEach(messages) { message in
+            MessageBubbleView(message: message)
+          }
+        }
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding()
+    .background(Color(.controlBackgroundColor))
+    .cornerRadius(8)
+  }
+  
+  func loadMessages() async {
+    isLoadingMessages = true
+    messagesError = nil
+    
+    do {
+      let response = try await NetworkStack.shared.getChatIssueReportMessages(reportID: report.id)
+      messages = response.messages
+    } catch {
+      messagesError = error
+    }
+    
+    isLoadingMessages = false
+  }
+}
+
+struct MessageBubbleView: View {
+  let message: AdminChatMessage
+  
+  var body: some View {
+    HStack {
+      if message.role == "assistant" {
+        messageBubble
+          .frame(maxWidth: 500, alignment: .leading)
+        Spacer()
+      } else {
+        Spacer()
+        messageBubble
+          .frame(maxWidth: 500, alignment: .trailing)
+      }
+    }
+  }
+  
+  private var messageBubble: some View {
+    VStack(alignment: .leading, spacing: 4) {
+      Text(message.role == "user" ? "User" : "Assistant")
+        .font(.caption)
+        .fontWeight(.medium)
+        .foregroundColor(.secondary)
+      
+      if let content = message.content {
+        Text(content)
+          .font(.body)
+          .textSelection(.enabled)
+      } else if message.imageFileID != nil {
+        Label("Image", systemImage: "photo")
+          .font(.body)
+          .foregroundColor(.secondary)
+      }
+    }
+    .padding(12)
+    .background(
+      message.role == "user" 
+        ? Color.blue.opacity(0.1) 
+        : Color(.controlBackgroundColor)
+    )
+    .cornerRadius(12)
+    .overlay(
+      RoundedRectangle(cornerRadius: 12)
+        .stroke(Color(.separatorColor), lineWidth: 1)
+    )
+  }
 }
 
 #Preview {
@@ -127,7 +241,7 @@ private extension ChatIssueReportDetailView {
       responseID: "response_987654321",
       notes: "The AI response was not helpful and contained incorrect information about nutrition facts.",
       isAnonymous: false,
-      userID: UserIdentifier("user_555"),
+      userID: AdminBloomModel.UserIdentifier("user_555"),
       createdAt: Date()
     )
   )
