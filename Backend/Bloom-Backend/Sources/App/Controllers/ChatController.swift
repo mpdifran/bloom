@@ -26,6 +26,7 @@ extension ChatController: RouteCollection {
           $0.post("submit-tool-call-response", use: submitToolCallResponses)
           $0.post("upload-image", use: uploadImage)
           $0.get("delete-thread", use: deleteThread)
+          $0.post("report-issue", use: reportIssue)
         }
       }
     }
@@ -44,12 +45,10 @@ extension ChatController {
       return
     }
 
-    let version: WebSocketService.Version = request.headers["X-Bloom-API-Version"].first == "v1" ? .v1 : .v2
-
     await request.webSocketService.registerChat(
       socket: webSocket,
       forUserID: userID,
-      version: version
+      version: .v2
     )
   }
 
@@ -61,15 +60,8 @@ extension ChatController {
     guard let byteBuffer = request.body.data else { throw Abort(.badRequest, reason: "Request body is missing") }
 
     let data = Data(buffer: byteBuffer)
-    
-    let success = switch request.version {
-    case .v1:
-      try await request.chatService.parse(data: data, for: userID, db: request.db)
-    case .v2:
-      try await request.chatServiceV2.parse(data: data, for: userID, db: request.db)
-    }
-    
-    if success {
+
+    if try await request.chatService.parse(data: data, for: userID, db: request.db) {
       return Response(status: .ok)
     }
     return Response(status: .internalServerError)
@@ -78,28 +70,7 @@ extension ChatController {
   @Sendable
   func uploadImage(_ request: Request) async throws -> ChatUploadFileResponse {
     let body = try request.content.decode(ChatUploadFileRequest.self)
-
-    let fileIDs: [String]
-    switch request.version {
-    case .v1:
-      fileIDs = try await withThrowingTaskGroup(of: String.self) { group in
-        for image in body.images {
-          group.addTask {
-            let file = try await request.openAIAssistantService.uploadFile(data: image)
-            return file.id
-          }
-        }
-
-        var fileIDs = [String]()
-        for try await fileID in group {
-          fileIDs.append(fileID)
-        }
-        return fileIDs
-      }
-    case .v2:
-      fileIDs = try await request.chatServiceV2.uploadImages(imageData: body.images)
-    }
-
+    let fileIDs = try await request.chatService.uploadImages(imageData: body.images)
     return ChatUploadFileResponse(fileIDs: fileIDs)
   }
 
@@ -111,16 +82,26 @@ extension ChatController {
       throw Abort(.internalServerError, reason: "User ID unexpectedly nil after authentication.")
     }
 
-    switch request.version {
-    case .v1:
-      try await request.openAIAssistantService.deleteThread(user: user, assistantSpec: .healthCoach)
-    case .v2:
-      try await request.chatHistory.clearHistory(for: userID)
-      try await request.chatHistory.clearFunctionCallIDs(for: userID)
-      try await request.chatHistory.clearLastResponseID(for: userID)
-      try await request.chatHistory.clearStreamingContent(userID: userID)
-    }
+    try await request.chatHistory.clearFunctionCallIDs(for: userID)
+    try await request.chatHistory.clearLastResponseID(for: userID)
+    try await request.chatHistory.clearStreamingContent(userID: userID)
 
+    return Response(status: .ok)
+  }
+  
+  @Sendable
+  func reportIssue(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
+    let requestBody = try request.content.decode(SubmitChatMessageIssueRequest.self)
+    
+    let issueReport = ChatMessageIssueReport(
+      responseID: requestBody.responseID,
+      notes: requestBody.notes,
+      userID: requestBody.isAnonymous ? nil : user.id
+    )
+    
+    try await issueReport.save(on: request.db)
+    
     return Response(status: .ok)
   }
 }

@@ -50,7 +50,7 @@ extension WebSocketService {
     Task {
       do {
         if version == .v2 {
-          try await application.chatServiceV2.flushCachedStreamingContent(userID: userID)
+          try await application.chatService.flushCachedStreamingContent(userID: userID)
         }
       } catch {
         logger.error("Failed to flush cached content for user \(userID): \(error)")
@@ -157,19 +157,10 @@ private extension WebSocketService {
     version: Version
   ) async throws {
 
-    switch version {
-    case .v1:
-      if try await application.chatService.parse(data: data, for: userID, db: db) {
-        // success
-      } else {
-        throw Abort(.badRequest)
-      }
-    case .v2:
-      if try await application.chatServiceV2.parse(data: data, for: userID, db: db) {
-        // success
-      } else {
-        throw Abort(.badRequest)
-      }
+    if try await application.chatService.parse(data: data, for: userID, db: db) {
+      // success
+    } else {
+      throw Abort(.badRequest)
     }
   }
 }

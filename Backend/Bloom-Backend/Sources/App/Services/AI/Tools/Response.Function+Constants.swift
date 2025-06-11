@@ -9,6 +9,10 @@ import Foundation
 import OpenAIKit
 import BloomModel
 
+extension String.Function {
+  static let queryUserHealthData = "queryUserHealthData"
+}
+
 extension Response.Function {
   static let queryUserHealthData = Response.Function(
     name: .Function.queryUserHealthData,

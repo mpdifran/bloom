@@ -37,4 +37,5 @@ let allMigrations: [Migration] = [
     User.AddAppVersion(),
     User.AddAPNSDeviceToken(),
     AssistantRecord.AddAssistantSpecHash(),
+    ChatMessageIssueReport.Create(),
 ]

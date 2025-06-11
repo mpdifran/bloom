@@ -45,15 +45,18 @@ public extension SocketMessage {
     public let id: String
     public let message: String
     public let requestID: String?
+    public let responseID: String?
 
     public init(
       id: String,
       message: String,
-      requestID: String? = nil
+      requestID: String? = nil,
+      responseID: String? = nil
     ) {
       self.id = id
       self.message = message
       self.requestID = requestID
+      self.responseID = responseID
     }
   }
 
@@ -62,17 +65,20 @@ public extension SocketMessage {
     public let kind: Kind
     public let isTemporary: Bool
     public let requestID: String?
+    public let responseID: String?
 
     public init(
       id: String,
       kind: Kind,
       isTemporary: Bool,
-      requestID: String? = nil
+      requestID: String? = nil,
+      responseID: String? = nil
     ) {
       self.id = id
       self.kind = kind
       self.isTemporary = isTemporary
       self.requestID = requestID
+      self.responseID = responseID
     }
 
     public enum Kind: Codable, Equatable, Sendable {

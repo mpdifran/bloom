@@ -36,16 +36,6 @@ public extension SocketMessage {
 public extension SocketMessage.ToolCallWrapper {
   enum Kind: Codable, Equatable, Sendable {
     case queries([SocketMessage.Query])
-    case newGoals([SocketMessage.HealthMetricGoal])
-    case detectedFood(SocketMessage.DetectedFood)
-    case logWeight(SocketMessage.LogWeight)
-    case logPeriod(SocketMessage.LogPeriod)
-    case logWater(SocketMessage.LogWaterConsumption)
-    case logBloodPressure(SocketMessage.LogBloodPressure)
-    case logBowelMovement(SocketMessage.LogBowelMovement)
-    case createWorkout(SocketMessage.WorkoutPlan)
-    case createUserFacts(SocketMessage.CreateUserFacts)
-    case deleteUserFacts(SocketMessage.DeleteUserFacts)
   }
 }
 

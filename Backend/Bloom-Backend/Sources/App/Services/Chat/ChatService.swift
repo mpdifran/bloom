@@ -2,7 +2,7 @@
 //  ChatService.swift
 //  Bloom-Backend
 //
-//  Created by Mark DiFranco on 2025-04-21.
+//  Created by Mark DiFranco on 2025-05-20.
 //
 
 import Foundation
@@ -19,6 +19,9 @@ import Redis
 final class ChatService: Sendable {
 
   private let application: Application
+  private let openAIService: OpenAIService
+  private let chatHistory: ChatHistory
+  private let toolCallTracker: ToolCallTracker
   private let logger: Logger
 
   init(
@@ -26,11 +29,20 @@ final class ChatService: Sendable {
     logger: Logger
   ) {
     self.application = application
+    self.openAIService = application.openAIService
+    self.chatHistory = application.chatHistory
+    self.toolCallTracker = application.toolCallTracker
     self.logger = logger
   }
 
+  private let modelID = ModelID.OSeries.o4Mini
+
   private let encoder = JSONEncoder.bloomModel
   private let decoder = JSONDecoder.bloomModel
+
+  private let jsonBuffer = StreamJSONBuffer()
+  private let typingStateTracker = TypingStateTracker()
+  private let requestIDTracker = RequestIDTracker()
 }
 
 // MARK: - Public Methods
@@ -51,6 +63,40 @@ extension ChatService {
     }
     return true
   }
+
+  func uploadImages(imageData: [Data]) async throws -> [String] {
+    try await withThrowingTaskGroup(of: String.self) { [openAIService] group in
+      for image in imageData {
+        group.addTask {
+          let file = try await openAIService.openAI.files.upload(file: image, purpose: .userData)
+          return file.id
+        }
+      }
+
+      var fileIDs = [String]()
+      for try await fileID in group {
+        fileIDs.append(fileID)
+      }
+      return fileIDs
+    }
+  }
+
+  func flushCachedStreamingContent(userID: UserIdentifier) async throws {
+    let messages = try await chatHistory.flushCachedStreamingContent(userID: userID)
+    
+    guard !messages.isEmpty else { return }
+    
+    logger.debug("Flushing \(messages.count) cached messages for user \(userID)")
+    
+    // Send all cached messages
+    for message in messages {
+      if let messageChunk = message.messageChunk {
+        _ = try await sendSocketContentIfAvailable(messageChunk, userID: userID)
+      } else if let richMessage = message.richMessage {
+        _ = try await sendSocketContentIfAvailable(richMessage, userID: userID)
+      }
+    }
+  }
 }
 
 // MARK: - Incoming Message Handlers
@@ -62,42 +108,42 @@ private extension ChatService {
     userID: UserIdentifier,
     db: any Database
   ) async throws {
-    let assistantService = application.openAIAssistantService(db: db)
 
-    guard let thread = try await assistantService.createOrFetchAssistantThread(
-      userID: userID,
-      assistantSpec: .healthCoach
-    ) else {
-      logger.info("Received WebSocket message from unknown user \(userID).")
-      return
-    }
+    // Store the requestID for this user's conversation
+    await requestIDTracker.setCurrentRequestID(message.requestID, for: userID)
 
-    var content = [OpenAIKit.Thread.Message.Content]()
-    content.append(.text("Here are some details about me:\n\n\(message.userInfo)"))
-    for fileID in message.imageFileIDs {
-      content.append(.imageFile(fileID, .auto))
-    }
-    if message.text.isNotEmpty {
-      content.append(.text(message.text))
-    }
+    var inputs = [OpenAIKit.Response.InputItem]()
 
-    guard content.isNotEmpty else { return }
-
-    try await sendIsAssistantTyping(isTyping: true, userID: userID)
-    try await assistantService.cancelCurrentlyActiveRuns(assistantThread: thread)
-
-    try await assistantService.sendChatContent(
-      assistantThread: thread,
-      content: content
+    // System Messages
+    inputs.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Here are some details about the user's current preferences. Do not record user facts from this data. \n\(message.userInfo)"))
+          ]
+        )
+      )
     )
 
-    let stream = try await performRun(
-      thread: thread,
+    // User Messages
+    var userContent = [OpenAIKit.Response.InputItem.Content]()
+    for fileID in message.imageFileIDs {
+      userContent.append(.image(.init(detail: .auto, fileId: fileID)))
+    }
+    if message.text.isNotEmpty {
+      userContent.append(.text(.init(text: message.text)))
+    }
+
+    guard userContent.isNotEmpty else { return }
+
+    inputs.append(.message(.init(role: .user, content: userContent)))
+
+    try await streamResponse(
+      inputs: inputs,
       userID: userID,
       db: db
     )
-
-    try await handleRunStream(stream: stream, userID: userID, db: db)
   }
 
   func onToolCallsResponse(
@@ -105,29 +151,449 @@ private extension ChatService {
     userID: UserIdentifier,
     db: any Database
   ) async throws {
-    let assistantService = application.openAIAssistantService(db: db)
 
-    guard let thread = try await assistantService.createOrFetchAssistantThread(
-      userID: userID,
-      assistantSpec: .healthCoach
-    ) else {
-      logger.info("Received WebSocket message from unknown user \(userID).")
-      return
+    // Update the requestID if provided in the response
+    if let requestID = response.requestID {
+      await requestIDTracker.setCurrentRequestID(requestID, for: userID)
     }
 
-    let toolOutputs = response.toolCallResults.map {
-      ToolOutput(toolCallID: $0.toolCallID, output: $0.data)
+    let inputs = response.toolCallResults.map {
+      let output = Response.InputItem.FunctionToolCallOutput(callId: $0.toolCallID, output: $0.data)
+      return OpenAIKit.Response.InputItem.item(.functionToolCallOutput(output))
     }
 
-    let stream = try await submitToolResponse(
-      thread: thread,
-      runID: response.runID,
-      toolOutputs: toolOutputs,
+    // Remove function calls
+    for toolCallResult in response.toolCallResults {
+      try await chatHistory.removeFunctionCallID(toolCallResult.toolCallID, for: userID)
+    }
+
+    try await streamResponse(
+      inputs: inputs,
       userID: userID,
       db: db
     )
+  }
+}
 
-    try await handleRunStream(stream: stream, userID: userID, db: db)
+// MARK: - Stream Management
+
+private extension ChatService {
+
+  func streamResponse(
+    inputs: [OpenAIKit.Response.InputItem],
+    userID: UserIdentifier,
+    db: any Database,
+    isRetry: Bool = false
+  ) async throws {
+
+    if isRetry {
+      logger.info("Chat stream request failed, retrying once.")
+    }
+
+    let previousResponseID = try await chatHistory.getLastResponseID(for: userID)
+    let fortifiedInputs = try await fortify(inputs: inputs, userID: userID)
+    
+    // Get current request ID and check if we should include tools
+    let shouldIncludeTools: Bool
+    if let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID) {
+      shouldIncludeTools = await toolCallTracker.shouldIncludeTools(for: currentRequestID)
+    } else {
+      shouldIncludeTools = true
+    }
+
+    let tools: [OpenAIKit.Response.Tool] = shouldIncludeTools ? [
+      Response.Tool.function(.queryUserHealthData)
+    ] : []
+
+    let stream = try await openAIService.openAI.responses.createAndStreamResponse(
+      input: fortifiedInputs,
+      model: modelID,
+      instructions: .Prompt.chatAssistant,
+      previousResponseID: previousResponseID,
+//      reasoning: .init(effort: .low, summary: .auto),
+      tools: tools,
+      truncation: .auto,
+      user: userID.value
+    )
+
+    var toolCalls = [OpenAIKit.Response.OutputItem.FunctionToolCall]()
+
+    func performRetry() async throws {
+      guard !isRetry else { return }
+
+      try await chatHistory.clearLastResponseID(for: userID)
+      try await chatHistory.clearFunctionCallIDs(for: userID)
+
+      try await streamResponse(
+        inputs: inputs,
+        userID: userID,
+        db: db,
+        isRetry: true
+      )
+    }
+
+    for try await event in stream {
+      do {
+        switch event {
+        case .created(let event):
+          await jsonBuffer.resetIndex(for: userID)
+          await typingStateTracker.reset(for: userID)
+          await requestIDTracker.setCurrentResponseID(event.response.id, for: userID)
+        case .inProgress:
+          try await sendIsAssistantTyping(isTyping: true, userID: userID)
+        case .completed(let event):
+          if toolCalls.isNotEmpty {
+            try await send(toolCalls: toolCalls, userID: userID, db: db)
+          }
+
+          try await chatHistory.storeLastResponseID(event.response.id, for: userID)
+          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          if toolCalls.isEmpty {
+            try await sendResponseCompleted(userID: userID, db: db)
+          }
+        case .failed:
+          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          try await performRetry()
+        case .outputTextDelta(let event):
+          try await bufferChunk(event: event, userID: userID, db: db)
+        case .outputTextDone(let event):
+          try await sendCompletedMessage(event: event, userID: userID, db: db)
+        case .outputItemDone(let event):
+          switch event.item {
+          case .functionToolCall(let call):
+            toolCalls.append(call)
+            try await chatHistory.storeFunctionCallID(call.callId, for: userID)
+          case .reasoning(let reasoning):
+            for summary in reasoning.summary {
+              logger.debug("Reasoning: \(summary.text)")
+            }
+            if reasoning.summary.isEmpty {
+              logger.debug("Reasoning: None")
+            }
+          default:
+            break
+          }
+        case .error:
+          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          try await performRetry()
+        default:
+          logger.debug("\(event)")
+          break
+        }
+      } catch {
+        logger.error("\(error)")
+      }
+    }
+  }
+
+  func fortify(
+    inputs: [OpenAIKit.Response.InputItem],
+    userID: UserIdentifier
+  ) async throws -> [OpenAIKit.Response.InputItem] {
+    // Check for any pending function calls and inject error outputs
+    let pendingCallIDs = try await chatHistory.getFunctionCallIDs(for: userID)
+    var modifiedInputs = inputs
+
+    for callID in pendingCallIDs {
+      let errorOutput = Response.InputItem.FunctionToolCallOutput(
+        callId: callID,
+        output: "There was an error running this tool"
+      )
+      modifiedInputs.append(.item(.functionToolCallOutput(errorOutput)))
+
+      // Remove the function call ID since we're handling it
+      try await chatHistory.removeFunctionCallID(callID, for: userID)
+    }
+    return modifiedInputs
+  }
+}
+
+// MARK: - Streaming Chunk Buffering
+
+private extension ChatService {
+
+  func bufferChunk(
+    event: OpenAIKit.Response.OutputTextDeltaEvent,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+
+    let filteredData = await jsonBuffer.filter(event.delta, for: userID)
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
+
+    for data in filteredData {
+      switch data {
+      case .chunk(let index, let chunk):
+        // Turn off typing indicator when we start streaming text chunks
+        try await sendIsAssistantTyping(isTyping: false, userID: userID)
+        
+        let messageChunk = SocketMessage.MessageChunkResponse(
+          id: event.itemId + "-\(index)", 
+          chunk: chunk,
+          requestID: currentRequestID
+        )
+        let wasSent = try await sendSocketContentIfAvailable(messageChunk, userID: userID)
+        if !wasSent {
+          try await chatHistory.cacheStreamingContent(messageChunk, userID: userID)
+        }
+      case .json(let index, let json):
+        let kind = try parseKind(from: json)
+
+        let message = SocketMessage.RichMessageResponse(
+          id: event.itemId + "-\(index)", 
+          kind: kind, 
+          isTemporary: true,
+          requestID: currentRequestID
+        )
+        let wasSent = try await sendSocketContentIfAvailable(message, userID: userID)
+        if !wasSent {
+          try await chatHistory.cacheStreamingContent(message, userID: userID)
+        }
+
+      case .collectingJSON:
+        try await sendIsAssistantTyping(isTyping: true, userID: userID)
+      case .streamingText:
+        try await sendIsAssistantTyping(isTyping: false, userID: userID)
+      }
+    }
+  }
+
+  func sendCompletedMessage(
+    event: OpenAIKit.Response.OutputTextDoneEvent,
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+    let partitions = await jsonBuffer.processCompletedMessage(event.text, for: userID)
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
+    let currentResponseID = await requestIDTracker.getCurrentResponseID(for: userID)
+
+    for partition in partitions {
+      switch partition {
+      case .text(let index, let content):
+        logger.trace("Assistant Message: \(content)")
+        let response = SocketMessage.MessageResponse(
+          id: event.itemId + "-\(index)", 
+          message: content,
+          requestID: currentRequestID,
+          responseID: currentResponseID
+        )
+        try await ensureContentSent(
+          response,
+          title: "Bud",
+          message: content.truncated(to: 200),
+          userID: userID,
+          db: db
+        )
+      case .json(let index, let content):
+        let kind = try parseKind(from: content)
+
+        logger.trace("Assistant Rich Content: \(content)")
+
+        let response = SocketMessage.RichMessageResponse(
+          id: event.itemId + "-\(index)",
+          kind: kind,
+          isTemporary: false,
+          requestID: currentRequestID,
+          responseID: currentResponseID
+        )
+        try await ensureContentSilentlySent(response, userID: userID, db: db)
+      }
+    }
+    
+    // Clear any cached streaming content since this message is now complete
+    try await chatHistory.clearStreamingContent(userID: userID)
+  }
+
+  func parseKind(from json: String) throws -> SocketMessage.RichMessageResponse.Kind {
+    let trimmedJSON = json.trimmingCharacters(in: .whitespacesAndNewlines)
+    let data = trimmedJSON.data(using: .utf8) ?? Data()
+
+    if let kind = handleNewGoals(data: data) {
+      return kind
+    }
+    if let kind = handleLogFood(data: data) {
+      return kind
+    }
+    if let kind = handleLogWater(data: data) {
+      return kind
+    }
+    if let kind = handleLogWeight(data: data) {
+      return kind
+    }
+    if let kind = handleLogPeriod(data: data) {
+      return kind
+    }
+    if let kind = handleLogBloodPressure(data: data) {
+      return kind
+    }
+    if let kind = handleLogBowelMovements(data: data) {
+      return kind
+    }
+    if let kind = handleCreateWorkout(data: data) {
+      return kind
+    }
+    if let kind = handleCreateReminder(data: data) {
+      return kind
+    }
+    if let kind = handleDeleteReminder(data: data) {
+      return kind
+    }
+    if let kind = handleCreateUserFacts(data: data) {
+      return kind
+    }
+    if let kind = handleDeleteUserFacts(data: data) {
+      return kind
+    }
+
+    logger.error("Could not parse JSON as Rich Message:\n\(json)\n")
+    return .invalid(json)
+  }
+
+  func handleNewGoals(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    guard let arguments = try? decoder.decode(SetGoalsArguments.self, from: data) else {
+      return nil
+    }
+    return .newGoals(arguments.newGoals)
+  }
+
+  func handleLogFood(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    guard let arguments = try? decoder.decode(DetectedFood.self, from: data) else {
+      return nil
+    }
+
+    let food = SocketMessage.DetectedFood(
+      name: arguments.name,
+      meal: arguments.meal,
+      foodItemServings: arguments.foodItems.map { $0.asServing() }
+    )
+
+    return .detectedFood(food)
+  }
+
+  func handleLogWater(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.LogWaterConsumption.self, from: data) {
+      return .logWater(content)
+    }
+    return nil
+  }
+
+  func handleLogWeight(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.LogWeight.self, from: data) {
+      return .logWeight(content)
+    }
+    return nil
+  }
+
+  func handleLogPeriod(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.LogPeriod.self, from: data) {
+      return .logPeriod(content)
+    }
+    return nil
+  }
+
+  func handleLogBloodPressure(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.LogBloodPressure.self, from: data) {
+      return .logBloodPressure(content)
+    }
+    return nil
+  }
+
+  func handleLogBowelMovements(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.LogBowelMovement.self, from: data) {
+      return .logBowelMovement(content)
+    }
+    return nil
+  }
+
+  func handleCreateWorkout(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content =  try? decoder.decode(SocketMessage.WorkoutPlan.self, from: data) {
+      return .createWorkout(content)
+    }
+    return nil
+  }
+
+  func handleCreateReminder(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.CreateReminder.self, from: data) {
+      return .createReminder(content)
+    }
+    return nil
+  }
+
+  func handleDeleteReminder(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.DeleteReminder.self, from: data) {
+      return .deleteReminder(content)
+    }
+    return nil
+  }
+
+  func handleCreateUserFacts(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.CreateUserFacts.self, from: data) {
+      return .createUserFacts(content)
+    }
+    return nil
+  }
+
+  func handleDeleteUserFacts(data: Data) -> SocketMessage.RichMessageResponse.Kind? {
+    if let content = try? decoder.decode(SocketMessage.DeleteUserFacts.self, from: data) {
+      return .deleteUserFacts(content)
+    }
+    return nil
+  }
+}
+
+// MARK: - Tool Calls
+
+private extension ChatService {
+
+  func send(
+    toolCalls: [OpenAIKit.Response.OutputItem.FunctionToolCall],
+    userID: UserIdentifier,
+    db: any Database
+  ) async throws {
+
+    // Increment tool call count once for this tool call request
+    if let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID) {
+      _ = await toolCallTracker.incrementToolCallCount(for: currentRequestID)
+    }
+
+    var toolCallWrappers = [SocketMessage.ToolCallWrapper]()
+
+    for toolCall in toolCalls {
+      switch toolCall.name {
+      case .Function.queryUserHealthData:
+        toolCallWrappers.append(try await performQuery(toolCall: toolCall))
+      default:
+        throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.name)")
+      }
+    }
+
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
+    let toolCallRequest = SocketMessage.ToolCallsRequest(
+      runID: "",
+      toolCalls: toolCallWrappers,
+      requestID: currentRequestID
+    )
+    try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
+  }
+
+  func performQuery(
+    toolCall: OpenAIKit.Response.OutputItem.FunctionToolCall
+  ) async throws -> SocketMessage.ToolCallWrapper {
+    guard toolCall.name == .Function.queryUserHealthData else {
+      throw Abort(.internalServerError, reason: "Improper tool handling")
+    }
+
+    let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthDataArguments.self, using: decoder)
+
+    let queries = queryArguments.queries.map { arguments in
+      SocketMessage.Query(
+        startDate: arguments.startDate,
+        endDate: arguments.endDate,
+        dataType: arguments.dataType
+      )
+    }
+
+    return SocketMessage.ToolCallWrapper(toolCallID: toolCall.callId, kind: .queries(queries))
   }
 }
 
@@ -144,19 +610,39 @@ private extension ChatService {
   func sendSocketContentIfAvailable<Content>(
     _ content: Content,
     userID: UserIdentifier
-  ) async throws where Content: Encodable {
+  ) async throws -> Bool where Content: Encodable {
     guard let socket = await socket(for: userID) else {
-      return
+      return false
     }
     try socket.sendContent(content)
+    return true
   }
 
   func sendIsAssistantTyping(
     isTyping: Bool,
     userID: UserIdentifier
   ) async throws {
-    let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
-    try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
+    // Only send if the state actually changed
+    let stateChanged = await typingStateTracker.setTypingIfChanged(isTyping, for: userID)
+    if stateChanged {
+      let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
+      _ = try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
+    }
+  }
+
+  func sendResponseCompleted(userID: UserIdentifier, db: any Database) async throws {
+    let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
+    let responseCompleted = SocketMessage.ResponseCompleted(requestID: currentRequestID)
+    try await ensureContentSilentlySent(responseCompleted, userID: userID, db: db)
+    
+    // Clear tool call tracking for this request
+    if let requestID = currentRequestID {
+      await toolCallTracker.clearRequest(requestID)
+    }
+    
+    // Clear the requestID and responseID after the response is completed
+    await requestIDTracker.clearRequestID(for: userID)
+    await requestIDTracker.clearResponseID(for: userID)
   }
 
   func ensureContentSent<Content>(
@@ -166,10 +652,14 @@ private extension ChatService {
     userID: UserIdentifier,
     db: any Database
   ) async throws where Content: Encodable, Content: Sendable {
+    logger.debug("ensureContentSent")
+
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
       return
     }
+
+    logger.debug("Could not send over web socket. Attempting APNs.")
 
     let userDatabaseService = application.userDatabaseService(db: db)
 
@@ -218,7 +708,7 @@ private extension ChatService {
         logger.debug("Sent APNS message to \(userID): \(apnsUniqueID)")
       }
     } else {
-      logger.debug("Could not relay message to user \(userID).")
+      logger.debug("Could not relay message to user \(userID). No Device Token set.")
 //      let key = RedisKey("\(threadID):\(userID.value)")
 //      let data = try encoder.encode(content)
 //
@@ -232,10 +722,14 @@ private extension ChatService {
     userID: UserIdentifier,
     db: any Database
   ) async throws where Content: Encodable, Content: Sendable {
+    logger.debug("ensureContentSilentlySent")
+
     if let socket = await socket(for: userID) {
       try socket.sendContent(content)
       return
     }
+
+    logger.debug("Could not send over web socket. Attempting APNs.")
 
     let userDatabaseService = application.userDatabaseService(db: db)
 
@@ -244,7 +738,7 @@ private extension ChatService {
       return
     }
 
-    let threadID = "bud-assistant-query" // This is used for the APNs but also redis
+//    let threadID = "bud-assistant-query" // This is used for the APNs but also redis
 
     if let deviceToken = user.apnsDeviceToken {
       let expirationTime = Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
@@ -275,279 +769,9 @@ private extension ChatService {
         logger.debug("Sent silent APNS message to \(userID): \(apnsUniqueID)")
       }
     } else {
-      logger.debug("Could not relay silent message to user \(userID).")
+      logger.debug("Could not relay silent message to user \(userID). No Device Token set.")
 
       // TODO: Store in redis? Or cancel run?
     }
-  }
-}
-
-// MARK: - Run Management
-
-private extension ChatService {
-
-  func performRun(
-    thread: OpenAIAssistantThread,
-    userID: UserIdentifier,
-    db: any Database
-  ) async throws -> AsyncThrowingStream<ThreadStreamEvent, Error> {
-    let assistantService = application.openAIAssistantService(db: db)
-
-    return try await assistantService.streamRun(
-      assistantThread: thread,
-      tools: [
-        Assistant.Tool.function(.queryUserHealthData),
-        Assistant.Tool.function(.setGoals),
-        Assistant.Tool.function(.logFood),
-        Assistant.Tool.function(.logWater),
-        Assistant.Tool.function(.logWeight),
-        Assistant.Tool.function(.logPeriod),
-        Assistant.Tool.function(.logBloodPressure),
-        Assistant.Tool.function(.logBowelMovement),
-        Assistant.Tool.function(.createWorkoutPlan),
-      ],
-      toolChoice: .auto
-    )
-  }
-
-  func submitToolResponse(
-    thread: OpenAIAssistantThread,
-    runID: String,
-    toolOutputs: [ToolOutput],
-    userID: UserIdentifier,
-    db: any Database
-  ) async throws -> AsyncThrowingStream<ThreadStreamEvent, Error> {
-    let assistantService = application.openAIAssistantService(db: db)
-
-    return try await assistantService.submitSuccessfulToolOputputAndStreamRun(
-      threadID: thread.threadID,
-      runID: runID,
-      toolOutputs: toolOutputs
-    )
-  }
-
-  func handleRunStream(
-    stream: AsyncThrowingStream<ThreadStreamEvent, Error>,
-    userID: UserIdentifier,
-    db: any Database
-  ) async throws {
-
-    var messageID = UUID().uuidString
-    for try await event in stream {
-      switch event {
-      case .run(let run):
-        switch run.status {
-        case .requiresAction:
-          guard let toolCalls = run.requiredAction?.submitToolOutputs.toolCalls else { continue }
-
-          try await sendToolCalls(run: run, toolCalls: toolCalls, userID: userID, db: db)
-        default:
-          break
-        }
-      case .message(let message):
-        let messages = message.content.compactMap {
-          switch $0 {
-          case .text(let text): return text
-          default: return nil
-          }
-        }
-
-        if message.content.isNotEmpty {
-          try await sendIsAssistantTyping(isTyping: false, userID: userID)
-        }
-
-        for message in messages {
-          let response = SocketMessage.MessageResponse(id: messageID, message: message)
-          try await ensureContentSent(
-            response,
-            title: "Bud",
-            message: message,
-            userID: userID,
-            db: db
-          )
-          messageID = UUID().uuidString // Ensure all these messages have unique IDs.
-        }
-      case .messageDelta(let delta):
-        let chunks = delta.delta.content
-          .sorted(by: { $0.index < $1.index })
-          .map { $0.text.value }
-
-        for chunk in chunks {
-          let messageChunk = SocketMessage.MessageChunkResponse(id: messageID, chunk: chunk)
-          try await sendSocketContentIfAvailable(messageChunk, userID: userID)
-        }
-      }
-    }
-  }
-
-  func sendToolCalls(
-    run: Run,
-    toolCalls: [Run.ToolCall],
-    userID: UserIdentifier,
-    db: any Database
-  ) async throws {
-    var toolCallWrappers = [SocketMessage.ToolCallWrapper]()
-    for toolCall in toolCalls {
-      switch toolCall.function.name {
-      case .Function.queryUserHealthData:
-        toolCallWrappers.append(try await performQuery(toolCall: toolCall))
-      case .Function.setGoals:
-        toolCallWrappers.append(try await setGoals(toolCall: toolCall))
-      case .Function.logFood:
-        toolCallWrappers.append(try await logFood(toolCall: toolCall))
-      case .Function.logWater:
-        toolCallWrappers.append(try await logWater(toolCall: toolCall))
-      case .Function.logWeight:
-        toolCallWrappers.append(try await logWeight(toolCall: toolCall))
-      case .Function.logPeriod:
-        toolCallWrappers.append(try await logPeriod(toolCall: toolCall))
-      case .Function.logBloodPressure:
-        toolCallWrappers.append(try await logBloodPressure(toolCall: toolCall))
-      case .Function.logBowelMovement:
-        toolCallWrappers.append(try await logBowelMovements(toolCall: toolCall))
-      case .Function.createWorkoutPlan:
-        toolCallWrappers.append(try await createWorkout(toolCall: toolCall))
-      case .Function.createUserFact, .Function.deleteUserFact:
-        // Stub for legacy service - not implemented
-        throw Abort(.internalServerError, reason: "User facts not supported in legacy ChatService")
-      default:
-        throw Abort(.internalServerError, reason: "Unsupported tool function: \(toolCall.function.name)")
-      }
-    }
-    let toolCallRequest = SocketMessage.ToolCallsRequest(
-      runID: run.id,
-      toolCalls: toolCallWrappers
-    )
-    try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
-  }
-}
-
-// MARK: - Function Handlers
-
-private extension ChatService {
-
-  func performQuery(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    switch toolCall.function.name {
-    case .Function.queryUserHealthData:
-      let queryArguments = try toolCall.decodeArguments(type: QueryUserHealthDataArguments.self, using: decoder)
-
-      let queries = queryArguments.queries.map { arguments in
-        SocketMessage.Query(
-          startDate: arguments.startDate,
-          endDate: arguments.endDate,
-          dataType: arguments.dataType
-        )
-      }
-
-      return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .queries(queries))
-    default:
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-  }
-
-  func setGoals(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.setGoals else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: SetGoalsArguments.self, using: decoder)
-
-    return SocketMessage.ToolCallWrapper(toolCallID: toolCall.id, kind: .newGoals(arguments.newGoals))
-  }
-
-  func logFood(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.logFood else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: DetectedFood.self, using: decoder)
-
-    let detectedFood = SocketMessage.DetectedFood(
-      name: arguments.name,
-      meal: arguments.meal,
-      foodItemServings: arguments.foodItems.map { $0.asServing() }
-    )
-
-    return SocketMessage.ToolCallWrapper(
-      toolCallID: toolCall.id,
-      kind: .detectedFood(detectedFood)
-    )
-  }
-
-  func logWater(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.logWater else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogWaterConsumption.self, using: decoder)
-
-    return SocketMessage.ToolCallWrapper(
-      toolCallID: toolCall.id,
-      kind: .logWater(arguments)
-    )
-  }
-
-  func logWeight(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.logWeight else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogWeight.self, using: decoder)
-
-    return SocketMessage.ToolCallWrapper(
-      toolCallID: toolCall.id,
-      kind: .logWeight(arguments)
-    )
-  }
-
-  func logPeriod(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.logPeriod else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogPeriod.self, using: decoder)
-
-    return SocketMessage.ToolCallWrapper(
-      toolCallID: toolCall.id, kind: .logPeriod(arguments)
-    )
-  }
-
-  func logBloodPressure(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.logBloodPressure else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogBloodPressure.self, using: decoder)
-
-    return SocketMessage.ToolCallWrapper(
-      toolCallID: toolCall.id,
-      kind: .logBloodPressure(arguments)
-    )
-  }
-
-  func logBowelMovements(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.logBowelMovement else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.LogBowelMovement.self, using: decoder)
-
-    return SocketMessage.ToolCallWrapper(
-      toolCallID: toolCall.id,
-      kind: .logBowelMovement(arguments)
-    )
-  }
-
-  func createWorkout(toolCall: Run.ToolCall) async throws -> SocketMessage.ToolCallWrapper {
-    guard toolCall.function.name == .Function.createWorkoutPlan else {
-      throw Abort(.internalServerError, reason: "Improper tool handling")
-    }
-
-    let arguments = try toolCall.decodeArguments(type: SocketMessage.WorkoutPlan.self, using: decoder)
-
-    return SocketMessage.ToolCallWrapper(
-      toolCallID: toolCall.id,
-      kind: .createWorkout(arguments)
-    )
   }
 }
