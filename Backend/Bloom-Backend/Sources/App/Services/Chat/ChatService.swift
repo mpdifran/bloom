@@ -52,12 +52,13 @@ extension ChatService {
   func parse(
     data: Data,
     for userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    modelOverride: ModelID?
   ) async throws -> Bool {
     if let message = try? decoder.decode(SocketMessage.MessageRequest.self, from: data) {
-      try await on(message: message, userID: userID, db: db)
+      try await on(message: message, userID: userID, db: db, modelOverride: modelOverride)
     } else if let toolCallResponse = try? decoder.decode(SocketMessage.ToolCallsResponse.self, from: data) {
-      try await onToolCallsResponse(response: toolCallResponse, userID: userID, db: db)
+      try await onToolCallsResponse(response: toolCallResponse, userID: userID, db: db, modelOverride: modelOverride)
     } else {
       return false
     }
@@ -106,7 +107,8 @@ private extension ChatService {
   func on(
     message: SocketMessage.MessageRequest,
     userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    modelOverride: ModelID?
   ) async throws {
 
     // Store the requestID for this user's conversation
@@ -142,14 +144,16 @@ private extension ChatService {
     try await streamResponse(
       inputs: inputs,
       userID: userID,
-      db: db
+      db: db,
+      modelOverride: modelOverride
     )
   }
 
   func onToolCallsResponse(
     response: SocketMessage.ToolCallsResponse,
     userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    modelOverride: ModelID?
   ) async throws {
 
     // Update the requestID if provided in the response
@@ -170,7 +174,8 @@ private extension ChatService {
     try await streamResponse(
       inputs: inputs,
       userID: userID,
-      db: db
+      db: db,
+      modelOverride: modelOverride
     )
   }
 }
@@ -183,6 +188,7 @@ private extension ChatService {
     inputs: [OpenAIKit.Response.InputItem],
     userID: UserIdentifier,
     db: any Database,
+    modelOverride: ModelID?,
     isRetry: Bool = false
   ) async throws {
 
@@ -205,12 +211,15 @@ private extension ChatService {
       Response.Tool.function(.queryUserHealthData)
     ] : []
 
+    let selectedModel = modelOverride ?? modelID
+
+    logger.debug("Streaming with model \(selectedModel.id)")
     let stream = try await openAIService.openAI.responses.createAndStreamResponse(
       input: fortifiedInputs,
-      model: modelID,
+      model: selectedModel,
       instructions: .Prompt.chatAssistant,
       previousResponseID: previousResponseID,
-//      reasoning: .init(effort: .low, summary: .auto),
+      reasoning: .init(effort: .low, summary: .auto),
       tools: tools,
       truncation: .auto,
       user: userID.value
@@ -228,6 +237,7 @@ private extension ChatService {
         inputs: inputs,
         userID: userID,
         db: db,
+        modelOverride: modelOverride,
         isRetry: true
       )
     }

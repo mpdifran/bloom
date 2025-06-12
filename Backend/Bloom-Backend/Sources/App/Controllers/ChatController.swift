@@ -45,10 +45,13 @@ extension ChatController {
       return
     }
 
+    let modelOverride = request.openAIModel
+
     await request.webSocketService.registerChat(
       socket: webSocket,
       forUserID: userID,
-      version: .v2
+      version: .v2,
+      modelOverride: modelOverride
     )
   }
 
@@ -61,7 +64,9 @@ extension ChatController {
 
     let data = Data(buffer: byteBuffer)
 
-    if try await request.chatService.parse(data: data, for: userID, db: request.db) {
+    let modelOverride = request.openAIModel
+    
+    if try await request.chatService.parse(data: data, for: userID, db: request.db, modelOverride: modelOverride) {
       return Response(status: .ok)
     }
     return Response(status: .internalServerError)

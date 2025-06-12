@@ -9,6 +9,7 @@ import Vapor
 import FluentKit
 import WebSocketKit
 import BloomModel
+import OpenAIKit
 
 extension WebSocketService {
   enum Version {
@@ -42,7 +43,8 @@ extension WebSocketService {
   func registerChat(
     socket: WebSocket,
     forUserID userID: UserIdentifier,
-    version: Version
+    version: Version,
+    modelOverride: ModelID?
   ) {
     chatSockets[userID] = socket
 
@@ -72,7 +74,8 @@ extension WebSocketService {
               data: data,
               userID: userID,
               db: db,
-              version: version
+              version: version,
+              modelOverride: modelOverride
             )
           }
         }
@@ -85,7 +88,8 @@ extension WebSocketService {
               data: data,
               userID: userID,
               db: db,
-              version: version
+              version: version,
+              modelOverride: modelOverride
             )
           }
         }
@@ -154,10 +158,11 @@ private extension WebSocketService {
     data: Data,
     userID: UserIdentifier,
     db: any Database,
-    version: Version
+    version: Version,
+    modelOverride: ModelID?
   ) async throws {
 
-    if try await application.chatService.parse(data: data, for: userID, db: db) {
+    if try await application.chatService.parse(data: data, for: userID, db: db, modelOverride: modelOverride) {
       // success
     } else {
       throw Abort(.badRequest)

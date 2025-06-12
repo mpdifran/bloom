@@ -10,6 +10,6 @@ import Vapor
 extension Request {
 
   var version: WebSocketService.Version {
-    headers["X-Bloom-API-Version"].first == "v1" ? WebSocketService.Version.v1 : .v2
+    headers[.Header.version].first == "v1" ? WebSocketService.Version.v1 : .v2
   }
 }

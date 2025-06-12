@@ -42,7 +42,7 @@ final actor ChatController: ObservableObject {
   private var inProgressMessagesIndex = 0
   @AsyncStreamable var error: Error?
 
-  @AppStorage(.FeatureFlag.enableLegacyChat) private var enableLegacyChat = false
+  @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
 
   private init() { }
 
@@ -209,7 +209,8 @@ private extension ChatController {
       return existingHandle
     }
 
-    let handle = await NetworkRequester.shared.openChatWebsocket(isV1: enableLegacyChat)
+    let modelOverride = enableOpenAIModelOverride ? "o3" : nil
+    let handle = await NetworkRequester.shared.openChatWebsocket(modelOverride: modelOverride)
 
     webSocketDataTask = Task.detached { [weak self] in
       for await data in await handle.$data {

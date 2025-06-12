@@ -20,9 +20,9 @@ extension URLRequest {
     return request
   }
 
-  func settingAPIVersionHeader(version: String) -> URLRequest {
+  func settingOpenAIModelHeader(model: String) -> URLRequest {
     var request = self
-    request.add(header: .apiVersion(version))
+    request.add(header: .openAIModel(model))
     return request
   }
 }
@@ -31,13 +31,12 @@ extension URLRequest {
   enum Header {
     case authorizationBearer(AuthToken)
     case contentTypeJSON
-    case apiVersion(String)
+    case openAIModel(String)
   }
 
   enum HeaderKey: String {
     case authorization = "Authorization"
     case contentType = "Content-Type"
-    case apiVersion = "X-Bloom-API-Version"
   }
 
   mutating func add(header: Header) {
@@ -46,8 +45,8 @@ extension URLRequest {
       addValue("Bearer \(token.value)", for: .authorization)
     case .contentTypeJSON:
       addValue("application/json", for: .contentType)
-    case .apiVersion(let version):
-      addValue(version, for: .apiVersion)
+    case .openAIModel(let model):
+      addValue(model, forHTTPHeaderField: String.Header.openAIModel)
     }
   }
 

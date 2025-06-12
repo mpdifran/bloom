@@ -16,7 +16,7 @@ struct DeveloperSettingsView: View {
 
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
-  @AppStorage(.FeatureFlag.enableLegacyChat) private var enableLegacyChat = false
+  @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
@@ -215,8 +215,8 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        SettingsCell("Enable Legacy Chat") {
-          Toggle("", isOn: $enableLegacyChat)
+        SettingsCell("OpenAI Model o3") {
+          Toggle("", isOn: $enableOpenAIModelOverride)
         }
       }
     }
@@ -488,7 +488,7 @@ extension DeveloperSettingsView {
           apiHost.overrideEnabled = false
           showDeveloperMode = false
           bypassPaywall = false
-          enableLegacyChat = false
+          enableOpenAIModelOverride = false
           dismiss()
         } label: {
           Text("Exit Developer Mode")

@@ -13,6 +13,6 @@ extension String {
     static let legacyGoalSetting = "FeatureFlag.legacyGoalSetting"
     static let bypassPaywall = "FeatureFlag.bypassPaywall"
     static let alwaysShowReports = "FeatureFlag.alwaysShowReports"
-    static let enableLegacyChat = "FeatureFlag.enableLegacyChat"
+    static let enableOpenAIModelOverride = "FeatureFlag.enableOpenAIModelOverride"
   }
 }
