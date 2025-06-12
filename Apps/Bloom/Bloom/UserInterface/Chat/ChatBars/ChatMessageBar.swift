@@ -58,9 +58,9 @@ struct ChatMessageBar: View {
         
         if text.isEmpty {
           Button {
-            isFocused = false
+            isFocused.toggle()
           } label: {
-            Image(systemSymbol: .chevronDownCircleFill)
+            Image(systemSymbol: isFocused ? .chevronDownCircleFill : .chevronUpCircleFill)
               .foregroundStyle(.text, .fill)
               .font(.title)
               .frame(square: 24)
@@ -80,6 +80,9 @@ struct ChatMessageBar: View {
       }
       .padding(12)
       .cardContainer(fill: .background, includePadding: false)
+      .onTapGesture {
+        isFocused = true
+      }
     }
     .padding()
     .background {
