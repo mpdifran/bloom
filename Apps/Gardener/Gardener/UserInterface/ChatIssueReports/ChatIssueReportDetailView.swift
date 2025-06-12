@@ -35,7 +35,7 @@ struct ChatIssueReportDetailView: View {
     .shelf {
       filterToolbar
     }
-    .task {
+    .task(id: report.id) {
       await loadMessages()
     }
   }
