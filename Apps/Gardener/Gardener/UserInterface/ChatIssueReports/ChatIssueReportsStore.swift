@@ -57,4 +57,23 @@ final class ChatIssueReportsStore: ObservableObject {
     guard !isLoading && reports.count < totalCount else { return }
     await loadReports(refresh: false)
   }
+  
+  func archiveReport(_ report: AdminChatIssueReport) async throws {
+    do {
+      let response = try await NetworkStack.shared.archiveChatIssueReport(reportID: report.id)
+      
+      // Update the local reports array with the archived report
+      if let index = reports.firstIndex(where: { $0.id == report.id }) {
+        reports[index] = response.report
+        
+        // Move archived report to the end of the list to match server sorting
+        let archivedReport = reports.remove(at: index)
+        reports.append(archivedReport)
+      }
+      
+    } catch {
+      self.error = error
+      throw error
+    }
+  }
 }

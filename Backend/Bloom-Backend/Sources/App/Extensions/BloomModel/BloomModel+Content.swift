@@ -37,3 +37,5 @@ extension ChatUploadFileRequest: @retroactive Content { }
 extension ChatUploadFileResponse: @retroactive Content { }
 extension AdminChatIssueReportsResponse: @retroactive Content { }
 extension AdminChatIssueReportMessagesResponse: @retroactive Content { }
+extension AdminArchiveChatIssueReportRequest: @retroactive Content { }
+extension AdminArchiveChatIssueReportResponse: @retroactive Content { }

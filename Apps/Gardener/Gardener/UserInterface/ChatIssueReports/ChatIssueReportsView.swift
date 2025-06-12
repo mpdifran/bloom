@@ -74,6 +74,12 @@ struct ChatIssueReportRow: View {
         
         Spacer()
         
+        if report.state == .archived {
+          Label("Archived", systemImage: "archivebox.fill")
+            .font(.caption)
+            .foregroundColor(.orange)
+        }
+        
         Text(report.createdAt, style: .relative)
           .font(.caption)
           .foregroundColor(.secondary)
@@ -102,6 +108,7 @@ struct ChatIssueReportRow: View {
       }
     }
     .padding(.vertical, 4)
+    .opacity(report.state == .archived ? 0.6 : 1.0)
   }
 }
 

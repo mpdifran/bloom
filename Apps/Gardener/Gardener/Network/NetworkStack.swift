@@ -249,6 +249,21 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(AdminChatIssueReportMessagesResponse.self, from: data)
   }
   
+  func archiveChatIssueReport(
+    reportID: String
+  ) async throws -> AdminArchiveChatIssueReportResponse {
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/chat/issue-reports/\(reportID)/archive",
+      method: .patch
+    )
+
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
+
+    return try JSONDecoder.bloomModel.decode(AdminArchiveChatIssueReportResponse.self, from: data)
+  }
+  
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse

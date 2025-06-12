@@ -21,6 +21,7 @@ extension AdminChatController: RouteCollection {
         $0.group("chat") {
           $0.get("issue-reports", use: getIssueReports)
           $0.get("issue-reports", ":reportID", "messages", use: getIssueReportMessages)
+          $0.patch("issue-reports", ":reportID", "archive", use: archiveIssueReport)
         }
       }
     }
@@ -37,10 +38,11 @@ extension AdminChatController {
     // Get total count
     let totalCount = try await ChatMessageIssueReport.query(on: request.db).count()
     
-    // Get paginated results with user relationship
+    // Get paginated results with user relationship, sorted by state then creation date
     let reports = try await ChatMessageIssueReport.query(on: request.db)
       .with(\.$user)
-      .sort(\.$createdAt, .descending)
+      .sort(\.$state, .ascending) // open reports first, archived last
+      .sort(\.$createdAt, .descending) // newest first within each state
       .offset(offset)
       .limit(limit)
       .all()
@@ -74,6 +76,7 @@ extension AdminChatController {
         id: id,
         responseID: report.responseID,
         notes: report.notes,
+        state: AdminChatIssueReport.State(rawValue: report.state.rawValue) ?? .open,
         isAnonymous: isAnonymous,
         userID: report.$user.id,
         userName: userName,
@@ -183,5 +186,60 @@ extension AdminChatController {
       request.logger.error("Failed to fetch messages from OpenAI: \(error)")
       throw Abort(.serviceUnavailable, reason: "Unable to fetch chat messages")
     }
+  }
+  
+  @Sendable
+  func archiveIssueReport(_ request: Request) async throws -> AdminArchiveChatIssueReportResponse {
+    guard let reportID = request.parameters.get("reportID") else {
+      throw Abort(.badRequest, reason: "Report ID is required")
+    }
+    
+    // Fetch the report
+    guard let report = try await ChatMessageIssueReport.find(reportID, on: request.db) else {
+      throw Abort(.notFound, reason: "Report not found")
+    }
+    
+    // Update the state to archived
+    report.state = .archived
+    try await report.save(on: request.db)
+    
+    // Load user relationship for response
+    try await report.$user.load(on: request.db)
+    
+    // Convert to response model
+    let isAnonymous = report.$user.id == nil
+    let userName: String?
+    
+    if isAnonymous {
+      userName = nil
+    } else if let user = report.user {
+      // Combine given name and family name
+      let givenName = user.givenName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+      let familyName = user.familyName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+      
+      if !givenName.isEmpty || !familyName.isEmpty {
+        userName = [givenName, familyName].filter { !$0.isEmpty }.joined(separator: " ")
+      } else {
+        userName = "Unknown User"
+      }
+    } else {
+      userName = "Unknown User"
+    }
+    
+    let adminReport = AdminChatIssueReport(
+      id: report.id!,
+      responseID: report.responseID,
+      notes: report.notes,
+      state: AdminChatIssueReport.State(rawValue: report.state.rawValue) ?? .archived,
+      isAnonymous: isAnonymous,
+      userID: report.$user.id,
+      userName: userName,
+      createdAt: report.createdAt!
+    )
+    
+    return AdminArchiveChatIssueReportResponse(
+      success: true,
+      report: adminReport
+    )
   }
 }

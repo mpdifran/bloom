@@ -15,6 +15,10 @@ struct ChatIssueReportDetailView: View {
   @State private var isLoadingMessages = false
   @State private var messagesError: Error?
   @State private var selectedRoles: Set<String> = ["user", "assistant", "system", "admin"]
+  @State private var isArchiving = false
+  @State private var archiveError: Error?
+  
+  @ObservedObject private var store = ChatIssueReportsStore.shared
   
   var body: some View {
     ScrollView {
@@ -32,6 +36,11 @@ struct ChatIssueReportDetailView: View {
       .padding()
     }
     .navigationTitle("Issue Report")
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        archiveButton
+      }
+    }
     .shelf {
       filterToolbar
     }
@@ -42,6 +51,23 @@ struct ChatIssueReportDetailView: View {
 }
 
 private extension ChatIssueReportDetailView {
+  
+  var archiveButton: some View {
+    Button {
+      Task {
+        await archiveReport()
+      }
+    } label: {
+      if isArchiving {
+        ProgressView()
+          .scaleEffect(0.8)
+      } else {
+        Image(systemName: report.state == .archived ? "archivebox.fill" : "archivebox")
+      }
+    }
+    .disabled(isArchiving || report.state == .archived)
+    .help(report.state == .archived ? "Report is archived" : "Archive this report")
+  }
   
   var headerSection: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -235,6 +261,19 @@ private extension ChatIssueReportDetailView {
     
     isLoadingMessages = false
   }
+  
+  func archiveReport() async {
+    isArchiving = true
+    archiveError = nil
+    
+    do {
+      try await store.archiveReport(report)
+    } catch {
+      archiveError = error
+    }
+    
+    isArchiving = false
+  }
 }
 
 struct MessageBubbleView: View {
@@ -321,6 +360,7 @@ struct MessageBubbleView: View {
       id: "issue_123456789",
       responseID: "response_987654321",
       notes: "The AI response was not helpful and contained incorrect information about nutrition facts.",
+      state: .open,
       isAnonymous: false,
       userID: AdminBloomModel.UserIdentifier("user_555"),
       userName: "John Doe",
