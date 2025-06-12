@@ -111,6 +111,11 @@ final class RemindersManager: ObservableObject {
     // Remove delivered notifications for this reminder
     await removeDeliveredNotifications(withID: id)
     
+    // Remove pending notifications for the completed occurrence
+    if let occurrenceID = occurrenceID {
+      await removePendingNotifications(forReminderID: id, occurrenceID: occurrenceID)
+    }
+    
     // Refresh to update completion records
     await fetchReminders()
   }
@@ -152,6 +157,45 @@ final class RemindersManager: ObservableObject {
   }
   
   // MARK: - Private Methods
+  
+  /// Removes pending notifications for a specific completed occurrence
+  private func removePendingNotifications(forReminderID reminderID: String, occurrenceID: String) async {
+    let center = UNUserNotificationCenter.current()
+    let calendar = Calendar.current
+    let today = Date()
+    
+    // Get all pending notifications
+    let pendingRequests = await center.pendingNotificationRequests()
+    
+    // Filter for reminder notifications from this specific reminder and occurrence
+    let targetIdentifiers = pendingRequests.compactMap { request -> String? in
+      // Check if it's a reminder notification with matching userInfo
+      guard request.content.categoryIdentifier == .CategoryID.reminders,
+            let requestReminderID = request.content.userInfo["reminderID"] as? String,
+            let requestOccurrenceID = request.content.userInfo["occurrenceID"] as? String,
+            requestReminderID == reminderID,
+            requestOccurrenceID == occurrenceID else {
+        return nil
+      }
+      
+      // For today's completed occurrence, we want to remove the pending notification
+      // Check if this is today's notification by examining the trigger
+      if let calendarTrigger = request.trigger as? UNCalendarNotificationTrigger {
+        let triggerDate = calendarTrigger.nextTriggerDate()
+        if let triggerDate = triggerDate, calendar.isDate(triggerDate, inSameDayAs: today) {
+          return request.identifier
+        }
+      }
+      
+      return nil
+    }
+    
+    if !targetIdentifiers.isEmpty {
+      // Remove the pending notifications for today
+      center.removePendingNotificationRequests(withIdentifiers: targetIdentifiers)
+      print("Removed \(targetIdentifiers.count) pending notification(s) for completed occurrence")
+    }
+  }
   
   /// Removes delivered notifications for a specific reminder based on today's completions
   private func removeDeliveredNotifications(withID reminderID: String) async {

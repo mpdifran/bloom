@@ -42,7 +42,7 @@ struct BloomApp: App {
     ])
     _ = EntitlementController.shared
 
-    //        BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
+    // Note: Background task scheduling moved to .task block to ensure handlers are registered first
 
     checkRegisterForRemoteNotifications()
     NotificationManager.shared.removeAllScheduledNotifications()
@@ -80,14 +80,15 @@ struct BloomApp: App {
           // Schedule all reminder notifications on app launch
           await RemindersManager.shared.rescheduleAllReminders()
         }
+        .task {
+          // Schedule background tasks after handlers are registered
+          BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
+        }
     }
     .modelContainer(ContainerHolder.shared.container)
-    //        .backgroundTask(.appRefresh("proactive-tip")) {
-    //            if await danieleMode {
-    //                await ProactiveTipper.shared.sendProactiveTip()
-    //            }
-    //            BackgroundTaskScheduler.shared.scheduleProactiveTipTask()
-    //        }
+    .backgroundTask(.appRefresh("update-reminder-notifications")) {
+        await BackgroundTaskScheduler.shared.updateReminderNotifications()
+    }
   }
 }
 

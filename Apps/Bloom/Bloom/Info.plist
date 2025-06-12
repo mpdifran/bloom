@@ -5,6 +5,7 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>proactive-tip</string>
+		<string>update-reminder-notifications</string>
 	</array>
 	<key>BLOOM_APP_GROUP_ID</key>
 	<string>$(BLOOM_APP_GROUP_ID)</string>

@@ -52,6 +52,39 @@ actor ReminderScheduler {
     await cancelNotifications(for: reminderID)
   }
   
+  /// Cleans up notifications for completed reminders (called by background tasks)
+  func cleanupCompletedNotifications() async {
+    do {
+      let context = ModelContext(modelContainer)
+      
+      // Get date range for today
+      let calendar = Calendar.current
+      let startOfToday = calendar.startOfDay(for: Date())
+      let endOfToday = calendar.date(byAdding: .day, value: 1, to: startOfToday) ?? Date()
+      
+      // Fetch all completion records for today
+      let completionDescriptor = FetchDescriptor<ReminderCompletionRecord>(
+        predicate: #Predicate<ReminderCompletionRecord> { completion in
+          completion.completedDate >= startOfToday &&
+          completion.completedDate <= endOfToday
+        }
+      )
+      
+      let todayCompletions = try context.fetch(completionDescriptor)
+      print("Background cleanup: Found \(todayCompletions.count) completions for today")
+      
+      if !todayCompletions.isEmpty {
+        await cleanupNotificationsForCompletions(todayCompletions)
+      }
+      
+      // Also clean up old delivered notifications
+      await cleanupOldDeliveredNotifications()
+      
+    } catch {
+      print("Background cleanup error: \(error)")
+    }
+  }
+  
   // MARK: - Private Methods
   
   private func fetchAllReminders() async throws -> [ReminderDTO] {
@@ -74,6 +107,12 @@ actor ReminderScheduler {
   
   private func scheduleNotifications(for reminder: ReminderDTO) async {
     for occurrence in reminder.occurrences {
+      // Check if this occurrence has been completed today before scheduling
+      if await isOccurrenceCompletedToday(reminderID: reminder.id, occurrenceID: occurrence.id) {
+        print("Skipping notification scheduling for completed occurrence: \(occurrence.id)")
+        continue
+      }
+      
       let notifications = createNotificationRequests(
         for: reminder,
         occurrence: occurrence
@@ -101,7 +140,11 @@ actor ReminderScheduler {
     content.sound = .default
     content.categoryIdentifier = .CategoryID.reminders
     content.threadIdentifier = reminder.id
-    
+    content.userInfo = [
+      "reminderID": reminder.id,
+      "occurrenceID": occurrence.id
+    ]
+
     // Convert timeOfDay (seconds since midnight) to date components
     let hour = Int(occurrence.timeOfDay) / 3600
     let minute = (Int(occurrence.timeOfDay) % 3600) / 60
@@ -233,5 +276,91 @@ actor ReminderScheduler {
       .map { $0.identifier }
     
     notificationCenter.removePendingNotificationRequests(withIdentifiers: reminderIdentifiers)
+  }
+  
+  private func isOccurrenceCompletedToday(reminderID: String, occurrenceID: String) async -> Bool {
+    do {
+      let context = ModelContext(modelContainer)
+      
+      // Get date range for today
+      let calendar = Calendar.current
+      let startOfToday = calendar.startOfDay(for: Date())
+      let endOfToday = calendar.date(byAdding: .day, value: 1, to: startOfToday) ?? Date()
+      
+      // Query for completion records matching the specific reminder, occurrence, and today's date
+      let descriptor = FetchDescriptor<ReminderCompletionRecord>(
+        predicate: #Predicate<ReminderCompletionRecord> { completion in
+          completion.reminder?.id == reminderID &&
+          completion.occurrence?.id == occurrenceID &&
+          completion.completedDate >= startOfToday &&
+          completion.completedDate <= endOfToday
+        }
+      )
+      
+      // Check if any completion records exist for this specific occurrence today
+      let completionRecords = try context.fetch(descriptor)
+      return !completionRecords.isEmpty
+      
+    } catch {
+      print("ReminderScheduler: Error checking reminder completion: \(error)")
+      return false
+    }
+  }
+  
+  private func cleanupNotificationsForCompletions(_ completions: [ReminderCompletionRecord]) async {
+    let calendar = Calendar.current
+    let today = Date()
+    
+    // Get all pending notifications
+    let pendingRequests = await notificationCenter.pendingNotificationRequests()
+    
+    var identifiersToRemove: Set<String> = []
+    
+    for completion in completions {
+      guard let reminderID = completion.reminder?.id,
+            let occurrenceID = completion.occurrence?.id else { continue }
+      
+      // Find pending notifications for this completed occurrence
+      for request in pendingRequests {
+        guard request.content.categoryIdentifier == .CategoryID.reminders,
+              let requestReminderID = request.content.userInfo["reminderID"] as? String,
+              let requestOccurrenceID = request.content.userInfo["occurrenceID"] as? String,
+              requestReminderID == reminderID,
+              requestOccurrenceID == occurrenceID else {
+          continue
+        }
+        
+        // Check if this is today's notification
+        if let calendarTrigger = request.trigger as? UNCalendarNotificationTrigger,
+           let triggerDate = calendarTrigger.nextTriggerDate(),
+           calendar.isDate(triggerDate, inSameDayAs: today) {
+          identifiersToRemove.insert(request.identifier)
+        }
+      }
+    }
+    
+    if !identifiersToRemove.isEmpty {
+      notificationCenter.removePendingNotificationRequests(withIdentifiers: Array(identifiersToRemove))
+      print("Background cleanup: Removed \(identifiersToRemove.count) pending notifications for completed reminders")
+    }
+  }
+  
+  private func cleanupOldDeliveredNotifications() async {
+    let calendar = Calendar.current
+    let today = Date()
+    
+    // Clean up old delivered notifications
+    let deliveredNotifications = await notificationCenter.deliveredNotifications()
+    let oldDeliveredIdentifiers = deliveredNotifications.compactMap { notification -> String? in
+      guard !calendar.isDateInToday(notification.date) && notification.date < today else {
+        return nil
+      }
+      return notification.request.identifier
+    }
+    
+    if !oldDeliveredIdentifiers.isEmpty {
+      notificationCenter.removeDeliveredNotifications(withIdentifiers: oldDeliveredIdentifiers)
+      print("Background cleanup: Removed \(oldDeliveredIdentifiers.count) old delivered notifications")
+    }
   }
 }
