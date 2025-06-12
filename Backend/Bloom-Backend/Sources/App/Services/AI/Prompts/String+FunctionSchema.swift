@@ -119,7 +119,8 @@ extension String.FunctionSchema {
       "title": String,              // Required. The title of the workout plan.
       "summary": String,            // Required. A short summary of the workout and what it will focus on.
       "requiredEquipment": [Equipment], // Required. The list of equipment required for the workout.
-      "sets": [WorkoutSet]          // Required. A list of sets. The workout should start with a warm up and end with a cool down.
+      "sets": [WorkoutSet] ,         // Required. A list of sets. The workout should start with a warm up and end with a cool down.
+      "type": "workoutPlan"          // Required. Always must be this type.
     }
 
     Equipment: An enum with the following cases: \(SocketMessage.WorkoutPlan.Equipment.stringCaseList())
@@ -156,7 +157,8 @@ extension String.FunctionSchema {
       "id": String?,                       // Optional. ID of existing reminder to update. Leave null for new reminders.
       "title": String,                     // Required. Short title for the reminder using title case. Examples: "Take Vitamins", "Log Weight"
       "color": String,                     // Required. A hex color code for the reminder (e.g., "#FF0000").
-      "occurrences": [ReminderOccurrence] // Required. When the reminder should occur.
+      "occurrences": [ReminderOccurrence], // Required. When the reminder should occur.
+      "type": "createReminder"             // Required. Always must be this type.
     }
 
     ReminderOccurrence: {
@@ -178,13 +180,15 @@ extension String.FunctionSchema {
 
   static let deleteReminder: String = """
     Delete Reminder: {
-      "reminderID": String // Required. The ID of the reminder to delete.
+      "reminderID": String,     // Required. The ID of the reminder to delete.
+      "type": "deleteReminder" // Required. Always must be this type.
     }
     """
 
   static let createUserFact: String = """
     Create User Fact: {
-      "facts": [UserFact] // Required. A list of user facts to create and store.
+      "facts": [UserFact], // Required. A list of user facts to create and store.
+      "type": "createUserFacts" // Required. Always must be this type.
     }
     
     UserFact: {
@@ -195,7 +199,8 @@ extension String.FunctionSchema {
 
   static let deleteUserFact: String = """
     Delete User Fact: {
-      "facts": [DeletedFact] // Required. A list of user facts to delete.
+      "facts": [DeletedFact], // Required. A list of user facts to delete.
+      "type": "deletedUserFacts" // Required. Always must be this type.
     }
     
     DeletedFact: {

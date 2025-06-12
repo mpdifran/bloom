@@ -5,7 +5,7 @@
   "groups" : [
     {
       "blend-mode" : "normal",
-      "blur-material" : null,
+      "blur-material" : 0.25,
       "hidden" : false,
       "layers" : [
         {
@@ -41,60 +41,6 @@
       "translucency" : {
         "enabled" : true,
         "value" : 0.75
-      }
-    },
-    {
-      "blur-material" : null,
-      "hidden" : true,
-      "layers" : [
-        {
-          "image-name" : "Bloom App Icon 7.png",
-          "name" : "Bloom App Icon 7"
-        },
-        {
-          "image-name" : "Bloom App Icon 9.png",
-          "name" : "Bloom App Icon 9"
-        },
-        {
-          "image-name" : "Bloom App Icon 8.png",
-          "name" : "Bloom App Icon 8"
-        },
-        {
-          "image-name" : "Bloom App Icon 6.png",
-          "name" : "Bloom App Icon 6"
-        }
-      ],
-      "lighting" : "individual",
-      "position-specializations" : [
-        {
-          "idiom" : "square",
-          "value" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              0,
-              0
-            ]
-          }
-        },
-        {
-          "idiom" : "watchOS",
-          "value" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              32,
-              32
-            ]
-          }
-        }
-      ],
-      "shadow" : {
-        "kind" : "layer-color",
-        "opacity" : 0.75
-      },
-      "specular" : true,
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
       }
     },
     {

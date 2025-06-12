@@ -6,12 +6,13 @@
 //
 
 public extension SocketMessage {
-  struct CreateReminder: Codable, Equatable, Sendable {
+  struct CreateReminder: Codable, Hashable, Sendable {
     public let id: String?
     public let title: String
     public let color: String
     public let occurrences: [ReminderOccurrence]
-    
+    public let type: `Type`
+
     public init(
       id: String? = nil,
       title: String,
@@ -22,6 +23,7 @@ public extension SocketMessage {
       self.title = title
       self.color = color
       self.occurrences = occurrences
+      self.type = .createReminder
     }
     
     public init(from decoder: any Decoder) throws {
@@ -54,10 +56,16 @@ public extension SocketMessage {
       } else {
         self.occurrences = rawOccurrences
       }
+
+      self.type = try container.decode(`Type`.self, forKey: .type)
+    }
+
+    public enum `Type`: String, Codable, Hashable, Sendable {
+      case createReminder
     }
   }
   
-  struct ReminderOccurrence: Codable, Equatable, Sendable {
+  struct ReminderOccurrence: Codable, Hashable, Sendable {
     public let cadenceType: CadenceType
     public let hour: Int // 0-23
     public let minute: Int // 0-59
@@ -124,14 +132,14 @@ public extension SocketMessage {
     }
   }
   
-  enum CadenceType: String, Codable, CaseIterable, Sendable {
+  enum CadenceType: String, Codable, CaseIterable, Hashable, Sendable {
     case daily = "daily"
     case weekly = "weekly"
     case monthly = "monthly"
     case yearly = "yearly"
   }
   
-  enum Weekday: String, Codable, CaseIterable, Sendable {
+  enum Weekday: String, Codable, CaseIterable, Hashable, Sendable {
     case sunday = "sunday"
     case monday = "monday"
     case tuesday = "tuesday"
@@ -141,7 +149,7 @@ public extension SocketMessage {
     case saturday = "saturday"
   }
   
-  enum Month: String, Codable, CaseIterable, Sendable {
+  enum Month: String, Codable, CaseIterable, Hashable, Sendable {
     case january = "january"
     case february = "february"
     case march = "march"
@@ -154,5 +162,21 @@ public extension SocketMessage {
     case october = "october"
     case november = "november"
     case december = "december"
+  }
+}
+
+public extension SocketMessage {
+  struct DeleteReminder: Codable, Equatable, Sendable {
+    public let reminderID: String
+    public let type: `Type`
+
+    public init(reminderID: String) {
+      self.reminderID = reminderID
+      self.type = .deleteReminder
+    }
+
+    public enum `Type`: String, Codable, Equatable, Sendable {
+      case deleteReminder
+    }
   }
 }

@@ -73,22 +73,24 @@ actor ChatHistoryModifier {
   }
   
   private func buildCellModels() async {
-    var models: [ChatCellModel] = []
+    var cellModels: [ChatCellModel] = []
     
     // Handle empty state
     if messages.isEmpty && inProgressMessages.isEmpty && !assistantIsTyping {
-      models = [ChatCellModel(id: "prompts", contentType: .prompts)]
-      self.cellModels = models
+      cellModels = [ChatCellModel(id: "prompts", contentType: .prompts)]
+      self.cellModels = cellModels
       return
     }
     
     // Add regular messages
     for message in messages {
       // Check if this message has rich content
-      if case .richContent(let data) = message.content {
-        // Process rich content and create appropriate cell model
-        if let processedContent = await processRichContent(from: data, dbID: message.dbID) {
-          models.append(ChatCellModel(
+      if
+        case .richContent(let data) = message.content,
+        let processedContent = await processRichContent(from: data, dbID: message.dbID)
+      {
+        cellModels.append(
+          ChatCellModel(
             id: message.id,
             contentType: .richContent(
               chatMessageID: message.id,
@@ -98,61 +100,58 @@ actor ChatHistoryModifier {
               responseID: message.responseID,
               requestID: message.requestID
             )
-          ))
-        } else {
-          // Fallback to regular message if processing fails
-          models.append(ChatCellModel(
-            id: message.id,
-            contentType: .message(message)
-          ))
-        }
-      } else {
-        // Regular message
-        models.append(ChatCellModel(
+          )
+        )
+        continue
+      }
+
+      // Fallback to regular message if processing fails
+      cellModels.append(
+        ChatCellModel(
           id: message.id,
           contentType: .message(message)
-        ))
-      }
+        )
+      )
     }
     
     // Add in-progress messages
     for inProgressMessage in inProgressMessages {
       // Skip if already exists as a regular message
-      if !messages.contains(where: { $0.id == inProgressMessage.id }) {
-        // Check if this in-progress message has rich content
-        if let data = inProgressMessage.data {
-          if let processedContent = await processRichContent(from: data, dbID: nil) {
-            models.append(ChatCellModel(
-              id: inProgressMessage.id,
-              contentType: .richContent(
-                chatMessageID: inProgressMessage.id,
-                content: processedContent,
-                hasPerformedAction: false,
-                dbID: nil,
-                responseID: nil,
-                requestID: nil
-              )
-            ))
-          } else {
-            // Fallback to regular in-progress message
-            models.append(ChatCellModel(
-              id: inProgressMessage.id,
-              contentType: .inProgress(inProgressMessage)
-            ))
-          }
-        } else {
-          // Regular in-progress message
-          models.append(ChatCellModel(
+      guard !messages.contains(where: { $0.id == inProgressMessage.id }) else { continue }
+
+      // Check if this in-progress message has rich content
+      if
+        let data = inProgressMessage.data,
+        let processedContent = await processRichContent(from: data, dbID: nil)
+      {
+        cellModels.append(
+          ChatCellModel(
             id: inProgressMessage.id,
-            contentType: .inProgress(inProgressMessage)
-          ))
-        }
+            contentType: .richContent(
+              chatMessageID: inProgressMessage.id,
+              content: processedContent,
+              hasPerformedAction: false,
+              dbID: nil,
+              responseID: nil,
+              requestID: nil
+            )
+          )
+        )
+        continue
       }
+
+      // Regular in-progress message
+      cellModels.append(
+        ChatCellModel(
+          id: inProgressMessage.id,
+          contentType: .inProgress(inProgressMessage)
+        )
+      )
     }
     
     // Add status text if present
     if let statusText = assistantTypingStatus {
-      models.append(ChatCellModel(
+      cellModels.append(ChatCellModel(
         id: "status-text",
         contentType: .statusText(statusText)
       ))
@@ -160,13 +159,13 @@ actor ChatHistoryModifier {
     
     // Add typing indicator
     if assistantIsTyping {
-      models.append(ChatCellModel(
+      cellModels.append(ChatCellModel(
         id: "typing-indicator",
         contentType: .typingIndicator
       ))
     }
     
-    self.cellModels = models
+    self.cellModels = cellModels
   }
   
   func addMessage(_ chatMessage: ChatMessage) async throws {
