@@ -177,29 +177,6 @@ class ChatLayoutViewController: UICollectionViewController {
     collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: animated)
   }
   
-  private func isLastCellInResponse(at index: Int, responseID: String?) -> Bool {
-    guard let responseID else { return false }
-
-    // Check if this is the last cell (of any type) with this responseID
-    for i in (index + 1)..<cellModels.count {
-      let cellModel = cellModels[i]
-      
-      switch cellModel.contentType {
-      case .text(_, _, let metadata), .image(_, _, let metadata):
-        if metadata?.responseID == responseID {
-          return false // Found another message with same responseID after this one
-        }
-      case .richContent(_, _, let metadata):
-        if metadata?.responseID == responseID {
-          return false // Found another rich content with same responseID after this one
-        }
-      default:
-        break // Other cell types don't have responseID
-      }
-    }
-
-    return true // This is the last cell with this responseID
-  }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -219,8 +196,8 @@ extension ChatLayoutViewController {
     case .text(let id, let content, let metadata):
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatMessageCell", for: indexPath) as! ChatMessageCollectionViewCell
       let isCurrentUser = metadata?.isCurrentUser ?? false
-      let isLastInResponse = isLastCellInResponse(at: indexPath.item, responseID: metadata?.responseID) && !isCurrentUser
-      cell.configure(with: content, isCurrentUser: isCurrentUser, isLastInResponse: isLastInResponse, responseID: metadata?.responseID, requestID: metadata?.requestID)
+      let showReportButton = metadata?.showReportButton ?? false
+      cell.configure(with: content, isCurrentUser: isCurrentUser, isLastInResponse: showReportButton, responseID: metadata?.responseID, requestID: metadata?.requestID)
       return cell
       
     case .image(let id, let imageData, let metadata):
@@ -232,14 +209,14 @@ extension ChatLayoutViewController {
     case .richContent(let id, let content, let metadata):
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatProcessedRichContentCell", for: indexPath) as! ChatProcessedRichContentCollectionViewCell
 
-      let isLastInResponse = metadata?.responseID != nil && isLastCellInResponse(at: indexPath.item, responseID: metadata?.responseID)
+      let showReportButton = metadata?.showReportButton ?? false
 
       cell.configure(
         chatMessageID: id,
         content: content,
         hasPerformedAction: metadata?.hasPerformedAction ?? false,
         dbID: metadata?.dbID,
-        showReportButton: isLastInResponse,
+        showReportButton: showReportButton,
         responseID: metadata?.responseID,
         requestID: metadata?.requestID
       )

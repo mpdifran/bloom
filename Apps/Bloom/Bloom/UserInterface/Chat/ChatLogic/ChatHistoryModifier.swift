@@ -82,8 +82,19 @@ actor ChatHistoryModifier {
       return
     }
     
-    // Add regular messages
-    for message in messages {
+    // Track responseIDs to determine which message should show report button
+    var seenResponseIDs = Set<String>()
+    
+    // Process messages in reverse order to build cellModels efficiently
+    for message in messages.reversed() {
+      let showReportButton = !message.isCurrentUser && 
+                           message.responseID != nil && 
+                           !seenResponseIDs.contains(message.responseID!)
+      
+      if let responseID = message.responseID {
+        seenResponseIDs.insert(responseID)
+      }
+      
       let metadata = ChatMessageMetadata(
         persistentID: message.persistentID,
         isCurrentUser: message.isCurrentUser,
@@ -91,31 +102,34 @@ actor ChatHistoryModifier {
         hasPerformedAction: message.hasPerformedAction,
         dbID: message.dbID,
         requestID: message.requestID,
-        responseID: message.responseID
+        responseID: message.responseID,
+        showReportButton: showReportButton
       )
       
       switch message.content {
       case .message(let text):
-        print("Appending completed text content: \(message.id)")
-        cellModels.append(
+        print("Inserting completed text content: \(message.id)")
+        cellModels.insert(
           ChatCellModel(
             id: message.id,
             contentType: .text(id: message.id, content: text, metadata: metadata)
-          )
+          ),
+          at: 0
         )
         
       case .imageData(let data):
-        cellModels.append(
+        cellModels.insert(
           ChatCellModel(
             id: message.id,
             contentType: .image(id: message.id, imageData: data, metadata: metadata)
-          )
+          ),
+          at: 0
         )
         
       case .richContent(let data):
         let processedContent = await processRichContent(from: data, dbID: message.dbID) ?? .unknown
-        print("Appending completed rich content: \(message.id)")
-        cellModels.append(
+        print("Inserting completed rich content: \(message.id)")
+        cellModels.insert(
           ChatCellModel(
             id: message.id,
             contentType: .richContent(
@@ -123,11 +137,12 @@ actor ChatHistoryModifier {
               content: processedContent,
               metadata: metadata
             )
-          )
+          ),
+          at: 0
         )
 
       @unknown default:
-        cellModels.append(
+        cellModels.insert(
           ChatCellModel(
             id: message.id,
             contentType: .richContent(
@@ -135,12 +150,13 @@ actor ChatHistoryModifier {
               content: .unknown,
               metadata: metadata
             )
-          )
+          ),
+          at: 0
         )
       }
     }
     
-    // Add in-progress messages
+    // Add in-progress messages (these go at the end)
     for inProgressMessage in inProgressMessages {
       // Skip if already exists as a regular message
       guard !messages.contains(where: { $0.id == inProgressMessage.id }) else { continue }

@@ -20,6 +20,7 @@ struct ChatMessageMetadata: Hashable, Sendable {
   let dbID: String?
   let requestID: String?
   let responseID: String?
+  let showReportButton: Bool
 }
 
 // Processed rich content data to avoid async loading in UI
