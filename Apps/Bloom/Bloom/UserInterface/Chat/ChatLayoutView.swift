@@ -93,6 +93,7 @@ class ChatLayoutViewController: UICollectionViewController {
     collectionView.register(ChatTypingIndicatorCollectionViewCell.self, forCellWithReuseIdentifier: "ChatTypingCell")
     collectionView.register(ChatStatusCollectionViewCell.self, forCellWithReuseIdentifier: "ChatStatusCell")
     collectionView.register(ChatPromptsCollectionViewCell.self, forCellWithReuseIdentifier: "ChatPromptsCell")
+    collectionView.register(ChatUnknownContentCollectionViewCell.self, forCellWithReuseIdentifier: "ChatUnknownContentCollectionViewCell")
   }
   
   private func setupKeyboardObservers() {
@@ -135,21 +136,34 @@ class ChatLayoutViewController: UICollectionViewController {
       scrollToBottom(animated: false)
       return
     }
-    
+
+    print("Old Models:\n\(oldModels.map { $0.id })")
+    print("New Models:\n\(newModels.map { $0.id })")
+
     // Calculate the difference
     let changeset = StagedChangeset(source: oldModels, target: newModels)
-    
+
+    print("Changeset")
+    for set in changeset {
+      let inserted = set.elementInserted.map { $0.element }
+      let deleted = set.elementDeleted.map { $0.element }
+      let updated = set.elementUpdated.map { $0.element }
+      let moved = set.elementMoved.map { "\($0.source.element) -> \($0.target.element)" }
+
+      print("Insert: \(inserted)\nDeleted:\(deleted)\nUpdated:\(updated)\nMoved:\(moved)\n")
+    }
+
     // Apply the changes with batch updates
     collectionView.reload(using: changeset, interrupt: { $0.changeCount > 100 }) { [weak self] newModels in
       self?.cellModels = newModels
     }
     
-    // Force reload cells that have in-progress messages to ensure UI updates
+    // Force reload cells that have text messages (for streaming updates)
     for (index, model) in newModels.enumerated() {
-      if case .inProgress(let inProgressMessage) = model.contentType {
+      if case .text(_, let content, let metadata) = model.contentType, metadata == nil {
         let indexPath = IndexPath(item: index, section: 0)
         if let cell = collectionView.cellForItem(at: indexPath) as? ChatMessageCollectionViewCell {
-          cell.configure(with: inProgressMessage)
+          cell.configure(with: content, isCurrentUser: false, isLastInResponse: false)
         }
       }
     }
@@ -163,42 +177,27 @@ class ChatLayoutViewController: UICollectionViewController {
     collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: animated)
   }
   
-  private func isLastMessageInResponse(at index: Int, chatMessage: ChatMessageDTO) -> Bool {
-    // Only show report button for assistant messages with responseID
-    guard !chatMessage.isCurrentUser, let responseID = chatMessage.responseID else {
-      return false
-    }
-    
-    // Check if this is the last message with this responseID
-    for i in (index + 1)..<cellModels.count {
-      if case .message(let nextMessage) = cellModels[i].contentType,
-         nextMessage.responseID == responseID {
-        return false // Found another message with same responseID after this one
-      }
-    }
-    
-    return true // This is the last message with this responseID
-  }
-  
-  private func isLastCellInResponse(at index: Int, responseID: String) -> Bool {
+  private func isLastCellInResponse(at index: Int, responseID: String?) -> Bool {
+    guard let responseID else { return false }
+
     // Check if this is the last cell (of any type) with this responseID
     for i in (index + 1)..<cellModels.count {
       let cellModel = cellModels[i]
       
       switch cellModel.contentType {
-      case .message(let chatMessage):
-        if chatMessage.responseID == responseID {
+      case .text(_, _, let metadata), .image(_, _, let metadata):
+        if metadata?.responseID == responseID {
           return false // Found another message with same responseID after this one
         }
-      case .richContent(_, _, _, _, let richContentResponseID, _):
-        if richContentResponseID == responseID {
+      case .richContent(_, _, let metadata):
+        if metadata?.responseID == responseID {
           return false // Found another rich content with same responseID after this one
         }
       default:
         break // Other cell types don't have responseID
       }
     }
-    
+
     return true // This is the last cell with this responseID
   }
 }
@@ -217,54 +216,34 @@ extension ChatLayoutViewController {
     let model = cellModels[indexPath.item]
     
     switch model.contentType {
-    case .message(let chatMessage):
-      switch chatMessage.content {
-      case .message:
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatMessageCell", for: indexPath) as! ChatMessageCollectionViewCell
-        let isLastInResponse = self.isLastMessageInResponse(at: indexPath.item, chatMessage: chatMessage)
-        cell.configure(with: chatMessage, isLastInResponse: isLastInResponse)
-        return cell
-      case .imageData:
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatImageCell", for: indexPath) as! ChatImageCollectionViewCell
-        cell.configure(with: chatMessage)
-        return cell
-      case .richContent:
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatRichContentCell", for: indexPath) as! ChatRichContentCollectionViewCell
-        let isLastInResponse = self.isLastMessageInResponse(at: indexPath.item, chatMessage: chatMessage)
-        cell.configure(with: chatMessage, isLastInResponse: isLastInResponse)
-        return cell
-      case .invalid:
-        return UICollectionViewCell()
-      @unknown default:
-        return UICollectionViewCell()
-      }
-      
-    case .richContent(let chatMessageID, let content, let hasPerformedAction, let dbID, let responseID, let requestID):
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatProcessedRichContentCell", for: indexPath) as! ChatProcessedRichContentCollectionViewCell
-      
-      let isLastInResponse = responseID != nil && self.isLastCellInResponse(at: indexPath.item, responseID: responseID!)
-      
-      cell.configure(
-        chatMessageID: chatMessageID,
-        content: content,
-        hasPerformedAction: hasPerformedAction,
-        dbID: dbID,
-        showReportButton: isLastInResponse,
-        responseID: responseID,
-        requestID: requestID
-      )
+    case .text(let id, let content, let metadata):
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatMessageCell", for: indexPath) as! ChatMessageCollectionViewCell
+      let isCurrentUser = metadata?.isCurrentUser ?? false
+      let isLastInResponse = isLastCellInResponse(at: indexPath.item, responseID: metadata?.responseID) && !isCurrentUser
+      cell.configure(with: content, isCurrentUser: isCurrentUser, isLastInResponse: isLastInResponse, responseID: metadata?.responseID, requestID: metadata?.requestID)
       return cell
       
-    case .inProgress(let inProgressMessage):
-      if inProgressMessage.data != nil {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatRichContentCell", for: indexPath) as! ChatRichContentCollectionViewCell
-        cell.configure(with: inProgressMessage)
-        return cell
-      } else {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatMessageCell", for: indexPath) as! ChatMessageCollectionViewCell
-        cell.configure(with: inProgressMessage)
-        return cell
-      }
+    case .image(let id, let imageData, let metadata):
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatImageCell", for: indexPath) as! ChatImageCollectionViewCell
+      let isCurrentUser = metadata?.isCurrentUser ?? false
+      cell.configure(with: imageData, isCurrentUser: isCurrentUser)
+      return cell
+      
+    case .richContent(let id, let content, let metadata):
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatProcessedRichContentCell", for: indexPath) as! ChatProcessedRichContentCollectionViewCell
+
+      let isLastInResponse = metadata?.responseID != nil && isLastCellInResponse(at: indexPath.item, responseID: metadata?.responseID)
+
+      cell.configure(
+        chatMessageID: id,
+        content: content,
+        hasPerformedAction: metadata?.hasPerformedAction ?? false,
+        dbID: metadata?.dbID,
+        showReportButton: isLastInResponse,
+        responseID: metadata?.responseID,
+        requestID: metadata?.requestID
+      )
+      return cell
       
     case .typingIndicator:
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatTypingCell", for: indexPath) as! ChatTypingIndicatorCollectionViewCell

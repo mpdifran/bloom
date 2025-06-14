@@ -10,9 +10,20 @@ import DataContainer
 import HealthKit
 import BloomModel
 import DifferenceKit
+import SwiftData
+
+struct ChatMessageMetadata: Hashable, Sendable {
+  let persistentID: PersistentIdentifier?
+  let isCurrentUser: Bool
+  let date: Date
+  let hasPerformedAction: Bool
+  let dbID: String?
+  let requestID: String?
+  let responseID: String?
+}
 
 // Processed rich content data to avoid async loading in UI
-enum ProcessedRichContent: Equatable {
+enum ProcessedRichContent: Hashable, Sendable {
   case goals([ProposedGoal])
   case detectedFood(name: String, meal: FoodItemLog.Meal, servings: [FoodItemServingAmount])
   case logWater(HKQuantity)
@@ -28,16 +39,16 @@ enum ProcessedRichContent: Equatable {
   case unknown
 }
 
-enum ChatCellType: Equatable {
-  case message(ChatMessageDTO)
-  case inProgress(ChatController.InProgressMessage)
-  case richContent(chatMessageID: String, content: ProcessedRichContent, hasPerformedAction: Bool, dbID: String?, responseID: String?, requestID: String?)
+enum ChatCellType: Hashable, Sendable {
+  case text(id: String, content: String, metadata: ChatMessageMetadata?)
+  case image(id: String, imageData: Data, metadata: ChatMessageMetadata?)
+  case richContent(id: String, content: ProcessedRichContent, metadata: ChatMessageMetadata?)
   case typingIndicator
   case statusText(String)
   case prompts
 }
 
-struct ChatCellModel: Identifiable, Equatable {
+struct ChatCellModel: Identifiable, Hashable, Sendable {
   let id: String
   let contentType: ChatCellType
 }
@@ -49,11 +60,10 @@ extension ChatCellModel: Differentiable {
   }
   
   func isContentEqual(to source: ChatCellModel) -> Bool {
-    // For in-progress messages, we need to check if the message content changed
+    // For text messages, we need to check if the content changed (for streaming updates)
     switch (self.contentType, source.contentType) {
-    case (.inProgress(let selfMessage), .inProgress(let sourceMessage)):
-      // Check if the actual message content changed
-      return selfMessage.message == sourceMessage.message && selfMessage.data == sourceMessage.data
+    case (.text(_, let selfContent, _), .text(_, let sourceContent, _)):
+      return selfContent == sourceContent
     default:
       // For all other cases, use standard equality
       return self == source

@@ -25,9 +25,12 @@ final actor StreamJSONBuffer {
   private var indices = [UserIdentifier : Int]()
   private var prefixBuffers = [UserIdentifier : String]()
   private var buffers =  [UserIdentifier : String]()
+  // Track if we've emitted text chunks for the current index
+  private var hasEmittedTextForCurrentIndex = [UserIdentifier : Bool]()
 
   func resetIndex(for userID: UserIdentifier) {
     indices[userID] = nil
+    hasEmittedTextForCurrentIndex[userID] = nil
   }
 
   func filter(_ delta: String, for userID: UserIdentifier) -> [FilteredData] {
@@ -45,12 +48,17 @@ final actor StreamJSONBuffer {
         let jsonString = String(buffer[..<closeRange.lowerBound])
         let after = String(buffer[closeRange.upperBound...])
         buffers.removeValue(forKey: userID)
-        indices[userID, default: 1] += 1
+        // Get the current index for JSON (which was set when we started collecting)
+        let jsonIndex = indices[userID, default: 1]
+        // Increment index for next section after JSON
+        let nextIndex = jsonIndex + 1
+        indices[userID] = nextIndex
+        hasEmittedTextForCurrentIndex[userID] = false // Reset for next section
         if after.isNotEmpty {
-          let nextIndex = indices[userID, default: 1]
-          return [.json(currentIndex, jsonString), .streamingText, .chunk(nextIndex, after)]
+          hasEmittedTextForCurrentIndex[userID] = true // Mark that we're emitting text
+          return [.json(jsonIndex, jsonString), .streamingText, .chunk(nextIndex, after)]
         } else {
-          return [.json(currentIndex, jsonString), .streamingText]
+          return [.json(jsonIndex, jsonString), .streamingText]
         }
       } else {
         return []
@@ -67,10 +75,17 @@ final actor StreamJSONBuffer {
           let before = String(updated[..<range.lowerBound])
           let after = String(updated[range.upperBound...])
           buffers[userID] = after
-          indices[userID, default: 1] += 1
           if before.isNotEmpty {
+            // Text before JSON: emit text with current index, increment for JSON
+            hasEmittedTextForCurrentIndex[userID] = true
+            indices[userID] = currentIndex + 1
             return [.chunk(currentIndex, before), .collectingJSON]
           } else {
+            // No text before JSON but check if we've emitted text chunks already
+            if hasEmittedTextForCurrentIndex[userID] == true {
+              // We've emitted text chunks, so increment for JSON
+              indices[userID] = currentIndex + 1
+            }
             return [.collectingJSON]
           }
         } else {
@@ -90,10 +105,17 @@ final actor StreamJSONBuffer {
       let before = String(delta[..<openRange.lowerBound])
       let after = String(delta[openRange.upperBound...])
       buffers[userID] = after
-      indices[userID, default: 1] += 1
       if before.isNotEmpty {
+        // Text before JSON: emit text with current index, increment for JSON
+        hasEmittedTextForCurrentIndex[userID] = true
+        indices[userID] = currentIndex + 1
         return [.chunk(currentIndex, before), .collectingJSON]
       } else {
+        // No text before JSON but check if we've emitted text chunks already
+        if hasEmittedTextForCurrentIndex[userID] == true {
+          // We've emitted text chunks, so increment for JSON
+          indices[userID] = currentIndex + 1
+        }
         return [.collectingJSON]
       }
     }
@@ -106,6 +128,7 @@ final actor StreamJSONBuffer {
     }
 
     // 5. Normal text
+    hasEmittedTextForCurrentIndex[userID] = true
     return [.chunk(currentIndex, delta)]
   }
 
@@ -114,14 +137,14 @@ final actor StreamJSONBuffer {
     let fenceOpen = "```json"
     let fenceClose = "```"
     var searchStart = message.startIndex
-    var index = 0
+    var index = 1
 
     while let openRange = message.range(of: fenceOpen, range: searchStart..<message.endIndex) {
       // Text before the JSON fence
       let textPart = String(message[searchStart..<openRange.lowerBound])
       if !textPart.isEmpty {
-        index += 1
         events.append(.text(index, textPart))
+        index += 1
       }
       // Look for closing fence after the opening
       let jsonStart = openRange.upperBound
@@ -129,15 +152,14 @@ final actor StreamJSONBuffer {
         // No closing fence; treat the rest as text
         let remainder = String(message[jsonStart..<message.endIndex])
         if !remainder.isEmpty {
-          index += 1
           events.append(.text(index, remainder))
         }
         return events
       }
       // JSON content between fences
       let jsonPart = String(message[jsonStart..<closeRange.lowerBound])
-      index += 1
       events.append(.json(index, jsonPart))
+      index += 1
       // Continue after the closing fence
       searchStart = closeRange.upperBound
     }
@@ -145,7 +167,6 @@ final actor StreamJSONBuffer {
     // Any trailing text after last fence
     let trailing = String(message[searchStart..<message.endIndex])
     if !trailing.isEmpty {
-      index += 1
       events.append(.text(index, trailing))
     }
     return events

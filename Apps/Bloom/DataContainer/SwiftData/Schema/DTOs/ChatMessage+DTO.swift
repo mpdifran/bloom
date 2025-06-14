@@ -13,7 +13,6 @@ public extension ChatMessageDTO {
     case message(String)
     case imageData(Data)
     case richContent(Data)
-    case invalid
   }
 }
 

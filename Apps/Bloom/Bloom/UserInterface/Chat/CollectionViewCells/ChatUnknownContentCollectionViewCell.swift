@@ -1,43 +1,65 @@
 //
-//  ChatImageCollectionViewCell.swift
+//  ChatUnknownContentCollectionViewCell.swift
 //  Bloom
 //
-//  Created by Assistant on 2025-06-02.
+//  Created by Mark DiFranco on 2025-06-13.
 //
 
 import UIKit
 import SwiftUI
 import ChatLayout
-import DataContainer
+import AppUI
 
-class ChatImageCollectionViewCell: UICollectionViewCell {
+class ChatUnknownContentCollectionViewCell: UICollectionViewCell {
   private var hostingController: UIHostingController<AnyView>?
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupUI()
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  private func setupUI() {
+}
+
+extension ChatUnknownContentCollectionViewCell {
+
+  func configure(isLastInResponse: Bool, requestID: String?, responseID: String?) {
+
+    let view = ChatUnknownContentCell(
+      showReportButton: isLastInResponse,
+      responseID: responseID,
+      requestID: requestID
+    )
+
+    updateHostingController(with: view.asAny)
+  }
+}
+
+private extension ChatUnknownContentCollectionViewCell {
+
+  func setupUI() {
     backgroundColor = .clear
     contentView.backgroundColor = .clear
+
+    let view = ChatUnknownContentCell()
+    let controller = UIHostingController(rootView: view.asAny)
+    controller.view.translatesAutoresizingMaskIntoConstraints = false
+    controller.view.backgroundColor = .clear
+
+    contentView.addSubview(controller.view)
+
+    NSLayoutConstraint.activate([
+      controller.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+      controller.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+      controller.view.topAnchor.constraint(equalTo: contentView.topAnchor),
+      controller.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+    ])
+
+    self.hostingController = controller
   }
-  
-  func configure(with imageData: Data, isCurrentUser: Bool) {
-    guard let image = UIImage(data: imageData) else { return }
-    
-    let view = ChatImageCell(
-      image: image,
-      isCurrentUser: isCurrentUser
-    )
-    
-    updateHostingController(with: AnyView(view))
-  }
-  
+
   private func updateHostingController(with view: AnyView) {
     if let hostingController = hostingController {
       hostingController.rootView = view
@@ -46,49 +68,44 @@ class ChatImageCollectionViewCell: UICollectionViewCell {
       let controller = UIHostingController(rootView: view)
       controller.view.translatesAutoresizingMaskIntoConstraints = false
       controller.view.backgroundColor = .clear
-      
+
+      // Enable automatic sizing for the hosting controller
+      controller.sizingOptions = [.intrinsicContentSize]
+
       contentView.addSubview(controller.view)
-      
+
       NSLayoutConstraint.activate([
         controller.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
         controller.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         controller.view.topAnchor.constraint(equalTo: contentView.topAnchor),
         controller.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
       ])
-      
+
       self.hostingController = controller
     }
-    
+
     // Force layout to calculate proper size
+    hostingController?.view.invalidateIntrinsicContentSize()
     setNeedsLayout()
     layoutIfNeeded()
-  }
-  
-  override func prepareForReuse() {
-    super.prepareForReuse()
-    hostingController?.rootView = AnyView(EmptyView())
   }
 }
 
 // MARK: - Size Calculation
-extension ChatImageCollectionViewCell {
+extension ChatUnknownContentCollectionViewCell {
   override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-    let targetSize = CGSize(width: layoutAttributes.frame.width, height: 0)
-    
-    // Force the hosting controller to calculate its size
-    hostingController?.view.setNeedsLayout()
-    hostingController?.view.layoutIfNeeded()
-    
+    let targetSize = CGSize(width: layoutAttributes.frame.width, height: UIView.layoutFittingCompressedSize.height)
+
     let size = contentView.systemLayoutSizeFitting(
       targetSize,
       withHorizontalFittingPriority: .required,
       verticalFittingPriority: .fittingSizeLevel
     )
-    
+
     var newFrame = layoutAttributes.frame
-    newFrame.size.height = max(1, ceil(size.height))
+    newFrame.size.height = ceil(size.height)
     layoutAttributes.frame = newFrame
-    
+
     return layoutAttributes
   }
 }

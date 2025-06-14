@@ -166,8 +166,6 @@ struct ChatMessageBubbleView: View {
         hasPerformedAction: message.hasPerformedAction,
         dbID: message.dbID
       )
-    case .invalid:
-      EmptyView()
     @unknown default:
       EmptyView()
     }

@@ -55,6 +55,20 @@ class ChatMessageCollectionViewCell: UICollectionViewCell {
     updateHostingController(with: AnyView(view))
   }
   
+  func configure(with content: String, isCurrentUser: Bool, isLastInResponse: Bool, responseID: String? = nil, requestID: String? = nil) {
+    let view = ChatBubbleCell(
+      message: content,
+      isDirect: false,
+      isCurrentUser: isCurrentUser,
+      showTail: true,
+      showReportButton: isLastInResponse,
+      responseID: responseID,
+      requestID: requestID
+    )
+
+    updateHostingController(with: AnyView(view))
+  }
+  
   private func updateHostingController(with view: AnyView) {
     if let hostingController = hostingController {
       hostingController.rootView = view

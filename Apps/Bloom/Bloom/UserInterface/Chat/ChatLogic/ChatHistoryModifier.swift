@@ -84,34 +84,60 @@ actor ChatHistoryModifier {
     
     // Add regular messages
     for message in messages {
-      // Check if this message has rich content
-      if
-        case .richContent(let data) = message.content,
-        let processedContent = await processRichContent(from: data, dbID: message.dbID)
-      {
+      let metadata = ChatMessageMetadata(
+        persistentID: message.persistentID,
+        isCurrentUser: message.isCurrentUser,
+        date: message.date,
+        hasPerformedAction: message.hasPerformedAction,
+        dbID: message.dbID,
+        requestID: message.requestID,
+        responseID: message.responseID
+      )
+      
+      switch message.content {
+      case .message(let text):
+        print("Appending completed text content: \(message.id)")
+        cellModels.append(
+          ChatCellModel(
+            id: message.id,
+            contentType: .text(id: message.id, content: text, metadata: metadata)
+          )
+        )
+        
+      case .imageData(let data):
+        cellModels.append(
+          ChatCellModel(
+            id: message.id,
+            contentType: .image(id: message.id, imageData: data, metadata: metadata)
+          )
+        )
+        
+      case .richContent(let data):
+        let processedContent = await processRichContent(from: data, dbID: message.dbID) ?? .unknown
+        print("Appending completed rich content: \(message.id)")
         cellModels.append(
           ChatCellModel(
             id: message.id,
             contentType: .richContent(
-              chatMessageID: message.id,
+              id: message.id,
               content: processedContent,
-              hasPerformedAction: message.hasPerformedAction,
-              dbID: message.dbID,
-              responseID: message.responseID,
-              requestID: message.requestID
+              metadata: metadata
             )
           )
         )
-        continue
-      }
 
-      // Fallback to regular message if processing fails
-      cellModels.append(
-        ChatCellModel(
-          id: message.id,
-          contentType: .message(message)
+      @unknown default:
+        cellModels.append(
+          ChatCellModel(
+            id: message.id,
+            contentType: .richContent(
+              id: message.id,
+              content: .unknown,
+              metadata: metadata
+            )
+          )
         )
-      )
+      }
     }
     
     // Add in-progress messages
@@ -120,33 +146,33 @@ actor ChatHistoryModifier {
       guard !messages.contains(where: { $0.id == inProgressMessage.id }) else { continue }
 
       // Check if this in-progress message has rich content
-      if
-        let data = inProgressMessage.data,
-        let processedContent = await processRichContent(from: data, dbID: nil)
-      {
+      if let data = inProgressMessage.data {
+        let processedContent = await processRichContent(from: data, dbID: nil) ?? .unknown
+        print("Appending in progress rich content: \(inProgressMessage.id)")
         cellModels.append(
           ChatCellModel(
             id: inProgressMessage.id,
             contentType: .richContent(
-              chatMessageID: inProgressMessage.id,
+              id: inProgressMessage.id,
               content: processedContent,
-              hasPerformedAction: false,
-              dbID: nil,
-              responseID: nil,
-              requestID: nil
+              metadata: nil
             )
           )
         )
-        continue
-      }
-
-      // Regular in-progress message
-      cellModels.append(
-        ChatCellModel(
-          id: inProgressMessage.id,
-          contentType: .inProgress(inProgressMessage)
+      } else {
+        // Regular in-progress text message
+        print("Appending in progress text content: \(inProgressMessage.id)")
+        cellModels.append(
+          ChatCellModel(
+            id: inProgressMessage.id,
+            contentType: .text(
+              id: inProgressMessage.id,
+              content: inProgressMessage.message,
+              metadata: nil
+            )
+          )
         )
-      )
+      }
     }
     
     // Add status text if present
@@ -164,7 +190,7 @@ actor ChatHistoryModifier {
         contentType: .typingIndicator
       ))
     }
-    
+
     self.cellModels = cellModels
   }
   
