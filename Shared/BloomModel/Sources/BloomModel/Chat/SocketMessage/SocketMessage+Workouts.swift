@@ -132,10 +132,11 @@ public extension SocketMessage {
 
       self.title = try container.decode(String.self, forKey: .title)
       self.instructions = try container.decode(String.self, forKey: .instructions)
-      self.numberOfReps = (try? container.decodeIfPresent(Int.self, forKey: .numberOfReps)) ?? 1
+      let numberOfReps = (try? container.decodeIfPresent(Int.self, forKey: .numberOfReps)) ?? 1
+      self.numberOfReps = numberOfReps
       self.distance = try? container.decodeIfPresent(Double.self, forKey: .distance)
       self.distanceUnit = try? container.decodeIfPresent(SocketMessage.WorkoutExercise.DistanceUnit.self, forKey: .distanceUnit)
-      self.duration = try container.decode(TimeInterval.self, forKey: .duration)
+      self.duration = (try? container.decode(TimeInterval.self, forKey: .duration)) ?? TimeInterval(numberOfReps * 10)
     }
   }
 }

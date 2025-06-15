@@ -276,7 +276,7 @@ private extension ChatController {
 
       self.queryAreas.removeAll()
 
-      var data: Data?
+      let data: Data?
       var dbID: String?
       
       switch richContentMessage.kind {
@@ -336,6 +336,7 @@ private extension ChatController {
           dbID = try? await self.autoLog(deleteUserFacts: content)
         }
       case .invalid(let json):
+        data = json.data(using: .utf8)
         TelemetryDeck.signal("Chat - Invalid JSON", parameters: ["json": json])
       }
 
