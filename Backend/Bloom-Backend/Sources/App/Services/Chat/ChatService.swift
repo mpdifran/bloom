@@ -69,7 +69,7 @@ extension ChatService {
     try await withThrowingTaskGroup(of: String.self) { [openAIService] group in
       for image in imageData {
         group.addTask {
-          let file = try await openAIService.openAI.files.upload(file: image, purpose: .userData)
+          let file = try await openAIService.openAI.files.upload(file: image, purpose: .assistants)
           return file.id
         }
       }

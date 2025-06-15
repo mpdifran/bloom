@@ -141,7 +141,7 @@ extension ChatController {
     let requestID = "request_\(UUID().uuidString)"
     currentRequestID = requestID
     
-    let imageData = image?.resized(toWidth: 300)?.pngData()
+    let imageData = image?.resized(toWidth: 800)?.pngData()
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
     if let imageData {
