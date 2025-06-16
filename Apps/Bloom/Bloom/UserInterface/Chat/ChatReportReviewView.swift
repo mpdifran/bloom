@@ -128,7 +128,8 @@ private extension ChatReportReviewView {
     let request = SubmitChatMessageIssueRequest(
       responseID: responseID,
       notes: notes.isEmpty ? nil : notes,
-      isAnonymous: isAnonymous
+      isAnonymous: isAnonymous,
+      appVersion: Bundle.main.appVersion
     )
 
     try await NetworkRequester.shared.submitChatMessageIssueReport(request: request)

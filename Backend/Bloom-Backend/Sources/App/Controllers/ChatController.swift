@@ -102,6 +102,7 @@ extension ChatController {
     let issueReport = ChatMessageIssueReport(
       responseID: requestBody.responseID,
       notes: requestBody.notes,
+      appVersion: requestBody.appVersion,
       userID: requestBody.isAnonymous ? nil : user.id
     )
     

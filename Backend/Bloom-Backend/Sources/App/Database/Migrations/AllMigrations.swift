@@ -39,4 +39,5 @@ let allMigrations: [Migration] = [
   AssistantRecord.AddAssistantSpecHash(),
   ChatMessageIssueReport.Create(),
   ChatMessageIssueReport.AddState(),
+  ChatMessageIssueReport.AddAppVersion(),
 ]

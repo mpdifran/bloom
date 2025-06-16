@@ -80,6 +80,7 @@ extension AdminChatController {
         isAnonymous: isAnonymous,
         userID: report.$user.id,
         userName: userName,
+        appVersion: report.appVersion,
         createdAt: createdAt
       )
     }
@@ -234,6 +235,7 @@ extension AdminChatController {
       isAnonymous: isAnonymous,
       userID: report.$user.id,
       userName: userName,
+      appVersion: report.appVersion,
       createdAt: report.createdAt!
     )
     

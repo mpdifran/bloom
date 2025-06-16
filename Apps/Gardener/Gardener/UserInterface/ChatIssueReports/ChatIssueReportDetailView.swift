@@ -91,6 +91,16 @@ private extension ChatIssueReportDetailView {
             .font(.system(.body, design: .monospaced))
             .textSelection(.enabled)
         }
+        
+        if let appVersion = report.appVersion {
+          HStack {
+            Text("App Version:")
+              .fontWeight(.medium)
+            Text(appVersion)
+              .font(.system(.body, design: .monospaced))
+              .textSelection(.enabled)
+          }
+        }
       }
       
       Text("Submitted \(report.createdAt.formatted(date: .abbreviated, time: .shortened))")
@@ -364,6 +374,7 @@ struct MessageBubbleView: View {
       isAnonymous: false,
       userID: AdminBloomModel.UserIdentifier("user_555"),
       userName: "John Doe",
+      appVersion: "1.2.3 (456)",
       createdAt: Date()
     )
   )
