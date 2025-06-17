@@ -21,9 +21,10 @@ struct BloomPlusTryBloomHeaderView: View {
           .bold()
           .fontDesign(.rounded)
 
-        Text("Your personal health coach in your pocket.")
+        Text("Meet Bud, your personal health coach in your pocket.")
           .foregroundStyle(.secondary)
       }
+      .multilineTextAlignment(.center)
     }
   }
 }
@@ -53,8 +54,9 @@ extension BloomPlusTryBloomHeaderView {
 }
 
 #Preview {
-  VStack {
-    BloomPlusTryBloomHeaderView(canTryForFree: true)
+  PreviewEnvironment {
+    BloomScrollView {
+      BloomPlusTryBloomHeaderView(canTryForFree: true)
+    }
   }
-  .groupedBackground()
 }

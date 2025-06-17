@@ -17,38 +17,41 @@ struct BloomPlusUserReviewListView: View {
         .multilineTextAlignment(.center)
 
       BloomPlusUserTestimonialChatView(
-        profilePhoto: .tori,
-        testimonial: "I've improved my eating habits, and my energy levels are through the roof! Bloom has helped me prioritize my health.",
-        name: "Tori E",
+        profilePhoto: .katie,
+        testimonial: "I love how I can just ask Bud anything about my health, and I get instant advice based on my data. This is like magic!",
+        name: "Katie W",
         position: .leading
       )
 
       BloomPlusUserTestimonialChatView(
-        profilePhoto: .katie,
-        testimonial: "I love how Bloom meets you where you are. The goals are always achievable, and I know I'm moving in the right direction.",
-        name: "Katie M",
+        profilePhoto: .mark,
+        testimonial: "It's so convenient tracking food just by taking a picture of it!",
+        name: "Mark F",
         position: .trailing
       )
 
       BloomPlusUserTestimonialChatView(
         profilePhoto: .kaitlyn,
-        testimonial: "I've tried everything, but Bloom is something else! I've reached my weight goal with an approach that fits my lifestyle perfectly.",
+        testimonial: "Bud is good at creating targeted workouts that align with my fitness goals.",
         name: "Kaitlyn R",
         position: .leading
       )
 
-//      BloomPlusUserTestimonialChatView(
-//        profilePhoto: .katie,
-//        testimonial: "Bloom has made me so much more healthy, thank you Team Bloom! ❤️",
-//        name: "Clara A",
-//        position: .trailing
-//      )
+      BloomPlusUserTestimonialChatView(
+        profilePhoto: .tori,
+        testimonial: "Bud is so good at helping me decide what to eat every day to stay healthy.",
+        name: "Tori E",
+        position: .trailing
+      )
     }
     .horizontallyCentered()
   }
 }
 
 #Preview {
-  BloomPlusUserReviewListView()
-    .padding()
+  PreviewEnvironment {
+    BloomScrollView {
+      BloomPlusUserReviewListView()
+    }
+  }
 }

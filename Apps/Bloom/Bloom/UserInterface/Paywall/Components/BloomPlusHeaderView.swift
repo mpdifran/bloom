@@ -27,7 +27,7 @@ struct BloomPlusHeaderView: View {
           dismiss()
         } label: {
           Image(systemSymbol: .xmarkCircleFill)
-            .foregroundStyle(.white, .gray)
+            .foregroundStyle(.text, .regularMaterial)
             .font(.title)
         }
         .frame(square: 44)
@@ -37,5 +37,7 @@ struct BloomPlusHeaderView: View {
 }
 
 #Preview {
-  BloomPlusHeaderView()
+  PreviewEnvironment {
+    BloomPlusHeaderView()
+  }
 }

@@ -15,19 +15,19 @@ struct BloomPlusFeaturesListView: View {
     VStack {
       HStack {
         FeatureCard(
-          image: Image(systemSymbol: .star),
-          message: "Personalized goals tailored to you"
+          image: Image(systemSymbol: .bubbleLeftAndBubbleRightFill),
+          message: "Ask Bud anything about your health"
         )
 
         FeatureCard(
-          image: Image(systemSymbol: .gaugeOpenWithLinesNeedle33percentAndArrowtriangle),
-          message: "Get to your ideal body weight"
+          image: Image(systemSymbol: .heartFill),
+          message: "Get health advice tailored to you"
         )
       }
 
       HStack {
         FeatureCard(
-          image: Image(systemSymbol: .camera),
+          image: Image(systemSymbol: .cameraFill),
           message: "Log nutrition with just a picture"
         )
 
@@ -40,11 +40,11 @@ struct BloomPlusFeaturesListView: View {
       HStack {
         FeatureCard(
           image: Image(systemSymbol: .figureRun),
-          message: "Keep track of your workouts"
+          message: "Bespoke workouts for your needs"
         )
 
         FeatureCard(
-          image: Image(systemSymbol: .heart),
+          image: Image(systemSymbol: .heartTextClipboardFill),
           message: "Comprehensive view of your health"
         )
       }
@@ -76,8 +76,9 @@ private struct FeatureCard: View {
 }
 
 #Preview {
-  VStack {
-    BloomPlusFeaturesListView()
+  PreviewEnvironment {
+    BloomScrollView {
+      BloomPlusFeaturesListView()
+    }
   }
-  .groupedBackground()
 }

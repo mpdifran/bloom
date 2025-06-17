@@ -27,7 +27,7 @@ struct BloomPlusFAQView: View {
         )
         BloomPlusFAQCell(
           question: "How is my health data secured?",
-          answer: "Privacy is one of our core values. Your health data never leaves your device, so there's no risk of it getting leaked or accessed by a third party. We explicitly don't track food you search for, and your food logs only exist on your device."
+          answer: "Privacy is one of our core values. Your health data is only stored on your device, and Bud reads specific data temporarily depending on what you ask. Your chat history is never used for AI training, and can only be accessed by you. We explicitly don't track food you search for, and your food logs only exist on your device."
         )
         BloomPlusFAQCell(
           question: "How can I cancel my trial?",
@@ -39,9 +39,9 @@ struct BloomPlusFAQView: View {
 }
 
 #Preview {
-  ScrollView {
-    BloomPlusFAQView()
-      .padding()
+  PreviewEnvironment {
+    BloomScrollView {
+      BloomPlusFAQView()
+    }
   }
-  .groupedBackground()
 }

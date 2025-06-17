@@ -23,3 +23,22 @@ func EntitledPresent<Content>(presentedSheet: Binding<AnyView?>, content: @escap
     }.asAny
   }
 }
+
+@MainActor
+func EntitledAction(
+  presentedSheet: Binding<AnyView?>,
+  action: @escaping () -> Void
+) {
+  if EntitlementController.shared.hasBloomPro == true {
+    action()
+  } else {
+    presentedSheet.wrappedValue = BloomPlusPaywall {
+      guard EntitlementController.shared.hasBloomPro == true else { return }
+
+      Task {
+        await Delay(300)
+        action()
+      }
+    }.asAny
+  }
+}

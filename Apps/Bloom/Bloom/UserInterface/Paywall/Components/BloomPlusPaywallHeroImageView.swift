@@ -28,7 +28,7 @@ struct BloomPlusPaywallHeroImageView: View {
 private extension BloomPlusPaywallHeroImageView {
 
   var image: some View {
-    Image(.woman)
+    Image(.breakfast)
       .resizable()
       .aspectRatio(contentMode: .fill)
       .frame(height: 250)
