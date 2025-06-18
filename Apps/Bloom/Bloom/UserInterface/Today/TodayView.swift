@@ -116,6 +116,7 @@ struct TodayView: View {
               .foregroundStyle(configureButtonTint)
               .bold()
           }
+          .buttonStyle(.plain)
         }
       }
       .sheet($presentedSheet)
@@ -130,6 +131,9 @@ struct TodayView: View {
     .animation(.default, value: todayViewModel.isLoadingContent)
     .animation(.default, value: todayViewModel.hasLoadError)
     .animation(.default, value: getBloomPlusHasDismissed)
+    .tabItem {
+      Label("Today", image: .todayTab)
+    }
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
       Task {

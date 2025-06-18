@@ -67,6 +67,9 @@ struct VitalsView: View {
       }
     }
     .sheet($presentedSheet)
+    .tabItem {
+      Label("Vitals", image: .vitalsTab)
+    }
   }
 }
 

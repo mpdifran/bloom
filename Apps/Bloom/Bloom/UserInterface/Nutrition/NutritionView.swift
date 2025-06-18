@@ -67,7 +67,7 @@ struct NutritionView: View {
     .animation(.easeInOut, value: nutritionViewModel.date)
     .sheet($presentedSheet)
     .tabItem {
-      Label("Nutrition", systemSymbol: .carrot)
+      Label("Nutrition", image: .nutritionTab)
     }
   }
 }

@@ -55,6 +55,9 @@ struct WorkoutsTabView: View {
       }
       .navigationDestination($pushedView)
     }
+    .tabItem {
+      Label("Workouts", image: .workoutsTab)
+    }
     .sheet($presentedSheet)
     .alert(error: $error)
     .task {

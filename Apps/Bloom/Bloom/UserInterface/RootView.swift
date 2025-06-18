@@ -59,21 +59,11 @@ struct RootView: View {
       } else if !userController.isAuthenticated {
         OnboardingLoginView { }
       } else {
-        Group {
-          switch tabController.activeTab {
-          case .today:
-            TodayView()
-          case .nutrition:
-            NutritionView()
-          case .vitals:
-            VitalsView()
-          case .workouts:
-            WorkoutsTabView()
-          }
+        if #available(iOS 26, *) {
+          newContentView
+        } else {
+          legacyContentView
         }
-        .chatLauncher()
-        .environment(tabController)
-        .transition(.blurReplace)
       }
     }
     .sheet($presentedSheet)
@@ -85,6 +75,62 @@ struct RootView: View {
     .tint(themeController.theme.color)
     .environment(themeController)
     .environment(experimentManager)
+  }
+}
+
+private extension RootView {
+
+  @available(iOS 26.0, *)
+  var newContentView: some View {
+    TabView(selection: $tabController.activeTab) {
+      TodayView()
+        .tag(Tab.today)
+      NutritionView()
+        .tag(Tab.nutrition)
+      VitalsView()
+        .tag(Tab.vitals)
+      WorkoutsTabView()
+        .tag(Tab.workouts)
+    }
+    .tabBarMinimizeBehavior(.onScrollDown)
+    .tabViewBottomAccessory {
+      VStack {
+        Spacer(minLength: 0)
+        HStack {
+          Image(systemSymbol: .sparkles)
+          TextField("Chat with Bud", text: .constant(""))
+
+          Button {
+
+          } label: {
+            Image(systemSymbol: .arrowUpCircleFill)
+              .foregroundStyle(.white, .tint)
+          }
+        }
+        .frame(minHeight: 44)
+        Spacer(minLength: 0)
+      }
+      .padding()
+    }
+    .environment(tabController)
+  }
+
+  var legacyContentView: some View {
+    Group {
+      switch tabController.activeTab {
+      case .today:
+        TodayView()
+      case .nutrition:
+        NutritionView()
+      case .vitals:
+        VitalsView()
+      case .workouts:
+        WorkoutsTabView()
+      }
+    }
+    .chatLauncher()
+    .environment(tabController)
+    .transition(.blurReplace)
   }
 }
 
