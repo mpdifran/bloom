@@ -76,23 +76,18 @@ struct ChatView: View {
   
   @ViewBuilder
   private var messageList: some View {
-    if viewModel.cellModels.isEmpty {
-      ChatPromptsView()
-        .zStackAlignment(.bottom)
-    } else {
-      ChatLayoutView(
-        cellModels: $viewModel.cellModels,
-        scrollToBottomTrigger: $scrollToBottomTrigger,
-        onLoadMore: {
-          await viewModel.loadMoreMessages()
-        },
-        onIsAtBottomChanged: { atBottom in
-          withAnimation {
-            isAtBottom = atBottom
-          }
+    ChatLayoutView(
+      cellModels: $viewModel.cellModels,
+      scrollToBottomTrigger: $scrollToBottomTrigger,
+      onLoadMore: {
+        await viewModel.loadMoreMessages()
+      },
+      onIsAtBottomChanged: { atBottom in
+        withAnimation {
+          isAtBottom = atBottom
         }
-      )
-    }
+      }
+    )
   }
 }
 
