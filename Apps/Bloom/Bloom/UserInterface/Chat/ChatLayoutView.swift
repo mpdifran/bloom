@@ -84,14 +84,6 @@ class ChatLayoutViewController: UICollectionViewController {
     collectionView.alwaysBounceVertical = true
     collectionView.showsVerticalScrollIndicator = true
     collectionView.contentInsetAdjustmentBehavior = .automatic
-    
-    // Register cell types
-    collectionView.register(ChatMessageCollectionViewCell.self, forCellWithReuseIdentifier: "ChatMessageCell")
-    collectionView.register(ChatImageCollectionViewCell.self, forCellWithReuseIdentifier: "ChatImageCell")
-    collectionView.register(ChatProcessedRichContentCollectionViewCell.self, forCellWithReuseIdentifier: "ChatProcessedRichContentCell")
-    collectionView.register(ChatTypingIndicatorCollectionViewCell.self, forCellWithReuseIdentifier: "ChatTypingCell")
-    collectionView.register(ChatStatusCollectionViewCell.self, forCellWithReuseIdentifier: "ChatStatusCell")
-    collectionView.register(ChatPromptsCollectionViewCell.self, forCellWithReuseIdentifier: "ChatPromptsCell")
   }
   
   private func setupKeyboardObservers() {
@@ -192,21 +184,20 @@ extension ChatLayoutViewController {
     
     switch model.contentType {
     case .text(let id, let content, let metadata):
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatMessageCell", for: indexPath) as! ChatMessageCollectionViewCell
+      let cell = collectionView.autoDequeueCell(ofType: ChatMessageCollectionViewCell.self, for: indexPath)
       let isCurrentUser = metadata?.isCurrentUser ?? false
       let showReportButton = metadata?.showReportButton ?? false
       cell.configure(with: content, isCurrentUser: isCurrentUser, isLastInResponse: showReportButton, responseID: metadata?.responseID, requestID: metadata?.requestID)
       return cell
       
     case .image(let id, let imageData, let metadata):
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatImageCell", for: indexPath) as! ChatImageCollectionViewCell
+      let cell = collectionView.autoDequeueCell(ofType: ChatImageCollectionViewCell.self, for: indexPath)
       let isCurrentUser = metadata?.isCurrentUser ?? false
       cell.configure(with: imageData, isCurrentUser: isCurrentUser)
       return cell
       
     case .richContent(let id, let content, let metadata):
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatProcessedRichContentCell", for: indexPath) as! ChatProcessedRichContentCollectionViewCell
-
+      let cell = collectionView.autoDequeueCell(ofType: ChatProcessedRichContentCollectionViewCell.self, for: indexPath)
       let showReportButton = metadata?.showReportButton ?? false
 
       cell.configure(
@@ -221,16 +212,16 @@ extension ChatLayoutViewController {
       return cell
       
     case .typingIndicator:
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatTypingCell", for: indexPath) as! ChatTypingIndicatorCollectionViewCell
+      let cell = collectionView.autoDequeueCell(ofType: ChatTypingIndicatorCollectionViewCell.self, for: indexPath)
       return cell
       
     case .statusText(let status):
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatStatusCell", for: indexPath) as! ChatStatusCollectionViewCell
+      let cell = collectionView.autoDequeueCell(ofType: ChatStatusCollectionViewCell.self, for: indexPath)
       cell.configure(with: status)
       return cell
       
     case .prompts:
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatPromptsCell", for: indexPath) as! ChatPromptsCollectionViewCell
+      let cell = collectionView.autoDequeueCell(ofType: ChatPromptsCollectionViewCell.self, for: indexPath)
       return cell
     }
   }
