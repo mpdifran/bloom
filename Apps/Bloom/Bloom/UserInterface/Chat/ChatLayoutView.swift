@@ -88,12 +88,10 @@ class ChatLayoutViewController: UICollectionViewController {
     // Register cell types
     collectionView.register(ChatMessageCollectionViewCell.self, forCellWithReuseIdentifier: "ChatMessageCell")
     collectionView.register(ChatImageCollectionViewCell.self, forCellWithReuseIdentifier: "ChatImageCell")
-    collectionView.register(ChatRichContentCollectionViewCell.self, forCellWithReuseIdentifier: "ChatRichContentCell")
     collectionView.register(ChatProcessedRichContentCollectionViewCell.self, forCellWithReuseIdentifier: "ChatProcessedRichContentCell")
     collectionView.register(ChatTypingIndicatorCollectionViewCell.self, forCellWithReuseIdentifier: "ChatTypingCell")
     collectionView.register(ChatStatusCollectionViewCell.self, forCellWithReuseIdentifier: "ChatStatusCell")
     collectionView.register(ChatPromptsCollectionViewCell.self, forCellWithReuseIdentifier: "ChatPromptsCell")
-    collectionView.register(ChatUnknownContentCollectionViewCell.self, forCellWithReuseIdentifier: "ChatUnknownContentCollectionViewCell")
   }
   
   private func setupKeyboardObservers() {
