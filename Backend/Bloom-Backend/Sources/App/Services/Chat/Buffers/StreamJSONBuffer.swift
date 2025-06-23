@@ -54,9 +54,10 @@ final actor StreamJSONBuffer {
         let nextIndex = jsonIndex + 1
         indices[userID] = nextIndex
         hasEmittedTextForCurrentIndex[userID] = false // Reset for next section
-        if after.isNotEmpty {
+        let trimmedAfter = stripLeadingNewlineIfFirstChunk(after, userID: userID, index: nextIndex)
+        if trimmedAfter.isNotEmpty {
           hasEmittedTextForCurrentIndex[userID] = true // Mark that we're emitting text
-          return [.json(jsonIndex, jsonString), .streamingText, .chunk(nextIndex, after)]
+          return [.json(jsonIndex, jsonString), .streamingText, .chunk(nextIndex, trimmedAfter)]
         } else {
           return [.json(jsonIndex, jsonString), .streamingText]
         }
@@ -75,11 +76,12 @@ final actor StreamJSONBuffer {
           let before = String(updated[..<range.lowerBound])
           let after = String(updated[range.upperBound...])
           buffers[userID] = after
-          if before.isNotEmpty {
+          let trimmedBefore = stripLeadingNewlineIfFirstChunk(before, userID: userID, index: currentIndex)
+          if trimmedBefore.isNotEmpty {
             // Text before JSON: emit text with current index, increment for JSON
             hasEmittedTextForCurrentIndex[userID] = true
             indices[userID] = currentIndex + 1
-            return [.chunk(currentIndex, before), .collectingJSON]
+            return [.chunk(currentIndex, trimmedBefore), .collectingJSON]
           } else {
             // No text before JSON but check if we've emitted text chunks already
             if hasEmittedTextForCurrentIndex[userID] == true {
@@ -90,7 +92,12 @@ final actor StreamJSONBuffer {
           }
         } else {
           // Not an opening fence after all
-          return [.chunk(currentIndex, updated)]
+          let trimmedUpdated = stripLeadingNewlineIfFirstChunk(updated, userID: userID, index: currentIndex)
+          if trimmedUpdated.isNotEmpty {
+            return [.chunk(currentIndex, trimmedUpdated)]
+          } else {
+            return []
+          }
         }
       } else {
         // Still potentially completing the fence; buffer silently
@@ -105,11 +112,12 @@ final actor StreamJSONBuffer {
       let before = String(delta[..<openRange.lowerBound])
       let after = String(delta[openRange.upperBound...])
       buffers[userID] = after
-      if before.isNotEmpty {
+      let trimmedBefore = stripLeadingNewlineIfFirstChunk(before, userID: userID, index: currentIndex)
+      if trimmedBefore.isNotEmpty {
         // Text before JSON: emit text with current index, increment for JSON
         hasEmittedTextForCurrentIndex[userID] = true
         indices[userID] = currentIndex + 1
-        return [.chunk(currentIndex, before), .collectingJSON]
+        return [.chunk(currentIndex, trimmedBefore), .collectingJSON]
       } else {
         // No text before JSON but check if we've emitted text chunks already
         if hasEmittedTextForCurrentIndex[userID] == true {
@@ -128,8 +136,13 @@ final actor StreamJSONBuffer {
     }
 
     // 5. Normal text
-    hasEmittedTextForCurrentIndex[userID] = true
-    return [.chunk(currentIndex, delta)]
+    let trimmedDelta = stripLeadingNewlineIfFirstChunk(delta, userID: userID, index: currentIndex)
+    if trimmedDelta.isNotEmpty {
+      hasEmittedTextForCurrentIndex[userID] = true
+      return [.chunk(currentIndex, trimmedDelta)]
+    } else {
+      return []
+    }
   }
 
   func processCompletedMessage(_ message: String, for userID: UserIdentifier) -> [CompletedPartitions] {
@@ -142,6 +155,7 @@ final actor StreamJSONBuffer {
     while let openRange = message.range(of: fenceOpen, range: searchStart..<message.endIndex) {
       // Text before the JSON fence
       let textPart = String(message[searchStart..<openRange.lowerBound])
+        .trimmingCharacters(in: .whitespacesAndNewlines)
       if !textPart.isEmpty {
         events.append(.text(index, textPart))
         index += 1
@@ -151,6 +165,7 @@ final actor StreamJSONBuffer {
       guard let closeRange = message.range(of: fenceClose, range: jsonStart..<message.endIndex) else {
         // No closing fence; treat the rest as text
         let remainder = String(message[jsonStart..<message.endIndex])
+          .trimmingCharacters(in: .whitespacesAndNewlines)
         if !remainder.isEmpty {
           events.append(.text(index, remainder))
         }
@@ -166,9 +181,18 @@ final actor StreamJSONBuffer {
 
     // Any trailing text after last fence
     let trailing = String(message[searchStart..<message.endIndex])
+      .trimmingCharacters(in: .whitespacesAndNewlines)
     if !trailing.isEmpty {
       events.append(.text(index, trailing))
     }
     return events
+  }
+  
+  private func stripLeadingNewlineIfFirstChunk(_ text: String, userID: UserIdentifier, index: Int) -> String {
+    // Strip leading newline if this is the first chunk for this text section
+    if hasEmittedTextForCurrentIndex[userID] != true && text.hasPrefix("\n") {
+      return String(text.dropFirst())
+    }
+    return text
   }
 }
