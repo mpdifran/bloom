@@ -172,7 +172,9 @@ extension ChatController {
     } else {
       fileIDs = []
     }
-    
+
+    guard trimmedMessage.isNotEmpty || fileIDs.isNotEmpty else { return }
+
     let socketMessage = SocketMessage.MessageRequest(
       text: trimmedMessage,
       imageFileIDs: fileIDs,

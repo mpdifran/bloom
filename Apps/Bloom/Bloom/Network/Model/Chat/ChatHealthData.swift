@@ -393,6 +393,7 @@ extension ChatHealthData {
     let focus: String?
     let currentDate: String
     let timeZone: String
+    let location: String?
     let workoutEquipment: [String]
     let userFacts: [ChatUserFactsData.UserFact]
   }

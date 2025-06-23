@@ -93,6 +93,9 @@ extension ChatVitalConverter {
         revisitDate: dto.revisitDate
       )
     } ?? []
+    
+    // Fetch location
+    let locationString = await LocationManagerViewModel.shared.locationString()
 
     return ChatHealthData.UserInfo(
       age: age,
@@ -101,6 +104,7 @@ extension ChatVitalConverter {
       focus: focus.isNotEmpty ? focus : nil,
       currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
       timeZone: TimeZone.current.identifier,
+      location: locationString,
       workoutEquipment: workoutEquipment,
       userFacts: userFacts
     )
