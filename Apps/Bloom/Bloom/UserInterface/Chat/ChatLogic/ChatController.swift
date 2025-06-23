@@ -562,7 +562,7 @@ private extension ChatController {
   }
 
   func autoLog(logPeriod: SocketMessage.LogPeriod) async throws -> String? {
-    let flowValue: HKCategoryValueMenstrualFlow
+    let flowValue: HKCategoryValueVaginalBleeding
     switch logPeriod.flow {
     case .none:
       flowValue = .unspecified

@@ -1,5 +1,5 @@
 //
-//  HKCategoryValueMenstrualFlow+Helpers.swift
+//  HKCategoryValueVaginalBleeding+Helpers.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-02-03.
@@ -7,7 +7,7 @@
 
 import HealthKit
 
-public extension HKCategoryValueMenstrualFlow {
+public extension HKCategoryValueVaginalBleeding {
 
   var name: String {
     switch self {

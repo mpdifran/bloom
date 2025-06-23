@@ -9,7 +9,6 @@ import SwiftUI
 //import ScreenControl
 
 private extension String {
-    static let sleepActivities = "SleepProgramCoordinator.sleepActivities"
     static let sleepProgramStartDate = "SleepProgramCoordinator.startDate"
     static let sleepEnvironmentTemperature = "SleepProgramCoordinator.sleepEnvironmentTemperature"
     static let sleepEnvironmentSound = "SleepProgramCoordinator.sleepEnvironmentSound"
@@ -27,16 +26,6 @@ final class SleepProgramCoordinator: ObservableObject {
         }
     }
 
-    @Published var sleepActivities = [SleepSuggestionModel]() {
-        didSet {
-            if let data = try? JSONEncoder.main.encode(sleepActivities) {
-                UserDefaults.group.set(data, forKey: .sleepActivities)
-            } else {
-                UserDefaults.group.removeObject(forKey: .sleepActivities)
-            }
-        }
-    }
-
     @AppStorage(.sleepEnvironmentTemperature, store: .group) var environmentTemperature = SleepEnvironmentTemperature.cold
     @AppStorage(.sleepEnvironmentSound, store: .group) var environmentSound = SleepEnvironmentSound.quiet
     @AppStorage(.sleepEnvironmentDarkness, store: .group) var environmentDarkness = SleepEnvironmentDarkness.dark
@@ -46,10 +35,6 @@ final class SleepProgramCoordinator: ObservableObject {
     private init() { 
         if let date = UserDefaults.group.object(forKey: .sleepProgramStartDate) as? Date {
             self.startDate = date
-        }
-
-        if let data = UserDefaults.group.data(forKey: .sleepActivities) {
-            self.sleepActivities = (try? JSONDecoder.main.decode([SleepSuggestionModel].self, from: data)) ?? []
         }
     }
 }

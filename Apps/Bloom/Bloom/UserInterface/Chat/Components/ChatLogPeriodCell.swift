@@ -17,7 +17,7 @@ struct ChatLogPeriodCell: View {
 
   init(
     chatMessageID: String,
-    flow: HKCategoryValueMenstrualFlow,
+    flow: HKCategoryValueVaginalBleeding,
     hasPerformedAction: Bool,
     dbID: String?
   ) {
@@ -27,7 +27,7 @@ struct ChatLogPeriodCell: View {
     self._hasLoggedPeriod = State(initialValue: hasPerformedAction)
   }
 
-  @State private var flowType: HKCategoryValueMenstrualFlow
+  @State private var flowType: HKCategoryValueVaginalBleeding
   @State private var saveComplete = false
   @State private var saveUndone = false
   @State private var hasLoggedPeriod: Bool
@@ -35,7 +35,7 @@ struct ChatLogPeriodCell: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.requestReview) private var requestReview
 
-  private let allFlowTypes: [HKCategoryValueMenstrualFlow] = [.none, .light, .medium, .heavy]
+  private let allFlowTypes: [HKCategoryValueVaginalBleeding] = [.none, .light, .medium, .heavy]
 
   var body: some View {
     HStack {

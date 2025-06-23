@@ -81,10 +81,7 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
             // Query for completion records matching the specific reminder, occurrence, and today's date
             let descriptor = FetchDescriptor<ReminderCompletionRecord>(
                 predicate: #Predicate<ReminderCompletionRecord> { completion in
-                    completion.reminder?.id == reminderID &&
-                    completion.occurrence?.id == occurrenceID &&
-                    completion.completedDate >= startOfToday &&
-                    completion.completedDate <= endOfToday
+                    completion.reminder?.id == reminderID && completion.occurrence?.id == occurrenceID && completion.completedDate >= startOfToday && completion.completedDate <= endOfToday
                 }
             )
             

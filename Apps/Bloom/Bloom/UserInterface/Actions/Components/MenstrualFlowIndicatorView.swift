@@ -9,7 +9,7 @@ import SwiftUI
 import HealthKit
 
 struct MenstrualFlowIndicatorView: View {
-  let flow: HKCategoryValueMenstrualFlow
+  let flow: HKCategoryValueVaginalBleeding
   let isSelected: Bool
 
   var body: some View {

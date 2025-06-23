@@ -10,7 +10,7 @@ import HealthKit
 
 extension SocketMessage.LogPeriod.FlowLevel {
 
-  var hkFlow: HKCategoryValueMenstrualFlow {
+  var hkFlow: HKCategoryValueVaginalBleeding {
     switch self {
     case .none: .none
     case .light: .light

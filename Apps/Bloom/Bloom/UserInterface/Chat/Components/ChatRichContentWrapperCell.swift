@@ -47,7 +47,7 @@ struct ChatRichContentWrapperCell: View {
   @State private var bristolStoolType: Int?
   @State private var duration: BowelMovement.Duration?
   @State private var weightQuantity: HKQuantity?
-  @State private var flowType: HKCategoryValueMenstrualFlow?
+  @State private var flowType: HKCategoryValueVaginalBleeding?
   @State private var systolic: Double?
   @State private var diastolic: Double?
   @State private var workoutPlan: SocketMessage.WorkoutPlan?

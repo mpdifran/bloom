@@ -23,13 +23,13 @@ struct CycleTrackingActionCardView: View {
   }
 
   @State private var date: Date
-  @State private var flowType: HKCategoryValueMenstrualFlow = .none
+  @State private var flowType: HKCategoryValueVaginalBleeding = .none
 
   @State private var vitalsViewModel = VitalsViewModel.shared
 
   @Environment(\.requestReview) private var requestReview
 
-  private let allFlowTypes: [HKCategoryValueMenstrualFlow] = [.none, .light, .medium, .heavy]
+  private let allFlowTypes: [HKCategoryValueVaginalBleeding] = [.none, .light, .medium, .heavy]
 
   var body: some View {
     CardView {
@@ -135,7 +135,7 @@ private extension CycleTrackingActionCardView {
 
     guard
       let firstSample = existingSamples.first as? HKCategorySample,
-      let flowType = HKCategoryValueMenstrualFlow(rawValue: firstSample.value)
+      let flowType = HKCategoryValueVaginalBleeding(rawValue: firstSample.value)
     else { return }
 
     self.flowType = flowType

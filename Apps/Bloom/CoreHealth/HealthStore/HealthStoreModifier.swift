@@ -122,7 +122,7 @@ public extension HealthStoreModifier {
 public extension HealthStoreModifier {
 
   @discardableResult
-  func log(flowType: HKCategoryValueMenstrualFlow, date: Date) async throws -> UUID? {
+  func log(flowType: HKCategoryValueVaginalBleeding, date: Date) async throws -> UUID? {
     var isNewCycle = flowType.indicatesBeginningOfCycle
     if await isCurrentPeriod() {
       isNewCycle = false

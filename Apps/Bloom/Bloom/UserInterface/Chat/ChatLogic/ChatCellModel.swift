@@ -30,7 +30,7 @@ enum ProcessedRichContent: Hashable, Sendable {
   case logWater(HKQuantity)
   case logBowelMovement(bristolStoolType: Int, duration: BowelMovement.Duration)
   case logWeight(HKQuantity)
-  case logPeriod(HKCategoryValueMenstrualFlow)
+  case logPeriod(HKCategoryValueVaginalBleeding)
   case logBloodPressure(systolic: Double, diastolic: Double)
   case createReminder(reminderID: String)
   case deleteReminder(reminderID: String)
