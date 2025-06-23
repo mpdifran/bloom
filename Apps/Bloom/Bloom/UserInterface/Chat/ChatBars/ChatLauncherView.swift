@@ -65,7 +65,10 @@ private extension ChatLauncherView {
 
   var chatPlaceholder: some View {
     HStack {
-      Image(systemSymbol: .sparkles)
+      Image(.budPeek)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 34)
         .foregroundStyle(.secondary)
       
       Text("Ask Bud")
@@ -74,7 +77,7 @@ private extension ChatLauncherView {
       Spacer()
     }
     .frame(minWidth: 120)
-    .padding(12)
+    .padding(4)
     .cardContainer(fill: .background, includePadding: false)
     .onTapGesture {
       tabController.isShowingChat = true
