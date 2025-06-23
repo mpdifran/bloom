@@ -241,6 +241,11 @@ private extension ChatController {
 
   func parse(data: Data) async {
     if let messageResponse = try? decoder.decode(SocketMessage.MessageResponse.self, from: data) {
+      let trimmedMessage = messageResponse.message.trimmingCharacters(in: .whitespacesAndNewlines)
+
+      guard trimmedMessage.isNotEmpty else {
+        return
+      }
 
       do {
         let message = ChatMessage(
