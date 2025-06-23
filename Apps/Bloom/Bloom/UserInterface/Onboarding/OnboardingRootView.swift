@@ -51,9 +51,10 @@ struct OnboardingRootView: View {
         }
       case .ageAndSex:
         OnboardingHealthAgeSexHeightView {
-          setStep(.vitals)
+          setStep(.healthGoals)
         }
       case .vitals:
+        // Skipped for now
         OnboardingHealthVitalLevelsView {
           setStep(.healthGoals)
         }

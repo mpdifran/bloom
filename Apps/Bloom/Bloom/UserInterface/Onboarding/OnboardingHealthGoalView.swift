@@ -37,6 +37,8 @@ struct OnboardingHealthGoalView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
+        BudImage(.budSalad)
+
         Group {
           Text("Let's talk about your goals.")
             .transition(.opacity)

@@ -161,6 +161,8 @@ private extension OnboardingHealthAgeSexHeightView {
 
   @ViewBuilder
   func hasHealthDataContent(age: Int, sex: String, height: HKQuantity) -> some View {
+    BudImage(.budWorkout)
+
     Text("Looks Great!")
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
@@ -198,6 +200,8 @@ private extension OnboardingHealthAgeSexHeightView {
 
   @ViewBuilder
   var doesNotHaveHealthDataContent: some View {
+    BudImage(.budSadWorkout)
+
     Text("Uh oh, looks like I wasn't able to get some important information.")
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
     Text("Do you mind providing it?")

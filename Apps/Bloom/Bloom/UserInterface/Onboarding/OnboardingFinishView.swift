@@ -18,21 +18,22 @@ struct OnboardingFinishView: View {
   @State private var presentedSheet: AnyView?
 
   @ObservedObject private var healthManager = HealthManager.shared
+  @Environment(ThemeController.self) private var themeController
 
   var body: some View {
     ScrollView {
       VStack(spacing: 20) {
-        DisplayAppIcon()
-          .frame(width: 150)
+        BudImage(.budTrophy, dimension: 200)
           .transition(.blurReplace)
           .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
+          .standardConfetti($index, colors: [themeController.theme.color, .white])
 
-        Text("We made it, \(healthManager.name)!")
-          .appear(with: 2, currentIndex: index)
+        Text("You made it, \(healthManager.name)!")
+          .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
         Text("Are you ready to get started?")
           .multilineTextAlignment(.center)
-          .appear(with: 3, currentIndex: index)
+          .appear(with: 3, currentIndex: index, secondaryIfNotCurrentIndex: false)
       }
       .horizontallyCentered()
       .onboardingTextStyle()
@@ -40,11 +41,11 @@ struct OnboardingFinishView: View {
     }
     .groupedBackground()
     .animation(.default, value: index)
-    .sensoryFeedback(.selection, trigger: index)
+    .sensoryFeedback(.impact, trigger: index)
     .sensoryFeedback(.selection, trigger: didContinue)
     .shelf {
       if index >= 3 {
-        Button("Yes!") {
+        Button("Let's Go!") {
           didContinue.toggle()
           TelemetryDeck.signal("OB Finish")
           TelemetryDeck.stopAndSendDurationSignal("Onboarding")
@@ -63,7 +64,7 @@ struct OnboardingFinishView: View {
 private extension OnboardingFinishView {
 
   func advanceForSubscribed() async {
-    while index < 3 {
+    while index < 5 {
       await advanceIndex()
     }
   }

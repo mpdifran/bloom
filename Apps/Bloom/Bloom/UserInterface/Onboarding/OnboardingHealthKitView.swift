@@ -25,19 +25,20 @@ struct OnboardingHealthKitView: View {
 
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(alignment: .leading) {
+        BudImage(.budDoctor)
+
         Group {
-          Text("Let's calculate your Vitals!")
-            .padding(.top, 30)
-          Text("Bloom needs access to your Health data in order give you guidance on your health.")
+          Text("Bud needs access to your Health Data")
+          Text("The more health data you share with Bud, the more personalized his advice will be!")
             .font(.title3)
             .foregroundStyle(.secondary)
         }
+        .fixedSize(horizontal: false, vertical: true)
         .onboardingTextStyle()
 
         if showMockHealthApp {
           MockHealthAppPermissionView()
-            .padding(.top, 40)
             .horizontallyCentered()
             .transition(.move(edge: .bottom))
             .onTapGesture {
@@ -47,7 +48,7 @@ struct OnboardingHealthKitView: View {
         }
       }
       .horizontalAlignment(.leading)
-      .padding()
+      .padding(.horizontal)
     }
     .groupedBackground()
     .animation(.bouncy, value: showMockHealthApp)

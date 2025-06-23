@@ -58,6 +58,10 @@ struct ChatView: View {
         Label("Settings", systemSymbol: .gear)
       }
     }
+
+    ToolbarItem(placement: .principal) {
+      BudImage(.budWatch, dimension: 60)
+    }
   }
   
   @ViewBuilder

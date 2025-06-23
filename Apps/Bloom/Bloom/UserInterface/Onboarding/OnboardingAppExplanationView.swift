@@ -9,6 +9,8 @@ import SwiftUI
 import DataContainer
 import AppUI
 import TelemetryDeck
+import CoreHealth
+import SFSafeSymbols
 
 struct OnboardingAppExplanationView: View {
   var onContinue: () -> Void
@@ -18,22 +20,25 @@ struct OnboardingAppExplanationView: View {
   @State private var animationCount = 0
   @State private var index = 0
   @State private var didContinue = false
+  @State private var showTennis = false
+  @State private var showWaterBottle = false
+  @State private var showBasketball = false
+
+  @ObservedObject private var healthManager = HealthManager.shared
 
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        vitalsCardPileView
-
-        Spacer(minLength: 40)
-
         if index >= 1 {
-          Text("The Power of Vitals")
+          BudImage(.budSmoothie, dimension: 200)
+
+          Text("Nice to meet you \(healthManager.name), I'm Bud!")
             .fixedSize(horizontal: false, vertical: true)
             .transition(.blurReplace)
         }
 
         if index >= 2 {
-          Text("Bloom categorizes your health data into vitals, helping you focus on what's really important.")
+          Text("You can ask me anything about your health, and I can give you advice tailored to your personal health data.")
             .font(.title3)
             .fixedSize(horizontal: false, vertical: true)
             .transition(.blurReplace)
@@ -41,13 +46,37 @@ struct OnboardingAppExplanationView: View {
         }
 
         if index >= 3 {
-          Text("You'll then get personalized goals to help improve each part of your health!")
+          Text("I can give you diet advice, create custom workout plans for you, set health goals, and even more!")
             .font(.title3)
             .fixedSize(horizontal: false, vertical: true)
             .transition(.blurReplace)
             .foregroundStyle(.secondary)
         }
+
+        if index >= 4 {
+          HStack {
+            Spacer()
+            Image(systemSymbol: .tennisRacket)
+              .opacity(showTennis ? 1 : 0)
+              .scaleEffect(showTennis ? 1 : 0.5)
+              .animation(.bouncy, value: showTennis)
+            Spacer()
+            Image(systemSymbol: .waterbottle)
+              .opacity(showWaterBottle ? 1 : 0)
+              .scaleEffect(showWaterBottle ? 1 : 0.5)
+              .animation(.bouncy, value: showWaterBottle)
+            Spacer()
+            Image(systemSymbol: .basketball)
+              .opacity(showBasketball ? 1 : 0)
+              .scaleEffect(showBasketball ? 1 : 0.5)
+              .animation(.bouncy, value: showBasketball)
+            Spacer()
+          }
+          .font(.system(size: 40))
+          .foregroundStyle(.tint)
+        }
       }
+      .horizontalAlignment(.leading)
       .padding()
       .onboardingTextStyle()
     }
@@ -58,7 +87,7 @@ struct OnboardingAppExplanationView: View {
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: didContinue)
     .shelf {
-      Button("Neat!") {
+      Button("Hi Bud!") {
         didContinue.toggle()
         onContinue()
       }
@@ -68,11 +97,16 @@ struct OnboardingAppExplanationView: View {
       await startAnimation()
     }
     .task {
-      //            await Delay(2000)
-
-      while index < 3 {
+      while index < 4 {
         await advanceIndex()
       }
+      // Animate symbols after index 4
+      await Delay(200)
+      showTennis = true
+      await Delay(200)
+      showWaterBottle = true
+      await Delay(200)
+      showBasketball = true
     }
     .onAppear {
       TelemetryDeck.signal("OB App Explanation")

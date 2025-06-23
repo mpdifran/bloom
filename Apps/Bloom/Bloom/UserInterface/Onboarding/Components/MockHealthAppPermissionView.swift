@@ -48,7 +48,7 @@ struct MockHealthAppPermissionView: View {
         .padding()
         .frame(width: 320, height: 600)
         .background {
-            RoundedRectangle(cornerRadius: 40)
+            RoundedRectangle(cornerRadius: 50)
                 .fill(.background.secondary)
         }
     }

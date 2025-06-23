@@ -21,12 +21,14 @@ struct OnboardingNotificationPermissionView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
+        BudImage(.budWater)
+
         Group {
-          Text("Almost done!")
+          Text("Almost there!")
             .transition(.opacity)
             .appear(with: 1, currentIndex: index)
 
-          Text("We'd love to keep in touch with you when it's important.")
+          Text("I'd love to keep in touch with you when it's important.")
             .transition(.opacity)
             .appear(with: 2, currentIndex: index)
         }
