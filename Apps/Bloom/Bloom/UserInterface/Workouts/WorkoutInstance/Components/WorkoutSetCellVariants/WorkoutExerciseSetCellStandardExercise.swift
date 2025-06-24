@@ -13,6 +13,7 @@ struct WorkoutExerciseSetCellStandardExercise: View {
   let exercise: WorkoutExercise
   let mode: WorkoutExerciseSetCell.Mode
   let isPeeking: Bool
+  let subTime: TimeInterval?
 
   var body: some View {
     VStack(alignment: .leading) {
@@ -21,7 +22,8 @@ struct WorkoutExerciseSetCellStandardExercise: View {
       WorkoutExerciseSetCellTitleView(
         symbol: exerciseSet.set.systemSymbol,
         title: exercise.title,
-        measurementDescription: exercise.measurementDescription,
+        measurementDescription: measurementDescription,
+        measurementNumericValue: remainingTime,
         mode: mode,
         isPeeking: isPeeking
       )
@@ -36,6 +38,27 @@ struct WorkoutExerciseSetCellStandardExercise: View {
     .foregroundStyle(mode.color)
     .cardContainer(fill: mode == .current ? AnyShapeStyle(.tint) : AnyShapeStyle(.background))
     .tint(.green)
+    .animation(.default, value: subTime)
+  }
+}
+
+private extension WorkoutExerciseSetCellStandardExercise {
+
+  var remainingTime: TimeInterval {
+    if exercise.duration > 0, let subTime, mode == .current {
+      return min(max(0, exercise.duration - subTime + 1), exercise.duration)
+    }
+    return exercise.duration
+  }
+
+  var measurementDescription: String {
+    // If exercise has duration and we're showing countdown
+    if exercise.duration > 0, let subTime, mode == .current {
+      return DateFormatter.timeIntervalHourMinuteSecondAbbreviated.string(from: DateComponents(second: Int(remainingTime))) ?? ""
+    } else {
+      // Use default measurement description
+      return exercise.measurementDescription
+    }
   }
 }
 
@@ -46,25 +69,29 @@ struct WorkoutExerciseSetCellStandardExercise: View {
         exerciseSet: .Preview.deadlifts,
         exercise: .Preview.deadlifts,
         mode: .complete,
-        isPeeking: false
+        isPeeking: false,
+        subTime: nil
       )
       WorkoutExerciseSetCellStandardExercise(
         exerciseSet: .Preview.deadlifts,
         exercise: .Preview.deadlifts,
         mode: .current,
-        isPeeking: false
+        isPeeking: false,
+        subTime: 45
       )
       WorkoutExerciseSetCellStandardExercise(
         exerciseSet: .Preview.deadlifts,
         exercise: .Preview.deadlifts,
         mode: .upNext,
-        isPeeking: false
+        isPeeking: false,
+        subTime: nil
       )
       WorkoutExerciseSetCellStandardExercise(
         exerciseSet: .Preview.deadlifts,
         exercise: .Preview.deadlifts,
         mode: .upcoming,
-        isPeeking: true
+        isPeeking: true,
+        subTime: nil
       )
     }
     .padding()

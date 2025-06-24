@@ -36,6 +36,8 @@ struct WorkoutInstanceView: View {
 
   @State private var sessionState: HKWorkoutSessionState = .notStarted
 
+  @State private var startTimerToggle = false
+
   @State private var currentIndex = 0
   @State private var peekingIndex: Int?
 
@@ -106,6 +108,7 @@ struct WorkoutInstanceView: View {
     .animation(.easeInOut, value: currentIndex)
     .sensoryFeedback(.selection, trigger: sessionState)
     .sensoryFeedback(.impact, trigger: currentIndex)
+    .sensoryFeedback(.impact, trigger: startTimerToggle)
     .presentationCompactAdaptation(.fullScreenCover)
     .alert(error: $error)
   }
@@ -224,6 +227,8 @@ private extension WorkoutInstanceView {
       default:
         false
       }
+    case .standard(let exercise):
+      exercise.isTimeBased
     default:
       false
     }
@@ -245,6 +250,8 @@ private extension WorkoutInstanceView {
       return restTime
     case .grouped:
       return exerciseSet.set.duration ?? 0
+    case .standard(let exercise):
+      return exercise.duration
     default:
       return 0
     }
@@ -320,7 +327,15 @@ private extension WorkoutInstanceView {
           currentSubTime = elapsedSubTime + Date().timeIntervalSince(subTimerStartDate)
         }
 
-        if shouldShowSubTimer && remainingSubTime <= 0 {
+        if currentIndex + 1 >= exerciseSets.count {
+          Task {
+            do {
+              try await endWorkout()
+            } catch {
+              self.error = error
+            }
+          }
+        } else if shouldShowSubTimer && remainingSubTime <= 0 {
           currentIndex += 1
         }
       }
@@ -554,6 +569,7 @@ private extension WorkoutInstanceView {
   func startSubTimer() {
     resetSubTimer()
     isSubTimerActive = true
+    startTimerToggle.toggle()
   }
 
   func restartWorkout() async throws {
@@ -615,6 +631,8 @@ private extension WorkoutInstanceView {
       default:
         return ""
       }
+    case .standard:
+      return "Work \(timeString)"
     default:
       return ""
     }

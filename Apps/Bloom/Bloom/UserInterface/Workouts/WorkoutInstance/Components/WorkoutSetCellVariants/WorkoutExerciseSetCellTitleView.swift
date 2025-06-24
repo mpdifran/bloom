@@ -14,6 +14,7 @@ struct WorkoutExerciseSetCellTitleView: View {
   let title: String
   let measurementDescription: String
   let measurementSubtitle: String?
+  let measurementNumericValue: Double?
   let mode: WorkoutExerciseSetCell.Mode
   let isPeeking: Bool
 
@@ -22,6 +23,7 @@ struct WorkoutExerciseSetCellTitleView: View {
     title: String,
     measurementDescription: String,
     measurementSubtitle: String? = nil,
+    measurementNumericValue: Double? = nil,
     mode: WorkoutExerciseSetCell.Mode,
     isPeeking: Bool
   ) {
@@ -29,6 +31,7 @@ struct WorkoutExerciseSetCellTitleView: View {
     self.title = title
     self.measurementDescription = measurementDescription
     self.measurementSubtitle = measurementSubtitle
+    self.measurementNumericValue = measurementNumericValue
     self.mode = mode
     self.isPeeking = isPeeking
   }
@@ -54,7 +57,7 @@ struct WorkoutExerciseSetCellTitleView: View {
 
       Text(measurementDescription)
         .monospacedDigit()
-        .contentTransition(.numericText())
+        .contentTransition(.numericText(value: measurementNumericValue ?? 0))
     }
     .font(.title2)
     .bold()

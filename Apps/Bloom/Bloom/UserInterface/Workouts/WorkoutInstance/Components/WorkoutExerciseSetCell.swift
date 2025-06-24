@@ -56,7 +56,8 @@ struct WorkoutExerciseSetCell: View {
           exerciseSet: exerciseSet,
           exercise: workoutExercise,
           mode: mode,
-          isPeeking: isPeeking
+          isPeeking: isPeeking,
+          subTime: currentSubTime
         )
       case .grouped(let exercises, let format):
         switch format {

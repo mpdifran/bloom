@@ -39,6 +39,10 @@ public extension WorkoutExercise {
 
     return "\(numberOfReps) Reps"
   }
+
+  var isTimeBased: Bool {
+    numberOfReps == nil && (distance == nil || distanceUnit == nil)
+  }
 }
 
 public extension WorkoutExercise {

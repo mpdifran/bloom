@@ -12,6 +12,7 @@ import AppUI
 
 private extension CGFloat {
   static let dimension: CGFloat = 35
+  static let smallDimension: CGFloat = 25
 }
 
 struct WorkoutActivityTypeTimelineView: View {
@@ -19,50 +20,26 @@ struct WorkoutActivityTypeTimelineView: View {
   let currentIndex: Int
 
   var body: some View {
-    ZStack {
-      lineView
-
-      HStack {
-        ForEachEnumeratedNoID(activityTypes) { (index, activityType) in
-          if index != 0 {
-            Spacer()
-          }
-
-          Circle()
-            .fill(index <= currentIndex ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
-            .frame(width: .dimension, height: .dimension)
-            .overlay(
-              Image(systemSymbol: SFSymbol(rawValue: activityType.systemImage))
-                .font(.system(size: .dimension / 2))
-                .foregroundStyle(index <= currentIndex ? AnyShapeStyle(.invertedText) : AnyShapeStyle(.fill))
-            )
+    HStack {
+      ForEachEnumeratedNoID(activityTypes) { (index, activityType) in
+        if index != 0 {
+          Spacer()
         }
+
+        Circle()
+          .fill(index <= currentIndex ? AnyShapeStyle(.tint) : AnyShapeStyle(.background.secondary))
+          .frame(square: index == currentIndex ? .dimension : .smallDimension)
+          .overlay(
+            Image(systemSymbol: SFSymbol(rawValue: activityType.systemImage))
+              .font(.system(size: index == currentIndex ? .dimension / 2 : .smallDimension / 2))
+              .foregroundStyle(index <= currentIndex ? AnyShapeStyle(.invertedText) : AnyShapeStyle(.fill))
+          )
+          .opacity(index < currentIndex ? 0.5 : 1)
       }
     }
     .frame(height: .dimension)
     .tint(.green)
-    .animation(.easeOut, value: currentIndex)
-  }
-}
-
-private extension WorkoutActivityTypeTimelineView {
-
-  var lineView: some View {
-    GeometryReader { proxy in
-      VStack {
-        Spacer()
-        Rectangle()
-          .fill(.background.secondary)
-          .frame(height: 4)
-          .overlay {
-            Rectangle()
-              .fill(.tint)
-              .frame(width: proxy.size.width * CGFloat(currentIndex) / CGFloat(activityTypes.count - 1))
-              .horizontalAlignment(.leading)
-          }
-        Spacer()
-      }
-    }
+    .animation(.bouncy, value: currentIndex)
   }
 }
 
