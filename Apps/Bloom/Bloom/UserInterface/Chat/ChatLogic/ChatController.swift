@@ -163,8 +163,7 @@ extension ChatController {
     }
 
     let demographics = await ChatVitalConverter.shared.generateDemographics()
-    let data = try encoder.encode(demographics)
-    let stringData = String(data: data, encoding: .utf8) ?? ""
+    let stringData = try encoder.encodeToString(demographics) ?? ""
 
     let fileIDs: [String]
     if let imageData {
@@ -197,6 +196,35 @@ extension ChatController {
 
     await TelemetryDeck.startDurationSignal("Chat TTFT")
     await TelemetryDeck.startDurationSignal("Chat TTFTC")
+  }
+
+  func sendSystemContextMessage(dummyAssistantMessage: String?, systemContext: String) async throws {
+    // Generate a new request ID
+    let requestID = "request_\(UUID().uuidString)"
+    currentRequestID = requestID
+
+    if let dummyAssistantMessage {
+      let assistantMessage = ChatMessage(
+        isCurrentUser: false,
+        message: dummyAssistantMessage,
+        requestID: requestID
+      )
+      try await ChatHistoryModifier.shared.addMessage(assistantMessage)
+    }
+
+    let demographics = await ChatVitalConverter.shared.generateDemographics()
+    let stringData = try encoder.encodeToString(demographics) ?? ""
+
+    let socketMessage = SocketMessage.MessageRequest(
+      text: "",
+      imageFileIDs: [],
+      userInfo: stringData,
+      extraSystemContext: systemContext,
+      requestID: requestID
+    )
+
+    let socket = await createOrGetWebSocketHandle()
+    try await socket.send(payload: socketMessage)
   }
 
   func handlePushData(_ data: Data) async {

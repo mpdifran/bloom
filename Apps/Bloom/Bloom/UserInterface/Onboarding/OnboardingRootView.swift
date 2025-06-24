@@ -16,6 +16,7 @@ extension OnboardingRootView {
     case ageAndSex
     case vitals
     case healthGoals
+    case chatGoalSetup
     case notifications
     case finish
   }
@@ -60,6 +61,10 @@ struct OnboardingRootView: View {
         }
       case .healthGoals:
         OnboardingHealthGoalView {
+          setStep(.notifications)
+        }
+      case .chatGoalSetup:
+        OnboardingChatSetupView {
           setStep(.notifications)
         }
       case .notifications:

@@ -10,17 +10,20 @@ public extension SocketMessage {
     public let text: String
     public let imageFileIDs: [String]
     public let userInfo: String
+    public let extraSystemContext: String?
     public let requestID: String?
 
     public init(
       text: String,
       imageFileIDs: [String],
       userInfo: String,
+      extraSystemContext: String? = nil,
       requestID: String? = nil
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
       self.userInfo = userInfo
+      self.extraSystemContext = extraSystemContext
       self.requestID = requestID
     }
   }

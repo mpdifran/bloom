@@ -132,6 +132,17 @@ private extension ChatService {
       )
     )
 
+    if let extraSystemContext = message.extraSystemContext {
+      inputs.append(
+        .message(
+          .init(
+            role: .system,
+            content: [.text(.init(text: extraSystemContext))]
+          )
+        )
+      )
+    }
+
     // User Messages
     var userContent = [OpenAIKit.Response.InputItem.Content]()
     for fileID in message.imageFileIDs {
@@ -141,9 +152,11 @@ private extension ChatService {
       userContent.append(.text(.init(text: message.text)))
     }
 
-    guard userContent.isNotEmpty else { return }
+    guard userContent.isNotEmpty || message.extraSystemContext?.isNotEmpty == true else { return }
 
-    inputs.append(.message(.init(role: .user, content: userContent)))
+    if userContent.isNotEmpty {
+      inputs.append(.message(.init(role: .user, content: userContent)))
+    }
 
     try await streamResponse(
       inputs: inputs,
