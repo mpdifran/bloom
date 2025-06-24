@@ -176,14 +176,18 @@ actor ChatHistoryModifier {
           )
         )
       } else {
-        // Regular in-progress text message
+        // Regular in-progress text message - only show if not empty after trimming
+        let trimmedMessage = inProgressMessage.message.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard trimmedMessage.isNotEmpty else { continue }
+        
         print("Appending in progress text content: \(inProgressMessage.id)")
         cellModels.append(
           ChatCellModel(
             id: inProgressMessage.id,
             contentType: .text(
               id: inProgressMessage.id,
-              content: inProgressMessage.message,
+              content: trimmedMessage,
               metadata: nil
             )
           )

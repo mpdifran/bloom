@@ -89,9 +89,9 @@ private extension ChatReportReviewView {
   }
 
   var warningSection: some View {
-    VStack {
+    HStack(alignment: .top) {
       Image(systemSymbol: .infoCircleFill)
-        .font(.system(size: 40))
+        .font(.system(size: 24))
         .foregroundStyle(.white, .tint)
 
       Text("The following message content will be submitted with the report.")
