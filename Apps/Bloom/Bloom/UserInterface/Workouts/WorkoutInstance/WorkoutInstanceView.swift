@@ -11,6 +11,7 @@ import DataContainer
 import SFSafeSymbols
 import HealthKit
 import CoreHealth
+import UIKit
 
 // MARK: - WorkoutInstanceView
 
@@ -111,6 +112,12 @@ struct WorkoutInstanceView: View {
     .sensoryFeedback(.impact, trigger: startTimerToggle)
     .presentationCompactAdaptation(.fullScreenCover)
     .alert(error: $error)
+    .onAppear {
+      UIApplication.shared.isIdleTimerDisabled = true
+    }
+    .onDisappear {
+      UIApplication.shared.isIdleTimerDisabled = false
+    }
   }
 }
 
