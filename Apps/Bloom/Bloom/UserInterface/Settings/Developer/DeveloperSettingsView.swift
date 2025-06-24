@@ -357,7 +357,7 @@ extension DeveloperSettingsView {
           }
         } label: {
           LabeledContent("Recalculate Vitals") {
-            Image(systemSymbol: .arrowClockwiseHeartFill)
+            Image(systemSymbol: .arrowTriangleheadClockwiseHeartFill)
           }
           .bold()
           .fontDesign(.rounded)
@@ -430,18 +430,17 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        Button {
-          presentedSheet = ColorPaletteView().asAny
-        } label: {
-          LabeledContent("Color Palette") {
-            Image(systemSymbol: .paintpalette)
+        SettingsCell("Color Palette", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = ColorPaletteView().asAny
           }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
+
+        Divider()
+
+        SettingsCell("Sounds", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = SoundDebugView().asAny
+          }
       }
     }
   }
