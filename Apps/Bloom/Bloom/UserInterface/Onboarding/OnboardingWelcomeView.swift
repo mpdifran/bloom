@@ -64,7 +64,7 @@ private extension OnboardingWelcomeView {
 
   @ViewBuilder
   var newWelcomeContent: some View {
-    Text("Hello there! Welcome to Bloom, your new favourite health app.")
+    Text("Hello there! Welcome to Bloom.")
       .transition(.opacity)
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
       .onboardingTextStyle()

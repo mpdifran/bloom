@@ -110,7 +110,7 @@ private extension FocusAreaVitalReviewView {
 
   func loadVitals() async {
     let focusVitals = await GoalsFactory.shared.recommendedFocusVitals()
-    await Delay(1700)
+    await Delay(1000)
 
     for vital in focusVitals {
       await Delay(100)

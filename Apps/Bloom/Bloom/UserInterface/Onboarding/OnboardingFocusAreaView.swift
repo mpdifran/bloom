@@ -1,5 +1,5 @@
 //
-//  OnboardingHealthGoalView.swift
+//  OnboardingFocusAreaView.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-09-13.
@@ -12,7 +12,7 @@ import HealthKit
 import TelemetryDeck
 import CoreHealth
 
-struct OnboardingHealthGoalView: View {
+struct OnboardingFocusAreaView: View {
   let onContinue: () -> Void
 
   @ObservedObject private var healthManager = HealthManager.shared
@@ -40,11 +40,11 @@ struct OnboardingHealthGoalView: View {
         BudImage(.budSalad)
 
         Group {
-          Text("Let's talk about your goals.")
+          Text("Let's talk about your main Focus Area.")
             .transition(.opacity)
             .appear(with: 1, currentIndex: index)
 
-          Text("Where would you like to focus your efforts?")
+          Text("Where would you like to focus your effort?")
             .transition(.opacity)
             .appear(with: 2, currentIndex: index)
         }
@@ -53,6 +53,12 @@ struct OnboardingHealthGoalView: View {
         goalTextFieldView
           .transition(.blurReplace)
           .appear(with: 3, currentIndex: index)
+
+        Text("This can help tailor my advice to you.")
+          .font(.body)
+          .foregroundStyle(.secondary)
+          .appear(with: 3, currentIndex: index)
+          .onboardingTextStyle()
       }
       .horizontalAlignment(.leading)
       .padding()
@@ -88,12 +94,12 @@ struct OnboardingHealthGoalView: View {
     }
     .onAppear {
       isFocused = true
-      TelemetryDeck.signal("OB Health Goals")
+      TelemetryDeck.signal("OB Focus Area")
     }
   }
 }
 
-private extension OnboardingHealthGoalView {
+private extension OnboardingFocusAreaView {
 
   var goalTextFieldView: some View {
     TextField(
@@ -216,7 +222,7 @@ var healthGoalSuggestionsView: some View {
   }
 
   func advanceIndex() async {
-    await Delay(1700)
+    await Delay(1000)
 
     index += 1
   }
@@ -257,6 +263,6 @@ struct OnboardingHealthGoalCell: View {
 
 #Preview {
   PreviewEnvironment {
-    OnboardingHealthGoalView { }
+    OnboardingFocusAreaView { }
   }
 }

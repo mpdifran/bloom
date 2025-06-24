@@ -107,7 +107,7 @@ private extension OnboardingHealthActivityLevelView {
 private extension OnboardingHealthActivityLevelView {
 
   func advanceIndex() async {
-    await Delay(1700)
+    await Delay(1000)
 
     index += 1
   }
