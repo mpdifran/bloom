@@ -263,6 +263,7 @@ actor ReminderScheduler {
     }
     
     notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
+    notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiersToRemove)
   }
   
   private func cancelAllReminderNotifications() async {
