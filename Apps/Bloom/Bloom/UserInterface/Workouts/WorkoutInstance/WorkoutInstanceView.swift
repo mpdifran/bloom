@@ -70,7 +70,11 @@ struct WorkoutInstanceView: View {
             .ignoresSafeArea()
         }
         .onChange(of: currentIndex) { oldValue, newValue in
-          onCurrentIndexChanges(newCurrentIndex: newValue, scrollProxy: scrollProxy)
+          onCurrentIndexChanges(
+            oldCurrentIndex: oldValue,
+            newCurrentIndex: newValue,
+            scrollProxy: scrollProxy
+          )
         }
         .onChange(of: sessionState) { oldValue, newValue in
           onSessionStateChange(oldSessionState: oldValue, newSessionState: newValue)
@@ -111,7 +115,9 @@ struct WorkoutInstanceView: View {
 
 private extension WorkoutInstanceView {
 
-  func onCurrentIndexChanges(newCurrentIndex: Int, scrollProxy: ScrollViewProxy) {
+  func onCurrentIndexChanges(oldCurrentIndex: Int, newCurrentIndex: Int, scrollProxy: ScrollViewProxy) {
+    playTransitionSoundIfNeeded(oldIndex: oldCurrentIndex, newIndex: newCurrentIndex)
+
     let exerciseSet = exerciseSets[newCurrentIndex]
 
     currentWorkoutType = exerciseSet.set.appleWorkoutType
@@ -126,6 +132,39 @@ private extension WorkoutInstanceView {
       if shouldAutoStartSubTimer {
         isSubTimerActive = true
       }
+    }
+  }
+  
+  func playTransitionSoundIfNeeded(oldIndex: Int, newIndex: Int) {
+    guard oldIndex >= 0 && oldIndex < exerciseSets.count,
+          newIndex >= 0 && newIndex < exerciseSets.count,
+          oldIndex != newIndex else { return }
+    
+    let previousExerciseSet = exerciseSets[oldIndex]
+    let currentExerciseSet = exerciseSets[newIndex]
+    
+    let wasRest: Bool
+    switch previousExerciseSet.kind {
+    case .rest:
+      wasRest = true
+    default:
+      wasRest = false
+    }
+    
+    let isRest: Bool
+    switch currentExerciseSet.kind {
+    case .rest:
+      isRest = true
+    default:
+      isRest = false
+    }
+    
+    if wasRest && !isRest {
+      // Transitioning from rest to work
+      SoundPlayer.playHeadGestureDoubleNod()
+    } else if !wasRest && isRest {
+      // Transitioning from work to rest
+      SoundPlayer.playHeadGestureDoubleShake()
     }
   }
 
