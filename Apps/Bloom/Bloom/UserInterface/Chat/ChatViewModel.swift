@@ -9,6 +9,7 @@ import SwiftUI
 import BloomModel
 import DataContainer
 import SwiftData
+import TelemetryDeck
 
 @Observable @MainActor
 final class ChatViewModel {
@@ -30,6 +31,11 @@ extension ChatViewModel {
       try await ChatController.shared.send(message: message, image: image)
     } catch {
       self.error = error
+      TelemetryDeck.errorOccurred(
+        id: "ChatViewModel.sendMessage",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
     }
   }
 
@@ -43,6 +49,11 @@ extension ChatViewModel {
       try await ChatHistoryModifier.shared.updateMessageAction(id: id, hasPerformedAction: hasPerformedAction)
     } catch {
       self.error = error
+      TelemetryDeck.errorOccurred(
+        id: "ChatViewModel.updateMessageAction",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
     }
   }
   
@@ -80,6 +91,14 @@ private extension ChatViewModel {
       for await error in await ChatController.shared.$error {
         await MainActor.run { [weak self] in
           self?.error = error
+
+          if let error {
+            TelemetryDeck.errorOccurred(
+              id: "ChatViewModel.ChatController.errorTask",
+              category: .thrownException,
+              message: error.localizedDescription
+            )
+          }
         }
       }
     }
