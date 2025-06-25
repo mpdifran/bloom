@@ -40,7 +40,8 @@ extension Application {
     }
 
     let service = ChatHistory(
-      redis: redis
+      redis: redis,
+      logger: logger
     )
 
     storage[ChatHistoryKey.self] = service
