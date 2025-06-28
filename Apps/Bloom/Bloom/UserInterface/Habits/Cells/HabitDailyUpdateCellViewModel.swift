@@ -140,7 +140,7 @@ private extension HabitDailyUpdateCellViewModel {
     if
       prevHasCompletedGoal != .metGoal &&
         goalCompletionState == .metGoal &&
-        !Calendar.current.isDateInToday(habit.lastNotificationDate ?? .distantPast)
+        !isNotificationAlreadySentInCurrentPeriod()
     {
       let id = habit.persistentModelID
       do {
@@ -189,5 +189,28 @@ private extension HabitDailyUpdateCellViewModel {
     // If we haven't met the goal, order it by progress ascending
     let percent = dailyValue.scaledPercent(lower: 0, upper: habit.value)
     return percent * 100
+  }
+  
+  func isNotificationAlreadySentInCurrentPeriod() -> Bool {
+    guard let lastNotificationDate = habit.lastNotificationDate else {
+      return false
+    }
+    
+    let calendar = Calendar.current
+    let now = Date()
+    
+    switch habit.timePeriod {
+    case .daily:
+      return calendar.isDate(lastNotificationDate, inSameDayAs: now)
+    case .weekly:
+      return calendar.isDate(lastNotificationDate, equalTo: now, toGranularity: .weekOfYear)
+    case .monthly:
+      return calendar.isDate(lastNotificationDate, equalTo: now, toGranularity: .month)
+    case .yearly:
+      return calendar.isDate(lastNotificationDate, equalTo: now, toGranularity: .year)
+    @unknown default:
+      print("Unknown time period for Goal")
+      return false
+    }
   }
 }
