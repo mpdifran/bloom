@@ -61,7 +61,7 @@ struct HabitGridWeek: View {
       }
     }
     .frame(height: height)
-    .padding(.leading, .spacing)
+    .padding(.horizontal, .spacing)
   }
 }
 

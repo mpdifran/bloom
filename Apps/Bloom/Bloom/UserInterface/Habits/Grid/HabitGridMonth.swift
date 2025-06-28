@@ -11,6 +11,7 @@ import AppUI
 private extension CGFloat {
   static let spacing: CGFloat = 4
   static let minCellWidth: CGFloat = 80
+  static let labelHeight: CGFloat = 20
 }
 
 private extension Double {
@@ -32,6 +33,7 @@ struct HabitGridMonth: View {
                 .font(.caption)
                 .bold()
                 .foregroundStyle(.secondary)
+                .frame(height: .labelHeight, alignment: .bottom)
 
               HabitGridMonthCell(
                 id: "\(month.id)",
@@ -54,7 +56,7 @@ struct HabitGridMonth: View {
       }
     }
     .frame(height: height)
-    .padding(.leading, .spacing)
+    .padding(.horizontal, .spacing)
   }
 }
 

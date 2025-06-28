@@ -35,6 +35,9 @@ struct HabitDetailsView: View {
         } else if viewModel.habit.timePeriod == .monthly {
           HabitGridMonth(model: viewModel.habitGridMonthModel)
             .padding(.bottom)
+        } else if viewModel.habit.timePeriod == .yearly {
+          HabitGridYear(model: viewModel.habitGridYearModel)
+            .padding(.bottom)
         } else {
           HabitGrid(model: viewModel.habitGridModel)
             .padding(.bottom)
@@ -79,7 +82,7 @@ struct HabitDetailsView: View {
       await viewModel.loadTodayValue()
     }
     .task {
-      await viewModel.loadGoalHistory()
+      await viewModel.loadGoalHistory(timePeriod: viewModel.habit.timePeriod)
     }
     .sheet($presentedSheet)
   }

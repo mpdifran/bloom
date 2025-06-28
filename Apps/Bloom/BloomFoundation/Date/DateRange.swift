@@ -321,6 +321,35 @@ public extension DateRange {
 
     return DateRange(startDate, endDate)
   }
+  
+  static func specificYear(_ yearsFromNow: Int) -> DateRange {
+    let now = Date.now
+    guard let targetYear = Calendar.current.date(byAdding: .year, value: -yearsFromNow, to: now) else {
+      return DateRange(now, now)
+    }
+    
+    let yearComponents = Calendar.current.dateComponents([.year], from: targetYear)
+    guard let startOfYear = Calendar.current.date(from: yearComponents) else {
+      return DateRange(now, now)
+    }
+    
+    var endComponents = yearComponents
+    endComponents.month = 12
+    endComponents.day = 31
+    endComponents.hour = 23
+    endComponents.minute = 59
+    endComponents.second = 59
+    
+    guard let endOfYear = Calendar.current.date(from: endComponents) else {
+      return DateRange(startOfYear, startOfYear)
+    }
+    
+    return DateRange(startOfYear, endOfYear)
+  }
+  
+  static func currentYear() -> DateRange {
+    return specificYear(0)
+  }
 }
 
 // MARK: Windows

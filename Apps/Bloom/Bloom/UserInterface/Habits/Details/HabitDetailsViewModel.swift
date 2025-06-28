@@ -9,6 +9,7 @@ import SwiftUI
 import HealthKit
 import DataContainer
 import CoreHealth
+import BloomFoundation
 
 struct GoalRange: Identifiable, Sendable, Hashable {
   var id: Int { hashValue }
@@ -32,6 +33,7 @@ extension HabitDetailsView {
     var habitGridModel = HabitGridModel()
     var habitGridWeekModel = HabitGridWeekModel()
     var habitGridMonthModel = HabitGridMonthModel()
+    var habitGridYearModel = HabitGridYearModel()
     var allSamplesTwelveWeeks = [DateQuantitySample]()
     var weekQuantitySamples = [WeekQuantitySamples]() {
       didSet { 
@@ -40,9 +42,16 @@ extension HabitDetailsView {
             await loadHabitGridWeekModel()
           } else if habit.timePeriod == .monthly {
             await loadHabitGridMonthModel()
-          } else {
+          } else if habit.timePeriod == .daily {
             await loadHabitGridModel()
           }
+        }
+      }
+    }
+    var yearlyQuantitySamples: [(year: Int, total: HKQuantity, referenceDate: Date)] = [] {
+      didSet { 
+        Task { 
+          await loadHabitGridYearModel()
         }
       }
     }
@@ -76,7 +85,7 @@ private extension HabitDetailsView.ViewModel {
       guard await self?.hasLoadedTodayAtLeastOnce == true else { return }
 
       await self?.loadTodayValue()
-      await self?.loadGoalHistory()
+      await self?.loadGoalHistory(timePeriod: self?.habit.timePeriod ?? .daily)
     }
   }
 }
@@ -109,9 +118,28 @@ extension HabitDetailsView.ViewModel {
     }
   }
 
-  nonisolated func loadGoalHistory() async {
+  nonisolated func loadGoalHistory(timePeriod: GoalTimePeriod) async {
     let targetMetric = await targetMetric()
     let unit = await habitUnit()
+
+    if timePeriod == .yearly {
+      // For yearly habits, fetch individual year totals
+      var yearlySamples: [(year: Int, total: HKQuantity, referenceDate: Date)] = []
+      let currentYear = Calendar.current.component(.year, from: .now)
+      
+      for yearOffset in 0..<5 {
+        let yearRange = DateRange.specificYear(yearOffset)
+        let total = await targetMetric.fetchTotalQuantity(for: yearRange)
+        let year = currentYear - yearOffset
+        yearlySamples.append((year: year, total: total, referenceDate: yearRange.start))
+      }
+
+      let constantYearlySamples = yearlySamples
+      await MainActor.run {
+        self.yearlyQuantitySamples = constantYearlySamples
+      }
+      return
+    }
 
     let twelveWeeksSamples = await targetMetric.fetchCollatedDailyQuantity(
       unit: unit,
@@ -401,6 +429,82 @@ extension HabitDetailsView.ViewModel {
     
     await MainActor.run {
       self.habitGridMonthModel = model
+      self.habitHistory = habitHistory
+    }
+  }
+  
+  nonisolated func loadHabitGridYearModel() async {
+    let targetMetric = await targetMetric()
+    let unit = await habitUnit()
+    
+    let habitHistory: [HabitDTO]
+    do {
+      habitHistory = try await modelActor.fetchHabits(for: targetMetric)
+    } catch {
+      print(error)
+      return
+    }
+    
+    let oldestHabit = habitHistory.first
+    let calendar = Calendar.current
+    let currentYear = calendar.component(.year, from: .now)
+    let yearlySamples = await yearlyQuantitySamples
+    
+    var years = yearlySamples.map { yearSample in
+      // Check if this is the current year
+      let isCurrentYear = yearSample.year == currentYear
+      
+      // Find the matching habit for this year and check if goal was met
+      let referenceHabit: HabitDTO?
+      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: yearSample.referenceDate) }) {
+        referenceHabit = habit
+      } else if let oldestHabit, yearSample.referenceDate < oldestHabit.startDate {
+        referenceHabit = oldestHabit
+      } else {
+        referenceHabit = nil
+      }
+      
+      let isComplete = referenceHabit?.quantityMeetsGoal(yearSample.total) ?? false
+      
+      // Generate year label
+      let yearLabel = String(yearSample.year)
+      
+      // Calculate ID based on years from current year (newer years have lower IDs)
+      let id = currentYear - yearSample.year
+      
+      return HabitGridYearModel.Year(
+        id: id,
+        isComplete: isComplete,
+        isCurrentYear: isCurrentYear,
+        referenceDate: yearSample.referenceDate,
+        yearLabel: yearLabel
+      )
+    }
+    
+    // Sort years by ID (newest on right, which means lowest ID)
+    years.sort { $0.id > $1.id }
+    
+    // Add empty years if needed to reach 5 total
+    if years.count < 5 {
+      var earliestId = years.first?.id ?? 0
+      let remainingAdditions = 5 - years.count
+      
+      for _ in 0 ..< remainingAdditions {
+        earliestId -= 1
+        let year = HabitGridYearModel.Year(
+          id: earliestId,
+          isComplete: nil,
+          referenceDate: .distantPast,
+          yearLabel: ""
+        )
+        years.insert(year, at: 0)
+      }
+    }
+    
+    let model = HabitGridYearModel(years: years)
+    
+    await MainActor.run {
+      self.habitGridYearModel = model
       self.habitHistory = habitHistory
     }
   }
