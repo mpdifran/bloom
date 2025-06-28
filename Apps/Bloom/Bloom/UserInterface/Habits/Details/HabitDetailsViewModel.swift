@@ -27,6 +27,7 @@ extension HabitDetailsView {
       didSet { Task { await calculateGoalRanges() } }
     }
     var todayValue: HKQuantity
+    var currentPeriodValue: HKQuantity
     var dailySamples = [DateQuantitySample]()
     var averageValue: HKQuantity?
     var dayStats = [Calendar.Weekday: Double]()
@@ -61,6 +62,7 @@ extension HabitDetailsView {
     init(habit: Habit) {
       self.habit = habit
       self.todayValue = HKQuantity(unit: habit.unit, doubleValue: 0)
+      self.currentPeriodValue = HKQuantity(unit: habit.unit, doubleValue: 0)
 
       observeChanges()
       Task {
@@ -72,6 +74,10 @@ extension HabitDetailsView {
 
     private var hasLoadedTodayAtLeastOnce = false
     private var observationHandler: HKObserverQueryHandle?
+
+    var timePeriod: GoalTimePeriod {
+      habit.timePeriod
+    }
   }
 }
 
@@ -84,8 +90,10 @@ private extension HabitDetailsView.ViewModel {
     ) { [weak self] in
       guard await self?.hasLoadedTodayAtLeastOnce == true else { return }
 
-      await self?.loadTodayValue()
-      await self?.loadGoalHistory(timePeriod: self?.habit.timePeriod ?? .daily)
+      let timePeriod = await self?.timePeriod ?? .daily
+
+      await self?.loadCurrentPeriodValue(timePeriod: timePeriod)
+      await self?.loadGoalHistory(timePeriod: timePeriod)
     }
   }
 }
@@ -108,12 +116,28 @@ extension HabitDetailsView.ViewModel {
   func targetMetric() -> TargetMetric {
     habit.targetMetric
   }
-
-  nonisolated func loadTodayValue() async {
-    let quantity = await targetMetric().fetchTotalQuantity(for: .today())
-
+  
+  nonisolated func loadCurrentPeriodValue(timePeriod: GoalTimePeriod) async {
+    let targetMetric = await targetMetric()
+    
+    let dateRange: DateRange
+    switch timePeriod {
+    case .daily:
+      dateRange = .today()
+    case .weekly:
+      dateRange = .startOfWeekToNow()
+    case .monthly:
+      dateRange = .startOfMonthToNow()
+    case .yearly:
+      dateRange = .currentYear()
+    @unknown default:
+      return
+    }
+    
+    let quantity = await targetMetric.fetchTotalQuantity(for: dateRange)
+    
     await MainActor.run {
-      self.todayValue = quantity
+      self.currentPeriodValue = quantity
       self.hasLoadedTodayAtLeastOnce = true
     }
   }
@@ -138,7 +162,6 @@ extension HabitDetailsView.ViewModel {
       await MainActor.run {
         self.yearlyQuantitySamples = constantYearlySamples
       }
-      return
     }
 
     let twelveWeeksSamples = await targetMetric.fetchCollatedDailyQuantity(
@@ -435,7 +458,6 @@ extension HabitDetailsView.ViewModel {
   
   nonisolated func loadHabitGridYearModel() async {
     let targetMetric = await targetMetric()
-    let unit = await habitUnit()
     
     let habitHistory: [HabitDTO]
     do {

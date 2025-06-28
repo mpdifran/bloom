@@ -76,10 +76,10 @@ struct HabitDetailsView: View {
     .tint(viewModel.habit.targetMetric.color)
     .navigationTitle("Habit Details")
     .navigationBarTitleDisplayMode(.inline)
-    .animation(.bouncy(duration: 1), value: viewModel.todayValue)
+    .animation(.bouncy(duration: 1), value: viewModel.currentPeriodValue)
     .task {
       await Delay(500)
-      await viewModel.loadTodayValue()
+      await viewModel.loadCurrentPeriodValue(timePeriod: viewModel.habit.timePeriod)
     }
     .task {
       await viewModel.loadGoalHistory(timePeriod: viewModel.habit.timePeriod)
@@ -90,20 +90,35 @@ struct HabitDetailsView: View {
 
 private extension HabitDetailsView {
 
+  var currentPeriodLabel: String {
+    switch viewModel.habit.timePeriod {
+    case .daily:
+      "Today"
+    case .weekly:
+      "This Week"
+    case .monthly:
+      "This Month"
+    case .yearly:
+      "This Year"
+    @unknown default:
+      ""
+    }
+  }
+
   var titleSection: some View {
     VStack {
-      Text(viewModel.todayValue.displayString(for: viewModel.habit.unit))
+      Text(viewModel.currentPeriodValue.displayString(for: viewModel.habit.unit))
         .font(.system(size: 60))
         .foregroundStyle(viewModel.habit.targetMetric.color)
         .lineLimit(1)
         .minimumScaleFactor(0.25)
         .fixedSize(horizontal: false, vertical: true)
-        .contentTransition(.numericText(value: viewModel.todayValue.doubleValue(for: viewModel.habit.unit)))
+        .contentTransition(.numericText(value: viewModel.currentPeriodValue.doubleValue(for: viewModel.habit.unit)))
 
       HStack {
         Text(viewModel.habit.targetMetric.name)
         Text("•")
-        Text("Today")
+        Text(currentPeriodLabel)
       }
       .foregroundStyle(.secondary)
       .font(.body)
