@@ -31,12 +31,15 @@ extension HabitDetailsView {
     var dayStats = [Calendar.Weekday: Double]()
     var habitGridModel = HabitGridModel()
     var habitGridWeekModel = HabitGridWeekModel()
+    var habitGridMonthModel = HabitGridMonthModel()
     var allSamplesTwelveWeeks = [DateQuantitySample]()
     var weekQuantitySamples = [WeekQuantitySamples]() {
       didSet { 
         Task { 
           if habit.timePeriod == .weekly {
             await loadHabitGridWeekModel()
+          } else if habit.timePeriod == .monthly {
+            await loadHabitGridMonthModel()
           } else {
             await loadHabitGridModel()
           }
@@ -303,6 +306,101 @@ extension HabitDetailsView.ViewModel {
     
     await MainActor.run {
       self.habitGridWeekModel = model
+      self.habitHistory = habitHistory
+    }
+  }
+  
+  nonisolated func loadHabitGridMonthModel() async {
+    let targetMetric = await targetMetric()
+    let unit = await habitUnit()
+    
+    let habitHistory: [HabitDTO]
+    do {
+      habitHistory = try await modelActor.fetchHabits(for: targetMetric)
+    } catch {
+      print(error)
+      return
+    }
+    
+    let oldestHabit = habitHistory.first
+    let calendar = Calendar.current
+    
+    // Group daily samples by month
+    let allSamples = await weekQuantitySamples.flatMap { $0.samples }
+    let monthlyGroupedSamples = Dictionary(grouping: allSamples) { sample in
+      calendar.dateInterval(of: .month, for: sample.date)?.start ?? sample.date
+    }
+    
+    // Create month samples with IDs
+    let currentMonth = calendar.dateInterval(of: .month, for: .now)?.start ?? .now
+    var monthSamples: [(id: Int, referenceDate: Date, samples: [DateQuantitySample])] = []
+    
+    for (monthStart, samples) in monthlyGroupedSamples.sorted(by: { $0.key < $1.key }) {
+      let monthsFromCurrent = calendar.dateComponents([.month], from: monthStart, to: currentMonth).month ?? 0
+      let id = monthsFromCurrent
+      monthSamples.append((id: id, referenceDate: monthStart, samples: samples))
+    }
+    
+    var months = monthSamples.map { monthSample in
+      // Check if this is the current month
+      let isCurrentMonth = calendar.isDate(monthSample.referenceDate, equalTo: .now, toGranularity: .month)
+      
+      // Calculate total for the month
+      let monthTotal = monthSample.samples.reduce(0) { total, sample in
+        total + sample.quantity.doubleValue(for: unit)
+      }
+      let monthQuantity = HKQuantity(unit: unit, doubleValue: monthTotal)
+      
+      // Find the matching habit for this month and check if goal was met
+      let referenceHabit: HabitDTO?
+      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: monthSample.referenceDate) }) {
+        referenceHabit = habit
+      } else if let oldestHabit, monthSample.referenceDate < oldestHabit.startDate {
+        referenceHabit = oldestHabit
+      } else {
+        referenceHabit = nil
+      }
+      
+      let isComplete = referenceHabit?.quantityMeetsGoal(monthQuantity) ?? false
+      
+      // Generate month label
+      let formatter = DateFormatter()
+      formatter.dateFormat = "MMM"
+      let monthLabel = formatter.string(from: monthSample.referenceDate)
+      
+      return HabitGridMonthModel.Month(
+        id: monthSample.id,
+        isComplete: isComplete,
+        isCurrentMonth: isCurrentMonth,
+        referenceDate: monthSample.referenceDate,
+        monthLabel: monthLabel
+      )
+    }
+    
+    // Sort months by ID (newest on right, which means lowest/negative ID)
+    months.sort { $0.id > $1.id }
+    
+    // Add empty months if needed to reach 12 total
+    if months.count < 12 {
+      var earliestId = months.first?.id ?? 0
+      let remainingAdditions = 12 - months.count
+      
+      for _ in 0 ..< remainingAdditions {
+        earliestId -= 1
+        let month = HabitGridMonthModel.Month(
+          id: earliestId,
+          isComplete: nil,
+          referenceDate: .distantPast,
+          monthLabel: ""
+        )
+        months.insert(month, at: 0)
+      }
+    }
+    
+    let model = HabitGridMonthModel(months: months)
+    
+    await MainActor.run {
+      self.habitGridMonthModel = model
       self.habitHistory = habitHistory
     }
   }

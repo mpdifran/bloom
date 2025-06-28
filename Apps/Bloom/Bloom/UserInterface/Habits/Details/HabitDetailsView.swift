@@ -32,6 +32,9 @@ struct HabitDetailsView: View {
         if viewModel.habit.timePeriod == .weekly {
           HabitGridWeek(model: viewModel.habitGridWeekModel)
             .padding(.bottom)
+        } else if viewModel.habit.timePeriod == .monthly {
+          HabitGridMonth(model: viewModel.habitGridMonthModel)
+            .padding(.bottom)
         } else {
           HabitGrid(model: viewModel.habitGridModel)
             .padding(.bottom)
