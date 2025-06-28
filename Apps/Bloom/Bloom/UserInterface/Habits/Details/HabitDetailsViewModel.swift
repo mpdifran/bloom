@@ -30,9 +30,18 @@ extension HabitDetailsView {
     var averageValue: HKQuantity?
     var dayStats = [Calendar.Weekday: Double]()
     var habitGridModel = HabitGridModel()
+    var habitGridWeekModel = HabitGridWeekModel()
     var allSamplesTwelveWeeks = [DateQuantitySample]()
     var weekQuantitySamples = [WeekQuantitySamples]() {
-      didSet { Task { await loadHabitGridModel() } }
+      didSet { 
+        Task { 
+          if habit.timePeriod == .weekly {
+            await loadHabitGridWeekModel()
+          } else {
+            await loadHabitGridModel()
+          }
+        }
+      }
     }
     var goalRanges = [GoalRange]()
     var habitHistory = [HabitDTO]()
@@ -210,6 +219,90 @@ extension HabitDetailsView.ViewModel {
 
     await MainActor.run {
       self.habitGridModel = model
+      self.habitHistory = habitHistory
+    }
+  }
+  
+  nonisolated func loadHabitGridWeekModel() async {
+    let targetMetric = await targetMetric()
+    let unit = await habitUnit()
+    
+    let habitHistory: [HabitDTO]
+    do {
+      habitHistory = try await modelActor.fetchHabits(for: targetMetric)
+    } catch {
+      print(error)
+      return
+    }
+    
+    let oldestHabit = habitHistory.first
+    let calendar = Calendar.current
+    
+    var weeks = await weekQuantitySamples.map { weekSamples in
+      // Check if this is the current week
+      let isCurrentWeek = weekSamples.samples.contains { calendar.isDateInToday($0.date) }
+      
+      // Calculate total for the week
+      let weekTotal = weekSamples.samples.reduce(0) { total, sample in
+        total + sample.quantity.doubleValue(for: unit)
+      }
+      let weekQuantity = HKQuantity(unit: unit, doubleValue: weekTotal)
+      
+      // Find the matching habit for this week and check if goal was met
+      let referenceHabit: HabitDTO?
+      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: weekSamples.referenceDate) }) {
+        referenceHabit = habit
+      } else if let oldestHabit, weekSamples.referenceDate < oldestHabit.startDate {
+        referenceHabit = oldestHabit
+      } else {
+        referenceHabit = nil
+      }
+      
+      let isComplete = referenceHabit?.quantityMeetsGoal(weekQuantity) ?? false
+      
+      // Check if this week contains the 1st of a month
+      var monthLabel: String? = nil
+      let weekDays = (0..<7).compactMap { dayOffset in
+        calendar.date(byAdding: .day, value: dayOffset, to: weekSamples.referenceDate)
+      }
+      
+      for day in weekDays {
+        if calendar.component(.day, from: day) == 1 {
+          let formatter = DateFormatter()
+          formatter.dateFormat = "MMM"
+          monthLabel = formatter.string(from: day)
+          break
+        }
+      }
+      
+      return HabitGridWeekModel.Week(
+        id: weekSamples.id,
+        isComplete: isComplete,
+        isCurrentWeek: isCurrentWeek,
+        referenceDate: weekSamples.referenceDate,
+        monthLabel: monthLabel
+      )
+    }
+    
+    if weeks.count < 20 {
+      var earliestId = weeks.first?.id ?? 0
+      let remainingAdditions = 20 - weeks.count
+      
+      for _ in 0 ..< remainingAdditions {
+        earliestId -= 1
+        let week = HabitGridWeekModel.Week(
+          id: earliestId,
+          isComplete: nil,
+          referenceDate: .distantPast
+        )
+        weeks.insert(week, at: 0)
+      }
+    }
+    
+    let model = HabitGridWeekModel(weeks: weeks)
+    
+    await MainActor.run {
+      self.habitGridWeekModel = model
       self.habitHistory = habitHistory
     }
   }

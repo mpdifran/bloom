@@ -29,8 +29,13 @@ struct HabitDetailsView: View {
       VStack {
         titleSection
 
-        HabitGrid(model: viewModel.habitGridModel)
-          .padding(.bottom)
+        if viewModel.habit.timePeriod == .weekly {
+          HabitGridWeek(model: viewModel.habitGridWeekModel)
+            .padding(.bottom)
+        } else {
+          HabitGrid(model: viewModel.habitGridModel)
+            .padding(.bottom)
+        }
       }
       .background(.background)
 

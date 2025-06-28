@@ -1,13 +1,13 @@
 //
-//  HabitGridCell.swift
-//  Supplements
+//  HabitGridWeekCell.swift
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-09-11.
+//  Created by Mark DiFranco on 2025-06-28.
 //
 
 import SwiftUI
 
-struct HabitGridCell: View {
+struct HabitGridWeekCell: View {
   let id: String
   let isComplete: Bool?
   let isToday: Bool
@@ -33,12 +33,12 @@ struct HabitGridCell: View {
             }
         }
       }
-      .aspectRatio(contentMode: .fit)
+      .aspectRatio(1/7, contentMode: .fit)
       .id(id)
   }
 }
 
-private extension HabitGridCell {
+private extension HabitGridWeekCell {
 
   var strokeOpacity: Double {
     switch isComplete {
@@ -57,13 +57,17 @@ private extension HabitGridCell {
 }
 
 #Preview {
-  VStack {
-    HabitGridCell(id: "1", isComplete: false, isToday: false)
-    HabitGridCell(id: "2", isComplete: false, isToday: true)
-    HabitGridCell(id: "3", isComplete: true, isToday: false)
-    HabitGridCell(id: "4", isComplete: true, isToday: true)
-    HabitGridCell(id: "5", isComplete: nil, isToday: false)
+  HStack {
+    HabitGridWeekCell(id: "1", isComplete: false, isToday: false)
+    HabitGridWeekCell(id: "2", isComplete: false, isToday: true)
+    HabitGridWeekCell(id: "3", isComplete: true, isToday: false)
+    HabitGridWeekCell(id: "4", isComplete: true, isToday: true)
+    HabitGridWeekCell(id: "5", isComplete: nil, isToday: false)
+    HabitGridWeekCell(id: "6", isComplete: false, isToday: false)
+    HabitGridWeekCell(id: "7", isComplete: false, isToday: false)
+    HabitGridWeekCell(id: "8", isComplete: false, isToday: false)
+    HabitGridWeekCell(id: "9", isComplete: false, isToday: false)
+    HabitGridWeekCell(id: "10", isComplete: false, isToday: false)
   }
-  .frame(width: 20)
-  .tint(.mutedBlue)
+  .tint(.mutedYellow)
 }
