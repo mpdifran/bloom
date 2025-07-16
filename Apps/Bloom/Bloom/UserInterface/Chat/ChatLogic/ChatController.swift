@@ -286,6 +286,7 @@ private extension ChatController {
           requestID: messageResponse.requestID
         )
         try await ChatHistoryModifier.shared.addMessage(message)
+        TelemetryDeck.signal("Received Bud Text Message")
       } catch {
         self.error = error
       }
@@ -390,6 +391,12 @@ private extension ChatController {
           responseID: richContentMessage.responseID,
           requestID: richContentMessage.requestID
         )
+        TelemetryDeck.signal(
+          "Received Bud Rich Content Message",
+          parameters: [
+            "richContentKind" : richContentMessage.kind.telemetryName
+          ]
+        )
       }
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       await TelemetryDeck.stopAndSendDurationSignal("Chat TTFTC")
@@ -490,6 +497,11 @@ private extension ChatController {
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
       self.error = NSError(description: error.errorMessage)
       print(error.errorMessage)
+      TelemetryDeck.errorOccurred(
+        id: "ChatController.parseData",
+        category: .thrownException,
+        message: error.errorMessage
+      )
     } else {
       print("Unknown SocketMessage:\n\n\(String(data: data, encoding: .utf8) ?? "")")
     }
