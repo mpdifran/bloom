@@ -80,14 +80,14 @@ private extension ChatLauncherView {
     .padding(4)
     .cardContainer(fill: .background, includePadding: false)
     .onTapGesture {
-      tabController.isShowingChat = true
-      selectionToggle.toggle()
-//      EntitledAction(
-//        presentedSheet: $presentedSheet
-//      ) {
-//        tabController.isShowingChat = true
-//        selectionToggle.toggle()
-//      }
+//      tabController.isShowingChat = true
+//      selectionToggle.toggle()
+      EntitledAction(
+        presentedSheet: $presentedSheet
+      ) {
+        tabController.isShowingChat = true
+        selectionToggle.toggle()
+      }
     }
   }
 

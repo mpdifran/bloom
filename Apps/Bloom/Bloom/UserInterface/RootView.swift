@@ -17,7 +17,7 @@ struct RootView: View {
 
   @Bindable private var themeController = ThemeController.shared
 
-  @ObservedObject private var entitlementController = EntitlementController.shared
+  @ObservedObject private var packageStore = PackageStore.shared
   @State private var presentedSheet: AnyView?
 
   @ObservedObject private var userController = UserController.shared

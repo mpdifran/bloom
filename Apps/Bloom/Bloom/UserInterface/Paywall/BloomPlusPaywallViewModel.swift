@@ -7,35 +7,31 @@
 
 import SwiftUI
 import RevenueCat
+import StoreKit
 import TelemetryDeck
 
 extension BloomPlusPaywall {
   @MainActor @Observable
   final class ViewModel {
-    var packages = [Package]()
+    var products = [Product]()
   }
 }
 
 extension BloomPlusPaywall.ViewModel {
 
   func loadOfferings() async {
-    do {
-      let offerings = try await Purchases.shared.offerings()
-      self.packages = offerings.current?.availablePackages ?? []
-    } catch {
-      TelemetryDeck.errorOccurred(
-        id: "BloomPlusPaywall.ViewModel.loadOfferings",
-        category: .thrownException,
-        message: error.localizedDescription
-      )
-    }
+    self.products = PackageStore.shared.subscriptions
   }
 
   func purchase(_ package: Package) async throws {
     _ = try await Purchases.shared.purchase(package: package)
   }
 
+  func purchase(_ product: Product) async throws {
+    _ = try await PackageStore.shared.purchase(product)
+  }
+
   func restorePurchases() async throws {
-    _ = try await Purchases.shared.restorePurchases()
+    try await PackageStore.shared.restore()
   }
 }

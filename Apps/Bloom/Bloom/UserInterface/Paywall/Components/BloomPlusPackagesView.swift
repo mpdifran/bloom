@@ -7,10 +7,11 @@
 
 import SwiftUI
 import RevenueCat
+import StoreKit
 
 struct BloomPlusPackagesView: View {
-  let packages: [Package]
-  @Binding var selectedPackage: Package?
+  let products: [Product]
+  @Binding var selectedProductID: String
 
   @State private var selectedPackageToggle = false
 
@@ -19,36 +20,19 @@ struct BloomPlusPackagesView: View {
       GridItem(.flexible()),
       GridItem(.flexible())
     ]) {
-      ForEach(packages) { package in
+      ForEach(products, id: \.id) { product in
         BloomPlusPackageCard(
-          title: package.sensibleName,
-          subtitle: package.pricingString ?? "",
-          introOffer: package.introductoryOfferString,
-          isSelected: package == selectedPackage
+          title: product.sensibleName,
+          subtitle: product.pricingString ?? "",
+          introOffer: product.introductoryOfferString,
+          isSelected: product.id == selectedProductID
         )
         .sensoryFeedback(.impact, trigger: selectedPackageToggle)
         .onTapGesture {
-          selectedPackage = package
+          selectedProductID = product.id
           selectedPackageToggle.toggle()
         }
       }
     }
   }
-}
-
-#Preview {
-  @Previewable @State var selectedPackage: Package?
-
-  BloomPlusPackagesView(
-    packages: [
-      Package(
-        identifier: "preview",
-        packageType: .monthly,
-        storeProduct: StoreProduct(sk1Product: SK1Product()),
-        offeringIdentifier: "offering",
-        webCheckoutUrl: nil
-      )
-    ],
-    selectedPackage: $selectedPackage
-  )
 }

@@ -9,6 +9,11 @@ import Foundation
 
 extension String {
   enum ProductIdentifier {
+    static let all: [String] = [
+      .ProductIdentifier.monthly,
+      .ProductIdentifier.yearly
+    ]
+
     static let monthly = "bloom_pro_monthly"
     static let yearly = "bloom_pro_yearly"
   }

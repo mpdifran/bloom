@@ -10,11 +10,11 @@ import AppUI
 
 @MainActor
 func EntitledPresent<Content>(presentedSheet: Binding<AnyView?>, content: @escaping () -> Content) where Content: View {
-  if EntitlementController.shared.hasBloomPro == true {
+  if PackageStore.shared.hasBloomPro == true {
     presentedSheet.wrappedValue = content().asAny
   } else {
     presentedSheet.wrappedValue = BloomPlusPaywall {
-      guard EntitlementController.shared.hasBloomPro == true else { return }
+      guard PackageStore.shared.hasBloomPro == true else { return }
 
       Task {
         await Delay(300)
@@ -29,11 +29,11 @@ func EntitledAction(
   presentedSheet: Binding<AnyView?>,
   action: @escaping () -> Void
 ) {
-  if EntitlementController.shared.hasBloomPro == true {
+  if PackageStore.shared.hasBloomPro == true {
     action()
   } else {
     presentedSheet.wrappedValue = BloomPlusPaywall {
-      guard EntitlementController.shared.hasBloomPro == true else { return }
+      guard PackageStore.shared.hasBloomPro == true else { return }
 
       Task {
         await Delay(300)

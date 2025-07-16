@@ -97,14 +97,6 @@ private extension TabController {
       dismiss()
       select(.today)
       showEveningReport = true
-    case .CategoryID.reviewFocusAreas:
-      dismiss()
-      select(.today)
-      if EntitlementController.shared.hasBloomPro == true {
-        showFocusAreasReview = true
-      } else {
-        showPaywall = true
-      }
     case .CategoryID.reminders:
       dismiss()
       select(.today)

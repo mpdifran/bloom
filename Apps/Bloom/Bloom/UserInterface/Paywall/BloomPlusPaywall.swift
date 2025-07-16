@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import RevenueCat
+import StoreKit
 import TelemetryDeck
 
 struct BloomPlusPaywall: View {
@@ -21,14 +22,16 @@ struct BloomPlusPaywall: View {
   ) {
     self.showDismiss = showDismiss
     self.onPurchase = onPurchase
+
+    self.selectedProductID = .ProductIdentifier.yearly
   }
 
   @State private var viewModel = ViewModel()
-  @State private var selectedPackage: Package?
+  @State private var selectedProductID: String
   @State private var presentedSheet: AnyView?
   @State private var error: Error?
 
-  @ObservedObject private var entitlementController = EntitlementController.shared
+  @ObservedObject private var packageStore = PackageStore.shared
 
   @Environment(\.dismiss) private var dismiss
 
@@ -39,7 +42,7 @@ struct BloomPlusPaywall: View {
         .clipped()
         .ignoresSafeArea(edges: .top)
 
-      ScrollView {
+      ScrollView(.vertical) {
         contentView
           .background {
             RoundedRectangle(cornerRadius: 30)
@@ -66,28 +69,38 @@ struct BloomPlusPaywall: View {
       await viewModel.loadOfferings()
     }
     .presentationCompactAdaptation(.fullScreenCover)
-    .animation(.default, value: selectedPackage)
-    .onChange(of: entitlementController.hasBloomPro) { _, _ in
-      guard entitlementController.hasBloomPro == true else { return }
+    .animation(.default, value: selectedProductID)
+    .onChange(of: packageStore.hasBloomPro) { _, _ in
+      guard packageStore.hasBloomPro == true else { return }
 
       TelemetryDeck.signal("Paywall Purchase Complete")
       dismiss()
       onPurchase()
     }
-    .onChange(of: viewModel.packages) { _, _ in
-      selectedPackage = viewModel.packages.first
+    .onChange(of: viewModel.products) { _, _ in
+      if viewModel.products.contains(where: { $0.id == .ProductIdentifier.yearly }) {
+        selectedProductID = .ProductIdentifier.yearly
+      } else {
+        selectedProductID = viewModel.products.first?.id ?? .ProductIdentifier.yearly
+      }
     }
   }
 }
 
 private extension BloomPlusPaywall {
 
+  var selectedProduct: Product? {
+    viewModel.products.first(where: { $0.id == selectedProductID })
+  }
+
   var contentView: some View {
     VStack {
       VStack(spacing: 30) {
-        BloomPlusTryBloomHeaderView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
+        BloomPlusTryBloomHeaderView(canTryForFree: selectedProduct?.hasFreeIntroductoryOffer == true)
           .padding(.top)
           .padding(.top)
+          .horizontallyCentered()
+          .padding(.horizontal)
         BloomPlusFeaturesListView()
       }
 
@@ -107,9 +120,9 @@ private extension BloomPlusPaywall {
   var purchaseShelf: some View {
     VStack {
       Group {
-        if let eventualCostString = selectedPackage?.introductoryEventualCostDescription {
+        if let eventualCostString = selectedProduct?.introductoryEventualCostDescription {
           Text(eventualCostString)
-        } else if let pricingString = selectedPackage?.pricingString {
+        } else if let pricingString = selectedProduct?.pricingString {
           Text(pricingString)
         }
       }
@@ -117,12 +130,12 @@ private extension BloomPlusPaywall {
       .bold()
 
       AsyncButton {
-        guard let package = selectedPackage ?? viewModel.packages.first else { return }
+        guard let product = selectedProduct ?? viewModel.products.first else { return }
 
-        try await viewModel.purchase(package)
+        try await viewModel.purchase(product)
       } label: {
         Group {
-          if let title = selectedPackage?.introductoryPurchaseButtonTitle {
+          if let title = selectedProduct?.introductoryPurchaseButtonTitle {
             Text(title)
           } else {
             Text("Invest in my Health")
@@ -134,8 +147,8 @@ private extension BloomPlusPaywall {
 
       Button("View All Plans") {
         presentedSheet = BloomPlusPackagePlanPicker(
-          packages: viewModel.packages,
-          selectedPackage: $selectedPackage
+          products: viewModel.products,
+          selectedProductID: $selectedProductID
         ).asAny
       }
       .bold()

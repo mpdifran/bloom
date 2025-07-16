@@ -7,11 +7,12 @@
 
 import SwiftUI
 import RevenueCat
+import StoreKit
 import TelemetryDeck
 
 struct BloomPlusPackagePlanPicker: View {
-  let packages: [Package]
-  @Binding var selectedPackage: Package?
+  let products: [Product]
+  @Binding var selectedProductID: String
 
   @State private var showOfferCodeSheet = false
   @State private var selectedPackageToggle = false
@@ -23,17 +24,17 @@ struct BloomPlusPackagePlanPicker: View {
   var body: some View {
     LargeTitleActionCard("Select a Plan") {
       VStack(spacing: 20) {
-        ForEach(packages) { package in
+        ForEach(products, id: \.id) { product in
           BloomPlusPackageCell(
-            title: package.sensibleName,
-            cost: package.pricingString ?? "",
-            costMonthly: package.monthlyPriceString,
-            offer: package.introductoryOfferString,
-            isSelected: package == selectedPackage
+            title: product.sensibleName,
+            cost: product.pricingString ?? "",
+            costMonthly: product.monthlyPriceString,
+            offer: product.introductoryOfferString,
+            isSelected: product.id == selectedProductID
           )
           .sensoryFeedback(.impact, trigger: selectedPackageToggle)
           .onTapGesture {
-            selectedPackage = package
+            selectedProductID = product.id
             selectedPackageToggle.toggle()
             dismiss()
           }
@@ -81,25 +82,25 @@ struct BloomPlusPackagePlanPicker: View {
 private extension BloomPlusPackagePlanPicker {
 
   func restorePurchases() async throws {
-    _ = try await Purchases.shared.restorePurchases()
+    try await PackageStore.shared.restore()
   }
 }
 
-#Preview {
-  @Previewable @State var selectedPackage: Package?
-
-  PreviewSheetPresent {
-    BloomPlusPackagePlanPicker(
-      packages: [
-        Package(
-          identifier: "preview",
-          packageType: .monthly,
-          storeProduct: StoreProduct(sk1Product: SK1Product()),
-          offeringIdentifier: "offering",
-          webCheckoutUrl: nil
-        )
-      ],
-      selectedPackage: $selectedPackage
-    )
-  }
-}
+//#Preview {
+//  @Previewable @State var selectedPackage: Package?
+//
+//  PreviewSheetPresent {
+//    BloomPlusPackagePlanPicker(
+//      packages: [
+//        Package(
+//          identifier: "preview",
+//          packageType: .monthly,
+//          storeProduct: StoreProduct(sk1Product: SK1Product()),
+//          offeringIdentifier: "offering",
+//          webCheckoutUrl: nil
+//        )
+//      ],
+//      selectedPackage: $selectedPackage
+//    )
+//  }
+//}
