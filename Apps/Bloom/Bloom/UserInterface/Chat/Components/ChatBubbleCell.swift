@@ -115,3 +115,50 @@ private extension ChatBubbleCell {
     .groupedBackground()
   }
 }
+
+#Preview("Screenshots") {
+  VStack(spacing: 30) {
+    ChatBubbleCell(
+      message: "I feel tired all the time, what can I do to get my energy up?",
+      isDirect: false,
+      isCurrentUser: true,
+      showTail: true
+    )
+
+    ChatBubbleCell(
+      message: "What should I eat from this restaurant?",
+      isDirect: false,
+      isCurrentUser: true,
+      showTail: true
+    )
+
+    ChatBubbleCell(
+      message: "What's a good lower body workout for me that doesn't irritate my sprained ankle?",
+      isDirect: false,
+      isCurrentUser: true,
+      showTail: true
+    )
+
+    ChatBubbleCell(
+      message: "Can you help me build up to a marathon?",
+      isDirect: false,
+      isCurrentUser: true,
+      showTail: true
+    )
+
+    VStack {
+      ChatImageCell(
+        image: UIImage(named: "CrackersAndCheese")!,
+        isCurrentUser: true
+      )
+      ChatBubbleCell(
+        message: "I just ate this for dinner.",
+        isDirect: false,
+        isCurrentUser: true,
+        showTail: true
+      )
+    }
+  }
+  .bold()
+  .frame(maxWidth: 340)
+}
