@@ -76,7 +76,7 @@ extension FoodItemRecord {
       name: name,
       brandName: brandName,
       flavour: flavour,
-      country: country.asCountry(),
+      country: country,
       calories: calories.map({ .init(value: $0, unit: "kcal")}),
       protein: protein.map({ .init(value: $0, unit: "g")}),
       carbohydrates: carbohydrates.map({ .init(value: $0, unit: "g")}),
@@ -123,7 +123,7 @@ extension FoodItemRecord {
       category: category.asAdminCategory(),
       barcode: barcode,
       ingredients: ingredients,
-      country: country.asCountry(),
+      country: country,
       calories: calories,
       protein: protein,
       carbohydrates: carbohydrates,
@@ -191,14 +191,6 @@ extension FoodItemRecord.State {
   }
 }
 
-extension FoodItemRecord.Country {
-  func asCountry() -> FoodItem.Country {
-    switch self {
-    case .canada: .canada
-    case .usa: .usa
-    }
-  }
-}
 
 extension FoodItemRecord {
   // consider using libraries like https://github.com/pointfreeco/swift-custom-dump in the future

@@ -25,7 +25,7 @@ extension USDAFoodItem {
             name: name,
             brandName: "Generic",
             flavour: foodCategory,
-            country: .usa,
+            country: "usa",
             calories: calories.map({ .init(value: $0, unit: "kcal") }),
             protein: protein.map({ .init(value: $0, unit: "g") }),
             carbohydrates: carbohydrates.map({ .init(value: $0, unit: "g") }),

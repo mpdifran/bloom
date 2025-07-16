@@ -17,7 +17,7 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
   public let brandName: String?
   public let flavour: String?
 
-  public let country: Country?
+  public let country: String?
 
   public let calories: Quantity?
   public let protein: Quantity?
@@ -62,7 +62,7 @@ public struct FoodItem: Codable, Identifiable, Sendable, Hashable {
     name: String,
     brandName: String?,
     flavour: String?,
-    country: Country?,
+    country: String?,
     calories: Quantity?,
     protein: Quantity?,
     carbohydrates: Quantity?,
@@ -153,12 +153,6 @@ public extension FoodItem {
   }
 }
 
-public extension FoodItem {
-  enum Country: String, Codable, Sendable, CaseIterable, Equatable {
-    case canada
-    case usa
-  }
-}
 
 public extension FoodItem {
 

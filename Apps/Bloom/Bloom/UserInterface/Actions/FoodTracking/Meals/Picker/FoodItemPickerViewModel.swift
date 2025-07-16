@@ -17,7 +17,7 @@ extension FoodItemPicker {
     var results: [FoodItemSection]?
     var frequentFoodItemSections = [FoodItemSection]()
     var recentFoodItemSections = [FoodItemSection]()
-    var country: FoodCountry = .usa
+    var country: String = "usa"
     var error: Error?
 
     private let foodItemModelActor = FoodItemLogModelActor.standard()

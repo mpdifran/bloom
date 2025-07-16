@@ -33,7 +33,7 @@ extension FoodLoggingActionCardView {
     var error: Error?
     var frequentFoodItemSections = [FoodItemSection]()
     var recentFoodItemSections = [FoodItemSection]()
-    var country: FoodCountry = .usa
+    var country: String = "usa"
 
     private var debounceTask: Task<Void, Never>?
 

@@ -65,7 +65,7 @@ extension NetworkRequester {
     return response.tokens
   }
 
-  func foodSearch(name: String, brand: String?, preferredCountry: FoodCountry) async throws -> [FoodSearchResponse.Section] {
+  func foodSearch(name: String, brand: String?, preferredCountry: String) async throws -> [FoodSearchResponse.Section] {
     let body = FoodSearchRequest(
       name: name,
       brand: brand,
@@ -81,7 +81,7 @@ extension NetworkRequester {
 
   func foodSearch(
     upcCode: String,
-    country: FoodCountry
+    country: String
   ) async throws -> [FoodSearchResponse.Section] {
     let body = FoodSearchRequest(
       upcCode: upcCode,
@@ -99,7 +99,7 @@ extension NetworkRequester {
     barcode: String,
     nutritionImage: UIImage,
     packagingImage: UIImage,
-    country: FoodCountry
+    country: String
   ) async throws -> UploadNewFoodResponse {
     guard
       let nutritionData = nutritionImage.pngData(),

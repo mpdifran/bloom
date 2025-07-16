@@ -22,7 +22,7 @@ extension AIFoodScannerView {
     var unknownBarcodes = [String]()
     var scanResultsToggle = false
     var scanResultsErrorToggle = false
-    var country: FoodCountry = .usa
+    var country: String = "usa"
     var error: Error?
 
     init() {

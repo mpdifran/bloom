@@ -30,12 +30,3 @@ extension AdminFoodItemRecord.State {
     }
   }
 }
-
-extension FoodItem.Country {
-  func asCountry() -> FoodItemRecord.Country {
-    switch self {
-    case .canada: .canada
-    case .usa: .usa
-    }
-  }
-}

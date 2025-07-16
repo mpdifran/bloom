@@ -66,7 +66,7 @@ extension FoodController {
     let existingFoodItems = try await request.foodDatabaseService.searchFoods(barcode: requestBody.barcode)
 
     // Both country and barcode need to match for it to be considered the same.
-    if let foodItem = existingFoodItems.first(where: { $0.country?.asCountry() == requestBody.country.country }) {
+    if let foodItem = existingFoodItems.first(where: { $0.country == requestBody.country }) {
       do {
         // Try updating images if they're missing.
         try await request.foodDatabaseService.addProductImagesIfMissing(
@@ -96,7 +96,7 @@ extension FoodController {
     do {
       let (foodItemRecord, result) = try await request.openAIService.parseNewFoodItem(
         barCode: requestBody.barcode,
-        country: requestBody.country.country,
+        country: requestBody.country,
         nutritionLabelMetadata: nutritionLabelMetadata,
         packagingMetadata: packagingMetadata
       )
@@ -251,7 +251,7 @@ private extension FoodController {
       return await searchFoodsByNameLocalDatabase(
         request,
         name: name,
-        country: requestBody.country?.country ?? .usa
+        country: requestBody.country ?? "usa"
       )
     } else {
       throw Abort(.badRequest)
@@ -283,14 +283,16 @@ private extension FoodController {
   func searchFoodsByNameLocalDatabase(
     _ request: Request,
     name: String,
-    country: FoodItemRecord.Country
+    country: String
   ) async -> [FoodSearchResponse.Section] {
     do {
       var sections = [FoodSearchResponse.Section]()
 
+      let foodDatabaseService = request.foodDatabaseService
+
       try await withThrowingTaskGroup(of: FoodSearchResponse.Section?.self) { group in
         group.addTask {
-          let foodItems = try await request.foodDatabaseService.searchFoods(
+          let foodItems = try await foodDatabaseService.searchFoods(
             query: name,
             category: .branded,
             preferredCountry: country,
@@ -306,7 +308,7 @@ private extension FoodController {
           )
         }
         group.addTask {
-          let foodItems = try await request.foodDatabaseService.searchFoods(
+          let foodItems = try await foodDatabaseService.searchFoods(
             query: name,
             category: .restaurant,
             preferredCountry: country,
@@ -322,7 +324,7 @@ private extension FoodController {
           )
         }
         group.addTask {
-          let foodItems = try await request.foodDatabaseService.searchFoods(
+          let foodItems = try await foodDatabaseService.searchFoods(
             query: name,
             category: .fastfood,
             preferredCountry: country,
@@ -338,7 +340,7 @@ private extension FoodController {
           )
         }
         group.addTask {
-          let foodItems = try await request.foodDatabaseService.searchFoods(
+          let foodItems = try await foodDatabaseService.searchFoods(
             query: name,
             category: .generic,
             preferredCountry: country,

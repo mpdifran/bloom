@@ -14,7 +14,7 @@ extension BarcodeScannerPickerView {
   final class ViewModel {
     var foodItems = [FoodItem]()
     var unknownBarcodes = [String]()
-    var country: FoodCountry = .usa
+    var country: String = "usa"
 
     var scanResultsToggle = false
     var scanResultsErrorToggle = false

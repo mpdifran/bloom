@@ -458,13 +458,11 @@ private extension FoodItemDetailView {
           .padding(.trailing, 40)
       }
 
-      Picker("Country", selection: $viewModel.foodItem.country) {
-        ForEach(FoodItem.Country.allCases, id: \.self) { country in
-          Text(country.rawValue)
-            .tag(country)
-        }
-      }
-      .changeIndicator(isChanged: viewModel.propertyChanged(\.country))
+      TextField("Country", text: .init($viewModel.foodItem.country, replacingNilWith: ""))
+        .textFieldStyle(.roundedBorder)
+        .autocorrectionDisabled()
+        .multilineTextAlignment(.trailing)
+        .changeIndicator(isChanged: viewModel.propertyChanged(\.country))
 
       TextField("Source", text: .init($viewModel.foodItem.source, replacingNilWith: ""))
         .changeIndicator(isChanged: viewModel.propertyChanged(\.source))

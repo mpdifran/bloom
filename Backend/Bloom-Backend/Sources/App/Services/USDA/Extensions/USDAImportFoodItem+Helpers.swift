@@ -17,7 +17,7 @@ extension USDAImportFoodItem {
         let foodItemRecord = try await FoodItemRecord.findOrCreate(id: id, on: request.db)
 
         foodItemRecord.name = description
-        foodItemRecord.country = .usa // Assuming all USDA items are from the USA.
+        foodItemRecord.country = "usa" // Assuming all USDA items are from the USA.
         foodItemRecord.category = category
         foodItemRecord.source = "USDA"
 

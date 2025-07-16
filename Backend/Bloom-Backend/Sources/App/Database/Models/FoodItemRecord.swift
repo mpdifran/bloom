@@ -42,8 +42,8 @@ final class FoodItemRecord: Model, @unchecked Sendable {
   @Field(key: "ingredients")
   var ingredients: String?
 
-  @Enum(key: "country")
-  var country: Country
+  @Field(key: "country")
+  var country: String
 
   @Field(key: "calories")
   var calories: Double?
@@ -146,7 +146,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
   init(
     id: String,
     name: String,
-    country: Country,
+    country: String,
     category: Category,
     source: String
   ) {
@@ -204,7 +204,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     nutritionLabelImage: String?,
     packagingImage: String?,
     ingredients: String?,
-    country: FoodItemRecord.Country,
+    country: String,
     calories: Double?,
     protein: Double?,
     carbohydrates: Double?,
@@ -301,6 +301,7 @@ extension FoodItemRecord {
     case branded
   }
 
+  @available(*, deprecated, message: "Use String for country instead")
   enum Country: String, Codable, FluentEnum {
     static let schema = "country"
     

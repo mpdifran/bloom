@@ -142,16 +142,19 @@ extension OpenFoodFactsProduct.SelectedImages.ImageSet {
 
 extension OpenFoodFactsProduct {
 
-  var standardizedCountries: [FoodItemRecord.Country] {
+  var standardizedCountries: [String] {
     let lowercasedCountries = countries?
       .map({ $0.lowercased() })
       .map({ $0.replacingOccurrences(of: "en:", with: "") }) ?? []
 
     return lowercasedCountries.compactMap({ countryCode in
       if ["united-states", "united states", "usa"].contains(countryCode) {
-        return .usa
+        return "usa"
       } else if ["canada"].contains(countryCode) {
-        return .canada
+        return "canada"
+      } else if !countryCode.isEmpty {
+        // For any other country, normalize the name and return it
+        return countryCode.replacingOccurrences(of: "-", with: " ")
       }
       return nil
     })

@@ -20,7 +20,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   public var nutritionLabelImage: URL?
   public var packagingImage: URL?
   public var ingredients: String?
-  public var country: FoodItem.Country?
+  public var country: String?
   public var calories: Double?
   public var protein: Double?
   public var carbohydrates: Double?
@@ -69,7 +69,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     category: Category?,
     barcode: String?,
     ingredients: String?,
-    country: FoodItem.Country?,
+    country: String?,
     calories: Double?,
     protein: Double?,
     carbohydrates: Double?,

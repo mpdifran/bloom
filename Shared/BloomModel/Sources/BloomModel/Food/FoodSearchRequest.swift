@@ -11,12 +11,12 @@ public struct FoodSearchRequest: Codable, Sendable {
     public let name: String?
     public let brand: String?
     public let upcCode: String?
-    public let country: FoodCountry?
+    public let country: String?
 
     public init(
         name: String?,
         brand: String?,
-        country: FoodCountry? = nil
+        country: String? = nil
     ) {
         self.name = name
         self.brand = brand
@@ -26,7 +26,7 @@ public struct FoodSearchRequest: Codable, Sendable {
 
     public init(
         upcCode: String?,
-        country: FoodCountry? = nil
+        country: String? = nil
     ) {
         self.name = nil
         self.brand = nil

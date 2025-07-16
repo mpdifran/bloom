@@ -394,7 +394,7 @@ private extension ChatController {
         TelemetryDeck.signal(
           "Received Bud Rich Content Message",
           parameters: [
-            "richContentKind" : richContentMessage.kind.telemetryName
+            "richContentKind": richContentMessage.kind.telemetryName
           ]
         )
       }

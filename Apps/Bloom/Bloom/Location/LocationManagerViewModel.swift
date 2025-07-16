@@ -7,14 +7,13 @@
 
 import SwiftUI
 import CoreLocation
-import BloomModel
 
 @MainActor @Observable
 final class LocationManagerViewModel {
   static let shared = LocationManagerViewModel()
 
   private(set) var currentLocation: CLLocation?
-  private(set) var country: FoodCountry?
+  private(set) var country: String?
   private(set) var auth: CLAuthorizationStatus = .notDetermined
 
   private init() {
@@ -119,10 +118,16 @@ private extension LocationManagerViewModel {
         guard let country = try await geocoder.getCountry(from: location) else {
             return
         }
-        if country.lowercased() == "canada" || country.lowercased() == "ca" {
-          self.country = .canada
-        } else { // TODO: We need more robust logic here
-          self.country = .usa
+        // Map country names and codes to normalized country identifiers
+        let normalizedCountry = country.lowercased()
+        
+        if normalizedCountry == "canada" || normalizedCountry == "ca" {
+          self.country = "canada"
+        } else if normalizedCountry == "united states" || normalizedCountry == "united states of america" || normalizedCountry == "us" || normalizedCountry == "usa" {
+          self.country = "usa"
+        } else {
+          // For any other country, use the lowercase country name as the identifier
+          self.country = normalizedCountry
         }
     } catch {
         print(error)

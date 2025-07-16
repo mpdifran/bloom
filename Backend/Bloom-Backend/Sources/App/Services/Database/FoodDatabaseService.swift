@@ -22,7 +22,7 @@ extension FoodDatabaseService {
   func searchFoods(
     query: String,
     category: FoodItemRecord.Category,
-    preferredCountry: FoodItemRecord.Country,
+    preferredCountry: String,
     limit: Int
   ) async throws -> [FoodItem] {
     guard !query.isEmpty else { return [] }
@@ -40,7 +40,7 @@ extension FoodDatabaseService {
                        similarity(brand_name || ' ' || name || ' ' || flavour, \(bind: query)) * 2.0
                    ) *
                    CASE WHEN state = 'verified' THEN 1.05 ELSE 1.0 END * 
-                   CASE WHEN country = \(bind: preferredCountry.rawValue)::country THEN 1.1 ELSE 1.0 END AS rank
+                   (1.0 + similarity(country, \(bind: preferredCountry)) * 0.1) AS rank
             FROM food_item_records
             WHERE (similarity(name, \(bind: query)) > 0.1
                OR similarity(brand_name, \(bind: query)) > 0.1

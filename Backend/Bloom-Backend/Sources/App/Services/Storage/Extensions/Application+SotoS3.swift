@@ -10,8 +10,23 @@ import Vapor
 
 extension Application {
 
+  private struct AWSClientKey: StorageKey {
+    typealias Value = AWSClient
+  }
+
   private struct SotoS3AIKey: StorageKey {
     typealias Value = S3
+  }
+
+  var awsClient: AWSClient {
+    if let client = storage[AWSClientKey.self] {
+      return client
+    }
+
+    let client = AWSClient(httpClientProvider: .createNew)
+    storage[AWSClientKey.self] = client
+
+    return client
   }
 
   var sotoS3: S3 {
@@ -19,11 +34,16 @@ extension Application {
       return s3
     }
 
-    let client = AWSClient(httpClientProvider: .createNew)
-
-    let s3 = S3(client: client)
+    let s3 = S3(client: awsClient)
     storage[SotoS3AIKey.self] = s3
 
     return s3
+  }
+  
+  @Sendable func shutdownAWSClient() {
+    // Shutdown AWS client if it exists
+    if let client = storage[AWSClientKey.self] {
+      try? client.syncShutdown()
+    }
   }
 }

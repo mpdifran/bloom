@@ -227,14 +227,19 @@ extension OpenFoodFactsService {
           continue // TODO: Do we want to update in this case?
         }
 
-        let country: FoodItemRecord.Country
+        let country: String
         if item.countries.contains("canada") {
-          country = .canada
+          country = "canada"
         } else if item.countries.contains("united-states") {
-          country = .usa
+          country = "usa"
         } else {
-          logger.info("Unknown country for bulk uplaoded Open Food Facts item: \(item.countries)")
-          continue
+          // For any other country, use the first country in the list (normalized to lowercase)
+          guard let firstCountry = item.countries.first else {
+            logger.info("No countries found for bulk uploaded Open Food Facts item")
+            continue
+          }
+          country = firstCountry.lowercased().replacingOccurrences(of: "-", with: " ")
+          logger.info("Using country '\(country)' for bulk uploaded Open Food Facts item")
         }
 
         let foodItemRecord = FoodItemRecord(

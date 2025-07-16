@@ -103,12 +103,11 @@ private extension FoodUploadScannerView {
 
     VStack {
       LabeledContent("Country") {
-        Picker("Country", selection: $viewModel.country) {
-          ForEach(FoodCountry.allCases) { country in
-            Text(country.name)
-              .tag(country)
-          }
-        }
+        TextField("Country", text: $viewModel.country)
+          .textFieldStyle(.roundedBorder)
+          .multilineTextAlignment(.trailing)
+          .autocorrectionDisabled()
+          .textInputAutocapitalization(.none)
       }
     }
     .cardContainer(fill: .background.secondary)

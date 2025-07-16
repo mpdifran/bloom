@@ -16,7 +16,7 @@ extension FoodItemRecord {
       name: foodItem.name,
       brandName: foodItem.brandName ?? "",
       flavour: foodItem.flavour ?? "",
-      rawCountry: foodItem.country?.rawValue,
+      rawCountry: foodItem.country,
       calories: foodItem.calories?.doubleValue(for: .largeCalorie()) ?? 0,
       protein: foodItem.protein?.doubleValue(for: .gram()) ?? 0,
       carbohydrates: foodItem.carbohydrates?.doubleValue(for: .gram()) ?? 0,
@@ -70,8 +70,8 @@ extension FoodItemRecord {
       self.flavour = foodItem.flavour ?? ""
       didChange = true
     }
-    if self.rawCountry != foodItem.country?.rawValue {
-      self.rawCountry = foodItem.country?.rawValue
+    if self.rawCountry != foodItem.country {
+      self.rawCountry = foodItem.country
       didChange = true
     }
     if self.calories != foodItem.calories?.doubleValue(for: .largeCalorie()) ?? 0 {
@@ -213,7 +213,7 @@ extension FoodItemRecord {
       name: name,
       brandName: brandName,
       flavour: flavour,
-      country: FoodItem.Country(rawValue: rawCountry ?? ""),
+      country: rawCountry,
       calories: FoodItem.Quantity(value: calories, unit: "Cal"),
       protein: FoodItem.Quantity(value: protein, unit: "g"),
       carbohydrates: FoodItem.Quantity(value: carbohydrates, unit: "g"),

@@ -95,7 +95,7 @@ private extension AdminFoodController {
       nutritionLabelImage: nil, // Will be set below if image is provided
       packagingImage: nil, // Will be set below if image is provided
       ingredients: createRecord.ingredients,
-      country: createRecord.country?.asCountry() ?? .canada,
+      country: createRecord.country ?? "canada",
       calories: createRecord.calories,
       protein: createRecord.protein,
       carbohydrates: createRecord.carbohydrates,
@@ -230,7 +230,7 @@ private extension AdminFoodController {
     existingRecord.barcode = updateRecord.barcode
     existingRecord.ingredients = updateRecord.ingredients
     if let country = updateRecord.country {
-      existingRecord.country = country.asCountry()
+      existingRecord.country = country
     }
     existingRecord.calories = updateRecord.calories
     existingRecord.protein = updateRecord.protein

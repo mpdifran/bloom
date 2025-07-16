@@ -35,7 +35,7 @@ extension OpenAIService {
 
   func parseNewFoodItem(
     barCode: String,
-    country: FoodItemRecord.Country,
+    country: String,
     nutritionLabelMetadata: ImageFileMetadata,
     packagingMetadata: ImageFileMetadata
   ) async throws -> (FoodItemRecord?, UploadNewFoodResponse.Result) {

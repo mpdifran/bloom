@@ -295,4 +295,105 @@ extension FoodItemRecord {
         .update()
     }
   }
+
+  struct ConvertCountryEnumToString: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      // Step 1: Add temporary string column
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        ADD COLUMN country_temp TEXT
+      """).run()
+
+      // Step 2: Copy enum values to string column
+      try await sqlDatabase.raw("""
+        UPDATE food_item_records 
+        SET country_temp = country::TEXT
+      """).run()
+
+      // Step 3: Drop the old enum column (this will remove the constraint)
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        DROP COLUMN country
+      """).run()
+
+      // Step 4: Rename temp column to country
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        RENAME COLUMN country_temp TO country
+      """).run()
+
+      // Step 5: Make country required
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        ALTER COLUMN country SET NOT NULL
+      """).run()
+
+      // Step 6: Now we can safely drop the enum type
+      try await sqlDatabase.raw("""
+        DROP TYPE IF EXISTS "FoodItemRecord+Country"
+      """).run()
+
+      // Step 7: Recreate the index on the new string column
+      try await sqlDatabase.raw("""
+        CREATE INDEX IF NOT EXISTS country_index 
+        ON food_item_records (country)
+      """).run()
+    }
+
+    func revert(on database: Database) async throws {
+      guard let sqlDatabase = database as? SQLDatabase else {
+        fatalError("This migration requires an SQL database.")
+      }
+
+      // Step 1: Drop the index
+      try await sqlDatabase.raw("""
+        DROP INDEX IF EXISTS country_index
+      """).run()
+
+      // Step 2: Create the enum type
+      try await sqlDatabase.raw("""
+        CREATE TYPE "FoodItemRecord+Country" AS ENUM ('canada', 'usa')
+      """).run()
+
+      // Step 3: Add temporary enum column
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        ADD COLUMN country_temp "FoodItemRecord+Country"
+      """).run()
+
+      // Step 4: Copy string values back to enum
+      try await sqlDatabase.raw("""
+        UPDATE food_item_records 
+        SET country_temp = country::"FoodItemRecord+Country"
+      """).run()
+
+      // Step 5: Drop the string column
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        DROP COLUMN country
+      """).run()
+
+      // Step 6: Rename temp column to country
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        RENAME COLUMN country_temp TO country
+      """).run()
+
+      // Step 7: Make country required
+      try await sqlDatabase.raw("""
+        ALTER TABLE food_item_records 
+        ALTER COLUMN country SET NOT NULL
+      """).run()
+
+      // Step 8: Recreate the index
+      try await sqlDatabase.raw("""
+        CREATE INDEX IF NOT EXISTS country_index 
+        ON food_item_records (country)
+      """).run()
+    }
+  }
 }

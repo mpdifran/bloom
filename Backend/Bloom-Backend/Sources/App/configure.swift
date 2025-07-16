@@ -3,6 +3,15 @@ import WebSocketKit
 import NIOWebSocket
 //import TelemetryDeck
 
+// Lifecycle handler for shutting down resources
+struct ShutdownHandler: LifecycleHandler {
+    let shutdownAWSClient: @Sendable () -> Void
+
+    func shutdown(_ application: Application) {
+        shutdownAWSClient()
+    }
+}
+
 // configures your application
 public func configure(_ app: Application) async throws {
 
@@ -30,4 +39,9 @@ public func configure(_ app: Application) async throws {
 
   // APNs
   try app.configureAPNs()
+  
+  // Shutdown handlers
+  app.lifecycle.use(
+    ShutdownHandler(shutdownAWSClient: app.shutdownAWSClient)
+  )
 }
