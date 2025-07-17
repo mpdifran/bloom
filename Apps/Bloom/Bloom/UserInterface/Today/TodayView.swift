@@ -172,14 +172,13 @@ private extension TodayView {
   var reminderSectionTitle: String {
     let totalCount = filteredTodaysOccurrences.count
     let completedCount = filteredTodaysOccurrences.filter { $0.isCompleted }.count
-    let incompleteCount = totalCount - completedCount
     
-    let reminderText = incompleteCount == 1 ? "reminder" : "reminders"
+    let reminderText = totalCount == 1 ? "reminder" : "reminders"
     
     if completedCount > 0 {
-      return "\(incompleteCount) \(reminderText) • \(completedCount) completed"
+      return "\(totalCount) \(reminderText) • \(completedCount) completed"
     } else {
-      return "\(incompleteCount) \(reminderText)"
+      return "\(totalCount) \(reminderText)"
     }
   }
 
