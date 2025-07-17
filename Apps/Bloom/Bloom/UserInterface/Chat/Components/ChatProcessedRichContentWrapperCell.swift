@@ -33,14 +33,15 @@ struct ChatProcessedRichContentWrapperCell: View {
             hasPerformedAction: hasPerformedAction
           )
 
-        case .detectedFood(let name, let meal, let servings):
+        case .detectedFood(let name, let meal, let servings, let date):
           ChatDetectedFoodCell(
             chatMessageID: chatMessageID,
             name: name,
             meal: meal,
             servings: servings,
             hasPerformedAction: hasPerformedAction,
-            dbID: dbID
+            dbID: dbID,
+            date: date
           )
 
         case .logWater(let waterQuantity):

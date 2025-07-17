@@ -307,7 +307,8 @@ actor ChatHistoryModifier {
       return .detectedFood(
         name: detectedFood.name,
         meal: detectedFood.meal.asMeal,
-        servings: detectedFood.foodItemServings.map { $0.asServing() }
+        servings: detectedFood.foodItemServings.map { $0.asServing() },
+        date: detectedFood.date
       )
       
     } else if let logWater = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWaterConsumption.self, from: data) {

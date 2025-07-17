@@ -12,6 +12,7 @@ struct DetectedFood: Codable, Hashable, Sendable {
   let name: String
   let meal: SocketMessage.DetectedFood.Meal
   let foodItems: [FoodItem]
+  let date: Date?
 }
 
 extension DetectedFood {

@@ -571,7 +571,7 @@ private extension ChatController {
         image: nil, // TODO: Link image from chat?
         numberOfServings: 1,
         foodItemServings: servings,
-        date: .now,
+        date: detectedFood.date ?? .now,
         meal: detectedFood.meal.asMeal
       )
       SoundPlayer.playLogHealthData()

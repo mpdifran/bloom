@@ -15,6 +15,7 @@ struct ChatDetectedFoodCell: View {
   let name: String
   let servings: [FoodItemServingAmount]
   let dbID: String?
+  let date: Date?
 
   init(
     chatMessageID: String,
@@ -22,12 +23,14 @@ struct ChatDetectedFoodCell: View {
     meal: FoodItemLog.Meal,
     servings: [FoodItemServingAmount],
     hasPerformedAction: Bool,
-    dbID: String?
+    dbID: String?,
+    date: Date? = nil
   ) {
     self.chatMessageID = chatMessageID
     self.name = name
     self.servings = servings
     self.dbID = dbID
+    self.date = date
     self._meal = State(initialValue: meal)
     self._hasAddedFood = State(initialValue: hasPerformedAction)
   }
@@ -143,7 +146,7 @@ private extension ChatDetectedFoodCell {
       image: nil,
       numberOfServings: 1,
       foodItemServings: servings,
-      date: .now,
+      date: date ?? .now,
       meal: meal
     )
 

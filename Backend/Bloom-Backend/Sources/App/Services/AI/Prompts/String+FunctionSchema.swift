@@ -18,7 +18,8 @@ extension String.FunctionSchema {
     Log Food: {
       "name": String, // Required. The name you would give the food. Capitalize using title case.
       "meal": Meal, // Required. The meal you think this food is for. You can use the current time, as well as the type of food to determine this.
-      "foodItems": [FoodItem] // Required. A list of individual food items detected.
+      "foodItems": [FoodItem], // Required. A list of individual food items detected.
+      "date": String? // Optional. ISO-8601 date string (e.g., "2025-07-17T00:00:00Z") indicating when the meal should be logged. Defaults to today if not provided.
     }
     
     Meal: An enum with the following types: \(SocketMessage.DetectedFood.Meal.stringCaseList())

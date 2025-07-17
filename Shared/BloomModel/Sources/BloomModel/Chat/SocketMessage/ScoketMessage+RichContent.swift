@@ -13,15 +13,18 @@ public extension SocketMessage {
     public let name: String
     public let meal: Meal
     public let foodItemServings: [EstimateFoodCaloriesResponse.Serving]
+    public let date: Date?
 
     public init(
       name: String,
       meal: Meal,
-      foodItemServings: [EstimateFoodCaloriesResponse.Serving]
+      foodItemServings: [EstimateFoodCaloriesResponse.Serving],
+      date: Date? = nil
     ) {
       self.name = name
       self.meal = meal
       self.foodItemServings = foodItemServings
+      self.date = date
     }
   }
 }

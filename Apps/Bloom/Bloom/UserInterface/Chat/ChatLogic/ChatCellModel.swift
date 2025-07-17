@@ -26,7 +26,7 @@ struct ChatMessageMetadata: Hashable, Sendable {
 // Processed rich content data to avoid async loading in UI
 enum ProcessedRichContent: Hashable, Sendable {
   case goals([ProposedGoal])
-  case detectedFood(name: String, meal: FoodItemLog.Meal, servings: [FoodItemServingAmount])
+  case detectedFood(name: String, meal: FoodItemLog.Meal, servings: [FoodItemServingAmount], date: Date?)
   case logWater(HKQuantity)
   case logBowelMovement(bristolStoolType: Int, duration: BowelMovement.Duration)
   case logWeight(HKQuantity)

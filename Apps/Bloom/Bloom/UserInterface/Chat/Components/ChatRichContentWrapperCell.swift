@@ -43,6 +43,7 @@ struct ChatRichContentWrapperCell: View {
   @State private var foodItemsName: String?
   @State private var meal: FoodItemLog.Meal?
   @State private var foodItemServings: [FoodItemServingAmount]?
+  @State private var foodDate: Date?
   @State private var waterQuantity: HKQuantity?
   @State private var bristolStoolType: Int?
   @State private var duration: BowelMovement.Duration?
@@ -86,7 +87,8 @@ struct ChatRichContentWrapperCell: View {
               meal: meal,
               servings: foodItemServings,
               hasPerformedAction: hasPerformedAction,
-              dbID: dbID
+              dbID: dbID,
+              date: foodDate
             )
           } else if let waterQuantity {
             ChatLogWaterCell(
@@ -214,6 +216,7 @@ private extension ChatRichContentWrapperCell {
       self.foodItemsName = detectedFood.name
       self.meal = detectedFood.meal.asMeal
       self.foodItemServings = detectedFood.foodItemServings.map { $0.asServing() }
+      self.foodDate = detectedFood.date
 
     } else if let logWater = try? JSONDecoder.bloomModel.decode(SocketMessage.LogWaterConsumption.self, from: data) {
 
