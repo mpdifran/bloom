@@ -15,7 +15,6 @@ struct ChatDetectedFoodCell: View {
   let name: String
   let servings: [FoodItemServingAmount]
   let dbID: String?
-  let date: Date?
 
   init(
     chatMessageID: String,
@@ -30,12 +29,13 @@ struct ChatDetectedFoodCell: View {
     self.name = name
     self.servings = servings
     self.dbID = dbID
-    self.date = date
+    self._date = State(initialValue: date ?? .now)
     self._meal = State(initialValue: meal)
     self._hasAddedFood = State(initialValue: hasPerformedAction)
   }
 
   @State private var meal: FoodItemLog.Meal
+  @State private var date: Date
   @State private var hasAddedFood: Bool
   @State private var saveComplete = false
   @State private var saveUndone = false
@@ -74,9 +74,12 @@ struct ChatDetectedFoodCell: View {
 
         Divider()
 
-        MealBindingPicker(meal: $meal)
-          .horizontallyCentered()
-          .disabled(hasAddedFood)
+        HStack {
+          FoodDateBindingPicker(date: $date)
+          MealBindingPicker(meal: $meal)
+        }
+        .horizontallyCentered()
+        .disabled(hasAddedFood)
 
         logFoodButton
       }
@@ -133,6 +136,7 @@ private extension ChatDetectedFoodCell {
 
     if let log = try? modelContext.fetchFoodItemLog(id: dbID) {
       self.meal = log.meal
+      self.date = log.date
     } else {
       hasAddedFood = false
       try? modelContext.markChatMessageActionTaken(id: chatMessageID, hasPerformedAction: false)
@@ -146,7 +150,7 @@ private extension ChatDetectedFoodCell {
       image: nil,
       numberOfServings: 1,
       foodItemServings: servings,
-      date: date ?? .now,
+      date: date,
       meal: meal
     )
 
@@ -200,9 +204,9 @@ private extension ChatDetectedFoodCell {
           dbID: "1234"
         )
         ChatDetectedFoodCell(
-          chatMessageID: "1234",
+          chatMessageID: "5678",
           name: "Crackers and Sliced Carrots",
-          meal: .breakfast,
+          meal: .lunch,
           servings: [
             FoodItemServingAmount(
               serving: 2,
@@ -214,7 +218,7 @@ private extension ChatDetectedFoodCell {
             )
           ],
           hasPerformedAction: true,
-          dbID: "1234"
+          dbID: "5678"
         )
       }
       .padding()
