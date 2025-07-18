@@ -38,7 +38,7 @@ struct OnboardingAppExplanationView: View {
         }
 
         if index >= 2 {
-          Text("You can ask me anything about your health, and I can give you advice tailored to your personal health data.")
+          Text("Ask me anything about your health, and I’ll give you smart, personalized advice based on your data — no guesswork, no stress.")
             .font(.title3)
             .fixedSize(horizontal: false, vertical: true)
             .transition(.blurReplace)
@@ -46,7 +46,7 @@ struct OnboardingAppExplanationView: View {
         }
 
         if index >= 3 {
-          Text("I can give you diet advice, create custom workout plans for you, set health goals, and even more!")
+          Text("Need help with nutrition? Want a custom workout plan? Ready to set (and actually hit) your goals? I’ve got you covered.")
             .font(.title3)
             .fixedSize(horizontal: false, vertical: true)
             .transition(.blurReplace)

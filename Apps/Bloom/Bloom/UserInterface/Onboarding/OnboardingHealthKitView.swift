@@ -30,7 +30,7 @@ struct OnboardingHealthKitView: View {
 
         Group {
           Text("Bud needs access to your Health Data")
-          Text("The more health data you share with Bud, the more personalized his advice will be!")
+          Text("The more health data you share with Bud, the more personalized your advice will be!")
             .font(.title3)
             .foregroundStyle(.secondary)
         }
