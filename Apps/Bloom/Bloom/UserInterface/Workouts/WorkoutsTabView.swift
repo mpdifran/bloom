@@ -45,14 +45,7 @@ struct WorkoutsTabView: View {
             Label("Equipment", systemSymbol: .dumbbellFill)
           }
         }
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            presentedSheet = SettingsView().asAny
-          } label: {
-            UserProfilePhotoView(dimension: 32)
-          }
-          .buttonStyle(.plain)
-        }
+        SettingsProfileViewToolbarButton()
       }
       .navigationDestination($pushedView)
     }

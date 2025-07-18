@@ -20,6 +20,8 @@ struct RootView: View {
   @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
 
+  @State private var selectionToggle = false
+
   @ObservedObject private var userController = UserController.shared
 
   @Environment(\.dismiss) private var dismiss
@@ -94,23 +96,47 @@ private extension RootView {
     }
     .tabBarMinimizeBehavior(.onScrollDown)
     .tabViewBottomAccessory {
-      VStack {
+      HStack {
+        Image(.budPeek)
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(square: 34)
+          .foregroundStyle(.secondary)
+
+        Text("Ask Bud")
+          .foregroundStyle(.secondary)
+
         Spacer(minLength: 0)
-        HStack {
-          Image(systemSymbol: .sparkles)
-          TextField("Chat with Bud", text: .constant(""))
 
-          Button {
-
-          } label: {
-            Image(systemSymbol: .arrowUpCircleFill)
-              .foregroundStyle(.white, .tint)
-          }
+        Button {
+          presentedSheet = ActionsView().asAny
+        } label: {
+          Image(systemSymbol: .plus)
+            .font(.body)
+            .fontDesign(.rounded)
+            .fontWeight(.semibold)
+            .frame(square: 24)
+            .padding(6)
+            .cardContainer(fill: .background, includePadding: false)
         }
-        .frame(minHeight: 44)
-        Spacer(minLength: 0)
+      }
+      .selectable()
+      .onTapGesture {
+        EntitledAction(
+          presentedSheet: $presentedSheet
+        ) {
+          tabController.isShowingChat = true
+          selectionToggle.toggle()
+        }
       }
       .padding()
+    }
+    .sensoryFeedback(.selection, trigger: selectionToggle)
+    .sheet(isPresented: Binding(
+      get: { tabController.isShowingChat },
+      set: { tabController.isShowingChat = $0 }
+    )) {
+      ChatView()
     }
     .environment(tabController)
   }

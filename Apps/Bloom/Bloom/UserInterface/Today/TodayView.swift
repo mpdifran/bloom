@@ -54,6 +54,8 @@ struct TodayView: View {
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage("GetBloomPlusTodayCell.hasDismissed") private var getBloomPlusHasDismissed = false
 
+  @Namespace private var namespace
+
   var body: some View {
     @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
 
@@ -97,17 +99,8 @@ struct TodayView: View {
       .navigationTitle("Today")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            presentedSheet = SettingsView().asAny
-          } label: {
-            UserProfilePhotoView(
-              dimension: 32,
-              whiteForegroundColor: true
-            )
-          }
-        }
-        
+        SettingsProfileViewToolbarButton()
+
         ToolbarItem(placement: .topBarLeading) {
           Button {
             presentedSheet = TodaySettingsView().asAny

@@ -55,14 +55,7 @@ struct NutritionView: View {
           }
         }
 
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            presentedSheet = SettingsView().asAny
-          } label: {
-            UserProfilePhotoView(dimension: 32)
-          }
-          .buttonStyle(.plain)
-        }
+        SettingsProfileViewToolbarButton()
       }
     }
     .animation(.easeInOut, value: nutritionViewModel.date)

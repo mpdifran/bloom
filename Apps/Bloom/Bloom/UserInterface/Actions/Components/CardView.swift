@@ -27,7 +27,7 @@ struct CardView<Content>: View where Content: View {
     .presentationDetentSelfSizing()
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
-    .presentationBackground(themeController.theme.backgroundColor)
+//    .presentationBackground(themeController.theme.backgroundColor)
   }
 }
 
