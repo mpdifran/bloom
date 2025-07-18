@@ -189,8 +189,7 @@ extension ChatController {
     TelemetryDeck.signal(
       "Send Chat Message",
       parameters: [
-        "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No",
-        "name": await UserController.shared.fullUserIdentifier
+        "includesChatImages": fileIDs.isNotEmpty ? "Yes" : "No"
       ]
     )
 
