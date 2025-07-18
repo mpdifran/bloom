@@ -20,7 +20,7 @@
     "_applicationInternalID" : "6739955926",
     "_developerTeamID" : "GUJ47GUV2Q",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 774393562.69230998,
+    "_lastSynchronizedDate" : 774492312.66040504,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -114,11 +114,11 @@
           "codeOffers" : [
             {
               "eligibility" : [
-                "expired",
                 "new",
-                "existing"
+                "existing",
+                "expired"
               ],
-              "internalID" : "DD70503F",
+              "internalID" : "5CEA9287",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -128,11 +128,11 @@
             {
               "displayPrice" : "19.99",
               "eligibility" : [
-                "existing",
                 "expired",
+                "existing",
                 "new"
               ],
-              "internalID" : "4AE3916F",
+              "internalID" : "F5B8A1BA",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "payAsYouGo",
@@ -144,7 +144,12 @@
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "6740501424",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "DE5E92C9",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
           "localizations" : [
             {
               "description" : "Full access to Bloom",

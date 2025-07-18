@@ -99,7 +99,7 @@ extension Package {
     }
 
     // Combine price and period
-    return "\(localizedPriceString)/\(periodString)"
+    return "\(localizedPriceString) / \(periodString)"
   }
 
   var isMonthly: Bool {
@@ -136,6 +136,6 @@ extension Package {
       number: .currency
     )
 
-    return "\(formattedPrice)/month"
+    return "\(formattedPrice) / month"
   }
 }

@@ -119,16 +119,6 @@ private extension BloomPlusPaywall {
 
   var purchaseShelf: some View {
     VStack {
-      Group {
-        if let eventualCostString = selectedProduct?.introductoryEventualCostDescription {
-          Text(eventualCostString)
-        } else if let pricingString = selectedProduct?.pricingString {
-          Text(pricingString)
-        }
-      }
-      .font(.subheadline)
-      .bold()
-
       AsyncButton {
         guard let product = selectedProduct ?? viewModel.products.first else { return }
 
@@ -144,6 +134,16 @@ private extension BloomPlusPaywall {
         .horizontallyCentered()
       }
       .buttonStyle(.primary)
+
+      Group {
+        if let eventualCostString = selectedProduct?.introductoryEventualCostDescription {
+          Text(eventualCostString)
+        } else if let pricingString = selectedProduct?.pricingString {
+          Text(pricingString)
+        }
+      }
+      .font(.subheadline)
+      .bold()
 
       Button("View All Plans") {
         presentedSheet = BloomPlusPackagePlanPicker(

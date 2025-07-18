@@ -95,7 +95,7 @@ extension Product {
       return nil
     }
     
-    return "\(displayPrice)/\(periodString)"
+    return "\(displayPrice) / \(periodString)"
   }
 
   var isMonthly: Bool {
@@ -127,7 +127,7 @@ extension Product {
       number: .currency
     )
     
-    return "\(formattedPrice)/month"
+    return "\(formattedPrice) / month"
   }
 }
 
