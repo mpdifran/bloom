@@ -20,14 +20,24 @@ struct CardView<Content>: View where Content: View {
   }
 
   var body: some View {
-    VStack {
-      contentBuilder()
+    if #available(iOS 26.0, *) {
+      VStack {
+        contentBuilder()
+      }
+      .horizontallyCentered()
+      .presentationDetentSelfSizing()
+      .presentationCornerRadius(30)
+      .presentationDragIndicator(.visible)
+    } else {
+      VStack {
+        contentBuilder()
+      }
+      .horizontallyCentered()
+      .presentationDetentSelfSizing()
+      .presentationCornerRadius(30)
+      .presentationDragIndicator(.visible)
+      .presentationBackground(themeController.theme.backgroundColor)
     }
-    .horizontallyCentered()
-    .presentationDetentSelfSizing()
-    .presentationCornerRadius(30)
-    .presentationDragIndicator(.visible)
-//    .presentationBackground(themeController.theme.backgroundColor)
   }
 }
 
