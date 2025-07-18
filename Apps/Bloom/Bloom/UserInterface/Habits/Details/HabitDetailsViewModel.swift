@@ -478,12 +478,29 @@ extension HabitDetailsView.ViewModel {
       
       // Find the matching habit for this year and check if goal was met
       let referenceHabit: HabitDTO?
-      if let habit = habitHistory.first(where: { $0.isDateWithinHabit(date: yearSample.referenceDate) }) {
-        referenceHabit = habit
-      } else if let oldestHabit, yearSample.referenceDate < oldestHabit.startDate {
-        referenceHabit = oldestHabit
+      
+      // First try to find active habits (no end date) that started in or before this year
+      let activeHabits = habitHistory.filter { habit in
+        let habitStartYear = calendar.component(.year, from: habit.startDate)
+        return habit.endDate == nil && habitStartYear <= yearSample.year
+      }
+      
+      if let latestActiveHabit = activeHabits.max(by: { $0.startDate < $1.startDate }) {
+        referenceHabit = latestActiveHabit
       } else {
-        referenceHabit = nil
+        // No active habits, find habits that started in the matching year
+        let yearHabits = habitHistory.filter { habit in
+          let habitStartYear = calendar.component(.year, from: habit.startDate)
+          return habitStartYear == yearSample.year
+        }
+        
+        if let latestYearHabit = yearHabits.max(by: { $0.startDate < $1.startDate }) {
+          referenceHabit = latestYearHabit
+        } else if let oldestHabit, yearSample.referenceDate < oldestHabit.startDate {
+          referenceHabit = oldestHabit
+        } else {
+          referenceHabit = nil
+        }
       }
       
       let isComplete = referenceHabit?.quantityMeetsGoal(yearSample.total) ?? false
