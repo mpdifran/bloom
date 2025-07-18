@@ -63,6 +63,7 @@ struct VitalsView: View {
           } label: {
             UserProfilePhotoView(dimension: 32)
           }
+          .buttonStyle(.plain)
         }
       }
     }

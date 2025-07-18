@@ -61,6 +61,7 @@ struct NutritionView: View {
           } label: {
             UserProfilePhotoView(dimension: 32)
           }
+          .buttonStyle(.plain)
         }
       }
     }

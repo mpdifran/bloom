@@ -51,6 +51,7 @@ struct WorkoutsTabView: View {
           } label: {
             UserProfilePhotoView(dimension: 32)
           }
+          .buttonStyle(.plain)
         }
       }
       .navigationDestination($pushedView)
