@@ -44,6 +44,7 @@ struct WorkoutsTabView: View {
           } label: {
             Label("Equipment", systemSymbol: .dumbbellFill)
           }
+          .buttonStyle(.plain)
         }
         SettingsProfileViewToolbarButton()
       }

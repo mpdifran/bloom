@@ -53,9 +53,7 @@ struct SoundDebugView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .navigationBarTrailing) {
-          Button("Done") {
-            dismiss()
-          }
+          DismissButton()
         }
       }
     }

@@ -22,75 +22,12 @@ struct ChatMessageBar: View {
   @Environment(TabController.self) private var tabController: TabController
 
   var body: some View {
-    VStack {
-      if image != nil || tabController.chatContexts.isNotEmpty {
-        imageAndContextSection
+    Group {
+      if #available(iOS 26, *) {
+        content
+      } else {
+        legacyContent
       }
-      
-      HStack(alignment: .bottom) {
-        ImagePicker(image: $image, presentedSheet: $presentedSheet) {
-          Image(systemSymbol: .plusCircleFill)
-            .foregroundStyle(.white, .tint)
-            .font(.title)
-            .frame(square: 24)
-        }
-        
-        TextField(
-          "",
-          text: $text,
-          prompt: Text("Message"),
-          axis: .vertical
-        )
-        .focused($isFocused)
-        .frame(minHeight: 24)
-        .submitLabel(.send)
-        .onSubmit {
-          Task {
-            await submit()
-          }
-        }
-        .onChange(of: text) { oldValue, newValue in
-          if let newLineIndex = newValue.lastIndex(of: "\n") {
-            text.remove(at: newLineIndex)
-            Task {
-              await submit()
-            }
-          }
-        }
-        
-        if text.isEmpty {
-          Button {
-            isFocused.toggle()
-          } label: {
-            Image(systemSymbol: isFocused ? .chevronDownCircleFill : .chevronUpCircleFill)
-              .foregroundStyle(.text, .fill)
-              .font(.title)
-              .frame(square: 24)
-          }
-        } else {
-          Button {
-            Task {
-              await submit()
-            }
-          } label: {
-            Image(systemSymbol: .arrowUpCircleFill)
-              .foregroundStyle(.white, .tint)
-              .font(.title)
-              .frame(square: 24)
-          }
-        }
-      }
-      .padding(12)
-      .cardContainer(fill: .background, includePadding: false)
-      .onTapGesture {
-        isFocused = true
-      }
-    }
-    .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 40)
-        .fill(.ultraThinMaterial)
-        .ignoresSafeArea(edges: .bottom)
     }
     .animation(.bouncy, value: image)
     .animation(.bouncy, value: tabController.chatContexts)
@@ -104,7 +41,43 @@ struct ChatMessageBar: View {
 }
 
 private extension ChatMessageBar {
-  
+
+  @available(iOS 26.0, *)
+  var content: some View {
+    VStack {
+      if image != nil || tabController.chatContexts.isNotEmpty {
+        imageAndContextSection
+      }
+
+      chatBar
+        .glassEffect(in: RoundedRectangle(cornerRadius: 34))
+        .onTapGesture {
+          isFocused = true
+        }
+        .padding(8)
+    }
+  }
+
+  var legacyContent: some View {
+    VStack {
+      if image != nil || tabController.chatContexts.isNotEmpty {
+        imageAndContextSection
+      }
+
+      chatBar
+        .cardContainer(fill: .background, includePadding: false)
+        .onTapGesture {
+          isFocused = true
+        }
+    }
+    .padding()
+    .background {
+      RoundedRectangle(cornerRadius: 40)
+        .fill(.ultraThinMaterial)
+        .ignoresSafeArea(edges: .bottom)
+    }
+  }
+
   var imageAndContextSection: some View {
     ScrollView(.horizontal) {
       HStack {
@@ -126,7 +99,64 @@ private extension ChatMessageBar {
       .padding(.horizontal)
     }
   }
-  
+
+  var chatBar: some View {
+    HStack(alignment: .bottom, spacing: 12) {
+      ImagePicker(image: $image, presentedSheet: $presentedSheet) {
+        Image(systemSymbol: .plusCircleFill)
+          .foregroundStyle(.white, .tint)
+          .font(.title)
+          .frame(square: 24)
+      }
+
+      TextField(
+        "",
+        text: $text,
+        prompt: Text("Message"),
+        axis: .vertical
+      )
+      .focused($isFocused)
+      .frame(minHeight: 24)
+      .submitLabel(.send)
+      .onSubmit {
+        Task {
+          await submit()
+        }
+      }
+      .onChange(of: text) { oldValue, newValue in
+        if let newLineIndex = newValue.lastIndex(of: "\n") {
+          text.remove(at: newLineIndex)
+          Task {
+            await submit()
+          }
+        }
+      }
+
+      if text.isEmpty {
+        Button {
+          isFocused.toggle()
+        } label: {
+          Image(systemSymbol: isFocused ? .chevronDownCircleFill : .chevronUpCircleFill)
+            .foregroundStyle(.text, .fill)
+            .font(.title)
+            .frame(square: 24)
+        }
+      } else {
+        Button {
+          Task {
+            await submit()
+          }
+        } label: {
+          Image(systemSymbol: .arrowUpCircleFill)
+            .foregroundStyle(.white, .tint)
+            .font(.title)
+            .frame(square: 24)
+        }
+      }
+    }
+    .padding(12)
+  }
+
   func submit() async {
     guard text.isNotEmpty || image != nil else { return }
     

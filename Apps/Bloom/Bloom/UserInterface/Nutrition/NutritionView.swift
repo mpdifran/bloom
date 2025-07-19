@@ -53,6 +53,7 @@ struct NutritionView: View {
             Image(systemSymbol: .plus)
               .bold()
           }
+          .buttonStyle(.plain)
         }
 
         SettingsProfileViewToolbarButton()

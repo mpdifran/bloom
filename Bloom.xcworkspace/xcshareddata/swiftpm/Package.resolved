@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppUI",
       "state" : {
-        "revision" : "5cf918eadbbcbe728ca922864b86c8daf29d74f1",
-        "version" : "1.1.0"
+        "revision" : "8675a5030db346fe7bd18c78efe9f26eaa8512b2",
+        "version" : "2.0.0"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ekazaev/ChatLayout.git",
       "state" : {
-        "revision" : "0576ac90f9e0f94c9f7acc7983381394544ceb7b",
-        "version" : "2.0.13"
+        "revision" : "e36ea58ecef0aa1240d10444ba66b023c7e0c26b",
+        "version" : "2.2.1"
       }
     },
     {
@@ -213,8 +213,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
       "state" : {
-        "revision" : "f7c5738962d14b7800addd2a517270aa66d5ce29",
-        "version" : "5.29.0"
+        "revision" : "fa196fa767b15663ff8941a0a80e3ad67ad4d53f",
+        "version" : "5.33.0"
       }
     },
     {
@@ -222,8 +222,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/redis.git",
       "state" : {
-        "revision" : "b4527022376f93ade3fa366f2c3465ed3489fca4",
-        "version" : "4.11.1"
+        "revision" : "f4ac19812066c3ff735f9aac3e254ee673aa6418",
+        "version" : "4.13.0"
       }
     },
     {
@@ -303,8 +303,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "a54383ada6cecde007d374f58f864e29370ba5c3",
-        "version" : "1.3.2"
+        "revision" : "f70225981241859eb4aa1a18a75531d26637c8cc",
+        "version" : "1.4.0"
       }
     },
     {
@@ -330,8 +330,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-certificates.git",
       "state" : {
-        "revision" : "999fd70c7803da89f3904d635a6815a2a7cd7585",
-        "version" : "1.10.0"
+        "revision" : "870f4d5fe5fcfedc13f25d70e103150511746404",
+        "version" : "1.11.0"
       }
     },
     {
@@ -402,8 +402,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "34d486b01cd891297ac615e40d5999536a1e138d",
-        "version" : "2.83.0"
+        "revision" : "ad6b5f17270a7008f60d35ec5378e6144a575162",
+        "version" : "2.84.0"
       }
     },
     {
@@ -420,8 +420,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-http2.git",
       "state" : {
-        "revision" : "4281466512f63d1bd530e33f4aa6993ee7864be0",
-        "version" : "1.36.0"
+        "revision" : "5ca52e2f076c6a24451175f575f390569381d6a1",
+        "version" : "1.37.0"
       }
     },
     {
@@ -438,8 +438,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-transport-services.git",
       "state" : {
-        "revision" : "cd1e89816d345d2523b11c55654570acd5cd4c56",
-        "version" : "1.24.0"
+        "revision" : "decfd235996bc163b44e10b8a24997a3d2104b90",
+        "version" : "1.25.0"
       }
     },
     {
@@ -510,8 +510,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/vapor.git",
       "state" : {
-        "revision" : "4014016aad591a120f244f9b9e8a57252b7e62b4",
-        "version" : "4.115.0"
+        "revision" : "3636f443474769147828a5863e81a31f6f30e92c",
+        "version" : "4.115.1"
       }
     },
     {

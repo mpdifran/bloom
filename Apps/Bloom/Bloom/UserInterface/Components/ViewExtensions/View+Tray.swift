@@ -27,12 +27,9 @@ struct ViewTray<TrayContent: View>: ViewModifier {
         }
         .horizontallyCentered()
         .padding()
-        .background {
-          RoundedRectangle(cornerRadius: 60)
-            .fill(.green)
-            .padding(3)
-            .edgesIgnoringSafeArea(.bottom)
-        }
+//        .background(.green, in: .rect(corner: .containerConcentric))
+        .padding(3)
+        .edgesIgnoringSafeArea(.bottom)
       }
   }
 }

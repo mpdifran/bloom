@@ -59,10 +59,7 @@ struct DeveloperSettingsView: View {
       .navigationTitle("Developer Tools")
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            dismiss()
-          }
-          .bold()
+          DismissButton()
         }
       }
     }

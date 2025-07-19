@@ -12,15 +12,27 @@ struct PrimaryButtonStyle: ButtonStyle {
   @Environment(\.isEnabled) private var isEnabled
 
   func makeBody(configuration: Configuration) -> some View {
-    HStack {
-      configuration.label
+    if #available(iOS 26.0, *) {
+      HStack {
+        configuration.label
+      }
+      .bold()
+      .padding(.vertical, 16)
+      .padding(.horizontal)
+      .background(isEnabled ? AnyShapeStyle(.tint) : AnyShapeStyle(.fill))
+      .foregroundStyle(.invertedText)
+      .clipShape(Capsule())
+    } else {
+      HStack {
+        configuration.label
+      }
+      .bold()
+      .padding(.vertical, 16)
+      .padding(.horizontal)
+      .background(isEnabled ? AnyShapeStyle(.tint) : AnyShapeStyle(.fill))
+      .foregroundStyle(.invertedText)
+      .clipShape(RoundedRectangle(cornerRadius: 17))
     }
-    .bold()
-    .padding(.vertical, 16)
-    .padding(.horizontal)
-    .background(isEnabled ? AnyShapeStyle(.tint) : AnyShapeStyle(.fill))
-    .foregroundStyle(.invertedText)
-    .clipShape(RoundedRectangle(cornerRadius: 17))
   }
 }
 

@@ -30,10 +30,7 @@ struct ColorPaletteView: View {
             .navigationTitle("Color Palette")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .bold()
+                  DismissButton()
                 }
             }
         }

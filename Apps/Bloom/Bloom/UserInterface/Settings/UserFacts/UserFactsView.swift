@@ -37,10 +37,7 @@ struct UserFactsView: View {
       .toolbar {
         if showDoneButton {
           ToolbarItem(placement: .cancellationAction) {
-            Button("Done") {
-              dismiss()
-            }
-            .bold()
+            DismissButton()
           }
         }
       }

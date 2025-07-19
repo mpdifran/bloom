@@ -84,14 +84,7 @@ struct FoodLoggingActionCardView: View {
           FoodItemLogPickerHeader()
         }
         ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            if let performDismiss {
-              performDismiss()
-            } else {
-              dismiss()
-            }
-          }
-          .bold()
+          DismissButton(performDismiss: performDismiss)
         }
         ToolbarItem(placement: .primaryAction) {
           Menu {

@@ -26,9 +26,7 @@ struct PersonalizationSettingsView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .navigationBarTrailing) {
-          Button("Done") {
-            dismiss()
-          }
+          DismissButton()
         }
       }
       .sheet($presentedSheet)

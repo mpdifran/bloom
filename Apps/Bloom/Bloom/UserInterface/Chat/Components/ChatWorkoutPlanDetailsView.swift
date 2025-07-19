@@ -35,10 +35,7 @@ struct ChatWorkoutPlanDetailsView: View {
         Image(systemSymbol: SFSymbol(rawValue: workoutPlan.representativeAppleWorkoutType.systemImage))
       }
       ToolbarItem(placement: .cancellationAction) {
-        Button("Done") {
-          dismiss()
-        }
-        .bold()
+        DismissButton()
       }
     }
     .shelf {

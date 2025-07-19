@@ -406,7 +406,7 @@
 			repositoryURL = "https://github.com/mpdifran/AppUI";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 2.0.0;
 			};
 		};
 		FFA2C4B12D419A970023401D /* XCRemoteSwiftPackageReference "Valet" */ = {
