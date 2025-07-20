@@ -140,13 +140,6 @@ class ChatLayoutViewController: UICollectionViewController {
     // Calculate the difference
     let changeset = StagedChangeset(source: oldModels, target: newModels)
 
-    for set in changeset {
-      let inserted = set.elementInserted.map { $0.element }
-      let deleted = set.elementDeleted.map { $0.element }
-      let updated = set.elementUpdated.map { $0.element }
-      let moved = set.elementMoved.map { "\($0.source.element) -> \($0.target.element)" }
-    }
-
     // Apply the changes with batch updates
     collectionView.reload(using: changeset, interrupt: { $0.changeCount > 100 }) { [weak self] newModels in
       self?.cellModels = newModels
