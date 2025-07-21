@@ -11,9 +11,11 @@ if [[ -n $CI_ARCHIVE_PATH ]];
 then
     echo "Found valid archive path."
 
+    echo "CI_BUNDLE_ID is: $CI_BUNDLE_ID"
+    echo "CI_ARCHIVE_PATH: $CI_ARCHIVE_PATH"
+
     pushd $CI_ARCHIVE_PATH
 
-    pwd
     ls -al
 
     pushd $CI_ARCHIVE_PATH/dSYMs
