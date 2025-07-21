@@ -11,6 +11,8 @@ if [[ -n $CI_ARCHIVE_PATH ]];
 then
     echo "Found valid archive path."
 
+    pushd $CI_ARCHIVE_PATH
+
     ls -al
 
     pushd $CI_ARCHIVE_PATH/dSYMs
