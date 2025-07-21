@@ -13,6 +13,19 @@
 	<string>$(BLOOM_BASE_URL)</string>
 	<key>BLOOM_BASE_WS_URL</key>
 	<string>$(BLOOM_BASE_WS_URL)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.lotus-labs.bloom</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bloom</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Show you your upcoming events every morning.</string>
 	<key>UIBackgroundModes</key>
