@@ -13,9 +13,6 @@
 		FFA2C4B32D419A970023401D /* Valet in Frameworks */ = {isa = PBXBuildFile; productRef = FFA2C4B22D419A970023401D /* Valet */; };
 		FFC3F7AF2E2E72BD0077F088 /* Bugsnag in Frameworks */ = {isa = PBXBuildFile; productRef = FFC3F7AE2E2E72BD0077F088 /* Bugsnag */; };
 		FFC3F7B12E2E72BD0077F088 /* BugsnagNetworkRequestPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FFC3F7B02E2E72BD0077F088 /* BugsnagNetworkRequestPlugin */; };
-		FFC3F7B42E2E72E90077F088 /* BugsnagPerformance in Frameworks */ = {isa = PBXBuildFile; productRef = FFC3F7B32E2E72E90077F088 /* BugsnagPerformance */; };
-		FFC3F7B62E2E72E90077F088 /* BugsnagPerformanceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FFC3F7B52E2E72E90077F088 /* BugsnagPerformanceSwift */; };
-		FFC3F7B82E2E72E90077F088 /* BugsnagPerformanceSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFC3F7B72E2E72E90077F088 /* BugsnagPerformanceSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,10 +56,7 @@
 				FFC3F7AF2E2E72BD0077F088 /* Bugsnag in Frameworks */,
 				FF5D0CB72CFA451D00374F66 /* BloomModel in Frameworks */,
 				FFC3F7B12E2E72BD0077F088 /* BugsnagNetworkRequestPlugin in Frameworks */,
-				FFC3F7B62E2E72E90077F088 /* BugsnagPerformanceSwift in Frameworks */,
 				4BF81F2A2D2F5C06008D3EEA /* AdminBloomModel in Frameworks */,
-				FFC3F7B82E2E72E90077F088 /* BugsnagPerformanceSwiftUI in Frameworks */,
-				FFC3F7B42E2E72E90077F088 /* BugsnagPerformance in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,9 +107,6 @@
 				FFA2C4B22D419A970023401D /* Valet */,
 				FFC3F7AE2E2E72BD0077F088 /* Bugsnag */,
 				FFC3F7B02E2E72BD0077F088 /* BugsnagNetworkRequestPlugin */,
-				FFC3F7B32E2E72E90077F088 /* BugsnagPerformance */,
-				FFC3F7B52E2E72E90077F088 /* BugsnagPerformanceSwift */,
-				FFC3F7B72E2E72E90077F088 /* BugsnagPerformanceSwiftUI */,
 			);
 			productName = Gardener;
 			productReference = FF5D0C9A2CFA426500374F66 /* Gardener.app */;
@@ -151,7 +142,6 @@
 				4BF81F282D2F5C06008D3EEA /* XCLocalSwiftPackageReference "../../Shared/AdminBloomModel" */,
 				FFA2C4B12D419A970023401D /* XCRemoteSwiftPackageReference "Valet" */,
 				FFC3F7AD2E2E72BD0077F088 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */,
-				FFC3F7B22E2E72E90077F088 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FF5D0C9B2CFA426500374F66 /* Products */;
@@ -435,14 +425,6 @@
 				minimumVersion = 6.32.2;
 			};
 		};
-		FFC3F7B22E2E72E90077F088 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/bugsnag/bugsnag-cocoa-performance";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.14.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -473,21 +455,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFC3F7AD2E2E72BD0077F088 /* XCRemoteSwiftPackageReference "bugsnag-cocoa" */;
 			productName = BugsnagNetworkRequestPlugin;
-		};
-		FFC3F7B32E2E72E90077F088 /* BugsnagPerformance */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FFC3F7B22E2E72E90077F088 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
-			productName = BugsnagPerformance;
-		};
-		FFC3F7B52E2E72E90077F088 /* BugsnagPerformanceSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FFC3F7B22E2E72E90077F088 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
-			productName = BugsnagPerformanceSwift;
-		};
-		FFC3F7B72E2E72E90077F088 /* BugsnagPerformanceSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FFC3F7B22E2E72E90077F088 /* XCRemoteSwiftPackageReference "bugsnag-cocoa-performance" */;
-			productName = BugsnagPerformanceSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

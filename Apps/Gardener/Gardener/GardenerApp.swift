@@ -7,14 +7,12 @@
 
 import SwiftUI
 import Bugsnag
-import BugsnagPerformance
 
 @main
 struct GardenerApp: App {
 
   init() {
     Bugsnag.start()
-    BugsnagPerformance.start()
 
     Task {
       do {
