@@ -47,6 +47,8 @@ final class PackageStore: NSObject, ObservableObject {
       await requestProducts()
       await updatePurchasedProductStatus()
     }
+
+    fatalError("We should not be using this class at all! We are using RevenueCat.")
   }
 }
 

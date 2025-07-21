@@ -35,7 +35,7 @@ struct SettingsView: View {
   @Environment(ThemeController.self) private var themeController
 
   @ObservedObject private var userController = UserController.shared
-  @ObservedObject private var packageStore = PackageStore.shared
+  @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var shouldRequestHealthPermissions = false
   @State private var isSwipingAnItem = false
   @State private var presentedSheet: AnyView?
@@ -389,14 +389,14 @@ private extension SettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        if packageStore.hasBloomPro {
+        if let entitlementInfo = entitlementController.bloomProEntitlement {
           SettingsCell("Plan") {
-            Text(packageStore.activeSubscriptionName)
+            Text(entitlementInfo.activeSubscriptionName)
           }
 
           Divider()
 
-          if let cellInfo = packageStore.statusCellInfo {
+          if let cellInfo = entitlementInfo.statusCellInfo {
             SettingsCell(cellInfo.title) {
               Text(cellInfo.date, style: .date)
             }

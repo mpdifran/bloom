@@ -13,14 +13,23 @@ import TelemetryDeck
 extension BloomPlusPaywall {
   @MainActor @Observable
   final class ViewModel {
-    var products = [Product]()
+    var packages = [Package]()
   }
 }
 
 extension BloomPlusPaywall.ViewModel {
 
   func loadOfferings() async {
-    self.products = PackageStore.shared.subscriptions
+    do {
+      let offerings = try await Purchases.shared.offerings()
+      self.packages = offerings.current?.availablePackages ?? []
+    } catch {
+      TelemetryDeck.errorOccurred(
+        id: "BloomPlusPaywall.ViewModel.loadOfferings",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+    }
   }
 
   func purchase(_ package: Package) async throws {
@@ -32,6 +41,6 @@ extension BloomPlusPaywall.ViewModel {
   }
 
   func restorePurchases() async throws {
-    try await PackageStore.shared.restore()
+    _ = try await Purchases.shared.restorePurchases()
   }
 }

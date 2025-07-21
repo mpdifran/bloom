@@ -11,8 +11,8 @@ import StoreKit
 import TelemetryDeck
 
 struct BloomPlusPackagePlanPicker: View {
-  let products: [Product]
-  @Binding var selectedProductID: String
+  let packages: [Package]
+  @Binding var selectedPackage: Package?
 
   @State private var showOfferCodeSheet = false
   @State private var selectedPackageToggle = false
@@ -24,17 +24,17 @@ struct BloomPlusPackagePlanPicker: View {
   var body: some View {
     LargeTitleActionCard("Select a Plan") {
       VStack(spacing: 20) {
-        ForEach(products, id: \.id) { product in
+        ForEach(packages) { package in
           BloomPlusPackageCell(
-            title: product.sensibleName,
-            cost: product.pricingString ?? "",
-            costMonthly: product.monthlyPriceString,
-            offer: product.introductoryOfferString,
-            isSelected: product.id == selectedProductID
+            title: package.sensibleName,
+            cost: package.pricingString ?? "",
+            costMonthly: package.monthlyPriceString,
+            offer: package.introductoryOfferString,
+            isSelected: package == selectedPackage
           )
           .sensoryFeedback(.impact, trigger: selectedPackageToggle)
           .onTapGesture {
-            selectedProductID = product.id
+            selectedPackage = package
             selectedPackageToggle.toggle()
             dismiss()
           }
@@ -47,17 +47,17 @@ struct BloomPlusPackagePlanPicker: View {
             showOfferCodeSheet.toggle()
           }
           .offerCodeRedemption(isPresented: $showOfferCodeSheet) { result in
-              switch result {
-              case .failure(let error):
-                  TelemetryDeck.errorOccurred(
-                      id: "PreferencesView.offerCodeRedemption",
-                      category: .thrownException,
-                      message: error.localizedDescription
-                  )
-                  self.error = error
-              default:
-                  break
-              }
+            switch result {
+            case .failure(let error):
+              TelemetryDeck.errorOccurred(
+                id: "PreferencesView.offerCodeRedemption",
+                category: .thrownException,
+                message: error.localizedDescription
+              )
+              self.error = error
+            default:
+              break
+            }
           }
 
           Text("•")
@@ -82,25 +82,25 @@ struct BloomPlusPackagePlanPicker: View {
 private extension BloomPlusPackagePlanPicker {
 
   func restorePurchases() async throws {
-    try await PackageStore.shared.restore()
+    _ = try await Purchases.shared.restorePurchases()
   }
 }
 
-//#Preview {
-//  @Previewable @State var selectedPackage: Package?
-//
-//  PreviewSheetPresent {
-//    BloomPlusPackagePlanPicker(
-//      packages: [
-//        Package(
-//          identifier: "preview",
-//          packageType: .monthly,
-//          storeProduct: StoreProduct(sk1Product: SK1Product()),
-//          offeringIdentifier: "offering",
-//          webCheckoutUrl: nil
-//        )
-//      ],
-//      selectedPackage: $selectedPackage
-//    )
-//  }
-//}
+#Preview {
+  @Previewable @State var selectedPackage: Package?
+
+  PreviewSheetPresent {
+    BloomPlusPackagePlanPicker(
+      packages: [
+        Package(
+          identifier: "preview",
+          packageType: .monthly,
+          storeProduct: StoreProduct(sk1Product: SK1Product()),
+          offeringIdentifier: "offering",
+          webCheckoutUrl: nil
+        )
+      ],
+      selectedPackage: $selectedPackage
+    )
+  }
+}
