@@ -4,5 +4,10 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>bugsnag</key>
+	<dict>
+		<key>apiKey</key>
+		<string>98b5d461b2c6b0e63dd53acdd675ef26</string>
+	</dict>
 </dict>
 </plist>

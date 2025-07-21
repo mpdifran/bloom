@@ -1,5 +1,5 @@
 {
-  "originHash" : "106f66ae9092603b7a38ee151665d8dad6169eb2026daf0c856c6ab0f1bf2b9b",
+  "originHash" : "27d6b95f1581b3ff9c0d924f222c1985c2c573091c05ba465afa70978b507837",
   "pins" : [
     {
       "identity" : "apns",
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/bugsnag/bugsnag-cocoa-performance",
       "state" : {
-        "revision" : "1e9878dbcc8b0c2c23da975c45dde2abcd586b38",
-        "version" : "1.13.0"
+        "revision" : "4c462ac3d736039699364a5233a4d3b64c82107e",
+        "version" : "1.14.0"
       }
     },
     {
