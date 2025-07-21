@@ -13,6 +13,7 @@ then
 
     pushd $CI_ARCHIVE_PATH
 
+    pwd
     ls -al
 
     pushd $CI_ARCHIVE_PATH/dSYMs
