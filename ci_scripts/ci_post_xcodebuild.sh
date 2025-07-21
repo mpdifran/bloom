@@ -11,6 +11,8 @@ if [[ -n $CI_ARCHIVE_PATH ]];
 then
     echo "Found valid archive path."
 
+    ls -al
+
     pushd $CI_ARCHIVE_PATH/dSYMs
 
     if [[ $CI_BUNDLE_ID == "com.lotus-labs.bloom" ]]; then
