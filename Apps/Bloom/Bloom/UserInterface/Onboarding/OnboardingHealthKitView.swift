@@ -13,7 +13,7 @@ import TelemetryDeck
 import CoreHealth
 
 struct OnboardingHealthKitView: View {
-  let onContinue: () -> Void
+  let onContinue: () async -> Void
 
   @State private var showMockHealthApp = false
   @State private var isWaitingForPermissionSheet = false
@@ -64,9 +64,11 @@ struct OnboardingHealthKitView: View {
           .multilineTextAlignment(.center)
 
         if isAuthorized {
-          Button("Let's go!") {
+          AsyncButton {
             didContinue.toggle()
-            onContinue()
+            await onContinue()
+          } label: {
+            Text("Let's go!")
           }
           .buttonStyle(.onboarding)
         } else {
@@ -152,7 +154,7 @@ private extension OnboardingHealthKitView {
 
       if isAuthorized {
         await VitalsCalculator.shared.forceFetchVitals()
-        onContinue()
+        await onContinue()
       }
     } catch { }
   }
@@ -160,6 +162,8 @@ private extension OnboardingHealthKitView {
 
 #Preview {
   PreviewEnvironment {
-    OnboardingHealthKitView { }
+    OnboardingHealthKitView { 
+      // Async preview action
+    }
   }
 }

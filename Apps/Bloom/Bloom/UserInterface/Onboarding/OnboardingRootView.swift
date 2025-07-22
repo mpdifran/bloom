@@ -47,7 +47,7 @@ struct OnboardingRootView: View {
         }
       case .healthKit:
         OnboardingHealthKitView {
-          setStep(.ageAndSex)
+          await checkHealthDataAndProceed()
         }
       case .ageAndSex:
         OnboardingHealthAgeSexHeightView {
@@ -82,6 +82,28 @@ private extension OnboardingRootView {
   func setStep(_ step: Step) {
     withAnimation {
       self.step = step
+    }
+  }
+  
+  func checkHealthDataAndProceed() async {
+    // Check if we already have complete health data from HealthKit
+    let sex = healthManager.healthStore.sex()
+    let age = healthManager.healthStore.age()
+    let sexName = sex?.personName
+    let height = healthManager.heightCM
+    
+    let isHealthKitDataValid = sex != nil && age != nil && sexName != nil && height > 0
+    
+    if isHealthKitDataValid {
+      // Skip the age/sex screen and go directly to focus area
+      // Make sure to set the health data values
+      healthManager.birthday = healthManager.healthStore.birthday() ?? Date()
+      healthManager.isFemale = healthManager.healthStore.sex() == .female
+      
+      setStep(.focusArea)
+    } else {
+      // Need to collect age/sex data
+      setStep(.ageAndSex)
     }
   }
 }
