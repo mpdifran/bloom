@@ -105,7 +105,7 @@ private extension OnboardingFocusAreaView {
     TextField(
       "",
       text: $healthManager.focus,
-      prompt: Text("Describe your health focus"),
+      prompt: Text("Describe your Health Focus"),
       axis: .vertical
     )
     .multilineTextAlignment(.center)

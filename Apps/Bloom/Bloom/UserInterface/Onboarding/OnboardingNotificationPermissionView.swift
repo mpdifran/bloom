@@ -24,32 +24,28 @@ struct OnboardingNotificationPermissionView: View {
         BudImage(.budWater)
 
         Group {
-          Text("Almost there!")
-            .transition(.opacity)
-            .appear(with: 1, currentIndex: index)
-
           Text("I'd love to keep in touch with you when it's important.")
             .transition(.opacity)
-            .appear(with: 2, currentIndex: index)
+            .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
         }
         .onboardingTextStyle()
 
         MockHomeScreenView()
           .transition(.move(edge: .bottom))
-          .appear(with: 3, currentIndex: index)
+          .appear(with: 2, currentIndex: index)
           .overlay {
             VStack {
               MockNotificationView(
                 title: "Your Morning Report is ready",
-                message: "",
+                message: "You were a bit short on deep sleep.",
                 timestamp: "Now"
               )
               .transition(.move(edge: .top))
               .appear(with: 2, currentIndex: notificationIndex, secondaryIfNotCurrentIndex: false)
 
               MockNotificationView(
-                title: "You met your steps goal! 🎉",
-                message: "",
+                title: "You met your steps goal!",
+                message: "10,523 steps so far today.",
                 timestamp: "5m ago"
               )
               .transition(.move(edge: .top))
@@ -74,7 +70,7 @@ struct OnboardingNotificationPermissionView: View {
     .sensoryFeedback(.success, trigger: notificationIndex)
     .sensoryFeedback(.selection, trigger: didContinue)
     .task {
-      while index < 3 {
+      while index < 2 {
         await advanceIndex()
       }
 

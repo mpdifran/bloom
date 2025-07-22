@@ -166,7 +166,7 @@ private extension OnboardingHealthAgeSexHeightView {
     Text("Looks Great!")
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
-    Text("According to your Health data, you're a \(age) year old \(sex). Your height is \(height.displayString(for: .meterUnit(with: .centi))). Is that correct?")
+    Text("According to your Health data, you're a \(age) year old \(sex). Your height is \(height.displayString(for: .meterUnit(with: .centi))). Does that look right?")
       .contentTransition(.numericText())
       .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
