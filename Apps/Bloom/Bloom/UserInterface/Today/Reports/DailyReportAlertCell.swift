@@ -107,12 +107,14 @@ private extension DailyReportAlertCell {
 }
 
 #Preview {
-  ScrollView {
-    VStack {
-      DailyReportAlertCell(kind: .morning)
-      DailyReportAlertCell(kind: .evening)
+  PreviewEnvironment {
+    ScrollView {
+      VStack {
+        DailyReportAlertCell(kind: .morning)
+        DailyReportAlertCell(kind: .evening)
+      }
+      .padding()
     }
-    .padding()
+    .groupedBackground()
   }
-  .groupedBackground()
 }

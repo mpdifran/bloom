@@ -370,6 +370,10 @@ private extension GoodMorningView {
         let weather,
         let minTemp = minTemp(from: weather),
         let maxTemp = maxTemp(from: weather),
+        let minPastTemp = minPastTemp(from: weather),
+        let maxPastTemp = maxPastTemp(from: weather),
+        let minFutureTemp = minFutureTemp(from: weather),
+        let maxFutureTemp = maxFutureTemp(from: weather),
         let closestHour = weather.hourlyForecast.filter({ Calendar.current.isDateInToday($0.date) && $0.date > .now }).min(by: {
           abs($0.date.timeIntervalSinceNow) < abs($1.date.timeIntervalSinceNow)
         }),
@@ -438,10 +442,10 @@ private extension GoodMorningView {
             .foregroundStyle(.text)
           }
           .chartForegroundStyleScale([
-            "Past Line": gradientFor(minTemp: minTemp, maxTemp: maxTemp, opacity: 0.5),
-            "Future Line": gradientFor(minTemp: minTemp, maxTemp: maxTemp),
-            "Past Area": gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.2),
-            "Future Area": gradientFor(minTemp: minTemp, minTempShift: 5, maxTemp: maxTemp, opacity: 0.5)
+            "Past Line": gradientFor(minTemp: minPastTemp, maxTemp: maxPastTemp, opacity: 0.5),
+            "Future Line": gradientFor(minTemp: minFutureTemp, maxTemp: maxFutureTemp),
+            "Past Area": gradientFor(minTemp: minPastTemp, minTempShift: 5, maxTemp: maxPastTemp, opacity: 0.2),
+            "Future Area": gradientFor(minTemp: minFutureTemp, minTempShift: 5, maxTemp: maxFutureTemp, opacity: 0.5)
           ])
           .chartLegend(.hidden)
           .chartYScale(domain: (minTemp.localizedValue - 5)...(maxTemp.localizedValue + 5), range: .plotDimension)
@@ -470,6 +474,34 @@ private extension GoodMorningView {
   func maxTemp(from weather: Weather) -> Measurement<UnitTemperature>? {
     weather.hourlyForecast
       .filter({ Calendar.current.isDateInToday($0.date) })
+      .max(by: \.temperature.value)
+      .map { $0.temperature }
+  }
+
+  func minPastTemp(from weather: Weather) -> Measurement<UnitTemperature>? {
+    weather.hourlyForecast
+      .filter({ Calendar.current.isDateInToday($0.date) && $0.date <= .now })
+      .min(by: \.temperature.value)
+      .map { $0.temperature }
+  }
+
+  func maxPastTemp(from weather: Weather) -> Measurement<UnitTemperature>? {
+    weather.hourlyForecast
+      .filter({ Calendar.current.isDateInToday($0.date) && $0.date <= .now })
+      .max(by: \.temperature.value)
+      .map { $0.temperature }
+  }
+
+  func minFutureTemp(from weather: Weather) -> Measurement<UnitTemperature>? {
+    weather.hourlyForecast
+      .filter({ Calendar.current.isDateInToday($0.date) && $0.date > .now })
+      .min(by: \.temperature.value)
+      .map { $0.temperature }
+  }
+
+  func maxFutureTemp(from weather: Weather) -> Measurement<UnitTemperature>? {
+    weather.hourlyForecast
+      .filter({ Calendar.current.isDateInToday($0.date) && $0.date > .now })
       .max(by: \.temperature.value)
       .map { $0.temperature }
   }
