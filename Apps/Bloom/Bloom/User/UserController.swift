@@ -220,7 +220,9 @@ extension UserController {
       }
     }
 
-    UIApplication.shared.registerForRemoteNotifications()
+    // Notify token manager of authentication state change
+    // This will handle remote notification registration if needed
+    await PushNotificationTokenManager.shared.handleAuthenticationStateChange(isAuthenticated: true)
   }
 
   func logout() async throws {
@@ -238,6 +240,9 @@ extension UserController {
     storeAuthToken()
 
     self.isAuthenticated = self.authToken != nil
+    
+    // Notify token manager of logout
+    await PushNotificationTokenManager.shared.handleAuthenticationStateChange(isAuthenticated: false)
   }
 
   func deleteAccount() async throws {
@@ -255,6 +260,13 @@ extension UserController {
     storeAuthToken()
 
     self.isAuthenticated = self.authToken != nil
+    
+    // Notify token manager of account deletion
+    await PushNotificationTokenManager.shared.handleAuthenticationStateChange(isAuthenticated: false)
+  }
+  
+  func updatePushNotificationToken(_ token: String) async throws {
+    try await NetworkRequester.shared.register(deviceToken: token)
   }
 }
 

@@ -22,21 +22,8 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
   ) {
-    let token = deviceToken
-      .map({ data in String(format: "%02.2hhx", data) })
-      .joined()
-
     Task {
-      do {
-        try await NetworkRequester.shared.register(deviceToken: token)
-      } catch {
-        TelemetryDeck.errorOccurred(
-          id: "BloomAppDelegate.didRegisterForRemoteNotificationsWithDeviceToken",
-          category: .thrownException,
-          message: error.localizedDescription
-        )
-        print(error)
-      }
+      await PushNotificationTokenManager.shared.handleNewToken(deviceToken)
     }
   }
 
@@ -44,6 +31,8 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didFailToRegisterForRemoteNotificationsWithError error: any Error
   ) {
+    PushNotificationTokenManager.shared.handleFailedRegistration(error)
+    
     TelemetryDeck.errorOccurred(
       id: "BloomAppDelegate.didFailToRegisterForRemoteNotificationsWithError",
       category: .thrownException,

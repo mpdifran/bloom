@@ -1,5 +1,5 @@
 {
-  "originHash" : "37f33b514e48e960f5ee912f50b3d6c4390ef3dfd67f6a83b525318f226abf76",
+  "originHash" : "655ed973aadc78606b2ba251ba76cce1bded1c909b3cac090626d9e847b77f81",
   "pins" : [
     {
       "identity" : "appfoundations",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mpdifran/AppUI",
       "state" : {
-        "revision" : "1b170185e0e0424d34947bd5a183682203b33595",
-        "version" : "1.0.3"
+        "revision" : "5cf918eadbbcbe728ca922864b86c8daf29d74f1",
+        "version" : "1.1.0"
       }
     },
     {
@@ -38,6 +38,15 @@
       }
     },
     {
+      "identity" : "chatlayout",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ekazaev/ChatLayout.git",
+      "state" : {
+        "revision" : "e36ea58ecef0aa1240d10444ba66b023c7e0c26b",
+        "version" : "2.2.1"
+      }
+    },
+    {
       "identity" : "confettiswiftui",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/simibac/ConfettiSwiftUI",
@@ -47,12 +56,30 @@
       }
     },
     {
-      "identity" : "statkit",
+      "identity" : "differencekit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JimmyMAndersson/StatKit.git",
+      "location" : "https://github.com/ra1028/DifferenceKit.git",
       "state" : {
-        "revision" : "ba1e0650f4270c3b3783f048b9ba17268296ee68",
-        "version" : "0.6.1"
+        "revision" : "073b9671ce2b9b5b96398611427a1f929927e428",
+        "version" : "1.3.0"
+      }
+    },
+    {
+      "identity" : "purchases-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
+      "state" : {
+        "revision" : "709554156bb93c909b362e0b30ec0f2afee3df6e",
+        "version" : "5.33.1"
+      }
+    },
+    {
+      "identity" : "sfsafesymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
+      "state" : {
+        "revision" : "3dd282d3269b061853a3b3bcd23a509d2aa166ce",
+        "version" : "6.2.0"
       }
     },
     {
@@ -80,6 +107,15 @@
       "state" : {
         "revision" : "e1a5f4ea47888e7e40cb2d40bea43ed4f1f5bfff",
         "version" : "2.6.1"
+      }
+    },
+    {
+      "identity" : "swipy",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rohanrhu/Swipy",
+      "state" : {
+        "revision" : "791a111381b64e0122edb8c3a9bd9f7ef994cb80",
+        "version" : "1.2.0"
       }
     },
     {

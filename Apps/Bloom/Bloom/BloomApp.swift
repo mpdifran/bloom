@@ -23,6 +23,7 @@ struct BloomApp: App {
   @UIApplicationDelegateAdaptor(BloomAppDelegate.self) var appDelegate
 
   private let foregroundPublisher = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+  private let tokenManager = PushNotificationTokenManager.shared
 
   init() {
     Bugsnag.start()
@@ -44,7 +45,6 @@ struct BloomApp: App {
 
     // Note: Background task scheduling moved to .task block to ensure handlers are registered first
 
-    checkRegisterForRemoteNotifications()
     NotificationManager.shared.removeAllScheduledNotifications()
     migrateUserDefaults()
 
@@ -109,6 +109,11 @@ private extension BloomApp {
       // Reschedule reminders when app comes to foreground
       await RemindersManager.shared.rescheduleAllReminders()
     }
+    
+    Task {
+      // Check if APNs token needs refresh
+      await tokenManager.refreshTokenIfNeeded()
+    }
 
     TelemetryDeck.signal(
       "Health Goal",
@@ -116,12 +121,6 @@ private extension BloomApp {
         "healthGoal": HealthDefaults.shared.getFocus()
       ]
     )
-  }
-
-  func checkRegisterForRemoteNotifications() {
-    guard UserController.shared.isAuthenticated else { return }
-
-    UIApplication.shared.registerForRemoteNotifications()
   }
 
   func migrateUserDefaults() {
