@@ -27,17 +27,23 @@ extension DayReviewCalculator {
     async let demographics = ChatVitalConverter.shared.generateDemographics()
     async let vitals = DayVitalsCalculator.shared.calculateVitals(for: date)
     async let goalProgress = GoalProgressCalculator.shared.calculateGoalProgress(for: date)
+    async let weather = DayReviewWeatherCalculator.shared.calculateWeatherData(for: date)
+    async let events = DayReviewEventCalculator.shared.calculateEventData(for: date)
 
-    let (demographicsResult, vitalsResult, goalProgressResult) = await (
+    let (demographicsResult, vitalsResult, goalProgressResult, weatherResult, eventsResult) = await (
       demographics,
       vitals,
-      try goalProgress
+      try goalProgress,
+      weather,
+      events
     )
 
     return DayReviewHealthData(
       demographics: demographicsResult,
       vitals: vitalsResult,
-      goalProgress: goalProgressResult
+      goalProgress: goalProgressResult,
+      weather: weatherResult,
+      events: eventsResult
     )
   }
 }

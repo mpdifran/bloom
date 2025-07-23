@@ -11,4 +11,6 @@ struct DayReviewHealthData: SendableNetworkModel {
   let demographics: HealthVitalData.UserInfo?
   let vitals: DayVitalsData?
   let goalProgress: GoalProgressData?
+  let weather: DayReviewWeatherData?
+  let events: DayReviewEventData?
 }
