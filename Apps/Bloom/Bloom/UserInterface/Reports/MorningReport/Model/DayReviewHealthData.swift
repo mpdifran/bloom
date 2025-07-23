@@ -7,6 +7,8 @@
 
 import Foundation
 
-struct DayReviewHealthData: Codable, Hashable, Sendable {
-  
+struct DayReviewHealthData: SendableNetworkModel {
+  let demographics: HealthVitalData.UserInfo?
+  let vitals: DayVitalsData?
+  let goalProgress: GoalProgressData?
 }

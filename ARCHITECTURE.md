@@ -233,6 +233,23 @@ extension ReminderDTO {
 
 This pattern is cleaner, more maintainable, and makes the public interface intent clear at the extension level.
 
+### Date and Calendar Helpers
+Before implementing custom date manipulation:
+1. **Check Calendar+Helpers.swift** in `BloomFoundation/Calendar/` for existing calendar utilities:
+   - `startOfWeek(for:)`, `startOfMonth(for:)`, `startOfYear(for:)`
+   - `endOfDay(for:)`, `startOfTomorrow(for:)`
+   - `mondayMorning(for:)`, `timeOfDay(for:)`
+   - `iterate(dateRange:by:iterator:)` for date iteration
+   - Many other helpful date/time utilities
+
+2. **Check DateRange.swift** in `BloomFoundation/Date/` for static date range helpers:
+   - `DateRange.today()`, `DateRange.yesterday()`, `DateRange.tomorrow()`
+   - `DateRange.startOfWeekToNow()`, `DateRange.startOfMonthToNow()`
+   - `DateRange.trailingDaysFromNow(_:)`, `DateRange.trailingWeeksFromNow(_:)`
+   - Many other pre-built date ranges
+
+Using these existing utilities ensures consistency and prevents duplicate implementations.
+
 ### Collection Extensions
 ```swift
 extension Collection {

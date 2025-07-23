@@ -1,5 +1,5 @@
 //
-//  ChatHealthData.swift
+//  HealthVitalData.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-02-16.
@@ -11,10 +11,9 @@ import HealthKit
 
 protocol SendableNetworkModel: Codable, Equatable, Sendable { }
 
-// MARK: - ChatHealthData
+// MARK: - HealthVitalData
 
-struct ChatHealthData: SendableNetworkModel {
-  let demographics: UserInfo?
+struct HealthVitalData: SendableNetworkModel {
   let activityLevel: ActivityLevel?
   let bodyComposition: BodyComposition?
   let bowelMovements: BowelMovements?
@@ -26,9 +25,8 @@ struct ChatHealthData: SendableNetworkModel {
   let stress: Stress?
 }
 
-extension ChatHealthData {
+extension HealthVitalData {
   var isEmpty: Bool {
-    demographics == nil &&
     activityLevel == nil &&
     bodyComposition == nil &&
     bowelMovements == nil &&
@@ -42,7 +40,7 @@ extension ChatHealthData {
 
 // MARK: - Primitives
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct Sample: SendableNetworkModel {
     let date: Date
     let quantity: Quantity
@@ -195,7 +193,7 @@ extension ChatHealthData {
   }
 }
 
-extension ChatHealthData.FoodItem {
+extension HealthVitalData.FoodItem {
 
   init(foodItemLog: FoodItemLogDTO, foodItem: FoodItemDTO) {
     func optionalQuantity(
@@ -385,7 +383,7 @@ extension ChatHealthData.FoodItem {
 
 // MARK: - UserInfo
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct UserInfo: SendableNetworkModel {
     let age: Int?
     let sex: String?
@@ -401,7 +399,7 @@ extension ChatHealthData {
 
 // MARK: - Activity Level
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct ActivityLevel: SendableNetworkModel {
     let basalEnergyBurned: [Sample]
     let activeEnergyBurned: [Sample]
@@ -410,7 +408,7 @@ extension ChatHealthData {
 
 // MARK: - Body Composition
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct BodyComposition: SendableNetworkModel {
     let bodyFatPercentage: [Sample]
     let bodyMass: [Sample]
@@ -419,7 +417,7 @@ extension ChatHealthData {
 
 // MARK: - Bowel Movement
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct BowelMovements: SendableNetworkModel {
     let samples: [BowelMovementSample]
   }
@@ -427,7 +425,7 @@ extension ChatHealthData {
 
 // MARK: - Exercise Effectiveness
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct ExerciseEffectiveness: SendableNetworkModel {
     let heartRateZones: HeartRateZones
     let heartRateZoneWorkoutSamples: [HeartRateZoneWorkoutSample]
@@ -436,7 +434,7 @@ extension ChatHealthData {
 
 // MARK: - Heart Health
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct HeartHealth: SendableNetworkModel {
     let vo2Max: [Sample]
     let restingHeartRate: [Sample]
@@ -446,7 +444,7 @@ extension ChatHealthData {
 
 // MARK: - Menstrual Health
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct MenstrualHealth: SendableNetworkModel {
     let cycles: [MenstrualCycle]
   }
@@ -454,16 +452,16 @@ extension ChatHealthData {
 
 // MARK: - Nutrition
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct Nutrition: SendableNetworkModel {
-    let nutritionAverages: ChatHealthData.NutritionAverages
+    let nutritionAverages: HealthVitalData.NutritionAverages
     let foodLogs: [FoodLogDay]
   }
 }
 
 // MARK: - Sleep
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct Sleep: SendableNetworkModel {
     let sleepDetails: [SleepDay]
   }
@@ -471,7 +469,7 @@ extension ChatHealthData {
 
 // MARK: - Stress
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct Stress: SendableNetworkModel {
     let heartRateVariability: [Sample]
     let bloodPressureSamples: [BloodPressureSample]
@@ -480,7 +478,7 @@ extension ChatHealthData {
 
 // MARK: - Workouts
 
-extension ChatHealthData {
+extension HealthVitalData {
   struct Workout: SendableNetworkModel {
     let name: String
     let start: Date

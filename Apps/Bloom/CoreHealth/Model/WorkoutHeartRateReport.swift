@@ -128,6 +128,12 @@ public extension WorkoutHeartRateReport {
   var maxHeartRate: Double? {
     heartRateSamples.map({ $0.quantity.doubleValue(for: .bpm()) }).max()
   }
+
+  var averageHeartRate: Double? {
+    heartRateSamples.reduce(into: 0) { result, sample in
+      result += sample.quantity.doubleValue(for: .bpm())
+    } / Double(heartRateSamples.count)
+  }
 }
 
 public extension WorkoutHeartRateReport {

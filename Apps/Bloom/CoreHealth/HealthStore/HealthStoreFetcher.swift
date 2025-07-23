@@ -82,6 +82,17 @@ public extension HealthStoreFetcher {
     (try? await healthStore.fetchLatestSample(for: quantityType)) as? HKQuantitySample
   }
 
+  func fetchMostRecentSample(for quantityType: HKQuantityTypeIdentifier, dateRange: DateRange) async -> HKQuantitySample? {
+    guard let sample = await fetchLatestSample(for: quantityType) else {
+      return nil
+    }
+    
+    // Check if the sample date falls within the specified range
+    guard dateRange.contains(date: sample.startDate) else { return nil }
+    
+    return sample
+  }
+
   func fetchTotalQuantity(for quantityType: HKQuantityTypeIdentifier, dateRange: DateRange) async -> HKQuantity? {
     try? await healthStore.fetchQuantity(for: quantityType, dateRange: dateRange, option: .cumulativeSum)
   }

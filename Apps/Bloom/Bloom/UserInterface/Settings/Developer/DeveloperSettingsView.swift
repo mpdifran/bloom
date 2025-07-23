@@ -251,13 +251,14 @@ extension DeveloperSettingsView {
       SettingsSectionContainer {
         AsyncButton {
           do {
-            let chatHealthData = try await ChatVitalConverter.shared.convertHealthDataString()
-            UIPasteboard.general.string = chatHealthData
+            let date = Calendar.current.date(byAdding: .day, value: -1, to: .now) ?? .now
+            let dayReviewData = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(for: date)
+            UIPasteboard.general.string = dayReviewData
 
             await MainActor.run {
               alertDetails = AlertDetails(
                 title: "Copied to Clipboard",
-                message: "Your health data has been copied to your clipboard."
+                message: "Your day review data has been copied to your clipboard."
               )
             }
           } catch {
@@ -266,44 +267,10 @@ extension DeveloperSettingsView {
             }
           }
         } label: {
-          LabeledContent("Copy Health Data to Clipboard") {
-            if #available(iOS 18.0, *) {
-              Image(systemSymbol: .documentOnDocument)
-            }
+          LabeledContent("Copy Morning Report Data to Clipboard") {
+            Image(systemSymbol: .sunrise)
           }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-        }
-        .frame(height: 60)
-
-        Divider()
-
-        AsyncButton {
-          do {
-            let goalsData = try await ChatGoalConverter.shared.convertGoalDataString()
-            UIPasteboard.general.string = goalsData
-
-            await MainActor.run {
-              alertDetails = AlertDetails(
-                title: "Copied to Clipboard",
-                message: "Your current goals have been copied to your clipboard."
-              )
-            }
-          } catch {
-            await MainActor.run {
-              self.error = error
-            }
-          }
-        } label: {
-          LabeledContent("Copy Goals to Clipboard") {
-            if #available(iOS 18.0, *) {
-              Image(systemSymbol: .documentOnDocument)
-            } else {
-              // Fallback on earlier versions
-            }
-          }
+          .multilineTextAlignment(.leading)
           .bold()
           .fontDesign(.rounded)
           .foregroundStyle(.tint)

@@ -133,7 +133,7 @@ private extension ChatHealthQueryPerformer {
   }
 
   func fetchFoodLogs(query: SocketMessage.Query) async -> String {
-    var logs = [ChatHealthData.FoodLogDay]()
+    var logs = [HealthVitalData.FoodLogDay]()
 
     await Calendar.current.asyncIterate(
       dateRange: query.dateRange.extendToEndOfDay(), // Food logs have hard coded times. Do this to make sure we capture everything within a day.
@@ -142,16 +142,16 @@ private extension ChatHealthQueryPerformer {
       do {
         let foodLogs = try await foodLogModelActor.fetchLogs(for: date)
 
-        var breakfast = [ChatHealthData.FoodItem]()
-        var lunch = [ChatHealthData.FoodItem]()
-        var dinner = [ChatHealthData.FoodItem]()
-        var snack = [ChatHealthData.FoodItem]()
+        var breakfast = [HealthVitalData.FoodItem]()
+        var lunch = [HealthVitalData.FoodItem]()
+        var dinner = [HealthVitalData.FoodItem]()
+        var snack = [HealthVitalData.FoodItem]()
 
         for foodLog in foodLogs {
           for serving in foodLog.foodItemServings {
             guard let foodItem = serving.foodItem else { continue }
 
-            let networkFoodItem = ChatHealthData.FoodItem(foodItemLog: foodLog, foodItem: foodItem)
+            let networkFoodItem = HealthVitalData.FoodItem(foodItemLog: foodLog, foodItem: foodItem)
 
             switch foodLog.meal {
             case .breakfast:
@@ -176,7 +176,7 @@ private extension ChatHealthQueryPerformer {
           snack.isNotEmpty
         else { return }
 
-        let dayLog = ChatHealthData.FoodLogDay(
+        let dayLog = HealthVitalData.FoodLogDay(
           date: DateFormatter.justDateShort.string(from: date),
           breakfast: breakfast,
           lunch: lunch,
@@ -193,7 +193,7 @@ private extension ChatHealthQueryPerformer {
 
   func fetchNutrition(query: SocketMessage.Query) async -> String {
     let dateRange = query.dateRange
-    let averages = ChatHealthData.NutritionAverages(
+    let averages = HealthVitalData.NutritionAverages(
       averageProtein: await formattedAverage(for: .dietaryProtein, unit: .gram(), dateRange: dateRange),
       averageCarbohydrates: await formattedAverage(for: .dietaryCarbohydrates, unit: .gram(), dateRange: dateRange),
       averageFat: await formattedAverage(for: .dietaryFatTotal, unit: .gram(), dateRange: dateRange),
@@ -257,17 +257,17 @@ private extension ChatHealthQueryPerformer {
     )
 
     guard basalEnergy.isNotEmpty || activeEnergy.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.ActivityLevel(basalEnergyBurned: [], activeEnergyBurned: []))
+      return convertToString(value: HealthVitalData.ActivityLevel(basalEnergyBurned: [], activeEnergyBurned: []))
     }
 
     let basalSamples = basalEnergy.map { sample in
-      ChatHealthData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit, numberFormatter: .noDecimalPlaces))
+      HealthVitalData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit, numberFormatter: .noDecimalPlaces))
     }
     let activeSamples = activeEnergy.map { sample in
-      ChatHealthData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit, numberFormatter: .noDecimalPlaces))
+      HealthVitalData.Sample(date: sample.date, quantity: sample.quantity.chatQuantity(for: unit, numberFormatter: .noDecimalPlaces))
     }
 
-    let activityLevel = ChatHealthData.ActivityLevel(
+    let activityLevel = HealthVitalData.ActivityLevel(
       basalEnergyBurned: basalSamples,
       activeEnergyBurned: activeSamples
     )
@@ -290,24 +290,24 @@ private extension ChatHealthQueryPerformer {
     )
 
     guard bodyFatPercentage.isNotEmpty || bodyMass.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.BodyComposition(bodyFatPercentage: [], bodyMass: []))
+      return convertToString(value: HealthVitalData.BodyComposition(bodyFatPercentage: [], bodyMass: []))
     }
 
     let bodyFatSamples = bodyFatPercentage.map {
-      ChatHealthData.Sample(
+      HealthVitalData.Sample(
         date: $0.date,
         quantity: $0.quantity.chatQuantity(for: .percent(), numberFormatter: .noDecimalPlaces)
       )
     }
     let bodyMassUnit = await HKUnit.gramUnit(with: .kilo).localizedUnit()
     let bodyMassSamples = bodyMass.map {
-      ChatHealthData.Sample(
+      HealthVitalData.Sample(
         date: $0.date,
         quantity: $0.quantity.chatQuantity(for: bodyMassUnit, numberFormatter: .oneDecimalPlace)
       )
     }
 
-    let bodyComposition = ChatHealthData.BodyComposition(
+    let bodyComposition = HealthVitalData.BodyComposition(
       bodyFatPercentage: bodyFatSamples,
       bodyMass: bodyMassSamples
     )
@@ -320,7 +320,7 @@ private extension ChatHealthQueryPerformer {
       let bowelMovementSamples = try await bowelMovementModelActor.fetchBowelMovements(dateRange: query.dateRange)
 
       let samples = bowelMovementSamples.map {
-        ChatHealthData.BowelMovementSample(
+        HealthVitalData.BowelMovementSample(
           date: $0.date,
           bristolStoolType: $0.bristolStoolType,
           duration: $0.duration.name
@@ -328,10 +328,10 @@ private extension ChatHealthQueryPerformer {
       }
 
       guard samples.isNotEmpty else { 
-        return convertToString(value: ChatHealthData.BowelMovements(samples: []))
+        return convertToString(value: HealthVitalData.BowelMovements(samples: []))
       }
 
-      let bowelMovements = ChatHealthData.BowelMovements(samples: samples)
+      let bowelMovements = HealthVitalData.BowelMovements(samples: samples)
 
       return convertToString(value: bowelMovements)
     } catch {
@@ -360,7 +360,7 @@ private extension ChatHealthQueryPerformer {
 
     guard vo2Max.isNotEmpty || rhr.isNotEmpty || heartRateRecovery.isNotEmpty else {
       return convertToString(
-        value: ChatHealthData.HeartHealth(
+        value: HealthVitalData.HeartHealth(
           vo2Max: [],
           restingHeartRate: [],
           heartRateRecoveryOneMinute: []
@@ -369,16 +369,16 @@ private extension ChatHealthQueryPerformer {
     }
 
     let vo2MaxSamples = vo2Max.map {
-      ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .vo2Max(), numberFormatter: .noDecimalPlaces))
+      HealthVitalData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .vo2Max(), numberFormatter: .noDecimalPlaces))
     }
     let rhrSamples = rhr.map {
-      ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm(), unitOverride: "bpm", numberFormatter: .noDecimalPlaces))
+      HealthVitalData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm(), unitOverride: "bpm", numberFormatter: .noDecimalPlaces))
     }
     let heartRateRecoverySamples = heartRateRecovery.map {
-      ChatHealthData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm(), unitOverride: "bpm", numberFormatter: .noDecimalPlaces))
+      HealthVitalData.Sample(date: $0.date, quantity: $0.quantity.chatQuantity(for: .bpm(), unitOverride: "bpm", numberFormatter: .noDecimalPlaces))
     }
 
-    let heartHealth = ChatHealthData.HeartHealth(
+    let heartHealth = HealthVitalData.HeartHealth(
       vo2Max: vo2MaxSamples,
       restingHeartRate: rhrSamples,
       heartRateRecoveryOneMinute: heartRateRecoverySamples
@@ -392,11 +392,11 @@ private extension ChatHealthQueryPerformer {
 
     let cycles = await HealthStoreFetcher.shared.fetchMenstrualFlowSamples(dateRange: dateRange)
 
-    let cycleSamples = cycles.compactMap { (cycle) -> ChatHealthData.MenstrualCycle? in
-      return ChatHealthData.MenstrualCycle(
+    let cycleSamples = cycles.compactMap { (cycle) -> HealthVitalData.MenstrualCycle? in
+      return HealthVitalData.MenstrualCycle(
         startDate: cycle.startDate,
         flowSamples: cycle.samples.map { sample in
-          ChatHealthData.MenstrualFlowLevelSample(
+          HealthVitalData.MenstrualFlowLevelSample(
             date: sample.startDate,
             flowLevel: sample.menstrualFlowCategory.chatFlowLevel
           )
@@ -405,10 +405,10 @@ private extension ChatHealthQueryPerformer {
     }
 
     guard cycleSamples.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.MenstrualHealth(cycles: []))
+      return convertToString(value: HealthVitalData.MenstrualHealth(cycles: []))
     }
 
-    let menstrualHealth = ChatHealthData.MenstrualHealth(cycles: cycleSamples)
+    let menstrualHealth = HealthVitalData.MenstrualHealth(cycles: cycleSamples)
 
     return convertToString(value: menstrualHealth)
   }
@@ -418,14 +418,14 @@ private extension ChatHealthQueryPerformer {
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: dateRange)
 
     guard sleepAnalyses.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.Sleep(sleepDetails: []))
+      return convertToString(value: HealthVitalData.Sleep(sleepDetails: []))
     }
 
     let sleepDays = sleepAnalyses.map { sleepAnalysis in
-      let respiratoryRateQuantity: ChatHealthData.Quantity?
+      let respiratoryRateQuantity: HealthVitalData.Quantity?
       let averageRespiratoryRate = sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate)
       if averageRespiratoryRate > 0 {
-        respiratoryRateQuantity = ChatHealthData.Quantity(
+        respiratoryRateQuantity = HealthVitalData.Quantity(
           value: averageRespiratoryRate,
           unit: "breaths / minute",
           numberFormatter: .oneDecimalPlace
@@ -434,9 +434,9 @@ private extension ChatHealthQueryPerformer {
         respiratoryRateQuantity = nil
       }
 
-      let soundLevelQuantity: ChatHealthData.Quantity?
+      let soundLevelQuantity: HealthVitalData.Quantity?
       if sleepAnalysis.averageSoundLevel > 0 {
-        soundLevelQuantity = ChatHealthData.Quantity(
+        soundLevelQuantity = HealthVitalData.Quantity(
           value: sleepAnalysis.averageSoundLevel,
           unit: HKUnit.decibelAWeightedSoundPressureLevel().unitString,
           numberFormatter: .noDecimalPlaces
@@ -445,9 +445,9 @@ private extension ChatHealthQueryPerformer {
         soundLevelQuantity = nil
       }
 
-      let wristTempQuantity: ChatHealthData.Quantity?
+      let wristTempQuantity: HealthVitalData.Quantity?
       if let wristTemp = sleepAnalysis.wristTemperature?.averageWristTemperature, wristTemp > 0 {
-        wristTempQuantity = ChatHealthData.Quantity(
+        wristTempQuantity = HealthVitalData.Quantity(
           value: wristTemp,
           unit: HKUnit.degreeFahrenheit().unitString,
           numberFormatter: .oneDecimalPlace
@@ -456,21 +456,21 @@ private extension ChatHealthQueryPerformer {
         wristTempQuantity = nil
       }
 
-      return ChatHealthData.SleepDay(
+      return HealthVitalData.SleepDay(
         start: sleepAnalysis.startDate,
         end: sleepAnalysis.endDate,
-        deepSleep: sleepAnalysis.hasDetailedSleepCategories ? ChatHealthData.Quantity(value: sleepAnalysis.deepSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
-        coreSleep: sleepAnalysis.hasDetailedSleepCategories ? ChatHealthData.Quantity(value: sleepAnalysis.coreSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
-        remSleep: sleepAnalysis.hasDetailedSleepCategories ? ChatHealthData.Quantity(value: sleepAnalysis.remSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
-        awakeSleep: sleepAnalysis.hasDetailedSleepCategories ? ChatHealthData.Quantity(value: sleepAnalysis.awakeSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
-        averageHeartRate: sleepAnalysis.averageHeartRate.map { ChatHealthData.Quantity(value: $0, unit: "bpm", numberFormatter: .noDecimalPlaces) },
+        deepSleep: sleepAnalysis.hasDetailedSleepCategories ? HealthVitalData.Quantity(value: sleepAnalysis.deepSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
+        coreSleep: sleepAnalysis.hasDetailedSleepCategories ? HealthVitalData.Quantity(value: sleepAnalysis.coreSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
+        remSleep: sleepAnalysis.hasDetailedSleepCategories ? HealthVitalData.Quantity(value: sleepAnalysis.remSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
+        awakeSleep: sleepAnalysis.hasDetailedSleepCategories ? HealthVitalData.Quantity(value: sleepAnalysis.awakeSleepMinutes, unit: "minute", numberFormatter: .noDecimalPlaces) : nil,
+        averageHeartRate: sleepAnalysis.averageHeartRate.map { HealthVitalData.Quantity(value: $0, unit: "bpm", numberFormatter: .noDecimalPlaces) },
         averageRespiratoryRate: respiratoryRateQuantity,
         averageDecibelAWeightedEnvironmentalSoundPressureLevel: soundLevelQuantity,
         wristTemperature: wristTempQuantity
       )
     }
 
-    let sleep = ChatHealthData.Sleep(sleepDetails: sleepDays)
+    let sleep = HealthVitalData.Sleep(sleepDetails: sleepDays)
 
     return convertToString(value: sleep)
   }
@@ -494,13 +494,13 @@ private extension ChatHealthQueryPerformer {
     )
 
     let hrvSamples = hrv.map {
-      ChatHealthData.Sample(
+      HealthVitalData.Sample(
         date: $0.date,
         quantity: $0.quantity.chatQuantity(for: .secondUnit(with: .milli), numberFormatter: .noDecimalPlaces)
       )
     }
 
-    var bloodPressureSamples = [ChatHealthData.BloodPressureSample]()
+    var bloodPressureSamples = [HealthVitalData.BloodPressureSample]()
     Calendar.current.iterate(dateRange: dateRange, by: DateComponents(day: 1)) { date in
       guard
         let systolicSample = systolic.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) }),
@@ -510,7 +510,7 @@ private extension ChatHealthQueryPerformer {
       }
 
       bloodPressureSamples.append(
-        ChatHealthData.BloodPressureSample(
+        HealthVitalData.BloodPressureSample(
           date: systolicSample.date,
           systolic: systolicSample.quantity.chatQuantity(for: .millimeterOfMercury(), numberFormatter: .noDecimalPlaces),
           diastolic: diastolicSample.quantity.chatQuantity(for: .millimeterOfMercury(), numberFormatter: .noDecimalPlaces)
@@ -519,10 +519,10 @@ private extension ChatHealthQueryPerformer {
     }
 
     guard hrvSamples.isNotEmpty || bloodPressureSamples.isNotEmpty else { 
-      return convertToString(value: ChatHealthData.Stress(heartRateVariability: [], bloodPressureSamples: []))
+      return convertToString(value: HealthVitalData.Stress(heartRateVariability: [], bloodPressureSamples: []))
     }
 
-    let stress = ChatHealthData.Stress(
+    let stress = HealthVitalData.Stress(
       heartRateVariability: hrvSamples,
       bloodPressureSamples: bloodPressureSamples
     )
@@ -536,10 +536,10 @@ private extension ChatHealthQueryPerformer {
     let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: dateRange)
 
     guard workouts.isNotEmpty else { 
-      return convertToString(value: [ChatHealthData.Workout]())
+      return convertToString(value: [HealthVitalData.Workout]())
     }
 
-    var workoutData = [ChatHealthData.Workout]()
+    var workoutData = [HealthVitalData.Workout]()
     for workout in workouts {
       let averageHeartRateString: String?
       let avgHR = workout.averageHeartRate
@@ -563,7 +563,7 @@ private extension ChatHealthQueryPerformer {
         elevationDescendedString = nil
       }
       
-      let data = await ChatHealthData.Workout(
+      let data = await HealthVitalData.Workout(
         name: workout.workoutActivityType.name,
         start: workout.startDate,
         end: workout.endDate,
@@ -583,7 +583,7 @@ private extension ChatHealthQueryPerformer {
 
   func fetchTargetHeartRateZoneMinutes(query: SocketMessage.Query) async -> String {
     guard let heartRateZones = await HealthStoreFetcher.shared.heartRateZones() else {
-      return convertToString(value: [ChatHealthData.HeartRateZoneWorkoutSample]())
+      return convertToString(value: [HealthVitalData.HeartRateZoneWorkoutSample]())
     }
 
     let dateRange = query.dateRange
@@ -591,11 +591,11 @@ private extension ChatHealthQueryPerformer {
     let heartRateReports = await HealthStoreFetcher.shared.fetchWorkoutHeartRateReports(dateRange: dateRange)
 
     guard heartRateReports.isNotEmpty else { 
-      return convertToString(value: [ChatHealthData.HeartRateZoneWorkoutSample]())
+      return convertToString(value: [HealthVitalData.HeartRateZoneWorkoutSample]())
     }
 
     let samples = heartRateReports.map {
-      ChatHealthData.HeartRateZoneWorkoutSample(
+      HealthVitalData.HeartRateZoneWorkoutSample(
         start: $0.workout.startDate,
         end: $0.workout.endDate,
         workout: $0.workout.workoutActivityType.name,
@@ -608,30 +608,30 @@ private extension ChatHealthQueryPerformer {
       )
     }
 
-    let zones = ChatHealthData.ExerciseEffectiveness(
-      heartRateZones: ChatHealthData.HeartRateZones(
-        heartRateReserve: ChatHealthData.Quantity(value: heartRateZones.heartRateReserve, unit: "bpm", numberFormatter: .noDecimalPlaces),
-        restingHeartRate: ChatHealthData.Quantity(value: heartRateZones.restingHeartRate, unit: "bpm", numberFormatter: .noDecimalPlaces),
-        maxHeartRate: ChatHealthData.Quantity(value: heartRateZones.maxHeartRate, unit: "bpm", numberFormatter: .noDecimalPlaces),
-        zone1: ChatHealthData.QuantityRange(
-          lower: ChatHealthData.Quantity(value: heartRateZones.zone1, unit: "bpm", numberFormatter: .noDecimalPlaces),
-          upper: ChatHealthData.Quantity(value: heartRateZones.zone2, unit: "bpm", numberFormatter: .noDecimalPlaces)
+    let zones = HealthVitalData.ExerciseEffectiveness(
+      heartRateZones: HealthVitalData.HeartRateZones(
+        heartRateReserve: HealthVitalData.Quantity(value: heartRateZones.heartRateReserve, unit: "bpm", numberFormatter: .noDecimalPlaces),
+        restingHeartRate: HealthVitalData.Quantity(value: heartRateZones.restingHeartRate, unit: "bpm", numberFormatter: .noDecimalPlaces),
+        maxHeartRate: HealthVitalData.Quantity(value: heartRateZones.maxHeartRate, unit: "bpm", numberFormatter: .noDecimalPlaces),
+        zone1: HealthVitalData.QuantityRange(
+          lower: HealthVitalData.Quantity(value: heartRateZones.zone1, unit: "bpm", numberFormatter: .noDecimalPlaces),
+          upper: HealthVitalData.Quantity(value: heartRateZones.zone2, unit: "bpm", numberFormatter: .noDecimalPlaces)
         ),
-        zone2: ChatHealthData.QuantityRange(
-          lower: ChatHealthData.Quantity(value: heartRateZones.zone2, unit: "bpm", numberFormatter: .noDecimalPlaces),
-          upper: ChatHealthData.Quantity(value: heartRateZones.zone3, unit: "bpm", numberFormatter: .noDecimalPlaces)
+        zone2: HealthVitalData.QuantityRange(
+          lower: HealthVitalData.Quantity(value: heartRateZones.zone2, unit: "bpm", numberFormatter: .noDecimalPlaces),
+          upper: HealthVitalData.Quantity(value: heartRateZones.zone3, unit: "bpm", numberFormatter: .noDecimalPlaces)
         ),
-        zone3: ChatHealthData.QuantityRange(
-          lower: ChatHealthData.Quantity(value: heartRateZones.zone3, unit: "bpm", numberFormatter: .noDecimalPlaces),
-          upper: ChatHealthData.Quantity(value: heartRateZones.zone4, unit: "bpm", numberFormatter: .noDecimalPlaces)
+        zone3: HealthVitalData.QuantityRange(
+          lower: HealthVitalData.Quantity(value: heartRateZones.zone3, unit: "bpm", numberFormatter: .noDecimalPlaces),
+          upper: HealthVitalData.Quantity(value: heartRateZones.zone4, unit: "bpm", numberFormatter: .noDecimalPlaces)
         ),
-        zone4: ChatHealthData.QuantityRange(
-          lower: ChatHealthData.Quantity(value: heartRateZones.zone4, unit: "bpm", numberFormatter: .noDecimalPlaces),
-          upper: ChatHealthData.Quantity(value: heartRateZones.zone5, unit: "bpm", numberFormatter: .noDecimalPlaces)
+        zone4: HealthVitalData.QuantityRange(
+          lower: HealthVitalData.Quantity(value: heartRateZones.zone4, unit: "bpm", numberFormatter: .noDecimalPlaces),
+          upper: HealthVitalData.Quantity(value: heartRateZones.zone5, unit: "bpm", numberFormatter: .noDecimalPlaces)
         ),
-        zone5: ChatHealthData.QuantityRange(
-          lower: ChatHealthData.Quantity(value: heartRateZones.zone5, unit: "bpm", numberFormatter: .noDecimalPlaces),
-          upper: ChatHealthData.Quantity(value: heartRateZones.maxHeartRate, unit: "bpm", numberFormatter: .noDecimalPlaces)
+        zone5: HealthVitalData.QuantityRange(
+          lower: HealthVitalData.Quantity(value: heartRateZones.zone5, unit: "bpm", numberFormatter: .noDecimalPlaces),
+          upper: HealthVitalData.Quantity(value: heartRateZones.maxHeartRate, unit: "bpm", numberFormatter: .noDecimalPlaces)
         )
       ),
       heartRateZoneWorkoutSamples: samples

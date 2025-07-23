@@ -189,6 +189,13 @@ public extension Calendar {
     return self.date(from: components)
   }
 
+  func startOfYear(for date: Date) -> Date? {
+    var components = self.dateComponents([.year], from: date)
+    components.month = 1
+    components.day = 1
+    return self.date(from: components)
+  }
+
   func mondayMorning(for date: Date) -> Date? {
     var components = self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
     components.weekday = 2
