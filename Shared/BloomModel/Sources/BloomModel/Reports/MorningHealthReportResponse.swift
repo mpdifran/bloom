@@ -1,18 +1,30 @@
 //
-//  MorningHealthReport.swift
+//  MorningHealthReportResponse.swift
 //  bloom-model
 //
 //  Created by Mark DiFranco on 2025-07-23.
 //
 
-public struct MorningHealthReport: Codable, Hashable, Sendable {
+public struct MorningHealthReportResponse: Codable, Hashable, Sendable {
   public let sleepFeedback: String
   public let insights: [Insight]
   public let notificationTitle: String
   public let notificationBody: String
+
+  public init(
+    sleepFeedback: String,
+    insights: [Insight],
+    notificationTitle: String,
+    notificationBody: String
+  ) {
+    self.sleepFeedback = sleepFeedback
+    self.insights = insights
+    self.notificationTitle = notificationTitle
+    self.notificationBody = notificationBody
+  }
 }
 
-public extension MorningHealthReport {
+public extension MorningHealthReportResponse {
   struct Insight: Codable, Hashable, Sendable {
     public let title: String
     public let body: String
