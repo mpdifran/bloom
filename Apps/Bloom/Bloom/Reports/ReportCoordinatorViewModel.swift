@@ -27,6 +27,8 @@ final class ReportCoordinatorViewModel {
       UserDefaults.group.set(showMorningReportOnWakeUp, forKey: .showMorningReportOnWakeUp)
     }
   }
+  
+  var isLoadingMorningReport = false
 
   private init() {
     UserDefaults.group.register(defaults: [.showMorningReportOnWakeUp: true])

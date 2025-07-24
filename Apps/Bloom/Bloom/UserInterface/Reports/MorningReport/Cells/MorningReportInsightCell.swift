@@ -15,10 +15,10 @@ struct MorningReportInsightCell: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       HStack(alignment: .top) {
-        Text(emoji)
         Text(title)
           .lineLimit(2)
         Spacer(minLength: 0)
+        Text(emoji)
       }
       .font(.headline)
       .fontDesign(.rounded)
@@ -31,8 +31,9 @@ struct MorningReportInsightCell: View {
       }
 
       Text(insight)
-        .font(.subheadline)
+        .font(.body)
         .fontDesign(.rounded)
+        .fixedSize(horizontal: false, vertical: true)
         .padding()
 
 //      AskBudButton()

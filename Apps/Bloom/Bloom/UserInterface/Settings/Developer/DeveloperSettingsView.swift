@@ -336,6 +336,22 @@ extension DeveloperSettingsView {
         Divider()
 
         AsyncButton {
+          await ReportCoordinator.shared.clearLastNotificationDate()
+          await ReportCoordinator.shared.didDetectWakeUp()
+        } label: {
+          LabeledContent("Generate Morning Report") {
+            Image(systemSymbol: .sunriseCircle)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
           do {
             try await NutritionTrackingViewModel.shared.reSyncNutritionToHealthKit()
             await MainActor.run {

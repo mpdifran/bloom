@@ -230,3 +230,16 @@ extension NetworkRequester {
     )
   }
 }
+
+// MARK: - Reports
+
+extension NetworkRequester {
+
+  func getMorningHealthReport(request: MorningHealthReportRequest) async throws -> MorningHealthReportResponse {
+    let urlRequest = try await URLRequest.Reports.getMorningHealthReport(body: request)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: urlRequest,
+      responseType: MorningHealthReportResponse.self
+    )
+  }
+}

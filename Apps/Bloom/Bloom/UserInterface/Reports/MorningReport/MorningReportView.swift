@@ -9,38 +9,142 @@ import SwiftUI
 import SFSafeSymbols
 import CoreHealth
 import AppUI
+import SwiftData
+import DataContainer
 
 struct MorningReportView: View {
   @State private var viewModel = ViewModel()
+  @State private var reportCoordinatorViewModel = ReportCoordinatorViewModel.shared
 
   @State private var presentedSheet: AnyView?
   @State private var presentedNavPush: AnyView?
 
   @Environment(\.dismiss) private var dismiss
+  
+  @Query private var morningReports: [MorningHealthReport]
+  
+  init() {
+    let today = Calendar.current.startOfDay(for: Date())
+    let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+    
+    _morningReports = Query(
+      filter: #Predicate<MorningHealthReport> { report in
+        report.day >= today && report.day < tomorrow
+      }
+    )
+  }
 
   var body: some View {
     NavigationStack {
-      BloomScrollView(padding: .vertical) {
-        TodaysDateView()
-          .padding(.horizontal)
-        alertsSection
-      }
-      .navigationTitle("Morning Report")
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            dismiss()
-          }
-          .bold()
+      Group {
+        if reportCoordinatorViewModel.isLoadingMorningReport {
+          loadingSection
+        } else if let morningReport = morningReports.first {
+          morningReportContent(morningReport)
+        } else {
+          noReportSection
         }
       }
-      .sheet($presentedSheet)
-      .navigationDestination($presentedNavPush)
+      .navigationTitle("Morning Report")
     }
+    .shelf {
+      Button(action: {
+        dismiss()
+      }, label: {
+        Text("Done")
+          .horizontallyCentered()
+      })
+      .buttonStyle(.primary)
+    }
+    .sheet($presentedSheet)
+    .navigationDestination($presentedNavPush)
+    .presentationCompactAdaptation(.fullScreenCover)
   }
 }
 
 private extension MorningReportView {
+  
+  @ViewBuilder
+  var loadingSection: some View {
+    VStack(spacing: 20) {
+      Spacer()
+      CircularSpinnerView()
+        .foregroundStyle(.tint)
+
+      Text("Generating Morning Report...")
+        .font(.headline)
+        .fontDesign(.rounded)
+      Spacer()
+    }
+    .horizontallyCentered()
+    .groupedBackground()
+  }
+  
+  @ViewBuilder
+  var noReportSection: some View {
+    ContentUnavailableView(
+      "Morning Report Not Available",
+      systemSymbol: .sunrise,
+      description: Text("Your morning report will be generated automatically when new health data is available.")
+    )
+    .groupedBackground()
+  }
+  
+  @ViewBuilder
+  func morningReportContent(_ report: MorningHealthReport) -> some View {
+    BloomScrollView(padding: .vertical) {
+      TodaysDateView()
+        .padding(.horizontal)
+
+      alertsSection
+
+      Group {
+        ReportTitledSection("Readiness") {
+          MorningReportReadinessCell(
+            readinessScore: report.readinessScore,
+            summary: report.readinessSummary ?? ""
+          )
+        }
+
+
+        if let todaysFocus = report.todaysFocus, !todaysFocus.isEmpty {
+          ReportTitledSection("Todays Focus") {
+            MorningReportFocusAreaCell(focusArea: todaysFocus)
+          }
+        }
+
+        if let insights = report.insights {
+          insightsSection(insights: insights)
+        }
+
+        ReportTitledSection("Weather") {
+          MorningReportWeatherCell()
+        }
+
+        ReportTitledSection("Calendar") {
+          MorningReportCalendarCell()
+        }
+      }
+      .padding(.horizontal)
+    }
+  }
+  
+  @ViewBuilder
+  func insightsSection(insights: [MorningHealthInsight]) -> some View {
+    if insights.isNotEmpty {
+      ReportTitledSection("Insights") {
+        VStack(spacing: 12) {
+          ForEach(insights, id: \.id) { insight in
+            MorningReportInsightCell(
+              emoji: insight.emoji ?? "",
+              title: insight.title ?? "",
+              insight: insight.body ?? ""
+            )
+          }
+        }
+      }
+    }
+  }
 
   @ViewBuilder
   var alertsSection: some View {

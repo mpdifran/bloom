@@ -88,7 +88,7 @@ struct TodayView: View {
       .sheet($presentedSheet)
       .fullScreenCover($presentedFullScreen)
       .fullScreenCover(isPresented: $tabController.showMorningReport) {
-        GoodMorningView()
+        MorningReportView()
       }
       .fullScreenCover(isPresented: $tabController.showEveningReport) {
         EveningReportView()
@@ -122,7 +122,7 @@ private extension TodayView {
         DailyReportAlertCell(kind: .morning)
           .transition(.scale)
           .onTapGesture {
-            presentedFullScreen = GoodMorningView().asAny
+            presentedFullScreen = MorningReportView().asAny
           }
       }
     }
@@ -211,7 +211,7 @@ private extension TodayView {
         .onTapGesture {
           guard morningReportCellAvailabilityText == nil else { return }
 
-          presentedSheet = GoodMorningView().asAny
+          presentedSheet = MorningReportView().asAny
         }
       }
     }

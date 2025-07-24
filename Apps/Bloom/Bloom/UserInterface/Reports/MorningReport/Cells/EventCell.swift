@@ -18,7 +18,7 @@ struct EventCell: View {
         Capsule()
           .fill(event.hasCompleted ? .gray : Color(event.calendar.cgColor))
           .frame(width: 4)
-          .padding(.vertical, 6)
+          .padding(.vertical, 2)
 
         VStack(alignment: .leading) {
           Text(event.title)
@@ -78,11 +78,13 @@ struct EventCell: View {
 }
 
 #Preview {
-  List {
-    Section("Today") {
-      EventCell(event: .preview)
-      EventCell(event: .futurePreview)
+  PreviewEnvironment {
+    BloomScrollView {
+      VStack {
+        EventCell(event: .preview)
+        EventCell(event: .futurePreview)
+      }
+      .cardContainer()
     }
   }
-  .listStyle(.plain)
 }

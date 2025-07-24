@@ -1,5 +1,5 @@
 //
-//  GoodMorningViewModel.swift
+//  MorningReportViewModel.swift
 //  Bloom
 //
 //  Created by Mark DiFranco on 2025-07-23.
@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreHealth
+import DataContainer
+import BloomModel
 
 extension MorningReportView.ViewModel {
   enum AlertKind: Sendable, Identifiable {
@@ -30,7 +32,30 @@ extension MorningReportView.ViewModel {
 extension MorningReportView {
   @MainActor @Observable
   final class ViewModel {
-    
+
+    init() {
+      Task {
+        await triggerReportLoadIfNeeded()
+      }
+    }
+
+    private func triggerReportLoadIfNeeded() async {
+      // Only trigger if we're not already loading
+      guard !ReportCoordinatorViewModel.shared.isLoadingMorningReport else { return }
+
+      // Check if we have a report for today
+      let reportModelActor = MorningHealthReportModelActor.standard()
+      do {
+        let existingReport = try await reportModelActor.fetchReport(for: Date())
+        if existingReport == nil {
+          // No report exists and we're not loading, so request one
+          await ReportCoordinator.shared.requestMorningReport()
+        }
+      } catch {
+        // If we can't check, try to request anyway
+        await ReportCoordinator.shared.requestMorningReport()
+      }
+    }
   }
 }
 
@@ -64,7 +89,7 @@ extension MorningReportView.ViewModel {
     else {
       return nil
     }
-
+    
     return periodDate
   }
 

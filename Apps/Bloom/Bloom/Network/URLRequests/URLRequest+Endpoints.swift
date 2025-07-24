@@ -107,3 +107,11 @@ extension URLRequest {
     }
   }
 }
+
+extension URLRequest {
+  enum Reports {
+    static func getMorningHealthReport(body: MorningHealthReportRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/morning-report/generate", body: body)
+    }
+  }
+}
