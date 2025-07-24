@@ -51,6 +51,18 @@ extension ResponseSchema {
               ]
             )
           )
+        ),
+        "readinessScore": Schema.Parameter(
+          type: .number,
+          description: "A readiness score from 1 to 10 indicating how ready the user is to tackle the day, where 1 is not ready at all and 10 is fully ready and energized. Consider factors like sleep quality, recovery metrics, stress levels, and overall health trends."
+        ),
+        "readinessSummary": Schema.Parameter(
+          type: .string,
+          description: "A brief 1-2 sentence summary explaining what factors contributed to the readiness score. Be specific about which health metrics influenced the score."
+        ),
+        "todaysFocus": Schema.Parameter(
+          type: .string,
+          description: "One specific, actionable health-related focus for today based on yesterday's data. This should be a single, clear recommendation that the user can act on throughout the day."
         )
       ]
     )

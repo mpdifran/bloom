@@ -10,17 +10,26 @@ public struct MorningHealthReportResponse: Codable, Hashable, Sendable {
   public let insights: [Insight]
   public let notificationTitle: String
   public let notificationBody: String
+  public let readinessScore: Int
+  public let readinessSummary: String
+  public let todaysFocus: String
 
   public init(
     sleepFeedback: String,
     insights: [Insight],
     notificationTitle: String,
-    notificationBody: String
+    notificationBody: String,
+    readinessScore: Int,
+    readinessSummary: String,
+    todaysFocus: String
   ) {
     self.sleepFeedback = sleepFeedback
     self.insights = insights
     self.notificationTitle = notificationTitle
     self.notificationBody = notificationBody
+    self.readinessScore = readinessScore
+    self.readinessSummary = readinessSummary
+    self.todaysFocus = todaysFocus
   }
 }
 
