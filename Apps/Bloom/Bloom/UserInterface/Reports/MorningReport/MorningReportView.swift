@@ -46,6 +46,8 @@ struct MorningReportView: View {
         }
       }
       .navigationTitle("Morning Report")
+      .sheet($presentedSheet)
+      .navigationDestination($presentedNavPush)
     }
     .shelf {
       Button(action: {
@@ -56,8 +58,6 @@ struct MorningReportView: View {
       })
       .buttonStyle(.primary)
     }
-    .sheet($presentedSheet)
-    .navigationDestination($presentedNavPush)
     .presentationCompactAdaptation(.fullScreenCover)
   }
 }
@@ -116,6 +116,10 @@ private extension MorningReportView {
         if let sleepFeedback = report.sleepFeedback, !sleepFeedback.isEmpty {
           ReportTitledSection("Sleep") {
             MorningReportSleepCell(sleepSummary: sleepFeedback)
+              .selectable()
+              .onTapGesture {
+                presentedNavPush = SleepDayView(showsChatBar: false).asAny
+              }
           }
         }
 
