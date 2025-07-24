@@ -15,29 +15,30 @@ struct MorningReportInsightCell: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       HStack(alignment: .top) {
+        Text(emoji)
         Text(title)
           .lineLimit(2)
         Spacer(minLength: 0)
-        Text(emoji)
       }
-      .font(.title2)
+      .font(.headline)
       .fontDesign(.rounded)
       .bold()
-      .padding()
+      .padding(.horizontal)
+      .padding(.vertical, 12)
       .background {
         Rectangle()
           .fill(.background.secondary)
       }
 
       Text(insight)
-        .font(.body)
+        .font(.subheadline)
         .fontDesign(.rounded)
         .padding()
 
-      AskBudButton()
-        .padding(.horizontal, 8)
-        .padding(.bottom, 8)
-        .horizontallyCentered()
+//      AskBudButton()
+//        .padding(.horizontal, 8)
+//        .padding(.bottom, 8)
+//        .horizontallyCentered()
     }
     .cardContainer(includePadding: false)
   }

@@ -21,3 +21,5 @@ public typealias ReminderOccurrence = SchemaV20.ReminderOccurrence
 public typealias ReminderCompletionRecord = SchemaV20.ReminderCompletionRecord
 public typealias ReminderCadenceType = SchemaV20.ReminderCadenceType
 public typealias UserFact = SchemaV19.UserFact
+public typealias MorningHealthReport = SchemaV22.MorningHealthReport
+public typealias MorningHealthInsight = SchemaV22.MorningHealthInsight

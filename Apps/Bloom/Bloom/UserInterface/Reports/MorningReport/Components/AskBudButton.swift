@@ -18,13 +18,19 @@ struct AskBudButton: View {
           .resizable()
           .frame(square: 30)
 
-        Text("Chat with Bud")
+        Text("Ask Bud")
           .font(.body)
+          .foregroundStyle(.tint)
           .bold()
           .fontDesign(.rounded)
       }
+      .padding(.vertical, 8)
+      .padding(.horizontal, 16)
+      .background {
+        Capsule()
+          .fill(.tint.tertiary)
+      }
     }
-    .buttonStyle(.secondary)
   }
 }
 
