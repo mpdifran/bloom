@@ -113,6 +113,12 @@ private extension MorningReportView {
           }
         }
 
+        if let sleepFeedback = report.sleepFeedback, !sleepFeedback.isEmpty {
+          ReportTitledSection("Sleep") {
+            MorningReportSleepCell(sleepSummary: sleepFeedback)
+          }
+        }
+
         if let insights = report.insights {
           insightsSection(insights: insights)
         }
