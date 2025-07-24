@@ -56,7 +56,7 @@ extension HealthReportService {
       input: inputItems,
       model: modelID,
       instructions: .Prompt.morningHealthReport,
-      reasoning: .init(effort: .high, summary: .auto),
+      reasoning: .init(effort: .low, summary: .auto),
       text: OpenAIKit.Text(format: Format(type: .jsonSchema(.morningHealthReport))),
       truncation: .auto
     )
