@@ -27,6 +27,7 @@ struct BloomPlusPaywall: View {
   @State private var viewModel = ViewModel()
   @State private var selectedPackage: Package?
   @State private var presentedSheet: AnyView?
+  @State private var showOfferCodeSheet = false
   @State private var error: Error?
 
   @ObservedObject private var entitlementController = EntitlementController.shared
@@ -139,15 +140,42 @@ private extension BloomPlusPaywall {
       .font(.subheadline)
       .bold()
 
-      Button("View All Plans") {
-        presentedSheet = BloomPlusPackagePlanPicker(
-          packages: viewModel.packages,
-          selectedPackage: $selectedPackage
-        ).asAny
+      HStack {
+        Button {
+          showOfferCodeSheet.toggle()
+        } label: {
+          Label("Promo Code", systemSymbol: .tag)
+        }
+        .bold()
+        .frame(minHeight: 50)
+        .foregroundStyle(.tint)
+        .offerCodeRedemption(isPresented: $showOfferCodeSheet) { result in
+            switch result {
+            case .failure(let error):
+                TelemetryDeck.errorOccurred(
+                    id: "BloomPlusPaywall.offerCodeRedemption",
+                    category: .thrownException,
+                    message: error.localizedDescription
+                )
+                self.error = error
+            default:
+                break
+            }
+        }
+
+        Text("•")
+          .foregroundStyle(.tint)
+
+        Button("View All Plans") {
+          presentedSheet = BloomPlusPackagePlanPicker(
+            packages: viewModel.packages,
+            selectedPackage: $selectedPackage
+          ).asAny
+        }
+        .bold()
+        .frame(minHeight: 50)
+        .foregroundStyle(.tint)
       }
-      .bold()
-      .frame(minHeight: 50)
-      .foregroundStyle(.tint)
     }
   }
 }

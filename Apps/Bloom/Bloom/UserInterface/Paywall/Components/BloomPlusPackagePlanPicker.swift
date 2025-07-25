@@ -43,14 +43,16 @@ struct BloomPlusPackagePlanPicker: View {
         HStack {
           Spacer(minLength: 0)
 
-          Button("Promo Code") {
+          Button {
             showOfferCodeSheet.toggle()
+          } label: {
+            Label("Promo Code", systemSymbol: .tag)
           }
           .offerCodeRedemption(isPresented: $showOfferCodeSheet) { result in
             switch result {
             case .failure(let error):
               TelemetryDeck.errorOccurred(
-                id: "PreferencesView.offerCodeRedemption",
+                id: "BloomPlusPackagePlanPicker.offerCodeRedemption",
                 category: .thrownException,
                 message: error.localizedDescription
               )
@@ -61,6 +63,7 @@ struct BloomPlusPackagePlanPicker: View {
           }
 
           Text("•")
+            .foregroundStyle(.tint)
 
           Button("Restore Purchases") {
             ThrowingUserTask(error: $error) {
@@ -70,6 +73,7 @@ struct BloomPlusPackagePlanPicker: View {
 
           Spacer(minLength: 0)
         }
+        .bold()
       }
     }
     .presentationDragIndicator(.visible)

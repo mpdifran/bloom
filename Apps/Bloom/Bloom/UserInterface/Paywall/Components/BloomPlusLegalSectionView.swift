@@ -30,7 +30,7 @@ struct BloomPlusLegalSectionView: View {
           switch result {
           case .failure(let error):
               TelemetryDeck.errorOccurred(
-                  id: "PreferencesView.offerCodeRedemption",
+                  id: "BloomPlusLegalSectionView.offerCodeRedemption",
                   category: .thrownException,
                   message: error.localizedDescription
               )
