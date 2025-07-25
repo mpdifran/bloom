@@ -249,12 +249,13 @@ private extension DayVitalsCalculator {
 private extension DayVitalsCalculator {
   
   func generateSleepData(for date: Date) async -> SleepData? {
-    // Sleep data is for the night before the given date
-    guard let sleepEndDate = Calendar.current.date(byAdding: .hour, value: 12, to: date),
-          let sleepStartDate = Calendar.current.date(byAdding: .hour, value: -12, to: date) else {
+    // The given date is yesterday. Look into the future to find the sleep session for that night.
+    guard let sleepEndDate = Calendar.current.date(byAdding: .hour, value: 24, to: date) else {
       return nil
     }
-    
+
+    let sleepStartDate = date
+
     let sleepDateRange = DateRange(sleepStartDate, sleepEndDate)
     let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: sleepDateRange)
     
