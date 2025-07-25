@@ -9,6 +9,7 @@ import SwiftUI
 import CoreHealth
 import DataContainer
 import BloomModel
+import TelemetryDeck
 
 private extension String {
   static let lastMorningReportNotificationDate = "ReportCoordinator.lastMorningReportNotificationDate"
@@ -114,6 +115,8 @@ extension ReportCoordinator {
         todaysFocus: response.todaysFocus,
         insights: insights
       )
+
+      TelemetryDeck.signal("Generated Morning Report")
 
       // Send notification using response data only if we should
       if shouldSendNotification {

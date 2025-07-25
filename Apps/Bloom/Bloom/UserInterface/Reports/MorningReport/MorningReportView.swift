@@ -11,6 +11,7 @@ import CoreHealth
 import AppUI
 import SwiftData
 import DataContainer
+import TelemetryDeck
 
 struct MorningReportView: View {
   @State private var viewModel = ViewModel()
@@ -59,6 +60,9 @@ struct MorningReportView: View {
       .buttonStyle(.primary)
     }
     .presentationCompactAdaptation(.fullScreenCover)
+    .onAppear {
+      TelemetryDeck.signal("View Morning Report")
+    }
   }
 }
 
@@ -88,6 +92,9 @@ private extension MorningReportView {
       description: Text("Your morning report will be generated automatically when new health data is available.")
     )
     .groupedBackground()
+    .onAppear {
+      TelemetryDeck.signal("Morning Report Not Available")
+    }
   }
   
   @ViewBuilder
