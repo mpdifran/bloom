@@ -69,6 +69,7 @@ struct EventCell: View {
         }
         .font(.subheadline)
       }
+      .compositingGroup()
       .opacity(event.hasCompleted ? 0.4 : 1)
       .animation(.default, value: event.hasCompleted)
       .animation(.default, value: event.hasStarted)
