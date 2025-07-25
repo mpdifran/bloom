@@ -13,6 +13,7 @@ import SwiftData
 struct ReminderCell: View {
   let reminder: ReminderDTO
   let occurrence: ReminderOccurrenceDTO?
+  let scheduledTime: Date
   let isCompleted: Bool
 
   @State private var completeToggle = false
@@ -21,23 +22,13 @@ struct ReminderCell: View {
   init(
     reminder: ReminderDTO,
     occurrence: ReminderOccurrenceDTO? = nil,
+    scheduledTime: Date,
     isCompleted: Bool
   ) {
     self.reminder = reminder
     self.occurrence = occurrence
+    self.scheduledTime = scheduledTime
     self.isCompleted = isCompleted
-  }
-  
-  /// The scheduled time for this specific occurrence (if available)
-  private var scheduledTime: Date? {
-    guard let occurrence = occurrence else { return nil }
-    
-    let calendar = Calendar.current
-    let today = calendar.startOfDay(for: Date())
-    let hour = Int(occurrence.timeOfDay) / 3600
-    let minute = (Int(occurrence.timeOfDay) % 3600) / 60
-    
-    return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today)
   }
   
   var body: some View {
@@ -98,7 +89,7 @@ struct ReminderCell: View {
     // Only check if not completed
     guard !isCompleted else { return false }
 
-    if let _ = occurrence, let scheduledTime = scheduledTime {
+    if let _ = occurrence {
       // Check if we're within the "due now" window (scheduled time to 5 minutes after)
       let now = Date()
       let fiveMinutesAfter = scheduledTime.addingTimeInterval(5 * 60)
@@ -108,7 +99,7 @@ struct ReminderCell: View {
   }
   
   private var isOverdue: Bool {
-    if let _ = occurrence, let scheduledTime = scheduledTime {
+    if let _ = occurrence {
       // Use specific occurrence time
       // It's overdue if it's past the 5-minute "due now" window
       let fiveMinutesAfter = scheduledTime.addingTimeInterval(5 * 60)
@@ -122,7 +113,7 @@ struct ReminderCell: View {
   private var overdueText: String {
     let targetTime: Date?
     
-    if let _ = occurrence, let scheduledTime = scheduledTime {
+    if let _ = occurrence {
       // Use specific occurrence time
       targetTime = scheduledTime
     } else {
@@ -139,20 +130,20 @@ struct ReminderCell: View {
     
     if calendar.isDateInToday(lastMissed) {
       formatter.dateFormat = "h:mm a"
-      return "Overdue from \(formatter.string(from: lastMissed))"
+      return "Overdue \(formatter.string(from: lastMissed))"
     } else if calendar.isDateInYesterday(lastMissed) {
       formatter.dateFormat = "h:mm a"
-      return "Overdue from yesterday at \(formatter.string(from: lastMissed))"
+      return "Overdue yesterday at \(formatter.string(from: lastMissed))"
     } else {
       formatter.dateFormat = "MMM d 'at' h:mm a"
-      return "Overdue from \(formatter.string(from: lastMissed))"
+      return "Overdue \(formatter.string(from: lastMissed))"
     }
   }
   
   private var nextNotificationText: String {
     let targetTime: Date?
     
-    if let _ = occurrence, let scheduledTime = scheduledTime {
+    if let _ = occurrence {
       // Use specific occurrence time
       targetTime = scheduledTime
     } else {
@@ -185,16 +176,19 @@ struct ReminderCell: View {
     BloomScrollView {
       ReminderCell(
         reminder: Reminder.Preview.dailyVitamins.asDTO(),
+        scheduledTime: .now,
         isCompleted: false
       )
       
       ReminderCell(
         reminder: Reminder.Preview.weeklyWaterPlants.asDTO(),
+        scheduledTime: .now,
         isCompleted: true
       )
       
       ReminderCell(
         reminder: Reminder.Preview.monthlyPayRent.asDTO(),
+        scheduledTime: .now,
         isCompleted: false
       )
     }

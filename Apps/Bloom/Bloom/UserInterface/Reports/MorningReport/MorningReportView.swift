@@ -20,8 +20,11 @@ struct MorningReportView: View {
   @State private var presentedSheet: AnyView?
   @State private var presentedNavPush: AnyView?
 
+  @ObservedObject private var remindersManager = RemindersManager.shared
+
   @Environment(\.dismiss) private var dismiss
-  
+
+  @Query var reminders: [Reminder]
   @Query private var morningReports: [MorningHealthReport]
   
   init() {
@@ -32,6 +35,11 @@ struct MorningReportView: View {
       filter: #Predicate<MorningHealthReport> { report in
         report.day >= today && report.day < tomorrow
       }
+    )
+
+    _reminders = Query(
+      sort: \Reminder.modifiedDate,
+      order: .reverse
     )
   }
 
@@ -133,7 +141,43 @@ private extension MorningReportView {
         if let insights = report.insights {
           insightsSection(insights: insights)
         }
+      }
+      .padding(.horizontal)
 
+      if viewModel.incompleteReminders.isNotEmpty {
+        ReportTitledSection("Missed Reminders", includeExtraTitlePadding: true) {
+          TimelineView(.everyMinute) { context in
+            ScrollView(.horizontal) {
+              HStack {
+                ForEach(viewModel.incompleteReminders) { occurrence in
+                  ReminderCell(
+                    reminder: occurrence.reminder,
+                    occurrence: occurrence.occurrence,
+                    scheduledTime: occurrence.scheduledTime,
+                    isCompleted: occurrence.isCompleted
+                  )
+                  .onTapGesture {
+                    handleOccurrenceTap(occurrence)
+                  }
+                  .contextMenu {
+                    Button("Edit", systemSymbol: .sliderHorizontal3) {
+                      handleEditReminder(occurrence.reminder)
+                    }
+                  }
+                  .transition(.scale.combined(with: .opacity))
+                }
+              }
+              .scrollTargetLayout()
+              .padding(.horizontal)
+              .animation(.bouncy(duration: 0.6), value: viewModel.incompleteReminders.map(\.id))
+            }
+            .scrollTargetBehavior(.viewAligned)
+            .scrollIndicators(.hidden)
+          }
+        }
+      }
+
+      Group {
         ReportTitledSection("Weather") {
           MorningReportWeatherCell()
         }
@@ -209,6 +253,38 @@ private extension MorningReportView {
         .scrollTargetBehavior(.viewAligned)
         .scrollIndicators(.hidden)
       }
+    }
+  }
+}
+
+private extension MorningReportView {
+
+  func handleOccurrenceTap(_ occurrence: ReminderOccurrenceDisplay) {
+    Task {
+      do {
+        if occurrence.isCompleted {
+          // Uncomplete the reminder (removes the completion for this specific occurrence)
+          try await remindersManager.markReminderUncompleted(
+            withID: occurrence.reminder.id,
+            occurrenceID: occurrence.occurrence.id
+          )
+        } else {
+          // Complete the reminder (adds a new completion for this specific occurrence)
+          try await remindersManager.markReminderCompleted(
+            withID: occurrence.reminder.id,
+            occurrenceID: occurrence.occurrence.id
+          )
+        }
+      } catch {
+        print("Failed to mark occurrence as \(occurrence.isCompleted ? "uncompleted" : "completed"): \(error)")
+      }
+    }
+  }
+
+  func handleEditReminder(_ reminderDTO: ReminderDTO) {
+    // Find the actual Reminder model from the DTO ID
+    if let reminder = reminders.first(where: { $0.id == reminderDTO.id }) {
+      presentedSheet = CreateEditReminderView(reminder: reminder).asAny
     }
   }
 }

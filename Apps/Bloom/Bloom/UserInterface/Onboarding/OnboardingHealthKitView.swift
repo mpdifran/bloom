@@ -29,7 +29,7 @@ struct OnboardingHealthKitView: View {
         BudImage(.budDoctor)
 
         Group {
-          Text("I needs access to your Health Data")
+          Text("I need access to your Health Data")
           Text("The more health data you share with me, the more personalized your advice will be!")
             .font(.title3)
             .foregroundStyle(.secondary)

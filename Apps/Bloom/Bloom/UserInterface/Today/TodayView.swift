@@ -146,6 +146,7 @@ private extension TodayView {
               ReminderCell(
                 reminder: occurrence.reminder,
                 occurrence: occurrence.occurrence,
+                scheduledTime: occurrence.scheduledTime,
                 isCompleted: occurrence.isCompleted
               )
               .onTapGesture {

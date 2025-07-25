@@ -32,29 +32,37 @@ extension MorningReportView.ViewModel {
 extension MorningReportView {
   @MainActor @Observable
   final class ViewModel {
+    var incompleteReminders = [ReminderOccurrenceDisplay]()
 
     init() {
       Task {
         await triggerReportLoadIfNeeded()
       }
+      Task {
+        await loadYesterdaysUncompletedOccurrences()
+      }
     }
 
-    private func triggerReportLoadIfNeeded() async {
-      // Only trigger if we're not already loading
-      guard !ReportCoordinatorViewModel.shared.isLoadingMorningReport else { return }
+    private let reminderModelActor = ReminderModelActor.standard()
+  }
+}
 
-      // Check if we have a report for today
-      let reportModelActor = MorningHealthReportModelActor.standard()
-      do {
-        let existingReport = try await reportModelActor.fetchReport(for: Date())
-        if existingReport == nil {
-          // No report exists and we're not loading, so request one
-          await ReportCoordinator.shared.requestMorningReport()
-        }
-      } catch {
-        // If we can't check, try to request anyway
-        await ReportCoordinator.shared.requestMorningReport()
+extension MorningReportView.ViewModel {
+
+  func loadYesterdaysUncompletedOccurrences() async {
+    do {
+      let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+      let reminderDTOs = try await reminderModelActor.fetchAllReminders()
+
+      // Get all occurrences for yesterday
+      let yesterdaysOccurrences = reminderDTOs.flatMap { reminder in
+        occurrenceDisplaysFor(reminder: reminder, date: yesterday)
       }
+
+      // Filter out completed occurrences
+      self.incompleteReminders = yesterdaysOccurrences.filter { !$0.isCompleted }
+    } catch {
+      print("Failed to fetch yesterday's uncompleted reminders: \(error)")
     }
   }
 }
@@ -106,5 +114,115 @@ extension MorningReportView.ViewModel {
 
   var hasSedentaryStreak: Bool {
     VitalsViewModel.shared.activityLevelSummary?.details.hasSedentaryStreakLast3Days == true
+  }
+}
+
+private extension MorningReportView.ViewModel {
+
+  func triggerReportLoadIfNeeded() async {
+    // Only trigger if we're not already loading
+    guard !ReportCoordinatorViewModel.shared.isLoadingMorningReport else { return }
+
+    // Check if we have a report for today
+    let reportModelActor = MorningHealthReportModelActor.standard()
+    do {
+      let existingReport = try await reportModelActor.fetchReport(for: Date())
+      if existingReport == nil {
+        // No report exists and we're not loading, so request one
+        await ReportCoordinator.shared.requestMorningReport()
+      }
+    } catch {
+      // If we can't check, try to request anyway
+      await ReportCoordinator.shared.requestMorningReport()
+    }
+  }
+
+  func occurrenceDisplaysFor(reminder: ReminderDTO, date: Date) -> [ReminderOccurrenceDisplay] {
+    let calendar = Calendar.current
+    let dayStart = calendar.startOfDay(for: date)
+
+    // Get completion records for the specified date
+    let dateCompletions = reminder.completionRecords
+      .filter { calendar.isDate($0.completedDate, inSameDayAs: date) }
+
+    // Get all occurrences that were scheduled for the date with their times
+    var occurrenceTimePairs: [(ReminderOccurrenceDTO, Date)] = []
+
+    for occurrence in reminder.occurrences {
+      let scheduledTimes = scheduledTimesFor(occurrence: occurrence, date: date)
+      for scheduledTime in scheduledTimes {
+        occurrenceTimePairs.append((occurrence, scheduledTime))
+      }
+    }
+
+    // Sort by scheduled time
+    occurrenceTimePairs.sort { $0.1 < $1.1 }
+
+    // Create displays
+    return occurrenceTimePairs.map { (occurrence, scheduledTime) in
+      let isCompleted = dateCompletions.contains { $0.occurrenceID == occurrence.id }
+      let completionDate = dateCompletions.first { $0.occurrenceID == occurrence.id }?.completedDate
+
+      return ReminderOccurrenceDisplay(
+        reminder: reminder,
+        occurrence: occurrence,
+        scheduledTime: scheduledTime,
+        isCompleted: isCompleted,
+        completionDate: completionDate
+      )
+    }
+  }
+
+  func scheduledTimesFor(occurrence: ReminderOccurrenceDTO, date: Date) -> [Date] {
+    let calendar = Calendar.current
+    let dayStart = calendar.startOfDay(for: date)
+
+    let hour = Int(occurrence.timeOfDay) / 3600
+    let minute = (Int(occurrence.timeOfDay) % 3600) / 60
+
+    switch occurrence.cadenceType {
+    case .daily:
+      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: dayStart) {
+        return [scheduledTime]
+      }
+
+    case .weekly:
+      guard let daysOfWeek = occurrence.daysOfWeek,
+            let weekday = calendar.dateComponents([.weekday], from: date).weekday,
+            daysOfWeek.contains(weekday) else {
+        return []
+      }
+      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: dayStart) {
+        return [scheduledTime]
+      }
+
+    case .monthly:
+      guard let dayOfMonth = occurrence.dayOfMonth,
+            let day = calendar.dateComponents([.day], from: date).day,
+            dayOfMonth == day else {
+        return []
+      }
+      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: dayStart) {
+        return [scheduledTime]
+      }
+
+    case .yearly:
+      guard let monthOfYear = occurrence.monthOfYear,
+            let dayOfYear = occurrence.dayOfYear else {
+        return []
+      }
+      let dateComponents = calendar.dateComponents([.month, .day], from: date)
+      guard monthOfYear == dateComponents.month,
+            dayOfYear == dateComponents.day else {
+        return []
+      }
+      if let scheduledTime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: dayStart) {
+        return [scheduledTime]
+      }
+    @unknown default:
+      break
+    }
+
+    return []
   }
 }

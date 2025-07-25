@@ -137,6 +137,7 @@ struct ChatRichContentWrapperCell: View {
             ReminderCell(
               reminder: createReminder.asReminderDTO(),
               occurrence: createReminder.occurrences.first?.asReminderOccurrenceDTO(),
+              scheduledTime: createReminder.occurrences.first?.asReminderOccurrenceDTO().scheduledTimesToday().first ?? Date(),
               isCompleted: false
             )
             .horizontalAlignment(.leading)
