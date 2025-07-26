@@ -57,15 +57,15 @@ struct MorningReportView: View {
       .navigationTitle("Morning Report")
       .sheet($presentedSheet)
       .navigationDestination($presentedNavPush)
-    }
-    .shelf {
-      Button(action: {
-        dismiss()
-      }, label: {
-        Text("Done")
-          .horizontallyCentered()
-      })
-      .buttonStyle(.primary)
+      .shelf {
+        Button(action: {
+          dismiss()
+        }, label: {
+          Text("Done")
+            .horizontallyCentered()
+        })
+        .buttonStyle(.primary)
+      }
     }
     .presentationCompactAdaptation(.fullScreenCover)
     .onAppear {

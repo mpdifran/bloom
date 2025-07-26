@@ -58,10 +58,12 @@ private struct FeatureCard: View {
   let message: String
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 16) {
+    VStack(alignment: .leading, spacing: 0) {
       image
         .foregroundStyle(.tint)
         .bold()
+
+      Spacer(minLength: 0)
 
       Text(message)
         .lineLimit(2)
@@ -71,6 +73,7 @@ private struct FeatureCard: View {
         .bold()
     }
     .horizontalAlignment(.leading)
+    .aspectRatio(2, contentMode: .fit)
     .cardContainer()
   }
 }

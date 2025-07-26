@@ -28,7 +28,7 @@ struct OnboardingFinishView: View {
           .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
           .standardConfetti($index, colors: [themeController.theme.color, .white])
 
-        Text("You made it, \(healthManager.name)!")
+        Text("You made it, \(usersName)!")
           .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
         Text("Are you ready to get started?")
@@ -62,6 +62,11 @@ struct OnboardingFinishView: View {
 }
 
 private extension OnboardingFinishView {
+
+  var usersName: String {
+    let trimmedName = healthManager.name.trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmedName.isEmpty ? "Friend" : trimmedName
+  }
 
   func advanceForSubscribed() async {
     while index < 5 {

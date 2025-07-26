@@ -1,15 +1,15 @@
 //
-//  LoginViewModel.swift
-//  Supplements
+//  OnboardingLoginViewModel.swift
+//  Bloom
 //
-//  Created by Mark DiFranco on 2024-12-19.
+//  Created by Mark DiFranco on 2025-07-25.
 //
 
 import SwiftUI
 import AuthenticationServices
 import BloomModel
 
-extension LoginView.ViewModel {
+extension OnboardingLoginView.ViewModel {
     enum AuthError: LocalizedError {
         case invalidCredentials
 
@@ -21,15 +21,14 @@ extension LoginView.ViewModel {
     }
 }
 
-extension LoginView {
-
-  @Observable @MainActor
+extension OnboardingLoginView {
+  @MainActor @Observable
   final class ViewModel {
     var isAuthenticating = false
   }
 }
 
-extension LoginView.ViewModel {
+extension OnboardingLoginView.ViewModel {
 
   func authenticate(using credential: ASAuthorizationAppleIDCredential) async throws {
     isAuthenticating = true

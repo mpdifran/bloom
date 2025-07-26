@@ -34,9 +34,7 @@ struct RootView: View {
 
   var body: some View {
     Group {
-      if !userController.isAuthenticated {
-        LoginView(showDismissButton: false) { }
-      } else if !hasShownOnboarding {
+      if !hasShownOnboarding {
         ZStack {
           OnboardingRootView {
             withAnimation {
@@ -58,6 +56,8 @@ struct RootView: View {
           .zStackAlignment(.topTrailing)
         #endif
         }
+      } else if !userController.isAuthenticated {
+        OnboardingLoginView { }
       } else {
         Group {
           switch tabController.activeTab {
