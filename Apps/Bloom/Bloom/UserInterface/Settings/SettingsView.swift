@@ -294,9 +294,11 @@ private extension SettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Morning Report on Wake Up") {
-          Toggle("", isOn: $reportViewModel.showMorningReportOnWakeUp)
-            .tint(.mutedGreen)
+        SettingsCell("Morning Report", showDisclosureIndicator: true) {
+          EmptyView()
+        }
+        .onTapGesture {
+          presentedSheet = MorningReportSettingsView().asAny
         }
       }
     }
@@ -492,12 +494,6 @@ private extension SettingsView {
               try await UserController.shared.logout()
             } label: {
               Text("Sign Out")
-            }
-          } else {
-            Button {
-              presentedSheet = LoginView { }.asAny
-            } label: {
-              Text("Sign In")
             }
           }
         }

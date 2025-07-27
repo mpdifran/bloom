@@ -46,13 +46,7 @@ private extension DayReviewEventCalculator {
 
   func fetchYesterdayEvents(calendarManager: CalendarManager) async -> [EKEvent] {
     let dateRange = DateRange.yesterday()
-    let predicate = calendarManager.eventStore.predicateForEvents(
-      withStart: dateRange.start,
-      end: dateRange.end,
-      calendars: nil
-    )
-
-    return await calendarManager.eventStore.fetchEvents(matching: predicate)
+    return await calendarManager.events(for: dateRange)
   }
 
   func fetchTodayEvents(calendarManager: CalendarManager) async -> [EKEvent] {

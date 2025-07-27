@@ -36,15 +36,33 @@ extension CalendarManager {
 }
 
 extension CalendarManager {
+    
+    func getAllCalendars() -> [EKCalendar] {
+        return eventStore.calendars(for: .event)
+    }
+    
+    func getCalendars(with identifiers: Set<String>) -> [EKCalendar] {
+        return getAllCalendars().filter { identifiers.contains($0.calendarIdentifier) }
+    }
+    
+    @MainActor
+    private func getFilteredCalendars() -> [EKCalendar]? {
+        let selectedIdentifiers = ReportCoordinatorViewModel.shared.selectedCalendarIdentifiers
+        if selectedIdentifiers.isEmpty {
+            return nil // nil means all calendars
+        }
+        return getCalendars(with: selectedIdentifiers)
+    }
 
     func eventsToday() async -> [EKEvent] {
         guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
 
         let dateRange = DateRange.today()
+        let calendars = await getFilteredCalendars()
         let predicate = eventStore.predicateForEvents(
             withStart: dateRange.start,
             end: dateRange.end,
-            calendars: nil
+            calendars: calendars
         )
 
         return await eventStore.fetchEvents(matching: predicate)
@@ -54,12 +72,26 @@ extension CalendarManager {
         guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
 
         let dateRange = DateRange.tomorrow()
+        let calendars = await getFilteredCalendars()
         let predicate = eventStore.predicateForEvents(
             withStart: dateRange.start,
             end: dateRange.end,
-            calendars: nil
+            calendars: calendars
         )
 
+        return await eventStore.fetchEvents(matching: predicate)
+    }
+    
+    func events(for dateRange: DateRange) async -> [EKEvent] {
+        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
+        
+        let calendars = await getFilteredCalendars()
+        let predicate = eventStore.predicateForEvents(
+            withStart: dateRange.start,
+            end: dateRange.end,
+            calendars: calendars
+        )
+        
         return await eventStore.fetchEvents(matching: predicate)
     }
 }

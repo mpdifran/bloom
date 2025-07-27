@@ -148,17 +148,6 @@ struct FoodLoggingActionCardView: View {
       locationViewModel.requestLocation()
     }
     .task {
-      if !userController.isAuthenticated {
-        await MainActor.run {
-          presentedSheet = LoginView {
-            if !userController.isAuthenticated {
-              dismiss()
-            }
-          }.asAny
-        }
-      }
-    }
-    .task {
       await checkHealthAuth()
     }
     .task {

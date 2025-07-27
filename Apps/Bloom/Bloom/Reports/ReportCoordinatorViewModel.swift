@@ -10,6 +10,7 @@ import SwiftUI
 private extension String {
   static let morningReportDate = "ReportCoordinator.morningReportDate"
   static let showMorningReportOnWakeUp = "ReportCoordinator.showMorningReportOnWakeUp"
+  static let selectedCalendarIdentifiers = "ReportCoordinator.selectedCalendarIdentifiers"
 }
 
 @Observable @MainActor
@@ -28,6 +29,12 @@ final class ReportCoordinatorViewModel {
     }
   }
   
+  var selectedCalendarIdentifiers: Set<String> = [] {
+    didSet {
+      UserDefaults.group.set(Array(selectedCalendarIdentifiers), forKey: .selectedCalendarIdentifiers)
+    }
+  }
+  
   var isLoadingMorningReport = false
 
   private init() {
@@ -37,5 +44,9 @@ final class ReportCoordinatorViewModel {
       self.morningReportDate = date
     }
     showMorningReportOnWakeUp = UserDefaults.group.bool(forKey: .showMorningReportOnWakeUp)
+    
+    if let identifiers = UserDefaults.group.object(forKey: .selectedCalendarIdentifiers) as? [String] {
+      self.selectedCalendarIdentifiers = Set(identifiers)
+    }
   }
 }

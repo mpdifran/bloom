@@ -455,7 +455,7 @@ extension DeveloperSettingsView {
           }
         } else {
           Button("Show Log In") {
-            presentedSheet = LoginView { }.asAny
+            presentedSheet = OnboardingLoginView { }.asAny
           }
           .frame(height: 60)
         }
