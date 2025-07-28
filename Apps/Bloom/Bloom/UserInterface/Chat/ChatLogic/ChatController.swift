@@ -153,6 +153,16 @@ extension ChatController {
       try await ChatHistoryModifier.shared.addMessage(imageMessage)
     }
 
+    for chatContext in chatContexts {
+      let contextData = try encoder.encode(chatContext)
+      let contextMessage = ChatMessage(
+        isCurrentUser: true,
+        richContent: contextData,
+        requestID: requestID
+      )
+      try await ChatHistoryModifier.shared.addMessage(contextMessage)
+    }
+
     if trimmedMessage.isNotEmpty {
       let userMessage = ChatMessage(
         isCurrentUser: true,

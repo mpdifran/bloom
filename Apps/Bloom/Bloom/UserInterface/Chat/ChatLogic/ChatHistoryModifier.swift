@@ -357,6 +357,8 @@ actor ChatHistoryModifier {
       
     } else if let deleteUserFacts = try? JSONDecoder.bloomModel.decode(SocketMessage.DeleteUserFacts.self, from: data) {
       return .deleteUserFacts(deleteUserFacts)
+    } else if let chatContext = try? JSONDecoder.bloomModel.decode(ChatContext.self, from: data) {
+      return .chatContext(chatContext)
     }
     
     return .unknown

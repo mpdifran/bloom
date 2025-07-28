@@ -37,6 +37,7 @@ enum ProcessedRichContent: Hashable, Sendable {
   case createUserFacts(SocketMessage.CreateUserFacts)
   case deleteUserFacts(SocketMessage.DeleteUserFacts)
   case workoutPlan(SocketMessage.WorkoutPlan)
+  case chatContext(ChatContext)
   case unknown
 }
 

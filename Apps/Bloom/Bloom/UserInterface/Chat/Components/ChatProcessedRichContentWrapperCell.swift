@@ -108,6 +108,8 @@ struct ChatProcessedRichContentWrapperCell: View {
             deleteUserFacts: deleteUserFacts,
             hasPerformedAction: hasPerformedAction
           )
+        case .chatContext(let chatContext):
+          ChatContextCell(chatContext: chatContext)
         case .unknown:
           ChatUnknownContentCell()
         }

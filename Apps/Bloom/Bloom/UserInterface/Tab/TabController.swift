@@ -46,7 +46,7 @@ extension Tab {
   }
 }
 
-struct ChatContext: Identifiable, Hashable, Sendable {
+struct ChatContext: Identifiable, Hashable, Sendable, Codable {
   var id: Int { hashValue }
 
   let title: String

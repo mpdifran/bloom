@@ -38,6 +38,7 @@ struct ChatContextCell: View {
           .padding()
       }
       .cardContainer(includePadding: false)
+      .padding(.horizontal)
     }
   }
 }
