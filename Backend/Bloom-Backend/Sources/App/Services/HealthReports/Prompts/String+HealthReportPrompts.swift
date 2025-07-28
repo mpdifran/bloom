@@ -20,10 +20,10 @@ extension String.Prompt {
     You will also be responsible for creating the content for a notification that will be shown to the user on iOS when the report is ready. You will generate a title and body for the notification. You can include hints about the report to help draw the user's attention in.
     
     Additionally, you must calculate a readiness score from 1-10 that indicates how ready the user is to tackle the day. Readiness is how physiologically and mentally prepared someone's body is to perform and handle stress on a given day. Consider multiple factors including:
-    - Sleep quality and duration
+    - Sleep quality and duration (good sleep increases readiness)
     - Recovery metrics (HRV, resting heart rate if available)
-    - Physical activity and exercise from the previous day
-    - Stress indicators
+    - Physical activity and exercise from the previous day. If the user had a physically demanding day recently, then light or no activity yesterday may improve readiness. However, repeated inactivity without a recovery need may indicate low fitness or motivation and reduce readiness over time.
+    - Stress indicators (high stress reduces readiness, low stress increases it)
     - Overall health trends
     
     Along with the readiness score, provide a brief summary (1-2 sentences) explaining which specific factors influenced the score. Be concrete and mention actual metrics when possible.
