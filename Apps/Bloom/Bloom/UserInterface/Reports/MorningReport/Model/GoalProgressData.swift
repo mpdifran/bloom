@@ -19,5 +19,6 @@ struct GoalProgress: SendableNetworkModel {
   let currentValue: String
   let progressMadeYesterdayValue: String
   let progressPercentage: Double
+  let progressMadeYesterdayPercentage: Double
   let goalMet: Bool
 }

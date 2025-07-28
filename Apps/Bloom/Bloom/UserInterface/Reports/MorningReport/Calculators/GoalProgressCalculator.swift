@@ -49,6 +49,12 @@ extension GoalProgressCalculator {
         unit: goal.unit
       )
 
+      let progressMadeYesterdayPercentage = calculateProgressPercentage(
+        actual: progressQuantity,
+        goal: goalQuantity,
+        unit: goal.unit
+      )
+
       let goalMet = goal.quantityMeetsGoal(currentQuantity)
 
       let progress = GoalProgress(
@@ -58,6 +64,7 @@ extension GoalProgressCalculator {
         currentValue: currentValueString,
         progressMadeYesterdayValue: progressMadeYesterdayValueString,
         progressPercentage: progressPercentage,
+        progressMadeYesterdayPercentage: progressMadeYesterdayPercentage,
         goalMet: goalMet
       )
 
