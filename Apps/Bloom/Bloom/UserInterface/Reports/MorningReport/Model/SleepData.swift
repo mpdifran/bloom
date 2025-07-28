@@ -15,6 +15,7 @@ struct SleepSession: SendableNetworkModel {
   let startDate: Date
   let endDate: Date
   let totalSleepTime: String
+  let sleepScore: Int?
   let deepSleep: String?
   let coreSleep: String?
   let remSleep: String?

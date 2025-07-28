@@ -288,6 +288,7 @@ private extension DayVitalsCalculator {
         startDate: sleepAnalysis.startDate,
         endDate: sleepAnalysis.endDate,
         totalSleepTime: totalSleepTime,
+        sleepScore: sleepAnalysis.overallScore,
         deepSleep: deepSleepString,
         coreSleep: coreSleepString,
         remSleep: remSleepString,
