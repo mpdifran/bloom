@@ -49,13 +49,6 @@ private extension MorningReportSettingsView {
         .padding(.horizontal)
         
       SettingsSectionContainer {
-        SettingsCell("Send Report on Wake Up") {
-          Toggle("", isOn: $reportViewModel.showMorningReportOnWakeUp)
-            .tint(.mutedGreen)
-        }
-        
-        Divider()
-        
         SettingsCell("Send Report By") {
           DatePicker("", selection: $reportViewModel.morningReportDate, displayedComponents: .hourAndMinute)
             .datePickerStyle(.compact)
@@ -65,15 +58,24 @@ private extension MorningReportSettingsView {
               }
             }
         }
+
+        Divider()
+
+        SettingsCell("Send Report on Wake Up") {
+          Toggle("", isOn: $reportViewModel.showMorningReportOnWakeUp)
+            .tint(.mutedGreen)
+        }
       }
+
+      SectionFooterView("Bloom can automatically detect when you wake up, and send your morning report immediately.")
     }
   }
   
   @ViewBuilder
   var calendarSection: some View {
-    if hasCalendarPermission && calendars.isNotEmpty {
+    if true {//hasCalendarPermission && calendars.isNotEmpty {
       VStack {
-        HStack {
+        HStack(alignment: .firstTextBaseline) {
           SectionTitleView("Calendars")
           
           Spacer()
@@ -83,6 +85,7 @@ private extension MorningReportSettingsView {
           }
           .font(.footnote)
           .bold()
+          .frame(height: 35)
         }
         .padding(.horizontal)
         
@@ -152,19 +155,27 @@ struct CalendarSelectionCell: View {
   let onToggle: (Bool) -> Void
   
   var body: some View {
-    SettingsCell(calendar.title) {
-      HStack(spacing: 12) {
-        Circle()
-          .fill(Color(cgColor: calendar.cgColor))
-          .frame(width: 10, height: 10)
-        
-        Toggle("", isOn: Binding(
-          get: { isSelected },
-          set: { onToggle($0) }
-        ))
-        .tint(.mutedGreen)
-      }
+    HStack {
+      Circle()
+        .fill(Color(cgColor: calendar.cgColor))
+        .frame(width: 10, height: 10)
+
+      Text(calendar.title)
+        .bold()
+        .fontDesign(.rounded)
+        .minimumScaleFactor(0.7)
+        .lineLimit(2)
+        .layoutPriority(10)
+
+      Spacer()
+
+      Toggle("", isOn: Binding(
+        get: { isSelected },
+        set: { onToggle($0) }
+      ))
+      .tint(.mutedGreen)
     }
+    .frame(minHeight: 60)
   }
 }
 
