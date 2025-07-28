@@ -58,11 +58,17 @@ extension ReportCoordinator {
   func clearLastNotificationDate() {
     lastMorningReportNotificationDate = nil
   }
-  
+
+  func deleteTodaysReport() async throws {
+    let reportModelActor = MorningHealthReportModelActor.standard()
+
+    try await reportModelActor.deleteReport(for: .now)
+  }
+
   var isLoadingReport: Bool {
     isGeneratingReport
   }
-  
+
   func requestMorningReport() async {
     guard !isGeneratingReport else { return }
     await generateAndStoreMorningReport(shouldSendNotification: false)

@@ -281,6 +281,23 @@ extension DeveloperSettingsView {
         Divider()
 
         AsyncButton {
+          await ReportCoordinator.shared.clearLastNotificationDate()
+          try await ReportCoordinator.shared.deleteTodaysReport()
+          await ReportCoordinator.shared.didDetectWakeUp()
+        } label: {
+          LabeledContent("Generate Morning Report") {
+            Image(systemSymbol: .sunriseCircle)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
           try await NetworkRequester.shared.deleteChatThread()
           try modelContext.deleteAll(ChatMessage.self)
           try modelContext.save()
@@ -325,22 +342,6 @@ extension DeveloperSettingsView {
         } label: {
           LabeledContent("Recalculate Vitals") {
             Image(systemSymbol: .arrowTriangleheadClockwiseHeartFill)
-          }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
-        }
-
-        Divider()
-
-        AsyncButton {
-          await ReportCoordinator.shared.clearLastNotificationDate()
-          await ReportCoordinator.shared.didDetectWakeUp()
-        } label: {
-          LabeledContent("Generate Morning Report") {
-            Image(systemSymbol: .sunriseCircle)
           }
           .bold()
           .fontDesign(.rounded)

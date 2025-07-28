@@ -29,6 +29,23 @@ public extension MorningHealthReportModelActor {
     return report.asDTO()
   }
 
+  func deleteReport(for date: Date) throws {
+    let dayStart = Calendar.current.startOfDay(for: date)
+    let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart)!
+    
+    let predicate = #Predicate<MorningHealthReport> { report in
+      report.day >= dayStart && report.day < dayEnd
+    }
+    let descriptor = FetchDescriptor<MorningHealthReport>(predicate: predicate)
+    let existingReports = try context.fetch(descriptor)
+    
+    for existingReport in existingReports {
+      context.delete(existingReport)
+    }
+    
+    try context.save()
+  }
+
   func saveReport(
     for date: Date,
     sleepFeedback: String,
