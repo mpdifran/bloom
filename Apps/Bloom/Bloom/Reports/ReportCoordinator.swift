@@ -38,6 +38,8 @@ extension ReportCoordinator {
   func didDetectWakeUp(sleepAnalysis: SleepAnalysis? = nil) async {
     guard await ReportCoordinatorViewModel.shared.showMorningReportOnWakeUp else { return }
 
+    guard !isGeneratingReport else { return }
+
     // Check if we already sent a notification today
     let shouldSendNotification: Bool
     if let lastMorningReportNotificationDate {
