@@ -11,7 +11,7 @@ import CoreHealth
 
 private extension CGFloat {
   static let spacing: CGFloat = 6
-  static let barHeight: CGFloat = 10
+  static let barHeight: CGFloat = 30
 }
 
 struct TargetHeartRateZonesDistributionView: View {
@@ -88,6 +88,7 @@ struct TargetHeartRateZonesDistributionView: View {
       HStack {
         Text("Total")
           .bold()
+          .fontDesign(.rounded)
 
         Spacer()
 
@@ -95,11 +96,13 @@ struct TargetHeartRateZonesDistributionView: View {
           Text("\(distribution.scaledDurationSum.doubleValue(for: .minute()).format()) min")
             .font(.subheadline)
             .bold()
+            .fontDesign(.rounded)
           if displayGoal {
             Text("/ \(Double.minZoneMinutes.format()) min")
               .foregroundStyle(.secondary)
               .font(.caption)
               .bold()
+              .fontDesign(.rounded)
           }
         }
       }
@@ -117,29 +120,53 @@ struct HeartRateZoneBar: View {
 
   var body: some View {
     HStack {
-      VStack(alignment: .leading) {
-        Text(title)
-          .bold()
-        Text(subtitle)
-          .font(.caption)
-      }
-      .foregroundStyle(.tint)
-
       GeometryReader { proxy in
-        Capsule()
-          .fill(.tint)
-          .frame(width: max(barProportion * proxy.size.width, .barHeight), height: .barHeight)
-          .offset(y: (proxy.size.height / 2) - (CGFloat.barHeight / 2))
-      }
+        HStack {
+          Image(systemSymbol: .heartFill)
+            .fontWeight(.heavy)
+            .fontDesign(.rounded)
+            .font(.system(size: 12))
 
-      Group {
-        Text(formattedDuration) +
-        Text(" \(multiplierString)")
-          .foregroundStyle(.tint)
+          VStack(alignment: .leading) {
+            Text(title)
+              .fontWeight(.heavy)
+              .fontDesign(.rounded)
+              .font(.system(size: 12))
+            Text(subtitle)
+              .font(.system(size: 8))
+          }
+
+          Spacer()
+
+          Text(multiplierString)
+            .font(.system(size: 12))
+            .fontWeight(.heavy)
+            .fontDesign(.rounded)
+        }
+        .foregroundStyle(.black)
+        .padding(.horizontal, 6)
+        .frame(width: barWidth(proxy: proxy), height: .barHeight)
+        .background {
+          RoundedRectangle(cornerRadius: 12)
+            .fill(.tint)
+        }
       }
-      .bold()
-      .font(.caption)
+      .frame(height: .barHeight)
+
+      Spacer()
+
+      Text(formattedDuration)
+        .fontWeight(.heavy)
+        .font(.system(size: 12))
+        .fontDesign(.rounded)
     }
+  }
+
+  func barWidth(proxy: GeometryProxy) -> CGFloat {
+    let remainingWidth = proxy.size.width - 120
+    let proportionalWidth = remainingWidth * barProportion
+
+    return 120 + proportionalWidth
   }
 
   var barProportion: CGFloat {
@@ -164,28 +191,29 @@ struct HeartRateZoneBar: View {
 }
 
 #Preview {
-  ScrollView {
-    TargetHeartRateZonesDistributionView(
-      distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution(
-        totalDuration: HKQuantity(unit: .minute(), doubleValue: 30),
-        zone1: HKQuantity(unit: .minute(), doubleValue: 3),
-        zone2: HKQuantity(unit: .minute(), doubleValue: 8),
-        zone3: HKQuantity(unit: .minute(), doubleValue: 9),
-        zone4: HKQuantity(unit: .minute(), doubleValue: 6),
-        zone5: HKQuantity(unit: .minute(), doubleValue: 4)
-      ),
-      heartRateZones: HeartRateZones(
-        heartRateReserve: 120,
-        restingHeartRate: 60,
-        maxHeartRate: 180,
-        zone1: 130,
-        zone2: 140,
-        zone3: 150,
-        zone4: 160,
-        zone5: 170
+  PreviewEnvironment {
+    BloomScrollView {
+      TargetHeartRateZonesDistributionView(
+        distribution: WorkoutHeartRateReport.WorkoutHeartZoneDistribution(
+          totalDuration: HKQuantity(unit: .minute(), doubleValue: 30),
+          zone1: HKQuantity(unit: .minute(), doubleValue: 3),
+          zone2: HKQuantity(unit: .minute(), doubleValue: 8),
+          zone3: HKQuantity(unit: .minute(), doubleValue: 9),
+          zone4: HKQuantity(unit: .minute(), doubleValue: 6),
+          zone5: HKQuantity(unit: .minute(), doubleValue: 0)
+        ),
+        heartRateZones: HeartRateZones(
+          heartRateReserve: 120,
+          restingHeartRate: 60,
+          maxHeartRate: 180,
+          zone1: 130,
+          zone2: 140,
+          zone3: 150,
+          zone4: 160,
+          zone5: 170
+        )
       )
-    )
-    .cardContainer(fill: .background.secondary)
-    .padding()
+      .cardContainer()
+    }
   }
 }
