@@ -38,7 +38,12 @@ final class ReportCoordinatorViewModel {
   var isLoadingMorningReport = false
 
   private init() {
-    UserDefaults.group.register(defaults: [.showMorningReportOnWakeUp: true])
+    // Set default values
+    let defaultMorningReportDate = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now
+    UserDefaults.group.register(defaults: [
+      .showMorningReportOnWakeUp: true,
+      .morningReportDate: defaultMorningReportDate
+    ])
 
     if let date = UserDefaults.group.object(forKey: .morningReportDate) as? Date {
       self.morningReportDate = date

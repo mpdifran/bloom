@@ -40,6 +40,9 @@ public func configure(_ app: Application) async throws {
   // APNs
   try app.configureAPNs()
   
+  // Cron jobs
+  try app.configureCronJobs()
+  
   // Shutdown handlers
   app.lifecycle.use(
     ShutdownHandler(shutdownAWSClient: app.shutdownAWSClient)

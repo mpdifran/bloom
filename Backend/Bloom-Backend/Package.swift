@@ -33,6 +33,7 @@ let package = Package(
                 .product(name: "VaporAPNS", package: "apns"),
                 .product(name: "Redis", package: "redis"),
                 .product(name: "WebSocketKit", package: "websocket-kit"),
+                .product(name: "VaporCron", package: "VaporCron"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
                 .product(name: "OpenAIKit", package: "openai-kit"),

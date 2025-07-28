@@ -43,6 +43,12 @@ final class User: Model, Content, @unchecked Sendable {
   @Field(key: "apns_device_token")
   var apnsDeviceToken: String?
 
+  @Field(key: "morning_notification_hour")
+  var morningNotificationHour: Int?
+
+  @Field(key: "morning_notification_minute")
+  var morningNotificationMinute: Int?
+
   @Field(key: "access_token")
   var accessToken: String?
 
@@ -76,6 +82,8 @@ final class User: Model, Content, @unchecked Sendable {
     healthCoachThreadID: String? = nil,
     healthGoalSetterThreadID: String? = nil,
     apnsDeviceToken: String? = nil,
+    morningNotificationHour: Int? = nil,
+    morningNotificationMinute: Int? = nil,
     accessToken: String? = nil,
     refreshToken: String? = nil,
     idToken: String? = nil,
@@ -91,6 +99,8 @@ final class User: Model, Content, @unchecked Sendable {
     self.healthCoachThreadID = healthCoachThreadID
     self.healthGoalSetterThreadID = healthGoalSetterThreadID
     self.apnsDeviceToken = apnsDeviceToken
+    self.morningNotificationHour = morningNotificationHour
+    self.morningNotificationMinute = morningNotificationMinute
     self.accessToken = accessToken
     self.refreshToken = refreshToken
     self.idToken = idToken

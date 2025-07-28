@@ -24,6 +24,7 @@ extension UserController: RouteCollection {
         $0.group("user") {
           $0.post("identify", use: identify)
           $0.post("register-device-token", use: registerDeviceToken)
+          $0.post("morning-notification-time", use: updateMorningNotificationTime)
           $0.get("logout", use: logout)
           $0.get("delete-account", use: deleteAccount)
         }
@@ -106,6 +107,55 @@ private extension UserController {
     let body = try request.content.decode(RegisterUserPushNotificationTokenRequest.self)
 
     user.apnsDeviceToken = body.deviceToken
+    try await user.save(on: request.db)
+
+    return Response(status: .ok)
+  }
+
+  @Sendable
+  func updateMorningNotificationTime(_ request: Request) async throws -> Response {
+    let user = try request.auth.require(User.self)
+    let body = try request.content.decode(UpdateMorningNotificationTimeRequest.self)
+
+    // Validate timezone
+    guard let userTimeZone = TimeZone(identifier: body.timeZone) else {
+      throw Abort(.badRequest, reason: "Invalid timezone identifier")
+    }
+
+    // Validate hour and minute
+    guard (0...23).contains(body.hour) else {
+      throw Abort(.badRequest, reason: "Hour must be between 0 and 23")
+    }
+    guard (0...59).contains(body.minute) else {
+      throw Abort(.badRequest, reason: "Minute must be between 0 and 59")
+    }
+
+    // Round minute to nearest 5
+    let roundedMinute = Int((Double(body.minute) / 5.0).rounded()) * 5
+
+    // Convert user's local time to UTC
+    var userCalendar = Calendar.current
+    userCalendar.timeZone = userTimeZone
+    
+    // Create date components for today at the specified time
+    let now = Date()
+    var components = userCalendar.dateComponents([.year, .month, .day], from: now)
+    components.hour = body.hour
+    components.minute = roundedMinute
+    
+    // Get the date in user's timezone
+    guard let userDate = userCalendar.date(from: components) else {
+      throw Abort(.internalServerError, reason: "Failed to create date from components")
+    }
+    
+    // Convert to UTC components
+    var utcCalendar = Calendar.current
+    utcCalendar.timeZone = TimeZone(identifier: "UTC")!
+    let utcComponents = utcCalendar.dateComponents([.hour, .minute], from: userDate)
+    
+    // Update user preferences with UTC time
+    user.morningNotificationHour = utcComponents.hour
+    user.morningNotificationMinute = utcComponents.minute
     try await user.save(on: request.db)
 
     return Response(status: .ok)

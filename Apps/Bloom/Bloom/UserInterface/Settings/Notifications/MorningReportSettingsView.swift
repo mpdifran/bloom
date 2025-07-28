@@ -54,12 +54,17 @@ private extension MorningReportSettingsView {
             .tint(.mutedGreen)
         }
         
-//        Divider()
-//        
-//        SettingsCell("Send Report By") {
-//          DatePicker("", selection: $reportViewModel.morningReportDate, displayedComponents: .hourAndMinute)
-//            .datePickerStyle(.compact)
-//        }
+        Divider()
+        
+        SettingsCell("Send Report By") {
+          DatePicker("", selection: $reportViewModel.morningReportDate, displayedComponents: .hourAndMinute)
+            .datePickerStyle(.compact)
+            .onChange(of: reportViewModel.morningReportDate) { _, _ in
+              Task {
+                await NotificationPreferencesService.shared.forceSyncMorningNotificationPreferences()
+              }
+            }
+        }
       }
     }
   }

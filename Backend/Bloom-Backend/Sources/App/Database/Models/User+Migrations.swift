@@ -149,4 +149,20 @@ extension User {
         .update()
     }
   }
+
+  struct AddMorningNotificationTime: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .field("morning_notification_hour", .int)
+        .field("morning_notification_minute", .int)
+        .update()
+    }
+    
+    func revert(on database: any Database) async throws {
+      try await database.schema(User.schema)
+        .deleteField("morning_notification_hour")
+        .deleteField("morning_notification_minute")
+        .update()
+    }
+  }
 }

@@ -83,11 +83,15 @@ struct BloomApp: App {
         .task {
           // Schedule background tasks after handlers are registered
           BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
+          BackgroundTaskScheduler.shared.scheduleNotificationPreferencesSyncTask()
         }
     }
     .modelContainer(ContainerHolder.shared.container)
     .backgroundTask(.appRefresh("update-reminder-notifications")) {
         await BackgroundTaskScheduler.shared.updateReminderNotifications()
+    }
+    .backgroundTask(.appRefresh("sync-notification-preferences")) {
+        await BackgroundTaskScheduler.shared.syncNotificationPreferences()
     }
   }
 }
@@ -113,6 +117,11 @@ private extension BloomApp {
     Task {
       // Check if APNs token needs refresh
       await tokenManager.refreshTokenIfNeeded()
+    }
+    
+    Task {
+      // Sync notification preferences
+      await NotificationPreferencesService.shared.syncMorningNotificationPreferences()
     }
 
     TelemetryDeck.signal(

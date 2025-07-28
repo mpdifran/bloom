@@ -40,5 +40,6 @@ let allMigrations: [Migration] = [
   ChatMessageIssueReport.Create(),
   ChatMessageIssueReport.AddState(),
   ChatMessageIssueReport.AddAppVersion(),
-  FoodItemRecord.ConvertCountryEnumToString()
+  FoodItemRecord.ConvertCountryEnumToString(),
+  User.AddMorningNotificationTime(),
 ]
