@@ -21,15 +21,15 @@ struct AskBudButton: View {
         Text("Ask Bud")
           .font(.body)
           .foregroundStyle(.tint)
-          .bold()
+          .fontWeight(.heavy)
           .fontDesign(.rounded)
       }
-      .padding(.vertical, 8)
-      .padding(.horizontal, 16)
-      .background {
-        Capsule()
-          .fill(.tint.tertiary)
-      }
+//      .padding(.vertical, 8)
+//      .padding(.horizontal, 16)
+//      .background {
+//        Capsule()
+//          .fill(.tint.tertiary)
+//      }
     }
   }
 }

@@ -114,7 +114,7 @@ private extension MorningReportView {
   
   @ViewBuilder
   func morningReportContent(_ report: MorningHealthReport) -> some View {
-    BloomScrollView(padding: .vertical) {
+    BloomScrollView(showsChatBar: false, padding: .vertical) {
       TodaysDateView()
         .padding(.horizontal)
 
