@@ -57,6 +57,13 @@ struct MorningReportView: View {
       .navigationTitle("Morning Report")
       .sheet($presentedSheet)
       .navigationDestination($presentedNavPush)
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          Button("Settings", systemSymbol: .gear) {
+            presentedSheet = MorningReportSettingsView().asAny
+          }
+        }
+      }
       .shelf {
         Button(action: {
           dismiss()

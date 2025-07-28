@@ -73,7 +73,7 @@ private extension MorningReportSettingsView {
   
   @ViewBuilder
   var calendarSection: some View {
-    if true {//hasCalendarPermission && calendars.isNotEmpty {
+    if hasCalendarPermission && calendars.isNotEmpty {
       VStack {
         HStack(alignment: .firstTextBaseline) {
           SectionTitleView("Calendars")
