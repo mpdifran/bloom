@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct AskBudButton: View {
+  let action: () -> Void
 
   var body: some View {
     Button {
-
+      action()
     } label: {
       HStack {
         Image(.budPeek)
@@ -38,7 +39,7 @@ struct AskBudButton: View {
   PreviewEnvironment {
     ScrollView {
       VStack {
-        AskBudButton()
+        AskBudButton { }
           .padding()
       }
       .horizontallyCentered()

@@ -82,9 +82,7 @@ private extension ChatLauncherView {
     .onTapGesture {
 //      tabController.isShowingChat = true
 //      selectionToggle.toggle()
-      EntitledAction(
-        presentedSheet: $presentedSheet
-      ) {
+      EntitledAction(presentedSheet: $presentedSheet) {
         tabController.isShowingChat = true
         selectionToggle.toggle()
       }

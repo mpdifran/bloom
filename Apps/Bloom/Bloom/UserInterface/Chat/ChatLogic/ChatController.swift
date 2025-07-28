@@ -132,7 +132,7 @@ extension ChatController {
     _ = await createOrGetWebSocketHandle()
   }
 
-  func send(message: String, image: UIImage?) async throws {
+  func send(message: String, image: UIImage?, chatContexts: [ChatContext]) async throws {
     // Send any pending telemetry before starting a new message
     sendToolCallCountTelemetry()
     sendToolRequestCountTelemetry()
@@ -174,10 +174,21 @@ extension ChatController {
 
     guard trimmedMessage.isNotEmpty || fileIDs.isNotEmpty else { return }
 
+    let extraSystemContext: String?
+    if chatContexts.isNotEmpty {
+      let chatContextTexts = chatContexts.reduce("", { partialResult, chatContext in
+        partialResult + "\n\(chatContext.title): \(chatContext.context)"
+      })
+      extraSystemContext = "The user is asking a question about these insights from their morning report: \n\n\(chatContextTexts)"
+    } else {
+      extraSystemContext = nil
+    }
+
     let socketMessage = SocketMessage.MessageRequest(
       text: trimmedMessage,
       imageFileIDs: fileIDs,
       userInfo: stringData,
+      extraSystemContext: extraSystemContext,
       requestID: requestID
     )
 

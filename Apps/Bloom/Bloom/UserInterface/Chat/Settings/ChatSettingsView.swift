@@ -16,17 +16,30 @@ struct ChatSettingsView: View {
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @State private var didDeleteChatHistory = false
 
+  @Environment(\.dismiss) private var dismiss
+
   var body: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        resetSection
+    NavigationStack {
+      BloomScrollView(showsChatBar: false) {
+        VStack(spacing: 20) {
+          resetSection
+        }
+        .padding()
       }
-      .padding()
+      .navigationTitle("Chat Settings")
+      .navigationBarTitleDisplayMode(.inline)
+      .confirmationDialog($confirmationDialogDetails)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button("Done") {
+            dismiss()
+          }
+          .bold()
+        }
+      }
     }
-    .groupedBackground()
     .presentationCornerRadius(30)
     .presentationDragIndicator(.visible)
-    .confirmationDialog($confirmationDialogDetails)
   }
 }
 

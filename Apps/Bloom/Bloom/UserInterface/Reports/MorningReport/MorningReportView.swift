@@ -14,6 +14,8 @@ import DataContainer
 import TelemetryDeck
 
 struct MorningReportView: View {
+  @Binding var rootPresentedSheet: AnyView?
+
   @State private var viewModel = ViewModel()
   @State private var reportCoordinatorViewModel = ReportCoordinatorViewModel.shared
 
@@ -27,7 +29,9 @@ struct MorningReportView: View {
   @Query var reminders: [Reminder]
   @Query private var morningReports: [MorningHealthReport]
   
-  init() {
+  init(rootPresentedSheet: Binding<AnyView?>) {
+    self._rootPresentedSheet = rootPresentedSheet
+
     let today = Calendar.current.startOfDay(for: Date())
     let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
     
@@ -206,7 +210,8 @@ private extension MorningReportView {
             MorningReportInsightCell(
               emoji: insight.emoji ?? "",
               title: insight.title ?? "",
-              insight: insight.body ?? ""
+              insight: insight.body ?? "",
+              rootPresentedSheet: $rootPresentedSheet
             )
           }
         }
@@ -297,7 +302,10 @@ private extension MorningReportView {
 }
 
 #Preview {
+  @Previewable @State var presentedSheet: AnyView?
+
   PreviewEnvironment {
-    MorningReportView()
+    MorningReportView(rootPresentedSheet: $presentedSheet)
+      .sheet($presentedSheet)
   }
 }

@@ -12,6 +12,11 @@ struct MorningReportInsightCell: View {
   let title: String
   let insight: String
 
+  @Binding var rootPresentedSheet: AnyView?
+
+  @Environment(TabController.self) private var tabController: TabController
+  @Environment(\.dismiss) private var dismiss
+
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       HStack(alignment: .top) {
@@ -36,29 +41,41 @@ struct MorningReportInsightCell: View {
         .fixedSize(horizontal: false, vertical: true)
         .padding()
 
-//      AskBudButton()
-//        .padding(.horizontal, 8)
-//        .padding(.bottom, 8)
-//        .horizontallyCentered()
+      AskBudButton {
+        EntitledAction(presentedSheet: $rootPresentedSheet) {
+          dismiss()
+          let context = ChatContext(title: title, context: insight)
+          tabController.chatContexts = [context]
+          tabController.isShowingChat = true
+        }
+      }
+      .padding(.horizontal, 8)
+      .padding(.bottom, 8)
+      .horizontallyCentered()
     }
     .cardContainer(includePadding: false)
   }
 }
 
 #Preview {
+  @Previewable @State var presentedSheet: AnyView?
+
   PreviewEnvironment {
     BloomScrollView {
       MorningReportInsightCell(
         emoji: "🍕",
         title: "Too Much Za",
-        insight: "You had way too much pizza yesterday. Try to not do that today bro."
+        insight: "You had way too much pizza yesterday. Try to not do that today bro.",
+        rootPresentedSheet: $presentedSheet
       )
 
       MorningReportInsightCell(
         emoji: "🤯",
         title: "New Running Workout Record",
-        insight: "You ran 14 km in one go! Way to go buddy! You're making great progress towards your goal."
+        insight: "You ran 14 km in one go! Way to go buddy! You're making great progress towards your goal.",
+        rootPresentedSheet: $presentedSheet
       )
     }
+    .sheet($presentedSheet)
   }
 }

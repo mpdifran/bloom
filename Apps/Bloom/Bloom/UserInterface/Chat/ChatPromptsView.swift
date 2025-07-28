@@ -42,7 +42,11 @@ struct ChatPromptsView: View {
   
   private func sendMessage(_ message: String) async {
     do {
-      try await ChatController.shared.send(message: message, image: nil)
+      try await ChatController.shared.send(
+        message: message,
+        image: nil,
+        chatContexts: []
+      )
     } catch {
       self.error = error
     }

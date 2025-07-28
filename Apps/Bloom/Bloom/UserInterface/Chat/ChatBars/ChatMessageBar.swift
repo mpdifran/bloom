@@ -18,11 +18,13 @@ struct ChatMessageBar: View {
   @State private var error: Error?
   
   @FocusState private var isFocused
-  
+
+  @Environment(TabController.self) private var tabController: TabController
+
   var body: some View {
     VStack {
-      if image != nil {
-        imageSection
+      if image != nil || tabController.chatContexts.isNotEmpty {
+        imageAndContextSection
       }
       
       HStack(alignment: .bottom) {
@@ -91,6 +93,7 @@ struct ChatMessageBar: View {
         .ignoresSafeArea(edges: .bottom)
     }
     .animation(.bouncy, value: image)
+    .animation(.bouncy, value: tabController.chatContexts)
     .sensoryFeedback(.impact, trigger: didSendToggle)
     .alert(error: $error)
     .sheet($presentedSheet)
@@ -102,7 +105,7 @@ struct ChatMessageBar: View {
 
 private extension ChatMessageBar {
   
-  var imageSection: some View {
+  var imageAndContextSection: some View {
     ScrollView(.horizontal) {
       HStack {
         if let image {
@@ -111,7 +114,15 @@ private extension ChatMessageBar {
           }
           .transition(.scale)
         }
+
+        ForEachEnumerated(tabController.chatContexts) { index, chatContext in
+          EditableChatContextCell(chatContext: chatContext) {
+            tabController.chatContexts.remove(at: index)
+          }
+          .transition(.scale)
+        }
       }
+      .padding(.top, 4)
       .padding(.horizontal)
     }
   }
@@ -123,12 +134,18 @@ private extension ChatMessageBar {
     
     let textToSend = text
     let imageToSend = image
-    
+    let chatContextsToSend = tabController.chatContexts
+
     text = ""
     image = nil
-    
+    tabController.chatContexts = []
+
     do {
-      try await ChatController.shared.send(message: textToSend, image: imageToSend)
+      try await ChatController.shared.send(
+        message: textToSend,
+        image: imageToSend,
+        chatContexts: chatContextsToSend
+      )
     } catch {
       self.error = error
     }

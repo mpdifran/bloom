@@ -46,10 +46,18 @@ extension Tab {
   }
 }
 
+struct ChatContext: Identifiable, Hashable, Sendable {
+  var id: Int { hashValue }
+
+  let title: String
+  let context: String
+}
+
 @Observable @MainActor
 final class TabController {
   var activeTab = Tab.today
   var isShowingChat = false
+  var chatContexts = [ChatContext]()
   var chatLauncherSafeAreaInset: CGFloat = 0
 
   var showMorningReport = false

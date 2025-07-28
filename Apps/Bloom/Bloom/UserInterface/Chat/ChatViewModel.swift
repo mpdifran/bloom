@@ -26,9 +26,17 @@ final class ChatViewModel {
 
 extension ChatViewModel {
 
-  func sendMessage(_ message: String, image: UIImage?) async {
+  func sendMessage(
+    _ message: String,
+    image: UIImage?,
+    chatContexts: [ChatContext]
+  ) async {
     do {
-      try await ChatController.shared.send(message: message, image: image)
+      try await ChatController.shared.send(
+        message: message,
+        image: image,
+        chatContexts: chatContexts
+      )
     } catch {
       self.error = error
       TelemetryDeck.errorOccurred(
