@@ -57,6 +57,19 @@ extension GoalProgressCalculator {
 
       let goalMet = goal.quantityMeetsGoal(currentQuantity)
 
+      // Filter completed goals for non-daily time periods
+      // Always include daily goals, but for other periods only include completed goals
+      // that were completed for the first time yesterday
+      if goal.timePeriod != .daily && goalMet {
+        let previousProgress = currentQuantity.doubleValue(for: goal.unit) - progressQuantity.doubleValue(for: goal.unit)
+        let goalValue = goalQuantity.doubleValue(for: goal.unit)
+        
+        // Skip if goal was already complete before yesterday
+        if previousProgress >= goalValue {
+          continue
+        }
+      }
+
       let progress = GoalProgress(
         metric: metric.rawValue,
         timePeriod: goal.timePeriod.name,
