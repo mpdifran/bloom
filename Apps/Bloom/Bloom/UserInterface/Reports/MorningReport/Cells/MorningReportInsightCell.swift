@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TelemetryDeck
 
 struct MorningReportInsightCell: View {
   let emoji: String
@@ -42,11 +43,19 @@ struct MorningReportInsightCell: View {
         .padding()
 
       AskBudButton {
+        TelemetryDeck.signal(
+          "Morning Report Insight Ask Bud Attempt"
+        )
+
         EntitledAction(presentedSheet: $rootPresentedSheet) {
           dismiss()
           let context = ChatContext(title: title, context: insight)
           tabController.chatContexts = [context]
           tabController.isShowingChat = true
+
+          TelemetryDeck.signal(
+            "Morning Report Insight Ask Bud"
+          )
         }
       }
       .padding(.horizontal, 8)
