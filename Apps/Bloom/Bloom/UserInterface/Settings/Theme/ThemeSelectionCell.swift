@@ -40,9 +40,9 @@ struct ThemeSelectionCell: View {
 #Preview {
   PreviewEnvironment {
     VStack {
-      ThemeSelectionCell(theme: .lilac, isSelected: true)
-      ThemeSelectionCell(theme: .ultramarine, isSelected: false)
-      ThemeSelectionCell(theme: .sunflower, isSelected: false)
+      ThemeSelectionCell(theme: .purple, isSelected: true)
+      ThemeSelectionCell(theme: .blue, isSelected: false)
+      ThemeSelectionCell(theme: .orange, isSelected: false)
     }
     .padding()
     .horizontallyCentered()

@@ -1866,7 +1866,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = Bloom;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Blueberry;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bloom/Bloom.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -2315,7 +2315,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Development.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = Bloom;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Blueberry;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bloom/Bloom.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -3071,7 +3071,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = Bloom;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Blueberry;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bloom/Bloom.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -3120,7 +3120,7 @@
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = Bloom;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Blueberry;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bloom/Bloom.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";

@@ -18,65 +18,65 @@ extension ThemeController {
   enum Theme: String, CaseIterable, Identifiable {
     var id: Self { self }
 
-    case ultramarine
-    case lilac
-    case sunflower
+    case blue
+    case purple
+    case orange
   }
 }
 
 extension ThemeController.Theme {
   var name: String {
     switch self {
-    case .lilac:
-      "Lilac"
-    case .ultramarine:
-      "Ultramarine"
-    case .sunflower:
-      "Sunflower"
+    case .purple:
+      "Dragonfruit"
+    case .blue:
+      "Blueberry"
+    case .orange:
+      "Mango"
     }
   }
 
   var color: Color {
     switch self {
-    case .lilac:
+    case .purple:
       return .lilacTint
-    case .ultramarine:
+    case .blue:
       return .marineTint
-    case .sunflower:
+    case .orange:
       return .sunflowerTint
     }
   }
 
   var backgroundColor: Color {
     switch self {
-    case .lilac:
+    case .purple:
       return .lilacBackground
-    case .ultramarine:
+    case .blue:
       return .marineBackground
-    case .sunflower:
+    case .orange:
       return .sunflowerBackground
     }
   }
 
   var appIcon: ImageResource {
     switch self {
-    case .lilac:
+    case .purple:
       return .bloomDisplayAppIconPurple
-    case .ultramarine:
+    case .blue:
       return .bloomDisplayAppIconBlue
-    case .sunflower:
+    case .orange:
       return .bloomDisplayAppIconOrange
     }
   }
 
   var alternateIconName: String? {
     switch self {
-    case .lilac:
-      "BloomAppIconLilac"
-    case .ultramarine:
+    case .purple:
+      "Dragonfruit"
+    case .blue:
       nil
-    case .sunflower:
-      "BloomAppIconOrange"
+    case .orange:
+      "Mango"
     }
   }
 }
@@ -85,14 +85,35 @@ extension ThemeController.Theme {
 final class ThemeController {
   static let shared = ThemeController()
 
-  private(set) var theme: Theme = .ultramarine
+  private(set) var theme: Theme = .blue
 
   private init() {
-    UserDefaults.group.register(defaults: [.Key.theme: Theme.ultramarine.rawValue])
-    if let rawTheme = UserDefaults.group.string(forKey: .Key.theme), let theme = Theme(rawValue: rawTheme) {
-      self.theme = theme
-      Task {
-        await set(theme: theme)
+    UserDefaults.group.register(defaults: [.Key.theme: Theme.blue.rawValue])
+    
+    // Migrate old theme names if needed
+    if let rawTheme = UserDefaults.group.string(forKey: .Key.theme) {
+      let migratedTheme: String
+      switch rawTheme {
+      case "ultramarine":
+        migratedTheme = Theme.blue.rawValue
+      case "lilac":
+        migratedTheme = Theme.purple.rawValue
+      case "sunflower":
+        migratedTheme = Theme.orange.rawValue
+      default:
+        migratedTheme = rawTheme
+      }
+      
+      // Save the migrated theme if it changed
+      if migratedTheme != rawTheme {
+        UserDefaults.group.set(migratedTheme, forKey: .Key.theme)
+      }
+      
+      if let theme = Theme(rawValue: migratedTheme) {
+        self.theme = theme
+        Task {
+          await set(theme: theme)
+        }
       }
     }
   }

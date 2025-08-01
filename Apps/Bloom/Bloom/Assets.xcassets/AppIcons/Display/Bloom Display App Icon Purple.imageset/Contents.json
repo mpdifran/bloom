@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Bloom Display App Icon Purple.png",
+      "filename" : "Display App Icon Purple.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Display App Icon Purple Dark.png",
       "idiom" : "universal"
     }
   ],
