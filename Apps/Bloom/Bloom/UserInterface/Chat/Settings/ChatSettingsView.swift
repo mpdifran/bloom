@@ -28,10 +28,7 @@ struct ChatSettingsView: View {
       .confirmationDialog($confirmationDialogDetails)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            dismiss()
-          }
-          .bold()
+          DismissButton()
         }
       }
     }

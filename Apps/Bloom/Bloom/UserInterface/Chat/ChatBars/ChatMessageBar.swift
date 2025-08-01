@@ -206,8 +206,7 @@ private extension ChatMessageBar {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Done") { }
-            .bold()
+          DismissButton()
         }
         ToolbarItem(placement: .primaryAction) {
           Button { } label: {

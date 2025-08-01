@@ -14,8 +14,6 @@ struct MorningReportSettingsView: View {
   @State private var calendars: [EKCalendar] = []
   @State private var hasCalendarPermission = false
 
-  @Environment(\.dismiss) private var dismiss
-
   var body: some View {
     NavigationStack {
       BloomScrollView {
@@ -27,10 +25,7 @@ struct MorningReportSettingsView: View {
       .presentationDragIndicator(.visible)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            dismiss()
-          }
-          .bold()
+          DismissButton()
         }
       }
     }
