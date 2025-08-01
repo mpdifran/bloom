@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatLayoutSwiftUIView: View {
   @Binding var cellModels: [ChatCellModel]
   @Binding var scrollToBottomTrigger: Bool
+  @Binding var conversationInProgress: Bool
 
   let onIsAtBottomChanged: (Bool) -> Void
 
@@ -22,12 +23,19 @@ struct ChatLayoutSwiftUIView: View {
           }
         }
 
-        Spacer(minLength: 600)
+        if conversationInProgress {
+          Spacer(minLength: 600)
+        }
       }
       .onChange(of: scrollToBottomTrigger) { oldValue, newValue in
-        guard let lastUserSentMessageID else { return }
+        guard newValue, let lastUserSentMessageID else { return }
 
-        scrollViewReader.scrollTo(lastUserSentMessageID, anchor: .top)
+        withAnimation(.easeInOut(duration: 0.3)) {
+          scrollViewReader.scrollTo(lastUserSentMessageID, anchor: .top)
+        }
+        
+        // Reset the trigger
+        scrollToBottomTrigger = false
       }
     }
   }
@@ -38,7 +46,7 @@ private extension ChatLayoutSwiftUIView {
   var lastUserSentMessageID: String? {
     cellModels.last(where: { cellModel in
       switch cellModel.contentType {
-      case .text(let id, let content, let metadata):
+      case .text(_, _, let metadata):
         return (metadata?.isCurrentUser ?? false)
       default:
         return false

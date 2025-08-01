@@ -15,6 +15,8 @@ import TelemetryDeck
 final class ChatViewModel {
   var cellModels = [ChatCellModel]()
   var error: Error?
+  var conversationInProgress = false
+  var shouldTriggerScroll = false
 
   init() {
     setupObservers()
@@ -22,6 +24,7 @@ final class ChatViewModel {
 
   private var cellModelsTask: Task<Void, Never>?
   private var errorTask: Task<Void, Never>?
+  private var conversationTask: Task<Void, Never>?
 }
 
 extension ChatViewModel {
@@ -107,6 +110,13 @@ private extension ChatViewModel {
               message: error.localizedDescription
             )
           }
+        }
+      }
+    }
+    conversationTask = Task.detached { [weak self] in
+      for await inProgress in await ChatController.shared.$conversationInProgress {
+        await MainActor.run { [weak self] in
+          self?.conversationInProgress = inProgress
         }
       }
     }

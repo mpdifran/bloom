@@ -41,6 +41,7 @@ final actor ChatController: ObservableObject {
   @AsyncStreamable var inProgressMessages = [InProgressMessage]()
   private var inProgressMessagesIndex = 0
   @AsyncStreamable var error: Error?
+  @AsyncStreamable var conversationInProgress = false
 
   @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
 
@@ -204,6 +205,8 @@ extension ChatController {
 
     let socket = await createOrGetWebSocketHandle()
     try await socket.send(payload: socketMessage)
+    
+    conversationInProgress = true
 
     await SoundPlayer.playSendMessage()
 
@@ -514,9 +517,11 @@ private extension ChatController {
       
       // Clear the current request ID when the response completes
       currentRequestID = nil
+      conversationInProgress = false
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
       self.error = NSError(description: error.errorMessage)
       print(error.errorMessage)
+      conversationInProgress = false
       TelemetryDeck.errorOccurred(
         id: "ChatController.parseData",
         category: .thrownException,
@@ -769,6 +774,7 @@ private extension ChatController {
     webSocketErrorTask = nil
     assistantIsTyping = false
     queryAreas.removeAll()
+    conversationInProgress = false
   }
   
   func sendToolCallCountTelemetry() {
