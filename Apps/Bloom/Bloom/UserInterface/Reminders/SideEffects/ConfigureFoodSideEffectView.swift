@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import DataContainer
 import BloomFoundation
 import SFSafeSymbols
@@ -174,47 +175,29 @@ private extension ConfigureFoodSideEffectView {
   }
   
   func handleFoodItemSelection(_ foodItem: FoodItem) {
-    // Convert FoodItem (from BloomModel) to FoodItemRecord (from DataContainer)
-    // Note: This creates a new FoodItemRecord instance - in a production app,
-    // you might want to fetch the existing record from the database instead
-    let foodItemRecord = FoodItemRecord(
-      id: foodItem.id.value,
-      name: foodItem.name,
-      brandName: foodItem.brandName ?? "",
-      flavour: foodItem.flavour ?? "",
-      rawCountry: foodItem.country,
-      calories: foodItem.calories?.value ?? 0,
-      protein: foodItem.protein?.value ?? 0,
-      carbohydrates: foodItem.carbohydrates?.value ?? 0,
-      fat: foodItem.fat?.value ?? 0,
-      saturatedFat: foodItem.saturatedFat?.value,
-      transFat: foodItem.transFat?.value,
-      polyunsaturatedFat: foodItem.polyunsaturatedFat?.value,
-      monounsaturatedFat: foodItem.monounsaturatedFat?.value,
-      fiber: foodItem.fiber?.value,
-      sugar: foodItem.sugar?.value,
-      cholesterol: foodItem.cholesterol?.value,
-      sodium: foodItem.sodium?.value,
-      calcium: foodItem.calcium?.value,
-      iron: foodItem.iron?.value,
-      potassium: foodItem.potassium?.value,
-      magnesium: foodItem.magnesium?.value,
-      zinc: foodItem.zinc?.value,
-      vitaminA: foodItem.vitaminA?.value,
-      vitaminB6: foodItem.vitaminB6?.value,
-      vitaminB12: foodItem.vitaminB12?.value,
-      vitaminC: foodItem.vitaminC?.value,
-      vitaminD: foodItem.vitaminD?.value,
-      vitaminE: foodItem.vitaminE?.value,
-      servingName: foodItem.servingName,
-      servingUnitString: foodItem.servingQuantity?.unit,
-      servingValue: foodItem.servingQuantity?.value,
-      ingredients: foodItem.ingredients,
-      category: foodItem.category.asFoodItemRecordCategory,
-      isVerified: foodItem.isVerified
-    )
+    // Create a FoodItemRecord from the selected FoodItem and save it to the database
+    // This ensures we can look it up later during side effect execution
+    let foodItemRecord = FoodItemRecord(foodItem: foodItem)
     
-    selectedFood = foodItemRecord
+    // Save the food item to the database if it doesn't already exist
+    let modelContext = ModelContext(ContainerHolder.shared.container)
+    
+    do {
+      // Check if this food item already exists in the database
+      if let existingFoodItem = try modelContext.fetchFirstFoodItem(for: foodItem.id.value) {
+        selectedFood = existingFoodItem
+      } else {
+        // Insert the new food item into the database
+        modelContext.insert(foodItemRecord)
+        try modelContext.save()
+        selectedFood = foodItemRecord
+      }
+    } catch {
+      print("Failed to save food item to database: \(error)")
+      // Fall back to using the record without saving
+      selectedFood = foodItemRecord
+    }
+    
     showingFoodPicker = false
   }
   
@@ -277,23 +260,6 @@ private extension ConfigureFoodSideEffectView {
       }
       
       isLoadingFoodItem = false
-    }
-  }
-}
-
-extension FoodItem.Category {
-  var asFoodItemRecordCategory: FoodItemRecord.Category? {
-    switch self {
-    case .generic:
-      return .generic
-    case .fastfood:
-      return .fastfood
-    case .restaurant:
-      return .restaurant
-    case .branded:
-      return .branded
-    case .aiGenerated:
-      return .aiGenerated
     }
   }
 }

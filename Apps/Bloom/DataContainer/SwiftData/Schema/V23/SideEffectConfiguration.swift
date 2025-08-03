@@ -36,6 +36,21 @@ public struct LogWaterSideEffectConfig: SideEffectConfiguration {
   }
 }
 
+// MARK: - Side Effect Execution Result
+public struct SideEffectExecutionResult: Codable, Sendable {
+  public let sideEffectID: String
+  public let type: SchemaV23.ReminderSideEffect.SideEffectType
+  public let createdRecordID: String?
+  public let success: Bool
+  
+  public init(sideEffectID: String, type: SchemaV23.ReminderSideEffect.SideEffectType, createdRecordID: String?, success: Bool) {
+    self.sideEffectID = sideEffectID
+    self.type = type
+    self.createdRecordID = createdRecordID
+    self.success = success
+  }
+}
+
 // MARK: - Helper Extensions
 extension SchemaV23.ReminderSideEffect {
   public func decodeConfiguration<T: SideEffectConfiguration>(as type: T.Type) -> T? {
@@ -44,5 +59,16 @@ extension SchemaV23.ReminderSideEffect {
   
   public func encodeConfiguration<T: SideEffectConfiguration>(_ config: T) throws {
     configuration = try JSONEncoder.dataContainer.encode(config)
+  }
+}
+
+extension SchemaV23.ReminderCompletionRecord {
+  public func decodeSideEffectResults() -> [SideEffectExecutionResult]? {
+    guard let data = sideEffectResults else { return nil }
+    return try? JSONDecoder.dataContainer.decode([SideEffectExecutionResult].self, from: data)
+  }
+  
+  public func encodeSideEffectResults(_ results: [SideEffectExecutionResult]) throws {
+    sideEffectResults = try JSONEncoder.dataContainer.encode(results)
   }
 }

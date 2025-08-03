@@ -64,9 +64,9 @@ struct ConfigureWaterSideEffectView: View {
       // Set default water amount based on unit
       let defaultAmount: Double
       if userUnit == .literUnit(with: .milli) {
-        defaultAmount = 500.0 // 500 ml
+        defaultAmount = 250 // 250 ml
       } else {
-        defaultAmount = 16.0 // 16 oz
+        defaultAmount = 8 // 8 oz
       }
       _waterAmount = State(initialValue: defaultAmount.format())
     }

@@ -110,7 +110,20 @@ final class RemindersManager: ObservableObject {
   
   /// Marks a reminder as completed for today
   func markReminderCompleted(withID id: String, occurrenceID: String? = nil) async throws {
-    _ = try await modelActor.markReminderCompleted(reminderID: id, occurrenceID: occurrenceID)
+    let completionRecord = try await modelActor.markReminderCompleted(reminderID: id, occurrenceID: occurrenceID)
+    
+    // Execute side effects after successful completion
+    if let reminder = try await modelActor.fetchReminder(withID: id) {
+      let sideEffectResults = await SideEffectExecutor.shared.executeSideEffects(for: reminder)
+      
+      // Store the side effect results on the completion record
+      if !sideEffectResults.isEmpty, let completionRecord = completionRecord {
+        try await modelActor.updateCompletionRecordWithSideEffectResults(
+          completionRecordID: completionRecord.id,
+          results: sideEffectResults
+        )
+      }
+    }
     
     // Remove delivered notifications for this reminder
     await removeDeliveredNotifications(withID: id)
@@ -126,7 +139,12 @@ final class RemindersManager: ObservableObject {
   
   /// Marks a reminder as uncompleted for today
   func markReminderUncompleted(withID id: String, occurrenceID: String? = nil) async throws {
-    try await modelActor.markReminderUncompleted(reminderID: id, occurrenceID: occurrenceID)
+    let sideEffectResults = try await modelActor.markReminderUncompleted(reminderID: id, occurrenceID: occurrenceID)
+    
+    // Undo side effects if there are any results stored
+    if let results = sideEffectResults {
+      await SideEffectExecutor.shared.undoSideEffects(results: results)
+    }
     
     // Refresh to update completion records
     await fetchReminders()

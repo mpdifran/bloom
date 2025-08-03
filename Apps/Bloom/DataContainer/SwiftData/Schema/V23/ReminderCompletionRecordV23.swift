@@ -6,6 +6,7 @@ extension SchemaV23 {
   public final class ReminderCompletionRecord: Hashable, Identifiable {
     public var id = UUID().uuidString
     public var completedDate: Date = Date()
+    public var sideEffectResults: Data? = nil
     
     public var reminder: Reminder? = nil
     public var occurrence: ReminderOccurrence? = nil

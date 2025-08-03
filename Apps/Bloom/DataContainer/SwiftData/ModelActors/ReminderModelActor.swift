@@ -122,7 +122,7 @@ public extension ReminderModelActor {
     reminderID: String,
     occurrenceID: String? = nil,
     completionDate: Date = Date()
-  ) throws {
+  ) throws -> [SideEffectExecutionResult]? {
     let calendar = Calendar.current
     let targetDay = calendar.startOfDay(for: completionDate)
     
@@ -143,21 +143,26 @@ public extension ReminderModelActor {
       calendar.isDate(record.completedDate, inSameDayAs: targetDay)
     }
     
+    var sideEffectResults: [SideEffectExecutionResult]?
+    
     // If we have an occurrenceID, only delete the first matching record
     // Otherwise, delete all records from that day (old behavior)
     if occurrenceID != nil && !recordsToDelete.isEmpty {
       // Delete only the most recent completion for this specific occurrence
       if let recordToDelete = recordsToDelete.sorted(by: { $0.completedDate > $1.completedDate }).first {
+        sideEffectResults = recordToDelete.decodeSideEffectResults()
         context.delete(recordToDelete)
       }
     } else {
       // Delete all completion records from that day
+      sideEffectResults = recordsToDelete.first?.decodeSideEffectResults()
       for record in recordsToDelete {
         context.delete(record)
       }
     }
     
     try context.save()
+    return sideEffectResults
   }
   
   // MARK: - Side Effects
@@ -206,6 +211,21 @@ public extension ReminderModelActor {
     guard let sideEffect = try context.fetch(descriptor).first else { return }
     
     context.delete(sideEffect)
+    try context.save()
+  }
+  
+  func updateCompletionRecordWithSideEffectResults(
+    completionRecordID: String,
+    results: [SideEffectExecutionResult]
+  ) throws {
+    let descriptor = FetchDescriptor<ReminderCompletionRecord>(
+      predicate: #Predicate<ReminderCompletionRecord> { record in
+        record.id == completionRecordID
+      }
+    )
+    guard let completionRecord = try context.fetch(descriptor).first else { return }
+    
+    try completionRecord.encodeSideEffectResults(results)
     try context.save()
   }
 }

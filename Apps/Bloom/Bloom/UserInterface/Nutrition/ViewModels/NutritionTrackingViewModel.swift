@@ -243,8 +243,9 @@ extension NutritionTrackingViewModel {
     foodItemServings: [FoodItemServingAmount],
     date: Date,
     meal: FoodItemLog.Meal
-  ) async throws {
+  ) async throws -> String? {
     var dates = [Date]()
+    var firstLogID: String?
 
     try modelContext.savingTransaction {
       for serving in foodItemServings {
@@ -261,8 +262,9 @@ extension NutritionTrackingViewModel {
           )
           modelContext.insert(foodItemServing)
 
+          let logID = UUID().uuidString
           let foodItemLog = FoodItemLog(
-            id: UUID().uuidString,
+            id: logID,
             name: nil,
             date: logDate,
             meal: meal,
@@ -271,6 +273,11 @@ extension NutritionTrackingViewModel {
             foodItemServings: [foodItemServing]
           )
           modelContext.insert(foodItemLog)
+          
+          // Store the first log ID for return
+          if firstLogID == nil {
+            firstLogID = logID
+          }
         }
       }
     }
@@ -282,6 +289,8 @@ extension NutritionTrackingViewModel {
       parameters: ["Meal": meal.rawValue],
       floatValue: Double(foodItemServings.count)
     )
+    
+    return firstLogID
   }
 
   func log(
@@ -290,14 +299,14 @@ extension NutritionTrackingViewModel {
     date: Date,
     meal: FoodItemLog.Meal,
     numberOfServings: Double
-  ) async throws {
+  ) async throws -> String {
     let serving = FoodItemServingAmount(serving: numberOfServings, foodItem: foodItem)
-    try await logIndividual(
+    return try await logIndividual(
       modelContext: modelContext,
       foodItemServings: [serving],
       date: date,
       meal: meal
-    )
+    ) ?? ""
   }
 }
 
