@@ -22,4 +22,8 @@ public extension String {
     public static let goalsMessage = "goals-message"
     public static let reminders = "reminders"
   }
+  
+  enum ActionID {
+    public static let completeReminder = "complete-reminder"
+  }
 }

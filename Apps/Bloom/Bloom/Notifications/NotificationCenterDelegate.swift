@@ -31,8 +31,12 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        onNotificationResponse(response)
-        completionHandler()
+        // Handle notification actions
+        Task {
+            await handleNotificationAction(response)
+            onNotificationResponse(response)
+            completionHandler()
+        }
     }
 
     func userNotificationCenter(
@@ -59,6 +63,34 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
     }
     
     // MARK: - Private Methods
+    
+    private func handleNotificationAction(_ response: UNNotificationResponse) async {
+        guard response.notification.request.content.categoryIdentifier == .CategoryID.reminders else {
+            return
+        }
+        
+        switch response.actionIdentifier {
+        case .ActionID.completeReminder:
+            await handleCompleteReminderAction(response.notification)
+        default:
+            break
+        }
+    }
+    
+    private func handleCompleteReminderAction(_ notification: UNNotification) async {
+        guard let reminderID = notification.request.content.userInfo["reminderID"] as? String,
+              let occurrenceID = notification.request.content.userInfo["occurrenceID"] as? String else {
+            print("NotificationCenterDelegate: Missing reminderID or occurrenceID in notification userInfo")
+            return
+        }
+        
+        do {
+            try await RemindersManager.shared.markReminderCompleted(withID: reminderID, occurrenceID: occurrenceID)
+            print("NotificationCenterDelegate: Successfully completed reminder \(reminderID)")
+        } catch {
+            print("NotificationCenterDelegate: Failed to complete reminder \(reminderID): \(error)")
+        }
+    }
     
     private func isReminderCompleted(notification: UNNotification) async -> Bool {
         // Extract reminder ID and occurrence ID from userInfo

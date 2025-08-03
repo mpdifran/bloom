@@ -77,6 +77,8 @@ struct BloomApp: App {
           }
         }
         .task {
+          // Register notification categories with actions
+          await NotificationCategoryManager.shared.registerNotificationCategories()
           // Schedule all reminder notifications on app launch
           await RemindersManager.shared.rescheduleAllReminders()
         }
