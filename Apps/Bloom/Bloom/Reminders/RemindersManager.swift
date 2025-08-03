@@ -52,12 +52,14 @@ final class RemindersManager: ObservableObject {
   func createReminder(
     title: String,
     colorHex: String,
-    occurrences: [ReminderOccurrence]
+    occurrences: [ReminderOccurrence],
+    sideEffects: [ReminderSideEffect] = []
   ) async throws -> ReminderDTO {
     let reminder = try await modelActor.createReminder(
       title: title,
       colorHex: colorHex,
-      occurrences: occurrences
+      occurrences: occurrences,
+      sideEffects: sideEffects
     )
     
     // Schedule notifications for the new reminder
@@ -74,13 +76,15 @@ final class RemindersManager: ObservableObject {
     withID id: String,
     title: String,
     colorHex: String,
-    occurrences: [ReminderOccurrence]
+    occurrences: [ReminderOccurrence],
+    sideEffects: [ReminderSideEffect] = []
   ) async throws -> ReminderDTO? {
     guard let reminder = try await modelActor.updateReminder(
       withID: id,
       title: title,
       colorHex: colorHex,
-      occurrences: occurrences
+      occurrences: occurrences,
+      sideEffects: sideEffects
     ) else { return nil }
     
     // Reschedule notifications for the updated reminder

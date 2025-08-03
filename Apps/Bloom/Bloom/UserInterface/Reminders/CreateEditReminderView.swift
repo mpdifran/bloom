@@ -12,8 +12,10 @@ struct CreateEditReminderView: View {
   @State private var title: String
   @State private var selectedColor: Color
   @State private var occurrences: [ReminderOccurrence]
+  @State private var sideEffects: [ReminderSideEffect]
   @State private var showingAddOccurrence = false
   @State private var editingOccurrence: ReminderOccurrence?
+  @State private var presentedSheet: AnyView?
   @State private var isSaving = false
   @State private var saveError: Error?
   @State private var isDeleting = false
@@ -28,6 +30,7 @@ struct CreateEditReminderView: View {
     self._title = State(initialValue: reminder?.title ?? "")
     self._selectedColor = State(initialValue: reminder?.colorHex.isEmpty ?? true ? .accentColor : Color(hex: reminder!.colorHex) ?? .accentColor)
     self._occurrences = State(initialValue: reminder?.occurrences ?? [])
+    self._sideEffects = State(initialValue: reminder?.sideEffects ?? [])
   }
   
   var body: some View {
@@ -35,6 +38,7 @@ struct CreateEditReminderView: View {
       BloomScrollView {
         titleSection
         occurrencesSection
+        sideEffectsSection
       }
       .shelf {
         saveButton
@@ -68,9 +72,11 @@ struct CreateEditReminderView: View {
         }
       }
       .animation(.default, value: occurrences)
+      .animation(.default, value: sideEffects)
       .alert(error: $saveError)
       .alert(error: $deleteError)
       .confirmationDialog($confirmationDetails)
+      .sheet($presentedSheet)
       .sheet(isPresented: $showingAddOccurrence) {
         EditReminderOccurrenceView(occurrence: nil) { newOccurrence in
           occurrences.append(newOccurrence)
@@ -144,6 +150,7 @@ struct CreateEditReminderView: View {
           Label("Add", systemSymbol: .plus)
             .horizontallyCentered()
         }
+        .frame(minHeight: 40)
         .bold()
         .fontDesign(.rounded)
       }
@@ -192,14 +199,16 @@ struct CreateEditReminderView: View {
             withID: existingReminder.id,
             title: title,
             colorHex: colorHex,
-            occurrences: occurrences
+            occurrences: occurrences,
+            sideEffects: sideEffects
           )
         } else {
           // Create new reminder
           _ = try await remindersManager.createReminder(
             title: title,
             colorHex: colorHex,
-            occurrences: occurrences
+            occurrences: occurrences,
+            sideEffects: sideEffects
           )
         }
         
@@ -212,6 +221,71 @@ struct CreateEditReminderView: View {
           isSaving = false
         }
       }
+    }
+  }
+  
+  private var sideEffectsSection: some View {
+    VStack {
+      SectionTitleView("Side Effects")
+        .padding(.horizontal)
+
+      VStack(alignment: .leading) {
+        ForEach(sideEffects, id: \.id) { sideEffect in
+          SideEffectCell(sideEffect: sideEffect)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              editSideEffect(sideEffect)
+            }
+            .contextMenu {
+              Button("Delete", systemSymbol: .trash, role: .destructive) {
+                sideEffects.removeAll { $0.id == sideEffect.id }
+              }
+              .tint(.red)
+            }
+
+          Divider()
+        }
+
+        Button {
+          addSideEffect()
+        } label: {
+          Label("Add Side Effect", systemSymbol: .plus)
+            .horizontallyCentered()
+        }
+        .frame(minHeight: 40)
+        .bold()
+        .fontDesign(.rounded)
+      }
+      .cardContainer()
+    }
+  }
+  
+  private func addSideEffect() {
+    presentedSheet = SelectSideEffectTypeView { sideEffect in
+      sideEffects.append(sideEffect)
+    }.asAny
+  }
+  
+  private func editSideEffect(_ sideEffect: ReminderSideEffect) {
+    switch sideEffect.type {
+    case .logFood:
+      presentedSheet = ConfigureFoodSideEffectView(
+        existingSideEffect: sideEffect
+      ) { updatedSideEffect in
+        if let index = sideEffects.firstIndex(where: { $0.id == sideEffect.id }) {
+          sideEffects[index] = updatedSideEffect
+        }
+      }.asAny
+    case .logWater:
+      presentedSheet = ConfigureWaterSideEffectView(
+        existingSideEffect: sideEffect
+      ) { updatedSideEffect in
+        if let index = sideEffects.firstIndex(where: { $0.id == sideEffect.id }) {
+          sideEffects[index] = updatedSideEffect
+        }
+      }.asAny
+    @unknown default:
+      break
     }
   }
   

@@ -64,6 +64,19 @@ struct ChatView: View {
 .roundedBackground(Color.container, cornerRadius: 16)
 ```
 
+### SwiftUI Styling Conventions
+```swift
+// ALWAYS use .foregroundStyle instead of .foregroundColor
+Text("Example")
+  .foregroundStyle(.primary)  // ✅ Correct
+  .foregroundStyle(.secondary) // ✅ Correct
+  .foregroundStyle(.accent)    // ✅ Correct (not .accentColor)
+
+// DON'T use deprecated .foregroundColor
+Text("Example")
+  .foregroundColor(.primary)   // ❌ Deprecated
+```
+
 ### Private Extension Pattern
 ```swift
 private extension ChatView {

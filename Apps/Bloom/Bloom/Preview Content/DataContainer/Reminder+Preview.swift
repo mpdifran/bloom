@@ -20,6 +20,9 @@ extension Reminder.Preview {
         cadenceType: .daily,
         timeOfDay: 9 * 3600 // 9 AM
       )
+    ],
+    sideEffects: [
+      ReminderSideEffect.Preview.logVitamins
     ]
   )
   

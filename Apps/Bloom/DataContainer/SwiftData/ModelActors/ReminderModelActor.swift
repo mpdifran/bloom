@@ -40,13 +40,15 @@ public extension ReminderModelActor {
   func createReminder(
     title: String,
     colorHex: String,
-    occurrences: [ReminderOccurrence]
+    occurrences: [ReminderOccurrence],
+    sideEffects: [ReminderSideEffect] = []
   ) throws -> ReminderDTO {
     let reminder = Reminder(
       title: title,
       colorHex: colorHex,
       occurrences: occurrences
     )
+    reminder.sideEffects = sideEffects
     context.insert(reminder)
     try context.save()
     return reminder.asDTO()
@@ -56,7 +58,8 @@ public extension ReminderModelActor {
     withID id: String,
     title: String,
     colorHex: String,
-    occurrences: [ReminderOccurrence]
+    occurrences: [ReminderOccurrence],
+    sideEffects: [ReminderSideEffect] = []
   ) throws -> ReminderDTO? {
     let descriptor = FetchDescriptor<Reminder>(
       predicate: #Predicate<Reminder> { reminder in
@@ -68,6 +71,7 @@ public extension ReminderModelActor {
     reminder.title = title
     reminder.colorHex = colorHex
     reminder.occurrences = occurrences
+    reminder.sideEffects = sideEffects
     reminder.modifiedDate = Date()
     
     try context.save()
@@ -153,6 +157,55 @@ public extension ReminderModelActor {
       }
     }
     
+    try context.save()
+  }
+  
+  // MARK: - Side Effects
+  
+  func addSideEffect(
+    to reminderID: String,
+    sideEffect: ReminderSideEffect
+  ) throws -> ReminderSideEffectDTO? {
+    let descriptor = FetchDescriptor<Reminder>(
+      predicate: #Predicate<Reminder> { reminder in
+        reminder.id == reminderID
+      }
+    )
+    guard let reminder = try context.fetch(descriptor).first else { return nil }
+    
+    reminder.addSideEffect(sideEffect)
+    context.insert(sideEffect)
+    
+    try context.save()
+    return sideEffect.asDTO()
+  }
+  
+  func updateSideEffect(
+    withID id: String,
+    configuration: Data
+  ) throws -> ReminderSideEffectDTO? {
+    let descriptor = FetchDescriptor<ReminderSideEffect>(
+      predicate: #Predicate<ReminderSideEffect> { sideEffect in
+        sideEffect.id == id
+      }
+    )
+    guard let sideEffect = try context.fetch(descriptor).first else { return nil }
+    
+    sideEffect.configuration = configuration
+    
+    try context.save()
+    return sideEffect.asDTO()
+  }
+  
+  func deleteSideEffect(withID id: String) throws {
+    let descriptor = FetchDescriptor<ReminderSideEffect>(
+      predicate: #Predicate<ReminderSideEffect> { sideEffect in
+        sideEffect.id == id
+      }
+    )
+    guard let sideEffect = try context.fetch(descriptor).first else { return }
+    
+    context.delete(sideEffect)
     try context.save()
   }
 }

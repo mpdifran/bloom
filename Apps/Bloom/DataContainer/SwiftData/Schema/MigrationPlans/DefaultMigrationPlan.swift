@@ -8,7 +8,7 @@
 import SwiftData
 
 // CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV22.self
+let currentSchema: VersionedSchema.Type = SchemaV23.self
 
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
@@ -35,7 +35,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       SchemaV19.self,
       SchemaV20.self,
       SchemaV21.self,
-      SchemaV22.self
+      SchemaV22.self,
+      SchemaV23.self
     ]
   }
 
@@ -62,7 +63,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       migrateV18ToV19,
       migrateV19ToV20,
       migrateV20ToV21,
-      migrateV21ToV22
+      migrateV21ToV22,
+      migrateV22ToV23
     ]
   }
 
@@ -319,6 +321,13 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
     .lightweight(
       fromVersion: SchemaV21.self,
       toVersion: SchemaV22.self
+    )
+  }
+
+  private static var migrateV22ToV23: MigrationStage {
+    .lightweight(
+      fromVersion: SchemaV22.self,
+      toVersion: SchemaV23.self
     )
   }
 }

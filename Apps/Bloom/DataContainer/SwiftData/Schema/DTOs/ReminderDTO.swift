@@ -10,6 +10,7 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
   public let colorHex: String
   public let occurrences: [ReminderOccurrenceDTO]
   public let completionRecords: [ReminderCompletionRecordDTO]
+  public let sideEffects: [ReminderSideEffectDTO]
   
   public init(
     persistentModelID: PersistentIdentifier? = nil,
@@ -19,7 +20,8 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
     title: String,
     colorHex: String,
     occurrences: [ReminderOccurrenceDTO],
-    completionRecords: [ReminderCompletionRecordDTO]
+    completionRecords: [ReminderCompletionRecordDTO],
+    sideEffects: [ReminderSideEffectDTO] = []
   ) {
     self.persistentModelID = persistentModelID
     self.id = id
@@ -29,6 +31,7 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
     self.colorHex = colorHex
     self.occurrences = occurrences
     self.completionRecords = completionRecords
+    self.sideEffects = sideEffects
   }
 }
 
@@ -42,7 +45,8 @@ extension Reminder {
       title: title,
       colorHex: colorHex,
       occurrences: occurrences?.map { $0.asDTO() } ?? [],
-      completionRecords: completionRecords?.map { $0.asDTO() } ?? []
+      completionRecords: completionRecords?.map { $0.asDTO() } ?? [],
+      sideEffects: sideEffects?.map { $0.asDTO() } ?? []
     )
   }
 }

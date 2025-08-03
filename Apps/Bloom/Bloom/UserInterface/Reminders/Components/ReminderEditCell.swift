@@ -18,6 +18,12 @@ struct ReminderEditCell: View {
         Text(reminder.combinedCadenceDescription)
           .font(.subheadline)
           .foregroundStyle(.secondary)
+
+        if let sideEffectDescription = reminder.sideEffectDescription {
+          Text(sideEffectDescription)
+            .font(.subheadline)
+            .foregroundStyle(reminder.color)
+        }
       }
 
       Spacer()
@@ -81,6 +87,10 @@ struct ReminderEditCell: View {
               cadenceType: .daily,
               timeOfDay: 22 * 3600 // 10 PM
             )
+          ],
+          sideEffects: [
+            ReminderSideEffect.Preview.logVitamins,
+            ReminderSideEffect.Preview.logWater16oz
           ]
         )
       )
