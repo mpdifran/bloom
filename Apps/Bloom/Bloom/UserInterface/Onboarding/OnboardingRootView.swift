@@ -89,7 +89,7 @@ private extension OnboardingRootView {
       self.step = step
     }
   }
-  
+
   func checkHealthDataAndProceed() async {
     // Check if we already have complete health data from HealthKit
     let sex = healthManager.healthStore.sex()

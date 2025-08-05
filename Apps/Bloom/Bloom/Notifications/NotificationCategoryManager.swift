@@ -27,9 +27,10 @@ final class NotificationCategoryManager {
     let completeAction = UNNotificationAction(
       identifier: .ActionID.completeReminder,
       title: "Complete",
-      options: [.authenticationRequired]
+      options: [.authenticationRequired],
+      icon: UNNotificationActionIcon(systemImageName: "checkmark")
     )
-    
+
     let remindersCategory = UNNotificationCategory(
       identifier: .CategoryID.reminders,
       actions: [completeAction],
