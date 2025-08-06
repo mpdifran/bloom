@@ -405,12 +405,22 @@ private extension SettingsView {
             Divider()
           }
 
-          SettingsCell("Manage Subscription") {
-            DisclosureIndicator()
-          }
-          .onTapGesture {
-            ThrowingUserTask(error: $error) {
-              try await Purchases.shared.showManageSubscriptions()
+          if entitlementInfo.isActive {
+            SettingsCell("Manage Subscription") {
+              DisclosureIndicator()
+            }
+            .onTapGesture {
+              ThrowingUserTask(error: $error) {
+                try await Purchases.shared.showManageSubscriptions()
+                TelemetryDeck.signal("View Manage Subscriptions")
+              }
+            }
+          } else {
+            SettingsCell("Subscribe to Bloom Plus") {
+              DisclosureIndicator()
+            }
+            .onTapGesture {
+              presentedSheet = BloomPlusPaywall().asAny
             }
           }
         } else {
