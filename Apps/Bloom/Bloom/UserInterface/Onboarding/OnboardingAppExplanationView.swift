@@ -13,7 +13,7 @@ import CoreHealth
 import SFSafeSymbols
 
 struct OnboardingAppExplanationView: View {
-  var onContinue: () -> Void
+  var onContinue: () async -> Void
 
   @State private var vitalPairs = [VitalOffsetPair]()
 
@@ -87,9 +87,11 @@ struct OnboardingAppExplanationView: View {
     .sensoryFeedback(.selection, trigger: index)
     .sensoryFeedback(.selection, trigger: didContinue)
     .shelf {
-      Button("Hi Bud!") {
+      AsyncButton {
         didContinue.toggle()
-        onContinue()
+        await onContinue()
+      } label: {
+        Text("Hi Bud!")
       }
       .buttonStyle(.onboarding)
     }

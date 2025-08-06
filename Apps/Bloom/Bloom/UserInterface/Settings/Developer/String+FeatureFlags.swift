@@ -15,4 +15,10 @@ extension String {
     static let alwaysShowReports = "FeatureFlag.alwaysShowReports"
     static let enableOpenAIModelOverride = "FeatureFlag.enableOpenAIModelOverride"
   }
+  
+  enum ExperimentOverrideKey {
+    static func key(for experimentId: String) -> String {
+      return "ExperimentOverride.\(experimentId)"
+    }
+  }
 }

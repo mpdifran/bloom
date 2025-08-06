@@ -13,6 +13,7 @@ extension OnboardingRootView {
     case welcome
     case appExplanation
     case healthKit
+    case healthKitTreatment
     case ageAndSex
     case focusArea
     case goalSetup
@@ -44,10 +45,14 @@ struct OnboardingRootView: View {
         }
       case .appExplanation:
         OnboardingAppExplanationView {
-          setStep(.healthKit)
+          await advanceToHealthKitViewExperimentVariant()
         }
       case .healthKit:
         OnboardingHealthKitView {
+          await checkHealthDataAndProceed()
+        }
+      case .healthKitTreatment:
+        OnboardingHealthKitViewTreatement {
           await checkHealthDataAndProceed()
         }
       case .ageAndSex:
@@ -87,6 +92,17 @@ private extension OnboardingRootView {
   func setStep(_ step: Step) {
     withAnimation {
       self.step = step
+    }
+  }
+  
+  func advanceToHealthKitViewExperimentVariant() async {
+    let variant = await ExperimentManager.shared.variant(for: .ExperimentID.onboardingHealthKitView)
+
+    switch variant {
+    case .control:
+      setStep(.healthKit)
+    case .treatment:
+      setStep(.healthKitTreatment)
     }
   }
 

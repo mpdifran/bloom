@@ -75,7 +75,7 @@ struct OnboardingFocusAreaView: View {
         VStack(spacing: 16) {
           healthGoalSuggestionsView
 
-          Button("Looks good") {
+          Button("Let's Do It!") {
             didContinue.toggle()
             onContinue()
           }

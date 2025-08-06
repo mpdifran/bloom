@@ -44,6 +44,7 @@ struct DeveloperSettingsView: View {
           userSection
           healthPermissionsSection
           featureFlagSection
+          experimentsSection
           adminActionsSection
           debugSection
           designSection
@@ -464,6 +465,20 @@ extension DeveloperSettingsView {
     }
   }
 
+  var experimentsSection: some View {
+    VStack {
+      SectionTitleView("Experiments")
+        .padding(.horizontal)
+      
+      SettingsSectionContainer {
+        ExperimentOverrideView(
+          experimentId: .ExperimentID.onboardingHealthKitView,
+          experimentName: "Onboarding HealthKit View"
+        )
+      }
+    }
+  }
+
   var developerModeSection: some View {
     VStack {
       SettingsSectionContainer {
@@ -472,6 +487,7 @@ extension DeveloperSettingsView {
           showDeveloperMode = false
           bypassPaywall = false
           enableOpenAIModelOverride = false
+          clearAllExperimentOverrides()
           dismiss()
         } label: {
           Text("Exit Developer Mode")
@@ -483,6 +499,12 @@ extension DeveloperSettingsView {
         }
       }
     }
+  }
+  
+  private func clearAllExperimentOverrides() {
+    // Clear all experiment overrides
+    let overrideKey = String.ExperimentOverrideKey.key(for: .ExperimentID.onboardingHealthKitView)
+    UserDefaults.standard.removeObject(forKey: overrideKey)
   }
 }
 

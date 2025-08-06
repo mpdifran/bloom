@@ -122,6 +122,7 @@ struct OnboardingHealthKitView: View {
     }
     .onAppear {
       TelemetryDeck.signal("OB HealthKit")
+      TelemetryDeck.signal("AB: OB HealthKit Control")
     }
   }
 }
