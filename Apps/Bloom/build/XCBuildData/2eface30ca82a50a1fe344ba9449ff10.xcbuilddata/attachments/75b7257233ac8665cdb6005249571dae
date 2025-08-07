@@ -1,6 +1,0 @@
-framework module DataContainer {
-  umbrella header "DataContainer.h"
-  export *
-
-  module * { export * }
-}

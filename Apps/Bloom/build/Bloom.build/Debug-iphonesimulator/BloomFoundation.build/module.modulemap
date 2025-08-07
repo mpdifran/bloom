@@ -1,6 +1,0 @@
-framework module BloomFoundation {
-  umbrella header "BloomFoundation.h"
-  export *
-
-  module * { export * }
-}
