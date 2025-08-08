@@ -219,7 +219,7 @@ extension NutritionTrackingViewModel {
         date: logDate,
         meal: meal,
         numberOfServings: numberOfServings,
-        imageData: image?.pngData(),
+        imageData: image?.resized(toWidth: 300)?.pngData(),
         foodItemServings: servings
       )
 
