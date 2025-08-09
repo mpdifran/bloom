@@ -47,6 +47,7 @@ struct DeveloperSettingsView: View {
           experimentsSection
           adminActionsSection
           debugSection
+          storageSection
           designSection
           authSection
           developerModeSection
@@ -353,6 +354,44 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        Button {
+          ImageResizeMigration.shared.resetMigration()
+          alertDetails = AlertDetails(
+            title: "Migration Reset",
+            message: "Image resize migration flag has been reset. Migration will run on next app foreground."
+          )
+        } label: {
+          LabeledContent("Reset Image Migration") {
+            Image(systemSymbol: .arrowClockwise)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
+          await ImageResizeMigration.shared.forceMigration()
+          alertDetails = AlertDetails(
+            title: "Migration Complete",
+            message: "Image resize migration has been forced to run. Check console for logs."
+          )
+        } label: {
+          LabeledContent("Force Image Migration") {
+            Image(systemSymbol: .photoStack)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
         AsyncButton {
           do {
             try await NutritionTrackingViewModel.shared.reSyncNutritionToHealthKit()
@@ -405,6 +444,20 @@ extension DeveloperSettingsView {
         }
         .debugRevenueCatOverlay(isPresented: $showRCDebugOverlay)
         #endif
+      }
+    }
+  }
+
+  var storageSection: some View {
+    VStack {
+      SectionTitleView("Storage")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("Storage Analysis", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = StorageAnalysisView().asAny
+          }
       }
     }
   }

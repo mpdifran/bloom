@@ -125,6 +125,11 @@ private extension BloomApp {
       // Sync notification preferences
       await NotificationPreferencesService.shared.syncMorningNotificationPreferences()
     }
+    
+    Task { @MainActor in
+      // Run image resize migration in background
+      ImageResizeMigration.shared.runMigrationIfNeeded()
+    }
 
     TelemetryDeck.signal(
       "Health Goal",
