@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CryptoKit
 
 final actor ExperimentManager {
   static let shared = ExperimentManager()
@@ -34,7 +33,7 @@ final actor ExperimentManager {
     }
 
     let userId = UserID.value
-    let hashValue = stableHash(experimentId: experimentId, userId: userId)
+    let hashValue = StableHashGenerator.stableHash(experimentId: experimentId, userId: userId)
     let normalizedValue = Double(hashValue) / Double(UInt64.max)
 
     return normalizedValue < experiment.treatmentPercentage ? .treatment : .control
@@ -55,20 +54,6 @@ final actor ExperimentManager {
     case .treatment:
       return .treatment
     }
-  }
-
-  private func stableHash(experimentId: String, userId: String) -> UInt64 {
-    let input = "\(experimentId):\(userId)"
-    let inputData = Data(input.utf8)
-    let hash = SHA256.hash(data: inputData)
-
-    // Convert first 8 bytes of hash to UInt64
-    let hashData = Data(hash)
-    let value = UInt64(bigEndian: hashData.prefix(8).withUnsafeBytes { bytes in
-      bytes.load(as: UInt64.self)
-    })
-
-    return value
   }
 }
 
