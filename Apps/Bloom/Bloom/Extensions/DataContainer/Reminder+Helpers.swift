@@ -56,19 +56,21 @@ extension Reminder {
     
     switch trigger {
     case .logWeight:
-      return "Complete when log weight"
+      return "Autocomplete when you log weight"
     case .logWater:
-      return "Complete when log water"
+      return "Autocomplete when you log water"
     case .logBloodPressure:
-      return "Complete when log blood pressure"
+      return "Autocomplete when you log blood pressure"
     case .logStrengthTraining:
-      return "Complete when log strength training"
+      return "Autocomplete when you log strength training"
     case .logCardio:
-      return "Complete when log cardio"
+      return "Autocomplete when you log cardio"
     case .logMobilityFlexibility:
-      return "Complete when log mobility/flexibility"
+      return "Autocomplete when you log mobility/flexibility"
     case .logHIIT:
-      return "Complete when log HIIT"
+      return "Autocomplete when you log HIIT"
+    @unknown default:
+      return nil
     }
   }
 }
