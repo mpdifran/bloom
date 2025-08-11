@@ -21,6 +21,7 @@ struct SectionFooterView: View {
       .bold()
       .horizontalAlignment(.leading)
       .multilineTextAlignment(.leading)
+      .fixedSize(horizontal: false, vertical: true)
       .padding(.horizontal)
   }
 }

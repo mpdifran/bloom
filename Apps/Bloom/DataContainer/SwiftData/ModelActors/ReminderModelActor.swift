@@ -37,15 +37,27 @@ public extension ReminderModelActor {
     return try context.fetchRemindersWithOccurrenceToday().map { $0.asDTO() }
   }
   
+  func fetchRemindersWithTrigger(_ triggerType: ReminderTriggerType) throws -> [ReminderDTO] {
+    let triggerRawValue = triggerType.rawValue
+    let descriptor = FetchDescriptor<Reminder>(
+      predicate: #Predicate<Reminder> { reminder in
+        reminder.triggerType == triggerRawValue
+      }
+    )
+    return try context.fetch(descriptor).map { $0.asDTO() }
+  }
+  
   func createReminder(
     title: String,
     colorHex: String,
+    triggerType: ReminderTriggerType? = nil,
     occurrences: [ReminderOccurrence],
     sideEffects: [ReminderSideEffect] = []
   ) throws -> ReminderDTO {
     let reminder = Reminder(
       title: title,
       colorHex: colorHex,
+      triggerType: triggerType?.rawValue,
       occurrences: occurrences
     )
     reminder.sideEffects = sideEffects
@@ -58,6 +70,7 @@ public extension ReminderModelActor {
     withID id: String,
     title: String,
     colorHex: String,
+    triggerType: ReminderTriggerType? = nil,
     occurrences: [ReminderOccurrence],
     sideEffects: [ReminderSideEffect] = []
   ) throws -> ReminderDTO? {
@@ -70,6 +83,7 @@ public extension ReminderModelActor {
     
     reminder.title = title
     reminder.colorHex = colorHex
+    reminder.triggerType = triggerType?.rawValue
     reminder.occurrences = occurrences
     reminder.sideEffects = sideEffects
     reminder.modifiedDate = Date()

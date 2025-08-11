@@ -8,9 +8,10 @@ import AppUI
 struct CreateEditReminderView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
-  
+
   @State private var title: String
   @State private var selectedColor: Color
+  @State private var triggerType: ReminderTriggerType?
   @State private var occurrences: [ReminderOccurrence]
   @State private var sideEffects: [ReminderSideEffect]
   @State private var showingAddOccurrence = false
@@ -24,20 +25,22 @@ struct CreateEditReminderView: View {
 
   private let existingReminder: Reminder?
   private let remindersManager = RemindersManager.shared
-  
+
   init(reminder: Reminder? = nil) {
     self.existingReminder = reminder
     self._title = State(initialValue: reminder?.title ?? "")
     self._selectedColor = State(initialValue: reminder?.colorHex.isEmpty ?? true ? .accentColor : Color(hex: reminder!.colorHex) ?? .accentColor)
+    self._triggerType = State(initialValue: reminder?.triggerType.flatMap { ReminderTriggerType(rawValue: $0) })
     self._occurrences = State(initialValue: reminder?.occurrences ?? [])
     self._sideEffects = State(initialValue: reminder?.sideEffects ?? [])
   }
-  
+
   var body: some View {
     NavigationStack {
       BloomScrollView {
         titleSection
         occurrencesSection
+        triggerSection
         sideEffectsSection
       }
       .shelf {
@@ -72,6 +75,7 @@ struct CreateEditReminderView: View {
         }
       }
       .animation(.default, value: occurrences)
+      .animation(.default, value: triggerType)
       .animation(.default, value: sideEffects)
       .alert(error: $saveError)
       .alert(error: $deleteError)
@@ -97,8 +101,11 @@ struct CreateEditReminderView: View {
       }
     }
   }
-  
-  private var titleSection: some View {
+}
+
+private extension CreateEditReminderView {
+
+  var titleSection: some View {
     VStack {
       SectionTitleView("Details")
         .padding(.horizontal)
@@ -122,8 +129,8 @@ struct CreateEditReminderView: View {
       .cardContainer()
     }
   }
-  
-  private var occurrencesSection: some View {
+
+  var occurrencesSection: some View {
     VStack {
       SectionTitleView("Notifications")
         .padding(.horizontal)
@@ -157,18 +164,47 @@ struct CreateEditReminderView: View {
       .cardContainer()
     }
   }
-  
-  private var sortedOccurrences: [ReminderOccurrence] {
+
+  var allReminderTriggerTypes: [ReminderTriggerType?] {
+    return [nil] + ReminderTriggerType.allCases
+  }
+
+  var triggerSection: some View {
+    VStack {
+      SectionTitleView("Trigger")
+        .padding(.horizontal)
+
+      VStack {
+        LabeledContent("Trigger") {
+          Picker("", selection: $triggerType) {
+            ForEachEnumeratedNoID(allReminderTriggerTypes) { index, trigger in
+              Text(trigger?.displayName ?? "None")
+                .tag(trigger)
+            }
+          }
+        }
+      }
+      .cardContainer()
+
+      if let triggerType {
+        SectionFooterView(triggerType.description)
+      } else {
+        SectionFooterView("Triggers will help you automtically complete the reminder when you perform an action.")
+      }
+    }
+  }
+
+  var sortedOccurrences: [ReminderOccurrence] {
     occurrences.sorted { first, second in
       // First sort by cadence type priority
       let cadenceOrder: [ReminderCadenceType] = [.daily, .weekly, .monthly, .yearly]
       let firstIndex = cadenceOrder.firstIndex(of: first.cadenceType) ?? cadenceOrder.count
       let secondIndex = cadenceOrder.firstIndex(of: second.cadenceType) ?? cadenceOrder.count
-      
+
       if firstIndex != secondIndex {
         return firstIndex < secondIndex
       }
-      
+
       // If same cadence type, sort by time of day
       return first.timeOfDay < second.timeOfDay
     }
@@ -184,13 +220,16 @@ struct CreateEditReminderView: View {
     .buttonStyle(.primary)
     .disabled(title.isEmpty || occurrences.isEmpty || isSaving)
   }
+}
 
-  private func saveReminder() {
+private extension CreateEditReminderView {
+
+  func saveReminder() {
     guard !isSaving else { return }
-    
+
     isSaving = true
     let colorHex = selectedColor.toHex() ?? ""
-    
+
     Task {
       do {
         if let existingReminder {
@@ -199,6 +238,7 @@ struct CreateEditReminderView: View {
             withID: existingReminder.id,
             title: title,
             colorHex: colorHex,
+            triggerType: triggerType,
             occurrences: occurrences,
             sideEffects: sideEffects
           )
@@ -207,11 +247,12 @@ struct CreateEditReminderView: View {
           _ = try await remindersManager.createReminder(
             title: title,
             colorHex: colorHex,
+            triggerType: triggerType,
             occurrences: occurrences,
             sideEffects: sideEffects
           )
         }
-        
+
         await MainActor.run {
           dismiss()
         }
@@ -223,8 +264,8 @@ struct CreateEditReminderView: View {
       }
     }
   }
-  
-  private var sideEffectsSection: some View {
+
+  var sideEffectsSection: some View {
     VStack {
       SectionTitleView("Side Effects")
         .padding(.horizontal)
@@ -257,16 +298,18 @@ struct CreateEditReminderView: View {
         .fontDesign(.rounded)
       }
       .cardContainer()
+
+      SectionFooterView("Side Effects are automatically performed when you complete a reminder.")
     }
   }
-  
-  private func addSideEffect() {
+
+  func addSideEffect() {
     presentedSheet = SelectSideEffectTypeView { sideEffect in
       sideEffects.append(sideEffect)
     }.asAny
   }
-  
-  private func editSideEffect(_ sideEffect: ReminderSideEffect) {
+
+  func editSideEffect(_ sideEffect: ReminderSideEffect) {
     switch sideEffect.type {
     case .logFood:
       presentedSheet = ConfigureFoodSideEffectView(
@@ -288,16 +331,16 @@ struct CreateEditReminderView: View {
       break
     }
   }
-  
-  private func deleteReminder() {
+
+  func deleteReminder() {
     guard !isDeleting, let existingReminder else { return }
-    
+
     isDeleting = true
-    
+
     Task {
       do {
         try await remindersManager.deleteReminder(withID: existingReminder.id)
-        
+
         await MainActor.run {
           dismiss()
         }

@@ -15,7 +15,7 @@ struct SelectSideEffectTypeView: View {
     CardView {
       LargeTitleActionCard("Choose Side Effect") {
         VStack(spacing: 0) {
-          ForEach(ReminderSideEffect.SideEffectType.allCases, id: \.self) { type in
+          ForEach(SideEffectType.allCases, id: \.self) { type in
             HStack {
               Image(systemSymbol: icon(for: type))
                 .foregroundStyle(.accent)
@@ -46,7 +46,7 @@ struct SelectSideEffectTypeView: View {
               select(sideEffect: type)
             }
 
-            if type != ReminderSideEffect.SideEffectType.allCases.last {
+            if type != SideEffectType.allCases.last {
               Divider()
                 .padding(.leading, 44)
             }
@@ -61,7 +61,7 @@ struct SelectSideEffectTypeView: View {
 
 private extension SelectSideEffectTypeView {
 
-  func icon(for type: ReminderSideEffect.SideEffectType) -> SFSymbol {
+  func icon(for type: SideEffectType) -> SFSymbol {
     switch type {
     case .logFood:
       return .forkKnife
@@ -72,7 +72,7 @@ private extension SelectSideEffectTypeView {
     }
   }
   
-  func title(for type: ReminderSideEffect.SideEffectType) -> String {
+  func title(for type: SideEffectType) -> String {
     switch type {
     case .logFood:
       return "Log Food"
@@ -83,7 +83,7 @@ private extension SelectSideEffectTypeView {
     }
   }
   
-  func description(for type: ReminderSideEffect.SideEffectType) -> String {
+  func description(for type: SideEffectType) -> String {
     switch type {
     case .logFood:
       return "Automatically log a food item when this reminder is completed."
@@ -97,7 +97,7 @@ private extension SelectSideEffectTypeView {
 
 private extension SelectSideEffectTypeView {
 
-  func select(sideEffect: ReminderSideEffect.SideEffectType) {
+  func select(sideEffect: SideEffectType) {
     switch sideEffect {
     case .logFood:
       presentedSheet = ConfigureFoodSideEffectView { sideEffect in

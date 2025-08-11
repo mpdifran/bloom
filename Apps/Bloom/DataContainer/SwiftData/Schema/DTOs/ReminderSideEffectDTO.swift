@@ -36,8 +36,8 @@ extension ReminderSideEffect {
 }
 
 extension ReminderSideEffectDTO {
-  public var type: ReminderSideEffect.SideEffectType? {
-    ReminderSideEffect.SideEffectType(rawValue: typeRawValue)
+  public var type: SideEffectType? {
+    SideEffectType(rawValue: typeRawValue)
   }
   
   public func decodeConfiguration<T: SideEffectConfiguration>(as type: T.Type) -> T? {

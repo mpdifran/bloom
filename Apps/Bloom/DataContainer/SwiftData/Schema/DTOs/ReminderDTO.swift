@@ -8,6 +8,7 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
   public let modifiedDate: Date
   public let title: String
   public let colorHex: String
+  public let triggerType: ReminderTriggerType?
   public let occurrences: [ReminderOccurrenceDTO]
   public let completionRecords: [ReminderCompletionRecordDTO]
   public let sideEffects: [ReminderSideEffectDTO]
@@ -19,6 +20,7 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
     modifiedDate: Date,
     title: String,
     colorHex: String,
+    triggerType: ReminderTriggerType? = nil,
     occurrences: [ReminderOccurrenceDTO],
     completionRecords: [ReminderCompletionRecordDTO],
     sideEffects: [ReminderSideEffectDTO] = []
@@ -29,6 +31,7 @@ public struct ReminderDTO: Sendable, Equatable, Identifiable {
     self.modifiedDate = modifiedDate
     self.title = title
     self.colorHex = colorHex
+    self.triggerType = triggerType
     self.occurrences = occurrences
     self.completionRecords = completionRecords
     self.sideEffects = sideEffects
@@ -44,6 +47,7 @@ extension Reminder {
       modifiedDate: modifiedDate,
       title: title,
       colorHex: colorHex,
+      triggerType: triggerType.flatMap { ReminderTriggerType(rawValue: $0) },
       occurrences: occurrences?.map { $0.asDTO() } ?? [],
       completionRecords: completionRecords?.map { $0.asDTO() } ?? [],
       sideEffects: sideEffects?.map { $0.asDTO() } ?? []

@@ -9,6 +9,7 @@ import SwiftUI
 import BloomFoundation
 import DataContainer
 import SwiftData
+import SFSafeSymbols
 
 struct ReminderCell: View {
   let reminder: ReminderDTO
@@ -37,8 +38,19 @@ struct ReminderCell: View {
         CompletionCheckmarkView(state: isCompleted ? .metGoal : .unmetGoal, colorize: true)
 
         VStack(alignment: .leading) {
-          Text(reminder.title)
-            .font(.title3)
+          HStack {
+            Text(reminder.title)
+              .font(.title3)
+            
+            if let triggerType = reminder.triggerType {
+              Image(systemSymbol: SFSymbol(rawValue: triggerType.systemImageName))
+                .font(.caption)
+                .foregroundColor(.accentColor)
+                .help(triggerType.description)
+            }
+            
+            Spacer()
+          }
 
           Text(subtitleText())
             .font(.subheadline)
@@ -47,8 +59,6 @@ struct ReminderCell: View {
         .bold()
         .fontDesign(.rounded)
         .lineLimit(1)
-
-        Spacer()
       }
       .sensoryFeedback(.success, trigger: completeToggle)
       .sensoryFeedback(.impact, trigger: unCompleteToggle)

@@ -48,4 +48,27 @@ extension Reminder {
     
     return descriptions.isEmpty ? nil : descriptions.joined(separator: ", ")
   }
+  
+  /// Returns a brief description of the trigger that will auto-complete this reminder
+  var triggerDescription: String? {
+    guard let triggerTypeString = triggerType,
+          let trigger = ReminderTriggerType(rawValue: triggerTypeString) else { return nil }
+    
+    switch trigger {
+    case .logWeight:
+      return "Complete when log weight"
+    case .logWater:
+      return "Complete when log water"
+    case .logBloodPressure:
+      return "Complete when log blood pressure"
+    case .logStrengthTraining:
+      return "Complete when log strength training"
+    case .logCardio:
+      return "Complete when log cardio"
+    case .logMobilityFlexibility:
+      return "Complete when log mobility/flexibility"
+    case .logHIIT:
+      return "Complete when log HIIT"
+    }
+  }
 }

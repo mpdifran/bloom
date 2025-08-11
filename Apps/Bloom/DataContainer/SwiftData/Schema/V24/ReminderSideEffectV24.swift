@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-extension SchemaV23 {
+extension SchemaV24 {
   @Model
   public final class ReminderSideEffect: Hashable, Identifiable {
     public var id = UUID().uuidString
@@ -28,7 +28,7 @@ extension SchemaV23 {
   }
 }
 
-extension SchemaV23.ReminderSideEffect {
+extension SchemaV24.ReminderSideEffect {
   public var type: SideEffectType {
     get {
       SideEffectType(rawValue: typeRawValue) ?? .logFood

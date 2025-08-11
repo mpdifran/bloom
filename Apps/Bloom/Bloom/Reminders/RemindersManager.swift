@@ -10,6 +10,22 @@ import SwiftData
 import DataContainer
 import UserNotifications
 
+enum ReminderError: LocalizedError {
+  case invalidConfiguration(String)
+  
+  var errorDescription: String? {
+    switch self {
+    case .invalidConfiguration(let message):
+      return message
+    }
+  }
+}
+
+enum ReminderCompletionSource {
+  case manual
+  case trigger
+}
+
 @MainActor
 final class RemindersManager: ObservableObject {
   static let shared = RemindersManager()
@@ -52,12 +68,14 @@ final class RemindersManager: ObservableObject {
   func createReminder(
     title: String,
     colorHex: String,
+    triggerType: ReminderTriggerType? = nil,
     occurrences: [ReminderOccurrence],
     sideEffects: [ReminderSideEffect] = []
   ) async throws -> ReminderDTO {
     let reminder = try await modelActor.createReminder(
       title: title,
       colorHex: colorHex,
+      triggerType: triggerType,
       occurrences: occurrences,
       sideEffects: sideEffects
     )
@@ -76,6 +94,7 @@ final class RemindersManager: ObservableObject {
     withID id: String,
     title: String,
     colorHex: String,
+    triggerType: ReminderTriggerType? = nil,
     occurrences: [ReminderOccurrence],
     sideEffects: [ReminderSideEffect] = []
   ) async throws -> ReminderDTO? {
@@ -83,6 +102,7 @@ final class RemindersManager: ObservableObject {
       withID: id,
       title: title,
       colorHex: colorHex,
+      triggerType: triggerType,
       occurrences: occurrences,
       sideEffects: sideEffects
     ) else { return nil }
@@ -109,11 +129,11 @@ final class RemindersManager: ObservableObject {
   }
   
   /// Marks a reminder as completed for today
-  func markReminderCompleted(withID id: String, occurrenceID: String? = nil) async throws {
+  func markReminderCompleted(withID id: String, occurrenceID: String? = nil, source: ReminderCompletionSource = .manual) async throws {
     let completionRecord = try await modelActor.markReminderCompleted(reminderID: id, occurrenceID: occurrenceID)
     
-    // Execute side effects after successful completion
-    if let reminder = try await modelActor.fetchReminder(withID: id) {
+    // Execute side effects only for manual completions (not trigger completions)
+    if source == .manual, let reminder = try await modelActor.fetchReminder(withID: id) {
       let sideEffectResults = await SideEffectExecutor.shared.executeSideEffects(for: reminder)
       
       // Store the side effect results on the completion record

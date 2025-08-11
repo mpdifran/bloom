@@ -1,6 +1,7 @@
 import SwiftUI
 import BloomFoundation
 import DataContainer
+import SFSafeSymbols
 
 struct ReminderEditCell: View {
   let reminder: Reminder
@@ -18,6 +19,12 @@ struct ReminderEditCell: View {
         Text(reminder.combinedCadenceDescription)
           .font(.subheadline)
           .foregroundStyle(.secondary)
+
+        if let triggerDescription = reminder.triggerDescription {
+          Text(triggerDescription)
+            .font(.subheadline)
+            .foregroundStyle(reminder.color)
+        }
 
         if let sideEffectDescription = reminder.sideEffectDescription {
           Text(sideEffectDescription)
@@ -90,6 +97,22 @@ struct ReminderEditCell: View {
           ],
           sideEffects: [
             ReminderSideEffect.Preview.logVitamins,
+            ReminderSideEffect.Preview.logWater16oz
+          ]
+        )
+      )
+      
+      ReminderEditCell(
+        reminder: Reminder(
+          title: "Hydration goal",
+          triggerType: "log_water",
+          occurrences: [
+            ReminderOccurrence(
+              cadenceType: .daily,
+              timeOfDay: 8 * 3600 // 8 AM
+            )
+          ],
+          sideEffects: [
             ReminderSideEffect.Preview.logWater16oz
           ]
         )

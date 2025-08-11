@@ -81,6 +81,8 @@ struct BloomApp: App {
           await NotificationCategoryManager.shared.registerNotificationCategories()
           // Schedule all reminder notifications on app launch
           await RemindersManager.shared.rescheduleAllReminders()
+          // Start observing HealthKit changes for reminder triggers
+          ReminderTriggerObserver.shared.startObserving()
         }
         .task {
           // Schedule background tasks after handlers are registered
