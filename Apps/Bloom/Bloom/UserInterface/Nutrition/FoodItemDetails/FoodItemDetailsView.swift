@@ -326,13 +326,11 @@ private extension FoodItemDetailsView {
         }
       }
 
-      // TODO: Mark - Add delete option for the food item serving.
-
       if let existingFoodItemLog {
+        Divider()
+        
         if existingFoodItemLog.hasSingleServing {
-          Divider()
-
-          Button("Delete Log", systemImage: "trash", role: .destructive) {
+          Button("Delete Log", systemSymbol: .trash, role: .destructive) {
             Task {
               do {
                 try await nutritionViewModel.delete(
@@ -345,6 +343,25 @@ private extension FoodItemDetailsView {
               }
             }
           }
+          .tint(.red)
+        } else {
+          // Delete individual serving from meal with multiple items
+          Button("Delete from Meal", systemSymbol: .trash, role: .destructive) {
+            guard let foodItemServing else { return }
+
+            Task {
+              do {
+                try await nutritionViewModel.delete(
+                  modelContext: modelContext,
+                  foodItemServing: foodItemServing
+                )
+                dismiss()
+              } catch {
+                self.error = error
+              }
+            }
+          }
+          .tint(.red)
         }
       }
     }
