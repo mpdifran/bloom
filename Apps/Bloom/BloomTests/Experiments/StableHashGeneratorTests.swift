@@ -47,7 +47,7 @@ final class StableHashGeneratorTests: XCTestCase {
     
     // Generate random user IDs and check distribution
     for i in 0..<numberOfUsers {
-      let userId = "user_\(UUID().uuidString)_\(i)"
+      let userId = "\(UUID().uuidString)"
       let hashValue = StableHashGenerator.stableHash(experimentId: experimentId, userId: userId)
       let normalizedValue = Double(hashValue) / Double(UInt64.max)
       

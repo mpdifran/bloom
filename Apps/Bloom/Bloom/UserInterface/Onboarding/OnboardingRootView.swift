@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreHealth
+import TelemetryDeck
 
 extension OnboardingRootView {
   enum Step {
@@ -96,7 +97,14 @@ private extension OnboardingRootView {
   }
   
   func advanceToHealthKitViewExperimentVariant() async {
-    let variant = await ExperimentManager.shared.variant(for: .ExperimentID.onboardingHealthKitView)
+    let experimentId = String.ExperimentID.onboardingHealthKitView
+    let variant = await ExperimentManager.shared.variant(for: experimentId)
+    
+    // Log variant assignment
+    TelemetryDeck.signal("Experiment.Assigned", parameters: [
+      "experiment_id": experimentId,
+      "variant": variant.rawValue
+    ])
 
     switch variant {
     case .control:

@@ -24,22 +24,38 @@ final actor ExperimentManager {
   func variant(for experimentId: String) -> ExperimentVariant {
     // Check for developer override first
     if let override = checkOverride(for: experimentId) {
+      print("[ExperimentManager] Using override for \(experimentId): \(override)")
       return override
     }
     
     guard let experiment = experiments.first(where: { $0.id == experimentId }),
           experiment.isEnabled else {
+      print("[ExperimentManager] WARNING: Experiment '\(experimentId)' not found or disabled. Available experiments: \(experiments.map { $0.id })")
       return .control
     }
 
     let userId = UserID.value
     let hashValue = StableHashGenerator.stableHash(experimentId: experimentId, userId: userId)
     let normalizedValue = Double(hashValue) / Double(UInt64.max)
+    
+    let variant = normalizedValue < experiment.treatmentPercentage ? ExperimentVariant.treatment : .control
+    
+    print("[ExperimentManager] Experiment: \(experimentId)")
+    print("[ExperimentManager]   UserID: \(userId)")
+    print("[ExperimentManager]   Hash: \(hashValue)")
+    print("[ExperimentManager]   Normalized: \(normalizedValue)")
+    print("[ExperimentManager]   Threshold: \(experiment.treatmentPercentage)")
+    print("[ExperimentManager]   Variant: \(variant)")
 
-    return normalizedValue < experiment.treatmentPercentage ? .treatment : .control
+    return variant
   }
   
   private func checkOverride(for experimentId: String) -> ExperimentVariant? {
+    // Only allow overrides if developer mode is enabled
+    guard UserDefaults.standard.bool(forKey: .FeatureFlag.developerMode) else {
+      return nil
+    }
+    
     let overrideKey = "ExperimentOverride.\(experimentId)"
     guard let overrideValue = UserDefaults.standard.string(forKey: overrideKey),
           let override = ExperimentOverride(rawValue: overrideValue) else {
