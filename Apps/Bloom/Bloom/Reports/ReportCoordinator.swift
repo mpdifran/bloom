@@ -109,7 +109,16 @@ extension ReportCoordinator {
 
       // Create request and call API
       let request = MorningHealthReportRequest(healthContext: healthContext)
-      let response = try await NetworkRequester.shared.getMorningHealthReport(request: request)
+      let response: MorningHealthReportResponse
+      do {
+        response = try await NetworkRequester.shared.getMorningHealthReport(request: request)
+      } catch {
+        TelemetryDeck.signal(
+          "Morning Report Network Error",
+          parameters: ["errorMessage" : error.localizedDescription]
+        )
+        throw error
+      }
 
       // Store the report in SwiftData using today's date as the key
       let insights = response.insights.map { insight in
@@ -135,7 +144,11 @@ extension ReportCoordinator {
       }
 
     } catch {
-      print(error)
+      TelemetryDeck.errorOccurred(
+        id: "ReportCoordinator.generateAndStoreMorningReport",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
       // Fallback to basic notification if API fails, but only if we should send one
       if shouldSendNotification {
         await NotificationManager.shared.sendGoodMorningNotification(
