@@ -70,8 +70,8 @@ struct OnboardingHealthAgeSexHeightView: View {
     .shelf {
       if index >= 3 {
         VStack {
-          if healthManager.age() < 1 {
-            Text("You must be at least 1 year old to use Bloom.")
+          if healthManager.age() < 18 {
+            Text("You must be at least 18 years old to use Bloom.")
               .font(.subheadline)
               .fontDesign(.rounded)
               .bold()
@@ -156,7 +156,7 @@ private extension OnboardingHealthAgeSexHeightView {
     let age = healthManager.age()
     let height = healthManager.heightCM
 
-    return age >= 1 && height > 0
+    return age >= 18 && height > 0
   }
 
   @ViewBuilder

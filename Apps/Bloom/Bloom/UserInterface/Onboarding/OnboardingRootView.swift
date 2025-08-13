@@ -121,7 +121,13 @@ private extension OnboardingRootView {
     let sexName = sex?.personName
     let height = healthManager.heightCM
     
-    let isHealthKitDataValid = sex != nil && age != nil && sexName != nil && height > 0
+    // Check if all health data is present
+    let hasAllHealthData = sex != nil && age != nil && sexName != nil && height > 0
+    
+    // Also check if user is 18 or older (if age is available)
+    let isAgeValid = (age ?? 1) >= 18
+    
+    let isHealthKitDataValid = hasAllHealthData && isAgeValid
     
     if isHealthKitDataValid {
       // Skip the age/sex screen and go directly to focus area
@@ -132,6 +138,7 @@ private extension OnboardingRootView {
       setStep(.focusArea)
     } else {
       // Need to collect age/sex data
+      // This includes cases where user is under 18 and needs to verify/correct their age
       setStep(.ageAndSex)
     }
   }
