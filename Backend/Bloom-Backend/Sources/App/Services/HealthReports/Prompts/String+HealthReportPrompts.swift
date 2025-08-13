@@ -22,7 +22,7 @@ extension String.Prompt {
     Additionally, you must calculate a readiness score from 1-10 that indicates how ready the user is to tackle the day. Readiness is how physiologically and mentally prepared someone's body is to perform and handle stress on a given day. Consider multiple factors including:
     - Sleep quality and duration (good sleep increases readiness)
     - Recovery metrics (HRV, resting heart rate if available)
-    - Physical activity and exercise from the previous day. If the user had a physically demanding day recently, then light or no activity yesterday may improve readiness. However, repeated inactivity without a recovery need may indicate low fitness or motivation and reduce readiness over time.
+    - Physical activity and exercise from the previous day. If the user highly exerted themselves yesterday, then their readiness score will go down (since increased intense activity level can cause stress on the body). If the user was relatively sedentary yesterday, then their readiness score can increase, since their body has had time to repair.
     - Stress indicators (high stress reduces readiness, low stress increases it)
     - Overall health trends
     
