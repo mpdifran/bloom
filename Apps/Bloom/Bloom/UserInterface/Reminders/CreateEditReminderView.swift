@@ -8,6 +8,7 @@ import AppUI
 struct CreateEditReminderView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @ObservedObject private var entitlementController = EntitlementController.shared
 
   @State private var title: String
   @State private var selectedColor: Color
@@ -22,6 +23,7 @@ struct CreateEditReminderView: View {
   @State private var isDeleting = false
   @State private var deleteError: Error?
   @State private var confirmationDetails: ConfirmationDialogDetails?
+  @Query private var allReminders: [Reminder]
 
   private let existingReminder: Reminder?
   private let remindersManager = RemindersManager.shared
@@ -225,6 +227,31 @@ private extension CreateEditReminderView {
 private extension CreateEditReminderView {
 
   func saveReminder() {
+    guard !isSaving else { return }
+
+    // Check if creating a new reminder and user has reached their limit
+    if existingReminder == nil {
+      if let maxReminders = entitlementController.maxReminders, allReminders.count >= maxReminders {
+        // Show paywall if at limit
+        presentedSheet = BloomPlusPaywall {
+          // After successful purchase, try saving again
+          if entitlementController.hasBloomPro == true {
+            Task {
+              await Delay(300)
+              await MainActor.run {
+                saveReminderWithoutCheck()
+              }
+            }
+          }
+        }.asAny
+        return
+      }
+    }
+    
+    saveReminderWithoutCheck()
+  }
+  
+  private func saveReminderWithoutCheck() {
     guard !isSaving else { return }
 
     isSaving = true

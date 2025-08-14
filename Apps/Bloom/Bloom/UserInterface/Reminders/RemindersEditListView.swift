@@ -3,13 +3,16 @@ import SwiftData
 import BloomFoundation
 import DataContainer
 import SFSafeSymbols
+import AppUI
 
 struct RemindersEditListView: View {
   @Query(sort: \Reminder.createdDate) private var reminders: [Reminder]
   @State private var selectedReminder: Reminder?
   @State private var showingAddReminder = false
   @State private var deleteError: Error?
+  @State private var presentedSheet: AnyView?
   @Environment(\.dismiss) private var dismiss
+  @ObservedObject private var entitlementController = EntitlementController.shared
   
   private let remindersManager = RemindersManager.shared
 
@@ -34,7 +37,14 @@ struct RemindersEditListView: View {
 
         ToolbarItem(placement: .primaryAction) {
           Button {
-            showingAddReminder = true
+            // Check if user has reached their reminder limit
+            if let maxReminders = entitlementController.maxReminders, reminders.count >= maxReminders {
+              EntitledPresent(presentedSheet: $presentedSheet) {
+                CreateEditReminderView()
+              }
+            } else {
+              showingAddReminder = true
+            }
           } label: {
             Image(systemSymbol: .plus)
           }
@@ -43,6 +53,7 @@ struct RemindersEditListView: View {
       .sheet(isPresented: $showingAddReminder) {
         CreateEditReminderView()
       }
+      .sheet($presentedSheet)
     }
   }
 

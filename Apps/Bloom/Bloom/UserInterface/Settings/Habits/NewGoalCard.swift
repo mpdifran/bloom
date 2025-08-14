@@ -9,6 +9,8 @@ import SwiftUI
 import DataContainer
 import SwiftData
 import HealthKit
+import AppUI
+import BloomFoundation
 
 struct NewGoalCard: View {
 
@@ -20,10 +22,12 @@ struct NewGoalCard: View {
   @State private var didSave = false
   @State private var didError = false
   @State private var error: Error?
+  @State private var presentedSheet: AnyView?
 
   @Environment(\.modelContext) private var modelContext
   @Environment(\.requestReview) private var requestReview
   @Environment(\.dismiss) private var dismiss
+  @ObservedObject private var entitlementController = EntitlementController.shared
 
   var body: some View {
     CardView {
@@ -89,6 +93,7 @@ struct NewGoalCard: View {
     .task {
       await loadExcludedTargetMetrics()
     }
+    .sheet($presentedSheet)
     .alert(error: $error)
     .onChange(of: targetMetric) { _, newValue in
       self.unit = newValue.defaultUnit
@@ -135,6 +140,27 @@ private extension NewGoalCard {
   func saveNewGoal() {
     guard canSave else { return }
 
+    // Check if user has reached their goal limit
+    let currentHabitCount = (try? modelContext.fetch(FetchDescriptor<Habit>(predicate: #Predicate<Habit> { $0.endDate == nil })).count) ?? 0
+    
+    if let maxGoals = entitlementController.maxGoals, currentHabitCount >= maxGoals {
+      // Show paywall if at limit
+      presentedSheet = BloomPlusPaywall {
+        // After successful purchase, try saving again
+        if entitlementController.hasBloomPro == true {
+          Task {
+            await Delay(300)
+            saveNewGoalWithoutCheck()
+          }
+        }
+      }.asAny
+      return
+    }
+    
+    saveNewGoalWithoutCheck()
+  }
+  
+  private func saveNewGoalWithoutCheck() {
     let habit = Habit(
       targetMetric: targetMetric,
       timePeriod: timePeriod,

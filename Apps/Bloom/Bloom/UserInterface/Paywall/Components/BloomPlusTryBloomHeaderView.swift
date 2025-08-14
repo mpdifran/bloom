@@ -21,7 +21,7 @@ struct BloomPlusTryBloomHeaderView: View {
           .bold()
           .fontDesign(.rounded)
 
-        Text("Meet Bud, your personal health coach in your pocket.")
+        Text("No more one-size-fits-all advice. Bloom reads your health data and turns it into clear, actionable tips you’ll actually use.")
           .foregroundStyle(.secondary)
       }
       .multilineTextAlignment(.center)

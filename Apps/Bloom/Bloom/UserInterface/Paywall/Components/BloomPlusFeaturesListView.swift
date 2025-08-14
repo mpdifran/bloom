@@ -39,8 +39,8 @@ struct BloomPlusFeaturesListView: View {
 
       HStack {
         FeatureCard(
-          image: Image(systemSymbol: .figureRun),
-          message: "Bespoke workouts for your needs"
+          image: Image(systemSymbol: .checkmarkCircleFill),
+          message: "Unlimited goals and reminders"
         )
 
         FeatureCard(

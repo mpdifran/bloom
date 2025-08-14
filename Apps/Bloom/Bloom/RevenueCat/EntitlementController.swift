@@ -50,6 +50,18 @@ extension EntitlementController {
   var bloomProEntitlement: EntitlementInfo? {
     customerInfo?.entitlements[.Entitlements.bloomPro]
   }
+  
+  /// Maximum number of goals (habits) a user can create
+  var maxGoals: Int? {
+    // Return nil for unlimited, or a specific number for limited
+    hasBloomPro == true ? nil : 3
+  }
+  
+  /// Maximum number of reminders a user can create
+  var maxReminders: Int? {
+    // Return nil for unlimited, or a specific number for limited
+    hasBloomPro == true ? nil : 1
+  }
 }
 
 private extension EntitlementController {

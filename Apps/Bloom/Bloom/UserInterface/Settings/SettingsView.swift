@@ -234,7 +234,14 @@ private extension SettingsView {
       if remainingMetrics.isNotEmpty {
         SettingsAddHabitCell()
           .onTapGesture {
-            presentedSheet = NewGoalCard().asAny
+            // Check if user has reached their goal limit
+            if let maxGoals = entitlementController.maxGoals, userAddedHabits.count >= maxGoals {
+              EntitledPresent(presentedSheet: $presentedSheet) {
+                NewGoalCard()
+              }
+            } else {
+              presentedSheet = NewGoalCard().asAny
+            }
           }
       }
     }
