@@ -122,7 +122,9 @@ private extension TodayView {
         DailyReportAlertCell(kind: .morning)
           .transition(.scale)
           .onTapGesture {
-            presentedSheet = MorningReportView(rootPresentedSheet: $presentedSheet).asAny
+            EntitledPresent(presentedSheet: $presentedSheet) {
+              MorningReportView(rootPresentedSheet: $presentedSheet)
+            }
           }
       }
     }
@@ -212,7 +214,9 @@ private extension TodayView {
         .onTapGesture {
           guard morningReportCellAvailabilityText == nil else { return }
 
-          presentedSheet = MorningReportView(rootPresentedSheet: $presentedSheet).asAny
+          EntitledPresent(presentedSheet: $presentedSheet) {
+            MorningReportView(rootPresentedSheet: $presentedSheet)
+          }
         }
       }
     }

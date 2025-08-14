@@ -38,6 +38,9 @@ extension ReportCoordinator {
   func didDetectWakeUp(sleepAnalysis: SleepAnalysis? = nil) async {
     guard await ReportCoordinatorViewModel.shared.showMorningReportOnWakeUp else { return }
 
+    // Check if user has Bloom Plus entitlement
+    guard await EntitlementController.shared.hasBloomPro == true else { return }
+
     guard !isGeneratingReport else { return }
 
     // Check if we already sent a notification today
@@ -75,6 +78,9 @@ extension ReportCoordinator {
   }
 
   private func generateAndStoreMorningReport(shouldSendNotification: Bool) async {
+    // Check if user has Bloom Plus entitlement
+    guard await EntitlementController.shared.hasBloomPro == true else { return }
+    
     isGeneratingReport = true
     await MainActor.run {
       ReportCoordinatorViewModel.shared.isLoadingMorningReport = true

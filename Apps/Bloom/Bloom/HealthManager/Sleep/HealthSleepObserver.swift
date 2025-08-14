@@ -53,7 +53,11 @@ private extension HealthSleepObserver {
         previousSleepAnalysis != nil
     {
       // We've triggered from new data, not from app launch
-      await ReportCoordinator.shared.didDetectWakeUp(sleepAnalysis: newLastSleepAnalysis)
+      // Check if user has Bloom Plus before triggering report
+      let hasBloomPro = await EntitlementController.shared.hasBloomPro
+      if hasBloomPro == true {
+        await ReportCoordinator.shared.didDetectWakeUp(sleepAnalysis: newLastSleepAnalysis)
+      }
     }
 
     lastSleepAnalysis = newLastSleepAnalysis

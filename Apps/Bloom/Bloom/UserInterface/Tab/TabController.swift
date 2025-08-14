@@ -100,7 +100,12 @@ private extension TabController {
     case .CategoryID.goodMorning:
       dismiss()
       select(.today)
-      showMorningReport = true
+      // Check Bloom Plus entitlement before showing morning report
+      if EntitlementController.shared.hasBloomPro == true {
+        showMorningReport = true
+      } else {
+        showPaywall = true
+      }
     case .CategoryID.goodEvening:
       dismiss()
       select(.today)

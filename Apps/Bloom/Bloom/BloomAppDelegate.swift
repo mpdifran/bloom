@@ -49,8 +49,10 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     do {
       // Check if this is a morning report notification
       if let type = userInfo["type"] as? String, type == "morning_report" {
-        // Trigger morning report generation
-        await ReportCoordinator.shared.didDetectWakeUp()
+        // Only trigger morning report generation if user has Bloom Plus
+        if EntitlementController.shared.hasBloomPro == true {
+          await ReportCoordinator.shared.didDetectWakeUp()
+        }
         return .newData
       }
       
