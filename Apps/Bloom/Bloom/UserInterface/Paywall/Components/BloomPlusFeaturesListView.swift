@@ -33,7 +33,7 @@ struct BloomPlusFeaturesListView: View {
 
         FeatureCard(
           image: Image(systemSymbol: .barcodeViewfinder),
-          message: "Scan food barcodes with ease"
+          message: "Scan food barcodes"
         )
       }
 
@@ -44,8 +44,8 @@ struct BloomPlusFeaturesListView: View {
         )
 
         FeatureCard(
-          image: Image(systemSymbol: .heartTextClipboardFill),
-          message: "Comprehensive view of your health"
+          image: Image(systemSymbol: .sunriseFill),
+          message: "Morning Reports on your health"
         )
       }
     }

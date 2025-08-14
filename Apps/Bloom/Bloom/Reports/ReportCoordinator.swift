@@ -115,7 +115,7 @@ extension ReportCoordinator {
       } catch {
         TelemetryDeck.signal(
           "Morning Report Network Error",
-          parameters: ["errorMessage" : error.localizedDescription]
+          parameters: ["errorMessage": error.localizedDescription]
         )
         throw error
       }
