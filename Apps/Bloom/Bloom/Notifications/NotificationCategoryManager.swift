@@ -40,6 +40,30 @@ final class NotificationCategoryManager {
     
     categories.insert(remindersCategory)
     
+    // Trial reminder category with Review Subscription and Leave Feedback actions
+    let reviewSubscriptionAction = UNNotificationAction(
+      identifier: .ActionID.reviewSubscription,
+      title: "Review Subscription",
+      options: [.foreground],
+      icon: UNNotificationActionIcon(systemImageName: "creditcard")
+    )
+    
+    let leaveFeedbackAction = UNNotificationAction(
+      identifier: .ActionID.leaveFeedback,
+      title: "Leave Feedback",
+      options: [.foreground],
+      icon: UNNotificationActionIcon(systemImageName: "envelope")
+    )
+    
+    let trialReminderCategory = UNNotificationCategory(
+      identifier: .CategoryID.trialReminder,
+      actions: [reviewSubscriptionAction, leaveFeedbackAction],
+      intentIdentifiers: [],
+      options: []
+    )
+    
+    categories.insert(trialReminderCategory)
+    
     return categories
   }
 }

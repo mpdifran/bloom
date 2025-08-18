@@ -47,6 +47,7 @@ struct DeveloperSettingsView: View {
           experimentsSection
           adminActionsSection
           debugSection
+          notificationsSection
           storageSection
           designSection
           authSection
@@ -240,6 +241,20 @@ extension DeveloperSettingsView {
         SettingsCell("View Food Item Logs", showDisclosureIndicator: true) { }
           .onTapGesture {
             presentedSheet = DebugFoodItemLogListView().asAny
+          }
+      }
+    }
+  }
+  
+  var notificationsSection: some View {
+    VStack {
+      SectionTitleView("Notifications")
+        .padding(.horizontal)
+
+      SettingsSectionContainer {
+        SettingsCell("View Scheduled Notifications", showDisclosureIndicator: true) { }
+          .onTapGesture {
+            presentedSheet = ScheduledNotificationsView().asAny
           }
       }
     }

@@ -101,6 +101,9 @@ private extension EntitlementController {
       self.hasBloomPro = self.bloomProEntitlement?.isActive == true
     }
     
+    // Handle trial reminder notifications based on current state
+    handleTrialReminderNotifications()
+    
     // Check for subscription cancellation before updating stored state
     checkForSubscriptionCancellation()
     
@@ -109,6 +112,36 @@ private extension EntitlementController {
       let newState = SubscriptionState(from: currentEntitlement)
       saveSubscriptionState(newState)
       previousSubscriptionState = newState
+    }
+  }
+  
+  @MainActor
+  func handleTrialReminderNotifications() {
+    guard let currentEntitlement = customerInfo?.entitlements[.Entitlements.bloomPro] else {
+      return
+    }
+    
+    if currentEntitlement.periodType == .trial && currentEntitlement.isActive {
+      // User is in a trial - schedule notification (idempotent operation)
+      Task {
+        do {
+          let offerings = try await Purchases.shared.offerings()
+          // Find the package that matches the current product identifier and has a free trial
+          if let package = offerings.current?.availablePackages.first(where: { 
+            $0.storeProduct.productIdentifier == currentEntitlement.productIdentifier && 
+            $0.hasFreeIntroductoryOffer 
+          }) {
+            await NotificationManager.shared.scheduleTrialReminderNotification(for: package)
+          }
+        } catch {
+          print("EntitlementController: Failed to load offerings for trial notification: \(error)")
+        }
+      }
+    } else if currentEntitlement.periodType == .normal && currentEntitlement.isActive {
+      // User is on a paid subscription - cancel any trial reminders
+      Task {
+        await NotificationManager.shared.cancelTrialReminderNotification()
+      }
     }
   }
   

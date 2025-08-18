@@ -7,6 +7,8 @@
 
 import SwiftUI
 import UserNotifications
+import RevenueCat
+import TelemetryDeck
 
 enum Tab: CaseIterable, Identifiable {
   var id: Self { self }
@@ -113,6 +115,16 @@ private extension TabController {
     case .CategoryID.reminders:
       dismiss()
       select(.today)
+    case .CategoryID.trialReminder:
+      dismiss()
+      Task {
+        do {
+          try await Purchases.shared.showManageSubscriptions()
+          TelemetryDeck.signal("View Manage Subscriptions")
+        } catch {
+          print("TabController: Failed to show manage subscriptions: \(error)")
+        }
+      }
     default:
       break
     }

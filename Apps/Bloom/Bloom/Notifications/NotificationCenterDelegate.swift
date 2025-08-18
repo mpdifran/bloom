@@ -10,6 +10,9 @@ import Foundation
 import SwiftData
 import DataContainer
 import BloomFoundation
+import UIKit
+import RevenueCat
+import TelemetryDeck
 
 final class NotificationCenterDelegate: NSObject {
 
@@ -57,6 +60,8 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
                 return []
             }
             return [.banner, .sound, .list]
+        case .CategoryID.trialReminder:
+            return [.banner, .sound, .list]
         default: 
             return [.banner, .sound, .list]
         }
@@ -65,13 +70,15 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
     // MARK: - Private Methods
     
     private func handleNotificationAction(_ response: UNNotificationResponse) async {
-        guard response.notification.request.content.categoryIdentifier == .CategoryID.reminders else {
-            return
-        }
+        let categoryID = response.notification.request.content.categoryIdentifier
         
         switch response.actionIdentifier {
-        case .ActionID.completeReminder:
+        case .ActionID.completeReminder where categoryID == .CategoryID.reminders:
             await handleCompleteReminderAction(response.notification)
+        case .ActionID.reviewSubscription where categoryID == .CategoryID.trialReminder:
+            await handleReviewSubscriptionAction()
+        case .ActionID.leaveFeedback where categoryID == .CategoryID.trialReminder:
+            await handleLeaveFeedbackAction()
         default:
             break
         }
@@ -89,6 +96,22 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
             print("NotificationCenterDelegate: Successfully completed reminder \(reminderID)")
         } catch {
             print("NotificationCenterDelegate: Failed to complete reminder \(reminderID): \(error)")
+        }
+    }
+    
+    private func handleReviewSubscriptionAction() async {
+        do {
+            try await Purchases.shared.showManageSubscriptions()
+            TelemetryDeck.signal("View Manage Subscriptions")
+        } catch {
+            print("NotificationCenterDelegate: Failed to show manage subscriptions: \(error)")
+        }
+    }
+    
+    private func handleLeaveFeedbackAction() async {
+        if let mailURL = URL(string: "mailto:hello@trybloom.app?subject=Bloom%20Trial%20Feedback") {
+            await UIApplication.shared.open(mailURL)
+            TelemetryDeck.signal("Leave Feedback From Trial Reminder")
         }
     }
     
