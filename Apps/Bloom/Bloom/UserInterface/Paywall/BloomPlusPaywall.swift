@@ -96,6 +96,12 @@ private extension BloomPlusPaywall {
           .padding(.top)
           .horizontallyCentered()
           .padding(.horizontal)
+        
+        if let package = selectedPackage, package.hasFreeIntroductoryOffer {
+          BloomPlusFreeTrialTimelineView(package: package)
+            .padding(.horizontal)
+        }
+        
         BloomPlusFeaturesListView()
       }
 

@@ -138,4 +138,50 @@ extension Package {
 
     return "\(formattedPrice) / month"
   }
+  
+  var trialEndDate: Date? {
+    guard let introDiscount = storeProduct.introductoryDiscount,
+          introDiscount.price == 0 else { return nil }
+    
+    let calendar = Calendar.current
+    let period = introDiscount.subscriptionPeriod
+    
+    switch period.unit {
+    case .day:
+      return calendar.date(byAdding: .day, value: period.value, to: Date())
+    case .week:
+      return calendar.date(byAdding: .weekOfYear, value: period.value, to: Date())
+    case .month:
+      return calendar.date(byAdding: .month, value: period.value, to: Date())
+    case .year:
+      return calendar.date(byAdding: .year, value: period.value, to: Date())
+    @unknown default:
+      return nil
+    }
+  }
+  
+  var trialReminderDate: Date? {
+    guard let endDate = trialEndDate else { return nil }
+    return Calendar.current.date(byAdding: .day, value: -2, to: endDate)
+  }
+  
+  var trialDurationInDays: Int? {
+    guard let introDiscount = storeProduct.introductoryDiscount,
+          introDiscount.price == 0 else { return nil }
+    
+    let period = introDiscount.subscriptionPeriod
+    
+    switch period.unit {
+    case .day:
+      return period.value
+    case .week:
+      return period.value * 7
+    case .month:
+      return period.value * 30
+    case .year:
+      return period.value * 365
+    @unknown default:
+      return nil
+    }
+  }
 }
