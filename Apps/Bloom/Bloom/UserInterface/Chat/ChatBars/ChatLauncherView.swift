@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 extension View {
   func chatLauncher() -> some View {
@@ -16,6 +17,8 @@ extension View {
 struct ChatLauncherViewModifier: ViewModifier {
 
   @Environment(TabController.self) private var tabController: TabController
+  @Environment(ThemeController.self) private var themeController: ThemeController
+  @AppStorage(.FeatureFlag.useSwiftUIChatView) private var useSwiftUIChatView = false
 
   func body(content: Content) -> some View {
     content
@@ -26,11 +29,19 @@ struct ChatLauncherViewModifier: ViewModifier {
           }
           .zStackAlignment(.bottom)
       }
-      .sheet(isPresented: Binding(
+      .fullScreenCover(isPresented: Binding(
         get: { tabController.isShowingChat },
         set: { tabController.isShowingChat = $0 }
       )) {
-        ChatView()
+        if useSwiftUIChatView {
+          ChatView()
+        } else {
+          ChatViewControllerRepresentable(
+            tabController: tabController,
+            themeController: themeController
+          )
+          .ignoresSafeArea()
+        }
       }
   }
 }
@@ -124,6 +135,25 @@ private extension ChatLauncherView {
         .padding(12)
         .cardContainer(fill: .background, includePadding: false)
     }
+  }
+}
+
+// MARK: - UIKit Integration
+
+struct ChatViewControllerRepresentable: UIViewControllerRepresentable {
+  let tabController: TabController
+  let themeController: ThemeController
+  
+  func makeUIViewController(context: Context) -> UINavigationController {
+    let chatViewController = ChatViewController(
+      tabController: tabController,
+      themeController: themeController
+    )
+    return UINavigationController(rootViewController: chatViewController)
+  }
+  
+  func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
+    // No updates needed
   }
 }
 

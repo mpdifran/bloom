@@ -50,7 +50,7 @@ struct ChatReminderCell: View {
         DisclosureIndicator()
       }
       .tint(reminder.color)
-      .cardContainer()
+      .chatCardContainer()
       .frame(width: 300)
 
       Spacer()

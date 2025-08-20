@@ -18,6 +18,7 @@ struct DeveloperSettingsView: View {
   @AppStorage(.FeatureFlag.developerMode) private var showDeveloperMode: Bool = false
   @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
   @AppStorage(.FeatureFlag.bypassPaywall) private var bypassPaywall = false
+  @AppStorage(.FeatureFlag.useSwiftUIChatView) private var useSwiftUIChatView = false
 
   @State private var authStatus: HKAuthorizationRequestStatus = .unknown
   @State private var shouldPromptForNotificationPermissions = false
@@ -220,6 +221,12 @@ extension DeveloperSettingsView {
 
         SettingsCell("OpenAI Model o3") {
           Toggle("", isOn: $enableOpenAIModelOverride)
+        }
+
+        Divider()
+
+        SettingsCell("Use SwiftUI Chat View") {
+          Toggle("", isOn: $useSwiftUIChatView)
         }
       }
     }
@@ -555,6 +562,7 @@ extension DeveloperSettingsView {
           showDeveloperMode = false
           bypassPaywall = false
           enableOpenAIModelOverride = false
+          useSwiftUIChatView = false
           clearAllExperimentOverrides()
           dismiss()
         } label: {

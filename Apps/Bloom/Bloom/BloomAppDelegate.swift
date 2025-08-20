@@ -16,7 +16,33 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
+    // Register background task handlers before app finishes launching
+    registerBackgroundTasks()
     return true
+  }
+  
+  private func registerBackgroundTasks() {
+    // Register reminder notification update task handler
+    BGTaskScheduler.shared.register(
+      forTaskWithIdentifier: "update-reminder-notifications",
+      using: nil
+    ) { task in
+      Task {
+        await BackgroundTaskScheduler.shared.updateReminderNotifications()
+        task.setTaskCompleted(success: true)
+      }
+    }
+    
+    // Register notification preferences sync task handler  
+    BGTaskScheduler.shared.register(
+      forTaskWithIdentifier: "sync-notification-preferences",
+      using: nil
+    ) { task in
+      Task {
+        await BackgroundTaskScheduler.shared.syncNotificationPreferences()
+        task.setTaskCompleted(success: true)
+      }
+    }
   }
 
   func application(

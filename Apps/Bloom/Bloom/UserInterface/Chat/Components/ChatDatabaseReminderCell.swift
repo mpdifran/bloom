@@ -75,7 +75,7 @@ struct ChatDatabaseReminderCell: View {
           }
           .foregroundStyle(.secondary)
           .tint(.gray)
-          .cardContainer()
+          .chatCardContainer()
           .frame(width: 300)
           .padding(.horizontal)
         }

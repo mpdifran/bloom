@@ -40,7 +40,7 @@ struct ChatCreateUserFactsCell: View {
 
         DisclosureIndicator()
       }
-      .cardContainer()
+      .chatCardContainer()
       .tint(.mutedYellow)
       .padding(.horizontal)
       .onTapGesture {
@@ -62,22 +62,25 @@ extension DateFormatter {
 
 #Preview {
   PreviewEnvironment {
-    BloomScrollView {
-      ChatCreateUserFactsCell(
-        chatMessageID: "test",
-        userFacts: SocketMessage.CreateUserFacts(
-          facts: [
-            SocketMessage.CreateUserFacts.UserFactInput(
-              fact: "User has a knee injury from running",
-              revisitDate: Date()
-            ),
-            SocketMessage.CreateUserFacts.UserFactInput(
-              fact: "Prefers morning workouts",
-              revisitDate: Date()
-            )
-          ]
+    ScrollView {
+      VStack {
+        ChatCreateUserFactsCell(
+          chatMessageID: "test",
+          userFacts: SocketMessage.CreateUserFacts(
+            facts: [
+              SocketMessage.CreateUserFacts.UserFactInput(
+                fact: "User has a knee injury from running",
+                revisitDate: Date()
+              ),
+              SocketMessage.CreateUserFacts.UserFactInput(
+                fact: "Prefers morning workouts",
+                revisitDate: Date()
+              )
+            ]
+          )
         )
-      )
+      }
+      .padding()
     }
   }
 }

@@ -28,7 +28,7 @@ struct ChatContextCell: View {
         .padding(.vertical, 12)
         .background {
           Rectangle()
-            .fill(.background.secondary)
+            .fill(.background.tertiary)
         }
 
         Text(chatContext.context)
@@ -37,7 +37,9 @@ struct ChatContextCell: View {
           .fixedSize(horizontal: false, vertical: true)
           .padding()
       }
-      .cardContainer(includePadding: false)
+      .chatCardContainer(
+        includePadding: false
+      )
       .padding(.horizontal)
     }
   }
@@ -45,13 +47,16 @@ struct ChatContextCell: View {
 
 #Preview {
   PreviewEnvironment {
-    BloomScrollView {
-      ChatContextCell(
-        chatContext: ChatContext(
-          title: "Fiber Win",
-          context: "You crushed your fiber goal with 11 g (110% of target), thanks to snacks like sourmelon bites. Fiber's your friend for digestion and fullness."
+    ScrollView {
+      VStack {
+        ChatContextCell(
+          chatContext: ChatContext(
+            title: "Fiber Win",
+            context: "You crushed your fiber goal with 11 g (110% of target), thanks to snacks like sourmelon bites. Fiber's your friend for digestion and fullness."
+          )
         )
-      )
+      }
+      .padding()
     }
   }
 }

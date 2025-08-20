@@ -39,7 +39,7 @@ struct ChatGoalsCell: View {
         addGoalsButton
           .padding(.top)
       }
-      .cardContainer()
+      .chatCardContainer()
     }
     .padding(.horizontal)
     .animation(.default, value: didAddGoals)

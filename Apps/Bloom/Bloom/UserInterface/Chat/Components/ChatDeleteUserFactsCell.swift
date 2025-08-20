@@ -41,7 +41,7 @@ struct ChatDeleteUserFactsCell: View {
 
         DisclosureIndicator()
       }
-      .cardContainer()
+      .chatCardContainer()
       .tint(.mutedYellow)
       .padding(.horizontal)
       .onTapGesture {

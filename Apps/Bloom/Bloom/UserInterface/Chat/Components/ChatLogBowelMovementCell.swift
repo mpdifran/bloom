@@ -102,7 +102,7 @@ struct ChatLogBowelMovementCell: View {
         .sensoryFeedback(.impact, trigger: saveUndone)
         .sensoryFeedback(.success, trigger: saveComplete)
       }
-      .cardContainer()
+      .chatCardContainer()
     }
     .padding(.horizontal)
     .tint(.brown)

@@ -26,13 +26,33 @@ extension View {
       .background {
         RoundedRectangle(cornerRadius: cornerRadius)
           .fill(fill)
-          .overlay {
-            RoundedRectangle(cornerRadius: cornerRadius)
-              .stroke(stroke, lineWidth: lineWidth)
-          }
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       .contentShape(RoundedRectangle(cornerRadius: cornerRadius))
+      .overlay {
+        RoundedRectangle(cornerRadius: cornerRadius)
+          .stroke(stroke, lineWidth: lineWidth)
+      }
+  }
+}
+
+extension View {
+
+  func chatCardContainer<S, S2>(
+    fill: S = BackgroundStyle.background.secondary,
+    stroke: S2 = .fill,
+    lineWidth: CGFloat = 1,
+    includePadding: Bool = true,
+    cornerRadius: CGFloat = 26
+  ) -> some View where S: ShapeStyle, S2: ShapeStyle {
+    self
+      .cardContainer(
+        fill: fill,
+        stroke: stroke,
+        lineWidth: lineWidth,
+        includePadding: includePadding,
+        cornerRadius: cornerRadius
+      )
   }
 }
 

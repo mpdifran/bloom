@@ -90,7 +90,7 @@ struct ChatLogPeriodCell: View {
         .sensoryFeedback(.impact, trigger: saveUndone)
         .sensoryFeedback(.success, trigger: saveComplete)
       }
-      .cardContainer()
+      .chatCardContainer()
     }
     .padding(.horizontal)
     .tint(.mutedPink)

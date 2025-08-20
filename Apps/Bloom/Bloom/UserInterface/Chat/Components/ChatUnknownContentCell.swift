@@ -37,7 +37,7 @@ struct ChatUnknownContentCell: View {
             .foregroundStyle(.tint)
           Spacer()
         }
-        .cardContainer()
+        .chatCardContainer()
       }
       .padding(.horizontal)
       .tint(.mutedYellow)

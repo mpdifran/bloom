@@ -43,7 +43,7 @@ struct BloomApp: App {
     ])
     _ = EntitlementController.shared
 
-    // Note: Background task scheduling moved to .task block to ensure handlers are registered first
+    // Note: Background task handlers are registered in AppDelegate.didFinishLaunchingWithOptions, scheduling happens in .task blocks
 
     NotificationManager.shared.removeAllScheduledNotifications()
     migrateUserDefaults()
@@ -85,18 +85,12 @@ struct BloomApp: App {
           ReminderTriggerObserver.shared.startObserving()
         }
         .task {
-          // Schedule background tasks after handlers are registered
+          // Schedule background tasks - handlers are registered in AppDelegate.didFinishLaunchingWithOptions
           BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
           BackgroundTaskScheduler.shared.scheduleNotificationPreferencesSyncTask()
         }
     }
     .modelContainer(ContainerHolder.shared.container)
-    .backgroundTask(.appRefresh("update-reminder-notifications")) {
-        await BackgroundTaskScheduler.shared.updateReminderNotifications()
-    }
-    .backgroundTask(.appRefresh("sync-notification-preferences")) {
-        await BackgroundTaskScheduler.shared.syncNotificationPreferences()
-    }
   }
 }
 

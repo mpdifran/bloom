@@ -25,7 +25,6 @@ struct ChatView: View {
   var body: some View {
     NavigationStack {
       chatContent
-        .groupedBackground()
         .sensoryFeedback(.selection, trigger: viewModel.cellModels)
         .animation(.default, value: viewModel.cellModels)
         .navigationTitle("Bud")

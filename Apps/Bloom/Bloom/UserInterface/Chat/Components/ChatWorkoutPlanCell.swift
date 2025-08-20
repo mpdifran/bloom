@@ -76,7 +76,7 @@ struct ChatWorkoutPlanCell: View {
         .sensoryFeedback(.success, trigger: saveComplete)
         .disabled(hasSavedWorkout)
       }
-      .cardContainer()
+      .chatCardContainer()
       .onTapGesture {
         showingDetails = true
       }

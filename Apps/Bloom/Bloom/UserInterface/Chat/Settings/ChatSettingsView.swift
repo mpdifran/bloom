@@ -21,10 +21,7 @@ struct ChatSettingsView: View {
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
-        VStack(spacing: 20) {
-          resetSection
-        }
-        .padding()
+        resetSection
       }
       .navigationTitle("Chat Settings")
       .navigationBarTitleDisplayMode(.inline)

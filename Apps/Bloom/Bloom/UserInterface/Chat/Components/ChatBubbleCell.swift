@@ -40,28 +40,35 @@ public struct ChatBubbleCell: View {
 
   public var body: some View {
     VStack(alignment: .leading) {
-      ChatBubble(
-        position: isCurrentUser ? .trailing : .leading,
-        showTail: showTail,
-        shouldFill: !isDirect,
-        includePadding: isCurrentUser,
-        foregroundStyle: foregroundColor,
-        backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)
-      ) {
+      if isCurrentUser {
+        ChatBubble(
+          position: isCurrentUser ? .trailing : .leading,
+          showTail: showTail,
+          shouldFill: !isDirect,
+          includePadding: isCurrentUser,
+          foregroundStyle: foregroundColor,
+          backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)
+        ) {
+          Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+      } else {
         Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
           .fixedSize(horizontal: false, vertical: true)
-      }
-      
-      if showReportButton && !isCurrentUser, 
-         responseID != nil,
-         requestID != nil {
-        Button("Report a Problem") {
-          showReportSheet = true
+          .padding(.vertical, 10)
+          .padding(.horizontal, 15)
+          .horizontalAlignment(.leading)
+
+        if showReportButton,
+           responseID != nil,
+           requestID != nil {
+          Button("Report a Problem") {
+            showReportSheet = true
+          }
+          .bold()
+          .font(.caption)
+          .padding(.horizontal, 15)
         }
-        .bold()
-        .font(.caption)
-        .padding(.horizontal)
-        .padding(.horizontal)
       }
     }
     .sheet(isPresented: $showReportSheet) {
@@ -102,7 +109,7 @@ private extension ChatBubbleCell {
         ChatBubbleCell(message: "It's actually going great!", isDirect: false, isCurrentUser: true, showTail: true)
         ChatBubbleCell(message: "PS It's actually not going great...", isDirect: true, isCurrentUser: true, showTail: true)
         ChatBubbleCell(
-          message: "Oh no what's up?", 
+          message: "Oh no what's up? Is there a problem I can help you solve?", 
           isDirect: true, 
           isCurrentUser: false, 
           showTail: true, 
@@ -117,48 +124,50 @@ private extension ChatBubbleCell {
 }
 
 #Preview("Screenshots") {
-  VStack(spacing: 30) {
-    ChatBubbleCell(
-      message: "I feel tired all the time, what can I do to get my energy up?",
-      isDirect: false,
-      isCurrentUser: true,
-      showTail: true
-    )
-
-    ChatBubbleCell(
-      message: "What should I eat from this restaurant?",
-      isDirect: false,
-      isCurrentUser: true,
-      showTail: true
-    )
-
-    ChatBubbleCell(
-      message: "What's a good lower body workout for me that doesn't irritate my sprained ankle?",
-      isDirect: false,
-      isCurrentUser: true,
-      showTail: true
-    )
-
-    ChatBubbleCell(
-      message: "Can you help me build up to a marathon?",
-      isDirect: false,
-      isCurrentUser: true,
-      showTail: true
-    )
-
-    VStack {
-      ChatImageCell(
-        image: UIImage(named: "CrackersAndCheese")!,
-        isCurrentUser: true
-      )
+  PreviewEnvironment {
+    VStack(spacing: 30) {
       ChatBubbleCell(
-        message: "I just ate this for dinner.",
+        message: "I feel tired all the time, what can I do to get my energy up?",
         isDirect: false,
         isCurrentUser: true,
         showTail: true
       )
+
+      ChatBubbleCell(
+        message: "What should I eat from this restaurant?",
+        isDirect: false,
+        isCurrentUser: true,
+        showTail: true
+      )
+
+      ChatBubbleCell(
+        message: "What's a good lower body workout for me that doesn't irritate my sprained ankle?",
+        isDirect: false,
+        isCurrentUser: true,
+        showTail: true
+      )
+
+      ChatBubbleCell(
+        message: "Can you help me build up to a marathon?",
+        isDirect: false,
+        isCurrentUser: true,
+        showTail: true
+      )
+
+      VStack {
+        ChatImageCell(
+          image: UIImage(named: "CrackersAndCheese")!,
+          isCurrentUser: true
+        )
+        ChatBubbleCell(
+          message: "I just ate this for dinner.",
+          isDirect: false,
+          isCurrentUser: true,
+          showTail: true
+        )
+      }
     }
+    .bold()
+    .frame(maxWidth: 340)
   }
-  .bold()
-  .frame(maxWidth: 340)
 }
