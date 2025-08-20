@@ -43,6 +43,8 @@ final class ReminderTriggerObserver {
   // MARK: - Private Methods
   
   private func setupObservers() async {
+    // Use start of current day to catch health data logged earlier today
+    // The hasRelevantDataLoggedToday validation ensures we only complete reminders for today's data
     let startDate = Calendar.current.startOfDay(for: Date())
     
     // Observe body mass (weight)
@@ -121,19 +123,19 @@ final class ReminderTriggerObserver {
       // Determine which trigger type to process based on workout activity type
       let activityType = workout.workoutActivityType
       
-      if Array.strengthTrainingTypes.contains(activityType) {
+      if [HKWorkoutActivityType].strengthTrainingTypes.contains(activityType) {
         await processTrigger(for: .logStrengthTraining)
       }
       
-      if Array.cardioTypes.contains(activityType) {
+      if [HKWorkoutActivityType].cardioTypes.contains(activityType) {
         await processTrigger(for: .logCardio)
       }
       
-      if Array.mobilityAndFlexibilityTypes.contains(activityType) {
+      if [HKWorkoutActivityType].mobilityAndFlexibilityTypes.contains(activityType) {
         await processTrigger(for: .logMobilityFlexibility)
       }
       
-      if Array.highIntensityIntervalTrainingTypes.contains(activityType) {
+      if [HKWorkoutActivityType].highIntensityIntervalTrainingTypes.contains(activityType) {
         await processTrigger(for: .logHIIT)
       }
     } catch {
@@ -145,11 +147,19 @@ final class ReminderTriggerObserver {
   
   private func processTrigger(for triggerType: ReminderTriggerType) async {
     do {
+      // First, verify that relevant health data was actually logged today
+      let today = Date()
+      let hasDataToday = await hasRelevantDataLoggedToday(for: triggerType)
+      
+      guard hasDataToday else {
+        print("No relevant data logged today for trigger: \(triggerType.displayName)")
+        return
+      }
+      
       // Find reminders with this trigger type that haven't been completed today
       let reminders = try await modelActor.fetchRemindersWithTrigger(triggerType)
       
       // Filter to uncompleted reminders for today
-      let today = Date()
       let calendar = Calendar.current
       let uncompletedReminders = reminders.filter { reminder in
         !reminder.completionRecords.contains { record in
@@ -227,6 +237,66 @@ final class ReminderTriggerObserver {
       let diff1 = abs(occ1.timeOfDay - currentTimeInterval)
       let diff2 = abs(occ2.timeOfDay - currentTimeInterval)
       return diff1 < diff2
+    }
+  }
+  
+  /// Verifies that relevant health data was actually logged today for the given trigger type
+  private func hasRelevantDataLoggedToday(for triggerType: ReminderTriggerType) async -> Bool {
+    let today = Date()
+    let calendar = Calendar.current
+    let todayRange = DateRange.duringDay(today)
+    
+    do {
+      switch triggerType {
+      case .logWeight:
+        let samples = try await healthStore.fetchSamples(
+          for: HKQuantityType(.bodyMass),
+          dateRange: todayRange
+        )
+        return !samples.isEmpty
+        
+      case .logWater:
+        let samples = try await healthStore.fetchSamples(
+          for: HKQuantityType(.dietaryWater),
+          dateRange: todayRange
+        )
+        return !samples.isEmpty
+        
+      case .logBloodPressure:
+        let systolicSamples = try await healthStore.fetchSamples(
+          for: HKQuantityType(.bloodPressureSystolic),
+          dateRange: todayRange
+        )
+        let diastolicSamples = try await healthStore.fetchSamples(
+          for: HKQuantityType(.bloodPressureDiastolic),
+          dateRange: todayRange
+        )
+        return !systolicSamples.isEmpty || !diastolicSamples.isEmpty
+        
+      case .logStrengthTraining, .logCardio, .logMobilityFlexibility, .logHIIT:
+        let workouts = try await healthStore.fetchWorkouts(dateRange: todayRange)
+        
+        // Check if any workout matches the trigger type's activity types
+        switch triggerType {
+        case .logStrengthTraining:
+          return workouts.contains { [HKWorkoutActivityType].strengthTrainingTypes.contains($0.workoutActivityType) }
+        case .logCardio:
+          return workouts.contains { [HKWorkoutActivityType].cardioTypes.contains($0.workoutActivityType) }
+        case .logMobilityFlexibility:
+          return workouts.contains { [HKWorkoutActivityType].mobilityAndFlexibilityTypes.contains($0.workoutActivityType) }
+        case .logHIIT:
+          return workouts.contains { [HKWorkoutActivityType].highIntensityIntervalTrainingTypes.contains($0.workoutActivityType) }
+        default:
+          return false
+        }
+        
+      @unknown default:
+        print("Unknown trigger type: \(triggerType)")
+        return false
+      }
+    } catch {
+      print("Failed to check if data was logged today for \(triggerType): \(error)")
+      return false
     }
   }
 }
