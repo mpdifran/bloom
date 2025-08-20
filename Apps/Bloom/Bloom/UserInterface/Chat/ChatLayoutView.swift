@@ -137,20 +137,14 @@ class ChatLayoutViewController: UICollectionViewController {
       return
     }
 
-    print("Old Models:\n\(oldModels.map { $0.id })")
-    print("New Models:\n\(newModels.map { $0.id })")
-
     // Calculate the difference
     let changeset = StagedChangeset(source: oldModels, target: newModels)
 
-    print("Changeset")
     for set in changeset {
       let inserted = set.elementInserted.map { $0.element }
       let deleted = set.elementDeleted.map { $0.element }
       let updated = set.elementUpdated.map { $0.element }
       let moved = set.elementMoved.map { "\($0.source.element) -> \($0.target.element)" }
-
-      print("Insert: \(inserted)\nDeleted:\(deleted)\nUpdated:\(updated)\nMoved:\(moved)\n")
     }
 
     // Apply the changes with batch updates
