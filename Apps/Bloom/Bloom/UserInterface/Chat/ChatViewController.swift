@@ -111,6 +111,10 @@ class ChatViewController: UICollectionViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
+    // Only resign first responder if we're being dismissed/popped, not when presenting a modal
+    if isBeingDismissed || isMovingFromParent {
+      resignFirstResponder()
+    }
     maintenanceTask?.cancel()
     maintenanceTask = nil
   }
@@ -251,10 +255,14 @@ class ChatViewController: UICollectionViewController {
   // MARK: - Actions
 
   @objc private func doneTapped() {
+    resignFirstResponder()
     dismiss(animated: true)
   }
 
   @objc private func settingsTapped() {
+    // Hide keyboard but keep input accessory view
+    chatMessageBar.resignTextFieldFocus()
+    
     let settingsView = ChatSettingsView()
       .environment(tabController)
       .environment(themeController)

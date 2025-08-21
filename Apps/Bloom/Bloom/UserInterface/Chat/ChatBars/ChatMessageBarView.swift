@@ -559,6 +559,10 @@ class ChatMessageBarView: UIView {
   func focusTextView() {
     textView.becomeFirstResponder()
   }
+  
+  func resignTextFieldFocus() {
+    textView.resignFirstResponder()
+  }
 
   private func findParentViewController() -> UIViewController? {
     var responder: UIResponder? = self
