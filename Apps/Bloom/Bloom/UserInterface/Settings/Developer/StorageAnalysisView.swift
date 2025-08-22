@@ -65,9 +65,7 @@ struct StorageAnalysisView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            dismiss()
-          }
+          DismissButton()
         }
 
         if !analyzer.categories.isEmpty {

@@ -37,7 +37,17 @@ struct BloomScrollView<Content>: View where Content: View {
       .padding(padding)
     }
     .groupedBackground()
-    .safeAreaPadding(.bottom, showsChatBar ? tabController.chatLauncherSafeAreaInset : 0)
+    .safeAreaPadding(.bottom, bottomPadding)
+  }
+}
+
+private extension BloomScrollView {
+
+  var bottomPadding: CGFloat {
+    if #available(iOS 26, *) {
+      return 0
+    }
+    return showsChatBar ? tabController.chatLauncherSafeAreaInset : 0
   }
 }
 

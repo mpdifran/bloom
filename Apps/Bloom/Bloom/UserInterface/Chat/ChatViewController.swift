@@ -172,16 +172,14 @@ class ChatViewController: UICollectionViewController {
   }
 
   private func setupNavigationBar() {
-    // Done button (left)
+    // Dismiss button (left) - modern iOS style with xmark
     navigationItem.leftBarButtonItem = UIBarButtonItem(
-      title: "Done",
-      style: .done,
+      image: UIImage(systemSymbol: .xmark),
+      style: .plain,
       target: self,
       action: #selector(doneTapped)
     )
-    navigationItem.leftBarButtonItem?.setTitleTextAttributes([
-      .font: UIFont.boldSystemFont(ofSize: 17)
-    ], for: .normal)
+//    navigationItem.leftBarButtonItem?.tintColor = .label
 
     // Bud image (center)
     let budImageView = UIImageView(image: .budCoach)

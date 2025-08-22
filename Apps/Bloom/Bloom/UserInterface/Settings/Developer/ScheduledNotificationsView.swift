@@ -82,10 +82,7 @@ struct ScheduledNotificationsView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Done") {
-            dismiss()
-          }
-          .bold()
+          DismissButton()
         }
         
         ToolbarItem(placement: .primaryAction) {

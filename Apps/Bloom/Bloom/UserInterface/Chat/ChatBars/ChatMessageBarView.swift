@@ -70,12 +70,13 @@ class ChatMessageBarView: UIView {
     containerView.backgroundColor = .clear
     addSubview(containerView)
 
-    // Blur effect setup
-    blurEffectView.translatesAutoresizingMaskIntoConstraints = false
-    blurEffectView.layer.cornerRadius = 40
-    blurEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-    blurEffectView.clipsToBounds = true
-    containerView.addSubview(blurEffectView)
+    if #available(iOS 26.0, *) {
+      // iOS 26+: Floating glass effect without blur view
+      setupViewsIOS26()
+    } else {
+      // Legacy: Blur effect setup
+      setupViewsLegacy()
+    }
 
     // Main stack view
     mainStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +92,34 @@ class ChatMessageBarView: UIView {
 
     // Update visibility
     updateImageContextVisibility()
+  }
+  
+  @available(iOS 26.0, *)
+  private func setupViewsIOS26() {
+    // Glass effect setup for iOS 26
+    let glassEffectView = UIVisualEffectView(effect: UIGlassEffect())
+    glassEffectView.translatesAutoresizingMaskIntoConstraints = false
+    glassEffectView.layer.cornerRadius = 34
+    glassEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    glassEffectView.clipsToBounds = true
+    containerView.addSubview(glassEffectView)
+    
+    // Add constraints for glass effect view
+    NSLayoutConstraint.activate([
+      glassEffectView.topAnchor.constraint(equalTo: containerView.topAnchor),
+      glassEffectView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+      glassEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+      glassEffectView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+    ])
+  }
+  
+  private func setupViewsLegacy() {
+    // Blur effect setup for older iOS versions
+    blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+    blurEffectView.layer.cornerRadius = 40
+    blurEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    blurEffectView.clipsToBounds = true
+    containerView.addSubview(blurEffectView)
   }
 
   private func setupImageContextScrollView() {
@@ -110,12 +139,18 @@ class ChatMessageBarView: UIView {
   private func setupInputStackView() {
     // Card container
     cardContainerView.translatesAutoresizingMaskIntoConstraints = false
-    cardContainerView.backgroundColor = .systemBackground
-    cardContainerView.layer.cornerRadius = 26
-    cardContainerView.layer.shadowColor = UIColor.black.cgColor
-    cardContainerView.layer.shadowOpacity = 0.05
-    cardContainerView.layer.shadowOffset = CGSize(width: 0, height: 1)
-    cardContainerView.layer.shadowRadius = 2
+    
+    if #available(iOS 26.0, *) {
+      cardContainerView.layer.cornerRadius = 34
+    } else {
+      // Legacy: Standard appearance
+      cardContainerView.backgroundColor = .systemBackground
+      cardContainerView.layer.cornerRadius = 26
+      cardContainerView.layer.shadowColor = UIColor.black.cgColor
+      cardContainerView.layer.shadowOpacity = 0.05
+      cardContainerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+      cardContainerView.layer.shadowRadius = 2
+    }
 
     // Input stack view
     inputStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -252,6 +287,41 @@ class ChatMessageBarView: UIView {
   }
 
   private func setupConstraints() {
+    if #available(iOS 26.0, *) {
+      setupConstraintsIOS26()
+    } else {
+      setupConstraintsLegacy()
+    }
+  }
+  
+  @available(iOS 26.0, *)
+  private func setupConstraintsIOS26() {
+    // iOS 26: Floating glass effect with 8pt padding
+    NSLayoutConstraint.activate([
+      // Container constraints
+      containerView.topAnchor.constraint(equalTo: topAnchor),
+      containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+      containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+      containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+      // Main stack constraints with 8pt padding for floating effect
+      mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
+      mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+      mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+      mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8),
+
+      // Image/context scroll view constraints
+      imageContextScrollView.heightAnchor.constraint(equalToConstant: 60),
+      imageContextStackView.topAnchor.constraint(equalTo: imageContextScrollView.topAnchor, constant: 4),
+      imageContextStackView.leadingAnchor.constraint(equalTo: imageContextScrollView.leadingAnchor),
+      imageContextStackView.trailingAnchor.constraint(equalTo: imageContextScrollView.trailingAnchor),
+      imageContextStackView.bottomAnchor.constraint(equalTo: imageContextScrollView.bottomAnchor),
+      imageContextStackView.heightAnchor.constraint(equalTo: imageContextScrollView.heightAnchor, constant: -4)
+    ])
+  }
+  
+  private func setupConstraintsLegacy() {
+    // Legacy: Standard blur effect with 16pt padding
     NSLayoutConstraint.activate([
       // Container constraints
       containerView.topAnchor.constraint(equalTo: topAnchor),
@@ -626,7 +696,15 @@ class ChatMessageBarView: UIView {
     // Calculate height based on text view content + padding
     let textViewHeight = textViewHeightConstraint?.constant ?? minTextViewHeight
     let imageContextHeight: CGFloat = (selectedImage != nil || !tabController.chatContexts.isEmpty) ? 60 : 0
-    let totalHeight = textViewHeight + 32 + imageContextHeight // 32 = top/bottom padding + card padding
+    
+    let basePadding: CGFloat
+    if #available(iOS 26.0, *) {
+      basePadding = 16 + 16 // 8pt top/bottom + 12pt card padding top/bottom  
+    } else {
+      basePadding = 32 // 16pt top/bottom + 12pt card padding top/bottom
+    }
+    
+    let totalHeight = textViewHeight + basePadding + imageContextHeight
 
     return CGSize(width: UIView.noIntrinsicMetric, height: totalHeight)
   }
