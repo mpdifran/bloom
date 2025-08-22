@@ -49,12 +49,19 @@ struct ChatDetectedFoodCell: View {
   var body: some View {
     HStack {
       VStack(alignment: .leading) {
-        Text(name)
-          .font(.title3)
-          .fontWeight(.heavy)
-          .fontDesign(.rounded)
-          .lineLimit(3)
-          .multilineTextAlignment(.leading)
+        HStack(alignment: .top) {
+          Image(systemSymbol: .forkKnifeCircleFill)
+            .foregroundStyle(.white, .tint)
+            .font(.largeTitle)
+
+          Text(name)
+            .font(.title3)
+            .fontWeight(.heavy)
+            .fontDesign(.rounded)
+            .lineLimit(3)
+            .multilineTextAlignment(.leading)
+        }
+
 
         Divider()
 
@@ -87,7 +94,7 @@ struct ChatDetectedFoodCell: View {
     }
     .animation(.default, value: hasAddedFood)
     .padding(.horizontal)
-    .sheet($presentedSheet)
+    .fullScreenCover($presentedSheet)
     .onAppear {
       loadMealIfLogged()
     }

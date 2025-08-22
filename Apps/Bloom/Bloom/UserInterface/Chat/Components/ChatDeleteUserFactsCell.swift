@@ -48,7 +48,7 @@ struct ChatDeleteUserFactsCell: View {
         presentedSheet = UserFactsView(showDoneButton: true).asAny
       }
     }
-    .sheet($presentedSheet)
+    .fullScreenCover($presentedSheet)
   }
 }
 

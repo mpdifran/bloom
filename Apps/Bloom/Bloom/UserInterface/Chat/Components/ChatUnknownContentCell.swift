@@ -54,7 +54,7 @@ struct ChatUnknownContentCell: View {
         .padding(.horizontal)
       }
     }
-    .sheet(isPresented: $showReportSheet) {
+    .fullScreenCover(isPresented: $showReportSheet) {
       if let responseID = responseID,
          let requestID = requestID {
         ChatReportReviewView(

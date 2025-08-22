@@ -83,7 +83,7 @@ struct ChatDatabaseReminderCell: View {
       
       Spacer()
     }
-    .sheet(isPresented: $showingEditReminder) {
+    .fullScreenCover(isPresented: $showingEditReminder) {
       if let reminder {
         NavigationStack {
           CreateEditReminderView(reminder: reminder)

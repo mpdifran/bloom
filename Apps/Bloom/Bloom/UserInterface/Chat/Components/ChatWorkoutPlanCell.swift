@@ -83,7 +83,7 @@ struct ChatWorkoutPlanCell: View {
     }
     .padding(.horizontal)
     .tint(.green)
-    .sheet(isPresented: $showingDetails) {
+    .fullScreenCover(isPresented: $showingDetails) {
       NavigationStack {
         ChatWorkoutPlanDetailsView(
           chatMessageID: chatMessageID,
