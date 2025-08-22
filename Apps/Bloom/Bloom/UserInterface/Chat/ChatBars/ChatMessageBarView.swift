@@ -10,6 +10,7 @@ import SwiftUI
 import SFSafeSymbols
 import AudioToolbox
 import PhotosUI
+import UniformTypeIdentifiers
 import DataContainer
 
 protocol ChatMessageBarScrollDelegate: AnyObject {
@@ -179,12 +180,48 @@ class ChatMessageBarView: UIView {
     plusButton.configuration = UIButton.Configuration.plain()
     plusButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
     
-    plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+    // Setup menu for image source selection
+    if #available(iOS 14.0, *) {
+      setupPlusButtonMenu()
+    } else {
+      plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+    }
 
     NSLayoutConstraint.activate([
       plusButton.widthAnchor.constraint(equalToConstant: 24),
       plusButton.heightAnchor.constraint(equalToConstant: 24)
     ])
+  }
+  
+  @available(iOS 14.0, *)
+  private func setupPlusButtonMenu() {
+    let cameraAction = UIAction(
+      title: "Camera",
+      image: UIImage(systemSymbol: .camera)
+    ) { [weak self] _ in
+      self?.provideFeedback()
+      self?.presentCameraPicker()
+    }
+    
+    let photoLibraryAction = UIAction(
+      title: "Photo Library",
+      image: UIImage(systemSymbol: .photo)
+    ) { [weak self] _ in
+      self?.provideFeedback()
+      self?.presentPhotoLibraryPicker()
+    }
+    
+    let filesAction = UIAction(
+      title: "Files",
+      image: UIImage(systemSymbol: .folder)
+    ) { [weak self] _ in
+      self?.provideFeedback()
+      self?.presentFilesPicker()
+    }
+    
+    let menu = UIMenu(children: [cameraAction, photoLibraryAction, filesAction])
+    plusButton.menu = menu
+    plusButton.showsMenuAsPrimaryAction = true
   }
 
   private func setupTextView() {
@@ -278,7 +315,7 @@ class ChatMessageBarView: UIView {
 
   @objc private func plusButtonTapped() {
     provideFeedback()
-    presentImagePicker()
+    presentPhotoLibraryPicker()
   }
 
   @objc private func actionButtonTapped() {
@@ -477,10 +514,34 @@ class ChatMessageBarView: UIView {
     }
   }
 
-  // MARK: - Image Picker
-
-  private func presentImagePicker() {
+  // MARK: - Image Pickers
+  
+  private func presentCameraPicker() {
     guard let parentViewController = findParentViewController() else { return }
+    
+    guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+      // Camera not available, fall back to photo library
+      presentPhotoLibraryPicker()
+      return
+    }
+    
+    // Resign first responder from both text view and parent view controller
+    textView.resignFirstResponder()
+    parentViewController.resignFirstResponder()
+    
+    let picker = UIImagePickerController()
+    picker.sourceType = .camera
+    picker.mediaTypes = ["public.image"]
+    picker.delegate = self
+    parentViewController.present(picker, animated: true)
+  }
+
+  private func presentPhotoLibraryPicker() {
+    guard let parentViewController = findParentViewController() else { return }
+    
+    // Resign first responder from both text view and parent view controller
+    textView.resignFirstResponder()
+    parentViewController.resignFirstResponder()
 
     if #available(iOS 14.0, *) {
       var configuration = PHPickerConfiguration()
@@ -497,6 +558,32 @@ class ChatMessageBarView: UIView {
       picker.delegate = self
       parentViewController.present(picker, animated: true)
     }
+  }
+  
+  private func presentFilesPicker() {
+    guard let parentViewController = findParentViewController() else { return }
+    
+    // Resign first responder from both text view and parent view controller
+    textView.resignFirstResponder()
+    parentViewController.resignFirstResponder()
+    
+    let documentPicker = UIDocumentPickerViewController(
+      forOpeningContentTypes: [
+        .image,
+        .png,
+        .jpeg,
+        .heif,
+        .heic,
+        .webP,
+        .gif,
+        .bmp,
+        .tiff
+      ],
+      asCopy: true
+    )
+    documentPicker.delegate = self
+    documentPicker.allowsMultipleSelection = false
+    parentViewController.present(documentPicker, animated: true)
   }
 
   // MARK: - Message Submission
@@ -663,5 +750,24 @@ extension ChatMessageBarView: UIImagePickerControllerDelegate, UINavigationContr
 
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
     picker.dismiss(animated: true)
+  }
+}
+
+// MARK: - UIDocumentPickerDelegate
+
+extension ChatMessageBarView: UIDocumentPickerDelegate {
+  func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+    guard let url = urls.first else { return }
+    
+    // Load the image from the selected file
+    if let data = try? Data(contentsOf: url),
+       let image = UIImage(data: data) {
+      selectedImage = image
+      updateImageContextVisibility()
+    }
+  }
+  
+  func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+    // User cancelled, no action needed
   }
 }

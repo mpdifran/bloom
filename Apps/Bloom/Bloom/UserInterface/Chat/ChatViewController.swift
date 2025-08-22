@@ -93,9 +93,11 @@ class ChatViewController: UICollectionViewController {
       scrollToBottom(animated: false)
     }
   }
-
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
+
+    print("View Did Appear")
 
     becomeFirstResponder()
     
@@ -111,10 +113,12 @@ class ChatViewController: UICollectionViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
+    print("View Will Disappear")
+
     // Only resign first responder if we're being dismissed/popped, not when presenting a modal
-    if isBeingDismissed || isMovingFromParent {
+//    if isBeingDismissed || isMovingFromParent {
       resignFirstResponder()
-    }
+//    }
     maintenanceTask?.cancel()
     maintenanceTask = nil
   }
