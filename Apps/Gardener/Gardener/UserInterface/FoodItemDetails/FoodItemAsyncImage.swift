@@ -31,7 +31,7 @@ struct FoodItemAsyncImage: View {
               .horizontallyCentered()
             Spacer()
           }
-          .aspectRatio(contentMode: .fit)
+          .frame(minHeight: 200)
         case .success(let image):
           ZStack(alignment: .topTrailing) {
             image
