@@ -27,7 +27,7 @@ class ChatMessageBarView: UIView {
   private let containerView = UIView()
   private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
   private let cardContainerView = UIView()
-  private let mainStackView = UIStackView()
+  let mainStackView = UIStackView()
 
   private let imageContextScrollView = UIScrollView()
   private let imageContextStackView = UIStackView()
@@ -44,7 +44,6 @@ class ChatMessageBarView: UIView {
   private let maxTextViewHeight: CGFloat = 120
 
   private var selectedImage: UIImage?
-  private var keyboardHeight: CGFloat = 0
 
   // MARK: - Initialization
 
@@ -53,16 +52,12 @@ class ChatMessageBarView: UIView {
     super.init(frame: .zero)
     setupViews()
     setupConstraints()
-    setupKeyboardObservers()
   }
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
-  deinit {
-    NotificationCenter.default.removeObserver(self)
-  }
 
   // MARK: - Setup
 
@@ -144,19 +139,10 @@ class ChatMessageBarView: UIView {
 
     cardContainerView.addSubview(inputStackView)
 
-    let cardWrapper = UIView()
-    cardWrapper.translatesAutoresizingMaskIntoConstraints = false
-    cardWrapper.addSubview(cardContainerView)
-
-    mainStackView.addArrangedSubview(cardWrapper)
+    mainStackView.addArrangedSubview(cardContainerView)
 
     // Card constraints
     NSLayoutConstraint.activate([
-      cardContainerView.topAnchor.constraint(equalTo: cardWrapper.topAnchor),
-      cardContainerView.leadingAnchor.constraint(equalTo: cardWrapper.leadingAnchor),
-      cardContainerView.trailingAnchor.constraint(equalTo: cardWrapper.trailingAnchor),
-      cardContainerView.bottomAnchor.constraint(equalTo: cardWrapper.bottomAnchor),
-
       inputStackView.topAnchor.constraint(equalTo: cardContainerView.topAnchor, constant: 12),
       inputStackView.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor, constant: 12),
       inputStackView.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor, constant: -12),
@@ -283,7 +269,6 @@ class ChatMessageBarView: UIView {
       mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
       mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
       mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-      mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
 
       // Image/context scroll view constraints
       imageContextScrollView.heightAnchor.constraint(equalToConstant: 60),
@@ -295,21 +280,6 @@ class ChatMessageBarView: UIView {
     ])
   }
 
-  private func setupKeyboardObservers() {
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(keyboardWillShow),
-      name: UIResponder.keyboardWillShowNotification,
-      object: nil
-    )
-
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(keyboardWillHide),
-      name: UIResponder.keyboardWillHideNotification,
-      object: nil
-    )
-  }
 
   // MARK: - Actions
 
@@ -336,18 +306,6 @@ class ChatMessageBarView: UIView {
     }
   }
 
-  // MARK: - Keyboard Handling
-
-  @objc private func keyboardWillShow(_ notification: Notification) {
-    guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-    keyboardHeight = keyboardFrame.height
-    updateActionButton()
-  }
-
-  @objc private func keyboardWillHide(_ notification: Notification) {
-    keyboardHeight = 0
-    updateActionButton()
-  }
 
   // MARK: - UI Updates
 
@@ -357,7 +315,7 @@ class ChatMessageBarView: UIView {
 
     if isEmpty {
       // Show keyboard toggle - text color on filled background
-      let isKeyboardVisible = keyboardHeight > 0
+      let isKeyboardVisible = textView.isFirstResponder
       let symbolName: SFSymbol = isKeyboardVisible ? .chevronDownCircleFill : .chevronUpCircleFill
       let image = UIImage(systemSymbol: symbolName, withConfiguration: config)
       actionButton.setImage(image, for: .normal)
@@ -679,6 +637,11 @@ class ChatMessageBarView: UIView {
 extension ChatMessageBarView: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
     scrollDelegate?.chatMessageBarDidBeginEditing()
+    updateActionButton()
+  }
+  
+  func textViewDidEndEditing(_ textView: UITextView) {
+    updateActionButton()
   }
   
   func textViewDidChange(_ textView: UITextView) {

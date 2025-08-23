@@ -24,11 +24,8 @@ class ChatViewController: UICollectionViewController {
   private let tabController: TabController
   private let themeController: ThemeController
 
-  private lazy var chatMessageBar: ChatMessageBarView = {
-    let bar = ChatMessageBarView(tabController: tabController)
-    bar.scrollDelegate = self
-    return bar
-  }()
+  private var chatMessageBar: ChatMessageBarView!
+  private var scrollToBottomButtonBottomConstraint: NSLayoutConstraint!
 
   private var cellModels: [ChatCellModel] = []
   private var isLoadingMore = false
@@ -84,25 +81,16 @@ class ChatViewController: UICollectionViewController {
 
     setupNavigationBar()
     setupCollectionView()
+    setupMessageBar()
     setupScrollToBottomButton()
     setupObservers()
     setupKeyboardObservers()
+    updateContentInsets()
 
     // Scroll to bottom on initial appearance if there are messages
     if cellModels.isNotEmpty {
       scrollToBottom(animated: false)
     }
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-
-    print("View Did Appear")
-
-    becomeFirstResponder()
-    
-    // Focus the text view in the message bar
-    chatMessageBar.focusTextView()
 
     // Start WebSocket maintenance
     maintenanceTask = Task {
@@ -110,17 +98,16 @@ class ChatViewController: UICollectionViewController {
     }
   }
 
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
 
-    print("View Will Disappear")
-
-    // Only resign first responder if we're being dismissed/popped, not when presenting a modal
-//    if isBeingDismissed || isMovingFromParent {
-      resignFirstResponder()
-//    }
-    maintenanceTask?.cancel()
-    maintenanceTask = nil
+    // Focus the text view in the message bar
+    chatMessageBar.focusTextView()
+  }
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    updateContentInsets()
   }
 
   deinit {
@@ -129,14 +116,29 @@ class ChatViewController: UICollectionViewController {
     NotificationCenter.default.removeObserver(self)
   }
 
-  // MARK: - Input Accessory
+  // MARK: - Message Bar Setup
+  
+  private func setupMessageBar() {
+    chatMessageBar = ChatMessageBarView(tabController: tabController)
+    chatMessageBar.scrollDelegate = self
+    chatMessageBar.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(chatMessageBar)
 
-  override var inputAccessoryView: UIView? {
-    return chatMessageBar
+    NSLayoutConstraint.activate([
+      chatMessageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      chatMessageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      chatMessageBar.mainStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -16),
+      chatMessageBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    ])
   }
-
-  override var canBecomeFirstResponder: Bool {
-    return true
+  
+  private func updateContentInsets() {
+    guard chatMessageBar != nil else { return }
+    
+    // Calculate the height of the message bar plus any keyboard
+    let messageBarHeight = chatMessageBar.mainStackView.frame.height + 32 // Top and bottom padding included
+    collectionView.contentInset.bottom = messageBarHeight + 16 // 16 for spacing
+    collectionView.verticalScrollIndicatorInsets.bottom = messageBarHeight
   }
 
   // MARK: - Setup
@@ -218,9 +220,13 @@ class ChatViewController: UICollectionViewController {
 
   private func setupScrollToBottomButton() {
     view.addSubview(scrollToBottomButton)
+    
+    // Constrain to message bar so it moves with keyboard
+    scrollToBottomButtonBottomConstraint = scrollToBottomButton.bottomAnchor.constraint(equalTo: chatMessageBar.topAnchor, constant: -8)
+    
     NSLayoutConstraint.activate([
       scrollToBottomButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      scrollToBottomButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+      scrollToBottomButtonBottomConstraint,
       scrollToBottomButton.widthAnchor.constraint(equalToConstant: 32),
       scrollToBottomButton.heightAnchor.constraint(equalToConstant: 32)
     ])
@@ -259,7 +265,7 @@ class ChatViewController: UICollectionViewController {
   // MARK: - Actions
 
   @objc private func doneTapped() {
-    resignFirstResponder()
+    chatMessageBar.resignTextFieldFocus()
     dismiss(animated: true)
   }
 
@@ -375,7 +381,11 @@ class ChatViewController: UICollectionViewController {
     guard cellModels.isNotEmpty else { return }
 
     let lastIndexPath = IndexPath(item: cellModels.count - 1, section: 0)
-    collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: animated)
+    collectionView.scrollToItem(
+      at: lastIndexPath,
+      at: .bottom,
+      animated: animated
+    )
   }
 
   // MARK: - Error Handling
@@ -496,9 +506,6 @@ extension ChatViewController: ChatLayoutDelegate {
 
 extension ChatViewController: ChatMessageBarScrollDelegate {
   func chatMessageBarDidBeginEditing() {
-    // Scroll to bottom when text field is tapped
-    DispatchQueue.main.async { [weak self] in
-      self?.scrollToBottom(animated: true)
-    }
+    // The keyboard notification will handle scrolling
   }
 }
