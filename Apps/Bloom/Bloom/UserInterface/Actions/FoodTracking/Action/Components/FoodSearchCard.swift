@@ -47,6 +47,32 @@ struct FoodSearchCard: View {
   @AppStorage("FoodLoggingActionCardView.hasShownExplanation", store: .group) private var hasShownExplanation = false
 
   var body: some View {
+    if #available(iOS 26.0, *) {
+      GlassEffectContainer {
+        coreContentView
+          .glassEffect(in: RoundedRectangle(cornerRadius: 40))
+          .padding(.horizontal, 8)
+          .padding(.bottom, 8)
+      }
+    } else {
+      coreContentView
+        .background {
+          RoundedRectangle(cornerRadius: 40)
+            .fill(.background.secondary)
+            .ignoresSafeArea(edges: .bottom)
+            .overlay {
+              RoundedRectangle(cornerRadius: 40)
+                .stroke(.fill)
+                .ignoresSafeArea(edges: .bottom)
+            }
+        }
+    }
+  }
+}
+
+private extension FoodSearchCard {
+
+  var coreContentView: some View {
     VStack {
       if !isFocused {
         switch toolbarMode {
@@ -68,24 +94,11 @@ struct FoodSearchCard: View {
       searchTextField
     }
     .padding()
-    .background {
-      RoundedRectangle(cornerRadius: 40)
-        .fill(.background.secondary)
-        .ignoresSafeArea(edges: .bottom)
-        .overlay {
-          RoundedRectangle(cornerRadius: 40)
-            .stroke(.fill)
-            .ignoresSafeArea(edges: .bottom)
-        }
-    }
     .sheet($presentedSheet)
     .sensoryFeedback(.selection, trigger: isFocused)
     .animation(.easeInOut, value: isFocused)
     .animation(.easeInOut, value: searchQuery.isEmpty)
   }
-}
-
-private extension FoodSearchCard {
 
   var magicScanButton: some View {
     FoodSearchActionButton(symbol: .barcodeViewfinder, title: "Scan") {

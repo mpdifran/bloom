@@ -126,19 +126,34 @@ class ChatViewController: UICollectionViewController {
     chatMessageBar.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(chatMessageBar)
 
-    NSLayoutConstraint.activate([
-      chatMessageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      chatMessageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      chatMessageBar.mainStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -16),
-      chatMessageBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-    ])
+    if #available(iOS 26.0, *) {
+      NSLayoutConstraint.activate([
+        chatMessageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        chatMessageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        chatMessageBar.mainStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -8),
+        chatMessageBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+      ])
+    } else {
+      NSLayoutConstraint.activate([
+        chatMessageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        chatMessageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        chatMessageBar.mainStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -16),
+        chatMessageBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+      ])
+    }
   }
   
   private func updateContentInsets() {
     guard chatMessageBar != nil else { return }
     
     // Calculate the height of the message bar plus any keyboard
-    let messageBarHeight = chatMessageBar.mainStackView.frame.height + 32 // Top and bottom padding included
+    let messageBarHeight: CGFloat
+    if #available(iOS 26.0, *) {
+      messageBarHeight = chatMessageBar.mainStackView.frame.height + 8 // Bottom padding included
+    } else {
+      messageBarHeight = chatMessageBar.mainStackView.frame.height + 32 // Top and bottom padding included
+    }
+
     collectionView.contentInset.bottom = messageBarHeight + 16 // 16 for spacing
     collectionView.verticalScrollIndicatorInsets.bottom = messageBarHeight
   }

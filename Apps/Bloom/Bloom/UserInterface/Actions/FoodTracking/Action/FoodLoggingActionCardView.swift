@@ -108,7 +108,7 @@ struct FoodLoggingActionCardView: View {
               Label("Upload a Food", systemSymbol: .plusViewfinder)
             }
           } label: {
-            Image(systemSymbol: .plus)
+            Label("Add", systemSymbol: .plus)
               .bold()
           }
         }

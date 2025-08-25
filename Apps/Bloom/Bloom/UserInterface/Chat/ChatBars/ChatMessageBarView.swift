@@ -69,10 +69,10 @@ class ChatMessageBarView: UIView {
     containerView.translatesAutoresizingMaskIntoConstraints = false
     containerView.backgroundColor = .clear
     addSubview(containerView)
+    containerView.constrainToParent()
 
     if #available(iOS 26.0, *) {
-      // iOS 26+: Floating glass effect without blur view
-      setupViewsIOS26()
+
     } else {
       // Legacy: Blur effect setup
       setupViewsLegacy()
@@ -93,26 +93,7 @@ class ChatMessageBarView: UIView {
     // Update visibility
     updateImageContextVisibility()
   }
-  
-  @available(iOS 26.0, *)
-  private func setupViewsIOS26() {
-    // Glass effect setup for iOS 26
-    let glassEffectView = UIVisualEffectView(effect: UIGlassEffect())
-    glassEffectView.translatesAutoresizingMaskIntoConstraints = false
-    glassEffectView.layer.cornerRadius = 34
-    glassEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-    glassEffectView.clipsToBounds = true
-    containerView.addSubview(glassEffectView)
-    
-    // Add constraints for glass effect view
-    NSLayoutConstraint.activate([
-      glassEffectView.topAnchor.constraint(equalTo: containerView.topAnchor),
-      glassEffectView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-      glassEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-      glassEffectView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-    ])
-  }
-  
+
   private func setupViewsLegacy() {
     // Blur effect setup for older iOS versions
     blurEffectView.translatesAutoresizingMaskIntoConstraints = false
@@ -120,6 +101,7 @@ class ChatMessageBarView: UIView {
     blurEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     blurEffectView.clipsToBounds = true
     containerView.addSubview(blurEffectView)
+    blurEffectView.constrainToParent()
   }
 
   private func setupImageContextScrollView() {
@@ -139,18 +121,6 @@ class ChatMessageBarView: UIView {
   private func setupInputStackView() {
     // Card container
     cardContainerView.translatesAutoresizingMaskIntoConstraints = false
-    
-    if #available(iOS 26.0, *) {
-      cardContainerView.layer.cornerRadius = 34
-    } else {
-      // Legacy: Standard appearance
-      cardContainerView.backgroundColor = .systemBackground
-      cardContainerView.layer.cornerRadius = 26
-      cardContainerView.layer.shadowColor = UIColor.black.cgColor
-      cardContainerView.layer.shadowOpacity = 0.05
-      cardContainerView.layer.shadowOffset = CGSize(width: 0, height: 1)
-      cardContainerView.layer.shadowRadius = 2
-    }
 
     // Input stack view
     inputStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -167,22 +137,38 @@ class ChatMessageBarView: UIView {
     // Action button setup
     setupActionButton()
 
+    if #available(iOS 26.0, *) {
+      cardContainerView.backgroundColor = .clear
+
+      let glassEffectView = UIVisualEffectView(effect: UIGlassEffect())
+      glassEffectView.translatesAutoresizingMaskIntoConstraints = false
+      glassEffectView.layer.cornerRadius = 24
+      glassEffectView.clipsToBounds = true
+      cardContainerView.addSubview(glassEffectView)
+      glassEffectView.constrainToParent()
+
+      NSLayoutConstraint.activate([
+        glassEffectView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
+      ])
+    } else {
+      // Legacy: Standard appearance
+      cardContainerView.backgroundColor = .systemBackground
+      cardContainerView.layer.cornerRadius = 26
+      cardContainerView.layer.shadowColor = UIColor.black.cgColor
+      cardContainerView.layer.shadowOpacity = 0.05
+      cardContainerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+      cardContainerView.layer.shadowRadius = 2
+    }
+
     // Add to stack
     inputStackView.addArrangedSubview(plusButton)
     inputStackView.addArrangedSubview(textView)
     inputStackView.addArrangedSubview(actionButton)
 
     cardContainerView.addSubview(inputStackView)
+    inputStackView.constrainToParent(padding: 12)
 
     mainStackView.addArrangedSubview(cardContainerView)
-
-    // Card constraints
-    NSLayoutConstraint.activate([
-      inputStackView.topAnchor.constraint(equalTo: cardContainerView.topAnchor, constant: 12),
-      inputStackView.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor, constant: 12),
-      inputStackView.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor, constant: -12),
-      inputStackView.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor, constant: -12)
-    ])
   }
 
   private func setupPlusButton() {
@@ -202,19 +188,15 @@ class ChatMessageBarView: UIView {
     plusButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
     
     // Setup menu for image source selection
-    if #available(iOS 14.0, *) {
-      setupPlusButtonMenu()
-    } else {
-      plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-    }
+    setupPlusButtonMenu()
 
     NSLayoutConstraint.activate([
       plusButton.widthAnchor.constraint(equalToConstant: 24),
       plusButton.heightAnchor.constraint(equalToConstant: 24)
     ])
   }
-  
-  @available(iOS 14.0, *)
+
+
   private func setupPlusButtonMenu() {
     let cameraAction = UIAction(
       title: "Camera",
@@ -223,7 +205,7 @@ class ChatMessageBarView: UIView {
       self?.provideFeedback()
       self?.presentCameraPicker()
     }
-    
+
     let photoLibraryAction = UIAction(
       title: "Photo Library",
       image: UIImage(systemSymbol: .photo)
@@ -231,7 +213,7 @@ class ChatMessageBarView: UIView {
       self?.provideFeedback()
       self?.presentPhotoLibraryPicker()
     }
-    
+
     let filesAction = UIAction(
       title: "Files",
       image: UIImage(systemSymbol: .folder)
@@ -239,7 +221,7 @@ class ChatMessageBarView: UIView {
       self?.provideFeedback()
       self?.presentFilesPicker()
     }
-    
+
     let menu = UIMenu(children: [cameraAction, photoLibraryAction, filesAction])
     plusButton.menu = menu
     plusButton.showsMenuAsPrimaryAction = true
@@ -248,7 +230,7 @@ class ChatMessageBarView: UIView {
   private func setupTextView() {
     textView.translatesAutoresizingMaskIntoConstraints = false
     textView.backgroundColor = .clear
-    textView.font = .systemFont(ofSize: 17)
+    textView.font = .preferredFont(forTextStyle: .body, compatibleWith: nil)
     textView.textColor = .label
     textView.textContainerInset = UIEdgeInsets.zero
     textView.textContainer.lineFragmentPadding = 0
@@ -259,7 +241,7 @@ class ChatMessageBarView: UIView {
     // Placeholder
     placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
     placeholderLabel.text = "Message"
-    placeholderLabel.font = .systemFont(ofSize: 17)
+    placeholderLabel.font = .preferredFont(forTextStyle: .body, compatibleWith: nil)
     placeholderLabel.textColor = .placeholderText
     textView.addSubview(placeholderLabel)
 
@@ -287,59 +269,8 @@ class ChatMessageBarView: UIView {
   }
 
   private func setupConstraints() {
-    if #available(iOS 26.0, *) {
-      setupConstraintsIOS26()
-    } else {
-      setupConstraintsLegacy()
-    }
-  }
-  
-  @available(iOS 26.0, *)
-  private func setupConstraintsIOS26() {
-    // iOS 26: Floating glass effect with 8pt padding
-    NSLayoutConstraint.activate([
-      // Container constraints
-      containerView.topAnchor.constraint(equalTo: topAnchor),
-      containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-      containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-      containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-      // Main stack constraints with 8pt padding for floating effect
-      mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
-      mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
-      mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
-      mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8),
-
-      // Image/context scroll view constraints
-      imageContextScrollView.heightAnchor.constraint(equalToConstant: 60),
-      imageContextStackView.topAnchor.constraint(equalTo: imageContextScrollView.topAnchor, constant: 4),
-      imageContextStackView.leadingAnchor.constraint(equalTo: imageContextScrollView.leadingAnchor),
-      imageContextStackView.trailingAnchor.constraint(equalTo: imageContextScrollView.trailingAnchor),
-      imageContextStackView.bottomAnchor.constraint(equalTo: imageContextScrollView.bottomAnchor),
-      imageContextStackView.heightAnchor.constraint(equalTo: imageContextScrollView.heightAnchor, constant: -4)
-    ])
-  }
-  
-  private func setupConstraintsLegacy() {
     // Legacy: Standard blur effect with 16pt padding
     NSLayoutConstraint.activate([
-      // Container constraints
-      containerView.topAnchor.constraint(equalTo: topAnchor),
-      containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-      containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-      containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-      // Blur effect constraints
-      blurEffectView.topAnchor.constraint(equalTo: containerView.topAnchor),
-      blurEffectView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-      blurEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-      blurEffectView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-      // Main stack constraints
-      mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-      mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-      mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-
       // Image/context scroll view constraints
       imageContextScrollView.heightAnchor.constraint(equalToConstant: 60),
       imageContextStackView.topAnchor.constraint(equalTo: imageContextScrollView.topAnchor, constant: 4),
@@ -348,15 +279,28 @@ class ChatMessageBarView: UIView {
       imageContextStackView.bottomAnchor.constraint(equalTo: imageContextScrollView.bottomAnchor),
       imageContextStackView.heightAnchor.constraint(equalTo: imageContextScrollView.heightAnchor, constant: -4)
     ])
+
+    if #available(iOS 26.0, *) {
+      NSLayoutConstraint.activate([
+        // Main stack constraints
+        mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+        mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+        mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+        // No bottom constraint for the mainStackView since it'll constrain to the bottom of the keyboard, setup in the view controller.
+      ])
+    } else {
+      NSLayoutConstraint.activate([
+        // Main stack constraints
+        mainStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+        mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+        mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+        // No bottom constraint for the mainStackView since it'll constrain to the bottom of the keyboard, setup in the view controller.
+      ])
+    }
   }
 
 
   // MARK: - Actions
-
-  @objc private func plusButtonTapped() {
-    provideFeedback()
-    presentPhotoLibraryPicker()
-  }
 
   @objc private func actionButtonTapped() {
     provideFeedback()
@@ -389,7 +333,7 @@ class ChatMessageBarView: UIView {
       let symbolName: SFSymbol = isKeyboardVisible ? .chevronDownCircleFill : .chevronUpCircleFill
       let image = UIImage(systemSymbol: symbolName, withConfiguration: config)
       actionButton.setImage(image, for: .normal)
-      
+
       // Use label color for chevron, secondary fill for background
       actionButton.tintColor = .tertiarySystemFill
       actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.label, .tertiarySystemFill])
@@ -397,7 +341,7 @@ class ChatMessageBarView: UIView {
       // Show send button - white arrow on tinted background
       let image = UIImage(systemSymbol: .arrowUpCircleFill, withConfiguration: config)
       actionButton.setImage(image, for: .normal)
-      
+
       // Use tint color for background with white foreground
       actionButton.tintColor = .tintColor
       actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
@@ -543,20 +487,20 @@ class ChatMessageBarView: UIView {
   }
 
   // MARK: - Image Pickers
-  
+
   private func presentCameraPicker() {
     guard let parentViewController = findParentViewController() else { return }
-    
+
     guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
       // Camera not available, fall back to photo library
       presentPhotoLibraryPicker()
       return
     }
-    
+
     // Resign first responder from both text view and parent view controller
     textView.resignFirstResponder()
     parentViewController.resignFirstResponder()
-    
+
     let picker = UIImagePickerController()
     picker.sourceType = .camera
     picker.mediaTypes = ["public.image"]
@@ -566,7 +510,7 @@ class ChatMessageBarView: UIView {
 
   private func presentPhotoLibraryPicker() {
     guard let parentViewController = findParentViewController() else { return }
-    
+
     // Resign first responder from both text view and parent view controller
     textView.resignFirstResponder()
     parentViewController.resignFirstResponder()
@@ -587,14 +531,14 @@ class ChatMessageBarView: UIView {
       parentViewController.present(picker, animated: true)
     }
   }
-  
+
   private func presentFilesPicker() {
     guard let parentViewController = findParentViewController() else { return }
-    
+
     // Resign first responder from both text view and parent view controller
     textView.resignFirstResponder()
     parentViewController.resignFirstResponder()
-    
+
     let documentPicker = UIDocumentPickerViewController(
       forOpeningContentTypes: [
         .image,
@@ -629,7 +573,7 @@ class ChatMessageBarView: UIView {
     textView.text = ""
     selectedImage = nil
     tabController.chatContexts = []
-    
+
     // Dismiss keyboard
     textView.resignFirstResponder()
 
@@ -670,11 +614,11 @@ class ChatMessageBarView: UIView {
     let impact = UIImpactFeedbackGenerator(style: .light)
     impact.impactOccurred()
   }
-  
+
   func focusTextView() {
     textView.becomeFirstResponder()
   }
-  
+
   func resignTextFieldFocus() {
     textView.resignFirstResponder()
   }
@@ -696,14 +640,14 @@ class ChatMessageBarView: UIView {
     // Calculate height based on text view content + padding
     let textViewHeight = textViewHeightConstraint?.constant ?? minTextViewHeight
     let imageContextHeight: CGFloat = (selectedImage != nil || !tabController.chatContexts.isEmpty) ? 60 : 0
-    
+
     let basePadding: CGFloat
     if #available(iOS 26.0, *) {
-      basePadding = 16 + 16 // 8pt top/bottom + 12pt card padding top/bottom  
+      basePadding = 16 + 16 // 8pt top/bottom + 12pt card padding top/bottom
     } else {
       basePadding = 32 // 16pt top/bottom + 12pt card padding top/bottom
     }
-    
+
     let totalHeight = textViewHeight + basePadding + imageContextHeight
 
     return CGSize(width: UIView.noIntrinsicMetric, height: totalHeight)
@@ -717,11 +661,11 @@ extension ChatMessageBarView: UITextViewDelegate {
     scrollDelegate?.chatMessageBarDidBeginEditing()
     updateActionButton()
   }
-  
+
   func textViewDidEndEditing(_ textView: UITextView) {
     updateActionButton()
   }
-  
+
   func textViewDidChange(_ textView: UITextView) {
     placeholderLabel.isHidden = !textView.text.isEmpty
     updateActionButton()
@@ -799,7 +743,7 @@ extension ChatMessageBarView: UIImagePickerControllerDelegate, UINavigationContr
 extension ChatMessageBarView: UIDocumentPickerDelegate {
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
     guard let url = urls.first else { return }
-    
+
     // Load the image from the selected file
     if let data = try? Data(contentsOf: url),
        let image = UIImage(data: data) {
@@ -807,7 +751,7 @@ extension ChatMessageBarView: UIDocumentPickerDelegate {
       updateImageContextVisibility()
     }
   }
-  
+
   func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
     // User cancelled, no action needed
   }
