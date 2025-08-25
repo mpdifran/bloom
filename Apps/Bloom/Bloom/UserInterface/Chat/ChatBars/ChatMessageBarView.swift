@@ -126,7 +126,7 @@ class ChatMessageBarView: UIView {
     inputStackView.translatesAutoresizingMaskIntoConstraints = false
     inputStackView.axis = .horizontal
     inputStackView.alignment = .bottom
-    inputStackView.spacing = 8
+    inputStackView.spacing = 12
 
     // Plus button setup
     setupPlusButton()
@@ -643,9 +643,9 @@ class ChatMessageBarView: UIView {
 
     let basePadding: CGFloat
     if #available(iOS 26.0, *) {
-      basePadding = 16 + 16 // 8pt top/bottom + 12pt card padding top/bottom
+      basePadding = 24 // 12pt card padding top + 12pt card padding bottom
     } else {
-      basePadding = 32 // 16pt top/bottom + 12pt card padding top/bottom
+      basePadding = 40 // 16pt mainStackView top + 12pt card padding top + 12pt card padding bottom
     }
 
     let totalHeight = textViewHeight + basePadding + imageContextHeight
@@ -658,11 +658,13 @@ class ChatMessageBarView: UIView {
 
 extension ChatMessageBarView: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
+    placeholderLabel.isHidden = !textView.text.isEmpty
     scrollDelegate?.chatMessageBarDidBeginEditing()
     updateActionButton()
   }
 
   func textViewDidEndEditing(_ textView: UITextView) {
+    placeholderLabel.isHidden = !textView.text.isEmpty
     updateActionButton()
   }
 
