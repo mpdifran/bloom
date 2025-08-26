@@ -28,7 +28,7 @@ struct OnboardingHealthKitView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading) {
-        switch experimentManager.variant(for: .ExperimentID.softerHealthKitView) {
+        switch experimentManager.variant(for: .softerHealthKitView) {
         case .treatment:
           BudImage(.budCoach)
 
@@ -109,7 +109,7 @@ struct OnboardingHealthKitView: View {
               .frame(minHeight: 50)
           }
 
-          if experimentManager.variant(for: .ExperimentID.softerHealthKitView) == .treatment {
+          if experimentManager.variant(for: .softerHealthKitView) == .treatment {
             Text("•")
               .bold()
               .foregroundStyle(.tint)
@@ -154,7 +154,7 @@ struct OnboardingHealthKitView: View {
     }
     .onAppear {
       TelemetryDeck.signal("OB HealthKit")
-      switch experimentManager.variant(for: .ExperimentID.softerHealthKitView) {
+      switch experimentManager.variant(for: .softerHealthKitView) {
       case .treatment:
         TelemetryDeck.signal("AB: Softer HealthKit Treatment")
       case .control:

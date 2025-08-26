@@ -11,50 +11,38 @@ import SwiftUI
 @MainActor @Observable
 final class ExperimentManager {
 
-  private let experiments: [Experiment] = [
-    Experiment(
-      id: .ExperimentID.onboardingHealthKitView,
-      name: "Onboarding HealthKit View AB Test",
-      isEnabled: false,
-      treatmentPercentage: 0.5
-    ),
-    Experiment(
-      id: .ExperimentID.softerHealthKitView,
-      name: "Softer HealthKit View",
-      isEnabled: true,
-      treatmentPercentage: 0.5
-    )
-  ]
-
   private let overrideVariant: ExperimentVariant?
   
   init(overrideVariant: ExperimentVariant? = nil) {
     self.overrideVariant = overrideVariant
   }
 
-  func variant(for experimentId: String) -> ExperimentVariant {
+  func variant(for identifier: ExperimentIdentifier) -> ExperimentVariant {
     // In override mode, always return the override variant
     if let overrideVariant = overrideVariant {
       return overrideVariant
     }
     
     // Check for developer override first
-    if let override = checkOverride(for: experimentId) {
-      print("[ExperimentManager] Using override for \(experimentId): \(override)")
+    if let override = checkOverride(for: identifier.value) {
+      print("[ExperimentManager] Using override for \(identifier.value): \(override)")
       return override
     }
     
-    guard let experiment = experiments.first(where: { $0.id == experimentId }),
-          experiment.isEnabled else {
-      print("[ExperimentManager] WARNING: Experiment '\(experimentId)' not found or disabled. Available experiments: \(experiments.map { $0.id })")
+    // Check if this experiment exists (is enabled)
+    guard Experiment.allCases.contains(where: { $0.id == identifier }) else {
+      print("[ExperimentManager] WARNING: Experiment '\(identifier.value)' not found or disabled. Available experiments: \(Experiment.allCases.map { $0.rawValue })")
       return .control
     }
+    
+    // Use default 50/50 split for all experiments
+    let treatmentPercentage = 0.5
 
     let userId = UserID.value
-    let hashValue = StableHashGenerator.stableHash(experimentId: experimentId, userId: userId)
+    let hashValue = StableHashGenerator.stableHash(experimentId: identifier.value, userId: userId)
     let normalizedValue = Double(hashValue) / Double(UInt64.max)
     
-    return normalizedValue < experiment.treatmentPercentage ? ExperimentVariant.treatment : .control
+    return normalizedValue < treatmentPercentage ? ExperimentVariant.treatment : .control
   }
   
   private func checkOverride(for experimentId: String) -> ExperimentVariant? {
@@ -80,17 +68,10 @@ final class ExperimentManager {
   }
 }
 
-// Convenience extension for non-async contexts
-extension String {
-  enum ExperimentID {
-    static let onboardingHealthKitView = "onboarding_healthkit_view"
-    static let softerHealthKitView = "softer_healthkit_view"
-  }
-}
 
 // Extension to get all experiments for developer settings
 extension ExperimentManager {
   func allExperiments() -> [Experiment] {
-    return experiments
+    return Experiment.allCases
   }
 }

@@ -16,7 +16,7 @@ import Foundation
 /// ```
 ///
 /// - note: When dealing with Codable objects, mark your subclass as ``Codable``.
-public class Identifier: NSObject {
+open class Identifier: NSObject {
 
   /// The underlaying value of the identifier.
   public let value: String

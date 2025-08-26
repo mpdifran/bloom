@@ -23,7 +23,8 @@ struct ExperimentOverrideView: View {
   }
 
   var body: some View {
-    let currentVariant = experimentManager.variant(for: experimentId)
+    let identifier = ExperimentIdentifier(experimentId)
+    let currentVariant = experimentManager.variant(for: identifier)
     
     SettingsCell(
       experimentName,
@@ -43,7 +44,7 @@ struct ExperimentOverrideView: View {
   PreviewEnvironment {
     BloomScrollView {
       SettingsSectionContainer {
-        ExperimentOverrideView(experimentId: .ExperimentID.softerHealthKitView, experimentName: "Softer HealthKit View")
+        ExperimentOverrideView(experimentId: ExperimentIdentifier.softerHealthKitView.value, experimentName: "Softer HealthKit View")
       }
     }
   }
