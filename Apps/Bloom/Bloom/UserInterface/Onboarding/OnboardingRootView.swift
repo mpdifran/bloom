@@ -14,7 +14,6 @@ extension OnboardingRootView {
     case welcome
     case appExplanation
     case healthKit
-    case healthKitTreatment
     case ageAndSex
     case focusArea
     case goalSetup
@@ -46,15 +45,11 @@ struct OnboardingRootView: View {
         }
       case .appExplanation:
         OnboardingAppExplanationView {
-          await advanceToHealthKitViewExperimentVariant()
+          setStep(.healthKit)
         }
       case .healthKit:
         OnboardingHealthKitView {
-          await checkHealthDataAndProceed()
-        }
-      case .healthKitTreatment:
-        OnboardingHealthKitViewTreatement {
-          await checkHealthDataAndProceed()
+          checkHealthDataAndProceed()
         }
       case .ageAndSex:
         OnboardingHealthAgeSexHeightView {
@@ -95,26 +90,8 @@ private extension OnboardingRootView {
       self.step = step
     }
   }
-  
-  func advanceToHealthKitViewExperimentVariant() async {
-    let experimentId = String.ExperimentID.onboardingHealthKitView
-    let variant = await ExperimentManager.shared.variant(for: experimentId)
-    
-    // Log variant assignment
-    TelemetryDeck.signal("Experiment.Assigned", parameters: [
-      "experiment_id": experimentId,
-      "variant": variant.rawValue
-    ])
 
-    switch variant {
-    case .control:
-      setStep(.healthKit)
-    case .treatment:
-      setStep(.healthKitTreatment)
-    }
-  }
-
-  func checkHealthDataAndProceed() async {
+  func checkHealthDataAndProceed() {
     // Check if we already have complete health data from HealthKit
     let sex = healthManager.healthStore.sex()
     let age = healthManager.healthStore.age()

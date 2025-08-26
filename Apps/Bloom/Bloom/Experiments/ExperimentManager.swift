@@ -6,22 +6,38 @@
 //
 
 import Foundation
+import SwiftUI
 
-final actor ExperimentManager {
-  static let shared = ExperimentManager()
+@MainActor @Observable
+final class ExperimentManager {
 
   private let experiments: [Experiment] = [
     Experiment(
       id: .ExperimentID.onboardingHealthKitView,
       name: "Onboarding HealthKit View AB Test",
+      isEnabled: false,
+      treatmentPercentage: 0.5
+    ),
+    Experiment(
+      id: .ExperimentID.softerHealthKitView,
+      name: "Softer HealthKit View",
       isEnabled: true,
       treatmentPercentage: 0.5
     )
   ]
 
-  private init() {}
+  private let overrideVariant: ExperimentVariant?
+  
+  init(overrideVariant: ExperimentVariant? = nil) {
+    self.overrideVariant = overrideVariant
+  }
 
   func variant(for experimentId: String) -> ExperimentVariant {
+    // In override mode, always return the override variant
+    if let overrideVariant = overrideVariant {
+      return overrideVariant
+    }
+    
     // Check for developer override first
     if let override = checkOverride(for: experimentId) {
       print("[ExperimentManager] Using override for \(experimentId): \(override)")
@@ -38,16 +54,7 @@ final actor ExperimentManager {
     let hashValue = StableHashGenerator.stableHash(experimentId: experimentId, userId: userId)
     let normalizedValue = Double(hashValue) / Double(UInt64.max)
     
-    let variant = normalizedValue < experiment.treatmentPercentage ? ExperimentVariant.treatment : .control
-    
-    print("[ExperimentManager] Experiment: \(experimentId)")
-    print("[ExperimentManager]   UserID: \(userId)")
-    print("[ExperimentManager]   Hash: \(hashValue)")
-    print("[ExperimentManager]   Normalized: \(normalizedValue)")
-    print("[ExperimentManager]   Threshold: \(experiment.treatmentPercentage)")
-    print("[ExperimentManager]   Variant: \(variant)")
-
-    return variant
+    return normalizedValue < experiment.treatmentPercentage ? ExperimentVariant.treatment : .control
   }
   
   private func checkOverride(for experimentId: String) -> ExperimentVariant? {
@@ -77,6 +84,7 @@ final actor ExperimentManager {
 extension String {
   enum ExperimentID {
     static let onboardingHealthKitView = "onboarding_healthkit_view"
+    static let softerHealthKitView = "softer_healthkit_view"
   }
 }
 

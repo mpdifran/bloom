@@ -13,8 +13,10 @@ import TelemetryDeck
 import CoreHealth
 
 struct OnboardingHealthKitView: View {
-  let onContinue: () async -> Void
+  let onContinue: () -> Void
 
+  @Environment(ExperimentManager.self) private var experimentManager
+  
   @State private var showMockHealthApp = false
   @State private var isWaitingForPermissionSheet = false
   @State private var healthPermissionTrigger = false
@@ -26,16 +28,30 @@ struct OnboardingHealthKitView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading) {
-        BudImage(.budDoctor)
+        switch experimentManager.variant(for: .ExperimentID.softerHealthKitView) {
+        case .treatment:
+          BudImage(.budCoach)
 
-        Group {
-          Text("I need access to your Health Data")
-          Text("The more health data you share with me, the more personalized your advice will be!")
-            .font(.title3)
-            .foregroundStyle(.secondary)
+          Group {
+            Text("Help me help you 💙")
+            Text("Share your Health data so I can personalize your insights. Your info always stays private, I promise.")
+              .font(.title3)
+              .foregroundStyle(.secondary)
+          }
+          .fixedSize(horizontal: false, vertical: true)
+          .onboardingTextStyle()
+        case .control:
+          BudImage(.budDoctor)
+
+          Group {
+            Text("I need access to your Health Data")
+            Text("The more health data you share with me, the more personalized your advice will be!")
+              .font(.title3)
+              .foregroundStyle(.secondary)
+          }
+          .fixedSize(horizontal: false, vertical: true)
+          .onboardingTextStyle()
         }
-        .fixedSize(horizontal: false, vertical: true)
-        .onboardingTextStyle()
 
         if showMockHealthApp {
           MockHealthAppPermissionView()
@@ -66,7 +82,7 @@ struct OnboardingHealthKitView: View {
         if isAuthorized {
           AsyncButton {
             didContinue.toggle()
-            await onContinue()
+            onContinue()
           } label: {
             Text("Let's go!")
           }
@@ -86,10 +102,26 @@ struct OnboardingHealthKitView: View {
           .buttonStyle(.onboarding)
         }
 
-        Link(destination: .privacyPolicy) {
-          Text("Privacy Policy")
-            .bold()
-            .frame(minHeight: 50)
+        HStack {
+          Link(destination: .privacyPolicy) {
+            Text("Privacy Policy")
+              .bold()
+              .frame(minHeight: 50)
+          }
+
+          if experimentManager.variant(for: .ExperimentID.softerHealthKitView) == .treatment {
+            Text("•")
+              .bold()
+              .foregroundStyle(.tint)
+
+            Button {
+              presentedSheet = OnboardingHealthKitLearnMoreView().asAny
+            } label: {
+              Text("Learn More")
+                .bold()
+                .frame(minHeight: 50)
+            }
+          }
         }
       }
     }
@@ -122,7 +154,12 @@ struct OnboardingHealthKitView: View {
     }
     .onAppear {
       TelemetryDeck.signal("OB HealthKit")
-      TelemetryDeck.signal("AB: OB HealthKit Control")
+      switch experimentManager.variant(for: .ExperimentID.softerHealthKitView) {
+      case .treatment:
+        TelemetryDeck.signal("AB: Softer HealthKit Treatment")
+      case .control:
+        TelemetryDeck.signal("AB: Softer HealthKit Control")
+      }
     }
   }
 }
@@ -155,16 +192,20 @@ private extension OnboardingHealthKitView {
 
       if isAuthorized {
         await VitalsCalculator.shared.forceFetchVitals()
-        await onContinue()
+        onContinue()
       }
     } catch { }
   }
 }
 
-#Preview {
-  PreviewEnvironment {
-    OnboardingHealthKitView { 
-      // Async preview action
-    }
+#Preview("Control") {
+  PreviewEnvironment(experimentVariant: .control) {
+    OnboardingHealthKitView { }
+  }
+}
+
+#Preview("Treatment") {
+  PreviewEnvironment(experimentVariant: .treatment) {
+    OnboardingHealthKitView { }
   }
 }

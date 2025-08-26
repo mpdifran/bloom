@@ -12,6 +12,7 @@ struct ExperimentOverrideView: View {
   let experimentId: String
   let experimentName: String
 
+  @Environment(ExperimentManager.self) private var experimentManager
   @AppStorage private var selectedOverride: String
 
   init(experimentId: String, experimentName: String) {
@@ -22,7 +23,12 @@ struct ExperimentOverrideView: View {
   }
 
   var body: some View {
-    SettingsCell(experimentName) {
+    let currentVariant = experimentManager.variant(for: experimentId)
+    
+    SettingsCell(
+      experimentName,
+      subtitle: "Current: \(currentVariant == .control ? "Control" : "Treatment")"
+    ) {
       Picker("", selection: $selectedOverride) {
         ForEach(ExperimentOverride.allCases, id: \.rawValue) { override in
           Text(override.displayName)
@@ -37,7 +43,7 @@ struct ExperimentOverrideView: View {
   PreviewEnvironment {
     BloomScrollView {
       SettingsSectionContainer {
-        ExperimentOverrideView(experimentId: .ExperimentID.onboardingHealthKitView, experimentName: "Onboarding HealthKit View")
+        ExperimentOverrideView(experimentId: .ExperimentID.softerHealthKitView, experimentName: "Softer HealthKit View")
       }
     }
   }

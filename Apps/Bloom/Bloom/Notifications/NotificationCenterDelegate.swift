@@ -106,12 +106,11 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
   }
 
   private func handleLeaveFeedbackAction() async {
-    if let mailURL = URL(string: "mailto:hello@trybloom.app?subject=Bloom%20Plus%20Feedback") {
-      await MainActor.run {
-        UIApplication.shared.open(mailURL)
-      }
-      TelemetryDeck.signal("Leave Feedback From Trial Reminder")
+    let mailURL = URL.emailBloom(subject: "Bloom Plus Feedback")
+    await MainActor.run {
+      UIApplication.shared.open(mailURL)
     }
+    TelemetryDeck.signal("Leave Feedback From Trial Reminder")
   }
 
   private func isReminderCompleted(notification: UNNotification) async -> Bool {

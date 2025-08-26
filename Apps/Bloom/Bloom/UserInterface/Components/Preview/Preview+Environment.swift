@@ -10,19 +10,42 @@ import DataContainer
 
 struct PreviewEnvironment<Content>: View where Content: View {
   let content: () -> Content
-
-  init(@ViewBuilder content: @escaping () -> Content) {
-    self.content = content
-    ContainerHolder.shared.setupForTests()
-  }
+  let experimentVariant: ExperimentVariant?
 
   @Bindable private var tabController = TabController()
   @Bindable private var themeController = ThemeController.shared
+  @Bindable private var experimentManager: ExperimentManager
+
+  @State private var presentedSheet: AnyView?
+  
+  init(
+    experimentVariant: ExperimentVariant? = nil,
+    @ViewBuilder content: @escaping () -> Content
+  ) {
+    self.content = content
+    self.experimentVariant = experimentVariant
+    self.experimentManager = ExperimentManager(overrideVariant: experimentVariant)
+    ContainerHolder.shared.setupForTests()
+  }
 
   var body: some View {
     content()
+      .sheet($presentedSheet)
       .tint(themeController.theme.color)
+      .overlay {
+        Button {
+          presentedSheet = DeveloperSettingsView().asAny
+        } label: {
+          Label("Developer Menu", systemSymbol: .curlybracesSquareFill)
+            .foregroundStyle(.white, .mutedYellow)
+            .font(.title2)
+            .bold()
+        }
+        .labelStyle(.iconOnly)
+        .zStackAlignment(.top)
+      }
       .environment(tabController)
       .environment(themeController)
+      .environment(experimentManager)
   }
 }

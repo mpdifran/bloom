@@ -40,13 +40,14 @@ private extension OnboardingHealthKitLearnMoreView {
 
   @ViewBuilder
   var titleSection: some View {
-    VStack(spacing: 16) {
-      Text("Health Data Usage")
+    VStack(alignment: .leading, spacing: 16) {
+      Text("Why I need your Health data 💙")
         .font(.title2)
 
-      Text("We ask for these permissions to provide you with the best experience possible.")
+      Text("With your permission, I can use your Health data to give you better, more personal insights.")
         .foregroundStyle(.secondary)
     }
+    .multilineTextAlignment(.leading)
   }
 
   var healthDataUsageSection: some View {
@@ -58,7 +59,7 @@ private extension OnboardingHealthKitLearnMoreView {
 
       HealthDataUsageCell(
         title: "Chat with Bud",
-        message: "Bud can give you personalized health advice based on your data."
+        message: "Get personalized tips and advice based on your data."
       ) {
         Image(.budPeek)
           .resizable()
@@ -67,7 +68,7 @@ private extension OnboardingHealthKitLearnMoreView {
 
       HealthDataUsageCell(
         title: "Workouts",
-        message: "Summarize and analyze your workouts."
+        message: "Summarize and celebrate your workouts."
       ) {
         Image(systemSymbol: .figureRun)
           .font(.title3)
@@ -75,21 +76,21 @@ private extension OnboardingHealthKitLearnMoreView {
 
       HealthDataUsageCell(
         title: "Sleep",
-        message: "Analyze your sleep patterns."
+        message: "Spot patterns in your sleep to help you rest better."
       ) {
         Image(systemSymbol: .moon)
       }
 
       HealthDataUsageCell(
         title: "Nutrition",
-        message: "Track meals, calories, and macros."
+        message: "Track meals, calories, and macros in one place."
       ) {
         Image(.nutritionTab)
       }
 
       HealthDataUsageCell(
         title: "Weight",
-        message: "Track and manage your weight."
+        message: "Follow your progress over time with friendly insights."
       ) {
         Image(.logWeightIcon)
       }
@@ -98,30 +99,41 @@ private extension OnboardingHealthKitLearnMoreView {
 
   var healthDataSecureSection: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("Your health data stays secure:")
+      Text("Your data is always safe:")
         .font(.body)
         .fontWeight(.heavy)
         .fontDesign(.rounded)
 
       Group {
-        Text("• Only visible to you, on this device")
-        Text("• Data shared with Bud stays anonymous")
-        Text("• Permissions can be adjusted at any time")
-        Text("• Health data is secured by \(Image(systemSymbol: .appleLogo)) Apple")
+        Text("• Only visible to you, stored on your device")
+        Text("• Shared with Bud anonymously and never tied to your identity")
+        Text("• You can change permissions anytime in Settings")
+        Text("• Secured by \(Image(systemSymbol: .appleLogo)) Apple")
       }
       .foregroundStyle(.secondary)
+      .multilineTextAlignment(.leading)
     }
     .horizontalAlignment(.leading)
   }
 
   var privacyPolicyButton: some View {
-    Link(destination: .privacyPolicy) {
-      HStack {
-        Text("Privacy Policy")
-        Image(systemSymbol: .arrowUpForwardAppFill)
+    VStack(alignment: .leading) {
+      Link(destination: .privacyPolicy) {
+        HStack {
+          Text("Privacy Policy")
+          Image(systemSymbol: .arrowUpForwardAppFill)
+        }
       }
+      .frame(height: 35)
+
+      Link(destination: .emailBloom(subject: "Health Data Questions")) {
+        HStack {
+          Text("Still have questions? Email us")
+          Image(systemSymbol: .envelopeFill)
+        }
+      }
+      .frame(height: 35)
     }
-    .frame(height: 35)
     .horizontalAlignment(.leading)
   }
 }

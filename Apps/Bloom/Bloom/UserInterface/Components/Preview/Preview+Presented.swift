@@ -15,30 +15,24 @@ struct PreviewSheetPresent<Content>: View where Content: View {
   }
 
   @State private var showSheet = true
-  @State private var developerSettings = false
 
   var body: some View {
     PreviewEnvironment {
       VStack {
+        Spacer()
+
         Button {
           showSheet.toggle()
         } label: {
           Text("Show Sheet")
         }
         .buttonStyle(.primary)
-        
-        Button {
-          developerSettings.toggle()
-        } label: {
-          Text("Developer Settings")
-        }
-        .frame(height: 60)
+
+        Spacer()
       }
+      .horizontallyCentered()
       .sheet(isPresented: $showSheet) {
         content()
-      }
-      .sheet(isPresented: $developerSettings) {
-        DeveloperSettingsView()
       }
     }
   }

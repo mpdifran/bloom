@@ -27,6 +27,11 @@ extension URL {
 
 extension URL {
   static let emailBloom = URL(string: "mailto:hello@trybloom.app")!
+  static func emailBloom(subject: String) -> URL {
+    var components = URLComponents(string: "mailto:hello@trybloom.app")!
+    components.queryItems = [URLQueryItem(name: "subject", value: subject)]
+    return components.url!
+  }
 }
 
 // MARK: - Apple

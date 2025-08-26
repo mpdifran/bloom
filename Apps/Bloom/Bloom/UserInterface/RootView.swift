@@ -14,8 +14,8 @@ struct RootView: View {
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
 
   @Bindable private var tabController = TabController()
-
   @Bindable private var themeController = ThemeController.shared
+  @Bindable private var experimentManager = ExperimentManager()
 
   @ObservedObject private var entitlementController = EntitlementController.shared
   @State private var presentedSheet: AnyView?
@@ -84,6 +84,7 @@ struct RootView: View {
     }
     .tint(themeController.theme.color)
     .environment(themeController)
+    .environment(experimentManager)
   }
 }
 

@@ -9,27 +9,38 @@ import SwiftUI
 
 struct SettingsCell<Content>: View where Content: View {
   let title: String
+  let subtitle: String?
   let showDisclosureIndicator: Bool
   let contentBuilder: () -> Content
 
   init(
     _ title: String,
+    subtitle: String? = nil,
     showDisclosureIndicator: Bool = false,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.title = title
+    self.subtitle = subtitle
     self.showDisclosureIndicator = showDisclosureIndicator
     self.contentBuilder = contentBuilder
   }
 
   var body: some View {
     HStack {
-      Text(title)
-        .bold()
-        .fontDesign(.rounded)
-        .minimumScaleFactor(0.7)
-        .lineLimit(2)
-        .layoutPriority(10)
+      VStack(alignment: .leading, spacing: 2) {
+        Text(title)
+          .bold()
+          .fontDesign(.rounded)
+          .minimumScaleFactor(0.7)
+          .lineLimit(2)
+        
+        if let subtitle = subtitle {
+          Text(subtitle)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+      }
+      .layoutPriority(10)
 
       Group {
         Spacer()

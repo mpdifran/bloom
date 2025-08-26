@@ -547,8 +547,8 @@ extension DeveloperSettingsView {
       
       SettingsSectionContainer {
         ExperimentOverrideView(
-          experimentId: .ExperimentID.onboardingHealthKitView,
-          experimentName: "Onboarding HealthKit View"
+          experimentId: .ExperimentID.softerHealthKitView,
+          experimentName: "Softer HealthKit View"
         )
       }
     }
@@ -579,7 +579,7 @@ extension DeveloperSettingsView {
   
   private func clearAllExperimentOverrides() {
     // Clear all experiment overrides
-    let overrideKey = String.ExperimentOverrideKey.key(for: .ExperimentID.onboardingHealthKitView)
+    let overrideKey = String.ExperimentOverrideKey.key(for: .ExperimentID.softerHealthKitView)
     UserDefaults.standard.removeObject(forKey: overrideKey)
   }
 }
