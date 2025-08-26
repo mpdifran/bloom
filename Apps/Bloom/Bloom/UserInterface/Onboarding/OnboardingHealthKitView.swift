@@ -155,10 +155,10 @@ struct OnboardingHealthKitView: View {
     .onAppear {
       TelemetryDeck.signal("OB HealthKit")
       switch experimentManager.variant(for: .softerHealthKitView) {
-      case .treatment:
-        TelemetryDeck.signal("AB: Softer HealthKit Treatment")
       case .control:
         TelemetryDeck.signal("AB: Softer HealthKit Control")
+      case .treatment:
+        TelemetryDeck.signal("AB: Softer HealthKit Treatment")
       }
     }
   }
@@ -199,13 +199,13 @@ private extension OnboardingHealthKitView {
 }
 
 #Preview("Control") {
-  PreviewEnvironment(experimentVariant: .control) {
+  PreviewEnvironment(variant: .control) {
     OnboardingHealthKitView { }
   }
 }
 
 #Preview("Treatment") {
-  PreviewEnvironment(experimentVariant: .treatment) {
+  PreviewEnvironment(variant: .treatment) {
     OnboardingHealthKitView { }
   }
 }

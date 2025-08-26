@@ -19,11 +19,11 @@ struct PreviewEnvironment<Content>: View where Content: View {
   @State private var presentedSheet: AnyView?
   
   init(
-    experimentVariant: ExperimentVariant? = nil,
+    variant: ExperimentVariant? = nil,
     @ViewBuilder content: @escaping () -> Content
   ) {
     self.content = content
-    self.experimentVariant = experimentVariant
+    self.experimentVariant = variant
     self.experimentManager = ExperimentManager(overrideVariant: experimentVariant)
     ContainerHolder.shared.setupForTests()
   }
@@ -42,7 +42,10 @@ struct PreviewEnvironment<Content>: View where Content: View {
             .bold()
         }
         .labelStyle(.iconOnly)
-        .zStackAlignment(.top)
+        .padding(20)
+        .padding(.horizontal)
+        .zStackAlignment(.topTrailing)
+        .ignoresSafeArea()
       }
       .environment(tabController)
       .environment(themeController)

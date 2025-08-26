@@ -112,6 +112,7 @@ struct OnboardingAppExplanationView: View {
     }
     .onAppear {
       TelemetryDeck.signal("OB App Explanation")
+      TelemetryDeck.signal("AB: OB App Explanation Control")
     }
   }
 }

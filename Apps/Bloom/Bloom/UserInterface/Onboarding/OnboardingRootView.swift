@@ -34,6 +34,7 @@ struct OnboardingRootView: View {
 
   @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
 
+  @Environment(ExperimentManager.self) private var experimentManager
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
@@ -44,8 +45,15 @@ struct OnboardingRootView: View {
           setStep(.appExplanation)
         }
       case .appExplanation:
-        OnboardingAppExplanationView {
-          setStep(.healthKit)
+        switch experimentManager.variant(for: .softerHealthKitView) {
+        case .control:
+          OnboardingAppExplanationView {
+            setStep(.healthKit)
+          }
+        case .treatment:
+          OnboardingAppExplanationViewTreatment {
+            setStep(.healthKit)
+          }
         }
       case .healthKit:
         OnboardingHealthKitView {
@@ -121,8 +129,14 @@ private extension OnboardingRootView {
   }
 }
 
-#Preview {
-  PreviewEnvironment {
+#Preview("Control") {
+  PreviewEnvironment(variant: .control) {
+    OnboardingRootView() { }
+  }
+}
+
+#Preview("Treatment") {
+  PreviewEnvironment(variant: .treatment) {
     OnboardingRootView() { }
   }
 }
