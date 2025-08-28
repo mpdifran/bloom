@@ -29,12 +29,6 @@ final class ExperimentManager {
       return override
     }
     
-    // Check if this experiment exists (is enabled)
-    guard Experiment.allCases.contains(where: { $0.id == identifier }) else {
-      print("[ExperimentManager] WARNING: Experiment '\(identifier.value)' not found or disabled. Available experiments: \(Experiment.allCases.map { $0.rawValue })")
-      return .control
-    }
-    
     // Use default 50/50 split for all experiments
     let treatmentPercentage = 0.5
 
