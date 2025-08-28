@@ -67,4 +67,50 @@ extension HealthReportService {
 
     return report
   }
+
+  func generateTodayView(
+    healthContext: String,
+    currentTime: String,
+    timezone: String
+  ) async throws -> TodayReportResponse {
+
+    var inputItems = [OpenAIKit.Response.InputItem]()
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Here is the user's health context:\n\(healthContext)"))
+          ]
+        )
+      )
+    )
+
+    inputItems.append(
+      .message(
+        .init(
+          role: .system,
+          content: [
+            .text(.init(text: "Current time: \(currentTime)\nTimezone: \(timezone)"))
+          ]
+        )
+      )
+    )
+
+    let response = try await openAIService.openAI.responses.createResponse(
+      input: inputItems,
+      model: modelID,
+      instructions: .Prompt.todayAI,
+      reasoning: .init(effort: .low, summary: .auto),
+      text: OpenAIKit.Text(format: Format(type: .jsonSchema(.todayAI))),
+      truncation: .auto
+    )
+
+    guard let todayResponse = try response.parse(TodayReportResponse.self) else {
+      throw Abort(.internalServerError, reason: "Failed to parse today report response")
+    }
+
+    return todayResponse
+  }
 }

@@ -67,4 +67,45 @@ extension ResponseSchema {
       ]
     )
   )
+
+  static let todayAI = ResponseSchema(
+    name: "todayAI",
+    schema: Schema.Object(
+      properties: [
+        "todaysAdvice": Schema.Parameter(
+          type: .string,
+          description: "Personalized health advice for today based on the user's current health data, goals, and trends. Keep this short, one to two sentences."
+        ),
+        "insights": Schema.Parameter(
+          description: "A list of health insights ordered by priority (highest to lowest).",
+          arrayOf: Schema.Item.object(
+            Schema.Object(
+              properties: [
+                "title": Schema.Parameter(
+                  type: .string,
+                  description: "A concise title for the insight."
+                ),
+                "body": Schema.Parameter(
+                  type: .string,
+                  description: "The detailed insight content."
+                ),
+                "priority": Schema.Parameter(
+                  type: .integer,
+                  description: "Priority from 1-10, where 10 is highest priority."
+                )
+              ]
+            )
+          )
+        ),
+        "sleepDetails": Schema.Parameter(
+          type: .optionalString,
+          description: "A summary of the user's recent sleep patterns with specific insights and recommendations. Optional - only include if sleep data is available."
+        ),
+        "tonightsSleepRecommendations": Schema.Parameter(
+          type: .string,
+          description: "Specific recommendations to improve tonight's sleep based on today's activities and recent sleep patterns."
+        )
+      ]
+    )
+  )
 }

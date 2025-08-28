@@ -19,6 +19,9 @@ extension HealthReportController: RouteCollection {
         $0.group("morning-report") {
           $0.post("generate", use: generateMorningReport)
         }
+        $0.group("today") {
+          $0.post("insights", use: generateTodayView)
+        }
       }
     }
   }
@@ -31,5 +34,17 @@ private extension HealthReportController {
     let body = try request.content.decode(MorningHealthReportRequest.self)
 
     return try await request.healthReportService.generateMorningHealthReport(from: body.healthContext)
+  }
+
+  @Sendable
+  func generateTodayView(_ request: Request) async throws -> TodayReportResponse {
+    let body = try request.content.decode(TodayReportRequest.self)
+    
+    // Generate the today view response
+    return try await request.healthReportService.generateTodayView(
+      healthContext: body.healthContext,
+      currentTime: body.currentTime,
+      timezone: body.timezone
+    )
   }
 }

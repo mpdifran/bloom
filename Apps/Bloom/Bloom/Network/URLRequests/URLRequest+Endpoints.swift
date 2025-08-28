@@ -118,3 +118,11 @@ extension URLRequest {
     }
   }
 }
+
+extension URLRequest {
+  enum AI {
+    static func getTodayView(body: TodayReportRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/today/insights", body: body)
+    }
+  }
+}
