@@ -55,8 +55,6 @@ struct TodayView: View {
         Group {
           TodaysDateView()
             .padding(.bottom)
-
-          alertsSection
         }
         .padding(.horizontal)
 
@@ -67,10 +65,6 @@ struct TodayView: View {
         Group {
           if habits.isNotEmpty {
             habitsSection
-          }
-
-          if !shouldShowMorningReportAlert {
-            reportsSection
           }
         }
         .padding(.horizontal)
@@ -114,25 +108,6 @@ struct TodayView: View {
 }
 
 private extension TodayView {
-
-  @ViewBuilder
-  var alertsSection: some View {
-    TimelineView(.everyMinute) { context in
-      if shouldShowMorningReportAlert {
-        DailyReportAlertCell(kind: .morning)
-          .transition(.scale)
-          .onTapGesture {
-            EntitledPresent(presentedSheet: $presentedSheet) {
-              MorningReportView(rootPresentedSheet: $presentedSheet)
-            }
-          }
-      }
-    }
-  }
-
-  var shouldShowMorningReportAlert: Bool {
-    Calendar.current.isMorning(date: .now) || alwaysShowReports
-  }
 
   @ViewBuilder
   var remindersSection: some View {

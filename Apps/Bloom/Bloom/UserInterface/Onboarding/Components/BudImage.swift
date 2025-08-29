@@ -31,7 +31,7 @@ struct BudImage: View {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      BudImage(.budDoctor)
+      BudImage(.budCoach)
       BudImage(.budSalad)
       BudImage(.budSmoothie, dimension: 200)
     }

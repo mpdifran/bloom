@@ -36,21 +36,11 @@ extension HealthReportService {
         .init(
           role: .system,
           content: [
-            .text(.init(text: "Here is the user's health context:\n\(healthContext)"))
+            .text(.init(text: "Here is the user's health data from yesterday:\n\(healthContext)"))
           ]
         )
       )
     )
-//    inputItems.append(
-//      .message(
-//        .init(
-//          role: .user,
-//          content: [
-//            .text(.init(text: "Generate my morning report.")) // TODO: Not sure if this is needed to illicit a response from the AI.
-//          ]
-//        )
-//      )
-//    )
 
     let response = try await openAIService.openAI.responses.createResponse(
       input: inputItems,
@@ -81,7 +71,7 @@ extension HealthReportService {
         .init(
           role: .system,
           content: [
-            .text(.init(text: "Here is the user's health context:\n\(healthContext)"))
+            .text(.init(text: "Here is the user's health data from yesterday:\n\(healthContext)"))
           ]
         )
       )

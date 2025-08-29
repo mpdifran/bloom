@@ -73,6 +73,14 @@ public extension DateFormatter {
     $0.doesRelativeDateFormatting = true
   }
 
+  static let weekdayShortMonthDayYear = DateFormatter().with {
+    $0.setLocalizedDateFormatFromTemplate("EEE, MMM d, yyyy")
+  }
+
+  static let weekdayFullMonthDayYear = DateFormatter().with {
+    $0.setLocalizedDateFormatFromTemplate("EEEE, MMMM d, yyyy")
+  }
+
   static let justFullMonth = DateFormatter().with {
     $0.setLocalizedDateFormatFromTemplate("MMMM")
   }

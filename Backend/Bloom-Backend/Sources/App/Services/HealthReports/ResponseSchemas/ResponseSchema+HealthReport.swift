@@ -72,12 +72,20 @@ extension ResponseSchema {
     name: "todayAI",
     schema: Schema.Object(
       properties: [
+        "summary": Schema.Parameter(
+          type: .string,
+          description: "One sentence describing how the user is feeling today, based on their health data from yesterday."
+        ),
+        "budState": Schema.Parameter(
+          enum: TodayReportResponse.BudState.self,
+          description: "A state for Bud that reflects the user's feelings described in the summary parameter above."
+        ),
         "todaysAdvice": Schema.Parameter(
           type: .string,
-          description: "Personalized health advice for today based on the user's current health data, goals, and trends. Keep this short, one to two sentences."
+          description: "Focused health advice based on the user's health data from yesterday. This should be a single thing the user should focus on today."
         ),
         "insights": Schema.Parameter(
-          description: "A list of health insights ordered by priority (highest to lowest).",
+          description: "A list of key health insights ordered by priority (highest to lowest). For goals, only comment on them if the user is falling behind for the time period. Only comment on things of importance.",
           arrayOf: Schema.Item.object(
             Schema.Object(
               properties: [
