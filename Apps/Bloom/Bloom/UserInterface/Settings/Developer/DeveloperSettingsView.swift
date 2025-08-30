@@ -291,7 +291,7 @@ extension DeveloperSettingsView {
             }
           }
         } label: {
-          LabeledContent("Copy Morning Report Data to Clipboard") {
+          LabeledContent("Copy Today Insight Data to Clipboard") {
             Image(systemSymbol: .sunrise)
           }
           .multilineTextAlignment(.leading)
@@ -304,14 +304,32 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        // Morning report generation has been removed
-        LabeledContent("Generate Morning Report") {
-          Text("Disabled")
-            .foregroundStyle(.secondary)
+        AsyncButton {
+          do {
+            try await TodayContentCoordinator.shared.deleteTodaysContent()
+            await TodayContentCoordinator.shared.loadContentIfNeeded()
+            
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Today Insights Regenerated",
+                message: "Your today insights have been regenerated with yesterday's health data."
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
+          }
+        } label: {
+          LabeledContent("Regenerate Today Insights") {
+            Image(systemSymbol: .arrowClockwise)
+          }
+          .multilineTextAlignment(.leading)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
         }
-        .bold()
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
         .frame(height: 60)
 
         Divider()

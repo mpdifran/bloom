@@ -108,8 +108,9 @@ extension TodayContentCoordinator {
       let today = Date()
       let contentModelActor = TodayContentModelActor.standard()
       
-      // Generate health context for today
-      let healthContext = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(for: today)
+      // Generate health context for yesterday (insights are based on previous day's data)
+      let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
+      let healthContext = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(for: yesterday)
       
       // Get current timezone
       let timezone = TimeZone.current.identifier
