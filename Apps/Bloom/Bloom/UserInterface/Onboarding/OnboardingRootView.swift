@@ -32,8 +32,6 @@ struct OnboardingRootView: View {
 
   @ObservedObject private var healthManager = HealthManager.shared
 
-  @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
-
   @Environment(ExperimentManager.self) private var experimentManager
   @Environment(\.dismiss) private var dismiss
 

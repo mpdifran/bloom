@@ -16,9 +16,6 @@ public extension String {
   }
   
   enum CategoryID {
-    public static let goodMorning = "good-morning"
-    public static let goodEvening = "good-evening"
-    public static let reviewFocusAreas = "review-focus-areas"
     public static let chatMessage = "chat-message"
     public static let goalsMessage = "goals-message"
     public static let reminders = "reminders"

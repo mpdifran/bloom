@@ -61,5 +61,9 @@ public extension TodayReportResponse {
     case stressed
     case proudCoach
     case superhero
+    case running
+    case strengthTraining
+    case yoga
+    case bicycleRiding
   }
 }

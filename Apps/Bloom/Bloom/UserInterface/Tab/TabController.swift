@@ -62,9 +62,6 @@ final class TabController {
   var chatContexts = [ChatContext]()
   var chatLauncherSafeAreaInset: CGFloat = 0
 
-  var showMorningReport = false
-  var showEveningReport = false
-  var showFocusAreasReview = false
   var showPaywall = false
   var toggleToDismiss = false
 
@@ -99,19 +96,6 @@ private extension TabController {
     case .CategoryID.chatMessage:
       dismiss()
 //      select(.chat)
-    case .CategoryID.goodMorning:
-      dismiss()
-      select(.today)
-      // Check Bloom Plus entitlement before showing morning report
-      if EntitlementController.shared.hasBloomPro == true {
-        showMorningReport = true
-      } else {
-        showPaywall = true
-      }
-    case .CategoryID.goodEvening:
-      dismiss()
-      select(.today)
-      showEveningReport = true
     case .CategoryID.reminders:
       dismiss()
       select(.today)

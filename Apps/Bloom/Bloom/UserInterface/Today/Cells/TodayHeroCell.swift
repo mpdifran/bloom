@@ -18,7 +18,22 @@ struct TodayHeroCell: View {
   let budState: TodayReportResponse.BudState?
   let summary: String?
   let hasError: Bool
+  let isLoading: Bool
   let onReload: (() async -> Void)?
+  
+  init(
+    budState: TodayReportResponse.BudState?,
+    summary: String?,
+    hasError: Bool,
+    isLoading: Bool,
+    onReload: (() async -> Void)? = nil
+  ) {
+    self.budState = budState
+    self.summary = summary
+    self.hasError = hasError
+    self.isLoading = isLoading
+    self.onReload = onReload
+  }
   
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
 
@@ -37,6 +52,11 @@ struct TodayHeroCell: View {
 
       if hasError {
         errorView
+      } else if isLoading {
+        CircularSpinnerView()
+          .foregroundStyle(.tint)
+          .frame(minHeight: 80)
+          .horizontallyCentered()
       } else if let summary {
         Text(summary)
           .font(.title3)
@@ -44,15 +64,11 @@ struct TodayHeroCell: View {
           .bold()
           .fixedSize(horizontal: false, vertical: true)
           .horizontalAlignment(.leading)
-      } else {
-        CircularSpinnerView()
-          .foregroundStyle(.tint)
-          .frame(minHeight: 80)
-          .horizontallyCentered()
       }
     }
     .animation(.default, value: budState)
     .animation(.default, value: hasError)
+    .animation(.default, value: isLoading)
   }
 }
 
@@ -130,6 +146,14 @@ private extension TodayHeroCell {
           BudImage(.budCoach, dimension: .budSize)
         case .superhero:
           BudImage(.budSuperhero, dimension: .budSize)
+        case .running:
+          BudImage(.budRunning, dimension: .budSize)
+        case .strengthTraining:
+          BudImage(.budStrengthTraining, dimension: .budSize)
+        case .yoga:
+          BudImage(.budYoga, dimension: .budSize)
+        case .bicycleRiding:
+          BudImage(.budBicycle, dimension: .budSize)
         @unknown default:
           BudImage(.budCoach, dimension: .budSize)
         }
@@ -146,23 +170,31 @@ private extension TodayHeroCell {
     NavigationStack {
       BloomScrollView {
         TodayHeroCell(
-          budState: .proudCoach,
+          budState: .bicycleRiding,
           summary: "You had a strong strength and protein day but overshot calories and sodium while not getting enough cardio or deep sleep.",
           hasError: false,
-          onReload: nil
+          isLoading: false
         )
 
         TodayHeroCell(
           budState: nil,
           summary: nil,
           hasError: false,
-          onReload: nil
+          isLoading: true
+        )
+        
+        TodayHeroCell(
+          budState: .superhero,
+          summary: nil,
+          hasError: false,
+          isLoading: false
         )
         
         TodayHeroCell(
           budState: nil,
           summary: nil,
           hasError: true,
+          isLoading: false,
           onReload: {
             print("Reload tapped")
           }

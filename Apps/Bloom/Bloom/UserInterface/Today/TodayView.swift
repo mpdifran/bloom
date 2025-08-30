@@ -47,8 +47,7 @@ struct TodayView: View {
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
-  @AppStorage(.FeatureFlag.alwaysShowReports) private var alwaysShowReports = false
-  @AppStorage(.FeatureFlag.legacyGoalSetting) private var legacyGoalSetting = false
+  @AppStorage("GetBloomPlusTodayCell.hasDismissed") private var getBloomPlusHasDismissed = false
 
   var body: some View {
     @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
@@ -72,6 +71,7 @@ struct TodayView: View {
         }
       }
       .navigationTitle("Today")
+      .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
           Button {
@@ -91,23 +91,14 @@ struct TodayView: View {
       }
       .sheet($presentedSheet)
       .fullScreenCover($presentedFullScreen)
-      .fullScreenCover(isPresented: $tabController.showMorningReport) {
-        MorningReportView(rootPresentedSheet: $presentedSheet)
-      }
-      .fullScreenCover(isPresented: $tabController.showEveningReport) {
-        EveningReportView()
-      }
-      .fullScreenCover(isPresented: $tabController.showFocusAreasReview) {
-        if legacyGoalSetting {
-          FocusAreaReviewRootView()
-        } else {
-          BaseReviewGoalsView()
-        }
-      }
       .fullScreenCover(isPresented: $tabController.showPaywall) {
         BloomPlusPaywall()
       }
     }
+    .animation(.default, value: todayViewModel.todayContent)
+    .animation(.default, value: todayViewModel.isLoadingContent)
+    .animation(.default, value: todayViewModel.hasLoadError)
+    .animation(.default, value: getBloomPlusHasDismissed)
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
       Task {
@@ -136,6 +127,7 @@ private extension TodayView {
           budState: todayViewModel.budState,
           summary: todayViewModel.todayContent?.summary,
           hasError: todayViewModel.hasLoadError,
+          isLoading: todayViewModel.todayContent == nil,
           onReload: {
             await todayViewModel.retryLoadContent()
           }
@@ -158,12 +150,15 @@ private extension TodayView {
   @ViewBuilder
   var nonBloomPlusContent: some View {
     VStack {
-      Group {
-        TodaysDateView()
-          .padding(.bottom)
-      }
+      TodayHeroCell(
+        budState: .proudCoach,
+        summary: nil,
+        hasError: false,
+        isLoading: false,
+        onReload: nil
+      )
       .padding(.horizontal)
-      
+
       // Show sections based on settings but only those available without Bloom Plus
       let configuration = todaySettings.configuration(for: currentTimeMode)
       ForEach(configuration.sectionOrder) { section in
@@ -173,9 +168,11 @@ private extension TodayView {
         }
       }
       
-      // Show Bloom Plus upsell at the bottom
-      GetBloomPlusTodayCell()
-        .padding(.horizontal)
+      // Show Bloom Plus upsell at the bottom if not dismissed
+      if !getBloomPlusHasDismissed {
+        GetBloomPlusTodayCell()
+          .padding(.horizontal)
+      }
     }
   }
 
@@ -202,6 +199,10 @@ private extension TodayView {
     case .insights:
       if let content = todayViewModel.getSectionContent(for: section),
          case .insights(let insights) = content {
+
+        SectionTitleView("Insights")
+          .padding(.horizontal)
+          .padding(.horizontal)
         InsightTodayCell(insights: insights)
       }
       
@@ -233,18 +234,30 @@ private extension TodayView {
       }
       
     case .todaysEvents:
+      SectionTitleView("Today's Events")
+        .padding(.horizontal)
+        .padding(.horizontal)
       CalendarTodayCell(day: .today)
         .padding(.horizontal)
       
     case .tomorrowsEvents:
+      SectionTitleView("Tomorrow's Events")
+        .padding(.horizontal)
+        .padding(.horizontal)
       CalendarTodayCell(day: .tomorrow)
         .padding(.horizontal)
       
     case .todaysWeather:
+      SectionTitleView("Today's Weather")
+        .padding(.horizontal)
+        .padding(.horizontal)
       WeatherTodayCell(day: .today)
         .padding(.horizontal)
       
     case .tomorrowsWeather:
+      SectionTitleView("Tomorrow's Weather")
+        .padding(.horizontal)
+        .padding(.horizontal)
       WeatherTodayCell(day: .tomorrow)
         .padding(.horizontal)
     }

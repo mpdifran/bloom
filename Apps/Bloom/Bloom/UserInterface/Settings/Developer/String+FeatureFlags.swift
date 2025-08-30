@@ -10,9 +10,7 @@ import Foundation
 extension String {
   enum FeatureFlag {
     static let developerMode = "FeatureFlag.developerMode"
-    static let legacyGoalSetting = "FeatureFlag.legacyGoalSetting"
     static let bypassPaywall = "FeatureFlag.bypassPaywall"
-    static let alwaysShowReports = "FeatureFlag.alwaysShowReports"
     static let enableOpenAIModelOverride = "FeatureFlag.enableOpenAIModelOverride"
     static let useSwiftUIChatView = "FeatureFlag.useSwiftUIChatView" // Toggle to use SwiftUI ChatView instead of default UIKit ChatViewController
   }

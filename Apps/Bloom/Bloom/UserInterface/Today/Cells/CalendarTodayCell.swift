@@ -35,14 +35,6 @@ struct CalendarTodayCell: View {
 
   var body: some View {
     VStack(spacing: 12) {
-      HStack {
-        Text("\(day.displayName)'s Events")
-          .font(.headline)
-          .fontDesign(.rounded)
-          .bold()
-        Spacer()
-      }
-      
       if events.isEmpty {
         noEventsView
       }

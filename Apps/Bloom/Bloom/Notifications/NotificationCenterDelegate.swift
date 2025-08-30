@@ -46,10 +46,6 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
     switch notification.request.content.categoryIdentifier {
     case .CategoryID.chatMessage:
       return [.banner, .sound, .list]
-    case .CategoryID.goodMorning, .CategoryID.goodEvening:
-      return [.banner, .sound, .list]
-    case .CategoryID.reviewFocusAreas:
-      return [.banner]
     case .CategoryID.reminders:
       // Check if this reminder has been completed
       if await isReminderCompleted(notification: notification) {

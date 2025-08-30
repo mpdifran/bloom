@@ -19,7 +19,7 @@ struct InsightTodayCell: View {
         }
       }
       .scrollTargetLayout()
-      .padding()
+      .padding(.horizontal)
     }
     .scrollTargetBehavior(.viewAligned)
     .scrollIndicators(.hidden)
