@@ -9,30 +9,31 @@ import SwiftUI
 
 @propertyWrapper
 struct TodaySettingsStorage: DynamicProperty {
-  @State private var value: TodaySettings
-  private let key: String
-  private let userDefaults: UserDefaults
+  @AppStorage private var _storedData: Data
+  private let defaultValue: TodaySettings
   
   init(wrappedValue: TodaySettings = TodaySettings(), _ key: String, store: UserDefaults = .standard) {
-    self.key = key
-    self.userDefaults = store
+    self.defaultValue = wrappedValue
     
-    // Load from UserDefaults if exists
-    if let data = userDefaults.data(forKey: key),
-       let decoded = try? JSONDecoder().decode(TodaySettings.self, from: data) {
-      self._value = State(initialValue: decoded)
-    } else {
-      self._value = State(initialValue: wrappedValue)
-    }
+    // Create default encoded data
+    let defaultData = (try? JSONEncoder().encode(wrappedValue)) ?? Data()
+    
+    // Initialize AppStorage with the key, default value, and store
+    self.__storedData = AppStorage(wrappedValue: defaultData, key, store: store)
   }
   
   var wrappedValue: TodaySettings {
-    get { value }
+    get {
+      // Try to decode from stored data, fallback to default
+      if let decoded = try? JSONDecoder().decode(TodaySettings.self, from: _storedData) {
+        return decoded
+      }
+      return defaultValue
+    }
     nonmutating set {
-      value = newValue
-      // Save to UserDefaults
+      // Encode and store
       if let encoded = try? JSONEncoder().encode(newValue) {
-        userDefaults.set(encoded, forKey: key)
+        _storedData = encoded
       }
     }
   }

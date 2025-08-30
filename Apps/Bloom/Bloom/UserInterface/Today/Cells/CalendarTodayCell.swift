@@ -10,7 +10,24 @@ import SwiftUI
 import EventKitUI
 import AppUI
 
+enum CalendarDay: CaseIterable {
+  case today
+  case tomorrow
+  
+  var displayName: String {
+    switch self {
+    case .today: return "Today"
+    case .tomorrow: return "Tomorrow"
+    }
+  }
+}
+
 struct CalendarTodayCell: View {
+  let day: CalendarDay
+  
+  init(day: CalendarDay) {
+    self.day = day
+  }
 
   @State private var events = [EKEvent]()
   @State private var selectedEvent: EKEvent?
@@ -18,6 +35,14 @@ struct CalendarTodayCell: View {
 
   var body: some View {
     VStack(spacing: 12) {
+      HStack {
+        Text("\(day.displayName)'s Events")
+          .font(.headline)
+          .fontDesign(.rounded)
+          .bold()
+        Spacer()
+      }
+      
       if events.isEmpty {
         noEventsView
       }
@@ -47,7 +72,12 @@ struct CalendarTodayCell: View {
     .animation(.default, value: events.count)
     .task {
       await CalendarManager.shared.promptForPermission()
-      self.events = await CalendarManager.shared.eventsToday()
+      switch day {
+      case .today:
+        self.events = await CalendarManager.shared.eventsToday()
+      case .tomorrow:
+        self.events = await CalendarManager.shared.eventsTomorrow()
+      }
     }
   }
 }
@@ -66,8 +96,9 @@ private extension CalendarTodayCell {
     ContentUnavailableView(
       "No Events",
       systemSymbol: .calendar,
-      description: Text("You have no events today.")
+      description: Text("You have no events \(day == .today ? "today" : "tomorrow").")
     )
+    .fixedSize(horizontal: false, vertical: true)
     .foregroundStyle(.secondary)
     .horizontallyCentered()
 //    .frame(height: 140)
@@ -77,7 +108,7 @@ private extension CalendarTodayCell {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      CalendarTodayCell()
+      CalendarTodayCell(day: .today)
     }
   }
 }

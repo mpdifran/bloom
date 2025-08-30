@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomFoundation
 
 private extension String {
   static let morningReportDate = "ReportCoordinator.morningReportDate"

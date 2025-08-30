@@ -59,6 +59,7 @@ public extension TodayReportResponse {
     case holdingTrophy
     case workingOut
     case stressed
-    case coach
+    case proudCoach
+    case superhero
   }
 }

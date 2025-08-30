@@ -11,6 +11,7 @@ import SwiftData
 import DataContainer
 import SFSafeSymbols
 import BloomFoundation
+import BloomModel
 
 @MainActor
 struct TodayView: View {
@@ -34,13 +35,15 @@ struct TodayView: View {
   @Query var reminders: [Reminder]
 
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
-  private var reportViewModel = ReportCoordinatorViewModel.shared
   @ObservedObject private var remindersManager = RemindersManager.shared
+  @State private var todayViewModel = ViewModel()
 
   @Environment(TabController.self) private var tabController: TabController
 
   @State private var presentedFullScreen: AnyView?
   @State private var presentedSheet: AnyView?
+  @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
+  @State private var currentTimeMode: TimeMode = .morning
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
@@ -51,23 +54,22 @@ struct TodayView: View {
     @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
 
     NavigationStack {
-      BloomScrollView(padding: .bottom) {
-        Group {
-          TodaysDateView()
-            .padding(.bottom)
-        }
-        .padding(.horizontal)
-
-        if filteredTodaysOccurrences.isNotEmpty {
-          remindersSection
-        }
-
-        Group {
-          if habits.isNotEmpty {
-            habitsSection
+      TimelineView(.everyMinute) { context in
+        BloomScrollView(padding: .bottom) {
+          if todayViewModel.hasBloomPlus {
+            bloomPlusContent
+          } else {
+            nonBloomPlusContent
           }
+
+          configureButton
         }
-        .padding(.horizontal)
+        .onAppear {
+          currentTimeMode = TimeMode.current(for: context.date, settings: todaySettings)
+        }
+        .onChange(of: context.date) { _, newDate in
+          currentTimeMode = TimeMode.current(for: newDate, settings: todaySettings)
+        }
       }
       .navigationTitle("Today")
       .toolbar {
@@ -76,6 +78,14 @@ struct TodayView: View {
             presentedSheet = SettingsView().asAny
           } label: {
             UserProfilePhotoView(dimension: 32)
+          }
+        }
+        
+        ToolbarItem(placement: .topBarLeading) {
+          Button {
+            presentedSheet = TodaySettingsView().asAny
+          } label: {
+            Image(systemSymbol: .sliderHorizontal3)
           }
         }
       }
@@ -100,14 +110,145 @@ struct TodayView: View {
     }
     .onAppear {
       habitsViewModel.checkUpdateSuggestedHabits()
+      Task {
+        todayViewModel.checkEntitlement()
+        await todayViewModel.requestContentIfNeeded()
+      }
     }
     .onForeground {
       habitsViewModel.checkUpdateSuggestedHabits()
+      Task {
+        todayViewModel.checkEntitlement()
+        await todayViewModel.requestContentIfNeeded()
+      }
     }
   }
 }
 
 private extension TodayView {
+  
+  @ViewBuilder
+  var bloomPlusContent: some View {
+    VStack {
+      // Hero section with Bud and summary
+      if todayViewModel.todayContent != nil || todayViewModel.isLoadingContent || todayViewModel.hasLoadError {
+        TodayHeroCell(
+          budState: todayViewModel.budState,
+          summary: todayViewModel.todayContent?.summary,
+          hasError: todayViewModel.hasLoadError,
+          onReload: {
+            await todayViewModel.retryLoadContent()
+          }
+        )
+        .padding(.horizontal)
+      }
+      
+      // Dynamic sections based on time mode and settings
+      let configuration = todaySettings.configuration(for: currentTimeMode)
+      ForEach(configuration.sectionOrder) { section in
+        // Only show enabled sections that user has access to
+        let hasAccess = !section.requiresBloomPlus || todayViewModel.hasBloomPlus
+        if configuration.enabledSections.contains(section) && hasAccess {
+          sectionView(for: section)
+        }
+      }
+    }
+  }
+  
+  @ViewBuilder
+  var nonBloomPlusContent: some View {
+    VStack {
+      Group {
+        TodaysDateView()
+          .padding(.bottom)
+      }
+      .padding(.horizontal)
+      
+      // Show sections based on settings but only those available without Bloom Plus
+      let configuration = todaySettings.configuration(for: currentTimeMode)
+      ForEach(configuration.sectionOrder) { section in
+        // Only show sections that don't require Bloom Plus
+        if configuration.enabledSections.contains(section) && !section.requiresBloomPlus {
+          sectionView(for: section)
+        }
+      }
+      
+      // Show Bloom Plus upsell at the bottom
+      GetBloomPlusTodayCell()
+        .padding(.horizontal)
+    }
+  }
+
+  var configureButton: some View {
+    Button {
+      presentedSheet = TodaySettingsView().asAny
+    } label: {
+      Label("Configure", systemSymbol: .sliderHorizontal3)
+    }
+    .buttonStyle(.secondary)
+    .padding()
+  }
+
+  @ViewBuilder
+  func sectionView(for section: TodaySection) -> some View {
+    switch section {
+    case .todaysAdvice:
+      if let content = todayViewModel.getSectionContent(for: section),
+         case .text(let advice) = content {
+        TodaysAdviceTodayCell(advice: advice)
+          .padding(.horizontal)
+      }
+      
+    case .insights:
+      if let content = todayViewModel.getSectionContent(for: section),
+         case .insights(let insights) = content {
+        InsightTodayCell(insights: insights)
+      }
+      
+    case .sleepDetails:
+      if let content = todayViewModel.getSectionContent(for: section),
+         case .text(let details) = content {
+        SleepSummaryTodayCell(summary: details)
+          .padding(.horizontal)
+      }
+      
+    case .tonightsSleep:
+      if let content = todayViewModel.getSectionContent(for: section),
+         case .text(let recommendations) = content {
+        TonightsSleepTodayCell(recommendations: recommendations)
+          .padding(.horizontal)
+      }
+      
+    case .goals:
+      if habits.isNotEmpty {
+        Group {
+          habitsSection
+        }
+        .padding(.horizontal)
+      }
+      
+    case .reminders:
+      if filteredTodaysOccurrences.isNotEmpty {
+        remindersSection
+      }
+      
+    case .todaysEvents:
+      CalendarTodayCell(day: .today)
+        .padding(.horizontal)
+      
+    case .tomorrowsEvents:
+      CalendarTodayCell(day: .tomorrow)
+        .padding(.horizontal)
+      
+    case .todaysWeather:
+      WeatherTodayCell(day: .today)
+        .padding(.horizontal)
+      
+    case .tomorrowsWeather:
+      WeatherTodayCell(day: .tomorrow)
+        .padding(.horizontal)
+    }
+  }
 
   @ViewBuilder
   var remindersSection: some View {

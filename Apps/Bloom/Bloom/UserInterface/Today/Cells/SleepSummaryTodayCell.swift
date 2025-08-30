@@ -9,7 +9,7 @@ import SwiftUI
 import CoreHealth
 
 struct SleepSummaryTodayCell: View {
-  let sleepSummary: String
+  let summary: String
 
   @State private var sleepAnalysis: SleepAnalysis?
 
@@ -52,7 +52,7 @@ private extension SleepSummaryTodayCell {
           .fontDesign(.rounded)
           .bold()
 
-        Text(sleepSummary)
+        Text(summary)
           .font(.body)
           .multilineTextAlignment(.leading)
           .fixedSize(horizontal: false, vertical: true)
@@ -64,7 +64,7 @@ private extension SleepSummaryTodayCell {
 #Preview {
   PreviewEnvironment {
     BloomScrollView {
-      SleepSummaryTodayCell(sleepSummary: "You done slept good.")
+      SleepSummaryTodayCell(summary: "You done slept good.")
     }
   }
 }

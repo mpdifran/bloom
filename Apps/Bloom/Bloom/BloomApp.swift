@@ -113,6 +113,11 @@ private extension BloomApp {
     }
     
     Task {
+      // Load Today content when app comes to foreground
+      await TodayContentCoordinator.shared.loadContentIfNeeded()
+    }
+    
+    Task {
       // Check if APNs token needs refresh
       await tokenManager.refreshTokenIfNeeded()
     }

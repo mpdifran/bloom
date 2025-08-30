@@ -51,7 +51,7 @@ private extension TodaySettingsView {
 
   var timeConfigurationSection: some View {
     VStack {
-      SectionTitleView("Modes")
+      SectionTitleView("Phases")
         .padding(.horizontal)
 
       SettingsSectionContainer {
@@ -131,7 +131,14 @@ private extension TodaySettingsView {
         TodayViewSectionCell(
           section: section,
           isEnabled: Binding(
-            get: { configuration.enabledSections.contains(section) },
+            get: { 
+              // Show as disabled if requires Bloom Plus and user doesn't have it
+              let hasBloomPlus = EntitlementController.shared.hasBloomPro == true
+              if section.requiresBloomPlus && !hasBloomPlus {
+                return false
+              }
+              return configuration.enabledSections.contains(section)
+            },
             set: { _ in toggleSection(section) }
           )
         )
@@ -158,6 +165,12 @@ private extension TodaySettingsView {
 private extension TodaySettingsView {
 
   func toggleSection(_ section: TodaySection) {
+    // Don't allow toggling sections that require Bloom Plus if user doesn't have it
+    let hasBloomPlus = EntitlementController.shared.hasBloomPro == true
+    if section.requiresBloomPlus && !hasBloomPlus {
+      return
+    }
+    
     withAnimation(.easeInOut(duration: 0.2)) {
       var configuration = todaySettings.configuration(for: selectedTimeMode)
       if configuration.enabledSections.contains(section) {
@@ -171,7 +184,18 @@ private extension TodaySettingsView {
   
   func resetCurrentModeToDefaults() {
     withAnimation(.easeInOut(duration: 0.3)) {
-      let defaultConfiguration = TodaySettings.TimeModeConfiguration(for: selectedTimeMode)
+      var defaultConfiguration = TodaySettings.TimeModeConfiguration(for: selectedTimeMode)
+      
+      // Remove sections that require Bloom Plus if user doesn't have it
+      let hasBloomPlus = EntitlementController.shared.hasBloomPro == true
+      if !hasBloomPlus {
+        for section in defaultConfiguration.enabledSections {
+          if section.requiresBloomPlus {
+            defaultConfiguration.enabledSections.remove(section)
+          }
+        }
+      }
+      
       todaySettings.setConfiguration(defaultConfiguration, for: selectedTimeMode)
     }
   }

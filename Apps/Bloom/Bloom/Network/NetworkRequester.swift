@@ -183,6 +183,19 @@ extension NetworkRequester {
   }
 }
 
+// MARK: - Today Content
+
+extension NetworkRequester {
+  
+  func getTodayInsights(request: TodayReportRequest) async throws -> TodayReportResponse {
+    let urlRequest = try await URLRequest.AI.getTodayView(body: request)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: urlRequest,
+      responseType: TodayReportResponse.self
+    )
+  }
+}
+
 // MARK: - Chat
 
 extension NetworkRequester {

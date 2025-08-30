@@ -110,13 +110,7 @@ private extension MorningReportView {
     } description: {
       Text("Looks like there was a problem getting your morning report. Tap the button below to try again.")
     } actions: {
-      Button("Try Again") {
-        TelemetryDeck.signal("Manual Try Again Morning Report Generation")
-        Task {
-          await ReportCoordinator.shared.requestMorningReport()
-        }
-      }
-      .buttonStyle(.tertiary)
+      // Morning report generation has been removed
     }
     .groupedBackground()
     .onAppear {

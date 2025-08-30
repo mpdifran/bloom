@@ -96,4 +96,13 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       return 9
     }
   }
+  
+  var requiresBloomPlus: Bool {
+    switch self {
+    case .goals, .reminders, .todaysEvents, .tomorrowsEvents, .todaysWeather, .tomorrowsWeather:
+      false
+    default:
+      true
+    }
+  }
 }

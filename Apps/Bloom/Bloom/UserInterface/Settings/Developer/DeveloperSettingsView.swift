@@ -304,20 +304,15 @@ extension DeveloperSettingsView {
 
         Divider()
 
-        AsyncButton {
-          await ReportCoordinator.shared.clearLastNotificationDate()
-          try await ReportCoordinator.shared.deleteTodaysReport()
-          await ReportCoordinator.shared.didDetectWakeUp()
-        } label: {
-          LabeledContent("Generate Morning Report") {
-            Image(systemSymbol: .sunriseCircle)
-          }
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.tint)
-          .selectable()
-          .frame(height: 60)
+        // Morning report generation has been removed
+        LabeledContent("Generate Morning Report") {
+          Text("Disabled")
+            .foregroundStyle(.secondary)
         }
+        .bold()
+        .fontDesign(.rounded)
+        .foregroundStyle(.secondary)
+        .frame(height: 60)
 
         Divider()
 
