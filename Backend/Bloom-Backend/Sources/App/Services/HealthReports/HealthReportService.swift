@@ -12,9 +12,11 @@ import OpenAIKit
 
 final class HealthReportService: Sendable {
   private let openAIService: OpenAIService
+  private let todayInsightsHistory: TodayInsightsHistory
 
-  init(openAIService: OpenAIService) {
+  init(openAIService: OpenAIService, todayInsightsHistory: TodayInsightsHistory) {
     self.openAIService = openAIService
+    self.todayInsightsHistory = todayInsightsHistory
   }
 
   private let modelID = ModelID.OSeries.o4Mini
@@ -61,7 +63,8 @@ extension HealthReportService {
   func generateTodayView(
     healthContext: String,
     currentTime: String,
-    timezone: String
+    timezone: String,
+    userID: UserIdentifier
   ) async throws -> TodayReportResponse {
 
     var inputItems = [OpenAIKit.Response.InputItem]()
@@ -88,10 +91,13 @@ extension HealthReportService {
       )
     )
 
+    let previousResponseID = try await todayInsightsHistory.getLastResponseID(for: userID)
+    
     let response = try await openAIService.openAI.responses.createResponse(
       input: inputItems,
       model: modelID,
       instructions: .Prompt.todayAI,
+      previousResponseID: previousResponseID,
       reasoning: .init(effort: .low, summary: .auto),
       text: OpenAIKit.Text(format: Format(type: .jsonSchema(.todayAI))),
       truncation: .auto
@@ -100,6 +106,9 @@ extension HealthReportService {
     guard let todayResponse = try response.parse(TodayReportResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse today report response")
     }
+
+    // Store the response ID for future continuity
+    try await todayInsightsHistory.storeLastResponseID(response.id, for: userID)
 
     return todayResponse
   }

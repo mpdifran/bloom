@@ -12,6 +12,24 @@ extension Application {
   private struct HealthReportServiceKey: StorageKey {
     typealias Value = HealthReportService
   }
+  
+  private struct TodayInsightsHistoryKey: StorageKey {
+    typealias Value = TodayInsightsHistory
+  }
+
+  var todayInsightsHistory: TodayInsightsHistory {
+    if let history = storage[TodayInsightsHistoryKey.self] {
+      return history
+    }
+
+    let history = TodayInsightsHistory(
+      redis: redis,
+      logger: logger
+    )
+
+    storage[TodayInsightsHistoryKey.self] = history
+    return history
+  }
 
   var healthReportService: HealthReportService {
     if let service = storage[HealthReportServiceKey.self] {
@@ -19,7 +37,8 @@ extension Application {
     }
 
     let service = HealthReportService(
-      openAIService: openAIService
+      openAIService: openAIService,
+      todayInsightsHistory: todayInsightsHistory
     )
 
     storage[HealthReportServiceKey.self] = service

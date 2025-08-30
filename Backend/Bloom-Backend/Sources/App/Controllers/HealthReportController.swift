@@ -39,12 +39,18 @@ private extension HealthReportController {
   @Sendable
   func generateTodayView(_ request: Request) async throws -> TodayReportResponse {
     let body = try request.content.decode(TodayReportRequest.self)
-    
+    let user = try request.auth.require(User.self)
+
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
     // Generate the today view response
     return try await request.healthReportService.generateTodayView(
       healthContext: body.healthContext,
       currentTime: body.currentTime,
-      timezone: body.timezone
+      timezone: body.timezone,
+      userID: userID
     )
   }
 }
