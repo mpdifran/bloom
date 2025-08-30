@@ -44,8 +44,8 @@ struct BloomPlusFeaturesListView: View {
         )
 
         FeatureCard(
-          image: Image(systemSymbol: .sunriseFill),
-          message: "Morning Reports on your health"
+          image: Image(systemSymbol: .rectangle3GroupFill),
+          message: "Daily insights that are actionable"
         )
       }
     }

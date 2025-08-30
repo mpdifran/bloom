@@ -73,12 +73,6 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
     didReceiveRemoteNotification userInfo: [AnyHashable: Any]
   ) async -> UIBackgroundFetchResult {
     do {
-      // Check if this is a morning report notification
-      if let type = userInfo["type"] as? String, type == "morning_report" {
-        // Morning report generation has been removed
-        return .newData
-      }
-      
       // Otherwise handle as chat notification
       let data = try JSONSerialization.data(withJSONObject: userInfo, options: [])
       await ChatController.shared.handlePushData(data)

@@ -65,7 +65,6 @@ struct SettingsView: View {
         habitsSection
         remindersSection
         workoutEquipmentSection
-        reportSection
         unitsSection
         subscriptionSection
         supportSection
@@ -149,26 +148,6 @@ private extension SettingsView {
         .tint(.mutedIndigo)
         .onTapGesture {
           presentedSheet = HealthGoalEditCard().asAny
-        }
-
-        Group {
-          if let activityLevel = healthManager.userReportedActivityLevel {
-            SettingsHealthGoalCell(
-              image: Image(systemSymbol: activityLevel.symbol),
-              value: "Activity level",
-              subtitle: activityLevel.name
-            )
-            .tint(activityLevel.barColor)
-          } else {
-            SettingsHealthGoalCell(
-              image: Image(systemSymbol: .figure),
-              value: "No level set",
-              subtitle: "Activity level"
-            )
-          }
-        }
-        .onTapGesture {
-          presentedSheet = ActivityLevelEditCard().asAny
         }
       }
     }
@@ -292,51 +271,6 @@ private extension SettingsView {
           presentedSheet = RemindersEditListView().asAny
         }
       }
-    }
-  }
-
-  var reportSection: some View {
-    VStack {
-      SectionTitleView("Reports")
-        .padding(.horizontal)
-
-      SettingsSectionContainer {
-        SettingsCell("Morning Report", showDisclosureIndicator: true) {
-          EmptyView()
-        }
-        .onTapGesture {
-          presentedSheet = MorningReportSettingsView().asAny
-        }
-      }
-    }
-  }
-
-  var widgetsSection: some View {
-    VStack {
-      SectionTitleView("Widgets")
-        .padding(.horizontal)
-
-      SettingsSectionContainer {
-        // Turning off until we figure out widgets
-        //        SettingsCell("Weight Widget") {
-        //          Toggle("", isOn: $showWeightWidget)
-        //            .tint(.mutedGreen)
-        //        }
-        //
-        //        Divider()
-
-        SettingsCell("Nutrition Widget") {
-          Toggle("", isOn: $showNutritionTodayWidget)
-            .tint(.mutedGreen)
-        }
-      }
-
-      Text("Widgets will only show if they're enabled above, and there's a corresponding Focus Area, Habit, or Health Goal.")
-        .horizontalAlignment(.leading)
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .fixedSize(horizontal: false, vertical: true)
-        .padding(.horizontal)
     }
   }
 

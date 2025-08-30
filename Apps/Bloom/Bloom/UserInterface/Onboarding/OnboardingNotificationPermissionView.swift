@@ -36,8 +36,8 @@ struct OnboardingNotificationPermissionView: View {
           .overlay {
             VStack {
               MockNotificationView(
-                title: "Your Morning Report is ready",
-                message: "You were a bit short on deep sleep.",
+                title: "Magnesium",
+                message: "Don't forget to take your vitamins!",
                 timestamp: "Now"
               )
               .transition(.move(edge: .top))
