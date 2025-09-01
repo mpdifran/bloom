@@ -10,20 +10,37 @@ import SFSafeSymbols
 
 struct AddReminderCell: View {
   var body: some View {
-    HStack {
-      Image(systemSymbol: .plusCircleFill)
-        .foregroundStyle(.white, .tint)
-        .font(.title)
+    ZStack {
+      HStack {
+        Image(systemSymbol: .plusCircleFill)
+          .foregroundStyle(.white, .tint)
+          .font(.title)
 
-      Text("Add Reminder")
-        .font(.title3)
-        .bold()
-        .fontDesign(.rounded)
+        Text("Add Reminder")
+          .font(.title3)
+          .bold()
+          .fontDesign(.rounded)
+      }
+      VStack(alignment: .leading) {
+        Text("1")
+          .font(.title3)
+
+        Text("1")
+          .font(.subheadline)
+      }
+      .bold()
+      .fontDesign(.rounded)
+      .lineLimit(1)
+      .opacity(0)
     }
     .cardContainer()
   }
 }
 
 #Preview {
-  AddReminderCell()
+  PreviewEnvironment {
+    BloomScrollView {
+      AddReminderCell()
+    }
+  }
 }
