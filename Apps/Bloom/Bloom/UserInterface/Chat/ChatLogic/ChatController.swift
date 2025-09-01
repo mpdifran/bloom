@@ -189,7 +189,7 @@ extension ChatController {
       let chatContextTexts = chatContexts.reduce("", { partialResult, chatContext in
         partialResult + "\n\(chatContext.title): \(chatContext.context)"
       })
-      extraSystemContext = "The user is asking a question about these insights from their morning report: \n\n\(chatContextTexts)"
+      extraSystemContext = "The user is asking a question about these insights from the Today View: \n\n\(chatContextTexts)"
     } else {
       extraSystemContext = nil
     }

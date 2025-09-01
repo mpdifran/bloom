@@ -7,15 +7,18 @@
 
 import SwiftUI
 import BloomModel
+import TelemetryDeck
 
 struct InsightTodayCell: View {
   let insights: [TodayReportResponse.HealthInsight]
+  
+  @State private var presentedSheet: AnyView?
   
   var body: some View {
     ScrollView(.horizontal) {
       HStack {
         ForEach(insights, id: \.self) { insight in
-          InsightCard(insight: insight)
+          InsightCard(insight: insight, presentedSheet: $presentedSheet)
         }
       }
       .scrollTargetLayout()
@@ -23,11 +26,15 @@ struct InsightTodayCell: View {
     }
     .scrollTargetBehavior(.viewAligned)
     .scrollIndicators(.hidden)
+    .sheet($presentedSheet)
   }
 }
 
 private struct InsightCard: View {
   let insight: TodayReportResponse.HealthInsight
+  @Binding var presentedSheet: AnyView?
+  
+  @Environment(TabController.self) private var tabController: TabController
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -49,6 +56,11 @@ private struct InsightCard: View {
     .horizontalAlignment(.leading)
     .frame(width: 220)
     .cardContainer(fill: cardFill)
+    .contextMenu {
+      Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+        handleAskBudAction()
+      }
+    }
   }
   
   var cardFill: AnyShapeStyle {
@@ -58,6 +70,18 @@ private struct InsightCard: View {
       return AnyShapeStyle(LinearGradient(colors: [.mutedYellow, .mutedRed], startPoint: .bottom, endPoint: .top))
     } else {
       return AnyShapeStyle(LinearGradient(colors: [.mutedPurple, .mutedPink], startPoint: .bottom, endPoint: .top))
+    }
+  }
+  
+  private func handleAskBudAction() {
+    TelemetryDeck.signal("Today Insight Ask Bud Attempt")
+    
+    EntitledAction(presentedSheet: $presentedSheet) {
+      let context = ChatContext(title: insight.title, context: insight.body)
+      tabController.chatContexts = [context]
+      tabController.isShowingChat = true
+      
+      TelemetryDeck.signal("Today Insight Ask Bud")
     }
   }
 }
