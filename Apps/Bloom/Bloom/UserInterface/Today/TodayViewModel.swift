@@ -15,6 +15,8 @@ import Combine
 extension TodayView {
   @MainActor @Observable
   final class ViewModel {
+    static let shared = ViewModel()
+
     var isLoadingContent = false
     var todayContent: TodayContentDTO?
     var hasBloomPlus: Bool = false
@@ -23,7 +25,7 @@ extension TodayView {
     private let contentModelActor = TodayContentModelActor.standard()
     private var entitlementCancellable: AnyCancellable?
 
-    init() {
+    private init() {
       Task {
         checkEntitlement()
         await loadContent()

@@ -45,13 +45,9 @@ private extension SleepSummaryTodayCell {
   func contentView(sleepAnalysis: SleepAnalysis) -> some View {
     HStack(alignment: .top) {
       SleepScoreView(sleepAnalysis: sleepAnalysis, isMini: true)
+        .fixedSize()
 
       VStack(alignment: .leading) {
-        Text("Sleep Summary")
-          .font(.headline)
-          .fontDesign(.rounded)
-          .bold()
-
         Text(summary)
           .font(.body)
           .multilineTextAlignment(.leading)

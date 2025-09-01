@@ -36,12 +36,13 @@ struct TodayView: View {
 
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   @ObservedObject private var remindersManager = RemindersManager.shared
-  @State private var todayViewModel = ViewModel()
+  @State private var todayViewModel = ViewModel.shared
 
   @Environment(TabController.self) private var tabController: TabController
 
   @State private var presentedFullScreen: AnyView?
   @State private var presentedSheet: AnyView?
+  @State private var presentedNavPush: AnyView?
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
   @State private var currentTimeMode: TimeMode = .morning
 
@@ -90,6 +91,7 @@ struct TodayView: View {
         }
       }
       .sheet($presentedSheet)
+      .navigationDestination($presentedNavPush)
       .fullScreenCover($presentedFullScreen)
       .fullScreenCover(isPresented: $tabController.showPaywall) {
         BloomPlusPaywall()
@@ -209,7 +211,13 @@ private extension TodayView {
     case .sleepDetails:
       if let content = todayViewModel.getSectionContent(for: section),
          case .text(let details) = content {
+        SectionTitleView("Sleep Summary")
+          .padding(.horizontal)
+          .padding(.horizontal)
         SleepSummaryTodayCell(summary: details)
+          .onTapGesture {
+            presentedNavPush = SleepDayView(showsChatBar: true).asAny
+          }
           .padding(.horizontal)
       }
       

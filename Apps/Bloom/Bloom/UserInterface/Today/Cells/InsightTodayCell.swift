@@ -42,7 +42,6 @@ private struct InsightCard: View {
         .font(.body)
         .fontDesign(.rounded)
         .fixedSize(horizontal: false, vertical: true)
-        .lineLimit(6)
       
       Spacer(minLength: 0)
     }
