@@ -240,9 +240,7 @@ private extension TodayView {
       }
       
     case .reminders:
-      if filteredTodaysOccurrences.isNotEmpty {
-        remindersSection
-      }
+      remindersSection
       
     case .todaysEvents:
       SectionTitleView("Today's Events")
@@ -320,6 +318,11 @@ private extension TodayView {
               }
               .transition(.scale.combined(with: .opacity))
             }
+
+            AddReminderCell()
+              .onTapGesture {
+                presentedSheet = CreateEditReminderView().asAny
+              }
           }
           .scrollTargetLayout()
           .padding(.horizontal)
