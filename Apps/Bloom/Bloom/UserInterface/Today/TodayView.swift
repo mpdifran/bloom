@@ -43,6 +43,7 @@ struct TodayView: View {
   @State private var presentedFullScreen: AnyView?
   @State private var presentedSheet: AnyView?
   @State private var presentedNavPush: AnyView?
+  @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
   @State private var currentTimeMode: TimeMode = .morning
 
@@ -96,6 +97,7 @@ struct TodayView: View {
       .fullScreenCover(isPresented: $tabController.showPaywall) {
         BloomPlusPaywall()
       }
+      .confirmationDialog($confirmationDialogDetails)
     }
     .animation(.default, value: todayViewModel.todayContent)
     .animation(.default, value: todayViewModel.isLoadingContent)
@@ -196,6 +198,7 @@ private extension TodayView {
          case .text(let advice) = content {
         TodaysAdviceTodayCell(advice: advice)
           .padding(.horizontal)
+          .padding(.top)
       }
       
     case .insights:
@@ -295,6 +298,25 @@ private extension TodayView {
                 Button("Edit", systemSymbol: .sliderHorizontal3) {
                   handleEditReminder(occurrence.reminder)
                 }
+                Divider()
+                Button("Delete", systemSymbol: .trash, role: .destructive) {
+                  confirmationDialogDetails = ConfirmationDialogDetails(
+                    title: "Delete Reminder",
+                    message: "Are you sure you want to delete \"\(occurrence.reminder.title)\"? This action cannot be undone.",
+                    buttons: [
+                      ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
+                        Task {
+                          do {
+                            try await remindersManager.deleteReminder(withID: occurrence.reminder.id)
+                          } catch {
+                            print("Failed to delete reminder: \(error)")
+                          }
+                        }
+                      }
+                    ]
+                  )
+                }
+                .tint(.red)
               }
               .transition(.scale.combined(with: .opacity))
             }
