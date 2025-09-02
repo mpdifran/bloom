@@ -52,7 +52,6 @@ struct TodayView: View {
   @AppStorage("GetBloomPlusTodayCell.hasDismissed") private var getBloomPlusHasDismissed = false
 
   @State private var sceneryScale: CGFloat = 1
-  @State private var sceneryOffset: CGFloat = 0
 
   var body: some View {
     @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
@@ -64,7 +63,9 @@ struct TodayView: View {
             currentSceneryImage
               .resizable()
               .scaledToFit()
-              .offset(y: sceneryOffset)
+              .allowsHitTesting(false)
+              .compositingGroup()
+              .drawingGroup()
               .scaleEffect(sceneryScale, anchor: .bottom)
               .zStackAlignment(.top)
 
@@ -85,11 +86,7 @@ struct TodayView: View {
           geometry.contentOffset.y
         } action: { oldValue, newValue in
           if newValue < 0 {
-            sceneryOffset = 0
             sceneryScale = (newValue - 200) / -200
-          } else {
-            sceneryOffset = newValue / 6
-            sceneryScale = 1
           }
         }
         .onAppear {
