@@ -19,6 +19,12 @@ public extension JSONEncoder {
 
         return encoder
     }()
+
+    static let aiContext: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(DateFormatter.mediumDateShortTime)
+        return encoder
+    }()
 }
 
 // MARK: - JSONDecoder

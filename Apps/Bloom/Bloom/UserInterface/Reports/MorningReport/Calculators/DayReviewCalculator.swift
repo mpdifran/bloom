@@ -19,7 +19,7 @@ extension DayReviewCalculator {
 
   func calculateDayReviewHealthDataString(for date: Date) async throws -> String {
     let healthData = try await calculateDayReviewHealthData(for: date)
-    let jsonData = try JSONEncoder.bloomModel.encode(healthData)
+    let jsonData = try JSONEncoder.aiContext.encode(healthData)
     return String(data: jsonData, encoding: .utf8) ?? "{}"
   }
 

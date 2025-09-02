@@ -118,7 +118,7 @@ extension TodayContentCoordinator {
       // Create request and call API
       let request = TodayReportRequest(
         healthContext: healthContext,
-        currentTime: ISO8601DateFormatter().string(from: today),
+        currentTime: DateFormatter.mediumDateShortTime.string(from: today),
         timezone: timezone
       )
       
