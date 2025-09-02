@@ -51,6 +51,9 @@ struct TodayView: View {
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
   @AppStorage("GetBloomPlusTodayCell.hasDismissed") private var getBloomPlusHasDismissed = false
 
+  @State private var sceneryScale: CGFloat = 1
+  @State private var sceneryOffset: CGFloat = 0
+
   var body: some View {
     @Bindable var tabController = tabController // Hopefully Apple fixes this in the future.
 
@@ -61,6 +64,8 @@ struct TodayView: View {
             currentSceneryImage
               .resizable()
               .scaledToFit()
+              .offset(y: sceneryOffset)
+              .scaleEffect(sceneryScale, anchor: .bottom)
               .zStackAlignment(.top)
 
             VStack {
@@ -72,10 +77,21 @@ struct TodayView: View {
 
               configureButton
             }
-            .padding(.top, 140)
+            .padding(.top, 160)
           }
         }
         .ignoresSafeArea(.all, edges: .top)
+        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+          geometry.contentOffset.y
+        } action: { oldValue, newValue in
+          if newValue < 0 {
+            sceneryOffset = 0
+            sceneryScale = (newValue - 200) / -200
+          } else {
+            sceneryOffset = newValue / 6
+            sceneryScale = 1
+          }
+        }
         .onAppear {
           currentTimeMode = TimeMode.current(for: context.date, settings: todaySettings)
         }
