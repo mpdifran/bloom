@@ -13,15 +13,18 @@ struct UserProfilePhotoView: View {
   let dimension: CGFloat
   let canEdit: Bool
   let showBorder: Bool
+  let whiteForegroundColor: Bool
 
   init(
     dimension: CGFloat = 140,
     canEdit: Bool = false,
-    showBorder: Bool = true
+    showBorder: Bool = true,
+    whiteForegroundColor: Bool = false
   ) {
     self.dimension = dimension
     self.canEdit = canEdit
     self.showBorder = showBorder
+    self.whiteForegroundColor = whiteForegroundColor
   }
 
   @ObservedObject private var userController = UserController.shared
@@ -83,7 +86,7 @@ private extension UserProfilePhotoView {
         }
     } else {
       Circle()
-        .fill(.tint.secondary)
+        .fill(whiteForegroundColor ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.secondary))
         .frame(square: dimension)
         .overlay {
           Text(healthManager.name.prefix(1))
@@ -92,7 +95,7 @@ private extension UserProfilePhotoView {
             .fontDesign(.rounded)
             .minimumScaleFactor(0.05)
             .padding(dimension / 10)
-            .foregroundStyle(.tint)
+            .foregroundStyle(whiteForegroundColor ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
             .contentTransition(.numericText())
         }
         .animation(.default, value: healthManager.name)
@@ -115,5 +118,6 @@ private extension UserProfilePhotoView {
   UserProfilePhotoView()
   UserProfilePhotoView(canEdit: true)
   UserProfilePhotoView(dimension: 80)
+  UserProfilePhotoView(dimension: 80, whiteForegroundColor: true)
   UserProfilePhotoView(dimension: 30)
 }

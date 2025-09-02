@@ -21,6 +21,7 @@ struct TodayCardCell: View {
       Text(content)
         .font(.body)
         .fontDesign(.rounded)
+        .fixedSize(horizontal: false, vertical: true)
     }
     .foregroundStyle(.white)
     .horizontallyCentered()

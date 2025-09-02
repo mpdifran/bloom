@@ -57,14 +57,25 @@ struct TodayView: View {
     NavigationStack {
       TimelineView(.everyMinute) { context in
         BloomScrollView(padding: .bottom) {
-          if todayViewModel.hasBloomPlus {
-            bloomPlusContent
-          } else {
-            nonBloomPlusContent
-          }
+          ZStack {
+            currentSceneryImage
+              .resizable()
+              .scaledToFit()
+              .zStackAlignment(.top)
 
-          configureButton
+            VStack {
+              if todayViewModel.hasBloomPlus {
+                bloomPlusContent
+              } else {
+                nonBloomPlusContent
+              }
+
+              configureButton
+            }
+            .padding(.top, 140)
+          }
         }
+        .ignoresSafeArea(.all, edges: .top)
         .onAppear {
           currentTimeMode = TimeMode.current(for: context.date, settings: todaySettings)
         }
@@ -79,17 +90,27 @@ struct TodayView: View {
           Button {
             presentedSheet = SettingsView().asAny
           } label: {
-            UserProfilePhotoView(dimension: 32)
+            UserProfilePhotoView(
+              dimension: 32,
+              whiteForegroundColor: true
+            )
           }
         }
         
-        ToolbarItem(placement: .topBarLeading) {
-          Button {
-            presentedSheet = TodaySettingsView().asAny
-          } label: {
-            Image(systemSymbol: .sliderHorizontal3)
-          }
-        }
+//        ToolbarItem(placement: .topBarLeading) {
+//          Button {
+//            presentedSheet = TodaySettingsView().asAny
+//          } label: {
+//            Image(systemSymbol: .sliderHorizontal3)
+//              .foregroundStyle(.white)
+//              .bold()
+//              .padding(6)
+//              .background {
+//                RoundedRectangle(cornerRadius: 10)
+//                  .fill(.tint)
+//              }
+//          }
+//        }
       }
       .sheet($presentedSheet)
       .navigationDestination($presentedNavPush)
@@ -121,6 +142,19 @@ struct TodayView: View {
 }
 
 private extension TodayView {
+  
+  var currentSceneryImage: Image {
+    switch currentTimeMode {
+    case .morning:
+      return Image(.morningScenery)
+    case .afternoon:
+      return Image(.afternoonScenery)
+    case .evening:
+      return Image(.eveningScenery)
+    case .night:
+      return Image(.nightScenery)
+    }
+  }
   
   @ViewBuilder
   var bloomPlusContent: some View {

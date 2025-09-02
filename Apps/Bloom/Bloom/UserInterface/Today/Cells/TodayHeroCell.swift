@@ -11,7 +11,7 @@ import BloomModel
 import CoreHealth
 
 private extension CGFloat {
-  static let budSize: CGFloat = 180
+  static let budSize: CGFloat = 240
 }
 
 struct TodayHeroCell: View {
