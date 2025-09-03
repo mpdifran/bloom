@@ -36,19 +36,18 @@ struct BloomPlusPaywall: View {
 
   var body: some View {
     ZStack {
-      BloomPlusPaywallHeroImageView()
-        .zStackAlignment(.top)
-        .clipped()
-        .ignoresSafeArea(edges: .top)
-
       ScrollView(.vertical) {
+        BloomPlusPaywallHeroImageView()
+          .parallaxOverscroll()
+
         contentView
           .background {
             RoundedRectangle(cornerRadius: 30)
               .fill(.paywallBackground)
           }
-          .padding(.top, 170)
+          .padding(.top, -30)
       }
+      .ignoresSafeArea(edges: .top)
       .scrollIndicators(.hidden)
 
       BloomPlusHeaderView(showDismiss: showDismiss)
