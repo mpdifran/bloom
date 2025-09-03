@@ -12,6 +12,7 @@ import DataContainer
 import SFSafeSymbols
 import BloomFoundation
 import BloomModel
+import TelemetryDeck
 
 @MainActor
 struct TodayView: View {
@@ -236,6 +237,15 @@ private extension TodayView {
         TodaysAdviceTodayCell(advice: advice)
           .padding(.horizontal)
           .padding(.top)
+          .contextMenu {
+            Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+              handleAskBudAction(
+                title: "Today's Advice",
+                content: advice,
+                source: "Today's Advice"
+              )
+            }
+          }
       }
       
     case .insights:
@@ -266,6 +276,15 @@ private extension TodayView {
          case .text(let recommendations) = content {
         TonightsSleepTodayCell(recommendations: recommendations)
           .padding(.horizontal)
+          .contextMenu {
+            Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+              handleAskBudAction(
+                title: "Tonight's Sleep",
+                content: recommendations,
+                source: "Tonight's Sleep"
+              )
+            }
+          }
       }
       
     case .goals:
@@ -577,6 +596,18 @@ private extension TodayView {
         }
       ]
     )
+  }
+  
+  func handleAskBudAction(title: String, content: String, source: String) {
+    TelemetryDeck.signal("Ask Bud Attempted", parameters: ["source": source])
+    
+    EntitledAction(presentedSheet: $presentedSheet) {
+      let context = ChatContext(title: title, context: content)
+      tabController.chatContexts = [context]
+      tabController.isShowingChat = true
+      
+      TelemetryDeck.signal("Ask Bud", parameters: ["source": source])
+    }
   }
 }
 

@@ -44,7 +44,8 @@ struct MorningReportInsightCell: View {
 
       AskBudButton {
         TelemetryDeck.signal(
-          "Morning Report Insight Ask Bud Attempt"
+          "Ask Bud Attempted",
+          parameters: ["source": "Morning Report Insight"]
         )
 
         EntitledAction(presentedSheet: $rootPresentedSheet) {
@@ -54,7 +55,8 @@ struct MorningReportInsightCell: View {
           tabController.isShowingChat = true
 
           TelemetryDeck.signal(
-            "Morning Report Insight Ask Bud"
+            "Ask Bud",
+            parameters: ["source": "Morning Report Insight"]
           )
         }
       }
