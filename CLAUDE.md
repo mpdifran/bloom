@@ -55,7 +55,8 @@ swift run   # Requires Redis: brew install redis && brew services start redis
 ### Testing
 - Run tests through Xcode (⌘U) or Xcode Cloud
 - Backend tests: `swift test` in Backend/Bloom-Backend directory
-- **Note**: Do not attempt to build the iOS app via command line to test changes - the build process is complex and time-consuming. Trust that SwiftLint validation is sufficient for code correctness.
+- **Note**: Do not attempt to build the iOS app via command line to test changes - the build process is complex and time-consuming
+- **Note**: SwiftLint will crash when run via command line - don't run it during development. The Xcode build process handles linting automatically
 
 ## Architecture Highlights
 

@@ -138,7 +138,7 @@ private extension OnboardingAppExplanationViewTreatment {
     if index < 2 {
       await Delay(200)
     } else {
-      await Delay(1500)
+      await Delay(1000)
     }
 
     index += 1

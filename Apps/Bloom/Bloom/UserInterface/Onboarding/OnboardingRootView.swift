@@ -63,10 +63,9 @@ struct OnboardingRootView: View {
         }
       case .focusArea:
         OnboardingFocusAreaView {
-          setStep(.notifications)
+          setStep(.goalSetup)
         }
       case .goalSetup:
-        // TODO: This is incomplete
         OnboardingGoalSetupView {
           setStep(.notifications)
         }
