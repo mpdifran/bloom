@@ -396,6 +396,16 @@ private extension TodayView {
         HabitDailyUpdateCell(habit: habit)
       }
       .buttonStyle(.plain)
+      .contextMenu {
+        Button("Edit", systemSymbol: .sliderHorizontal3) {
+          handleEditHabit(habit)
+        }
+        Divider()
+        Button("Delete", systemSymbol: .trash, role: .destructive) {
+          handleDeleteHabit(habit)
+        }
+        .tint(.red)
+      }
     }
   }
 
@@ -544,6 +554,29 @@ private extension TodayView {
     if let reminder = reminders.first(where: { $0.id == reminderDTO.id }) {
       presentedSheet = CreateEditReminderView(reminder: reminder).asAny
     }
+  }
+  
+  func handleEditHabit(_ habit: Habit) {
+    presentedSheet = EditUserAddedHabitView(habit: habit) { updatedHabit in
+      // The EditUserAddedHabitView handles the update
+      // If updatedHabit is nil, the habit was deleted from within the edit view
+    }.asAny
+  }
+  
+  func handleDeleteHabit(_ habit: Habit) {
+    confirmationDialogDetails = ConfirmationDialogDetails(
+      title: "Delete Goal",
+      message: "Are you sure you want to delete \"\(habit.targetMetric.name)\"? This action cannot be undone.",
+      buttons: [
+        ConfirmationDialogDetails.Button(title: "Delete", role: .destructive) {
+          do {
+            try HabitsViewModel.shared.delete(habit)
+          } catch {
+            print("Failed to delete habit: \(error)")
+          }
+        }
+      ]
+    )
   }
 }
 
