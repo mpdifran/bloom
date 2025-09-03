@@ -9,7 +9,7 @@ import SwiftUI
 import TelemetryDeck
 
 private extension Int {
-  static let minPositiveEventCount = 3
+  static let minPositiveEventCount = 10
   static let monthsOfPauseAfterShowingRatingPrompt = 3
 }
 
@@ -31,6 +31,12 @@ final class RatingPromptTracker {
 }
 
 extension RatingPromptTracker {
+
+  /// Increments the positive event count without checking if the prompt should be shown.
+  func incrementEventCount() {
+    guard canTrackRatingCount() else { return }
+    positiveEventCount += 1
+  }
 
   /// Returns `true` if the rating prompt should be shown to the user.
   func recordEvent() -> Bool {

@@ -18,7 +18,6 @@ struct ChatLauncherViewModifier: ViewModifier {
 
   @Environment(TabController.self) private var tabController: TabController
   @Environment(ThemeController.self) private var themeController: ThemeController
-  @AppStorage(.FeatureFlag.useSwiftUIChatView) private var useSwiftUIChatView = false
 
   func body(content: Content) -> some View {
     content
@@ -33,15 +32,11 @@ struct ChatLauncherViewModifier: ViewModifier {
         get: { tabController.isShowingChat },
         set: { tabController.isShowingChat = $0 }
       )) {
-        if useSwiftUIChatView {
-          ChatView()
-        } else {
-          ChatViewControllerRepresentable(
-            tabController: tabController,
-            themeController: themeController
-          )
-          .ignoresSafeArea()
-        }
+        ChatViewControllerRepresentable(
+          tabController: tabController,
+          themeController: themeController
+        )
+        .ignoresSafeArea()
       }
   }
 }

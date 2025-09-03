@@ -98,6 +98,7 @@ private extension BloomApp {
 
   func onForeground() {
     NutritionTrackingViewModel.shared.updateMealForCurrentTime()
+    RatingPromptTracker.shared.incrementEventCount()
 
     Task {
       await UserController.shared.identify()

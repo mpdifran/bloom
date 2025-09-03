@@ -14,6 +14,7 @@ import DifferenceKit
 import Combine
 import SFSafeSymbols
 import AppUI
+import StoreKit
 
 class ChatViewController: UICollectionViewController {
 
@@ -31,6 +32,7 @@ class ChatViewController: UICollectionViewController {
   private var isLoadingMore = false
   private var isAtBottom = true
   private var hasScrolledToBottomInitially = false
+  private var previousBudMessageCount = 0
 
   private var cancellables = Set<AnyCancellable>()
   private var cellModelsTask: Task<Void, Never>?
@@ -330,6 +332,9 @@ class ChatViewController: UICollectionViewController {
 
     // Update prompts visibility
     updatePromptsVisibility()
+    
+    // Check for new Bud messages and potentially show rating prompt
+    checkForNewBudMessage(newModels)
   }
 
   private func updatePromptsVisibility() {
@@ -389,6 +394,35 @@ class ChatViewController: UICollectionViewController {
   }
 
   // MARK: - Error Handling
+
+  private func checkForNewBudMessage(_ cellModels: [ChatCellModel]) {
+    // Count non-user messages (messages from Bud)
+    let currentBudMessageCount = cellModels.filter { cellModel in
+      // Check if this is a message from Bud (not from current user)
+      switch cellModel.contentType {
+      case .text(_, _, let metadata), .richContent(_, _, let metadata):
+        return metadata?.isCurrentUser == false
+      case .image(_, _, let metadata):
+        return metadata?.isCurrentUser == false
+      default:
+        return false
+      }
+    }.count
+    
+    // If we have more Bud messages than before, a new one arrived
+    if currentBudMessageCount > previousBudMessageCount && previousBudMessageCount > 0 {
+      // Record the event and potentially show rating prompt
+      if RatingPromptTracker.shared.recordEvent() {
+        // Request review using StoreKit
+        if let windowScene = view.window?.windowScene {
+          AppStore.requestReview(in: windowScene)
+        }
+      }
+    }
+    
+    // Update the count for next time
+    previousBudMessageCount = currentBudMessageCount
+  }
 
   private func showError(_ error: Error) {
     let alert = UIAlertController(

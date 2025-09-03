@@ -8,6 +8,7 @@ import AppUI
 struct CreateEditReminderView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.requestReview) private var requestReview
   @ObservedObject private var entitlementController = EntitlementController.shared
 
   @State private var title: String
@@ -281,6 +282,9 @@ private extension CreateEditReminderView {
         }
 
         await MainActor.run {
+          if RatingPromptTracker.shared.recordEvent() {
+            requestReview()
+          }
           dismiss()
         }
       } catch {

@@ -12,7 +12,6 @@ extension String {
     static let developerMode = "FeatureFlag.developerMode"
     static let bypassPaywall = "FeatureFlag.bypassPaywall"
     static let enableOpenAIModelOverride = "FeatureFlag.enableOpenAIModelOverride"
-    static let useSwiftUIChatView = "FeatureFlag.useSwiftUIChatView" // Toggle to use SwiftUI ChatView instead of default UIKit ChatViewController
   }
   
   enum ExperimentOverrideKey {
