@@ -42,3 +42,23 @@ func EntitledAction(
     }.asAny
   }
 }
+
+@MainActor
+func EntitledAction(
+  presentedSheet: Binding<AnyView?>,
+  focus: BloomPlusPaywall.Focus,
+  action: @escaping () -> Void
+) {
+  if EntitlementController.shared.hasBloomPro == true {
+    action()
+  } else {
+    presentedSheet.wrappedValue = BloomPlusPaywall(focus: focus) {
+      guard EntitlementController.shared.hasBloomPro == true else { return }
+
+      Task {
+        await Delay(300)
+        action()
+      }
+    }.asAny
+  }
+}

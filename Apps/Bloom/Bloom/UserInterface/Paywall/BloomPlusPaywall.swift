@@ -11,15 +11,25 @@ import RevenueCat
 import StoreKit
 import TelemetryDeck
 
+extension BloomPlusPaywall {
+  enum Focus {
+    case standard
+    case todayInsights
+  }
+}
+
 struct BloomPlusPaywall: View {
 
+  private let focus: Focus
   private let showDismiss: Bool
   private let onPurchase: () -> Void
 
   init(
+    focus: Focus = .standard,
     showDismiss: Bool = true,
     onPurchase: @escaping () -> Void = { }
   ) {
+    self.focus = focus
     self.showDismiss = showDismiss
     self.onPurchase = onPurchase
   }
@@ -40,12 +50,19 @@ struct BloomPlusPaywall: View {
         BloomPlusPaywallHeroImageView()
           .parallaxOverscroll()
 
-        contentView
-          .background {
-            RoundedRectangle(cornerRadius: 30)
-              .fill(.paywallBackground)
+        Group {
+          switch focus {
+          case .standard:
+            standardContent
+          case .todayInsights:
+            todayInsightFocusedContent
           }
-          .padding(.top, -30)
+        }
+        .background {
+          RoundedRectangle(cornerRadius: 30)
+            .fill(.paywallBackground)
+        }
+        .padding(.top, -30)
       }
       .ignoresSafeArea(edges: .top)
       .scrollIndicators(.hidden)
@@ -87,7 +104,7 @@ struct BloomPlusPaywall: View {
 
 private extension BloomPlusPaywall {
 
-  var contentView: some View {
+  var standardContent: some View {
     VStack {
       VStack(spacing: 30) {
         BloomPlusTryBloomHeaderView(canTryForFree: selectedPackage?.hasFreeIntroductoryOffer == true)
@@ -95,12 +112,46 @@ private extension BloomPlusPaywall {
           .padding(.top)
           .horizontallyCentered()
           .padding(.horizontal)
-        
+
         if let package = selectedPackage, package.hasFreeIntroductoryOffer {
           BloomPlusFreeTrialTimelineView(package: package)
             .padding(.horizontal)
         }
-        
+
+        BloomPlusTodayCardShowcaseCell()
+
+        BloomPlusFeaturesListView()
+      }
+
+      VStack(spacing: 30) {
+        BloomPlusUserReviewListView()
+        BloomPlusFAQView()
+        BloomPlusLegalSectionView(restorePurchases: {
+          ThrowingUserTask(error: $error) {
+            try await viewModel.restorePurchases()
+          }
+        })
+      }
+      .padding()
+    }
+  }
+
+  var todayInsightFocusedContent: some View {
+    VStack {
+      VStack(spacing: 30) {
+        BloomPlusTodayInsightHeaderView()
+          .padding(.top)
+          .padding(.top)
+          .horizontallyCentered()
+          .padding(.horizontal)
+
+        BloomPlusTodayCardShowcaseCell()
+
+        if let package = selectedPackage, package.hasFreeIntroductoryOffer {
+          BloomPlusFreeTrialTimelineView(package: package)
+            .padding(.horizontal)
+        }
+
         BloomPlusFeaturesListView()
       }
 
@@ -185,8 +236,14 @@ private extension BloomPlusPaywall {
   }
 }
 
-#Preview {
+#Preview("Standard") {
   PreviewEnvironment {
     BloomPlusPaywall()
+  }
+}
+
+#Preview("Today Insight Focused") {
+  PreviewEnvironment {
+    BloomPlusPaywall(focus: .todayInsights)
   }
 }

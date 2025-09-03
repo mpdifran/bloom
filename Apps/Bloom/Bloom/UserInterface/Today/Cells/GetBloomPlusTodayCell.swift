@@ -31,7 +31,7 @@ struct GetBloomPlusTodayCell: View {
 
       Button {
         TelemetryDeck.signal("Today View Upsell")
-        presentedSheet = BloomPlusPaywall(showDismiss: true).asAny
+        presentedSheet = BloomPlusPaywall(focus: .todayInsights, showDismiss: true).asAny
       } label: {
         Label("Unlock Insights", systemSymbol: .sparkles)
           .horizontallyCentered()

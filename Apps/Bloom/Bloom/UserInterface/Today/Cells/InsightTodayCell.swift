@@ -30,7 +30,7 @@ struct InsightTodayCell: View {
   }
 }
 
-private struct InsightCard: View {
+struct InsightCard: View {
   let insight: TodayReportResponse.HealthInsight
   @Binding var presentedSheet: AnyView?
   
@@ -76,7 +76,7 @@ private struct InsightCard: View {
   private func handleAskBudAction() {
     TelemetryDeck.signal("Ask Bud Attempted", parameters: ["source": "Today Insight"])
     
-    EntitledAction(presentedSheet: $presentedSheet) {
+    EntitledAction(presentedSheet: $presentedSheet, focus: .todayInsights) {
       let context = ChatContext(title: insight.title, context: insight.body)
       tabController.chatContexts = [context]
       tabController.isShowingChat = true
