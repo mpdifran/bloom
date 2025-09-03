@@ -19,14 +19,16 @@ struct OnboardingGoalSetupView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 20) {
-        BudImage(.budWorkout)
+        BudImage(.budStrengthTraining)
 
         Group {
           Text("Let's set some goals!")
             .transition(.opacity)
-            .appear(with: 1, currentIndex: index)
+            .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
           Text("Goals are a great way to help improve specific aspects of your health, and keep track of the progress.")
+            .font(.title3)
+            .foregroundStyle(.secondary)
             .transition(.opacity)
             .appear(with: 2, currentIndex: index)
 
