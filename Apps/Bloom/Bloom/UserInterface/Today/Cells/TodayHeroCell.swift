@@ -97,17 +97,17 @@ private extension TodayHeroCell {
   
   var greetingText: String {
     let currentMode = TimeMode.current(for: .now, settings: todaySettings)
-    let userName = HealthManager.shared.name.isEmpty ? "there" : HealthManager.shared.name
-    
+    let userName = HealthManager.shared.name.isEmpty ? "" : ", \(HealthManager.shared.name)"
+
     switch currentMode {
     case .morning:
-      return "Good Morning, \(userName)!"
+      return "Good Morning\(userName)!"
     case .afternoon:
-      return "Good Afternoon, \(userName)!"
+      return "Good Afternoon\(userName)!"
     case .evening:
-      return "Good Evening, \(userName)!"
+      return "Good Evening\(userName)!"
     case .night:
-      return "Good Night, \(userName)!"
+      return "Good Night\(userName)!"
     }
   }
 

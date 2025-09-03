@@ -39,6 +39,7 @@ struct TodayView: View {
   @ObservedObject private var remindersManager = RemindersManager.shared
   @State private var todayViewModel = ViewModel.shared
 
+  @Environment(ThemeController.self) private var themeController: ThemeController
   @Environment(TabController.self) private var tabController: TabController
 
   @State private var presentedFullScreen: AnyView?
@@ -47,6 +48,7 @@ struct TodayView: View {
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
   @State private var currentTimeMode: TimeMode = .morning
+  @State private var configureButtonTint = Color.white
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
   @AppStorage("TodayView.showNutritionTodayWidget") private var showNutritionTodayWidget: Bool = true
@@ -86,6 +88,11 @@ struct TodayView: View {
         .onChange(of: context.date) { _, newDate in
           currentTimeMode = TimeMode.current(for: newDate, settings: todaySettings)
         }
+        .onScrollGeometryChange(for: Bool.self) { geometry in
+          geometry.contentOffset.y > 2
+        } action: { oldValue, newValue in
+          self.configureButtonTint = newValue ? themeController.theme.color : .white
+        }
       }
       .navigationTitle("Today")
       .navigationBarTitleDisplayMode(.inline)
@@ -101,20 +108,15 @@ struct TodayView: View {
           }
         }
         
-//        ToolbarItem(placement: .topBarLeading) {
-//          Button {
-//            presentedSheet = TodaySettingsView().asAny
-//          } label: {
-//            Image(systemSymbol: .sliderHorizontal3)
-//              .foregroundStyle(.white)
-//              .bold()
-//              .padding(6)
-//              .background {
-//                RoundedRectangle(cornerRadius: 10)
-//                  .fill(.tint)
-//              }
-//          }
-//        }
+        ToolbarItem(placement: .topBarLeading) {
+          Button {
+            presentedSheet = TodaySettingsView().asAny
+          } label: {
+            Image(systemSymbol: .sliderHorizontal3)
+              .foregroundStyle(configureButtonTint)
+              .bold()
+          }
+        }
       }
       .sheet($presentedSheet)
       .navigationDestination($presentedNavPush)

@@ -15,7 +15,7 @@ struct TodayCardCell: View {
   let color: Color
 
   var body: some View {
-    VStack(spacing: 16) {
+    VStack(alignment: .leading, spacing: 16) {
       headerView
 
       Text(content)

@@ -16,28 +16,15 @@ struct GetBloomPlusTodayCell: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
-      HStack(alignment: .top) {
-        iconView
+      TodayCardCell(
+        symbol: .moonZzz,
+        title: "Tonight's Sleep",
+        content: "This is where you would receive daily insights into your health data.",
+        color: .mutedPurple
+      )
+      .premiumLocked("Bud’s Got the Scoop—Wanna See It?")
 
-        Text("See How Healthy You Really Are")
-          .font(.title3)
-          .fontDesign(.rounded)
-          .bold()
-
-        Spacer()
-
-        Button {
-          TelemetryDeck.signal("Today View Upsell Dismissed")
-          hasDismissed = true
-        } label: {
-          Image(systemSymbol: .xmarkCircleFill)
-            .font(.title)
-            .foregroundStyle(.white, .fill)
-        }
-        .frame(square: 44)
-      }
-
-      Text("Daily insights on your sleep, nutrition, and activity, so you know exactly what’s helping (and what’s holding you back).")
+      Text("Get personalized insights on what’s boosting (or bumming out) your health. It’s like x-ray vision for your wellness.")
         .font(.body)
         .foregroundStyle(.secondary)
         .padding(.bottom)
@@ -50,6 +37,18 @@ struct GetBloomPlusTodayCell: View {
           .horizontallyCentered()
       }
       .buttonStyle(.tertiary)
+    }
+    .overlay {
+      Button {
+        TelemetryDeck.signal("Today View Upsell Dismissed")
+        hasDismissed = true
+      } label: {
+        Image(systemSymbol: .xmarkCircleFill)
+          .font(.title)
+          .foregroundStyle(.primary, .thickMaterial)
+      }
+      .frame(square: 44)
+      .zStackAlignment(.topTrailing)
     }
     .cardContainer()
     .sheet($presentedSheet)
