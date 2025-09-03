@@ -58,7 +58,19 @@ extension TodayView.ViewModel {
   
   func loadContent() async {
     do {
-      todayContent = try await contentModelActor.fetchContent(for: Date())
+      let fetchedContent = try await contentModelActor.fetchContent(for: Date())
+      todayContent = nil
+
+      // Check if the fetched content is actually for today
+      if let content = fetchedContent {
+        let isToday = Calendar.current.isDateInToday(content.day)
+        
+        // Only use the content if it's from today
+        if isToday {
+          todayContent = content
+        }
+      }
+      
       hasLoadError = false
     } catch {
       print("Failed to load today content: \(error)")
