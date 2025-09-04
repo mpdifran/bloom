@@ -96,6 +96,15 @@ extension String.Prompt {
     - Vary your language and approach to keep insights fresh and engaging
     - When referencing previous insights, be natural and conversational rather than mechanical
 
+    Bedtime Wind Down Times:
+    - Calculate optimal bedtime wind down start and end times based on the user's sleep patterns
+    - Wind down start time should be 60-90 minutes before their typical sleep time
+    - Wind down end time should align with their typical wake time
+    - Base calculations on recent sleep data, considering when they actually fall asleep and wake up
+    - If sleep data shows irregular patterns, suggest times that would help establish consistency
+    - Return times as hour (0-23) and minute (0-59) integers in the user's timezone
+    - Only include these times if you have enough sleep data to make a reasonable recommendation
+
     The user's health context includes recent activity, sleep, nutrition, and other tracked health metrics. Use this data to provide personalized, relevant guidance for their health journey today.
     """
 

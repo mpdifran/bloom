@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import DeviceActivity
+@preconcurrency import DeviceActivity
 
 public extension DeviceActivityName {
     static let sleep = Self("sleep")

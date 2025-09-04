@@ -112,6 +112,22 @@ extension ResponseSchema {
         "tonightsSleepRecommendations": Schema.Parameter(
           type: .string,
           description: "Specific recommendations to improve tonight's sleep based on today's activities and recent sleep patterns."
+        ),
+        "windDownStartHour": Schema.Parameter(
+          type: .optionalInteger,
+          description: "Recommended bedtime wind down start hour (0-23) in user's timezone to restrict phone usage for optimal sleep."
+        ),
+        "windDownStartMinute": Schema.Parameter(
+          type: .optionalInteger,
+          description: "Recommended bedtime wind down start minute (0-59)."
+        ),
+        "windDownEndHour": Schema.Parameter(
+          type: .optionalInteger,
+          description: "Recommended bedtime wind down end hour (0-23) in user's timezone - typically wake up time."
+        ),
+        "windDownEndMinute": Schema.Parameter(
+          type: .optionalInteger,
+          description: "Recommended bedtime wind down end minute (0-59)."
         )
       ]
     )

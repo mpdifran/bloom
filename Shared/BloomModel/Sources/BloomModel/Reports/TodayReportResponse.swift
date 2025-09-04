@@ -14,6 +14,10 @@ public struct TodayReportResponse: Codable, Hashable, Sendable {
   public let insights: [HealthInsight]
   public let sleepDetails: String?
   public let tonightsSleepRecommendations: String
+  public let windDownStartHour: Int?
+  public let windDownStartMinute: Int?
+  public let windDownEndHour: Int?
+  public let windDownEndMinute: Int?
   
   public init(
     summary: String,
@@ -21,7 +25,11 @@ public struct TodayReportResponse: Codable, Hashable, Sendable {
     todaysAdvice: String,
     insights: [HealthInsight],
     sleepDetails: String?,
-    tonightsSleepRecommendations: String
+    tonightsSleepRecommendations: String,
+    windDownStartHour: Int? = nil,
+    windDownStartMinute: Int? = nil,
+    windDownEndHour: Int? = nil,
+    windDownEndMinute: Int? = nil
   ) {
     self.summary = summary
     self.budState = budState
@@ -29,6 +37,10 @@ public struct TodayReportResponse: Codable, Hashable, Sendable {
     self.insights = insights
     self.sleepDetails = sleepDetails
     self.tonightsSleepRecommendations = tonightsSleepRecommendations
+    self.windDownStartHour = windDownStartHour
+    self.windDownStartMinute = windDownStartMinute
+    self.windDownEndHour = windDownEndHour
+    self.windDownEndMinute = windDownEndMinute
   }
 }
 
