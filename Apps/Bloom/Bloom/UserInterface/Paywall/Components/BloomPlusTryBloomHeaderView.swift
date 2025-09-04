@@ -16,7 +16,7 @@ struct BloomPlusTryBloomHeaderView: View {
       BloomPlusLogo()
         .horizontallyCentered()
 
-      Text(canTryForFree ? "Health Tips So Good, You’ll Forget It’s Free" : "Smarter Health Starts Today")
+      Text(canTryForFree ? "Prioritize Your Health. On The House." : "Smarter Health Starts Today")
         .font(.largeTitle)
         .bold()
         .fontDesign(.rounded)
