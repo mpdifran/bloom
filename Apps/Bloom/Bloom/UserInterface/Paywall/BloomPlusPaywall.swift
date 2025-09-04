@@ -65,7 +65,6 @@ struct BloomPlusPaywall: View {
         .padding(.top, -30)
       }
       .ignoresSafeArea(edges: .top)
-      .scrollIndicators(.hidden)
 
       BloomPlusHeaderView(showDismiss: showDismiss)
         .padding(.horizontal)

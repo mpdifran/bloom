@@ -84,7 +84,7 @@ private extension ChatLauncherView {
     }
     .frame(minWidth: 120)
     .padding(4)
-    .cardContainer(fill: .thickMaterial, includePadding: false)
+    .cardContainer(fill: .background.opacity(0.5), includePadding: false)
     .onTapGesture {
 //      tabController.isShowingChat = true
 //      selectionToggle.toggle()
@@ -113,7 +113,7 @@ private extension ChatLauncherView {
       tabController.activeTab.tabImage
         .frame(square: 24)
         .padding(12)
-        .cardContainer(fill: .thickMaterial, includePadding: false)
+        .cardContainer(fill: .background.opacity(0.5), includePadding: false)
     }
   }
 
@@ -128,7 +128,7 @@ private extension ChatLauncherView {
         .fontWeight(.semibold)
         .frame(square: 24)
         .padding(12)
-        .cardContainer(fill: .thickMaterial, includePadding: false)
+        .cardContainer(fill: .background.opacity(0.5), includePadding: false)
     }
   }
 }

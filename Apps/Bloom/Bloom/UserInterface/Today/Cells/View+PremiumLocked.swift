@@ -11,7 +11,7 @@ extension View {
 
   func premiumLocked(_ title: String) -> some View {
     self
-      .blur(radius: 5)
+      .blur(radius: 7)
       .overlay {
         VStack {
           Image(systemSymbol: .lockFill)

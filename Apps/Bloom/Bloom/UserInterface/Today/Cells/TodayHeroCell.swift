@@ -48,6 +48,8 @@ struct TodayHeroCell: View {
           .font(.title)
           .bold()
           .fontDesign(.rounded)
+          .multilineTextAlignment(.leading)
+          .fixedSize(horizontal: false, vertical: true)
       }
 
       if hasError {

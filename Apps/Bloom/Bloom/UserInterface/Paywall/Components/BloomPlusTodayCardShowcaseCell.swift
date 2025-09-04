@@ -14,7 +14,7 @@ struct BloomPlusTodayCardShowcaseCell: View {
   @State private var height: CGFloat = 1
   @State private var selectedIndex = 0
   
-  private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+  private let timer = Timer.publish(every: 7, on: .main, in: .common).autoconnect()
   private let totalCards = 3
 
   var body: some View {
