@@ -12,7 +12,6 @@ import AppUI
 struct RootView: View {
 
   @AppStorage("hasShownOnboardingV3") var hasShownOnboarding: Bool = false
-  @AppStorage(.FeatureFlag.useSwiftUIChatView) private var useSwiftUIChatView = false
 
   @Bindable private var tabController = TabController()
   @Bindable private var themeController = ThemeController.shared
@@ -102,15 +101,11 @@ private extension RootView {
       get: { tabController.isShowingChat },
       set: { tabController.isShowingChat = $0 }
     )) {
-      if useSwiftUIChatView {
-        ChatView()
-      } else {
-        ChatViewControllerRepresentable(
-          tabController: tabController,
-          themeController: themeController
-        )
-        .ignoresSafeArea()
-      }
+      ChatViewControllerRepresentable(
+        tabController: tabController,
+        themeController: themeController
+      )
+      .ignoresSafeArea()
     }
     .environment(tabController)
   }

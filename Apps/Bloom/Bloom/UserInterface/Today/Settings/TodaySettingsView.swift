@@ -19,8 +19,6 @@ struct TodaySettingsView: View {
   @State private var draggedSection: TodaySection?
   @State private var navigationPushView: AnyView?
 
-  @Environment(\.dismiss) private var dismiss
-
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
@@ -35,12 +33,7 @@ struct TodaySettingsView: View {
       .navigationDestination($navigationPushView)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button {
-            dismiss()
-          } label: {
-            Text("Done")
-              .bold()
-          }
+          DismissButton()
         }
       }
     }

@@ -91,7 +91,11 @@ struct TodayView: View {
           currentTimeMode = TimeMode.current(for: newDate, settings: todaySettings)
         }
         .onScrollGeometryChange(for: Bool.self) { geometry in
-          geometry.contentOffset.y > 2
+          if #available(iOS 26.0, *) {
+            return false
+          } else {
+            return geometry.contentOffset.y > 2
+          }
         } action: { oldValue, newValue in
           self.configureButtonTint = newValue ? themeController.theme.color : .white
         }
