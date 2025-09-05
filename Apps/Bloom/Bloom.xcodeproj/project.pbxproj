@@ -56,11 +56,6 @@
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9BEA262DCAABD200D90BAF /* Algorithms */; };
-		FFA85F7F2E6A02AC002489DC /* DeviceActivityMonitorExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96192C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FFA85F812E6A02B3002489DC /* ShieldConfigurationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96312C0BF57F004DAD2D /* ShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FFA85F822E6A02B3002489DC /* ShieldActionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96452C0BF5E4004DAD2D /* ShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FFA85F832E6A02C9002489DC /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
-		FFA85F842E6A02D2002489DC /* ScreenControl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -150,13 +145,6 @@
 			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
 			remoteInfo = Umbrella;
 		};
-		FFA85F852E6A02DA002489DC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
-			remoteInfo = ScreenControl;
-		};
 		FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -229,7 +217,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FFA85F842E6A02D2002489DC /* ScreenControl.framework in Embed Frameworks */,
 				FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */,
 				FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */,
 				FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */,
@@ -244,9 +231,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				FFA85F812E6A02B3002489DC /* ShieldConfigurationExtension.appex in Embed Foundation Extensions */,
-				FFA85F822E6A02B3002489DC /* ShieldActionExtension.appex in Embed Foundation Extensions */,
-				FFA85F7F2E6A02AC002489DC /* DeviceActivityMonitorExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -493,7 +477,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFA85F832E6A02C9002489DC /* ScreenControl.framework in Frameworks */,
 				FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */,
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
@@ -852,7 +835,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				FFA85F862E6A02DA002489DC /* PBXTargetDependency */,
 				FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */,
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
 				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
@@ -1305,11 +1287,6 @@
 			isa = PBXTargetDependency;
 			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
 			targetProxy = FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */;
-		};
-		FFA85F862E6A02DA002489DC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
-			targetProxy = FFA85F852E6A02DA002489DC /* PBXContainerItemProxy */;
 		};
 		FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
