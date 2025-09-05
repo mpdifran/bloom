@@ -8,11 +8,26 @@
 import SwiftUI
 import SFSafeSymbols
 
-struct TodayCardCell: View {
+struct TodayCardCell<Content: View>: View {
   let symbol: SFSymbol
   let title: String
   let content: String
   let color: Color
+  let contentBuilder: (() -> Content)?
+
+  init(
+    symbol: SFSymbol,
+    title: String,
+    content: String,
+    color: Color,
+    contentBuilder: @escaping () -> Content
+  ) {
+    self.symbol = symbol
+    self.title = title
+    self.content = content
+    self.color = color
+    self.contentBuilder = contentBuilder
+  }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
@@ -26,6 +41,22 @@ struct TodayCardCell: View {
     .foregroundStyle(.white)
     .horizontallyCentered()
     .cardContainer(fill: color.gradient)
+  }
+}
+
+extension TodayCardCell where Content == EmptyView {
+
+  init(
+    symbol: SFSymbol,
+    title: String,
+    content: String,
+    color: Color
+  ) {
+    self.symbol = symbol
+    self.title = title
+    self.content = content
+    self.color = color
+    self.contentBuilder = nil
   }
 }
 

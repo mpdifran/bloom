@@ -27,9 +27,6 @@
 		FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D0D152CFA47C500374F66 /* BloomModel */; };
 		FF5D62DA2DEDEC2D00C05976 /* ChatLayout in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D62D92DEDEC2D00C05976 /* ChatLayout */; };
 		FF5D70CC2DEE306D00C05976 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D70CB2DEE306D00C05976 /* DifferenceKit */; };
-		FF5D71172DF0A9C400C05976 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF5D71102DF0A9C400C05976 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FF5D71222DF0AD1800C05976 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
-		FF5D71252DF0AD2800C05976 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF7577572DC92C3600E31C86 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF7577562DC92C3600E31C86 /* SFSafeSymbols */; };
 		FF7577582DC9625D00E31C86 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
 		FF7577592DC9625D00E31C86 /* BloomFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -59,6 +56,11 @@
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
 		FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9BEA262DCAABD200D90BAF /* Algorithms */; };
+		FFA85F7F2E6A02AC002489DC /* DeviceActivityMonitorExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96192C0BEC1D004DAD2D /* DeviceActivityMonitorExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FFA85F812E6A02B3002489DC /* ShieldConfigurationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96312C0BF57F004DAD2D /* ShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FFA85F822E6A02B3002489DC /* ShieldActionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF1E96452C0BF5E4004DAD2D /* ShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FFA85F832E6A02C9002489DC /* ScreenControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; };
+		FFA85F842E6A02D2002489DC /* ScreenControl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -113,27 +115,6 @@
 			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
 			remoteInfo = ScreenControl;
 		};
-		FF5D71152DF0A9C400C05976 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF5D710F2DF0A9C400C05976;
-			remoteInfo = NotificationServiceExtension;
-		};
-		FF5D71202DF0AD1300C05976 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FFCE852D2C99DBD6002C46B1;
-			remoteInfo = DataContainer;
-		};
-		FF5D71232DF0AD2400C05976 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FF1E96832C0C1F38004DAD2D;
-			remoteInfo = BloomFoundation;
-		};
 		FF75774E2DC92C0700E31C86 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -168,6 +149,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
 			remoteInfo = Umbrella;
+		};
+		FFA85F852E6A02DA002489DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E966C2C0C1A99004DAD2D;
+			remoteInfo = ScreenControl;
 		};
 		FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -241,6 +229,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				FFA85F842E6A02D2002489DC /* ScreenControl.framework in Embed Frameworks */,
 				FFCE85352C99DBD6002C46B1 /* DataContainer.framework in Embed Frameworks */,
 				FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */,
 				FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */,
@@ -255,7 +244,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				FF5D71172DF0A9C400C05976 /* NotificationServiceExtension.appex in Embed Foundation Extensions */,
+				FFA85F812E6A02B3002489DC /* ShieldConfigurationExtension.appex in Embed Foundation Extensions */,
+				FFA85F822E6A02B3002489DC /* ShieldActionExtension.appex in Embed Foundation Extensions */,
+				FFA85F7F2E6A02AC002489DC /* DeviceActivityMonitorExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,7 +288,6 @@
 		FF1E966D2C0C1A99004DAD2D /* ScreenControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ScreenControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BloomFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF5D71102DF0A9C400C05976 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BloomWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
@@ -384,13 +374,6 @@
 			);
 			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
 		};
-		FF5D711D2DF0A9C500C05976 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = FF5D710F2DF0A9C400C05976 /* NotificationServiceExtension */;
-		};
 		FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
@@ -418,7 +401,6 @@
 		4BD93F0B2CFA88C400D1AFB8 /* BloomFoundation */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4BD93F1C2CFA88C400D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4BD93F1D2CFA88C400D1AFB8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BloomFoundation; sourceTree = "<group>"; };
 		4BD93F212CFA88C900D1AFB8 /* fastlane */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = fastlane; path = ../../fastlane; sourceTree = "<group>"; };
 		FF0B2C5B2D73C82500196463 /* Scripts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Scripts; sourceTree = "<group>"; };
-		FF5D71112DF0A9C400C05976 /* NotificationServiceExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF5D711D2DF0A9C500C05976 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NotificationServiceExtension; sourceTree = "<group>"; };
 		FF67B2482DAFF5D70086E697 /* Configuration */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configuration; sourceTree = "<group>"; };
 		FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BloomWatch Watch App"; sourceTree = "<group>"; };
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
@@ -479,15 +461,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FF5D710D2DF0A9C400C05976 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FF5D71252DF0AD2800C05976 /* BloomFoundation.framework in Frameworks */,
-				FF5D71222DF0AD1800C05976 /* DataContainer.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FF75772B2DC91A3700E31C86 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -520,6 +493,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFA85F832E6A02C9002489DC /* ScreenControl.framework in Frameworks */,
 				FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */,
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
@@ -607,7 +581,6 @@
 				4BD93D442CFA889800D1AFB8 /* Bloom */,
 				FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */,
 				4BD93EBC2CFA88A900D1AFB8 /* BloomTests */,
-				FF5D71112DF0A9C400C05976 /* NotificationServiceExtension */,
 				4BD93EC52CFA88B000D1AFB8 /* DeviceActivityMonitorExtension */,
 				4BD93ECC2CFA88B300D1AFB8 /* ShieldConfigurationExtension */,
 				4BD93ED32CFA88B600D1AFB8 /* ShieldActionExtension */,
@@ -641,7 +614,6 @@
 				FF9782D72C9A22C900A8ED7E /* Umbrella.framework */,
 				FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */,
 				FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */,
-				FF5D71102DF0A9C400C05976 /* NotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -805,30 +777,6 @@
 			productReference = FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */;
 			productType = "com.apple.product-type.extensionkit-extension";
 		};
-		FF5D710F2DF0A9C400C05976 /* NotificationServiceExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FF5D71182DF0A9C500C05976 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */;
-			buildPhases = (
-				FF5D710C2DF0A9C400C05976 /* Sources */,
-				FF5D710D2DF0A9C400C05976 /* Frameworks */,
-				FF5D710E2DF0A9C400C05976 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FF5D71242DF0AD2400C05976 /* PBXTargetDependency */,
-				FF5D71212DF0AD1300C05976 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				FF5D71112DF0A9C400C05976 /* NotificationServiceExtension */,
-			);
-			name = NotificationServiceExtension;
-			packageProductDependencies = (
-			);
-			productName = NotificationServiceExtension;
-			productReference = FF5D71102DF0A9C400C05976 /* NotificationServiceExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		FF75772D2DC91A3700E31C86 /* BloomWatch Watch App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FF75773E2DC91A3900E31C86 /* Build configuration list for PBXNativeTarget "BloomWatch Watch App" */;
@@ -904,11 +852,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				FFA85F862E6A02DA002489DC /* PBXTargetDependency */,
 				FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */,
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
 				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
 				FFECC1D32DC2C327002F6AAA /* PBXTargetDependency */,
-				FF5D71162DF0A9C400C05976 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4BD93D442CFA889800D1AFB8 /* Bloom */,
@@ -1044,9 +992,6 @@
 					FF3A8F2E2C1A8341002DA563 = {
 						CreatedOnToolsVersion = 15.4;
 					};
-					FF5D710F2DF0A9C400C05976 = {
-						CreatedOnToolsVersion = 16.3;
-					};
 					FF75772D2DC91A3700E31C86 = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -1100,7 +1045,6 @@
 				FFACBAD82BAC7788006AAD0B /* Bloom */,
 				FF75772D2DC91A3700E31C86 /* BloomWatch Watch App */,
 				FFF61B372BEEB7B000926042 /* BloomTests */,
-				FF5D710F2DF0A9C400C05976 /* NotificationServiceExtension */,
 				FF1E96182C0BEC1D004DAD2D /* DeviceActivityMonitorExtension */,
 				FF1E96302C0BF57F004DAD2D /* ShieldConfigurationExtension */,
 				FF1E96442C0BF5E4004DAD2D /* ShieldActionExtension */,
@@ -1151,13 +1095,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FF3A8F2D2C1A8341002DA563 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FF5D710E2DF0A9C400C05976 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1274,13 +1211,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FF5D710C2DF0A9C400C05976 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FF75772A2DC91A3700E31C86 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1351,21 +1281,6 @@
 			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
 			targetProxy = FF3A8F412C1A835F002DA563 /* PBXContainerItemProxy */;
 		};
-		FF5D71162DF0A9C400C05976 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF5D710F2DF0A9C400C05976 /* NotificationServiceExtension */;
-			targetProxy = FF5D71152DF0A9C400C05976 /* PBXContainerItemProxy */;
-		};
-		FF5D71212DF0AD1300C05976 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FFCE852D2C99DBD6002C46B1 /* DataContainer */;
-			targetProxy = FF5D71202DF0AD1300C05976 /* PBXContainerItemProxy */;
-		};
-		FF5D71242DF0AD2400C05976 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
-			targetProxy = FF5D71232DF0AD2400C05976 /* PBXContainerItemProxy */;
-		};
 		FF75774F2DC92C0700E31C86 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
@@ -1390,6 +1305,11 @@
 			isa = PBXTargetDependency;
 			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
 			targetProxy = FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */;
+		};
+		FFA85F862E6A02DA002489DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF1E966C2C0C1A99004DAD2D /* ScreenControl */;
+			targetProxy = FFA85F852E6A02DA002489DC /* PBXContainerItemProxy */;
 		};
 		FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1891,130 +1811,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
-		};
-		FF5D71192DF0A9C500C05976 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).NotificationServiceExtension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.NotificationServiceExtension";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		FF5D711A2DF0A9C500C05976 /* Debug [Dev] */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).NotificationServiceExtension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.NotificationServiceExtension";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = "Debug [Dev]";
-		};
-		FF5D711B2DF0A9C500C05976 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).NotificationServiceExtension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.NotificationServiceExtension";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		FF5D711C2DF0A9C500C05976 /* Release [Dev] */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUJ47GUV2Q;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).NotificationServiceExtension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.lotus-labs.bloom.dev.NotificationServiceExtension";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = "Release [Dev]";
 		};
 		FF67B24B2DAFFA6E0086E697 /* Debug [Dev] */ = {
 			isa = XCBuildConfiguration;
@@ -3764,17 +3560,6 @@
 				FF67B2512DAFFA6E0086E697 /* Debug [Dev] */,
 				FF3A8F3E2C1A8341002DA563 /* Release */,
 				FF67B25C2DAFFA930086E697 /* Release [Dev] */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FF5D71182DF0A9C500C05976 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FF5D71192DF0A9C500C05976 /* Debug */,
-				FF5D711A2DF0A9C500C05976 /* Debug [Dev] */,
-				FF5D711B2DF0A9C500C05976 /* Release */,
-				FF5D711C2DF0A9C500C05976 /* Release [Dev] */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
