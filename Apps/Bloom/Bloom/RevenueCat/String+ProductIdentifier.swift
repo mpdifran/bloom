@@ -16,5 +16,7 @@ extension String {
 
     static let monthly = "bloom_pro_monthly"
     static let yearly = "bloom_pro_yearly"
+    static let monthlyHalf = "bloom_499_1m"
+    static let yearlyHalf = "bloom_1999_1y_3d0"
   }
 }

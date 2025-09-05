@@ -58,7 +58,7 @@ struct OnboardingRootView: View {
           checkHealthDataAndProceed()
         }
       case .ageAndSex:
-        OnboardingHealthAgeSexHeightView {
+        OnboardingHealthAgeSexView {
           setStep(.focusArea)
         }
       case .focusArea:
@@ -101,10 +101,9 @@ private extension OnboardingRootView {
     let sex = healthManager.healthStore.sex()
     let age = healthManager.healthStore.age()
     let sexName = sex?.personName
-    let height = healthManager.heightCM
     
-    // Check if all health data is present
-    let hasAllHealthData = sex != nil && age != nil && sexName != nil && height > 0
+    // Check if all required health data is present (height is now optional)
+    let hasAllHealthData = sex != nil && age != nil && sexName != nil
     
     // Also check if user is 18 or older (if age is available)
     let isAgeValid = (age ?? 1) >= 18

@@ -1,5 +1,5 @@
 //
-//  OnboardingHealthAgeSexHeightView.swift
+//  OnboardingHealthAgeSexView.swift
 //  Supplements
 //
 //  Created by Mark DiFranco on 2024-08-15.
@@ -7,12 +7,11 @@
 
 import SwiftUI
 import AppUI
-import HealthKitUI
 import TelemetryDeck
 import CoreHealth
 
 @MainActor
-struct OnboardingHealthAgeSexHeightView: View {
+struct OnboardingHealthAgeSexView: View {
   let onContinue: () -> Void
 
   @ObservedObject private var healthManager = HealthManager.shared
@@ -32,17 +31,16 @@ struct OnboardingHealthAgeSexHeightView: View {
         if wasMissingHealthData {
           doesNotHaveHealthDataContent
 
-          ageSexHeightPicker
+          ageSexPicker
             .appear(with: 3, currentIndex: index)
         } else {
           hasHealthDataContent(
             age: healthManager.age(),
-            sex: healthManager.isFemale ? "female" : "male",
-            height: healthManager.height()
+            sex: healthManager.isFemale ? "female" : "male"
           )
 
           if isHealthDataConfirmed == false {
-            ageSexHeightPicker
+            ageSexPicker
               .appear(with: 4, currentIndex: index)
           } else {
             Text("Glad to get to know you better!")
@@ -77,13 +75,6 @@ struct OnboardingHealthAgeSexHeightView: View {
               .bold()
               .foregroundStyle(.secondary)
               .multilineTextAlignment(.center)
-          } else if healthManager.heightCM < 1 {
-            Text("Please enter a valid height.")
-              .font(.subheadline)
-              .fontDesign(.rounded)
-              .bold()
-              .foregroundStyle(.secondary)
-              .multilineTextAlignment(.center)
           }
           Button("Continue") {
             didContinue.toggle()
@@ -103,7 +94,6 @@ struct OnboardingHealthAgeSexHeightView: View {
           parameters: [
             "sex": healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
             "age": healthManager.healthStore.age() == nil ? "Not Present" : "Present",
-            "height": healthManager.heightCM > 0 ? "Not Present" : "Present",
             "isMissingHealthData": "yes"
           ]
         )
@@ -113,7 +103,6 @@ struct OnboardingHealthAgeSexHeightView: View {
           parameters: [
             "sex": healthManager.healthStore.sex()?.personName == nil ? "Not Present" : "Present",
             "age": healthManager.healthStore.age() == nil ? "Not Present" : "Present",
-            "height": healthManager.heightCM > 0 ? "Not Present" : "Present",
             "isMissingHealthData": "no"
           ]
         )
@@ -127,7 +116,7 @@ struct OnboardingHealthAgeSexHeightView: View {
   }
 }
 
-private extension OnboardingHealthAgeSexHeightView {
+private extension OnboardingHealthAgeSexView {
 
   var shouldDisableContinue: Bool {
     if wasMissingHealthData {
@@ -147,26 +136,24 @@ private extension OnboardingHealthAgeSexHeightView {
     let sex = healthManager.healthStore.sex()
     let age = healthManager.healthStore.age()
     let sexName = sex?.personName
-    let height = healthManager.heightCM
 
-    return sex != nil && age != nil && sexName != nil && height > 0
+    return sex != nil && age != nil && sexName != nil
   }
 
   var hasValidHealthData: Bool {
     let age = healthManager.age()
-    let height = healthManager.heightCM
 
-    return age >= 18 && height > 0
+    return age >= 18
   }
 
   @ViewBuilder
-  func hasHealthDataContent(age: Int, sex: String, height: HKQuantity) -> some View {
+  func hasHealthDataContent(age: Int, sex: String) -> some View {
     BudImage(.budWorkout)
 
     Text("Looks Great!")
       .appear(with: 1, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
-    Text("According to your Health data, you're a \(age) year old \(sex). Your height is \(height.displayString(for: .meterUnit(with: .centi))). Does that look right?")
+    Text("According to your Health data, you're a \(age) year old \(sex). Does that look right?")
       .contentTransition(.numericText())
       .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
 
@@ -208,7 +195,7 @@ private extension OnboardingHealthAgeSexHeightView {
       .appear(with: 2, currentIndex: index, secondaryIfNotCurrentIndex: false)
   }
 
-  var ageSexHeightPicker: some View {
+  var ageSexPicker: some View {
     VStack {
       VStack {
         LabeledContent("Birthday") {
@@ -232,12 +219,6 @@ private extension OnboardingHealthAgeSexHeightView {
           .pickerStyle(.segmented)
           .frame(width: 150, height: 50)
         }
-        
-        Divider()
-        
-        LabeledContent("Height") {
-          HeightEditorTextField()
-        }
       }
       .cardContainer(fill: .background.secondary)
       .transition(.blurReplace)
@@ -248,6 +229,6 @@ private extension OnboardingHealthAgeSexHeightView {
 
 #Preview {
   PreviewEnvironment {
-    OnboardingHealthAgeSexHeightView { }
+    OnboardingHealthAgeSexView { }
   }
 }

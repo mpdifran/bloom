@@ -99,7 +99,7 @@ extension ChatVitalConverter {
     return HealthVitalData.UserInfo(
       age: age,
       sex: sex,
-      height: height.chatQuantity(for: .meterUnit(with: .centi), numberFormatter: .oneDecimalPlace),
+      height: height.doubleValue(for: .meterUnit(with: .centi)) > 0 ? height.chatQuantity(for: .meterUnit(with: .centi), numberFormatter: .oneDecimalPlace) : nil,
       focus: focus.isNotEmpty ? focus : nil,
       currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
       timeZone: TimeZone.current.identifier,
