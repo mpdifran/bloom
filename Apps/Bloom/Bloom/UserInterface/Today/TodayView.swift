@@ -83,6 +83,7 @@ struct TodayView: View {
             .padding(.top, 160)
           }
         }
+        .removeScrollEdgeEffect()
         .ignoresSafeArea(.all, edges: .top)
         .onAppear {
           currentTimeMode = TimeMode.current(for: context.date, settings: todaySettings)

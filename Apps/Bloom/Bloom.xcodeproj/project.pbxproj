@@ -1168,7 +1168,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Copy the appropriate Metal library based on platform\nif [ \"${PLATFORM_NAME}\" == \"iphonesimulator\" ]; then\n    echo \"Copying simulator Metal library\"\n    cp \"${SRCROOT}/Apps/Bloom/Bloom/UserInterface/Components/Metal/Prebuilt/default-sim.metallib\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/default.metallib\"\nelse\n    echo \"Copying device Metal library\"\n    cp \"${SRCROOT}/Apps/Bloom/Bloom/UserInterface/Components/Metal/Prebuilt/default-ios.metallib\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/default.metallib\"\nfi \n";
+			shellScript = "# Copy the appropriate Metal library based on platform\nif [ \"${PLATFORM_NAME}\" == \"iphonesimulator\" ]; then\n    echo \"Copying simulator Metal library\"\n    cp \"${SRCROOT}/Bloom/UserInterface/Components/Metal/Prebuilt/default-sim.metallib\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/default.metallib\"\nelse\n    echo \"Copying device Metal library\"\n    cp \"${SRCROOT}/Bloom/UserInterface/Components/Metal/Prebuilt/default-ios.metallib\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/default.metallib\"\nfi \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
