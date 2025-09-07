@@ -144,13 +144,13 @@ private extension RootView {
       Button {
         presentedSheet = ActionsView().asAny
       } label: {
-        Image(systemSymbol: .plus)
-          .font(.body)
+        Image(systemSymbol: .plusCircleFill)
+          .foregroundStyle(.white, .tint)
+          .font(.title2)
+          .bold()
           .fontDesign(.rounded)
           .fontWeight(.semibold)
           .frame(square: 24)
-          .padding(6)
-          .cardContainer(fill: .background, includePadding: false)
       }
     }
     .selectable()
