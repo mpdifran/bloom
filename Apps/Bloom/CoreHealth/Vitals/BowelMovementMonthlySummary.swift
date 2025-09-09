@@ -25,33 +25,33 @@ private enum Constants {
 
 public extension BowelMovementMonthlySummary {
   enum Rating {
-    case unhealthy
-    case concerning
-    case regular
-    case optimal
+    case poor
+    case fair
+    case good
+    case excellent
 
     var name: String {
       switch self {
-      case .unhealthy:
-        "Unhealthy"
-      case .concerning:
-        "Concerning"
-      case .regular:
-        "Regular"
-      case .optimal:
-        "Optimal"
+      case .poor:
+        "Poor"
+      case .fair:
+        "Fair"
+      case .good:
+        "Good"
+      case .excellent:
+        "Excellent"
       }
     }
 
     var color: Color {
       switch self {
-      case .unhealthy:
+      case .poor:
           .vitalSevere
-      case .concerning:
+      case .fair:
           .vitalWarning
-      case .regular:
+      case .good:
           .vitalGood
-      case .optimal:
+      case .excellent:
           .vitalGreat
       }
     }
@@ -75,22 +75,22 @@ public struct BowelMovementMonthlySummary: Sendable {
     guard let rating else { return nil }
 
     switch rating {
-    case .unhealthy:
+    case .poor:
       return VitalModel.BarLevel(
         level: .low,
         proportion: score.scaledPercent(lower: 0, upper: 0.4)
       )
-    case .concerning:
+    case .fair:
       return VitalModel.BarLevel(
         level: .medium,
         proportion: score.scaledPercent(lower: 0.4, upper: 0.6)
       )
-    case .regular:
+    case .good:
       return VitalModel.BarLevel(
         level: .high,
         proportion: score.scaledPercent(lower: 0.6, upper: 0.9)
       )
-    case .optimal:
+    case .excellent:
       return VitalModel.BarLevel(
         level: .optimal,
         proportion: score.scaledPercent(lower: 0.9, upper: 1)
@@ -100,6 +100,8 @@ public struct BowelMovementMonthlySummary: Sendable {
 
   private(set) var score: Double = 1
   private(set) var subtitle: String?
+  private(set) var regularityScore: Double = 1
+  private(set) var coefficientOfVariation: Double?
 }
 
 public extension BowelMovementMonthlySummary {
@@ -109,13 +111,15 @@ public extension BowelMovementMonthlySummary {
       return
     }
 
-    var scores = [Double]()
+    var typeAndDurationScores = [Double]()
+    var intervalScores = [Double]()
     var previousBowelMovement: BowelMovementDTO?
 
     for bowelMovement in bowelMovements.sorted(keyPath: \.date) {
       guard let score = Constants.stoolTypeScoreMap[bowelMovement.bristolStoolType] else { continue }
 
       let typeScore = score * bowelMovement.duration.scoreModifier
+      typeAndDurationScores.append(typeScore)
 
       if let previousBowelMovement {
         let hours = bowelMovement.date.timeIntervalSince(previousBowelMovement.date) / 3600
@@ -128,17 +132,38 @@ public extension BowelMovementMonthlySummary {
         } else {
           intervalScore = 1
         }
-
-        let average = [typeScore, intervalScore].average(keyPath: \.self)
-        scores.append(average)
-      } else {
-        scores.append(typeScore)
+        
+        intervalScores.append(intervalScore)
       }
 
       previousBowelMovement = bowelMovement
     }
-
-    self.score = scores.average(keyPath: \.self)
+    
+    // Calculate regularity score if we have enough data
+    let statistics = bowelMovementStatistics()
+    if let statistics = statistics, bowelMovements.count >= 3 {
+      self.regularityScore = calculateRegularityScore(from: statistics)
+      self.coefficientOfVariation = statistics.coefficientOfVariation
+    } else {
+      self.regularityScore = 1.0
+      self.coefficientOfVariation = nil
+    }
+    
+    // Calculate weighted average score
+    let avgTypeAndDuration = typeAndDurationScores.average(keyPath: \.self)
+    let avgInterval = intervalScores.isEmpty ? 1.0 : intervalScores.average(keyPath: \.self)
+    
+    // Weighted scoring:
+    // 60% Type and Duration (existing weight)
+    // 20% Interval (existing)
+    // 20% Regularity (new)
+    if bowelMovements.count >= 3 && coefficientOfVariation != nil {
+      self.score = (avgTypeAndDuration * 0.6) + (avgInterval * 0.2) + (regularityScore * 0.2)
+    } else {
+      // Fall back to original scoring if insufficient data for regularity
+      self.score = (avgTypeAndDuration * 0.75) + (avgInterval * 0.25)
+    }
+    
     self.subtitle = calculateSubtitle()
   }
 
@@ -151,17 +176,36 @@ public extension BowelMovementMonthlySummary {
 
     let pace = Double(daySpan) / Double(bowelMovements.count)
     let paceFormat = pace.format()
-
+    
+    var frequencyText: String
     if paceFormat == "1" {
-      return "Once a Day"
+      frequencyText = "Once a Day"
+    } else if pace > 1 {
+      frequencyText = "Every \(paceFormat) Days"
+    } else {
+      let inversePaceFormat = (1 / pace).format(using: .oneDecimalPlace)
+      frequencyText = "\(inversePaceFormat)x a Day"
     }
-    if pace > 1 {
-      return "Every \(paceFormat) Days"
+    
+    // Add regularity indicator if we have enough data
+    if let cv = coefficientOfVariation, bowelMovements.count >= 3 {
+      let regularityText: String
+      if cv < 0.2 {
+        regularityText = "Very Regular"
+      } else if cv < 0.4 {
+        regularityText = "Regular"
+      } else if cv < 0.6 {
+        regularityText = "Somewhat Regular"
+      } else if cv < 0.8 {
+        regularityText = "Irregular"
+      } else {
+        regularityText = "Very Irregular"
+      }
+      
+      return "\(frequencyText)\n\(regularityText)"
     }
 
-    let inversePaceFormat = (1 / pace).format(using: .oneDecimalPlace)
-
-    return "\(inversePaceFormat)x a Day"
+    return frequencyText
   }
 
   var rating: BowelMovementMonthlySummary.Rating? {
@@ -170,13 +214,13 @@ public extension BowelMovementMonthlySummary {
     }
 
     if score < 0.4 {
-      return .unhealthy
+      return .poor
     } else if score < 0.6 {
-      return .concerning
+      return .fair
     } else if score < 0.9 {
-      return .regular
+      return .good
     } else {
-      return .optimal
+      return .excellent
     }
   }
 
@@ -217,6 +261,11 @@ private extension BowelMovementMonthlySummary {
   struct BowelMovementIntervalStatistics {
     let averageIntervalHours: Double
     let standardDeviationIntervalHours: Double
+    
+    var coefficientOfVariation: Double? {
+      guard averageIntervalHours > 0 else { return nil }
+      return standardDeviationIntervalHours / averageIntervalHours
+    }
   }
 
   func bowelMovementStatistics() -> BowelMovementIntervalStatistics? {
@@ -244,5 +293,35 @@ private extension BowelMovementMonthlySummary {
       averageIntervalHours: averageInterval,
       standardDeviationIntervalHours: standardDeviation
     )
+  }
+  
+  func calculateRegularityScore(from statistics: BowelMovementIntervalStatistics) -> Double {
+    guard let cv = statistics.coefficientOfVariation else { return 1.0 }
+    
+    // Lower CV means more regular, higher CV means less regular
+    // CV < 0.2: Excellent regularity (score = 1.0)
+    // CV 0.2-0.4: Good regularity (score = 0.9)
+    // CV 0.4-0.6: Moderate regularity (score = 0.7)
+    // CV 0.6-0.8: Poor regularity (score = 0.5)
+    // CV > 0.8: Very poor regularity (score = 0.3)
+    
+    if cv < 0.2 {
+      return 1.0
+    } else if cv < 0.4 {
+      // Linear interpolation between 1.0 and 0.9
+      return 1.0 - (cv - 0.2) * 0.5
+    } else if cv < 0.6 {
+      // Linear interpolation between 0.9 and 0.7
+      return 0.9 - (cv - 0.4) * 1.0
+    } else if cv < 0.8 {
+      // Linear interpolation between 0.7 and 0.5
+      return 0.7 - (cv - 0.6) * 1.0
+    } else if cv < 1.2 {
+      // Linear interpolation between 0.5 and 0.3
+      return 0.5 - (cv - 0.8) * 0.5
+    } else {
+      // Very irregular pattern
+      return 0.3
+    }
   }
 }
