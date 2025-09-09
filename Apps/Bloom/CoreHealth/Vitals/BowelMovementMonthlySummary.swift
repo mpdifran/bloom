@@ -98,10 +98,10 @@ public struct BowelMovementMonthlySummary: Sendable {
     }
   }
 
-  private(set) var score: Double = 1
-  private(set) var subtitle: String?
-  private(set) var regularityScore: Double = 1
-  private(set) var coefficientOfVariation: Double?
+  private(set) public var score: Double = 1
+  private(set) public var subtitle: String?
+  private(set) public var regularityScore: Double = 1
+  private(set) public var coefficientOfVariation: Double?
 }
 
 public extension BowelMovementMonthlySummary {
@@ -253,6 +253,78 @@ public extension BowelMovementMonthlySummary {
     }
 
     return maxIndex + 1
+  }
+  
+  // MARK: - Regularity Visualization Data
+  
+  /// Returns interval data for bar chart visualization showing time between movements
+  func intervalData() -> [(date: Date, intervalHours: Double)] {
+    var intervals = [(date: Date, intervalHours: Double)]()
+    var previousBowelMovement: BowelMovementDTO?
+
+    for bowelMovement in bowelMovements.sorted(keyPath: \.date) {
+      defer {
+        previousBowelMovement = bowelMovement
+      }
+
+      guard let previousBowelMovement else { continue }
+      
+      let hours = bowelMovement.date.timeIntervalSince(previousBowelMovement.date) / 3600
+      intervals.append((date: bowelMovement.date, intervalHours: hours))
+    }
+
+    return intervals
+  }
+  
+  /// Returns regularity level for a given coefficient of variation
+  func regularityLevel(for cv: Double?) -> RegularityLevel {
+    guard let cv = cv else { return .unknown }
+    
+    if cv < 0.2 {
+      return .excellent
+    } else if cv < 0.4 {
+      return .good
+    } else if cv < 0.6 {
+      return .moderate
+    } else if cv < 0.8 {
+      return .poor
+    } else {
+      return .veryPoor
+    }
+  }
+  
+  /// Enum for regularity levels with associated colors and names
+  enum RegularityLevel: String, CaseIterable {
+    case excellent = "Excellent"
+    case good = "Good" 
+    case moderate = "Moderate"
+    case poor = "Poor"
+    case veryPoor = "Very Poor"
+    case unknown = "Unknown"
+    
+    var color: Color {
+      switch self {
+      case .excellent:
+        return .vitalGreat
+      case .good:
+        return .vitalGood
+      case .moderate:
+        return .vitalWarning
+      case .poor, .veryPoor:
+        return .vitalSevere
+      case .unknown:
+        return .secondary
+      }
+    }
+    
+    var shortName: String {
+      switch self {
+      case .veryPoor:
+        return "Very Poor"
+      default:
+        return rawValue
+      }
+    }
   }
 }
 

@@ -18,6 +18,7 @@ struct BowelMovementsDetailView: View {
 
   @State private var presentedSheet: AnyView?
   @State private var selectedBristolType = 0
+  @State private var selectedRegularityFilter = 0
 
   @State private var dailyWater = [DateQuantitySample]()
   @State private var averageWater: HKQuantity?
@@ -34,6 +35,7 @@ struct BowelMovementsDetailView: View {
       }
     }
     .animation(.default, value: selectedBristolType)
+    .animation(.default, value: selectedRegularityFilter)
     .navigationTitle("Bowel Movements")
     .navigationBarTitleDisplayMode(.inline)
     .sheet($presentedSheet)
@@ -75,6 +77,8 @@ private extension BowelMovementsDetailView {
   var contentView: some View {
     BloomScrollView(spacing: 20) {
       stoolTypeChart
+      regularityChart
+      detailsCardForSelectedRegularityFilter
       lastBowelMovementSection
       timeOfDayChart
       waterChart
@@ -276,6 +280,120 @@ private extension BowelMovementsDetailView {
       fatalError("Unhandled case")
     }
   }
+  
+  func colorForInterval(_ intervalHours: Double) -> Color {
+    if intervalHours < 8 {
+      return .vitalSevere // Too frequent
+    } else if intervalHours <= 24 {
+      return .vitalGreat // Optimal daily
+    } else if intervalHours <= 48 {
+      return .vitalGood // Still good
+    } else if intervalHours <= 72 {
+      return .vitalWarning // Getting concerning
+    } else {
+      return .vitalSevere // Too infrequent
+    }
+  }
+  
+  var regularityFilterPicker: some View {
+    Button {
+      selectedRegularityFilter = (selectedRegularityFilter + 1) % 6
+    } label: {
+      HStack {
+        Text("Interval Range")
+        
+        Spacer()
+        
+        Text(regularityFilterName)
+      }
+    }
+    .buttonStyle(.zone)
+    .tint(regularityFilterColor)
+    .sensoryFeedback(.selection, trigger: selectedRegularityFilter)
+  }
+  
+  var regularityFilterName: String {
+    switch selectedRegularityFilter {
+    case 0: "All"
+    case 1: "< 8 Hours"
+    case 2: "8-24 Hours"
+    case 3: "24-48 Hours"
+    case 4: "48-72 Hours"
+    case 5: "> 72 Hours"
+    default: "All"
+    }
+  }
+  
+  var regularityFilterColor: Color {
+    switch selectedRegularityFilter {
+    case 0: .brown
+    case 1: .vitalSevere
+    case 2: .vitalGreat
+    case 3: .vitalGood
+    case 4: .vitalWarning
+    case 5: .vitalSevere
+    default: .brown
+    }
+  }
+  
+  func shouldShowInterval(_ intervalHours: Double) -> Bool {
+    switch selectedRegularityFilter {
+    case 0: true // All
+    case 1: intervalHours < 8
+    case 2: intervalHours >= 8 && intervalHours <= 24
+    case 3: intervalHours > 24 && intervalHours <= 48
+    case 4: intervalHours > 48 && intervalHours <= 72
+    case 5: intervalHours > 72
+    default: true
+    }
+  }
+  
+  func rangeForSelectedFilter() -> (min: Double, max: Double)? {
+    switch selectedRegularityFilter {
+    case 0: return nil // All - no range highlight
+    case 1: return (min: 0, max: 8) // < 8 Hours
+    case 2: return (min: 8, max: 24) // 8-24 Hours
+    case 3: return (min: 24, max: 48) // 24-48 Hours
+    case 4: return (min: 48, max: 72) // 48-72 Hours
+    case 5: return (min: 72, max: 120) // > 72 Hours (capped at chart max)
+    default: return nil
+    }
+  }
+  
+  func chartYAxisMax(for intervals: [(date: Date, intervalHours: Double)]) -> Double {
+    // Get the maximum data point
+    let dataMax = intervals.map(\.intervalHours).max() ?? 72
+    
+    // Get the maximum of the highlighted range (if any)
+    let rangeMax = rangeForSelectedFilter()?.max ?? 0
+    
+    // Take the maximum of data and range, then add 10% padding
+    let maxValue = max(dataMax, rangeMax) * 1.1
+    
+    // Cap at reasonable maximum to prevent excessive scaling
+    return min(maxValue, 200)
+  }
+  
+  var detailsCardForSelectedRegularityFilter: some View {
+    DetailInfoCardView {
+      switch selectedRegularityFilter {
+      case 0:
+        Text("Time between bowel movements helps indicate digestive health and regularity. Consistent patterns are generally healthier.")
+      case 1:
+        Text("Very frequent bowel movements (less than 8 hours apart) may indicate digestive sensitivity, dietary issues, or stress.")
+      case 2:
+        Text("Daily bowel movements (8-24 hours) are considered optimal for most people, indicating healthy digestive function.")
+      case 3:
+        Text("Every 1-2 days (24-48 hours) is still within normal range for many people, though daily is generally preferred.")
+      case 4:
+        Text("Every 2-3 days (48-72 hours) may indicate slower digestion. Consider increasing fiber, water, and physical activity.")
+      case 5:
+        Text("More than 3 days between bowel movements suggests constipation. Consult healthcare provider if this persists.")
+      default:
+        Text("Time between bowel movements helps indicate digestive health and regularity patterns.")
+      }
+    }
+  }
 }
 
 private extension BowelMovementsDetailView {
@@ -368,6 +486,80 @@ private extension BowelMovementsDetailView {
       .frame(height: 160)
     }
     .cardContainer()
+  }
+
+  var regularityChart: some View {
+    VStack(alignment: .leading) {
+      VitalDetailChartTitleView(
+        title: "Regularity",
+        value: summary?.regularityScore.format(using: .oneDecimalPlace) ?? ""
+      )
+      
+      if let summary = summary, summary.bowelMovements.count >= 3 {
+        VStack(alignment: .leading) {
+          intervalChart
+          regularityFilterPicker
+        }
+      } else {
+        ContentUnavailableView(
+          "Insufficient Data",
+          systemImage: "chart.bar.fill",
+          description: Text("At least 3 bowel movements are needed to analyze regularity patterns.")
+        )
+        .frame(height: 160)
+      }
+    }
+    .cardContainer()
+  }
+  
+  var intervalChart: some View {
+    Group {
+      if let summary = summary {
+        let intervals = summary.intervalData()
+        
+        Chart {
+          // Dynamic range background based on selected filter
+          if selectedRegularityFilter != 0, let range = rangeForSelectedFilter() {
+            RectangleMark(
+              yStart: .value("Min Range", range.min),
+              yEnd: .value("Max Range", range.max)
+            )
+            .foregroundStyle(regularityFilterColor.opacity(0.2))
+            
+            // Dynamic range boundary lines
+            if range.min > 0 {
+              RuleMark(y: .value("Range Min", range.min))
+                .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                .foregroundStyle(regularityFilterColor)
+            }
+            
+            if range.max < 120 {
+              RuleMark(y: .value("Range Max", range.max))
+                .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                .foregroundStyle(regularityFilterColor)
+            }
+          }
+          
+          ForEach(intervals.indices, id: \.self) { index in
+            let interval = intervals[index]
+            
+            BarMark(
+              x: .value("Date", interval.date),
+              y: .value("Hours Between", interval.intervalHours)
+            )
+            .foregroundStyle(
+              shouldShowInterval(interval.intervalHours) 
+                ? colorForInterval(interval.intervalHours)
+                : colorForInterval(interval.intervalHours).opacity(0.2)
+            )
+            .cornerRadius(4)
+          }
+        }
+        .chartYScale(domain: 0...chartYAxisMax(for: intervals))
+        .chartXScale(numDaysToNow: 30)
+        .frame(height: 180)
+      }
+    }
   }
 
   var showAllDataCell: some View {
