@@ -47,7 +47,10 @@ public struct ChatBubbleCell: View {
           shouldFill: !isDirect,
           includePadding: isCurrentUser,
           foregroundStyle: foregroundColor,
-          backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background)
+          backgroundStyle: isCurrentUser ? AnyShapeStyle(.tint) : AnyShapeStyle(.background),
+          onCopy: {
+            UIPasteboard.general.string = message.trimmingCharacters(in: .whitespacesAndNewlines)
+          }
         ) {
           Text(message.trimmingCharacters(in: .whitespacesAndNewlines).formattedMarkdown)
             .fixedSize(horizontal: false, vertical: true)
@@ -58,6 +61,11 @@ public struct ChatBubbleCell: View {
           .padding(.vertical, 10)
           .padding(.horizontal, 15)
           .horizontalAlignment(.leading)
+          .contextMenu {
+            Button("Copy", systemSymbol: .documentOnDocument) {
+              UIPasteboard.general.string = message.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+          }
 
         if showReportButton,
            responseID != nil,

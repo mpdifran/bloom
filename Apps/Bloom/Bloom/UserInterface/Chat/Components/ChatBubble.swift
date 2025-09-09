@@ -18,6 +18,7 @@ public struct ChatBubble<Content, ForegroundStyle, BackgroundStyle>: View where 
   let includePadding: Bool
   let foregroundStyle: ForegroundStyle
   let backgroundStyle: BackgroundStyle
+  let onCopy: (() -> Void)?
   let content: () -> Content
 
   public init(
@@ -27,6 +28,7 @@ public struct ChatBubble<Content, ForegroundStyle, BackgroundStyle>: View where 
     includePadding: Bool = true,
     foregroundStyle: ForegroundStyle = Color(uiColor: .label),
     backgroundStyle: BackgroundStyle,
+    onCopy: (() -> Void)? = nil,
     @ViewBuilder content: @escaping () -> Content
   ) {
     self.position = position
@@ -35,6 +37,7 @@ public struct ChatBubble<Content, ForegroundStyle, BackgroundStyle>: View where 
     self.includePadding = includePadding
     self.foregroundStyle = foregroundStyle
     self.backgroundStyle = backgroundStyle
+    self.onCopy = onCopy
     self.content = content
   }
 
@@ -52,6 +55,9 @@ public struct ChatBubble<Content, ForegroundStyle, BackgroundStyle>: View where 
             .frame(minWidth: 40)
             .foregroundStyle(foregroundStyle)
             .background(backgroundView)
+            .contextMenu {
+              Button("Copy", systemSymbol: .documentOnDocument) { onCopy?() }
+            }
         }
         .padding(position == .leading ? .leading : .trailing)
 
