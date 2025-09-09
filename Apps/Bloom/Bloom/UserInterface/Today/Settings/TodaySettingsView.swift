@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import SFSafeSymbols
+@preconcurrency import EventKit
 
 struct TodaySettingsView: View {
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
@@ -16,12 +17,14 @@ struct TodaySettingsView: View {
   @State private var editingTimeMode: TimeMode?
   @State private var presentedSheet: AnyView?
   @State private var draggedSection: TodaySection?
+  @State private var navigationPushView: AnyView?
 
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     NavigationStack {
       BloomScrollView(showsChatBar: false) {
+        calendarSection
         timeConfigurationSection
         sectionsConfigurationSection
       }
@@ -29,6 +32,7 @@ struct TodaySettingsView: View {
       .navigationTitle("Today Settings")
       .navigationBarTitleDisplayMode(.inline)
       .sensoryFeedback(.selection, trigger: selectedTimeMode)
+      .navigationDestination($navigationPushView)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button {
@@ -40,14 +44,51 @@ struct TodaySettingsView: View {
         }
       }
     }
+    .presentationDragIndicator(.visible)
     .sheet($presentedSheet)
     .onAppear {
       selectedTimeMode = TimeMode.current(for: .now, settings: todaySettings)
+    }
+    .task {
+      await loadCalendarSettings()
     }
   }
 }
 
 private extension TodaySettingsView {
+
+  func loadCalendarSettings() async {
+    // CalendarPreferenceManager handles initialization automatically
+  }
+
+  var calendarSection: some View {
+    VStack {
+      SectionTitleView("Calendars")
+        .padding(.horizontal)
+      
+      SettingsSectionContainer {
+        SettingsCell("Calendars", showDisclosureIndicator: true) {
+          Text(calendarCountText)
+        }
+        .onTapGesture {
+          navigationPushView = CalendarSelectionView().asAny
+        }
+      }
+    }
+  }
+  
+  var calendarCountText: String {
+    let calendars = CalendarManager.shared.getAllCalendars()
+    let selectedCount = CalendarPreferenceManager.shared.selectedCalendarIdentifiers.count
+    
+    if selectedCount == 0 {
+      return "None Selected"
+    } else if selectedCount == calendars.count && calendars.count > 0 {
+      return "All Calendars"
+    } else {
+      return "\(selectedCount) Selected"
+    }
+  }
 
   var timeConfigurationSection: some View {
     VStack {

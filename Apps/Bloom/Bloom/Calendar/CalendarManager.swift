@@ -47,7 +47,7 @@ extension CalendarManager {
     
     @MainActor
     private func getFilteredCalendars() -> [EKCalendar]? {
-        let selectedIdentifiers = ReportCoordinatorViewModel.shared.selectedCalendarIdentifiers
+        let selectedIdentifiers = CalendarPreferenceManager.shared.selectedCalendarIdentifiers
         if selectedIdentifiers.isEmpty {
             return nil // nil means all calendars
         }

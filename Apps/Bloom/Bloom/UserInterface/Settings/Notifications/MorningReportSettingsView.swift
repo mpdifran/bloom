@@ -149,36 +149,6 @@ private extension MorningReportSettingsView {
   }
 }
 
-struct CalendarSelectionCell: View {
-  let calendar: EKCalendar
-  let isSelected: Bool
-  let onToggle: (Bool) -> Void
-  
-  var body: some View {
-    HStack {
-      Circle()
-        .fill(Color(cgColor: calendar.cgColor))
-        .frame(width: 10, height: 10)
-
-      Text(calendar.title)
-        .bold()
-        .fontDesign(.rounded)
-        .minimumScaleFactor(0.7)
-        .lineLimit(2)
-        .layoutPriority(10)
-
-      Spacer()
-
-      Toggle("", isOn: Binding(
-        get: { isSelected },
-        set: { onToggle($0) }
-      ))
-      .tint(.mutedGreen)
-    }
-    .frame(minHeight: 60)
-  }
-}
-
 #Preview {
   PreviewEnvironment {
     MorningReportSettingsView()
