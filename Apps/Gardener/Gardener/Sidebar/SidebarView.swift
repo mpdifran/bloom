@@ -40,6 +40,14 @@ struct SidebarView: View {
         )
       }
       NavigationLink {
+        DuplicateDetectionView()
+      } label: {
+        createLabel(
+          title: "Duplicate Detection",
+          systemImage: "square.on.square"
+        )
+      }
+      NavigationLink {
         ChatIssueReportsView()
       } label: {
         createLabel(

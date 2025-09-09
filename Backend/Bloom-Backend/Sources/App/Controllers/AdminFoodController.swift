@@ -27,6 +27,12 @@ extension AdminFoodController: RouteCollection {
           $0.get("search", use: searchFood)
           $0.get("accuracy-report", use: getAccuracyReport)
           $0.post("regenerate-accuracy-report", use: evaluateAccuracy)
+          
+          $0.group("duplicates") {
+            $0.get("groups", use: getDuplicateGroups)
+            $0.get(":id", use: getDuplicatesForItem)
+            $0.post("merge", use: mergeFoodItems)
+          }
 
           $0.group("open-food-facts") {
             $0.post("bulk-upload", use: openFoodFactsBulkUpload)
@@ -382,6 +388,46 @@ private extension AdminFoodController {
       evaluationNotes: accuracyReport.evaluationNotes,
       createdAt: accuracyReport.createdAt
     ))
+  }
+  
+  @Sendable
+  func getDuplicateGroups(_ request: Request) async throws -> DuplicateGroupsResponse {
+    let query = try request.query.decode(DuplicateGroupsRequest.self)
+    
+    return try await request.foodDatabaseService.findDuplicateGroups(
+      limit: query.limit ?? 50,
+      offset: query.offset ?? 0,
+      minimumDuplicates: query.minimumDuplicates ?? 2,
+      category: query.category?.asCategory(),
+      state: query.state?.asState()
+    )
+  }
+  
+  @Sendable
+  func getDuplicatesForItem(_ request: Request) async throws -> ItemDuplicatesResponse {
+    guard let id = request.parameters.get("id") else {
+      throw Abort(.badRequest, reason: "Missing id.")
+    }
+    
+    let query = try request.query.decode(ItemDuplicatesRequest.self)
+    let foodID = FoodItemIdentifier(id)
+    
+    return try await request.foodDatabaseService.findDuplicatesForItem(
+      foodID: foodID,
+      similarityThreshold: query.similarityThreshold ?? 0.3,
+      limit: query.limit ?? 20
+    )
+  }
+  
+  @Sendable
+  func mergeFoodItems(_ request: Request) async throws -> MergeFoodItemsResponse {
+    let requestBody = try request.content.decode(MergeFoodItemsRequest.self)
+    
+    return try await request.foodDatabaseService.mergeFoodItems(
+      primaryItemId: requestBody.primaryItemId,
+      itemsToMerge: requestBody.itemsToMerge,
+      mergedData: requestBody.mergedItem
+    )
   }
 }
 

@@ -264,6 +264,77 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(AdminArchiveChatIssueReportResponse.self, from: data)
   }
   
+  func getDuplicateGroups(
+    limit: Int = 50,
+    offset: Int = 0,
+    minimumDuplicates: Int = 2,
+    category: AdminFoodItemRecord.Category? = nil,
+    state: AdminFoodItemRecord.State? = nil
+  ) async throws -> DuplicateGroupsResponse {
+    var queryItems = [
+      URLQueryItem(name: "limit", value: "\(limit)"),
+      URLQueryItem(name: "offset", value: "\(offset)"),
+      URLQueryItem(name: "minimumDuplicates", value: "\(minimumDuplicates)")
+    ]
+    
+    if let category = category {
+      queryItems.append(URLQueryItem(name: "category", value: category.rawValue))
+    }
+    
+    if let state = state {
+      queryItems.append(URLQueryItem(name: "state", value: state.rawValue))
+    }
+    
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/food/duplicates/groups",
+      method: .get,
+      queryItems: queryItems
+    )
+    
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
+    
+    return try JSONDecoder.bloomModel.decode(DuplicateGroupsResponse.self, from: data)
+  }
+  
+  func getDuplicatesForItem(
+    foodID: FoodItemIdentifier,
+    similarityThreshold: Double = 0.3,
+    limit: Int = 20
+  ) async throws -> ItemDuplicatesResponse {
+    let queryItems = [
+      URLQueryItem(name: "similarityThreshold", value: "\(similarityThreshold)"),
+      URLQueryItem(name: "limit", value: "\(limit)")
+    ]
+    
+    let urlRequest = await createAuthenticatedRequest(
+      path: "v1/admin/food/duplicates/\(foodID.value)",
+      method: .get,
+      queryItems: queryItems
+    )
+    
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
+    
+    return try JSONDecoder.bloomModel.decode(ItemDuplicatesResponse.self, from: data)
+  }
+  
+  func mergeFoodItems(request: MergeFoodItemsRequest) async throws -> MergeFoodItemsResponse {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/food/duplicates/merge",
+      method: .post,
+      body: request
+    )
+    
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
+    
+    return try JSONDecoder.bloomModel.decode(MergeFoodItemsResponse.self, from: data)
+  }
+  
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse
