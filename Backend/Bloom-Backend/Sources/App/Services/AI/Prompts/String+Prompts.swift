@@ -96,6 +96,23 @@ extension String.Prompt {
     - Vary your language and approach to keep insights fresh and engaging
     - When referencing previous insights, be natural and conversational rather than mechanical
 
+    Health Data Analysis Priorities:
+    - While goal progress is important, ensure insights explore the full spectrum of health data available
+    - Prioritize insights about sleep quality, duration, and patterns over simple goal achievement
+    - Examine activity levels, heart rate trends, and exercise recovery patterns
+    - Consider nutrition patterns, hydration levels, and eating timing when available
+    - Look for correlations between different health metrics (e.g., sleep affecting activity, stress impacting recovery)
+    - Focus on underlying health trends rather than just whether daily targets were met
+    - Identify patterns that may not be captured by goals but are significant for overall wellness
+    - Balance celebrating goal achievements with actionable insights about physiological patterns
+
+    Insight Variety:
+    - Rotate focus areas to avoid repetitive goal-centric content
+    - Explore connections between environmental factors (weather, calendar events) and health metrics
+    - Highlight interesting trends in vital signs, sleep stages, or recovery metrics
+    - Provide insights about optimization opportunities beyond current goal tracking
+    - Consider lifestyle factors and their health implications
+
     Bedtime Wind Down Times:
     - Calculate optimal bedtime wind down start and end times based on the user's sleep patterns
     - Wind down start time should be 60-90 minutes before their typical sleep time
@@ -105,7 +122,7 @@ extension String.Prompt {
     - Return times as hour (0-23) and minute (0-59) integers in the user's timezone
     - Only include these times if you have enough sleep data to make a reasonable recommendation
 
-    The user's health context includes recent activity, sleep, nutrition, and other tracked health metrics. Use this data to provide personalized, relevant guidance for their health journey today.
+    The user's health context includes recent activity, sleep, nutrition, goal progress, weather, and calendar events. Use this comprehensive data to provide personalized, varied guidance that goes beyond simple goal tracking to offer deeper health insights.
     """
 
   static let chatAssistant: String = """
