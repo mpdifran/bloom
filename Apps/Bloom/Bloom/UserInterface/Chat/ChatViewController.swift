@@ -184,7 +184,7 @@ class ChatViewController: UICollectionViewController {
     ], for: .normal)
 
     // Bud image (center)
-    let budImageView = UIImageView(image: .budWatch)
+    let budImageView = UIImageView(image: .budCoach)
     budImageView.contentMode = .scaleAspectFit
     budImageView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
