@@ -68,6 +68,15 @@ struct DuplicateDetectionView: View {
         )
       }
     }
+    .alert("Error", isPresented: .constant(store.errorMessage != nil)) {
+      Button("OK") {
+        store.errorMessage = nil
+      }
+    } message: {
+      if let errorMessage = store.errorMessage {
+        Text(errorMessage)
+      }
+    }
   }
 }
 
@@ -125,10 +134,25 @@ private extension DuplicateDetectionView {
         }
         .disabled(selectedDuplicates.isEmpty)
         
-        Button("Not Duplicates") {
-          store.markAsNotDuplicates(group: group)
-          selectedDuplicates.removeAll()
+        Button {
+          Task {
+            do {
+              try await store.markAsNotDuplicates(group: group)
+              selectedDuplicates.removeAll()
+            } catch {
+              store.errorMessage = "Failed to mark items as distinct: \(error.localizedDescription)"
+            }
+          }
+        } label: {
+          HStack {
+            if store.isMarkingDistinct {
+              ProgressView()
+                .scaleEffect(0.8)
+            }
+            Text("Not Duplicates")
+          }
         }
+        .disabled(store.isMarkingDistinct)
       }
     }
     .onChange(of: store.selectedGroup) { _, _ in

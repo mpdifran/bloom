@@ -335,6 +335,20 @@ extension NetworkStack {
     return try JSONDecoder.bloomModel.decode(MergeFoodItemsResponse.self, from: data)
   }
   
+  func markItemsAsDistinct(request: MarkItemsDistinctRequest) async throws -> MarkItemsDistinctResponse {
+    let urlRequest = try await createAuthenticatedRequest(
+      path: "v1/admin/food/duplicates/mark-distinct",
+      method: .post,
+      body: request
+    )
+    
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    
+    try await Self.checkStatusCode(data: data, response: response)
+    
+    return try JSONDecoder.bloomModel.decode(MarkItemsDistinctResponse.self, from: data)
+  }
+  
   private static func checkStatusCode(data: Data, response: URLResponse) async throws {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw NetworkError.invalidResponse

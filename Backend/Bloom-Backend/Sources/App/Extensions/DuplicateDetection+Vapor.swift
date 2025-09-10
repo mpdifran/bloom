@@ -14,3 +14,5 @@ extension MergeFoodItemsResponse: @retroactive Content { }
 extension DuplicateGroupsRequest: @retroactive Content { }
 extension ItemDuplicatesRequest: @retroactive Content { }
 extension MergeFoodItemsRequest: @retroactive Content { }
+extension MarkItemsDistinctRequest: @retroactive Content { }
+extension MarkItemsDistinctResponse: @retroactive Content { }

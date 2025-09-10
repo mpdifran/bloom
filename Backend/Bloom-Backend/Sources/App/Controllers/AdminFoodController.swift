@@ -32,6 +32,7 @@ extension AdminFoodController: RouteCollection {
             $0.get("groups", use: getDuplicateGroups)
             $0.get(":id", use: getDuplicatesForItem)
             $0.post("merge", use: mergeFoodItems)
+            $0.post("mark-distinct", use: markItemsAsDistinct)
           }
 
           $0.group("open-food-facts") {
@@ -427,6 +428,28 @@ private extension AdminFoodController {
       primaryItemId: requestBody.primaryItemId,
       itemsToMerge: requestBody.itemsToMerge,
       mergedData: requestBody.mergedItem
+    )
+  }
+  
+  @Sendable
+  func markItemsAsDistinct(_ request: Request) async throws -> MarkItemsDistinctResponse {
+    let requestBody = try request.content.decode(MarkItemsDistinctRequest.self)
+    
+    // Get admin user ID from authenticated request
+    let adminUser = try request.auth.require(AdminUser.self)
+    guard let adminUserId = adminUser.id else {
+      throw Abort(.unauthorized, reason: "Admin user ID not found")
+    }
+    
+    try await request.foodDatabaseService.markItemsAsDistinct(
+      foodItemId: requestBody.foodItemId,
+      duplicateItemId: requestBody.duplicateItemId,
+      adminUserId: adminUserId.value
+    )
+    
+    return MarkItemsDistinctResponse(
+      success: true,
+      message: "Items marked as distinct successfully"
     )
   }
 }

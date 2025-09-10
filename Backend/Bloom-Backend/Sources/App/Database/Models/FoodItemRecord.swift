@@ -132,6 +132,12 @@ final class FoodItemRecord: Model, @unchecked Sendable {
   @Field(key: "notes")
   var notes: String?
 
+  @Field(key: "duplicate_score")
+  var duplicateScore: Double?
+
+  @Field(key: "duplicate_last_processed")
+  var duplicateLastProcessed: Date?
+
   @Timestamp(key: "created_at", on: .create)
   var createdAt: Date?
 
@@ -140,6 +146,12 @@ final class FoodItemRecord: Model, @unchecked Sendable {
 
   @Children(for: \.$foodItemRecord)
   var issueReports: [FoodItemIssueReport]
+
+  @Children(for: \.$foodItem)
+  var duplicateRelationshipsAsSource: [FoodItemDuplicate]
+  
+  @Children(for: \.$duplicateFoodItem)
+  var duplicateRelationshipsAsTarget: [FoodItemDuplicate]
 
   init() { }
 

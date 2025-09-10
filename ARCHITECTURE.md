@@ -445,6 +445,76 @@ extension ReminderCompletionRecord {
 
 This approach maintains clear version tracking while minimizing code duplication through typealias usage.
 
+### Database Migration Organization Pattern
+All migrations for a given model should be organized in the model's main migrations file, not in separate files:
+
+```swift
+// ✅ CORRECT: All migrations in one file
+// FoodItemRecord+Migrations.swift
+extension FoodItemRecord {
+  struct Create: AsyncMigration { ... }
+  struct AddNutrients: AsyncMigration { ... }
+  struct FixNutritionFieldTypes: AsyncMigration { ... }
+  struct AddDuplicateFields: AsyncMigration { ... }
+}
+
+// ❌ AVOID: Separate migration files
+// FoodItemRecord+DuplicateFieldsMigration.swift
+// FoodItemRecord+NutrientsMigration.swift
+```
+
+**Benefits of consolidated migrations:**
+- **Single source of truth**: All schema changes for a model in one place
+- **Better git history**: Related migrations are versioned together
+- **Easier maintenance**: No need to search across multiple files for migration history
+- **Consistent pattern**: Follows the same organization as other backend models
+
+**When adding new migrations:**
+1. Add the new migration struct to the existing `{Model}+Migrations.swift` file
+2. Follow the existing naming pattern (`AddFeatureName`, `FixFieldTypes`, etc.)
+3. Include both `prepare` and `revert` methods
+4. Register in `AllMigrations.swift`
+5. **Use FluentEnum pattern for enums**: Reference the actual enum type, not string literals
+
+### FluentEnum Pattern for Database Migrations
+When creating database enums in migrations, always use the FluentEnum pattern with the actual enum type:
+
+**Prerequisites**: The enum must conform to `FluentEnum` protocol:
+```swift
+enum AdminStatus: String, Codable, CaseIterable, FluentEnum {
+  static let schema = "admin_status"
+  
+  case pending
+  case markedDistinct = "marked_distinct"
+}
+```
+
+**Migration usage**:
+```swift
+// ✅ CORRECT: Use the enum type directly
+let adminStatusEnum = try await database.enum(AdminStatus.self)
+  .case(.pending)
+  .case(.markedDistinct)
+  .create()
+
+// ❌ AVOID: String-based enum creation
+let adminStatusEnum = try await database.enum("admin_status")
+  .case("pending")
+  .case("marked_distinct")
+  .create()
+```
+
+**Benefits of FluentEnum pattern:**
+- **Type safety**: Compile-time checking ensures enum cases match
+- **Refactoring safety**: IDE can rename enum cases across codebase
+- **Consistency**: Matches the established pattern used in existing migrations
+- **Less error-prone**: No risk of typos in string literals
+
+**In revert methods**, also use the enum type:
+```swift
+try await database.enum(AdminStatus.self).delete()
+```
+
 ### Model Organization Pattern
 SwiftData models are organized to separate core definitions from helper methods:
 ```

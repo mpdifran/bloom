@@ -14,6 +14,7 @@ final class DuplicateDetectionStore: ObservableObject {
   @Published var duplicateGroups: [DuplicateGroup] = []
   @Published var selectedGroup: DuplicateGroup?
   @Published var isLoading = false
+  @Published var isMarkingDistinct = false
   @Published var errorMessage: String?
   @Published var totalGroups = 0
   @Published var totalDuplicates = 0
@@ -105,7 +106,25 @@ final class DuplicateDetectionStore: ObservableObject {
     }
   }
   
-  func markAsNotDuplicates(group: DuplicateGroup) {
+  func markAsNotDuplicates(group: DuplicateGroup) async throws {
+    isMarkingDistinct = true
+    defer { isMarkingDistinct = false }
+    
+    // Mark all combinations in this group as distinct
+    for duplicate in group.duplicates {
+      let request = MarkItemsDistinctRequest(
+        foodItemId: group.primaryItem.id,
+        duplicateItemId: duplicate.item.id
+      )
+      
+      let response = try await service.markItemsAsDistinct(request: request)
+      
+      if !response.success {
+        throw NetworkError.serverError(statusCode: 400, errorResponse: nil)
+      }
+    }
+    
+    // Remove the group from the UI after successfully marking items as distinct
     if let index = duplicateGroups.firstIndex(where: { $0.id == group.id }) {
       duplicateGroups.remove(at: index)
       

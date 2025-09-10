@@ -396,4 +396,20 @@ extension FoodItemRecord {
       """).run()
     }
   }
+
+  struct AddDuplicateFields: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      try await database.schema(FoodItemRecord.schema)
+        .field("duplicate_score", .double)
+        .field("duplicate_last_processed", .datetime)
+        .update()
+    }
+
+    func revert(on database: Database) async throws {
+      try await database.schema(FoodItemRecord.schema)
+        .deleteField("duplicate_score")
+        .deleteField("duplicate_last_processed")
+        .update()
+    }
+  }
 }

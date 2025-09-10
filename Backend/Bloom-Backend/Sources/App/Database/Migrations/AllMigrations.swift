@@ -42,4 +42,6 @@ let allMigrations: [Migration] = [
   ChatMessageIssueReport.AddAppVersion(),
   FoodItemRecord.ConvertCountryEnumToString(),
   User.AddMorningNotificationTime(),
+  FoodItemRecord.AddDuplicateFields(),
+  FoodItemDuplicate.Create(),
 ]

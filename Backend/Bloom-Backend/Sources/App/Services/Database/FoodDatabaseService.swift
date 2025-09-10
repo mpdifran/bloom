@@ -247,147 +247,76 @@ extension FoodDatabaseService {
     category: FoodItemRecord.Category?,
     state: FoodItemRecord.State?
   ) async throws -> DuplicateGroupsResponse {
-    guard let sqlDatabase = db as? SQLDatabase else {
-      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
-    }
+    // Query items that have pending duplicate relationships
+    var query = FoodItemRecord.query(on: db)
+      .join(FoodItemDuplicate.self, on: \FoodItemRecord.$id == \FoodItemDuplicate.$foodItem.$id)
+      .filter(FoodItemDuplicate.self, \.$adminStatus == .pending)
     
-    var categoryFilter = ""
     if let category = category {
-      categoryFilter = "AND f1.category = '\(category.rawValue)'::category"
+      query = query.filter(\.$category == category)
     }
     
-    var stateFilter = ""
     if let state = state {
-      stateFilter = "AND f1.state = '\(state.rawValue)'"
+      query = query.filter(\.$state == state)
     }
     
-    let groupsQuery = """
-      WITH duplicate_pairs AS (
-        SELECT DISTINCT
-          f1.id AS primary_id,
-          f2.id AS duplicate_id,
-          GREATEST(
-            similarity(f1.name, f2.name) * 1.5,
-            similarity(f1.brand_name, f2.brand_name),
-            similarity(f1.brand_name || ' ' || f1.name || ' ' || f1.flavour, 
-                      f2.brand_name || ' ' || f2.name || ' ' || f2.flavour) * 2.0,
-            CASE 
-              WHEN f1.barcode IS NOT NULL AND f1.barcode = f2.barcode THEN 1.0
-              ELSE 0
-            END
-          ) AS similarity_score
-        FROM food_item_records f1
-        JOIN food_item_records f2 ON f1.id < f2.id
-        WHERE (
-          similarity(f1.name, f2.name) > 0.4
-          OR similarity(f1.brand_name, f2.brand_name) > 0.5
-          OR (f1.barcode IS NOT NULL AND f1.barcode = f2.barcode)
-        )
-        \(categoryFilter)
-        \(stateFilter)
-      ),
-      grouped_duplicates AS (
-        SELECT 
-          primary_id,
-          ARRAY_AGG(duplicate_id) AS duplicate_ids,
-          COUNT(*) + 1 AS total_count
-        FROM duplicate_pairs
-        GROUP BY primary_id
-        HAVING COUNT(*) >= \(minimumDuplicates - 1)
-        ORDER BY COUNT(*) DESC
-        LIMIT \(limit)
-        OFFSET \(offset)
-      )
-      SELECT 
-        gd.primary_id,
-        gd.duplicate_ids,
-        gd.total_count,
-        f.*
-      FROM grouped_duplicates gd
-      JOIN food_item_records f ON f.id = gd.primary_id
-    """
-    
-    let results = try await sqlDatabase.raw(SQLQueryString(groupsQuery))
+    // Eager load duplicate relationships
+    let itemsWithDuplicates = try await query
+      .with(\.$duplicateRelationshipsAsSource)
+      .with(\.$duplicateRelationshipsAsTarget)
+      .unique()
       .all()
     
-    var groups: [DuplicateGroup] = []
-    var totalDuplicates = 0
-    
-    for row in results {
-      guard 
-        let primaryId = try? row.decode(column: "primary_id", as: String.self),
-        let duplicateIds = try? row.decode(column: "duplicate_ids", as: [String].self),
-        let totalCount = try? row.decode(column: "total_count", as: Int.self)
-      else { continue }
-      
-      let primaryRecord = try row.decode(fluentModel: FoodItemRecord.self)
-      guard let primaryAdminRecord = primaryRecord.asAdminFoodItemRecord() else { continue }
-      
-      var duplicateCandidates: [DuplicateCandidate] = []
-      for duplicateId in duplicateIds {
-        if let duplicateRecord = try await FoodItemRecord.find(duplicateId, on: db),
-           let adminRecord = duplicateRecord.asAdminFoodItemRecord() {
-          
-          let similarityScore = try await calculateSimilarity(
-            between: primaryRecord,
-            and: duplicateRecord
-          )
-          
-          let matchTypes = determineMatchTypes(
-            primary: primaryRecord,
-            duplicate: duplicateRecord,
-            similarityScore: similarityScore
-          )
-          
-          duplicateCandidates.append(
-            DuplicateCandidate(
-              item: adminRecord,
-              similarityScore: similarityScore,
-              matchTypes: matchTypes
-            )
-          )
-        }
+    // Load the related items for each relationship
+    for item in itemsWithDuplicates {
+      for relationship in item.duplicateRelationshipsAsSource {
+        try await relationship.$duplicateFoodItem.load(on: db)
       }
+      for relationship in item.duplicateRelationshipsAsTarget {
+        try await relationship.$foodItem.load(on: db)
+      }
+    }
+    
+    // Filter items that have enough pending duplicates
+    let qualifyingItems = itemsWithDuplicates.filter { item in
+      let pendingAsSource = item.duplicateRelationshipsAsSource.filter { $0.adminStatus == .pending }.count
+      let pendingAsTarget = item.duplicateRelationshipsAsTarget.filter { $0.adminStatus == .pending }.count
+      let totalPendingDuplicates = pendingAsSource + pendingAsTarget
+      return totalPendingDuplicates >= minimumDuplicates
+    }
+    
+    // Sort by duplicate count (highest first) and paginate
+    let sortedItems = qualifyingItems
+      .sorted { 
+        let count1 = $0.duplicateRelationshipsAsSource.filter { $0.adminStatus == .pending }.count + 
+                    $0.duplicateRelationshipsAsTarget.filter { $0.adminStatus == .pending }.count
+        let count2 = $1.duplicateRelationshipsAsSource.filter { $0.adminStatus == .pending }.count + 
+                    $1.duplicateRelationshipsAsTarget.filter { $0.adminStatus == .pending }.count
+        return count1 > count2
+      }
+      .dropFirst(offset)
+      .prefix(limit)
+    
+    // Convert to DuplicateGroup format
+    var groups: [DuplicateGroup] = []
+    for item in sortedItems {
+      guard let primaryAdminRecord = item.asAdminFoodItemRecord() else { continue }
+      
+      // Get pending duplicates with their pivot data
+      let duplicateCandidates = try await getPendingDuplicatesForItem(item)
       
       let group = DuplicateGroup(
-        id: primaryId,
+        id: item.id ?? "",
         primaryItem: primaryAdminRecord,
         duplicates: duplicateCandidates,
-        totalCount: totalCount
+        totalCount: duplicateCandidates.count + 1
       )
       
       groups.append(group)
-      totalDuplicates += duplicateCandidates.count
     }
     
-    let totalGroupsQuery = """
-      WITH duplicate_pairs AS (
-        SELECT DISTINCT
-          f1.id AS primary_id,
-          f2.id AS duplicate_id
-        FROM food_item_records f1
-        JOIN food_item_records f2 ON f1.id < f2.id
-        WHERE (
-          similarity(f1.name, f2.name) > 0.4
-          OR similarity(f1.brand_name, f2.brand_name) > 0.5
-          OR (f1.barcode IS NOT NULL AND f1.barcode = f2.barcode)
-        )
-        \(categoryFilter)
-        \(stateFilter)
-      )
-      SELECT COUNT(DISTINCT primary_id) AS total_groups
-      FROM (
-        SELECT primary_id
-        FROM duplicate_pairs
-        GROUP BY primary_id
-        HAVING COUNT(*) >= \(minimumDuplicates - 1)
-      ) AS grouped
-    """
-    
-    let totalResult = try await sqlDatabase.raw(SQLQueryString(totalGroupsQuery))
-      .first()
-    
-    let totalGroups = try totalResult?.decode(column: "total_groups", as: Int.self) ?? 0
+    let totalGroups = qualifyingItems.count
+    let totalDuplicates = groups.reduce(0) { $0 + $1.duplicates.count }
     
     return DuplicateGroupsResponse(
       groups: groups,
@@ -396,76 +325,83 @@ extension FoodDatabaseService {
     )
   }
   
+  private func getPendingDuplicatesForItem(_ item: FoodItemRecord) async throws -> [DuplicateCandidate] {
+    var candidates: [DuplicateCandidate] = []
+    
+    // Process relationships where this item is the source
+    for relationship in item.duplicateRelationshipsAsSource {
+      guard relationship.adminStatus == .pending,
+            let duplicateAdminRecord = relationship.duplicateFoodItem.asAdminFoodItemRecord() else { continue }
+      
+      let matchTypes = decodeMatchTypes(relationship.matchTypes)
+      let candidate = DuplicateCandidate(
+        item: duplicateAdminRecord,
+        similarityScore: relationship.similarityScore,
+        matchTypes: matchTypes
+      )
+      candidates.append(candidate)
+    }
+    
+    // Process relationships where this item is the target
+    for relationship in item.duplicateRelationshipsAsTarget {
+      guard relationship.adminStatus == .pending,
+            let duplicateAdminRecord = relationship.foodItem.asAdminFoodItemRecord() else { continue }
+      
+      let matchTypes = decodeMatchTypes(relationship.matchTypes)
+      let candidate = DuplicateCandidate(
+        item: duplicateAdminRecord,
+        similarityScore: relationship.similarityScore,
+        matchTypes: matchTypes
+      )
+      candidates.append(candidate)
+    }
+    
+    return candidates.sorted { $0.similarityScore > $1.similarityScore }
+  }
+  
+  private func decodeMatchTypes(_ jsonString: String) -> [MatchType] {
+    guard let data = jsonString.data(using: .utf8),
+          let rawValues = try? JSONDecoder().decode([String].self, from: data) else {
+      return []
+    }
+    
+    return rawValues.compactMap { MatchType(rawValue: $0) }
+  }
+  
   func findDuplicatesForItem(
     foodID: FoodItemIdentifier,
     similarityThreshold: Double,
     limit: Int
   ) async throws -> ItemDuplicatesResponse {
+    // First get the food item
     guard let foodItem = try await FoodItemRecord.find(foodID.value, on: db) else {
       throw Abort(.notFound)
+    }
+    
+    // Load the relationships separately
+    try await foodItem.$duplicateRelationshipsAsSource.load(on: db)
+    try await foodItem.$duplicateRelationshipsAsTarget.load(on: db)
+    
+    // Load the related items for each relationship
+    for relationship in foodItem.duplicateRelationshipsAsSource {
+      try await relationship.$duplicateFoodItem.load(on: db)
+    }
+    for relationship in foodItem.duplicateRelationshipsAsTarget {
+      try await relationship.$foodItem.load(on: db)
     }
     
     guard let adminRecord = foodItem.asAdminFoodItemRecord() else {
       throw Abort(.internalServerError)
     }
     
-    guard let sqlDatabase = db as? SQLDatabase else {
-      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
-    }
-    
-    let results = try await sqlDatabase.raw("""
-      SELECT *,
-        GREATEST(
-          similarity(name, \(bind: foodItem.name)) * 1.5,
-          similarity(brand_name, \(bind: foodItem.brandName ?? "")) * 1.2,
-          similarity(brand_name || ' ' || name || ' ' || flavour, 
-                    \(bind: "\(foodItem.brandName ?? "") \(foodItem.name) \(foodItem.flavour ?? "")")) * 2.0,
-          CASE 
-            WHEN barcode IS NOT NULL AND barcode = \(bind: foodItem.barcode ?? "")
-            THEN 1.0
-            ELSE 0
-          END
-        ) AS similarity_score
-      FROM food_item_records
-      WHERE id != \(bind: foodID.value)
-        AND (
-          similarity(name, \(bind: foodItem.name)) > \(bind: similarityThreshold)
-          OR similarity(brand_name, \(bind: foodItem.brandName ?? "")) > \(bind: similarityThreshold)
-          OR (barcode IS NOT NULL AND barcode = \(bind: foodItem.barcode ?? ""))
-        )
-      ORDER BY similarity_score DESC
-      LIMIT \(bind: limit)
-    """)
-      .all(decodingFluent: FoodItemRecord.self)
-    
-    var duplicates: [DuplicateCandidate] = []
-    
-    for duplicateRecord in results {
-      guard let duplicateAdminRecord = duplicateRecord.asAdminFoodItemRecord() else { continue }
-      
-      let similarityScore = try await calculateSimilarity(
-        between: foodItem,
-        and: duplicateRecord
-      )
-      
-      let matchTypes = determineMatchTypes(
-        primary: foodItem,
-        duplicate: duplicateRecord,
-        similarityScore: similarityScore
-      )
-      
-      duplicates.append(
-        DuplicateCandidate(
-          item: duplicateAdminRecord,
-          similarityScore: similarityScore,
-          matchTypes: matchTypes
-        )
-      )
-    }
+    // Get duplicates from pre-computed relationships
+    let duplicateCandidates = try await getPendingDuplicatesForItem(foodItem)
+      .filter { $0.similarityScore >= similarityThreshold }
+      .prefix(limit)
     
     return ItemDuplicatesResponse(
       item: adminRecord,
-      duplicates: duplicates
+      duplicates: Array(duplicateCandidates)
     )
   }
   
@@ -519,10 +455,23 @@ extension FoodDatabaseService {
     var deletedCount = 0
     for itemId in itemsToMerge {
       if let itemToDelete = try await FoodItemRecord.find(itemId.value, on: db) {
+        // Clean up duplicate relationships before deletion (cascade should handle this but let's be explicit)
+        try await FoodItemDuplicate.query(on: db)
+          .group(.or) { group in
+            group.filter(\.$foodItem.$id == itemId.value)
+            group.filter(\.$duplicateFoodItem.$id == itemId.value)
+          }
+          .delete()
+        
         try await itemToDelete.delete(on: db)
         deletedCount += 1
       }
     }
+    
+    // Reset duplicate score for primary item since we've resolved these duplicates
+    primaryItem.duplicateScore = nil
+    primaryItem.duplicateLastProcessed = Date()
+    try await primaryItem.save(on: db)
     
     guard let updatedAdminRecord = primaryItem.asAdminFoodItemRecord() else {
       throw Abort(.internalServerError)
@@ -534,146 +483,40 @@ extension FoodDatabaseService {
       success: true
     )
   }
+  
+  func markItemsAsDistinct(
+    foodItemId: FoodItemIdentifier,
+    duplicateItemId: FoodItemIdentifier,
+    adminUserId: String
+  ) async throws {
+    // Find the relationship (in either direction)
+    let relationship = try await FoodItemDuplicate.query(on: db)
+      .group(.or) { group in
+        group.group(.and) { and in
+          and.filter(\.$foodItem.$id == foodItemId.value)
+          and.filter(\.$duplicateFoodItem.$id == duplicateItemId.value)
+        }
+        group.group(.and) { and in
+          and.filter(\.$foodItem.$id == duplicateItemId.value)
+          and.filter(\.$duplicateFoodItem.$id == foodItemId.value)
+        }
+      }
+      .first()
+    
+    guard let relationship = relationship else {
+      throw Abort(.notFound, reason: "Duplicate relationship not found")
+    }
+    
+    // Mark as distinct
+    relationship.adminStatus = .markedDistinct
+    relationship.adminUserID = adminUserId
+    relationship.adminDecisionAt = Date()
+    
+    try await relationship.save(on: db)
+  }
 }
 
 private extension FoodDatabaseService {
-  func calculateSimilarity(
-    between primary: FoodItemRecord,
-    and duplicate: FoodItemRecord
-  ) async throws -> Double {
-    guard let sqlDatabase = db as? SQLDatabase else {
-      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
-    }
-    
-    let result = try await sqlDatabase.raw("""
-      SELECT GREATEST(
-        similarity(\(bind: primary.name), \(bind: duplicate.name)) * 1.5,
-        similarity(\(bind: primary.brandName ?? ""), \(bind: duplicate.brandName ?? "")) * 1.2,
-        similarity(
-          \(bind: "\(primary.brandName ?? "") \(primary.name) \(primary.flavour ?? "")"),
-          \(bind: "\(duplicate.brandName ?? "") \(duplicate.name) \(duplicate.flavour ?? "")")
-        ) * 2.0,
-        CASE 
-          WHEN \(bind: primary.barcode ?? "") != '' 
-            AND \(bind: primary.barcode ?? "") = \(bind: duplicate.barcode ?? "")
-          THEN 1.0
-          ELSE 0
-        END
-      ) AS similarity_score
-    """).first()
-    return try result?.decode(column: "similarity_score", as: Double.self) ?? 0.0
-  }
-  
-  func determineMatchTypes(
-    primary: FoodItemRecord,
-    duplicate: FoodItemRecord,
-    similarityScore: Double
-  ) -> [MatchType] {
-    var matchTypes: [MatchType] = []
-    
-    if primary.barcode != nil && primary.barcode == duplicate.barcode {
-      matchTypes.append(.exactBarcode)
-    }
-    
-    let nameSimilarity = calculateStringSimilarity(primary.name, duplicate.name)
-    if nameSimilarity > 0.6 {
-      matchTypes.append(.similarName)
-    }
-    
-    if let primaryBrand = primary.brandName,
-       let duplicateBrand = duplicate.brandName {
-      let brandSimilarity = calculateStringSimilarity(primaryBrand, duplicateBrand)
-      if brandSimilarity > 0.7 {
-        matchTypes.append(.similarBrand)
-      }
-    }
-    
-    if let primaryCalories = primary.calories,
-       let duplicateCalories = duplicate.calories,
-       let primaryProtein = primary.protein,
-       let duplicateProtein = duplicate.protein,
-       let primaryCarbs = primary.carbohydrates,
-       let duplicateCarbs = duplicate.carbohydrates,
-       let primaryFat = primary.fat,
-       let duplicateFat = duplicate.fat {
-      
-      let nutritionSimilarity = calculateNutritionSimilarity(
-        calories1: primaryCalories,
-        protein1: primaryProtein,
-        carbs1: primaryCarbs,
-        fat1: primaryFat,
-        calories2: duplicateCalories,
-        protein2: duplicateProtein,
-        carbs2: duplicateCarbs,
-        fat2: duplicateFat
-      )
-      
-      if nutritionSimilarity > 0.85 {
-        matchTypes.append(.similarNutrition)
-      }
-    }
-    
-    if matchTypes.isEmpty && similarityScore > 0.5 {
-      matchTypes.append(.combined)
-    }
-    
-    return matchTypes
-  }
-  
-  func calculateStringSimilarity(_ str1: String, _ str2: String) -> Double {
-    let s1 = str1.lowercased()
-    let s2 = str2.lowercased()
-    
-    if s1 == s2 { return 1.0 }
-    
-    let longer = s1.count > s2.count ? s1 : s2
-    let shorter = s1.count > s2.count ? s2 : s1
-    
-    if longer.isEmpty { return 0.0 }
-    
-    let editDistance = levenshteinDistance(shorter, longer)
-    return Double(longer.count - editDistance) / Double(longer.count)
-  }
-  
-  func levenshteinDistance(_ s1: String, _ s2: String) -> Int {
-    let s1Array = Array(s1)
-    let s2Array = Array(s2)
-    var matrix = [[Int]](repeating: [Int](repeating: 0, count: s2Array.count + 1), count: s1Array.count + 1)
-    
-    for i in 0...s1Array.count {
-      matrix[i][0] = i
-    }
-    
-    for j in 0...s2Array.count {
-      matrix[0][j] = j
-    }
-    
-    for i in 1...s1Array.count {
-      for j in 1...s2Array.count {
-        let cost = s1Array[i - 1] == s2Array[j - 1] ? 0 : 1
-        matrix[i][j] = min(
-          matrix[i - 1][j] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j - 1] + cost
-        )
-      }
-    }
-    
-    return matrix[s1Array.count][s2Array.count]
-  }
-  
-  func calculateNutritionSimilarity(
-    calories1: Double, protein1: Double, carbs1: Double, fat1: Double,
-    calories2: Double, protein2: Double, carbs2: Double, fat2: Double
-  ) -> Double {
-    let caloriesDiff = abs(calories1 - calories2) / max(calories1, calories2, 1)
-    let proteinDiff = abs(protein1 - protein2) / max(protein1, protein2, 1)
-    let carbsDiff = abs(carbs1 - carbs2) / max(carbs1, carbs2, 1)
-    let fatDiff = abs(fat1 - fat2) / max(fat1, fat2, 1)
-    
-    let avgDiff = (caloriesDiff + proteinDiff + carbsDiff + fatDiff) / 4
-    return max(0, 1 - avgDiff)
-  }
   
   /// Map foodItemRecords to adminFoodItemRecords and sign images from S3.
   func createAdminRecords(
