@@ -48,6 +48,7 @@ struct TodayView: View {
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @TodaySettingsStorage("TodayView.settings") private var todaySettings = TodaySettings()
   @State private var currentTimeMode: TimeMode = .morning
+  @State private var hideScrollEdge = true
   @State private var configureButtonTint = Color.white
 
   @AppStorage("TodayView.showWeightWidget") private var showWeightWidget: Bool = true
@@ -83,7 +84,7 @@ struct TodayView: View {
             .padding(.top, 160)
           }
         }
-        .removeScrollEdgeEffect()
+        .removeScrollEdgeEffect(shouldHide: hideScrollEdge)
         .ignoresSafeArea(.all, edges: .top)
         .onAppear {
           currentTimeMode = TimeMode.current(for: context.date, settings: todaySettings)
@@ -93,12 +94,16 @@ struct TodayView: View {
         }
         .onScrollGeometryChange(for: Bool.self) { geometry in
           if #available(iOS 26.0, *) {
-            return false
+            return geometry.contentOffset.y < 100
           } else {
             return geometry.contentOffset.y > 2
           }
         } action: { oldValue, newValue in
-          self.configureButtonTint = newValue ? themeController.theme.color : .white
+          if #available(iOS 26.0, *) {
+            self.hideScrollEdge = newValue
+          } else {
+            self.configureButtonTint = newValue ? themeController.theme.color : .white
+          }
         }
       }
       .navigationTitle("Today")

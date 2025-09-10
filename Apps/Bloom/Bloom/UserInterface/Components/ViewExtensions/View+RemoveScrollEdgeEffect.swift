@@ -10,9 +10,9 @@ import SwiftUI
 extension View {
 
   @ViewBuilder
-  func removeScrollEdgeEffect() -> some View {
+  func removeScrollEdgeEffect(shouldHide: Bool) -> some View {
     if #available(iOS 26.0, *) {
-      scrollEdgeEffectHidden(for: .top)
+      scrollEdgeEffectHidden(shouldHide, for: .top)
     } else {
       self
     }
