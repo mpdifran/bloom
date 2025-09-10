@@ -110,9 +110,14 @@ struct TodayView: View {
           Button {
             presentedSheet = TodaySettingsView().asAny
           } label: {
-            Image(systemSymbol: .sliderHorizontal3)
-              .foregroundStyle(configureButtonTint)
-              .bold()
+            if #available(iOS 26.0, *) {
+              Image(systemSymbol: .sliderHorizontal3)
+                .bold()
+            } else {
+              Image(systemSymbol: .sliderHorizontal3)
+                .foregroundStyle(configureButtonTint)
+                .bold()
+            }
           }
           .buttonStyle(.plain)
         }
