@@ -68,10 +68,6 @@ extension ChatViewModel {
     }
   }
   
-  func loadMoreMessages() async {
-    await ChatHistoryModifier.shared.loadMoreMessages()
-  }
-  
   func maintainWebSocketConnection() async {
     // Initial connection
     await ChatController.shared.ensureWebSocketConnected()

@@ -29,9 +29,7 @@ class ChatViewController: UICollectionViewController {
   private var scrollToBottomButtonBottomConstraint: NSLayoutConstraint!
 
   private var cellModels: [ChatCellModel] = []
-  private var isLoadingMore = false
   private var isAtBottom = true
-  private var hasScrolledToBottomInitially = false
   private var previousBudMessageCount = 0
 
   private var cancellables = Set<AnyCancellable>()
@@ -89,11 +87,6 @@ class ChatViewController: UICollectionViewController {
     setupKeyboardObservers()
     updateContentInsets()
 
-    // Scroll to bottom on initial appearance if there are messages
-    if cellModels.isNotEmpty {
-      scrollToBottom(animated: false)
-    }
-
     // Start WebSocket maintenance
     maintenanceTask = Task {
       await viewModel.maintainWebSocketConnection()
@@ -105,8 +98,28 @@ class ChatViewController: UICollectionViewController {
 
     // Focus the text view in the message bar
     chatMessageBar.focusTextView()
+    
+    // Scroll to bottom when view appears if there are messages
+    if cellModels.isNotEmpty {
+      // Use a small delay to ensure layout is complete
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+        self?.scrollToBottom(animated: false)
+      }
+    }
   }
-  
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+
+    // Scroll to bottom when view appears if there are messages
+    if cellModels.isNotEmpty {
+      // Use a small delay to ensure layout is complete
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+        self?.scrollToBottom(animated: false)
+      }
+    }
+  }
+
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     updateContentInsets()
@@ -310,20 +323,8 @@ class ChatViewController: UICollectionViewController {
 
     guard oldModels != newModels else { return }
 
-    // Initial load
-    if !hasScrolledToBottomInitially && newModels.isNotEmpty {
-      cellModels = newModels
-      collectionView.reloadData()
-      hasScrolledToBottomInitially = true
-
-      // Ensure layout is complete before scrolling
-      collectionView.layoutIfNeeded()
-      scrollToBottom(animated: false)
-
-      // Hide prompts if we have messages
-      updatePromptsVisibility()
-      return
-    }
+    // Check if we should scroll after update (new messages added)
+    let shouldScrollToBottom = newModels.count > oldModels.count && isAtBottom
 
     // Calculate the difference
     let changeset = StagedChangeset(source: oldModels, target: newModels)
@@ -331,6 +332,11 @@ class ChatViewController: UICollectionViewController {
     // Apply the changes with batch updates
     collectionView.reload(using: changeset, interrupt: { $0.changeCount > 100 }) { [weak self] newModels in
       self?.cellModels = newModels
+    }
+    
+    // Scroll to bottom if new messages were added and we were already at bottom
+    if shouldScrollToBottom {
+      scrollToBottom(animated: true)
     }
 
     // Force reload cells that have text messages (for streaming updates)
@@ -528,16 +534,7 @@ extension ChatViewController {
       }
     }
 
-    // Check if should load more (near top)
-    if scrollOffset < 100 && !isLoadingMore && cellModels.isNotEmpty {
-      isLoadingMore = true
-      Task {
-        await viewModel.loadMoreMessages()
-        await MainActor.run {
-          self.isLoadingMore = false
-        }
-      }
-    }
+    // Removed load more functionality - now always showing last 30 messages
   }
 }
 

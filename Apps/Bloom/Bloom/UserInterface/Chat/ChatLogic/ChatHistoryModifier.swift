@@ -18,13 +18,13 @@ actor ChatHistoryModifier {
   private var assistantTypingStatus: String?
   private var assistantIsTyping = false
   
-  private static let defaultMessageLimit = 20
+  private static let messageLimit = 30
   
   private init() {
     self.modelActor = ChatMessageModelActor.standard()
     self.habitModelActor = HabitModelActor.standard()
     
-    // Load initial messages with default limit
+    // Load initial messages
     Task {
       await loadMessages()
     }
@@ -35,9 +35,9 @@ actor ChatHistoryModifier {
     }
   }
   
-  private func loadMessages(limit: Int? = defaultMessageLimit) async {
+  private func loadMessages() async {
     do {
-      let fetchedMessages = try await modelActor.fetchMessages(limit: limit)
+      let fetchedMessages = try await modelActor.fetchMessages(limit: Self.messageLimit)
       // Reverse the messages so they're in chronological order (oldest first)
       self.messages = fetchedMessages.reversed()
       await buildCellModels()
@@ -223,8 +223,8 @@ actor ChatHistoryModifier {
     updatedMessages.append(dto)
     
     // Trim from the beginning if we exceed the limit
-    if updatedMessages.count > Self.defaultMessageLimit {
-      updatedMessages = Array(updatedMessages.suffix(Self.defaultMessageLimit))
+    if updatedMessages.count > Self.messageLimit {
+      updatedMessages = Array(updatedMessages.suffix(Self.messageLimit))
     }
     
     self.messages = updatedMessages
@@ -264,11 +264,6 @@ actor ChatHistoryModifier {
   
   func refreshMessages() async {
     await loadMessages()
-  }
-  
-  func loadMoreMessages() async {
-    // Load all messages without limit to get more history
-    await loadMessages(limit: nil)
   }
   
   // Process rich content data synchronously to avoid async loading in UI
