@@ -129,40 +129,15 @@ private extension RootView {
   }
 
   var tabViewAccessoryView: some View {
-    HStack {
-      Image(.budPeek)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(square: 34)
-        .foregroundStyle(.secondary)
-
-      Text("Ask Bud")
-        .foregroundStyle(.secondary)
-
-      Spacer(minLength: 0)
-
-      Button {
-        presentedSheet = ActionsView().asAny
-      } label: {
-        Image(systemSymbol: .plusCircleFill)
-          .foregroundStyle(.white, .tint)
-          .font(.title2)
-          .bold()
-          .fontDesign(.rounded)
-          .fontWeight(.semibold)
-          .frame(square: 24)
+    ChatLauncherTabAccessoryView(presentedSheet: $presentedSheet)
+      .onTapGesture {
+        EntitledAction(
+          presentedSheet: $presentedSheet
+        ) {
+          tabController.isShowingChat = true
+          selectionToggle.toggle()
+        }
       }
-    }
-    .selectable()
-    .onTapGesture {
-      EntitledAction(
-        presentedSheet: $presentedSheet
-      ) {
-        tabController.isShowingChat = true
-        selectionToggle.toggle()
-      }
-    }
-    .padding()
   }
 }
 
