@@ -126,7 +126,7 @@ class ChatMessageBarView: UIView {
     inputStackView.translatesAutoresizingMaskIntoConstraints = false
     inputStackView.axis = .horizontal
     inputStackView.alignment = .bottom
-    inputStackView.spacing = 12
+    inputStackView.spacing = 8
 
     // Plus button setup
     setupPlusButton()
@@ -166,7 +166,7 @@ class ChatMessageBarView: UIView {
     inputStackView.addArrangedSubview(actionButton)
 
     cardContainerView.addSubview(inputStackView)
-    inputStackView.constrainToParent(padding: 12)
+    inputStackView.constrainToParent(padding: 8)
 
     mainStackView.addArrangedSubview(cardContainerView)
   }
@@ -174,26 +174,47 @@ class ChatMessageBarView: UIView {
   private func setupPlusButton() {
     plusButton.translatesAutoresizingMaskIntoConstraints = false
     
-    // Configure the symbol with hierarchical rendering
-    let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)
-    let image = UIImage(systemSymbol: .plusCircleFill, withConfiguration: config)
-    plusButton.setImage(image, for: .normal)
-    
-    // Use tint color for the filled background
-    plusButton.tintColor = .tintColor
-    
-    // Configure symbol rendering mode for hierarchical coloring (white foreground on tinted background)
-    plusButton.imageView?.preferredSymbolConfiguration = UIImage.SymbolConfiguration(hierarchicalColor: .white)
-    plusButton.configuration = UIButton.Configuration.plain()
-    plusButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
+    if #available(iOS 26.0, *) {
+      // iOS 26+: Match ChatLauncherTabAccessoryView styling
+      var config = UIButton.Configuration.filled()
+      let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+      let roundedDescriptor = bodyFont.fontDescriptor.withDesign(.rounded) ?? bodyFont.fontDescriptor
+      let roundedFont = UIFont(descriptor: roundedDescriptor, size: bodyFont.pointSize)
+      let symbolConfig = UIImage.SymbolConfiguration(font: roundedFont, scale: .default).applying(UIImage.SymbolConfiguration(weight: .bold))
+      config.image = UIImage(systemSymbol: .plus, withConfiguration: symbolConfig)
+      config.baseForegroundColor = .white
+      config.baseBackgroundColor = .tintColor
+      config.cornerStyle = .capsule
+      config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+      
+      plusButton.configuration = config
+      
+      NSLayoutConstraint.activate([
+        plusButton.widthAnchor.constraint(equalToConstant: 30),
+        plusButton.heightAnchor.constraint(equalToConstant: 30)
+      ])
+    } else {
+      // Legacy: Keep existing filled circle icon
+      let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)
+      let image = UIImage(systemSymbol: .plusCircleFill, withConfiguration: config)
+      plusButton.setImage(image, for: .normal)
+      
+      // Use tint color for the filled background
+      plusButton.tintColor = .tintColor
+      
+      // Configure symbol rendering mode for hierarchical coloring (white foreground on tinted background)
+      plusButton.imageView?.preferredSymbolConfiguration = UIImage.SymbolConfiguration(hierarchicalColor: .white)
+      plusButton.configuration = UIButton.Configuration.plain()
+      plusButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
+      
+      NSLayoutConstraint.activate([
+        plusButton.widthAnchor.constraint(equalToConstant: 24),
+        plusButton.heightAnchor.constraint(equalToConstant: 24)
+      ])
+    }
     
     // Setup menu for image source selection
     setupPlusButtonMenu()
-
-    NSLayoutConstraint.activate([
-      plusButton.widthAnchor.constraint(equalToConstant: 24),
-      plusButton.heightAnchor.constraint(equalToConstant: 24)
-    ])
   }
 
 
@@ -257,13 +278,23 @@ class ChatMessageBarView: UIView {
 
   private func setupActionButton() {
     actionButton.translatesAutoresizingMaskIntoConstraints = false
-    actionButton.configuration = UIButton.Configuration.plain()
     actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
 
-    NSLayoutConstraint.activate([
-      actionButton.widthAnchor.constraint(equalToConstant: 24),
-      actionButton.heightAnchor.constraint(equalToConstant: 24)
-    ])
+    if #available(iOS 26.0, *) {
+      // iOS 26+: Capsule style
+      // Configuration will be set in updateActionButton
+      NSLayoutConstraint.activate([
+        actionButton.widthAnchor.constraint(equalToConstant: 44),
+        actionButton.heightAnchor.constraint(equalToConstant: 30)
+      ])
+    } else {
+      // Legacy: Keep existing configuration
+      actionButton.configuration = UIButton.Configuration.plain()
+      NSLayoutConstraint.activate([
+        actionButton.widthAnchor.constraint(equalToConstant: 24),
+        actionButton.heightAnchor.constraint(equalToConstant: 24)
+      ])
+    }
 
     updateActionButton()
   }
@@ -325,26 +356,56 @@ class ChatMessageBarView: UIView {
 
   private func updateActionButton() {
     let isEmpty = textView.text.isEmpty
-    let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)
 
-    if isEmpty {
-      // Show keyboard toggle - text color on filled background
-      let isKeyboardVisible = textView.isFirstResponder
-      let symbolName: SFSymbol = isKeyboardVisible ? .chevronDownCircleFill : .chevronUpCircleFill
-      let image = UIImage(systemSymbol: symbolName, withConfiguration: config)
-      actionButton.setImage(image, for: .normal)
-
-      // Use label color for chevron, secondary fill for background
-      actionButton.tintColor = .tertiarySystemFill
-      actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.label, .tertiarySystemFill])
+    if #available(iOS 26.0, *) {
+      // iOS 26+: Capsule style buttons with configuration
+      var config = UIButton.Configuration.filled()
+      config.cornerStyle = .capsule
+      config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+      
+      let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+      let roundedDescriptor = bodyFont.fontDescriptor.withDesign(.rounded) ?? bodyFont.fontDescriptor
+      let roundedFont = UIFont(descriptor: roundedDescriptor, size: bodyFont.pointSize)
+      let symbolConfig = UIImage.SymbolConfiguration(font: roundedFont, scale: .default).applying(UIImage.SymbolConfiguration(weight: .bold))
+      
+      if isEmpty {
+        // Show keyboard toggle - label color on tertiarySystemFill background
+        let isKeyboardVisible = textView.isFirstResponder
+        let symbolName: SFSymbol = isKeyboardVisible ? .chevronDown : .chevronUp
+        config.image = UIImage(systemSymbol: symbolName, withConfiguration: symbolConfig)
+        config.baseForegroundColor = .label
+        config.baseBackgroundColor = .tertiarySystemFill
+      } else {
+        // Show send button - white arrow on tinted background
+        config.image = UIImage(systemSymbol: .arrowUp, withConfiguration: symbolConfig)
+        config.baseForegroundColor = .white
+        config.baseBackgroundColor = .tintColor
+      }
+      
+      actionButton.configuration = config
     } else {
-      // Show send button - white arrow on tinted background
-      let image = UIImage(systemSymbol: .arrowUpCircleFill, withConfiguration: config)
-      actionButton.setImage(image, for: .normal)
+      // Legacy: Keep existing filled circle icons
+      let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)
+      
+      if isEmpty {
+        // Show keyboard toggle - text color on filled background
+        let isKeyboardVisible = textView.isFirstResponder
+        let symbolName: SFSymbol = isKeyboardVisible ? .chevronDownCircleFill : .chevronUpCircleFill
+        let image = UIImage(systemSymbol: symbolName, withConfiguration: config)
+        actionButton.setImage(image, for: .normal)
 
-      // Use tint color for background with white foreground
-      actionButton.tintColor = .tintColor
-      actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
+        // Use label color for chevron, secondary fill for background
+        actionButton.tintColor = .tertiarySystemFill
+        actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.label, .tertiarySystemFill])
+      } else {
+        // Show send button - white arrow on tinted background
+        let image = UIImage(systemSymbol: .arrowUpCircleFill, withConfiguration: config)
+        actionButton.setImage(image, for: .normal)
+
+        // Use tint color for background with white foreground
+        actionButton.tintColor = .tintColor
+        actionButton.configuration?.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(paletteColors: [.white, .tintColor])
+      }
     }
   }
 
