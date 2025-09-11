@@ -91,13 +91,10 @@ extension HealthReportService {
       )
     )
 
-    let previousResponseID = try await todayInsightsHistory.getLastResponseID(for: userID)
-    
     let response = try await openAIService.openAI.responses.createResponse(
       input: inputItems,
       model: modelID,
       instructions: .Prompt.todayAI,
-      previousResponseID: previousResponseID,
       reasoning: .init(effort: .low, summary: .auto),
       text: OpenAIKit.Text(format: Format(type: .jsonSchema(.todayAI))),
       truncation: .auto
@@ -106,9 +103,6 @@ extension HealthReportService {
     guard let todayResponse = try response.parse(TodayReportResponse.self) else {
       throw Abort(.internalServerError, reason: "Failed to parse today report response")
     }
-
-    // Store the response ID for future continuity
-    try await todayInsightsHistory.storeLastResponseID(response.id, for: userID)
 
     return todayResponse
   }
