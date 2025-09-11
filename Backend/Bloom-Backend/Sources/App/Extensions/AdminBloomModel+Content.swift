@@ -9,4 +9,4 @@ import AdminBloomModel
 import Vapor
 
 // Mark AdminBloomModel response types as Vapor Content
-extension RunDuplicateDetectionResponse: Content { }
+extension RunDuplicateDetectionResponse: @retroactive Content { }
