@@ -247,10 +247,25 @@ extension FoodDatabaseService {
     category: FoodItemRecord.Category?,
     state: FoodItemRecord.State?
   ) async throws -> DuplicateGroupsResponse {
-    // Query items that have pending duplicate relationships
+    // First, get all unique item IDs that have pending duplicate relationships
+    let sourceItemIds = try await FoodItemDuplicate.query(on: db)
+      .filter(\.$adminStatus == .pending)
+      .unique()
+      .all()
+      .map { $0.$foodItem.id }
+    
+    let targetItemIds = try await FoodItemDuplicate.query(on: db)
+      .filter(\.$adminStatus == .pending)
+      .unique()
+      .all()
+      .map { $0.$duplicateFoodItem.id }
+    
+    // Combine and deduplicate item IDs
+    let allUniqueItemIds = Set(sourceItemIds + targetItemIds)
+    
+    // Now fetch the actual items with filters applied
     var query = FoodItemRecord.query(on: db)
-      .join(FoodItemDuplicate.self, on: \FoodItemRecord.$id == \FoodItemDuplicate.$foodItem.$id)
-      .filter(FoodItemDuplicate.self, \.$adminStatus == .pending)
+      .filter(\.$id ~~ Array(allUniqueItemIds))
     
     if let category = category {
       query = query.filter(\.$category == category)
@@ -260,11 +275,10 @@ extension FoodDatabaseService {
       query = query.filter(\.$state == state)
     }
     
-    // Eager load duplicate relationships
+    // Eager load duplicate relationships for filtered items
     let itemsWithDuplicates = try await query
       .with(\.$duplicateRelationshipsAsSource)
       .with(\.$duplicateRelationshipsAsTarget)
-      .unique()
       .all()
     
     // Load the related items for each relationship

@@ -14,28 +14,40 @@ struct DuplicateDetectionView: View {
   @State private var showMergeSheet = false
   
   var body: some View {
-    NavigationSplitView {
+    HStack(spacing: 0) {
+      // Sidebar - List of duplicate groups
       duplicateGroupsList
-    } content: {
+        .frame(minWidth: 250, idealWidth: 300, maxWidth: 400)
+      
+      Divider()
+      
+      // Content - Duplicate candidates for selected group
       if let selectedGroup = store.selectedGroup {
         duplicateCandidatesList(for: selectedGroup)
+          .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
       } else {
         ContentUnavailableView(
           "No Group Selected",
           systemImage: "square.on.square",
           description: Text("Select a duplicate group to view candidates")
         )
+        .frame(maxWidth: .infinity)
       }
-    } detail: {
+      
+      Divider()
+      
+      // Detail - Comparison view
       if let selectedGroup = store.selectedGroup,
          !selectedDuplicates.isEmpty {
         comparisonView(for: selectedGroup)
+          .frame(minWidth: 400, idealWidth: 600)
       } else {
         ContentUnavailableView(
           "No Items Selected",
           systemImage: "square.split.2x2",
           description: Text("Select items to compare")
         )
+        .frame(maxWidth: .infinity)
       }
     }
     .navigationTitle("Duplicate Detection")
@@ -82,12 +94,10 @@ struct DuplicateDetectionView: View {
 
 private extension DuplicateDetectionView {
   var duplicateGroupsList: some View {
-    List(selection: $store.selectedGroup) {
+    List(selection: $store.selectedGroupID) {
       ForEach(store.duplicateGroups) { group in
-        NavigationLink(value: group) {
-          DuplicateGroupRow(group: group)
-        }
-        .tag(group)
+        DuplicateGroupRow(group: group)
+          .tag(group.id)
       }
       
       if store.duplicateGroups.count < store.totalGroups {
@@ -98,7 +108,7 @@ private extension DuplicateDetectionView {
           }
       }
     }
-    .navigationSplitViewColumnWidth(min: 250, ideal: 300, max: 400)
+    .listStyle(.sidebar)
     .overlay {
       if store.isLoading && store.duplicateGroups.isEmpty {
         ProgressView("Loading duplicate groups...")
@@ -126,7 +136,7 @@ private extension DuplicateDetectionView {
         }
       }
     }
-    .navigationSplitViewColumnWidth(min: 300, ideal: 400, max: 500)
+    .listStyle(.inset)
     .toolbar {
       ToolbarItemGroup(placement: .secondaryAction) {
         Button("Merge Selected") {
@@ -155,7 +165,7 @@ private extension DuplicateDetectionView {
         .disabled(store.isMarkingDistinct)
       }
     }
-    .onChange(of: store.selectedGroup) { _, _ in
+    .onChange(of: store.selectedGroupID) { _, _ in
       selectedDuplicates.removeAll()
     }
   }
@@ -182,7 +192,6 @@ private extension DuplicateDetectionView {
       }
       .padding()
     }
-    .navigationSplitViewColumnWidth(min: 400, ideal: 600)
   }
   
   var filterMenu: some View {

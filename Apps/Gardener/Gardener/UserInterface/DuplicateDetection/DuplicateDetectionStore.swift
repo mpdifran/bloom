@@ -12,12 +12,17 @@ import SwiftUI
 @MainActor
 final class DuplicateDetectionStore: ObservableObject {
   @Published var duplicateGroups: [DuplicateGroup] = []
-  @Published var selectedGroup: DuplicateGroup?
+  @Published var selectedGroupID: String?
   @Published var isLoading = false
   @Published var isMarkingDistinct = false
   @Published var errorMessage: String?
   @Published var totalGroups = 0
   @Published var totalDuplicates = 0
+  
+  var selectedGroup: DuplicateGroup? {
+    guard let selectedGroupID else { return nil }
+    return duplicateGroups.first { $0.id == selectedGroupID }
+  }
   
   @Published var filterCategory: AdminFoodItemRecord.Category?
   @Published var filterState: AdminFoodItemRecord.State?
@@ -46,7 +51,7 @@ final class DuplicateDetectionStore: ObservableObject {
       currentOffset = 0
       
       if let firstGroup = duplicateGroups.first {
-        selectedGroup = firstGroup
+        selectedGroupID = firstGroup.id
       }
     } catch {
       errorMessage = "Failed to load duplicate groups: \(error.localizedDescription)"
@@ -98,9 +103,9 @@ final class DuplicateDetectionStore: ObservableObject {
         duplicateGroups.remove(at: groupIndex)
         
         if let nextGroup = duplicateGroups.first {
-          selectedGroup = nextGroup
+          selectedGroupID = nextGroup.id
         } else {
-          selectedGroup = nil
+          selectedGroupID = nil
         }
       }
     }
@@ -129,26 +134,26 @@ final class DuplicateDetectionStore: ObservableObject {
       duplicateGroups.remove(at: index)
       
       if duplicateGroups.isEmpty {
-        selectedGroup = nil
-      } else if selectedGroup?.id == group.id {
-        selectedGroup = duplicateGroups.first
+        selectedGroupID = nil
+      } else if selectedGroupID == group.id {
+        selectedGroupID = duplicateGroups.first?.id
       }
     }
   }
   
   func selectNextGroup() {
-    guard let currentGroup = selectedGroup,
-          let currentIndex = duplicateGroups.firstIndex(where: { $0.id == currentGroup.id }),
+    guard let selectedGroupID,
+          let currentIndex = duplicateGroups.firstIndex(where: { $0.id == selectedGroupID }),
           currentIndex < duplicateGroups.count - 1 else { return }
     
-    selectedGroup = duplicateGroups[currentIndex + 1]
+    self.selectedGroupID = duplicateGroups[currentIndex + 1].id
   }
   
   func selectPreviousGroup() {
-    guard let currentGroup = selectedGroup,
-          let currentIndex = duplicateGroups.firstIndex(where: { $0.id == currentGroup.id }),
+    guard let selectedGroupID,
+          let currentIndex = duplicateGroups.firstIndex(where: { $0.id == selectedGroupID }),
           currentIndex > 0 else { return }
     
-    selectedGroup = duplicateGroups[currentIndex - 1]
+    self.selectedGroupID = duplicateGroups[currentIndex - 1].id
   }
 }
