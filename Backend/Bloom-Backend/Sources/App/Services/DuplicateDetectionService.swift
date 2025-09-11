@@ -43,17 +43,38 @@ extension DuplicateDetectionService {
     let cutoffDate = Date().addingTimeInterval(-processingIntervalHours * 3600)
     let itemsToProcess = try await getItemsNeedingProcessing(cutoffDate: cutoffDate)
     
-    logger.info("Processing \(itemsToProcess.count) food items for duplicates")
+    logger.info("Found \(itemsToProcess.count) food items to process for duplicates")
     
-    for item in itemsToProcess {
+    var successCount = 0
+    var failureCount = 0
+    var itemsWithDuplicates = 0
+    var itemsWithoutDuplicates = 0
+    
+    for (index, item) in itemsToProcess.enumerated() {
       do {
-        try await processItem(item)
+        logger.info("[\(index + 1)/\(itemsToProcess.count)] Processing item \(item.id ?? "unknown"): \(item.name)")
+        let hadDuplicates = try await processItem(item)
+        successCount += 1
+        if hadDuplicates {
+          itemsWithDuplicates += 1
+        } else {
+          itemsWithoutDuplicates += 1
+        }
+        logger.info("[\(index + 1)/\(itemsToProcess.count)] Successfully processed item \(item.id ?? "unknown")")
       } catch {
-        logger.error("Failed to process item \(item.id ?? "unknown"): \(error)")
+        failureCount += 1
+        logger.error("[\(index + 1)/\(itemsToProcess.count)] Failed to process item \(item.id ?? "unknown"): \(error)")
       }
     }
     
-    logger.info("Completed duplicate detection batch processing")
+    logger.info("""
+      Duplicate detection batch completed:
+      - Total items processed: \(itemsToProcess.count)
+      - Successfully marked: \(successCount)
+      - Failed to mark: \(failureCount)
+      - Items with duplicates (score >= 0.7): \(itemsWithDuplicates)
+      - Items without duplicates: \(itemsWithoutDuplicates)
+      """)
   }
   
   private func getItemsNeedingProcessing(cutoffDate: Date) async throws -> [FoodItemRecord] {
@@ -69,17 +90,27 @@ extension DuplicateDetectionService {
       .all()
   }
   
-  private func processItem(_ item: FoodItemRecord) async throws {
-    guard let itemId = item.id else { return }
+  private func processItem(_ item: FoodItemRecord) async throws -> Bool {
+    guard let itemId = item.id else {
+      logger.warning("Skipping item with nil ID")
+      return false
+    }
+    
+    logger.debug("Finding similar items for \(itemId): \(item.name)")
     
     // Find potential duplicates using existing similarity logic
     let duplicates = try await findSimilarItems(for: item)
     
+    logger.debug("Found \(duplicates.count) potential duplicates for \(itemId)")
+    
     var highestScore: Double = 0.0
+    var duplicatesAboveThreshold = 0
     
     for duplicate in duplicates {
       guard let duplicateId = duplicate.item.id,
             duplicate.similarityScore >= similarityThreshold else { continue }
+      
+      duplicatesAboveThreshold += 1
       
       // Check if we already have a relationship (in either direction) 
       let existingRelationship = try await FoodItemDuplicate.query(on: db)
@@ -135,10 +166,23 @@ extension DuplicateDetectionService {
       highestScore = max(highestScore, duplicate.similarityScore)
     }
     
-    // Update item's duplicate score and last processed timestamp
-    item.duplicateScore = highestScore > 0 ? highestScore : nil
+    logger.debug("Item \(itemId) has \(duplicatesAboveThreshold) duplicates above threshold (highest score: \(highestScore))")
+    
+    // Always update both fields - set score to 0.0 if no duplicates found
+    item.duplicateScore = highestScore > 0 ? highestScore : 0.0
     item.duplicateLastProcessed = Date()
-    try await item.save(on: db)
+    
+    // Explicitly save and verify
+    do {
+      logger.debug("Saving processing results for item \(itemId) - Score: \(item.duplicateScore ?? 0.0), Timestamp: \(item.duplicateLastProcessed?.description ?? "nil")")
+      try await item.save(on: db)
+      logger.info("Successfully saved item \(itemId) with score \(item.duplicateScore ?? 0.0) and timestamp \(item.duplicateLastProcessed?.description ?? "nil")")
+    } catch {
+      logger.error("Failed to save item \(itemId) after processing: \(error)")
+      throw error
+    }
+    
+    return highestScore >= similarityThreshold
   }
   
   private func findSimilarItems(for item: FoodItemRecord) async throws -> [(item: FoodItemRecord, similarityScore: Double, matchTypes: [MatchType])] {
@@ -229,13 +273,20 @@ extension DuplicateDetectionService {
       matchTypes.append(.exactBarcode)
     }
     
-    let nameSimilarity = calculateStringSimilarity(primary.name, duplicate.name)
-    if nameSimilarity > 0.6 {
-      matchTypes.append(.similarName)
+    // Safely calculate name similarity with nil checks
+    let primaryName = primary.name.trimmingCharacters(in: .whitespacesAndNewlines)
+    let duplicateName = duplicate.name.trimmingCharacters(in: .whitespacesAndNewlines)
+    
+    if !primaryName.isEmpty && !duplicateName.isEmpty {
+      let nameSimilarity = calculateStringSimilarity(primaryName, duplicateName)
+      if nameSimilarity > 0.6 {
+        matchTypes.append(.similarName)
+      }
     }
     
-    if let primaryBrand = primary.brandName,
-       let duplicateBrand = duplicate.brandName {
+    if let primaryBrand = primary.brandName?.trimmingCharacters(in: .whitespacesAndNewlines),
+       let duplicateBrand = duplicate.brandName?.trimmingCharacters(in: .whitespacesAndNewlines),
+       !primaryBrand.isEmpty && !duplicateBrand.isEmpty {
       let brandSimilarity = calculateStringSimilarity(primaryBrand, duplicateBrand)
       if brandSimilarity > 0.7 {
         matchTypes.append(.similarBrand)
@@ -269,8 +320,10 @@ extension DuplicateDetectionService {
   }
   
   private func calculateStringSimilarity(_ str1: String, _ str2: String) -> Double {
-    let s1 = str1.lowercased()
-    let s2 = str2.lowercased()
+    // Limit string length to prevent memory issues
+    let maxLength = 500
+    let s1 = String(str1.lowercased().prefix(maxLength))
+    let s2 = String(str2.lowercased().prefix(maxLength))
     
     if s1 == s2 { return 1.0 }
     
@@ -279,13 +332,46 @@ extension DuplicateDetectionService {
     
     if longer.isEmpty { return 0.0 }
     
+    // For very long strings, use a simpler comparison
+    if longer.count > 200 {
+      return simpleSimilarity(shorter, longer)
+    }
+    
     let editDistance = levenshteinDistance(shorter, longer)
     return Double(longer.count - editDistance) / Double(longer.count)
+  }
+  
+  private func simpleSimilarity(_ str1: String, _ str2: String) -> Double {
+    // Simple character-based similarity for long strings
+    let set1 = Set(str1)
+    let set2 = Set(str2)
+    let intersection = set1.intersection(set2).count
+    let union = set1.union(set2).count
+    
+    if union == 0 { return 0.0 }
+    
+    // Jaccard similarity combined with length ratio
+    let jaccardSimilarity = Double(intersection) / Double(union)
+    let lengthRatio = Double(min(str1.count, str2.count)) / Double(max(str1.count, str2.count))
+    
+    return (jaccardSimilarity * 0.7) + (lengthRatio * 0.3)
   }
   
   private func levenshteinDistance(_ s1: String, _ s2: String) -> Int {
     let s1Array = Array(s1)
     let s2Array = Array(s2)
+    
+    // Safety check: prevent excessive memory allocation
+    guard s1Array.count <= 500 && s2Array.count <= 500 else {
+      logger.warning("Strings too long for Levenshtein distance: \(s1Array.count) and \(s2Array.count) characters")
+      // Return a high distance for very long strings
+      return max(s1Array.count, s2Array.count)
+    }
+    
+    // Early exit for empty strings
+    if s1Array.isEmpty { return s2Array.count }
+    if s2Array.isEmpty { return s1Array.count }
+    
     var matrix = [[Int]](repeating: [Int](repeating: 0, count: s2Array.count + 1), count: s1Array.count + 1)
     
     for i in 0...s1Array.count {

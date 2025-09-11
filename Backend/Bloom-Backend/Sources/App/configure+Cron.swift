@@ -11,7 +11,11 @@ import VaporCron
 extension Application {
   func configureCronJobs() throws {
     // Duplicate detection job - runs every 4 hours at minute 0
-    _ = try self.cron.schedule("0 */4 * * *") { [unowned self] in
+    try cron.schedule("0 */4 * * *") { [weak self] in
+      guard let self else { return }
+
+      self.logger.info("Starting duplicate detection cron job")
+      
       let duplicateService = DuplicateDetectionService(
         db: self.db,
         logger: self.logger

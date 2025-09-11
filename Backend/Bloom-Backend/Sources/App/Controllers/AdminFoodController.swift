@@ -33,6 +33,7 @@ extension AdminFoodController: RouteCollection {
             $0.get(":id", use: getDuplicatesForItem)
             $0.post("merge", use: mergeFoodItems)
             $0.post("mark-distinct", use: markItemsAsDistinct)
+            $0.post("run-detection", use: runDuplicateDetection)
           }
 
           $0.group("open-food-facts") {
@@ -450,6 +451,36 @@ private extension AdminFoodController {
     return MarkItemsDistinctResponse(
       success: true,
       message: "Items marked as distinct successfully"
+    )
+  }
+  
+  @Sendable
+  func runDuplicateDetection(_ request: Request) async throws -> RunDuplicateDetectionResponse {
+    request.logger.info("Admin triggered manual duplicate detection")
+    
+    let duplicateService = DuplicateDetectionService(
+      db: request.db,
+      logger: request.logger
+    )
+    
+    try await duplicateService.processNextBatch()
+    
+    // Get statistics about processed items
+    let totalItems = try await FoodItemRecord.query(on: request.db).count()
+    let processedItems = try await FoodItemRecord.query(on: request.db)
+      .filter(\.$duplicateLastProcessed != nil)
+      .count()
+    let itemsWithDuplicates = try await FoodItemRecord.query(on: request.db)
+      .filter(\.$duplicateScore != nil)
+      .filter(\.$duplicateScore > 0)
+      .count()
+    
+    return RunDuplicateDetectionResponse(
+      success: true,
+      message: "Duplicate detection completed",
+      totalItems: totalItems,
+      processedItems: processedItems,
+      itemsWithDuplicates: itemsWithDuplicates
     )
   }
 }
