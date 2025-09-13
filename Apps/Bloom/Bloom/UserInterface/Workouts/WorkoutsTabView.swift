@@ -33,6 +33,8 @@ struct WorkoutsTabView: View {
   var body: some View {
     NavigationStack {
       BloomScrollView {
+        TrainingLoadChartView()
+        
         workoutTemplatesSection
         workoutsSection
       }
