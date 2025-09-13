@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
-import UserNotifications
+@preconcurrency import UserNotifications
 import RevenueCat
 import TelemetryDeck
+import SFSafeSymbols
 
 enum Tab: CaseIterable, Identifiable {
   var id: Self { self }
@@ -26,7 +27,7 @@ extension Tab {
     case .today:
       "Today"
     case .vitals:
-      "Vitals"
+      "You"
     case .nutrition:
       "Nutrition"
     case .workouts:
@@ -39,7 +40,7 @@ extension Tab {
     case .today:
       Image(.todayTab)
     case .vitals:
-      Image(.vitalsTab)
+      Image(systemSymbol: .figure)
     case .nutrition:
       Image(.nutritionTab)
     case .workouts:

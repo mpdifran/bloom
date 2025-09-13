@@ -22,9 +22,11 @@ struct VitalsView: View {
   var body: some View {
     NavigationStack(path: $path) {
       BloomScrollView {
-        // Training Load Chart
         TrainingLoadChartView()
-        
+
+        SectionTitleView("Vitals")
+          .padding(.horizontal)
+
         ForEach(viewModel.vitals) { vital in
           NavigationLink(value: vital.id) {
             MonthlyVitalCardCell(vital: vital)
@@ -43,7 +45,7 @@ struct VitalsView: View {
           }
         }
       }
-      .navigationTitle("Vitals")
+      .navigationTitle("You")
       .navigationDestination(for: VitalModel.Kind.self) { vitalKind in
         switch vitalKind {
         case .sleepQuality: SleepDetailsView()
@@ -66,7 +68,7 @@ struct VitalsView: View {
     }
     .sheet($presentedSheet)
     .tabItem {
-      Label("Vitals", image: .vitalsTab)
+      Label("You", systemSymbol: .figure)
     }
   }
 }

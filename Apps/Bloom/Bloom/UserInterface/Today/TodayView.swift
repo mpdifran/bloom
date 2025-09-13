@@ -189,6 +189,7 @@ private extension TodayView {
           }
         )
         .padding(.horizontal)
+        .padding(.bottom)
       }
       
       // Dynamic sections based on time mode and settings
@@ -214,6 +215,7 @@ private extension TodayView {
         onReload: nil
       )
       .padding(.horizontal)
+      .padding(.bottom)
 
       // Show sections based on settings but only those available without Bloom Plus
       let configuration = todaySettings.configuration(for: currentTimeMode)
@@ -250,7 +252,6 @@ private extension TodayView {
          case .text(let advice) = content {
         TodaysAdviceTodayCell(advice: advice)
           .padding(.horizontal)
-          .padding(.top)
           .contextMenu {
             Button("Ask Bud", systemSymbol: .ellipsisMessage) {
               handleAskBudAction(

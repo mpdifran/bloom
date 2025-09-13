@@ -129,11 +129,7 @@ private extension TrainingLoadChartView {
             series: .value("7-day", "7-day Average")
           )
           .interpolationMethod(.catmullRom)
-          .foregroundStyle(colorForTrainingLoadDifference(
-            sevenDayValue: point.value,
-            twentyEightDayValue: twentyEightDayValue,
-            summary: summary
-          ))
+          .foregroundStyle(.mutedBlue)
           .lineStyle(StrokeStyle(lineWidth: 6))
 
           if point.value > 0 {
@@ -153,7 +149,7 @@ private extension TrainingLoadChartView {
                   twentyEightDayValue: twentyEightDayValue,
                   summary: summary
                 ))
-                .strokeBorder(.text, lineWidth: 1.5)
+                .strokeBorder(.black, lineWidth: 1)
                 .frame(width: 8, height: 8)
             }
           }
