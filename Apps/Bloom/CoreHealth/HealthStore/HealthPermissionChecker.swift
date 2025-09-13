@@ -30,7 +30,9 @@ public final class HealthPermissionChecker: Sendable {
     HKQuantityType(.activeEnergyBurned),
     HKObjectType.workoutType(),
     HKSeriesType.workoutRoute(),
-    HKQuantityType(.distanceWalkingRunning)
+    HKQuantityType(.distanceWalkingRunning),
+    HKQuantityType(.workoutEffortScore),
+    HKQuantityType(.estimatedWorkoutEffortScore)
   ]
 
   public let heartTypes: Set<HKObjectType> = [

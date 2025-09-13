@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import DataContainer
+import CoreHealth
 
 struct VitalsView: View {
 
@@ -21,6 +22,9 @@ struct VitalsView: View {
   var body: some View {
     NavigationStack(path: $path) {
       BloomScrollView {
+        // Training Load Chart
+        TrainingLoadChartView()
+        
         ForEach(viewModel.vitals) { vital in
           NavigationLink(value: vital.id) {
             MonthlyVitalCardCell(vital: vital)

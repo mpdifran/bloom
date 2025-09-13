@@ -36,15 +36,17 @@ extension DayVitalsCalculator {
     async let sleep = generateSleepData(for: date)
     async let stress = generateStressData(for: date)
     async let exercise = generateExerciseData(for: date)
+    async let trainingLoad = generateTrainingLoadData(for: date)
     
-    let (activityResult, bodyCompositionResult, heartHealthResult, nutritionResult, sleepResult, stressResult, exerciseResult) = await (
+    let (activityResult, bodyCompositionResult, heartHealthResult, nutritionResult, sleepResult, stressResult, exerciseResult, trainingLoadResult) = await (
       activity,
       bodyComposition,
       heartHealth,
       nutrition,
       sleep,
       stress,
-      exercise
+      exercise,
+      trainingLoad
     )
     
     return DayVitalsData(
@@ -55,7 +57,8 @@ extension DayVitalsCalculator {
       nutrition: nutritionResult,
       sleep: sleepResult,
       stress: stressResult,
-      exercise: exerciseResult
+      exercise: exerciseResult,
+      trainingLoad: trainingLoadResult
     )
   }
 }
@@ -115,11 +118,21 @@ private extension DayVitalsCalculator {
     
     let bodyMassUnit = await HKUnit.gramUnit(with: .kilo).localizedUnit()
     
+    let bodyFatPercentageString = bodyFatQuantity.map { quantity in
+      let percent = quantity.doubleValue(for: .percent()) * 100
+      return "\(Int(percent))%"
+    }
+    
+    let bodyFatPercentageAverageString = bodyCompositionSummary?.details.bodyFatPercentage.map { quantity in
+      let percent = quantity.doubleValue(for: .percent()) * 100
+      return "\(Int(percent))%"
+    }
+    
     return BodyCompositionData(
       bodyMass: await bodyMassQuantity?.displayString(for: bodyMassUnit, formatter: .oneDecimalPlace),
       bodyMassAverage: await bodyCompositionSummary?.details.averageBodyMass?.displayString(for: bodyMassUnit, formatter: .oneDecimalPlace),
-      bodyFatPercentage: await bodyFatQuantity?.displayString(for: .percent(), formatter: .noDecimalPlaces),
-      bodyFatPercentageAverage: await bodyCompositionSummary?.details.bodyFatPercentage?.displayString(for: .percent(), formatter: .noDecimalPlaces),
+      bodyFatPercentage: bodyFatPercentageString,
+      bodyFatPercentageAverage: bodyFatPercentageAverageString,
       leanBodyMass: await leanBodyMassQuantity?.displayString(for: bodyMassUnit, formatter: .oneDecimalPlace),
       leanBodyMassAverage: nil // Lean body mass average not available in summary
     )
@@ -399,6 +412,69 @@ private extension DayVitalsCalculator {
       workouts: workoutData,
       totalExerciseMinutes: await HKQuantity(unit: .minute(), doubleValue: totalMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces),
       totalCaloriesBurned: "\(Int(totalCalories)) cal"
+    )
+  }
+}
+
+// MARK: - Training Load Data
+private extension DayVitalsCalculator {
+  
+  func generateTrainingLoadData(for date: Date) async -> TrainingLoadData? {
+    let dateRange = DateRange.duringDay(date)
+    
+    let workouts = await HealthStoreFetcher.shared.fetchWorkouts(dateRange: dateRange)
+    guard workouts.isNotEmpty else { return nil }
+    
+    var workoutEffortData = [WorkoutEffortData]()
+    
+    for workout in workouts {
+      let duration = workout.duration / 60 // Convert to minutes
+      
+      // Fetch user-provided effort score for this workout
+      let userEffortScore = (await HealthStoreFetcher.shared.fetchSamples(
+        for: HKQuantityType(.workoutEffortScore),
+        dateRange: DateRange(workout.startDate, workout.endDate)
+      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
+      
+      // Fetch estimated effort score for this workout
+      let estimatedEffortScore = (await HealthStoreFetcher.shared.fetchSamples(
+        for: HKQuantityType(.estimatedWorkoutEffortScore),
+        dateRange: DateRange(workout.startDate, workout.endDate)
+      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
+      
+      // Use user score if available, otherwise estimated score
+      let effortScore = userEffortScore ?? estimatedEffortScore
+      
+      let effortLevel = effortScore.map { score in
+        switch score {
+        case 0...3: return "Easy"
+        case 4...6: return "Moderate" 
+        case 7...8: return "Hard"
+        case 9...10: return "All Out"
+        default: return "Unknown"
+        }
+      }
+      
+      let workoutEffortDataItem = WorkoutEffortData(
+        workoutType: workout.workoutActivityType.name,
+        startTime: workout.startDate,
+        duration: await HKQuantity(unit: .minute(), doubleValue: duration).displayString(for: .minute(), formatter: .noDecimalPlaces),
+        userEffortScore: userEffortScore.map { String(format: "%.1f", $0) },
+        estimatedEffortScore: estimatedEffortScore.map { String(format: "%.1f", $0) },
+        effortLevel: effortLevel
+      )
+      
+      workoutEffortData.append(workoutEffortDataItem)
+    }
+    
+    // Get training load summary from calculator
+    let trainingLoadSummary = await TrainingLoadCalculator.shared.trainingLoadSummary
+    await TrainingLoadCalculator.shared.refreshTrainingLoad()
+    
+    return TrainingLoadData(
+      workoutEffortScores: workoutEffortData,
+      percentageDifference: trainingLoadSummary.map { String(format: "%.0f", $0.percentageDifference) },
+      trainingLoadStatus: trainingLoadSummary?.status.rawValue
     )
   }
 }

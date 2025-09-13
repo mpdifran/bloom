@@ -16,4 +16,5 @@ struct DayVitalsData: SendableNetworkModel {
   let sleep: SleepData?
   let stress: StressData?
   let exercise: ExerciseData?
+  let trainingLoad: TrainingLoadData?
 }

@@ -964,6 +964,134 @@ public extension HealthStoreFetcher {
     let cycles = await fetchMenstrualFlowSamples(dateRange: .trailingMonthsFromNow(7))
     return MenstrualSummary(menstrualCycles: cycles)
   }
+
+  func fetchTrainingLoadSummary() async -> TrainingLoadSummary? {
+    let dateRange = DateRange.trailingDaysFromNow(56)
+    let workouts = await fetchWorkouts(dateRange: dateRange)
+    
+    // Fetch active energy burned for all 56 days
+    let activeEnergyData = (try? await healthStore.fetchCollatedQuantity(
+      quantityTypeID: .activeEnergyBurned,
+      unit: .largeCalorie(),
+      dateRange: dateRange
+    )) ?? []
+    
+    // Need either workouts or active energy data
+    guard workouts.isNotEmpty || activeEnergyData.isNotEmpty else { return nil }
+    
+    // Calculate daily training loads for all 56 days
+    var dailyLoads: [Date: Double] = [:]
+    
+    // First, add workout-based loads
+    for workout in workouts {
+      let workoutDate = Calendar.current.startOfDay(for: workout.startDate)
+      let duration = workout.duration / 60 // Convert to minutes
+      
+      // Fetch effort scores for this workout
+      let userEffortScore = (await fetchSamples(
+        for: HKQuantityType(.workoutEffortScore),
+        dateRange: DateRange(workout.startDate, workout.endDate)
+      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
+      
+      let estimatedEffortScore = (await fetchSamples(
+        for: HKQuantityType(.estimatedWorkoutEffortScore),
+        dateRange: DateRange(workout.startDate, workout.endDate)
+      ) as? [HKQuantitySample])?.first?.quantity.doubleValue(for: .appleEffortScore())
+      
+      // Use user score if available, otherwise estimated score
+      if let effortScore = userEffortScore ?? estimatedEffortScore {
+        let workoutLoad = effortScore * duration
+        dailyLoads[workoutDate, default: 0] += workoutLoad
+      }
+    }
+    
+    // Add all-day load adjustments based on active calories deviation from baseline
+    let caloriesByDate = Dictionary(uniqueKeysWithValues: activeEnergyData.map { 
+      (Calendar.current.startOfDay(for: $0.date), $0.quantity.doubleValue(for: .largeCalorie()))
+    })
+    
+    // Calculate rolling 28-day baseline for each day
+    for date in Calendar.current.dateCollection(for: dateRange) {
+      let dayStart = Calendar.current.startOfDay(for: date)
+      
+      // Calculate 28-day baseline ending on the previous day
+      let baselineEndDate = Calendar.current.date(byAdding: .day, value: -1, to: dayStart) ?? dayStart
+      let baselineStartDate = Calendar.current.date(byAdding: .day, value: -28, to: baselineEndDate) ?? baselineEndDate
+      
+      var baselineCalories: [Double] = []
+      for baselineDate in Calendar.current.dateCollection(for: DateRange(baselineStartDate, baselineEndDate)) {
+        if let calories = caloriesByDate[Calendar.current.startOfDay(for: baselineDate)] {
+          baselineCalories.append(calories)
+        }
+      }
+      
+      let baseline = baselineCalories.isEmpty ? 0 : baselineCalories.reduce(0, +) / Double(baselineCalories.count)
+      
+      // Get today's active calories
+      let todayCalories = caloriesByDate[dayStart] ?? 0
+      
+      // Calculate all-day adjustment (positive deviations only)
+      // Scaling factor of 2.0 to balance with workout loads
+      let allDayAdjustment = max(0, (todayCalories - baseline) / 2.0)
+      
+      // Add all-day adjustment to existing workout load
+      dailyLoads[dayStart, default: 0] += allDayAdjustment
+    }
+    
+    // Generate date samples for the last 28 days
+    let startDate = Calendar.current.date(byAdding: .day, value: -27, to: Date()) ?? Date()
+    let endDate = Date()
+    let last28Days = Calendar.current.dateCollection(for: DateRange(startDate, endDate))
+    
+    var sevenDayTrend: [DateValueSample] = []
+    var twentyEightDayTrend: [DateValueSample] = []
+    var dailyLoadSamples: [DateValueSample] = []
+    
+    for date in last28Days {
+      let dayStart = Calendar.current.startOfDay(for: date)
+      
+      // Calculate 7-day rolling average ending on this date
+      let sevenDayStartDate = Calendar.current.date(byAdding: .day, value: -6, to: dayStart) ?? dayStart
+      let sevenDayWindow = Calendar.current.dateCollection(for: DateRange(sevenDayStartDate, dayStart))
+      let sevenDayLoads = sevenDayWindow.compactMap { dailyLoads[$0] }
+      let sevenDayAvg = sevenDayLoads.isEmpty ? 0 : sevenDayLoads.reduce(0, +) / Double(sevenDayLoads.count)
+      
+      // Calculate 28-day rolling average ending on this date  
+      let twentyEightDayStartDate = Calendar.current.date(byAdding: .day, value: -27, to: dayStart) ?? dayStart
+      let twentyEightDayWindow = Calendar.current.dateCollection(for: DateRange(twentyEightDayStartDate, dayStart))
+      let twentyEightDayLoads = twentyEightDayWindow.compactMap { dailyLoads[$0] }
+      let twentyEightDayAvg = twentyEightDayLoads.isEmpty ? 0 : twentyEightDayLoads.reduce(0, +) / Double(twentyEightDayLoads.count)
+      
+      sevenDayTrend.append(DateValueSample(date: date, value: sevenDayAvg))
+      twentyEightDayTrend.append(DateValueSample(date: date, value: twentyEightDayAvg))
+      dailyLoadSamples.append(DateValueSample(date: date, value: dailyLoads[dayStart] ?? 0))
+    }
+    
+    // Current averages (most recent values)
+    let currentSevenDayAverage = sevenDayTrend.last?.value ?? 0
+    let currentTwentyEightDayAverage = twentyEightDayTrend.last?.value ?? 0
+    
+    // Calculate percentage difference
+    let percentageDifference: Double
+    if currentTwentyEightDayAverage > 0 {
+      percentageDifference = ((currentSevenDayAverage - currentTwentyEightDayAverage) / currentTwentyEightDayAverage) * 100
+    } else {
+      percentageDifference = 0
+    }
+    
+    let status = TrainingLoadStatus.from(percentageDifference: percentageDifference)
+    
+    return TrainingLoadSummary(
+      dateRange: DateRange.trailingDaysFromNow(28),
+      currentSevenDayAverage: currentSevenDayAverage,
+      currentTwentyEightDayAverage: currentTwentyEightDayAverage,
+      percentageDifference: percentageDifference,
+      status: status,
+      sevenDayTrend: sevenDayTrend,
+      twentyEightDayTrend: twentyEightDayTrend,
+      dailyLoads: dailyLoadSamples
+    )
+  }
 }
 
 // MARK: Recommended Ranges

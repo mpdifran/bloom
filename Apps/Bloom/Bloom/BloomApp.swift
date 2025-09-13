@@ -66,6 +66,9 @@ struct BloomApp: App {
           await HealthSleepObserver.shared.observeSleep()
         }
         .task {
+          await TrainingLoadObserver.shared.observeTrainingLoad()
+        }
+        .task {
           do {
             try await UserController.shared.verifyAuthentication()
           } catch {

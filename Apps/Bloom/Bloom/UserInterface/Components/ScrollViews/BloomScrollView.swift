@@ -29,7 +29,7 @@ struct BloomScrollView<Content>: View where Content: View {
   @Environment(TabController.self) private var tabController: TabController
 
   var body: some View {
-    ScrollView {
+    ScrollView(.vertical) {
       VStack(spacing: spacing) {
         contentBuilder()
       }
