@@ -128,7 +128,7 @@ extension HealthReportService {
         .init(
           role: .system,
           content: [
-            .text(.init(text: "Here is the user's health data:\n\(healthContext)"))
+            .text(.init(text: "Here is the user's health data from the last 7 days:\n\(healthContext)"))
           ]
         )
       )

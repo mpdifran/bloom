@@ -146,20 +146,20 @@ extension ResponseSchema {
           description: "A clear, supportive explanation of why the biological age is what it is, focusing on specific health factors that influenced the calculation. Be encouraging while factual about areas for improvement."
         ),
         "positiveFactors": Schema.Parameter(
-          description: "A list of positive factors that are helping the user's biological age (e.g., 'good sleep quality', 'consistent exercise').",
+          description: "A list of positive factors that are helping the user's biological age. Use clear, human-readable descriptions (e.g., 'Excellent sleep quality', 'Consistent exercise routine', 'Good cardiovascular health').",
           arrayOf: Schema.Item.parameter(
             Schema.Parameter(
               type: .string,
-              description: "A positive factor contributing to biological age"
+              description: "A human-readable positive factor contributing to biological age"
             )
           )
         ),
         "negativeFactors": Schema.Parameter(
-          description: "A list of negative factors that are hurting the user's biological age (e.g., 'poor sleep duration', 'high stress levels').",
+          description: "A list of negative factors that are hurting the user's biological age. Use clear, human-readable descriptions (e.g., 'Insufficient sleep duration', 'High stress levels', 'Poor cardiovascular fitness').",
           arrayOf: Schema.Item.parameter(
             Schema.Parameter(
               type: .string,
-              description: "A negative factor contributing to biological age"
+              description: "A human-readable negative factor contributing to biological age"
             )
           )
         )

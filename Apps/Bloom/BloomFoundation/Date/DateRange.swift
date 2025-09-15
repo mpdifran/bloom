@@ -352,6 +352,28 @@ public extension DateRange {
   }
 }
 
+// MARK: Biological Age Ranges
+
+public extension DateRange {
+  
+  static func previousPeriod(from dateRange: DateRange, days: Int) -> DateRange {
+    let periodLength = TimeInterval(days * 24 * 60 * 60)
+    let previousEnd = dateRange.start
+    let previousStart = previousEnd.addingTimeInterval(-periodLength)
+    return DateRange(previousStart, previousEnd)
+  }
+  
+  static func previousWeek(from dateRange: DateRange) -> DateRange {
+    return previousPeriod(from: dateRange, days: 7)
+  }
+  
+  static func previous30Days(from date: Date) -> DateRange {
+    let previousEnd = date.addingTimeInterval(-30 * 24 * 60 * 60)
+    let previousStart = previousEnd.addingTimeInterval(-30 * 24 * 60 * 60)
+    return DateRange(previousStart, previousEnd)
+  }
+}
+
 // MARK: Windows
 
 public extension DateRange {

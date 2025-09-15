@@ -439,6 +439,40 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        AsyncButton {
+          do {
+            let biologicalAgeController = BiologicalAgeController(modelContext: modelContext)
+            let healthData = try await biologicalAgeController.collectBiologicalAgeData()
+            
+            let jsonString = try JSONEncoder.aiContext.encodeToString(healthData) ?? "Failed to encode"
+            
+            UIPasteboard.general.string = jsonString
+            
+            await MainActor.run {
+              alertDetails = AlertDetails(
+                title: "Copied to Clipboard",
+                message: "Biological age health context has been copied to your clipboard."
+              )
+            }
+          } catch {
+            await MainActor.run {
+              self.error = error
+            }
+          }
+        } label: {
+          LabeledContent("Copy Biological Age Health Context") {
+            Image(systemSymbol: .heartTextSquare)
+          }
+          .multilineTextAlignment(.leading)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
         Button {
           presentedSheet = BloomPlusPaywall().asAny
         } label: {

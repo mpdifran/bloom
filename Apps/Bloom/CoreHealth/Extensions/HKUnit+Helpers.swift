@@ -54,6 +54,8 @@ public extension HKUnit {
       "oz"
     case .fluidOunceImperial():
       "oz"
+    case .bpm():
+      "bpm"
     default:
       unitString
     }

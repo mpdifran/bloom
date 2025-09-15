@@ -36,6 +36,8 @@ extension String.Prompt {
 
     Biological age represents the true physiological age of someone's body based on their health metrics, lifestyle factors, and biomarkers. It can be higher or lower than chronological age depending on health status.
 
+    The health context data provided represents a 7-day snapshot from the past week, giving you recent trends and patterns to analyze.
+
     If provided with a previous biological age and positive/negative factors, use this information to understand trends and changes. Focus on what has improved, stayed the same, or worsened since the last calculation.
 
     Consider these key factors in your analysis:
