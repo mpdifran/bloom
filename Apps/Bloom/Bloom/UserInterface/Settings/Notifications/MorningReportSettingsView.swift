@@ -47,11 +47,6 @@ private extension MorningReportSettingsView {
         SettingsCell("Send Report By") {
           DatePicker("", selection: $reportViewModel.morningReportDate, displayedComponents: .hourAndMinute)
             .datePickerStyle(.compact)
-            .onChange(of: reportViewModel.morningReportDate) { _, _ in
-              Task {
-                await NotificationPreferencesService.shared.forceSyncMorningNotificationPreferences()
-              }
-            }
         }
 
         Divider()

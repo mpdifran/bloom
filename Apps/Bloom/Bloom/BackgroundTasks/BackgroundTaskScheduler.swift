@@ -38,27 +38,4 @@ extension BackgroundTaskScheduler {
         // Schedule the next background task
         scheduleReminderNotificationUpdateTask()
     }
-    
-    func scheduleNotificationPreferencesSyncTask() {
-        let request = BGAppRefreshTaskRequest(identifier: "sync-notification-preferences")
-        // Schedule to run in 12-24 hours to periodically sync preferences
-        request.earliestBeginDate = Calendar.current.date(byAdding: .hour, value: 12, to: .now)
-        
-        do {
-            try BGTaskScheduler.shared.submit(request)
-            print("Notification Preferences Sync Background Task Scheduled!")
-        } catch(let error) {
-            print("Notification Preferences Sync Scheduling Error \(error.localizedDescription)")
-        }
-    }
-    
-    func syncNotificationPreferences() async {
-        print("Background task: Syncing notification preferences...")
-        
-        // Sync notification preferences with server
-        await NotificationPreferencesService.shared.syncMorningNotificationPreferences()
-        
-        // Schedule the next background task
-        scheduleNotificationPreferencesSyncTask()
-    }
 }

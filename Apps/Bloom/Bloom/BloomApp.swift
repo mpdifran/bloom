@@ -90,7 +90,6 @@ struct BloomApp: App {
         .task {
           // Schedule background tasks - handlers are registered in AppDelegate.didFinishLaunchingWithOptions
           BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
-          BackgroundTaskScheduler.shared.scheduleNotificationPreferencesSyncTask()
         }
     }
     .modelContainer(ContainerHolder.shared.container)

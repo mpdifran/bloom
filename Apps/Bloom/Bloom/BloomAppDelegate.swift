@@ -32,17 +32,6 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
         task.setTaskCompleted(success: true)
       }
     }
-    
-    // Register notification preferences sync task handler  
-    BGTaskScheduler.shared.register(
-      forTaskWithIdentifier: "sync-notification-preferences",
-      using: nil
-    ) { task in
-      Task {
-        await BackgroundTaskScheduler.shared.syncNotificationPreferences()
-        task.setTaskCompleted(success: true)
-      }
-    }
   }
 
   func application(

@@ -42,9 +42,6 @@ extension URLRequest {
     static func registerDeviceToken(body: RegisterUserPushNotificationTokenRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/user/register-device-token", body: body)
     }
-    static func updateMorningNotificationTime(body: UpdateMorningNotificationTimeRequest) async throws -> URLRequest {
-      try await URLRequest.post("v1/user/morning-notification-time", body: body)
-    }
     static func logout() async -> URLRequest {
       await URLRequest.get("v1/user/logout")
     }

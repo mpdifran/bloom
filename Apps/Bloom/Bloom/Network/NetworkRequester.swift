@@ -48,16 +48,6 @@ extension NetworkRequester {
     let request = await URLRequest.User.deleteAccount()
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
-
-  func updateMorningNotificationTime(hour: Int, minute: Int, timeZone: String) async throws {
-    let body = UpdateMorningNotificationTimeRequest(
-      hour: hour,
-      minute: minute,
-      timeZone: timeZone
-    )
-    let request = try await URLRequest.User.updateMorningNotificationTime(body: body)
-    try await URLSession.shared.authenticatedBloomRequest(request: request)
-  }
 }
 
 // MARK: - Food
