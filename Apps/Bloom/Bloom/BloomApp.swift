@@ -125,11 +125,6 @@ private extension BloomApp {
       await tokenManager.refreshTokenIfNeeded()
     }
     
-    Task {
-      // Sync notification preferences
-      await NotificationPreferencesService.shared.syncMorningNotificationPreferences()
-    }
-    
     Task { @MainActor in
       // Run image resize migration in background
       ImageResizeMigration.shared.runMigrationIfNeeded()
