@@ -42,3 +42,5 @@ extension AdminArchiveChatIssueReportResponse: @retroactive Content { }
 extension MorningHealthReportResponse: @retroactive Content { }
 extension TodayReportRequest: @retroactive Content { }
 extension TodayReportResponse: @retroactive Content { }
+extension BiologicalAgeRequest: @retroactive Content { }
+extension BiologicalAgeResponse: @retroactive Content { }

@@ -132,4 +132,38 @@ extension ResponseSchema {
       ]
     )
   )
+
+  static let biologicalAge = ResponseSchema(
+    name: "biologicalAge",
+    schema: Schema.Object(
+      properties: [
+        "biologicalAge": Schema.Parameter(
+          type: .number,
+          description: "The calculated biological age as a precise decimal value (e.g., 32.4) representing how old the user's body appears to be based on health indicators."
+        ),
+        "summary": Schema.Parameter(
+          type: .string,
+          description: "A clear, supportive explanation of why the biological age is what it is, focusing on specific health factors that influenced the calculation. Be encouraging while factual about areas for improvement."
+        ),
+        "positiveFactors": Schema.Parameter(
+          description: "A list of positive factors that are helping the user's biological age (e.g., 'good sleep quality', 'consistent exercise').",
+          arrayOf: Schema.Item.parameter(
+            Schema.Parameter(
+              type: .string,
+              description: "A positive factor contributing to biological age"
+            )
+          )
+        ),
+        "negativeFactors": Schema.Parameter(
+          description: "A list of negative factors that are hurting the user's biological age (e.g., 'poor sleep duration', 'high stress levels').",
+          arrayOf: Schema.Item.parameter(
+            Schema.Parameter(
+              type: .string,
+              description: "A negative factor contributing to biological age"
+            )
+          )
+        )
+      ]
+    )
+  )
 }

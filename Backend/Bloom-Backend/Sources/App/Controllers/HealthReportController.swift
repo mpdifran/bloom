@@ -22,6 +22,9 @@ extension HealthReportController: RouteCollection {
         $0.group("today") {
           $0.post("insights", use: generateTodayView)
         }
+        $0.group("biological-age") {
+          $0.post("calculate", use: calculateBiologicalAge)
+        }
       }
     }
   }
@@ -32,8 +35,16 @@ private extension HealthReportController {
   @Sendable
   func generateMorningReport(_ request: Request) async throws -> MorningHealthReportResponse {
     let body = try request.content.decode(MorningHealthReportRequest.self)
+    let user = try request.auth.require(User.self)
 
-    return try await request.healthReportService.generateMorningHealthReport(from: body.healthContext)
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+
+    return try await request.healthReportService.generateMorningHealthReport(
+      from: body.healthContext,
+      userID: userID
+    )
   }
 
   @Sendable
@@ -50,6 +61,25 @@ private extension HealthReportController {
       healthContext: body.healthContext,
       currentTime: body.currentTime,
       timezone: body.timezone,
+      userID: userID
+    )
+  }
+  
+  @Sendable
+  func calculateBiologicalAge(_ request: Request) async throws -> BiologicalAgeResponse {
+    let body = try request.content.decode(BiologicalAgeRequest.self)
+    let user = try request.auth.require(User.self)
+    
+    guard let userID = user.id else {
+      throw Abort(.unauthorized)
+    }
+    
+    return try await request.healthReportService.calculateBiologicalAge(
+      healthContext: body.healthContext,
+      chronologicalAge: body.chronologicalAge,
+      previousBiologicalAge: body.previousBiologicalAge,
+      previousPositiveFactors: body.previousPositiveFactors,
+      previousNegativeFactors: body.previousNegativeFactors,
       userID: userID
     )
   }
