@@ -55,8 +55,8 @@ struct TodayHeroCell: View {
       if hasError {
         errorView
       } else if isLoading {
-        CircularSpinnerView()
-          .foregroundStyle(.tint)
+        ProgressView()
+          .progressViewStyle(.circular)
           .frame(minHeight: 80)
           .horizontallyCentered()
       } else if let summary {
