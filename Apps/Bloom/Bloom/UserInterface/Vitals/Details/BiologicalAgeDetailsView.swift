@@ -44,7 +44,7 @@ private extension BiologicalAgeDetailsView {
 
       // Summary Card
       TodayCardCell(
-        symbol: .heartTextSquare,
+        symbol: .starFill,
         title: "Summary",
         content: response.summary,
         color: .mutedBlue
