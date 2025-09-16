@@ -123,3 +123,11 @@ extension URLRequest {
     }
   }
 }
+
+extension URLRequest {
+  enum BiologicalAge {
+    static func calculate(body: BiologicalAgeRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/biological-age/calculate", body: body)
+    }
+  }
+}

@@ -69,6 +69,9 @@ struct BloomApp: App {
           await TrainingLoadObserver.shared.observeTrainingLoad()
         }
         .task {
+          await BiologicalAgeViewModel.shared.calculateBiologicalAgeIfNeeded()
+        }
+        .task {
           do {
             try await UserController.shared.verifyAuthentication()
           } catch {
@@ -124,7 +127,12 @@ private extension BloomApp {
       // Check if APNs token needs refresh
       await tokenManager.refreshTokenIfNeeded()
     }
-    
+
+    Task {
+      // Calculate biological age if needed (once every 3 days)
+      await BiologicalAgeViewModel.shared.calculateBiologicalAgeIfNeeded()
+    }
+
     Task { @MainActor in
       // Run image resize migration in background
       ImageResizeMigration.shared.runMigrationIfNeeded()

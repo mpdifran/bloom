@@ -8,12 +8,15 @@
 import SwiftUI
 import AppUI
 import DataContainer
+import CoreHealth
 
 struct VitalsView: View {
 
   private let viewModel = VitalsViewModel.shared
+  @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
 
   @State private var path = NavigationPath()
+  @State private var presentedNavigationDestination: AnyView?
   @State private var presentedSheet: AnyView?
 
   @Environment(TabController.self) private var tabController: TabController
@@ -21,6 +24,15 @@ struct VitalsView: View {
   var body: some View {
     NavigationStack(path: $path) {
       BloomScrollView {
+
+        SectionTitleView("Biological Age")
+          .padding(.horizontal)
+
+        bioAgeMeter
+
+        SectionTitleView("Vitals")
+          .padding(.horizontal)
+
         ForEach(viewModel.vitals) { vital in
           NavigationLink(value: vital.id) {
             MonthlyVitalCardCell(vital: vital)
@@ -55,20 +67,58 @@ struct VitalsView: View {
           fatalError("Unknown case")
         }
       }
+      .navigationDestination($presentedNavigationDestination)
+      .sheet($presentedSheet)
       .animation(.default, value: viewModel.vitals)
       .toolbar {
         SettingsProfileViewToolbarButton()
       }
     }
-    .sheet($presentedSheet)
     .tabItem {
       Label("You", systemSymbol: .figure)
     }
   }
 }
 
+private extension VitalsView {
+
+  var bioAgeMeter: some View {
+    VStack(spacing: 0) {
+      BiologicalAgeMeter(
+        biologicalAge: biologicalAgeViewModel.currentBiologicalAge
+      )
+      .frame(square: 200)
+
+      Divider()
+
+      Button {
+        presentedNavigationDestination = BiologicalAgeDetailsView().asAny
+      } label: {
+        HStack {
+          Text("View Details")
+            .bold()
+            .fontDesign(.rounded)
+
+          Spacer()
+
+          DisclosureIndicator()
+        }
+        .frame(height: 50)
+        .selectable()
+      }
+      .buttonStyle(.plain)
+    }
+    .horizontallyCentered()
+    .padding(.horizontal)
+    .padding(.top)
+    .cardContainer(includePadding: false)
+  }
+}
+
 #Preview {
-  TabView {
-    VitalsView()
+  PreviewEnvironment {
+    TabView {
+      VitalsView()
+    }
   }
 }

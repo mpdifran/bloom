@@ -1,5 +1,5 @@
 //
-//  BiologicalAgeController.swift
+//  BiologicalAgeHealthContextCalculator.swift
 //  Bloom
 //
 //  Created by Assistant on 2025-09-15.
@@ -12,15 +12,13 @@ import CoreHealth
 import BloomFoundation
 import SwiftData
 
-@Observable
-@MainActor
-final class BiologicalAgeController {
-  
+actor BiologicalAgeHealthContextCalculator {
+
   private let healthStoreFetcher = HealthStoreFetcher.shared
   private let modelContext: ModelContext
-  
-  init(modelContext: ModelContext) {
-    self.modelContext = modelContext
+
+  init() {
+    self.modelContext = ModelContext(ContainerHolder.shared.container)
   }
   
   func collectBiologicalAgeData() async throws -> BiologicalAgeHealthData {
@@ -92,9 +90,9 @@ final class BiologicalAgeController {
     let trend = calculateTrend(current: average, previous: previousSamples, unit: .bpm(), lowerIsBetter: true)
     
     return BiologicalAgeHealthData.CardiovascularHealth.HeartRateMetric(
-      average: HKQuantity(unit: .bpm(), doubleValue: average).displayString(for: .bpm()),
-      min: HKQuantity(unit: .bpm(), doubleValue: min).displayString(for: .bpm()),
-      max: HKQuantity(unit: .bpm(), doubleValue: max).displayString(for: .bpm()),
+      average: await HKQuantity(unit: .bpm(), doubleValue: average).displayString(for: .bpm()),
+      min: await HKQuantity(unit: .bpm(), doubleValue: min).displayString(for: .bpm()),
+      max: await HKQuantity(unit: .bpm(), doubleValue: max).displayString(for: .bpm()),
       trend: trend
     )
   }
@@ -120,7 +118,7 @@ final class BiologicalAgeController {
     
     let unit = HKUnit.secondUnit(with: .milli)
     return BiologicalAgeHealthData.CardiovascularHealth.HRVMetric(
-      average: HKQuantity(unit: unit, doubleValue: average).displayString(for: unit),
+      average: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit),
       trend: trend
     )
   }
@@ -147,7 +145,7 @@ final class BiologicalAgeController {
     let trend = calculateTrend(current: value, previous: previousSamples, unit: unit, lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: unit, doubleValue: value).displayString(for: unit),
+      value: await HKQuantity(unit: unit, doubleValue: value).displayString(for: unit),
       trend: trend
     )
   }
@@ -173,7 +171,7 @@ final class BiologicalAgeController {
     let trend = calculateTrend(current: average, previous: previousSamples, unit: .bpm(), lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: .bpm(), doubleValue: average).displayString(for: .bpm()),
+      value: await HKQuantity(unit: .bpm(), doubleValue: average).displayString(for: .bpm()),
       trend: trend
     )
   }
@@ -246,31 +244,70 @@ final class BiologicalAgeController {
       return calculateSleepTrend(current: currentWake, previous: previousSleepAnalyses.map { $0.awakeSleepMinutes }, lowerIsBetter: true)
     }()
     
+    // Pre-calculate all display strings
+    let durationDisplayString = await HKQuantity(unit: .hour(), doubleValue: averageDuration / 60).displayString(for: .hour())
+
+    let deepSleepDisplayString: String?
+    if let minutes = averageDeepMinutes {
+      deepSleepDisplayString = await HKQuantity(unit: .minute(), doubleValue: minutes).displayString(for: .minute())
+    } else {
+      deepSleepDisplayString = nil
+    }
+
+    let remSleepDisplayString: String?
+    if let minutes = averageRemMinutes {
+      remSleepDisplayString = await HKQuantity(unit: .minute(), doubleValue: minutes).displayString(for: .minute())
+    } else {
+      remSleepDisplayString = nil
+    }
+
+    let wakeDisplayString: String?
+    if let minutes = averageWakeMinutes {
+      wakeDisplayString = await HKQuantity(unit: .minute(), doubleValue: minutes).displayString(for: .minute())
+    } else {
+      wakeDisplayString = nil
+    }
+
     return BiologicalAgeHealthData.SleepMetrics(
       averageSleepDuration: BiologicalAgeHealthData.MetricValue(
-        value: HKQuantity(unit: .hour(), doubleValue: averageDuration / 60).displayString(for: .hour()),
+        value: durationDisplayString,
         trend: durationTrend
       ),
-      averageSleepEfficiency: averageEfficiency.map { 
+      averageSleepEfficiency: averageEfficiency.map {
         BiologicalAgeHealthData.MetricValue(value: String(format: "%.1f%%", $0), trend: efficiencyTrend)
       },
-      averageDeepSleep: averageDeepMinutes.map { minutes in
-        BiologicalAgeHealthData.SleepMetrics.SleepStageMetric(
-          averageMinutes: HKQuantity(unit: .minute(), doubleValue: minutes).displayString(for: .minute()),
-          averagePercentage: String(format: "%.1f%%", deepSleepPercentage ?? 0),
-          trend: deepSleepTrend
-        )
-      },
-      averageRemSleep: averageRemMinutes.map { minutes in
-        BiologicalAgeHealthData.SleepMetrics.SleepStageMetric(
-          averageMinutes: HKQuantity(unit: .minute(), doubleValue: minutes).displayString(for: .minute()),
-          averagePercentage: String(format: "%.1f%%", remSleepPercentage ?? 0),
-          trend: remSleepTrend
-        )
-      },
-      averageWakeMinutes: averageWakeMinutes.map {
-        BiologicalAgeHealthData.MetricValue(value: HKQuantity(unit: .minute(), doubleValue: $0).displayString(for: .minute()), trend: wakeTrend)
-      }
+      averageDeepSleep: {
+        if let displayString = deepSleepDisplayString {
+          return BiologicalAgeHealthData.SleepMetrics.SleepStageMetric(
+            averageMinutes: displayString,
+            averagePercentage: String(format: "%.1f%%", deepSleepPercentage ?? 0),
+            trend: deepSleepTrend
+          )
+        } else {
+          return nil
+        }
+      }(),
+      averageRemSleep: {
+        if let displayString = remSleepDisplayString {
+          return BiologicalAgeHealthData.SleepMetrics.SleepStageMetric(
+            averageMinutes: displayString,
+            averagePercentage: String(format: "%.1f%%", remSleepPercentage ?? 0),
+            trend: remSleepTrend
+          )
+        } else {
+          return nil
+        }
+      }(),
+      averageWakeMinutes: {
+        if let displayString = wakeDisplayString {
+          return BiologicalAgeHealthData.MetricValue(
+            value: displayString,
+            trend: wakeTrend
+          )
+        } else {
+          return nil
+        }
+      }()
     )
   }
   
@@ -325,7 +362,7 @@ final class BiologicalAgeController {
     let trend = calculateSleepTrend(current: averageSteps, previous: [previousAverageSteps], lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: .count(), doubleValue: averageSteps).displayString(for: .count()),
+      value: await HKQuantity(unit: .count(), doubleValue: averageSteps).displayString(for: .count()),
       trend: trend
     )
   }
@@ -355,7 +392,7 @@ final class BiologicalAgeController {
     let trend = calculateSleepTrend(current: averageCalories, previous: [previousAverageCalories], lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: .kilocalorie(), doubleValue: averageCalories).displayString(for: .kilocalorie()),
+      value: await HKQuantity(unit: .kilocalorie(), doubleValue: averageCalories).displayString(for: .kilocalorie()),
       trend: trend
     )
   }
@@ -384,7 +421,7 @@ final class BiologicalAgeController {
     let trend = calculateSleepTrend(current: totalMinutes, previous: [previousTotalMinutes], lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: .minute(), doubleValue: totalMinutes).displayString(for: .minute()),
+      value: await HKQuantity(unit: .minute(), doubleValue: totalMinutes).displayString(for: .minute()),
       trend: trend
     )
   }
@@ -416,7 +453,7 @@ final class BiologicalAgeController {
     let trend = calculateTrend(current: averageSpeed, previous: previousSamples, unit: unit, lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: unit, doubleValue: averageSpeed).displayString(for: unit),
+      value: await HKQuantity(unit: unit, doubleValue: averageSpeed).displayString(for: unit),
       trend: trend
     )
   }
@@ -497,7 +534,7 @@ final class BiologicalAgeController {
     let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: lowerIsBetter)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: unit, doubleValue: average).displayString(for: unit),
+      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit),
       trend: trend
     )
   }
@@ -645,7 +682,7 @@ final class BiologicalAgeController {
     let trend = calculateTrend(current: averageWeight, previous: previousSamples, unit: .pound(), lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: .pound(), doubleValue: averageWeight).displayString(for: .pound()),
+      value: await HKQuantity(unit: .pound(), doubleValue: averageWeight).displayString(for: .pound()),
       trend: trend
     )
   }
@@ -674,7 +711,7 @@ final class BiologicalAgeController {
     let trend = calculateTrend(current: averageBMI, previous: previousSamples, unit: .count(), lowerIsBetter: false)
     
     return BiologicalAgeHealthData.MetricValue(
-      value: HKQuantity(unit: .count(), doubleValue: averageBMI).displayString(for: .count(), showUnits: false) + " kg/m²",
+      value: await HKQuantity(unit: .count(), doubleValue: averageBMI).displayString(for: .count(), showUnits: false) + " kg/m²",
       trend: trend
     )
   }
@@ -727,22 +764,24 @@ final class BiologicalAgeController {
   }
   
   private func fetchBiologicalSex() async -> String? {
-    let healthStore = HKHealthStore()
-    
-    guard HKHealthStore.isHealthDataAvailable() else { return nil }
-    
-    do {
-      let sex = try healthStore.biologicalSex().biologicalSex
-      switch sex {
-      case .male:
-        return "male"
-      case .female:
-        return "female"
-      default:
+    return await MainActor.run {
+      let healthStore = HKHealthStore()
+
+      guard HKHealthStore.isHealthDataAvailable() else { return nil }
+
+      do {
+        let sex = try healthStore.biologicalSex().biologicalSex
+        switch sex {
+        case .male:
+          return "male"
+        case .female:
+          return "female"
+        default:
+          return nil
+        }
+      } catch {
         return nil
       }
-    } catch {
-      return nil
     }
   }
   

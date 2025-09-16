@@ -441,8 +441,8 @@ extension DeveloperSettingsView {
 
         AsyncButton {
           do {
-            let biologicalAgeController = BiologicalAgeController(modelContext: modelContext)
-            let healthData = try await biologicalAgeController.collectBiologicalAgeData()
+            let calculator = BiologicalAgeHealthContextCalculator()
+            let healthData = try await calculator.collectBiologicalAgeData()
             
             let jsonString = try JSONEncoder.aiContext.encodeToString(healthData) ?? "Failed to encode"
             
@@ -462,6 +462,26 @@ extension DeveloperSettingsView {
         } label: {
           LabeledContent("Copy Biological Age Health Context") {
             Image(systemSymbol: .heartTextSquare)
+          }
+          .multilineTextAlignment(.leading)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
+          await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
+          alertDetails = AlertDetails(
+            title: "Biological Age Test",
+            message: "Biological age calculation triggered. Check the logs for results."
+          )
+        } label: {
+          LabeledContent("Test Biological Age ViewModel") {
+            Image(systemSymbol: .brainHeadProfile)
           }
           .multilineTextAlignment(.leading)
           .bold()

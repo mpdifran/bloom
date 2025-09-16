@@ -176,12 +176,25 @@ extension NetworkRequester {
 // MARK: - Today Content
 
 extension NetworkRequester {
-  
+
   func getTodayInsights(request: TodayReportRequest) async throws -> TodayReportResponse {
     let urlRequest = try await URLRequest.AI.getTodayView(body: request)
     return try await URLSession.shared.authenticatedBloomRequestWithResponse(
       request: urlRequest,
       responseType: TodayReportResponse.self
+    )
+  }
+}
+
+// MARK: - Biological Age
+
+extension NetworkRequester {
+
+  func getBiologicalAge(request: BiologicalAgeRequest) async throws -> BiologicalAgeResponse {
+    let urlRequest = try await URLRequest.BiologicalAge.calculate(body: request)
+    return try await URLSession.shared.authenticatedBloomRequestWithResponse(
+      request: urlRequest,
+      responseType: BiologicalAgeResponse.self
     )
   }
 }
