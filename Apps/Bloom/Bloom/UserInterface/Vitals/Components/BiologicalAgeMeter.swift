@@ -43,7 +43,7 @@ struct BiologicalAgeMeter: View {
             from: ageDifference < 0 ? normalizedPosition : centerAngle,
             to: ageDifference < 0 ? centerAngle : normalizedPosition
           )
-          .stroke(progressGradient, style: StrokeStyle(lineWidth: size * 0.16, lineCap: .round))
+          .stroke(progressColor, style: StrokeStyle(lineWidth: size * 0.16, lineCap: .round))
           .rotationEffect(.degrees(90))
           .frame(width: radius * 2, height: radius * 2)
           .shadow(color: progressColor.opacity(0.3), radius: size * 0.02, x: 0, y: size * 0.01)
@@ -120,32 +120,6 @@ private extension BiologicalAgeMeter {
       return .mutedPink
     }
   }
-
-  private var progressGradient: AngularGradient {
-    let noonAngle = Angle.degrees(0) // 12:00 position (before rotation)
-    let endColor: Color
-
-    if abs(ageDifference) < 0.5 {
-      // Neutral - no color gradient
-      endColor = .clear
-    } else if ageDifference < 0 {
-      // Younger biological age - use muted blue
-      endColor = .mutedGreen
-    } else {
-      // Older biological age - use muted pink
-      endColor = .mutedPink
-    }
-
-    // Convert indicator angle to the unrotated coordinate system
-    let targetAngle = indicatorAngle + Angle.degrees(90)
-
-    return AngularGradient(
-      colors: [.clear, endColor],
-      center: .center,
-      startAngle: noonAngle,
-      endAngle: targetAngle
-    )
-  }
 }
 
 #Preview {
@@ -162,6 +136,12 @@ private extension BiologicalAgeMeter {
         .frame(square: dimension)
 
       BiologicalAgeMeter(chronologicalAge: 42, biologicalAge: bioAge)
+        .frame(square: dimension)
+
+      BiologicalAgeMeter(chronologicalAge: 30, biologicalAge: bioAge)
+        .frame(square: dimension)
+
+      BiologicalAgeMeter(chronologicalAge: 60, biologicalAge: bioAge)
         .frame(square: dimension)
 
       BiologicalAgeMeter(chronologicalAge: 42, biologicalAge: nil)
