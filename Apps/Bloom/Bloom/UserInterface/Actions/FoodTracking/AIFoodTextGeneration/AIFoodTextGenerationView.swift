@@ -75,6 +75,9 @@ struct AIFoodTextGenerationView: View {
     .animation(.default, value: viewModel.suggestedServings)
     .animation(.default, value: viewModel.isEstimating)
     .presentationCompactAdaptation(.fullScreenCover)
+    .onAppear {
+      isFocused = true
+    }
   }
 }
 
