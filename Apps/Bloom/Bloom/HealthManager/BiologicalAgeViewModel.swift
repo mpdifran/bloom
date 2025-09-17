@@ -86,6 +86,8 @@ extension BiologicalAgeViewModel {
   }
 
   private func calculateAndStoreBiologicalAge() async {
+    guard EntitlementController.shared.hasBloomPro == true else { return }
+
     isCalculatingAge = true
     lastCalculationError = nil
 

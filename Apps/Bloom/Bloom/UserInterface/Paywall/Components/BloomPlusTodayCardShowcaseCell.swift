@@ -60,6 +60,7 @@ struct BloomPlusTodayCardShowcaseCell: View {
               .fixedSize(horizontal: false, vertical: true)
             Spacer()
           }
+          .foregroundStyle(.white)
           .horizontalAlignment(.leading)
           .cardContainer(
             fill: LinearGradient(
@@ -87,47 +88,6 @@ struct BloomPlusTodayCardShowcaseCell: View {
         selectedIndex = (selectedIndex + 1) % totalCards
       }
     }
-  }
-}
-
-private struct BloomPlusTodayCardShowcaseCard<Content: View>: View {
-  let title: String
-  let message: String
-  let contentBuilder: () -> Content
-
-  init(
-    title: String,
-    message: String,
-    @ViewBuilder contentBuilder: @escaping () -> Content
-  ) {
-    self.title = title
-    self.message = message
-    self.contentBuilder = contentBuilder
-  }
-
-  var body: some View {
-    VStack {
-      contentBuilder()
-
-      Text(title)
-        .font(.headline)
-        .bold()
-        .fontDesign(.rounded)
-        .fixedSize(horizontal: false, vertical: true)
-        .horizontalAlignment(.leading)
-
-      Text(message)
-        .font(.headline)
-        .foregroundStyle(.secondary)
-        .fontDesign(.rounded)
-        .horizontalAlignment(.leading)
-        .fixedSize(horizontal: false, vertical: true)
-        .padding(.bottom, 24)
-
-      Spacer(minLength: 0)
-    }
-    .horizontallyCentered()
-    .cardContainer(cornerRadius: 40)
   }
 }
 

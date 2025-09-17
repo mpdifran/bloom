@@ -14,6 +14,7 @@ struct VitalsView: View {
 
   private let viewModel = VitalsViewModel.shared
   @State private var biologicalAgeViewModel = BiologicalAgeViewModel.shared
+  @StateObject private var entitlementController = EntitlementController.shared
 
   @State private var path = NavigationPath()
   @State private var presentedNavigationDestination: AnyView?
@@ -24,7 +25,6 @@ struct VitalsView: View {
   var body: some View {
     NavigationStack(path: $path) {
       BloomScrollView {
-
         SectionTitleView("Biological Age")
           .padding(.horizontal)
 
@@ -82,36 +82,41 @@ struct VitalsView: View {
 
 private extension VitalsView {
 
+  @ViewBuilder
   var bioAgeMeter: some View {
-    VStack(spacing: 0) {
-      BiologicalAgeMeter(
-        biologicalAge: biologicalAgeViewModel.currentBiologicalAge
-      )
-      .frame(square: 200)
+    if entitlementController.hasBloomPro == true {
+      VStack(spacing: 0) {
+        BiologicalAgeMeter(
+          biologicalAge: biologicalAgeViewModel.currentBiologicalAge
+        )
+        .frame(square: 200)
 
-      Divider()
+        Divider()
 
-      Button {
-        presentedNavigationDestination = BiologicalAgeDetailsView().asAny
-      } label: {
-        HStack {
-          Text("View Details")
-            .bold()
-            .fontDesign(.rounded)
+        Button {
+          presentedNavigationDestination = BiologicalAgeDetailsView().asAny
+        } label: {
+          HStack {
+            Text("View Details")
+              .bold()
+              .fontDesign(.rounded)
 
-          Spacer()
+            Spacer()
 
-          DisclosureIndicator()
+            DisclosureIndicator()
+          }
+          .frame(height: 50)
+          .selectable()
         }
-        .frame(height: 50)
-        .selectable()
+        .buttonStyle(.plain)
       }
-      .buttonStyle(.plain)
+      .horizontallyCentered()
+      .padding(.horizontal)
+      .padding(.top)
+      .cardContainer(includePadding: false)
+    } else {
+      BioAgeMeterGetBloomPlusCell()
     }
-    .horizontallyCentered()
-    .padding(.horizontal)
-    .padding(.top)
-    .cardContainer(includePadding: false)
   }
 }
 

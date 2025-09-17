@@ -115,7 +115,7 @@ private extension BiologicalAgeMeter {
     if abs(ageDifference) < 0.5 {
       return .clear
     } else if ageDifference < 0 {
-      return .mutedBlue
+      return .mutedGreen
     } else {
       return .mutedPink
     }
@@ -130,7 +130,7 @@ private extension BiologicalAgeMeter {
       endColor = .clear
     } else if ageDifference < 0 {
       // Younger biological age - use muted blue
-      endColor = .mutedBlue
+      endColor = .mutedGreen
     } else {
       // Older biological age - use muted pink
       endColor = .mutedPink
