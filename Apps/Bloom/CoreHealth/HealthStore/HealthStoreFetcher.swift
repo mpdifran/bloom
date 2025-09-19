@@ -1053,13 +1053,13 @@ public extension HealthStoreFetcher {
       // Calculate 7-day rolling average ending on this date
       let sevenDayStartDate = Calendar.current.date(byAdding: .day, value: -6, to: dayStart) ?? dayStart
       let sevenDayWindow = Calendar.current.dateCollection(for: DateRange(sevenDayStartDate, dayStart))
-      let sevenDayLoads = sevenDayWindow.compactMap { dailyLoads[$0] }
+      let sevenDayLoads = sevenDayWindow.map { dailyLoads[$0] ?? 0 }
       let sevenDayAvg = sevenDayLoads.isEmpty ? 0 : sevenDayLoads.reduce(0, +) / Double(sevenDayLoads.count)
       
-      // Calculate 28-day rolling average ending on this date  
+      // Calculate 28-day rolling average ending on this date
       let twentyEightDayStartDate = Calendar.current.date(byAdding: .day, value: -27, to: dayStart) ?? dayStart
       let twentyEightDayWindow = Calendar.current.dateCollection(for: DateRange(twentyEightDayStartDate, dayStart))
-      let twentyEightDayLoads = twentyEightDayWindow.compactMap { dailyLoads[$0] }
+      let twentyEightDayLoads = twentyEightDayWindow.map { dailyLoads[$0] ?? 0 }
       let twentyEightDayAvg = twentyEightDayLoads.isEmpty ? 0 : twentyEightDayLoads.reduce(0, +) / Double(twentyEightDayLoads.count)
       
       sevenDayTrend.append(DateValueSample(date: date, value: sevenDayAvg))

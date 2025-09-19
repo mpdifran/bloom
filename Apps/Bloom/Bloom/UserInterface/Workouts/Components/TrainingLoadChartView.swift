@@ -55,33 +55,34 @@ struct TrainingLoadChartView: View {
       }
     }
     .frame(height: 160)
-    .cardContainer(
-      fill: LinearGradient(
-        colors: [.mutedIndigo.opacity(0.1), .mutedIndigo.opacity(0.4)],
-        startPoint: .top,
-        endPoint: .bottom
-      )
-    )
+    .cardContainer(fill: .mutedIndigo.gradient)
     .task {
       await loadTrainingLoadData()
     }
   }
-
 }
 
 private extension TrainingLoadChartView {
 
   func statusHeader(summary: TrainingLoadSummary?) -> some View {
     HStack {
+      Image(systemSymbol: .gaugeOpenWithLinesNeedle33percent)
+        .font(.title3)
+        .foregroundStyle(.mutedIndigo)
+        .frame(square: 30)
+        .padding(6)
+        .background {
+          RoundedRectangle(cornerRadius: 13)
+            .fill(.white)
+        }
+
       VStack(alignment: .leading) {
         Text("Training Load")
           .font(.title3)
           .bold()
-          .fontDesign(.rounded)
 
         Text("7-DAY vs. 28-DAY LOAD")
           .font(.caption)
-          .foregroundStyle(.secondary)
       }
 
       Spacer()
@@ -93,11 +94,11 @@ private extension TrainingLoadChartView {
           Text(String(format: "%+.0f%%", summary.percentageDifference))
         }
         .font(.title3)
-        .fontDesign(.rounded)
-        .fontWeight(.semibold)
-        .foregroundStyle(summary.status.color)
+        .bold()
+        .foregroundStyle(.white)
       }
     }
+    .fontDesign(.rounded)
   }
 
   private func contentView(summary: TrainingLoadSummary) -> some View {
@@ -116,11 +117,13 @@ private extension TrainingLoadChartView {
           )
           .interpolationMethod(.catmullRom)
         }
-        .foregroundStyle(.foreground.secondary.opacity(0.6))
-        .lineStyle(StrokeStyle(lineWidth: 4))
+        .foregroundStyle(.white.opacity(0.5))
+        .lineStyle(StrokeStyle(lineWidth: 6))
 
         // 7-day trend line (primary colored line)
-        ForEach(Array(summary.sevenDayTrend.enumerated()), id: \.offset) { index, point in
+        ForEach(Array(summary.sevenDayTrend.enumerated()), id: \.offset) {
+          index,
+          point in
           let twentyEightDayValue = index < summary.twentyEightDayTrend.count ? summary.twentyEightDayTrend[index].value : 0
           
           LineMark(
@@ -129,7 +132,7 @@ private extension TrainingLoadChartView {
             series: .value("7-day", "7-day Average")
           )
           .interpolationMethod(.catmullRom)
-          .foregroundStyle(.mutedBlue)
+          .foregroundStyle(.white)
           .lineStyle(StrokeStyle(lineWidth: 6))
 
           if point.value > 0 {
@@ -137,11 +140,6 @@ private extension TrainingLoadChartView {
               x: .value("Date", point.date),
               y: .value("7-day Average", point.value)
             )
-            .foregroundStyle(colorForTrainingLoadDifference(
-              sevenDayValue: point.value,
-              twentyEightDayValue: twentyEightDayValue,
-              summary: summary
-            ))
             .symbol {
               Circle()
                 .fill(colorForTrainingLoadDifference(
@@ -149,8 +147,8 @@ private extension TrainingLoadChartView {
                   twentyEightDayValue: twentyEightDayValue,
                   summary: summary
                 ))
-                .strokeBorder(.black, lineWidth: 1)
-                .frame(width: 8, height: 8)
+                .strokeBorder(.white, lineWidth: 0.5)
+                .frame(width: 6, height: 6)
             }
           }
         }
@@ -173,6 +171,7 @@ private extension TrainingLoadChartView {
 
       Spacer()
       ProgressView()
+        .foregroundStyle(.white)
         .horizontallyCentered()
       Spacer()
     }
