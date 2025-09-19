@@ -1014,9 +1014,9 @@ public extension HealthStoreFetcher {
     for date in Calendar.current.dateCollection(for: dateRange) {
       let dayStart = Calendar.current.startOfDay(for: date)
       
-      // Calculate 28-day baseline ending on the previous day
+      // Calculate 7-day baseline ending on the previous day
       let baselineEndDate = Calendar.current.date(byAdding: .day, value: -1, to: dayStart) ?? dayStart
-      let baselineStartDate = Calendar.current.date(byAdding: .day, value: -28, to: baselineEndDate) ?? baselineEndDate
+      let baselineStartDate = Calendar.current.date(byAdding: .day, value: -7, to: baselineEndDate) ?? baselineEndDate
       
       var baselineCalories: [Double] = []
       for baselineDate in Calendar.current.dateCollection(for: DateRange(baselineStartDate, baselineEndDate)) {
@@ -1030,9 +1030,9 @@ public extension HealthStoreFetcher {
       // Get today's active calories
       let todayCalories = caloriesByDate[dayStart] ?? 0
       
-      // Calculate all-day adjustment (positive deviations only)
+      // Calculate all-day adjustment (both positive and negative deviations)
       // Scaling factor of 2.0 to balance with workout loads
-      let allDayAdjustment = max(0, (todayCalories - baseline) / 2.0)
+      let allDayAdjustment = (todayCalories - baseline) / 2.0
       
       // Add all-day adjustment to existing workout load
       dailyLoads[dayStart, default: 0] += allDayAdjustment

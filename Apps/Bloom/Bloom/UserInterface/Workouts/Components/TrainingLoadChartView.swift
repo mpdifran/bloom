@@ -135,21 +135,19 @@ private extension TrainingLoadChartView {
           .foregroundStyle(.white)
           .lineStyle(StrokeStyle(lineWidth: 6))
 
-          if point.value > 0 {
-            PointMark(
-              x: .value("Date", point.date),
-              y: .value("7-day Average", point.value)
-            )
-            .symbol {
-              Circle()
-                .fill(colorForTrainingLoadDifference(
-                  sevenDayValue: point.value,
-                  twentyEightDayValue: twentyEightDayValue,
-                  summary: summary
-                ))
-                .strokeBorder(.white, lineWidth: 0.5)
-                .frame(width: 6, height: 6)
-            }
+          PointMark(
+            x: .value("Date", point.date),
+            y: .value("7-day Average", point.value)
+          )
+          .symbol {
+            Circle()
+              .fill(colorForTrainingLoadDifference(
+                sevenDayValue: point.value,
+                twentyEightDayValue: twentyEightDayValue,
+                summary: summary
+              ))
+              .strokeBorder(.white, lineWidth: 0.5)
+              .frame(width: 6, height: 6)
           }
         }
       }
