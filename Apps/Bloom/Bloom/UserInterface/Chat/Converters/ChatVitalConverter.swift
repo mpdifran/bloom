@@ -80,7 +80,7 @@ extension ChatVitalConverter {
     let height = await HealthManager.shared.height()
     let focus = await HealthManager.shared.focus
     let workoutEquipment = Array(await HealthManager.shared.selectedWorkoutEquipment)
-    
+
     // Fetch user facts
     let userFactModelActor = UserFactModelActor.standard()
     let userFactDTOs = try? await userFactModelActor.fetchAllUserFacts()
@@ -96,10 +96,16 @@ extension ChatVitalConverter {
     // Fetch location
     let locationString = await LocationManagerViewModel.shared.locationString()
 
+    let heightString: String? = await {
+      guard height.doubleValue(for: .meterUnit(with: .centi)) > 0 else { return nil }
+      let heightUnit = await HKUnit.meterUnit(with: .centi).localizedUnit()
+      return await height.displayString(for: heightUnit, formatter: .oneDecimalPlace)
+    }()
+
     return HealthVitalData.UserInfo(
       age: age,
       sex: sex,
-      height: height.doubleValue(for: .meterUnit(with: .centi)) > 0 ? height.chatQuantity(for: .meterUnit(with: .centi), numberFormatter: .oneDecimalPlace) : nil,
+      height: heightString,
       focus: focus.isNotEmpty ? focus : nil,
       currentDate: DateFormatter.dateTimeMediumWithTimeZone.string(from: .now),
       timeZone: TimeZone.current.identifier,

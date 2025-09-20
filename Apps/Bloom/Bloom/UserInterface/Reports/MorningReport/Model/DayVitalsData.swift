@@ -17,4 +17,7 @@ struct DayVitalsData: SendableNetworkModel {
   let stress: StressData?
   let exercise: ExerciseData?
   let trainingLoad: TrainingLoadData?
+  let mindfulness: MetricWithTrend?
+  let menstrualHealth: MenstrualHealthData?
+  let digestiveHealth: DigestiveHealthData?
 }

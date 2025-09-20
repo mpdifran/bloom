@@ -18,8 +18,8 @@ struct NutritionData: SendableNetworkModel {
   let fiber: String?
   let sugar: String?
   let sodium: String?
-  let water: String?
-  
+  let hydration: MetricWithTrend?
+
   let meals: [MealData]
 }
 

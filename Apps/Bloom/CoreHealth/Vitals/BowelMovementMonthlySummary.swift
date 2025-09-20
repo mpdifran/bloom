@@ -30,7 +30,7 @@ public extension BowelMovementMonthlySummary {
     case good
     case excellent
 
-    var name: String {
+    public var name: String {
       switch self {
       case .poor:
         "Poor"

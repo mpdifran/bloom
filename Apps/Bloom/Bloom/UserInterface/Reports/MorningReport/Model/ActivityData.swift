@@ -8,10 +8,10 @@
 import Foundation
 
 struct ActivityData: SendableNetworkModel {
-  let basalEnergyBurned: String
-  let activeEnergyBurned: String
-  let totalEnergyBurned: String
-  let steps: String?
-  let walkingDistance: String?
-  let timeInDaylight: String?
+  let basalEnergyBurned: MetricWithTrend
+  let activeEnergyBurned: MetricWithTrend
+  let totalEnergyBurned: MetricWithTrend
+  let steps: MetricWithTrend?
+  let walkingDistance: MetricWithTrend?
+  let timeInDaylight: MetricWithTrend?
 }

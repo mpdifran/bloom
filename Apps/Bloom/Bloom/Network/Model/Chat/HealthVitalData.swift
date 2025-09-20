@@ -387,7 +387,7 @@ extension HealthVitalData {
   struct UserInfo: SendableNetworkModel {
     let age: Int?
     let sex: String?
-    let height: Quantity?
+    let height: String?
     let focus: String?
     let currentDate: String
     let timeZone: String

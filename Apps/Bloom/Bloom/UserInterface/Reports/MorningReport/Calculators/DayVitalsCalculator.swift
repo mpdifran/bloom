@@ -37,8 +37,11 @@ extension DayVitalsCalculator {
     async let stress = generateStressData(for: date)
     async let exercise = generateExerciseData(for: date)
     async let trainingLoad = generateTrainingLoadData(for: date)
-    
-    let (activityResult, bodyCompositionResult, heartHealthResult, nutritionResult, sleepResult, stressResult, exerciseResult, trainingLoadResult) = await (
+    async let mindfulness = generateMindfulnessData(for: date)
+    async let menstrualHealth = generateMenstrualHealthData(for: date)
+    async let digestiveHealth = generateDigestiveHealthData(for: date)
+
+    let (activityResult, bodyCompositionResult, heartHealthResult, nutritionResult, sleepResult, stressResult, exerciseResult, trainingLoadResult, mindfulnessResult, menstrualHealthResult, digestiveHealthResult) = await (
       activity,
       bodyComposition,
       heartHealth,
@@ -46,9 +49,12 @@ extension DayVitalsCalculator {
       sleep,
       stress,
       exercise,
-      trainingLoad
+      trainingLoad,
+      mindfulness,
+      menstrualHealth,
+      digestiveHealth
     )
-    
+
     return DayVitalsData(
       date: date,
       activity: activityResult,
@@ -58,7 +64,10 @@ extension DayVitalsCalculator {
       sleep: sleepResult,
       stress: stressResult,
       exercise: exerciseResult,
-      trainingLoad: trainingLoadResult
+      trainingLoad: trainingLoadResult,
+      mindfulness: mindfulnessResult,
+      menstrualHealth: menstrualHealthResult,
+      digestiveHealth: digestiveHealthResult
     )
   }
 }
@@ -68,33 +77,111 @@ private extension DayVitalsCalculator {
   
   func generateActivityData(for date: Date) async -> ActivityData? {
     let dateRange = DateRange.duringDay(date)
-    
+    let previousWeekRange = DateRange.trailingDays(from: date, numberOfDays: 7)
+
+    // Fetch current day data
     async let basalEnergy = HealthStoreFetcher.shared.fetchTotalQuantity(for: .basalEnergyBurned, dateRange: dateRange)
     async let activeEnergy = HealthStoreFetcher.shared.fetchTotalQuantity(for: .activeEnergyBurned, dateRange: dateRange)
     async let steps = HealthStoreFetcher.shared.fetchTotalQuantity(for: .stepCount, dateRange: dateRange)
     async let walkingDistance = HealthStoreFetcher.shared.fetchTotalQuantity(for: .distanceWalkingRunning, dateRange: dateRange)
     async let timeInDaylight = HealthStoreFetcher.shared.fetchTotalQuantity(for: .timeInDaylight, dateRange: dateRange)
-    
-    let (basalResult, activeResult, stepsResult, walkingResult, daylightResult) = await (
-      basalEnergy,
-      activeEnergy,
-      steps,
-      walkingDistance,
-      timeInDaylight
+
+    // Fetch previous week data for trends
+    async let previousBasalEnergy = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .basalEnergyBurned, unit: .largeCalorie(), dateRange: previousWeekRange)
+    async let previousActiveEnergy = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .activeEnergyBurned, unit: .largeCalorie(), dateRange: previousWeekRange)
+    async let previousSteps = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .stepCount, unit: .count(), dateRange: previousWeekRange)
+    async let previousWalkingDistance = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .distanceWalkingRunning, unit: .mile(), dateRange: previousWeekRange)
+    async let previousTimeInDaylight = HealthStoreFetcher.shared.fetchCollatedQuantity(for: .timeInDaylight, unit: .minute(), dateRange: previousWeekRange)
+
+    let (basalResult, activeResult, stepsResult, walkingResult, daylightResult, prevBasal, prevActive, prevSteps, prevWalking, prevDaylight) = await (
+      basalEnergy, activeEnergy, steps, walkingDistance, timeInDaylight,
+      previousBasalEnergy, previousActiveEnergy, previousSteps, previousWalkingDistance, previousTimeInDaylight
     )
-    
+
     guard let basal = basalResult, let active = activeResult else { return nil }
-    
+
     let totalEnergy = basal.sum(active, unit: .largeCalorie())
-    
-    return ActivityData(
-      basalEnergyBurned: await basal.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces),
-      activeEnergyBurned: await active.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces),
-      totalEnergyBurned: await totalEnergy.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces),
-      steps: await stepsResult?.displayString(for: .count(), formatter: .noDecimalPlaces),
-      walkingDistance: await walkingResult?.displayString(for: .mile(), formatter: .oneDecimalPlace),
-      timeInDaylight: await daylightResult?.displayString(for: .minute(), formatter: .noDecimalPlaces)
+
+    // Create metrics with trends
+    let basalMetric = await createMetricWithTrend(
+      current: basal,
+      unit: .largeCalorie(),
+      previous: prevBasal.map { $0.quantity },
+      formatter: .noDecimalPlaces
     )
+
+    let activeMetric = await createMetricWithTrend(
+      current: active,
+      unit: .largeCalorie(),
+      previous: prevActive.map { $0.quantity },
+      formatter: .noDecimalPlaces
+    )
+
+    let totalMetric = await createMetricWithTrend(
+      current: totalEnergy,
+      unit: .largeCalorie(),
+      previous: prevBasal.compactMap { basalSample in
+        prevActive.first { Calendar.current.isDate($0.date, inSameDayAs: basalSample.date) }
+          .map { activeSample in basalSample.quantity.sum(activeSample.quantity, unit: .largeCalorie()) }
+      },
+      formatter: .noDecimalPlaces
+    )
+
+    let stepsMetric: MetricWithTrend? = if let stepsResult {
+      await createMetricWithTrend(
+        current: stepsResult,
+        unit: .count(),
+        previous: prevSteps.map { $0.quantity },
+        formatter: .noDecimalPlaces
+      )
+    } else {
+      nil
+    }
+
+    let walkingMetric: MetricWithTrend? = if let walkingResult {
+      await createMetricWithTrend(
+        current: walkingResult,
+        unit: .mile(),
+        previous: prevWalking.map { $0.quantity },
+        formatter: .oneDecimalPlace
+      )
+    } else {
+      nil
+    }
+
+    let daylightMetric: MetricWithTrend? = if let daylightResult {
+      await createMetricWithTrend(
+        current: daylightResult,
+        unit: .minute(),
+        previous: prevDaylight.map { $0.quantity },
+        formatter: .noDecimalPlaces
+      )
+    } else {
+      nil
+    }
+
+    return ActivityData(
+      basalEnergyBurned: basalMetric,
+      activeEnergyBurned: activeMetric,
+      totalEnergyBurned: totalMetric,
+      steps: stepsMetric,
+      walkingDistance: walkingMetric,
+      timeInDaylight: daylightMetric
+    )
+  }
+
+  private func createMetricWithTrend(
+    current: HKQuantity,
+    unit: HKUnit,
+    previous: [HKQuantity],
+    formatter: NumberFormatter
+  ) async -> MetricWithTrend {
+    let value = await current.displayString(for: unit, formatter: formatter)
+    let currentValue = current.doubleValue(for: unit)
+    let previousValues = previous.map { $0.doubleValue(for: unit) }
+    let trend = TrendCalculator.calculateTrend(current: currentValue, previous: previousValues)
+
+    return MetricWithTrend(value: value, trend: trend)
   }
 }
 
@@ -204,7 +291,7 @@ private extension DayVitalsCalculator {
     
     guard caloriesResult != nil || meals.isNotEmpty else { return nil }
     
-    return NutritionData(
+    return await NutritionData(
       totalCalories: await caloriesResult?.displayString(for: .largeCalorie(), formatter: .noDecimalPlaces) ?? "0 cal",
       protein: await proteinResult?.displayString(for: .gram(), formatter: .noDecimalPlaces),
       carbohydrates: await carbsResult?.displayString(for: .gram(), formatter: .noDecimalPlaces),
@@ -213,7 +300,17 @@ private extension DayVitalsCalculator {
       fiber: await fiberResult?.displayString(for: .gram(), formatter: .noDecimalPlaces),
       sugar: await sugarResult?.displayString(for: .gram(), formatter: .noDecimalPlaces),
       sodium: await sodiumResult?.displayString(for: .gramUnit(with: .milli), formatter: .noDecimalPlaces),
-      water: await waterResult?.displayString(for: .literUnit(with: .milli), formatter: .noDecimalPlaces),
+      hydration: {
+        guard let waterResult = waterResult else { return nil }
+        let previousWeekRange = DateRange.trailingDays(from: date, numberOfDays: 7)
+        let previousWater = await HealthStoreFetcher.shared.fetchCollatedQuantity(for: .dietaryWater, unit: .literUnit(with: .milli), dateRange: previousWeekRange)
+        return await createMetricWithTrend(
+          current: waterResult,
+          unit: .literUnit(with: .milli),
+          previous: previousWater.map { $0.quantity },
+          formatter: .oneDecimalPlace
+        )
+      }(),
       meals: meals
     )
   }
@@ -476,5 +573,195 @@ private extension DayVitalsCalculator {
       percentageDifference: trainingLoadSummary.map { String(format: "%.0f", $0.percentageDifference) },
       trainingLoadStatus: trainingLoadSummary?.status.rawValue
     )
+  }
+}
+
+// MARK: - New Health Metrics
+private extension DayVitalsCalculator {
+
+  func generateMindfulnessData(for date: Date) async -> MetricWithTrend? {
+    let dateRange = DateRange.duringDay(date)
+    let previousWeekRange = DateRange.trailingDays(from: date, numberOfDays: 7)
+
+    // Fetch mindful sessions for the day
+    let mindfulSessions = await HealthStoreFetcher.shared.fetchSamples(
+      for: HKCategoryType(.mindfulSession),
+      dateRange: dateRange
+    ).compactMap { $0 as? HKCategorySample }
+
+    guard !mindfulSessions.isEmpty else { return nil }
+
+    // Calculate total mindfulness minutes for the day
+    let totalMinutes = mindfulSessions.reduce(0.0) { total, session in
+      total + session.endDate.timeIntervalSince(session.startDate) / 60.0
+    }
+
+    // Fetch previous week data for trend
+    let previousSessions = await HealthStoreFetcher.shared.fetchSamples(
+      for: HKCategoryType(.mindfulSession),
+      dateRange: previousWeekRange
+    ).compactMap { $0 as? HKCategorySample }
+
+    // Calculate daily averages for previous week
+    var dailyMinutes: [Double] = []
+    Calendar.current.iterate(dateRange: previousWeekRange, by: DateComponents(day: 1)) { iterDate in
+      let dayMinutes = previousSessions
+        .filter { Calendar.current.isDate($0.startDate, inSameDayAs: iterDate) }
+        .reduce(0.0) { total, session in
+          total + session.endDate.timeIntervalSince(session.startDate) / 60.0
+        }
+      if dayMinutes > 0 {
+        dailyMinutes.append(dayMinutes)
+      }
+    }
+
+    let value = await HKQuantity(unit: .minute(), doubleValue: totalMinutes)
+      .displayString(for: .minute(), formatter: .noDecimalPlaces)
+    let trend = TrendCalculator.calculateTrend(current: totalMinutes, previous: dailyMinutes)
+
+    return MetricWithTrend(value: value, trend: trend)
+  }
+
+  func generateMenstrualHealthData(for date: Date) async -> MenstrualHealthData? {
+    // Get menstrual health data from past month
+    guard let monthAgo = Calendar.current.date(byAdding: .month, value: -1, to: date) else { return nil }
+    let dateRange = DateRange(monthAgo, date)
+
+    let cycles = await HealthStoreFetcher.shared.fetchMenstrualFlowSamples(dateRange: dateRange)
+    guard !cycles.isEmpty else { return nil }
+
+    // Find current cycle
+    let sortedCycles = cycles.sorted { $0.startDate > $1.startDate }
+    guard let currentCycle = sortedCycles.first else { return nil }
+
+    // Calculate days since last period
+    let daysSinceLastPeriod = Calendar.current.dateComponents([.day], from: currentCycle.startDate, to: date).day ?? 0
+
+    // Estimate cycle phase
+    let cyclePhase: String?
+    let dayInCycle = daysSinceLastPeriod + 1
+
+    switch dayInCycle {
+    case 1...5:
+      cyclePhase = "menstrual"
+    case 6...12:
+      cyclePhase = "follicular"
+    case 13...16:
+      cyclePhase = "ovulatory"
+    case 17...28:
+      cyclePhase = "luteal"
+    default:
+      cyclePhase = nil
+    }
+
+    // Calculate average cycle length if we have multiple cycles
+    let averageCycleLength: MetricWithTrend?
+    if cycles.count >= 2 {
+      let cycleLengths = cycles.dropFirst().enumerated().compactMap { index, cycle in
+        let nextCycle = cycles[index]
+        return Calendar.current.dateComponents([.day], from: cycle.startDate, to: nextCycle.startDate).day
+      }
+
+      if !cycleLengths.isEmpty {
+        let currentLength = cycleLengths.last ?? 28
+        let previousLengths = Array(cycleLengths.dropLast())
+        let lengthValue = "\(currentLength) days"
+        let trend = TrendCalculator.calculateTrend(current: currentLength, previous: previousLengths)
+        averageCycleLength = MetricWithTrend(value: lengthValue, trend: trend)
+      } else {
+        averageCycleLength = nil
+      }
+    } else {
+      averageCycleLength = nil
+    }
+
+    // Predict next period (assuming 28-day cycle as default)
+    let estimatedCycleLength = averageCycleLength != nil ? Int(averageCycleLength!.value.components(separatedBy: " ").first ?? "28") ?? 28 : 28
+    let daysUntilNextPeriod = estimatedCycleLength - dayInCycle
+    let predictedNextPeriod = daysUntilNextPeriod > 0 ? "in \(daysUntilNextPeriod) days" : nil
+
+    return MenstrualHealthData(
+      currentCyclePhase: cyclePhase,
+      dayInCycle: dayInCycle,
+      daysSinceLastPeriod: daysSinceLastPeriod,
+      averageCycleLength: averageCycleLength,
+      predictedNextPeriod: predictedNextPeriod
+    )
+  }
+
+  func generateDigestiveHealthData(for date: Date) async -> DigestiveHealthData? {
+    let dateRange = DateRange.duringDay(date)
+    let previousWeekRange = DateRange.trailingDays(from: date, numberOfDays: 7)
+
+    // Fetch yesterday's bowel movements
+    do {
+      let yesterdayMovements = try await bowelMovementModelActor.fetchBowelMovements(dateRange: dateRange)
+
+      // Convert to samples for API
+      let movementSamples = yesterdayMovements.map { movement in
+        BowelMovementSample(
+          time: DateFormatter.justTimeShort.string(from: movement.date),
+          bristolScore: movement.bristolStoolType,
+          duration: movement.duration.name
+        )
+      }
+
+      // Fetch previous week data for trends
+      let previousMovements = try await bowelMovementModelActor.fetchBowelMovements(dateRange: previousWeekRange)
+
+      // Calculate daily movement counts for trend
+      var dailyCounts: [Int] = []
+      Calendar.current.iterate(dateRange: previousWeekRange, by: DateComponents(day: 1)) { iterDate in
+        let dayCount = previousMovements.filter { Calendar.current.isDate($0.date, inSameDayAs: iterDate) }.count
+        dailyCounts.append(dayCount)
+      }
+
+      let avgDailyMovements: MetricWithTrend?
+      if !dailyCounts.isEmpty {
+        let average = Double(dailyCounts.reduce(0, +)) / Double(dailyCounts.count)
+        let value = String(format: "%.1f/day", average)
+        let trend = TrendCalculator.calculateTrend(current: yesterdayMovements.count, previous: dailyCounts)
+        avgDailyMovements = MetricWithTrend(value: value, trend: trend)
+      } else {
+        avgDailyMovements = nil
+      }
+
+      // Calculate regularity score based on BowelMovementMonthlySummary logic
+      let monthlyMovements = try await bowelMovementModelActor.fetchBowelMovements(
+        dateRange: DateRange.trailingDays(from: date, numberOfDays: 30)
+      )
+      let summary = BowelMovementMonthlySummary(bowelMovements: monthlyMovements)
+
+      let regularityScore: MetricWithTrend?
+      if let rating = summary.rating {
+        let scoreValue = rating.name
+        // For simplicity, we won't calculate regularity trend for now
+        regularityScore = MetricWithTrend(value: scoreValue)
+      } else {
+        regularityScore = nil
+      }
+
+      // Days since last movement
+      let daysSinceLastMovement: Int?
+      if yesterdayMovements.isEmpty {
+        if let lastMovement = monthlyMovements.sorted(by: { $0.date > $1.date }).first {
+          daysSinceLastMovement = Calendar.current.dateComponents([.day], from: lastMovement.date, to: date).day
+        } else {
+          daysSinceLastMovement = nil
+        }
+      } else {
+        daysSinceLastMovement = nil
+      }
+
+      return DigestiveHealthData(
+        yesterdayMovements: movementSamples,
+        averageDailyMovements: avgDailyMovements,
+        regularityScore: regularityScore,
+        daysSinceLastMovement: daysSinceLastMovement
+      )
+
+    } catch {
+      return nil
+    }
   }
 }
