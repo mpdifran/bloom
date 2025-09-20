@@ -23,20 +23,22 @@ actor BiologicalAgeHealthContextCalculator {
   
   func collectBiologicalAgeData() async throws -> BiologicalAgeHealthData {
     let dateRange = DateRange.trailingDaysFromNow(7)
-    
+
     async let cardiovascular = fetchCardiovascularHealth(dateRange: dateRange)
     async let sleep = fetchSleepMetrics(dateRange: dateRange)
     async let activity = fetchActivityMetrics(dateRange: dateRange)
+    async let mobility = fetchMobilityMetrics(dateRange: dateRange)
     async let nutrition = fetchNutritionMetrics(dateRange: dateRange)
     async let body = fetchBodyMetrics()
     async let recovery = fetchRecoveryIndicators(dateRange: dateRange)
     async let sex = fetchBiologicalSex()
-    
+
     return BiologicalAgeHealthData(
       sevenDayAverage: BiologicalAgeHealthData.SevenDayAverage(
         cardiovascular: await cardiovascular,
         sleep: await sleep,
         activity: await activity,
+        mobility: await mobility,
         nutrition: await nutrition,
         bodyComposition: await body,
         recovery: await recovery
@@ -312,60 +314,25 @@ actor BiologicalAgeHealthContextCalculator {
   }
   
   private func fetchActivityMetrics(dateRange: DateRange) async -> BiologicalAgeHealthData.ActivityMetrics? {
-    async let steps = fetchDailySteps(dateRange: dateRange)
     async let activeEnergy = fetchActiveEnergy(dateRange: dateRange)
     async let exerciseMinutes = fetchExerciseMinutes(dateRange: dateRange)
     async let workouts = fetchWorkoutCount(dateRange: dateRange)
-    async let walkingSpeed = fetchWalkingSpeed(dateRange: dateRange)
-    
-    let stepsResult = await steps
+
     let activeEnergyResult = await activeEnergy
     let exerciseMinutesResult = await exerciseMinutes
     let workoutsResult = await workouts
-    let walkingSpeedResult = await walkingSpeed
-    
-    guard stepsResult != nil || activeEnergyResult != nil || exerciseMinutesResult != nil || workoutsResult != nil || walkingSpeedResult != nil else {
+
+    guard activeEnergyResult != nil || exerciseMinutesResult != nil || workoutsResult != nil else {
       return nil
     }
-    
+
     return BiologicalAgeHealthData.ActivityMetrics(
-      averageDailySteps: stepsResult,
       averageActiveEnergy: activeEnergyResult,
       totalExerciseMinutes: exerciseMinutesResult,
-      totalWorkoutCount: workoutsResult,
-      averageWalkingSpeed: walkingSpeedResult
+      totalWorkoutCount: workoutsResult
     )
   }
   
-  private func fetchDailySteps(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
-    let samples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .stepCount,
-      unit: .count(),
-      dateRange: dateRange
-    )
-    
-    guard !samples.isEmpty else { return nil }
-    
-    let dailySteps = samples.map { $0.quantity.doubleValue(for: .count()) }
-    let averageSteps = dailySteps.reduce(0, +) / Double(dailySteps.count)
-    
-    // Fetch previous week for trend calculation
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .stepCount,
-      unit: .count(),
-      dateRange: previousWeekRange
-    )
-    
-    let previousSteps = previousSamples.map { $0.quantity.doubleValue(for: .count()) }
-    let previousAverageSteps = previousSteps.isEmpty ? 0 : previousSteps.reduce(0, +) / Double(previousSteps.count)
-    let trend = calculateSleepTrend(current: averageSteps, previous: [previousAverageSteps], lowerIsBetter: false)
-    
-    return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: .count(), doubleValue: averageSteps).displayString(for: .count()),
-      trend: trend
-    )
-  }
   
   private func fetchActiveEnergy(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
     let samples = await healthStoreFetcher.fetchCollatedQuantity(
@@ -431,33 +398,227 @@ actor BiologicalAgeHealthContextCalculator {
     return workouts.isEmpty ? nil : workouts.count
   }
   
+  private func fetchMobilityMetrics(dateRange: DateRange) async -> BiologicalAgeHealthData.MobilityMetrics? {
+    async let walkingSteadiness = fetchWalkingSteadiness(dateRange: dateRange)
+    async let walkingSpeed = fetchWalkingSpeed(dateRange: dateRange)
+    async let doubleSupportPercentage = fetchDoubleSupportPercentage(dateRange: dateRange)
+    async let walkingAsymmetry = fetchWalkingAsymmetryPercentage(dateRange: dateRange)
+    async let sixMinuteWalk = fetchSixMinuteWalkDistance(dateRange: dateRange)
+    async let stairAscentSpeed = fetchStairAscentSpeed(dateRange: dateRange)
+    async let stairDescentSpeed = fetchStairDescentSpeed(dateRange: dateRange)
+
+    let walkingSteadinessResult = await walkingSteadiness
+    let walkingSpeedResult = await walkingSpeed
+    let doubleSupportResult = await doubleSupportPercentage
+    let walkingAsymmetryResult = await walkingAsymmetry
+    let sixMinuteWalkResult = await sixMinuteWalk
+    let stairAscentResult = await stairAscentSpeed
+    let stairDescentResult = await stairDescentSpeed
+
+    guard walkingSteadinessResult != nil || walkingSpeedResult != nil || doubleSupportResult != nil ||
+          walkingAsymmetryResult != nil || sixMinuteWalkResult != nil ||
+          stairAscentResult != nil || stairDescentResult != nil else {
+      return nil
+    }
+
+    return BiologicalAgeHealthData.MobilityMetrics(
+      walkingSteadiness: walkingSteadinessResult,
+      walkingSpeed: walkingSpeedResult,
+      doubleSupportPercentage: doubleSupportResult,
+      walkingAsymmetryPercentage: walkingAsymmetryResult,
+      sixMinuteWalkDistance: sixMinuteWalkResult,
+      stairAscentSpeed: stairAscentResult,
+      stairDescentSpeed: stairDescentResult
+    )
+  }
+
+  private func fetchWalkingSteadiness(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
+    let samples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.appleWalkingSteadiness),
+      dateRange: dateRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    guard !samples.isEmpty else { return nil }
+
+    let values = samples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
+    let average = values.reduce(0, +) / Double(values.count)
+
+    let previousWeekRange = DateRange.previousWeek(from: dateRange)
+    let previousSamples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.appleWalkingSteadiness),
+      dateRange: previousWeekRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
+    let previousAverage = previousValues.isEmpty ? 0 : previousValues.reduce(0, +) / Double(previousValues.count)
+    let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: false)
+
+    return BiologicalAgeHealthData.MetricValue(
+      value: String(format: "%.1f%%", average),
+      trend: trend
+    )
+  }
+
   private func fetchWalkingSpeed(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
     let samples = await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.walkingSpeed),
       dateRange: dateRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let speeds = samples.map { $0.quantity.doubleValue(for: .meter().unitDivided(by: .second())) }
     let averageSpeed = speeds.reduce(0, +) / Double(speeds.count)
-    
+
     // Fetch previous week for trend calculation
     let previousWeekRange = DateRange.previousWeek(from: dateRange)
     let previousSamples = await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.walkingSpeed),
       dateRange: previousWeekRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     let unit = HKUnit.meter().unitDivided(by: .second())
     let trend = calculateTrend(current: averageSpeed, previous: previousSamples, unit: unit, lowerIsBetter: false)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: unit, doubleValue: averageSpeed).displayString(for: unit),
+      value: await HKQuantity(unit: unit, doubleValue: averageSpeed).displayString(for: unit, formatter: .twoDecimalPlaces),
       trend: trend
     )
   }
-  
+
+  private func fetchDoubleSupportPercentage(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
+    let samples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.walkingDoubleSupportPercentage),
+      dateRange: dateRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    guard !samples.isEmpty else { return nil }
+
+    let values = samples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
+    let average = values.reduce(0, +) / Double(values.count)
+
+    let previousWeekRange = DateRange.previousWeek(from: dateRange)
+    let previousSamples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.walkingDoubleSupportPercentage),
+      dateRange: previousWeekRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
+    let previousAverage = previousValues.isEmpty ? 0 : previousValues.reduce(0, +) / Double(previousValues.count)
+    // Lower double support percentage is better (indicates better balance)
+    let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: true)
+
+    return BiologicalAgeHealthData.MetricValue(
+      value: String(format: "%.1f%%", average),
+      trend: trend
+    )
+  }
+
+  private func fetchWalkingAsymmetryPercentage(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
+    let samples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.walkingAsymmetryPercentage),
+      dateRange: dateRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    guard !samples.isEmpty else { return nil }
+
+    let values = samples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
+    let average = values.reduce(0, +) / Double(values.count)
+
+    let previousWeekRange = DateRange.previousWeek(from: dateRange)
+    let previousSamples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.walkingAsymmetryPercentage),
+      dateRange: previousWeekRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
+    let previousAverage = previousValues.isEmpty ? 0 : previousValues.reduce(0, +) / Double(previousValues.count)
+    // Lower asymmetry is better
+    let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: true)
+
+    return BiologicalAgeHealthData.MetricValue(
+      value: String(format: "%.1f%%", average),
+      trend: trend
+    )
+  }
+
+  private func fetchSixMinuteWalkDistance(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
+    let samples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.sixMinuteWalkTestDistance),
+      dateRange: dateRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    guard !samples.isEmpty else { return nil }
+
+    let distances = samples.map { $0.quantity.doubleValue(for: .meter()) }
+    let average = distances.reduce(0, +) / Double(distances.count)
+
+    let previousWeekRange = DateRange.previousWeek(from: dateRange)
+    let previousSamples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.sixMinuteWalkTestDistance),
+      dateRange: previousWeekRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    let trend = calculateTrend(current: average, previous: previousSamples, unit: .meter(), lowerIsBetter: false)
+
+    return BiologicalAgeHealthData.MetricValue(
+      value: await HKQuantity(unit: .meter(), doubleValue: average).displayString(for: .meter()),
+      trend: trend
+    )
+  }
+
+  private func fetchStairAscentSpeed(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
+    let samples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.stairAscentSpeed),
+      dateRange: dateRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    guard !samples.isEmpty else { return nil }
+
+    let speeds = samples.map { $0.quantity.doubleValue(for: .meter().unitDivided(by: .second())) }
+    let average = speeds.reduce(0, +) / Double(speeds.count)
+
+    let previousWeekRange = DateRange.previousWeek(from: dateRange)
+    let previousSamples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.stairAscentSpeed),
+      dateRange: previousWeekRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    let unit = HKUnit.meter().unitDivided(by: .second())
+    let trend = calculateTrend(current: average, previous: previousSamples, unit: unit, lowerIsBetter: false)
+
+    return BiologicalAgeHealthData.MetricValue(
+      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit, formatter: .twoDecimalPlaces),
+      trend: trend
+    )
+  }
+
+  private func fetchStairDescentSpeed(dateRange: DateRange) async -> BiologicalAgeHealthData.MetricValue? {
+    let samples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.stairDescentSpeed),
+      dateRange: dateRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    guard !samples.isEmpty else { return nil }
+
+    let speeds = samples.map { $0.quantity.doubleValue(for: .meter().unitDivided(by: .second())) }
+    let average = speeds.reduce(0, +) / Double(speeds.count)
+
+    let previousWeekRange = DateRange.previousWeek(from: dateRange)
+    let previousSamples = await healthStoreFetcher.fetchSamples(
+      for: HKQuantityType(.stairDescentSpeed),
+      dateRange: previousWeekRange
+    ).compactMap { $0 as? HKQuantitySample }
+
+    let unit = HKUnit.meter().unitDivided(by: .second())
+    let trend = calculateTrend(current: average, previous: previousSamples, unit: unit, lowerIsBetter: false)
+
+    return BiologicalAgeHealthData.MetricValue(
+      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit, formatter: .twoDecimalPlaces),
+      trend: trend
+    )
+  }
+
   private func fetchNutritionMetrics(dateRange: DateRange) async -> BiologicalAgeHealthData.NutritionMetrics? {
     async let calories = fetchNutrientAverage(type: .dietaryEnergyConsumed, dateRange: dateRange, unit: .kilocalorie())
     async let protein = fetchNutrientAverage(type: .dietaryProtein, dateRange: dateRange, unit: .gram())

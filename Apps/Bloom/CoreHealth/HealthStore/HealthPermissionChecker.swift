@@ -136,11 +136,18 @@ public final class HealthPermissionChecker: Sendable {
   public let otherTypes: Set<HKObjectType> = [
     HKQuantityType(.timeInDaylight),
     HKCategoryType(.mindfulSession),
-//    HKCategoryType(.appleWalkingSteadinessEvent),
-//    HKQuantityType(.sixMinuteWalkTestDistance),
-//    HKQuantityType(.walkingDoubleSupportPercentage),
     HKQuantityType(.bodyFatPercentage),
     HKQuantityType(.bodyMass)
+  ]
+
+  public let mobilityTypes: Set<HKObjectType> = [
+    HKQuantityType(.appleWalkingSteadiness),
+    HKQuantityType(.walkingSpeed),
+    HKQuantityType(.walkingDoubleSupportPercentage),
+    HKQuantityType(.walkingAsymmetryPercentage),
+    HKQuantityType(.sixMinuteWalkTestDistance),
+    HKQuantityType(.stairAscentSpeed),
+    HKQuantityType(.stairDescentSpeed)
   ]
 
   public let writeOtherTypes: Set<HKSampleType> = [
@@ -188,6 +195,7 @@ public extension HealthPermissionChecker {
     nutritionTypes.forEach { set.insert($0) }
     menstrualTypes.forEach { set.insert($0) }
     otherTypes.forEach { set.insert($0) }
+    mobilityTypes.forEach { set.insert($0) }
     #elseif os(watchOS)
     readWatchTypes.forEach { set.insert($0) }
     #endif

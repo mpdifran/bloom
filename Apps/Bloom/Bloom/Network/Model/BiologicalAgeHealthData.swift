@@ -21,6 +21,7 @@ struct BiologicalAgeHealthData: Codable, Sendable {
     let cardiovascular: CardiovascularHealth?
     let sleep: SleepMetrics?
     let activity: ActivityMetrics?
+    let mobility: MobilityMetrics?
     let nutrition: NutritionMetrics?
     let bodyComposition: BodyMetrics?
     let recovery: RecoveryIndicators?
@@ -74,11 +75,9 @@ extension BiologicalAgeHealthData {
   }
   
   struct ActivityMetrics: Codable, Sendable {
-    let averageDailySteps: MetricValue?
     let averageActiveEnergy: MetricValue?
     let totalExerciseMinutes: MetricValue?
     let totalWorkoutCount: Int?
-    let averageWalkingSpeed: MetricValue?
   }
   
   struct NutritionMetrics: Codable, Sendable {
@@ -113,5 +112,15 @@ extension BiologicalAgeHealthData {
     let morningRestingHRTrend: MetricValue.Trend?
     let hrvTrend: MetricValue.Trend?
     let daysSinceLastWorkout: Int?
+  }
+
+  struct MobilityMetrics: Codable, Sendable {
+    let walkingSteadiness: MetricValue?
+    let walkingSpeed: MetricValue?
+    let doubleSupportPercentage: MetricValue?
+    let walkingAsymmetryPercentage: MetricValue?
+    let sixMinuteWalkDistance: MetricValue?
+    let stairAscentSpeed: MetricValue?
+    let stairDescentSpeed: MetricValue?
   }
 }

@@ -44,7 +44,8 @@ struct InsightCard: View {
         .bold()
         .lineLimit(2)
         .multilineTextAlignment(.leading)
-      
+        .fixedSize(horizontal: false, vertical: true)
+
       Text(insight.body)
         .font(.body)
         .fontDesign(.rounded)
