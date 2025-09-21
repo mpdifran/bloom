@@ -11,15 +11,16 @@ import SwiftData
 // For CloudKit sync to work, all properties must be optional or have default values, and all relationship must be optional.
 
 extension SchemaV25 {
+  @available(*, deprecated, message: "TodayInsight is deprecated. Use TodayInsightsManager with UserDefaults instead.")
   @Model
   public final class TodayInsight: Identifiable, Hashable {
     public var id: String = ""
     public var title: String? = nil
     public var body: String? = nil
     public var priority: Int = 1
-    
+
     public var content: TodayContent?
-    
+
     public init(
       id: String = UUID().uuidString,
       title: String,

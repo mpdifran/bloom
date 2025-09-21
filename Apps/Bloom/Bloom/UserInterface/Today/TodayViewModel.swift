@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import DataContainer
 import BloomModel
-import SwiftData
 import Combine
 
 extension TodayView {
@@ -17,12 +16,9 @@ extension TodayView {
   final class ViewModel {
     static let shared = ViewModel()
 
-    var isLoadingContent = false
-    var todayContent: TodayContentDTO?
     var hasBloomPlus: Bool = false
-    var hasLoadError = false
 
-    private let contentModelActor = TodayContentModelActor.standard()
+    private let todayInsightsManager = TodayInsightsManager.shared
     private var entitlementCancellable: AnyCancellable?
 
     private init() {
@@ -30,15 +26,15 @@ extension TodayView {
         checkEntitlement()
         await loadContent()
       }
-      
+
       Task {
         await observeLoadingState()
       }
-      
+
       Task {
         await observeErrors()
       }
-      
+
       // Observe entitlement changes
       observeEntitlementChanges()
     }
@@ -47,76 +43,50 @@ extension TodayView {
 
 extension TodayView.ViewModel {
 
+  var isLoadingContent: Bool {
+    todayInsightsManager.isLoadingContent
+  }
+
+  var todayContent: TodayContentDTO? {
+    todayInsightsManager.todayContent
+  }
+
+  var hasLoadError: Bool {
+    todayInsightsManager.hasLoadError
+  }
+
   var budState: TodayReportResponse.BudState? {
-    guard let budStateString = todayContent?.budState else { return nil }
-    return TodayReportResponse.BudState(rawValue: budStateString)
+    todayInsightsManager.budState
   }
 
   func checkEntitlement() {
     hasBloomPlus = EntitlementController.shared.hasBloomPro == true
   }
-  
-  func loadContent() async {
-    do {
-      let fetchedContent = try await contentModelActor.fetchContent(for: Date())
-      todayContent = nil
 
-      // Check if the fetched content is actually for today
-      if let content = fetchedContent {
-        let isToday = Calendar.current.isDateInToday(content.day)
-        
-        // Only use the content if it's from today
-        if isToday {
-          todayContent = content
-        }
-      }
-      
-      hasLoadError = false
-    } catch {
-      print("Failed to load today content: \(error)")
-      hasLoadError = false // Don't show error for local fetch failures
-    }
+  func loadContent() async {
+    await todayInsightsManager.refreshContentIfNeeded()
   }
-  
+
   func refreshContent() {
     Task {
-      await loadContent()
+      await todayInsightsManager.refreshContentIfNeeded()
     }
   }
-  
+
   func requestContentIfNeeded() async {
-    hasLoadError = false
-    await TodayContentCoordinator.shared.loadContentIfNeeded()
-    // Reload content after the coordinator finishes
-    await loadContent()
+    await todayInsightsManager.refreshContentIfNeeded()
   }
-  
+
   func retryLoadContent() async {
-    hasLoadError = false
-    // Force a reload attempt
-    await TodayContentCoordinator.shared.loadContentIfNeeded()
-    await loadContent()
+    await todayInsightsManager.forceRefreshContent()
   }
-  
+
   func observeLoadingState() async {
-    for await isLoading in await TodayContentCoordinator.shared.isLoadingContentStream {
-      await MainActor.run {
-        self.isLoadingContent = isLoading
-      }
-      
-      // When loading finishes, refresh the content
-      if !isLoading {
-        await loadContent()
-      }
-    }
+    // No longer needed as we directly access the manager's properties
   }
-  
+
   func observeErrors() async {
-    for await error in await TodayContentCoordinator.shared.errorStream {
-      await MainActor.run {
-        self.hasLoadError = error != nil
-      }
-    }
+    // No longer needed as we directly access the manager's properties
   }
   
   func observeEntitlementChanges() {

@@ -9,18 +9,20 @@ import Foundation
 import SwiftData
 import BloomFoundation
 
+@available(*, deprecated, message: "TodayContentModelActor is deprecated. Use TodayInsightsManager with UserDefaults instead.")
 @ModelActor
 public final actor TodayContentModelActor: SharedModelActor {
-  
+
   private var context: ModelContext { modelExecutor.modelContext }
 }
 
+@available(*, deprecated, message: "TodayContentModelActor is deprecated. Use TodayInsightsManager with UserDefaults instead.")
 public extension TodayContentModelActor {
-  
+
   func fetchContent(for date: Date) throws -> TodayContentDTO? {
     let dayStart = Calendar.current.startOfDay(for: date)
     let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart)!
-    
+
     let predicate = #Predicate<SchemaV25.TodayContent> { content in
       content.day >= dayStart && content.day < dayEnd
     }
@@ -31,24 +33,43 @@ public extension TodayContentModelActor {
     guard let content = try context.fetch(descriptor).first else { return nil }
     return content.asDTO()
   }
-  
+
   func deleteContent(for date: Date) throws {
     let dayStart = Calendar.current.startOfDay(for: date)
     let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart)!
-    
+
     let predicate = #Predicate<SchemaV25.TodayContent> { content in
       content.day >= dayStart && content.day < dayEnd
     }
     let descriptor = FetchDescriptor<SchemaV25.TodayContent>(predicate: predicate)
     let existingContent = try context.fetch(descriptor)
-    
+
     for content in existingContent {
       context.delete(content)
     }
-    
+
     try context.save()
   }
-  
+
+  func deleteAllTodayContent() throws {
+    // Delete all TodayContent and TodayInsight records
+    let contentDescriptor = FetchDescriptor<SchemaV25.TodayContent>()
+    let insightDescriptor = FetchDescriptor<SchemaV25.TodayInsight>()
+
+    let allContent = try context.fetch(contentDescriptor)
+    let allInsights = try context.fetch(insightDescriptor)
+
+    for content in allContent {
+      context.delete(content)
+    }
+
+    for insight in allInsights {
+      context.delete(insight)
+    }
+
+    try context.save()
+  }
+
   func saveContent(
     for date: Date,
     summary: String,
@@ -60,18 +81,18 @@ public extension TodayContentModelActor {
   ) throws -> TodayContentDTO {
     let dayStart = Calendar.current.startOfDay(for: date)
     let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart)!
-    
+
     // Check if content already exists for this day and delete it
     let predicate = #Predicate<SchemaV25.TodayContent> { content in
       content.day >= dayStart && content.day < dayEnd
     }
     let descriptor = FetchDescriptor<SchemaV25.TodayContent>(predicate: predicate)
     let existingContent = try context.fetch(descriptor)
-    
+
     for content in existingContent {
       context.delete(content)
     }
-    
+
     // Create new content
     let content = SchemaV25.TodayContent(
       day: dayStart,
@@ -82,7 +103,7 @@ public extension TodayContentModelActor {
       sleepDetails: sleepDetails,
       tonightsSleepRecommendations: tonightsSleepRecommendations
     )
-    
+
     // Add insights
     for insightData in insights {
       let insight = SchemaV25.TodayInsight(
@@ -93,13 +114,13 @@ public extension TodayContentModelActor {
       insight.content = content
       context.insert(insight)
     }
-    
+
     context.insert(content)
     try context.save()
-    
+
     return content.asDTO()
   }
-  
+
   func hasContentForToday() -> Bool {
     do {
       // Simply check if content exists for today's calendar day
