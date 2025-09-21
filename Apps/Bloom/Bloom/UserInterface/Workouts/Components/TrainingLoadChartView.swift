@@ -48,7 +48,7 @@ struct TrainingLoadChartView: View {
             .font(.title3)
             .bold()
             .fontDesign(.rounded)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(.white.secondary)
           Spacer()
         }
         .horizontallyCentered()
@@ -84,6 +84,7 @@ private extension TrainingLoadChartView {
         Text("7-DAY vs. 28-DAY LOAD")
           .font(.caption)
       }
+      .foregroundStyle(.white)
 
       Spacer()
 
