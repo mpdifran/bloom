@@ -28,6 +28,10 @@ public extension DateFormatter {
     $0.timeStyle = .short
   }
 
+  static let mediumDateShortTimeLowercase = DateFormatter().with {
+    $0.dateFormat = "MMM d, yyyy h:mma"
+  }
+
   static let justTimeShort = DateFormatter().with {
     $0.dateStyle = .none
     $0.timeStyle = .short

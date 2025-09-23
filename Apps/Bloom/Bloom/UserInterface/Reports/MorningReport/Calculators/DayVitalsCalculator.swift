@@ -359,59 +359,10 @@ private extension DayVitalsCalculator {
 private extension DayVitalsCalculator {
   
   func generateSleepData(for date: Date) async -> SleepData? {
-    // The given date is yesterday. Look into the future to find the sleep session for that night.
-    guard let sleepEndDate = Calendar.current.date(byAdding: .hour, value: 24, to: date) else {
-      return nil
-    }
+    let sleepSessions = await CentralizedSleepCalculator.shared.calculateSleepSessionsForTodayInsights(for: date)
 
-    let sleepStartDate = date
+    guard sleepSessions.isNotEmpty else { return nil }
 
-    let sleepDateRange = DateRange(sleepStartDate, sleepEndDate)
-    let sleepAnalyses = await HealthStoreFetcher.shared.fetchSleepAnalysis(dateRange: sleepDateRange)
-    
-    guard sleepAnalyses.isNotEmpty else { return nil }
-    
-    var sleepSessions: [SleepSession] = []
-    
-    for sleepAnalysis in sleepAnalyses {
-      let totalSleepQuantity = HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.overallMinutes)
-      let totalSleepTime = await totalSleepQuantity.displayString(for: .hour(), formatter: .oneDecimalPlace)
-      
-      let deepSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.deepSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
-      let coreSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.coreSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
-      let remSleepString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.remSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
-      let awakeTimeString = sleepAnalysis.hasDetailedSleepCategories ? await HKQuantity(unit: .minute(), doubleValue: sleepAnalysis.awakeSleepMinutes).displayString(for: .minute(), formatter: .noDecimalPlaces) : nil
-      
-      let heartRateString = sleepAnalysis.averageHeartRate.map { "\(Int($0)) bpm" }
-      let respiratoryRateString = sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate) > 0 ? "\(Int(sleepAnalysis.respiratoryRate.average(keyPath: \.averageRespiratoryRate))) breaths/min" : nil
-      let soundLevelString = sleepAnalysis.averageSoundLevel > 0 ? "\(Int(sleepAnalysis.averageSoundLevel)) dB" : nil
-      
-      let wristTemperatureString: String?
-      if let wristTemp = sleepAnalysis.wristTemperature?.averageWristTemperature {
-        let tempQuantity = HKQuantity(unit: .degreeFahrenheit(), doubleValue: wristTemp)
-        wristTemperatureString = await tempQuantity.displayString(for: .degreeFahrenheit(), formatter: .oneDecimalPlace)
-      } else {
-        wristTemperatureString = nil
-      }
-      
-      let sleepSession = SleepSession(
-        startDate: sleepAnalysis.startDate,
-        endDate: sleepAnalysis.endDate,
-        totalSleepTime: totalSleepTime,
-        sleepScore: sleepAnalysis.overallScore,
-        deepSleep: deepSleepString,
-        coreSleep: coreSleepString,
-        remSleep: remSleepString,
-        awakeTime: awakeTimeString,
-        averageHeartRate: heartRateString,
-        averageRespiratoryRate: respiratoryRateString,
-        averageSoundLevel: soundLevelString,
-        wristTemperature: wristTemperatureString
-      )
-      
-      sleepSessions.append(sleepSession)
-    }
-    
     return SleepData(sleepSessions: sleepSessions)
   }
 }

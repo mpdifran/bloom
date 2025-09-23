@@ -66,7 +66,9 @@ extension BiologicalAgeHealthData {
     let averageDeepSleep: SleepStageMetric?
     let averageRemSleep: SleepStageMetric?
     let averageWakeMinutes: MetricValue?
-    
+    let averageBedtime: MetricValue?
+    let averageWakeupTime: MetricValue?
+
     struct SleepStageMetric: Codable, Sendable {
       let averageMinutes: String
       let averagePercentage: String

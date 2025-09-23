@@ -12,8 +12,8 @@ struct SleepData: SendableNetworkModel {
 }
 
 struct SleepSession: SendableNetworkModel {
-  let startDate: Date
-  let endDate: Date
+  let bedtimeLocal: String
+  let wakeupTimeLocal: String
   let totalSleepTime: String
   let sleepScore: Int?
   let deepSleep: String?
@@ -24,4 +24,8 @@ struct SleepSession: SendableNetworkModel {
   let averageRespiratoryRate: String?
   let averageSoundLevel: String?
   let wristTemperature: String?
+  let bedtimeTrend: String?
+  let wakeupTimeTrend: String?
+  let sleepEfficiency: String?
+  let sleepEfficiencyTrend: String?
 }
