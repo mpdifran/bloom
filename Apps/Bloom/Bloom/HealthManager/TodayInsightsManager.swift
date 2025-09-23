@@ -102,7 +102,7 @@ final class TodayInsightsManager {
 
       // Generate health context for yesterday (insights are based on previous day's data)
       let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
-      let healthContext = try await DayVitalsCalculator.shared.calculateVitalsString(for: yesterday)
+      let healthContext = try await DayReviewCalculator.shared.calculateDayReviewHealthDataString(for: yesterday)
 
       // Get current timezone
       let timezone = TimeZone.current.identifier

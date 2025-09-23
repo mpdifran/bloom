@@ -23,6 +23,12 @@ extension DayReviewWeatherCalculator {
     return String(data: jsonData, encoding: .utf8) ?? "{}"
   }
 
+  func calculateSimplifiedWeatherDataString(for date: Date) async throws -> String {
+    let weatherData = await calculateSimplifiedWeatherData(for: date)
+    let jsonData = try JSONEncoder.bloomModel.encode(weatherData)
+    return String(data: jsonData, encoding: .utf8) ?? "{}"
+  }
+
   func calculateWeatherData(for date: Date) async -> DayReviewWeatherData? {
     guard let location = await getCurrentLocation() else {
       return nil
@@ -66,6 +72,57 @@ extension DayReviewWeatherCalculator {
       hourlyForecast: Array(hourlyForecast)
     )
   }
+
+  func calculateSimplifiedWeatherData(for date: Date) async -> SimplifiedWeatherData? {
+    guard let location = await getCurrentLocation() else {
+      return nil
+    }
+
+    guard let weather = await WeatherForecaster.shared.forecastedWeather(location: location) else {
+      return nil
+    }
+
+    // Get today's forecast for high/low temperatures
+    let todaysForecast = weather.hourlyForecast.filter { hourWeather in
+      Calendar.current.isDate(hourWeather.date, inSameDayAs: date)
+    }
+
+    let todaysHigh = todaysForecast.max { first, second in
+      first.temperature.value < second.temperature.value
+    }?.temperature.formatted(
+      .measurement(
+        width: .narrow,
+        numberFormatStyle: .number.precision(.fractionLength(0))
+      )
+    )
+
+    let todaysLow = todaysForecast.min { first, second in
+      first.temperature.value < second.temperature.value
+    }?.temperature.formatted(
+      .measurement(
+        width: .narrow,
+        numberFormatStyle: .number.precision(.fractionLength(0))
+      )
+    )
+
+    // Determine general outlook and significant weather
+    let generalOutlook = determineGeneralOutlook(from: weather.currentWeather.condition)
+    let hasSignificantWeather = hasSignificantWeatherConditions(weather: weather)
+
+    return SimplifiedWeatherData(
+      currentTemperature: weather.currentWeather.temperature.formatted(
+        .measurement(
+          width: .narrow,
+          numberFormatStyle: .number.precision(.fractionLength(0))
+        )
+      ),
+      currentCondition: weather.currentWeather.condition.description,
+      todaysHigh: todaysHigh,
+      todaysLow: todaysLow,
+      generalOutlook: generalOutlook,
+      hasSignificantWeather: hasSignificantWeather
+    )
+  }
 }
 
 private extension DayReviewWeatherCalculator {
@@ -100,5 +157,42 @@ private extension DayReviewWeatherCalculator {
         numberFormatStyle: .number.precision(.fractionLength(0))
       )
     )
+  }
+
+  func determineGeneralOutlook(from condition: WeatherKit.WeatherCondition) -> String {
+    switch condition {
+    case .clear, .mostlyClear, .partlyCloudy:
+      return "sunny"
+    case .cloudy, .mostlyCloudy:
+      return "cloudy"
+    case .rain, .drizzle, .heavyRain:
+      return "rainy"
+    case .snow, .sleet, .freezingRain, .heavySnow:
+      return "snowy"
+    case .thunderstorms:
+      return "stormy"
+    case .haze:
+      return "foggy"
+    default:
+      return "variable"
+    }
+  }
+
+  func hasSignificantWeatherConditions(weather: WeatherKit.Weather) -> Bool {
+    // Check for significant weather in current conditions or forecast
+    let significantConditions: [WeatherKit.WeatherCondition] = [
+      .heavyRain, .thunderstorms, .heavySnow, .freezingRain, .sleet
+    ]
+
+    // Check current weather
+    if significantConditions.contains(weather.currentWeather.condition) {
+      return true
+    }
+
+    // Check next 12 hours for significant weather
+    let next12Hours = weather.hourlyForecast.prefix(12)
+    return next12Hours.contains { hour in
+      significantConditions.contains(hour.condition)
+    }
   }
 }

@@ -28,3 +28,12 @@ struct HourlyWeatherForecast: SendableNetworkModel {
   let humidity: String?
   let windSpeed: String?
 }
+
+struct SimplifiedWeatherData: SendableNetworkModel {
+  let currentTemperature: String
+  let currentCondition: String
+  let todaysHigh: String?
+  let todaysLow: String?
+  let generalOutlook: String
+  let hasSignificantWeather: Bool
+}
