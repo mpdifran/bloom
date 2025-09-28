@@ -76,10 +76,6 @@ private extension HealthReportController {
     
     return try await request.healthReportService.calculateBiologicalAge(
       healthContext: body.healthContext,
-      chronologicalAge: body.chronologicalAge,
-      previousBiologicalAge: body.previousBiologicalAge,
-      previousPositiveFactors: body.previousPositiveFactors,
-      previousNegativeFactors: body.previousNegativeFactors,
       userID: userID
     )
   }

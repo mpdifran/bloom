@@ -98,9 +98,6 @@ extension BiologicalAgeViewModel {
     do {
       let today = Date()
 
-      // Get chronological age from user's birthday
-      let chronologicalAge = HealthDefaults.shared.getBirthday().toAge()
-
       // Collect health data using BiologicalAgeHealthContextCalculator
       let calculator = BiologicalAgeHealthContextCalculator()
       let healthData = try await calculator.collectBiologicalAgeData()
@@ -119,14 +116,8 @@ extension BiologicalAgeViewModel {
         healthContext = "{}"
       }
 
-      // Prepare request with previous factors if available
-      let request = BiologicalAgeRequest(
-        healthContext: healthContext,
-        chronologicalAge: chronologicalAge,
-        previousBiologicalAge: lastResponse?.biologicalAge,
-        previousPositiveFactors: lastResponse?.positiveFactors ?? [],
-        previousNegativeFactors: lastResponse?.negativeFactors ?? []
-      )
+      // Create simplified request with only health data
+      let request = BiologicalAgeRequest(healthContext: healthContext)
 
       // Make network request
       let response: BiologicalAgeResponse
@@ -147,9 +138,7 @@ extension BiologicalAgeViewModel {
       TelemetryDeck.signal(
         "Biological Age Calculated",
         parameters: [
-          "biologicalAge": String(response.biologicalAge),
-          "chronologicalAge": String(chronologicalAge),
-          "ageDifference": String(response.biologicalAge - Double(chronologicalAge))
+          "biologicalAge": String(response.biologicalAge)
         ]
       )
 

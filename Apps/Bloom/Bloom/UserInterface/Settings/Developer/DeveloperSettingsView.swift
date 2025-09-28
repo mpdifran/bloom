@@ -475,12 +475,23 @@ extension DeveloperSettingsView {
 
         AsyncButton {
           await BiologicalAgeViewModel.shared.forceCalculateBiologicalAge()
+
+          // Get the calculated result and show it in the alert
+          let calculatedAge = BiologicalAgeViewModel.shared.currentBiologicalAge
+          let message: String
+
+          if let age = calculatedAge {
+            message = "Biological age calculated: \(String(format: "%.1f", age)) years"
+          } else {
+            message = "Biological age calculation completed. No result available - check that you have enough health data logged."
+          }
+
           alertDetails = AlertDetails(
-            title: "Biological Age Test",
-            message: "Biological age calculation triggered. Check the logs for results."
+            title: "Biological Age Calculated",
+            message: message
           )
         } label: {
-          LabeledContent("Test Biological Age ViewModel") {
+          LabeledContent("Calculate Biological Age") {
             Image(systemSymbol: .brainHeadProfile)
           }
           .multilineTextAlignment(.leading)

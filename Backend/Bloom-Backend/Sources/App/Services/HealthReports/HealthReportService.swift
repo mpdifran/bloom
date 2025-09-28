@@ -114,10 +114,6 @@ extension HealthReportService {
 
   func calculateBiologicalAge(
     healthContext: String,
-    chronologicalAge: Int,
-    previousBiologicalAge: Double? = nil,
-    previousPositiveFactors: [String] = [],
-    previousNegativeFactors: [String] = [],
     userID: UserIdentifier
   ) async throws -> BiologicalAgeResponse {
 
@@ -129,28 +125,6 @@ extension HealthReportService {
           role: .system,
           content: [
             .text(.init(text: "Here is the user's health data from the last 7 days:\n\(healthContext)"))
-          ]
-        )
-      )
-    )
-
-    var contextText = "User's chronological age: \(chronologicalAge)"
-    if let previousAge = previousBiologicalAge {
-      contextText += "\nPrevious biological age: \(previousAge)"
-    }
-    if !previousPositiveFactors.isEmpty {
-      contextText += "\nPrevious positive factors: \(previousPositiveFactors.joined(separator: ", "))"
-    }
-    if !previousNegativeFactors.isEmpty {
-      contextText += "\nPrevious negative factors: \(previousNegativeFactors.joined(separator: ", "))"
-    }
-
-    inputItems.append(
-      .message(
-        .init(
-          role: .system,
-          content: [
-            .text(.init(text: contextText))
           ]
         )
       )
