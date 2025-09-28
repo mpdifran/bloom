@@ -75,27 +75,18 @@ actor BiologicalAgeHealthContextCalculator {
       for: HKQuantityType(.restingHeartRate),
       dateRange: dateRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let values = samples.map { $0.quantity.doubleValue(for: .bpm()) }
     let average = values.reduce(0, +) / Double(values.count)
     let min = values.min() ?? 0
     let max = values.max() ?? 0
-    
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.restingHeartRate),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-    
-    let trend = calculateTrend(current: average, previous: previousSamples, unit: .bpm(), lowerIsBetter: true)
-    
+
     return BiologicalAgeHealthData.CardiovascularHealth.HeartRateMetric(
       average: await HKQuantity(unit: .bpm(), doubleValue: average).displayString(for: .bpm()),
       min: await HKQuantity(unit: .bpm(), doubleValue: min).displayString(for: .bpm()),
-      max: await HKQuantity(unit: .bpm(), doubleValue: max).displayString(for: .bpm()),
-      trend: trend
+      max: await HKQuantity(unit: .bpm(), doubleValue: max).displayString(for: .bpm())
     )
   }
   
@@ -104,51 +95,32 @@ actor BiologicalAgeHealthContextCalculator {
       for: HKQuantityType(.heartRateVariabilitySDNN),
       dateRange: dateRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let values = samples.map { $0.quantity.doubleValue(for: .secondUnit(with: .milli)) }
     let average = values.reduce(0, +) / Double(values.count)
-    
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.heartRateVariabilitySDNN),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-    
-    let trend = calculateTrend(current: average, previous: previousSamples, unit: .secondUnit(with: .milli), lowerIsBetter: false)
-    
+
     let unit = HKUnit.secondUnit(with: .milli)
     return BiologicalAgeHealthData.CardiovascularHealth.HRVMetric(
-      average: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit),
-      trend: trend
+      average: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit)
     )
   }
   
   private func fetchVO2Max() async -> BiologicalAgeHealthData.MetricValue? {
     let dateRange = DateRange.trailingDaysFromNow(30)
-    
+
     guard let sample = await healthStoreFetcher.fetchMostRecentSample(
       for: .vo2Max,
       dateRange: dateRange
     ) else { return nil }
-    
+
     let value = sample.quantity.doubleValue(for: .literUnit(with: .milli).unitDivided(by: .gramUnit(with: .kilo)).unitDivided(by: .minute()))
-    
-    // Fetch previous period for trend calculation
-    let previousDateRange = DateRange.previousPeriod(from: dateRange, days: 30)
-    
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.vo2Max),
-      dateRange: previousDateRange
-    ).compactMap { $0 as? HKQuantitySample }
-    
+
     let unit = HKUnit.literUnit(with: .milli).unitDivided(by: .gramUnit(with: .kilo)).unitDivided(by: .minute())
-    let trend = calculateTrend(current: value, previous: previousSamples, unit: unit, lowerIsBetter: false)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: unit, doubleValue: value).displayString(for: unit),
-      trend: trend
+      value: await HKQuantity(unit: unit, doubleValue: value).displayString(for: unit)
     )
   }
   
@@ -157,24 +129,14 @@ actor BiologicalAgeHealthContextCalculator {
       for: HKQuantityType(.heartRateRecoveryOneMinute),
       dateRange: dateRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let values = samples.map { $0.quantity.doubleValue(for: .bpm()) }
     let average = values.reduce(0, +) / Double(values.count)
-    
-    // Fetch previous week for trend calculation
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.heartRateRecoveryOneMinute),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-    
-    let trend = calculateTrend(current: average, previous: previousSamples, unit: .bpm(), lowerIsBetter: false)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: .bpm(), doubleValue: average).displayString(for: .bpm()),
-      trend: trend
+      value: await HKQuantity(unit: .bpm(), doubleValue: average).displayString(for: .bpm())
     )
   }
   
@@ -209,27 +171,14 @@ actor BiologicalAgeHealthContextCalculator {
       unit: .kilocalorie(),
       dateRange: dateRange
     )
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let dailyCalories = samples.map { $0.quantity.doubleValue(for: .kilocalorie()) }
     let averageCalories = dailyCalories.reduce(0, +) / Double(dailyCalories.count)
-    
-    // Fetch previous week for trend calculation
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .activeEnergyBurned,
-      unit: .kilocalorie(),
-      dateRange: previousWeekRange
-    )
-    
-    let previousCalories = previousSamples.map { $0.quantity.doubleValue(for: .kilocalorie()) }
-    let previousAverageCalories = previousCalories.isEmpty ? 0 : previousCalories.reduce(0, +) / Double(previousCalories.count)
-    let trend = calculateSleepTrend(current: averageCalories, previous: [previousAverageCalories], lowerIsBetter: false)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: .kilocalorie(), doubleValue: averageCalories).displayString(for: .kilocalorie()),
-      trend: trend
+      value: await HKQuantity(unit: .kilocalorie(), doubleValue: averageCalories).displayString(for: .kilocalorie())
     )
   }
   
@@ -239,26 +188,14 @@ actor BiologicalAgeHealthContextCalculator {
       unit: .minute(),
       dateRange: dateRange
     )
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let dailyMinutes = samples.map { $0.quantity.doubleValue(for: .minute()) }
     let totalMinutes = dailyMinutes.reduce(0, +)
-    
-    // Fetch previous week for trend calculation
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: .appleExerciseTime,
-      unit: .minute(),
-      dateRange: previousWeekRange
-    )
-    
-    let previousTotalMinutes = previousSamples.map { $0.quantity.doubleValue(for: .minute()) }.reduce(0, +)
-    let trend = calculateSleepTrend(current: totalMinutes, previous: [previousTotalMinutes], lowerIsBetter: false)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: .minute(), doubleValue: totalMinutes).displayString(for: .minute()),
-      trend: trend
+      value: await HKQuantity(unit: .minute(), doubleValue: totalMinutes).displayString(for: .minute())
     )
   }
   
@@ -312,19 +249,8 @@ actor BiologicalAgeHealthContextCalculator {
     let values = samples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
     let average = values.reduce(0, +) / Double(values.count)
 
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.appleWalkingSteadiness),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-
-    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
-    let previousAverage = previousValues.isEmpty ? 0 : previousValues.reduce(0, +) / Double(previousValues.count)
-    let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: false)
-
     return BiologicalAgeHealthData.MetricValue(
-      value: String(format: "%.1f%%", average),
-      trend: trend
+      value: String(format: "%.1f%%", average)
     )
   }
 
@@ -339,19 +265,10 @@ actor BiologicalAgeHealthContextCalculator {
     let speeds = samples.map { $0.quantity.doubleValue(for: .meter().unitDivided(by: .second())) }
     let averageSpeed = speeds.reduce(0, +) / Double(speeds.count)
 
-    // Fetch previous week for trend calculation
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.walkingSpeed),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-
     let unit = HKUnit.meter().unitDivided(by: .second())
-    let trend = calculateTrend(current: averageSpeed, previous: previousSamples, unit: unit, lowerIsBetter: false)
 
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: unit, doubleValue: averageSpeed).displayString(for: unit, formatter: .twoDecimalPlaces),
-      trend: trend
+      value: await HKQuantity(unit: unit, doubleValue: averageSpeed).displayString(for: unit, formatter: .twoDecimalPlaces)
     )
   }
 
@@ -366,20 +283,8 @@ actor BiologicalAgeHealthContextCalculator {
     let values = samples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
     let average = values.reduce(0, +) / Double(values.count)
 
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.walkingDoubleSupportPercentage),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-
-    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
-    let previousAverage = previousValues.isEmpty ? 0 : previousValues.reduce(0, +) / Double(previousValues.count)
-    // Lower double support percentage is better (indicates better balance)
-    let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: true)
-
     return BiologicalAgeHealthData.MetricValue(
-      value: String(format: "%.1f%%", average),
-      trend: trend
+      value: String(format: "%.1f%%", average)
     )
   }
 
@@ -394,20 +299,8 @@ actor BiologicalAgeHealthContextCalculator {
     let values = samples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
     let average = values.reduce(0, +) / Double(values.count)
 
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.walkingAsymmetryPercentage),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-
-    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
-    let previousAverage = previousValues.isEmpty ? 0 : previousValues.reduce(0, +) / Double(previousValues.count)
-    // Lower asymmetry is better
-    let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: true)
-
     return BiologicalAgeHealthData.MetricValue(
-      value: String(format: "%.1f%%", average),
-      trend: trend
+      value: String(format: "%.1f%%", average)
     )
   }
 
@@ -422,17 +315,8 @@ actor BiologicalAgeHealthContextCalculator {
     let distances = samples.map { $0.quantity.doubleValue(for: .meter()) }
     let average = distances.reduce(0, +) / Double(distances.count)
 
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.sixMinuteWalkTestDistance),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-
-    let trend = calculateTrend(current: average, previous: previousSamples, unit: .meter(), lowerIsBetter: false)
-
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: .meter(), doubleValue: average).displayString(for: .meter()),
-      trend: trend
+      value: await HKQuantity(unit: .meter(), doubleValue: average).displayString(for: .meter())
     )
   }
 
@@ -447,18 +331,10 @@ actor BiologicalAgeHealthContextCalculator {
     let speeds = samples.map { $0.quantity.doubleValue(for: .meter().unitDivided(by: .second())) }
     let average = speeds.reduce(0, +) / Double(speeds.count)
 
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.stairAscentSpeed),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-
     let unit = HKUnit.meter().unitDivided(by: .second())
-    let trend = calculateTrend(current: average, previous: previousSamples, unit: unit, lowerIsBetter: false)
 
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit, formatter: .twoDecimalPlaces),
-      trend: trend
+      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit, formatter: .twoDecimalPlaces)
     )
   }
 
@@ -473,19 +349,63 @@ actor BiologicalAgeHealthContextCalculator {
     let speeds = samples.map { $0.quantity.doubleValue(for: .meter().unitDivided(by: .second())) }
     let average = speeds.reduce(0, +) / Double(speeds.count)
 
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.stairDescentSpeed),
-      dateRange: previousWeekRange
-    ).compactMap { $0 as? HKQuantitySample }
-
     let unit = HKUnit.meter().unitDivided(by: .second())
-    let trend = calculateTrend(current: average, previous: previousSamples, unit: unit, lowerIsBetter: false)
 
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit, formatter: .twoDecimalPlaces),
-      trend: trend
+      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit, formatter: .twoDecimalPlaces)
     )
+  }
+
+  private func fetchDaysWithCompleteMealLogging(dateRange: DateRange) async -> Set<Date> {
+    let calendar = Calendar.current
+    let days = calendar.dateComponents([.day], from: dateRange.start, to: dateRange.end).day ?? 7
+
+    var completeDays = Set<Date>()
+
+    for dayOffset in 0..<days {
+      guard let date = calendar.date(byAdding: .day, value: dayOffset, to: dateRange.start) else { continue }
+
+      let dayStart = calendar.startOfDay(for: date)
+      let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) ?? date
+
+      let predicate = #Predicate<FoodItemLog> { log in
+        log.date >= dayStart && log.date < dayEnd
+      }
+
+      let descriptor = FetchDescriptor<FoodItemLog>(predicate: predicate)
+
+      do {
+        let foodItemLogs = try modelContext.fetch(descriptor)
+
+        // Check if all main meals are logged (excluding snacks)
+        var hasBreakfast = false
+        var hasLunch = false
+        var hasDinner = false
+
+        for log in foodItemLogs {
+          switch log.meal {
+          case .breakfast:
+            hasBreakfast = true
+          case .lunch:
+            hasLunch = true
+          case .dinner:
+            hasDinner = true
+          case .snack:
+            // Snacks don't count toward meal completion
+            break
+          }
+        }
+
+        // Only count days where all three main meals are logged
+        if hasBreakfast && hasLunch && hasDinner {
+          completeDays.insert(dayStart)
+        }
+      } catch {
+        print("Error fetching food logs: \(error)")
+      }
+    }
+
+    return completeDays
   }
 
   private func fetchNutritionMetrics(dateRange: DateRange) async -> BiologicalAgeHealthData.NutritionMetrics? {
@@ -530,73 +450,66 @@ actor BiologicalAgeHealthContextCalculator {
     dateRange: DateRange,
     unit: HKUnit
   ) async -> BiologicalAgeHealthData.MetricValue? {
+    // First, identify days with complete meal logging
+    let completeDays = await fetchDaysWithCompleteMealLogging(dateRange: dateRange)
+
+    guard !completeDays.isEmpty else {
+      // No complete logging days, can't calculate meaningful average
+      return nil
+    }
+
     let samples = await healthStoreFetcher.fetchCollatedQuantity(
       for: type,
       unit: unit,
       dateRange: dateRange
     )
-    
+
     guard !samples.isEmpty else { return nil }
-    
-    let dailyValues = samples.map { $0.quantity.doubleValue(for: unit) }
-    let average = dailyValues.reduce(0, +) / Double(dailyValues.count)
-    
-    // Fetch previous week for trend calculation
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSamples = await healthStoreFetcher.fetchCollatedQuantity(
-      for: type,
-      unit: unit,
-      dateRange: previousWeekRange
-    )
-    
-    // Determine if lower is better for this nutrient
-    let lowerIsBetter: Bool = {
-      switch type {
-      case .dietarySugar, .dietaryFatSaturated:
-        return true
-      default:
-        return false
-      }
-    }()
-    
-    let previousValues = previousSamples.map { $0.quantity.doubleValue(for: unit) }
-    let previousAverage = previousValues.isEmpty ? 0 : previousValues.reduce(0, +) / Double(previousValues.count)
-    let trend = calculateSleepTrend(current: average, previous: [previousAverage], lowerIsBetter: lowerIsBetter)
-    
+
+    // Filter samples to only include complete logging days
+    let calendar = Calendar.current
+    let validSamples = samples.filter { sample in
+      let sampleDayStart = calendar.startOfDay(for: sample.date)
+      return completeDays.contains(sampleDayStart)
+    }
+
+    guard !validSamples.isEmpty else { return nil }
+
+    let dailyValues = validSamples.map { $0.quantity.doubleValue(for: unit) }
+    let average = dailyValues.reduce(0, +) / Double(validSamples.count)
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit),
-      trend: trend
+      value: await HKQuantity(unit: unit, doubleValue: average).displayString(for: unit)
     )
   }
   
   private func fetchDietQuality(dateRange: DateRange) async -> BiologicalAgeHealthData.NutritionMetrics.DietQuality? {
-    let calendar = Calendar.current
-    let days = calendar.dateComponents([.day], from: dateRange.start, to: dateRange.end).day ?? 7
-    
+    // Get complete logging days
+    let completeDays = await fetchDaysWithCompleteMealLogging(dateRange: dateRange)
+
+    guard !completeDays.isEmpty else { return nil }
+
     var processedFoodCount = 0
     var totalFoodCount = 0
     var vegetableServings = 0.0
-    
-    for dayOffset in 0..<days {
-      guard let date = calendar.date(byAdding: .day, value: dayOffset, to: dateRange.start) else { continue }
-      
-      let dayStart = calendar.startOfDay(for: date)
-      let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) ?? date
-      
+
+    for dayStart in completeDays {
+      let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart) ?? dayStart
+
       let predicate = #Predicate<FoodItemLog> { log in
         log.date >= dayStart && log.date < dayEnd
       }
-      
+
       let descriptor = FetchDescriptor<FoodItemLog>(predicate: predicate)
-      
+
       do {
         let foodItemLogs = try modelContext.fetch(descriptor)
-        
+
         for foodItemLog in foodItemLogs {
           if let foodItemServings = foodItemLog.foodItemServings {
             for serving in foodItemServings {
               totalFoodCount += 1
-              
+
               if let ingredients = serving.foodItem?.ingredients,
                  !ingredients.isEmpty {
                 let lowercasedIngredients = ingredients.lowercased()
@@ -604,7 +517,7 @@ actor BiologicalAgeHealthContextCalculator {
                   processedFoodCount += 1
                 }
               }
-              
+
               if let name = serving.foodItem?.name.lowercased() {
                 if isVegetableOrFruit(name) {
                   vegetableServings += serving.numberOfServings
@@ -617,9 +530,9 @@ actor BiologicalAgeHealthContextCalculator {
         print("Error fetching food item logs: \(error)")
       }
     }
-    
+
     guard totalFoodCount > 0 else { return nil }
-    
+
     let processedFoodPercentage = Double(processedFoodCount) / Double(totalFoodCount)
     let processedFoodScore: BiologicalAgeHealthData.NutritionMetrics.DietQuality.ProcessedFoodLevel = {
       if processedFoodPercentage < 0.2 {
@@ -630,9 +543,10 @@ actor BiologicalAgeHealthContextCalculator {
         return .high
       }
     }()
-    
-    let averageVegetableServings = vegetableServings / Double(days)
-    
+
+    // Now dividing by actual complete logging days, not total days
+    let averageVegetableServings = vegetableServings / Double(completeDays.count)
+
     return BiologicalAgeHealthData.NutritionMetrics.DietQuality(
       processedFoodScore: processedFoodScore,
       vegetableServings: averageVegetableServings > 0 ? averageVegetableServings : nil
@@ -690,105 +604,68 @@ actor BiologicalAgeHealthContextCalculator {
   
   private func fetchLatestWeight() async -> BiologicalAgeHealthData.MetricValue? {
     let dateRange = DateRange.trailingDaysFromNow(30)
-    
+
     let samples = await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.bodyMass),
       dateRange: dateRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let weights = samples.map { $0.quantity.doubleValue(for: .pound()) }
     let averageWeight = weights.reduce(0, +) / Double(weights.count)
-    
-    // Fetch previous period for trend calculation
-    let previousDateRange = DateRange.previousPeriod(from: dateRange, days: 30)
-    
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.bodyMass),
-      dateRange: previousDateRange
-    ).compactMap { $0 as? HKQuantitySample }
-    
-    let trend = calculateTrend(current: averageWeight, previous: previousSamples, unit: .pound(), lowerIsBetter: false)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: .pound(), doubleValue: averageWeight).displayString(for: .pound()),
-      trend: trend
+      value: await HKQuantity(unit: .pound(), doubleValue: averageWeight).displayString(for: .pound())
     )
   }
   
   private func fetchLatestBMI() async -> BiologicalAgeHealthData.MetricValue? {
     let dateRange = DateRange.trailingDaysFromNow(30)
-    
+
     let samples = await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.bodyMassIndex),
       dateRange: dateRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let bmis = samples.map { $0.quantity.doubleValue(for: .count()) }
     let averageBMI = bmis.reduce(0, +) / Double(bmis.count)
-    
-    // Fetch previous period for trend calculation
-    let previousDateRange = DateRange.previousPeriod(from: dateRange, days: 30)
-    
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.bodyMassIndex),
-      dateRange: previousDateRange
-    ).compactMap { $0 as? HKQuantitySample }
-    
-    let trend = calculateTrend(current: averageBMI, previous: previousSamples, unit: .count(), lowerIsBetter: false)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: await HKQuantity(unit: .count(), doubleValue: averageBMI).displayString(for: .count(), showUnits: false) + " kg/m²",
-      trend: trend
+      value: await HKQuantity(unit: .count(), doubleValue: averageBMI).displayString(for: .count(), showUnits: false) + " kg/m²"
     )
   }
   
   private func fetchLatestBodyFat() async -> BiologicalAgeHealthData.MetricValue? {
     let dateRange = DateRange.trailingDaysFromNow(30)
-    
+
     let samples = await healthStoreFetcher.fetchSamples(
       for: HKQuantityType(.bodyFatPercentage),
       dateRange: dateRange
     ).compactMap { $0 as? HKQuantitySample }
-    
+
     guard !samples.isEmpty else { return nil }
-    
+
     let bodyFats = samples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
     let averageBodyFat = bodyFats.reduce(0, +) / Double(bodyFats.count)
-    
-    // Fetch previous period for trend calculation
-    let previousDateRange = DateRange.previousPeriod(from: dateRange, days: 30)
-    
-    let previousSamples = await healthStoreFetcher.fetchSamples(
-      for: HKQuantityType(.bodyFatPercentage),
-      dateRange: previousDateRange
-    ).compactMap { $0 as? HKQuantitySample }
-    
-    let previousBodyFats = previousSamples.map { $0.quantity.doubleValue(for: .percent()) * 100 }
-    let previousAverage = previousBodyFats.isEmpty ? 0 : previousBodyFats.reduce(0, +) / Double(previousBodyFats.count)
-    let trend = calculateSleepTrend(current: averageBodyFat, previous: [previousAverage], lowerIsBetter: true)
-    
+
     return BiologicalAgeHealthData.MetricValue(
-      value: String(format: "%.1f%%", averageBodyFat),
-      trend: trend
+      value: String(format: "%.1f%%", averageBodyFat)
     )
   }
   
   private func fetchRecoveryIndicators(dateRange: DateRange) async -> BiologicalAgeHealthData.RecoveryIndicators? {
     let workouts = await healthStoreFetcher.fetchWorkouts(dateRange: dateRange)
-    
+
     let daysSinceLastWorkout: Int? = {
       guard let lastWorkout = workouts.max(by: { $0.endDate < $1.endDate }) else { return nil }
       let days = Calendar.current.dateComponents([.day], from: lastWorkout.endDate, to: Date()).day
       return days
     }()
-    
+
     return BiologicalAgeHealthData.RecoveryIndicators(
-      morningRestingHRTrend: nil,
-      hrvTrend: nil,
       daysSinceLastWorkout: daysSinceLastWorkout
     )
   }
@@ -812,44 +689,6 @@ actor BiologicalAgeHealthContextCalculator {
       } catch {
         return nil
       }
-    }
-  }
-  
-  private func calculateTrend(
-    current: Double,
-    previous: [HKQuantitySample],
-    unit: HKUnit,
-    lowerIsBetter: Bool
-  ) -> BiologicalAgeHealthData.MetricValue.Trend? {
-    guard !previous.isEmpty else { return nil }
-    
-    let previousValues = previous.map { $0.quantity.doubleValue(for: unit) }
-    let previousAverage = previousValues.reduce(0, +) / Double(previousValues.count)
-    
-    let percentChange = ((current - previousAverage) / previousAverage) * 100
-    
-    if abs(percentChange) < 5 {
-      return .stable
-    } else {
-      return percentChange > 0 ? .increasing : .decreasing
-    }
-  }
-  
-  private func calculateSleepTrend(
-    current: Double,
-    previous: [Double],
-    lowerIsBetter: Bool
-  ) -> BiologicalAgeHealthData.MetricValue.Trend? {
-    guard !previous.isEmpty else { return nil }
-    
-    let previousAverage = previous.reduce(0, +) / Double(previous.count)
-    
-    let percentChange = ((current - previousAverage) / previousAverage) * 100
-    
-    if abs(percentChange) < 5 {
-      return .stable
-    } else {
-      return percentChange > 0 ? .increasing : .decreasing
     }
   }
 }

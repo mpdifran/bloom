@@ -32,13 +32,6 @@ extension BiologicalAgeHealthData {
   
   struct MetricValue: Codable, Sendable {
     let value: String
-    let trend: Trend?
-    
-    enum Trend: String, Codable, Sendable {
-      case increasing
-      case stable
-      case decreasing
-    }
   }
   
   struct CardiovascularHealth: Codable, Sendable {
@@ -51,12 +44,10 @@ extension BiologicalAgeHealthData {
       let average: String
       let min: String
       let max: String
-      let trend: MetricValue.Trend?
     }
     
     struct HRVMetric: Codable, Sendable {
       let average: String
-      let trend: MetricValue.Trend?
     }
   }
   
@@ -72,7 +63,6 @@ extension BiologicalAgeHealthData {
     struct SleepStageMetric: Codable, Sendable {
       let averageMinutes: String
       let averagePercentage: String
-      let trend: MetricValue.Trend?
     }
   }
   
@@ -111,8 +101,6 @@ extension BiologicalAgeHealthData {
   }
   
   struct RecoveryIndicators: Codable, Sendable {
-    let morningRestingHRTrend: MetricValue.Trend?
-    let hrvTrend: MetricValue.Trend?
     let daysSinceLastWorkout: Int?
   }
 

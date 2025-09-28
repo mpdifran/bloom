@@ -98,8 +98,6 @@ actor CentralizedSleepCalculator {
 
     guard !sleepAnalyses.isEmpty else { return nil }
 
-    let previousWeekRange = DateRange.previousWeek(from: dateRange)
-    let previousSleepAnalyses = await healthStoreFetcher.fetchSleepAnalysis(dateRange: previousWeekRange)
 
     let durations = sleepAnalyses.map { $0.overallMinutes }
     let averageDuration = durations.reduce(0, +) / Double(durations.count)
@@ -126,32 +124,6 @@ actor CentralizedSleepCalculator {
       return (remMinutes / averageDuration) * 100
     }()
 
-    let durationTrend = calculateSleepTrend(
-      current: averageDuration,
-      previous: previousSleepAnalyses.map { $0.overallMinutes },
-      lowerIsBetter: false
-    )
-
-    let efficiencyTrend: BiologicalAgeHealthData.MetricValue.Trend? = {
-      guard let currentEfficiency = averageEfficiency else { return nil }
-      let previousEfficiencies = previousSleepAnalyses.compactMap { calculateSleepEfficiency($0) }
-      return calculateSleepTrend(current: currentEfficiency, previous: previousEfficiencies, lowerIsBetter: false)
-    }()
-
-    let deepSleepTrend: BiologicalAgeHealthData.MetricValue.Trend? = {
-      guard let currentDeep = averageDeepMinutes else { return nil }
-      return calculateSleepTrend(current: currentDeep, previous: previousSleepAnalyses.map { $0.deepSleepMinutes }, lowerIsBetter: false)
-    }()
-
-    let remSleepTrend: BiologicalAgeHealthData.MetricValue.Trend? = {
-      guard let currentRem = averageRemMinutes else { return nil }
-      return calculateSleepTrend(current: currentRem, previous: previousSleepAnalyses.map { $0.remSleepMinutes }, lowerIsBetter: false)
-    }()
-
-    let wakeTrend: BiologicalAgeHealthData.MetricValue.Trend? = {
-      guard let currentWake = averageWakeMinutes else { return nil }
-      return calculateSleepTrend(current: currentWake, previous: previousSleepAnalyses.map { $0.awakeSleepMinutes }, lowerIsBetter: true)
-    }()
 
     let durationDisplayString = await HKQuantity(unit: .hour(), doubleValue: averageDuration / 60).displayString(for: .hour())
 
@@ -176,23 +148,21 @@ actor CentralizedSleepCalculator {
       wakeDisplayString = nil
     }
 
-    let bedtimeMetric = await calculateAverageBedtime(sleepAnalyses: sleepAnalyses, previousAnalyses: previousSleepAnalyses)
-    let wakeupMetric = await calculateAverageWakeupTime(sleepAnalyses: sleepAnalyses, previousAnalyses: previousSleepAnalyses)
+    let bedtimeMetric = await calculateAverageBedtimeSimple(sleepAnalyses: sleepAnalyses)
+    let wakeupMetric = await calculateAverageWakeupTimeSimple(sleepAnalyses: sleepAnalyses)
 
     return BiologicalAgeHealthData.SleepMetrics(
       averageSleepDuration: BiologicalAgeHealthData.MetricValue(
-        value: durationDisplayString,
-        trend: durationTrend
+        value: durationDisplayString
       ),
       averageSleepEfficiency: averageEfficiency.map {
-        BiologicalAgeHealthData.MetricValue(value: String(format: "%.1f%%", $0), trend: efficiencyTrend)
+        BiologicalAgeHealthData.MetricValue(value: String(format: "%.1f%%", $0))
       },
       averageDeepSleep: {
         if let displayString = deepSleepDisplayString {
           return BiologicalAgeHealthData.SleepMetrics.SleepStageMetric(
             averageMinutes: displayString,
-            averagePercentage: String(format: "%.1f%%", deepSleepPercentage ?? 0),
-            trend: deepSleepTrend
+            averagePercentage: String(format: "%.1f%%", deepSleepPercentage ?? 0)
           )
         } else {
           return nil
@@ -202,8 +172,7 @@ actor CentralizedSleepCalculator {
         if let displayString = remSleepDisplayString {
           return BiologicalAgeHealthData.SleepMetrics.SleepStageMetric(
             averageMinutes: displayString,
-            averagePercentage: String(format: "%.1f%%", remSleepPercentage ?? 0),
-            trend: remSleepTrend
+            averagePercentage: String(format: "%.1f%%", remSleepPercentage ?? 0)
           )
         } else {
           return nil
@@ -212,8 +181,7 @@ actor CentralizedSleepCalculator {
       averageWakeMinutes: {
         if let displayString = wakeDisplayString {
           return BiologicalAgeHealthData.MetricValue(
-            value: displayString,
-            trend: wakeTrend
+            value: displayString
           )
         } else {
           return nil
@@ -222,6 +190,26 @@ actor CentralizedSleepCalculator {
       averageBedtime: bedtimeMetric,
       averageWakeupTime: wakeupMetric
     )
+  }
+
+  private func calculateAverageBedtimeSimple(sleepAnalyses: [SleepAnalysis]) async -> BiologicalAgeHealthData.MetricValue? {
+    guard !sleepAnalyses.isEmpty else { return nil }
+
+    let bedtimeMinutes = sleepAnalyses.map { getMinutesFromMidnight($0.startDate) }
+    let averageMinutes = bedtimeMinutes.reduce(0, +) / Double(bedtimeMinutes.count)
+    let averageTime = formatMinutesAsTime(averageMinutes)
+
+    return BiologicalAgeHealthData.MetricValue(value: averageTime)
+  }
+
+  private func calculateAverageWakeupTimeSimple(sleepAnalyses: [SleepAnalysis]) async -> BiologicalAgeHealthData.MetricValue? {
+    guard !sleepAnalyses.isEmpty else { return nil }
+
+    let wakeupMinutes = sleepAnalyses.map { getMinutesFromMidnight($0.endDate) }
+    let averageMinutes = wakeupMinutes.reduce(0, +) / Double(wakeupMinutes.count)
+    let averageTime = formatMinutesAsTime(averageMinutes)
+
+    return BiologicalAgeHealthData.MetricValue(value: averageTime)
   }
 
   private func calculateSleepEfficiency(_ sleepAnalysis: SleepAnalysis) -> Double? {
@@ -327,25 +315,8 @@ actor CentralizedSleepCalculator {
 
     let averageTime = formatMinutesAsTime(averageMinutes)
 
-    let trend: BiologicalAgeHealthData.MetricValue.Trend? = {
-      guard !previousAnalyses.isEmpty else { return nil }
-      let previousMinutes = previousAnalyses.map { getMinutesFromMidnight($0.startDate) }
-      let previousAverage = previousMinutes.reduce(0, +) / Double(previousMinutes.count)
-
-      let difference = averageMinutes - previousAverage
-
-      if abs(difference) < 15 {
-        return .stable
-      } else if difference < 0 {
-        return .decreasing
-      } else {
-        return .increasing
-      }
-    }()
-
     return BiologicalAgeHealthData.MetricValue(
-      value: averageTime,
-      trend: trend
+      value: averageTime
     )
   }
 
@@ -357,25 +328,8 @@ actor CentralizedSleepCalculator {
 
     let averageTime = formatMinutesAsTime(averageMinutes)
 
-    let trend: BiologicalAgeHealthData.MetricValue.Trend? = {
-      guard !previousAnalyses.isEmpty else { return nil }
-      let previousMinutes = previousAnalyses.map { getMinutesFromMidnight($0.endDate) }
-      let previousAverage = previousMinutes.reduce(0, +) / Double(previousMinutes.count)
-
-      let difference = averageMinutes - previousAverage
-
-      if abs(difference) < 15 {
-        return .stable
-      } else if difference < 0 {
-        return .decreasing
-      } else {
-        return .increasing
-      }
-    }()
-
     return BiologicalAgeHealthData.MetricValue(
-      value: averageTime,
-      trend: trend
+      value: averageTime
     )
   }
 
@@ -405,21 +359,4 @@ actor CentralizedSleepCalculator {
     return String(format: "%d:%02d %@", hours % 12 == 0 ? 12 : hours % 12, minutes, hours < 12 ? "AM" : "PM")
   }
 
-  private func calculateSleepTrend(
-    current: Double,
-    previous: [Double],
-    lowerIsBetter: Bool
-  ) -> BiologicalAgeHealthData.MetricValue.Trend? {
-    guard !previous.isEmpty else { return nil }
-
-    let previousAverage = previous.reduce(0, +) / Double(previous.count)
-
-    let percentChange = ((current - previousAverage) / previousAverage) * 100
-
-    if abs(percentChange) < 5 {
-      return .stable
-    } else {
-      return percentChange > 0 ? .increasing : .decreasing
-    }
-  }
 }
