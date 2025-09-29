@@ -17,6 +17,7 @@ struct BloomPlusTodayInsightHeaderView: View {
         .font(.largeTitle)
         .bold()
         .fontDesign(.rounded)
+        .fixedSize(horizontal: false, vertical: true)
         .horizontalAlignment(.leading)
 
       Text("Get simple, personalized insights each morning to help you move, rest, and eat with intention.")

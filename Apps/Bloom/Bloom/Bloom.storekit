@@ -18,58 +18,55 @@
   ],
   "settings" : {
     "_applicationInternalID" : "6739955926",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
     "_developerTeamID" : "GUJ47GUV2Q",
+    "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 777324032.16356897,
+    "_lastSynchronizedDate" : 780853891.18701601,
     "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
     "_storeKitErrors" : [
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Load Products"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Purchase"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Verification"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "App Store Sync"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Subscription Status"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "App Transaction"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Manage Subscriptions Sheet"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Refund Request Sheet"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Offer Code Redeem Sheet"
       }
-    ]
+    ],
+    "_timeRate" : 0
   },
   "subscriptionGroups" : [
     {
@@ -88,7 +85,7 @@
           ],
           "displayPrice" : "9.99",
           "familyShareable" : false,
-          "groupNumber" : 1,
+          "groupNumber" : 2,
           "internalID" : "6739967940",
           "introductoryOffer" : null,
           "localizations" : [
@@ -100,7 +97,7 @@
           ],
           "productID" : "bloom_pro_monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Bloom Plus - Monthly - Full",
+          "referenceName" : "Bloom Plus - Monthly - 9.99",
           "subscriptionGroupID" : "21614173",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
@@ -114,10 +111,10 @@
           "codeOffers" : [
             {
               "eligibility" : [
-                "new",
-                "expired"
+                "expired",
+                "new"
               ],
-              "internalID" : "E77F9D2D",
+              "internalID" : "4E2BDDDE",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -130,7 +127,7 @@
                 "new",
                 "existing"
               ],
-              "internalID" : "1A9EBE59",
+              "internalID" : "7B59498C",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -143,7 +140,7 @@
                 "expired",
                 "existing"
               ],
-              "internalID" : "BF6C8D2B",
+              "internalID" : "711B95EA",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "free",
@@ -151,13 +148,26 @@
               "subscriptionPeriod" : "P1Y"
             },
             {
+              "eligibility" : [
+                "new",
+                "expired",
+                "existing"
+              ],
+              "internalID" : "F6BACC05",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "UGC Creator - Free First Year",
+              "subscriptionPeriod" : "P1Y"
+            },
+            {
               "displayPrice" : "19.99",
               "eligibility" : [
                 "new",
-                "existing",
-                "expired"
+                "expired",
+                "existing"
               ],
-              "internalID" : "1E7C3FE8",
+              "internalID" : "FA4CCA5C",
               "isStackable" : true,
               "numberOfPeriods" : 1,
               "paymentMode" : "payAsYouGo",
@@ -170,7 +180,7 @@
                 "expired",
                 "new"
               ],
-              "internalID" : "6993CA7D",
+              "internalID" : "7ED3377B",
               "isStackable" : false,
               "numberOfPeriods" : 1,
               "paymentMode" : "payUpFront",
@@ -180,10 +190,10 @@
           ],
           "displayPrice" : "39.99",
           "familyShareable" : false,
-          "groupNumber" : 2,
+          "groupNumber" : 1,
           "internalID" : "6740501424",
           "introductoryOffer" : {
-            "internalID" : "F43BCCC0",
+            "internalID" : "25F220B4",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -197,7 +207,7 @@
           ],
           "productID" : "bloom_pro_yearly",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Bloom Plus - Yearly - Full",
+          "referenceName" : "Bloom Plus - Yearly - 39.99 - 3 Days Free",
           "subscriptionGroupID" : "21614173",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
@@ -222,7 +232,7 @@
           ],
           "displayPrice" : "4.99",
           "familyShareable" : false,
-          "groupNumber" : 1,
+          "groupNumber" : 2,
           "internalID" : "6751231964",
           "introductoryOffer" : null,
           "localizations" : [
@@ -234,7 +244,7 @@
           ],
           "productID" : "bloom_499_1m",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Bloom Plus - Monthly - Half",
+          "referenceName" : "Bloom Plus - Monthly - 4.99",
           "subscriptionGroupID" : "21758930",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
@@ -250,10 +260,10 @@
           ],
           "displayPrice" : "19.99",
           "familyShareable" : false,
-          "groupNumber" : 2,
+          "groupNumber" : 1,
           "internalID" : "6751232035",
           "introductoryOffer" : {
-            "internalID" : "22596831",
+            "internalID" : "B3059D4A",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -267,8 +277,106 @@
           ],
           "productID" : "bloom_1999_1y_3d0",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Bloom Plus - Yearly - Half",
+          "referenceName" : "Bloom Plus - Yearly - 19.99 - 3 Days Free",
           "subscriptionGroupID" : "21758930",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    },
+    {
+      "id" : "21793379",
+      "localizations" : [
+
+      ],
+      "name" : "Bloom Plus - Time Periods",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6753175655",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full access to Bloom",
+              "displayName" : "Bloom Plus - Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bloom_399_1m",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Bloom Plus - Monthly - 3.99",
+          "subscriptionGroupID" : "21793379",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "1.49",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6753176037",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full access to Bloom",
+              "displayName" : "Bloom Plus - Weekly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bloom_149_1w",
+          "recurringSubscriptionPeriod" : "P1W",
+          "referenceName" : "Bloom Plus - Weekly - 1.49",
+          "subscriptionGroupID" : "21793379",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6753174998",
+          "introductoryOffer" : {
+            "internalID" : "DCF67C0F",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Full access to Bloom",
+              "displayName" : "Bloom Plus - Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bloom_2999_1y_7d0",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Bloom Plus - Yearly - 29.99 - 1 Week Free",
+          "subscriptionGroupID" : "21793379",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
 
