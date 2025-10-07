@@ -8,9 +8,11 @@
 public extension SocketMessage {
   struct Error: Codable, Equatable, Sendable {
     public let errorMessage: String
+    public let conversationID: String?
 
-    public init(errorMessage: String) {
+    public init(errorMessage: String, conversationID: String? = nil) {
       self.errorMessage = errorMessage
+      self.conversationID = conversationID
     }
   }
 }

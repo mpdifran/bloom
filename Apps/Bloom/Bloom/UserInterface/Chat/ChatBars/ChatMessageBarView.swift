@@ -22,6 +22,7 @@ class ChatMessageBarView: UIView {
   // MARK: - Properties
 
   private let tabController: TabController
+  private let conversationActor: ConversationModelActor
   weak var scrollDelegate: ChatMessageBarScrollDelegate?
 
   private let containerView = UIView()
@@ -49,6 +50,7 @@ class ChatMessageBarView: UIView {
 
   init(tabController: TabController) {
     self.tabController = tabController
+    self.conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
     super.init(frame: .zero)
     setupViews()
     setupConstraints()
@@ -644,10 +646,15 @@ class ChatMessageBarView: UIView {
     updateTextViewHeight()
 
     do {
+      // Fetch latest conversation to get lastMessageID
+      let conversation = try await conversationActor.getOrCreateLegacyConversation()
+
       try await ChatController.shared.send(
         message: textToSend,
         image: imageToSend,
-        chatContexts: chatContextsToSend
+        chatContexts: chatContextsToSend,
+        conversationID: .legacyConversationID,
+        lastMessageID: conversation.lastMessageID
       )
     } catch {
       // Show error

@@ -346,6 +346,28 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        AsyncButton {
+          let conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
+          try await conversationActor.fixUnassignedMessages()
+
+          alertDetails = AlertDetails(
+            title: "Messages Fixed",
+            message: "All unassigned chat messages have been assigned to the legacy conversation."
+          )
+        } label: {
+          LabeledContent("Fix Unassigned Chat Messages") {
+            Image(systemSymbol: .arrowshapeTurnUpForwardCircle)
+          }
+          .multilineTextAlignment(.leading)
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
         Button {
           hasShownOnboarding = false
         } label: {

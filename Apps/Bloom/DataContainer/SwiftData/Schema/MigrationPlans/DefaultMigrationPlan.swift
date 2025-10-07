@@ -8,7 +8,7 @@
 import SwiftData
 
 // CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV25.self
+let currentSchema: VersionedSchema.Type = SchemaV26.self
 
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
@@ -38,7 +38,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       SchemaV22.self,
       SchemaV23.self,
       SchemaV24.self,
-      SchemaV25.self
+      SchemaV25.self,
+      SchemaV26.self
     ]
   }
 
@@ -68,7 +69,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       migrateV21ToV22,
       migrateV22ToV23,
       migrateV23ToV24,
-      migrateV24ToV25
+      migrateV24ToV25,
+      migrateV25ToV26
     ]
   }
 
@@ -346,6 +348,44 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
     .lightweight(
       fromVersion: SchemaV24.self,
       toVersion: SchemaV25.self
+    )
+  }
+
+  private static var migrateV25ToV26: MigrationStage {
+    .custom(
+      fromVersion: SchemaV25.self,
+      toVersion: SchemaV26.self,
+      willMigrate: { context in
+        // Clean up deprecated TodayInsight and TodayContent models
+        let todayInsights = try context.fetch(FetchDescriptor<SchemaV25.TodayInsight>())
+        for insight in todayInsights {
+          context.delete(insight)
+        }
+
+        let todayContents = try context.fetch(FetchDescriptor<SchemaV25.TodayContent>())
+        for content in todayContents {
+          context.delete(content)
+        }
+
+        try context.save()
+      },
+      didMigrate: { context in
+        // Create a default "Legacy Chat" conversation for existing messages
+        let legacyConversation = SchemaV26.ChatConversation(
+          id: .legacyConversationID,
+          name: "Legacy Chat",
+          createdDate: Date.distantPast
+        )
+        context.insert(legacyConversation)
+
+        // Fetch all auto-migrated ChatMessage objects and attach to legacy conversation
+        let messages = try context.fetch(FetchDescriptor<SchemaV26.ChatMessage>())
+        for message in messages {
+          message.conversation = legacyConversation
+        }
+
+        try context.save()
+      }
     )
   }
 }

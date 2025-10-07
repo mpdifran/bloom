@@ -10,13 +10,16 @@ import SFSafeSymbols
 import AppUI
 
 struct ChatMessageBar: View {
-  
+
+  let conversationID: String
+  let lastMessageID: String?
+
   @State private var text = ""
   @State private var image: UIImage?
   @State private var presentedSheet: AnyView?
   @State private var didSendToggle = false
   @State private var error: Error?
-  
+
   @FocusState private var isFocused
 
   @Environment(TabController.self) private var tabController: TabController
@@ -174,7 +177,9 @@ private extension ChatMessageBar {
       try await ChatController.shared.send(
         message: textToSend,
         image: imageToSend,
-        chatContexts: chatContextsToSend
+        chatContexts: chatContextsToSend,
+        conversationID: conversationID,
+        lastMessageID: lastMessageID
       )
     } catch {
       self.error = error
@@ -215,7 +220,7 @@ private extension ChatMessageBar {
         }
       }
       .safeAreaInset(edge: .bottom) {
-        ChatMessageBar()
+        ChatMessageBar(conversationID: "preview", lastMessageID: nil)
       }
     }
   }

@@ -12,11 +12,15 @@ public extension SocketMessage {
     public let runID: String
     public let toolCalls: [ToolCallWrapper]
     public let requestID: String?
+    public let conversationID: String?
+    public let lastMessageID: String?
 
-    public init(runID: String, toolCalls: [ToolCallWrapper], requestID: String? = nil) {
+    public init(runID: String, toolCalls: [ToolCallWrapper], requestID: String? = nil, conversationID: String? = nil, lastMessageID: String? = nil) {
       self.runID = runID
       self.toolCalls = toolCalls
       self.requestID = requestID
+      self.conversationID = conversationID
+      self.lastMessageID = lastMessageID
     }
   }
 }
@@ -44,15 +48,21 @@ public extension SocketMessage {
     public let runID: String
     public let toolCallResults: [ToolCallResult]
     public let requestID: String?
+    public let conversationID: String?
+    public let lastMessageID: String?
 
     public init(
       runID: String,
       toolCallResults: [ToolCallResult],
-      requestID: String? = nil
+      requestID: String? = nil,
+      conversationID: String? = nil,
+      lastMessageID: String? = nil
     ) {
       self.runID = runID
       self.toolCallResults = toolCallResults
       self.requestID = requestID
+      self.conversationID = conversationID
+      self.lastMessageID = lastMessageID
     }
   }
 }

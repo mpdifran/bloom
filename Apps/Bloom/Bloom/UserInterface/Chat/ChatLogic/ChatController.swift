@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import BloomModel
 import BloomFoundation
+import SwiftData
 import CoreHealth
 import HealthKit
 import TelemetryDeck
@@ -18,17 +19,20 @@ extension ChatController {
     let id: String
     var message: String
     let data: Data?
+    let conversationID: String
 
-    init(id: String, message: String) {
+    init(id: String, message: String, conversationID: String) {
       self.id = id
       self.message = message
       self.data = nil
+      self.conversationID = conversationID
     }
 
-    init(id: String, data: Data) {
+    init(id: String, data: Data, conversationID: String) {
       self.id = id
       self.message = ""
       self.data = data
+      self.conversationID = conversationID
     }
   }
 }
@@ -36,26 +40,35 @@ extension ChatController {
 final actor ChatController: ObservableObject {
   static let shared = ChatController()
 
-  @AsyncStreamable var assistantTypingStatus: String?
-  @AsyncStreamable var assistantIsTyping = false
-  @AsyncStreamable var inProgressMessages = [InProgressMessage]()
-  private var inProgressMessagesIndex = 0
+  @AsyncStreamable var assistantTypingStatus: [String: String?] = [:]
+  @AsyncStreamable var assistantIsTyping: [String: Bool] = [:]
+  @AsyncStreamable var inProgressMessages: [String: [InProgressMessage]] = [:]
+  @AsyncStreamable var lastMessageIDUpdate: LastMessageIDUpdate?
+  private var inProgressMessagesIndex: [String: Int] = [:]
   @AsyncStreamable var error: Error?
-  @AsyncStreamable var conversationInProgress = false
+  @AsyncStreamable var conversationInProgress: [String: Bool] = [:]
+  @AsyncStreamable var conversationIDToRefresh: String?
 
   @AppStorage(.FeatureFlag.enableOpenAIModelOverride) private var enableOpenAIModelOverride = false
 
+  struct LastMessageIDUpdate: Equatable {
+    let conversationID: String
+    let lastMessageID: String
+  }
+
   private init() { }
 
-  private var queryAreas = [String]() {
+  private var queryAreas: [String: [String]] = [:] {
     didSet {
-      if queryAreas.isEmpty {
-        assistantTypingStatus = nil
-      } else {
-        if let listContent = listFormatter.string(from: queryAreas) {
-          assistantTypingStatus = "Reading \(listContent)..."
+      for (conversationID, areas) in queryAreas {
+        if areas.isEmpty {
+          assistantTypingStatus[conversationID] = nil
         } else {
-          assistantTypingStatus = nil
+          if let listContent = listFormatter.string(from: areas) {
+            assistantTypingStatus[conversationID] = "Reading \(listContent)..."
+          } else {
+            assistantTypingStatus[conversationID] = nil
+          }
         }
       }
     }
@@ -66,35 +79,38 @@ final actor ChatController: ObservableObject {
   private var webSocketDisconnectionTask: Task<Void, Never>?
   private var webSocketErrorTask: Task<Void, Never>?
 
-  private var throttleTask: Task<Void, Never>?
+  private var throttleTasks: [String: Task<Void, Never>] = [:]
   private let throttleInterval: UInt64 = 100_000_000  // 100 ms in nanoseconds
-  private var lastEmitTime: UInt64 = 0
-  private var pendingInternalInProgressMessages: [InProgressMessage]?
-  private var internalInProgressMessages = [InProgressMessage]() {
+  private var lastEmitTimes: [String: UInt64] = [:]
+  private var pendingInternalInProgressMessages: [String: [InProgressMessage]] = [:]
+  private var internalInProgressMessages: [String: [InProgressMessage]] = [:] {
     didSet {
-      let now = DispatchTime.now().uptimeNanoseconds
-      let newValue = internalInProgressMessages
-      // If enough time has passed since last emit, send immediately
-      if now - lastEmitTime >= throttleInterval {
-        lastEmitTime = now
-        inProgressMessages = newValue
-      } else {
-        // Buffer the latest value
-        pendingInternalInProgressMessages = newValue
-        // Schedule a trailing emit if not already scheduled
-        if throttleTask == nil {
-          // Calculate remaining wait time
-          let wait = throttleInterval - (now - lastEmitTime)
-          throttleTask = Task {
-            // Sleep for the remainder of the interval
-            try? await Task.sleep(nanoseconds: wait)
-            // After interval, emit the buffered value if still present
-            if let valueToEmit = pendingInternalInProgressMessages {
-              lastEmitTime = DispatchTime.now().uptimeNanoseconds
-              inProgressMessages = valueToEmit
-              pendingInternalInProgressMessages = nil
+      for (conversationID, messages) in internalInProgressMessages {
+        let now = DispatchTime.now().uptimeNanoseconds
+        let lastEmitTime = lastEmitTimes[conversationID] ?? 0
+
+        // If enough time has passed since last emit, send immediately
+        if now - lastEmitTime >= throttleInterval {
+          lastEmitTimes[conversationID] = now
+          inProgressMessages[conversationID] = messages
+        } else {
+          // Buffer the latest value
+          pendingInternalInProgressMessages[conversationID] = messages
+          // Schedule a trailing emit if not already scheduled
+          if throttleTasks[conversationID] == nil {
+            // Calculate remaining wait time
+            let wait = throttleInterval - (now - lastEmitTime)
+            throttleTasks[conversationID] = Task { [conversationID] in
+              // Sleep for the remainder of the interval
+              try? await Task.sleep(nanoseconds: wait)
+              // After interval, emit the buffered value if still present
+              if let valueToEmit = pendingInternalInProgressMessages[conversationID] {
+                lastEmitTimes[conversationID] = DispatchTime.now().uptimeNanoseconds
+                inProgressMessages[conversationID] = valueToEmit
+                pendingInternalInProgressMessages[conversationID] = nil
+              }
+              throttleTasks[conversationID] = nil
             }
-            throttleTask = nil
           }
         }
       }
@@ -102,7 +118,8 @@ final actor ChatController: ObservableObject {
   }
 
   private let listFormatter = ListFormatter()
-  private let modelContext = ContainerHolder.shared.createContext()
+  private let modelContext = ModelContext(ContainerHolder.shared.container)
+  private let conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
   private let queryPerformer = ChatHealthQueryPerformer()
 
   private let encoder = JSONEncoder.bloomModel
@@ -133,15 +150,27 @@ extension ChatController {
     _ = await createOrGetWebSocketHandle()
   }
 
-  func send(message: String, image: UIImage?, chatContexts: [ChatContext]) async throws {
+  func send(message: String, image: UIImage?, chatContexts: [ChatContext], conversationID: String?, lastMessageID: String?) async throws {
     // Send any pending telemetry before starting a new message
     sendToolCallCountTelemetry()
     sendToolRequestCountTelemetry()
-    
+
+    // Create new conversation if needed
+    let resolvedConversationID: String
+    if let conversationID = conversationID {
+      resolvedConversationID = conversationID
+    } else {
+      let conversation = try await conversationActor.createConversation(name: "Chat")
+      resolvedConversationID = conversation.id
+    }
+
     // Generate a new request ID
     let requestID = "request_\(UUID().uuidString)"
     currentRequestID = requestID
-    
+
+    // Fetch the conversation for message relationship
+    let conversationModel = try getConversationModel(id: resolvedConversationID)
+
     let imageData = image?.resized(toWidth: 800)?.pngData()
     let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -149,9 +178,10 @@ extension ChatController {
       let imageMessage = ChatMessage(
         isCurrentUser: true,
         imageData: imageData,
-        requestID: requestID
+        requestID: requestID,
+        conversation: conversationModel
       )
-      try await ChatHistoryModifier.shared.addMessage(imageMessage)
+      try await saveMessage(imageMessage)
     }
 
     for chatContext in chatContexts {
@@ -159,18 +189,20 @@ extension ChatController {
       let contextMessage = ChatMessage(
         isCurrentUser: true,
         richContent: contextData,
-        requestID: requestID
+        requestID: requestID,
+        conversation: conversationModel
       )
-      try await ChatHistoryModifier.shared.addMessage(contextMessage)
+      try await saveMessage(contextMessage)
     }
 
     if trimmedMessage.isNotEmpty {
       let userMessage = ChatMessage(
         isCurrentUser: true,
         message: message,
-        requestID: requestID
+        requestID: requestID,
+        conversation: conversationModel
       )
-      try await ChatHistoryModifier.shared.addMessage(userMessage)
+      try await saveMessage(userMessage)
     }
 
     let demographics = await ChatVitalConverter.shared.generateDemographics()
@@ -200,13 +232,15 @@ extension ChatController {
       imageFileIDs: fileIDs,
       userInfo: stringData,
       extraSystemContext: extraSystemContext,
-      requestID: requestID
+      requestID: requestID,
+      lastMessageID: lastMessageID,
+      conversationID: resolvedConversationID
     )
 
     let socket = await createOrGetWebSocketHandle()
     try await socket.send(payload: socketMessage)
-    
-    conversationInProgress = true
+
+    conversationInProgress[resolvedConversationID] = true
 
     await SoundPlayer.playSendMessage()
 
@@ -221,18 +255,31 @@ extension ChatController {
     await TelemetryDeck.startDurationSignal("Chat TTFTC")
   }
 
-  func sendSystemContextMessage(dummyAssistantMessage: String?, systemContext: String) async throws {
+  func sendSystemContextMessage(dummyAssistantMessage: String?, systemContext: String, conversationID: String?, lastMessageID: String?) async throws {
+    // Create new conversation if needed
+    let resolvedConversationID: String
+    if let conversationID = conversationID {
+      resolvedConversationID = conversationID
+    } else {
+      let conversation = try await conversationActor.createConversation(name: "Chat")
+      resolvedConversationID = conversation.id
+    }
+
     // Generate a new request ID
     let requestID = "request_\(UUID().uuidString)"
     currentRequestID = requestID
+
+    // Fetch the conversation for message relationship
+    let conversationModel = try getConversationModel(id: resolvedConversationID)
 
     if let dummyAssistantMessage {
       let assistantMessage = ChatMessage(
         isCurrentUser: false,
         message: dummyAssistantMessage,
-        requestID: requestID
+        requestID: requestID,
+        conversation: conversationModel
       )
-      try await ChatHistoryModifier.shared.addMessage(assistantMessage)
+      try await saveMessage(assistantMessage)
     }
 
     let demographics = await ChatVitalConverter.shared.generateDemographics()
@@ -243,7 +290,9 @@ extension ChatController {
       imageFileIDs: [],
       userInfo: stringData,
       extraSystemContext: systemContext,
-      requestID: requestID
+      requestID: requestID,
+      lastMessageID: lastMessageID,
+      conversationID: resolvedConversationID
     )
 
     let socket = await createOrGetWebSocketHandle()
@@ -256,6 +305,8 @@ extension ChatController {
 }
 
 private extension ChatController {
+
+  // MARK: - WebSocket Management
 
   func createOrGetWebSocketHandle() async -> WebSocketHandle {
     if let existingHandle = webSocketHandle {
@@ -300,44 +351,65 @@ private extension ChatController {
         return
       }
 
+      guard let conversationID = messageResponse.conversationID else {
+        print("Warning: MessageResponse missing conversationID")
+        return
+      }
+
       do {
+        let conversationModel = try getConversationModel(id: conversationID)
         let message = ChatMessage(
           id: messageResponse.id,
           isCurrentUser: false,
           message: messageResponse.message,
           responseID: messageResponse.responseID,
-          requestID: messageResponse.requestID
+          requestID: messageResponse.requestID,
+          conversation: conversationModel
         )
-        try await ChatHistoryModifier.shared.addMessage(message)
+        try await saveMessage(message)
+
         TelemetryDeck.signal("Received Bud Text Message")
       } catch {
         self.error = error
       }
 
-      self.inProgressMessagesIndex = 0
-      self.internalInProgressMessages = []
-      self.queryAreas.removeAll()
-      self.assistantIsTyping = false
+      self.inProgressMessagesIndex[conversationID] = 0
+      self.internalInProgressMessages[conversationID] = []
+      self.queryAreas[conversationID] = []
+      self.assistantIsTyping[conversationID] = false
 
     } else if let messageChunk = try? decoder.decode(SocketMessage.MessageChunkResponse.self, from: data) {
+      guard let conversationID = messageChunk.conversationID else {
+        print("Warning: MessageChunkResponse missing conversationID")
+        return
+      }
 
-      self.queryAreas.removeAll()
+      self.queryAreas[conversationID] = []
 
-      if self.internalInProgressMessages.count > self.inProgressMessagesIndex {
-        self.internalInProgressMessages[self.inProgressMessagesIndex].message += messageChunk.chunk
+      let index = self.inProgressMessagesIndex[conversationID] ?? 0
+      var messages = self.internalInProgressMessages[conversationID] ?? []
+
+      if messages.count > index {
+        messages[index].message += messageChunk.chunk
       } else {
-        let inProgressMessage = InProgressMessage(id: messageChunk.id, message: messageChunk.chunk)
-        self.internalInProgressMessages.append(inProgressMessage)
+        let inProgressMessage = InProgressMessage(id: messageChunk.id, message: messageChunk.chunk, conversationID: conversationID)
+        messages.append(inProgressMessage)
 
         await TelemetryDeck.stopAndSendDurationSignal("Chat TTFT")
       }
-    } else if let richContentMessage = try? decoder.decode(SocketMessage.RichMessageResponse.self, from: data) {
 
-      self.queryAreas.removeAll()
+      self.internalInProgressMessages[conversationID] = messages
+    } else if let richContentMessage = try? decoder.decode(SocketMessage.RichMessageResponse.self, from: data) {
+      guard let conversationID = richContentMessage.conversationID else {
+        print("Warning: RichMessageResponse missing conversationID")
+        return
+      }
+
+      self.queryAreas[conversationID] = []
 
       let data: Data?
       var dbID: String?
-      
+
       switch richContentMessage.kind {
       case .newGoals(let content):
         data = try? JSONEncoder.bloomModel.encode(content)
@@ -402,18 +474,22 @@ private extension ChatController {
       guard let data else { return }
 
       if richContentMessage.isTemporary {
-        let inProgressMessage = InProgressMessage(id: richContentMessage.id, data: data)
-        self.internalInProgressMessages.append(inProgressMessage)
-        self.inProgressMessagesIndex += 2 // One for the JSON, and we immediately move to the next message
+        let inProgressMessage = InProgressMessage(id: richContentMessage.id, data: data, conversationID: conversationID)
+        var messages = self.internalInProgressMessages[conversationID] ?? []
+        messages.append(inProgressMessage)
+        self.internalInProgressMessages[conversationID] = messages
+        self.inProgressMessagesIndex[conversationID] = (self.inProgressMessagesIndex[conversationID] ?? 0) + 2 // One for the JSON, and we immediately move to the next message
       } else {
         try? await self.insertRichChatMessage(
-          id: richContentMessage.id, 
+          id: richContentMessage.id,
           data: data,
+          conversationID: conversationID,
           markActionTaken: dbID != nil,
           dbID: dbID,
           responseID: richContentMessage.responseID,
           requestID: richContentMessage.requestID
         )
+
         TelemetryDeck.signal(
           "Received Bud Rich Content Message",
           parameters: [
@@ -424,8 +500,10 @@ private extension ChatController {
     } else if let toolCallRequest = try? decoder.decode(SocketMessage.ToolCallsRequest.self, from: data) {
       await TelemetryDeck.stopAndSendDurationSignal("Chat TTFTC")
 
-      // Extract the request ID from the tool call request
+      // Extract the request ID, conversationID, and lastMessageID from the tool call request
       let requestIDForResponse = toolCallRequest.requestID
+      let conversationID = toolCallRequest.conversationID
+      let lastMessageID = toolCallRequest.lastMessageID
 
       // Increment tool request count
       toolRequestCount += 1
@@ -443,7 +521,9 @@ private extension ChatController {
               case .queries(let queries):
 
                 let queryNames = queries.map { $0.dataType.name }
-                await self.record(queryAreas: queryNames)
+                if let conversationID {
+                  await self.record(queryAreas: queryNames, conversationID: conversationID)
+                }
 
                 let results: [String] = await withTaskGroup(of: String.self) { group in
                   for query in queries {
@@ -474,7 +554,9 @@ private extension ChatController {
         let responseMessage = SocketMessage.ToolCallsResponse(
           runID: toolCallRequest.runID,
           toolCallResults: toolCallsResponses,
-          requestID: requestIDForResponse
+          requestID: requestIDForResponse,
+          conversationID: conversationID,
+          lastMessageID: lastMessageID
         )
 
         if let socket = webSocketHandle {
@@ -487,7 +569,9 @@ private extension ChatController {
         let responseMessage = SocketMessage.ToolCallsResponse(
           runID: toolCallRequest.runID,
           toolCallResults: toolCallRequest.toolCalls.map { SocketMessage.ToolCallResult(toolCallID: $0.toolCallID) },
-          requestID: requestIDForResponse
+          requestID: requestIDForResponse,
+          conversationID: conversationID,
+          lastMessageID: lastMessageID
         )
         if let socket = webSocketHandle {
           try? await socket.send(payload: responseMessage)
@@ -502,26 +586,42 @@ private extension ChatController {
 //        self.error = error
       }
     } else if let typingIndicator = try? decoder.decode(SocketMessage.TypingIndicator.self, from: data) {
-      self.assistantIsTyping = typingIndicator.isTyping
+      if let conversationID = typingIndicator.conversationID {
+        self.assistantIsTyping[conversationID] = typingIndicator.isTyping
 
-      if self.assistantIsTyping {
-        self.queryAreas.removeAll()
+        if typingIndicator.isTyping {
+          self.queryAreas[conversationID] = []
+        }
       }
-    } else if let _ = try? decoder.decode(SocketMessage.ResponseCompleted.self, from: data) {
-
+    } else if let responseCompleted = try? decoder.decode(SocketMessage.ResponseCompleted.self, from: data) {
       TelemetryDeck.signal("Response Completed")
-      
+
       // Send telemetry before clearing
       sendToolCallCountTelemetry()
       sendToolRequestCountTelemetry()
-      
+
       // Clear the current request ID when the response completes
       currentRequestID = nil
-      conversationInProgress = false
+
+      if let conversationID = responseCompleted.conversationID {
+        conversationInProgress[conversationID] = false
+      }
+
+      // Emit lastMessageID update if present
+      if let conversationID = responseCompleted.conversationID, let lastMessageID = responseCompleted.lastMessageID {
+        self.lastMessageIDUpdate = LastMessageIDUpdate(
+          conversationID: conversationID,
+          lastMessageID: lastMessageID
+        )
+      }
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
       self.error = NSError(description: error.errorMessage)
       print(error.errorMessage)
-      conversationInProgress = false
+
+      if let conversationID = error.conversationID {
+        conversationInProgress[conversationID] = false
+      }
+
       TelemetryDeck.errorOccurred(
         id: "ChatController.parseData",
         category: .thrownException,
@@ -532,22 +632,25 @@ private extension ChatController {
     }
   }
 
-  func record(queryAreas: [String]) {
+  func record(queryAreas: [String], conversationID: String) {
+    var areas = self.queryAreas[conversationID] ?? []
     for area in queryAreas {
-      guard !self.queryAreas.contains(area) else { continue }
-
-      self.queryAreas.append(area)
+      guard !areas.contains(area) else { continue }
+      areas.append(area)
     }
+    self.queryAreas[conversationID] = areas
   }
 
   func insertRichChatMessage(
     id: String,
     data: Data,
+    conversationID: String,
     markActionTaken: Bool = false,
     dbID: String? = nil,
     responseID: String? = nil,
     requestID: String? = nil
   ) async throws {
+    let conversationModel = try getConversationModel(id: conversationID)
     let richContentMessage = ChatMessage(
       id: id,
       isCurrentUser: false,
@@ -555,9 +658,41 @@ private extension ChatController {
       dbID: dbID,
       hasPerformedAction: markActionTaken,
       responseID: responseID,
-      requestID: requestID
+      requestID: requestID,
+      conversation: conversationModel
     )
-    try await ChatHistoryModifier.shared.addMessage(richContentMessage)
+    try await saveMessage(richContentMessage)
+  }
+
+  // MARK: - Helper Methods
+
+  /// Fetch a conversation model object (not DTO) for assigning to messages
+  private func getConversationModel(id conversationID: String) throws -> ChatConversation {
+    let predicate = #Predicate<ChatConversation> { conversation in
+      conversation.id == conversationID
+    }
+    let descriptor = FetchDescriptor<ChatConversation>(predicate: predicate)
+
+    if let existing = try modelContext.fetch(descriptor).first {
+      return existing
+    }
+
+    // Create if it doesn't exist
+    let conversation = ChatConversation(
+      id: conversationID,
+      name: "Chat",
+      createdDate: .now
+    )
+    modelContext.insert(conversation)
+    try modelContext.save()
+    return conversation
+  }
+
+  /// Save a message to SwiftData. ChatHistoryModifier instances will observe and update.
+  private func saveMessage(_ message: ChatMessage) async throws {
+    modelContext.insert(message)
+    try modelContext.save()
+    conversationIDToRefresh = message.conversation?.id
   }
 
   func autoLog(logWater: SocketMessage.LogWaterConsumption) async throws -> String {
@@ -772,9 +907,9 @@ private extension ChatController {
     webSocketDataTask = nil
     webSocketDisconnectionTask = nil
     webSocketErrorTask = nil
-    assistantIsTyping = false
+    assistantIsTyping.removeAll()
     queryAreas.removeAll()
-    conversationInProgress = false
+    conversationInProgress.removeAll()
   }
   
   func sendToolCallCountTelemetry() {

@@ -24,21 +24,21 @@ class ChatPromptsCollectionViewCell: UICollectionViewCell {
   private func setupUI() {
     backgroundColor = .clear
     contentView.backgroundColor = .clear
-    
+
     let view = ChatPromptsView()
     let controller = UIHostingController(rootView: view)
     controller.view.translatesAutoresizingMaskIntoConstraints = false
     controller.view.backgroundColor = .clear
-    
+
     contentView.addSubview(controller.view)
-    
+
     NSLayoutConstraint.activate([
       controller.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
       controller.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
       controller.view.topAnchor.constraint(equalTo: contentView.topAnchor),
       controller.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
     ])
-    
+
     self.hostingController = controller
   }
 }

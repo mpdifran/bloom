@@ -162,7 +162,10 @@ private extension ChatService {
       inputs: inputs,
       userID: userID,
       db: db,
-      modelOverride: modelOverride
+      modelOverride: modelOverride,
+      isV2Client: message.isV2 == true,
+      clientLastMessageID: message.lastMessageID,
+      conversationID: message.conversationID
     )
   }
 
@@ -188,11 +191,17 @@ private extension ChatService {
       try await chatHistory.removeFunctionCallID(toolCallResult.toolCallID, for: userID)
     }
 
+    // Determine if this is a V2 client based on presence of conversationID
+    let isV2Client = response.conversationID != nil
+
     try await streamResponse(
       inputs: inputs,
       userID: userID,
       db: db,
-      modelOverride: modelOverride
+      modelOverride: modelOverride,
+      isV2Client: isV2Client,
+      clientLastMessageID: response.lastMessageID,
+      conversationID: response.conversationID
     )
   }
 }
@@ -206,14 +215,26 @@ private extension ChatService {
     userID: UserIdentifier,
     db: any Database,
     modelOverride: ModelID?,
-    isRetry: Bool = false
+    isRetry: Bool = false,
+    isV2Client: Bool,
+    clientLastMessageID: String?,
+    conversationID: String?
   ) async throws {
 
     if isRetry {
       logger.info("Chat stream request failed, retrying once.")
     }
 
-    let previousResponseID = try await chatHistory.getLastResponseID(for: userID)
+    // Handle previous response ID based on client version
+    let previousResponseID: String?
+    if isV2Client {
+      // V2 client - use client-provided lastMessageID
+      previousResponseID = clientLastMessageID
+    } else {
+      // V1 client - use Redis stored lastResponseID
+      previousResponseID = try await chatHistory.getLastResponseID(for: userID)
+    }
+
     let fortifiedInputs = try await fortify(inputs: inputs, userID: userID)
     
     // Get current request ID and check if we should include tools
@@ -247,7 +268,10 @@ private extension ChatService {
     func performRetry() async throws {
       guard !isRetry else { return }
 
-      try await chatHistory.clearLastResponseID(for: userID)
+      // Only clear Redis for V1 clients
+      if !isV2Client {
+        try await chatHistory.clearLastResponseID(for: userID)
+      }
       try await chatHistory.clearFunctionCallIDs(for: userID)
 
       try await streamResponse(
@@ -255,7 +279,10 @@ private extension ChatService {
         userID: userID,
         db: db,
         modelOverride: modelOverride,
-        isRetry: true
+        isRetry: true,
+        isV2Client: isV2Client,
+        clientLastMessageID: clientLastMessageID,
+        conversationID: conversationID
       )
     }
 
@@ -267,24 +294,29 @@ private extension ChatService {
           await typingStateTracker.reset(for: userID)
           await requestIDTracker.setCurrentResponseID(event.response.id, for: userID)
         case .inProgress:
-          try await sendIsAssistantTyping(isTyping: true, userID: userID)
+          try await sendIsAssistantTyping(isTyping: true, userID: userID, conversationID: conversationID)
         case .completed(let event):
           if toolCalls.isNotEmpty {
-            try await send(toolCalls: toolCalls, userID: userID, db: db)
+            try await send(toolCalls: toolCalls, userID: userID, db: db, conversationID: conversationID, lastMessageID: event.response.id)
           }
 
-          try await chatHistory.storeLastResponseID(event.response.id, for: userID)
-          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          // Only store in Redis for V1 clients
+          if !isV2Client {
+            try await chatHistory.storeLastResponseID(event.response.id, for: userID)
+          }
+          try await sendIsAssistantTyping(isTyping: false, userID: userID, conversationID: conversationID)
           if toolCalls.isEmpty {
-            try await sendResponseCompleted(userID: userID, db: db)
+            try await sendResponseCompleted(userID: userID, db: db, lastMessageID: event.response.id, conversationID: conversationID)
           }
         case .failed:
-          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          try await sendIsAssistantTyping(isTyping: false, userID: userID, conversationID: conversationID)
           try await performRetry()
         case .outputTextDelta(let event):
-          try await bufferChunk(event: event, userID: userID, db: db)
+          let currentResponseID = await requestIDTracker.getCurrentResponseID(for: userID)
+          try await bufferChunk(event: event, userID: userID, db: db, lastMessageID: currentResponseID, conversationID: conversationID)
         case .outputTextDone(let event):
-          try await sendCompletedMessage(event: event, userID: userID, db: db)
+          let currentResponseID = await requestIDTracker.getCurrentResponseID(for: userID)
+          try await sendCompletedMessage(event: event, userID: userID, db: db, lastMessageID: currentResponseID, conversationID: conversationID)
         case .outputItemDone(let event):
           switch event.item {
           case .functionToolCall(let call):
@@ -301,7 +333,7 @@ private extension ChatService {
             break
           }
         case .error:
-          try await sendIsAssistantTyping(isTyping: false, userID: userID)
+          try await sendIsAssistantTyping(isTyping: false, userID: userID, conversationID: conversationID)
           try await performRetry()
         default:
           logger.debug("\(event)")
@@ -342,7 +374,9 @@ private extension ChatService {
   func bufferChunk(
     event: OpenAIKit.Response.OutputTextDeltaEvent,
     userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    lastMessageID: String? = nil,
+    conversationID: String? = nil
   ) async throws {
 
     let filteredData = await jsonBuffer.filter(event.delta, for: userID)
@@ -352,12 +386,13 @@ private extension ChatService {
       switch data {
       case .chunk(let index, let chunk):
         // Turn off typing indicator when we start streaming text chunks
-        try await sendIsAssistantTyping(isTyping: false, userID: userID)
-        
+        try await sendIsAssistantTyping(isTyping: false, userID: userID, conversationID: conversationID)
+
         let messageChunk = SocketMessage.MessageChunkResponse(
-          id: event.itemId + "-\(index)", 
+          id: event.itemId + "-\(index)",
           chunk: chunk,
-          requestID: currentRequestID
+          requestID: currentRequestID,
+          conversationID: conversationID
         )
         let wasSent = try await sendSocketContentIfAvailable(messageChunk, userID: userID)
         if !wasSent {
@@ -367,10 +402,11 @@ private extension ChatService {
         let kind = try parseKind(from: json)
 
         let message = SocketMessage.RichMessageResponse(
-          id: event.itemId + "-\(index)", 
-          kind: kind, 
+          id: event.itemId + "-\(index)",
+          kind: kind,
           isTemporary: true,
-          requestID: currentRequestID
+          requestID: currentRequestID,
+          conversationID: conversationID
         )
         let wasSent = try await sendSocketContentIfAvailable(message, userID: userID)
         if !wasSent {
@@ -378,9 +414,9 @@ private extension ChatService {
         }
 
       case .collectingJSON:
-        try await sendIsAssistantTyping(isTyping: true, userID: userID)
+        try await sendIsAssistantTyping(isTyping: true, userID: userID, conversationID: conversationID)
       case .streamingText:
-        try await sendIsAssistantTyping(isTyping: false, userID: userID)
+        try await sendIsAssistantTyping(isTyping: false, userID: userID, conversationID: conversationID)
       }
     }
   }
@@ -388,7 +424,9 @@ private extension ChatService {
   func sendCompletedMessage(
     event: OpenAIKit.Response.OutputTextDoneEvent,
     userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    lastMessageID: String? = nil,
+    conversationID: String? = nil
   ) async throws {
     let partitions = await jsonBuffer.processCompletedMessage(event.text, for: userID)
     let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
@@ -399,10 +437,11 @@ private extension ChatService {
       case .text(let index, let content):
         logger.trace("Assistant Message: \(content)")
         let response = SocketMessage.MessageResponse(
-          id: event.itemId + "-\(index)", 
+          id: event.itemId + "-\(index)",
           message: content,
           requestID: currentRequestID,
-          responseID: currentResponseID
+          responseID: currentResponseID,
+          conversationID: conversationID
         )
         try await ensureContentSent(
           response,
@@ -421,12 +460,13 @@ private extension ChatService {
           kind: kind,
           isTemporary: false,
           requestID: currentRequestID,
-          responseID: currentResponseID
+          responseID: currentResponseID,
+          conversationID: conversationID
         )
         try await ensureContentSilentlySent(response, userID: userID, db: db)
       }
     }
-    
+
     // Clear any cached streaming content since this message is now complete
     try await chatHistory.clearStreamingContent(userID: userID)
   }
@@ -576,7 +616,9 @@ private extension ChatService {
   func send(
     toolCalls: [OpenAIKit.Response.OutputItem.FunctionToolCall],
     userID: UserIdentifier,
-    db: any Database
+    db: any Database,
+    conversationID: String?,
+    lastMessageID: String?
   ) async throws {
 
     // Increment tool call count once for this tool call request
@@ -599,7 +641,9 @@ private extension ChatService {
     let toolCallRequest = SocketMessage.ToolCallsRequest(
       runID: "",
       toolCalls: toolCallWrappers,
-      requestID: currentRequestID
+      requestID: currentRequestID,
+      conversationID: conversationID,
+      lastMessageID: lastMessageID
     )
     try await ensureContentSilentlySent(toolCallRequest, userID: userID, db: db)
   }
@@ -648,26 +692,28 @@ private extension ChatService {
 
   func sendIsAssistantTyping(
     isTyping: Bool,
-    userID: UserIdentifier
+    userID: UserIdentifier,
+    conversationID: String?
   ) async throws {
     // Only send if the state actually changed
     let stateChanged = await typingStateTracker.setTypingIfChanged(isTyping, for: userID)
     if stateChanged {
-      let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping)
+      let typingIndicator = SocketMessage.TypingIndicator(isTyping: isTyping, conversationID: conversationID)
       _ = try await sendSocketContentIfAvailable(typingIndicator, userID: userID)
     }
   }
 
-  func sendResponseCompleted(userID: UserIdentifier, db: any Database) async throws {
+  func sendResponseCompleted(userID: UserIdentifier, db: any Database, lastMessageID: String? = nil, conversationID: String? = nil) async throws {
     let currentRequestID = await requestIDTracker.getCurrentRequestID(for: userID)
-    let responseCompleted = SocketMessage.ResponseCompleted(requestID: currentRequestID)
+
+    let responseCompleted = SocketMessage.ResponseCompleted(requestID: currentRequestID, conversationID: conversationID, lastMessageID: lastMessageID)
     try await ensureContentSilentlySent(responseCompleted, userID: userID, db: db)
-    
+
     // Clear tool call tracking for this request
     if let requestID = currentRequestID {
       await toolCallTracker.clearRequest(requestID)
     }
-    
+
     // Clear the requestID and responseID after the response is completed
     await requestIDTracker.clearRequestID(for: userID)
     await requestIDTracker.clearResponseID(for: userID)

@@ -10,9 +10,9 @@ import AppUI
 import SFSafeSymbols
 
 struct ChatPromptsView: View {
-  
+
   @State private var error: Error?
-  
+
   private let prompts = [
     "How can I improve my heart health?",
     "What is my sleep quality score?",
@@ -22,7 +22,7 @@ struct ChatPromptsView: View {
     "How's my nutrition doing?",
     "Help me manage stress"
   ]
-  
+
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
       HStack(spacing: 8) {
@@ -39,13 +39,15 @@ struct ChatPromptsView: View {
     }
     .alert(error: $error)
   }
-  
+
   private func sendMessage(_ message: String) async {
     do {
       try await ChatController.shared.send(
         message: message,
         image: nil,
-        chatContexts: []
+        chatContexts: [],
+        conversationID: nil,
+        lastMessageID: nil
       )
     } catch {
       self.error = error

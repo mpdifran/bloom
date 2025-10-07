@@ -18,7 +18,12 @@ final class ChatViewModel {
   var conversationInProgress = false
   var shouldTriggerScroll = false
 
+  private let conversationActor: ConversationModelActor
+  private let historyModifier: ChatHistoryModifier
+
   init() {
+    self.conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
+    self.historyModifier = ChatHistoryModifier(conversationID: .legacyConversationID)
     setupObservers()
   }
 
@@ -35,10 +40,13 @@ extension ChatViewModel {
     chatContexts: [ChatContext]
   ) async {
     do {
+      let conversation = try await conversationActor.getOrCreateLegacyConversation()
       try await ChatController.shared.send(
         message: message,
         image: image,
-        chatContexts: chatContexts
+        chatContexts: chatContexts,
+        conversationID: .legacyConversationID,
+        lastMessageID: conversation.lastMessageID
       )
     } catch {
       self.error = error
@@ -50,14 +58,33 @@ extension ChatViewModel {
     }
   }
 
+  func sendSystemContextMessage(dummyAssistantMessage: String?, systemContext: String) async {
+    do {
+      let conversation = try await conversationActor.getOrCreateLegacyConversation()
+      try await ChatController.shared.sendSystemContextMessage(
+        dummyAssistantMessage: dummyAssistantMessage,
+        systemContext: systemContext,
+        conversationID: .legacyConversationID,
+        lastMessageID: conversation.lastMessageID
+      )
+    } catch {
+      self.error = error
+      TelemetryDeck.errorOccurred(
+        id: "ChatViewModel.sendSystemContextMessage",
+        category: .thrownException,
+        message: error.localizedDescription
+      )
+    }
+  }
+
   func deleteChatHistory() async throws {
     try await NetworkRequester.shared.deleteChatThread()
-    try await ChatHistoryModifier.shared.deleteAllMessages()
+    try await historyModifier.deleteAllMessages()
   }
-  
+
   func updateMessageAction(id: String, hasPerformedAction: Bool) async {
     do {
-      try await ChatHistoryModifier.shared.updateMessageAction(id: id, hasPerformedAction: hasPerformedAction)
+      try await historyModifier.updateMessageAction(id: id, hasPerformedAction: hasPerformedAction)
     } catch {
       self.error = error
       TelemetryDeck.errorOccurred(
@@ -88,7 +115,8 @@ private extension ChatViewModel {
 
   func setupObservers() {
     cellModelsTask = Task.detached { [weak self] in
-      for await cellModels in await ChatHistoryModifier.shared.$cellModels {
+      guard let historyModifier = self?.historyModifier else { return }
+      for await cellModels in await historyModifier.$cellModels {
         await MainActor.run { [weak self] in
           self?.cellModels = cellModels
         }
@@ -110,9 +138,10 @@ private extension ChatViewModel {
       }
     }
     conversationTask = Task.detached { [weak self] in
-      for await inProgress in await ChatController.shared.$conversationInProgress {
+      for await conversationInProgressDict in await ChatController.shared.$conversationInProgress {
         await MainActor.run { [weak self] in
-          self?.conversationInProgress = inProgress
+          guard let self else { return }
+          self.conversationInProgress = conversationInProgressDict[.legacyConversationID] ?? false
         }
       }
     }

@@ -21,11 +21,11 @@ class ChatViewController: UICollectionViewController {
   // MARK: - Properties
 
   private let chatLayout: CollectionViewChatLayout
-  private let viewModel = ChatViewModel()
+  private let viewModel: ChatViewModel
   private let tabController: TabController
   private let themeController: ThemeController
 
-  private var chatMessageBar: ChatMessageBarView!
+  private let chatMessageBar: ChatMessageBarView
   private var scrollToBottomButtonBottomConstraint: NSLayoutConstraint!
 
   private var cellModels: [ChatCellModel] = []
@@ -59,6 +59,8 @@ class ChatViewController: UICollectionViewController {
   init(tabController: TabController, themeController: ThemeController) {
     self.tabController = tabController
     self.themeController = themeController
+    self.viewModel = ChatViewModel()
+    self.chatMessageBar = ChatMessageBarView(tabController: tabController)
 
     chatLayout = CollectionViewChatLayout()
     chatLayout.settings.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width, height: 100)
@@ -81,15 +83,15 @@ class ChatViewController: UICollectionViewController {
 
     setupNavigationBar()
     setupCollectionView()
+    setupKeyboardObservers()
     setupMessageBar()
     setupScrollToBottomButton()
-    setupObservers()
-    setupKeyboardObservers()
     updateContentInsets()
+    setupObservers()
 
     // Start WebSocket maintenance
-    maintenanceTask = Task {
-      await viewModel.maintainWebSocketConnection()
+    maintenanceTask = Task { [weak self] in
+      await self?.viewModel.maintainWebSocketConnection()
     }
   }
 
@@ -134,7 +136,6 @@ class ChatViewController: UICollectionViewController {
   // MARK: - Message Bar Setup
   
   private func setupMessageBar() {
-    chatMessageBar = ChatMessageBarView(tabController: tabController)
     chatMessageBar.scrollDelegate = self
     chatMessageBar.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(chatMessageBar)
@@ -157,8 +158,6 @@ class ChatViewController: UICollectionViewController {
   }
   
   private func updateContentInsets() {
-    guard chatMessageBar != nil else { return }
-    
     // Calculate the height of the message bar plus any keyboard
     let messageBarHeight: CGFloat
     if #available(iOS 26.0, *) {

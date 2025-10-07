@@ -10,9 +10,11 @@ import Foundation
 public extension SocketMessage {
   struct TypingIndicator: Codable, Equatable, Sendable {
     public let isTyping: Bool
+    public let conversationID: String?
 
-    public init(isTyping: Bool) {
+    public init(isTyping: Bool, conversationID: String? = nil) {
       self.isTyping = isTyping
+      self.conversationID = conversationID
     }
   }
 }

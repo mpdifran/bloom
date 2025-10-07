@@ -12,19 +12,29 @@ public extension SocketMessage {
     public let userInfo: String
     public let extraSystemContext: String?
     public let requestID: String?
+    public let lastMessageID: String?
+    public let conversationID: String?
+
+    public var isV2: Bool {
+      conversationID != nil
+    }
 
     public init(
       text: String,
       imageFileIDs: [String],
       userInfo: String,
       extraSystemContext: String? = nil,
-      requestID: String? = nil
+      requestID: String? = nil,
+      lastMessageID: String? = nil,
+      conversationID: String? = nil
     ) {
       self.text = text
       self.imageFileIDs = imageFileIDs
       self.userInfo = userInfo
       self.extraSystemContext = extraSystemContext
       self.requestID = requestID
+      self.lastMessageID = lastMessageID
+      self.conversationID = conversationID
     }
   }
 
@@ -32,15 +42,18 @@ public extension SocketMessage {
     public let id: String
     public let chunk: String
     public let requestID: String?
+    public let conversationID: String?
 
     public init(
       id: String,
       chunk: String,
-      requestID: String? = nil
+      requestID: String? = nil,
+      conversationID: String? = nil
     ) {
       self.id = id
       self.chunk = chunk
       self.requestID = requestID
+      self.conversationID = conversationID
     }
   }
 
@@ -49,17 +62,20 @@ public extension SocketMessage {
     public let message: String
     public let requestID: String?
     public let responseID: String?
+    public let conversationID: String?
 
     public init(
       id: String,
       message: String,
       requestID: String? = nil,
-      responseID: String? = nil
+      responseID: String? = nil,
+      conversationID: String? = nil
     ) {
       self.id = id
       self.message = message
       self.requestID = requestID
       self.responseID = responseID
+      self.conversationID = conversationID
     }
   }
 
@@ -69,19 +85,22 @@ public extension SocketMessage {
     public let isTemporary: Bool
     public let requestID: String?
     public let responseID: String?
+    public let conversationID: String?
 
     public init(
       id: String,
       kind: Kind,
       isTemporary: Bool,
       requestID: String? = nil,
-      responseID: String? = nil
+      responseID: String? = nil,
+      conversationID: String? = nil
     ) {
       self.id = id
       self.kind = kind
       self.isTemporary = isTemporary
       self.requestID = requestID
       self.responseID = responseID
+      self.conversationID = conversationID
     }
 
     public enum Kind: Codable, Equatable, Sendable {

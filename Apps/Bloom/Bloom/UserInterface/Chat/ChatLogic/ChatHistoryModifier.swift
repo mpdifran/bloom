@@ -7,37 +7,43 @@ import HealthKit
 import BloomModel
 
 actor ChatHistoryModifier {
-  static let shared = ChatHistoryModifier()
-  
   @AsyncStreamable private(set) var cellModels: [ChatCellModel] = []
-  
+
   private let modelActor: ChatMessageModelActor
   private let habitModelActor: HabitModelActor
   private var messages: [ChatMessageDTO] = []
   private var inProgressMessages: [ChatController.InProgressMessage] = []
   private var assistantTypingStatus: String?
   private var assistantIsTyping = false
-  
+  private let conversationID: String
+  private var subscriptions = Set<Task<Void, Never>>()
+
   private static let messageLimit = 30
-  
-  private init() {
+
+  init(conversationID: String) {
+    self.conversationID = conversationID
     self.modelActor = ChatMessageModelActor.standard()
     self.habitModelActor = HabitModelActor.standard()
-    
-    // Load initial messages
-    Task {
-      await loadMessages()
-    }
-    
-    // Subscribe to ChatController updates
+
+    // Load initial messages and subscribe to updates
     Task {
       await subscribeToUpdates()
     }
+    Task {
+      await loadMessages()
+    }
+  }
+
+  deinit {
+    for task in subscriptions { task.cancel() }
   }
   
   private func loadMessages() async {
     do {
-      let fetchedMessages = try await modelActor.fetchMessages(limit: Self.messageLimit)
+      let fetchedMessages = try await modelActor.fetchMessages(
+        limit: Self.messageLimit,
+        conversationID: conversationID
+      )
       // Reverse the messages so they're in chronological order (oldest first)
       self.messages = fetchedMessages.reversed()
       await buildCellModels()
@@ -47,29 +53,59 @@ actor ChatHistoryModifier {
   }
   
   private func subscribeToUpdates() async {
-    // Subscribe to in-progress messages
-    Task {
-      for await messages in await ChatController.shared.$inProgressMessages {
-        self.inProgressMessages = messages
-        await buildCellModels()
+    let inProgressTask = Task { [conversationID] in
+      for await messagesDict in await ChatController.shared.$inProgressMessages {
+        if let messages = messagesDict[conversationID] {
+          await self.updateInProgress(messages)
+        } else {
+          await self.updateInProgress([])
+        }
       }
     }
-    
-    // Subscribe to typing status
-    Task {
-      for await status in await ChatController.shared.$assistantTypingStatus {
-        self.assistantTypingStatus = status
-        await buildCellModels()
+    subscriptions.insert(inProgressTask)
+
+    let typingStatusTask = Task { [conversationID] in
+      for await statusDict in await ChatController.shared.$assistantTypingStatus {
+        if let status = statusDict[conversationID] {
+          await self.updateTypingStatus(status)
+        } else {
+          await self.updateTypingStatus(nil)
+        }
       }
     }
-    
-    // Subscribe to typing indicator
-    Task {
-      for await isTyping in await ChatController.shared.$assistantIsTyping {
-        self.assistantIsTyping = isTyping
-        await buildCellModels()
+    subscriptions.insert(typingStatusTask)
+
+    let isTypingTask = Task { [conversationID] in
+      for await isTypingDict in await ChatController.shared.$assistantIsTyping {
+        let isTyping = isTypingDict[conversationID] ?? false
+        await self.updateIsTyping(isTyping)
       }
     }
+    subscriptions.insert(isTypingTask)
+
+    let refreshTask = Task { [conversationID] in
+      for await refreshConversationID in await ChatController.shared.$conversationIDToRefresh {
+        if let refreshConversationID, refreshConversationID == conversationID {
+          await self.loadMessages()
+        }
+      }
+    }
+    subscriptions.insert(refreshTask)
+  }
+
+  private func updateInProgress(_ messages: [ChatController.InProgressMessage]) async {
+    self.inProgressMessages = messages
+    await buildCellModels()
+  }
+
+  private func updateTypingStatus(_ status: String?) async {
+    self.assistantTypingStatus = status
+    await buildCellModels()
+  }
+
+  private func updateIsTyping(_ isTyping: Bool) async {
+    self.assistantIsTyping = isTyping
+    await buildCellModels()
   }
   
   private func buildCellModels() async {

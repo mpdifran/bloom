@@ -16,10 +16,24 @@ public final actor ChatMessageModelActor: SharedModelActor {
 
 public extension ChatMessageModelActor {
 
-  func fetchMessages(limit: Int? = nil) throws -> [ChatMessageDTO] {
-    var descriptor = FetchDescriptor<ChatMessage>(
-      sortBy: [SortDescriptor(\.date, order: .reverse)]
-    )
+  func fetchMessages(limit: Int? = nil, conversationID: String? = nil) throws -> [ChatMessageDTO] {
+    var descriptor: FetchDescriptor<ChatMessage>
+
+    if let conversationID {
+      // Filter by conversation
+      let predicate = #Predicate<ChatMessage> { message in
+        message.conversation?.id == conversationID
+      }
+      descriptor = FetchDescriptor<ChatMessage>(
+        predicate: predicate,
+        sortBy: [SortDescriptor(\.date, order: .reverse)]
+      )
+    } else {
+      // No filter - get all messages
+      descriptor = FetchDescriptor<ChatMessage>(
+        sortBy: [SortDescriptor(\.date, order: .reverse)]
+      )
+    }
 
     if let limit {
       descriptor.fetchLimit = limit
