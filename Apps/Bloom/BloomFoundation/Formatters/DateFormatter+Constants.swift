@@ -133,6 +133,22 @@ public extension DateFormatter {
     return justDayOfWeek.string(from: date)
   }
 
+  static func conversationRelativeDateOrTime(date: Date) -> String {
+    if Calendar.current.isDateInToday(date) {
+      return justTimeShort.string(from: date)
+    }
+    if Calendar.current.isDateInTomorrow(date) || Calendar.current.isDateInYesterday(date) {
+      return justRelativeDateMedium.string(from: date)
+    }
+    let cal = Calendar.current
+    if let sixDaysAgo = cal.date(byAdding: .day, value: -6, to: cal.startOfDay(for: Date())),
+       let startOfToday = cal.startOfDay(for: Date()) as Date?,
+       date >= sixDaysAgo && date < startOfToday {
+      return justDayOfWeek.string(from: date)
+    }
+    return justDateShort.string(from: date)
+  }
+
   static let timeIntervalHourAbbreviated = DateComponentsFormatter().with {
     $0.unitsStyle = .abbreviated
     $0.allowedUnits = [.hour]
@@ -194,3 +210,4 @@ public extension DateFormatter {
     $0.dateFormat = "HH:mm:ss.SSS"
   }
 }
+
