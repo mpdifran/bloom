@@ -166,9 +166,11 @@ private extension EntitlementController {
       // Determine subscription type
       let subscriptionType: String
       switch currentEntitlement.productIdentifier {
-      case .ProductIdentifier.monthly, .ProductIdentifier.monthlyHalf:
+      case .ProductIdentifier.weeklyLower:
+        subscriptionType = "weekly"
+      case .ProductIdentifier.monthly, .ProductIdentifier.monthlyHalf, .ProductIdentifier.monthlyLower:
         subscriptionType = "monthly"
-      case .ProductIdentifier.yearly, .ProductIdentifier.yearlyHalf:
+      case .ProductIdentifier.yearly, .ProductIdentifier.yearlyHalf, .ProductIdentifier.yearlyLower:
         subscriptionType = "yearly"
       default:
         subscriptionType = "unknown"
