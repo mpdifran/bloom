@@ -14,6 +14,7 @@ public struct ChatConversationDTO: Sendable, Equatable, Identifiable {
   public let name: String
   public let lastMessageID: String?
   public let createdDate: Date
+  public let updatedAt: Date
 }
 
 public extension ChatConversation {
@@ -24,7 +25,8 @@ public extension ChatConversation {
       id: id,
       name: name,
       lastMessageID: lastMessageID,
-      createdDate: createdDate
+      createdDate: createdDate,
+      updatedAt: updatedAt
     )
   }
 }

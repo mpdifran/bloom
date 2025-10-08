@@ -22,7 +22,7 @@ public actor ConversationModelActor {
 
   public func fetchAllConversations() throws -> [ChatConversationDTO] {
     let descriptor = FetchDescriptor<ChatConversation>(
-      sortBy: [SortDescriptor(\.createdDate, order: .reverse)]
+      sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
     )
     return try modelContext.fetch(descriptor).map { $0.asDTO() }
   }
@@ -102,6 +102,7 @@ public actor ConversationModelActor {
       conversation: conversation
     )
 
+    conversation.updatedAt = .now
     modelContext.insert(chatMessage)
     try modelContext.save()
     return chatMessage.asDTO()
@@ -136,6 +137,7 @@ public actor ConversationModelActor {
       conversation: conversation
     )
 
+    conversation.updatedAt = .now
     modelContext.insert(chatMessage)
     try modelContext.save()
     return chatMessage.asDTO()
@@ -170,6 +172,7 @@ public actor ConversationModelActor {
       conversation: conversation
     )
 
+    conversation.updatedAt = .now
     modelContext.insert(chatMessage)
     try modelContext.save()
     return chatMessage.asDTO()

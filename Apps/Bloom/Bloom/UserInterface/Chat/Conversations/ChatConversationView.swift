@@ -10,7 +10,7 @@ import SwiftData
 import DataContainer
 
 struct ChatConversationView: View {
-  @Query(sort: \ChatConversation.createdDate, order: .reverse) private var conversations: [ChatConversation]
+  @Query(sort: \ChatConversation.updatedAt, order: .reverse) private var conversations: [ChatConversation]
 
   var body: some View {
     BloomScrollView {

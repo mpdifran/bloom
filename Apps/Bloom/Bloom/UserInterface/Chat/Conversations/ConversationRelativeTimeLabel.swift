@@ -11,12 +11,11 @@ struct ConversationRelativeTimeLabel: View {
   let date: Date
 
   var body: some View {
-    TimelineView(.everyMinute) { _ in 
-      Text(DateFormatter.conversationRelativeDateOrTime(date: date))
-        .font(.caption)
-        .fontDesign(.rounded)
-        .foregroundStyle(.secondary)
-    }
+    Text(DateFormatter.conversationRelativeDateOrTime(date: date))
+      .font(.caption)
+      .fontDesign(.rounded)
+      .foregroundStyle(.secondary)
+      .fixedSize(horizontal: true, vertical: true)
   }
 }
 

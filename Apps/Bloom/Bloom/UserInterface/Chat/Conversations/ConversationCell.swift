@@ -20,10 +20,12 @@ struct ConversationCell: View {
 
         VStack(alignment: .leading) {
           Text(conversation.name)
+            .lineLimit(2)
             .bold()
 
           if let userMessage = conversation.latestUserMessage?.message {
             Text(userMessage)
+              .lineLimit(2)
               .font(.body)
               .foregroundStyle(.secondary)
           }

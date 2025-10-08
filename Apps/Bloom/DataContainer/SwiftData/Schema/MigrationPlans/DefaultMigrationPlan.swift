@@ -8,7 +8,7 @@
 import SwiftData
 
 // CURRENT SCHEMA
-let currentSchema: VersionedSchema.Type = SchemaV26.self
+let currentSchema: VersionedSchema.Type = SchemaV27.self
 
 public enum DefaultMigrationPlan: SchemaMigrationPlan {
   public static var schemas: [any VersionedSchema.Type] {
@@ -39,7 +39,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       SchemaV23.self,
       SchemaV24.self,
       SchemaV25.self,
-      SchemaV26.self
+      SchemaV26.self,
+      SchemaV27.self
     ]
   }
 
@@ -70,7 +71,8 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
       migrateV22ToV23,
       migrateV23ToV24,
       migrateV24ToV25,
-      migrateV25ToV26
+      migrateV25ToV26,
+      migrateV26ToV27
     ]
   }
 
@@ -384,6 +386,22 @@ public enum DefaultMigrationPlan: SchemaMigrationPlan {
           message.conversation = legacyConversation
         }
 
+        try context.save()
+      }
+    )
+  }
+
+  private static var migrateV26ToV27: MigrationStage {
+    .custom(
+      fromVersion: SchemaV26.self,
+      toVersion: SchemaV27.self,
+      willMigrate: nil,
+      didMigrate: { context in
+        // Set updatedAt to createdDate for all existing conversations
+        let conversations = try context.fetch(FetchDescriptor<SchemaV27.ChatConversation>())
+        for conversation in conversations {
+          conversation.updatedAt = conversation.createdDate
+        }
         try context.save()
       }
     )
