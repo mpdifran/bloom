@@ -33,6 +33,41 @@ struct OpenAIService: Sendable {
 
 extension OpenAIService {
 
+  func generateConversationTitle(userMessage: String) async -> String? {
+    do {
+      let model = ModelID.OSeries.o4Mini
+
+      let messages: [Chat.Message] = [
+        Chat.Message(
+          role: .system,
+          content: [
+            .text("Generate a concise title for this conversation based on the user's message. Respond with only the title, no quotes or punctuation.")
+          ]
+        ),
+        Chat.Message(
+          role: .user,
+          content: [
+            .text(userMessage)
+          ]
+        )
+      ]
+
+      let response = try await openAI.chats.create(
+        model: model,
+        messages: messages
+      )
+
+      guard let text = response.choices.first?.message.content.first?.text else {
+        return nil
+      }
+
+      return text.trimmingCharacters(in: .whitespacesAndNewlines)
+    } catch {
+      logger.error("Failed to generate conversation title: \(error)")
+      return nil
+    }
+  }
+
   func parseNewFoodItem(
     barCode: String,
     country: String,

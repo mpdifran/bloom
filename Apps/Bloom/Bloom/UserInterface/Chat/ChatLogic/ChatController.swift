@@ -614,6 +614,19 @@ private extension ChatController {
           lastMessageID: lastMessageID
         )
       }
+    } else if let conversationNameUpdate = try? decoder.decode(SocketMessage.ConversationNameUpdate.self, from: data) {
+      do {
+        _ = try await conversationActor.updateConversationName(
+          conversationID: conversationNameUpdate.conversationID,
+          name: conversationNameUpdate.name
+        )
+      } catch {
+        TelemetryDeck.errorOccurred(
+          id: "ChatController.updateConversationName",
+          category: .thrownException,
+          message: error.localizedDescription
+        )
+      }
     } else if let error = try? decoder.decode(SocketMessage.Error.self, from: data) {
       self.error = NSError(description: error.errorMessage)
       print(error.errorMessage)

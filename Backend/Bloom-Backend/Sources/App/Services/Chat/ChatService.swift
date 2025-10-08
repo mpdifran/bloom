@@ -158,6 +158,16 @@ private extension ChatService {
       inputs.append(.message(.init(role: .user, content: userContent)))
     }
 
+    // Generate conversation title in parallel if this is the first message
+    if message.lastMessageID == nil, let conversationID = message.conversationID, message.text.isNotEmpty {
+      Task {
+        if let title = await openAIService.generateConversationTitle(userMessage: message.text) {
+          let nameUpdate = SocketMessage.ConversationNameUpdate(conversationID: conversationID, name: title)
+          try? await ensureContentSilentlySent(nameUpdate, userID: userID, db: db)
+        }
+      }
+    }
+
     try await streamResponse(
       inputs: inputs,
       userID: userID,
