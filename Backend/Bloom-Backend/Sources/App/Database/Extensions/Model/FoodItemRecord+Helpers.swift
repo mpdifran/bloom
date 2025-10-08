@@ -53,6 +53,7 @@ extension FoodItemRecord {
       downvoteCount: downvoteCount,
       source: source,
       notes: notes,
+      logCount: logCount,
       createdAt: createdAt,
       updatedAt: updatedAt
     )
@@ -153,6 +154,7 @@ extension FoodItemRecord {
       downvoteCount: downvoteCount,
       source: source,
       notes: notes,
+      logCount: logCount,
       createdAt: createdAt,
       updatedAt: updatedAt
     )
@@ -235,7 +237,8 @@ extension FoodItemRecord {
       servingUnit: \(servingUnit?.debugDescription ?? "nil"),
       downvoteCount: \(downvoteCount ?? 0),
       source: \(source?.debugDescription ?? "nil"),
-      notes: \(notes?.debugDescription ?? "nil")
+      notes: \(notes?.debugDescription ?? "nil"),
+      logCount: \(logCount ?? 0)
     )
     """
   }

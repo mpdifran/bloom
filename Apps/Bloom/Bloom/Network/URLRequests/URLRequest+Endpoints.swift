@@ -71,6 +71,9 @@ extension URLRequest {
     static func submitFoodItemIssue(body: SubmitFoodItemIssueRequest) async throws -> URLRequest {
       try await URLRequest.post("v1/food/submit-food-item-issue", body: body)
     }
+    static func trackLog(body: TrackFoodLogRequest) async throws -> URLRequest {
+      try await URLRequest.post("v1/food/track-log", body: body)
+    }
   }
 }
 

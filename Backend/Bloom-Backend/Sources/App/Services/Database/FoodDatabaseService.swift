@@ -129,6 +129,21 @@ extension FoodDatabaseService {
     try await foodItem.save(on: db)
   }
 
+  func incrementLogCount(foodIDs: [FoodItemIdentifier]) async throws {
+    guard !foodIDs.isEmpty else { return }
+
+    guard let sqlDatabase = db as? SQLDatabase else {
+      throw Abort(.internalServerError, reason: "Database is not SQLDatabase compatible.")
+    }
+
+    let ids = foodIDs.map { $0.value }
+    try await sqlDatabase.raw("""
+      UPDATE food_item_records
+      SET log_count = COALESCE(log_count, 0) + 1
+      WHERE id = ANY(\(bind: ids))
+    """).run()
+  }
+
   func submitFoodItemIssueReport(user: User, foodItemIssue: FoodItemIssue) async throws {
     // Save images
     let packagingImageFileName: String?

@@ -171,6 +171,16 @@ extension NetworkRequester {
     let request = try await URLRequest.Food.markAsInaccurate(body: body)
     try await URLSession.shared.authenticatedBloomRequest(request: request)
   }
+
+  func trackFoodLog(foodIDs: [FoodItemIdentifier]) async throws {
+    guard !foodIDs.isEmpty else { return }
+
+    let body = TrackFoodLogRequest(
+      foodIds: foodIDs
+    )
+    let request = try await URLRequest.Food.trackLog(body: body)
+    try await URLSession.shared.authenticatedBloomRequest(request: request)
+  }
 }
 
 // MARK: - Today Content

@@ -27,6 +27,7 @@ extension FoodController: RouteCollection {
           $0.post("upload", use: uploadNewFood)
           $0.post("mark-as-inaccurate", use: markAsInaccurate)
           $0.post("submit-food-item-issue", use: submitFoodItemIssue)
+          $0.post("track-log", use: trackLog)
         }
       }
       $0.group("v2") {
@@ -173,6 +174,15 @@ extension FoodController {
       user: user,
       foodItemIssue: requestBody.foodItemIssue
     )
+
+    return Response(status: .ok)
+  }
+
+  @Sendable
+  func trackLog(_ request: Request) async throws -> Response {
+    let requestBody = try request.content.decode(TrackFoodLogRequest.self)
+
+    try await request.foodDatabaseService.incrementLogCount(foodIDs: requestBody.foodIds)
 
     return Response(status: .ok)
   }

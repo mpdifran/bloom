@@ -44,4 +44,5 @@ let allMigrations: [Migration] = [
   User.AddMorningNotificationTime(),
   FoodItemRecord.AddDuplicateFields(),
   FoodItemDuplicate.Create(),
+  FoodItemRecord.AddLogCount(),
 ]

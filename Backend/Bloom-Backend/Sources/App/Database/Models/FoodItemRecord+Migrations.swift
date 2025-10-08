@@ -412,4 +412,18 @@ extension FoodItemRecord {
         .update()
     }
   }
+
+  struct AddLogCount: AsyncMigration {
+    func prepare(on database: Database) async throws {
+      try await database.schema(FoodItemRecord.schema)
+        .field("log_count", .int, .sql(.default(0)))
+        .update()
+    }
+
+    func revert(on database: Database) async throws {
+      try await database.schema(FoodItemRecord.schema)
+        .deleteField("log_count")
+        .update()
+    }
+  }
 }

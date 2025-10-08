@@ -50,6 +50,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
   public var downvoteCount: Int?
   public var source: String?
   public var notes: String?
+  public var logCount: Int?
   /// Read-only.
   public var createdAt: Date?
   /// Read-only.
@@ -99,6 +100,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     downvoteCount: Int?,
     source: String?,
     notes: String?,
+    logCount: Int?,
     createdAt: Date?,
     updatedAt: Date?
   ) {
@@ -140,6 +142,7 @@ public struct AdminFoodItemRecord: Codable, Identifiable, Sendable, Hashable {
     self.downvoteCount = downvoteCount
     self.source = source
     self.notes = notes
+    self.logCount = logCount
     self.createdAt = createdAt
     self.updatedAt = updatedAt
   }

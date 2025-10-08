@@ -251,7 +251,7 @@ private extension PackageStore {
 
   @MainActor
   func requestProducts() async {
-    let identifiers = String.ProductIdentifier.all
+    let identifiers = [String.ProductIdentifier.monthlyHalf, String.ProductIdentifier.yearlyHalf]
     var subscriptions = [Product]()
 
     do {

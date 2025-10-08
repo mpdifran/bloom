@@ -138,6 +138,9 @@ final class FoodItemRecord: Model, @unchecked Sendable {
   @Field(key: "duplicate_last_processed")
   var duplicateLastProcessed: Date?
 
+  @Field(key: "log_count")
+  var logCount: Int?
+
   @Timestamp(key: "created_at", on: .create)
   var createdAt: Date?
 
@@ -203,6 +206,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.downvoteCount = nil
     self.source = source
     self.notes = nil
+    self.logCount = nil
   }
 
   init(
@@ -246,6 +250,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     downvoteCount: Int?,
     source: String?,
     notes: String?,
+    logCount: Int?,
     createdAt: Date?,
     updatedAt: Date?
   ) {
@@ -289,6 +294,7 @@ final class FoodItemRecord: Model, @unchecked Sendable {
     self.downvoteCount = downvoteCount
     self.source = source
     self.notes = notes
+    self.logCount = logCount
     self.createdAt = createdAt
     self.updatedAt = updatedAt
   }

@@ -133,6 +133,7 @@ private extension AdminFoodController {
       downvoteCount: createRecord.downvoteCount,
       source: createRecord.source,
       notes: createRecord.notes,
+      logCount: 0,
       createdAt: Date(),
       updatedAt: Date()
     )

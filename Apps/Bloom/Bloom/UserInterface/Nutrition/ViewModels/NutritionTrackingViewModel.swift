@@ -234,6 +234,12 @@ extension NutritionTrackingViewModel {
       floatValue: Double(foodItemServings.count)
     )
 
+    // Track food item logs on the server (fire-and-forget)
+    Task {
+      let foodIDs = foodItemServings.map { $0.foodItem.id }
+      try? await NetworkRequester.shared.trackFoodLog(foodIDs: foodIDs)
+    }
+
     return foodLogID
   }
 
@@ -289,7 +295,13 @@ extension NutritionTrackingViewModel {
       parameters: ["Meal": meal.rawValue],
       floatValue: Double(foodItemServings.count)
     )
-    
+
+    // Track food item logs on the server (fire-and-forget)
+    Task {
+      let foodIDs = foodItemServings.map { $0.foodItem.id }
+      try? await NetworkRequester.shared.trackFoodLog(foodIDs: foodIDs)
+    }
+
     return firstLogID
   }
 
