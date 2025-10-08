@@ -86,6 +86,7 @@ extension FoodDatabaseService {
           WHERE state = 'unverified'
           AND packaging_image IS NOT NULL
           AND nutrition_label_image IS NOT NULL
+          ORDER BY log_count DESC NULLS LAST
           LIMIT \(bind: limit)
       """).all(decodingFluent: FoodItemRecord.self)
 
