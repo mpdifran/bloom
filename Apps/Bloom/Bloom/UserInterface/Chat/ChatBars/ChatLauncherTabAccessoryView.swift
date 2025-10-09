@@ -44,7 +44,6 @@ struct ChatLauncherTabAccessoryView: View {
     }
     .selectable()
     .padding(.horizontal, 8)
-    .sheet($presentedSheet)
   }
 }
 
