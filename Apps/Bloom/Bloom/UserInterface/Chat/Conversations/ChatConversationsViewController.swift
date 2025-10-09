@@ -10,6 +10,7 @@ import SwiftUI
 import SwiftData
 import DataContainer
 import SFSafeSymbols
+import TelemetryDeck
 
 class ChatConversationsViewController: UIHostingController<ChatConversationsRootView> {
 
@@ -268,6 +269,8 @@ struct NewConversationChatBar: View {
       let conversation = ChatConversation(name: "New Chat")
       modelContext.insert(conversation)
       try modelContext.save()
+
+      TelemetryDeck.signal("Create Chat Conversation")
 
       // Send the message to the new conversation
       try await ChatController.shared.send(

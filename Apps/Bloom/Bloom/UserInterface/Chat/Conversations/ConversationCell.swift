@@ -38,8 +38,15 @@ struct ConversationCell: View {
       Spacer(minLength: 0)
 
       ConversationRelativeTimeLabel(date: conversation.latestUserMessage?.date ?? .now)
+
+      if conversation.isPinned {
+        Image(systemSymbol: .pinFill)
+          .font(.caption)
+          .foregroundStyle(.tint)
+      }
     }
     .cardContainer()
+    .id(conversation.id)
   }
 }
 
@@ -56,10 +63,11 @@ struct ConversationCell: View {
       )
       ConversationCell(
         conversation: ChatConversation(
-          id: "convo_123",
+          id: "convo_456",
           name: "What foods should I eat to build muscle?",
           lastMessageID: nil,
-          createdDate: .now.addingTimeInterval(-102465)
+          createdDate: .now.addingTimeInterval(-102465),
+          isPinned: true
         )
       )
     }

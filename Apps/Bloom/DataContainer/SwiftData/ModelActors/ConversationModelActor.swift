@@ -59,6 +59,18 @@ public actor ConversationModelActor {
     return conversation.asDTO()
   }
 
+  public func toggleConversationPin(conversationID: String) throws -> ChatConversationDTO? {
+    let predicate = #Predicate<ChatConversation> { conversation in
+      conversation.id == conversationID
+    }
+    let descriptor = FetchDescriptor<ChatConversation>(predicate: predicate)
+    guard let conversation = try modelContext.fetch(descriptor).first else { return nil }
+
+    conversation.isPinned.toggle()
+    try modelContext.save()
+    return conversation.asDTO()
+  }
+
   public func deleteConversation(conversationID: String) throws {
     let predicate = #Predicate<ChatConversation> { conversation in
       conversation.id == conversationID
