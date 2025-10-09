@@ -18,6 +18,7 @@ class BloomAppDelegate: NSObject, UIApplicationDelegate {
   ) -> Bool {
     // Register background task handlers before app finishes launching
     registerBackgroundTasks()
+    BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
     return true
   }
   

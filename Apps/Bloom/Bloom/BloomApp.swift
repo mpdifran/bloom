@@ -91,10 +91,6 @@ struct BloomApp: App {
           ReminderTriggerObserver.shared.startObserving()
         }
         .task {
-          // Schedule background tasks - handlers are registered in AppDelegate.didFinishLaunchingWithOptions
-          BackgroundTaskScheduler.shared.scheduleReminderNotificationUpdateTask()
-        }
-        .task {
           // Run chat conversation migration on app launch
           ChatConversationMigration.shared.runMigrationIfNeeded()
         }
