@@ -19,6 +19,7 @@ struct ChatConversationView: View {
   @Query(sort: \ChatConversation.updatedAt, order: .reverse) private var conversations: [ChatConversation]
   @State private var confirmationDialogDetails: ConfirmationDialogDetails?
   @State private var error: Error?
+  @State private var presentedSheet: AnyView?
 
   var body: some View {
     BloomScrollView {
@@ -29,6 +30,14 @@ struct ChatConversationView: View {
             onSelectConversation(conversation, true)
           }
           .contextMenu {
+            Button {
+              presentedSheet = RenameConversationView(conversation: conversation).asAny
+            } label: {
+              Label("Rename", systemSymbol: .squareAndPencil)
+            }
+
+            Divider()
+
             Button(role: .destructive) {
               showDeleteConfirmation(for: conversation)
             } label: {
@@ -40,7 +49,8 @@ struct ChatConversationView: View {
     }
     .navigationTitle("Conversations")
     .alert(error: $error)
-    .animation(.default, value: conversations.count)
+    .sheet($presentedSheet)
+    .animation(.default, value: conversations)
   }
 
   private func showDeleteConfirmation(for conversation: ChatConversation) {

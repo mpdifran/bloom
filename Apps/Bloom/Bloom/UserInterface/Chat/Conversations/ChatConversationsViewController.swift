@@ -260,6 +260,7 @@ struct NewConversationChatBar: View {
     text = ""
     image = nil
     tabController.chatContexts = []
+    isFocused = false
 
     do {
       // Create a new conversation directly on main context
