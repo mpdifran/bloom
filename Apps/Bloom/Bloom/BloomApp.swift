@@ -138,6 +138,11 @@ private extension BloomApp {
       ImageResizeMigration.shared.runMigrationIfNeeded()
     }
 
+    Task { @MainActor in
+      // Run chat conversation migration in background
+      ChatConversationMigration.shared.runMigrationIfNeeded()
+    }
+
     TelemetryDeck.signal(
       "Health Goal",
       parameters: [

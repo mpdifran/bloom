@@ -21,6 +21,7 @@ class ChatMessageBarView: UIView {
 
   // MARK: - Properties
 
+  private let conversationID: String
   private let tabController: TabController
   private let conversationActor: ConversationModelActor
   weak var scrollDelegate: ChatMessageBarScrollDelegate?
@@ -48,7 +49,8 @@ class ChatMessageBarView: UIView {
 
   // MARK: - Initialization
 
-  init(tabController: TabController) {
+  init(conversationID: String, tabController: TabController) {
+    self.conversationID = conversationID
     self.tabController = tabController
     self.conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
     super.init(frame: .zero)
@@ -647,14 +649,14 @@ class ChatMessageBarView: UIView {
 
     do {
       // Fetch latest conversation to get lastMessageID
-      let conversation = try await conversationActor.getOrCreateLegacyConversation()
+      let conversation = try await conversationActor.fetchConversation(by: conversationID)
 
       try await ChatController.shared.send(
         message: textToSend,
         image: imageToSend,
         chatContexts: chatContextsToSend,
-        conversationID: .legacyConversationID,
-        lastMessageID: conversation.lastMessageID
+        conversationID: conversationID,
+        lastMessageID: conversation?.lastMessageID
       )
     } catch {
       // Show error

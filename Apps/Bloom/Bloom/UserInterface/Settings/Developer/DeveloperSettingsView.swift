@@ -439,6 +439,44 @@ extension DeveloperSettingsView {
 
         Divider()
 
+        Button {
+          ChatConversationMigration.shared.resetMigration()
+          alertDetails = AlertDetails(
+            title: "Migration Reset",
+            message: "Chat conversation migration flag has been reset. Migration will run on next app foreground."
+          )
+        } label: {
+          LabeledContent("Reset Chat Migration") {
+            Image(systemSymbol: .arrowClockwise)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
+        AsyncButton {
+          await ChatConversationMigration.shared.forceMigration()
+          alertDetails = AlertDetails(
+            title: "Migration Complete",
+            message: "Chat conversation migration has been forced to run. Check console for logs."
+          )
+        } label: {
+          LabeledContent("Force Chat Migration") {
+            Image(systemSymbol: .bubbleLeftAndBubbleRight)
+          }
+          .bold()
+          .fontDesign(.rounded)
+          .foregroundStyle(.tint)
+          .selectable()
+          .frame(height: 60)
+        }
+
+        Divider()
+
         AsyncButton {
           do {
             try await NutritionTrackingViewModel.shared.reSyncNutritionToHealthKit()

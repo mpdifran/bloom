@@ -138,15 +138,15 @@ private extension ChatLauncherView {
 struct ChatViewControllerRepresentable: UIViewControllerRepresentable {
   let tabController: TabController
   let themeController: ThemeController
-  
+
   func makeUIViewController(context: Context) -> UINavigationController {
-    let chatViewController = ChatViewController(
+    let conversationsViewController = ChatConversationsViewController(
       tabController: tabController,
       themeController: themeController
     )
-    return UINavigationController(rootViewController: chatViewController)
+    return UINavigationController(rootViewController: conversationsViewController)
   }
-  
+
   func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
     // No updates needed
   }

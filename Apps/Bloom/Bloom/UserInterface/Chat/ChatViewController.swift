@@ -20,6 +20,8 @@ class ChatViewController: UICollectionViewController {
 
   // MARK: - Properties
 
+  private let conversationID: String
+  private let shouldFocusOnAppear: Bool
   private let chatLayout: CollectionViewChatLayout
   private let viewModel: ChatViewModel
   private let tabController: TabController
@@ -56,11 +58,13 @@ class ChatViewController: UICollectionViewController {
 
   // MARK: - Initialization
 
-  init(tabController: TabController, themeController: ThemeController) {
+  init(conversationID: String, tabController: TabController, themeController: ThemeController, shouldFocusOnAppear: Bool = true) {
+    self.conversationID = conversationID
+    self.shouldFocusOnAppear = shouldFocusOnAppear
     self.tabController = tabController
     self.themeController = themeController
-    self.viewModel = ChatViewModel()
-    self.chatMessageBar = ChatMessageBarView(tabController: tabController)
+    self.viewModel = ChatViewModel(conversationID: conversationID)
+    self.chatMessageBar = ChatMessageBarView(conversationID: conversationID, tabController: tabController)
 
     chatLayout = CollectionViewChatLayout()
     chatLayout.settings.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width, height: 100)
@@ -98,9 +102,11 @@ class ChatViewController: UICollectionViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    // Focus the text view in the message bar
-    chatMessageBar.focusTextView()
-    
+    // Focus the text view in the message bar if requested
+    if shouldFocusOnAppear {
+      chatMessageBar.focusTextView()
+    }
+
     // Scroll to bottom when view appears if there are messages
     if cellModels.isNotEmpty {
       // Use a small delay to ensure layout is complete
@@ -199,15 +205,6 @@ class ChatViewController: UICollectionViewController {
   }
 
   private func setupNavigationBar() {
-    // Dismiss button (left) - modern iOS style with xmark
-    navigationItem.leftBarButtonItem = UIBarButtonItem(
-      image: UIImage(systemSymbol: .xmark),
-      style: .plain,
-      target: self,
-      action: #selector(doneTapped)
-    )
-//    navigationItem.leftBarButtonItem?.tintColor = .label
-
     // Bud image (center)
     let budImageView = UIImageView(image: .budCoach)
     budImageView.contentMode = .scaleAspectFit
@@ -217,14 +214,6 @@ class ChatViewController: UICollectionViewController {
       budImageView.heightAnchor.constraint(equalToConstant: 60)
     ])
     navigationItem.titleView = budImageView
-
-    // Settings button (right)
-    navigationItem.rightBarButtonItem = UIBarButtonItem(
-      image: UIImage(systemSymbol: .gear),
-      style: .plain,
-      target: self,
-      action: #selector(settingsTapped)
-    )
   }
 
   private func setupCollectionView() {
@@ -290,26 +279,6 @@ class ChatViewController: UICollectionViewController {
   }
 
   // MARK: - Actions
-
-  @objc private func doneTapped() {
-    chatMessageBar.resignTextFieldFocus()
-    dismiss(animated: true)
-  }
-
-  @objc private func settingsTapped() {
-    // Hide keyboard but keep input accessory view
-    chatMessageBar.resignTextFieldFocus()
-    
-    let settingsView = ChatSettingsView()
-      .environment(tabController)
-      .environment(themeController)
-      .tint(themeController.theme.color)
-
-    let hostingController = UIHostingController(rootView: settingsView)
-    hostingController.modalPresentationStyle = .pageSheet
-
-    present(hostingController, animated: true)
-  }
 
   @objc private func scrollToBottomTapped() {
     scrollToBottom(animated: true)

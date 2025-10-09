@@ -20,10 +20,12 @@ final class ChatViewModel {
 
   private let conversationActor: ConversationModelActor
   private let historyModifier: ChatHistoryModifier
+  private let conversationID: String
 
-  init() {
+  init(conversationID: String) {
+    self.conversationID = conversationID
     self.conversationActor = ConversationModelActor(modelContainer: ContainerHolder.shared.container)
-    self.historyModifier = ChatHistoryModifier(conversationID: .legacyConversationID)
+    self.historyModifier = ChatHistoryModifier(conversationID: conversationID)
     setupObservers()
   }
 
@@ -40,13 +42,13 @@ extension ChatViewModel {
     chatContexts: [ChatContext]
   ) async {
     do {
-      let conversation = try await conversationActor.getOrCreateLegacyConversation()
+      let conversation = try await conversationActor.fetchConversation(by: conversationID)
       try await ChatController.shared.send(
         message: message,
         image: image,
         chatContexts: chatContexts,
-        conversationID: .legacyConversationID,
-        lastMessageID: conversation.lastMessageID
+        conversationID: conversationID,
+        lastMessageID: conversation?.lastMessageID
       )
     } catch {
       self.error = error
@@ -60,12 +62,12 @@ extension ChatViewModel {
 
   func sendSystemContextMessage(dummyAssistantMessage: String?, systemContext: String) async {
     do {
-      let conversation = try await conversationActor.getOrCreateLegacyConversation()
+      let conversation = try await conversationActor.fetchConversation(by: conversationID)
       try await ChatController.shared.sendSystemContextMessage(
         dummyAssistantMessage: dummyAssistantMessage,
         systemContext: systemContext,
-        conversationID: .legacyConversationID,
-        lastMessageID: conversation.lastMessageID
+        conversationID: conversationID,
+        lastMessageID: conversation?.lastMessageID
       )
     } catch {
       self.error = error
@@ -141,7 +143,33 @@ private extension ChatViewModel {
       for await conversationInProgressDict in await ChatController.shared.$conversationInProgress {
         await MainActor.run { [weak self] in
           guard let self else { return }
-          self.conversationInProgress = conversationInProgressDict[.legacyConversationID] ?? false
+          self.conversationInProgress = conversationInProgressDict[conversationID] ?? false
+        }
+      }
+    }
+
+    // Observe lastMessageID updates from the server
+    Task.detached { [weak self] in
+      for await update in await ChatController.shared.$lastMessageIDUpdate {
+        guard let self, let update else { continue }
+        // Only process updates for this conversation
+        guard update.conversationID == self.conversationID else { continue }
+
+        // Update the conversation's lastMessageID
+        do {
+          _ = try await self.conversationActor.updateConversationLastMessageID(
+            conversationID: update.conversationID,
+            lastMessageID: update.lastMessageID
+          )
+        } catch {
+          // Log error but don't propagate to UI
+          await MainActor.run {
+            TelemetryDeck.errorOccurred(
+              id: "ChatViewModel.lastMessageIDUpdate",
+              category: .thrownException,
+              message: error.localizedDescription
+            )
+          }
         }
       }
     }

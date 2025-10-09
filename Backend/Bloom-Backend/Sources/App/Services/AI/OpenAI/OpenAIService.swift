@@ -41,7 +41,7 @@ extension OpenAIService {
         Chat.Message(
           role: .system,
           content: [
-            .text("Generate a concise title for this conversation based on the user's message. Respond with only the title, no quotes or punctuation.")
+            .text("Generate a concise title for this conversation based on the message. This title will be shown to the user to describe the conversation. It should summarize what you're chatting about. Respond with only the title, no quotes or punctuation.")
           ]
         ),
         Chat.Message(
