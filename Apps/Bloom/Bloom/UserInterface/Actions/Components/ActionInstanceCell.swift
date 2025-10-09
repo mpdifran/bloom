@@ -25,17 +25,15 @@ struct ActionInstanceCell: View {
 
       DisclosureIndicator()
     }
-    .cardContainer()
+    .cardContainer(fill: .tint.tertiary)
   }
 }
 
 #Preview {
-  ScrollView {
-    VStack {
+  PreviewEnvironment {
+    BloomScrollView {
       ActionInstanceCell(image: .todayTab, title: "Weight")
         .tint(.mutedPurple)
     }
-    .padding()
   }
-  .groupedBackground()
 }
