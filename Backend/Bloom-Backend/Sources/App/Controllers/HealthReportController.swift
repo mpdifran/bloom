@@ -69,13 +69,15 @@ private extension HealthReportController {
   func calculateBiologicalAge(_ request: Request) async throws -> BiologicalAgeResponse {
     let body = try request.content.decode(BiologicalAgeRequest.self)
     let user = try request.auth.require(User.self)
-    
+
     guard let userID = user.id else {
       throw Abort(.unauthorized)
     }
-    
+
     return try await request.healthReportService.calculateBiologicalAge(
       healthContext: body.healthContext,
+      currentAge: body.currentAge,
+      lastBiologicalAge: body.lastBiologicalAge,
       userID: userID
     )
   }

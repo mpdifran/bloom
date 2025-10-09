@@ -114,17 +114,30 @@ extension HealthReportService {
 
   func calculateBiologicalAge(
     healthContext: String,
+    currentAge: Int?,
+    lastBiologicalAge: Double?,
     userID: UserIdentifier
   ) async throws -> BiologicalAgeResponse {
 
     var inputItems = [OpenAIKit.Response.InputItem]()
+
+    // Build context message with health data and age information
+    var contextMessage = "Here is the user's health data from the last 7 days:\n\(healthContext)"
+
+    if let currentAge = currentAge {
+      contextMessage += "\n\nThe user's current chronological age is \(currentAge) years old."
+    }
+
+    if let lastBioAge = lastBiologicalAge {
+      contextMessage += "\n\nThe user's last calculated biological age was \(String(format: "%.1f", lastBioAge)) years old. Use this as a reference point to maintain consistency between calculations."
+    }
 
     inputItems.append(
       .message(
         .init(
           role: .system,
           content: [
-            .text(.init(text: "Here is the user's health data from the last 7 days:\n\(healthContext)"))
+            .text(.init(text: contextMessage))
           ]
         )
       )

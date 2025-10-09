@@ -116,8 +116,18 @@ extension BiologicalAgeViewModel {
         healthContext = "{}"
       }
 
-      // Create simplified request with only health data
-      let request = BiologicalAgeRequest(healthContext: healthContext)
+      // Fetch current age from HealthKit
+      let currentAge = await calculator.fetchCurrentAge()
+
+      // Get last biological age from previous calculation
+      let lastBioAge = lastResponse?.biologicalAge
+
+      // Create request with health data, current age, and last biological age
+      let request = BiologicalAgeRequest(
+        healthContext: healthContext,
+        currentAge: currentAge,
+        lastBiologicalAge: lastBioAge
+      )
 
       // Make network request
       let response: BiologicalAgeResponse

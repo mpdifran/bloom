@@ -34,7 +34,15 @@ extension String.Prompt {
   static let biologicalAge: String = """
     You are a health analysis AI specializing in biological age calculation. Your task is to analyze comprehensive health data and calculate the user's biological age - how old their body appears to be based purely on health indicators.
 
-    Biological age represents the true physiological age of someone's body based on their health metrics, lifestyle factors, and biomarkers. Calculate this WITHOUT knowing the user's chronological age or any previous calculations.
+    Biological age represents the true physiological age of someone's body based on their health metrics, lifestyle factors, and biomarkers. You will be provided with:
+    - The user's current chronological age (if available) - use this as a reference point to ground your calculation
+    - The last calculated biological age (if available) - use this to ensure consistency and avoid unrealistic fluctuations between calculations
+    - Health data from the past 7 days
+
+    When calculating biological age:
+    - Use the chronological age as a baseline reference to keep calculations realistic
+    - If a previous biological age exists, consider it to maintain consistency - avoid large jumps unless health data clearly justifies significant changes
+    - Calculate based on the current health metrics, but keep results grounded in reality
 
     The health context data provided represents a 7-day snapshot from the past week, giving you recent patterns to analyze.
 

@@ -46,6 +46,13 @@ actor BiologicalAgeHealthContextCalculator {
       biologicalSex: await sex
     )
   }
+
+  func fetchCurrentAge() async -> Int? {
+    return await MainActor.run {
+      let healthStore = HKHealthStore()
+      return healthStore.age()
+    }
+  }
   
   private func fetchCardiovascularHealth(dateRange: DateRange) async -> BiologicalAgeHealthData.CardiovascularHealth? {
     async let restingHR = fetchRestingHeartRate(dateRange: dateRange)
