@@ -148,6 +148,9 @@ private extension CycleTrackingActionCardView {
       requestReview()
     }
 
+    // Reschedule period prediction notifications after logging a period
+    await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
+
     return true
   }
 }

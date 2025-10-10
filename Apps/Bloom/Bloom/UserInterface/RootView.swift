@@ -21,6 +21,7 @@ struct RootView: View {
   @State private var presentedSheet: AnyView?
 
   @State private var selectionToggle = false
+  @State private var shouldShowLogPeriodSheet = false
 
   @ObservedObject private var userController = UserController.shared
 
@@ -69,10 +70,18 @@ struct RootView: View {
       }
     }
     .sheet($presentedSheet)
+    .sheet(isPresented: $shouldShowLogPeriodSheet) {
+      CycleTrackingActionCardView {
+        shouldShowLogPeriodSheet = false
+      }
+    }
     .animation(.easeInOut(duration: 1), value: userController.isAuthenticated)
     .animation(.easeInOut(duration: 1), value: hasShownOnboarding)
     .onChange(of: tabController.toggleToDismiss) { oldValue, newValue in
       dismiss()
+    }
+    .onReceive(NotificationCenter.default.publisher(for: .showLogPeriodSheet)) { _ in
+      shouldShowLogPeriodSheet = true
     }
     .tint(themeController.theme.color)
     .environment(themeController)

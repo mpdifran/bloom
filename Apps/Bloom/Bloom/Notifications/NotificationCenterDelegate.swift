@@ -14,6 +14,10 @@ import UIKit
 import RevenueCat
 import TelemetryDeck
 
+extension Notification.Name {
+  static let showLogPeriodSheet = Notification.Name("showLogPeriodSheet")
+}
+
 @MainActor
 final class NotificationCenterDelegate: NSObject {
 
@@ -55,6 +59,8 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
       return [.banner, .sound, .list]
     case .CategoryID.trialReminder:
       return [.banner, .sound, .list]
+    case .CategoryID.periodPrediction:
+      return [.banner, .sound, .list]
     default:
       return [.banner, .sound, .list]
     }
@@ -72,6 +78,8 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
       await handleReviewSubscriptionAction()
     case .ActionID.leaveFeedback where categoryID == .CategoryID.trialReminder:
       await handleLeaveFeedbackAction()
+    case .ActionID.logPeriod where categoryID == .CategoryID.periodPrediction:
+      await handleLogPeriodAction()
     default:
       break
     }
@@ -107,6 +115,14 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
       UIApplication.shared.open(mailURL)
     }
     TelemetryDeck.signal("Leave Feedback From Trial Reminder")
+  }
+
+  private func handleLogPeriodAction() async {
+    // Post notification to trigger log period sheet
+    await MainActor.run {
+      NotificationCenter.default.post(name: .showLogPeriodSheet, object: nil)
+    }
+    TelemetryDeck.signal("Log Period From Notification")
   }
 
   private func isReminderCompleted(notification: UNNotification) async -> Bool {

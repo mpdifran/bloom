@@ -253,6 +253,32 @@ extension DeveloperSettingsView {
           .onTapGesture {
             presentedSheet = ScheduledNotificationsView().asAny
           }
+
+        Divider()
+
+        Menu {
+          Button("4 Days Before") {
+            Task {
+              await PeriodPredictionScheduler.shared.sendTestNotification(type: .near)
+            }
+          }
+
+          Button("1 Day Before") {
+            Task {
+              await PeriodPredictionScheduler.shared.sendTestNotification(type: .imminent)
+            }
+          }
+
+          Button("4 Days After") {
+            Task {
+              await PeriodPredictionScheduler.shared.sendTestNotification(type: .late)
+            }
+          }
+        } label: {
+          SettingsCell("Test Period Notifications") {
+            Image(systemSymbol: .bellBadgeFill)
+          }
+        }
       }
     }
   }

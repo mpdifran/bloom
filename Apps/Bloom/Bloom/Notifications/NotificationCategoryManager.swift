@@ -22,7 +22,7 @@ final class NotificationCategoryManager {
   
   private func createNotificationCategories() -> Set<UNNotificationCategory> {
     var categories: Set<UNNotificationCategory> = []
-    
+
     // Reminders category with Complete action
     let completeAction = UNNotificationAction(
       identifier: .ActionID.completeReminder,
@@ -37,9 +37,9 @@ final class NotificationCategoryManager {
       intentIdentifiers: [],
       options: []
     )
-    
+
     categories.insert(remindersCategory)
-    
+
     // Trial reminder category with Review Subscription and Leave Feedback actions
     let reviewSubscriptionAction = UNNotificationAction(
       identifier: .ActionID.reviewSubscription,
@@ -47,23 +47,40 @@ final class NotificationCategoryManager {
       options: [.foreground],
       icon: UNNotificationActionIcon(systemImageName: "creditcard")
     )
-    
+
     let leaveFeedbackAction = UNNotificationAction(
       identifier: .ActionID.leaveFeedback,
       title: "Leave Feedback",
       options: [.foreground],
       icon: UNNotificationActionIcon(systemImageName: "envelope")
     )
-    
+
     let trialReminderCategory = UNNotificationCategory(
       identifier: .CategoryID.trialReminder,
       actions: [reviewSubscriptionAction, leaveFeedbackAction],
       intentIdentifiers: [],
       options: []
     )
-    
+
     categories.insert(trialReminderCategory)
-    
+
+    // Period prediction category with Log Period action
+    let logPeriodAction = UNNotificationAction(
+      identifier: .ActionID.logPeriod,
+      title: "Log Period",
+      options: [.foreground],
+      icon: UNNotificationActionIcon(systemImageName: "calendar.badge.plus")
+    )
+
+    let periodPredictionCategory = UNNotificationCategory(
+      identifier: .CategoryID.periodPrediction,
+      actions: [logPeriodAction],
+      intentIdentifiers: [],
+      options: []
+    )
+
+    categories.insert(periodPredictionCategory)
+
     return categories
   }
 }

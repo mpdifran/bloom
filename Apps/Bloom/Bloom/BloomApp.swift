@@ -89,6 +89,8 @@ struct BloomApp: App {
           await RemindersManager.shared.rescheduleAllReminders()
           // Start observing HealthKit changes for reminder triggers
           ReminderTriggerObserver.shared.startObserving()
+          // Schedule period prediction notifications
+          await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
         }
         .task {
           // Run chat conversation migration on app launch
@@ -117,7 +119,12 @@ private extension BloomApp {
       // Reschedule reminders when app comes to foreground
       await RemindersManager.shared.rescheduleAllReminders()
     }
-    
+
+    Task {
+      // Reschedule period prediction notifications when app comes to foreground
+      await PeriodPredictionScheduler.shared.schedulePeriodPredictionNotifications()
+    }
+
     Task {
       // Load Today content when app comes to foreground
       await TodayContentCoordinator.shared.loadContentIfNeeded()
