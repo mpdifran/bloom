@@ -288,9 +288,6 @@
 			membershipExceptions = (
 				Bloom.storekit,
 				Info.plist,
-				"UserInterface/Components/Metal/Prebuilt/default-ios.metallib",
-				"UserInterface/Components/Metal/Prebuilt/default-sim.metallib",
-				UserInterface/Components/Metal/Stripes.metal,
 			);
 			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
 		};
@@ -831,7 +828,6 @@
 				FFACBAD52BAC7788006AAD0B /* Sources */,
 				FFACBAD62BAC7788006AAD0B /* Frameworks */,
 				FFACBAD72BAC7788006AAD0B /* Resources */,
-				FF7F7F702E6D291500A1BF96 /* Copy Metal Library */,
 				FF1E96622C0BF96D004DAD2D /* Embed Frameworks */,
 				FF7577392DC91A3900E31C86 /* Embed Watch Content */,
 				FF5D711E2DF0A9C500C05976 /* Embed Foundation Extensions */,
@@ -1151,24 +1147,6 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\n\n# Run the SwiftLint script\n\"${SRCROOT}/Scripts/swiftlint.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		FF7F7F702E6D291500A1BF96 /* Copy Metal Library */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Metal Library";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Copy the appropriate Metal library based on platform\nif [ \"${PLATFORM_NAME}\" == \"iphonesimulator\" ]; then\n    echo \"Copying simulator Metal library\"\n    cp \"${SRCROOT}/Bloom/UserInterface/Components/Metal/Prebuilt/default-sim.metallib\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/default.metallib\"\nelse\n    echo \"Copying device Metal library\"\n    cp \"${SRCROOT}/Bloom/UserInterface/Components/Metal/Prebuilt/default-ios.metallib\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/default.metallib\"\nfi \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
