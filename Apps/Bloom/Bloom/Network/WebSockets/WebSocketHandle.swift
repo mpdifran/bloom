@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import BloomModel
 import BloomFoundation
 
@@ -85,12 +86,9 @@ private extension WebSocketHandle {
   func schedulePing() -> Task<Void, Never> {
     Task {
       while !Task.isCancelled {
-        do {
-          await Delay(20_000)
-          try await self.sendPing()
-        } catch {
-          print("Ping error: \(error)")
-        }
+        await Delay(20_000)
+        // Use try? to swallow ping errors - if ping fails, we'll detect disconnection through other means
+        try? await self.sendPing()
       }
     }
   }
@@ -98,11 +96,21 @@ private extension WebSocketHandle {
   func sendPing() async throws {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
       print("WebSocketHandle: Sending ping")
+      let hasResumed = OSAllocatedUnfairLock(initialState: false)
+
       task.sendPing { error in
-        if let error = error {
-          continuation.resume(throwing: error)
-        } else {
-          continuation.resume(returning: ())
+        hasResumed.withLock { resumed in
+          guard !resumed else {
+            print("WebSocketHandle: Warning - Attempted to resume ping continuation multiple times")
+            return
+          }
+          resumed = true
+
+          if let error = error {
+            continuation.resume(throwing: error)
+          } else {
+            continuation.resume(returning: ())
+          }
         }
       }
     }
