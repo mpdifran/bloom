@@ -648,6 +648,16 @@ private extension DayVitalsCalculator {
     do {
       let yesterdayMovements = try await bowelMovementModelActor.fetchBowelMovements(dateRange: dateRange)
 
+      // Calculate regularity score based on BowelMovementMonthlySummary logic
+      let monthlyMovements = try await bowelMovementModelActor.fetchBowelMovements(
+        dateRange: DateRange.trailingDays(from: date, numberOfDays: 30)
+      )
+
+      // Return nil if there's no bowel movement data at all
+      guard yesterdayMovements.isNotEmpty || monthlyMovements.isNotEmpty else {
+        return nil
+      }
+
       // Convert to samples for API
       let movementSamples = yesterdayMovements.map { movement in
         BowelMovementSample(
@@ -677,10 +687,6 @@ private extension DayVitalsCalculator {
         avgDailyMovements = nil
       }
 
-      // Calculate regularity score based on BowelMovementMonthlySummary logic
-      let monthlyMovements = try await bowelMovementModelActor.fetchBowelMovements(
-        dateRange: DateRange.trailingDays(from: date, numberOfDays: 30)
-      )
       let summary = BowelMovementMonthlySummary(bowelMovements: monthlyMovements)
 
       let regularityScore: MetricWithTrend?
