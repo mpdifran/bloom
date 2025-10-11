@@ -18,7 +18,8 @@ public struct TodayReportResponse: Codable, Hashable, Sendable {
   public let windDownStartMinute: Int?
   public let windDownEndHour: Int?
   public let windDownEndMinute: Int?
-  public let periodInsight: PeriodPhaseInsight?
+  public let phaseTip: String?
+  public let periodForecast: String?
 
   public init(
     summary: String,
@@ -31,7 +32,8 @@ public struct TodayReportResponse: Codable, Hashable, Sendable {
     windDownStartMinute: Int? = nil,
     windDownEndHour: Int? = nil,
     windDownEndMinute: Int? = nil,
-    periodInsight: PeriodPhaseInsight? = nil
+    phaseTip: String? = nil,
+    periodForecast: String? = nil
   ) {
     self.summary = summary
     self.budState = budState
@@ -43,7 +45,8 @@ public struct TodayReportResponse: Codable, Hashable, Sendable {
     self.windDownStartMinute = windDownStartMinute
     self.windDownEndHour = windDownEndHour
     self.windDownEndMinute = windDownEndMinute
-    self.periodInsight = periodInsight
+    self.phaseTip = phaseTip
+    self.periodForecast = periodForecast
   }
 }
 
@@ -61,18 +64,6 @@ public extension TodayReportResponse {
       self.title = title
       self.body = body
       self.priority = min(max(priority, 1), 10) // Ensure priority is between 1 and 10
-    }
-  }
-}
-
-public extension TodayReportResponse {
-  struct PeriodPhaseInsight: Codable, Hashable, Sendable {
-    public let phaseTip: String?
-    public let periodForecast: String?
-
-    public init(phaseTip: String?, periodForecast: String?) {
-      self.phaseTip = phaseTip
-      self.periodForecast = periodForecast
     }
   }
 }

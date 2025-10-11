@@ -142,12 +142,10 @@ final class TodayInsightsManager {
             priority: insight.priority
           )
         },
-        periodInsight: response.periodInsight.map { periodInsight in
-          PeriodInsightDTO(
-            phaseTip: periodInsight.phaseTip,
-            periodForecast: periodInsight.periodForecast
-          )
-        }
+        periodInsight: (response.phaseTip != nil || response.periodForecast != nil) ? PeriodInsightDTO(
+          phaseTip: response.phaseTip,
+          periodForecast: response.periodForecast
+        ) : nil
       )
 
       lastRequestDate = today
