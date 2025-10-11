@@ -574,69 +574,97 @@ private extension DayVitalsCalculator {
   }
 
   func generateMenstrualHealthData(for date: Date) async -> MenstrualHealthData? {
-    // Get menstrual health data from past month
-    guard let monthAgo = Calendar.current.date(byAdding: .month, value: -1, to: date) else { return nil }
-    let dateRange = DateRange(monthAgo, date)
+    // Only include menstrual data for female users
+    let isFemale = await HealthManager.shared.sex() == .female
+    guard isFemale else { return nil }
 
-    let cycles = await HealthStoreFetcher.shared.fetchMenstrualFlowSamples(dateRange: dateRange)
-    guard !cycles.isEmpty else { return nil }
-
-    // Find current cycle
-    let sortedCycles = cycles.sorted { $0.startDate > $1.startDate }
-    guard let currentCycle = sortedCycles.first else { return nil }
+    // Use the already-calculated menstrual summary from VitalsCalculator
+    guard let menstrualSummary = await VitalsCalculator.shared.menstrualSummary else { return nil }
+    guard !menstrualSummary.hasNoData else { return nil }
+    guard let mostRecentCycle = menstrualSummary.mostRecentCycle else { return nil }
 
     // Calculate days since last period
-    let daysSinceLastPeriod = Calendar.current.dateComponents([.day], from: currentCycle.startDate, to: date).day ?? 0
-
-    // Estimate cycle phase
-    let cyclePhase: String?
+    let daysSinceLastPeriod = Calendar.current.dateComponents([.day], from: mostRecentCycle.startDate, to: date).day ?? 0
     let dayInCycle = daysSinceLastPeriod + 1
 
-    switch dayInCycle {
-    case 1...5:
-      cyclePhase = "menstrual"
-    case 6...12:
+    // Get phase from VitalsCalculator
+    let phase = menstrualSummary.currentPhase()
+    let cyclePhase: String?
+    let dayInCurrentPhase: Int?
+
+    switch phase {
+    case .follicular:
       cyclePhase = "follicular"
-    case 13...16:
+      // Follicular phase starts after menstruation ends
+      let menstruationDays = menstrualSummary.averageMenstruationDays ?? 5
+      dayInCurrentPhase = max(0, dayInCycle - menstruationDays)
+    case .ovulation:
       cyclePhase = "ovulatory"
-    case 17...28:
+      dayInCurrentPhase = 1 // Single day
+    case .luteal:
       cyclePhase = "luteal"
-    default:
+      let cycleDuration = menstrualSummary.averageCycleDuration ?? 28
+      let ovulationDay = cycleDuration / 2
+      dayInCurrentPhase = max(0, dayInCycle - ovulationDay)
+    case .unknown, .none:
       cyclePhase = nil
+      dayInCurrentPhase = nil
     }
 
-    // Calculate average cycle length if we have multiple cycles
+    // Calculate average cycle length with trend
     let averageCycleLength: MetricWithTrend?
-    if cycles.count >= 2 {
-      let cycleLengths = cycles.dropFirst().enumerated().compactMap { index, cycle in
-        let nextCycle = cycles[index]
-        return Calendar.current.dateComponents([.day], from: cycle.startDate, to: nextCycle.startDate).day
-      }
+    if let avgLength = menstrualSummary.averageCycleDuration {
+      // Get previous cycle lengths for trend calculation
+      let cycles = menstrualSummary.menstrualCycles.sorted { $0.startDate < $1.startDate }
+      if cycles.count >= 2 {
+        var cycleLengths: [Int] = []
+        for i in 0..<(cycles.count - 1) {
+          if let days = Calendar.current.dateComponents([.day], from: cycles[i].startDate, to: cycles[i + 1].startDate).day {
+            cycleLengths.append(days)
+          }
+        }
 
-      if !cycleLengths.isEmpty {
-        let currentLength = cycleLengths.last ?? 28
-        let previousLengths = Array(cycleLengths.dropLast())
-        let lengthValue = "\(currentLength) days"
-        let trend = TrendCalculator.calculateTrend(current: currentLength, previous: previousLengths)
-        averageCycleLength = MetricWithTrend(value: lengthValue, trend: trend)
+        if !cycleLengths.isEmpty {
+          let currentLength = cycleLengths.last ?? avgLength
+          let previousLengths = cycleLengths.count > 1 ? Array(cycleLengths.dropLast()) : []
+          let trend = previousLengths.isEmpty ? nil : TrendCalculator.calculateTrend(current: currentLength, previous: previousLengths)
+          averageCycleLength = MetricWithTrend(value: "\(avgLength) days", trend: trend)
+        } else {
+          averageCycleLength = MetricWithTrend(value: "\(avgLength) days")
+        }
       } else {
-        averageCycleLength = nil
+        averageCycleLength = MetricWithTrend(value: "\(avgLength) days")
       }
     } else {
       averageCycleLength = nil
     }
 
-    // Predict next period (assuming 28-day cycle as default)
-    let estimatedCycleLength = averageCycleLength != nil ? Int(averageCycleLength!.value.components(separatedBy: " ").first ?? "28") ?? 28 : 28
-    let daysUntilNextPeriod = estimatedCycleLength - dayInCycle
-    let predictedNextPeriod = daysUntilNextPeriod > 0 ? "in \(daysUntilNextPeriod) days" : nil
+    // Get predicted next period date
+    let predictedNextPeriodDate = menstrualSummary.nextPredictedPeriodDate
+    let predictedNextPeriodDateString = predictedNextPeriodDate.map { ISO8601DateFormatter().string(from: $0) }
+
+    // Calculate days until next period
+    let daysUntilNextPeriod: Int?
+    let predictedNextPeriod: String?
+    if let predictionDate = predictedNextPeriodDate {
+      let days = Calendar.current.dateComponents([.day], from: date, to: predictionDate).day ?? 0
+      daysUntilNextPeriod = days > 0 ? days : nil
+      predictedNextPeriod = days > 0 ? "in \(days) days" : nil
+    } else {
+      daysUntilNextPeriod = nil
+      predictedNextPeriod = nil
+    }
 
     return MenstrualHealthData(
       currentCyclePhase: cyclePhase,
       dayInCycle: dayInCycle,
       daysSinceLastPeriod: daysSinceLastPeriod,
       averageCycleLength: averageCycleLength,
-      predictedNextPeriod: predictedNextPeriod
+      predictedNextPeriod: predictedNextPeriod,
+      predictedNextPeriodDate: predictedNextPeriodDateString,
+      daysUntilPredictedPeriod: daysUntilNextPeriod,
+      isMenstruating: menstrualSummary.isMenstruating,
+      dayInCurrentPhase: dayInCurrentPhase
     )
   }
 

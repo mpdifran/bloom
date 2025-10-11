@@ -12,6 +12,7 @@ import DataContainer
 import SFSafeSymbols
 import BloomFoundation
 import BloomModel
+import CoreHealth
 import TelemetryDeck
 
 @MainActor
@@ -38,6 +39,7 @@ struct TodayView: View {
   @ObservedObject private var habitsViewModel = HabitsViewModel.shared
   @ObservedObject private var remindersManager = RemindersManager.shared
   @State private var todayViewModel = ViewModel.shared
+  @State private var vitalsViewModel = VitalsViewModel.shared
 
   @Environment(ThemeController.self) private var themeController: ThemeController
   @Environment(TabController.self) private var tabController: TabController
@@ -196,7 +198,9 @@ private extension TodayView {
       let configuration = todaySettings.configuration(for: currentTimeMode)
       ForEach(configuration.sectionOrder) { section in
         // Only show enabled sections that user has access to
-        let hasAccess = !section.requiresBloomPlus || todayViewModel.hasBloomPlus
+        let hasBloomPlusAccess = !section.requiresBloomPlus || todayViewModel.hasBloomPlus
+        let hasSexAccess = !section.requiresFemale || HealthManager.shared.sex() == .female
+        let hasAccess = hasBloomPlusAccess && hasSexAccess
         if configuration.enabledSections.contains(section) && hasAccess {
           sectionView(for: section)
         }
@@ -220,8 +224,9 @@ private extension TodayView {
       // Show sections based on settings but only those available without Bloom Plus
       let configuration = todaySettings.configuration(for: currentTimeMode)
       ForEach(configuration.sectionOrder) { section in
-        // Only show sections that don't require Bloom Plus
-        if configuration.enabledSections.contains(section) && !section.requiresBloomPlus {
+        // Only show sections that don't require Bloom Plus and match user's sex
+        let hasSexAccess = !section.requiresFemale || HealthManager.shared.sex() == .female
+        if configuration.enabledSections.contains(section) && !section.requiresBloomPlus && hasSexAccess {
           sectionView(for: section)
         }
       }
@@ -301,7 +306,42 @@ private extension TodayView {
             }
           }
       }
-      
+
+    case .phaseTip:
+      if let content = todayViewModel.getSectionContent(for: section),
+         case .text(let tip) = content {
+        PhaseTipTodayCell(
+          phaseName: vitalsViewModel.menstrualSummary?.phaseName,
+          tip: tip
+        )
+        .padding(.horizontal)
+        .contextMenu {
+          Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+            handleAskBudAction(
+              title: "Cycle Phase Tip",
+              content: tip,
+              source: "Cycle Phase Tip"
+            )
+          }
+        }
+      }
+
+    case .periodForecast:
+      if let content = todayViewModel.getSectionContent(for: section),
+         case .text(let forecast) = content {
+        PeriodForecastTodayCell(forecast: forecast)
+          .padding(.horizontal)
+          .contextMenu {
+            Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+              handleAskBudAction(
+                title: "Period Forecast",
+                content: forecast,
+                source: "Period Forecast"
+              )
+            }
+          }
+      }
+
     case .goals:
       if habits.isNotEmpty {
         Group {

@@ -10,6 +10,7 @@ import SwiftUI
 import DataContainer
 import BloomModel
 import Combine
+import CoreHealth
 
 extension TodayView {
   @MainActor @Observable
@@ -22,8 +23,9 @@ extension TodayView {
     private var entitlementCancellable: AnyCancellable?
 
     private init() {
+      checkEntitlement()
+
       Task {
-        checkEntitlement()
         await loadContent()
       }
 
@@ -133,7 +135,15 @@ extension TodayView.ViewModel {
     case .tonightsSleep:
       guard let recommendations = todayContent?.tonightsSleepRecommendations else { return nil }
       return .text(recommendations)
-      
+
+    case .phaseTip:
+      guard let phaseTip = todayContent?.periodInsight?.phaseTip else { return nil }
+      return .text(phaseTip)
+
+    case .periodForecast:
+      guard let periodForecast = todayContent?.periodInsight?.periodForecast else { return nil }
+      return .text(periodForecast)
+
     case .goals:
       // This will be handled by existing habits section in TodayView
       return .local

@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import SFSafeSymbols
+import CoreHealth
 @preconcurrency import EventKit
 
 struct TodaySettingsView: View {
@@ -162,34 +163,37 @@ private extension TodaySettingsView {
       let configuration = todaySettings.configuration(for: selectedTimeMode)
 
       ForEach(configuration.sectionOrder) { section in
-        TodayViewSectionCell(
-          section: section,
-          isEnabled: Binding(
-            get: { 
-              // Show as disabled if requires Bloom Plus and user doesn't have it
-              let hasBloomPlus = EntitlementController.shared.hasBloomPro == true
-              if section.requiresBloomPlus && !hasBloomPlus {
-                return false
-              }
-              return configuration.enabledSections.contains(section)
-            },
-            set: { _ in toggleSection(section) }
-          )
-        )
-        .scaleEffect(draggedSection == section ? 1.02 : 1.0)
-        .onDrag {
-          self.draggedSection = section
-          return NSItemProvider(object: section.rawValue as NSString)
-        }
-        .onDrop(
-          of: [.text],
-          delegate: SectionDropDelegate(
+        // Only show sections that match user's sex
+        if !section.requiresFemale || HealthManager.shared.sex() == .female {
+          TodayViewSectionCell(
             section: section,
-            todaySettings: $todaySettings,
-            selectedTimeMode: selectedTimeMode,
-            draggedSection: $draggedSection
+            isEnabled: Binding(
+              get: {
+                // Show as disabled if requires Bloom Plus and user doesn't have it
+                let hasBloomPlus = EntitlementController.shared.hasBloomPro == true
+                if section.requiresBloomPlus && !hasBloomPlus {
+                  return false
+                }
+                return configuration.enabledSections.contains(section)
+              },
+              set: { _ in toggleSection(section) }
+            )
           )
-        )
+          .scaleEffect(draggedSection == section ? 1.02 : 1.0)
+          .onDrag {
+            self.draggedSection = section
+            return NSItemProvider(object: section.rawValue as NSString)
+          }
+          .onDrop(
+            of: [.text],
+            delegate: SectionDropDelegate(
+              section: section,
+              todaySettings: $todaySettings,
+              selectedTimeMode: selectedTimeMode,
+              draggedSection: $draggedSection
+            )
+          )
+        }
       }
     }
     .animation(.easeInOut(duration: 0.2), value: draggedSection)
@@ -204,7 +208,12 @@ private extension TodaySettingsView {
     if section.requiresBloomPlus && !hasBloomPlus {
       return
     }
-    
+
+    // Don't allow toggling female-only sections if user is male
+    if section.requiresFemale && HealthManager.shared.sex() != .female {
+      return
+    }
+
     withAnimation(.easeInOut(duration: 0.2)) {
       var configuration = todaySettings.configuration(for: selectedTimeMode)
       if configuration.enabledSections.contains(section) {
@@ -219,7 +228,7 @@ private extension TodaySettingsView {
   func resetCurrentModeToDefaults() {
     withAnimation(.easeInOut(duration: 0.3)) {
       var defaultConfiguration = TodaySettings.TimeModeConfiguration(for: selectedTimeMode)
-      
+
       // Remove sections that require Bloom Plus if user doesn't have it
       let hasBloomPlus = EntitlementController.shared.hasBloomPro == true
       if !hasBloomPlus {
@@ -229,7 +238,16 @@ private extension TodaySettingsView {
           }
         }
       }
-      
+
+      // Remove female-only sections if user is male
+      if HealthManager.shared.sex() != .female {
+        for section in defaultConfiguration.enabledSections {
+          if section.requiresFemale {
+            defaultConfiguration.enabledSections.remove(section)
+          }
+        }
+      }
+
       todaySettings.setConfiguration(defaultConfiguration, for: selectedTimeMode)
     }
   }

@@ -13,4 +13,8 @@ struct MenstrualHealthData: SendableNetworkModel {
   let daysSinceLastPeriod: Int?     // Days since period started
   let averageCycleLength: MetricWithTrend?  // "28 days" with regularity trend
   let predictedNextPeriod: String?  // "in 14 days"
+  let predictedNextPeriodDate: String?  // ISO date string of predicted next period
+  let daysUntilPredictedPeriod: Int?    // Days until predicted period
+  let isMenstruating: Bool?         // Whether currently menstruating
+  let dayInCurrentPhase: Int?       // Day number within current phase (not cycle)
 }

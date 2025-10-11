@@ -19,6 +19,8 @@ struct TodaySettings: Codable {
           .todaysAdvice,
           .insights,
           .sleepDetails,
+          .phaseTip,
+          .periodForecast,
           .reminders,
           .goals,
           .todaysEvents,
@@ -27,10 +29,12 @@ struct TodaySettings: Codable {
         self.enabledSections = Set(self.sectionOrder)
         // Add remaining sections that are not enabled by default
         self.sectionOrder.append(contentsOf: [.tonightsSleep, .tomorrowsEvents, .tomorrowsWeather])
-        
+
       case .afternoon:
         self.sectionOrder = [
           .todaysAdvice,
+          .phaseTip,
+          .periodForecast,
           .reminders,
           .goals,
           .todaysEvents,
@@ -39,10 +43,12 @@ struct TodaySettings: Codable {
         self.enabledSections = Set(self.sectionOrder)
         // Add remaining sections that are not enabled by default
         self.sectionOrder.append(contentsOf: [.insights, .sleepDetails, .tonightsSleep, .tomorrowsEvents, .tomorrowsWeather])
-        
+
       case .evening:
         self.sectionOrder = [
           .tonightsSleep,
+          .phaseTip,
+          .periodForecast,
           .reminders,
           .goals,
           .tomorrowsEvents,
@@ -55,6 +61,8 @@ struct TodaySettings: Codable {
       case .night:
         self.sectionOrder = [
           .tonightsSleep,
+          .phaseTip,
+          .periodForecast,
           .tomorrowsEvents,
           .tomorrowsWeather
         ]

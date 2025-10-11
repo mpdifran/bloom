@@ -89,6 +89,11 @@ final class TodayInsightsManager {
     await loadTodayContent()
   }
 
+  func clearStoredContent() {
+    lastRequestDate = nil
+    lastResponse = nil
+  }
+
   private func loadTodayContent() async {
     isLoadingContent = true
     hasLoadError = false
@@ -135,6 +140,12 @@ final class TodayInsightsManager {
             title: insight.title,
             body: insight.body,
             priority: insight.priority
+          )
+        },
+        periodInsight: response.periodInsight.map { periodInsight in
+          PeriodInsightDTO(
+            phaseTip: periodInsight.phaseTip,
+            periodForecast: periodInsight.periodForecast
           )
         }
       )

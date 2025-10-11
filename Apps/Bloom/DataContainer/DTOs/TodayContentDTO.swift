@@ -16,6 +16,7 @@ public struct TodayContentDTO: Sendable, Hashable, Codable {
   public let sleepDetails: String?
   public let tonightsSleepRecommendations: String
   public let insights: [TodayInsightDTO]
+  public let periodInsight: PeriodInsightDTO?
 
   public init(
     day: Date,
@@ -25,7 +26,8 @@ public struct TodayContentDTO: Sendable, Hashable, Codable {
     todaysAdvice: String,
     sleepDetails: String?,
     tonightsSleepRecommendations: String,
-    insights: [TodayInsightDTO]
+    insights: [TodayInsightDTO],
+    periodInsight: PeriodInsightDTO? = nil
   ) {
     self.day = day
     self.timestamp = timestamp
@@ -35,6 +37,7 @@ public struct TodayContentDTO: Sendable, Hashable, Codable {
     self.sleepDetails = sleepDetails
     self.tonightsSleepRecommendations = tonightsSleepRecommendations
     self.insights = insights
+    self.periodInsight = periodInsight
   }
 }
 
@@ -51,5 +54,18 @@ public struct TodayInsightDTO: Sendable, Hashable, Codable {
     self.title = title
     self.body = body
     self.priority = priority
+  }
+}
+
+public struct PeriodInsightDTO: Sendable, Hashable, Codable {
+  public let phaseTip: String?
+  public let periodForecast: String?
+
+  public init(
+    phaseTip: String?,
+    periodForecast: String?
+  ) {
+    self.phaseTip = phaseTip
+    self.periodForecast = periodForecast
   }
 }

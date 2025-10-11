@@ -321,20 +321,14 @@ extension DeveloperSettingsView {
         Divider()
 
         AsyncButton {
-          do {
-            try await TodayContentCoordinator.shared.deleteTodaysContent()
-            await TodayContentCoordinator.shared.loadContentIfNeeded()
-            
-            await MainActor.run {
-              alertDetails = AlertDetails(
-                title: "Today Insights Regenerated",
-                message: "Your today insights have been regenerated with yesterday's health data."
-              )
-            }
-          } catch {
-            await MainActor.run {
-              self.error = error
-            }
+          TodayInsightsManager.shared.clearStoredContent()
+          await TodayInsightsManager.shared.forceRefreshContent()
+
+          await MainActor.run {
+            alertDetails = AlertDetails(
+              title: "Today Insights Regenerated",
+              message: "Your today insights have been regenerated with yesterday's health data."
+            )
           }
         } label: {
           LabeledContent("Regenerate Today Insights") {

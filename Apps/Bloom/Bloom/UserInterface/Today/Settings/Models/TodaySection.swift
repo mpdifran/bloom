@@ -13,13 +13,15 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
   case insights = "insights"
   case sleepDetails = "sleepDetails"
   case tonightsSleep = "tonightsSleep"
+  case phaseTip = "phaseTip"
+  case periodForecast = "periodForecast"
   case goals = "goals"
   case reminders = "reminders"
   case todaysEvents = "todaysEvents"
   case tomorrowsEvents = "tomorrowsEvents"
   case todaysWeather = "todaysWeather"
   case tomorrowsWeather = "tomorrowsWeather"
-  
+
   var id: String { rawValue }
   
   var displayName: String {
@@ -32,6 +34,10 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       return "Sleep Details"
     case .tonightsSleep:
       return "Tonight's Sleep"
+    case .phaseTip:
+      return "Cycle Phase Tip"
+    case .periodForecast:
+      return "Period Forecast"
     case .goals:
       return "Goals"
     case .reminders:
@@ -57,6 +63,10 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       return .bedDoubleFill
     case .tonightsSleep:
       return .moonZzzFill
+    case .phaseTip:
+      return .sparkles
+    case .periodForecast:
+      return .calendarBadgeClock
     case .goals:
       return .target
     case .reminders:
@@ -82,18 +92,22 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       return 2
     case .tonightsSleep:
       return 3
-    case .goals:
+    case .phaseTip:
       return 4
-    case .reminders:
+    case .periodForecast:
       return 5
-    case .todaysEvents:
+    case .goals:
       return 6
-    case .tomorrowsEvents:
+    case .reminders:
       return 7
-    case .todaysWeather:
+    case .todaysEvents:
       return 8
-    case .tomorrowsWeather:
+    case .tomorrowsEvents:
       return 9
+    case .todaysWeather:
+      return 10
+    case .tomorrowsWeather:
+      return 11
     }
   }
   
@@ -103,6 +117,15 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       false
     default:
       true
+    }
+  }
+
+  var requiresFemale: Bool {
+    switch self {
+    case .phaseTip, .periodForecast:
+      true
+    default:
+      false
     }
   }
 }
