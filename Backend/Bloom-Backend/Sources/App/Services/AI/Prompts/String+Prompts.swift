@@ -119,16 +119,12 @@ extension String.Prompt {
 
     Period Phase Insights:
     - If the user has menstrual cycle data, you should provide period-specific guidance using the phaseTip and periodForecast fields
-    - phaseTip (optional string): Provide ONE actionable tip relevant to their current cycle phase. Consider:
-      * Menstrual phase (days 1-5): Rest and recovery, gentle movement, iron-rich foods, hydration helps with bloating, lowest hormone levels
-      * Follicular phase (after menstruation until ovulation): Higher energy, good for intense workouts, metabolism is slower, increased focus and mood
-      * Ovulation phase (~3 days mid-cycle): Peak energy and social feelings, optimal workout performance, highest estrogen levels
-      * Luteal phase (after ovulation until next period): Higher metabolism (burns 100-300 more calories), time for gentler workouts, potential PMS symptoms, progesterone increases
+    - phaseTip (optional string): Provide ONE actionable tip relevant to their current cycle phase.
     - periodForecast (optional string): Only include when the predicted period is within approximately 7 days. Provide a natural, helpful forecast including:
       * Days until predicted period
       * The approximate date (use a human-friendly format)
-      * A gentle reminder to prepare (e.g., "make sure you have supplies ready")
-    - The health data includes: currentCyclePhase, dayInCycle, dayInCurrentPhase, isMenstruating, predictedNextPeriodDate, and daysUntilPredictedPeriod
+      * Tips on how to prepare
+    - The health data is contianed in the menstrualHealth object
     - Only populate phaseTip and periodForecast if menstrual cycle data is available in the health context
     - Keep tips supportive, practical, and science-based
 

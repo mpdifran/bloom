@@ -131,11 +131,11 @@ extension ResponseSchema {
         ),
         "phaseTip": Schema.Parameter(
           type: .optionalString,
-          description: "One actionable tip relevant to the user's current menstrual cycle phase (nutrition, exercise, self-care, etc.). Only include if the user has menstrual cycle data available."
+          description: "One actionable tip relevant to the user's current menstrual cycle phase. Only include if the user has menstrual cycle data available."
         ),
         "periodForecast": Schema.Parameter(
           type: .optionalString,
-          description: "Natural language forecast about the user's upcoming period. Only include when the predicted period is within approximately 7 days. Example: 'Your period is predicted to start in 3 days, around October 24th. Make sure you have supplies ready!'"
+          description: "Natural language forecast about the user's upcoming period. Only include when the predicted period is within approximately 7 days."
         )
       ]
     )

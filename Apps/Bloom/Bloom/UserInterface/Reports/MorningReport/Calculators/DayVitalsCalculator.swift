@@ -648,7 +648,7 @@ private extension DayVitalsCalculator {
 
     // Get predicted next period date
     let predictedNextPeriodDate = menstrualSummary.nextPredictedPeriodDate
-    let predictedNextPeriodDateString = predictedNextPeriodDate.map { ISO8601DateFormatter().string(from: $0) }
+    let predictedNextPeriodDateString = predictedNextPeriodDate.map { DateFormatter.mediumDateShortTime.string(from: $0) }
 
     // Calculate days until next period
     let daysUntilNextPeriod: Int?
