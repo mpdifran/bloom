@@ -37,6 +37,10 @@ struct TodayCardCell<Content: View>: View {
         .font(.body)
         .fontDesign(.rounded)
         .fixedSize(horizontal: false, vertical: true)
+
+      if let contentBuilder {
+        contentBuilder()
+      }
     }
     .foregroundStyle(.white)
     .horizontallyCentered()

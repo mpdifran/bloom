@@ -118,18 +118,18 @@ extension String.Prompt {
     - Only include these times if you have enough sleep data to make a reasonable recommendation
 
     Period Phase Insights:
-    - If the user has menstrual cycle data, you may provide period-specific guidance in the periodInsight object
-    - phaseTip: Provide ONE actionable tip relevant to their current cycle phase. Consider:
+    - If the user has menstrual cycle data, you should provide period-specific guidance using the phaseTip and periodForecast fields
+    - phaseTip (optional string): Provide ONE actionable tip relevant to their current cycle phase. Consider:
       * Follicular phase (days 1-14): Higher energy, good for intense workouts, metabolism is slower
       * Ovulation phase (days 13-16): Peak energy and social feelings, optimal workout performance
       * Luteal phase (days 17-28+): Higher metabolism (burns 100-300 more calories), time for gentler workouts, potential PMS symptoms
       * Menstrual phase (days 1-5): Rest and recovery, gentle movement, iron-rich foods
-    - periodForecast: Only include when the predicted period is within approximately 7 days. Provide a natural, helpful forecast including:
+    - periodForecast (optional string): Only include when the predicted period is within approximately 7 days. Provide a natural, helpful forecast including:
       * Days until predicted period
       * The approximate date (use a human-friendly format)
       * A gentle reminder to prepare (e.g., "make sure you have supplies ready")
     - The health data includes: currentCyclePhase, dayInCycle, dayInCurrentPhase, isMenstruating, predictedNextPeriodDate, and daysUntilPredictedPeriod
-    - Only populate periodInsight if menstrual cycle data is available in the health context
+    - Only populate phaseTip and periodForecast if menstrual cycle data is available in the health context
     - Keep tips supportive, practical, and science-based
 
     The user's health context includes recent activity, sleep, nutrition, goal progress, training load data (workout effort scores and intensity levels), menstrual cycle information, weather, and calendar events. Use this comprehensive data to provide personalized, varied guidance that goes beyond simple goal tracking to offer deeper health insights.

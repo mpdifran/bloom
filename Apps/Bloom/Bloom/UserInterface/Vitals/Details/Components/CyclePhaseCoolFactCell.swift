@@ -9,29 +9,27 @@ import SwiftUI
 import CoreHealth
 
 struct CyclePhaseCoolFactCell: View {
-    let coolFact: MenstrualCyclePhase.CoolFact
+  let coolFact: MenstrualCyclePhase.CoolFact
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(coolFact.title)
-                .font(.title3)
-                .bold()
-                .foregroundStyle(.tint)
+  var body: some View {
+    VStack(alignment: .leading, spacing: 10) {
+      Text(coolFact.title)
+        .font(.title3)
+        .bold()
+        .foregroundStyle(.tint)
 
-            Text(coolFact.fact)
-        }
-        .cardContainer()
+      Text(coolFact.fact)
     }
+    .cardContainer()
+  }
 }
 
 #Preview {
-    VStack {
-        Spacer()
-        CyclePhaseCoolFactCell(
-            coolFact: MenstrualCyclePhase.luteal.coolFacts[0]
-        )
-        Spacer()
+  PreviewEnvironment {
+    BloomScrollView {
+      CyclePhaseCoolFactCell(
+        coolFact: MenstrualCyclePhase.luteal.coolFacts[0]
+      )
     }
-    .padding()
-    .groupedBackground()
+  }
 }

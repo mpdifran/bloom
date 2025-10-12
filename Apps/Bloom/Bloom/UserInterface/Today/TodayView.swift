@@ -329,17 +329,20 @@ private extension TodayView {
     case .periodForecast:
       if let content = todayViewModel.getSectionContent(for: section),
          case .text(let forecast) = content {
-        PeriodForecastTodayCell(forecast: forecast)
-          .padding(.horizontal)
-          .contextMenu {
-            Button("Ask Bud", systemSymbol: .ellipsisMessage) {
-              handleAskBudAction(
-                title: "Period Forecast",
-                content: forecast,
-                source: "Period Forecast"
-              )
-            }
+        PeriodForecastTodayCell(
+          forecast: forecast,
+          menstrualSummary: vitalsViewModel.menstrualSummary
+        )
+        .padding(.horizontal)
+        .contextMenu {
+          Button("Ask Bud", systemSymbol: .ellipsisMessage) {
+            handleAskBudAction(
+              title: "Period Forecast",
+              content: forecast,
+              source: "Period Forecast"
+            )
           }
+        }
       }
 
     case .goals:
