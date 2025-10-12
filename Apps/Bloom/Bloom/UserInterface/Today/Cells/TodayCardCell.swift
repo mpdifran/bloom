@@ -36,12 +36,12 @@ struct TodayCardCell<Content: View>: View {
       Text(content)
         .font(.body)
         .fontDesign(.rounded)
-        .fixedSize(horizontal: false, vertical: true)
 
       if let contentBuilder {
         contentBuilder()
       }
     }
+    .fixedSize(horizontal: false, vertical: true)
     .foregroundStyle(.white)
     .horizontallyCentered()
     .cardContainer(fill: color.gradient)

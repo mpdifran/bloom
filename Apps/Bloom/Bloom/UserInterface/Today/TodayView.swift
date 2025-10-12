@@ -319,6 +319,9 @@ private extension TodayView {
           tip: tip
         )
         .padding(.horizontal)
+        .onTapGesture {
+          presentedNavPush = MenstruationDetailView().asAny
+        }
         .contextMenu {
           Button("Ask Bud", systemSymbol: .ellipsisMessage) {
             handleAskBudAction(
@@ -342,6 +345,9 @@ private extension TodayView {
           menstrualSummary: vitalsViewModel.menstrualSummary
         )
         .padding(.horizontal)
+        .onTapGesture {
+          presentedNavPush = MenstruationDetailView().asAny
+        }
         .contextMenu {
           Button("Ask Bud", systemSymbol: .ellipsisMessage) {
             handleAskBudAction(
