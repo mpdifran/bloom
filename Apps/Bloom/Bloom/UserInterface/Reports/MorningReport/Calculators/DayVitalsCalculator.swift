@@ -593,6 +593,10 @@ private extension DayVitalsCalculator {
     let dayInCurrentPhase: Int?
 
     switch phase {
+    case .menstrual:
+      cyclePhase = "menstrual"
+      // Day in menstrual phase is same as day in cycle (starts at 1)
+      dayInCurrentPhase = dayInCycle
     case .follicular:
       cyclePhase = "follicular"
       // Follicular phase starts after menstruation ends
@@ -600,12 +604,15 @@ private extension DayVitalsCalculator {
       dayInCurrentPhase = max(0, dayInCycle - menstruationDays)
     case .ovulation:
       cyclePhase = "ovulatory"
-      dayInCurrentPhase = 1 // Single day
+      let cycleDuration = menstrualSummary.averageCycleDuration ?? 28
+      let ovulationDay = cycleDuration / 2
+      // Day in ovulation window (1-3 days)
+      dayInCurrentPhase = max(1, dayInCycle - ovulationDay + 2)
     case .luteal:
       cyclePhase = "luteal"
       let cycleDuration = menstrualSummary.averageCycleDuration ?? 28
       let ovulationDay = cycleDuration / 2
-      dayInCurrentPhase = max(0, dayInCycle - ovulationDay)
+      dayInCurrentPhase = max(0, dayInCycle - ovulationDay - 1)
     case .unknown, .none:
       cyclePhase = nil
       dayInCurrentPhase = nil

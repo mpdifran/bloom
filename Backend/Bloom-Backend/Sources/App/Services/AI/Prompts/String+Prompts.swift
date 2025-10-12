@@ -120,10 +120,10 @@ extension String.Prompt {
     Period Phase Insights:
     - If the user has menstrual cycle data, you should provide period-specific guidance using the phaseTip and periodForecast fields
     - phaseTip (optional string): Provide ONE actionable tip relevant to their current cycle phase. Consider:
-      * Follicular phase (days 1-14): Higher energy, good for intense workouts, metabolism is slower
-      * Ovulation phase (days 13-16): Peak energy and social feelings, optimal workout performance
-      * Luteal phase (days 17-28+): Higher metabolism (burns 100-300 more calories), time for gentler workouts, potential PMS symptoms
-      * Menstrual phase (days 1-5): Rest and recovery, gentle movement, iron-rich foods
+      * Menstrual phase (days 1-5): Rest and recovery, gentle movement, iron-rich foods, hydration helps with bloating, lowest hormone levels
+      * Follicular phase (after menstruation until ovulation): Higher energy, good for intense workouts, metabolism is slower, increased focus and mood
+      * Ovulation phase (~3 days mid-cycle): Peak energy and social feelings, optimal workout performance, highest estrogen levels
+      * Luteal phase (after ovulation until next period): Higher metabolism (burns 100-300 more calories), time for gentler workouts, potential PMS symptoms, progesterone increases
     - periodForecast (optional string): Only include when the predicted period is within approximately 7 days. Provide a natural, helpful forecast including:
       * Days until predicted period
       * The approximate date (use a human-friendly format)

@@ -310,8 +310,12 @@ private extension TodayView {
     case .phaseTip:
       if let content = todayViewModel.getSectionContent(for: section),
          case .text(let tip) = content {
+        SectionTitleView("Phase Tip")
+          .padding(.horizontal)
+          .padding(.horizontal)
+
         PhaseTipTodayCell(
-          phaseName: vitalsViewModel.menstrualSummary?.phaseName,
+          phase: vitalsViewModel.menstrualSummary?.currentPhase(),
           tip: tip
         )
         .padding(.horizontal)
@@ -329,6 +333,10 @@ private extension TodayView {
     case .periodForecast:
       if let content = todayViewModel.getSectionContent(for: section),
          case .text(let forecast) = content {
+        SectionTitleView("Upcoming Period")
+          .padding(.horizontal)
+          .padding(.horizontal)
+
         PeriodForecastTodayCell(
           forecast: forecast,
           menstrualSummary: vitalsViewModel.menstrualSummary

@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import CoreHealth
 
 struct PhaseTipTodayCell: View {
-  let phaseName: String?
+  let phase: MenstrualCyclePhase?
   let tip: String
 
   var body: some View {
@@ -16,13 +17,13 @@ struct PhaseTipTodayCell: View {
       symbol: .circleDottedAndCircle,
       title: title,
       content: tip,
-      color: .mutedPink
+      color: phase?.color ?? .mutedPink
     )
   }
 
   private var title: String {
-    if let phaseName = phaseName, !phaseName.isEmpty {
-      return "\(phaseName.capitalized) Phase Tip"
+    if let phaseName = phase?.name {
+      return "\(phaseName) Tip"
     }
     return "Cycle Phase Tip"
   }
@@ -32,8 +33,20 @@ struct PhaseTipTodayCell: View {
   PreviewEnvironment {
     BloomScrollView {
       PhaseTipTodayCell(
-        phaseName: "Follicular",
+        phase: .menstrual,
+        tip: "You menstruating."
+      )
+      PhaseTipTodayCell(
+        phase: .follicular,
         tip: "You're in your follicular phase with higher energy levels. This is a great time for intense workouts and challenging yourself with new exercises."
+      )
+      PhaseTipTodayCell(
+        phase: .ovulation,
+        tip: "You ovulating."
+      )
+      PhaseTipTodayCell(
+        phase: .luteal,
+        tip: "You're in your luteal phase with lower energy levels."
       )
     }
   }

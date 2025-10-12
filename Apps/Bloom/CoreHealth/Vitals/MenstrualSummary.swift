@@ -123,17 +123,25 @@ public extension MenstrualSummary {
 
     let cycleDuration = averageCycleDuration ?? .typicalCycleDuration
     let daysSinceStart = days + 1
-    let ovulationDays = cycleDuration / 2
+    let ovulationDay = cycleDuration / 2
+    let menstruationDuration = averageMenstruationDays ?? .defaultMinMenstruationDays
 
-    if daysSinceStart < ovulationDays {
+    // Menstrual phase: Days 1-5 (average menstruation duration)
+    if daysSinceStart <= menstruationDuration {
+      return .menstrual
+    }
+
+    // Follicular phase: After menstruation until ~2 days before ovulation
+    if daysSinceStart < (ovulationDay - 1) {
       return .follicular
     }
 
-    // TODO: Rework this logic
-    if daysSinceStart == ovulationDays {
+    // Ovulation phase: ~3 day window centered on mid-cycle
+    if daysSinceStart >= (ovulationDay - 1) && daysSinceStart <= (ovulationDay + 1) {
       return .ovulation
     }
 
+    // Luteal phase: After ovulation until next predicted period
     if daysSinceStart < (cycleDuration + .standardDeviationCycleDays) {
       return .luteal
     }

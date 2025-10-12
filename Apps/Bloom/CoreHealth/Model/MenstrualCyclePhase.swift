@@ -9,6 +9,7 @@ import SwiftUI
 import HealthKit
 
 public enum MenstrualCyclePhase: Hashable {
+  case menstrual
   case follicular
   case ovulation
   case luteal
@@ -19,6 +20,8 @@ public extension MenstrualCyclePhase {
 
   var name: String {
     switch self {
+    case .menstrual:
+      "Menstrual Phase"
     case .follicular:
       "Follicular Phase"
     case .ovulation:
@@ -32,6 +35,8 @@ public extension MenstrualCyclePhase {
 
   var color: Color? {
     switch self {
+    case .menstrual:
+      return .mutedPink
     case .follicular:
       return .mutedPurple
     case .luteal:
@@ -45,10 +50,12 @@ public extension MenstrualCyclePhase {
 
   var details: String? {
     switch self {
+    case .menstrual:
+      "This is when you're on your period. The uterine lining sheds, and hormone levels are at their lowest. It's a time for rest, gentle movement, and nourishment. Many people experience cramps, fatigue, and mood changes during this phase."
     case .follicular:
-      "This is the first half of your cycle. It begins with menstruation and continues until ovulation. During this phase, estrogen levels rise, and your body is preparing to release an egg. You’ll likely feel more energized, focused, and social during this time."
+      "Following menstruation, the follicular phase continues until ovulation. During this phase, estrogen levels rise, and your body is preparing to release an egg. You'll likely feel more energized, focused, and social during this time."
     case .luteal:
-      "Following ovulation, the luteal phase begins. Progesterone increases, preparing the body for a potential pregnancy. This phase is often associated with PMS symptoms, including mood swings, fatigue, and bloating. It’s a time for rest and self-care."
+      "Following ovulation, the luteal phase begins. Progesterone increases, preparing the body for a potential pregnancy. This phase is often associated with PMS symptoms, including mood swings, fatigue, and bloating. It's a time for rest and self-care."
     case .ovulation, .unknown:
       nil
     }
@@ -56,6 +63,29 @@ public extension MenstrualCyclePhase {
 
   var coolFacts: [CoolFact] {
     switch self {
+    case .menstrual:
+      [
+        CoolFact(
+          title: "Rest and Recover",
+          fact: "Your body is working hard during menstruation. It's okay to take it easy, prioritize rest, and listen to your body's need for downtime."
+        ),
+        CoolFact(
+          title: "Iron-Rich Foods Help",
+          fact: "You lose iron during your period, which can contribute to fatigue. Eating iron-rich foods like leafy greens, red meat, or beans can help replenish your levels."
+        ),
+        CoolFact(
+          title: "Gentle Movement Can Help",
+          fact: "Light exercise like walking, stretching, or gentle yoga can help reduce cramps and improve mood during your period by increasing blood flow and releasing endorphins."
+        ),
+        CoolFact(
+          title: "Hormone Levels Are Lowest",
+          fact: "Both estrogen and progesterone are at their lowest during menstruation, which can affect energy levels and mood. Be kind to yourself during this time."
+        ),
+        CoolFact(
+          title: "Hydration Helps With Bloating",
+          fact: "It might seem counterintuitive, but drinking more water during your period can actually help reduce bloating and water retention."
+        ),
+      ]
     case .follicular:
       [
         CoolFact(
