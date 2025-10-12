@@ -704,6 +704,12 @@ private extension ChatController {
   /// Save a message to SwiftData. ChatHistoryModifier instances will observe and update.
   private func saveMessage(_ message: ChatMessage) async throws {
     modelContext.insert(message)
+
+    // Update conversation's updatedAt timestamp so it sorts to the top
+    if let conversation = message.conversation {
+      conversation.updatedAt = .now
+    }
+
     try modelContext.save()
     conversationIDToRefresh = message.conversation?.id
   }
