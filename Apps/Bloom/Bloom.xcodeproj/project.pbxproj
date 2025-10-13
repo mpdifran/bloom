@@ -55,6 +55,9 @@
 		FF97832A2C9B546700A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FFD8C4D22BD1AC5E001E8D42 /* AppUI */; };
 		FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FFF61AEA2BED52A900926042 /* AppFoundations */; };
 		FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF8B8B202BFD1EF500BA2128 /* Algorithms */; };
+		FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */; };
+		FF97C3F72E9C407300FE7A82 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */; };
+		FF97C4062E9C407400FE7A82 /* BloomWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9BEA262DCAABD200D90BAF /* Algorithms */; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
@@ -145,6 +148,13 @@
 			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
 			remoteInfo = Umbrella;
 		};
+		FF97C4042E9C407400FE7A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF97C3F22E9C407300FE7A82;
+			remoteInfo = BloomWidgetsExtension;
+		};
 		FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -231,6 +241,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				FF97C4062E9C407400FE7A82 /* BloomWidgetsExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,6 +287,9 @@
 		FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BloomWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		FFACBAD92BAC7788006AAD0B /* Bloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreHealth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -365,6 +379,13 @@
 			);
 			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
 		};
+		FF97C40C2E9C407400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
+		};
 		FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
@@ -388,6 +409,8 @@
 		FF67B2482DAFF5D70086E697 /* Configuration */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configuration; sourceTree = "<group>"; };
 		FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BloomWatch Watch App"; sourceTree = "<group>"; };
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
+		FF97C3F82E9C407300FE7A82 /* BloomWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97C40C2E9C407400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BloomWidgets; sourceTree = "<group>"; };
+		FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SharedAppIntents; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
 		FFECC1CF2DC2C327002F6AAA /* CoreHealth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreHealth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -473,6 +496,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF97C3F02E9C407300FE7A82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF97C3F72E9C407300FE7A82 /* SwiftUI.framework in Frameworks */,
+				FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FFACBAD62BAC7788006AAD0B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -544,6 +576,8 @@
 				FF1E961B2C0BEC1D004DAD2D /* DeviceActivity.framework */,
 				FF1E96322C0BF57F004DAD2D /* ManagedSettings.framework */,
 				FF1E96342C0BF57F004DAD2D /* ManagedSettingsUI.framework */,
+				FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */,
+				FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -562,7 +596,9 @@
 			isa = PBXGroup;
 			children = (
 				4BD93D442CFA889800D1AFB8 /* Bloom */,
+				FF97C3F82E9C407300FE7A82 /* BloomWidgets */,
 				FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */,
+				FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */,
 				4BD93EBC2CFA88A900D1AFB8 /* BloomTests */,
 				4BD93EC52CFA88B000D1AFB8 /* DeviceActivityMonitorExtension */,
 				4BD93ECC2CFA88B300D1AFB8 /* ShieldConfigurationExtension */,
@@ -597,6 +633,7 @@
 				FF9782D72C9A22C900A8ED7E /* Umbrella.framework */,
 				FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */,
 				FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */,
+				FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -820,6 +857,28 @@
 			productReference = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF97C4072E9C407400FE7A82 /* Build configuration list for PBXNativeTarget "BloomWidgetsExtension" */;
+			buildPhases = (
+				FF97C3EF2E9C407300FE7A82 /* Sources */,
+				FF97C3F02E9C407300FE7A82 /* Frameworks */,
+				FF97C3F12E9C407300FE7A82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				FF97C3F82E9C407300FE7A82 /* BloomWidgets */,
+			);
+			name = BloomWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = BloomWidgetsExtension;
+			productReference = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		FFACBAD82BAC7788006AAD0B /* Bloom */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Bloom" */;
@@ -839,6 +898,7 @@
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
 				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
 				FFECC1D32DC2C327002F6AAA /* PBXTargetDependency */,
+				FF97C4052E9C407400FE7A82 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4BD93D442CFA889800D1AFB8 /* Bloom */,
@@ -952,7 +1012,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					FF1E96182C0BEC1D004DAD2D = {
@@ -979,6 +1039,9 @@
 					};
 					FF9782D62C9A22C900A8ED7E = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					FF97C3F22E9C407300FE7A82 = {
+						CreatedOnToolsVersion = 26.0;
 					};
 					FFACBAD82BAC7788006AAD0B = {
 						CreatedOnToolsVersion = 15.3;
@@ -1027,6 +1090,7 @@
 				FFACBAD82BAC7788006AAD0B /* Bloom */,
 				FF75772D2DC91A3700E31C86 /* BloomWatch Watch App */,
 				FFF61B372BEEB7B000926042 /* BloomTests */,
+				FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */,
 				FF1E96182C0BEC1D004DAD2D /* DeviceActivityMonitorExtension */,
 				FF1E96302C0BF57F004DAD2D /* ShieldConfigurationExtension */,
 				FF1E96442C0BF5E4004DAD2D /* ShieldActionExtension */,
@@ -1091,6 +1155,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FF9782D52C9A22C900A8ED7E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF97C3F12E9C407300FE7A82 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1207,6 +1278,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF97C3EF2E9C407300FE7A82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FFACBAD52BAC7788006AAD0B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1287,6 +1365,11 @@
 			isa = PBXTargetDependency;
 			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
 			targetProxy = FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */;
+		};
+		FF97C4052E9C407400FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
+			targetProxy = FF97C4042E9C407400FE7A82 /* PBXContainerItemProxy */;
 		};
 		FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2933,6 +3016,142 @@
 			};
 			name = Release;
 		};
+		FF97C4082E9C407400FE7A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BloomWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FF97C4092E9C407400FE7A82 /* Debug [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BloomWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug [Dev]";
+		};
+		FF97C40A2E9C407400FE7A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BloomWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FF97C40B2E9C407400FE7A82 /* Release [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BloomWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Release [Dev]";
+		};
 		FFACBAE52BAC778A006AAD0B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
@@ -3563,6 +3782,17 @@
 				FF67B2552DAFFA6E0086E697 /* Debug [Dev] */,
 				FF9782E22C9A22C900A8ED7E /* Release */,
 				FF67B2602DAFFA930086E697 /* Release [Dev] */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF97C4072E9C407400FE7A82 /* Build configuration list for PBXNativeTarget "BloomWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF97C4082E9C407400FE7A82 /* Debug */,
+				FF97C4092E9C407400FE7A82 /* Debug [Dev] */,
+				FF97C40A2E9C407400FE7A82 /* Release */,
+				FF97C40B2E9C407400FE7A82 /* Release [Dev] */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

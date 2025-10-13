@@ -30,6 +30,19 @@ extension Application {
   }
 }
 
+// MARK: - App-Site Association
+
+extension Application {
+
+  var appleAppSiteAssociationFilepath: String {
+      switch environment {
+      case .production: return "Resources/association-prod.json"
+      case .development: return "Resources/association-dev.json"
+      default: fatalError("No domain for unknown environment.")
+      }
+  }
+}
+
 // MARK: - APNs
 
 extension Application {

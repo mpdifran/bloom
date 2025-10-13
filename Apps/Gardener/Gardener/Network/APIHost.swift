@@ -20,7 +20,7 @@ extension APIHost {
     if let url = URL(string: overrideBase), overrideBase.isNotEmpty, overrideEnabled {
       return url
     } else {
-      return URL(string: "https://bloom-api-5903aeb2ee43.herokuapp.com/")!
+      return URL(string: "https://api.trybloom.app/")!
     }
   }
 }

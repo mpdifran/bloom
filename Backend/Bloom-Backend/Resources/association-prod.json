@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "GUJ47GUV2Q.com.lotus-labs.bloom"
+        ],
+        "components": [
+          {
+            "/": "/action/food-scanner",
+            "?": { "scheme": "https" }
+          }
+        ]
+      }
+    ]
+  }
+}

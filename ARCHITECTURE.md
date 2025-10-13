@@ -306,6 +306,31 @@ struct CalorieTargetCalculatorTestSuite {
 - `BloomModel` - Shared network models
 - `ScreenControl` - Family Controls APIs
 
+### Widgets & App Intents Organization
+```
+Apps/Bloom/
+├── BloomWidgets/           # Widget extension target
+│   ├── BloomWidgetsBundle.swift
+│   ├── BloomWidgets.swift
+│   └── BloomWidgetsControl.swift
+└── SharedAppIntents/       # Shared App Intents (multi-target)
+    └── [App Intent files]
+```
+
+**Key Patterns:**
+- **Widgets**: All widget implementations live in `Apps/Bloom/BloomWidgets/`
+- **App Intents**: Shared App Intents go in `Apps/Bloom/SharedAppIntents/`
+- **Target Membership**: Files in `SharedAppIntents/` have dual target membership:
+  - Main app target (`Bloom`)
+  - Widget extension target (`BloomWidgets`)
+- **Purpose**: This allows App Intents to be used by both the main app and widgets without code duplication
+- **Widget Types**: Support for both standard widgets and Control Center widgets (ControlWidget)
+
+**Implementation Notes:**
+- Use `AppIntentTimelineProvider` for widget timeline management
+- Configure App Intents to be accessible from both targets in Xcode's target membership settings
+- Follow WidgetKit best practices for timeline updates and relevance
+
 ### File Organization
 ```
 UserInterface/

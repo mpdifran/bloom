@@ -10,7 +10,7 @@
 
 BLOOM_APP_NAME = Bloom
 BLOOM_APP_BUNDLE_ID = com.lotus-labs.bloom
-BLOOM_BASE_URL = https:\/\/bloom-api-5903aeb2ee43.herokuapp.com
-BLOOM_BASE_WS_URL = wss:\/\/bloom-api-5903aeb2ee43.herokuapp.com
+BLOOM_BASE_URL = https:\/\/api.trybloom.app
+BLOOM_BASE_WS_URL = wss:\/\/api.trybloom.app
 BLOOM_APP_GROUP_ID = group.com.lotus-labs.bloom
 OTHER_SWIFT_FLAGS = $(inherited) -DPRODUCTION
