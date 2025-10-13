@@ -13,13 +13,8 @@ struct OpenFoodScannerIntent: AppIntent {
   static let description = IntentDescription("Opens the AI Food Scanner to scan barcodes or analyze food.")
   static let openAppWhenRun: Bool = true
 
-  func perform() async throws -> some IntentResult {
-    guard let url = URL(string: "https://api.trybloom.app/action/food-scanner") else {
-      throw IntentError.message("Invalid URL")
-    }
-
-    await UIApplication.shared.open(url)
-
-    return .result()
+  func perform() async throws -> some IntentResult & OpensIntent {
+    let url = URL(string: "https://api.trybloom.app/action/food-scanner")!
+    return .result(opensIntent: OpenURLIntent(url))
   }
 }

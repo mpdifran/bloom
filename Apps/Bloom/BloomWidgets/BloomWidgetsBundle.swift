@@ -10,8 +10,7 @@ import SwiftUI
 
 @main
 struct BloomWidgetsBundle: WidgetBundle {
-    var body: some Widget {
-        BloomWidgets()
-        BloomWidgetsControl()
-    }
+  var body: some Widget {
+    FoodScannerControl()
+  }
 }

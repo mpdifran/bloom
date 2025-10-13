@@ -44,7 +44,6 @@
 		FF75776C2DCA381D00E31C86 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF75776B2DCA381D00E31C86 /* TelemetryDeck */; };
 		FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = FF83DB1B2D2ECF010018FAAC /* RevenueCat */; };
 		FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */; };
-		FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -58,6 +57,8 @@
 		FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */; };
 		FF97C3F72E9C407300FE7A82 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */; };
 		FF97C4062E9C407400FE7A82 /* BloomWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FF97CD772E9D9E1300FE7A82 /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */; };
 		FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9BEA262DCAABD200D90BAF /* Algorithms */; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
@@ -154,6 +155,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF97C3F22E9C407300FE7A82;
 			remoteInfo = BloomWidgetsExtension;
+		};
+		FF97CD782E9D9E1900FE7A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
+			remoteInfo = Umbrella;
 		};
 		FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -386,6 +394,20 @@
 			);
 			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
 		};
+		FF97CD732E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				OpenFoodScannerIntent.swift,
+			);
+			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
+		};
+		FF97CD742E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				OpenFoodScannerIntent.swift,
+			);
+			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
+		};
 		FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
@@ -410,7 +432,7 @@
 		FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BloomWatch Watch App"; sourceTree = "<group>"; };
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
 		FF97C3F82E9C407300FE7A82 /* BloomWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97C40C2E9C407400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BloomWidgets; sourceTree = "<group>"; };
-		FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SharedAppIntents; sourceTree = "<group>"; };
+		FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97CD732E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FF97CD742E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SharedAppIntents; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
 		FFECC1CF2DC2C327002F6AAA /* CoreHealth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreHealth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -500,7 +522,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF97CD772E9D9E1300FE7A82 /* Umbrella.framework in Frameworks */,
 				FF97C3F72E9C407300FE7A82 /* SwiftUI.framework in Frameworks */,
+				FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */,
 				FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,7 +533,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF95D7502CECE57E0047F8C2 /* BloomModel in Frameworks */,
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
 				FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */,
@@ -868,12 +891,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF97CD792E9D9E1900FE7A82 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FF97C3F82E9C407300FE7A82 /* BloomWidgets */,
 			);
 			name = BloomWidgetsExtension;
 			packageProductDependencies = (
+				FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */,
 			);
 			productName = BloomWidgetsExtension;
 			productReference = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */;
@@ -1370,6 +1395,11 @@
 			isa = PBXTargetDependency;
 			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
 			targetProxy = FF97C4042E9C407400FE7A82 /* PBXContainerItemProxy */;
+		};
+		FF97CD792E9D9E1900FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+			targetProxy = FF97CD782E9D9E1900FE7A82 /* PBXContainerItemProxy */;
 		};
 		FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3025,7 +3055,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -3059,7 +3089,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -3093,7 +3123,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -3127,7 +3157,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GUJ47GUV2Q;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
@@ -4086,6 +4116,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
+		};
+		FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
 		};
 		FF9BEA262DCAABD200D90BAF /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
