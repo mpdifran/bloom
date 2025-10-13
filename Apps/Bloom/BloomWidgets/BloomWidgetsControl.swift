@@ -10,68 +10,15 @@ import SwiftUI
 import WidgetKit
 
 struct BloomWidgetsControl: ControlWidget {
-    static let kind: String = "com.lotus-labs.bloom.BloomWidgets"
+  static let kind: String = "com.lotus-labs.bloom.FoodScannerControl"
 
-    var body: some ControlWidgetConfiguration {
-        AppIntentControlConfiguration(
-            kind: Self.kind,
-            provider: Provider()
-        ) { value in
-            ControlWidgetToggle(
-                "Start Timer",
-                isOn: value.isRunning,
-                action: StartTimerIntent(value.name)
-            ) { isRunning in
-                Label(isRunning ? "On" : "Off", systemImage: "timer")
-            }
-        }
-        .displayName("Timer")
-        .description("A an example control that runs a timer.")
+  var body: some ControlWidgetConfiguration {
+    StaticControlConfiguration(kind: Self.kind) {
+      ControlWidgetButton(action: OpenFoodScannerIntent()) {
+        Label("Scan Food", systemImage: "barcode.viewfinder")
+      }
     }
-}
-
-extension BloomWidgetsControl {
-    struct Value {
-        var isRunning: Bool
-        var name: String
-    }
-
-    struct Provider: AppIntentControlValueProvider {
-        func previewValue(configuration: TimerConfiguration) -> Value {
-            BloomWidgetsControl.Value(isRunning: false, name: configuration.timerName)
-        }
-
-        func currentValue(configuration: TimerConfiguration) async throws -> Value {
-            let isRunning = true // Check if the timer is running
-            return BloomWidgetsControl.Value(isRunning: isRunning, name: configuration.timerName)
-        }
-    }
-}
-
-struct TimerConfiguration: ControlConfigurationIntent {
-    static let title: LocalizedStringResource = "Timer Name Configuration"
-
-    @Parameter(title: "Timer Name", default: "Timer")
-    var timerName: String
-}
-
-struct StartTimerIntent: SetValueIntent {
-    static let title: LocalizedStringResource = "Start a timer"
-
-    @Parameter(title: "Timer Name")
-    var name: String
-
-    @Parameter(title: "Timer is running")
-    var value: Bool
-
-    init() {}
-
-    init(_ name: String) {
-        self.name = name
-    }
-
-    func perform() async throws -> some IntentResult {
-        // Start the timer…
-        return .result()
-    }
+    .displayName("Food Scanner")
+    .description("Open the AI Food Scanner to scan barcodes or analyze food.")
+  }
 }

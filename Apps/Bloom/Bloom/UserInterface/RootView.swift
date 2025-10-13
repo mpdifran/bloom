@@ -83,6 +83,9 @@ struct RootView: View {
     .onReceive(NotificationCenter.default.publisher(for: .showLogPeriodSheet)) { _ in
       shouldShowLogPeriodSheet = true
     }
+    .onOpenURL { url in
+      handleUniversalLink(url)
+    }
     .tint(themeController.theme.color)
     .environment(themeController)
     .environment(experimentManager)
@@ -90,6 +93,17 @@ struct RootView: View {
 }
 
 private extension RootView {
+
+  func handleUniversalLink(_ url: URL) {
+    guard url.host == "api.trybloom.app" || url.host == "trybloom.app" else { return }
+
+    switch url.path {
+    case "/action/food-scanner":
+      presentedSheet = AIFoodScannerView().asAny
+    default:
+      break
+    }
+  }
 
   @available(iOS 26.0, *)
   var newContentView: some View {

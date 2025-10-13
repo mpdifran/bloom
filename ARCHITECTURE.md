@@ -85,6 +85,30 @@ private extension ChatView {
 }
 ```
 
+### Sheet Presentation Pattern
+Use the `presentedSheet: AnyView?` pattern for presenting modal sheets throughout the app:
+
+```swift
+struct MyView: View {
+  @State private var presentedSheet: AnyView?
+
+  var body: some View {
+    VStack {
+      Button("Show Detail") {
+        presentedSheet = DetailView().asAny
+      }
+    }
+    .sheet($presentedSheet)
+  }
+}
+```
+
+**Benefits:**
+- Type-erased sheet presentation without complex state management
+- Single binding handles all sheet presentations
+- Consistent pattern across the codebase
+- Works seamlessly with the `.sheet($presentedSheet)` modifier
+
 ## Data Flow Patterns
 
 ### SwiftData with DTOs
