@@ -100,6 +100,18 @@ private extension RootView {
     switch url.path {
     case "/action/food-scanner":
       presentedSheet = AIFoodScannerView().asAny
+    case "/action/log-food":
+      presentedSheet = FoodLoggingActionCardView(performDismiss: nil).asAny
+    case "/action/log-water":
+      presentedSheet = WaterActionCardView(performDismiss: nil).asAny
+    case "/action/log-bowel-movement":
+      presentedSheet = BowelMovementActionCardView(performDismiss: nil).asAny
+    case "/action/log-period":
+      presentedSheet = CycleTrackingActionCardView(performDismiss: nil).asAny
+    case "/action/log-weight":
+      presentedSheet = BodyWeightActionCardView(performDismiss: nil).asAny
+    case "/action/log-blood-pressure":
+      presentedSheet = BloodPressureActionCardView(performDismiss: nil).asAny
     default:
       break
     }

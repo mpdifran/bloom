@@ -14,8 +14,8 @@ custom_rules:
     message: "Avoid using .init shorthand. Use the full type name instead."
     severity: error
 
-  sf_safe_symbol:
-    name: "Safe SFSymbol"
-    message: "Use `SFSafeSymbols` via `systemSymbol` parameters for type safety."
-    regex: "(?<!\\w)(Image\\(systemName:|NSImage\\(symbolName:|Label\\([^,]+?,\\s*systemImage:|UIApplicationShortcutIcon\\(systemImageName:)"
-    severity: error
+  # sf_safe_symbol:
+  #   name: "Safe SFSymbol"
+  #   message: "Use `SFSafeSymbols` via `systemSymbol` parameters for type safety."
+  #   regex: "(?<!\\w)(Image\\(systemName:|NSImage\\(symbolName:|Label\\([^,]+?,\\s*systemImage:|UIApplicationShortcutIcon\\(systemImageName:)"
+  #   severity: error

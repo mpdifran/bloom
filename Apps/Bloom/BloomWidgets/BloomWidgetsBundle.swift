@@ -11,6 +11,6 @@ import SwiftUI
 @main
 struct BloomWidgetsBundle: WidgetBundle {
   var body: some Widget {
-    FoodScannerControl()
+    ActionControl()
   }
 }

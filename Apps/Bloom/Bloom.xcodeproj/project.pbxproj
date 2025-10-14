@@ -394,17 +394,21 @@
 			);
 			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
 		};
-		FF97CD732E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		FF97CD872E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				OpenFoodScannerIntent.swift,
+				ActionControlIntent.swift,
+				ActionType.swift,
+				OpenActionIntent.swift,
 			);
 			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
 		};
-		FF97CD742E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		FF97CD882E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				OpenFoodScannerIntent.swift,
+				ActionControlIntent.swift,
+				ActionType.swift,
+				OpenActionIntent.swift,
 			);
 			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
 		};
@@ -432,7 +436,7 @@
 		FF75772F2DC91A3700E31C86 /* BloomWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BloomWatch Watch App"; sourceTree = "<group>"; };
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
 		FF97C3F82E9C407300FE7A82 /* BloomWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97C40C2E9C407400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BloomWidgets; sourceTree = "<group>"; };
-		FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97CD732E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FF97CD742E9D9ADF00FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SharedAppIntents; sourceTree = "<group>"; };
+		FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97CD872E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FF97CD882E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SharedAppIntents; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
 		FFECC1CF2DC2C327002F6AAA /* CoreHealth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreHealth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -3061,13 +3065,11 @@
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3095,13 +3097,11 @@
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3129,13 +3129,11 @@
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3163,13 +3161,11 @@
 				INFOPLIST_FILE = BloomWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BloomWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BLOOM_APP_BUNDLE_ID).BloomWidgets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
