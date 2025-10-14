@@ -213,6 +213,11 @@ private extension BowelMovementsDetailView {
       default:
         EmptyView()
       }
+
+      HealthCitationLinkView(
+        url: .bristolStoolScale,
+        title: "Based on the Bristol Stool Form Scale (Heaton & Lewis, 1997)."
+      )
     }
   }
 
@@ -392,6 +397,11 @@ private extension BowelMovementsDetailView {
       default:
         Text("Time between bowel movements helps indicate digestive health and regularity patterns.")
       }
+
+      HealthCitationLinkView(
+        url: .stoolHabits,
+        title: "Assessment of normal bowel habits in the general adult population, PubMed"
+      )
     }
   }
 }

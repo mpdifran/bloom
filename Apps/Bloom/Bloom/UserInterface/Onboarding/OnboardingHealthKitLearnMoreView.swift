@@ -16,6 +16,7 @@ struct OnboardingHealthKitLearnMoreView: View {
         titleSection
         healthDataUsageSection
         healthDataSecureSection
+        disclaimerSection
         privacyPolicyButton
       }
       .padding()
@@ -109,6 +110,22 @@ private extension OnboardingHealthKitLearnMoreView {
         Text("• Shared with Bud anonymously and never tied to your identity")
         Text("• You can change permissions anytime in Settings")
         Text("• Secured by \(Image(systemSymbol: .appleLogo)) Apple")
+      }
+      .foregroundStyle(.secondary)
+      .multilineTextAlignment(.leading)
+    }
+    .horizontalAlignment(.leading)
+  }
+
+  var disclaimerSection: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      Text("Health information disclaimer:")
+        .font(.body)
+        .fontWeight(.heavy)
+        .fontDesign(.rounded)
+
+      Group {
+        Text("Bloom uses Apple Health data together with AI to create general wellness insights. These insights are for educational purposes only and are not medical advice.\n\nAlways consult a qualified healthcare professional before making medical decisions.")
       }
       .foregroundStyle(.secondary)
       .multilineTextAlignment(.leading)

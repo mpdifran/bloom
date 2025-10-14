@@ -41,3 +41,16 @@ extension URL {
   static let trackSleepWithAppleWatch = URL(string: "https://support.apple.com/en-ca/guide/watch/apd830528336/watchos")!
   static let cycleTrackingWithAppleWatch = URL(string: "https://support.apple.com/en-us/120356")!
 }
+
+// MARK: - Citations
+
+extension URL {
+  static let adultActivityLevels = URL(string: "https://www.cdc.gov/physical-activity-basics/guidelines/adults.html")!
+  static let faoHumanEnergyRequirements = URL(string: "https://www.fao.org/4/y5686e/y5686e00.htm")!
+  static let dietaryGuidelinesForAmericans = URL(string: "https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf")!
+  static let sleepStageRanges = URL(string: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4246141/")!
+  static let friendDatabase = URL(string: "https://pubmed.ncbi.nlm.nih.gov/26455884/")!
+  static let bristolStoolScale = URL(string: "https://www.tandfonline.com/doi/abs/10.3109/00365529709011203")!
+  static let stoolHabits = URL(string: "https://pubmed.ncbi.nlm.nih.gov/20205503/")!
+  static let aceFitnessCalculators = URL(string: "https://www.acefitness.org/resources/everyone/tools-calculators/")!
+}

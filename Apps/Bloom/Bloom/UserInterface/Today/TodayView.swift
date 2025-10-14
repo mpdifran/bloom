@@ -81,7 +81,8 @@ struct TodayView: View {
                 nonBloomPlusContent
               }
 
-              configureButton
+              MedicalDisclaimerFooterView()
+                .padding(.horizontal)
             }
             .padding(.top, 160)
           }
@@ -162,7 +163,7 @@ struct TodayView: View {
 }
 
 private extension TodayView {
-  
+
   var currentSceneryImage: Image {
     switch currentTimeMode {
     case .morning:
@@ -175,7 +176,7 @@ private extension TodayView {
       return Image(.nightScenery)
     }
   }
-  
+
   @ViewBuilder
   var bloomPlusContent: some View {
     VStack {
@@ -193,7 +194,7 @@ private extension TodayView {
         .padding(.horizontal)
         .padding(.bottom)
       }
-      
+
       // Dynamic sections based on time mode and settings
       let configuration = todaySettings.configuration(for: currentTimeMode)
       ForEach(configuration.sectionOrder) { section in
@@ -207,7 +208,7 @@ private extension TodayView {
       }
     }
   }
-  
+
   @ViewBuilder
   var nonBloomPlusContent: some View {
     VStack {
@@ -230,23 +231,13 @@ private extension TodayView {
           sectionView(for: section)
         }
       }
-      
+
       // Show Bloom Plus upsell at the bottom if not dismissed
       if !getBloomPlusHasDismissed {
         GetBloomPlusTodayCell()
           .padding(.horizontal)
       }
     }
-  }
-
-  var configureButton: some View {
-    Button {
-      presentedSheet = TodaySettingsView().asAny
-    } label: {
-      Label("Configure", systemSymbol: .sliderHorizontal3)
-    }
-    .buttonStyle(.secondary)
-    .padding()
   }
 
   @ViewBuilder
@@ -267,7 +258,7 @@ private extension TodayView {
             }
           }
       }
-      
+
     case .insights:
       if let content = todayViewModel.getSectionContent(for: section),
          case .insights(let insights) = content {
@@ -277,7 +268,7 @@ private extension TodayView {
           .padding(.horizontal)
         InsightTodayCell(insights: insights)
       }
-      
+
     case .sleepDetails:
       if let content = todayViewModel.getSectionContent(for: section),
          case .text(let details) = content {
@@ -290,7 +281,7 @@ private extension TodayView {
           }
           .padding(.horizontal)
       }
-      
+
     case .tonightsSleep:
       if let content = todayViewModel.getSectionContent(for: section),
          case .text(let recommendations) = content {
@@ -366,31 +357,31 @@ private extension TodayView {
         }
         .padding(.horizontal)
       }
-      
+
     case .reminders:
       remindersSection
-      
+
     case .todaysEvents:
       SectionTitleView("Today's Events")
         .padding(.horizontal)
         .padding(.horizontal)
       CalendarTodayCell(day: .today)
         .padding(.horizontal)
-      
+
     case .tomorrowsEvents:
       SectionTitleView("Tomorrow's Events")
         .padding(.horizontal)
         .padding(.horizontal)
       CalendarTodayCell(day: .tomorrow)
         .padding(.horizontal)
-      
+
     case .todaysWeather:
       SectionTitleView("Today's Weather")
         .padding(.horizontal)
         .padding(.horizontal)
       WeatherTodayCell(day: .today)
         .padding(.horizontal)
-      
+
     case .tomorrowsWeather:
       SectionTitleView("Tomorrow's Weather")
         .padding(.horizontal)
@@ -465,9 +456,9 @@ private extension TodayView {
   var reminderSectionTitle: String {
     let totalCount = filteredTodaysOccurrences.count
     let completedCount = filteredTodaysOccurrences.filter { $0.isCompleted }.count
-    
+
     let reminderText = totalCount == 1 ? "reminder" : "reminders"
-    
+
     if completedCount > 0 {
       return "\(totalCount) \(reminderText) • \(completedCount) completed"
     } else {
@@ -499,51 +490,11 @@ private extension TodayView {
       }
     }
   }
+}
 
-  @ViewBuilder
-  var reportsSection: some View {
-    SectionTitleView("Reports")
-      .padding(.horizontal)
+// MARK: - Reminder Helpers
 
-    TimelineView(.everyMinute) { context in
-      HStack {
-        DailyReportCell(
-          kind: .morning,
-          availabilityText: morningReportCellAvailabilityText
-        )
-        .onTapGesture {
-          guard morningReportCellAvailabilityText == nil else { return }
-
-          EntitledPresent(presentedSheet: $presentedSheet) {
-            MorningReportView(rootPresentedSheet: $presentedSheet)
-          }
-        }
-      }
-    }
-  }
-
-  var morningReportCellAvailabilityText: String? {
-    guard
-      let morningTime = Calendar.current.morningTime(for: .now),
-      morningTime > .now
-    else {
-      return nil
-    }
-
-    if
-      morningTime.timeIntervalSinceNow > 3600,
-      let duration = DateFormatter.timeIntervalHourAbbreviated.string(from: .now, to: morningTime)
-    {
-      return "Available in \(duration)"
-    } else if
-      let duration = DateFormatter.timeIntervalMinuteAbbreviated.string(from: .now, to: morningTime)
-    {
-      return "Available in \(duration)"
-    }
-    return "Available soon"
-  }
-  
-  // MARK: - Reminder Helpers
+extension TodayView {
   
   /// Filtered reminder occurrences that should show on today's view
   var filteredTodaysOccurrences: [ReminderOccurrenceDisplay] {

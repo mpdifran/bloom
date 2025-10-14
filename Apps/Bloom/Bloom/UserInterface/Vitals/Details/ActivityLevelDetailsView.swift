@@ -119,6 +119,8 @@ private extension ActivityLevelDetailsView {
 
         DetailInfoCardView {
           Text("Energy Ratio is the ratio between your Basal Energy and TDEE (Total Daily Energy Exertion) for a given day. The higher the ratio, the more active you were.")
+
+          HealthCitationLinkView(url: .faoHumanEnergyRequirements, title: "Based on Physical Activity Level (PAL) definitions from the FAO/WHO/UNU Expert Consultation on Human Energy Requirements (2001).")
         }
       }
     }
@@ -244,7 +246,9 @@ private extension Int {
 }
 
 #Preview {
-  NavigationStack {
-    ActivityLevelDetailsView()
+  PreviewEnvironment {
+    NavigationStack {
+      ActivityLevelDetailsView()
+    }
   }
 }

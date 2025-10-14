@@ -72,6 +72,7 @@ struct SettingsView: View {
         if showDeveloperMode {
           developerSection
         }
+        disclaimerSection
       }
       .padding()
     }
@@ -501,6 +502,20 @@ private extension SettingsView {
         }
       }
     }
+  }
+
+  var disclaimerSection: some View {
+    VStack {
+      Text("© 2025 Lotus Labs Inc. All Rights Reserved.")
+
+      Text("Bloom is not a substitute for professional medical advice. Always consult your physician first.")
+        .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
+    }
+    .font(.caption)
+    .bold()
+    .fontDesign(.rounded)
+    .padding(.horizontal)
   }
 }
 

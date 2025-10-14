@@ -30,14 +30,16 @@ struct VitalsView: View {
 
         bioAgeMeter
 
-        SectionTitleView("Vitals")
-          .padding(.horizontal)
+        if viewModel.vitals.isNotEmpty {
+          SectionTitleView("Vitals")
+            .padding(.horizontal)
 
-        ForEach(viewModel.vitals) { vital in
-          NavigationLink(value: vital.id) {
-            MonthlyVitalCardCell(vital: vital)
+          ForEach(viewModel.vitals) { vital in
+            NavigationLink(value: vital.id) {
+              MonthlyVitalCardCell(vital: vital)
+            }
+            .buttonStyle(.plain)
           }
-          .buttonStyle(.plain)
         }
 
         if viewModel.noDataVitals.isNotEmpty {
@@ -50,6 +52,8 @@ struct VitalsView: View {
             .buttonStyle(.plain)
           }
         }
+
+        MedicalDisclaimerFooterView()
       }
       .navigationTitle("You")
       .navigationDestination(for: VitalModel.Kind.self) { vitalKind in

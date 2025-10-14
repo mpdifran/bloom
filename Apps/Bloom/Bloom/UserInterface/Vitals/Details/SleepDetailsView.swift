@@ -70,6 +70,12 @@ private extension SleepDetailsView {
           includePadding: false
         )
 
+      HealthCitationLinkView(
+        url: .sleepStageRanges,
+        title: "Sleep stage ranges from How to Interpret the Results of a Sleep Study (NIH, 2014)."
+      )
+      .padding(.horizontal)
+
       viewDailySleepDataButton
     }
   }

@@ -69,6 +69,8 @@ private extension BiologicalAgeDetailsView {
             .tint(.mutedYellow)
         }
       }
+
+      MedicalDisclaimerFooterView()
     }
   }
 
@@ -118,6 +120,7 @@ struct FactorCell: View {
 
       Spacer(minLength: 0)
     }
+    .fixedSize(horizontal: false, vertical: true)
     .cardContainer()
   }
 }

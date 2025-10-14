@@ -72,7 +72,7 @@ struct OnboardingHealthKitView: View {
     .sheet($presentedSheet)
     .shelf {
       VStack {
-        Text("Your Health data always remains anonymous.")
+        Text("Your Health data always remains anonymous. Always consult with a doctor before making any changes to your health.")
           .font(.subheadline)
           .fontDesign(.rounded)
           .bold()

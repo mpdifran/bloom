@@ -46,6 +46,12 @@ struct NutritionDetailsView: View {
             .cardContainer()
           sugarChart
             .cardContainer()
+
+          HealthCitationLinkView(
+            url: .dietaryGuidelinesForAmericans,
+            title: "Recommended ranges based on the USDA's Dietary Guidelines for Americans."
+          )
+          .padding(.horizontal)
         }
       }
     }

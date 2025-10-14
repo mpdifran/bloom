@@ -306,10 +306,14 @@ private extension BodyCompositionDetailsView {
           Text("Higher body fat percentages can be associated with an increased risk of health issues such as cardiovascular disease, diabetes, and other metabolic conditions. It may indicate a need for lifestyle changes to improve health.")
         case .unknown:
           EmptyView()
+        @unknown default:
+          EmptyView()
         }
 
-        Link("Learn More", destination: URL(string: "https://www.healthline.com/health/exercise-fitness/ideal-body-fat-percentage")!)
-          .foregroundStyle(range.color)
+        HealthCitationLinkView(
+          url: .aceFitnessCalculators,
+          title: "Body-fat classification ranges based on the American Council on Exercise (ACE) guidelines."
+        )
       }
     }
   }

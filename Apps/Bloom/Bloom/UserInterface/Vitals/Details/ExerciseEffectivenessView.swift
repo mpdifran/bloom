@@ -42,7 +42,15 @@ private extension ExerciseEffectivenessView {
 
   var contentView: some View {
     BloomScrollView(spacing: 20) {
-      targetHeartRateZonesChart
+      VStack(alignment: .leading, spacing: 6) {
+        targetHeartRateZonesChart
+        HealthCitationLinkView(
+          url: .adultActivityLevels,
+          title: "600 minutes based on Physical Activity Guidelines by the CDC."
+        )
+        .padding(.horizontal)
+      }
+
       workoutTypeSummary
     }
   }
@@ -153,7 +161,9 @@ private extension ExerciseEffectivenessView {
 }
 
 #Preview {
-  NavigationStack {
-    ExerciseEffectivenessView()
+  PreviewEnvironment {
+    NavigationStack {
+      ExerciseEffectivenessView()
+    }
   }
 }

@@ -211,9 +211,11 @@ private extension HeartHealthDetailsView {
       if vo2MaxSamples.isNotEmpty {
         DetailInfoCardView {
           Text(fitnessLevel.summary)
-          Text("Fitness levels derived from the Fitness Registry and Importance of Exercise National Database (FRIEND).")
-            .font(.caption)
-            .foregroundStyle(.secondary)
+
+          HealthCitationLinkView(
+            url: .friendDatabase,
+            title: "Fitness levels derived from the Fitness Registry and Importance of Exercise National Database (FRIEND)."
+          )
         }
       }
     }
