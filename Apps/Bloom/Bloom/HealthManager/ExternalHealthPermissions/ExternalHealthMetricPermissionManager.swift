@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppFoundations
+import BloomFoundation
 
 private extension String {
   static let determinedPermissionIDs = "ExternalHealthMetricPermissionManager.determinedPermissionIDs"

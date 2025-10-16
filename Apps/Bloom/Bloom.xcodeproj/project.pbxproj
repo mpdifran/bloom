@@ -59,6 +59,7 @@
 		FF97C4062E9C407400FE7A82 /* BloomWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF97CD772E9D9E1300FE7A82 /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */; };
+		FF97CDA72EA148C400FE7A82 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
 		FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9BEA262DCAABD200D90BAF /* Algorithms */; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
@@ -537,6 +538,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF97CDA72EA148C400FE7A82 /* BloomModel in Frameworks */,
 				FF97832C2C9B546700A8ED7E /* Algorithms in Frameworks */,
 				FF97832B2C9B546700A8ED7E /* AppFoundations in Frameworks */,
 				FF5D0D162CFA47C500374F66 /* BloomModel in Frameworks */,
