@@ -8,10 +8,16 @@
 import SwiftUI
 import BloomFoundation
 
-struct MacroDistributionBar: View {
+public struct MacroDistributionBar: View {
   let proteinGrams: Double
   let carbsGrams: Double
   let fatGrams: Double
+
+  public init(proteinGrams: Double, carbsGrams: Double, fatGrams: Double) {
+    self.proteinGrams = proteinGrams
+    self.carbsGrams = carbsGrams
+    self.fatGrams = fatGrams
+  }
   
   private var totalCalories: Double {
     (proteinGrams * .caloriesPerGramOfProtein) +
@@ -34,7 +40,7 @@ struct MacroDistributionBar: View {
     return (fatGrams * .caloriesPerGramOfFat) / totalCalories
   }
   
-  var body: some View {
+  public var body: some View {
     GeometryReader { proxy in
       HStack(spacing: 0) {
         Rectangle()

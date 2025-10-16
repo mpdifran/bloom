@@ -46,6 +46,10 @@
 		FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */; };
 		FF89AA532EA2A74B00C76B6C /* CoreNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; };
 		FF89AA662EA2C6F000C76B6C /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF89AA652EA2C6F000C76B6C /* BloomModel */; };
+		FF89B3F22EA2CFF900C76B6C /* CoreHealth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */; };
+		FF89B3F52EA2E6AC00C76B6C /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF89B3F42EA2E6AC00C76B6C /* AppFoundations */; };
+		FF89B3F72EA2E6E500C76B6C /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF89B3F62EA2E6E500C76B6C /* BloomModel */; };
+		FF89B40A2EA321F900C76B6C /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF89B4092EA321F900C76B6C /* TelemetryDeck */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -159,6 +163,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF97D6912EA16EE300FE7A82;
 			remoteInfo = CoreNetwork;
+		};
+		FF89B3F02EA2CFF300C76B6C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFECC1CD2DC2C326002F6AAA;
+			remoteInfo = CoreHealth;
 		};
 		FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -340,6 +351,10 @@
 		FF3A8F2F2C1A8341002DA563 /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BloomWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		FF89B3FF2EA31B7A00C76B6C /* BloomWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BloomWidgetsExtension.entitlements; sourceTree = "<group>"; };
+		FF89B4002EA31BBC00C76B6C /* BloomWidgetsExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BloomWidgetsExtensionDebug.entitlements; sourceTree = "<group>"; };
+		FF89B4012EA31BEC00C76B6C /* BloomWidgetsExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BloomWidgetsExtensionRelease.entitlements; sourceTree = "<group>"; };
+		FF89B4022EA31BF300C76B6C /* BloomWidgetsExtensionDebug [Dev].entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BloomWidgetsExtensionDebug [Dev].entitlements"; sourceTree = "<group>"; };
 		FF9782D02C9A1CC700A8ED7E /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		FF9782D72C9A22C900A8ED7E /* Umbrella.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Umbrella.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BloomWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -447,6 +462,11 @@
 			membershipExceptions = (
 				ActionControlIntent.swift,
 				ActionType.swift,
+				FoodItemEntity.swift,
+				FoodItemQuery.swift,
+				LogMealConfigurationIntent.swift,
+				LogMealIntent.swift,
+				MealOption.swift,
 				OpenActionIntent.swift,
 			);
 			target = FFACBAD82BAC7788006AAD0B /* Bloom */;
@@ -456,6 +476,11 @@
 			membershipExceptions = (
 				ActionControlIntent.swift,
 				ActionType.swift,
+				FoodItemEntity.swift,
+				FoodItemQuery.swift,
+				LogMealConfigurationIntent.swift,
+				LogMealIntent.swift,
+				MealOption.swift,
 				OpenActionIntent.swift,
 			);
 			target = FF97C3F22E9C407300FE7A82 /* BloomWidgetsExtension */;
@@ -575,10 +600,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF89B3F22EA2CFF900C76B6C /* CoreHealth.framework in Frameworks */,
 				FF97CD772E9D9E1300FE7A82 /* Umbrella.framework in Frameworks */,
 				FF97C3F72E9C407300FE7A82 /* SwiftUI.framework in Frameworks */,
+				FF89B3F72EA2E6E500C76B6C /* BloomModel in Frameworks */,
 				FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */,
 				FF97C3F52E9C407300FE7A82 /* WidgetKit.framework in Frameworks */,
+				FF89B3F52EA2E6AC00C76B6C /* AppFoundations in Frameworks */,
+				FF89B40A2EA321F900C76B6C /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,6 +736,10 @@
 				FF9782D12C9A1CC700A8ED7E /* ci_scripts */,
 				4BD93F212CFA88C900D1AFB8 /* fastlane */,
 				FF9782D82C9A22C900A8ED7E /* Umbrella */,
+				FF89B4002EA31BBC00C76B6C /* BloomWidgetsExtensionDebug.entitlements */,
+				FF89B3FF2EA31B7A00C76B6C /* BloomWidgetsExtension.entitlements */,
+				FF89B4022EA31BF300C76B6C /* BloomWidgetsExtensionDebug [Dev].entitlements */,
+				FF89B4012EA31BEC00C76B6C /* BloomWidgetsExtensionRelease.entitlements */,
 				FF1E961A2C0BEC1D004DAD2D /* Frameworks */,
 				FFACBADA2BAC7788006AAD0B /* Products */,
 			);
@@ -970,6 +1003,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF89B3F92EA2E6EB00C76B6C /* PBXTargetDependency */,
+				FF89B3F12EA2CFF300C76B6C /* PBXTargetDependency */,
 				FF97CD792E9D9E1900FE7A82 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -978,6 +1013,9 @@
 			name = BloomWidgetsExtension;
 			packageProductDependencies = (
 				FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */,
+				FF89B3F42EA2E6AC00C76B6C /* AppFoundations */,
+				FF89B3F62EA2E6E500C76B6C /* BloomModel */,
+				FF89B4092EA321F900C76B6C /* TelemetryDeck */,
 			);
 			productName = BloomWidgetsExtension;
 			productReference = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */;
@@ -1526,6 +1564,15 @@
 		FF89AA642EA2C6E900C76B6C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = FF89AA632EA2C6E900C76B6C /* BloomModel */;
+		};
+		FF89B3F12EA2CFF300C76B6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFECC1CD2DC2C326002F6AAA /* CoreHealth */;
+			targetProxy = FF89B3F02EA2CFF300C76B6C /* PBXContainerItemProxy */;
+		};
+		FF89B3F92EA2E6EB00C76B6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = FF89B3F82EA2E6EB00C76B6C /* BloomModel */;
 		};
 		FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3220,6 +3267,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = BloomWidgetsExtensionDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -3252,6 +3300,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "BloomWidgetsExtensionDebug [Dev].entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -3284,6 +3333,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = BloomWidgetsExtensionRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -3316,6 +3366,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = BloomWidgetsExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -4452,6 +4503,25 @@
 		FF89AA652EA2C6F000C76B6C /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BloomModel;
+		};
+		FF89B3F42EA2E6AC00C76B6C /* AppFoundations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
+			productName = AppFoundations;
+		};
+		FF89B3F62EA2E6E500C76B6C /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BloomModel;
+		};
+		FF89B3F82EA2E6EB00C76B6C /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D0D142CFA47C500374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */;
+			productName = BloomModel;
+		};
+		FF89B4092EA321F900C76B6C /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF9782F32C9B1ECD00A8ED7E /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
 		};
 		FF8B8B202BFD1EF500BA2128 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;

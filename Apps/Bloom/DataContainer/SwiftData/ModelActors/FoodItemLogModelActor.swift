@@ -152,4 +152,13 @@ public extension FoodItemLogModelActor {
       value.0?.asDTO()
     }
   }
+
+  func fetchFoodItem(for id: String) throws -> FoodItemDTO? {
+    let descriptor = FetchDescriptor<FoodItemRecord>(
+      predicate: #Predicate<FoodItemRecord> { model in
+        model.id == id
+      }
+    )
+    return try context.fetch(descriptor).first?.asDTO()
+  }
 }

@@ -12,10 +12,7 @@ import TelemetryDeck
 import DataContainer
 import RevenueCat
 import CoreHealth
-
-private extension String {
-  static let telemetryDeckAppID = "764D40B8-F2CE-4372-87D3-0D68F34E08CA"
-}
+import BloomFoundation
 
 @main
 struct BloomApp: App {
