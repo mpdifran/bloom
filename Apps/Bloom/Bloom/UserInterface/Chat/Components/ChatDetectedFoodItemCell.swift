@@ -7,6 +7,7 @@
 
 import SwiftUI
 import BloomModel
+import CoreHealth
 
 struct ChatDetectedFoodItemCell: View {
   let foodItemServing: FoodItemServingAmount

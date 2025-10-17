@@ -748,7 +748,7 @@ private extension ChatController {
       let foodLogID = try await NutritionTrackingViewModel.shared.log(
         modelContext: modelContext,
         name: detectedFood.name,
-        image: nil, // TODO: Link image from chat?
+        imageData: nil, // TODO: Link image from chat?
         numberOfServings: 1,
         foodItemServings: servings,
         date: detectedFood.date ?? .now,

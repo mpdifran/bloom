@@ -6,22 +6,15 @@
 //
 
 import SwiftUI
+import CoreHealth
 
 private extension CGFloat {
   static let progressBarLineWidth: CGFloat = 4
 }
 
-extension FoodLogDateCell {
-  enum State {
-    case inProgress(Double)
-    case complete
-    case exceeded
-  }
-}
-
 struct FoodLogDateCell: View {
   let date: Date
-  let state: State
+  let state: FoodLogDateState
   let isSelected: Bool
 
   var body: some View {

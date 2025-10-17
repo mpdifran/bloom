@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import BloomModel
+import CoreHealth
 
 /// This is inspired by `FoodItemCell`.
 struct AIScanFoodItemCell: View {

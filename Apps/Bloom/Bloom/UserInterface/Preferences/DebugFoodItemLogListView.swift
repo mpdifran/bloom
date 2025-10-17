@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import SwiftData
 import DataContainer
+import CoreHealth
 
 struct DebugFoodItemLogListView: View {
 

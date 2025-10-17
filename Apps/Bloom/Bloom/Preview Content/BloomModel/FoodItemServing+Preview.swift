@@ -6,6 +6,7 @@
 //
 
 import BloomModel
+import CoreHealth
 
 extension FoodItemServingAmount {
     enum Preview { }

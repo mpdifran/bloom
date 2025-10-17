@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import CoreHealth
 
 struct AIFoodTextGenerationView: View {
 
@@ -235,7 +236,7 @@ private extension AIFoodTextGenerationView {
     try await nutritionViewModel.log(
       modelContext: modelContext,
       name: viewModel.foodName ?? "My Meal",
-      image: nil,
+      imageData: nil,
       numberOfServings: 1,
       foodItemServings: viewModel.servings,
       date: nutritionViewModel.date,

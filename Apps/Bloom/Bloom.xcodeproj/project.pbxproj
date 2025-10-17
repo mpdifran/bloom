@@ -44,6 +44,8 @@
 		FF75776C2DCA381D00E31C86 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = FF75776B2DCA381D00E31C86 /* TelemetryDeck */; };
 		FF83DB1C2D2ECF010018FAAC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = FF83DB1B2D2ECF010018FAAC /* RevenueCat */; };
 		FF83DB1E2D2ECFC80018FAAC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF83DB1D2D2ECFC80018FAAC /* StoreKit.framework */; };
+		FF89AA532EA2A74B00C76B6C /* CoreNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; };
+		FF89AA662EA2C6F000C76B6C /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF89AA652EA2C6F000C76B6C /* BloomModel */; };
 		FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF9782E62C9A22EE00A8ED7E /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = FF9782E52C9A22EE00A8ED7E /* AppUI */; };
@@ -150,6 +152,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
 			remoteInfo = Umbrella;
+		};
+		FF89AA542EA2A75200C76B6C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF97D6912EA16EE300FE7A82;
+			remoteInfo = CoreNetwork;
 		};
 		FF9782DB2C9A22C900A8ED7E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -631,6 +640,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF89AA662EA2C6F000C76B6C /* BloomModel in Frameworks */,
+				FF89AA532EA2A74B00C76B6C /* CoreNetwork.framework in Frameworks */,
 				FFECC2202DC2C499002F6AAA /* Umbrella.framework in Frameworks */,
 				FFECC2252DC2C4AB002F6AAA /* DataContainer.framework in Frameworks */,
 				FFECCF6B2DC3FA3D002F6AAA /* SFSafeSymbols in Frameworks */,
@@ -1091,6 +1102,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF89AA642EA2C6E900C76B6C /* PBXTargetDependency */,
+				FF89AA552EA2A75200C76B6C /* PBXTargetDependency */,
 				FFECC1DD2DC2C346002F6AAA /* PBXTargetDependency */,
 				FFECC2232DC2C499002F6AAA /* PBXTargetDependency */,
 				FFECC2282DC2C4AB002F6AAA /* PBXTargetDependency */,
@@ -1104,6 +1117,7 @@
 				FFECCF6C2DC3FA4C002F6AAA /* Algorithms */,
 				FFECCF6E2DC3FA7A002F6AAA /* AppFoundations */,
 				FF7577692DC9A69F00E31C86 /* TelemetryDeck */,
+				FF89AA652EA2C6F000C76B6C /* BloomModel */,
 			);
 			productName = CoreHealth;
 			productReference = FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */;
@@ -1503,6 +1517,15 @@
 			isa = PBXTargetDependency;
 			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
 			targetProxy = FF7577542DC92C0700E31C86 /* PBXContainerItemProxy */;
+		};
+		FF89AA552EA2A75200C76B6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF97D6912EA16EE300FE7A82 /* CoreNetwork */;
+			targetProxy = FF89AA542EA2A75200C76B6C /* PBXContainerItemProxy */;
+		};
+		FF89AA642EA2C6E900C76B6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = FF89AA632EA2C6E900C76B6C /* BloomModel */;
 		};
 		FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4418,6 +4441,15 @@
 			productName = RevenueCat;
 		};
 		FF8741782CE14F8E002581FA /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BloomModel;
+		};
+		FF89AA632EA2C6E900C76B6C /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D0D142CFA47C500374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */;
+			productName = BloomModel;
+		};
+		FF89AA652EA2C6F000C76B6C /* BloomModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BloomModel;
 		};

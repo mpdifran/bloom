@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import BloomModel
 import DataContainer
+import CoreHealth
 
 struct ChatDetectedFoodCell: View {
   let chatMessageID: String
@@ -154,7 +155,7 @@ private extension ChatDetectedFoodCell {
     let foodLogID = try await nutritionViewModel.log(
       modelContext: modelContext,
       name: name,
-      image: nil,
+      imageData: nil,
       numberOfServings: 1,
       foodItemServings: servings,
       date: date,

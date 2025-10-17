@@ -10,6 +10,7 @@ import SwiftUI
 import AppUI
 import BloomModel
 import DataContainer
+import CoreHealth
 
 extension FoodItemDetailsView {
   enum Mode {

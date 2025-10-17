@@ -10,6 +10,7 @@ import DataContainer
 import AppUI
 import BloomFoundation
 import SFSafeSymbols
+import CoreHealth
 
 struct DuplicateFoodLogView: View {
   let foodItemLog: FoodItemLog

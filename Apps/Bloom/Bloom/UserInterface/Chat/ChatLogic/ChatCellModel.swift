@@ -11,6 +11,7 @@ import HealthKit
 import BloomModel
 import DifferenceKit
 import SwiftData
+import CoreHealth
 
 struct ChatMessageMetadata: Hashable, Sendable {
   let persistentID: PersistentIdentifier?

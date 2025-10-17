@@ -10,6 +10,7 @@ import SwiftUI
 import AppUI
 import BloomModel
 import AVFoundation
+import CoreHealth
 
 extension AIFoodScannerView {
   enum Mode: Equatable {
@@ -408,7 +409,7 @@ private extension AIFoodScannerView {
     try await nutritionViewModel.log(
       modelContext: modelContext,
       name: viewModel.scannedFoodName ?? "My Scanned Meal",
-      image: viewModel.image,
+      imageData: BackendImageResizer.resize(viewModel.image),
       numberOfServings: 1,
       foodItemServings: viewModel.servings,
       date: nutritionViewModel.date,
@@ -419,7 +420,7 @@ private extension AIFoodScannerView {
       try await nutritionViewModel.createMeal(
         modelContext: modelContext,
         name: viewModel.scannedFoodName ?? "My Scanned Meal",
-        image: viewModel.image,
+        imageData: BackendImageResizer.resize(viewModel.image),
         foodItemServings: viewModel.servings
       )
     }

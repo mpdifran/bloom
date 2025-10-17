@@ -10,6 +10,7 @@ import SwiftUI
 import AppUI
 import BloomModel
 import DataContainer
+import CoreHealth
 
 struct FoodItemCell: View {
   let foodItem: FoodItem

@@ -10,6 +10,7 @@ import SwiftUI
 import AppUI
 import DataContainer
 import SwiftData
+import CoreHealth
 
 struct NutritionView: View {
 

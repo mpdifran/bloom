@@ -7,14 +7,15 @@
 
 import SwiftUI
 import BloomFoundation
+import CoreHealth
 
 struct FoodLogDatePicker: View {
   @Binding var date: Date
-  let stateForDate: (Date) -> FoodLogDateCell.State
+  let stateForDate: (Date) -> FoodLogDateState
 
   init(
     date: Binding<Date>,
-    stateForDate: @escaping (Date) -> FoodLogDateCell.State
+    stateForDate: @escaping (Date) -> FoodLogDateState
   ) {
     self._date = date
     self._internalDate = State(initialValue: date.wrappedValue)

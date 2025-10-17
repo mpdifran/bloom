@@ -7,29 +7,34 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 import BloomModel
 import DataContainer
-import TelemetryDeck
+internal import TelemetryDeck
 import BloomFoundation
-import CoreHealth
 import CoreNetwork
 
 extension String {
   static let lastMealAutoUpdateDateKey = "NutritionTrackingViewModel.lastMealAutoUpdateDate"
 }
 
-struct DateState {
-  let date: Date
-  let state: FoodLogDateCell.State
+public struct DateState: Sendable {
+  public let date: Date
+  public let state: FoodLogDateState
+
+  public init(date: Date, state: FoodLogDateState) {
+    self.date = date
+    self.state = state
+  }
 }
 
 @MainActor
-final class NutritionTrackingViewModel: ObservableObject {
-  static let shared = NutritionTrackingViewModel()
+public final class NutritionTrackingViewModel: ObservableObject {
+  public static let shared = NutritionTrackingViewModel()
 
-  @Published var date = Date.now
-  @Published var suggestedMeal = FoodItemLog.Meal.breakfast
-  @Published var dateStates = [DateState]()
+  @Published public var date = Date.now
+  @Published public var suggestedMeal = FoodItemLog.Meal.breakfast
+  @Published public var dateStates = [DateState]()
 
   @Storage(key: .lastMealAutoUpdateDateKey, defaultValue: nil) var lastMealAutoUpdateDate: Date?
 
@@ -41,7 +46,7 @@ final class NutritionTrackingViewModel: ObservableObject {
   }
 }
 
-extension NutritionTrackingViewModel {
+public extension NutritionTrackingViewModel {
 
   func updateMealForCurrentTime() {
     if let lastUpdateDate = lastMealAutoUpdateDate {
@@ -113,7 +118,7 @@ extension NutritionTrackingViewModel {
     for date in dates {
       try await HealthStoreModifier.shared.updateNutrition(for: date)
     }
-    
+
     // Refresh date states in the background to avoid blocking
     Task {
       await refreshDateStates()
@@ -148,7 +153,7 @@ extension NutritionTrackingViewModel {
           }
         }
       }
-      
+
       for await state in group {
         if let state = state {
           newDateStates.append(state)
@@ -160,7 +165,7 @@ extension NutritionTrackingViewModel {
   }
 }
 
-extension NutritionTrackingViewModel {
+public extension NutritionTrackingViewModel {
 
   nonisolated func reSyncNutritionToHealthKit() async throws {
     guard let earliestLog = try await earliestLogDate() else { return }
@@ -184,13 +189,13 @@ extension NutritionTrackingViewModel {
 
 // MARK: - Logging
 
-extension NutritionTrackingViewModel {
+public extension NutritionTrackingViewModel {
 
   @discardableResult
   func log(
     modelContext: ModelContext,
     name: String,
-    image: UIImage?,
+    imageData: Data?,
     numberOfServings: Double,
     foodItemServings: [FoodItemServingAmount],
     date: Date,
@@ -220,7 +225,7 @@ extension NutritionTrackingViewModel {
         date: logDate,
         meal: meal,
         numberOfServings: numberOfServings,
-        imageData: image?.resized(toWidth: 300)?.pngData(),
+        imageData: imageData,
         foodItemServings: servings
       )
 
@@ -280,7 +285,7 @@ extension NutritionTrackingViewModel {
             foodItemServings: [foodItemServing]
           )
           modelContext.insert(foodItemLog)
-          
+
           // Store the first log ID for return
           if firstLogID == nil {
             firstLogID = logID
@@ -325,7 +330,7 @@ extension NutritionTrackingViewModel {
 
 // MARK: - Delete Methods
 
-extension NutritionTrackingViewModel {
+public extension NutritionTrackingViewModel {
 
   func delete(
     modelContext: ModelContext,
@@ -364,7 +369,7 @@ extension NutritionTrackingViewModel {
 
 // MARK: - Update Methods
 
-extension NutritionTrackingViewModel {
+public extension NutritionTrackingViewModel {
 
   func update(
     modelContext: ModelContext,
@@ -467,7 +472,7 @@ extension NutritionTrackingViewModel {
 
 // MARK: - FoodItemRecord Methods
 
-extension NutritionTrackingViewModel {
+public extension NutritionTrackingViewModel {
 
   /// Upserts the `foodItem` into the database if it exists, or creates a new record. If the upsert modifies the database record, a list of affected dates is returned.
   /// You can use these dates to re-sync HealthKit.
@@ -496,12 +501,12 @@ extension NutritionTrackingViewModel {
 
 // MARK: - MealRecords
 
-extension NutritionTrackingViewModel {
+public extension NutritionTrackingViewModel {
 
   func createMeal(
     modelContext: ModelContext,
     name: String,
-    image: UIImage?,
+    imageData: Data?,
     foodItemServings: [FoodItemServingAmount]
   ) async throws {
     guard name.isNotEmpty else {
@@ -536,7 +541,7 @@ extension NutritionTrackingViewModel {
 
       let meal = MealRecord(
         name: name,
-        imageData: image?.resized(toWidth: 300)?.pngData(),
+        imageData: imageData,
         items: mealItemRecords
       )
 
@@ -550,7 +555,7 @@ extension NutritionTrackingViewModel {
     modelContext: ModelContext,
     mealRecord: MealRecord,
     name: String,
-    image: UIImage?,
+    imageData: Data?,
     foodItemServings: [FoodItemServingAmount]
   ) async throws {
     guard name.isNotEmpty else {
@@ -559,19 +564,19 @@ extension NutritionTrackingViewModel {
     guard foodItemServings.isNotEmpty else {
       throw NSError(description: "At least one food item must be added.")
     }
-    
+
     var datesToUpdate = Set<Date>()
-    
+
     try modelContext.savingTransaction {
       mealRecord.name = name
-      mealRecord.imageData = image?.resized(toWidth: 300)?.pngData()
-      
+      mealRecord.imageData = imageData
+
       // Create new meal items, or fetch existing ones.
       var mealItems = [MealItemRecord]()
       for foodItemServing in foodItemServings {
         let numberOfServings = foodItemServing.serving
         let foodItem = foodItemServing.foodItem
-        
+
         if let existingMealItem = mealRecord.items?.first(where: { $0.foodItem?.id == foodItem.id.value }) {
           existingMealItem.numberOfServings = numberOfServings
           mealItems.append(existingMealItem)
@@ -589,16 +594,16 @@ extension NutritionTrackingViewModel {
           datesToUpdate.formUnion(dates)
         }
       }
-      
+
       // Delete old meal items.
       let mealItemsToDelete = mealRecord.items?.filter { item in
         !mealItems.contains(where: { $0.id == item.id })
       }
       mealItemsToDelete?.forEach({ modelContext.delete($0) })
-      
+
       mealRecord.items = mealItems
     }
-    
+
     try await updateNutrition(for: datesToUpdate)
   }
 
@@ -659,8 +664,8 @@ extension NutritionTrackingViewModel {
 
 // MARK: - Duplicate Methods
 
-extension NutritionTrackingViewModel {
-  
+public extension NutritionTrackingViewModel {
+
   func duplicate(
     modelContext: ModelContext,
     foodItemLog: FoodItemLog,
@@ -668,11 +673,11 @@ extension NutritionTrackingViewModel {
     toMeal meal: FoodItemLog.Meal
   ) async throws {
     var dates = [Date]()
-    
+
     try modelContext.savingTransaction {
       // Create new servings from the existing ones
       var newServings: [FoodItemServing] = []
-      
+
       if let existingServings = foodItemLog.foodItemServings {
         for serving in existingServings {
           if let foodItem = serving.foodItem {
@@ -685,10 +690,10 @@ extension NutritionTrackingViewModel {
           }
         }
       }
-      
+
       let logDate = calculateDate(for: meal, from: date)
       dates.append(logDate)
-      
+
       // Create the duplicate food log
       let duplicatedLog = FoodItemLog(
         id: UUID().uuidString,
@@ -699,17 +704,17 @@ extension NutritionTrackingViewModel {
         imageData: foodItemLog.imageData,
         foodItemServings: newServings
       )
-      
+
       // Copy meal item reference if it exists
       if let mealItem = foodItemLog.mealItem {
         duplicatedLog.mealItem = mealItem
       }
-      
+
       modelContext.insert(duplicatedLog)
     }
-    
+
     try await updateNutrition(for: dates.asSet())
-    
+
     TelemetryDeck.signal(
       "Duplicated Food Log",
       parameters: ["Meal": meal.rawValue]

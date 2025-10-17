@@ -8,6 +8,7 @@
 import SwiftUI
 import TelemetryDeck
 import CoreNetwork
+import CoreHealth
 
 extension AIFoodTextGenerationView {
   @MainActor @Observable

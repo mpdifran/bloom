@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import DataContainer
+import CoreHealth
 
 struct MealPicker: View {
   @ObservedObject private var nutritionViewModel = NutritionTrackingViewModel.shared

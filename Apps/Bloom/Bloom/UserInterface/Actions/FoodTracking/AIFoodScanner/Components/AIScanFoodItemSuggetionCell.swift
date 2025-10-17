@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import BloomModel
+import CoreHealth
 
 struct AIScanFoodItemSuggetionCell: View {
   let foodItemServing: FoodItemServingAmount

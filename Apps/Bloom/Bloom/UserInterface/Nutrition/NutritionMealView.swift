@@ -9,6 +9,7 @@ import SFSafeSymbols
 import AppUI
 import DataContainer
 import SwiftUI
+import CoreHealth
 
 struct NutritionMealView: View {
 

@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import BloomModel
 import DataContainer
+import CoreHealth
 
 extension FoodItemPicker {
   enum FoodItemHistoryTab: NamedCaseIterable {

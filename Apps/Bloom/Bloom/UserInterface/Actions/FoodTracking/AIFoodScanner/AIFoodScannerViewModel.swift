@@ -11,6 +11,7 @@ import DataContainer
 import TelemetryDeck
 import AVFoundation
 import CoreNetwork
+import CoreHealth
 
 extension AIFoodScannerView {
   @Observable @MainActor

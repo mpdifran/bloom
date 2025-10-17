@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import BloomModel
 import DataContainer
+import CoreHealth
 
 struct CreateEditMealView: View {
 
@@ -321,14 +322,14 @@ private extension CreateEditMealView {
         modelContext: modelContext,
         mealRecord: existingMealRecord,
         name: name,
-        image: image,
+        imageData: BackendImageResizer.resize(image),
         foodItemServings: foodItemServings
       )
     } else {
       try await nutritionViewModel.createMeal(
         modelContext: modelContext,
         name: name,
-        image: image,
+        imageData: BackendImageResizer.resize(image),
         foodItemServings: foodItemServings
       )
     }

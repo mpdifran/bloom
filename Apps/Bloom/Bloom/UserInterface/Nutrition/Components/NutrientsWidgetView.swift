@@ -9,6 +9,7 @@ import AppUI
 import SwiftUI
 import DataContainer
 import BloomFoundation
+import CoreHealth
 
 struct NutrientsWidgetView: View {
 

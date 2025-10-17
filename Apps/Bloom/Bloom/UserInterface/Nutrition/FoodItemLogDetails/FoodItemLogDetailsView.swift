@@ -10,6 +10,7 @@ import AppUI
 import SFSafeSymbols
 import BloomModel
 import DataContainer
+import CoreHealth
 
 struct FoodItemLogDetailsView: View {
   private let foodItemLog: FoodItemLog

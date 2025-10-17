@@ -5,12 +5,13 @@
 //  Created by Mark DiFranco on 2024-11-22.
 //
 
+import HealthKit
 import DataContainer
 import BloomModel
 
 extension FoodItemRecord {
 
-  convenience init(foodItem: FoodItem) {
+  public convenience init(foodItem: FoodItem) {
     self.init(
       id: foodItem.id.value,
       name: foodItem.name,
@@ -197,7 +198,7 @@ extension FoodItemRecord {
 
 extension FoodItemRecord {
 
-  func asNetworkFoodItem() -> FoodItem {
+  public func asNetworkFoodItem() -> FoodItem {
     let quantity: FoodItem.Quantity?
     if let servingValue, let servingUnitString {
       quantity = FoodItem.Quantity(
@@ -245,13 +246,13 @@ extension FoodItemRecord {
     )
   }
 
-  var networkCategory: FoodItem.Category {
+  public var networkCategory: FoodItem.Category {
     guard let dbCategory = self.category else { return .generic }
 
     return FoodItem.Category(rawValue: dbCategory.rawValue) ?? .generic
   }
 
-  func logDates() -> [Date] {
+  public func logDates() -> [Date] {
     servings?.compactMap({ $0.foodItemLog?.date }) ?? []
   }
 }
