@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct DayReviewWeatherData: SendableNetworkModel {
   let currentConditions: CurrentWeatherConditions?

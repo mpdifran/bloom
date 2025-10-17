@@ -60,6 +60,14 @@
 		FF97CD772E9D9E1300FE7A82 /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
 		FF97CD7B2E9D9EDA00FE7A82 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = FF97CD7A2E9D9EDA00FE7A82 /* SFSafeSymbols */; };
 		FF97CDA72EA148C400FE7A82 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF8741782CE14F8E002581FA /* BloomModel */; };
+		FF97D6982EA16EE300FE7A82 /* CoreNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; };
+		FF97D6992EA16EE300FE7A82 /* CoreNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF97D6B22EA1765C00FE7A82 /* Umbrella.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF9782D72C9A22C900A8ED7E /* Umbrella.framework */; };
+		FF97D6B72EA1766900FE7A82 /* BloomFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF1E96842C0C1F38004DAD2D /* BloomFoundation.framework */; };
+		FF97D6BD2EA176B500FE7A82 /* Valet in Frameworks */ = {isa = PBXBuildFile; productRef = FF97D6BC2EA176B500FE7A82 /* Valet */; };
+		FF97D6C22EA17AE100FE7A82 /* AppFoundations in Frameworks */ = {isa = PBXBuildFile; productRef = FF97D6C12EA17AE100FE7A82 /* AppFoundations */; };
+		FF97D6C82EA17BFB00FE7A82 /* BloomModel in Frameworks */ = {isa = PBXBuildFile; productRef = FF97D6C72EA17BFB00FE7A82 /* BloomModel */; };
+		FF97D6CF2EA17C5300FE7A82 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
 		FF9BEA272DCAABD200D90BAF /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FF9BEA262DCAABD200D90BAF /* Algorithms */; };
 		FFADE9942D468789004FBF2B /* Swipy in Frameworks */ = {isa = PBXBuildFile; productRef = FFADE9932D468789004FBF2B /* Swipy */; };
 		FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */; };
@@ -164,6 +172,34 @@
 			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
 			remoteInfo = Umbrella;
 		};
+		FF97D6962EA16EE300FE7A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF97D6912EA16EE300FE7A82;
+			remoteInfo = CoreNetwork;
+		};
+		FF97D6B42EA1765C00FE7A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF9782D62C9A22C900A8ED7E;
+			remoteInfo = Umbrella;
+		};
+		FF97D6B92EA1766900FE7A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF1E96832C0C1F38004DAD2D;
+			remoteInfo = BloomFoundation;
+		};
+		FF97D6CD2EA17C4C00FE7A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFCE852D2C99DBD6002C46B1;
+			remoteInfo = DataContainer;
+		};
 		FFCE85322C99DBD6002C46B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFACBAD12BAC7788006AAD0B /* Project object */;
@@ -240,6 +276,7 @@
 				FF9782DE2C9A22C900A8ED7E /* Umbrella.framework in Embed Frameworks */,
 				FF1E968B2C0C1F38004DAD2D /* BloomFoundation.framework in Embed Frameworks */,
 				FFECC1D52DC2C327002F6AAA /* CoreHealth.framework in Embed Frameworks */,
+				FF97D6992EA16EE300FE7A82 /* CoreNetwork.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,6 +336,7 @@
 		FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BloomWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF97C3F42E9C407300FE7A82 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FF97C3F62E9C407300FE7A82 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFACBAD92BAC7788006AAD0B /* Bloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCE852E2C99DBD6002C46B1 /* DataContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreHealth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -438,6 +476,7 @@
 		FF9782D82C9A22C900A8ED7E /* Umbrella */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF9782DF2C9A22C900A8ED7E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Umbrella; sourceTree = "<group>"; };
 		FF97C3F82E9C407300FE7A82 /* BloomWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97C40C2E9C407400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BloomWidgets; sourceTree = "<group>"; };
 		FF97C40E2E9C408C00FE7A82 /* SharedAppIntents */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF97CD872E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FF97CD882E9E812400FE7A82 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SharedAppIntents; sourceTree = "<group>"; };
+		FF97D6932EA16EE300FE7A82 /* CoreNetwork */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreNetwork; sourceTree = "<group>"; };
 		FFCE852F2C99DBD6002C46B1 /* DataContainer */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFCE85362C99DBD6002C46B1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataContainer; sourceTree = "<group>"; };
 		FFECC1CF2DC2C327002F6AAA /* CoreHealth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreHealth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -534,6 +573,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF97D68F2EA16EE300FE7A82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF97D6CF2EA17C5300FE7A82 /* DataContainer.framework in Frameworks */,
+				FF97D6BD2EA176B500FE7A82 /* Valet in Frameworks */,
+				FF97D6C22EA17AE100FE7A82 /* AppFoundations in Frameworks */,
+				FF97D6C82EA17BFB00FE7A82 /* BloomModel in Frameworks */,
+				FF97D6B22EA1765C00FE7A82 /* Umbrella.framework in Frameworks */,
+				FF97D6B72EA1766900FE7A82 /* BloomFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FFACBAD62BAC7788006AAD0B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -558,6 +610,7 @@
 				FFCE85342C99DBD6002C46B1 /* DataContainer.framework in Frameworks */,
 				FF4A21BC2C88FA5600278019 /* Bugsnag in Frameworks */,
 				FF4A21C32C88FA9D00278019 /* BugsnagPerformanceSwift in Frameworks */,
+				FF97D6982EA16EE300FE7A82 /* CoreNetwork.framework in Frameworks */,
 				FF9782DD2C9A22C900A8ED7E /* Umbrella.framework in Frameworks */,
 				FF5D62DA2DEDEC2D00C05976 /* ChatLayout in Frameworks */,
 				FFE41D242C8BE1A000E3E559 /* ConfettiSwiftUI in Frameworks */,
@@ -635,6 +688,7 @@
 				4BD93EDB2CFA88BA00D1AFB8 /* DeviceActivityReportExtension */,
 				4BD93EED2CFA88BD00D1AFB8 /* ScreenControl */,
 				FFECC1CF2DC2C327002F6AAA /* CoreHealth */,
+				FF97D6932EA16EE300FE7A82 /* CoreNetwork */,
 				FFCE852F2C99DBD6002C46B1 /* DataContainer */,
 				4BD93F0B2CFA88C400D1AFB8 /* BloomFoundation */,
 				FF67B2482DAFF5D70086E697 /* Configuration */,
@@ -663,6 +717,7 @@
 				FFECC1CE2DC2C326002F6AAA /* CoreHealth.framework */,
 				FF75772E2DC91A3700E31C86 /* BloomWatch Watch App.app */,
 				FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */,
+				FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -685,6 +740,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FF9782D22C9A22C900A8ED7E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF97D68D2EA16EE300FE7A82 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -910,6 +972,36 @@
 			productReference = FF97C3F32E9C407300FE7A82 /* BloomWidgetsExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		FF97D6912EA16EE300FE7A82 /* CoreNetwork */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF97D69A2EA16EE300FE7A82 /* Build configuration list for PBXNativeTarget "CoreNetwork" */;
+			buildPhases = (
+				FF97D68D2EA16EE300FE7A82 /* Headers */,
+				FF97D68E2EA16EE300FE7A82 /* Sources */,
+				FF97D68F2EA16EE300FE7A82 /* Frameworks */,
+				FF97D6902EA16EE300FE7A82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF97D6CE2EA17C4C00FE7A82 /* PBXTargetDependency */,
+				FF97D6CA2EA17C0F00FE7A82 /* PBXTargetDependency */,
+				FF97D6B52EA1765C00FE7A82 /* PBXTargetDependency */,
+				FF97D6BA2EA1766900FE7A82 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FF97D6932EA16EE300FE7A82 /* CoreNetwork */,
+			);
+			name = CoreNetwork;
+			packageProductDependencies = (
+				FF97D6BC2EA176B500FE7A82 /* Valet */,
+				FF97D6C12EA17AE100FE7A82 /* AppFoundations */,
+				FF97D6C72EA17BFB00FE7A82 /* BloomModel */,
+			);
+			productName = CoreNetwork;
+			productReference = FF97D6922EA16EE300FE7A82 /* CoreNetwork.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		FFACBAD82BAC7788006AAD0B /* Bloom */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FFACBAE72BAC778A006AAD0B /* Build configuration list for PBXNativeTarget "Bloom" */;
@@ -925,11 +1017,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				FF97D6CC2EA17C1A00FE7A82 /* PBXTargetDependency */,
 				FF1E96892C0C1F38004DAD2D /* PBXTargetDependency */,
 				FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */,
 				FF9782DC2C9A22C900A8ED7E /* PBXTargetDependency */,
 				FFECC1D32DC2C327002F6AAA /* PBXTargetDependency */,
 				FF97C4052E9C407400FE7A82 /* PBXTargetDependency */,
+				FF97D6972EA16EE300FE7A82 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4BD93D442CFA889800D1AFB8 /* Bloom */,
@@ -1074,6 +1168,9 @@
 					FF97C3F22E9C407300FE7A82 = {
 						CreatedOnToolsVersion = 26.0;
 					};
+					FF97D6912EA16EE300FE7A82 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					FFACBAD82BAC7788006AAD0B = {
 						CreatedOnToolsVersion = 15.3;
 					};
@@ -1128,6 +1225,7 @@
 				FF3A8F2E2C1A8341002DA563 /* DeviceActivityReportExtension */,
 				FF1E966C2C0C1A99004DAD2D /* ScreenControl */,
 				FFECC1CD2DC2C326002F6AAA /* CoreHealth */,
+				FF97D6912EA16EE300FE7A82 /* CoreNetwork */,
 				FFCE852D2C99DBD6002C46B1 /* DataContainer */,
 				FF1E96832C0C1F38004DAD2D /* BloomFoundation */,
 				FF9782D62C9A22C900A8ED7E /* Umbrella */,
@@ -1193,6 +1291,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FF97C3F12E9C407300FE7A82 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF97D6902EA16EE300FE7A82 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1316,6 +1421,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF97D68E2EA16EE300FE7A82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FFACBAD52BAC7788006AAD0B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1406,6 +1518,34 @@
 			isa = PBXTargetDependency;
 			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
 			targetProxy = FF97CD782E9D9E1900FE7A82 /* PBXContainerItemProxy */;
+		};
+		FF97D6972EA16EE300FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF97D6912EA16EE300FE7A82 /* CoreNetwork */;
+			targetProxy = FF97D6962EA16EE300FE7A82 /* PBXContainerItemProxy */;
+		};
+		FF97D6B52EA1765C00FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF9782D62C9A22C900A8ED7E /* Umbrella */;
+			targetProxy = FF97D6B42EA1765C00FE7A82 /* PBXContainerItemProxy */;
+		};
+		FF97D6BA2EA1766900FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF1E96832C0C1F38004DAD2D /* BloomFoundation */;
+			targetProxy = FF97D6B92EA1766900FE7A82 /* PBXContainerItemProxy */;
+		};
+		FF97D6CA2EA17C0F00FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = FF97D6C92EA17C0F00FE7A82 /* BloomModel */;
+		};
+		FF97D6CC2EA17C1A00FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = FF97D6CB2EA17C1A00FE7A82 /* BloomModel */;
+		};
+		FF97D6CE2EA17C4C00FE7A82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFCE852D2C99DBD6002C46B1 /* DataContainer */;
+			targetProxy = FF97D6CD2EA17C4C00FE7A82 /* PBXContainerItemProxy */;
 		};
 		FFCE85332C99DBD6002C46B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3180,6 +3320,186 @@
 			};
 			name = "Release [Dev]";
 		};
+		FF97D69B2EA16EE300FE7A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.bloom.CoreNetwork";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FF97D69C2EA16EE300FE7A82 /* Debug [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.bloom.CoreNetwork";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Debug [Dev]";
+		};
+		FF97D69D2EA16EE300FE7A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.bloom.CoreNetwork";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FF97D69E2EA16EE300FE7A82 /* Release [Dev] */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lotus-labs.bloom.CoreNetwork";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Release [Dev]";
+		};
 		FFACBAE52BAC778A006AAD0B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = FF67B2482DAFF5D70086E697 /* Configuration */;
@@ -3825,6 +4145,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FF97D69A2EA16EE300FE7A82 /* Build configuration list for PBXNativeTarget "CoreNetwork" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF97D69B2EA16EE300FE7A82 /* Debug */,
+				FF97D69C2EA16EE300FE7A82 /* Debug [Dev] */,
+				FF97D69D2EA16EE300FE7A82 /* Release */,
+				FF97D69E2EA16EE300FE7A82 /* Release [Dev] */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FFACBAD42BAC7788006AAD0B /* Build configuration list for PBXProject "Bloom" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -4119,6 +4450,30 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4B13A26C2D74E7FD00459D05 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
 			productName = SFSafeSymbols;
+		};
+		FF97D6BC2EA176B500FE7A82 /* Valet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF1FFD662D15C27D0008B47D /* XCRemoteSwiftPackageReference "Valet" */;
+			productName = Valet;
+		};
+		FF97D6C12EA17AE100FE7A82 /* AppFoundations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFF61AE92BED52A900926042 /* XCRemoteSwiftPackageReference "AppFoundations" */;
+			productName = AppFoundations;
+		};
+		FF97D6C72EA17BFB00FE7A82 /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BloomModel;
+		};
+		FF97D6C92EA17C0F00FE7A82 /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D0D142CFA47C500374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */;
+			productName = BloomModel;
+		};
+		FF97D6CB2EA17C1A00FE7A82 /* BloomModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D0D142CFA47C500374F66 /* XCLocalSwiftPackageReference "../../Shared/BloomModel" */;
+			productName = BloomModel;
 		};
 		FF9BEA262DCAABD200D90BAF /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;

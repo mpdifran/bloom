@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct MenstrualHealthData: SendableNetworkModel {
   let currentCyclePhase: String?    // follicular, luteal, menstrual, ovulatory

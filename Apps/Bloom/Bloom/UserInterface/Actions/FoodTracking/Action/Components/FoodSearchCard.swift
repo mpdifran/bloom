@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import BloomModel
+import BloomFoundation
 
 extension FoodSearchCard {
   enum ToolbarMode {

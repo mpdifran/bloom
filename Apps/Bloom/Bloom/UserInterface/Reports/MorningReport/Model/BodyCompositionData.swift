@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct BodyCompositionData: SendableNetworkModel {
   let bodyMass: String?

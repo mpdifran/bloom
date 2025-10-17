@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct DayReviewEventData: SendableNetworkModel {
   let yesterdayEvents: [CalendarEvent]

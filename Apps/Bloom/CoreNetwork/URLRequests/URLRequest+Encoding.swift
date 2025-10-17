@@ -8,7 +8,7 @@
 import Foundation
 import BloomModel
 
-extension URLRequest {
+public extension URLRequest {
 
   mutating func encode<T>(body: T) throws where T: Encodable {
     method = .post

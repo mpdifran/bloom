@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct ActivityData: SendableNetworkModel {
   let basalEnergyBurned: MetricWithTrend

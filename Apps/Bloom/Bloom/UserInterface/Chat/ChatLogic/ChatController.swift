@@ -13,6 +13,7 @@ import SwiftData
 import CoreHealth
 import HealthKit
 import TelemetryDeck
+import CoreNetwork
 
 extension ChatController {
   struct InProgressMessage: Identifiable, Hashable, Sendable {

@@ -7,14 +7,15 @@
 
 import SwiftUI
 import BloomModel
+import AppFoundations
 
-final class NetworkRequester: Sendable {
-  static let shared = NetworkRequester()
+public final class NetworkRequester: Sendable {
+  public static let shared = NetworkRequester()
 }
 
 // MARK: - Authentication
 
-extension NetworkRequester {
+public extension NetworkRequester {
 
   func authenticate(request: AuthenticationRequest) async throws -> AuthenticationResponse {
     let request = try await URLRequest.Auth.signIn(body: request)
@@ -52,7 +53,7 @@ extension NetworkRequester {
 
 // MARK: - Food
 
-extension NetworkRequester {
+public extension NetworkRequester {
 
   func foodAutocomplete(query: String) async throws -> [String] {
     let body = FoodAutocompleteRequest(query: query)
@@ -185,7 +186,7 @@ extension NetworkRequester {
 
 // MARK: - Today Content
 
-extension NetworkRequester {
+public extension NetworkRequester {
 
   func getTodayInsights(request: TodayReportRequest) async throws -> TodayReportResponse {
     let urlRequest = try await URLRequest.AI.getTodayView(body: request)
@@ -198,7 +199,7 @@ extension NetworkRequester {
 
 // MARK: - Biological Age
 
-extension NetworkRequester {
+public extension NetworkRequester {
 
   func getBiologicalAge(request: BiologicalAgeRequest) async throws -> BiologicalAgeResponse {
     let urlRequest = try await URLRequest.BiologicalAge.calculate(body: request)
@@ -211,7 +212,7 @@ extension NetworkRequester {
 
 // MARK: - Chat
 
-extension NetworkRequester {
+public extension NetworkRequester {
 
   func openChatWebsocket(modelOverride: String? = nil) async -> WebSocketHandle {
     var request = await URLRequest.Chat.webSocket().settingBloomHeaders()
@@ -251,7 +252,7 @@ extension NetworkRequester {
 
 // MARK: - Goals
 
-extension NetworkRequester {
+public extension NetworkRequester {
 
   func suggestGoals(healthData: String, currentGoals: String) async throws -> SuggestGoalsResponse {
     let body = SuggestGoalsRequest(
@@ -269,7 +270,7 @@ extension NetworkRequester {
 
 // MARK: - Reports
 
-extension NetworkRequester {
+public extension NetworkRequester {
 
   func getMorningHealthReport(request: MorningHealthReportRequest) async throws -> MorningHealthReportResponse {
     let urlRequest = try await URLRequest.Reports.getMorningHealthReport(body: request)

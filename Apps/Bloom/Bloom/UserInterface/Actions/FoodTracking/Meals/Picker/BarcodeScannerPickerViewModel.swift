@@ -8,6 +8,7 @@
 import SwiftUI
 import BloomModel
 import TelemetryDeck
+import CoreNetwork
 
 extension BarcodeScannerPickerView {
   @Observable @MainActor

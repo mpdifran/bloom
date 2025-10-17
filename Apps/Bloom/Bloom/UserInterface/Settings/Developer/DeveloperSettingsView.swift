@@ -11,6 +11,7 @@ import AppUI
 import HealthKit
 import DataContainer
 import CoreHealth
+import CoreNetwork
 
 struct DeveloperSettingsView: View {
 
@@ -31,7 +32,7 @@ struct DeveloperSettingsView: View {
 
   @Environment(\.dismiss) private var dismiss
 
-  @ObservedObject private var userController = UserController.shared
+  @ObservedObject private var authTokenManager = AuthTokenManager.shared
 
   private let vitalsViewModel = VitalsViewModel.shared
   private let modelContext = ContainerHolder.shared.createContext()
@@ -660,18 +661,18 @@ extension DeveloperSettingsView {
 
       SettingsSectionContainer {
         SettingsCell("User ID") {
-          Text(userController.authenticatedUserIdentifier?.value ?? "None")
+          Text(authTokenManager.authenticatedUserIdentifier?.value ?? "None")
         }
 
         Divider()
 
         SettingsCell("Auth Token") {
-          Text(userController.authToken?.value ?? "None")
+          Text(authTokenManager.authToken?.value ?? "None")
         }
 
         Divider()
 
-        if userController.isAuthenticated {
+        if authTokenManager.isAuthenticated {
           AsyncButton(role: .destructive) {
             try await UserController.shared.logout()
           } label: {

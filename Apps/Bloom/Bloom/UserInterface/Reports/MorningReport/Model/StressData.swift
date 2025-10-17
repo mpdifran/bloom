@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct StressData: SendableNetworkModel {
   let heartRateVariability: String?

@@ -10,16 +10,16 @@ import os
 import BloomModel
 import BloomFoundation
 
-final actor WebSocketHandle {
+public final actor WebSocketHandle {
   let task: URLSessionWebSocketTask
 
-  init(task: URLSessionWebSocketTask) {
+  public init(task: URLSessionWebSocketTask) {
     self.task = task
   }
 
-  @AsyncStreamable var data: Data?
-  @AsyncStreamable var hasDisconnected = false
-  @AsyncStreamable var error: Error?
+  @AsyncStreamable public var data: Data?
+  @AsyncStreamable public var hasDisconnected = false
+  @AsyncStreamable public var error: Error?
 
   private var hasStarted = false
 
@@ -35,7 +35,7 @@ final actor WebSocketHandle {
   }
 }
 
-extension WebSocketHandle {
+public extension WebSocketHandle {
 
   func start() async {
     guard !hasStarted else { return }
@@ -68,11 +68,11 @@ extension WebSocketHandle {
     self.pingTask = schedulePing()
   }
 
-  func stop() {
+  public func stop() {
     task.cancel(with: .normalClosure, reason: nil)
   }
 
-  func send<T: Encodable>(payload: T) async throws {
+  public func send<T: Encodable>(payload: T) async throws {
     if !hasStarted {
       await start()
     }

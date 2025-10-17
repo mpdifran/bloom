@@ -8,6 +8,7 @@
 @preconcurrency import AVFoundation
 import CoreImage
 import UIKit
+import BloomFoundation
 
 // MARK: - CameraManager
 

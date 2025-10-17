@@ -10,6 +10,7 @@ import SwiftUI
 import Symbols
 import AppUI
 import TelemetryDeck
+import BloomFoundation
 
 extension ExternalHealthPrivacyView {
   enum Mode {

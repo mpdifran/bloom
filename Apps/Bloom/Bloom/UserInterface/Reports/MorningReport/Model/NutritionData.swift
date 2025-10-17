@@ -8,6 +8,7 @@
 import Foundation
 import DataContainer
 import HealthKit
+import CoreNetwork
 
 struct NutritionData: SendableNetworkModel {
   let totalCalories: String

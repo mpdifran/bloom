@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomFoundation
 
 @MainActor
 func EntitledPresent<Content>(presentedSheet: Binding<AnyView?>, content: @escaping () -> Content) where Content: View {

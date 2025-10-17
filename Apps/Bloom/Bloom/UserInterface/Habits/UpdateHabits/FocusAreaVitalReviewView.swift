@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import AppUI
 import TelemetryDeck
+import BloomFoundation
 
 struct FocusAreaVitalReviewView: View {
   let onContinue: ([VitalModel]) -> Void

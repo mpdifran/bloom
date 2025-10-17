@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import BloomModel
 import TelemetryDeck
+import CoreNetwork
 
 extension FoodUploadScannerView {
   @Observable @MainActor

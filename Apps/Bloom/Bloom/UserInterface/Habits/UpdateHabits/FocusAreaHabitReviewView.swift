@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import AppUI
 import TelemetryDeck
+import BloomFoundation
 
 struct FocusAreaHabitReviewView: View {
   let vitals: [VitalModel]

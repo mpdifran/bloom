@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct HeartHealthData: SendableNetworkModel {
   let vo2Max: String?

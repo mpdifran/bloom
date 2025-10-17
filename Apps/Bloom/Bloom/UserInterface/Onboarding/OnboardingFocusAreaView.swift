@@ -11,6 +11,7 @@ import AppUI
 import HealthKit
 import TelemetryDeck
 import CoreHealth
+import BloomFoundation
 
 struct OnboardingFocusAreaView: View {
   let onContinue: () -> Void

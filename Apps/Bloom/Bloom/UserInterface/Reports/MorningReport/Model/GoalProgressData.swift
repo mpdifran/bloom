@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct GoalProgressData: SendableNetworkModel {
   let date: Date

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomFoundation
 
 struct FoodLogDatePicker: View {
   @Binding var date: Date

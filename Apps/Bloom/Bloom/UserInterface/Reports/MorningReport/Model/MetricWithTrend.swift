@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct MetricWithTrend: SendableNetworkModel {
   let value: String

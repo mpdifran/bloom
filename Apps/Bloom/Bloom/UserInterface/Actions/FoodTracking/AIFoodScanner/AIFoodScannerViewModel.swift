@@ -10,6 +10,7 @@ import BloomModel
 import DataContainer
 import TelemetryDeck
 import AVFoundation
+import CoreNetwork
 
 extension AIFoodScannerView {
   @Observable @MainActor

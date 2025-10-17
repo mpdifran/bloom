@@ -8,7 +8,7 @@
 import Foundation
 import BloomModel
 
-extension URLSession {
+public extension URLSession {
 
   func authenticatedBloomRequest(request: URLRequest) async throws {
     let authRequest = await request.settingBloomHeaders()

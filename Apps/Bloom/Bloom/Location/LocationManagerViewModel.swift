@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreLocation
+import BloomFoundation
 
 @MainActor @Observable
 final class LocationManagerViewModel {

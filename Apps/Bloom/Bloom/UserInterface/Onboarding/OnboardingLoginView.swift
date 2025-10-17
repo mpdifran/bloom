@@ -10,6 +10,7 @@ import SFSafeSymbols
 import AuthenticationServices
 import AppUI
 import TelemetryDeck
+import BloomFoundation
 
 struct OnboardingLoginView: View {
   let onContinue: () -> Void

@@ -8,12 +8,12 @@
 import Foundation
 import BloomModel
 
-extension URLRequest {
+public extension URLRequest {
 
   func settingBloomHeaders() async -> URLRequest {
     var request = self
 
-    if let authToken = await UserController.shared.authToken {
+    if let authToken = await AuthTokenManager.shared.authToken {
       request.add(header: .authorizationBearer(authToken))
     }
 
@@ -27,7 +27,7 @@ extension URLRequest {
   }
 }
 
-extension URLRequest {
+public extension URLRequest {
   enum Header {
     case authorizationBearer(AuthToken)
     case contentTypeJSON

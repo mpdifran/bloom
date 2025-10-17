@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreHealth
+import BloomFoundation
 
 struct UserNamePrompt: View {
 

@@ -8,7 +8,7 @@
 import Foundation
 import BloomModel
 
-extension URLRequest {
+public extension URLRequest {
 
   static func get(_ path: String) async -> URLRequest {
     let base = await APIHost.shared.resolvedHost

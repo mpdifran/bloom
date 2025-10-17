@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct ExerciseData: SendableNetworkModel {
   let workouts: [WorkoutData]

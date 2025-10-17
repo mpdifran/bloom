@@ -10,6 +10,7 @@ import BloomModel
 import DataContainer
 import SwiftData
 import TelemetryDeck
+import CoreNetwork
 
 @Observable @MainActor
 final class ChatViewModel {

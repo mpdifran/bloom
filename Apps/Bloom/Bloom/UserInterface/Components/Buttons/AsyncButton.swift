@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomFoundation
 
 struct AsyncButton<Label: View>: View {
   let role: ButtonRole?

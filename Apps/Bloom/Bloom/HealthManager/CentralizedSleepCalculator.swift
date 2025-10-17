@@ -8,6 +8,7 @@
 import Foundation
 import HealthKit
 import CoreHealth
+import CoreNetwork
 import BloomFoundation
 
 actor CentralizedSleepCalculator {

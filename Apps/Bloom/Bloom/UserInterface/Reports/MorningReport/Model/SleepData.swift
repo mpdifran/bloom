@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct SleepData: SendableNetworkModel {
   let sleepSessions: [SleepSession]

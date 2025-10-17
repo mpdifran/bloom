@@ -11,6 +11,7 @@ import BloomFoundation
 import DataContainer
 import BloomModel
 import TelemetryDeck
+import CoreNetwork
 
 private extension String {
   static let lastTodayContentRequestDate = "TodayInsightsManager.lastTodayContentRequestDate"

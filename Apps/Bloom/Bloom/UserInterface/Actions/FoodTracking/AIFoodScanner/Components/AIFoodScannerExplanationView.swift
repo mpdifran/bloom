@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomFoundation
 
 struct AIFoodScannerExplanationView: View {
 

@@ -11,6 +11,7 @@ import BloomFoundation
 import HealthKit
 import DataContainer
 import CoreHealth
+@preconcurrency import CoreNetwork
 
 final class ChatHealthQueryPerformer: Sendable {
 

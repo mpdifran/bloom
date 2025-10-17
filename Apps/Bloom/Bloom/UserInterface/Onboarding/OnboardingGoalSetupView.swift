@@ -13,6 +13,7 @@ import HealthKit
 import CoreHealth
 import DataContainer
 import SwiftData
+import BloomFoundation
 
 struct OnboardingGoalSetupView: View {
   let onContinue: () -> Void

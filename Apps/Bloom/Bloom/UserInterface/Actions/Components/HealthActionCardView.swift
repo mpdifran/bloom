@@ -10,6 +10,7 @@ import SFSafeSymbols
 import AppUI
 import HealthKit
 import CoreHealth
+import BloomFoundation
 
 struct HealthActionCardView<Content>: View where Content: View {
   let sampleTypes: Set<HKSampleType>

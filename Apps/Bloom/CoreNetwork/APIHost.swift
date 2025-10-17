@@ -6,19 +6,22 @@
 //
 
 import SwiftUI
+import Combine
+import BloomFoundation
+import AppFoundations
 
 @MainActor
-final class APIHost: ObservableObject {
-  static let shared = APIHost()
+public final class APIHost: ObservableObject {
+  public static let shared = APIHost()
 
-  @AppStorage("APIHost.overrideEnabled", store: .group) var overrideEnabled: Bool = false
-  @AppStorage("APIHost.base", store: .group) var base: String = ""
-  @AppStorage("APIHost.wsBase", store: .group) var wsBase: String = ""
+  @AppStorage("APIHost.overrideEnabled", store: .group) public var overrideEnabled: Bool = false
+  @AppStorage("APIHost.base", store: .group) public var base: String = ""
+  @AppStorage("APIHost.wsBase", store: .group) public var wsBase: String = ""
 
   private init() { }
 }
 
-extension APIHost {
+public extension APIHost {
 
   var resolvedHost: URL {
     if let url = URL(string: base), base.isNotEmpty, overrideEnabled {

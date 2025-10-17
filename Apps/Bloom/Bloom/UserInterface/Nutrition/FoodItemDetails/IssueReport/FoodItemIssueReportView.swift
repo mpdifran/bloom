@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import BloomModel
+import CoreNetwork
 
 struct FoodItemIssueReportView: View {
   let foodItem: FoodItem

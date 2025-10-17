@@ -10,6 +10,7 @@ import DataContainer
 import BloomFoundation
 import BloomModel
 import HealthKit
+@preconcurrency import CoreNetwork
 
 private extension Int {
   static let goalHistoryDays: Int = 30

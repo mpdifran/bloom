@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import VisionKit
+import BloomFoundation
 
 struct FoodBarcodeScannerView: View {
   let onBarcodeScan: @MainActor (String) -> Void

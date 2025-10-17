@@ -9,6 +9,7 @@ import SwiftUI
 import BloomModel
 import DataContainer
 import TelemetryDeck
+import CoreNetwork
 
 extension FoodItemPicker {
   @Observable @MainActor

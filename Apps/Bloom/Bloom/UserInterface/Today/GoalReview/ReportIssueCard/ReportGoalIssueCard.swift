@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundations
 import TelemetryDeck
+import BloomFoundation
 
 extension ReportGoalIssueCard {
   enum GoalIssue: String, CaseIterable, Identifiable {

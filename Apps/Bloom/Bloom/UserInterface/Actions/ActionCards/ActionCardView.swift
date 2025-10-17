@@ -11,6 +11,7 @@ import HealthKit
 import SwiftData
 import DataContainer
 import CoreHealth
+import BloomFoundation
 
 struct ActionCardView<Content>: View where Content: View {
   let title: String

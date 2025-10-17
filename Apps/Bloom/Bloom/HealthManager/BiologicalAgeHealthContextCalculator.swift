@@ -9,6 +9,7 @@ import Foundation
 import HealthKit
 import DataContainer
 import CoreHealth
+import CoreNetwork
 import BloomFoundation
 import SwiftData
 

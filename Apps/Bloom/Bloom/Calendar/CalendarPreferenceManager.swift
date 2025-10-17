@@ -9,7 +9,7 @@ import Foundation
 import Combine
 @preconcurrency import EventKit
 
-@Observable
+@MainActor @Observable
 final class CalendarPreferenceManager {
   static let shared = CalendarPreferenceManager()
   

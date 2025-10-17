@@ -12,6 +12,7 @@ import BloomModel
 import BloomFoundation
 import TelemetryDeck
 import SwiftData
+import CoreNetwork
 
 private extension String {
   static let lastBiologicalAgeRequestDate = "BiologicalAgeViewModel.lastBiologicalAgeRequestDate"

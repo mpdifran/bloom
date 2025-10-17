@@ -12,6 +12,7 @@ import DataContainer
 import TelemetryDeck
 import BloomFoundation
 import CoreHealth
+import CoreNetwork
 
 extension String {
   static let lastMealAutoUpdateDateKey = "NutritionTrackingViewModel.lastMealAutoUpdateDate"

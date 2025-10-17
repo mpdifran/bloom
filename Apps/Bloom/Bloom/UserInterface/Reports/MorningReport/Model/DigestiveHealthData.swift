@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreNetwork
 
 struct DigestiveHealthData: SendableNetworkModel {
   let yesterdayMovements: [BowelMovementSample]

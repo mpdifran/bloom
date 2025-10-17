@@ -7,83 +7,20 @@
 
 import SwiftUI
 import BloomModel
-import Valet
 import TelemetryDeck
 import RevenueCat
 import AuthenticationServices
 import CoreHealth
-
-private extension String {
-  static let authenticatedUserIdentifierKey = "user_identifier"
-  static let authTokenKey = "auth_token"
-}
-
-#if targetEnvironment(simulator)
-// Simulator-specific UserDefaults keys for development purposes
-private extension String {
-  static let simulatorUserIdentifierKey = "simulator_user_identifier"
-  static let simulatorAuthTokenKey = "simulator_auth_token"
-}
-#endif
+import CoreNetwork
 
 @MainActor
 final class UserController: ObservableObject {
   static let shared = UserController()
 
-  /// Whether the user is authenticated or not.
-  @Published var isAuthenticated: Bool
-
-  /// An identifier for the Sign in with Apple user. This may change if the account is unlinked and re-linked.
-  @Published var authenticatedUserIdentifier: UserIdentifier?
-
-  /// The auth token for the authenticated user.
-  @Published var authToken: AuthToken?
-
   private init() {
-    // Migrate from iCloud Valet to Shared Group Valet
-    for key in [String.authenticatedUserIdentifierKey, String.authTokenKey] {
-      if let value = try? valet.string(forKey: key) {
-        try? sharedValet.setString(value, forKey: key)
-        try? valet.removeObject(forKey: key)
-      }
-    }
-
-    #if targetEnvironment(simulator)
-    print("[UserController] Using UserDefaults fallback for simulator authentication")
-    // Simulator-specific code path - use UserDefaults only
-    if let rawUserIdentifier = UserDefaults.group.string(forKey: .simulatorUserIdentifierKey) {
-      self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
-    }
-    
-    var isAuthenticated = false
-    if let rawAuthToken = UserDefaults.group.string(forKey: .simulatorAuthTokenKey) {
-      self.authToken = AuthToken(rawAuthToken)
-      isAuthenticated = true
-    }
-    #else
-    // Real device code path
-    do {
-      let rawUserIdentifier = try sharedValet.string(forKey: .authenticatedUserIdentifierKey)
-      self.authenticatedUserIdentifier = UserIdentifier(rawUserIdentifier)
-    } catch {
-      print(error)
-    }
-
-    var isAuthenticated = false
-    do {
-      let rawAuthToken = try sharedValet.string(forKey: .authTokenKey)
-      self.authToken = AuthToken(rawAuthToken)
-      isAuthenticated = true
-    } catch {
-      print(error)
-    }
-    #endif
-
     if let lastIdentifyDate = UserDefaults.group.object(forKey: "UserController.lastIdentifyDate") as? Date {
       self.lastIdentifyDate = lastIdentifyDate
     }
-
-    self._isAuthenticated = Published(initialValue: isAuthenticated)
 
     if let data = try? Data(contentsOf: profilePhotoURL) {
       profilePhoto = UIImage(data: data)
@@ -109,17 +46,9 @@ final class UserController: ObservableObject {
     didSet { UserDefaults.group.set(lastIdentifyDate, forKey: "UserController.lastIdentifyDate") }
   }
 
-  @available(*, deprecated, message: "Use `sharedValet` instead.")
-  private let valet = Valet.iCloudValet(
-    with: Identifier(nonEmpty: "UserController")!,
-    accessibility: .afterFirstUnlock
-  )
-
-  private let sharedValet = Valet.sharedGroupValet(
-    with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: Bundle.main.bundleIdentifier!)!,
-    identifier: Identifier(nonEmpty: "UserController")!,
-    accessibility: .afterFirstUnlock
-  )
+  var isAuthenticated: Bool {
+    AuthTokenManager.shared.isAuthenticated
+  }
 }
 
 extension UserController {
@@ -136,7 +65,7 @@ extension UserController {
   }
 
   func verifyAuthentication() async throws {
-    guard let userIdentifier = authenticatedUserIdentifier else { return }
+    guard let userIdentifier = AuthTokenManager.shared.authenticatedUserIdentifier else { return }
 
     #if targetEnvironment(simulator)
     // Skip verification on simulator as it will always fail
@@ -203,13 +132,11 @@ extension UserController {
     self.lastIdentifyDate = .now
     self.registerDetailsWithRevenueCat()
 
-    self.authenticatedUserIdentifier = userIdentifier
-    self.authToken = authResponse.authToken
-
-    storeAuthenticatedUserIdentifier()
-    storeAuthToken()
-
-    self.isAuthenticated = self.authToken != nil
+    // Store auth token and user identifier in AuthTokenManager
+    AuthTokenManager.shared.setAuthentication(
+      token: authResponse.authToken,
+      userIdentifier: userIdentifier
+    )
 
     // Set the user's name automatically if it's not already provided.
     if let name = authResponse.identity.givenName {
@@ -228,19 +155,16 @@ extension UserController {
   func logout() async throws {
     try await NetworkRequester.shared.signOut()
 
-    authenticatedUserIdentifier = nil
-    authToken = nil
+    // Clear authentication
+    AuthTokenManager.shared.clearAuthentication()
+
     email = nil
     givenName = nil
     familyName = nil
     lastIdentifyDate = nil
 
     registerDetailsWithRevenueCat()
-    storeAuthenticatedUserIdentifier()
-    storeAuthToken()
 
-    self.isAuthenticated = self.authToken != nil
-    
     // Notify token manager of logout
     await PushNotificationTokenManager.shared.handleAuthenticationStateChange(isAuthenticated: false)
   }
@@ -248,19 +172,16 @@ extension UserController {
   func deleteAccount() async throws {
     try await NetworkRequester.shared.deleteAccount()
 
-    authenticatedUserIdentifier = nil
-    authToken = nil
+    // Clear authentication
+    AuthTokenManager.shared.clearAuthentication()
+
     email = nil
     givenName = nil
     familyName = nil
     lastIdentifyDate = nil
 
     registerDetailsWithRevenueCat()
-    storeAuthenticatedUserIdentifier()
-    storeAuthToken()
 
-    self.isAuthenticated = self.authToken != nil
-    
     // Notify token manager of account deletion
     await PushNotificationTokenManager.shared.handleAuthenticationStateChange(isAuthenticated: false)
   }
@@ -280,59 +201,5 @@ private extension UserController {
     attributes["$email"] = email ?? ""
 
     Purchases.shared.attribution.setAttributes(attributes)
-  }
-
-  func storeAuthenticatedUserIdentifier() {
-    #if targetEnvironment(simulator)
-    // Simulator code path - UserDefaults only
-    if let authenticatedUserIdentifier {
-      UserDefaults.group.set(authenticatedUserIdentifier.value, forKey: .simulatorUserIdentifierKey)
-    } else {
-      UserDefaults.group.removeObject(forKey: .simulatorUserIdentifierKey)
-    }
-    #else
-    // Real device code path
-    do {
-      if let authenticatedUserIdentifier {
-        try sharedValet.setString(authenticatedUserIdentifier.value, forKey: .authenticatedUserIdentifierKey)
-      } else {
-        try sharedValet.removeObject(forKey: .authenticatedUserIdentifierKey)
-      }
-    } catch {
-      TelemetryDeck.errorOccurred(
-        id: "UserController.storeAuthenticatedUserIdentifier",
-        category: .thrownException,
-        message: error.localizedDescription
-      )
-      print(error)
-    }
-    #endif
-  }
-
-  func storeAuthToken() {
-    #if targetEnvironment(simulator)
-    // Simulator code path - UserDefaults only
-    if let authToken {
-      UserDefaults.group.set(authToken.value, forKey: .simulatorAuthTokenKey)
-    } else {
-      UserDefaults.group.removeObject(forKey: .simulatorAuthTokenKey)
-    }
-    #else
-    // Real device code path
-    do {
-      if let authToken {
-        try sharedValet.setString(authToken.value, forKey: .authTokenKey)
-      } else {
-        try sharedValet.removeObject(forKey: .authTokenKey)
-      }
-    } catch {
-      TelemetryDeck.errorOccurred(
-        id: "UserController.storeAuthToken",
-        category: .thrownException,
-        message: error.localizedDescription
-      )
-      print(error)
-    }
-    #endif
   }
 }

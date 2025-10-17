@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomFoundation
 
 private extension CGFloat {
   static let spacing: CGFloat = 4

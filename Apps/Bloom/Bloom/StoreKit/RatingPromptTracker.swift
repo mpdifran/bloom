@@ -8,6 +8,7 @@
 import SwiftUI
 import TelemetryDeck
 import BloomFoundation
+import CoreNetwork
 
 private extension Int {
   static let minPositiveEventCount = 10

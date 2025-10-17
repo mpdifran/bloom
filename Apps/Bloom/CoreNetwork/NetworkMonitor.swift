@@ -9,14 +9,14 @@ import Foundation
 import Network
 
 @MainActor
-final class NetworkMonitor {
+public final class NetworkMonitor {
 
-  private(set) var isNetworkReachable = true
+  public private(set) var isNetworkReachable = true
 
   private let monitor = NWPathMonitor()
   private let queue = DispatchQueue(label: "NetworkMonitor.queue")
 
-  init() {
+  public init() {
     monitor.pathUpdateHandler = { [weak self] (path) in
       guard let self = self else { return }
 
