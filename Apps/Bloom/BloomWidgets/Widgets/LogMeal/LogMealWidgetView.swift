@@ -35,54 +35,25 @@ struct LogMealWidgetView: View {
 
   var body: some View {
     VStack(alignment: .leading) {
-
       HStack(alignment: .top) {
-        Text(entry.displayName)
-          .font(.title3)
-          .bold()
-          .fontDesign(.rounded)
-          .lineLimit(2)
-          .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading) {
+          Text(entry.mealName)
+            .font(.caption)
+            .bold()
+            .foregroundStyle(.secondary)
+
+          Text(entry.displayName)
+            .font(.title3)
+            .fontWeight(.heavy)
+            .fontDesign(.rounded)
+            .lineLimit(2)
+            .fixedSize(horizontal: false, vertical: true)
+        }
 
         Spacer()
 
         Image(.logFoodIcon)
           .foregroundStyle(.tint)
-      }
-
-      // Calories and macro bar
-      if let caloriesText = entry.caloriesText {
-        if widgetFamily == .systemSmall {
-          MacroDistributionBar(
-            proteinGrams: entry.proteinGrams,
-            carbsGrams: entry.carbsGrams,
-            fatGrams: entry.fatGrams
-          )
-
-          Text(caloriesText)
-            .font(.caption)
-            .bold()
-            .fontDesign(.rounded)
-        } else {
-          HStack {
-            MacroDistributionBar(
-              proteinGrams: entry.proteinGrams,
-              carbsGrams: entry.carbsGrams,
-              fatGrams: entry.fatGrams
-            )
-            .frame(maxWidth: 100)
-
-            Text(caloriesText)
-              .font(.caption)
-              .bold()
-              .fontDesign(.rounded)
-          }
-        }
-      } else if redactionReasons.isEmpty {
-        Text("Edit widget to add food items")
-          .font(.caption)
-          .bold()
-          .fontDesign(.rounded)
       }
 
       // Food item names (for multi-item display, medium+ only)
@@ -94,17 +65,32 @@ struct LogMealWidgetView: View {
           .foregroundStyle(.secondary)
       }
 
+      MacroDistributionBar(
+        proteinGrams: entry.proteinGrams,
+        carbsGrams: entry.carbsGrams,
+        fatGrams: entry.fatGrams
+      )
+
+//      // Food item names (for multi-item display, medium+ only)
+//      if let foodItemNames = entry.foodItemNames, widgetFamily != .systemSmall {
+//        Text(foodItemNames)
+//          .font(.subheadline)
+//          .bold()
+//          .fontDesign(.rounded)
+//          .foregroundStyle(.secondary)
+//      }
+
       Spacer()
 
       HStack {
         Group {
           if widgetFamily == .systemSmall {
             VStack(alignment: .leading) {
+              Text(entry.caloriesText ?? "")
               Text(entry.servingsDescription)
-              Text(entry.mealName)
             }
           } else {
-            Text("\(entry.servingsDescription) • \(entry.mealName)")
+            Text("\(entry.caloriesText ?? "") • \(entry.servingsDescription)")
           }
         }
         .font(.caption)
