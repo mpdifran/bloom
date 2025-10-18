@@ -21,6 +21,6 @@ struct LogMealEntry: TimelineEntry {
   let foodItemNames: String?
   let servingsDescription: String
 
-  // Intent data for the button
-  let intent: LogMealIntent
+  // Intent data for the toggle
+  let intent: LogMealToggleIntent
 }

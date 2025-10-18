@@ -39,7 +39,7 @@ struct LogMealWidget: Widget {
     fatGrams: 2,
     foodItemNames: nil,
     servingsDescription: "1 serving",
-    intent: LogMealIntent(
+    intent: LogMealToggleIntent(
       foodItems: [FoodItemEntity(
         id: "fooditem_123",
         name: "Vector",
@@ -69,7 +69,7 @@ struct LogMealWidget: Widget {
     fatGrams: 17,
     foodItemNames: "Oatmeal, Blueberries, and Almonds",
     servingsDescription: "1 serving",
-    intent: LogMealIntent(
+    intent: LogMealToggleIntent(
       foodItems: [
         FoodItemEntity(id: "1", name: "Oatmeal", brandName: nil, flavour: nil, calories: 150, protein: 5, carbs: 27, fat: 3),
         FoodItemEntity(id: "2", name: "Blueberries", brandName: nil, flavour: nil, calories: 80, protein: 1, carbs: 21, fat: 0),

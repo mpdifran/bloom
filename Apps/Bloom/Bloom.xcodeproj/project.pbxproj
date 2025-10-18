@@ -466,6 +466,7 @@
 				FoodItemQuery.swift,
 				LogMealConfigurationIntent.swift,
 				LogMealIntent.swift,
+				LogMealToggleIntent.swift,
 				MealOption.swift,
 				OpenActionIntent.swift,
 			);
@@ -480,6 +481,7 @@
 				FoodItemQuery.swift,
 				LogMealConfigurationIntent.swift,
 				LogMealIntent.swift,
+				LogMealToggleIntent.swift,
 				MealOption.swift,
 				OpenActionIntent.swift,
 			);

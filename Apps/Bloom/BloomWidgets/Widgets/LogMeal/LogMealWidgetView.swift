@@ -13,6 +13,21 @@ import AppIntents
 import CoreHealth
 internal import BloomFoundation
 
+struct LogMealToggleStyle: ToggleStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    Button {
+      configuration.isOn.toggle()
+    } label: {
+      Image(systemSymbol: configuration.isOn ? .checkmark : .plus)
+        .font(.title3)
+        .bold()
+        .fontDesign(.rounded)
+    }
+    .buttonStyle(.borderedProminent)
+    .controlSize(.regular)
+  }
+}
+
 struct LogMealWidgetView: View {
   let entry: LogMealEntry
   @Environment(\.redactionReasons) var redactionReasons
@@ -98,14 +113,10 @@ struct LogMealWidgetView: View {
 
         Spacer()
 
-        Button(intent: entry.intent) {
-          Image(systemSymbol: .plus)
-            .font(.title3)
-            .bold()
-            .fontDesign(.rounded)
+        Toggle(isOn: false, intent: entry.intent) {
+          EmptyView()
         }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.regular)
+        .toggleStyle(LogMealToggleStyle())
       }
     }
     .unredacted()

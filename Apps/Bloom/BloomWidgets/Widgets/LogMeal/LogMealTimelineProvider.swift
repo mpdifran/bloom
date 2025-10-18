@@ -24,7 +24,7 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
       fatGrams: 3,
       foodItemNames: nil,
       servingsDescription: "1 serving",
-      intent: LogMealIntent(foodItems: [], mealOption: .automatic, servings: 1.0)
+      intent: LogMealToggleIntent(foodItems: [], mealOption: .automatic, servings: 1.0)
     )
   }
 
@@ -78,8 +78,8 @@ struct LogMealTimelineProvider: AppIntentTimelineProvider {
       }
     }()
 
-    // Create intent for the button
-    let intent = LogMealIntent(
+    // Create intent for the toggle
+    let intent = LogMealToggleIntent(
       foodItems: foodItems,
       mealOption: mealOption,
       servings: servings
