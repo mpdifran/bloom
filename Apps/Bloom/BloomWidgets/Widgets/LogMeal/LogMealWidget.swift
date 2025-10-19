@@ -7,9 +7,10 @@
 
 import SwiftUI
 import WidgetKit
+internal import BloomFoundation
 
 struct LogMealWidget: Widget {
-  let kind: String = "com.lotus-labs.bloom.LogMealWidget"
+  let kind: String = .WidgetKind.logMeal
 
   var body: some WidgetConfiguration {
     AppIntentConfiguration(

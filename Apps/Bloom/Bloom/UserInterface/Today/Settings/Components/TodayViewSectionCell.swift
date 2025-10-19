@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomUI
 
 struct TodayViewSectionCell: View {
   let section: TodaySection

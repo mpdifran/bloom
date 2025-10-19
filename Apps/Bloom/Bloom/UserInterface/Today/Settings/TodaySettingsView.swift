@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppUI
+import BloomUI
 import SFSafeSymbols
 import CoreHealth
 @preconcurrency import EventKit

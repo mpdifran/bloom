@@ -15,5 +15,6 @@ struct BloomWidgetsBundle: WidgetBundle {
   var body: some Widget {
     ActionControl()
     LogMealWidget()
+    TodayInsightWidget()
   }
 }

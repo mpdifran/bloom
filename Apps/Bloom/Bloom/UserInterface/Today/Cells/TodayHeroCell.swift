@@ -8,6 +8,7 @@
 import SwiftUI
 import AppUI
 import BloomModel
+import BloomUI
 import CoreHealth
 
 private extension CGFloat {

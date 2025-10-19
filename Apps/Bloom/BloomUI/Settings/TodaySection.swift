@@ -1,6 +1,6 @@
 //
 //  TodaySection.swift
-//  Bloom
+//  BloomUI
 //
 //  Created by Assistant on 2025-08-27.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 import SFSafeSymbols
 
-enum TodaySection: String, CaseIterable, Identifiable, Codable {
+public enum TodaySection: String, CaseIterable, Identifiable, Codable {
   case todaysAdvice = "todaysAdvice"
   case insights = "insights"
   case sleepDetails = "sleepDetails"
@@ -22,9 +22,9 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
   case todaysWeather = "todaysWeather"
   case tomorrowsWeather = "tomorrowsWeather"
 
-  var id: String { rawValue }
-  
-  var displayName: String {
+  public var id: String { rawValue }
+
+  public var displayName: String {
     switch self {
     case .todaysAdvice:
       return "Today's Advice"
@@ -52,8 +52,8 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       return "Tomorrow's Weather"
     }
   }
-  
-  var icon: SFSymbol {
+
+  public var icon: SFSymbol {
     switch self {
     case .todaysAdvice:
       return .lightbulbFill
@@ -81,8 +81,8 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       return .cloudSunFill
     }
   }
-  
-  var defaultOrder: Int {
+
+  public var defaultOrder: Int {
     switch self {
     case .todaysAdvice:
       return 0
@@ -110,8 +110,8 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
       return 11
     }
   }
-  
-  var requiresBloomPlus: Bool {
+
+  public var requiresBloomPlus: Bool {
     switch self {
     case .goals, .reminders, .todaysEvents, .tomorrowsEvents, .todaysWeather, .tomorrowsWeather:
       false
@@ -120,7 +120,7 @@ enum TodaySection: String, CaseIterable, Identifiable, Codable {
     }
   }
 
-  var requiresFemale: Bool {
+  public var requiresFemale: Bool {
     switch self {
     case .phaseTip, .periodForecast:
       true

@@ -9,9 +9,10 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 import SFSafeSymbols
+internal import BloomFoundation
 
 struct ActionControl: ControlWidget {
-  static let kind: String = "com.lotus-labs.bloom.ActionControl"
+  static let kind: String = .WidgetKind.actionControl
 
   var body: some ControlWidgetConfiguration {
     AppIntentControlConfiguration(

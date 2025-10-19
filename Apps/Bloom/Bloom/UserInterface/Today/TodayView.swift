@@ -12,6 +12,7 @@ import DataContainer
 import SFSafeSymbols
 import BloomFoundation
 import BloomModel
+import BloomUI
 import CoreHealth
 import TelemetryDeck
 

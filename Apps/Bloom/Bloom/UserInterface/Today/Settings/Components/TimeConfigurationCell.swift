@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 import SFSafeSymbols
 
 struct TimeConfigurationCell: View {

@@ -36,6 +36,8 @@ final class TodayInsightsManager {
       if let response = lastResponse {
         if let data = try? JSONEncoder().encode(response) {
           UserDefaults.group.set(data, forKey: .lastTodayContentResponse)
+          // Reload widget timeline when data updates
+          WidgetRefreshManager.shared.reloadTodayWidgets()
         }
       } else {
         UserDefaults.group.removeObject(forKey: .lastTodayContentResponse)

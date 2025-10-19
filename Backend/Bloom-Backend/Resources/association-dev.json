@@ -3,7 +3,7 @@
     "details": [
       {
         "appID": "GUJ47GUV2Q.com.lotus-labs.bloom.dev",
-        "paths": [ "/action/*" ]
+        "paths": [ "/action/*", "/today" ]
       }
     ]
   }

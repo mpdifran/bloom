@@ -1,18 +1,18 @@
 //
 //  TodaySettings.swift
-//  Bloom
+//  BloomUI
 //
 //  Created by Assistant on 2025-08-27.
 //
 
 import Foundation
 
-struct TodaySettings: Codable {
-  struct TimeModeConfiguration: Codable {
-    var enabledSections: Set<TodaySection>
-    var sectionOrder: [TodaySection]
-    
-    init(for timeMode: TimeMode) {
+public struct TodaySettings: Codable, TimeModeSettings {
+  public struct TimeModeConfiguration: Codable {
+    public var enabledSections: Set<TodaySection>
+    public var sectionOrder: [TodaySection]
+
+    public init(for timeMode: TimeMode) {
       switch timeMode {
       case .morning:
         self.sectionOrder = [
@@ -71,36 +71,36 @@ struct TodaySettings: Codable {
         self.sectionOrder.append(contentsOf: [.todaysAdvice, .insights, .sleepDetails, .reminders, .goals, .todaysEvents, .todaysWeather])
       }
     }
-    
-    init(enabledSections: Set<TodaySection>, sectionOrder: [TodaySection]) {
+
+    public init(enabledSections: Set<TodaySection>, sectionOrder: [TodaySection]) {
       self.enabledSections = enabledSections
       self.sectionOrder = sectionOrder
     }
   }
-  
-  var morningStartHour: Int
-  var afternoonStartHour: Int
-  var eveningStartHour: Int
-  var nightStartHour: Int
-  
-  var morningConfiguration: TimeModeConfiguration
-  var afternoonConfiguration: TimeModeConfiguration
-  var eveningConfiguration: TimeModeConfiguration
-  var nightConfiguration: TimeModeConfiguration
-  
-  init() {
+
+  public var morningStartHour: Int
+  public var afternoonStartHour: Int
+  public var eveningStartHour: Int
+  public var nightStartHour: Int
+
+  public var morningConfiguration: TimeModeConfiguration
+  public var afternoonConfiguration: TimeModeConfiguration
+  public var eveningConfiguration: TimeModeConfiguration
+  public var nightConfiguration: TimeModeConfiguration
+
+  public init() {
     self.morningStartHour = TimeMode.morning.defaultStartHour
     self.afternoonStartHour = TimeMode.afternoon.defaultStartHour
     self.eveningStartHour = TimeMode.evening.defaultStartHour
     self.nightStartHour = TimeMode.night.defaultStartHour
-    
+
     self.morningConfiguration = TimeModeConfiguration(for: .morning)
     self.afternoonConfiguration = TimeModeConfiguration(for: .afternoon)
     self.eveningConfiguration = TimeModeConfiguration(for: .evening)
     self.nightConfiguration = TimeModeConfiguration(for: .night)
   }
-  
-  func configuration(for timeMode: TimeMode) -> TimeModeConfiguration {
+
+  public func configuration(for timeMode: TimeMode) -> TimeModeConfiguration {
     let config = switch timeMode {
     case .morning:
       morningConfiguration
@@ -111,29 +111,29 @@ struct TodaySettings: Codable {
     case .night:
       nightConfiguration
     }
-    
+
     return migrateConfiguration(config, for: timeMode)
   }
-  
+
   private func migrateConfiguration(_ config: TimeModeConfiguration, for timeMode: TimeMode) -> TimeModeConfiguration {
     let allCurrentSections = Set(TodaySection.allCases)
     let configSections = Set(config.sectionOrder)
     let missingSections = allCurrentSections.subtracting(configSections)
-    
+
     // If no new sections, return as-is
     guard !missingSections.isEmpty else { return config }
-    
+
     var newConfig = config
-    
+
     // Add missing sections to the end of the order (disabled by default)
     newConfig.sectionOrder.append(contentsOf: missingSections.sorted { $0.defaultOrder < $1.defaultOrder })
-    
+
     // For specific sections that should be enabled by default in certain modes,
     // we can add them to the enabled set
     for section in missingSections {
       if shouldBeEnabledByDefault(section: section, in: timeMode) {
         newConfig.enabledSections.insert(section)
-        
+
         // Move it to the appropriate position in the order
         if let index = getInsertionIndex(for: section, in: timeMode, currentOrder: newConfig.sectionOrder) {
           // Remove from end and insert at correct position
@@ -144,21 +144,21 @@ struct TodaySettings: Codable {
         }
       }
     }
-    
+
     return newConfig
   }
-  
+
   private func shouldBeEnabledByDefault(section: TodaySection, in timeMode: TimeMode) -> Bool {
     // Check if this section should be enabled by default in this time mode
     let defaultConfig = TimeModeConfiguration(for: timeMode)
     return defaultConfig.enabledSections.contains(section)
   }
-  
+
   private func getInsertionIndex(for section: TodaySection, in timeMode: TimeMode, currentOrder: [TodaySection]) -> Int? {
     // Get the default position for this section in this time mode
     let defaultConfig = TimeModeConfiguration(for: timeMode)
     guard let defaultIndex = defaultConfig.sectionOrder.firstIndex(of: section) else { return nil }
-    
+
     // Find the best insertion point in the current order
     // Look for the section that should come after this one in the default order
     for i in (defaultIndex + 1)..<defaultConfig.sectionOrder.count {
@@ -167,7 +167,7 @@ struct TodaySettings: Codable {
         return existingIndex
       }
     }
-    
+
     // If no section found after it, find the last enabled section and insert after it
     let enabledSections = defaultConfig.enabledSections
     for i in stride(from: currentOrder.count - 1, through: 0, by: -1) {
@@ -175,11 +175,11 @@ struct TodaySettings: Codable {
         return i + 1
       }
     }
-    
+
     return 0 // Insert at beginning if no enabled sections found
   }
-  
-  mutating func setConfiguration(_ configuration: TimeModeConfiguration, for timeMode: TimeMode) {
+
+  public mutating func setConfiguration(_ configuration: TimeModeConfiguration, for timeMode: TimeMode) {
     switch timeMode {
     case .morning:
       morningConfiguration = configuration
@@ -191,8 +191,8 @@ struct TodaySettings: Codable {
       nightConfiguration = configuration
     }
   }
-  
-  func startHour(for timeMode: TimeMode) -> Int {
+
+  public func startHour(for timeMode: TimeMode) -> Int {
     switch timeMode {
     case .morning:
       return morningStartHour
@@ -204,8 +204,8 @@ struct TodaySettings: Codable {
       return nightStartHour
     }
   }
-  
-  mutating func setStartHour(_ hour: Int, for timeMode: TimeMode) {
+
+  public mutating func setStartHour(_ hour: Int, for timeMode: TimeMode) {
     switch timeMode {
     case .morning:
       morningStartHour = hour
@@ -218,4 +218,3 @@ struct TodaySettings: Codable {
     }
   }
 }
-

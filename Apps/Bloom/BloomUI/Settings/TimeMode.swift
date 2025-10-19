@@ -1,6 +1,6 @@
 //
 //  TimeMode.swift
-//  Bloom
+//  BloomUI
 //
 //  Created by Assistant on 2025-08-27.
 //
@@ -8,16 +8,17 @@
 import Foundation
 import SwiftUI
 import SFSafeSymbols
+import BloomFoundation
 
-enum TimeMode: String, CaseIterable, Identifiable, Codable {
+public enum TimeMode: String, CaseIterable, Identifiable, Codable {
   case morning = "morning"
   case afternoon = "afternoon"
   case evening = "evening"
   case night = "night"
-  
-  var id: String { rawValue }
-  
-  var displayName: String {
+
+  public var id: String { rawValue }
+
+  public var displayName: String {
     switch self {
     case .morning:
       return "Morning"
@@ -29,8 +30,8 @@ enum TimeMode: String, CaseIterable, Identifiable, Codable {
       return "Night"
     }
   }
-  
-  var icon: SFSymbol {
+
+  public var icon: SFSymbol {
     switch self {
     case .morning:
       return .sunriseFill
@@ -42,8 +43,8 @@ enum TimeMode: String, CaseIterable, Identifiable, Codable {
       return .moonStarsFill
     }
   }
-  
-  var tintColor: Color {
+
+  public var tintColor: Color {
     switch self {
     case .morning:
       return .mutedYellow
@@ -55,8 +56,8 @@ enum TimeMode: String, CaseIterable, Identifiable, Codable {
       return .mutedBlue
     }
   }
-  
-  var defaultStartHour: Int {
+
+  public var defaultStartHour: Int {
     switch self {
     case .morning:
       return 6  // 6:00 AM
@@ -68,11 +69,11 @@ enum TimeMode: String, CaseIterable, Identifiable, Codable {
       return 22 // 10:00 PM
     }
   }
-  
-  static func current(for date: Date = .now, settings: TodaySettings) -> TimeMode {
+
+  public static func current(for date: Date = .now, settings: any TimeModeSettings) -> TimeMode {
     let calendar = Calendar.current
     let hour = calendar.component(.hour, from: date)
-    
+
     // Check in reverse order (night -> evening -> afternoon -> morning)
     // to find the most recent time mode that has started
     if hour >= settings.nightStartHour {
@@ -88,4 +89,12 @@ enum TimeMode: String, CaseIterable, Identifiable, Codable {
       return .night
     }
   }
+}
+
+/// Protocol that defines the start hours for each time mode phase
+public protocol TimeModeSettings {
+  var morningStartHour: Int { get }
+  var afternoonStartHour: Int { get }
+  var eveningStartHour: Int { get }
+  var nightStartHour: Int { get }
 }

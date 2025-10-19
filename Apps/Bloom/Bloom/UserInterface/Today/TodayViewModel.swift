@@ -11,6 +11,7 @@ import DataContainer
 import BloomModel
 import Combine
 import CoreHealth
+import BloomUI
 
 extension TodayView {
   @MainActor @Observable

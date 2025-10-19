@@ -1,6 +1,6 @@
 //
 //  CardContainer.swift
-//  Supplements
+//  BloomUI
 //
 //  Created by Mark DiFranco on 2024-07-31.
 //
@@ -10,7 +10,7 @@ import SwiftUI
 import AppUI
 import BloomFoundation
 
-extension View {
+public extension View {
 
   func cardContainer<S, S2>(
     fill: S = BackgroundStyle.background,
@@ -36,7 +36,7 @@ extension View {
   }
 }
 
-extension View {
+public extension View {
 
   func chatCardContainer<S, S2>(
     fill: S = BackgroundStyle.background.secondary,
@@ -54,27 +54,4 @@ extension View {
         cornerRadius: cornerRadius
       )
   }
-}
-
-#Preview {
-  ScrollView {
-    VStack {
-      HStack {
-        Spacer()
-        Text("Hello\nWorld")
-        Spacer()
-      }
-      .cardContainer()
-
-      HStack {
-        Label("Good Morning", systemSymbol: .sunriseFill)
-          .foregroundStyle(.mutedGreen)
-
-        Spacer()
-      }
-      .cardContainer(fill: .mutedGreen.opacity(0.3), stroke: .mutedGreen)
-    }
-    .padding()
-  }
-  .groupedBackground()
 }

@@ -210,6 +210,90 @@ do {
 }
 ```
 
+## Deep Linking & Universal Links
+
+Bloom supports both custom URL schemes and universal links for deep linking into the app.
+
+### URL Scheme Configuration
+Custom URL scheme `bloom://` is registered in `Info.plist`:
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>bloom</string>
+    </array>
+  </dict>
+</array>
+```
+
+### Universal Links Configuration
+Universal links use the domain `https://api.trybloom.app/*` and are configured via Apple App Site Association (AASA) files:
+- **Production**: `Backend/Bloom-Backend/Resources/association-prod.json`
+- **Development**: `Backend/Bloom-Backend/Resources/association-dev.json`
+
+AASA files are served at `https://api.trybloom.app/.well-known/apple-app-site-association` via `AppSiteAssociationController.swift`.
+
+### Supported Deep Link Paths
+
+#### Navigation Links
+- `bloom://today` or `https://api.trybloom.app/today` - Navigate to Today tab
+  - Used by: Today Insight widget
+
+#### Action Shortcuts
+All action shortcuts support both custom scheme and universal link:
+- `bloom://action/food-scanner` or `https://api.trybloom.app/action/food-scanner`
+- `bloom://action/log-food` or `https://api.trybloom.app/action/log-food`
+- `bloom://action/log-water` or `https://api.trybloom.app/action/log-water`
+- `bloom://action/log-bowel-movement` or `https://api.trybloom.app/action/log-bowel-movement`
+- `bloom://action/log-period` or `https://api.trybloom.app/action/log-period`
+- `bloom://action/log-weight` or `https://api.trybloom.app/action/log-weight`
+- `bloom://action/log-blood-pressure` or `https://api.trybloom.app/action/log-blood-pressure`
+
+### URL Handling Pattern
+All deep links are handled in `RootView.handleURL()`:
+
+```swift
+.onOpenURL { url in
+    handleURL(url)
+}
+
+private func handleURL(_ url: URL) {
+    // Support both custom URL scheme and universal links
+    guard url.scheme == "bloom" ||
+          url.host == "api.trybloom.app" ||
+          url.host == "trybloom.app" else { return }
+
+    // Normalize path for custom scheme (bloom://today -> /today)
+    let path = url.scheme == "bloom" ? "/\(url.host ?? "")" : url.path
+
+    switch path {
+    case "/today":
+        tabController.activeTab = .today
+    case "/action/food-scanner":
+        presentedSheet = AIFoodScannerView().asAny
+    // ... other cases
+    }
+}
+```
+
+### Adding New Deep Links
+
+1. **Update RootView.swift**: Add new case to `handleURL()` switch statement
+2. **Update AASA files**: Add path to both `association-prod.json` and `association-dev.json`
+3. **Deploy backend**: AASA changes require backend redeployment
+4. **Test both**: Verify custom scheme (`bloom://path`) and universal link (`https://api.trybloom.app/path`)
+
+### Widget Deep Linking Pattern
+Widgets should use `.widgetURL()` with custom scheme as primary (offline support):
+```swift
+.widgetURL(URL(string: "bloom://today"))
+.containerBackground(color.gradient, for: .widget)
+```
+
+Universal links provide fallback for web sharing and better user experience when tapped from outside the app.
+
 ## Common Utilities & Extensions
 
 ### Date Formatting
@@ -325,10 +409,19 @@ struct CalorieTargetCalculatorTestSuite {
 
 ### Module Structure
 - `BloomFoundation` - Shared utilities and extensions
+- `BloomUI` - Shared UI components and styling for app-widget code sharing (views, modifiers, settings models)
 - `CoreHealth` - HealthKit abstractions
 - `DataContainer` - SwiftData models and actors
 - `BloomModel` - Shared network models
 - `ScreenControl` - Family Controls APIs
+
+**BloomUI Framework Details:**
+Created to enable UI code sharing between the main app and widget extensions. Widgets cannot directly access the main app target's code, so shared UI components must live in a framework accessible to both targets.
+
+Contents:
+- **Views**: `TodayCardCell` - Card UI component used in app and widgets
+- **Modifiers**: `CardContainer` - Consistent card styling with rounded corners and backgrounds
+- **Settings**: `TimeMode`, `TodaySection`, `TodaySettings` - Time-based configuration shared between app and Today Insight widget
 
 ### Widgets & App Intents Organization
 ```

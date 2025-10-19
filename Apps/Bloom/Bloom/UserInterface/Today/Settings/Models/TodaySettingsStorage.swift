@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 @propertyWrapper
 struct TodaySettingsStorage: DynamicProperty {
