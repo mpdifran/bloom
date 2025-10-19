@@ -31,7 +31,7 @@ struct LogMealWidget: Widget {
 } timeline: {
   LogMealEntry(
     date: .now,
-    displayName: "Vector - Kellogs",
+    displayName: "Vector",
     mealName: "Breakfast",
     caloriesText: "300 cal",
     proteinGrams: 15,
@@ -40,7 +40,8 @@ struct LogMealWidget: Widget {
     foodItemNames: nil,
     servingsDescription: "1 serving",
     intent: LogMealToggleIntent(
-      foodItems: [FoodItemEntity(
+      kind: .singleFoodItem,
+      foodItem: FoodItemEntity(
         id: "fooditem_123",
         name: "Vector",
         brandName: "Kellogs",
@@ -49,14 +50,15 @@ struct LogMealWidget: Widget {
         protein: 15,
         carbs: 45,
         fat: 2
-      )],
-      mealOption: .breakfast,
-      servings: 1
+      ),
+      savedMeal: nil,
+      meal: .breakfast,
+      servings: 1.0
     )
   )
 }
 
-#Preview("Multiple Items - Medium", as: .systemMedium) {
+#Preview("Saved Meal - Medium", as: .systemMedium) {
   LogMealWidget()
 } timeline: {
   LogMealEntry(
@@ -70,13 +72,11 @@ struct LogMealWidget: Widget {
     foodItemNames: "Oatmeal, Blueberries, and Almonds",
     servingsDescription: "1 serving",
     intent: LogMealToggleIntent(
-      foodItems: [
-        FoodItemEntity(id: "1", name: "Oatmeal", brandName: nil, flavour: nil, calories: 150, protein: 5, carbs: 27, fat: 3),
-        FoodItemEntity(id: "2", name: "Blueberries", brandName: nil, flavour: nil, calories: 80, protein: 1, carbs: 21, fat: 0),
-        FoodItemEntity(id: "3", name: "Almonds", brandName: nil, flavour: nil, calories: 160, protein: 6, carbs: 6, fat: 14)
-      ],
-      mealOption: .breakfast,
-      servings: 1
+      kind: .savedMeal,
+      foodItem: nil,
+      savedMeal: MealEntity(id: "meal_123", name: "Breakfast Bowl"),
+      meal: .breakfast,
+      servings: 1.0
     )
   )
 }

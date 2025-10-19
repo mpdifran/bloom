@@ -9,4 +9,5 @@ import Foundation
 
 public extension String {
   static let telemetryDeckAppID = "764D40B8-F2CE-4372-87D3-0D68F34E08CA"
+  static let telemetryDeckSalt = "bloom_secret_salt"
 }

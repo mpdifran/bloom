@@ -13,48 +13,72 @@ struct LogMealConfigurationIntent: WidgetConfigurationIntent {
   nonisolated(unsafe) static var title: LocalizedStringResource = "Log Meal Configuration"
   nonisolated(unsafe) static var description = IntentDescription("Configure which meal to log with the widget.")
 
-  @Parameter(title: "Meal Name (Optional)")
-  var mealName: String?
+  @Parameter(title: "Widget Type", default: .singleFoodItem)
+  var kind: LogMealWidgetType?
 
-  @Parameter(title: "Food Items")
-  var foodItems: [FoodItemEntity]?
+  // Single Food Item parameters
+  @Parameter(title: "Food Item")
+  var foodItem: FoodItemEntity?
 
-  @Parameter(title: "Meal Type", default: .automatic)
-  var mealOption: MealOption?
+  // Saved Meal parameters
+  @Parameter(title: "Saved Meal")
+  var savedMeal: MealEntity?
 
-  @Parameter(title: "Servings per item", default: 1.0)
+  // Common parameters
+  @Parameter(title: "Meal", default: .automatic)
+  var meal: MealOption?
+
+  @Parameter(title: "Servings", default: 1.0)
   var servings: Double?
 
+  static var parameterSummary: some ParameterSummary {
+    When(\.$kind, .equalTo, LogMealWidgetType.singleFoodItem) {
+      Summary {
+        \.$kind
+        \.$foodItem
+        \.$meal
+        \.$servings
+      }
+    } otherwise: {
+      Summary {
+        \.$kind
+        \.$savedMeal
+        \.$meal
+        \.$servings
+      }
+    }
+  }
+
   init() {
-    self.mealName = nil
-    self.foodItems = nil
-    self.mealOption = .automatic
+    self.kind = .singleFoodItem
+    self.foodItem = nil
+    self.savedMeal = nil
+    self.meal = .automatic
     self.servings = 1.0
   }
 
   init(
-    mealName: String?,
-    foodItems: [FoodItemEntity]?,
-    mealOption: MealOption?,
+    kind: LogMealWidgetType?,
+    foodItem: FoodItemEntity?,
+    savedMeal: MealEntity?,
+    meal: MealOption?,
     servings: Double?
   ) {
-    self.mealName = mealName
-    self.foodItems = foodItems
-    self.mealOption = mealOption
+    self.kind = kind
+    self.foodItem = foodItem
+    self.savedMeal = savedMeal
+    self.meal = meal
     self.servings = servings
   }
 
   var displayName: String {
-    // If custom name is provided, use it
-    if let customName = mealName, !customName.isEmpty {
-      return customName
-    }
+    let type = kind ?? .singleFoodItem
 
-    // Default logic based on number of food items
-    if let items = foodItems, items.count == 1 {
-      return items[0].name // Use food name for single item
-    } else {
-      return "My Meal" // Multiple items default
+    switch type {
+    case .singleFoodItem:
+      return foodItem?.name ?? "Choose Food Item"
+    case .savedMeal:
+      return savedMeal?.name ?? "Choose Saved Meal"
     }
   }
 }

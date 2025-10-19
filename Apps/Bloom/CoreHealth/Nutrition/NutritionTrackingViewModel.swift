@@ -18,6 +18,12 @@ extension String {
   static let lastMealAutoUpdateDateKey = "NutritionTrackingViewModel.lastMealAutoUpdateDate"
 }
 
+private extension Bundle {
+  var isAppExtension: Bool {
+    bundlePath.hasSuffix(".appex")
+  }
+}
+
 public struct DateState: Sendable {
   public let date: Date
   public let state: FoodLogDateState
@@ -234,11 +240,13 @@ public extension NutritionTrackingViewModel {
 
     try await updateNutrition(for: dates.asSet())
 
-    TelemetryDeck.signal(
-      "Logged Food Item",
-      parameters: ["Meal": meal.rawValue],
-      floatValue: Double(foodItemServings.count)
-    )
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal(
+        "Logged Food Item",
+        parameters: ["Meal": meal.rawValue],
+        floatValue: Double(foodItemServings.count)
+      )
+    }
 
     // Track food item logs on the server (fire-and-forget)
     Task {
@@ -296,11 +304,13 @@ public extension NutritionTrackingViewModel {
 
     try await updateNutrition(for: dates.asSet())
 
-    TelemetryDeck.signal(
-      "Logged Food Item",
-      parameters: ["Meal": meal.rawValue],
-      floatValue: Double(foodItemServings.count)
-    )
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal(
+        "Logged Food Item",
+        parameters: ["Meal": meal.rawValue],
+        floatValue: Double(foodItemServings.count)
+      )
+    }
 
     // Track food item logs on the server (fire-and-forget)
     Task {
@@ -648,17 +658,19 @@ public extension NutritionTrackingViewModel {
 
     try await updateNutrition(for: dates.asSet())
 
-    TelemetryDeck.signal(
-      "Logged Food Item",
-      parameters: ["Meal": meal.rawValue],
-      floatValue: Double(items.count)
-    )
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal(
+        "Logged Food Item",
+        parameters: ["Meal": meal.rawValue],
+        floatValue: Double(items.count)
+      )
 
-    TelemetryDeck.signal(
-      "Logged Meal",
-      parameters: ["Meal": meal.rawValue],
-      floatValue: Double(items.count)
-    )
+      TelemetryDeck.signal(
+        "Logged Meal",
+        parameters: ["Meal": meal.rawValue],
+        floatValue: Double(items.count)
+      )
+    }
   }
 }
 
@@ -715,10 +727,12 @@ public extension NutritionTrackingViewModel {
 
     try await updateNutrition(for: dates.asSet())
 
-    TelemetryDeck.signal(
-      "Duplicated Food Log",
-      parameters: ["Meal": meal.rawValue]
-    )
+    if !Bundle.main.isAppExtension {
+      TelemetryDeck.signal(
+        "Duplicated Food Log",
+        parameters: ["Meal": meal.rawValue]
+      )
+    }
   }
 }
 

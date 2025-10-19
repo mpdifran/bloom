@@ -467,6 +467,8 @@
 				LogMealConfigurationIntent.swift,
 				LogMealIntent.swift,
 				LogMealToggleIntent.swift,
+				LogMealWidgetType.swift,
+				MealEntity.swift,
 				MealOption.swift,
 				OpenActionIntent.swift,
 			);
@@ -482,6 +484,8 @@
 				LogMealConfigurationIntent.swift,
 				LogMealIntent.swift,
 				LogMealToggleIntent.swift,
+				LogMealWidgetType.swift,
+				MealEntity.swift,
 				MealOption.swift,
 				OpenActionIntent.swift,
 			);

@@ -21,4 +21,13 @@ public extension MealRecordModelActor {
     let descriptor = FetchDescriptor<MealRecord>()
     return try context.fetch(descriptor).map { $0.asDTO() }
   }
+
+  func fetchMealRecord(for id: String) throws -> MealRecordDTO? {
+    let descriptor = FetchDescriptor<MealRecord>(
+      predicate: #Predicate<MealRecord> { model in
+        model.id == id
+      }
+    )
+    return try context.fetch(descriptor).first?.asDTO()
+  }
 }

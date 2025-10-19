@@ -8,6 +8,7 @@
 import AppIntents
 import Foundation
 import DataContainer
+import BloomModel
 
 struct FoodItemEntity: AppEntity, Identifiable, Codable {
   let id: String
@@ -49,5 +50,16 @@ extension FoodItemEntity {
     self.protein = foodItemDTO.protein
     self.carbs = foodItemDTO.carbohydrates
     self.fat = foodItemDTO.fat
+  }
+
+  init(from foodItem: FoodItem) {
+    self.id = foodItem.id.value
+    self.name = foodItem.name
+    self.brandName = foodItem.brandName
+    self.flavour = foodItem.flavour
+    self.calories = foodItem.calories?.value
+    self.protein = foodItem.protein?.value
+    self.carbs = foodItem.carbohydrates?.value
+    self.fat = foodItem.fat?.value
   }
 }

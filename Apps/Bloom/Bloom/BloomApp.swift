@@ -27,7 +27,12 @@ struct BloomApp: App {
     BugsnagPerformance.start()
 
     // Setup TelemetryDeck
-    TelemetryDeck.initialize(config: TelemetryManagerConfiguration(appID: .telemetryDeckAppID, salt: "bloom_secret_salt"))
+    TelemetryDeck.initialize(
+      config: TelemetryManagerConfiguration(
+        appID: .telemetryDeckAppID,
+        salt: .telemetryDeckSalt
+      )
+    )
 
     // Setup RevenueCat
     Purchases.configure()

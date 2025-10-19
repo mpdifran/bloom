@@ -9,8 +9,10 @@ import AppIntents
 import Foundation
 import SwiftData
 import DataContainer
+import CoreNetwork
+import BloomModel
 
-struct FoodItemQuery: EntityQuery {
+struct FoodItemQuery: EntityQuery, EntityStringQuery {
   func entities(for identifiers: [String]) async throws -> [FoodItemEntity] {
     let modelActor = FoodItemLogModelActor.standard()
 
@@ -30,7 +32,18 @@ struct FoodItemQuery: EntityQuery {
     // Fetch frequently logged foods (last 2 months, all meals)
     let frequentFoods = try await modelActor.fetchFrequentLogs(for: nil)
 
-    // Limit to 30 items for good UX
-    return frequentFoods.prefix(30).map { FoodItemEntity(from: $0) }
+    return frequentFoods.map { FoodItemEntity(from: $0) }
+  }
+
+  func entities(matching string: String) async throws -> [FoodItemEntity] {
+    // Search backend for food items matching the query string
+    let sections = try await NetworkRequester.shared.foodSearch(
+      name: string,
+      brand: nil,
+      preferredCountry: "usa"
+    )
+
+    // Flatten all sections and convert to FoodItemEntity
+    return sections.flatMap { $0.foods }.map { FoodItemEntity(from: $0) }
   }
 }
