@@ -11,6 +11,7 @@ import HealthKit
 import BloomModel
 import DataContainer
 import CoreHealth
+import BloomUI
 
 struct ChatRichContentWrapperCell: View {
   let chatMessageID: String

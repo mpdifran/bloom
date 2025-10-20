@@ -8,6 +8,7 @@
 import SwiftUI
 import BloomFoundation
 import CoreHealth
+import BloomUI
 
 struct FoodLogDatePicker: View {
   @Binding var date: Date

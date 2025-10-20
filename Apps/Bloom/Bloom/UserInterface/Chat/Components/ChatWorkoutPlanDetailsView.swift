@@ -10,6 +10,7 @@ import BloomModel
 import DataContainer
 import TelemetryDeck
 import SFSafeSymbols
+import BloomUI
 
 struct ChatWorkoutPlanDetailsView: View {
   let chatMessageID: String

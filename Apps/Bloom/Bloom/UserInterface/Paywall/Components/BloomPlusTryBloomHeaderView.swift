@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 struct BloomPlusTryBloomHeaderView: View {
 

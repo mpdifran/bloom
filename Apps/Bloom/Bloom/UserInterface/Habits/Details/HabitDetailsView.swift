@@ -13,6 +13,7 @@ import SwiftData
 import Charts
 import CoreHealth
 import BloomFoundation
+import BloomUI
 
 struct HabitDetailsView: View {
   @State private var viewModel: ViewModel

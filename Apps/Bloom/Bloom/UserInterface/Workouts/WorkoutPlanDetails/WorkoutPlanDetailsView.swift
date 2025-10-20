@@ -9,6 +9,7 @@ import SwiftUI
 import DataContainer
 import AppUI
 import SFSafeSymbols
+import BloomUI
 
 struct WorkoutPlanDetailsView: View {
   let workoutPlan: WorkoutPlan

@@ -12,6 +12,7 @@ import DataContainer
 import TelemetryDeck
 import CoreHealth
 import BloomFoundation
+import BloomUI
 
 struct OnboardingHealthVitalLevelsView: View {
   let onContinue: () -> Void

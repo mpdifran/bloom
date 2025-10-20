@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import TelemetryDeck
 import BloomFoundation
+import BloomUI
 
 struct OnboardingNotificationPermissionView: View {
   let onContinue: () -> Void

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 struct BloomPlusTodayInsightHeaderView: View {
   var body: some View {

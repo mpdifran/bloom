@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 extension View {
   func presentationDetentSelfSizing() -> some View {

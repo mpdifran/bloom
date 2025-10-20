@@ -8,6 +8,7 @@
 import SwiftUI
 import BloomModel
 import Combine
+import BloomUI
 
 struct BloomPlusTodayCardShowcaseCell: View {
 

@@ -10,6 +10,7 @@ import DataContainer
 import AppUI
 import TelemetryDeck
 import BloomFoundation
+import BloomUI
 
 struct FocusAreaVitalReviewView: View {
   let onContinue: ([VitalModel]) -> Void

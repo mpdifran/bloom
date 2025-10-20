@@ -11,6 +11,7 @@ import AppUI
 import BloomModel
 import AVFoundation
 import CoreHealth
+import BloomUI
 
 extension AIFoodScannerView {
   enum Mode: Equatable {

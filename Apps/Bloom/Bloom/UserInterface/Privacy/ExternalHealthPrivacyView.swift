@@ -11,6 +11,7 @@ import Symbols
 import AppUI
 import TelemetryDeck
 import BloomFoundation
+import BloomUI
 
 extension ExternalHealthPrivacyView {
   enum Mode {

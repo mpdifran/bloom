@@ -10,6 +10,7 @@ import AppUI
 import TelemetryDeck
 import CoreHealth
 import BloomFoundation
+import BloomUI
 
 @MainActor
 struct OnboardingHealthAgeSexView: View {

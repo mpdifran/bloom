@@ -8,6 +8,7 @@
 import SFSafeSymbols
 import SwiftUI
 import RevenueCat
+import BloomUI
 
 struct BloomPlusFeaturesListView: View {
 

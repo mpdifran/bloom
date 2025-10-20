@@ -12,6 +12,7 @@ import TelemetryDeck
 import CoreHealth
 import SFSafeSymbols
 import BloomFoundation
+import BloomUI
 
 struct OnboardingAppExplanationView: View {
   var onContinue: () async -> Void

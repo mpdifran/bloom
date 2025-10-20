@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 public enum ChatBubblePosition {
   case leading, trailing

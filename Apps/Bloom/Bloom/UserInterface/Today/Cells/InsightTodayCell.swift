@@ -8,6 +8,7 @@
 import SwiftUI
 import BloomModel
 import TelemetryDeck
+import BloomUI
 
 struct InsightTodayCell: View {
   let insights: [TodayReportResponse.HealthInsight]

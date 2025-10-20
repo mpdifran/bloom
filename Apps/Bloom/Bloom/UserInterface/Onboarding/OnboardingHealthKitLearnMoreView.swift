@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreHealth
 import TelemetryDeck
+import BloomUI
 
 struct OnboardingHealthKitLearnMoreView: View {
   var body: some View {

@@ -12,6 +12,7 @@ import Charts
 import TelemetryDeck
 import CoreHealth
 import BloomFoundation
+import BloomUI
 
 struct OnboardingHealthKitView: View {
   let onContinue: () -> Void

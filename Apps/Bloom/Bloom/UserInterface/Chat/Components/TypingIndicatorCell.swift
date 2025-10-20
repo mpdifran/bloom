@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 private enum Constants {
   static let dotSize: CGFloat = 9

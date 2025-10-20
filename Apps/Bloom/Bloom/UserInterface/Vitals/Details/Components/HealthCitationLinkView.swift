@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 struct HealthCitationLinkView: View {
   let url: URL

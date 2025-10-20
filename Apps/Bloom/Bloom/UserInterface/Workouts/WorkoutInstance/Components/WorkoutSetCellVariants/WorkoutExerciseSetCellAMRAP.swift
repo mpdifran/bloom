@@ -8,6 +8,7 @@
 import SwiftUI
 import DataContainer
 import AppUI
+import BloomUI
 
 struct WorkoutExerciseSetCellAMRAP: View {
   let exerciseSet: WorkoutExerciseSet

@@ -56,7 +56,7 @@ struct TodayInsightWidgetView: View {
       Spacer(minLength: 0)
     }
     .foregroundStyle(.white)
-    .widgetURL(URL(string: "bloom://today"))
+    .widgetURL(URL(string: "https://api.trybloom.app/today"))
     .containerBackground(entry.color.gradient, for: .widget)
   }
 

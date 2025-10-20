@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import BloomUI
 
 extension View {
   func chatLauncher() -> some View {

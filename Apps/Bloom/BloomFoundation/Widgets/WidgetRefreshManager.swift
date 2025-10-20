@@ -30,6 +30,11 @@ public final class WidgetRefreshManager {
     WidgetCenter.shared.reloadTimelines(ofKind: .WidgetKind.todayInsight)
   }
 
+  /// Reload Bud Summary widgets
+  public func reloadBudSummaryWidgets() {
+    WidgetCenter.shared.reloadTimelines(ofKind: .WidgetKind.budSummary)
+  }
+
   /// Reload Nutrition-related widgets (Log Meal widget)
   public func reloadNutritionWidgets() {
     WidgetCenter.shared.reloadTimelines(ofKind: .WidgetKind.logMeal)

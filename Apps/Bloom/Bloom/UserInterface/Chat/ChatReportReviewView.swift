@@ -13,6 +13,7 @@ import BloomFoundation
 import SFSafeSymbols
 import AppUI
 import CoreNetwork
+import BloomUI
 
 struct ChatReportReviewView: View {
   let responseID: String

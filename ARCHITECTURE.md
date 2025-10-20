@@ -212,21 +212,7 @@ do {
 
 ## Deep Linking & Universal Links
 
-Bloom supports both custom URL schemes and universal links for deep linking into the app.
-
-### URL Scheme Configuration
-Custom URL scheme `bloom://` is registered in `Info.plist`:
-```xml
-<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>bloom</string>
-    </array>
-  </dict>
-</array>
-```
+Bloom uses universal links for secure deep linking into the app.
 
 ### Universal Links Configuration
 Universal links use the domain `https://api.trybloom.app/*` and are configured via Apple App Site Association (AASA) files:
@@ -238,18 +224,19 @@ AASA files are served at `https://api.trybloom.app/.well-known/apple-app-site-as
 ### Supported Deep Link Paths
 
 #### Navigation Links
-- `bloom://today` or `https://api.trybloom.app/today` - Navigate to Today tab
+- `https://api.trybloom.app/today` - Navigate to Today tab
   - Used by: Today Insight widget
+- `https://api.trybloom.app/paywall` - Show subscription paywall
+  - Used by: Bud Summary widget (non-subscribers)
 
 #### Action Shortcuts
-All action shortcuts support both custom scheme and universal link:
-- `bloom://action/food-scanner` or `https://api.trybloom.app/action/food-scanner`
-- `bloom://action/log-food` or `https://api.trybloom.app/action/log-food`
-- `bloom://action/log-water` or `https://api.trybloom.app/action/log-water`
-- `bloom://action/log-bowel-movement` or `https://api.trybloom.app/action/log-bowel-movement`
-- `bloom://action/log-period` or `https://api.trybloom.app/action/log-period`
-- `bloom://action/log-weight` or `https://api.trybloom.app/action/log-weight`
-- `bloom://action/log-blood-pressure` or `https://api.trybloom.app/action/log-blood-pressure`
+- `https://api.trybloom.app/action/food-scanner` - Open AI food scanner
+- `https://api.trybloom.app/action/log-food` - Log food
+- `https://api.trybloom.app/action/log-water` - Log water
+- `https://api.trybloom.app/action/log-bowel-movement` - Log bowel movement
+- `https://api.trybloom.app/action/log-period` - Log period
+- `https://api.trybloom.app/action/log-weight` - Log weight
+- `https://api.trybloom.app/action/log-blood-pressure` - Log blood pressure
 
 ### URL Handling Pattern
 All deep links are handled in `RootView.handleURL()`:
@@ -260,17 +247,15 @@ All deep links are handled in `RootView.handleURL()`:
 }
 
 private func handleURL(_ url: URL) {
-    // Support both custom URL scheme and universal links
-    guard url.scheme == "bloom" ||
-          url.host == "api.trybloom.app" ||
+    // Support universal links only
+    guard url.host == "api.trybloom.app" ||
           url.host == "trybloom.app" else { return }
 
-    // Normalize path for custom scheme (bloom://today -> /today)
-    let path = url.scheme == "bloom" ? "/\(url.host ?? "")" : url.path
-
-    switch path {
+    switch url.path {
     case "/today":
         tabController.activeTab = .today
+    case "/paywall":
+        tabController.showPaywall = true
     case "/action/food-scanner":
         presentedSheet = AIFoodScannerView().asAny
     // ... other cases
@@ -283,16 +268,16 @@ private func handleURL(_ url: URL) {
 1. **Update RootView.swift**: Add new case to `handleURL()` switch statement
 2. **Update AASA files**: Add path to both `association-prod.json` and `association-dev.json`
 3. **Deploy backend**: AASA changes require backend redeployment
-4. **Test both**: Verify custom scheme (`bloom://path`) and universal link (`https://api.trybloom.app/path`)
+4. **Test**: Verify universal link works (`https://api.trybloom.app/path`)
 
 ### Widget Deep Linking Pattern
-Widgets should use `.widgetURL()` with custom scheme as primary (offline support):
+Widgets should use `.widgetURL()` with universal links for security and reliability:
 ```swift
-.widgetURL(URL(string: "bloom://today"))
+.widgetURL(URL(string: "https://api.trybloom.app/today"))
 .containerBackground(color.gradient, for: .widget)
 ```
 
-Universal links provide fallback for web sharing and better user experience when tapped from outside the app.
+Universal links provide secure domain validation and ensure only your app can handle the links.
 
 ## Common Utilities & Extensions
 

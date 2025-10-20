@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreHealth
+import BloomUI
 
 struct BloomPlusBioAgeMeterView: View {
   @State private var biologicalAge: Double? = nil

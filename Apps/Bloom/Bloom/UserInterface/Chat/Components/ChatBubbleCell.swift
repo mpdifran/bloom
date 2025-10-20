@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BloomUI
 
 public struct ChatBubbleCell: View {
   let message: String

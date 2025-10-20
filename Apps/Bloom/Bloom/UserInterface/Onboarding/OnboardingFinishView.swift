@@ -10,6 +10,7 @@ import AppUI
 import TelemetryDeck
 import CoreHealth
 import BloomFoundation
+import BloomUI
 
 struct OnboardingFinishView: View {
   var onContinue: () -> Void

@@ -10,6 +10,7 @@ import AppUI
 import CoreLocation
 @preconcurrency import WeatherKit
 import Charts
+import BloomUI
 
 enum WeatherDay: CaseIterable {
   case today

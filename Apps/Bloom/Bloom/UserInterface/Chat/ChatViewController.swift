@@ -15,6 +15,7 @@ import Combine
 import SFSafeSymbols
 import AppUI
 import StoreKit
+import BloomUI
 
 class ChatViewController: UICollectionViewController {
 

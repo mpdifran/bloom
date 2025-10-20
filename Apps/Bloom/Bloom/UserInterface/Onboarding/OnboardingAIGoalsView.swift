@@ -9,6 +9,7 @@ import SwiftUI
 import AppUI
 import DataContainer
 import TelemetryDeck
+import BloomUI
 
 extension OnboardingAIGoalsView {
   enum Mode {

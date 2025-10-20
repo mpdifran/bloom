@@ -17,6 +17,7 @@ private extension String {
   
   enum UserDefaultsKeys {
     static let lastSubscriptionState = "RevenueCat.LastSubscriptionState"
+    static let isSubscribed = "RevenueCat.IsSubscribed"
   }
 }
 
@@ -77,6 +78,8 @@ private extension EntitlementController {
   func saveSubscriptionState(_ state: SubscriptionState) {
     guard let data = try? JSONEncoder().encode(state) else { return }
     UserDefaults.group.set(data, forKey: .UserDefaultsKeys.lastSubscriptionState)
+    // Also save simple boolean for widget access
+    UserDefaults.group.set(state.isActive, forKey: .UserDefaultsKeys.isSubscribed)
   }
 
   func observeCustomerInfo() {

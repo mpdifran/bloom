@@ -11,6 +11,7 @@ import AuthenticationServices
 import AppUI
 import TelemetryDeck
 import BloomFoundation
+import BloomUI
 
 struct OnboardingLoginView: View {
   let onContinue: () -> Void

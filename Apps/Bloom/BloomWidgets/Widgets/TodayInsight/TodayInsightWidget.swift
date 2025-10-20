@@ -32,10 +32,12 @@ struct TodayInsightWidget: Widget {
 } timeline: {
   TodayInsightEntry(
     date: .now,
+    relevance: TimelineEntryRelevance(score: 1.0, duration: 3600),
     title: "Today's Advice",
     content: "Focus on getting at least 20 minutes of moderate cardio today—go for a brisk bike ride or jog—to boost your weekly cardio minutes and support your VO2 max goal.",
     symbol: .sunHorizonFill,
     color: .mutedOrange,
+    contentType: .advice,
     isLoading: false,
     hasError: false
   )
@@ -46,10 +48,12 @@ struct TodayInsightWidget: Widget {
 } timeline: {
   TodayInsightEntry(
     date: .now,
+    relevance: TimelineEntryRelevance(score: 1.0, duration: 3600),
     title: "Tonight's Sleep",
     content: "Wind down at least 60 minutes before bed: dim lights, put away screens, and skip the evening ice cream. Aim for a cooler room (around 18–19°C) and consider a short relaxation exercise to help you fall into deeper sleep.",
     symbol: .moonZzzFill,
     color: .mutedIndigo,
+    contentType: .sleep,
     isLoading: false,
     hasError: false
   )
@@ -60,10 +64,12 @@ struct TodayInsightWidget: Widget {
 } timeline: {
   TodayInsightEntry(
     date: .now,
+    relevance: TimelineEntryRelevance(score: 0.3, duration: 3600),
     title: "Today's Insight",
     content: "Open the app to load your personalized insights.",
     symbol: .sparkles,
     color: .mutedOrange,
+    contentType: .advice,
     isLoading: true,
     hasError: false
   )

@@ -10,6 +10,7 @@ import SwiftData
 import DataContainer
 import AppUI
 import SFSafeSymbols
+import BloomUI
 
 struct ChatConversationView: View {
   let tabController: TabController

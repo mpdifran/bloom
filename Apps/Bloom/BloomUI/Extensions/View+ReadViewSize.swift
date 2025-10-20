@@ -1,13 +1,13 @@
 //
 //  View+ReadViewSize.swift
-//  Supplements
+//  BloomUI
 //
 //  Created by Mark DiFranco on 2024-12-19.
 //
 
 import SwiftUI
 
-extension View {
+public extension View {
 
   func readViewSize(_ handler: @escaping (GeometryProxy) -> Void) -> some View {
     self.background {
