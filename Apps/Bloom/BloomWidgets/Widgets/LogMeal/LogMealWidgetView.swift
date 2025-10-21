@@ -34,78 +34,102 @@ struct LogMealWidgetView: View {
   @Environment(\.widgetFamily) var widgetFamily
 
   var body: some View {
-    VStack(alignment: .leading) {
-      HStack(alignment: .top) {
-        VStack(alignment: .leading) {
-          Text(entry.mealName)
-            .font(.caption)
-            .bold()
-            .foregroundStyle(.secondary)
+    HStack(spacing: 16) {
+      if widgetFamily != .systemSmall {
+        MacroDistributionBar(
+          proteinGrams: entry.proteinGrams,
+          carbsGrams: entry.carbsGrams,
+          fatGrams: entry.fatGrams,
+          axis: .vertical
+        )
+      }
 
-          Text(entry.displayName)
-            .font(.title3)
-            .fontWeight(.heavy)
-            .fontDesign(.rounded)
-            .lineLimit(2)
-            .fixedSize(horizontal: false, vertical: true)
+      VStack(alignment: .leading) {
+        foodNameHeaderView
+
+        foodItemNamesSubtitle
+
+        if widgetFamily == .systemSmall {
+          MacroDistributionBar(
+            proteinGrams: entry.proteinGrams,
+            carbsGrams: entry.carbsGrams,
+            fatGrams: entry.fatGrams
+          )
         }
 
         Spacer()
 
-        Image(.logFoodIcon)
-          .foregroundStyle(.tint)
-      }
+        HStack {
+          calorieServingView
 
-      // Food item names (for multi-item display, medium+ only)
-      if let foodItemNames = entry.foodItemNames, widgetFamily != .systemSmall {
-        Text(foodItemNames)
-          .font(.subheadline)
-          .bold()
-          .fontDesign(.rounded)
-          .foregroundStyle(.secondary)
-      }
+          Spacer()
 
-      MacroDistributionBar(
-        proteinGrams: entry.proteinGrams,
-        carbsGrams: entry.carbsGrams,
-        fatGrams: entry.fatGrams
-      )
-
-//      // Food item names (for multi-item display, medium+ only)
-//      if let foodItemNames = entry.foodItemNames, widgetFamily != .systemSmall {
-//        Text(foodItemNames)
-//          .font(.subheadline)
-//          .bold()
-//          .fontDesign(.rounded)
-//          .foregroundStyle(.secondary)
-//      }
-
-      Spacer()
-
-      HStack {
-        Group {
-          if widgetFamily == .systemSmall {
-            VStack(alignment: .leading) {
-              Text(entry.caloriesText ?? "")
-              Text(entry.servingsDescription)
-            }
-          } else {
-            Text("\(entry.caloriesText ?? "") • \(entry.servingsDescription)")
-          }
+          addButton
         }
-        .font(.caption)
-        .bold()
-        .foregroundStyle(.secondary)
-
-        Spacer()
-
-        Toggle(isOn: false, intent: entry.intent) {
-          EmptyView()
-        }
-        .toggleStyle(LogMealToggleStyle())
       }
     }
     .unredacted()
     .tint(.mutedGreen)
+  }
+}
+
+private extension LogMealWidgetView {
+
+  var foodNameHeaderView: some View {
+    HStack(alignment: .top) {
+      VStack(alignment: .leading) {
+        Text(entry.mealName)
+          .font(.caption)
+          .bold()
+          .foregroundStyle(.secondary)
+
+        Text(entry.displayName)
+          .font(.title3)
+          .fontWeight(.heavy)
+          .fontDesign(.rounded)
+          .lineLimit(2)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+
+      Spacer()
+
+      Image(.logFoodIcon)
+        .foregroundStyle(.tint)
+    }
+  }
+
+  @ViewBuilder
+  var foodItemNamesSubtitle: some View {
+    // Food item names (for multi-item display, medium+ only)
+    if let foodItemNames = entry.foodItemNames, widgetFamily != .systemSmall {
+      Text(foodItemNames)
+        .font(.subheadline)
+        .bold()
+        .fontDesign(.rounded)
+        .foregroundStyle(.secondary)
+    }
+  }
+
+  var calorieServingView: some View {
+    Group {
+      if widgetFamily == .systemSmall {
+        VStack(alignment: .leading) {
+          Text(entry.caloriesText ?? "")
+          Text(entry.servingsDescription)
+        }
+      } else {
+        Text("\(entry.caloriesText ?? "") • \(entry.servingsDescription)")
+      }
+    }
+    .font(.caption)
+    .bold()
+    .foregroundStyle(.secondary)
+  }
+
+  var addButton: some View {
+    Toggle(isOn: false, intent: entry.intent) {
+      EmptyView()
+    }
+    .toggleStyle(LogMealToggleStyle())
   }
 }
