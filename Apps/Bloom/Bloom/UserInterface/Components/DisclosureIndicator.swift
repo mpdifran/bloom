@@ -9,14 +9,14 @@ import SFSafeSymbols
 import SwiftUI
 
 struct DisclosureIndicator: View {
-    var body: some View {
-      Image(systemSymbol: .chevronForward)
-            .foregroundStyle(.secondary)
-            .bold()
-            .fontDesign(.rounded)
-    }
+  var body: some View {
+    Image(systemSymbol: .chevronForward)
+      .foregroundStyle(.secondary)
+      .bold()
+      .fontDesign(.rounded)
+  }
 }
 
 #Preview {
-    DisclosureIndicator()
+  DisclosureIndicator()
 }

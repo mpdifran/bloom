@@ -62,7 +62,7 @@ private extension TodaySettingsView {
         .padding(.horizontal)
       
       SettingsSectionContainer {
-        SettingsCell("Calendars", showDisclosureIndicator: true) {
+        SettingsCell("Calendars", iconType: .disclosure) {
           Text(calendarCountText)
         }
         .onTapGesture {

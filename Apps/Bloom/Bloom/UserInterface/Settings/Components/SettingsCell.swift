@@ -6,22 +6,30 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
+
+extension SettingsCell {
+  enum TrailingIconType {
+    case disclosure
+    case link
+  }
+}
 
 struct SettingsCell<Content>: View where Content: View {
   let title: String
   let subtitle: String?
-  let showDisclosureIndicator: Bool
+  let iconType: TrailingIconType?
   let contentBuilder: () -> Content
 
   init(
     _ title: String,
     subtitle: String? = nil,
-    showDisclosureIndicator: Bool = false,
+    iconType: TrailingIconType? = nil,
     @ViewBuilder contentBuilder: @escaping () -> Content
   ) {
     self.title = title
     self.subtitle = subtitle
-    self.showDisclosureIndicator = showDisclosureIndicator
+    self.iconType = iconType
     self.contentBuilder = contentBuilder
   }
 
@@ -44,17 +52,38 @@ struct SettingsCell<Content>: View where Content: View {
 
       Group {
         Spacer()
+
         contentBuilder()
           .layoutPriority(0)
-        if showDisclosureIndicator {
-          DisclosureIndicator()
-            .bold()
-        }
+
+        iconView
       }
       .foregroundStyle(.secondary)
     }
     .frame(minHeight: 60)
     .selectable()
+  }
+}
+
+private extension SettingsCell {
+
+  @ViewBuilder
+  var iconView: some View {
+    Group {
+      if let iconType {
+        switch iconType {
+        case .disclosure:
+          DisclosureIndicator()
+        case .link:
+          Image(systemSymbol: .arrowUpForward)
+        }
+      } else {
+        EmptyView()
+      }
+    }
+    .foregroundStyle(.secondary)
+    .bold()
+    .fontDesign(.rounded)
   }
 }
 
@@ -84,12 +113,17 @@ struct SettingsCell<Content>: View where Content: View {
             } label: {
               SettingsCell(
                 "Target Weight",
-                showDisclosureIndicator: true
+                iconType: .disclosure
               ) {
                 Text("160 lbs")
               }
             }
             .buttonStyle(.plain)
+
+            SettingsCell(
+              "Privacy Policy",
+              iconType: .link
+            ) { }
           }
 
           SettingsSectionContainer {

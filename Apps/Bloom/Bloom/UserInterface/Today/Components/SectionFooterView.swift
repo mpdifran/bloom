@@ -34,7 +34,7 @@ struct SectionFooterView: View {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Content", showDisclosureIndicator: true) {
+        SettingsCell("Content", iconType: .disclosure) {
         }
       }
 

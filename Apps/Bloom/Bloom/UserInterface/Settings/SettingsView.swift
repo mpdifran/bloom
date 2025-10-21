@@ -62,7 +62,6 @@ struct SettingsView: View {
         userSection
         healthPermissionsSection
         healthGoalsSection
-        personalizationSection
         habitsSection
         remindersSection
         workoutEquipmentSection
@@ -152,16 +151,9 @@ private extension SettingsView {
           presentedSheet = HealthGoalEditCard().asAny
         }
       }
-    }
-  }
-
-  var personalizationSection: some View {
-    VStack {
-      SectionTitleView("Personalization")
-        .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Personal Details", showDisclosureIndicator: true) {
+        SettingsCell("Personal Details", iconType: .disclosure) {
           EmptyView()
         }
         .onTapGesture {
@@ -349,9 +341,7 @@ private extension SettingsView {
           }
 
           if entitlementInfo.isActive {
-            SettingsCell("Manage Subscription") {
-              DisclosureIndicator()
-            }
+            SettingsCell("Manage Subscription", iconType: .disclosure) { }
             .onTapGesture {
               ThrowingUserTask(error: $error) {
                 try await Purchases.shared.showManageSubscriptions()
@@ -359,17 +349,13 @@ private extension SettingsView {
               }
             }
           } else {
-            SettingsCell("Subscribe to Bloom Plus") {
-              DisclosureIndicator()
-            }
+            SettingsCell("Subscribe to Bloom Plus", iconType: .disclosure) { }
             .onTapGesture {
               presentedSheet = BloomPlusPaywall().asAny
             }
           }
         } else {
-          SettingsCell("Subscribe to Bloom Plus") {
-            DisclosureIndicator()
-          }
+          SettingsCell("Subscribe to Bloom Plus", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = BloomPlusPaywall().asAny
           }
@@ -380,7 +366,7 @@ private extension SettingsView {
 
   var supportSection: some View {
     VStack {
-      SectionTitleView("Support")
+      SectionTitleView("Help")
         .padding(.horizontal)
 
       SettingsSectionContainer {
@@ -393,35 +379,24 @@ private extension SettingsView {
 
         Divider()
 
-        SettingsCell("Tell us what you think!", showDisclosureIndicator: true) {
+        SettingsCell("Post in r/tryBloom", iconType: .link) {
           Image(systemSymbol: .heartFill)
             .foregroundStyle(.mutedRed)
         }
         .onTapGesture {
-          if healthManager.name.isEmpty {
-            presentedSheet = UserNamePrompt {
-              presentedSheet = FeatureRequestScreen().asAny
-            }
-            .asAny
-          } else {
-            presentedSheet = FeatureRequestScreen().asAny
-          }
+          openURL(.subreddit)
         }
 
         Divider()
 
-        SettingsCell("Privacy Policy") {
-          DisclosureIndicator()
-        }
+        SettingsCell("Privacy Policy", iconType: .link) { }
         .onTapGesture {
           openURL(.privacyPolicy)
         }
 
         Divider()
 
-        SettingsCell("Terms of Service") {
-          DisclosureIndicator()
-        }
+        SettingsCell("Terms of Service", iconType: .link) { }
         .onTapGesture {
           openURL(.termsOfService)
         }
@@ -495,7 +470,7 @@ private extension SettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Developer Tools", showDisclosureIndicator: true) {
+        SettingsCell("Developer Tools", iconType: .disclosure) {
           EmptyView()
         }
         .onTapGesture {

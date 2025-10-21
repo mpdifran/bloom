@@ -98,7 +98,7 @@ private extension PersonalizationSettingsView {
         NavigationLink {
           UserFactsView()
         } label: {
-          SettingsCell("Bud's Memory", showDisclosureIndicator: true) {
+          SettingsCell("Bud's Memory", iconType: .disclosure) {
             EmptyView()
           }
         }

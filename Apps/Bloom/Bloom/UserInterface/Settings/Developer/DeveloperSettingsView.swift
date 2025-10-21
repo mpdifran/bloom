@@ -229,14 +229,14 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("View Goals", showDisclosureIndicator: true) { }
+        SettingsCell("View Goals", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = DebugHabitsListView().asAny
           }
 
         Divider()
 
-        SettingsCell("View Food Item Logs", showDisclosureIndicator: true) { }
+        SettingsCell("View Food Item Logs", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = DebugFoodItemLogListView().asAny
           }
@@ -250,7 +250,7 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("View Scheduled Notifications", showDisclosureIndicator: true) { }
+        SettingsCell("View Scheduled Notifications", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = ScheduledNotificationsView().asAny
           }
@@ -625,7 +625,7 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Storage Analysis", showDisclosureIndicator: true) { }
+        SettingsCell("Storage Analysis", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = StorageAnalysisView().asAny
           }
@@ -639,14 +639,14 @@ extension DeveloperSettingsView {
         .padding(.horizontal)
 
       SettingsSectionContainer {
-        SettingsCell("Color Palette", showDisclosureIndicator: true) { }
+        SettingsCell("Color Palette", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = ColorPaletteView().asAny
           }
 
         Divider()
 
-        SettingsCell("Sounds", showDisclosureIndicator: true) { }
+        SettingsCell("Sounds", iconType: .disclosure) { }
           .onTapGesture {
             presentedSheet = SoundDebugView().asAny
           }
